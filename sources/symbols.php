@@ -225,7 +225,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IMG_INLINE':
 				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
 				{
-					$value=find_theme_image($param[0],true,true,(array_key_exists(2,$param) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+					$value=find_theme_image($param[0],true,true,(isset($param[2]) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 					if ($value!='')
 					{
 						$file_path=((substr($value,0,22)=='themes/default/images/')?get_file_base():get_custom_file_base()).'/'.$value;
@@ -242,7 +242,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IMG':
 				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
 				{
-					$value=find_theme_image($param[0],((isset($param[3])) && ($param[3]=='1')),false,(array_key_exists(2,$param) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+					$value=find_theme_image($param[0],((isset($param[3])) && ($param[3]=='1')),false,(isset($param[2]) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 				}
 				break;
 
@@ -263,20 +263,23 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'FEEDS':
 				// Feeds
-				$feeds=new ocp_tempcode();
-				if (addon_installed('syndication'))
+				if ((get_option('is_on_rss',true)==='1') && (addon_installed('syndication')))
 				{
-					if (get_option('is_on_rss',true)==='1')
+					$feeds=new ocp_tempcode();
+					if ($GLOBALS['FEED_URL']!==NULL)
 					{
-						if ($GLOBALS['FEED_URL']!==NULL)
-							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'3a289a821e87e954494753edf7cb2ebd','FEED_URL'=>$GLOBALS['FEED_URL'])));
-						if ($GLOBALS['FEED_URL_2']!==NULL)
-							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'fa8c7aaa3601c24d1986fa2598416558','FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
-						if (addon_installed('news'))
-							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'53e135b04502d6df64f1570b61310f30','FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
+						if (substr($GLOBALS['FEED_URL'],0,1)=='?') $GLOBALS['FEED_URL']=find_script('backend').$GLOBALS['FEED_URL'];
+						$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'3a289a821e87e954494753edf7cb2ebd','FEED_URL'=>$GLOBALS['FEED_URL'])));
 					}
+					if ($GLOBALS['FEED_URL_2']!==NULL)
+					{
+						if (substr($GLOBALS['FEED_URL_2'],0,1)=='?') $GLOBALS['FEED_URL_2']=find_script('backend').$GLOBALS['FEED_URL_2'];
+						$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'fa8c7aaa3601c24d1986fa2598416558','FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
+					}
+					if (addon_installed('news'))
+						$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'53e135b04502d6df64f1570b61310f30','FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
+					$value=$feeds->evaluate();
 				}
-				$value=$feeds->evaluate();
 				break;
 
 			case 'META_DATA':
@@ -305,29 +308,41 @@ function ecv($lang,$escaped,$type,$name,$param)
 							break;
 
 						case 'meta_description':
-							global $SEO_DESCRIPTION;
-							if (($SEO_DESCRIPTION===NULL) || ($SEO_DESCRIPTION==''))
+							if (isset($param[2]))
 							{
-								if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']!=''))
-								{
-									$value=strip_comcode($GLOBALS['META_DATA']['description']);
-								} else
-								{
-									$value=get_option('description');
-								}
+								list(,$value)=seo_meta_get_for($param[1],$param[2]);
 							} else
 							{
-								$value=$SEO_DESCRIPTION;
+								global $SEO_DESCRIPTION;
+								if (($SEO_DESCRIPTION===NULL) || ($SEO_DESCRIPTION==''))
+								{
+									if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']!=''))
+									{
+										$value=strip_comcode($GLOBALS['META_DATA']['description']);
+									} else
+									{
+										$value=get_option('description');
+									}
+								} else
+								{
+									$value=$SEO_DESCRIPTION;
+								}
 							}
 							break;
 
 						case 'keywords':
-							global $SEO_KEYWORDS;
-							$keywords=get_option('keywords');
-							if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
-							$keywords_array=$SEO_KEYWORDS;
-							if ($keywords!='') $keywords_array=array_merge($keywords_array,explode(',',$keywords));
-							$value=implode(',',array_unique($keywords_array));
+							if (isset($param[2]))
+							{
+								list($value,)=seo_meta_get_for($param[1],$param[2]);
+							} else
+							{
+								global $SEO_KEYWORDS;
+								$keywords=get_option('keywords');
+								if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
+								$keywords_array=$SEO_KEYWORDS;
+								if ($keywords!='') $keywords_array=array_merge($keywords_array,explode(',',$keywords));
+								$value=implode(',',array_unique($keywords_array));
+							}
 							break;
 
 						default:
@@ -336,8 +351,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 								$META_DATA[$param[0]]=$param[1];
 							} else
 							{
-								$value=isset($META_DATA[$param[0]])?strip_comcode($META_DATA[$param[0]]):'';
-								if ($value===NULL) $value='';
+								if (isset($META_DATA[$param[0]]))
+								{
+									$value=$META_DATA[$param[0]];
+									if (preg_match('#^[\:\s\w\-\_]*$#',$value)==0)
+									{
+										$value=strip_comcode($value);
+									}
+								}
 							}
 					}
 				}
@@ -389,7 +410,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					require_code('blocks');
 					$_block_constraints=block_params_to_block_signature(block_params_str_to_arr($param[0]));
-					if (array_key_exists(1,$param))
+					if (isset($param[1]))
 					{
 						$_block_constraints=array_merge($_block_constraints,block_params_str_to_arr($param[1]));
 						ksort($_block_constraints);
@@ -401,7 +422,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						'p_session_id'=>get_session_id(),
 						'p_block_constraints'=>$block_constraints,
 					),'',1);
-					if (!array_key_exists(0,$_auth_key))
+					if (!isset($_auth_key[0]))
 					{
 						$auth_key=$GLOBALS['SITE_DB']->query_insert('temp_block_permissions',array(
 							'p_session_id'=>get_session_id(),
@@ -506,10 +527,61 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'REVERSE':
+			case 'COMMA_LIST_REVERSE':
 				if (isset($param[0]))
 				{
 					$value=implode(',',array_reverse(explode(',',$param[0])));
+				}
+				break;
+
+			case 'COMMA_LIST_FROM_BREADCRUMBS':
+				if (array_key_exists(0,$param))
+				{
+					$separator=do_template('BREADCRUMB_SEPARATOR');
+					$value='='.str_replace($separator->evaluate(),',=',str_replace(',','&#44;',$param[0]));
+					if ((!array_key_exists(1,$param)) || ($param[1]=='0')) $value=strip_tags($value);
+					else $value=strip_tags($value,'<a>');
+					$value=trim($value);
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+				}
+				break;
+
+			case 'COMMA_LIST_POP':
+				if (array_key_exists(0,$param))
+				{
+					$value=preg_replace('#(^|,)[^,]+$#','',$param[0]);
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+				}
+				break;
+
+			case 'COMMA_LIST_SHIFT':
+				if (array_key_exists(0,$param))
+				{
+					$value=preg_replace('#^[^,]+(,|$)#','',$param[0]);
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+				}
+				break;
+
+			case 'COMMA_LIST_PUSH':
+				if (array_key_exists(1,$param))
+				{
+					$value=$param[0].','.str_replace(',','&#44;',$param[1]);
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+				}
+				break;
+
+			case 'COMMA_LIST_UNSHIFT':
+				if (array_key_exists(1,$param))
+				{
+					$value=str_replace(',','&#44;',$param[1]).','.$param[0];
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+				}
+				break;
+
+			case 'COMMA_LIST_NICIFY':
+				if (array_key_exists(0,$param))
+				{
+					$value=html_entity_decode(str_replace(',',', ',$param[0]),ENT_QUOTES,get_charset());
 				}
 				break;
 
@@ -763,7 +835,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'TRIM':
 				if (isset($param[0]))
 				{
-					$value=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>\s*)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>\s*)+$#','#(&nbsp;)+$#'),array('','','','','',''),$param[0]);
+					$value=$param[0];
+					if ($value!='')
+					{
+						if (strpos($value,'<')===false && strpos($value,'&')===false)
+						{
+							$value=trim($value);
+						} else
+						{
+							$value=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>\s*)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>\s*)+$#','#(&nbsp;)+$#'),array('','','','','',''),$value);
+						}
+					}
 				}
 				break;
 
@@ -1060,7 +1142,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$parts=explode('=',$exp,2);
 						if (count($parts)==2)
 						{
-							if (!in_array($parts[0],$param))
+							if ((!in_array($parts[0],$param)) && (!in_array(preg_replace('#\d+#','*',$parts[0]),$param)))
 							{
 								$_value->attach(form_input_hidden($parts[0],urldecode($parts[1])));
 							}
@@ -1127,7 +1209,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						if (strpos($param[0],'://')===false)
 						{
-							$img_url=find_theme_image($param[0],false,false,array_key_exists(2,$param)?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+							$img_url=find_theme_image($param[0],false,false,isset($param[2])?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 						} else $img_url=$param[0];
 						require_code('images');
 						list($width,$height)=_symbol_image_dims(array($img_url));
@@ -1212,9 +1294,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 					foreach ($param as $i=>$p)
 						if (is_object($p)) $param[$i]=$p->evaluate();
 
-					if ((count($param)==1) && (strpos($param[0],',')!==false))
+					if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in tempcode.php
 					{
-						$param=preg_split('#((?<'.'![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+						$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
+						foreach ($param as $key=>$val)
+						{
+							$param[$key]=str_replace('\,',',',$val);
+						}
 					}
 
 					global $BLOCKS_CACHE;
@@ -1282,7 +1368,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'ADDON_INSTALLED':
 				if (isset($param[0]))
 				{
-					$value=(addon_installed($param[0],(array_key_exists(1,$param)) && ($param[1]=='1')))?'1':'0';
+					$value=(addon_installed($param[0],(isset($param[1])) && ($param[1]=='1')))?'1':'0';
 				}
 				break;
 
@@ -1809,6 +1895,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'DIV_CEIL':
+				if (isset($param[1]))
+				{
+					$value=strval(intval(ceil(floatval($param[0])/floatval($param[1]))));
+				}
+				break;
+
 			case 'SUBTRACT':
 				if (isset($param[1]))
 				{
@@ -1942,7 +2035,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$d_escaping=array(isset($param[1])?constant($param[1]):ENTITY_ESCAPED);
-					if (is_string($param[0])) apply_tempcode_escaping($d_escaping,$param[0]);
+					for ($i=0;$i<max(1,array_key_exists(2,$param)?intval($param[2]):1);$i++)
+					{
+						if (is_string($param[0])) apply_tempcode_escaping($d_escaping,$param[0]);
+					}
 					$value=$param[0];
 				}
 				break;
@@ -2166,8 +2262,21 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'AWARD_ID':
 				if (array_key_exists(0,$param))
 				{
-					$value=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
-					if (is_null($value)) $value='';
+					if ($param[0]!='')
+					{
+						static $awarded_content_ids=NULL;
+						if ($awarded_content_ids===NULL)
+						{
+							if (can_arbitrary_groupby())
+							{
+								$awarded_content_ids=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive GROUP BY a_type_id ORDER BY date_and_time DESC'));
+							} else
+							{
+								$awarded_content_ids[intval($param[0])]=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
+							}
+						}
+						$value=isset($awarded_content_ids[intval($param[0])])?$awarded_content_ids[intval($param[0])]:'';
+					}
 				}
 				break;
 
@@ -2180,8 +2289,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 					while (isset($param[$i]))
 					{
 						$bits=explode('=',$param[$i],2);
-						if ($bits[1]=='<null>') $bits[1]=NULL;
-						$extra_params[$bits[0]]=$bits[1];
+						if (count($bits)==2)
+						{
+							if ($bits[1]=='<null>') $bits[1]=NULL;
+							$extra_params[$bits[0]]=$bits[1];
+						}
 						$i++;
 					}
 				}
@@ -2250,7 +2362,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (preg_match('#^\w*views\w*$#',$param[1])!=0)
 					{
 						$test=$GLOBALS['SITE_DB']->query_select_value_if_there($param[0],$param[1],array($id_field=>$param[2]));
-						if (!is_null($test)) $value=integer_format($test);
+						if ($test!==NULL) $value=integer_format($test);
 					}
 				}
 				break;
@@ -2272,9 +2384,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 						}
 					}
 				}
-				if (array_key_exists($name,$EXTRA_SYMBOLS))
+				if (isset($EXTRA_SYMBOLS[$name]))
 				{
-					if (!array_key_exists('ob',$EXTRA_SYMBOLS[$name]))
+					if (!isset($EXTRA_SYMBOLS[$name]['ob']))
 					{
 						require_code('hooks/systems/symbols/'.filter_naughty_harsh($name));
 						$EXTRA_SYMBOLS[$name]['ob']=object_factory('Hook_symbol_'.filter_naughty_harsh($name));
@@ -2285,6 +2397,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (defined($name))
 				{
 					$value=constant($name);
+					if (!is_string($value)) $value=strval($value);
 					break;
 				}
 				$value='';
@@ -2720,6 +2833,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'COMMENT':
+				break;
+
 			default:
 				require_code('site');
 				attach_message(do_lang_tempcode('UNKNOWN_DIRECTIVE',escape_html($name)),'warn');
@@ -2867,7 +2983,7 @@ function keep_symbol($param)
 {
 	$value='';
 	$get_vars=$_GET;
-	if ((isset($param[1])) && ($param[1]=='1') && (!array_key_exists('keep_session',$get_vars))) $get_vars['keep_session']=strval(get_session_id());
+	if ((isset($param[1])) && ($param[1]=='1') && (!isset($get_vars['keep_session']))) $get_vars['keep_session']=strval(get_session_id());
 
 	if (count($get_vars)>0)
 	{

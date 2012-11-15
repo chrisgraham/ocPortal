@@ -257,7 +257,7 @@ class Hook_search_ocf_members
 			$where_clause.='('.$group_where_clause.')';
 		}
 
-		if (!has_privilege(get_member(),'see_unvalidated'))
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='m_validated=1';

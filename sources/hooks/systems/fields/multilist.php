@@ -97,7 +97,8 @@ class Hook_fields_multilist
 			if (in_array($option,$exploded)) $all[]=array('OPTION'=>$option,'HAS'=>true);
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+
+		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all,'FIELD_ID'=>strval($field['id'])),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
 	}
 
 	// ======================

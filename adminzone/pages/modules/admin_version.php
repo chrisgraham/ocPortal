@@ -133,8 +133,6 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('sms_log','sms_log_for',array('s_member_id','s_time'));
 			$GLOBALS['SITE_DB']->create_index('sms_log','sms_trigger_ip',array('s_trigger_ip'));
-			require_lang('ocf');
-			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('mobile_phone_number',20,1,0,1,0,do_lang('SPECIAL_CPF__ocp_mobile_phone_number_DESCRIPTION'),'short_text');
 			add_privilege('GENERAL_SETTINGS','use_sms',false);
 			add_privilege('GENERAL_SETTINGS','sms_higher_limit',false);
 			add_privilege('GENERAL_SETTINGS','sms_higher_trigger_limit',false);
@@ -194,7 +192,7 @@ class Module_admin_version
 				'date_and_time'=>'TIME',
 				'the_theme'=>'*ID_TEXT',
 				'lang'=>'*LANGUAGE_NAME',
-				'langs_required'=>'LONG_TEXT'
+				'dependencies'=>'LONG_TEXT'
 			));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_ford',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_fore',array('cached_for'));
@@ -303,6 +301,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA','human_name'=>'USE_CAPTCHAS','the_name'=>'use_captchas'),array('the_name'=>'use_security_images'),'',1);
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'captcha_single_guess'),'',1);
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
+			$GLOBALS['SITE_DB']->alter_table_field('cache','langs_required','LONG_TEXT','dependencies');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
@@ -357,6 +356,7 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_page',array('mt_page'));
 			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_id',array('mt_page','mt_id','mt_type'));
+			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_time',array('mt_time'));
 
 			$GLOBALS['SITE_DB']->create_table('cache_on',array(
 				'cached_for'=>'*ID_TEXT',
@@ -376,6 +376,7 @@ class Module_admin_version
 				'the_time'=>'TIME',
 				'the_member'=>'MEMBER'
 			));
+			$GLOBALS['SITE_DB']->create_index('edit_pings','edit_pings_on',array('the_page','the_type','the_id'));
 
 			$GLOBALS['SITE_DB']->create_table('translate_history',array(
 				'id'=>'*AUTO',

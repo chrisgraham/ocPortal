@@ -51,7 +51,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	} else
 	{
 		require_code('site');
-		set_feed_url(find_script('backend').'?mode=ocf_forumview&filter='.strval($id));
+		set_feed_url('?mode=ocf_forumview&filter='.strval($id));
 		$details=ocf_get_forum_view($start,$max,$id);
 		$breadcrumbs=ocf_forum_breadcrumbs($id,$details['name'],$details['parent_forum']);
 
@@ -418,7 +418,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	);
 	$content=do_template('OCF_FORUM',$map);
 
-	$ltitle=do_lang_tempcode('NAMED_FORUM',is_null($id)?make_string_tempcode(escape_html($details['name'])):make_fractionable_editable('forum',$id,$details['name']));
+	$ltitle=do_lang_tempcode('NAMED_FORUM',is_null($id)?(is_object($details['name'])?$details['name']:make_string_tempcode(escape_html($details['name']))):make_fractionable_editable('forum',$id,$details['name']));
 
 	return array($content,$ltitle,$breadcrumbs,$forum_name);
 }
@@ -517,7 +517,7 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 	if ($topic_row['t_pinned']==1) $topic['modifiers'][]='pinned';
 	if ($topic_row['t_sunk']==1) $topic['modifiers'][]='sunk';
 	if ($topic_row['t_is_open']==0) $topic['modifiers'][]='closed';
-	if ($topic_row['t_validated']==0) $topic['modifiers'][]='unvalidated';
+	if (($topic_row['t_validated']==0) && (addon_installed('unvalidated'))) $topic['modifiers'][]='unvalidated';
 	if (!is_null($topic_row['t_poll_id'])) $topic['modifiers'][]='poll';
 	$num_posts=$topic_row['t_cache_num_posts'];
 	$start_time=$topic_row['t_cache_first_time'];
@@ -735,7 +735,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		} else $child_or_list='';
 		if ($child_or_list!='') $child_or_list.=' AND ';
 		$query='SELECT DISTINCT t_forum_id,t.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval((integer)get_member()).') WHERE '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
-		if (!has_privilege(get_member(),'jump_to_unvalidated')) $query.=' AND t_validated=1';
+		if ((!has_privilege(get_member(),'jump_to_unvalidated')) && (addon_installed('unvalidated'))) $query.=' AND t_validated=1';
 		$unread_forums=collapse_2d_complexity('t_forum_id','id',$GLOBALS['FORUM_DB']->query($query));
 	}
 
@@ -839,7 +839,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 	// Find topics
 	$extra='';
-	if ((!has_privilege(get_member(),'see_unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
+	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
 	if (is_null($forum_info[0]['f_parent_forum']))
 	{
 		$where=$extra.' (t_forum_id='.strval((integer)$forum_id).')';

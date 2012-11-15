@@ -34,6 +34,15 @@ class Block_main_google_map_users
 	}
 
 	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('latitude');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('longitude');
+	}
+
+	/**
 	 * Standard modular install function.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)

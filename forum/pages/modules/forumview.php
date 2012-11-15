@@ -255,7 +255,7 @@ class Module_forumview
 			breadcrumb_add_segment($breadcrumbs);
 		}
 
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=is_null($id)?array():find_awards_for('forum',strval($id));

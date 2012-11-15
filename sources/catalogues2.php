@@ -785,7 +785,26 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	}
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('catalogue_entry',strval($id),$map,'');
+	$seo_source_map=$map;
+	$seo_source_map__specific=get_value('catalogue_seo_source_map__'.$catalogue_name);
+	if (!is_null($seo_source_map__specific))
+	{
+		$seo_source_map=array();
+		foreach (explode(',',$seo_source_map__specific) as $_map_source)
+		{
+			if (substr($seo_source_map__specific,-1)=='!')
+			{
+				$must_use=true;
+				$seo_source_map__specific=substr($seo_source_map__specific,0,strlen($seo_source_map__specific)-1);
+			} else
+			{
+				$must_use=false;
+			}
+			if (isset($map[intval($seo_source_map__specific)]))
+				$seo_source_map[]=array($map[intval($seo_source_map__specific)],$must_use);
+		}
+	}
+	seo_meta_set_for_implicit('catalogue_entry',strval($id),$seo_source_map,'');
 
 	calculate_category_child_count_cache($category_id);
 

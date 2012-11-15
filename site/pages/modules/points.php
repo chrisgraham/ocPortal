@@ -74,6 +74,11 @@ class Module_points
 
 		delete_menu_item_simple('_SEARCH:points:type=member:id={$MEMBER_OVERRIDE}');
 		delete_menu_item_simple('_SEARCH:points:type=member');
+
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_used');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('gift_points_used');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_given');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_rating');
 	}
 
 	/**
@@ -125,6 +130,11 @@ class Module_points
 			add_privilege('POINTS','have_negative_gift_points',false);
 			add_privilege('POINTS','give_negative_points',false);
 			add_privilege('POINTS','view_charge_log',false);
+
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_used',20,1,0,0,0,'','integer');
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('gift_points_used',20,1,0,0,0,'','integer');
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_given',20,1,0,0,0,'','integer');
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_rating',20,1,0,0,0,'','integer');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
@@ -179,7 +189,7 @@ class Module_points
 	 */
 	function points_search_form()
 	{
-		set_feed_url(find_script('backend').'?mode=points&filter=');
+		set_feed_url('?mode=points&filter=');
 
 		$title=get_screen_title('MEMBER_POINT_FIND');
 
@@ -208,7 +218,7 @@ class Module_points
 	 */
 	function points_search_results()
 	{
-		set_feed_url(find_script('backend').'?mode=points&filter=');
+		set_feed_url('?mode=points&filter=');
 
 		$username=str_replace('*','%',get_param('username'));
 		if ((substr($username,0,1)=='%') && ($GLOBALS['FORUM_DRIVER']->get_members()>3000))
@@ -265,7 +275,7 @@ class Module_points
 			return redirect_screen($title,$url.'#tab__points','');
 		}
 
-		set_feed_url(find_script('backend').'?mode=points&filter='.strval($member_id_of));
+		set_feed_url('?mode=points&filter='.strval($member_id_of));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND'))));
 

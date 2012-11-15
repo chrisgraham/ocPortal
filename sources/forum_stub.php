@@ -41,6 +41,16 @@ class forum_driver_base
 	var $EMOTICON_CACHE=NULL;
 
 	/**
+	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
+	 *
+	 * @param  string			The name of the new custom field
+	 */
+	function install_delete_custom_field($name)
+	{
+		if (method_exists($this,'_install_delete_custom_field')) $this->_install_delete_custom_field($name);
+	}
+
+	/**
 	 * Find the usergroup id of the forum guest member.
 	 *
 	 * @return GROUP			The usergroup id of the forum guest member

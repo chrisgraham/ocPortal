@@ -177,8 +177,11 @@ function disable_wysiwyg(forms,so,so2,discard)
 	window.wysiwyg_on=function() { return false; };
 }
 
-window.wysiwyg_editors=[];
-window.wysiwyg_original_comcode=[];
+if (typeof window.wysiwyg_editors=='undefined')
+{
+	window.wysiwyg_editors=[];
+	window.wysiwyg_original_comcode=[];
+}
 function load_html_edit(posting_form,ajax_copy)
 {
 	if ((!posting_form.getAttribute('method')) || (posting_form.getAttribute('method').toLowerCase()!='post')) return;

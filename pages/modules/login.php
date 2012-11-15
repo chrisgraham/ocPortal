@@ -63,6 +63,7 @@ class Module_login
 			'date_and_time'=>'TIME',
 			'ip'=>'IP'
 		));
+		$GLOBALS['SITE_DB']->create_index('failedlogins','failedlogins_by_ip',array('ip'));
 	}
 
 	/**

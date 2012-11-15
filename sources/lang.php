@@ -210,7 +210,8 @@ function user_lang()
 	}
 	if ($lang=='')
 	{
-		$lang=filter_naughty(either_param('lang',get_param('keep_lang','')));
+		$lang=either_param('lang',get_param('keep_lang',''));
+		if ($lang!='') $lang=filter_naughty($lang);
 	}
 
 	if ((!function_exists('get_member')) || ($USER_LANG_LOOP==1) || ($MEMBER_CACHED===NULL))
@@ -419,7 +420,8 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 
 	$cfb=get_custom_file_base();
 	$fb=get_file_base();
-	$codename=filter_naughty($codename);
+	if (strpos($codename,'..')!==false)
+		$codename=filter_naughty($codename);
 
 	if ($PAGE_CACHE_LAZY_LOAD)
 	{
@@ -439,7 +441,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 				$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'.po';
 				if (!is_file($lang_file))
 				{
-					$lang_file=$fb.'/lang_custom/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+					$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'-'.strtolower($lang).'.po';
 					if (!is_file($lang_file))
 					{
 						$lang_file=$lang_file_default;
@@ -511,7 +513,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			if (!is_file($lang_file))
 			{
 				$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.po';
-				if (!is_file($lang_file)) $lang_file=$fb.'/lang/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+				if (!is_file($lang_file)) $lang_file=$fb.'/lang/'.$lang.'/'.$codename.'-'.strtolower($lang).'.po';
 			}
 			$pcache=persistent_cache_get(array('LANG',$lang,$codename),is_file($lang_file)?filemtime($lang_file):NULL);
 		} else
@@ -540,7 +542,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 				$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'.po';
 				if (!is_file($lang_file))
 				{
-					$lang_file=$fb.'/lang_custom/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+					$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'-'.strtolower($lang).'.po';
 					if (!is_file($lang_file))
 					{
 						$lang_file=$lang_file_default;

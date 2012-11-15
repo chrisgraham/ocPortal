@@ -52,8 +52,8 @@ class Hook_content_meta_aware_news_category
 			'view_pagelink_pattern'=>'_SEARCH:news:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_news:_ec:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:news:misc:_WILD',
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_news'))?build_url(array('page'=>'cms_news','type'=>'ad'),get_module_zone('cms_news')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'news'),(!is_null($zone))?$zone:get_module_zone('news')),
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_news'))?(get_module_zone('cms_news').':cms_news:ad'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('news')).':news',
 
 			'support_url_monikers'=>true,
 

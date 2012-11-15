@@ -1,10 +1,11 @@
 "use strict";
 
-window.slideshow_timer=null;
-
-window.slideshow_slides={};
-
-window.slideshow_time=null;
+if (typeof window.slideshow_timer=='undefined')
+{
+	window.slideshow_timer=null;
+	window.slideshow_slides={};
+	window.slideshow_time=null;
+}
 
 function initialise_slideshow()
 {

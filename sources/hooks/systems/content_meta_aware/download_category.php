@@ -55,8 +55,8 @@ class Hook_content_meta_aware_download_category
 			'view_pagelink_pattern'=>'_SEARCH:downloads:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_downloads:_ec:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:downloads:misc:_WILD',
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?build_url(array('page'=>'cms_downloads','type'=>'ac','parent_id'=>'!'),get_module_zone('cms_downloads')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'downloads'),(!is_null($zone))?$zone:get_module_zone('downloads')),
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?(get_module_zone('cms_downloads').':cms_downloads:ac:parent_id=!'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('downloads')).':downloads',
 
 			'support_url_monikers'=>true,
 

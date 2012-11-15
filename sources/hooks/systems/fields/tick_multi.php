@@ -91,13 +91,13 @@ class Hook_fields_tick_multi
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=explode(chr(10),$ev);
+		$exploded=array_flip(explode(chr(10),$ev));
 		foreach (explode('|',$field['cf_default']) as $option)
 		{
-			$all[]=array('OPTION'=>$option,'HAS'=>in_array($option,$exploded));
+			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded[$option]));
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all,'FIELD_ID'=>strval($field['id'])),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
 	}
 
 	// ======================

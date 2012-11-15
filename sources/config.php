@@ -138,13 +138,15 @@ function multi_lang()
  */
 function load_options()
 {
-	global $CONFIG_OPTIONS_CACHE;
+	global $CONFIG_OPTIONS_CACHE,$CONFIG_OPTIONS_BEING_CACHED;
+	$CONFIG_OPTIONS_BEING_CACHED=true;
 	$CONFIG_OPTIONS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
 	if (is_array($CONFIG_OPTIONS_CACHE)) return;
+	$CONFIG_OPTIONS_BEING_CACHED=false;
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
 		global $SITE_INFO;
-		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'',NULL,NULL,true);
+		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.the_type','c.c_set','t.text_original AS config_value_translated','(case c_set when 0 then eval else \'\' end) AS eval'),array(),'',NULL,NULL,true);
 	} else
 	{
 		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('the_name','config_value','the_type','c_set'),NULL,'',NULL,NULL,true);
@@ -287,6 +289,8 @@ function delete_value($name)
 {
 	$GLOBALS['SITE_DB']->query_delete('values',array('the_name'=>$name),'',1);
 	if (function_exists('persistent_cache_delete')) persistent_cache_delete('VALUES');
+	global $VALUE_OPTIONS_CACHE;
+	unset($VALUE_OPTIONS_CACHE[$name]);
 }
 
 /**
@@ -325,7 +329,8 @@ function get_option($name,$missing_ok=false)
 		$option['config_value_translated']=$option['config_value']; // Allows slightly better code path next time
 		if ($option['config_value_translated']===NULL) $option['config_value_translated']='<null>';
 		$CONFIG_OPTIONS_CACHE[$name]=$option;
-		if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+		global $CONFIG_OPTIONS_BEING_CACHED;
+		if ($CONFIG_OPTIONS_BEING_CACHED) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
 		if ($option['config_value']=='<null>') return NULL;
 		return $option['config_value'];
 	}

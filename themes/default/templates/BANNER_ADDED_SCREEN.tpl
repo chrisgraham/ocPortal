@@ -13,10 +13,12 @@
 	</code>
 </div>
 
-<h2>{!INFORMATION}</h2>
+<h2>{!_STATISTICS}</h2>
 
 <p>
 	{!ACCESS_BANNER_INFO,{STATS_URL*}}
 </p>
+
+<h2>{!WHAT_NEXT}</h2>
 
 {DO_NEXT}

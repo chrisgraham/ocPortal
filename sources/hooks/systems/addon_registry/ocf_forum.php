@@ -123,6 +123,7 @@ class Hook_addon_registry_ocf_forum
 			'MEMBER_BAR_SEARCH.tpl',
 			'OCF_NOTIFICATION.tpl',
 			'BLOCK_MAIN_PT_NOTIFICATIONS.tpl',
+			'OCF_MEMBER_PROFILE_PTS.tpl',
 			'OCF_PINNED_DIVIDER.tpl',
 			'OCF_POSTER_GUEST.tpl',
 			'OCF_POSTER_MEMBER.tpl',
@@ -324,7 +325,8 @@ class Hook_addon_registry_ocf_forum
 			'OCF_TOPIC_POLL_VIEW_RESULTS.tpl'=>'ocf_topic_voted_wrap',
 			'TOPIC_LIST.tpl'=>'topic_list',
 			'OCF_PT_FILTERS.tpl'=>'ocf_forum',
-			'OCF_MEMBER_PROFILE_POSTS.tpl'=>'ocf_member_profile_posts'
+			'OCF_MEMBER_PROFILE_POSTS.tpl'=>'ocf_member_profile_posts',
+			'OCF_MEMBER_PROFILE_PTS.tpl'=>'ocf_member_profile_pts',
 		);
 	}
 
@@ -1310,6 +1312,24 @@ class Hook_addon_registry_ocf_forum
 			'MEMBER_ID'=>placeholder_id(),
 			'TOPICS'=>$topic_wrapper
 		));
+		return array(
+			lorem_globalise($tab_content, NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__ocf_member_profile_pts()
+	{
+		require_css('ocf');
+
+		$tab_content=do_template('OCF_MEMBER_PROFILE_PTS',array('CONTENT'=>lorem_paragraph_html()));
+
 		return array(
 			lorem_globalise($tab_content, NULL, '', true)
 		);

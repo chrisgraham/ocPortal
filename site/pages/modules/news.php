@@ -371,7 +371,7 @@ class Module_news
 		{
 			if (has_category_access(get_member(),'news',strval($category['id'])))
 			{
-				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news r'.$join.' WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
+				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news r'.$join.' WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
 				$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
 				if ($count>0)
 				{
@@ -453,7 +453,7 @@ class Module_news
 
 		// Get category contents
 		$inline=get_param_integer('inline',0)==1;
-		$content=do_block('main_news',array('title'=>'','filter'=>$filter,'filter_and'=>$filter_and,'blogs'=>is_null($blog)?'-1':strval($blog),'member_based'=>($blog===1)?'1':'0','zone'=>'_SELF','days'=>'0','fallback_full'=>$inline?'0':'10','fallback_archive'=>$inline?'30':'0','no_links'=>'1','pagination'=>'1','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
+		$content=do_block('main_news',array('title'=>'','filter'=>$filter,'filter_and'=>$filter_and,'blogs'=>is_null($blog)?'-1':strval($blog),'member_based'=>($blog===1)?'1':'0','zone'=>'_SELF','days'=>'0','fallback_full'=>$inline?'0':'10','fallback_archive'=>$inline?'30':'0','no_links'=>'1','pagination'=>'1','attach_to_url_filter'=>'1','ocselect'=>$ocselect,'block_id'=>'module'));
 
 		// Management links
 		if ((($blog!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
@@ -529,7 +529,7 @@ class Module_news
 		if (!has_category_access(get_member(),'news',strval($myrow['news_category']))) access_denied('CATEGORY_ACCESS');
 
 		// Title
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('news',strval($id));
@@ -572,7 +572,7 @@ class Module_news
 		}
 
 		// Validation
-		if ($myrow['validated']==0)
+		if (($myrow['validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');

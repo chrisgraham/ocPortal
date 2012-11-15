@@ -95,12 +95,12 @@ function _symbol_thumbnail($param)
 			if (isset($param[2]) && $param[2] != '') // Where we are saving to
 			{
 				$thumb_save_dir=$param[2];
+				if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
+				if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
 			} else
 			{
-				$thumb_save_dir=basename(dirname(rawurldecode($orig_url)));
+				$thumb_save_dir=dirname(rawurldecode(preg_replace('#'.preg_quote(get_custom_base_url().'/','#').'#','',$orig_url)));
 			}
-			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
-			if (!file_exists(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
 			$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
 			$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);
@@ -222,8 +222,7 @@ function _symbol_thumbnail($param)
 					if (!$result) $value=(trim($param[4])=='')? $orig_url : $param[4];
 				}
 
-				if (!is_file($save_path))
-					$value.='.png'; // was saved as PNG
+				if ((!is_saveable_image($save_path)) && (get_file_extension($save_path)!='svg')) $value.='.png'; // Will have been saved with .png on the end (probably was a .gif)
 			}
 			else
 			{
@@ -845,7 +844,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 
 	if ($ext2=='png')
 	{
-		if (strtolower(substr($to,-4)) != '.png') $to=$to . '.png';
+		if (strtolower(substr($to,-4))!='.png') $to.='.png';
 		$test=@imagepng($dest,$to);
 		if (!$test)
 		{

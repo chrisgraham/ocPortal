@@ -1,4 +1,7 @@
-window.has_focus=true;
+if (typeof window.has_focus=='undefined')
+{
+	window.has_focus=true;
+}
 add_event_listener_abstract(window,'blur',function() { window.has_focus=false; });
 add_event_listener_abstract(window,'focus',function() { window.has_focus=true; });
 

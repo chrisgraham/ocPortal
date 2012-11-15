@@ -72,7 +72,7 @@ function init__comcode_text()
 		'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
 
 		/*Handled in special way*/
-		'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'reference'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,
+		'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'reference'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,
 	);
 	// These are not reversable, but we want them WYSIWYGABLE
 	global $PUREHTML_TAGS;

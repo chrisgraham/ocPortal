@@ -249,7 +249,7 @@ function restore_output_state($just_tempcode=false,$merge_current=false)
 	global $OUTPUT_STATE_STACK;
 
 	$old_state=array_pop($OUTPUT_STATE_STACK);
-	if (is_null($old_state))
+	if ($old_state===NULL)
 	{
 		_load_blank_output_state($just_tempcode);
 	} else
@@ -260,7 +260,7 @@ function restore_output_state($just_tempcode=false,$merge_current=false)
 			{
 				if (($merge_current) && (is_array($val)))
 				{
-					if (is_null($GLOBALS[$var])) $GLOBALS[$var]=array();
+					if ($GLOBALS[$var]===NULL) $GLOBALS[$var]=array();
 					$GLOBALS[$var]+=$val;
 				} else
 				{
@@ -524,6 +524,19 @@ function ocp_mb_strtoupper($in)
 }
 
 /**
+ * Trim white-space.
+ *
+ * @param  string	Subject.
+ * @return string	Result.
+ */
+function ocp_mb_trim($in)
+{
+	if (strtoupper(get_charset())!='utf-8') return trim($in);
+
+	return preg_replace('/(^\s+)|(\s+$)/us','',$in); // Based on comment in PHP manual
+}
+
+/**
  * Find if we a string is ASCII, and hence we can use non-UTF-safe functions on it.
  *
  * @param  string			String to test
@@ -647,13 +660,15 @@ function has_no_forum()
  */
 function addon_installed($addon,$non_bundled_too=false)
 {
-	global $ADDON_INSTALLED_CACHE;
+	global $ADDON_INSTALLED_CACHE,$SITE_INFO;
 	if ($ADDON_INSTALLED_CACHE==array())
 	{
 		if (function_exists('persistent_cache_get')) $ADDON_INSTALLED_CACHE=persistent_cache_get('ADDONS_INSTALLED');
 	}
 	if (isset($ADDON_INSTALLED_CACHE[$addon])) return $ADDON_INSTALLED_CACHE[$addon];
-	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
+
+	$addon=filter_naughty($addon);
+	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.$addon.'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.$addon.'.php');
 	if ((!$answer) && ($non_bundled_too))
 	{
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('addons','addon_name',array('addon_name'=>$addon));
@@ -1086,7 +1101,8 @@ function get_page_name()
 			if ($page===NULL) $page='';
 		}
 	}
-	$page=filter_naughty($page);
+	if (strpos($page,'..')!==false)
+		$page=filter_naughty($page);
 	if ($ZONE!==NULL) $PAGE_NAME_CACHE=$page;
 	$GETTING_PAGE_NAME=false;
 	return $page;
@@ -1188,7 +1204,7 @@ function is_valid_ip($ip)
 {
 	if ($ip=='') return false;
 	$parts=array();
-	if (preg_match('#^(\d+)\.(\d+)\.(\d+)\.(\d+)$#',$ip,$parts)!=0)
+	if ((strpos($ip,'.')!==false) && (preg_match('#^(\d+)\.(\d+)\.(\d+)\.(\d+)$#',$ip,$parts)!=0))
 	{
 		if (intval($parts[1])>255) return false;
 		if (intval($parts[2])>255) return false;
@@ -1196,7 +1212,7 @@ function is_valid_ip($ip)
 		if (intval($parts[4])>255) return false;
 		return true;
 	}
-	if (preg_match('#^[\d:a-fA-F]*$#',$ip)!=0)
+	if ((strpos($ip,':')!==false) && (preg_match('#^[\d:a-fA-F]*$#',$ip)!=0))
 	{
 		return true;
 	}
@@ -1212,14 +1228,21 @@ function is_valid_ip($ip)
  */
 function get_ip_address($amount=4)
 {
-//	return strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)); // Nice little test for if sessions break
+	static $ip_cache=array();
+	if (isset($ip_cache[$amount])) return $ip_cache[$amount];
+
+	//	return strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)); // Nice little test for if sessions break
 
 	/*$fw=ocp_srv('HTTP_X_FORWARDED_FOR');	Presents too many security and maintenance problems. Can easily be faked, or changed.
 	if (ocp_srv('HTTP_CLIENT_IP')!='') $fw=ocp_srv('HTTP_CLIENT_IP');
 	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
 	else */$ip=ocp_srv('REMOTE_ADDR');
 
-	if (!is_valid_ip($ip)) return '';
+	if (!is_valid_ip($ip))
+	{
+		$ip_cache[$amount]='';
+		return '';
+	}
 
 	// Bizarro-filter (found "in the wild")
 	$pos=strpos($ip,',');
@@ -1242,7 +1265,8 @@ function get_ip_address($amount=4)
 		{
 			$parts[$i]='*';
 		}
-		return implode(':',$parts);
+		$ip_cache[$amount]=implode(':',$parts);
+		return $ip_cache[$amount];
 	} else
 	{
 		$parts=explode('.',$ip);
@@ -1254,7 +1278,8 @@ function get_ip_address($amount=4)
 		{
 			$parts[$i]='*';
 		}
-		return implode('.',$parts);
+		$ip_cache[$amount]=implode('.',$parts);
+		return $ip_cache[$amount];
 	}
 }
 
@@ -1626,6 +1651,8 @@ function is_invisible()
  */
 function get_num_users_site()
 {
+	if (get_value('disable_user_online_counting')==='1') return 1;
+
 	global $NUM_USERS_SITE_CACHE,$PEAK_USERS_EVER_CACHE,$PEAK_USERS_WEEK_CACHE;
 	$users_online_time_seconds=60*intval(get_option('users_online_time'));
 	$NUM_USERS_SITE_CACHE=get_value_newer_than('users_online',time()-$users_online_time_seconds/2); /* Refreshes half way through the user online time, to approximate accuracy */
@@ -1990,7 +2017,11 @@ function get_bot_type()
 	if ($BOT_TYPE_CACHE!==false) return $BOT_TYPE_CACHE;
 
 	$agent=ocp_srv('HTTP_USER_AGENT');
-	if (strpos($agent,'WebKit')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false) return NULL; // Quick exit path
+	if (strpos($agent,'WebKit')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false)
+	{
+		$BOT_TYPE_CACHE=NULL;
+		return NULL; // Quick exit path
+	}
 	$agent=strtolower($agent);
 
 	global $BOT_MAP_CACHE,$SITE_INFO;
@@ -2209,11 +2240,14 @@ function seo_meta_get_for($type,$id)
  */
 function seo_meta_load_for($type,$id,$title=NULL)
 {
-	$result=seo_meta_get_for($type,$id);
-	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
-	if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',$result[0]));
-	if ($result[1]!='') $SEO_DESCRIPTION=$result[1];
-	if ($title!==NULL) set_short_title(str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title))));
+	if (!$GLOBALS['IS_VIRTUALISED_REQUEST'])
+	{
+		$result=seo_meta_get_for($type,$id);
+		global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
+		if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',$result[0]));
+		if ($result[1]!='') $SEO_DESCRIPTION=$result[1];
+		if ($title!==NULL) set_short_title(str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title))));
+	} // Otherwise don't bother (this is an optimisation)
 }
 
 /**
@@ -2225,6 +2259,7 @@ function seo_meta_load_for($type,$id,$title=NULL)
  */
 function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 {
+	if (get_value('no_tags')==='1') return new ocp_tempcode();
 	if (!addon_installed('search')) return new ocp_tempcode();
 
 	if ($the_tags===NULL)
@@ -2636,4 +2671,137 @@ function strip_html($in)
 	$in=str_replace(array('&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('-','-','|','"','"',"'","'"),$in);
 	$in=strip_tags($in);
 	return @html_entity_decode($in,ENT_QUOTES,get_charset());
+}
+
+/**
+ * Attach some XHTML to the screen footer.
+ *
+ * @sets_output_state
+ *
+ * @param  mixed			XHTML to attach (Tempcode or string)
+ */
+function attach_to_screen_footer($data)
+{
+	global $EXTRA_FOOT;
+	if ($EXTRA_FOOT===NULL) $EXTRA_FOOT=new ocp_tempcode();
+	$EXTRA_FOOT->attach($data);
+}
+
+/**
+ * Check to see if an IP address is banned.
+ *
+ * @param  string			The IP address to check for banning (potentially encoded with *'s)
+ * @param  boolean		Force check via database
+ * @param  boolean		Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
+ * @return ?boolean		Whether the IP address is banned (NULL: unknown)
+ */
+function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is the very first query called, so we will be a bit smarter, checking for errors
+{
+	static $cache=array();
+	if ($handle_uncertainties)
+	{
+		if (array_key_exists($ip,$cache)) return $cache[$ip];
+	}
+
+	if (!addon_installed('securitylogging')) return false;
+
+	// Check exclusions first
+	$_exclusions=get_option('spam_check_exclusions',true);
+	if (!is_null($_exclusions))
+	{
+		$exclusions=explode(',',$_exclusions);
+		foreach ($exclusions as $exclusion)
+		{
+			if (trim($ip)==$exclusion) return false;
+		}
+	}
+
+	global $SITE_INFO;
+	if ((!$force_db) && (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess'))))
+	{
+		$bans=array();
+		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().'/.htaccess'),$bans);
+		$ip_bans=array();
+		for ($i=0;$i<$ban_count;$i++)
+		{
+			$ip_bans[]=array('ip'=>$bans[1][$i]);
+		}
+	} else
+	{
+		$ip_bans=persistent_cache_get('IP_BANS');
+		if (is_null($ip_bans))
+		{
+			$ip_bans=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'banned_ip',NULL,NULL,true);
+			if (is_null($ip_bans))
+				$ip_bans=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'usersubmitban_ip',NULL,NULL,true); // LEGACY
+			if (!is_null($ip_bans))
+			{
+				persistent_cache_set('IP_BANS',$ip_bans);
+			}
+		}
+		if (is_null($ip_bans)) critical_error('DATABASE_FAIL');
+	}
+
+	$ip4=(strpos($ip,'.')!==false);
+	if ($ip4)
+	{
+		$ip_parts=explode('.',$ip);
+	} else
+	{
+		$ip_parts=explode(':',$ip);
+	}
+
+	$self_ip=NULL;
+	foreach ($ip_bans as $ban)
+	{
+		if ((isset($ban['i_ban_until'])) && ($ban['i_ban_until']<time()))
+		{
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NOT NULL AND i_ban_until<'.strval(time()));
+			continue;
+		}
+
+		if ((($ip4) && (compare_ip_address_ip4($ban['ip'],$ip_parts))) || ((!$ip4) && (compare_ip_address_ip6($ban['ip'],$ip_parts))))
+		{
+			if (is_null($self_ip))
+			{
+				$self_host=ocp_srv('HTTP_HOST');
+				if (($self_host=='') || (preg_match('#^localhost[\.\:$]#',$self_host)!=0))
+				{
+					$self_ip='';
+				} else
+				{
+					if (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0)
+					{
+						$self_ip=gethostbyname($self_host);
+					} else $self_ip='';
+					if ($self_ip=='') $self_ip=ocp_srv('SERVER_ADDR');
+				}
+			}
+
+			if (($self_ip!='') && (!compare_ip_address($ban['ip'],$self_ip))) continue;
+			if (compare_ip_address($ban['ip'],'127.0.0.1')) continue;
+			if (compare_ip_address($ban['ip'],'fe00:0000:0000:0000:0000:0000:0000:0000')) continue;
+
+			if (array_key_exists('i_ban_positive',$ban))
+			{
+				$ret=($ban['i_ban_positive']==1);
+			} else
+			{
+				$ret=true;
+			}
+
+			if ($handle_uncertainties)
+			{
+				$cache[$ip]=$ret;
+			}
+			return $ret;
+		}
+	}
+
+	$ret=$handle_uncertainties?NULL:false;
+	if ($handle_uncertainties)
+	{
+		$cache[$ip]=$ret;
+	}
+	return $ret;
 }

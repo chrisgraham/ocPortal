@@ -1,10 +1,13 @@
 "use strict";
 
-window.menu_hold_time=500;
+if (typeof window.menu_hold_time=='undefined')
+{
+	window.menu_hold_time=500;
 
-window.clean_menus_timeout=null;
-window.active_menu=null;
-window.last_active_menu=null;
+	window.clean_menus_timeout=null;
+	window.active_menu=null;
+	window.last_active_menu=null;
+}
 
 function clean_menus()
 {

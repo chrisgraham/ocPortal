@@ -56,8 +56,8 @@ class Hook_content_meta_aware_image
 			'view_pagelink_pattern'=>'_SEARCH:galleries:image:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_galleries:_ed:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:galleries:misc:_WILD',
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?build_url(array('page'=>'cms_galleries','type'=>'ad'),get_module_zone('cms_galleries')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'galleries'),(!is_null($zone))?$zone:get_module_zone('galleries')),
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries').':cms_galleries:ad'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('galleries')).':galleries',
 
 			'support_url_monikers'=>true,
 

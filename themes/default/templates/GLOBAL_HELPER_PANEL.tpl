@@ -1,6 +1,4 @@
 <div class="global_helper_panel_wrap">
-	{$REQUIRE_CSS,helper_panel}
-
 	{+START,IF,{$NOT,{$HIDE_HELP_PANEL}}}
 	<a id="helper_panel_toggle" href="#" onclick="return help_panel(false);"><img title="{!HELP_OR_ADVICE}: {!HIDE}" alt="{!HELP_OR_ADVICE}: {!HIDE}" src="{$IMG*,help_panel_hide}" /></a>
 	{+END}

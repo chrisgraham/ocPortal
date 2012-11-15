@@ -70,7 +70,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
-			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if (addon_installed('unvalidated'))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));

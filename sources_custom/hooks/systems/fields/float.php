@@ -143,6 +143,7 @@ class Hook_fields_float
 		{
 			$default=post_param('longitude',STRING_MAGIC_NULL);
 		}
+
 		return post_param($tmp_name,$default);
 	}
 

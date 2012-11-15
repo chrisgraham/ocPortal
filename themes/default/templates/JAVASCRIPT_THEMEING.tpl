@@ -20,8 +20,11 @@ function make_tooltip_func(op)
 	}
 }
 
-window.tpl_descrips=[];
-window.url='{$FIND_SCRIPT_NOHTTP;,load_template}';
+if (typeof window.tpl_descrips=='undefined')
+{
+	window.tpl_descrips=[];
+	window.url='{$FIND_SCRIPT_NOHTTP;,load_template}';
+}
 
 function load_template_previews()
 {

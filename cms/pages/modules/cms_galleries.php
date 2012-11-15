@@ -895,7 +895,7 @@ class Module_cms_galleries extends standard_crud_module
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
-			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
@@ -1306,7 +1306,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
-			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		$thumb_width=intval(get_option('thumb_width'));
 		$validated_field=new ocp_tempcode();

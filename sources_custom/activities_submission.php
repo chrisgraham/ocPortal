@@ -154,7 +154,7 @@ function activities_ajax_update_list_handler()
 {
 	$map=array();
 
-	$map['max']=$GLOBALS['SITE_DB']->query_select_value_if_there('values','the_value',array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
+	$map['max']=$GLOBALS['SITE_DB']->query_select_value_if_there('values','the_value',array('the_name'=>get_zone_name().'_'.get_page_name().'_update_max'));
 
 	if (is_null($map['max']))
 	{
@@ -184,13 +184,13 @@ function activities_ajax_update_list_handler()
 
 	header('Content-Type: text/xml');
 
-	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
+	$response='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 
 	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
 
 	if ($proceed_selection===true)
 	{
-		$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE (('.$whereville.') AND id>'.(($last_id=='')?'-1':$last_id).') ORDER BY a_time DESC',$map['max']);
+		$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE (('.$whereville.') AND id>'.(($last_id=='')?'-1':$last_id).') ORDER BY a_time DESC',intval($map['max']));
 
 		if (count($activities)>0)
 		{
@@ -295,12 +295,12 @@ function activities_ajax_removal_handler()
  */
 function log_newest_activity($id,$timeout=1000,$force=false)
 {
-	$filename=get_custom_file_base().'/data_custom/latest_activity.txt';
+	$file_path=get_custom_file_base().'/data_custom/latest_activity.txt';
 
 	// Grab a pointer for appending to this file
 	// NOTE: ALWAYS open as append! Opening as write will wipe the file during
 	// the fopen call, which is before we have a lock.
-	$fp=@fopen($filename, 'a+');
+	$fp=@fopen($file_path, 'a+');
 
 	// Only bother running if this file can be opened
 	if ($fp!==false)
@@ -343,6 +343,9 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 	} else
 	{
 		if (function_exists('attach_message'))
-			attach_message(intelligent_write_error_inline($filename),'warn');
+			attach_message(intelligent_write_error_inline($file_path),'warn');
 	}
+
+	fix_permissions($file_path);
+	sync_file($file_path);
 }

@@ -127,6 +127,8 @@ class Hook_fields_url
 	{
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
 
+		if ($actual_value=='') $actual_value='http://';
+
 		return form_input_line($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1,NULL,NULL,'url');
 	}
 

@@ -447,7 +447,7 @@ class Module_galleries
 	{
 		$title=get_screen_title('LIST_OF_GALLERIES');
 
-		set_feed_url(find_script('backend').'?mode=galleries&filter=');
+		set_feed_url('?mode=galleries&filter=');
 
 		// Not done via main_multi_content block due to need to filter out special galleries
 		$count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
@@ -476,7 +476,7 @@ class Module_galleries
 		require_code('images');
 
 		$cat=get_param('id','root');
-		set_feed_url(find_script('backend').'?mode=galleries&filter='.$cat);
+		set_feed_url('?mode=galleries&filter='.$cat);
 		$root=get_param('keep_gallery_root','root');
 
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
@@ -585,7 +585,7 @@ class Module_galleries
 		}
 
 		// Page title
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('gallery',$cat);
@@ -700,7 +700,7 @@ class Module_galleries
 		if ($probe_type=='first')
 		{
 			$where=db_string_equal_to('cat',$cat);
-			if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+			if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 			if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,1);
 			if (array_key_exists(0,$first_video))
@@ -711,7 +711,7 @@ class Module_galleries
 			} else
 			{
 				$where=db_string_equal_to('cat',$cat);
-				if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+				if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 				if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,1);
 				if (array_key_exists(0,$first_image))
@@ -722,7 +722,7 @@ class Module_galleries
 				} // If else, then we have no probe_type, and thus won't be able to show anything
 			}
 		}
-		if ((!is_null($row)) && ($row['validated']==0))
+		if ((!is_null($row)) && ($row['validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -735,7 +735,7 @@ class Module_galleries
 				if (is_null($row))
 				{
 					$map=array('cat'=>$cat,'id'=>$probe_id);
-					if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
+					if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $map['validated']=1;
 					$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
 					{
@@ -791,7 +791,7 @@ class Module_galleries
 				if (is_null($row))
 				{
 					$map=array('cat'=>$cat,'id'=>$probe_id);
-					if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
+					if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $map['validated']=1;
 					$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
 					{
@@ -853,7 +853,7 @@ class Module_galleries
 
 		// Display entries
 		$where=db_string_equal_to('cat',$cat);
-		if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 		$_max_entries=get_value('flow_mode_max');
 		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
@@ -1012,7 +1012,7 @@ class Module_galleries
 		$video_select=get_param('video_select','*');
 		$sort=get_param('sort','add_date DESC');
 		$ocselect=either_param('active_filter','');
-		$entries=do_block('main_gallery_embed',array('param'=>$filter,'zone'=>'_SELF','sort'=>$sort,'days'=>$days,'max'=>'30','pagination'=>'1','select'=>$image_select,'video_select'=>$video_select,'ocselect'=>$ocselect));
+		$entries=do_block('main_gallery_embed',array('param'=>$filter,'zone'=>'_SELF','sort'=>$sort,'days'=>$days,'max'=>'30','pagination'=>'1','select'=>$image_select,'video_select'=>$video_select,'ocselect'=>$ocselect,'block_id'=>'module'));
 		inform_non_canonical_parameter('sort');
 		inform_non_canonical_parameter('select');
 		inform_non_canonical_parameter('video_select');
@@ -1063,7 +1063,7 @@ class Module_galleries
 
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('image',strval($id));
@@ -1079,7 +1079,7 @@ class Module_galleries
 		$url=$myrow['url'];
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 		$cat=$myrow['cat'];
-		set_feed_url(find_script('backend').'?mode=galleries&filter='.$cat);
+		set_feed_url('?mode=galleries&filter='.$cat);
 
 		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_select_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
 		{
@@ -1131,7 +1131,7 @@ class Module_galleries
 		$description=get_translated_tempcode($myrow['description']);
 
 		// Validation
-		if ($myrow['validated']==0)
+		if (($myrow['validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -1217,7 +1217,7 @@ class Module_galleries
 
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('video',strval($id));
@@ -1233,7 +1233,7 @@ class Module_galleries
 		$url=$myrow['url'];
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 		$cat=$myrow['cat'];
-		set_feed_url(find_script('backend').'?mode=galleries&filter='.urlencode($cat));
+		set_feed_url('?mode=galleries&filter='.urlencode($cat));
 
 		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_select_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
 		{
@@ -1285,7 +1285,7 @@ class Module_galleries
 		);
 
 		// Validation
-		if ($myrow['validated']==0)
+		if (($myrow['validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -1401,7 +1401,7 @@ class Module_galleries
 	 */
 	function build_set_navigation($where,$join,$category_name,$current_id,$root,$current_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,$image_select,$video_select)
 	{
-		$sv=has_privilege(get_member(),'see_unvalidated');
+		$sv=(has_privilege(get_member(),'see_unvalidated') && (addon_installed('unvalidated')));
 		if (!$sv) $where.=' AND validated=1';
 
 		$days=get_param('days','');

@@ -70,7 +70,7 @@ class Block_side_news_archive
 		$filters_2=ocfilter_to_sqlfragment($filter,'d.news_entry_category','news_categories',NULL,'d.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$q_filter='('.$filters_1.' OR '.$filters_2.')';
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.id,p.date_and_time FROM '.get_table_prefix().'news p LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=p.id WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY date_and_time DESC');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.id,p.date_and_time FROM '.get_table_prefix().'news p LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=p.id WHERE '.$q_filter.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY date_and_time DESC');
 		$rows=remove_duplicate_rows($rows,'id');
 		$rows=array_reverse($rows);
 

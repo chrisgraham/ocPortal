@@ -59,6 +59,14 @@ class Module_shopping
 		delete_config_option('allow_opting_out_of_tax');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=category:catalogue_name=products');
+
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('firstname');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('lastname');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('building_name_or_number');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('city');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('state');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('post_code');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('country');
 	}
 
 	/**

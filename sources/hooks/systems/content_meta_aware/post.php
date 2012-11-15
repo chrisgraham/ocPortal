@@ -57,8 +57,8 @@ class Hook_content_meta_aware_post
 			'view_pagelink_pattern'=>'_SEARCH:topicview:findpost:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_post:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:topicview:misc:_WILD',
-			'add_url'=>new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'forumview'),(!is_null($zone))?$zone:get_module_zone('forumview')),
+			'add_url'=>'',
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('forumview')).':forumview',
 
 			'support_url_monikers'=>false,
 

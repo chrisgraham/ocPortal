@@ -133,6 +133,10 @@ function fractional_edit_script()
 	if (!has_actual_page_access(get_member(),$page,$zone))
 		access_denied('ZONE_ACCESS');
 
+	require_code('failure');
+	global $WANT_TEXT_ERRORS;
+	$WANT_TEXT_ERRORS=true;
+
 	require_code('site');
 	request_page($page,true);
 

@@ -1,15 +1,17 @@
 <tr class="form_table_field_spacer">
-	<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="table_heading_cell{+START,IF,{REQUIRED}} required{+END}">
-		<span class="field_name">
-			<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
-		</span>
-
+	{+START,SET,posting_field}
 		{+START,IF_PASSED,POST_COMMENT}
-			<h2><label for="{NAME*}">{POST_COMMENT*}</label></h2>
+			{+START,IF_NON_EMPTY,{POST_COMMENT}}
+				<h2><label for="{NAME*}">{POST_COMMENT*}</label></h2>
 
-			<input type="hidden" name="label_for__{NAME*}" value="{$STRIP_TAGS,{POST_COMMENT*}}" />
+				<input type="hidden" name="label_for__{NAME*}" value="{$STRIP_TAGS,{POST_COMMENT*}}" />
+			{+END}
 		{+END}
 		{+START,IF_NON_PASSED,POST_COMMENT}
+			<span class="field_name">
+				<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
+			</span>
+
 			<label class="accessibility_hidden" for="{NAME*}">{!_POST}</label>
 		{+END}
 
@@ -17,8 +19,8 @@
 			<div class="associated_details">{DESCRIPTION}</div>
 		{+END}
 
-		<div class="comcode_supported posting_form_main_comcode_button">
-			{+START,IF,{$OR,{$AND,{$IN_STR,{CLASS},wysiwyg},{$JS_ON}},{$AND,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages},{$SHOW_DOCS}}}}
+		{+START,IF,{$OR,{$AND,{$IN_STR,{CLASS},wysiwyg},{$JS_ON}},{$AND,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages},{$SHOW_DOCS}}}}
+			<div class="comcode_supported posting_form_main_comcode_button">
 				<ul class="horizontal_links horiz_field_sep associated_links_block_group">
 					{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,COMCODE_URL}
 						{$,<li><a class="link_exempt" title="\{!COMCODE_MESSAGE,Comcode\}: \{!LINK_NEW_WINDOW\}" target="_blank" href="\{COMCODE_URL*\}"><img class="comcode_supported_icon" alt="\{!COMCODE_MESSAGE,Comcode\}" src="\{$IMG*,comcode\}" title="\{!COMCODE_MESSAGE,Comcode\}" /></a> \{!COMCODE_MESSAGE,<a class="link_exempt" title="Comcode: \{!LINK_NEW_WINDOW\}" target="_blank" href="\{COMCODE_URL*\}">Comcode</a>\}</li>}
@@ -33,9 +35,14 @@
 						{+END}
 					{+END}
 				</ul>
-			{+END}
-		</div>
-	</th>
+			</div>
+		{+END}
+	{+END}
+	{+START,IF_NON_EMPTY,{$TRIM,{$GET,posting_field}}}
+		<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="table_heading_cell{+START,IF,{REQUIRED}} required{+END}">
+			{$GET,posting_field}
+		</th>
+	{+END}
 </tr>
 <tr class="field_input">
 	<td class="{+START,IF,{REQUIRED}} required{+END} form_table_huge_field"{+START,IF,{$NOT,{$MOBILE}}} colspan="2"{+END}>
@@ -94,7 +101,7 @@
 			{+END}{+END}
 
 			{+START,IF_PASSED,POST_COMMENT}
-				<p>{!USE_WEBSITE_RULES,{$PAGE_LINK*,:rules},{$PAGE_LINK*,:privacy}}</p>
+				<p class="posting_rules">{!USE_WEBSITE_RULES,{$PAGE_LINK*,:rules},{$PAGE_LINK*,:privacy}}</p>
 			{+END}
 		{+END}
 	</td>

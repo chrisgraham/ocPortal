@@ -44,25 +44,37 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	}
 	foreach (array_keys($hooks) as $hook)
 	{
-		if (($only_tab===NULL) || ($only_tab==$hook))
+		if (($only_tab===NULL) || (preg_match('#(^|,)'.preg_quote($hook,'#').'(,|$)#',$only_tab)!=0))
 		{
 			require_code('hooks/systems/profiles_tabs/'.$hook);
 			$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
 			if ($ob->is_active($member_id_of,$member_id_viewing))
 			{
-				$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,$only_tab!==$hook && !browser_matches('ie6') && !browser_matches('ie7') && has_js());
+				$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,(preg_match('#(^|,)'.preg_quote($hook,'#').'(,|$)#',$only_tab)==0) && !browser_matches('ie6') && !browser_matches('ie7') && has_js());
 			}
 		}
 	}
 
-	sort_maps_by($tabs,2);
+	if (!is_null($only_tab))
+	{
+		$_unsorted=$tabs;
+		$tabs=array();
+		foreach (explode(',',$only_tab) as $tab)
+		{
+			if (isset($_unsorted[$tab]))
+				$tabs[$tab]=$_unsorted[$tab];
+		}
+	} else
+	{
+		sort_maps_by($tabs,2);
+	}
 
 	require_javascript('javascript_profile');
 	require_javascript('javascript_ajax');
 
 	load_up_all_self_page_permissions($member_id_viewing);
 
-	if (addon_installed('awards'))
+	if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 	{
 		require_code('awards');
 		$awards=find_awards_for('member',strval($member_id_of));

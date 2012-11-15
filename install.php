@@ -1621,7 +1621,7 @@ function step_5_core()
 	$GLOBALS['SITE_DB']->drop_table_if_exists('values');
 	$GLOBALS['SITE_DB']->create_table('values',array(
 		'the_name'=>'*ID_TEXT',
-		'the_value'=>'ID_TEXT',
+		'the_value'=>'SHORT_TEXT',
 		'date_and_time'=>'TIME'
 	));
 	$GLOBALS['SITE_DB']->create_index('values','date_and_time',array('date_and_time'));
@@ -1651,6 +1651,7 @@ function step_5_core()
 		'category_name'=>'*ID_TEXT',
 		'the_value'=>'BINARY'
 	));
+	$GLOBALS['SITE_DB']->create_index('group_privileges','group_id',array('group_id'));
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('privilege_list');
 	$GLOBALS['SITE_DB']->create_table('privilege_list',array(
@@ -2036,14 +2037,8 @@ function step_10_forum_stuff()
 
 	if ($forum_type!='none')
 	{
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_used',20,1,0,0,0,'','integer');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('gift_points_used',20,1,0,0,0,'','integer');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_given',20,1,0,0,0,'','integer');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_rating',20,1,0,0,0,'','integer');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_voting',20,1,0,0,0,'','integer');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('sites',100,1,0,0,0,'','short_text');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('role',100,1,0,1,0,'','short_text');
-		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('fullname',100,1,0,1,0,'','short_text');
+		require_lang('ocf');
+		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('mobile_phone_number',20,1,0,1,0,do_lang('SPECIAL_CPF__ocp_mobile_phone_number_DESCRIPTION'),'short_text');
 
 		$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'efdbb0cbc46520fe767c6292465751a1','SOMETHING'=>do_lang_tempcode('CREATED_CUSTOM_PROFILE_FIELDS'))));
 	}

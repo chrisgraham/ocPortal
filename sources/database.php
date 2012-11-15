@@ -640,12 +640,14 @@ class database_driver
 	 */
 	function _get_where_expand($table,$select_map=NULL,$where_map=NULL,$end='')
 	{
+		global $DEV_MODE;
+
 		if ($select_map===NULL) $select_map=array('*');
 
 		$select='';
 		foreach ($select_map as $key)
 		{
-			if (!is_string($key)) $key=strval($key);
+			//if (!is_string($key)) $key=strval($key);	Should not happen, but won't cause a problem if does. Don't do this check for performance reasons.
 
 			if ($select!='') $select.=',';
 
@@ -657,7 +659,10 @@ class database_driver
 		{
 			foreach ($where_map as $key=>$value)
 			{
-				if (!is_string($key)) fatal_exit('Parameters to the database API given in the wrong order. Please check the function call.');
+				if ($DEV_MODE)
+				{
+					if (!is_string($key)) fatal_exit('Parameters to the database API given in the wrong order. Please check the function call.');
+				}
 
 				if ($where!='') $where.=' AND ';
 
@@ -822,9 +827,10 @@ class database_driver
 
 					$field_prefix='main.';
 
+					$select_inv=array_flip($select);
 					foreach ($lang_fields_provisional as $lang_field)
 					{
-						if ((in_array($field_prefix.$lang_field,$select)) || (in_array($field_prefix.'*',$select)))
+						if ((isset($select_inv[$field_prefix.$lang_field])) || (isset($select_inv[$field_prefix.'*'])))
 						{
 							$lang_fields[]=$lang_field;
 						}
@@ -975,7 +981,8 @@ class database_driver
 		{
 			$before=microtime(false);
 		}
-		if (substr(strtoupper($query),0,7)=='SELECT ')
+		$sub=substr($query,0,7);
+		if ($sub=='SELECT ' || $sub=='select ')
 		{
 			$connection=&$this->connection_read;
 		} else

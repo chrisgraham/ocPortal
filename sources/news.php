@@ -68,7 +68,7 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 	$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors')):new ocp_tempcode();
 	$author=$row['author'];
 
-	$seo_bits=seo_meta_get_for('news',strval($row['id']));
+	$seo_bits=(get_value('no_tags')==='1')?array('',''):seo_meta_get_for('news',strval($row['id']));
 
 	$map=array(
 		'_GUID'=>($guid!='')?$guid:'jd89f893jlkj9832gr3uyg2u',

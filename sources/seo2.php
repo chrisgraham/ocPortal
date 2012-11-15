@@ -99,6 +99,117 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 }
 
 /**
+ * Automatically extracts meta information from some source data.
+ *
+ * @param  array			Array of content strings to summarise from
+ * @param  SHORT_TEXT	The description to use
+ * @return array			A pair: Keyword string generated, Description generated
+ */
+function _seo_meta_find_data($keyword_sources,$description)
+{
+	// These characters are considered to be word-characters
+	require_code('textfiles');
+	$word_chars=explode(chr(10),read_text_file('word_characters','')); // We use this, as we have no easy multi-language way of detecting if something is a word character in non-latin alphabets (as they don't usually have upper/lower case which would be our detection technique)
+	foreach ($word_chars as $i=>$word_char)
+	{
+		$word_chars[$i]=ocp_mb_trim($word_char);
+	}
+	$common_words=explode(chr(10),read_text_file('too_common_words',''));
+	foreach ($common_words as $i=>$common_word)
+	{
+		$common_words[$i]=ocp_mb_trim(ocp_mb_strtolower($common_word));
+	}
+
+	$min_word_length=3;
+
+	$keywords=array(); // This will be filled
+	$keywords_must_use=array(); // ...and/or this
+
+	$source=mixed();
+	foreach ($keyword_sources as $source) // Look in all our sources
+	{
+		$must_use=false;
+		if (is_array($source)) list($source,$must_use)=$source;
+
+		$source=strip_comcode($source);
+		if (ocp_mb_strtoupper($source)==$source) $source=ocp_mb_strtolower($source); // Don't leave in all caps, as is ugly, and also would break our Proper Noun detection
+
+		$i=0;
+		$len=ocp_mb_strlen($source);
+		$from=0;
+		$in_word=false;
+		$word_is_caps=false;
+		while ($i<$len)
+		{
+			$at=ocp_mb_substr($source,$i,1);
+			$is_word_char=in_array($at,$word_chars) || ocp_mb_strtolower($at)!=ocp_mb_strtoupper($at);
+
+			if ($in_word)
+			{
+				// Exiting word
+				if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($source,$i+1,1))==ocp_mb_substr($source,$i+1,1)))))
+				{
+					if (($i-$from)>=$min_word_length)
+					{
+						while (ocp_mb_substr($this_word,-1)=='\'' || ocp_mb_substr($this_word,-1)=='-' || ocp_mb_substr($this_word,-1)=='.')
+							$this_word=ocp_mb_substr($this_word,0,ocp_mb_substr($this_word)-1);
+						if (!in_array(ocp_mb_strtolower($this_word),$common_words))
+						{
+							if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
+							if ($must_use)
+							{
+								$keywords_must_use[$this_word]++;
+							} else
+							{
+								$keywords[$this_word]++;
+							}
+						}
+					}
+					$in_word=false;
+				} else
+				{
+					$this_word.=$at;
+				}
+			} else
+			{
+				// Entering word
+				if (($is_word_char) && ($at!='\'') && ($at!='-') && ($at!='.')/*Special latin cases, cannot start a word with a symbol*/)
+				{
+					$word_is_caps=(ocp_mb_strtolower($at)!=$at);
+					$from=$i;
+					$in_word=true;
+					$this_word=$at;
+				}
+			}
+			$i++;
+		}
+	}
+
+	arsort($keywords);
+
+	$imp='';
+	foreach (array_keys($keywords_must_use) as $keyword)
+	{
+		if ($imp!='') $imp.=',';
+		$imp.=$keyword;
+	}
+	foreach (array_keys($keywords) as $i=>$keyword)
+	{
+		if ($imp!='') $imp.=',';
+		$imp.=$keyword;
+		if ($i==10) break;
+	}
+
+	require_code('xhtml');
+	$description=strip_comcode($description);
+	$description=trim(preg_replace('#\s+---+\s+#',' ',$description));
+
+	if (strlen($description)>1000) $description=substr($description,0,1000).'...';
+
+	return array($imp,$description);
+}
+
+/**
  * Sets the meta information for the specified resource, by auto-summarisation from the given parameters.
  *
  * @param  ID_TEXT		The type of resource (e.g. download)
@@ -119,95 +230,9 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 
 	if (get_option('automatic_meta_extraction')=='0') return '';
 
-	// These characters are considered to be word-characters
-	require_code('textfiles');
-	$word_chars=explode(chr(10),read_text_file('word_characters',''));
-	$strip_chars=array('\''); // These present problems so will be entirely stripped
-	foreach ($word_chars as $i=>$word_char)
-	{
-		$word_chars[$i]=trim($word_char);
-	}
-	$common_words=explode(chr(10),read_text_file('too_common_words',''));
-	foreach ($common_words as $i=>$common_word)
-	{
-		$common_words[$i]=trim($common_word);
-	}
+	list($imp,$description)=_seo_meta_find_data($keyword_sources,$description);
 
-	$keywords=array(); // This will be filled
-
-	foreach ($keyword_sources as $source) // Look in all our sources
-	{
-		$source=strip_comcode($source);
-		foreach ($strip_chars as $strip_char)
-		{
-			$source=strtolower(str_replace($strip_char,'',$source));
-		}
-
-		$source=preg_replace('#\-+#',' ',$source);
-
-		$i=0;
-		$len=strlen($source);
-		$from=0;
-		$in_word=false;
-		while ($i<$len)
-		{
-			$at=$source[$i];
-			$word_char=in_array($at,$word_chars);
-
-			if ($in_word)
-			{
-				// Exiting word
-				if (!$word_char)
-				{
-					if (($i-$from)>=3)
-					{
-						$this_word=substr($source,$from,$i-$from);
-						if (!in_array($this_word,$common_words))
-						{
-							if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
-							$keywords[$this_word]++;
-						}
-					}
-					$in_word=false;
-				}
-			} else
-			{
-				// Entering word
-				if ($word_char)
-				{
-					$from=$i;
-					$in_word=true;
-				}
-			}
-			$i++;
-		}
-
-		// Finalise
-		if (($in_word) && (($i-$from)>=3))
-		{
-			$this_word=substr($source,$from,$i-$from);
-			if (!in_array($this_word,$common_words))
-			{
-				if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
-				$keywords[$this_word]++;
-			}
-		}
-	}
-
-	arsort($keywords);
-
-	$imp='';
-	foreach (array_keys($keywords) as $i=>$keyword)
-	{
-		if ($imp!='') $imp.=',';
-		$imp.=$keyword;
-		if ($i==15) break;
-	}
-
-	require_code('xhtml');
-	$description=strip_comcode($description);
-	$description=trim(preg_replace('#\s+---+\s+#',' ',$description));
-	seo_meta_set_for_explicit($type,$id,$imp,(strlen($description)>1000)?(substr($description,0,1000).'...'):$description);
+	seo_meta_set_for_explicit($type,$id,$imp,$description);
 
 	if (function_exists('decache')) decache('side_tag_cloud');
 

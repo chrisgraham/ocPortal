@@ -56,6 +56,8 @@ class Module_polls
 		delete_config_option('points_ADD_POLL');
 		delete_config_option('points_CHOOSE_POLL');
 		delete_config_option('poll_update_time');
+
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_voting');
 	}
 
 	/**
@@ -121,6 +123,8 @@ class Module_polls
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po3',array('option3'));
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po4',array('option4'));
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po5',array('option5'));
+
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_voting',20,1,0,0,0,'','integer');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
@@ -216,7 +220,7 @@ class Module_polls
 	 */
 	function run()
 	{
-		set_feed_url(find_script('backend').'?mode=polls&filter=');
+		set_feed_url('?mode=polls&filter=');
 
 		require_code('feedback');
 		require_code('polls');
@@ -241,7 +245,7 @@ class Module_polls
 	{
 		$title=get_screen_title('POLL_ARCHIVE');
 
-		$content=do_block('main_multi_content',array('param'=>'poll','efficient'=>'0','zone'=>'_SELF','sort'=>'recent','max'=>'20','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0'));
+		$content=do_block('main_multi_content',array('param'=>'poll','efficient'=>'0','zone'=>'_SELF','sort'=>'recent','max'=>'20','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','block_id'=>'module'));
 
 		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content));
 	}

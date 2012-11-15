@@ -52,9 +52,12 @@ function block_params_str_to_arr($_map)
 	$map=array();
 	foreach (explode(',',$_map) as $x)
 	{
-		if (strpos($x,'=')===false) continue;
-		list($a,$b)=explode('=',$x,2);
-		$map[$a]=str_replace('\,',',',$b);
+		$result=explode('=',$x,2);
+		if (isset($result[1]))
+		{
+			list($a,$b)=$result;
+			$map[$a]=str_replace('\,',',',$b);
+		}
 	}
 
 	ksort($map);

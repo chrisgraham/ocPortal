@@ -120,7 +120,7 @@ function get_staff_actions_list()
 function get_page_warning_details($zone,$codename,$edit_url)
 {
 	$warning_details=new ocp_tempcode();
-	if (!has_privilege(get_member(),'jump_to_unvalidated'))
+	if ((!has_privilege(get_member(),'jump_to_unvalidated')) && (addon_installed('unvalidated')))
 		access_denied('PRIVILEGE','jump_to_unvalidated');
 	$uv_warning=do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'); // Wear sun cream
 	if (!$edit_url->is_empty())

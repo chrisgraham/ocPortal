@@ -210,6 +210,7 @@ function block_helper_script()
 		$parameters[]='failsafe';
 		$parameters[]='cache';
 		$parameters[]='quick_cache';
+		$parameters[]='block_id';
 		if (!isset($defaults['cache'])) $defaults['cache']=block_cache_default($block);
 		if (is_null($parameters)) $parameters=array();
 		$advanced_ind=do_lang('BLOCK_IND_ADVANCED');
@@ -217,7 +218,7 @@ function block_helper_script()
 		foreach ($parameters as $parameter)
 		{
 			$param_class='normal';
-			if (($parameter=='cache') || ($parameter=='quick_cache') || ($parameter=='failsafe') || (strpos(do_lang('BLOCK_'.$block.'_PARAM_'.$parameter),$advanced_ind)!==false))
+			if (($parameter=='cache') || ($parameter=='quick_cache') || ($parameter=='failsafe') || ($parameter=='block_id') || (strpos(do_lang('BLOCK_'.$block.'_PARAM_'.$parameter),$advanced_ind)!==false))
 				$param_class='advanced';
 			$param_classes[$param_class][]=$parameter;
 		}
@@ -248,6 +249,7 @@ function block_helper_script()
 				{
 					case 'quick_cache':
 					case 'cache':
+					case 'block_id':
 					case 'failsafe':
 						$description=do_lang('BLOCK_PARAM_'.$parameter);
 						break;
@@ -441,6 +443,7 @@ function block_helper_script()
 		$parameters=get_block_parameters($block);
 		$parameters[]='failsafe';
 		$parameters[]='cache';
+		$parameters[]='block_id';
 		$parameters[]='quick_cache';
 		if (in_array('param',$parameters))
 		{
@@ -456,7 +459,7 @@ function block_helper_script()
 				if (post_param_integer('tick_on_form__'.$parameter,0)==0) continue; // If not on form, continue, otherwise must be 0
 				$value='0';
 			}
-			if (($value!='') && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value!=block_cache_default($block))) && (($parameter!='quick_cache') || ($value=='1')))
+			if (($value!='') && (($parameter!='block_id') || ($value!='')) && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value!=block_cache_default($block))) && (($parameter!='quick_cache') || ($value=='1')))
 			{
 				if ($parameter=='param')
 				{

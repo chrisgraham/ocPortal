@@ -326,6 +326,7 @@ oc_data_map
  - themes/default/templates_custom/FORM_SCREEN_INPUT_MAP_POSITION.tpl
  - themes/default/images_custom/star-3.png
  - sources_custom/catalogues2.php
+ - sources_custom/hooks/systems/upon_query/google_maps.php
 
 oc_user_map
 -----------
@@ -4096,3 +4097,7 @@ youtube_channel_integration_block
  - sources_custom/blocks/youtube_channel.php
  - themes/default/templates_custom/BLOCK_YOUTUBE_CHANNEL.tpl
  - themes/default/templates_custom/BLOCK_YOUTUBE_CHANNEL_STYLE.tpl
+
+performance_compile
+-------------------
+ - data_custom/compile_in_includes.php

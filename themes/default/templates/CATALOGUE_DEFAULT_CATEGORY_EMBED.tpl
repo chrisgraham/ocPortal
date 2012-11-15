@@ -34,10 +34,10 @@
 			<div class="float_surrounder ajax_block_wrapper_links">
 				{PAGINATION}
 			</div>
-		{+END}
 
-		{+START,INCLUDE,AJAX_PAGINATION}
-			ALLOW_INFINITE_SCROLL={$EQ,{DISPLAY_TYPE},FIELDMAPS,GRID}
+			{+START,INCLUDE,AJAX_PAGINATION}
+				ALLOW_INFINITE_SCROLL={$EQ,{DISPLAY_TYPE},FIELDMAPS,GRID}
+			{+END}
 		{+END}
 	</div>
 {+END}

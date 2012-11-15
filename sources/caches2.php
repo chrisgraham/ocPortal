@@ -40,22 +40,22 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	if ($KEEP_MARKERS || $SHOW_EDIT_LINKS) return;
 
-	$langs_required=(is_null($_langs_required))?'':implode(':',$_langs_required);
-	$langs_required.='!';
-	$langs_required.=(is_null($_javascripts_required))?'':implode(':',$_javascripts_required);
-	$langs_required.='!';
-	$langs_required.=(is_null($_csss_required))?'':implode(':',$_csss_required);
+	$dependencies=(is_null($_langs_required))?'':implode(':',$_langs_required);
+	$dependencies.='!';
+	$dependencies.=(is_null($_javascripts_required))?'':implode(':',$_javascripts_required);
+	$dependencies.='!';
+	$dependencies.=(is_null($_csss_required))?'':implode(':',$_csss_required);
 
 	if (!is_null($GLOBALS['MEM_CACHE']))
 	{
 		$pcache=persistent_cache_get(array('CACHE',$codename));
 		if (is_null($pcache)) $pcache=array();
-		$pcache[$cache_identifier][$lang][$theme]=array('langs_required'=>$langs_required,'date_and_time'=>time(),'the_value'=>$cache);
+		$pcache[$cache_identifier][$lang][$theme]=array('dependencies'=>$dependencies,'date_and_time'=>time(),'the_value'=>$cache);
 		persistent_cache_set(array('CACHE',$codename),$pcache,false,$ttl*60);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_delete('cache',array('lang'=>$lang,'the_theme'=>$theme,'cached_for'=>$codename,'identifier'=>md5($cache_identifier)),'',1);
-		$GLOBALS['SITE_DB']->query_insert('cache',array('langs_required'=>$langs_required,'lang'=>$lang,'cached_for'=>$codename,'the_value'=>$tempcode?$cache->to_assembly($lang):serialize($cache),'date_and_time'=>time(),'the_theme'=>$theme,'identifier'=>md5($cache_identifier)),false,true);
+		$GLOBALS['SITE_DB']->query_insert('cache',array('dependencies'=>$dependencies,'lang'=>$lang,'cached_for'=>$codename,'the_value'=>$tempcode?$cache->to_assembly($lang):serialize($cache),'date_and_time'=>time(),'the_theme'=>$theme,'identifier'=>md5($cache_identifier)),false,true);
 	}
 }
 

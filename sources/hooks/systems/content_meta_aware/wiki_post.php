@@ -55,8 +55,8 @@ class Hook_content_meta_aware_wiki_post
 			'view_pagelink_pattern'=>'_SEARCH:wiki:find_post:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:wiki:post:post_id=_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
-			'add_url'=>(has_submit_permission('low',get_member(),get_ip_address(),'wiki'))?build_url(array('page'=>'wiki','type'=>'add_post'),get_module_zone('wiki')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'wiki'),(!is_null($zone))?$zone:get_module_zone('wiki')),
+			'add_url'=>(has_submit_permission('low',get_member(),get_ip_address(),'wiki'))?(get_module_zone('wiki').':wiki:add_post'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('wiki')).':wiki',
 
 			'support_url_monikers'=>false,
 

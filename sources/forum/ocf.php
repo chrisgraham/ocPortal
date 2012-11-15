@@ -137,6 +137,21 @@ class forum_driver_ocf extends forum_driver_base
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
 	 * @param  string			The name of the new custom field
+	 */
+	function _install_delete_custom_field($name)
+	{
+		$id=$this->connection->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_'.$name));
+		if (!is_null($id))
+		{
+			require_code('ocf_members_action2');
+			ocf_delete_custom_field($id);
+		}
+	}
+
+	/**
+	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
+	 *
+	 * @param  string			The name of the new custom field
 	 * @param  integer		The length of the new custom field
 	 * @param  BINARY			Whether the field is locked
 	 * @param  BINARY			Whether the field is for viewing
@@ -662,7 +677,18 @@ class forum_driver_ocf extends forum_driver_base
 
 		global $TOPIC_IDENTIFIERS_TO_IDS_CACHE;
 		if (array_key_exists($key,$TOPIC_IDENTIFIERS_TO_IDS_CACHE)) return $TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key];
-		$result=is_numeric($forum)?intval($forum):$this->connection->query_select_value_if_there('f_forums','id',array('f_name'=>$forum));
+		if (is_numeric($forum))
+		{
+			$result=intval($forum);
+		} else
+		{
+			$result=$this->connection->query_select_value_if_there('f_forums','id',array('f_name'=>$forum));
+			if ($forum==get_option('comments_forum_name')) // Fix performance for next time
+			{
+				require_code('config2');
+				set_option('comments_forum_name',strval($result));
+			}
+		}
 
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);

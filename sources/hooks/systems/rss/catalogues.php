@@ -48,7 +48,7 @@ class Hook_rss_catalogues
 		{
 			$_categories[$i]['text_original']=get_translated_text($_category['cc_title']);
 		}
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_add_date>'.strval(time()-$cutoff).((!has_privilege(get_member(),'see_unvalidated'))?' AND ce_validated=1 ':'').' AND '.$filters.' ORDER BY ce_add_date DESC',$max);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_add_date>'.strval(time()-$cutoff).(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND ce_validated=1 ':'').' AND '.$filters.' ORDER BY ce_add_date DESC',$max);
 		$categories=array();
 		foreach ($_categories as $category)
 		{

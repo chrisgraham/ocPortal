@@ -103,8 +103,15 @@ class Block_main_content
 			if (is_null($content_id)) return new ocp_tempcode();
 		}
 
+		global $TABLE_LANG_FIELDS_CACHE;
+		$lang_fields=isset($TABLE_LANG_FIELDS_CACHE[$info['table']])?$TABLE_LANG_FIELDS_CACHE[$info['table']]:array();
+
 		$submit_url=$info['add_url'];
-		if (is_object($submit_url)) $submit_url=$submit_url->evaluate();
+		if (!is_null($submit_url))
+		{
+			list($submit_url_zone,$submit_url_map,$submit_url_hash)=page_link_decode($submit_url);
+			$submit_url=static_evaluate_tempcode(build_url($submit_url_map,$submit_url_zone,NULL,false,false,false,$submit_url_hash));
+		} else $submit_url='';
 		if (!has_actual_page_access(NULL,$info['cms_page'],NULL,NULL)) $submit_url='';
 
 		// Randomisation mode
@@ -223,7 +230,7 @@ class Block_main_content
 				));
 			}
 
-			$rows=$info['connection']->query('SELECT * '.$query,1,mt_rand(0,$cnt-1));
+			$rows=$info['connection']->query('SELECT * '.$query,1,mt_rand(0,$cnt-1),false,false,$lang_fields);
 			$award_content_row=$rows[0];
 
 			if (is_array($info['id_field']))
@@ -239,7 +246,7 @@ class Block_main_content
 				}
 			} else
 			{
-				$content_id=$award_content_row[$info['id_field']];
+				$content_id=$award_content_row['g.'.$info['id_field']];
 				if (!is_string($content_id)) $content_id=strval($content_id);
 			}
 		}
@@ -263,13 +270,15 @@ class Block_main_content
 				$wherea=array();
 				foreach ($bits as $i=>$bit)
 				{
-					$wherea[$info['id_field'][$i]]=$info['id_field_numeric']?intval($bit):$bit;
+					$wherea['g.'.$info['id_field'][$i]]=$info['id_field_numeric']?intval($bit):$bit;
 				}
-			} else $wherea[$info['id_field']]=$info['id_field_numeric']?intval($content_id):$content_id;
+			} else $wherea['g.'.$info['id_field']]=$info['id_field_numeric']?intval($content_id):$content_id;
 
-			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1);
+			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1,NULL,false,$lang_fields);
 			if (!array_key_exists(0,$rows))
 			{
+				if ((array_key_exists('render_if_empty',$map)) && ($map['render_if_empty']=='0')) return new ocp_tempcode();
+
 				return do_template('BLOCK_NO_ENTRIES',array(
 					'_GUID'=>($guid!='')?$guid:'12d8cdc62cd78480b83c8daaaa68b686',
 					'HIGH'=>true,
@@ -289,7 +298,11 @@ class Block_main_content
 
 		$submit_url=str_replace('%21',$content_id,$submit_url);
 
-		$archive_url=$info['archive_url'];
+		if (!is_null($info['archive_url']))
+		{
+			list($archive_url_zone,$archive_url_map,$archive_url_hash)=page_link_decode($info['archive_url']);
+			$archive_url=_build_url($archive_url_map,$archive_url_zone,NULL,false,false,false,$archive_url_hash);
+		} else $archive_url=new ocp_tempcode();
 
 		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs,NULL,false,$guid);
 

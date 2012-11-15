@@ -272,9 +272,10 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 				$out_accept[]=$numeric_record_set_ids?$id:strval($id);
 			}
 		}
-		elseif (preg_match('#^\!(.+)$#',$token,$matches)!=0) // e.g. '!1'
+		elseif (preg_match('#^\!(.*)$#',$token,$matches)!=0) // e.g. '!1'
 		{
-			$out_avoid[]=$numeric_record_set_ids?intval($matches[1]):$matches[1];
+			if ($matches[1]!='') // Likely came from referencing some Tempcode that didn't return a result
+				$out_avoid[]=$numeric_record_set_ids?intval($matches[1]):$matches[1];
 		}
 		elseif (($numeric_record_set_ids) && (preg_match('#^(\d+)\-(\d+)$#',$token,$matches)!=0)) // e.g. '1-3')
 		{
@@ -479,10 +480,13 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			if ($out_or!='') $out_or.=' OR ';
 			$out_or.='1=1';
 		}
-		elseif (preg_match('#^\!(.+)$#',$token,$matches)!=0) // e.g. '!1'
+		elseif (preg_match('#^\!(.*)$#',$token,$matches)!=0) // e.g. '!1'
 		{
-			if ($out_and!='') $out_and.=' AND ';
-			$out_and.=_ocfilter_neq($field_name,$matches[1],$numeric_record_set_ids);
+			if ($matches[1]!='') // Likely came from referencing some Tempcode that didn't return a result
+			{
+				if ($out_and!='') $out_and.=' AND ';
+				$out_and.=_ocfilter_neq($field_name,$matches[1],$numeric_record_set_ids);
+			}
 		}
 		elseif (($numeric_record_set_ids) && (preg_match('#^(\d+)\-(\d+)$#',$token,$matches)!=0)) // e.g. '1-3')
 		{
@@ -512,7 +516,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				}
 			} else
 			{
-				$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,$matches[2]=='>',$matches[2]=='>');
+				$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,true,$matches[2]!='>');
 				foreach ($subtree as $ii)
 				{
 					if ($out_or!='') $out_or.=' OR ';

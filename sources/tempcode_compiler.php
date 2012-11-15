@@ -93,6 +93,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	$current_level_data=array();
 	$current_level_params=array();
 	$preprocessable_bits=array();
+	$num_preprocessable_bits=0;
 	for ($i=0;$i<$count;$i++)
 	{
 		$next_token=$bits[$i];
@@ -107,7 +108,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 		{
 			case '{':
 				// Open a new level
-				$stack[]=array($current_level_mode,$current_level_data,$current_level_params,NULL,NULL,NULL);
+				$stack[]=array($current_level_mode,$current_level_data,$current_level_params,NULL,NULL,NULL,count($preprocessable_bits));
 				++$i;
 				$next_token=isset($bits[$i])?$bits[$i]:NULL;
 				if (is_null($next_token))
@@ -166,7 +167,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					}
 				} else
 				{
-					list($current_level_mode,$current_level_data,$current_level_params,,,)=array_pop($stack);
+					list($current_level_mode,$current_level_data,$current_level_params,,,,$num_preprocessable_bits)=array_pop($stack);
 				}
 
 				// Handle the level we just closed
@@ -248,8 +249,12 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$no_preprocess=in_array('-',$_escaped);
 						if (!$no_preprocess)
 						{
-							switch ($first_param)
+							switch ($first_param) // These need preprocessing
 							{
+								case '""':
+									array_splice($preprocessable_bits,$num_preprocessable_bits); // Remove anything preprocessable marked inside the comment
+									break;
+
 								case '"REQUIRE_CSS"':
 								case '"REQUIRE_JAVASCRIPT"':
 								case '"JS_TEMPCODE"':
@@ -310,7 +315,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 							}
 						}
 
-						if ($first_param!='""')
+						if ($first_param!='""') // If not a comment
 						{
 							$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
 							if ((in_array($first_param,$compilable_symbols)) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
@@ -373,7 +378,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					if ($eval=='START') // START
 					{
 						// Open a new directive level
-						$stack[]=array($current_level_mode,$current_level_data,$current_level_params,$past_level_mode,$past_level_data,$past_level_params);
+						$stack[]=array($current_level_mode,$current_level_data,$current_level_params,$past_level_mode,$past_level_data,$past_level_params,count($preprocessable_bits));
 						$current_level_data=array();
 						$current_level_params=array();
 						$current_level_mode=PARSE_DIRECTIVE_INNER;
@@ -389,7 +394,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 							if ($tolerate_errors) continue;
 							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
 						}
-						list($current_level_mode,$current_level_data,$current_level_params,$directive_level_mode,$directive_level_data,$directive_level_params)=array_pop($stack);
+						list($current_level_mode,$current_level_data,$current_level_params,$directive_level_mode,$directive_level_data,$directive_level_params,$num_preprocessable_bits)=array_pop($stack);
 						if (!is_array($directive_level_params))
 						{
 							if ($tolerate_errors) continue;
@@ -432,6 +437,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						}
 						switch ($directive_name)
 						{
+							case 'COMMENT':
+								break;
 							case 'IF':
 								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("1"\)\).""$#',$first_directive_param)!=0)
 									$first_directive_param='"0".""';
@@ -469,7 +476,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break;
 							case 'INCLUDE':
 								global $FILE_ARRAY;
-								if ((count($directive_opener_params)==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
+								if ((!$GLOBALS['SEMI_DEV_MODE']) && (count($directive_opener_params)==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
 								{
 									$eval=@eval('return '.$first_directive_param.';');
 									if (!is_string($eval)) $eval='';
@@ -512,7 +519,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					}
 				}
 				break;
-			case ',':
+			case ',': // NB: Escaping via "\," was handled in our regexp split
 				switch($current_level_mode)
 				{
 					case PARSE_NO_MANS_LAND:

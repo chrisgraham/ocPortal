@@ -1,82 +1,143 @@
 "use strict";
 
-window.AJAX_REQUESTS=[];
-window.AJAX_METHODS=[];
+if (typeof window.AJAX_REQUESTS=='undefined')
+{
+	window.AJAX_REQUESTS=[];
+	window.AJAX_METHODS=[];
+}
 
 /*
 	Faux frames and faux scrolling
 */
 
-window.block_data_cache={};
+if (typeof window.block_data_cache=='undefined')
+{
+	window.block_data_cache={};
+}
 
-var infinite_scroll_pending=false;
-var infinite_scroll_blocked=false;
+if (typeof window.infinite_scroll_pending=='undefined')
+{
+	window.infinite_scroll_pending=false; // Blocked due to queued HTTP request
+	window.infinite_scroll_blocked=false; // Blocked due to event tracking active
+}
 function infinite_scrolling_block(event)
 {
 	if (event.keyCode==35) // 'End' key pressed, so stop the expand happening for a few seconds while the browser scrolls down
 	{
-		infinite_scroll_blocked=true;
+		window.infinite_scroll_blocked=true;
 		window.setTimeout(function() {
-			infinite_scroll_blocked=false;
+			window.infinite_scroll_blocked=false;
 		}, 3000);
 	}
 }
-var infinite_scroll_mouse_held=false;
+if (typeof window.infinite_scroll_mouse_held=='undefined')
+{
+	window.infinite_scroll_mouse_held=false;
+}
 function infinite_scrolling_block_hold()
 {
-	if (!infinite_scroll_blocked)
+	if (!window.infinite_scroll_blocked)
 	{
-		infinite_scroll_blocked=true;
-		infinite_scroll_mouse_held=true;
+		window.infinite_scroll_blocked=true;
+		window.infinite_scroll_mouse_held=true;
 	}
 }
 function infinite_scrolling_block_unhold(infinite_scrolling)
 {
-	if (infinite_scroll_mouse_held)
+	if (window.infinite_scroll_mouse_held)
 	{
-		infinite_scroll_blocked=false;
-		infinite_scroll_mouse_held=false;
+		window.infinite_scroll_blocked=false;
+		window.infinite_scroll_mouse_held=false;
 		infinite_scrolling();
 	}
 }
 function internalise_infinite_scrolling(url_stem,wrapper)
 {
-	if (infinite_scroll_blocked) return false; // Already waiting for a result
+	if (window.infinite_scroll_blocked || window.infinite_scroll_pending) return false; // Already waiting for a result
 
 	var _pagination=get_elements_by_class_name(wrapper,'pagination');
 
-	if (typeof _pagination[0]=='undefined') return false;
-	var pagination=_pagination[0];
+	if (_pagination.length==0) return false;
 
-	var more_links=pagination.getElementsByTagName('a');
+	var more_links=[],found_new_links=null;
 
-	if (pagination.parentNode)
+	for (var _i=0;_i<_pagination.length;_i++)
 	{
-		// Replace pagination with AJAX load more link
-		var load_more_link=document.createElement('div');
-		load_more_link.className='pagination_load_more';
-		var load_more_link_a=document.createElement('a');
-		set_inner_html(load_more_link_a,'{!LOAD_MORE;}');
-		load_more_link_a.href='#';
-		load_more_link_a.onclick=function() { internalise_infinite_scrolling_go(url_stem,wrapper,more_links); return false; }; // Click link -- load
-		load_more_link.appendChild(load_more_link_a);
-		pagination.parentNode.insertBefore(load_more_link,pagination.nextSibling);
+		var pagination=_pagination[_i];
 
-		// Remove pagination, now we've grabbed the links from it and replaced with AJAX load more link
-		var pagination_parent=pagination.parentNode;
-		pagination_parent.removeChild(pagination.nextSibling);
-		pagination_parent.removeChild(pagination);
-		var num_node_children=0;
-		for (var i=0;i<pagination_parent.childNodes.length;i++)
+		if (pagination.style.display!='none')
 		{
-			if (pagination_parent.childNodes[i].nodeName!='#text') num_node_children++;
+			// Remove visibility of pagination, now we've replaced with AJAX load more link
+			var pagination_parent=pagination.parentNode;
+			pagination.style.display='none';
+			var num_node_children=0;
+			for (var i=0;i<pagination_parent.childNodes.length;i++)
+			{
+				if (pagination_parent.childNodes[i].nodeName!='#text') num_node_children++;
+			}
+			if (num_node_children==0) // Remove empty pagination wrapper
+			{
+				pagination_parent.style.display='none';
+			}
+
+			// Add AJAX load more link before where the last pagination control was
+				// Remove old pagination_load_more's
+				var pagination_load_more=get_elements_by_class_name(wrapper,'pagination_load_more');
+				if (pagination_load_more.length>0) pagination_load_more[0].parentNode.removeChild(pagination_load_more[0]);
+
+				// Add in new one
+				var load_more_link=document.createElement('div');
+				load_more_link.className='pagination_load_more';
+				var load_more_link_a=document.createElement('a');
+				set_inner_html(load_more_link_a,'{!LOAD_MORE;}');
+				load_more_link_a.href='#';
+				load_more_link_a.onclick=function() { internalise_infinite_scrolling_go(url_stem,wrapper,more_links); return false; }; // Click link -- load
+				load_more_link.appendChild(load_more_link_a);
+				_pagination[_pagination.length-1].parentNode.insertBefore(load_more_link,_pagination[_pagination.length-1].nextSibling);
+
+			more_links=pagination.getElementsByTagName('a');
+			found_new_links=_i;
 		}
-		if (num_node_children==0) // Remove empty pagination wrapper
+	}
+	for (var _i=0;_i<_pagination.length;_i++)
+	{
+		if (found_new_links!=null) // Cleanup old pagination
 		{
-			pagination_parent.parentNode.removeChild(pagination_parent);
+			if (_i!=found_new_links)
+			{
+				var _more_links=pagination.getElementsByTagName('a');
+				for (var i=0;i<_more_links.length;i++)
+				{
+					_more_links[i].parentNode.removeChild(_more_links[i]);
+				}
+			}
+		} else // Find links from an already-hidden pagination
+		{
+			more_links=pagination.getElementsByTagName('a');
+			if (more_links.length!=0) break;
 		}
 	}
 
+	// Is more scrolling possible?
+	var rel,found_rel=false;
+	for (var i=0;i<more_links.length;i++)
+	{
+		rel=more_links[i].getAttribute('rel');
+		if (rel && rel.indexOf('next')!=-1)
+		{
+			found_rel=true;
+		}
+	}
+	if (!found_rel) // Ah, no more scrolling possible
+	{
+		// Remove old pagination_load_more's
+		var pagination_load_more=get_elements_by_class_name(wrapper,'pagination_load_more');
+		if (pagination_load_more.length>0) pagination_load_more[0].parentNode.removeChild(pagination_load_more[0]);
+
+		return;
+	}
+
+	// Used for calculating if we need to scroll down
 	var wrapper_pos_y=find_pos_y(wrapper);
 	var wrapper_height=find_height(wrapper);
 	var wrapper_bottom=wrapper_pos_y+wrapper_height;
@@ -94,23 +155,30 @@ function internalise_infinite_scrolling(url_stem,wrapper)
 }
 function internalise_infinite_scrolling_go(url_stem,wrapper,more_links)
 {
-	if (infinite_scroll_pending) return false;
+	if (window.infinite_scroll_pending) return false;
 
+	var wrapper_inner=document.getElementById(wrapper.id+'_inner');
+	if (!wrapper_inner) wrapper_inner=wrapper;
+
+	var rel;
 	for (var i=0;i<more_links.length;i++)
 	{
-		if (more_links[i].getAttribute('rel')=='next')
+		rel=more_links[i].getAttribute('rel');
+		if (rel && rel.indexOf('next')!=-1)
 		{
 			var next_link=more_links[i];
-
 			var url_stub='';
-			var matches=next_link.href.match(new RegExp('[&\?]([^_]*_start)=([^&]*)'));
+
+			var matches=next_link.href.match(new RegExp('[&?](start|[^_]*_start)=([^&]*)'));
 			if (matches)
 			{
 				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
 				url_stub+=matches[1]+'='+matches[2];
 				url_stub+='&raw=1';
 
-				return call_block(url_stem+url_stub,'',wrapper,true,function() { window.infinite_scroll_pending=false; internalise_infinite_scrolling(url_stem,wrapper); } );
+				window.infinite_scroll_pending=true;
+
+				return call_block(url_stem+url_stub,'',wrapper_inner,true,function() { window.infinite_scroll_pending=false; internalise_infinite_scrolling(url_stem,wrapper); } );
 			}
 		}
 	}
@@ -144,7 +212,7 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 	}
 	for (var i=0;i<links.length;i++)
 	{
-		if ((links[i].target) && (links[i].target=='_self'))
+		if ((links[i].target) && (links[i].target=='_self') && ((!links[i].href) || (links[i].href.substr(0,1)!='#')))
 		{
 			var submit_func=function()
 			{
@@ -197,12 +265,18 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 			}
 			if (links[i].nodeName.toLowerCase()=='a')
 			{
-				links[i].onclick=submit_func;
+				if (links[i].onclick)
+				{
+					links[i].onclick=function(old_onclick) { return function(event) { return old_onclick.call(this,event)!==false && submit_func.call(this,event); } }(links[i].onclick);
+				} else
+				{
+					links[i].onclick=submit_func;
+				}
 			} else
 			{
 				if (links[i].onsubmit)
 				{
-					links[i].onsubmit=function(old_onsubmit) { return function(event) { return old_onsubmit(event) && submit_func(event); } }(links[i].onsubmit);
+					links[i].onsubmit=function(old_onsubmit) { return function(event) { return old_onsubmit.call(this.event)!==false && submit_func.call(this,event); } }(links[i].onsubmit);
 				} else
 				{
 					links[i].onsubmit=submit_func;
@@ -226,7 +300,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 		block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_block_params if returning to fresh state
 
 	var ajax_url=url;
-	if (new_block_params!='') '&block_map_sup='+window.encodeURIComponent(new_block_params);
+	if (new_block_params!='') ajax_url+='&block_map_sup='+window.encodeURIComponent(new_block_params);
 	if (typeof block_data_cache[ajax_url]!='undefined')
 	{
 		// Show results from cache
@@ -303,7 +377,7 @@ function show_block_html(new_html,target_div,append)
 	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
 	if (typeof raw_ajax_grow_spot[0]!='undefined' && append) target_div=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 
-	set_inner_html(target_div,new_html,append);
+	set_inner_html(target_div,new_html,append,true);
 }
 
 function ajax_form_submit__admin__headless(event,form,block_name,map)
@@ -434,7 +508,7 @@ function process_request_changes()
 			window.AJAX_REQUESTS[i]=null;
 
 			// If status is 'OK'
-			if ((result.status) && (result.status==200) || (result.status==500) || (result.status==400) || (result.status==401))
+			if ((result.status) && ((result.status==200) || (result.status==500) || (result.status==400) || (result.status==401)))
 			{
 				//Process the result
 				if ((window.AJAX_METHODS[i]) && (!result.responseXML/*Not payload handler and not stack trace*/ || result.responseXML.childNodes.length==0))
@@ -558,5 +632,4 @@ function merge_text_nodes(childNodes)
 	}
 	return text;
 }
-
 

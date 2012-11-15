@@ -134,8 +134,18 @@ class Module_admin_occle
 			$commands=$temp->output_html();
 		} else $commands=new ocp_tempcode();
 
-		$content=do_template('OCCLE_MAIN',array('_GUID'=>'05c1e7efacc3839babfe58fe624caa61','SUBMIT_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'COMMANDS'=>$commands));
-		return do_template('OCCLE_MAIN_SCREEN',array('_GUID'=>'d71ef9fa2cdaf419fee64cf3d7555225','TITLE'=>$title,'CONTENT'=>$content));
+		$content=do_template('OCCLE_MAIN',array(
+			'_GUID'=>'05c1e7efacc3839babfe58fe624caa61',
+			'SUBMIT_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
+			'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
+			'COMMANDS'=>$commands,
+		));
+
+		return do_template('OCCLE_MAIN_SCREEN',array(
+			'_GUID'=>'d71ef9fa2cdaf419fee64cf3d7555225',
+			'TITLE'=>$title,
+			'CONTENT'=>$content,
+		));
 	}
 }
 

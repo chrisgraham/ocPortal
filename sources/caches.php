@@ -161,15 +161,28 @@ function decache($cached_for,$identifier=NULL)
 		persistent_cache_delete(array('CACHE',$cached_for));
 	}
 
-	$where=array('cached_for'=>$cached_for);
-	if ($identifier!==NULL) $where['identifier']=md5(serialize($identifier));
-	$GLOBALS['SITE_DB']->query_delete('cache',$where);
-
+	$where=db_string_equal_to('cached_for',$cached_for);
 	if ($identifier!==NULL)
 	{
-		$where['identifier']=md5(serialize($identifier));
-		$GLOBALS['SITE_DB']->query_delete('cache',$where);
+		$where.=' AND (';
+		$done_first=false;
+		$bot_statuses=array(true,false);
+		$timezones=array_keys(get_timezone_list());
+		foreach ($bot_statuses as $bot_status)
+		{
+			foreach ($timezones as $timezone)
+			{
+				$_cache_identifier=$identifier;
+				$_cache_identifier[]=$timezone;
+				$_cache_identifier[]=$bot_status;
+				if ($done_first) $where.=' OR ';
+				$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
+				$done_first=true;
+			}
+		}
+		$where.=')';
 	}
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
 }
 
 /**
@@ -189,17 +202,11 @@ function find_cache_on($codename)
 		$BLOCK_CACHE_ON_CACHE=persistent_cache_get('BLOCK_CACHE_ON_CACHE');
 		if ($BLOCK_CACHE_ON_CACHE===NULL)
 		{
-			$BLOCK_CACHE_ON_CACHE=$GLOBALS['SITE_DB']->query_select('cache_on',array('*'));
+			$BLOCK_CACHE_ON_CACHE=list_to_map('cached_for',$GLOBALS['SITE_DB']->query_select('cache_on',array('*')));
 			persistent_cache_set('BLOCK_CACHE_ON_CACHE',$BLOCK_CACHE_ON_CACHE);
 		}
 	}
-	foreach ($BLOCK_CACHE_ON_CACHE as $row)
-	{
-		if ($row['cached_for']==$codename)
-		{
-			return $row;
-		}
-	}
+	if (isset($BLOCK_CACHE_ON_CACHE[$codename])) return $BLOCK_CACHE_ON_CACHE[$codename];
 	return NULL;
 }
 
@@ -235,7 +242,7 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,
 		$cache_rows=array($pcache);
 	} else
 	{
-		$cache_rows=$GLOBALS['SITE_DB']->query_select('cache',array('*'),array('lang'=>user_lang(),'cached_for'=>$codename,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'identifier'=>md5($cache_identifier)),'',1);
+		$cache_rows=$GLOBALS['SITE_DB']->query_select('cache',array('the_value','date_and_time','dependencies'),array('lang'=>user_lang(),'cached_for'=>$codename,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'identifier'=>md5($cache_identifier)),'',1);
 		if (!isset($cache_rows[0])) // No
 		{
 			if ($caching_via_cron)
@@ -268,9 +275,9 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,
 			request_via_cron($codename,$map,$tempcode);
 
 		$cache=$cache_rows[0]['the_value'];
-		if ($cache_rows[0]['langs_required']!='')
+		if ($cache_rows[0]['dependencies']!='')
 		{
-			$bits=explode('!',$cache_rows[0]['langs_required']);
+			$bits=explode('!',$cache_rows[0]['dependencies']);
 			$langs_required=explode(':',$bits[0]); // Sometimes lang has got intertwinded with non cacheable stuff (and thus was itself not cached), so we need the lang files
 			foreach ($langs_required as $lang)
 				if ($lang!='') require_lang($lang,NULL,NULL,true);

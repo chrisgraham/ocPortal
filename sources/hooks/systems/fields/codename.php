@@ -115,7 +115,10 @@ class Hook_fields_codename
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		require_code('type_validation');
+		$value=post_param($tmp_name,STRING_MAGIC_NULL);
+		if (($value!='') && ($value!=STRING_MAGIC_NULL) && (!is_alphanumeric($value))) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		return $value;
 	}
 
 }

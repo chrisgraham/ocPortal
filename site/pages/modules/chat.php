@@ -78,6 +78,8 @@ class Module_chat
 
 		delete_menu_item_simple('_SEARCH:chat:type=misc');
 		delete_menu_item_simple('_SEARCH:chat:type=misc:member_id={$MEMBER_OVERRIDE}');
+
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_chat');
 	}
 
 	/**
@@ -392,7 +394,7 @@ class Module_chat
 
 		// Generic stuff: Title, feed URL
 		$title=get_screen_title('CHAT_LOBBY');
-		set_feed_url(find_script('backend').'?mode=chat&filter=');
+		set_feed_url('?mode=chat&filter=');
 
 		// Rooms
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0),'ORDER BY room_name DESC',200);
@@ -411,7 +413,7 @@ class Module_chat
 				$users=get_chatters_in_room($myrow['id']);
 				$usernames=get_chatters_in_room_tpl($users);
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$myrow['id']),'_SELF');
-				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>make_fractionable_editable('chat',$row['id'],$myrow['room_name']),'USERNAMES'=>$usernames,'URL'=>$url));
+				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
 				$fields->attach($room_link);
 			}
 		}
@@ -531,7 +533,7 @@ class Module_chat
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
 		$room_id=get_param_integer('id',1);
-		set_feed_url(find_script('backend').'?mode=chat&filter='.strval($room_id));
+		set_feed_url('?mode=chat&filter='.strval($room_id));
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
 		if (!array_key_exists(0,$room_check))
 		{

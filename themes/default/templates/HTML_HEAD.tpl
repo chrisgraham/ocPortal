@@ -30,12 +30,12 @@
 <link rel="sitemap" href="{$BASE_URL*}/ocp_sitemap.xml" />
 <meta name="description" content="{+START,IF,{$NEQ,{$META_DATA,meta_description},{!NA},???}}{$META_DATA*,meta_description}{+END}" />
 <meta name="keywords" content="{$META_DATA*,keywords}" />
-{+START,SET,Commented out by default to save bandwidth}
+{+START,COMMENT,Commented out by default to save bandwidth}
 	<meta name="GENERATOR" content="{$BRAND_NAME*}" />
 	<meta name="publisher" content="{$COPYRIGHT`}" />
 	<meta name="author" content="{$SITE_NAME*}" />
 {+END}
-{+START,SET,Commented out by default to save bandwidth - schema.org and HTML5 semantics is probably the best default approach for most sites}
+{+START,COMMENT,Commented out by default to save bandwidth - schema.org and HTML5 semantics is probably the best default approach for most sites}
 	<link rel="schema.OCPCORE" href="http://ocportal.com/ocpcore.rdf" />
 	{+START,IF_NON_EMPTY,{$META_DATA,rating}}<meta name="OCPCORE.Rating" content="{$META_DATA*,rating}" />{+END}
 	{+START,IF_NON_EMPTY,{$META_DATA,numcomments}}<meta name="OCPCORE.NumComments" content="{$META_DATA*,numcomments}" />{+END}
@@ -57,7 +57,7 @@
 {+START,IF_NON_EMPTY,{$META_DATA,title}}<meta property="og:title" content="{$META_DATA*,title}"/>{+END}
 {+START,IF_NON_EMPTY,{$META_DATA,type}}<meta property="og:type" content="{$REPLACE*, ,_,{$LCASE,{$META_DATA,type}}}"/>{+END}
 <meta property="og:url" content="{$CANONICAL_URL*}"/><meta property="og:site_name" content="{$SITE_NAME*}"/>
-{+START,SET,Commented out by default to save bandwidth}
+{+START,COMMENT,Commented out by default to save bandwidth}
 	{+START,IF_NON_EMPTY,{$CONFIG_OPTION*,facebook_uid}}<meta property="fb:admins" content="{$CONFIG_OPTION*,facebook_uid}"/>{+END}
 {+END}
 {+START,IF_NON_EMPTY,{$META_DATA,description}}<meta property="og:description" content="{$META_DATA*,description}"/>{+END}
@@ -65,7 +65,7 @@
 {+START,IF_NON_EMPTY,{$META_DATA,video}}<meta property="og:video" content="{$META_DATA*,video}" /><meta property="og:video:height" content="{$META_DATA*,video:height}" /><meta property="og:video:width" content="{$META_DATA*,video:width}" /><meta property="og:video:type" content="{$META_DATA*,video:type}" />{+END}
 
 {$,Define the Microformats we support}
-{+START,SET,Commented out by default to save bandwidth}
+{+START,COMMENT,Commented out by default to save bandwidth}
 	<link rel="profile" href="http://www.w3.org/2003/g/data-view" />
 	<link rel="profile" href="http://dublincore.org/documents/dcq-html/" />
 	<link rel="profile" href="http://gmpg.org/xfn/11" />
@@ -81,7 +81,7 @@
 <link rel="shortcut icon" href="{$IMG*,favicon}" type="image/x-icon" />
 
 {$,Inclusion of search semantic data, so smart browsers can automatically allow native-browser searching of the site}
-{+START,SET,Commented out by default to save bandwidth}{+START,IF,{$ADDON_INSTALLED,search}}
+{+START,COMMENT,Commented out by default to save bandwidth}{+START,IF,{$ADDON_INSTALLED,search}}
 	{+START,IF,{$EQ,{$ZONE},docs}}
 		<link rel="search" type="application/opensearchdescription+xml" title="{$SITE_NAME*} {$ZONE*}" href="{$FIND_SCRIPT*,opensearch}?filter=:id=comcode_pages:search_under=docs" />
 	{+END}

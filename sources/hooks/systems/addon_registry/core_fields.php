@@ -153,7 +153,8 @@ class Hook_addon_registry_core_fields
 						'HAS'=>false,
 						'OPTION'=>lorem_phrase()
 					)
-				)
+				),
+				'FIELD_ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}

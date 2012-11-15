@@ -199,6 +199,10 @@ The values you might want to manually change are:
  - [tt]session_prudence[/tt] -- set this to '1' if new guests from the same IP address as an existing session should be reinitiated with that session, and that sessions should not be saved to the persistent cache. This is useful to improve performance slightly if the site is under very high load from non-cookie-supporting bots yet doesn't have eCommerce features that rely on tight session reliability
  - [tt]username_profile_links[/tt] -- set this to '1' if member profile links should have the username in the URL rather than the member ID number
  - [tt]welcome_nw_choice[/tt] -- set this to a newsletter ID# if welcome emails should go out to new newsletter subscribers rather than new members
+ - [tt]show_empty_cpfs[/tt] -- if you want empty CPFs to be passed through to member profile templates
+ - [tt]catalogue_seo_source_map__<catalogue-name>[/tt] -- a comma-separated list of field IDs to use for SEO keyword generation (if not set, uses all fields). If all keywords in the field should be used, put an exclamation mark after the field ID
+ - [tt]pagination_when_not_needed[/tt] -- set this to '1' if you want the pagination wrapper template to load even if there is no pagination (useful for collecting result meta data via Tempcode)
+ - [tt]allow_own_rate[/tt] -- set this to '1' if members should be allowed to rate their own content
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)
@@ -250,6 +254,18 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]alternate_search_join_type[/tt] -- set this to '1' if your database server does 'JOIN' translate table searches intractably slowly, and 'LEFT JOIN' ones fast. This is the exact opposite of the behaviour of most MySQL versions, but we think we have seen a case of this so on some MySQL servers to make catalogue searches tractable you might need to enable this.
  - [tt]catalogue_limit_cat_field_load__<cataloguename>[/tt] -- set this to '1' if you want that catalogue to not have all fields loaded on category views, an optimisation that reduces templating flexibility
  - [tt]canonical_keep_params[/tt] -- set this to a comma-separated list of keep_ parameters that should be allowed to propagate within search engines
+ - [tt]no_catalogue_field_assembly[/tt] -- set this to '1' if you want catalogue entries to be 100% hand-templated; removing this will improve performance but remove pre-assembly
+ - [tt]no_catalogue_field_assembly_fieldmaps[/tt] -- see above, but only if fieldmap assembly not required
+ - [tt]no_catalogue_field_assembly_grid[/tt] -- see above, but only if grid assembly not required
+ - [tt]no_catalogue_field_assembly_tabular[/tt] -- see above, but only if tabular assembly not required
+ - [tt]assume_modules_correct[/tt] -- set to '1' if module auto-installation/auto-upgrade should not happen; this will improve performance
+ - [tt]no_priority_redirects[/tt] -- set to '1' if redirects should only be considered if a page cannot be found via other means
+ - [tt]no_tags[/tt] -- set to '1' if you don't want tags to be generated (small performance tweak)
+ - [tt]no_awards_in_titles[/tt] -- set this to '1' if you don't want awards to be displayed on content screens (small performance improvement)
+ - [tt]disable_user_online_counting[/tt] -- set this to '1' if you don't want to count online users (small performance improvement)
+ - [tt]no_banner_count_updates[/tt] -- set this to '1' if you don't want to maintain banner view counts (small performance improvement)
+ - [tt]pinpoint_submitban_check[/tt] -- set this to '1' if you only want submitter ban checks to occur in the CMS zone (small performance improvement)
+ - [tt]no_block_timeout[/tt] -- set this to '1' if blocks should never timeout
 
 [title="3"]Hidden 'keep' parameters[/title]
 

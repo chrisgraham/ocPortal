@@ -106,7 +106,7 @@ class Hook_search_wiki_posts
 			$where_clause.='date_and_time>'.strval($cutoff);
 		}
 
-		if (!has_privilege(get_member(),'see_unvalidated'))
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='validated=1';

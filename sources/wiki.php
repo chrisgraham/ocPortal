@@ -661,7 +661,7 @@ function dispatch_wiki_post_notification($post_id,$type)
 	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($the_message);
 
-	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),'_SELF',NULL,false,false,true);
+	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('wiki'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
@@ -684,7 +684,7 @@ function dispatch_wiki_page_notification($page_id,$type)
 	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages','description',array('id'=>$page_id)));
 
-	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),'_SELF',NULL,false,false,true);
+	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('wiki'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 

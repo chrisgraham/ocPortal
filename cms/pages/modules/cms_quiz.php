@@ -218,7 +218,7 @@ class Module_cms_quiz extends standard_crud_module
 			inform_non_canonical_parameter('validated');
 
 			$validated=get_param_integer('validated',0);
-			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if (addon_installed('unvalidated'))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED_SIMPLE'),'validated',$validated==1));

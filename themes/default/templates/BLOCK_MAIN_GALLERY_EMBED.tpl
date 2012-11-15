@@ -10,9 +10,9 @@
 				<div class="float_surrounder ajax_block_wrapper_links">
 					{PAGINATION}
 				</div>
-			{+END}
 
-			{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+				{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+			{+END}
 		</div>
 	{+END}
 

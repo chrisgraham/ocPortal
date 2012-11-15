@@ -236,7 +236,7 @@ class Module_tickets
 	function run()
 	{
 		if (has_no_forum()) warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
-		set_feed_url(find_script('backend').'?mode=tickets&filter=');
+		set_feed_url('?mode=tickets&filter=');
 
 		require_lang('tickets');
 		require_javascript('javascript_validation');
@@ -292,7 +292,7 @@ class Module_tickets
 			// Our tickets
 			$ticket_type=get_param_integer('ticket_type',NULL);
 			if (!is_null($ticket_type))
-				set_feed_url(find_script('backend').'?mode=tickets&filter='.strval($ticket_type));
+				set_feed_url('?mode=tickets&filter='.strval($ticket_type));
 			$tickets=get_tickets(get_member(),$ticket_type);
 
 			// List (our?) tickets

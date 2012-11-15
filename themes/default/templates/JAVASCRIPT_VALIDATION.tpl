@@ -307,6 +307,7 @@ function clever_find_value(the_form,the_element)
 		if ((my_value=='') && (the_element.getAttribute('size')>1)) my_value='-1'; // Fudge, as we have selected something explicitly that is blank
 	}
 	if (my_value===null) my_value='';
+	if ((the_element.getAttribute('type')=='checkbox') && (!the_element.checked)) return '';
 	return my_value;
 }
 

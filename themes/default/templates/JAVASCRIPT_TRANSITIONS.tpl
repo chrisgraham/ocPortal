@@ -1,6 +1,9 @@
 "use strict";
 
-window.fade_transition_timers=[];
+if (typeof window.fade_transition_timers=='undefined')
+{
+	window.fade_transition_timers=[];
+}
 
 function fade_transition(fade_element,dest_percent_opacity,period_in_msecs,increment,destroy_after)
 {

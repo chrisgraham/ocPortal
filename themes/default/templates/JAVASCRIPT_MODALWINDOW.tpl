@@ -16,7 +16,10 @@ It provides a function to open an image link as a 'lightbox' (we use the term li
 
 */
 
-window.overlay_zIndex=999999; // Has to be higher than plupload, which is 99999
+if (typeof window.overlay_zIndex=='undefined')
+{
+	window.overlay_zIndex=999999; // Has to be higher than plupload, which is 99999
+}
 
 function open_link_as_overlay(ob,width,height,target)
 {

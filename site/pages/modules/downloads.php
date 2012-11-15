@@ -355,7 +355,7 @@ class Module_downloads
 		$order=get_param('order','t.text_original ASC');
 
 		// RSS
-		set_feed_url(find_script('backend').'?mode=downloads&filter='.strval($category_id));
+		set_feed_url('?mode=downloads&filter='.strval($category_id));
 
 		// Get details
 		$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('id'=>$category_id),'',1);
@@ -416,11 +416,11 @@ class Module_downloads
 			$filter=strval($category_id);
 		}
 		$ocselect=either_param('active_filter','');
-		$entries=do_block('main_multi_content',array('param'=>'download','filter'=>$filter,'efficient'=>'0','zone'=>'_SELF','sort'=>$order,'max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
+		$entries=do_block('main_multi_content',array('param'=>'download','filter'=>$filter,'efficient'=>'0','zone'=>'_SELF','sort'=>$order,'max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','ocselect'=>$ocselect,'block_id'=>'module'));
 
 		// Title
 		$title_to_use=get_translated_text($category['category']);
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('download_category',strval($category_id));
@@ -509,7 +509,7 @@ class Module_downloads
 
 		// Load up all data
 		$cats=array();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE validated=1 AND ('.$sql_filter.') ORDER BY text_original ASC');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.') ORDER BY text_original ASC');
 		foreach ($rows as $row)
 		{
 			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['name']);
@@ -591,7 +591,7 @@ class Module_downloads
 			return warn_screen(get_screen_title('SECTION_DOWNLOADS'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-		set_feed_url(find_script('backend').'?mode=downloads&filter='.strval($myrow['category_id']));
+		set_feed_url('?mode=downloads&filter='.strval($myrow['category_id']));
 		$name=get_translated_text($myrow['name']);
 
 		// Permissions
@@ -621,7 +621,7 @@ class Module_downloads
 		// Title
 		$title_to_use=do_lang_tempcode('DOWNLOAD_TITLE',make_fractionable_editable('download',$id,$name));
 		$title_to_use_2=do_lang('DOWNLOAD_TITLE',$name);
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('download',strval($id));
@@ -634,7 +634,7 @@ class Module_downloads
 		$warning_details=new ocp_tempcode();
 
 		// Validation
-		if ($myrow['validated']==0)
+		if (($myrow['validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -693,7 +693,7 @@ class Module_downloads
 			require_lang('galleries');
 			$cat='download_'.strval($id);
 			$map=array('cat'=>$cat);
-			if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
+			if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $map['validated']=1;
 			$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',200/*Stop sillyness, could be a DOS attack*/);
 			$div=2;
 			$_out=new ocp_tempcode();
@@ -813,7 +813,7 @@ class Module_downloads
 	 */
 	function tree_view_screen()
 	{
-		set_feed_url(find_script('backend').'?mode=downloads&filter=');
+		set_feed_url('?mode=downloads&filter=');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECTION_DOWNLOADS'))));
 

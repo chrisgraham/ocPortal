@@ -56,8 +56,8 @@ class Hook_content_meta_aware_member
 			'edit_pagelink_pattern_post'=>'_SEARCH:members:view:_WILD:only_tab=edit:only_subtab=settings',
 			'edit_pagelink_field'=>'edit_username',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'members'),(!is_null($zone))?$zone:get_module_zone('members')),
+			'add_url'=>'',
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('members')).':members',
 
 			'support_url_monikers'=>(get_value('username_profile_links')!=='1'),
 

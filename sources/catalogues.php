@@ -347,7 +347,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	// Work out the actual rendering, but only for those results in our selection scope (for performance)
 	foreach ($entries as $i=>$entry)
 	{
-		if (($in_db_sorting) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select))))))
+		if ((!$in_db_sorting) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select))))))
 		{
 			$entries[$i]['map']=get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root,$fields,(($display_type==1) && (!$is_ecomm) && (!is_null($order_by)))?array(0,intval($order_by)):NULL,false,true,intval($order_by));
 		}
@@ -535,30 +535,32 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
  * @param  ID_TEXT			The field to get
  * @param  string				The field value for this
  * @param  array				Database field data
+ * @param  string				What MySQL will join the table with
  * @return ?array				A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
  */
-function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields)
+function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code)
 {
 	$matches=array();
 	if (preg_match('#^field\_(\d+)#',$filter_key,$matches)!=0)
 	{
-		$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields);
+		$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
 		return $ret;
 	}
 
 	// Named
 	require_code('fields');
 	$fields=get_catalogue_fields($catalogue_name);
-	foreach ($fields as $field)
+	foreach ($fields as $i=>$field)
 	{
 		if (get_translated_text($field['cf_name'])==$filter_key)
 		{
-			$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,'field_'.strval($field['id']),$filter_val,$db_fields);
+			$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,'field_'.strval($i),$filter_val,$db_fields,$table_join_code);
+
 			return $ret;
 		}
 	}
 
-	return _default_conv_func($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields);
+	return _default_conv_func($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
 }
 
 /**
@@ -578,7 +580,7 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  */
 function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$filters,$order_by,$direction,$extra_where='')
 {
-	$where_clause=is_null($catalogue_name)?'1=1':db_string_equal_to('c_name',$catalogue_name).$extra_where;
+	$where_clause='1=1'.$extra_where;
 	if (!is_null($category_id))
 	{
 		// WHERE clause
@@ -592,10 +594,11 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 			$where_clause='r.cc_id='.strval($category_id);
 		}
 	}
-	if (!has_privilege(get_member(),'see_unvalidated')) $where_clause.=' AND r.ce_validated=1';
+	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_clause.=' AND r.ce_validated=1';
 
 	// Convert the filters to SQL
 	require_code('ocselect');
+
 	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],$filters,'catalogue_entry',$catalogue_name);
 	$where_clause.=$extra_where.' AND '.db_string_equal_to('r.c_name',$catalogue_name);
 
@@ -640,11 +643,11 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		}
 		elseif (($order_by=='compound_rating') || ($order_by=='average_rating') || ($order_by=='fixed_random'))
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,$order_by,'',array());
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,$order_by,'',array(),'r');
 			if (!is_null($bits)) list($virtual_order_by,)=$bits;
 		} elseif (is_numeric($order_by)) // Ah, so it's saying the nth field of this catalogue
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array());
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array(),'r');
 			if (!is_null($bits))
 			{
 				list($new_key,)=$bits;
@@ -682,7 +685,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		$virtual_order_by='r.id';
 	}
 
-	$sql='SELECT r.*'.implode(',',$extra_select).' FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause;
+	$sql='SELECT r.*'.implode('',$extra_select).' FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause;
 	$in_db_sorting=$do_sorting && $can_do_db_sorting; // This defines whether $virtual_order_by can actually be used in SQL (if not, we have to sort manually)
 	if ($in_db_sorting && $do_sorting) $sql.=' ORDER BY '.$virtual_order_by.' '.$direction;
 
@@ -759,7 +762,8 @@ function catalogue_entries_manual_sort($fields,&$entries,$order_by,$direction)
 			}
 			elseif ($order_by=='distance') // By distance
 			{
-				$r=(floatval($a)<floatval($b))?-1:1;
+				if (is_null($a) || is_null($b)) $r=0;
+				else $r=(floatval($a)<floatval($b))?-1:1;
 			} else // Normal case
 			{
 				$r=strnatcmp(strtolower($a),strtolower($b));
@@ -825,7 +829,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	// Loop over all fields
 	foreach ($fields as $i=>$field)
 	{
-		if (!array_key_exists('effective_value',$field))
+		if (!isset($field['effective_value']))
 		{
 			$all_visible=false;
 			continue;
@@ -865,7 +869,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$map['_FIELD_'.strval($field['id'])]=$use_ev;
 			$map['FIELD_'.strval($i).'_PLAIN']=$ev;
 			$map['_FIELD_'.strval($field['id']).'_PLAIN']=$ev;
-			if (array_key_exists('effective_value_pure',$field))
+			if (isset($field['effective_value_pure']))
 			{
 				$map['FIELD_'.strval($i).'_PURE']=$field['effective_value_pure'];
 				$map['_FIELD_'.strval($field['id']).'_PURE']=$field['effective_value_pure'];
@@ -883,13 +887,25 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 
 				if (($field['cf_visible']==1) || ($i==0))
 				{
-					$f=array('ENTRYID'=>strval($id),'CATALOGUE'=>$catalogue_name,'TYPE'=>$field['cf_type'],'FIELD'=>$field_name,'FIELDID'=>strval($i),'_FIELDID'=>strval($field['id']),'FIELDTYPE'=>$field_type,'VALUE_PLAIN'=>$ev,'VALUE'=>$use_ev_enhanced);
-					$_field=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
-					$map['FIELDS']->attach($_field);
-					$_field=do_template('CATALOGUE_'.$tpl_set.'_GRID_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_GRID_ENTRY_FIELD');
-					$map['FIELDS_GRID']->attach($_field);
-					$_field=do_template('CATALOGUE_'.$tpl_set.'_TABULAR_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD');
-					$map['FIELDS_TABULAR']->attach($_field);
+					if (get_value('no_catalogue_field_assembly')!=='1')
+					{
+						$f=array('ENTRYID'=>strval($id),'CATALOGUE'=>$catalogue_name,'TYPE'=>$field['cf_type'],'FIELD'=>$field_name,'FIELDID'=>strval($i),'_FIELDID'=>strval($field['id']),'FIELDTYPE'=>$field_type,'VALUE_PLAIN'=>$ev,'VALUE'=>$use_ev_enhanced);
+						if (get_value('no_catalogue_field_assembly_fieldmaps')!=='1')
+						{
+							$_field=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
+							$map['FIELDS']->attach($_field);
+						}
+						if (get_value('no_catalogue_field_assembly_grid')!=='1')
+						{
+							$_field=do_template('CATALOGUE_'.$tpl_set.'_GRID_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_GRID_ENTRY_FIELD');
+							$map['FIELDS_GRID']->attach($_field);
+						}
+						if (get_value('no_catalogue_field_assembly_tabular')!=='1')
+						{
+							$_field=do_template('CATALOGUE_'.$tpl_set.'_TABULAR_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD');
+							$map['FIELDS_TABULAR']->attach($_field);
+						}
+					}
 				}
 			} else $all_visible=false;
 
@@ -1207,7 +1223,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;
 	} else
 	{
-		$value=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_'.$type,'cv_value',array('cf_id'=>$field_id,'ce_id'=>$entry_id));
+		$value=$catalogue_entry_cache[$entry_id][$field_id];
 	}
 
 	if (is_integer($value)) $value=strval($value);
@@ -1538,10 +1554,12 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
  * Check the current catalogue is an ecommerce catalogue
  *
  * @param  SHORT_TEXT		Catalogue name
+ * @param  ?array				Catalogue row (NULL: look up)
  * @return boolean			Status of ecommerce catalogue check
 */
-function is_ecommerce_catalogue($catalogue_name)
+function is_ecommerce_catalogue($catalogue_name,$catalogue=NULL)
 {
+	if (($catalogue!==NULL) && ($catalogue['c_ecommerce']==0)) return false;
 	if (!addon_installed('ecommerce')) return false;
 	if (!addon_installed('shopping')) return false;
 
@@ -1596,7 +1614,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	if (!array_key_exists(0,$categories)) warn_exit(do_lang_tempcode('CAT_NOT_FOUND',strval($entry['cc_id'])));
 	$category=$categories[0];
 	require_code('site');
-	set_feed_url(find_script('backend').'?mode=catalogues&filter='.strval($entry['cc_id']));
+	set_feed_url('?mode=catalogues&filter='.strval($entry['cc_id']));
 
 	$catalogue_name=$category['c_name'];
 	$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
@@ -1630,7 +1648,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	}
 
 	// Validation
-	if ($entry['ce_validated']==0)
+	if (($entry['ce_validated']==0) && (addon_installed('unvalidated')))
 	{
 		if (!has_privilege(get_member(),'jump_to_unvalidated'))
 			access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -1668,7 +1686,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 		$map['TITLE']=new ocp_tempcode();
 	} else
 	{
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('catalogue_entry',strval($id));

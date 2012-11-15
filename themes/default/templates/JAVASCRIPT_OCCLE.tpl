@@ -1,7 +1,10 @@
 "use strict";
 
-window.previous_commands=[];
-window.current_command=null;
+if (typeof window.previous_commands=='undefined')
+{
+	window.previous_commands=[];
+	window.current_command=null;
+}
 
 // Deal with OcCLE history
 function occle_handle_history(element,key_code,e)
@@ -243,7 +246,10 @@ function clear_cl()
 
 // Fun stuff...
 
-window.occle_foxy_textnodes=[];
+if (typeof window.occle_foxy_textnodes=='undefined')
+{
+	window.occle_foxy_textnodes=[];
+}
 
 function bsod()
 {

@@ -33,6 +33,10 @@ function init__zones()
 	global $DO_NOT_CACHE_THIS;
 	$DO_NOT_CACHE_THIS=false;
 
+	global $ZBMF_CACHE;
+	$ZBMF_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ZBMF_CACHE'):NULL;
+	if ($ZBMF_CACHE===NULL) $ZBMF_CACHE=array();
+
 	global $MODULES_ZONES_CACHE,$MODULES_ZONES_CACHE_DEFAULT;
 	$MODULES_ZONES_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('MODULES_ZONES'):NULL;
 	global $SITE_INFO;
@@ -114,8 +118,7 @@ function zone_black_magic_filterer($path,$relative=false)
 	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones',true)!=='1');
 	if ($no_collapse_zones) return $path;
 
-	static $zbmf_cache=array();
-	if (isset($zbmf_cache[$path])) return $zbmf_cache[$path];
+	if (isset($ZBMF_CACHE[$path])) return $ZBMF_CACHE[$path];
 
 	if ($relative)
 	{
@@ -147,14 +150,16 @@ function zone_black_magic_filterer($path,$relative=false)
 				if (is_file($site_equiv))
 				{
 					$ret=$relative?('site/'.$stripped):$site_equiv;
-					$zbmf_cache[$path]=$ret;
+					$ZBMF_CACHE[$path]=$ret;
+					if (function_exists('persistent_cache_set')) persistent_cache_set('ZBMF_CACHE',$ZBMF_CACHE);
 					return $ret;
 				}
 			}
 		}
 	}
 
-	$zbmf_cache[$path]=$path;
+	$ZBMF_CACHE[$path]=$path;
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ZBMF_CACHE',$ZBMF_CACHE);
 	return $path;
 }
 
@@ -229,13 +234,16 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		}
 	}
 
+	$check_redirects=(get_value('no_priority_redirects')!=='1');
+
 	global $REDIRECT_CACHE;
+	if ($check_redirects && $REDIRECT_CACHE===NULL) load_redirect_cache();
 	$first_zones=array((substr($module_name,0,6)=='admin_')?'adminzone':$zone);
 	if ($zone!='') $first_zones[]='';
 	if (($zone!='site')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';
 	foreach ($first_zones as $zone)
 	{
-		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
+		if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
 		{
 			$MODULES_ZONES_CACHE[$module_name]=$zone;
 			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
@@ -245,7 +253,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		if ((is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype)))
 			|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
 		{
-			if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
+			if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
 			$MODULES_ZONES_CACHE[$module_name]=$zone;
 			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
@@ -259,7 +267,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 			if ((is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype)))
 				|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
 			{
-				if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
+				if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
 				$MODULES_ZONES_CACHE[$module_name]=$zone;
 				if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 				return $zone;
@@ -269,7 +277,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 
 	foreach ($zones as $zone) // Okay, finally check for redirects
 	{
-		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1))
+		if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1))
 		{
 			$MODULES_ZONES_CACHE[$module_name]=$zone;
 			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
@@ -379,47 +387,50 @@ function load_module_page($string,$codename)
 	}
 
 	// Get info about what is installed and what is on disk
-	$rows=$GLOBALS['SITE_DB']->query_select('modules',array('*'),array('module_the_name'=>$codename),'',1);
-	if (array_key_exists(0,$rows))
+	if (get_value('assume_modules_correct')!=='1')
 	{
-		$info=$object->info();
-		$installed_version=$rows[0]['module_version'];
-		$installed_hack_version=$rows[0]['module_hack_version'];
-		$installed_hacked_by=$rows[0]['module_hacked_by'];
-		if (is_null($installed_hacked_by)) $installed_hacked_by='';
-		$this_version=$info['version'];
-		$this_hack_version=$info['hack_version'];
-		$this_hacked_by=$info['hacked_by'];
-		if (is_null($this_hacked_by)) $this_hacked_by='';
+		$rows=$GLOBALS['SITE_DB']->query_select('modules',array('*'),array('module_the_name'=>$codename),'',1);
+		if (array_key_exists(0,$rows))
+		{
+			$info=$object->info();
+			$installed_version=$rows[0]['module_version'];
+			$installed_hack_version=$rows[0]['module_hack_version'];
+			$installed_hacked_by=$rows[0]['module_hacked_by'];
+			if (is_null($installed_hacked_by)) $installed_hacked_by='';
+			$this_version=$info['version'];
+			$this_hack_version=$info['hack_version'];
+			$this_hacked_by=$info['hacked_by'];
+			if (is_null($this_hacked_by)) $this_hacked_by='';
 
-		// See if we need to do an upgrade
-		if (($installed_version<$this_version) && (array_key_exists('update_require_upgrade',$info)))
-		{
-			require_code('database_action');
-			require_code('config2');
-			require_code('menus2');
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1); // Happens first so if there is an error it won't loop (if we updated install code manually there will be an error)
-			$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
-		}
-		elseif (($installed_hack_version<$this_hack_version) && (array_key_exists('hack_require_upgrade',$info)))
-		{
-			require_code('database_action');
-			require_code('config2');
-			require_code('menus2');
-			/*if (($installed_hacked_by!=$this_hacked_by) && (!is_null($installed_hacked_by)))
+			// See if we need to do an upgrade
+			if (($installed_version<$this_version) && (array_key_exists('update_require_upgrade',$info)))
 			{
-				fatal_exit('Managed by different author');
-			} Probably better we leave the solution to this to modders rather than just block the potential for there even to be a solution	*/
+				require_code('database_action');
+				require_code('config2');
+				require_code('menus2');
+				$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1); // Happens first so if there is an error it won't loop (if we updated install code manually there will be an error)
+				$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
+			}
+			elseif (($installed_hack_version<$this_hack_version) && (array_key_exists('hack_require_upgrade',$info)))
+			{
+				require_code('database_action');
+				require_code('config2');
+				require_code('menus2');
+				/*if (($installed_hacked_by!=$this_hacked_by) && (!is_null($installed_hacked_by)))
+				{
+					fatal_exit('Managed by different author');
+				} Probably better we leave the solution to this to modders rather than just block the potential for there even to be a solution	*/
 
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1);
-			$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
+				$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1);
+				$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
+			}
+		} else
+		{
+			require_code('zones2');
+			$zone=substr($string,0,strpos($string,'/'));
+			if ($zone=='pages') $zone='';
+			reinstall_module($zone,$codename);
 		}
-	} else
-	{
-		require_code('zones2');
-		$zone=substr($string,0,strpos($string,'/'));
-		if ($zone=='pages') $zone='';
-		reinstall_module($zone,$codename);
 	}
 
 	return $object->run();
@@ -560,36 +571,38 @@ function find_all_hooks($type,$entry)
 
 	$out=array();
 
-	$dir=get_file_base().'/sources/hooks/'.filter_naughty($type).'/'.filter_naughty($entry);
-	$dh=@opendir($dir);
+	if (strpos($type,'..')!==false)
+		$type=filter_naughty($type);
+	if (strpos($entry,'..')!==false)
+		$entry=filter_naughty($entry);
+	$dir=get_file_base().'/sources/hooks/'.$type.'/'.$entry;
+	$dh=@scandir($dir);
 	if ($dh!==false)
 	{
-		while (($file=readdir($dh))!==false)
+		foreach ($dh as $file)
 		{
 			$basename=basename($file,'.php');
-			if (($file==$basename.'.php') && (preg_match('#^[\w\-]*$#',$basename)!=0))
+			if (($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
 			{
 				$out[$basename]='sources';
 			}
 		}
-		closedir($dh);
 	}
 
 	if ((!isset($GLOBALS['DOING_USERS_INIT'])) && (!in_safe_mode())) // The !isset is because of if the user init causes a DB query to load sessions which loads DB hooks which checks for safe mode which leads to a permissions check for safe mode and thus a failed user check (as sessions not loaded yet)
 	{
-		$dir=get_file_base().'/sources_custom/hooks/'.filter_naughty($type).'/'.filter_naughty($entry);
-		$dh=@opendir($dir);
+		$dir=get_file_base().'/sources_custom/hooks/'.$type.'/'.$entry;
+		$dh=@scandir($dir);
 		if ($dh!==false)
 		{
-			while (($file=readdir($dh))!==false)
+			foreach ($dh as $file)
 			{
 				$basename=basename($file,'.php');
-				if (($file==$basename.'.php') && (preg_match('#^[\w\-]*$#',$basename)!=0))
+				if (($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
 				{
 					$out[$basename]='sources_custom';
 				}
 			}
-			closedir($dh);
 		}
 	}
 
@@ -636,6 +649,7 @@ function block_cache_default($codename)
  */
 function get_block_id($map)
 {
+	if (isset($map['block_id'])) return $map['block_id'];
 	ksort($map);
 	unset($map['raw']);
 	unset($map['cache']);
@@ -662,7 +676,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	$map['block']=$codename;
 
-	if (!array_key_exists('cache',$map))
+	if (!isset($map['cache']))
 		$map['cache']=block_cache_default($codename);
 
 	push_output_state(false,true);
@@ -700,7 +714,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			if ($cache_identifier!==NULL)
 			{
 				if ($ttl===NULL) $ttl=$row['cache_ttl'];
-				$cache=get_cache_entry($codename,$cache_identifier,$ttl,true,(array_key_exists('cache',$map)) && ($map['cache']=='2'),$map);
+				if (get_value('no_block_timeout')==='1') $ttl=60*60*24*365*5; // 5 year timeout
+				$cache=get_cache_entry($codename,$cache_identifier,$ttl,true,(isset($map['cache'])) && ($map['cache']=='2'),$map);
 				if ($cache===NULL)
 				{
 					$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
@@ -901,7 +916,7 @@ function do_block_hunt_file($codename,$map=NULL)
 				$BLOCKS_AT_CACHE[$codename]='sources/miniblocks';
 				if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 			}
-		} elseif ((is_null($map)) || (!array_key_exists('failsafe',$map)) || ($map['failsafe']!='1'))
+		} elseif ((is_null($map)) || (!isset($map['failsafe'])) || ($map['failsafe']!='1'))
 		{
 			$temp=do_template('WARNING_BOX',array('_GUID'=>'09f1bd6e117693a85fb69bfb52ea1799','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename))));
 			return $temp->evaluate();
@@ -944,6 +959,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 		} elseif (defined('HIPHOP_PHP')) return NULL;
 	}
 
+	// NB: Don't extend this without thinking, see hard-coded in decache() function too
 	$_cache_identifier[]=get_users_timezone(get_member());
 	$_cache_identifier[]=(get_bot_type()===NULL);
 
@@ -1036,13 +1052,14 @@ function find_all_modules($zone)
  * Extract code to execute the requested functions with the requested parameters from the module at the given path.
  * We used to actually load up the module, but it ate all our RAM when we did!
  *
- * @param  PATH			The path to the module
+ * @param  PATH			The path to the module (or any PHP file with a class)
  * @param  array			Array of functions to be executing
  * @param  ?array			A list of parameters to pass to our functions (NULL: none)
  * @param  boolean		Whether to do this "properly" (via proper OOP), which will consume more memory
+ * @param  ?array			Class name to use (NULL: autodetect)
  * @return array			A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
-function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_code_call=false)
+function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_code_call=false,$class_name=NULL)
 {
 	if ($params===NULL) $params=array();
 
@@ -1052,25 +1069,31 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 	if ((($hphp) && (!function_exists('quercus_version'))) || ($prefer_direct_code_call))
 	{
 		global $CLASS_CACHE;
-		if (array_key_exists($path,$CLASS_CACHE))
+		if (isset($CLASS_CACHE[$path]))
 		{
 			$new_classes=$CLASS_CACHE[$path];
 		} else
 		{
-			if (!$hphp) $classes_before=get_declared_classes();
+			if (!$hphp && $class_name===NULL) $classes_before=get_declared_classes();
 			require_code(preg_replace('#^'.preg_quote(get_file_base()).'/#','',preg_replace('#^'.preg_quote(get_file_base()).'/((sources)|(sources\_custom))/(.*)\.php#','${4}',$path)));
-			if (!$hphp) $classes_after=get_declared_classes();
-			$new_classes=$hphp?array():array_values(array_diff($classes_after,$classes_before));
-			if (count($new_classes)==0) // Ah, AllVolatile is probably not enabled
+			if (!$hphp && $class_name===NULL) $classes_after=get_declared_classes();
+			if ($class_name===NULL)
 			{
-				$matches=array();
-				if (preg_match('#^\s*class (\w+)#m',file_get_contents($path),$matches)!=0)
-					$new_classes=array($matches[1]);
+				$new_classes=$hphp?array():array_values(array_diff($classes_after,$classes_before));
+				if (count($new_classes)==0) // Ah, HipHop PHP's AllVolatile is probably not enabled
+				{
+					$matches=array();
+					if (preg_match('#^\s*class (\w+)#m',file_get_contents($path),$matches)!=0)
+						$new_classes=array($matches[1]);
+				}
+			} else
+			{
+				$new_classes=array($class_name);
 			}
 			$CLASS_CACHE[$path]=$new_classes;
 		}
-		if ((array_key_exists(0,$new_classes)) && ($new_classes[0]=='standard_crud_module')) array_shift($new_classes);
-		if (array_key_exists(0,$new_classes))
+		if ((isset($new_classes[0])) && ($new_classes[0]=='standard_crud_module')) array_shift($new_classes);
+		if (isset($new_classes[0]))
 		{
 			$c=$new_classes[0];
 			$new_ob=new $c;

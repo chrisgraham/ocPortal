@@ -62,7 +62,11 @@ class Hook_checklist_awards
 				$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
 				$url=$details['add_url'];
-				if (is_object($url)) $url=$url->evaluate();
+				if (!is_null($url))
+				{
+					list($url_zone,$url_map,$url_hash)=page_link_decode($url);
+					$url=static_evaluate_tempcode(build_url($url_map,$url_zone,NULL,false,false,false,$url_hash));
+				} else $url='';
 				$url=str_replace('=!','_ignore=1',$url);
 
 				$task=do_lang_tempcode('_GIVE_AWARD',escape_html(get_translated_text($award['a_title'])));

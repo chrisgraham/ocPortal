@@ -181,6 +181,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 //));
 ");
 	get_table_backup($logfile,'db_meta','db_meta_indices',$install_data_php_file);
+
 	if (fwrite($install_php_file,substr($_install_php_file,$place+8))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($install_php_file);
 	fclose($install_data_php_file);
@@ -207,7 +208,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 
 			'site', // In case of collapsed zones blocking in
 		));
-		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'),true);
+		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'));
 	} elseif ($b_type=='incremental')
 	{
 		$threshold=intval(get_value('last_backup'));

@@ -142,7 +142,7 @@ class Module_filedump
 		$place=filter_naughty(get_param('place','/'));
 		if (substr($place,-1,1)!='/') $place.='/';
 
-		set_feed_url(find_script('backend').'?mode=filedump&filter='.$place);
+		set_feed_url('?mode=filedump&filter='.$place);
 
 		// Show tree
 		$dirs=explode('/',substr($place,0,strlen($place)-1));
@@ -288,7 +288,7 @@ class Module_filedump
 		} else $upload_form=new ocp_tempcode();
 
 		// Do a form so people can make folders
-		if ((get_option('is_on_folder_create')=='1') && (has_specific_permission(get_member(),'upload_filedump')))
+		if ((get_option('is_on_folder_create')=='1') && (has_privilege(get_member(),'upload_filedump')))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'ac'),'_SELF');
 			require_code('form_templates');
@@ -402,7 +402,7 @@ class Module_filedump
 	{
 		$title=get_screen_title('FILEDUMP_CREATE_FOLDER');
 
-		if (!has_specific_permission(get_member(),'upload_filedump')) access_denied('I_ERROR');
+		if (!has_privilege(get_member(),'upload_filedump')) access_denied('I_ERROR');
 
 		$name=filter_naughty(post_param('name'));
 		$place=filter_naughty(post_param('place'));

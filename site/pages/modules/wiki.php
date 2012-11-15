@@ -74,6 +74,8 @@ class Module_wiki
 		delete_menu_item_simple('_SEARCH:wiki:type=random');
 		delete_menu_item_simple('_SEARCH:wiki:type=changes');
 		delete_menu_item_simple('_SEARCH:wiki:type=tree');
+
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_wiki');
 	}
 
 	/**
@@ -335,7 +337,7 @@ class Module_wiki
 	 */
 	function run()
 	{
-		set_feed_url(find_script('backend').'?mode=wiki&filter=');
+		set_feed_url('?mode=wiki&filter=');
 
 		$type=get_param('type','misc');
 
@@ -429,7 +431,7 @@ class Module_wiki
 		$current_title=get_translated_text($page['title']);
 		$title_to_use=do_lang_tempcode('WIKI_PAGE',escape_html($current_title));
 		$title_to_use_2=do_lang('WIKI_PAGE',$current_title);
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('wiki_page',strval($page['id']));
@@ -493,7 +495,7 @@ class Module_wiki
 
 		// Main text (posts)
 		$where_map=array('page_id'=>$id);
-		if (!has_privilege(get_member(),'see_unvalidated')) $where_map['validated']=1;
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_map['validated']=1;
 		$dbposts=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),$where_map,'ORDER BY date_and_time',300);
 		$num_posts=0;
 		$posts=new ocp_tempcode();

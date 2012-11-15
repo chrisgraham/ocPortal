@@ -259,7 +259,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			decache('side_ocf_private_topics',array(get_member()));
 		}
 		// Check validated
-		if ($topic_info['t_validated']==0)
+		if (($topic_info['t_validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -590,7 +590,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	require_lang('ocf');
 	require_code('ocf_members2');
 	$buttons=new ocp_tempcode();
-	if ((array_key_exists('may_validate_posts',$topic_info)) && ((($topic_info['validated']==0) && ($_postdetails['id']==$topic_info['first_post_id'])) || ($_postdetails['validated']==0)))
+	if ((array_key_exists('may_validate_posts',$topic_info)) && (addon_installed('unvalidated')) && ((($topic_info['validated']==0) && ($_postdetails['id']==$topic_info['first_post_id'])) || ($_postdetails['validated']==0)))
 	{
 		$map=array('page'=>'topics','type'=>'validate_post','id'=>$_postdetails['id']);
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);

@@ -98,7 +98,7 @@ class Module_topicview
 		}
 
 		if (!is_null($id))
-			set_feed_url(find_script('backend').'?mode=ocf_topicview&filter='.strval($id));
+			set_feed_url('?mode=ocf_topicview&filter='.strval($id));
 
 		$view_poll_results=get_param_integer('view_poll_results',0);
 
@@ -254,7 +254,7 @@ class Module_topicview
 
 				$first_unread=(($_postdetails['id']==$first_unread_id) || (($first_unread_id<0) && ($array_id==count($topic_info['posts'])-1)))?do_template('OCF_TOPIC_FIRST_UNREAD'):new ocp_tempcode();
 
-				$unvalidated=($_postdetails['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode();
+				$unvalidated=(($_postdetails['validated']==0) && (addon_installed('unvalidated')))?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode();
 
 				$post_url=$GLOBALS['FORUM_DRIVER']->post_url($_postdetails['id'],is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),true);
 
@@ -676,7 +676,7 @@ class Module_topicview
 			}
 			if (array_key_exists('may_delete_posts',$topic_info))
 				$marked_post_actions.='<option value="delete_posts">'.do_lang('DELETE_POSTS').'</option>';
-			if (array_key_exists('may_validate_posts',$topic_info))
+			if ((array_key_exists('may_validate_posts',$topic_info)) && (addon_installed('unvalidated')))
 				$marked_post_actions.='<option value="validate_posts">'.do_lang('VALIDATE_POSTS').'</option>';
 			if (get_value('disable_multi_quote')!=='1')
 			{
@@ -744,7 +744,7 @@ class Module_topicview
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('INLINE_PERSONAL_POSTS').'</span>'));
 		}
 
-		if ($topic_info['validated']==0)
+		if (($topic_info['validated']==0) && (addon_installed('unvalidated')))
 		{
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'313de370c1aeab9545c4bee4e35e7f84','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
 		} else $warning_details=new ocp_tempcode();
@@ -759,7 +759,7 @@ class Module_topicview
 				$title=get_screen_title(do_lang_tempcode('NAMED_PRIVATE_TOPIC',escape_html($topic_info['title'])),false,NULL,do_lang_tempcode('READING_PRIVATE_TOPIC'));
 			} else
 			{
-				if (addon_installed('awards'))
+				if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 				{
 					require_code('awards');
 					$awards=find_awards_for('topic',strval($id));

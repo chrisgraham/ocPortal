@@ -4,7 +4,10 @@
  * Request data for the activities activities feed
  */
 // Assume that our activity feed needs updating to start with
-window.latest_activity = 0;
+if (typeof window.latest_activity=='undefined')
+{
+	window.latest_activity = 0;
+}
 
 function sUpdateGetData ()
 {

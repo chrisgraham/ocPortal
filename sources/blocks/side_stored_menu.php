@@ -84,8 +84,6 @@ class Block_side_stored_menu
 		$menu=build_stored_menu($type,$map['param'],$silent_failure=='1');
 		$menu->handle_symbol_preprocessing(); // Optimisation: we are likely to have lots of page-links in here, so we want to spawn them to be detected for mass moniker loading
 
-		if ($menu->is_empty()) return new ocp_tempcode();
-
 		if ((array_key_exists('title',$map)) && ($map['title']!=''))
 			$menu=do_template('BLOCK_SIDE_STORED_MENU',array('_GUID'=>'ae46aa37a9c5a526f43b26a391164436','CONTENT'=>$menu,'TYPE'=>$type,'PARAM'=>$map['param'],'TRAY_STATUS'=>$tray_status,'TITLE'=>comcode_to_tempcode($map['title'],NULL,true)));
 

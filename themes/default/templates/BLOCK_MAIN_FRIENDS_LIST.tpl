@@ -35,7 +35,9 @@
 		<script type="text/javascript">// <![CDATA[
 			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['.*'],{ },false,true);
 		//]]></script>
-		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+		{+START,IF_NON_EMPTY,{PAGINATION}}
+			{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+		{+END}
 	</div>
 {+END}
 

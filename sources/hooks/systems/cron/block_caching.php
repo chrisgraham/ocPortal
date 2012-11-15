@@ -69,16 +69,13 @@ class Hook_cron_block_caching
 			$object=do_block_hunt_file($codename,$map);
 			if (is_object($object))
 			{
-				global $LANGS_REQUESTED,$JAVASCRIPTS,$CSSS,$LANGS_REQUESTED,$DO_NOT_CACHE_THIS,$TIMEZONE_MEMBER_CACHE;
+				global $LANGS_REQUESTED,$LANGS_REQUESTED,$DO_NOT_CACHE_THIS,$TIMEZONE_MEMBER_CACHE,$JAVASCRIPTS,$CSSS;
 
 				$backup_langs_requested=$LANGS_REQUESTED;
-				$backup_javascripts=$JAVASCRIPTS;
-				$backup_csss=$CSSS;
 				get_users_timezone();
 				$backup_timezone=$TIMEZONE_MEMBER_CACHE[get_member()];
 				$LANGS_REQUESTED=array();
-				$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
-				$CSSS=array('no_cache'=>1,'global'=>1);
+				push_output_state(false,true);
 				$cache=$object->run($map);
 				$TIMEZONE_MEMBER_CACHE[get_member()]=$backup_timezone;
 				$cache->handle_symbol_preprocessing();
@@ -113,8 +110,7 @@ class Hook_cron_block_caching
 					put_into_cache($codename,$ttl,$cache_identifier,$cache,array_keys($LANGS_REQUESTED),array_keys($JAVASCRIPTS),array_keys($CSSS),true);
 				}
 				$LANGS_REQUESTED+=$backup_langs_requested;
-				$JAVASCRIPTS+=$backup_javascripts;
-				$CSSS+=$backup_csss;
+				restore_output_state(false,true);
 			}
 
 			$GLOBALS['SITE_DB']->query_delete('cron_caching_requests',$request);

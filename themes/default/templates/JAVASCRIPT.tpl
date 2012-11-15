@@ -263,7 +263,10 @@ function initialise_error_mechanism()
 	add_event_listener_abstract(window,'unload',function() { window.onerror=null; } );
 }
 if ((typeof window.take_errors!='undefined') && (window.take_errors)) initialise_error_mechanism();
-window.unloaded=false;
+if (typeof window.unloaded=='undefined')
+{
+	window.unloaded=false;
+}
 add_event_listener_abstract(window,'unload',function() { window.unloaded=true; } );
 
 /* Screen transition, for staff */
@@ -1122,7 +1125,8 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 			{
 				pic.src=((pic.src.indexOf("themewizard.php")!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
 				pic.setAttribute('alt',pic.getAttribute('alt').replace('{!CONTRACT;}','{!EXPAND;}'));
-				pic.setAttribute('title','{!EXPAND;}');
+				pic.title='{!EXPAND;}'; // Needs doing because convert_tooltip may not have run yet
+				pic.ocp_tooltip_title='{!EXPAND;}';
 			}
 			element.style.display='none';
 		}
@@ -1194,7 +1198,7 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 		{
 			pic.src=((animate_dif<0)?'{$IMG;,expand}':'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
 			pic.setAttribute('alt',pic.getAttribute('alt').replace((animate_dif<0)?'{!CONTRACT;}':'{!EXPAND;}',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}'));
-			pic.setAttribute('title',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}');
+			pic.ocp_tooltip_title=(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}';
 		}
 		trigger_resize(true);
 	}
@@ -1625,7 +1629,7 @@ function key_pressed(event,key,no_error_if_bad)
 function convert_tooltip(element)
 {
 	var title=element.title;
-	if ((title!='') && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
+	if ((title!='') && (element.className.indexOf('leave_native_tooltip')==-1) && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
 	{
 		element.title='';
 
@@ -1644,11 +1648,13 @@ function convert_tooltip(element)
 		// And now define nice listeners for it all...
 		var win=get_main_ocp_window(true);
 
+		element.ocp_tooltip_title=title;
+
 		win.add_event_listener_abstract(
 			element,
 			'mouseover',
 			function(event) {
-				win.activate_tooltip(element,event,title,null,null,null,null,false,false,false,win);
+				win.activate_tooltip(element,event,element.ocp_tooltip_title,null,null,null,null,false,false,false,win);
 			}
 		);
 
@@ -2436,12 +2442,12 @@ function set_outer_html(element,tHTML)
 
 /* Put some new HTML into the given element */
 // Note that embedded Javascript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached Javascript
-function set_inner_html(element,tHTML,append)
+function set_inner_html(element,tHTML,append,force_dom)
 {
 	/* Parser hint: .innerHTML okay */
 	if (typeof tHTML=='number') tHTML=tHTML+'';
 
-	if ((document.write) && (typeof element.innerHTML!='undefined') && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
+	if (((typeof force_dom=='undefined') || (!force_dom)) && (document.write) && (typeof element.innerHTML!='undefined') && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
 	{
 		var clone=element.cloneNode(true);
 		try
@@ -2550,8 +2556,10 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 			} }(i);
 
 			bit.onclick=function(i) {
-				return function()	{
-					// Find where the
+				return function(event)	{
+					event.returnValue=false;
+
+					// Find where the rating replacement will go
 					var template='';
 					var replace_spot=bit;
 					while (replace_spot!==null)
@@ -2589,6 +2597,8 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 						var message=ajax_result.responseText;
 						set_inner_html(_replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
 					});
+
+					return false;
 				}
 			}(i);
 		}
@@ -2744,7 +2754,7 @@ function replace_comments_form_with_ajax(options,hash)
 				if ((ajax_result.responseText!='') && (ajax_result.status!=500))
 				{
 					// Display
-					set_inner_html(comments_wrapper,ajax_result.responseText);
+					set_outer_html(comments_wrapper,ajax_result.responseText);
 
 					// Collapse, so user can see what happening
 					if (document.getElementById('comments_posting_form_outer').className.indexOf('toggleable_tray')!=-1)
@@ -2814,9 +2824,9 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 			post.value='';
 		else if (post.value!='') post.value+='\n\n';
 
+		post.focus();
 		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
 		post.default_substring_to_strip=post.value;
-		post.focus();
 	}
 
 	return false;
@@ -2911,8 +2921,3 @@ function set_up_change_monitor(id)
 		}
 	} );
 }
-
-{+START,INCLUDE,JAVASCRIPT_MODALWINDOW}{+END}
-
-/* Put your extra custom code in an overridden version of the template below + it will take function precedence also */
-{+START,INCLUDE,JAVASCRIPT_CUSTOM_GLOBALS}{+END}

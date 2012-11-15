@@ -58,30 +58,31 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 		}
 	}
 
+	$get_url=get_self_url(true);
+
+	// How many to show per page
+	if (is_null($_selectors)) $_selectors=array(10,25,50,100,300);
+	if (has_privilege(get_member(),'remove_page_split')) $_selectors[]=$max_rows;
+	$_selectors[]=$max;
+	sort($_selectors);
+	$_selectors=array_unique($_selectors);
+	$selectors=new ocp_tempcode();
+	foreach ($_selectors as $selector_value)
+	{
+		if ($selector_value>$max_rows) $selector_value=$max_rows;
+		$selected=($max==$selector_value);
+		$selectors->attach(do_template('PAGINATION_PER_PAGE_OPTION',array('_GUID'=>'1a0583bab42257c60289459ce1ac1e05','SELECTED'=>$selected,'VALUE'=>strval($selector_value),'NAME'=>integer_format($selector_value))));
+
+		if ($selector_value==$max_rows) break;
+	}
+	$hidden=build_keep_form_fields('_SELF',true,array($max_name,$start_name));
+	$per_page=do_template('PAGINATION_PER_SCREEN',array('_GUID'=>'1993243727e58347d1544279c5eba496','HASH'=>($hash=='')?NULL:$hash,'HIDDEN'=>$hidden,'URL'=>$get_url,'MAX_NAME'=>$max_name,'SELECTORS'=>$selectors));
+	$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
+
 	if ($max<$max_rows) // If they don't all fit on one page
 	{
 		$parts=new ocp_tempcode();
-		$get_url=get_self_url(true);
 		$num_pages=($max==0)?1:intval(ceil(floatval($max_rows)/floatval($max)));
-
-		// How many to show per page
-		if (is_null($_selectors)) $_selectors=array(10,25,50,100,300);
-		if (has_privilege(get_member(),'remove_page_split')) $_selectors[]=$max_rows;
-		$_selectors[]=$max;
-		sort($_selectors);
-		$_selectors=array_unique($_selectors);
-		$selectors=new ocp_tempcode();
-		foreach ($_selectors as $selector_value)
-		{
-			if ($selector_value>$max_rows) $selector_value=$max_rows;
-			$selected=($max==$selector_value);
-			$selectors->attach(do_template('PAGINATION_PER_PAGE_OPTION',array('_GUID'=>'1a0583bab42257c60289459ce1ac1e05','SELECTED'=>$selected,'VALUE'=>strval($selector_value),'NAME'=>integer_format($selector_value))));
-
-			if ($selector_value==$max_rows) break;
-		}
-		$hidden=build_keep_form_fields('_SELF',true,array($max_name,$start_name));
-		$per_page=do_template('PAGINATION_PER_SCREEN',array('_GUID'=>'1993243727e58347d1544279c5eba496','HASH'=>($hash=='')?NULL:$hash,'HIDDEN'=>$hidden,'URL'=>$get_url,'MAX_NAME'=>$max_name,'SELECTORS'=>$selectors));
-		$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
 
 		// Link to first
 		if ($start>0)
@@ -216,6 +217,32 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 			'NEXT'=>$next,
 			'LAST'=>$last,
 			'PAGES_LIST'=>$pages_list,
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'MAX_ROWS'=>strval($max_rows),
+			'NUM_PAGES'=>strval($num_pages),
+		));
+	}
+
+	if (get_value('pagination_when_not_needed')==='1')
+	{
+		return do_template('PAGINATION_WRAP',array(
+			'TEXT_ID'=>$title,
+			'PER_PAGE'=>$per_page,
+			'FIRST'=>'',
+			'PREVIOUS'=>'',
+			'CONTINUES_LEFT'=>'',
+			'PARTS'=>'',
+			'CONTINUES_RIGHT'=>'',
+			'NEXT'=>'',
+			'LAST'=>'',
+			'PAGES_LIST'=>'',
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'MAX_ROWS'=>strval($max_rows),
+			'NUM_PAGES'=>strval(1),
 		));
 	}
 

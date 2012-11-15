@@ -84,8 +84,8 @@ class Block_main_include_module
 		push_output_state();
 
 		// Do it!
-		$out=request_page($attributes['page'],false,$zone,NULL,true);
-		$ret=make_string_tempcode($out->evaluate());
+		$ret=request_page($attributes['page'],false,$zone,NULL,true);
+		$ret->handle_symbol_preprocessing();
 
 		// Get things back to prior state
 		set_execution_context(

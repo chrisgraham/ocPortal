@@ -85,7 +85,11 @@ class Block_main_awards
 		if (is_null($info)) return do_lang_tempcode('IMPOSSIBLE_TYPE_USED');
 
 		$submit_url=$info['add_url'];
-		if (is_object($submit_url)) $submit_url=$submit_url->evaluate();
+		if (!is_null($submit_url)
+		{
+			list($submit_url_zone,$submit_url_map,$submit_url_hash)=page_link_decode($submit_url);
+			$submit_url=static_evaluate_tempcode(build_url($submit_url_map,$submit_url_zone,NULL,false,false,false,$submit_url_hash));
+		} else $submit_url='';
 		if (!has_actual_page_access(NULL,$info['cms_page'],NULL,NULL)) $submit_url='';
 		if (!has_category_access(get_member(),'award',strval($award))) $submit_url='';
 		if ($submit_url!='')

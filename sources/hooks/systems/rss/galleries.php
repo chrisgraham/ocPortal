@@ -54,8 +54,8 @@ class Hook_rss_galleries
 			}
 		}
 		$galleries=collapse_2d_complexity('name','text_original',$_galleries);
-		$rows1=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
-		$rows2=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'images WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
+		$rows1=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
+		$rows2=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'images WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
 		$rows=array_merge($rows1,$rows2);
 		foreach ($rows as $row)
 		{

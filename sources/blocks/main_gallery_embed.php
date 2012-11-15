@@ -83,7 +83,7 @@ class Block_main_gallery_embed
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
 		$where_sup='';
-		if (!has_privilege(get_member(),'see_unvalidated')) $where_sup.=' AND r.validated=1';
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_sup.=' AND r.validated=1';
 
 		// ocFilter
 		if (!array_key_exists('select',$map)) $map['select']='*';
@@ -257,23 +257,21 @@ class Block_main_gallery_embed
 		// Empty? Bomb out somehow
 		if ($entries->is_empty())
 		{
-			if ((isset($map['render_if_empty'])) && ($map['render_if_empty']=='0'))
+			if ((!isset($map['render_if_empty'])) || ($map['render_if_empty']=='0'))
 			{
-				return new ocp_tempcode();
+				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
+				{
+					$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
+				} else $submit_url=new ocp_tempcode();
+				return do_template('BLOCK_NO_ENTRIES',array(
+					'_GUID'=>($guid!='')?$guid:'bf84d65b8dd134ba6cd7b1b7bde99de2',
+					'HIGH'=>false,
+					'TITLE'=>do_lang_tempcode('GALLERY'),
+					'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
+					'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),
+					'SUBMIT_URL'=>$submit_url,
+				));
 			}
-
-			if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
-			{
-				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
-			} else $submit_url=new ocp_tempcode();
-			return do_template('BLOCK_NO_ENTRIES',array(
-				'_GUID'=>($guid!='')?$guid:'bf84d65b8dd134ba6cd7b1b7bde99de2',
-				'HIGH'=>false,
-				'TITLE'=>do_lang_tempcode('GALLERY'),
-				'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
-				'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),
-				'SUBMIT_URL'=>$submit_url,
-			));
 		}
 
 		// Pagination

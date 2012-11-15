@@ -152,9 +152,10 @@ function get_attachments($posting_field_name)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether this is a required input field
  * @param  boolean		Whether the form supports previewing
+ * @param  boolean		Whether to avoid WYSIWYG mode
  * @return tempcode		The posting form
  */
-function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true,$has_preview=true)
+function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true,$has_preview=true,$avoid_wysiwyg=false)
 {
 	require_lang('javascript');
 	require_javascript('javascript_posting');
@@ -185,7 +186,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	$comcode_editor=get_comcode_editor();
 	$comcode_editor_small=get_comcode_editor('post',true);
 
-	$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
+	$w=(!$avoid_wysiwyg) && (has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
 
 	$class='';
 	attach_wysiwyg();

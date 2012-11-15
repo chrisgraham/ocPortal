@@ -109,7 +109,7 @@ class Hook_search_ocf_within_topic
 			$where_clause.='p_time>'.strval($cutoff);
 		}
 
-		if (!has_privilege(get_member(),'see_unvalidated'))
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='p_validated=1';

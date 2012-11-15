@@ -29,6 +29,7 @@ div.comcode_supported {
 
 .required_star {
 	float: right;
+	margin-left: 0.3em;
 	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 }
 

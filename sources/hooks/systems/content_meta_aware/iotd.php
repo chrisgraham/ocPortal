@@ -56,8 +56,8 @@ class Hook_content_meta_aware_iotd
 			'view_pagelink_pattern'=>'_SEARCH:iotds:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_iotds:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_iotds'))?build_url(array('page'=>'cms_iotds','type'=>'ad'),get_module_zone('cms_iotds')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'iotds'),(!is_null($zone))?$zone:get_module_zone('iotds')),
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_iotds'))?(get_module_zone('cms_iotds').':cms_iotds:ad'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('iotds')).':iotds',
 
 			'support_url_monikers'=>true,
 

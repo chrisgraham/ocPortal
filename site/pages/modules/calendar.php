@@ -421,7 +421,7 @@ class Module_calendar
 		$view=get_param('view','day');
 		$member_id=get_param_integer('member_id',get_member());
 		$filter=$this->get_filter();
-		set_feed_url(find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter()));
+		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 		if ($member_id!=get_member()) enforce_personal_access($member_id);
 		$back_url=NULL;
 
@@ -1340,7 +1340,7 @@ class Module_calendar
 	{
 		$id=get_param_integer('id');
 		$filter=$this->get_filter();
-		set_feed_url(find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter()));
+		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 
 		// Load up
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON t.id=e.e_type',array('*'),array('e.id'=>$id),'',1);
@@ -1357,7 +1357,7 @@ class Module_calendar
 
 		// Validation
 		$warning_details=new ocp_tempcode();
-		if (($event['validated']==0) && ($event['e_is_public']==1))
+		if (($event['validated']==0) && ($event['e_is_public']==1) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
@@ -1366,7 +1366,7 @@ class Module_calendar
 		}
 
 		// Titling
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('event',strval($id));

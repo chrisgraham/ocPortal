@@ -143,6 +143,7 @@ class Module_admin_permissions
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_addons','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people installing new code
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_emaillog','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people snooping on admin emails (e.g. password reset)
 			}
+			$GLOBALS['SITE_DB']->create_index('group_page_access','group_id',array('group_id'));
 
 			add_privilege('SUBMISSION','edit_own_lowrange_content',true);
 			add_privilege('SUBMISSION','submit_highrange_content',true);

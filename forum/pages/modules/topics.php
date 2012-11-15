@@ -1196,7 +1196,7 @@ class Module_topics
 					access_denied('I_ERROR');
 				elseif ((!has_privilege(get_member(),'view_other_pt')) && ($_postdetails[0]['p_intended_solely_for']!=get_member()) && ($_postdetails[0]['p_poster']!=get_member()) && (!is_null($_postdetails[0]['p_intended_solely_for'])))
 					access_denied('I_ERROR');
-				if ((!has_privilege(get_member(),'see_unvalidated')) && (!$_postdetails[0]['p_validated']) && (($_postdetails[0]['p_poster']!=get_member()) || ((is_guest($_postdetails[0]['p_poster'])) && ($_postdetails[0]['p_ip_address']!=get_ip_address()))))
+				if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')) && (!$_postdetails[0]['p_validated']) && (($_postdetails[0]['p_poster']!=get_member()) || ((is_guest($_postdetails[0]['p_poster'])) && ($_postdetails[0]['p_ip_address']!=get_ip_address()))))
 					access_denied('I_ERROR');
 
 				$_topic=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title'),array('id'=>$_postdetails[0]['p_topic_id']),'',1);
@@ -1730,7 +1730,7 @@ class Module_topics
 				if ($topic_info[0]['t_validated']==0)
 				{
 					$topic_info[0]['t_validated']=get_param_integer('validated',0);
-					if ($topic_info[0]['t_validated']==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+					if (($topic_info[0]['t_validated']==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 				}
 
 				$options[]=array(do_lang_tempcode('VALIDATED'),'topic_validated',$topic_info[0]['t_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
@@ -1795,7 +1795,7 @@ class Module_topics
 		$poster=$post_info[0]['p_poster_name_if_guest'];
 
 		$member=$poster;
-		if (!is_guest($post_info[0]['p_poster'])) $member='[page="_SEARCH:members:view:'.strval($post_info[0]['p_poster']).'"]'.$poster.'[/page]';
+		if (!is_guest($post_info[0]['p_poster'])) $member='{{'.strval($post_info[0]['p_poster']).'"}}';
 
 		$_postdetails=post_param('post',NULL);
 		if (is_null($_postdetails))
@@ -1842,7 +1842,7 @@ class Module_topics
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add_reply'),'_SELF');
 
-		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false);
+		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false,true);
 
 		$title=get_screen_title('REPORT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));
@@ -2649,7 +2649,7 @@ END;
 				if ($post_details[0]['p_validated']==0)
 				{
 					$post_details[0]['p_validated']=get_param_integer('validated',0);
-					if ($post_details[0]['p_validated']==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+					if (($post_details[0]['p_validated']==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 				}
 				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$post_details[0]['p_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
 			}
@@ -2893,7 +2893,7 @@ END;
 				if ($topic_info[0]['t_validated']==0)
 				{
 					$topic_info[0]['t_validated']=get_param_integer('validated',0);
-					if ($topic_info[0]['t_validated']==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+					if (($topic_info[0]['t_validated']==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 				}
 				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$topic_info[0]['t_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
 			}

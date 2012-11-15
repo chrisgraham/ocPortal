@@ -49,7 +49,6 @@ function ocf_get_forums_stats()
 	{
 		$out['newest_member_username']=NULL;
 	}
-	$out['newest_member_username']=NULL;
 	if (is_null($out['newest_member_username']))
 	{
 		$newest_member=$GLOBALS['FORUM_DB']->query('SELECT m_username,id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_validated=1 AND id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY m_join_time DESC',1); // Only ordered by m_join_time and not double ordered with ID to make much faster in MySQL

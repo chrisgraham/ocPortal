@@ -640,12 +640,12 @@ function check_submit_permission($range,$cats=NULL,$page=NULL)
 function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 {
 	global $SUBMIT_PERMISSION_CACHE,$USERSUBMITBAN_MEMBER_CACHE;
-	if (isset($SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][serialize($cats)]))
-		return $SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][serialize($cats)];
+	if (isset($SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][($cats===NULL)?'':serialize($cats)]))
+		return $SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][($cats===NULL)?'':serialize($cats)];
 
 	$result=NULL;
 
-	if (addon_installed('securitylogging'))
+	if ((addon_installed('securitylogging')) && ((get_value('pinpoint_submitban_check')!=='1') || (get_zone_name()=='cms')))
 	{
 		if (is_null($USERSUBMITBAN_MEMBER_CACHE))
 		{
@@ -660,7 +660,7 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 		$result=has_privilege($member,'submit_'.$range.'range_content',$page,$cats);
 	}
 
-	$SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][serialize($cats)]=$result;
+	$SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][($cats===NULL)?'':serialize($cats)]=$result;
 
 	return $result;
 }

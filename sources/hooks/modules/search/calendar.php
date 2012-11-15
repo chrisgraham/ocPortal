@@ -95,7 +95,7 @@ class Hook_search_calendar
 		}
 		$where_clause.=' AND ';
 		$where_clause.='e_type<>'.strval(db_get_first_id());
-		if (!has_privilege(get_member(),'see_unvalidated'))
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='validated=1';

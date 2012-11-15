@@ -29,35 +29,49 @@ function get_remappings($old_style=false)
 	// The target mapping... upper case means variable substitution, lower case means constant-string
 	// The source mapping... NULL means 'anything' (we'll use it in a variable substitution), else we require a certain value
 	// These have to be in longest to shortest number of bindings order, to reduce the potential for &'d attributes
+	$rules=array();
 	if ($old_style)
 	{
-		return array(
-			array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false),
-			array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>1),'pg/galleries/image/ID',false),
-			array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>1),'pg/galleries/video/ID',false),
-			array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>1),'pg/iotds/view/ID',false),
-			array(array('page'=>'blogs','news_filter'=>NULL),'pg/blogs/view/NEWS_FILTER',false),
-			array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false),
-			array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false),
-			array(array('page'=>NULL),'pg/PAGE',false),
-			array(array('page'=>''),'pg',false),
-			array(array(),'',true),
-		);
+		if (addon_installed('wiki'))
+		{
+			$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false);
+		}
+		if (addon_installed('galleries'))
+		{
+			$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'pg/galleries/image/ID',false);
+			$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'pg/galleries/video/ID',false);
+		}
+		if (addon_installed('iotds'))
+		{
+			$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'pg/iotds/view/ID',false);
+		}
+		$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false);
+		$rules[]=array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false);
+		$rules[]=array(array('page'=>NULL),'pg/PAGE',false);
+		$rules[]=array(array('page'=>''),'pg',false);
+		$rules[]=array(array(),'',true);
 	} else
 	{
-		return array(
-			array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false),
-			array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>1),'galleries/image/ID.htm',false),
-			array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>1),'galleries/video/ID.htm',false),
-			array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>1),'iotds/view/ID.htm',false),
-			array(array('page'=>'blogs','news_filter'=>NULL),'blogs/view/NEWS_FILTER.htm',false),
-			array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false),
-			array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false),
-			array(array('page'=>NULL),'PAGE.htm',false),
-			array(array('page'=>''),'',false),
-			array(array(),'',true),
-		);
+		if (addon_installed('wiki'))
+		{
+			$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false);
+		}
+		if (addon_installed('galleries'))
+		{
+			$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'galleries/image/ID.htm',false);
+			$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'galleries/video/ID.htm',false);
+		}
+		if (addon_installed('iotds'))
+		{
+			$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'iotds/view/ID.htm',false);
+		}
+		$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false);
+		$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false);
+		$rules[]=array(array('page'=>NULL),'PAGE.htm',false);
+		$rules[]=array(array('page'=>''),'',false);
+		$rules[]=array(array(),'',true);
 	}
+	return $rules;
 }
 
 

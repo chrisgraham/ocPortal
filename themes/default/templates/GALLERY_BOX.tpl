@@ -30,7 +30,7 @@
 		</p></nav>
 	{+END}{+END}
 
-	<p class="shunted_button">
+	<div class="buttons_group proceed_button_left">
 		<a href="{URL*}"><img class="button_pageitem" alt="{!VIEW}" title="{!VIEW}" src="{$IMG*,pageitem/goto}" /></a>
-	</p>
+	</div>
 </div></div>

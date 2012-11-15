@@ -71,7 +71,7 @@ function init__global2()
 	}
 
 	// Initialise some globals
-	$JAVASCRIPTS_DEFAULT=array('javascript'=>1,'javascript_transitions'=>1);
+	$JAVASCRIPTS_DEFAULT=array('javascript'=>1,'javascript_transitions'=>1,'javascript_modalwindow'=>1,'javascript_custom_globals'=>1);
 	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS_DEFAULT['javascript_ajax']=1; // AJAX needed by shared installs
 	$RUNNING_SCRIPT_CACHE=array();
 	$BROWSER_DECACHEING_CACHE=NULL;
@@ -194,8 +194,8 @@ function init__global2()
 	require_code('caches');
 	require_code('database'); // There's nothing without the database
 	require_code('config'); // Config is needed for much active stuff
-	require_code('global4');
-	if (ip_banned(get_ip_address())) critical_error('BANNED');
+	if ((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0'))
+		if (ip_banned(get_ip_address())) critical_error('BANNED');
 	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally unsound chat message precheck (for extra efficiency)
 	{
 		require_code('chat_poller');
@@ -307,8 +307,7 @@ function init__global2()
 	if (get_option('log_php_errors')=='1')
 	{
 		@ini_set('log_errors','1');
-		if (addon_installed('errorlog'))
-			@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
+		@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
 	}
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
 	{
@@ -351,9 +350,9 @@ function init__global2()
 		{
 			$JAVASCRIPTS_DEFAULT['javascript_staff']=1;
 			$JAVASCRIPTS_DEFAULT['javascript_ajax']=1;
-			if (addon_installed('occle')) $JAVASCRIPTS_DEFAULT['javascript_button_occle']=1;
+			if (get_option('bottom_show_occle_button',true)==='1') $JAVASCRIPTS_DEFAULT['javascript_button_occle']=1;
 		}
-		if ((addon_installed('realtime_rain')) && (get_option('bottom_show_realtime_rain_button',true)==='1')) $JAVASCRIPTS_DEFAULT['javascript_button_realtime_rain']=1;
+		if (get_option('bottom_show_realtime_rain_button',true)==='1') $JAVASCRIPTS_DEFAULT['javascript_button_realtime_rain']=1;
 		$JAVASCRIPTS+=$JAVASCRIPTS_DEFAULT;
 	}
 	/*ocp_memory_profile('startup');	If debugging with inbuilt profiler
@@ -834,7 +833,7 @@ function current_script()
 	global $WHAT_IS_RUNNING_CACHE;
 	if ($WHAT_IS_RUNNING_CACHE===NULL)
 	{
-		$stripped_current_url=preg_replace('#^.*/#','',function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
+		$stripped_current_url=basename(function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
 		$WHAT_IS_RUNNING_CACHE=substr($stripped_current_url,0,strpos($stripped_current_url,'.'));
 	}
 	return $WHAT_IS_RUNNING_CACHE;
@@ -1632,7 +1631,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 		js_compile($j,$js_cache_path,$minify);
 	}
 
-	if (filesize($js_cache_path)==0) return '';
+	//if (filesize($js_cache_path)==0) return '';		Optimisation isn't useful now
 
 	return $js_cache_path;
 }
@@ -1924,14 +1923,18 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 					{
 						$merge_from=css_enforce($resource);
 					}
-					if ($merge_from!='') $hash=substr(md5($hash.@strval(filemtime($merge_from))),0,5);
+					if ($merge_from!='')
+					{
+						$hash=substr(md5($hash.@strval(filemtime($merge_from))),0,5);
+					}
 				}
-
 				$value=implode(',',$resources).'::'.$hash;
+				if ($type=='.js') $value=preg_replace('#(^|,)javascript_#','${1}',$value); // Shorten
 				set_value($grouping_codename.$type,$value);
 			}
 		}
 	}
+	if (($type=='.js') && ($value!==NULL)) $value=preg_replace('#(^|,)(?!javascript)#','${1}javascript_',$value); // Unshorten
 
 	// If set, ensure merged resources file exists, and apply it
 	if (!is_null($value))
@@ -1973,13 +1976,16 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 				{
 					$merge_from=css_enforce($resource);
 				}
-				if (is_file($merge_from))
+				if ($merge_from!='')
 				{
-					$data.=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
-				} else // race condition
-				{
-					$good_to_go=false;
-					break;
+					if (is_file($merge_from))
+					{
+						$data.=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
+					} else // race condition
+					{
+						$good_to_go=false;
+						break;
+					}
 				}
 			}
 

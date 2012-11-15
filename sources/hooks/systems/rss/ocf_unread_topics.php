@@ -39,7 +39,7 @@ class Hook_rss_ocf_unread_topics
 		if (is_guest()) return NULL;
 
 		$condition='l_time<t_cache_last_time OR (l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).')';
-		$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE ('.$condition.') AND t_forum_id IS NOT NULL '.((!has_privilege(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' ORDER BY t_cache_last_time DESC';
+		$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE ('.$condition.') AND t_forum_id IS NOT NULL '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND t_validated=1 ':'').' ORDER BY t_cache_last_time DESC';
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT *,top.id AS t_id '.$query,$max);
 		$categories=collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
 

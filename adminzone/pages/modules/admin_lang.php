@@ -587,6 +587,8 @@ msgstr ""
 		{
 			$title=get_screen_title('TRANSLATE_CODE');
 
+			$search=trim($search,'" ');
+
 			require_code('form_templates');
 			$fields=new ocp_tempcode();
 			global $LANGUAGE_STRINGS_CACHE;

@@ -162,7 +162,7 @@ class Module_members
 		}
 
 		$where_clause='id<>'.strval(db_get_first_id()).$ocselect_extra_where;
-		if (!has_privilege(get_member(),'see_unvalidated')) $where_clause.=' AND m_validated=1';
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_clause.=' AND m_validated=1';
 
 		if ($group_filter!='')
 		{

@@ -513,12 +513,14 @@ class standard_crud_module
 		$bits=$this->get_form_fields();
 		$fields2=new ocp_tempcode();
 		$posting_form_tabindex=NULL;
+		$extra_tpl_params=array();
 		if (is_array($bits))
 		{
 			$fields=$bits[0];
 			$hidden=$bits[1];
-			if (array_key_exists(6,$bits)) $fields2=$bits[6];
-			if (array_key_exists(7,$bits)) $posting_form_tabindex=$bits[7];
+			if ((array_key_exists(6,$bits)) && (!is_null($bits[6])))$fields2=$bits[6];
+			if ((array_key_exists(7,$bits)) && (!is_null($bits[7]))) $posting_form_tabindex=$bits[7];
+			if ((array_key_exists(8,$bits)) && (!is_null($bits[8]))) $extra_tpl_params+=$bits[8];
 		} else
 		{
 			$fields=$bits;
@@ -610,7 +612,7 @@ class standard_crud_module
 				'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
-			));
+			)+$extra_tpl_params);
 		}
 		elseif (!is_null($this->posting_form_title))
 		{
@@ -623,7 +625,7 @@ class standard_crud_module
 				'TEXT'=>$this->add_text,
 				'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,
 				'JAVASCRIPT'=>$this->javascript,
-			));
+			)+$extra_tpl_params);
 		} else
 		{
 			$fields->attach($fields2);
@@ -639,7 +641,7 @@ class standard_crud_module
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
-			));
+			)+$extra_tpl_params);
 		}
 	}
 
@@ -679,8 +681,11 @@ class standard_crud_module
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
 		{
 			inject_action_spamcheck();
-			if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
-				$_POST['validated']='0';
+			if (addon_installed('unvalidated'))
+			{
+				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
+					$_POST['validated']='0';
+			}
 		}
 
 		if (!is_null($this->upload)) require_code('uploads');
@@ -707,13 +712,12 @@ class standard_crud_module
 		if ($this->user_facing)
 		{
 			require_code('submit');
-			if (($this->check_validation) && (post_param_integer('validated',0)==0))
+			if (($this->check_validation) && (addon_installed('unvalidated')) && (post_param_integer('validated',0)==0))
 			{
 				if ($this->send_validation_request)
 				{
 					$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id,'validated'=>1),'_SELF',NULL,false,false,true);
-					if (addon_installed('unvalidated'))
-						send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
+					send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 				}
 
 				$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
@@ -1014,6 +1018,7 @@ class standard_crud_module
 		$delete_fields=new ocp_tempcode();
 		$all_delete_fields_given=false;
 		$fields2=new ocp_tempcode();
+		$extra_tpl_params=array();
 		if (is_array($bits))
 		{
 			$fields=$bits[0];
@@ -1023,7 +1028,8 @@ class standard_crud_module
 			if ((array_key_exists(4,$bits)) && ($bits[4])) $all_delete_fields_given=true;
 			if ((array_key_exists(5,$bits)) && (!is_null($bits[5]))) $this->posting_form_text=$bits[5];
 			if ((array_key_exists(6,$bits)) && (!is_null($bits[6]))) $fields2=$bits[6];
-			if (array_key_exists(7,$bits)) $this->posting_form_text_parsed=$bits[7];
+			if ((array_key_exists(7,$bits)) && (!is_null($bits[7]))) $this->posting_form_text_parsed=$bits[7];
+			if ((array_key_exists(8,$bits)) && (!is_null($bits[8]))) $extra_tpl_params+=$bits[8];
 		} else
 		{
 			$fields=$bits;
@@ -1164,7 +1170,7 @@ class standard_crud_module
 				'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
-			));
+			)+$extra_tpl_params);
 		}
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 		if (!is_null($this->posting_form_title))
@@ -1180,7 +1186,7 @@ class standard_crud_module
 				'TEXT'=>$this->add_text,
 				'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,
 				'JAVASCRIPT'=>$this->javascript,
-			));
+			)+$extra_tpl_params);
 		} else
 		{
 			$fields->attach($fields2);
@@ -1198,7 +1204,7 @@ class standard_crud_module
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
-			));
+			)+$extra_tpl_params);
 		}
 	}
 
@@ -1321,7 +1327,7 @@ class standard_crud_module
 			$test=$this->handle_confirmations($title);
 			if (!is_null($test)) return $test;
 
-			if (($this->user_facing) && (!is_null($this->permissions_require)) && (array_key_exists('validated',$_POST)))
+			if (($this->user_facing) && (!is_null($this->permissions_require)) && (addon_installed('unvalidated')) && (array_key_exists('validated',$_POST)))
 			{
 				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
 					$_POST['validated']='0';
@@ -1356,11 +1362,10 @@ class standard_crud_module
 				if (($this->check_validation) && (post_param_integer('validated',0)==0))
 				{
 					require_code('submit');
-					if ($this->send_validation_request)
+					if (($this->send_validation_request) && (addon_installed('unvalidated')))
 					{
 						$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id,'validated'=>1),'_SELF',NULL,false,false,true);
-						if (addon_installed('unvalidated'))
-							send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
+						send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 					}
 
 					$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));

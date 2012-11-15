@@ -65,7 +65,7 @@ class Block_main_comcode_page_children
 		if ($zone=='_SEARCH') $zone=NULL;
 		$qmap=array('p_parent_page'=>$page);
 		if (!is_null($zone)) $qmap['the_zone']=$zone;
-		if (!has_privilege(get_member(),'see_unvalidated')) $qmap['p_validated']=1;
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $qmap['p_validated']=1;
 		$children=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','the_zone'),$qmap);
 		foreach ($children as $i=>$child)
 		{

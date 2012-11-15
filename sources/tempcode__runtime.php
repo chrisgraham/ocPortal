@@ -44,6 +44,7 @@ function init__tempcode__runtime()
 	define('FORCIBLY_ENTITY_ESCAPED',12); // To force a language string to be escaped
 	define('CSS_ESCAPED',13); // To stop CSS injection
 	define('UL2_ESCAPED',14); // rawurlencode
+	define('TEMPCODE_VARIABLE_ESCAPED',15); // Commas become \,
 
 	define('TC_SYMBOL',0);
 	define('TC_KNOWN',1); // Either tempcode or string
@@ -144,6 +145,7 @@ function apply_tempcode_escaping($escaped,&$value)
 		elseif ($escape==ID_ESCAPED) $value=fix_id($value);
 		elseif ($escape==CSS_ESCAPED) $value=preg_replace('#[^\w\#\.\-\%]#','_',$value);
 		elseif ($escape==NAUGHTY_ESCAPED) $value=filter_naughty_harsh($value,true);
+		elseif ($escape==TEMPCODE_VARIABLE_ESCAPED) $value=str_replace(',','\,',$value);
 	}
 	if (($GLOBALS['XSS_DETECT']) && ($escaped!=array())) ocp_mark_as_escaped($value);
 
@@ -175,6 +177,7 @@ function apply_tempcode_escaping_inline($escaped,$value)
 		elseif ($escape==ID_ESCAPED) $value=fix_id($value);
 		elseif ($escape==CSS_ESCAPED) $value=preg_replace('#[^\w\#\.\-\%]#','_',$value);
 		elseif ($escape==NAUGHTY_ESCAPED) $value=filter_naughty_harsh($value,true);
+		elseif ($escape==TEMPCODE_VARIABLE_ESCAPED) $value=str_replace(',','\,',$value);
 	}
 	if (($GLOBALS['XSS_DETECT']) && ($escaped!=array())) ocp_mark_as_escaped($value);
 

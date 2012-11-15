@@ -241,7 +241,7 @@ function usertime_to_utctime($timestamp=NULL,$member=NULL)
  */
 function my_strftime($format,$timestamp=NULL)
 {
-	if (is_null($timestamp)) $timestamp=time();
+	if ($timestamp===NULL) $timestamp=time();
 
 	$ret=strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
 	if ($ret===false) $ret='';

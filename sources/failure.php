@@ -32,6 +32,12 @@ function init__failure()
 	{
 		define('MAX_STACK_TRACE_VALUE_LENGTH',300);
 	}
+
+	/** Whether we want errors to result in simple text responses. Useful for AJAX scripts.
+	 * @global boolean $WANT_TEXT_ERRORS
+	 */
+	global $WANT_TEXT_ERRORS;
+	$WANT_TEXT_ERRORS=false;
 }
 
 /**
@@ -223,6 +229,15 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 function _generic_exit($text,$template)
 {
 	@ob_end_clean(); // Incase in minimodule
+
+	global $WANT_TEXT_ERRORS;
+	if ($WANT_TEXT_ERRORS)
+	{
+		header('Content-Type: text/plain');
+		set_http_status_code('500');
+		@ini_set('ocproducts.xss_detect','0');
+		exit(is_object($text)?strip_html($text->evaluate()):$text);
+	}
 
 	if (get_param_integer('keep_fatalistic',0)==1) fatal_exit($text);
 
@@ -502,14 +517,15 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('hackattack',array('*'),array('ip'=>$alt_ip?$ip2:$ip));
 			$rows[]=$new_row;
-			$summary='';
+			$summary='[list]';
 			$is_spammer=false;
 			foreach ($rows as $row)
 			{
 				if ($row['reason']=='LAME_SPAM_HACK') $is_spammer=true;
 				$full_reason=do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b'],NULL,get_site_default_lang());
-				$summary.="\n".' - '.$full_reason.' ['.$row['url'].']';
+				$summary.="\n".'[*]'.$full_reason."\n".$row['url']."\n".get_timezoned_date($row['date_and_time']);
 			}
+			$summary.="\n".'[/list]';
 			if ($is_spammer)
 			{
 				syndicate_spammer_report($alt_ip?$ip2:$ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
@@ -722,6 +738,15 @@ function _fatal_exit($text,$return=false)
 		require_code('firephp');
 		if (function_exists('fb'))
 			fb('Error: '.(is_object($text)?$text->evaluate():$text));
+	}
+
+	global $WANT_TEXT_ERRORS;
+	if ($WANT_TEXT_ERRORS)
+	{
+		header('Content-Type: text/plain');
+		set_http_status_code('500');
+		@ini_set('ocproducts.xss_detect','0');
+		exit(is_object($text)?strip_html($text->evaluate()):$text);
 	}
 
 	if (running_script('occle'))

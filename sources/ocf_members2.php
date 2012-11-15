@@ -29,9 +29,10 @@
  * @param  ID_TEXT			The field to get
  * @param  string				The field value for this
  * @param  array				Database field data
+ * @param  string				What MySQL will join the table with
  * @return ?array				A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
  */
-function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filter_key,$field_val,$db_fields)
+function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filter_key,$field_val,$db_fields,$table_join_code)
 {
 	// If it's trivial
 	if (($filter_key=='id') || (preg_match('#^m\_[\w\_]+$#',$filter_key)!=0))

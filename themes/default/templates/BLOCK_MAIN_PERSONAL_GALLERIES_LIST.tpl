@@ -2,7 +2,7 @@
 	{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 	<div id="{$GET*,wrapper_id}">
 		{+START,IF_NON_EMPTY,{GALLERIES}}
-			<div class="box box___download_category_screen"><div class="box_inner compacted_subbox_stream">
+			<div class="box box___block_main_personal_galleries_list"><div class="box_inner compacted_subbox_stream">
 				<div class="raw_ajax_grow_spot">
 					{GALLERIES}
 				</div>
@@ -31,7 +31,9 @@
 			3_REDIRECT_HASH=galleries
 		{+END}
 
-		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+		{+START,IF_NON_EMPTY,{PAGINATION}}
+			{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+		{+END}
 	</div>
 {+END}
 

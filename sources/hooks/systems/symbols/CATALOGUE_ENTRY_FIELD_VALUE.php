@@ -35,7 +35,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 			$map=NULL;
 
 			$entry_id=intval($param[0]);
-			$field_id=$param[1];
+			$field_id=intval($param[1]);
 
 			static $cache=array();
 			if (isset($cache[$entry_id]))
@@ -47,10 +47,19 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 				$entry=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entry_id),'',1);
 				if (array_key_exists(0,$entry))
 				{
-					$catalogue=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$entry[0]['c_name']),'',1);
-					if (array_key_exists(0,$catalogue))
+					$catalogue_name=$entry[0]['c_name'];
+					static $catalogues_cache=array();
+					if (!isset($catalogues_cache[$catalogue_name]))
 					{
-						$map=get_catalogue_entry_map($entry[0],$catalogue[0],'PAGE','DEFAULT',NULL,NULL/*Actually we'll load all so we can cache all,array($field_id)*/);
+						$catalogue=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
+						if (array_key_exists(0,$catalogue))
+						{
+							$catalogues_cache[$catalogue_name]=$catalogue[0];
+						}
+					}
+					if (isset($catalogues_cache[$catalogue_name]))
+					{
+						$map=get_catalogue_entry_map($entry[0],$catalogues_cache[$catalogue_name],'PAGE','DEFAULT',NULL,NULL/*Actually we'll load all so we can cache all,array($field_id)*/);
 					}
 				}
 

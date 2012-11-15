@@ -142,9 +142,6 @@ function init__site()
  */
 function load_zone_data()
 {
-	global $REDIRECT_CACHE;
-	$REDIRECT_CACHE=array();
-
 	global $ZONE,$RELATIVE_PATH;
 	$zone_name=get_zone_name();
 	$real_zone=(($RELATIVE_PATH=='_tests') || ($RELATIVE_PATH=='data') || ($RELATIVE_PATH=='data_custom'))?get_param('zone',''):$zone_name;
@@ -183,6 +180,20 @@ function load_zone_data()
 		$ZONE['zone_wide']=(get_forum_type()=='ocf')?$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_zone_wide'):1;
 	}
 
+	global $REDIRECT_CACHE;
+	$REDIRECT_CACHE=NULL;
+
+	return $real_zone;
+}
+
+/**
+ * Load up redirect cache.
+ */
+function load_redirect_cache()
+{
+	global $REDIRECT_CACHE;
+	$REDIRECT_CACHE=array();
+
 	$_zone=get_zone_name();
 	$REDIRECT_CACHE=array($_zone=>array());
 	if (addon_installed('redirects_editor'))
@@ -200,8 +211,6 @@ function load_zone_data()
 			$REDIRECT_CACHE[$r['r_from_zone']][$r['r_from_page']]=$r;
 		}
 	}
-
-	return $real_zone;
 }
 
 /**
@@ -230,20 +239,6 @@ function attach_to_screen_header($data)
 	global $EXTRA_HEAD;
 	if ($EXTRA_HEAD===NULL) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach($data);
-}
-
-/**
- * Attach some XHTML to the screen footer.
- *
- * @sets_output_state
- *
- * @param  mixed			XHTML to attach (Tempcode or string)
- */
-function attach_to_screen_footer($data)
-{
-	global $EXTRA_FOOT;
-	if ($EXTRA_FOOT===NULL) $EXTRA_FOOT=new ocp_tempcode();
-	$EXTRA_FOOT->attach($data);
 }
 
 /**
@@ -920,7 +915,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 		$REQUEST_PAGE_NEST_LEVEL=0;
 		warn_exit(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE'));
 	}
-//if (rand(0,10)==1) @exit('!'.$zone.':'.$codename.'!'.$REQUEST_PAGE_NEST_LEVEL.chr(10));
+
 	// Run hooks, if any exist
 	$hooks=find_all_hooks('systems','upon_page_load');
 	foreach (array_keys($hooks) as $hook)
@@ -1073,23 +1068,13 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	}
 
 	// Redirect
-	if ((!$no_redirect_check) && (addon_installed('redirects_editor')))
+	if ((!$no_redirect_check) && (get_value('no_priority_redirects')!=='1') && (addon_installed('redirects_editor')))
 	{
-		global $REDIRECT_CACHE;
-		if (array_key_exists($zone,$REDIRECT_CACHE))
-		{
-			$redirect=array_key_exists($codename,$REDIRECT_CACHE[$zone])?array($REDIRECT_CACHE[$zone][$codename]):array();
-		} else
-		{
-			$redirect=$GLOBALS['SITE_DB']->query_select('redirects',array('*'),array('r_from_zone'=>$zone,'r_from_page'=>$codename),'',1);
-		}
-		if (array_key_exists(0,$redirect))
-		{
-			return array('REDIRECT',$redirect[0]);
-		}
+		$test=_request_page__redirects($codename,$zone);
+		if ($test!==false) return $test;
 	}
 
-	//If we know the page type
+	// If we know the page type
 	if ($page_type!==NULL)
 	{
 		switch ($page_type)
@@ -1253,6 +1238,38 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 			return array('HTML',$zone,$codename,$fallback_lang,$path);
 	}
 
+	// Redirect
+	if ((!$no_redirect_check) && (get_value('no_priority_redirects')==='1') && (addon_installed('redirects_editor')))
+	{
+		$test=_request_page__redirects($codename,$zone);
+		if ($test!==false) return $test;
+	}
+
+	return false;
+}
+
+/**
+ * Take the specified parameters, and try to find a redirect for the corresponding page
+ *
+ * @param  ID_TEXT			The codename of the page to load
+ * @param  ID_TEXT			The zone the page is being loaded in
+ * @return ~array				A list of details (false: page not found)
+ */
+function _request_page__redirects($codename,$zone)
+{
+	global $REDIRECT_CACHE;
+	if ($REDIRECT_CACHE===NULL) load_redirect_cache();
+	if (array_key_exists($zone,$REDIRECT_CACHE))
+	{
+		$redirect=array_key_exists($codename,$REDIRECT_CACHE[$zone])?array($REDIRECT_CACHE[$zone][$codename]):array();
+	} else
+	{
+		$redirect=$GLOBALS['SITE_DB']->query_select('redirects',array('*'),array('r_from_zone'=>$zone,'r_from_page'=>$codename),'',1);
+	}
+	if (array_key_exists(0,$redirect))
+	{
+		return array('REDIRECT',$redirect[0]);
+	}
 	return false;
 }
 
@@ -1294,7 +1311,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	if ($codename=='sitemap')
 	{
-		set_feed_url(find_script('backend').'?mode=comcode_pages&filter='.$zone);
+		set_feed_url('?mode=comcode_pages&filter='.$zone);
 	}
 
 	global $PAGE_STRING,$COMCODE_PARSE_TITLE,$LAST_COMCODE_PARSED_TITLE;

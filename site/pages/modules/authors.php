@@ -100,7 +100,7 @@ class Module_authors
 	 */
 	function run()
 	{
-		set_feed_url(find_script('backend').'?mode=authors&filter=');
+		set_feed_url('?mode=authors&filter=');
 
 		require_code('authors');
 		require_lang('authors');
@@ -122,7 +122,7 @@ class Module_authors
 	{
 		$author=get_param('id',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if ((is_null($author)) || ($author=='')) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('author',$author);

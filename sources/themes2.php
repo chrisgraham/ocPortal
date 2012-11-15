@@ -31,9 +31,10 @@ function autoprobe_cdns()
 	$parsed=parse_url($base_url);
 	if (!array_key_exists('path',$parsed)) $parsed['path']='';
 	$domain_name=$parsed['host'];
+	$server_ip=ocp_srv('REMOTE_ADDR');
 	$try=array(
 		'cdn'.'.'.$domain_name,
-		ocp_srv('REMOTE_ADDR'),
+		($server_ip=='127.0.0.1' || substr($server_ip,0,8)=='192.168.' || substr($server_ip,0,5)=='10.0.')?NULL:$server_ip,
 		(substr($domain_name,0,4)=='www.')?preg_replace('#^www\.#','',$domain_name):('www'.'.'.$domain_name),
 		'ftp'.'.'.$domain_name,
 		'mail'.'.'.$domain_name,
@@ -47,6 +48,8 @@ function autoprobe_cdns()
 	$expected=file_get_contents(get_file_base().'/themes/default/images/comcode.png');
 	foreach ($try as $t)
 	{
+		if (is_null($t)) continue;
+
 		if (preg_match('#^'.preg_quote($t,'#').'($|\.|/|:)#',$domain_name)==0) // Don't use it if it is in the base URL
 		{
 			$test_url='http://'.$t.$parsed['path'].'/themes/default/images/comcode.png';

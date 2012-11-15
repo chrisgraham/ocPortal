@@ -1,8 +1,10 @@
-{+START,IF,{$JS_ON}}
-	{+START,IF_NON_EMPTY,{$MESSAGES_TOP}}
-		<div class="global_messages">
-			{$MESSAGES_TOP}
-		</div>
+{+START,IF,{$NOT,{$WIDE_HIGH}}}
+	{+START,IF,{$JS_ON}}
+		{+START,IF_NON_EMPTY,{$MESSAGES_TOP}}
+			<div class="global_messages">
+				{$MESSAGES_TOP}
+			</div>
+		{+END}
 	{+END}
 {+END}
 

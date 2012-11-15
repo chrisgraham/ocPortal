@@ -95,7 +95,8 @@ function require_code($codename,$light_exit=false)
 		$REQUIRED_CODE[$non_custom_codename]=1;
 	}
 
-	$codename=filter_naughty($codename);
+	if (strpos($codename,'..')!==false)
+		$codename=filter_naughty($codename);
 
 	static $mue=NULL;
 	if ($mue===NULL) $mue=function_exists('memory_get_usage');
@@ -155,7 +156,7 @@ function require_code($codename,$light_exit=false)
 			{
 				$functions_before=get_defined_functions();
 				$classes_before=get_declared_classes();
-				include($path_a); // Include our overrride
+				include($path_a); // Include our override
 				$functions_after=get_defined_functions();
 				$classes_after=get_declared_classes();
 				$functions_diff=array_diff($functions_after['user'],$functions_before['user']); // Our override defined these functions

@@ -55,8 +55,8 @@ class Hook_content_meta_aware_wiki_page
 			'view_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_wiki:edit_page:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
-			'add_url'=>(has_submit_permission('cat_low',get_member(),get_ip_address(),'cms_wiki'))?build_url(array('page'=>'cms_wiki','type'=>'add_page'),get_module_zone('cms_wiki')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'wiki'),(!is_null($zone))?$zone:get_module_zone('wiki')),
+			'add_url'=>(has_submit_permission('cat_low',get_member(),get_ip_address(),'cms_wiki'))?(get_module_zone('cms_wiki').':cms_wiki:add_page'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('wiki')).':wiki',
 
 			'support_url_monikers'=>false,
 

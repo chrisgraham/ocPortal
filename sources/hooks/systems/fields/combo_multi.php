@@ -91,21 +91,21 @@ class Hook_fields_combo_multi
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded_inbuilt=explode('|',$field['cf_default']);
-		$exploded_chosen=explode(chr(10),$ev);
+		$exploded_inbuilt=array_flip(explode('|',$field['cf_default']));
+		$exploded_chosen=array_flip(explode(chr(10),$ev));
 		foreach ($exploded_inbuilt as $option)
 		{
-			$all[]=array('OPTION'=>$option,'HAS'=>in_array($option,$exploded_chosen));
+			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded_chosen[$option]));
 		}
 		foreach ($exploded_chosen as $chosen)
 		{
-			if (!in_array($chosen,$exploded_inbuilt))
+			if (!isset($exploded_inbuilt[$chosen]))
 			{
 				$all[]=array('OPTION'=>$chosen,'HAS'=>true,'IS_OTHER'=>true);
 			}
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all,'FIELD_ID'=>strval($field['id'])),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
 	}
 
 	// ======================
@@ -126,7 +126,7 @@ class Hook_fields_combo_multi
 		$default=$field['cf_default'];
 		$exploded_inbuilt=explode('|',$default);
 		$_list=array();
-		$exploded_chosen=explode(chr(10),$actual_value);
+		$exploded_chosen=($actual_value==$default)?array():explode(chr(10),$actual_value);
 		$custom_value=mixed();
 		foreach ($exploded_inbuilt as $i=>$l)
 		{
@@ -140,6 +140,7 @@ class Hook_fields_combo_multi
 				$custom_value.=$chosen;
 			}
 		}
+
 		return form_input_various_ticks($_list,$_cf_description,NULL,$_cf_name,false,'field_'.strval($field['id']).'_other',$custom_value);
 	}
 

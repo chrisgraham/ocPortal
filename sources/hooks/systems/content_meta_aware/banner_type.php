@@ -52,7 +52,7 @@ class Hook_content_meta_aware_banner_type
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>NULL,
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_submit_permission('cat_high',get_member(),get_ip_address(),'cms_banners'))?build_url(array('page'=>'cms_banners','type'=>'ac'),get_module_zone('cms_banners')):new ocp_tempcode(),
+			'add_url'=>(has_submit_permission('cat_high',get_member(),get_ip_address(),'cms_banners'))?(get_module_zone('cms_banners').':cms_banners:ac'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

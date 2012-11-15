@@ -629,7 +629,7 @@ class Module_cms_banners_cat extends standard_crud_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $this->_do_next_manager($title,$description,$id,'');
+		return $this->_do_next_manager($title,$description,'',$id);
 	}
 
 	/**

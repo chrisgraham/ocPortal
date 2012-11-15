@@ -37,6 +37,8 @@ prepare_for_known_ajax_response();
 
 header('Content-type: text/plain');
 
+@ini_set('ocproducts.xss_detect','0');
+
 $lstring=get_param('lstring',NULL);
 if (!is_null($lstring)) // Forward geopositioning (textlocation to full details)
 {

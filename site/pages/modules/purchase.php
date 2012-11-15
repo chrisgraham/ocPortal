@@ -70,6 +70,10 @@ class Module_purchase
 		delete_menu_item_simple('_SEARCH:purchase:type=misc');
 		delete_menu_item_simple('_SEARCH:invoices:type=misc');
 		delete_menu_item_simple('_SEARCH:subscriptions:type=misc');
+
+		$cpf=array('currency','payment_cardholder_name','payment_type','payment_card_number','payment_card_start_date','payment_card_expiry_date','payment_card_issue_number','payment_card_cv2');
+		foreach ($cpf as $_cpf)
+			$GLOBALS['FORUM_DRIVER']->install_delete_custom_field($_cpf);
 	}
 
 	/**

@@ -192,7 +192,7 @@ class Hook_Profiles_Tabs_about
 				$value=float_to_raw_string($value);
 			}
 
-			if (((!is_object($value)) && ($value!='')) || ((is_object($value)) && (!$value->is_empty())))
+			if ((get_value('show_empty_cpfs')==='1') || (((!is_object($value)) && ($value!='')) || ((is_object($value)) && (!$value->is_empty()))))
 			{
 				$custom_fields[]=array(
 					'NAME'=>$name,
@@ -200,7 +200,9 @@ class Hook_Profiles_Tabs_about
 					'VALUE'=>$rendered_value,
 					'ENCRYPTED_VALUE'=>$encrypted_value,
 					'FIELD_ID'=>$_value['FIELD_ID'],
+					'FIELD_TYPE'=>$_value['TYPE'],
 					'EDITABILITY'=>$_value['EDITABILITY'],
+					'EDIT_TYPE'=>$_value['EDIT_TYPE'],
 				);
 				if ($name==do_lang('KEYWORDS')) $GLOBALS['SEO_KEYWORDS']=is_object($value)?$value->evaluate():$value;
 				if ($name==do_lang('DESCRIPTION')) $GLOBALS['SEO_DESCRIPTION']=is_object($value)?$value->evaluate():$value;

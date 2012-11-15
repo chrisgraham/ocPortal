@@ -303,13 +303,15 @@ class Module_cms_catalogues extends standard_crud_module
 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  ?AUTO_LINK		The ID of the entry (NULL: not yet added)
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+	 * @return array				Tuple: the tempcode for the visible fields, and the tempcode for the hidden fields, ..., extra templating details
 	 */
 	function get_form_fields($catalogue_name=NULL,$category_id=NULL,$validated=1,$notes='',$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$id=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
 		if (is_null($catalogue_name)) $catalogue_name=get_param('catalogue_name');
+
+		$_GET['catalogue_name']=$catalogue_name; // Useful for referencing in templates etc
 
 		require_code('feedback');
 		require_code('form_templates');
@@ -365,6 +367,15 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$field_groups=array();
 
+		$field_defaults=array( // We load up these into a map to allow custom add/edit form templating
+			'CATEGORY_ID'=>is_null($category_id)?'':strval($category_id),
+			'VALIDATED'=>strval($validated),
+			'NOTES'=>$notes,
+			'ALLOW_RATING'=>strval($allow_rating),
+			'ALLOW_COMMENTS'=>strval($allow_comments),
+			'ALLOW_TRACKBACKS'=>strval($allow_trackbacks),
+		);
+
 		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
 		{
@@ -372,6 +383,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 			$ob=get_fields_hook($field['cf_type']);
 			$default=get_param('field_'.strval($field['id']),$field['cf_default']);
+			// Grab default from what already exists, if this is an edit and we know this
 			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
 			elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
 
@@ -409,6 +421,9 @@ class Module_cms_catalogues extends standard_crud_module
 
 			if (strpos($field['cf_type'],'_trans')!==false) $this->do_preview=true;
 
+			$field_defaults['FIELD_'.strval($field['id'])]=$default;
+			$field_defaults['FIELD_'.strval($field['id']).'_CHOICES']=explode('|',$field['cf_default']);
+
 			unset($result);
 			unset($ob);
 		}
@@ -431,7 +446,7 @@ class Module_cms_catalogues extends standard_crud_module
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
-			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if ((has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require_b)) || (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require)))
 		{
@@ -446,7 +461,7 @@ class Module_cms_catalogues extends standard_crud_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
-		return array($fields,$hidden);
+		return array($fields,$hidden,NULL,NULL,false,NULL,NULL,NULL,$field_defaults);
 	}
 
 	/**

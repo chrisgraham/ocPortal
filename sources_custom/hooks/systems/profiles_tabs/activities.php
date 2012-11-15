@@ -47,7 +47,7 @@ class Hook_Profiles_Tabs_activities
 		require_javascript('javascript_base64');
 
 		require_code('site');
-		set_feed_url(find_script('backend').'?mode=activities&filter='.strval($member_id_of));
+		set_feed_url('?mode=activities&filter='.strval($member_id_of));
 
 		require_lang('activities');
 

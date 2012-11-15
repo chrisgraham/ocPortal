@@ -276,19 +276,24 @@ function cdn_filter($path)
 				$cdn=autoprobe_cdns();
 			}
 		}
+		if ($cdn=='') return $path;
 
 		global $CDN_CONSISTENCY_CHECK;
 
 		if (isset($CDN_CONSISTENCY_CHECK[$path])) return $CDN_CONSISTENCY_CHECK[$path];
 
-		$cdn_parts=explode(',',$cdn);
+		static $cdn_parts=NULL;
+		if ($cdn_parts===NULL) $cdn_parts=explode(',',$cdn);
 
 		$sum_asc=0;
-		$path_len=strlen($path);
-		for ($i=0;$i<$path_len;$i++) $sum_asc+=ord($path[$i]);
+		$basename=basename($path);
+		$path_len=strlen($basename);
+		for ($i=0;$i<$path_len;$i++) $sum_asc+=ord($basename[$i]);
 
 		$cdn_part=$cdn_parts[$sum_asc%count($cdn_parts)]; // To make a consistent but fairly even distribution we do some modular arithmetic against the total of the ascii values
-		$out=preg_replace('#(^https?://)'.str_replace('#','#',preg_quote(get_domain())).'(/)#','${1}'.$cdn_part.'${2}',$path);
+		static $normal_suffix=NULL;
+		if ($normal_suffix===NULL) $normal_suffix='#(^https?://)'.str_replace('#','#',preg_quote(get_domain())).'(/)#';
+		$out=preg_replace($normal_suffix,'${1}'.$cdn_part.'${2}',$path);
 		$CDN_CONSISTENCY_CHECK[$path]=$out;
 		return $out;
 	}

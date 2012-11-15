@@ -196,7 +196,7 @@ q:after {
 }
 
 /* Re-apply default styles non-HTML5-aware browsers */
-aside, header, footer, nav, hgroup, article, section, figure {
+details, aside, header, footer, nav, hgroup, article, section, figure, figcaption {
 	display: block;
 }
 
@@ -1261,7 +1261,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	color: inherit;
 }
 
-/* If we want a box to standout less, give it 'pale_box' */
+/* If we want a box to stand out less, give it 'pale_box' */
 .pale_box.box, .pale_box .box {
 	border: 1px solid {$GET,pale_border} !important;
 }
@@ -1418,7 +1418,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	color: {$GET,area_text};
 	border-bottom: 1px dotted {$GET,pale_border};
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 300px;
+		width: 25em;
 	{+END}
 	max-width: 100%;
 	padding-{!en_left}: 0.5em;
@@ -3818,6 +3818,16 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 }
 .adminzone_search #search_button:hover {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
+}
+
+/*
+=========================
+=========Overlays========
+=========================
+*/
+
+.overlay [role="toolbar"], .overlay .emoticon_chooser, .overlay .posting_rules, .overlay .required_field_warning {
+	display: none;
 }
 
 /*

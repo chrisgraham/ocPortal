@@ -149,7 +149,7 @@
 
 								{+START,IF,{$NOT,{$MOBILE}}}
 									{+START,IF,{$JS_ON}}
-										{+START,IF,{$CONFIG_OPTION,is_on_emoticon_choosers}}
+										{+START,IF_NON_EMPTY,{EM}}
 											<div class="comments_posting_form_emoticons">
 												<div class="box box___comments_posting_form"><div class="box_inner">
 													{EM}

@@ -52,8 +52,8 @@ class Hook_content_meta_aware_author
 			'view_pagelink_pattern'=>'_SEARCH:authors:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_authors:_ad:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_authors'))?build_url(array('page'=>'cms_authors','type'=>'_ad'),get_module_zone('cms_authors')):new ocp_tempcode(),
-			'archive_url'=>build_url(array('page'=>'authors'),(!is_null($zone))?$zone:get_module_zone('authors')),
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_authors'))?(get_module_zone('cms_authors').':cms_authors:_ad'):NULL,
+			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('authors')).':authors',
 
 			'support_url_monikers'=>false,
 

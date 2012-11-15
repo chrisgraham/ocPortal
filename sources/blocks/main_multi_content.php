@@ -133,7 +133,11 @@ class Block_main_multi_content
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 
 		$submit_url=$info['add_url'];
-		if (is_object($submit_url)) $submit_url=$submit_url->evaluate();
+		if (!is_null($submit_url))
+		{
+			list($submit_url_zone,$submit_url_map,$submit_url_hash)=page_link_decode($submit_url);
+			$submit_url=static_evaluate_tempcode(build_url($submit_url_map,$submit_url_zone,NULL,false,false,false,$submit_url_hash));
+		} else $submit_url='';
 		if (!has_actual_page_access(NULL,$info['cms_page'],NULL,NULL)) $submit_url='';
 
 		// Get entries
@@ -215,7 +219,7 @@ class Block_main_multi_content
 			}
 		}
 
-		if ((array_key_exists('validated_field',$info)) && ($info['validated_field']!='') && (has_privilege(get_member(),'see_unvalidated')))
+		if ((array_key_exists('validated_field',$info)) && (addon_installed('unvalidated')) && ($info['validated_field']!='') && (has_privilege(get_member(),'see_unvalidated')))
 		{
 			if ($where!='') $where.=' AND ';
 			$where.='r.'.$info['validated_field'].'=1';
@@ -290,91 +294,127 @@ class Block_main_multi_content
 		if ((($sort=='average_rating') || ($sort=='compound_rating')) && (array_key_exists('feedback_type_code',$info)) && (is_null($info['feedback_type_code'])))
 			$sort='title';
 
+		global $TABLE_LANG_FIELDS_CACHE;
+		$lang_fields=isset($TABLE_LANG_FIELDS_CACHE[$info['table']])?$TABLE_LANG_FIELDS_CACHE[$info['table']]:array();
+
 		// Find what kind of query to run and run it
-		switch ($sort)
+		if ($filter!='-1')
 		{
-			case 'random':
-			case 'fixed_random ASC':
-				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$info['id_field'].' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start);
-				break;
-			case 'recent':
-				if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
-				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,$start);
+			switch ($sort)
+			{
+				case 'random':
+				case 'fixed_random ASC':
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$info['id_field'].' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start,false,false,$lang_fields);
 					break;
-				}
-				$sort=$info['id_field'];
-			case 'views':
-				if ((array_key_exists('views_field',$info)) && (!is_null($info['views_field'])))
-				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,$start);
-					break;
-				}
-				$sort=$info['id_field'];
-			case 'average_rating':
-			case 'average_rating ASC':
-			case 'average_rating DESC':
-				if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
-				{
-					if ($sort=='average_rating')  $sort.=' DESC';
-
-					$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS average_rating';
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort);
-					break;
-				}
-				$sort=$info['id_field'];
-			case 'compound_rating':
-			case 'compound_rating ASC':
-			case 'compound_rating DESC':
-				if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
-				{
-					if ($sort=='compound_rating')  $sort.=' DESC';
-
-					$select_rating=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS compound_rating';
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort);
-					break;
-				}
-				$sort=$info['id_field'];
-			default: // Some manual order
-				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$sort,$max,$start);
-				break;
-			case 'title':
-				if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
-				{
-					if ($info['title_field_dereference'])
+				case 'recent':
+					if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY t.text_original ASC',$max,$start);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,$start,false,false,$lang_fields);
+						break;
+					}
+					$sort=$info['id_field'];
+				case 'views':
+					if ((array_key_exists('views_field',$info)) && (!is_null($info['views_field'])))
+					{
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,$start,false,false,$lang_fields);
+						break;
+					}
+					$sort=$info['id_field'];
+				case 'average_rating':
+				case 'average_rating ASC':
+				case 'average_rating DESC':
+					if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
+					{
+						if ($sort=='average_rating')  $sort.=' DESC';
+
+						$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS average_rating';
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort,$max,$start,false,false,$lang_fields);
+						break;
+					}
+					$sort=$info['id_field'];
+				case 'compound_rating':
+				case 'compound_rating ASC':
+				case 'compound_rating DESC':
+					if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
+					{
+						if ($sort=='compound_rating')  $sort.=' DESC';
+
+						$select_rating=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS compound_rating';
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort,$max,$start,false,false,$lang_fields);
+						break;
+					}
+					$sort=$info['id_field'];
+				default: // Some manual order
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$sort,$max,$start,false,false,$lang_fields);
+					break;
+				case 'title':
+					if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
+					{
+						if ($info['title_field_dereference'])
+						{
+							$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY t.text_original ASC',$max,$start,false,false,$lang_fields);
+						} else
+						{
+							$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,$start,false,false,$lang_fields);
+						}
 					} else
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,$start);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,$start,false,false,$lang_fields);
 					}
-				} else
-				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,$start);
-				}
-				break;
-		}
+					break;
+			}
 
-		$max_rows=$info['connection']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' '.$query);
+			$max_rows=$info['connection']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' '.$query);
+		} else
+		{
+			$rows=array();
+			$max_rows=0;
+		}
 
 		$pinned_order=array();
 
 		require_code('content');
 
 		// Add in requested pinned awards
-		if (addon_installed('awards'))
+		if (($pinned!=array()) && (addon_installed('awards')))
 		{
-			foreach ($pinned as $i=>$p)
+			if (can_arbitrary_groupby())
 			{
-				$awarded_rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>intval($p)),'ORDER BY date_and_time DESC',1);
-				if (!array_key_exists(0,$awarded_rows)) continue;
-				$awarded_row=$awarded_rows[0];
-
-				$award_content_row=content_get_row($awarded_row['content_id'],$info);
-
-				if ((!is_null($award_content_row)) && ((!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
+				$where='';
+				foreach ($pinned as $p)
 				{
-					$pinned_order[$i]=$award_content_row;
+					if (trim($p)=='') continue;
+					if ($where!='') $where.=' OR ';
+					$where.='a_type_id='.strval(intval($p));
+				}
+				if ($where=='')
+				{
+					$awarded_content_ids=array();
+				} else
+				{
+					$awarded_content_ids=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive WHERE '.$where.' GROUP BY a_type_id ORDER BY date_and_time DESC'));
+				}
+			} else
+			{
+				$awarded_content_ids=array();
+				foreach ($pinned as $p)
+				{
+					if (trim($p)=='') continue;
+					$where='a_type_id='.strval(intval($p));
+					$awarded_content_ids+=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive WHERE '.$where.' ORDER BY date_and_time DESC',1));
+				}
+			}
+
+			foreach ($pinned as $p)
+			{
+				if (!isset($awarded_content_ids[intval($p)])) continue;
+				$awarded_content_id=$awarded_content_ids[intval($p)];
+
+				$award_content_row=content_get_row($awarded_content_id,$info);
+
+				if ((!is_null($award_content_row)) && ((!addon_installed('unvalidated')) || (!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
+				{
+					$pinned_order[]=$award_content_row;
 				}
 			}
 		}
@@ -383,57 +423,28 @@ class Block_main_multi_content
 		{
 			if (count($rows)>0)
 			{
-				//Bit inefficient I know, but it'll mean less rewriting of the later code -- Paul
 				$old_rows=$rows;
 				$rows=array();
 				$total_count=count($old_rows)+count($pinned_order);
 				$used_ids=array();
 
-				/*
-				 * NOTE: If anything is pinned as the first element, it can't just be passed on directly because
-				 * next() will miss the first element of the $old rows array. It is necessary to assess the first
-				 * element of the array so if a pinned element must be first, tacking it on to the start of the
-				 * array then using the array's first element under either circumstance is the simplest answer.
-				 */
-				if (array_key_exists(0,$pinned_order))
-					array_unshift($old_rows,$pinned_order[0]);
-
-				reset($old_rows); //Why is there no 'get number _then_ goto next element' function?
-				$temp_row=current($old_rows);
-				$rows[]=$temp_row;
-				$used_ids[]=$temp_row[$info['id_field']];
-
-				$n_count=1; //If duplicates exist, position in the new array needs to be maintained.
-				//Carry on as it should be
-				for ($t_count=1; $t_count<$total_count; $t_count++)
+				// Carry on as it should be
+				for ($t_count=0;$t_count<$total_count;$t_count++)
 				{
-					if (array_key_exists($n_count,$pinned_order))
+					if (array_key_exists($t_count,$pinned_order)) // Pinned ones go first, so order # for them is in sequence with main loop order
 					{
-						if (!in_array($pinned_order[$n_count][$info['id_field']],$used_ids))
+						if (!in_array($pinned_order[$t_count][$info['id_field']],$used_ids))
 						{
-							$rows[]=$pinned_order[$n_count];
-							$used_ids[]=$pinned_order[$n_count][$info['id_field']];
-							$n_count++;
+							$rows[]=$pinned_order[$t_count];
+							$used_ids[]=$pinned_order[$t_count][$info['id_field']];
 						}
-						else
-						{
-							$temp_row=next($old_rows);
-							if (!in_array($temp_row[$info['id_field']],$used_ids))
-							{
-								$rows[]=$temp_row;
-								$used_ids[]=$temp_row[$info['id_field']];
-								$n_count++;
-							}
-						}
-					}
-					else
+					} else
 					{
-						$temp_row=next($old_rows);
+						$temp_row=$old_rows[$t_count-count($pinned_order)];
 						if (!in_array($temp_row[$info['id_field']],$used_ids))
 						{
 							$rows[]=$temp_row;
 							$used_ids[]=$temp_row[$info['id_field']];
-							$n_count++;
 						}
 					}
 				}
@@ -468,7 +479,11 @@ class Block_main_multi_content
 
 		// Move towards render...
 
-		$archive_url=$info['archive_url'];
+		if (!is_null($info['archive_url']))
+		{
+			list($archive_url_zone,$archive_url_map,$archive_url_hash)=page_link_decode($info['archive_url']);
+			$archive_url=_build_url($archive_url_map,$archive_url_zone,NULL,false,false,false,$archive_url_hash);
+		} else $archive_url=new ocp_tempcode();
 		$view_url=array_key_exists('view_url',$info)?$info['view_url']:new ocp_tempcode();
 
 		$done_already=array(); // We need to keep track, in case those pulled up via awards would also come up naturally

@@ -1,6 +1,10 @@
 "use strict";
 
-window.current_list_for=null;
+if (typeof window.current_list_for=='undefined')
+{
+	window.current_list_for=null;
+	window.currently_doing_list=null;
+}
 
 function update_ajax_admin_search_list(target,e)
 {
@@ -22,8 +26,6 @@ function close_down()
 	var current=document.getElementById('ajax_list');
 	if (current) current.parentNode.removeChild(current);
 }
-
-window.currently_doing_list=null;
 
 function update_ajax_member_list(target,special,delayed,e)
 {

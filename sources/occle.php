@@ -1015,11 +1015,11 @@ class virtual_bash
 		{
 			//SQL command
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL,true);
+			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
-			if (count($occle_output)>100)
+			if ((is_array($occle_output)) && (count($occle_output)>100))
 			{
-				$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,NULL,true);
+				$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,NULL);
 				$occle_output[]=array('...'=>'...');
 			}
 
@@ -1030,7 +1030,7 @@ class virtual_bash
 
 			if (is_null($occle_output))
 			{
-				$this->output[STREAM_STDERR]=do_lang('NO_RESULTS');
+				$this->output[STREAM_STDERR]=do_lang('SUCCESS');
 			} else
 			{
 				$this->output[STREAM_STDHTML]=$this->_array_to_html($occle_output);

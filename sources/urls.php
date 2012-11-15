@@ -149,6 +149,10 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
  */
 function ocp_url_encode($url_part,$consider_rewrite=NULL)
 {
+	// Slipstream for 99.99% of data
+	$url_part_encoded=urlencode($url_part);
+	if ($url_part_encoded==$url_part) return $url_part_encoded;
+
 	if ($consider_rewrite===NULL) $consider_rewrite=can_try_mod_rewrite();
 	if ($consider_rewrite) // These interfere with mod_rewrite processing because they get pre-decoded and make things ambiguous
 	{
@@ -172,6 +176,10 @@ function ocp_url_encode($url_part,$consider_rewrite=NULL)
  */
 function ocp_url_encode_mini($url_part,$consider_rewrite=NULL)
 {
+	// Slipstream for 99.99% of data
+	$url_part_encoded=urlencode($url_part);
+	if ($url_part_encoded==$url_part) return $url_part_encoded;
+
 	return str_replace('%3Aslash%3A','/',ocp_url_encode($url_part,$consider_rewrite));
 }
 
@@ -247,8 +255,12 @@ function tacit_https()
  */
 function is_page_https($zone,$page)
 {
-	if (get_option('enable_https',true)=='0') return false;
-	if (in_safe_mode()) return false;
+	static $off=NULL;
+	if ($off===NULL)
+	{
+		$off=(get_option('enable_https',true)=='0') || (in_safe_mode());
+	}
+	if ($off) return false;
 
 	if (($page=='login') && (get_page_name()=='login')) // Because how login can be called from any arbitrary page, which may or may not be on HTTPS. We want to maintain HTTPS if it is there to avoid warning on form submission
 	{
@@ -535,25 +547,27 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 		$old_style=get_option('htm_short_urls')!='1';
 		require_code('url_remappings');
 		$URL_REMAPPINGS=get_remappings($old_style);
+		foreach ($URL_REMAPPINGS as $i=>$_remapping)
+		{
+			$URL_REMAPPINGS[$i][3]=count($_remapping[0]);
+		}
 	}
 
 	// Find mapping
 	foreach ($URL_REMAPPINGS as $_remapping)
 	{
-		list($remapping,$target,$require_full_coverage)=$_remapping;
+		list($remapping,$target,$require_full_coverage,$last_key_num)=$_remapping;
 		$good=true;
 
-		$last_key_num=count($remapping);
 		$loop_cnt=0;
 		foreach ($remapping as $key=>$val)
 		{
 			$loop_cnt++;
 			$last=($loop_cnt==$last_key_num);
 
-			if ((!is_string($val)) && ($val!==NULL)) $val=strval($val);
-			if ((array_key_exists($key,$vars)) && (is_integer($vars[$key]))) $vars[$key]=strval($vars[$key]);
+			if ((isset($vars[$key])) && (is_integer($vars[$key]))) $vars[$key]=strval($vars[$key]);
 
-			if (!(((isset($vars[$key])) || (($val===NULL) && ($key=='type') && (array_key_exists('id',$vars)))) && (($key!='page') || ($vars[$key]!='') || ($val==='')) && ((!array_key_exists($key,$vars)/*NB this is just so the next clause does not error, we have other checks for non-existence*/) || ($vars[$key]!='') || (!$last)) && (($val===NULL) || ($vars[$key]==$val))))
+			if (!(((isset($vars[$key])) || (($val===NULL) && ($key=='type') && ((isset($vars['id'])) || (array_key_exists('id',$vars))))) && (($key!='page') || ($vars[$key]!='') || ($val==='')) && ((!isset($vars[$key])&&!array_key_exists($key,$vars)/*NB this is just so the next clause does not error, we have other checks for non-existence*/) || ($vars[$key]!='') || (!$last)) && (($val===NULL) || ($vars[$key]==$val))))
 			{
 				$good=false;
 				break;
@@ -881,7 +895,9 @@ function load_moniker_hooks()
 		$hooks=find_all_hooks('systems','content_meta_aware');
 		foreach ($hooks as $hook=>$sources_dir)
 		{
-			$info_function=extract_module_functions(get_file_base().'/'.$sources_dir.'/hooks/systems/content_meta_aware/'.$hook.'.php',array('info'));
+			if ($hook=='banner' || $hook=='banner_type' || $hook=='catalogue' || $hook=='comcode_page' || $hook=='gallery' || $hook=='post') continue; // FUDGEFUDGE: Optimisation, not ideal!
+
+			$info_function=extract_module_functions(get_file_base().'/'.$sources_dir.'/hooks/systems/content_meta_aware/'.$hook.'.php',array('info'),NULL,false,'Hook_content_meta_aware_'.$hook);
 			if ($info_function[0]!==NULL)
 			{
 				$ob_info=is_array($info_function[0])?call_user_func_array($info_function[0][0],$info_function[0][1]):eval($info_function[0]);

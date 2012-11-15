@@ -718,7 +718,7 @@ class Module_catalogues
 	{
 		$title=get_screen_title('CATALOGUES');
 
-		set_feed_url(find_script('backend').'?mode=catalogues&filter=');
+		set_feed_url('?mode=catalogues&filter=');
 
 		$ecommerce=get_param_integer('ecommerce',NULL);
 
@@ -763,7 +763,7 @@ class Module_catalogues
 	{
 		// Read in catalogue details
 		$catalogue_name=get_param('id');
-		set_feed_url(find_script('backend').'?mode=catalogues&filter='.$catalogue_name);
+		set_feed_url('?mode=catalogues&filter='.$catalogue_name);
 		$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		if (!array_key_exists(0,$catalogue_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$catalogue=$catalogue_rows[0];
@@ -777,7 +777,7 @@ class Module_catalogues
 		$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])),NULL,NULL,NULL,false);
 		if (is_null($title_to_use_2))
 			$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])));
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=find_awards_for('catalogue',$catalogue_name);
@@ -858,7 +858,7 @@ class Module_catalogues
 		{
 			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
 		}
-		set_feed_url(find_script('backend').'?mode=catalogues&filter='.strval($id));
+		set_feed_url('?mode=catalogues&filter='.strval($id));
 
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$categories))
@@ -960,6 +960,7 @@ class Module_catalogues
 				'ENTRIES'=>$category_buildup,
 				'SUBCATEGORIES'=>'',
 				'DESCRIPTION'=>'',
+				'ID'=>'',
 			),
 			NULL,
 			false,
@@ -983,7 +984,7 @@ class Module_catalogues
 		{
 			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
 		}
-		set_feed_url(find_script('backend').'?mode=catalogues&filter='.strval($id));
+		set_feed_url('?mode=catalogues&filter='.strval($id));
 
 		// Get category
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$id),'',1);
@@ -1013,7 +1014,7 @@ class Module_catalogues
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
 		$catalogue=$catalogues[0];
-		if (is_ecommerce_catalogue($catalogue_name))
+		if (is_ecommerce_catalogue($catalogue_name,$catalogue))
 		{
 			$is_ecommerce=true;
 			$tpl_set='products';
@@ -1041,7 +1042,7 @@ class Module_catalogues
 			$title_to_use_2=do_lang('DEFAULT__CATALOGUE_CATEGORY',$_title);
 		}
 		$awards=array();
-		if (addon_installed('awards'))
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
 			$awards=array_merge($awards,find_awards_for('catalogue',$catalogue_name));
@@ -1140,7 +1141,7 @@ class Module_catalogues
 			$filter=strval($id);
 		}
 		$ocselect=either_param('active_filter','');
-		$entries=do_block('main_cc_embed',array('param'=>$filter,'zone'=>'_SELF','max'=>'30','pagination'=>'1','sorting'=>'1','ocselect'=>$ocselect));
+		$entries=do_block('main_cc_embed',array('param'=>$filter,'zone'=>'_SELF','max'=>'30','pagination'=>'1','sorting'=>'1','ocselect'=>$ocselect,'block_id'=>'module'));
 
 		// Render
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array(
@@ -1188,7 +1189,7 @@ class Module_catalogues
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
-		set_feed_url(find_script('backend').'?mode=catalogues&filter=');
+		set_feed_url('?mode=catalogues&filter=');
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'category'),'_SELF',NULL,false,false,true);
 		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MAX(cc_add_date)');

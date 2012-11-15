@@ -341,7 +341,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 		// Work out possible errors that mighr prevent rating being allowed
 		$error=new ocp_tempcode();
 		$rate_url=new ocp_tempcode();
-		if (($submitter===get_member()) && (!is_guest()))
+		if ((get_value('allow_own_rate')!=='1') && ($submitter===get_member()) && (!is_guest()))
 		{
 			$error=do_lang_tempcode('RATE_DENIED_OWN');
 		}

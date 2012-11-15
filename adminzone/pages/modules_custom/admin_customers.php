@@ -206,7 +206,7 @@ class Module_admin_customers
 
 		// NB: Nothing to stop them going into overdraft
 		$new_amount=$fields['field_'.strval($cpf_id)]-$amount;
-		if ($new_amount<0) $new_amount=0;
+		//if ($new_amount<0) $new_amount=0;
 
 		ocf_set_custom_field($member_id,$cpf_id,$new_amount);
 

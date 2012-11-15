@@ -121,13 +121,16 @@ class Module_reportcontent
 
 		list($content_title,$poster_id,)=content_get_details($content_type,$content_id);
 		if ($content_title=='') $content_title=$content_type.' #'.$content_id;
-		$poster=$GLOBALS['FORUM_DRIVER']->get_username($poster_id);
 
 		// Show form with input field and CAPTCHA, like forum's report post...
 
-		$member=$poster;
-		if (!is_guest($poster_id))
-			$member='[page="'.get_module_zone('members').':members:view:'.strval($poster_id).']'.$poster.'[/page]';
+		$member=do_lang('UNKNOWN');
+		if ((!is_null($poster_id)) && (!is_guest($poster_id)))
+		{
+			$poster=$GLOBALS['FORUM_DRIVER']->get_username($poster_id);
+			if (!is_null($poster))
+				$member='{{'.$poster.'}}';
+		}
 
 		$hidden_fields=build_keep_form_fields('',true);
 
@@ -161,7 +164,7 @@ class Module_reportcontent
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 
 		$post=do_template('REPORTED_CONTENT_FCOMCODE',array('_GUID'=>'cb40aa1900eefcd24a0786b9d980fef6','URL'=>$url,'CONTENT_ID'=>$content_id,'MEMBER'=>$member,'CONTENT_TITLE'=>$content_title,'POSTER'=>$poster));
-		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,NULL,NULL,true,false);
+		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,NULL,NULL,true,false,true);
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'92a0a35a7c07edd0d3f8a960710de608','TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}

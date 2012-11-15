@@ -197,7 +197,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		}
 
 		// Run Query
-		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true);
+		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true,false,array('caption'));
 		if (is_null($rows)) $rows=array(); // Error, but tolerate it as it could be on each page load
 
 		// Filter out what we don't have permission for
@@ -267,7 +267,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		$name=$rows[$i]['name'];
 
 		// Update the counts (ones done per-view)
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_banner_count_updates')!=='1'))
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_to=(views_to+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
 		if ($source!='')
 		{
@@ -359,13 +359,21 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 					$img_url=get_custom_base_url().'/'.$img_url;
 				}
 			}
-			$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
-			if (array_key_exists(0,$_banner_type_row))
+			static $banner_type_rows=array();
+			if (isset($banner_type_rows[$b_type]))
 			{
-				$banner_type_row=$_banner_type_row[0];
+				$banner_type_row=$banner_type_rows[$b_type];
 			} else
 			{
-				$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+				$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
+				if (array_key_exists(0,$_banner_type_row))
+				{
+					$banner_type_row=$_banner_type_row[0];
+				} else
+				{
+					$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+				}
+				$banner_type_rows[$b_type]=$banner_type_row;
 			}
 			$content=do_template('BANNER_IMAGE',array('_GUID'=>'6aaf45b7bb7349393024c24458549e9e','URL'=>$url,'B_TYPE'=>$b_type,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height']),'SOURCE'=>$source,'DEST'=>$name,'CAPTION'=>$caption,'IMG'=>$img_url));
 		} else // Iframe

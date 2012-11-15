@@ -43,7 +43,6 @@ function init__facebook_connect()
 	if (is_null($appsecret)) return;
 	$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 
-	require_code('site');
 	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
 }
 
@@ -61,8 +60,8 @@ function handle_facebook_connection_login($current_logged_in_member)
 		set_session_id(-1);
 	}
 
-	// If already session-logged-in onto a Facebook account, don't bother doing anything
-	if ((!is_null($current_logged_in_member)) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($current_logged_in_member,'m_password_compat_scheme')=='facebook'))
+	// If already session-logged-in onto a Facebook account, or a non-Facebook account (i.e. has a log in on top), don't bother doing anything
+	if ((!is_null($current_logged_in_member)) && (!is_guest($current_logged_in_member)))
 	{
 		return $current_logged_in_member;
 	}
@@ -147,7 +146,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 			}
 			//if (($username!=$member_row[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member_row[0]['m_timezone_offset'])) || ($email_address!=$member_row[0]['m_email_address']))		Actually there's lots of things that may have changed so let's just do this always
 			{
-				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
+				$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict yet the name has changed
 				{
 					$update_map=array('m_username'=>$username,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);

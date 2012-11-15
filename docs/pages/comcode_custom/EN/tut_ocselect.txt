@@ -35,6 +35,7 @@ You are allowed to specify that comparisons may work on multiple fields, by sepa
  - [tt]==[/tt] (Equal to, where blank means only a blank value will be matched)
  - [tt]~=[/tt] (Contains substring)
  - [tt]~[/tt] (Seems to match, according to database full-text search matching)
+ - [tt]@[/tt] (Falls within a range, e.g. 1-4)
 
 The comparison value can either by given directly, like in the introductory example, or it can be written like [tt]<name>[/tt], which will tell it to look within a GET/POST parameter called [tt]filter_<name>[/tt]. This is the mechanism by which you hook up forms to the filter strings.
 

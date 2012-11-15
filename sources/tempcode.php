@@ -39,6 +39,7 @@ function init__tempcode()
 	define('FORCIBLY_ENTITY_ESCAPED',12); // To force a language string to be escaped
 	define('CSS_ESCAPED',13); // To stop CSS injection
 	define('UL2_ESCAPED',14); // rawurlencode
+	define('TEMPCODE_VARIABLE_ESCAPED',15); // Commas become \,
 
 	define('TC_SYMBOL',0);
 	define('TC_KNOWN',1); // Either tempcode or string
@@ -101,7 +102,8 @@ function static_evaluate_tempcode($ob)
  */
 function php_addslashes_twice($in)
 {
-	return php_addslashes(php_addslashes($in));
+	$in2=php_addslashes($in);
+	return ($in==$in2)?$in:php_addslashes($in2);
 
 	// This code does not work, provides awfully confusing Tempcode errors...
 
@@ -267,9 +269,16 @@ function closure_loop($param,$args,$main_function)
 				if (strpos($x,'=')!==false)
 				{
 					list($key,$val)=explode('=',$x,2);
-					$array[$key]=$val;
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($x)))
+					{
+						ocp_mark_as_escaped($key);
+						ocp_mark_as_escaped($val);
+					}
+					if ($key=='' && isset($array[$key])) $array[]=$val; // Empty keys: which are done to allow "="s in strings by putting in an empty key
+					else $array[$key]=$val;
 				} else
 				{
+					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($x))) ocp_mark_as_escaped($x);
 					$array[]=$x;
 				}
 			}
@@ -371,6 +380,7 @@ function apply_tempcode_escaping($escaped,&$value)
 		elseif ($escape==ID_ESCAPED) $value=fix_id($value);
 		elseif ($escape==CSS_ESCAPED) $value=preg_replace('#[^\w\#\.\-\%]#','_',$value);
 		elseif ($escape==NAUGHTY_ESCAPED) $value=filter_naughty_harsh($value,true);
+		elseif ($escape==TEMPCODE_VARIABLE_ESCAPED) $value=str_replace(',','\,',$value);
 	}
 	if (($GLOBALS['XSS_DETECT']) && ($escaped!=array())) ocp_mark_as_escaped($value);
 
@@ -404,6 +414,7 @@ function apply_tempcode_escaping_inline($escaped,$value)
 		elseif ($escape==ID_ESCAPED) $value=fix_id($value);
 		elseif ($escape==CSS_ESCAPED) $value=preg_replace('#[^\w\#\.\-\%]#','_',$value);
 		elseif ($escape==NAUGHTY_ESCAPED) $value=filter_naughty_harsh($value,true);
+		elseif ($escape==TEMPCODE_VARIABLE_ESCAPED) $value=str_replace(',','\,',$value);
 	}
 	if (($GLOBALS['XSS_DETECT']) && ($escaped!=array())) ocp_mark_as_escaped($value);
 
@@ -525,7 +536,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 					$found=$TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type];
 				}
 
-				if (!is_null($found))
+				if ($found!==NULL)
 				{
 					if (isset($GLOBALS['CURRENT_SHARE_USER']))
 					{
@@ -565,9 +576,9 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		}
 
 		unset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]);
-		if (is_null($found))
+		if ($found===NULL)
 		{
-			if (is_null($fallback))
+			if ($fallback===NULL)
 			{
 				if ($light_error) return paragraph(do_lang_tempcode('MISSING_TEMPLATE_FILE',escape_html($codename)),'34rwefwfdee');
 				fatal_exit(do_lang_tempcode('MISSING_TEMPLATE_FILE',escape_html($codename)));
@@ -723,9 +734,13 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
-			if ((count($param)==1) && (strpos($param[0],',')!==false))
+			if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in symbols.php
 			{
-				$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+				$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
+				foreach ($param as $key=>$val)
+				{
+					$param[$key]=str_replace('\,',',',$val);
+				}
 			}
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
@@ -743,7 +758,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				$block_parts=explode('=',$_param,2);
 				if (!isset($block_parts[1]))
 				{
-					$BLOCKS_CACHE[serialize($param)]=do_lang_tempcode('INTERNAL_ERROR');
+					$BLOCKS_CACHE[serialize($param)]=make_string_tempcode(do_lang('INTERNAL_ERROR').' (bad block parameter: '.escape_html($_param).')');
 					return;
 				}
 				list($key,$val)=$block_parts;
@@ -996,7 +1011,7 @@ class ocp_tempcode
 				}
 				foreach ($seq_part[1] as $param)
 				{
-					if (is_object($param))
+					if (isset($param->preprocessable_bits))
 					{
 						foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
 					}
@@ -1293,7 +1308,8 @@ class ocp_tempcode
 		if ((isset($this->code_to_preexecute[800])) && ($GLOBALS['CACHE_TEMPLATES']))
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
-			$this->code_to_preexecute='if (($result=@include(\''.php_addslashes($file).'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.php_addslashes($forced_reload_details[2]).'\',false,\''.(($forced_reload_details[6]=='')?'':php_addslashes($forced_reload_details[6])).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (mt_rand(0,100)==1 || !is_file(\''.php_addslashes($file).'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
+			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
+			$this->code_to_preexecute='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (mt_rand(0,100)==1 || !is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
 			else { eval($result[4]); unset($result); }';
 		}
 
@@ -1408,8 +1424,8 @@ class ocp_tempcode
 		{
 			foreach ($preprocessable_bit[3] as $i=>$param)
 			{
-				if ((($preprocessable_bit[2]!='SET') || (($i==1))) && (is_object($param)))
-					$preprocessable_bit[3][$i]=$param->bind($parameters,'');
+				if ((($preprocessable_bit[2]!='SET') || (($i>=1))) && (is_object($param)))
+					$preprocessable_bit[3][$i]=$param->bind($parameters,'<'.$codename.'>');
 			}
 			$out->preprocessable_bits[]=$preprocessable_bit;
 		}

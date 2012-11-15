@@ -384,7 +384,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	if (!$load_spacer_posts_too)
 		$where.=not_like_spacer_posts('t.text_original');
 	$where.=$extra_where;
-	if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
+	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
@@ -437,7 +437,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 						$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
 				}
 				$temp['message']=$message;
-				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
+				$temp['message_comcode']=$myrow['text_original'];
 				$temp['member']=$myrow['p_poster'];
 				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
 				$temp['date']=$myrow['p_time'];
@@ -481,6 +481,8 @@ function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
  */
 function _helper_get_emoticon_chooser($this_ref,$field_name)
 {
+	if (get_option('is_on_emoticon_choosers')=='0') return new ocp_tempcode();
+
 	$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	$emoticons=$this_ref->connection->query('SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_emoticons WHERE e_relevance_level=0'.$extra);
 	$em=new ocp_tempcode();

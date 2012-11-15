@@ -32,7 +32,7 @@ class Hook_Profiles_Tabs_edit
 	{
 		if (is_guest($member_id_viewing)) return false;
 
-		if (!(($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')))) return false;
+		if (!(($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')))) return false;
 
 		$hooks=find_all_hooks('systems','profiles_tabs_edit');
 		foreach (array_keys($hooks) as $hook)
@@ -77,7 +77,7 @@ class Hook_Profiles_Tabs_edit
 		}
 		foreach (array_keys($hooks) as $hook)
 		{
-			if (($only_tab===NULL) || ($only_tab==$hook))
+			if (($only_tab===NULL) || (preg_match('#(^|,)'.preg_quote($hook,'#').'(,|$)#',$only_tab)!=0))
 			{
 				require_code('hooks/systems/profiles_tabs_edit/'.$hook);
 				$ob=object_factory('Hook_Profiles_Tabs_Edit_'.$hook);
@@ -98,6 +98,7 @@ class Hook_Profiles_Tabs_edit
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		sort_maps_by($tabs,4);
+		$tabs=array_values($tabs); // Reindex, needed for lastness check
 
 		$javascript='';
 
@@ -120,8 +121,21 @@ class Hook_Profiles_Tabs_edit
 
 			$javascript.=$tab[3];
 
+			$tab_last=true;
+			foreach ($tabs as $j=>$tabj)
+			{
+				if ($j>$i)
+				{
+					if (!is_null($tabj))
+					{
+						$tab_last=false;
+						break;
+					}
+				}
+			}
+
 			if (isset($tab[5])) $hidden->attach($tab[5]);
-			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
+			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$i==0,'TAB_LAST'=>$tab_last);
 		}
 		$url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
 

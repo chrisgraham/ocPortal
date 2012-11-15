@@ -75,6 +75,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	if (!is_null($description)) $update['t_description']=$description;
 	if (!is_null($description_link)) $update['t_description_link']=$description_link;
 	if (!is_null($emoticon)) $update['t_emoticon']=$emoticon;
+	if (!addon_installed('unvalidated')) $validated=1;
 	if (!is_null($validated)) $update['t_validated']=$validated;
 	if (!is_null($pinned)) $update['t_pinned']=$pinned;
 	if (!is_null($sunk)) $update['t_sunk']=$sunk;

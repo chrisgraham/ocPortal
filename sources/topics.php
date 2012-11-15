@@ -950,7 +950,7 @@ class OCP_Topic
 	 */
 	function inject_rss_url($forum,$type,$id)
 	{
-		$GLOBALS['FEED_URL_2']=find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($type.'_'.$id);
+		$GLOBALS['FEED_URL_2']='?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($type.'_'.$id);
 	}
 
 	/**

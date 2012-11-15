@@ -357,12 +357,21 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	// Query mode?
 	if ($special_page_type=='query')
 	{
-		require_lang("profiling");
+		require_lang('profiling');
 
 		global $QUERY_LIST;
 		$queries=new ocp_tempcode();
 		$total_time=0.0;
-		sort_maps_by($QUERY_LIST,'time');
+		$sort_order=get_param('query_sort','time');
+		switch ($sort_order)
+		{
+			case 'time':
+				sort_maps_by($QUERY_LIST,'time');
+				break;
+			case 'text':
+				sort_maps_by($QUERY_LIST,'text');
+				break;
+		}
 		$QUERY_LIST=array_reverse($QUERY_LIST);
 		foreach ($QUERY_LIST as $query)
 		{
@@ -659,6 +668,15 @@ function erase_cached_templates($preserve_some=false)
 				closedir($_dir);
 			}
 		}
+	}
+
+	$zones=find_all_zones();
+	foreach ($zones as $zone)
+	{
+		delete_value('merged__'.$zone.'.css');
+		delete_value('merged__'.$zone.'.js');
+		delete_value('merged__'.$zone.'__admin.css');
+		delete_value('merged__'.$zone.'__admin.js');
 	}
 
 	// Often the back button will be used to return to a form, so we need to ensure we have not broken the Javascript

@@ -57,6 +57,10 @@ class Module_staff
 	function uninstall()
 	{
 		delete_menu_item_simple('_SEARCH:staff:type=misc');
+
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('sites');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('role');
+		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('fullname');
 	}
 
 	/**
@@ -69,6 +73,10 @@ class Module_staff
 	{
 		require_lang('staff');
 		add_menu_item_simple('main_website',NULL,'STAFF','_SEARCH:staff:type=misc');
+
+		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('sites',100,1,0,0,0,'','short_text');
+		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('role',100,1,0,1,0,'','short_text');
+		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('fullname',100,1,0,1,0,'','short_text');
 	}
 
 	/**

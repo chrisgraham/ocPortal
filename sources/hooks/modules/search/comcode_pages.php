@@ -110,7 +110,7 @@ class Hook_search_comcode_pages
 			$where_clause.='('.db_string_equal_to('r.the_zone',$search_under).')';
 		}
 
-		if (!has_privilege(get_member(),'see_unvalidated'))
+		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='p_validated=1';

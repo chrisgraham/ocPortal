@@ -341,7 +341,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 					}
 				}
 			}
-			elseif (trim($current_char)=='')
+			elseif (ltrim($current_char)=='')
 			{
 				$in_tag_type='OPEN';
 			} elseif (($in_tag_type=='') || ($in_tag_type=='CLOSE')) $current_tag.=$current_char;

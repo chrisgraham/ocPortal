@@ -66,10 +66,10 @@
 						<div class="pagination_spacing float_surrounder ajax_block_wrapper_links">
 							{PAGINATION}
 						</div>
+
+						{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 					{+END}
 				{+END}
-
-				{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 			</div>
 		{+END}
 	{+END}
@@ -95,5 +95,7 @@
 		{_loop_var}
 	{+END}
 
-	{PAGINATION}
+	{+START,IF_PASSED,PAGINATION}
+		{PAGINATION}
+	{+END}
 {+END}

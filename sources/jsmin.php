@@ -225,7 +225,7 @@ class JSMin
 	 */
 	function isAlphaNum($c)
 	{
-		if (is_null($c)) return false;
+		if ($c===NULL) return false;
 		return ord($c) > 126 || $c == '\\' || preg_match('/^[\w\$]$/', $c) == 1;
 	}
 

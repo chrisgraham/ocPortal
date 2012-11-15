@@ -52,9 +52,14 @@ This section will step through how to build your design, in a number of steps an
 	[*]Do not use [tt]float[/tt]s unless doing it to make stuff sit next to something else. For example, do not float stuff just to make it not overlap with another float, and do not float stuff to try and work around IE bugs. There are much better ways to solve these problems without resorting to floats (which introduce many other kinds of problem).
 	[*]Do not use background images unless an image really is in the background. It is harder to implement (needs CSS widths/heights setting, which is inflexible) and we can't use transparency in IE6 if we do this and we can't assign alt text. Use 'img' tags Instead.
 	[*]Do not use a CSS reset: ocPortal does not use a CSS reset in it's default templates so you would need to re-theme all ocPortal screens to re-apply default spacings.
+	[*]Similarly, don't apply overly-broad styles thinking you'll undo them for any case that does not match -- any broadly defined style must be a very general one, because you won't want to add dozens of exceptions back in to cater for the pre-coded HTML usage that ocPortal does in its myriad of templates
 	[*]Make sure the default font size is sensible for the main content area. You will not be able to specify the font size of all text on the final theme as there will be a lot of layout that comes from default ocPortal templates and you won't have time to give them all individual consideration.
 	[*]It's not a good idea to make your main content area too thin, because default ocPortal templates will assume that they have at least about 600 pixels.
 	[*]Do not have two images with the same name but different extensions. For example do not have an [tt]example.jpg[/tt] and an [tt]example.gif[/tt]. They should have different names such as [tt]examplea.jpg[/tt] and [tt]exampleb.gif[/tt]
+	[*]Don't invent CSS class names that are too generic and thus risk clashing, e.g. [tt]description[/tt]
+	[*]If other people will be working with your CSS, lay it out neatly, with plenty of comments (ocPortal will minify the CSS on output, so this won't hurt performance)
+	[*]Try to modularise your CSS according to ocPortal's own modularisations. For example, keep news CSS separate from galleries CSS. This allows you to then place it in the appropriate ocPortal CSS files, rather than having to dump it all into [tt]global.css[/tt]
+	[*]If you must use CSS hacks, comment them nicely to make them easy for someone else reading your code to understand. ocPortal doesn't use them because they're cryptic, especially when there's thousands of lines of CSS code to try to understand
 [/list]
 [/list]
 

@@ -206,6 +206,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					'~='=>do_lang_tempcode('OCSELECT_OP_CO'),
 					'~'=>do_lang_tempcode('OCSELECT_OP_FT'),
 					'<>'=>do_lang_tempcode('OCSELECT_OP_NE'),
+					'@'=>do_lang_tempcode('OCSELECT_OP_RANGE'),
 				)
 			);
 		}
@@ -432,7 +433,7 @@ function parse_ocselect($filter)
 	{
 		if ($bit!='')
 		{
-			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|=|==|~=|~)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
+			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|=|==|~=|~|@)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
 			if (count($parts)==3) $parsed[]=$parts;
 		}
 	}
@@ -468,9 +469,10 @@ function unparse_ocselect($parsed)
  * @param  ID_TEXT			The field to get
  * @param  string				The field value for this
  * @param  array				Database field data
+ * @param  string				What MySQL will join the table with
  * @return ?array				A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
  */
-function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields)
+function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code)
 {
 	require_code('fields');
 	$fields=get_catalogue_fields($catalogue_name);
@@ -486,11 +488,11 @@ function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
 
 	if (strpos($table,'_trans')!==false)
 	{
-		$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'catalogue_efv_'.$table.' f'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.ce_id=r.id AND f'.strval($field_in_seq).'.cf_id='.strval($fields[$field_in_seq]['id']).' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.cv_value=t'.strval($field_in_seq).'.id';
+		$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'catalogue_efv_'.$table.' f'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.ce_id='.$table_join_code.'.id AND f'.strval($field_in_seq).'.cf_id='.strval($fields[$field_in_seq]['id']).' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.cv_value=t'.strval($field_in_seq).'.id';
 		return array('t'.strval($field_in_seq).'.text_original',$table,$filter_val);
 	}
 
-	$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'catalogue_efv_'.$table.' f'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.ce_id=r.id AND f'.strval($field_in_seq).'.cf_id='.strval($fields[$field_in_seq]['id']);
+	$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'catalogue_efv_'.$table.' f'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.ce_id='.$table_join_code.'.id AND f'.strval($field_in_seq).'.cf_id='.strval($fields[$field_in_seq]['id']);
 	return array('f'.strval($field_in_seq).'.cv_value',$table,$filter_val);
 }
 
@@ -505,21 +507,24 @@ function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  * @param  ID_TEXT			The field to get
  * @param  string				The field value for this
  * @param  array				Database field data
+ * @param  string				What MySQL will join the table with
  * @return ?array				A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
  */
-function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields)
+function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code)
 {
 	// Special case for ratings
-	if ($filter_key=='compound_rating')
+	$matches=array('',$info['feedback_type_code']);
+	if (($filter_key=='compound_rating') || (preg_match('#^compound_rating\_\_(.+)#',$filter_key,$matches)!=0))
 	{
-		$clause='(SELECT SUM(rating-1) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type','catalogues').' AND rat.rating_for_id=r.id)';
-		$extra_select[$filter_key]=', '.$clause.' AS compound_rating';
+		$clause='(SELECT SUM(rating-1) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type',$matches[1]).' AND rat.rating_for_id='.$table_join_code.'.id)';
+		$extra_select[$filter_key]=', '.$clause.' AS compound_rating_'.fix_id($matches[1]);
 		return array($clause,'',$filter_val);
 	}
-	if ($filter_key=='average_rating')
+	$matches=array('',$info['feedback_type_code']);
+	if (($filter_key=='average_rating') || (preg_match('#^average_rating\_\_(.+)#',$filter_key,$matches)!=0))
 	{
-		$clause='(SELECT AVG(rating) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type','catalogues').' AND rat.rating_for_id=r.id)';
-		$extra_select[$filter_key]=', '.$clause.' AS compound_rating';
+		$clause='(SELECT AVG(rating)/2 FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type',$matches[1]).' AND rat.rating_for_id='.$table_join_code.'.id)';
+		$extra_select[$filter_key]=', '.$clause.' AS average_rating_'.fix_id($matches[1]);
 		return array($clause,'',$filter_val);
 	}
 
@@ -527,17 +532,17 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 	if (($filter_key=='meta_keywords') || ($filter_key=='meta_description'))
 	{
 		$seo_type_code=isset($info['seo_type_code'])?$info['seo_type_code']:'!!!ERROR!!!';
-		$join=' LEFT JOIN '.$db->get_table_prefix().'seo_meta sm ON sm.meta_for_id=r.id AND '.db_string_equal_to('sm.meta_for_type',$seo_type_code);
+		$join=' LEFT JOIN '.$db->get_table_prefix().'seo_meta sm ON sm.meta_for_id='.$table_join_code.'.id AND '.db_string_equal_to('sm.meta_for_type',$seo_type_code);
 		if (!in_array($join,$extra_join))
 			$extra_join[$filter_key]=$join;
-		return array($clause,'',$filter_val);
+		return array($filter_key,'',$filter_val);
 	}
 
 	// Fields API
 	$matches=array();
 	if ((preg_match('#^field\_(\d+)#',$filter_key,$matches)!=0) && (isset($info['content_type'])))
 	{
-		return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,$filter_key,$filter_val,$db_fields);
+		return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
 	}
 
 	$filter_key=filter_naughty_harsh($filter_key);
@@ -557,6 +562,7 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 			case 'BINARY':
 			case 'GROUP':
 				$field_type='integer';
+				$filter_key=$table_join_code.'.'.$filter_key;
 				break;
 			case 'MEMBER':
 				$field_type='integer';
@@ -565,9 +571,11 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 					$_filter_val=$GLOBALS['FORUM_DRIVER']->get_member_from_username($filter_val);
 					$filter_val=is_null($_filter_val)?'':strval($_filter_val);
 				}
+				$filter_key=$table_join_code.'.'.$filter_key;
 				break;
 			case 'REAL':
 				$field_type='float';
+				$filter_key=$table_join_code.'.'.$filter_key;
 				break;
 			case 'MD5':
 			case 'URLPATH':
@@ -578,6 +586,7 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 			case 'LONG_TEXT':
 			case 'SHORT_TEXT':
 				$field_type='line';
+				$filter_key=$table_join_code.'.'.$filter_key;
 				break;
 			case 'LONG_TRANS':
 			case 'SHORT_TRANS':
@@ -599,7 +608,7 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 			{
 				if (get_translated_text($field['cf_name'])==$filter_key)
 				{
-					return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,'field_'.strval($field['id']),$filter_val,$db_fields);
+					return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,'field_'.strval($field['id']),$filter_val,$db_fields,$table_join_code);
 				}
 			}
 		}
@@ -619,9 +628,10 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
  * @param  array				Parsed ocSelect structure
  * @param  ID_TEXT			The content type (blank: no function needed, direct in-table mapping always works)
  * @param  string				First parameter to send to the conversion function, may mean whatever that function wants it to. If we have no conversion function, this is the name of a table to read field meta data from
+ * @param  string				What MySQL will join the table with
  * @return array				Tuple: array of extra select, array of extra join, string of extra where
  */
-function ocselect_to_sql($db,$filters,$content_type='',$context='')
+function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_code='r')
 {
 	// Nothing to do?
 	if ((is_null($filters)) || ($filters==array())) return array(array(),array(),'');
@@ -700,7 +710,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 		{
 			if (in_array($filter_key,$disallowed_fields)) continue;
 
-			$bits=call_user_func_array($conv_func,array($db,$info,&$context,&$extra_join,&$extra_select,&$filter_key,$filter_val,$db_fields)); // call_user_func_array has to be used for reference passing, bizarrely
+			$bits=call_user_func_array($conv_func,array($db,$info,&$context,&$extra_join,&$extra_select,&$filter_key,$filter_val,$db_fields,$table_join_code)); // call_user_func_array has to be used for reference passing, bizarrely
 			if (is_null($bits))
 			{
 				require_lang('ocselect');
@@ -710,12 +720,22 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 			}
 			list($filter_key,$field_type,$filter_val)=$bits;
 
-			$filter_key=preg_replace('#[^\w\s\|]#','',$filter_key); // So can safely come from environment
+			if (strpos($filter_key,'<')!==false)
+				$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
 
 			if (in_array($filter_key,$disallowed_fields)) continue;
 
 			switch ($filter_op)
 			{
+				case '@':
+					if ((preg_match('#^\d+-\d+$#',$filter_val)!=0) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))
+					{
+						if ($alt!='') $alt.=' OR ';
+						$_filter_val=explode('-',$filter_val,2);
+						$alt.=$filter_key.'>='.$_filter_val[0].' AND '.$filter_key.'<='.$_filter_val[1];
+					}
+					break;
+
 				case '<':
 				case '>':
 				case '<=':
@@ -728,19 +748,32 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 					break;
 
 				case '<>':
-					if ($alt!='') $alt.=' OR ';
 					if ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))
-						$alt.=$filter_key.'<>'.strval($filter_val);
-					else
+					{
+						if ($filter_val!='')
+						{
+							if ($alt!='') $alt.=' OR ';
+							$alt.=$filter_key.'<>'.$filter_val;
+						}
+					} else
+					{
+						if ($alt!='') $alt.=' OR ';
 						$alt.=db_string_not_equal_to($filter_key,$filter_val);
+					}
 					break;
 
 				case '=':
 					if ($alt!='') $alt.=' OR ';
-					if ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))
-						$alt.=$filter_key.'='.$filter_val;
-					else
-						$alt.=db_string_equal_to($filter_key,$filter_val);
+					$alt.='(';
+					foreach (explode('|',$field_val) as $it_id=>$it_value)
+					{
+						if ($it_id!=0) $alt.=' OR ';
+						if ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))
+							$alt.=$filter_key.'='.$filter_val;
+						else
+							$alt.=db_string_equal_to($filter_key,$filter_val);
+					}
+					$alt.=')';
 					break;
 
 				case '~':
@@ -749,7 +782,13 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 						if ($filter_val!='')
 						{
 							if ($alt!='') $alt.=' OR ';
-							$alt.=str_replace('?',$filter_key,db_full_text_assemble($filter_val,false));
+							$alt.='(';
+							foreach (explode('|',$filter_val) as $it_id=>$it_value)
+							{
+								if ($it_id!=0) $alt.=' OR ';
+								$alt.=str_replace('?',$filter_key,db_full_text_assemble($it_value,false));
+							}
+							$alt.=')';
 						}
 						break;
 					}
@@ -758,7 +797,13 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 					if ($filter_val!='')
 					{
 						if ($alt!='') $alt.=' OR ';
-						$alt.=$filter_key.' LIKE \''.db_encode_like('%'.$filter_val.'%').'\'';
+						$alt.='(';
+						foreach (explode('|',$filter_val) as $it_id=>$it_value)
+						{
+							if ($it_id!=0) $alt.=' OR ';
+							$alt.=$filter_key.' LIKE \''.db_encode_like('%'.$it_value.'%').'\'';
+						}
+						$alt.=')';
 					}
 					break;
 

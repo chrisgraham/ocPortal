@@ -112,6 +112,10 @@ $SITE_INFO['no_extra_mobiles']='1'; // Don't read in extra mobile device signatu
 [/codebox]
 They all have effects, so be careful! There are reasons these settings aren't the defaults.
 
+[title="2"]Templates[/title]
+
+As a screen uses many instances of menu branch templates, it is wise to simplify these down as much as possible for your menu. Remove the need to use an include, and Tempcode for any features you don't need.
+
 [title="2"]Server[/title]
 
 A faster and more dedicated server will make ocPortal run faster. This may seem obvious, but in the efforts of optimisation, is easily forgotten.
@@ -129,6 +133,18 @@ If you are on a single database but have hundreds of members online at once (or 
 :set_value('session_prudence','1');
 [/code]
 It will cause ocPortal to not load up all sessions on each page request. This will stop "users online" working, but is important for performance.
+
+[title="2"]Other optimisations[/title]
+
+There are many other possible [tt]set_value[/tt] commands to tune performance, described in the [page="_SEARCH:codebook_3"]Code Book[/page].
+
+[title="2"]Ensure configuration is set[/title]
+
+If a configuration page has never been saved, default config values from that page will be calculated on the fly, which is a little slower.
+Go through and save them all, or run this OcCLE command:
+[code]
+:require_code('config2'); foreach (array_keys($GLOBALS['CONFIG_OPTIONS_CACHE']) as $key) if (get_option($key)!==NULL) set_option($key,get_option($key));
+[/code]
 
 [title="2"]Huge databases[/title]
 

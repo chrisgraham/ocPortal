@@ -130,6 +130,7 @@
 										<span{+START,IF,{$EQ,{NAME},{!SPECIAL_CPF__ocp_fullname}}} class="fn given-name"{+END}>
 											{+START,IF_EMPTY,{ENCRYPTED_VALUE}}
 												{+START,IF_PASSED,EDITABILITY}
+													{$SET,edit_type,{EDIT_TYPE}}
 													{+START,FRACTIONAL_EDITABLE,{VALUE},field_{FIELD_ID},_SEARCH:members:type=view:id={MEMBER_ID}:only_tab=edit:only_subtab=settings,{EDITABILITY}}{VALUE}{+END}
 												{+END}
 												{+START,IF_NON_PASSED,EDITABILITY}

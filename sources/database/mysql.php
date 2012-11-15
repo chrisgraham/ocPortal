@@ -172,7 +172,7 @@ class Database_Static_mysql extends Database_super_mysql
 	{
 		static $mres=NULL;
 		if ($mres===NULL) $mres=function_exists('mysql_real_escape_string');
-		if (($mres) && (isset($GLOBALS['SITE_DB']->connection_read[0])) && (!is_bool($GLOBALS['SITE_DB']->connection_read[0])))
+		if (($mres) && (isset($GLOBALS['SITE_DB']->connection_read[0])) && ($GLOBALS['SITE_DB']->connection_read[0]!==false))
 			return mysql_real_escape_string($string,$GLOBALS['SITE_DB']->connection_read[0]);
 		if (!function_exists('mysql_escape_string')) return addslashes($string);
 		return @mysql_escape_string($string);
@@ -213,9 +213,9 @@ class Database_Static_mysql extends Database_super_mysql
 			$this->last_select_db=$db_name;
 		}
 
-		if (($max!==NULL) && ($start!==NULL)) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);
-		elseif ($max!==NULL) $query.=' LIMIT '.strval((integer)$max);
-		elseif ($start!==NULL) $query.=' LIMIT '.strval((integer)$start).',30000000';
+		if (($max!==NULL) && ($start!==NULL)) $query.=' LIMIT '.strval($start).','.strval($max);
+		elseif ($max!==NULL) $query.=' LIMIT '.strval($max);
+		elseif ($start!==NULL) $query.=' LIMIT '.strval($start).',30000000';
 
 		$results=@mysql_query($query,$db);
 		if (($results===false) && ((!$fail_ok) || (strpos(mysql_error($db),'is marked as crashed and should be repaired')!==false)))
@@ -243,7 +243,8 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 		}
 
-		if (($results!==true) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==false))
+		$sub=substr($query,0,7);
+		if (($results!==true) && (($sub=='SELECT ') || ($sub=='select ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}
@@ -308,7 +309,6 @@ class Database_Static_mysql extends Database_super_mysql
 						{
 							$_v=intval($v);
 							$newrow[$name]=$_v;
-							if (strval($_v)!=$v) $newrow[$name]=floatval($v); // Weird problem due to Roadsend bug. Weird order, due to HPHP bug
 						}
 						break;
 

@@ -8,19 +8,19 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 	$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance);
 	$where.=' AND ';
 	$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance).')';
-	if ($latitude-$error_tolerance<-45)
+	if ($latitude-$error_tolerance<-45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance+90);
+		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance+90.0);
 		$where.=' AND ';
-		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance+90).')';
+		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance+90.0).')';
 	}
-	if ($latitude+$error_tolerance>45)
+	if ($latitude+$error_tolerance>45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance-90);
+		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance-90.0);
 		$where.=' AND ';
-		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance-90).')';
+		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance-90.0).')';
 	}
 	$where.=')';
 
@@ -30,19 +30,19 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 	$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance);
 	$where.=' AND ';
 	$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance).')';
-	if ($longitude-$error_tolerance<-45)
+	if ($longitude-$error_tolerance<-45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance+90);
+		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance+90.0);
 		$where.=' AND ';
-		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance+90).')';
+		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance+90.0).')';
 	}
-	if ($longitude+$error_tolerance>45)
+	if ($longitude+$error_tolerance>45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance-90);
+		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance-90.0);
 		$where.=' AND ';
-		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance-90).')';
+		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance-90.0).')';
 	}
 	$where.=')';
 
@@ -59,7 +59,7 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 
 	if (count($locations)==0)
 	{
-		if (($latitude-$error_tolerance<-90) && ($latitude+$error_tolerance>90) && ($longitude-$error_tolerance<-90) && ($longitude+$error_tolerance>90))
+		if (($latitude-$error_tolerance<-90.0) && ($latitude+$error_tolerance>90.0) && ($longitude-$error_tolerance<-90.0) && ($longitude+$error_tolerance>90.0))
 		{
 			return NULL; // Nothing, in whole world
 		}

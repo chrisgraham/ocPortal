@@ -27,6 +27,8 @@
  */
 function content_validated($content_type,$content_id)
 {
+	if (!addon_installed('unvalidated')) return true;
+
 	require_code('content');
 	list(,,$cma_info,$content_row,)=content_get_details($content_type,$content_id);
 	if (is_null($content_row)) return false;

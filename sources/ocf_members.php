@@ -271,14 +271,20 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL);
 
 			$editability=mixed(); // If stays as NULL, not editable
-			if (in_array($field_to_show['cf_type'],array('short_trans'))) $editability=true; // Editable: Supports Comcode
-			elseif (in_array($field_to_show['cf_type'],array('short_text'))) $editability=false; // Editable: Does not support Comcode
+			if (in_array($field_to_show['cf_type'],array('long_text','long_trans','short_trans'))) $editability=true; // Editable: Supports Comcode
+			elseif (in_array($field_to_show['cf_type'],array('list','radiolist','short_text','codename','url','integer','float','email'))) $editability=false; // Editable: Does not support Comcode
+
+			$edit_type='line';
+			if (in_array($field_to_show['cf_type'],array('list','radiolist'))) $edit_type=$field_to_show['cf_default'];
+			elseif (in_array($field_to_show['cf_type'],array('long_text','long_trans'))) $edit_type='textarea';
 
 			$custom_fields[$field_to_show['trans_name']]=array(
 				'RAW'=>$member_value,
 				'RENDERED'=>$rendered_value,
 				'FIELD_ID'=>strval($field_to_show['id']),
 				'EDITABILITY'=>$editability,
+				'TYPE'=>$field_to_show['cf_type'],
+				'EDIT_TYPE'=>$edit_type,
 			);
 		}
 	}
