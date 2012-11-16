@@ -158,9 +158,28 @@ function decache($cached_for,$identifier=NULL)
 		persistant_cache_delete(array('CACHE',$cached_for));
 	}
 
-	$where=array('cached_for'=>$cached_for);
-	if ($identifier!==NULL) $where['identifier']=md5(serialize($identifier));
-	$GLOBALS['SITE_DB']->query_delete('cache',$where);
+	$where=db_string_equal_to('cached_for',$cached_for);
+ 	if ($identifier!==NULL)
+ 	{
+		$where.=' AND (';
+		$done_first=false;
+		$bot_statuses=array(true,false);
+		$timezones=array_keys(get_timezone_list());
+		foreach ($bot_statuses as $bot_status)
+		{
+			foreach ($timezones as $timezone)
+			{
+				$_cache_identifier=$identifier;
+				$_cache_identifier[]=$timezone;
+				$_cache_identifier[]=$bot_status;
+				if ($done_first) $where.=' OR ';
+				$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
+				$done_first=true;
+			}
+		}
+		$where.=')';
+ 	}
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
 
 	if ($identifier!==NULL)
 	{
