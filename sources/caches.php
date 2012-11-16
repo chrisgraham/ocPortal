@@ -172,6 +172,9 @@ function decache($cached_for,$identifier=NULL)
 				$_cache_identifier=$identifier;
 				$_cache_identifier[]=$timezone;
 				$_cache_identifier[]=$bot_status;
+				global $TEMPCODE_SETGET;
+				$_cache_identifier[]=isset($TEMPCODE_SETGET['in_panel'])?$TEMPCODE_SETGET['in_panel']:'0';
+				$_cache_identifier[]=isset($TEMPCODE_SETGET['interlock'])?$TEMPCODE_SETGET['interlock']:'0';
 				if ($done_first) $where.=' OR ';
 				$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
 				$done_first=true;
@@ -180,14 +183,6 @@ function decache($cached_for,$identifier=NULL)
 		$where.=')';
  	}
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
-
-	if ($identifier!==NULL)
-	{
-		global $TEMPCODE_SETGET;
-		$identifier[]=array_key_exists('in_panel',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['in_panel']:'0';
-		$where['identifier']=md5(serialize($identifier));
-		$GLOBALS['SITE_DB']->query_delete('cache',$where);
-	}
 }
 
 /**
