@@ -31,6 +31,7 @@ class Hook_login_provider_facebook
 		// Facebook connect
 		if (get_forum_type()=='ocf')
 		{
+			@ini_set('ocproducts.type_strictness','0');
 			require_code('facebook_connect');
 			global $FACEBOOK_CONNECT;
 			if (!is_null($FACEBOOK_CONNECT))
@@ -45,6 +46,7 @@ class Hook_login_provider_facebook
 					// User will know what is wrong already (Facebook wil have said), so don't show on our end
 				}
 			}
+			@ini_set('ocproducts.type_strictness','1');
 		}
 		return $member;
 	}

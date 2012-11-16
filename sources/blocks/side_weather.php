@@ -117,7 +117,7 @@ class Block_side_weather
 				}
 			} else
 			{
-				$loc_code=$test;
+				$loc_code=strval($test);
 			}
 		}
 
