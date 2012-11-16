@@ -984,9 +984,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 					foreach ($param as $i=>$p)
 						if (is_object($p)) $param[$i]=$p->evaluate();
 
-					if ((count($param)==1) && (strpos($param[0],',')!==false))
+					if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in tempcode.php
 					{
-						$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+						$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
+						foreach ($param as $key=>$val)
+						{
+							$param[$key]=str_replace('\,',',',$val);
+						}
 					}
 
 					global $LOADED_BLOCKS;
