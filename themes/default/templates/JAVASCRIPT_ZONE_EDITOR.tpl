@@ -98,10 +98,10 @@ function select_ze_tab(id,tab)
 				if (is_wysiwyg_field(document.getElementById('edit_'+id+'_textarea')))
 				{
 					// Fix for Firefox
-					if (typeof wysiwyg_editors['edit_'+id+'_textarea'].document!='undefined')
+					if (typeof window.wysiwyg_editors['edit_'+id+'_textarea'].document!='undefined')
 					{
-						wysiwyg_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='false';
-						wysiwyg_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='true';
+						window.wysiwyg_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='false';
+						window.wysiwyg_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='true';
 					}
 				}
 			}

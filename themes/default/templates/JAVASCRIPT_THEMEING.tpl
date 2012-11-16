@@ -4,17 +4,17 @@ function make_tooltip_func(op)
 {
 	return function(event) {
 		if (typeof event=='undefined') var event=window.event;
-		if (!tpl_descrips[op])
+		if (!window.tpl_descrips[op])
 		{
 			var get_descrip=function() {
-				var loaded_result=do_ajax_request(url+'?theme='+window.encodeURIComponent(window.current_theme)+'&id='+window.encodeURIComponent(op)+keep_stub());
+				var loaded_result=do_ajax_request(window.url+'?theme='+window.encodeURIComponent(window.current_theme)+'&id='+window.encodeURIComponent(op)+keep_stub());
 				if (!loaded_result) return '';
-				tpl_descrips[op]=loaded_result.responseText;
-				return '<div class="whitespace_visible">'+escape_html(tpl_descrips[op])+'</div>';
+				window.tpl_descrips[op]=loaded_result.responseText;
+				return '<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>';
 			};
 		} else
 		{
-			var get_descrip=function() { return '<div class="whitespace_visible">'+escape_html(tpl_descrips[op])+'</div>'; };
+			var get_descrip=function() { return '<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>'; };
 		}
 		if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,get_descrip,'20%',null,'130px');
 	}

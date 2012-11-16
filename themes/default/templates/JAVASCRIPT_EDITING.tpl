@@ -150,7 +150,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(window.wysiwyg_editors[id].getData().replace(new RegExp(String.fromCharCode(8203),'g'),'')));
 					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName('result')[0]))
 					{
-						textarea.value='[semihtml]'+wysiwyg_editors[id].getData()+'[/semihtml]';
+						textarea.value='[semihtml]'+window.wysiwyg_editors[id].getData()+'[/semihtml]';
 					} else
 					{
 						var result_tags=request.responseXML.documentElement.getElementsByTagName('result');
@@ -605,7 +605,7 @@ function get_textbox(element)
 {
 	if (is_wysiwyg_field(element))
 	{
-		var ret=wysiwyg_editors[element.id].getData();
+		var ret=window.wysiwyg_editors[element.id].getData();
 		if ((ret=='\n') || (ret=='<br />')) ret='';
 		return ret;
 	}
@@ -618,10 +618,10 @@ function set_textbox(element,text,html)
 	{
 		if (typeof html=='undefined') var html=escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />');
 
-		wysiwyg_editors[element.id].setData(html);
+		window.wysiwyg_editors[element.id].setData(html);
 
 		window.setTimeout(function() {
-			find_tags_in_editor(wysiwyg_editors[element.id],element);
+			find_tags_in_editor(window.wysiwyg_editors[element.id],element);
 		}, 100);
 	}
 
@@ -632,7 +632,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 {
 	if (is_wysiwyg_field(element))
 	{
-		var editor=wysiwyg_editors[element.id];
+		var editor=window.wysiwyg_editors[element.id];
 
 		var insert='';
 		if (plain_insert)
@@ -776,7 +776,7 @@ function insert_textbox_wrapping(element,before_wrap_tag,after_wrap_tag)
 
 	if (is_wysiwyg_field(element))
 	{
-		var editor=wysiwyg_editors[element.id];
+		var editor=window.wysiwyg_editors[element.id];
 
 		if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
 		var selected_html=get_selected_html(editor);

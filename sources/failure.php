@@ -357,17 +357,21 @@ function ip_cidr_check($ip,$cidr)
 	// IPv6...
 
 	$unpacked=unpack('A16',_inet_pton($ip));
-	$unpacked=str_split($unpacked[1]);
 	$binaryip='';
-	foreach ($unpacked as $char)
+	for ($i=0;$i<strlen($unpacked[1]);$i++)
+	{
+		$char=$unpacked[1][$i];
 		$binaryip.=str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+	}
 
 	list($net,$maskbits)=explode('/',$cidr,2);
 	$unpacked=unpack('A16',_inet_pton($net));
-	$unpacked=str_split($unpacked[1]);
 	$binarynet='';
-	foreach ($unpacked as $char)
+	for ($i=0;$i<strlen($unpacked[1]);$i++)
+	{
+		$char=$unpacked[1][$i];
 		$binarynet.=str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+	}
 
 	$ip_net_bits=substr($binaryip,0,intval($maskbits));
 	$net_bits=substr($binarynet,0,intval($maskbits));

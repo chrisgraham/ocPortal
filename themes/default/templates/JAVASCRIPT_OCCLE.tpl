@@ -262,8 +262,8 @@ function bsod()
 
 function foxy()
 {
-	var rand=Math.round(Math.random()*(occle_foxy_textnodes.length-1));
-	var t=occle_foxy_textnodes[rand];
+	var rand=Math.round(Math.random()*(window.occle_foxy_textnodes.length-1));
+	var t=window.occle_foxy_textnodes[rand];
 	var at=Math.round(Math.random()*(t.data.length-1));
 	var a_char=t.data.charCodeAt(at);
 	if ((a_char>33) && (a_char<126))
@@ -282,7 +282,7 @@ function bsod_traverse_node(node)
 		t=node.childNodes[i];
 		if (t.nodeType==3)
 		{
-			if ((t.data.length>1) && (Math.random()<0.3)) occle_foxy_textnodes[occle_foxy_textnodes.length]=t;
+			if ((t.data.length>1) && (Math.random()<0.3)) window.occle_foxy_textnodes[window.occle_foxy_textnodes.length]=t;
 		}
 		else bsod_traverse_node(t);
 	}

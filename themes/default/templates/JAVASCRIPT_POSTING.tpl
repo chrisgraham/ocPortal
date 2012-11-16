@@ -102,10 +102,10 @@ function set_attachment(field_name,number,filename)
 						}
 					} else // Cancelled
 					{
-						var clearBtn=document.getElementById('fsClear_file'+number);
-						if (clearBtn)
+						var clear_button=document.getElementById('fsClear_file'+number);
+						if (clear_button)
 						{
-							clearBtn.onclick();
+							clear_button.onclick();
 						}
 					}
 				}

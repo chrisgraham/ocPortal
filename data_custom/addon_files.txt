@@ -4101,3 +4101,28 @@ youtube_channel_integration_block
 performance_compile
 -------------------
  - data_custom/compile_in_includes.php
+
+twitter_feed_integration_block
+------------------------------
+ - lang_custom/EN/twitter_feed.ini
+ - sources_custom/blocks/twitter_feed.php
+ - themes/default/templates_custom/BLOCK_TWITTER_FEED.tpl
+ - themes/default/templates_custom/BLOCK_TWITTER_FEED_STYLE.tpl
+ - themes/default/images_custom/twitter_feed/bird_black_16.png
+ - themes/default/images_custom/twitter_feed/bird_black_32.png
+ - themes/default/images_custom/twitter_feed/bird_black_48.png
+ - themes/default/images_custom/twitter_feed/bird_blue_16.png
+ - themes/default/images_custom/twitter_feed/bird_blue_32.png
+ - themes/default/images_custom/twitter_feed/bird_blue_48.png
+ - themes/default/images_custom/twitter_feed/bird_gray_16.png
+ - themes/default/images_custom/twitter_feed/bird_gray_32.png
+ - themes/default/images_custom/twitter_feed/bird_gray_48.png
+ - themes/default/images_custom/twitter_feed/favorite.png
+ - themes/default/images_custom/twitter_feed/favorite_hover.png
+ - themes/default/images_custom/twitter_feed/favorite_on.png
+ - themes/default/images_custom/twitter_feed/index.html
+ - themes/default/images_custom/twitter_feed/reply.png
+ - themes/default/images_custom/twitter_feed/reply_hover.png
+ - themes/default/images_custom/twitter_feed/retweet.png
+ - themes/default/images_custom/twitter_feed/retweet_hover.png
+ - themes/default/images_custom/twitter_feed/retweet_on.png

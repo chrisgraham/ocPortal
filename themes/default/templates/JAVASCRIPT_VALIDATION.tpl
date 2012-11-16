@@ -271,7 +271,7 @@ function do_form_preview(form,preview_url,has_separate_preview)
 	var pf=document.getElementById('preview_iframe');
 
 	/* Do our loading-animation */
-	window.setInterval(trigger_resize,500);  /* In case its running in an iframe itself */
+	window.setInterval(window.trigger_resize,500);  /* In case its running in an iframe itself */
 	animate_frame_load(pf,'preview_iframe',50);
 
 	/* input.value not readable on most modern web browsers, and this code is not maintained
