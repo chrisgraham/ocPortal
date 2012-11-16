@@ -511,9 +511,10 @@ function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
 function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields)
 {
 	// Special case for ratings
+	$matches=array('',$info['feedback_type_code']);
 	if ($filter_key=='compound_rating')
 	{
-		$clause='(SELECT AVG(rating) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type','catalogues').' AND rat.rating_for_id=r.id)';
+		$clause='(SELECT AVG(rating) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type',$matches[1]).' AND rat.rating_for_id=r.id)';
 		$extra_select[$filter_key]=', '.$clause.' AS compound_rating';
 		return array($clause,'',$filter_val);
 	}
