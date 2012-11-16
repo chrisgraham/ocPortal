@@ -207,7 +207,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 
 			'site', // In case of collapsed zones blocking in
 		));
-		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'),true);
+		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'));
 	} elseif ($b_type=='incremental')
 	{
 		$threshold=intval(get_value('last_backup'));

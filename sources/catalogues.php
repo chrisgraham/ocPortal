@@ -206,7 +206,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	// Work out the actual rendering, but only for those results in our selection scope (for performance)
 	foreach ($entries as $i=>$entry)
 	{
-		if (($in_db_sorting) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select))))))
+		if ((!$in_db_sorting) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select))))))
 		{
 			$entries[$i]['map']=get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root,$fields,(($display_type==1) && (!$is_ecomm) && (!is_null($order_by)))?array(0,intval($order_by)):NULL,false,true,intval($order_by));
 		}
