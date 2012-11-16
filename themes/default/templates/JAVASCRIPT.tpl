@@ -2577,6 +2577,8 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 						var message=ajax_result.responseText;
 						set_inner_html((template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
 					});
+
+					return false;
 				}
 			}(i);
 		}
@@ -2732,7 +2734,7 @@ function replace_comments_form_with_ajax(options,hash)
 				if ((ajax_result.responseText!='') && (ajax_result.status!=500))
 				{
 					// Display
-					set_inner_html(comments_wrapper,ajax_result.responseText);
+					set_outer_html(comments_wrapper,ajax_result.responseText);
 
 					// Collapse, so user can see what happening
 					if (document.getElementById('comments_posting_form_outer').className.indexOf('toggleable_tray')!=-1)
