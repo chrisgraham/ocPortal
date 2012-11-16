@@ -697,24 +697,32 @@ function block_helper_script()
 					$list=nice_get_catalogues($default,false);
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='param') && (in_array($block,array('main_cc_embed'))) && ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)')<500)) // catalogue category
+				elseif (($parameter=='param') && (in_array($block,array('main_cc_embed')))) // catalogue category
 				{
-					$list=new ocp_tempcode();
-					$structured_list=new ocp_tempcode();
-					$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','c_name'),array('cc_parent_id'=>NULL),'ORDER BY c_name,id',100);
-					$last_cat=mixed();
-					foreach ($categories as $cat)
+					$num_categories=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)');
+					$num_categories_top=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>NULL));
+					if (($num_categories_top<300) && ((!$has_default) || ($num_categories<300))) // catalogue category
 					{
-						if ((is_null($last_cat)) || ($cat['c_name']!=$last_cat))
+						$list=new ocp_tempcode();
+						$structured_list=new ocp_tempcode();
+						$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','c_name'),($num_categories>=300)?array('cc_parent_id'=>NULL):NULL,'ORDER BY c_name,id');
+						$last_cat=mixed();
+						foreach ($categories as $cat)
 						{
-							$structured_list->attach(form_input_list_group($cat['c_name'],$list));
-							$list=new ocp_tempcode();
-							$last_cat=$cat['c_name'];
+							if ((is_null($last_cat)) || ($cat['c_name']!=$last_cat))
+							{
+								if (!$list->is_empty()) $structured_list->attach(form_input_list_group($last_cat,$list));
+								$list=new ocp_tempcode();
+								$last_cat=$cat['c_name'];
+							}
+							$list->attach(form_input_list_entry(strval($cat['id']),$has_default && strval($cat['id'])==$default,get_translated_text($cat['cc_title'])));
 						}
-						$list->attach(form_input_list_entry(strval($cat['id']),$has_default && strval($cat['id'])==$default,get_translated_text($cat['cc_title'])));
+						if (!$list->is_empty()) $structured_list->attach(form_input_list_group($last_cat,$list));
+						$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$structured_list,NULL,false,false));
+					} else
+					{
+						$fields->attach(form_input_line(titleify($parameter),escape_html($description),$parameter,$default,false));
 					}
-					$structured_list->attach(form_input_list_group($cat['c_name'],$list));
-					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$structured_list,NULL,false,false));
 				}
 				elseif (($parameter=='param') && (in_array($block,array('main_banner_wave','main_topsites')))) // banner type list
 				{
