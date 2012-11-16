@@ -524,7 +524,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		$virtual_order_by='r.id';
 	}
 
-	$sql='SELECT r.*'.implode(',',$extra_select).' FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause;
+	$sql='SELECT r.*'.implode('',$extra_select).' FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause;
 	$in_db_sorting=$do_sorting && $can_do_db_sorting; // This defines whether $virtual_order_by can actually be used in SQL (if not, we have to sort manually)
 	if ($in_db_sorting && $do_sorting) $sql.=' ORDER BY '.$virtual_order_by.' '.$direction;
 
