@@ -1418,7 +1418,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	color: {$GET,area_text};
 	border-bottom: 1px dotted {$GET,pale_border};
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 300px;
+		width: 25em;
 	{+END}
 	max-width: 100%;
 	padding-{!en_left}: 0.5em;

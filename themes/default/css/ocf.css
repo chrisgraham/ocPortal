@@ -231,7 +231,7 @@
 	color: {$GET,box_title_text};
 }
 .ocf_topic .ocf_forum_box_left, .ocf_post_details, .ocf_post_details a, .ocf_post_details a:hover {
-	color: {$GET,box_title_text};
+	color: {$GET,box_title_text} !important;
 }
 
 .ocf_post_emphasis, .ocf_post_personal {
