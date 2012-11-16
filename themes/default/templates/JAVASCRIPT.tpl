@@ -1122,7 +1122,8 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 			{
 				pic.src=((pic.src.indexOf("themewizard.php")!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
 				pic.setAttribute('alt',pic.getAttribute('alt').replace('{!CONTRACT;}','{!EXPAND;}'));
-				pic.setAttribute('title','{!EXPAND;}');
+				pic.title='{!EXPAND;}'; // Needs doing because convert_tooltip may not have run yet
+				pic.ocp_tooltip_title='{!EXPAND;}';
 			}
 			element.style.display='none';
 		}
@@ -1194,7 +1195,7 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 		{
 			pic.src=((animate_dif<0)?'{$IMG;,expand}':'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
 			pic.setAttribute('alt',pic.getAttribute('alt').replace((animate_dif<0)?'{!CONTRACT;}':'{!EXPAND;}',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}'));
-			pic.setAttribute('title',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}');
+			pic.ocp_tooltip_title=(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}';
 		}
 		trigger_resize(true);
 	}
@@ -1625,7 +1626,7 @@ function key_pressed(event,key,no_error_if_bad)
 function convert_tooltip(element)
 {
 	var title=element.title;
-	if ((title!='') && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
+	if ((title!='') && (element.className.indexOf('leave_native_tooltip')==-1) && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
 	{
 		element.title='';
 
@@ -1644,11 +1645,13 @@ function convert_tooltip(element)
 		// And now define nice listeners for it all...
 		var win=get_main_ocp_window(true);
 
+		element.ocp_tooltip_title=title;
+
 		win.add_event_listener_abstract(
 			element,
 			'mouseover',
 			function(event) {
-				win.activate_tooltip(element,event,title,null,null,null,null,false,false,false,win);
+				win.activate_tooltip(element,event,element.ocp_tooltip_title,null,null,null,null,false,false,false,win);
 			}
 		);
 
