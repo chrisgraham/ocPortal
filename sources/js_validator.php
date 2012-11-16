@@ -106,9 +106,9 @@ function init__js_validator()
 		'EmbedActiveXFlash'=>array('Object',array(array('Number','ReadyState'),array('Number','TotalFrames'),array('Number','FrameNum'),array('Boolean','Playing'),array('String','Quality'),array('Number','ScaleMode'),array('Number','AlignMode'),array('String','Backgroundcolor'),array('Boolean','Loop'),array('String','Movie'),array('function','Play'),array('function','Stop'),array('function','Back'),array('function','Forward'),array('function','Rewind'),)),
 		'EmbedLiveConnectFlash'=>array('Object',array(array('function','LoadMovie'),array('function','GetVariable','!Object'),array('function','Play'),array('function','StopPlay'),array('function','IsPlaying','Boolean'),array('function','GotoFrame'),array('function','TotalFrames','Number'),array('function','Rewind'),array('function','SetZoomRect'),array('function','Zoom'),array('function','Pan'),array('function','PercentLoaded','Number'),)),
 		'DomException'=>array('Error',array(array('Number','code'),array('Number','!INDEX_SIZE_ERR'),array('Number','!DOMSTRING_SIZE_ERR'),array('Number','!HIERARCHY_REQUEST_ERR'),array('Number','!WRONG_DOCUMENT_ERR'),array('Number','!INVALID_CHARACTER_ERR'),array('Number','!NO_DATA_ALLOWED_ERR'),array('Number','!NO_MODIFICATION_ALLOWED_ERR'),array('Number','!NOT_FOUND_ERR'),array('Number','!NOT_SUPPORTED_ERR'),array('Number','!INUSE_ATTRIBUTE_ERR'),array('Number','!INVALID_STATE_ERR'),array('Number','!SYNTAX_ERR'),array('Number','!INVALID_MODIFICATION_ERR'),array('Number','!NAMESPACE_ERR'),array('Number','!INVALID_ACCESS_ERR'),array('Number','!VALIDATION_ERR'),array('Number','!TYPE_MISMATCH_ERR'),)),
-		'Storage'=>array('Object',array(array('Number','length'),array('function','getItem'),array('function','setItem'),array('function','removeItem'),array('function','clear'))),
+		'Storage'=>array('Object',array(array('Number','length'),array('function','getItem','Object'),array('function','setItem'),array('function','removeItem'),array('function','clear'))),
 		'Console'=>array('Object',array(array('function','log'))),
-		'JSON'=>array('Object',array(array('function','parse'),array('function','stringify'))),
+		'JSON'=>array('Object',array(array('function','parse','Object'),array('function','stringify','String'))),
 
 		'StringArray'=>array('Array',array()),
 		'NodeArray'=>array('Array',array()),
@@ -713,7 +713,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 			}
 			return $ret;
 		case 'CALL':
-			$ret=js_check_call($inner,$c_pos,false,$is_guarded);
+			$ret=js_check_call($inner,$c_pos,$is_guarded?'Object':NULL);
 			if (is_null($ret))
 			{
 				if (!$secondary) js_log_warning('CHECKER','(Function (\''.(is_array($inner[1])?'(complex)':$inner[1]).'\') that returns no value used in an expression',$c_pos);
@@ -997,8 +997,8 @@ function js_set_ocportal_type($identifier,$type)
  * @param  integer			Where the first mention of the variable is
  * @param  boolean			Whether this is an instantiation reference
  * @param  boolean			Whether this is a reference (as opposed to instantiation/setting)
- * @param  boolean			Whether this is a function call
  * @param  ?string			The result-type (NULL: not a function)
+ * @param  boolean			Whether this is a function call
  */
 function js_add_variable_reference($identifier,$first_mention,$instantiation=true,$reference=false,$function_return=NULL,$is_call=false)
 {

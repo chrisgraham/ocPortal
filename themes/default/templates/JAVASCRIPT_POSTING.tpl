@@ -92,21 +92,20 @@ function set_attachment(field_name,number,filename)
 				'width=750,height=530,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
 				function(ret)
 				{
-					// Add field for next one
-					var add_another_field=(number==window.num_attachments) && (window.num_attachments<window.max_attachments); // Needs running late, in case something happened inbetween
-					if (add_another_field)
+					if (ret)
 					{
-						add_attachment(window.num_attachments+1,field_name);
-					}
-				} else // Cancelled
-				{
-					var clearBtn=document.getElementById('fsClear_file'+number);
-					if (clearBtn)
-					{
-						var clearBtn=document.getElementById('fsClear_file'+number);
-						if (clearBtn)
+						// Add field for next one
+						var add_another_field=(number==window.num_attachments) && (window.num_attachments<window.max_attachments); // Needs running late, in case something happened inbetween
+						if (add_another_field)
 						{
-							clearBtn.onclick();
+							add_attachment(window.num_attachments+1,field_name);
+						}
+					} else // Cancelled
+					{
+						var clear_button=document.getElementById('fsClear_file'+number);
+						if (clear_button)
+						{
+							clear_button.onclick();
 						}
 					}
 				}

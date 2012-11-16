@@ -290,20 +290,20 @@ function ticker_tick(id,width)
 	var e=document.getElementById(id);
 	if (!e) return;
 	if (e.mouseisover) return;
-	e.style.textIndent=tick_pos[id]+'px';
-	tick_pos[id]--;
-	if (tick_pos[id]<-1.1*find_width(e.childNodes[0])) tick_pos[id]=width;
+	e.style.textIndent=window.tick_pos[id]+'px';
+	window.tick_pos[id]--;
+	if (window.tick_pos[id]<-1.1*find_width(e.childNodes[0])) window.tick_pos[id]=width;
 }
 
 window.jumper_pos=[];
 window.jumper_parts=[];
 function jumper_tick(id)
 {
-	if (jumper_pos[id]==jumper_parts[id].length-1) jumper_pos[id]=0;
+	if (window.jumper_pos[id]==window.jumper_parts[id].length-1) window.jumper_pos[id]=0;
 	var e=document.getElementById(id);
 	if (!e) return;
-	set_inner_html(e,jumper_parts[id][jumper_pos[id]]);
-	jumper_pos[id]++;
+	set_inner_html(e,window.jumper_parts[id][window.jumper_pos[id]]);
+	window.jumper_pos[id]++;
 }
 
 function crazy_tick()

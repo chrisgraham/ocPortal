@@ -32,7 +32,7 @@ class css_and_js_test_set extends ocp_test_case
 		$VALIDATION_JAVASCRIPT=true;
 		$VALIDATION_CSS=true;
 		$VALIDATION_WCAG=true;
-		$VALIDATION_COMPAT=true;
+		$VALIDATION_COMPAT=false;
 		$VALIDATION_EXT_FILES=true;
 		$VALIDATION_MANUAL=false;
 		$MAIL_MODE=false;
@@ -56,10 +56,10 @@ class css_and_js_test_set extends ocp_test_case
 				$errors=check_js($contents);
 				if (!is_null($errors))
 				{
-					foreach ($vars['errors'] as $i=>$e)
+					foreach ($errors['errors'] as $i=>$e)
 					{
 						$e['line']+=3;
-						$vars['errors'][$i]=$e;
+						$errors['errors'][$i]=$e;
 					}
 				}
 				if ((!is_null($errors)) && ($errors['errors']==array())) $errors=NULL; // Normalise

@@ -42,7 +42,7 @@ function do_color_change(e)
 
 	var rgb=[];
 	rgb[0]=0; rgb[1]=0; rgb[2]=0;
-	rgb[d]=last_cc_i[d+names_to_numbers[_id]*3];
+	rgb[d]=window.last_cc_i[d+window.names_to_numbers[_id]*3];
 	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+_id);
 	if (temp_last_cc!=targ)
 	{
@@ -50,7 +50,7 @@ function do_color_change(e)
 		temp_last_cc.style.cursor='pointer';
 		temp_last_cc.style.outline='none';
 		temp_last_cc.style.position='static';
-		last_cc_i[d+names_to_numbers[_id]*3]=i;
+		window.last_cc_i[d+window.names_to_numbers[_id]*3]=i;
 
 		// Show a white line over the colour we clicked
 		targ.style.backgroundColor='#FFFFFF';
@@ -92,12 +92,12 @@ function update_choose(id,d,i)
 	if (!targ) return false;
 	var rgb=[];
 	rgb[0]=0; rgb[1]=0; rgb[2]=0;
-	rgb[d]=last_cc_i[d+names_to_numbers[id]*3];
+	rgb[d]=window.last_cc_i[d+window.names_to_numbers[id]*3];
 	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+id);
 	temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]); // Reset old
 	temp_last_cc.style.outline='none';
 	temp_last_cc.style.position='static';
-	last_cc_i[d+names_to_numbers[id]*3]=i;
+	window.last_cc_i[d+window.names_to_numbers[id]*3]=i;
 
 	var element=document.getElementById('cc_target_'+id);
 	var bgColor=element.style.backgroundColor;
@@ -161,7 +161,7 @@ function do_color_chooser_element(element)
 	var d,i,_rgb=[],bg,innert,tid,selected,style;
 	for (d=0;d<=2;d++)
 	{
-		last_cc_i[d+names_to_numbers[id]*3]=0;
+		window.last_cc_i[d+window.names_to_numbers[id]*3]=0;
 		innert='';
 //		for (i=0;i<256;i++)
 		for (i=0;i<256;i+=4)
@@ -174,7 +174,7 @@ function do_color_chooser_element(element)
 			} else
 			{
 				_rgb[0]=255; _rgb[1]=255; _rgb[2]=255;
-				last_cc_i[d+names_to_numbers[id]*3]=i;
+				window.last_cc_i[d+window.names_to_numbers[id]*3]=i;
 			}
 			bg='rgb('+_rgb[0]+','+_rgb[1]+','+_rgb[2]+')';
 			tid='cc_col_'+d+'_'+i+'#'+id;
@@ -198,7 +198,7 @@ function make_colour_chooser(name,color,context,tabindex,label,className)
 		className='class="'+className+'" ';
 	}
 
-	names_to_numbers[name]=names_to_numbers.length;
+	window.names_to_numbers[name]=window.names_to_numbers.length;
 
 	var p=document.getElementById('colours_go_here');
 

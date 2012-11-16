@@ -159,8 +159,8 @@ function decache($cached_for,$identifier=NULL)
 	}
 
 	$where=db_string_equal_to('cached_for',$cached_for);
- 	if ($identifier!==NULL)
- 	{
+	if ($identifier!==NULL)
+	{
 		$where.=' AND (';
 		$done_first=false;
 		$bot_statuses=array(true,false);
@@ -178,14 +178,8 @@ function decache($cached_for,$identifier=NULL)
 			}
 		}
 		$where.=')';
- 	}
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
-
-	if ($identifier!==NULL)
-	{
-		$where['identifier']=md5(serialize($identifier));
-		$GLOBALS['SITE_DB']->query_delete('cache',$where);
 	}
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
 }
 
 /**
