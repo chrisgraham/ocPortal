@@ -1,7 +1,15 @@
 {+START,BOX,{TITLE},,{$?,{$GET,in_panel},panel,classic},tray_closed}
 	<script type="text/javascript" src="http://static.ak.connect.facebook.com/connect.php/en_US"></script>
 
-	<script type="text/javascript">FB.init("40d2a3e3af18f7a6928882d0ea1bdea1");</script>
+	<script type="text/javascript">
+	FB.init({
+		appId: '{$CONFIG_OPTION*;,facebook_appid}',
+		channelUrl: '{$BASE_URL*;}/facebook_connect.php',
+		status: true,
+		cookie: true,
+		xfbml: true
+	});
+	</script>
 
 	<div class="fb-fan" data-profile_id="{$CONFIG_OPTION*,facebook_uid}" data-stream="{STREAM}" data-connections="{FANS}" data-logobar="{LOGOBAR}" data-width="300"></div>
 
