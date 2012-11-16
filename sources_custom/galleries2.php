@@ -17,7 +17,7 @@ function init__galleries2($code)
 {
 	// We want to inject our workflow handling code into add_image...
 	$code=str_replace(
-		'log_it(\'ADD_IMAGE\',strval($id),$cat);',
+		'log_it(\'ADD_IMAGE\',strval($id),$title);',
 		'
 		if ($validated==0)
 		{
@@ -33,7 +33,7 @@ function init__galleries2($code)
 			if ($workflow_id==-1)
 			{
 				// Look for the workflow of the containing gallery
-				$workflow_id=get_workflow_of_content("gallery",$cat);
+				$workflow_id=get_workflow_of_content("gallery",$title);
 				if (is_null($workflow_id))
 				{
 					// Use the default if it has none
@@ -53,7 +53,7 @@ function init__galleries2($code)
 				add_content_to_workflow("image",strval($id),$workflow_id);
 				attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
 			}
-			log_it(\'ADD_IMAGE\',strval($id),$cat);
+			log_it(\'ADD_IMAGE\',strval($id),$title);
 		}
 		',
 		$code
@@ -61,7 +61,7 @@ function init__galleries2($code)
 
 	// ...and add_video...
 	$code=str_replace(
-		'log_it(\'ADD_VIDEO\',strval($id),$cat);',
+		'log_it(\'ADD_VIDEO\',strval($id),$title);',
 		'
 		if ($validated==0)
 		{
@@ -77,7 +77,7 @@ function init__galleries2($code)
 			if ($workflow_id==-1)
 			{
 				// Look for the workflow of the containing gallery
-				$workflow_id=get_workflow_of_content("gallery",$cat);
+				$workflow_id=get_workflow_of_content("gallery",$title);
 				if (is_null($workflow_id))
 				{
 					// Use the default if it has none
@@ -97,7 +97,7 @@ function init__galleries2($code)
 				add_content_to_workflow("video",strval($id),$workflow_id);
 				attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
 			}
-			log_it(\'ADD_VIDEO\',strval($id),$cat);
+			log_it(\'ADD_VIDEO\',strval($id),$title);
 		}
 		',
 		$code
@@ -142,7 +142,7 @@ function init__galleries2($code)
 
 	// Do this for images...
 	$code=str_replace(
-		'log_it(\'EDIT_IMAGE\',strval($id),$cat);',
+		'log_it(\'EDIT_IMAGE\',strval($id),$title);',
 		'
 		if ($validated==0)
 		{
@@ -162,7 +162,7 @@ function init__galleries2($code)
 			if ($edit_workflow && ($workflow_id==-1))
 			{
 				// Look for the workflow of the containing gallery
-				$workflow_id=get_workflow_of_content("gallery",$cat);
+				$workflow_id=get_workflow_of_content("gallery",$title);
 				if (is_null($workflow_id))
 				{
 					// Use the default if it has none
@@ -191,14 +191,14 @@ function init__galleries2($code)
 					attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
 				}
 			}
-			log_it(\'EDIT_IMAGE\',strval($id),$cat);
+			log_it(\'EDIT_IMAGE\',strval($id),$title);
 		}
 		',
 		$code
 	);
 
 	// ...videos...
-	$code=str_replace('log_it(\'EDIT_VIDEO\',strval($id),$cat);',
+	$code=str_replace('log_it(\'EDIT_VIDEO\',strval($id),$title);',
 		'
 		if ($validated==0)
 		{
@@ -218,7 +218,7 @@ function init__galleries2($code)
 			if (($edit_workflow) && ($workflow_id==-1))
 			{
 				// Look for the workflow of the containing gallery
-				$workflow_id=get_workflow_of_content("gallery",$cat);
+				$workflow_id=get_workflow_of_content("gallery",$title);
 				if (is_null($workflow_id))
 				{
 					// Use the default if it has none
@@ -247,7 +247,7 @@ function init__galleries2($code)
 					attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
 				}
 			}
-			log_it(\'EDIT_VIDEO\',strval($id),$cat);
+			log_it(\'EDIT_VIDEO\',strval($id),$title);
 		}
 		',
 		$code

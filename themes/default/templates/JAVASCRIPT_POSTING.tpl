@@ -85,13 +85,12 @@ function set_attachment(field_name,number,filename)
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path
 		if (wysiwyg) url+='&in_wysiwyg=1';
 		url+=keep_stub();
-		window.faux_showModalDialog(
-			maintain_theme_in_link(url),
-			'',
-			'width=750,height=530,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
-			function(ret)
-			{
-				if (ret)
+		window.setTimeout(function() {
+			window.faux_showModalDialog(
+				maintain_theme_in_link(url),
+				'',
+				'width=750,height=530,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
+				function(ret)
 				{
 					// Add field for next one
 					var add_another_field=(number==window.num_attachments) && (window.num_attachments<window.max_attachments); // Needs running late, in case something happened inbetween
@@ -104,11 +103,15 @@ function set_attachment(field_name,number,filename)
 					var clearBtn=document.getElementById('fsClear_file'+number);
 					if (clearBtn)
 					{
-						clearBtn.onclick();
+						var clearBtn=document.getElementById('fsClear_file'+number);
+						if (clearBtn)
+						{
+							clearBtn.onclick();
+						}
 					}
 				}
-			}
-		);
+			);
+		},800 ); // In a timeout to disassociate possible 'enter' keypress which could have led to this function being called [enter on the file selection dialogue] and could propagate through (on Google Chrome anyways, maybe a browser bug)
 	} else
 	{
 		// Add field for next one

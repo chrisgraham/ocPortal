@@ -191,7 +191,7 @@ function activities_ajax_update_list_handler()
 
 	if ($proceed_selection===true)
 	{
-		$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE (('.$whereville.') AND id>'.(($last_id=='')?'-1':$last_id).') ORDER BY a_time DESC',$map['max']);
+		$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE (('.$whereville.') AND id>'.(($last_id=='')?'-1':$last_id).') ORDER BY a_time DESC',intval($map['max']));
 
 		if (count($activities)>0)
 		{
@@ -335,4 +335,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		if (function_exists('attach_message'))
 			attach_message(intelligent_write_error_inline($filename),'warn');
 	}
+
+	fix_permissions($filename);
+	sync_file($filename);
 }

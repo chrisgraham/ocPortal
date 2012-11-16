@@ -414,6 +414,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		{
 			require_code('users_active_actions');
 			handle_active_login($username);
+			$message->attach(do_lang_tempcode('OCF_LOGIN_AUTO'));
 		} else // Invite them to explicitly instant log in
 		{
 			$_login_url=build_url(array('page'=>'login','redirect'=>get_param('redirect',NULL)),get_module_zone('login'));

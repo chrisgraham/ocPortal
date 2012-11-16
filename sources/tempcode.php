@@ -725,9 +725,13 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
-			if ((count($param)==1) && (strpos($param[0],',')!==false))
+			if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in symbols.php
 			{
-				$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+				$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
+				foreach ($param as $key=>$val)
+				{
+					$param[$key]=str_replace('\,',',',$val);
+				}
 			}
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging

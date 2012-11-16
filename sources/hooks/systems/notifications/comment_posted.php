@@ -38,6 +38,18 @@ class Hook_Notification_comment_posted extends Hook_Notification
 	{
 		$categories=parent::create_category_tree($notification_code,$id);
 
+		$notification_category=get_param('id',NULL);
+		if (!is_null($notification_category))
+		{
+			$found=false;
+			foreach ($categories as $i=>$c)
+			{
+				if ($c['id']==$notification_category) $found=true;
+			}
+			if (!$found)
+				$categories[]=array('id'=>$notification_category);
+		}
+
 		// See if we can get better titles
 		require_code('feedback');
 		foreach ($categories as $i=>$c)
