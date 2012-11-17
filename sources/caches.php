@@ -163,6 +163,8 @@ function decache($cached_for,$identifier=NULL)
 	{
 		$where.=' AND (';
 		$done_first=false;
+
+		// For combinations of implied parameters
 		$bot_statuses=array(true,false);
 		$timezones=array_keys(get_timezone_list());
 		foreach ($bot_statuses as $bot_status)
@@ -177,6 +179,13 @@ function decache($cached_for,$identifier=NULL)
 				$done_first=true;
 			}
 		}
+
+		// And finally for no implied parameters (raw API usage)
+		$_cache_identifier=$identifier;
+		if ($done_first) $where.=' OR ';
+		$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
+		$done_first=true;
+
 		$where.=')';
  	}
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
