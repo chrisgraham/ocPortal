@@ -244,9 +244,10 @@ function debuttonise($matches)
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
+ * @param  boolean		Whether to force full conversion regardless of settings
  * @return LONG_TEXT		The equivalent comcode
  */
-function semihtml_to_comcode($semihtml)
+function semihtml_to_comcode($semihtml,$force=false)
 {
 	require_code('obfuscate');
 	$semihtml=trim($semihtml);
