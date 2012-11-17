@@ -19,6 +19,213 @@
  */
 
 /**
+ * Take a Tempcode object and run some hackerish code to make it XHTML-strict.
+ *
+ * @param  object			Tempcode object
+ * @return object			Tempcode object (no longer cache safe)
+ */
+function make_xhtml_strict($global)
+{
+	$_global=$global->evaluate();
+	$_global=str_replace(
+		'<!DOCTYPE html>',
+		'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+		$_global);
+	$_global=preg_replace('#(<a\s[^>]*)onclick="([^"]*)"(\s[^>]*)target="_blank"#','${1}onclick="this.target=\'_blank\'; ${2}"${3}',$_global);
+	$_global=preg_replace('#(<a\s[^>]*)target="_blank"(\s[^>]*)onclick="([^"]*)"#','${1}onclick="this.target=\'_blank\'; ${3}"${2}',$_global);
+	$_global=preg_replace('#(<a\s[^>]*)target="_blank"#','${1}onclick="this.target=\'_blank\';"',$_global);
+	$_global=preg_replace('#(<form\s[^>]*)onsubmit="([^"]*)"(\s[^>]*)target="_blank"#','${1}onsubmit="this.target=\'_blank\'; ${2}"${3}',$_global);
+	$_global=preg_replace('#(<form\s[^>]*)target="_blank"(\s[^>]*)onsubmit="([^"]*)"#','${1}onsubmit="this.target=\'_blank\'; ${3}"${2}',$_global);
+	$_global=preg_replace('#(<form\s[^>]*)target="_blank"#','${1}onsubmit="this.target=\'_blank\';"',$_global);
+	$_global=preg_replace('#(<(a|form)\s[^>]*)target="[^"]*"#','${1}',$_global);
+	return make_string_tempcode($_global);
+}
+
+/**
+ * Find the country an IP address long is located in
+ *
+ * @param  ?IP				The IP to geolocate (NULL: current user's IP)
+ * @return ?string		The country initials (NULL: unknown)
+ */
+function geolocate_ip($ip=NULL)
+{
+	if (is_null($ip)) $ip=get_ip_address();
+
+	if (!addon_installed('stats')) return NULL;
+
+	$long_ip=ip2long($ip);
+	if ($long_ip===false) return NULL; // No IP6 support
+
+	$query='SELECT * FROM '.get_table_prefix().'ip_country WHERE begin_num<='.sprintf('%u',$long_ip).' AND end_num>='.sprintf('%u',$long_ip);
+	$results=$GLOBALS['SITE_DB']->query($query);
+
+	if (!array_key_exists(0,$results)) return NULL;
+	elseif (!is_null($results[0]['country'])) return $results[0]['country'];
+	else return NULL;
+}
+
+/**
+ * Get links and details related to a member.
+ *
+ * @param  MEMBER				A member ID
+ * @return array				A tuple: links (Tempcode), details (Tempcode), number of unread inline personal posts or private topics
+ */
+function member_personal_links_and_details($member_id)
+{
+	$details=new ocp_tempcode();
+	$links=new ocp_tempcode();
+
+	if (get_forum_type()!='none')
+	{
+		// Post count
+		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_posts')=='1'))
+		{
+			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'371dfee46e8c40b1b109e0350055f8cc','KEY'=>do_lang_tempcode('COUNT_POSTSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_post_count($member_id)))));
+		}
+		// Topic count
+		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_topics')=='1'))
+		{
+			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'2dd2a2d30c4ea7144c74ab058239fb23','KEY'=>do_lang_tempcode('COUNT_TOPICSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topic_count($member_id)))));
+		}
+
+		// Member profile view link
+		if (get_option('ocf_show_profile_link')=='1')
+		{
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true);
+			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'2c8648c953c802a9de41c3adeef0e97f','NAME'=>do_lang_tempcode('MY_PROFILE'),'URL'=>$url,'REL'=>'me')));
+		}
+	}
+
+	// Point count
+	if (addon_installed('points'))
+	{
+		require_lang('points');
+		require_code('points');
+		if (get_option('points_show_personal_stats_points_left')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e58e30457576735f3a2618fd7fff','KEY'=>do_lang_tempcode('COUNT_POINTS_LEFT'),'VALUE'=>integer_format(available_points($member_id)))));
+		if (get_option('points_show_personal_stats_points_used')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e58edfdsf735f3a2618fd7fff','KEY'=>do_lang_tempcode('COUNT_POINTS_USED'),'VALUE'=>integer_format(points_used($member_id)))));
+		if (get_option('points_show_personal_stats_total_points')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'3e6183abf9054574c0cd292d25a4fe5c','KEY'=>do_lang_tempcode('COUNT_POINTS_EVER'),'VALUE'=>integer_format(total_points($member_id)))));
+		if (get_option('points_show_personal_stats_gift_points_left')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e5ssd45ddsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_LEFT'),'VALUE'=>integer_format(get_gift_points_to_give($member_id)))));
+		if (get_option('points_show_personal_stats_gift_points_used')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_USED'),'VALUE'=>integer_format(get_gift_points_used($member_id)))));
+	}
+
+	// Links to usergroups
+	if (get_option('ocp_show_personal_usergroup')=='1')
+	{
+		$group_id=$GLOBALS['FORUM_DRIVER']->pname_group($GLOBALS['FORUM_DRIVER']->get_member_row($member_id));
+		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+		if (array_key_exists($group_id,$usergroups))
+		{
+			if (get_forum_type()=='ocf')
+			{
+				$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$group_id),get_module_zone('groups'));
+				$hyperlink=hyperlink($group_url,$usergroups[$group_id],false,true);
+				$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array('_GUID'=>'sas41eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>$hyperlink)));
+			} else
+			{
+				$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'65180134fbc4cf7e227011463d466677','KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>$usergroups[$group_id])));
+			}
+		}
+	}
+
+	// Last visit time
+	if (get_option('ocp_show_personal_last_visit')=='1')
+	{
+		$row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
+		$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
+		$_last_visit=get_timezoned_date($last_visit,false);
+		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
+	}
+
+	// Subscription links
+	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')) && (get_option('ocp_show_personal_sub_links')=='1') && (!has_zone_access($member_id,'adminzone')) && (has_actual_page_access($member_id,'purchase')))
+	{
+		$usergroup_subs=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title','s_group_id','s_cost'),array('s_enabled'=>1));
+		$in_one=false;
+		$members_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
+		foreach ($usergroup_subs as $i=>$sub)
+		{
+			$usergroup_subs[$i]['s_cost']=floatval($sub['s_cost']);
+			if (in_array($sub['s_group_id'],$members_groups))
+			{
+				$in_one=true;
+				break;
+			}
+		}
+		if (!$in_one)
+		{
+			sort_maps_by($usergroup_subs,'s_cost');
+			foreach ($usergroup_subs as $sub)
+			{
+				$url=build_url(array('page'=>'purchase','type'=>'message','product'=>'USERGROUP'.strval($sub['id'])),get_module_zone('purchase'));
+				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'5c4a1f300b37722e587fe2f608f1ee3a','NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title']))),'URL'=>$url)));
+			}
+		}
+	}
+
+	// Admin Zone link
+	if ((get_option('ocp_show_personal_adminzone_link')=='1') && (has_zone_access($member_id,'adminzone')))
+	{
+		$url=build_url(array('page'=>''),'adminzone');
+		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'ae243058f780f9528016f7854763a5fa','ACCESSKEY'=>'I','NAME'=>do_lang_tempcode('ADMIN_ZONE'),'URL'=>$url)));
+	}
+
+	// Conceded mode link
+	if (($GLOBALS['SESSION_CONFIRMED_CACHE']==1) && (get_option('ocp_show_conceded_mode_link')=='1'))
+	{
+		$url=build_url(array('page'=>'login','type'=>'concede','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
+		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'81fa81cfd3130e42996bf72b0e03d8aa','POST'=>true,'NAME'=>do_lang_tempcode('CONCEDED_MODE'),'DESCRIPTION'=>do_lang_tempcode('DESCRIPTION_CONCEDED_MODE'),'URL'=>$url)));
+	}
+
+	// Becomes-invisible link
+	if (get_option('is_on_invisibility')=='1')
+	{
+		if ((array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0))
+		{
+			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+			$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
+			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'2af618fe39444861c21cf0caec216227','NAME'=>do_lang_tempcode($visible?'INVISIBLE':'BE_VISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
+		}
+	}
+
+	// Logout link
+	$url=build_url(array('page'=>'login','type'=>'logout'),get_module_zone('login'));
+	if (!is_httpauth_login())
+		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array('_GUID'=>'d1caacba272a7ee3bf5b2a758e4e54ee','NAME'=>do_lang_tempcode('LOGOUT'),'URL'=>$url)));
+
+	if (get_forum_type()=='ocf')
+	{
+		require_code('ocf_notifications');
+		list(,$num_unread_pps)=generate_notifications($member_id);
+	} else
+	{
+		$num_unread_pps=0;
+	}
+
+	return array($links,$details,$num_unread_pps);
+}
+
+/**
+ * Use the url_title_cache table (a bit of a hack but saved changed the DB structure) to see if a check-op was performed has been performed within the last 30 days.
+ *
+ * @param  ID_TEXT		Special check code (often a URL but does not need to be).
+ * @return boolean		Whether the check has happened recently.
+*/
+function handle_has_checked_recently($id_code)
+{
+	$last_check_test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>substr('!'.$id_code,0,255)));
+	if ((is_null($last_check_test)) || (substr($last_check_test,0,1)!='!') || (intval(substr($last_check_test,1))+60*60*24*30<time())) // only re-checks every 30 days
+	{
+		// Show when it was last tested
+		$GLOBALS['SITE_DB']->query_delete('url_title_cache',array('t_url'=>substr('!'.$id_code,0,255)),'',1); // To make sure it can insert below
+		$GLOBALS['SITE_DB']->query_insert('url_title_cache',array('t_title'=>'!'.strval(time()),'t_url'=>substr('!'.$id_code,0,255)),false,true); // To stop weird race-like conditions
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
  * Convert a string to an array, with utf-8 awareness where possible/required.
  *
  * @param  string			Input

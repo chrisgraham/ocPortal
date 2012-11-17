@@ -53,6 +53,7 @@ class Module_filedump
 		delete_privilege('upload_filedump');
 		delete_privilege('upload_anything_filedump');
 
+		//require_code('files');
 		//deldir_contents(get_custom_file_base().'/uploads/filedump',true);
 
 		delete_menu_item_simple('_SEARCH:filedump:type=misc');
@@ -117,6 +118,7 @@ class Module_filedump
 	function run()
 	{
 		require_lang('filedump');
+		require_code('files');
 		require_code('files2');
 
 		$type=get_param('type','misc');
@@ -492,7 +494,10 @@ class Module_filedump
 			log_it('FILEDUMP_UPLOAD',$file,$place);
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),get_page_name(),get_zone_name()))
+			{
+				require_code('activities');
 				syndicate_described_activity('filedump:ACTIVITY_FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
+			}
 
 			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 		} else warn_exit(do_lang_tempcode('OVERWRITE_ERROR'));

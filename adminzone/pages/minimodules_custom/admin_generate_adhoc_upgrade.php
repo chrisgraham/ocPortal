@@ -31,6 +31,7 @@ if ($type=='auto_probe')
 {
 	$probe_dir=post_param('probe_dir');
 
+	require_code('files');
 	require_code('files2');
 	require_code('diff');
 	$path=$probe_dir.'/sources/hooks/systems/addon_registry';

@@ -1102,6 +1102,7 @@ class Module_admin_stats
 				$regions=array();
 				$data=array();
 				$degrees=360/count($rows);
+				require_code('global4');
 				foreach ($rows as $value)
 				{
 					$region=geolocate_ip($value['ip']);
@@ -1276,6 +1277,8 @@ class Module_admin_stats
 		$handle=opendir(get_custom_file_base().'/data_custom/modules/admin_stats/');
 		if ($handle!==false)
 		{
+			require_code('files');
+
 			while (false!==($file=readdir($handle)))
 			{
 				if ((!should_ignore_file(get_custom_file_base().'/data_custom/modules/admin_stats/'.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) && ($file!='IP_Country.txt') && (!is_dir($file)))

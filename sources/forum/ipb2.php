@@ -444,6 +444,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 							$special=do_template('FORUM_ATTACHMENT_IMAGE_THUMB',array('_GUID'=>'98a66462f270f53101c4c0a1b63f0bfc','FULL'=>$url,'URL'=>get_forum_base_url().'/uploads/'.$attachment['attach_thumb_location']));
 						} else
 						{
+							require_code('files');
 							$special=do_template('FORUM_ATTACHMENT_LINK',array('_GUID'=>'002a3220f35debbe567ce7a225aa221e','FULL'=>$url,'FILENAME'=>$attachment['attach_file'],'CLEAN_SIZE'=>clean_file_size($attachment['attach_filesize']),'NUM_DOWNLOADS'=>integer_format($attachment['attach_hits'])));
 						}
 					} else // Must be an inline image
@@ -548,6 +549,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 		$def='';
 
 		// Load in remapper
+		require_code('files');
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
 		if (!$skip_member_specific)

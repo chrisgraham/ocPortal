@@ -57,6 +57,7 @@ class Module_admin_zones
 	function uninstall()
 	{
 		/*		$zones=find_all_zones(true);		We don't really want to throw away on-disk data on reinstalls
+		require_code('files');
 		foreach ($zones as $zone)
 		{
 			//if (!in_array($zone,array('','docs','adminzone','collaboration','forum','cms','site'))) deldir_contents(get_file_base().'/'.$zone,true);

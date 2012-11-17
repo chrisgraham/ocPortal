@@ -1571,7 +1571,7 @@ function step_5_uninstall()
 	// UNINSTALL STUFF
 
 	// Delete directories
-	require_code('files2');
+	require_code('files');
 	deldir_contents('uploads/attachments',true);
 	deldir_contents('uploads/attachments_thumbs',true);
 

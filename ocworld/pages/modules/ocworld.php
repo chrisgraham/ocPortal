@@ -53,6 +53,7 @@ class Module_ocworld
 		$GLOBALS['SITE_DB']->drop_table_if_exists('w_rooms');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('w_travelhistory');
 
+		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/ocworld',true);
 
 		require_code('ocworld');

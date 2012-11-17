@@ -103,7 +103,7 @@ function make_upgrade_get_path($from_version,$to_version)
 	@rename($tar_path.'.new',$tar_path);
 
 	// Clean up	
-	require_code('files2');
+	require_code('files');
 	@deldir_contents($new_base_path);
 	@deldir_contents($old_base_path);
 	@deldir_contents($wip_path);
@@ -189,6 +189,8 @@ function recursive_unzip($zip_path,$unzip_path)
 
 function make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir='',$pretend_dir='')
 {
+	require_code('files');
+
 	$dh=opendir($new_base_path.'/'.$dir);
 	while (($file=readdir($dh))!==false)
 	{

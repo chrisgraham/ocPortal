@@ -26,6 +26,7 @@
  */
 function ip_to_currency($ip=NULL)
 {
+	require_code('global4');
 	if (is_null($ip)) $ip=get_ip_address();
 	$country=geolocate_ip($ip);
 	return country_to_currency($country);

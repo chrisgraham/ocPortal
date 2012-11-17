@@ -20,6 +20,7 @@ class override_issues_test_set extends ocp_test_case
 {
 	function testOverrideIssues()
 	{
+		require_code('files');
 		require_code('files2');
 		$contents=get_directory_contents(get_file_base());
 		foreach ($contents as $c)

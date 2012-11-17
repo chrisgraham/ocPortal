@@ -707,6 +707,7 @@ class Module_quiz
 				$result->attach(paragraph(do_lang_tempcode('TEST_PASS'),'4tfdhdhghh'));
 				$result2->attach(do_lang_tempcode('MAIL_TEST_PASS'));
 
+				require_code('activities');
 				syndicate_described_activity('quiz:ACTIVITY_PASSED_TEST',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 			}
 			elseif ($maximum_percentage<$quiz['q_percentage'])
@@ -728,6 +729,7 @@ class Module_quiz
 		{
 			$result=comcode_to_tempcode($_corrections->evaluate());
 
+			require_code('activities');
 			syndicate_described_activity('quiz:ACTIVITY_ENTERED_COMPETITION',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		} else
 		{
@@ -738,6 +740,7 @@ class Module_quiz
 			// Send mail of answers to the staff
 			dispatch_notification('quiz_results',strval($id),$notification_title,$_answers->evaluate(get_site_default_lang()));
 
+			require_code('activities');
 			syndicate_described_activity('quiz:ACTIVITY_FILLED_SURVEY',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		}
 

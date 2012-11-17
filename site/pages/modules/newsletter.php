@@ -327,6 +327,7 @@ class Module_newsletter
 			}
 			if (!$found_level) warn_exit(do_lang_tempcode('NOT_NEWSLETTER_SUBSCRIBER'));
 
+			require_code('crypt');
 			$code_confirm=mt_rand(1,32000);
 			$salt=produce_salt();
 			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang,'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt)));
@@ -384,6 +385,8 @@ class Module_newsletter
 	{
 		$title=get_screen_title(get_option('newsletter_title'),false);
 
+		require_code('crypt');
+
 		$email=trim(get_param('email'));
 		$lang=$GLOBALS['SITE_DB']->query_select_value('newsletter','language',array('email'=>$email));
 		$salt=$GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email'=>$email));
@@ -415,6 +418,7 @@ class Module_newsletter
 		if (!array_key_exists(0,$_subscriber)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		$subscriber=$_subscriber[0];
 
+		require_code('crypt');
 		$needed_hash=best_hash($subscriber['the_password'],'xunsub');
 
 		if ($hash!=$needed_hash)

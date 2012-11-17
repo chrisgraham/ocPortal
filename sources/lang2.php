@@ -26,6 +26,8 @@
  */
 function get_lang_files($lang=NULL)
 {
+	require_code('files');
+
 	if (is_null($lang)) $lang=get_site_default_lang();
 
 	$_dir=@opendir(get_file_base().'/lang/'.$lang);
@@ -230,6 +232,7 @@ function lookup_language_full_name($code)
 
 	if ($LANGS_MAP_CACHE===NULL)
 	{
+		require_code('files');
 		$map_file_a=get_file_base().'/lang/langs.ini';
 		$map_file_b=get_custom_file_base().'/lang_custom/langs.ini';
 		if (!is_file($map_file_b)) $map_file_b=$map_file_a;

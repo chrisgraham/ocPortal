@@ -60,7 +60,7 @@ function init__global2()
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
 	// Closed site message
-	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']!='1')))
+	if (((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']!='1')) && (strpos($_SERVER['PHP_SELF'],'upgrader.php')===false))
 	{
 		if ((is_file('closed.html')) || (@is_file('../closed.html')))
 		{
@@ -178,8 +178,6 @@ function init__global2()
 
 	// Most critical things
 	require_code('global3'); // A lot of support code is present in this
-	srand(make_seed());
-	mt_srand(make_seed());
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))
@@ -239,7 +237,6 @@ function init__global2()
 	if ($MICRO_AJAX_BOOTUP==0)
 	{
 		require_code('temporal'); // Date/time functions
-		require_code('files'); // Contains fix_permissions, needed for 'lang'
 		require_code('lang'); // So that we can do language stuff (e.g. errors)
 		convert_data_encodings();
 		if ($MICRO_BOOTUP==0)
@@ -790,18 +787,6 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 	return false;
 }
 
-/*function ocp_memory_profile($id)
-{
-	if (!function_exists('memory_get_usage')) return;
-	echo memory_get_usage().'  ('.$id.')<br />';
-}
-function ocp_memory_profile_2($id,&$struct)
-{
-	if (!function_exists('memory_get_usage')) return;
-	@ob_end_clean();
-	echo memory_get_usage().'  ('.$id.')'.(is_null($struct)?'':(' ['.strlen(var_export($struct,true)).']')).'<br />';
-}*/
-
 /**
  * Find whether the browser session is set to be doing a hard cache-empty refresh.
  *
@@ -886,32 +871,6 @@ function warn_exit($text)
 }
 
 /**
- * Give the user an option to see a stack trace by adding in a link, but only if they have permission
- */
-function suggest_fatalistic()
-{
-	if ((may_see_stack_dumps()) && (get_param_integer('keep_fatalistic',0)==0) && (running_script('index')))
-	{
-		if (count($_POST)==0)
-		{
-			$stack_trace_url=build_url(array('page'=>'_SELF','keep_fatalistic'=>1),'_SELF',NULL,true);
-			$st=do_lang_tempcode('WARN_TO_STACK_TRACE',escape_html($stack_trace_url->evaluate()));
-		} elseif (count($_FILES)==0)
-		{
-			$stack_trace_url=build_url(array('page'=>'_SELF','keep_fatalistic'=>1),'_SELF',NULL,true);
-			$p=build_keep_post_fields();
-			$st=do_lang_tempcode('WARN_TO_STACK_TRACE_2',escape_html($stack_trace_url->evaluate()),$p->evaluate());
-		} else
-		{
-			$stack_trace_url=build_url(array('page'=>'','keep_fatalistic'=>1),'');
-			$st=do_lang_tempcode('WARN_TO_STACK_TRACE_3',escape_html($stack_trace_url->evaluate()));
-		}
-		require_code('site');
-		attach_message($st,'inform');
-	}
-}
-
-/**
  * Do a fatal exit, echo the header (if possible) and an error message, followed by a debugging back-trace.
  * It also adds an entry to the error log, for reference.
  *
@@ -935,39 +894,6 @@ function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',
 {
 	require_code('failure');
 	_log_hack_attack_and_exit($reason,$reason_param_a,$reason_param_b,$silent);
-}
-
-/**
- * Use the url_title_cache table (a bit of a hack but saved changed the DB structure) to see if a check-op was performed has been performed within the last 30 days.
- *
- * @param  ID_TEXT		Special check code (often a URL but does not need to be).
- * @return boolean		Whether the check has happened recently.
-*/
-function handle_has_checked_recently($id_code)
-{
-	$last_check_test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>substr('!'.$id_code,0,255)));
-	if ((is_null($last_check_test)) || (substr($last_check_test,0,1)!='!') || (intval(substr($last_check_test,1))+60*60*24*30<time())) // only re-checks every 30 days
-	{
-		// Show when it was last tested
-		$GLOBALS['SITE_DB']->query_delete('url_title_cache',array('t_url'=>substr('!'.$id_code,0,255)),'',1); // To make sure it can insert below
-		$GLOBALS['SITE_DB']->query_insert('url_title_cache',array('t_title'=>'!'.strval(time()),'t_url'=>substr('!'.$id_code,0,255)),false,true); // To stop weird race-like conditions
-
-		return false;
-	}
-
-	return true;
-}
-
-/**
- * A custom random number seed generator. It returns a random number seed.
- *
- * @return integer		A random seed
- */
-function make_seed()
-{
-	list($usec,$sec)=explode(' ', microtime(false));
-	$u=produce_salt();
-	return intval(floatval($sec)*floatval($usec))+ord(substr($u,0,1))+(ord(substr($u,1,2))<<8);
 }
 
 /**
@@ -2026,25 +1952,13 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
  */
 function sync_file($filename)
 {
-	global $FILE_BASE,$_MODIFIED_FILES,$_CREATED_FILES;
+	global $FILE_BASE,$_MODIFIED_FILES;
 	static $has_sync_script=NULL;
 	if (is_null($has_sync_script)) $has_sync_script=is_file($FILE_BASE.'/data_custom/sync_script.php');
 	if ((!$has_sync_script) && (!isset($_MODIFIED_FILES))) return;
-	if (substr($filename,0,strlen($FILE_BASE)+1)==$FILE_BASE.'/')
-	{
-		$filename=substr($filename,strlen($FILE_BASE)+1);
-	}
-	if ($has_sync_script)
-	{
-		require_once($FILE_BASE.'/data_custom/sync_script.php');
-		if (function_exists('master__sync_file')) master__sync_file($filename);
-	}
-	if (isset($_MODIFIED_FILES))
-		foreach ($_MODIFIED_FILES as $i=>$x)
-			if (($x==$FILE_BASE.'/'.$filename) || ($x==$filename)) unset($_MODIFIED_FILES[$i]);
-	if (isset($_CREATED_FILES))
-		foreach ($_CREATED_FILES as $i=>$x)
-			if (($x==$FILE_BASE.'/'.$filename) || ($x==$filename)) unset($_CREATED_FILES[$i]);
+
+	require_code('files2');
+	_sync_file($filename);
 }
 
 /**
@@ -2201,59 +2115,3 @@ function will_be_unicode_neutered($data)
 	return true;
 }
 
-/**
- * Convert a unicode character number to a unicode string. Callback for preg_replace.
- *
- * @param  array					Regular expression match array.
- * @return ~string				Converted data (false: could not convert).
- */
-function unichrm_hex($matches)
-{
-	return unichr(hexdec($matches[1]));
-}
-
-/**
- * Convert a unicode character number to a unicode string. Callback for preg_replace.
- *
- * @param  array					Regular expression match array.
- * @return ~string				Converted data (false: could not convert).
- */
-function unichrm($matches)
-{
-	return unichr(intval($matches[1]));
-}
-
-/**
- * Convert a unicode character number to a HTML-entity enabled string, using lower ASCII characters where possible.
- *
- * @param  integer				Character number.
- * @return ~string				Converted data (false: could not convert).
- */
-function unichr($c)
-{
-	if ($c<=0x7F)
-	{
-		return chr($c);
-	} else
-	{
-		return '#&'.strval($c).';';
-	}
-}
-
-/**
- * Should be called when an action happens that results in content submission. Does a spammer check.
- *
- * @param ?string		Check this particular username that has just been supplied (NULL: none)
- * @param ?string		Check this particular email address that has just been supplied (NULL: none)
- */
-function inject_action_spamcheck($username=NULL,$email=NULL)
-{
-	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') && (is_guest()))
-	{
-		require_code('antispam');
-		check_rbls();
-		check_stopforumspam($username,$email);
-	}
-}

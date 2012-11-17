@@ -21,6 +21,7 @@ if (count($files)==0)
 		$dbrows=$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('name'=>$file,'path'=>'/'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'/'));
 		if (!array_key_exists(0,$dbrows)) $description=do_lang_tempcode('NONE_EM'); else $description=make_string_tempcode(get_translated_text($dbrows[0]['description']));
 
+		require_code('files');
 		echo '
 			<tr>
 				<td><a target="_blank" href="'.escape_html($baseurl.'/'.$file).'">'.escape_html($file).'</a></td>

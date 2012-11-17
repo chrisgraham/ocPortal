@@ -66,6 +66,7 @@ class Module_catalogues
 
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'catalogues'));
 
+		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/catalogues',true);
 
 		delete_config_option('catalogues_subcat_narrowin');

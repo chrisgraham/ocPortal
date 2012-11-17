@@ -41,6 +41,32 @@ function init__failure()
 }
 
 /**
+ * Give the user an option to see a stack trace by adding in a link, but only if they have permission
+ */
+function suggest_fatalistic()
+{
+	if ((may_see_stack_dumps()) && (get_param_integer('keep_fatalistic',0)==0) && (running_script('index')))
+	{
+		if (count($_POST)==0)
+		{
+			$stack_trace_url=build_url(array('page'=>'_SELF','keep_fatalistic'=>1),'_SELF',NULL,true);
+			$st=do_lang_tempcode('WARN_TO_STACK_TRACE',escape_html($stack_trace_url->evaluate()));
+		} elseif (count($_FILES)==0)
+		{
+			$stack_trace_url=build_url(array('page'=>'_SELF','keep_fatalistic'=>1),'_SELF',NULL,true);
+			$p=build_keep_post_fields();
+			$st=do_lang_tempcode('WARN_TO_STACK_TRACE_2',escape_html($stack_trace_url->evaluate()),$p->evaluate());
+		} else
+		{
+			$stack_trace_url=build_url(array('page'=>'','keep_fatalistic'=>1),'');
+			$st=do_lang_tempcode('WARN_TO_STACK_TRACE_3',escape_html($stack_trace_url->evaluate()));
+		}
+		require_code('site');
+		attach_message($st,'inform');
+	}
+}
+
+/**
  * Terminate with an error caused by unzipping.
  *
  * @param  integer	The zip error number.
@@ -159,6 +185,7 @@ function improperly_filled_in_post($name)
 
 	if ((count($_POST)==0) && (get_option('user_postsize_errors')=='1'))
 	{
+		require_code('files');
 		$upload_max_filesize=(ini_get('upload_max_filesize')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('upload_max_filesize')));
 		$post_max_size=(ini_get('post_max_size')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('post_max_size')));
 		warn_exit(do_lang_tempcode((get_param_integer('uploading',0)==1)?'SHOULD_HAVE_BEEN_POSTED_FILE_ERROR':'SHOULD_HAVE_BEEN_POSTED',escape_html($name),escape_html($post_max_size),escape_html($upload_max_filesize)));

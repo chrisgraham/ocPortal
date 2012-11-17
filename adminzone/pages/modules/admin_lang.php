@@ -56,6 +56,8 @@ class Module_admin_lang
 	 */
 	function uninstall()
 	{
+		require_code('files');
+
 		$langs=find_all_langs(true);
 		foreach (array_keys($langs) as $lang)
 		{
@@ -608,6 +610,7 @@ msgstr ""
 		}
 		$lang_file=get_param('lang_file');
 		if (!file_exists($map_b)) $map_b=$map_a;
+		require_code('files');
 		$map=better_parse_ini_file($map_b);
 		$title=get_screen_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(array_key_exists($lang,$map)?$map[$lang]:$lang)));
 

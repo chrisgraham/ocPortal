@@ -389,6 +389,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_
 function _get_all_image_ids_type(&$ids,$dir,$type,$recurse,$dirs_only=false)
 {
 	require_code('images');
+	require_code('files');
 
 	$_dir=@opendir($dir);
 	if ($_dir!==false)
@@ -453,6 +454,7 @@ function get_image_paths($base_url,$base_path)
 	$out=array();
 
 	require_code('images');
+	require_code('files');
 
 	$handle=@opendir($base_path);
 	if ($handle!==false)
@@ -495,6 +497,7 @@ function get_all_image_codes($base_path,$search_under,$recurse=true)
 	$out=array();
 
 	require_code('images');
+	require_code('files');
 
 	if (!file_exists($base_path.'/'.$search_under)) return array();
 	$handle=@opendir($base_path.'/'.$search_under);

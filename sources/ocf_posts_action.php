@@ -106,7 +106,11 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 {
 	if (is_null($poster)) $poster=get_member();
 
-	if (function_exists('inject_action_spamcheck')) inject_action_spamcheck($poster_name_if_guest,get_param('email',NULL));
+	if (!running_script('install'))
+	{
+		require_code('antispam');
+		inject_action_spamcheck($poster_name_if_guest,get_param('email',NULL));
+	}
 
 	if ($check_permissions)
 	{

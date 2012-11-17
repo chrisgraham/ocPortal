@@ -187,6 +187,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 						attach_message(do_lang_tempcode('TOO_MANY_FILES_TO_EXTRACT'),'warn');
 					} else
 					{
+						require_code('files');
+
 						foreach ($dir as $entry)
 						{
 							$_file=preg_replace('#\..*\.#','.',basename($entry['path']));

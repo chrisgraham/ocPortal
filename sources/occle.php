@@ -1318,6 +1318,8 @@ class virtual_bash
 	 */
 	function _find_script_file($script_name,$dir=NULL)
 	{
+		require_code('files');
+
 		if (is_null($dir)) $dir=get_custom_file_base().'/data/modules/admin_occle/';
 		$dh=@opendir($dir);
 		if ($dh!==false)

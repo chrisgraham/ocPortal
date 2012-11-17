@@ -94,7 +94,7 @@ class Hook_raw
 
 		if ((is_dir($path)) && (file_exists($path.'/'.$dir_name)) && (is_writable_wrap($path.'/'.$dir_name)))
 		{
-			require_code('files2');
+			require_code('files');
 			deldir_contents($path.'/'.$dir_name);
 			$ret=@rmdir($path.'/'.$dir_name) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path.'/'.$dir_name)));
 			sync_file($path.'/'.$dir_name);

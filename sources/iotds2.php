@@ -125,7 +125,10 @@ function set_iotd($id)
 
 	log_it('CHOOSE_IOTD',strval($id),$title);
 	if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
+	{
+		require_code('activities');
 		syndicate_described_activity('iotds:ACTIVITY_CHOOSE_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+	}
 
 	if ((!is_guest($submitter)) && (addon_installed('points')))
 	{

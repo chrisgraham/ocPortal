@@ -315,6 +315,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 	require_code('mime_types');
 	$mime_type=get_mime_type($extension);
 
+	require_code('files');
 	$attachment['CLEAN_SIZE']=clean_file_size($attachment['a_file_size']);
 	$attachment['MIME_TYPE']=$mime_type;
 	$attachment['PASS_ID']=(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id;

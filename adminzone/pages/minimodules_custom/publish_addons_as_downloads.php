@@ -124,6 +124,7 @@ if (get_param_integer('import_themes',1)==1)
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$addon_path));
 			if (is_null($test))
 			{
+				require_code('files');
 				require_code('tar');
 				$tar=tar_open($from,'rb');
 				$info_file=tar_get_file($tar,'addon.inf',true);

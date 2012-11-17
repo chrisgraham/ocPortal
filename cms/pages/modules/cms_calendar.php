@@ -470,6 +470,7 @@ class Module_cms_calendar extends standard_crud_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
 
 		return array($fields,$hidden,NULL,NULL,true,NULL,$fields2);
@@ -764,6 +765,7 @@ class Module_cms_calendar extends standard_crud_module
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
+				require_code('activities');
 				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 			}
 		}
@@ -901,6 +903,7 @@ class Module_cms_calendar extends standard_crud_module
 
 				$submitter=$GLOBALS['SITE_DB']->query_select_value('calendar_events','submitter',array('id'=>$id));
 
+				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CALENDAR_EVENT':'calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,$submitter,true);
 			}
 		}

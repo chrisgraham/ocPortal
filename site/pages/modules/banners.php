@@ -65,6 +65,7 @@ class Module_banners
 		delete_privilege('view_anyones_banner_stats');
 		delete_privilege('banner_free');
 
+		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/banners',true);
 
 		//delete_menu_item_simple('_SEARCH:donate');

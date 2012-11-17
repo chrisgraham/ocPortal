@@ -47,17 +47,6 @@ function init__files()
 }
 
 /**
- * Find whether we can get away with natural file access, not messing with AFMs, world-writability, etc.
- *
- * @return boolean		Whether we have this
- */
-function is_suexec_like()
-{
-	return (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'),'posix_getuid')===false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid()==@fileowner(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))))
-	|| (is_writable_wrap(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))));
-}
-
-/**
  * Get the number of bytes for a PHP config option. Code taken from the PHP manual.
  *
  * @param  string			PHP config option value.
@@ -121,19 +110,6 @@ function clean_file_size($bytes)
 	if (floatval($bytes)>2.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0))).' Kb';
 	if (floatval($bytes)>1024.0) return float_format(round(floatval($bytes)/1024.0,2)).' Kb';
 	return strval($bytes).' Bytes';
-}
-
-/**
- * Get the file extension of the specified file. It returns without a dot.
- *
- * @param  string			The filename
- * @return string			The filename extension (no dot)
- */
-function get_file_extension($name)
-{
-	$dot_pos=strrpos($name,'.');
-	if ($dot_pos===false) return '';
-	return strtolower(substr($name,$dot_pos+1));
 }
 
 /**
@@ -524,58 +500,5 @@ function deldir_contents($dir,$default_preserve=false,$just_files=false)
 {
 	require_code('files2');
 	_deldir_contents($dir,$default_preserve,$just_files);
-}
-
-/**
- * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions
- *
- * @param  PATH			The full pathname to the file/directory
- * @param  integer		The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
- */
-function fix_permissions($path,$perms=0666) // We call this function assuming we are giving world permissions
-{
-	// If the file user is different to the FTP user, we need to make it world writeable
-	if ((!is_suexec_like()) || (ocp_srv('REQUEST_METHOD')==''))
-	{
-		@chmod($path,$perms);
-	} else // Otherwise we do not
-	{
-		if ($perms==0666) @chmod($path,0644);
-		elseif ($perms==0777) @chmod($path,0755);
-		else @chmod($path,$perms);
-	}
-
-	global $_CREATED_FILES; // From ocProducts PHP version, for development testing
-	if (isset($_CREATED_FILES))
-		foreach ($_CREATED_FILES as $i=>$x)
-			if ($x==$path) unset($_CREATED_FILES[$i]);
-}
-
-/**
- * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
- *
- * @param  URLPATH		The URL to download
- * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
- * @range  1 max
- * @param  boolean		Whether to throw an ocPortal error, on error
- * @param  boolean		Whether to block redirects (returns NULL when found)
- * @param  string			The user-agent to identify as
- * @param  ?array			An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
- * @param  ?array			An optional array of cookies to send (NULL: none)
- * @param  ?string		'accept' header value (NULL: don't pass one)
- * @param  ?string		'accept-charset' header value (NULL: don't pass one)
- * @param  ?string		'accept-language' header value (NULL: don't pass one)
- * @param  ?resource		File handle to write to (NULL: do not do that)
- * @param  ?string		The HTTP referer (NULL: none)
- * @param  ?array			A pair: authentication username and password (NULL: none)
- * @param  float			The timeout
- * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
- * @param  ?array			Files to send. Map between field to file path (NULL: none)
- * @return ?string		The data downloaded (NULL: error)
- */
-function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
-{
-	require_code('files2');
-	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$is_xml,$files);
 }
 

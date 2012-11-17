@@ -504,6 +504,8 @@ class Module_admin_newsletter extends standard_crud_module
 
 		require_lang('ocf');
 
+		require_code('crypt');
+
 		// Select newsletter
 		if (is_null($id))
 		{

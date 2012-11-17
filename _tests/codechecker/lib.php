@@ -82,6 +82,8 @@ function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 	require_once($OCPORTAL_PATH.'/sources/files.php');
 	init__files();
 
+	require_code('files');
+
 	$out=array();
 	$_dir=($dir=='')?'.':$dir;
 	$dh=opendir($_dir);

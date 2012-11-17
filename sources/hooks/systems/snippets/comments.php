@@ -33,6 +33,7 @@ class Hook_comments
 		$serialized_options=get_param('serialized_options',false,true);
 		$hash=get_param('hash');
 
+		require_code('crypt');
 		if (best_hash($serialized_options,get_site_salt())!=$hash) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		list($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews)=unserialize($serialized_options);

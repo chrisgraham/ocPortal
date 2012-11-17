@@ -19,6 +19,149 @@
  */
 
 /**
+ * Find whether to run in multi-lang mode.
+ *
+ * @return boolean		Whether to run in multi-lang mode.
+ */
+function _multi_lang()
+{
+	global $MULTI_LANG_CACHE;
+
+	$_dir=opendir(get_file_base().'/lang/');
+	$_langs=array();
+	while (false!==($file=readdir($_dir)))
+	{
+		if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini'))
+		{
+			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
+		}
+	}
+	closedir($_dir);
+	if (!in_safe_mode())
+	{
+		$_dir=@opendir(get_custom_file_base().'/lang_custom/');
+		if ($_dir!==false)
+		{
+			while (false!==($file=readdir($_dir)))
+			{
+				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini') && (!isset($_langs[$file])))
+				{
+					if (is_dir(get_custom_file_base().'/lang_custom/'.$file)) $_langs[$file]='lang_custom';
+				}
+			}
+			closedir($_dir);
+		}
+		if (get_custom_file_base()!=get_file_base())
+		{
+			$_dir=opendir(get_file_base().'/lang_custom/');
+			while (false!==($file=readdir($_dir)))
+			{
+				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini') && (!isset($_langs[$file])))
+				{
+					if (is_dir(get_file_base().'/lang_custom/'.$file)) $_langs[$file]='lang_custom';
+				}
+			}
+			closedir($_dir);
+		}
+	}	
+
+	foreach ($_langs as $lang=>$dir)
+	{
+		if (/*optimisation*/is_file((($dir=='lang_custom')?get_custom_file_base():get_file_base()).'/'.$dir.'/'.$lang.'/global.ini'))
+		{
+			$MULTI_LANG_CACHE=true;
+			break;
+		}
+
+		$_dir2=@opendir((($dir=='lang_custom')?get_custom_file_base():get_file_base()).'/'.$dir.'/'.$lang);
+		if ($_dir2!==false)
+		{
+			while (false!==($file2=readdir($_dir2)))
+			{
+				if ((substr($file2,-4)=='.ini') || (substr($file2,-3)=='.po'))
+				{
+					$MULTI_LANG_CACHE=true;
+					break;
+				}
+			}
+		}
+	}
+
+	return $MULTI_LANG_CACHE;
+}
+
+/**
+ * Get the default value of a config option.
+ *
+ * @param  array			The option row from the database
+ * @param  ID_TEXT		The type of the option
+ * @param  ID_TEXT		The name of the option
+ * @return SHORT_TEXT	The value
+ */
+function _get_default_option($option,$type,$name)
+{
+	global $GET_OPTION_LOOP;
+
+	if (($type=='transline') || ($type=='transtext'))
+	{
+		if (defined('HIPHOP_PHP'))
+		{
+			require_code('hooks/systems/config_default/'.$name);
+			$hook=object_factory('Hook_config_default_'.$name);
+			$option['config_value_translated']=$hook->get_default();
+		} else
+		{
+			if (!isset($option['eval']))
+			{
+				global $SITE_INFO;
+				$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
+				$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
+				$option=&$CONFIG_OPTIONS_CACHE[$name];
+			}
+			$option['config_value_translated']=eval($option['eval'].';');
+			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
+			if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+			{
+				require_code('config2');
+				set_option($name,$option['config_value_translated']);
+			}
+		}
+		if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
+		$GET_OPTION_LOOP=0;
+		return $option['config_value_translated'];
+	}
+	if (defined('HIPHOP_PHP'))
+	{
+		require_code('hooks/systems/config_default/'.$name);
+		$hook=object_factory('Hook_config_default_'.$name);
+		$option['config_value']=$hook->get_default();
+	} else
+	{
+		if (!isset($option['eval']))
+		{
+			global $SITE_INFO;
+			$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
+			$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
+			$option=&$CONFIG_OPTIONS_CACHE[$name];
+		}
+		if ((function_exists('do_lang')) || (strpos($option['eval'],'lang')===false)) // Something in set_option may need do_lang
+		{
+			$option['config_value']=eval($option['eval'].';');
+			if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+			{
+				require_code('config2');
+				set_option($name,$option['config_value']);
+			}
+		}
+	}
+	if (is_object($option['config_value'])) $option['config_value']=$option['config_value']->evaluate(); elseif (is_integer($option['config_value'])) $option['config_value']=strval($option['config_value']);
+
+	$GET_OPTION_LOOP=0;
+	$option['c_set']=1;
+	return $option['config_value'];
+}
+
+/**
  * An option has dissappeared somehow - find it via searching our code-base for it's install code. It doesn't get returned, just loaded up. This function will produce a fatal error if we cannot find it.
  *
  * @param  ID_TEXT		The name of the value

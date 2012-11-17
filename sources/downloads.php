@@ -62,6 +62,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 {
 	require_lang('downloads');
 	require_css('downloads');
+	require_code('files');
 
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 

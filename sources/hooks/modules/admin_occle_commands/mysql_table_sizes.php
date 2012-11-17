@@ -33,6 +33,8 @@ class Hook_mysql_table_sizes
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('mysql_table_sizes',array('h'),array(true,true)),'','');
 		else
 		{
+			require_code('files');
+
 			$db=$GLOBALS['SITE_DB'];
 			require_code('files');
 			$sizes=list_to_map('Name',$db->query('SHOW TABLE STATUS WHERE Name LIKE \''.db_encode_like($db->get_table_prefix().'%').'\''));

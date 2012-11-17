@@ -229,6 +229,7 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/sites/'.filter_naughty($codename);
 	if (file_exists($path))
 	{
+		require_code('files');
 		deldir_contents($path);
 	} else
 	{
@@ -646,7 +647,7 @@ function myocp_delete_site($server,$codename,$bulk=false)
 		$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/sites/'.filter_naughty($codename);
 		if (file_exists($path))
 		{
-			require_code('files2');
+			require_code('files');
 			deldir_contents($path);
 			rmdir($path);
 		}

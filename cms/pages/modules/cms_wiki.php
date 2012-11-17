@@ -311,6 +311,7 @@ class Module_cms_wiki
 		$posting_form=get_posting_form(do_lang('SAVE'),$description,$edit_url,new ocp_tempcode(),$fields,do_lang_tempcode('PAGE_TEXT'),'',$fields2,$_description,NULL,NULL,false);
 
 		// Revision history
+		require_code('files');
 		$revision_history=new ocp_tempcode();
 		$revisions=$GLOBALS['SITE_DB']->query_select('translate_history',array('*'),array('lang_id'=>$page['description']),'ORDER BY action_time DESC');
 		$last_description=$description;

@@ -232,6 +232,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$map_a=get_file_base().'/lang/langs.ini';
 		$map_b=get_custom_file_base().'/lang_custom/langs.ini';
 		if (!file_exists($map_b)) $map_b=$map_a;
+		require_code('files');
 		$map=better_parse_ini_file($map_b);
 
 		$lang_name=user_lang();
@@ -275,6 +276,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$map_a=get_file_base().'/lang/langs.ini';
 		$map_b=get_custom_file_base().'/lang_custom/langs.ini';
 		if (!file_exists($map_b)) $map_b=$map_a;
+		require_code('files');
 		$map=better_parse_ini_file($map_b);
 
 		$lang_name=user_lang();

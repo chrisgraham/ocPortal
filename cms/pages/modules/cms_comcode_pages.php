@@ -75,6 +75,7 @@ class Module_cms_comcode_pages
 		delete_config_option('points_COMCODE_PAGE_ADD');
 
 		/*$zones=find_all_zones(true);		We don't want to get rid of on-disk data when reinstalling
+		require_code('files');
 		$langs=find_all_langs(true);
 		foreach ($zones as $zone)
 		{
@@ -143,6 +144,7 @@ class Module_cms_comcode_pages
 		require_code('zones2');
 		require_code('zones3');
 		require_lang('zones');
+		require_code('files');
 
 		$type=get_param('type','misc');
 
@@ -914,6 +916,7 @@ class Module_cms_comcode_pages
 		}
 
 		$validated=post_param_integer('validated',0);
+		require_code('antispam');
 		inject_action_spamcheck();
 		if (!has_privilege(get_member(),'bypass_validation_highrange_content')) $validated=0;
 		$parent_page=post_param('parent_page','');

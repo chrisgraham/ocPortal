@@ -1056,6 +1056,7 @@ class Module_wiki
 		// Do it
 		if ($mode=='post')
 		{
+			require_code('antispam');
 			inject_action_spamcheck();
 			if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$id)))
 				$validated=0;

@@ -34,6 +34,8 @@ class standard_dir_files_test_set extends ocp_test_case
 	{
 		$contents=0;
 
+		require_code('files');
+
 		if (($dh=opendir($dir))!==false)
 		{
 			while (($file=readdir($dh))!==false)

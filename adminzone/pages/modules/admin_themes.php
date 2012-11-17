@@ -52,6 +52,7 @@ class Module_admin_themes
 		delete_config_option('templates_store_revisions');
 		delete_config_option('templates_number_revisions_show');
 
+		require_code('files');
 		$langs=find_all_langs(true);
 		foreach (array_keys($langs) as $lang)
 		{
@@ -127,6 +128,7 @@ class Module_admin_themes
 		require_code('view_modes');
 		require_code('themes2');
 		require_lang('zones');
+		require_code('files');
 
 		require_css('themes_editor');
 

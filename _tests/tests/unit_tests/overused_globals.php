@@ -25,6 +25,7 @@ class overused_globals_test_set extends ocp_test_case
 		$documented_globals=array();
 		$sanctified_globals=array();
 
+		require_code('files');
 		require_code('files2');
 		$files=get_directory_contents(get_file_base(),'',true);
 		foreach ($files as $file)

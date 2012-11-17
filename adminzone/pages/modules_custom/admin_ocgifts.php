@@ -128,6 +128,7 @@ class Module_admin_ocgifts extends standard_crud_module
 		$GLOBALS['SITE_DB']->drop_table_if_exists('ocgifts');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('members_gifts');
 
+		//require_code('files');
 		//deldir_contents(get_custom_file_base().'/uploads/ocgifts_addon',true);
 	}
 

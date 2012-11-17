@@ -639,6 +639,7 @@ function test_fail_php_type_check($type,$function_name,$name,$value,$echo=false)
 			break;
 		case 'LANGUAGE_NAME':
 			global $LANG_TD_MAP;
+			require_code('files');
 			if (is_null($LANG_TD_MAP)) $LANG_TD_MAP=better_parse_ini_file(get_file_base().'/lang/langs.ini');
 			if ((!is_string($value)) || (!array_key_exists($value,$LANG_TD_MAP))) _fail_php_type_check($type,$function_name,$name,$value,$echo);
 			break;

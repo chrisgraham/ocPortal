@@ -248,6 +248,7 @@ function _symbol_thumbnail($param)
  */
 function get_max_image_size()
 {
+	require_code('files');
 	$a=php_return_bytes(ini_get('upload_max_filesize'));
 	$b=php_return_bytes(ini_get('post_max_size'));
 	$c=intval(get_option('max_download_size'))*1024;

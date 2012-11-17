@@ -42,6 +42,8 @@ class Hook_directory_sizes
 			}
 			asort($sizes);
 
+			require_code('files');
+
 			$out='';
 			$out.='<table class="results_table"><thead><tr><th>'.do_lang('NAME').'</th><th>'.do_lang('SIZE').'</th></tr></thead>';
 			foreach ($sizes as $key=>$val)

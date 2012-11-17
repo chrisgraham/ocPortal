@@ -32,6 +32,23 @@ function init__antispam()
 }
 
 /**
+ * Should be called when an action happens that results in content submission. Does a spammer check.
+ *
+ * @param ?string		Check this particular username that has just been supplied (NULL: none)
+ * @param ?string		Check this particular email address that has just been supplied (NULL: none)
+ */
+function inject_action_spamcheck($username=NULL,$email=NULL)
+{
+	// Check RBL's/stopforumspam
+	$spam_check_level=get_option('spam_check_level',true);
+	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') && (is_guest()))
+	{
+		check_rbls();
+		check_stopforumspam($username,$email);
+	}
+}
+
+/**
  * Check RBLs to see if we need to block this user.
  *
  * @param boolean		Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)

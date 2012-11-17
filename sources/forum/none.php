@@ -847,6 +847,7 @@ class forum_driver_none extends forum_driver_base
 			return $out;
 		}
 
+		require_code('crypt');
 		if (!check_master_password($password_raw))
 		{
 			$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));

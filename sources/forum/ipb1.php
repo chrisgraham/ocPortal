@@ -434,6 +434,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		$def='';
 
 		// Load in remapper
+		require_code('files');
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
 		if (!$skip_member_specific)

@@ -102,6 +102,7 @@ class Hook_cron_ocf_welcome_emails
 						if ($newsletter_style)
 						{
 							$sendid='n'.strval($member['id']);
+							require_code('crypt');
 							$hash=best_hash($member['the_password'],'xunsub');
 						} else
 						{

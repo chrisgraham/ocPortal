@@ -966,6 +966,7 @@ class forum_driver_aef extends forum_driver_base
 		$def='';
 
 		// Load in remapper
+		require_code('files');
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
 		// Work out

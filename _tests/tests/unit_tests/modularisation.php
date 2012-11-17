@@ -136,6 +136,8 @@ class modularisation_test_set extends ocp_test_case
 	{
 		global $GFILE_ARRAY;
 
+		require_code('files');
+
 		$full_dir=get_file_base().'/'.$dir;
 		$dh=opendir($full_dir);
 		while (($file=readdir($dh))!==false)

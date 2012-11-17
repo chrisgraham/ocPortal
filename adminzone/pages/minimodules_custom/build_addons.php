@@ -120,6 +120,7 @@ if (get_param_integer('export_addons',1)==1)
 if (get_param_integer('export_themes',0)==1)
 {
 	require_code('themes2');
+	require_code('files');
 	require_code('files2');
 	$themes=find_all_themes();
 

@@ -27,6 +27,8 @@
  */
 function zip_scan_folder($path,$subpath='')
 {
+	require_code('files');
+
 	$_full=($path=='')?$subpath:($path.'/'.$subpath);
 	if ($_full=='') $_full='.';
 	$info=array();

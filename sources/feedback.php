@@ -165,6 +165,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 	if (is_object($content_url)) $content_url=$content_url->evaluate();
 
 	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum));
+	require_code('crypt');
 	$hash=best_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
 
 	// AJAX support
@@ -190,6 +191,7 @@ function post_comment_script()
 
 	// Check security
 	$hash=post_param('hash');
+	require_code('crypt');
 	if (best_hash($options,get_site_salt())!=$hash)
 	{
 		header('Content-Type: text/plain; charset='.get_charset());
@@ -568,6 +570,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
+			require_code('activities');
 			if ($content_title=='')
 			{
 				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
@@ -802,6 +805,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';
+			require_code('activities');
 			if ($content_title=='')
 			{
 				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
@@ -976,6 +980,7 @@ function actualise_post_trackback($allow_trackbacks,$content_type,$content_id)
 {
 	if ((get_option('is_on_trackbacks')=='0') || (!$allow_trackbacks)) return false;
 
+	require_code('antispam');
 	inject_action_spamcheck();
 
 	$url=either_param('url',NULL);

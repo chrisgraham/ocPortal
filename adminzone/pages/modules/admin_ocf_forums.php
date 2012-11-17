@@ -513,7 +513,10 @@ class Module_admin_ocf_forums extends standard_crud_module
 		$this->set_permissions($id);
 
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',$id)))
+		{
+			require_code('activities');
 			syndicate_described_activity('ocf:ACTIVITY_ADD_FORUM',$name,'','','_SEARCH:forumview:misc:'.$id,'','','ocf_forum');
+		}
 
 		return $id;
 	}

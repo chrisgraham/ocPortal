@@ -120,6 +120,83 @@ function init__global3()
 }
 
 /**
+ * Get the file extension of the specified file. It returns without a dot.
+ *
+ * @param  string			The filename
+ * @return string			The filename extension (no dot)
+ */
+function get_file_extension($name)
+{
+	$dot_pos=strrpos($name,'.');
+	if ($dot_pos===false) return '';
+	return strtolower(substr($name,$dot_pos+1));
+}
+
+/**
+ * Find whether we can get away with natural file access, not messing with AFMs, world-writability, etc.
+ *
+ * @return boolean		Whether we have this
+ */
+function is_suexec_like()
+{
+	return (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'),'posix_getuid')===false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid()==@fileowner(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))))
+	|| (is_writable_wrap(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))));
+}
+
+/**
+ * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions
+ *
+ * @param  PATH			The full pathname to the file/directory
+ * @param  integer		The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
+ */
+function fix_permissions($path,$perms=0666) // We call this function assuming we are giving world permissions
+{
+	// If the file user is different to the FTP user, we need to make it world writeable
+	if ((!is_suexec_like()) || (ocp_srv('REQUEST_METHOD')==''))
+	{
+		@chmod($path,$perms);
+	} else // Otherwise we do not
+	{
+		if ($perms==0666) @chmod($path,0644);
+		elseif ($perms==0777) @chmod($path,0755);
+		else @chmod($path,$perms);
+	}
+
+	global $_CREATED_FILES; // From ocProducts PHP version, for development testing
+	if (isset($_CREATED_FILES))
+		foreach ($_CREATED_FILES as $i=>$x)
+			if ($x==$path) unset($_CREATED_FILES[$i]);
+}
+
+/**
+ * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
+ *
+ * @param  URLPATH		The URL to download
+ * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
+ * @range  1 max
+ * @param  boolean		Whether to throw an ocPortal error, on error
+ * @param  boolean		Whether to block redirects (returns NULL when found)
+ * @param  string			The user-agent to identify as
+ * @param  ?array			An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
+ * @param  ?array			An optional array of cookies to send (NULL: none)
+ * @param  ?string		'accept' header value (NULL: don't pass one)
+ * @param  ?string		'accept-charset' header value (NULL: don't pass one)
+ * @param  ?string		'accept-language' header value (NULL: don't pass one)
+ * @param  ?resource		File handle to write to (NULL: do not do that)
+ * @param  ?string		The HTTP referer (NULL: none)
+ * @param  ?array			A pair: authentication username and password (NULL: none)
+ * @param  float			The timeout
+ * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
+ * @param  ?array			Files to send. Map between field to file path (NULL: none)
+ * @return ?string		The data downloaded (NULL: error)
+ */
+function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
+{
+	require_code('files2');
+	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$is_xml,$files);
+}
+
+/**
  * Load a fresh output state.
  *
  * @sets_output_state
@@ -598,18 +675,8 @@ function is_writable_wrap($path)
  */
 function intelligent_write_error($path)
 {
-	if (file_exists($path))
-	{
-		warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path)));
-	}
-	elseif (file_exists(dirname($path)))
-	{
-		if (strpos($path,'/templates_cached/')!==false) critical_error('PASSON',do_lang('WRITE_ERROR_CREATE',escape_html($path),escape_html(dirname($path))));
-		warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',escape_html($path),escape_html(dirname($path))));
-	} else
-	{
-		warn_exit(do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY',escape_html(dirname($path)),escape_html(dirname(dirname($path)))));
-	}
+	require_code('files2');
+	_intelligent_write_error($path);
 }
 
 /**
@@ -620,13 +687,8 @@ function intelligent_write_error($path)
  */
 function intelligent_write_error_inline($path)
 {
-	if (file_exists($path))
-		return do_lang_tempcode('WRITE_ERROR',escape_html($path));
-	elseif (file_exists(dirname($path)))
-		return do_lang_tempcode('WRITE_ERROR_CREATE',escape_html($path),escape_html(dirname($path)));
-	else
-		return do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY',escape_html(dirname($path)),escape_html(dirname(dirname($path))));
-	return new ocp_tempcode();
+	require_code('files2');
+	return _intelligent_write_error_inline($path);
 }
 
 /**
@@ -899,6 +961,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 
 	if (get_value('xhtml_strict')==='1')
 	{
+		require_code('global4');
 		$global=make_xhtml_strict($global);
 	}
 
@@ -918,40 +981,8 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
  */
 function ocp_tempnam($prefix)
 {
-	$problem_saving=((ini_get('safe_mode')=='1') || (get_value('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
-	$local_path=get_custom_file_base().'/safe_mode_temp/';
-	$server_path='/tmp/';
-	$tmp_path=$problem_saving?$local_path:$server_path;
-	$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
-	if (($tempnam===false) && (!$problem_saving))
-	{
-		$problem_saving=true;
-		$tempnam=tempnam($local_path,$prefix);
-	}
-	return $tempnam;
-}
-
-/**
- * Take a Tempcode object and run some hackerish code to make it XHTML-strict.
- *
- * @param  object			Tempcode object
- * @return object			Tempcode object (no longer cache safe)
- */
-function make_xhtml_strict($global)
-{
-	$_global=$global->evaluate();
-	$_global=str_replace(
-		'<!DOCTYPE html>',
-		'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
-		$_global);
-	$_global=preg_replace('#(<a\s[^>]*)onclick="([^"]*)"(\s[^>]*)target="_blank"#','${1}onclick="this.target=\'_blank\'; ${2}"${3}',$_global);
-	$_global=preg_replace('#(<a\s[^>]*)target="_blank"(\s[^>]*)onclick="([^"]*)"#','${1}onclick="this.target=\'_blank\'; ${3}"${2}',$_global);
-	$_global=preg_replace('#(<a\s[^>]*)target="_blank"#','${1}onclick="this.target=\'_blank\';"',$_global);
-	$_global=preg_replace('#(<form\s[^>]*)onsubmit="([^"]*)"(\s[^>]*)target="_blank"#','${1}onsubmit="this.target=\'_blank\'; ${2}"${3}',$_global);
-	$_global=preg_replace('#(<form\s[^>]*)target="_blank"(\s[^>]*)onsubmit="([^"]*)"#','${1}onsubmit="this.target=\'_blank\'; ${3}"${2}',$_global);
-	$_global=preg_replace('#(<form\s[^>]*)target="_blank"#','${1}onsubmit="this.target=\'_blank\';"',$_global);
-	$_global=preg_replace('#(<(a|form)\s[^>]*)target="[^"]*"#','${1}',$_global);
-	return make_string_tempcode($_global);
+	require_code('files2');
+	return _ocp_tempnam($prefix);
 }
 
 /**
@@ -1329,29 +1360,6 @@ function cron_installed()
 }
 
 /**
- * Find the country an IP address long is located in
- *
- * @param  ?IP				The IP to geolocate (NULL: current user's IP)
- * @return ?string		The country initials (NULL: unknown)
- */
-function geolocate_ip($ip=NULL)
-{
-	if (is_null($ip)) $ip=get_ip_address();
-
-	if (!addon_installed('stats')) return NULL;
-
-	$long_ip=ip2long($ip);
-	if ($long_ip===false) return NULL; // No IP6 support
-
-	$query='SELECT * FROM '.get_table_prefix().'ip_country WHERE begin_num<='.sprintf('%u',$long_ip).' AND end_num>='.sprintf('%u',$long_ip);
-	$results=$GLOBALS['SITE_DB']->query($query);
-
-	if (!array_key_exists(0,$results)) return NULL;
-	elseif (!is_null($results[0]['country'])) return $results[0]['country'];
-	else return NULL;
-}
-
-/**
  * Compare two IP addresses for potential correlation. Not as simple as equality due to '*' syntax.
  *
  * @param  string			The general IP address that is potentially wildcarded
@@ -1452,76 +1460,6 @@ function log_it($type,$a=NULL,$b=NULL)
 {
 	require_code('global4');
 	_log_it($type,$a,$b);
-}
-
-/**
- * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
- *
- * @param  string			Language string code
- * @param  string			Label 1 (given as a parameter to the language string code)
- * @param  string			Label 2 (given as a parameter to the language string code)
- * @param  string			Label 3 (given as a parameter to the language string code)
- * @param  string			Page link 1
- * @param  string			Page link 2
- * @param  string			Page link 3
- * @param  string			Addon that caused the event
- * @param  BINARY			Whether this post should be public or friends-only
- * @param  ?MEMBER		Member being written for (NULL: current member)
- * @param  boolean		Whether to push this out as a site event if user requested
- * @param  ?MEMBER		Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
- */
-function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL,$sitewide_too=false,$a_also_involving=NULL)
-{
-	if (running_script('install')) return;
-	$hooks=find_all_hooks('systems','activities');
-	foreach (array_keys($hooks) as $hook) // We only expect one actually
-	{
-		require_code('hooks/systems/activities/'.$hook);
-		$ob=object_factory('Activity_'.$hook);
-		if (get_param_integer('keep_debug_notifications',0)==1)
-		{
-			$ob->syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
-		} else
-		{
-			register_shutdown_function(array($ob,'syndicate_described_activity'),$a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
-		}
-	}
-}
-
-/**
- * Detect whether we have external site-wide syndication support somewhere.
- *
- * @return boolean		Whether we do
- */
-function has_external_site_wide_syndication()
-{
-	$hooks=find_all_hooks('systems','activities');
-	$ret=false;
-	foreach (array_keys($hooks) as $hook) // We only expect one actually
-	{
-		require_code('hooks/systems/activities/'.$hook);
-		$ob=object_factory('Activity_'.$hook);
-		$ret=$ret || $ob->has_external_site_wide_syndication();
-	}
-	return $ret;
-}
-
-/**
- * Get syndication field UI.
- *
- * @return tempcode		Syndication fields (or empty)
- */
-function get_syndication_option_fields()
-{
-	$hooks=find_all_hooks('systems','activities');
-	$ret=new ocp_tempcode();
-	foreach (array_keys($hooks) as $hook) // We only expect one actually
-	{
-		require_code('hooks/systems/activities/'.$hook);
-		$ob=object_factory('Activity_'.$hook);
-		$ret->attach($ob->get_syndication_option_fields());
-	}
-	return $ret;
 }
 
 /**
@@ -1730,7 +1668,7 @@ function get_num_users_peak()
  */
 function escape_html($string)
 {
-//	if ($string==='') return $string; // Optimisation
+	//	if ($string==='') return $string; // Optimisation, but doesn't work well
 	if (is_object($string)) return $string;
 
 	/*if ($GLOBALS['XSS_DETECT'])	Useful for debugging
@@ -2177,21 +2115,11 @@ function has_cookies() // Will fail on users first visit, but then will catch on
  */
 function has_js()
 {
-	if (get_param_integer('keep_has_js',0)==1) return true;
-	if (get_param_integer('keep_has_js',NULL)===0) return false;
 	if (!function_exists('get_option')) return true;
 	if (get_option('detect_javascript',true)==='0') return true;
+	if (get_param_integer('keep_has_js',0)==1) return true;
+	if (get_param_integer('keep_has_js',NULL)===0) return false;
 	return ((array_key_exists('js_on',$_COOKIE)) && ($_COOKIE['js_on']=='1'));
-}
-
-/**
- * Get a randomised password.
- *
- * @return string			The randomised password
- */
-function get_rand_password()
-{
-	return substr(uniqid(strval(mt_rand(0,32767)),true),0,10);
 }
 
 /**
@@ -2349,95 +2277,6 @@ function get_zone_default_page($zone_name)
 }
 
 /**
- * Hash something as well as possible. Only use this function if the hash is for short-term use, because long-term we don't know if the best hash function will change or not.
- *
- * @param  SHORT_TEXT	What to hash
- * @param  SHORT_TEXT	Salt
- * @return SHORT_TEXT	Hashed result
- */
-function best_hash($to_hash,$salt)
-{
-	// The crypt implementation is quite complex.
-	// It md5's $to_hash first because crypt is not binary safe and we need to feed in arbitrary data.
-	// It substr's the salt to comply with salt length requirements.
-
-	if ((defined('CRYPT_BLOWFISH')) && (CRYPT_BLOWFISH==1))
-	{
-		$_salt=substr(md5($salt),0,22).'$';
-		return substr(crypt(md5($to_hash),'$2a$07$'.$_salt),strlen($_salt));
-	}
-
-	if ((defined('CRYPT_SHA512')) && (CRYPT_SHA512==1))
-	{
-		$_salt='$6$rounds=5000$'.substr(md5($salt),0,17).'$';
-		return substr(crypt(md5($to_hash),$_salt),strlen($_salt));
-	}
-
-	return sha1($to_hash.$salt);
-}
-
-/**
- * Check the given master password is valid.
- *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
- */
-function check_master_password($password_given)
-{
-	if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
-	{
-		$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
-		unset($GLOBALS['SITE_INFO']['admin_password']);
-	}
-
-	global $SITE_INFO;
-	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
-	$actual_password_hashed=$SITE_INFO['master_password'];
-	$salt='';
-	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
-	{
-		$actual_password_hashed=substr($actual_password_hashed,1);
-		$salt='ocp';
-	}
-	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
-}
-
-/**
- * Get a decent randomised salt.
- *
- * @return ID_TEXT		The salt
- */
-function produce_salt()
-{
-	if ((function_exists('openssl_random_pseudo_bytes')) && (strtoupper(substr(PHP_OS,0,3))!='WIN')/*Implementation on Windows is very slow*/)
-	{
-		$u=substr(md5(openssl_random_pseudo_bytes(13)),0,13); // md5 so that we get nice ASCII characters
-	} else
-	{
-		$u=uniqid('',true);
-	}
-	return $u;
-}
-
-/**
- * Get the site-wide salt. It should be something hard for a hacker to get, so we depend on data gathered both from the database and file-system.
- *
- * @return ID_TEXT		The salt
- */
-function get_site_salt()
-{
-	$site_salt=get_value('site_salt');
-	if ($site_salt===NULL)
-	{
-		$site_salt=produce_salt();
-		set_value('site_salt',$site_salt);
-	}
-	//global $SITE_INFO; This is unstable on some sites, as the array can be prepopulated on the fly
-	//$site_salt.=serialize($SITE_INFO);
-	return md5($site_salt);
-}
-
-/**
  * Turn a boring codename, into a "pretty" title.
  *
  * @param  ID_TEXT		The codename
@@ -2489,146 +2328,6 @@ function propagate_ocselect_pagelink()
 		$_map.=':'.$key.'='.urlencode($val);
 	}
 	return $_map;
-}
-
-/**
- * Get links and details related to a member.
- *
- * @param  MEMBER				A member ID
- * @return array				A tuple: links (Tempcode), details (Tempcode), number of unread inline personal posts or private topics
- */
-function member_personal_links_and_details($member_id)
-{
-	$details=new ocp_tempcode();
-	$links=new ocp_tempcode();
-
-	if (get_forum_type()!='none')
-	{
-		// Post count
-		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_posts')=='1'))
-		{
-			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'371dfee46e8c40b1b109e0350055f8cc','KEY'=>do_lang_tempcode('COUNT_POSTSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_post_count($member_id)))));
-		}
-		// Topic count
-		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_topics')=='1'))
-		{
-			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'2dd2a2d30c4ea7144c74ab058239fb23','KEY'=>do_lang_tempcode('COUNT_TOPICSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topic_count($member_id)))));
-		}
-
-		// Member profile view link
-		if (get_option('ocf_show_profile_link')=='1')
-		{
-			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true);
-			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'2c8648c953c802a9de41c3adeef0e97f','NAME'=>do_lang_tempcode('MY_PROFILE'),'URL'=>$url,'REL'=>'me')));
-		}
-	}
-
-	// Point count
-	if (addon_installed('points'))
-	{
-		require_lang('points');
-		require_code('points');
-		if (get_option('points_show_personal_stats_points_left')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e58e30457576735f3a2618fd7fff','KEY'=>do_lang_tempcode('COUNT_POINTS_LEFT'),'VALUE'=>integer_format(available_points($member_id)))));
-		if (get_option('points_show_personal_stats_points_used')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e58edfdsf735f3a2618fd7fff','KEY'=>do_lang_tempcode('COUNT_POINTS_USED'),'VALUE'=>integer_format(points_used($member_id)))));
-		if (get_option('points_show_personal_stats_total_points')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'3e6183abf9054574c0cd292d25a4fe5c','KEY'=>do_lang_tempcode('COUNT_POINTS_EVER'),'VALUE'=>integer_format(total_points($member_id)))));
-		if (get_option('points_show_personal_stats_gift_points_left')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e5ssd45ddsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_LEFT'),'VALUE'=>integer_format(get_gift_points_to_give($member_id)))));
-		if (get_option('points_show_personal_stats_gift_points_used')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_USED'),'VALUE'=>integer_format(get_gift_points_used($member_id)))));
-	}
-
-	// Links to usergroups
-	if (get_option('ocp_show_personal_usergroup')=='1')
-	{
-		$group_id=$GLOBALS['FORUM_DRIVER']->pname_group($GLOBALS['FORUM_DRIVER']->get_member_row($member_id));
-		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-		if (array_key_exists($group_id,$usergroups))
-		{
-			if (get_forum_type()=='ocf')
-			{
-				$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$group_id),get_module_zone('groups'));
-				$hyperlink=hyperlink($group_url,$usergroups[$group_id],false,true);
-				$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array('_GUID'=>'sas41eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>$hyperlink)));
-			} else
-			{
-				$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'65180134fbc4cf7e227011463d466677','KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>$usergroups[$group_id])));
-			}
-		}
-	}
-
-	// Last visit time
-	if (get_option('ocp_show_personal_last_visit')=='1')
-	{
-		$row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
-		$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
-		$_last_visit=get_timezoned_date($last_visit,false);
-		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
-	}
-
-	// Subscription links
-	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')) && (get_option('ocp_show_personal_sub_links')=='1') && (!has_zone_access($member_id,'adminzone')) && (has_actual_page_access($member_id,'purchase')))
-	{
-		$usergroup_subs=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title','s_group_id','s_cost'),array('s_enabled'=>1));
-		$in_one=false;
-		$members_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
-		foreach ($usergroup_subs as $i=>$sub)
-		{
-			$usergroup_subs[$i]['s_cost']=floatval($sub['s_cost']);
-			if (in_array($sub['s_group_id'],$members_groups))
-			{
-				$in_one=true;
-				break;
-			}
-		}
-		if (!$in_one)
-		{
-			sort_maps_by($usergroup_subs,'s_cost');
-			foreach ($usergroup_subs as $sub)
-			{
-				$url=build_url(array('page'=>'purchase','type'=>'message','product'=>'USERGROUP'.strval($sub['id'])),get_module_zone('purchase'));
-				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'5c4a1f300b37722e587fe2f608f1ee3a','NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title']))),'URL'=>$url)));
-			}
-		}
-	}
-
-	// Admin Zone link
-	if ((get_option('ocp_show_personal_adminzone_link')=='1') && (has_zone_access($member_id,'adminzone')))
-	{
-		$url=build_url(array('page'=>''),'adminzone');
-		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'ae243058f780f9528016f7854763a5fa','ACCESSKEY'=>'I','NAME'=>do_lang_tempcode('ADMIN_ZONE'),'URL'=>$url)));
-	}
-
-	// Conceded mode link
-	if (($GLOBALS['SESSION_CONFIRMED_CACHE']==1) && (get_option('ocp_show_conceded_mode_link')=='1'))
-	{
-		$url=build_url(array('page'=>'login','type'=>'concede','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
-		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'81fa81cfd3130e42996bf72b0e03d8aa','POST'=>true,'NAME'=>do_lang_tempcode('CONCEDED_MODE'),'DESCRIPTION'=>do_lang_tempcode('DESCRIPTION_CONCEDED_MODE'),'URL'=>$url)));
-	}
-
-	// Becomes-invisible link
-	if (get_option('is_on_invisibility')=='1')
-	{
-		if ((array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0))
-		{
-			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
-			$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
-			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'2af618fe39444861c21cf0caec216227','NAME'=>do_lang_tempcode($visible?'INVISIBLE':'BE_VISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
-		}
-	}
-
-	// Logout link
-	$url=build_url(array('page'=>'login','type'=>'logout'),get_module_zone('login'));
-	if (!is_httpauth_login())
-		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array('_GUID'=>'d1caacba272a7ee3bf5b2a758e4e54ee','NAME'=>do_lang_tempcode('LOGOUT'),'URL'=>$url)));
-
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_notifications');
-		list(,$num_unread_pps)=generate_notifications($member_id);
-	} else
-	{
-		$num_unread_pps=0;
-	}
-
-	return array($links,$details,$num_unread_pps);
 }
 
 /**

@@ -155,6 +155,7 @@ function uninstall_ocf()
 	delete_value('ocf_topic_count');
 	delete_value('ocf_post_count');
 
+	require_code('files');
 	deldir_contents(get_custom_file_base().'/uploads/ocf_avatars',true);
 	deldir_contents(get_custom_file_base().'/uploads/ocf_photos',true);
 	deldir_contents(get_custom_file_base().'/uploads/ocf_photos_thumbs',true);

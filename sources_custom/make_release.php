@@ -32,6 +32,8 @@ function make_installers($skip_file_grab=false)
 {
 	global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY,$MAKE_INSTALLERS__TOTAL_DIRS,$MAKE_INSTALLERS__TOTAL_FILES;
 
+	require_code('files');
+
 	// Start output
 	$out='';
 	$out.='<p>An ocPortal build is being compiled and packed up into installation packages.</p>';
@@ -687,6 +689,7 @@ function make_installers($skip_file_grab=false)
 	// We're done, show the result
 
 	$details='';
+	require_code('files');
 	if ($make_quick) $details.='<li>'.$quick_zip.' file size: '.clean_file_size(filesize($quick_zip)).'</li>';
 	if ($make_manual) $details.='<li>'.$manual_zip.' file size: '.clean_file_size(filesize($manual_zip)).'</li>';
 	if ($make_debian) $details.='<li>'.$debian.' file size: '.clean_file_size(filesize($debian)).'</li>';
@@ -785,6 +788,8 @@ function do_build_zip_output($file,$new_output)
 
 function populate_build_files_array($dir='',$pretend_dir='')
 {
+	require_code('files');
+
 	global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY;
 
 	$builds_path=get_builds_path();

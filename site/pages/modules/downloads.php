@@ -73,6 +73,7 @@ class Module_downloads
 		delete_value('num_archive_downloads');
 		delete_value('num_downloads_downloaded');
 
+		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/downloads',true);
 
 		delete_menu_item_simple('_SEARCH:downloads:type=misc');
@@ -330,6 +331,7 @@ class Module_downloads
 		require_code('feedback');
 		require_lang('downloads');
 		require_css('downloads');
+		require_code('files');
 
 		$type=get_param('type','misc');
 

@@ -36,6 +36,7 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
 	if (is_null($lang)) $lang=user_lang();
 	if (is_null($newsletter_id)) $newsletter_id=db_get_first_id();
 
+	require_code('crypt');
 	$password=get_rand_password();
 	$code_confirm=$get_confirm_mail?mt_rand(1,9999999):0;
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter_subscribe','the_level',array('newsletter_id'=>$newsletter_id,'email'=>$email));
@@ -51,6 +52,8 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','email',array('email'=>$email));
 		if (is_null($test))
 		{
+			require_code('crypt');
+
 			$salt=produce_salt();
 			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt),'language'=>$lang),false,true); // race condition
 
@@ -178,6 +181,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 						if ($username=='') $username=do_lang('NEWSLETTER_SUBSCRIBER',get_site_name());
 						$usernames[]=$username;
 						$ids[]='n'.strval($_temp['id']);
+						require_code('crypt');
 						$hashes[]=best_hash($_temp['the_password'],'xunsub');
 					} else
 					{

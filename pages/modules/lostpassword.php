@@ -216,6 +216,7 @@ class Module_lostpassword
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_email_address');
 
+		require_code('crypt');
 		$new_password=get_rand_password();
 
 		// Send password in mail

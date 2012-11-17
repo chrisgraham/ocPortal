@@ -33,6 +33,63 @@ function init__comcode_renderer()
 }
 
 /**
+ * Get the text with all the emoticon codes replaced with the correct XHTML. Emoticons are determined by your forum system.
+ * This is not used in the normal comcode chain - it's for non-comcode things that require emoticons (actually in reality it is used in the Comcode chain if the optimiser sees that a full parse is not needed)
+ *
+ * @param  string			The text to add emoticons to (assumption: that this is XHTML)
+ * @return string			The XHTML with the image-substitution of emoticons
+ */
+function _apply_emoticons($text)
+{
+	$_emoticons=$GLOBALS['FORUM_DRIVER']->find_emoticons(); // Sorted in descending length order
+
+	if ($GLOBALS['XSS_DETECT']) $orig_escaped=ocp_is_escaped($text);
+
+	// Pre-check, optimisation
+	$emoticons=array();
+	foreach ($_emoticons as $code=>$imgcode)
+	{
+		if (strpos($text,$code)!==false)
+			$emoticons[$code]=$imgcode;
+	}
+
+	if (count($emoticons)!=0)
+	{
+		$len=strlen($text);
+		for ($i=0;$i<$len;++$i) // Has to go through in byte order so double application cannot happen (i.e. smiley contains [all or portion of] smiley code somehow)
+		{
+			$char=$text[$i];
+
+			if ($char=='"') // This can cause severe HTML corruption so is a disallowed character
+			{
+				$i++;
+				continue;
+			}
+			foreach ($emoticons as $code=>$imgcode)
+			{
+				$code_len=strlen($code);
+				if (($char==$code[0]) && (substr($text,$i,$code_len)==$code))
+				{
+					$eval=do_emoticon($imgcode);
+					$_eval=$eval->evaluate();
+					if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($_eval);
+					$before=substr($text,0,$i);
+					$after=substr($text,$i+$code_len);
+					if (($before=='') && ($after=='')) $text=$_eval; else $text=$before.$_eval.$after;
+					$len=strlen($text);
+					$i+=strlen($_eval)-1;
+					break;
+				}
+			}
+		}
+
+		if (($GLOBALS['XSS_DETECT']) && ($orig_escaped)) ocp_mark_as_escaped($text);
+	}
+
+	return $text;
+}
+
+/**
  * Check the specified URL for potentially malicious JavaScript/etc. If any is found, the hack attack is logged if in an active post request by the submitting member otherwise filtered out.
  *
  * @param  MEMBER			The member who submitted the URL
@@ -360,6 +417,7 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 	if (strpos($url_full,'{$')!==false) return new ocp_tempcode();
 
 	$temp_tpl=new ocp_tempcode();
+	require_code('global4');
 	if (!handle_has_checked_recently($url_full))
 	{
 		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']++;
@@ -2215,6 +2273,29 @@ function map_keys_to_upper($array)
 		$out[strtoupper($key)]=$val;
 	}
 	return $out;
+}
+
+/**
+ * Find a specified tutorial link identifier.
+ *
+ * @param  ID_TEXT		The name of the value
+ * @return ?SHORT_TEXT	The value (NULL: value not found)
+ */
+function get_tutorial_link($name)
+{
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('tutorial_links','the_value',array('the_name'=>$name));
+}
+
+/**
+ * Set the specified value to the specified tutorial link identifier.
+ *
+ * @param  ID_TEXT		The name of the value
+ * @param  SHORT_TEXT	The value
+ */
+function set_tutorial_link($name,$value)
+{
+	$GLOBALS['SITE_DB']->query_delete('tutorial_links',array('the_name'=>$name),'',1);
+	$GLOBALS['SITE_DB']->query_insert('tutorial_links',array('the_value'=>$value,'the_name'=>$name),false,true); // Allow failure, if there is a race condition
 }
 
 

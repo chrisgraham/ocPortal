@@ -61,6 +61,7 @@ class Module_admin_addons
 		$GLOBALS['SITE_DB']->drop_table_if_exists('addons_files');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('addons_dependencies');
 
+		require_code('files');
 		deldir_contents(get_custom_file_base().'/exports/addons',true);
 	}
 
@@ -584,6 +585,8 @@ class Module_admin_addons
 	{
 		$title=get_screen_title('EXPORT_ADDON');
 
+		require_code('files');
+
 		// Lang packs
 		$url=build_url(array('page'=>'_SELF','type'=>'_addon_export','exp'=>'lang'),'_SELF');
 		$all_langs=find_all_langs();
@@ -664,6 +667,8 @@ class Module_admin_addons
 		$_dir=@opendir($full);
 		if ($_dir!==false)
 		{
+			require_code('files');
+
 			while (false!==($file=readdir($_dir)))
 			{
 				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES))
@@ -705,6 +710,8 @@ class Module_admin_addons
 		$theme=get_param('theme',NULL,true);
 
 		$title=get_screen_title('EXPORT_ADDON');
+
+		require_code('files');
 
 		// Default meta data
 		$name='';

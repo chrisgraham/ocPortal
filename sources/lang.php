@@ -355,6 +355,7 @@ function get_lang_forum_user($member)
 		$_lang=strtoupper($lang);
 		if ((!is_dir(get_file_base().'/lang/'.$_lang)) && (!is_dir(get_custom_file_base().'/lang_custom/'.$_lang)) && (!is_dir(get_file_base().'/lang_custom/'.$_lang)))
 		{
+			require_code('files');
 			$map_file_a=get_file_base().'/lang/map.ini';
 			$map_file_b=get_custom_file_base().'/lang_custom/map.ini';
 			if (!is_file($map_file_b)) $map_file_b=$map_file_a;
@@ -1264,42 +1265,6 @@ function comcode_lang_string($lang_code)
  */
 function choose_language($title,$tip=false,$allow_all_selection=false)
 {
-	if (!multi_lang()) return user_lang();
-
-	$lang=either_param('lang',/*get_param('keep_lang',NULL)*/NULL);
-	if (!is_null($lang)) return filter_naughty($lang);
-
-	if (!$tip)
-	{
-		$text=do_lang_tempcode('CHOOSE_LANG_DESCRIP');
-	} else
-	{
-		global $LANGS_MAP_CACHE;
-		if ($LANGS_MAP_CACHE===NULL)
-		{
-			$map_a=get_file_base().'/lang/langs.ini';
-			$map_b=get_custom_file_base().'/lang_custom/langs.ini';
-			if (!is_file($map_b)) $map_b=$map_a;
-			$LANGS_MAP_CACHE=better_parse_ini_file($map_b);
-		}
-
-		$lang_name=get_site_default_lang();
-		if (array_key_exists($lang_name,$LANGS_MAP_CACHE)) $lang_name=$LANGS_MAP_CACHE[$lang_name];
-
-		$text=do_lang_tempcode('CHOOSE_LANG_DESCRIP_ADD_TO_MAIN_LANG_FIRST',escape_html($lang_name));
-	}
-
-	$langs=new ocp_tempcode();
-	if ($allow_all_selection)
-	{
-		$langs->attach(form_input_list_entry('',false,do_lang_tempcode('_ALL')));
-	}
-	$langs->attach(nice_get_langs());
-	require_code('form_templates');
-	$fields=form_input_list(do_lang_tempcode('LANGUAGE'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),'lang',$langs,NULL,true);
-
-	$hidden=build_keep_post_fields();
-	$url=get_self_url();
-
-	return do_template('FORM_SCREEN',array('_GUID'=>'1a2823d450237aa299c095bf9c689a2a','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'TEXT'=>$text));
+	require_code('lang3');
+	return _choose_language($title,$tip,$allow_all_selection);
 }

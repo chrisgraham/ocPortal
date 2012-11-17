@@ -220,6 +220,7 @@ class Module_sites
 		$url=find_script('dload',false,1).'?id='.strval($id).$keep->evaluate();
 		require_code('version2');
 		$version=get_version_dotted__from_anything($myrow['text_original']);
+		require_code('files');
 		$filesize=clean_file_size($myrow['file_size']);
 
 		if (!is_null($version_must_be_newer_than))

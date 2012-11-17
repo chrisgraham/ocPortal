@@ -1330,6 +1330,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'GEOLOCATE':
+				require_code('global4');
 				$value=geolocate_ip(isset($param[0])?$param[0]:NULL);
 				break;
 

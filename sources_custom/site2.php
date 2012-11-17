@@ -57,7 +57,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 			$as_admin=false; // Will only have admin privileges if $page_submitter has them
 			$page_submitter=$comcode_page_row['p_submitter'];
 		}
-
+		if (is_null($page_submitter)) $page_submitter=get_member();
 
 		// Parse and work out how to add
 		$lang=user_lang();

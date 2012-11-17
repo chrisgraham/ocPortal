@@ -61,6 +61,8 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 	global $THEME_WIZARD_IMAGES_CACHE;
 	if (isset($THEME_WIZARD_IMAGES_CACHE[$theme])) return;
 
+	require_code('files');
+
 	$map=array();
 	if ($theme!='default')
 	{
@@ -151,6 +153,7 @@ function find_theme_seed($theme,$no_easy_anchor=false)
 	$ini_path=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini';
 	if (is_file($ini_path))
 	{
+		require_code('files');
 		$map=better_parse_ini_file($ini_path);
 	} else
 	{
@@ -267,6 +270,7 @@ function find_theme_image_themewizard_preview($id)
 function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template')
 {
 	require_code('character_sets');
+	require_code('files');
 
 	if (is_null($theme))
 	{

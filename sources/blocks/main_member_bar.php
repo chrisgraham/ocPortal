@@ -68,6 +68,7 @@ class Block_main_member_bar
 			$max_avatar_height=ocf_get_member_best_group_property($member_id,'max_avatar_height');
 
 			// Misc (shared with side_personal_stats block)
+			require_code('global4');
 			list($links,$details,$num_unread_pps)=member_personal_links_and_details($member_id);
 
 			// Any unread PT-PPs?

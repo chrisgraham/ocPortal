@@ -264,6 +264,7 @@ function page_not_found($codename,$zone)
 	$_did_mean=array_pop($did_mean);
 	if ($_did_mean=='') $_did_mean=NULL;
 
+	require_code('global4');
 	if ((ocp_srv('HTTP_REFERER')!='') && (!handle_has_checked_recently('request-'.$zone.':'.$codename)))
 	{
 		require_code('failure');
@@ -337,6 +338,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 		$as_admin=false; // Will only have admin privileges if $page_submitter has them
 		$page_submitter=$comcode_page_row['p_submitter'];
 	}
+	if (is_null($page_submitter)) $page_submitter=get_member();
 
 	// Parse and work out how to add
 	$lang=user_lang();

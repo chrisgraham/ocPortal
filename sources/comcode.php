@@ -89,60 +89,16 @@ function html_to_comcode($html)
 }
 
 /**
- * Get the text with all the smilie codes replaced with the correct XHTML. Smiles are determined by your forum system.
- * This is not used in the normal comcode chain - it's for non-comcode things that require smilies (actually in reality it is used in the Comcode chain if the optimiser sees that a full parse is not needed)
+ * Get the text with all the emoticon codes replaced with the correct XHTML. Emoticons are determined by your forum system.
+ * This is not used in the normal comcode chain - it's for non-comcode things that require emoticons (actually in reality it is used in the Comcode chain if the optimiser sees that a full parse is not needed)
  *
- * @param  string			The text to add smilies to (assumption: that this is XHTML)
- * @return string			The XHTML with the image-substitution of smilies
+ * @param  string			The text to add emoticons to (assumption: that this is XHTML)
+ * @return string			The XHTML with the image-substitution of emoticons
  */
 function apply_emoticons($text)
 {
-	$_smilies=$GLOBALS['FORUM_DRIVER']->find_emoticons(); // Sorted in descending length order
-
-	if ($GLOBALS['XSS_DETECT']) $orig_escaped=ocp_is_escaped($text);
-
-	// Pre-check, optimisation
-	$smilies=array();
-	foreach ($_smilies as $code=>$imgcode)
-	{
-		if (strpos($text,$code)!==false)
-			$smilies[$code]=$imgcode;
-	}
-
-	if (count($smilies)!=0)
-	{
-		$len=strlen($text);
-		for ($i=0;$i<$len;++$i) // Has to go through in byte order so double application cannot happen (i.e. smiley contains [all or portion of] smiley code somehow)
-		{
-			$char=$text[$i];
-
-			if ($char=='"') // This can cause severe HTML corruption so is a disallowed character
-			{
-				$i++;
-				continue;
-			}
-			foreach ($smilies as $code=>$imgcode)
-			{
-				$code_len=strlen($code);
-				if (($char==$code[0]) && (substr($text,$i,$code_len)==$code))
-				{
-					$eval=do_emoticon($imgcode);
-					$_eval=$eval->evaluate();
-					if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($_eval);
-					$before=substr($text,0,$i);
-					$after=substr($text,$i+$code_len);
-					if (($before=='') && ($after=='')) $text=$_eval; else $text=$before.$_eval.$after;
-					$len=strlen($text);
-					$i+=strlen($_eval)-1;
-					break;
-				}
-			}
-		}
-
-		if (($GLOBALS['XSS_DETECT']) && ($orig_escaped)) ocp_mark_as_escaped($text);
-	}
-
-	return $text;
+	require_code('comcode_renderer');
+	return _apply_emoticons($text);
 }
 
 /**

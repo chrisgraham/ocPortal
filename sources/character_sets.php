@@ -19,6 +19,45 @@
  */
 
 /**
+ * Convert a unicode character number to a unicode string. Callback for preg_replace.
+ *
+ * @param  array					Regular expression match array.
+ * @return ~string				Converted data (false: could not convert).
+ */
+function unichrm_hex($matches)
+{
+	return unichr(hexdec($matches[1]));
+}
+
+/**
+ * Convert a unicode character number to a unicode string. Callback for preg_replace.
+ *
+ * @param  array					Regular expression match array.
+ * @return ~string				Converted data (false: could not convert).
+ */
+function unichrm($matches)
+{
+	return unichr(intval($matches[1]));
+}
+
+/**
+ * Convert a unicode character number to a HTML-entity enabled string, using lower ASCII characters where possible.
+ *
+ * @param  integer				Character number.
+ * @return ~string				Converted data (false: could not convert).
+ */
+function unichr($c)
+{
+	if ($c<=0x7F)
+	{
+		return chr($c);
+	} else
+	{
+		return '#&'.strval($c).';';
+	}
+}
+
+/**
  * Convert text to an entity format via unicode, compatible with the GD TTF functions. Originally taken from php manual but heavily modified. Passed text is assumed to be in the get_charset() character set.
  *
  * @param  string		Input text.

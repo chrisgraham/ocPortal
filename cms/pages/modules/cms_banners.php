@@ -507,6 +507,7 @@ class Module_cms_banners_cat extends standard_crud_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
+		require_code('files');
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
 		foreach ($rows as $row)
 		{

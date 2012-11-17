@@ -222,6 +222,8 @@ function find_addon_effective_mtime($addon_name)
  */
 function find_available_addons()
 {
+	require_code('files');
+
 	$addons_available_for_installation=array();
 	$files=array();
 
@@ -496,6 +498,7 @@ function install_addon($file,$files=NULL)
 
 	require_code('zones2');
 	require_code('zones3');
+	require_code('files');
 
 	require_code('tar');
 	$tar=tar_open($full,'rb');
@@ -753,6 +756,8 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	if (is_null($also_installing)) $also_installing=array();
 
 	$full=get_custom_file_base().'/imports/addons/'.$file;
+
+	require_code('files');
 
 	// Look in the tar
 	require_code('tar');

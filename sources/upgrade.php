@@ -34,6 +34,7 @@ function upgrade_script()
 	if ((array_key_exists('given_password',$_POST)))
 	{
 		$given_password=post_param('given_password');
+		require_code('crypt');
 		if (check_master_password($given_password))
 		{
 			$type=get_param('type','misc');
@@ -683,6 +684,7 @@ function get_chmod_array_2()
 function check_perms()
 {
 	require_code('inst_special');
+	require_code('files');
 
 	$super_out='';
 
@@ -754,6 +756,7 @@ function check_perms()
 function fix_perms()
 {
 	require_code('inst_special');
+	require_code('files');
 
 	$super_out='';
 
@@ -877,6 +880,8 @@ function check_excess_perms($array,$rel='')
 {
 	$out='';
 
+	require_code('files');
+
 	$dir=get_file_base().'/'.$rel.'/';
 
 	$dh=@opendir($dir);
@@ -918,6 +923,8 @@ function check_excess_perms($array,$rel='')
 function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 {
 	$ret_str='';
+
+	require_code('files');
 
 	// We'll need to know about stuff in our addon registry, and file manifest
 	if (function_exists('find_all_hooks'))
@@ -1315,6 +1322,8 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 {
 	$alien='';
 	$addon='';
+
+	require_code('files');
 
 	$dh=@opendir($dir);
 	if ($dh!==false)

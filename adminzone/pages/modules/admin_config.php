@@ -551,6 +551,7 @@ class Module_admin_config
 		// UI hooks
 		$ui_hooks=find_all_hooks('modules','admin_config');
 
+		require_code('files');
 		$upload_max_filesize=(ini_get('upload_max_filesize')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('upload_max_filesize')));
 		$post_max_size=(ini_get('post_max_size')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('post_max_size')));
 

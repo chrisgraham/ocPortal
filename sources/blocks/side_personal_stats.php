@@ -64,6 +64,7 @@ class Block_side_personal_stats
 
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
+			require_code('global4');
 			list($links,$details,$num_unread_pps)=member_personal_links_and_details($member_id);
 
 			return do_template('BLOCK_SIDE_PERSONAL_STATS',array('_GUID'=>'99f9bc3387102daaeeedf99843b0502e','NUM_UNREAD_PTS'=>strval($num_unread_pps),'AVATAR_URL'=>$avatar_url,'MEMBER_ID'=>strval($member_id),'USERNAME'=>$username,'LINKS'=>$links,'DETAILS'=>$details));

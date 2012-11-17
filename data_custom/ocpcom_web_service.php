@@ -44,6 +44,7 @@ if ($password_given===NULL)
 	call_user_func_array('server__public__'.get_param('call'),$parameters);
 } else
 {
+	require_code('global4');
 	if (!check_master_password($password_given)) exit('Access Denied');
 
 	call_user_func_array('server__'.get_param('call'),$parameters);

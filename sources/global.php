@@ -21,45 +21,7 @@
 // Quick JS loader
 if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 {
-	@ini_set('zlib.output_compression','On');
-
-	header("Pragma: public");
-	$time=400*60*60*24;
-	header('Cache-Control: maxage='.strval(time()+$time));
-	header('Expires: '.gmdate('D, d M Y H:i:s',time()+$time).' GMT');
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()-$time).' GMT');
-
-	$since=isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])?$_SERVER['HTTP_IF_MODIFIED_SINCE']:'';
-	if ($since!='')
-	{
-		header('HTTP/1.0 304 Not Modified');
-		exit();
-	}
-
-	global $FILE_BASE,$SITE_INFO;
-
-	$domain=$_SERVER['HTTP_HOST'];
-	$colon_pos=strpos($domain,':');
-	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-	$port=$_SERVER['SERVER_PORT'];
-	if (($port=='') || ($port=='80') || ($port=='443'))
-	{
-		$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
-	} else
-	{
-		@include($FILE_BASE.'/_config.php');
-		if (array_key_exists('base_url',$SITE_INFO))
-		{
-			$base_url=$SITE_INFO['base_url'];
-		} else
-		{
-			$base_url='http://'.$domain.':'.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
-		}
-	}
-
-	header('Content-type: text/html');
-	@ini_set('ocproducts.xss_detect','0');
-	exit(str_replace(array('{$BASE_URL}'),array($base_url),file_get_contents($FILE_BASE.'/themes/default/templates/QUICK_JS_LOADER.tpl')));
+	require_once(get_file_base().'/data/quick_js_loader.php');
 }
 
 if ((strpos($_SERVER['PHP_SELF'],'/sources/')!==false) || (strpos($_SERVER['PHP_SELF'],'/sources_custom/')!==false)) exit('May not be included directly');
@@ -74,14 +36,13 @@ if ((strpos($_SERVER['PHP_SELF'],'/sources/')!==false) || (strpos($_SERVER['PHP_
  */
 function require_code($codename,$light_exit=false)
 {
-	$hphp=defined('HIPHOP_PHP');
+	static $hphp=NULL;
+	if ($hphp===NULL) $hphp=defined('HIPHOP_PHP');
 
 	if ($hphp)
 	{
-		if ($codename=='tempcode')
-			$codename='tempcode__runtime';
-		if ($codename=='tempcode_compiler')
-			$codename='tempcode_compiler__runtime';
+		if ($codename=='tempcode' || $codename=='tempcode_compiler')
+			$codename.='__runtime';
 	}
 
 	global $REQUIRED_CODE,$FILE_BASE,$SITE_INFO;
@@ -439,26 +400,18 @@ $PAGE_START_TIME=microtime(false);
 // Unregister globals (sanitisation)
 if (ini_get('register_globals')=='1')
 {
-	foreach ($_GET as $key=>$_)
-		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_GET[$key])) $GLOBALS[$key]=NULL;
-	foreach ($_POST as $key=>$_)
-		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_POST[$key])) $GLOBALS[$key]=NULL;
-	foreach ($_COOKIE as $key=>$_)
-		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_COOKIE[$key])) $GLOBALS[$key]=NULL;
-	foreach ($_ENV as $key=>$_)
-		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_ENV[$key])) $GLOBALS[$key]=NULL;
-	foreach ($_SERVER as $key=>$_)
-		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_SERVER[$key])) $GLOBALS[$key]=NULL;
-	if ((isset($_SESSION)) && (is_array($_SESSION)))
+	foreach (array('_GET','_POST','_COOKIE','_ENV','_SERVER','_SESSION') as $superglobal)
 	{
-		foreach ($_SESSION as $key=>$_)
-			if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_SESSION[$key])) $GLOBALS[$key]=NULL;
+		if ((isset($$superglobal)) && (is_array($$superglobal)))
+		{
+			foreach ($$superglobal as $key=>$_)
+				if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$$superglobal[$key])) $GLOBALS[$key]=NULL;
+		}
 	}
 }
 
 // Sanitise the PHP environment some more
 @ini_set('track_errors','1'); // so $php_errormsg is available
-@ini_set('allow_url_fopen','0');
 @ini_set('allow_url_fopen','0');
 @ini_set('suhosin.executor.disable_emodifier','1'); // Extra security if suhosin is available
 @ini_set('suhosin.executor.multiheader','1'); // Extra security if suhosin is available

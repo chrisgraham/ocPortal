@@ -30,6 +30,7 @@ class Hook_stats_downloads
 	{
 		if (!addon_installed('downloads')) return new ocp_tempcode();
 
+		require_code('files');
 		require_lang('downloads');
 		require_code('downloads_stats');
 		$bits=new ocp_tempcode();

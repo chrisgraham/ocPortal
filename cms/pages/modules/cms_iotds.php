@@ -302,7 +302,10 @@ class Module_cms_iotds extends standard_crud_module
 		if ($validated==1)
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
+			{
+				require_code('activities');
 				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+			}
 		}
 
 		$current=post_param_integer('validated',0);
@@ -361,7 +364,10 @@ class Module_cms_iotds extends standard_crud_module
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('iotd','submitter',array('id'=>$id));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
+			{
+				require_code('activities');
 				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,$submitter);
+			}
 		}
 
 		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);

@@ -680,6 +680,7 @@ class standard_crud_module
 
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
 		{
+			require_code('antispam');
 			inject_action_spamcheck();
 			if (addon_installed('unvalidated'))
 			{

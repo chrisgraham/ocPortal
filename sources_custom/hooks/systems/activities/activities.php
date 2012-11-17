@@ -67,6 +67,7 @@ class Activity_activities
 	function get_syndication_option_fields()
 	{
 		$fields=new ocp_tempcode();
+		require_code('activities');
 		if ((has_privilege(get_member(),'syndicate_site_activity')) && (has_external_site_wide_syndication()))
 		{
 			require_lang('activities');

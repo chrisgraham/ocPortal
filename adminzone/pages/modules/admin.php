@@ -62,6 +62,7 @@ class Module_admin
 	{
 		require_code('templates_donext');
 		require_code('menus');
+		require_code('files');
 
 		require_all_lang();
 

@@ -60,6 +60,90 @@ function init__files2()
 }
 
 /**
+ * Discern the cause of a file-write error, and show an appropriate error message.
+ *
+ * @param PATH			File path that could not be written (full path, not relative)
+ */
+function _intelligent_write_error($path)
+{
+	if (file_exists($path))
+	{
+		warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path)));
+	}
+	elseif (file_exists(dirname($path)))
+	{
+		if (strpos($path,'/templates_cached/')!==false) critical_error('PASSON',do_lang('WRITE_ERROR_CREATE',escape_html($path),escape_html(dirname($path))));
+		warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',escape_html($path),escape_html(dirname($path))));
+	} else
+	{
+		warn_exit(do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY',escape_html(dirname($path)),escape_html(dirname(dirname($path)))));
+	}
+}
+
+/**
+ * Discern the cause of a file-write error, and return an appropriate error message.
+ *
+ * @param  PATH			File path that could not be written
+ * @return tempcode		Message
+ */
+function _intelligent_write_error_inline($path)
+{
+	if (file_exists($path))
+		return do_lang_tempcode('WRITE_ERROR',escape_html($path));
+	elseif (file_exists(dirname($path)))
+		return do_lang_tempcode('WRITE_ERROR_CREATE',escape_html($path),escape_html(dirname($path)));
+	else
+		return do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY',escape_html(dirname($path)),escape_html(dirname(dirname($path))));
+	return new ocp_tempcode();
+}
+
+/**
+ * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
+ *
+ * @param  string		The prefix of the temporary file name.
+ * @return ~string	The name of the temporary file (false: error).
+ */
+function _ocp_tempnam($prefix)
+{
+	$problem_saving=((ini_get('safe_mode')=='1') || (get_value('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
+	$local_path=get_custom_file_base().'/safe_mode_temp/';
+	$server_path='/tmp/';
+	$tmp_path=$problem_saving?$local_path:$server_path;
+	$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
+	if (($tempnam===false) && (!$problem_saving))
+	{
+		$problem_saving=true;
+		$tempnam=tempnam($local_path,$prefix);
+	}
+	return $tempnam;
+}
+
+/**
+ * Provides a hook for file synchronisation between mirrored servers. Called after any file creation, deletion or edit.
+ *
+ * @param  PATH				File/directory name to sync on (full path)
+ */
+function _sync_file($filename)
+{
+	global $FILE_BASE,$_MODIFIED_FILES,$_CREATED_FILES;
+	if (substr($filename,0,strlen($FILE_BASE)+1)==$FILE_BASE.'/')
+	{
+		$filename=substr($filename,strlen($FILE_BASE)+1);
+	}
+	if ($has_sync_script)
+	{
+		require_once($FILE_BASE.'/data_custom/sync_script.php');
+		if (function_exists('master__sync_file')) master__sync_file($filename);
+	}
+	if (isset($_MODIFIED_FILES))
+		foreach ($_MODIFIED_FILES as $i=>$x)
+			if (($x==$FILE_BASE.'/'.$filename) || ($x==$filename)) unset($_MODIFIED_FILES[$i]);
+	if (isset($_CREATED_FILES))
+		foreach ($_CREATED_FILES as $i=>$x)
+			if (($x==$FILE_BASE.'/'.$filename) || ($x==$filename)) unset($_CREATED_FILES[$i]);
+}
+
+/**
  * Provides a hook for file-move synchronisation between mirrored servers. Called after any rename or move action.
  *
  * @param  PATH				File/directory name to move from (may be full or relative path)
@@ -247,6 +331,8 @@ function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=t
 {
 	$out=array();
 
+	require_code('files');
+
 	$d=opendir($path);
 	while (($file=readdir($d))!==false)
 	{
@@ -331,6 +417,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 {
 	$possibilities=array();
 
+	require_code('files');
 	$a=php_return_bytes(ini_get('upload_max_filesize'));
 	$b=php_return_bytes(ini_get('post_max_size'));
 	$c=intval(get_option('max_download_size'))*1024;

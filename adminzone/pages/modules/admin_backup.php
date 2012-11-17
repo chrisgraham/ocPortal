@@ -71,6 +71,7 @@ class Module_admin_backup
 		delete_config_option('backup_server_path');
 		delete_config_option('backup_overwrite');
 
+		//require_code('files');
 		//deldir_contents(get_custom_file_base().'/exports/backups',true);
 	}
 
@@ -103,6 +104,8 @@ class Module_admin_backup
 	function run()
 	{
 		require_lang('backups');
+
+		require_code('files');
 
 		set_helper_panel_pic('pagepics/backups');
 		set_helper_panel_tutorial('tut_backup');

@@ -53,6 +53,7 @@ class Module_iotds
 
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'iotds'));
 
+		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/iotds',true);
 
 		delete_config_option('points_ADD_IOTD');

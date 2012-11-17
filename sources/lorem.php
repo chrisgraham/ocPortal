@@ -440,7 +440,7 @@ function placeholder_id()
  */
 function placeholder_filesize()
 {
-	require_code('files2');
+	require_code('files');
 	return clean_file_size(123);
 }
 

@@ -25,8 +25,6 @@
  */
 function init__database()
 {
-	if (defined('DB_MAX_KEY_SIZE')) return;
-
 	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG,$SITE_INFO;
 	$QUERY_LIST=array();
 	$QUERY_COUNT=0;
@@ -61,16 +59,6 @@ function init__database()
 		 */
 		$SITE_DB=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password(),get_table_prefix());
 	}
-
-	// Limits (we also limit field names to not conflict with keywords - those defined in database_action.php)
-	define('DB_MAX_KEY_SIZE',500);
-	define('DB_MAX_PRIMARY_KEY_SIZE',251);
-	define('DB_MAX_ROW_SIZE',8000);
-	define('DB_MAX_FIELD_IDENTIFIER_SIZE',31);
-	define('DB_MAX_IDENTIFIER_SIZE',32);
-	// We have to take into account that chars might take 3 bytes - but we'll assume unicode is only used on db's with higher limits
-	define('DB_MAX_KEY_SIZE_UNICODE',1000);
-	define('DB_MAX_ROW_SIZE_UNICODE',24000);
 
 	global $UPON_QUERY_HOOKS_CACHE;
 	$UPON_QUERY_HOOKS_CACHE=NULL;
