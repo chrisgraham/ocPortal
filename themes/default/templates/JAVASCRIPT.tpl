@@ -1235,7 +1235,7 @@ function illustrate_frame_load(pf,frame)
 		{
 			try
 			{
-				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1)) continue;
+				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1) && (document.styleSheets[i].href.indexOf('/merged')==-1)) continue;
 				if (typeof document.styleSheets[i].cssText!='undefined')
 				{
 					cssText+=document.styleSheets[i].cssText;
@@ -1322,13 +1322,17 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	{+END}
 
 	var scroll_y=get_window_scroll_y();
-	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y));
+	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y),true);
 	if (dest_y<0) dest_y=0;
 	if ((typeof expected_scroll_y!='undefined') && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
 	if (typeof dir=='undefined' || !null) var dir=(dest_y>scroll_y)?1:-1;
-	var dist=dir*17;
 
-	if (((dir==1) && (scroll_y+dist>=dest_y)) || ((dir==-1) && (scroll_y+dist<=dest_y)) || ((dest_y-scroll_y)*dir>2000))
+	var distance_to_go=(dest_y-scroll_y)*dir;
+	var dist=Math.round(dir*(distance_to_go/25));
+	if (dir==-1 && dist>-25) dist=-25;
+	if (dir==1 && dist<25) dist=25;
+
+	if (((dir==1) && (scroll_y+dist>=dest_y)) || ((dir==-1) && (scroll_y+dist<=dest_y)) || (distance_to_go>2000))
 	{
 		try
 		{
@@ -1344,7 +1348,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	}
 	catch (e) {return;}; // May be stopped by popup blocker
 
-	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y,dir,event_after); } , 30);
+	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y+dist,dir,event_after); } , 30);
 }
 
 /* Get what an elements current style is for a particular CSS property */
@@ -1701,7 +1705,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	// Add in move/leave events if needed
 	if (!ac.onmouseout) ac.onmouseout=function(event) { win.deactivate_tooltip(ac,event); };
 	if (!ac.onmousemove) ac.onmousemove=function(event) { win.reposition_tooltip(ac,event,false,false,null,false,win); };
- 
+
 	if (typeof tooltip=='function') tooltip=tooltip();
 	if (tooltip=='') return;
 
@@ -2736,6 +2740,11 @@ function replace_comments_form_with_ajax(options,hash)
 					// Display
 					set_outer_html(comments_wrapper,ajax_result.responseText);
 
+					window.setTimeout(function() { // Scroll back to comment
+						var comments_wrapper=document.getElementById('comments_wrapper'); // outerhtml set will have broken the reference
+						smooth_scroll(find_pos_y(comments_wrapper,true));
+					},0);
+
 					// Collapse, so user can see what happening
 					if (document.getElementById('comments_posting_form_outer').className.indexOf('toggleable_tray')!=-1)
 						toggleable_tray('comments_posting_form_outer');
@@ -2788,7 +2797,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	var post=form.elements['post'];
 
-	smooth_scroll(find_pos_y(form));
+	smooth_scroll(find_pos_y(form,true));
 
 	if (document.getElementById('comments_posting_form_outer').style.display=='none')
 		toggleable_tray('comments_posting_form_outer');
