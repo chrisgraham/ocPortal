@@ -984,10 +984,11 @@ class Hook_smf2
 	/**
 	 * Gets the role value for permissions of group
 	 *
-	 * @param integer		Group ID to use
-	 * @param integer		Profile ID to use
-	 * @param object		The DB connection to import from
-	 * @param string		The table prefix the target prefix is using
+	 * @param  integer		Group ID to use
+	 * @param  integer		Profile ID to use
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @return integer		The role value
 	 */
 	function get_role_value($gid,$pid,$db,$table_prefix)
 	{
