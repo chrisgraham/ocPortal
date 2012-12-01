@@ -483,9 +483,43 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
 		{
-			$file_contents=http_download_file($img,NULL,false);
-			if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
-			if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			$file_contents=mixed();
+			$matches=array();
+			if ((preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches)!=0) && (strpos($img,'forum_db=1')===false))
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id'=>intval($matches[1])),'ORDER BY a_add_time DESC');
+				if ((array_key_exists(0,$rows)) && (has_attachment_access($as,intval($matches[1]))))
+				{
+					$myrow=$rows[0];
+
+					if ($matches[2]=='1')
+					{
+						$full=$myrow['a_thumb_url'];
+					}
+					else
+					{
+						$full=$myrow['a_url'];
+					}
+
+					if (url_is_local($full))
+					{
+						$_full=get_custom_file_base().'/'.rawurldecode($full);
+						if (file_exists($_full))
+						{
+							$filename=$myrow['a_original_filename'];
+							require_code('mime_types');
+							$file_contents=file_get_contents($_full);
+							$mime_type=get_mime_type(get_file_extension($filename));
+						}
+					}
+				}
+			}
+			if ($file_contents===NULL)
+			{
+				$file_contents=http_download_file($img,NULL,false);
+				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
+				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			}
 		}
 		$sending_message.='Content-Type: '.str_replace("\r",'',str_replace("\n",'',$mime_type)).$line_term;
 		$sending_message.='Content-ID: <'.$id.'>'.$line_term;
@@ -543,7 +577,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 				fwrite($socket,'HELO '.$domain."\r\n");
 				$rcv=fgets($socket,1024);
 
-				// Login if necessary
+				// Log in if necessary
 				$username=get_option('smtp_sockets_username');
 				$password=get_option('smtp_sockets_password');
 				if ($username!='')
@@ -736,17 +770,14 @@ function filter_css($css,$context)
 						// We let all tag-name selectors through if the tag exists in the document, unless they contain a class/ID specifier -- in which case we toe to the presence of that class/ID
 						if ((strpos($selector,'.')===false) && (strpos($selector,'#')===false) && (preg_match('#(^|\s)(\w+)([\[\#\.:\s]|$)#',$selector,$matches)!=0))
 						{
-							//if (($matches[2]=='html') || ($matches[2]=='body') || ($matches[2]=='div') || ($matches[2]=='a') || (strpos($context,'<'.$matches[2])!==false))
-							{
-								$applies=true;
-								break;
-							}
+							$applies=true;
+							break;
 						}
 
 						// ID selectors
 						foreach ($ids as $id)
 						{
-							if (preg_match('#\#'.str_replace('#','\#',preg_quote($id)).'([\[\.:\s]|$)#',$selector)!=0)
+							if (preg_match('#\#'.preg_quote($id,'#').'([\[\.:\s]|$)#',$selector)!=0)
 							{
 								$applies=true;
 								break;
@@ -756,7 +787,7 @@ function filter_css($css,$context)
 						// Class name selectors
 						foreach ($classes as $class)
 						{
-							if (preg_match('#\.'.str_replace('#','\#',preg_quote($class)).'([\[\#:\s]|$)#',$selector)!=0)
+							if (preg_match('#\.'.preg_quote($class,'#').'([\[\#:\s]|$)#',$selector)!=0)
 							{
 								$applies=true;
 								break;
@@ -801,7 +832,6 @@ function form_to_email_entry_script()
 	if (!is_null($redirect))
 	{
 		require_code('site2');
-		$GLOBALS['NON_PAGE_SCRIPT']=0;
 		$tpl=redirect_screen($title,$redirect,$text);
 	} else
 	{
@@ -862,10 +892,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 	is_swf_upload(true);
 	foreach ($_FILES as $file)
 	{
-		//if (is_uploaded_file($file['tmp_name']))
-		{
-			$attachments[$file['tmp_name']]=$file['name'];
-		}
+		$attachments[$file['tmp_name']]=$file['name'];
 	}
 
 	if (addon_installed('captcha'))
