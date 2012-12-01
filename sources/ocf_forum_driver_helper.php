@@ -396,7 +396,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	{
 		$select='p.*,h.h_post_id,text_parsed,text_original';
 	}
-	if ((($is_threaded) || ($sort=='compound_rating') || ($sort=='average_rating')) && (db_has_subqueries($this_ref->connection->connection_read)))
+	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
 	{
 		$select.=',COALESCE((SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),5) AS compound_rating';
 	}

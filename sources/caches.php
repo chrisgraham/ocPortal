@@ -187,7 +187,7 @@ function decache($cached_for,$identifier=NULL)
 		$done_first=true;
 
 		$where.=')';
- 	}
+	}
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
 }
 
