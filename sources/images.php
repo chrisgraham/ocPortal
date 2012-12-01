@@ -234,8 +234,7 @@ function _symbol_thumbnail($param)
 					if (!$result) $value=(trim($param[4])=='')? $orig_url : $param[4];
 				}
 
-				if (!is_file($save_path))
-					$value.='.png'; // was saved as PNG
+				if (!file_exists($save_path)) $value.='.png';
 			}
 			else
 			{
@@ -308,7 +307,10 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
 		if (!file_exists($file_thumb))
+		{
 			convert_image($url,$file_thumb,$box_size?-1:$width,$box_size?-1:$height,$box_size?$width:-1,false);
+			if (!file_exists($file_thumb)) $new_name.='.png';
+		}
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 	}
@@ -375,7 +377,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	$_file=$url_parts[count($url_parts)-1];
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
-	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $_file.='.png';
+	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $ext.='.png';
 	$_file=substr($_file,0,$dot_pos);
 	$thumb_path='';
 	do
@@ -405,6 +407,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 		} else
 		{
 			convert_image($from,$thumb_path,-1,-1,intval($thumb_width),false);
+			if (!file_exists($thumb_path)) $thumb_url.='.png';
 		}
 	}
 
