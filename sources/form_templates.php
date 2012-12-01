@@ -1172,7 +1172,7 @@ function form_input_radio($pretty_name,$description,$name,$content,$required=fal
 		$map=array_merge($map,array('CODE'=>$selected_path,));
 	}
 	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',$map);
-	return _form_input('',$pretty_name,$description,$input,$required);
+	return _form_input(($GLOBALS['DOING_ALTERNATE_FIELDS_SET']!==NULL)?$name:'',$pretty_name,$description,$input,$required);
 }
 
 /**
