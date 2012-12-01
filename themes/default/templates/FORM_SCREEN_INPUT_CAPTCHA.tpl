@@ -11,7 +11,18 @@
 <input tabindex="{TABINDEX*}" maxlength="6" size="6" class="input_text_required" value="" type="text" id="security_image" name="security_image" />
 
 <script type="text/javascript">// <![CDATA[
-	addEventListenerAbstract(window,'pageshow',function () {
-		document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
-	} );
+	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
+
+	var func=function () {
+		document.getElementById('captcha_readable').src+='&'; // Force it to reload latest captcha
+	};
+
+	if (typeof window.addEventListener!='undefined')
+	{
+		window.addEventListener(showevent,func,false);
+	}
+	else if (typeof window.attachEvent!='undefined')
+	{
+		window.attachEvent('on'+showevent,func);
+	}
 //]]></script>
