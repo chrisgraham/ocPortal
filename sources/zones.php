@@ -582,7 +582,7 @@ function find_all_hooks($type,$entry)
 		foreach ($dh as $file)
 		{
 			$basename=basename($file,'.php');
-			if (($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
+			if (($file[0]!='.') && ($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
 			{
 				$out[$basename]='sources';
 			}
@@ -598,7 +598,7 @@ function find_all_hooks($type,$entry)
 			foreach ($dh as $file)
 			{
 				$basename=basename($file,'.php');
-				if (($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
+				if (($file[0]!='.') && ($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
 				{
 					$out[$basename]='sources_custom';
 				}

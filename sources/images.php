@@ -44,10 +44,22 @@ function _symbol_image_dims($param)
 		} else
 		{
 			require_code('files');
-			$source=@imagecreatefromstring(http_download_file($param[0],1024*1024*20/*reasonable limit*/,false));
+			$from_file=http_download_file($param[0],1024*1024*20/*reasonable limit*/,false);
+			$source=@imagecreatefromstring($from_file);
 			if ($source!==false)
 			{
-				$value=array(strval(imagesx($source)),strval(imagesy($source)));
+				if (get_file_extension($param[0])=='gif')
+				{
+					$header=unpack('@6/'.'vwidth/'.'vheight',$from_file);
+					$sx=$header['width'];
+					$sy=$header['height'];
+				} else
+				{
+					$sx=imagesx($source);
+					$sy=imagesy($source);
+				}
+
+				$value=array(strval($sx),strval($sy));
 				imagedestroy($source);
 			}
 		}
@@ -222,7 +234,7 @@ function _symbol_thumbnail($param)
 					if (!$result) $value=(trim($param[4])=='')? $orig_url : $param[4];
 				}
 
-				if ((!is_saveable_image($save_path)) && (get_file_extension($save_path)!='svg')) $value.='.png'; // Will have been saved with .png on the end (probably was a .gif)
+				if (!file_exists($save_path)) $value.='.png';
 			}
 			else
 			{
@@ -296,7 +308,10 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
 		if (!file_exists($file_thumb))
+		{
 			convert_image($url,$file_thumb,$box_size?-1:$width,$box_size?-1:$height,$box_size?$width:-1,false);
+			if (!file_exists($file_thumb)) $new_name.='.png';
+		}
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 	}
@@ -334,6 +349,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 		return $thumb_url;
 	}
 
+	// Ensure existing path still exists
 	if ($thumb_url!='')
 	{
 		if (url_is_local($thumb_url))
@@ -358,12 +374,13 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 		return $thumb_url;
 	}
 
+	// Create new path
 	$url_parts=explode('/',$full_url);
 	$i=0;
 	$_file=$url_parts[count($url_parts)-1];
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
-	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $_file.='.png';
+	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $ext.='.png';
 	$_file=substr($_file,0,$dot_pos);
 	$thumb_path='';
 	do
@@ -393,6 +410,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 		} else
 		{
 			convert_image($from,$thumb_path,-1,-1,intval($thumb_width),false);
+			if (!file_exists($thumb_path)) $thumb_url.='.png';
 		}
 	}
 
@@ -780,6 +798,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			if (($thumb_options['where']=='start') || (($thumb_options['where']=='start_if_vertical') && ($pad_axis=='y')) || (($thumb_options['where']=='start_if_horizontal') && ($pad_axis=='x')))
 			{
 				$pad_amount=0;
+			}
+			elseif (($thumb_options['where']=='end') || (($thumb_options['where']=='end_if_vertical') && ($pad_axis=='y')) || (($thumb_options['where']=='end_if_horizontal') && ($pad_axis=='x')))
+			{
+				$pad_amount=$padding;
 			}
 			else
 			{

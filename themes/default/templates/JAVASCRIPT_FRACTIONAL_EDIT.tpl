@@ -80,7 +80,8 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 		}
 		for (var i=0;i<to_copy.length;i++)
 		{
-			input.style[to_copy[i]]=abstract_get_computed_style(object.parentNode,to_copy[i]);
+			var style=abstract_get_computed_style(object.parentNode,to_copy[i]);
+			if (typeof style!='undefined') input.style[to_copy[i]]=style;
 		}
 		input.name=edit_param_name;
 		form.onsubmit=function(event) { return false; };
@@ -123,7 +124,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 			var response=do_ajax_request(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
 
 			// Some kind of error?
-			if ((response.responseText=='') || (response.status!=200))
+			if (((response.responseText=='') && (input.value!='')) || (response.status!=200))
 			{
 				var session_test_url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
 				var session_test_ret=do_ajax_request(session_test_url+keep_stub(true));
@@ -133,7 +134,13 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 					confirm_session(
 						function(result)
 						{
-							if (result)	save_function();
+							if (result)
+							{
+								save_function();
+							} else
+							{
+								cleanup_function();
+							}
 						}
 					);
 				} else
@@ -170,10 +177,21 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 		if (type=='line') input.onkeyup=function(event) // Not using onkeypress because that only works for actual represented characters in the input box
 			{
 				if (typeof event=='undefined') var event=window.event;
-
-				if ((key_pressed(event,[27],true)) && (this.value!='')) // Cancel (escape key)
+				if (key_pressed(event,[27],true)) // Cancel (escape key)
 				{
-					return cancel_function();
+					var tmp=input.onblur;
+					input.onblur=null;
+					fauxmodal_confirm('{!FRACTIONAL_EDIT_CANCEL_CONFIRM;}',function(result) {
+						if (result)
+						{
+							cancel_function();
+						} else
+						{
+							input.focus();
+							input.onblur=tmp;
+						}
+					},'{!CONFIRM_TEXT;}');
+					return null;
 				}
 
 				if ((enter_pressed(event)) && (this.value!='')) // Save
@@ -185,7 +203,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 			}
 		input.onblur=function(event)
 			{
-				if (this.value!='') save_function(); else cancel_function();
+				if (this.value!='' || raw_text=='') save_function(); else cancel_function();
 			}
 
 		// Add in form

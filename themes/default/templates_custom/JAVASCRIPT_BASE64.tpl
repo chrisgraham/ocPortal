@@ -4,7 +4,7 @@
 // Simple Base64 encoder/decoder
 // Public Domain
 
-Base64 = {
+var Base64 = {
 
 	encode : function (input) {
 		// Converts each character in the input to its Unicode number, then writes

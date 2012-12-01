@@ -230,9 +230,9 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 				$topic_row=array('t_cache_first_title'=>'');
 			}
 		}
-		if ($row['t_cache_first_title']=='')
+		if ($topic_row['t_cache_first_title']=='')
 		{
-			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
+			$topic_row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
 		}
 		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$topic_row['t_cache_first_title']);
 		$title=do_lang_tempcode('FORUM_POST_ISOLATED_RESULT',escape_html(strval($row['id'])),$poster,array(escape_html($date),$link));

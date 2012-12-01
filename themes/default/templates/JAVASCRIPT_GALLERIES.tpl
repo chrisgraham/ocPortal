@@ -99,7 +99,7 @@ function slideshow_backward()
 	return false;
 }
 
-function playerStopped()
+function player_stopped()
 {
 	slideshow_forward();
 }
@@ -184,7 +184,8 @@ function slideshow_show_slide(slide)
 			fade_transition(fade_element_old,0.0,30,-10,true);
 		} // else probably a video
 
-		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
+		if (slideshow_from)
+			document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
 
 		window.slideshow_current_position=slide;
 
@@ -192,11 +193,11 @@ function slideshow_show_slide(slide)
 	}
 
 	var fade_elements=get_elements_by_class_name(document.body,'scale_down');
-	if (typeof fade_elements[0]!='undefined')
+	if (typeof fade_elements[0]!='undefined') // Is image
 	{
 		start_slideshow_timer();
 		reset_slideshow_countdown();
-	} else
+	} else // Is video
 	{
 		stop_slideshow_timer('{!galleries:WILL_CONTINUE_AFTER_VIDEO_FINISHED}');
 	}

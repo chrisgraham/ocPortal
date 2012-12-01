@@ -531,7 +531,18 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 	$input_mime_type=get_mime_type($file_ext);
 	if (preg_match('#audio\/#i',$input_mime_type)!=0)
 	{
-		return find_theme_image('audio_thumb',true);
+		$ret=find_theme_image('audio_thumb',true);
+		if ($ret!='')
+		{
+			if (!is_null($expected_output_path))
+			{
+				require_code('files');
+				$_expected_output_path=fopen($expected_output_path,'wb');
+				http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
+				fclose($_expected_output_path);
+			}
+		}
+		return $ret;
 	}
 
 	// Try one of the hooks for video types
@@ -625,7 +636,19 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 		}
 	}
 
-	return '';
+	// Default
+	$ret=find_theme_image('video_thumb',true);
+	if ($ret!='')
+	{
+		if (!is_null($expected_output_path))
+		{
+			require_code('files');
+			$_expected_output_path=fopen($expected_output_path,'wb');
+			http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
+			fclose($_expected_output_path);
+		}
+	}
+	return $ret;
 }
 
 /**

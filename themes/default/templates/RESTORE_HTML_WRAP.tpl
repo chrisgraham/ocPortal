@@ -6,9 +6,9 @@
 		<meta name="language" content="{$LANG*}" />
 		<link href="restore.php?type=css" rel="stylesheet" type="text/css" />
 		{+START,IF_NON_EMPTY,{CSS_NOCACHE}}
-			<style type="text/css">
+			<style type="text/css">/*<![CDATA[*/
 				{CSS_NOCACHE*}
-			</style>
+			/*]]>*/</style>
 		{+END}
 		<title>Backup restorer</title>
 	</head>

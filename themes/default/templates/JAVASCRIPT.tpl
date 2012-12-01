@@ -57,9 +57,6 @@ function script_load_stuff()
 		new_html__initialise(document.images[i]);
 	}
 
-	/* Staff functionality */
-	if (typeof window.script_load_stuff_staff!='undefined') script_load_stuff_staff();
-
 	/* Mouse/keyboard listening */
 	window.mouse_x=0;
 	window.mouse_y=0;
@@ -137,7 +134,7 @@ function script_load_stuff()
 		page_fully_loaded=true;
 	} );
 
-	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff)) script_load_stuff_staff();
+	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof script_load_stuff_staff!='undefined')) script_load_stuff_staff();
 }
 
 function new_html__initialise(element)
@@ -724,9 +721,9 @@ function create_rollover(rand,rollover)
 	{
 		img.setAttribute('src',img.old_src);
 	};
-	add_event_listener_abstract(img,"mouseover",activate);
-	add_event_listener_abstract(img,"click",deactivate);
-	add_event_listener_abstract(img,"mouseout",deactivate);
+	add_event_listener_abstract(img,'mouseover',activate);
+	add_event_listener_abstract(img,'click',deactivate);
+	add_event_listener_abstract(img,'mouseout',deactivate);
 }
 
 /* Cookies */
@@ -736,10 +733,10 @@ function set_cookie(cookie_name,cookie_value,num_days)
 	var expire=new Date();
 	if (num_days==null || num_days==0) num_days=1;
 	expire.setTime(today.getTime()+3600000*24*num_days);
-	var extra="";
-	if ("{$COOKIE_PATH}"!="") extra=extra+";path={$COOKIE_PATH}";
-	if ("{$COOKIE_DOMAIN}"!="") extra=extra+";domain={$COOKIE_DOMAIN}";
-	var to_set=cookie_name+"="+encodeURIComponent(cookie_value)+";expires="+expire.toUTCString()+extra;
+	var extra='';
+	if ('{$COOKIE_PATH;}'!='') extra=extra+';path={$COOKIE_PATH;}';
+	if ('{$COOKIE_DOMAIN;}'!='') extra=extra+';domain={$COOKIE_DOMAIN;}';
+	var to_set=cookie_name+'='+encodeURIComponent(cookie_value)+';expires='+expire.toUTCString()+extra;
 	document.cookie=to_set;
 	var read=read_cookie(cookie_name);
 	if ((read!=cookie_value) && (read))
@@ -752,10 +749,10 @@ function set_cookie(cookie_name,cookie_value,num_days)
 }
 function read_cookie(cookie_name)
 {
-	var theCookie=""+document.cookie;
+	var theCookie=''+document.cookie;
 	var ind=theCookie.indexOf(' '+cookie_name+'=');
 	if ((ind==-1) && (theCookie.substr(0,cookie_name.length+1)==cookie_name+'=')) ind=0; else if (ind!=-1) ind++;
-	if (ind==-1 || cookie_name=="") return "";
+	if (ind==-1 || cookie_name=='') return '';
 	var ind1=theCookie.indexOf(';',ind);
 	if (ind1==-1) ind1=theCookie.length;
 	return window.decodeURIComponent(theCookie.substring(ind+cookie_name.length+1,ind1));
@@ -801,12 +798,12 @@ function get_elements_by_class_name(node,class_name)
 /* Type checking */
 function is_integer(val)
 {
-	if (val=="") return false;
+	if (val=='') return false;
 	var c;
 	for (var i=0;i<val.length;i++)
 	{
 		c=val.charAt(i);
-		if ((c!="0") && (c!="1") && (c!="2") && (c!="3") && (c!="4") && (c!="5") && (c!="6") && (c!="7") && (c!="8") && (c!="9"))
+		if ((c!='0') && (c!='1') && (c!='2') && (c!='3') && (c!='4') && (c!='5') && (c!='6') && (c!='7') && (c!='8') && (c!='9'))
 			return false;
 	}
 	return true;
@@ -886,7 +883,7 @@ function confirm_session(callback)
 
 	// First see if session already established
 	var ret=null;
-	require_javascript("javascript_ajax");
+	require_javascript('javascript_ajax');
 	if (typeof window.do_ajax_request!='undefined') ret=do_ajax_request(url+keep_stub(true),false);
 	if (!ret) return;
 
@@ -952,7 +949,7 @@ function load_snippet(code,post,callback)
 	var html;
 	if (typeof window.do_ajax_request!='undefined')
 	{
-		var url2="{$FIND_SCRIPT_NOHTTP#,snippet}?snippet="+code+"&url="+window.encodeURIComponent(url)+'&title='+window.encodeURIComponent(title)+keep_stub();
+		var url2='{$FIND_SCRIPT_NOHTTP;,snippet}?snippet='+code+'&url='+window.encodeURIComponent(url)+'&title='+window.encodeURIComponent(title)+keep_stub();
 		html=do_ajax_request(maintain_theme_in_link(url2),callback,post);
 	}
 	if (callback) return null;
@@ -963,9 +960,9 @@ function require_css(sheet)
 	if (document.getElementById('loading_css_'+sheet)) return;
 	var link=document.createElement('link');
 	link.setAttribute('id','loading_css_'+sheet);
-	link.setAttribute('type',"text/css");
-	link.setAttribute('rel',"stylesheet");
-	link.setAttribute('href',"{$FIND_SCRIPT_NOHTTP#,sheet}?sheet="+sheet+keep_stub());
+	link.setAttribute('type','text/css');
+	link.setAttribute('rel','stylesheet');
+	link.setAttribute('href','{$FIND_SCRIPT_NOHTTP;,sheet}?sheet='+sheet+keep_stub());
 	document.getElementsByTagName('head')[0].appendChild(link);
 }
 function require_javascript(script,lang)
@@ -973,9 +970,9 @@ function require_javascript(script,lang)
 	if (document.getElementById('loading_js_'+script)) return;
 	var link=document.createElement('script');
 	link.setAttribute('id','loading_js_'+script);
-	link.setAttribute('type',"text/javascript");
-	var url="{$FIND_SCRIPT_NOHTTP#,javascript}?script="+script+keep_stub();
-	if (lang) url=url+"&lang="+lang;
+	link.setAttribute('type','text/javascript');
+	var url='{$FIND_SCRIPT_NOHTTP;,javascript}?script='+script+keep_stub();
+	if (lang) url=url+'&lang='+lang;
 	link.setAttribute('src',url);
 	document.getElementsByTagName('head')[0].appendChild(link);
 }
@@ -1123,7 +1120,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 		{
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf("themewizard.php")!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
+				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
 				pic.setAttribute('alt',pic.getAttribute('alt').replace('{!CONTRACT;}','{!EXPAND;}'));
 				pic.title='{!EXPAND;}'; // Needs doing because convert_tooltip may not have run yet
 				pic.ocp_tooltip_title='{!EXPAND;}';
@@ -1139,7 +1136,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 function begin_toggleable_tray_animation(element,animate_dif,animate_ticks,final_height,pic)
 {
 	var fullHeight=find_height(element,true);
-	if (final_height==-1) // We're animating to full height - not a fixed height
+	if (final_height==-1) // We are animating to full height - not a fixed height
 	{
 		final_height=fullHeight;
 		element.style.height='0px';
@@ -1234,32 +1231,35 @@ function illustrate_frame_load(pf,frame)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
 		var head='<style type="text/css">',cssText='';
-		for (var i=0;i<document.styleSheets.length;i++)
+		if (!browser_matches('ie8'))
 		{
-			try
+			for (var i=0;i<document.styleSheets.length;i++)
 			{
-				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1) && (document.styleSheets[i].href.indexOf('/merged')==-1)) continue;
-				if (typeof document.styleSheets[i].cssText!='undefined')
+				try
 				{
-					cssText+=document.styleSheets[i].cssText;
-				} else
-				{
-					var rules=[];
-					try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
-					catch (e) {};
-					if (rules)
+					if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1) && (document.styleSheets[i].href.indexOf('/merged')==-1)) continue;
+					if (typeof document.styleSheets[i].cssText!='undefined')
 					{
-						for (var j=0;j<rules.length;j++)
+						cssText+=document.styleSheets[i].cssText;
+					} else
+					{
+						var rules=[];
+						try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
+						catch (e) {};
+						if (rules)
 						{
-							if (rules[j].cssText)
-								cssText+=rules[j].cssText+"\n\n";
-							else
-								cssText+=rules[j].selectorText+'{ '+rules[j].style.cssText+"}\n\n";
+							for (var j=0;j<rules.length;j++)
+							{
+								if (rules[j].cssText)
+									cssText+=rules[j].cssText+"\n\n";
+								else
+									cssText+=rules[j].selectorText+'{ '+rules[j].style.cssText+"}\n\n";
+							}
 						}
 					}
 				}
+				catch (e){};
 			}
-			catch (e){};
 		}
 		head+=cssText+'<\/style>';
 
@@ -1325,13 +1325,17 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	{+END}
 
 	var scroll_y=get_window_scroll_y();
-	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y));
+	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y),true);
 	if (dest_y<0) dest_y=0;
 	if ((typeof expected_scroll_y!='undefined') && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
 	if (typeof dir=='undefined' || !null) var dir=(dest_y>scroll_y)?1:-1;
-	var dist=dir*17;
 
-	if (((dir==1) && (scroll_y+dist>=dest_y)) || ((dir==-1) && (scroll_y+dist<=dest_y)) || ((dest_y-scroll_y)*dir>2000))
+	var distance_to_go=(dest_y-scroll_y)*dir;
+	var dist=Math.round(dir*(distance_to_go/25));
+	if (dir==-1 && dist>-25) dist=-25;
+	if (dir==1 && dist<25) dist=25;
+
+	if (((dir==1) && (scroll_y+dist>=dest_y)) || ((dir==-1) && (scroll_y+dist<=dest_y)) || (distance_to_go>2000))
 	{
 		try
 		{
@@ -1347,7 +1351,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	}
 	catch (e) {return;}; // May be stopped by popup blocker
 
-	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y,dir,event_after); } , 30);
+	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y+dist,dir,event_after); } , 30);
 }
 
 /* Get what an elements current style is for a particular CSS property */
@@ -1474,7 +1478,6 @@ function get_window_scroll_y(win)
 }
 function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
-	if (!obj && typeof window.console!='undefined') { console.log(find_pos_x.caller); return 0; }
 	var call_obj=obj;
 
 	var curleft=0;
@@ -1496,7 +1499,6 @@ function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 }
 function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
-	if (!obj && typeof window.console!='undefined') { console.log(find_pos_y.caller); return 0; }
 	var call_obj=obj;
 
 	var curtop=0;
@@ -1698,7 +1700,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	var existing_tooltips=get_elements_by_class_name(document.body,'tooltip');
 	for (var i=0;i<existing_tooltips.length;i++)
 	{
-		if (existing_tooltips[i].id!=ac.tooltipId) existing_tooltips[i].parentNode.removeChild(existing_tooltips[i]);
+		if (existing_tooltips[i].id!=ac.tooltip_id) existing_tooltips[i].parentNode.removeChild(existing_tooltips[i]);
 	}
 
 	// Add in move/leave events if needed
@@ -1716,9 +1718,9 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	for (var i=0;i<children.length;i++) children[i].setAttribute('title','');
 
 	var tooltip_element;
-	if ((typeof ac.tooltipId!='undefined') && (document.getElementById(ac.tooltipId)))
+	if ((typeof ac.tooltip_id!='undefined') && (document.getElementById(ac.tooltip_id)))
 	{
-		tooltip_element=win.document.getElementById(ac.tooltipId);
+		tooltip_element=win.document.getElementById(ac.tooltip_id);
 		tooltip_element.style.display='none';
 		set_inner_html(tooltip_element,'');
 		reposition_tooltip(ac,myevent,bottom,true,tooltip_element,force_width);
@@ -1727,7 +1729,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		tooltip_element=win.document.createElement('div');
 		tooltip_element.role='tooltip';
 		tooltip_element.style.display='none';
-		tooltip_element.className="tooltip";
+		tooltip_element.className='tooltip';
 		if (ac.className.substr(0,3)=='tt_')
 		{
 			tooltip_element.className+=' '+ac.className;
@@ -1740,7 +1742,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		}
 		tooltip_element.style.position='absolute';
 		tooltip_element.id=Math.floor(Math.random()*1000);
-		ac.tooltipId=tooltip_element.id;
+		ac.tooltip_id=tooltip_element.id;
 		reposition_tooltip(ac,myevent,bottom,true,tooltip_element,force_width);
 		document.body.appendChild(tooltip_element);
 	}
@@ -1806,9 +1808,9 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 	}
 
 	if (!page_loaded) return;
-	if (!ac.tooltipId) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  /* Should not happen but written as a fail-safe */
+	if (!ac.tooltip_id) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  /* Should not happen but written as a fail-safe */
 
-	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltipId);
+	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltip_id);
 	if (tooltip_element)
 	{
 		var width=find_width(tooltip_element);
@@ -1884,9 +1886,9 @@ function deactivate_tooltip(ac,event)
 {
 	ac.is_over=false;
 
-	if ((!page_loaded) || (!ac.tooltipId)) return;
+	if ((!page_loaded) || (!ac.tooltip_id)) return;
 
-	var tooltip_element=document.getElementById(ac.tooltipId);
+	var tooltip_element=document.getElementById(ac.tooltip_id);
 	if (tooltip_element) tooltip_element.style.display='none';
 }
 
@@ -2030,7 +2032,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 {
 	if (element)
 	{
-		if ((element==window) && ((the_event=='load') || (the_event=='real_load')) && (page_fully_loaded))
+		if ((element==window) && ((the_event=='load') && (page_fully_loaded)) || ((the_event=='real_load') && (page_loaded)))
 		{
 			window.setTimeout(func,0);
 			return true;
@@ -2049,22 +2051,28 @@ function add_event_listener_abstract(element,the_event,func,capture)
 			element.simulated_events[the_event].push(func);
 		}
 
-		if(typeof element.addEventListener!='undefined')
+		if (typeof element.addEventListener!='undefined')
 		{
 			/* W3C */
 			if (the_event=='load') // Try and be smarter
 			{
-				element.addEventListener('DOMContentLoaded',function() { window.ranD=true; window.setTimeout(func,0); },capture);
-				return element.addEventListener(the_event,function() { if (!window.ranD) window.setTimeout(func,0); },capture);
+				element.addEventListener('DOMContentLoaded',function() { page_loaded=true; window.ranD=true; window.setTimeout(func,0); },capture);
+				return element.addEventListener(the_event,function() { page_loaded=true; if (!window.ranD) window.setTimeout(func,0); },capture);
 			}
-			if (the_event=='real_load') the_event='load';
+			if (the_event=='real_load')
+			{
+				return element.addEventListener('load',function() { page_fully_loaded=true; func(); },capture);
+			}
 			return element.addEventListener(the_event,func,capture);
 		}
-		else if(typeof element.attachEvent!='undefined')
+		else if (typeof element.attachEvent!='undefined')
 		{
 			/* Microsoft - no capturing :( */
-			if (the_event=='real_load') the_event='load';
-			return element.attachEvent("on"+the_event,func);
+			if ((the_event=='load') || (the_event=='real_load'))
+			{
+				return element.attachEvent('onload',function() { page_loaded=true; page_fully_loaded=true; func(); });
+			}
+			return element.attachEvent('on'+the_event,func);
 		}
 		else return false;
 	}
@@ -2139,8 +2147,11 @@ function get_outer_html(element)
 }
 
 /* Get an element's HTML */
-function get_inner_html(element,outerToo)
+function get_inner_html(element,outer_too)
 {
+	if (typeof outer_too=='undefined') var outer_too=false;
+	if (typeof element.innerHTML!='undefined') return outer_too?element.outerHTML:element.innerHTML;
+
 	// recursively copy the DOM into a string
 	function inner_html_copy(src_dom_node,level) {
 		var out='';
@@ -2166,7 +2177,7 @@ function get_inner_html(element,outerToo)
 						(a_value!==null) &&
 						(a_name!='complete') &&
 						(a_name!='simulated_events') && // ocp, expando
-						(((a_name.substr(0,2)!='on') && (a_name!='cite') && (a_name!='nofocusrect') && (a_name!='width') && (a_name!='height') && (a_name!='cache') && (a_name!='dataFld') && (a_name!='dataFormatAs') && (a_name!='dataSrc') && (a_name!='implementation') && (a_name!='style')) || (a_value!='null')) &&
+						(((a_name.substr(0,2)!='on') && (a_name.substr(0,6)!='jQuery') && (a_name.substr(0,8)!='sizcache') && (a_name!='sizset') && (a_name!='nodeIndex') && (a_name!='cite') && (a_name!='nofocusrect') && (a_name!='width') && (a_name!='height') && (a_name!='cache') && (a_name!='dataFld') && (a_name!='dataFormatAs') && (a_name!='dataSrc') && (a_name!='implementation') && (a_name!='style')) || (a_value!='null')) &&
 						((a_name!='start') || (a_value!='fileopen')) &&
 						((a_name!='loop') || (a_value!='1')) &&
 						(((a_name!='width') && (a_name!='height') && (a_name!='tabIndex') && (a_name!='hspace') && (a_name!='vspace')) || (a_value!='0')) &&
@@ -2196,11 +2207,11 @@ function get_inner_html(element,outerToo)
 			}
 			else if (src_dom_node.nodeType==3) {
 				// text node
-				out+= (src_dom_node.nodeValue?src_dom_node.nodeValue:"");
+				out+= (src_dom_node.nodeValue?src_dom_node.nodeValue:'');
 			}
 			else if (src_dom_node.nodeType == 4) {
 				// text node
-				out+=(src_dom_node.nodeValue?"<![CDATA["+src_dom_node.nodeValue+"]]":"");
+				out+=(src_dom_node.nodeValue?'<![CDATA['+src_dom_node.nodeValue+']]':'');
 			}
 		} else
 		{
@@ -2215,7 +2226,7 @@ function get_inner_html(element,outerToo)
 		return out;
 	}
 
-	return inner_html_copy(element,outerToo?2:1);
+	return inner_html_copy(element,outer_too?2:1);
 }
 
 /*  Originally written by Optimal Works, http://www.optimalworks.net/  */
@@ -2276,9 +2287,9 @@ function entities_to_unicode(din)
 /* load the HTML as XHTML */
 function inner_html_load(xml_string) {
 	var xml;
-	if (typeof DOMParser!='undefined') xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
+	if (typeof DOMParser!='undefined') xml=(new DOMParser()).parseFromString(xml_string,'application/xml');
 	else {
-		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
+		var ieDOM=['MSXML2.DOMDocument','MSXML.DOMDocument','Microsoft.XMLDOM'];
 		for (var i=0;i<ieDOM.length && !xml;i++) {
 			try { xml=new ActiveXObject(ieDOM[i]);xml.loadXML(xml_string); }
 			catch(e) {}
@@ -2296,11 +2307,17 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 
 		if ((node_upper=='SCRIPT') && (!xml_doc.getAttribute('src')))
 		{
-			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:"")));
+			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:'')));
 			if (script_tag_dependencies['to_load']==0)
 			{
 				window.setTimeout(function() {
-					eval.call(window,text);
+					if (typeof window.execScript!='undefined')
+					{
+						window.execScript(text);
+					} else
+					{
+						eval.call(window,text);
+					}
 				},0);
 			} else
 			{
@@ -2316,11 +2333,11 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 
 			// attributes
 			for (var a=0,attr=xml_doc.attributes.length;a<attr;a++) {
-				var a_name=xml_doc.attributes[a].name,a_value=xml_doc.attributes[a].value,evt=(a_name.substr(0,2)=="on");
+				var a_name=xml_doc.attributes[a].name,a_value=xml_doc.attributes[a].value,evt=(a_name.substr(0,2)=='on');
 				if (!evt) {
 					switch (a_name) {
-						case "class": this_node.className=a_value; break;
-						case "for": this_node.htmlFor=a_value; break;
+						case 'class': this_node.className=a_value; break;
+						case 'for': this_node.htmlFor=a_value; break;
 						default: this_node.setAttribute(a_name,a_value);
 					}
 				} else
@@ -2346,11 +2363,17 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 									delete script_tag_dependencies['to_load'][i];
 								else if (typeof script_tag_dependencies['to_load'][i]!=='undefined') found++;
 							}
-							if (found==0)
+							if (found==0) // Now we know all to_loads are loaded, we do the to_runs
 							{
 								for (i=0;i<script_tag_dependencies['to_run'].length;i++)
 								{
-									eval.call(window,script_tag_dependencies['to_run'][i]);
+									if (typeof window.execScript!='undefined')
+									{
+										window.execScript(script_tag_dependencies['to_run'][i]);
+									} else
+									{
+										eval.call(window,script_tag_dependencies['to_run'][i]);
+									}
 								}
 								script_tag_dependencies['to_run']=[]; // So won't run again, if both onreadystatechange and onload implemented in browser
 							}
@@ -2381,10 +2404,10 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 		}
 		else if (xml_doc.nodeType==3) {
 			// text node
-			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:"")));
-			var test=text.replace(/^\s*|\s*$/g,"");
+			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:'')));
+			var test=text.replace(/^\s*|\s*$/g,'');
 
-			if (test.indexOf("<!--")!=0 && (test.length<=3 || test.indexOf("-->")!=(test.length-3)))
+			if (test.indexOf('<!--')!=0 && (test.length<=3 || test.indexOf('-->')!=(test.length-3)))
 			{
 				if ((dom_node.nodeName=='STYLE') && (!dom_node.ownerDocument.createCDATASection))
 				{
@@ -2398,7 +2421,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 		}
 		else if (xml_doc.nodeType==4) {
 			// CDATA node
-			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:"")));
+			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:'')));
 			if ((dom_node.nodeName=='STYLE') && (!dom_node.ownerDocument.createCDATASection))
 			{
 				dom_node.cssText=text; /* needed for IE */
@@ -2424,7 +2447,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 /* Put some new HTML around the given element */
 function set_outer_html(element,tHTML)
 {
-	set_inner_html(element,tHTML);
+	set_inner_html(element,tHTML,false,true);
 	var p=element.parentNode;
 	var c=element.childNodes;
 	for (var i=c.length-1;i>=0;i--)
@@ -2473,22 +2496,29 @@ function set_inner_html(element,tHTML,append,force_dom)
 
 			if (tHTML.toLowerCase().indexOf('<script')!=-1)
 			{
-				window.js_runs_test=false;
 				var r_id='js_'+Math.random();
-				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
+				window['js_runs_test_'+r_id]=false;
+				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window[\'js_runs_test_'+r_id+'\']=true;</script>';
 
 				window.setTimeout(function() {
-					if (!window.js_runs_test) // If JS was not run by the above op
+					if (!window['js_runs_test_'+r_id]) // If JS was not run by the above op
 					{
 						var scripts=element.getElementsByTagName('script');
 						for (var i=scripts_jump;i<scripts.length;i++)
 						{
 							if (!scripts[i].src) // i.e. if it is inline JS
 							{
-								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
-								eval.call(window,text);
+								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):'')));
+								if (typeof window.execScript!='undefined')
+								{
+									window.execScript(text);
+								} else
+								{
+									eval.call(window,text);
+								}
 							}
 						}
+						window['js_runs_test_'+r_id]=true;
 					} else
 					{
 						var r=document.getElementById(r_id);
@@ -2505,10 +2535,19 @@ function set_inner_html(element,tHTML,append,force_dom)
 	tHTML=entities_to_unicode(tHTML);
 
 	/* load the XML and copies to DOM */
-	tHTML="<root>"+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+"</root>";
+	tHTML='<root>'+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+'</root>';
 	var xml_doc=inner_html_load(tHTML);
 	if (element && xml_doc) {
-		if (!append) while (element.lastChild) element.removeChild(element.lastChild);
+		if (!append)
+		{
+			if (element.lastChild && element.lastChild.parentNode!=element) // Workaround IE bug
+			{
+				element.innerHTML='';
+			} else
+			{
+				while (element.lastChild) element.removeChild(element.lastChild);
+			}
+		}
 
 		var script_tag_dependencies={
 			'to_run': [],
@@ -2557,6 +2596,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 
 			bit.onclick=function(i) {
 				return function(event)	{
+					if (typeof event=='undefined') var event=window.event;
 					event.returnValue=false;
 
 					// Find where the rating replacement will go
@@ -2565,20 +2605,23 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 					while (replace_spot!==null)
 					{
 						replace_spot=replace_spot.parentNode;
-						if (replace_spot.className.match(/^RATING_BOX( |$)/))
+						if (replace_spot)
 						{
-							template='RATING_BOX';
-							break;
-						}
-						if (replace_spot.className.match(/^RATING_INLINE_STATIC( |$)/))
-						{
-							template='RATING_INLINE_STATIC';
-							break;
-						}
-						if (replace_spot.className.match(/^RATING_INLINE_DYNAMIC( |$)/))
-						{
-							template='RATING_INLINE_DYNAMIC';
-							break;
+							if (replace_spot.className.match(/(^| )RATING_BOX( |$)/))
+							{
+								template='RATING_BOX';
+								break;
+							}
+							if (replace_spot.className.match(/(^| )RATING_INLINE_STATIC( |$)/))
+							{
+								template='RATING_INLINE_STATIC';
+								break;
+							}
+							if (replace_spot.className.match(/(^| )RATING_INLINE_DYNAMIC( |$)/))
+							{
+								template='RATING_INLINE_DYNAMIC';
+								break;
+							}
 						}
 					}
 					var _replace_spot=(template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot;
@@ -2595,7 +2638,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 					var snippet_request='rating&type='+window.encodeURIComponent(type)+'&id='+window.encodeURIComponent(id)+'&content_type='+window.encodeURIComponent(content_type)+'&template='+window.encodeURIComponent(template)+'&content_url='+window.encodeURIComponent(content_url)+'&content_title='+window.encodeURIComponent(content_title);
 					var message=load_snippet(snippet_request,'rating='+window.encodeURIComponent(i),function(ajax_result) {
 						var message=ajax_result.responseText;
-						set_inner_html(_replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
+						set_outer_html(_replace_spot,(template=='')?('<strong>'+message+'</strong>'):message);
 					});
 
 					return false;
@@ -2702,9 +2745,9 @@ function move_to_full_editor(button,more_url)
 }
 
 /* Update a normal comments topic with AJAX replying */
-function replace_comments_form_with_ajax(options,hash)
+function replace_comments_form_with_ajax(options,hash,comments_form_id,comments_wrapper_id)
 {
-	var comments_form=document.getElementById('comments_form');
+	var comments_form=document.getElementById(comments_form_id);
 	if (comments_form)
 	{
 		comments_form.old_onsubmit=comments_form.onsubmit;
@@ -2718,7 +2761,7 @@ function replace_comments_form_with_ajax(options,hash)
 
 			if (!comments_form.old_onsubmit(event)) return false;
 
-			var comments_wrapper=document.getElementById('comments_wrapper');
+			var comments_wrapper=document.getElementById(comments_wrapper_id);
 			if (!comments_wrapper) // No AJAX, as stuff missing from template
 			{
 				comments_form.submit();
@@ -2742,7 +2785,7 @@ function replace_comments_form_with_ajax(options,hash)
 			if (typeof post_element.default_substring_to_strip!='undefined') // Strip off prefix if unchanged
 			{
 				if (post_value.substring(0,post_element.default_substring_to_strip.length)==post_element.default_substring_to_strip)
-					post_value=post_element.substring(post_element.default_substring_to_strip.length,post_value.length);
+					post_value=post_value.substring(post_element.default_substring_to_strip.length,post_value.length);
 			}
 			for (var i=0;i<comments_form.elements.length;i++)
 			{
@@ -2756,8 +2799,18 @@ function replace_comments_form_with_ajax(options,hash)
 					// Display
 					set_outer_html(comments_wrapper,ajax_result.responseText);
 
+					// Scroll back to comment
+					window.setTimeout(function() {
+						var comments_wrapper=document.getElementById(comments_wrapper_id); // outerhtml set will have broken the reference
+						smooth_scroll(find_pos_y(comments_wrapper,true));
+					},0);
+
+					// Force reload on back button, as otherwise comment would be missing
+					force_reload_on_back();
+
 					// Collapse, so user can see what happening
-					if (document.getElementById('comments_posting_form_outer').className.indexOf('toggleable_tray')!=-1)
+					var outer=document.getElementById('comments_posting_form_outer');
+					if (outer && outer.className.indexOf('toggleable_tray')!=-1)
 						toggleable_tray('comments_posting_form_outer');
 
 					// Set fade for posts not shown before
@@ -2771,7 +2824,7 @@ function replace_comments_form_with_ajax(options,hash)
 						}
 					}
 
-					// And re-attach this code (got killed by set_inner_html)
+					// And re-attach this code (got killed by set_outer_html)
 					replace_comments_form_with_ajax(options,hash);
 				} else // Error: do a normal post so error can be seen
 				{
@@ -2781,6 +2834,23 @@ function replace_comments_form_with_ajax(options,hash)
 
 			return false;
 		};
+	}
+}
+
+function force_reload_on_back()
+{
+	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
+	var func=function () {
+		window.location.reload();
+	};
+
+	if (typeof window.addEventListener!='undefined')
+	{
+		window.addEventListener(showevent,func,false);
+	}
+	else if (typeof window.attachEvent!='undefined')
+	{
+		window.attachEvent('on'+showevent,func);
 	}
 }
 
@@ -2808,9 +2878,10 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	var post=form.elements['post'];
 
-	smooth_scroll(find_pos_y(form));
+	smooth_scroll(find_pos_y(form,true));
 
-	if (document.getElementById('comments_posting_form_outer').style.display=='none')
+	var outer=document.getElementById('comments_posting_form_outer');
+	if (outer && outer.style.display=='none')
 		toggleable_tray('comments_posting_form_outer');
 
 	if (is_threaded)
@@ -2887,7 +2958,7 @@ function setup_word_counter(post,count_element)
 	}, 1000);
 }
 
-/* Set up a form to have its CAPTCHA validated upon submissio using AJAX */
+/* Set up a form to have its CAPTCHA validated upon submission using AJAX */
 function add_captcha_validation(form)
 {
 	form.old_submit=form.onsubmit;
@@ -2905,7 +2976,8 @@ function add_captcha_validation(form)
 			if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 			return true;
 		};
-	add_event_listener_abstract(window,'pageshow',function () {
+	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
+	add_event_listener_abstract(window,showevent,function () {
 		form.elements['captcha'].src+='&'; // Force it to reload latest captcha
 	} );
 }

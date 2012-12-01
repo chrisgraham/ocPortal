@@ -166,7 +166,7 @@ echo '<ol>';
 foreach ($todo as $i=>$target_file)
 {
 	echo '<li>';
-	echo '<input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label>';
+	echo '<input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset+20)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label>';
 	if ($i==$file_offset) echo '<a name="progress" id="progress"></a>';
 	echo '</li>';
 }
@@ -202,14 +202,14 @@ END;
 		<meta http-equiv="refresh" content="3;url={$_refresh_url}" />
 END;
 	echo <<<END
-		<style type="text/css">
+		<style type="text/css">/*<![CDATA[*/
 END;
 global $FILE_BASE;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($FILE_BASE.'/themes/default/css/global.css'))))));
 echo <<<END
 			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		</style>
+		/*]]>*/</style>
 
 		<meta name="robots" content="noindex, nofollow" />
 	</head>

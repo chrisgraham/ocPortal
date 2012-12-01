@@ -101,7 +101,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 				{
 					$category_field=array_pop($category_field);
 					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
-					if ($award_hook=='catalogue_entry')
+					if ($content_type=='catalogue_entry')
 					{
 						$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 						if (!has_category_access($member_id,'catalogues_catalogue',$catalogue_name))
@@ -173,6 +173,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 		'_GUID'=>'da533e0f637e4c90ca7ef5a9a23f3203',
 		'OPTIONS'=>$serialized_options,
 		'HASH'=>$hash,
+		'PAGE_NAME'=>$page_name,
 	)));
 
 	return array($rating_details,$comment_details,$trackback_details);
@@ -186,11 +187,11 @@ function post_comment_script()
 	prepare_for_known_ajax_response();
 
 	// Read in context of what we're doing
-	$options=post_param('options');
+	$options=either_param('options');
 	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum)=unserialize($options);
 
 	// Check security
-	$hash=post_param('hash');
+	$hash=either_param('hash');
 	require_code('crypt');
 	if (best_hash($options,get_site_salt())!=$hash)
 	{
@@ -203,6 +204,14 @@ function post_comment_script()
 
 	// Get new comments state
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,true,$submitter,$allow_comments==2);
+
+	// AJAX support
+	$comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
+		'_GUID'=>'da533e0f637e4c90ca7ef5a9a23f3203',
+		'OPTIONS'=>$options,
+		'HASH'=>$hash,
+		'PAGE_NAME'=>$page_name,
+	)));
 
 	// And output as text
 	header('Content-Type: text/plain; charset='.get_charset());
@@ -374,7 +383,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			'SIMPLISTIC'=>(count($all_rating_criteria)==1),
 			'LIKES'=>$likes,
 			'LIKED_BY'=>$liked_by,
-		);
+		)+$all_rating_criteria[$content_type]/*so can assume single rating criteria if want and reference that directly*/;
 		$rating_form=do_template($form_tpl,$tpl_params);
 		$ret=$tpl_params+array(
 			'RATING_FORM'=>$rating_form,
@@ -507,7 +516,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 	list($_content_title,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
 	if (is_null($content_title)) $content_title=$_content_title;
-	if (($member_id===$submitter) && (!is_guest($member_id))) return;
+	if ((get_value('allow_own_rate')!=='1') && ($member_id===$submitter) && (!is_guest($member_id))) return;
 
 	if (!is_null($rating))
 	{

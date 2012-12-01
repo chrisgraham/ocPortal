@@ -210,6 +210,8 @@ class OCP_Topic
 				'HASH'=>$hash,
 				'SERIALIZED_OPTIONS'=>$serialized_options,
 				'SORT'=>$sort,
+				'TOTAL_POSTS'=>strval($this->total_posts),
+				'IS_THREADED'=>$this->is_threaded,
 			));
 		}
 
@@ -936,6 +938,7 @@ class OCP_Topic
 				'UNVALIDATED'=>$unvalidated,
 				'IS_SPACER_POST'=>$is_spacer_post,
 				'NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),
+				'IS_THREADED'=>$this->is_threaded,
 			))));
 		}
 

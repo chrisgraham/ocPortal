@@ -1078,6 +1078,8 @@ class Module_galleries
 		$myrow=$rows[0];
 		$url=$myrow['url'];
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+		$thumb_url=$myrow['thumb_url'];
+		if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 		$cat=$myrow['cat'];
 		set_feed_url('?mode=galleries&filter='.$cat);
 
@@ -1200,6 +1202,7 @@ class Module_galleries
 			'NAV'=>$nav,
 			'DESCRIPTION'=>$description,
 			'URL'=>$url,
+			'THUMB_URL'=>$thumb_url,
 			'WARNING_DETAILS'=>$warning_details,
 		));
 	}
@@ -1373,6 +1376,7 @@ class Module_galleries
 			'DESCRIPTION'=>$description,
 			'VIDEO'=>$video,
 			'WARNING_DETAILS'=>$warning_details,
+			'THUMB_URL'=>$thumb_url,
 		));
 	}
 

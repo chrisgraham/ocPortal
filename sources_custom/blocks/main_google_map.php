@@ -29,7 +29,7 @@ class Block_main_google_map
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('filter','ocselect','title','region','cluster','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','max_results','extra_sources');
+		$info['parameters']=array('filter','ocselect','title','region','cluster','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','max_results','extra_sources','guid');
 		return $info;
 	}
 
@@ -71,6 +71,7 @@ class Block_main_google_map
 		$icon=array_key_exists('icon',$map)?$map['icon']:'';
 		if (!array_key_exists('filter',$map)) $map['filter']='';
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
+		$guid=array_key_exists('guid',$map)?$map['guid']:'';
 
 		$data=array();
 
@@ -117,8 +118,14 @@ class Block_main_google_map
 			$where.=' AND (1=1';
 			if ($map['filter']!='')
 			{
-				require_code('ocfiltering');
-				$where.=' AND ('.ocfilter_to_sqlfragment($map['filter'],'r.id','catalogue_categories','cc_parent_id','cc_id','r.id').')';
+				if ($map['filter']=='/')
+				{
+					$where.=' AND (0=1)';
+				} else
+				{
+					require_code('ocfiltering');
+					$where.=' AND ('.ocfilter_to_sqlfragment($map['filter'],'r.id','catalogue_categories','cc_parent_id','cc_id','r.id').')';
+				}
 			}
 			if ($ocselect!='')
 			{
@@ -178,6 +185,7 @@ class Block_main_google_map
 					$details['LATITUDE']=float_to_raw_string(floatval($latitude));
 
 					$details['ENTRY_TITLE']=$entry_title;
+					if (isset($map['guid']) && $map['guid']!='') $details['_GUID']=$map['guid'];
 
 					$entry_content=do_template('CATALOGUE_googlemap_FIELDMAP_ENTRY_WRAP',$details+array('GIVE_CONTEXT'=>false),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 					$details['ENTRY_CONTENT']=$entry_content;
@@ -202,7 +210,7 @@ class Block_main_google_map
 		$div_id='div_'.$catalogue_name.'_'.$uniqid;
 
 		return do_template('BLOCK_MAIN_GOOGLE_MAP',array(
-			'_GUID'=>'939dd8fe2397bba0609fba129a8a3bfd',
+			'_GUID'=>($guid=='')?'939dd8fe2397bba0609fba129a8a3bfd':$guid,
 			'TITLE'=>$map['title'],
 			'ICON'=>$icon,
 			'MIN_LATITUDE'=>$min_latitude,

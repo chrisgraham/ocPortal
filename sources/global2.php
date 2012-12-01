@@ -667,10 +667,12 @@ function load_user_stuff()
 
 		if (!array_key_exists('forum_type',$SITE_INFO)) $SITE_INFO['forum_type']='ocf';
 		require_code('forum/'.$SITE_INFO['forum_type']);	 // So we can at least get user details
+		$class='forum_driver_'.filter_naughty_harsh($SITE_INFO['forum_type']);
+		if (class_exists($class.'_sub')) $class.='_sub';
 		/** The active forum driver, through which member and forum interfacing should be done (apart from code that is explicitly only written as part of OCF)
 		 * @global object $FORUM_DRIVER
 		 */
-		$FORUM_DRIVER=object_factory('forum_driver_'.filter_naughty_harsh($SITE_INFO['forum_type']));
+		$FORUM_DRIVER=object_factory($class);
 		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($FORUM_DRIVER->get_drivered_table_prefix()==get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) // NB: In debug mode needs separating so we can properly test our boundaries
 		{
 			$FORUM_DRIVER->connection=&$SITE_DB;
@@ -1350,7 +1352,7 @@ function __param($array,$name,$default,$integer=false,$posted=false)
 	if (is_array($val)) $val=implode(',',$val);
 	if (get_magic_quotes_gpc()) $val=stripslashes($val);
 
-	if (($posted) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
+	if (($posted) && (count($_POST)!=0) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
 	{
 		require_code('input_filter');
 		return check_posted_field($name,$val);
@@ -1824,7 +1826,7 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 		$welcome_value=$value;
 	}
 
-	// If not set yet, work out what merge situaton would be and save it
+	// If not set yet, work out what merge situation would be and save it
 	if ((is_null($value)) || (strpos($value,'::')===false))
 	{
 		$is_guest=is_guest();
@@ -1835,28 +1837,9 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 			// If in guest group or admin group
 			if (($is_guest) || ($is_admin))
 			{
-				// Work out a hash (checksum) for cache busting on this merged file. Does it using an mtime has chain for performance (better than reading and hashing all the file contents)
-				$hash='';
 				$resources=array_keys($arr);
-				foreach ($resources as $resource)
-				{
-					if ($resource=='no_cache') continue;
-
-					if ($type=='.js')
-					{
-						$merge_from=javascript_enforce($resource);
-					} else // .css
-					{
-						$merge_from=css_enforce($resource);
-					}
-					if ($merge_from!='')
-					{
-						$hash=substr(md5($hash.@strval(filemtime($merge_from))),0,5);
-					}
-				}
-				$value=implode(',',$resources).'::'.$hash;
+				$value=implode(',',$resources).'::???';
 				if ($type=='.js') $value=preg_replace('#(^|,)javascript_#','${1}',$value); // Shorten
-				set_value($grouping_codename.$type,$value);
 			}
 		}
 	}
@@ -1873,6 +1856,38 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 		$_value=explode('::',$value);
 		$resources=explode(',',$_value[0]);
 		$hash=$_value[1];
+
+		// Regenerate hash if we support smart decaching, it might have changed and hence we need to do recompiling with a new hash OR this may be the first time ("???" is placeholder)
+		global $SITE_INFO;
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
+		if ($support_smart_decaching)
+		{
+			// Work out a hash (checksum) for cache busting on this merged file. Does it using an mtime has chain for performance (better than reading and hashing all the file contents)
+			$old_hash=$hash;
+			$hash='';
+			foreach ($resources as $resource)
+			{
+				if ($resource=='no_cache') continue;
+
+				if ($type=='.js')
+				{
+					$merge_from=javascript_enforce($resource);
+				} else // .css
+				{
+					$merge_from=css_enforce($resource);
+				}
+				if ($merge_from!='')
+				{
+					$hash=substr(md5($hash.@strval(filemtime($merge_from))),0,5);
+				}
+			}
+			if ($hash!=$old_hash)
+			{
+				$value=implode(',',$resources).'::'.$hash;
+				if ($type=='.js') $value=preg_replace('#(^|,)javascript_#','${1}',$value); // Shorten
+				set_value($grouping_codename.$type,$value);
+			}
+		}
 
 		// Find merged file path
 		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());

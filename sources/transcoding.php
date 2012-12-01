@@ -18,7 +18,7 @@
 /**
  * Transcode a video.
  *
- * @param  URLPATH		Video to transcoded.
+ * @param  URLPATH		Video to be transcoded.
  * @param  ID_TEXT		The table we are saving into
  * @param  ID_TEXT		Name of the URL field in the table
  * @param  ?ID_TEXT		Name of the original filename field in the table (NULL: built into URL field)

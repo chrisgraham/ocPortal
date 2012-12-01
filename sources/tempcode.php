@@ -135,6 +135,7 @@ function output_tempcode_parameter($var,$parameter,$template_name)
 	switch (gettype($var))
 	{
 		case 'NULL':
+			if (strtolower($template_name)!=$template_name && (!is_file(get_file_base().'/themes/default/templates/'.$template_name.'.tpl'))) return ''; // Some kind of custom template, will be error prone
 			return attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$parameter,$template_name),'warn');
 		case 'string':
 			return $var;

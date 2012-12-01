@@ -237,7 +237,13 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
 	{
 		$ob=get_fields_hook($custom_field['cf_type']);
 		$old_value=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','field_'.strval($custom_field['id']),array('mf_member_id'=>$member_id));
-		$actual_custom_fields[$custom_field['id']]=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
+		$value=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
+		if ((fractional_edit()) && ($value!=STRING_MAGIC_NULL))
+		{
+			$rendered=$ob->render_field_value($custom_field,$value,0,NULL);
+			$_POST['field_'.strval($custom_field['id']).'__altered_rendered_output']=is_object($rendered)?$rendered->evaluate():$rendered;
+		}
+		$actual_custom_fields[$custom_field['id']]=$value;
 	}
 	return $actual_custom_fields;
 }
@@ -355,7 +361,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$fields=new ocp_tempcode();
 
 	// Human name / Username
-	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook'))
+	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')!='facebook'))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self')))
 		{
@@ -1380,7 +1386,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 
 			if (get_file_extension($avatar_url)=='gif')
 			{
-				$header = unpack('@6/'.'vwidth/'.'vheight',$from_file);
+				$header=unpack('@6/'.'vwidth/'.'vheight',$from_file);
 				$sx=$header['width'];
 				$sy=$header['height'];
 			} else
@@ -1443,10 +1449,14 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	if ((!is_swf_upload()) && ((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
 	{
 		$x=post_param($param_name,'');
-		if (($x!='') && (url_is_local($x)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
+		if (($x!='') && (url_is_local($x)))
 		{
 			$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_photo_url',array('id'=>$member_id));
-			if ($old!=$x) access_denied('ASSOCIATE_EXISTING_FILE');
+			if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			{
+				if ($old!=$x) access_denied('ASSOCIATE_EXISTING_FILE');
+			}
+			if ($old==$x) return; // Not changed, bomb out as we don't want to generate a thumbnail
 		}
 	}
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))

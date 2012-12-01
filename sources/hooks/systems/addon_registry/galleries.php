@@ -926,6 +926,7 @@ class Hook_addon_registry_galleries
 					'TRACKBACK_DETAILS'=>lorem_sentence_html(),
 					'COMMENT_DETAILS'=>$comment_details,
 					'EDIT_URL'=>placeholder_url(),
+					'THUMB_URL'=>placeholder_image_url(),
 					'NAV'=>$nav,
 					'COMMENTS'=>lorem_phrase(),
 					'VIDEO'=>$video,

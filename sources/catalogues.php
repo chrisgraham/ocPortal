@@ -643,11 +643,17 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		}
 		elseif (($order_by=='compound_rating') || ($order_by=='average_rating') || ($order_by=='fixed_random'))
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,$order_by,'',array(),'r');
+			require_code('hooks/systems/content_meta_aware/catalogue_entry');
+			$ob=object_factory('Hook_content_meta_aware_catalogue_entry');
+			$info=$ob->info();
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],$info,$catalogue_name,$extra_join,$extra_select,$order_by,'',array(),'r');
 			if (!is_null($bits)) list($virtual_order_by,)=$bits;
 		} elseif (is_numeric($order_by)) // Ah, so it's saying the nth field of this catalogue
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array(),'r');
+			require_code('hooks/systems/content_meta_aware/catalogue_entry');
+			$ob=object_factory('Hook_content_meta_aware_catalogue_entry');
+			$info=$ob->info();
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],$info,$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array(),'r');
 			if (!is_null($bits))
 			{
 				list($new_key,)=$bits;
@@ -725,16 +731,16 @@ function catalogue_entries_manual_sort($fields,&$entries,$order_by,$direction)
 				$considered_field='FIELD_'.$order_by;
 			}
 
-			$a=@$entries[$j]['map'][$considered_field];
-			if (array_key_exists($considered_field.'_PLAIN',@$entries[$j]['map']))
+			$a=$entries[$j]['map'][$considered_field];
+			if (array_key_exists($considered_field.'_PLAIN',$entries[$j]['map']))
 			{
-				$a=@$entries[$j]['map'][$considered_field.'_PLAIN'];
+				$a=$entries[$j]['map'][$considered_field.'_PLAIN'];
 			}
-			$b=@$entries[$i]['map'][$considered_field];
+			$b=$entries[$i]['map'][$considered_field];
 
-			if (array_key_exists($considered_field.'_PLAIN',@$entries[$i]['map']))
+			if (array_key_exists($considered_field.'_PLAIN',$entries[$i]['map']))
 			{
-				$b=@$entries[$i]['map'][$considered_field.'_PLAIN'];
+				$b=$entries[$i]['map'][$considered_field.'_PLAIN'];
 			}
 			if (is_object($a)) $a=$a->evaluate();
 			if (is_object($b)) $b=$b->evaluate();
@@ -887,10 +893,10 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 
 				if (($field['cf_visible']==1) || ($i==0))
 				{
-					if (get_value('no_catalogue_field_assembly')!=='1')
+					if ((get_value('no_catalogue_field_assembly')!=='1') || (!$feedback_details/*no feedback details implies wants all field data*/))
 					{
 						$f=array('ENTRYID'=>strval($id),'CATALOGUE'=>$catalogue_name,'TYPE'=>$field['cf_type'],'FIELD'=>$field_name,'FIELDID'=>strval($i),'_FIELDID'=>strval($field['id']),'FIELDTYPE'=>$field_type,'VALUE_PLAIN'=>$ev,'VALUE'=>$use_ev_enhanced);
-						if (get_value('no_catalogue_field_assembly_fieldmaps')!=='1')
+						if ((get_value('no_catalogue_field_assembly_fieldmaps')!=='1') || (!$feedback_details/*no feedback details implies wants all field data*/))
 						{
 							$_field=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
 							$map['FIELDS']->attach($_field);
@@ -943,7 +949,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$self_url=build_url($url_map,get_module_zone('catalogues'),NULL,false,false,true);
 	if (($feedback_details) || ($only_fields!==array(0)))
 	{
-		$map['RATING']=($entry['allow_rating']==1)?display_rating($self_url,$c_value,'catalogues',strval($id),'RATING_INLINE_STATIC',$entry['ce_submitter']):new ocp_tempcode();
+		$map['RATING']=($entry['allow_rating']==1)?display_rating($self_url,$c_value,'catalogues__'.$catalogue_name,strval($id),'RATING_INLINE_STATIC',$entry['ce_submitter']):new ocp_tempcode();
 	}
 	if ($feedback_details)
 	{

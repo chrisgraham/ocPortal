@@ -227,7 +227,7 @@ function skippable_keep($key,$val)
 {
 	global $BOT_TYPE_CACHE;
 	if ($BOT_TYPE_CACHE===false) get_bot_type();
-	if ($BOT_TYPE_CACHE!==false)
+	if ($BOT_TYPE_CACHE!==NULL)
 	{
 		return true;
 	}
@@ -438,7 +438,17 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		$HAS_KEEP_IN_URL_CACHE=false;
 		foreach ($_GET as $key=>$val)
 		{
-			if (!is_string($val)) continue;
+			if (!is_string($val))
+			{
+				if ($keep_all)
+				{
+					if ((!array_key_exists($key,$vars)) && (!isset($skip[$key])))
+					{
+						_handle_array_var_append($key,$val,$vars);
+					}
+				}
+				continue;
+			}
 
 			$is_keep=false;
 			$appears_keep=(($key[0]=='k') && (substr($key,0,5)=='keep_'));
@@ -529,6 +539,30 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 
 	// Done
 	return $url.$hash;
+}
+
+/**
+ * Recursively put array parameters into a flat array for use in a query string.
+ *
+ * @param  ID_TEXT		Primary field name
+ * @param  array			Array
+ * @param  array			Flat array to write into
+ */
+function _handle_array_var_append($key,$val,&$vars)
+{
+	foreach ($val as $key2=>$val2)
+	{
+		if (get_magic_quotes_gpc()) $val2=stripslashes($val2);
+		if (!is_string($key2)) $key2=strval($key2);
+
+		if (is_array($val2))
+		{
+			_handle_array_var_append($key.'['.$key2.']',$val2,&$vars);
+		} else
+		{
+			$vars[$key.'['.$key2.']']=$val2;
+		}
+	}
 }
 
 /**

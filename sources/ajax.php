@@ -123,7 +123,7 @@ function fractional_edit_script()
 	$_POST['fractional_edit']='1'; // FUDGE
 
 	global $SESSION_CONFIRMED_CACHE;
-	if ($SESSION_CONFIRMED_CACHE==0)
+	if (($SESSION_CONFIRMED_CACHE==0) && ($GLOBALS['SITE_DB']->query_select_value('zones','zone_require_session',array('zone_name'=>$zone))))
 	{
 		return;
 	}
@@ -141,11 +141,21 @@ function fractional_edit_script()
 	request_page($page,true);
 
 	$supports_comcode=get_param_integer('supports_comcode',0)==1;
-	$edited=post_param(get_param('edit_param_name'));
-	if ($supports_comcode)
+	$param_name=get_param('edit_param_name');
+	if (isset($_POST[$param_name.'__altered_rendered_output']))
 	{
-		$_edited=comcode_to_tempcode($edited,get_member());
-		$edited=$_edited->evaluate();
+		$edited=$_POST[$param_name.'__altered_rendered_output'];
+	} else
+	{
+		$edited=post_param($param_name);
+		if ($supports_comcode)
+		{
+			$_edited=comcode_to_tempcode($edited,get_member());
+			$edited=$_edited->evaluate();
+		} else
+		{
+			$edited=escape_html($edited);
+		}
 	}
 	@ini_set('ocproducts.xss_detect','0');
 	echo $edited;

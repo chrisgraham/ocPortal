@@ -58,7 +58,7 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 			$cms_ob=object_factory('Hook_content_meta_aware_'.$content_type);
 			$cma_info=$cms_ob->info();
 			$cma_info['content_type']=$content_type;
-			if ((isset($cma_info[$type_has])) && (isset($cma_info[$type_wanted])) && ($cma_info[$type_has]==$type_id))
+			if ((isset($cma_info[$type_has])) && (isset($cma_info[$type_wanted])) && (($cma_info[$type_has]==$type_id) || ($cma_info[$type_has]==preg_replace('#__.*$#','',$type_id))))
 			{
 				$found_type_id=$cma_info[$type_wanted];
 				break;

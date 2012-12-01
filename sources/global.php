@@ -113,7 +113,7 @@ function require_code($codename,$light_exit=false)
 			$orig=str_replace(array('?'.'>','<'.'?php'),array('',''),file_get_contents($path_b));
 			$a=file_get_contents($path_a);
 
-			if (((strpos($codename,'.php')===false) || (strpos($a,'class Mx_')===false)) && ((function_exists('quercus_version')) || (!$hphp)))
+			if (((strpos($codename,'.php')===false) || (strpos($a,'class Mx_')===false)) && (strpos($a,' extends forum_driver_')===false) && ((function_exists('quercus_version')) || (!$hphp)))
 			{
 				$functions_before=get_defined_functions();
 				$classes_before=get_declared_classes();

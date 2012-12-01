@@ -229,13 +229,13 @@ function rd_do_header()
 	<head>
 		<title>ocPortal rootkit detector</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-		<style type="text/css">
+		<style type="text/css">/*<![CDATA[*/
 END;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo <<<END
 			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		</style>
+		/*]]>*/</style>
 	</head>
 	<body class="website_body"><div class="global_middle">
 		<h1 class="screen_title">ocPortal rootkit detector</h1>

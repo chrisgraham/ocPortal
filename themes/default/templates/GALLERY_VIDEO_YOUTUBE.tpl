@@ -14,7 +14,7 @@
 <script type="text/javascript">// <![CDATA[
 	function youtubeStateChanged(newState)
 	{
-		if (newState==0) playerStopped();
+		if (newState==0) player_stopped();
 	}
 
 	add_event_listener_abstract(window,'real_load',function () {

@@ -543,7 +543,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 				fwrite($socket,'HELO '.$domain."\r\n");
 				$rcv=fgets($socket,1024);
 
-				// Login if necessary
+				// Log in if necessary
 				$username=get_option('smtp_sockets_username');
 				$password=get_option('smtp_sockets_password');
 				if ($username!='')

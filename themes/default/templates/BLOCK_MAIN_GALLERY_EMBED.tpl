@@ -49,8 +49,8 @@
 				current_loading_from_pos_{$GET*,carousel_id}+={MAX%};
 
 				call_block(
-					'{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS},raw=.*}'+'&{START_PARAM%}='+current_loading_from_pos_{$GET*,carousel_id},
-					'raw=1&cache=0',
+					'{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS},raw=.*\,cache=.*,{START_PARAM%}=.*}'+'&{START_PARAM%}='+current_loading_from_pos_{$GET*,carousel_id},
+					'raw=1,cache=0',
 					ob,
 					true
 				);

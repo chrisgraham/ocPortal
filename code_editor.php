@@ -214,7 +214,7 @@ END;
 		<tr><th>FTP Password</th><td><input size="50" type="password" name="ftp_password" /></td></tr>
 	</table>
 	<p>
-		<input type="submit" value="Login" />
+		<input type="submit" value="Log in" />
 	</p>
 	<hr />
 	<ul class="actions_list" role="navigation">

@@ -169,7 +169,7 @@ function internalise_infinite_scrolling_go(url_stem,wrapper,more_links)
 			var next_link=more_links[i];
 			var url_stub='';
 
-			var matches=next_link.href.match(new RegExp('[&?](start|[^_]*_start)=([^&]*)'));
+			var matches=next_link.href.match(new RegExp('[&?](start|[^_]*_start|start_[^_]*)=([^&]*)'));
 			if (matches)
 			{
 				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
@@ -310,30 +310,44 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 	}
 
 	// Show loading animation
-	var loading_wrapper=target_div;
-	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
-	if (typeof raw_ajax_grow_spot[0]!='undefined' && append) loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
-	var loading_wrapper_inner=document.createElement('div');
-	loading_wrapper_inner.style.position='relative';
-	var loading_image=document.createElement('img');
-	loading_image.className='ajax_loading ajax_loading_block';
-	loading_image.src='{$IMG;,loading}';
-	loading_image.style.position='absolute';
-	loading_image.style.left=(find_width(target_div)/2-10)+'px';
-	if (!append)
+	if (loading_wrapper.id.indexOf('carousel_')==-1)
 	{
-		loading_image.style.top=(-find_height(target_div)/2-20)+'px';
-	} else
-	{
-		loading_image.style.top=0;
-		loading_wrapper_inner.style.height='30px';
+		var loading_wrapper=target_div;
+		var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
+		if (typeof raw_ajax_grow_spot[0]!='undefined' && append) loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
+		var loading_wrapper_inner=document.createElement('div');
+		if (abstract_get_computed_style(loading_wrapper,'position')!='relative')
+		{
+			if (append)
+			{
+				loading_wrapper_inner.style.position='relative';
+			} else
+			{
+				loading_wrapper.style.position='relative';
+			}
+		}
+		var loading_image=document.createElement('img');
+		loading_image.className='ajax_loading ajax_loading_block';
+		loading_image.src='{$IMG;,loading}';
+		loading_image.style.position='absolute';
+		loading_image.style.zIndex='1000';
+		loading_image.style.left=(find_width(target_div)/2-10)+'px';
+		if (!append)
+		{
+			loading_image.style.top=(find_height(target_div)/2-20)+'px';
+		} else
+		{
+			loading_image.style.top=0;
+			loading_wrapper_inner.style.height='30px';
+		}
+		loading_wrapper_inner.appendChild(loading_image);
+		loading_wrapper.appendChild(loading_wrapper_inner);
+		window.document.body.style.cursor='wait';
 	}
-	loading_wrapper_inner.appendChild(loading_image);
-	loading_wrapper.appendChild(loading_wrapper_inner);
 
 	// Make AJAX call
 	do_ajax_request(
-		ajax_url,
+		ajax_url+keep_stub(),
 		function(raw_ajax_result) { // Show results when available
 			_call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper);
 		},
@@ -353,6 +367,7 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 	if (typeof ajax_loading[0]!='undefined')
 	{
 		ajax_loading[0].parentNode.parentNode.removeChild(ajax_loading[0].parentNode);
+		window.document.body.style.cursor='';
 	}
 
 	// Put in HTML
@@ -376,8 +391,13 @@ function show_block_html(new_html,target_div,append)
 {
 	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
 	if (typeof raw_ajax_grow_spot[0]!='undefined' && append) target_div=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
-
-	set_inner_html(target_div,new_html,append,true);
+	if (append)
+	{
+		set_inner_html(target_div,new_html,true,true);
+	} else
+	{
+		set_outer_html(target_div,new_html);
+	}
 }
 
 function ajax_form_submit__admin__headless(event,form,block_name,map)

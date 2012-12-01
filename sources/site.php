@@ -605,6 +605,10 @@ function set_short_title($title)
  */
 function process_url_monikers()
 {
+	static $done=false;
+	if ($done) return;
+	$done=true;
+
 	// More SEO redirection (monikers)
 	// Does this URL arrangement support monikers?
 	$url_id=get_param('id',NULL,true);

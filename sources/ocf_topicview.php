@@ -618,17 +618,19 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$test=get_param_integer('threaded',-1);
 		if ($test!=-1) $map['threaded']=$test;
 		$action_url=build_url($map,get_module_zone('topics'));
-		$_title=do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST');
-		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
 		$javascript=NULL;
 
 		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (!array_key_exists('intended_solely_for',$map)))
 		{
 			$javascript='return topic_reply('.($topic_info['is_threaded']?'true':'false').',this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode'])).'\',\''.str_replace(chr(10),'\n',addslashes(strip_comcode($_postdetails['message_comcode']))).'\');';
 		}
+		$_title=do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'reply':'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 		if ($topic_info['is_threaded']==1) // Second button for replying with explicit quote
 		{
+			$_title=do_lang_tempcode('QUOTE_POST');
+			$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
 			$javascript=str_replace('return topic_reply(true,','return topic_reply(false,',$javascript);
 			$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 		}

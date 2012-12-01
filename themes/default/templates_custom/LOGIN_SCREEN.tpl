@@ -89,7 +89,7 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{$BLOCK,block=openid,failsafe=1}}
-		<h2>Login using OpenID</h2>
+		<h2>Log in using OpenID</h2>
 
 		{$BLOCK,block=openid}
 	{+END}

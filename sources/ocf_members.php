@@ -216,8 +216,19 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 
 		if (strpos($storage_type,'_trans')!==false)
 		{
-			if ((is_null($member_value)) || ($member_value==0)) $member_value=''; else $member_value=get_translated_tempcode($member_value,$GLOBALS['FORUM_DB']); // This is meant to be '' for blank, not new ocp_tempcode()
-			if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
+			if ((is_null($member_value)) || ($member_value==0))
+			{
+				$member_value=''; // This is meant to be '' for blank, not new ocp_tempcode()
+				$member_value_raw='';
+			} else
+			{
+				$member_value_raw=get_translated_text($member_value,$GLOBALS['FORUM_DB']);
+				$member_value=get_translated_tempcode($member_value,$GLOBALS['FORUM_DB']);
+				if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
+			}
+		} else
+		{
+			$member_value_raw=$member_value;
 		}
 
 		// Get custom permissions for the current CPF
@@ -279,7 +290,7 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			elseif (in_array($field_to_show['cf_type'],array('long_text','long_trans'))) $edit_type='textarea';
 
 			$custom_fields[$field_to_show['trans_name']]=array(
-				'RAW'=>$member_value,
+				'RAW'=>$member_value_raw,
 				'RENDERED'=>$rendered_value,
 				'FIELD_ID'=>strval($field_to_show['id']),
 				'EDITABILITY'=>$editability,

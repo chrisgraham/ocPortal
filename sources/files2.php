@@ -924,30 +924,30 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		{
 			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url2))." HTTP/1.1\r\n";
 		}
-		$out.="Host: ".$url_parts['host']."\r\n";
+		$out.='Host: '.$url_parts['host']."\r\n";
 		if ((!is_null($cookies)) && (count($cookies)!=0)) $out.='Cookie: '.$_cookies."\r\n";
-		$out.="User-Agent: ".rawurlencode($ua)."\r\n";
+		$out.='User-Agent: '.rawurlencode($ua)."\r\n";
 		if (!is_null($auth))
 		{
-			$out.="Authorization: Basic ".base64_encode(implode(':',$auth))."==\r\n";
+			$out.='Authorization: Basic '.base64_encode(implode(':',$auth))."==\r\n";
 		}
 		if (!is_null($accept))
 		{
-			$out.="Accept: ".rawurlencode($accept)."\r\n";
+			$out.='Accept: '.rawurlencode($accept)."\r\n";
 		} else
 		{
 			$out.="Accept: */*(\r\n"; // There's a mod_security rule that checks for this
 		}
 		if (!is_null($accept_charset))
 		{
-			$out.="Accept-Charset: ".rawurlencode($accept_charset)."\r\n";
+			$out.='Accept-Charset: '.rawurlencode($accept_charset)."\r\n";
 		}
 		if (!is_null($accept_language))
 		{
-			$out.="Accept-Language: ".rawurlencode($accept_language)."\r\n";
+			$out.='Accept-Language: '.rawurlencode($accept_language)."\r\n";
 		}
 		if (!is_null($referer))
-			$out.="Referer: ".rawurlencode($referer)."\r\n";
+			$out.='Referer: '.rawurlencode($referer)."\r\n";
 		if ($_postdetails_params!='')
 		{
 			if ($is_xml)
@@ -1181,7 +1181,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					if ($line=="\r\n")
 					{
 						$data_started=true;
-						$input_len+=max(0,strlen($old_line)-$tally);
 						$buffer_unprocessed=substr($old_line,$tally);
 						if ($buffer_unprocessed===false) $buffer_unprocessed='';
 						break;
@@ -1196,7 +1195,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if ($buffer_unprocessed!='')
 			{
 				if (is_null($write_to_file)) $input.=$buffer_unprocessed; else fwrite($write_to_file,$buffer_unprocessed);
-				$input_len+=strlen($line);
+				$input_len+=strlen($buffer_unprocessed);
 				if ((!is_null($byte_limit)) && ($input_len>=$byte_limit))
 				{
 					$input=substr($input,0,$byte_limit);

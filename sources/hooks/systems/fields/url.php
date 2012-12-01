@@ -104,7 +104,10 @@ class Hook_fields_url
 			),false,true); // To stop weird race-like conditions
 		}
 
-		if ($link_captions_title=='') $link_captions_title=urldecode(basename($ev));
+		if ($link_captions_title=='')
+		{
+			$link_captions_title=urldecode(rtrim(preg_replace('#^\w+://#','',$ev),'/'));
+		}
 
 		return hyperlink((url_is_local($ev)?(get_base_url().'/'):'').$ev,escape_html($link_captions_title),true);
 	}

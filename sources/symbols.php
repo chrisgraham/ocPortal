@@ -230,7 +230,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$file_path=((substr($value,0,22)=='themes/default/images/')?get_file_base():get_custom_file_base()).'/'.$value;
 						$file_size=@filesize($file_path);
-						if (($file_size!==false) && ($file_size<32768))
+						if (($file_size!==false) && (floatval($file_size)*1.4<32768.0-100.0)) /* 1.4 represents inflation ratio for base64 encoding */
 						{
 							require_code('mime_types');
 							$value='data:'.get_mime_type(get_file_extension($file_path)).';base64,'.base64_encode(file_get_contents($file_path));
@@ -581,7 +581,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'COMMA_LIST_NICIFY':
 				if (array_key_exists(0,$param))
 				{
-					$value=html_entity_decode(str_replace(',',', ',$param[0]),ENT_QUOTES,get_charset());
+					$value=html_entity_decode(str_replace(',',', ',preg_replace('#[^,=]*=#','',$param[0])),ENT_QUOTES,get_charset());
 				}
 				break;
 
@@ -2331,6 +2331,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=(get_option('ssw')=='1')?'1':'0';
 				break;
 
+			case 'ALREADY_RATED':
+				if (isset($param[1]))
+				{
+					$value=(already_rated(array($param[0]),$param[1])?'1':'0');
+				}
+				break;
+
 			case 'RATING':
 				if (isset($param[1]))
 				{
@@ -2475,7 +2482,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					list($zone,$attributes,)=page_link_decode($edit_pagelink);
 					if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
-					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (has_zone_access(get_member(),'adminzone')))
+					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (((array_key_exists(4,$param)) && ($param[3]->evaluate()=='1')) || (has_zone_access(get_member(),'adminzone'))))
 					{
 						$keep=symbol_tempcode('KEEP');
 						$url=find_script('fractional_edit').'?edit_param_name='.urlencode($edit_param_name).'&supports_comcode='.($supports_comcode?'1':'0').'&zone='.urlencode($zone).$keep->evaluate();
@@ -2719,7 +2726,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					foreach ($explode as $val)
 					{
 						$bits=explode('=',$val,2);
-						if (count($bits)==2) $tpl_params[ltrim($bits[0])]=$bits[1];
+						if (count($bits)==2) $tpl_params[ltrim($bits[0])]=str_replace('\n',chr(10),$bits[1]);
 					}
 					$td=isset($param[3])?$param[2]->evaluate():'';
 					if ($td=='') $td='templates';

@@ -36,10 +36,10 @@
 				var player=document.getElementById('{$GET*,player_id}');
 
 				{$,WMP}
-				add_event_listener_abstract(player,'playstatechange',function(newState) { if (newState==1) { playerStopped(); } } );
+				add_event_listener_abstract(player,'playstatechange',function(newState) { if (newState==1) { player_stopped(); } } );
 
 				{$,Quicktime}
-				add_event_listener_abstract(player,'qt_ended',function() { playerStopped(); } );
+				add_event_listener_abstract(player,'qt_ended',function() { player_stopped(); } );
 
 				try { player.Play(); } catch (e) {};
 				try { player.controls.play(); } catch (e) {};

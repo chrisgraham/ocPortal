@@ -132,10 +132,10 @@ class Block_main_gallery_embed
 		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
 		if ($_sort=='average_rating')
 		{
-			$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS compound_rating';
+			$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS average_rating';
 		} elseif ($_sort=='compound_rating')
 		{
-			$rating_sort=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS average_rating';
+			$rating_sort=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS compound_rating';
 		} elseif ($_sort=='fixed_random')
 		{
 			$rating_sort=',(MOD(id,'.date('d').')) AS fixed_random';
@@ -205,6 +205,7 @@ class Block_main_gallery_embed
 							'VIEWS'=>strval($row_image['image_views']),
 							'ADD_DATE_RAW'=>strval($row_image['add_date']),
 							'EDIT_DATE_RAW'=>is_null($row_image['edit_date'])?'':strval($row_image['edit_date']),
+							'START'=>strval($start),
 						);
 						$entry=do_template('GALLERY_IMAGE',$entry_map);
 						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>($guid!='')?$guid:'13134830e1ebea158ab44885eeec0953','ENTRY'=>$entry)+$entry_map));
@@ -242,6 +243,7 @@ class Block_main_gallery_embed
 							'VIEWS'=>strval($row_video['video_views']),
 							'ADD_DATE_RAW'=>strval($row_video['add_date']),
 							'EDIT_DATE_RAW'=>is_null($row_video['edit_date'])?'':strval($row_video['edit_date']),
+							'START'=>strval($start),
 						);
 						$entry=do_template('GALLERY_VIDEO',$entry_map);
 						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>($guid!='')?$guid:'a0ff010ae7fd1f7b3341993072ed23cf','ENTRY'=>$entry)+$entry_map));

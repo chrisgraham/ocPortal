@@ -546,6 +546,11 @@ class Module_cms_catalogues extends standard_crud_module
 			list(,,$storage_type)=$object->get_field_value_row_bits($field);
 
 			$value=$object->inputted_to_field_value(!is_null($editing_id),$field,'uploads/catalogues',is_null($editing_id)?NULL:_get_catalogue_entry_field($field['id'],$editing_id,$storage_type));
+			if ((fractional_edit()) && ($value!=STRING_MAGIC_NULL))
+			{
+				$rendered=static_evaluate_tempcode($object->render_field_value($field,$value,0,NULL));
+				$_POST['field_'.strval($field['id']).'__altered_rendered_output']=is_object($rendered)?$rendered->evaluate():$rendered;
+			}
 
 			$map[$field['id']]=$value;
 		}

@@ -196,6 +196,8 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 	// OCF imports
 	if (get_forum_type()=='ocf')
 	{
+		$where_lang=multi_lang()?('('.db_string_equal_to('m_language',$lang).' OR '.db_string_equal_to('m_language','').') AND '):'';
+
 		// Usergroups
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 		foreach ($send_details as $_id=>$is_on)
@@ -203,10 +205,10 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 			if ((is_string($_id)) && (substr($_id,0,1)=='g') && ($is_on==1))
 			{
 				$id=intval(substr($_id,1));
-				$query='SELECT xxxxx  FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON m.id=g.gm_member_id AND g.gm_validated=1 WHERE '.db_string_not_equal_to('m_email_address','').' AND ('.db_string_equal_to('m_language',$lang).' OR '.db_string_equal_to('m_language','').') AND m_validated=1 AND gm_group_id='.strval($id);
+				$query='SELECT xxxxx  FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON m.id=g.gm_member_id AND g.gm_validated=1 WHERE '.db_string_not_equal_to('m_email_address','').' AND ('.db_string_equal_to('m_language',$lang).' OR '.$where_lang.'m_validated=1 AND gm_group_id='.strval($id);
 				if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
 				$query.=' AND m_is_perm_banned=0';
-				$query.=' UNION SELECT xxxxx FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.db_string_not_equal_to('m_email_address','').' AND ('.db_string_equal_to('m_language',$lang).' OR '.db_string_equal_to('m_language','').') AND m_validated=1 AND m_primary_group='.strval($id);
+				$query.=' UNION SELECT xxxxx FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.db_string_not_equal_to('m_email_address','').' AND '.$where_lang.'m_validated=1 AND m_primary_group='.strval($id);
 				if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
 				$query.=' AND m_is_perm_banned=0';
 				$_rows=$GLOBALS['FORUM_DB']->query(str_replace('xxxxx','m.id,m.m_email_address,m.m_username',$query),$max,$start,false,true);
@@ -237,7 +239,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 		// *All* OCF members (we could have chosen all usergroups, but for legacy reasons we still have this option)
 		if (array_key_exists('-1',$send_details)?$send_details['-1']:0==1)
 		{
-			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_email_address','').' AND ('.db_string_equal_to('m_language',$lang).' OR '.db_string_equal_to('m_language','').') AND m_validated=1';
+			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_email_address','').' AND '.$where_lang.'m_validated=1';
 			if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
 			$query.=' AND m_is_perm_banned=0';
 			$_rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_email_address,m_username'.$query,$max,$start);

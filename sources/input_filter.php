@@ -72,7 +72,7 @@ function check_posted_field($name,$val)
 			if (!$found)
 			{
 				$_POST=array(); // To stop loops
-				log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',ocp_srv('HTTP_REFERER'));
+				log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',ocp_srv('HTTP_REFERER'),$name);
 			}
 		}
 	}

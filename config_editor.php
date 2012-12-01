@@ -137,7 +137,7 @@ function ce_do_login()
 	echo '
 		<label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
 
-		<p><input type="submit" value="Login" /></p>
+		<p><input type="submit" value="Log in" /></p>
 	';
 }
 

@@ -272,7 +272,7 @@ function activities_ajax_removal_handler()
 	}
 	elseif (is_null($stat_owner))
 	{
-		$response.='<success>0</success><err>missing</err><feedback>Missing ID for status removal or id does not exist.</feedback>';
+		$response.='<success>0</success><err>missing</err><feedback>Missing ID for status removal or ID does not exist.</feedback>';
 	}
 	else
 		$response.='<success>0</success><feedback>Login expired, you must log in again to post</feedback>';

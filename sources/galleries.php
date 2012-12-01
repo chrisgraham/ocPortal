@@ -405,8 +405,8 @@ function show_video_details($myrow)
 {
 	return do_template('GALLERY_VIDEO_INFO',array(
 		'_GUID'=>'46d32c84cb2f6ab77d825ad711e24e13',
-		'HEIGHT'=>integer_format($myrow['video_height']),
 		'WIDTH'=>integer_format($myrow['video_width']),
+		'HEIGHT'=>integer_format($myrow['video_height']),
 		'LENGTH'=>strval($myrow['video_length']),
 	));
 }

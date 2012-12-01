@@ -573,7 +573,7 @@ class Module_admin_newsletter extends standard_crud_module
 		}
 
 		// Show subscribers
-		$levels=is_null($level)?array(1,2,3,4):array($level);
+		$levels=is_null($level)?(($id=='-1' || substr($id,0,1)=='g')?array(4):array(1,2,3,4)):array($level);
 		$outs=array();
 		foreach ($levels as $level)
 		{
@@ -631,7 +631,7 @@ class Module_admin_newsletter extends standard_crud_module
 					$name=array_key_exists('m_username',$r)?$r['m_username']:'';
 
 					$salt=array_key_exists('pass_salt',$r)?$r['pass_salt']:'';
-					$lang=array_key_exists('language',$r)?$r['language']:'';
+					$_lang=array_key_exists('language',$r)?$r['language']:'';
 					$confirm_code=array_key_exists('confirm_code',$r)?$r['confirm_code']:0;
 					$join_time=array_key_exists('join_time',$r)?$r['join_time']:time();
 
@@ -641,7 +641,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 					if ($csv==1)
 					{
-						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'.chr(10);
+						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$_lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'.chr(10);
 					} else
 					{
 						$tpl=do_template('NEWSLETTER_SUBSCRIBER',array('_GUID'=>'ca45867a23cbaa7c6788d3cd2ba2793c','EMAIL'=>$email,'FORENAME'=>$forename,'SURNAME'=>$surname,'NAME'=>$name,'NEWSLETTER_SEND_ID'=>$send_id,'NEWSLETTER_HASH'=>$hash));
@@ -653,7 +653,7 @@ class Module_admin_newsletter extends standard_crud_module
 			}
 			while (($csv==1) && (array_key_exists(0,$rows)));
 
-			if ((count($rows)==0) && ($start==0))
+			if ((count($rows)==0) && ($start2==0))
 			{
 				if ($csv==1)
 				{
@@ -667,7 +667,6 @@ class Module_admin_newsletter extends standard_crud_module
 
 			if ($csv==1)
 			{
-				echo '""'.chr(10);
 			} else
 			{
 				require_code('templates_pagination');

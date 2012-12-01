@@ -147,17 +147,14 @@ class Block_main_activities
 			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'activities WHERE '.$whereville);
 
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang('ACTIVITIES_TITLE'),$start,'act_start',$max,'act_max',$max_rows,false,5,NULL,'tab__activities');
+			$pagination=pagination(do_lang('ACTIVITIES_TITLE'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,false,5,NULL,'tab__activities');
 
 			$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE '.$whereville.' ORDER BY a_time DESC',$max,$start);
 
-			if (!is_null($activities) && (count($activities)>0))
+			foreach ($activities as $row)
 			{
-				foreach ($activities as $row)
-				{
-					list($message,$memberpic,$datetime,$member_url,$lang_string)=render_activity($row);
-					$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
-				}
+				list($message,$memberpic,$datetime,$member_url,$lang_string)=render_activity($row);
+				$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
 			}
 		} else
 		{

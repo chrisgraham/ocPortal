@@ -84,7 +84,7 @@ class Hook_fields_short_trans_multi
 		$ret=new ocp_tempcode();
 		foreach (explode(chr(10),$ev) as $ev)
 		{
-			$ret->attach(paragraph(escape_html($ev)));
+			$ret->attach(paragraph(comcode_to_tempcode($ev)));
 		}
 		return $ret;
 	}

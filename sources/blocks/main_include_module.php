@@ -86,6 +86,7 @@ class Block_main_include_module
 		// Do it!
 		$ret=request_page($attributes['page'],false,$zone,NULL,true);
 		$ret->handle_symbol_preprocessing();
+		$ret=make_string_tempcode($ret->evaluate()); // So things are evaluated in the right context
 
 		// Get things back to prior state
 		set_execution_context(

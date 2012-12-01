@@ -336,6 +336,7 @@ class Hook_addon_registry_core_feedback_features
 				'UNVALIDATED'=>new ocp_tempcode(),
 				'TOPIC_ID'=>placeholder_id(),
 				'IS_SPACER_POST'=>false,
+				'IS_THREADED'=>false,
 				'NUM_TO_SHOW_LIMIT'=>placeholder_number()
 			);
 			$comments->attach(do_lorem_template('POST', $map));
@@ -380,11 +381,14 @@ class Hook_addon_registry_core_feedback_features
 			'FORM'=>$form,
 			'COMMENTS'=>$comments,
 			'SORT'=>'relevance',
+			'TOTAL_POSTS'=>placeholder_number(),
+			'IS_THREADED'=>false,
 		));
 
 		$out->attach(do_lorem_template('COMMENT_AJAX_HANDLER', array(
 			'OPTIONS'=>lorem_phrase(),
-			'HASH'=>lorem_phrase()
+			'HASH'=>lorem_phrase(),
+			'PAGE_NAME'=>lorem_word(),
 		)));
 
 		return array(
