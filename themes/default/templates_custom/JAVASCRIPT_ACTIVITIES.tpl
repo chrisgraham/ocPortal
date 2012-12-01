@@ -160,7 +160,7 @@ function sUpdateRmShow(data, stat)
 		if (jQuery('success', data).text()=='1')
 		{
 			status_id = '#'+jQuery('status_id', data).text();
-			jQuery('.activities-content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #00CBF6;').hide().fadeIn(velocifero, function ()
+			jQuery('.activities_content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #00CBF6;').hide().fadeIn(velocifero, function ()
 			{
 				jQuery(status_id, '#activities_feed').fadeOut(velocifero, function()
 				{
@@ -173,12 +173,12 @@ function sUpdateRmShow(data, stat)
 			{
 				case 'perms':
 					status_id = '#'+jQuery('status_id', data).text();
-					var savetext=jQuery('activities-content', status_id, '#activities_feed').text();
-					jQuery('.activities-content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #FF0000;').hide().fadeIn(velocifero, function ()
+					var savetext=jQuery('activities_content', status_id, '#activities_feed').text();
+					jQuery('.activities_content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #FF0000;').hide().fadeIn(velocifero, function ()
 					{
-						jQuery('.activities-content', status_id, '#activities_feed').fadeOut( velocifero, function ()
+						jQuery('.activities_content', status_id, '#activities_feed').fadeOut( velocifero, function ()
 						{
-							jQuery('.activities-content', status_id, '#activities_feed').text(savetext).removeAttr('style').fadeIn(velocifero);
+							jQuery('.activities_content', status_id, '#activities_feed').text(savetext).removeAttr('style').fadeIn(velocifero);
 						});
 					});
 					break;
