@@ -1649,7 +1649,7 @@ table.scrollable_inside {
 .results_table td:first-child, .results_table th:first-child {
 	border-left: 1px solid {$GET,standard_border};
 }
-.results_table tr:last-child td, .results_table tr:last-child th {
+.results_table tbody tr:last-child td, .results_table tbody tr:last-child th {
 	border-bottom: 1px solid {$GET,standard_border};
 }
 
@@ -2166,7 +2166,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .post .post_subline {
-	margin-bottom: 1em;
+	margin: 1em 0;
 	font-size: 0.9em;
 }
 
@@ -2230,13 +2230,17 @@ div.wysiwyg_toolbar_color_finder {
 	margin-left: 2em;
 }
 
+.comment_wrapper {
+	margin: 1em 0;
+}
+
 .comment_wrapper .highlighted_post {
 	background: {$GET,point_of_interest_background} !important;
-	padding: 0 1em !important;
-	border: 1px dashed {$GET,slightly_seeded_complement_text} !important;
+	padding: 1em !important;
+	border: 1px dotted {$GET,slightly_seeded_complement_text} !important;
 }
 .comments_wrapper .boxless_space .comment_wrapper .highlighted_post.box {
-	border-top: 1px dashed {$GET,slightly_seeded_complement_text} !important; /* Needs to be more explicit as boxless-space rules will remove borders */
+	border-top: 1px dotted {$GET,slightly_seeded_complement_text} !important; /* Needs to be more explicit as boxless-space rules will remove borders */
 }
 
 .reviews_average {
