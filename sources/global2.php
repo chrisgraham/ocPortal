@@ -1477,7 +1477,7 @@ function __param($array,$name,$default,$integer=false,$posted=false)
 	if (is_array($val)) $val=implode(',',$val);
 	if (get_magic_quotes_gpc()) $val=stripslashes($val);
 
-	if (($posted) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
+	if (($posted) && (count($_POST)!=0) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
 	{
 		require_code('input_filter');
 		return check_posted_field($name,$val);
