@@ -53,7 +53,7 @@ function fade_transition(fade_element,dest_percent_opacity,period_in_msecs,incre
 		window.fade_transition_timers[fade_element.fader_key]=window.setTimeout(function() { fade_transition(fade_element,dest_percent_opacity,period_in_msecs,increment,destroy_after); },period_in_msecs);
 	} else
 	{
-		if (destroy_after) fade_element.parentNode.removeChild(fade_element);
+		if (destroy_after && fade_element.parentNode) fade_element.parentNode.removeChild(fade_element);
 	}
 }
 
