@@ -11,7 +11,18 @@
 <input tabindex="{TABINDEX*}" maxlength="6" size="6" class="input_text_required" value="" type="text" id="captcha" name="captcha" />
 
 <script type="text/javascript">// <![CDATA[
-	add_event_listener_abstract(window,'pageshow',function () {
+	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
+
+	var func=function () {
 		document.getElementById('captcha_readable').src+='&'; // Force it to reload latest captcha
-	} );
+	};
+
+	if (typeof window.addEventListener!='undefined')
+	{
+		window.addEventListener(showevent,func,false);
+	}
+	else if (typeof window.attachEvent!='undefined')
+	{
+		window.attachEvent('on'+showevent,func);
+	}
 //]]></script>

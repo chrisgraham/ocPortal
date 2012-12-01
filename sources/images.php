@@ -44,10 +44,22 @@ function _symbol_image_dims($param)
 		} else
 		{
 			require_code('files');
-			$source=@imagecreatefromstring(http_download_file($param[0],1024*1024*20/*reasonable limit*/,false));
+			$from_file=http_download_file($param[0],1024*1024*20/*reasonable limit*/,false);
+			$source=@imagecreatefromstring($from_file);
 			if ($source!==false)
 			{
-				$value=array(strval(imagesx($source)),strval(imagesy($source)));
+				if (get_file_extension($param[0])=='gif')
+				{
+					$header=unpack('@6/'.'vwidth/'.'vheight',$from_file);
+					$sx=$header['width'];
+					$sy=$header['height'];
+				} else
+				{
+					$sx=imagesx($source);
+					$sy=imagesy($source);
+				}
+
+				$value=array(strval($sx),strval($sy));
 				imagedestroy($source);
 			}
 		}

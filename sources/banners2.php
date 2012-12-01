@@ -190,7 +190,18 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 						warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($test_url)));
 					}
 
-					if ((get_option('banner_autosize')!='1') && ((imagesx($img_res)!=$banner_type_row['t_image_width']) || (imagesy($img_res)!=$banner_type_row['t_image_height'])))
+					if (get_file_extension($test_url)=='gif')
+					{
+						$header=unpack('@6/'.'vwidth/'.'vheight',$data);
+						$sx=$header['width'];
+						$sy=$header['height'];
+					} else
+					{
+						$sx=imagesx($img_res);
+						$sy=imagesy($img_res);
+					}
+
+					if ((get_option('banner_autosize')!='1') && (($sx!=$banner_type_row['t_image_width']) || ($sy!=$banner_type_row['t_image_height'])))
 					{
 						if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
 						warn_exit(do_lang_tempcode('BANNER_RES_BAD',integer_format($banner_type_row['t_image_width']),integer_format($banner_type_row['t_image_height'])));

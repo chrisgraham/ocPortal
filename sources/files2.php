@@ -1069,7 +1069,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					if ($line=="\r\n")
 					{
 						$data_started=true;
-						$input_len+=max(0,strlen($old_line)-$tally);
 						$buffer_unprocessed=substr($old_line,$tally);
 						if ($buffer_unprocessed===false) $buffer_unprocessed='';
 						break;
@@ -1084,7 +1083,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if ($buffer_unprocessed!='')
 			{
 				if (is_null($write_to_file)) $input.=$buffer_unprocessed; else fwrite($write_to_file,$buffer_unprocessed);
-				$input_len+=strlen($line);
+				$input_len+=strlen($buffer_unprocessed);
 				if ((!is_null($byte_limit)) && ($input_len>=$byte_limit))
 				{
 					$input=substr($input,0,$byte_limit);

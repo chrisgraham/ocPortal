@@ -769,7 +769,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$self_url=build_url($url_map,get_module_zone('catalogues'),NULL,false,false,true);
 	if (($feedback_details) || ($only_fields!==array(0)))
 	{
-		$map['RATING']=($entry['allow_rating']==1)?display_rating($self_url,$c_value,'catalogues',strval($id),'RATING_INLINE_STATIC',$entry['ce_submitter']):new ocp_tempcode();
+		$map['RATING']=($entry['allow_rating']==1)?display_rating($self_url,$c_value,'catalogues__'.$catalogue_name,strval($id),'RATING_INLINE_STATIC',$entry['ce_submitter']):new ocp_tempcode();
 	}
 	if ($feedback_details)
 	{

@@ -1231,32 +1231,35 @@ function illustrate_frame_load(pf,frame)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
 		var head='<style type="text/css">',cssText='';
-		for (var i=0;i<document.styleSheets.length;i++)
+		if (!browser_matches('ie8'))
 		{
-			try
+			for (var i=0;i<document.styleSheets.length;i++)
 			{
-				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1) && (document.styleSheets[i].href.indexOf('/merged')==-1)) continue;
-				if (typeof document.styleSheets[i].cssText!='undefined')
+				try
 				{
-					cssText+=document.styleSheets[i].cssText;
-				} else
-				{
-					var rules=[];
-					try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
-					catch (e) {};
-					if (rules)
+					if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1)) continue;
+					if (typeof document.styleSheets[i].cssText!='undefined')
 					{
-						for (var j=0;j<rules.length;j++)
+						cssText+=document.styleSheets[i].cssText;
+					} else
+					{
+						var rules=[];
+						try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
+						catch (e) {};
+						if (rules)
 						{
-							if (rules[j].cssText)
-								cssText+=rules[j].cssText+"\n\n";
-							else
-								cssText+=rules[j].selectorText+'{ '+rules[j].style.cssText+"}\n\n";
+							for (var j=0;j<rules.length;j++)
+							{
+								if (rules[j].cssText)
+									cssText+=rules[j].cssText+"\n\n";
+								else
+									cssText+=rules[j].selectorText+'{ '+rules[j].style.cssText+"}\n\n";
+							}
 						}
 					}
 				}
+				catch (e){};
 			}
-			catch (e){};
 		}
 		head+=cssText+'<\/style>';
 
@@ -2301,7 +2304,13 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 			if (script_tag_dependencies['to_load']==0)
 			{
 				window.setTimeout(function() {
-					eval.call(window,text);
+					if (typeof window.execScript!='undefined')
+					{
+						window.execScript(text);
+					} else
+					{
+						eval.call(window,text);
+					}
 				},0);
 			} else
 			{
@@ -2348,7 +2357,13 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 							{
 								for (i=0;i<script_tag_dependencies['to_run'].length;i++)
 								{
-									eval.call(window,script_tag_dependencies['to_run'][i]);
+									if (typeof window.execScript!='undefined')
+									{
+										window.execScript(script_tag_dependencies['to_run'][i]);
+									} else
+									{
+										eval.call(window,script_tag_dependencies['to_run'][i]);
+									}
 								}
 								script_tag_dependencies['to_run']=[]; // So won't run again, if both onreadystatechange and onload implemented in browser
 							}
@@ -2471,12 +2486,12 @@ function set_inner_html(element,tHTML,append)
 
 			if (tHTML.toLowerCase().indexOf('<script')!=-1)
 			{
-				window.js_runs_test=false;
+				window['js_runs_test_'+r_id]=false;
 				var r_id='js_'+Math.random();
-				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
+				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window[\'js_runs_test_'+r_id+'\']=true;</script>';
 
 				window.setTimeout(function() {
-					if (!window.js_runs_test) // If JS was not run by the above op
+					if (!window['js_runs_test_'+r_id]) // If JS was not run by the above op
 					{
 						var scripts=element.getElementsByTagName('script');
 						for (var i=scripts_jump;i<scripts.length;i++)
@@ -2484,9 +2499,16 @@ function set_inner_html(element,tHTML,append)
 							if (!scripts[i].src) // i.e. if it is inline JS
 							{
 								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
-								eval.call(window,text);
+								if (typeof window.execScript!='undefined')
+								{
+									window.execScript(text);
+								} else
+								{
+									eval.call(window,text);
+								}
 							}
 						}
+						window['js_runs_test_'+r_id]=true;
 					} else
 					{
 						var r=document.getElementById(r_id);
@@ -2726,7 +2748,7 @@ function replace_comments_form_with_ajax(options,hash)
 			if (typeof post_element.default_substring_to_strip!='undefined') // Strip off prefix if unchanged
 			{
 				if (post_value.substring(0,post_element.default_substring_to_strip.length)==post_element.default_substring_to_strip)
-					post_value=post_element.substring(post_element.default_substring_to_strip.length,post_value.length);
+					post_value=post_value.substring(post_element.default_substring_to_strip.length,post_value.length);
 			}
 			for (var i=0;i<comments_form.elements.length;i++)
 			{
