@@ -2640,7 +2640,7 @@ function replace_comments_form_with_ajax(options,hash)
 			if (typeof post_element.default_substring_to_strip!='undefined') // Strip off prefix if unchanged
 			{
 				if (post_value.substring(0,post_element.default_substring_to_strip.length)==post_element.default_substring_to_strip)
-					post_value=post_element.substring(post_element.default_substring_to_strip.length,post_value.length);
+					post_value=post_value.substring(post_element.default_substring_to_strip.length,post_value.length);
 			}
 			for (var i=0;i<comments_form.elements.length;i++)
 			{
