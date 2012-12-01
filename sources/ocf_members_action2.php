@@ -1442,10 +1442,14 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	if ((!is_swf_upload()) && ((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
 	{
 		$x=post_param($param_name,'');
-		if (($x!='') && (url_is_local($x)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
+		if (($x!='') && (url_is_local($x)))
 		{
 			$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));
-			if ($old!=$x) access_denied('ASSOCIATE_EXISTING_FILE');
+			if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			{
+				if ($old!=$x) access_denied('ASSOCIATE_EXISTING_FILE');
+			}
+			if ($old==$x) return; // Not changed, bomb out as we don't want to generate a thumbnail
 		}
 	}
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
