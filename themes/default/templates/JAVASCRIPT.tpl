@@ -2916,7 +2916,8 @@ function add_captcha_validation(form)
 			if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 			return true;
 		};
-	add_event_listener_abstract(window,'pageshow',function () {
+	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
+	add_event_listener_abstract(window,showevent,function () {
 		form.elements['captcha'].src+='&'; // Force it to reload latest captcha
 	} );
 }
