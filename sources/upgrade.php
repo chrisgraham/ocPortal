@@ -847,13 +847,13 @@ function up_do_header()
 		<title>{$upgrader_title}</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 
-		<style type="text/css"><![CDATA[
+		<style type="text/css">/*<![CDATA[*/
 END;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{[\$+].*\}#','',file_get_contents(get_file_base().'/themes/default/css/global.css'))))));
 echo <<<END
 			.main_page_title { text-decoration: underline; display: block; background: url('themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		]]></style>
+		/*]]>*/</style>
 
 		<meta name="robots" content="noindex, nofollow" />
 	</head>
