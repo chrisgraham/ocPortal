@@ -2214,7 +2214,13 @@ function Copy(domNode,xmlDoc,level,script_tag_dependencies) {
 			if (script_tag_dependencies['to_load']==0)
 			{
 				window.setTimeout(function() {
-					eval.call(window,text);
+					if (typeof window.execScript!='undefined')
+					{
+						window.execScript(text);
+					} else
+					{
+						eval.call(window,text);
+					}
 				},0);
 			} else
 			{
@@ -2260,7 +2266,13 @@ function Copy(domNode,xmlDoc,level,script_tag_dependencies) {
 							{
 								for (i=0;i<script_tag_dependencies['to_run'].length;i++)
 								{
-									eval.call(window,script_tag_dependencies['to_run'][i]);
+									if (typeof window.execScript!='undefined')
+									{
+										window.execScript(script_tag_dependencies['to_run'][i]);
+									} else
+									{
+										eval.call(window,script_tag_dependencies['to_run'][i]);
+									}
 								}
 								script_tag_dependencies['to_run']=[]; // So won't run again, if both onreadystatechange and onload implemented in browser
 							}
@@ -2381,12 +2393,12 @@ function setInnerHTML(element,tHTML,append)
 
 			if (tHTML.toLowerCase().indexOf('<script')!=-1)
 			{
-				window.js_runs_test=false;
+				window['js_runs_test_'+r_id]=false;
 				var r_id='js_'+Math.random();
-				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
+				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window[\'js_runs_test_'+r_id+'\']=true;</script>';
 
 				window.setTimeout(function() {
-					if (!window.js_runs_test) // If JS was not run by the above op
+					if (!window['js_runs_test_'+r_id]) // If JS was not run by the above op
 					{
 						var scripts=element.getElementsByTagName('script');
 						for (var i=scripts_jump;i<scripts.length;i++)
@@ -2394,9 +2406,16 @@ function setInnerHTML(element,tHTML,append)
 							if (!scripts[i].src) // i.e. if it is inline JS
 							{
 								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
-								eval.call(window,text);
+								if (typeof window.execScript!='undefined')
+								{
+									window.execScript(text);
+								} else
+								{
+									eval.call(window,text);
+								}
 							}
 						}
+						window['js_runs_test_'+r_id]=true;
 					} else
 					{
 						var r=document.getElementById(r_id);
