@@ -1144,32 +1144,35 @@ function illustrateFrameLoad(pf,frame)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
 		var head='<style type="text/css">',cssText='';
-		for (var i=0;i<document.styleSheets.length;i++)
+		if (!browser_matches('ie8'))
 		{
-			try
+			for (var i=0;i<document.styleSheets.length;i++)
 			{
-				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1)) continue;
-				if (typeof document.styleSheets[i].cssText!='undefined')
+				try
 				{
-					cssText+=document.styleSheets[i].cssText;
-				} else
-				{
-					var rules=[];
-					try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
-					catch (e) {};
-					if (rules)
+					if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1)) continue;
+					if (typeof document.styleSheets[i].cssText!='undefined')
 					{
-						for (var j=0;j<rules.length;j++)
+						cssText+=document.styleSheets[i].cssText;
+					} else
+					{
+						var rules=[];
+						try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
+						catch (e) {};
+						if (rules)
 						{
-							if (rules[j].cssText)
-								cssText+=rules[j].cssText+"\n\n";
-							else
-								cssText+=rules[j].selectorText+'{ '+rules[j].style.cssText+"}\n\n";
+							for (var j=0;j<rules.length;j++)
+							{
+								if (rules[j].cssText)
+									cssText+=rules[j].cssText+"\n\n";
+								else
+									cssText+=rules[j].selectorText+'{ '+rules[j].style.cssText+"}\n\n";
+							}
 						}
 					}
 				}
+				catch (e){};
 			}
-			catch (e){};
 		}
 		head+=cssText+'<\/style>';
 
