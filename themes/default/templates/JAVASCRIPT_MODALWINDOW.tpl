@@ -347,6 +347,8 @@ function ModalWindow()
 		},
 
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
+			if (!this.box) return;
+
 			var dim = this.getPageSize();
 
 			if (width>dim.pageWidth) width=dim.pageWidth;
@@ -668,8 +670,14 @@ function ModalWindow()
 
 			this.box.childNodes[0].appendChild(container);
 
-			if(this.input) this.input.focus();
-			else if (typeof this.box.getElementsByTagName('button')[0]!='undefined') this.box.getElementsByTagName('button')[0].focus();
+			if(this.input)
+			{
+				window.setTimeout(function() { _this.input.focus(); }, 0);
+			}
+			else if (typeof this.box.getElementsByTagName('button')[0]!='undefined')
+			{
+				this.box.getElementsByTagName('button')[0].focus();
+			}
 
 			if(this.yes || this.yes != false)
 			{
