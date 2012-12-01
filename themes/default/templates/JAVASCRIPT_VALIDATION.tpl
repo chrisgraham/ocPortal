@@ -633,6 +633,7 @@ function _standard_alternate_fields_get_object(field_name)
 		for (j=0;j<document.forms[i].elements.length;j++)
 		{
 			e=document.forms[i].elements[j];
+			if (!e.name) continue;
 
 			if ((e.name.replace(/\[\]$/,'')==field_name) || (e.name.replace(/\_\d+$/,'_')==field_name))
 			{
