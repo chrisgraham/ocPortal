@@ -1206,6 +1206,13 @@ function handle_tray_cookie_setting(id)
 	var element=document.getElementById('tray_'+id);
 	if (!element) element=document.getElementById(id);
 	if (!element) return;
+
+	if (element.className.indexOf('toggleable_tray')==-1) // Suspicious, maybe we need to probe deeper
+	{
+		var toggleables=get_elements_by_class_name(element,'toggleable_tray');
+		if (typeof toggleables[0]!='undefined') element=toggleables[0];
+	}
+
 	if (((element.style.display=='none') && (cookie_value=='open')) || ((element.style.display!='none') && (cookie_value=='closed')))
 		toggleable_tray(element,true);
 }
