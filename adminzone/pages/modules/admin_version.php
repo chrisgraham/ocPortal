@@ -542,7 +542,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<15))
+		if ((!is_null($upgrade_from)) && ($upgrade_from==14))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?USER');
 		}
