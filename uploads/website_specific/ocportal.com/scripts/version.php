@@ -309,7 +309,13 @@ if ($has_jump)
 			$tooltip=comcode_to_tempcode('[title="2"]Inbetween versions[/title]'.$higher_versions[$i]['download_description']);
 
 			$upgrade_url='http://ocportal.com/site/news/view/'.strval($higher_versions[$i]['news_id']).'.htm?wide_high=1&from_version='.$long_version_with_qualifier;
-			echo '<p class="version"><span class="version_number">'.escape_html($higher_versions[$i]['version']).'</span> <span class="version_news_link">[ <a onclick="window.open(this.href,null,\'status=yes,toolbar=no,location=no,menubar=no,resizable=yes,scrollbars=yes,width=976,height=600\'); return false;" target="_blank" title="'.$upgrade_type[$i].' news post (this link will open in a new window)" href="'.escape_html($upgrade_url).'">view news post</a> ]</span> <span class="version_details">('.$upgrade_type[$i].', released '.display_time_period(time()-$higher_versions[$i]['add_date']).' ago)</span> <span class="version_note">'.$note.'</span> <img class="version_help_icon" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (this.parentNode.title!=undefined) this.parentNode.title=\'\'; if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,\''.escape_html(str_replace("\n",'\n',addslashes($tooltip->evaluate()))).'\',\'600px\',null,null,false,true);" alt="Help" src="'.escape_html(find_theme_image('help')).'" /> ';
+			echo '<p class="version">';
+
+			// First line of details
+			echo '<span class="version_number">'.escape_html($higher_versions[$i]['version']).'</span>';
+			echo ' ';
+			echo '<span class="version_news_link">[ <a onclick="window.open(this.href,null,\'status=yes,toolbar=no,location=no,menubar=no,resizable=yes,scrollbars=yes,width=976,height=600\'); return false;" target="_blank" title="'.$upgrade_type[$i].' news post (this link will open in a new window)" href="'.escape_html($upgrade_url).'">view news post</a> ]</span>';
+			echo ' ';
 
 			// Output upgrader link
 			// NB: For legacy reasons all lines get dumped into paragraphs. So we have to put on one line.
@@ -337,7 +343,18 @@ if ($has_jump)
 			/*//]]>*/</script>
 			";
 			echo str_replace(chr(10),'',str_replace(chr(13),'',$out));
+
+			// Next line of details
+			echo '<span class="version_details">('.$upgrade_type[$i].', released '.display_time_period(time()-$higher_versions[$i]['add_date']).' ago)</span>';
+			echo ' ';
+			echo '<span class="version_note">'.$note.'</span>';
+			echo ' ';
+			echo '<img class="version_help_icon" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (this.parentNode.title!=undefined) this.parentNode.title=\'\'; if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,\''.escape_html(str_replace("\n",'\n',addslashes($tooltip->evaluate()))).'\',\'600px\',null,null,false,true);" alt="Help" src="'.escape_html(find_theme_image('help')).'" />';
+			echo ' ';
+
 			echo '</p>';
+
+			// Noscript version
 			$out="
 			<noscript>
 				<form style=\"display: inline\" action=\"../".$upgrade_script."\" target=\"_blank\" method=\"post\">
