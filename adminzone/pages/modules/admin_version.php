@@ -603,7 +603,7 @@ class Module_admin_version
 			));
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<16))
+		if ((!is_null($upgrade_from)) && ($upgrade_from==15))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_interlock');
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_in_panel');
