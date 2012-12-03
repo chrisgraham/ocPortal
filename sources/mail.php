@@ -136,7 +136,7 @@ function comcode_to_clean_text($message_plain)
 	}
 	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 
-	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1}',$message_plain);
+	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
