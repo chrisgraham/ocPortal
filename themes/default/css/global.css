@@ -280,8 +280,6 @@ td, th.de_th {
 	color: {$GET,slightly_seeded_text};
 	font-weight: normal;
 	text-align: {!en_left};
-	background-image: none;
-	background-color: transparent;
 	font-weight: normal;
 	border: 0;
 }
