@@ -283,6 +283,10 @@ td, th.de_th {
 	font-weight: normal;
 	border: 0;
 }
+th.de_th {
+	background-color: transparent;
+	background-image: none;
+}
 th.de_th a, th.de_th a:hover, th.de_th a:visited {
 	color: {$GET,slightly_seeded_text};
 }
