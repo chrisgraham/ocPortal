@@ -240,7 +240,7 @@ class Module_admin_ocgifts extends standard_aed_module
 
 		handle_max_file_size($hidden,'image');
 
-		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),'','price',strval($price),true));
+		$fields->attach(form_input_integer(do_lang_tempcode('PRICE'),'','price',$price,true));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('GIFT_ENABLED'),do_lang_tempcode('DESCRIPTION_GIFT_ENABLED'),'enabled',$enabled==1));
 
@@ -302,8 +302,8 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		$name=post_param('name');
 		$category=post_param('category');
-		$price=post_param('price',0);
-		$enabled=post_param('enabled',0);
+		$price=post_param_integer('price');
+		$enabled=post_param_integer('enabled',0);
 
 		require_code('uploads');
 
@@ -334,8 +334,8 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		$name=post_param('name');
 		$category=post_param('category');
-		$price=post_param('price',0);
-		$enabled=post_param('enabled',0);
+		$price=post_param_integer('price');
+		$enabled=post_param_integer('enabled',0);
 
 		require_code('uploads');
 
