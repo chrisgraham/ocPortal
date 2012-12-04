@@ -36,7 +36,7 @@ class Module_admin_import
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -60,6 +60,11 @@ class Module_admin_import
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('import_session','imp_db_host','ID_TEXT');
+		}
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('import_id_remap','id_old','ID_TEXT');
@@ -78,6 +83,7 @@ class Module_admin_import
 				'imp_db_user'=>'ID_TEXT',
 				'imp_hook'=>'ID_TEXT',
 				'imp_db_table_prefix'=>'ID_TEXT',
+				'imp_db_host'=>'ID_TEXT',
 				'imp_refresh_time'=>'INTEGER',
 				'imp_session'=>'*INTEGER'
 			));
@@ -352,19 +358,23 @@ class Module_admin_import
 		$object=object_factory('Hook_'.filter_naughty_harsh($importer));
 
 		// Test import source is good
+		$db_host=get_db_site_host();
 		if (method_exists($object,'probe_db_access'))
 		{
-			list($db_name,$db_user,$db_password,$db_table_prefix)=$object->probe_db_access(either_param('old_base_dir'));
+			$probe=$object->probe_db_access(either_param('old_base_dir'));
+			list($db_name,$db_user,$db_password,$db_table_prefix)=$probe;
+			if (array_key_exists(4,$probe)) $db_host=$probe[4];
 		} else
 		{
 			$db_name=either_param('db_name');
 			$db_user=either_param('db_user');
 			$db_password=either_param('db_password');
 			$db_table_prefix=either_param('db_table_prefix');
+			$db_host=either_param('db_host',$db_host);
 		}
 		if (($db_name==get_db_site()) && ($importer=='ocp_merge') && ($db_table_prefix==$GLOBALS['SITE_DB']->get_table_prefix()))
 			warn_exit(do_lang_tempcode('IMPORT_SELF_NO'));
-		$import_source=is_null($db_name)?NULL:new database_driver($db_name,get_db_site_host(),$db_user,$db_password,$db_table_prefix);
+		$import_source=is_null($db_name)?NULL:new database_driver($db_name,$db_host,$db_user,$db_password,$db_table_prefix);
 		unset($import_source);
 
 		$lang_array=array();
@@ -385,6 +395,7 @@ class Module_admin_import
 			$db_name=$session_row[0]['imp_db_name'];
 			$db_user=$session_row[0]['imp_db_user'];
 			$db_table_prefix=$session_row[0]['imp_db_table_prefix'];
+			$db_host=$session_row[0]['imp_db_host'];
 			$refresh_time=$session_row[0]['imp_refresh_time'];
 		} else
 		{
@@ -392,6 +403,7 @@ class Module_admin_import
 			$db_name=get_db_site();
 			$db_user=get_db_site_user();
 			$db_table_prefix=array_key_exists('prefix',$info)?$info['prefix']:$GLOBALS['SITE_DB']->get_table_prefix();
+			$db_host=get_db_site_host();
 			$refresh_time=15;
 		}
 
@@ -545,20 +557,24 @@ class Module_admin_import
 		$old_base_dir=either_param('old_base_dir');
 		if ((method_exists($object,'verify_base_path')) && (!$object->verify_base_path($old_base_dir)))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html($old_base_dir)));
+		$db_host=get_db_site_host();
 		if (method_exists($object,'probe_db_access'))
 		{
-			list($db_name,$db_user,$db_password,$db_table_prefix)=$object->probe_db_access(either_param('old_base_dir'));
+			$probe=$object->probe_db_access(either_param('old_base_dir'));
+			list($db_name,$db_user,$db_password,$db_table_prefix)=$probe;
+			if (array_key_exists(4,$probe)) $db_host=$probe[4];
 		} else
 		{
 			$db_name=either_param('db_name');
 			$db_user=either_param('db_user');
 			$db_password=either_param('db_password');
 			$db_table_prefix=either_param('db_table_prefix');
+			$db_host=either_param('db_host',$db_host);
 		}
 		if (($db_name==get_db_site()) && ($importer=='ocp_merge') && ($db_table_prefix==$GLOBALS['SITE_DB']->get_table_prefix()))
 			warn_exit(do_lang_tempcode('IMPORT_SELF_NO'));
 
-		$import_source=is_null($db_name)?NULL:new database_driver($db_name,get_db_site_host(),$db_user,$db_password,$db_table_prefix);
+		$import_source=is_null($db_name)?NULL:new database_driver($db_name,$db_host,$db_user,$db_password,$db_table_prefix);
 
 		// Some preliminary tests
 		$happy=get_param_integer('happy',0);
@@ -579,6 +595,7 @@ class Module_admin_import
 			'imp_db_name'=>is_null($db_name)?'':$db_name,
 			'imp_db_user'=>is_null($db_user)?'':$db_user,
 			'imp_db_table_prefix'=>is_null($db_table_prefix)?'':$db_table_prefix,
+			'imp_db_host'=>is_null($db_host)?'':$db_host,
 			'imp_refresh_time'=>$refresh_time,
 			'imp_session'=>get_session_id()
 		));

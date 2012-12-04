@@ -1887,7 +1887,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .results_launcher a:visited,
 .results_launcher a:hover,
 .results_launcher span {
-	padding: 2px {$?,{$MOBILE},10,5}px;
+	padding: 2px {$?,{$MOBILE},10,5}px !important;
 }
 
 .results_launcher {

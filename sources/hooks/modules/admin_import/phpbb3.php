@@ -113,6 +113,7 @@ class Hook_phpbb3
 		$dbname='';
 		$dbuser='';
 		$dbpasswd='';
+		$dbhost='';
 		$table_prefix='';
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
@@ -122,8 +123,9 @@ class Hook_phpbb3
 		$INFO['sql_user']=$dbuser;
 		$INFO['sql_pass']=$dbpasswd;
 		$INFO['sql_tbl_prefix']=$table_prefix;
+		$INFO['sql_host']=$dbhost;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix'],$INFO['sql_host']);
 	}
 
 	/**
@@ -429,11 +431,12 @@ class Hook_phpbb3
 						{
 							if (is_null($val))
 							{
-								if ($cpf_rows[substr($key,3)]==FIELD_INT) $val=NULL;
+								/*if ($cpf_rows[substr($key,3)]==FIELD_INT) $val=NULL;	Actually is stored as a string
 								elseif ($cpf_rows[substr($key,3)]==FIELD_BOOL) $val=NULL;
 								elseif ($cpf_rows[substr($key,3)]==FIELD_DATE) $val=NULL;
-								else $val='';
+								else */$val='';
 							}
+							if (!is_string($val)) $val=strval($val);
 							$row2['field_'.strval(import_id_remap_get('cpf',substr($key,3)))]=$val;
 						}
 					}

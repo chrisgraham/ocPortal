@@ -1,32 +1,20 @@
 ; Similar to stuff defined in sources/files.php, but defined in terms of what we want never to be in git
-docs/api
 /www.pid
-*test.png
-/info.php
-/_config.php
 /.htaccess
 .DS_Store
 *.lcd
 *.tcp
 *.tcd
 *.gcd
-/uploads
-; themes/[abcefghijklmnopqrstuvwxyz0123456789]*
 templates_cached
-*.[1234567890]*
-comcode_custom
-*log.php
+data_custom/*log.php
 /exports
 /imports
-html_custom
-spelling
 data_custom/modules/chat/*.dat
-themes/default/images_custom/*logo.png
-data_custom/modules/admin_stats/*
+data_custom/modules/admin_stats/*.xml
 /ocp_sitemap.xml
 /*.clpprj
 data_custom/latest_activity.txt
-_tests/codechecker/functions.dat
 /subs.inc
 /hphp-static-cache
 /hphp.files.list
@@ -39,7 +27,6 @@ _tests/codechecker/functions.dat
 tmpfile__*
 *.tmp
 /_vti*
-/if_hosted_service.txt
 *.log
 error_log
 thumbs.db
@@ -50,11 +37,26 @@ gibb
 gibberish
 /bingsiteauth.xml
 php.ini
-/.htpasswd
-/iirf.ini
-/robots.txt
 /*.shtml
 /.project
+
+; These should be banned for the main ocPortal dev repository but not for ocP projects
+/iirf.ini
+docs/api
+*test.png
+/info.php
+/_config.php
+/uploads
+; themes/[abcefghijklmnopqrstuvwxyz0123456789]*
+*.[1234567890]*
+comcode_custom
+html_custom
+spelling
+themes/default/images_custom/*logo.png
+_tests/codechecker/functions.dat
+/if_hosted_service.txt
+/.htpasswd
+/robots.txt
 /closed.html
 /closed.html.old
 /sites
