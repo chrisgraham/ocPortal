@@ -236,10 +236,13 @@ class Module_admin_import
 			}
 			$sessions->attach(form_input_list_entry(strval($session['imp_session']),false,$text));
 		}
-		$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE');
+		$text=do_lang_tempcode((count($_sessions)==0)?'IMPORT_SESSION_NEW':'IMPORT_SESSION_NEW_DELETE');
 		$sessions->attach(form_input_list_entry(strval(-1),false,$text));
-		$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE_OCF_SATELLITE');
-		$sessions->attach(form_input_list_entry(strval(-2),false,$text));
+		if ($importer=='ocp_merge')
+		{
+			$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE_OCF_SATELLITE');
+			$sessions->attach(form_input_list_entry(strval(-2),false,$text));
+		}
 		$fields=form_input_list(do_lang_tempcode('IMPORT_SESSION'),do_lang_tempcode('DESCRIPTION_IMPORT_SESSION'),'session',$sessions,NULL,true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session2','importer'=>get_param('importer')),'_SELF');
