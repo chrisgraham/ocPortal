@@ -1,5 +1,5 @@
 <section class="box box___catalogue_default_grid_entry_wrap"><div class="box_inner">
-	<h3><span class="name">{FIELD_0}</h3>
+	<h3><span class="name">{$TRUNCATE_LEFT,{FIELD_0},25,1,1}</h3>
 
 	{+START,SET,TOOLTIP}
 		<table summary="{!MAP_TABLE}" class="results_table">
