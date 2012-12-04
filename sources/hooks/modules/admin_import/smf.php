@@ -95,16 +95,12 @@ class Hook_smf
 		$db_user='';
 		$db_passwd='';
 		$db_prefix='';
+		$db_server='';
 		if (!file_exists($file_base.'/Settings.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('Settings.php')));
 		require($file_base.'/Settings.php');
-		$INFO=array();
-		$INFO['sql_database']=$db_name;
-		$INFO['sql_user']=$db_user;
-		$INFO['sql_pass']=$db_passwd;
-		$INFO['sql_tbl_prefix']=$db_prefix;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($db_name,$db_user,$db_passwd,$db_prefix,$db_server);
 	}
 
 	/**

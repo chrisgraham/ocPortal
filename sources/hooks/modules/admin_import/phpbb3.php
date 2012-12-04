@@ -118,14 +118,8 @@ class Hook_phpbb3
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
-		$INFO=array();
-		$INFO['sql_database']=$dbname;
-		$INFO['sql_user']=$dbuser;
-		$INFO['sql_pass']=$dbpasswd;
-		$INFO['sql_tbl_prefix']=$table_prefix;
-		$INFO['sql_host']=$dbhost;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix'],$INFO['sql_host']);
+		return array($dbname,$dbuser,$dbpasswd,$table_prefix,$dbhost);
 	}
 
 	/**

@@ -107,22 +107,23 @@ class Hook_vb3
 		if (!file_exists($file_base.'/includes/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('includes/config.php')));
 		require($file_base.'/includes/config.php');
-		$INFO=array();
 		if (!is_null($dbname))
 		{
-			$INFO['sql_database']=$dbname;
-			$INFO['sql_user']=$dbusername;
-			$INFO['sql_pass']=$dbpassword;
-			$INFO['sql_tbl_prefix']=$tableprefix;
+			$sql_database=$dbname;
+			$sql_user=$dbusername;
+			$sql_pass=$dbpassword;
+			$sql_tbl_prefix=$tableprefix;
+			$sql_host=$servername;
 		} else
 		{
-			$INFO['sql_database']=$config['Database']['dbname'];
-			$INFO['sql_user']=$config['MasterServer']['username'];
-			$INFO['sql_pass']=$config['MasterServer']['password'];
-			$INFO['sql_tbl_prefix']=$config['Database']['tableprefix'];
+			$sql_database=$config['Database']['dbname'];
+			$sql_user=$config['MasterServer']['username'];
+			$sql_pass=$config['MasterServer']['password'];
+			$sql_tbl_prefix=$config['Database']['tableprefix'];
+			$sql_tbl_prefix=$config['MasterServer']['servername'];
 		}
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($sql_database,$sql_user,$sql_pass,$sql_tbl_prefix,$sql_host);
 	}
 
 	/**

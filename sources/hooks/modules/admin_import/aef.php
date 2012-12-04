@@ -101,13 +101,8 @@ class Hook_aef
 		if (!file_exists($file_base.'/universal.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH','universal.php'));
 		require($file_base.'/universal.php');
-		$INFO=array();
-		$INFO['sql_database']=$globals['database'];
-		$INFO['sql_user']=$globals['user'];
-		$INFO['sql_pass']=$globals['password'];
-		$INFO['sql_tbl_prefix']=$globals['dbprefix'];
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($globals['database'],$globals['user'],$globals['password'],$globals['dbprefix'],$globals['server']);
 	}
 
 	/**

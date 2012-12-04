@@ -74,7 +74,7 @@ class Hook_ipb_base
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('conf_global.php')));
 		require_once($file_base.'/conf_global.php');
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix'],$INFO['sql_host']);
 	}
 
 	/**
