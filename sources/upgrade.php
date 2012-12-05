@@ -310,10 +310,9 @@ function upgrade_script()
 
 							// Install if either of the following is true:
 							//  - it's some file not in an addon (shouldn't actually happen)
-							//  - it's a new addon (addon that is not installed or uninstalled i.e. does not have an exported mod file)
+							//  - it's a new addon (addon that is not installed or uninstalled i.e. does not have an exported mod file, and not showing up as uninstalled in log)
 							//  - it's a file in an addon we have installed
-							//  - we're upgrading from an ocPortal version that doesn't support addons yet
-							if ((is_null($found)) || (!file_exists(get_file_base().'/imports/addons/'.$found.'.tar')) || (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$found.'.php')) || (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry')))
+							if ((is_null($found)) || ((!file_exists(get_file_base().'/imports/addons/'.$found.'.tar')) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','id',array('the_type'=>'UNINSTALL_ADDON','param_a'=>$found))))) || (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$found.'.php')))
 							{
 								if (substr($upgrade_file['path'],-1)=='/')
 								{
@@ -370,6 +369,7 @@ function upgrade_script()
 					tar_close($upgrade_resource);
 					if ($popup_simple_extract)
 					{
+@var_dump($data);exit(); // TODO
 						copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
 						@unlink($temp_path);
 						$temp_path=get_custom_file_base().'/data_custom/upgrader.tar.tmp';
