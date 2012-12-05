@@ -284,6 +284,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 
 	// Not cached :(
 	$result=file_get_contents($file_base.'/'.$string);
+	apply_comcode_page_substitutions($result);
 
 	// Fix bad unicode
 	if (get_charset()=='utf-8')
@@ -383,6 +384,23 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 }
 
 /**
+ * If any Comcode substitutions are configured, apply them.
+ *
+ * @param  string			The Comcode page contents
+ */
+function apply_comcode_page_substitutions(&$result)
+{
+	global $SITE_INFO;
+	if (isset($SITE_INFO['reps']))
+	{
+		foreach ($SITE_INFO['reps'] as $search=>$replace)
+		{
+			$result=str_replace($search,$replace,$result);
+		}
+	}
+}
+
+/**
  * Load Comcode page from disk.
  *
  * @param  PATH			The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
@@ -412,11 +430,14 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 
 	$_comcode_page_row=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$codename),'',1);
 
+	$result=file_get_contents($file_base.'/'.$string);
+	apply_comcode_page_substitutions($result);
+
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	require_code('attachments2');
-	$_new=do_comcode_attachments(file_get_contents($file_base.'/'.$string),'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
+	$_new=do_comcode_attachments($result,'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
 	$html=$_new['tempcode'];
 	$LAX_COMCODE=$temp;
 	$title_to_use=is_null($COMCODE_PARSE_TITLE)?NULL:clean_html_title($COMCODE_PARSE_TITLE);

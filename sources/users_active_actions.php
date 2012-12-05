@@ -168,7 +168,7 @@ function handle_active_login($username)
 		global $MEMBER_CACHED;
 		$MEMBER_CACHED=$member;
 
-		enforce_temporary_passwords();
+		enforce_temporary_passwords($member);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));
