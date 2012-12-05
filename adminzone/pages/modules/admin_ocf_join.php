@@ -996,7 +996,7 @@ class Module_admin_ocf_join
 					$join_time=NULL;
 				}
 
-				$avatar_url=array_key_exists('Avatar',$line)?$line['Avatar']:'';
+				$avatar_url=array_key_exists('Avatar',$line)?$line['Avatar']:NULL;
 				if (substr($avatar_url,0,strlen(get_base_url()))==get_base_url()) $avatar_url=substr($avatar_url,strlen(get_base_url()));
 				$signature=array_key_exists('Signature',$line)?$line['Signature']:'';
 				$is_perm_banned=array_key_exists('Banned',$line)?((strtoupper($line['Banned'])=='YES' || $line['Banned']=='1' || strtoupper($line['Banned'])=='Y' || strtoupper($line['Banned'])=='ON')?1:0):0;
