@@ -148,7 +148,7 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 }
 
 /**
- * Load up custom Comcode tags so that we may parse them.
+ * Load up Custom Comcode tags so that we may parse them.
  *
  * @param  object			The database connection to use
  */

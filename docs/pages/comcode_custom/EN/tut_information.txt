@@ -203,7 +203,7 @@ Downloads may be used to release information indirectly, essentially via archive
 				<p>Structured data</p>
 			</td>
 			<td>
-				<p>No, unless you use custom Comcode tags for this</p>
+				<p>No, unless you use Custom Comcode tags for this</p>
 			</td>
 			<td>
 				<p>No</p>

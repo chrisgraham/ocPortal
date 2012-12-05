@@ -17,7 +17,7 @@
 /**
  * Get some metadata of what Comcode tags we have.
  *
- * @return array			A pair: core tags (map to tag parameters), custom tags (map to custom Comcode row).
+ * @return array			A pair: core tags (map to tag parameters), custom tags (map to Custom Comcode row).
  */
 function _get_details_comcode_tags()
 {

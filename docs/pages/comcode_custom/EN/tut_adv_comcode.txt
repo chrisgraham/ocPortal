@@ -46,17 +46,17 @@ Menu entries are typed so that their indentation is equal to the indentation of 
 
 [title="2"]Custom Comcode[/title]
 
-[exp_thumb="Adding a custom Comcode tag" float="right"]adv_comcode_custom[/exp_thumb]
+[exp_thumb="Adding a Custom Comcode tag" float="right"]adv_comcode_custom[/exp_thumb]
 {!custom_comcode:DOC_CUSTOM_COMCODE}
 To add a custom tag, do as follows:
  - Enter the Admin Zone
  - In the Setup section, go to 'Custom Comcode'
- - Choose 'Add custom Comcode tag'
+ - Choose 'Add Custom Comcode tag'
  - Choose the tag codename you would like to use, a title for the tag, a description, and an example of how the tag would be used.
  - Tick the various check boxes as necessary.
  - Place the HTML you wish to use inside the 'Replacement text' field, and put '{content}' at the place where you wish for the tag content to be (the text that sits between the opening of the Comcode tag and the closing of the Comcode tag).
  - If you have additional parameters for the tag, list your chosen codenames, separated by commas, in the 'Parameters' field. Then place the codenames in the 'Replacement text' field, in a similar way to as you did for '{content}'.
- - Click the 'Add custom Comcode tag' button
+ - Click the 'Add Custom Comcode tag' button
 Your tag will be shown in your local copy of the Comcode tutorial, with your title, description and usage example.
 
 Note that Comcode is cached, and if you edit a tag after adding Comcode using it, it won't be updated until you edit that content (or the Comcode field precalculation cache is emptied).

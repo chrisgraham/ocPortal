@@ -55,7 +55,7 @@ class Hook_video_embed_youtube
 	}
 
 	/**
-	 * Add a custom Comcode field for this URL type.
+	 * Add a Custom Comcode field for this URL type.
 	 */
 	function add_custom_comcode_field()
 	{
