@@ -123,7 +123,7 @@ When something appears beneath, on the same level, it has been attached. When on
 
 [title="2"]HTML[/title]
 
-A third view of the structure of an ocPortal-driven website, is that of the HTML itself. HTML forms its own tree structure, which is actually similar to how the final ocPortal template tree looks before it is output. HTML is of a lower level however, and if ocPortal didn't have the template system as an intermediatory, layout control for non-programmers would be severely limited.
+A third view of the structure of an ocPortal-driven website, is that of the HTML itself. HTML forms its own tree structure, which is actually similar to how the final ocPortal template tree looks before it is output. HTML is of a lower level however, and if ocPortal didn't have the template system as an intermediary, layout control for non-programmers would be severely limited.
 
 [title="2]The Site-Tree editor[/title]
 

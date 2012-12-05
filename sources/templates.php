@@ -278,14 +278,14 @@ function with_whitespace($in)
  * @param  tempcode		Title to display on redirect page
  * @param  mixed			Destination URL (may be Tempcode)
  * @param  mixed			Message to show (may be Tempcode)
- * @param  boolean		For intermediatory hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediatory)
+ * @param  boolean		For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
  * @param  ID_TEXT	Code of message type to show
  * @set    warn inform fatal
  * @return tempcode		Redirection message (likely to not actually be seen due to instant redirection)
  */
-function redirect_screen($title,$url,$text,$intermediatory_hop=false,$msg_type='inform')
+function redirect_screen($title,$url,$text,$intermediary_hop=false,$msg_type='inform')
 {
 	require_code('templates_redirect_screen');
-	return _redirect_screen($title,$url,$text,$intermediatory_hop,$msg_type);
+	return _redirect_screen($title,$url,$text,$intermediary_hop,$msg_type);
 }
 
