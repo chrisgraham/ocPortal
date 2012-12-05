@@ -130,6 +130,9 @@ class Module_admin_ocf_join
 
 		list($fields,$hidden)=ocf_get_member_fields(false);
 
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('OPTIONS'))));
+		$fields->attach(form_input_tick(do_lang_tempcode('FORCE_TEMPORARY_PASSWORD'),do_lang_tempcode('DESCRIPTION_FORCE_TEMPORARY_PASSWORD'),'temporary_password',false));
+
 		$text=do_lang_tempcode('_ENTER_PROFILE_DETAILS');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
@@ -189,7 +192,8 @@ class Module_admin_ocf_join
 		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 		// Add member
-		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,'','','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
+		$password_compatibility_scheme=((post_param_integer('temporary_password',0)==1)?'temporary':'');
+		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,'','','',true,$password_compatibility_scheme,'',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
 
 		// Secondary groups
 		if (array_key_exists('secondary_groups',$_POST))
@@ -784,6 +788,7 @@ class Module_admin_ocf_join
 		handle_max_file_size($hidden);
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_IMPORT_CSV'),'file',true,NULL,NULL,true,'csv,txt'));
 		$fields->attach(form_input_line(do_lang_tempcode('DEFAULT_PASSWORD'),do_lang_tempcode('DESCRIPTION_DEFAULT_PASSWORD'),'default_password','',false));
+		$fields->attach(form_input_tick(do_lang_tempcode('FORCE_TEMPORARY_PASSWORD'),do_lang_tempcode('DESCRIPTION_FORCE_TEMPORARY_PASSWORD'),'temporary_password',false));
 
 		$submit_name=do_lang_tempcode('IMPORT_MEMBER_CSV');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_csv'),'_SELF');
@@ -1100,7 +1105,8 @@ class Module_admin_ocf_join
 				{
 					if (is_null($password)) $password=$default_password;
 					if (is_null($salt)) $salt='';
-					if (is_null($password_compatibility_scheme)) $password_compatibility_scheme='';
+					if (is_null($password_compatibility_scheme))
+						$password_compatibility_scheme=((post_param_integer('temporary_password',0)==1)?'temporary':'');
 
 					$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
 					$num_added++;

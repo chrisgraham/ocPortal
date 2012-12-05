@@ -381,8 +381,16 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	{
 		if ((is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
 		{
-			$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),do_lang_tempcode('DESCRIPTION_PASSWORD'.(!is_null($member_id)?'_EDIT':'')),is_null($member_id)?'password':'edit_password',$mini_mode));
-			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode));
+			$temporary_password=(!is_null($member_id)) && ($member_id==get_member() && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='temporary'));
+			if ($temporary_password)
+			{
+				$password_field_description=do_lang_tempcode('DESCRIPTION_PASSWORD_TEMPORARY');
+			} else
+			{
+				$password_field_description=do_lang_tempcode('DESCRIPTION_PASSWORD'.(!is_null($member_id)?'_EDIT':''));
+			}
+			$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),$password_field_description,is_null($member_id)?'password':'edit_password',$mini_mode || $temporary_password));
+			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode || $temporary_password));
 		}
 	}
 

@@ -1412,6 +1412,7 @@ class forum_driver_ocf extends forum_driver_base
 			switch ($password_compatibility_scheme)
 			{
 				case '': // ocPortal style salted MD5 algorithm
+				case 'temporary': // as above, but forced temporary password
 					if ($cookie_login)
 					{
 						if ($password_hashed!=$row['m_pass_hash_salted'])

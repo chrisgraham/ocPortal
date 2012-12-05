@@ -145,13 +145,13 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	} else $secondary_groups=ocf_get_all_default_groups();
 	if (is_null($ip_address)) $ip_address=get_ip_address();
 
-	if (($password_compatibility_scheme=='') && (get_value('no_password_hashing')==='1'))
+	if ((($password_compatibility_scheme=='') || ($password_compatibility_scheme=='temporary')) && (get_value('no_password_hashing')==='1'))
 	{
 		$password_compatibility_scheme='plain';
 		$salt='';
 	}
 
-	if (($salt=='') && ($password_compatibility_scheme==''))
+	if (($salt=='') && (($password_compatibility_scheme=='') || ($password_compatibility_scheme=='temporary')))
 	{
 		$salt=produce_salt();
 		$password_salted=md5($salt.md5($password));

@@ -37,17 +37,20 @@ function _redirect_screen($title,$url,$text,$intermediatory_hop=false,$msg_type=
 	$special_page_type=get_param('special_page_type','view');
 	if (($special_page_type=='view') && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (!headers_sent()) && (!$FORCE_META_REFRESH))
 	{
-		foreach ($ATTACHED_MESSAGES_RAW as $message)
+		if ($ATTACHED_MESSAGES_RAW!==NULL)
 		{
-			$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
-				'r_session_id'=>get_session_id(),
-				'r_message'=>is_object($message[0])?$message[0]->evaluate():escape_html($message[0]),
-				'r_type'=>$message[1],
-				'r_time'=>time(),
-			));
+			foreach ($ATTACHED_MESSAGES_RAW as $message)
+			{
+				$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
+					'r_session_id'=>get_session_id(),
+					'r_message'=>is_object($message[0])?$message[0]->evaluate():escape_html($message[0]),
+					'r_type'=>$message[1],
+					'r_time'=>time(),
+				));
+			}
 		}
 		$_message=is_object($text)?$text->evaluate():escape_html($text);
-		if (($_message!='') && ((count($ATTACHED_MESSAGES_RAW)==0) || (($_message!=do_lang('SUCCESS')) && ($_message!=do_lang('REDIRECTING')))))
+		if (($_message!='') && ((($ATTACHED_MESSAGES_RAW===NULL) || (count($ATTACHED_MESSAGES_RAW)==0)) || (($_message!=do_lang('SUCCESS')) && ($_message!=do_lang('REDIRECTING')))))
 		{
 			$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
 				'r_session_id'=>get_session_id(),
