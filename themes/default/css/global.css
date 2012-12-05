@@ -989,7 +989,7 @@ a.fancy_user_link, a.fancy_user_link:visited, a.fancy_user_link:hover {
 	background-color: {$GET,point_of_interest_background};
 	margin-bottom: 7px;
 	text-decoration: none;
-	padding: 2px 2px;
+	padding: 2px 2px !important;
 }
 .post_poster a.fancy_user_link, .post_poster a.fancy_user_link:visited, .post_poster a.fancy_user_link:hover {
 	display: inline-block;
