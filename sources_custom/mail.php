@@ -4,7 +4,7 @@
 
 /**
  * Attempt to send an e-mail to the specified recipient. The mail will be forwarding to the CC address specified in the options (if there is one, and if not specified not to cc).
- * The mail will be sent in dual HTML/text format, where the text is the unconverted comcode source: if a member does not read HTML mail, they may wish to fallback to reading that.
+ * The mail will be sent in dual HTML/text format, where the text is the unconverted Comcode source: if a member does not read HTML mail, they may wish to fallback to reading that.
  *
  * @param  string			The subject of the mail in plain text
  * @param  LONG_TEXT		The message, as Comcode
@@ -16,7 +16,7 @@
  * @range  1 5
  * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
  * @param  boolean		Whether to NOT CC to the CC address
- * @param  ?MEMBER		Convert comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (NULL: guest)
+ * @param  ?MEMBER		Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (NULL: guest)
  * @param  boolean		Replace above with arbitrary admin
  * @param  boolean		HTML-only
  * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools

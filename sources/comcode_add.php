@@ -163,7 +163,7 @@ function _get_details_comcode_tags()
 }
 
 /**
- * Get the comcode tags in groups
+ * Get the Comcode tags in groups
  *
  * @param  ?string		Group Name (NULL: return a specific group)
  * @return array			Returns each Group name as key, values as its tags

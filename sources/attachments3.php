@@ -56,7 +56,7 @@ function _delete_attachment($id,$connection)
  * Deletes all the attachments a given language code holds. Well, not quite! It deletes all references, and any attachments have through it, run out of references.
  *
  * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
- * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
+ * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
  */
 function delete_comcode_attachments($type,$id,$connection=NULL)
@@ -79,9 +79,9 @@ function delete_comcode_attachments($type,$id,$connection=NULL)
 /**
  * This function is the same as delete_comcode_attachments, except that it deletes the language code as well.
  *
- * @param  integer		The language id
+ * @param  integer		The language ID
  * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
- * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
+ * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
  */
 function delete_lang_comcode_attachments($lang_id,$type,$id,$connection=NULL)
@@ -95,14 +95,14 @@ function delete_lang_comcode_attachments($lang_id,$type,$id,$connection=NULL)
 /**
  * Update a language code, in such a way that new attachments are created if they were specified.
  *
- * @param  integer		The language id
+ * @param  integer		The language ID
  * @param  LONG_TEXT		The new text
  * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
- * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
+ * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether to backup the language string before changing it
  * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return integer		The language id
+ * @return integer		The language ID
  */
 function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NULL,$backup_string=false,$for_member=NULL)
 {

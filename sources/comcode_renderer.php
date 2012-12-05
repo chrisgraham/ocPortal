@@ -34,7 +34,7 @@ function init__comcode_renderer()
 
 /**
  * Get the text with all the emoticon codes replaced with the correct XHTML. Emoticons are determined by your forum system.
- * This is not used in the normal comcode chain - it's for non-comcode things that require emoticons (actually in reality it is used in the Comcode chain if the optimiser sees that a full parse is not needed)
+ * This is not used in the normal Comcode chain - it's for non-Comcode things that require emoticons (actually in reality it is used in the Comcode chain if the optimiser sees that a full parse is not needed)
  *
  * @param  string			The text to add emoticons to (assumption: that this is XHTML)
  * @return string			The XHTML with the image-substitution of emoticons
@@ -148,7 +148,7 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 }
 
 /**
- * Load up custom comcode tags so that we may parse them.
+ * Load up custom Comcode tags so that we may parse them.
  *
  * @param  object			The database connection to use
  */
@@ -215,13 +215,13 @@ function _custom_comcode_import($connection)
 }
 
 /**
- * Convert the specified comcode (unknown format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
+ * Convert the specified Comcode (unknown format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
  *
- * @param  LONG_TEXT		The comcode to convert
- * @param  ?MEMBER		The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the comcode came from carefully (NULL: current member)
+ * @param  LONG_TEXT		The Comcode to convert
+ * @param  ?MEMBER		The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (NULL: current member)
  * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
  * @param  ?integer		The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
- * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between Javascript in evaluated comcode, and the surrounding environment (NULL: no explicit binding)
+ * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between Javascript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
  * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.
@@ -268,12 +268,12 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
 }
 
 /**
- * Show a comcode parser error.
+ * Show a Comcode parser error.
  *
  * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.
  * @param  array			Error message details to pass to do_lang, or if the first in the list is NULL, use directly
  * @param  integer		The position during parsing that the error occurred at
- * @param  LONG_TEXT		The comcode the parser error occurred in
+ * @param  LONG_TEXT		The Comcode the parser error occurred in
  * @param  boolean		Whether to only check the Comcode.
  * @return tempcode		An error message to put in the output stream (shown in certain situations, where in other situations we bomb out).
  */
@@ -542,7 +542,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
  * @param  MEMBER			The member who is responsible for this Comcode
  * @param  boolean		Whether to check as arbitrary admin
  * @param  object			The database connection to use
- * @param  string			The whole chunk of comcode
+ * @param  string			The whole chunk of Comcode
  * @param  boolean		Whether this is for WML output (no longer supported)
  * @param  boolean		Whether this is only a structure sweep
  * @param  boolean		Whether we are in semi-parse-mode (some tags might convert differently)

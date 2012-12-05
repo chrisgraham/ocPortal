@@ -196,7 +196,7 @@ function get_zone_name()
  *
  * @param  ID_TEXT		The page name to find
  * @param  ID_TEXT		The type of the page we are looking for
- * @param  ?string		The special subcategorisation of page we are looking for (e.g. 'EN' for a comcode page) (NULL: none)
+ * @param  ?string		The special subcategorisation of page we are looking for (e.g. 'EN' for a Comcode page) (NULL: none)
  * @param  string			The file extension for the page type
  * @param  boolean		Whether ocPortal should bomb out if the page was not found
  * @return ?ID_TEXT		The zone the page is in (NULL: not found)
@@ -295,11 +295,11 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 }
 
 /**
- * Find the zone a comcode page is in.
+ * Find the zone a Comcode page is in.
  *
- * @param  ID_TEXT		The comcode page name to find
+ * @param  ID_TEXT		The Comcode page name to find
  * @param  boolean		Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT		The zone the comcode page is in (NULL: missing)
+ * @return ?ID_TEXT		The zone the Comcode page is in (NULL: missing)
  */
 function get_comcode_zone($page_name,$error=true)
 {

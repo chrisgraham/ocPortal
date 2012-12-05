@@ -273,7 +273,7 @@ function convert_html_headers_to_titles($semihtml)
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
  * @param  boolean		Whether to force full conversion regardless of settings
- * @return LONG_TEXT		The equivalent comcode
+ * @return LONG_TEXT		The equivalent Comcode
  */
 function semihtml_to_comcode($semihtml,$force=false)
 {

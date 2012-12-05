@@ -19,9 +19,9 @@
  */
 
 /**
- * Takes some comcode, and return an XHTML menu created from it.
+ * Takes some Comcode, and return an XHTML menu created from it.
  *
- * @param  LONG_TEXT		The contents of the comcode menu tag
+ * @param  LONG_TEXT		The contents of the Comcode menu tag
  * @param  SHORT_TEXT	An identifier for this menu (will be used as a unique id by menu javascript code)
  * @param  MEMBER			The member the menu is being built as
  * @param  ID_TEXT		The menu type (determines what templates get used)

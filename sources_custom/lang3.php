@@ -12,12 +12,12 @@ if (!function_exists('parse_translated_text'))
 	/**
 	 * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
 	 *
-	 * @param  integer			The id
+	 * @param  integer			The ID
 	 * @param  ?object			The database connection to use (NULL: standard site connection)
 	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
 	 * @param  boolean			Whether to force it to the specified language
-	 * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for comcode page cacheing)
-	 * @return ?tempcode			The parsed comcode (NULL: the text couldn't be looked up)
+	 * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
+	 * @return ?tempcode			The parsed Comcode (NULL: the text couldn't be looked up)
 	 */
 	function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 	{

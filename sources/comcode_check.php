@@ -21,8 +21,8 @@
 /**
  * Check the Comcode is valid.
  *
- * @param  LONG_TEXT		The comcode to convert
- * @param  ?MEMBER		The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the comcode came from carefully (NULL: current member)
+ * @param  LONG_TEXT		The Comcode to convert
+ * @param  ?MEMBER		The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (NULL: current member)
  * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether there might be new attachments. If there are, we will check as lax- as attachments are always preserved by forcing lax parsing.

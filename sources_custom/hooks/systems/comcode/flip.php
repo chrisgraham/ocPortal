@@ -17,7 +17,7 @@ class Hook_comcode_flip
 {
 
 	/**
-	 * Standard modular run function for comcode hooks. They find the custom-comcode-row-like attributes of the tag.
+	 * Standard modular run function for Comcode hooks. They find the custom-comcode-row-like attributes of the tag.
 	 *
 	 * @return array			Fake custom Comcode row
 	 */

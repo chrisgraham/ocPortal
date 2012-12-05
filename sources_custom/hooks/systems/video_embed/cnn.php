@@ -50,7 +50,7 @@ class Hook_video_embed_cnn
 	}
 
 	/**
-	 * Add a custom comcode field for this URL type.
+	 * Add a custom Comcode field for this URL type.
 	 */
 	function add_custom_comcode_field()
 	{

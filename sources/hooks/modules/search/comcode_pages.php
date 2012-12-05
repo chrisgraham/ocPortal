@@ -227,12 +227,12 @@ class Hook_search_comcode_pages
 	}
 
 	/**
-	 * Decide how to show a comcode page in the search results.
+	 * Decide how to show a Comcode page in the search results.
 	 *
 	 * @param  ID_TEXT		The zone for the page
 	 * @param  ID_TEXT		The page name
 	 * @param  string			What search hooks the search is being limited to (blank: not limited)
-	 * @return tempcode		The tempcode showing the comcode page
+	 * @return tempcode		The tempcode showing the Comcode page
 	 */
 	function decide_template($zone,$page,$limit_to)
 	{

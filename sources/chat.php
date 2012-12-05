@@ -1014,7 +1014,7 @@ function get_chatroom_name($room_id,$allow_null=false)
 }
 
 /**
- * Get the id of the specified chatroom, from its room name.
+ * Get the ID of the specified chatroom, from its room name.
  *
  * @param  SHORT_TEXT		The name of the chatroom
  * @param  boolean			Make sure the room is not an IM room. If it is an IM room, pretend it does not exist.
@@ -1129,9 +1129,9 @@ function chat_get_all_rooms()
 }
 
 /**
- * Get a multidimensional array of the content of the specified chatroom. It automatically parses for comcode, chatcode, banned words, smilies, and uses complex logic to decide whether or not to show each message; based upon who the member is, the message content, and other such inputs.
+ * Get a multidimensional array of the content of the specified chatroom. It automatically parses for Comcode, chatcode, banned words, smilies, and uses complex logic to decide whether or not to show each message; based upon who the member is, the message content, and other such inputs.
  * If you set the $dereference flag, all the messages will be dereferenced for you, and if you set the $downloading flag, the array is returned in a format appropriate for things like downloading the chat logs.
- * $start and $finish are used to cutoff the number of messages returned, based on their posting date and time, and the $uptoid variable is used to make the function only return the messages newer than the id specified.
+ * $start and $finish are used to cutoff the number of messages returned, based on their posting date and time, and the $uptoid variable is used to make the function only return the messages newer than the ID specified.
  *
  * @param  AUTO_LINK		The room ID (-1 for IM)
  * @param  array			Rooms database rows that we'll need

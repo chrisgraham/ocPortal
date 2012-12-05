@@ -251,7 +251,7 @@ To include a page named [tt]<otherpagename>[/tt] into another Comcode page you c
 [code]
 {$LOAD_PAGE,<otherpagename>}
 [/code]
-Obviously the pages you reference must exist to show. Go to Content Management > Pages (Comcode Pages) and type in the new page-link beneath the list of existing pages. For example, for these examples (assuming we are working in the welcome zone) we would create [tt]:panel_<panelname>[/tt] and [tt]:otherpagename[/tt]. You will then be in the page editor and can define the page contents there.
+Obviously the pages you reference must exist to show. Go to Content Management > Pages (Comcode pages) and type in the new page-link beneath the list of existing pages. For example, for these examples (assuming we are working in the welcome zone) we would create [tt]:panel_<panelname>[/tt] and [tt]:otherpagename[/tt]. You will then be in the page editor and can define the page contents there.
 
 [semihtml][b]This section is accompanied by a <a onclick="window.open(this.getAttribute('href'),'','width=910,height=700,status=no,resizable=yes,scrollbars=no'); return false;" href="{$BASE_URL*}/uploads/website_specific/ocportal.com/swf_play.php?file=video_tutorials/designer_themes__new_panels.mp4&amp;width=900&amp;height=675">video</a>.[/b][/semihtml]
 
@@ -414,7 +414,7 @@ If you are not just making a theme, but a whole site, you will need to do some o
 2) Edit the menus in the theme, to place the real final links
 3) If a page does not exist in the standard ocPortal then the page needs to be created. The menu can link to non-existing pages (so make up a name for the "Link" field, like "my_new_page") and when this menu item is clicked it shows an error that the page doe not exist and also gives an option to add this page. Once the page is added, this can be edit it like any other Comcode page.
 4) Install any non-bundled addons you need, such as the Google Maps addon
-5) If you have used completely new theme images inside content, such as Comcode Pages or catalogue entries (using in your own theme's CSS or templates is fine) then you actually want these theme images to be defined inside the default theme rather than your own theme. This is because theoretically any theme could need to use these images, not just your one. So for each of these "content theme images" move [tt]themes/<yourthemename>/images_custom/<yoursitename>/<example>[/tt] to [tt]themes/default/images_custom/<yoursitename>/<example>[/tt].
+5) If you have used completely new theme images inside content, such as Comcode pages or catalogue entries (using in your own theme's CSS or templates is fine) then you actually want these theme images to be defined inside the default theme rather than your own theme. This is because theoretically any theme could need to use these images, not just your one. So for each of these "content theme images" move [tt]themes/<yourthemename>/images_custom/<yoursitename>/<example>[/tt] to [tt]themes/default/images_custom/<yoursitename>/<example>[/tt].
 
 [title="3"]Internationalisation[/title]
 

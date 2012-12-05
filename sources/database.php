@@ -546,7 +546,7 @@ class database_driver
 	 * @param  boolean		Whether to return the auto-insert-id
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
 	 * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
-	 * @return integer		The id of the new row
+	 * @return integer		The ID of the new row
 	 */
 	function query_insert($table,$map,$ret=false,$fail_ok=false,$save_as_volatile=false)
 	{

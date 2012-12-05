@@ -541,7 +541,7 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
 }
 
 /**
- * Get the tempcode for a comcode-enabled text input line.
+ * Get the tempcode for a Comcode-enabled text input line.
  *
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
@@ -732,7 +732,7 @@ function form_input_text($pretty_name,$description,$name,$default,$required,$tab
 }
 
 /**
- * Get the tempcode for a comcode-enabled text input (textarea).
+ * Get the tempcode for a Comcode-enabled text input (textarea).
  *
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
@@ -1708,7 +1708,7 @@ function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$
  * @param  mixed			The human-readable description for this field
  * @param  tempcode		The actual raw input field
  * @param  boolean		Whether it is required that this field be filled in
- * @param  boolean		Whether this field may contain comcode
+ * @param  boolean		Whether this field may contain Comcode
  * @param  ?integer		The tab index (NULL: none specified)
  * @param  boolean		Whether it is a textarea field
  * @param  boolean		Whether to skip displaying a label for the field

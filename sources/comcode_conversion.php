@@ -33,9 +33,9 @@ function init__comcode_conversion()
 /**
  * Convert Comcode-Text to Comcode-XML.
  *
- * @param  LONG_TEXT		The comcode to convert
+ * @param  LONG_TEXT		The Comcode to convert
  * @param  boolean		Whether to not include a wrapper element (<comcode>)
- * @return LONG_TEXT		The converted comcode
+ * @return LONG_TEXT		The converted Comcode
  */
 function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 {
@@ -1187,7 +1187,7 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 }
 
 /**
- * Convert and return an uncompiled textual variable (as used in templates, and comcode) into tempcode (these pieces are attached to other pieces, in a certain way, forming a tempcode tree for a template or a variable-in-comcode).
+ * Convert and return an uncompiled textual variable (as used in templates, and Comcode) into tempcode (these pieces are attached to other pieces, in a certain way, forming a tempcode tree for a template or a variable-in-Comcode).
  *
  * @param  string				The full text that is being parsed (we only look into this - the whole thing will be passed into PHP by reference, hence avoiding us a memory block copy)
  * @param  integer			The position we are looking at in the text

@@ -429,7 +429,7 @@ class Module_calendar
 		{
 			case 'day': // Like a diary
 				$id=get_param('id',date('Y-m-d',utctime_to_usertime()));
-				if (strpos($id,'-')===false) $id=date('Y-m-d',utctime_to_usertime()); // The id was actually a filter, will need to use default date/time
+				if (strpos($id,'-')===false) $id=date('Y-m-d',utctime_to_usertime()); // The ID was actually a filter, will need to use default date/time
 				$self_encompassing=($id==date('Y-m-d',utctime_to_usertime()));
 				$date=$id;
 				$explode=explode('-',$id);

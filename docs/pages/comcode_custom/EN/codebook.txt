@@ -39,7 +39,7 @@ When you make modifications to any of ocPortal's default files, There is no need
 
 ocPortal is written to the '[url="front controller"]http://en.wikipedia.org/wiki/Front_controller[/url]' and MVC '[url="design patterns"]http://en.wikipedia.org/wiki/Model-view-controller[/url]':
  - Model/API: Most of the scripts from the 'sources' directory represent the model/API.
- - View: The templates (see 'themes/default/templates' directory) represent the 'view'. Comcode Pages could also be considered part of the view (though they are also content).
+ - View: The templates (see 'themes/default/templates' directory) represent the 'view'. Comcode pages could also be considered part of the view (though they are also content).
  - Controller: The entry scripts (e.g. the [tt]index.php[/tt] files, or files like [tt]site/dload.php[/tt]) represent the 'front controllers'. The modules (i.e. scripts from the '*/pages/modules' directories) and blocks (i.e. scripts from the 'sources/[mini]blocks' directory) represent the controllers. [tt]sources/site.php[/tt] and the initialisation functions in [tt]sources/global.php[/tt] and [tt]sources/global2.php[/tt] bind the entry scripts to the modules and control final output.
 
 Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.

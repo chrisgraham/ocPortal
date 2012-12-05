@@ -1099,7 +1099,7 @@ class forum_driver_aef extends forum_driver_base
 	}
 
 	/**
-	 * Get the ids of the admin groups.
+	 * Get the IDs of the admin groups.
 	 *
 	 * @return array			The admin group ids
 	 */
@@ -1111,7 +1111,7 @@ class forum_driver_aef extends forum_driver_base
 	}
 
 	/**
-	 * Get the ids of the moderator groups.
+	 * Get the IDs of the moderator groups.
 	 * It should not be assumed that a member only has one group - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
 	 *
 	 * @return array			The moderator group ids

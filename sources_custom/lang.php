@@ -10,9 +10,9 @@
 if (!function_exists('_do_lang'))
 {
 	/**
-	 * Get the human-readable form of a language id, or a language entry from a language INI file.
+	 * Get the human-readable form of a language ID, or a language entry from a language INI file.
 	 *
-	 * @param  ID_TEXT		The language id
+	 * @param  ID_TEXT		The language ID
 	 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
 	 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
 	 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
@@ -268,9 +268,9 @@ if (!function_exists('_do_lang'))
 if (!function_exists('get_translated_text'))
 {
 	/**
-	 * Try to return the human-readable version of the language id, passed in as $entry.
+	 * Try to return the human-readable version of the language ID, passed in as $entry.
 	 *
-	 * @param  integer			The id
+	 * @param  integer			The ID
 	 * @param  ?object			The database connection to use (NULL: standard site connection)
 	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
 	 * @return string				The human-readable version

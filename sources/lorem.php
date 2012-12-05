@@ -709,9 +709,9 @@ function placeholder_pagination()
 }
 
 /**
- * Get all comcode files.
+ * Get all Comcode files.
  *
- * @return array		List of comcodes.
+ * @return array		List of Comcode files.
  */
 function find_comcodes()
 {
@@ -726,9 +726,9 @@ function find_comcodes()
 }
 
 /**
- * Get all html files.
+ * Get all HTML files.
  *
- * @return array		List of htmls.
+ * @return array		List of HTML files.
  */
 function find_html()
 {

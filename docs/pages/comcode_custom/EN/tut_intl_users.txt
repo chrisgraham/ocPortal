@@ -64,10 +64,10 @@ There is another option, within the Admin Zone menu under the Style tab, entitle
 [title="2"]Translating the content[/title]
 
 There are two parts to editing the website content:
-1) Comcode Pages
+1) Comcode pages
 2) Other content, which can be translated by a link in the footer
 
-[title="3"]Comcode Pages[/title]
+[title="3"]Comcode pages[/title]
 
 A Comcode page is a page like your front page that consists mostly of static text that doesn't have any particular pre-defined content structure. This is contrasted to a page that is generated from some other form of content like a news article or news archive.
 

@@ -1278,7 +1278,7 @@ function _request_page__redirects($codename,$zone)
 }
 
 /**
- * Get the parsed contents of a comcode page.
+ * Get the parsed contents of a Comcode page.
  *
  * @param  PATH			The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
  * @param  ID_TEXT		The zone the page is being loaded from

@@ -17,7 +17,7 @@ class Hook_comcode_link_handler_cnn
 {
 
 	/**
-	 * Standard modular bind function for comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
+	 * Standard modular bind function for Comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
 	 *
 	 * @param  URLPATH		Link to use or reject
 	 * @param  string			Title for what is at the other end of the link (was found by downloading and looking for <title>)
@@ -27,7 +27,7 @@ class Hook_comcode_link_handler_cnn
 	 * @param  MEMBER			The member who is responsible for this Comcode
 	 * @param  boolean		Whether to check as arbitrary admin
 	 * @param  object			The database connection to use
-	 * @param  string			The whole chunk of comcode
+	 * @param  string			The whole chunk of Comcode
 	 * @param  boolean		Whether this is for WML output (no longer supported)
 	 * @param  boolean		Whether this is only a structure sweep
 	 * @param  boolean		Whether we are in semi-parse-mode (some tags might convert differently)

@@ -75,12 +75,12 @@ class comcode_xml_to_tempcode
 	var $tempcode;
 
 	/**
-	 * Convert the specified comcode (text format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
+	 * Convert the specified Comcode (text format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
 	 *
-	 * @param  LONG_TEXT		The comcode to convert
-	 * @param  MEMBER			The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the comcode came from carefully
+	 * @param  LONG_TEXT		The Comcode to convert
+	 * @param  MEMBER			The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
 	 * @param  ?integer		The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
-	 * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between Javascript in evaluated comcode, and the surrounding environment (NULL: no explicit binding)
+	 * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between Javascript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
 	 * @param  object			The database connection to use
 	 * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
 	 * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.

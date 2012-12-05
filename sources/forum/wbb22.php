@@ -173,7 +173,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 	}
 
 	/**
-	 * Get the ids of the admin usergroups.
+	 * Get the IDs of the admin usergroups.
 	 *
 	 * @return array			The admin usergroup ids
 	 */
@@ -183,7 +183,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 	}
 
 	/**
-	 * Get the ids of the moderator usergroups.
+	 * Get the IDs of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
 	 *
 	 * @return array			The moderator usergroup ids

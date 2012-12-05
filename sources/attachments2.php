@@ -19,16 +19,16 @@
  */
 
 /**
- * Get an array containing new comcode, and tempcode. The function wraps the normal comcode_to_tempcode function. The function will do attachment management, including deleting of attachments that have become unused due to editing of some comcode and removing of the reference.
+ * Get an array containing new Comcode, and tempcode. The function wraps the normal comcode_to_tempcode function. The function will do attachment management, including deleting of attachments that have become unused due to editing of some Comcode and removing of the reference.
  *
- * @param  LONG_TEXT		The unparsed comcode that references the attachments
+ * @param  LONG_TEXT		The unparsed Comcode that references the attachments
  * @param  ID_TEXT		The type the attachment will be used for (e.g. download)
  * @param  ID_TEXT		The ID the attachment will be used for
  * @param  boolean		Whether we are only previewing the attachments (i.e. don't store them!)
  * @param  ?object		The database connection to use (NULL: standard site connection)
- * @param  ?boolean		Whether to insert it as an admin (any comcode parsing will be carried out with admin privileges) (NULL: autodetect)
+ * @param  ?boolean		Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges) (NULL: autodetect)
  * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return array			A map containing 'comcode' (after substitution for tying down the new attachments) and 'tempcode'
+ * @return array			A map containing 'Comcode' (after substitution for tying down the new attachments) and 'tempcode'
  */
 function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=false,$connection=NULL,$insert_as_admin=NULL,$for_member=NULL)
 {
@@ -470,17 +470,17 @@ function _check_attachment_count()
 }
 
 /**
- * Insert some comcode content that may contain attachments, and return the language id.
+ * Insert some Comcode content that may contain attachments, and return the language ID.
  *
  * @param  integer		The level of importance this language string holds
  * @set    1 2 3 4
- * @param  LONG_TEXT		The comcode content
+ * @param  LONG_TEXT		The Comcode content
  * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
- * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
+ * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
- * @param  boolean		Whether to insert it as an admin (any comcode parsing will be carried out with admin privileges)
+ * @param  boolean		Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
  * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return integer		The language id
+ * @return integer		The language ID
  */
 function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL,$insert_as_admin=false,$for_member=NULL)
 {

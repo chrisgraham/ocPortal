@@ -213,9 +213,9 @@ class Module_admin_custom_comcode extends standard_crud_module
 	}
 
 	/**
-	 * Get tempcode for a custom comcode tag adding/editing form.
+	 * Get tempcode for a custom Comcode tag adding/editing form.
 	 *
-	 * @param  SHORT_TEXT	The title (name) of the custom comcode tag
+	 * @param  SHORT_TEXT	The title (name) of the custom Comcode tag
 	 * @param  LONG_TEXT		The description of the tag
 	 * @param  BINARY			Whether the tag is enabled
 	 * @param  ID_TEXT		The actual tag code

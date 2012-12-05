@@ -19,7 +19,7 @@
  */
 
 /**
- * Erase the comcode page cache
+ * Erase the Comcode page cache
  */
 function erase_comcode_page_cache()
 {

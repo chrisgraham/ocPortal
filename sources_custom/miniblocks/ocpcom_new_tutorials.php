@@ -273,7 +273,7 @@ function get_tutorial_info($tut)
 
 		case 'adv_comcode_pages':
 			$result=array(
-				"Advanced Comcode Pages",
+				"Advanced Comcode pages",
 				"How to add dynamism and inline content to your pages, using blocks; and multimedia, using attachments.",
 				"Aug 2008",
 				"blue",

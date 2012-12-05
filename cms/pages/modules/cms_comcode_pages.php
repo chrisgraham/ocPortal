@@ -857,7 +857,7 @@ class Module_cms_comcode_pages
 	}
 
 	/**
-	 * The actualiser to edit a comcode page.
+	 * The actualiser to edit a Comcode page.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -1117,7 +1117,7 @@ class Module_cms_comcode_pages
 	}
 
 	/**
-	 * The actualiser to export a comcode page.
+	 * The actualiser to export a Comcode page.
 	 *
 	 * @return tempcode		The UI
 	 */
