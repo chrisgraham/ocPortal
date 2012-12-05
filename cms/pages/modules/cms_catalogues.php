@@ -341,7 +341,9 @@ class Module_cms_catalogues extends standard_aed_module
 		// Category
 		if ((is_null($id)) && (is_null($category_id)) && (get_value('no_confirm_url_spec_cats')!=='1'))
 		{
-			$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
+			$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name,'cc_parent_id'=>NULL));
+			if (is_null($category_id))
+				$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 		}
 		if ((!is_null($category_id)) && ((is_null($id)) && (get_value('no_confirm_url_spec_cats')==='1') || (get_value('no_spec_cat__'.$catalogue_name)==='1'))) // Adding, but defined category ID in URL, and set option saying not to ask for passed categories
 		{
