@@ -476,7 +476,14 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	}
 	if ($test_rewrite===NULL)
 	{
-		$url=(($self_page) && ($WHAT_IS_RUNNING!=='index'))?find_script($WHAT_IS_RUNNING):($stub.'index.php');
+		if (($self_page) && ($WHAT_IS_RUNNING!=='index'))
+		{
+			$url=find_script($WHAT_IS_RUNNING);
+			if (!array_key_exists('zone',$vars)) $vars['zone']=get_param('zone',NULL);
+		} else
+		{
+			$url=$stub.'index.php';
+		}
 
 		// Fix sort order
 		if (isset($vars['id']))

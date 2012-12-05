@@ -8,7 +8,7 @@
 	</td>
 	<td class="form_table_field_input search_for_search_domain_more">
 		{+START,IF_NON_EMPTY,{OPTIONS_URL}}
-			<span class="associated_link"><a title="{!ADVANCED}: {$STRIP_TAGS,{LANG*}}" href="{OPTIONS_URL*}">{!ADVANCED}</a></span>
+			<span class="associated_link"><a title="{!ADVANCED}: {$STRIP_TAGS,{LANG*}}" target="_self" href="{OPTIONS_URL*}">{!ADVANCED}</a></span>
 		{+END}
 	</td>
 </tr>
