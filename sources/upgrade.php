@@ -369,7 +369,6 @@ function upgrade_script()
 					tar_close($upgrade_resource);
 					if ($popup_simple_extract)
 					{
-@var_dump($data);exit(); // TODO
 						copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
 						@unlink($temp_path);
 						$temp_path=get_custom_file_base().'/data_custom/upgrader.tar.tmp';
