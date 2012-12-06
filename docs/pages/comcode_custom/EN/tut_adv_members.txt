@@ -140,7 +140,7 @@ echo temporary > /members/bob/m_password_compat_scheme
 (this assumes you are doing it for a member, [tt]bob[/tt]).
 You can also run SQL queries. To force all members to change their passwords:
 [code]
-UPDATE ocp_f_members SET m_password_compat_scheme='temporary'
+UPDATE ocp_f_members SET m_password_compat_scheme='temporary' WHERE m_password_compat_scheme=''
 [/code]
 
 
