@@ -55,7 +55,59 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	header('Content-Type: text/plain');
-	require_code('css_and_js');
-	@print(js_minify(http_download_file('http://portalcearamirim.com.br/themes/Portal_Cear_mirim/templates_cached/EN/javascript_validation_non_minified.js?1350491190')));
+	@header('Content-type: text/plain');
+
+	$dodgy_addons=array();
+	$hooks=find_all_hooks('systems','addon_registry');
+	$hook_keys=array_keys($hooks);
+	$hook_files=array();
+	foreach ($hook_keys as $hook)
+	{
+		if (substr($hook,0,4)=='core') continue;
+
+		$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
+		if (!file_exists($path))
+		{
+			$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
+		}
+		$hook_files[$hook]=file_get_contents($path);
+	}
+	ksort($hook_files);
+	foreach ($hook_files as $addon_name=>$hook_file)
+	{
+		$matches=array();
+		if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
+		{
+			if (!defined('HIPHOP_PHP'))
+			{
+				$hooks_files=eval($matches[1]);
+			} else
+			{
+				require_code('hooks/systems/addon_registry/'.$addon_name);
+				$hook=object_factory('Hook_addon_registry_'.$addon_name);
+				$hooks_files=$hook->get_file_list();
+			}
+			$dodgy_addons[$addon_name]=false;
+			foreach ($hooks_files as $file)
+			{
+				if (strpos($file,'/')===false)
+				{
+					if (substr($file,-4)=='.tpl') $file='themes/default/templates/'.$file;
+					elseif (substr($file,-4)=='.css') $file='themes/default/css/'.$file;
+				}
+				if (!file_exists(get_file_base().'/'.$file))
+				{
+					$dodgy_addons[$addon_name]=true;
+				}
+			}
+
+			if ($dodgy_addons[$addon_name])
+			{
+				foreach ($hooks_files as $file)
+				{
+					echo $file."\n";
+				}
+			}
+		}
+	}
 }
