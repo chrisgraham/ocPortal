@@ -2392,7 +2392,13 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 					}
 
 					if (found==0)
-						new_html__initialise(this_node);
+					{
+						try
+						{
+							new_html__initialise(this_node);
+						}
+						catch (e) {}; // Could be some kind of access error (been seen in IE)
+					}
 					else
 						window.setTimeout(_new_html__initialise,0); // Can't do it yet
 				};
