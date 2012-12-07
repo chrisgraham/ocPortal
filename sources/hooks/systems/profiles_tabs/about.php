@@ -72,7 +72,7 @@ class Hook_Profiles_Tabs_about
 
 		// Things staff can do with this user
 		$modules=array();
-		if ((has_specific_permission($member_id_viewing,'warn_member')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
+		if ((has_specific_permission($member_id_viewing,'warn_members')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$redir_url=get_self_url(true);
 			$modules[]=array('usage',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')));

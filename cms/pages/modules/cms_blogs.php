@@ -30,7 +30,6 @@ class Module_cms_blogs extends standard_aed_module
 	var $code_require='news';
 	var $permissions_require='high';
 	var $permissions_cat_require='news';
-	var $permissions_cat_name='main_news_category';
 	var $user_facing=true;
 	var $seo_type='news';
 	var $award_type='news';
@@ -40,6 +39,7 @@ class Module_cms_blogs extends standard_aed_module
 	var $table='news';
 	var $orderer='title';
 	var $title_is_multi_lang=true;
+	var $permission_page_name='cms_news';
 
 	var $donext_type=NULL;
 
@@ -233,7 +233,7 @@ class Module_cms_blogs extends standard_aed_module
 			$validated=get_param_integer('validated',0);
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
-		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
+		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content','cms_news',$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
 				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		if ($cats1->is_empty()) warn_exit(do_lang_tempcode('NO_CATEGORIES'));
@@ -384,7 +384,7 @@ class Module_cms_blogs extends standard_aed_module
 		if (!is_null($main_news_category))
 		{
 			$owner=$GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
-			if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
+			if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
 		}
 
 		$time=$add_time;
@@ -462,7 +462,7 @@ class Module_cms_blogs extends standard_aed_module
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
-		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
+		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?mixed():$schedule;
@@ -562,7 +562,7 @@ class Module_cms_blogs extends standard_aed_module
 	 */
 	function import_wordpress()
 	{
-		check_specific_permission('mass_import');
+		check_specific_permission('mass_import',NULL,NULL,'cms_news');
 
 		$lang=post_param('lang',user_lang());
 		$title=get_screen_title('IMPORT_WP_DB');
@@ -634,7 +634,7 @@ class Module_cms_blogs extends standard_aed_module
 	 */
 	function _import_wordpress()
 	{
-		check_specific_permission('mass_import');
+		check_specific_permission('mass_import',NULL,NULL,'cms_news');
 
 		$title=get_screen_title('IMPORT_WP_DB');
 
