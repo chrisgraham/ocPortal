@@ -150,8 +150,9 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 				$opener_params=array_merge($current_level_params,array($current_level_data));
 				$__first_param=array_shift($opener_params);
-				if (count($__first_param)!=0)
+				if (count($__first_param)!=1)
 				{
+@var_dump($__first_param);exit();
 					warn_exit(do_lang_tempcode('COMPLEX_FIRST_PARAMETER'));
 				}
 				$_first_param=$__first_param[0];
@@ -552,7 +553,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
 		}
 	}
-@var_dump($current_level_data);exit();//TODO
+
 	return array($current_level_data,$preprocessable_bits);
 }
 
