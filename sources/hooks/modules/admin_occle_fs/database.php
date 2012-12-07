@@ -83,7 +83,7 @@ class Hook_database
 			// We're in a row; list the row contents :)
 			$where=$this->_do_where($meta_dir[0],$meta_dir[1]);
 			if ($where===false) return false;
-			$row=$GLOBALS['SITE_DB']->query_select($meta_dir[0],array('*'),$where,'',1);
+			$row=$GLOBALS['SITE_DB']->query_select($meta_dir[0],array('*'),$where,'',1,NULL,false,array());
 			if (!array_key_exists(0,$row)) return false;
 			$row=$row[0];
 			foreach ($row as $field_name=>$field_value) $listing[]=$field_name;

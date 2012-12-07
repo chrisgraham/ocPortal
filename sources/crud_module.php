@@ -95,6 +95,7 @@ class standard_crud_module
 	var $cached_entry_rows=NULL;
 	var $cached_max_rows=NULL;
 	var $lang_type=NULL;
+	var $permission_page_name=NULL;
 
 	// These only needed if we are generate nice_get_entries automatically
 	var $table_prefix='';
@@ -347,14 +348,14 @@ class standard_crud_module
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
 					$this->do_next_editing_categories?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:NULL),									 // Add one
-					$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',get_page_name()))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)),					  // Edit this
-					$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',get_page_name())))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)),									 // Edit one
+					$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)),					  // Edit this
+					$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)),									 // Edit one
 					$this->do_next_editing_categories?NULL:(is_null($id))?NULL:$view_url,																				 // View this
 					$archive_url,																			 // View archive
 					NULL,																						 // Add to category
 					(!$this->do_next_editing_categories)?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_cat_label)?$this->add_one_cat_label:NULL),									 // Add one category
-					(!$this->do_next_editing_categories)?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',get_page_name())))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_cat_label)?$this->edit_one_cat_label:NULL)),									 // Edit one category
-					(!$this->do_next_editing_categories)?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',get_page_name()))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_cat_label)?$this->edit_this_cat_label:NULL)),					  // Edit this category
+					(!$this->do_next_editing_categories)?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_cat_label)?$this->edit_one_cat_label:NULL)),									 // Edit one category
+					(!$this->do_next_editing_categories)?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_cat_label)?$this->edit_this_cat_label:NULL)),					  // Edit this category
 					(!$this->do_next_editing_categories)?NULL:$view_url,																				 // View this category
 					$this->extra_donext_entries,
 					$this->extra_donext_categories,
@@ -680,11 +681,10 @@ class standard_crud_module
 
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
 		{
-			require_code('antispam');
 			inject_action_spamcheck();
 			if (addon_installed('unvalidated'))
 			{
-				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
+				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
 					$_POST['validated']='0';
 			}
 		}
@@ -1066,7 +1066,7 @@ class standard_crud_module
 		$delete_permission=true;
 		if (!is_null($this->permissions_require))
 		{
-			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,get_page_name(),array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
+			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->permission_page_name)?get_page_name():$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
 		}
 		$may_delete=(((!method_exists($this,'may_delete_this')) || ($this->may_delete_this($id))) && ((!is_numeric($id)) || (intval($id)>=db_get_first_id()+$this->protect_first))) && ($delete_permission);
 
@@ -1330,7 +1330,7 @@ class standard_crud_module
 
 			if (($this->user_facing) && (!is_null($this->permissions_require)) && (addon_installed('unvalidated')) && (array_key_exists('validated',$_POST)))
 			{
-				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
+				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
 					$_POST['validated']='0';
 			}
 

@@ -482,11 +482,13 @@ function enforce_personal_access($member_id,$permission=NULL,$permission2=NULL,$
  * @param  ID_TEXT		The permission to require
  * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @param  ?MEMBER		Member to check for (NULL: current user)
+ * @param  ?ID_TEXT		Page name to check for (NULL: current page)
  */
-function check_privilege($permission,$cats=NULL,$member_id=NULL)
+function check_privilege($permission,$cats=NULL,$member_id=NULL,$page_name=NULL)
 {
+	if (is_null($page_name)) $page_name=get_page_name();
 	if (is_null($member_id)) $member_id=get_member();
-	if (!has_privilege($member_id,$permission,get_page_name(),$cats)) access_denied('PRIVILEGE',$permission);
+	if (!has_privilege($member_id,$permission,$page_name,$cats)) access_denied('PRIVILEGE',$permission);
 }
 
 /**

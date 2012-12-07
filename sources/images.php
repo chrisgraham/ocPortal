@@ -100,153 +100,140 @@ function _symbol_thumbnail($param)
 		$dimensions=$param[1]; // Generation dimensions.
 		$exp_dimensions=explode('x',$dimensions);
 		if (count($exp_dimensions)==1) $exp_dimensions[]='-1';
-		if (count($exp_dimensions)==2)
+
+		if ($exp_dimensions[0]=='') $exp_dimensions[0]='-1';
+
+		if (isset($param[2]) && $param[2] != '') // Where we are saving to
 		{
-			if ($exp_dimensions[0]=='') $exp_dimensions[0]='-1';
+			$thumb_save_dir=$param[2];
+			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
+			if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
+		} else
+		{
+			$thumb_save_dir=dirname(rawurldecode(preg_replace('#'.preg_quote(get_custom_base_url().'/','#').'#','',$orig_url)));
+		}
+		$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+		$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
+		$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);
 
-			if (isset($param[2]) && $param[2] != '') // Where we are saving to
+		// We put a branch in here to preserve the old behaviour when
+		// called without the last 2 options
+		if (isset($param[5]) && in_array(trim($param[5]),array('width','height','crop','pad','pad_horiz_crop_horiz','pad_vert_crop_vert')))
+		{
+			// This branch does the new behaviour described above
+
+			$file_prefix='/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.trim($param[5]);
+			if (isset($param[6])) $file_prefix.='__'.trim($param[6]);
+			if (isset($param[7])) $file_prefix.='__'.trim(str_replace('#','',$param[7]));
+			$save_path=get_custom_file_base().$file_prefix.'__'.$filename;
+			$value=get_custom_base_url().$file_prefix.'__'.rawurlencode($filename);
+
+			// Only bother calculating the image if we've not already
+			// made one with these options
+			if ((!is_file($save_path)) && (!is_file($save_path.'.png')))
 			{
-				$thumb_save_dir=$param[2];
-				if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
-				if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
-			} else
-			{
-				$thumb_save_dir=dirname(rawurldecode(preg_replace('#'.preg_quote(get_custom_base_url().'/','#').'#','',$orig_url)));
-			}
-			$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
-			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
-			$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);
-
-			// We put a branch in here to preserve the old behaviour when
-			// called without the last 2 options
-			if (isset($param[5]) && in_array(trim($param[5]),array('width','height','crop','pad','pad_horiz_crop_horiz','pad_vert_crop_vert')))
-			{
-				// This branch does the new behaviour described above
-
-				$file_prefix='/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.trim($param[5]);
-				if (isset($param[6])) $file_prefix.='__'.trim($param[6]);
-				if (isset($param[7])) $file_prefix.='__'.trim(str_replace('#','',$param[7]));
-				$save_path=get_custom_file_base().$file_prefix.'__'.$filename;
-				$value=get_custom_base_url().$file_prefix.'__'.rawurlencode($filename);
-
-				// Only bother calculating the image if we've not already
-				// made one with these options
-				if ((!is_file($save_path)) && (!is_file($save_path.'.png')))
+				// Branch based on the type of thumbnail we're making
+				if (trim($param[5])=='width' || trim($param[5])=='height')
 				{
-					// Branch based on the type of thumbnail we're making
-					if (trim($param[5])=='width' || trim($param[5])=='height')
+					// We just need to scale to the given dimension
+					$result=convert_image($orig_url,$save_path,(trim($param[5])=='width')?intval($exp_dimensions[0]):-1,(trim($param[5])=='height')?intval($exp_dimensions[1]):-1,-1,false,NULL,false,$only_make_smaller);
+				}
+				elseif (trim($param[5])=='crop' || trim($param[5])=='pad' || trim($param[5])=='pad_horiz_crop_horiz' || trim($param[5])=='pad_vert_crop_vert')
+				{
+					// We need to shrink a bit and crop/pad
+					require_code('files');
+
+					// Find dimensions of the source
+					$converted_to_path=convert_url_to_path($orig_url);
+					if (!is_null($converted_to_path))
 					{
-						// We just need to scale to the given dimension
-						$result=convert_image($orig_url,$save_path,(trim($param[5])=='width')?intval($exp_dimensions[0]):-1,(trim($param[5])=='height')?intval($exp_dimensions[1]):-1,-1,false,NULL,false,$only_make_smaller);
+						$sizes=@getimagesize($converted_to_path);
+						if ($sizes===false) return '';
+						list($source_x,$source_y)=$sizes;
+					} else
+					{
+						$source=@imagecreatefromstring(http_download_file($orig_url,NULL,false));
+						if ($source===false) return '';
+						$source_x=imagesx($source);
+						$source_y=imagesy($source);
+						imagedestroy($source);
 					}
-					elseif (trim($param[5])=='crop' || trim($param[5])=='pad' || trim($param[5])=='pad_horiz_crop_horiz' || trim($param[5])=='pad_vert_crop_vert')
+
+					// We only need to crop/pad if the aspect ratio
+					// differs from what we want
+					$source_aspect=floatval($source_x) / floatval($source_y);
+					if ($exp_dimensions[1]=='0') $exp_dimensions[1]='1';
+					$destination_aspect=floatval($exp_dimensions[0]) / floatval($exp_dimensions[1]);
+
+					// We test the scaled sizes, rather than the ratios
+					// directly, so that differences too small to affect
+					// the integer dimensions will be tolerated.
+					if ($source_aspect > $destination_aspect)
 					{
-						// We need to shrink a bit and crop/pad
-						require_code('files');
-
-						// Find dimensions of the source
-						$converted_to_path=convert_url_to_path($orig_url);
-						if (!is_null($converted_to_path))
+						// The image is wider than the output.
+						if ((trim($param[5])=='crop') || (trim($param[5])=='pad_horiz_crop_horiz'))
 						{
-							$sizes=@getimagesize($converted_to_path);
-							if ($sizes===false) return '';
-							list($source_x,$source_y)=$sizes;
-						} else
-						{
-							$source=@imagecreatefromstring(http_download_file($orig_url,NULL,false));
-							if ($source===false) return '';
-							$source_x=imagesx($source);
-							$source_y=imagesy($source);
-							imagedestroy($source);
-						}
-
-						// We only need to crop/pad if the aspect ratio
-						// differs from what we want
-						$source_aspect=floatval($source_x) / floatval($source_y);
-						if ($exp_dimensions[1]=='0') $exp_dimensions[1]='1';
-						$destination_aspect=floatval($exp_dimensions[0]) / floatval($exp_dimensions[1]);
-
-						// We test the scaled sizes, rather than the ratios
-						// directly, so that differences too small to affect
-						// the integer dimensions will be tolerated.
-						if ($source_aspect > $destination_aspect)
-						{
-							// The image is wider than the output.
-							if ((trim($param[5])=='crop') || (trim($param[5])=='pad_horiz_crop_horiz'))
-							{
-								// Is it too wide, requiring cropping?
-								$scale=floatval($source_y) / floatval($exp_dimensions[1]);
-								$modify_image=intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
-							}
-							else
-							{
-								// Is the image too short, requiring padding?
-								$scale=floatval($source_x) / floatval($exp_dimensions[0]);
-								$modify_image=intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
-							}
-						}
-						elseif ($source_aspect < $destination_aspect)
-						{
-							// The image is taller than the output
-							if ((trim($param[5])=='crop') || (trim($param[5])=='pad_vert_crop_vert'))
-							{
-								// Is it too tall, requiring cropping?
-								$scale=floatval($source_x) / floatval($exp_dimensions[0]);
-								$modify_image=intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
-							}
-							else
-							{
-								// Is the image too narrow, requiring padding?
-								$scale=floatval($source_y) / floatval($exp_dimensions[1]);
-								$modify_image=intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
-							}
+							// Is it too wide, requiring cropping?
+							$scale=floatval($source_y) / floatval($exp_dimensions[1]);
+							$modify_image=intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
 						}
 						else
 						{
-							// They're the same, within the tolerances of
-							// floating point arithmentic. Just scale it.
-							$modify_image=false;
+							// Is the image too short, requiring padding?
+							$scale=floatval($source_x) / floatval($exp_dimensions[0]);
+							$modify_image=intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
 						}
-
-						// We have a special case here, since we can "pad" an
-						// image with nothing, ie. shrink it to fit in the
-						// output dimensions. This means we don't need to
-						// modify the image contents either, just scale it.
-						if ((trim($param[5])=='pad' || trim($param[5])=='pad_horiz_crop_horiz' || trim($param[5])=='pad_vert_crop_vert') && isset($param[5]) && (!isset($param[6]) || trim($param[6])==''))
+					}
+					elseif ($source_aspect < $destination_aspect)
+					{
+						// The image is taller than the output
+						if ((trim($param[5])=='crop') || (trim($param[5])=='pad_vert_crop_vert'))
 						{
-							$modify_image=false;
-						}
-
-						// Now do the cropping, padding and scaling
-						if ($modify_image)
-						{
-							$result=convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller,array('type'=>trim($param[5]),'background'=>(isset($param[7])?trim($param[7]):NULL),'where'=>(isset($param[6])?trim($param[6]):'both'),'scale'=>$scale));
+							// Is it too tall, requiring cropping?
+							$scale=floatval($source_x) / floatval($exp_dimensions[0]);
+							$modify_image=intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
 						}
 						else
 						{
-							// Just resize
-							$result=convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller);
+							// Is the image too narrow, requiring padding?
+							$scale=floatval($source_y) / floatval($exp_dimensions[1]);
+							$modify_image=intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
 						}
 					}
+					else
+					{
+						// They're the same, within the tolerances of
+						// floating point arithmentic. Just scale it.
+						$modify_image=false;
+					}
 
-					// If the convertion failed then give back the fallback,
-					// or if it's empty then give back the original image
-					if (!$result) $value=(trim($param[4])=='')? $orig_url : $param[4];
-				}
+					// We have a special case here, since we can "pad" an
+					// image with nothing, ie. shrink it to fit in the
+					// output dimensions. This means we don't need to
+					// modify the image contents either, just scale it.
+					if ((trim($param[5])=='pad' || trim($param[5])=='pad_horiz_crop_horiz' || trim($param[5])=='pad_vert_crop_vert') && isset($param[5]) && (!isset($param[6]) || trim($param[6])==''))
+					{
+						$modify_image=false;
+					}
 
-				if (!file_exists($save_path)) $value.='.png';
-			}
-			else
-			{
-				// This branch does the old behaviour of fitting to width, without the "type" or subsequent parameters.
-				if (!is_file($save_path))
-				{
-					if (!convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller))
-					{ // Ah error, get the closest match we have
-						$value=isset($param[4])?$param[4]:$orig_url;
+					// Now do the cropping, padding and scaling
+					if ($modify_image)
+					{
+						$result=convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller,array('type'=>trim($param[5]),'background'=>(isset($param[7])?trim($param[7]):NULL),'where'=>(isset($param[6])?trim($param[6]):'both'),'scale'=>$scale));
+					}
+					else
+					{
+						// Just resize
+						$result=convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller);
 					}
 				}
+
+				// If the convertion failed then give back the fallback,
+				// or if it's empty then give back the original image
+				if (!$result) $value=(trim($param[4])=='')? $orig_url : $param[4];
 			}
+
+			if (!file_exists($save_path)) $value.='.png';
 		}
 	}
 

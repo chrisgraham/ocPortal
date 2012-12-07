@@ -344,9 +344,9 @@ function update_permission_box(setting)
 			for (name in window.attributes_full[id])
 			{
 				value=window.attributes_full[id][name];
-				if (name.substr(0,3)=='privilege_')
+				if (name.substr(0,'privilege_'.length)=='privilege_')
 				{
-					privilege=name.substr(3);
+					privilege=name.substr('privilege_'.length);
 					privilege_title=value;
 					for (k=0;k<known_groups.length;k++)
 					{
@@ -386,10 +386,10 @@ function update_permission_box(setting)
 			for (name in window.attributes_full[id])
 			{
 				value=window.attributes_full[id][name];
-				if (name.substr(0,'group_privilegess_'.length)=='group_privilegess_')
+				if (name.substr(0,'group_privileges_'.length)=='group_privileges_')
 				{
 					group=name.substr(name.lastIndexOf('_')+1);
-					privilege=name.substr('group_privilegess_'.length,name.length-group.length-1-'group_privileges_'.length);
+					privilege=name.substr('group_privileges_'.length,name.length-group.length-1-'group_privileges_'.length);
 					element=document.getElementById('access_'+group+'_privilege_'+privilege);
 					if (element.selectedIndex<value+1)
 						element.selectedIndex=parseInt(value)+1; // -1 corresponds to 0.
@@ -514,7 +514,7 @@ function set_permissions(setting)
 					for (j=0;j<known_groups.length;j++)
 					{
 						group=known_groups[j];
-						privilege=name.substr(3);
+						privilege=name.substr('privilege_'.length);
 						value=window.attributes_full[id]['group_privileges_'+privilege+'_'+group];
 						if (!value) value=-1;
 						element=document.getElementById('access_'+group+'_privilege_'+privilege);

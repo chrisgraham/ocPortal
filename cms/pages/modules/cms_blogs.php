@@ -30,7 +30,6 @@ class Module_cms_blogs extends standard_crud_module
 	var $code_require='news';
 	var $permissions_require='high';
 	var $permissions_cat_require='news';
-	var $permissions_cat_name='main_news_category';
 	var $user_facing=true;
 	var $seo_type='news';
 	var $award_type='news';
@@ -40,6 +39,7 @@ class Module_cms_blogs extends standard_crud_module
 	var $table='news';
 	var $orderer='title';
 	var $title_is_multi_lang=true;
+	var $permission_page_name='cms_news';
 
 	var $donext_type=NULL;
 
@@ -232,7 +232,7 @@ class Module_cms_blogs extends standard_crud_module
 			$validated=get_param_integer('validated',0);
 			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
-		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
+		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content','cms_news',$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
 				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		if ($cats1->is_empty()) warn_exit(do_lang_tempcode('NO_CATEGORIES'));
@@ -259,7 +259,6 @@ class Module_cms_blogs extends standard_crud_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,$send_trackbacks==1,$notes,$allow_comments==2));
 
-		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
 
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/);
@@ -384,7 +383,7 @@ class Module_cms_blogs extends standard_crud_module
 		if (!is_null($main_news_category))
 		{
 			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
-			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
+			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
 		}
 
 		$time=$add_time;
@@ -465,7 +464,7 @@ class Module_cms_blogs extends standard_crud_module
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // if_there in case somehow category setting corrupted
-		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
+		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?mixed():$schedule;
