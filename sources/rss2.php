@@ -118,9 +118,6 @@ function backend_script()
 	if ($type=='RSS2') $prefix='RSS_';
 	else $prefix='ATOM_';
 
-	// Firefox (and probably other browsers, but I didn't test) doesn't want to display Atom feeds inline if they're sent as text/xml+atom, even if the Content-Disposition is sent to inline :(
-	header('Content-Type: text/xml'); // application/rss+xml ?
-
 	/*if (get_param_integer('force_text',0)==0)
 	{
 		if ($type=='atom') header('Content-Type: text/xml+atom; charset='.get_charset());
@@ -159,6 +156,8 @@ function backend_script()
 
 	if ($mode=='opml')
 	{
+		header('Content-Type: text/xml');
+
 		$_feeds=find_all_hooks('systems','rss');
 		$feeds=array();
 		foreach (array_keys($_feeds) as $feed)
@@ -215,6 +214,9 @@ function backend_script()
 
 		$rss_cloud=do_template('RSS_CLOUD',array('_GUID'=>'a47c40a4c137ea1e5abfc71346547313','TYPE'=>($type=='news')?'':$type,'PORT'=>strval($port),'LOCAL_BASE_URL'=>$local_base_url));
 	} else $rss_cloud=new ocp_tempcode();
+
+	// Firefox (and probably other browsers, but I didn't test) doesn't want to display Atom feeds inline if they're sent as text/xml+atom, even if the Content-Disposition is sent to inline :(
+	header('Content-Type: text/xml'); // application/rss+xml ?
 
 	$echo=do_template($prefix.'WRAPPER',array('FILTER'=>$filter,'CUTOFF'=>strval($cutoff),'MODE'=>$mode,'MODE_NICE'=>$mode_nice,'RSS_CLOUD'=>$rss_cloud,'VERSION'=>ocp_version_full(),'COPYRIGHT'=>$copyright,'DATE'=>$date,'LOGO_URL'=>$logo_url,'ABOUT'=>$site_about,'CONTENT'=>$content));
 	$echo->evaluate_echo();
