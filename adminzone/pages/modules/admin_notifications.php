@@ -152,7 +152,7 @@ class Module_admin_notifications
 						}
 					}
 
-					$_checked=post_param_integer('notification_'.$notification_code.'_'.$ntype,$checked?1:0);
+					$_checked=post_param_integer('notification_'.$notification_code.'_'.$ntype,((strtoupper(ocp_srv('REQUEST_METHOD'))!='POST') && $checked)?1:0);
 
 					$notification_types[]=array(
 						'NTYPE'=>$ntype,
