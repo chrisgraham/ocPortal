@@ -140,6 +140,7 @@ function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attac
 	$_rep_image=mixed();
 	if ($img!='')
 	{
+		require_code('images');
 		$_rep_image=$img;
 		$rep_image=do_image_thumb($img,$_title,false);
 	}

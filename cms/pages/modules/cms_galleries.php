@@ -912,18 +912,30 @@ class Module_cms_galleries extends standard_crud_module
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'971e7db21c3b9d2c8cfbd6a910711514','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
-		if (get_option('is_on_gd')=='1')
+		$do_watermark=($this->has_at_least_one_watermark($cat)) && (get_option('is_on_gd')=='1');
+		$do_rep_image=((get_value('no_gallery_rep_image')!=='1') && (($cat=='') || (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat)))));
+		if (($do_watermark) || ($do_rep_image))
 		{
-			$fields->attach(form_input_tick(do_lang_tempcode('WATERMARK'),do_lang_tempcode('DESCRIPTION_WATERMARK'),'watermark',true)); // Only applies to new uploads, so can't be watermarked twice
-		}
-		if (($cat=='') || (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))))
-		{
-			$fields->attach(form_input_tick(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('_DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'971e7db21c3b9d2c8cfbd6a910711514','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+			if ($do_watermark)
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('WATERMARK'),do_lang_tempcode('DESCRIPTION_WATERMARK'),'watermark',true)); // Only applies to new uploads, so can't be watermarked twice
+			}
+			if ($do_rep_image)
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('_DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false));
+			}
 		}
 
-		require_code('feedback2');
-		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+		if (get_value('no_gallery_feedback_fields')!=='1')
+		{
+			require_code('feedback2');
+			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+		} else
+		{
+			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
+			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
+		}
 
 		return array($fields,$hidden);
 	}
@@ -1363,8 +1375,15 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$fields->attach($validated_field);
 		}
 
-		require_code('feedback2');
-		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+		if (get_value('no_gallery_feedback_fields')!=='1')
+		{
+			require_code('feedback2');
+			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+		} else
+		{
+			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
+			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
+		}
 
 		return array($fields,$hidden);
 	}
@@ -1661,6 +1680,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 		inform_non_canonical_parameter('cat');
 		inform_non_canonical_parameter('validated');
 
+		$hidden=new ocp_tempcode();
+
 		if (is_null($flow_mode_interface))
 		{
 			$cnt=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
@@ -1677,31 +1698,90 @@ class Module_cms_galleries_cat extends standard_crud_module
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'fullname',$fullname,true));
 		if ($name!='root')
-			$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
+		{
+			if (get_value('no_manual_gallery_codename')!=='1')
+			{
+				$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
+			} else
+			{
+				$hidden->attach(form_input_hidden('name',$name));
+			}
+		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
 		if ($parent_id=='') $parent_id=get_param('cat','');
 		if ($name!='root')
-			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id));
-		$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
-		$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'94d1f77eb9fdca010cb9d1eac5d19b9b','SECTION_HIDDEN'=>($rep_image=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		{
+			if ((get_value('no_manual_gallery_parent')!=='1') || ($parent_id==''))
+			{
+				$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id));
+			} else
+			{
+				$hidden->attach(form_input_hidden('parent_id',$parent_id));
+			}
+		}
+		if ((get_value('no_manual_gallery_media_types')!=='1') || ($accept_images==0) || ($accept_videos==0))
+		{
+			$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
+		} else
+		{
+			$hidden->attach(form_input_hidden('accept_images','1'));
+			$hidden->attach(form_input_hidden('accept_videos','1'));
+		}
+		if (get_value('gallery_flow_is')==='1')
+		{
+			$hidden->attach(form_input_hidden('flow_mode_interface','1'));
+		}
+		elseif (get_value('gallery_flow_is')==='0')
+		{
+			$hidden->attach(form_input_hidden('flow_mode_interface','0'));
+		} else
+		{
+			$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
+		}
+		$request_rep_image=(get_value('no_gallery_rep_image')!=='1') || ($rep_image!='');
+		$request_member_synced=(get_value('no_gallery_member_synced')!=='1') || ($is_member_synched==1) || ($name=='root');
+		if ($request_rep_image || $request_member_synced)
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'94d1f77eb9fdca010cb9d1eac5d19b9b','SECTION_HIDDEN'=>($rep_image=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+			if ($request_rep_image)
+			{
+				$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			}
+			if ($request_member_synced)
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('IS_MEMBER_SYNCHED'),do_lang_tempcode('DESCRIPTION_IS_MEMBER_SYNCHED_GALLERY'),'is_member_synched',$is_member_synched==1));
+			}
+		}
 
-		$fields->attach(form_input_tick(do_lang_tempcode('IS_MEMBER_SYNCHED'),do_lang_tempcode('DESCRIPTION_IS_MEMBER_SYNCHED_GALLERY'),'is_member_synched',$is_member_synched==1));
-
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'555320228b5a1ff1effb8a1bf9c15d8e','SECTION_HIDDEN'=>is_null($watermark_top_left) && is_null($watermark_top_right) && is_null($watermark_bottom_left) && is_null($watermark_bottom_right),'TITLE'=>do_lang_tempcode('WATERMARKING'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_LEFT')),'watermark_top_left',false,$watermark_top_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_RIGHT')),'watermark_top_right',false,$watermark_top_right,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),'watermark_bottom_left',false,$watermark_bottom_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),'watermark_bottom_right',false,$watermark_bottom_right,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$hidden=new ocp_tempcode();
+		if (get_value('no_gallery_watermarks')!=='1')
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'555320228b5a1ff1effb8a1bf9c15d8e','SECTION_HIDDEN'=>is_null($watermark_top_left) && is_null($watermark_top_right) && is_null($watermark_bottom_left) && is_null($watermark_bottom_right),'TITLE'=>do_lang_tempcode('WATERMARKING'))));
+			$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_LEFT')),'watermark_top_left',false,$watermark_top_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_RIGHT')),'watermark_top_right',false,$watermark_top_right,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),'watermark_bottom_left',false,$watermark_bottom_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),'watermark_bottom_right',false,$watermark_bottom_right,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		}
 		handle_max_file_size($hidden,'image');
 
-		require_code('feedback2');
-		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,NULL,false,$notes,$allow_comments==2,true));
+		if (get_value('no_gallery_feedback_fields')!=='1')
+		{
+			require_code('feedback2');
+			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,NULL,false,$notes,$allow_comments==2,true));
+		} else
+		{
+			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
+			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
+		}
 
 		// Permissions
-		$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
+		if (get_value('no_gallery_permissions')!=='1')
+		{
+			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
+		} else
+		{
+			require_code('permissions2');
+			$hidden->attach(get_category_permissions_hidden_on());
+		}
 
 		return array($fields,$hidden);
 	}

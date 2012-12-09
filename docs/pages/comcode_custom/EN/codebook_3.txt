@@ -203,6 +203,15 @@ The values you might want to manually change are:
  - [tt]catalogue_seo_source_map__<catalogue-name>[/tt] -- a comma-separated list of field IDs to use for SEO keyword generation (if not set, uses all fields). If all keywords in the field should be used, put an exclamation mark after the field ID
  - [tt]pagination_when_not_needed[/tt] -- set this to '1' if you want the pagination wrapper template to load even if there is no pagination (useful for collecting result meta data via Tempcode)
  - [tt]allow_own_rate[/tt] -- set this to '1' if members should be allowed to rate their own content
+ - [tt]no_manual_gallery_codename[/tt] -- set to '1' if gallery codenames should be auto-calculated from titles
+ - [tt]no_manual_gallery_parent[/tt] -- set to '1' if gallery parents for new galleries specified by URL should not be changeable
+ - [tt]no_manual_gallery_media_types[/tt] -- set to '1' if all media types should be enabled for new galleries
+ - [tt]gallery_flow_is[/tt] -- set to '1' to force flow mode for new galleries, and '0' to force it off
+ - [tt]no_gallery_member_synced[/tt] -- set to '1' if new galleries may not be member-gallery-containers
+ - [tt]no_gallery_watermarks[/tt] -- set to '1' if watermarks should not be enabled
+ - [tt]no_gallery_permissions[/tt] -- set to '1' if galleries should assume normal view permissions
+ - [tt]no_gallery_rep_image[/tt] -- set to '1' if galleries should not have rep-images
+ - [tt]no_gallery_feedback_fields[/tt] -- set to '1' if galleries should have the default feedback options
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)

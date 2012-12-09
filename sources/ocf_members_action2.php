@@ -419,7 +419,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$doing_international=(get_option('allow_international')=='1');
 	$_langs=find_all_langs();
 	$doing_langs=multi_lang();
-	$doing_email_option=(get_option('allow_email_disable')=='1');
+	$doing_email_option=(get_option('allow_email_disable')=='1') && (addon_installed('contact_member'));
 	$doing_email_from_staff_option=(get_option('allow_email_from_staff_disable')=='1');
 	$unspecced_width_zone_exists=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_wide'=>NULL));
 	$unspecced_theme_zone_exists=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'zones WHERE '.db_string_equal_to('zone_theme','').' OR '.db_string_equal_to('zone_theme','-1'));
@@ -1431,6 +1431,8 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
+
+	decache('main_friends_list');
 }
 
 /**
@@ -1507,8 +1509,6 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	dispatch_notification('ocf_choose_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$url,$thumb_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
 
 	// If Avatars addon not installed, use photo for it
-	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-	$default_avatar_url=find_theme_image('ocf_default_avatars/default',true,true);
 	if (!addon_installed('ocf_avatars'))
 	{
 		$avatar_url=$url;
@@ -1535,6 +1535,8 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
+
+	decache('main_friends_list');
 }
 
 /**

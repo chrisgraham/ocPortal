@@ -63,14 +63,14 @@ class Block_main_personal_galleries_list
 		// Find galleries
 		$galleries=new ocp_tempcode();
 		$query=' FROM '.get_table_prefix().'galleries';
-		$query.=' WHERE name LIKE \''.db_encode_like('member\_'.strval($member_id).'\_%').'\'';
+		$query.=' WHERE name LIKE \''.db_encode_like('member\_'.strval($member_id).'\_%').'\' OR g_owner='.strval($member_id);
 		$rows=$GLOBALS['SITE_DB']->query('SELECT *'.$query,$max,$start);
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$query);
 
 		// Render galleries
 		foreach ($rows as $i=>$row)
 		{
-			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),true,false,false,false));
+			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),false,false,false,false));
 			$this->attach_gallery_subgalleries($row['name'],$galleries);
 		}
 

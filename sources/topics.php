@@ -456,7 +456,7 @@ class OCP_Topic
 			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts/*passed by reference*/,$queue,$max_thread_depth);
 			if (count($posts)!=0) // E.g. if parent was deleted at some time
 			{
-				$sort=$this->_get_sort_order($reverse);
+				$sort=$this->_get_sort_order($this->reverse);
 				switch ($sort)
 				{
 					case 'newest':

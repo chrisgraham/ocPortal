@@ -86,7 +86,7 @@ function _symbol_thumbnail($param)
 	// type: One of "width" (scale until the width matches), "height" (scale until the height matches), "crop" (scale until one dimension's right, cut off the remainder),
 	//		"pad" (scale down until the image fits completely inside the dimensions, then optionally fill the gaps), "pad_horiz_crop_horiz" (fit to height, cropping or
 	//		padding as needed) or "pad_vert_crop_vert" (fit to width, padding or cropping as needed)
-	// where: If padding or cropping, specifies where to crop or pad. One of "start", "end" or "both"
+	// where: If padding or cropping, specifies where to crop or pad. One of "start", "end", "both", "start_if_vertical", "end_if_vertical", "start_if_horizontal", or "end_if_vhorizontal"
 	// option: An extra option if desired. If type is "pad" then this can be a hex colour for the padding
 	// only_make_smaller: Whether to avoid growing small images to fit (smaller images are better for the Web). One of 0 (false) or 1 (true)
 	if (($param[0]!=''))

@@ -658,7 +658,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if (array_key_exists('may_edit',$_postdetails))
 	{
-		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id']);
+		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id'],'redirect'=>get_self_url(true));
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 		$test=get_param_integer('threaded',-1);
@@ -670,7 +670,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if (array_key_exists('may_delete',$_postdetails))
 	{
-		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id']);
+		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id'],'redirect'=>get_self_url(true));
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 		$test=get_param_integer('threaded',-1);

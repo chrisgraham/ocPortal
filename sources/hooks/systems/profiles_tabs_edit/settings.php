@@ -75,7 +75,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				($member_id_of!=$member_id_viewing)?NULL:1, // owner view
 				($member_id_of!=$member_id_viewing)?NULL:1 // owner set
 			);
-			$actual_custom_fields=ocf_read_in_custom_fields($custom_fields,$member_id_of);
+			$actual_custom_fields=(post_param_integer('submitting_profile_tab',0)==1)?ocf_read_in_custom_fields($custom_fields,$member_id_of):array();
 
 			if (!fractional_edit())
 			{

@@ -2365,6 +2365,11 @@ END;
 			delete_form_custom_fields('post',strval($post_id));
 		}
 
+		// Show it worked / Refresh
+		$url=get_param('redirect',NULL);
+		if ($url!==NULL)
+			return redirect_screen(get_screen_title('DELETE_POST'),$url,do_lang_tempcode('SUCCESS'));
+
 		if ($deleted_all)
 		{
 			return $this->redirect_to_forum('DELETE_POST',$_topic_info[0]['t_forum_id']);

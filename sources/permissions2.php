@@ -122,6 +122,22 @@ function has_privilege_group($group_id,$permission,$page=NULL,$cats=NULL)
 }
 
 /**
+ * Get hidden fields for setting category access permissions as on.
+ *
+ * @return tempcode		Hidden fields
+ */
+function get_category_permissions_hidden_on()
+{
+	$hidden=new ocp_tempcode();
+	$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
+	foreach (array_keys($all_groups) as $id)
+	{
+		$hidden->attach(form_input_hidden('access_'.strval($id),'1'));
+	}
+	return $hidden;
+}
+
+/**
  * Gather the permissions for the specified category as a form field input matrix.
  *
  * @param  ID_TEXT		The ID code for the module being checked for category access
@@ -158,7 +174,7 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 		}
 	}
 
-	// privileges
+	// Privileges
 	$privileges=array();
 	$access_rows=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_select('group_privileges',array('group_id','privilege','the_value'),array('module_the_name'=>$module,'category_name'=>$category));
 	foreach ($access_rows as $row)

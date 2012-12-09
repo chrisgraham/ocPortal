@@ -62,6 +62,8 @@ class Hook_Profiles_Tabs_Edit_profile
 		if (!is_null($redirect))
 			$hidden->attach(form_input_hidden('redirect',$redirect));
 
+		$hidden->attach(form_input_hidden('submitting_profile_tab','1'));
+
 		$javascript='';
 
 		$text='';

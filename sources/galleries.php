@@ -792,7 +792,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 
 	if ((get_value('personal_under_members')==='1') && (get_forum_type()=='ocf'))
 	{
-		$owner=get_member_id_from_gallery_name($PT_PAIR_CACHE_G[$category_id]['parent_id'],NULL,true);
+		$owner=get_member_id_from_gallery_name($category_id,NULL,true);
 		if (!is_null($owner))
 		{
 			$below=new ocp_tempcode();

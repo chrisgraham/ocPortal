@@ -1014,6 +1014,8 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
 	$out=new ocp_tempcode();
 	foreach ($rows as $row)
 	{
+		if (substr($row['c_name'],0,1)=='_') continue;
+
 		if (!has_category_access(get_member(),'catalogues_catalogue',$row['c_name'])) continue;
 
 		if (($only_submittable) && (!has_privilege(get_member(),'submit_midrange_content','cms_catalogues',array('catalogues_catalogue',$row['c_name'])))) continue;

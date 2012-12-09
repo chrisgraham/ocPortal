@@ -406,6 +406,7 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	}
 
 	decache('side_galleries');
+	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 
 	decache('main_image_fader');
@@ -512,6 +513,7 @@ function delete_image($id,$delete_full)
 	seo_meta_erase_storage('image',strval($id));
 
 	decache('side_galleries');
+	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 	decache('main_image_fader');
 }
@@ -703,6 +705,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	seo_meta_set_for_implicit('video',strval($id),array($description),$description);
 
 	decache('side_galleries');
+	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 
 	return $id;
@@ -810,6 +813,7 @@ function delete_video($id,$delete_full)
 	seo_meta_erase_storage('video',strval($id));
 
 	decache('side_galleries');
+	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 }
 
@@ -967,6 +971,7 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 	if (function_exists('decache'))
 	{
 		decache('side_galleries');
+		decache('main_personal_galleries_list');
 	}
 }
 
@@ -1085,6 +1090,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 	$GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name'=>$name),array('module_the_name'=>'galleries','category_name'=>$old_name));
 
 	decache('side_galleries');
+	decache('main_personal_galleries_list');
 
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),$fullname,get_value('comment_forum__galleries'));
@@ -1149,6 +1155,7 @@ function delete_gallery($name)
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>$name));
 
 	decache('side_galleries');
+	decache('main_personal_galleries_list');
 }
 
 /**

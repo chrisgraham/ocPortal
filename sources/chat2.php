@@ -98,6 +98,8 @@ function friend_add($likes,$liked,$time=NULL)
 	require_code('activities');
 	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
 	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
+
+	decache('main_friends_list');
 }
 
 /**
@@ -114,6 +116,8 @@ function friend_remove($likes,$liked)
 	),'',1); // Just in case page refreshed
 
 	log_it('DUMP_FRIEND',strval($likes),strval($liked));
+
+	decache('main_friends_list');
 }
 
 /**

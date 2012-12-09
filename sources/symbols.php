@@ -2265,16 +2265,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					if ($param[0]!='')
 					{
-						static $awarded_content_ids=NULL;
-						if ($awarded_content_ids===NULL)
+						static $awarded_content_ids=array();
+						if (!isset($awarded_content_ids[intval($param[0])]))
 						{
-							if (can_arbitrary_groupby())
-							{
-								$awarded_content_ids=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive GROUP BY a_type_id ORDER BY date_and_time DESC'));
-							} else
-							{
-								$awarded_content_ids[intval($param[0])]=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
-							}
+							$awarded_content_ids[intval($param[0])]=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
 						}
 						$value=isset($awarded_content_ids[intval($param[0])])?$awarded_content_ids[intval($param[0])]:'';
 					}

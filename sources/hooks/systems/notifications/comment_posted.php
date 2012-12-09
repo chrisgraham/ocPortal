@@ -47,7 +47,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
 				if ($c['id']==$notification_category) $found=true;
 			}
 			if (!$found)
-				$categories[]=array('id'=>$notification_category);
+				$categories[]=array('id'=>$notification_category,'title'=>do_lang('UNKNOWN'));
 		}
 
 		// See if we can get better titles

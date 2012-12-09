@@ -197,7 +197,7 @@ function activities_ajax_update_list_handler()
 			$list_items='';
 			foreach ($activities as $row)
 			{
-				list($message,$memberpic,$datetime,$member_url)=render_activity($row);
+				list($message,$memberpic,$datetime,$member_url,$is_public)=render_activity($row);
 
 				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array(
 					'_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f',
@@ -210,6 +210,7 @@ function activities_ajax_update_list_handler()
 					'MEMBER_URL'=>$member_url,
 					'LIID'=>strval($row['id']),
 					'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others),
+					'IS_PUBLIC'=>$is_public,
 				));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
