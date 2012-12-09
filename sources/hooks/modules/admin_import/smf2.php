@@ -97,16 +97,12 @@ class Hook_smf2
 		$db_user='';
 		$db_passwd='';
 		$db_prefix='';
+		$db_server='';
 		if (!file_exists($file_base.'/Settings.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('Settings.php')));
 		require($file_base.'/Settings.php');
-		$INFO=array();
-		$INFO['sql_database']=$db_name;
-		$INFO['sql_user']=$db_user;
-		$INFO['sql_pass']=$db_passwd;
-		$INFO['sql_tbl_prefix']=$db_prefix;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($db_name,$db_user,$db_passwd,$db_prefix,$db_server);
 	}
 
 	/**
@@ -302,7 +298,7 @@ class Hook_smf2
 			$is_super_admin=0;
 			$is_super_moderator=0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$group_name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$group_name),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($group_name,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$leader,5,0,5,$max_attachments_upload,$avatar_max_width,$avatar_max_height,30000); //Edited by Duck
@@ -499,7 +495,7 @@ class Hook_smf2
 			if (import_check_if_imported('cpf',$row['id_field'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['default_value'];
@@ -821,7 +817,7 @@ class Hook_smf2
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['id_cat']),$test);

@@ -382,7 +382,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		if (!is_null($main_news_category))
 		{
-			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
+			$owner=$GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
 			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
 		}
 
@@ -463,7 +463,7 @@ class Module_cms_blogs extends standard_crud_module
 			$url=STRING_MAGIC_NULL;
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // if_there in case somehow category setting corrupted
+		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
 
 		$schedule=get_input_date('schedule');
@@ -567,7 +567,7 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function import_wordpress()
 	{
-		check_privilege('mass_import');
+		check_privilege('mass_import',NULL,NULL,'cms_news');
 
 		$lang=post_param('lang',user_lang());
 		$title=get_screen_title('IMPORT_WP_DB');
@@ -639,7 +639,7 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function _import_wordpress()
 	{
-		check_privilege('mass_import');
+		check_privilege('mass_import',NULL,NULL,'cms_news');
 
 		$title=get_screen_title('IMPORT_WP_DB');
 

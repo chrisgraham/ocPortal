@@ -107,22 +107,24 @@ class Hook_vb3
 		if (!file_exists($file_base.'/includes/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('includes/config.php')));
 		require($file_base.'/includes/config.php');
-		$PROBED_FORUM_CONFIG=array();
+
 		if (!is_null($dbname))
 		{
-			$PROBED_FORUM_CONFIG['sql_database']=$dbname;
-			$PROBED_FORUM_CONFIG['sql_user']=$dbusername;
-			$PROBED_FORUM_CONFIG['sql_pass']=$dbpassword;
-			$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$tableprefix;
+			$sql_database=$dbname;
+			$sql_user=$dbusername;
+			$sql_pass=$dbpassword;
+			$sql_tbl_prefix=$tableprefix;
+			$sql_host=$servername;
 		} else
 		{
-			$PROBED_FORUM_CONFIG['sql_database']=$config['Database']['dbname'];
-			$PROBED_FORUM_CONFIG['sql_user']=$config['MasterServer']['username'];
-			$PROBED_FORUM_CONFIG['sql_pass']=$config['MasterServer']['password'];
-			$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$config['Database']['tableprefix'];
+			$sql_database=$config['Database']['dbname'];
+			$sql_user=$config['MasterServer']['username'];
+			$sql_pass=$config['MasterServer']['password'];
+			$sql_tbl_prefix=$config['Database']['tableprefix'];
+			$sql_tbl_prefix=$config['MasterServer']['servername'];
 		}
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array($sql_database,$sql_user,$sql_pass,$sql_tbl_prefix,$sql_host);
 	}
 
 	/**

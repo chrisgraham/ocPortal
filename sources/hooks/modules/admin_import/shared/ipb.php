@@ -69,12 +69,13 @@ class Hook_ipb_base
 	 */
 	function probe_db_access($file_base)
 	{
-		global $PROBED_FORUM_CONFIG;
+		global $INFO;
+
 		if (!file_exists($file_base.'/conf_global.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('conf_global.php')));
 		require_once($file_base.'/conf_global.php');
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix'],$INFO['sql_host']);
 	}
 
 	/**

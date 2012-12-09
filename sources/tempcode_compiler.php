@@ -151,7 +151,12 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 				$opener_params=array_merge($current_level_params,array($current_level_data));
 				$__first_param=array_shift($opener_params);
-				$_first_param=implode('.',$__first_param);
+				if (count($__first_param)!=1)
+				{
+@var_dump($__first_param);exit();
+					warn_exit(do_lang_tempcode('COMPLEX_FIRST_PARAMETER'));
+				}
+				$_first_param=$__first_param[0];
 
 				if ($bits[$i-1]=='') $current_level_data[]='""';
 
@@ -242,6 +247,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					if ($_opener_params!='') $_opener_params.=',';
 					$_opener_params.=implode('.',$param);
 				}
+
 				$first_param=str_replace(array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@'),array('','','','','','','','','','','','','','',''),$_first_param);
 				switch ($past_level_mode)
 				{

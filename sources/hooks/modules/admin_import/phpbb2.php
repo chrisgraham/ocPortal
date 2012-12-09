@@ -95,17 +95,13 @@ class Hook_phpbb2
 		$dbname='';
 		$dbuser='';
 		$dbpasswd='';
+		$dbhost='';
 		$table_prefix='';
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
-		$PROBED_FORUM_CONFIG=array();
-		$PROBED_FORUM_CONFIG['sql_database']=$dbname;
-		$PROBED_FORUM_CONFIG['sql_user']=$dbuser;
-		$PROBED_FORUM_CONFIG['sql_pass']=$dbpasswd;
-		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$table_prefix;
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array($dbname,$dbuser,$dbpasswd,$table_prefix,$dbhost);
 	}
 
 	/**

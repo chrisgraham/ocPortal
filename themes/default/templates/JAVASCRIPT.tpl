@@ -1206,6 +1206,13 @@ function handle_tray_cookie_setting(id)
 	var element=document.getElementById('tray_'+id);
 	if (!element) element=document.getElementById(id);
 	if (!element) return;
+
+	if (element.className.indexOf('toggleable_tray')==-1) // Suspicious, maybe we need to probe deeper
+	{
+		var toggleables=get_elements_by_class_name(element,'toggleable_tray');
+		if (typeof toggleables[0]!='undefined') element=toggleables[0];
+	}
+
 	if (((element.style.display=='none') && (cookie_value=='open')) || ((element.style.display!='none') && (cookie_value=='closed')))
 		toggleable_tray(element,true);
 }
@@ -2395,7 +2402,13 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 					}
 
 					if (found==0)
-						new_html__initialise(this_node);
+					{
+						try
+						{
+							new_html__initialise(this_node);
+						}
+						catch (e) {}; // Could be some kind of access error (been seen in IE)
+					}
 					else
 						window.setTimeout(_new_html__initialise,0); // Can't do it yet
 				};

@@ -102,13 +102,8 @@ class Hook_mybb
 		if (!file_exists($file_base.'/inc/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('inc/config.php')));
 		require($file_base.'/inc/config.php');
-		$PROBED_FORUM_CONFIG=array();
-		$PROBED_FORUM_CONFIG['sql_database']=$config['database']['database'];
-		$PROBED_FORUM_CONFIG['sql_user']=$config['database']['username'];
-		$PROBED_FORUM_CONFIG['sql_pass']=$config['database']['password'];
-		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$config['database']['table_prefix'];
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array($config['database']['database'],$config['database']['username'],$config['database']['password'],$config['database']['table_prefix'],$config['database']['hostname']);
 	}
 
 	/**

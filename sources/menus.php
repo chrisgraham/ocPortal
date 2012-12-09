@@ -138,15 +138,21 @@ function build_management_menu()
 		{
 			$sections=array();
 			$sections['']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>''),'site'),'CAPTION'=>do_lang('SITE'),'IMG'=>'menu_items/management_navigation/start');
-			if (has_zone_access(get_member(),'adminzone')) $sections['start']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>''),'adminzone'),'CAPTION'=>do_lang('GUIDE'),'IMG'=>'menu_items/management_navigation/setup');
+			if ((has_zone_access(get_member(),'adminzone')) && (has_page_access(get_member(),'start','adminzone')))
+			{
+				$sections['start']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>''),'adminzone'),'CAPTION'=>do_lang('GUIDE'),'IMG'=>'menu_items/management_navigation/setup');
+			}
 			$sections['admin']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>'cms'),'cms'),'CAPTION'=>do_lang('OPTIONS'),'IMG'=>'menu_items/management_navigation/cms');
 		}
 	}
 
 	if (has_zone_access(get_member(),'adminzone'))
 	{
-		$docs_url=(get_option('show_docs')=='0')?build_url(array('page'=>'website'),'adminzone'):make_string_tempcode(brand_base_url().'/docs'.strval(ocp_version()).'/');
-		$sections['docs']=array('TOOLTIP'=>do_lang('MM_TOOLTIP_DOCS'),'CURRENT'=>false,'URL'=>$docs_url,'CAPTION'=>do_lang('DOCS'),'IMG'=>'menu_items/management_navigation/docs');
+		if ((get_option('show_docs')=='1') || ((is_file(get_custom_file_base().'/adminzone/pages/comcode_custom/'.fallback_lang().'/website.txt')) && (has_page_access(get_member(),'website','adminzone'))))
+		{
+			$docs_url=(get_option('show_docs')=='0')?build_url(array('page'=>'website'),'adminzone'):make_string_tempcode(brand_base_url().'/docs'.strval(ocp_version()).'/');
+			$sections['docs']=array('TOOLTIP'=>do_lang('MM_TOOLTIP_DOCS'),'CURRENT'=>false,'URL'=>$docs_url,'CAPTION'=>do_lang('DOCS'),'IMG'=>'menu_items/management_navigation/docs');
+		}
 	}
 
 	$items=array();

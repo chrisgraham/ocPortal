@@ -465,7 +465,7 @@ class standard_crud_module
 	function ad()
 	{
 		if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require)))
-			check_submit_permission($this->permissions_require);
+			check_submit_permission($this->permissions_require,$this->permission_page_name);
 
 		$doing='ADD_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
@@ -653,7 +653,7 @@ class standard_crud_module
 	 */
 	function _ad()
 	{
-		if (!is_null($this->permissions_require)) check_submit_permission($this->permissions_require,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b)));
+		if (!is_null($this->permissions_require)) check_submit_permission($this->permissions_require,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b)),$this->permission_page_name);
 
 		$doing='ADD_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
@@ -839,7 +839,7 @@ class standard_crud_module
 	function ed()
 	{
 		if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require)))
-			check_some_edit_permission($this->permissions_require);
+			check_some_edit_permission($this->permissions_require,NULL,$this->permission_page_name);
 
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
@@ -1006,7 +1006,7 @@ class standard_crud_module
 
 		if (!is_null($this->permissions_require))
 		{
-			check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
+			check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
 		}
 
 		if ((!is_null($this->permissions_cat_require)) && (!has_category_access(get_member(),$this->permissions_cat_require,$this->get_cat($id))))
@@ -1276,7 +1276,7 @@ class standard_crud_module
 		{
 			if (!is_null($this->permissions_require))
 			{
-				check_delete_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
+				check_delete_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
 			}
 
 			$doing='DELETE_'.$this->lang_type;
@@ -1322,7 +1322,7 @@ class standard_crud_module
 		{
 			if (!is_null($this->permissions_require))
 			{
-				check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
+				check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
 			}
 
 			$test=$this->handle_confirmations($title);

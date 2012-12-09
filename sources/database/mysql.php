@@ -73,7 +73,7 @@ class Database_Static_mysql extends Database_super_mysql
 		$db=$persistent?@mysql_pconnect($db_host,$db_user,$db_password):@mysql_connect($db_host,$db_user,$db_password);
 		if ($db===false)
 		{
-			$error='Could not connect to database-server ('.mysql_error().', '.escape_html(@strval($php_errormsg)).')';
+			$error='Could not connect to database-server ('.mysql_error().', '.(@strval($php_errormsg)).')';
 			if ($fail_ok)
 			{
 				echo $error.chr(10);

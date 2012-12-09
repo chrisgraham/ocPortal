@@ -146,11 +146,28 @@ class Block_main_cc_embed
 			$pagination=pagination(do_lang_tempcode('ENTRIES'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
+		$display_type_str='';
+		switch ($display_type)
+		{
+			case C_DT_FIELDMAPS:
+				$display_type_str='FIELDMAPS';
+				break;
+			case C_DT_TITLELIST:
+				$display_type_str='TITLELIST';
+				break;
+			case C_DT_TABULAR:
+				$display_type_str='TABULAR';
+				break;
+			case C_DT_GRID:
+				$display_type_str='GRID';
+				break;
+		}
+
 		// Render
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array(
 			'_GUID'=>'dfdsfdsfsd3ffsdfsd',
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-			'DISPLAY_TYPE'=>strval($display_type),
+			'DISPLAY_TYPE'=>$display_type_str,
 			'ROOT'=>is_null($root)?'':strval($root),
 			'CATALOGUE'=>$catalogue_name,
 			'ENTRIES'=>$entry_buildup,

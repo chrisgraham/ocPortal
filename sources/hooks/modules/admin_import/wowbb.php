@@ -102,13 +102,8 @@ class Hook_wowbb
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
-		$PROBED_FORUM_CONFIG=array();
-		$PROBED_FORUM_CONFIG['sql_database']=constant('DB_NAME');
-		$PROBED_FORUM_CONFIG['sql_user']=constant('DB_USER_NAME');
-		$PROBED_FORUM_CONFIG['sql_pass']=constant('DB_PASSWORD');
-		$PROBED_FORUM_CONFIG['sql_tbl_prefix']='wowbb_';
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array(constant('DB_NAME'),constant('DB_USER_NAME'),constant('DB_PASSWORD'),'wowbb_',constant('DB_HOST'));
 	}
 
 	/**

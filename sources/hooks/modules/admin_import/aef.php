@@ -104,13 +104,8 @@ class Hook_aef
 		if (!file_exists($file_base.'/universal.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH','universal.php'));
 		require($file_base.'/universal.php');
-		$PROBED_FORUM_CONFIG=array();
-		$PROBED_FORUM_CONFIG['sql_database']=$globals['database'];
-		$PROBED_FORUM_CONFIG['sql_user']=$globals['user'];
-		$PROBED_FORUM_CONFIG['sql_pass']=$globals['password'];
-		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$globals['dbprefix'];
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array($globals['database'],$globals['user'],$globals['password'],$globals['dbprefix'],$globals['server']);
 	}
 
 	/**

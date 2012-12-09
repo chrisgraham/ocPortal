@@ -113,17 +113,13 @@ class Hook_phpbb3
 		$dbname='';
 		$dbuser='';
 		$dbpasswd='';
+		$dbhost='';
 		$table_prefix='';
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
-		$PROBED_FORUM_CONFIG=array();
-		$PROBED_FORUM_CONFIG['sql_database']=$dbname;
-		$PROBED_FORUM_CONFIG['sql_user']=$dbuser;
-		$PROBED_FORUM_CONFIG['sql_pass']=$dbpasswd;
-		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$table_prefix;
 
-		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
+		return array($dbname,$dbuser,$dbpasswd,$table_prefix,$dbhost);
 	}
 
 	/**
@@ -429,11 +425,12 @@ class Hook_phpbb3
 						{
 							if (is_null($val))
 							{
-								if ($cpf_rows[substr($key,3)]==FIELD_INT) $val=NULL;
+								/*if ($cpf_rows[substr($key,3)]==FIELD_INT) $val=NULL;	Actually is stored as a string
 								elseif ($cpf_rows[substr($key,3)]==FIELD_BOOL) $val=NULL;
 								elseif ($cpf_rows[substr($key,3)]==FIELD_DATE) $val=NULL;
-								else $val='';
+								else */$val='';
 							}
+							if (!is_string($val)) $val=strval($val);
 							$row2['field_'.strval(import_id_remap_get('cpf',substr($key,3)))]=$val;
 						}
 					}

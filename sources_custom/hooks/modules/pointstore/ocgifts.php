@@ -51,11 +51,11 @@ class Hook_pointstore_ocgifts
 
 		require_code('form_templates');
 
-		$map=NULL;
+		$map=array('enabled'=>1);
 		$category=either_param('category','');
 		if ($category!='')
 		{
-			$map=array('category'=>$category);
+			$map['category']=$category;
 		}
 
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('ocgifts','COUNT(*)',$map);

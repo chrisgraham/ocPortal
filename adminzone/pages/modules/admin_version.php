@@ -228,6 +228,11 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');
 		}
 
+		if ((!is_null($upgrade_from)) && ($upgrade_from==14))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?USER');
+		}
+
 		if ((is_null($upgrade_from)) || ($upgrade_from<14))
 		{
 			$GLOBALS['SITE_DB']->create_table('temp_block_permissions',array(
@@ -284,12 +289,7 @@ class Module_admin_version
 			));
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<15))
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?MEMBER');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<16))
+		if ((!is_null($upgrade_from)) && ($upgrade_from==15))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_interlock');
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_in_panel');

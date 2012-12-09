@@ -673,9 +673,12 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
  * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
  */
-function check_some_edit_permission($range,$cats=NULL)
+function check_some_edit_permission($range,$cats=NULL,$page=NULL)
 {
+	if (is_null($page)) $page=get_page_name();
+
 	$ret=false;
 	$member=get_member();
 	if (is_guest($member)) $ret=false;

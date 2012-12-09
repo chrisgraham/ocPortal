@@ -76,8 +76,8 @@ class Block_main_image_fader
 		$images_full=array();
 		$titles=array();
 		$html=array();
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images WHERE '.$cat_select,100/*reasonable amount*/);
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos WHERE '.$cat_select,100/*reasonable amount*/);
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images WHERE '.$cat_select.' ORDER BY add_date ASC',100/*reasonable amount*/);
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos WHERE '.$cat_select.' ORDER BY add_date ASC',100/*reasonable amount*/);
 		$all_rows=array();
 		if ($order!='')
 		{

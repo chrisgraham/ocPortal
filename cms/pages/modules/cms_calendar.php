@@ -65,7 +65,26 @@ class Module_cms_calendar extends standard_crud_module
 	function get_privilege_overrides()
 	{
 		require_lang('calendar');
-		return array('submit_cat_highrange_content'=>array(0,'ADD_EVENT_TYPE'),'edit_cat_highrange_content'=>array(0,'EDIT_EVENT_TYPE'),'delete_cat_highrange_content'=>array(0,'DELETE_EVENT_TYPE'),'submit_lowrange_content'=>array(1,'ADD_CALENDAR_EVENT'),'bypass_validation_lowrange_content'=>array(1,'BYPASS_VALIDATION_CALENDAR_EVENT'),'edit_own_lowrange_content'=>array(1,'EDIT_OWN_CALENDAR_EVENT'),'edit_lowrange_content'=>array(1,'EDIT_CALENDAR_EVENT'),'delete_own_lowrange_content'=>array(1,'DELETE_OWN_CALENDAR_EVENT'),'delete_lowrange_content'=>array(1,'DELETE_CALENDAR_EVENT'),'mass_import'=>0);
+		return array(
+			'submit_cat_highrange_content'=>array(0,'ADD_EVENT_TYPE'),
+			'edit_cat_highrange_content'=>array(0,'EDIT_EVENT_TYPE'),
+			'delete_cat_highrange_content'=>array(0,'DELETE_EVENT_TYPE'),
+			'submit_lowrange_content'=>array(1,'ADD_CALENDAR_EVENT'),
+
+			'bypass_validation_lowrange_content'=>array(1,'BYPASS_VALIDATION_CALENDAR_EVENT__NON_PUBLIC'),
+			'edit_own_lowrange_content'=>array(1,'EDIT_OWN_CALENDAR_EVENT__NON_PUBLIC'),
+			'edit_lowrange_content'=>array(1,'EDIT_CALENDAR_EVENT__NON_PUBLIC'),
+			'delete_own_lowrange_content'=>array(1,'DELETE_OWN_CALENDAR_EVENT__NON_PUBLIC'),
+			'delete_lowrange_content'=>array(1,'DELETE_CALENDAR_EVENT__NON_PUBLIC'),
+
+			'bypass_validation_midrange_content'=>array(1,'BYPASS_VALIDATION_CALENDAR_EVENT'),
+			'edit_own_midrange_content'=>array(1,'EDIT_OWN_CALENDAR_EVENT'),
+			'edit_midrange_content'=>array(1,'EDIT_CALENDAR_EVENT'),
+			'delete_own_midrange_content'=>array(1,'DELETE_OWN_CALENDAR_EVENT'),
+			'delete_midrange_content'=>array(1,'DELETE_CALENDAR_EVENT'),
+
+			'mass_import'=>0,
+		);
 	}
 
 	/**

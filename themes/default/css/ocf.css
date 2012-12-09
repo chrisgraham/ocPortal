@@ -365,8 +365,8 @@
 
 .ocf_topic_poster_name {
 	text-align: center;
+	display: inline-block;
 	{+START,IF,{$NOT,{$MOBILE}}}
-		padding: 0 2em;
 		{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	{+END}
 	margin: 1em 0;

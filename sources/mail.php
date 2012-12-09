@@ -136,7 +136,7 @@ function comcode_to_clean_text($message_plain)
 	}
 	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 
-	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1}',$message_plain);
+	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
@@ -207,6 +207,8 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
 function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
 {
 	if (running_script('stress_test_loader')) return NULL;
+
+	if (@$GLOBALS['SITE_INFO']['no_email_output']==='1') return NULL;
 
 	global $EMAIL_ATTACHMENTS;
 	$EMAIL_ATTACHMENTS=array();
@@ -483,9 +485,43 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
 		{
-			$file_contents=http_download_file($img,NULL,false);
-			if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
-			if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			$file_contents=mixed();
+			$matches=array();
+			if ((preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches)!=0) && (strpos($img,'forum_db=1')===false))
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id'=>intval($matches[1])),'ORDER BY a_add_time DESC');
+				if ((array_key_exists(0,$rows)) && (has_attachment_access($as,intval($matches[1]))))
+				{
+					$myrow=$rows[0];
+
+					if ($matches[2]=='1')
+					{
+						$full=$myrow['a_thumb_url'];
+					}
+					else
+					{
+						$full=$myrow['a_url'];
+					}
+
+					if (url_is_local($full))
+					{
+						$_full=get_custom_file_base().'/'.rawurldecode($full);
+						if (file_exists($_full))
+						{
+							$filename=$myrow['a_original_filename'];
+							require_code('mime_types');
+							$file_contents=file_get_contents($_full);
+							$mime_type=get_mime_type(get_file_extension($filename));
+						}
+					}
+				}
+			}
+			if ($file_contents===NULL)
+			{
+				$file_contents=http_download_file($img,NULL,false);
+				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
+				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			}
 		}
 		$sending_message.='Content-Type: '.str_replace("\r",'',str_replace("\n",'',$mime_type)).$line_term;
 		$sending_message.='Content-ID: <'.$id.'>'.$line_term;

@@ -123,7 +123,12 @@ foreach ($todo as $i=>$_target_file)
 
 	// Copy in the data
 	fseek($myfile,$offset);
-	$myfile2=fopen($FILE_BASE.'/'.$target_file,'wb');
+	$myfile2=@fopen($FILE_BASE.'/'.$target_file,'wb');
+	if ($myfile2===false)
+	{
+		header('Content-type: text/plain');
+		exit('Filesystem permission error when trying to extract '.$target_file.'. Maybe you needed to give FTP details when logging in?');
+	}
 	while ($length>0)
 	{
 		$amount_to_read=min(1024,$length);

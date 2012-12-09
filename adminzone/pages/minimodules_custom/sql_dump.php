@@ -43,7 +43,7 @@ if ((strpos(ini_get('disallowed_functions'),'shell_exec')===false) && (strpos(ge
 		if ($msg!='') echo ' - '.$msg; */
 	} else
 	{
-		header('Location: '.get_custom_base_url().'/'.$target_file);
+		header('Location: '.get_custom_base_url().'/'.$filename);
 		exit();
 	}
 }/* else*/
