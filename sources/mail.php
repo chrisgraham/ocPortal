@@ -519,6 +519,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			if ($file_contents===NULL)
 			{
 				$file_contents=http_download_file($img,NULL,false);
+				if (is_null($file_contents)) continue;
 				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 			}
@@ -546,12 +547,15 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 			if (strpos($path,'://')===false)
 			{
-				$sending_message.=chunk_split(base64_encode(file_get_contents($path)),76,$line_term);
+				if (!is_file($path)) continue;
+				$contents=file_get_contents($path);
 			} else
 			{
 				require_code('files');
-				$sending_message.=chunk_split(base64_encode(http_download_file($path)),76,$line_term);
+				$contents=http_download_file($path,NULL,false);
+				if (is_null($contents)) continue;
 			}
+			$sending_message.=chunk_split(base64_encode($contents),76,$line_term);
 		}
 
 		$sending_message.=$line_term.'--'.$boundary.'--'.$line_term;

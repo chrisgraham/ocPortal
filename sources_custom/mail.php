@@ -231,6 +231,9 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 							require_code('mime_types');
 							$myfile=$_full;
 							$mime_type=get_mime_type(get_file_extension($filename));
+						} else
+						{
+							continue;
 						}
 					}
 				}
@@ -239,6 +242,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			{
 				$myfile=ocp_tempnam('email_attachment');
 				http_download_file($img,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
+				if (is_null($file_contents)) continue;
 				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 			}
