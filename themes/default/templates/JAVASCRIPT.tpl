@@ -2826,7 +2826,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		if (typeof window.last_reply_to!='undefined') set_opacity(window.last_reply_to,1.0);
 	}
 	window.last_reply_to=ob;
-	parent_id_field.value=id;
+	parent_id_field.value=is_threaded?id:'';
 
 	ob.className+=' activated_quote_button';
 
@@ -2850,7 +2850,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 		post.focus();
 		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
-		post.default_substring_to_strip=post.value;
+		//post.default_substring_to_strip=post.value;
 	}
 
 	return false;
