@@ -2308,7 +2308,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 		if ((node_upper=='SCRIPT') && (!xml_doc.getAttribute('src')))
 		{
 			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:"")));
-			if (script_tag_dependencies['to_load']==0)
+			if (script_tag_dependencies['to_load'].length==0)
 			{
 				window.setTimeout(function() {
 					if (typeof window.execScript!='undefined')
