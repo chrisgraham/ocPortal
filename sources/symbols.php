@@ -1807,7 +1807,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'DIV':
-				if (isset($param[1]))
+				if (floatval($param[1])==0.0)
+				{
+					$value='divide-by-zero';
+				} else
 				{
 					$value=strval(intval(floor(floatval($param[0])/floatval($param[1]))));
 				}
