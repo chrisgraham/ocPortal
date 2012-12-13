@@ -1111,9 +1111,10 @@ function form_input_list($pretty_name,$description,$name,$content,$tabindex=NULL
  * @param  boolean		Whether to use the server-ID in the list instead of the ID in the list
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether multiple selections are allowed
+ * @param  ?string		Label for default value (NULL: just use the literal)
  * @return tempcode		The input field
  */
-function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default=NULL,$use_server_id=false,$tabindex=NULL,$multi_select=false)
+function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default=NULL,$use_server_id=false,$tabindex=NULL,$multi_select=false,$nice_label=NULL)
 {
 	require_javascript('javascript_tree_list');
 	require_javascript('javascript_more');
@@ -1143,7 +1144,7 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 
 	require_javascript('javascript_ajax');
 
-	$nice_label=$default;
+	if (is_null($nice_label)) $nice_label=$default;
 
 	$_required=($required)?'_required':'';
 	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array(

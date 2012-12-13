@@ -275,6 +275,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_banner_count_updates[/tt] -- set this to '1' if you don't want to maintain banner view counts (small performance improvement)
  - [tt]pinpoint_submitban_check[/tt] -- set this to '1' if you only want submitter ban checks to occur in the CMS zone (small performance improvement)
  - [tt]no_block_timeout[/tt] -- set this to '1' if blocks should never timeout
+ - [tt]cleanup_files[/tt] -- set this to '1' if you want ocPortal to delete files linked to content that a member deletes (ordinarily ocPortal won't, for record keeping / safety)
 
 [title="3"]Hidden 'keep' parameters[/title]
 

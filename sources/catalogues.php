@@ -258,15 +258,15 @@ function count_catalogue_category_children($category_id)
  * @param  ID_TEXT			Environment param used for ordering
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
-function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_filters='',$_order_by=NULL,$ordering_param='order')
+function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='order')
 {
-	if ($_filters!='')
+	if ($_ocselect!='')
 	{
 		require_code('ocselect');
-		$filters=parse_ocselect($_filters);
+		$ocselect=parse_ocselect($_ocselect);
 	} else
 	{
-		$filters=mixed();
+		$ocselect=mixed();
 	}
 
 	// How to display
@@ -335,7 +335,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	require_code('fields');
 	if (is_null($entries))
 	{
-		list($in_db_sorting,$num_entries,$entries)=get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$filters,$order_by,$direction);
+		list($in_db_sorting,$num_entries,$entries)=get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$ocselect,$order_by,$direction);
 	} else // Oh, we already have $entries
 	{
 		$num_entries=count($entries);
@@ -578,7 +578,7 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  * @param  string				Additional WHERE SQL to add on to query
  * @return array				A tuple: whether sorting was done, number of entries returned, list of entries
  */
-function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$filters,$order_by,$direction,$extra_where='')
+function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$ocselect,$order_by,$direction,$extra_where='')
 {
 	$where_clause='1=1'.$extra_where;
 	if (!is_null($category_id))
@@ -599,7 +599,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 	// Convert the filters to SQL
 	require_code('ocselect');
 
-	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],$filters,'catalogue_entry',$catalogue_name);
+	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],$ocselect,'catalogue_entry',$catalogue_name);
 	$where_clause.=$extra_where.' AND '.db_string_equal_to('r.c_name',$catalogue_name);
 
 	// If we're listing what IDs to look at, work out SQL for this

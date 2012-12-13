@@ -1161,7 +1161,7 @@ function delete_gallery($name)
 /**
  * The UI shows member galleries that do not exist. If it is a member gallery, and it does not exist, it'll need making, before something can be added. This gallery performs the check and makes the gallery if needed.
  *
- * @param  ID_TEXT		The gallery name
+ * @param  ID_TEXT		The gallery codename
  */
 function make_member_gallery_if_needed($cat)
 {
@@ -1174,19 +1174,14 @@ function make_member_gallery_if_needed($cat)
 	if (is_null($test))
 	{
 		$parts=explode('_',$cat,3);
-		$member=intval($parts[1]); // Almost certainly going to be same as get_member(), but we might as well be general here
-
-		if (!has_privilege($member,'have_personal_category','cms_galleries')) return;
-
-		// Find about parent (new gallery inherits)
+		$member=intval($parts[1]);
 		$parent_id=$parts[2];
+		if (!has_privilege($member,'have_personal_category','cms_galleries')) return;
 		$_parent_info=$GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos','flow_mode_interface','fullname'),array('name'=>$parent_id),'',1);
 		if (!array_key_exists(0,$_parent_info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		$parent_info=$_parent_info[0];
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		if (is_null($username)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
-		$member_gallery_title=do_lang('PERSONAL_GALLERY_OF',$username,get_translated_text($parent_info['fullname']));
+		$member_gallery_title=get_potential_gallery_title($cat);
 		add_gallery($cat,$member_gallery_title,'','',$parent_id,$parent_info['accept_images'],$parent_info['accept_videos'],0,$parent_info['flow_mode_interface']);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('group_category_access',array('group_id'),array('module_the_name'=>'galleries','category_name'=>$parent_id));
@@ -1197,4 +1192,40 @@ function make_member_gallery_if_needed($cat)
 	}
 }
 
+/**
+ * Get the potential title of a gallery - real name if gallery exists.
+ *
+ * @param  ID_TEXT		The gallery codename
+ * @return ?SHORT_TEXT	The gallery title (NULL: does not exist and won't be auto-created)
+ */
+function get_potential_gallery_title($cat)
+{
+	// Test to see if it exists
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$cat));
+	if ((is_null($test)) && (substr($cat,0,7)=='member_'))
+	{
+		// Does not exist but is a potential member gallery
+		$parts=explode('_',$cat,3);
+		$member=intval($parts[1]); // Almost certainly going to be same as get_member(), but we might as well be general here
+
+		// Find about parent (new gallery inherits)
+		$parent_id=$parts[2];
+		$_parent_info=$GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos','flow_mode_interface','fullname'),array('name'=>$parent_id),'',1);
+		if (!array_key_exists(0,$_parent_info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		$parent_info=$_parent_info[0];
+
+		// Work out name
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		if (is_null($username)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
+		$fullname=get_translated_text($parent_info['fullname']);
+		if ($fullname==do_lang('GALLERIES_HOME')) $fullname=do_lang('GALLERY');
+		return do_lang('PERSONAL_GALLERY_OF',$username,$fullname);
+	} else
+	{
+		// Does exist
+		return get_translated_text($test);
+	}
+
+	return NULL; // Non-existent
+}
 

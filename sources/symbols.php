@@ -1773,9 +1773,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'MULT':
-				if (isset($param[1]))
+				$value='1';
+				foreach ($param as $p)
 				{
-					$value=float_to_raw_string(floatval($param[0])*floatval($param[1]),20,true);
+					$value=float_to_raw_string(floatval($value)*floatval($p),20,true);
 				}
 				break;
 
@@ -1892,14 +1893,26 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'DIV':
 				if (isset($param[1]))
 				{
-					$value=strval(intval(floor(floatval($param[0])/floatval($param[1]))));
+					if (floatval($param[1])==0.0)
+					{
+						$value='divide-by-zero';
+					} else
+					{
+						$value=strval(intval(floor(floatval($param[0])/floatval($param[1]))));
+					}
 				}
 				break;
 
 			case 'DIV_CEIL':
 				if (isset($param[1]))
 				{
-					$value=strval(intval(ceil(floatval($param[0])/floatval($param[1]))));
+					if (floatval($param[1])==0.0)
+					{
+						$value='divide-by-zero';
+					} else
+					{
+						$value=strval(intval(ceil(floatval($param[0])/floatval($param[1]))));
+					}
 				}
 				break;
 

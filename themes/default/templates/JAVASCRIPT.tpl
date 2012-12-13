@@ -2315,7 +2315,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 		if ((node_upper=='SCRIPT') && (!xml_doc.getAttribute('src')))
 		{
 			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:'')));
-			if (script_tag_dependencies['to_load']==0)
+			if (script_tag_dependencies['to_load'].length==0)
 			{
 				window.setTimeout(function() {
 					if (typeof window.execScript!='undefined')
@@ -2579,9 +2579,10 @@ function careful_import_node(node)
 	return imported;
 }
 
-/* Update ratings to use Javascript/AJAX */
-function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,rating,content_url,content_title,initialisation_phase)
+function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,rating,content_url,content_title,initialisation_phase,visual_only)
 {
+	if (typeof visual_only=='undefined') var visual_only=false;
+
 	var i,bit;
 	for (i=1;i<=10;i++)
 	{
@@ -2607,7 +2608,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 				apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,initial_rating,content_url,content_title,false);
 			} }(i);
 
-			bit.onclick=function(i) {
+			if (!visual_only) bit.onclick=function(i) {
 				return function(event)	{
 					if (typeof event=='undefined') var event=window.event;
 					event.returnValue=false;
@@ -2868,8 +2869,10 @@ function force_reload_on_back()
 }
 
 /* Reply to a topic using AJAX */
-function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,replying_to_post_plain)
+function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,replying_to_post_plain,explicit_quote)
 {
+	if (typeof explicit_quote=='undefined') var explicit_quote=false;
+
 	var form=document.getElementById('comments_form');
 
 	var parent_id_field;
@@ -2901,7 +2904,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 	{
 		post.value='{!QUOTED_REPLY_MESSAGE;^}'.replace(/\\{1\\}/g,replying_to_username).replace(/\\{2\\}/g,replying_to_post_plain);
 		post.strip_on_focus=post.value;
-		post.style.color='';
+		post.style.color='gray';
 	} else
 	{
 		if (typeof post.strip_on_focus!='undefined' && post.value==post.strip_on_focus)
@@ -2910,8 +2913,10 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 		post.focus();
 		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
-		post.default_substring_to_strip=post.value;
+		if (!explicit_quote) post.default_substring_to_strip=post.value;
 	}
+
+	post.scrollTop=post.scrollHeight;
 
 	return false;
 }

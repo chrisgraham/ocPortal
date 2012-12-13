@@ -415,7 +415,7 @@ function already_rated($rating_for_types,$content_id)
 	}
 	$query='SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id);
 	$query.=' AND (';
-	if (!$GLOBALS['IS_ACTUALLY_ADMIN'])
+	if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_value('poll_no_member_ip_restrict')!=='1'))
 	{
 		$query.='rating_ip=\''.get_ip_address().'\'';
 	} else
@@ -529,63 +529,62 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 	// Top rating / liked
 	if (($rating===10) && ($type==''))
 	{
-		$content_type_title=$content_type;
 		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
 		{
 			$content_type_title=do_lang($cma_info['content_type_label']);
-		}
 
-		// Special case. Would prefer not to hard-code, but important for usability
-		if (($content_type=='post') && ($content_title=='') && (get_forum_type()=='ocf'))
-		{
-			$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
-		}
-
-		if ((!is_null($submitter)) && (!is_guest($submitter)))
-		{
-			// Give points
-			if ($member_id!=$submitter)
+			// Special case. Would prefer not to hard-code, but important for usability
+			if (($content_type=='post') && ($content_title=='') && (get_forum_type()=='ocf'))
 			{
-				if ((addon_installed('points')) && (!$already_rated))
-				{
-					require_code('points2');
-					require_lang('points');
-					system_gift_transfer(do_lang('CONTENT_LIKED'),intval(get_option('points_if_liked')),$submitter);
-				}
+				$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
 			}
 
-			// Notification
-			require_code('notifications');
-			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title);
-			$rendered='';
-			$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
-			if ($content_type!='')
+			if ((!is_null($submitter)) && (!is_guest($submitter)))
 			{
-				require_code('hooks/systems/content_meta_aware/'.$content_type);
-				$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
-				$cma_content_row=content_get_row($content_id,$cma_ob->info());
-				if (!is_null($cma_content_row))
+				// Give points
+				if ($member_id!=$submitter)
 				{
-					$rendered=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
+					if ((addon_installed('points')) && (!$already_rated))
+					{
+						require_code('points2');
+						require_lang('points');
+						system_gift_transfer(do_lang('CONTENT_LIKED'),intval(get_option('points_if_liked')),$submitter);
+					}
 				}
+
+				// Notification
+				require_code('notifications');
+				$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title);
+				$rendered='';
+				$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+				if ($content_type!='')
+				{
+					require_code('hooks/systems/content_meta_aware/'.$content_type);
+					$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+					$cma_content_row=content_get_row($content_id,$cma_ob->info());
+					if (!is_null($cma_content_row))
+					{
+						$rendered=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
+					}
+				}
+				$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
+				dispatch_notification('like',NULL,$subject,$mail,array($submitter));
 			}
-			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
-			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
-		}
 
-		// Put on activity wall / whatever
-		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
-		{
-			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			// Put on activity wall / whatever
+			if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
+			{
+				if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
-			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
-			require_code('activities');
-			if ($content_title=='')
-			{
-				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
-			} else
-			{
-				syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+				$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
+				require_code('activities');
+				if ($content_title=='')
+				{
+					syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+				} else
+				{
+					syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+				}
 			}
 		}
 	}

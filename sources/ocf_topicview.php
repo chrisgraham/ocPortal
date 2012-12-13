@@ -619,10 +619,14 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		if ($test!=-1) $map['threaded']=$test;
 		$action_url=build_url($map,get_module_zone('topics'));
 		$javascript=NULL;
+		$javascript_explicit_quote=NULL;
 
 		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (!array_key_exists('intended_solely_for',$map)))
 		{
-			$javascript='return topic_reply('.($topic_info['is_threaded']?'true':'false').',this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode'])).'\',\''.str_replace(chr(10),'\n',addslashes(strip_comcode($_postdetails['message_comcode']))).'\');';
+			$replying_to_post=str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode']));
+			$replying_to_post_plain=str_replace(chr(10),'\n',addslashes(strip_comcode($_postdetails['message_comcode'])));
+			$javascript='return topic_reply('.($topic_info['is_threaded']?'true':'false').',this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.$replying_to_post.'\',\''.$replying_to_post_plain.'\');';
+			$javascript_explicit_quote='return topic_reply(false,this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.$replying_to_post.'\',\''.$replying_to_post_plain.'\',true);';
 		}
 		$_title=do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
@@ -631,8 +635,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		{
 			$_title=do_lang_tempcode('QUOTE_POST');
 			$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-			$javascript=str_replace('return topic_reply(true,','return topic_reply(false,',$javascript);
-			$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
+			$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript_explicit_quote)));
 		}
 	}
 	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_privilege($_postdetails['poster'],'use_points')))

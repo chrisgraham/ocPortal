@@ -960,6 +960,7 @@ class Module_chat
 					$members[]=intval(substr($key,7));
 				}
 			}
+			if (count($members)==0) either_param_integer('member_id'); // Force error
 			$username=do_lang('_MULTIPLE');
 		} else
 		{

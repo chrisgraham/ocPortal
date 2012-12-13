@@ -530,7 +530,7 @@ function check_extension($name,$skip_server_side_security_check=false,$file_to_d
 function delete_upload($upload_path,$table,$field,$id_field,$id,$new_url=NULL)
 {
 	// Try and delete the file
-	if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) // This isn't really a permission - more a failsafe in case there is a security hole. Staff can cleanup leftover files from the Cleanup module anyway
+	if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) || (get_value('cleanup_files')==='1')) // This isn't really a permission - more a failsafe in case there is a security hole. Staff can cleanup leftover files from the Cleanup module anyway. NB: Also repeated in cms_galleries.php.
 	{
 		$where=is_array($id_field)?$id_field:array($id_field=>$id);
 		$url=$GLOBALS['SITE_DB']->query_select_value($table,$field,$where);

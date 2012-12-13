@@ -82,7 +82,7 @@ function friend_add($likes,$liked,$time=NULL)
 	));
 
 	// Send a notification
-	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','date_and_time',array('member_likes'=>$liked,'member_liked'=>$likes))))
+	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','date_and_time',array('member_likes'=>$liked,'member_liked'=>$likes))))
 	{
 		require_code('notifications');
 		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($liked);
@@ -91,15 +91,15 @@ function friend_add($likes,$liked,$time=NULL)
 		$befriend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
 		$message_raw=do_lang('YOURE_MY_FRIEND_BODY',comcode_escape($to_name),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_name)),get_lang($liked));
 		dispatch_notification('new_friend',NULL,$subject_line,$message_raw,array($liked),$likes);
+
+		// Log the action
+		log_it('MAKE_FRIEND',strval($likes),strval($liked));
+		require_code('activities');
+		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
+		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
+
+		decache('main_friends_list');
 	}
-
-	// Log the action
-	log_it('MAKE_FRIEND',strval($likes),strval($liked));
-	require_code('activities');
-	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
-	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
-
-	decache('main_friends_list');
 }
 
 /**

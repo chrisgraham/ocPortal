@@ -873,9 +873,16 @@ class Module_cms_galleries extends standard_crud_module
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
 		$filters=array('must_accept_images'=>true,'addable_filter'=>true);
 		if (substr($cat,0,9)!='download_') $filters['filter']='only_conventional_galleries';
+
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE',do_lang_tempcode('TITLE')),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
 
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat));
+		$gallery_title='';
+		if ($cat!='')
+		{
+			$gallery_title=get_potential_gallery_title($cat);
+			if ($gallery_title===NULL) $gallery_title='';
+		}
+		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
 
 		$set_name='image';
 		$required=true;
@@ -988,10 +995,16 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
 		{
-			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
-			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
-			$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+			if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
+			{
+				$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
+				$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
+				$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
+				$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+			} else
+			{
+				$delete_fields=form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false);
+			}
 		} else $delete_fields=new ocp_tempcode();
 
 		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
@@ -1317,9 +1330,18 @@ class Module_cms_galleries_alt extends standard_crud_module
 		require_code('form_templates');
 		handle_max_file_size($hidden);
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
+		$filters=array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true);
+
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE',do_lang_tempcode('TITLE')),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
 
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true),true,$cat));
+		$gallery_title='';
+		if ($cat!='')
+		{
+			$gallery_title=get_potential_gallery_title($cat);
+			if ($gallery_title===NULL) $gallery_title='';
+		}
+		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+
 		$supported=get_allowed_video_file_types();
 
 		$set_name='video';
@@ -1437,10 +1459,16 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
 		{
-			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
-			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
-			$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+			if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
+			{
+				$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
+				$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
+				$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
+				$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+			} else
+			{
+				$delete_fields=form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false);
+			}
 		} else $delete_fields=new ocp_tempcode();
 
 		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
@@ -1713,7 +1741,16 @@ class Module_cms_galleries_cat extends standard_crud_module
 		{
 			if ((get_value('no_manual_gallery_parent')!=='1') || ($parent_id==''))
 			{
-				$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id));
+				$parent_gallery_title='';
+				if ($parent_id!='')
+				{
+					$_parent_gallery_title=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$parent_id));
+					if (!is_null($_parent_gallery_title))
+					{
+						$parent_gallery_title=get_translated_text($_parent_gallery_title);
+					}
+				}
+				$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id,false,NULL,false,$parent_gallery_title));
 			} else
 			{
 				$hidden->attach(form_input_hidden('parent_id',$parent_id));

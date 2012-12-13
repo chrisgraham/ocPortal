@@ -116,7 +116,7 @@ class Block_main_friends_list
 				$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
 				$mutual_label=do_lang('MUTUAL_FRIEND');
 				$box=render_member_box($f_id,true,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL,false,'friends_list');
-				if (!$box->is_empty())
+				if (!$box->is_empty_shell())
 				{
 					$friends[]=array(
 						'USERGROUP'=>$friend_usergroup,

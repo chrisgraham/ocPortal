@@ -91,6 +91,23 @@ if (!is_null($lstring)) // Forward geopositioning (textlocation to full details)
 		{
 			// Give out different IDs, depending on what the search fields were in.
 
+			$with_contents=(get_param_integer('with_contents',0)==1);
+			if (($with_contents) && (isset($bits['id'])) && (!is_null(get_param_integer('latitude_search_field',NULL))) && (!is_null(get_param_integer('longitude_search_field',NULL))))
+			{
+				$backup=$bits['id'];
+				do // Ensure we have some entries under the idealised location
+				{
+					$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_childcountcache','c_num_rec_entries',array('cc_id'=>$bits['id']));
+					if ($num_entries==0)
+					{
+						$bits['id']=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_parent_id',array('id'=>$bits['id']));
+						if (is_null($bits['id'])) break;
+					}
+				}
+				while ($num_entries==0);
+				if (is_null($bits['id'])) $bits['id']=$backup; // Could find nothing, so revert to being specific
+			}
+
 			echo '[';
 
 			if (isset($bits['id'])) echo strval($bits['id']); // Category or Location

@@ -510,12 +510,13 @@ function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  * @param  string				What MySQL will join the table with
  * @return ?array				A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
  */
-function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code)
+function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code)
 {
 	// Special case for ratings
 	$matches=array('',$info['feedback_type_code']);
 	if (($filter_key=='compound_rating') || (preg_match('#^compound_rating\_\_(.+)#',$filter_key,$matches)!=0))
 	{
+		if ($filter_key=='compound_rating') $matches[1].='__'.$catalogue_name;
 		$clause='(SELECT SUM(rating-1) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type',$matches[1]).' AND rat.rating_for_id='.$table_join_code.'.id)';
 		$extra_select[$filter_key]=', '.$clause.' AS compound_rating_'.fix_id($matches[1]);
 		return array($clause,'',$filter_val);
@@ -523,6 +524,7 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 	$matches=array('',$info['feedback_type_code']);
 	if (($filter_key=='average_rating') || (preg_match('#^average_rating\_\_(.+)#',$filter_key,$matches)!=0))
 	{
+		if ($filter_key=='average_rating') $matches[1].='__'.$catalogue_name;
 		$clause='(SELECT AVG(rating)/2 FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type',$matches[1]).' AND rat.rating_for_id='.$table_join_code.'.id)';
 		$extra_select[$filter_key]=', '.$clause.' AS average_rating_'.fix_id($matches[1]);
 		return array($clause,'',$filter_val);
@@ -732,7 +734,8 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 					{
 						if ($alt!='') $alt.=' OR ';
 						$_filter_val=explode('-',$filter_val,2);
-						$alt.=$filter_key.'>='.$_filter_val[0].' AND '.$filter_key.'<='.$_filter_val[1];
+						//$alt.=$filter_key.'>='.$_filter_val[0].' AND '.$filter_key.'<='.$_filter_val[1];		Less efficient than the below, due to possibility of $filter_key being a subselect
+						$alt.=$filter_key.' BETWEEN '.$_filter_val[0].' AND '.$_filter_val[1];
 					}
 					break;
 

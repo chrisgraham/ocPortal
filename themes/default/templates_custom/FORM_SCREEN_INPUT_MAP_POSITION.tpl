@@ -32,8 +32,8 @@
 		});
 
 		{$,Show marker for current position}
-		{+START,IF,{$AND,{$IS_NON_EMPTY,{LATITUDE}},{REQUIRED}}}
-			place_marker({LATITUDE;},{LONGITUDE;});
+		{+START,IF,{$OR,{$NEQ,{LATITUDE},0,},{REQUIRED}}}
+			place_marker({$?,{$IS_EMPTY,{LATITUDE}},0,{LATITUDE;}},{$?,{$IS_EMPTY,{LONGITUDE}},0,{LONGITUDE;}});
 			marker.setMap(map);
 		{+END}
 

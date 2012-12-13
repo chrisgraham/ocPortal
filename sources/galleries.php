@@ -684,6 +684,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 					{
 						$own_gallery=array();
 						$own_gallery['id']=$this_category_id;
+						if ($title==do_lang('GALLERIES_HOME')) $title=do_lang('GALLERY');
 						$this_title=do_lang('NEW_PERSONAL_GALLERY_OF',$username,$title);
 						$own_gallery['breadcrumbs']=$breadcrumbs.$this_title;
 						$own_gallery['video_count']=0;
@@ -709,6 +710,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 			{
 				$own_gallery=array();
 				$own_gallery['id']=$this_category_id;
+				if ($title==do_lang('GALLERIES_HOME')) $title=do_lang('GALLERY');
 				$this_title=do_lang('NEW_PERSONAL_GALLERY_OF',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$title);
 				$own_gallery['breadcrumbs']=$breadcrumbs.$this_title;
 				$own_gallery['video_count']=0;

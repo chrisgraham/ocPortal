@@ -1157,7 +1157,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty
+	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
 	 *
 	 * @return boolean		Whether it is entirely empty
 	 */

@@ -5255,6 +5255,8 @@ function doSubmit(e,ob,recurse) {
 		btnSubmit.disabled = true;
 		ob.start();
 		smooth_scroll(find_pos_y(txtFileName,true));
+
+		window.fauxmodal_alert('{!PLEASE_WAIT_WHILE_UPLOADING;}');
 	} else
 	{
 		window.form_submitting=btnSubmit.form; // For IE

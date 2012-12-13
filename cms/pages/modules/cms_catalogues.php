@@ -1699,8 +1699,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		{
 			$content_type=substr($name,1);
 
-			require_code('hooks/systems/awards/'.$content_type);
-			$ob=object_factory('Hook_awards_'.$content_type);
+			require_code('hooks/systems/content_meta_aware/'.$content_type);
+			$ob=object_factory('Hook_content_meta_aware_'.$content_type);
 			$info=$ob->info();
 
 			$title=do_lang('CUSTOM_FIELDS_FOR',do_lang($info['content_type_label']));
