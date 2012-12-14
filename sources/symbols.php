@@ -449,6 +449,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=strip_tags($param[0],array_key_exists(2,$param)?$param[2]:'');
 					}
 					if ((isset($param[1])) && ($param[1]=='1')) $value=@html_entity_decode($value,ENT_QUOTES,get_charset());
+					if ((!isset($param[2])) || ($param[2]=='0')) $value=trim($value);
 				}
 				break;
 
