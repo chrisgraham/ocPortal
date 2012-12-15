@@ -4126,3 +4126,10 @@ twitter_feed_integration_block
  - themes/default/images_custom/twitter_feed/retweet.png
  - themes/default/images_custom/twitter_feed/retweet_hover.png
  - themes/default/images_custom/twitter_feed/retweet_on.png
+
+nested_cpf_csv_lists
+--------------------
+ - sources_custom/hooks/systems/fields/list.php
+ - sources_custom/miniblocks/nested_csv_lists_javascript.php
+ - sources_custom/nested_csv.php
+ - themes/default/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl

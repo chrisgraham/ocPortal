@@ -73,6 +73,7 @@ class Hook_fields_list
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
+		unset($field);
 		if (!is_null($required))
 		{
 			if (($required) && ($default=='')) $default=preg_replace('#\|.*#','',$default);
@@ -109,10 +110,36 @@ class Hook_fields_list
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
 	{
 		$default=$field['cf_default'];
-		$list=($default=='')?array():explode('|',$default);
+
+		$_value=explode('|',$default); // $_value will come up as file|heading(optional)|order(optional)
+		$csv_filename=$_value[0];
+
+		if (substr(strtolower($csv_filename),-4)=='.csv')
+		{
+			if (!isset($_value[1])) $_value[1]=NULL;
+			if (!isset($_value[2])) $_value[2]=NULL;
+			if (!isset($_value[3])) $_value[3]=NULL;
+			$csv_heading=$_value[1];
+			$csv_parent_filename=$_value[2];
+			$csv_parent_heading=$_value[3];
+
+			require_code('nested_csv');
+			$csv_structure=get_nested_csv_structure();
+
+			$list=array();
+			foreach ($csv_structure['csv_files'][$csv_filename]['data'] as $row)
+			{
+				$list[$row[$csv_heading]]=1;
+			}
+			$list=array_keys($list);
+			natsort($list);
+		} else
+		{
+			$list=explode('|',$default);
+		}
 		$_list=new ocp_tempcode();
 		if (($field['cf_required']==0) || ($actual_value==$default) || ($actual_value=='') || (is_null($actual_value)))
-			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('PLEASE_SELECT')));
 		foreach ($list as $l)
 		{
 			$_list->attach(form_input_list_entry($l,$l==$actual_value));
