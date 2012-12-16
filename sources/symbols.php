@@ -1161,6 +1161,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'NOTIFICATIONS_AVAILABLE':
+				$value='1';
+				if (array_key_exists(0,$param))
+				{
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
+						'l_notification_code'=>$param[0],
+					));
+					if ($test==0) $value='0';
+				}
+				break;
+
 			case 'DOCUMENT_HELP': // LEGACY: Remove
 				break;
 
