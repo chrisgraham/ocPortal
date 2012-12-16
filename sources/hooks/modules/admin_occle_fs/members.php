@@ -51,6 +51,7 @@ class Hook_members
 			if (!array_key_exists(0,$member_data)) return false;
 			$member_data=$member_data[0];
 			$listing=array(
+				'id',
 				'theme',
 				'avatar',
 				'validated',
@@ -175,6 +176,7 @@ class Hook_members
 		{
 			// We're in a member's directory, and deleting one of their profile fields
 			if (in_array($file_name,array(
+				'id',
 				'theme',
 				'avatar',
 				'validated',
@@ -245,6 +247,7 @@ class Hook_members
 		{
 			// We're in a member's directory, and reading one of their profile fields
 			$coded_fields=array(
+				'id'=>'id',
 				'theme'=>'m_theme',
 				'avatar'=>'m_avatar_url',
 				'validated'=>'m_validated',
@@ -315,6 +318,7 @@ class Hook_members
 		{
 			// We're in a member's directory, and writing one of their profile fields
 			$coded_fields=array(
+				'id'=>'id',
 				'theme'=>'m_theme',
 				'avatar'=>'m_avatar_url',
 				'validated'=>'m_validated',
