@@ -757,8 +757,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				$blue=$rgb_array['blue'];		// Grab the blue
 
 				// Sort out if we're using alpha
-				$using_alpha=false;
-				if (array_key_exists('alpha',$rgb_array)) $using_alpha=true;
+				$using_alpha=((array_key_exists('alpha',$rgb_array)) && ($rgb_array['alpha']>0));
 				if ($using_alpha) $alpha=255-($rgb_array['alpha']*2+1);
 
 				// Destroy the temporary image
@@ -850,7 +849,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	if (is_null($ext2)) $ext2=get_file_extension($to);
 
 	// If we've got transparency then we have to save as PNG
-	if (!is_null($thumb_options) && isset($red) && $using_alpha) $ext2='png';
+	if (!is_null($thumb_options) && isset($using_alpha) && $using_alpha) $ext2='png';
 
 	if ($ext2=='png')
 	{
