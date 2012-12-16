@@ -292,10 +292,11 @@ function guarded_form_submit(form)
 }
 
 // This function will load a block, with options for parameter changes, and render the results in specified way - with optional callback support
-function call_block(url,new_block_params,target_div,append,callback,scroll_to_top_of_wrapper,post_params)
+function call_block(url,new_block_params,target_div,append,callback,scroll_to_top_of_wrapper,post_params,inner)
 {
 	if (typeof scroll_to_top_of_wrapper=='undefined') var scroll_to_top_of_wrapper=false;
 	if (typeof post_params=='undefined') var post_params=null;
+	if (typeof inner=='undefined') var inner=false;
 	if ((typeof block_data_cache[url]=='undefined') && (new_block_params!=''))
 		block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_block_params if returning to fresh state
 
@@ -304,15 +305,15 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 	if (typeof block_data_cache[ajax_url]!='undefined')
 	{
 		// Show results from cache
-		show_block_html(block_data_cache[ajax_url],target_div,append);
+		show_block_html(block_data_cache[ajax_url],target_div,append,inner);
 		if (callback) callback();
 		return false;
 	}
 
 	// Show loading animation
+	var loading_wrapper=target_div;
 	if (loading_wrapper.id.indexOf('carousel_')==-1)
 	{
-		var loading_wrapper=target_div;
 		var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
 		if (typeof raw_ajax_grow_spot[0]!='undefined' && append) loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 		var loading_wrapper_inner=document.createElement('div');
@@ -349,7 +350,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 	do_ajax_request(
 		ajax_url+keep_stub(),
 		function(raw_ajax_result) { // Show results when available
-			_call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper);
+			_call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper,inner);
 		},
 		post_params
 	);
@@ -357,7 +358,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 	return false;
 }
 
-function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper)
+function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper,inner)
 {
 	var new_html=raw_ajax_result.responseText;
 	block_data_cache[ajax_url]=new_html;
@@ -371,7 +372,7 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 	}
 
 	// Put in HTML
-	show_block_html(new_html,target_div,append);
+	show_block_html(new_html,target_div,append,inner);
 
 	// Scroll up if required
 	if (scroll_to_top_of_wrapper)
@@ -387,7 +388,7 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 	if (callback) callback();
 }
 
-function show_block_html(new_html,target_div,append)
+function show_block_html(new_html,target_div,append,inner)
 {
 	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
 	if (typeof raw_ajax_grow_spot[0]!='undefined' && append) target_div=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
@@ -396,7 +397,13 @@ function show_block_html(new_html,target_div,append)
 		set_inner_html(target_div,new_html,true,true);
 	} else
 	{
-		set_outer_html(target_div,new_html);
+		if (inner)
+		{
+			set_inner_html(target_div,new_html);
+		} else
+		{
+			set_outer_html(target_div,new_html);
+		}
 	}
 }
 
