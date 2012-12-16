@@ -131,11 +131,13 @@ function upgrade_script()
 
 <div style=\"margin: 0 50px\">
 	<h2>{$l_maintenance}&hellip;</h2><ul>
-		<li>{$l_clear_caches}</li>
+		<li>{$l_clear_caches}</li>";
+					if (!is_suexec_like()) echo "
 		<li>{$l_check_permissions}</li>
 		<li>{$l_fix_permissions}</li>
-	</ul>
+	</ul>";
 
+					echo "
 	<h2 style=\"margin-top: 40px\">{$l_upgrading}&hellip;</h2>
 
 	<h3>{$l_important}</h3>
