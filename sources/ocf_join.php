@@ -355,7 +355,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		{
 			if ($custom_field['cf_type']!='upload')
 			{
-				$fields_done.=do_lang('THIS_WITH_COMCODE',$custom_field['trans_name'],post_param('custom_'.$custom_field['id'].'_value'))."\n";
+				$fields_done.=do_lang('THIS_WITH_COMCODE',$custom_field['trans_name'],post_param('field_'.$custom_field['id']))."\n";
 			}
 		}
 		$_privacy_url=build_url(array('page'=>'privacy'),'_SEARCH',NULL,false,false,true);
