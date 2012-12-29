@@ -498,7 +498,7 @@ function ModalWindow()
 				case 'iframe':
 					var iframe=this.element('iframe', {
 						'frameBorder': '0',
-						'scrolling': browser_matches('ie')?'auto':'no',
+						'scrolling': (browser_matches('ie') || browser_matches('gecko'))?'auto':'no',
 						'title': '',
 						'name': 'overlay_iframe',
 						'id': 'overlay_iframe',
