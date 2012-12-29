@@ -789,22 +789,28 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											$username=substr($username,1);
 										} else $username_info=false;
 										$this_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-										if ((!is_null($this_member_id)) && (!is_guest($this_member_id)))
+										if (!is_null($this_member_id))
 										{
 											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 											$tag_output->attach($continuation);
 											$continuation='';
 
-											$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
-											if ((get_forum_type()=='ocf') && ($username_info))
+											if (!is_guest($this_member_id))
 											{
-												require_lang('ocf');
-												require_code('ocf_members2');
-												$details=render_member_box($this_member_id,false,NULL,NULL,true,NULL,false);
-												$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
+												$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
+												if ((get_forum_type()=='ocf') && ($username_info))
+												{
+													require_lang('ocf');
+													require_code('ocf_members2');
+													$details=render_member_box($this_member_id,false,NULL,NULL,true,NULL,false);
+													$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
+												} else
+												{
+													$tag_output->attach(hyperlink($poster_url,$username));
+												}
 											} else
 											{
-												$tag_output->attach(hyperlink($poster_url,$username));
+												$tag_output->attach(escape_html($username));
 											}
 
 											$pos+=strlen($matches[1])+3;

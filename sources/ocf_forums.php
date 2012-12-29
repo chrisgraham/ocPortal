@@ -78,6 +78,7 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 		'_GUID'=>($guid!='')?$guid:'f61cd0ea4c2ac496da958a36f118495d',
 		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$row['f_name'],
 		'SUMMARY'=>$summary,
 		'URL'=>$url,
 		'ENTRY_DETAILS'=>protect_from_escaping($entry_details),

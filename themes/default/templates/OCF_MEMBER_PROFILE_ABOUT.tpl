@@ -250,7 +250,7 @@
 
 		{+START,IF,{VIEW_PROFILES}}
 		<div class="stats_overwrap">
-			<h2>{!STATISTICS}</h2>
+			<h2>{!ACTIVITY}</h2>
 
 			<div class="wide_table_wrap">
 				<table class="wide_table ocf_profile_statistics" summary="{!MAP_TABLE}">

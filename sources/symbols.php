@@ -2352,6 +2352,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'ALREADY_RATED':
 				if (isset($param[1]))
 				{
+					require_code('feedback');
 					$value=(already_rated(array($param[0]),$param[1])?'1':'0');
 				}
 				break;

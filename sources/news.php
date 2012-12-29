@@ -150,6 +150,7 @@ function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attac
 		'_GUID'=>($guid!='')?$guid:'49e9c7022f9171fdff02d84ee968bb52',
 		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$_title,
 		'_REP_IMAGE'=>$_rep_image,
 		'REP_IMAGE'=>$rep_image,
 		'OWNER'=>is_null($row['nc_owner'])?'':strval($row['nc_owner']),

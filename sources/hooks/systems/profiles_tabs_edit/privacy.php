@@ -30,6 +30,8 @@ class Hook_Profiles_Tabs_Edit_privacy
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
+		if (get_value('disable_privacy_tab')==='1') return false;
+
 		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
 	}
 

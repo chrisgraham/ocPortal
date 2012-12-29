@@ -66,10 +66,13 @@ class css_and_js_test_set extends ocp_test_case
 				$this->assertTrue(is_null($errors),'Bad JS in '.$f);
 				if (!is_null($errors))
 				{
-					//unset($errors['tag_ranges']);
-					//unset($errors['value_ranges']);
-					//unset($errors['level_ranges']);
-					//var_dump($errors['errors']);
+					if (isset($_GET['show']))
+					{
+						unset($errors['tag_ranges']);
+						unset($errors['value_ranges']);
+						unset($errors['level_ranges']);
+						var_dump($errors['errors']);
+					}
 				} else
 				{
 					//echo 'Ok: '.$f."\n";

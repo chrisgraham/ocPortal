@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__nested_csv()
+{
+	require_lang('nested_csv');
+}
+
+/**
  * Get the CSV/CPF structure for the site.
  *
  * @return array		Structured data about CSV files/CPFs
@@ -25,52 +33,56 @@ function get_nested_csv_structure()
 	static $csv_structure=array();
 	if ($csv_structure!==array()) return $csv_structure;
 
-	if (!file_exists(get_custom_file_base().'/private_data')) warn_exit('Missing private_data directory for CSV file storage.');
-	$dh=opendir(get_custom_file_base().'/private_data');
 	$csv_files=array();
-	while (($csv_filename=readdir($dh))!==false)
+	if (file_exists(get_custom_file_base().'/private_data'))
 	{
-		if (substr($csv_filename,-4)!='.csv') continue;
-
-		$myfile=@fopen(get_file_base().'/private_data/'.$csv_filename,'rb');
-		if ($myfile===false)
-			warn_exit('The CSV file for "'.$custom_field['trans_name'].'" could not be opened.');
-
-		$header_row=fgetcsv($myfile,10000);
-
-		if ($header_row!==false)
+		$dh=@opendir(get_custom_file_base().'/private_data');
+		while (($csv_filename=readdir($dh))!==false)
 		{
-			// Initialise data for this forthcoming $csv_files entry
-			$csv_file=array();
-			$csv_file['headings']=array();    // Unordered headings                               ?=>heading
-			$csv_file['data']=array();        // Array of rows                                    ?=>array(cols,col2,col3,...)
+			if (substr($csv_filename,-4)!='.csv') continue;
 
-			// Fill out 'headings'
-			$csv_file['headings']=$header_row;
+			$myfile=@fopen(get_file_base().'/private_data/'.$csv_filename,'rb');
+			if ($myfile===false)
+				warn_exit('The CSV file for "'.$custom_field['trans_name'].'" could not be opened.');
 
-			// Fill out 'data' and 'lists'
-			$vl_temp=fgetcsv($myfile,10000);
-			while ($vl_temp!==false) // If there's nothing past the headings this loop never executes
+			$header_row=fgetcsv($myfile,10000);
+
+			if ($header_row!==false)
 			{
-				while (count($vl_temp)<count($header_row)) $vl_temp[]=''; // Pad out row to be complete
+				// Initialise data for this forthcoming $csv_files entry
+				$csv_file=array();
+				$csv_file['headings']=array();    // Unordered headings                               ?=>heading
+				$csv_file['data']=array();        // Array of rows                                    ?=>array(cols,col2,col3,...)
 
-				$new_entry=array();
-				foreach ($header_row as $j=>$heading)
-				{
-					$new_entry[$heading]=$vl_temp[$j];
-				}
-				$csv_file['data'][]=$new_entry;
+				// Fill out 'headings'
+				$csv_file['headings']=$header_row;
 
+				// Fill out 'data' and 'lists'
 				$vl_temp=fgetcsv($myfile,10000);
+				if ($vl_temp!==false) $vl_temp=array_map('trim',$vl_temp);
+				while ($vl_temp!==false) // If there's nothing past the headings this loop never executes
+				{
+					while (count($vl_temp)<count($header_row)) $vl_temp[]=''; // Pad out row to be complete
+
+					$new_entry=array();
+					foreach ($header_row as $j=>$heading)
+					{
+						$new_entry[$heading]=$vl_temp[$j];
+					}
+					$csv_file['data'][]=$new_entry;
+
+					$vl_temp=fgetcsv($myfile,10000);
+					if ($vl_temp!==false) $vl_temp=array_map('trim',$vl_temp);
+				}
+
+				$csv_files[$csv_filename]=$csv_file;
+			} else
+			{
+				warn_exit('No header row found for '.$custom_field['trans_name'].'".');
 			}
 
-			$csv_files[$csv_filename]=$csv_file;
-		} else
-		{
-			warn_exit('No header row found for '.$custom_field['trans_name'].'".');
+			fclose($myfile);
 		}
-
-		fclose($myfile);
 	}
 	$csv_structure['csv_files']=$csv_files;
 
@@ -93,6 +105,12 @@ function get_nested_csv_structure()
 
 				if (!array_key_exists($csv_filename,$csv_files)) // Check referenced filename exists
 				{
+					if (!file_exists(get_custom_file_base().'/private_data'))
+					{
+						attach_message('Missing private_data directory for CSV file storage.','warn');
+						break;
+					}
+
 					attach_message('Specified CSV file, '.$csv_filename.', not found for "'.$custom_field['trans_name'].'".','warn');
 					continue;
 				}
@@ -154,23 +172,48 @@ function get_nested_csv_structure()
  * Query the CSV files.
  *
  * @param  ID_TEXT	Filename
- * @param  ID_TEXT	Name of field we know
- * @param  ID_TEXT	Value of field we know
+ * @param  ?ID_TEXT	Name of field we know (NULL: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT	Value of field we know (NULL: we know nothing special - i.e. no filtering)
  * @param  ID_TEXT	Name of field we want
  * @return array		List of possibilities
  */
 function get_csv_data_values($csv_file,$known_field_key,$known_field_value,$desired_field)
 {
+	$map=array();
+	if ((!is_null($known_field_key)) && (!is_null($known_field_value)))
+		$map[$known_field_key]=$known_field_value;
+	return get_csv_data_values__and($csv_file,$map,$desired_field);
+}
+
+/**
+ * Query the CSV files for multiple matching constraints at once.
+ *
+ * @param  ID_TEXT	Filename
+ * @param  array		Map of ANDd constraints
+ * @param  ID_TEXT	Name of field we want
+ * @return array		List of possibilities
+ */
+function get_csv_data_values__and($csv_file,$map,$desired_field)
+{
 	$results=array();
 	$csv_structure=get_nested_csv_structure();
 	foreach ($csv_structure['csv_files'][$csv_file]['data'] as $row)
 	{
-		if ($row[$known_field_key]==$known_field_value)
+		$okay=true;
+		foreach ($map as $where_key=>$where_value)
+		{
+			if ($row[$where_key]!=$where_value)
+			{
+				$okay=false;
+				break;
+			}
+		}
+		if ($okay)
 		{
 			$results[]=$row[$desired_field];
 		}
 	}
-	return $results;
+	return array_unique($results);
 }
 
 /**
@@ -189,7 +232,7 @@ function get_members_csv_data_values($member_id)
 	$csv_structure=get_nested_csv_structure();
 	foreach ($csv_structure['cpf_fields'] as $cpf_field)
 	{
-		$out[$cpf_field['csv_heading']]=$member_row['field_'.strval($cpf_field['id'])];
+		$out[$cpf_field['csv_heading']]=trim($member_row['field_'.strval($cpf_field['id'])]);
 	}
 
 	return $out;

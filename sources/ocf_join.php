@@ -144,12 +144,12 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 		if (get_option('is_on_invites')=='1')
 		{
 			$javascript.="
-					url='".addslashes($script)."?snippet=invite_missing&name='+window.encodeURIComponent(form.elements['email_address'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
+				url='".addslashes($script)."?snippet=invite_missing&name='+window.encodeURIComponent(form.elements['email_address'].value);
+				if (!do_ajax_field_test(url))
+				{
+					document.getElementById('submit_button').disabled=false;
+					return false;
+				}
 			";
 		}
 	}
@@ -158,12 +158,12 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 		if (get_option('one_per_email_address')=='1')
 		{
 			$javascript.="
-					url='".addslashes($script)."?snippet=email_exists&name='+window.encodeURIComponent(form.elements['email_address'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
+				url='".addslashes($script)."?snippet=email_exists&name='+window.encodeURIComponent(form.elements['email_address'].value);
+				if (!do_ajax_field_test(url))
+				{
+					document.getElementById('submit_button').disabled=false;
+					return false;
+				}
 			";
 		}
 	}
@@ -175,12 +175,12 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 			if (use_captcha())
 			{
 				$javascript.="
-						url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
+					url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
+					if (!do_ajax_field_test(url))
+					{
+						document.getElementById('submit_button').disabled=false;
+						return false;
+					}
 				";
 			}
 		}
@@ -349,7 +349,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		{
 			if ($custom_field['cf_type']!='upload')
 			{
-				$fields_done.=do_lang('THIS_WITH_COMCODE',$custom_field['trans_name'],post_param('custom_'.$custom_field['id'].'_value'))."\n";
+				$fields_done.=do_lang('THIS_WITH_COMCODE',$custom_field['trans_name'],post_param('field_'.$custom_field['id']))."\n";
 			}
 		}
 		$_privacy_url=build_url(array('page'=>'privacy'),'_SEARCH',NULL,false,false,true);

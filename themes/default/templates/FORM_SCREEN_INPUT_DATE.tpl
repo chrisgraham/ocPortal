@@ -21,7 +21,7 @@
 {TIME}
 
 {+START,IF,{$JS_ON}}
-	<img class="top_vertical_alignment" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
+	<img class="vertical_alignment" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
 {+END}
 
 <div id="cal{STUB#}Container" class="inline"></div>

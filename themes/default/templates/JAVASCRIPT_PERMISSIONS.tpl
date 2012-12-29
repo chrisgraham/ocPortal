@@ -135,7 +135,7 @@ function copy_permission_presets(name,value,just_track)
 			{
 				if (usual_suspects[j]==x)
 				{
-					test=(access[j]<=parseInt(value))?1:0;
+					test=(access[j]<=window.parseInt(value))?1:0;
 					break;
 				}
 			}
@@ -389,10 +389,10 @@ function update_permission_box(setting)
 				if (name.substr(0,'group_privileges_'.length)=='group_privileges_')
 				{
 					group=name.substr(name.lastIndexOf('_')+1);
-					privilege=name.substr('group_privileges_'.length,name.length-group.length-1-'group_privileges_'.length);
+					privilege=name.substr('group_privileges_'.length,name.length-group.length-1-('group_privileges_'.length));
 					element=document.getElementById('access_'+group+'_privilege_'+privilege);
-					if (element.selectedIndex<value+1)
-						element.selectedIndex=parseInt(value)+1; // -1 corresponds to 0.
+					if (element.selectedIndex<window.parseInt(value)+1)
+						element.selectedIndex=window.parseInt(value)+1; // -1 corresponds to 0.
 				}
 			}
 

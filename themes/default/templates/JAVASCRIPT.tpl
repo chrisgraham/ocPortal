@@ -1164,7 +1164,6 @@ function begin_toggleable_tray_animation(element,animate_dif,animate_ticks,final
 
 	var orig_overflow=element.style.overflow;
 	element.style.overflow='hidden';
-	if (browser_matches('firefox')) element.parentNode.style.overflow='hidden'; // Stops weird issue on Firefox
 	window.setTimeout(function () { toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic); } ,animate_ticks);
 }
 function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic)
@@ -1189,7 +1188,6 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 			element.style.display='none';
 		}
 		element.style.overflow=orig_overflow;
-		if (browser_matches('firefox')) element.parentNode.style.overflow=''; // Stops weird issue on Firefox
 		element.style.outline='0';
 		if (pic)
 		{

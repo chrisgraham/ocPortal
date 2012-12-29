@@ -346,7 +346,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 	static $logged=0;
 	$logged++;
 
-	if ($logged==0)
+	if ($logged==1)
 	{
 		decache('side_tag_cloud');
 		decache('main_staff_actions');

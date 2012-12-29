@@ -80,13 +80,13 @@ echo "
 			if (current_parent_value=='') // Parent unset, so this is
 			{
 				option=document.createElement('option');
-				option.innerHTML='".addslashes(do_lang('SELECT_OTHER_FIRST','xxx'))."'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label);
+				set_inner_html(option,'".addslashes(do_lang('SELECT_OTHER_FIRST','xxx'))."'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label));
 				option.value='';
-				element.add(option);
+				element.add(option,null);
 			} else // Parent is set, so we need to filter possibilities
 			{
 				// Work out available (filtered) possiblities
-				var csv_data=nested_csv_structure.csv_files[cpf_field.csv_filename].data;
+				var csv_data=window.nested_csv_structure.csv_files[cpf_field.csv_filename].data;
 				var possibilities=[];
 				for (var i=0;i<csv_data.length;i++)
 				{
@@ -99,19 +99,19 @@ echo "
 
 				// Add possibilities, selecting one if it matches old selection (i.e. continuity maintained)
 				option=document.createElement('option');
-				option.innerHTML='".addslashes(do_lang('PLEASE_SELECT'))."';
+				set_inner_html(option,'".addslashes(do_lang('PLEASE_SELECT'))."');
 				option.value='';
-				element.add(option);
+				element.add(option,null);
 				var previous_one=null;
 				for (var i=0;i<possibilities.length;i++)
 				{
 					if (previous_one!=possibilities[i]) // don't allow dupes (which we know are sequential due to sorting)
 					{ // not a dupe
 						option=document.createElement('option');
-						option.innerHTML=escape_html(possibilities[i]);
+						set_inner_html(option,escape_html(possibilities[i]));
 						option.value=possibilities[i];
 						if (possibilities[i]==current_value) option.selected=true;
-						element.add(option);
+						element.add(option,null);
 						previous_one=possibilities[i];
 					}
 				}
@@ -146,7 +146,8 @@ echo "
 						if (typeof window.console!='undefined')
 							console.log('UPDATING: '+child_cpf_field.csv_heading);
 
-						inject_form_select_chaining__element(child_cpf_field_element,child_cpf_field,false);
+						if (child_cpf_field_element)
+							inject_form_select_chaining__element(child_cpf_field_element,child_cpf_field,false);
 					}; }(child_cpf_field_element,child_cpf_field);
 
 					all_refresh_functions.push(refresh_function);

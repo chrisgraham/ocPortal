@@ -394,7 +394,6 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	// E-mail address
 	if ($email_address=='') $email_address=trim(get_param('email_address',''));
-	$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
 	if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
 	{
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
@@ -659,7 +658,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 		$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
 		if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
 		$field_groups[$field_cat]->attach($result);
-		$hidden->attach(form_input_hidden('label_for__custom_'.strval($custom_field['id']).'_value',$custom_field['trans_name']));
+		$hidden->attach(form_input_hidden('label_for__field_'.strval($custom_field['id']),$custom_field['trans_name']));
 	}
 	if (array_key_exists('',$field_groups)) // Blank prefix must go first
 	{

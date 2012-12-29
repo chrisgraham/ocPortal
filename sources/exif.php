@@ -89,8 +89,8 @@ function _get_simple_gps($exif)
 	$gps['LongSeconds']=isset($exif['GPSLongitude'][2])?$exif['GPSLongitude'][2]:0;
 
 	// calculate the decimal degree
-	$result['Latitude']=float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)));
-	$result['Longitude']=float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)));
+	$result['Latitude']=float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)),10);
+	$result['Longitude']=float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)),10);
 
 	return $result;
 }
@@ -257,11 +257,13 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 			$map[$field['id']]=$exif[$name];
 		elseif (isset($exif[str_replace(' ','',$name)]))
 			$map[$field['id']]=$exif[str_replace(' ','',$name)];
+		elseif ((isset($exif['COMPUTED']['ApertureFNumber'])) && ($name=='Aperture')) // PHP tidies up for us, we want to use this
+			$map[$field['id']]=$exif['COMPUTED']['ApertureFNumber'];
 		elseif (isset($exif[str_replace(' ','',$name.' Value')]))
 			$map[$field['id']]=$exif[str_replace(' ','',$name.' Value')];
-		elseif ((isset($exif['UndefinedTag:0xA434'])) && ($name=='Lens') || ($name=='Lens Model'))
+		elseif ((isset($exif['UndefinedTag:0xA434'])) && (($name=='Lens') || ($name=='Lens Model')))
 			$map[$field['id']]=$exif['UndefinedTag:0xA434'];
-		elseif ((isset($exif['FNumber'])) && ($name=='Lens') || ($name=='Lens Model'))
+		elseif ((isset($exif['FNumber'])) && (($name=='Lens') || ($name=='Lens Model')))
 			$map[$field['id']]=$exif['FNumber'];
 		elseif (!isset($map[$field['id']])) $map[$field['id']]='';
 	}

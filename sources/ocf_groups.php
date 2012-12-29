@@ -63,6 +63,7 @@ function render_group_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'_GUID'=>($guid!='')?$guid:'efeac1c8465974edd27bb0d805c4fbe0',
 		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$_title,
 		'SUMMARY'=>$summary,
 		'ENTRY_DETAILS'=>$entry_details,
 		'URL'=>$url,

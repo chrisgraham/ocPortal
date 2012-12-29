@@ -252,6 +252,7 @@ function check_rbl($rbl,$user_ip,$we_have_a_result_already=false,$page_level=fal
 	}
 
 	// Unknown RBL, basic support only
+	$rbl_response=rbl_resolve($user_ip,$rbl,$page_level);
 	if ($rbl_response[3]!=0)
 	{
 		if ($we_have_a_result_already) return array(ANTISPAM_RESPONSE_SKIP,NULL); // We know better than this RBL can tell us, so stick with what we know

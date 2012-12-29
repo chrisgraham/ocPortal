@@ -695,9 +695,9 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	{
 		$body='> '.str_replace(chr(10),chr(10).'> ',$post);
 		if (substr($body,-2)=='> ') $body=substr($body,0,strlen($body)-2);
-		if (get_page_name()!='tickets') $post.='[staff_note]';
+		if (get_page_name()!='tickets') $post.='{+START,IF,{$IS_ADMIN}}';
 		$post.="\n\n".'[email subject="Re: '.comcode_escape($post_title).' ['.get_site_name().']" body="'.comcode_escape($body).'"]'.$email.'[/email]'."\n\n";
-		if (get_page_name()!='tickets') $post.='[/staff_note]';
+		if (get_page_name()!='tickets') $post.='{+END}';
 	}
 
 	$content_title=strip_comcode($content_title);

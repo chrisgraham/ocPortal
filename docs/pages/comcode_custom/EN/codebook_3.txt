@@ -212,6 +212,8 @@ The values you might want to manually change are:
  - [tt]no_gallery_permissions[/tt] -- set to '1' if galleries should assume normal view permissions
  - [tt]no_gallery_rep_image[/tt] -- set to '1' if galleries should not have rep-images
  - [tt]no_gallery_feedback_fields[/tt] -- set to '1' if galleries should have the default feedback options
+ - [tt]cleanup_files[/tt] -- set this to '1' if you want ocPortal to delete files linked to content that a member deletes (ordinarily ocPortal won't, for record keeping / safety)
+ - [tt]disable_privacy_tab[/tt] -- set this to '1' to disable the member privacy settings
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)
@@ -275,7 +277,6 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_banner_count_updates[/tt] -- set this to '1' if you don't want to maintain banner view counts (small performance improvement)
  - [tt]pinpoint_submitban_check[/tt] -- set this to '1' if you only want submitter ban checks to occur in the CMS zone (small performance improvement)
  - [tt]no_block_timeout[/tt] -- set this to '1' if blocks should never timeout
- - [tt]cleanup_files[/tt] -- set this to '1' if you want ocPortal to delete files linked to content that a member deletes (ordinarily ocPortal won't, for record keeping / safety)
 
 [title="3"]Hidden 'keep' parameters[/title]
 

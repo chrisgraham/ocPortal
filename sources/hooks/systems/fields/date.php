@@ -92,6 +92,7 @@ class Hook_fields_date
 				$date_bits=explode((strpos($bits[0],'-')!==false)?'-':'/',$bits[0],3);
 				if (!array_key_exists(1,$date_bits)) $date_bits[1]=date('m');
 				if (!array_key_exists(2,$date_bits)) $date_bits[2]=date('Y');
+				if (!array_key_exists(1,$bits)) $bits[1]='00:00:00';
 				$time_bits=explode(':',$bits[1],3);
 				if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 				if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';

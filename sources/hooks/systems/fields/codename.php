@@ -117,15 +117,20 @@ class Hook_fields_codename
 		$tmp_name='field_'.strval($id);
 		require_code('type_validation');
 		$value=post_param($tmp_name,STRING_MAGIC_NULL);
-		if (($value!='') && ($value!=STRING_MAGIC_NULL) && (!is_alphanumeric($value)))
+		if (($value!='') && ($value!=STRING_MAGIC_NULL))
 		{
-			if (strpos($value,'://')!==false) // strip out from URL, if full URL was entered
+			if ((strpos($value,'://')===false) && (substr($value,0,4)=='www.')) $value='http://'.$value;
+
+			if (!is_alphanumeric($value))
 			{
-				$value=basename($value);
-				$_POST[$tmp_name]=$value; // Copy back, so fractional editing knows
-			} else
-			{
-				warn_exit(do_lang_tempcode('BAD_CODENAME'));
+				if (strpos($value,'://')!==false) // strip out from URL, if full URL was entered
+				{
+					$value=basename($value);
+					$_POST[$tmp_name]=$value; // Copy back, so fractional editing knows
+				} else
+				{
+					warn_exit(do_lang_tempcode('BAD_CODENAME'));
+				}
 			}
 		}
 		return $value;

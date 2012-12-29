@@ -501,7 +501,7 @@ function ModalWindow()
 				case 'iframe':
 					var iframe=this.element('iframe', {
 						'frameBorder': '0',
-						'scrolling': browser_matches('ie')?'auto':'no',
+						'scrolling': (browser_matches('ie') || browser_matches('gecko'))?'auto':'no',
 						'title': '',
 						'name': 'overlay_iframe',
 						'id': 'overlay_iframe',
@@ -519,7 +519,7 @@ function ModalWindow()
 					{
 						var button=this.element('button', {
 							'html': this.cancel_button,
-							'class': 'button_pageitem'
+							'class': 'button_pageitem button_cancel'
 						});
 						this.addEvent( button, 'click', function() { _this.option('finished'); } );
 						buttonContainer.appendChild(button);

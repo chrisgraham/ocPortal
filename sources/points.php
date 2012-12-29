@@ -181,7 +181,7 @@ function point_info($member)
  */
 function get_gift_points_used($member)
 {
-	$actual_used=intval($GLOBALS['SITE_DB']->query_value_null_ok('gifts','SUM(amount)',array('gift_from'=>$member))); // Most reliable way
+	$actual_used=intval($GLOBALS['SITE_DB']->query_select_value_if_there('gifts','SUM(amount)',array('gift_from'=>$member))); // Most reliable way
 	$_used=point_info($member);
 	$claimed_used=$_used['gift_points_used'];
 	return ($claimed_used<0)?$claimed_used:$actual_used; // Still allows $claimed_used to be fiddled to negative give members extra gift points

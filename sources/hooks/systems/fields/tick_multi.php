@@ -91,7 +91,7 @@ class Hook_fields_tick_multi
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=array_flip(explode(chr(10),$ev));
+		$exploded=($ev=='')?array():array_flip(explode(chr(10),$ev));
 		foreach (explode('|',$field['cf_default']) as $option)
 		{
 			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded[$option]));
@@ -153,6 +153,7 @@ class Hook_fields_tick_multi
 				$value.=$l;
 			}
 		}
+
 		return $value;
 	}
 

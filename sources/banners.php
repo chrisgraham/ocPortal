@@ -52,6 +52,7 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'_GUID'=>($guid!='')?$guid:'aaea5f7f64297ab46aa3b3182fb57c37',
 		'ID'=>$row['name'],
 		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$_title,
 		'SUMMARY'=>$summary,
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'name',

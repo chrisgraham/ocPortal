@@ -1762,7 +1762,11 @@ function handle_conflict_resolution($id=NULL,$only_staff=false)
 {
 	if (($only_staff) && (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) return array(NULL,NULL);
 
-	if (is_null($id)) $id=get_param('id','',true);
+	if (is_null($id))
+	{
+		$id=get_param('id',post_param('id',NULL),true);
+		if ($id===NULL) return array(NULL,NULL);
+	}
 
 	require_javascript('javascript_ajax');
 	$last_edit_screen_time=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'edit_pings WHERE '.db_string_equal_to('the_page',get_page_name()).' AND '.db_string_equal_to('the_type',get_param('type','misc')).' AND '.db_string_equal_to('the_id',$id).' AND the_member<>'.strval(get_member()).' ORDER BY the_time DESC',1);

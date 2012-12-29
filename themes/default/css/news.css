@@ -3,6 +3,15 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.compacted_subbox_stream .box.box___news_brief {
+	border-top: 0 !important;
+}
+
+.global_middle .boxless_space .box .box.box___news_brief + .box.box___news_brief:before {
+	border-top: 0 !important;
+	padding-top: 0 !important;
+}
+
 .rss_summary nobr { /* Stops naughty Google news from breaking layout */
 	white-space: normal;
 }

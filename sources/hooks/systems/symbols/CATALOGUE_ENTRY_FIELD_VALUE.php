@@ -35,7 +35,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 			$map=NULL;
 
 			$entry_id=intval($param[0]);
-			$field_id=intval($param[1]);
+			$field_id=intval($param[1]); // nth field in catalogue
 
 			static $cache=array();
 			if (isset($cache[$entry_id]))

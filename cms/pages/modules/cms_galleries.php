@@ -1880,7 +1880,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$allow_comments=post_param_integer('allow_comments',0);
 		$g_owner_name=post_param('g_owner',NULL);
 
-		if(is_null($g_owner_name))
+		if (is_null($g_owner_name))
 			$g_owner=get_member();
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);

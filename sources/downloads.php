@@ -199,6 +199,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 		'ID'=>strval($row['id']),
 		'BREADCRUMBS'=>$breadcrumbs,
 		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$_title,
 		'SUMMARY'=>$summary,
 		'ENTRY_DETAILS'=>$entry_details,
 		'URL'=>$url,

@@ -75,7 +75,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				($member_id_of!=$member_id_viewing)?NULL:1, // owner view
 				($member_id_of!=$member_id_viewing)?NULL:1 // owner set
 			);
-			$actual_custom_fields=(post_param_integer('submitting_profile_tab',0)==1)?ocf_read_in_custom_fields($custom_fields,$member_id_of):array();
+			$actual_custom_fields=((post_param_integer('submitting_profile_tab',0)==1) || (fractional_edit()))?ocf_read_in_custom_fields($custom_fields,$member_id_of):array();
 
 			if (!fractional_edit())
 			{
@@ -210,6 +210,11 @@ class Hook_Profiles_Tabs_Edit_settings
 
 				attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
 			}
+		} elseif (post_param_integer('validated',0)==1) // Special support for just approving
+		{
+			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_validated'=>1),array('id'=>$member_id_of),'',1);
+
+			attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
 		}
 
 		if ($leave_to_ajax_if_possible) return NULL;

@@ -91,7 +91,7 @@ class Module_admin_messaging
 	 */
 	function run()
 	{
-		if (has_no_forum()) warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
+		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
 
 		set_helper_panel_pic('pagepics/messaging');
 		set_helper_panel_tutorial('tut_support_desk');
@@ -215,8 +215,8 @@ class Module_admin_messaging
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
-		breadcrumb_set_self(do_lang_tempcode('VIEW'));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING'))));
+		breadcrumb_set_self(do_lang_tempcode('MESSAGE'));
 
 		return do_template('MESSAGING_MESSAGE_SCREEN',array(
 			'_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c',
@@ -256,7 +256,7 @@ class Module_admin_messaging
 			do_lang('COMMENT')
 		);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('VIEW'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('MESSAGE'))));
 		breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));
 
 		// Redirect them back to view screen

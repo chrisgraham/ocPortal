@@ -364,4 +364,12 @@ Some people might also wonder why we have modules to display categories at all. 
 3) It is difficult to see how blocks could be used to navigate a category tree -- the architecture for this would be really quite complex, considering there is no direct/easy association between URL and the parameters a block takes.
 
 Some people might wonder why entry viewing isn't done via blocks, or really any other code other than category viewing. The reason is that we don't want a huge collection of blocks and lots of extra internal code complexity. So, we solve the issue of wanting to allow fluid site structure via the [tt]main_include_module[/tt] block, which allows you to take a module screen and use it [i]as if it was a block[/i]. Again, we try and represent what is commonly required in the default ocPortal structure, and coded in the simplest possible way, while also making the system fluid and malleable enough to make changes.
+
+[title="3"]Making theme changes outside ocPortal[/title]
+
+When you add/edit theme images inside ocPortal, it makes up a filename. But instead if you make the [tt]themes/<theme>/images_custom[/tt] naming structure match that of [tt]themes/default/images[/tt], then ocPortal automatically finds them. This is better when working collaboratively with git, or if synching development and live sites, because a new database record is not needed to track the theme image reference.
+
+Generally you should rarely use the ocPortal inbuilt theming tools when acting as a programmer. Just put the files in the right place and use your text editor to alter the CSS and templates. This makes for a more integrated, programmer-friendly, workflow.
+
+The only caveat with theme images is that if ocPortal has already searched for it a theme image in your theme, and only found the default one, you'd need to empty the theme_images table to make it search again. That's safe as long as you only add/edit via filesystem and never from inside ocPortal.
 [/surround]

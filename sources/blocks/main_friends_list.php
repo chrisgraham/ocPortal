@@ -54,7 +54,7 @@ class Block_main_friends_list
 		$member_id=array_key_exists('member_id',$map)?intval($map['member_id']):get_member();
 		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):12);
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
-		$mutual=((array_key_exists('mutual',$map)?$map['mutual']:'0')=='1');
+		$mutual=((array_key_exists('mutual',$map)?$map['mutual']:'1')=='1');
 
 		$text_id=do_lang_tempcode('FRIENDS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
 
@@ -81,7 +81,7 @@ class Block_main_friends_list
 			if (($friends_search!='') && (!$msn))
 				$where.=' AND m.m_username LIKE \''.db_encode_like('%'.$friends_search.'%').'\'';
 
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends LEFT JOIN '.get_table_prefix().'f_members m ON m.id=a.member_likes WHERE member_likes='.strval(intval($member_id)).$where;
+			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends LEFT JOIN '.get_table_prefix().'f_members m ON m.id=member_likes WHERE member_likes='.strval(intval($member_id)).$where;
 			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$query.' ORDER BY date_and_time',$max,$start);
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$query);

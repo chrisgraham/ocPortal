@@ -88,7 +88,7 @@ class Hook_fields_member_multi
 		if ($ev=='') return new ocp_tempcode();
 
 		$out=new ocp_tempcode();
-		foreach (explode(chr(10),$ev) as $ev)
+		foreach (($ev=='')?array():explode(chr(10),$ev) as $ev)
 		{
 			$out->attach(paragraph($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(intval($ev))));
 		}

@@ -208,6 +208,9 @@ textarea, input, code {
 input[type="text"]:focus, input[type="password"]:focus {
 	background: url('{$IMG_INLINE;,keyboard}') right center no-repeat white;
 }
+input[type="text"][readonly="true"]:focus {
+	background: none;
+}
 
 /* Normally a browser default, but gets inherited on some phones */
 input[type="text"], input[type="password"], input[type="color"], input[type="email"], input[type="number"], input[type="range"], input[type="search"], input[type="tel"], input[type="url"], textarea, select {
@@ -383,6 +386,15 @@ body.website_body.frame {
 		margin: 15px auto 15px auto;
 		border: 1px solid {$GET,fixed_width_border};
 		{$BETA_CSS_PROPERTY,box-shadow: 0 0 20px {$GET,standard_border};}
+	}
+
+	/* Responsive design for tablets etc */
+	@media screen and (max-width:1024px) {
+		#main_website #main_website_inner {
+			margin: 0;
+			border: 0;
+			{$BETA_CSS_PROPERTY,box-shadow: none;}
+		}
 	}
 {+END}{+END}
 
@@ -586,9 +598,7 @@ header h1 {
 }
 
 .title_tagline {
-	font-size: 0.85em;
-}
-.title_tagline {
+	font-size: 0.95em;
 	padding-bottom: 2em;
 	margin-top: -1.5em;
 	color: {$GET,area_key_text};
@@ -902,6 +912,7 @@ body .accessibility_hidden { /* Contents should be made visible (or interpreted)
 	position: absolute;
 	top: -256000px;
 	left: 0;
+	visibility: hidden; /* So browser doesn't waste resources rendering */
 	display: block; /* stops browser bugs where it interacts with the layout flow incorrectly */
 }
 
@@ -3054,11 +3065,11 @@ ul.nl, .nl ul {
 	list-style-image: none;
 }
 
-.menu_type__tree .has_no_img .drawer, .menu_type__popup .has_no_img .drawer {
+.menu_type__tree .has_no_img .drawer {
 	background: url('{$IMG;,menus/menu_bullet_expand}') no-repeat 0 5px !important;
 }
 
-.menu_type__tree .has_no_img .drawer:hover, .menu_type__popup .has_no_img .drawer:hover {
+.menu_type__tree .has_no_img .drawer:hover {
 	background: url('{$IMG;,menus/menu_bullet_expand_hover}') no-repeat 0 5px !important;
 }
 

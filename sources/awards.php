@@ -118,6 +118,11 @@ function get_award_fields($content_type,$id=NULL)
 
 	$fields=new ocp_tempcode();
 	$rows=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('a_content_type'=>$content_type));
+	foreach ($rows as $i=>$row)
+	{
+		$rows[$i]['_title']=get_translated_text($row['a_title']);
+	}
+	sort_maps_by($rows,'_title');
 
 	require_lang('awards');
 

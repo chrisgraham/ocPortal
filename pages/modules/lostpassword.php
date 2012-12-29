@@ -120,41 +120,41 @@ class Module_lostpassword
 
 		if ($username!='')
 		{
-			$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 		} else
 		{
-			$member=$GLOBALS['FORUM_DRIVER']->get_member_from_email_address($email_address);
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_email_address($email_address);
 		}
-		if (is_null($member)) warn_exit(do_lang_tempcode('PASSWORD_RESET_ERROR_2'));
-		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='') && (has_privilege($member,'disable_lost_passwords')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+		if (is_null($member_id)) warn_exit(do_lang_tempcode('PASSWORD_RESET_ERROR_2'));
+		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='') && (has_privilege($member_id,'disable_lost_passwords')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
 			warn_exit(do_lang_tempcode('NO_RESET_ACCESS'));
 		}
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='httpauth')
+		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='httpauth')
 		{
 			warn_exit(do_lang_tempcode('NO_PASSWORD_RESET_HTTPAUTH'));
 		}
-		$is_ldap=ocf_is_ldap_member($member);
-		$is_httpauth=ocf_is_httpauth_member($member);
+		$is_ldap=ocf_is_ldap_member($member_id);
+		$is_httpauth=ocf_is_httpauth_member($member_id);
 		if (($is_ldap)/* || ($is_httpauth  Actually covered more explicitly above - over mock-httpauth, like Facebook, may have passwords reset to break the integrations)*/) warn_exit(do_lang_tempcode('EXT_NO_PASSWORD_CHANGE'));
 
 		$code=mt_rand(0,mt_getrandmax());
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>strval($code)),array('id'=>$member),'',1);
+		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>strval($code)),array('id'=>$member_id),'',1);
 
-		log_it('RESET_PASSWORD',strval($member),strval($code));
+		log_it('RESET_PASSWORD',strval($member_id),strval($code));
 
-		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_email_address');
+		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if ($email=='') warn_exit(do_lang_tempcode('MEMBER_NO_EMAIL_ADDRESS_RESET_TO'));
 
 		// Send confirm mail
 		$zone=get_module_zone('join');
-		$_url=build_url(array('page'=>'lostpassword','type'=>'step3','code'=>$code,'member'=>$member),$zone,NULL,false,false,true);
+		$_url=build_url(array('page'=>'lostpassword','type'=>'step3','code'=>$code,'member'=>$member_id),$zone,NULL,false,false,true);
 		$url=$_url->evaluate();
 		$_url_simple=build_url(array('page'=>'lostpassword','type'=>'step3','code'=>NULL,'username'=>NULL,'member'=>NULL),$zone,NULL,false,false,true);
 		$url_simple=$_url_simple->evaluate();
-		$message=do_lang('RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($url),$url_simple,strval($member),strval($code)),get_lang($member));
+		$message=do_lang('RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($url),$url_simple,strval($member_id),strval($code)),get_lang($member_id));
 		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member));
+		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
@@ -194,37 +194,37 @@ class Module_lostpassword
 		if (!is_null($username))
 		{
 			$username=trim($username);
-			$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-			if (is_null($member)) warn_exit(do_lang_tempcode('PASSWORD_RESET_ERROR_2'));
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+			if (is_null($member_id)) warn_exit(do_lang_tempcode('PASSWORD_RESET_ERROR_2'));
 		} else
 		{
-			$member=get_param_integer('member');
+			$member_id=get_param_integer('member');
 		}
-		$correct_code=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_change_code');
+		$correct_code=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_change_code');
 		if ($correct_code=='')
 		{
-			$_reset_url=build_url(array('page'=>'_SELF','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member)),'_SELF');
+			$_reset_url=build_url(array('page'=>'_SELF','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),'_SELF');
 			$reset_url=$_reset_url->evaluate();
 			warn_exit(do_lang_tempcode('PASSWORD_ALREADY_RESET',escape_html($reset_url),get_site_name()));
 		}
 		if ($code!=$correct_code)
 		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',array('the_type'=>'RESET_PASSWORD','param_a'=>strval($member),'param_b'=>$code));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',array('the_type'=>'RESET_PASSWORD','param_a'=>strval($member_id),'param_b'=>$code));
 			if (!is_null($test)) warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE'));
 			log_hack_attack_and_exit('HACK_ATTACK_PASSWORD_CHANGE');
 		}
 
-		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_email_address');
+		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 
 		require_code('crypt');
 		$new_password=get_rand_password();
 
 		// Send password in mail
-		$_login_url=build_url(array('page'=>'login','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member)),get_module_zone('login'),NULL,false,false,true);
+		$_login_url=build_url(array('page'=>'login','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('login'),NULL,false,false,true);
 		$login_url=$_login_url->evaluate();
 		$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,get_site_name());
 		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member));
+		mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 
 		if (get_value('no_password_hashing')==='1')
 		{
@@ -233,12 +233,12 @@ class Module_lostpassword
 		} else
 		{
 			$password_compatibility_scheme='';
-			$salt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_pass_salt');
+			$salt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
 			$new=md5($salt.md5($new_password));
 		}
 
 		unset($_GET['code']);
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_validated_email_confirm_code'=>'','m_password_compat_scheme'=>$password_compatibility_scheme,'m_password_change_code'=>'','m_pass_hash_salted'=>$new),array('id'=>$member),'',1);
+		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_validated_email_confirm_code'=>'','m_password_compat_scheme'=>$password_compatibility_scheme,'m_password_change_code'=>'','m_pass_hash_salted'=>$new),array('id'=>$member_id),'',1);
 
 		return inform_screen($title,do_lang_tempcode('NEW_PASSWORD_MAILED',escape_html($email)));
 	}

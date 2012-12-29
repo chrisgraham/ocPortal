@@ -146,7 +146,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 			}
 			//if (($username!=$member_row[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member_row[0]['m_timezone_offset'])) || ($email_address!=$member_row[0]['m_email_address']))		Actually there's lots of things that may have changed so let's just do this always
 			{
-				$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
+				$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_photo_url',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict yet the name has changed
 				{
 					$update_map=array('m_username'=>$username,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
@@ -155,7 +155,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 					{
 						if ($timezone!==NULL)
 							$update_map['m_timezone_offset']=$timezone;
-						$update_map['m_avatar_url']=$avatar_url;
+						if (!addon_installed('ocf_avatars')) $update_map['m_avatar_url']=$avatar_url;
 						$update_map['m_photo_url']=$photo_url;
 						$update_map['m_photo_thumb_url']=$photo_thumb_url;
 					}

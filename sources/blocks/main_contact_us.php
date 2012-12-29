@@ -90,7 +90,7 @@ class Block_main_contact_us
 			$message=new ocp_tempcode();
 		}
 
-		if (!has_no_forum())
+		if (get_forum_type()!='none') // If ocf_forum not installed, will still work
 		{
 			// Comment posts
 			$forum=get_option('messaging_forum_name');

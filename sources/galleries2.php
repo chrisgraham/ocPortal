@@ -485,7 +485,7 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
  * @param  AUTO_LINK		The ID of the image
  * @param  boolean		Whether to delete the actual file also
  */
-function delete_image($id,$delete_full)
+function delete_image($id,$delete_full=true)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('images',array('title','description','cat'),array('id'=>$id));
 	$title=$rows[0]['title'];
@@ -786,7 +786,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
  * @param  AUTO_LINK		The ID of the entry to delete
  * @param  boolean		Whether to delete the actual video file from disk as well as the entry
  */
-function delete_video($id,$delete_full)
+function delete_video($id,$delete_full=true)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','description','cat'),array('id'=>$id));
 	$title=$rows[0]['title'];

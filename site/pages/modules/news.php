@@ -299,6 +299,7 @@ class Module_news
 	{
 		require_lang('news');
 		require_code('feedback');
+		require_code('news');
 		require_css('news');
 
 		inform_non_canonical_parameter('filter');

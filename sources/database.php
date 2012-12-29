@@ -589,7 +589,7 @@ class database_driver
 						$v=' ';
 					}
 					if (is_integer($v)) $values.=strval($v);
-					elseif (is_float($v)) $values.=float_to_raw_string($v);
+					elseif (is_float($v)) $values.=float_to_raw_string($v,10);
 					elseif (($key=='begin_num') || ($key=='end_num')) $values.=$v; // Fudge, for all our known large unsigned integers
 					else $values.='\''.$this->static_ob->db_escape_string($v).'\'';
 				}
@@ -654,7 +654,7 @@ class database_driver
 
 				if ($where!='') $where.=' AND ';
 
-				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
+				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value,10);
 				elseif (is_integer($value)) $where.=$key.'='.strval($value);
 				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 				else
@@ -1065,7 +1065,7 @@ class database_driver
 			{
 				if ($where!='') $where.=' AND ';
 
-				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
+				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value,10);
 				elseif (is_integer($value)) $where.=$key.'='.strval($value);
 				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 				else
@@ -1088,7 +1088,7 @@ class database_driver
 			if ($value===NULL) $update.=$key.'=NULL';
 			else
 			{
-				if (is_float($value)) $update.=$key.'='.float_to_raw_string($value);
+				if (is_float($value)) $update.=$key.'='.float_to_raw_string($value,10);
 				elseif (is_integer($value)) $update.=$key.'='.strval($value);
 				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 				else $update.=$key.'=\''.$this->static_ob->db_escape_string($value).'\'';
@@ -1146,7 +1146,7 @@ class database_driver
 		{
 			if ($where!='') $where.=' AND ';
 
-			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
+			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value,10);
 			elseif (is_integer($value)) $where.=$key.'='.strval($value);
 			elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 			else

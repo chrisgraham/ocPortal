@@ -45,7 +45,7 @@ function is_swf_upload($fake_prepopulation=false)
 {
 	//check whatever is used the swfuploader
 	$swfupload=false;
-	foreach($_POST as $key=>$value)
+	foreach ($_POST as $key=>$value)
 	{
 		if (!is_string($value)) continue;	
 
@@ -83,7 +83,7 @@ function is_swf_upload($fake_prepopulation=false)
 							$swfupload=true;
 							if ($fake_prepopulation)
 							{
-								$_FILES[preg_replace('#\_1$#','_'.strval($i+1),substr($key,10))]=array(
+								$_FILES[preg_replace('#(\_)?1$#','_'.strval($i+1),substr($key,10))]=array(
 									'type'=>'swfupload',
 									'name'=>$incoming_uploads_row[0]['i_orig_filename'],
 									'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],

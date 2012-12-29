@@ -103,9 +103,9 @@ class Hook_fields_float
 
 			$latitude='';
 			$longitude='';
-			if ((isset($actual_value)) && ($actual_value!='')) $longitude=float_to_raw_string(floatval($actual_value));
+			if ((isset($actual_value)) && ($actual_value!='')) $longitude=float_to_raw_string(floatval($actual_value),10);
 			global $LATITUDE;
-			if ((isset($LATITUDE)) && ($LATITUDE!='')) $latitude=float_to_raw_string(floatval($LATITUDE));
+			if ((isset($LATITUDE)) && ($LATITUDE!='')) $latitude=float_to_raw_string(floatval($LATITUDE),10);
 
 			$input=do_template('FORM_SCREEN_INPUT_MAP_POSITION',array('_GUID'=>'86d69d152d7bfd125e6216c9ac936cfd','REQUIRED'=>$required,'NAME'=>$name,'LATITUDE'=>$latitude,'LONGITUDE'=>$longitude));
 			return _form_input($name,'Position','',$input,$required,false);

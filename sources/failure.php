@@ -130,6 +130,10 @@ function _param_invalid($name,$ret,$posted)
 	//  People typing the wrong URLs for many reasons
 	// Therefore we can't really treat it as a hack-attack, even though that would be preferable.
 
+	static $param_invalid_looping=false;
+	if ($param_invalid_looping) return '0'; // stop loop, e.g. with keep_fatalistic=<corruptvalue>
+	$param_invalid_looping=true;
+
 	if (!is_null($ret))
 	{
 		// Try and recover by stripping junk off...

@@ -4133,3 +4133,4 @@ nested_cpf_csv_lists
  - sources_custom/miniblocks/nested_csv_lists_javascript.php
  - sources_custom/nested_csv.php
  - themes/default/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl
+ - lang_custom/EN/nested_csv.ini

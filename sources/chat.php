@@ -59,6 +59,7 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070',
 		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$_title,
 		'SUMMARY'=>'',
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'room_name',

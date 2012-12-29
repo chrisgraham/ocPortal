@@ -92,12 +92,12 @@ class Hook_fields_combo_multi
 		if (is_object($ev)) return $ev;
 		$all=array();
 		$exploded_inbuilt=array_flip(explode('|',$field['cf_default']));
-		$exploded_chosen=array_flip(explode(chr(10),$ev));
-		foreach ($exploded_inbuilt as $option)
+		$exploded_chosen=($ev=='')?array():array_flip(explode(chr(10),$ev));
+		foreach (array_keys($exploded_inbuilt) as $option)
 		{
 			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded_chosen[$option]));
 		}
-		foreach ($exploded_chosen as $chosen)
+		foreach (array_keys($exploded_chosen) as $chosen)
 		{
 			if (!isset($exploded_inbuilt[$chosen]))
 			{
@@ -105,6 +105,7 @@ class Hook_fields_combo_multi
 			}
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
+
 		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all,'FIELD_ID'=>strval($field['id'])),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
 	}
 
@@ -179,6 +180,7 @@ class Hook_fields_combo_multi
 			if ($value!='') $value.=chr(10);
 			$value.=$custom;
 		}
+
 		return $value;
 	}
 

@@ -181,8 +181,8 @@ class Block_main_google_map
 
 				if ((is_numeric($longitude)) && (is_numeric($latitude)))
 				{
-					$details['LONGITUDE']=float_to_raw_string(floatval($longitude));
-					$details['LATITUDE']=float_to_raw_string(floatval($latitude));
+					$details['LONGITUDE']=float_to_raw_string(floatval($longitude),10);
+					$details['LATITUDE']=float_to_raw_string(floatval($latitude),10);
 
 					$details['ENTRY_TITLE']=$entry_title;
 					if (isset($map['guid']) && $map['guid']!='') $details['_GUID']=$map['guid'];
