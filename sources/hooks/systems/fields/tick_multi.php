@@ -154,6 +154,7 @@ class Hook_fields_tick_multi
 				$value.=$l;
 			}
 		}
+
 		return $value;
 	}
 

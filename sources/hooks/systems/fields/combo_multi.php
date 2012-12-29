@@ -179,6 +179,7 @@ class Hook_fields_combo_multi
 			if ($value!='') $value.=chr(10);
 			$value.=$custom;
 		}
+
 		return $value;
 	}
 

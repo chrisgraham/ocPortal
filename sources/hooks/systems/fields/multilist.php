@@ -92,7 +92,7 @@ class Hook_fields_multilist
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=explode(chr(10),$ev);
+		$exploded=($ev=='')?array():explode(chr(10),$ev);
 		foreach (explode('|',$field['cf_default']) as $option)
 		{
 			if (in_array($option,$exploded)) $all[]=array('OPTION'=>$option,'HAS'=>true);
