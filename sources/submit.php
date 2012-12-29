@@ -48,7 +48,7 @@ function send_content_validated_notification($content_type,$content_id)
 	{
 		require_code('notifications');
 		require_lang('unvalidated');
-		$subject=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$content_title);
+		$subject=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL_SUBJECT',$content_title,get_site_name());
 		$mail=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($content_title),array($content_url_safe->evaluate()));
 		dispatch_notification('content_validated',NULL,$subject,$mail,array($submitter_id));
 	}
