@@ -3,7 +3,7 @@
 {+START,IF_NON_EMPTY,{RESULTS_TABLE}}
 	{+START,IF_PASSED,SYMBOLS}
 		<div class="float_surrounder"><div class="pagination alphabetical_jumper">
-			{+START,LOOP,SYMBOLS}<a class="results_continue alphabetical_jumper_cont" target="_top" href="{$PAGE_LINK*,_SELF:_SELF:md_start={START}:md_max={MAX*}:md_sort=m_username ASC}">{SYMBOL*}</a>{+END}
+			{+START,LOOP,SYMBOLS}<a class="results_continue alphabetical_jumper_cont" target="_self" href="{$PAGE_LINK*,_SELF:_SELF:md_start={START}:md_max={MAX*}:md_sort=m_username ASC}">{SYMBOL*}</a>{+END}
 		</div></div>
 	{+END}
 	{RESULTS_TABLE}

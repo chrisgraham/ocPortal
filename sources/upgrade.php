@@ -372,7 +372,8 @@ function upgrade_script()
 					tar_close($upgrade_resource);
 					if ($popup_simple_extract)
 					{
-						copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
+						$test=@copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
+						if ($test===false) fatal_exit(do_lang_tempcode('FU_FTP_NEEDED'));
 						@unlink($temp_path);
 						$temp_path=get_custom_file_base().'/data_custom/upgrader.tar.tmp';
 						$tmp_data_path=get_custom_file_base().'/data_custom/upgrader.tmp';

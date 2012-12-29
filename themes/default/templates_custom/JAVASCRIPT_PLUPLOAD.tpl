@@ -5646,7 +5646,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var referrer_favicon='{$IMG;,favicon}';
 		var posturl='{$FIND_SCRIPT;,incoming_uploads}';
 
-		var picup_url='fileupload://new?callbackURL='+window.encodeURIComponent('{$BASE_URL;}/data_custom/picup.htm?window_url='+window.encodeURIComponent(window.encodeURIComponent(callback_url))+'&window_name='+window.encodeURIComponent(window.encodeURIComponent(window.name)))+
+		var picup_url='fileupload://new?callbackURL='+window.encodeURIComponent('{$BASE_URL;}/data_custom/picup.html?window_url='+window.encodeURIComponent(window.encodeURIComponent(callback_url))+'&window_name='+window.encodeURIComponent(window.encodeURIComponent(window.name)))+
 							'&referrername='+window.encodeURIComponent(referrer_name)+
 							'&referrerfavicon='+window.encodeURIComponent(referrer_favicon)+
 							'&debug=false&imagesize=1600&postimageparam=file'+
