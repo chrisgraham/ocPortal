@@ -4,6 +4,7 @@
 */
 
 .whos_read {
+	margin-top: 1em;
 	float: {!en_right};
 	margin-{!en_left}: 1em;
 	width: 20em;
