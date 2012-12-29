@@ -135,8 +135,8 @@ if (!is_null($lstring)) // Forward geopositioning (textlocation to full details)
 			}
 			else echo '\'\'';
 
-			echo ','.float_to_raw_string($bits['l_latitude']);
-			echo ','.float_to_raw_string($bits['l_longitude']);
+			echo ','.float_to_raw_string($bits['l_latitude'],10);
+			echo ','.float_to_raw_string($bits['l_longitude'],10);
 
 			echo ']';
 		}

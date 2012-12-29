@@ -42,8 +42,8 @@ function install_location_data()
 
 		if ($newline['Latitude']!='')
 		{
-			$newline['Latitude']=float_to_raw_string(floatval($newline['Latitude'])/100.0);
-			$newline['Longitude']=float_to_raw_string(floatval($newline['Longitude'])/100.0);
+			$newline['Latitude']=float_to_raw_string(floatval($newline['Latitude'])/100.0,10);
+			$newline['Longitude']=float_to_raw_string(floatval($newline['Longitude'])/100.0,10);
 		}
 
 		// Fix inconsistencies
@@ -496,12 +496,12 @@ function _create_catalogue_subtree($fields,$first_cat,$catalogue_name,$root_cat,
 
 	// Save into category: bounding box, and own latitude/longitude if specified
 	$map=array(
-		$fields[0]['id']=>float_to_raw_string($node['details']['l_latitude']),
-		$fields[1]['id']=>float_to_raw_string($node['details']['l_longitude']),
-		$fields[2]['id']=>float_to_raw_string($node['details']['l_min_latitude']),
-		$fields[3]['id']=>float_to_raw_string($node['details']['l_max_latitude']),
-		$fields[4]['id']=>float_to_raw_string($node['details']['l_min_longitude']),
-		$fields[5]['id']=>float_to_raw_string($node['details']['l_max_longitude']),
+		$fields[0]['id']=>float_to_raw_string($node['details']['l_latitude'],10),
+		$fields[1]['id']=>float_to_raw_string($node['details']['l_longitude'],10),
+		$fields[2]['id']=>float_to_raw_string($node['details']['l_min_latitude'],10),
+		$fields[3]['id']=>float_to_raw_string($node['details']['l_max_latitude'],10),
+		$fields[4]['id']=>float_to_raw_string($node['details']['l_min_longitude'],10),
+		$fields[5]['id']=>float_to_raw_string($node['details']['l_max_longitude'],10),
 	);
 
 	$existing=get_bound_content_entry('catalogue_category',strval($id));

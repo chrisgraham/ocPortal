@@ -176,8 +176,8 @@ class Block_main_google_map
 				{
 					if (($map['filter_term']=='') || (strpos(strtolower($all_output),strtolower($map['filter_term']))!==false))
 					{
-						$details['LONGITUDE']=float_to_raw_string(floatval($longitude));
-						$details['LATITUDE']=float_to_raw_string(floatval($latitude));
+						$details['LONGITUDE']=float_to_raw_string(floatval($longitude),10);
+						$details['LATITUDE']=float_to_raw_string(floatval($latitude),10);
 
 						$details['ENTRY_TITLE']=$entry_title;
 
