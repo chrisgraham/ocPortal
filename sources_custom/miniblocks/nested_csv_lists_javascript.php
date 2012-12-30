@@ -38,6 +38,8 @@ echo "
 		for (var i in cpf_fields)
 		{
 			var cpf_field=cpf_fields[i];
+			if (typeof cpf_field.possible_fields=='undefined') continue; // Is not part of list
+
 			var element=find_cpf_field_element(form,cpf_field);
 			if (element) inject_form_select_chaining__element(element,cpf_field,true);
 		}
