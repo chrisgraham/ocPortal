@@ -447,8 +447,6 @@ function upload_to_tracker_issue($tracker_id,$tar_path)
 
 function make_call($call,$params,$file=NULL)
 {
-	if ($call!='post_in_bugs_catalogue') return;
-
 	$data=$params;
 	$data['password']=post_param('password');
 	if (is_null($file))
