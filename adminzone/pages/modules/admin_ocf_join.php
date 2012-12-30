@@ -833,12 +833,15 @@ class Module_admin_ocf_join
 		{
 			$_csv_data=array();
 
-			$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
-			$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
-			if ($myfile!==false)
+			if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) // Cleanup possible line ending problems, but only if file not too big
 			{
-				fwrite($myfile,$fixed_contents);
-				fclose($myfile);
+				$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
+				$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
+				if ($myfile!==false)
+				{
+					fwrite($myfile,$fixed_contents);
+					fclose($myfile);
+				}
 			}
 
 			$myfile=fopen($_FILES['file']['tmp_name'],'rb');
@@ -1032,9 +1035,15 @@ class Module_admin_ocf_join
 				$photo_url=array_key_exists('Photo',$line)?$line['Photo']:'';
 				if ($photo_url!='')
 				{
-					require_code('images');
-					$photo_thumb_url='uploads/ocf_photos_thumbs/'.uniqid('').'.png';
-					convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false);
+					if ((!$new_member) && ($photo_url==$GLOBALS['FORUM_DRIVER']->get_member_row_field($linked_id,'m_photo_url')))
+					{
+						$photo_thumb_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($linked_id,'m_photo_url');
+					} else
+					{
+						require_code('images');
+						$photo_thumb_url='uploads/ocf_photos_thumbs/'.uniqid('').'.png';
+						convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false);
+					}
 				} else $photo_thumb_url='';
 				$custom_fields=array();
 				foreach ($all_cpfs as $cpf)
@@ -1110,6 +1119,17 @@ class Module_admin_ocf_join
 					if ($old_username==$username) $username=NULL;
 
 					ocf_edit_member($linked_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,NULL,$primary_group,$custom_fields,NULL,$reveal_age,NULL,NULL,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,NULL,NULL,NULL,NULL,NULL,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+					if (!is_null($groups))
+					{
+						foreach ($groups as $g_id)
+						{
+							$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
+								'gm_group_id'=>$g_id,
+								'gm_member_id'=>$linked_id,
+								'gm_validated'=>1
+							),false,true); // Allow failure, if member is already in (handy for importers)
+						}
+					}
 					$num_edited++;
 				}
 

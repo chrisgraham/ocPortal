@@ -188,12 +188,15 @@ class Module_admin_newsletter extends standard_aed_module
 		require_code('uploads');
 		if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 		{
-			$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
-			$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
-			if ($myfile!==false)
+			if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) // Cleanup possible line ending problems, but only if file not too big
 			{
-				fwrite($myfile,$fixed_contents);
-				fclose($myfile);
+				$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
+				$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
+				if ($myfile!==false)
+				{
+					fwrite($myfile,$fixed_contents);
+					fclose($myfile);
+				}
 			}
 
 			$myfile=fopen($_FILES['file']['tmp_name'],'rb');
