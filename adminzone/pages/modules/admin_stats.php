@@ -84,6 +84,7 @@ class Module_admin_stats
 
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_1',array('the_user'));
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_2',array('ip'));
+			$GLOBALS['SITE_DB']->create_index('stats','member_track_3',array('the_user','date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('stats','pages',array('the_page'));
 			$GLOBALS['SITE_DB']->create_index('stats','date_and_time',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('stats','milliseconds',array('milliseconds'));
