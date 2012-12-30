@@ -238,6 +238,8 @@ class Hook_search_comcode_pages
 	{
 		global $SEARCH__CONTENT_BITS;
 
+		if (function_exists('set_time_limit')) @set_time_limit(30); // This can be slow.
+
 		require_code('xhtml');
 
 		$url=build_url(array('page'=>$page),$zone);

@@ -974,6 +974,7 @@ function get_html_trace()
 {
 	if (!function_exists('debug_backtrace')) return new ocp_tempcode();
 	if (!function_exists('var_export')) return new ocp_tempcode();
+	require_code('templates');
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$GLOBALS['SUPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
