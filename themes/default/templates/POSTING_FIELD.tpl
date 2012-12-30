@@ -100,37 +100,39 @@
 	</td>
 </tr>
 
-<tr class="form_table_field_spacer">
-	<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="table_heading_cell">
-		{+START,IF,{$JS_ON}}
-			<a class="toggleable_tray_button" id="fes_attachments" onclick="toggle_subordinate_fields(this.getElementsByTagName('img')[0]); return false;" href="#"><img alt="{!EXPAND}: {!ATTACHMENTS}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-		{+END}
-
-		<h2{+START,IF,{$JS_ON}} class="toggleable_tray_button" onclick="toggle_subordinate_fields(this.parentNode.getElementsByTagName('img')[0],'fes_attachments_help'); return false;"{+END}>
-			{!ATTACHMENTS}
-
-			{+START,IF,{$NOT,{$MOBILE}}}
-				<img class="help_icon" onkeydown="this.onmouseover(event);" onkeyup="this.onmouseout(event);" onclick="this.onmouseover(event);" title="{!ATTACHMENT_HELP=}" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,help}" />
+{+START,IF_NON_EMPTY,{ATTACHMENTS}}
+	<tr class="form_table_field_spacer">
+		<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="table_heading_cell">
+			{+START,IF,{$JS_ON}}
+				<a class="toggleable_tray_button" id="fes_attachments" onclick="toggle_subordinate_fields(this.getElementsByTagName('img')[0]); return false;" href="#"><img alt="{!EXPAND}: {!ATTACHMENTS}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 			{+END}
-		</h2>
 
-		{+START,IF_PASSED,HELP}
-			<p style="display: none" id="fes_attachments_help">
-				{HELP*}
-			</p>
-		{+END}
-	</th>
-</tr>
-<tr style="display: none" class="field_input">
-	<td class="form_table_huge_field"{+START,IF,{$NOT,{$MOBILE}}} colspan="2"{+END}>
-		{ATTACHMENTS}
+			<h2{+START,IF,{$JS_ON}} class="toggleable_tray_button" onclick="toggle_subordinate_fields(this.parentNode.getElementsByTagName('img')[0],'fes_attachments_help'); return false;"{+END}>
+				{!ATTACHMENTS}
 
-		<input type="hidden" name="comcode__{NAME*}" value="1" />
-		<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
-		{HIDDEN_FIELDS}
+				{+START,IF,{$NOT,{$MOBILE}}}
+					<img class="help_icon" onkeydown="this.onmouseover(event);" onkeyup="this.onmouseout(event);" onclick="this.onmouseover(event);" title="{!ATTACHMENT_HELP=}" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,help}" />
+				{+END}
+			</h2>
 
-		<script type="text/javascript">// <![CDATA[
-			initialise_dragdrop_upload('container_for_{NAME*;}','{NAME*;}');
-		//]]></script>
-	</td>
-</tr>
+			{+START,IF_PASSED,HELP}
+				<p style="display: none" id="fes_attachments_help">
+					{HELP*}
+				</p>
+			{+END}
+		</th>
+	</tr>
+	<tr style="display: none" class="field_input">
+		<td class="form_table_huge_field"{+START,IF,{$NOT,{$MOBILE}}} colspan="2"{+END}>
+			{ATTACHMENTS}
+
+			<input type="hidden" name="comcode__{NAME*}" value="1" />
+			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
+			{HIDDEN_FIELDS}
+
+			<script type="text/javascript">// <![CDATA[
+				initialise_dragdrop_upload('container_for_{NAME*;}','{NAME*;}');
+			//]]></script>
+		</td>
+	</tr>
+{+END}
