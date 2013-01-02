@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		gallery_syndicate
+ * @package		gallery_syndication
  */
 
-class Hook_cron_gallery_syndicate
+class Hook_cron_gallery_syndication
 {
 
 	/**
@@ -26,13 +26,13 @@ class Hook_cron_gallery_syndicate
 	 */
 	function run()
 	{
-		$value=get_value('last_gallery_syndicate');
+		$value=get_value('last_gallery_syndication');
 		if ((is_null($value)) || (intval($value)<time()-60*60))
 		{
-			require_code('gallery_syndicate');
+			require_code('gallery_syndication');
 			sync_video_syndication();
 
-			set_value('last_gallery_syndicate',strval(time()));
+			set_value('last_gallery_syndication',strval(time()));
 		}
 	}
 

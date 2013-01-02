@@ -110,6 +110,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/systems/video_embed/.htaccess',
 			'sources/hooks/systems/video_embed/index.html',
 			'sources/hooks/systems/video_embed/youtube.php',
+			'sources/hooks/systems/video_embed/vimeo.php',
 			'sources/hooks/systems/video_embed/facebook.php',
 			'sources/hooks/systems/meta/image.php',
 			'sources/hooks/systems/meta/video.php',
@@ -122,6 +123,7 @@ class Hook_addon_registry_galleries
 			'BLOCK_MAIN_GALLERY_EMBED.tpl',
 			'GALLERY_BOX.tpl',
 			'GALLERY_VIDEO_YOUTUBE.tpl',
+			'GALLERY_VIDEO_VIMEO.tpl',
 			'GALLERY_VIDEO_FACEBOOK.tpl',
 			'GALLERY_VIDEO_GENERAL.tpl',
 			'GALLERY_VIDEO_QT.tpl',
@@ -234,6 +236,7 @@ class Hook_addon_registry_galleries
 				'GALLERY_ENTRY_SCREEN.tpl'=>'gallery_entry_screen',
 				'GALLERY_NAV.tpl'=>'gallery_entry_screen',
 				'GALLERY_VIDEO_YOUTUBE.tpl'=>'gallery_video_youtube',
+				'GALLERY_VIDEO_VIMEO.tpl'=>'gallery_video_vimeo',
 				'GALLERY_VIDEO_FACEBOOK.tpl'=>'gallery_video_facebook',
 				'GALLERY_VIDEO_GENERAL.tpl'=>'gallery_video_general',
 				'GALLERY_VIDEO_QT.tpl'=>'gallery_video_qt',
@@ -455,6 +458,24 @@ class Hook_addon_registry_galleries
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_YOUTUBE',array(
 					'URL'=>'4cpX1ZjuaiA',
+				)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__gallery_video_vimeo()
+	{
+		return array(
+			lorem_globalise(
+				do_lorem_template('GALLERY_VIDEO_VIMEO',array(
+					'URL'=>'6636365',
 				)
 			),NULL,'',true),
 		);

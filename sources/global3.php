@@ -188,12 +188,14 @@ function fix_permissions($path,$perms=0666) // We call this function assuming we
  * @param  float			The timeout
  * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
  * @param  ?array			Files to send. Map between field to file path (NULL: none)
+ * @param  ?array			Extra headers to send (NULL: none)
+ * @param  ?string		HTTP verb (NULL: auto-decide based on other parameters)
  * @return ?string		The data downloaded (NULL: error)
  */
-function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
+function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL,$extra_headers=NULL,$http_verb=NULL)
 {
 	require_code('files2');
-	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$is_xml,$files);
+	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$is_xml,$files,$extra_headers,$http_verb);
 }
 
 /**
@@ -2137,7 +2139,7 @@ function mixed()
  *
  * @param  ID_TEXT		The type of resource (e.g. download)
  * @param  ID_TEXT		The ID of the resource
- * @return array			The first element is the meta keyword string for the specified resource, and the other is the meta description string.
+ * @return array			A pair: The first element is the meta keyword string for the specified resource, and the other is the meta description string.
  */
 function seo_meta_get_for($type,$id)
 {

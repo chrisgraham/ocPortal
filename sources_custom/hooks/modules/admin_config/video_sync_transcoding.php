@@ -18,13 +18,21 @@
  * @package		gallery_syndication
  */
 
-require_code('oauth2');
+class Hook_admin_config_video_sync_transcoding
+{
 
-$auth_url='https://accounts.google.com/o/oauth2/auth?client_id=_API_KEY_';
-$auth_url.='&redirect_uri='.urlencode(static_evaluate_tempcode(get_self_url(true)));
-$auth_url.='&response_type=code';
-$auth_url.='&scope='.urlencode('https://gdata.youtube.com');
-$auth_url.='&access_type=offline';
-$auth_url.='&state=authorized';
+	function run($myrow)
+	{
+		$list='';
+		$hooks=find_all_hooks('modules','video_syndication');
+		$list.=static_evaluate_tempcode(form_input_list_entry(do_lang('OTHER',NULL,NULL,NULL,fallback_lang()));
+		foreach (array_keys($hooks) as $hook)
+		{
+			$list.=static_evaluate_tempcode(form_input_list_entry($hook,$hook==get_option($myrow['the_name'])));
+		}
+		return $list;
+	}
 
-handle_oauth('youtube','Youtube',$auth_url);
+}
+
+

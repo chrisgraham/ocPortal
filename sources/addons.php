@@ -40,7 +40,6 @@ function find_updated_addons()
 		$url.='&addon_'.strval($i).'='.urlencode($addon);
 	}
 
-	require_code('files');
 	$addon_data=http_download_file($url,NULL,false);
 	if ((is_null($addon_data)) || ($addon_data==''))
 	{
@@ -414,7 +413,6 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 			//if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
 			//{
 			//	$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
-			//	require_code('files');
 			//	$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$_themed_version));
 			//	if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
 			//}
@@ -427,7 +425,6 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 			$mtime=0;
 			//if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($full)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
 			//{
-			//	require_code('files');
 			//	$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));
 			//	if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
 			//}
@@ -666,7 +663,6 @@ function install_addon($file,$files=NULL)
 	$path='/data_custom/'.strtolower(basename($file,'.tar')).'_install.php';
 	if (file_exists(get_file_base().$path))
 	{
-		require_code('files');
 		http_download_file(get_base_url().$path);
 	}
 

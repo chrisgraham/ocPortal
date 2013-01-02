@@ -1087,16 +1087,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					}
 				}
 
-				if (addon_installed('galleries'))
-				{
-					require_code('images');
-					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
-					{
-						require_code('transcoding');
-						$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
-					}
-				}
-
 				$attachment=array(
 					'a_member_id'=>$on_behalf_of_member,
 					'a_file_size'=>$_size,
@@ -1111,6 +1101,16 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				$attach_id=$connection->query_insert('attachments',$attachment,true);
 				$attachment['id']=$attach_id;
+
+				if (addon_installed('galleries'))
+				{
+					require_code('images');
+					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					{
+						require_code('transcoding');
+						transcode_video($url,'attachments',$attach_id,'id','a_url','a_original_filename',NULL,NULL);
+					}
+				}
 
 				// Create and document attachment
 				if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
@@ -1183,16 +1183,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$add_time=time();
 				$member_id=$on_behalf_of_member;
 
-				if (addon_installed('galleries'))
-				{
-					require_code('images');
-					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
-					{
-						require_code('transcoding');
-						$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
-					}
-				}
-
 				$attachment=array(
 					'a_member_id'=>$member_id,
 					'a_file_size'=>$_size,
@@ -1207,6 +1197,16 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				$attach_id=$connection->query_insert('attachments',$attachment,true);
 				$attachment['id']=$attach_id;
+
+				if (addon_installed('galleries'))
+				{
+					require_code('images');
+					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					{
+						require_code('transcoding');
+						transcode_video($url,'attachments',$attach_id,'id','a_url','a_original_filename',NULL,NULL);
+					}
+				}
 
 				if (($tag=='attachment_safe') || (substr($id,0,4)=='url_')) // Lock it if we are starting with this tag
 				{

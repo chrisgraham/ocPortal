@@ -29,7 +29,7 @@
             <div class="span5">
 					<b>Welcome to the ocPortal API documentation.</b><br />
 					<br />
-					For other documentation (including our developers guide, the Code Book), see the <a target="_blank" title="(this link will open in a new window)" href="http://ocportal.com/docs/">documentation section of our website</a>.
+					For other documentation (including our developers guide, the Code Book), see the <a target="_blank" title="Documentation section of our website (this link will open in a new window)" href="http://ocportal.com/docs/">documentation section of our website</a>.
 					<br />
 					<br />
 					The packages in this documentation (shown above) correspond to the addons that ocPortal is split up into. All packages beginning 'core_' can be assumed to be installed on any ocPortal version.

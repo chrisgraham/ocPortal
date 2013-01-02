@@ -2134,6 +2134,7 @@ direct_video_link_posting
 -------------------------
  - sources_custom/hooks/systems/comcode_link_handlers/facebook_video.php
  - sources_custom/hooks/systems/comcode_link_handlers/youtube.php
+ - sources_custom/hooks/systems/comcode_link_handlers/vimeo.php
  - sources_custom/hooks/systems/comcode_link_handlers/mp3.php
  - sources_custom/hooks/systems/video_embed/cnn.php
  - sources_custom/hooks/systems/video_embed/index.html
@@ -4134,3 +4135,23 @@ nested_cpf_csv_lists
  - sources_custom/nested_csv.php
  - themes/default/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl
  - lang_custom/EN/nested_csv.ini
+
+gallery_syndication
+-------------------
+
+ - adminzone/pages/minimodules_custom/vimeo_oauth.php
+ - adminzone/pages/minimodules_custom/youtube_oauth.php
+ - lang_custom/EN/gallery_syndication.ini
+ - lang_custom/EN/oauth2.ini
+ - lang_custom/EN/gallery_syndication_youtube.ini
+ - lang_custom/EN/gallery_syndication_vimeo.ini
+ - sources_custom/gallery_syndication.php
+ - sources_custom/hooks/modules/admin_config/video_sync_transcoding.php
+ - sources_custom/hooks/modules/admin_config/index.html
+ - sources_custom/hooks/modules/video_syndication/vimeo.php
+ - sources_custom/hooks/modules/video_syndication/youtube.php
+ - sources_custom/hooks/modules/video_syndication/index.html
+ - sources_custom/hooks/systems/cron/gallery_syndication.php
+ - sources_custom/hooks/systems/do_next_menus/gallery_syndication.php
+ - sources_custom/oauth2.php
+ - sources_custom/vimeo.php

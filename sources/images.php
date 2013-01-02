@@ -43,7 +43,6 @@ function _symbol_image_dims($param)
 			}
 		} else
 		{
-			require_code('files');
 			$from_file=http_download_file($param[0],1024*1024*20/*reasonable limit*/,false);
 			$source=@imagecreatefromstring($from_file);
 			if ($source!==false)

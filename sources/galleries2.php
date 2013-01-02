@@ -100,6 +100,16 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 
 	fclose($file);
 
+	if (is_null($info))
+	{
+		require_code('mime_types');
+		$mime_type=get_mime_type($extension);
+		if (substr($mime_type,0,6)=='audio/')
+		{
+			$info=array(300,20,NULL); // IDEA: make configurable? ('300' and '20' also defined in sources/transcoding.php)
+		}
+	}
+
 	if (is_null($info)) return array(NULL,NULL,NULL);
 	return $info;
 }
@@ -681,13 +691,13 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
 
-	require_code('transcoding');
-	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
-
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'video_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'description'=>insert_lang_comcode($description,3),'cat'=>$cat,'validated'=>$validated,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
+
+	require_code('transcoding');
+	transcode_video($url,'videos',$id,'id','url',NULL,'video_width','video_height');
 
 	log_it('ADD_VIDEO',strval($id),$title);
 
@@ -707,6 +717,12 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	decache('side_galleries');
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
+
+	if (addon_installed('gallery_syndication',true))
+	{
+		require_code('gallery_syndication');
+		sync_video_syndication($id);
+	}
 
 	return $id;
 }
@@ -739,12 +755,11 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	$_title=$GLOBALS['SITE_DB']->query_select_value('videos','title',array('id'=>$id));
 	$_description=$GLOBALS['SITE_DB']->query_select_value('videos','description',array('id'=>$id));
 
+	$orig_url=$GLOBALS['SITE_DB']->query_select_value('videos','url',array('id'=>$id));
+
 	require_code('files2');
 	delete_upload('uploads/galleries','videos','url','id',$id,$url);
 	delete_upload('uploads/galleries_thumbs','videos','thumb_url','id',$id,$thumb_url);
-
-	require_code('transcoding');
-	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
 
 	if (!addon_installed('unvalidated')) $validated=1;
 
@@ -756,6 +771,9 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	}
 
 	$GLOBALS['SITE_DB']->query_update('videos',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'description'=>lang_remap_comcode($_description,$description),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
+
+	require_code('transcoding');
+	transcode_video($url,'videos',$id,'id','url',NULL,'video_width','video_height');
 
 	$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 
@@ -778,6 +796,12 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	require_lang('galleries');
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'videos',strval($id),$self_url,do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
+
+	if (addon_installed('gallery_syndication',true))
+	{
+		require_code('gallery_syndication');
+		sync_video_syndication($id,$orig_url!=$url);
+	}
 }
 
 /**

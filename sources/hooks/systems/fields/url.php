@@ -84,7 +84,6 @@ class Hook_fields_url
 		if ((is_null($link_captions_title)) || (substr($link_captions_title,0,1)=='!'))
 		{
 			$link_captions_title='';
-			require_code('files');
 			$downloaded_at_link=http_download_file($ev,3000,false);
 			if ((is_string($downloaded_at_link)) && (strpos($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'],'html')!==false) && ($GLOBALS['HTTP_MESSAGE']=='200'))
 			{

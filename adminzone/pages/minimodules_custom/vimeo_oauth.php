@@ -15,7 +15,53 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		gallery_syndicate
+ * @package		gallery_syndication
  */
 
-// TODO
+require_code('vimeo');
+require_code('oauth2'); // Contains some useful ocPortal-ties, for creating config options, etc, that applies to oauth1 also
+
+$service_name='vimeo';
+
+$title=get_page_title('OAUTH_TITLE',$service_name);
+
+$api_key=ensure_got_oauth_api_key($service_name);
+
+$vimeo=new phpVimeo(get_option($service_name.'_key'),get_option($service_name.'_client_secret'));
+
+$oauth_token=get_param('oauth_token','');
+if ($oauth_token=='')
+{
+	// Send to authorize
+	$token=$vimeo->getRequestToken();
+	$auth_url=$vimeo->getAuthorizeUrl($token['oauth_token'],'write');
+	require_code('site2');
+	assign_refresh($auth_url,0.0);
+	$echo=do_template('REDIRECT_SCREEN',array('URL'=>$auth_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+	$echo->evaluate_echo();
+	return;
+}
+
+// Got a response back...
+
+$vimeo->setToken(get_long_value('oauth_request_token'),get_long_value('oauth_request_token_secret'));
+$token=$vimeo->getAccessToken(get_param('oauth_verifier'));
+$vimeo->setToken($token['oauth_token'],$token['oauth_token_secret']);
+try // Check it...
+{
+	$vimeo->call('vimeo.test.null');
+}
+// Save if it passed through okay
+set_long_value($service_name.'_access_token',$token['oauth_token']);
+set_long_value($service_name.'_access_token_secret',$token['oauth_token_secret']);
+$out=do_lang_tempcode('OAUTH_SUCCESS',$service_name);
+catch (VimeoAPIException $e) // Error if not okay
+{
+	require_lang('gallery_syndication_vimeo');
+	attach_message(do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
+	$out=do_lang_tempcode('SOME_ERRORS_OCCURRED');
+}
+
+$title->evaluate_echo();
+
+$out->evaluate_echo();

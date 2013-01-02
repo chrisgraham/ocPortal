@@ -342,6 +342,7 @@ class Hook_addon_registry_core_form_interfaces
 			'data/ckeditor/skins/kama/skin.js',
 			'data/ckeditor/skins/kama/templates.css',
 			'data/ckeditor/themes/default/theme.js',
+			'data/spelling/index.html',
 			'data/spelling/aspell/.htaccess',
 			'data/spelling/aspell/index.html',
 			'data/spelling/spell-check-logic.php',

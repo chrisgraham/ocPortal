@@ -626,9 +626,11 @@ function check_shared_space_usage($extra)
  * @param  float			The timeout
  * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
  * @param  ?array			Files to send. Map between field to file path (NULL: none)
+ * @param  ?array			Extra headers to send (NULL: none)
+ * @param  ?string		HTTP verb (NULL: auto-decide based on other parameters)
  * @return ?string		The data downloaded (NULL: error)
  */
-function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
+function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL,$extra_headers=NULL,$http_verb=NULL)
 {
 	$url=str_replace(' ','%20',$url);
 
@@ -729,6 +731,9 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		}
 	}
 
+	if (is_null($http_verb))
+		$http_verb=(((is_null($post_params)) && (is_null($files)))?(($byte_limit===0)?'HEAD':'GET'):'POST');
+
 	if ($use_curl) // We'll have to try to use CURL
 	{
 		if (!is_null($files))
@@ -736,7 +741,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if (is_null($post_params)) $post_params=array();
 			foreach ($files as $upload_field=>$file_path)
 			{
-				$post_params[$upload_field]='@'.$file_path;
+				if (strpos($upload_field,'/')===false)
+				{
+					$post_params[$upload_field]='@'.$file_path;
+				} else
+				{
+					$post_params[$upload_field]='@'.$file_path.';type='.$upload_field;
+				}
 			}
 		}
 
@@ -773,11 +784,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,intval($timeout));
 				curl_setopt($ch,CURLOPT_TIMEOUT,intval($timeout));
 				curl_setopt($ch,CURLOPT_USERAGENT,$ua);
-				$headers=array();
-				if ($is_xml) $headers[]='Content-Type: application/xml';
-				if (!is_null($accept)) $headers[]='Accept: '.rawurlencode($accept);
-				if (!is_null($accept_charset)) $headers[]='Accept-Charset: '.rawurlencode($accept_charset);
-				if (!is_null($accept_language)) $headers[]='Accept-Language: '.rawurlencode($accept_language);
+				curl_setopt($ch,CURLOPT_CUSTOMREQUEST,$http_verb);
+				$curl_headers=array();
+				if ($is_xml) $curl_headers[]='Content-Type: application/xml';
+				if (!is_null($accept)) $curl_headers[]='Accept: '.rawurlencode($accept);
+				if (!is_null($accept_charset)) $curl_headers[]='Accept-Charset: '.rawurlencode($accept_charset);
+				if (!is_null($accept_language)) $curl_headers[]='Accept-Language: '.rawurlencode($accept_language);
+				if (!is_null($extra_headers)) $curl_headers=array_merge($curl_headers,$extra_headers);
 				if (is_null($files)) // Breaks file uploads for some reason
 					curl_setopt($ch,CURLOPT_HTTPHEADER,$headers);
 				curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
@@ -870,6 +883,87 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		return NULL;
 	}
 
+	$headers='';
+	if ((!is_null($cookies)) && (count($cookies)!=0)) $headers.='Cookie: '.$_cookies."\r\n";
+	$headers.='User-Agent: '.rawurlencode($ua)."\r\n";
+	if (!is_null($auth))
+	{
+		$headers.='Authorization: Basic '.base64_encode(implode(':',$auth))."==\r\n";
+	}
+	if (!is_null($extra_headers))
+	{
+		foreach ($extra_headers as $h)
+		{
+			$headers.=$h."\r\n";
+		}
+	}
+	if (!is_null($accept))
+	{
+		$headers.='Accept: '.rawurlencode($accept)."\r\n";
+	} else
+	{
+		$headers.="Accept: */*(\r\n"; // There's a mod_security rule that checks for this
+	}
+	if (!is_null($accept_charset))
+	{
+		$headers.='Accept-Charset: '.rawurlencode($accept_charset)."\r\n";
+	}
+	if (!is_null($accept_language))
+	{
+		$headers.='Accept-Language: '.rawurlencode($accept_language)."\r\n";
+	}
+	if (!is_null($referer))
+		$headers.='Referer: '.rawurlencode($referer)."\r\n";
+
+	$raw_payload='';
+	if ($_postdetails_params!='')
+	{
+		if ($is_xml)
+		{
+			$raw_payload.="Content-Type: application/xml\r\n";
+			$raw_payload.='Content-length: '.strval(strlen($_postdetails_params))."\r\n";
+			$raw_payload.="\r\n".$_postdetails_params."\r\n\r\n";
+		} else
+		{
+			if (is_null($files))
+			{
+				$raw_payload.='Content-type: application/x-www-form-urlencoded; charset='.get_charset()."\r\n";
+				$raw_payload.='Content-length: '.strval(strlen($_postdetails_params))."\r\n";
+				$raw_payload.="\r\n".$_postdetails_params."\r\n\r\n";
+			} else
+			{
+				$divider=uniqid('');
+				$raw_payload2='';
+				$raw_payload.='Content-type: multipart/form-data; boundary="--ocp'.$divider.'"; charset='.get_charset()."\r\n";
+				foreach ($post_params as $key=>$val)
+				{
+					$raw_payload2.='----ocp'.$divider."\r\n";
+					$raw_payload2.='Content-Disposition: form-data; name="'.urlencode($key).'"'."\r\n\r\n";
+					$raw_payload2.=$val."\r\n";
+				}
+				if (!is_null($files))
+				{
+					foreach ($files as $upload_field=>$file_path)
+					{
+						$raw_payload2.='----ocp'.$divider."\r\n";
+						if (strpos($upload_field,'/')===false)
+						{
+							$raw_payload2.='Content-Disposition: form-data; name="'.urlencode($upload_field).'"; filename="'.urlencode(basename($file_path)).'"'."\r\n";
+							$raw_payload2.='Content-Type: application/octet-stream'."\r\n\r\n";
+						} else
+						{
+							$raw_payload2.='Content-Type: '.$upload_field."\r\n\r\n";
+						}
+						$raw_payload2.=file_get_contents($file_path)."\r\n";
+					}
+				}
+				$raw_payload2.='----ocp'.$divider."--\r\n";
+				$raw_payload.='Content-length: '.strval(strlen($raw_payload2))."\r\n";
+				$raw_payload.="\r\n".$out2;
+			}
+		}
+	}
+
 	$errno=0;
 	$errstr='';
 	if ($url_parts['scheme']=='http')
@@ -913,7 +1007,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if ((!is_null($proxy)) && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
 		{
 			$out='';
-			$out.=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.1\r\n";
+			$out.=$http_verb.' '.str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.1\r\n";
 			$proxy_user=get_value('proxy_user',NULL,true);
 			if (!is_null($proxy_user))
 			{
@@ -925,70 +1019,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url2))." HTTP/1.1\r\n";
 		}
 		$out.='Host: '.$url_parts['host']."\r\n";
-		if ((!is_null($cookies)) && (count($cookies)!=0)) $out.='Cookie: '.$_cookies."\r\n";
-		$out.='User-Agent: '.rawurlencode($ua)."\r\n";
-		if (!is_null($auth))
-		{
-			$out.='Authorization: Basic '.base64_encode(implode(':',$auth))."==\r\n";
-		}
-		if (!is_null($accept))
-		{
-			$out.='Accept: '.rawurlencode($accept)."\r\n";
-		} else
-		{
-			$out.="Accept: */*(\r\n"; // There's a mod_security rule that checks for this
-		}
-		if (!is_null($accept_charset))
-		{
-			$out.='Accept-Charset: '.rawurlencode($accept_charset)."\r\n";
-		}
-		if (!is_null($accept_language))
-		{
-			$out.='Accept-Language: '.rawurlencode($accept_language)."\r\n";
-		}
-		if (!is_null($referer))
-			$out.='Referer: '.rawurlencode($referer)."\r\n";
-		if ($_postdetails_params!='')
-		{
-			if ($is_xml)
-			{
-				$out.="Content-Type: application/xml\r\n";
-				$out.='Content-length: '.strval(strlen($_postdetails_params))."\r\n";
-				$out.="\r\n".$_postdetails_params."\r\n\r\n";
-			} else
-			{
-				if (is_null($files))
-				{
-					$out.='Content-type: application/x-www-form-urlencoded; charset='.get_charset()."\r\n";
-					$out.='Content-length: '.strval(strlen($_postdetails_params))."\r\n";
-					$out.="\r\n".$_postdetails_params."\r\n\r\n";
-				} else
-				{
-					$divider=uniqid('');
-					$out2='';
-					$out.='Content-type: multipart/form-data; boundary="--ocp'.$divider.'"; charset='.get_charset()."\r\n";
-					foreach ($post_params as $key=>$val)
-					{
-						$out2.='----ocp'.$divider."\r\n";
-						$out2.='Content-Disposition: form-data; name="'.urlencode($key).'"'."\r\n\r\n";
-						$out2.=$val."\r\n";
-					}
-					if (!is_null($files))
-					{
-						foreach ($files as $upload_field=>$file_path)
-						{
-							$out2.='----ocp'.$divider."\r\n";
-							$out2.='Content-Disposition: form-data; name="'.urlencode($upload_field).'"; filename="'.urlencode(basename($file_path)).'"'."\r\n";
-							$out2.='Content-Type: application/octet-stream'."\r\n\r\n";
-							$out2.=file_get_contents($file_path)."\r\n";
-						}
-					}
-					$out2.='----ocp'.$divider."--\r\n";
-					$out.='Content-length: '.strval(strlen($out2))."\r\n";
-					$out.="\r\n".$out2;
-				}
-			}
-		}
+		$out.=$headers;
+		$out.=$raw_payload;
 		$out.="Connection: Close\r\n\r\n";
 
 		@fwrite($mysock,$out);
@@ -1240,19 +1272,52 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			@ini_set('allow_url_fopen','1');
 			$timeout_before=@ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout',strval(intval($timeout)));
-			if (is_null($byte_limit))
+			$opts=array(
+				'method'=>$http_verb,
+				'header'=>$headers,
+				'user_agent'=>$ua,
+				'content'=>$raw_payload,
+				'follow_location'=>$no_redirect?0:1,
+			);
+			$proxy=get_value('proxy',NULL,true);
+			if ($proxy=='') $proxy=NULL;
+			if (!is_null($proxy))
 			{
-				$read_file=@file_get_contents($url);
+				$port=get_value('proxy_port',NULL,true);
+				if (is_null($port)) $port='8080';
+				$proxy_user=get_value('proxy_user',NULL,true);
+				if (!is_null($proxy_user))
+				{
+					$proxy_password=get_value('proxy_password',NULL,true);
+					$opts['proxy']='tcp://'.$proxy_user.':'.$proxy_password.'@'.$proxy.':'.$port;
+				} else
+				{
+					$opts['proxy']='tcp://'.$proxy.':'.$port;
+				}
+			}
+			$context=stream_context_create(array('http'=>$opts));
+			if ((is_null($byte_limit)) && (is_null($write_to_file)))
+			{
+				$read_file=@file_get_contents($url,false,$context);
 			} else
 			{
-				$_read_file=@fopen($url,'rb');
+				$_read_file=@fopen($url,'rb',false,$context);
 				if ($_read_file!==false)
 				{
 					$read_file='';
-					while ((!feof($_read_file)) && (strlen($read_file)<$byte_limit)) $read_file.=fread($_read_file,1024);
+					while ((!feof($_read_file)) && (strlen($read_file)<$byte_limit))
+					{
+						$read_file.=fread($_read_file,1024);
+						if (!is_null($write_to_file))
+						{
+							fwrite($write_to_file,$read_file);
+							$read_file='';
+						}
+					}
 					fclose($_read_file);
 				} else $read_file=false;
 			}
+			if ((!is_null($byte_limit)) && ($read_file!==false)) $read_file=substr($read_file,0,$byte_limit);
 			@ini_set('allow_url_fopen','0');
 			@ini_set('default_socket_timeout',$timeout_before);
 			if ($read_file!==false)

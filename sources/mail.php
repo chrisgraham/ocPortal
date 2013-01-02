@@ -551,7 +551,6 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 				$contents=file_get_contents($path);
 			} else
 			{
-				require_code('files');
 				$contents=http_download_file($path,NULL,false);
 				if (is_null($contents)) continue;
 			}

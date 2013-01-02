@@ -36,7 +36,7 @@ class Module_galleries
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=9;
+		$info['version']=10;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -237,6 +237,8 @@ class Module_galleries
 
 			$GLOBALS['SITE_DB']->create_table('video_transcoding',array(
 				't_id'=>'*ID_TEXT',
+				't_local_id'=>'?AUTO_LINK',
+				't_local_id_field'=>'ID_TEXT',
 				't_error'=>'LONG_TEXT',
 				't_url'=>'URLPATH',
 				't_table'=>'ID_TEXT',
@@ -244,7 +246,7 @@ class Module_galleries
 				't_orig_filename_field'=>'ID_TEXT',
 				't_width_field'=>'ID_TEXT',
 				't_height_field'=>'ID_TEXT',
-				't_output_filename'=>'ID_TEXT',
+				't_output_filename'=>'ID_TEXT', // This is the filename in uploads/galleries where the transcoder is expected to place new files. If blank, this means that the post-transcode API call will be explicitly fed a URL instead.
 			));
 		}
 
@@ -266,6 +268,17 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->alter_table_field('images','comments','LONG_TRANS','description');
 			$GLOBALS['SITE_DB']->alter_table_field('videos','comments','LONG_TRANS','description');
 			$GLOBALS['SITE_DB']->delete_table_field('galleries','teaser');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<10))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('video_transcoding','t_local_id','?AUTO_LINK',NULL);
+			$GLOBALS['SITE_DB']->add_table_field('video_transcoding','t_local_id_field','ID_TEXT','');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<10))
+		{
+			$GLOBALS['SITE_DB']->create_index('video_transcoding','t_local_id',array('t_local_id'));
 		}
 	}
 

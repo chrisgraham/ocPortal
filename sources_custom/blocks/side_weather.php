@@ -96,7 +96,6 @@ class Block_side_weather
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_weather_codes','w_code',array('w_string'=>$loc_code));
 			if (is_null($test))
 			{
-				require_code('files');
 				$result=http_download_file('http://uk.weather.yahoo.com/search/weather?p='.urlencode($loc_code));
 				$matches=array();
 				if (preg_match('#<a href=\'/redirwoei/(\d+)\'>#',$result,$matches)!=0)

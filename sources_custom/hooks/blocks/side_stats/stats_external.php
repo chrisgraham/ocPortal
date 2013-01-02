@@ -165,7 +165,6 @@ function getpr($url)
 	$ch=getch($url);
 	$errno='0';
 	$errstr='';
-	require_code('files');
 	$data=http_download_file('http://toolbarqueries.google.com/search?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false);
 	if (is_null($data)) return '';
 

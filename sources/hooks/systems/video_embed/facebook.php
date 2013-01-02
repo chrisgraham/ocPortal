@@ -49,7 +49,6 @@ class Hook_video_embed_facebook
 		$matches=array();
 		if (preg_match('#^http://www\.facebook\.com/video/video\.php\?v=(\w+)#',$src_url,$matches)!=0)
 		{
-			require_code('files');
 			$contents=http_download_file($src_url);
 			if (preg_match('#addVariable\("thumb_url", "([^"]*)"\);#',$contents,$matches)!=0)
 			{

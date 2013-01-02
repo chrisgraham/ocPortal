@@ -72,9 +72,13 @@ class Hook_fields_video
 	 * @param  mixed			The raw value
 	 * @param  integer		Position in fieldset
 	 * @param  ?array			List of fields the output is being limited to (NULL: N/A)
+	 * @param  ?ID_TEXT		The table we store in (NULL: N/A)
+	 * @param  ?AUTO_LINK	The ID of the row in the table (NULL: N/A)
+	 * @param  ?ID_TEXT		Name of the ID field in the table (NULL: N/A)
+	 * @param  ?ID_TEXT		Name of the URL field in the table (NULL: N/A)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev,$i,$only_fields)
+	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL)
 	{
 		if (is_object($ev)) return $ev;
 
@@ -84,7 +88,10 @@ class Hook_fields_video
 		require_code('galleries2');
 		require_code('transcoding');
 
-		$ev=transcode_video($ev,'catalogue_efv_short','cv_value',NULL,NULL,NULL);
+		if ((!is_null($table)) && (!is_null($id)) && (!is_null($id_field)) && (!is_null($url_field)))
+		{
+			$ev=transcode_video($ev,$table,$id,$id_field,$url_field,NULL,NULL,NULL);
+		}
 
 		$thumb_url=create_video_thumb($ev);
 

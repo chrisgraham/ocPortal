@@ -52,12 +52,11 @@ class Hook_video_embed_vimeo
 			$test=get_long_value('vimeo_thumb_for__'.$matches[1]);
 			if ($test!==NULL) return $test;
 
-			require_code('files');
 			$html=http_download_file($src_url);
 			$matches2=array();
 			if (preg_match('#<meta property="og:image" content="([^"]+)"#',$html,$matches2)!=0)
 			{
-				set_long_value('vimeo_thumb_for__'.$matches[1],$matches2[1]);
+				//set_long_value('vimeo_thumb_for__'.$matches[1],$matches2[1]);		Actually this only happens occasionally (on add/edit), so not needed. Caching would bung up DB and make editing a pain.
 				return $matches[1];
 			}
 		}

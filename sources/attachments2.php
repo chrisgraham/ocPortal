@@ -267,27 +267,32 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							}
 
 							$url='uploads/attachments/'.$_file;
+
+							$attachment_id=$connection->query_insert('attachments',
+								array(
+									'a_member_id'=>get_member(),
+									'a_file_size'=>$file_details['size'],
+									'a_url'=>$url,
+									'a_thumb_url'=>$thumb_url,
+									'a_original_filename'=>basename($entry['path']),
+									'a_num_downloads'=>0,
+									'a_last_downloaded_time'=>time(),
+									'a_description'=>$description,
+									'a_add_time'=>time()
+								),
+								true
+							);
+							$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
+
 							if (addon_installed('galleries'))
 							{
 								require_code('images');
 								if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
 								{
 									require_code('transcoding');
-									$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
+									transcode_video($url,'attachments',$attachment_id,'id','a_url','a_original_filename',NULL,NULL);
 								}
 							}
-
-							$attachment_id=$connection->query_insert('attachments',array(
-								'a_member_id'=>get_member(),
-								'a_file_size'=>$file_details['size'],
-								'a_url'=>$url,
-								'a_thumb_url'=>$thumb_url,
-								'a_original_filename'=>basename($entry['path']),
-								'a_num_downloads'=>0,
-								'a_last_downloaded_time'=>time(),
-								'a_description'=>$description,
-								'a_add_time'=>time()),true);
-							$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
 
 							if ($comcode_text)
 							{
