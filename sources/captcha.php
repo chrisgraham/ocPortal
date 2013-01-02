@@ -186,13 +186,13 @@ function securityimage_script()
 		</head>
 		<body>
 		';
-		echo '<div style="width: '.strval($width).'px; font-size: 0.001px; line-height: 0">';
+		echo '<div style="width: '.strval($width).'px; font-size: 0; line-height: 0">';
 		for ($j=0;$j<$height;$j++)
 		{
 			for ($i=0;$i<$width;$i++)
 			{
 				$colour=imagecolorsforindex($img,imagecolorat($img,$i,$j));
-				echo '<span style="overflow: hidden; font-size: 0px; display: inline-block; background: rgb('.strval($colour['red']).','.strval($colour['green']).','.strval($colour['blue']).'); width: 1px; height: 1px"></span>';
+				echo '<span style="vertical-align: bottom; overflow: hidden; display: inline-block; -webkit-text-size-adjust: none; text-size-adjust: none; background: rgb('.strval($colour['red']).','.strval($colour['green']).','.strval($colour['blue']).'); width: 1px; height: 1px"></span>';
 			}
 		}
 		echo '</div>';
