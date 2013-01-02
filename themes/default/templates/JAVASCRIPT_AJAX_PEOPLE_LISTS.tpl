@@ -38,7 +38,10 @@ function update_ajax_member_list(target,special,delayed,e)
 	target.setAttribute('autocomplete','off');
 	if (target.disabled) return;
 
-	if (!target.onblur) target.onblur=function () { setTimeout(function() { close_down(); } ,300); }
+	if (!browser_matches('ios'))
+	{
+		if (!target.onblur) target.onblur=function () { setTimeout(function() { close_down(); } ,300); }
+	}
 
 	if (!delayed) // A delay, so as not to throw out too many requests
 	{
@@ -73,20 +76,28 @@ function update_ajax_member_list_response(result,list_contents)
 
 	close_down();
 
+	var data_list=(typeof document.createElement('datalist').options!='undefined');
+
 	//if (list_contents.childNodes.length==0) return;
-	var list=document.createElement('select');
+	var list=document.createElement(data_list?'datalist':'select');
 	list.className='people_list';
-	if (list_contents.childNodes.length==1) // We need to make sure it is not a dropdown. Normally we'd use size (multiple isn't correct, but we'll try this for 1 as it may be more stable on some browsers with no side effects)
+	list.setAttribute('id','ajax_list');
+	if (data_list)
 	{
-		list.setAttribute('multiple','multiple');
+		window.current_list_for.setAttribute('list','ajax_list');
 	} else
 	{
-		list.setAttribute('size',list_contents.childNodes.length+1);
+		if (list_contents.childNodes.length==1) // We need to make sure it is not a dropdown. Normally we'd use size (multiple isn't correct, but we'll try this for 1 as it may be more stable on some browsers with no side effects)
+		{
+			list.setAttribute('multiple','multiple');
+		} else
+		{
+			list.setAttribute('size',list_contents.childNodes.length+1);
+		}
+		list.style.position='absolute';
+		list.style.left=(find_pos_x(window.current_list_for))+'px';
+		list.style.top=(find_pos_y(window.current_list_for)+find_height(window.current_list_for))+'px';
 	}
-	list.setAttribute('id','ajax_list');
-	list.style.position='absolute';
-	list.style.left=(find_pos_x(window.current_list_for))+'px';
-	list.style.top=(find_pos_y(window.current_list_for)+find_height(window.current_list_for))+'px';
 	setTimeout(function() { list.style.zIndex++; } ,100); // Fixes Opera by causing a refresh
 
 	if (list_contents.childNodes.length==0) return;
@@ -106,6 +117,9 @@ function update_ajax_member_list_response(result,list_contents)
 	item.innerText='{!SUGGESTIONS_ONLY;}'.toUpperCase();
 	list.appendChild(item);
 	window.current_list_for.parentNode.appendChild(list);
+
+	if (data_list) return;
+
 	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(list,0.0);
@@ -239,7 +253,7 @@ function update_ajax_member_list_response(result,list_contents)
 		return null;
 	}
 
-	add_event_listener_abstract(list,'click',make_selection,false);
+	add_event_listener_abstract(list,browser_matches('ios')?'change':'click',make_selection,false);
 
 	window.current_list_for=null;
 }

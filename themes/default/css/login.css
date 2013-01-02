@@ -83,7 +83,3 @@ table.login_page_form {
 .login_note a {
 	font-size: 1.1em;
 }
-
-.openid_wrap {
-	overflow: scroll;
-}

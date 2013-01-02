@@ -357,7 +357,6 @@ function ModalWindow()
 			if (!this.box) return;
 
 			var dim=this.getPageSize();
-
 			if (width>dim.pageWidth) width=dim.pageWidth-30;
 
 			var boxWidth=((width) ? (width + 8) : (dim.pageWidth / 4))  + 'px';
@@ -773,7 +772,7 @@ function ModalWindow()
 		},
 
 		getPageSize: function() {
-			return { 'pageWidth': this.topWindow.get_window_scroll_width(this.topWindow), 'pageHeight': this.topWindow.get_window_scroll_height(this.topWindow), 'windowWidth' : this.topWindow.get_window_width(), 'windowHeight': this.topWindow.get_window_height() };
+			return { 'pageWidth': this.topWindow.get_window_width(this.topWindow)/*intentionally not scroll width, we don't want overlays over horizontal scrolling*/, 'pageHeight': this.topWindow.get_window_scroll_height(this.topWindow), 'windowWidth' : this.topWindow.get_window_width(), 'windowHeight': this.topWindow.get_window_height() };
 		}
 	};
 }
