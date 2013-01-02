@@ -20,12 +20,16 @@ window.overlay_zIndex=999999; // Has to be higher than plupload, which is 99999
 
 function open_link_as_overlay(ob,width,height,target)
 {
+	{+START,IF,{$MOBILE}}
+		if (typeof height=='undefined') return true; // Would probably not fit, and unfortunately cannot scroll
+	{+END}
+
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		if ((typeof width=='undefined') || (!width)) var width=800;
 		if ((typeof height=='undefined') || (!height)) var height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
 		if ((typeof target=='undefined') || (!target)) var target='_top';
-		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
+		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1&overlay=1',null,'width='+width+';height='+height,target);
 		return false;
 	{+END}
 
@@ -503,6 +507,7 @@ function ModalWindow()
 						'name': 'overlay_iframe',
 						'id': 'overlay_iframe',
 						'allowTransparency': 'true',
+						//'seamless': 'seamless',	Not supported, and therefore testable yet. Would be great for mobile browsing.
 						'styles' : {
 							'width': this.width?(this.width+'px'):'100%',
 							'height': this.height?(this.height+'px'):'50%',

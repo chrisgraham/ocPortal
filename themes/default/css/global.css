@@ -359,6 +359,7 @@ iframe {
 /* Consider .website_body as 'body': it is just we cannot put our styles directly on body because sometimes this gets used in things we should not mess with such as the WYSIWYG editors frame (which is #htmlarea) and e-mails */
 body.website_body {
 	padding: 0 !important;
+	margin: 0;
 	color: {$GET,slightly_seeded_text};
 	background: {$GET,main_background};
 }
@@ -624,6 +625,22 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	padding-{!en_left}: 1em;
 	padding-{!en_right}: 1em;
 }
+
+{+START,IF,{$MOBILE}}
+	.global_middle {
+		padding-{!en_left}: 0.4em;
+		padding-{!en_right}: 0.4em;
+		{$BETA_CSS_PROPERTY,text-size-adjust: none;}
+	}
+
+	.overlay {
+		width: 285px;
+	}
+
+	.overlay h1 {
+		display: none;
+	}
+{+END}
 
 body.popup_spacer {
 	padding: 1em !important;

@@ -25,15 +25,17 @@
 
 			<div class="float_surrounder">
 				{+START,IF,{$MOBILE}}
-					<p class="constrain_field">
-						<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label>
-						<input maxlength="80" class="wide_field" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
-					</p>
+					<div class="login_page_form">
+						<p class="constrain_field">
+							<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label>
+							<input maxlength="80" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="15" />
+						</p>
 
-					<p class="constrain_field">
-						<label for="password">{!PASSWORD}</label>
-						<input maxlength="255" class="wide_field" type="password" id="password" name="password" size="25" />
-					</p>
+						<p class="constrain_field">
+							<label for="password">{!PASSWORD}</label>
+							<input maxlength="255" type="password" id="password" name="password" size="15" />
+						</p>
+					</div>
 				{+END}
 
 				{+START,IF,{$NOT,{$MOBILE}}}
@@ -89,9 +91,11 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{$BLOCK,block=openid,failsafe=1}}
-		<h2>Login using OpenID</h2>
+		<div class="openid_wrap">
+			<h2>Login using OpenID</h2>
 
-		{$BLOCK,block=openid}
+			{$BLOCK,block=openid}
+		</div>
 	{+END}
 </div>
 
