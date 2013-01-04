@@ -189,6 +189,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]alternate_search_join_type[/tt] -- set this to '1' if your database server does 'JOIN' translate table searches intractably slowly, and 'LEFT JOIN' ones fast. This is the exact opposite of the behaviour of most MySQL versions, but we think we have seen a case of this so on some MySQL servers to make catalogue searches tractable you might need to enable this.
  - [tt]catalogue_limit_cat_field_load__<cataloguename>[/tt] -- set this to '1' if you want that catalogue to not have all fields loaded on category views, an optimisation that reduces templating flexibility
  - [tt]canonical_keep_params[/tt] -- set this to a comma-separated list of keep_ parameters that should be allowed to propagate within search engines.
+ - [tt]disable_sitemap_for__*[/tt] -- disable sitemap generation for a particular page (e.g. if there's too much data in it and the server can't cope, and the data isn't so important anyway)
 
 [title="3"]Hidden 'keep' parameters[/title]
 
