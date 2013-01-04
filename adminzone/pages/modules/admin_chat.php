@@ -75,6 +75,7 @@ class Module_admin_chat extends standard_aed_module
 	 */
 	function misc()
 	{
+		require_lang('menus');
 		$also_url=build_url(array('page'=>'cms_chat'),get_module_zone('cms_chat'));
 		attach_message(do_lang_tempcode('ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
 

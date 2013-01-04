@@ -101,6 +101,7 @@ class Module_cms_chat
 	{
 		if (has_actual_page_access(get_member(),'admin_chat'))
 		{
+			require_lang('menus');
 			$also_url=build_url(array('page'=>'admin_chat'),get_module_zone('admin_chat'));
 			attach_message(do_lang_tempcode('ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
 		}
