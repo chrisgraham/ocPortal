@@ -52,6 +52,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
 
 		// See if we can get better titles
 		require_code('feedback');
+		$num_done=0;
 		foreach ($categories as $i=>$c)
 		{
 			$matches=array();
@@ -59,9 +60,17 @@ class Hook_Notification_comment_posted extends Hook_Notification
 			{
 				$details=get_details_behind_feedback_code($matches[1],$matches[2]);
 				$new_title=$details[0];
-				if (!is_null($new_title))
+				if ((!is_null($new_title)) && ($new_title!=''))
 				{
 					$categories[$i]['title']=$new_title;
+					$num_done++;
+					if ($num_done>200); // Reasonable limit
+					{
+						unset($categories[$i]);
+					}
+				} else
+				{
+					unset($categories[$i]);
 				}
 			}
 		}
