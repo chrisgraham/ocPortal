@@ -77,7 +77,7 @@ function init__minikernel()
 	set_error_handler('ocportal_error_handler');
 	if (function_exists('error_get_last')) register_shutdown_function('catch_fatal_errors');
 	@ini_set('track_errors','1');
-	$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
 	@ini_set('ocproducts.type_strictness','1');
 
@@ -108,7 +108,7 @@ function get_html_trace()
 	if (!function_exists('debug_backtrace')) return new ocp_tempcode();
 	if (!function_exists('var_export')) return new ocp_tempcode();
 	$x=@ob_get_contents(); @ob_end_clean(); if (is_string($x)) @print($x);
-	$GLOBALS['SUPRESS_ERROR_DEATH']=true;
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
 	$trace=new ocp_tempcode();
 	foreach ($_trace as $i=>$stage)
@@ -172,7 +172,7 @@ function get_html_trace()
 		}
 		$trace->attach(do_template('STACK_TRACE_WRAP',array('_GUID'=>'748860b0c83ea19d56de594fdc04fe12','TRACES'=>$traces)));
 	}
-	$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
 	return do_template('STACK_TRACE_HYPER_WRAP',array('_GUID'=>'da6c0ef0d8d793807d22e51555d73929','CONTENT'=>$trace,'POST'=>''));
 }
@@ -248,7 +248,7 @@ function catch_fatal_errors()
 			case E_CORE_ERROR:
 			case E_COMPILE_ERROR:
 			case E_USER_ERROR:
-				$GLOBALS['SUPRESS_ERROR_DEATH']=false; // We can't recover as we've lost our execution track. Force a nice death rather than trying to display a recoverable error.
+				$GLOBALS['SUPPRESS_ERROR_DEATH']=false; // We can't recover as we've lost our execution track. Force a nice death rather than trying to display a recoverable error.
 				$GLOBALS['DYING_BADLY']=true; // Does not actually work unfortunately. @'d calls never get here at all.
 				ocportal_error_handler($error['type'],$error['message'],$error['file'],$error['line']);
 		}
@@ -283,7 +283,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 		case E_WARNING:
 		case E_NOTICE:
 			@ob_end_clean(); // We can't be doing output buffering at this point
-			if (!$GLOBALS['SUPRESS_ERROR_DEATH'])
+			if (!$GLOBALS['SUPPRESS_ERROR_DEATH'])
 			{
 				fatal_exit('PHP ['.strval($errno).'] '.$errstr);
 			} else

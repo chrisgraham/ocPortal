@@ -240,7 +240,11 @@ function init__site()
  */
 function attach_message($message,$type='inform')
 {
-	if ((error_reporting()==0) && ($type=='warn')) return ''; // Supressing errors
+	if ((error_reporting()==0) && ($type=='warn')) return ''; // Suppressing errors
+
+	static $am_looping=false;
+	if ($am_looping) return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
+	$am_looping=true;
 
 	static $am_looping=false;
 	if ($am_looping) return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)

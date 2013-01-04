@@ -444,7 +444,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				'c_member_id'=>$to_member_id,
 				'c_frequency'=>$setting,
 				'c_time'=>time(),
-			),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is supressed*/);
+			),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
 
 			$needs_manual_cc=false;
 		}

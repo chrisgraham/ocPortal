@@ -197,8 +197,8 @@ function _parse_command_actual($no_term_needed=false)
 // Choice{"FUNCTION" | variable "DEC" | variable "INC" | target assignment_operator expression | function "BRACKET_OPEN" comma_expressions "BRACKET_CLOSE" | "IF" expression command if_rest? | "SWITCH" expression "CURLY_OPEN" cases "CURLY_CLOSE" | "FOREACH" "BRACKET_OPEN" expression "AS" _foreach "BRACKET_CLOSE" command | "FOR" "BRACKET_OPEN" command expression command "BRACKET_CLOSE" command | "DO" command "WHILE" "BRACKET_OPEN" expression "BRACKET_CLOSE" | "WHILE" "BRACKET_OPEN" expression "BRACKET_CLOSE" command | "RETURN" | "CONTINUE" | "BREAK" | "BREAK" expression | "CONTINUE" expression | "RETURN" expression | "GLOBAL" comma_variables | "ECHO" expression}
 
 	$next=pparse__parser_peek(true);
-	$supress_error=($next[0]=='SUPRESS_ERROR');
-	if ($supress_error)
+	$suppress_error=($next[0]=='SUPPRESS_ERROR');
+	if ($suppress_error)
 	{
 		pparse__parser_next();
 		$next=pparse__parser_peek(true);
@@ -215,14 +215,14 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'DEC':
 			pparse__parser_next();
-			$variable=_parse_variable($supress_error);
+			$variable=_parse_variable($suppress_error);
 			$command=array('PRE_DEC',$variable,$GLOBALS['i']);
 			if (!$no_term_needed) _test_command_end();
 			break;
 
 		case 'INC':
 			pparse__parser_next();
-			$variable=_parse_variable($supress_error);
+			$variable=_parse_variable($suppress_error);
 			$command=array('PRE_INC',$variable,$GLOBALS['i']);
 			if (!$no_term_needed) _test_command_end();
 			break;
@@ -281,12 +281,12 @@ function _parse_command_actual($no_term_needed=false)
 				pparse__parser_expect('BRACKET_OPEN');
 				$parameters=_parse_comma_expressions();
 				pparse__parser_expect('BRACKET_CLOSE');
-				$command=array('CALL_DIRECT',$identifier,$parameters,$supress_error,$GLOBALS['i']);
+				$command=array('CALL_DIRECT',$identifier,$parameters,$suppress_error,$GLOBALS['i']);
 			}
 			while (pparse__parser_peek()=='OBJECT_OPERATOR')
 			{
 				pparse__parser_next();
-				$command=_parse_call_chain($command,$supress_error);
+				$command=_parse_call_chain($command,$suppress_error);
 			}
 			//log_special('functions',$identifier.'/'.count($parameters));
 			if (!$no_term_needed) _test_command_end();
@@ -343,12 +343,12 @@ function _parse_command_actual($no_term_needed=false)
 			$expression=_parse_expression();
 			pparse__parser_expect('AS');
 			// Choice{"variable" "DOUBLE_ARROW" "variable" | "variable"}
-			$variable=_parse_variable($supress_error);
+			$variable=_parse_variable($suppress_error);
 			$after_variable=pparse__parser_peek();
 			if ($after_variable=='DOUBLE_ARROW')
 			{
 				pparse__parser_next();
-				$_foreach=array($variable,_parse_variable($supress_error));
+				$_foreach=array($variable,_parse_variable($suppress_error));
 			} else
 			{
 				$_foreach=$variable;
@@ -502,7 +502,7 @@ function _parse_command_actual($no_term_needed=false)
 	return $command;
 }
 
-function _parse_call_chain($command=array(),$supress_error=false)
+function _parse_call_chain($command=array(),$suppress_error=false)
 {
 	$i=pparse__parser_expect('IDENTIFIER');		// Silly PHP syntax makes $scoped_variables and scoped_functions() different, but member_variables and member_functions() the same...
 	switch (pparse__parser_peek())
@@ -512,7 +512,7 @@ function _parse_call_chain($command=array(),$supress_error=false)
 			$args=_parse_comma_expressions();
 			pparse__parser_expect('BRACKET_CLOSE');		// Consume the ")"
 			$expression=$command; // Actually the 'command' was an expression, on which we will call our object
-			$command=array('CALL_METHOD',$expression,$args,$supress_error,$GLOBALS['i']);
+			$command=array('CALL_METHOD',$expression,$args,$suppress_error,$GLOBALS['i']);
 			break;
 		default:
 			// Nothing of interest. Let the next pass handle it.
@@ -905,8 +905,8 @@ function _parse_expression_inner()
 	{
 		$next='*literal';
 	}
-	$supress_error=($next=='SUPRESS_ERROR');
-	if ($supress_error)
+	$suppress_error=($next=='SUPPRESS_ERROR');
+	if ($suppress_error)
 	{
 		pparse__parser_next();
 		$next=pparse__parser_peek();
@@ -955,7 +955,7 @@ function _parse_expression_inner()
 				pparse__parser_next();
 				$parameters=_parse_comma_expressions();
 				pparse__parser_expect('BRACKET_CLOSE');
-				$expression=array('CALL_DIRECT',$next[1],$parameters,$supress_error,$GLOBALS['i']);
+				$expression=array('CALL_DIRECT',$next[1],$parameters,$suppress_error,$GLOBALS['i']);
 				//log_special('functions',$next[1].'/'.count($parameters));
 			} else
 			{
@@ -1004,7 +1004,7 @@ function _parse_expression_inner()
 			$next_3=pparse__parser_peek_dist(1);
 			if ($next_3=='EQUAL')
 			{
-				$target=_parse_variable($supress_error);
+				$target=_parse_variable($suppress_error);
 				pparse__parser_expect('EQUAL');
 				$_expression=_parse_expression();
 				$expression=array('EMBEDDED_ASSIGNMENT','EQUAL',$target,$_expression,$GLOBALS['i']);
@@ -1024,32 +1024,32 @@ function _parse_expression_inner()
 
 		case 'REFERENCE':
 			pparse__parser_next();
-			$variable=_parse_variable($supress_error);
+			$variable=_parse_variable($suppress_error);
 			$expression=array('VARIABLE_REFERENCE',$variable,$GLOBALS['i']);
 			break;
 
 		default: // By elimination: Must be a variable or a call chained to a variable
-			$expression=_parse_variable($supress_error,true);
+			$expression=_parse_variable($suppress_error,true);
 	}
 	if (in_array($expression[0],array('CALL_DIRECT','CALL_INDIRECT','CALL_METHOD'),true))
 	{
 		while (pparse__parser_peek()=='OBJECT_OPERATOR')
 		{
 			pparse__parser_next();
-			$expression=_parse_call_chain($expression,$supress_error);
+			$expression=_parse_call_chain($expression,$suppress_error);
 		}
 	}
 	return $expression;
 }
 
-function _parse_variable($supress_error,$can_be_dangling_method_call_instead=false)
+function _parse_variable($suppress_error,$can_be_dangling_method_call_instead=false)
 {
 // Choice{"variable" | "variable" "OBJECT_OPERATOR" variable | "variable" "OBJECT_OPERATOR" "IDENTIFIER" | "variable" "EXTRACT_OPEN" expression "EXTRACT_CLOSE"}
 
 	$variable=pparse__parser_next(true);
 	$next=pparse__parser_peek(true);
-	$supress_error=$supress_error || ($next[0]=='SUPRESS_ERROR');
-	if ($next[0]=='SUPRESS_ERROR')
+	$suppress_error=$suppress_error || ($next[0]=='SUPPRESS_ERROR');
+	if ($next[0]=='SUPPRESS_ERROR')
 	{
 		pparse__parser_next();
 		$next=pparse__parser_peek(true);
@@ -1068,11 +1068,11 @@ function _parse_variable($supress_error,$can_be_dangling_method_call_instead=fal
 			{
 				log_warning('Indirect call');
 			}
-			return array('CALL_INDIRECT',$variable,$parameters,$supress_error,$GLOBALS['i']);
+			return array('CALL_INDIRECT',$variable,$parameters,$suppress_error,$GLOBALS['i']);
 		}
 	}
 
-	$variable_chain=_parse_variable_dereferencing_chain_segment($supress_error,$can_be_dangling_method_call_instead);
+	$variable_chain=_parse_variable_dereferencing_chain_segment($suppress_error,$can_be_dangling_method_call_instead);
 	if ($variable_chain!==array())
 	{
 		// Restructure the chain around any particular calls made
@@ -1110,7 +1110,7 @@ function _parse_is_non_pure_variable($actual_expression)
 	return _parse_is_non_pure_variable($actual_expression[2]);
 }
 
-function _parse_variable_dereferencing_chain_segment($supress_error)
+function _parse_variable_dereferencing_chain_segment($suppress_error)
 {
 	$next=pparse__parser_peek();
 	switch ($next)
@@ -1124,7 +1124,7 @@ function _parse_variable_dereferencing_chain_segment($supress_error)
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
-			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($supress_error);
+			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
 			$variable=array('DEREFERENCE',$calling,$tunnel,$GLOBALS['i']);
 			break;
 
@@ -1142,7 +1142,7 @@ function _parse_variable_dereferencing_chain_segment($supress_error)
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
-			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($supress_error);
+			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
 			$variable=array('ARRAY_AT',$expression,$tunnel,$GLOBALS['i']);
 			break;
 
@@ -1153,8 +1153,8 @@ function _parse_variable_dereferencing_chain_segment($supress_error)
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
-			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($supress_error);
-			$variable=array('CALL_METHOD',NULL/*will be subbed later for preceding part of chain*/,$args,$supress_error,$GLOBALS['i'],$tunnel);
+			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
+			$variable=array('CALL_METHOD',NULL/*will be subbed later for preceding part of chain*/,$args,$suppress_error,$GLOBALS['i'],$tunnel);
 			break;
 
 		/*case 'CURLY_OPEN':  Not in PHP 6

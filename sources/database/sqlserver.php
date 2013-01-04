@@ -407,7 +407,7 @@ class Database_Static_sqlserver
 			}
 		}
 
-		$GLOBALS['SUPRESS_ERROR_DEATH']=true;
+		$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 		if (function_exists('sqlsrv_query'))
 		{
 			$results=sqlsrv_query($db,$query,array(),array('Scrollable'=>'static'));
@@ -415,7 +415,7 @@ class Database_Static_sqlserver
 		{
 			$results=mssql_query($query,$db);
 		}
-		$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+		$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 		if (($results===false) && (strtoupper(substr($query,0,12))=='INSERT INTO ') && (strpos($query,'(id, ')!==false))
 		{
 			$pos=strpos($query,'(');
