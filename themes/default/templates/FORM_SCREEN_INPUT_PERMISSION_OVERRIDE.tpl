@@ -3,7 +3,7 @@
 	<select onclick="this.onchange(event);" onchange="permissions_overridden('access_{GROUP_ID%}');" onmouseover="if (this.options[this.selectedIndex].value=='-1') show_permission_setting(this,event);" tabindex="{TABINDEX*}" title="{TITLE*}" id="access_{GROUP_ID*}_sp_{SP*}" name="access_{GROUP_ID*}_sp_{SP*}">
 		{$,The order of options here should not be changed with unless Javascript is also recoded}
 		{+START,IF,{$EQ,{CODE},-1}}
-			<option selected="selected" value="-1">&mdash;</option>
+			<option selected="selected" value="-1">/</option>
 		{+END}
 		{+START,IF,{$NEQ,{CODE},-1}}
 			<option value="-1">{!USE_DEFAULT}</option>
