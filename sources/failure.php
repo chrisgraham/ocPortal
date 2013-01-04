@@ -289,7 +289,7 @@ function _generic_exit($text,$template)
 	}
 
 	global $EXITING;
-	if (running_script('upgrader')) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
+	if ((running_script('upgrader')) || (!function_exists('get_screen_title'))) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
 
 	if (($EXITING==1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 	$EXITING++;
