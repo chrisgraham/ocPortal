@@ -632,7 +632,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		foreach ($to_email as $i=>$to)
 		{
 			//exit($headers.chr(10).$sending_message);
-			$GLOBALS['SUPRESS_ERROR_DEATH']=true;
+			$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 
 			$additional='';
 			if (get_option('enveloper_override')=='1') $additional='-f '.$website_email;
@@ -651,7 +651,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			{
 				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			}
-			$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+			$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 		}
 	}
 

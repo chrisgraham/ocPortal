@@ -1,3 +1,21 @@
+{+START,SET,location}
+	{+START,SET,_location}
+		{+START,IF_NON_EMPTY,{LOCATION}}
+			{LOCATION}
+		{+END}
+		{+START,IF_EMPTY,{LOCATION}}
+			<em>{!UNKNOWN}</em>
+		{+END}
+	{+END}
+
+	{+START,IF_EMPTY,{AT_URL}}
+		{$GET,_location}
+	{+END}
+	{+START,IF_NON_EMPTY,{AT_URL}}
+		<a href="{AT_URL*}">{$TRIM,{$GET,_location}}</a>
+	{+END}
+{+END}
+
 <tr class="{$CYCLE,results_table_zebra,zebra_0,zebra_1}">
 	<td class="dottedborder_barrier_b_nonrequired">
 		{MEMBER}
@@ -8,17 +26,7 @@
 		{+START,IF,{$MOBILE}}
 			{+START,IF,{$HAS_SPECIFIC_PERMISSION,show_user_browsing}}
 				<p class="associated_details">
-					{+START,IF_EMPTY,{AT_URL}}
-						{+START,IF_NON_EMPTY,{AT_URL}}
-							{LOCATION}
-						{+END}
-						{+START,IF_EMPTY,{AT_URL}}
-							<em>{!UNKNOWN}</em>
-						{+END}
-					{+END}
-					{+START,IF_NON_EMPTY,{AT_URL}}
-						<a href="{AT_URL*}">{LOCATION}</a>
-					{+END}
+					{$GET,location}
 				</p>
 			{+END}
 		{+END}
@@ -26,12 +34,7 @@
 	{+START,IF,{$NOT,{$MOBILE}}}
 		{+START,IF,{$HAS_SPECIFIC_PERMISSION,show_user_browsing}}
 			<td class="dottedborder_barrier_b_nonrequired">
-				{+START,IF_EMPTY,{AT_URL}}
-					{LOCATION}
-				{+END}
-				{+START,IF_NON_EMPTY,{AT_URL}}
-					<a href="{AT_URL*}">{LOCATION}</a>
-				{+END}
+				{$GET,location}
 			</td>
 		{+END}
 	{+END}

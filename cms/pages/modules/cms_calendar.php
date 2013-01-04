@@ -369,7 +369,7 @@ class Module_cms_calendar extends standard_aed_module
 
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
-		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day):$start_minute,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day):$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
+		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day):$start_minute,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day):$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone,get_param('date','')==''));
 		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day):$end_hour,$end_month,$end_day,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
 
 		if ($validated==0) $validated=get_param_integer('validated',0);

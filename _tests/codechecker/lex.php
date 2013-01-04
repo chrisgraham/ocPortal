@@ -50,7 +50,7 @@ $PTOKENS['PLUS_EQUAL']='+=';
 $PTOKENS['EQUAL']='=';
 $PTOKENS['BOR_EQUAL']='|=';
 // General structural
-$PTOKENS['SUPRESS_ERROR']='@';
+$PTOKENS['SUPPRESS_ERROR']='@';
 $PTOKENS['COLON']=':';
 $PTOKENS['QUESTION']='?';
 $PTOKENS['COMMA']=',';

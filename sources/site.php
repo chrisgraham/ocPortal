@@ -238,13 +238,21 @@ function init__site()
  */
 function attach_message($message,$type='inform')
 {
-	if ((error_reporting()==0) && ($type=='warn')) return ''; // Supressing errors
+	if ((error_reporting()==0) && ($type=='warn')) return ''; // Suppressing errors
+
+	static $am_looping=false;
+	if ($am_looping) return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
+	$am_looping=true;
 
 	global $DONE_HEADER,$ATTACH_MESSAGE_CALLED,$ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW;
 
 	foreach ($ATTACHED_MESSAGES_RAW as $last)
 	{
-		if (array(is_object($last[0])?$last[0]->evaluate():$last[0],$last[1])==array(is_object($message)?$message->evaluate():$message,$type)) return ''; // Already shown
+		if (array(is_object($last[0])?$last[0]->evaluate():$last[0],$last[1])==array(is_object($message)?$message->evaluate():$message,$type))
+		{
+			$am_looping=false;
+			return ''; // Already shown
+		}
 	}
 
 	$ATTACH_MESSAGE_CALLED++;
@@ -292,6 +300,7 @@ function attach_message($message,$type='inform')
 
 	$ATTACH_MESSAGE_CALLED--;
 
+	$am_looping=false;
 	return '';
 }
 

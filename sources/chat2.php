@@ -91,12 +91,12 @@ function buddy_add($likes,$liked,$time=NULL)
 		$befriend_url=build_url(array('page'=>'chat','type'=>'buddy_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
 		$message_raw=do_lang('YOURE_MY_BUDDY_BODY',comcode_escape($to_name),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_name)),get_lang($liked));
 		dispatch_notification('new_buddy',NULL,$subject_tag,$message_raw,array($liked),$likes);
-	}
 
-	// Log the action
-	log_it('MAKE_BUDDY',strval($likes),strval($liked));
-	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
-	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
+		// Log the action
+		log_it('MAKE_BUDDY',strval($likes),strval($liked));
+		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
+		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
+	}
 }
 
 /**

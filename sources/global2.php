@@ -362,7 +362,7 @@ function init__global2()
 	}
 
 	// At this point we can display errors nicely
-	$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 	set_error_handler('ocportal_error_handler');
 	if (function_exists('error_get_last')) register_shutdown_function('catch_fatal_errors');
 	$HAS_SET_ERROR_HANDLER=true;
@@ -793,7 +793,7 @@ function catch_fatal_errors()
 			case E_CORE_ERROR:
 			case E_COMPILE_ERROR:
 			case E_USER_ERROR:
-				$GLOBALS['SUPRESS_ERROR_DEATH']=false; // We can't recover as we've lost our execution track. Force a nice death rather than trying to display a recoverable error.
+				$GLOBALS['SUPPRESS_ERROR_DEATH']=false; // We can't recover as we've lost our execution track. Force a nice death rather than trying to display a recoverable error.
 				$GLOBALS['DYING_BADLY']=true; // Does not actually work unfortunately. @'d calls never get here at all.
 				ocportal_error_handler($error['type'],$error['message'],$error['file'],$error['line']);
 		}

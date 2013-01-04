@@ -1292,7 +1292,7 @@ class ocp_tempcode
 		}
 
 		$result=@include($file); // We don't eval on this because we want it to potentially be op-code cached by e.g. Zend Accelerator
-		if (!is_array($result)) return false; // May never get here, as PHP fatal errors can't be supressed or skipped over
+		if (!is_array($result)) return false; // May never get here, as PHP fatal errors can't be suppressed or skipped over
 
 		$this->cached_output=NULL;
 		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->last_attach,$this->pure_lang,$this->code_to_preexecute)=$result;
