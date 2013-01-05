@@ -38,7 +38,7 @@
 								</th>
 
 								<td>
-									<input maxlength="255" size="24" value="" type="text" tabindex="1" id="poster_name_if_guest" name="poster_name_if_guest" />
+									<input maxlength="255" size="{$?,{$MOBILE},16,24}" value="" type="text" tabindex="1" id="poster_name_if_guest" name="poster_name_if_guest" />
 									{+START,IF_PASSED,JOIN_BITS}{+START,IF_NON_EMPTY,{JOIN_BITS}}
 										<span class="horiz_field_sep">{JOIN_BITS}</span>
 									{+END}{+END}

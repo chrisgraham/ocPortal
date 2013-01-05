@@ -909,7 +909,7 @@ function log_download($id,$size,$got_before)
 {
 	// Log
 	if (!$got_before)
-		$GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'member_id'=>get_member(),'ip'=>get_ip_address(),'date_and_time'=>time()),false,true); // Supress errors in case of race condition
+		$GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'member_id'=>get_member(),'ip'=>get_ip_address(),'date_and_time'=>time()),false,true); // Suppress errors in case of race condition
 
 	// Update download count
 	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'download_downloads SET num_downloads=(num_downloads+1) WHERE id='.strval($id),1,NULL,true);

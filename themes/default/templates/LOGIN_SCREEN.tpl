@@ -13,15 +13,17 @@
 
 			<div class="float_surrounder">
 				{+START,IF,{$MOBILE}}
-					<p class="constrain_field">
-						<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label>
-						<input maxlength="80" class="wide_field" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
-					</p>
+					<div class="login_page_form">
+						<p class="constrain_field">
+							<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label>
+							<input maxlength="80" class="wide_field" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
+						</p>
 
-					<p class="constrain_field">
-						<label for="password">{!PASSWORD}</label>
-						<input maxlength="255" class="wide_field" type="password" id="password" name="password" size="25" />
-					</p>
+						<p class="constrain_field">
+							<label for="password">{!PASSWORD}</label>
+							<input maxlength="255" class="wide_field" type="password" id="password" name="password" size="25" />
+						</p>
+					</div>
 				{+END}
 
 				{+START,IF,{$NOT,{$MOBILE}}}

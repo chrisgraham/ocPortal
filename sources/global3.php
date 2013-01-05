@@ -1743,7 +1743,7 @@ function browser_matches($code)
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'iphone')!==false;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'wysiwyg':
-			if ((get_option('wysiwyg')=='0') || (is_mobile()) || (strpos($os,'ipad')!==false))
+			if ((get_option('wysiwyg')=='0') || (is_mobile()))
 			{
 				$BROWSER_MATCHES_CACHE[$code]=false;
 				return false;

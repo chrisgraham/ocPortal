@@ -443,7 +443,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 	if ($a!=0) $possibilities[]=$a;
 	if ($b!=0) $possibilities[]=$b;
 	if ($c!=0) $possibilities[]=$c;
-	if ($d!=0) $possibilities[]=$d;
+	$possibilities[]=$d;
 
 	return min($possibilities);
 }

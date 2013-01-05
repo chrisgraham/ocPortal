@@ -72,6 +72,7 @@ class Block_main_sitemap
 		$_zones=array();
 		$zones=find_all_zones(false,true);
 
+		disable_php_memory_limit();
 		$GLOBALS['MEMORY_OVER_SPEED']=true;
 		$low_memory=((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') && (ini_get('memory_limit')!='') && (intval(preg_replace('#M$#','',ini_get('memory_limit')))<26)) || (get_option('has_low_memory_limit')==='1');
 

@@ -444,7 +444,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				'c_member_id'=>$to_member_id,
 				'c_frequency'=>$setting,
 				'c_time'=>time(),
-			),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is supressed*/);
+			),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
 
 			$needs_manual_cc=false;
 		}
@@ -702,7 +702,7 @@ class Hook_Notification
 		{
 			$map['l_member_id']=get_member();
 		}
-		$types=$db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map); // Already monitoring members who may not be friends
+		$types=$db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map,'ORDER BY id DESC',2000/*reasonable limit*/); // Already monitoring members who may not be friends
 		foreach ($types as $type)
 		{
 			if ($type['l_code_category']!='')

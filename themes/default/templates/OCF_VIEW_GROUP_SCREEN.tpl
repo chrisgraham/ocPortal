@@ -33,7 +33,7 @@
 			<form title="{!ADD_MEMBER_TO_GROUP}" onsubmit="if (check_field_for_blankness(this.elements['username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{ADD_URL*}" method="post">
 				<div>
 					<label for="vga_username">{!USERNAME}: </label>
-					<input autocomplete="off" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" alt="{!USERNAME}" type="text" id="vga_username" name="username" value="" />
+					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" alt="{!USERNAME}" type="text" id="vga_username" name="username" value="" />
 					<input class="button_pageitem" type="submit" value="{!ADD_MEMBER_TO_GROUP}" />
 				</div>
 			</form>

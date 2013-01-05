@@ -8,11 +8,13 @@
 }
 
 .login_page {
-	text-align: center;
-	width: 80%;
-	margin: 0 auto;
-	background: url('{$IMG_INLINE;,background_image}') no-repeat 20px 44px;
-	padding: 5px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		text-align: center;
+		width: 80%;
+		padding: 0.5em;
+		margin: 0 auto;
+	{+END}
+	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
 }
 
 .login_page input[type="text"], .login_page input[type="password"] {
@@ -27,7 +29,14 @@
 	margin-top: 60px;
 }
 
-.login_page_form {
+{+START,IF,{$MOBILE}}
+	.login_page_form label {
+		width: 7em;
+		display: inline-block;
+	}
+{+END}
+
+table.login_page_form {
 	width: 45%;
 	float: left;
 	padding-right: 1em;
@@ -48,8 +57,10 @@
 
 .login_page_options {
 	text-align: left;
-	width: 285px;
-	float: left;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 285px;
+		float: left;
+	{+END}
 	margin-top: 0.5em;
 }
 
@@ -58,7 +69,9 @@
 }
 
 .login_page_options .associated_details {
-	padding-left: 2.5em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding-left: 2.5em;
+	{+END}
 	display: inline-block;
 }
 

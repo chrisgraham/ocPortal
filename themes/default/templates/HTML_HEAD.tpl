@@ -21,7 +21,12 @@
 
 {$,iPhone/Android/etc should know they have an optimised design heading to them}
 {+START,IF,{$MOBILE}}
-	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+	{+START,IF,{$NOT,{$_GET,overlay}}}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	{+END}
+	{+START,IF,{$_GET,overlay}}
+		<meta name="viewport" content="width=285, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	{+END}
 {+END}
 
 {$,Meta data for the page: standard meta data, Dublin Core meta data, Facebook Open Graph, and ocPortal meta data extensions [OCPCORE]}

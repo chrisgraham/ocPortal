@@ -1,3 +1,8 @@
+.openid_wrap {
+	overflow: scroll;
+	width: 100%;
+}
+
 #openid {
 	background: url({$IMG;,openid/indicator}) center center no-repeat;
 	margin: 0 auto;

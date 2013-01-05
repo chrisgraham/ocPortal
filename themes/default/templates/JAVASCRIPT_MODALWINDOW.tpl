@@ -23,12 +23,16 @@ if (typeof window.overlay_zIndex=='undefined')
 
 function open_link_as_overlay(ob,width,height,target)
 {
+	{+START,IF,{$MOBILE}}
+		if (typeof height=='undefined') return true; // Would probably not fit, and unfortunately cannot scroll
+	{+END}
+
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		if ((typeof width=='undefined') || (!width)) var width=800;
 		if ((typeof height=='undefined') || (!height)) var height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
 		if ((typeof target=='undefined') || (!target)) var target='_top';
-		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
+		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1&overlay=1',null,'width='+width+';height='+height,target);
 		return false;
 	{+END}
 
@@ -356,7 +360,6 @@ function ModalWindow()
 			if (!this.box) return;
 
 			var dim=this.getPageSize();
-
 			if (width>dim.pageWidth) width=dim.pageWidth-30;
 
 			var boxWidth=((width) ? (width + 8) : (dim.pageWidth / 4))  + 'px';
@@ -506,6 +509,7 @@ function ModalWindow()
 						'name': 'overlay_iframe',
 						'id': 'overlay_iframe',
 						'allowTransparency': 'true',
+						//'seamless': 'seamless',	Not supported, and therefore testable yet. Would be great for mobile browsing.
 						'styles' : {
 							'width': this.width?(this.width+'px'):'100%',
 							'height': this.height?(this.height+'px'):'50%',
@@ -771,7 +775,7 @@ function ModalWindow()
 		},
 
 		getPageSize: function() {
-			return { 'pageWidth': this.topWindow.get_window_scroll_width(this.topWindow), 'pageHeight': this.topWindow.get_window_scroll_height(this.topWindow), 'windowWidth' : this.topWindow.get_window_width(), 'windowHeight': this.topWindow.get_window_height() };
+			return { 'pageWidth': this.topWindow.get_window_width(this.topWindow)/*intentionally not scroll width, we don't want overlays over horizontal scrolling*/, 'pageHeight': this.topWindow.get_window_scroll_height(this.topWindow), 'windowWidth' : this.topWindow.get_window_width(), 'windowHeight': this.topWindow.get_window_height() };
 		}
 	};
 }

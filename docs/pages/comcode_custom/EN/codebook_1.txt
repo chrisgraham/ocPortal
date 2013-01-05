@@ -755,7 +755,7 @@ There are four main ways to get an error message:
  - catch the output of a command using output buffering
  - suppress the error with '@', then listen to the [tt]$php_errormsg[/tt] variable
 
-ocPortal will react fatally on errors unless they are suppressed. This includes PHP_NOTICE's. To suppress errors from a PHP command, put an '@' symbol before the function call. If the PHP command causing the error is buried inside an ocPortal API function and you want errors to be shown as 'deferred' rather than fatal, you can set the global SUPRESS_ERROR_DEATH variable to 1 temporarily.
+ocPortal will react fatally on errors unless they are suppressed. This includes PHP_NOTICE's. To suppress errors from a PHP command, put an '@' symbol before the function call. If the PHP command causing the error is buried inside an ocPortal API function and you want errors to be shown as 'deferred' rather than fatal, you can set the global SUPPRESS_ERROR_DEATH variable to 1 temporarily.
 
 There's no need in ocPortal code to listen for every possible error that PHP might give back. You can use some common sense, only detecting errors that have a cause, rather than trying to detect those that can't theoretically happen. Errors that can't theoretically happen, but happen anyway, will trigger ocPortal's automatic error mechanism and we can then deal with them as they come up.
 For example:

@@ -470,7 +470,33 @@ function make_call($call,$params,$file=NULL)
 	$context=stream_context_create($opts);
 
 	global $REMOTE_BASE_URL;
-	$result=file_get_contents($REMOTE_BASE_URL.'/data_custom/ocpcom_web_service.php?call='.urlencode($call),false,$context);
+	$call_url=$REMOTE_BASE_URL.'/data_custom/ocpcom_web_service.php?call='.urlencode($call);
+
+	$result=@file_get_contents($call_url,false,$context);
+	if ($result===false)
+	{
+		echo '
+			<form method="post" target="_blank" action="'.escape_html($call_url).'">
+		';
+		foreach ($data as $key=>$val)
+		{
+			if (!is_array($val))
+			{
+				echo '<input type="hidden" name="'.escape_html($key).'" value="'.escape_html($val).'" />';
+			} else
+			{
+				foreach ($val as $k2=>$v2)
+				{
+					if (!is_string($k2)) $k2=strval($k2);
+					echo '<input type="hidden" name="'.escape_html($key.'['.$k2.']').'" value="'.escape_html($v2).'" />';
+				}
+			}
+		}
+		echo '
+				<input type="submit" value="Action failed: Try manually" />
+			</form>
+		';
+	}
 	if ($result=='Access Denied')
 	{
 		echo '<p>Access denied</p>';

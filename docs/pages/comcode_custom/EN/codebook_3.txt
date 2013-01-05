@@ -277,6 +277,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_banner_count_updates[/tt] -- set this to '1' if you don't want to maintain banner view counts (small performance improvement)
  - [tt]pinpoint_submitban_check[/tt] -- set this to '1' if you only want submitter ban checks to occur in the CMS zone (small performance improvement)
  - [tt]no_block_timeout[/tt] -- set this to '1' if blocks should never timeout
+ - [tt]disable_sitemap_for__*[/tt] -- disable sitemap generation for a particular page (e.g. if there's too much data in it and the server can't cope, and the data isn't so important anyway)
 
 [title="3"]Hidden 'keep' parameters[/title]
 
@@ -291,7 +292,7 @@ The 'keep' parameters available are:
  - [tt]keep_simplified_donext[/tt] -- set to '1' to temporarily act as if the simplified do-next option is turned on
  - [tt]keep_mobile[/tt] -- set to '1' to pretend you're using a PDA
  - [tt]keep_has_js[/tt] -- set to '1' to force ocPortal to think you have Javascript (useful if the has-JS cookie isn't saving yet you need to use a JS-based interface)
- - [tt]keep_ldap_debug[/tt] -- set to '1' to forcefully show LDAP errors, when supressing them might normally be wise due to over-sensitivity
+ - [tt]keep_ldap_debug[/tt] -- set to '1' to forcefully show LDAP errors, when suppressing them might normally be wise due to over-sensitivity
  - [tt]keep_hide_mail_failure[/tt] -- set to '1' if you want to avoid showing e-mailing errors
  - [tt]keep_huge[/tt] -- set to '1' if you want to override the precautionary filesize check used by the JS validator
  - [tt]keep_show_query[/tt] -- set to '1' if you want the SQL query used by a search to be echoed out

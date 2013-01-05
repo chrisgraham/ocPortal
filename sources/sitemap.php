@@ -144,6 +144,8 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 				if (($page=='forums') && (substr($page_type,0,7)=='modules') && ((get_forum_type()=='ocf') || (get_forum_type()=='none'))) continue;
 				if (($page=='join') && (substr($page_type,0,7)=='modules') && (!is_guest($member_id))) continue;
 
+				if (get_value('disable_sitemap_for__'.$page)==='1') continue;
+
 				if (has_page_access($member_id,$page,$zone))
 				{
 					// Page level
@@ -303,11 +305,14 @@ function sitemaps_xml_initialise($file_path)
 	$SITEMAPS_OUT_PATH=$file_path;
 
 	// Load ALL URL ID monikers (for efficiency)
-	$query='SELECT m_moniker,m_resource_page,m_resource_type,m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE m_deprecated=0';
-	$results=$GLOBALS['SITE_DB']->query($query);
-	foreach ($results as $result)
+	if ($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','COUNT(*)',array('m_deprecated'=>0))<10000)
 	{
-		$LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
+		$query='SELECT m_moniker,m_resource_page,m_resource_type,m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE m_deprecated=0';
+		$results=$GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_moniker','m_resource_page','m_resource_type','m_resource_id'),array('m_deprecated'=>0));
+		foreach ($results as $result)
+		{
+			$LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
+		}
 	}
 
 	// Load ALL guest permissions (for efficiency)

@@ -210,7 +210,7 @@ function improperly_filled_in_post($name)
  */
 function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 {
-	if (!$GLOBALS['SUPRESS_ERROR_DEATH'])
+	if (!$GLOBALS['SUPPRESS_ERROR_DEATH'])
 	{
 		// Turn off MSN, as this increases stability
 		if ((array_key_exists('MSN_DB',$GLOBALS)) && (!is_null($GLOBALS['MSN_DB'])))
@@ -224,7 +224,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	$outx='<strong>'.strtoupper($type).'</strong> ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline).'<br />'.chr(10);
 	if (class_exists('ocp_tempcode'))
 	{
-		if ($GLOBALS['SUPRESS_ERROR_DEATH'])
+		if ($GLOBALS['SUPPRESS_ERROR_DEATH'])
 		{
 			$trace=new ocp_tempcode();
 		} else
@@ -238,7 +238,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	if (get_param_integer('keep_fatalistic',0)==0)
 		@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(),0);
 
-	if (!$GLOBALS['SUPRESS_ERROR_DEATH']) // Don't display - die as normal
+	if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) // Don't display - die as normal
 	{
 		@ini_set('display_errors','0');
 		fatal_exit('PHP '.strtoupper($type).' ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline));
@@ -315,7 +315,7 @@ function _generic_exit($text,$template)
 	}
 
 	global $EXITING;
-	if (running_script('upgrader')) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
+	if ((running_script('upgrader')) || (!function_exists('get_screen_title'))) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
 
 	if (($EXITING==1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 	$EXITING++;
@@ -1032,7 +1032,7 @@ function die_html_trace($message)
 function get_html_trace()
 {
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
-	$GLOBALS['SUPRESS_ERROR_DEATH']=true;
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
 	$trace=new ocp_tempcode();
 	foreach ($_trace as $i=>$stage)
@@ -1103,7 +1103,7 @@ function get_html_trace()
 		}
 		$trace->attach(do_template('STACK_TRACE_WRAP',array('_GUID'=>'beb78896baefd0f623c1c480840dace1','TRACES'=>$traces)));
 	}
-	$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
 	return do_template('STACK_TRACE_HYPER_WRAP',array('_GUID'=>'9620695fb8c3e411a6a4926432cea64f','POST'=>(count($_POST)<200)?$_POST:array(),'CONTENT'=>$trace));
 }

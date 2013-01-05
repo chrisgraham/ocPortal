@@ -498,6 +498,7 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 function delete_image($id,$delete_full=true)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('images',array('title','description','cat'),array('id'=>$id));
+	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$title=$rows[0]['title'];
 	$description=$rows[0]['description'];
 	$cat=$rows[0]['cat'];

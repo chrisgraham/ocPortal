@@ -671,7 +671,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		foreach ($to_email as $i=>$to)
 		{
 			//exit($headers.chr(10).$sending_message);
-			$GLOBALS['SUPRESS_ERROR_DEATH']=true;
+			$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 
 			$additional='';
 			if (get_option('enveloper_override')=='1') $additional='-f '.$website_email;
@@ -691,9 +691,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			{
 				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			}
-			if ((!$worked) && (isset($php_errormsg)) && (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN'])))
-				$error=$php_errormsg;
-			$GLOBALS['SUPRESS_ERROR_DEATH']=false;
+			$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 		}
 	}
 

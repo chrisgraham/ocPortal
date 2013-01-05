@@ -145,8 +145,8 @@
 					{+START,IF_NON_EMPTY,{URL_ADD_FRIEND}}
 						<p>{!MUST_ADD_CONTACTS}</p>
 
-						<form autocomplete="off" title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
-							<label class="accessibility_hidden" for="friend_username">{!USERNAME}: </label><input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME*;}') { this.value=''; this.className='field_input_filled'; }" onblur="if (this.value=='') { this.value='{!USERNAME*;}'; this.className='field_input_non_filled'; }" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" />
+						<form title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
+							<label class="accessibility_hidden" for="friend_username">{!USERNAME}: </label><input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME*;}') { this.value=''; this.className='field_input_filled'; }" onblur="if (this.value=='') { this.value='{!USERNAME*;}'; this.className='field_input_non_filled'; }" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" />
 							<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!ADD}" />
 						</form>
 					{+END}
