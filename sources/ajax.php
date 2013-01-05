@@ -122,14 +122,15 @@ function fractional_edit_script()
 
 	$_POST['fractional_edit']='1'; // FUDGE
 
+	$zone=get_param('zone');
+	$page=get_param('page');
+
 	global $SESSION_CONFIRMED_CACHE;
-	if (($SESSION_CONFIRMED_CACHE==0) && ($GLOBALS['SITE_DB']->query_select_value('zones','zone_require_session',array('zone_name'=>$zone))))
+	if (($SESSION_CONFIRMED_CACHE==0) && ($GLOBALS['SITE_DB']->query_select_value('zones','zone_require_session',array('zone_name'=>$zone))==1))
 	{
 		return;
 	}
 
-	$zone=get_param('zone');
-	$page=get_param('page');
 	if (!has_actual_page_access(get_member(),$page,$zone))
 		access_denied('ZONE_ACCESS');
 

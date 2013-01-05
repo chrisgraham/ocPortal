@@ -200,13 +200,15 @@ function do_access($given_password)
 
 		'prefer_direct_code_call'=>'<em>Tuning:</em> Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion.',
 
-		'backdoor_ip'=>'<em>Development:</em> Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.',
+		'backdoor_ip'=>'<em>Security:</em> Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.',
+		'full_ips'=>'<em>Security:</em> Whether to match sessions to the full IP addresses. Set this to 1 if you are sure users don\'t jump around IP addresses on the same 255.255.255.0 subnet (e.g. due to proxy server randomisation).',
 		/*	Don't want this in here, we want it autodetected unless explicitly overridden
 		'dev_mode'=>'<em>Development:</em> Whether development mode is enabled (<strong>intended only for core ocPortal programmers</strong>).',
 		*/
 		'force_no_eval'=>'<em>Development:</em> Whether to force extra strictness that is required for ocPortal to run on non-native PHP environments.',
 		'no_keep_params'=>'<em>Development:</em> Whether to disable support for \'keep_\' params in ocPortal. You probably don\'t want to disable them!',
 		'safe_mode'=>'<em>Development:</em> Whether ocPortal is to be forced into Safe Mode, meaning no custom files will load and most caching will be disabled.',
+		'no_email_output'=>'<em>Development:</em> Whether emails should never be sent.',
 	);
 
 	global $SITE_INFO;

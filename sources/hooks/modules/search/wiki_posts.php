@@ -82,7 +82,7 @@ class Hook_search_wiki_posts
 		{
 			case 'average_rating':
 			case 'compound_rating':
-				$remapped_orderer=$sort':wiki_post:id';
+				$remapped_orderer=$sort.':wiki_post:id';
 				break;
 
 			case 'title':

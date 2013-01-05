@@ -130,6 +130,8 @@ function _sync_file($filename)
 	{
 		$filename=substr($filename,strlen($FILE_BASE)+1);
 	}
+	static $has_sync_script=NULL;
+	if ($has_sync_script===NULL) $has_sync_script=is_file($FILE_BASE.'/data_custom/sync_script.php');
 	if ($has_sync_script)
 	{
 		require_once($FILE_BASE.'/data_custom/sync_script.php');
@@ -152,7 +154,7 @@ function _sync_file($filename)
 function _sync_file_move($old,$new)
 {
 	global $FILE_BASE;
-	if (file_exists($FILE_BASE.'/data_custom/sync_script.php'))
+	if (is_file($FILE_BASE.'/data_custom/sync_script.php'))
 	{
 		require_once($FILE_BASE.'/data_custom/sync_script.php');
 		if (substr($old,0,strlen($FILE_BASE))==$FILE_BASE)
@@ -792,7 +794,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if (!is_null($accept_language)) $curl_headers[]='Accept-Language: '.rawurlencode($accept_language);
 				if (!is_null($extra_headers)) $curl_headers=array_merge($curl_headers,$extra_headers);
 				if (is_null($files)) // Breaks file uploads for some reason
-					curl_setopt($ch,CURLOPT_HTTPHEADER,$headers);
+					curl_setopt($ch,CURLOPT_HTTPHEADER,$curl_headers);
 				curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 				curl_setopt($ch,CURLOPT_HEADER,true);
 				if (!is_null($auth)) curl_setopt($ch,CURLOPT_USERPWD,implode(':',$auth));
@@ -959,7 +961,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 				$raw_payload2.='----ocp'.$divider."--\r\n";
 				$raw_payload.='Content-length: '.strval(strlen($raw_payload2))."\r\n";
-				$raw_payload.="\r\n".$out2;
+				$raw_payload.="\r\n".$raw_payload2;
 			}
 		}
 	}

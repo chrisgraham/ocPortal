@@ -26,7 +26,7 @@ class bot_list_sync_test_set extends ocp_test_case
 	function testBotListInSync()
 	{
 		$_SERVER['HTTP_USER_AGENT']='aaaa';
-		$GLOBALS['CACHE_BOT_TYPE']=false;
+		$GLOBALS['BOT_TYPE_CACHE']=false;
 		get_bot_type();
 
 		require_code('files');

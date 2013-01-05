@@ -55,7 +55,7 @@ class Hook_smf2
 								'ocf_members',
 								'ocf_member_files',
 								'ip_bans',
-								'ocf_categories',
+								'ocf_forum_groupings',
 								'ocf_forums',
 								'ocf_topics',
 								'ocf_personal_topics',
@@ -70,7 +70,7 @@ class Hook_smf2
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
 								'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields'),
 								'ocf_member_files'=>array('ocf_members'),
-								'ocf_forums'=>array('ocf_categories','ocf_members','ocf_groups'),
+								'ocf_forums'=>array('ocf_forum_groupings','ocf_members','ocf_groups'),
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
@@ -305,7 +305,7 @@ class Hook_smf2
 			}
 
 			// privileges
-			set_specific_permission($id_new,'allow_html',true);
+			set_privilege($id_new,'allow_html',true);
 
 			if (!import_check_if_imported('group',strval($row['id_group'])))
 				import_id_remap_put('group',strval($row['id_group']),$id_new);
@@ -450,7 +450,7 @@ class Hook_smf2
 				$allow_emails=intval($row['instant_messages']) > 0? 1:0;
 
 				if ($row['date_registered']==0) $row['date_registered']=time();
-				$id_new=ocf_make_member($row['member_name'],$password,$row['email_address'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['date_registered'],$row['last_login'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$allow_emails,1,'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['member_name'],$password,$row['email_address'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['date_registered'],$row['last_login'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$allow_emails,1,'','',false,$type,$salt,1);
 
 				//cpf stuff
 				$cpf_rows=$db->query('SELECT id_field,col_name FROM '.$table_prefix.'custom_fields');
@@ -807,7 +807,7 @@ class Hook_smf2
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_categories($db,$table_prefix,$old_base_dir)
+	function import_ocf_forum_groupings($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query_select('categories');
 		foreach ($rows as $row)
@@ -817,14 +817,14 @@ class Hook_smf2
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_value_if_there('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_value_if_there('f_forum_groupings','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['id_cat']),$test);
 				continue;
 			}
 
-			$id_new=ocf_make_category($title,'',1);
+			$id_new=ocf_make_forum_grouping($title,'',1);
 
 			import_id_remap_put('category',strval($row['id_cat']),$id_new);
 		}
@@ -1625,63 +1625,63 @@ class Hook_smf2
 			{
 				//read only
 				case 0:
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
 					break;
 				//post
 				case 1:
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
 					break;
 				//unvetted
 				case 2:
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
 					break;
 				//moderate
 				case 3:
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
 					break;
 			}
 			// Now we put the remap in so we know it is imported.

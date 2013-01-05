@@ -82,8 +82,6 @@ function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 	require_once($OCPORTAL_PATH.'/sources/files.php');
 	init__files();
 
-	require_code('files');
-
 	$out=array();
 	$_dir=($dir=='')?'.':$dir;
 	$dh=opendir($_dir);
@@ -140,6 +138,13 @@ function warn_error($system,$pos,$line,$message)
 {
 	global $FILENAME;
 	echo 'WARNING "'.$FILENAME.'" '.$line.' '.$pos.' '.'PHP: '.$message.cnl();
+}
+
+function get_file_extension($name)
+{
+	$dot_pos=strrpos($name,'.');
+	if ($dot_pos===false) return '';
+	return strtolower(substr($name,$dot_pos+1));
 }
 
 function die_html_trace($message)

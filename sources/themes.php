@@ -270,7 +270,7 @@ function cdn_filter($path)
 		if ($cdn=='<autodetect>')
 		{
 			$cdn=get_value('cdn');
-			if ($cdn==NULL)
+			if ($cdn===NULL)
 			{
 				require_code('themes2');
 				$cdn=autoprobe_cdns();

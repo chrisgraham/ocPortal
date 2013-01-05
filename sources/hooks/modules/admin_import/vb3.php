@@ -103,6 +103,7 @@ class Hook_vb3
 		$dbusername='';
 		$dbpassword='';
 		$tableprefix='';
+		$servername='';
 		$config=array();
 		if (!file_exists($file_base.'/includes/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('includes/config.php')));

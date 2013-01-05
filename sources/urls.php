@@ -438,7 +438,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		$HAS_KEEP_IN_URL_CACHE=false;
 		foreach ($_GET as $key=>$val)
 		{
-			if (!is_string($val))
+			if (is_array($val))
 			{
 				if (is_null($val)) continue;
 
@@ -552,6 +552,8 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
  */
 function _handle_array_var_append($key,$val,&$vars)
 {
+	$val2=mixed();
+
 	foreach ($val as $key2=>$val2)
 	{
 		if (get_magic_quotes_gpc()) $val2=stripslashes($val2);
@@ -559,7 +561,7 @@ function _handle_array_var_append($key,$val,&$vars)
 
 		if (is_array($val2))
 		{
-			_handle_array_var_append($key.'['.$key2.']',$val2,&$vars);
+			_handle_array_var_append($key.'['.$key2.']',$val2,$vars);
 		} else
 		{
 			$vars[$key.'['.$key2.']']=$val2;

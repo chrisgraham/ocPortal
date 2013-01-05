@@ -208,9 +208,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'gibb'=>'.*',
 		'gibberish'=>'.*',
 
-		// Compiled documentation
-		'api'=>'docs',
-
 		// Files you are sometimes expected to leave around, but outside ocPortal's direct remit
 		'bingsiteauth.xml'=>'',
 		'php.ini'=>'.*',

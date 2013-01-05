@@ -1277,6 +1277,12 @@ function get_ip_address($amount=4)
 		return '';
 	}
 
+	global $SITE_INFO;
+	if (($amount==3) && (array_key_exists('full_ips',$SITE_INFO)) && ($SITE_INFO['full_ips']=='1')) // Extra configurable security
+	{
+		$amount=4;
+	}
+
 	// Bizarro-filter (found "in the wild")
 	$pos=strpos($ip,',');
 	if ($pos!==false) $ip=substr($ip,0,$pos);

@@ -118,6 +118,7 @@ function zone_black_magic_filterer($path,$relative=false)
 	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones',true)!=='1');
 	if ($no_collapse_zones) return $path;
 
+	global $ZBMF_CACHE;
 	if (isset($ZBMF_CACHE[$path])) return $ZBMF_CACHE[$path];
 
 	if ($relative)
@@ -1056,7 +1057,7 @@ function find_all_modules($zone)
  * @param  array			Array of functions to be executing
  * @param  ?array			A list of parameters to pass to our functions (NULL: none)
  * @param  boolean		Whether to do this "properly" (via proper OOP), which will consume more memory
- * @param  ?array			Class name to use (NULL: autodetect)
+ * @param  ?string		Class name to use (NULL: autodetect, which is a little slower)
  * @return array			A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
 function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_code_call=false,$class_name=NULL)

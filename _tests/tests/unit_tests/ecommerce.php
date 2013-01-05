@@ -155,7 +155,7 @@ class ecommerce_test_set extends ocp_test_case
 	function testOrderDetails()
 	{
 		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$_GET['id']=$this->order_id;
+		$_GET['id']=strval($this->order_id);
 		return $this->admin_orders->order_details();
 	}
 

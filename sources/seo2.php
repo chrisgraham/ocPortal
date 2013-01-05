@@ -125,6 +125,8 @@ function _seo_meta_find_data($keyword_sources,$description)
 	$keywords=array(); // This will be filled
 	$keywords_must_use=array(); // ...and/or this
 
+	$this_word='';
+
 	$source=mixed();
 	foreach ($keyword_sources as $source) // Look in all our sources
 	{
@@ -152,7 +154,7 @@ function _seo_meta_find_data($keyword_sources,$description)
 					if (($i-$from)>=$min_word_length)
 					{
 						while (ocp_mb_substr($this_word,-1)=='\'' || ocp_mb_substr($this_word,-1)=='-' || ocp_mb_substr($this_word,-1)=='.')
-							$this_word=ocp_mb_substr($this_word,0,ocp_mb_substr($this_word,-1));
+							$this_word=ocp_mb_substr($this_word,0,ocp_mb_strlen($this_word)-1);
 						if (!in_array(ocp_mb_strtolower($this_word),$common_words))
 						{
 							if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;

@@ -768,7 +768,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 				case '=':
 					if ($alt!='') $alt.=' OR ';
 					$alt.='(';
-					foreach (explode('|',$field_val) as $it_id=>$it_value)
+					foreach (explode('|',$filter_val) as $it_id=>$it_value)
 					{
 						if ($it_id!=0) $alt.=' OR ';
 						if ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))

@@ -35,7 +35,7 @@ class Hook_symbol_GALLERY_VIDEO_FOR_URL
 		{
 			$url=$param[0];
 			if (strpos($url,' ')!==false) $url=rawurlencode(str_replace('%2F','/',$url)); // In case was not properly encoded as URL
-			if (is_file(get_custom_file_base().'/'.rawurldecode($url))
+			if (is_file(get_custom_file_base().'/'.rawurldecode($url)))
 			{
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','id',array('url'=>$url));
 				if (!is_null($test))
@@ -47,6 +47,8 @@ class Hook_symbol_GALLERY_VIDEO_FOR_URL
 					require_code('exif');
 
 					require_lang('galleries');
+
+					$file=rawurldecode(basename($url));
 
 					$ret=get_video_details(get_custom_file_base().'/'.rawurldecode($url),$file,true);
 					if ($ret!==false)
@@ -60,9 +62,12 @@ class Hook_symbol_GALLERY_VIDEO_FOR_URL
 						$title=array_key_exists(1,$param)?$param[1]:'';
 						if ($title=='') $title=$exif['UserComment'];
 
-						$allow_rating=array_key_exists(2,$param)?((intval($param[2])==1)?1:0):1;
-						$allow_comments=array_key_exists(2,$param)?((intval($param[3])==1)?1:0):1;
-						$allow_trackbacks=array_key_exists(2,$param)?((intval($param[4])==1)?1:0):1;
+						$cat=array_key_exists(2,$param)?$param[1]:'';
+						if ($cat=='') $cat='root';
+
+						$allow_rating=array_key_exists(3,$param)?((intval($param[3])==1)?1:0):1;
+						$allow_comments=array_key_exists(4,$param)?((intval($param[4])==1)?1:0):1;
+						$allow_trackbacks=array_key_exists(5,$param)?((intval($param[5])==1)?1:0):1;
 
 						$id=add_video($title,$cat,'',$url,'',1,$allow_rating,$allow_comments,$allow_trackbacks,do_lang('VIDEO_WAS_AUTO_IMPORTED'),$length,$width,$height);
 						store_exif('video',strval($id),$exif);

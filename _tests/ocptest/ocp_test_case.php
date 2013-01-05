@@ -39,7 +39,7 @@ class ocp_test_case extends WebTestCase
 		if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page link. Complex regexp to make sure URLs do not match
 		{
 			list($zone_name,$vars,$hash)=page_link_decode($url);
-			$real_url=_build_url($vars,$zone_name,NULL,false,false,false,$hash);
+			$real_url=static_evaluate_tempcode(build_url($vars,$zone_name,NULL,false,false,false,$hash));
 
 			$ret=parent::get($real_url,$parameters);
 		} else
@@ -81,6 +81,7 @@ class ocp_test_case extends WebTestCase
 		global $MEMBER_CACHED;
 		require_code('users_active_actions');
 		$MEMBER_CACHED=restricted_manually_enabled_backdoor();
+
 		$this->dump($this->_browser->getContent());
 	}
 }

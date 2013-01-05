@@ -23,7 +23,7 @@
 /**
  * Standard code module initialisation function.
  */
-function init__database()
+function init__database_helper()
 {
 	if (defined('DB_MAX_KEY_SIZE')) return;
 

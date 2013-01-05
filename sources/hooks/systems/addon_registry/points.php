@@ -307,7 +307,6 @@ class Hook_addon_registry_points
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_SCREEN', array(
 				'TITLE'=>lorem_title(),
-				'PAGINATION'=>$pagination,
 				'CONTENT'=>$content
 			)), NULL, '', true)
 		);

@@ -24,7 +24,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 	$RELATIVE_PATH=basename($FILE_BASE);
 	$FILE_BASE=dirname($FILE_BASE);
 }
-$RELATIVE_PATH='';
+$RELATIVE_PATH='_tests';
 @chdir($FILE_BASE);
 
 global $FORCE_INVISIBLE_GUEST;

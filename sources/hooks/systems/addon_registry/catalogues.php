@@ -702,7 +702,6 @@ class Hook_addon_registry_catalogues
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED', array(
 				'DISPLAY_TYPE'=>'FIELDMAPS',
 				'ENTRIES'=>$entries,
-				'DISPLAY_TYPE'=>'',
 				'ROOT'=>placeholder_id(),
 				'BLOCK_PARAMS'=>'',
 

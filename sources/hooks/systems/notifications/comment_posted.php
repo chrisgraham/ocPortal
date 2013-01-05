@@ -64,7 +64,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
 				{
 					$categories[$i]['title']=$new_title;
 					$num_done++;
-					if ($num_done>200); // Reasonable limit
+					if ($num_done>200) // Reasonable limit
 					{
 						unset($categories[$i]);
 					}

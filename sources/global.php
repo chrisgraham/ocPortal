@@ -402,10 +402,10 @@ if (ini_get('register_globals')=='1')
 {
 	foreach (array('_GET','_POST','_COOKIE','_ENV','_SERVER','_SESSION') as $superglobal)
 	{
-		if ((isset($$superglobal)) && (is_array($$superglobal)))
+		if ((isset($GLOBALS[$superglobal])) && (is_array($GLOBALS[$superglobal])))
 		{
-			foreach ($$superglobal as $key=>$_)
-				if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$$superglobal[$key])) $GLOBALS[$key]=NULL;
+			foreach ($GLOBALS[$superglobal] as $key=>$_)
+				if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$GLOBALS[$superglobal][$key])) $GLOBALS[$key]=NULL;
 		}
 	}
 }

@@ -383,7 +383,7 @@ class Module_cms_blogs extends standard_crud_module
 		if (!is_null($main_news_category))
 		{
 			$owner=$GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
-			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
+			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),NULL,'cms_news');
 		}
 
 		$time=$add_time;
@@ -464,7 +464,7 @@ class Module_cms_blogs extends standard_crud_module
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
-		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),'cms_news');
+		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),NULL,'cms_news');
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?mixed():$schedule;

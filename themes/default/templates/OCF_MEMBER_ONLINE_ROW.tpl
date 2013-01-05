@@ -4,7 +4,7 @@
 			{LOCATION}
 		{+END}
 		{+START,IF_EMPTY,{LOCATION}}
-			<em>{!UNKNOWN}</em>
+			<em>{!OTHER}</em>
 		{+END}
 	{+END}
 

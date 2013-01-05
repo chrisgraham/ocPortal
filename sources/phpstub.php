@@ -400,11 +400,12 @@ function constant($name)
 /**
  * Copies a file. {{creates-file}}
  *
- * @param  PATH		The source path.
- * @param  PATH		The destination path.
- * @return boolean	Success status.
+ * @param  PATH			The source path.
+ * @param  PATH			The destination path.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return boolean		Success status.
  */
-function copy($source,$dest)
+function copy($source,$dest,$context=NULL)
 {
 	return false;
 }
@@ -475,7 +476,7 @@ function date($format,$timestamp=NULL)
  * @param  string			The username to connect with.
  * @param  string			The password to connect with.
  * @param  BINARY			Whether to use a persitent connection.
- * @return ~object	 	The connection (false: error)
+ * @return ~object	 	The connection (false: error).
  */
 function dbx_connect($module,$server,$database,$username,$password,$persistent=0)
 {
@@ -567,7 +568,7 @@ function dirname($name)
  * Returns the amount of free space under a directory in a unix-style mount/quota-supporting filesystem.
  *
  * @param  PATH		The path.
- * @return ~integer  The amount of space (technically a float, but integer is more conveniant). (false: error)
+ * @return ~integer  The amount of space (technically a float, but integer is more conveniant) (false: error).
  */
 function disk_free_space($directory)
 {
@@ -589,7 +590,7 @@ function deg2rad($number)
  * Send an error message somewhere.
  *
  * @param  string		The message to log.
- * @param  integer	The message type (0 is normal PHP logging system, 1 is e-mail address [non-Roadsend], 2 is debugger connection, 3 is file)
+ * @param  integer	The message type (0 is normal PHP logging system, 1 is e-mail address [non-Roadsend], 2 is debugger connection, 3 is file).
  * @set    0 1 2 3
  * @param  string		The parameter that defines details of the message type (for type 0, meaningless).
  * @return boolean	Success status.
@@ -602,8 +603,8 @@ function error_log($message,$message_type=0,$destination='')
 /**
  * Sets which PHP errors are reported.
  *
- * @param  ?integer  OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (NULL: find current level)
- * @return integer	Current error reporting level
+ * @param  ?integer  OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (NULL: find current level).
+ * @return integer	Current error reporting level.
  */
 function error_reporting($level=NULL)
 {
@@ -671,7 +672,7 @@ function fgets($handle,$length)
  *
  * @param  PATH		The file name.
  * @param  integer	Flags.
- * @return ~array		The array (each line being an entry in the array, and newlines still attached). (false: error)
+ * @return ~array		The array (each line being an entry in the array, and newlines still attached) (false: error).
  */
 function file($filename,$flags=0)
 {
@@ -810,11 +811,13 @@ function get_defined_functions()
 /**
  * Opens file or URL. {{creates-file}}
  *
- * @param  PATH		Filename.
- * @param  string		Mode (e.g. at).
- * @return ~resource The file handle (false: could not be opened).
+ * @param  PATH			Filename.
+ * @param  string			Mode (e.g. at).
+ * @param  boolean		Whether to search within the include path.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return ~resource 	The file handle (false: could not be opened).
  */
-function fopen($filename,$mode)
+function fopen($filename,$mode,$use_include_path=false,$context=NULL)
 {
 	return array();
 }
@@ -874,7 +877,7 @@ function fsockopen($target,$port,&$errno,&$errstr,$timeout=NULL)
  * Gets file pointer read/write position.
  *
  * @param  resource  The file handle.
- * @return ~integer  The offset (false: error)
+ * @return ~integer  The offset (false: error).
  */
 function ftell($handle)
 {
@@ -1101,7 +1104,7 @@ function get_html_translation_table($table,$quote_style=ENT_COMPAT)
 }
 
 /**
- * Gets the current active configuration setting of magic quotes gpc. (Note: it actually returns a BINARY, but lets make it cleaner, it won't hurt)
+ * Gets the current active configuration setting of magic quotes gpc (Note: it actually returns a BINARY, but lets make it cleaner, it won't hurt)
  *
  * @return boolean	Whether magic quotes gpc is on.
  */
@@ -1566,7 +1569,7 @@ function imagestringup($image,$font,$x,$y,$s,$col)
  * @param  float		Angle in degrees in which text will be measured.
  * @param  string		The name of the TrueType font file.
  * @param  string		The string to be measured.
- * @return ~array 	Tuple: lower-left-X, lower-left-Y, lower-right-X, lower-right-Y, upper-right-X, upper-right-Y, upper-left-X, upper-left-Y. (false: error)
+ * @return ~array 	Tuple: lower-left-X, lower-left-Y, lower-right-X, lower-right-Y, upper-right-X, upper-right-Y, upper-left-X, upper-left-Y (false: error).
  */
 function imagettfbbox($size,$angle,$fontfile,$text)
 {
@@ -1584,7 +1587,7 @@ function imagettfbbox($size,$angle,$fontfile,$text)
  * @param  integer	Colour code.
  * @param  string		The name of the TrueType font file.
  * @param  string		Text to draw.
- * @return ~array 	Tuple: lower-left-X, lower-left-Y, lower-right-X, lower-right-Y, upper-right-X, upper-right-Y, upper-left-X, upper-left-Y. (false: error)
+ * @return ~array 	Tuple: lower-left-X, lower-left-Y, lower-right-X, lower-right-Y, upper-right-X, upper-right-Y, upper-left-X, upper-left-Y (false: error).
  */
 function imagettftext($handle,$size,$angle,$x,$y,$colour,$fontfile,$text)
 {
@@ -2098,7 +2101,7 @@ function include_once($filename)
  * Gets the value of a configuration option. Note: On Phalanger any unknown config options will produce a warning if fetched.
  *
  * @param  string	Config option.
- * @return mixed	Value of option. (empty: no such config option, or an empty value) (false: ditto)
+ * @return mixed	Value of option (empty: no such config option, or an empty value) (false: ditto).
  */
 function ini_get($varname)
 {
@@ -2460,11 +2463,12 @@ function min($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=
 /**
  * Makes a directory. {{creates-file}}
  *
- * @param  PATH		The path to the directory to make.
- * @param  integer	The mode (e.g. 0777).
- * @return boolean	Success status.
+ * @param  PATH			The path to the directory to make.
+ * @param  integer		The mode (e.g. 0777).
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return boolean		Success status.
  */
-function mkdir($path,$mode)
+function mkdir($path,$mode,$context=NULL)
 {
 	return false;
 }
@@ -2587,7 +2591,7 @@ function ob_start()
  * Output something.
  *
  * @param  string		The string to output.
- * @return integer	The number '1', always
+ * @return integer	The number '1', always.
  */
 function print($octal_string)
 {
@@ -2683,7 +2687,7 @@ function parse_url($url)
  * Returns information about a file path.
  *
  * @param  PATH		The path to parse.
- * @return ~array		A map of details about the path. (false: error)
+ * @return ~array		A map of details about the path (false: error).
  */
 function pathinfo($path)
 {
@@ -2711,7 +2715,7 @@ function phpversion()
  * Return info about a user by user id. Does not exist on Windows.
  *
  * @param  integer	The user ID.
- * @return ~array		A map of details of the user. (false: failure)
+ * @return ~array		A map of details of the user (false: failure).
  */
 function posix_getpwuid($uid)
 {
@@ -2733,7 +2737,7 @@ function posix_getuid()
  *
  * @param  string		The pattern.
  * @param  string		The subject string.
- * @param  ?array		Where matches will be put (note that it is a list of maps, except the arrays are turned inside out). (NULL: do not store matches). Note that this is actually passed by reference, but is also optional.
+ * @param  ?array		Where matches will be put (note that it is a list of maps, except the arrays are turned inside out) (NULL: do not store matches). Note that this is actually passed by reference, but is also optional.
  * @param  integer	Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer  The number of matches (false: error).
  */
@@ -2748,7 +2752,7 @@ function preg_match($pattern,$subject,$matches=NULL,$flags=0)
  * @param  string		The pattern.
  * @param  array		The subject strings.
  * @param  integer	Either 0, or PREG_GREP_INVERT.
- * @return array		Matches
+ * @return array		Matches.
  */
 function preg_grep($pattern,$subject,$flags=0)
 {
@@ -2904,11 +2908,12 @@ function register_shutdown_function($callback,$parama=NULL,$paramb=NULL,$paramc=
 /**
  * Renames a file.
  *
- * @param  PATH		Old name.
- * @param  PATH		New name.
- * @return boolean	Success status.
+ * @param  PATH			Old name.
+ * @param  PATH			New name.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return boolean		Success status.
  */
-function rename($oldname,$newname)
+function rename($oldname,$newname,$context=NULL)
 {
 	return false;
 }
@@ -2949,10 +2954,11 @@ function reset($array)
 /**
  * Removes directory.
  *
- * @param  PATH		Directory path.
- * @return boolean	Success status.
+ * @param  PATH			Directory path.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return boolean		Success status.
  */
-function rmdir($dirname)
+function rmdir($dirname,$context=NULL)
 {
 	return false;
 }
@@ -3042,7 +3048,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!ROADSEND*
  * Set locale information.
  *
- * @param  integer	The locale category (LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME)
+ * @param  integer	The locale category (LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME).
  * @param  mixed		The locale (Some PHP versions require an array, and some a string with multiple calls).
  * @return ~string	The set locale (false: error).
  */
@@ -3065,8 +3071,8 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!SPECIAL*
  * Get data from the persistent cache.
  *
- * @param  mixed			Key
- * @return ?mixed			The data (NULL: not found / NULL entry)
+ * @param  mixed			Key.
+ * @return ?mixed			The data (NULL: not found / NULL entry).
  */
 /*function eaccelerator_get($id)
 {
@@ -3076,9 +3082,9 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!SPECIAL*
  * Put data into the persistent cache.
  *
- * @param  mixed			Key
- * @param  mixed			The data
- * @param  integer		Various flags (parameter not used)
+ * @param  mixed			Key.
+ * @param  mixed			The data.
+ * @param  integer		Various flags (parameter not used).
  */
 /*function eaccelerator_put($id,$value,$timeout)
 {
@@ -3087,7 +3093,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!SPECIAL*
  * Delete data from the persistent cache.
  *
- * @param  mixed			Key name
+ * @param  mixed			Key name.
  */
 /*function eaccelerator_rm($id)
 {
@@ -3096,8 +3102,8 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!SPECIAL*
  * Get data from the persistent cache.
  *
- * @param  mixed			Key
- * @return ?mixed			The data (NULL: not found / NULL entry)
+ * @param  mixed			Key.
+ * @return ?mixed			The data (NULL: not found / NULL entry).
  */
 /*function mmcache_get($id)
 {
@@ -3107,9 +3113,9 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!SPECIAL*
  * Put data into the persistent cache.
  *
- * @param  mixed			Key
- * @param  mixed			The data
- * @param  integer		Various flags (parameter not used)
+ * @param  mixed			Key.
+ * @param  mixed			The data.
+ * @param  integer		Various flags (parameter not used).
  */
 /*function mmcache_put($id,$value,$flags)
 {
@@ -3118,7 +3124,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*!SPECIAL*
  * Delete data from the persistent cache.
  *
- * @param  mixed			Key name
+ * @param  mixed			Key name.
  */
 /*function mmcache_rm($id)
 {
@@ -3537,10 +3543,11 @@ function uniqid($prefix,$lcg=false)
 /**
  * Deletes a file.
  *
- * @param  PATH		The filename.
- * @return boolean	Success status.
+ * @param  PATH			The filename.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return boolean		Success status.
  */
-function unlink($filename)
+function unlink($filename,$context=NULL)
 {
 	return false;
 }
@@ -3636,7 +3643,7 @@ function wordwrap($string,$width=75,$break="\n",$cut=false)
 /**
  * Xdebug: dump profiling information.
  *
- * @param  integer	The dump mode
+ * @param  integer	The dump mode.
  */
 function xdebug_dump_function_profile($type)
 {
@@ -4205,7 +4212,7 @@ function long2ip($proper_address)
  * Calculates the md5 hash of the file identified by the given filename.
  *
  * @param  PATH		File name.
- * @return ~string	The hash of the file. (false: error)
+ * @return ~string	The hash of the file (false: error).
  */
 /*function md5_file($filename)
 {
@@ -4307,10 +4314,12 @@ function range($from,$to,$step=1)
 /**
  * Outputs a file.
  *
- * @param  PATH		The filename.
- * @return ~integer  The number of bytes read (false: error).
+ * @param  PATH			The filename.
+ * @param  boolean		Whether to search within the include path.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return ~integer  	The number of bytes read (false: error).
  */
-function readfile($filename)
+function readfile($filename,$use_include_path=false,$context=NULL)
 {
 	return 0;
 }
@@ -4341,7 +4350,7 @@ function similar_text($first,$second,/*&*/$percent=NULL)
  * Square root.
  *
  * @param  float	Number.
- * @return float	return 0.0;
+ * @return float	return 0.0.
  */
 function sqrt($arg)
 {
@@ -4512,7 +4521,7 @@ function tan($arg)
  *
  * @param  string	The formatting string for unpacking.
  * @param  string	The data to unpack.
- * @return ~array	The unpacked data. (false: error)
+ * @return ~array	The unpacked data (false: error).
  */
 function unpack($format,$data)
 {
@@ -4566,7 +4575,7 @@ function zend_version()
  * Get current column number for an XML parser.
  *
  * @param  resource  A reference to the XML parser to get column number from.
- * @return ~integer  Which column on the current line the parser is currently at. (false: error)
+ * @return ~integer  Which column on the current line the parser is currently at (false: error).
  */
 function xml_get_current_column_number($parser)
 {
@@ -4577,7 +4586,7 @@ function xml_get_current_column_number($parser)
  * Create an XML parser.
  *
  * @param  ?string	Encoding (NULL: PHP4: as-for-input/PHP5: autodetect).
- * @return ~resource XML parser (false: could not create, happens on default PHP5 on Windows). (false: error)
+ * @return ~resource XML parser (false: could not create, happens on default PHP5 on Windows) (false: error).
  */
 function xml_parser_create($encoding=NULL)
 {
@@ -4797,7 +4806,7 @@ function system($commend,$ret_var=NULL)
  * Output a gz-file.
  *
  * @param  PATH		Path to read from.
- * @return ~integer  Number of uncompressed bytes handled. (false: error)
+ * @return ~integer  Number of uncompressed bytes handled (false: error).
  */
 function readgzfile($filename)
 {
@@ -5025,7 +5034,7 @@ function atan2($x,$y)
  * Gets character from file pointer.
  *
  * @param  resource  Handle.
- * @return ~string	Character. (false: error)
+ * @return ~string	Character (false: error).
  */
 function fgetc($handle)
 {
@@ -5038,7 +5047,7 @@ function fgetc($handle)
  * @param  resource  File handle.
  * @param  integer	Maximum length of line.
  * @param  string		Delimiter.
- * @return ~array		Line. (false: error)
+ * @return ~array		Line (false: error).
  */
 function fgetcsv($handle,$length,$delimiter=',')
 {
@@ -5051,7 +5060,7 @@ function fgetcsv($handle,$length,$delimiter=',')
  * @param  resource  File handle.
  * @param  integer	Maximum length of line.
  * @param  string		Allowable HTML tags separated by spaces.
- * @return ~string	Line. (false: error)
+ * @return ~string	Line (false: error).
  */
 function fgetss($handle,$length,$allowable_tags='')
 {
@@ -5062,7 +5071,7 @@ function fgetss($handle,$length,$allowable_tags='')
  * Gets file type.
  *
  * @param  PATH		Filename.
- * @return ~string	Result (fifo, char, dir, block, link, file, and unknown). (false: error)
+ * @return ~string	Result (fifo, char, dir, block, link, file, and unknown) (false: error).
  */
 function filetype($file)
 {
@@ -5160,7 +5169,7 @@ function ftp_pasv($ftp_stream,$pasv)
  * Returns the current directory name.
  *
  * @param  resource  The link identifier of the FTP connection.
- * @return ~string	Current directory name. (false: error)
+ * @return ~string	Current directory name (false: error).
  */
 function ftp_pwd($ftp_stream)
 {
@@ -5172,7 +5181,7 @@ function ftp_pwd($ftp_stream)
  *
  * @param  resource  The link identifier of the FTP connection.
  * @param  PATH		The directory path.
- * @return ~array	 	Each element corresponds to one line of text. (false: error)
+ * @return ~array	 	Each element corresponds to one line of text (false: error).
  */
 function ftp_rawlist($ftp_stream,$directory)
 {
@@ -5183,7 +5192,7 @@ function ftp_rawlist($ftp_stream,$directory)
  * Returns the system type identifier of the remote FTP server.
  *
  * @param  resource  The link identifier of the FTP connection.
- * @return ~string	System type. (false: error)
+ * @return ~string	System type (false: error).
  */
 function ftp_systype($ftp_stream)
 {
@@ -5238,7 +5247,7 @@ function func_num_args()
  *
  * @param  PATH		The file path.
  * @param  boolean	Whether to process sections.
- * @return ~array	 	Map of Ini file data (2d if processed sections). (false: error)
+ * @return ~array	 	Map of Ini file data (2d if processed sections) (false: error).
  */
 function parse_ini_file($filename,$process_sections=false)
 {
@@ -5285,7 +5294,7 @@ function pclose($handle)
  * @param  integer	Where any error number will be put.
  * @param  string		Whether any error string will be put.
  * @param  ?float		How long to wait until timeout (NULL: no timeout).
- * @return ~resource The handle (false: error). (false: error)
+ * @return ~resource The handle (false: error) (false: error).
  */
 /*function pfsockopen($target,$port,&$errno,&$errstr,$timeout=NULL)
 {
@@ -5374,7 +5383,7 @@ function nl2br($in)
 /**
  * Return the length of the output buffer.
  *
- * @return ~integer  Output buffer length. (false: error)
+ * @return ~integer  Output buffer length (false: error).
  */
 function ob_get_length()
 {
@@ -5506,7 +5515,7 @@ function count_chars($string,$mode=0)
  * Returns the total size of a directory.
  *
  * @param  PATH		Where to look.
- * @return ~integer  The size (false: error). (actually, a float)
+ * @return ~integer  The size (false: error) (actually, a float).
  */
 function disk_total_space($directory)
 {
@@ -5517,7 +5526,7 @@ function disk_total_space($directory)
  * Run some code. Do not use unless absolutely needed.
  *
  * @param  string		Code to run.
- * @return mixed  	Result
+ * @return mixed  	Result.
  */
 function eval($code)
 {
@@ -5551,7 +5560,7 @@ function gethostbynamel($hostname)
  *
  * @param  PATH		Filename.
  * @param  ?array		Extra details will be put here (NULL: return-only). Note that this is actually passed by reference, but is also optional.
- * @return ~array	 	List of details: $width, $height, $type, $attr. (false: error)
+ * @return ~array	 	List of details: $width, $height, $type, $attr (false: error).
  */
 function getimagesize($filename,$image_info=NULL)
 {
@@ -5571,7 +5580,7 @@ function getimagesize($filename,$image_info=NULL)
 /**
  * Gets PHP's process ID.
  *
- * @return ~integer  Process ID. (false: error)
+ * @return ~integer  Process ID (false: error).
  */
 function getmypid()
 {
@@ -5581,7 +5590,7 @@ function getmypid()
 /**
  * Gets PHP's user ID.
  *
- * @return ~integer  User ID. (false: error)
+ * @return ~integer  User ID (false: error).
  */
 function getmyuid()
 {
@@ -5602,7 +5611,7 @@ function gettimeofday()
  * Gets the value of a PHP configuration option.
  *
  * @param  string		Value name to get.
- * @return ~string	Value. (false: error)
+ * @return ~string	Value (false: error).
  */
 /*function get_cfg_var($varname)
 {
@@ -5623,7 +5632,7 @@ function get_magic_quotes_runtime()
  * Extracts all meta tag content attributes from a file and returns an array.
  *
  * @param  PATH		Filename.
- * @return ~array	 	Map of meta information. (false: error)
+ * @return ~array	 	Map of meta information (false: error).
  */
 /*function get_meta_tags($filename)
 {
@@ -5679,7 +5688,7 @@ function gzcompress($data,$level)
  *
  * @param  string		Compressed data.
  * @param  integer	Compression level.
- * @return ~string	Uncompressed data. (false: error)
+ * @return ~string	Uncompressed data (false: error).
  */
 function gzdeflate($data,$level)
 {
@@ -5703,7 +5712,7 @@ function gzencode($data,$level)
  * Read entire gz-file into an array.
  *
  * @param  PATH		The filename.
- * @return ~array	 	An array containing the file, one line per cell. (false: error)
+ * @return ~array	 	An array containing the file, one line per cell (false: error).
  */
 function gzfile($filename)
 {
@@ -5962,9 +5971,11 @@ function ocp_is_escaped($var)
  * Get the contents of a file.
  *
  * @param  SHORT_TEXT	The file name.
+ * @param  boolean		Whether to search within the include path.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return ~LONG_TEXT	The file contents (false: error).
  */
-function file_get_contents($filename)
+function file_get_contents($filename,$use_include_path=false,$context=NULL)
 {
 	return '';
 }
@@ -5972,10 +5983,10 @@ function file_get_contents($filename)
 /**
  * Isolate the words in the input string.
  *
- * @param  string			String to count words in
- * @param  integer		The format
+ * @param  string			String to count words in.
+ * @param  integer		The format.
  * @set    0 1 2
- * @return mixed			Typically a list - the words of the input string
+ * @return mixed			Typically a list - the words of the input string.
  */
 function str_word_count($input,$format=0)
 {
@@ -5985,10 +5996,10 @@ function str_word_count($input,$format=0)
 /**
  * Decode the HTML entitity encoded input string.
  *
- * @param  string			The text to decode
- * @param  integer		The quote style code
- * @param  ?string		Character set to decode to (NULL: default)
- * @return string			The decoded text
+ * @param  string			The text to decode.
+ * @param  integer		The quote style code.
+ * @param  ?string		Character set to decode to (NULL: default).
+ * @return string			The decoded text.
  */
 function html_entity_decode($input,$quote_style,$charset=NULL)
 {
@@ -5998,9 +6009,9 @@ function html_entity_decode($input,$quote_style,$charset=NULL)
 /**
  * Creates an array by using one array for keys and another for its values.
  *
- * @param  array 	 		Keys
- * @param  array 	 		Values
- * @return array			Combined
+ * @param  array 	 		Keys.
+ * @param  array 	 		Values.
+ * @return array			Combined.
  */
 function array_combine($keys,$values)
 {
@@ -6010,9 +6021,9 @@ function array_combine($keys,$values)
 /**
  * Computes the difference of arrays with additional index check which is performed by a user supplied callback function.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_diff_uassoc($a,$b)
 {
@@ -6022,9 +6033,9 @@ function array_diff_uassoc($a,$b)
 /**
  * Computes the difference of arrays by using a callback function for data comparison.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_udiff($a,$b)
 {
@@ -6034,9 +6045,9 @@ function array_udiff($a,$b)
 /**
  * Computes the difference of arrays with additional index check. The data is compared by using a callback function.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_udiff_assoc($a,$b)
 {
@@ -6046,9 +6057,9 @@ function array_udiff_assoc($a,$b)
 /**
  * Computes the difference of arrays with additional index check. The data is compared by using a callback function. The index check is done by a callback function also.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_udiff_uassoc($a,$b)
 {
@@ -6058,10 +6069,10 @@ function array_udiff_uassoc($a,$b)
 /**
  * Apply a user function recursively to every member of an array.
  *
- * @param  array 	 		The input array
- * @param  mixed 	 		Callback
- * @param  ?mixed 	 	If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (NULL: no user data)
- * @return boolean		Result
+ * @param  array 	 		The input array.
+ * @param  mixed 	 		Callback.
+ * @param  ?mixed 	 	If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (NULL: no user data).
+ * @return boolean		Result.
  */
 function array_walk_recursive($input,$funcname,$userdata=NULL)
 {
@@ -6071,9 +6082,9 @@ function array_walk_recursive($input,$funcname,$userdata=NULL)
 /**
  * Computes the intersection of arrays with additional index check. The data is compared by using a callback function.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_uintersect_assoc($a,$b)
 {
@@ -6083,9 +6094,9 @@ function array_uintersect_assoc($a,$b)
 /**
  * Computes the intersection of arrays with additional index check. Both the data and the indexes are compared by using separate callback functions.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_uintersect_uassoc($a,$b)
 {
@@ -6095,9 +6106,9 @@ function array_uintersect_uassoc($a,$b)
 /**
  * Computes the intersection of arrays. The data is compared by using a callback function.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_uintersect($a,$b)
 {
@@ -6107,9 +6118,9 @@ function array_uintersect($a,$b)
 /**
  * Convert a string to an array.
  *
- * @param  string	 		The input string
- * @param  integer 		Maximum length of the chunk
- * @return array			Result
+ * @param  string	 		The input string.
+ * @param  integer 		Maximum length of the chunk.
+ * @return array			Result.
  */
 function str_split($str,$split_length=1)
 {
@@ -6119,9 +6130,9 @@ function str_split($str,$split_length=1)
 /**
  * Search a string for any of a set of characters.
  *
- * @param  string  		The string where char_list is looked for
- * @param  string  		The character list
- * @return ~string		String starting from the character found, or FALSE if it is not found (false: not found)
+ * @param  string  		The string where char_list is looked for.
+ * @param  string  		The character list.
+ * @return ~string		String starting from the character found, or FALSE if it is not found (false: not found).
  */
 function strpbrk($haystack,$char_list)
 {
@@ -6131,12 +6142,12 @@ function strpbrk($haystack,$char_list)
 /**
  * Binary safe optionally case insensitive comparison of two strings from an offset, up to length characters.
  *
- * @param  string	 		The main string being compared
- * @param  string  		The secondary string being compared
- * @param  integer  		The start position for the comparison. If negative, it starts counting from the end of the string
- * @param  ?integer		The length of the comparison (NULL: the largest of the length of the str compared to the length of main_str less the offset)
- * @param  boolean  		Whether to compare as case insensitive
- * @return ~integer		Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than str, and 0 if they are equal (false: out of bounds)
+ * @param  string	 		The main string being compared.
+ * @param  string  		The secondary string being compared.
+ * @param  integer  		The start position for the comparison. If negative, it starts counting from the end of the string.
+ * @param  ?integer		The length of the comparison (NULL: the largest of the length of the str compared to the length of main_str less the offset).
+ * @param  boolean  		Whether to compare as case insensitive.
+ * @return ~integer		Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than str, and 0 if they are equal (false: out of bounds).
  */
 function substr_compare($main_str,$str,$offset,$length=NULL,$case_insensitivity=false)
 {
@@ -6146,12 +6157,13 @@ function substr_compare($main_str,$str,$offset,$length=NULL,$case_insensitivity=
 /**
  * Write a string to a file.
  *
- * @param  PATH 	 		Path to the file where to write the data
- * @param  string	 		The data to write
- * @param  integer 		Supported flags
- * @return ~integer		Bytes written (false: error)
+ * @param  PATH 	 		Path to the file where to write the data.
+ * @param  string	 		The data to write.
+ * @param  integer 		Supported flags.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
+ * @return ~integer		Bytes written (false: error).
  */
-function file_put_contents($filename,$data,$flags=0)
+function file_put_contents($filename,$data,$flags=0,$context=NULL)
 {
 	return 0;
 }
@@ -6159,9 +6171,9 @@ function file_put_contents($filename,$data,$flags=0)
 /**
  * Fetches all the headers sent by the server in response to a HTTP request.
  *
- * @param  URLPATH 	 	The target URL
- * @param  BINARY			Whether to parse into a map
- * @return array			Result
+ * @param  URLPATH 	 	The target URL.
+ * @param  BINARY			Whether to parse into a map.
+ * @return array			Result.
  */
 function get_headers($url,$parse=0)
 {
@@ -6171,7 +6183,7 @@ function get_headers($url,$parse=0)
 /**
  * Returns a list of response headers sent (or ready to send).
  *
- * @return array			List of headers
+ * @return array			List of headers.
  */
 function headers_list()
 {
@@ -6181,8 +6193,8 @@ function headers_list()
 /**
  * Generate URL-encoded query string.
  *
- * @param  array 	 		URL parameters
- * @return string			URL
+ * @param  array 	 		URL parameters.
+ * @return string			URL.
  */
 function http_build_query($query_data)
 {
@@ -6192,9 +6204,9 @@ function http_build_query($query_data)
 /**
  * Get file extension for image-type returned by .
  *
- * @param  integer 		One of the IMAGETYPE_XXX constants
- * @param  boolean 		Whether to prepend a dot to the extension or not
- * @return string			A string with the extension corresponding to the given image type
+ * @param  integer 		One of the IMAGETYPE_XXX constants.
+ * @param  boolean 		Whether to prepend a dot to the extension or not.
+ * @return string			A string with the extension corresponding to the given image type.
  */
 function image_type_to_extension($imagetype,$include_dot=true)
 {
@@ -6204,13 +6216,13 @@ function image_type_to_extension($imagetype,$include_dot=true)
 /**
  * Applies a filter to an image using custom arguments.
  *
- * @param  resource 	 	Image
- * @param  integer 	 	A constant indicating the filter type
- * @param  ?mixed	 	 	Parameter (NULL: don't read)
- * @param  ?mixed	 	 	Parameter (NULL: don't read)
- * @param  ?mixed	 	 	Parameter (NULL: don't read)
- * @param  ?mixed	 	 	Parameter (NULL: don't read)
- * @return boolean		Success status
+ * @param  resource 	 	Image.
+ * @param  integer 	 	A constant indicating the filter type.
+ * @param  ?mixed	 	 	Parameter (NULL: don't read).
+ * @param  ?mixed	 	 	Parameter (NULL: don't read).
+ * @param  ?mixed	 	 	Parameter (NULL: don't read).
+ * @param  ?mixed	 	 	Parameter (NULL: don't read).
+ * @return boolean		Success status.
  */
 function imagefilter($image,$filtertype,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL)
 {
@@ -6220,8 +6232,8 @@ function imagefilter($image,$filtertype,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=N
 /**
  * List files and directories inside the specified path.
  *
- * @param  PATH 	 		Directory
- * @return ~array			Files (false: error)
+ * @param  PATH 	 		Directory.
+ * @return ~array			Files (false: error).
  */
 function scandir($directory)
 {
@@ -6231,8 +6243,8 @@ function scandir($directory)
 /**
  * Randomly shuffles a string.
  *
- * @param  string 		In
- * @return string			Out
+ * @param  string 		In.
+ * @return string			Out.
  */
 function str_shuffle($in)
 {
@@ -6242,8 +6254,8 @@ function str_shuffle($in)
 /**
  * Get Mime-Type for image-type returned by getimagesize, exif_read_data, exif_thumbnail, exif_imagetype.
  *
- * @param  integer 	 	Image type
- * @return string			Mime type
+ * @param  integer 	 	Image type.
+ * @return string			Mime type.
  */
 function image_type_to_mime_type($image_type)
 {
@@ -6253,8 +6265,8 @@ function image_type_to_mime_type($image_type)
 /**
  * Calculate the sha1 hash of a string.
  *
- * @param  string 		The input string
- * @return string			Hash
+ * @param  string 		The input string.
+ * @return string			Hash.
  */
 function sha1($str)
 {
@@ -6264,8 +6276,8 @@ function sha1($str)
 /**
  * Determine the type of an image.
  *
- * @param  PATH 	 		Image path
- * @return integer		Image type
+ * @param  PATH 	 		Image path.
+ * @return integer		Image type.
  */
 function exif_imagetype($filename)
 {
@@ -6275,7 +6287,7 @@ function exif_imagetype($filename)
 /**
  * Get current buffer contents and delete current output buffer.
  *
- * @return ~string		Contents of the buffer (false: no buffer was open)
+ * @return ~string		Contents of the buffer (false: no buffer was open).
  */
 function ob_get_clean()
 {
@@ -6285,9 +6297,9 @@ function ob_get_clean()
 /**
  * Computes the difference of arrays with additional index check.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_diff_assoc($a,$b)
 {
@@ -6297,9 +6309,9 @@ function array_diff_assoc($a,$b)
 /**
  * Find pathnames matching a pattern.
  *
- * @param  string 	 	Pattern according to the rules used by the libc glob
- * @param  integer 	 	Flags
- * @return ~array			Files found (false: error)
+ * @param  string 	 	Pattern according to the rules used by the libc glob.
+ * @param  integer 	 	Flags.
+ * @return ~array			Files found (false: error).
  */
 function glob($pattern,$flags=0)
 {
@@ -6309,7 +6321,7 @@ function glob($pattern,$flags=0)
 /**
  * Generates a backtrace.
  *
- * @return array			Backtrace
+ * @return array			Backtrace.
  */
 function debug_backtrace()
 {
@@ -6319,8 +6331,8 @@ function debug_backtrace()
 /**
  * Sets the default timezone used by all date/time functions in a script.
  *
- * @param  string 	 	Timezone identifier
- * @return boolean		Success status
+ * @param  string 	 	Timezone identifier.
+ * @return boolean		Success status.
  */
 function date_default_timezone_set($timezone_identifier)
 {
@@ -6330,7 +6342,7 @@ function date_default_timezone_set($timezone_identifier)
 /**
  * Gets the default timezone used by all date/time functions in a script.
  *
- * @return string			The timezone identifier
+ * @return string			The timezone identifier.
  */
 function date_default_timezone_get()
 {
@@ -6340,9 +6352,9 @@ function date_default_timezone_get()
 /**
  * Computes the difference of arrays using keys for comparison.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @return array			Result.
  */
 function array_diff_key($array1,$array2)
 {
@@ -6352,8 +6364,8 @@ function array_diff_key($array1,$array2)
 /**
  * Converts a human readable IP address to its packed in_addr representation.
  *
- * @param  string 	 	A human readable IPv4 or IPv6 address
- * @return ~string		The in_addr representation of the given address (false: error)
+ * @param  string 	 	A human readable IPv4 or IPv6 address.
+ * @return ~string		The in_addr representation of the given address (false: error).
  */
 function inet_pton($address)
 {
@@ -6363,8 +6375,8 @@ function inet_pton($address)
 /**
  * Calculate the product of values in an array.
  *
- * @param  array 	 		Input
- * @return float			Result
+ * @param  array 	 		Input.
+ * @return float			Result.
  */
 function array_product($array)
 {
@@ -6374,10 +6386,10 @@ function array_product($array)
 /**
  * Computes the difference of arrays using a callback function on the keys for comparison.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @param  mixed 	 		Callback
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @param  mixed 	 		Callback.
+ * @return array			Result.
  */
 function array_diff_ukey($array1,$array2,$callback)
 {
@@ -6387,10 +6399,10 @@ function array_diff_ukey($array1,$array2,$callback)
 /**
  * Computes the intersection of arrays using a callback function on the keys for comparison.
  *
- * @param  array 	 		Array 1
- * @param  array 	 		Array 2
- * @param  mixed 	 		Callback
- * @return array			Result
+ * @param  array 	 		Array 1.
+ * @param  array 	 		Array 2.
+ * @param  mixed 	 		Callback.
+ * @return array			Result.
  */
 function array_intersect_ukey($array1,$array2,$callback)
 {
@@ -6400,7 +6412,7 @@ function array_intersect_ukey($array1,$array2,$callback)
 /**
  * Retrieve array of errors.
  *
- * @return array			Array of errors
+ * @return array			Array of errors.
  */
 function libxml_get_errors()
 {
@@ -6410,8 +6422,8 @@ function libxml_get_errors()
 /**
  * Converts a packed internet address to a human readable representation.
  *
- * @param  string	 		Converts a packed internet address to a human readable representation
- * @return string			A string representation of the address (false: error)
+ * @param  string	 		Converts a packed internet address to a human readable representation.
+ * @return string			A string representation of the address (false: error).
  */
 function inet_ntop($in_addr)
 {
@@ -6421,11 +6433,11 @@ function inet_ntop($in_addr)
 /**
  * Format line as CSV and write to file pointer.
  *
- * @param  resource 	 	File pointer
- * @param  array 	 		An array of values
- * @param  string	 		The optional delimiter parameter sets the field delimiter (one character only)
- * @param  string	 		The optional enclosure parameter sets the field enclosure (one character only)
- * @return ~integer		The length of the written string (false: error)
+ * @param  resource 	 	File pointer.
+ * @param  array 	 		An array of values.
+ * @param  string	 		The optional delimiter parameter sets the field delimiter (one character only).
+ * @param  string	 		The optional enclosure parameter sets the field enclosure (one character only).
+ * @return ~integer		The length of the written string (false: error).
  */
 function fputcsv($handle,$fields,$delimiter=',',$enclosure='"')
 {
@@ -6435,8 +6447,8 @@ function fputcsv($handle,$fields,$delimiter=',',$enclosure='"')
 /**
  * Finds whether a value is not a number.
  *
- * @param  float	 		The value to check
- * @return boolean		Answer
+ * @param  float	 		The value to check.
+ * @return boolean		Answer.
  */
 function is_nan($val)
 {
@@ -6446,8 +6458,8 @@ function is_nan($val)
 /**
  * Finds whether a value is a legal finite number.
  *
- * @param  float	 		The value to check
- * @return boolean		Answer
+ * @param  float	 		The value to check.
+ * @return boolean		Answer.
  */
 function is_finite($val)
 {
@@ -6457,8 +6469,8 @@ function is_finite($val)
 /**
  * Finds whether a value is infinite.
  *
- * @param  float	 		The value to check
- * @return boolean		Answer
+ * @param  float	 		The value to check.
+ * @return boolean		Answer.
  */
 function is_infinite($val)
 {
@@ -6475,10 +6487,10 @@ function ob_flush()
 /**
  * Split an array into chunks.
  *
- * @param  array 			The array to work on
- * @param  integer 		The size of each chunk
- * @param  boolean 		When set to TRUE keys will be preserved. Default is FALSE which will reindex the chunk numerically
- * @return array			A multidimensional numerically indexed array, starting with zero, with each dimension containing size elements
+ * @param  array 			The array to work on.
+ * @param  integer 		The size of each chunk.
+ * @param  boolean 		When set to TRUE keys will be preserved. Default is FALSE which will reindex the chunk numerically.
+ * @return array			A multidimensional numerically indexed array, starting with zero, with each dimension containing size elements.
  */
 function array_chunk($input,$size,$preserve_keys=false)
 {
@@ -6490,8 +6502,8 @@ function array_chunk($input,$size,$preserve_keys=false)
  *
  * @param  integer 		The first index of the returned array. If start_index is negative, the first index of the returned array will be start_index and the following indices will start from zero.
  * @param  integer 		Number of elements to insert. Must be greater than zero.
- * @param  mixed	 		Value to use for filling
- * @return array			The filled array
+ * @param  mixed	 		Value to use for filling.
+ * @return array			The filled array.
  */
 function array_fill($start_index,$num,$value)
 {
@@ -6501,9 +6513,9 @@ function array_fill($start_index,$num,$value)
 /**
  * Changes all keys in an array.
  *
- * @param  array 			The array to work on
- * @param  integer 		Either CASE_UPPER or CASE_LOWER
- * @return array			An array with its keys lower or uppercased
+ * @param  array 			The array to work on.
+ * @param  integer 		Either CASE_UPPER or CASE_LOWER.
+ * @return array			An array with its keys lower or uppercased.
  */
 function array_change_key_case($input,$case)
 {
@@ -6514,10 +6526,10 @@ function array_change_key_case($input,$case)
  * Reads the EXIF headers from JPEG or TIFF.
  *
  * @param  PATH	 		The name of the image file being read. This cannot be an URL.
- * @param  ?string 		Is a comma separated list of sections that need to be present in file to produce a result array (NULL: no filter)
- * @param  boolean 		Specifies whether or not each section becomes an array
+ * @param  ?string 		Is a comma separated list of sections that need to be present in file to produce a result array (NULL: no filter).
+ * @param  boolean 		Specifies whether or not each section becomes an array.
  * @param  boolean 		When set to TRUE the thumbnail itself is read. Otherwise, only the tagged data is read.
- * @return ~array			An associative array where the array indexes are the header names and the array values are the values associated with those headers (false: error)
+ * @return ~array			An associative array where the array indexes are the header names and the array values are the values associated with those headers (false: error).
  */
 function exif_read_data($filename,$sections=NULL,$arrays=false,$thumbnail=false)
 {
@@ -6527,11 +6539,23 @@ function exif_read_data($filename,$sections=NULL,$arrays=false,$thumbnail=false)
 /**
  * Outputs or returns a parsable string representation of a variable.
  *
- * @param  mixed	 		The variable you want to export
- * @param  boolean 		If used and set to TRUE, var_export() will return the variable representation instead of outputting it
- * @return ?string		Variable representation (NULL: asked to not return a value)
+ * @param  mixed	 		The variable you want to export.
+ * @param  boolean 		If used and set to TRUE, var_export() will return the variable representation instead of outputting it.
+ * @return ?string		Variable representation (NULL: asked to not return a value).
  */
 function var_export($expression,$return=false)
 {
 	return '';
+}
+
+/**
+ * Creates a stream context.
+ *
+ * @param  ?array	 		Options (NULL: none).
+ * @param  ?array 		Parameters (NULL: none). Usually options is used, parameters not needed and refers to standard parameters for all context types.
+ * @return resource		Stream context.
+ */
+function stream_context_create($options=NULL,$params=NULL)
+{
+	return array();
 }
