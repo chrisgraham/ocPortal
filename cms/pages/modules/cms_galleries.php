@@ -503,8 +503,8 @@ class Module_cms_galleries extends standard_crud_module
 					if ($ret!==false)
 					{
 						list($width,$height,$length)=$ret;
-						if (is_null($width)) $width=100;
-						if (is_null($height)) $height=100;
+						if (is_null($width)) $width=intval(get_option('default_video_width'));
+						if (is_null($height)) $height=intval(get_option('default_video_height'));
 						if (is_null($length)) $length=0;
 						$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
 						$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);

@@ -33,9 +33,14 @@ function init__gallery_syndication()
 	}
 }
 
-function sync_video_syndication($local_id=NULL,$reupload=false)
+function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferring=false)
 {
 	$orphaned_handling=get_option('gallery_sync_orphaned_handling');
+
+	if (!is_null($local_id))
+	{
+		set_value('handling_video_currently__'.strval($local_id),'1'); // Set lock
+	}
 
 	if (is_null($local_id)) // If being asked to do a full sync
 	{
@@ -47,6 +52,24 @@ function sync_video_syndication($local_id=NULL,$reupload=false)
 	}
 
 	$local_videos=get_local_videos($local_id);
+
+	if (($consider_deferring) && (!is_null($local_id)) && (count($local_videos)==1))
+	{
+		$GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
+			't_id'=>'sync_defer_'.strval($local_id).($reupload?'__reupload':''),
+			't_local_id'=>$local_id,
+			't_local_id_field'=>'id',
+			't_error'=>'',
+			't_url'=>$local_videos[0]['_raw_url'],
+			't_table'=>'videos',
+			't_url_field'=>'url',
+			't_orig_filename_field'=>'',
+			't_width_field'=>'video_width',
+			't_height_field'=>'video_height',
+			't_output_filename'=>'',
+		));
+		return;
+	}
 
 	$hooks=find_all_hooks('modules','gallery_syndication');
 
@@ -62,6 +85,8 @@ function sync_video_syndication($local_id=NULL,$reupload=false)
 			$remote_videos=$ob->get_remote_videos($local_id);
 			foreach ($remote_videos as $video)
 			{
+				if (get_value('handling_video_currently__'.strval($video['bound_to_local_id']))==='1') continue; // Check lock
+
 				_sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reupload);
 				$exists_remote[$video['bound_to_local_id']]=true;
 			}
@@ -70,11 +95,21 @@ function sync_video_syndication($local_id=NULL,$reupload=false)
 		// What is there locally
 		foreach ($local_videos as $video)
 		{
+			if (get_value('handling_video_currently__'.strval($video['local_id']))==='1') continue; // Check lock
+
 			if (!array_key_exists($video['local_id'],$exists_remote))
 			{
 				_sync_onlylocal_video($ob,$video);
 			}
 		}
+	}
+
+	if (!is_null($local_id))
+	{
+		delete_value('handling_video_currently__'.strval($local_id)); // Remove lock
+		$GLOBALS['SITE_DB']->query_delete('video_transcoding',array(
+			't_id'=>'sync_defer_'.strval($local_id),
+		));
 	}
 }
 

@@ -383,6 +383,21 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 </tbody></table>
 [/html]
 
+[title="3"]Galleries[/title]
+
+[html]
+<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+	<tr>
+		<th>Symbol name / example</th>
+		<th>Purpose</th>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$GALLERY_VIDEO_FOR_URL,uploads/galleries/foo.mov}</td>
+		<td>Get the gallery video ID for a named URL, importing to a new video if needed. This is useful for managing documentation out of git, referencing videos that will then be synchronised with Youtube upon first reference. You'll likely use this symbol to pass as a parameter to the <kbd>main_content</kbd> block.</td>
+	</tr>
+</tbody></table>
+[/html]
+
 [title="3"]eCommerce[/title]
 
 [html]

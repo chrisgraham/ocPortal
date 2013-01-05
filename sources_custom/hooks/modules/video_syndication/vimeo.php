@@ -70,6 +70,11 @@ class video_syndication_vimeo
 			{
 				$query_params['video_id']=preg_replace('#^vimeo_#','',$transcoding_id);
 				$api_method='vimeo.videos.getInfo';
+
+				$result=$this->_vimeo_ob->call($api_method,$query_params);
+				if ($result===false) return $videos;
+
+				$result=array('video'=>array($result));
 			} else
 			{
 				$query_params['per_page']=strval(50);
@@ -77,10 +82,12 @@ class video_syndication_vimeo
 				$query_params['full_response']=true;
 				$query_params['user_id']=$this->_request_token;
 				$api_method='vimeo.videos.getUploaded';
+
+				$result=$this->_vimeo_ob->call($api_method,$query_params);
+				if ($result===false) return $videos;
 			}
 
-			$result=$this->_vimeo_ob->call($api_method,$query_params);
-			if ($result===false) return $videos;
+			if (!isset($result['video'])) return $videos;
 
 			foreach ($result['video'] as $p)
 			{
@@ -106,12 +113,28 @@ class video_syndication_vimeo
 	{
 		$detected_video=mixed();
 
+		$remote_id=$p->id;
+
 		$add_date=strtotime($p->upload_date);
 		$edit_date=isset($p->modified_date)?strtotime($p->modified_date):$add_date;
 
 		$allow_rating=NULL; // Specification of this not supported by Vimeo
 		$allow_comments=NULL; // Specification of this not supported by Vimeo in API
 		$validated=($p->privacy!='nobody');
+
+		$got_best_video_type=false;
+		foreach ($p->urls->url as $_url)
+		{
+			if (($_url['type']=='video') && (!$got_best_video_type))
+			{
+				$url=$_url['_content']; // Non-ideal, as is a link to vimeo.com
+			}
+			if ($_url['type']=='sd') // Ideal because it lets us use jwplayer
+			{ // But hmm, vimeo has not implemented yet https://vimeo.com/forums/api/topic:41030 !
+				$url=$_url['_content'];
+				$got_best_video_type=true;
+			}
+		}
 
 		$category=NULL;
 		$keywords=array();
@@ -130,8 +153,6 @@ class video_syndication_vimeo
 			}
 		}
 
-		$remote_id=$p->id;
-
 		if (!is_null($bound_to_local_id))
 		{
 			$detected_video=array(
@@ -142,7 +163,7 @@ class video_syndication_vimeo
 				'description'=>$p->description,
 				'mtime'=>$edit_date,
 				'tags'=>$keywords,
-				'url'=>'https://vimeo.com/'.$remote_id,
+				'url'=>$url,
 				'allow_rating'=>$allow_rating,
 				'allow_comments'=>$allow_comments,
 				'validated'=>$validated,
@@ -159,6 +180,23 @@ class video_syndication_vimeo
 		try
 		{
 			$remote_id=$this->_vimeo_ob->upload($file_path,true,2097152);
+
+			if ($is_temp_file) @unlink($file_path);
+			if ($remote_id==false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+			$this->_vimeo_ob->call('vimeo.videos.setDownloadPrivacy',array($remote_id,false)); // If we want to allow downloading, we'll handle that locally. Most users won't want downloading.
+
+			// Now do settings, which is like doing an immediate edit...
+
+			// We change $video (which is a local video array) to be like a remote video array. This is because change_remote_video expects that.
+			$video['remote_id']=$remote_id;
+			$video['bound_to_local_id']=$video['local_id'];
+			unset($video['local_id']);
+			$video['url']=NULL;
+			// We pass whole $video as $changes; unchangable/irrelevant keys will be ignored, due to how change_remote_video is coded.
+			$changes=$video;
+			unset($changes['url']); // this is correct already of course
+			$this->change_remote_video($video,$changes);
 		}
 		catch (VimeoAPIException $e)
 		{
@@ -166,22 +204,14 @@ class video_syndication_vimeo
 			attach_message(do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
 			return NULL;
 		}
-		if ($is_temp_file) @unlink($file_path);
-		if ($remote_id==false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$this->_vimeo_ob->call('vimeo.videos.setDownloadPrivacy',array($remote_id,false)); // If we want to allow downloading, we'll handle that locally. Most users won't want downloading.
-
-		// Now do settings, which is like doing an immediate edit...
-
-		// We change $video (which is a local video array) to be like a remote video array. This is because change_remote_video expects that.
-		$video['remote_id']=$remote_id;
-		$video['bound_to_local_id']=$video['local_id'];
-		unset($video['local_id']);
-		$video['url']='https://vimeo.com/'.$remote_id;
-		// We pass whole $video as $changes; unchangable/irrelevant keys will be ignored, due to how change_remote_video is coded.
-		$changes=$video;
-		unset($changes['url']); // this is correct already of course
-		$this->change_remote_video($video,$changes);
+		// Find live details
+		$query_params=array();
+		$query_params['video_id']=$remote_id;
+		$api_method='vimeo.videos.getInfo';
+		$result=$this->_vimeo_ob->call($api_method,$query_params);
+		if ($result===false) return $videos;
+		$video=$this->_process_remote_video($result);
 
 		return $video;
 	}

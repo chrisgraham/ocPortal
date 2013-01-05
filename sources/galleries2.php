@@ -722,7 +722,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if (addon_installed('gallery_syndication',true))
 	{
 		require_code('gallery_syndication');
-		sync_video_syndication($id);
+		sync_video_syndication($id,false,true);
 	}
 
 	return $id;
@@ -801,7 +801,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	if (addon_installed('gallery_syndication',true))
 	{
 		require_code('gallery_syndication');
-		sync_video_syndication($id,$orig_url!=$url);
+		sync_video_syndication($id,$orig_url!=$url,true);
 	}
 }
 

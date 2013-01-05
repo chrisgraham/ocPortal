@@ -52,6 +52,8 @@ class video_syndication_youtube
 
 			$parsed=simplexml_load_string($xml);
 
+			if (!isset($parsed['entry'])) return $videos;
+
 			foreach ($parsed['entry'] as $p)
 			{
 				$detected_video=$this->_process_remote_video($p);
@@ -75,6 +77,8 @@ class video_syndication_youtube
 	function _process_remote_video($p)
 	{
 		$detected_video=mixed();
+
+		$remote_id=$p->{media:group}[0]->{yt:videoid}[0];
 
 		$add_date=strtotime($p->published[0]);
 		$edit_date=isset($p->updated[0])?strtotime($p->updated[0]):$add_date;
@@ -121,8 +125,6 @@ class video_syndication_youtube
 				unset($keywords[$i]);
 			}
 		}
-
-		$remote_id=$p->{media:group}[0]->{yt:videoid}[0];
 
 		if (!is_null($bound_to_local_id))
 		{
@@ -287,7 +289,7 @@ class video_syndication_youtube
 		$files=is_null($file_to_upload)?NULL:array($mime_type=>$file_to_upload);
 
 		$result=http_download_file($full_url,NULL,false,false,'ocPortal',is_null($xml)?NULL:array($xml),NULL,NULL,NULL,NULL,NULL,NULL,NULL,$timeout,!is_null($xml),$files,$extra_headers,$http_verb);
-		if (is_null($result)) throw Exception TODO;
+		if (is_null($result)) throw Exception(static_evaluate_tempcode($GLOBALS['HTTP_MESSAGE_B']));
 		return $result;
 	}
 }

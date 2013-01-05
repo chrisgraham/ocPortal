@@ -118,6 +118,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/blocks/side_stats/stats_galleries.php',
 			'sources/hooks/systems/addon_registry/galleries.php',
 			'sources/hooks/modules/admin_import_types/galleries.php',
+			'sources/hooks/systems/symbols/GALLERY_VIDEO_FOR_URL.php',
 			'sources/hooks/systems/profiles_tabs/galleries.php',
 			'GALLERY_ENTRY_WRAP.tpl',
 			'BLOCK_MAIN_GALLERY_EMBED.tpl',
