@@ -277,6 +277,9 @@ vb_version*/
 			case 'backdoor_ip':
 				$notes='Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.';
 				break;
+			case 'full_ips':
+				$notes='Whether to match sessions to the full IP addresses. Set this to 1 if you are sure users don\'t jump around IP addresses on the same 255.255.255.0 subnet (e.g. due to proxy server randomisation). This increases security.';
+				break;
 		}
 		if (strpos($key,'_table_prefix')!==false)
 		{
