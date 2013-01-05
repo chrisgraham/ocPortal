@@ -722,7 +722,8 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if (addon_installed('gallery_syndication',true))
 	{
 		require_code('gallery_syndication');
-		sync_video_syndication($id,false,true);
+		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
+		sync_video_syndication($id,false,$consider_deferring);
 	}
 
 	return $id;
@@ -801,7 +802,8 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	if (addon_installed('gallery_syndication',true))
 	{
 		require_code('gallery_syndication');
-		sync_video_syndication($id,$orig_url!=$url,true);
+		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
+		sync_video_syndication($id,$orig_url!=$url,$orig_url!=$url && $consider_deferring);
 	}
 }
 

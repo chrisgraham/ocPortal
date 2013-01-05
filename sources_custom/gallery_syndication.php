@@ -37,11 +37,6 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 {
 	$orphaned_handling=get_option('gallery_sync_orphaned_handling');
 
-	if (!is_null($local_id))
-	{
-		set_value('handling_video_currently__'.strval($local_id),'1'); // Set lock
-	}
-
 	if (is_null($local_id)) // If being asked to do a full sync
 	{
 		$num_local_videos=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');
@@ -86,9 +81,12 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 			foreach ($remote_videos as $video)
 			{
 				if (get_value('handling_video_currently__'.strval($video['bound_to_local_id']))==='1') continue; // Check lock
+				set_value('handling_video_currently__'.strval($video['bound_to_local_id']),'1'); // Set lock
 
 				_sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reupload);
 				$exists_remote[$video['bound_to_local_id']]=true;
+
+				delete_value('handling_video_currently__'.strval($video['bound_to_local_id']));
 			}
 		}
 
@@ -96,17 +94,19 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 		foreach ($local_videos as $video)
 		{
 			if (get_value('handling_video_currently__'.strval($video['local_id']))==='1') continue; // Check lock
+			set_value('handling_video_currently__'.strval($video['local_id']),'1'); // Set lock
 
 			if (!array_key_exists($video['local_id'],$exists_remote))
 			{
 				_sync_onlylocal_video($ob,$video);
 			}
+
+			delete_value('handling_video_currently__'.strval($video['local_id']));
 		}
 	}
 
 	if (!is_null($local_id))
 	{
-		delete_value('handling_video_currently__'.strval($local_id)); // Remove lock
 		$GLOBALS['SITE_DB']->query_delete('video_transcoding',array(
 			't_id'=>'sync_defer_'.strval($local_id),
 		));
