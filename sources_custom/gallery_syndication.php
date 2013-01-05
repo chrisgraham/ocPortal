@@ -29,7 +29,7 @@ function init__gallery_syndication()
 	{
 		add_config_option('GALLERY_SYNC_OCFILTER','gallery_sync_ocfilter','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
 		add_config_option('GALLERY_SYNC_ORPHANED_HANDLING','gallery_sync_orphaned_handling','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
-		add_config_option('VIDEO_SYNC_TRANSCODING','video_sync_transcoding','special','return \''.addcslashes(do_lang('OTHER',NULL,NULL,NULL,fallback_lang())).'\';','FEATURE','GALLERY_SYNDICATION');
+		add_config_option('VIDEO_SYNC_TRANSCODING','video_sync_transcoding','special','return \''.addslashes(do_lang('OTHER',NULL,NULL,NULL,fallback_lang())).'\';','FEATURE','GALLERY_SYNDICATION');
 	}
 }
 
@@ -133,7 +133,7 @@ function get_local_videos($local_id=NULL)
 	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'videos WHERE '.$where);
 	foreach ($rows as $row)
 	{
-		$videos[$row['id']]=_get_local_video($row,$tree);
+		$videos[$row['id']]=_get_local_video($row);
 	}
 
 	return $videos;

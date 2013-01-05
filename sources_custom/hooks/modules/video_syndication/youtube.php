@@ -62,7 +62,7 @@ class video_syndication_youtube
 					$remote_id=$detected_video['remote_id'];
 					if ((!array_key_exists($remote_id,$videos)) || (!$videos[$remote_id]['validated'])) // If new match, or last match was unvalidated (i.e. old version)
 					{
-						$videos[$youtube_id]=$detected_video;
+						$videos[$remote_id]=$detected_video;
 					}
 				}
 			}
@@ -198,7 +198,7 @@ class video_syndication_youtube
 	function leave_comment($video,$comment)
 	{
 		$xml='
-			<?xml version="1.0" encoding="UTF-8"?>
+			<'.'?xml version="1.0" encoding="UTF-8"?'.'>
 			<entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007">
 				<content>'.xmlentities($comment).'</content>
 			</entry>
@@ -228,7 +228,7 @@ class video_syndication_youtube
 
 		// Now generate the XML...
 		$xml='
-			<?xml version="1.0"?>
+			<'.'?xml version="1.0"?'.'>
 			<entry xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:yt="http://gdata.youtube.com/schemas/2007">
 				<media:group>
 					<media:title type="plain">'.xmlentities($video['title']).'</media:title>
@@ -264,7 +264,7 @@ class video_syndication_youtube
 		$this->_access_token=refresh_oauth($auth_url,get_option('youtube_key'),get_option('youtube_secret'),get_value('youtube_refresh_token'));
 	}
 
-	function _http($path,$params,$http_verb='GET',$xml=NULL,$timeout=6.0,$extra_headers=NULL,$file_to_upload=NULL)
+	function _http($url,$params,$http_verb='GET',$xml=NULL,$timeout=6.0,$extra_headers=NULL,$file_to_upload=NULL)
 	{
 		$key=get_option('youtube_key');
 
@@ -284,9 +284,13 @@ class video_syndication_youtube
 		if (is_null($extra_headers)) $extra_headers=array();
 		$extra_headers['Authorization']='Bearer '.$this->_access_token;
 
-		require_code('mime_types');
-		$mime_type=get_mime_type($extension);
-		$files=is_null($file_to_upload)?NULL:array($mime_type=>$file_to_upload);
+		$files=mixed();
+		if (!is_null($file_to_upload))
+		{
+			require_code('mime_types');
+			$mime_type=get_mime_type(get_file_extension($file_to_upload));
+			$files=array($mime_type=>$file_to_upload);
+		}
 
 		$result=http_download_file($full_url,NULL,false,false,'ocPortal',is_null($xml)?NULL:array($xml),NULL,NULL,NULL,NULL,NULL,NULL,NULL,$timeout,!is_null($xml),$files,$extra_headers,$http_verb);
 		if (is_null($result)) throw Exception(static_evaluate_tempcode($GLOBALS['HTTP_MESSAGE_B']));

@@ -23,7 +23,7 @@ require_code('oauth2'); // Contains some useful ocPortal-ties, for creating conf
 
 $service_name='vimeo';
 
-$title=get_page_title('OAUTH_TITLE',$service_name);
+$title=get_screen_title('OAUTH_TITLE',true,array($service_name));
 
 $api_key=ensure_got_oauth_api_key($service_name);
 
@@ -47,19 +47,24 @@ if ($oauth_token=='')
 $vimeo->setToken(get_long_value('oauth_request_token'),get_long_value('oauth_request_token_secret'));
 $token=$vimeo->getAccessToken(get_param('oauth_verifier'));
 $vimeo->setToken($token['oauth_token'],$token['oauth_token_secret']);
+$ok=true;
 try // Check it...
 {
 	$vimeo->call('vimeo.test.null');
 }
-// Save if it passed through okay
-set_long_value($service_name.'_access_token',$token['oauth_token']);
-set_long_value($service_name.'_access_token_secret',$token['oauth_token_secret']);
-$out=do_lang_tempcode('OAUTH_SUCCESS',$service_name);
 catch (VimeoAPIException $e) // Error if not okay
 {
 	require_lang('gallery_syndication_vimeo');
 	attach_message(do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
 	$out=do_lang_tempcode('SOME_ERRORS_OCCURRED');
+	$ok=false;
+}
+if ($ok)
+{
+	// Save if it passed through okay
+	set_long_value($service_name.'_access_token',$token['oauth_token']);
+	set_long_value($service_name.'_access_token_secret',$token['oauth_token_secret']);
+	$out=do_lang_tempcode('OAUTH_SUCCESS',$service_name);
 }
 
 $title->evaluate_echo();

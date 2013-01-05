@@ -37,7 +37,13 @@ class Hook_do_next_menus_gallery_syndication
 
 			$service_title=$ob->get_service_title();
 
-			$menu_items[]=array('setup','facebook',array($hook.'_oauth',array(),'adminzone'),do_lang_tempcode('OAUTH_TITLE',escape_html($service_title)),('DOC_OAUTH_SETUP',comcode_escape($service_title)));
+			$menu_items[]=array(
+				'setup',
+				'galleries',
+				array($hook.'_oauth',array(),'adminzone'),
+				do_lang_tempcode('OAUTH_TITLE',escape_html($service_title)),
+				comcode_to_tempcode(do_lang('DOC_OAUTH_SETUP',$service_title))
+			);
 		}
 
 		return $menu_items;

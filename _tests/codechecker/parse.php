@@ -643,7 +643,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 	$next=pparse__parser_peek();
 	$class=array('functions'=>array(),'vars'=>array(),'i'=>$GLOBALS['i']);
 	$modifiers=array();
-	while (($next=='CONST') || ($next=='VAR') || ($next=='FUNCTION') || ($next=='PUBLIC') || ($next=='PRIVATE') || ($next=='PROTECTED') || ($next=='ABSTRACT'))
+	while (($next=='CONST') || ($next=='VAR') || ($next=='FUNCTION') || ($next=='PUBLIC') || ($next=='PRIVATE') || ($next=='PROTECTED') || ($next=='ABSTRACT') || ($next=='STATIC'))
 	{
 		switch ($next)
 		{
@@ -657,7 +657,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 				}
 				$modifiers[]=strtolower($next);
 				if ($is_interface && in_array('abstract',$modifiers)) log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword.');
-				if (pparse__parser_peek_dist(1)=='FUNCTION')
+				if ((pparse__parser_peek_dist(1)=='FUNCTION') || (pparse__parser_peek_dist(1)=='STATIC') || (pparse__parser_peek_dist(1)=='ABSTRACT'))
 				{
 					// Variables fall through to VAR, function's don't
 					pparse__parser_next();		// VAR does this in its do-while loop
@@ -714,12 +714,19 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 				$modifiers=array();
 				break;
 
+			case 'STATIC':
 			case 'ABSTRACT':
-				if ($is_interface) log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword');
-				$modifiers[]='abstract';
-				if (!in_array('abstract',$class_modifiers))
+				if ($next=='ABSTRACT')
 				{
-					log_warning('Abstract keyword found in a non-abstract class.');
+					if ($is_interface) log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword');
+					$modifiers[]='abstract';
+					if (!in_array('abstract',$class_modifiers))
+					{
+						log_warning('Abstract keyword found in a non-abstract class.');
+					}
+				} else
+				{
+					$modifiers[]='static';
 				}
 				pparse__parser_next();		// Consume the abstract keyword
 				// Peek ahead to make sure the next token can be abstract

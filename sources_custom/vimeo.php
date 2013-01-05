@@ -79,7 +79,7 @@ class phpVimeo
      */
     private function _generateNonce()
     {
-        return md5(uniqid(microtime()));
+        return md5(uniqid(strval(microtime(true))));
     }
 
     /**
@@ -90,8 +90,10 @@ class phpVimeo
      * @param string $url The base URL to use.
      * @return string The OAuth signature.
      */
-    private function _generateSignature($params, $request_method = 'GET', $url = self::API_REST_URL)
+    private function _generateSignature($params, $request_method = 'GET', $url = NULL)
     {
+        if (is_null($url)) $url = self::API_REST_URL;
+
         uksort($params, 'strcmp');
         $params = self::url_encode_rfc3986($params);
 
@@ -149,8 +151,11 @@ class phpVimeo
      * @param boolean $use_auth_header Use the OAuth Authorization header to pass the OAuth params.
      * @return object The response from the method call.
      */
-    private function _request($method, $call_params = array(), $request_method = 'GET', $url = self::API_REST_URL, $cache = true, $use_auth_header = true)
+    private function _request($method, $call_params = NULL, $request_method = 'GET', $url = NULL, $cache = true, $use_auth_header = true)
     {
+        if (is_null($call_params)) $call_params = array();
+        if (is_null($url)) $url = self::API_REST_URL;
+
         // Prepare oauth arguments
         $oauth_params = array(
             'oauth_consumer_key' => $this->_consumer_key,
@@ -188,7 +193,7 @@ class phpVimeo
         $all_params = array_merge($oauth_params, $api_params);
 
         // Returned cached value
-        if ($this->_cache_enabled && ($cache && $response = $this->_getCached($all_params))) {
+        if ($this->_cache_enabled && ($cache && ($response = $this->_getCached($all_params)) !== NULL)) {
             return $response;
         }
 
@@ -274,8 +279,11 @@ class phpVimeo
      * @param boolean $cache Whether or not to cache the response.
      * @return object The response from the API method
      */
-    public function call($method, $params = array(), $request_method = 'GET', $url = self::API_REST_URL, $cache = true)
+    public function call($method, $params = NULL, $request_method = 'GET', $url = NULL, $cache = true)
     {
+        if (is_null($params)) $params = array();
+        if (is_null($url)) $url = self::API_REST_URL;
+
         $method = (substr($method, 0, 6) != 'vimeo.') ? "vimeo.{$method}" : $method;
         return $this->_request($method, $params, $request_method, $url, $cache);
     }
@@ -307,11 +315,12 @@ class phpVimeo
      * Get an access token. Make sure to call setToken() with the
      * request token before calling this function.
      *
-     * @param string $verifier The OAuth verifier returned from the authorization page or the user.
+     * @param array $verifier The OAuth verifier returned from the authorization page or the user.
      */
     public function getAccessToken($verifier)
     {
         $access_token = $this->_request(null, array('oauth_verifier' => $verifier), 'GET', self::API_ACCESS_TOKEN_URL, false, true);
+        $parsed = array();
         parse_str($access_token, $parsed);
         return $parsed;
     }
@@ -331,6 +340,8 @@ class phpVimeo
 
     /**
      * Get a request token.
+     *
+     * @return array The request token.
      */
     public function getRequestToken($callback_url = 'oob')
     {
@@ -343,6 +354,7 @@ class phpVimeo
             false
         );
 
+        $parsed = array();
         parse_str($request_token, $parsed);
         return $parsed;
     }
@@ -424,17 +436,17 @@ class phpVimeo
         $chunks = array();
         if ($use_multiple_chunks) {
             // Create pieces
-            $number_of_chunks = ceil(filesize($file_path) / $size);
+            $number_of_chunks = intval(ceil(filesize($file_path) / $size));
             for ($i = 0; $i < $number_of_chunks; $i++) {
                 $chunk_file_path = ocp_tempnam('vimeochunking');
 
                 // Break it up
-                $chunk = file_get_contents($file_path, FILE_BINARY, null, $i * $size, $size);
+                $chunk = file_get_contents($file_path, false, null, $i * $size, $size);
                 $file = file_put_contents($chunk_file_path, $chunk);
 
                 $chunks[] = array(
-                    'file' => realpath($chunk_file_name),
-                    'size' => filesize($chunk_file_name)
+                    'file' => realpath($chunk_file_path),
+                    'size' => filesize($chunk_file_path)
                 );
             }
         }

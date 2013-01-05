@@ -17,6 +17,8 @@ function ensure_got_oauth_api_key($service_name) // This is generic so can work 
 
 	if ($api_key=='')
 	{
+		$title=get_screen_title('OAUTH_TITLE',true,array($service_name));
+
 		$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'FEATURE','redirect'=>get_self_url(true)),'_SELF',NULL,false,false,false,'group_GALLERY_SYNDICATION');
 		require_code('site2');
 		assign_refresh($config_url,0.0);
@@ -36,7 +38,7 @@ function install_oauth_settings_for($service_name) // This is generic so can wor
 
 function handle_oauth($service_name,$service_title,$auth_url)
 {
-	$title=get_page_title('OAUTH_TITLE',$service_name);
+	$title=get_screen_title('OAUTH_TITLE',true,array($service_name));
 
 	$api_key=ensure_got_oauth_api_key($service_name);
 

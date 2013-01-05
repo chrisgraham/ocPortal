@@ -25,6 +25,8 @@ class video_syndication_vimeo
 
 	function __construct()
 	{
+		$service_name='vimeo';
+
 		$this->_vimeo_ob=new phpVimeo(
 			get_option($service_name.'_key'),
 			get_option($service_name.'_client_secret'),
@@ -97,7 +99,7 @@ class video_syndication_vimeo
 					$remote_id=$detected_video['remote_id'];
 					if ((!array_key_exists($remote_id,$videos)) || (!$videos[$remote_id]['validated'])) // If new match, or last match was unvalidated (i.e. old version)
 					{
-						$videos[$youtube_id]=$detected_video;
+						$videos[$remote_id]=$detected_video;
 					}
 				}
 			}
@@ -141,8 +143,9 @@ class video_syndication_vimeo
 		$bound_to_local_id=mixed();
 		if (isset($p->tags))
 		{
-			foreach($p->tags->tag as $tag)
+			foreach ($p->tags->tag as $tag)
 			{
+				$matches=array();
 				if (preg_match('#^sync(\d+)$#',$tag['_content'],$matches)!=0)
 				{
 					$bound_to_local_id=intval($matches[1]);
@@ -159,7 +162,7 @@ class video_syndication_vimeo
 				'bound_to_local_id'=>$bound_to_local_id,
 				'remote_id'=>$remote_id,
 
-				'title'=>$p->title
+				'title'=>$p->title,
 				'description'=>$p->description,
 				'mtime'=>$edit_date,
 				'tags'=>$keywords,
@@ -176,13 +179,13 @@ class video_syndication_vimeo
 	function upload_video($video)
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(10000);
-		list($file_path,$is_temp_file)=_url_to_file_path($video['url']);
+		list($file_path,$is_temp_file)=$this->_url_to_file_path($video['url']);
 		try
 		{
 			$remote_id=$this->_vimeo_ob->upload($file_path,true,2097152);
 
 			if ($is_temp_file) @unlink($file_path);
-			if ($remote_id==false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			if ($remote_id===false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 			$this->_vimeo_ob->call('vimeo.videos.setDownloadPrivacy',array($remote_id,false)); // If we want to allow downloading, we'll handle that locally. Most users won't want downloading.
 
@@ -210,26 +213,26 @@ class video_syndication_vimeo
 		$query_params['video_id']=$remote_id;
 		$api_method='vimeo.videos.getInfo';
 		$result=$this->_vimeo_ob->call($api_method,$query_params);
-		if ($result===false) return $videos;
+		if ($result===false) return NULL;
 		$video=$this->_process_remote_video($result);
 
 		return $video;
 	}
 
-	function _url_to_file_path()
+	function _url_to_file_path($url)
 	{
 		$is_temp_file=false;
 
-		if (substr($video['url'],0,strlen(get_custom_base_url()))!=get_custom_base_url())
+		if (substr($url,0,strlen(get_custom_base_url()))!=get_custom_base_url())
 		{
 			$temppath=ocp_tempnam('vimeo_temp_dload');
 			$tempfile=fopen($temppath,'wb');
-			http_download_file($video['url'],1024*1024*1024*5,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$tempfile);
+			http_download_file($url,1024*1024*1024*5,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$tempfile);
 
 			$is_temp_file=true;
 		} else
 		{
-			$video_path=preg_replace('^'.preg_quote(get_custom_base_url().'/'),get_custom_file_base(),$video['url']);
+			$video_path=preg_replace('^'.preg_quote(get_custom_base_url().'/'),get_custom_file_base(),$url);
 		}
 
 		return array($video_path,$is_temp_file);
@@ -260,8 +263,8 @@ class video_syndication_vimeo
 
 				case 'url':
 					if (function_exists('set_time_limit')) @set_time_limit(10000);
-					list($file_path,$is_temp_file)=_url_to_file_path($video['url']);
-					$remote_id=$this->_vimeo_ob->upload(_url_to_file_path($file_path),true,2097152,$video['remote_id']);
+					list($file_path,$is_temp_file)=$this->_url_to_file_path($video['url']);
+					$remote_id=$this->_vimeo_ob->upload($this->_url_to_file_path($file_path),true,2097152,$video['remote_id']);
 					if ($is_temp_file) @unlink($file_path);
 					if ($remote_id===false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 					break;

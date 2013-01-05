@@ -398,6 +398,22 @@ function lex($text=NULL)
 
 					if (($token_found=='IF') && (@$tokens[count($tokens)-1][0]=='ELSE')) log_warning('Use \'elseif\' not \'else if\'',$i,true);
 
+					if (($token_found=='CURLY_OPEN') && (isset($tokens[0])))
+					{
+						if ($tokens[count($tokens)-1][0]=='OBJECT_OPERATOR')
+						{
+							$token_found='';
+							do
+							{
+								list($reached_end,$i,$char)=plex__get_next_char($i);
+								if ($char!='}') $token_found.=$char;
+							}
+							while (($char!='}') && (!$reached_end));
+							$tokens[]=array('IDENTIFIER',$token_found,$i);
+							break;
+						}
+					}
+
 					/*$terse_style=!isset($GLOBALS['NON_TERSE']); TODO Maybe put back, but should be optional
 					if ($terse_style)
 					{
