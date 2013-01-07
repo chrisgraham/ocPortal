@@ -301,7 +301,10 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 
 		$select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
 		$where='p_validated=1 AND p_topic_id='.strval($out[$i]['id']).' '.not_like_spacer_posts('t.text_original');
-		$fp_rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY p_time,p.id',1);
+		$sql='SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
+		if (strpos(get_db_type(),'mysql')!==false) $sql.='USE INDEX(in_topic) ';
+		$sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY p_time,p.id';
+		$fp_rows=$this_ref->connection->query($sql,1);
 		if (!array_key_exists(0,$fp_rows))
 		{
 			unset($out[$i]);

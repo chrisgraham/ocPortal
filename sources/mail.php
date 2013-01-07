@@ -208,8 +208,6 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 {
 	if (running_script('stress_test_loader')) return NULL;
 
-	if (@$GLOBALS['SITE_INFO']['no_email_output']==='1') return NULL;
-
 	global $EMAIL_ATTACHMENTS;
 	$EMAIL_ATTACHMENTS=array();
 
@@ -246,6 +244,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 		if ($through_queue) return NULL;
 	}
+
+	if (@$GLOBALS['SITE_INFO']['no_email_output']==='1') return NULL;
 
 	if (count($attachments)==0) $attachments=NULL;
 

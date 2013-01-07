@@ -82,9 +82,9 @@ echo "
 			if (current_parent_value=='') // Parent unset, so this is
 			{
 				option=document.createElement('option');
+				element.add(option,null);
 				set_inner_html(option,'".addslashes(do_lang('SELECT_OTHER_FIRST','xxx'))."'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label));
 				option.value='';
-				element.add(option,null);
 			} else // Parent is set, so we need to filter possibilities
 			{
 				// Work out available (filtered) possiblities
@@ -101,19 +101,19 @@ echo "
 
 				// Add possibilities, selecting one if it matches old selection (i.e. continuity maintained)
 				option=document.createElement('option');
+				element.add(option,null);
 				set_inner_html(option,'".addslashes(do_lang('PLEASE_SELECT'))."');
 				option.value='';
-				element.add(option,null);
 				var previous_one=null;
 				for (var i=0;i<possibilities.length;i++)
 				{
 					if (previous_one!=possibilities[i]) // don't allow dupes (which we know are sequential due to sorting)
 					{ // not a dupe
 						option=document.createElement('option');
+						element.add(option,null);
 						set_inner_html(option,escape_html(possibilities[i]));
 						option.value=possibilities[i];
 						if (possibilities[i]==current_value) option.selected=true;
-						element.add(option,null);
 						previous_one=possibilities[i];
 					}
 				}

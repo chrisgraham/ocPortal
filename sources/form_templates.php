@@ -1438,7 +1438,7 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  * @param  boolean		Whether this field is empty by default
  * @param  boolean		Whether to input time for this field also
  * @param  ?mixed			The default timestamp to use (either TIME or array of time components) (NULL: now)
- * @param  ?integer		The number of years to allow selection from (all into the future, as this field type is not meant for inputting past dates) (NULL: no limit)
+ * @param  ?integer		The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
  * @param  ?integer		The year to start from (NULL: this year)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?boolean		Whether this is rendered in pink as a required field (NULL: depend on $null_ok)
