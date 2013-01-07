@@ -201,6 +201,7 @@ class Hook_addon_registry_galleries
 			'uploads/grepimages/.htaccess',
 			'uploads/watermarks/.htaccess',
 			'themes/default/images/audio_thumb.png',
+			'themes/default/images/video_thumb.png',
 			'JAVASCRIPT_GALLERIES.tpl',
 			'OCF_MEMBER_PROFILE_GALLERIES.tpl',
 			'sources/hooks/systems/block_ui_renderers/galleries.php',

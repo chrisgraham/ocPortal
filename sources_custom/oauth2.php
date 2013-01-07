@@ -5,17 +5,17 @@ function init__oauth2()
 	require_lang('oauth2');
 }
 
-function ensure_got_oauth_api_key($service_name) // This is generic so can work with oauth1
+function ensure_got_oauth_client_id($service_name,$has_sep_key=false) // This is generic so can work with oauth1
 {
-	$api_key=get_option($service_name.'_key',true);
+	$client_id=get_option($service_name.'_client_id',true);
 
-	if (is_null($api_key))
+	if (is_null($client_id))
 	{
-		install_oauth_settings_for($service_name);
-		$api_key='';
+		install_oauth_settings_for($service_name,$has_sep_key);
+		$client_id='';
 	}
 
-	if ($api_key=='')
+	if ($client_id=='')
 	{
 		$title=get_screen_title('OAUTH_TITLE',true,array($service_name));
 
@@ -24,27 +24,31 @@ function ensure_got_oauth_api_key($service_name) // This is generic so can work 
 		assign_refresh($config_url,0.0);
 		$echo=do_template('REDIRECT_SCREEN',array('URL'=>$config_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('OAUTH_SETUP_FIRST',$service_name)));
 		$echo->evaluate_echo();
-		return;
+		exit();
 	}
+
+	return $client_id;
 }
 
-function install_oauth_settings_for($service_name) // This is generic so can work with oauth1
+function install_oauth_settings_for($service_name,$has_sep_key=false) // This is generic so can work with oauth1
 {
 	require_code('database_action');
 
-	add_config_option(strtoupper($service_name).'_KEY',$service_name.'_key','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
+	add_config_option(strtoupper($service_name).'_CLIENT_ID',$service_name.'_client_id','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
 	add_config_option(strtoupper($service_name).'_CLIENT_SECRET',$service_name.'_client_secret','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
+	if ($has_sep_key)
+		add_config_option(strtoupper($service_name).'_DEVELOPER_KEY',$service_name.'_developer_key','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
 }
 
 function handle_oauth($service_name,$service_title,$auth_url)
 {
 	$title=get_screen_title('OAUTH_TITLE',true,array($service_name));
 
-	$api_key=ensure_got_oauth_api_key($service_name);
+	$client_id=ensure_got_oauth_client_id($service_name);
 
 	if (get_param('state','')!='authorized')
 	{
-		$auth_url=str_replace('_API_KEY_',$api_key,$auth_url);
+		$auth_url=str_replace('_CLIENT_ID_',$client_id,$auth_url);
 		require_code('site2');
 		assign_refresh($auth_url,0.0);
 		$echo=do_template('REDIRECT_SCREEN',array('URL'=>$auth_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
@@ -58,16 +62,15 @@ function handle_oauth($service_name,$service_title,$auth_url)
 	{
 		$post_params=array(
 			'code'=>$code,
-			'client_id'=>$api_key,
+			'client_id'=>$client_id,
 			'client_secret'=>get_option($service_name.'_client_secret'),
-			'redirect_uri'=>get_base_url(),
+			'redirect_uri'=>static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,false,false,true)),
 			'grant_type'=>'authorization_code',
 		);
 
 		$result=http_download_file('https://accounts.google.com/o/oauth2/token',NULL,true,false,'ocPortal',$post_params);
 		$parsed_result=json_decode($result);
-
-		set_long_value($service_name.'_refresh_token',$parsed_result['refresh_token']);
+		set_long_value($service_name.'_refresh_token',$parsed_result->refresh_token);
 
 		$out=do_lang_tempcode('OAUTH_SUCCESS',$service_name);
 	} else
@@ -80,12 +83,12 @@ function handle_oauth($service_name,$service_title,$auth_url)
 	$out->evaluate_echo();
 }
 
-function refresh_oauth($url,$client_id,$client_secret,$refresh_token)
+function refresh_oauth($service_name,$url,$client_id,$client_secret,$refresh_token)
 {
 	$post_params=array(
-		'client_id'=>get_option('youtube_key'),
-		'client_secret'=>get_option('youtube_secret'),
-		'refresh_token'=>get_value('youtube_refresh_token'),
+		'client_id'=>get_option($service_name.'_client_id'),
+		'client_secret'=>get_option($service_name.'_client_secret'),
+		'refresh_token'=>get_long_value($service_name.'_refresh_token'),
 		'grant_type'=>'refresh_token',
 	);
 
@@ -99,5 +102,5 @@ function refresh_oauth($url,$client_id,$client_secret,$refresh_token)
 		warn_exit(do_lang_tempcode('ERROR_OBTAINING_ACCESS_TOKEN'));
 	}
 
-	return $parsed_result['access_token'];
+	return $parsed_result->access_token;
 }

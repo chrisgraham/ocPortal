@@ -719,7 +719,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 
-	if (addon_installed('gallery_syndication',true))
+	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 	{
 		require_code('gallery_syndication');
 		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
@@ -799,7 +799,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'videos',strval($id),$self_url,do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
 
-	if (addon_installed('gallery_syndication',true))
+	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 	{
 		require_code('gallery_syndication');
 		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);

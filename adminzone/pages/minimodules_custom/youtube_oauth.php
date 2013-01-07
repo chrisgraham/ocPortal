@@ -20,9 +20,12 @@
 
 require_code('oauth2');
 
-$auth_url='https://accounts.google.com/o/oauth2/auth?client_id=_API_KEY_';
-$auth_url.='&redirect_uri='.urlencode(static_evaluate_tempcode(get_self_url(true)));
+ensure_got_oauth_client_id('youtube',true);
+
+$auth_url='https://accounts.google.com/o/oauth2/auth?client_id=_CLIENT_ID_';
+$auth_url.='&redirect_uri='.urlencode(static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,false,false,true)));
 $auth_url.='&response_type=code';
+$auth_url.='&approval_prompt=force';
 $auth_url.='&scope='.urlencode('https://gdata.youtube.com');
 $auth_url.='&access_type=offline';
 $auth_url.='&state=authorized';

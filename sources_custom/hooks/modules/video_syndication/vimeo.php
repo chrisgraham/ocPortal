@@ -25,10 +25,20 @@ class video_syndication_vimeo
 
 	function __construct()
 	{
-		$service_name='vimeo';
+		require_code('vimeo');
 
+		// Ensure config options installed
+		$service_name='vimeo';
+		$client_id=get_option($service_name.'_client_id',true);
+		if (is_null($client_id))
+		{
+			require_code('oauth2');
+			install_oauth_settings_for($service_name);
+		}
+
+		// Initialise official client
 		$this->_vimeo_ob=new phpVimeo(
-			get_option($service_name.'_key'),
+			get_option($service_name.'_client_id'),
 			get_option($service_name.'_client_secret'),
 			get_long_value($service_name.'_access_token'),
 			get_long_value($service_name.'_access_token_secret')
@@ -40,15 +50,20 @@ class video_syndication_vimeo
 		return 'Vimeo';
 	}
 
+	function recognises_as_remote($url)
+	{
+		return (preg_match('#^http://vimeo\.com/(\d+)#',$url)!=0);
+	}
+
 	function is_active()
 	{
-		$vimeo_key=get_option('vimeo_key');
-		if (is_null($vimeo_key))
+		$vimeo_client_id=get_option('vimeo_client_id',true);
+		if (is_null($vimeo_client_id))
 		{
 			return false;
 		}
 
-		return ($vimeo_key!='');
+		return ($vimeo_client_id!='');
 	}
 
 	function get_remote_videos($local_id=NULL)
@@ -74,7 +89,7 @@ class video_syndication_vimeo
 				$api_method='vimeo.videos.getInfo';
 
 				$result=$this->_vimeo_ob->call($api_method,$query_params);
-				if ($result===false) return $videos;
+				if ($result===false) break;
 
 				$result=array('video'=>array($result));
 			} else
@@ -89,7 +104,7 @@ class video_syndication_vimeo
 				if ($result===false) return $videos;
 			}
 
-			if (!isset($result['video'])) return $videos;
+			if (!isset($result['video'])) break;
 
 			foreach ($result['video'] as $p)
 			{
@@ -230,9 +245,11 @@ class video_syndication_vimeo
 			http_download_file($url,1024*1024*1024*5,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$tempfile);
 
 			$is_temp_file=true;
+
+			$video_path=$temppath;
 		} else
 		{
-			$video_path=preg_replace('^'.preg_quote(get_custom_base_url().'/'),get_custom_file_base(),$url);
+			$video_path=preg_replace('#^'.preg_quote(get_custom_base_url().'/').'#',get_custom_file_base().'/',$url);
 		}
 
 		return array($video_path,$is_temp_file);

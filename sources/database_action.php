@@ -228,7 +228,7 @@ function permission_exists($name)
  * @param  ID_TEXT		The language code to the human name of the config option
  * @param  ID_TEXT		The codename for the config option
  * @param  ID_TEXT		The type of the config option
- * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup colour
+ * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup colour special
  * @param  SHORT_TEXT	The PHP code to execute to get the default value for this option. Be careful not to make a get_option loop.
  * @param  ID_TEXT		The language code for the option category to store the option in
  * @param  ID_TEXT		The language code for the option group to store the option in
@@ -237,7 +237,7 @@ function permission_exists($name)
  */
 function add_config_option($human_name,$name,$type,$eval,$category,$group,$shared_hosting_restricted=0,$data='')
 {
-	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','?forum','forum','forum_grouping','usergroup','colour')))
+	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','?forum','forum','forum_grouping','usergroup','colour','special')))
 		fatal_exit('Invalid config option type');
 
 	$map=array('c_set'=>0,'config_value'=>'','the_name'=>$name,'human_name'=>$human_name,'the_type'=>$type,'eval'=>$eval,'the_page'=>$category,'section'=>$group,'explanation'=>'CONFIG_OPTION_'.$name,'shared_hosting_restricted'=>$shared_hosting_restricted,'c_data'=>$data);

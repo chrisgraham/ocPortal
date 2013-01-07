@@ -922,9 +922,10 @@ class Module_admin_config
 				if ($myrow['the_name']=='timezone')
 				{
 					set_value('timezone',$value);
+					continue;
 				}
 			}
-			elseif ($myrow['c_set']==1)
+			if ($myrow['c_set']==1)
 			{
 				if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (is_numeric($myrow['config_value'])))
 				{

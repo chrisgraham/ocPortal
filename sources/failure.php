@@ -996,14 +996,21 @@ function die_html_trace($message)
 		$traces='';
 		foreach ($stage as $key=>$value)
 		{
-			if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)))
+			try
 			{
-				$_value=gettype($value);
-			} else
+				if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)))
+				{
+					$_value=gettype($value);
+				} else
+				{
+					@ob_start();
+					var_export($value);
+					$_value=ob_get_clean();
+				}
+			}
+			catch (Exception $e) // Can happen for SimpleXMLElement
 			{
-				@ob_start();
-				var_export($value);
-				$_value=ob_get_clean();
+				$_value=make_string_tempcode(escape_html('...'));
 			}
 
 			global $SITE_INFO;
@@ -1053,19 +1060,26 @@ function get_html_trace()
 				{
 					if (!((is_array($param)) && (array_key_exists('GLOBALS',$param)))) // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
 					{
-						if ((is_object($param) && (is_a($param,'ocp_tempcode'))) || (is_null($param)) || ((is_array($param)) && (defined('HIPHOP_PHP'))) || (is_null($param)) || (strpos(serialize($param),';R:')!==false))
+						try
 						{
-							$__value=gettype($param);
-						} else
-						{
-							@ob_start();
-							var_export($param);
-							$__value=ob_get_clean();
+							if ((is_object($param) && (is_a($param,'ocp_tempcode'))) || (is_null($param)) || ((is_array($param)) && (defined('HIPHOP_PHP'))) || (is_null($param)) || (strpos(serialize($param),';R:')!==false))
+							{
+								$__value=gettype($param);
+							} else
+							{
+								@ob_start();
+								var_export($param);
+								$__value=ob_get_clean();
+							}
+							if ((strlen($__value)<MAX_STACK_TRACE_VALUE_LENGTH) || (defined('HIPHOP_PHP')))
+							{
+								$_value->attach(paragraph(escape_html($__value)));
+							} else
+							{
+								$_value=make_string_tempcode(escape_html('...'));
+							}
 						}
-						if ((strlen($__value)<MAX_STACK_TRACE_VALUE_LENGTH) || (defined('HIPHOP_PHP')))
-						{
-							$_value->attach(paragraph(escape_html($__value)));
-						} else
+						catch (Exception $e) // Can happen for SimpleXMLElement
 						{
 							$_value=make_string_tempcode(escape_html('...'));
 						}
@@ -1080,15 +1094,22 @@ function get_html_trace()
 					$value=integer_format($__value);
 				else $value=$__value;
 
-				if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)) || (strpos(serialize($value),';R:')!==false))
+				try
 				{
-					$_value=make_string_tempcode(escape_html(gettype($value)));
-				} else
+					if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)) || (strpos(serialize($value),';R:')!==false))
+					{
+						$_value=make_string_tempcode(escape_html(gettype($value)));
+					} else
+					{
+						@ob_start();
+						var_export($value);
+						$_value=make_string_tempcode(escape_html(ob_get_contents()));
+						ob_end_clean();
+					}
+				}
+				catch (Exception $e) // Can happen for SimpleXMLElement
 				{
-					@ob_start();
-					var_export($value);
-					$_value=make_string_tempcode(escape_html(ob_get_contents()));
-					ob_end_clean();
+					$_value=make_string_tempcode(escape_html('...'));
 				}
 			}
 

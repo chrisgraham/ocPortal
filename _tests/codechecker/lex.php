@@ -402,15 +402,28 @@ function lex($text=NULL)
 					{
 						if ($tokens[count($tokens)-1][0]=='OBJECT_OPERATOR')
 						{
-							$token_found='';
-							do
+							list($reached_end,$i,$char)=plex__get_next_char($i);
+
+							if ($char=='\'')
 							{
+								$token_found='';
+								do
+								{
+									list($reached_end,$i,$char)=plex__get_next_char($i);
+									if ($char!='\'') $token_found.=$char;
+								}
+								while (($char!='\'') && (!$reached_end));
+
 								list($reached_end,$i,$char)=plex__get_next_char($i);
-								if ($char!='}') $token_found.=$char;
-							}
-							while (($char!='}') && (!$reached_end));
-							$tokens[]=array('IDENTIFIER',$token_found,$i);
-							break;
+								if ($char!='}')
+								{
+									log_warning('Bad token found',$i,true);
+									exit();
+								}
+
+								$tokens[]=array('IDENTIFIER',$token_found,$i);
+								break;
+							} else $i--;
 						}
 					}
 

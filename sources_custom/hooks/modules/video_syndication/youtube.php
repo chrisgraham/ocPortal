@@ -22,20 +22,37 @@ class video_syndication_youtube
 {
 	var $_access_token=NULL;
 
+	function __construct()
+	{
+		// Ensure config options installed
+		$service_name='youtube';
+		$client_id=get_option($service_name.'_client_id',true);
+		if (is_null($client_id))
+		{
+			require_code('oauth2');
+			install_oauth_settings_for($service_name,true);
+		}
+	}
+
 	function get_service_title()
 	{
 		return 'YouTube';
 	}
 
+	function recognises_as_remote($url)
+	{
+		return ((preg_match('#^http://www\.youtube\.com/watch\?v=([\w\-]+)#',$url)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$url)!=0));
+	}
+
 	function is_active()
 	{
-		$youtube_key=get_option('youtube_key');
-		if (is_null($youtube_key))
+		$youtube_client_id=get_option('youtube_client_id',true);
+		if (is_null($youtube_client_id))
 		{
 			return false;
 		}
 
-		return ($youtube_key!='');
+		return ($youtube_client_id!='');
 	}
 
 	function get_remote_videos($local_id=NULL)
@@ -48,15 +65,16 @@ class video_syndication_youtube
 			$query_params=array('max-results'=>strval(50),'start-index'=>strval($start));
 			if (!is_null($local_id)) $query_params['category']='sync'.strval($local_id);
 			$xml=$this->_http('https://gdata.youtube.com/feeds/api/users/default/uploads',$query_params);
-			if ($xml===NULL) return $videos;
+			if ($xml===NULL) break;
 
 			$parsed=simplexml_load_string($xml);
 
-			if (!isset($parsed['entry'])) return $videos;
+			if (!isset($parsed->entry)) break;
 
-			foreach ($parsed['entry'] as $p)
+			foreach ($parsed->entry as $p)
 			{
 				$detected_video=$this->_process_remote_video($p);
+
 				if (!is_null($detected_video))
 				{
 					$remote_id=$detected_video['remote_id'];
@@ -78,39 +96,40 @@ class video_syndication_youtube
 	{
 		$detected_video=mixed();
 
-		$remote_id=$p->{media:group}[0]->{yt:videoid}[0];
+		$_remote_id=$p->xpath('//media:group/yt:videoid');
+		$remote_id=strval($_remote_id[0]);
 
-		$add_date=strtotime($p->published[0]);
-		$edit_date=isset($p->updated[0])?strtotime($p->updated[0]):$add_date;
+		$add_date=strtotime(strval($p->published[0]));
+		$edit_date=isset($p->updated[0])?strtotime(strval($p->updated[0])):$add_date;
 
 		$allow_rating=mixed();
 		$allow_comments=mixed();
 		$validated=true;
-		foreach ($p->{yt:accessControl} as $a)
+		foreach ($p->xpath('//yt:accessControl') as $a)
 		{
-			if ($a['action']=='rate') $allow_rating=($a['permission']=='allowed');
-			if ($a['action']=='comment') $allow_comments=($a['permission']=='allowed');
-			if ($a['action']=='list') $validated=($a['permission']=='allowed');
+			if (strval($a['action'])=='rate') $allow_rating=(strval($a['permission'])=='allowed');
+			if (strval($a['action'])=='comment') $allow_comments=(strval($a['permission'])=='allowed');
+			if (strval($a['action'])=='list') $validated=(strval($a['permission'])=='allowed');
 		}
-
 		$bound_to_local_id=mixed();
 		$category=mixed();
 
-		$keywords=explode(', ',$p->{media:group}[0]->{media:keywords}[0]);
+		$_keywords=$p->xpath('//media:group/media:keywords');
+		$keywords=explode(', ',strval($_keywords[0]));
 
 		// Find category and bound ID
-		foreach ($p->{media:group}[0]->{media:category} as $k)
+		foreach ($p->xpath('//media:group/media:category') as $k)
 		{
-			if ($k['scheme']=='http://gdata.youtube.com/schemas/2007/developertags.cat')
+			if (strval($k['scheme'])=='http://gdata.youtube.com/schemas/2007/developertags.cat')
 			{
 				$matches=array();
-				if (preg_match('#^sync(\d+)$#',$k,$matches)!=0)
+				if (preg_match('#^sync(\d+)$#',strval($k),$matches)!=0)
 				{
 					$bound_to_local_id=intval($matches[1]);
 				}
-			} elseif ($k['scheme']=='http://gdata.youtube.com/schemas/2007/categories.cat')
+			} elseif (strval($k['scheme'])=='http://gdata.youtube.com/schemas/2007/categories.cat')
 			{
-				$category=$k;
+				$category=strval($k);
 				array_unshift($keywords,$category);
 			}
 		}
@@ -119,12 +138,16 @@ class video_syndication_youtube
 		foreach ($keywords as $i=>$k)
 		{
 			$matches=array();
-			if (preg_match('#^sync(\d+)$#',$k,$matches)!=0)
+			if (preg_match('#^sync(\d+)$#',strval($k),$matches)!=0)
 			{
 				$bound_to_local_id=intval($matches[1]);
 				unset($keywords[$i]);
 			}
 		}
+
+		$_description=$p->xpath('//media:group/media:description');
+
+		$_player=$p->xpath('//media:group/media:player');
 
 		if (!is_null($bound_to_local_id))
 		{
@@ -132,11 +155,11 @@ class video_syndication_youtube
 				'bound_to_local_id'=>$bound_to_local_id,
 				'remote_id'=>$remote_id,
 
-				'title'=>$p['title'][0],
-				'description'=>$p->{media:group}[0]->{media:description}[0],
+				'title'=>strval($p['title'][0]),
+				'description'=>strval($_description[0]),
 				'mtime'=>$edit_date,
 				'tags'=>$keywords,
-				'url'=>$p->{media:group}[0]->{media:player}[0]['url'],
+				'url'=>strval($_player[0]['url']),
 				'allow_rating'=>$allow_rating,
 				'allow_comments'=>$allow_comments,
 				'validated'=>$validated,
@@ -148,27 +171,57 @@ class video_syndication_youtube
 
 	function upload_video($video)
 	{
+		global $HTTP_DOWNLOAD_URL;
+
 		$extra_headers=array('Slug'=>basename($video['url']));
 
 		$xml=$this->_generate_video_xml($video/*PHP has weird overwrite precedence with + operator, opposite to the intuitive ordering*/,true);
 
-		$file_to_upload=$video['url'];
+		list($file_path,$is_temp_file)=$this->_url_to_file_path($video['url']);
 
-		$api_url='https://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
+		$api_url='https://uploads.gdata.youtube.com/resumable/feeds/api/users/default/uploads';
 
 		if (function_exists('set_time_limit')) @set_time_limit(10000);
 		try
 		{
-			$result=$this->_http($api_url,array(),'POST',$xml,10000.0,$extra_headers,$file_to_upload);
+			$test=$this->_http($api_url,array(),'POST',$xml,1000.0,$extra_headers/*,$file_path*/);
+			$result=$this->_http($HTTP_DOWNLOAD_URL,NULL,'PUT','',10000.0,$extra_headers,$file_path);
 		}
 		catch (Exception $e)
 		{
+			@exit($result);
+			if ($is_temp_file) @unlink($file_path);
+
 			require_lang('gallery_syndication_youtube');
 			attach_message(do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
+			return NULL;
 		}
+
+		if ($is_temp_file) @unlink($file_path);
 
 		$parsed=simplexml_load_string($result);
 		return $this->_process_remote_video($parsed);
+	}
+
+	function _url_to_file_path($url)
+	{
+		$is_temp_file=false;
+
+		if (substr($url,0,strlen(get_custom_base_url()))!=get_custom_base_url())
+		{
+			$temppath=ocp_tempnam('vimeo_temp_dload');
+			$tempfile=fopen($temppath,'wb');
+			http_download_file($url,1024*1024*1024*5,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$tempfile);
+
+			$is_temp_file=true;
+
+			$video_path=$temppath;
+		} else
+		{
+			$video_path=preg_replace('#^'.preg_quote(get_custom_base_url().'/').'#',get_custom_file_base().'/',$url);
+		}
+
+		return array($video_path,$is_temp_file);
 	}
 
 	function change_remote_video($video,$changes)
@@ -197,14 +250,14 @@ class video_syndication_youtube
 
 	function leave_comment($video,$comment)
 	{
-		$xml='
+		$xml=trim('
 			<'.'?xml version="1.0" encoding="UTF-8"?'.'>
 			<entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007">
 				<content>'.xmlentities($comment).'</content>
 			</entry>
-		';
+		');
 
-		$this->_http('https://gdata.youtube.com/feeds/api/videos/'.$video['remote_id'].'/comments','POST',$xml);
+		$this->_http('https://gdata.youtube.com/feeds/api/videos/'.$video['remote_id'].'/comments',array(),'POST',$xml);
 	}
 
 	function _generate_video_xml($video,$is_initial)
@@ -212,7 +265,7 @@ class video_syndication_youtube
 		// Match to a category using remote list
 		$remote_list_xml=http_download_file('http://gdata.youtube.com/schemas/2007/categories.cat');
 		$remote_list_parsed=simplexml_load_string($remote_list_xml);
-		$category=mixed();
+		$category='People';
 		foreach ($remote_list_parsed->category as $c) // Try to bind to one of our tags. Already-bound-remote-category intentionally will be on start of tags list, so automatically maintained through precedence.
 		{
 			foreach ($video['tags'] as $i=>$tag)
@@ -253,7 +306,7 @@ class video_syndication_youtube
 				<updated>'.date('c',$video['mtime']).'</updated>
 			</entry>
 		';
-		return $xml;
+		return trim($xml);
 	}
 
 	function _connect()
@@ -261,25 +314,31 @@ class video_syndication_youtube
 		require_code('oauth2');
 
 		$auth_url='https://accounts.google.com/o/oauth2/token';
-		$this->_access_token=refresh_oauth($auth_url,get_option('youtube_key'),get_option('youtube_secret'),get_value('youtube_refresh_token'));
+		$this->_access_token=refresh_oauth('youtube',$auth_url,get_option('youtube_client_id'),get_option('youtube_client_secret'),get_long_value('youtube_refresh_token'));
 	}
 
 	function _http($url,$params,$http_verb='GET',$xml=NULL,$timeout=6.0,$extra_headers=NULL,$file_to_upload=NULL)
 	{
-		$key=get_option('youtube_key');
+		$youtube_developer_key=get_option('youtube_developer_key');
 
 		if (is_null($this->_access_token))
 		{
 			if (!$this->_connect()) return NULL;
 		}
 
-		$_params='';
-		foreach ($params as $key=>$val)
+		if ($params!==NULL)
 		{
-			$_params.='&'.$key.'='.urlencode($val);
-		}
+			$_params='';
+			foreach ($params as $key=>$val)
+			{
+				$_params.='&'.$key.'='.urlencode($val);
+			}
 
-		$full_url=$url.'?key='.$key.'&strict=1&v=2.1'.$_params;
+			$full_url=$url.'?key='.urlencode($youtube_developer_key).'&strict=1&v=2.1'.$_params;
+		} else
+		{
+			$full_url=$url;
+		}
 
 		if (is_null($extra_headers)) $extra_headers=array();
 		$extra_headers['Authorization']='Bearer '.$this->_access_token;
@@ -292,8 +351,14 @@ class video_syndication_youtube
 			$files=array($mime_type=>$file_to_upload);
 		}
 
-		$result=http_download_file($full_url,NULL,false,false,'ocPortal',is_null($xml)?NULL:array($xml),NULL,NULL,NULL,NULL,NULL,NULL,NULL,$timeout,!is_null($xml),$files,$extra_headers,$http_verb);
-		if (is_null($result)) throw Exception(static_evaluate_tempcode($GLOBALS['HTTP_MESSAGE_B']));
+		$result=http_download_file($full_url,NULL,false,true,'ocPortal',is_null($xml)?NULL:array($xml),NULL,NULL,NULL,NULL,NULL,NULL,NULL,$timeout,!is_null($xml),$files,$extra_headers,$http_verb,'application/atom+xml');
+
+		if (is_null($result))
+		{
+			global $HTTP_MESSAGE_B;
+			throw new Exception(is_null($HTTP_MESSAGE_B)?do_lang('UNKNOWN'):static_evaluate_tempcode($HTTP_MESSAGE_B));
+		}
+
 		return $result;
 	}
 }

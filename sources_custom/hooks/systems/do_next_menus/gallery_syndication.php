@@ -28,11 +28,11 @@ class Hook_do_next_menus_gallery_syndication
 
 		$menu_items=array();
 
-		$hooks=find_all_hooks('modules','gallery_syndication');
+		$hooks=find_all_hooks('modules','video_syndication');
 
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/modules/video_syndication');
+			require_code('hooks/modules/video_syndication/'.filter_naughty($hook));
 			$ob=object_factory('video_syndication_'.filter_naughty($hook));
 
 			$service_title=$ob->get_service_title();

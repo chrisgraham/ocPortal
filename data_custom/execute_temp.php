@@ -53,4 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	add_config_option('VIDEO_SYNC_TRANSCODING','video_sync_transcoding','special','return \''.addslashes(do_lang('OTHER',NULL,NULL,NULL,fallback_lang())).'\';','FEATURE','GALLERY_SYNDICATION');
 }

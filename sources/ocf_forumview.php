@@ -300,7 +300,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	$button_array=array();
 	if ((!is_guest()) && ($type!='pt'))
 	{
-		if ((get_value('disable_mark_forum_read')!=='1') && ($num_unread!=0))
+		if (get_value('disable_mark_forum_read')!=='1')
 		{
 			$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
 			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'mark_read');

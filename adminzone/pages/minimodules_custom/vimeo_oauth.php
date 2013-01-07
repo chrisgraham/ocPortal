@@ -25,9 +25,9 @@ $service_name='vimeo';
 
 $title=get_screen_title('OAUTH_TITLE',true,array($service_name));
 
-$api_key=ensure_got_oauth_api_key($service_name);
+$client_id=ensure_got_oauth_client_id($service_name);
 
-$vimeo=new phpVimeo(get_option($service_name.'_key'),get_option($service_name.'_client_secret'));
+$vimeo=new phpVimeo(get_option($service_name.'_client_id'),get_option($service_name.'_client_secret'));
 
 $oauth_token=get_param('oauth_token','');
 if ($oauth_token=='')
