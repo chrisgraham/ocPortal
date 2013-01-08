@@ -302,7 +302,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 	$c=intval(get_option('max_download_size'))*1024;
 	if (has_specific_permission(get_member(),'exceed_filesize_limit')) $c=0;
 
-	$d=0;
+	$d=mixed();
 	if ((!is_null($source_member)) && (!has_specific_permission(get_member(),'exceed_filesize_limit'))) // We'll be considering quota also
 	{
 		if (get_forum_type()=='ocf')
@@ -322,7 +322,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 	if ($a!=0) $possibilities[]=$a;
 	if ($b!=0) $possibilities[]=$b;
 	if ($c!=0) $possibilities[]=$c;
-	$possibilities[]=$d;
+	if ($d!==NULL) $possibilities[]=$d;
 
 	return min($possibilities);
 }

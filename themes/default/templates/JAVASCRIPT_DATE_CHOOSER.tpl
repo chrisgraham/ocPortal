@@ -38,13 +38,13 @@ if (typeof window.YAHOO != 'undefined')
 			var date = new Date();
 			var thisMonth = document.getElementById(stub + '_month').options[document.getElementById(stub + '_month').selectedIndex].value;
 			if (thisMonth == '')
-				thisMonth = date.getMonth() + 1;
+				thisMonth = (date.getMonth() + 1)+'';
 			var thisYear = document.getElementById(stub + '_year').options[document.getElementById(stub + '_year').selectedIndex].value;
 			if (thisYear == '')
-				thisYear = date.getFullYear();
+				thisYear = (date.getFullYear())+'';
 			var thisDay = document.getElementById(stub + '_day').options[document.getElementById(stub + '_day').selectedIndex].value;
 			if (thisDay == '')
-				thisDay = date.getDate();
+				thisDay = (date.getDate())+'';
 			var monthDate = thisMonth + '/' + thisYear;
 			var date = thisMonth + '/' + thisDay + '/' + thisYear;
 			window[calob] = new YAHOO.widget.Calendar('cal' + stub, 'cal' + stub + 'Container', monthDate, date);
@@ -58,7 +58,11 @@ if (typeof window.YAHOO != 'undefined')
 					window[calob].minDate = new Date();
 					window[calob].minDate.setDate(1);
 					window[calob].minDate.setMonth(0);
-					window[calob].minDate.setFullYear(document.getElementById(stub + '_year').options[1].value);
+					var year_field = document.getElementById(stub + '_year');
+					var min_year_a = window.parseInt(year_field.options[1].value);
+					var min_year_b = window.parseInt(year_field.options[year_field.options.length-1].value);
+					var min_year = (min_year_a<min_year_b)?min_year_a:min_year_b;
+					window[calob].minDate.setFullYear(min_year);
 				}
 				if (maxdate)
 				{
@@ -70,8 +74,16 @@ if (typeof window.YAHOO != 'undefined')
 				var dates = window[calob].getSelectedDates();
 				var date = dates[0];
 				var year = document.getElementById(stub + '_year');
-				var new_year_index = date.getFullYear() - year.options[1].value + 1;
-				if ((new_year_index >= year.options.length) || (new_year_index<0) || (year.options[new_year_index].value != date.getFullYear()))
+				var new_year_index = null;
+				for (var i=1;i<year.options.length;i++)
+				{
+					if (window.parseInt(year.options[i].value) == date.getFullYear())
+					{
+						new_year_index = i;
+						break;
+					}
+				}
+				if (new_year_index == null)
 				{
 					var new_option = document.createElement('option');
 					new_option.value = date.getFullYear();
