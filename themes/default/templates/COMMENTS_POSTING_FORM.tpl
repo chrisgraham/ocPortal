@@ -65,7 +65,7 @@
 						{+START,IF,{GET_EMAIL}}
 							<tr>
 								<th class="de_th">
-									<label for="email">{!EMAIL_ADDRESS}:</label>{+START,IF,{EMAIL_OPTIONAL}} <span class="associated_details">({!OPTIONAL})</span>{+END}:
+									<label for="email">{!EMAIL_ADDRESS}:</label>{+START,IF,{EMAIL_OPTIONAL}} <span class="associated_details">({!OPTIONAL})</span>{+END}
 								</th>
 
 								<td>
