@@ -2238,8 +2238,8 @@ function entities_to_unicode(din)
 	if (typeof window.entity_rep_reg=='undefined')
 	{
 		var reps={'amp':38,'gt':62,'lt':60,'quot':34,'hellip':8230,'middot':183,'ldquo':8220,'lsquo':8216,'rdquo':8221,'rsquo':8217,'mdash':8212,'ndash':8211,'nbsp':160,'times':215,
-		'harr':8596,'lsaquo':8249,'rsaquo':8250,'euro':8364,'pound':163,'bull':8226,'copy':169,'trade':8482,'dagger':8224,'yen':165,'laquo':171,'raquo':187,'larr':8592,'rarr':8594,'uarr':8593,'darr':8595};
-		/*'acute':180,'cedil':184,'circ':710,'macr':175,'tilde':732,'uml':168,'Aacute':193,'aacute':225,'Acirc':194,'acirc':226,'AElig':198,
+		'harr':8596,'lsaquo':8249,'rsaquo':8250,'euro':8364,'pound':163,'bull':8226,'copy':169,'trade':8482,'dagger':8224,'yen':165,'laquo':171,'raquo':187,'larr':8592,'rarr':8594,'uarr':8593,'darr':8595,
+		'acute':180,'cedil':184,'circ':710,'macr':175,'tilde':732,'uml':168,'Aacute':193,'aacute':225,'Acirc':194,'acirc':226,'AElig':198,
 		'aelig':230,'Agrave':192,'agrave':224,'Aring':197,'aring':229,'Atilde':195,'atilde':227,'Auml':196,
 		'auml':228,'Ccedil':199,'ccedil':231,'Eacute':201,'eacute':233,'Ecirc':202,'ecirc':234,'Egrave':200,
 		'egrave':232,'ETH':208,'eth':240,'Euml':203,'euml':235,'Iacute':205,'iacute':237,'Icirc':206,
@@ -2269,17 +2269,25 @@ function entities_to_unicode(din)
 		'Tau':932,'tau':964,'Theta':920,'theta':952,'thetasym':977,'upsih':978,'Upsilon':933,'upsilon':965,
 		'Xi':926,'xi':958,'Zeta':918,'zeta':950,'crarr':8629,'dArr':8659,
 		'hArr':8660,'lArr':8656,'rArr':8658,'uArr':8657,'clubs':9827,
-		'diams':9830,'hearts':9829,'spades':9824,'loz':9674};*/
+		'diams':9830,'hearts':9829,'spades':9824,'loz':9674};
 
 		window.entity_rep_reg={};
 		for (var i in reps)
 		{
-			window.entity_rep_reg['&#'+reps[i]+';']=new RegExp('&'+i+';','g');
+			window.entity_rep_reg['&#'+reps[i]+';']=i;
 		}
 	}
 
+	var i;
 	for (var x in window.entity_rep_reg)
 	{
+		i=window.entity_rep_reg[x];
+		if (typeof i=='string')
+		{
+			if ((i=='acute') && (!din.match(/&\w+;/))) break; // No need to go further usually
+			i=new RegExp('&'+i+';','g');
+			window.entity_rep_reg[x]=i;
+		}
 		din=din.replace(window.entity_rep_reg[x],x);
 	}
 	return din;
