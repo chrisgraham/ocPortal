@@ -152,7 +152,7 @@ class Module_login
 		if (get_forum_type()=='ocf')
 		{
 			require_lang('ocf');
-			$forgotten_link=build_url(array('page'=>'lostpassword'),get_module_zone('lostpassword'));
+			$forgotten_link=build_url(array('page'=>'lostpassword','wide_high'=>get_param_integer('wide_high',NULL)),get_module_zone('lostpassword'));
 			$extra=do_lang_tempcode('IF_FORGOTTEN_PASSWORD',escape_html($forgotten_link->evaluate()));
 		} else $extra=new ocp_tempcode();
 

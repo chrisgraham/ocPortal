@@ -278,6 +278,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]pinpoint_submitban_check[/tt] -- set this to '1' if you only want submitter ban checks to occur in the CMS zone (small performance improvement)
  - [tt]no_block_timeout[/tt] -- set this to '1' if blocks should never timeout
  - [tt]disable_sitemap_for__*[/tt] -- disable sitemap generation for a particular page (e.g. if there's too much data in it and the server can't cope, and the data isn't so important anyway)
+ - [tt]no_tech_login_messages[/tt] -- set to '1' if you don't want technical explanations attaching when a user is forced to login
 
 [title="3"]Hidden 'keep' parameters[/title]
 
