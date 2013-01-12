@@ -35,9 +35,9 @@ function init__gallery_syndication()
 	restrictify();
 }
 
-function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferring=false)
+function sync_video_syndication($local_id=NULL,$new_upload=false,$reupload=false,$consider_deferring=false)
 {
-	$orphaned_handling=get_option('gallery_sync_orphaned_handling');
+	$orphaned_handling=intval(get_option('gallery_sync_orphaned_handling'));
 
 	if (is_null($local_id)) // If being asked to do a full sync
 	{
@@ -52,19 +52,22 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 
 	if (($consider_deferring) && (cron_installed()) && (!is_null($local_id)) && (count($local_videos)==1))
 	{
-		$GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
-			't_id'=>'sync_defer_'.strval($local_id).($reupload?'__reupload':''),
-			't_local_id'=>$local_id,
-			't_local_id_field'=>'id',
-			't_error'=>'',
-			't_url'=>$local_videos[0]['_raw_url'],
-			't_table'=>'videos',
-			't_url_field'=>'url',
-			't_orig_filename_field'=>'',
-			't_width_field'=>'video_width',
-			't_height_field'=>'video_height',
-			't_output_filename'=>'',
-		),false,true);
+		foreach ($local_videos as $local_video)
+		{
+			$GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
+				't_id'=>'sync_defer_'.strval($local_id).($new_upload?'__new_upload':'').($reupload?'__reupload':''),
+				't_local_id'=>$local_id,
+				't_local_id_field'=>'id',
+				't_error'=>'',
+				't_url'=>$local_video['_raw_url'],
+				't_table'=>'videos',
+				't_url_field'=>'url',
+				't_orig_filename_field'=>'',
+				't_width_field'=>'video_width',
+				't_height_field'=>'video_height',
+				't_output_filename'=>'',
+			),false,true);
+		}
 		return;
 	}
 
@@ -86,16 +89,23 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 		if ($ob->is_active())
 		{
 			// What is already on remote server
-			$remote_videos=$ob->get_remote_videos($local_id);
+			$remote_videos=$new_upload?/*no remote search needed*/array():$ob->get_remote_videos($local_id);
+
 			foreach ($remote_videos as $video)
 			{
-				if (get_value('handling_video_currently__'.strval($video['bound_to_local_id']))==='1') continue; // Check lock
-				set_value('handling_video_currently__'.strval($video['bound_to_local_id']),'1'); // Set lock
+				if (!$GLOBALS['DEV_MODE'])
+				{
+					if (get_value('handling_video_currently__'.strval($video['bound_to_local_id']))==='1') continue; // Check lock
+					set_value('handling_video_currently__'.strval($video['bound_to_local_id']),'1'); // Set lock
+				}
 
-				_sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reupload);
+				_sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reupload,$services);
 				$exists_remote[$video['bound_to_local_id']]=true;
 
-				delete_value('handling_video_currently__'.strval($video['bound_to_local_id']));
+				if (!$GLOBALS['DEV_MODE'])
+				{
+					delete_value('handling_video_currently__'.strval($video['bound_to_local_id']));
+				}
 			}
 
 			// What is there locally
@@ -107,15 +117,21 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 					if ($_service->recognises_as_remote($video['url'])) continue 2;
 				}
 
-				if (get_value('handling_video_currently__'.strval($video['local_id']))==='1') continue; // Check lock
-				set_value('handling_video_currently__'.strval($video['local_id']),'1'); // Set lock
+				if (!$GLOBALS['DEV_MODE'])
+				{
+					if (get_value('handling_video_currently__'.strval($video['local_id']))==='1') continue; // Check lock
+					set_value('handling_video_currently__'.strval($video['local_id']),'1'); // Set lock
+				}
 
 				if (!array_key_exists($video['local_id'],$exists_remote))
 				{
 					_sync_onlylocal_video($ob,$video);
 				}
 
-				delete_value('handling_video_currently__'.strval($video['local_id']));
+				if (!$GLOBALS['DEV_MODE'])
+				{
+					delete_value('handling_video_currently__'.strval($video['local_id']));
+				}
 			}
 		}
 	}
@@ -123,29 +139,27 @@ function sync_video_syndication($local_id=NULL,$reupload=false,$consider_deferri
 	if (!is_null($local_id))
 	{
 		$GLOBALS['SITE_DB']->query_delete('video_transcoding',array(
-			't_id'=>'sync_defer_'.strval($local_id),
+			't_id'=>'sync_defer_'.strval($local_id).($new_upload?'__new_upload':'').($reupload?'__reupload':''),
 		));
 	}
 }
 
 function get_local_videos($local_id=NULL)
 {
-	$videos=array();
-
 	$filter=get_option('gallery_sync_ocfilter');
-
 	if ($filter=='')
 	{
 		$where='1=1';
 	} else
 	{
 		require_code('ocfiltering');
-		$where=ocfilter_to_sqlfragment($filter,'id','galleries','parent_id','cat','name',true,false);
+		$where=ocfilter_to_sqlfragment($filter,'v.id','galleries','parent_id','v.cat','name',true,false);
 	}
 
-	if (!is_null($local_id)) $where.=' AND id='.strval($local_id);
+	if (!is_null($local_id)) $where.=' AND v.id='.strval($local_id);
 
-	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'videos WHERE '.$where);
+	$rows=$GLOBALS['SITE_DB']->query('SELECT v.* FROM '.get_table_prefix().'videos v WHERE '.$where,NULL,NULL,false,false,array('title','description'));
+	$videos=array();
 	foreach ($rows as $row)
 	{
 		$videos[$row['id']]=_get_local_video($row);
@@ -169,9 +183,9 @@ function _get_local_video($row)
 		}
 	}
 
-	$categories=array($row['cat']);
+	$categories=array();
 	$parent_id=$row['cat'];
-	while (!is_null($parent_id))
+	while ($parent_id!='')
 	{
 		array_push($categories,$parent_id);
 		if (array_key_exists($parent_id,$tree))
@@ -180,6 +194,7 @@ function _get_local_video($row)
 		} else
 		{
 			$parent_id=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>$parent_id));
+			$tree[$parent_id]=$parent_id;
 		}
 	}
 	array_pop($categories); // We don't need root category on there
@@ -202,14 +217,14 @@ function _get_local_video($row)
 		'tags'=>$tags,
 		'url'=>$url,
 		'_raw_url'=>$row['url'],
-		'_thumb_url'=>$row['thumb_url'],
+		'thumb_url'=>$row['thumb_url'],
 		'allow_rating'=>($row['allow_rating']==1),
 		'allow_comments'=>($row['allow_comments']==1),
 		'validated'=>($row['validated']==1),
 	);
 }
 
-function _sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reupload)
+function _sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reupload,$services)
 {
 	if (array_key_exists($video['bound_to_local_id'],$local_videos))
 	{
@@ -226,10 +241,17 @@ function _sync_remote_video($ob,$video,$local_videos,$orphaned_handling,$reuploa
 		}
 		if ($reupload)
 		{
-			$changes+=array('url'=>$local_video['url']);
+			foreach ($services as $_service)
+			{
+				if ($_service->recognises_as_remote($local_video['url'])) $reupload=false; // Actually, this isn't handleable as a reupload, the URL is on a remote service
+			}
+			if ($reupload)
+			{
+				$changes+=array('url'=>$local_video['url']);
+			}
 		}
 		if ($changes!=array())
-			$ob->change_remote_video($video,$changes);
+			$ob->change_remote_video($video+$local_video,$changes);
 	} else
 	{
 		// Orphaned remotes
@@ -260,15 +282,19 @@ function _sync_onlylocal_video($ob,$local_video)
 	$service_title=$ob->get_service_title();
 
 	$local_video_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$local_video['local_id']),get_module_zone('galleries'),NULL,false,false,true);
+	$_local_video_url=$local_video_url->evaluate();
+	$_local_video_url_cleaned=preg_replace('#^http://#','',$_local_video_url); // Useful if URLs are not permitted
 
 	require_lang('gallery_syndication');
-	$comment=do_lang('VIDEO_SYNC_INITIAL_COMMENT',$service_title,get_site_name(),$local_video_url->evaluate());
+	$comment=do_lang('VIDEO_SYNC_INITIAL_COMMENT',$service_title,get_site_name(),array($_local_video_url,$_local_video_url_cleaned));
 
 	if ($comment!='')
+	{
 		$ob->leave_comment($remote_video,$comment);
+	}
 
 	// Store the DB mapping for the transcoding
-	$transcoding_id=$service_name.'_'.strval($remote_video['remote_id']);
+	$transcoding_id=$service_name.'_'.$remote_video['remote_id'];
 	$GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
 		't_id'=>$transcoding_id,
 		't_local_id'=>$local_video['local_id'],
@@ -293,7 +319,7 @@ function _sync_onlylocal_video($ob,$local_video)
 		store_transcoding_success($transcoding_id,$remote_video['url']);
 
 		// Now copy over thumbnail, if applicable
-		if ((find_theme_image('video_thumb',true)===$local_video['_thumb_url']) || ($local_video['_thumb_url']=='')) // Is currently on default thumb (i.e. none explicitly chosen)
+		if ((find_theme_image('video_thumb',true)===$local_video['thumb_url']) || ($local_video['thumb_url']=='')) // Is currently on default thumb (i.e. none explicitly chosen)
 		{
 			require_code('galleries2');
 			$thumb_url=create_video_thumb($remote_video['url']);

@@ -36,7 +36,7 @@ class Hook_comcode_link_handler_vimeo
 	 */
 	function bind($link,$link_captions_title,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits)
 	{
-		if (preg_match('#^http://vimeo\.com/(\d+)#',$link)!=0)
+		if (preg_match('#^https?://vimeo\.com/(\d+)#',$link)!=0)
 		{
 			global $IMPORTED_CUSTOM_COMCODE;
 			if (!$IMPORTED_CUSTOM_COMCODE)

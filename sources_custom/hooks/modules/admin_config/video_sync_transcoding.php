@@ -24,12 +24,18 @@ class Hook_admin_config_video_sync_transcoding
 	function run($myrow)
 	{
 		$list='';
-		$hooks=find_all_hooks('modules','video_syndication');
 		$list.=static_evaluate_tempcode(form_input_list_entry(do_lang('OTHER',NULL,NULL,NULL,fallback_lang())));
+
+		$hooks=find_all_hooks('modules','video_syndication');
 		foreach (array_keys($hooks) as $hook)
 		{
-			$list.=static_evaluate_tempcode(form_input_list_entry($hook,$hook==get_option($myrow['the_name'])));
+			require_code('hooks/modules/video_syndication/'.filter_naughty($hook));
+			$ob=object_factory('video_syndication_'.filter_naughty($hook));
+			$label=$ob->get_service_title();
+
+			$list.=static_evaluate_tempcode(form_input_list_entry($hook,$hook==get_option($myrow['the_name']),$label));
 		}
+
 		return form_input_list(do_lang_tempcode('VIDEO_SYNC_TRANSCODING'),do_lang_tempcode('CONFIG_OPTION_video_sync_transcoding'),'video_sync_transcoding',make_string_tempcode($list));
 	}
 

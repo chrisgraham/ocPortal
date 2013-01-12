@@ -30,7 +30,7 @@ class Hook_video_embed_vimeo
 	function get_template_name_and_id($url)
 	{
 		$matches=array();
-		if (preg_match('#^http://vimeo\.com/(\d+)#',$url,$matches)!=0)
+		if (preg_match('#^https?://vimeo\.com/(\d+)#',$url,$matches)!=0)
 		{
 			$id=rawurldecode($matches[1]);
 			return array('GALLERY_VIDEO_VIMEO',$id);
@@ -47,12 +47,30 @@ class Hook_video_embed_vimeo
 	function get_video_thumbnail($src_url)
 	{
 		$matches=array();
-		if (preg_match('#^http://vimeo\.com/(\d+)#',$src_url,$matches)!=0)
+		if (preg_match('#^https?://vimeo\.com/(\d+)#',$src_url,$matches)!=0)
 		{
 			$test=get_long_value('vimeo_thumb_for__'.$matches[1]);
 			if ($test!==NULL) return $test;
 
-			$html=http_download_file($src_url);
+			// Vimeo API method
+			if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+			{
+				require_code('hooks/modules/video_syndication/vimeo');
+				$ob=new video_syndication_vimeo();
+				$result=$ob->get_remote_videos(NULL,$matches[1]);
+				if (count($result)!=0)
+				{
+					foreach ($result as $r)
+					{
+						return $r['thumb_url'];
+					}
+				}
+				return NULL;
+			}
+
+			// Lame method (not so reliable)
+			$html=http_download_file($src_url,NULL,false);
+			if (is_null($html)) return NULL;
 			$matches2=array();
 			if (preg_match('#<meta property="og:image" content="([^"]+)"#',$html,$matches2)!=0)
 			{

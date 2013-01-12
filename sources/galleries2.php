@@ -723,7 +723,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	{
 		require_code('gallery_syndication');
 		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
-		sync_video_syndication($id,false,$consider_deferring);
+		sync_video_syndication($id,true,false,$consider_deferring);
 	}
 
 	return $id;
@@ -803,7 +803,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	{
 		require_code('gallery_syndication');
 		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
-		sync_video_syndication($id,$orig_url!=$url,$orig_url!=$url && $consider_deferring);
+		sync_video_syndication($id,false,$orig_url!=$url,$orig_url!=$url && $consider_deferring);
 	}
 }
 
@@ -842,6 +842,12 @@ function delete_video($id,$delete_full=true)
 	decache('side_galleries');
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
+
+	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+	{
+		require_code('gallery_syndication');
+		sync_video_syndication($id,false,false);
+	}
 }
 
 /**

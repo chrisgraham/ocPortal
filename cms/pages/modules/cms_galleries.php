@@ -881,6 +881,10 @@ class Module_cms_galleries extends standard_crud_module
 		{
 			$gallery_title=get_potential_gallery_title($cat);
 			if ($gallery_title===NULL) $gallery_title='';
+		} else
+		{
+			$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
+			if ($num_galleries==1) $cat='root'; // Only option!
 		}
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
 
@@ -1339,6 +1343,10 @@ class Module_cms_galleries_alt extends standard_crud_module
 		{
 			$gallery_title=get_potential_gallery_title($cat);
 			if ($gallery_title===NULL) $gallery_title='';
+		} else
+		{
+			$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
+			if ($num_galleries==1) $cat='root'; // Only option!
 		}
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
 

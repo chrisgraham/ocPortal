@@ -30,11 +30,19 @@ $client_id=ensure_got_oauth_client_id($service_name);
 $vimeo=new phpVimeo(get_option($service_name.'_client_id'),get_option($service_name.'_client_secret'));
 
 $oauth_token=get_param('oauth_token','');
+
 if ($oauth_token=='')
 {
-	// Send to authorize
-	$token=$vimeo->getRequestToken();
-	$auth_url=$vimeo->getAuthorizeUrl($token['oauth_token'],'write');
+	// Grab initial unauthorized request tokens...
+	$callback_url=static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,false,false,true));
+	$token=$vimeo->getRequestToken($callback_url);
+	$auth_url=$vimeo->getAuthorizeUrl($token['oauth_token'],'delete');
+
+	// Store them...
+	set_long_value($service_name.'_access_token',$token['oauth_token']);
+	set_long_value($service_name.'_access_token_secret',$token['oauth_token_secret']);
+
+	// Send off to authorize...
 	require_code('site2');
 	assign_refresh($auth_url,0.0);
 	$echo=do_template('REDIRECT_SCREEN',array('URL'=>$auth_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
@@ -44,8 +52,8 @@ if ($oauth_token=='')
 
 // Got a response back...
 
-$vimeo->setToken(get_long_value('oauth_request_token'),get_long_value('oauth_request_token_secret'));
-$token=$vimeo->getAccessToken(get_param('oauth_verifier'));
+$vimeo->setToken(get_long_value($service_name.'_access_token'),get_long_value($service_name.'_access_token_secret'));
+$token=$vimeo->getAccessToken(get_param('oauth_verifier')); // Convert to long-term access tokens
 $vimeo->setToken($token['oauth_token'],$token['oauth_token_secret']);
 $ok=true;
 try // Check it...
@@ -61,7 +69,7 @@ catch (VimeoAPIException $e) // Error if not okay
 }
 if ($ok)
 {
-	// Save if it passed through okay
+	// Save long-term access tokens if it passed through okay
 	set_long_value($service_name.'_access_token',$token['oauth_token']);
 	set_long_value($service_name.'_access_token_secret',$token['oauth_token_secret']);
 	$out=do_lang_tempcode('OAUTH_SUCCESS',$service_name);

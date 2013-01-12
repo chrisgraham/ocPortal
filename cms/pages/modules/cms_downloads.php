@@ -484,6 +484,12 @@ class Module_cms_downloads extends standard_crud_module
 			$notes=get_param('notes',$notes);
 		}
 
+		if (is_null($category_id))
+		{
+			$num_categories=$GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)');
+			if ($num_categories==1) $cat=db_get_first_id(); // Only option!
+		}
+
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 		require_code('form_templates');

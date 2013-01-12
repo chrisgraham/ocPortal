@@ -30,7 +30,7 @@ class Hook_video_embed_youtube
 	function get_template_name_and_id($url)
 	{
 		$matches=array();
-		if ((preg_match('#^http://www\.youtube\.com/watch\?v=([\w\-]+)#',$url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$url,$matches)!=0))
+		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$url,$matches)!=0))
 		{
 			$id=rawurldecode($matches[1]);
 			return array('GALLERY_VIDEO_YOUTUBE',$id);
@@ -47,7 +47,7 @@ class Hook_video_embed_youtube
 	function get_video_thumbnail($src_url)
 	{
 		$matches=array();
-		if ((preg_match('#^http://www\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$src_url,$matches)!=0))
+		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$src_url,$matches)!=0))
 		{
 			return 'http://img.youtube.com/vi/'.rawurldecode($matches[1]).'/0.jpg';
 		}
