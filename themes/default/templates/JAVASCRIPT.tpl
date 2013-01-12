@@ -1483,6 +1483,11 @@ function get_window_scroll_y(win)
 }
 function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
+	if ((typeof not_relative!='undefined') && (not_relative) && (typeof obj.getBoundingClientRect!='undefined'))
+	{
+		return obj.getBoundingClientRect().left+get_window_scroll_x();
+	}
+
 	var call_obj=obj;
 
 	var curleft=0;
@@ -1504,6 +1509,11 @@ function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 }
 function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
+	if ((typeof not_relative!='undefined') && (not_relative) && (typeof obj.getBoundingClientRect!='undefined'))
+	{
+		return obj.getBoundingClientRect().top+get_window_scroll_y();
+	}
+
 	var call_obj=obj;
 
 	var curtop=0;
@@ -2817,7 +2827,10 @@ function replace_comments_form_with_ajax(options,hash,comments_form_id,comments_
 				if ((ajax_result.responseText!='') && (ajax_result.status!=500))
 				{
 					// Display
+					var old_action=comments_form.action;
 					set_outer_html(comments_wrapper,ajax_result.responseText);
+					comments_form=document.getElementById(comments_form_id);
+					old_action=comments_form.action=old_action; // AJAX will have mangled URL (as was not running in a page context), this will fix it back
 
 					// Scroll back to comment
 					window.setTimeout(function() {
