@@ -82,7 +82,7 @@ class Hook_Profiles_Tabs_about
 			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('usage',do_lang_tempcode('POST_HISTORY'),build_url(array('page'=>'admin_ocf_history','member_id'=>$member_id_of),'adminzone'));
 		if ((addon_installed('securitylogging')) && (has_actual_page_access($member_id_viewing,'admin_lookup')))
 		{
-			require_lang('submitban');
+			require_lang('lookup');
 			$modules[]=array('usage',do_lang_tempcode('INVESTIGATE_USER'),build_url(array('page'=>'admin_lookup','param'=>$member_id_of),'adminzone'));
 		}
 		if (has_actual_page_access($member_id_viewing,'admin_security'))
@@ -94,7 +94,7 @@ class Hook_Profiles_Tabs_about
 		{
 			if (has_actual_page_access($member_id_viewing,'admin_actionlog'))
 			{
-				require_lang('submitban');
+				require_lang('actionlog');
 				$modules[]=array('usage',do_lang_tempcode('VIEW_ACTION_LOGS'),build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$member_id_of),'adminzone'));
 			}
 		}
