@@ -1,6 +1,6 @@
 <div id="fb-root"></div>
 {+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
- 	<script type="text/javascript">
+	<script type="text/javascript">// <![CDATA[
 		window.fbAsyncInit=function() {
 			FB.init({
 				appId: '{$CONFIG_OPTION*;,facebook_appid}',
@@ -48,9 +48,9 @@
 					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}} {$,Check it is not that logout}
 						{$,... and therefore only refresh to let ocPortal adapt, if this was a new login initiated just now on the client side}
 						window.setTimeout(function() { {$,Firefox needs us to wait a bit}
-							if (window.location.href.indexOf('login')!=-1)
+							if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 							{
-								window.location='{$SELF_URL;,1}';
+								window.location='{$PAGE_LINK;,:}';
 							} else
 							{
 								window.top.location.reload();
@@ -69,5 +69,5 @@
 			js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={$CONFIG_OPTION,facebook_appid}";
 			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
-	</script>
+	//]]></script>
 {+END}

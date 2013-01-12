@@ -124,7 +124,7 @@ class Module_reportcontent
 
 		// Show form with input field and CAPTCHA, like forum's report post...
 
-		$member=do_lang('UNKNOWN');
+		$poster=do_lang('UNKNOWN');
 		if ((!is_null($poster_id)) && (!is_guest($poster_id)))
 		{
 			$poster=$GLOBALS['FORUM_DRIVER']->get_username($poster_id);
