@@ -112,7 +112,16 @@ class Hook_fields_radiolist
 		$default=$field['cf_default'];
 		$list=explode('|',$default);
 		$_list=new ocp_tempcode();
-		if (($field['cf_required']) && (($actual_value=='') || (is_null($actual_value)))) $_list->attach(form_input_radio_entry('field_'.strval($field['id']),'',($actual_value=='') || (is_null($actual_value)),do_lang_tempcode('NA_EM')));
+		if (($field['cf_required']==0) || ($actual_value==$default) || ($actual_value=='') || (is_null($actual_value)))
+		{
+			if ((array_key_exists(0,$list)) && ($list[0]==do_lang('NOT_DISCLOSED')))
+			{
+				$actual_value=$list[0]; // "Not Disclosed" will become the default if it is there
+			} else
+			{
+				$_list->attach(form_input_radio_entry('field_'.strval($field['id']),'',($actual_value=='') || (is_null($actual_value)),do_lang_tempcode('NA_EM')));
+			}
+		}
 		foreach ($list as $l)
 		{
 			$_list->attach(form_input_radio_entry('field_'.strval($field['id']),$l,$l==$actual_value,$l));

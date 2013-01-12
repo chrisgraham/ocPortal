@@ -112,7 +112,15 @@ class Hook_fields_list
 		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
 		if (($field['cf_required']==0) || ($actual_value==$default) || ($actual_value=='') || (is_null($actual_value)))
-			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+		{
+			if ((array_key_exists(0,$list)) && ($list[0]==do_lang('NOT_DISCLOSED')))
+			{
+				$actual_value=$list[0]; // "Not Disclosed" will become the default if it is there
+			} else
+			{
+				$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+			}
+		}
 		foreach ($list as $l)
 		{
 			$_list->attach(form_input_list_entry($l,$l==$actual_value));
