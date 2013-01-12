@@ -125,7 +125,9 @@ class Hook_fields_reference
 		{
 			$options['catalogue_name']=substr($field['cf_type'],3);
 		}
-		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',$options,$field['cf_required']==1,$actual_value);
+		require_code('content');
+		list($nice_label)=content_get_details('catalogue_entry',$actual_value);
+		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',$options,$field['cf_required']==1,$actual_value,false,NULL,false,$nice_label);
 	}
 
 	/**
