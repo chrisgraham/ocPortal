@@ -23,9 +23,6 @@
  */
 function init__files()
 {
-	global $DOWNLOAD_LEVEL;
-	$DOWNLOAD_LEVEL=0;
-
 	if (!defined('IGNORE_DEFAULTS'))
 	{
 		define('IGNORE_DEFAULTS',0);

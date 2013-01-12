@@ -193,10 +193,10 @@ function fix_permissions($path,$perms=0666) // We call this function assuming we
  * @param  string			The content type to use if a raw HTTP post
  * @return ?string		The data downloaded (NULL: error)
  */
-function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL,$extra_headers=NULL,$http_verb=NULL,$xml_content_type='application/xml')
+function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$raw_post=false,$files=NULL,$extra_headers=NULL,$http_verb=NULL,$raw_content_type='application/xml')
 {
 	require_code('files2');
-	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$is_xml,$files,$extra_headers,$http_verb,$xml_content_type);
+	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
 }
 
 /**
