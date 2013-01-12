@@ -365,7 +365,7 @@ function transcode_remaining_locations()
 	while (count($unknown)!=0);
 }
 
-function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
+function create_catalogue_category_tree($catalogue_name='places',$country=NULL,$fixup=false/*used to fix old bug where countries without regions were not imported*/)
 {
 	if (is_null($country)) // We will do this by looping through each country, recursing back into this function to do just this country. This will take about 5 hours to run, so it's important to be able to do in a measured way.
 	{
@@ -373,7 +373,7 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 		@ob_end_clean();
 		foreach ($countries as $country)
 		{
-			create_catalogue_category_tree($catalogue_name,$country['l_country']);
+			create_catalogue_category_tree($catalogue_name,$country['l_country'],$fixup);
 			echo('Done '.$country['l_country']."\n");flush();
 		}
 
@@ -385,9 +385,11 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 		return;
 	}
 
-	$root_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
+	static $root_cat=NULL;
+	if ($root_cat===NULL)
+		$root_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 
-	$locations=$GLOBALS['SITE_DB']->query_select('locations',array('*'),array('l_country'=>$country));
+	$locations=$GLOBALS['SITE_DB']->query_select('locations',array('*'),array('l_country'=>$country)+($fixup?array('l_parent_1'=>''):array()));
 
 	// Go through from deepest, ensuring tree structure for each
 	$full_tree=array();
@@ -399,7 +401,6 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 		if ($location['l_parent_3']!='') $location['l_depth']=3;
 		elseif ($location['l_parent_2']!='') $location['l_depth']=2;
 		elseif ($location['l_parent_1']!='') $location['l_depth']=1;
-		else continue;
 
 		if (intval($location['l_population'])<100) continue; // Too small to consider
 		if (is_null($location['l_longitude'])) continue; // No info, probably an error or unconventional location
@@ -434,8 +435,12 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 	}
 
 	// Create root nodes under catalogue root
-	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_catalogue_category'),'ORDER BY cf_order');
-	$first_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>'_catalogue_category'));
+	static $fields=NULL;
+	if ($fields===NULL)
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_catalogue_category'),'ORDER BY cf_order');
+	static $first_cat=NULL;
+	if ($first_cat===NULL)
+		$first_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>'_catalogue_category'));
 	if (is_null($first_cat)) // Repair needed, must have a category
 	{
 		require_code('catalogues2');
@@ -504,19 +509,22 @@ function _create_catalogue_subtree($fields,$first_cat,$catalogue_name,$root_cat,
 		$fields[5]['id']=>float_to_raw_string($node['details']['l_max_longitude'],10),
 	);
 
-	$existing=get_bound_content_entry('catalogue_category',strval($id));
-	if (!is_null($existing))
+	if (!is_null($id))
 	{
-		actual_edit_catalogue_entry($existing,$first_cat,1,'',0,0,0,$map);
-	} else
-	{
-		$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+		$existing=get_bound_content_entry('catalogue_category',strval($id));
+		if (!is_null($existing))
+		{
+			actual_edit_catalogue_entry($existing,$first_cat,1,'',0,0,0,$map);
+		} else
+		{
+			$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
 
-		$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
-			'catalogue_entry_id'=>$catalogue_entry_id,
-			'content_type'=>'catalogue_category',
-			'content_id'=>strval($id),
-		));
+			$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+				'catalogue_entry_id'=>$catalogue_entry_id,
+				'content_type'=>'catalogue_category',
+				'content_id'=>strval($id),
+			));
+		}
 	}
 
 	return $node;
@@ -524,23 +532,35 @@ function _create_catalogue_subtree($fields,$first_cat,$catalogue_name,$root_cat,
 
 function _create_catalogue_position($catalogue_name,$tree_pos,$cat,$location,&$tree)
 {
+	$added=false;
+
+	static $cache=NULL;
+	if ($cache===NULL) $cache=array();
+
 	foreach ($tree_pos as $name)
 	{
 		$tree=&$tree['children'][$name];
 
 		if (!isset($tree['cc_id']))
 		{
-			$tree['cc_id']=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$cat,'text_original'=>$name));
+			$tree['cc_id']=isset($cache[$cat][$name])?$cache[$cat][$name]:$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$cat,'text_original'=>$name));
 
 			if (is_null($tree['cc_id']))
 			{
 				$tree['cc_id']=actual_add_catalogue_category($catalogue_name,$name,'','',$cat);
+				$added=true;
+			} else
+			{
+				$added=false;
 			}
+
+			$cache[$cat][$name]=$tree['cc_id'];
 		}
 
 		$cat=$tree['cc_id'];
 	}
 
+	if (!$added) return NULL;
 	return $cat;
 }
 
