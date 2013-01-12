@@ -259,7 +259,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 
 function faux_open(url,name,options,target,cancel_text)
 {
-	if (typeof cancel_text=='undefined') var cancel_text='{!INPUTSYSTEM_CLOSE;^}';
+	if (typeof cancel_text=='undefined') var cancel_text='{!INPUTSYSTEM_CANCEL;^}';
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		faux_showModalDialog(url,name,options,null,target,cancel_text);
