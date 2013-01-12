@@ -436,9 +436,14 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$directive_name=$eval;
 						switch ($directive_name)
 						{
+							case 'INCLUDE':
 							case 'FRACTIONAL_EDITABLE':
-								$pp_bit=array(array(),TC_DIRECTIVE,str_replace('"','',$directive_name),array());
-								$preprocessable_bits[]=$pp_bit;
+								$eval=@eval('return array('.$directive_params.');');
+								if (is_array($eval))
+								{
+									$pp_bit=array(array(),TC_DIRECTIVE,str_replace('"','',$directive_name),$eval);
+									$preprocessable_bits[]=$pp_bit;
+								}
 								break;
 						}
 						switch ($directive_name)
@@ -482,7 +487,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break;
 							case 'INCLUDE':
 								global $FILE_ARRAY;
-								if ((!$GLOBALS['SEMI_DEV_MODE']) && (count($directive_opener_params)==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
+								if ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='') && (count($directive_opener_params)==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
 								{
 									$eval=@eval('return '.$first_directive_param.';');
 									if (!is_string($eval)) $eval='';

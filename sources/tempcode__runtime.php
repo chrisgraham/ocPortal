@@ -560,6 +560,17 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			return;
 
+		case 'INCLUDE':
+			if ($GLOBALS['RECORD_TEMPLATES_USED'])
+			{
+				$GLOBALS['RECORDED_TEMPLATES_USED'][]=$codename;
+			}
+			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
+			{
+				$children[]=array($param[0],array(),false);
+			}
+			break;
+
 		case 'REQUIRE_JAVASCRIPT':
 			if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) return;
 			$param=$bit[3];
@@ -730,6 +741,7 @@ class ocp_tempcode
 				{
 					switch ($seq_part[2])
 					{
+						case 'INCLUDE':
 						case 'FRACTIONAL_EDITABLE':
 							$this->bits[]=array(array(),TC_DIRECTIVE,$seq_part[2]);
 							break;

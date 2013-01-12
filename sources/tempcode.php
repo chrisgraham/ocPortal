@@ -485,7 +485,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		}
 	}
 
-	global $IS_TEMPLATE_PREVIEW_OP_CACHE,$RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE_CACHE,$USER_THEME_CACHE,$TEMPLATE_DISK_ORIGIN_CACHE,$LOADED_TPL_CACHE;
+	global $IS_TEMPLATE_PREVIEW_OP_CACHE,$RECORD_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE_CACHE,$USER_THEME_CACHE,$TEMPLATE_DISK_ORIGIN_CACHE,$LOADED_TPL_CACHE;
 	$special_treatment=((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
 
 	if ($RECORD_TEMPLATES_USED)
@@ -508,7 +508,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$loaded_this_once=true;
 	}
 	$_data=false;
-	if (($CACHE_TEMPLATES) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && ((!$POSSIBLY_IN_SAFE_MODE_CACHE) || (!in_safe_mode())))
+	if (($CACHE_TEMPLATES) && (/*the following relates to ensuring a full recompile for INCLUDEs except for CSS and JS*/($parameters===NULL) || ((!$RECORD_TEMPLATES_USED) && (!$RECORD_TEMPLATES_TREE))) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && ((!$POSSIBLY_IN_SAFE_MODE_CACHE) || (!in_safe_mode())))
 	{
 		$tcp_path=$prefix.$theme.'/templates_cached/'.$lang.'/'.$codename.$suffix.'.tcp';
 		if ($loaded_this_once)
@@ -701,6 +701,19 @@ function handle_symbol_preprocessing($bit,&$children)
 				}
 			}
 			return;
+
+		case 'INCLUDE':
+			if ($GLOBALS['RECORD_TEMPLATES_USED'])
+			{
+				$param=$bit[3];
+				$GLOBALS['$RECORDED_TEMPLATES_USED'][]=$codename;
+			}
+			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
+			{
+				$param=$bit[3];
+				$children[]=array((is_object($param[0])?$param[0]->evaluate():$param[0]),isset($param[1]->children)?$param[1]->children:array(),isset($param[1]->fresh)?$param[1]->fresh:false);
+			}
+			break;
 
 		case 'SET':
 			$param=$bit[3];
@@ -1008,6 +1021,7 @@ class ocp_tempcode
 				{
 					switch ($seq_part[3])
 					{
+						case 'INCLUDE':
 						case 'FRACTIONAL_EDITABLE':
 							$pp_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
 							break;
