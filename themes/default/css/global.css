@@ -1056,7 +1056,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 .non_link:hover {
 	color: inherit !important;
 	text-decoration: none;
-	cursor: default;
+	cursor: inherit;
 }
 
 .trinav_wrap {
