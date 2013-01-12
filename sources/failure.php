@@ -1192,7 +1192,8 @@ function _access_denied($class,$param,$force_login)
 
 		$middle=load_module_page(_get_module_path('','login'),'login');
 		require_code('site');
-		attach_message($message,'warn');
+		if (get_value('no_tech_login_messages')!=='1')
+			attach_message($message,'warn');
 		$echo=globalise($middle,NULL,'',true);
 		$echo->evaluate_echo();
 		exit();
