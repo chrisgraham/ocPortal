@@ -360,7 +360,11 @@ function not_like_spacer_posts($field)
  */
 function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false)
 {
-	if (is_null($topic_id)) return (-2);
+	if (is_null($topic_id))
+	{
+		$count=0;
+		return (-2);
+	}
 
 	require_code('ocf_topics');
 
@@ -369,7 +373,11 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$extra_where='';
 	if (!is_null($post_ids))
 	{
-		if (count($post_ids)==0) return array();
+		if (count($post_ids)==0)
+		{
+			$count=0;
+			return array();
+		}
 		$extra_where=' AND (';
 		foreach ($post_ids as $i=>$id)
 		{

@@ -466,6 +466,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	if ((get_param_integer('keep_just_show_query',0)==0) && (!is_null($meta_type)) && ($content!=''))
 	{
 		$keywords_where=preg_replace('#\?#','tm.text_original',build_content_where($content,$boolean_search,$boolean_operator,true));
+		$keywords_where=str_replace(' AND (tm.text_original IS NOT NULL)','',$keywords_where); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 
 		if ($keywords_where!='')
 		{
@@ -498,6 +499,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
 
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
+			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible
 
 			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
 
@@ -556,6 +558,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				if (($only_titles) && ($i!=0)) break;
 
 				$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
+				$where_clause_2=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$where_clause_2); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 				$where_clause_3=$where_clause;
 				if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
 					$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
@@ -563,6 +566,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
 				{
 					$_select=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where).' AS contextual_relevance';
+					$_select=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$_select); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 				} else
 				{
 					$_select='';
@@ -698,6 +702,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 
 		$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
+		if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
 
 		$query.=($group_by_ok?' GROUP BY r.id':'');
 

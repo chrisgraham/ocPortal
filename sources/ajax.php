@@ -588,8 +588,11 @@ function snippet_script()
 	$tempcode=$object->run();
 	$out=$tempcode->evaluate();
 
-	require_code('xhtml');
-	$out=xhtmlise_html($out,true);
+	if (strpos($out,chr(10))!==false) // Is HTML
+	{
+		require_code('xhtml');
+		$out=xhtmlise_html($out,true);
+	}
 
 	// End early execution listening (this means register_shutdown_function will run after connection closed - faster)
 	if (function_exists('apache_setenv')) @apache_setenv('no-gzip','1');

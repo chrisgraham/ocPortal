@@ -1222,7 +1222,7 @@ class virtual_bash
 					if (!is_scalar($occle_val)) continue;
 
 					if ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
-					else eval('$'.$occle_key.'='.$occle_val.';');
+					else eval('$'.$occle_key.'='.strval($occle_val).';');
 				}
 			}
 
@@ -1978,11 +1978,15 @@ function get_queued_messages($xml=true)
 	$output=mixed();
 	if ($xml) $output='';
 	else $output=new ocp_tempcode();
+
+	$_loc=get_value('last_occle_command');
+	$loc=is_null($_loc)?NULL:intval($_loc);
+
 	foreach (array_keys($hooks) as $hook)
 	{
 		require_code('hooks/modules/admin_occle_notifications/'.filter_naughty_harsh($hook));
 		$object=object_factory('Hook_Notification_'.filter_naughty_harsh($hook));
-		$object_values=$object->run(get_value('last_occle_command'));
+		$object_values=$object->run($loc);
 		if ($object_values===false) continue;
 
 		if ($xml)
