@@ -255,7 +255,10 @@ class video_syndication_youtube
 			if ($is_temp_file) @unlink($file_path);
 
 			require_lang('gallery_syndication_youtube');
-			attach_message(do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
+			$error_msg=do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+			require_code('failure');
+			relay_error_notification($error_msg);
+			attach_message($error_msg,'warn');
 			return NULL;
 		}
 
@@ -311,7 +314,10 @@ class video_syndication_youtube
 		catch (Exception $e)
 		{
 			require_lang('gallery_syndication_youtube');
-			attach_message(do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
+			$error_msg=do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+			require_code('failure');
+			relay_error_notification($error_msg);
+			attach_message($error_msg,'warn');
 			return NULL;
 		}
 	}
@@ -338,7 +344,10 @@ class video_syndication_youtube
 		catch (Exception $e)
 		{
 			require_lang('gallery_syndication_youtube');
-			attach_message(do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
+			$error_msg=do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+			require_code('failure');
+			relay_error_notification($error_msg);
+			attach_message($error_msg,'warn');
 			return false;
 		}
 		return true;
@@ -367,7 +376,10 @@ class video_syndication_youtube
 		catch (Exception $e)
 		{
 			require_lang('gallery_syndication_youtube');
-			attach_message(do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name())),'warn');
+			$error_msg=do_lang_tempcode('YOUTUBE_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+			require_code('failure');
+			relay_error_notification($error_msg);
+			attach_message($error_msg,'warn');
 			return false;
 		}
 

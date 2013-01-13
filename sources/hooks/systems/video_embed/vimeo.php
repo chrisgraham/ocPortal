@@ -57,15 +57,18 @@ class Hook_video_embed_vimeo
 			{
 				require_code('hooks/modules/video_syndication/vimeo');
 				$ob=new video_syndication_vimeo();
-				$result=$ob->get_remote_videos(NULL,$matches[1]);
-				if (count($result)!=0)
+				if ($ob->is_active())
 				{
-					foreach ($result as $r)
+					$result=$ob->get_remote_videos(NULL,$matches[1]);
+					if (count($result)!=0)
 					{
-						return $r['thumb_url'];
+						foreach ($result as $r)
+						{
+							return $r['thumb_url'];
+						}
 					}
+					return NULL;
 				}
-				return NULL;
 			}
 
 			// Lame method (not so reliable)
