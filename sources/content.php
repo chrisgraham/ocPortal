@@ -49,6 +49,8 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 
 	$type_id=preg_replace('#^catalogues__\w+_#','catalogues_',$type_id);
 
+	$type_id=preg_replace('#^catalogues__\w+_#','catalogues_',$type_id);
+
 	// Search content-meta-aware hooks
 	$found_type_id='';
 	$cma_hooks=find_all_hooks('systems','content_meta_aware');
