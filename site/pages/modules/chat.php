@@ -396,7 +396,7 @@ class Module_chat
 
 		// Starting an IM? The IM will popup by AJAX once the page loads, because it's in the system now
 		$enter_im=get_param_integer('enter_im',NULL);
-		if (!is_null($enter_im))
+		if ((!is_null($enter_im)) && (!is_guest()))
 		{
 			$test=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_rooms WHERE is_im=1 AND allow_list LIKE \''.db_encode_like('%'.strval($enter_im).'%').'\'');
 			$found_one=false;

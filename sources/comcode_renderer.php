@@ -1309,7 +1309,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($max_color,0,1)=='#') $max_color=substr($max_color,1);
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_SHOCKER',array('UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_SHOCKER',array('UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval(intval($embed)),'PARTS'=>$_parts));
 			break;
 		case 'ticker':
 			$width=$attributes['param'];

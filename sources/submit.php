@@ -101,7 +101,7 @@ function send_validation_request($type,$table,$non_integer_id,$id,$url,$member_i
 			if ($good['db_title_dereference']) $title=get_translated_text($title,$db); // May actually be comcode (can't be certain), but in which case it will be shown as source
 		} else $title='#'.(is_integer($id)?strval($id):$id);
 	}
-	if ($title=='') $title='#'.strval($id);
+	if ($title=='') $title='#'.(is_integer($id)?strval($id):$id);
 
 	if (is_null($member_id)) $member_id=get_member();
 

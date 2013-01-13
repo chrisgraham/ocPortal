@@ -41,6 +41,8 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 		$type_has='cma_hook';
 	}
 
+	$type_id=preg_replace('#^catalogues__\w+_#','catalogues_',$type_id);
+
 	// Search content-meta-aware hooks
 	$found_type_id='';
 	$cma_hooks=find_all_hooks('systems','content_meta_aware');
@@ -134,6 +136,17 @@ function content_get_details($content_type,$content_id)
 		{
 			$_content_title=$content_row[$cma_info['title_field']];
 			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
+			if ($content_title=='')
+			{
+				if ($content_type=='image' || $content_type=='video') // A bit of a fudge, but worth doing
+				{
+					require_lang('galleries');
+					$content_title=do_lang('VIEW_'.strtoupper($content_type).'_IN',get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$content_row['cat']))));
+				} else
+				{
+					$content_title=do_lang($cma_info['content_type_label']).' (#'.(is_string($content_id)?$content_id:strval($content_id)).')';
+				}
+			}
 		}
 	}
 
