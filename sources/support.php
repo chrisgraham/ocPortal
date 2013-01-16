@@ -965,12 +965,6 @@ function get_ip_address($amount=4)
 
 	if (!is_valid_ip($ip)) return '';
 
-	global $SITE_INFO;
-	if (($amount==3) && (array_key_exists('full_ips',$SITE_INFO)) && ($SITE_INFO['full_ips']=='1')) // Extra configurable security
-	{
-		$amount=4;
-	}
-
 	// Bizarro-filter (found "in the wild")
 	$pos=strpos($ip,',');
 	if ($pos!==false) $ip=substr($ip,0,$pos);
@@ -1511,7 +1505,7 @@ function browser_matches($code)
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'iphone')!==false;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'wysiwyg':
-			if ((get_option('wysiwyg')=='0') || (is_mobile()))
+			if ((get_option('wysiwyg')=='0') || (is_mobile()) || (strpos($os,'ipad')!==false))
 			{
 				$BROWSER_MATCHES_CACHE[$code]=false;
 				return false;
@@ -2255,6 +2249,31 @@ function member_personal_links_and_details($member_id)
 		$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
 		$_last_visit=get_timezoned_date($last_visit,false);
 		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
+	}
+	
+	// Subscription expiry date
+	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')))
+	{
+		require_code('ecommerce');
+		$subscriptions=$GLOBALS['FORUM_DB']->query_select('subscriptions',array('s_type_code','s_time'),array('s_member_id'=>$member_id,'s_state'=>'active'));
+		if ($subscriptions)
+		{
+			foreach ($subscriptions as $sub)
+			{
+				$product_obj=find_product($sub['s_type_code']);
+				$products=$product_obj->get_products(true);
+				$product_name=$products[$sub['s_type_code']][4];
+				$s_length=$products[$sub['s_type_code']][3]['length'];
+				$s_length_units=$products[$sub['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
+				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+				$expiry_time=strtotime('+'.$s_length.' '.$time_period_units[$s_length_units],$sub['s_time']);
+				if ((($expiry_time-time())<(7*24*60*60))&&($expiry_time>=time()))
+				{
+					$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
+					$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'65180134fbc4cf7e227011463d466677','KEY'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_MESSAGE',$product_name),'VALUE'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_DATE',$expiry_date))));
+				}
+			}
+		}
 	}
 
 	// Subscription links

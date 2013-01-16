@@ -110,6 +110,8 @@ class Module_admin_ecommerce extends standard_aed_module
 		//if ($type=='balance_sheet') return $this->balance_sheet();
 		if ($type=='trigger') return $this->trigger();
 		if ($type=='_trigger') return $this->_trigger();
+		if ($type=='view_manual') return $this->view_manual();
+		if ($type=='cancel_subscription') return $this->cancel_subscription();
 
 		if (get_forum_type()=='ocf')
 		{
@@ -162,6 +164,7 @@ class Module_admin_ecommerce extends standard_aed_module
 						array('transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
 						array('invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
 						addon_installed('shopping')?array('orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,
+						array('invoices',array('_SELF',array('type'=>'view_manual'),'_SELF'),do_lang('VIEW_MANUAL_TRANSACTIONS')),
 					),
 					do_lang('ECOMMERCE')
 		);
@@ -331,6 +334,8 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('MONEY_AMOUNT_DESCRIPTION',ecommerce_get_currency_symbol()),'amount',NULL,false));
+		
+		$fields->attach(form_input_date(do_lang_tempcode('CUSTOM_EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_CUSTOM_EXPIRY_DATE'),'cexpiry',true,false,false));
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('item_name',$item_name));
@@ -354,6 +359,8 @@ class Module_admin_ecommerce extends standard_aed_module
 		$purchase_id=post_param('purchase_id','');
 		$memo=post_param('memo');
 		$mc_gross=post_param('amount','');
+		$custom_expiry=get_input_date('cexpiry');
+		
 		$object=find_product($item_name);
 		$products=$object->get_products(true);
 		if ($mc_gross=='')
@@ -391,6 +398,15 @@ class Module_admin_ecommerce extends standard_aed_module
 			}
 
 			$_item_name=''; // Flag for handle_confirmed_transaction to know it's a subscription
+			
+			if ($custom_expiry!=NULL)
+			{
+				$s_length=$products[$item_name][3]['length'];
+				$s_length_units=$products[$item_name][3]['length_units']; // y-year, m-month, w-week, d-day
+				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+				$new_s_time=strtotime('-'.$s_length.' '.$time_period_units[$s_length_units],$custom_expiry);
+				$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_time'=>$new_s_time),array('id'=>$purchase_id));
+			}
 		}
 
 		handle_confirmed_transaction($purchase_id,$_item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
@@ -809,6 +825,94 @@ class Module_admin_ecommerce extends standard_aed_module
 		$uhoh_mail=post_param('mail_uhoh');
 
 		delete_usergroup_subscription(intval($id),$uhoh_mail);
+	}
+	
+	/**
+	 * Show a manual subscriptions.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function view_manual()
+	{
+		$title=get_screen_title('MANUAL_TRANSACTIONS');
+		
+		$subscriptions=$GLOBALS['SITE_DB']->query("SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."subscriptions WHERE s_auto_fund_key LIKE '%manual%' ORDER BY s_type_code,s_time");
+		
+		$data=array();
+		foreach ($subscriptions as $subs)
+		{
+			$product_obj=find_product($subs['s_type_code']);
+			$products=$product_obj->get_products(true);
+			$product_name=$products[$subs['s_type_code']][4];
+			$s_length=$products[$subs['s_type_code']][3]['length'];
+			$s_length_units=$products[$subs['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
+			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+			$expiry_time=strtotime('+'.$s_length.' '.$time_period_units[$s_length_units],$subs['s_time']);
+			$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
+			$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subs['s_member_id']);
+			$cancel_url=build_url(array('page'=>'_SELF','type'=>'cancel_subscription','subscription_id'=>$subs['id']),'_SELF');
+			$data[$product_name][]=array($member_name,$expiry_date,$cancel_url);
+		}
+		$result=new ocp_tempcode();
+		foreach ($data as $key=>$value)
+		{
+			$flag=1;
+			foreach ($value as $val)
+			{
+				if ($flag)
+				{
+					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','SUBSCRIPTION'=>$key,'MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>strval(count($data[$key])),'CANCEL_URL'=>$val[2])));
+					$flag=0;
+				}
+				else
+				{
+					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','SUBSCRIPTION'=>'','MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>'','CANCEL_URL'=>$val[2])));
+				}
+			}
+		}
+		
+		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','TITLE'=>$title,'CONTENT'=>$result));
+	}
+	
+	/**
+	 * Cancel a manual subscriptions.
+	 *
+	 * @param  ID_TEXT	The entry being edited
+	 *
+	 */
+	function cancel_subscription()
+	{
+		$id=get_param_integer('subscription_id',false);
+		if ($id)
+		{
+			$subscription=$GLOBALS['FORUM_DB']->query_select('subscriptions',array('s_type_code','s_member_id'),array('id'=>$id));
+			if ($subscription)
+			{
+				
+				$product_obj=find_product($subscription[0]['s_type_code']);
+				$products=$product_obj->get_products(true);
+				$product_name=$products[$subscription[0]['s_type_code']][4];
+				$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
+			
+				$title=do_lang_tempcode('CANCEL_MANUAL_SUBSCRITPION');
+		
+				$rePost_id=post_param('id','');
+				if (($rePost_id!='')&&($rePost_id==$id))
+				{
+					require_code('ecommerce');
+					handle_confirmed_transaction($id,'','SCancelled','','','','','','manual','');
+					return inform_screen($title,do_lang_tempcode('SUCCESS'));
+				}
+				else
+				{
+					$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRITPION_CONFIRM',$product_name,$member_name);
+					$fields=form_input_hidden('id',strval($id));
+					$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
+					$url=build_url($map,'_SELF');
+					return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
+				}
+			}
+		}
 	}
 
 }
