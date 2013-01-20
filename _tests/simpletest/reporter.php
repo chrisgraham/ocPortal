@@ -91,11 +91,11 @@ class HtmlReporter extends SimpleReporter {
         print "<div style=\"";
         print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
         print "\">";
-        print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
+        print strval($this->getTestCaseProgress()) . "/" . strval($this->getTestCaseCount());
         print " test cases complete:\n";
-        print "<strong>" . $this->getPassCount() . "</strong> passes, ";
-        print "<strong>" . $this->getFailCount() . "</strong> fails and ";
-        print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
+        print "<strong>" . strval($this->getPassCount()) . "</strong> passes, ";
+        print "<strong>" . strval($this->getFailCount()) . "</strong> fails and ";
+        print "<strong>" . strval($this->getExceptionCount()) . "</strong> exceptions.";
         print "</div>\n";
         print "</body>\n</html>\n";
     }

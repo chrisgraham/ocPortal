@@ -1001,7 +1001,7 @@ function _get_next_tag()
 				if ($next=='=')
 				{
 					require_code('type_validation');
-					if (!is_alphanumeric($current_attribute_name))
+					if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name)))
 					{
 						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
 						$current_attribute_name='wrong'.strval($POS);
@@ -1020,7 +1020,7 @@ function _get_next_tag()
 				elseif ($next=='>')
 				{
 					require_code('type_validation');
-					if (!is_alphanumeric($current_attribute_name))
+					if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name)))
 					{
 						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
 						$current_attribute_name='wrong'.strval($POS);
@@ -1040,7 +1040,7 @@ function _get_next_tag()
 				else
 				{
 					require_code('type_validation');
-					if (!is_alphanumeric($current_attribute_name))
+					if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name)))
 					{
 						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
 						$current_attribute_name='wrong'.strval($POS);

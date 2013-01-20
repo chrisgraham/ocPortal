@@ -74,7 +74,7 @@ class SimpleExpectation {
      *    @access protected
      */
     function &_getDumper() {
-        if (! $this->_dumper) {
+        if ($this->_dumper === NULL) {
             $dumper = new SimpleDumper();
             return $dumper;
         }
