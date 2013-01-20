@@ -167,6 +167,7 @@ class Module_admin_version
 				'c_ip_address'=>'IP',
 				'c_url'=>'URLPATH',
 			));
+			$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
 
 			$GLOBALS['SITE_DB']->create_table('incoming_uploads',array(
 				'id'=>'*AUTO',

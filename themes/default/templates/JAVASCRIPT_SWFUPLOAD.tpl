@@ -1223,6 +1223,12 @@ function doSubmit(e,ob,recurse) {
 			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
+<<<<<<< HEAD
+=======
+		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
+		if (ret2 && !ret)
+			window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
+>>>>>>> master
 
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
