@@ -48,7 +48,7 @@ class Block_main_topsites
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
-		$info['ttl']=60*24;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
 

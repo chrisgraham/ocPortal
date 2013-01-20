@@ -993,7 +993,16 @@ function _get_next_tag()
 					$more_to_come=(!isset($special_chars[$next])) && ($POS<$LEN);
 				}
 
-				if ($next=='=') $status=IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
+				if ($next=='=')
+				{
+					require_code('type_validation');
+					if (!is_alphanumeric($current_attribute_name))
+					{
+						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
+						$current_attribute_name='wrong'.strval($POS);
+					}
+					$status=IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
+				}
 				elseif ($next=='<')
 				{
 					$errors[]=array('XML_TAG_OPEN_ANOMALY','5');
@@ -1005,6 +1014,13 @@ function _get_next_tag()
 				}
 				elseif ($next=='>')
 				{
+					require_code('type_validation');
+					if (!is_alphanumeric($current_attribute_name))
+					{
+						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
+						$current_attribute_name='wrong'.strval($POS);
+					}
+
 					if ($GLOBALS['XML_CONSTRAIN']) $errors[]=array('XML_TAG_CLOSE_ANOMALY');
 					// Things like nowrap, checked, etc
 					//return array(NULL,$errors);
@@ -1016,7 +1032,16 @@ function _get_next_tag()
 					return _check_tag($current_tag,$attribute_map,false,$close,$errors);
 				}
 				elseif (($next!=' ') && ($next!="\t") && ($next!=$chr_10) && ($next!=$chr_13)) $current_attribute_name.=$next;
-				else $status=IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT;
+				else
+				{
+					require_code('type_validation');
+					if (!is_alphanumeric($current_attribute_name))
+					{
+						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
+						$current_attribute_name='wrong'.strval($POS);
+					}
+					$status=IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT;
+				}
 				break;
 			case IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT:
 				if ($next=='=') $status=IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;

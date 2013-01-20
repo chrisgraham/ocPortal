@@ -391,7 +391,7 @@ abstract class BaseFacebook
    * @return string the signed request, if available, or null otherwise.
    */
   public function getSignedRequest() {
-    if (!$this->signedRequest) {
+    if (!is_string($this->signedRequest)) {
       if (isset($_REQUEST['signed_request'])) {
         $this->signedRequest = $this->parseSignedRequest(
           $_REQUEST['signed_request']);

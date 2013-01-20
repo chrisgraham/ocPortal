@@ -25,6 +25,9 @@ function init__files()
 {
 	if (!defined('IGNORE_DEFAULTS'))
 	{
+		global $DOWNLOAD_LEVEL;
+		$DOWNLOAD_LEVEL=0;
+
 		define('IGNORE_DEFAULTS',0);
 		// -
 		define('IGNORE_ACCESS_CONTROLLERS',1);

@@ -48,7 +48,7 @@ class Block_main_contact_catalogues
 	{
 		$info=array();
 		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\')';
-		$info['ttl']=60*24*7;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
 		return $info;
 	}
 

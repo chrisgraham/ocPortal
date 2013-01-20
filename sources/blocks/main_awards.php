@@ -48,7 +48,7 @@ class Block_main_awards
 	{
 		$info=array();
 		$info['cache_on']='(count($_POST)!=0 || get_param_integer(\'keep_non_rated\',0)==1)?NULL:array(array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'param\',$map)?$map[\'param\']:strval(db_get_first_id()),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
-		$info['ttl']=60*24; // Intentionally, do randomisation acts as 'of the day'
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24; // Intentionally, do randomisation acts as 'of the day'
 		return $info;
 	}
 

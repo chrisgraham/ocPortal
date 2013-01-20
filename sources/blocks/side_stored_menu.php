@@ -49,7 +49,7 @@ class Block_side_stored_menu
 		/* Ideally we would not cache as we would need to cache for all screens due to context sensitive link display (either you're here or match key filtering). However in most cases that only happens per page, so we will cache per page -- and people can turn off cacheing via the standard block parameter for that if needed.*/
 		$info=array();
 		$info['cache_on']=array('block_side_stored_menu__cache_on');
-		$info['ttl']=60*24*140;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*140;
 		return $info;
 	}
 

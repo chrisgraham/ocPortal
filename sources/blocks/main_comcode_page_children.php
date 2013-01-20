@@ -48,7 +48,7 @@ class Block_main_comcode_page_children
 	{
 		$info=array();
 		$info['cache_on']='array(has_privilege(get_member(),\'see_unvalidated\'),((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),array_key_exists(\'zone\',$map)?$map[\'zone\']:post_param(\'zone\',get_comcode_zone(((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),false)))';
-		$info['ttl']=60*24*7;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
 		return $info;
 	}
 

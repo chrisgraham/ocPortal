@@ -48,7 +48,7 @@ class Block_main_code_documentor
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'support\')';
-		$info['ttl']=120;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:120;
 		return $info;
 	}
 

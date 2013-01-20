@@ -266,6 +266,11 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 		elseif ((isset($exif['FNumber'])) && (($name=='Lens') || ($name=='Lens Model')))
 			$map[$field['id']]=$exif['FNumber'];
 		elseif (!isset($map[$field['id']])) $map[$field['id']]='';
+
+		if (isset($map[$field['id']]))
+		{
+			if (!is_string($map[$field['id']])) $map[$field['id']]=strval($map[$field['id']]);
+		}
 	}
 	if (count($map)==0) return;
 

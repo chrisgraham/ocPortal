@@ -50,7 +50,8 @@ function block_params_to_block_signature($map)
 function block_params_str_to_arr($_map)
 {
 	$map=array();
-	foreach (explode(',',$_map) as $x)
+	$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$_map);
+	foreach ($param as $x)
 	{
 		$result=explode('=',$x,2);
 		if (isset($result[1]))

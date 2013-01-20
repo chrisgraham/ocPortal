@@ -53,5 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	add_config_option('VIDEO_SYNC_TRANSCODING','video_sync_transcoding','special','return \''.addslashes(do_lang('OTHER',NULL,NULL,NULL,fallback_lang())).'\';','FEATURE','GALLERY_SYNDICATION');
+	require_code('xhtml');
+	echo xhtmlise_html('<img alt="Minecraft Server Delirious World" src="http://minecraft-server-list.com/server/logo/112260.png" /="/" />',true);
 }

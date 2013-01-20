@@ -302,8 +302,7 @@ hr {
 }
 
 img {
-	display: inline;
-	border: 0;
+	border: 0; /* Some (older?) browsers imply a border for linked images */
 }
 
 blockquote {
@@ -3734,67 +3733,67 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".pdf"], a[href$=".ps"], body div a.pdf_link {
+	a[href$=".pdf"].user_link, a[href$=".ps"].user_link, body div a.pdf_link {
 		background: url('{$IMG;,filetypes/page_pdf}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".doc"], a[href$=".docx"], a[href$=".rtf"], body div a.doc_link {
+	a[href$=".doc"].user_link, a[href$=".docx"].user_link, a[href$=".rtf"].user_link, body div a.doc_link {
 		background: url('{$IMG;,filetypes/page_doc}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".xls"], a[href$=".xlsx"], body div a.xls_link {
+	a[href$=".xls"].user_link, a[href$=".xlsx"].user_link, body div a.xls_link {
 		background: url('{$IMG;,filetypes/page_xls}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".ppt"], a[href$=".pptx"], body div a.ppt_link {
+	a[href$=".ppt"].user_link, a[href$=".pptx"].user_link, body div a.ppt_link {
 		background: url('{$IMG;,filetypes/page_ppt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".log"], a[href$=".txt"], body div a.txt_link {
+	a[href$=".log"].user_link, a[href$=".txt"].user_link, body div a.txt_link {
 		background: url('{$IMG;,filetypes/page_txt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".odt"], body div a.odt_link {
+	a[href$=".odt"].user_link, body div a.odt_link {
 		background: url('{$IMG;,filetypes/page_odt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".odp"], body div a.odp_link {
+	a[href$=".odp"].user_link, body div a.odp_link {
 		background: url('{$IMG;,filetypes/page_odt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".ods"], body div a.ods_link {
+	a[href$=".ods"].user_link, body div a.ods_link {
 		background: url('{$IMG;,filetypes/page_ods}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".rss"], body div a.feed_link {
+	a[href$=".rss"].user_link, body div a.feed_link {
 		background: url('{$IMG;,filetypes/feed}') no-repeat right top; 
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".torrent"], body div a.torrent_link {
+	a[href$=".torrent"].user_link, body div a.torrent_link {
 		background: url('{$IMG;,filetypes/page_torrent}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".zip"], a[href$=".gz"], a[href$=".bz2"], a[href$=".tar"], a[href$=".rar"], body div a.archive_link {
+	a[href$=".zip"].user_link, a[href$=".gz"].user_link, a[href$=".bz2"].user_link, a[href$=".tar"].user_link, a[href$=".rar"].user_link, body div a.archive_link {
 		background: url('{$IMG;,filetypes/page_archive}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[href$=".asf"], a[href$=".ra"], a[href$=".wma"], a[href$=".wav"], a[href$=".mp3"], a[href$=".ogg"], a[href$=".mid"], a[href$=".mov"], a[href$=".qt"], a[href$=".wmv"], a[href$=".ram"], a[href$=".rm"], a[href$=".avi"], a[href$=".mpg"], a[href$=".mpe"], a[href$=".mpeg"], a[href$=".mp4"], a[href$=".webm"], body div a.media_link {
+	a[href$=".asf"].user_link, a[href$=".ra"].user_link, a[href$=".wma"].user_link, a[href$=".wav"].user_link, a[href$=".mp3"].user_link, a[href$=".ogg"].user_link, a[href$=".mid"].user_link, a[href$=".mov"].user_link, a[href$=".qt"].user_link, a[href$=".wmv"].user_link, a[href$=".ram"].user_link, a[href$=".rm"].user_link, a[href$=".avi"].user_link, a[href$=".mpg"].user_link, a[href$=".mpe"].user_link, a[href$=".mpeg"].user_link, a[href$=".mp4"].user_link, a[href$=".webm"].user_link, body div a.media_link {
 		background: url('{$IMG;,filetypes/page_media}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
-	a[target="_blank"] { /* Detected external links have styling */
+	a[target="_blank"].user_link { /* Detected external links have styling */
 		background: url('{$IMG;,filetypes/external_link}') no-repeat right top;
 		padding-right: 10px;
 	}
@@ -3803,7 +3802,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 		padding-right: 10px !important;
 	}
 
-	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
+	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"].user_link { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
 		background-image: none;
 		padding: 0px;
 	}

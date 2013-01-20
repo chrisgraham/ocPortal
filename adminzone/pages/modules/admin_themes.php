@@ -1674,7 +1674,7 @@ class Module_admin_themes
 		{
 			require_code('files2');
 			$config_url=get_upload_limit_config_url();
-			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'7b8066b63002cda0a7628ddadddd9962','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
@@ -1839,7 +1839,7 @@ class Module_admin_themes
 		{
 			require_code('files2');
 			$config_url=get_upload_limit_config_url();
-			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'b0e178ad1f840a07c4967f3c266c750b','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));

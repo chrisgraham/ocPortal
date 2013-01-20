@@ -68,7 +68,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			$error='Could not connect to database/database-server';
 			if ($fail_ok)
 			{
-				echo $error;
+				echo $error.chr(10);
 				return NULL;
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR')); // purposely not ===false
@@ -78,10 +78,56 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		global $SITE_INFO;
 		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
 		@dbx_query($db,'SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"');
+		@dbx_query($db,'SET WAIT_TIMEOUT=28800');
 		@dbx_query($db,'SET SQL_BIG_SELECTS=1');
-		if (get_forum_type()=='ocf') @dbx_query($db,'SET sql_mode=STRICT_ALL_TABLES');
+		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @dbx_query($db,'SET sql_mode=\'STRICT_ALL_TABLES\'');
+		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
 		return array($db,$db_name);
+	}
+
+	/**
+	 * Find whether full-text-search is present
+	 *
+	 * @param  array			A DB connection
+	 * @return boolean		Whether it is
+	 */
+	function db_has_full_text($db)
+	{
+		if ($this->using_innodb()) return false;
+		return true;
+	}
+
+	/**
+	 * Find whether subquery support is present
+	 *
+	 * @param  array			A DB connection
+	 * @return boolean		Whether it is
+	 */
+	function db_has_subqueries($db)
+	{
+		return true;
+	}
+
+	/**
+	 * Find whether collate support is present
+	 *
+	 * @param  array			A DB connection
+	 * @return boolean		Whether it is
+	 */
+	function db_has_collate_settings($db)
+	{
+		return true;
+	}
+
+	/**
+	 * Find whether full-text-boolean-search is present
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function db_has_full_text_boolean()
+	{
+		return true;
 	}
 
 	/**
@@ -94,19 +140,6 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 	{
 		if (is_null($this->last_select_db)) return addslashes($string);
 		return dbx_escape_string($this->last_select_db,$string);
-	}
-
-	/**
-	 * Find whether full-text-search is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
-	function db_has_full_text($db)
-	{
-		if ($this->using_innodb()) return false;
-		unset($db);
-		return true; // Assumes yes, because we are in a limited environment to actually check
 	}
 
 	/**
@@ -124,32 +157,38 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 	{
 		list($db,)=$db_parts;
 
-		if (strlen($query)>500000) // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
+		if (isset($query[500000])) // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
 		{
 			$test_result=$this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'',$db_parts,NULL,NULL,true);
 
 			if (!is_array($test_result)) return NULL;
 			if (intval($test_result[0]['Value'])<intval(strlen($query)*1.2))
 			{
-				if ($get_insert_id) fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG',escape_html($query)));
+				/*@mysql_query('SET session max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); Does not work well, as MySQL server has gone away error will likely just happen instead */
 
+				if ($get_insert_id) fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG',escape_html($query)));
 				return NULL;
 			}
 		}
 
-		if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval($start).','.strval($max);
-		elseif (!is_null($max)) $query.=' LIMIT '.strval($max);
-		elseif (!is_null($start)) $query.=' LIMIT '.strval($start).',30000000';
+		if (($max!==NULL) && ($start!==NULL)) $query.=' LIMIT '.strval($start).','.strval($max);
+		elseif ($max!==NULL) $query.=' LIMIT '.strval($max);
+		elseif ($start!==NULL) $query.=' LIMIT '.strval($start).',30000000';
 
 		$results=@dbx_query($db,$query,DBX_RESULT_INFO);
 		if (($results===0) && ((!$fail_ok) || (strpos(dbx_error($db),'is marked as crashed and should be repaired')!==false)))
 		{
 			$err=dbx_error($db);
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
-			if ((!running_script('upgrader')) && (get_page_name()!='admin_import'))
+			if ((!running_script('upgrader')) && (get_page_name()!='admin_import') && (strpos($err,'Duplicate entry')===false))
 			{
-				if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',NULL,NULL,NULL,NULL,false))) fatal_exit(htmlentities('Query failed: '.$query.' : '.$err));
+				$matches=array();
+				if (preg_match('#/(\w+)\' is marked as crashed and should be repaired#U',$err,$matches)!=0)
+				{
+					$this->db_query('REPAIR TABLE '.$matches[1],$db_parts);
+				}
 
+				if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',NULL,NULL,NULL,NULL,false))) fatal_exit(htmlentities('Query failed: '.$query.' : '.$err));
 				fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
 			} else
 			{
@@ -158,7 +197,8 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			}
 		}
 
-		if ((is_object($results)) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')))
+		$sub=substr(ltrim($query),0,7);
+		if ((is_object($results)) && (($sub=='SELECT ') || ($sub=='select ') || (strtoupper(substr(ltrim($query),0,8))=='EXPLAIN ') || (strtoupper(substr(ltrim($query),0,9))=='DESCRIBE ') || (strtoupper(substr(ltrim($query),0,5))=='SHOW ')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}
@@ -210,7 +250,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 				$name=$names[$j];
 				$type=$types[$j];
 
-				if (($type=='int') || ($type=='integer'))
+				if (($type=='int') || ($type=='integer') || ($type=='real'))
 				{
 					if ((is_null($v)) || ($v==='')) // Roadsend returns empty string instead of NULL
 					{

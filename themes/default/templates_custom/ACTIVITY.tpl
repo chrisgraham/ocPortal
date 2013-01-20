@@ -14,11 +14,11 @@
 	{+END}
 
 	{+START,SET,commented_out}
-		{+START,IF_EMPTY,{MEMPIC}}{+START,IF_NON_EMPTY,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1}}
+		{+START,IF_EMPTY,{AVATAR}}{+START,IF_NON_EMPTY,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1}}
 			<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
 		{+END}{+END}
-		{+START,IF_NON_EMPTY,{MEMPIC}}
-			<img src="{$THUMBNAIL*,{MEMPIC},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
+		{+START,IF_NON_EMPTY,{AVATAR}}
+			<img src="{$THUMBNAIL*,{AVATAR},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
 		{+END}
 	{+END}
 </div>
@@ -33,16 +33,16 @@
 	{+END}
 
 	<div class="time right">
-		{$MAKE_RELATIVE_DATE*,{DATETIME}} {!AGO}
+		{$MAKE_RELATIVE_DATE*,{DATETIME},1} {!AGO}
 	</div>
 
 	<div class="activities_content">
 		{$,The main message}
 		{+START,IF,{$EQ,{LANG_STRING},RAW_DUMP}}
-			{BITS}
+			{MESSAGE}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
-			{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{BITS},0,1}}{$SUBSTR,{BITS},1}}
+			{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{MESSAGE},0,1}}{$SUBSTR,{MESSAGE},1}}
 		{+END}
 	</div>
 </div>

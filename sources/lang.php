@@ -869,7 +869,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 	}
 
 	// Put in parameters
-	static $non_plural_non_vowel=array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z');
+	static $non_plural_non_vowel=array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z','{'/*for no-op param usage*/);
 	$looked_up=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
 	if ($looked_up===NULL)
 	{
@@ -900,14 +900,14 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 						$exploded=explode('|',$out[$at-2]);
 						$_token=$token1->evaluate();
 						$_token_denum=str_replace(',','',$_token);
-						$ret->attach((in_array(is_numeric($_token_denum)?$_token_denum:strtolower(substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
+						$ret->attach((in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
 					}
 					elseif (($plural_or_vowel_check) && (substr($out[$at-2],0,2)=='2|'))
 					{
 						$exploded=explode('|',$out[$at-2]);
 						$_token=$token2->evaluate();
 						$_token_denum=str_replace(',','',$_token);
-						$ret->attach((in_array(is_numeric($_token_denum)?$_token_denum:strtolower(substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
+						$ret->attach((in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
 					}
 				}
 				$ret->attach($bit[0]);
@@ -920,7 +920,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			if ($plural_or_vowel_check)
 			{
 				$_token_denum=str_replace(',','',$token1);
-				$out=preg_replace('#\{1\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:strtolower(substr($token1,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
+				$out=preg_replace('#\{1\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token1,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 			}
 			if (($XSS_DETECT) && (ocp_is_escaped($token1))) ocp_mark_as_escaped($out);
 		}
@@ -932,7 +932,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			if ($plural_or_vowel_check)
 			{
 				$_token_denum=str_replace(',','',$token1);
-				$out=preg_replace('#\{2\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:strtolower(substr($token2,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
+				$out=preg_replace('#\{2\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token2,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 			}
 			if (($XSS_DETECT) && (ocp_is_escaped($token2)) && ($escaped)) ocp_mark_as_escaped($out);
 
@@ -947,7 +947,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					if ($plural_or_vowel_check)
 					{
 						$_token_denum=str_replace(',','',$token);
-						$out=preg_replace('#\{'.strval($i).'\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:strtolower(substr($token,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
+						$out=preg_replace('#\{'.strval($i).'\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 					}
 					if (($XSS_DETECT) && (ocp_is_escaped($token)) && ($escaped)) ocp_mark_as_escaped($out);
 					$i++;

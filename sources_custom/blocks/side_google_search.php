@@ -41,7 +41,7 @@ class Block_side_google_search
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'user_search_id\',$map)?$map[\'user_search_id\']:\'\',array_key_exists(\'page_id\',$map)?$map[\'page_id\']:\'google_search\')';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
 

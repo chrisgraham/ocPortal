@@ -48,7 +48,7 @@ class Block_side_news_categories
 	{
 		$info=array();
 		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true))';
-		$info['ttl']=60*24;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
 

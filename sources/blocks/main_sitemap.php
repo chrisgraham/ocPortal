@@ -48,7 +48,7 @@ class Block_main_sitemap
 	{
 		$info=array();
 		$info['cache_on']=array('block_main_sitemap__cache_on');
-		$info['ttl']=600;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*10;
 		return $info;
 	}
 

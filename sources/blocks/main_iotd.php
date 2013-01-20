@@ -48,7 +48,7 @@ class Block_main_iotd
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'current\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'iotds\'))';
-		$info['ttl']=60*24;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
 

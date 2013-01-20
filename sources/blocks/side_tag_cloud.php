@@ -48,7 +48,7 @@ class Block_side_tag_cloud
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:do_lang(\'TAG_CLOUD\'),array_key_exists(\'max\',$map)?intval($map[\'max\']):30,array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
-		$info['ttl']=60*1;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*1;
 		return $info;
 	}
 

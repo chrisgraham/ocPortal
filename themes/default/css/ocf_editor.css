@@ -3,11 +3,11 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-.ocf_edit_forum_grouping {
+.ocf_edit_forum_category {
 	background-color: {$GET,box_title_background};
 }
 
-.ocf_edit_forum_grouping, .ocf_edit_forum_forum {
+.ocf_edit_forum_category, .ocf_edit_forum_forum {
 	border: 1px solid {$GET,dark_border};
 	margin-top: -1px;
 	padding: 1em;
@@ -27,7 +27,12 @@
 }
 
 .ocf_edit_forum_orderings {
-	padding-top: 1.5em;
+	padding-top: 1em;
+}
+
+.ocf_edit_forum_title h3, .ocf_edit_forum_orderings label, .ocf_edit_forum_type {
+	color: {$GET,box_title_text};
+	border: none;
 }
 
 .ocf_edit_forum_orderings_f {

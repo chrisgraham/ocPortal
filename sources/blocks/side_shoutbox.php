@@ -48,7 +48,7 @@ class Block_side_shoutbox
 	{
 		$info=array();
 		$info['cache_on']='((get_value(\'no_frames\')===\'1\') && (count($_POST)!=0))?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()),array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'param\',$map)?intval($map[\'param\']):NULL)';
-		$info['ttl']=60*24;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
 

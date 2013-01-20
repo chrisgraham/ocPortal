@@ -48,7 +48,7 @@ class Block_main_emoticon_codes
 	{
 		$info=array();
 		$info['cache_on']='array(has_privilege(get_member(),\'use_special_emoticons\'))';
-		$info['ttl']=60*2;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*2;
 		return $info;
 	}
 

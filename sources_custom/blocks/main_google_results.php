@@ -41,7 +41,7 @@ class Block_main_google_results
 	{
 		$info=array();
 		$info['cache_on']='array()';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*100;
 		return $info;
 	}
 

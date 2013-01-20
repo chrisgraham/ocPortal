@@ -161,6 +161,7 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->create_index('images','xis',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('images','iadd_date',array('add_date'));
 			$GLOBALS['SITE_DB']->create_index('images','ftjoin_idescription',array('description'));
+			$GLOBALS['SITE_DB']->create_index('images','ftjoin_dtitle',array('title'));
 
 			$GLOBALS['SITE_DB']->create_table('videos',array(
 				'id'=>'*AUTO',
@@ -188,6 +189,7 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->create_index('videos','category_list',array('cat'));
 			$GLOBALS['SITE_DB']->create_index('videos','vadd_date',array('add_date'));
 			$GLOBALS['SITE_DB']->create_index('videos','ftjoin_vdescription',array('description'));
+			$GLOBALS['SITE_DB']->create_index('videos','ftjoin_dtitle',array('title'));
 
 			require_lang('galleries');
 			add_menu_item_simple('main_content',NULL,'GALLERIES','_SEARCH:galleries:type=misc',0,0,true,'',0,'',2);
@@ -254,6 +256,8 @@ class Module_galleries
 		{
 			$GLOBALS['SITE_DB']->add_table_field('videos','title','SHORT_TRANS');
 			$GLOBALS['SITE_DB']->add_table_field('images','title','SHORT_TRANS');
+			$GLOBALS['SITE_DB']->create_index('images','ftjoin_dtitle',array('title'));
+			$GLOBALS['SITE_DB']->create_index('videos','ftjoin_dtitle',array('title'));
 			$GLOBALS['SITE_DB']->add_table_field('galleries','gallery_views','INTEGER');
 			$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?MEMBER');
 		}
@@ -1099,7 +1103,7 @@ class Module_galleries
 		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_select_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
 		{
 			require_code('site2');
-			assign_refresh(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'probe_id'=>$id,'probe_type'=>'video'),'_SELF'),0.0);
+			assign_refresh(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'probe_id'=>$id,'probe_type'=>'image'),'_SELF'),0.0);
 		}
 
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
@@ -1254,7 +1258,7 @@ class Module_galleries
 		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_select_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
 		{
 			require_code('site2');
-			assign_refresh(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'probe_id'=>$id,'probe_type'=>'image'),'_SELF'),0.0);
+			assign_refresh(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'probe_id'=>$id,'probe_type'=>'video'),'_SELF'),0.0);
 		}
 
 		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$cat)));

@@ -469,6 +469,7 @@ class Module_admin_version
 				't_url'=>'URLPATH',
 				't_title'=>'SHORT_TEXT',
 			));
+			$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
 
 			$GLOBALS['SITE_DB']->create_table('rating',array(
 				'id'=>'*AUTO',

@@ -48,7 +48,7 @@ class Block_bottom_news
 	{
 		$info=array();
 		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):5,array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
 

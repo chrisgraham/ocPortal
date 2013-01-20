@@ -41,7 +41,7 @@ class Block_side_amazon_affiliate_sales
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'associates_id\',$map)?$map[\'associates_id\']:\'\',array_key_exists(\'product_line\',$map)?$map[\'product_line\']:\'\',array_key_exists(\'subject_keywords\',$map)?$map[\'subject_keywords\']:\'\',array_key_exists(\'items_number\',$map)?$map[\'items_number\']:\'\')';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
 

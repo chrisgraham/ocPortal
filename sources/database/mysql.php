@@ -110,6 +110,7 @@ class Database_Static_mysql extends Database_super_mysql
 		{
 			@mysql_query('SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"',$db);
 		}
+		@mysql_query('SET WAIT_TIMEOUT=28800',$db);
 		@mysql_query('SET SQL_BIG_SELECTS=1',$db);
 		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'',$db); else @mysql_query('SET sql_mode=\'MYSQL40\'',$db);
 		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
@@ -226,7 +227,7 @@ class Database_Static_mysql extends Database_super_mysql
 			{
 				$this->reconnected_once=true;
 				mysql_ping($db);
-				$ret=$this->db_query($query,$db_parts,NULL,NULL,$fail_ok,$get_insert_id);
+				$ret=$this->db_query($query,$db_parts,$max,$start,$fail_ok,$get_insert_id);
 				$this->reconnected_once=false;
 				return $ret;
 			}

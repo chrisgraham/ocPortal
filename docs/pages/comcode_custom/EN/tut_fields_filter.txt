@@ -30,7 +30,7 @@ The 'filter' tag again is used to limit the situations under which restriction t
 
 The following restriction tags are supported for manipulating form results:
  - 'minlength', give an error if the field value does not meet the minimum length. This is useful to prevent people posting poorly completed entries.
- - 'maxlength', give an error if the field value does not meet the minimum length.
+ - 'maxlength', give an error if the field value does not meet the maximum length.
  - 'possibilityset', give an error if the field value does not match the contained wildcard expression. If you apply the 'secretive' attribute with a value of '1' then the user will not be told what the possible values are, which is useful if you are trying to implement a password (e.g. you can only send me a PT if you use the word "abracadabra" in it).
  - 'disallowedsubstring', provide an error if the field value contains a match for the contained wildcard expression. This is useful as a blocking word-filter. Unlike the main ocPortal word filter, you have full qualification and filter support, so it is selectively applied as you require.
  - 'disallowedword', as above but will only match whole words.

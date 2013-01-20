@@ -23,8 +23,7 @@
  */
 function init__files2()
 {
-	global $DOWNLOAD_LEVEL;
-	$DOWNLOAD_LEVEL=0;
+	require_code('files');
 
 	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
 	/** The mime type returned from the last file lookup.

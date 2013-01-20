@@ -41,7 +41,7 @@ class Block_side_amazon_wishlist
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'wishlist_id\',$map)?$map[\'wishlist_id\']:\'\',array_key_exists(\'access_key\',$map)?$map[\'access_key\']:\'\',array_key_exists(\'secret_key\',$map)?$map[\'secret_key\']:\'\',array_key_exists(\'domain\',$map)?$map[\'domain\']:\'\',array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
 

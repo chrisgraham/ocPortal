@@ -24,13 +24,13 @@
 	font-size: 0.95em;
 }
 
-.remove {
+.activities_box .remove {
 	float: right;
 	overflow: hidden;
 	width: 22px;
 }
 
-.remove .remove_cross {
+.activities_box .remove .remove_cross {
 	width: 14px;
 	height: 14px;
 	background: url('{$IMG;,stop12}') transparent no-repeat;
@@ -41,54 +41,54 @@
 	padding: 0;
 }
 
-.remove .remove_cross:hover {
+.activities_box .remove .remove_cross:hover {
 	background: url('{$IMG;,stop12Hover}') transparent no-repeat;
 	cursor: pointer;
 }
 
-.remove .remove_cross:active {
+.activities_box .remove .remove_cross:active {
 	background: url('{$IMG;,stop12Active}') transparent no-repeat;
 	cursor: pointer;
 }
 
 /* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
-.remove input.remove_cross::-moz-focus-inner {
+.activities_box .remove input.remove_cross::-moz-focus-inner {
 	border: 0;
 }
 
 .activities_content {
 	width: auto;
 	float: none;
-	padding: 6px 5px 5px 45px;
-	font-size: 1.1em;
+	padding: 0.5em 0.5em 0.5em 45px;
+	font-size: 1.05em;
 	color: #333333;
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 }
 
-.name {
+.activities_box .name {
 	float: left;
-	padding-{!en_right}: 10px;
+	padding-{!en_right}: 2em;
 	margin-top: 10px;
 	font-size: 0.95em;
 	font-weight: bold;
 }
 
-.name a, .activities_box .name a[href*=".php"] {
+.activities_box .name a, .activities_box .name a[href*=".php"] {
 	color: #333333;
 	text-decoration: none;
 }
 
-.name a:hover, .activities_box .name a[href*=".php"]:hover {
+.activities_box .name a:hover, .activities_box .activities_box .name a[href*=".php"]:hover {
 	color: #005567;
 }
 
-.time {
+.activities_box .time {
 	float: right;
 	color: #999999;
 }
 
-.name, .time {
-	margin: 5px 10px 0 0;
+.activities_box .name, .activities_box .time {
+	margin: 5px 1em 0 0;
 	font-size: 0.80em;
 	text-decoration: none;
 }
@@ -104,6 +104,7 @@
 	overflow: auto;
 	height: 2.3em;
 	font-size: 1.2em;
+	{$BETA_CSS_PROPERTY,box-sizing: content-box;}
 }
 
 .status_controls {
@@ -113,7 +114,7 @@
 	width: 100%;
 }
 
-#notify {
+.status_table #notify {
 	white-space: normal;
 	font-size: 0.85em;
 	margin: 0.2em;

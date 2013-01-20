@@ -5237,7 +5237,7 @@ function doSubmit(e,ob,recurse) {
 
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
-			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
+			window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
 		if (!recurse && ret && ret2) btnSubmit.form.submit();
 		return ret && ret2;
 	}
@@ -5512,7 +5512,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		filenameField.setAttribute('id','txtFileName_'+name);
 		filenameField.setAttribute('type','text');
 		filenameField.value='';
-		filenameField.className='top_vertical_alignment button_micro';
+		filenameField.className='top_vertical_alignment';
 		filenameField.name='txtFileName_'+name;
 		filenameField.disabled=true;
 		subdiv.appendChild(filenameField);

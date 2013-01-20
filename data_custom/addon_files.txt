@@ -4155,3 +4155,8 @@ gallery_syndication
  - sources_custom/hooks/systems/do_next_menus/gallery_syndication.php
  - sources_custom/oauth2.php
  - sources_custom/vimeo.php
+
+pagination_protection
+---------------------
+
+ - sources_custom/hooks/systems/startup/param_restrict.php

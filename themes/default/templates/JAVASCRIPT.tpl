@@ -2683,6 +2683,11 @@ function click_link(link)
 {
 	var cancelled=false;
 
+	if (link.nodeName.toLowerCase()!='a')
+	{
+		link=link.getElementsByTagName('a')[0];
+	}
+
 	var backup=link.onclick;
 
 	link.onclick=function(e) { if (typeof e=='undefined') var e=window.event; cancel_bubbling(e); };

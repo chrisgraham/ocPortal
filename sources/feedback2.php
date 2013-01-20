@@ -107,7 +107,7 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 			$choices->attach(form_input_list_entry('0',!$allow_comments && !$allow_reviews,do_lang('NO')));
 			$choices->attach(form_input_list_entry('1',$allow_comments && !$allow_reviews,do_lang('ALLOW_COMMENTS_ONLY')));
 			$choices->attach(form_input_list_entry('2',$allow_reviews,do_lang('ALLOW_REVIEWS')));
-			$fields->attach(form_input_list(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),'allow_comments',$choices));
+			$fields->attach(form_input_list(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),'allow_comments',$choices,NULL,false,false));
 		} else
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),'allow_comments',$allow_comments));

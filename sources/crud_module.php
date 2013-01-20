@@ -468,6 +468,7 @@ class standard_crud_module
 			check_submit_permission($this->permissions_require,$this->permission_page_name);
 
 		$doing='ADD_'.$this->lang_type;
+
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
 			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -574,7 +575,7 @@ class standard_crud_module
 				{
 					require_code('files2');
 					$config_url=get_upload_limit_config_url();
-					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			} else
 			{
@@ -583,7 +584,7 @@ class standard_crud_module
 				if ($max<30.0)
 				{
 					$config_url=get_upload_limit_config_url();
-					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			}
 		}
@@ -656,6 +657,12 @@ class standard_crud_module
 		if (!is_null($this->permissions_require)) check_submit_permission($this->permissions_require,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b)),$this->permission_page_name);
 
 		$doing='ADD_'.$this->lang_type;
+
+		$success_message_str='SUCCESS_MESSAGE__'.$doing;
+		if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
+		if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
+			$success_message_str='SUCCESS';
+
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
 			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -693,7 +700,7 @@ class standard_crud_module
 		if (!is_null($this->upload)) require_code('uploads');
 		$temp=$this->add_actualisation();
 
-		$description=is_null($this->do_next_description)?do_lang_tempcode('SUCCESS'):$this->do_next_description;
+		$description=is_null($this->do_next_description)?do_lang_tempcode($success_message_str):$this->do_next_description;
 
 		if (is_array($temp))
 		{
@@ -843,6 +850,7 @@ class standard_crud_module
 			check_some_edit_permission($this->permissions_require,NULL,$this->permission_page_name);
 
 		$doing='EDIT_'.$this->lang_type;
+
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
 			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -963,6 +971,7 @@ class standard_crud_module
 	function _ed()
 	{
 		$doing='EDIT_'.$this->lang_type;
+
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
 			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -1107,7 +1116,7 @@ class standard_crud_module
 				{
 					require_code('files2');
 					$config_url=get_upload_limit_config_url();
-					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			} else
 			{
@@ -1116,7 +1125,7 @@ class standard_crud_module
 				if ($max<30.0)
 				{
 					$config_url=get_upload_limit_config_url();
-					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			}
 		}
@@ -1221,6 +1230,12 @@ class standard_crud_module
 		$id=$this->non_integer_id?get_param('id',false,true):strval(get_param_integer('id'));
 
 		$doing='EDIT_'.$this->lang_type;
+
+		$success_message_str='SUCCESS_MESSAGE__'.$doing;
+		if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
+		if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
+			$success_message_str='SUCCESS';
+
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
 			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -1310,12 +1325,12 @@ class standard_crud_module
 			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
 			{
 				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-				return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+				return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
 			}*/
 
 			clear_ocp_autosave();
 
-			$description=is_null($this->do_next_description)?do_lang_tempcode('SUCCESS'):$this->do_next_description;
+			$description=is_null($this->do_next_description)?do_lang_tempcode($success_message_str):$this->do_next_description;
 
 			return $this->do_next_manager($title,$description,NULL);
 		}
@@ -1348,7 +1363,7 @@ class standard_crud_module
 
 			if (($this->output_of_action_is_confirmation) && (!is_null($description))) return $description;
 
-			if (is_null($description)) $description=do_lang_tempcode('SUCCESS');
+			if (is_null($description)) $description=do_lang_tempcode($success_message_str);
 
 			if (addon_installed('awards'))
 			{
@@ -1378,7 +1393,8 @@ class standard_crud_module
 		if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
 		{
 			$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?make_string_tempcode(get_param('redirect')):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+
+			return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
 		}
 
 		clear_ocp_autosave();

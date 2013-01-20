@@ -48,7 +48,7 @@ class Block_side_language
 	{
 		$info=array();
 		$info['cache_on']='array(user_lang())';
-		$info['ttl']=60;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60;
 		return $info;
 	}
 

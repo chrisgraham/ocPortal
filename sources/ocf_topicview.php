@@ -173,7 +173,15 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		}
 
 		// Any custom fields to show?
-		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,1);
+		$post['custom_fields']=ocf_get_all_custom_fields_match_member(
+			$_postdetails['p_poster'],
+			((get_member()!=$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,
+			((get_member()==$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,
+			NULL,
+			NULL,
+			NULL,
+			1
+		);
 
 		// Usergroup
 		$post['primary_group']=$primary_group;

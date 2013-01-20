@@ -72,7 +72,7 @@ class Hook_content_meta_aware_catalogue_entry
 
 			'feedback_type_code'=>'catalogues',
 
-			'permissions_type_code'=>'catalogues_category', // NULL if has no permissions
+			'permissions_type_code'=>(get_value('disable_cat_cat_perms')==='1')?NULL:'catalogues_category', // NULL if has no permissions
 
 			'search_hook'=>'catalogue_entries',
 

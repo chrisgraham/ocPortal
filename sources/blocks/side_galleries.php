@@ -48,7 +48,7 @@ class Block_side_galleries
 	{
 		$info=array();
 		$info['cache_on']='array(has_actual_page_access(get_member(),\'galleries\',array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\')),array_key_exists(\'depth\',$map)?intval($map[\'depth\']):0,array_key_exists(\'param\',$map)?$map[\'param\']:\'root\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',array_key_exists(\'show_empty\',$map)?($map[\'show_empty\']==\'1\'):false)';
-		$info['ttl']=60*2;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*2;
 		return $info;
 	}
 

@@ -197,14 +197,15 @@ function activities_ajax_update_list_handler()
 			$list_items='';
 			foreach ($activities as $row)
 			{
-				list($message,$memberpic,$datetime,$member_url,$is_public)=render_activity($row);
+				list($message,$member_avatar,$datetime,$member_url,$is_public)=render_activity($row);
 
 				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array(
 					'_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f',
 					'LANG_STRING'=>'RAW_DUMP',
+					'ADDON'=>$row['a_addon'],
 					'ADDON_ICON'=>find_addon_icon($row['a_addon']),
-					'BITS'=>$message,
-					'MEMPIC'=>$memberpic,
+					'MESSAGE'=>$message,
+					'AVATAR'=>$member_avatar,
 					'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),
 					'DATETIME'=>strval($datetime),
 					'MEMBER_URL'=>$member_url,

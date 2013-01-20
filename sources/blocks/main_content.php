@@ -48,7 +48,7 @@ class Block_main_content
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'1\',array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'id\',$map)?$map[\'id\']:\'\',array_key_exists(\'efficient\',$map)?$map[\'efficient\']:\'_SEARCH\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
-		$info['ttl']=60*24; // Intentionally, do randomisation acts as 'of the day'
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24; // Intentionally, do randomisation acts as 'of the day'
 		return $info;
 	}
 

@@ -518,17 +518,17 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	/* At this point we know our order (or subscription cancellation) is good */
 
 	// Dispatch
-	if ($payment_status=='Completed')
+	if (($payment_status=='Completed') || ($payment_status=='SCancelled'))
 	{
 		//Find product hooks of this order to check dispatch type
 
 		$object=find_product($product,true);
 
-		if(is_object($object) && !method_exists($object,'get_product_dispatch_type'))	
+		if (is_object($object) && !method_exists($object,'get_product_dispatch_type'))	
 		{	//If hook does not have dispatch method setting take dispatch method as automatic
 			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';	
 		}
-		elseif(is_object($object) && $object->get_product_dispatch_type($purchase_id)=='automatic')
+		elseif (is_object($object) && $object->get_product_dispatch_type($purchase_id)=='automatic')
 		{	
 			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';
 		}

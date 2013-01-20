@@ -650,26 +650,29 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
-		$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
-		if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) // Safer
+		if (strpos($original_contents,chr(10).'deny from '.$ip_cleaned)===false)
 		{
-			if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents))
+			$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
+			if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) // Safer
 			{
-				file_put_contents(get_file_base().'/.htaccess',$original_contents,LOCK_EX);
-				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-			}
-		} else
-		{
-			$myfile=fopen(get_file_base().'/.htaccess','wt');
-			if (fwrite($myfile,$contents)<strlen($contents))
+				if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents))
+				{
+					file_put_contents(get_file_base().'/.htaccess',$original_contents,LOCK_EX);
+					warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				}
+			} else
 			{
-				rewind($myfile);
-				fwrite($myfile,$original_contents);
-				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				$myfile=fopen(get_file_base().'/.htaccess','wt');
+				if (fwrite($myfile,$contents)<strlen($contents))
+				{
+					rewind($myfile);
+					fwrite($myfile,$original_contents);
+					warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				}
+				fclose($myfile);
 			}
-			fclose($myfile);
+			sync_file(get_file_base().'/.htaccess');
 		}
-		sync_file(get_file_base().'/.htaccess');
 	}
 
 	return true;

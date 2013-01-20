@@ -105,7 +105,8 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 	{
 		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 		$members=$this->_all_members_who_have_enabled_with_page_access($members,'catalogues',$notification_code,$category,$to_member_ids,$start,$max);
-		$members=$this->_all_members_who_have_enabled_with_category_access($members,'catalogues_category',$notification_code,$category,$to_member_ids,$start,$max);
+		if (get_value('disable_cat_cat_perms')!=='1')
+			$members=$this->_all_members_who_have_enabled_with_category_access($members,'catalogues_category',$notification_code,$category,$to_member_ids,$start,$max);
 
 		return $members;
 	}

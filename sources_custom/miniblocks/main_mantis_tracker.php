@@ -70,7 +70,7 @@ if (isset($map['sort']))
 	}
 }
 
-$max_rows=$db->query_value_if_there('SELECT COUNT(*) FROM mantis_bug_table a JOIN mantis_bug_text_table b ON b.id=a.id JOIN mantis_custom_field_string_table c ON c.bug_id=a.id AND field_id=3 WHERE '.$where);
+$max_rows=$db->query_value_if_there('SELECT COUNT(*) FROM mantis_bug_table a JOIN mantis_bug_text_table b ON b.id=a.bug_text_id JOIN mantis_custom_field_string_table c ON c.bug_id=a.id AND field_id=3 WHERE '.$where);
 $query='SELECT a.*,b.description,(SELECT COUNT(*) FROM mantis_bugnote_table x WHERE x.bug_id=a.id) AS num_comments,(SELECT COUNT(*) FROM mantis_bug_monitor_table y WHERE y.bug_id=a.id) AS num_votes,(SELECT SUM(amount) FROM mantis_sponsorship_table z WHERE z.bug_id=a.id) AS money_raised,CAST(c.value AS DECIMAL) as hours,d.name AS category FROM mantis_bug_table a JOIN mantis_bug_text_table b ON b.id=a.id JOIN mantis_custom_field_string_table c ON c.bug_id=a.id AND field_id=3 JOIN mantis_category_table d ON d.id=a.category_id WHERE '.$where.' ORDER BY '.$order;
 
 $issues=$db->query($query,$max,$start);

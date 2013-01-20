@@ -50,7 +50,7 @@ class Block_side_ocf_private_topics
 	{
 		$info=array();
 		$info['cache_on']='array(get_member())';
-		$info['ttl']=6000;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*100;
 		return $info;
 	}
 

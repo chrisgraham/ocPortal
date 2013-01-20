@@ -41,7 +41,7 @@ class Block_main_ebay
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'type\',$map)?$map[\'type\']:\'\',array_key_exists(\'seller\',$map)?$map[\'seller\']:\'\',array_key_exists(\'query\',$map)?$map[\'query\']:\'\',array_key_exists(\'lang\',$map)?$map[\'lang\']:\'\')';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
 

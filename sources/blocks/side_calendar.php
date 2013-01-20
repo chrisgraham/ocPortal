@@ -48,7 +48,7 @@ class Block_side_calendar
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',utctime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',utctime_to_usertime()))';
-		$info['ttl']=60*24;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
 

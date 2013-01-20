@@ -48,7 +48,7 @@ class Block_main_forum_news
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'forum\',$map)?$map[\'forum\']:\'Announcements\',array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'date_key\',$map)?$map[\'date_key\']:\'lasttime\')';
-		$info['ttl']=60;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60;
 		return $info;
 	}
 

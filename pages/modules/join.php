@@ -176,7 +176,7 @@ class Module_join
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		// Check confirm code correct
-		$_code=get_param('code',-1); // -1 allowed because people often seem to mess the e-mail link up
+		$_code=get_param('code','-1'); // -1 allowed because people often seem to mess the e-mail link up
 		$code=intval($_code);
 		if ($code<=0)
 		{

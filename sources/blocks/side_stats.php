@@ -101,7 +101,7 @@ class Block_side_stats
 	{
 		$info=array();
 		$info['cache_on']='';
-		$info['ttl']=15;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
 

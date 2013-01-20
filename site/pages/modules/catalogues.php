@@ -1206,7 +1206,7 @@ class Module_catalogues
 		{
 			if ($i!=0)
 			{
-				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category['id']))) continue;
+				if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category['id'])))) continue;
 			}
 
 			$id=$category['id'];

@@ -316,7 +316,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				$found=false;
 				foreach ($fields as $i=>$field)
 				{
-					if ($order_by==$field['id'])
+					if ($order_by==strval($field['id']))
 					{
 						$order_by=strval($i);
 						$found=true;
@@ -925,7 +925,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$map['FIELDS_2D']=$fields_2d;
 
 	// Admin functions
-	if ((has_actual_page_access(NULL,'cms_catalogues',NULL,NULL)) && (has_edit_permission('mid',get_member(),$entry['ce_submitter'],'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$entry['cc_id']))))
+	if ((has_actual_page_access(NULL,'cms_catalogues',NULL,NULL)) && (has_edit_permission('mid',get_member(),$entry['ce_submitter'],'cms_catalogues',array('catalogues_catalogue',$catalogue_name)+((get_value('disable_cat_cat_perms')!=='1')?array('catalogues_category',$entry['cc_id']):array()))))
 	{
 		$map['EDIT_URL']=build_url(array('page'=>'cms_catalogues','type'=>'_edit_entry','catalogue_name'=>$catalogue_name,'id'=>$id),get_module_zone('cms_catalogues'));
 	} else $map['EDIT_URL']='';
@@ -1345,7 +1345,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	$children[0]['entries']=array();
 	foreach ($erows as $row)
 	{
-		if (($editable_filter) && (!has_edit_permission('mid',get_member(),$row['ce_submitter'],'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$category_id)))) continue;
+		if (($editable_filter) && (!has_edit_permission('mid',get_member(),$row['ce_submitter'],'cms_catalogues',array('catalogues_catalogue',$catalogue_name)+((get_value('disable_cat_cat_perms')!=='1')?array('catalogues_category',$category_id):array())))) continue;
 
 		$entry_fields=get_catalogue_entry_field_values($catalogue_name,$row['id'],array(0));
 		$name=$entry_fields[0]['effective_value']; // 'Name' is value of first field
@@ -1465,7 +1465,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 		$children[0]['breadcrumbs']=$breadcrumbs;
 		$children[0]['compound_list']=strval($category_id).',';
 		$children[0]['count']=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('cc_id'=>$category_id));
-		if ($addable_filter) $children[0]['addable']=has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$category_id));
+		if ($addable_filter) $children[0]['addable']=has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$catalogue_name)+((get_value('disable_cat_cat_perms')!=='1')?array('catalogues_category',$category_id):array()));
 	}
 
 	// Children of this category

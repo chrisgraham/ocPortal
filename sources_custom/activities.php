@@ -283,7 +283,7 @@ function render_activity($row,$use_inside_ocp=true)
 
 	// Details of member
 	$member_id=$row['a_member_id'];
-	$memberpic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+	$member_avatar=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,$use_inside_ocp);
 
 	$datetime=$row['a_time'];
@@ -342,7 +342,7 @@ function render_activity($row,$use_inside_ocp=true)
 		}
 	}
 
-	return array($message,$memberpic,$datetime,$member_url,$row['a_language_string_code'],$row['a_is_public']==1);
+	return array($message,$member_avatar,$datetime,$member_url,$row['a_language_string_code'],$row['a_is_public']==1);
 }
 
 /**

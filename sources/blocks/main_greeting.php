@@ -47,7 +47,7 @@ class Block_main_greeting
 	{
 		$info=array();
 		$info['cache_on']='is_guest()?NULL:array(get_member())';
-		$info['ttl']=60*24*7;
+		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
 		return $info;
 	}
 
