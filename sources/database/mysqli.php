@@ -168,9 +168,9 @@ class Database_Static_mysqli extends Database_super_mysql
 	 *
 	 * @return boolean		Whether it is
 	 */
-	function db_has_full_text_boolean($db)
+	function db_has_full_text_boolean()
 	{
-		return (version_compare(mysqli_get_server_info($db[0]),'4.1.0','>='));
+		return true;
 	}
 
 	/**
