@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2013
 
  You may not distribute a modified version of this file, unless it is solely as an ocPortal modification.
  See text/EN/licence.txt for full licencing information.
