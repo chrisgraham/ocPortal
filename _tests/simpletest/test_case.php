@@ -506,7 +506,7 @@ class TestSuite {
      *    @access public
      */
     function getLabel() {
-        if (! $this->_label) {
+        if ($this->_label === NULL) {
             return ($this->getSize() == 1) ?
                     get_class($this->_test_cases[0]) : get_class($this);
         } else {

@@ -4276,9 +4276,10 @@ function pow($base,$exp)
  * Quote regular expression characters.
  *
  * @param  string	The string to escape.
+ * @param  string	Extra character to escape, was used in regular expression to surround it.
  * @return string	The escape string.
  */
-function preg_quote($str)
+function preg_quote($str,$surround_char='/')
 {
 	return '';
 }

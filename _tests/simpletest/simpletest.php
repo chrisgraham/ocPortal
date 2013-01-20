@@ -353,7 +353,7 @@ class SimpleStackTrace {
                 continue;
             }
             if ($this->_frameMatchesPrefix($frame)) {
-                return ' at [' . $frame['file'] . ' line ' . $frame['line'] . ']';
+                return ' at [' . $frame['file'] . ' line ' . strval($frame['line']) . ']';
             }
         }
         return '';

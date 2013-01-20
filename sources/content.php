@@ -138,13 +138,13 @@ function content_get_details($content_type,$content_id)
 			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
 			if ($content_title=='')
 			{
+				$content_title=do_lang($cma_info['content_type_label']).' (#'.(is_string($content_id)?$content_id:strval($content_id)).')';
 				if ($content_type=='image' || $content_type=='video') // A bit of a fudge, but worth doing
 				{
 					require_lang('galleries');
-					$content_title=do_lang('VIEW_'.strtoupper($content_type).'_IN',get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$content_row['cat']))));
-				} else
-				{
-					$content_title=do_lang($cma_info['content_type_label']).' (#'.(is_string($content_id)?$content_id:strval($content_id)).')';
+					$fullname=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$content_row['cat']));
+					if (!is_null($fullname))
+						$content_title=do_lang('VIEW_'.strtoupper($content_type).'_IN',get_translated_text($fullname));
 				}
 			}
 		}

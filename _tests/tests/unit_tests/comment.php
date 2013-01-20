@@ -34,7 +34,7 @@ class comment_test_set extends ocp_test_case
 		require_code('ocf_forum_driver_helper');
 		require_lang('lang');
 		$this->event_id=add_calendar_event(8,'1',NULL,0,'test_event','',3,1,2010,1,10,10,15,2010,NULL,1,1,19,NULL,1,1,1,1,1,'',NULL,0,NULL,NULL,NULL);
-		if('test_event'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))))
+		if ('test_event'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))))
 		{
 			$lang_id=insert_lang_comcode('test_comment_desc_1',4,$GLOBALS['FORUM_DB']);
 			$map=array(
@@ -56,7 +56,7 @@ class comment_test_set extends ocp_test_case
 			);
 			$this->post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);
 		}
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT p_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE t.text_original NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',get_site_default_lang()).'%').'\' AND ( p.id = '.$this->post_id.') ORDER BY p.id');
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT p_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE t.text_original NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',get_site_default_lang()).'%').'\' AND ( p.id = '.strval($this->post_id).') ORDER BY p.id');
 		$title = $rows[0]['p_title'];
 		// Test the forum was actually created
 		$this->assertTrue('test_comment1'==$title);

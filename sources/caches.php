@@ -159,8 +159,8 @@ function decache($cached_for,$identifier=NULL)
 	}
 
 	$where=db_string_equal_to('cached_for',$cached_for);
- 	if ($identifier!==NULL)
- 	{
+	if ($identifier!==NULL)
+	{
 		$where.=' AND (';
 		$done_first=false;
 
@@ -190,7 +190,7 @@ function decache($cached_for,$identifier=NULL)
 		$done_first=true;
 
 		$where.=')';
- 	}
+	}
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
 }
 
