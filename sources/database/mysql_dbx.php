@@ -78,7 +78,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			$error='Could not connect to database/database-server';
 			if ($fail_ok)
 			{
-				echo $error;
+				echo $error.chr(10);
 				return NULL;
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR')); // purposely not ===false
@@ -136,7 +136,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 	{
 		list($db,)=$db_parts;
 
-		if (strlen($query)>500000) // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
+		if (isset($query[500000])) // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
 		{
 			$test_result=$this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'',$db_parts,NULL,NULL,true);
 
@@ -149,9 +149,9 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			}
 		}
 
-		if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);
-		elseif (!is_null($max)) $query.=' LIMIT '.strval((integer)$max);
-		elseif (!is_null($start)) $query.=' LIMIT '.strval((integer)$start).',30000000';
+		if (($max!==NULL) && ($start!==NULL)) $query.=' LIMIT '.strval($start).','.strval($max);
+		elseif ($max!==NULL) $query.=' LIMIT '.strval($max);
+		elseif ($start!==NULL) $query.=' LIMIT '.strval($start).',30000000';
 
 		$results=@dbx_query($db,$query,DBX_RESULT_INFO);
 		if (($results===0) && ((!$fail_ok) || (strpos(dbx_error($db),'is marked as crashed and should be repaired')!==false)))
@@ -170,7 +170,8 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			}
 		}
 
-		if ((is_object($results)) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')))
+		$sub=substr(ltrim($query),0,7);
+		if ((is_object($results)) && (($sub=='SELECT ') || ($sub=='select ') || (strtoupper(substr(ltrim($query),0,8))=='EXPLAIN ') || (strtoupper(substr(ltrim($query),0,9))=='DESCRIBE ') || (strtoupper(substr(ltrim($query),0,5))=='SHOW ')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}
@@ -223,7 +224,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 				$name=$names[$j];
 				$type=$types[$j];
 
-				if (($type=='int') || ($type=='integer'))
+				if (($type=='int') || ($type=='integer') || ($type=='real'))
 				{
 					if ((is_null($v)) || ($v==='')) // Roadsend returns empty string instead of NULL
 					{

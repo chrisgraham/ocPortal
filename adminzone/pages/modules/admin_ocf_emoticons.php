@@ -145,7 +145,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		{
 			require_code('files2');
 			$config_url=get_upload_limit_config_url();
-			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}*/
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE'))));

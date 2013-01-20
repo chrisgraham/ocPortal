@@ -237,6 +237,14 @@ function form_input_hidden($name,$value)
  */
 function form_input_list_group($title,$entries)
 {
+	if (browser_matches('ios')) // Workaround to iOS bug
+	{
+		$entries2=new ocp_tempcode();
+		$entries2->attach(form_input_list_entry('',false,$title,false,true));
+		$entries2->attach($entries);
+		return $entries2;
+	}
+ 
 	return do_template('FORM_SCREEN_INPUT_LIST_GROUP',array('_GUID'=>'dx76a2685d0fba5f819ef160b0816d03','TITLE'=>$title,'ENTRIES'=>$entries));
 }
 

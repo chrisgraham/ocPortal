@@ -1150,7 +1150,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'MAKE_RELATIVE_DATE':
 				if (isset($param[0]))
 				{
-					if (get_option('use_contextual_dates')=='0')
+					if ((get_option('use_contextual_dates')=='0') && ((!array_key_exists(1,$param)) || ($param[1]!='1')))
 					{
 						$value=get_timezoned_date(intval($param[0]));
 					} else

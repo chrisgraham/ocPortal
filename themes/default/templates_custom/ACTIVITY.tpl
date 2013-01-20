@@ -33,7 +33,7 @@
 	{+END}
 
 	<div class="time right">
-		{$MAKE_RELATIVE_DATE*,{DATETIME}} {!AGO}
+		{$MAKE_RELATIVE_DATE*,{DATETIME},1} {!AGO}
 	</div>
 
 	<div class="activities_content">

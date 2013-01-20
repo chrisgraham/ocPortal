@@ -173,7 +173,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				$found=false;
 				foreach ($fields as $i=>$field)
 				{
-					if ($order_by==$field['id'])
+					if ($order_by==strval($field['id']))
 					{
 						$order_by=strval($i);
 						$found=true;

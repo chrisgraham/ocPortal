@@ -126,6 +126,7 @@ class Module_lostpassword
 			$member=$GLOBALS['FORUM_DRIVER']->get_member_from_email_address($email_address);
 		}
 		if (is_null($member)) warn_exit(do_lang_tempcode('PASSWORD_RESET_ERROR_2'));
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='') && (has_specific_permission($member,'disable_lost_passwords')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
 			warn_exit(do_lang_tempcode('NO_RESET_ACCESS'));
@@ -154,7 +155,7 @@ class Module_lostpassword
 		$url_simple=$_url_simple->evaluate();
 		$message=do_lang('RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($url),$url_simple,strval($member),strval($code)),get_lang($member));
 		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member));
+		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
@@ -213,7 +214,7 @@ class Module_lostpassword
 		$login_url=$_login_url->evaluate();
 		$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,get_site_name());
 		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member));
+		mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 
 		if (get_value('no_password_hashing')==='1')
 		{

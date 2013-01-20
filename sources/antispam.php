@@ -263,6 +263,8 @@ function rbl_resolve($ip,$rbl_domain,$page_level)
 		$arpa=implode('.',array_reverse(explode('.',$ip)));
 	} else // ipv6
 	{
+		if (strpos($rbl_domain,'httpbl.org')!==false) return NULL; // Not supported
+
 		$_ip=explode(':',$ip);
 		$normalised_ip='';
 		$normalised_ip.=str_pad('',(4*(8-count($_ip))),'0000',STR_PAD_LEFT); // Fill out trimmed 0's on left
@@ -286,7 +288,7 @@ function rbl_resolve($ip,$rbl_domain,$page_level)
 		if (!$page_level)
 		{
 			require_code('failure');
-			$error=do_lang('_ERROR_CHECKING_FOR_SPAMMERS',$rbl_domain,$_result);
+			$error=do_lang('_ERROR_CHECKING_FOR_SPAMMERS',$rbl_domain,$_result,$ip);
 			relay_error_notification($error,false,'error_occurred');
 		}
 		return NULL;
@@ -451,14 +453,14 @@ function _check_stopforumspam($user_ip,$username=NULL,$email=NULL)
 		} else
 		{
 			require_code('failure');
-			$error=do_lang('_ERROR_CHECKING_FOR_SPAMMERS','stopforumspam.com',$result['error']);
+			$error=do_lang('_ERROR_CHECKING_FOR_SPAMMERS','stopforumspam.com',$result['error'],$user_ip);
 			relay_error_notification($error,false,'error_occurred');
 			return array(ANTISPAM_RESPONSE_ERROR,$confidence_level);
 		}
 	} else
 	{
 		require_code('failure');
-		$error=do_lang('ERROR_CHECKING_FOR_SPAMMERS','stopforumspam.com');
+		$error=do_lang('ERROR_CHECKING_FOR_SPAMMERS','stopforumspam.com',$user_ip);
 		relay_error_notification($error,false,'error_occurred');
 		return array(ANTISPAM_RESPONSE_ERROR,$confidence_level);
 	}

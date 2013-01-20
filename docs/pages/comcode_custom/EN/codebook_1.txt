@@ -511,7 +511,7 @@ This section is an explanation of hooks in ocPortal, using search as an example 
 
 The search module is a general purpose search tool. It provides a UI and it shows results. It needs to be able to find different kinds of results.
 
-When something in ocPortal needs to something but in lots of different kinds of way, or a place needs to be defined for different things of the same kind to happen, hooks are used.
+When something in ocPortal needs to do something but in lots of different kinds of way, or a place needs to be defined for different things of the same kind to happen, hooks are used.
 
 Hooks are modular. They are plugins. They prevent us having to hard-code too many different things in an ugly bloated way that would be impossible to extend or strip down.
 

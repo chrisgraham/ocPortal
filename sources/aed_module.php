@@ -458,6 +458,7 @@ class standard_aed_module
 			check_submit_permission($this->permissions_require,$this->permission_page_name);
 
 		$doing='ADD_'.$this->lang_type;
+
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
 			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -562,7 +563,7 @@ class standard_aed_module
 				{
 					require_code('files2');
 					$config_url=get_upload_limit_config_url();
-					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			} else
 			{
@@ -571,7 +572,7 @@ class standard_aed_module
 				if ($max<30.0)
 				{
 					$config_url=get_upload_limit_config_url();
-					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->add_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			}
 		}
@@ -1055,7 +1056,7 @@ class standard_aed_module
 				{
 					require_code('files2');
 					$config_url=get_upload_limit_config_url();
-					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			} else
 			{
@@ -1064,7 +1065,7 @@ class standard_aed_module
 				if ($max<30.0)
 				{
 					$config_url=get_upload_limit_config_url();
-					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+					$this->edit_text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 				}
 			}
 		}

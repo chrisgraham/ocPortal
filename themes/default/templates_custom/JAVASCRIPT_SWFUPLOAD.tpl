@@ -1227,7 +1227,7 @@ function doSubmit(e,ob,recurse) {
 
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
-			window.fauxmodal_alert('{!REQUIRED_NOT_FILLED_IN;^}');
+			window.fauxmodal_alert('{!IMPROPERLY_FILLED_IN;^}');
 		if (!recurse && ret && ret2) btnSubmit.form.submit(); // If we aren't stuck in a recursion, and the field did not need filling in, and submit handler says otherwise okay, trigger the form to submit explicitly
 		return ret && ret2; // Whether submit may happen (the field did not need filling in, and submit handler says otherwise okay)
 	}

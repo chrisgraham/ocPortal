@@ -5237,7 +5237,7 @@ function doSubmit(e,ob,recurse) {
 
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
-			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
+			window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
 		if (!recurse && ret && ret2) btnSubmit.form.submit();
 		return ret && ret2;
 	}

@@ -70,7 +70,11 @@ function handle_permission_check_logging($member,$op,$params,$result)
 		if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file($file_path)) && (is_writable_wrap($file_path)))
 		{
 			$PERMISSION_CHECK_LOGGER=fopen($file_path,'at');
-			if (!function_exists('get_self_url')) require_code('urls');
+			if (!function_exists('get_self_url'))
+			{
+				require_code('tempcode');
+				require_code('urls');
+			}
 			$self_url=get_self_url(true);
 			if (!is_string($self_url)) $self_url=get_self_url_easy(); // A weirdness can happen here. If some kind of fatal error happens then output buffers can malfunction making it impossible to use Tempcode as above. So we fall back to this. (This function may be called in a fatal error due to the 'display_php_errors' permissions).
 			fwrite($PERMISSION_CHECK_LOGGER,chr(10).chr(10).date('Y/m/d h:m:i').' -- '.$self_url.' -- '.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).chr(10));

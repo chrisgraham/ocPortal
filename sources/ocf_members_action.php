@@ -479,6 +479,9 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 		{
 			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 		}
+	} elseif ((strpos($type,'trans')!==false) || ($type=='posting_field'))
+	{
+		$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 	}
 
 	log_it('ADD_CUSTOM_PROFILE_FIELD',strval($id),$name);

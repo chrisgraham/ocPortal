@@ -46,7 +46,7 @@ ErrorDocument 404 /index.php?page=404
 </FilesMatch>
 
 <IfModule mod_rewrite.c>
-# Needed for mod_rewrite
+# Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
 Options +FollowSymLinks
 
 RewriteEngine on

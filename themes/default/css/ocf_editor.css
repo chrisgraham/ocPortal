@@ -27,7 +27,12 @@
 }
 
 .ocf_edit_forum_orderings {
-	padding-top: 1.5em;
+	padding-top: 1em;
+}
+
+.ocf_edit_forum_title h3, .ocf_edit_forum_orderings label, .ocf_edit_forum_type {
+	color: {$GET,box_title_text};
+	border: none;
 }
 
 .ocf_edit_forum_orderings_f {
