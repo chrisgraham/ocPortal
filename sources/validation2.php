@@ -1086,7 +1086,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 				break;
 
 			case 'select':
-				if ((isset($attributes['onchange'])) && (strpos($attributes['onchange'],'form.submit()')!==false) && ((get_option('validation')=='0') || (!has_js())))
+				if ((isset($attributes['onchange'])) && (strpos($attributes['onchange'],'form.submit()')!==false) && (strpos($attributes['onchange'],'/*guarded*/')===false) && ((get_option('validation')=='0') || (!has_js())))
 					$errors[]=array('WCAG_AUTO_SUBMIT_LIST');
 				break;
 

@@ -4,7 +4,7 @@
 			<div class="purchase_buy">
 				<form title="{!ADD_TO_CART}" method="post" action="{ACTION_URL*}">	
 					<input class="button_page" {+START,IF,{OUT_OF_STOCK}}onclick="window.fauxmodal_alert('{!OUT_OF_STOCK;}'); return false;" {+END}type="image" src="{$IMG*,page/cart_add}" title="{!ADD_TO_CART}" alt="{!ADD_TO_CART}"/>
-					<input type="hidden" id="quantity" name="quantity" value="1" size="5"/>
+					<input type="hidden" id="quantity" name="quantity" value="1" />
 					<input type="hidden" name="product_id" value="{PRODUCT_ID*}"/>	
 				</form>
 

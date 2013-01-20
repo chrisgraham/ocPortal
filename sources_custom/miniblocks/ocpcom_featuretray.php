@@ -159,7 +159,7 @@ $featuretree=array(
 				NULL, // divider
 				array('Invoicing support','Including status tracking and online payment tracking'),
 				array('Basic accounting support','Input your incoming and outgoing transactions to get basic ledger, profit-and-loss, and cashflow charting'),
-				array('<acronym title="Secure Socket Layer">SSL</acronym>/<acronym title="Transport Layer Security">TLS</acronym>/HTTPS certificate support','Make key pages of your choice run over SSL (e.g. the join and payment pages)'),
+				array('<abbr title="Secure Socket Layer">SSL</abbr>/<abbr title="Transport Layer Security">TLS</abbr>/HTTPS certificate support','Make key pages of your choice run over SSL (e.g. the join and payment pages)'),
 				array('Currency conversions','Perform automatic currency conversions within your website pages'),
 			),
 		),
@@ -278,18 +278,18 @@ $featuretree=array(
 				array('Sophisticated permissions'),
 				array('Priority flagging'),
 				array('Programmers can even use the calendar to schedule website cronjobs'),
-				array('<acronym title="Really Simple Syndication">RSS</acronym> and Atom support','Export support, but also support for overlaying news feeds onto the calendar'),
+				array('<abbr title="Really Simple Syndication">RSS</abbr> and Atom support','Export support, but also support for overlaying news feeds onto the calendar'),
 			),
 		),
 		'news'=>array(
 			'News and blogging <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of News" href="http://shareddemo.myocp.com/site/index.php?page=news&amp;type=select"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
 				array('Member blogs','Allow members to have their own blogs <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of News" href="http://shareddemo.myocp.com/cms/index.php?page=cms_blogs"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('<acronym title="Really Simple Syndication">RSS</acronym> and Atom support','Export and import feeds'),
+				array('<abbr title="Really Simple Syndication">RSS</abbr> and Atom support','Export and import feeds'),
 				array('Trackback support','Send and receive trackbacks'),
 				array('Scheduled publishing'),
 				NULL, // divider
-				array('Ping support and <acronym title="Really Simple Syndication">RSS</acronym> Cloud support'),
+				array('Ping support and <abbr title="Really Simple Syndication">RSS</abbr> Cloud support'),
 				array('Multiple news categories, and filtering'),
 				array('Chicklet support'),
 				array('Multiple ways to integrate news into your website'),
@@ -344,7 +344,7 @@ $featuretree=array(
 			'Page support <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Page support" href="http://shareddemo.myocp.com/site/index.php?page=comcode_page"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
 				array('Add unlimited pages'),
-				array('<acronym title="What You See Is What You Get">WYSIWYG</acronym> editor'),
+				array('<abbr title="What You See Is What You Get">WYSIWYG</abbr> editor'),
 				array('Convenient edit links','Staff see &ldquo;edit this&rdquo; links at the bottom of every page'),
 				array('PHP support','Upload your PHP scripts and run them inside ocPortal (may require adjustments to the script code)'),
 			),
@@ -383,8 +383,8 @@ $featuretree=array(
 			'Extendable and programmable',
 			array(
 				array('Versatile','You can strip down to a core system, or build up with 3rd-party addons <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Addons" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_addons&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('Full <acronym title="Application Programming Interface">API</acronym> documentation <a target="_blank" class="link_exempt no_print" title="(Opens in new window) API documentation" href="http://ocportal.com/docs/api/"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('High coding standards','No PHP notices. Type-strict codebase. We use <acronym title="Model View Controller">MVC</acronym>'),
+				array('Full <abbr title="Application Programming Interface">API</abbr> documentation <a target="_blank" class="link_exempt no_print" title="(Opens in new window) API documentation" href="http://ocportal.com/docs/api/"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
+				array('High coding standards','No PHP notices. Type-strict codebase. We use <abbr title="Model View Controller">MVC</abbr>'),
 				array('Free online developers guide book <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Developers Documentation" href="http://ocportal.com/docs/codebook.htm"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				NULL, // divider
 				array('Custom field filters','For example, restrict news posts to a minimum length'),
@@ -397,13 +397,13 @@ $featuretree=array(
 			array(
 				array('Convert from other software','See our <a href="'.escape_html($sites_url).'">download page</a> for a list of importers'),
 				array('Use an existing member system','See our <a href="'.escape_html($sites_url).'">download page</a> for a list of forum drivers'),
-				array('Convert an <acronym title="HyperText Markup Language">HTML</acronym> site into ocPortal pages'),
-				array('LDAP support for corporate networks (<acronym title="ocPortal forum">OCF</acronym>) <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Help of LDAP usage" href="http://ocportal.com/docs/tut_ldap.htm"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
+				array('Convert an <abbr title="HyperText Markup Language">HTML</abbr> site into ocPortal pages'),
+				array('LDAP support for corporate networks (<abbr title="ocPortal forum">OCF</abbr>) <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Help of LDAP usage" href="http://ocportal.com/docs/tut_ldap.htm"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				NULL, // divider
-				array('HTTP authentication','Tie into an existing HTTP authentication-based login system (<acronym title="ocPortal forum">OCF</acronym>)'),
+				array('HTTP authentication','Tie into an existing HTTP authentication-based login system (<abbr title="ocPortal forum">OCF</abbr>)'),
 				array('Proxying system','Programmers can integrate any existing scripts using our sophisticated proxying system (which includes full cookie support)'),
 				array('Minimodules and miniblocks','Programmers can port existing PHP code into ocPortal itself <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Framework documentation" href="http://ocportal.com/docs/tut_framework.htm"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('Export your Comcode as <acronym title="eXtensible HyperText Markup Language">XML</acronym>','Other systems may integrate your rich content, using (for example) <acronym title="XSL transformations">XSLT</acronym>'),
+				array('Export your Comcode as <abbr title="eXtensible HyperText Markup Language">XML</abbr>','Other systems may integrate your rich content, using (for example) <abbr title="XSL transformations">XSLT</abbr>'),
 			),
 		),
 	),
@@ -427,8 +427,8 @@ $featuretree=array(
 		'tools'=>array(
 			'Design and themeing tools',
 			array(
-				array('Theme Wizard: pick a colour, let ocP do the work','Recolour all your <acronym title="Cascading Style Sheets">CSS</acronym> and images in just a few clicks (ocPortal picks the perfect complementary palette and automatically makes 100\'s of CSS and image changes) <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Theme Wizard" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_themewizard&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('Built-in template and <acronym title="Cascading Style Sheets">CSS</acronym> editing tools <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Theme Tools" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin&amp;type=style"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
+				array('Theme Wizard: pick a colour, let ocP do the work','Recolour all your <abbr title="Cascading Style Sheets">CSS</abbr> and images in just a few clicks (ocPortal picks the perfect complementary palette and automatically makes 100\'s of CSS and image changes) <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Theme Wizard" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_themewizard&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
+				array('Built-in template and <abbr title="Cascading Style Sheets">CSS</abbr> editing tools <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Theme Tools" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin&amp;type=style"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Quick-start logo wizard <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Logo Wizard" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_themewizard&amp;type=make_logo"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Interactive CSS editor','Quickly identify what to change and preview'),
 			),
@@ -452,7 +452,7 @@ $featuretree=array(
 				array('Branching and filtering','Tailor output according to permissions and usergroups, as well as user options such as language selection'),
 				NULL, // divider
 				array('Include other templates, blocks, or pages, within a template'),
-				array('Create and use standard boxes','Avoid having to copy and paste complex segments of <acronym title="eXtensible HyperText Markup Language">XHTML</acronym>'),
+				array('Create and use standard boxes','Avoid having to copy and paste complex segments of <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>'),
 				array('Easy web browser sniffing','Present different markup to different web browsers, detect whether Javascript is enabled, detect bots, and detect PDAs/Smartphones'),
 				array('Randomisation features'),
 				array('Pull up member details with ease','For example, show the current users avatar or point count'),
@@ -460,7 +460,7 @@ $featuretree=array(
 			),
 		),
 		'rad'=>array(
-			'<acronym title="Rapid Application Development">RAD</acronym> and testing tools',
+			'<abbr title="Rapid Application Development">RAD</abbr> and testing tools',
 			array(
 				array('Switch users','Masquerade as any user using your admin logging <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of SU" href="http://shareddemo.myocp.com/index.php?keep_su=test"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Change theme images inline with just a few clicks'),
@@ -478,7 +478,7 @@ $featuretree=array(
 			array(
 				array('Comcode','Powerful but simple content-enrichment language'),
 				array('Media embedding','Easily integrate/attach flash applets, flash video, and other common video formats, such as Quicktime or MPEG'),
-				array('Easily create cool effects','Create scrolling, rolling, randomisation, and hiding effects. Put content in boxes, split content across subpages. Create <acronym title="eXtensible HyperText Markup Language">XHTML</acronym> overlays. Place tooltips'),
+				array('Easily create cool effects','Create scrolling, rolling, randomisation, and hiding effects. Put content in boxes, split content across subpages. Create <abbr title="eXtensible HyperText Markup Language">XHTML</abbr> overlays. Place tooltips'),
 				array('Customise your content for different usergroups'),
 				array('Create count-downs and hit counters'),
 				array('Automatic table of contents creation for your documents'),
@@ -495,17 +495,17 @@ $featuretree=array(
 			array(
 				array('Configurable swear filtering <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Word Filter" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_wordfilter&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('IP address tools','Audit, check, and ban them <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Lookup Tools" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_lookup"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('<acronym title="Completely Automated Public Turing test to tell Computers and Humans Apart">CAPTCHA</acronym>, to stop spammers'),
+				array('<abbr title="Completely Automated Public Turing test to tell Computers and Humans Apart">CAPTCHA</abbr>, to stop spammers'),
 				array('Track failed logins <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Security" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_security&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Automatic detection and banning of hackers <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of IP Banning" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_ipban&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Architectural approaches to combat all major exploit techniques'),
 				array('Defence-in-depth','Multiple layers of built-in security'),
-				array('<acronym title="Cross-Site scripting">XSS</acronym> protection','Developed using unique technology to auto-detect XSS security holes before the software gets even released'),
+				array('<abbr title="Cross-Site scripting">XSS</abbr> protection','Developed using unique technology to auto-detect XSS security holes before the software gets even released'),
 				NULL, // divider
 				array('Published e-mail addresses will be protected from spammers'),
-				array('Protection from spammers trying to use your website for their own <acronym title="Search Engine Optimisation">SEO</acronym>'),
-				array('<acronym title="HyperText Markup Language">HTML</acronym> filtering'),
-				array('Protection against <acronym title="Cross-Site Request-Forgery">CSRF</acronym> attacks','You can temporarily &lsquo;Concede&rsquo; your admin access for added protection'),
+				array('Protection from spammers trying to use your website for their own <abbr title="Search Engine Optimisation">SEO</abbr>'),
+				array('<abbr title="HyperText Markup Language">HTML</abbr> filtering'),
+				array('Protection against <abbr title="Cross-Site Request-Forgery">CSRF</abbr> attacks','You can temporarily &lsquo;Concede&rsquo; your admin access for added protection'),
 				array('Root-kit detection kit for developers (developers developers!)'),
 				array('Won\'t <a href="http://www.youtube.com/watch?v=z4vDClhnJjs" target="_blank" title="(Opens in new window)">crash the Internet</a>'),
 			),
@@ -514,10 +514,10 @@ $featuretree=array(
 			'Ease of use <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Ease of use" href="http://ocportal.com/docs/"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
 				array('Professionally designed user interfaces'),
-				array('<acronym title="Asynchronous Javascript And XML">AJAX</acronym> techniques','Streamlined website interaction'),
-				array('<acronym title="What You See Is What You Get">WYSIWYG</acronym> editing'),
+				array('<abbr title="Asynchronous Javascript And XML">AJAX</abbr> techniques','Streamlined website interaction'),
+				array('<abbr title="What You See Is What You Get">WYSIWYG</abbr> editing'),
 				array('Tutorials','Over 100 written tutorials, and a growing collection of video tutorials'),
-				array('Displays great on mobiles','Mobile browsers can be automatically detected, or the user can select the mobile version from the footer. All public website features work great on <acronym title="Quarter VGA, a mobile display size standard">QVGA</acronym> or higher.'),
+				array('Displays great on mobiles','Mobile browsers can be automatically detected, or the user can select the mobile version from the footer. All public website features work great on <abbr title="Quarter VGA, a mobile display size standard">QVGA</abbr> or higher.'),
 				array('A consistent and fully integrated feature-set','Breadcrumb navigation, previews, and many other features we didn\'t have space to mention here &ndash; are all present right across ocPortal'),
 			),
 		),
@@ -534,14 +534,14 @@ $featuretree=array(
 			'Web standards <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Web standards" href="http://ocportal.com/site/vision.htm"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
 				array('Support for all major web browsers'),
-				array('True and correct <acronym title="eXtensible HyperText Markup Language">XHTML</acronym> markup'),
-				array('<acronym title="Web Content Accessibility Guidelines">WCAG</acronym>, <acronym title="Authoring Tool Accessibility Guidelines">ATAG</acronym>','Meeting of accessibility guidelines in full'),
-				array('Tableless <acronym title="Cascading Style Sheets">CSS</acronym> markup, with no hacks'),
+				array('True and correct <abbr title="eXtensible HyperText Markup Language">XHTML</abbr> markup'),
+				array('<abbr title="Web Content Accessibility Guidelines">WCAG</abbr>, <abbr title="Authoring Tool Accessibility Guidelines">ATAG</abbr>','Meeting of accessibility guidelines in full'),
+				array('Tableless <abbr title="Cascading Style Sheets">CSS</abbr> markup, with no hacks'),
 				NULL, // divider
-				array('Inbuilt tools for checking validity of <acronym title="eXtensible HyperText Markup Language">XHTML</acronym>, <acronym title="Cascading Style Sheets">CSS</acronym>, and Javascript'),
+				array('Inbuilt tools for checking validity of <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr>, and Javascript'),
 				array('Extra markup semantics, including Dublin Core support and microformats'),
-				array('Standards-based (modern <acronym title="Document Object Model">DOM</acronym> and <acronym title="Asynchronous Javascript And XML">AJAX</acronym>, no DOM-0 or innerHTML) Javascript'),
-				array('Automatic cleanup of bad <acronym title="eXtensible HyperText Markup Language">XHTML</acronym>','XHTML outside your control (e.g. from <acronym title="Really Simple Syndication">RSS</acronym>) will be cleaned up for you'),
+				array('Standards-based (modern <abbr title="Document Object Model">DOM</abbr> and <abbr title="Asynchronous Javascript And XML">AJAX</abbr>, no DOM-0 or innerHTML) Javascript'),
+				array('Automatic cleanup of bad <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>','XHTML outside your control (e.g. from <abbr title="Really Simple Syndication">RSS</abbr>) will be cleaned up for you'),
 			),
 		),
 		'itln'=>array(
@@ -571,7 +571,7 @@ $featuretree=array(
 				array('Keyword density analysis for your content'),
 				array('Correct use of HTTP status codes'),
 				array('Correct use of page titles'),
-				array('<acronym title="Search Engine Optimisation">SEO</acronym> via semantic and accessible markup (e.g. &lsquo;alt tags&rdquo;)'),
+				array('<abbr title="Search Engine Optimisation">SEO</abbr> via semantic and accessible markup (e.g. &lsquo;alt tags&rdquo;)'),
 			),
 		),
 	),
@@ -612,7 +612,7 @@ $featuretree=array(
 			array(
 				array('Find posts made since you last visited <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of New Posts" href="http://shareddemo.myocp.com/forum/index.php?page=vforums&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Remembers your unread posts','Even if you frequently change computers <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Unread Posts" href="http://shareddemo.myocp.com/forum/index.php?page=vforums&amp;type=unread"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
-				array('<acronym title="Really Simple Syndication">RSS</acronym> and Atom support <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of RSS Feeds" href="http://shareddemo.myocp.com/backend.php"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
+				array('<abbr title="Really Simple Syndication">RSS</abbr> and Atom support <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of RSS Feeds" href="http://shareddemo.myocp.com/backend.php"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Recent activity','See what topics you recently read or posted in <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Recent Posts" href="http://shareddemo.myocp.com/forum/index.php?page=vforums&amp;type=recently_read"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 			),
 		),
