@@ -273,7 +273,7 @@ class Module_filedump
 			if ($max<30.0)
 			{
 				$config_url=get_upload_limit_config_url();
-				$text->attach(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max/1024.0/1024.0)),escape_html($config_url)));
+				$text->attach(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max/1024.0/1024.0)),escape_html(is_null($config_url)?'':$config_url)));
 			}
 			require_code('form_templates');
 			$fields=form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('_DESCRIPTION_UPLOAD'),'file',true);

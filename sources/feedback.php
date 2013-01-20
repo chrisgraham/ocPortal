@@ -551,7 +551,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 		}
 
 		// Put on activity wall / whatever
-		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
+		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
@@ -785,7 +786,8 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		}
 
 		// Activity
-		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
+		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';

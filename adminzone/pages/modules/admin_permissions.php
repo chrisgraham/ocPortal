@@ -951,7 +951,10 @@ class Module_admin_permissions
 						$m_list.='<strong>'.escape_html($module).'</strong>';
 					}
 
-					if ($module=='topics') $m_list.=' ('.strtolower(do_lang('SECTION_FORUMS')).')';
+					if ($module=='topics')
+					{
+						$m_list.=' ('.strtolower(do_lang((strpos($permission,'lowrange')!==false)?'FORUM_POSTS':'FORUM_TOPICS')).')';
+					}
 				}
 				if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($m_list);
 				$tpl_map['DESCRIPTION']=do_lang_tempcode($has_actual_overriding?'SP_USED_IN_SLASHED':'SP_USED_IN',$m_list);

@@ -114,6 +114,7 @@ class Database_Static_mysql extends Database_super_mysql
 		{
 			@mysql_query('SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"',$db);
 		}
+		@mysql_query('SET WAIT_TIMEOUT=28800',$db);
 		@mysql_query('SET SQL_BIG_SELECTS=1',$db);
 		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=STRICT_ALL_TABLES',$db); else @mysql_query('SET sql_mode=MYSQL40',$db);
 
@@ -233,7 +234,7 @@ class Database_Static_mysql extends Database_super_mysql
 			{
 				$GLOBALS['REDONE_ONCE']=true;
 				mysql_ping($db);
-				$ret=$this->db_query($query,$db_parts,NULL,NULL,$fail_ok,$get_insert_id);
+				$ret=$this->db_query($query,$db_parts,$max,$start,$fail_ok,$get_insert_id);
 				unset($GLOBALS['REDONE_ONCE']);
 				return $ret;
 			}

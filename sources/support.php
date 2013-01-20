@@ -1466,7 +1466,7 @@ function browser_matches($code)
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'android')!==false;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'ios':
-			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'iphone')!==false;
+			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'iphone')!==false || strpos($browser,'ipad')!==false;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'true_xhtml':
 			$BROWSER_MATCHES_CACHE[$code]=$is_opera || $is_konqueror || $is_safari || $is_gecko;

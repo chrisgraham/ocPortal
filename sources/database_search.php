@@ -503,7 +503,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
 
-			if ($order!='')
+			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
 			{
 				$keywords_query.=' ORDER BY '.$order;
 				if ($direction=='DESC') $keywords_query.=' DESC';
@@ -706,7 +706,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 		$query.=($group_by_ok?' GROUP BY r.id':'');
 
-		if ($order!='')
+		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
 		{
 			$query.=' ORDER BY '.$order;
 			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';

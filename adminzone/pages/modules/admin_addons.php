@@ -221,7 +221,7 @@ class Module_admin_addons
 		if ($max<30.0)
 		{
 			$config_url=get_upload_limit_config_url();
-			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
+			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'7f50130c5a46e0f6e8a95e936ce7bf47','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'JAVASCRIPT'=>$javascript));

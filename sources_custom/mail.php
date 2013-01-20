@@ -21,9 +21,10 @@
  * @param  boolean		HTML-only
  * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
  * @param  ID_TEXT		The template used to show the email
+ * @param  boolean		Whether to bypass queueing
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
+function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
 {
 	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_tag,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
 
@@ -41,6 +42,8 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	{
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
+		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
+
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>$subject_tag,
 			'm_message'=>$message_raw,
@@ -57,11 +60,11 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_date_and_time'=>time(),
 			'm_member_id'=>get_member(),
 			'm_url'=>get_self_url(true),
-			'm_queued'=>((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && cron_installed()))?1:0,
+			'm_queued'=>$through_queue?1:0,
 			'm_template'=>$mail_template,
 		));
 
-		if ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && cron_installed())) return NULL;
+		if ($through_queue) return NULL;
 	}
 
 	if (count($attachments)==0) $attachments=NULL;

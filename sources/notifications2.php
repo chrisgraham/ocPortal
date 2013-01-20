@@ -257,7 +257,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 					$new_setting=A_NA;
 					foreach ($_notification_types as $possible=>$ntype)
 					{
-						if (post_param_integer('notification_'.strval($notification_category).'_'.$ntype,0)==1)
+						if (post_param_integer('notification_'.$notification_category.'_'.$ntype,0)==1)
 						{
 							$new_setting=$new_setting | $possible;
 						}

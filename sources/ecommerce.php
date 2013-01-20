@@ -509,7 +509,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	/* At this point we know our order (or subscription cancellation) is good */
 
 	// Dispatch
-	if ($payment_status=='Completed')
+	if (($payment_status=='Completed') || ($payment_status=='SCancelled'))
 	{
 		//Find product hooks of this order to check dispatch type
 

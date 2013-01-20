@@ -261,6 +261,11 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 		elseif (isset($exif[str_replace(' ','',$name)]))
 			$map[$field['id']]=$exif[str_replace(' ','',$name)];
 		elseif (!isset($map[$field['id']])) $map[$field['id']]='';
+
+		if (isset($map[$field['id']]))
+		{
+			if (!is_string($map[$field['id']])) $map[$field['id']]=strval($map[$field['id']]);
+		}
 	}
 	if (count($map)==0) return;
 

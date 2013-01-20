@@ -1753,6 +1753,8 @@ function step_5_core_2()
 		'meta_description'=>'LONG_TRANS'
 	));
 	$GLOBALS['SITE_DB']->create_index('seo_meta','alt_key',array('meta_for_type','meta_for_id'));
+	$GLOBALS['SITE_DB']->create_index('seo_meta','ftjoin_dmeta_keywords',array('meta_keywords'));
+	$GLOBALS['SITE_DB']->create_index('seo_meta','ftjoin_dmeta_description',array('meta_description'));
 
 	return do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'685ebf53cf9fc3f728168fed2f01a5a1','SOMETHING'=>do_lang_tempcode('SECONDARY_CORE_INSTALLED')));
 }
@@ -2554,10 +2556,10 @@ php_value open_basedir "{$file_base}"
 END;
 */
 $clauses[]=<<<END
-<IfModule mod_rewrite.c>
-# Needed for mod_rewrite
 Options +FollowSymLinks
+END;
 
+$clauses[]=<<<END
 RewriteEngine on
 
 # Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
@@ -2616,7 +2618,6 @@ RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.
 RewriteRule ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ index.php\?page=$1&type=$2&id=$3 [L,QSA]
 RewriteRule ^([^/\&\?]+)/([^/\&\?]*)\.htm$ index.php\?page=$1&type=$2 [L,QSA]
 RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,QSA]
-</IfModule>
 END;
 
 $clauses[]=<<<END

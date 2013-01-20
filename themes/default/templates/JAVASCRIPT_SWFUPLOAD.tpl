@@ -1221,7 +1221,7 @@ function doSubmit(e,ob) {
 		}
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
 		if (ret2 && !ret)
-			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
+			window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
 
 		return ret && ret2;
 	}

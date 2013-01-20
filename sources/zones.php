@@ -46,9 +46,9 @@ function init__zones()
 				'topicview'=>'forum',
 				'topics'=>'forum',
 				'vforums'=>'forum',
-				'points'=>'site',
-				'members'=>'site',
-				'catalogues'=>'site',
+				'points'=>(get_option('collapse_user_zones')=='1')?'':'site',
+				'members'=>(get_option('collapse_user_zones')=='1')?'':'site',
+				'catalogues'=>(get_option('collapse_user_zones')=='1')?'':'site',
 				'join'=>'',
 				'login'=>'',
 				'recommend'=>'',
@@ -232,7 +232,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	global $REDIRECT_CACHE;
 	$first_zones=array((substr($module_name,0,6)=='admin_')?'adminzone':$zone);
 	if ($zone!='') $first_zones[]='';
-	if (($zone!='site')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';
+	if (($zone!='site') && (get_option('collapse_user_zones')!='1')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';
 	foreach ($first_zones as $zone)
 	{
 		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)

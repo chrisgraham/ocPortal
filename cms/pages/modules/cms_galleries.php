@@ -248,7 +248,7 @@ class Module_cms_galleries extends standard_aed_module
 		if ($max<30.0)
 		{
 			$config_url=get_upload_limit_config_url();
-			$text=paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url)));
+			$text=paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url)));
 		} else $text=new ocp_tempcode();
 		// Show form
 		$hidden->attach(form_input_hidden('test','1'));
