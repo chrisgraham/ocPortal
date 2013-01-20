@@ -65,7 +65,7 @@ function phase_0()
 
 	$changes='All reported bugs since the last release have been fixed';
 	if (strpos($release_description,'patch release')!==false)
-		$changes.=' (for a full list, see the [page="site:catalogues:index:bugs"]bugs catalogue[/page]).';
+		$changes.=' (for a list of the more important fixes, see the [page="site:catalogues:index:bugs"]bugs catalogue[/page]).';
 	if (strpos($release_description,'gold')!==false) $changes='TODO';
 
 	$post_url=static_evaluate_tempcode(get_self_url(false,false,array('type'=>'1')));
