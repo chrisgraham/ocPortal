@@ -46,16 +46,19 @@ class Hook_attachments_ocf_post
 			$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from'),array('id'=>$info[0]['p_topic_id']),'',1);
 			return (($topic_info[0]['t_pt_to']==get_member()) || ($topic_info[0]['t_pt_from']==get_member()) || (ocf_has_special_pt_access($info[0]['p_topic_id'])));
 		}
-		$tf=get_option('ticket_forum_name',true);
-		if (!is_null($tf)) $forum2=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($tf); else $forum2=NULL;
-		if (($forum2===$forum_id) || ($forum2===$forum_id_parent) || ($forum2===$forum_id_parent_parent))
+		if (addon_installed('tickets'))
 		{
-			$title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$info[0]['p_topic_id']));
-			if (substr($title,0,strlen(strval(get_member()))+1)==strval(get_member()).'_') return true;
-			require_lang('tickets');
+			$tf=get_option('ticket_forum_name',true);
+			if (!is_null($tf)) $forum2=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($tf); else $forum2=NULL;
+			if (($forum2===$forum_id) || ($forum2===$forum_id_parent) || ($forum2===$forum_id_parent_parent))
+			{
+				$title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$info[0]['p_topic_id']));
+				if (substr($title,0,strlen(strval(get_member()))+1)==strval(get_member()).'_') return true;
+				require_lang('tickets');
 
-			$description=$GLOBALS['FORUM_DB']->query_value('f_topics','t_description',array('id'=>$info[0]['p_topic_id']));
-			if (substr($description,0,strlen(do_lang('SUPPORT_TICKET').': #'.strval(get_member()))+1)==do_lang('SUPPORT_TICKET').': #'.strval(get_member()).'_') return true;
+				$description=$GLOBALS['FORUM_DB']->query_value('f_topics','t_description',array('id'=>$info[0]['p_topic_id']));
+				if (substr($description,0,strlen(do_lang('SUPPORT_TICKET').': #'.strval(get_member()))+1)==do_lang('SUPPORT_TICKET').': #'.strval(get_member()).'_') return true;
+			}
 		}
 		return (has_category_access(get_member(),'forums',strval($forum_id)));
 	}
