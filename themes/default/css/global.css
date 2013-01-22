@@ -3867,6 +3867,17 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	display: none;
 }
 
+.overlay {
+	overflow: visible;
+}
+
+.overlay_close_button {
+	position: absolute;
+	top: -16px;
+	right: -16px;
+	cursor: pointer;
+}
+
 /*
 =========================
 =======Print rules=======

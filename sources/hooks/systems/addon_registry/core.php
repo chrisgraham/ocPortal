@@ -808,6 +808,7 @@ class Hook_addon_registry_core
 			'QUERY_SCREEN.tpl',
 			'JAVASCRIPT_CUSTOM_GLOBALS.tpl',
 			'JAVASCRIPT_MODALWINDOW.tpl',
+			'themes/default/images/button_lightbox_close.png',
 			'sources/blocks/main_greeting.php',
 			'themes/default/images/iphone.png',
 			'themes/default/images/quote_gradient.png',

@@ -602,7 +602,12 @@ function comcode_helper_script()
 		}
 
 		$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
+
+		if (($tag=='attachment') && (strpos($default_embed,'new_')!==false))
+			$text=do_lang_tempcode('COMCODE_ATTACHMENT_WILL_HAVE_MARKER');
+
 		$hidden->attach(form_input_hidden('tag',$tag));
+
 		$content=do_template('FORM_SCREEN',array(
 			'_GUID'=>'270058349d048a8be6570bba97c81fa2',
 			'TITLE'=>$title,

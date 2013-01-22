@@ -1,6 +1,6 @@
 <aside role="navigation" class="screen_actions_outer box"><div class="screen_actions box_inner">
 	<div class="print"><a class="link_exempt" rel="print" target="_blank" title="{!PRINT_THIS_SCREEN}: {!LINK_NEW_WINDOW}" href="{PRINT_URL*}"></a></div>
-	<div class="recommend"><a onclick="return open_link_as_overlay(this,null,'100%');" class="link_exempt" target="_blank" title="{!OCP_RECOMMEND}: {!LINK_NEW_WINDOW}" href="{RECOMMEND_URL*}"></a></div>
+	<div class="recommend"><a onclick="return open_link_as_overlay(this);" class="link_exempt" target="_blank" title="{!OCP_RECOMMEND}: {!LINK_NEW_WINDOW}" href="{RECOMMEND_URL*}"></a></div>
 	{+START,IF,{$BROWSER_MATCHES,ie}}
 		<div class="favorites"><a class="link_exempt" title="{!ADD_TO_FAVORITES}" href="#" onclick="window.external.AddFavorite(window.location.href,document.title); return false;"></a></div>
 	{+END}

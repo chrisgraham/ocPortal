@@ -1454,13 +1454,18 @@ function get_window_scroll_width(win)
 	if (typeof win=='undefined') var win=window;
 	return win.document.body.scrollWidth;
 }
-function get_window_scroll_height(win)
+function get_window_scroll_height(win,dont_allow_iframe_size)
 {
 	if (typeof win=='undefined') var win=window;
-	var best=win.document.body.parentNode.offsetHeight;
+	if (typeof dont_allow_iframe_size=='undefined') var dont_allow_iframe_size=false;
+	var best=0;
 	if (((win.document.body.offsetHeight>best) && (win.document.body.offsetHeight!=150)) || (best==150)) best=win.document.body.offsetHeight;
-	if (((win.document.body.parentNode.scrollHeight/*>best*/ /*on IE the offsetHeight is 4px too much*/) && (win.document.body.parentNode.scrollHeight!=150)) || (best==150)) best=win.document.body.parentNode.scrollHeight;
 	if (((win.document.body.scrollHeight>best) && (best<150) && (win.document.body.scrollHeight!=150)) || (best==150)) best=win.document.body.scrollHeight;
+	if (!dont_allow_iframe_size) // This will consider the iframe height if larger than the contents
+	{
+		if (((win.document.body.parentNode.offsetHeight>best) && (win.document.body.parentNode.offsetHeight!=150)) || (best==150)) best=win.document.body.parentNode.offsetHeight;
+		if (((win.document.body.parentNode.scrollHeight/*>best*/ /*on IE the offsetHeight is 4px too much*/) && (win.document.body.parentNode.scrollHeight!=150)) || (best==150)) best=win.document.body.parentNode.scrollHeight;
+	}
 	return best;
 }
 function get_window_scroll_x(win)
@@ -1908,9 +1913,9 @@ function deactivate_tooltip(ac,event)
 }
 
 /* Automatic resizing to make frames seamless */
-function resize_frame(name,minHeight)
+function resize_frame(name,min_height)
 {
-	if (typeof minHeight=='undefined') var minHeight=0;
+	if (typeof min_height=='undefined') var min_height=0;
 	var frame_element=document.getElementById(name);
 	var frame_window;
 	if (typeof window.frames[name]!='undefined') frame_window=window.frames[name]; else if (parent && parent.frames[name]) frame_window=parent.frames[name]; else return;
@@ -1919,14 +1924,14 @@ function resize_frame(name,minHeight)
 		var h=get_window_scroll_height(frame_window);
 		if ((h==0) && (frame_element.parentNode.style.display=='none'))
 		{
-			h=((typeof minHeight=='undefined') || (minHeight==0))?100:minHeight;
+			h=((typeof min_height=='undefined') || (min_height==0))?100:min_height;
 			if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 		}
 		if (h+'px'!=frame_element.style.height)
 		{
 			if (frame_element.scrolling!='auto')
 			{
-				frame_element.style.height=((h>=minHeight)?h:minHeight)+'px';
+				frame_element.style.height=((h>=min_height)?h:min_height)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 				frame_element.scrolling='no';
 				frame_window.onscroll=function(event) { if (typeof event=='undefined') var event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancel_bubbling(event); }; /* Needed for Opera */

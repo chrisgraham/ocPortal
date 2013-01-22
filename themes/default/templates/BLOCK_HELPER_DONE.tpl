@@ -60,25 +60,35 @@
 					message='{!ADDED_COMCODE_ONLY_SAFE_ATTACHMENT;}';
 				} else
 				{
-					message='{!ADDED_COMCODE_ONLY_ATTACHMENT;}';
+					//message='{!ADDED_COMCODE_ONLY_ATTACHMENT;}';	Kind of states the obvious
 				}
 			} else
 			{
-				message='{!ADDED_COMCODE_ONLY;}';
+				//message='{!ADDED_COMCODE_ONLY;}';	Kind of states the obvious
 			}
 
 			target_window.insert_textbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
-			window.fauxmodal_alert(
-				message,
-				function() {
-					window.setTimeout(function() { // Close master window in timeout, so that this will close first (issue on Firefox)
-						if (typeof win.faux_close!='undefined')
-							win.faux_close();
-						else
-							win.close();
-					},0);
-				}
-			);
+
+			if (message!='')
+			{
+				window.fauxmodal_alert(
+					message,
+					function() {
+						window.setTimeout(function() { // Close master window in timeout, so that this will close first (issue on Firefox)
+							if (typeof win.faux_close!='undefined')
+								win.faux_close();
+							else
+								win.close();
+						},0);
+					}
+				);
+			} else
+			{
+				if (typeof win.faux_close!='undefined')
+					win.faux_close();
+				else
+					win.close();
+			}
 		}
 	},1000 ); // Delay it, so if we have in a faux popup it can set up faux_close
 //]]></script>

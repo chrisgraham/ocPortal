@@ -89,7 +89,7 @@ function set_attachment(field_name,number,filename)
 			window.faux_showModalDialog(
 				maintain_theme_in_link(url),
 				'',
-				'width=750,height=530,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
+				'width=750,height=auto,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
 				function(ret)
 				{
 					if (ret)
@@ -220,7 +220,7 @@ function do_input_block(field_name)
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,block_helper}?field_name='+field_name+keep_stub();
 	url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-	window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,'{!INPUTSYSTEM_CANCEL;}');
+	window.faux_open(maintain_theme_in_link(url),'','width=750,height=auto,status=no,resizable=yes,scrollbars=yes',null,'{!INPUTSYSTEM_CANCEL;}');
 }
 
 function do_input_comcode(field_name,tag)
@@ -230,7 +230,7 @@ function do_input_comcode(field_name,tag)
 	if (tag) url+='&type=step2&tag='+tag;
 	if (is_wysiwyg_field(document.getElementById(field_name))) url+='&in_wysiwyg=1';
 	url+=keep_stub();
-	window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,'{!INPUTSYSTEM_CANCEL;}');
+	window.faux_open(maintain_theme_in_link(url),'','width=750,height=auto,status=no,resizable=yes,scrollbars=yes',null,'{!INPUTSYSTEM_CANCEL;}');
 }
 
 function do_input_list(field_name,add)
