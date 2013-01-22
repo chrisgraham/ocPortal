@@ -1169,7 +1169,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
 						'l_notification_code'=>$param[0],
 					));
-					if ($test==0) $value='0';
+					if ($test===0) $value='0';
 				}
 				break;
 
