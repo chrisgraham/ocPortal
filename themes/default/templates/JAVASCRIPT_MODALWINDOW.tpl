@@ -649,7 +649,7 @@ function ModalWindow()
 								iframe.contentWindow.document.body.className+=' overlay';
 
 							// Allow scrolling, if we want it
-							iframe.scrolling=(_this.scrollbars===false)?'no':'auto';
+							//iframe.scrolling=(_this.scrollbars===false)?'no':'auto';	Actually, not wanting this now
 
 							// Remove fixed width
 							var main_website_inner=iframe.contentWindow.document.getElementById('main_website_inner');
