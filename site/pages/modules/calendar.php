@@ -766,7 +766,7 @@ class Module_calendar
 				}
 			}
 
-			$hours->attach(do_template('CALENDAR_DAY_HOUR',array('_GUID'=>'d967ce3f793942f78104c53b105f9f74','HOUR'=>$hour,'STREAMS'=>$_streams)));
+			$hours->attach(do_template('CALENDAR_DAY_HOUR',array('_GUID'=>'d967ce3f793942f78104c53b105f9f74','_HOUR'=>strval($i),'HOUR'=>$hour,'STREAMS'=>$_streams)));
 		}
 
 		return do_template('CALENDAR_DAY',array('_GUID'=>'60e102b38025c1b1618ac36070564065','HOURS'=>$hours,'PERIOD_START'=>strval($period_start),'PERIOD_END'=>strval($period_end)));
@@ -932,7 +932,7 @@ class Module_calendar
 				}
 			}
 
-			$hours->attach(do_template('CALENDAR_WEEK_HOUR',array('_GUID'=>'a57d0d6a683d30fc0a48168b43299607','HOUR'=>$hour,'DAYS'=>$days)));
+			$hours->attach(do_template('CALENDAR_WEEK_HOUR',array('_GUID'=>'a57d0d6a683d30fc0a48168b43299607','_HOUR'=>strval($i),'HOUR'=>$hour,'DAYS'=>$days)));
 		}
 
 		$offset=0;
