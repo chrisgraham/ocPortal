@@ -98,6 +98,10 @@ class Hook_Profiles_Tabs_about
 				$modules[]=array('usage',do_lang_tempcode('VIEW_ACTION_LOGS'),build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$member_id_of),'adminzone'));
 			}
 		}
+		if (has_specific_permission(get_member(),'assume_any_member'))
+		{
+			$modules[]=array('views',do_lang_tempcode('MASQUERADE_AS_MEMBER'),build_url(array('page'=>'','keep_su'=>$username),''));
+		}
 		if ((has_actual_page_access($member_id_viewing,'search')) && (addon_installed('ocf_forum')) && (addon_installed('search')))
 			$modules[]=array('content',do_lang_tempcode('SEARCH_POSTS'),build_url(array('page'=>'search','type'=>'results','id'=>'ocf_posts','author'=>$username,'sort'=>'add_date','direction'=>'DESC','content'=>''),get_module_zone('search')),'search');
 		if ((has_actual_page_access($member_id_viewing,'search')) && (addon_installed('search')))
