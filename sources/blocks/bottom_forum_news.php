@@ -47,7 +47,7 @@ class Block_bottom_forum_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:6,array_key_exists(\'forum\',$map)?$map[\'forum\']:\'Announcements\',array_key_exists(\'date_key\',$map)?$map[\'date_key\']:\'lasttime\')';
+		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:6,array_key_exists(\'forum\',$map)?$map[\'forum\']:\'Announcements\',array_key_exists(\'date_key\',$map)?$map[\'date_key\']:\'firsttime\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
@@ -65,7 +65,7 @@ class Block_bottom_forum_news
 		$limit=array_key_exists('param',$map)?intval($map['param']):6;
 		$forum_name=array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS');
 
-		$date_key=array_key_exists('date_key',$map)?$map['date_key']:'lasttime';
+		$date_key=array_key_exists('date_key',$map)?$map['date_key']:'firsttime';
 
 		$forum_ids=array();
 		$forum_names=explode(',',$forum_name);
