@@ -1848,10 +1848,14 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 
 .alphabetical_jumper {
 	float: none !important;
-	margin-left: 2px !important;
+	margin-left: -2px !important;
 	margin-bottom: 10px !important;
 	max-width: 100% !important;
 	padding: 3px;
+}
+
+.alphabetical_jumper.pagination a, .alphabetical_jumper.pagination a:hover {
+	padding: 3px 5.8px !important;
 }
 
 .results_continue, .results_page_num {
