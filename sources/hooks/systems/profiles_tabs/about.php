@@ -98,7 +98,7 @@ class Hook_Profiles_Tabs_about
 				$modules[]=array('usage',do_lang_tempcode('VIEW_ACTION_LOGS'),build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$member_id_of),'adminzone'));
 			}
 		}
-		if (has_specific_permission(get_member(),'assume_any_member'))
+		if ((has_specific_permission($member_id_viewing,'assume_any_member')) && (get_member()!=$member_id_of))
 		{
 			$modules[]=array('views',do_lang_tempcode('MASQUERADE_AS_MEMBER'),build_url(array('page'=>'','keep_su'=>$username),''));
 		}
