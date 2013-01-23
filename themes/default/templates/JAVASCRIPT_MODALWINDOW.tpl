@@ -379,6 +379,8 @@ function ModalWindow()
 			var bottom_gap=this.WINDOW_TOP_GAP;
 			if (this.button_container.childNodes.length>0) bottom_gap+=find_height(this.button_container);
 
+			height='auto'; // Actually we always want auto heights, no reason to not for overlays
+
 			// Store for later (when browser resizes for example)
 			this.width=width;
 			this.height=height;

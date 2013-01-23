@@ -11,10 +11,10 @@
 			<a class="horiz_field_sep associated_link suggested_link" rel="edit" href="{EDIT_URL*}" title="{!EDIT}: {FORUM_NAME*}">{!EDIT}</a>
 		{+END}
 		{+START,IF_NON_EMPTY,{FORUM_RULES_URL}}
-			<a class="horiz_field_sep associated_link suggested_link" target="_blank" onclick="window.faux_open(maintain_theme_in_link('{FORUM_RULES_URL*}'),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{FORUM_RULES_URL*}" title="{!FORUM_RULES}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!FORUM_RULES}</a>
+			<a class="horiz_field_sep associated_link suggested_link" target="_blank" onclick="window.faux_open(maintain_theme_in_link('{FORUM_RULES_URL*}'),'','width=600,height=auto,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{FORUM_RULES_URL*}" title="{!FORUM_RULES}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!FORUM_RULES}</a>
 		{+END}
 		{+START,IF_NON_EMPTY,{INTRO_QUESTION_URL}}
-			<a class="horiz_field_sep associated_link suggested_link" target="_blank" onclick="window.faux_open(maintain_theme_in_link('{INTRO_QUESTION_URL*}'),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{INTRO_QUESTION_URL*}" title="{!INTRO_QUESTION}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!INTRO_QUESTION}</a>
+			<a class="horiz_field_sep associated_link suggested_link" target="_blank" onclick="window.faux_open(maintain_theme_in_link('{INTRO_QUESTION_URL*}'),'','width=600,height=auto,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{INTRO_QUESTION_URL*}" title="{!INTRO_QUESTION}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!INTRO_QUESTION}</a>
 		{+END}
 
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}
