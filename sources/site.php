@@ -246,10 +246,6 @@ function attach_message($message,$type='inform')
 	if ($am_looping) return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
 	$am_looping=true;
 
-	static $am_looping=false;
-	if ($am_looping) return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
-	$am_looping=true;
-
 	global $ATTACH_MESSAGE_CALLED,$ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
 
 	foreach ($ATTACHED_MESSAGES_RAW as $last)
