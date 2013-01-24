@@ -481,6 +481,8 @@ function ModalWindow()
 			this.box_wrapper.childNodes[0].style.top=box_pos_top;
 			this.box_wrapper.childNodes[0].style.left=box_pos_left;
 
+			var do_scroll=false;
+
 			// Absolute positioning instead of fixed positioning
 			if (('{$MOBILE}'==1) || (detected_box_height>dim.window_height) || (this.box_wrapper.style.position=='absolute'/*don't switch back to fixed*/))
 			{
@@ -493,19 +495,31 @@ function ModalWindow()
 				box_pos_top={$?,{$MOBILE},0,this.WINDOW_TOP_GAP}+'px' ;
 				this.box_wrapper.childNodes[0].style.top=box_pos_top;
 
-				if ((init) || (was_fixed))
+				if ((init) || (was_fixed)) do_scroll=true;
+				try
 				{
-					try // Scroll to top to see
+					if (/*maybe a navigation has happened and we need to scroll back up*/(typeof iframe[0]!='undefined') && (typeof iframe[0].contentWindow.scrolled_up_for=='undefined'))
 					{
-						this.top_window.scrollTo(0,0);
+						do_scroll=true;
 					}
-					catch (e) {};
 				}
+				catch (e) {};
 			} else // Fixed positioning, with scrolling turned off until the overlay is closed
 			{
 				this.box_wrapper.style.position='fixed';
 				this.box_wrapper.childNodes[0].style.position='fixed';
 				this.top_window.document.body.style.overflow='hidden';
+			}
+
+			if (do_scroll)
+			{
+				try // Scroll to top to see
+				{
+					this.top_window.scrollTo(0,0);
+					if (typeof iframe[0]!='undefined')
+						iframe[0].contentWindow.scrolled_up_for=true;
+				}
+				catch (e) {};
 			}
 		},
 

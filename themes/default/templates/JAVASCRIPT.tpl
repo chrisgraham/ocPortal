@@ -1458,6 +1458,13 @@ function get_window_scroll_height(win,dont_allow_iframe_size)
 {
 	if (typeof win=='undefined') var win=window;
 	if (typeof dont_allow_iframe_size=='undefined') var dont_allow_iframe_size=false;
+
+	if (typeof win.document.body.parentNode.getBoundingClientRect!='undefined')
+	{
+		var rect=win.document.body.parentNode.getBoundingClientRect();
+		return rect.bottom-rect.top;
+	}
+
 	var best=0;
 	if (((win.document.body.offsetHeight>best) && (win.document.body.offsetHeight!=150)) || (best==150)) best=win.document.body.offsetHeight;
 	if (((win.document.body.scrollHeight>best) && (best<150) && (win.document.body.scrollHeight!=150)) || (best==150)) best=win.document.body.scrollHeight;
