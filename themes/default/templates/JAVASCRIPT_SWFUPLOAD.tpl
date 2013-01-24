@@ -1845,7 +1845,6 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		newClearBtn.type='image';
 		newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 		newClearBtn.style.marginLeft='8px';
-		newClearBtn.style.verticalAlign='top';
 		newClearBtn.value='{!UPLOAD;^}: {!CLEAR;^}';
 		subdiv.appendChild(newClearBtn);
 

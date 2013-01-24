@@ -2813,7 +2813,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 }
 .button_micro {
 	background-image: none !important; /* Too loud for such a small space */
-	font-size: 0.85em;
+	font-size: 0.9em;
 }
 
 /* This is used to overlay special out-of-flow edit buttons, for staff only */
