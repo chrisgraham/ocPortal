@@ -59,7 +59,7 @@ function open_link_as_overlay(ob,width,height,target)
 			var img=modal.top_window.document.createElement('img');
 			img.onload=function()
 			{
-				if (!modal.box) return; /* Overlay closed already */
+				if (!modal.box_wrapper) return; /* Overlay closed already */
 
 				var real_width=img.width;
 				var width=real_width;
@@ -81,10 +81,14 @@ function open_link_as_overlay(ob,width,height,target)
 						width=window.parseInt(max_height*real_width/real_height-1);
 						height=max_height;
 					}
-					modal.reset_dimensions(width,height,false);
 
 					img.width=width;
 					img.height=height;
+					modal.reset_dimensions(''+width,''+height,false,true); // Temporarily forced, until real height is known (includes extra text space etc)
+
+					window.setTimeout(function() {
+						modal.reset_dimensions(''+width,''+height,false);
+					},0);
 				};
 
 				dims_func();
@@ -142,7 +146,8 @@ function fauxmodal_alert(notice,callback,title)
 			yes_button: '{!INPUTSYSTEM_OK;^}',
 			width: '600',
 			yes: callback,
-			title: title
+			title: title,
+			cancel_button: null
 		};
 		new ModalWindow().open(my_alert);
 	{+END}
@@ -338,7 +343,7 @@ function ModalWindow()
 			this.top_window=this.top_window.top;
 
 			for (var key in defaults) {
-				this[key]=(typeof options[key]!='undefined')?options[key]:defaults[key] ;
+				this[key]=(typeof options[key]!='undefined')?options[key]:defaults[key];
 			}
 
 			this.close(this.top_window);
@@ -371,7 +376,9 @@ function ModalWindow()
 			this.close(win);
 		},
 
-		reset_dimensions: function(width,height,init) {
+		reset_dimensions: function(width,height,init,force_height) {
+			if (typeof force_height=='undefined') var force_height=false;
+
 			if (!this.box_wrapper) return;
 
 			var dim=this.get_page_size();
@@ -379,7 +386,8 @@ function ModalWindow()
 			var bottom_gap=this.WINDOW_TOP_GAP;
 			if (this.button_container.childNodes.length>0) bottom_gap+=find_height(this.button_container);
 
-			height='auto'; // Actually we always want auto heights, no reason to not for overlays
+			if (!force_height)
+				height='auto'; // Actually we always want auto heights, no reason to not for overlays
 
 			// Store for later (when browser resizes for example)
 			this.width=width;
@@ -474,7 +482,7 @@ function ModalWindow()
 			}
 			if (_box_pos_top<this.WINDOW_TOP_GAP) _box_pos_top=this.WINDOW_TOP_GAP;
 			_box_pos_left=((dim.window_width/2)-(parseInt(box_width)/2));
-			box_pos_top=_box_pos_top+'px' ;
+			box_pos_top=_box_pos_top+'px';
 			box_pos_left=_box_pos_left+'px';
 
 			// Save into HTML
@@ -492,7 +500,7 @@ function ModalWindow()
 				this.box_wrapper.style.height=((dim.page_height>(detected_box_height+bottom_gap+_box_pos_left))?dim.page_height:(detected_box_height+bottom_gap+_box_pos_left))+'px';
 				this.box_wrapper.childNodes[0].style.position='absolute';
 				this.top_window.document.body.style.overflow='';
-				box_pos_top={$?,{$MOBILE},0,this.WINDOW_TOP_GAP}+'px' ;
+				box_pos_top={$?,{$MOBILE},0,this.WINDOW_TOP_GAP}+'px';
 				this.box_wrapper.childNodes[0].style.top=box_pos_top;
 
 				if ((init) || (was_fixed)) do_scroll=true;
@@ -609,17 +617,22 @@ function ModalWindow()
 			};
 
 			this.keyup=function(e) {
-				if (!e) e=window.event ;
-				var keyCode=(e)?(e.which || e.keyCode):null ;
+				if (!e) e=window.event;
+				var key_code=(e)?(e.which || e.keyCode):null;
 
-				if (keyCode==13) {
+				if ((key_code==13/*enter*/) && (this.yes))
+				{
 					_this.option('yes');
+				} else if ((key_code==27/*esc*/) && (_this.cancel_button) && ((_this.type=='prompt') || (_this.type=='confirm') || (_this.type=='lightbox') || (_this.type=='alert')))
+				{
+					_this.option('cancel');
 				}
 			};
 
 			this.add_event(this.box_wrapper,'click',function(e) { try { _this.top_window.cancel_bubbling(e); } catch (e) {}; });
 
-			switch (this.type) {
+			switch (this.type)
+			{
 				case 'iframe':
 					var iframe_width=(this.width.match(/^[\d\.]+$/)!==null)?(this.width+'px'):this.width;
 					var iframe_height=(this.height.match(/^[\d\.]+$/)!==null)?(this.height+'px'):((this.height=='auto')?(this.LOADING_SCREEN_HEIGHT+'px'):this.height);
@@ -747,7 +760,8 @@ function ModalWindow()
 
 				case 'lightbox':
 				case 'alert':
-					if (this.yes!=false) {
+					if (this.yes)
+					{
 						var button=this.element('button',{
 							'html': this.yes_button,
 							'class': 'button_pageitem'
@@ -755,6 +769,9 @@ function ModalWindow()
 						this.add_event(button,'click',function() { _this.option('yes'); });
 						window.setTimeout(function() { _this.add_event(_this.box_wrapper,'click',_this.clickout_yes); },1000);
 						this.button_container.appendChild(button);
+					} else
+					{
+						window.setTimeout(function() { _this.add_event(_this.box_wrapper,'click',_this.clickout_cancel); },1000);
 					}
 					break;
 
@@ -789,7 +806,8 @@ function ModalWindow()
 					input_wrap.appendChild(this.input);
 					container.appendChild(input_wrap);
 
-					if (this.yes) {
+					if (this.yes)
+					{
 						var button=this.element('button',{
 							'html': this.yes_button,
 							'class': 'button_pageitem',
@@ -854,12 +872,9 @@ function ModalWindow()
 				this.box_wrapper.getElementsByTagName('button')[0].focus();
 			}
 
-			if (this.yes || this.yes!=false)
-			{
-				window.setTimeout(function() { // Timeout needed else keyboard activation of overlay opener may cause instant shutdown also
-					_this.add_event(document,'keyup',_this.keyup);
-				},100);
-			}
+			window.setTimeout(function() { // Timeout needed else keyboard activation of overlay opener may cause instant shutdown also
+				_this.add_event(document,'keyup',_this.keyup);
+			},100);
 		},
 
 		inject: function(el) {
@@ -880,17 +895,24 @@ function ModalWindow()
 				'for': 'htmlFor',
 				'text': 'innerText'
 			};
-			if (options) {
-				if (typeof options=='object') {
-					for (var name in options) {
+			if (options)
+			{
+				if (typeof options=='object')
+				{
+					for (var name in options)
+					{
 						var value=options[name];
-						if (name=='styles') {
+						if (name=='styles')
+						{
 							this.set_styles(el,value);
-						} else if (name=='html') {
+						} else if (name=='html')
+						{
 							set_inner_html(el,value);
-						} else if (attributes[name]) {
+						} else if (attributes[name])
+						{
 							el[attributes[name]]=value;
-						} else {
+						} else
+						{
 							el.setAttribute(name,value);
 						}
 					}
@@ -900,29 +922,34 @@ function ModalWindow()
 		},
 
 		add_event: function(o,e,f) {
-			if (o) {
+			if (o)
+			{
 				if (o.addEventListener) o.addEventListener(e,f,false);
 				else if (o.attachEvent) o.attachEvent('on'+e,f);
 			}
 		},
 
 		remove_event: function(o,e,f) {
-			if (o) {
+			if (o)
+			{
 				if (o.removeEventListener) o.removeEventListener(e,f,false);
 				else if (o.detachEvent) o.detachEvent('on'+e,f);
 			}
 		},
 
 		set_styles: function(e,o) {
-			for (var k in o) {
+			for (var k in o)
+			{
 				this.set_style(e,k,o[k]);
 			}
 		},
 
 		set_style: function(e,p,v) {
-			if (p=='opacity') {
+			if (p=='opacity')
+			{
 				this.top_window.set_opacity(e,v);
-			} else {
+			} else
+			{
 				try
 				{
 					e.style[p]=v;
