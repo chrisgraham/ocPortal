@@ -31,6 +31,8 @@ class Hook_choose_filedump_file
 	 */
 	function run($id,$options,$default=NULL)
 	{
+		if ($id===NULL) $id='';
+
 		require_code('files2');
 		require_code('images');
 		$fullpath=get_custom_file_base().'/uploads/filedump';
