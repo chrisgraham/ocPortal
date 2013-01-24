@@ -1640,50 +1640,53 @@ function key_pressed(event,key,no_error_if_bad)
 function convert_tooltip(element)
 {
 	var title=element.title;
-	if ((title!='') && (element.className.indexOf('leave_native_tooltip')==-1) && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
+	if ((title!='') && (element.className.indexOf('leave_native_tooltip')==-1))
 	{
 		element.title='';
 
-		if (element.innerText)
+		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title=='')))
 		{
-			var prefix=element.innerText+': ';
-			if (title.substr(0,prefix.length)==prefix)
-				title=title.substring(prefix.length,title.length);
-			else if (title==element.innerText) return;
+			if (element.innerText)
+			{
+				var prefix=element.innerText+': ';
+				if (title.substr(0,prefix.length)==prefix)
+					title=title.substring(prefix.length,title.length);
+				else if (title==element.innerText) return;
+			}
+
+			// Stop the tooltip code adding to these events, by defining our own (it will not overwrite existing events).
+			if (!element.onmouseout) element.onmouseout=function() {};
+			if (!element.onmousemove) element.onmouseover=function() {};
+
+			// And now define nice listeners for it all...
+			var win=get_main_ocp_window(true);
+
+			element.ocp_tooltip_title=title;
+
+			win.add_event_listener_abstract(
+				element,
+				'mouseover',
+				function(event) {
+					win.activate_tooltip(element,event,element.ocp_tooltip_title,null,null,null,null,false,false,false,win);
+				}
+			);
+
+			win.add_event_listener_abstract(
+				element,
+				'mousemove',
+				function(event) {
+					win.reposition_tooltip(element,event,false,false,null,false,win);
+				}
+			);
+
+			win.add_event_listener_abstract(
+				element,
+				'mouseout',
+				function(event) {
+					win.deactivate_tooltip(element,event);
+				}
+			);
 		}
-
-		// Stop the tooltip code adding to these events, by defining our own (it will not overwrite existing events).
-		if (!element.onmouseout) element.onmouseout=function() {};
-		if (!element.onmousemove) element.onmouseover=function() {};
-
-		// And now define nice listeners for it all...
-		var win=get_main_ocp_window(true);
-
-		element.ocp_tooltip_title=title;
-
-		win.add_event_listener_abstract(
-			element,
-			'mouseover',
-			function(event) {
-				win.activate_tooltip(element,event,element.ocp_tooltip_title,null,null,null,null,false,false,false,win);
-			}
-		);
-
-		win.add_event_listener_abstract(
-			element,
-			'mousemove',
-			function(event) {
-				win.reposition_tooltip(element,event,false,false,null,false,win);
-			}
-		);
-
-		win.add_event_listener_abstract(
-			element,
-			'mouseout',
-			function(event) {
-				win.deactivate_tooltip(element,event);
-			}
-		);
 	}
 }
 
