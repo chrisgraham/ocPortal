@@ -825,7 +825,8 @@ class Module_calendar
 				$continuation=$i;
 
 				// Happenings in a single day
-				for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
+				$cnt=count($happenings);
+				for ($hap_i=0;$hap_i<$cnt;$hap_i++)
 				{
 					$happening=$happenings[$hap_i];
 					list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
@@ -1055,7 +1056,8 @@ class Module_calendar
 			$class='';
 			$worst_priority=6;
 
-			for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
+			$cnt=count($happenings);
+			for ($hap_i=0;$hap_i<$cnt;$hap_i++)
 			{
 				$happening=$happenings[$hap_i];
 
