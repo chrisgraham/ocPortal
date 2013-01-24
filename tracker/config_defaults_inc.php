@@ -2432,7 +2432,7 @@
 	 * $g_bug_readonly_status_threshold.
 	 * @global int $g_update_readonly_bug_threshold
 	 */
-	$g_update_readonly_bug_threshold = MANAGER;
+	$g_update_readonly_bug_threshold = VIEWER;
 
 	/**
 	 * threshold for viewing changelog
