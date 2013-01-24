@@ -4109,3 +4109,11 @@ twitter_feed_integration_block
  - themes/default/images_custom/twitter_feed/retweet.png
  - themes/default/images_custom/twitter_feed/retweet_hover.png
  - themes/default/images_custom/twitter_feed/retweet_on.png
+
+calendar_from_6am
+-----------------
+
+ - themes/default/templates_custom/CALENDAR_DAY.tpl
+ - themes/default/templates_custom/CALENDAR_DAY_HOUR.tpl
+ - themes/default/templates_custom/CALENDAR_WEEK.tpl
+ - themes/default/templates_custom/CALENDAR_WEEK_HOUR.tpl
