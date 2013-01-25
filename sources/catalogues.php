@@ -391,11 +391,11 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
 	// Named
 	require_code('fields');
 	$fields=get_catalogue_fields($catalogue_name);
-	foreach ($fields as $field)
+	foreach ($fields as $i=>$field)
 	{
 		if (get_translated_text($field['cf_name'])==$filter_key)
 		{
-			$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,'field_'.strval($field['id']),$filter_val,$db_fields);
+			$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,'field_'.strval($i),$filter_val,$db_fields);
 			return $ret;
 		}
 	}

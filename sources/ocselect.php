@@ -707,7 +707,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 			}
 			list($filter_key,$field_type,$filter_val)=$bits;
 
-			$filter_key=preg_replace('#[^\w\s\|]#','',$filter_key); // So can safely come from environment
+			$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
 
 			if (in_array($filter_key,$disallowed_fields)) continue;
 
