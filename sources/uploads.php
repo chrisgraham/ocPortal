@@ -132,15 +132,15 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	{
 		if ($_attach_name=='') continue;
 
-		//check whatever it is an incoming upload
+		// Check if it is an incoming upload
 		$row_id_file='hidFileID_'.$_attach_name;
 		$row_id_file_value=post_param($row_id_file,NULL);
 		if ($row_id_file_value=='-1') $row_id_file_value=NULL;
 
-		//id of the upload from the incoming uploads database table
-		if (!is_null($row_id_file_value)) //SwfUploader used
+		// ID of the upload from the incoming uploads database table
+		if (!is_null($row_id_file_value)) // SwfUploader was used
 		{
-			//get the incoming uploads appropiate db table row
+			// Get the incoming upload's appropiate DB table row
 			if ((substr($row_id_file_value,-4)=='.dat') && (strpos($row_id_file_value,':')===false))
 			{
 				$path='uploads/incoming/'.filter_naughty($row_id_file_value);
@@ -159,7 +159,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			{
 				$incoming_uploads_id=intval(preg_replace('#:.*$#','',$row_id_file_value));
 				$incoming_uploads_row=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'incoming_uploads WHERE (i_submitter='.strval(get_member()).' OR i_submitter='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).') AND id='.strval($incoming_uploads_id),1);
-				//if there is a db record proceed
+				// If there is a DB record, proceed
 				if (array_key_exists(0,$incoming_uploads_row))
 				{
 					if (file_exists(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']))
