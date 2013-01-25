@@ -601,11 +601,11 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 		{
 			this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+selected_start[i]),false);
 		}
-		if ((!this.object.multi_selection) || ((!event.ctrlKey) && (!assume_ctrl)))
+		if ((!this.object.multi_selection) || (((!event.ctrlKey) && (!event.metaKey) && (!event.altKey)) && (!assume_ctrl)))
 		{
 			selected_end=[];
 		}
-		if ((selected_start.inArray(selected_id)) && ((selected_start.length==1) || (event.ctrlKey) || (assume_ctrl)))
+		if ((selected_start.inArray(selected_id)) && ((selected_start.length==1) || ((event.ctrlKey) || (event.metaKey) || (event.altKey)) || (assume_ctrl)))
 		{
 			selected_end.arrayDelete(selected_id);
 		} else
