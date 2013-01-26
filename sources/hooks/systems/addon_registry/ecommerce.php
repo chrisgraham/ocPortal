@@ -116,6 +116,10 @@ class Hook_addon_registry_ecommerce
 			'ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY.tpl',
 			'ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER.tpl',
 			'ECOM_TRANSACTION_LOGS_SCREEN.tpl',
+			'ECOM_VIEW_MANUAL_TRANSACTIONS_LINE.tpl',
+			'ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN.tpl',
+			'sources/hooks/systems/notifications/manual_subscription.php',
+			'sources/hooks/systems/cron/manual_subscription_notification.php',
 			'adminzone/pages/modules/admin_ecommerce.php',
 			'adminzone/pages/modules/admin_invoices.php',
 			'ecommerce.css',
@@ -196,7 +200,9 @@ class Hook_addon_registry_ecommerce
 			'ECOM_INVOICES_SCREEN.tpl'=>'ecom_invoices_screen',
 			'ECOM_SUBSCRIPTIONS_SCREEN.tpl'=>'ecom_subscriptions_screen',
 			'PURCHASE_WIZARD_STAGE_SUBSCRIBE.tpl'=>'purchase_wizard_stage_subscribe',
-			'PURCHASE_WIZARD_STAGE_PAY.tpl'=>'purchase_wizard_stage_pay'
+			'PURCHASE_WIZARD_STAGE_PAY.tpl'=>'purchase_wizard_stage_pay',
+			'ECOM_VIEW_MANUAL_TRANSACTIONS_LINE.tpl'=>'ecom_view_manual_transactions_screen',
+			'ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN.tpl'=>'ecom_view_manual_transactions_screen',
 		);
 	}
 
@@ -737,10 +743,10 @@ class Hook_addon_registry_ecommerce
 				'CURRENCY'=>placeholder_number(),
 				'ITEM_NAME'=>lorem_word(),
 				'TITLE'=>lorem_phrase(),
-				'LENGTH'=>"3",
-				'LENGTH_UNITS'=>"$",
+				'LENGTH'=>'3',
+				'LENGTH_UNITS'=>'$',
 				'PURCHASE_ID'=>placeholder_id(),
-				'PRICE'=>"123.45"
+				'PRICE'=>'123.45'
 			)), NULL, '', true)
 		);
 	}
@@ -761,11 +767,37 @@ class Hook_addon_registry_ecommerce
 				'CURRENCY'=>placeholder_number(),
 				'ITEM_NAME'=>lorem_word(),
 				'TITLE'=>lorem_phrase(),
-				'LENGTH'=>"3",
-				'LENGTH_UNITS'=>"$",
+				'LENGTH'=>'3',
+				'LENGTH_UNITS'=>'$',
 				'PURCHASE_ID'=>placeholder_id(),
-				'PRICE'=>"123.45"
+				'PRICE'=>'123.45'
 			)), NULL, '', true)
 		);
 	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__ecom_view_manual_transactions_screen()
+	{
+		$lines=do_lorem_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array(
+			'ID'=>placeholder_id(),
+			'SUBSCRIPTION'=>lorem_title(),
+			'ROWSPAN'=>'1',
+			'MEMBER'=>placeholder_link(),
+			'EXPIRY'=>lorem_title(),
+			'CANCEL_URL'=>placeholder_url(),
+		));
+
+		return array(
+			lorem_globalise(do_lorem_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN', array(
+				'CONTENT'=>$lines,
+			)), NULL, '', true)
+		);
+	}
+
 }

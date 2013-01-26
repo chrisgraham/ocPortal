@@ -126,9 +126,22 @@ class Hook_usergroup
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($row['s_member_id']);
 			if (is_null($username)) $username=do_lang('UNKNOWN');
-			$list->attach(form_input_list_entry(strval($row['id']),false,do_lang('SUBSCRIPTION_OF',strval($row['id']),$username)));
+			$list->attach(form_input_list_entry(strval($row['id']),false,do_lang('SUBSCRIPTION_OF',strval($row['id']),$username,get_timezoned_date($row['s_time']))));
 		}
-		return form_input_list(do_lang_tempcode('SUBSCRIPTION'),'','purchase_id',$list);
+
+		$fields=alternate_fields_set__start('options');
+
+		$fields_inner=new ocp_tempcode();
+
+		$fields_inner->attach(form_input_list(do_lang_tempcode('FINISH_STARTED_ALREADY'),do_lang_tempcode('DESCRIPTION_FINISH_STARTED_ALREADY'),'purchase_id',$list,NULL,false,true));
+
+		$pretty_name=do_lang_tempcode('NEW_UGROUP_SUB_FOR');
+		$description=do_lang_tempcode('DESCRIPTION_NEW_UGROUP_SUB_FOR');
+		$fields_inner->attach(form_input_username($pretty_name,$description,'username','',true,true));
+
+		$fields->attach(alternate_fields_set__end('options',do_lang_tempcode('SUBSCRIPTION'),'',$fields_inner,true));
+
+		return $fields;
 	}
 
 	/**

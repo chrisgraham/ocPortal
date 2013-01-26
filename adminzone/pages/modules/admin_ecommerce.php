@@ -110,7 +110,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		//if ($type=='balance_sheet') return $this->balance_sheet();
 		if ($type=='trigger') return $this->trigger();
 		if ($type=='_trigger') return $this->_trigger();
-		if ($type=='view_manual') return $this->view_manual();
+		if ($type=='view_manual_subscriptions') return $this->view_manual_subscriptions();
 		if ($type=='cancel_subscription') return $this->cancel_subscription();
 
 		if (get_forum_type()=='ocf')
@@ -164,7 +164,7 @@ class Module_admin_ecommerce extends standard_aed_module
 						array('transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
 						array('invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
 						addon_installed('shopping')?array('orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,
-						array('invoices',array('_SELF',array('type'=>'view_manual'),'_SELF'),do_lang('VIEW_MANUAL_TRANSACTIONS')),
+						array('invoices',array('_SELF',array('type'=>'view_manual_subscriptions'),'_SELF'),do_lang('MANUAL_SUBSCRIPTIONS')),
 					),
 					do_lang('ECOMMERCE')
 		);
@@ -280,7 +280,8 @@ class Module_admin_ecommerce extends standard_aed_module
 			$list=new ocp_tempcode();
 			foreach ($products as $product=>$details)
 			{
-				$list->attach(form_input_list_entry($product,do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,NULL,false)==get_param('product',NULL),$details[4]));
+				if (!is_string($product)) $product=strval($product);
+				$list->attach(form_input_list_entry($product,do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,NULL,false)===get_param('product',NULL),$details[4]));
 			}
 			$fields->attach(form_input_list(do_lang_tempcode('PRODUCT'),'','item_name',$list));
 
@@ -312,14 +313,6 @@ class Module_admin_ecommerce extends standard_aed_module
 				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
 			}
 		}
-		$default_purchase_id=get_param('id',NULL);
-		if (is_null($default_purchase_id))
-		{	
-			if (method_exists($product_ob,'set_needed_fields'))
-				$default_purchase_id=$product_ob->set_needed_fields($item_name);
-			else
-				$default_purchase_id=strval(get_member());
-		}
 
 		// Remaining fields, customised for product chosen
 		if (method_exists($product_ob,'get_identifier_manual_field_inputter'))
@@ -328,6 +321,15 @@ class Module_admin_ecommerce extends standard_aed_module
 			if (!is_null($f)) $fields->attach($f);
 		} else
 		{
+			$default_purchase_id=get_param('id',NULL);
+			if (is_null($default_purchase_id))
+			{	
+				if (method_exists($product_ob,'set_needed_fields'))
+					$default_purchase_id=$product_ob->set_needed_fields($item_name);
+				else
+					$default_purchase_id=strval(get_member());
+			}
+
 			$fields->attach(form_input_codename(do_lang_tempcode('IDENTIFIER'),do_lang('MANUAL_TRANSACTION_IDENTIFIER'),'purchase_id',$default_purchase_id,false));
 		}
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang('TRANSACTION_NOTES'),'memo','',false));
@@ -373,10 +375,6 @@ class Module_admin_ecommerce extends standard_aed_module
 		$mc_currency=get_option('currency');
 		$txn_id='manual-'.substr(uniqid(''),0,10);
 		$parent_txn_id='';
-		/*if ($products[$item_name][0]==PRODUCT_SUBSCRIPTION)
-		{
-			$payment_status='SCancelled';
-		}*/
 
 		$_item_name=$products[$item_name][4];
 
@@ -384,9 +382,17 @@ class Module_admin_ecommerce extends standard_aed_module
 		{
 			if ($purchase_id=='')
 			{
+				$member_id=get_member();
+				$username=post_param('username','');
+				if ($username!='')
+				{
+					$_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+					if (!is_null($_member_id)) $member_id=$_member_id;
+				}
+
 				$purchase_id=strval($GLOBALS['SITE_DB']->query_insert('subscriptions',array(
 					's_type_code'=>$item_name,
-					's_member_id'=>get_member(),
+					's_member_id'=>$member_id,
 					's_state'=>'new',
 					's_amount'=>$products[$item_name][1],
 					's_special'=>$purchase_id,
@@ -398,15 +404,15 @@ class Module_admin_ecommerce extends standard_aed_module
 			}
 
 			$_item_name=''; // Flag for handle_confirmed_transaction to know it's a subscription
-			
-			if ($custom_expiry!=NULL)
-			{
-				$s_length=$products[$item_name][3]['length'];
-				$s_length_units=$products[$item_name][3]['length_units']; // y-year, m-month, w-week, d-day
-				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
-				$new_s_time=strtotime('-'.$s_length.' '.$time_period_units[$s_length_units],$custom_expiry);
-				$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_time'=>$new_s_time),array('id'=>$purchase_id));
-			}
+		}
+
+		if ($custom_expiry!==NULL)
+		{
+			$s_length=$products[$item_name][3]['length'];
+			$s_length_units=$products[$item_name][3]['length_units']; // y-year, m-month, w-week, d-day
+			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+			$new_s_time=strtotime('-'.strval($s_length).' '.$time_period_units[$s_length_units],$custom_expiry);
+			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_time'=>$new_s_time),array('id'=>$purchase_id));
 		}
 
 		handle_confirmed_transaction($purchase_id,$_item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
@@ -828,91 +834,92 @@ class Module_admin_ecommerce extends standard_aed_module
 	}
 	
 	/**
-	 * Show a manual subscriptions.
+	 * Show manual subscriptions.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function view_manual()
+	function view_manual_subscriptions()
 	{
-		$title=get_screen_title('MANUAL_TRANSACTIONS');
-		
-		$subscriptions=$GLOBALS['SITE_DB']->query("SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."subscriptions WHERE s_auto_fund_key LIKE '%manual%' ORDER BY s_type_code,s_time");
-		
+		$title=get_screen_title('MANUAL_SUBSCRIPTIONS');
+
+		disable_php_memory_limit();
+
+		$subscriptions=$GLOBALS['SITE_DB']->query('SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."subscriptions WHERE '.db_string_equal_to('s_via','manual').' ORDER BY s_type_code,s_time');
+		if (count($subscriptions)==0)
+			inform_exit(do_lang_tempcode('NO_ENTRIES'));
+
 		$data=array();
 		foreach ($subscriptions as $subs)
 		{
 			$product_obj=find_product($subs['s_type_code']);
+
 			$products=$product_obj->get_products(true);
+
 			$product_name=$products[$subs['s_type_code']][4];
 			$s_length=$products[$subs['s_type_code']][3]['length'];
 			$s_length_units=$products[$subs['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
 			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
-			$expiry_time=strtotime('+'.$s_length.' '.$time_period_units[$s_length_units],$subs['s_time']);
+			$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$subs['s_time']);
 			$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
-			$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subs['s_member_id']);
+			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($subs['s_member_id'],true);
 			$cancel_url=build_url(array('page'=>'_SELF','type'=>'cancel_subscription','subscription_id'=>$subs['id']),'_SELF');
-			$data[$product_name][]=array($member_name,$expiry_date,$cancel_url);
+
+			$data[$product_name][]=array($member_link,$expiry_date,$cancel_url,$subs['id']);
 		}
+
 		$result=new ocp_tempcode();
 		foreach ($data as $key=>$value)
 		{
-			$flag=1;
+			$continues_for_same_product=true;
 			foreach ($value as $val)
 			{
-				if ($flag)
+				if ($continues_for_same_product)
 				{
-					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','SUBSCRIPTION'=>$key,'MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>strval(count($data[$key])),'CANCEL_URL'=>$val[2])));
-					$flag=0;
+					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('ID'=>strval($val[3]),'SUBSCRIPTION'=>$key,'MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>strval(count($data[$key])),'CANCEL_URL'=>$val[2])));
+					$continues_for_same_product=false;
 				}
 				else
 				{
-					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','SUBSCRIPTION'=>'','MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>'','CANCEL_URL'=>$val[2])));
+					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('ID'=>'','SUBSCRIPTION'=>'','MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>'','CANCEL_URL'=>$val[2])));
 				}
 			}
 		}
-		
-		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','TITLE'=>$title,'CONTENT'=>$result));
+
+		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array('TITLE'=>$title,'CONTENT'=>$result));
 	}
-	
+
 	/**
-	 * Cancel a manual subscriptions.
+	 * Cancel a manual subscription.
 	 *
-	 * @param  ID_TEXT	The entry being edited
-	 *
+	 * @return tempcode	The result of execution.
 	 */
 	function cancel_subscription()
 	{
-		$id=get_param_integer('subscription_id',false);
-		if ($id)
+		$id=get_param_integer('subscription_id');
+		$subscription=$GLOBALS['SITE_DB']->query_select('subscriptions',array('s_type_code','s_member_id'),array('id'=>$id),'',1);
+		if (!array_key_exists(0,$subscription)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+		$product_obj=find_product($subscription[0]['s_type_code']);
+		$products=$product_obj->get_products(true);
+		$product_name=$products[$subscription[0]['s_type_code']][4];
+		$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
+
+		$title=get_screen_title('CANCEL_MANUAL_SUBSCRITPION');
+
+		$repost_id=post_param_integer('id',NULL);
+		if (($repost_id!==NULL) && ($repost_id==$id))
 		{
-			$subscription=$GLOBALS['FORUM_DB']->query_select('subscriptions',array('s_type_code','s_member_id'),array('id'=>$id));
-			if ($subscription)
-			{
-				
-				$product_obj=find_product($subscription[0]['s_type_code']);
-				$products=$product_obj->get_products(true);
-				$product_name=$products[$subscription[0]['s_type_code']][4];
-				$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
-			
-				$title=do_lang_tempcode('CANCEL_MANUAL_SUBSCRITPION');
-		
-				$rePost_id=post_param('id','');
-				if (($rePost_id!='')&&($rePost_id==$id))
-				{
-					require_code('ecommerce');
-					handle_confirmed_transaction($id,'','SCancelled','','','','','','manual','');
-					return inform_screen($title,do_lang_tempcode('SUCCESS'));
-				}
-				else
-				{
-					$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRITPION_CONFIRM',$product_name,$member_name);
-					$fields=form_input_hidden('id',strval($id));
-					$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
-					$url=build_url($map,'_SELF');
-					return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
-				}
-			}
+			require_code('ecommerce');
+			handle_confirmed_transaction(strval($id),'','SCancelled','','','','','','manual',''); // Runs a cancel
+			return inform_screen($title,do_lang_tempcode('SUCCESS'));
 		}
+
+		// We need to get confirmation via POST, for security/confirmation reasons
+		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRITPION_CONFIRM',$product_name,$member_name);
+		$fields=form_input_hidden('id',strval($id));
+		$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
+		$url=build_url($map,'_SELF');
+		return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
 	}
 
 }
