@@ -281,9 +281,15 @@ class Module_admin_ecommerce extends standard_aed_module
 			foreach ($products as $product=>$details)
 			{
 				if (!is_string($product)) $product=strval($product);
-				$list->attach(form_input_list_entry($product,do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,NULL,false)===get_param('product',NULL),$details[4]));
+				$label=$details[4];
+				$label.=' ('.escape_html($product);
+
+				if ($details[1]!==NULL)
+					$label.=', '.ecommerce_get_currency_symbol().escape_html(is_float($details[1])?float_to_raw_string($details[1],2):$details[1]);
+				$label.=')';
+				$list->attach(form_input_list_entry($product,do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,NULL,false)===get_param('product',NULL),protect_from_escaping($label)));
 			}
-			$fields->attach(form_input_list(do_lang_tempcode('PRODUCT'),'','item_name',$list));
+			$fields->attach(form_input_huge_list(do_lang_tempcode('PRODUCT'),'','item_name',$list,NULL,true));
 
 			$submit_name=do_lang('CHOOSE');
 
@@ -334,10 +340,12 @@ class Module_admin_ecommerce extends standard_aed_module
 		}
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang('TRANSACTION_NOTES'),'memo','',false));
 
+		$products=$product_ob->get_products();
+		if ($products[$item_name][0]==PRODUCT_SUBSCRIPTION)
+			$fields->attach(form_input_date(do_lang_tempcode('CUSTOM_EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_CUSTOM_EXPIRY_DATE'),'cexpiry',true,false,false));
+
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('MONEY_AMOUNT_DESCRIPTION',ecommerce_get_currency_symbol()),'amount',NULL,false));
-		
-		$fields->attach(form_input_date(do_lang_tempcode('CUSTOM_EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_CUSTOM_EXPIRY_DATE'),'cexpiry',true,false,false));
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('item_name',$item_name));
@@ -404,15 +412,15 @@ class Module_admin_ecommerce extends standard_aed_module
 			}
 
 			$_item_name=''; // Flag for handle_confirmed_transaction to know it's a subscription
-		}
 
-		if ($custom_expiry!==NULL)
-		{
-			$s_length=$products[$item_name][3]['length'];
-			$s_length_units=$products[$item_name][3]['length_units']; // y-year, m-month, w-week, d-day
-			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
-			$new_s_time=strtotime('-'.strval($s_length).' '.$time_period_units[$s_length_units],$custom_expiry);
-			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_time'=>$new_s_time),array('id'=>$purchase_id));
+			if ($custom_expiry!==NULL)
+			{
+				$s_length=$products[$item_name][3]['length'];
+				$s_length_units=$products[$item_name][3]['length_units']; // y-year, m-month, w-week, d-day
+				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+				$new_s_time=strtotime('-'.strval($s_length).' '.$time_period_units[$s_length_units],$custom_expiry);
+				$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_time'=>$new_s_time),array('id'=>$purchase_id));
+			}
 		}
 
 		handle_confirmed_transaction($purchase_id,$_item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
@@ -844,7 +852,10 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		disable_php_memory_limit();
 
-		$subscriptions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE '.db_string_equal_to('s_via','manual').' ORDER BY s_type_code,s_time');
+		$where=db_string_equal_to('s_via','manual');
+		if (get_param_integer('all',0)==1) $where='1=1';
+
+		$subscriptions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE '.$where.' ORDER BY s_type_code,s_time');
 		if (count($subscriptions)==0)
 			inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
