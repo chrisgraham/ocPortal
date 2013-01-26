@@ -4,5 +4,5 @@
 	{+END}
 	<td>{MEMBER}</td>
 	<td>{EXPIRY*}</td>
-	<td><a title="{!_CANCEL_MANUAL_SUBSCRITPION} #{ID*}" href="{CANCEL_URL*}">{!_CANCEL_MANUAL_SUBSCRITPION}</a></td>
+	<td><a title="{!_CANCEL_MANUAL_SUBSCRIPTION} #{ID*}" href="{CANCEL_URL*}">{!_CANCEL_MANUAL_SUBSCRIPTION}</a></td>
 </tr>

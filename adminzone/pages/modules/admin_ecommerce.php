@@ -904,7 +904,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		$product_name=$products[$subscription[0]['s_type_code']][4];
 		$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
 
-		$title=get_screen_title('CANCEL_MANUAL_SUBSCRITPION');
+		$title=get_screen_title('CANCEL_MANUAL_SUBSCRIPTION');
 
 		$repost_id=post_param_integer('id',NULL);
 		if (($repost_id!==NULL) && ($repost_id==$id))
@@ -915,7 +915,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		}
 
 		// We need to get confirmation via POST, for security/confirmation reasons
-		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRITPION_CONFIRM',$product_name,$member_name);
+		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRIPTION_CONFIRM',$product_name,$member_name);
 		$fields=form_input_hidden('id',strval($id));
 		$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
 		$url=build_url($map,'_SELF');
