@@ -124,9 +124,15 @@ class Module_members
 		$start=get_param_integer('md_start',0);
 		$max=get_param_integer('md_max',50);
 		$sortables=array('m_username'=>do_lang_tempcode('USERNAME'),'m_primary_group'=>do_lang_tempcode('PRIMARY_GROUP'),'m_cache_num_posts'=>do_lang_tempcode('COUNT_POSTS'),'m_join_time'=>do_lang_tempcode('JOIN_DATE'));
+		if (get_option('use_lastondate')=='1')
+		{
+			$sortables['m_last_visit_time']=do_lang_tempcode('LAST_VISIT_TIME');
+		}
 		$default_sort_order=get_value('md_default_sort_order');
 		if (is_null($default_sort_order))
-			$default_sort_order='m_join_time DESC';
+		{
+			$default_sort_order=(get_option('use_lastondate')=='1')?'m_last_visit_time DESC':'m_join_time DESC';  // sort by lastondate unless it is not enabled
+		}
 		$test=explode(' ',get_param('md_sort',$default_sort_order),2);
 		if (count($test)==1) $test[]='ASC';
 		list($sortable,$sort_order)=$test;
@@ -186,9 +192,9 @@ class Module_members
 		$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) '.$query);
 
 		if (can_arbitrary_groupby()) $query.=' GROUP BY r.id';
-		if ($sortable=='m_join_time')
+		if ($sortable=='m_join_time' || $sortable=='m_last_visit_time')
 		{
-			$query.=' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
+			$query.=' ORDER by '.$sortable.' '.$sort_order.','.'id '.$sort_order; // Also order by ID, in case lots joined at the same time
 		} else
 		{
 			$query.=' ORDER BY '.$sortable.' '.$sort_order;
@@ -199,7 +205,12 @@ class Module_members
 		$members=new ocp_tempcode();
 		$member_boxes=array();
 		require_code('templates_results_table');
-		$fields_title=results_field_title(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('PRIMARY_GROUP'),do_lang_tempcode('COUNT_POSTS'),do_lang_tempcode('JOIN_DATE')),$sortables,'md_sort',$sortable.' '.$sort_order);
+		$_fields_title=array(do_lang_tempcode('USERNAME'),do_lang_tempcode('PRIMARY_GROUP'),do_lang_tempcode('COUNT_POSTS'));
+		if (get_option('use_lastondate')=='1')
+			$_fields_title[]=do_lang_tempcode('LAST_VISIT_TIME');
+		if (get_option('use_joindate')=='1')
+			$_fields_title[]=do_lang_tempcode('JOIN_DATE');
+		$fields_title=results_field_title($_fields_title,$sortables,'md_sort',$sortable.' '.$sort_order);
 		require_code('ocf_members2');
 		foreach ($rows as $row)
 		{
@@ -210,7 +221,12 @@ class Module_members
 			$member_primary_group=ocf_get_member_primary_group($row['id']);
 			$primary_group=ocf_get_group_link($member_primary_group);
 
-			$members->attach(results_entry(array($link,$primary_group,integer_format($row['m_cache_num_posts']),escape_html(get_timezoned_date($row['m_join_time'])))));
+			$_entry=array($link,$primary_group,integer_format($row['m_cache_num_posts']));
+			if (get_option('use_joindate')=='1')
+				$_entry[]=escape_html(get_timezoned_date($row['m_join_time']));
+			if (get_option('use_lastondate')=='1')
+				$_entry[]=escape_html(get_timezoned_date($row['m_last_visit_time']));
+			$members->attach(results_entry($_entry));
 
 			$box=render_member_box($row['id'],true,NULL,NULL,true,NULL,false);
 			$member_boxes[]=$box;

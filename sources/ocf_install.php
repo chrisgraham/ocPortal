@@ -149,6 +149,8 @@ function uninstall_ocf()
 	delete_config_option('decryption_key');
 	delete_config_option('intro_forum_id');
 	delete_config_option('is_on_show_online');
+	delete_config_option('use_joindate');
+	delete_config_option('use_lastondate');
 
 	delete_value('ocf_newest_member_id');
 	delete_value('ocf_newest_member_username');
@@ -328,6 +330,8 @@ function install_ocf($upgrade_from=NULL)
 	if ((is_null($upgrade_from)) || ($upgrade_from<10.0))
 	{
 		add_config_option('IS_ON_SHOW_ONLINE','is_on_show_online','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('USE_JOINDATE','use_joindate','tick','return \'1\';','FEATURE','MEMBERS');
+		add_config_option('USE_LASTONDATE','use_lastondate','tick','return \'0\';','FEATURE','MEMBERS');
 	}
 
 	// If we have the forum installed to this db already, leave
