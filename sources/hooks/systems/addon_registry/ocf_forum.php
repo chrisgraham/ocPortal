@@ -249,7 +249,9 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/rss/ocf_private_topics.php',
 			'TOPIC_LIST.tpl',
 			'OCF_PT_FILTERS.tpl',
-			'OCF_MEMBER_PROFILE_POSTS.tpl'
+			'OCF_MEMBER_PROFILE_POSTS.tpl',
+			'themes/default/images/ocf_general/isoff.png',
+			'themes/default/images/ocf_general/ison.png',
 		);
 	}
 

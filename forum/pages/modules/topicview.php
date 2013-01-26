@@ -178,6 +178,13 @@ class Module_topicview
 					$buttons=ocf_render_post_buttons($topic_info,$_postdetails,$may_reply);
 				}
 
+				// User online status
+				$poster_online=mixed();
+				if ((get_option('is_on_show_online')=='1') && (!is_guest($_postdetails['poster'])))
+				{
+					$poster_online=member_is_online($_postdetails['poster']);
+				}
+
 				// Avatar
 				if ((array_key_exists('poster_avatar',$_postdetails)) && ($_postdetails['poster_avatar']!=''))
 				{
@@ -305,6 +312,7 @@ class Module_topicview
 							'UNVALIDATED'=>$unvalidated,
 							'DESCRIPTION'=>$description,
 							'RATING'=>$rating,
+							'POSTER_ONLINE'=>$poster_online,
 				));
 				$posts->attach($rendered_post);
 			}

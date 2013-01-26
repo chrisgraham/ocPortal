@@ -148,6 +148,7 @@ function uninstall_ocf()
 	delete_config_option('encryption_key');
 	delete_config_option('decryption_key');
 	delete_config_option('intro_forum_id');
+	delete_config_option('is_on_show_online');
 
 	delete_value('ocf_newest_member_id');
 	delete_value('ocf_newest_member_username');
@@ -323,6 +324,10 @@ function install_ocf($upgrade_from=NULL)
 			rename_privilege($old,$new);
 		}
 		$GLOBALS['FORUM_DB']->delete_table_field('f_members','m_notes');
+	}
+	if ((is_null($upgrade_from)) || ($upgrade_from<10.0))
+	{
+		add_config_option('IS_ON_SHOW_ONLINE','is_on_show_online','tick','return \'1\';','SECTION_FORUMS','GENERAL');
 	}
 
 	// If we have the forum installed to this db already, leave
