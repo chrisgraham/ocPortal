@@ -35,7 +35,7 @@ class Block_main_feedback
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','forum','body_prefix','body_suffix','subject_prefix','subject_suffix');
+		$info['parameters']=array('param','forum','body_prefix','body_suffix','subject_prefix','subject_suffix','redirect');
 		return $info;
 	}
 
@@ -106,6 +106,15 @@ class Block_main_feedback
 						mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
 					}
 				}
+			}
+
+			$redirect=array_key_exists('redirect',$map)?$map['redirect']:'';
+			if ($redirect!='')
+			{
+				require_code('urls2');
+				$redirect=pagelink_as_url($redirect);
+				require_code('site2');
+				assign_refresh($redirect,0.0);
 			}
 		}
 

@@ -35,7 +35,7 @@ class Block_main_contact_catalogues
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('to','param','subject','body_prefix','body_suffix','subject_prefix','subject_suffix');
+		$info['parameters']=array('to','param','subject','body_prefix','body_suffix','subject_prefix','subject_suffix','redirect');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_contact_catalogues
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\',array_key_exists(\'subject\',$map)?$map[\'subject\']:\'\',array_key_exists(\'body_prefix\',$map)?$map[\'body_prefix\']:\'\',array_key_exists(\'body_suffix\',$map)?$map[\'body_suffix\']:\'\',array_key_exists(\'subject_prefix\',$map)?$map[\'subject_prefix\']:\'\',array_key_exists(\'subject_suffix\',$map)?$map[\'subject_suffix\']:\'\')';
+		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\',array_key_exists(\'redirect\',$map)?$map[\'redirect\']:\'\',array_key_exists(\'subject\',$map)?$map[\'subject\']:\'\',array_key_exists(\'body_prefix\',$map)?$map[\'body_prefix\']:\'\',array_key_exists(\'body_suffix\',$map)?$map[\'body_suffix\']:\'\',array_key_exists(\'subject_prefix\',$map)?$map[\'subject_prefix\']:\'\',array_key_exists(\'subject_suffix\',$map)?$map[\'subject_suffix\']:\'\')';
 		$info['ttl']=60*24*7;
 		return $info;
 	}
@@ -80,6 +80,15 @@ class Block_main_contact_catalogues
 			form_to_email($subject_prefix.$subject.$subject_suffix,$body_prefix,NULL,$to_email,$body_suffix);
 
 			attach_message(do_lang_tempcode('SUCCESS'));
+
+			$redirect=array_key_exists('redirect',$map)?$map['redirect']:'';
+			if ($redirect!='')
+			{
+				require_code('urls2');
+				$redirect=pagelink_as_url($redirect);
+				require_code('site2');
+				assign_refresh($redirect,0.0);
+			}
 		}
 
 		require_code('form_templates');

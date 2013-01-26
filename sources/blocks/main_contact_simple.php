@@ -35,7 +35,7 @@ class Block_main_contact_simple
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','title','private','email_optional','body_prefix','body_suffix','subject_prefix','subject_suffix');
+		$info['parameters']=array('param','title','private','email_optional','body_prefix','body_suffix','subject_prefix','subject_suffix','redirect');
 		return $info;
 	}
 
@@ -69,7 +69,7 @@ class Block_main_contact_simple
 				}
 			}
 
-			$message=new ocp_tempcode();/*Used to be written out here*/ attach_message(do_lang_tempcode('MESSAGE_SENT'),'inform');
+			$message=new ocp_tempcode();/*Used to be written out here*/
 
 			require_code('mail');
 
@@ -81,6 +81,17 @@ class Block_main_contact_simple
 			if ($email_from!='')
 			{
 				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',post_param('title')),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
+			}
+
+			attach_message(do_lang_tempcode('MESSAGE_SENT'),'inform');
+
+			$redirect=array_key_exists('redirect',$map)?$map['redirect']:'';
+			if ($redirect!='')
+			{
+				require_code('urls2');
+				$redirect=pagelink_as_url($redirect);
+				require_code('site2');
+				assign_refresh($redirect,0.0);
 			}
 		} else
 		{
