@@ -115,10 +115,14 @@ function _get_notification_ob_for_code($notification_code)
  * @param  boolean		Whether to NOT CC to the CC address
  * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
  * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
+ * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject prefix for storage
+ * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
+ * @param  string			Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
+ * @param  string			Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
  */
-function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL)
+function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='')
 {
-	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category);
+	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
 	if (get_param_integer('keep_debug_notifications',0)==1)
 	{
 		$dispatcher->dispatch();
@@ -146,6 +150,10 @@ class Notification_dispatcher
 	var $no_cc=NULL;
 	var $no_notify_for__notification_code=NULL;
 	var $no_notify_for__code_category=NULL;
+	var $subject_prefix='';
+	var $subject_suffix='';
+	var $body_prefix='';
+	var $body_suffix='';
 
 	/**
 	 * Construct notification dispatcher.
@@ -162,8 +170,12 @@ class Notification_dispatcher
 	 * @param  boolean		Whether to NOT CC to the CC address
 	 * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
 	 * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
+	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject prefix for storage
+	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
+	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
+	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
 	 */
-	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category)
+	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='')
 	{
 		$this->notification_code=$notification_code;
 		$this->code_category=$code_category;
@@ -176,6 +188,10 @@ class Notification_dispatcher
 		$this->no_cc=$no_cc;
 		$this->no_notify_for__notification_code=$no_notify_for__notification_code;
 		$this->no_notify_for__code_category=$no_notify_for__code_category;
+		$this->subject_prefix=$subject_prefix;
+		$this->subject_suffix=$subject_suffix;
+		$this->body_prefix=$body_prefix;
+		$this->body_suffix=$body_suffix;
 	}
 
 	/**
@@ -214,7 +230,10 @@ class Notification_dispatcher
 			$message_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'),NULL,false,false,true);
 			$message=do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());
 
-			actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
+			$post_title=$this->subject_prefix.post_param('title','').$this->subject_suffix;
+			$post=$this->body_prefix.post_param('post','').$this->body_suffix;
+
+			actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true,$post_title,$post);
 		}
 
 		$testing=(get_param_integer('keep_debug_notifications',0)==1);

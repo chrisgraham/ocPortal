@@ -35,7 +35,7 @@ class Block_main_contact_catalogues
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('to','param');
+		$info['parameters']=array('to','param','subject','body_prefix','body_suffix','subject_prefix','subject_suffix');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_contact_catalogues
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\')';
+		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\',array_key_exists(\'subject\',$map)?$map[\'subject\']:\'\',array_key_exists(\'body_prefix\',$map)?$map[\'body_prefix\']:\'\',array_key_exists(\'body_suffix\',$map)?$map[\'body_suffix\']:\'\',array_key_exists(\'subject_prefix\',$map)?$map[\'subject_prefix\']:\'\',array_key_exists(\'subject_suffix\',$map)?$map[\'subject_suffix\']:\'\')';
 		$info['ttl']=60*24*7;
 		return $info;
 	}
@@ -63,14 +63,21 @@ class Block_main_contact_catalogues
 		$catalogue_name=array_key_exists('param',$map)?$map['param']:'';
 		if ($catalogue_name=='') $catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogues','c_name'); // Random/arbitrary (first one that comes out of the DB)
 
-		$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title'));
+		$subject=array_key_exists('subject',$map)?$map['subject']:'';
+		if ($subject=='')
+			$subject=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title'));
+
+		$body_prefix=array_key_exists('body_prefix',$map)?$map['body_prefix']:'';
+		$body_suffix=array_key_exists('body_suffix',$map)?$map['body_suffix']:'';
+		$subject_prefix=array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
+		$subject_suffix=array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
 
 		if (post_param('subject','')!='')
 		{
 			require_code('mail');
 			$to_email=array_key_exists('to',$map)?$map['to']:'';
 			if ($to_email=='') $to_email=NULL;
-			form_to_email(NULL,'',NULL,$to_email);
+			form_to_email($subject_prefix.$subject.$subject_suffix,$body_prefix,NULL,$to_email,$body_suffix);
 
 			attach_message(do_lang_tempcode('SUCCESS'));
 		}
@@ -144,7 +151,7 @@ class Block_main_contact_catalogues
 			$fields->attach($extra_fields);
 		}
 
-		$hidden->attach(form_input_hidden('subject',$catalogue_title));
+		$hidden->attach(form_input_hidden('subject',$subject));
 
 		$url=get_self_url();
 

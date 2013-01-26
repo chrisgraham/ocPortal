@@ -35,7 +35,7 @@ class Block_main_feedback
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','forum');
+		$info['parameters']=array('param','forum','body_prefix','body_suffix','subject_prefix','subject_suffix');
 		return $info;
 	}
 
@@ -58,12 +58,20 @@ class Block_main_feedback
 		$type='block_main_feedback';
 		$id=array_key_exists('param',$map)?$map['param']:'';
 
+		$body_prefix=array_key_exists('body_prefix',$map)?$map['body_prefix']:'';
+		$body_suffix=array_key_exists('body_suffix',$map)?$map['body_suffix']:'';
+		$subject_prefix=array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
+		$subject_suffix=array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
+
 		$out=new ocp_tempcode();
 		if (post_param_integer('_comment_form_post',0)==1)
 		{
 			if (!has_no_forum())
 			{
-				$hidden=actualise_post_comment(true,$type,$id,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,($is_occle_talking) || (get_option('captcha_on_feedback')=='0'),1,false,true,true);
+				$post_title=$subject_prefix.post_param('title','').$subject_suffix;
+				$post=$body_prefix.post_param('post','').$body_suffix;
+
+				$hidden=actualise_post_comment(true,$type,$id,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,($is_occle_talking) || (get_option('captcha_on_feedback')=='0'),1,false,true,true,$post_title,$post);
 				if (array_key_exists('title',$_POST))
 				{
 					$redirect=get_param('redirect',NULL);
@@ -87,8 +95,8 @@ class Block_main_feedback
 					dispatch_notification(
 						'new_feedback',
 						$type,
-						do_lang('NEW_FEEDBACK_SUBJECT',$title,NULL,NULL,get_site_default_lang()),
-						do_lang('NEW_FEEDBACK_MESSAGE',$post,NULL,NULL,get_site_default_lang())
+						do_lang('NEW_FEEDBACK_SUBJECT',$subject_prefix.$title.$subject_suffix,NULL,NULL,get_site_default_lang()),
+						do_lang('NEW_FEEDBACK_MESSAGE',$body_prefix.$post.$body_suffix,NULL,NULL,get_site_default_lang())
 					);
 
 					$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));

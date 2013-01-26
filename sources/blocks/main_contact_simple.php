@@ -35,7 +35,7 @@ class Block_main_contact_simple
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','title','private','email_optional');
+		$info['parameters']=array('param','title','private','email_optional','body_prefix','body_suffix','subject_prefix','subject_suffix');
 		return $info;
 	}
 
@@ -51,6 +51,11 @@ class Block_main_contact_simple
 		require_code('feedback');
 
 		$to=array_key_exists('param',$map)?$map['param']:get_option('staff_address');
+
+		$body_prefix=array_key_exists('body_prefix',$map)?$map['body_prefix']:'';
+		$body_suffix=array_key_exists('body_suffix',$map)?$map['body_suffix']:'';
+		$subject_prefix=array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
+		$subject_suffix=array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
 
 		$post=post_param('post','');
 		if ((post_param_integer('_comment_form_post',0)==1) && ($post!=''))
@@ -69,7 +74,9 @@ class Block_main_contact_simple
 			require_code('mail');
 
 			$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
-			mail_wrap(post_param('title'),$post,array($to),NULL,$email_from,$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+			$title=post_param('title');
+
+			mail_wrap($subject_prefix.$title.$subject_suffix,$body_prefix.$post.$body_suffix,array($to),NULL,$email_from,$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 
 			if ($email_from!='')
 			{

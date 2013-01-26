@@ -632,9 +632,11 @@ function extract_topic_identifier($full_text)
  * @param  boolean		Whether to force allowance
  * @param  boolean		Whether to skip a success message
  * @param  boolean		Whether posts made should not be shared
+ * @param  ?string		Title of the post (NULL: lookup from POST environment)
+ * @param  ?string		Body of the post (NULL: lookup from POST environment)
  * @return boolean		Whether a hidden post has been made
  */
-function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false)
+function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false,$post_title=NULL,$post=NULL)
 {
 	if (!$explicit_allow)
 	{
@@ -656,10 +658,12 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		}
 	}
 
-	$post_title=post_param('title',NULL);
+	if (is_null($post_title))
+		$post_title=post_param('title',NULL);
 	if ((is_null($post_title)) && (!$forum_tie)) return false;
 
-	$post=post_param('post',NULL);
+	if (is_null($post))
+		$post=post_param('post',NULL);
 	if (($post=='') && ($post_title!==''))
 	{
 		$post=$post_title;
