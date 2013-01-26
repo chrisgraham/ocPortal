@@ -844,7 +844,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		disable_php_memory_limit();
 
-		$subscriptions=$GLOBALS['SITE_DB']->query('SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."subscriptions WHERE '.db_string_equal_to('s_via','manual').' ORDER BY s_type_code,s_time');
+		$subscriptions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE '.db_string_equal_to('s_via','manual').' ORDER BY s_type_code,s_time');
 		if (count($subscriptions)==0)
 			inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
