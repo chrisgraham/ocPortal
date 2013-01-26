@@ -863,6 +863,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		foreach ($subscriptions as $subs)
 		{
 			$product_obj=find_product($subs['s_type_code']);
+			if (is_null($product_obj)) continue;
 
 			$products=$product_obj->get_products(true);
 
