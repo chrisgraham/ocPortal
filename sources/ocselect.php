@@ -755,10 +755,10 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 					if ($filter_val!='')
 					{
 						if ($alt!='') $alt.=' OR ';
-						$alt.=$filter_key.' LIKE \''.db_encode_like('%'.$filter_val.'%').'\'';
-						/*$alt.=$filter_key.' LIKE \''.db_encode_like('% '.$filter_val.' %').'\'';
-						$alt.=' OR '.$filter_key.' LIKE \''.db_encode_like($filter_val.' %').'\'';
-						$alt.=' OR '.$filter_key.' LIKE \''.db_encode_like('% '.$filter_val).'\'';*/
+						$alt.=$filter_key.' LIKE \''.db_escape_string('%'.$filter_val.'%').'\'';
+						/*$alt.=$filter_key.' LIKE \''.db_escape_string('% '.$filter_val.' %').'\'';
+						$alt.=' OR '.$filter_key.' LIKE \''.db_escape_string($filter_val.' %').'\'';
+						$alt.=' OR '.$filter_key.' LIKE \''.db_escape_string('% '.$filter_val).'\'';*/
 					}
 					break;
 
