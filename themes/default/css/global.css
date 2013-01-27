@@ -3105,7 +3105,11 @@ ul.nl, .nl ul {
 }
 
 .menu_type__popup {
+	min-width: 15em;
 	max-width: 30em; /* Really this is just to make the screen preview work! Normally a panel would constrain the width. */
+}
+.box .menu_type__popup {
+	min-width: 0;
 }
 
 .menu_type__dropdown ul.nlevel, .menu_type__popup ul {
