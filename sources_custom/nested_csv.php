@@ -89,7 +89,7 @@ function get_nested_csv_structure()
 	$cpf_fields=array();
 	foreach ($_custom_fields as $cf=>$custom_field)
 	{
-		if ($custom_field['cf_type']=='list')
+		if (($custom_field['cf_type']=='list') || ($custom_field['cf_type']=='multilist'))
 		{
 			$_value=explode('|',$custom_field['cf_default']); // $_value will come up as file|heading(optional)|order(optional)
 			$csv_filename=$_value[0];
