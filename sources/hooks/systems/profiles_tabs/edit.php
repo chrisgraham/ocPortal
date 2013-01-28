@@ -102,6 +102,7 @@ class Hook_Profiles_Tabs_edit
 		}
 
 		$_tabs=array();
+		$first=true;
 		foreach ($tabs as $i=>$tab)
 		{
 			if (is_null($tab)) continue;
@@ -109,7 +110,8 @@ class Hook_Profiles_Tabs_edit
 			$javascript.=$tab[3];
 
 			if (isset($tab[5])) $hidden->attach($tab[5]);
-			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
+			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$first,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
+			$first=false;
 		}
 		$url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
 
