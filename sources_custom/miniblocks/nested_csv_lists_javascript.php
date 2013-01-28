@@ -5,9 +5,10 @@ $csv_structure=get_nested_csv_structure();
 
 // Sanitisation to protect any data not destined to be available in the form
 $csv_headings_used=array();
-foreach (array_keys($csv_structure['cpf_fields']) as $csv_heading)
+foreach ($csv_structure['cpf_fields'] as $csv_field)
 {
-	$csv_headings_used[$csv_heading]=1;
+	$csv_headings_used[$csv_field['csv_heading']]=1;
+	$csv_headings_used[$csv_field['csv_parent_heading']]=1;
 }
 foreach ($csv_structure['csv_files'] as $csv_filename=>$csv_file)
 {
@@ -15,6 +16,7 @@ foreach ($csv_structure['csv_files'] as $csv_filename=>$csv_file)
 	{
 		foreach (array_keys($row) as $csv_heading)
 		{
+			if ($csv_heading=='deprecated') continue;
 			if (!isset($csv_headings_used[$csv_heading])) unset($csv_structure['csv_files'][$csv_filename]['data'][$i][$csv_heading]);
 		}
 	}
@@ -53,7 +55,7 @@ echo "
 			{
 				for (var j=0;j<cpf_field.possible_fields.length;j++)
 				{
-					if ((typeof form.elements[i].name!='undefined') && (cpf_field.possible_fields[j]==form.elements[i].name))
+					if ((typeof form.elements[i].name!='undefined') && (cpf_field.possible_fields[j]==form.elements[i].name.replace('[]','')))
 					{
 						return form.elements[i];
 					}
@@ -64,6 +66,16 @@ echo "
 		return null;
 	}
 
+	function find_selected_on_list(list)
+	{
+		var out=[];
+		for (var i=0;i<list.options.length;i++)
+		{
+			if (list.options[i].selected) out.push(list.options[i].value);
+		}
+		return out;
+	}
+
 	function inject_form_select_chaining__element(element,cpf_field,initial_run)
 	{
 		var cpf_fields=window.nested_csv_structure.cpf_fields;
@@ -72,14 +84,14 @@ echo "
 
 		if (cpf_field.csv_parent_heading!==null) // We need to look at parent to filter possibilities, if we have one
 		{
-			var current_value=(element.selectedIndex==-1)?'':element.options[element.selectedIndex].value;
+			var current_value=find_selected_on_list(element);
 
 			element.innerHTML=''; // Wipe list contents
 			var option;
 
 			var parent_cpf_field_element=find_cpf_field_element(element.form,cpf_fields[cpf_field.csv_parent_heading]);
-			var current_parent_value=(parent_cpf_field_element.selectedIndex==-1)?'':parent_cpf_field_element.options[parent_cpf_field_element.selectedIndex].value;
-			if (current_parent_value=='') // Parent unset, so this is
+			var current_parent_value=find_selected_on_list(parent_cpf_field_element);
+			if (current_parent_value.length==0) // Parent unset, so this is
 			{
 				option=document.createElement('option');
 				element.add(option,null);
@@ -88,36 +100,77 @@ echo "
 			} else // Parent is set, so we need to filter possibilities
 			{
 				// Work out available (filtered) possiblities
-				var csv_data=window.nested_csv_structure.csv_files[cpf_field.csv_filename].data;
+				var csv_data=window.nested_csv_structure.csv_files[cpf_field.csv_parent_filename].data;
 				var possibilities=[];
 				for (var i=0;i<csv_data.length;i++)
 				{
-					if (csv_data[i][cpf_field.csv_parent_heading]==current_parent_value)
+					for (var j=0;j<current_parent_value.length;j++)
 					{
-						possibilities.push(csv_data[i][cpf_field.csv_heading]);
+						if (csv_data[i][cpf_field.csv_parent_heading]==current_parent_value[j])
+						{
+							if ((typeof csv_data[i]['deprecated']=='undefined') || (csv_data[i]['deprecated']=='0') || (typeof window.handle_csv_deprecation=='undefined') || (!window.window.handle_csv_deprecation))
+								possibilities.push(csv_data[i][cpf_field.csv_heading]);
+						}
+					}
+				}
+				if (cpf_field.csv_parent_filename!=cpf_field.csv_filename)
+				{
+					csv_data=window.nested_csv_structure.csv_files[cpf_field.csv_filename].data;
+					for (var i=0;i<csv_data.length;i++)
+					{
+						if ((typeof csv_data[i]['deprecated']!='undefined') && (csv_data[i]['deprecated']=='1') && (typeof window.handle_csv_deprecation!='undefined') && (window.window.handle_csv_deprecation))
+						{
+							for (var j=0;j<possibilities.length;j++)
+							{
+								if (possibilities[j]==csv_data[i][cpf_field.csv_heading])
+								{
+									possibilities[j]=null; // Deprecated, so remove
+								}
+							}
+						}
 					}
 				}
 				possibilities.sort();
 
 				// Add possibilities, selecting one if it matches old selection (i.e. continuity maintained)
-				option=document.createElement('option');
-				element.add(option,null);
-				set_inner_html(option,'".addslashes(do_lang('PLEASE_SELECT'))."');
-				option.value='';
+				if (!element.multiple)
+				{
+					option=document.createElement('option');
+					element.add(option,null);
+					set_inner_html(option,'".addslashes(do_lang('PLEASE_SELECT'))."');
+					option.value='';
+				}
 				var previous_one=null;
 				for (var i=0;i<possibilities.length;i++)
 				{
+					if (possibilities[i]===null) continue;
+
 					if (previous_one!=possibilities[i]) // don't allow dupes (which we know are sequential due to sorting)
 					{ // not a dupe
 						option=document.createElement('option');
 						element.add(option,null);
 						set_inner_html(option,escape_html(possibilities[i]));
 						option.value=possibilities[i];
-						if (possibilities[i]==current_value) option.selected=true;
+						if (current_value.length==0)
+						{
+							if (element.multiple) // Pre-select all, if multiple input
+							{
+								option.selected=true;
+							}
+						} else
+						{
+							for (var j=0;j<current_value.length;j++)
+							{
+								if (possibilities[i]==current_value[j]) option.selected=true;
+							}
+						}
 						previous_one=possibilities[i];
 					}
 				}
-				if (element.options.length==2) element.selectedIndex=1; // Only one thing to select, so may as well auto-select it
+				if (!element.multiple)
+				{
+					if (element.options.length==2) element.selectedIndex=1; // Only one thing to select, so may as well auto-select it
+				}
 			}
 
 			changes_made_already=true;
