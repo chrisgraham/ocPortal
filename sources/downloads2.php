@@ -729,7 +729,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
  * Set the permissions for a download gallery.
  *
  * @param  ?AUTO_LINK		The ID of the download (NULL: lookup from download)
- * @param  MEMBER				The submitter
+ * @param  ?MEMBER			The submitter (NULL: work out automatically)
  */
 function set_download_gallery_permissions($id,$submitter=NULL)
 {
