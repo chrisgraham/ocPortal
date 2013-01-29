@@ -784,7 +784,7 @@ class Module_calendar
 			$day_remap=array('Mon'=>0,'Tue'=>1,'Wed'=>2,'Thu'=>3,'Fri'=>4,'Sat'=>5,'Sun'=>6);
 		} else
 		{
-			$day_remap=array('Sun'=>6,'Mon'=>0,'Tue'=>1,'Wed'=>2,'Thu'=>3,'Fri'=>4,'Sat'=>5);
+			$day_remap=array('Sun'=>0,'Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6);
 		}
 
 		// We start with our 24x7 stream array, assuming all is free time
