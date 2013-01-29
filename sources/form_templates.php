@@ -1201,6 +1201,8 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
 
+	if (count($ids)==0) return new ocp_tempcode();
+
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$selected_code=filter_form_field_default($name,is_null($selected_code)?'':$selected_code);
@@ -1602,8 +1604,10 @@ function alternate_fields_set__start($set_name)
  */
 function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required)
 {
-	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required));
 	global $DOING_ALTERNATE_FIELDS_SET;
+	if ($DOING_ALTERNATE_FIELDS_SET===NULL) return $fields; // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
+
+	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required));
 	if (is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$DOING_ALTERNATE_FIELDS_SET=NULL;
 	return _form_input('',$pretty_name,$description,$set,$required);

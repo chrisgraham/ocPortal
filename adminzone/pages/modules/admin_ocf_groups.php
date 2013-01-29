@@ -211,9 +211,9 @@ class Module_admin_ocf_groups extends standard_aed_module
 			$set_name='rank_image';
 			$required=false;
 			$set_title=do_lang_tempcode('RANK_IMAGE');
-			$field_set=alternate_fields_set__start($set_name);
+			$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
 
-			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$rank_image,NULL,false,$GLOBALS['FORUM_DB']);
 			$field_set->attach($image_chooser_field);
@@ -223,6 +223,8 @@ class Module_admin_ocf_groups extends standard_aed_module
 			handle_max_file_size($hidden,'image');
 		} else
 		{
+			if (count($ids)==0) warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN','ocf_rank_images'));
+
 			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$rank_image,NULL,true,$GLOBALS['FORUM_DB']);
 			$fields->attach($image_chooser_field);
 		}
