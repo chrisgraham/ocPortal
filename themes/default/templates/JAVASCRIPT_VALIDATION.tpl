@@ -194,7 +194,7 @@ function do_form_submit(form,event)
 	if (!form.getAttribute('target')) form.setAttribute('target','_top');
 
 	/* Remove any stuff that is only in the form for previews if doing a GET request */
-	if (form.getAttribute('method').toLowerCase()=='get')
+	if (form.method.toLowerCase()=='get')
 	{
 		var i=0,name,elements=[];
 		for (i=0;i<form.elements.length;i++)

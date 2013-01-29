@@ -1958,7 +1958,7 @@ function trigger_resize(and_subframes)
 /* Marking things (to avoid illegally nested forms) */
 function add_form_marked_posts(work_on,prefix)
 {
-	var get=work_on.getAttribute('method').toLowerCase()=='get';
+	var get=work_on.method.toLowerCase()=='get';
 	var elements=document.getElementsByTagName('input');
 	var i;
 	var append='';
