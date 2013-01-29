@@ -35,7 +35,7 @@ class Block_main_cc_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','select','template_set','display_type','sorting','sort','max','start','pagination','root');
+		$info['parameters']=array('ocselect','param','filter','template_set','display_type','sorting','sort','max','start','pagination','root');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_cc_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param($block_id.\'_order\',\'\'),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
+		$info['cache_on']='(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param($block_id.\'_order\',\'\'),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',/*legacy*/array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*2;
 		return $info;
 	}
@@ -72,11 +72,12 @@ class Block_main_cc_embed
 		require_css('catalogues');
 
 		// ocFilter
-		$select=NULL;
-		if ((!is_null($map)) && (array_key_exists('select',$map)) && ($map['select']!=''))
+		$filter=NULL;
+		if ((array_key_exists('select',$map)) && (!array_key_exists('filter',$map))) $map['filter']=$map['select']; // LEGACY
+		if ((!is_null($map)) && (array_key_exists('filter',$map)) && ($map['filter']!=''))
 		{
 			require_code('ocfiltering');
-			$select=ocfilter_to_sqlfragment($map['select'],'e.id','catalogue_categories','cc_parent_id','cc_id','id');
+			$filter=ocfilter_to_sqlfragment($map['filter'],'e.id','catalogue_categories','cc_parent_id','cc_id','id');
 		}
 
 		// Pick up details about category
@@ -132,7 +133,7 @@ class Block_main_cc_embed
 		}
 
 		// Get entries
-		list($entry_buildup,$sorting,,$max_rows)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$ocselect,$sort,$block_id.'_order');
+		list($entry_buildup,$sorting,,$max_rows)=get_catalogue_category_entry_buildup(is_null($filter)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$filter,$root,$display_type,true,NULL,$ocselect,$sort,$block_id.'_order');
 
 		// Sorting and pagination
 		if (!$do_sorting)

@@ -260,7 +260,7 @@ function count_catalogue_category_children($category_id)
  * @param  ID_TEXT			Environment param used for ordering
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
-function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='order')
+function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$filter,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='order')
 {
 	if ($_ocselect!='')
 	{
@@ -333,11 +333,11 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	}
 
 	// Get entries in this category
-	if ($select==='1=1') $select=NULL;
+	if ($filter==='1=1') $filter=NULL;
 	require_code('fields');
 	if (is_null($entries))
 	{
-		list($in_db_sorting,$num_entries,$entries)=get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$ocselect,$order_by,$direction);
+		list($in_db_sorting,$num_entries,$entries)=get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,$do_sorting,$ocselect,$order_by,$direction);
 	} else // Oh, we already have $entries
 	{
 		$num_entries=count($entries);
@@ -349,7 +349,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	// Work out the actual rendering, but only for those results in our selection scope (for performance)
 	foreach ($entries as $i=>$entry)
 	{
-		if (($in_db_sorting /*Only select rows were grabbed so $i is not the first entry, it is the $start entry*/) || (!$in_db_sorting /*Needs data to do manual sort*/) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select))))))
+		if (($in_db_sorting /*Only select rows were grabbed so $i is not the first entry, it is the $start entry*/) || (!$in_db_sorting /*Needs data to do manual sort*/) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($filter)) || ((is_array($filter)) && (in_array($entry['id'],$filter))))))
 		{
 			$entries[$i]['map']=get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root,$fields,(($display_type==C_DT_TITLELIST) && (!$is_ecomm) && (!is_null($order_by)))?array(0,intval($order_by)):NULL,false,true,intval($order_by));
 		}
@@ -420,7 +420,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 				$entry=$entries[$i];
 
-				if ((is_null($max)) || ((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+				if ((is_null($max)) || ((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($filter)) || ((is_array($filter)) && (in_array($entry['id'],$filter)))))
 					$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$entry['map']+array('GIVE_CONTEXT'=>false)+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP'));
 			}
 			break;
@@ -432,7 +432,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 				$entry=$entries[$i];
 
-				if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+				if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($filter)) || ((is_array($filter)) && (in_array($entry['id'],$filter)))))
 					$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_TITLELIST_ENTRY',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_TITLELIST_ENTRY'));
 			}
 			if (!$entry_buildup->is_empty()) $entry_buildup=do_template('CATALOGUE_'.$tpl_set.'_TITLELIST_WRAP',$entry['map']+array('CATALOGUE'=>$catalogue_name,'CONTENT'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_TITLELIST_WRAP');
@@ -443,7 +443,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			{
 				if (!array_key_exists($i,$entries)) break;
 				$entry=$entries[$i];
-				if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || (is_array($select)) && (in_array($entry['id'],$select))))
+				if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($filter)) || (is_array($filter)) && (in_array($entry['id'],$filter))))
 				{
 					$tab_entry_map=$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array());
 					if ((get_option('is_on_comments')=='1') && ($entry['allow_comments']>=1) || (get_option('is_on_rating')=='1') && ($entry['allow_rating']==1) || (get_option('is_on_trackbacks')=='1') && ($entry['allow_trackbacks']==1))
@@ -514,7 +514,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 				$entry=$entries[$i];
 
-				if ((is_null($max)) || ((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+				if ((is_null($max)) || ((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($filter)) || ((is_array($filter)) && (in_array($entry['id'],$filter)))))
 					$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_GRID_ENTRY_WRAP',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_GRID_ENTRY_WRAP'));
 			}
 			break;
@@ -570,8 +570,8 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  *
  * @param  ID_TEXT			Name of the catalogue
  * @param  ?AUTO_LINK		The ID of the category for which the entries are being collected (NULL: entries are [and must be] passed instead)
- * @param  ?integer			The maximum number of entries to show on a single page of this this category (ignored if $select is not NULL) (NULL: all)
- * @param  ?integer			The entry number to start at (ignored if $select is not NULL) (NULL: all)
+ * @param  ?integer			The maximum number of entries to show on a single page of this this category (ignored if $filter is not NULL) (NULL: all)
+ * @param  ?integer			The entry number to start at (ignored if $filter is not NULL) (NULL: all)
  * @param  ?mixed				The entries to show, may be from other categories. Can either be SQL fragment, or array (NULL: use $start and $max)
  * @param  boolean			Whether to perform sorting
  * @param  ?array				List of filters to apply (NULL: none). Each filter is a triple: ORd comparison key(s) [separated by pipe symbols], comparison type (one of '<', '>', '<=', '>=', '=', '~=', or '~'), comparison value
@@ -580,7 +580,7 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  * @param  string				Additional WHERE SQL to add on to query
  * @return array				A tuple: whether sorting was done, number of entries returned, list of entries
  */
-function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,$do_sorting,$ocselect,$order_by,$direction,$extra_where='')
+function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,$do_sorting,$ocselect,$order_by,$direction,$extra_where='')
 {
 	$where_clause='1=1'.$extra_where;
 	if (!is_null($category_id))
@@ -605,20 +605,20 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 	$where_clause.=$extra_where.' AND '.db_string_equal_to('r.c_name',$catalogue_name);
 
 	// If we're listing what IDs to look at, work out SQL for this
-	if ((is_null($category_id)) && (!is_null($select)))
+	if ((is_null($category_id)) && (!is_null($filter)))
 	{
-		if (((is_array($select)) && (count($select)==0)) || ((is_string($select)) && ($select=='')))
+		if (((is_array($filter)) && (count($filter)==0)) || ((is_string($filter)) && ($filter=='')))
 		{
 			$entries=array(); // This is saying we are selecting nothing, so just say that - it'll save us a query
 		} else // Put together some SQL for defining what to select
 		{
-			if (!is_array($select))
+			if (!is_array($filter))
 			{
-				$or_list=$select;
+				$or_list=$filter;
 			} else
 			{
 				$or_list='';
-				foreach ($select as $s)
+				foreach ($filter as $s)
 				{
 					if ($or_list!='') $or_list.=' OR ';
 					$or_list.='r.id='.strval($s);
