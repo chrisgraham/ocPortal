@@ -81,7 +81,7 @@ class Block_main_cc_embed
 		if ((!is_null($map)) && (array_key_exists('select',$map)))
 		{
 			require_code('ocfiltering');
-			$select=ocfilter_to_sqlfragment($map['select'],'e.id','catalogue_categories','cc_parent_id','cc_id','id');
+			$select=ocfilter_to_sqlfragment($map['select'],'r.id','catalogue_categories','cc_parent_id','cc_id','id');
 		}
 
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$category_id),'',1);
@@ -142,7 +142,7 @@ class Block_main_cc_embed
 				break;
 		}
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array('DISPLAY_TYPE'=>$display_type_str,'ROOT'=>strval($root),'CATALOGUE'=>$catalogue_name,'ENTRIES'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array('DISPLAY_TYPE'=>$display_type_str,'ROOT'=>is_null($root)?'':strval($root),'CATALOGUE'=>$catalogue_name,'ENTRIES'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
 	}
 
 }
