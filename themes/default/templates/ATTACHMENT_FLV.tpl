@@ -27,6 +27,9 @@
 				autostart: false,
 				width: {A_WIDTH*},
 				height: {A_HEIGHT*},
+				events: {
+					{+START,IF,{$NOT,{$INLINE_STATS}}}onPlay: function() { ga_track(null,'{!VIDEO;*}','{A_ORIGINAL_FILENAME;*}'); }{+END}
+				},
 				players: [
 					{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf{+START,IF,{$NOT,{$BROWSER_MATCHES,bot}}}?rand={$RAND*}{+END}" },
 					{ type: "html5" }

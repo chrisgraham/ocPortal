@@ -2690,6 +2690,32 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 	}
 }
 
+/* Google Analytics tracking for links; particularly useful if you have no server-side stat collection */
+function ga_track(ob,category,action)
+{
+	{+START,IF_NON_EMPTY,{$CONFIG_OPTION,google_analytics}}{+START,IF,{$NOR,{$IS_STAFF},{$IS_ADMIN}}}
+		if (typeof category=='undefined') var category='{!URL;}';
+		if (typeof action=='undefined') var action=ob?ob.href:'{!UNKNOWN;}';
+
+		try
+		{ 
+			_gaq.push(['_trackEvent',category,action]); 
+		}
+		catch(err) {}
+
+		if (ob)
+		{
+			setTimeout(function() {
+				click_link(ob);
+			},100);
+
+			return false;
+		}
+	{+END}{+END}
+
+	return null;
+}
+
 /* Force a link to be clicked without user clicking it directly (useful if there's a confirmation dialog inbetween their click) */
 function click_link(link)
 {

@@ -34,6 +34,7 @@
 			],
 			provider: '{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},sound,video}',
 			events: {
+				{+START,IF,{$NOT,{$INLINE_STATS}}}onPlay: function() { ga_track(null,'{!VIDEO;*}','{URL;*}'); },{+END}
 				onComplete: function() { if (document.getElementById('next_slide')) player_stopped(); },
 				onReady: function() { if (document.getElementById('next_slide')) { stop_slideshow_timer('{!STOPPED;}'); jwplayer("flv_container_{$GET%,rand_id}").play(true); } }
 			}

@@ -131,6 +131,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
 	return do_template('DOWNLOAD_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'7a4737e21bdb4bd15ac5fe8570915d08',
+		'ORIGINAL_FILENAME'=>$row['original_filename'],
 		'GIVE_CONTEXT'=>$give_context,
 		'TEXT_SUMMARY'=>$text_summary,
 		'AUTHOR'=>$row['author'],

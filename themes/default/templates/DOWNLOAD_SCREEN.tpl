@@ -29,7 +29,7 @@
 					<div class="box_inner">
 					{+END}
 						<div class="download_now" itemprop="significantLinks">
-							<p class="download_link associated_link suggested_link"><a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
+							<p class="download_link associated_link suggested_link"><a {+START,IF,{$NOT,{$INLINE_STATS}}}onclick="return ga_track(this,'{!DOWNLOAD;*}','{ORIGINAL_FILENAME;*}');" {+END}rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
 							<p class="download_filesize">({FILE_SIZE*})</p>
 						</div>
 					</div>

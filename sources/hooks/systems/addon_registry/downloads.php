@@ -258,6 +258,7 @@ class Hook_addon_registry_downloads
 		foreach ($download_items as $download)
 		{
 			$map=array(
+				'ORIGINAL_FILENAME'=>lorem_phrase(),
 				'AUTHOR'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
 				'VIEWS'=>placeholder_number(),
