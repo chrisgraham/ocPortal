@@ -1125,7 +1125,7 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 
 		$type=convert_ocportal_type_codes('search_hook',$result['type'],'cma_hook');
 		$id=mixed();
-		if (!is_null($type))
+		if ($type!='')
 		{
 			require_code('hooks/systems/content_meta_aware/'.$type);
 			$cma_ob=object_factory('Hook_content_meta_aware_'.$type);
