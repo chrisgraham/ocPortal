@@ -66,3 +66,12 @@
 		<label for="auto_monitor_contrib_content"><span>{!ocf:DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT}</span></label>
 	</p>
 {+END}
+
+{+START,IF_PASSED,SMART_TOPIC_NOTIFICATION_CONTENT}
+	<h2>{!ocf:SMART_TOPIC_NOTIFICATION}</h2>
+
+	<p class="simple_neat_checkbox">
+		<input {+START,IF,{SMART_TOPIC_NOTIFICATION_CONTENT}}checked="checked" {+END}type="checkbox" id="smart_topic_notification_content" name="smart_topic_notification_content" value="1" />
+		<label for="smart_topic_notification_content"><span>{!ocf:DESCRIPTION_SMART_TOPIC_NOTIFICATION}</span></label>
+	</p>
+{+END}

@@ -202,6 +202,32 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			$members=$this->_all_members_who_have_enabled_with_category_access($members,'forums',$notification_code,strval($forum_id),$to_member_ids,$start,$max);
 		} // We know PTs have been pre-filtered before notification is sent out, to limit them
 
+		//Filter members who has more than one unread posts in that topic
+		if (is_numeric($category))
+		{
+			$members_new=array();
+			foreach ($members[0] as $member_id=>$setting)
+			{
+				$fields=ocf_get_custom_fields_member($member_id);
+				$smart_topic_notification_enabled=$fields[39]==1?true:false;
+				if ($smart_topic_notification_enabled)
+				{
+					$read_log=$GLOBALS['FORUM_DB']->query_select('f_read_logs',array('l_time'),array('l_member_id'=>intval($member_id),'l_topic_id'=>intval($category)));
+					if (array_key_exists(0,$read_log))
+					{
+						$members_new[$member_id]=$setting;
+					} else
+					{
+						$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>$member_id,'l_topic_id'=>$category,'l_time'=>0));
+					}
+				} else
+				{
+					$members_new[$member_id]=$setting;
+				}
+			}
+			$members[0]=$members_new;
+		}
+	
 		return $members;
 	}
 }
