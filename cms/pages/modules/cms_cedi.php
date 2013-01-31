@@ -518,13 +518,13 @@ class Module_cms_cedi
 
 						$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'seedy_page','category_name'=>strval($child_id),'group_id'=>$group_id));
 					}
+
+					require_code('notifications2');
+					copy_notifications_to_new_child('cedi',strval($id),strval($child_id));
 				}
 
 				$GLOBALS['SITE_DB']->query_delete('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id),'',1); // Just in case it was repeated
 				$GLOBALS['SITE_DB']->query_insert('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id,'the_order'=>$i,'title'=>$title));
-
-				require_code('notifications2');
-				copy_notifications_to_new_child('cedi',strval($id),strval($child_id));
 			}
 			$start=$start+$length+1;
 		}
