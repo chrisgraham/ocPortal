@@ -2,6 +2,8 @@
 
 {WARNING_DETAILS}
 
+{$SET,topic_title,{_TITLE}}
+
 <div class="ocf_topic_{THREADED*}">
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
 		<div class="non_accessibility_redundancy">
@@ -74,6 +76,7 @@
 	{+START,IF,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
 		<div class="box ocf_topic_control_functions"><div class="box_inner">
 			<span class="field_name">{!CONTROL_FUNCTIONS}:</span>
+
 			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
 				<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline">
 					{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
@@ -89,6 +92,7 @@
 					</div>
 				</form>
 			{+END}
+
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{+START,IF_NON_EMPTY,{MARKED_POST_ACTIONS}}
 					{+START,IF,{$JS_ON}}
@@ -108,6 +112,7 @@
 					{+END}
 				{+END}
 			{+END}
+
 			{+START,IF_NON_EMPTY,{PAGINATION}}
 				{+START,IF,{MAY_CHANGE_MAX}}
 					<form title="{!PER_PAGE}" class="inline horiz_field_sep" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get">
@@ -128,6 +133,23 @@
 						</div>
 					</form>
 				{+END}
+			{+END}
+
+			{+START,IF,{THREADED}}
+				<form class="inline horiz_field_sep" action="{$SELF_URL*}" method="post">
+					<div class="inline">
+						<label for="comments_sort">{!SORT}:
+						<select id="comments_sort" name="comments_sort">
+							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},relevance}}selected="selected" {+END}value="relevance">{!RELEVANCE}</option>
+							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},newest}}selected="selected" {+END}value="newest">{!NEWEST_FIRST}</option>
+							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},oldest}}selected="selected" {+END}value="oldest">{!OLDEST_FIRST}</option>
+							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},average_rating}}selected="selected" {+END}value="average_rating">{!RATING}</option>
+							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},compound_rating}}selected="selected" {+END}value="compound_rating">{!POPULARITY}</option>
+						</select>
+						</label>
+						<input type="submit" value="{!SORT}" class="button_pageitem" />
+					</div>
+				</form>
 			{+END}
 		</div></div>
 	{+END}

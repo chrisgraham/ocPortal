@@ -912,7 +912,7 @@ class OCP_Topic
 			}
 
 			// Render
-			$sequence->attach(/*performance*/static_evaluate_tempcode(do_template('POST',array(
+			$sequence->attach(do_template('POST',array(
 				'_GUID'=>'eb7df038959885414e32f58e9f0f9f39',
 				'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
 				'HIGHLIGHT'=>$highlight,
@@ -939,7 +939,7 @@ class OCP_Topic
 				'IS_SPACER_POST'=>$is_spacer_post,
 				'NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),
 				'IS_THREADED'=>$this->is_threaded,
-			))));
+			)));
 		}
 
 		return $sequence;

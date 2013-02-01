@@ -16,7 +16,7 @@
 			{+START,IF_NON_EMPTY,{ID}}<a id="post_{ID*}"></a>{+END}
 
 			<div class="float_surrounder">
-				{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title" itemprop="name">{TITLE*}</h3>{+END}
+				{+START,IF_NON_EMPTY,{TITLE}}{+START,IF,{$NEQ,{TITLE},{$GET,topic_title}}}<h3 class="post_title" itemprop="name">{TITLE*}</h3>{+END}{+END}
 				{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}
 					<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" />
 				{+END}
