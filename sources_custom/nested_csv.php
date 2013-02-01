@@ -157,7 +157,7 @@ function get_nested_csv_structure()
 					'possible_fields'=>array('field_'.strval($custom_field['id']),$csv_heading), // Form field names that this CPF may appear as (may not all be real CPFs)
 					'csv_filename'=>$csv_filename,
 					'csv_heading'=>$csv_heading,
-					'csv_parent_filename'=>$csv_parent_filename,	// Not actually used, but may be useful in future
+					'csv_parent_filename'=>$csv_parent_filename,
 					'csv_parent_heading'=>$csv_parent_heading,
 				);
 			}
