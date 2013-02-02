@@ -161,8 +161,10 @@ function get_bound_content_entry($content_type,$id)
  * @param  ?ID_TEXT		Content entry ID (NULL: new entry)
  * @param  tempcode		Fields (passed by reference)
  * @param  tempcode		Hidden Fields (passed by reference)
+ * @param  ?array			Limit fields to a set (NULL: no limit)
+ * @param  boolean		Whether $field_filter is a whitelist (if false, it is a blacklist)
  */
-function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
+function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_filter=NULL,$field_filter_whitelist=true)
 {
 	require_code('catalogues');
 
@@ -180,6 +182,11 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 	require_code('fields');
 	foreach ($special_fields as $field_num=>$field)
 	{
+		if ((!is_null($field_filter)) && ($field_filter_whitelist) && (!in_array($field['id'],$field_filter)))
+			continue;
+		if ((!is_null($field_filter)) && (!$field_filter_whitelist) && (in_array($field['id'],$field_filter)))
+			continue;
+
 		$ob=get_fields_hook($field['cf_type']);
 		$default=get_param('field_'.strval($field['id']),$field['cf_default']);
 		if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];

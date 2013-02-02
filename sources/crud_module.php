@@ -512,6 +512,8 @@ class standard_crud_module
 		if ((!is_null($this->upload)) || ($this->possibly_some_kind_of_upload)) $map['uploading']=1;
 		$post_url=build_url($map,'_SELF');
 
+		$tie_in_custom_form_fields=$this->has_tied_catalogue();
+
 		$bits=$this->get_form_fields();
 		$fields2=new ocp_tempcode();
 		$posting_form_tabindex=NULL;
@@ -520,9 +522,10 @@ class standard_crud_module
 		{
 			$fields=$bits[0];
 			$hidden=$bits[1];
-			if ((array_key_exists(6,$bits)) && (!is_null($bits[6])))$fields2=$bits[6];
+			if ((array_key_exists(6,$bits)) && (!is_null($bits[6]))) $fields2=$bits[6];
 			if ((array_key_exists(7,$bits)) && (!is_null($bits[7]))) $posting_form_tabindex=$bits[7];
 			if ((array_key_exists(8,$bits)) && (!is_null($bits[8]))) $extra_tpl_params+=$bits[8];
+			if ((array_key_exists(9,$bits)) && (!is_null($bits[9]))) $tie_in_custom_form_fields=$bits[9];
 		} else
 		{
 			$fields=$bits;
@@ -530,7 +533,7 @@ class standard_crud_module
 		}
 
 		// Add in custom fields
-		if ($this->has_tied_catalogue())
+		if ($tie_in_custom_form_fields)
 		{
 			require_code('fields');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d55b3a9fc65c8586498489f55ca2f1b8','TITLE'=>do_lang_tempcode('MORE'))));
@@ -1025,6 +1028,8 @@ class standard_crud_module
 		if ((!is_null($this->permissions_cat_require_b)) && (!has_category_access(get_member(),$this->permissions_cat_require_b,$this->get_cat_b($id))))
 			access_denied('CATEGORY_ACCESS');
 
+		$tie_in_custom_form_fields=$this->has_tied_catalogue();
+
 		$bits=$this->fill_in_edit_form($id);
 		$delete_fields=new ocp_tempcode();
 		$all_delete_fields_given=false;
@@ -1041,6 +1046,7 @@ class standard_crud_module
 			if ((array_key_exists(6,$bits)) && (!is_null($bits[6]))) $fields2=$bits[6];
 			if ((array_key_exists(7,$bits)) && (!is_null($bits[7]))) $this->posting_form_text_parsed=$bits[7];
 			if ((array_key_exists(8,$bits)) && (!is_null($bits[8]))) $extra_tpl_params+=$bits[8];
+			if ((array_key_exists(9,$bits)) && (!is_null($bits[9]))) $tie_in_custom_form_fields=$bits[9];
 		} else
 		{
 			$fields=$bits;
@@ -1048,7 +1054,7 @@ class standard_crud_module
 		}
 
 		// Add in custom fields
-		if ($this->has_tied_catalogue())
+		if ($tie_in_custom_form_fields)
 		{
 			require_code('fields');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3431365db07e3ecd6f9f4d8cf51ff396','TITLE'=>do_lang_tempcode('MORE'))));

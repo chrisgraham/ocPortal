@@ -613,7 +613,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		$cat=$myrow['category_id'];
 
-		list($fields,$hidden)=$this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['additional_details']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
+		$ret=$this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['additional_details']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
 
 		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_downloads',array('downloads',$cat)))
 		{
@@ -623,7 +623,10 @@ class Module_cms_downloads extends standard_crud_module
 			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		return array($fields,$hidden,$delete_fields,'',true);
+		$ret[2]=$delete_fields;
+		$ret[3]='';
+		$ret[4]=true;
+		return $ret;
 	}
 
 	/**

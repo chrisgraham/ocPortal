@@ -60,8 +60,6 @@ foreach ($files as $file)
 		}
 		$file_data=preg_replace('#^\##m','',trim($file_data));
 
-		if (strpos($file_data,' extends ')!==false) continue;
-
 		// UNDO MODE
 		if ($undo)
 		{

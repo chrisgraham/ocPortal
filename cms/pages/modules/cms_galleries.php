@@ -1011,9 +1011,12 @@ class Module_cms_galleries extends standard_crud_module
 			}
 		} else $delete_fields=new ocp_tempcode();
 
-		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
+		$ret=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
 
-		return array($fields,$hidden,$delete_fields,'',true);
+		$ret[2]=$delete_fields;
+		$ret[3]='';
+		$ret[4]=true;
+		return $ret;
 	}
 
 	/**
@@ -1480,9 +1483,12 @@ class Module_cms_galleries_alt extends standard_crud_module
 			}
 		} else $delete_fields=new ocp_tempcode();
 
-		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
+		$ret=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
 
-		return array($fields,$hidden,$delete_fields,'',true);
+		$ret[2]=$delete_fields;
+		$ret[3]='';
+		$ret[4]=true;
+		return $ret;
 	}
 
 	/**

@@ -94,7 +94,9 @@ class Hook_fields_float
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		if ($_cf_name=='Longitude') // Assumes there is a Latitude field too, although not critical
+		require_lang('google_map');
+
+		if ($_cf_name==do_lang('LONGITUDE_FIELD_NAME')) // Assumes there is a Latitude field too, although not critical
 		{
 			$pretty_name=$_cf_name;
 			$description=$_cf_description;
@@ -109,10 +111,13 @@ class Hook_fields_float
 			if ($longitude=='0.0000000000') $longitude='0';
 
 			$input=do_template('FORM_SCREEN_INPUT_MAP_POSITION',array('_GUID'=>'86d69d152d7bfd125e6216c9ac936cfd','REQUIRED'=>$required,'NAME'=>$name,'LATITUDE'=>$latitude,'LONGITUDE'=>$longitude));
-			return _form_input($name,'Position','',$input,$required,false);
+			$lang_string='MAP_POSITION_FIELD_field_'.strval($field['id']);
+			$test=do_lang($lang_string,NULL,NULL,NULL,NULL,false);
+			if (is_null($test)) $lang_string='MAP_POSITION_FIELD';
+			return _form_input($name,do_lang_tempcode($lang_string),'',$input,$required,false);
 		}
 
-		if ($_cf_name=='Latitude') // Assumes there is a Longitude field too
+		if ($_cf_name==do_lang('LATITUDE_FIELD_NAME')) // Assumes there is a Longitude field too
 		{
 			global $LATITUDE;
 			$LATITUDE=$actual_value; // Store for when Longitude field is rendered - critical, else won't be entered
@@ -133,14 +138,16 @@ class Hook_fields_float
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
+		require_lang('google_map');
+
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 		$default=STRING_MAGIC_NULL;
-		if (get_translated_text($field['cf_name'])=='Latitude')
+		if (get_translated_text($field['cf_name'])==do_lang('LATITUDE_FIELD_NAME'))
 		{
 			$default=post_param('latitude',STRING_MAGIC_NULL);
 		}
-		if (get_translated_text($field['cf_name'])=='Longitude')
+		if (get_translated_text($field['cf_name'])==do_lang('LONGITUDE_FIELD_NAME'))
 		{
 			$default=post_param('longitude',STRING_MAGIC_NULL);
 		}
