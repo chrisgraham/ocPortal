@@ -888,7 +888,7 @@ class Module_cms_galleries extends standard_aed_module
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
 		$filters=array('must_accept_images'=>true,'addable_filter'=>true);
 		if (substr($cat,0,9)!='download_') $filters['filter']='only_conventional_galleries';
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE',do_lang_tempcode('TITLE')),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
 
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat));
 
@@ -1305,7 +1305,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 		require_code('form_templates');
 		handle_max_file_size($hidden);
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE',do_lang_tempcode('TITLE')),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
 
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true),true,$cat));
 		$supported=get_allowed_video_file_types();
