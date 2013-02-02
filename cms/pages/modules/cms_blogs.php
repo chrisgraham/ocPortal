@@ -30,6 +30,7 @@ class Module_cms_blogs extends standard_aed_module
 	var $code_require='news';
 	var $permissions_require='high';
 	var $permissions_cat_require='news';
+	var $permissions_cat_name='main_news_category';
 	var $user_facing=true;
 	var $seo_type='news';
 	var $award_type='news';
