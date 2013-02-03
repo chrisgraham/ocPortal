@@ -78,8 +78,8 @@ class Module_cms_galleries extends standard_crud_module
 		set_helper_panel_tutorial('tut_galleries');
 		set_helper_panel_pic('pagepics/images');
 
-		$this->cat_crud_module=new Module_cms_galleries_cat();
-		$this->alt_crud_module=new Module_cms_galleries_alt();
+		$this->cat_crud_module=class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_galleries_alt')?new Mx_cms_galleries_alt():new Module_cms_galleries_alt();
 		$GLOBALS['MODULE_CMS_GALLERIES']=$this;
 
 		$this->alt_crud_module->add_text=new ocp_tempcode();
@@ -997,25 +997,29 @@ class Module_cms_galleries extends standard_crud_module
 		$cat=$myrow['cat'];
 		$validated=$myrow['validated'];
 
-		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
+		$delete_fields=mixed();
+		if (get_value('cleanup_files')!=='1')
 		{
-			if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
+			if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
 			{
-				$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
-				$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
-				$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-				$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
-			} else
-			{
-				$delete_fields=form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false);
-			}
-		} else $delete_fields=new ocp_tempcode();
+				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
+				{
+					$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
+					$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
+					$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
+					$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+				} else
+				{
+					$delete_fields=form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false);
+				}
+			} else $delete_fields=new ocp_tempcode();
+		}
 
 		$ret=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
 
 		$ret[2]=$delete_fields;
 		$ret[3]='';
-		$ret[4]=true;
+		$ret[4]=!is_null($delete_fields);
 		return $ret;
 	}
 
@@ -1151,11 +1155,11 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$delete_status=post_param('delete','leave');
+		$delete_status=post_param('delete','1');
 
 		$this->donext_type=post_param('cat');
 
-		delete_image($id,$delete_status=='2');
+		delete_image($id,($delete_status=='2') || (get_value('cleanup_files')==='1'));
 	}
 
 	/**
@@ -1469,25 +1473,29 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$cat=$myrow['cat'];
 		$validated=$myrow['validated'];
 
-		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
+		$delete_fields=mixed();
+		if (get_value('cleanup_files')!=='1')
 		{
-			if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
+			if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
 			{
-				$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
-				$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
-				$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-				$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
-			} else
-			{
-				$delete_fields=form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false);
-			}
-		} else $delete_fields=new ocp_tempcode();
+				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
+				{
+					$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
+					$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
+					$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
+					$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+				} else
+				{
+					$delete_fields=form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false);
+				}
+			} else $delete_fields=new ocp_tempcode();
+		}
 
 		$ret=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
 
 		$ret[2]=$delete_fields;
 		$ret[3]='';
-		$ret[4]=true;
+		$ret[4]=!is_null($delete_fields);
 		return $ret;
 	}
 
@@ -1639,11 +1647,11 @@ class Module_cms_galleries_alt extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$delete_status=post_param('delete','leave');
+		$delete_status=post_param('delete','1');
 
 		$this->donext_type=post_param('cat');
 
-		delete_video($id,$delete_status=='2');
+		delete_video($id,($delete_status=='2') || (get_value('cleanup_files')==='1'));
 	}
 
 	/**

@@ -95,7 +95,7 @@ class Module_cms_calendar extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=new Module_cms_calendar_cat();
+		$this->cat_crud_module=class_exists('Mx_cms_calendar_cat')?new Mx_cms_calendar_cat():new Module_cms_calendar_cat();
 
 		$this->javascript="
 			var form=document.getElementById('recurrence_pattern').form;

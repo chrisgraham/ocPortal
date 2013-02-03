@@ -75,7 +75,7 @@ class Module_cms_news extends standard_crud_module
 		set_helper_panel_pic('pagepics/news');
 		set_helper_panel_tutorial('tut_news');
 
-		$this->cat_crud_module=new Module_cms_news_cat();
+		$this->cat_crud_module=class_exists('Mx_cms_news_cat')?new Mx_cms_news_cat():new Module_cms_news_cat();
 		$this->posting_form_title=do_lang_tempcode('NEWS_ARTICLE');
 
 		require_code('news2');

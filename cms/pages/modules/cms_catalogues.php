@@ -75,8 +75,8 @@ class Module_cms_catalogues extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=new Module_cms_catalogues_cat();
-		$this->alt_crud_module=new Module_cms_catalogues_alt();
+		$this->cat_crud_module=class_exists('Mx_cms_catalogues_cat')?new Mx_cms_catalogues_cat():new Module_cms_catalogues_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_catalogues_alt')?new Mx_cms_catalogues_alt():new Module_cms_catalogues_alt();
 		$GLOBALS['MODULE_CMS_CATALOGUES']=$this;
 
 		if (get_value('disable_cat_cat_perms')==='1')

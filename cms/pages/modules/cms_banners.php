@@ -55,7 +55,7 @@ class Module_cms_banners extends standard_crud_module
 			attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform');
 		}
 
-		$this->cat_crud_module=new Module_cms_banners_cat();
+		$this->cat_crud_module=class_exists('Mx_cms_banners_cat')?new Mx_cms_banners_cat():new Module_cms_banners_cat();
 
 		require_code('banners');
 		require_code('banners2');

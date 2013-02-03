@@ -69,8 +69,8 @@ class Module_cms_downloads extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=new Module_cms_downloads_cat();
-		$this->alt_crud_module=new Module_cms_downloads_alt();
+		$this->cat_crud_module=class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_downloads_alt')?new Mx_cms_downloads_alt():new Module_cms_downloads_alt();
 
 		$GLOBALS['MODULE_CMS_DOWNLOADS']=$this;
 

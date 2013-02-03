@@ -61,9 +61,9 @@ class Module_cms_booking extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=new Module_cms_booking_blacks(); // Blacks
-		$this->alt_crud_module=new Module_cms_booking_supplements(); // Supplements
-		$this->bookings_crud_module=new Module_cms_booking_bookings(); // Bookings
+		$this->cat_crud_module=class_exists('Mx_cms_booking_blacks')?new Mx_cms_booking_blacks():new Module_cms_booking_blacks(); // Blacks
+		$this->alt_crud_module=class_exists('Mx_cms_booking_supplements')?new Mx_cms_booking_supplements():new Module_cms_booking_supplements(); // Supplements
+		$this->bookings_crud_module=class_exists('Mx_cms_booking_bookings')?new Mx_cms_booking_bookings():new Module_cms_booking_bookings(); // Bookings
 
 		require_code('booking2');
 

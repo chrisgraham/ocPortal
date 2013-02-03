@@ -155,6 +155,11 @@ class standard_crud_module
 			$this->second_stage_preview=true;
 		}
 
+		if (get_value('no_edit_under')==='1')
+		{
+			$this->special_edit_frontend=true;
+		}
+
 		// Load lang file if it exists
 		$this->module_type=get_class($this);
 		if (strtolower(substr($this->module_type,0,11))=='module_cms_') $this->module_type=substr($this->module_type,11);

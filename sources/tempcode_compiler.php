@@ -493,15 +493,18 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 									if (!is_string($eval)) $eval='';
 									$found=find_template_place($eval,'',$theme,'.tpl','templates');
 									$_theme=$found[0];
-									$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
-									if (!is_file($fullpath))
-										$fullpath=get_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
-									$filecontents=@file_get_contents($fullpath);
-									if ($filecontents===false) $filecontents='';
-									list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);
-									$current_level_data=array_merge($current_level_data,$_current_level_data);
-									$preprocessable_bits=array_merge($preprocessable_bits,$_preprocessable_bits);
-									break;
+									if (!is_null($found[1]))
+									{
+										$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
+										if (!is_file($fullpath))
+											$fullpath=get_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
+										$filecontents=@file_get_contents($fullpath);
+										if ($filecontents===false) $filecontents='';
+										list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);
+										$current_level_data=array_merge($current_level_data,$_current_level_data);
+										$preprocessable_bits=array_merge($preprocessable_bits,$_preprocessable_bits);
+										break;
+									}
 								}
 							default:
 								if ($directive_params!='') $directive_params.=',';
