@@ -4,9 +4,9 @@
 	{!DESCRIPTION_I_AGREE_RULES}
 </p>
 
-<div class="box box___ocf_join_step1_screen"><div class="box_inner">
+<div class="box box___ocf_join_step1_screen"><div class="box_inner"><div>
 	{RULES}
-</div></div>
+</div></div></div>
 
 <form title="{!PRIMARY_PAGE_FORM}" class="ocf_join_1" method="post" action="{URL*}">
 	<p>
