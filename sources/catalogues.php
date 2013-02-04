@@ -472,6 +472,9 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 	$cf_type=is_numeric($order_by)?$fields[intval($order_by)]['cf_type']:'';
 	$can_do_db_sorting=($order_by!='distance') && ($cf_type!='date') && ($cf_type!='just_date') && ($cf_type!='just_time');
 
+	require_code('hooks/systems/content_meta_aware/catalogue_entry');
+	$cma_ob=object_factory('Hook_content_meta_aware_catalogue_entry');
+
 	if (($do_sorting) && ($can_do_db_sorting))
 	{
 		$virtual_order_by=$order_by;
@@ -482,11 +485,11 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		}
 		elseif ($order_by=='rating')
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'compound_rating','',array());
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],$cma_ob->info(),$catalogue_name,$extra_join,$extra_select,'compound_rating','',array());
 			if (!is_null($bits)) list($virtual_order_by,)=$bits;
 		} elseif (is_numeric($order_by)) // Ah, so it's saying the nth field of this catalogue
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array());
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],$cma_ob->info(),$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array());
 			if (!is_null($bits))
 			{
 				list($new_key,)=$bits;
