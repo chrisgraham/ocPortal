@@ -537,8 +537,6 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 		return _fields_api_ocselect($db,$info,'_'.$info['cma_hook'],$extra_join,$extra_select,$filter_key,$filter_val,$db_fields);
 	}
 
-	$filter_key=filter_naughty_harsh($filter_key);
-
 	// Natural fields
 	$field_type='';
 	if (array_key_exists($filter_key,$db_fields))
