@@ -131,13 +131,6 @@ class Hook_paypal
 	 */
 	function handle_transaction()
 	{	
-		if ((file_exists(get_file_base().'/data_custom/ecommerce.log')) && (is_writable_wrap(get_file_base().'/data_custom/ecommerce.log')))
-		{
-			$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
-			fwrite($myfile,serialize($_POST).chr(10));
-			fclose($myfile);
-		}
-
 		// assign posted variables to local variables
 		$purchase_id=post_param_integer('custom','-1');
 
