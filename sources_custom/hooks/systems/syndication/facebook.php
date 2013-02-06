@@ -136,7 +136,7 @@ class Hook_Syndication_facebook
 		}
 		catch (Exception $e)
 		{
-			warn_exit($e->getMessage());
+			attach_message($e->getMessage(),'warn');
 		}
 
 		return true;
