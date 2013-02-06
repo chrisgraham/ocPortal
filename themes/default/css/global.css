@@ -3072,7 +3072,10 @@ ul.nl, .nl ul {
 }
 
 .menu_type__tree ul li a, .menu_type__popup ul li a, .menu_type__dropdown ul.nlevel li a { /* ul li added to ensure precedence over ".nl li" selector, whilst not forcing us to use up our only !important */
-	display: inline-block;
+	padding-{!en_left}: 14px;
+}
+.menu_type__tree ul li a, .menu_type__popup ul li a {
+	display: inline-block; /* This says that we want to encourage greedy space consumption rather than wrapping */
 	padding-{!en_left}: 14px;
 }
 
@@ -3154,6 +3157,10 @@ ul.nl, .nl ul {
 .menu_type__dropdown .nlevel li, .menu_type__dropdown .nlevel .menu_spacer {
 	background-color: {$GET,dropdown_menu_background};
 	font-weight: normal;
+
+	/* We do want wrapping for this, as menu labels could be longer than the available space between the start of the dropdown label and the edge of the fixed width */
+	max-width: 15em;
+	white-space: normal;
 }
 
 .menu_type__dropdown .nlevel li:hover {
