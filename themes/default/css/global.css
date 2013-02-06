@@ -844,6 +844,7 @@ footer .global_footer_left img:hover {/*, .menu_type__dropdown li:hover>img*/
 
 footer .global_footer_button_ref_point {
 	position: absolute;
+	font-size: 13px; /* Puts it back, as was set to zero elsewhere */
 }
 
 footer .global_footer_left #special_page_type {
