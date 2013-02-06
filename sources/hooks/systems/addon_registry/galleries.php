@@ -601,7 +601,7 @@ class Hook_addon_registry_galleries
 		$entries=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$map=array('TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'ADD_DATE_RAW'=>lorem_word(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_id());
+			$map=array('MEDIA_TYPE'=>'image','TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'ADD_DATE_RAW'=>lorem_word(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_id());
 			$entry=do_lorem_template('GALLERY_IMAGE',$map);
 			$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 		}
@@ -864,13 +864,13 @@ class Hook_addon_registry_galleries
 		$tags=do_lorem_template('TAGS',array('LINK_FULLSCOPE'=>lorem_word(),'TAG'=>lorem_word(),'TAGS'=>placeholder_array(),'TYPE'=>NULL));
 
 		$entry=new ocp_tempcode();
-		$map=array('TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'EDIT_DATE_RAW'=>placeholder_time(),'ADD_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number());
+		$map=array('MEDIA_TYPE'=>'image','TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'EDIT_DATE_RAW'=>placeholder_time(),'ADD_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number());
 		$entry=do_lorem_template('GALLERY_IMAGE',$map);
 		$entries=new ocp_tempcode();
 		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
 		$video_details=do_lorem_template('GALLERY_VIDEO_INFO',array('HEIGHT'=>placeholder_number(),'WIDTH'=>placeholder_number(),'LENGTH'=>placeholder_number()));
-		$map=array('TITLE'=>lorem_phrase(),'VIDEO_DETAILS'=>$video_details,'DESCRIPTION'=>lorem_phrase(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number(),'VIEW_URL'=>placeholder_url(),'SUBMITTER'=>placeholder_id(),'ID'=>placeholder_id(),'THUMB'=>placeholder_image());
+		$map=array('MEDIA_TYPE'=>'video','TITLE'=>lorem_phrase(),'VIDEO_DETAILS'=>$video_details,'DESCRIPTION'=>lorem_phrase(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number(),'VIEW_URL'=>placeholder_url(),'SUBMITTER'=>placeholder_id(),'ID'=>placeholder_id(),'THUMB'=>placeholder_image());
 		$entry=do_lorem_template('GALLERY_VIDEO',$map);
 		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 

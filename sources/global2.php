@@ -1906,6 +1906,7 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 
 			$data='';
 			$good_to_go=true;
+			$all_strict=true;
 			foreach ($resources as $resource)
 			{
 				if ($resource=='no_cache') continue;
@@ -1921,7 +1922,9 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 				{
 					if (is_file($merge_from))
 					{
-						$data.=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
+						$extra_data=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
+						$data.=$extra_data;
+						if (strpos($extra_data,'"use strict";')===false) $all_strict=false;
 					} else // race condition
 					{
 						$good_to_go=false;
@@ -1932,6 +1935,11 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 
 			if ($good_to_go)
 			{
+				if (!$all_strict)
+				{
+					$data=str_replace('"use strict";','',$data);
+				}
+
 				$myfile=@fopen($write_path,'wb') OR intelligent_write_error($write_path); // Intentionally 'wb' to stop line ending conversions on Windows
 				fwrite($myfile,$data);
 				fclose($myfile);

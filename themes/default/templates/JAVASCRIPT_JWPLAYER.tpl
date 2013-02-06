@@ -1,11 +1,11 @@
 {$,Parser hint: pure}
 {$,Parser hint: .innerHTML okay}
 
-jwplayer = function (a) {
+var jwplayer = function (a) {
 	return jwplayer.constructor(a)
 };
 jwplayer.constructor = function (a) {};
-$jw = jwplayer;
+var $jw = jwplayer;
 jwplayer.utils = function () {};
 jwplayer.utils.typeOf = function (b) {
 	var a = typeof b;
@@ -317,7 +317,7 @@ jwplayer.utils.selectors = function (a, c) {
 	return null
 };
 jwplayer.utils.selectors.getElementsByTagAndClass = function (d, g, f) {
-	elements = [];
+	var elements = [];
 	if (f === undefined) {
 		f = document
 	}
@@ -824,7 +824,7 @@ jwplayer.utils.strings.extension = function (a) {
 	}
 })(jwplayer);
 var _userPlayerReady = (typeof playerReady == "function") ? playerReady : undefined;
-playerReady = function (b) {
+var playerReady = function (b) {
 	var a = jwplayer.api.playerById(b.id);
 	if (a) {
 		a.playerReady(b)
@@ -1332,7 +1332,6 @@ playerReady = function (b) {
 					if (v.width !== C.width || v.height !== C.height) {
 						h(C.width, C.height)
 					}
-					delete C
 				}
 			}, 100)
 		}
@@ -1670,13 +1669,13 @@ playerReady = function (b) {
 			}
 		}
 	};
-	_css = a.html5.utils.css;
-	_hide = function (c) {
+	var _css = a.html5.utils.css;
+	var _hide = function (c) {
 		_css(c, {
 			display: "none"
 		})
 	};
-	_show = function (c) {
+	var _show = function (c) {
 		_css(c, {
 			display: "block"
 		})
@@ -2548,13 +2547,13 @@ playerReady = function (b) {
 	}
 })(jwplayer);
 (function (a) {
-	_css = a.html5.utils.css;
-	_hide = function (b) {
+	var _css = a.html5.utils.css;
+	var _hide = function (b) {
 		_css(b, {
 			display: "none"
 		})
 	};
-	_show = function (b) {
+	var _show = function (b) {
 		_css(b, {
 			display: "block"
 		})
@@ -2952,7 +2951,7 @@ playerReady = function (b) {
 		hide: true,
 		position: "bottom-left"
 	};
-	_css = a.html5.utils.css;
+	var _css = a.html5.utils.css;
 	a.html5.logo = function (g, h) {
 		var l = g;
 		var j;
@@ -3400,7 +3399,6 @@ playerReady = function (b) {
 			for (var O in U.levels) {
 				var N = U.levels[O];
 				if (a.html5.utils.isYouTube(N.file)) {
-					delete P;
 					k(N.file);
 					return
 				}

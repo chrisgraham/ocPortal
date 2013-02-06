@@ -99,7 +99,7 @@ class Block_main_gallery_embed
 
 		// Sorting
 		$sort=array_key_exists('sort',$map)?$map['sort']:'add_date DESC';
-		if (($sort!='fixed_random ASC') && ($sort!='average_rating DESC') && ($sort!='average_rating ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC')) $sort='add_date DESC';
+		if (($sort!='fixed_random ASC') && ($sort!='average_rating DESC') && ($sort!='average_rating ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='edit_date DESC') && ($sort!='edit_date ASC') && ($sort!='url DESC') && ($sort!='url ASC')) $sort='add_date DESC';
 		list($_sort,$_dir)=explode(' ',$sort,2);
 
 		// ocSelect support
@@ -138,7 +138,7 @@ class Block_main_gallery_embed
 			$rating_sort=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS compound_rating';
 		} elseif ($_sort=='fixed_random')
 		{
-			$rating_sort=',(MOD(id,'.date('d').')) AS fixed_random';
+			$rating_sort=',(MOD(r.id,'.date('d').')) AS fixed_random';
 		} else
 		{
 			$rating_sort='';
@@ -152,7 +152,7 @@ class Block_main_gallery_embed
 			$rating_sort=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=r.id) AS compound_rating';
 		} elseif ($_sort=='fixed_random')
 		{
-			$rating_sort=',(MOD(id,'.date('d').')) AS fixed_random';
+			$rating_sort=',(MOD(r.id,'.date('d').')) AS fixed_random';
 		} else
 		{
 			$rating_sort='';
@@ -195,6 +195,7 @@ class Block_main_gallery_embed
 							'TITLE'=>get_translated_text($row_image['title']),
 							'DESCRIPTION'=>get_translated_tempcode($row_image['description']),
 							'ID'=>strval($row_image['id']),
+							'MEDIA_TYPE'=>'image',
 							'FILE_SIZE'=>$file_size,
 							'SUBMITTER'=>strval($row_image['submitter']),
 							'FULL_URL'=>$full_url,
@@ -233,6 +234,7 @@ class Block_main_gallery_embed
 							'TITLE'=>get_translated_text($row_video['title']),
 							'DESCRIPTION'=>get_translated_tempcode($row_video['description']),
 							'ID'=>strval($row_video['id']),
+							'MEDIA_TYPE'=>'video',
 							'CAT'=>$cat,
 							'THUMB'=>$thumb,
 							'VIEW_URL'=>$view_url,
