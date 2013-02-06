@@ -1391,7 +1391,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		}
 
 		$set_name='thumbnail';
-		$required=(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0');
+		$required=(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0') && (find_theme_image('video_thumb',true)=='');
 		$set_title=do_lang_tempcode('THUMBNAIL');
 		$field_set=alternate_fields_set__start($set_name);
 
