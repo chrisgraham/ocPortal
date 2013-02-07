@@ -490,9 +490,6 @@ class Module_admin_version
 				'i_orig_filename'=>'URLPATH',
 				'i_save_url'=>'URLPATH'
 			));
-		
-			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
-			
 		}
 
 		if (($upgrade_from<11) && (!is_null($upgrade_from)))
@@ -611,6 +608,11 @@ class Module_admin_version
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_interlock');
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_in_panel');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<17))
+		{
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
