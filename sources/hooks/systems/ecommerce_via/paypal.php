@@ -176,7 +176,7 @@ class Hook_paypal
 			if (!(strcmp($res,'VERIFIED')==0))
 			{
 				if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
-				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post),strpos($res,'<html')!==false);
+				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post,true),strpos($res,'<html')!==false);
 			}
 		}
 
