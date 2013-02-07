@@ -635,20 +635,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($query!='') $query.=' UNION ';
 
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
-				{
-					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
-					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
-				} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
-				{
-					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
-					if (($where_clause_2!='') || ($where_clause_3!=''))
-					{
-						$query.=' WHERE '.$where_clause_2;
-						$query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
-					}
-				}
+				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
 			}
 		}
 		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
@@ -674,7 +663,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				}
 			}
 			$_count_query_main_search='SELECT COUNT(*) FROM '.$table_clause.$_query;
-		} else // This is inaccurate (does ot filter dupes from each +'d query) but much more efficient on MySQL
+		} else // This is inaccurate (does not filter dupes from each +'d query) but much more efficient on MySQL
 		{
 			foreach ($where_alternative_matches as $parts) // We "+" them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
 			{
@@ -682,20 +671,16 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($_query!='') $_query.='+';
 
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
+				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where==''))
 				{
 					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
 					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3).')';
-				} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
+				} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
 				{
-					$_query.='(SELECT COUNT(*) FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
-					if (($where_clause_2!='') || ($where_clause_3!=''))
-					{
-						$_query.=' WHERE '.$where_clause_2;
-						$_query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
-					}
-					$_query.=')';
+					$_query.='(SELECT COUNT(*) FROM (';
+					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
+					$_query.=' LIMIT 10000) counter)';
 				}
 			}
 			$_count_query_main_search='SELECT ('.$_query.')';
