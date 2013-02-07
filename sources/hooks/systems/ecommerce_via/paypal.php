@@ -163,6 +163,7 @@ class Hook_paypal
 		{
 			require_code('files');
 			$pure_post=isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
+			if (get_magic_quotes_gpc()) $pure_post=array_map('stripslashes',$pure_post);
 			$x=0;
 			$res=mixed();
 			do
