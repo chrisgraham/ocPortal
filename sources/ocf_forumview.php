@@ -797,7 +797,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	// Find topics
 	$extra='';
 	if ((!has_specific_permission(get_member(),'see_unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
-	if (is_null($forum_info[0]['f_parent_forum']))
+	if ((is_null($forum_info[0]['f_parent_forum'])) || ($GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)',array('t_cascading'=>1))==0))
 	{
 		$where=$extra.' (t_forum_id='.strval((integer)$forum_id).')';
 	} else

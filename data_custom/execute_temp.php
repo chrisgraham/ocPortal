@@ -55,59 +55,16 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	@header('Content-type: text/plain');
+	$GLOBALS['FORUM_DB']->create_index('f_topics','unread_forums',array('t_forum_id','t_cache_last_time'));
+	$GLOBALS['SITE_DB']->create_index('seo_meta','ftjoin_dmeta_keywords',array('meta_keywords'));
+	$GLOBALS['SITE_DB']->create_index('seo_meta','ftjoin_dmeta_description',array('meta_description'));
+	$GLOBALS['SITE_DB']->create_index('images','ftjoin_dtitle',array('title'));
+	$GLOBALS['SITE_DB']->create_index('videos','ftjoin_dtitle',array('title'));
+	$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
 
-	$dodgy_addons=array();
-	$hooks=find_all_hooks('systems','addon_registry');
-	$hook_keys=array_keys($hooks);
-	$hook_files=array();
-	foreach ($hook_keys as $hook)
+	$fields=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields WHERE cf_type LIKE \'%trans%\' OR cf_type LIKE \'%posting_field%\'');
+	foreach ($fields as $field)
 	{
-		if (substr($hook,0,4)=='core') continue;
-
-		$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
-		if (!file_exists($path))
-		{
-			$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
-		}
-		$hook_files[$hook]=file_get_contents($path);
-	}
-	ksort($hook_files);
-	foreach ($hook_files as $addon_name=>$hook_file)
-	{
-		$matches=array();
-		if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
-		{
-			if (!defined('HIPHOP_PHP'))
-			{
-				$hooks_files=eval($matches[1]);
-			} else
-			{
-				require_code('hooks/systems/addon_registry/'.$addon_name);
-				$hook=object_factory('Hook_addon_registry_'.$addon_name);
-				$hooks_files=$hook->get_file_list();
-			}
-			$dodgy_addons[$addon_name]=false;
-			foreach ($hooks_files as $file)
-			{
-				if (strpos($file,'/')===false)
-				{
-					if (substr($file,-4)=='.tpl') $file='themes/default/templates/'.$file;
-					elseif (substr($file,-4)=='.css') $file='themes/default/css/'.$file;
-				}
-				if (!file_exists(get_file_base().'/'.$file))
-				{
-					$dodgy_addons[$addon_name]=true;
-				}
-			}
-
-			if ($dodgy_addons[$addon_name])
-			{
-				foreach ($hooks_files as $file)
-				{
-					echo $file."\n";
-				}
-			}
-		}
+		$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($field['id']),array('field_'.strval($field['id'])),'mf_member_id');
 	}
 }
