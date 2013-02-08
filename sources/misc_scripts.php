@@ -30,11 +30,37 @@ function gd_text_script()
 
 	$font_size=array_key_exists('size',$_GET)?intval($_GET['size']):8;
 
-	$font=get_param('font',get_file_base().'/data/fonts/'.filter_naughty(get_param('font','Veranda')).'.ttf');
+	$font=get_param('font',filter_naughty(get_param('font','Veranda')).'.ttf');
+	if (strpos($font,'/')===false) $font=get_file_base().'/data/fonts/'.$font;
+	if (substr($font,-4)!='.ttf') $font.='.ttf';
 
 	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')===false) || (strlen($text)==0))
 	{
-		$pfont=4;
+		switch ($font_size)
+		{
+			case 1:
+			case 2:
+				$pfont=1;
+				break;
+
+			case 3:
+			case 4:
+				$pfont=2;
+				break;
+
+			case 5:
+			case 6:
+				$pfont=3;
+				break;
+
+			case 7:
+			case 8:
+				$pfont=4;
+				break;
+
+			default:
+				$pfont=5;
+		}
 		$height=intval(imagefontwidth($pfont)*strlen($text)*1.05);
 		$width=imagefontheight($pfont);
 		$baseline_offset=0;
