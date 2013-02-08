@@ -215,6 +215,7 @@ class Hook_addon_registry_core_notifications
 		);
 		$out=do_lorem_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN', array(
 			'TITLE'=>lorem_title(),
+			'_TITLE'=>lorem_phrase(),
 			'COLOR'=>'FFFFFF',
 			'ACTION_URL'=>placeholder_url(),
 			'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,

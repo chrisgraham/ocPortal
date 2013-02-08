@@ -1,7 +1,7 @@
 {TITLE}
 
 <p>
-	{!DECIDE_PER_CATEGORY_NOTIFICATIONS}
+	{!DECIDE_PER_CATEGORY_NOTIFICATIONS,{_TITLE*}}
 </p>
 
 <form title="{!NOTIFICATIONS}" method="post" action="{ACTION_URL*}">
@@ -20,7 +20,7 @@
 						<th></th>
 						{+START,LOOP,NOTIFICATION_TYPES_TITLES}
 							<th>
-								<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
+								<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="" alt="{LABEL*}" />
 							</th>
 						{+END}
 					</tr>

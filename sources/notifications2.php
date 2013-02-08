@@ -271,6 +271,20 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 		}
 	} else
 	{
+		// Put in content title to message
+		$_tree=$ob->create_category_tree($notification_code,$notification_category);
+		foreach ($_tree as $tree_pos)
+		{
+			if ($tree_pos['id']==$notification_category)
+			{
+				$disable_message=protect_from_escaping(str_replace('{1}',escape_html($tree_pos['title']),$disable_message->evaluate()));
+				$enable_message=protect_from_escaping(str_replace('{1}',escape_html($tree_pos['title']),$enable_message->evaluate()));
+				break;
+			}
+		}
+		$disable_message=protect_from_escaping(str_replace('{1}',do_lang('UNKNOWN'),$disable_message->evaluate()));
+		$enable_message=protect_from_escaping(str_replace('{1}',do_lang('UNKNOWN'),$enable_message->evaluate()));
+
 		if (notifications_enabled($notification_code,$notification_category))
 		{
 			attach_message($disable_message,'inform');
@@ -307,6 +321,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	return do_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN',array(
 		'_GUID'=>'21337e54cc87d82269bec89e70690543',
 		'TITLE'=>$title,
+		'_TITLE'=>$info_details[$notification_code][1],
 		'COLOR'=>$color,
 		'ACTION_URL'=>get_self_url(false,false,array('id'=>NULL)),
 		'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
