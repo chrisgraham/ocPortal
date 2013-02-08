@@ -37,12 +37,11 @@ function get_week_number_for($timestamp,$no_year=false)
 {
 	$format=$no_year?'W':'o-W';
 	$w=intval(date('w',$timestamp));
-	if ((get_option('ssw')=='0') || (($w!=0) && ($w!=6)))
+	if (get_option('ssw')=='0')
 	{
 		return date($format,$timestamp);
 	}
-	if ($w==6) return date($format,$timestamp+60*60*24); // For SSW: If anything, the Saturday will get pushed forward because Sunday always exists in the first week now
-	return date($format,$timestamp-60*60*24); // For SSW: If anything, the Saturday will get pushed backwards because Sunday always exists in the first week now
+	return date($format,$timestamp-60*60*24); // For SSW: week starts one day earlier, so first day of week actually pushes back onto end of previous one
 }
 
 /**
