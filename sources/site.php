@@ -752,6 +752,26 @@ function do_site()
 		closed_site();
 	}
 
+	// Warning about whether the Setup Wizard still needs running
+	$zone=get_zone_name();
+	if (($zone=='adminzone') || ($zone=='cms'))
+	{
+		if ((get_param_integer('cancel_sw_warn',0)==1) || (!addon_installed('setupwizard')))
+		{
+			set_value('setup_wizard_completed','1');
+		} else
+		{
+			$_done_sw_once=get_value('setup_wizard_completed');
+			$done_sw_once=!is_null($_done_sw_once);
+			if ((!$done_sw_once) && (get_param('page','')!='admin_setupwizard') && (has_actual_page_access(get_member(),'admin_setupwizard')))
+			{
+				$setup_wizard_url=build_url(array('page'=>'admin_setupwizard'),get_module_zone('admin_setupwizard'));
+				$cancel_sw_url=get_self_url(false,false,array('cancel_sw_warn'=>1));
+				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setup_wizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'notice');
+			}
+		}
+	}
+
 	// Load up our frames into strings. Note that the header and the footer are fixed already.
 	$middle=request_page(get_page_name(),true);
 	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things

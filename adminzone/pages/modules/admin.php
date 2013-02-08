@@ -73,22 +73,6 @@ class Module_admin
 			if ($type=='misc') return do_next_manager_admin_simplified();
 		}
 
-		// Warning about whether the Setup Wizard still needs running
-		if ((get_param_integer('cancel_sw_warn',0)==1) || (!addon_installed('setupwizard')))
-		{
-			set_value('setup_wizard_completed','1');
-		} else
-		{
-			$_done_sw_once=get_value('setup_wizard_completed');
-			$done_sw_once=!is_null($_done_sw_once);
-			if ((!$done_sw_once) && (get_param('page','')!='admin_setupwizard') && (has_actual_page_access(get_member(),'admin_setupwizard')))
-			{
-				$setup_wizard_url=build_url(array('page'=>'admin_setupwizard'),get_module_zone('admin_setupwizard'));
-				$cancel_sw_url=get_self_url(false,false,array('cancel_sw_warn'=>1));
-				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setup_wizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'notice');
-			}
-		}
-
 		switch ($type)
 		{
 			case 'misc':
