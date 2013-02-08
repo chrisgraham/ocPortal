@@ -80,8 +80,12 @@ function handle_facebook_connection_login($current_logged_in_member)
 	{
 		return $current_logged_in_member;
 	}
+	if (!is_array($details))
+	{
+		return $current_logged_in_member;
+	}
 	$details2=$FACEBOOK_CONNECT->api('/me',array('fields'=>'picture','type'=>'normal'));
-	if ((!is_array($details)) || (!is_array($details2)))
+	if (!is_array($details2)) // NB: This can happen even if there is a Facebook session, if the session ID in the cookie has expired. In this case Guest will be the user until the frontend does a refresh
 	{
 		return $current_logged_in_member;
 	}

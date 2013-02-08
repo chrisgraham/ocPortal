@@ -4,6 +4,8 @@ class Hook_symbol_FB_CONNECT_UID
 {
 	function run($param)
 	{
+		if ((is_guest()) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) return ''; // Theoretically unneeded, but if FB cookie is invalid then we need to assume getUser may be wrong (if Guest, and not SU, it implies we found it was invalid in facebook_connect.php)
+
 		$value='';
 		if (get_forum_type()=='ocf')
 		{

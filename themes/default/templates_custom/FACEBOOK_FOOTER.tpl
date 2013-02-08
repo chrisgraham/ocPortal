@@ -38,7 +38,7 @@
 						{+END}
 					{+END}
 
-					{+START,IF_NON_EMPTY,{$FB_CONNECT_UID}}
+					{+START,IF_NON_EMPTY,{$FB_CONNECT_UID}}{$,No point this code being in the request for non-FB users}
 						{$,Map Facebook logout action to logout links}
 						var forms=document.getElementsByTagName('form');
 						for (var i=0;i<forms.length;i++)
