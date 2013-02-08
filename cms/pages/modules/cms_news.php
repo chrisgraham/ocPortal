@@ -936,9 +936,9 @@ class Module_cms_news_cat extends standard_crud_module
 			$set_name='rep_image';
 			$required=true;
 			$set_title=do_lang_tempcode('IMAGE');
-			$field_set=alternate_fields_set__start($set_name);
+			$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
 
-			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$img,NULL,false);
 			$field_set->attach($image_chooser_field);
@@ -948,6 +948,8 @@ class Module_cms_news_cat extends standard_crud_module
 			handle_max_file_size($hidden,'image');
 		} else
 		{
+			if (count($ids)==0) warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN','newscats'));
+
 			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$img,NULL,true);
 			$fields->attach($image_chooser_field);
 		}

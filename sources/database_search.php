@@ -485,17 +485,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				$extra_join.=' '.$translate_join_type.' '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 			}
-			if (!db_has_subqueries($db->connection_read) || true /* Forced this old code to run because the "optimisation" does not work for larger result sets */)
-			{
-				$_keywords_query=$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
-				$_keywords_query.=' WHERE '.$keywords_where;
-				$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
-			} else
-			{
-				$_keywords_query=/*str_replace(' LEFT JOIN ',' JOIN ',*/$table_clause/*)*/.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
-				$_keywords_query.=' WHERE '.$keywords_where;
-				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
-			}
+			$_keywords_query=$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+			$_keywords_query.=' WHERE '.$keywords_where;
+			$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
 			$keywords_query='SELECT '.$select.' FROM '.$_keywords_query;
 			$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
 
@@ -621,20 +613,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 			if ($query!='') $query.=' UNION ';
 
-			if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
-			{
-				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+			$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
-				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
-			} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
-			{
-				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
-				if (($where_clause_2!='') || ($where_clause_3!=''))
-				{
-					$query.=' WHERE '.$where_clause_2;
-					$query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
-				}
-			}
+			$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
 		}
 		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
 		$_query='';
@@ -644,19 +625,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				list($where_clause_2,$where_clause_3,,$_table_clause,$tid)=$parts;
 
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
-				{
-					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
-					$_query.=(($where_clause_3!='')?((($_query=='')?' WHERE ':' OR ').$where_clause_3):'');
-				} else
-				{
-					if (($where_clause_2!='') || ($where_clause_3!=''))
-					{
-						$_query.=(($_query=='')?' WHERE ':' OR ').$where_clause_2;
-						$_query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
-					}
-				}
+				$_query.=(($where_clause_3!='')?((($_query=='')?' WHERE ':' OR ').$where_clause_3):'');
 			}
 			$_count_query_main_search='SELECT COUNT(*) FROM '.$table_clause.$_query;
 		} else // This is inaccurate (does not filter dupes from each +'d query) but much more efficient on MySQL
@@ -667,20 +638,16 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($_query!='') $_query.='+';
 
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
+				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where==''))
 				{
 					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
 					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3).')';
-				} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
+				} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
 				{
-					$_query.='(SELECT COUNT(*) FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
-					if (($where_clause_2!='') || ($where_clause_3!=''))
-					{
-						$_query.=' WHERE '.$where_clause_2;
-						$_query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
-					}
-					$_query.=')';
+					$_query.='(SELECT COUNT(*) FROM (';
+					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
+					$_query.=' LIMIT 10000) counter)';
 				}
 			}
 			$_count_query_main_search='SELECT ('.$_query.')';

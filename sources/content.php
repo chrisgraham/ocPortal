@@ -70,6 +70,7 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 		}
 	}
 
+	if ($found_type_id===NULL) $found_type_id='';
 	return $found_type_id;
 }
 

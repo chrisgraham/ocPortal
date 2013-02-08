@@ -119,6 +119,10 @@ function pop_up_menu(id,place,menu,event)
 	}
 	e.style.position='absolute';
 	var full_width=(window.scrollX==0)?get_window_width():get_window_scroll_width();
+	{+START,IF,{$CONFIG_OPTION,fixed_width}}
+		var main_website_inner=document.getElementById('main_website_inner');
+		if (main_website_inner) full_width=find_width(main_website_inner);
+	{+END}
 	if (l+find_width(e)+10>full_width) l=full_width-find_width(e)-10;
 	e.style.left=l+'px';
 	window.setTimeout(function() { // Force it after a refresh too, when real width is known

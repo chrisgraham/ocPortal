@@ -430,7 +430,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$out=array();
 	foreach ($rows as $myrow)
 	{
-		if ((is_null($myrow['p_intended_solely_for'])) || ($myrow['p_intended_solely_for']==get_member()) || (($myrow['p_intended_solely_for']==$this_ref->get_guest_id()) && ($this_ref->is_staff(get_member()))))
+		if ((is_null($myrow['p_intended_solely_for'])) || (($myrow['p_poster']==get_member()) && (!is_guest($myrow['p_poster']))) || ($myrow['p_intended_solely_for']==get_member()) || (($myrow['p_intended_solely_for']==$this_ref->get_guest_id()) && ($this_ref->is_staff(get_member()))))
 		{
 			$temp=$myrow; // Takes all OCF properties
 

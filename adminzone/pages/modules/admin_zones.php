@@ -506,14 +506,16 @@ class Module_admin_zones
 			{
 				$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'8c4c1267060970f8b89d1068d03280a7','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
 
+				require_code('themes2');
+				$ids=get_all_image_ids_type('logo',false,NULL,$theme);
+
 				$set_name='logo_choose_'.$theme;
 				$required=true;
 				$set_title=do_lang_tempcode('LOGO');
-				$field_set=alternate_fields_set__start($set_name);
+				$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
 
-				$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','logo_upload_'.$theme,false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-				require_code('themes2');
-				$ids=get_all_image_ids_type('logo',false,NULL,$theme);
+				$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','logo_upload_'.$theme,$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
 				$current_logo='logo/'.$zone.'-logo';
 				if (!in_array($current_logo,$ids)) $current_logo='logo/-logo';
 

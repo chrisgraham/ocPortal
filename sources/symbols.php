@@ -778,7 +778,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$messages_bottom=new ocp_tempcode();
 				$site_closed=get_option('site_closed'); // May have been JUST changed in page load - think Setup Wizard
 				$page=get_page_name();
-				if (($site_closed=='1') && ($page!='login') && ($page!='join') && (get_param_integer('wide_high',0)==0))
+				if (($site_closed=='1') && ($page!='login') && ($page!='join') && (get_param_integer('wide_high',0)==0) && (($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_privilege(get_member(),'access_closed_site'))))
 				{
 					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'03a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode(has_privilege(get_member(),'access_closed_site')?'SITE_SPECIAL_ACCESS':'SITE_SPECIAL_ACCESS_SU'))));
 				}

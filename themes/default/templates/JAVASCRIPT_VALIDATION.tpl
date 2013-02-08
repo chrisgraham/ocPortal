@@ -194,7 +194,7 @@ function do_form_submit(form,event)
 	if (!form.getAttribute('target')) form.setAttribute('target','_top');
 
 	/* Remove any stuff that is only in the form for previews if doing a GET request */
-	if (form.getAttribute('method').toLowerCase()=='get')
+	if (form.method.toLowerCase()=='get')
 	{
 		var i=0,name,elements=[];
 		for (i=0;i<form.elements.length;i++)
@@ -546,7 +546,7 @@ function standard_alternate_fields(field_names,something_required,second_run)
 	for (var i=0;i<field_names.length;i++)
 	{
 		var field=fields[i];
-		if (typeof field.alternating=='undefined') // ... but only if not already set
+		if ((field) && (typeof field.alternating=='undefined')) // ... but only if not already set
 		{
 			var self_function=function (e) { standard_alternate_fields(field_names,something_required,true); } ; // We'll re-call ourself on change
 			_standard_alternate_field_create_listeners(field,self_function);
@@ -557,7 +557,7 @@ function standard_alternate_fields(field_names,something_required,second_run)
 	for (var i=0;i<field_names.length;i++)
 	{
 		var field=fields[i];
-		if (_standard_alternate_field_is_filled_in(field,second_run,false))
+		if ((field) && (_standard_alternate_field_is_filled_in(field,second_run,false)))
 			return _standard_alternate_field_update_editability(field,fields,something_required);
 	}
 
@@ -565,7 +565,7 @@ function standard_alternate_fields(field_names,something_required,second_run)
 	for (var i=0;i<field_names.length;i++)
 	{
 		var field=fields[i];
-		if (_standard_alternate_field_is_filled_in(field,second_run,true))
+		if ((field) && (_standard_alternate_field_is_filled_in(field,second_run,true)))
 			return _standard_alternate_field_update_editability(field,fields,something_required);
 	}
 }
@@ -657,7 +657,8 @@ function _standard_alternate_field_update_editability(chosen,choices,something_r
 {
 	for (var i=0;i<choices.length;i++)
 	{
-		__standard_alternate_field_update_editability(choices[i],chosen,choices[i]!=chosen,choices[i]==chosen,something_required);
+		if (choices[i])
+			__standard_alternate_field_update_editability(choices[i],chosen,choices[i]!=chosen,choices[i]==chosen,something_required);
 	}
 }
 // NB: is_chosen may only be null if is_locked is false

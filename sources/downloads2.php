@@ -691,6 +691,7 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 			$download_gallery_root=get_option('download_gallery_root');
 			if (is_null($download_gallery_root)) $download_gallery_root='root';
 			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
+			set_download_gallery_permissions($id,$submitter);
 		}
 	}
 
@@ -711,6 +712,42 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 	log_it('ADD_DOWNLOAD',strval($id),$name);
 
 	return $id;
+}
+
+/**
+ * Set the permissions for a download gallery.
+ *
+ * @param  ?AUTO_LINK		The ID of the download (NULL: lookup from download)
+ * @param  ?MEMBER			The submitter (NULL: work out automatically)
+ */
+function set_download_gallery_permissions($id,$submitter=NULL)
+{
+	if (is_null($submitter)) $submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
+
+	$download_gallery_root=get_option('download_gallery_root');
+	if (is_null($download_gallery_root)) $download_gallery_root='root';
+
+	// Copy through requisite permissions
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
+	$perms=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name'=>'galleries','category_name'=>$download_gallery_root));
+	foreach ($perms as $perm)
+	{
+		$perm['category_name']='download_'.strval($id);
+		$GLOBALS['SITE_DB']->query_insert('group_category_access',$perm);
+	}
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
+	$perms=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>'galleries','category_name'=>$download_gallery_root));
+	foreach ($perms as $perm)
+	{
+		$perm['category_name']='download_'.strval($id);
+		$GLOBALS['SITE_DB']->query_insert('group_privileges',$perm);
+	}
+	// If they were able to submit the download, they should be able to submit extra images
+	$GLOBALS['SITE_DB']->query_delete('member_privileges',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
+	foreach (array('submit_midrange_content') as $privilege)
+	{
+		$GLOBALS['SITE_DB']->query_insert('member_privileges',array('active_until'=>2147483647/*FUDGEFUDGE*/,'member_id'=>$submitter,'privilege'=>$privilege,'the_page'=>'','module_the_name'=>'galleries','category_name'=>'download_'.strval($id),'the_value'=>'1'));
+	}
 }
 
 /**

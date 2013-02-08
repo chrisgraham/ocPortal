@@ -2044,16 +2044,17 @@ function read_multi_code($param)
  * Turn an array into a humanely readable string.
  *
  * @param  array			Array to convert
+ * @param  boolean		Whether PHP magic-quotes have already been cleaned out for the array
  * @return string			A humanely readable version of the array.
  */
-function flatten_slashed_array($array)
+function flatten_slashed_array($array,$already_stripped=false)
 {
 	$ret='';
 	foreach ($array as $key=>$val)
 	{
 		if (is_array($val)) $val=flatten_slashed_array($val);
 
-		if (get_magic_quotes_gpc()) $val=stripslashes($val);
+		if (!$already_stripped && get_magic_quotes_gpc()) $val=stripslashes($val);
 
 		$ret.='<param>'.(is_integer($key)?strval($key):$key).'='.$val.'</param>'."\n"; // $key may be integer, due to recursion line for list fields, above
 	}

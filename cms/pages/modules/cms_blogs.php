@@ -30,6 +30,7 @@ class Module_cms_blogs extends standard_crud_module
 	var $code_require='news';
 	var $permissions_require='high';
 	var $permissions_cat_require='news';
+	var $permissions_cat_name='main_news_category';
 	var $user_facing=true;
 	var $seo_type='news';
 	var $award_type='news';
@@ -386,7 +387,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		if (!is_null($main_news_category))
 		{
-			$owner=$GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
+			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
 			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),NULL,'cms_news');
 		}
 
@@ -467,7 +468,7 @@ class Module_cms_blogs extends standard_crud_module
 			$url=STRING_MAGIC_NULL;
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
+		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // if_there in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),NULL,'cms_news');
 
 		$schedule=get_input_date('schedule');

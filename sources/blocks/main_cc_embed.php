@@ -72,12 +72,12 @@ class Block_main_cc_embed
 		require_css('catalogues');
 
 		// ocFilter
-		$filter=NULL;
+		$filter=mixed();
 		if ((array_key_exists('select',$map)) && (!array_key_exists('filter',$map))) $map['filter']=$map['select']; // LEGACY
 		if ((!is_null($map)) && (array_key_exists('filter',$map)) && ($map['filter']!=''))
 		{
 			require_code('ocfiltering');
-			$filter=ocfilter_to_sqlfragment($map['filter'],'e.id','catalogue_categories','cc_parent_id','cc_id','id');
+			$filter=ocfilter_to_sqlfragment($map['filter'],'r.id','catalogue_categories','cc_parent_id','cc_id','id');
 		}
 
 		// Pick up details about category

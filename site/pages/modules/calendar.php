@@ -745,7 +745,7 @@ class Module_calendar
 				}
 			}
 
-			$hours->attach(do_template('CALENDAR_DAY_HOUR',array('_GUID'=>'d967ce3f793942f78104c53b105f9f74','HOUR'=>$hour,'STREAMS'=>$_streams)));
+			$hours->attach(do_template('CALENDAR_DAY_HOUR',array('_GUID'=>'d967ce3f793942f78104c53b105f9f74','_HOUR'=>strval($i),'HOUR'=>$hour,'STREAMS'=>$_streams)));
 		}
 
 		return do_template('CALENDAR_DAY',array('_GUID'=>'60e102b38025c1b1618ac36070564065','HOURS'=>$hours,'PERIOD_START'=>strval($period_start),'PERIOD_END'=>strval($period_end)));
@@ -778,7 +778,7 @@ class Module_calendar
 			$day_remap=array('Mon'=>0,'Tue'=>1,'Wed'=>2,'Thu'=>3,'Fri'=>4,'Sat'=>5,'Sun'=>6);
 		} else
 		{
-			$day_remap=array('Sun'=>6,'Mon'=>0,'Tue'=>1,'Wed'=>2,'Thu'=>3,'Fri'=>4,'Sat'=>5);
+			$day_remap=array('Sun'=>0,'Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6);
 		}
 
 		// We start with our 24x7 stream array, assuming all is free time
@@ -802,7 +802,8 @@ class Module_calendar
 				$continuation=$i;
 
 				// Happenings in a single day
-				for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
+				$cnt=count($happenings);
+				for ($hap_i=0;$hap_i<$cnt;$hap_i++)
 				{
 					$happening=$happenings[$hap_i];
 					list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
@@ -919,7 +920,7 @@ class Module_calendar
 				}
 			}
 
-			$hours->attach(do_template('CALENDAR_WEEK_HOUR',array('_GUID'=>'a57d0d6a683d30fc0a48168b43299607','HOUR'=>$hour,'DAYS'=>$days)));
+			$hours->attach(do_template('CALENDAR_WEEK_HOUR',array('_GUID'=>'a57d0d6a683d30fc0a48168b43299607','_HOUR'=>strval($i),'HOUR'=>$hour,'DAYS'=>$days)));
 		}
 
 		$offset=0;
@@ -1059,7 +1060,8 @@ class Module_calendar
 			$class='';
 			$worst_priority=6;
 
-			for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
+			$cnt=count($happenings);
+			for ($hap_i=0;$hap_i<$cnt;$hap_i++)
 			{
 				$happening=$happenings[$hap_i];
 

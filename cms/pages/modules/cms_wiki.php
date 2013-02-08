@@ -528,6 +528,9 @@ class Module_cms_wiki
 
 						$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'wiki_page','category_name'=>strval($child_id),'group_id'=>$group_id));
 					}
+
+					require_code('notifications2');
+					copy_notifications_to_new_child('wiki',strval($id),strval($child_id));
 				}
 
 				$GLOBALS['SITE_DB']->query_delete('wiki_children',array('parent_id'=>$id,'child_id'=>$child_id),'',1); // Just in case it was repeated

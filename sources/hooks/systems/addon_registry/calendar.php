@@ -446,6 +446,7 @@ class Hook_addon_registry_calendar
 					}
 
 					$hours->attach(do_lorem_template('CALENDAR_DAY_HOUR', array(
+						'_HOUR'=>placeholder_number(),
 						'HOUR'=>lorem_word(),
 						'STREAMS'=>$_streams
 					)));
@@ -494,6 +495,7 @@ class Hook_addon_registry_calendar
 					}
 
 					$hours->attach(do_lorem_template('CALENDAR_WEEK_HOUR', array(
+						'_HOUR'=>placeholder_number(),
 						'HOUR'=>lorem_word(),
 						'DAYS'=>$days
 					)));

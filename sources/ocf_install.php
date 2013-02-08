@@ -730,6 +730,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_topics','topic_order_2',array('t_forum_id','t_cascading','t_pinned','t_sunk','t_cache_last_time')); // Total index for forumview, including ordering. Doesn't work on current MySQL.
 		$GLOBALS['FORUM_DB']->create_index('f_topics','topic_order_3',array('t_forum_id','t_cascading','t_pinned','t_cache_last_time')); // Total index for forumview, including ordering. Works if disable_sunk is turned on.
 		$GLOBALS['FORUM_DB']->create_index('f_topics','ownedtopics',array('t_cache_first_member_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_topics','unread_forums',array('t_forum_id','t_cache_last_time'));
 
 		// Welcome topic
 		$topic_id=ocf_make_topic($staff_forum_id,'','',1,1,0,0,0,NULL,NULL,false);

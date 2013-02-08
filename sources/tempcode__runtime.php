@@ -563,7 +563,7 @@ function handle_symbol_preprocessing($bit,&$children)
 		case 'INCLUDE':
 			if ($GLOBALS['RECORD_TEMPLATES_USED'])
 			{
-				$GLOBALS['RECORDED_TEMPLATES_USED'][]=$codename;
+				$GLOBALS['RECORDED_TEMPLATES_USED'][]=$param[0]->evaluate();
 			}
 			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 			{

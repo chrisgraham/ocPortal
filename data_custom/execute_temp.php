@@ -53,6 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('xhtml');
-	echo xhtmlise_html('<img alt="Minecraft Server Delirious World" src="http://minecraft-server-list.com/server/logo/112260.png" /="/" />',true);
 }

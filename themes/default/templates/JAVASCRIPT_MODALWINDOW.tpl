@@ -113,7 +113,7 @@ function fauxmodal_confirm(question,callback,title)
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var my_confirm={
 			type: 'confirm',
-			text: escape_html(question),
+			text: escape_html(question).replace(/\n/g,'<br />'),
 			yes_button: '{!YES;^}',
 			no_button: '{!NO;^}',
 			title: title,
@@ -142,7 +142,7 @@ function fauxmodal_alert(notice,callback,title)
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var my_alert={
 			type: 'alert',
-			text: escape_html(notice),
+			text: escape_html(notice).replace(/\n/g,'<br />'),
 			yes_button: '{!INPUTSYSTEM_OK;^}',
 			width: '600',
 			yes: callback,
@@ -163,7 +163,7 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var my_prompt={
 			type: 'prompt',
-			text: escape_html(question),
+			text: escape_html(question).replace(/\n/g,'<br />'),
 			yes_button: '{!INPUTSYSTEM_OK;^}',
 			cancel_button: '{!INPUTSYSTEM_CANCEL;^}',
 			defaultValue: (this.defaultValue===null)?'':this.defaultValue,

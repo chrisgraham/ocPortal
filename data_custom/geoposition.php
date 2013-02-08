@@ -69,7 +69,7 @@ if (!is_null($lstring)) // Forward geopositioning (textlocation to full details)
 		if (isset($_COOKIE['google_bias'])) $url.='&region='.urlencode($_COOKIE['google_bias']);
 		$result=http_download_file($url);
 		$matches=array();
-		if (preg_match('#<formatted_address>([^<>]*)</formatted_address>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>#s',$result,$matches)!=0)
+		if (preg_match('#<formatted_address>([^<>]*)</formatted_address>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>#Us',$result,$matches)!=0)
 		{
 			echo '[';
 

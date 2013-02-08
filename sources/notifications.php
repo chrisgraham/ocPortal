@@ -285,9 +285,12 @@ function _notification_setting_available($setting,$member_id=NULL)
 				{
 					require_code('sms');
 					$cpf_values=$GLOBALS['FORUM_DRIVER']->get_custom_fields($member_id);
-					if (array_key_exists('mobile_phone_number',$cpf_values))
+					if (!is_null($cpf_values))
 					{
-						$for_member=(cleanup_mobile_number($cpf_values['mobile_phone_number'])!='');
+						if (array_key_exists('mobile_phone_number',$cpf_values))
+						{
+							$for_member=(cleanup_mobile_number($cpf_values['mobile_phone_number'])!='');
+						}
 					}
 				}
 			}

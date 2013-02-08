@@ -563,13 +563,16 @@ function erase_block_cache()
  */
 function erase_comcode_cache()
 {
+	static $done_once=false; // Useful to stop it running multiple times in admin_cleanup module, as this code takes time
+	if ($done_once) return;
 	if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
 	{
-		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE text_parsed>\'\''/*this where is so indexing helps*/);
+		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
 	} else
 	{
-		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this where is so indexing helps*/);
+		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
 	}
+	$done_once=true;
 }
 
 /**

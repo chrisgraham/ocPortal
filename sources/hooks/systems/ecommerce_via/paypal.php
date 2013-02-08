@@ -142,13 +142,6 @@ class Hook_paypal
 	 */
 	function handle_transaction()
 	{	
-		if ((file_exists(get_file_base().'/data_custom/ecommerce.log')) && (is_writable_wrap(get_file_base().'/data_custom/ecommerce.log')))
-		{
-			$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
-			fwrite($myfile,serialize($_POST).chr(10));
-			fclose($myfile);
-		}
-
 		// assign posted variables to local variables
 		$purchase_id=post_param_integer('custom','-1');
 
@@ -181,6 +174,7 @@ class Hook_paypal
 		{
 			require_code('files');
 			$pure_post=isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
+			if (get_magic_quotes_gpc()) $pure_post=array_map('stripslashes',$pure_post);
 			$x=0;
 			$res=mixed();
 			do
@@ -193,7 +187,7 @@ class Hook_paypal
 			if (!(strcmp($res,'VERIFIED')==0))
 			{
 				if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
-				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post),strpos($res,'<html')!==false);
+				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post,true),strpos($res,'<html')!==false);
 			}
 		}
 

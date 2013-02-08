@@ -767,7 +767,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 				$raw_payload2.=$val."\r\n";
 			}
-			if ($put!==NULL && !$put_no_delete) { fwrite($put,$raw_payload2); $raw_payload2=''; }
+			if ($put!==NULL && !$put_no_delete)
+			{
+				fwrite($put,$raw_payload2);
+				$raw_payload2='';
+			}
 			foreach ($files as $upload_field=>$file_path)
 			{
 				if (($put===NULL) || (count($post_params)!=0) || (count($files)!=1))
@@ -788,13 +792,17 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						$raw_content_type=$upload_field;
 					}
 				}
-				if ($put!==NULL && !$put_no_delete) { fwrite($put,$raw_payload2); $raw_payload2=''; }
+				if ($put!==NULL && !$put_no_delete)
+				{
+					fwrite($put,$raw_payload2);
+					$raw_payload2='';
+				}
 				if ($put!==NULL && !$put_no_delete)
 				{
 					$myfile=fopen($file_path,'rb');
 					while (!feof($myfile))
 					{
-						$data=$data=@fread($myfile,1024*100);
+						$data=@fread($myfile,1024*100);
 						if (($data!==false) && ($data!==NULL))
 							fwrite($put,$data);
 						else break;
@@ -808,13 +816,21 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				{
 					$raw_payload2.="\r\n";
 				}
-				if ($put!==NULL && !$put_no_delete) { fwrite($put,$raw_payload2); $raw_payload2=''; }
+				if ($put!==NULL && !$put_no_delete)
+				{
+					fwrite($put,$raw_payload2);
+					$raw_payload2='';
+				}
 			}
 			if (($put===NULL) || (count($post_params)!=0) || (count($files)!=1))
 			{
 				$raw_payload2.='----ocp'.$divider."--\r\n";
 			}
-			if ($put!==NULL && !$put_no_delete) { fwrite($put,$raw_payload2); $raw_payload2=''; }
+			if ($put!==NULL && !$put_no_delete)
+			{
+				fwrite($put,$raw_payload2);
+				$raw_payload2='';
+			}
 			if ($put!==NULL)
 			{
 				$raw_payload.='Content-length: '.strval(filesize($put_path))."\r\n";
@@ -955,7 +971,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					$HTTP_MESSAGE_B=make_string_tempcode($error);
 					if ($trigger_error)
 						warn_exit($error);
-					if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+					if ($put!==NULL)
+					{
+						fclose($put);
+						if (!$put_no_delete) @unlink($put_path);
+					}
 					return NULL;
 				}
 				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
@@ -1003,14 +1023,22 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
-							if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+							if ($put!==NULL)
+							{
+								fclose($put);
+								if (!$put_no_delete) @unlink($put_path);
+							}
 							return $text;
 						}
 					}
 				}
 
 				$DOWNLOAD_LEVEL--;
-				if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+				if ($put!==NULL)
+				{
+					fclose($put);
+					if (!$put_no_delete) @unlink($put_path);
+				}
 				return substr($line,$pos);
 			}
 		}
@@ -1020,7 +1048,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_BAD_URL',escape_html($url));
 		$DOWNLOAD_LEVEL--;
 		$HTTP_MESSAGE='non-HTTP';
-		if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+		if ($put!==NULL)
+		{
+			fclose($put);
+			if (!$put_no_delete) @unlink($put_path);
+		}
 		return NULL;
 	}
 
@@ -1119,7 +1151,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			rewind($put);
 			while (!feof($put))
 			{
-				$data=$data=@fread($put,1024*100);
+				$data=@fread($put,1024*100);
 				if (($data!==false) && ($data!==NULL))
 					@fwrite($mysock,$data);
 				else break;
@@ -1245,7 +1277,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if ($no_redirect) $HTTP_DOWNLOAD_URL=$matches[2];
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 						$DOWNLOAD_LEVEL--;
-						if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+						if ($put!==NULL)
+						{
+							fclose($put);
+							if (!$put_no_delete) @unlink($put_path);
+						}
 						return $text;
 					}
 					if (preg_match("#^Location: (.*)\r\n#i",$line,$matches)!=0)
@@ -1263,7 +1299,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 								$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
 								if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 								$DOWNLOAD_LEVEL--;
-								if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+								if ($put!==NULL)
+								{
+									fclose($put);
+									if (!$put_no_delete) @unlink($put_path);
+								}
 								return $text;
 							}
 						}
@@ -1293,7 +1333,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 								@fclose($mysock);
 								$HTTP_DOWNLOAD_MIME_TYPE='security';
 								$DOWNLOAD_LEVEL--;
-								if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+								if ($put!==NULL)
+								{
+									fclose($put);
+									if (!$put_no_delete) @unlink($put_path);
+								}
 								return NULL;
 							case '403':
 								if ($trigger_error)
@@ -1302,21 +1346,33 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 								@fclose($mysock);
 								$HTTP_DOWNLOAD_MIME_TYPE='security';
 								$DOWNLOAD_LEVEL--;
-								if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+								if ($put!==NULL)
+								{
+									fclose($put);
+									if (!$put_no_delete) @unlink($put_path);
+								}
 								return NULL;
 							case '404':
 								if ($trigger_error)
 									warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_STATUS_NOT_FOUND',escape_html($url)));
 								@fclose($mysock);
 								$DOWNLOAD_LEVEL--;
-								if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+								if ($put!==NULL)
+								{
+									fclose($put);
+									if (!$put_no_delete) @unlink($put_path);
+								}
 								return NULL;
 							case '500':
 								if ($trigger_error)
 									warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_STATUS_SERVER_ERROR',escape_html($url)));
 								@fclose($mysock);
 								$DOWNLOAD_LEVEL--;
-								if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+								if ($put!==NULL)
+								{
+									fclose($put);
+									if (!$put_no_delete) @unlink($put_path);
+								}
 								return NULL;
 							default:
 								if ($trigger_error)
@@ -1356,7 +1412,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($url));
 			$DOWNLOAD_LEVEL--;
 			$HTTP_MESSAGE='no-data';
-			if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+			if ($put!==NULL)
+			{
+				fclose($put);
+				if (!$put_no_delete) @unlink($put_path);
+			}
 			return NULL;
 		}
 		$size_expected=$HTTP_DOWNLOAD_SIZE;
@@ -1372,13 +1432,21 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_CUT_SHORT',escape_html($url),escape_html(integer_format($size_expected)),escape_html(integer_format($input_len)));
 			$DOWNLOAD_LEVEL--;
 			$HTTP_MESSAGE='short-data';
-			if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+			if ($put!==NULL)
+			{
+				fclose($put);
+				if (!$put_no_delete) @unlink($put_path);
+			}
 			return $input;
 		}
 
 		$DOWNLOAD_LEVEL--;
 
-		if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+		if ($put!==NULL)
+		{
+			fclose($put);
+			if (!$put_no_delete) @unlink($put_path);
+		}
 		return $input;
 	} else
 	{
@@ -1443,7 +1511,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if ($read_file!==false)
 			{
 				$DOWNLOAD_LEVEL--;
-				if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+				if ($put!==NULL)
+				{
+					fclose($put);
+					if (!$put_no_delete) @unlink($put_path);
+				}
 				return $read_file;
 			}
 		}
@@ -1456,7 +1528,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($url));
 		$DOWNLOAD_LEVEL--;
 		$HTTP_MESSAGE='could not connect to host ('.$errstr.')';
-		if ($put!==NULL) { fclose($put); if (!$put_no_delete) @unlink($put_path); }
+		if ($put!==NULL)
+		{
+			fclose($put);
+			if (!$put_no_delete) @unlink($put_path);
+		}
 		return NULL;
 	}
 }

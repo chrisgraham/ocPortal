@@ -44,7 +44,7 @@ If LDAP integration is required (for corporate network authentication integratio
 
 If your website staff need to do spell checks and do not use a web browser with this built in (Firefox or Safari or Google Chrome at the time of writing), a PHP environment with the pSpell extension is required.
 
-If you need to transcode video files, you will need 'mencoder' installed on the server, and a PHP environment that can call 'shell commands' (Safe Mode would need to be disabled, and various other limitations must not be imposed).
+If you need to transcode video files, you will need 'FFMPEG' installed on the server, and a PHP environment that can call 'shell commands' (Safe Mode would need to be disabled, and various other limitations must not be imposed).
 
 If you need to be able to easily remove 'bounce' emails from newsletter subscriber lists, you will need the PHP IMAP extension. If your IMAP server requires SSL (like gmail) then you will need to have IMAP-SSL support inside PHP (or you will get "invalid remote specification" errors).
 

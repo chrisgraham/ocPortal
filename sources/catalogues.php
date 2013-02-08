@@ -557,7 +557,6 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
 		if (get_translated_text($field['cf_name'])==$filter_key)
 		{
 			$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,'field_'.strval($i),$filter_val,$db_fields,$table_join_code);
-
 			return $ret;
 		}
 	}
@@ -634,6 +633,9 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 
 	$cf_type=is_numeric($order_by)?$fields[intval($order_by)]['cf_type']:'';
 	$can_do_db_sorting=($order_by!='distance') && ($cf_type!='date') && ($cf_type!='just_date') && ($cf_type!='just_time');
+
+	require_code('hooks/systems/content_meta_aware/catalogue_entry');
+	$cma_ob=object_factory('Hook_content_meta_aware_catalogue_entry');
 
 	if (($do_sorting) && ($can_do_db_sorting))
 	{

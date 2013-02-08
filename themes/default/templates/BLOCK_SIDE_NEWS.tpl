@@ -14,7 +14,7 @@
 				<li><a rel="archives" href="{ARCHIVE_URL*}">{!VIEW_ARCHIVE}</a></li>
 			{+END}
 			{+START,IF_NON_EMPTY,{SUBMIT_URL}}
-				<li><a rel="add" href="{SUBMIT_URL*}">{!ADD_NEWS}</a></li>
+				<li><a rel="add" href="{SUBMIT_URL*}">{$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}</a></li>
 			{+END}
 		</ul>
 	{+END}

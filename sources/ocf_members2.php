@@ -129,7 +129,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 				1, // show in posts
 				0 // show in post previews
 			);
-		} else $poster_details['custom_fields_full']=array();
+		} else $poster_details['custom_fields_full']=$poster_details['custom_fields'];
 		if ((has_privilege(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_cache_warnings');

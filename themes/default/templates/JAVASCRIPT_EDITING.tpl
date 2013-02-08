@@ -184,7 +184,7 @@ if (typeof window.wysiwyg_editors=='undefined')
 }
 function load_html_edit(posting_form,ajax_copy)
 {
-	if ((!posting_form.getAttribute('method')) || (posting_form.getAttribute('method').toLowerCase()!='post')) return;
+	if ((!posting_form.method) || (posting_form.method.toLowerCase()!='post')) return;
 
 	if (!posting_form.elements['http_referer'])
 	{

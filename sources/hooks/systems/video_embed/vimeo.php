@@ -56,7 +56,7 @@ class Hook_video_embed_vimeo
 			if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 			{
 				require_code('hooks/modules/video_syndication/vimeo');
-				$ob=new video_syndication_vimeo();
+				$ob=object_factory('video_syndication_vimeo');
 				if ($ob->is_active())
 				{
 					$result=$ob->get_remote_videos(NULL,$matches[1]);

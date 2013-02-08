@@ -309,7 +309,7 @@ class Block_main_content
 		if ((array_key_exists('no_links',$map)) && ($map['no_links']=='1'))
 		{
 			$submit_url='';
-			$archive_url='';
+			$archive_url=new ocp_tempcode();
 		}
 
 		$raw_date=($info['date_field']=='')?mixed():$award_content_row[$info['date_field']];

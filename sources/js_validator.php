@@ -79,7 +79,7 @@ function init__js_validator()
 		'Body'=>array('Element',array(/*array('function','onmousewheel'),*/array('function','onpagehide'),array('function','onpageshow'),array('function','onunload'),array('function','onload'),array('Number','offsetWidth'),array('Number','offsetHeight'),array('Number','scrollWidth'),array('Number','scrollHeight'),array('Number','scrollTop'),array('Number','scrollLeft'),)),
 		'Caption'=>array('Element',array()),
 		'HTML'=>array('Element',array(array('Number','clientWidth'),array('Number','clientHeight'),array('Number','scrollWidth'),array('Number','scrollHeight'),array('Number','scrollTop'),array('Number','scrollLeft'),)),
-		'Form'=>array('Element',array(array('String','action'),array('String','title'),array('Array','elements'),array('function','submit'),array('function','reset'),)),
+		'Form'=>array('Element',array(array('String','method'),array('String','action'),array('String','title'),array('Array','elements'),array('function','submit'),array('function','reset'),)),
 		'Img'=>array('Element',array(array('String','alt'),array('String','title'),array('String','src'),array('Boolean','complete'),)),
 		'FormField'=>array('Element',array(array('Form','form'),array('function','focus'),array('function','onfocus'),array('function','onchange'),array('function','onblur'),array('Boolean','disabled'),array('String','name'),)),
 		'Select'=>array('FormField',array(array('function','onselect'),array('function','select'),array('Number','selectedIndex'),array('Boolean','multiple'),array('Array','options'),)),

@@ -547,8 +547,6 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 		return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
 	}
 
-	$filter_key=filter_naughty_harsh($filter_key);
-
 	// Natural fields
 	$field_type='';
 	if (array_key_exists($filter_key,$db_fields))
@@ -722,8 +720,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 			}
 			list($filter_key,$field_type,$filter_val)=$bits;
 
-			if (strpos($filter_key,'<')!==false)
-				$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
+			$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
 
 			if (in_array($filter_key,$disallowed_fields)) continue;
 

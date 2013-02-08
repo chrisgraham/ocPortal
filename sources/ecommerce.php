@@ -366,6 +366,13 @@ function perform_local_payment()
  */
 function handle_transaction_script()
 {
+	if ((file_exists(get_file_base().'/data_custom/ecommerce.log')) && (is_writable_wrap(get_file_base().'/data_custom/ecommerce.log')))
+	{
+		$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
+		fwrite($myfile,serialize($_POST).chr(10));
+		fclose($myfile);
+	}
+
 	require_lang('ecommerce');
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
