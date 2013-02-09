@@ -575,7 +575,7 @@ class Module_news
 				$summary=get_translated_tempcode($myrow['news']);
 				if ($summary->is_empty()) $summary=get_translated_tempcode($myrow['news_article']);
 				$seo_bits=seo_meta_get_for('news',strval($myrow['id']));
-				$map=array('_GUID'=>'a29bbea4a703287793e2b3b190114ec3','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'CATEGORY'=>$category,'IMG'=>$img,'AUTHOR_URL'=>$author_url,'AUTHOR'=>$author,'TRUNCATE'=>$truncate,'BLOG'=>$blog===1,'NEWS'=>$summary,'SUMMARY'=>$summary,'ID'=>strval($myrow['p_id']),'VIEWS'=>strval($myrow['news_views']),'SUBMITTER'=>strval($myrow['submitter']),'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'FULL_URL'=>$url,'URL'=>$url,'TITLE_PLAIN'=>$_title_plain,'NEWS_TITLE'=>$_title,'TITLE'=>$_title);
+				$map=array('_GUID'=>'a29bbea4a703287793e2b3b190114ec3','TAGS'=>(get_option('show_content_tagging_inline')=='1')?get_loaded_tags('news',explode(',',$seo_bits[0])):NULL,'CATEGORY'=>$category,'IMG'=>$img,'AUTHOR_URL'=>$author_url,'AUTHOR'=>$author,'TRUNCATE'=>$truncate,'BLOG'=>$blog===1,'NEWS'=>$summary,'SUMMARY'=>$summary,'ID'=>strval($myrow['p_id']),'VIEWS'=>strval($myrow['news_views']),'SUBMITTER'=>strval($myrow['submitter']),'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'FULL_URL'=>$url,'URL'=>$url,'TITLE_PLAIN'=>$_title_plain,'NEWS_TITLE'=>$_title,'TITLE'=>$_title);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
 				$content->attach(do_template($inline?'NEWS_BOX':'NEWS_BRIEF',$map));
 
