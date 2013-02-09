@@ -33,7 +33,7 @@ function _build_sitetree_menu_deep($this_id,$children,$pagelinks,$page_link,$pag
 	$items=array();
 	foreach ($children as $pagelink)
 	{
-		$new_id=mt_rand(0,100000);
+		$new_id=mt_rand(0,mt_getrandmax());
 
 		$actual_page_link=str_replace('!',is_string($pagelink['id'])?$pagelink['id']:strval($pagelink['id']),$pagelinks[2]);
 		$actual_page_link=str_replace('_SELF:_SELF',get_module_zone($page).':'.$page,$actual_page_link); // Support for lazy notation
@@ -74,7 +74,7 @@ function build_sitetree_menu($specifier)
 		{
 			foreach ($pagelinks[0] as $pagelink)
 			{
-				$this_id=mt_rand(0,100000);
+				$this_id=mt_rand(0,mt_getrandmax());
 				$parent=NULL;
 
 				$keys=array_keys($pagelink);
@@ -93,7 +93,7 @@ function build_sitetree_menu($specifier)
 					{
 						if (!array_key_exists($pagelink['second_cat'],$parents))
 						{
-							$new_parent_id=mt_rand(0,100000);
+							$new_parent_id=mt_rand(0,mt_getrandmax());
 							$items[]=array('id'=>$new_parent_id,'i_parent'=>NULL,'cap'=>$pagelink['second_cat'],'i_url'=>'','i_check_permissions'=>0,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'');
 							$parents[$pagelink['second_cat']]=$new_parent_id;
 						}
