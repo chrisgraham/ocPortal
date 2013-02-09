@@ -96,16 +96,31 @@ class Block_side_weather
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_weather_codes','w_code',array('w_string'=>$loc_code));
 			if (is_null($test))
 			{
-				$result=http_download_file('http://uk.weather.yahoo.com/search/weather?p='.urlencode($loc_code));
 				$matches=array();
-				if (preg_match('#<a href=\'/redirwoei/(\d+)\'>#',$result,$matches)!=0)
+
+				require_code('files');
+
+				if (preg_match('#^\-?\d+(\.\d+)?,\-?\d+(\.\d+)?$#',$loc_code)!=0)
 				{
-					$loc_code=$matches[1];
+					$result=http_download_file('http://where.yahooapis.com/geocode?flags=J&gflags=R&location='.urlencode($loc_code));
+
+					if (preg_match('#"woeid":"(\d+)"#',$result,$matches)!=0)
+					{
+						$loc_code=$matches[1];
+					} else return new ocp_tempcode();
+				} else
+				{
+					$result=http_download_file('http://uk.weather.yahoo.com/search/weather?p='.urlencode($loc_code));
+
+					if (preg_match('#<a href=\'/redirwoei/(\d+)\'>#',$result,$matches)!=0)
+					{
+						$loc_code=$matches[1];
+					}
+					elseif (preg_match('#-(\d+)/#',$GLOBALS['HTTP_DOWNLOAD_URL'],$matches)!=0)
+					{
+						$loc_code=$matches[1];
+					} else return new ocp_tempcode();
 				}
-				elseif (preg_match('#-(\d+)/#',$GLOBALS['HTTP_DOWNLOAD_URL'],$matches)!=0)
-				{
-					$loc_code=$matches[1];
-				} else return new ocp_tempcode();
 
 				if (is_numeric($loc_code))
 				{
@@ -129,7 +144,6 @@ class Block_side_weather
 		{
 			$rss_url='http://weather.yahooapis.com/forecastrss?p='.urlencode($loc_code).'&u='.urlencode($temperature_unit);
 		}
-
 		$rss=new rss($rss_url);
 
 		if (!is_null($rss->error))
@@ -143,6 +157,8 @@ class Block_side_weather
 			}
 			return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'046c437a5c3799838155b5c5fbe3be26','MESSAGE'=>htmlentities($rss->error)));
 		}
+
+		if (!isset($rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'])) return new ocp_tempcode(); // No weather for here
 
 		$location_city=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['CITY'];
 		$location_region=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['REGION'];
