@@ -1461,8 +1461,13 @@ function get_window_scroll_height(win,dont_allow_iframe_size)
 
 	if (typeof win.document.body.parentNode.getBoundingClientRect!='undefined')
 	{
-		var rect=win.document.body.parentNode.getBoundingClientRect();
-		return rect.bottom-rect.top;
+		var rect;
+		rect=win.document.body.parentNode.getBoundingClientRect();
+		var a=rect.bottom-rect.top;
+		rect=win.document.body.getBoundingClientRect();
+		var b=rect.bottom-rect.top;
+		if (a>b) return a;
+		return b;
 	}
 
 	var best=0;
@@ -2531,11 +2536,15 @@ function set_inner_html(element,tHTML,append,force_dom)
 			}
 
 			window.setTimeout(function() {
-				var elements=element.getElementsByTagName('*');
-				for (var i=already_offset;i<elements.length;i++)
+				try
 				{
-					new_html__initialise(elements[i]);
+					var elements=element.getElementsByTagName('*');
+					for (var i=already_offset;i<elements.length;i++)
+					{
+						new_html__initialise(elements[i]);
+					}
 				}
+				catch (e) {} // In case its an iframe with changed access in the interim
 			}, 0); // Delayed so we know DOM has loaded
 
 			if (tHTML.toLowerCase().indexOf('<script')!=-1)

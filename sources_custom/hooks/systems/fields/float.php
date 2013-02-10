@@ -103,6 +103,9 @@ class Hook_fields_float
 			$name='field_'.strval($field['id']);
 			$required=$field['cf_required']==1;
 
+			$latitude='0';
+			$longitude='0';
+
 			if ((isset($actual_value)) && ($actual_value!='') && ($actual_value!=do_lang('NA'))) $longitude=float_to_raw_string(floatval($actual_value),10);
 			global $LATITUDE;
 			if ((isset($LATITUDE)) && ($LATITUDE!='') && ($LATITUDE!=do_lang('NA'))) $latitude=float_to_raw_string(floatval($LATITUDE),10);
