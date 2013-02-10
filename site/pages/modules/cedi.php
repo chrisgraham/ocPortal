@@ -582,7 +582,7 @@ class Module_cedi
 		if ((has_specific_permission(get_member(),'seedy_manage_tree','cms_cedi',array('seedy_page',$id))) && (has_actual_page_access(get_member(),'cms_cedi')))
 		{
 			$tree_url=build_url(array('page'=>'cms_cedi','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi'));
-			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('TREE'),'IMG'=>'edit_tree'));
+			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('CEDI_EDIT_TREE'),'IMG'=>'edit_tree'));
 		} else $tree_button=new ocp_tempcode();
 		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_cedi',array('seedy_page',$id))) && (has_actual_page_access(get_member(),'cms_cedi')))
 		{
