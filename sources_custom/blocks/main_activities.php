@@ -41,6 +41,8 @@ class Block_main_activities
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('activities');
+
+		delete_specific_permission('syndicate_site_activity');
 	}
 
 	/**

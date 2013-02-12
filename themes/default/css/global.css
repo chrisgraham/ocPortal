@@ -564,6 +564,10 @@ header h1 {
 	}
 {+END}
 
+.non_accessibility_redundancy .breadcrumbs {
+	width: 100%;
+}
+
 .breadcrumbs {
 	font-weight: bold;
 }
@@ -2780,7 +2784,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	cursor: pointer;
 	border: 1px solid {$GET,dark_border};
 	background-color: {$GET,lgrad};
-	color: {$GET,native_ui_button_foreground};
+	color: {$GET,box_title_text};
 	{$BETA_CSS_PROPERTY,border-radius: 6px;}
 	background-image: url('{$IMG;,gradient}');
 	text-shadow: 1px 1px 1px {$GET,dark_shadow};
@@ -2961,7 +2965,6 @@ Form buttons are wrapped in either:
 	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 10px;}
 	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 10px;}
 	padding: 0.5em;
-	margin-left: 1px;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
 }
 
