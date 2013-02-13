@@ -116,6 +116,7 @@ function fauxmodal_confirm(question,callback,title)
 			text: escape_html(question).replace(/\n/g,'<br />'),
 			yes_button: '{!YES;^}',
 			no_button: '{!NO;^}',
+			cancel_button: null,
 			title: title,
 			yes: function() {
 				callback(true);
