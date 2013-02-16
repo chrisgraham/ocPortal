@@ -28,18 +28,6 @@ class Hook_Notification_messaging extends Hook_Notification__Staff
 	}
 
 	/**
-	 * Standard function to create the standardised category tree. This base version will do it based on seeing what is already being monitored, i.e. so you can unmonitor them. It assumes monitoring is initially set from the frontend via the monitor button.
-	 *
-	 * @param  ID_TEXT		Notification code
-	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
-	 * @return array 			Tree structure
-	 */
-	function create_category_tree($notification_code,$id)
-	{
-		return parent::create_category_tree($notification_code,$id);
-	}
-
-	/**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *

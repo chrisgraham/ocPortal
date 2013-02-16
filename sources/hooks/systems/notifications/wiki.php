@@ -38,18 +38,15 @@ class Hook_Notification_wiki extends Hook_Notification
 	{
 		require_code('wiki');
 
-		if (is_null($id))
-		{
-			$total=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','COUNT(*)');
-			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
-		}
+		$total=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','COUNT(*)');
+		if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 
 		static $wiki_seen=array();
-		$pagelinks=get_wiki_page_tree($wiki_seen,is_null($id)?NULL:intval($id),NULL,NULL,false,false,is_null($id)?0:1);
+		$pagelinks=get_wiki_page_tree($wiki_seen,is_null($id)?NULL:intval($id),NULL,NULL,false,false,5);
 		$filtered=array();
 		foreach ($pagelinks as $p)
 		{
-			if (strval($p['id'])!==$id) $filtered[]=$p;
+			$filtered[]=$p;
 		}
 		return $filtered;
 	}

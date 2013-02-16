@@ -6,8 +6,6 @@
 	{$INSERT_SPAMMER_BLACKHOLE}
 
 	<div>
-		{HIDDEN_FIELDS}
-
 		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>

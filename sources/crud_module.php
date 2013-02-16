@@ -150,16 +150,6 @@ class standard_crud_module
 		require_code('autosave');
 		require_code('permissions2');
 
-		if (get_value('xhtml_strict')==='1')
-		{
-			$this->second_stage_preview=true;
-		}
-
-		if (get_value('no_edit_under')==='1')
-		{
-			$this->special_edit_frontend=true;
-		}
-
 		// Load lang file if it exists
 		$this->module_type=get_class($this);
 		if (strtolower(substr($this->module_type,0,11))=='module_cms_') $this->module_type=substr($this->module_type,11);
@@ -207,6 +197,24 @@ class standard_crud_module
 		{
 			$ret=$this->run_start($type);
 			if ((!is_null($ret)) && (!$ret->is_empty())) return $ret;
+		}
+
+		if (get_value('xhtml_strict')==='1')
+		{
+			$this->second_stage_preview=true;
+			if (!is_null($this->cat_crud_module))
+				$this->second_stage_preview=true;
+			if (!is_null($this->alt_crud_module))
+				$this->second_stage_preview=true;
+		}
+
+		if (get_value('no_edit_under')==='1')
+		{
+			$this->special_edit_frontend=true;
+			if (!is_null($this->cat_crud_module))
+				$this->special_edit_frontend=true;
+			if (!is_null($this->alt_crud_module))
+				$this->special_edit_frontend=true;
 		}
 
 		if (!is_null($this->cat_crud_module)) $this->cat_crud_module->type_code='d';
@@ -946,7 +954,7 @@ class standard_crud_module
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$keep=symbol_tempcode('KEEP');
-		$iframe_url=NULL;
+		$iframe_url=mixed();
 		if (!$this->special_edit_frontend && (has_js()))
 		{
 			$iframe_url=find_script('iframe').'?zone='.get_zone_name().'&opens_below=1';

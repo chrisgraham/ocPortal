@@ -29,7 +29,7 @@ class Hook_config_default_club_forum_parent_grouping
 	function get_details()
 	{
 		return array(
-			'human_name'=>'CLUB_FORUM_PARENT_CATEGORY',
+			'human_name'=>'CLUB_FORUM_PARENT_FORUM_GROUPING',
 			'the_type'=>'category',
 			'the_page'=>'SECTION_FORUMS',
 			'section'=>'GENERAL',

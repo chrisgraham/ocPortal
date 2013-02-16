@@ -287,7 +287,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 
 		if (notifications_enabled($notification_code,$notification_category))
 		{
-			attach_message($disable_message,'inform');
+			attach_message($disable_message,'warn');
 		} else
 		{
 			attach_message($enable_message,'inform');

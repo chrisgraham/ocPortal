@@ -38,11 +38,13 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 	{
 		require_code('ocf_forums2');
 
-		if (is_null($id))
-		{
-			$total=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','COUNT(*)');
-			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
-		} else
+		$notification_category=get_param('id',NULL);
+		$done_in_url=is_null($notification_category);
+
+		$total=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','COUNT(*)');
+		if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
+
+		if (!is_null($id))
 		{
 			if (substr($id,0,6)!='forum:') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 			$id=substr($id,6);
@@ -56,7 +58,13 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			$p['id']='forum:'.strval($p['id']);
 			$p['title']=do_lang('A_FORUM',$p['title']);
 			$pagelinks[]=$p;
+
+			if (!$done_in_url)
+			{
+				if ('forum:'.strval($p['id'])==$notification_category) $done_in_url=true;
+			}
 		}
+
 		if (is_null($id)) // On root level add monitored topics too
 		{
 			$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>'ocf_topic','l_member_id'=>get_member()));
@@ -71,10 +79,26 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 							'id'=>$type['l_code_category'],
 							'title'=>do_lang('A_TOPIC',$title),
 						);
+
+						if (!$done_in_url)
+						{
+							if ($type['l_code_category']==$notification_category) $done_in_url=true;
+						}
 					}
 				}
 			}
 		}
+
+		if ((!$done_in_url) && (is_numeric($notification_category)))
+		{
+			$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_cache_first_title',array('id'=>intval($notification_category)));
+
+			$pagelinks[]=array(
+				'id'=>$notification_category,
+				'title'=>do_lang('A_TOPIC',$title),
+			);
+		}
+
 		return $pagelinks;
 	}
 

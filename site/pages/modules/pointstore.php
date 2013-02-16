@@ -143,7 +143,7 @@ class Module_pointstore
 			//  POP3
 				add_config_option('COST_quota','quota','integer','return \'2\';','POINTSTORE','POP3');
 			//  Community billboard
-				add_config_option('COST_text','community_message','integer','return (!addon_installed(\'community_billboard\'))?NULL:\'700\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
+				add_config_option('COST_COMMUNITY_MESSAGE','community_message','integer','return (!addon_installed(\'community_billboard\'))?NULL:\'700\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
 			// Custom
 				$GLOBALS['SITE_DB']->create_table('pstore_customs',array(
 					'id'=>'*AUTO',
@@ -186,6 +186,7 @@ class Module_pointstore
 		if (($upgrade_from<6) && (!is_null($upgrade_from)))
 		{
 			rename_config_option('text','community_message');
+			$GLOBALS['SITE_DB']->query_update('config',array('human_name'=>'COST_COMMUNITY_MESSAGE'),array('the_name'=>'community_message'),'',1);
 			rename_config_option('is_on_flagrant_buy','is_on_community_message_buy');
 		}
 	}

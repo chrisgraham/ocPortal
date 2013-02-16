@@ -700,6 +700,9 @@ class Hook_Notification
 
 		$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
+		$notification_category=get_param('id',NULL);
+		$done_in_url=is_null($notification_category);
+
 		$map=array('l_notification_code'=>$notification_code);
 		if (!$for_any_member)
 		{
@@ -714,7 +717,18 @@ class Hook_Notification
 					'id'=>$type['l_code_category'],
 					'title'=>$type['l_code_category'],
 				);
+				if (!$done_in_url)
+				{
+					if ($type['l_code_category']==$notification_category) $done_in_url=true;
+				}
 			}
+		}
+		if (!$done_in_url)
+		{
+			$pagelinks[]=array(
+				'id'=>$notification_category,
+				'title'=>$notification_category,
+			);
 		}
 		sort_maps_by($pagelinks,'title');
 

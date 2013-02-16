@@ -319,7 +319,7 @@ function install_ocf($upgrade_from=NULL)
 	{
 		$GLOBALS['FORUM_DB']->rename_table('f_categories','f_forum_groupings');
 		$GLOBALS['FORUM_DB']->alter_table_field('f_forums','f_category_id','AUTO_LINK','f_forum_grouping_id');
-		$GLOBALS['SITE_DB']->query_update('config',array('the_type'=>'forum_grouping','the_name'=>'club_forum_parent_forum_grouping'),array('the_name'=>'club_forum_parent_category'),'',1);
+		$GLOBALS['SITE_DB']->query_update('config',array('the_type'=>'forum_grouping','the_name'=>'club_forum_parent_forum_grouping','human_name'=>'CLUB_FORUM_PARENT_FORUM_GROUPING'),array('the_name'=>'club_forum_parent_category'),'',1);
 		$privileges=array('moderate_private_topic'=>'moderate_private_topic','edit_private_topic_posts'=>'edit_private_topic_posts','delete_private_topic_posts'=>'delete_private_topic_posts');
 		foreach ($privileges as $old=>$new)
 		{
@@ -370,7 +370,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('PROHIBIT_USERNAME_WHITESPACE','prohibit_username_whitespace','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('ASSIGN_RANDOM_AVATARS','random_avatars','tick','return addon_installed(\'ocf_member_avatars\')?\'1\':NULL;','SECTION_FORUMS','GENERAL');
 		add_config_option('CLUB_FORUM_PARENT_FORUM','club_forum_parent_forum','forum','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
-		add_config_option('CLUB_FORUM_PARENT_CATEGORY','club_forum_parent_forum_grouping','forum_grouping','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
+		add_config_option('CLUB_FORUM_PARENT_FORUM_GROUPING','club_forum_parent_forum_grouping','forum_grouping','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
 		add_config_option('DELETE_TRASHED_PTS','delete_trashed_pts','tick','return has_no_forum()?NULL:\'0\';','SECTION_FORUMS','GENERAL');
 		add_config_option('PROBATION_USERGROUP','probation_usergroup','usergroup','return do_lang(\'PROBATION\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SHOW_FIRST_JOIN_PAGE','show_first_join_page','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');

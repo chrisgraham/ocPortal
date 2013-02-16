@@ -38,17 +38,14 @@ class Hook_Notification_gallery_entry extends Hook_Notification
 	{
 		require_code('galleries');
 
-		if (is_null($id))
-		{
-			$total=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','COUNT(*)');
-			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
-		}
+		$total=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','COUNT(*)');
+		if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 
-		$pagelinks=get_gallery_tree($id,'',NULL,true,NULL,false,false,true,false,is_null($id)?0:1);
+		$pagelinks=get_gallery_tree($id,'',NULL,false,NULL,false,false,true,false,5);
 		$filtered=array();
 		foreach ($pagelinks as $p)
 		{
-			if ($p['id']!==$id) $filtered[]=$p;
+			$filtered[]=$p;
 		}
 
 		return $filtered;

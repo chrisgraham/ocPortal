@@ -44,6 +44,9 @@ class Hook_login_provider_facebook
 								if (post_param_integer('auto_syndicate',0)==1)
 								{
 									set_long_value('facebook_oauth_token'.'__'.strval($member),$FACEBOOK_CONNECT->getAccessToken());
+								} else
+								{
+									set_long_value('facebook_oauth_token'.'__'.strval($member),'');
 								}
 							}
 						}

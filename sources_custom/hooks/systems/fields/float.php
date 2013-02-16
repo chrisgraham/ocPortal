@@ -74,6 +74,16 @@ class Hook_fields_float
 	 */
 	function render_field_value($field,$ev)
 	{
+		require_lang('google_map');
+		$_cf_name=get_translated_text($field['cf_name']);
+		if (($_cf_name==do_lang('LATITUDE_FIELD_NAME')) || ($_cf_name==do_lang('LONGITUDE_FIELD_NAME')))
+		{
+			if (is_object($ev))
+			{
+				if ($ev->evaluate()==do_lang('NA_EM')) return ''; // Cleanup noisy data
+			}
+		}
+
 		if (is_object($ev)) return $ev;
 		return escape_html($ev);
 	}

@@ -53,4 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$GLOBALS['SITE_DB']->query_update('config',array('human_name'=>'COST_COMMUNITY_MESSAGE'),array('the_name'=>'community_message'),'',1);
 }

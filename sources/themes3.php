@@ -54,7 +54,7 @@ function actual_delete_theme_image($id,$theme=NULL,$lang=NULL)
  * Regenerate all the theme image paths in the database.
  *
  * @param  ID_TEXT	The theme we're searching in.
- * @param  ?array	A map of languages (lang=>1) (NULL: find it in-function).
+ * @param  ?array		A map of languages (lang=>1) (NULL: find it in-function).
  * @param  ?ID_TEXT  The theme we're storing in (NULL: same as $theme).
  */
 function regen_theme_images($theme,$langs=NULL,$target_theme=NULL)
@@ -62,18 +62,18 @@ function regen_theme_images($theme,$langs=NULL,$target_theme=NULL)
 	if (is_null($langs)) $langs=find_all_langs(true);
 	if (is_null($target_theme)) $target_theme=$theme;
 
-	$images=find_images_do_dir($theme,'images/',$langs);
+	$images=array_merge(find_images_do_dir($theme,'images/',$langs),find_images_do_dir($theme,'images_custom/',$langs));
 
 	foreach (array_keys($langs) as $lang)
 	{
-		$existing=$GLOBALS['SITE_DB']->query_select('theme_images',array('id'),array('lang'=>$lang,'theme'=>$target_theme));
+		$existing=$GLOBALS['SITE_DB']->query_select('theme_images',array('id','path'),array('lang'=>$lang,'theme'=>$target_theme));
 
 		foreach ($images as $id=>$path)
 		{
 			$found=false;
 			foreach ($existing as $e)
 			{
-				if ($e['id']==$id)
+				if (($e['path']==$path) || ($e['id']==$id))
 				{
 					$found=true;
 					break;

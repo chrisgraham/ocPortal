@@ -160,8 +160,6 @@ class Block_main_google_map
 			// Make marker data Javascript-friendly
 			foreach ($entries_to_show as $i=>$entry_row)
 			{
-				$entry_row['allow_rating']=0; // Performance: So rating is not loaded
-
 				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL);
 
 				$two_d_list=$details['FIELDS_2D'];
