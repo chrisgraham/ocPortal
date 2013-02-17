@@ -34,7 +34,7 @@ function _symbol_image_dims($param)
 	if (isset($param[0]))
 	{
 		$base_url=get_custom_base_url();
-		if ((function_exists('getimagesize')) && (substr($param[0],0,strlen($base_url))==$base_url))
+		if ((function_exists('getimagesize')) && (strpos($param[0],'.php')===false) && (substr($param[0],0,strlen($base_url))==$base_url))
 		{
 			$details=@getimagesize(get_custom_file_base().'/'.urldecode(substr($param[0],strlen($base_url)+1)));
 			if ($details!==false)
