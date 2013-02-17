@@ -1742,8 +1742,8 @@ class Module_admin_themes
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		require_code('themes3');
-		regen_theme_images($theme);
-		if ($theme!='default') regen_theme_images('default',NULL,$theme);
+		regen_theme_images($theme,array($lang=>1));
+		if ($theme!='default') regen_theme_images('default',array($lang=>1),$theme);
 
 		// Choose image to edit
 		require_code('form_templates');
@@ -1758,7 +1758,7 @@ class Module_admin_themes
 		}
 		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);*/
 		require_code('themes2');
-		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme);
+		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme,false,true); // The final 'true' stops new theme images being detected, as we know regen_theme_images did that (and more conservatively - it won't scan images_custom dirs for NEW codes which an unbridled get_all_image_ids_type call would)
 		$fields=form_input_picture_choose_specific(do_lang_tempcode('IMAGE'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');

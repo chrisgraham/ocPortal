@@ -8,7 +8,6 @@
 		<textarea cols="1" rows="1" style="display: none" readonly="readonly" name="post_parsed">{DEFAULT_PARSED*}</textarea>
 		{+END}
 
-		{HIDDEN_FIELDS}
 		<input type="hidden" name="label_for__post" value="{$STRIP_TAGS,{POST_COMMENT*}}" />
 
 		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">

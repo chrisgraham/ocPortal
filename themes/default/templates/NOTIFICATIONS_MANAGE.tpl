@@ -17,12 +17,16 @@
 	<thead>
 		<tr>
 			<th></th>
-			{+START,IF_PASSED,SHOW_PRIVILEGES}
-				<th><img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{!NOTIFICATION_PRIVILEGED},UL_ESCAPED}{$KEEP*}" title="{!NOTIFICATION_PRIVILEGED}" alt="{!NOTIFICATION_PRIVILEGED}" /></th>
+			{+START,IF_PASSED_AND_TRUE,SHOW_PRIVILEGES}
+				<th>
+					{$SET,url,{$BASE_URL}/data/gd_text.php?color={COLOR}&text={$ESCAPE,{!NOTIFICATION_PRIVILEGED},UL_ESCAPED}{$KEEP}}
+					<img src="{$GET*,url}" width="{$IMG_WIDTH*,{$GET,url}}" height="{$IMG_HEIGHT*,{$GET,url}}" title="{!NOTIFICATION_PRIVILEGED}" alt="{!NOTIFICATION_PRIVILEGED}" />
+				</th>
 			{+END}
 			{+START,LOOP,NOTIFICATION_TYPES_TITLES}
 				<th>
-					<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
+					{$SET,url,{$BASE_URL}/data/gd_text.php?color={COLOR}&text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP}}
+					<img src="{$GET*,url}" width="{$IMG_WIDTH*,{$GET,url}}" height="{$IMG_HEIGHT*,{$GET,url}}" title="" alt="{LABEL*}" />
 				</th>
 			{+END}
 			<th></th>

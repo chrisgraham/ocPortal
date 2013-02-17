@@ -163,10 +163,14 @@ class Module_admin_newsletter extends standard_aed_module
 			// Choose level
 			if (get_option('interest_levels')=='0')
 			{
-				$hidden->attach(form_input_hidden('level','4'));
+				$l=new ocp_tempcode();
+				$l->attach(form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0')));
+				$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NEWSLETTER_IMPORT')));
+				$fields->attach(form_input_list(do_lang_tempcode('SETTINGS'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_3'),'level',$l));
 			} else
 			{
-				$l=form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0'));
+				$l=new ocp_tempcode();
+				$l->attach(form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0')));
 				$l->attach(form_input_list_entry('1',$level==1,do_lang_tempcode('NEWSLETTER_1')));
 				$l->attach(form_input_list_entry('2',$level==2,do_lang_tempcode('NEWSLETTER_2')));
 				$l->attach(form_input_list_entry('3',$level==3,do_lang_tempcode('NEWSLETTER_3')));

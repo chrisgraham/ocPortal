@@ -364,9 +364,9 @@ function step_1()
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_XML_ON_SERVER'))));
 	if ((function_exists('memory_get_usage')) && (@ini_get('memory_limit')!='') && (@ini_get('memory_limit')!='-1') && (@ini_get('memory_limit')!='0') && (intval(trim(str_replace('M','',@ini_get('memory_limit'))))<16))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('LOW_MEMORY_LIMIT'))));
-	if ((is_numeric(@ini_get('max_execute_time'))) && (intval(@ini_get('max_execute_time'))<10) && (ini_get('safe_mode')=='1'))
-		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MAX_EXECUTE_TIME'))));
-	if ((is_numeric(@ini_get('max_input_time'))) && (intval(@ini_get('max_input_time'))<60) && (ini_get('safe_mode')=='1'))
+	if ((is_numeric(@ini_get('max_execution_time'))) && (intval(@ini_get('max_execution_time'))>0) && (intval(@ini_get('max_execution_time'))<10) && (ini_get('safe_mode')=='1'))
+		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MAX_EXECUTION_TIME'))));
+	if ((is_numeric(@ini_get('max_input_time'))) && (intval(@ini_get('max_input_time'))>0) && (intval(@ini_get('max_input_time'))<60) && (ini_get('safe_mode')=='1'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MAX_INPUT_TIME'))));
 	$needed_functions=<<<END
 		abs addslashes array_count_values array_diff array_flip array_key_exists array_keys

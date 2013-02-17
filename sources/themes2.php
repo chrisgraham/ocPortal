@@ -285,9 +285,10 @@ function find_images_do_dir($theme,$subdir,$langs)
  * @param  ?object		The database connection to work over (NULL: site db)
  * @param  ?ID_TEXT		The theme to search in, in addition to the default theme (NULL: current theme)
  * @param  boolean		Whether to only return directories (advanced option, rarely used)
+ * @param  boolean		Whether to only return from the database (advanced option, rarely used)
  * @return array			The list of image IDs
  */
-function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_only=false)
+function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_only=false,$db_only=false)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
 	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
@@ -301,7 +302,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_
 
 	$ids=array();
 
-	if (($db->connection_write==$GLOBALS['SITE_DB']->connection_write) || ($dirs_only) || (get_db_forums()==get_db_site()))
+	if ((!$db_only) && (($db->connection_write==$GLOBALS['SITE_DB']->connection_write) || ($dirs_only) || (get_db_forums()==get_db_site())))
 	{
 		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
 		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
@@ -321,7 +322,11 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_
 
 	if (!$dirs_only)
 	{
-		$rows=$db->query('SELECT DISTINCT id,path FROM '.$db->get_table_prefix().'theme_images WHERE path NOT LIKE \''.db_encode_like('themes/default/images/%').'\' AND '.db_string_not_equal_to('path','themes/default/images/blank.gif').' AND ('.db_string_equal_to('theme',$theme).' OR '.db_string_equal_to('theme','default').') AND id LIKE \''.db_encode_like($type.'%').'\' ORDER BY path');
+		$query='SELECT DISTINCT id,path FROM '.$db->get_table_prefix().'theme_images WHERE ';
+		if (!$db_only)
+			$query.='path NOT LIKE \''.db_encode_like('themes/default/images/%').'\' AND '.db_string_not_equal_to('path','themes/default/images/blank.gif').' AND ';
+		$query.='('.db_string_equal_to('theme',$theme).' OR '.db_string_equal_to('theme','default').') AND id LIKE \''.db_encode_like($type.'%').'\' ORDER BY path';
+		$rows=$db->query($query);
 		foreach ($rows as $row)
 		{
 			if ($row['path']=='') continue;

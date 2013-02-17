@@ -5280,7 +5280,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
 	if (!posting_field_name) posting_field_name='post';
 
-	if (page_type=="attachment")
+	if (page_type=='attachment')
 	{
 		var current_num=name.replace('file', '');
 		set_attachment(posting_field_name,current_num,file_name);
@@ -5291,6 +5291,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 function fireFakeChangeFor(name,value)
 {
 	var rep=document.getElementById(name);
+
 	if ((typeof rep.onchange!='undefined') && (rep.onchange)) rep.onchange();
 	rep.value=value;
 	rep.virtual_value=value;
@@ -5644,13 +5645,12 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var referrer_favicon='{$IMG;,favicon}';
 		var posturl='{$FIND_SCRIPT;,incoming_uploads}';
 
-		var picup_url='fileupload://new?callbackURL='+window.encodeURIComponent('{$BASE_URL;}/data_custom/picup.htm?window_url='+window.encodeURIComponent(window.encodeURIComponent(callback_url))+'&window_name='+window.encodeURIComponent(window.encodeURIComponent(window.name)))+
-							'&referrername='+window.encodeURIComponent(referrer_name)+
-							'&referrerfavicon='+window.encodeURIComponent(referrer_favicon)+
-							'&debug=false&imagesize=1600&postimageparam=file'+
-							'&posturl='+window.encodeURIComponent(posturl)+
-							'&postvalues='+window.encodeURIComponent('name=image.jpg')+
-							'&postimagefilename=image.jpg&returnstatus=true&returnserverresponse=true';
+		var picup_url='fileupload://new?callbackURL='+window.encodeURIComponent('{$BASE_URL;}/data_custom/picup.html?window_url='+window.encodeURIComponent(window.encodeURIComponent(callback_url))+'&field_name='+window.encodeURIComponent(window.encodeURIComponent(name))+'&window_name='+window.encodeURIComponent(window.encodeURIComponent(window.name)))+
+							'&referrerName='+window.encodeURIComponent(referrer_name)+
+							'&referrerFavicon='+window.encodeURIComponent(referrer_favicon)+
+							'&debug=false&imageSize=1600&postFileParamName=file'+
+							'&postURL='+window.encodeURIComponent(posturl)+
+							'&postFileName=image.jpg&returnStatus=true&returnServerResponse=true';
 
 		setInnerHTML(message,'iOS doesn\'t support direct file uploads, but if you have the <a target=\"_blank\" href=\"http://itunes.apple.com/gb/app/picup/id354101378?mt=8\">Picup app</a> then you can<br /><a style="display: block; font-size: 1.3em; line-height: 1.4em" href=\"'+escape_html(picup_url)+'\">Upload using Picup</a>');
 
@@ -5720,7 +5720,10 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		immediate_submit : true
 	};
 
-	if (!ios)
+	if (window.location.hash=='#picup_test')
+		window.location.hash='#serverResponse={upload_id:51,upload_name:\'example.jpg\'}&field_name=file1'; // Useful for testing picup
+
+	if ((!ios){+START,IF,{$DEV_MODE}} && (window.location.hash.indexOf('=')==-1){+END})
 	{
 		var ob=new plupload.Uploader(settings);
 		ob.bind('Init',plUploadLoaded);
@@ -5766,12 +5769,13 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			}
 			var decodedData = eval('(' + paramHash['serverResponse'] + ')');
 
-			if (decodedData)
+			if ((decodedData) && (paramHash['field_name']==name))
 			{
 				document.getElementById('hidFileID_'+name).value=decodedData['upload_id'];
 				document.getElementById('txtFileName_'+name).value=decodedData['upload_name'];
 				document.getElementById(name).value='1';
 				if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
+				dispatch_for_page_type(page_type,name,decodedData['upload_name'],posting_field_name);
 				fireFakeChangeFor(name,'1');
 			}
 		}

@@ -5,7 +5,7 @@
 <body style="text-align: center; font-family: Verdana; font-size: 3em; margin-top: 5em">
 	<p>Upload completed!</p>
 
-	<a style="font-size: 2em" href="#" onclick="window.open(getQueryVariable('window_url')+window.location.hash,getQueryVariable('window_name')); window.close()">Return to form</a>
+	<a style="font-size: 2em" href="#" onclick="window.open(getQueryVariable('window_url')+window.location.hash+'&field_name='+getQueryVariable('field_name'),getQueryVariable('window_name')); window.close()">Return to form</a>
 
 	<script type="text/javascript">// <![CDATA[
 		function getQueryVariable(variable) {

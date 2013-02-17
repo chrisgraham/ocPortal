@@ -254,7 +254,7 @@ class Module_cms_blogs extends standard_aed_module
 		if (get_value('disable_secondary_news')!=='1')
 			$fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'),do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'),'news_category',$cats2));
 		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		handle_max_file_size($hidden,'image');
+		//handle_max_file_size($hidden,'image'); Attachments will add this
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
 			$fields2->attach(form_input_date__scheduler(do_lang_tempcode('PUBLICATION_TIME'),do_lang_tempcode('DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true,$scheduled,intval(date('Y'))-1970+2,1970));
 
