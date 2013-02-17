@@ -545,6 +545,7 @@ class Module_admin_import
 		$refresh_time=either_param_integer('refresh_time',15); // Shouldn't default, but reported on some systems to do so
 		if (function_exists('set_time_limit')) @set_time_limit($refresh_time);
 		header('Content-type: text/html; charset='.get_charset());
+		@ini_set('log_errors','0');
 		global $I_REFRESH_URL;
 		$I_REFRESH_URL=$refresh_url;
 

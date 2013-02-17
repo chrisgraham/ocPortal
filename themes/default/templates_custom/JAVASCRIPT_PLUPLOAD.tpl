@@ -5280,7 +5280,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
 	if (!posting_field_name) posting_field_name='post';
 
-	if (page_type=="attachment")
+	if (page_type=='attachment')
 	{
 		var current_num=name.replace('file', '');
 		set_attachment(posting_field_name,current_num,file_name);
@@ -5291,6 +5291,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 function fireFakeChangeFor(name,value)
 {
 	var rep=document.getElementById(name);
+
 	if ((typeof rep.onchange!='undefined') && (rep.onchange)) rep.onchange();
 	rep.value=value;
 	rep.virtual_value=value;
@@ -5720,7 +5721,10 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		immediate_submit : true
 	};
 
-	if (!ios)
+	if (window.location.hash=='#picup_test')
+		window.location.hash='#serverResponse={upload_id:51,upload_name:\'example.jpg\'}&field_name=file1'; // Useful for testing picup
+
+	if ((!ios){+START,IF,{$DEV_MODE}} && (window.location.hash.indexOf('=')==-1){+END})
 	{
 		var ob=new plupload.Uploader(settings);
 		ob.bind('Init',plUploadLoaded);
@@ -5766,12 +5770,13 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			}
 			var decodedData = eval('(' + paramHash['serverResponse'] + ')');
 
-			if (decodedData)
+			if ((decodedData) && (paramHash['field_name']==name))
 			{
 				document.getElementById('hidFileID_'+name).value=decodedData['upload_id'];
 				document.getElementById('txtFileName_'+name).value=decodedData['upload_name'];
 				document.getElementById(name).value='1';
 				if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
+				dispatch_for_page_type(page_type,name,decodedData['upload_name'],posting_field_name);
 				fireFakeChangeFor(name,'1');
 			}
 		}

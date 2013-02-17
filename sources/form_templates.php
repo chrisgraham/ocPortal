@@ -737,7 +737,7 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 		$WYSIWYG_ATTACHED=true;
 		@header('Content-type: text/html; charset='.get_charset());
 
-		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(browser_matches('wysiwyg')) && (has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 		if ($w) $_required.=' wysiwyg';
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
@@ -791,7 +791,7 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());
 
-	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(browser_matches('wysiwyg')) && (has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 	if ($w) $_required.=' wysiwyg';
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
@@ -1218,7 +1218,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 		$slash_pos=strrpos($id,'/');
 		if ($slash_pos===false) $slash_pos=0;
 		$new_path=substr($id,0,$slash_pos);
-		if ($new_path!=$current_path)
+		if ($new_path!==$current_path)
 		{
 			if (!is_null($current_path))
 			{
