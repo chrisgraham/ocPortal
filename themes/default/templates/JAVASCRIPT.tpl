@@ -134,7 +134,7 @@ function script_load_stuff()
 		page_fully_loaded=true;
 	} );
 
-	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof script_load_stuff_staff!='undefined')) script_load_stuff_staff();
+	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof window.script_load_stuff_staff!='undefined')) script_load_stuff_staff();
 }
 
 function new_html__initialise(element)

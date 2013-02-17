@@ -46,7 +46,7 @@ $db=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_
 $where='duplicate_id=0';
 $where.=' AND view_state=10';
 if (isset($map['completed'])) $where.=' AND '.(($map['completed']=='0')?'a.status<=50':'a.status=80');
-if (isset($map['voted'])) $where.=' AND ('.(($map['voted']=='1')?'a.reporter_id='.strval(get_member()).' OR  EXISTS':'NOT EXISTS').' (SELECT * FROM mantis_bug_monitor_table p WHERE user_id='.strval(get_member()).' AND p.bug_id=a.id))';
+if (isset($map['voted'])) $where.=' AND ('.(($map['voted']=='1')?/*'a.reporter_id='.strval(get_member()).' OR '.*/'EXISTS':'NOT EXISTS').' (SELECT * FROM mantis_bug_monitor_table p WHERE user_id='.strval(get_member()).' AND p.bug_id=a.id))';
 if (isset($map['project'])) $where.=' AND a.project_id='.strval(intval($map['project']));
 
 $order='id';

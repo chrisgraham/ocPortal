@@ -615,7 +615,7 @@ class Module_wiki
 		if ((has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$tree_url=build_url(array('page'=>'cms_wiki','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('TREE'),'IMG'=>'edit_tree'));
+			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('WIKI_EDIT_TREE'),'IMG'=>'edit_tree'));
 		} else $tree_button=new ocp_tempcode();
 		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{

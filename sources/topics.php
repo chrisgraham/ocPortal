@@ -825,6 +825,7 @@ class OCP_Topic
 						{
 							$this->topic_info=ocf_read_in_topic($this->topic_id,0,0,false,false);
 						}
+						require_lang('ocf');
 						$buttons=ocf_render_post_buttons($this->topic_info,$post,$may_reply);
 					}
 				}

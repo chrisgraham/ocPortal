@@ -25,7 +25,7 @@
 			{+END}
 			{+START,LOOP,NOTIFICATION_TYPES_TITLES}
 				<th>
-					{$SET,url,{$BASE_URL}/data/gd_text.php?font=VerandaBd&size=10&fgcolor=FFFFFF&text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP}}
+					{$SET,url,{$BASE_URL}/data/gd_text.php?color={COLOR}&text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP}}
 					<img src="{$GET*,url}" width="{$IMG_WIDTH*,{$GET,url}}" height="{$IMG_HEIGHT*,{$GET,url}}" title="" alt="{LABEL*}" />
 				</th>
 			{+END}

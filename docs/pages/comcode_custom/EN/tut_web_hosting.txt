@@ -52,8 +52,11 @@ If encrypted CPFs are needed (see the [page="_SEARCH:tut_adv_members"]Advanced o
 
 [title="2"]Recommended web host[/title]
 
-We don't current recommend a web host, but we would advise not to shop by price.
+We recommend Arvixe for ocPortal hosting. Arvixe have worked with the ocPortal developers to ensure the hosting is perfectly tuned for ocPortal, and the ocPortal developers intend to make sure this remains the case across ocPortal versions. Arvixe is an established company, a friend to Open Source software, and provides good value and great quality servers. We maintain a good working relationship with the management of the company.
 
+You can even buy hosting with Arvixe and have ocPortal automatically installed for you from the get go: [url="Arvixe ocPortal hosting"]http://www.arvixe.com/5256-223-3-122.html[/url].
+
+A bit of advice if you choose to not use our recommended host and go purely on a price comparison:
 Most companies competing on price may appear to be good if you compare features/limits but fail in the most important area -- quality of service. ocPortal is progressive software, and the price squeezed service we have seen from cheap web hosts are only suitable for those with very basic needs.
 
 [title="2"]Forum drivers[/title]
