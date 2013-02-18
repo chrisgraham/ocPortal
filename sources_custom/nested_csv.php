@@ -43,7 +43,7 @@ function get_nested_csv_structure()
 
 			$myfile=@fopen(get_file_base().'/private_data/'.$csv_filename,'rb');
 			if ($myfile===false)
-				warn_exit('The CSV file for "'.$custom_field['trans_name'].'" could not be opened.');
+				warn_exit('The CSV file "'.$csv_filename.'" could not be opened.');
 
 			$header_row=fgetcsv($myfile,10000);
 
@@ -78,7 +78,7 @@ function get_nested_csv_structure()
 				$csv_files[$csv_filename]=$csv_file;
 			} else
 			{
-				warn_exit('No header row found for '.$custom_field['trans_name'].'".');
+				warn_exit('No header row found for "'.$csv_filename.'".');
 			}
 
 			fclose($myfile);
@@ -174,10 +174,10 @@ function get_nested_csv_structure()
  * @param  ID_TEXT	Filename
  * @param  ?ID_TEXT	Name of field we know (NULL: we know nothing special - i.e. no filtering)
  * @param  ?ID_TEXT	Value of field we know (NULL: we know nothing special - i.e. no filtering)
- * @param  ID_TEXT	Name of field we want
+ * @param  ?ID_TEXT	Name of field we want (NULL: all fields in an array)
  * @return array		List of possibilities
  */
-function get_csv_data_values($csv_file,$known_field_key,$known_field_value,$desired_field)
+function get_csv_data_values($csv_file,$known_field_key=NULL,$known_field_value=NULL,$desired_field=NULL)
 {
 	$map=array();
 	if ((!is_null($known_field_key)) && (!is_null($known_field_value)))
@@ -190,10 +190,10 @@ function get_csv_data_values($csv_file,$known_field_key,$known_field_value,$desi
  *
  * @param  ID_TEXT	Filename
  * @param  array		Map of ANDd constraints
- * @param  ID_TEXT	Name of field we want
+ * @param  ?ID_TEXT	Name of field we want (NULL: all fields in an array)
  * @return array		List of possibilities
  */
-function get_csv_data_values__and($csv_file,$map,$desired_field)
+function get_csv_data_values__and($csv_file,$map,$desired_field=NULL)
 {
 	$results=array();
 	$csv_structure=get_nested_csv_structure();
@@ -210,7 +210,7 @@ function get_csv_data_values__and($csv_file,$map,$desired_field)
 		}
 		if ($okay)
 		{
-			$results[]=$row[$desired_field];
+			$results[]=is_null($desired_field)?$row:$row[$desired_field];
 		}
 	}
 	return array_unique($results);

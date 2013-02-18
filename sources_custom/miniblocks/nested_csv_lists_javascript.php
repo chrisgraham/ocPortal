@@ -99,17 +99,23 @@ echo "
 				option.value='';
 			} else // Parent is set, so we need to filter possibilities
 			{
-				// Work out available (filtered) possiblities
+				// Work out available (filtered) possibilities
 				var csv_data=window.nested_csv_structure.csv_files[cpf_field.csv_parent_filename].data;
 				var possibilities=[];
-				for (var i=0;i<csv_data.length;i++)
+				for (var i=0;i<csv_data.length;i++) // This is going through parent table. Note that the parent table must contain both the child and parent IDs, as essentially it is a linker table. Field names are defined as unique across all CSV files, so you don't need to use the same actual CSV file as the parent field was drawn from.
 				{
 					for (var j=0;j<current_parent_value.length;j++)
 					{
 						if (csv_data[i][cpf_field.csv_parent_heading]==current_parent_value[j])
 						{
 							if ((typeof csv_data[i]['deprecated']=='undefined') || (csv_data[i]['deprecated']=='0') || (typeof window.handle_csv_deprecation=='undefined') || (!window.window.handle_csv_deprecation))
+							{
+								if (typeof csv_data[i][cpf_field.csv_heading]=='undefined')
+								{
+									console.log('Configured linker table does not include child field');
+								}
 								possibilities.push(csv_data[i][cpf_field.csv_heading]);
+							}
 						}
 					}
 				}

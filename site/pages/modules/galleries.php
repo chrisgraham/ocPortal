@@ -1078,6 +1078,8 @@ class Module_galleries
 	{
 		$id=get_param_integer('id');
 
+		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
+
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
 		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
@@ -1234,6 +1236,8 @@ class Module_galleries
 	function show_video($category_name=NULL,$breadcrumbs=NULL)
 	{
 		$id=get_param_integer('id');
+
+		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
 
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
@@ -1536,7 +1540,7 @@ class Module_galleries
 	{
 		if (!is_null($back_id))
 		{
-			$slideshow_previous_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
+			$slideshow_previous_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1,'ajax'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
 			$back_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide'=>1,'id'=>$back_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
 		} else
 		{
@@ -1545,7 +1549,7 @@ class Module_galleries
 		}
 		if (!is_null($next_id))
 		{
-			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide_high'=>1,'id'=>$next_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
+			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide_high'=>1,'id'=>$next_id,'slideshow'=>1,'ajax'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
 			$next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide'=>1,'id'=>$next_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
 		} else
 		{
