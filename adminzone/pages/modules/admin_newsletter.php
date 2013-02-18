@@ -687,10 +687,10 @@ class Module_admin_newsletter extends standard_aed_module
 		{
 			if (strpos(get_db_type(),'mysql')!==false)
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter',array('email','COUNT(*) as cnt'),NULL,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
+				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email','COUNT(*) as cnt'),NULL,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
 			} else
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter',array('email'),NULL,500,$start);
+				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email'),NULL,500,$start);
 			}
 			foreach ($rows as $row)
 			{

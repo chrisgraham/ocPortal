@@ -38,13 +38,13 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{DOMAINS}}
-	<h2>{!STATISTICS}</h2>
+	<h2>{!DOMAIN_STATISTICS,{$NUMBER_FORMAT*,{DOMAINS}},{$NUMBER_FORMAT*,{DOMAINS}}}</h2>
 
 	<div class="wide_table_wrap"><table class="wide_table results_table" summary="{!COLUMNED_TABLE}">
 		<thead>
 			<tr>
 				<th>{!DOMAIN}</th>
-				<th>{!COUNT_TOTAL} ({!OF,{$NUMBER_FORMAT*,{DOMAINS}}})</th>
+				<th>{!COUNT_TOTAL}</th>
 			</tr>
 		</thead>
 		<tbody>
