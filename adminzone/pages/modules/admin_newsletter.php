@@ -571,7 +571,7 @@ class Module_admin_newsletter extends standard_aed_module
 		}
 
 		// Show subscribers
-		$levels=is_null($level)?(($id=='-1' || substr($id,0,1)=='g')?array(4):array(1,2,3,4)):array($level);
+		$levels=is_null($level)?(($id=='-1' || substr($id,0,1)=='g')?array(4):((get_option('interest_levels')=='1')?array(1,2,3,4):array(4))):array($level);
 		$outs=array();
 		foreach ($levels as $level)
 		{

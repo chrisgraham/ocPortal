@@ -1,9 +1,11 @@
 {TITLE}
 
 {+START,LOOP,SUBSCRIBERS}
-	<p>
-		{TEXT}
-	</p>
+	{+START,IF,{$NEQ,{SUBSCRIBERS},1}}
+		<p>
+			{TEXT}
+		</p>
+	{+END}
 
 	{+START,IF_NON_EMPTY,{SUB}}
 		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
