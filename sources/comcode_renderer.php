@@ -1195,16 +1195,31 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				$attachment['a_description']=post_param('caption'.$_id,array_key_exists('description',$attributes)?(is_object($attributes['description'])?('[html]'.$attributes['description']->evaluate().'[/html]'):$attributes['description']):'');
 
-				$attach_id=$connection->query_insert('attachments',$attachment,true);
+				$attach_id=mixed();
+				$already_here=false;
+				if (substr($id,0,4)=='url_')
+				{
+					$attach_id=$connection->query_select_value_if_there('attachments','id',array('a_url'=>$url));
+					if (!is_null($attach_id)) $already_here=true;
+				}
+
+				if (is_null($attach_id))
+				{
+					$attach_id=$connection->query_insert('attachments',$attachment,true);
+					$already_here=false;
+				}
 				$attachment['id']=$attach_id;
 
-				if (addon_installed('galleries'))
+				if (!$already_here)
 				{
-					require_code('images');
-					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					if (addon_installed('galleries'))
 					{
-						require_code('transcoding');
-						transcode_video($url,'attachments',$attach_id,'id','a_url','a_original_filename',NULL,NULL);
+						require_code('images');
+						if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+						{
+							require_code('transcoding');
+							transcode_video($url,'attachments',$attach_id,'id','a_url','a_original_filename',NULL,NULL);
+						}
 					}
 				}
 

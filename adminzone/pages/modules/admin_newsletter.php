@@ -550,12 +550,15 @@ class Module_admin_newsletter extends standard_crud_module
 			$submit_name=do_lang_tempcode('VIEW_SUBSCRIBERS');
 			$post_url=get_self_url();
 
+			$hidden=new ocp_tempcode();
+			$hidden->attach(form_input_hidden('lang',$lang));
+
 			$prune_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_a'),'_SELF');
 			return do_template('FORM_SCREEN',array(
 				'_GUID'=>'0100ae6565474bca0669de1654b6efcf',
 				'GET'=>true,
 				'SKIP_VALIDATION'=>true,
-				'HIDDEN'=>'',
+				'HIDDEN'=>$hidden,
 				'TITLE'=>$title,
 				'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),
 				'FIELDS'=>$fields,
@@ -580,7 +583,7 @@ class Module_admin_newsletter extends standard_crud_module
 		}
 
 		// Show subscribers
-		$levels=is_null($level)?(($id=='-1' || substr($id,0,1)=='g')?array(4):array(1,2,3,4)):array($level);
+		$levels=is_null($level)?(($id=='-1' || substr($id,0,1)=='g')?array(4):((get_option('interest_levels')=='1')?array(1,2,3,4):array(4))):array($level);
 		$outs=array();
 		foreach ($levels as $level)
 		{
@@ -696,10 +699,10 @@ class Module_admin_newsletter extends standard_crud_module
 		{
 			if (strpos(get_db_type(),'mysql')!==false)
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter',array('email','COUNT(*) as cnt'),NULL,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
+				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email','COUNT(*) as cnt'),NULL,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
 			} else
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter',array('email'),NULL,500,$start);
+				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email'),NULL,500,$start);
 			}
 			foreach ($rows as $row)
 			{

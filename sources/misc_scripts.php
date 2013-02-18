@@ -19,7 +19,7 @@
  */
 
 /**
- * Script to make a nice textual image.
+ * Script to make a nice textual image, vertical writing.
  */
 function gd_text_script()
 {
@@ -71,7 +71,7 @@ function gd_text_script()
 		$baseline_offset=8*intval(ceil(floatval($font_size)/8.0));
 		$width=max($width,-$width);
 		$width+=$baseline_offset;
-		$height+=2*$scale; // This is just due to inaccuracy in imagettfbbox
+		$height+=$font_size*$scale; // This is just due to inaccuracy in imagettfbbox, possibly due to italics not being computed correctly
 
 		list(,,$real_height,,,,,$real_width)=imagettfbbox(floatval($font_size),0.0,$font,$text);
 		$real_width=max($real_width,-$real_width);
