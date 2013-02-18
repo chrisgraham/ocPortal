@@ -548,8 +548,11 @@ class Module_admin_newsletter extends standard_aed_module
 			$submit_name=do_lang_tempcode('VIEW_SUBSCRIBERS');
 			$post_url=get_self_url();
 
+			$hidden=new ocp_tempcode();
+			$hidden->attach(form_input_hidden('lang',$lang));
+
 			$prune_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_a'),'_SELF');
-			return do_template('FORM_SCREEN',array('GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			return do_template('FORM_SCREEN',array('GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		}
 
 		// Send to CSV file?
