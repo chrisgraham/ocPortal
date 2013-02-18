@@ -1149,13 +1149,23 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$add_time=time();
 				$member_id=$on_behalf_of_member;
 
-				if (addon_installed('galleries'))
+				$attach_id=mixed();
+
+				if (substr($id,0,4)=='url_')
 				{
-					require_code('images');
-					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					$attach_id=$connection->query_value_null_ok('attachments','id',array('a_url'=>$url));
+				}
+
+				if (is_null($attach_id))
+				{
+					if (addon_installed('galleries'))
 					{
-						require_code('transcoding');
-						$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
+						require_code('images');
+						if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+						{
+							require_code('transcoding');
+							$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
+						}
 					}
 				}
 
@@ -1171,7 +1181,10 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				$attachment['a_description']=post_param('caption'.$_id,array_key_exists('description',$attributes)?(is_object($attributes['description'])?('[html]'.$attributes['description']->evaluate().'[/html]'):$attributes['description']):'');
 
-				$attach_id=$connection->query_insert('attachments',$attachment,true);
+				if (is_null($attach_id))
+				{
+					$attach_id=$connection->query_insert('attachments',$attachment,true);
+				}
 				$attachment['id']=$attach_id;
 
 				if (($tag=='attachment_safe') || (substr($id,0,4)=='url_')) // Lock it if we are starting with this tag
