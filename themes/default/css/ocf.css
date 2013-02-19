@@ -380,6 +380,7 @@
 
 .ocf_topic_post_avatar {
 	margin: 0 auto;
+	max-width: 100%;
 }
 
 .ocf_post_main_column {
