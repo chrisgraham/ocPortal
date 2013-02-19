@@ -1,4 +1,16 @@
-/* CSS for the activities feed and the status posting box */
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+/* Activities feed */
+
+.activities_holder {
+	padding-left: 0;
+	margin-left: 0;
+	display: block;
+	list-style: none;
+}
 
 .activities_box {
 	overflow: hidden;
@@ -12,7 +24,7 @@
 	vertical-align: top;
 }
 
-.avatar_box {
+.activities_avatar_box {
 	width: 40px;
 	float: left;
 	margin-top: 5px;
@@ -24,13 +36,13 @@
 	font-size: 0.95em;
 }
 
-.activities_box .remove {
+form.activities_remove {
 	float: right;
 	overflow: hidden;
 	width: 22px;
 }
 
-.activities_box .remove .remove_cross {
+form.activities_remove .remove_cross {
 	width: 14px;
 	height: 14px;
 	background: url('{$IMG;,stop12}') transparent no-repeat;
@@ -41,18 +53,17 @@
 	padding: 0;
 }
 
-.activities_box .remove .remove_cross:hover {
+form.activities_remove .remove_cross:hover {
 	background: url('{$IMG;,stop12Hover}') transparent no-repeat;
 	cursor: pointer;
 }
 
-.activities_box .remove .remove_cross:active {
+form.activities_remove .remove_cross:active {
 	background: url('{$IMG;,stop12Active}') transparent no-repeat;
 	cursor: pointer;
 }
 
-/* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
-.activities_box .remove input.remove_cross::-moz-focus-inner {
+form.activities_remove input.remove_cross::-moz-focus-inner { /* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
 	border: 0;
 }
 
@@ -60,12 +71,11 @@
 	width: auto;
 	float: none;
 	padding: 0.5em 0.5em 0.5em 45px;
-	font-size: 1.05em;
-	color: #333333;
+	font-size: 1.1em;
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 }
 
-.activities_box .name {
+.activities_line .activity_name {
 	float: left;
 	padding-{!en_right}: 2em;
 	margin-top: 10px;
@@ -73,33 +83,37 @@
 	font-weight: bold;
 }
 
-.activities_box .name a, .activities_box .name a[href*=".php"] {
-	color: #333333;
+.activities_line .activity_name a, .activities_line .activity_name a[href*=".php"] {
 	text-decoration: none;
 }
 
-.activities_box .name a:hover, .activities_box .activities_box .name a[href*=".php"]:hover {
-	color: #005567;
-}
-
-.activities_box .time {
+.activities_line .activity_time {
 	float: right;
-	color: #999999;
+	{$BETA_CSS_PROPERTY,opacity: 0.8;}
 }
 
-.activities_box .name, .activities_box .time {
+.activities_line .activity_name, .activities_line .activity_time {
 	margin: 5px 1em 0 0;
 	font-size: 0.80em;
 	text-decoration: none;
 }
 
+.activities_content__remove_success {
+	color: {$GET,green_highlight_text};
+}
+
+.activities_content__remove_failure {
+	color: {$GET,red_highlight_text};
+}
+
+/* Status posting */
+
 .status_box_outer {
 	margin: 0 1em 0 0;
-	font-size: 0.90em;
+	margin-right: 14em;
 }
 
 .status_box {
-	background: #FFFFFF;
 	width: 100%;
 	overflow: auto;
 	height: 2.3em;
@@ -108,26 +122,15 @@
 }
 
 .status_controls {
+	float: right;
+	text-align: right;
+	width: 14em;
 }
 
-.status_table {
-	width: 100%;
-}
-
-.status_table #notify {
+#activities_update_notify {
 	white-space: normal;
 	font-size: 0.85em;
 	margin: 0.2em;
-}
-
-.activities_holder {
-	padding-left: 0;
-	margin-left: 0;
-	display: block;
-	list-style: none;
-}
-
-.update_success {
 	margin: 0;
 }
 
