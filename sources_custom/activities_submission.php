@@ -53,7 +53,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 		$stored_id=$GLOBALS['SITE_DB']->query_insert('activities',$row,true);
 
 		// Update the latest activity file
-		log_newest_activity($stored_id,1000);
+		log_newest_activity($stored_id,1000,true/*We do want to force it, IDs can get out of sync on dev sites*/);
 
 		// External places
 		if (($a_is_public==1) && (!$GLOBALS['IS_ACTUALLY_ADMIN']/*SU means oauth'd user is not intended user*/))
@@ -99,15 +99,15 @@ function activities_ajax_submit_handler()
 
 	if (!is_guest(get_member()))
 	{
-		$map['STATUS']=trim(either_param('status', ''));
+		$map['STATUS']=trim(either_param('status',''));
 
-		if ((post_param('zone', '')!='') && ($map['STATUS']!='') && ($map['STATUS']!=do_lang('TYPE_HERE')))
+		if ((post_param('zone','')!='') && ($map['STATUS']!='') && ($map['STATUS']!=do_lang('TYPE_HERE')))
 		{
 			comcode_to_tempcode($map['STATUS'],$guest_id,false,NULL);
 
-			$map['PRIVACY']=either_param('privacy', 'private');
+			$map['PRIVACY']=either_param('privacy','private');
 
-			if (strlen(strip_tags($map['STATUS'])) < strlen($map['STATUS']))
+			if (strlen(strip_tags($map['STATUS']))<strlen($map['STATUS']))
 			{
 				$cc_guide=build_url(array('page'=>'userguide_comcode'),'site');
 				$response.='<success>0</success><feedback><![CDATA[No HTML allowed. See <a href="'.$cc_guide->evaluate().'">Comcode Help</a> for info on the alternative.]]></feedback>';
@@ -155,14 +155,14 @@ function activities_ajax_update_list_handler()
 {
 	$map=array();
 
-	$map['max']=$GLOBALS['SITE_DB']->query_value_null_ok('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
+	$map['max']=$GLOBALS['SITE_DB']->query_value_null_ok('values','the_value',array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
 
 	if (is_null($map['max']))
 	{
 		$map['max']='10';
 	}
 
-	$last_id=post_param('lastid', '-1');
+	$last_id=post_param('last_id','-1');
 	$mode=post_param('mode','all');
 
 	require_lang('activities');
@@ -174,7 +174,7 @@ function activities_ajax_update_list_handler()
 	$guest_id=intval($GLOBALS['FORUM_DRIVER']->get_guest_id());
 	$viewer_id=intval(get_member()); //We'll need this later anyway.
 
-	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
+	$can_remove_others=(has_zone_access($viewer_id,'adminzone'));
 
 	//Getting the member viewed ids if available, member viewing if not
 	$member_ids=array_map('intval',explode(',',post_param('member_ids',strval($viewer_id))));
@@ -187,7 +187,7 @@ function activities_ajax_update_list_handler()
 
 	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 
-	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
+	$can_remove_others=(has_zone_access($viewer_id,'adminzone'));
 
 	if ($proceed_selection===true)
 	{
@@ -200,7 +200,7 @@ function activities_ajax_update_list_handler()
 			{
 				list($message,$memberpic,$datetime,$member_url)=render_activity($row);
 
-				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f','LANG_STRING'=>'RAW_DUMP', 'ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message, 'MEMPIC'=>$memberpic, 'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
+				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f','LANG_STRING'=>'RAW_DUMP','ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
 				// However, we allow comcode but some tags make use of CDATA. Since
@@ -228,13 +228,13 @@ function activities_ajax_update_list_handler()
 
 function activities_ajax_removal_handler()
 {
-	$is_guest=false; //Can't be doing with overcomplicated SQL breakages. Weed it out.
+	$is_guest=false; // Can't be doing with overcomplicated SQL breakages. Weed it out.
 	$guest_id=intval($GLOBALS['FORUM_DRIVER']->get_guest_id());
 	$viewer_id=intval(get_member()); //We'll need this later anyway.
 	if ($guest_id==$viewer_id)
 		$is_guest=true;
 
-	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
+	$can_remove_others=(has_zone_access($viewer_id,'adminzone'));
 
 	header('Content-Type: text/xml');
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
@@ -244,7 +244,7 @@ function activities_ajax_removal_handler()
 	$response.='<response>';
 
 	$stat_id=post_param_integer('removal_id',-1);
-	$stat_owner=($stat_id!=-1)?$GLOBALS['SITE_DB']->query_value_null_ok('activities', 'a_member_id', array('id'=>$stat_id)):NULL;
+	$stat_owner=($stat_id!=-1)?$GLOBALS['SITE_DB']->query_value_null_ok('activities','a_member_id',array('id'=>$stat_id)):NULL;
 
 	if (($is_guest!==true) && (!is_null($stat_owner)))
 	{
@@ -255,7 +255,7 @@ function activities_ajax_removal_handler()
 		}
 		else //I suppose we can proceed now.
 		{
-			$GLOBALS['SITE_DB']->query_delete('activities', array('id'=>$stat_id),'',1);
+			$GLOBALS['SITE_DB']->query_delete('activities',array('id'=>$stat_id),'',1);
 
 			$response.='<success>1</success><feedback>Message deleted.</feedback><status_id>'.strval($stat_id).'</status_id>';
 		}
@@ -290,7 +290,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 	// Grab a pointer for appending to this file
 	// NOTE: ALWAYS open as append! Opening as write will wipe the file during
 	// the fopen call, which is before we have a lock.
-	$fp=@fopen($filename, 'a+');
+	$fp=@fopen($filename,'a+');
 
 	// Only bother running if this file can be opened
 	if ($fp!==false)
@@ -298,19 +298,19 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		// Grab our current time in milliseconds
 		$start_time=microtime(true);
 
-		$sleep_multiplier=$timeout / 10;
+		$sleep_multiplier=$timeout/10;
 
 		// Start looping
 		do
 		{
 			// Try to lock the file
-			$can_write=flock($fp, LOCK_EX);
+			$can_write=flock($fp,LOCK_EX);
 
 			// If lock is not obtained sleep for 0 <-> $timeout/10 milliseconds,
 			// to avoid collision and CPU load
-			if(!$can_write) usleep(intval(mt_rand(0, intval($sleep_multiplier))*1000));		// *1000 as usleep uses microseconds
+			if (!$can_write) usleep(intval(mt_rand(0,intval($sleep_multiplier))*1000)); // *1000 as usleep uses microseconds
 		}
-		while ((!$can_write) && ((microtime(true)-$start_time) < $timeout));
+		while ((!$can_write) && ((microtime(true)-$start_time)<$timeout));
 
 		// File was locked so now we can store information
 		if ($can_write)
@@ -319,14 +319,14 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 			rewind($fp);
 			$old_id=intval(fgets($fp,1024));
 			// See if we should be updating the file (IDs increase numerically)
-			if ($force || ($old_id < $id))
+			if ($force || ($old_id<$id))
 			{
 				// If so then wipe the file (since we're in append mode,
 				// but we want to overwrite)
-				ftruncate($fp, 0);
+				ftruncate($fp,0);
 
 				// Save our new ID
-				fwrite($fp, strval($id));
+				fwrite($fp,strval($id));
 			}
 		}
 		fclose($fp);
