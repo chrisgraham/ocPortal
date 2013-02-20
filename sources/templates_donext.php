@@ -316,7 +316,7 @@ function _do_next_section($list,$title)
 		if ($page=='_SELF') $page=get_page_name();
 
 		$description=(array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_'.$option);
-		$link=(is_null($page))?build_url(array_merge($url[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url[1]),$zone);
+		$url_final=(is_null($page))?build_url(array_merge($url[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url[1]),$zone);
 		$doc=array_key_exists(3,$_option)?$_option[3]:'';
 		if ((is_string($doc)) && ($doc!=''))
 		{
@@ -339,7 +339,7 @@ function _do_next_section($list,$title)
 			'TARGET'=>$target,
 			'PICTURE'=>$option,
 			'DESCRIPTION'=>$description,
-			'LINK'=>$link,
+			'URL'=>$url_final,
 			'DOC'=>$doc,
 			'WARNING'=>array_key_exists(3,$url)?$url[3]:'',
 		)));
