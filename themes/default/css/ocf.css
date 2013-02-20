@@ -40,14 +40,17 @@
 }
 
 .ocf_forum_topic_wrapper_column_column3 {
+	word-wrap: break-word;
 	width: 100px;
 }
 
 .ocf_forum_topic_wrapper_column_column4, .ocf_forum_grouping_column3 {
+	word-wrap: break-word;
 	width: 5em;
 }
 
 .ocf_forum_topic_wrapper_column_column5, .ocf_forum_grouping_column4 {
+	word-wrap: break-word;
 	width: 5em;
 }
 
