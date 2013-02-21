@@ -302,7 +302,7 @@ class Module_cms_iotds extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('iotd',NULL);
 
-		$id=add_iotd($url,$title,$caption,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$id=add_iotd($url,$title,$caption,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['add_time'],$meta_data['submitter'],0,NULL,$meta_data['views']);
 
 		if ($validated==1)
 		{
@@ -377,7 +377,7 @@ class Module_cms_iotds extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('iotd',strval($id));
 
-		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		if ($current==1)
 		{

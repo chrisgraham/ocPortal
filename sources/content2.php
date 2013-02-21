@@ -24,13 +24,16 @@
  * @param  ID_TEXT		The type of resource (e.g. download)
  * @param  ?ID_TEXT		The ID of the resource (NULL: adding)
  * @param  boolean		Whether to allow owner to be left blank (meaning no owner)
+ * @param  ?array			List of fields to NOT take in (NULL: empty list)
  * @return tempcode		Form page tempcode fragment
  */
-function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false)
+function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$fields_to_skip=NULL)
 {
 	if (!has_privilege(get_member(),'edit_meta_fields')) return new ocp_tempcode();
 
 	require_lang('meta_data');
+
+	if (is_null($fields_to_skip)) $fields_to_skip=array();
 
 	require_code('hooks/systems/content_meta_aware/'.filter_naughty($content_type));
 	$ob=object_factory('Hook_content_meta_aware_'.$content_type);
@@ -43,14 +46,14 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false)
 	if (!is_null($content_id))
 		$content_row=content_get_details($content_type,$content_id);
 
-	$views_field=$info['views_field'];
+	$views_field=in_array('views',$fields_to_skip)?NULL:$info['views_field'];
 	if (!is_null($views_field))
 	{
 		$views=is_null($content_row)?0:$content_row[$views_field];
 		$fields->attach(form_input_integer(do_lang_tempcode('VIEWS'),do_lang_tempcode('DESCRIPTION_META_VIEWS'),'meta_views',NULL,false));
 	}
 
-	$submitter_field=$info['submitter_field'];
+	$submitter_field=in_array('submitter',$fields_to_skip)?NULL:$info['submitter_field'];
 	if (!is_null($submitter_field))
 	{
 		$submitter=is_null($content_row)?get_member():$content_row[$submitter_field];
@@ -59,7 +62,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false)
 		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'meta_submitter',$username,!$allow_no_owner));
 	}
 
-	$add_time_field=$info['add_time_field'];
+	$add_time_field=in_array('add_time',$fields_to_skip)?NULL:$info['add_time_field'];
 	if (!is_null($add_time_field))
 	{
 		$add_time=is_null($content_row)?time():$content_row[$add_time_field];
@@ -68,7 +71,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false)
 
 	if (!is_null($content_id))
 	{
-		$edit_time_field=$info['edit_time_field'];
+		$edit_time_field=in_array('edit_time',$fields_to_skip)?NULL:$info['edit_time_field'];
 		if (!is_null($edit_time_field))
 		{
 			$edit_time=is_null($content_row)?NULL:(is_null($content_row[$edit_time_field])?time():max(time(),$content_row[$edit_time_field]));
@@ -76,7 +79,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false)
 		}
 	}
 
-	if ($info['support_url_monikers'])
+	if (($info['support_url_monikers']) && (!in_array('url_moniker',$fields_to_skip)))
 	{
 		$url_moniker=mixed();
 		if (!is_null($content_id))
@@ -109,11 +112,14 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false)
  *
  * @param  ID_TEXT		The type of resource (e.g. download)
  * @param  ?ID_TEXT		The ID of the resource (NULL: adding)
+ * @param  ?array			List of fields to NOT take in (NULL: empty list)
  * @return array			A map of standard meta data fields (name to value). If adding, this map is accurate for adding. If editing, NULLs mean do-not-edit or non-editable.
  */
-function actual_meta_data_get_fields($content_type,$content_id)
+function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=NULL)
 {
 	require_lang('meta_data');
+
+	if (is_null($fields_to_skip)) $fields_to_skip=array();
 
 	if (fractional_edit())
 	{
@@ -142,7 +148,7 @@ function actual_meta_data_get_fields($content_type,$content_id)
 	$info=$ob->info();
 
 	$views=mixed();
-	$views_field=$info['views_field'];
+	$views_field=in_array('views',$fields_to_skip)?NULL:$info['views_field'];
 	if (!is_null($views_field))
 	{
 		$views=post_param_integer('meta_views',NULL);
@@ -159,7 +165,7 @@ function actual_meta_data_get_fields($content_type,$content_id)
 	}
 
 	$submitter=mixed();
-	$submitter_field=$info['submitter_field'];
+	$submitter_field=in_array('submitter',$fields_to_skip)?NULL:$info['submitter_field'];
 	if (!is_null($submitter_field))
 	{
 		$_submitter=post_param('meta_submitter',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
@@ -182,7 +188,7 @@ function actual_meta_data_get_fields($content_type,$content_id)
 	}
 
 	$add_time=mixed();
-	$add_time_field=$info['add_time_field'];
+	$add_time_field=in_array('add_time',$fields_to_skip)?NULL:$info['add_time_field'];
 	if (!is_null($add_time_field))
 	{
 		$add_time=get_input_date('meta_add_time');
@@ -199,7 +205,7 @@ function actual_meta_data_get_fields($content_type,$content_id)
 	}
 
 	$edit_time=mixed();
-	$edit_time_field=$info['edit_time_field'];
+	$edit_time_field=in_array('edit_time',$fields_to_skip)?NULL:$info['edit_time_field'];
 	if (!is_null($edit_time_field))
 	{
 		$edit_time=get_input_date('meta_edit_time');
@@ -216,7 +222,7 @@ function actual_meta_data_get_fields($content_type,$content_id)
 	}
 
 	$url_moniker=mixed();
-	if ($info['support_url_monikers'])
+	if (($info['support_url_monikers']) && (!in_array('url_moniker',$fields_to_skip)))
 	{
 		$url_moniker=post_param('meta_url_moniker','');
 		if ($url_moniker=='') $url_moniker=NULL;

@@ -152,10 +152,13 @@ function catalogue_file_script()
  * @param  BINARY				Whether the catalogue is an eCommerce catalogue
  * @param  ID_TEXT			How to send view reports
  * @set    never daily weekly monthly quarterly
+ * @param  ?TIME				The add time (NULL: now)
  * @return ?AUTO_LINK		The ID of the first new catalogues root category (NULL: no root, as it's not a tree catalogue)
  */
-function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never')
+function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never',$add_time=NULL)
 {
+	if (is_null($add_time)) $add_time=time();
+
 	require_code('type_validation');
 	if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
@@ -166,7 +169,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	// Create
 	if (!is_integer($description)) $description=insert_lang_comcode($description,2);
 	if (!is_integer($title)) $title=insert_lang($title,1);
-	$GLOBALS['SITE_DB']->query_insert('catalogues',array('c_name'=>$name,'c_title'=>$title,'c_send_view_reports'=>$send_view_reports,'c_ecommerce'=>$ecommerce,'c_description'=>$description,'c_display_type'=>$display_type,'c_is_tree'=>$is_tree,'c_notes'=>$notes,'c_add_date'=>time(),'c_submit_points'=>$submit_points));
+	$GLOBALS['SITE_DB']->query_insert('catalogues',array('c_name'=>$name,'c_title'=>$title,'c_send_view_reports'=>$send_view_reports,'c_ecommerce'=>$ecommerce,'c_description'=>$description,'c_display_type'=>$display_type,'c_is_tree'=>$is_tree,'c_notes'=>$notes,'c_add_date'=>$add_time,'c_submit_points'=>$submit_points));
 
 	if ($is_tree==1)
 	{
@@ -260,8 +263,9 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
  * @param  BINARY				Whether the catalogue is an eCommerce catalogue
  * @param  ID_TEXT			How to send view reports
  * @set    never daily weekly monthly quarterly
+ * @param  ?TIME				Add time (NULL: do not change)
  */
-function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports)
+function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$add_time=NULL)
 {
 	if ($old_name!=$name)
 	{
@@ -283,7 +287,20 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 	$_description=$myrow['c_description'];
 
 	// Edit
-	$GLOBALS['SITE_DB']->query_update('catalogues',array('c_send_view_reports'=>$send_view_reports,'c_display_type'=>$display_type,'c_ecommerce'=>$ecommerce,'c_name'=>$name,'c_title'=>lang_remap($_title,$title),'c_description'=>lang_remap_comcode($_description,$description),'c_notes'=>$notes,'c_add_date'=>time(),'c_submit_points'=>$submit_points),array('c_name'=>$old_name),'',1);
+	$update_map=array(
+		'c_send_view_reports'=>$send_view_reports,
+		'c_display_type'=>$display_type,
+		'c_ecommerce'=>$ecommerce,
+		'c_name'=>$name,
+		'c_title'=>lang_remap($_title,$title),
+		'c_description'=>lang_remap_comcode($_description,$description),
+		'c_notes'=>$notes,
+		'c_add_date'=>$add_time,
+		'c_submit_points'=>$submit_points,
+	);
+	if (!is_null($add_time))
+		$update_map['c_add_date']=$add_time;
+	$GLOBALS['SITE_DB']->query_update('catalogues',$update_map,array('c_name'=>$old_name),'',1);
 
 	// If we're renaming, then we better change a load of references
 	if ($name!=$old_name)
@@ -572,8 +589,9 @@ function calculate_category_child_count_cache($cat_id,$recursive_updates=true)
  * @param  integer		The number of days before expiry (lower limit)
  * @param  integer		The number of days before expiry (higher limit)
  * @param  ?AUTO_LINK	The expiry category (NULL: do not expire)
+ * @param  ?TIME			Add time (NULL: do not change)
  */
-function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target)
+function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time=NULL)
 {
 	$under_category_id=$parent_id;
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
@@ -593,18 +611,21 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 
 	store_in_catalogue_cat_treecache($id,$parent_id);
 
-	$map=array('cc_move_days_lower'=>$move_days_lower,'cc_move_days_higher'=>$move_days_higher,'cc_move_target'=>$move_target,'cc_title'=>lang_remap($_title,$title),'cc_description'=>lang_remap_comcode($_description,$description),'cc_notes'=>$notes,'cc_parent_id'=>$parent_id);
+	$update_map=array('cc_move_days_lower'=>$move_days_lower,'cc_move_days_higher'=>$move_days_higher,'cc_move_target'=>$move_target,'cc_title'=>lang_remap($_title,$title),'cc_description'=>lang_remap_comcode($_description,$description),'cc_notes'=>$notes,'cc_parent_id'=>$parent_id);
 
 	if (!is_null($rep_image))
 	{
-		$map['rep_image']=$rep_image;
+		$update_map['rep_image']=$rep_image;
 		require_code('files2');
 		delete_upload('uploads/grepimages','catalogue_categories','rep_image','id',$id,$rep_image);
 	}
 
+	if (!is_null($add_time))
+		$update_map['cc_add_date']=$add_time;
+
 	$old_parent_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_parent_id',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_categories',$map,array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('catalogue_categories',$update_map,array('id'=>$id),'',1);
 
 	require_code('urls2');
 	suggest_new_idmoniker_for('catalogues','category',strval($id),$title);
@@ -841,9 +862,16 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
  * @param  array				A map of field IDs, to values, that defines the entries settings
  * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit)
  * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit)
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  ?integer			Number of views (NULL: do not change)
+ * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords='',$meta_description='')
+function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords='',$meta_description='',$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 	$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
 	$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
@@ -863,7 +891,25 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		send_content_validated_notification('catalogue_entry',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
+	$update_map=array(
+		'cc_id'=>$category_id,
+		'ce_validated'=>$validated,
+		'notes'=>$notes,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+	);
+
+	$update_map['ce_edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['ce_add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['ce_views']=$views;
+	if (!is_null($submitter))
+		$update_map['ce_submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_entries',$update_map,array('id'=>$id),'',1);
+
 	require_code('fields');
 	$title=NULL;
 	foreach ($map as $field_id=>$val)

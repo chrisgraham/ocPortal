@@ -33,8 +33,10 @@
  * @param  ?string		New title for the topic (NULL: do not change).
  * @param  ?SHORT_TEXT	Link related to the topic (e.g. link to view a ticket) (NULL: do not change).
  * @param  boolean		Whether to check permissions.
+ * @param  ?integer		Number of views (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NULL,$open=NULL,$pinned=NULL,$sunk=NULL,$cascading=NULL,$reason='',$title=NULL,$description_link=NULL,$check_perms=true)
+function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NULL,$open=NULL,$pinned=NULL,$sunk=NULL,$cascading=NULL,$reason='',$title=NULL,$description_link=NULL,$check_perms=true,$views=NULL,$null_is_literal=false)
 {
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_from','t_pt_to','t_cache_first_member_id','t_cache_first_title','t_forum_id','t_cache_first_post_id'),array('id'=>$topic_id),'',1);
 	if (!array_key_exists(0,$info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -81,6 +83,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	if (!is_null($sunk)) $update['t_sunk']=$sunk;
 	if (!is_null($cascading)) $update['t_cascading']=$cascading;
 	if (!is_null($open)) $update['t_is_open']=$open;
+	if (!is_null($views)) $update['t_views']=$views;
 
 	if ((!is_null($title)) && ($title!=''))
 	{

@@ -1062,7 +1062,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('image',NULL);
 
-		$id=add_image($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$id=add_image($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['submitter'],$meta_data['add_time'],$meta_data['edit_time'],$meta_data['views']);
 
 		if ($validated==1)
 		{
@@ -1145,7 +1145,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('image',strval($id));
 
-		edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
+		edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		if ((!fractional_edit()) && (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
@@ -1550,7 +1550,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('video',NULL);
 
-		$id=add_video($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
+		$id=add_video($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_data['submitter'],$meta_data['add_time'],$meta_data['edit_time'],$meta_data['views']);
 
 		if ($validated==1)
 		{
@@ -1649,7 +1649,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('video',strval($id));
 
-		edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''));
+		edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 	}
 
 	/**
@@ -1857,7 +1857,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(get_category_permissions_hidden_on());
 		}
 
-		$fields->attach(meta_data_get_fields('gallery',($name=='')?NULL:$name));
+		$fields->attach(meta_data_get_fields('gallery',($name=='')?NULL:$name,true));
 
 		return array($fields,$hidden);
 	}
@@ -1917,16 +1917,10 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$watermark_bottom_right=get_url('','watermark_bottom_right','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$g_owner_name=post_param('g_owner',NULL);
-
-		if (is_null($g_owner_name))
-			$g_owner=get_member();
-		else
-			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 
 		$meta_data=actual_meta_data_get_fields('gallery',NULL);
 
-		add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],$allow_rating,$allow_comments,false,time(),$g_owner);
+		add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],$allow_rating,$allow_comments,false,$meta_data['add_time'],$meta_data['submitter']);
 		$this->set_permissions($name);
 
 		return $name;
@@ -1970,12 +1964,6 @@ class Module_cms_galleries_cat extends standard_crud_module
 		}
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$g_owner_name=post_param('g_owner',NULL);
-		if (is_null($g_owner_name))
-			$g_owner=$GLOBALS['SITE_DB']->query_select_value('galleries','g_owner',array('name'=>$name));
-		else
-			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
-		if (fractional_edit()) $g_owner=INTEGER_MAGIC_NULL;
 
 		$meta_data=actual_meta_data_get_fields('gallery',$id);
 
@@ -1999,7 +1987,9 @@ class Module_cms_galleries_cat extends standard_crud_module
 			post_param('meta_description',STRING_MAGIC_NULL),
 			$allow_rating,
 			$allow_comments,
-			$g_owner
+			$meta_data['submitter'],
+			$meta_data['add_date'],
+			true
 		);
 
 		$this->new_id=$name;

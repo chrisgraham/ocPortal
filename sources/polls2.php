@@ -121,9 +121,16 @@ function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY				Whether to allow trackbacking on this poll
  * @param  LONG_TEXT			Notes about this poll
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  ?integer			Number of views (NULL: do not change)
+ * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
+function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	log_it('EDIT_POLL',strval($id),$question);
 
 	persistent_cache_delete('POLL');
@@ -141,7 +148,34 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 	$_a9=$rows[0]['option9'];
 	$_a10=$rows[0]['option10'];
 
-	$GLOBALS['SITE_DB']->query_update('poll',array('edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'num_options'=>$num_options,'question'=>lang_remap_comcode($_question,$question),'option1'=>lang_remap_comcode($_a1,$a1),'option2'=>lang_remap_comcode($_a2,$a2),'option3'=>lang_remap_comcode($_a3,$a3),'option4'=>lang_remap_comcode($_a4,$a4),'option5'=>lang_remap_comcode($_a5,$a5),'option6'=>lang_remap_comcode($_a6,$a6),'option7'=>lang_remap_comcode($_a7,$a7),'option8'=>lang_remap_comcode($_a8,$a8),'option9'=>lang_remap_comcode($_a9,$a9),'option10'=>lang_remap_comcode($_a10,$a10)),array('id'=>$id),'',1);
+	$update_map=array(
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'num_options'=>$num_options,
+		'question'=>lang_remap_comcode($_question,$question),
+		'option1'=>lang_remap_comcode($_a1,$a1),
+		'option2'=>lang_remap_comcode($_a2,$a2),
+		'option3'=>lang_remap_comcode($_a3,$a3),
+		'option4'=>lang_remap_comcode($_a4,$a4),
+		'option5'=>lang_remap_comcode($_a5,$a5),
+		'option6'=>lang_remap_comcode($_a6,$a6),
+		'option7'=>lang_remap_comcode($_a7,$a7),
+		'option8'=>lang_remap_comcode($_a8,$a8),
+		'option9'=>lang_remap_comcode($_a9,$a9),
+		'option10'=>lang_remap_comcode($_a10,$a10)
+	);
+
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_time']=$add_time;
+	if (!is_null($views))
+		$update_map['poll_views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('poll',$update_map,array('id'=>$id),'',1);
 	decache('main_poll');
 
 	require_code('urls2');

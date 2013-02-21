@@ -199,7 +199,7 @@ class Module_cms_wiki
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('wiki_page',NULL);
 
-		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0));
+		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views']);
 		require_code('permissions2');
 		set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');
 
@@ -401,7 +401,7 @@ class Module_cms_wiki
 
 			require_code('permissions2');
 			set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');
-			wiki_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),post_param('meta_keywords',''),post_param('meta_description',''));
+			wiki_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),post_param('meta_keywords',''),post_param('meta_description',''),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views']);
 
 			require_code('fields');
 			if (has_tied_catalogue('wiki_page'))

@@ -246,11 +246,13 @@ function _save_available_quiz_answers($id,$text,$type)
  * @param  ?MEMBER		The member adding it (NULL: current member)
  * @param  integer		The number of points awarded for completing/passing the quiz/test
  * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
+ * @param  ?TIME			The add time (NULL: now)
  * @return AUTO_LINK		The ID
  */
-function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL)
+function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
+	if (is_null($add_time)) $add_time=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$id=$GLOBALS['SITE_DB']->query_insert('quizzes',array(
@@ -268,7 +270,7 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 		'q_type'=>$type,
 		'q_validated'=>$validated,
 		'q_submitter'=>$submitter,
-		'q_add_date'=>time(),
+		'q_add_date'=>$add_time,
 		'q_points_for_passing'=>$points_for_passing,
 		'q_tied_newsletter'=>$tied_newsletter,
 	),true);
@@ -306,8 +308,12 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
  * @param  LONG_TEXT		Meta description
  * @param  integer		The number of points awarded for completing/passing the quiz/test
  * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
+ * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?MEMBER		Submitter (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing=0,$tied_newsletter=NULL)
+function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL,$submitter=NULL,$null_is_literal=false)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows))
@@ -328,7 +334,7 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		send_content_validated_notification('quiz',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('quizzes',array(
+	$update_map=array(
 		'q_name'=>lang_remap($_name,$name),
 		'q_timeout'=>$timeout,
 		'q_start_text'=>lang_remap($_start_text,$start_text),
@@ -344,7 +350,14 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		'q_validated'=>$validated,
 		'q_points_for_passing'=>$points_for_passing,
 		'q_tied_newsletter'=>$tied_newsletter,
-	),array('id'=>$id));
+	);
+
+	if (!is_null($add_time))
+		$update_map['q_add_date']=$add_time;
+	if (!is_null($submitter))
+		$update_map['q_submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('quizzes',$update_map,array('id'=>$id));
 
 	if (!fractional_edit())
 		_save_available_quiz_answers($id,$text,$type);

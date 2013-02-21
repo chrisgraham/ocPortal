@@ -62,9 +62,16 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY				Whether the IOTD may be trackbacked
  * @param  LONG_TEXT			Notes for the IOTD
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  ?integer			Number of views (NULL: do not change)
+ * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
+function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	$_caption=$GLOBALS['SITE_DB']->query_select_value('iotd','caption',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('iotd','i_title',array('id'=>$id));
 
@@ -72,7 +79,26 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	delete_upload('uploads/iotds','iotd','url','id',$id,$url);
 	delete_upload('uploads/iotds_thumbs','iotd','thumb_url','id',$id,$thumb_url);
 
-	$GLOBALS['SITE_DB']->query_update('iotd',array('i_title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'caption'=>lang_remap_comcode($_caption,$caption),'thumb_url'=>$thumb_url,'url'=>$url),array('id'=>$id),'',1);
+	$update_map=array(
+		'i_title'=>lang_remap_comcode($_title,$title),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'caption'=>lang_remap_comcode($_caption,$caption),
+		'thumb_url'=>$thumb_url,
+		'url'=>$url,
+	);
+
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('iotd',$update_map,array('id'=>$id),'',1);
 
 	require_code('urls2');
 	suggest_new_idmoniker_for('iotds','view',strval($id),$title);

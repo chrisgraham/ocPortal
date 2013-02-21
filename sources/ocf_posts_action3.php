@@ -84,10 +84,16 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
  * @param  boolean		Whether to mark the topic as unread by those previous having read this post.
  * @param  LONG_TEXT		The reason for this action.
  * @param  boolean		Whether to check permissions.
+ * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?MEMBER		Submitter (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  * @return AUTO_LINK		The ID of the topic (whilst this could be known without calling this function, as we've gone to effort and grabbed it from the DB, it might turn out useful for something).
  */
-function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,$check_perms=true)
+function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,$check_perms=true,$edit_time=NULL,$add_time=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	$post_info=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_topic_id','p_time','p_post','p_poster','p_cache_forum_id'),array('id'=>$post_id));
 	if (!array_key_exists(0,$post_info))
 	{
@@ -120,8 +126,6 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
 		}
 	}
-
-	$edit_time=time();
 
 	// Save in history
 	$GLOBALS['FORUM_DB']->query_insert('f_post_history',array(
@@ -156,6 +160,11 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 		$update['p_last_edit_time']=NULL;
 		$update['p_last_edit_by']=NULL;
 	}
+
+	if (!is_null($add_time))
+		$update_map['p_time']=$add_time;
+	if (!is_null($submitter))
+		$update_map['p_poster']=$submitter;
 
 	$GLOBALS['FORUM_DB']->query_update('f_posts',$update,array('id'=>$post_id),'',1);
 

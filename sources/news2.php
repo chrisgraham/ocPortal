@@ -286,10 +286,16 @@ END;
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
  * @param  ?URLPATH			URL to the image for the news entry (blank: use cat image) (NULL: don't delete existing)
- * @param  ?TIME				Recorded add time (NULL: leave alone)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?integer			Number of views (NULL: do not change)
+ * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$time=NULL)
+function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$add_time=NULL,$edit_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter'),array('id'=>$id),'',1);
 	$_title=$rows[0]['title'];
 	$_news=$rows[0]['news'];
@@ -311,13 +317,30 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		send_content_validated_notification('news',strval($id));
 	}
 
-	$map=array('news_category'=>$main_news_category,'news_article'=>update_lang_comcode_attachments($_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'title'=>lang_remap_comcode($_title,$title),'news'=>lang_remap_comcode($_news,$news),'author'=>$author);
+	$update_map=array(
+		'news_category'=>$main_news_category,
+		'news_article'=>update_lang_comcode_attachments($_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'title'=>lang_remap_comcode($_title,$title),
+		'news'=>lang_remap_comcode($_news,$news),
+		'author'=>$author,
+	);
 
-	if (!is_null($time)) $map['date_and_time']=$time;
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
 
 	if (!is_null($image))
 	{
-		$map['news_image']=$image;
+		$update_map['news_image']=$image;
 		require_code('files2');
 		delete_upload('uploads/grepimages','news','news_image','id',$id,$image);
 	}
@@ -334,7 +357,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	log_it('EDIT_NEWS',strval($id),$title);
 
-	$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('news',$update_map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true);
 

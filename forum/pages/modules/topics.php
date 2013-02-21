@@ -1438,7 +1438,7 @@ class Module_topics
 		}
 
 		require_code('content2');
-		$fields->attach(meta_data_get_fields('topic',NULL));
+		$fields->attach(meta_data_get_fields('topic',NULL,false,array('submitter','add_time','edit_time')));
 
 		if (is_null($text))
 			$text=new ocp_tempcode();
@@ -1965,7 +1965,7 @@ class Module_topics
 			$topic_title=$title;
 
 			require_code('content2');
-			$meta_data=actual_meta_data_get_fields('topic',NULL);
+			$meta_data=actual_meta_data_get_fields('topic',NULL,array('submitter','add_time','edit_time'));
 
 			if ($forum_id==-1) // New Private Topic
 			{
@@ -1973,7 +1973,7 @@ class Module_topics
 				if (!ocf_may_whisper($member_id)) warn_exit(do_lang_tempcode('NO_PT_FROM_ALLOW'));
 				check_privilege('use_pt');
 
-				$topic_id=ocf_make_topic(NULL,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),get_member(),$member_id);
+				$topic_id=ocf_make_topic(NULL,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),get_member(),$member_id,true,$meta_data['views']);
 				$_title=get_screen_title('ADD_PRIVATE_TOPIC');
 			}
 			elseif ($forum_id==-2) // New reported post topic
@@ -1988,14 +1988,14 @@ class Module_topics
 					// Already a topic
 				} else // New topic
 				{
-					$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false);
+					$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false,$meta_data['views']);
 				}
 
 				$_title=get_screen_title('REPORT_POST');
 				$check_permissions=false;
 			} else // New topic
 			{
-				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
+				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),NULL,NULL,true,$meta_data['views']);
 				$_title=get_screen_title('ADD_TOPIC');
 
 				if (addon_installed('awards'))
@@ -2086,7 +2086,7 @@ END;
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('post',NULL);
 
-		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1 || is_null($forum_id),$forum_id==-1 || is_null($forum_id),false,$parent_id);
+		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,$meta_data['add_time'],$meta_data['submitter'],$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1 || is_null($forum_id),$forum_id==-1 || is_null($forum_id),false,$parent_id);
 
 		if ((!is_null($forum_id)) && ($anonymous==0) && ($intended_solely_for===NULL))
 		{
@@ -2801,7 +2801,7 @@ END;
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('post',strval($post_id));
 
-		$topic_id=ocf_edit_post($post_id,$validated,post_param('title',''),post_param('post'),post_param_integer('skip_sig',0),post_param_integer('is_emphasised',0),$intended_solely_for,(post_param_integer('show_as_edited',0)==1),(post_param_integer('mark_as_unread',0)==1),post_param('reason'));
+		$topic_id=ocf_edit_post($post_id,$validated,post_param('title',''),post_param('post'),post_param_integer('skip_sig',0),post_param_integer('is_emphasised',0),$intended_solely_for,(post_param_integer('show_as_edited',0)==1),(post_param_integer('mark_as_unread',0)==1),post_param('reason'),true,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['submitter'],true);
 
 		require_code('fields');
 		if (has_tied_catalogue('post'))
@@ -2949,7 +2949,7 @@ END;
 		}
 
 		require_code('content2');
-		$fields->attach(meta_data_get_fields('topic',strval($topic_id)));
+		$fields->attach(meta_data_get_fields('topic',strval($topic_id),false,array('submitter','add_time','edit_time')));
 
 		$title=get_screen_title('EDIT_TOPIC');
 		$submit_name=do_lang_tempcode('SAVE');
@@ -2984,9 +2984,9 @@ END;
 		require_code('ocf_topics_action2');
 
 		require_code('content2');
-		$meta_data=actual_meta_data_get_fields('topic',strval($topic_id));
+		$meta_data=actual_meta_data_get_fields('topic',strval($topic_id),array('submitter','add_time','edit_time'));
 
-		ocf_edit_topic($topic_id,post_param('description',STRING_MAGIC_NULL),post_param('emoticon',STRING_MAGIC_NULL),$validated,$open,$pinned,$sunk,$cascading,post_param('reason',STRING_MAGIC_NULL),$title);
+		ocf_edit_topic($topic_id,post_param('description',STRING_MAGIC_NULL),post_param('emoticon',STRING_MAGIC_NULL),$validated,$open,$pinned,$sunk,$cascading,post_param('reason',STRING_MAGIC_NULL),$title,NULL,true,$meta_data['views']);
 
 		require_code('fields');
 		if (has_tied_catalogue('topic'))

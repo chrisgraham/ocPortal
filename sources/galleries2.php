@@ -440,9 +440,16 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
  * @param  LONG_TEXT		Hidden notes associated with the image
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
+ * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?integer		Number of views (NULL: do not change)
+ * @param  ?MEMBER		Submitter (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description)
+function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','image',strval($id),($title=='')?$description:$title);
 
@@ -464,7 +471,28 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 		send_content_validated_notification('image',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('images',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'description'=>lang_remap_comcode($_description,$description),'url'=>$url,'thumb_url'=>$thumb_url),array('id'=>$id),'',1);
+	$update_map=array(
+		'title'=>lang_remap_comcode($_title,$title),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'cat'=>$cat,
+		'description'=>lang_remap_comcode($_description,$description),
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+	);
+
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['image_views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('images',$update_map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 
@@ -748,9 +776,16 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
  * @param  integer		The height of the video
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
+ * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?integer		Number of views (NULL: do not change)
+ * @param  ?MEMBER		Submitter (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description)
+function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','video',strval($id),($title=='')?$description:$title);
 
@@ -772,7 +807,31 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 		send_content_validated_notification('video',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('videos',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'description'=>lang_remap_comcode($_description,$description),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
+	$update_map=array(
+		'title'=>lang_remap_comcode($_title,$title),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'cat'=>$cat,
+		'description'=>lang_remap_comcode($_description,$description),
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'video_length'=>$video_length,
+		'video_width'=>$video_width,
+		'video_height'=>$video_height,
+	);
+
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['video_views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('videos',$update_map,array('id'=>$id),'',1);
 
 	require_code('transcoding');
 	transcode_video($url,'videos',$id,'id','url',NULL,'video_width','video_height');
@@ -1031,9 +1090,13 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
  * @param  BINARY			Whether rating are allowed
  * @param  BINARY			Whether comments are allowed
  * @param  ?MEMBER		The gallery owner (NULL: nobody)
+ * @param  ?TIME			The add time (NULL: now)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL)
+function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL,$add_time=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','misc',$name,$fullname);
 
@@ -1073,7 +1136,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
-	$map=array(
+	$update_map=array(
 		'name'=>$name,
 		'notes'=>$notes,
 		'fullname'=>lang_remap($myrow['fullname'],$fullname),
@@ -1085,38 +1148,42 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 		'flow_mode_interface'=>$flow_mode_interface,
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
-		'g_owner'=>$g_owner,
 	);
 
 	require_code('files2');
 
 	if (!is_null($rep_image))
 	{
-		$map['rep_image']=$rep_image;
+		$update_map['rep_image']=$rep_image;
 		delete_upload('uploads/grepimages','galleries','rep_image','name',$old_name,$rep_image);
 	}
 	if (!is_null($watermark_top_left))
 	{
-		$map['watermark_top_left']=$watermark_top_left;
+		$update_map['watermark_top_left']=$watermark_top_left;
 		delete_upload('uploads/watermarks','galleries','watermark_top_left','name',$old_name,$watermark_top_left);
 	}
 	if (!is_null($watermark_top_right))
 	{
-		$map['watermark_top_right']=$watermark_top_right;
+		$update_map['watermark_top_right']=$watermark_top_right;
 		delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$old_name,$watermark_top_right);
 	}
 	if (!is_null($watermark_bottom_left))
 	{
-		$map['watermark_bottom_left']=$watermark_bottom_left;
+		$update_map['watermark_bottom_left']=$watermark_bottom_left;
 		delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$old_name,$watermark_bottom_left);
 	}
 	if (!is_null($watermark_bottom_right))
 	{
-		$map['watermark_bottom_right']=$watermark_bottom_right;
+		$update_map['watermark_bottom_right']=$watermark_bottom_right;
 		delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$old_name,$watermark_bottom_right);
 	}
 
-	$GLOBALS['SITE_DB']->query_update('galleries',$map,array('name'=>$old_name),'',1);
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($submitter))
+		$update_map['g_owner']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('galleries',$update_map,array('name'=>$old_name),'',1);
 
 	log_it('EDIT_GALLERY',$name,$fullname);
 

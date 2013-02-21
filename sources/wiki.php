@@ -115,19 +115,22 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
  * @param  BINARY			Whether the post will be validated
  * @param  ?MEMBER		The member doing the action (NULL: current member)
  * @param  boolean		Whether to send out a notification out
+ * @param  ?TIME			The add time (NULL: now)
+ * @param  integer		The number of views so far
  * @return AUTO_LINK		The post ID
  */
-function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notification=true)
+function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notification=true,$add_time=NULL,$views=0)
 {
-	require_lang('wiki');
-
 	if (is_null($member)) $member=get_member();
+	if (is_null($add_time)) $add_time=time();
+
+	require_lang('wiki');
 
 	require_code('comcode_check');
 	check_comcode($message,NULL,false,NULL,true);
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'member_id'=>$member,'date_and_time'=>time(),'page_id'=>$page_id,'wiki_views'=>0),true);
+	$id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'member_id'=>$member,'date_and_time'=>$add_time,'page_id'=>$page_id,'wiki_views'=>$views),true);
 	require_code('attachments2');
 	$the_message=insert_lang_comcode_attachments(2,$message,'wiki_post',strval($id));
 	$GLOBALS['SITE_DB']->query_update('wiki_posts',array('the_message'=>$the_message),array('id'=>$id),'',1);
@@ -167,10 +170,14 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
  * @param  string			The new post
  * @param  BINARY			Whether the post will be validated
  * @param  ?MEMBER		The member doing the action (NULL: current member)
+ * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?integer		Number of views (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function wiki_edit_post($id,$message,$validated,$member=NULL)
+function wiki_edit_post($id,$message,$validated,$member=NULL,$edit_time=NULL,$add_time=NULL,$views=NULL,$null_is_literal=false)
 {
-	if (is_null($member)) $member=get_member();
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -192,7 +199,20 @@ function wiki_edit_post($id,$message,$validated,$member=NULL)
 		send_content_validated_notification('wiki_post',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('wiki_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'wiki_post',strval($id),NULL,true,$original_poster)),array('id'=>$id),'',1);
+	$update_map=array(
+		'validated'=>$validated,
+		'the_message'=>update_lang_comcode_attachments($_message,$message,'wiki_post',strval($id),NULL,true,$original_poster),
+	);
+
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['views']=$views;
+	if (!is_null($member))
+		$update_map['submitter']=$member;
+
+	$GLOBALS['SITE_DB']->query_update('wiki_posts',$update_map,array('id'=>$id),'',1);
 
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
 
@@ -243,11 +263,14 @@ function wiki_delete_post($post_id,$member=NULL)
  * @param  LONG_TEXT		Hidden notes pertaining to the page
  * @param  BINARY			Whether to hide the posts on the page by default
  * @param  ?MEMBER		The member doing the action (NULL: current member)
+ * @param  ?TIME			The add time (NULL: now)
+ * @param  integer		The number of views so far
  * @return AUTO_LINK		The page ID
  */
-function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL)
+function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_time=NULL,$views=0)
 {
 	if (is_null($member)) $member=get_member();
+	if (is_null($add_time)) $add_time=time();
 
 	require_code('comcode_check');
 	check_comcode($description,NULL,false,NULL,true);
@@ -260,7 +283,7 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 		$GLOBALS['SITE_DB']->query_update('wiki_pages',array('description'=>insert_lang_comcode_attachments(2,$description,'wiki_page',strval($id),NULL,false,$member)),array('id'=>$id),'',1);
 	} else
 	{
-		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'edit_date'=>NULL,'wiki_views'=>0,'notes'=>$notes,'description'=>insert_lang($description,2),'title'=>insert_lang($title,2),'add_date'=>time()),true);
+		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'edit_date'=>NULL,'wiki_views'=>$views,'notes'=>$notes,'description'=>insert_lang($description,2),'title'=>insert_lang($title,2),'add_date'=>$add_time),true);
 	}
 
 	update_stat('num_wiki_pages',1);
@@ -290,9 +313,9 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL)
  * @param  LONG_TEXT		Meta description
  * @param  ?MEMBER		The member doing the action (NULL: current member)
  */
-function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member=NULL)
+function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member=NULL,$edit_time=NULL,$add_time=NULL,$views=NULL,$null_is_literal=false)
 {
-	if (is_null($member)) $member=get_member();
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	$pages=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$pages)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -302,7 +325,24 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 
 	require_code('attachments2');
 	require_code('attachments3');
-	$GLOBALS['SITE_DB']->query_update('wiki_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true),'notes'=>$notes,'title'=>lang_remap($_title,$title),'edit_date'=>time()),array('id'=>$id),'',1);
+
+	$update_map=array(
+		'hide_posts'=>$hide_posts,
+		'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true),
+		'notes'=>$notes,
+		'title'=>lang_remap($_title,$title),
+	);
+
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['views']=$views;
+	if (!is_null($member))
+		$update_map['submitter']=$member;
+
+	$GLOBALS['SITE_DB']->query_update('wiki_pages',$update_map,array('id'=>$id),'',1);
+
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
 
 	require_code('seo2');

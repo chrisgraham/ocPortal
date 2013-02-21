@@ -1073,7 +1073,7 @@ class Module_wiki
 			$meta_data=actual_meta_data_get_fields('wiki_post',NULL);
 
 			require_code('content2');
-			$post_id=wiki_add_post($id,$message,$validated);
+			$post_id=wiki_add_post($id,$message,$validated,$meta_data['submitter'],true,$meta_data['add_time'],$meta_data['views']);
 
 			if ($validated==0)
 			{
@@ -1112,7 +1112,7 @@ class Module_wiki
 				require_code('content2');
 				$meta_data=actual_meta_data_get_fields('wiki_post',strval($post_id));
 
-				wiki_edit_post($post_id,$message,$validated);
+				wiki_edit_post($post_id,$message,$validated,$meta_data['submitter'],$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],true);
 			}
 		}
 

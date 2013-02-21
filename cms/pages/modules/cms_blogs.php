@@ -381,7 +381,6 @@ class Module_cms_blogs extends standard_crud_module
 			convert_image(get_base_url().'/'.$url,get_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
 		$schedule=get_input_date('schedule');
-		$add_time=is_null($schedule)?time():$schedule;
 		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')) && (!is_null($schedule)) && ($schedule>time()))
 		{
 			$validated=0;
@@ -395,8 +394,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('news',NULL);
 
-		$time=$add_time;
-		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
+		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_data['add_time'],$meta_data['submitter'],$meta_data['views'],NULL,NULL,$url);
 
 		$main_news_category=$GLOBALS['SITE_DB']->query_select_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;
@@ -476,7 +474,6 @@ class Module_cms_blogs extends standard_crud_module
 		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),NULL,'cms_news');
 
 		$schedule=get_input_date('schedule');
-		$add_time=is_null($schedule)?mixed():$schedule;
 
 		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
 		{
@@ -522,7 +519,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('news',$id);
 
-		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
+		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$meta_data['add_time'],$meta_data['edit_time'],$meta_data['views'],$meta_data['submitter'],true);
 	}
 
 	/**

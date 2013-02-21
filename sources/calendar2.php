@@ -199,7 +199,6 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 	$update_map=array(
 		'e_title'=>lang_remap($myrow['e_title'],$title),
 		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
-		'e_edit_date'=>time(),
 		'e_recurrence'=>$recurrence,
 		'e_recurrences'=>$recurrences,
 		'e_seg_recurrences'=>$seg_recurrences,
@@ -227,15 +226,13 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'notes'=>$notes
 	);
 
-	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
-	$update_map['edit_date']=$edit_time;
+	$update_map['e_edit_date']=$edit_time;
 	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
+		$update_map['e_add_date']=$add_time;
 	if (!is_null($views))
-		$update_map['views']=$views;
+		$update_map['e_views']=$views;
 	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
+		$update_map['e_submitter']=$submitter;
 
 	$GLOBALS['SITE_DB']->query_update('calendar_events',$update_map,array('id'=>$id),'',1);
 

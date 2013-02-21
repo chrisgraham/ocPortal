@@ -851,8 +851,6 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		'out_mode_id'=>$out_mode_id,
 	);
 
-	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;

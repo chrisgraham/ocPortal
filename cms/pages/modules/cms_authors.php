@@ -267,6 +267,8 @@ class Module_cms_authors
 			}
 			$url=(strpos($_url,'mailto:')===false)?fixup_protocolless_urls($_url):$_url;
 
+			$meta_data=actual_meta_data_get_fields('author',NULL);
+
 			add_author($author,$url,$forum_handle,post_param('description'),post_param('skills'),post_param('meta_keywords',''),post_param('meta_description',''));
 
 			require_code('fields');

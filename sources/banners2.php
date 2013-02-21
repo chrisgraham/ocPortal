@@ -361,6 +361,7 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		'validated'=>$validated,
 		'b_type'=>$b_type
 	);
+
 	if (!is_null($submitter))
 		$update_map['submitter']=$submitter;
 	$update_map['edit_date']=$edit_time;

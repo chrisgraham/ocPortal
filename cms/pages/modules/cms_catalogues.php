@@ -592,7 +592,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue_entry',NULL);
 
-		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map);
+		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_data['add_time'],$meta_data['submitter'],NULL,$meta_data['views']);
 
 		if ($validated==1)
 		{
@@ -663,7 +663,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue_entry',strval($id));
 
-		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
+		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
@@ -1548,7 +1548,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue_category',NULL);
 
-		$category_id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target);
+		$category_id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$meta_data['add_time']);
 		if (get_value('disable_cat_cat_perms')!=='1')
 			$this->set_permissions(strval($category_id));
 
@@ -1596,7 +1596,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue_category',strval($category_id));
 
-		actual_edit_catalogue_category($category_id,$title,$description,$notes,$parent_id,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$rep_image,$move_days_lower,$move_days_higher,$move_target);
+		actual_edit_catalogue_category($category_id,$title,$description,$notes,$parent_id,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$rep_image,$move_days_lower,$move_days_higher,$move_target,$meta_data['add_time']);
 		if (!fractional_edit())
 		{
 			if (get_value('disable_cat_cat_perms')!=='1')
@@ -1928,7 +1928,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue',NULL);
 
-		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports);
+		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$meta_data['add_time']);
 		$this->set_permissions($name);
 		if (!is_null($category_id)) $GLOBALS['MODULE_CMS_CATALOGUES']->cat_crud_module->set_permissions(strval($category_id));
 
@@ -2094,7 +2094,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue',$old_name);
 
-		actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports);
+		actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$meta_data['add_time']);
 
 		$this->new_id=$name;
 

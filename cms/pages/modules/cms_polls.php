@@ -311,7 +311,7 @@ class Module_cms_polls extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('poll',NULL);
 
-		$id=add_poll($question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$id=add_poll($question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['add_time'],$meta_data['submiter'],NULL,0,0,0,0,0,0,0,0,0,0,$meta_data['views'],$meta_data['edit_time']);
 		$current=post_param_integer('validated',0);
 		if ($current==1)
 		{
@@ -393,7 +393,7 @@ class Module_cms_polls extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('poll',$id);
 
-		edit_poll(intval($id),$question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		edit_poll(intval($id),$question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		if (!fractional_edit())
 		{
