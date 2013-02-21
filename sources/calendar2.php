@@ -58,10 +58,11 @@
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
-	if (is_null($add_date)) $add_date=time();
+	if (is_null($add_time)) $add_time=time();
+
 	if (is_null($timezone)) $timezone=get_users_timezone();
 
 	require_code('comcode_check');
@@ -74,8 +75,8 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'e_views'=>$views,
 		'e_title'=>insert_lang($title,2),
 		'e_content'=>0,
-		'e_add_date'=>$add_date,
-		'e_edit_date'=>$edit_date,
+		'e_add_date'=>$add_time,
+		'e_edit_date'=>$edit_time,
 		'e_recurrence'=>$recurrence,
 		'e_recurrences'=>$recurrences,
 		'e_seg_recurrences'=>$seg_recurrences,
@@ -164,9 +165,16 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY				Whether the download may be trackbacked
  * @param  LONG_TEXT			Hidden notes pertaining to the download
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  ?integer			Number of views (NULL: do not change)
+ * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
+function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter'),array('id'=>$id),'',1);
 	$myrow=$myrows[0];
 
@@ -188,7 +196,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		send_content_validated_notification('event',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('calendar_events',array(
+	$update_map=array(
 		'e_title'=>lang_remap($myrow['e_title'],$title),
 		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
 		'e_edit_date'=>time(),
@@ -217,7 +225,19 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes
-	),array('id'=>$id),'',1);
+	);
+
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('calendar_events',$update_map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
 

@@ -110,6 +110,7 @@ class Module_cms_iotds extends standard_crud_module
 	/**
 	 * Get tempcode for an IOTD adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK		The IOTD ID (NULL: new)
 	 * @param  URLPATH			The URL to the image
 	 * @param  URLPATH			The URL to the thumbnail
 	 * @param  SHORT_TEXT		The title
@@ -121,7 +122,7 @@ class Module_cms_iotds extends standard_crud_module
 	 * @param  LONG_TEXT			Notes for the IOTD
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($url='',$thumb_url='',$title='',$caption='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
+	function get_form_fields($id=NULL,$url='',$thumb_url='',$title='',$caption='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -170,6 +171,8 @@ class Module_cms_iotds extends standard_crud_module
 
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+
+		$fields->attach(meta_data_get_fields('iotd',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden);
 	}
@@ -297,6 +300,8 @@ class Module_cms_iotds extends standard_crud_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$validated=post_param_integer('validated',0);
 
+		$meta_data=actual_meta_data_get_fields('iotd',NULL);
+
 		$id=add_iotd($url,$title,$caption,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
 		if ($validated==1)
@@ -369,6 +374,8 @@ class Module_cms_iotds extends standard_crud_module
 				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,$submitter);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('iotd',strval($id));
 
 		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 

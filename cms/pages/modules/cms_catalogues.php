@@ -463,6 +463,8 @@ class Module_cms_catalogues extends standard_crud_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		$fields->attach(meta_data_get_fields('catalogue_entry',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden,NULL,NULL,false,NULL,NULL,NULL,$field_defaults);
 	}
 
@@ -588,6 +590,8 @@ class Module_cms_catalogues extends standard_crud_module
 			system_gift_transfer(do_lang('ADD_CATALOGUE_ENTRY'),intval($points),get_member());
 		}
 
+		$meta_data=actual_meta_data_get_fields('catalogue_entry',NULL);
+
 		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map);
 
 		if ($validated==1)
@@ -656,6 +660,8 @@ class Module_cms_catalogues extends standard_crud_module
 					syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('catalogue_entry',strval($id));
 
 		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
 
@@ -1456,6 +1462,8 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_HIGHER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_HIGHER'),'move_days_higher',$move_days_higher,true));
 		}
 
+		$fields->attach(meta_data_get_fields('catalogue_category',is_null($id)?NULL:strval($id)));
+
 		// Permissions
 		if (get_value('disable_cat_cat_perms')!=='1')
 			$fields->attach($this->get_permission_fields(is_null($id)?'':strval($id),NULL,is_null($id)));
@@ -1538,6 +1546,8 @@ class Module_cms_catalogues_cat extends standard_crud_module
 				access_denied('CATEGORY_ACCESS');
 		}
 
+		$meta_data=actual_meta_data_get_fields('catalogue_category',NULL);
+
 		$category_id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target);
 		if (get_value('disable_cat_cat_perms')!=='1')
 			$this->set_permissions(strval($category_id));
@@ -1583,6 +1593,8 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			$rep_image=$urls[0];
 			if (($rep_image=='') && (post_param_integer('rep_image_unlink',0)!=1)) $rep_image=NULL;
 		} else $rep_image=STRING_MAGIC_NULL;
+
+		$meta_data=actual_meta_data_get_fields('catalogue_category',strval($category_id));
 
 		actual_edit_catalogue_category($category_id,$title,$description,$notes,$parent_id,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$rep_image,$move_days_lower,$move_days_higher,$move_target);
 		if (!fractional_edit())
@@ -1772,6 +1784,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$view_report_types->attach(form_input_list_entry('quarterly',$send_view_reports=='quarterly',do_lang_tempcode('VR_QUARTERLY')));
 			$fields->attach(form_input_list(do_lang_tempcode('VIEW_REPORTS'),do_lang_tempcode('DESCRIPTION_VIEW_REPORTS'),'send_view_reports',$view_report_types));
 
+			$fields->attach(meta_data_get_fields('catalogue',($name=='')?NULL:$name));
+
 			// Permissions
 			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 
@@ -1911,6 +1925,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			if ($field['name']!='') $num_fields++;
 		}
 		if ($num_fields==0) warn_exit(do_lang_tempcode('NO_FIELDS'));
+
+		$meta_data=actual_meta_data_get_fields('catalogue',NULL);
 
 		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports);
 		$this->set_permissions($name);
@@ -2075,6 +2091,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			catalogue_from_tree($name);
 		}
 		$this->is_tree_catalogue=($is_tree==1);
+
+		$meta_data=actual_meta_data_get_fields('catalogue',$old_name);
 
 		actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports);
 

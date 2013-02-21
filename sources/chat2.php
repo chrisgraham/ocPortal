@@ -123,6 +123,7 @@ function friend_remove($likes,$liked)
 /**
  * Get form fields for adding/editing a chatroom.
  *
+ * @param  ?AUTO_LINK	The chat room ID (NULL: new)
  * @param  boolean		Whether the room is being made as a private room by the current member
  * @param  SHORT_TEXT	The room name
  * @param  LONG_TEXT		The welcome message
@@ -133,7 +134,7 @@ function friend_remove($likes,$liked)
  * @param  LONG_TEXT		The comma-separated list of usergroups that may NOT access it (blank: no restriction)
  * @return tempcode		The fields
  */
-function get_chatroom_fields($is_made_by_me=false,$room_name='',$welcome='',$username='',$allow2='',$allow2_groups='',$disallow2='',$disallow2_groups='')
+function get_chatroom_fields($id,$is_made_by_me=false,$room_name='',$welcome='',$username='',$allow2='',$allow2_groups='',$disallow2='',$disallow2_groups='')
 {
 	require_code('form_templates');
 
@@ -216,6 +217,9 @@ function get_chatroom_fields($is_made_by_me=false,$room_name='',$welcome='',$use
 
 		$fields->attach(form_input_multi_list(do_lang_tempcode('DISALLOW_LIST_GROUPS'),do_lang_tempcode('DESCRIPTION_DISALLOW_LIST_GROUPS'),'disallow_list_groups',$usergroup_list));
 	}
+
+	require_code('content2');
+	$fields->attach(meta_data_get_fields('chat',is_null($id)?NULL:strval($id)));
 
 	return $fields;
 }

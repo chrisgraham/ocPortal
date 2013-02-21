@@ -58,10 +58,6 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	{
 		$fields->attach(form_input_hidden('b_type',$b_type));
 	}
-	if (has_privilege(get_member(),'full_banner_setup'))
-	{
-		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',$GLOBALS['FORUM_DRIVER']->get_username(is_null($submitter)?get_member():$submitter),true));
-	}
 	if (get_value('disable_staff_notes')!=='1')
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
@@ -314,17 +310,22 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
  * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
  * @param  ?TIME				The banner expiry date (NULL: never)
- * @param  MEMBER				The banners submitter
+ * @param  ?MEMBER			The banners submitter (NULL: leave unchanged)
  * @param  BINARY				Whether the banner has been validated
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type)
+function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_time=NULL,$add_time=NULL,$null_is_literal=false)
 {
 	if ($old_name!=$name)
 	{
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$name));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 	}
+
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	$_caption=$GLOBALS['SITE_DB']->query_select_value('banners','caption',array('name'=>$old_name));
 
@@ -345,13 +346,11 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		send_content_validated_notification('banner',$name);
 	}
 
-	$GLOBALS['SITE_DB']->query_update('banners',array(
+	$update_map=array(
 		'b_title_text'=>$title_text,
 		'b_direct_code'=>$direct_code,
-		'edit_date'=>time(),
 		'expiry_date'=>$expiry_date,
 		'the_type'=>$the_type,
-		'submitter'=>$submitter,
 		'name'=>$name,
 		'img_url'=>$imgurl,
 		'caption'=>lang_remap_comcode($_caption,$caption),
@@ -361,7 +360,14 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		'notes'=>$notes,
 		'validated'=>$validated,
 		'b_type'=>$b_type
-	),array('name'=>$old_name),'',1);
+	);
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+
+	$GLOBALS['SITE_DB']->query_update('banners',$update_map,array('name'=>$old_name),'',1);
 }
 
 /**

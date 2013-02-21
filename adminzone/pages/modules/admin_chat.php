@@ -156,7 +156,7 @@ class Module_admin_chat extends standard_crud_module
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['room_owner']);
 		if (is_null($username)) $username='';//do_lang('UNKNOWN');
 
-		$fields=get_chatroom_fields(false,$row['room_name'],get_translated_text($row['c_welcome']),$username,$allow2,$allow2_groups,$disallow2,$disallow2_groups);
+		$fields=get_chatroom_fields(intval($id),false,$row['room_name'],get_translated_text($row['c_welcome']),$username,$allow2,$allow2_groups,$disallow2,$disallow2_groups);
 
 		// Permissions
 		$fields->attach($this->get_permission_fields($id));
@@ -176,6 +176,8 @@ class Module_admin_chat extends standard_crud_module
 	function add_actualisation()
 	{
 		list($allow2,$allow2_groups,$disallow2,$disallow2_groups)=read_in_chat_perm_fields();
+
+		$meta_data=actual_meta_data_get_fields('chat',NULL);
 
 		$id=add_chatroom(post_param('c_welcome'),post_param('room_name'),$GLOBALS['FORUM_DRIVER']->get_member_from_username(post_param('room_owner')),$allow2,$allow2_groups,$disallow2,$disallow2_groups,post_param('room_lang',user_lang()));
 		$this->set_permissions($id);
@@ -201,6 +203,8 @@ class Module_admin_chat extends standard_crud_module
 			$disallow2=STRING_MAGIC_NULL;
 			$disallow2_groups=STRING_MAGIC_NULL;
 		}
+
+		$meta_data=actual_meta_data_get_fields('chat',$id);
 
 		edit_chatroom(intval($id),post_param('c_welcome',STRING_MAGIC_NULL),post_param('room_name'),$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,post_param('room_lang',STRING_MAGIC_NULL));
 		$this->set_permissions($id);

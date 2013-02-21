@@ -283,20 +283,12 @@ function staff_unload_action()
 	div.className='unload_action';
 	div.style.width='100%';
 	div.style.top=(get_window_height()/2-160)+'px';
-	div.style.position='absolute';
+	div.style.position='fixed';
 	div.style.zIndex=10000;
 	div.style.textAlign='center';
 	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
-	if (typeof window.scrollTo!='undefined')
-	{
-		try
-		{
-			window.scrollTo(0,0);
-		}
-		catch (e) {};
-	}
 
 	add_event_listener_abstract(window,'pageshow',undo_staff_unload_action);
 	add_event_listener_abstract(window,'keydown',undo_staff_unload_action);

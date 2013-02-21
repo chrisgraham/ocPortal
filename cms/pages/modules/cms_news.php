@@ -206,6 +206,7 @@ class Module_cms_news extends standard_crud_module
 	/**
 	 * Get tempcode for a news adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK		The news ID (NULL: new)
 	 * @param  ?AUTO_LINK		The primary category for the news (NULL: personal)
 	 * @param  ?array				A list of categories the news is in (NULL: not known)
 	 * @param  SHORT_TEXT		The news title
@@ -221,7 +222,7 @@ class Module_cms_news extends standard_crud_module
 	 * @param  ?array				Scheduled go-live time (NULL: N/A)
 	 * @return array				A tuple of lots of info (fields, hidden fields, trailing fields, tabindex for posting form)
 	 */
-	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
+	function get_form_fields($id=NULL,$main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -306,6 +307,8 @@ class Module_cms_news extends standard_crud_module
 		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
 
+		$fields->attach(meta_data_get_fields('news',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/,$posting_form_tabindex);
 	}
 
@@ -375,7 +378,7 @@ class Module_cms_news extends standard_crud_module
 			$scheduled=NULL;
 		}
 
-		$ret=$this->get_form_fields($cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image'],$scheduled);
+		$ret=$this->get_form_fields($id,$cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image'],$scheduled);
 
 		$ret[2]=new ocp_tempcode();
 		$ret[3]='';
@@ -433,6 +436,8 @@ class Module_cms_news extends standard_crud_module
 			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
 			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
 		}
+
+		$meta_data=actual_meta_data_get_fields('news',NULL);
 
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
@@ -560,6 +565,8 @@ class Module_cms_news extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('news',strval($id));
 
 		edit_news($id,$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
 	}
@@ -920,7 +927,7 @@ class Module_cms_news_cat extends standard_crud_module
 	 * @param  ?AUTO_LINK	The ID of this news category (NULL: we haven't added it yet)
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($title='',$img='',$notes='',$owner=NULL,$category_id=NULL)
+	function get_form_fields($id=NULL,$title='',$img='',$notes='',$owner=NULL,$category_id=NULL)
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
@@ -954,18 +961,13 @@ class Module_cms_news_cat extends standard_crud_module
 			$fields->attach($image_chooser_field);
 		}
 
-		if (!is_null($owner))
-		{
-			$owner_username=$GLOBALS['FORUM_DRIVER']->get_username($owner);
-			if (is_null($owner_username)) $owner_username=do_lang('UNKNOWN');
-			$fields->attach(form_input_line(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$owner_username,true));
-		}
-
 		if (get_value('disable_staff_notes')!=='1')
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b88f1b286b05e18991ad51538812f7b2','SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		}
+
+		$fields->attach(meta_data_get_fields('news_category',is_null($id)?NULL:strval($id)),true);
 
 		$fields->attach($this->get_permission_fields(is_null($category_id)?'':strval($category_id),NULL,($title=='')));
 
@@ -989,7 +991,7 @@ class Module_cms_news_cat extends standard_crud_module
 		}
 		$myrow=$rows[0];
 
-		return $this->get_form_fields(get_translated_text($myrow['nc_title']),$myrow['nc_img'],$myrow['notes'],$myrow['nc_owner'],$myrow['id']);
+		return $this->get_form_fields($id,get_translated_text($myrow['nc_title']),$myrow['nc_img'],$myrow['notes'],$myrow['nc_owner'],$myrow['id']);
 	}
 
 	/**
@@ -1004,6 +1006,8 @@ class Module_cms_news_cat extends standard_crud_module
 		$title=post_param('title');
 		$img=get_theme_img_code('newscats',true);
 		$notes=post_param('notes','');
+
+		$meta_data=actual_meta_data_get_fields('news_category',NULL);
 
 		$id=add_news_category($title,$img,$notes);
 		$this->set_permissions($id);
@@ -1024,11 +1028,15 @@ class Module_cms_news_cat extends standard_crud_module
 		$img=get_theme_img_code('newscats',true);
 		if (fractional_edit()) $img=STRING_MAGIC_NULL;
 		$notes=post_param('notes',STRING_MAGIC_NULL);
-		$_owner=post_param('owner',fractional_edit()?STRING_MAGIC_NULL:NULL);
-		$owner=is_null($_owner)?NULL:$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
-		if (fractional_edit()) $owner=INTEGER_MAGIC_NULL;
 
-		edit_news_category(intval($id),$title,$img,$notes,$owner);
+		$meta_data=actual_meta_data_get_fields('news_category',$id);
+
+		if (is_null($meta_data['submitter'])) // We need to interpret this - if we didn't have specification permission, we need to copy through existing setting, as a NULL would imply a de-set
+		{
+			$meta_data['submitter']=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>intval($id)));
+		}
+
+		edit_news_category(intval($id),$title,$img,$notes,$meta_data['submitter']);
 		$this->set_permissions(intval($id));
 	}
 

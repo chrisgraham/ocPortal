@@ -659,7 +659,7 @@ class Module_chat
 
 		require_code('form_templates');
 
-		$fields=get_chatroom_fields(true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
+		$fields=get_chatroom_fields(NULL,true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
 
 		$posting_name=do_lang_tempcode('CREATE_PRIVATE_ROOM');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_private'),'_SELF');
@@ -691,6 +691,8 @@ class Module_chat
 		$room_lang=post_param('room_lang',user_lang());
 		list($allow2,$allow2_groups,$disallow2,$disallow2_groups)=read_in_chat_perm_fields();
 		$allow=explode(',',$allow2);
+
+		$meta_data=actual_meta_data_get_fields('chat',NULL);
 
 		$new_room_id=add_chatroom(post_param('c_welcome'),$room_name,get_member(),$allow2,$allow2_groups,$disallow2,$disallow2_groups,$room_lang);
 

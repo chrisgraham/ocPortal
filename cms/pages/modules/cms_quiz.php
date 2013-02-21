@@ -177,6 +177,7 @@ class Module_cms_quiz extends standard_crud_module
 	/**
 	 * Get tempcode for a adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK	The quiz ID (NULL: new)
 	 * @param  SHORT_TEXT	The name of the quiz
 	 * @param  ?integer		The number of minutes allowed for completion (NULL: NA)
 	 * @param  LONG_TEXT		The text shown at the start of the quiz
@@ -196,7 +197,7 @@ class Module_cms_quiz extends standard_crud_module
 	 * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
 	 * @return tempcode		The form fields
 	 */
-	function get_form_fields($name='',$timeout=NULL,$start_text='',$end_text='',$end_text_fail='',$notes='',$percentage=70,$open_time=NULL,$close_time=NULL,$num_winners=2,$redo_time=NULL,$type='COMPETITION',$validated=1,$text=NULL,$points_for_passing=0,$tied_newsletter=NULL)
+	function get_form_fields($id=NULL,$name='',$timeout=NULL,$start_text='',$end_text='',$end_text_fail='',$notes='',$percentage=70,$open_time=NULL,$close_time=NULL,$num_winners=2,$redo_time=NULL,$type='COMPETITION',$validated=1,$text=NULL,$points_for_passing=0,$tied_newsletter=NULL)
 	{
 		if (is_null($open_time)) $open_time=time();
 
@@ -262,6 +263,8 @@ class Module_cms_quiz extends standard_crud_module
 		if (get_value('disable_staff_notes')!=='1')
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
+		$fields->attach(meta_data_get_fields('quiz',is_null($id)?NULL:strval($id)));
+
 		return $fields;
 	}
 
@@ -313,7 +316,7 @@ class Module_cms_quiz extends standard_crud_module
 			$text.=chr(10);
 		}
 
-		return $this->get_form_fields(get_translated_text($myrow['q_name']),$myrow['q_timeout'],get_translated_text($myrow['q_start_text']),get_translated_text($myrow['q_end_text']),get_translated_text($myrow['q_end_text_fail']),$myrow['q_notes'],$myrow['q_percentage'],$myrow['q_open_time'],$myrow['q_close_time'],$myrow['q_num_winners'],$myrow['q_redo_time'],$myrow['q_type'],$myrow['q_validated'],$text,$myrow['q_points_for_passing'],$myrow['q_tied_newsletter']);
+		return $this->get_form_fields($myrow['id'],get_translated_text($myrow['q_name']),$myrow['q_timeout'],get_translated_text($myrow['q_start_text']),get_translated_text($myrow['q_end_text']),get_translated_text($myrow['q_end_text_fail']),$myrow['q_notes'],$myrow['q_percentage'],$myrow['q_open_time'],$myrow['q_close_time'],$myrow['q_num_winners'],$myrow['q_redo_time'],$myrow['q_type'],$myrow['q_validated'],$text,$myrow['q_points_for_passing'],$myrow['q_tied_newsletter']);
 	}
 
 	/**
@@ -331,6 +334,9 @@ class Module_cms_quiz extends standard_crud_module
 		$_tied_newsletter=post_param('tied_newsletter','');
 		$tied_newsletter=($_tied_newsletter=='')?NULL:intval($_tied_newsletter);
 		$name=post_param('name');
+
+		$meta_data=actual_meta_data_get_fields('quiz',NULL);
+
 		$id=add_quiz($name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter);
 
 		if ($validated==1)
@@ -374,6 +380,8 @@ class Module_cms_quiz extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$submitter);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('quiz',strval($id));
 
 		edit_quiz(
 			$id,

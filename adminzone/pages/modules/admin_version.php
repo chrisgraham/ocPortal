@@ -85,6 +85,7 @@ class Module_admin_version
 		delete_privilege('sms_higher_limit');
 		delete_privilege('sms_higher_trigger_limit');
 		delete_privilege('assume_any_member');
+		delete_privilege('edit_meta_fields');
 		delete_config_option('url_monikers_enabled');
 	}
 
@@ -109,7 +110,8 @@ class Module_admin_version
 				'm_resource_type'=>'ID_TEXT',
 				'm_resource_id'=>'ID_TEXT',
 				'm_moniker'=>'SHORT_TEXT',
-				'm_deprecated'=>'BINARY'
+				'm_deprecated'=>'BINARY',
+				'm_manually_chosen'=>'BINARY',
 			));
 			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_pagelink',array('m_resource_page','m_resource_type','m_resource_id'));
 			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_moniker',array('m_moniker'));
@@ -303,6 +305,12 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'captcha_single_guess'),'',1);
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
 			$GLOBALS['SITE_DB']->alter_table_field('cache','langs_required','LONG_TEXT','dependencies');
+			$GLOBALS['SITE_DB']->add_table_field('url_monikers','m_manually_chosen','BINARY');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<17))
+		{
+			add_privilege('SUBMISSION','edit_meta_fields');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

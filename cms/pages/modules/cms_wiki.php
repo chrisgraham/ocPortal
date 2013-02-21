@@ -114,13 +114,14 @@ class Module_cms_wiki
 	/**
 	 * Get the fields for adding/editing a Wiki+ page.
 	 *
+	 * @param  ?AUTO_LINK	The page ID (NULL: new)
 	 * @param  SHORT_TEXT	The page title
 	 * @param  LONG_TEXT		Hidden notes pertaining to the page
 	 * @param  BINARY			Whether to hide the posts on the page by default
 	 * @param  AUTO_LINK		The ID of the page (-1 implies we're adding)
 	 * @return array			The fields, the extra fields, the hidden fields.
 	 */
-	function get_page_fields($title,$notes='',$hide_posts=0,$page_id=-1)
+	function get_page_fields($id=NULL,$title='',$notes='',$hide_posts=0,$page_id=-1)
 	{
 		$fields=new ocp_tempcode();
 		$fields2=new ocp_tempcode();
@@ -146,6 +147,9 @@ class Module_cms_wiki
 			append_form_custom_fields('wiki_page',($page_id==-1)?NULL:strval($page_id),$fields,$hidden);
 		}
 
+		require_code('content2');
+		$fields->attach(meta_data_get_fields('wiki_page',strval($id)));
+
 		require_code('permissions2');
 		$fields2->attach(get_category_permissions_for_environment('wiki_page',strval($page_id),'cms_wiki',NULL,($page_id==-1)));
 
@@ -167,7 +171,7 @@ class Module_cms_wiki
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'_add_page','redirect'=>get_param('redirect',NULL)),'_SELF');
 
-		list($fields,$fields2,$hidden)=$this->get_page_fields($_title);
+		list($fields,$fields2,$hidden)=$this->get_page_fields(NULL,$_title);
 
 		// Awards?
 		if (addon_installed('awards'))
@@ -191,6 +195,9 @@ class Module_cms_wiki
 		$title=get_screen_title('WIKI_ADD_PAGE');
 
 		check_submit_permission('cat_low');
+
+		require_code('content2');
+		$meta_data=actual_meta_data_get_fields('wiki_page',NULL);
 
 		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0));
 		require_code('permissions2');
@@ -284,7 +291,7 @@ class Module_cms_wiki
 		}
 		$edit_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'id'=>get_param('id',false,true),'type'=>'_edit_page'),'_SELF');
 
-		list($fields,$fields2,$hidden)=$this->get_page_fields($page_title,$page['notes'],$page['hide_posts'],$id);
+		list($fields,$fields2,$hidden)=$this->get_page_fields($id,$page_title,$page['notes'],$page['hide_posts'],$id);
 		require_code('seo2');
 		$fields2->attach(seo_get_fields('wiki_page',strval($id)));
 
@@ -388,6 +395,9 @@ class Module_cms_wiki
 			$title=get_screen_title('WIKI_EDIT_PAGE');
 
 			check_edit_permission('cat_low',NULL,array('wiki_page',$id));
+
+			require_code('content2');
+			$meta_data=actual_meta_data_get_fields('wiki_page',strval($id));
 
 			require_code('permissions2');
 			set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');

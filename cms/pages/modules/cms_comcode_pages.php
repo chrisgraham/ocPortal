@@ -793,10 +793,6 @@ class Module_cms_comcode_pages
 		if (!$simple_add)
 		{
 			$fields2->attach(form_input_tick(do_lang_tempcode('SHOW_AS_EDITED'),do_lang_tempcode('DESCRIPTION_SHOW_AS_EDITED'),'show_as_edit',$show_as_edit));
-			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission (see #206 on tracker)
-			{
-				$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
-			}
 
 			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
 				'_GUID'=>'a42341a9a2de532cecdcfbecaff00a0f',
@@ -814,6 +810,9 @@ class Module_cms_comcode_pages
 			require_code('awards');
 			$fields2->attach(get_award_fields('comcode_page',$zone.':'.$file));
 		}
+
+		require_code('content2');
+		$fields->attach(meta_data_get_fields('comcode_page',($page_link=='')?NULL:$page_link));
 
 		require_code('permissions2');
 		$fields2->attach(get_page_permissions_for_environment($zone,$file));
@@ -922,14 +921,10 @@ class Module_cms_comcode_pages
 		$parent_page=post_param('parent_page','');
 		$show_as_edit=post_param_integer('show_as_edit',0);
 
+		$meta_data=actual_meta_data_get_fields('comcode_page',$zone.':'.$file);
+
 		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
-		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission (see #206 on tracker)
-		{
-			$_owner=post_param('owner',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
-			$owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
-			if (is_null($owner)) $owner=get_member();
-		} else $owner=get_member();
 		if (is_null($resource_owner)) // Add
 		{
 			check_submit_permission('high');
@@ -943,9 +938,9 @@ class Module_cms_comcode_pages
 				'the_page'=>$file,
 				'p_parent_page'=>$parent_page,
 				'p_validated'=>$validated,
-				'p_edit_date'=>NULL,
-				'p_add_date'=>time(),
-				'p_submitter'=>$owner,
+				'p_edit_date'=>$meta_data['edit_time'],
+				'p_add_date'=>$meta_data['add_time'],
+				'p_submitter'=>$meta_data['submitter'],
 				'p_show_as_edit'=>0
 			));
 		} else // Edit
@@ -963,8 +958,9 @@ class Module_cms_comcode_pages
 			$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
 				'p_parent_page'=>$parent_page,
 				'p_validated'=>$validated,
-				'p_edit_date'=>time(),
-				'p_submitter'=>$owner,
+				'p_edit_date'=>$meta_data['edit_time'],
+				'p_add_date'=>$meta_data['add_time'],
+				'p_submitter'=>$meta_data['submitter'],
 				'p_show_as_edit'=>$show_as_edit
 			),array('the_zone'=>$zone,'the_page'=>$file),'',1);
 		}

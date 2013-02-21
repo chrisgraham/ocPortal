@@ -50,7 +50,7 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
  * @param  ?LONG_TEXT		The notes (NULL: keep as-is)
  * @param  ?MEMBER			The owner (NULL: public)
 */
-function edit_news_category($id,$title,$img,$notes,$owner=NULL)
+function edit_news_category($id,$title,$img,$notes,$owner)
 {
 	$myrows=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title','nc_img','notes'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -65,7 +65,10 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 	if (is_null($img)) $img=$myrow['nc_img'];
 	if (is_null($notes)) $notes=$myrow['notes'];
 
-	$GLOBALS['SITE_DB']->query_update('news_categories',array('nc_title'=>lang_remap($myrow['nc_title'],$title),'nc_img'=>$img,'notes'=>$notes,'nc_owner'=>$owner),array('id'=>$id),'',1);
+	$update_map=array('nc_title'=>lang_remap($myrow['nc_title'],$title),'nc_img'=>$img,'notes'=>$notes);
+	$update_map['nc_owner']=$owner;
+
+	$GLOBALS['SITE_DB']->query_update('news_categories',$update_map,array('id'=>$id),'',1);
 
 	require_code('themes2');
 	tidy_theme_img_code($img,$myrow['nc_img'],'news_categories','nc_img');

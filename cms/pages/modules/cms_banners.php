@@ -274,7 +274,7 @@ class Module_cms_banners extends standard_crud_module
 	/**
 	 * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
 	 *
-	 * @param  ID_TEXT			The name of the banner
+	 * @param  ID_TEXT			The name of the banner (blank: new)
 	 * @param  URLPATH			The URL to the banner image
 	 * @param  URLPATH			The URL to the site the banner leads to
 	 * @param  SHORT_TEXT		The caption of the banner
@@ -301,6 +301,8 @@ class Module_cms_banners extends standard_crud_module
 
 		list($fields,$_javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,$submitter,$validated,$b_type,$title_text);
 		$this->javascript.=$_javascript;
+
+		$fields->attach(meta_data_get_fields('banner',$name));
 
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
@@ -360,8 +362,6 @@ class Module_cms_banners extends standard_crud_module
 		$notes=post_param('notes','');
 		$the_type=post_param_integer('the_type',1);
 		$expiry_date=get_input_date('expiry_date');
-		$_submitter=post_param('submitter',strval(get_member()));
-		$submitter=(!is_numeric($_submitter))?$GLOBALS['FORUM_DRIVER']->get_member_from_username($_submitter):intval($_submitter);
 		$validated=post_param_integer('validated',0);
 		$b_type=post_param('b_type');
 
@@ -371,7 +371,9 @@ class Module_cms_banners extends standard_crud_module
 
 		list($url,$title_text)=check_banner($title_text,$direct_code,$b_type);
 
-		add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type);
+		$meta_data=actual_meta_data_get_fields('banner',NULL);
+
+		add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$meta_data['add_time'],0,0,0,0,$meta_data['edit_time']);
 
 		$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
 		if (array_key_exists(0,$_banner_type_row))
@@ -410,10 +412,10 @@ class Module_cms_banners extends standard_crud_module
 		list($url,$title_text)=check_banner($title_text,$direct_code,$b_type);
 
 		$validated=post_param_integer('validated',0);
-		$_submitter=post_param('submitter',strval(get_member()));
-		$submitter=!is_numeric($_submitter)?$GLOBALS['FORUM_DRIVER']->get_member_from_username($_submitter):intval($_submitter);
 
-		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
+		$meta_data=actual_meta_data_get_fields('banner',$id);
+
+		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type,$meta_data['edit_time'],$meta_data['add_time'],true);
 
 		$this->new_id=post_param('name');
 
@@ -524,7 +526,7 @@ class Module_cms_banners_cat extends standard_crud_module
 	/**
 	 * Get tempcode for a post template adding/editing form.
 	 *
-	 * @param  ID_TEXT		The ID of the banner type
+	 * @param  ID_TEXT		The ID of the banner type (blank: new)
 	 * @param  BINARY			Whether this is a textual banner
 	 * @param  integer		The image width (ignored for textual banners)
 	 * @param  integer		The image height (ignored for textual banners)
@@ -549,6 +551,8 @@ class Module_cms_banners_cat extends standard_crud_module
 		$fields->attach(form_input_integer(do_lang_tempcode('HEIGHT'),do_lang_tempcode('DESCRIPTION_BANNER_HEIGHT'),'image_height',$image_height,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'),do_lang_tempcode('DESCRIPTION_BANNER_FILE_SIZE'),'max_file_size',$max_file_size,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('COMCODE_INLINE'),do_lang_tempcode('DESCRIPTION_COMCODE_INLINE'),'comcode_inline',$comcode_inline==1));
+
+		$fields->attach(meta_data_get_fields('banner_type',($id=='')?NULL:$id));
 
 		return array($fields,$hidden);
 	}
@@ -584,6 +588,8 @@ class Module_cms_banners_cat extends standard_crud_module
 		$max_file_size=post_param_integer('max_file_size');
 		$comcode_inline=post_param_integer('comcode_inline',0);
 
+		$meta_data=actual_meta_data_get_fields('banner_type',NULL);
+
 		add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
 
 		return array($id,do_lang_tempcode('ADD_BANNER_TEMPLATING'));
@@ -602,6 +608,8 @@ class Module_cms_banners_cat extends standard_crud_module
 		$image_height=post_param_integer('image_height');
 		$max_file_size=post_param_integer('max_file_size');
 		$comcode_inline=post_param_integer('comcode_inline',0);
+
+		$meta_data=actual_meta_data_get_fields('banner_type',$id);
 
 		edit_banner_type($id,post_param('new_id'),$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
 

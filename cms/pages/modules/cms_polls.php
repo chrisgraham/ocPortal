@@ -189,6 +189,7 @@ class Module_cms_polls extends standard_crud_module
 	/**
 	 * Get tempcode for a poll adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK		The poll ID (NULL: new)
 	 * @param  SHORT_TEXT		The question
 	 * @param  SHORT_TEXT		The first answer
 	 * @param  SHORT_TEXT		The second answer
@@ -207,7 +208,7 @@ class Module_cms_polls extends standard_crud_module
 	 * @param  LONG_TEXT			Notes for the poll
 	 * @return tempcode			The tempcode for the visible fields
 	 */
-	function get_form_fields($question='',$a1='',$a2='',$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
+	function get_form_fields($id=NULL,$question='',$a1='',$a2='',$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -237,6 +238,8 @@ class Module_cms_polls extends standard_crud_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		$fields->attach(meta_data_get_fields('poll',is_null($id)?NULL:strval($id)));
+
 		return $fields;
 	}
 
@@ -250,7 +253,7 @@ class Module_cms_polls extends standard_crud_module
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('submitter','date_and_time'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$rows)) return array(NULL,NULL);
-		return array($rows[0]['submitter'],$rows[0]['date_and_time']);
+		return array(intval($id),$rows[0]['submitter'],$rows[0]['date_and_time']);
 	}
 
 	/**
@@ -305,6 +308,8 @@ class Module_cms_polls extends standard_crud_module
 		if ($option4=='') $num_options=3;
 		if ($option3=='') $num_options=2;
 		if ($option2=='') $num_options=1;
+
+		$meta_data=actual_meta_data_get_fields('poll',NULL);
 
 		$id=add_poll($question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 		$current=post_param_integer('validated',0);
@@ -385,6 +390,8 @@ class Module_cms_polls extends standard_crud_module
 				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls',1,$submitter);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('poll',$id);
 
 		edit_poll(intval($id),$question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 

@@ -187,6 +187,8 @@ class Hook_addon_registry_core
 			'data_custom/.htaccess',
 			'sources/firephp.php',
 			'sources/content.php',
+			'sources/content2.php',
+			'lang/EN/meta_data.ini',
 			'adminzone/find_permissions.php',
 			'JAVASCRIPT_SOUND.tpl',
 			'INLINE_WIP_MESSAGE.tpl',

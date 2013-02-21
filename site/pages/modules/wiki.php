@@ -905,6 +905,9 @@ class Module_wiki
 			$message=get_translated_text($myrow['the_message']);
 			$parsed=get_translated_tempcode($myrow['the_message']);
 
+			require_code('content2');
+			$specialisation->attach(meta_data_get_fields('wiki_post',strval($post_id)));
+
 			if (has_delete_permission('low',get_member(),$original_poster,'cms_wiki',array('wiki_page',$myrow['page_id'])))
 			{
 				$specialisation->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'569be0b840914473a0928606a045f838','TITLE'=>do_lang_tempcode('ACTIONS'))));
@@ -940,6 +943,9 @@ class Module_wiki
 			$validated=1;
 
 			list($warning_details,$ping_url)=array(NULL,NULL);
+
+			require_code('content2');
+			$specialisation->attach(meta_data_get_fields('wiki_post',NULL));
 
 			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki'))
 				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
@@ -1064,6 +1070,9 @@ class Module_wiki
 
 			check_submit_permission('low',NULL,'cms_wiki');
 
+			$meta_data=actual_meta_data_get_fields('wiki_post',NULL);
+
+			require_code('content2');
 			$post_id=wiki_add_post($id,$message,$validated);
 
 			if ($validated==0)
@@ -1099,6 +1108,9 @@ class Module_wiki
 			} else
 			{
 				check_edit_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
+
+				require_code('content2');
+				$meta_data=actual_meta_data_get_fields('wiki_post',strval($post_id));
 
 				wiki_edit_post($post_id,$message,$validated);
 			}

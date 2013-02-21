@@ -560,6 +560,9 @@ class standard_crud_module
 			$fields2->attach(seo_get_fields($this->seo_type));
 		}
 
+		// Meta data
+		require_code('content2');
+
 		// Awards?
 		if (addon_installed('awards'))
 		{

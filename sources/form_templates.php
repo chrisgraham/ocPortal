@@ -344,11 +344,14 @@ function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?integer		The maximum length of the field (NULL: default 80)
+ * @param  ?array			List of extra characters to allow (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL)
+function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$extra_chars=NULL)
 {
 	if (is_null($default)) $default='';
+
+	if (is_null($extra_chars)) $extra_chars=array();
 
 	$default=filter_form_field_default($name,$default);
 
@@ -357,7 +360,7 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID'=>'4b1a3a3ebe6ac85c7c14bcec9d8ab88d','MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID'=>'4b1a3a3ebe6ac85c7c14bcec9d8ab88d','MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'EXTRA_CHARS'=>$extra_chars));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 

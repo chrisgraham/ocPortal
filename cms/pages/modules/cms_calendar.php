@@ -296,6 +296,7 @@ class Module_cms_calendar extends standard_crud_module
 	/**
 	 * Get the form fields for an event input form.
 	 *
+	 * @param  ?AUTO_LINK		The event ID (NULL: new)
 	 * @param  ?AUTO_LINK		The event type (NULL: default)
 	 * @param  ?integer			The year the event starts at (NULL: default)
 	 * @param  ?integer			The month the event starts at (NULL: default)
@@ -489,6 +490,8 @@ class Module_cms_calendar extends standard_crud_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		$fields->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id)));
+
 		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
 
@@ -648,7 +651,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		check_edit_permission(($myrow['e_is_public']==1)?'mid':'low',$myrow['e_submitter']);
 		$content=get_translated_text($myrow['e_content']);
-		$fields=$this->get_form_fields($myrow['e_type'],$myrow['e_start_year'],$myrow['e_start_month'],$myrow['e_start_day'],$myrow['e_start_monthly_spec_type'],$myrow['e_start_hour'],$myrow['e_start_minute'],get_translated_text($myrow['e_title']),$content,$myrow['e_recurrence'],$myrow['e_recurrences'],$myrow['e_seg_recurrences'],$myrow['e_is_public'],$myrow['e_priority'],$myrow['e_end_year'],$myrow['e_end_month'],$myrow['e_end_day'],$myrow['e_end_monthly_spec_type'],$myrow['e_end_hour'],$myrow['e_end_minute'],$myrow['e_timezone'],$myrow['e_do_timezone_conv'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
+		$fields=$this->get_form_fields($myrow['id'],$myrow['e_type'],$myrow['e_start_year'],$myrow['e_start_month'],$myrow['e_start_day'],$myrow['e_start_monthly_spec_type'],$myrow['e_start_hour'],$myrow['e_start_minute'],get_translated_text($myrow['e_title']),$content,$myrow['e_recurrence'],$myrow['e_recurrences'],$myrow['e_seg_recurrences'],$myrow['e_is_public'],$myrow['e_priority'],$myrow['e_end_year'],$myrow['e_end_month'],$myrow['e_end_day'],$myrow['e_end_monthly_spec_type'],$myrow['e_end_hour'],$myrow['e_end_minute'],$myrow['e_timezone'],$myrow['e_do_timezone_conv'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
 
 		if (has_delete_permission('low',get_member(),$myrow['e_submitter'],'cms_calendar'))
 		{
@@ -677,7 +680,9 @@ class Module_cms_calendar extends standard_crud_module
 		$validated=post_param_integer('validated',0);
 		$seg_recurrences=post_param_integer('seg_recurrences',0);
 
-		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$meta_data=actual_meta_data_get_fields('event',NULL);
+
+		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['submitter'],$meta_data['views'],$meta_data['add_time'],$meta_data['edit_time']);
 
 		// Reminders
 		if (has_privilege(get_member(),'set_reminders'))
@@ -927,7 +932,9 @@ class Module_cms_calendar extends standard_crud_module
 			}
 		}
 
-		edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$meta_data=actual_meta_data_get_fields('event',strval($id));
+
+		edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		if (!fractional_edit())
 		{
@@ -1127,6 +1134,8 @@ class Module_cms_calendar_cat extends standard_crud_module
 			$hidden->attach(form_input_hidden('external_feed',$external_feed));
 		}
 
+		$fields->attach(meta_data_get_fields('calendar_type',is_null($id)?NULL:strval($id)));
+
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,($title=='')));
 
@@ -1204,6 +1213,8 @@ class Module_cms_calendar_cat extends standard_crud_module
 	{
 		require_code('themes2');
 
+		$meta_data=actual_meta_data_get_fields('calendar_type',NULL);
+
 		$id=add_event_type(post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
 		$this->set_permissions(strval($id));
 		return strval($id);
@@ -1217,6 +1228,8 @@ class Module_cms_calendar_cat extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		require_code('themes2');
+
+		$meta_data=actual_meta_data_get_fields('calendar_type',$id);
 
 		edit_event_type(intval($id),post_param('title'),fractional_edit()?STRING_MAGIC_NULL:get_theme_img_code('calendar'),post_param('external_feed',STRING_MAGIC_NULL));
 		if (!fractional_edit())

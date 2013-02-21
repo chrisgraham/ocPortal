@@ -562,8 +562,11 @@ class Module_cms_downloads extends standard_crud_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
-		if (!is_null($id))
-			$hidden->attach(form_input_hidden('id',strval($id)));
+		$fields->attach(meta_data_get_fields('download',is_null($id)?NULL:strval($id)));
+		if (has_privilege(get_member(),'edit_meta_fields'))
+		{
+			$fields->attach(form_input_integer(do_lang_tempcode('NUM_DOWNLOADS'),do_lang_tempcode('DESCRIPTION_META_NUM_DOWNLOADS'),'meta_num_downloads',NULL,false));
+		}
 
 		return array($fields,$hidden);
 	}
@@ -668,7 +671,10 @@ class Module_cms_downloads extends standard_crud_module
 		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence);
+		$meta_data=actual_meta_data_get_fields('download',NULL);
+		actual_meta_data_get_fields__special($meta_data,'num_downloads',0);
+
+		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_data['add_time'],$meta_data['num_downloads'],$meta_data['views'],$meta_data['submitter']);
 		if (addon_installed('galleries'))
 		{
 			require_code('permissions2');
@@ -761,7 +767,10 @@ class Module_cms_downloads extends standard_crud_module
 			}
 		}
 
-		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
+		$meta_data=actual_meta_data_get_fields('download',strval($id));
+		actual_meta_data_get_fields__special($meta_data,'num_downloads',INTEGER_MAGIC_NULL);
+
+		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		if ((addon_installed('galleries')) && (!fractional_edit()))
 		{
@@ -943,6 +952,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	/**
 	 * Get tempcode for a download category adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK	The download ID (NULL: new)
 	 * @param  SHORT_TEXT	The name of the download category
 	 * @param  ?AUTO_LINK	The download category parent (NULL: use root)
 	 * @param  LONG_TEXT		Description
@@ -951,7 +961,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 * @param  URLPATH		The rep-image for the download category
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($category='',$parent_id=NULL,$description='',$notes='',$category_id=-1,$rep_image='')
+	function get_form_fields($id,$category='',$parent_id=NULL,$description='',$notes='',$category_id=-1,$rep_image='')
 	{
 		if ((is_null($parent_id)) && ($category_id==-1))
 		{
@@ -974,6 +984,8 @@ class Module_cms_downloads_cat extends standard_crud_module
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+		$fields->attach(meta_data_get_fields('download_category',is_null($id)?NULL:strval($id)));
 
 		// Permissions
 		$fields->attach($this->get_permission_fields(($category_id==-1)?NULL:strval($category_id),NULL,($category=='')));
@@ -998,7 +1010,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 		}
 		$myrow=$rows[0];
 
-		return $this->get_form_fields(get_translated_text($myrow['category']),$myrow['parent_id'],get_translated_text($myrow['description']),$myrow['notes'],$category_id,$myrow['rep_image']);
+		return $this->get_form_fields($category_id,get_translated_text($myrow['category']),$myrow['parent_id'],get_translated_text($myrow['description']),$myrow['notes'],$category_id,$myrow['rep_image']);
 	}
 
 	/**
@@ -1015,7 +1027,9 @@ class Module_cms_downloads_cat extends standard_crud_module
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$rep_image=$urls[0];
 
-		$category_id=add_download_category($category,$parent_id,$description,$notes,$rep_image);
+		$meta_data=actual_meta_data_get_fields('download_category',NULL);
+
+		$category_id=add_download_category($category,$parent_id,$description,$notes,$rep_image,$meta_data['add_time']);
 		$this->set_permissions(strval($category_id));
 
 		return strval($category_id);
@@ -1042,7 +1056,9 @@ class Module_cms_downloads_cat extends standard_crud_module
 			if (($rep_image=='') && (post_param_integer('rep_image_unlink',0)!=1)) $rep_image=NULL;
 		} else $rep_image=STRING_MAGIC_NULL;
 
-		edit_download_category($category,$parent_id,$description,$category_id,$notes,$rep_image,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
+		$meta_data=actual_meta_data_get_fields('download_category',strval($category_id));
+
+		edit_download_category($category,$parent_id,$description,$category_id,$notes,$rep_image,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['add_time']);
 		if (!fractional_edit())
 		{
 			$this->set_permissions(strval($category_id));

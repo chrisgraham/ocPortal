@@ -267,6 +267,8 @@ class Module_admin_ocf_groups extends standard_crud_module
 		$fields->attach(form_input_integer(do_lang_tempcode('FLOOD_CONTROL_ACCESS_SECS'),do_lang_tempcode('DESCRIPTION_FLOOD_CONTROL_ACCESS_SECS'),'flood_control_access_secs',$flood_control_access_secs,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('FLOOD_CONTROL_SUBMIT_SECS'),do_lang_tempcode('DESCRIPTION_FLOOD_CONTROL_SUBMIT_SECS'),'flood_control_submit_secs',$flood_control_submit_secs,true));
 
+		$fields->attach(meta_data_get_fields('group',is_null($id)?NULL:strval($id)));
+
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'0fd215401ffaace7f2f9f6aa73db4ce1','TITLE'=>do_lang_tempcode('ACTIONS'))));
 
 		$copy_members_from_groups=new ocp_tempcode();
@@ -571,7 +573,11 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		list($group_leader,$promotion_target,$promotion_threshold)=$this->read_in_data();
 		$rank_img=get_theme_img_code('ocf_rank_images',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
+
+		$meta_data=actual_meta_data_get_fields('group',NULL);
+
 		$id=ocf_make_group(post_param('name'),post_param_integer('is_default',0),post_param_integer('is_super_admin',0),post_param_integer('is_super_moderator',0),post_param('title',''),$rank_img,$promotion_target,$promotion_threshold,$group_leader,post_param_integer('flood_control_submit_secs'),post_param_integer('flood_control_access_secs'),post_param_integer('max_daily_upload_mb'),post_param_integer('max_attachments_per_post'),post_param_integer('max_avatar_width',100),post_param_integer('max_avatar_height',100),post_param_integer('max_post_length_comcode'),post_param_integer('max_sig_length_comcode',10000),post_param_integer('gift_points_base',0),post_param_integer('gift_points_per_day',0),post_param_integer('enquire_on_new_ips',0),post_param_integer('is_presented_at_install',0),post_param_integer('hidden',0),post_param_integer('order'),post_param_integer('rank_image_pri_only',0),post_param_integer('open_membership',0),post_param_integer('is_private_club',0));
+
 		$this->copy_members_into($id);
 
 		$absorb=post_param_integer('absorb',-1);
@@ -620,6 +626,9 @@ class Module_admin_ocf_groups extends standard_crud_module
 		$was_club=($GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_private_club',array('id'=>intval($id)))==1);
 
 		$rank_img=fractional_edit()?STRING_MAGIC_NULL:get_theme_img_code('ocf_rank_images',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
+
+		$meta_data=actual_meta_data_get_fields('group',$id);
+
 		ocf_edit_group(
 			intval($id),
 			post_param('name'),

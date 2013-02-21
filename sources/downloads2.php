@@ -236,11 +236,14 @@ function dload_script()
  * @param  LONG_TEXT		Hidden notes pertaining to this download category
  * @param  URLPATH		The representative image for the category (blank: none)
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
+ * @param  ?TIME			Add time (NULL: now)
  * @return AUTO_LINK		The ID of the newly added download category
  */
-function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL)
+function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL,$add_time=NULL)
 {
-	$map=array('rep_image'=>$rep_image,'add_date'=>time(),'notes'=>$notes,'category'=>insert_lang($category,2),'parent_id'=>$parent_id,'description'=>insert_lang_comcode($description,2));
+	if (is_null($add_time)) $add_time=time();
+
+	$map=array('rep_image'=>$rep_image,'add_date'=>$add_time,'notes'=>$notes,'category'=>insert_lang($category,2),'parent_id'=>$parent_id,'description'=>insert_lang_comcode($description,2));
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
 
@@ -269,8 +272,9 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
  * @param  URLPATH		The representative image for the category (blank: none)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit)
+ * @param  ?TIME			Add time (NULL: do not change)
  */
-function edit_download_category($category,$parent_id,$description,$category_id,$notes,$rep_image,$meta_keywords,$meta_description)
+function edit_download_category($category,$parent_id,$description,$category_id,$notes,$rep_image,$meta_keywords,$meta_description,$add_time=NULL)
 {
 	$under_category_id=$parent_id;
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
@@ -287,14 +291,16 @@ function edit_download_category($category,$parent_id,$description,$category_id,$
 	$_category=$rows[0]['category'];
 	$_description=$rows[0]['description'];
 
-	$map=array('notes'=>$notes,'category'=>lang_remap($_category,$category),'parent_id'=>$parent_id,'description'=>lang_remap_comcode($_description,$description));
+	$update_map=array('notes'=>$notes,'category'=>lang_remap($_category,$category),'parent_id'=>$parent_id,'description'=>lang_remap_comcode($_description,$description));
 	if (!is_null($rep_image))
 	{
-		$map['rep_image']=$rep_image;
+		$update_map['rep_image']=$rep_image;
 		require_code('files2');
 		delete_upload('uploads/grepimages','download_categories','rep_image','id',$category_id,$rep_image);
 	}
-	$GLOBALS['SITE_DB']->query_update('download_categories',$map,array('id'=>$category_id),'',1);
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	$GLOBALS['SITE_DB']->query_update('download_categories',$update_map,array('id'=>$category_id),'',1);
 
 	log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
 
@@ -660,6 +666,7 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 {
 	if (is_null($add_date)) $add_date=time();
 	if (is_null($submitter)) $submitter=get_member();
+
 	if (($file_size==0) || (url_is_local($url)))
 	{
 		if (url_is_local($url))
@@ -774,9 +781,16 @@ function set_download_gallery_permissions($id,$submitter=NULL)
  * @param  ?AUTO_LINK		The licence to use (NULL: none)
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
+ * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME				Add time (NULL: do not change)
+ * @param  ?integer			Number of views (NULL: do not change)
+ * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description)
+function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
+	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+
 	require_code('urls2');
 	suggest_new_idmoniker_for('downloads','view',strval($id),$name);
 
@@ -814,8 +828,40 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		send_content_validated_notification('download',strval($id));
 	}
 
-	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'original_filename'=>$original_filename,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'edit_date'=>time(),'file_size'=>$file_size,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'name'=>lang_remap($myrow['name'],$name),'description'=>lang_remap_comcode($myrow['description'],$description),'additional_details'=>lang_remap_comcode($myrow['additional_details'],$additional_details),'validated'=>$validated,'category_id'=>$category_id,'url'=>$url,'author'=>$author,'default_pic'=>$default_pic,'out_mode_id'=>$out_mode_id);
-	$GLOBALS['SITE_DB']->query_update('download_downloads',$map,array('id'=>$id),'',1);
+	$update_map=array(
+		'download_data_mash'=>$data_mash,
+		'download_licence'=>$licence,
+		'original_filename'=>$original_filename,
+		'download_submitter_gets_points'=>$submitter_gets_points,
+		'download_cost'=>$cost,
+		'edit_date'=>$editing_time,
+		'file_size'=>$file_size,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'name'=>lang_remap($myrow['name'],$name),
+		'description'=>lang_remap_comcode($myrow['description'],$description),
+		'additional_details'=>lang_remap_comcode($myrow['additional_details'],$additional_details),
+		'validated'=>$validated,
+		'category_id'=>$category_id,
+		'url'=>$url,
+		'author'=>$author,
+		'default_pic'=>$default_pic,
+		'out_mode_id'=>$out_mode_id,
+	);
+
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+	$update_map['edit_date']=$edit_time;
+	if (!is_null($add_time))
+		$update_map['add_date']=$add_time;
+	if (!is_null($views))
+		$update_map['views']=$views;
+	if (!is_null($submitter))
+		$update_map['submitter']=$submitter;
+
+	$GLOBALS['SITE_DB']->query_update('download_downloads',$update_map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
 

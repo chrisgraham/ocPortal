@@ -1437,6 +1437,9 @@ class Module_topics
 			append_form_custom_fields('post',NULL,$specialisation,$hidden_fields);
 		}
 
+		require_code('content2');
+		$fields->attach(meta_data_get_fields('topic',NULL));
+
 		if (is_null($text))
 			$text=new ocp_tempcode();
 
@@ -1743,6 +1746,9 @@ class Module_topics
 				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
 		}
 
+		require_code('content2');
+		$specialisation2->attach(meta_data_get_fields('post',NULL));
+
 		$topic_posts=new ocp_tempcode();
 		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.p_post WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',30);
 		foreach ($posts as $row)
@@ -1958,6 +1964,9 @@ class Module_topics
 			$sunk=post_param_integer('sunk',0);
 			$topic_title=$title;
 
+			require_code('content2');
+			$meta_data=actual_meta_data_get_fields('topic',NULL);
+
 			if ($forum_id==-1) // New Private Topic
 			{
 				require_code('ocf_members2');
@@ -2073,6 +2082,9 @@ END;
 				if (($to!=$forum_id) && (!is_null($to))) ocf_move_topics($forum_id,$to,array($topic_id));
 			}
 		}
+
+		require_code('content2');
+		$meta_data=actual_meta_data_get_fields('post',NULL);
 
 		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1 || is_null($forum_id),$forum_id==-1 || is_null($forum_id),false,$parent_id);
 
@@ -2675,6 +2687,9 @@ END;
 			append_form_custom_fields('post',strval($post_id),$specialisation2,$hidden_fields);
 		}
 
+		require_code('content2');
+		$specialisation2->attach(meta_data_get_fields('post',strval($post_id)));
+
 		if (count($moderation_options)!=0) $specialisation2->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
 		$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'bdab02bfa4ea2f50feedf8a15762c5f1','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$options=array();
@@ -2782,6 +2797,10 @@ END;
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
 		require_code('ocf_posts_action3');
+
+		require_code('content2');
+		$meta_data=actual_meta_data_get_fields('post',strval($post_id));
+
 		$topic_id=ocf_edit_post($post_id,$validated,post_param('title',''),post_param('post'),post_param_integer('skip_sig',0),post_param_integer('is_emphasised',0),$intended_solely_for,(post_param_integer('show_as_edited',0)==1),(post_param_integer('mark_as_unread',0)==1),post_param('reason'));
 
 		require_code('fields');
@@ -2929,6 +2948,9 @@ END;
 			$fields->attach(get_award_fields('topic',strval($topic_id)));
 		}
 
+		require_code('content2');
+		$fields->attach(meta_data_get_fields('topic',strval($topic_id)));
+
 		$title=get_screen_title('EDIT_TOPIC');
 		$submit_name=do_lang_tempcode('SAVE');
 		return do_template('FORM_SCREEN',array(
@@ -2960,6 +2982,9 @@ END;
 
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
+
+		require_code('content2');
+		$meta_data=actual_meta_data_get_fields('topic',strval($topic_id));
 
 		ocf_edit_topic($topic_id,post_param('description',STRING_MAGIC_NULL),post_param('emoticon',STRING_MAGIC_NULL),$validated,$open,$pinned,$sunk,$cascading,post_param('reason',STRING_MAGIC_NULL),$title);
 

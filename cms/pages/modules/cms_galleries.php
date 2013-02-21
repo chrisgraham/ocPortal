@@ -840,6 +840,7 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Get tempcode for an image adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK		The ID of the image (NULL: new)
 	 * @param  SHORT_TEXT		The title
 	 * @param  ID_TEXT			The gallery
 	 * @param  LONG_TEXT			The image description
@@ -853,7 +854,7 @@ class Module_cms_galleries extends standard_crud_module
 	 * @param  boolean			Whether this form will be used for adding a new image
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
+	function get_form_fields($id,$title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -948,6 +949,8 @@ class Module_cms_galleries extends standard_crud_module
 			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
 		}
 
+		$fields->attach(meta_data_get_fields('image',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden);
 	}
 
@@ -1015,7 +1018,7 @@ class Module_cms_galleries extends standard_crud_module
 			} else $delete_fields=new ocp_tempcode();
 		}
 
-		$ret=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
+		$ret=$this->get_form_fields($id,get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
 
 		$ret[2]=$delete_fields;
 		$ret[3]='';
@@ -1056,6 +1059,8 @@ class Module_cms_galleries extends standard_crud_module
 		$description=post_param('description');
 
 		$this->donext_type=$cat;
+
+		$meta_data=actual_meta_data_get_fields('image',NULL);
 
 		$id=add_image($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
@@ -1137,6 +1142,8 @@ class Module_cms_galleries extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_IMAGE':'galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries',1,$submitter);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('image',strval($id));
 
 		edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
 
@@ -1307,6 +1314,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	/**
 	 * Get tempcode for a video adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK		The ID of the video (NULL: new)
  	 * @param  SHORT_TEXT		The title
 	 * @param  ID_TEXT			The gallery
 	 * @param  LONG_TEXT			The video description
@@ -1423,6 +1431,8 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
 		}
 
+		$fields->attach(meta_data_get_fields('video',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden);
 	}
 
@@ -1491,7 +1501,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			} else $delete_fields=new ocp_tempcode();
 		}
 
-		$ret=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
+		$ret=$this->get_form_fields($id,get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
 
 		$ret[2]=$delete_fields;
 		$ret[3]='';
@@ -1537,6 +1547,8 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$description=post_param('description');
 
 		$this->donext_type=$cat;
+
+		$meta_data=actual_meta_data_get_fields('video',NULL);
 
 		$id=add_video($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
 
@@ -1635,6 +1647,8 @@ class Module_cms_galleries_alt extends standard_crud_module
 			}
 		}
 
+		$meta_data=actual_meta_data_get_fields('video',strval($id));
+
 		edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''));
 	}
 
@@ -1706,7 +1720,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 	/**
 	 * Get tempcode for a gallery adding/editing form.
 	 *
-	 * @param  ID_TEXT			The gallery codename
+	 * @param  ID_TEXT			The gallery codename (blank: new)
 	 * @param  SHORT_TEXT		The full human-readeable name of the gallery
 	 * @param  LONG_TEXT			The description of the gallery
 	 * @param  LONG_TEXT			Hidden notes associated with the gallery
@@ -1843,6 +1857,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(get_category_permissions_hidden_on());
 		}
 
+		$fields->attach(meta_data_get_fields('gallery',($name=='')?NULL:$name));
+
 		return array($fields,$hidden);
 	}
 
@@ -1908,6 +1924,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 
+		$meta_data=actual_meta_data_get_fields('gallery',NULL);
+
 		add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],$allow_rating,$allow_comments,false,time(),$g_owner);
 		$this->set_permissions($name);
 
@@ -1958,6 +1976,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 		if (fractional_edit()) $g_owner=INTEGER_MAGIC_NULL;
+
+		$meta_data=actual_meta_data_get_fields('gallery',$id);
 
 		edit_gallery(
 			$id,

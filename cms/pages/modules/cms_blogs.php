@@ -176,6 +176,7 @@ class Module_cms_blogs extends standard_crud_module
 	/**
 	 * Get tempcode for a news adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK		The news ID (NULL: new)
 	 * @param  ?AUTO_LINK		The primary category for the news (NULL: personal)
 	 * @param  ?array				A list of categories the news is in (NULL: not known)
 	 * @param  SHORT_TEXT		The news title
@@ -191,7 +192,7 @@ class Module_cms_blogs extends standard_crud_module
 	 * @param  ?array				Scheduled go-live time (NULL: N/A)
 	 * @return array				A tuple of lots of info (fields, hidden fields, trailing fields)
 	 */
-	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
+	function get_form_fields($id=NULL,$main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -334,7 +335,7 @@ class Module_cms_blogs extends standard_crud_module
 			$scheduled=NULL;
 		}
 
-		$ret=$this->get_form_fields($cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image'],$scheduled);
+		$ret=$this->get_form_fields($id,$cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image'],$scheduled);
 		$ret[2]=new ocp_tempcode();
 		$ret[3]='';
 		$ret[4]=false;
@@ -391,6 +392,8 @@ class Module_cms_blogs extends standard_crud_module
 			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
 			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category),NULL,'cms_news');
 		}
+
+		$meta_data=actual_meta_data_get_fields('news',NULL);
 
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
@@ -516,6 +519,8 @@ class Module_cms_blogs extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);
 			}
 		}
+
+		$meta_data=actual_meta_data_get_fields('news',$id);
 
 		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
 	}

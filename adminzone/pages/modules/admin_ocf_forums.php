@@ -181,6 +181,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 		$fields->attach(form_input_list(do_lang_tempcode('TOPIC_ORDER'),do_lang_tempcode('DESCRIPTION_TOPIC_ORDER'),'order',$list));
 		$fields->attach(form_input_tick(do_lang_tempcode('IS_THREADED'),do_lang_tempcode('DESCRIPTION_IS_THREADED'),'is_threaded',$is_threaded==1));
 
+		$fields->attach(meta_data_get_fields('forum',is_null($id)?NULL:strval($id)));
+
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,is_null($id)));
 
@@ -467,6 +469,9 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		$parent_forum=post_param_integer('parent_forum',-1);
 		$name=post_param('name');
+
+		$meta_data=actual_meta_data_get_fields('forum',NULL);
+
 		$id=strval(ocf_make_forum($name,post_param('description'),post_param_integer('forum_grouping_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order'),post_param_integer('is_threaded',0)));
 
 		// Warning if there is full access to this forum, but not to the parent
@@ -528,6 +533,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
+		$meta_data=actual_meta_data_get_fields('forum',$id);
+
 		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('forum_grouping_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('is_threaded',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('reset_intro_acceptance',0)==1);
 
 		if (!fractional_edit())

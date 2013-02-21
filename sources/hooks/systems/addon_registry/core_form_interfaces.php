@@ -577,7 +577,8 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
-			'DEFAULT'=>''
+			'DEFAULT'=>'',
+			'EXTRA_CHARS'=>array(),
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,
