@@ -405,7 +405,7 @@ class Module_cms_quiz extends standard_crud_module
 			$tied_newsletter,
 			$meta_data['add_time'],
 			$meta_data['submitter'],
-			true,
+			true
 		);
 	}
 

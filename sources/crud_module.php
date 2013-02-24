@@ -192,6 +192,8 @@ class standard_crud_module
 			}
 		}
 
+		// Meta data
+		require_code('content2');
 
 		if (method_exists($this,'run_start'))
 		{
@@ -559,9 +561,6 @@ class standard_crud_module
 			require_code('seo2');
 			$fields2->attach(seo_get_fields($this->seo_type));
 		}
-
-		// Meta data
-		require_code('content2');
 
 		// Awards?
 		if (addon_installed('awards'))

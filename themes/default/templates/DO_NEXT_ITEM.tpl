@@ -16,7 +16,7 @@
 				</div>
 
 				<div>
-					<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
+					<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{URL*}">{DESCRIPTION*}</a>
 				</div>
 			</div>
 		</div>

@@ -39,6 +39,7 @@ class catalogues_test_set extends ocp_test_case
 
 	function testAddCatalogueUI()
 	{
+		require_code('content2');
 		$this->cms_catalogues_alt->ad();
 	}
 

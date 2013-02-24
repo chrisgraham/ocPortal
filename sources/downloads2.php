@@ -834,7 +834,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		'original_filename'=>$original_filename,
 		'download_submitter_gets_points'=>$submitter_gets_points,
 		'download_cost'=>$cost,
-		'edit_date'=>$editing_time,
+		'edit_date'=>$edit_time,
 		'file_size'=>$file_size,
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,

@@ -908,6 +908,11 @@ function install_ocf($upgrade_from=NULL)
 			add_privilege('SECTION_FORUMS',$permission,false,($permission=='view_other_pt'));
 		}
 	}
+
+	if ((is_null($upgrade_from)) || ($upgrade_from<10.0))
+	{
+		$GLOBALS['FORUM_DB']->create_index('f_members','last_visit_time',array('m_dob_month','m_dob_day','m_last_visit_time'));
+	}
 }
 
 

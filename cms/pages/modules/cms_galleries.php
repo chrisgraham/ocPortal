@@ -854,7 +854,7 @@ class Module_cms_galleries extends standard_crud_module
 	 * @param  boolean			Whether this form will be used for adding a new image
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id,$title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
+	function get_form_fields($id=NULL,$title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -1330,7 +1330,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	 * @param  ?integer			The height of the video (NULL: not yet added, so not yet known)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
+	function get_form_fields($id=NULL,$title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 

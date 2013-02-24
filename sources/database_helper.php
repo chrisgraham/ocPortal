@@ -188,7 +188,11 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 				$_field=preg_replace('#\(.*\)$#','',$field);
 
 				$db_type=$this_ref->query_select_value_if_there('db_meta','m_type',array('m_table'=>$table_name,'m_name'=>$_field));
-				if (is_null($db_type)) $db_type='SHORT_TEXT';
+				if (is_null($db_type))
+				{
+					$db_type='SHORT_TEXT';
+					if (running_script('install')) fatal_exit('It seems we are creating an index on a table that is not yet created.');
+				}
 				if (substr($db_type,0,1)!='*') $db_type='*'.$db_type;
 				$fields_full[$field]=$db_type;
 			}

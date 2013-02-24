@@ -44,13 +44,15 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 	require_code('content');
 	$content_row=mixed();
 	if (!is_null($content_id))
-		$content_row=content_get_details($content_type,$content_id);
+	{
+		list(,,,$content_row)=content_get_details($content_type,$content_id);
+	}
 
 	$views_field=in_array('views',$fields_to_skip)?NULL:$info['views_field'];
 	if (!is_null($views_field))
 	{
 		$views=is_null($content_row)?0:$content_row[$views_field];
-		$fields->attach(form_input_integer(do_lang_tempcode('VIEWS'),do_lang_tempcode('DESCRIPTION_META_VIEWS'),'meta_views',NULL,false));
+		$fields->attach(form_input_integer(do_lang_tempcode('_VIEWS'),do_lang_tempcode('DESCRIPTION_META_VIEWS'),'meta_views',NULL,false));
 	}
 
 	$submitter_field=in_array('submitter',$fields_to_skip)?NULL:$info['submitter_field'];
@@ -86,9 +88,13 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 		{
 			list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
 			$url_moniker=find_id_moniker($attributes+array('id'=>$content_id));
+			if (is_null($url_moniker)) $url_moniker='';
+			$manually_chosen=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_manually_chosen'=>1,'m_resource_page'=>$attributes['page'],'m_resource_type'=>$attributes['type'],'m_resource_id'=>$content_id)));
+		} else
+		{
+			$url_moniker='';
+			$manually_chosen=false;
 		}
-		if (is_null($url_moniker)) $url_moniker='';
-		$manually_chosen=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker','m_manually_chosen'=>1,'m_resource_page'=>$attributes['page'],'m_resource_type'=>$attributes['type'],'m_resource_id'=>$content_id));
 		$fields->attach(form_input_codename(do_lang_tempcode('URL_MONIKER'),do_lang_tempcode('DESCRIPTION_META_URL_MONIKER',escape_html($url_moniker)),'url_moniker',$manually_chosen?$url_moniker:'',false,NULL,NULL,array('/')));
 	}
 
@@ -98,7 +104,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 		$_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
 			'SECTION_HIDDEN'=>true,
 			'TITLE'=>do_lang_tempcode('META_DATA'),
-			'HELP'=>do_lang_tempcode('DESCRIPTION_META_DATA',is_null($content_id)?do_lang_tempcode('RESOURCE_NEW'),$content_id),
+			'HELP'=>do_lang_tempcode('DESCRIPTION_META_DATA',is_null($content_id)?do_lang_tempcode('RESOURCE_NEW'):$content_id),
 		)));
 		$_fields->attach($fields);
 		return $_fields;
@@ -292,22 +298,29 @@ function actual_meta_data_get_fields__special($meta_data,$key,$default)
 	$meta_data[$key]=$default;
 	if (has_privilege(get_member(),'edit_meta_fields'))
 	{
-		switch ($default)
+		if (is_integer($default))
 		{
-			case '':
-			case STRING_MAGIC_NULL:
-				$meta_data[$key]=post_param('meta_'.$key,$default);
-				if ($meta_data[$key]=='') $meta_data[$key]=$default;
-				break;
-
-			case 0:
-			case INTEGER_MAGIC_NULL:
-				$meta_data[$key]=post_param_integer('meta_'.$key,$default);
-				break;
-
-			case NULL:
-				$meta_data[$key]=post_param_integer('meta_'.$key,NULL);
-				break;
+			switch ($default)
+			{
+				case 0:
+				case INTEGER_MAGIC_NULL:
+					$meta_data[$key]=post_param_integer('meta_'.$key,$default);
+					break;
+			}
+		} else
+		{
+			switch ($default)
+			{
+				case '':
+				case STRING_MAGIC_NULL:
+					$meta_data[$key]=post_param('meta_'.$key,$default);
+					if ($meta_data[$key]=='') $meta_data[$key]=$default;
+					break;
+	
+				case NULL:
+					$meta_data[$key]=post_param_integer('meta_'.$key,NULL);
+					break;
+			}
 		}
 	}
 }

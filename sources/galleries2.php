@@ -1095,8 +1095,6 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
  */
 function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL,$add_time=NULL,$null_is_literal=false)
 {
-	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
-
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','misc',$name,$fullname);
 
@@ -1180,8 +1178,8 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
-	if (!is_null($submitter))
-		$update_map['g_owner']=$submitter;
+	if (!is_null($g_owner))
+		$update_map['g_owner']=$g_owner;
 
 	$GLOBALS['SITE_DB']->query_update('galleries',$update_map,array('name'=>$old_name),'',1);
 

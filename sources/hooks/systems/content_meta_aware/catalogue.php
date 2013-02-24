@@ -35,7 +35,7 @@ class Hook_content_meta_aware_catalogue
 			'content_type_label'=>'CATALOGUES',
 
 			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'banners',
+			'table'=>'catalogues',
 			'id_field'=>'c_name',
 			'id_field_numeric'=>false,
 			'parent_category_field'=>NULL,

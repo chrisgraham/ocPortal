@@ -343,7 +343,7 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 
 	$GLOBALS['SITE_DB']->query_update('wiki_pages',$update_map,array('id'=>$id),'',1);
 
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>is_null($member)?get_member():$member));
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('wiki_page',strval($id),$meta_keywords,$meta_description);

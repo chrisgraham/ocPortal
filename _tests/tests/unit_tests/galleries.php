@@ -53,6 +53,7 @@ class galleries_test_set extends ocp_test_case
 
 	function testAddgalleryUI()
 	{
+		require_code('content2');
 		return $this->cms_gal_category->ad();
 	}
 
