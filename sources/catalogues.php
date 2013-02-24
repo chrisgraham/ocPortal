@@ -1240,7 +1240,7 @@ function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filt
 
 		$selected=($category['id']==$it);
 		$line=do_template('CATALOGUE_CATEGORIES_LIST_LINE',array('_GUID'=>'9f6bfc4f28c154c8f5d8887ce0d47c1c','BREADCRUMBS'=>$category['breadcrumbs'],'COUNT'=>integer_format($category['count'])));
-		$out->attach(form_input_list_entry(!$use_compound_list?strval($category['id']):$category['compound_list'],$selected,$line->evaluate()));
+		$out->attach(form_input_list_entry(!$use_compound_list?strval($category['id']):$category['compound_list'],$selected,protect_from_escaping($line->evaluate())));
 	}
 
 	return $out;
