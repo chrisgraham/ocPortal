@@ -160,14 +160,40 @@ function xhtmlise_html($html,$definitely_want=false)
 			}
 		}
 
-		$token=_get_next_tag();
-		if (is_null($token))
+		if ((in_array('style',$TAG_STACK)) || (in_array('script',$TAG_STACK))) // Fix that script/style tags MUST be quoted explicitly as CDATA to be both XML and HTML compatible. HTML assumes CDATA, XML assumes not-CDATA unless specified
 		{
-			// If we actually have a partial tag right at the end (ie. we're breaking out of some HTML at a bad point)
-			$ang_pos=strpos($INBETWEEN_TEXT,'<');
-			if ($ang_pos!==false) $INBETWEEN_TEXT=substr($INBETWEEN_TEXT,0,$ang_pos);
+			$treat_as_cdata=in_array('style',$TAG_STACK)?'style':'script';
+			$temp='';
+			$temp.=$INBETWEEN_TEXT;
+			while (true)
+			{
+				$token=_get_next_tag();
+				$temp.=$INBETWEEN_TEXT;
+				if ($token[0]!='</'.$treat_as_cdata.'>')
+				{
+					$temp.=$token[0];
+				} else break;
+				if (is_null($token)) break;
+			}
+			if (strpos($temp,'<![CDATA[')===false)
+				$new.='// <![CDATA['.chr(10);
+			$temp=str_replace('</','<\/',$temp);
+			if (strpos($temp,'<![CDATA[')===false)
+				$temp=str_replace(']]>',']]\'+\'>',$temp);
+			$new.=$temp;
+			if (strpos($temp,'<![CDATA[')===false)
+				$new.='//]]>';
+		} else
+		{
+			$token=_get_next_tag();
+			if (is_null($token))
+			{
+				// If we actually have a partial tag right at the end (ie. we're breaking out of some HTML at a bad point)
+				$ang_pos=strpos($INBETWEEN_TEXT,'<');
+				if ($ang_pos!==false) $INBETWEEN_TEXT=substr($INBETWEEN_TEXT,0,$ang_pos);
+			}
+			$new.=fix_entities($INBETWEEN_TEXT);
 		}
-		$new.=fix_entities($INBETWEEN_TEXT);
 	}
 
 	// Check we have everything closed
