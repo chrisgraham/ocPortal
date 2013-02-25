@@ -139,9 +139,9 @@ class Module_vforums
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		$title=do_lang_tempcode('INVOLVED_TOPICS');
-		$condition=array('EXISTS (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p WHERE p.p_topic_id=top.id AND p_poster='.strval(get_member()).')');
+		$condition=array('p_poster='.strval(get_member()));
 
-		return array(get_screen_title('INVOLVED_TOPICS'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
+		return array(get_screen_title('INVOLVED_TOPICS'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true,NULL,$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts pos LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top ON top.id=pos.p_topic_id'));
 	}
 
 	/**
@@ -182,6 +182,7 @@ class Module_vforums
 	 * @param  string			The ordering of the results
 	 * @param  boolean		Whether to not show pinning in a separate section
 	 * @param  ?array			Extra template parameters to pass through (NULL: none)
+	 * @param  ?string		The table to query (NULL: topic table)
 	 * @return tempcode		The UI
 	 */
 	function _vforum($title,$condition,$order,$no_pin=false,$extra_tpl_map=NULL)
@@ -226,7 +227,14 @@ class Module_vforums
 		$topic_rows=array();
 		foreach (is_array($condition)?$condition:array($condition) as $_condition)
 		{
-			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top';
+			$query=' FROM ';
+			if (!is_null($initial_table))
+			{
+				$query.=$initial_table;
+			} else
+			{
+				$query.=$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top';
+			}
 			if (!is_guest())
 				$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).')';
 			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
