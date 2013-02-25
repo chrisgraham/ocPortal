@@ -61,7 +61,7 @@ function splurgh(save_to,key_name,url_stub,range_a,range_b,level,data,chain,not_
 			under=splurgh(save_to,key_name,url_stub,a,b,level+1,data,chain+'~'+anchor_reference,true);
 			if (under!='')
 			{
-				contents+='<a class=\"toggleable_tray_button\" href=\"#\" onclick=\"return toggleable_tray(this.parentNode.parentNode);\"><img title=\"\" alt=\"{!EXPAND^#}/{!CONTRACT^#}\" src=\"'+"{$IMG*#,contract}".replace(/^http:/,window.location.protocol)+'\" /></a>\n';
+				contents+='<a class=\"toggleable_tray_button\" href=\"#\" onclick=\"return toggleable_tray(this.parentNode);\"><img title=\"\" alt=\"{!EXPAND^#}/{!CONTRACT^#}\" src=\"'+"{$IMG*#,contract}".replace(/^http:/,window.location.protocol)+'\" /></a>\n';
 				contents+='<ul class=\"toggleable_tray\">\n';
 				contents+=under;
 				contents+='</ul>\n';
