@@ -201,7 +201,7 @@ class Block_main_content
 				$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:NULL;
 				if (!is_null($parent_spec__table_name))
 				{
-					$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=r.'.$info['id_field'];
+					$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=g.'.$info['id_field'];
 				}
 			}
 			if (($filter_b!='') && (!is_null($category_field_filter)))
