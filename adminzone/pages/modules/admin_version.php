@@ -511,6 +511,7 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_ford',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_fore',array('cached_for'));
+			$GLOBALS['SITE_DB']->create_index('cache','cached_fore2',array('cached_for','identifier'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_forf',array('lang'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_forg',array('identifier'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_forh',array('the_theme'));
