@@ -241,7 +241,7 @@ function _generic_exit($text,$template)
 {
 	@ob_end_clean(); // Incase in minimodule
 
-	if (get_param_integer('keep_fatalistic',0)==1) fatal_exit($text);
+	if ((get_param_integer('keep_fatalistic',0)==1) || (running_script('occle'))) fatal_exit($text);
 
 	@header('Content-type: text/html; charset='.get_charset());
 	@header('Content-Disposition: inline');

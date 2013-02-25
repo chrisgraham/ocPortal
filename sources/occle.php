@@ -2037,7 +2037,7 @@ function get_queued_messages($xml=true)
  *
  * @param  string			Command name
  * @param  array			Options
- * @param  array			Parameters
+ * @param  array			Parameters (keys are the parameters, values are always set to true, i.e. it is an array of as many trues as there are parameters)
  * @return tempcode		Help template
 */
 function do_command_help($command,$options,$parameters)
