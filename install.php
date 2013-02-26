@@ -97,6 +97,7 @@ if (($shl===false) || ($shl=='') || ($shl=='0'))
 	@ini_set('memory_limit','-1');
 } else
 {
+	if (is_numeric($shl)) $shl.='M'; // Units are in MB for this, while PHP's memory limit setting has it in bytes
 	@ini_set('memory_limit',$shl);
 }
 
