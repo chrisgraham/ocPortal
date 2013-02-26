@@ -4117,3 +4117,7 @@ calendar_from_6am
  - themes/default/templates_custom/CALENDAR_DAY_HOUR.tpl
  - themes/default/templates_custom/CALENDAR_WEEK.tpl
  - themes/default/templates_custom/CALENDAR_WEEK_HOUR.tpl
+
+user_sync
+----------
+ - sources/hooks/systems/cron/user_sync.php
