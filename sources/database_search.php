@@ -352,7 +352,7 @@ function build_search_submitter_clauses($member_field_name,$member_id,$author,$a
  */
 function exact_match_sql($row,$i,$type='short',$param=NULL)
 {
-	$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+	$table=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 	$search_field='f'.strval($i).'.cv_value';
 	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';
@@ -385,7 +385,7 @@ function exact_match_sql($row,$i,$type='short',$param=NULL)
  */
 function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
 {
-	$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+	$table=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 	$search_field='f'.strval($i).'.cv_value';
 	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';
@@ -486,14 +486,14 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			}
 			if (!db_has_subqueries($db->connection_read) || true /* Forced this old code to run because the "optimisation" does not work for larger result sets */)
 			{
-				$_keywords_query=$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+				$_keywords_query=$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
 				$_keywords_query.=' WHERE '.$keywords_where;
 				$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
 			} else
 			{
-				$_keywords_query=/*str_replace(' LEFT JOIN ',' JOIN ',*/$table_clause/*)*/.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+				$_keywords_query=$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
 				$_keywords_query.=' WHERE '.$keywords_where;
-				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
+				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
 			}
 			$keywords_query='SELECT '.$select.' FROM '.$_keywords_query;
 			$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
