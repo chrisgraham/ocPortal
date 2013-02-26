@@ -131,6 +131,9 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	{
 		require_code('uploads');
 		is_swf_upload(true);
+
+		require_code('comcode_from_html');
+		$original_comcode=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$original_comcode);
 	}
 	$myfile=mixed();
 	foreach ($_FILES as $key=>$file)
@@ -141,12 +144,14 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			$has_one=true;
 
 			$atype=post_param('attachmenttype'.$matches[1],'');
-			if (substr($atype,-8)=='_extract')
+			$is_extract=(preg_match('#\[attachment [^\]]*type="\w+_extract"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode)!=0) || (preg_match('#<attachment [^>]*type="\w+_extract"[^>]*>new_'.$matches[1].'</#',$original_comcode)!=0);
+
+			if ((substr($atype,-8)=='_extract') || ($is_extract))
 			{
 				require_code('uploads');
 				require_code('files');
 				require_code('files2');
-				$thumb=(strpos($original_comcode,' thumb="1"]new_'.$matches[1].'[/attachment_safe]')!==false) || (strpos($original_comcode,' thumb="1">new_'.$matches[1].'</attachment_safe>')!==false) || (strpos($original_comcode,' thumb="1"]new_'.$matches[1].'[/attachment]')!==false) || (strpos($original_comcode,' thumb="1">new_'.$matches[1].'</attachment>')!==false);
+				$thumb=(preg_match('#\[(attachment|attachment_safe) [^\]]*thumb="1"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode)!=0) || (preg_match('#<(attachment|attachment_safe) [^>]*thumb="1"[^>]*>new_'.$matches[1].'</#',$original_comcode)!=0);
 
 				$arcext=get_file_extension($_FILES[$key]['name']);
 				if (($arcext=='tar') || ($arcext=='zip'))
@@ -189,6 +194,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 					{
 						foreach ($dir as $entry)
 						{
+							if (substr($entry['path'],-1)=='/') continue; // Ignore folders
+
 							$_file=preg_replace('#\..*\.#','.',basename($entry['path']));
 
 							if (!check_extension($_file,false,NULL,true)) continue;
