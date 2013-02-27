@@ -1636,6 +1636,7 @@ function key_pressed(event,key,no_error_if_bad)
 	if ((key=='-') && (event.keyCode==189)) key=189; /* Safari */
 	if ((key==190) && (event.keyCode==110)) key=110; /* Keypad '.' */
 	if (key=='-') key=109;
+	if (key=='/') key=191;
 	if ((key=='_') && (event.keyCode==189)) key=189; /* Safari */
 	else if (key=='_') key=0; /* This one is a real shame as the key code 0 is shared by lots of symbols */
 

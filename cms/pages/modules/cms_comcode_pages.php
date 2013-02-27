@@ -812,7 +812,7 @@ class Module_cms_comcode_pages
 		}
 
 		require_code('content2');
-		$fields->attach(meta_data_get_fields('comcode_page',($page_link=='')?NULL:$page_link));
+		$fields2->attach(meta_data_get_fields('comcode_page',($page_link=='')?NULL:$page_link));
 
 		require_code('permissions2');
 		$fields2->attach(get_page_permissions_for_environment($zone,$file));

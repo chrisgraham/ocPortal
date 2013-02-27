@@ -332,9 +332,9 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
+		$update_map['date_and_time']=$add_time;
 	if (!is_null($views))
-		$update_map['views']=$views;
+		$update_map['news_views']=$views;
 	if (!is_null($submitter))
 		$update_map['submitter']=$submitter;
 

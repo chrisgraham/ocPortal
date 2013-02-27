@@ -480,7 +480,19 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	if ($URL_MONIKERS_ENABLED_CACHE)
 	{
 		$test=find_id_moniker($vars);
-		if ($test!==NULL) $vars['id']=$test;
+		if ($test!==NULL)
+		{
+			if (substr($test,0,1)=='/') // relative to zone root
+			{
+				$parts=explode('/',substr($test,1),3);
+				$vars['page']=$parts[0];
+				if (isset($parts[1])) $vars['type']=$parts[1]; else unset($vars['type']);
+				if (isset($parts[2])) $vars['id']=$parts[2]; else unset($vars['id']);
+			} else // relative to content module
+			{
+				$vars['id']=$test;
+			}
+		}
 	}
 
 	// We either use mod_rewrite, or return a standard parameterisation

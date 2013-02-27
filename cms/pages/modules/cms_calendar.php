@@ -490,10 +490,10 @@ class Module_cms_calendar extends standard_crud_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
-		$fields->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id)));
-
 		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
+
+		$fields2->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden,NULL,NULL,true,NULL,$fields2);
 	}

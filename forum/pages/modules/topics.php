@@ -1438,7 +1438,7 @@ class Module_topics
 		}
 
 		require_code('content2');
-		$fields->attach(meta_data_get_fields('topic',NULL,false,array('submitter','add_time','edit_time')));
+		$specialisation2->attach(meta_data_get_fields('topic',NULL,false,array('submitter','add_time','edit_time')));
 
 		if (is_null($text))
 			$text=new ocp_tempcode();

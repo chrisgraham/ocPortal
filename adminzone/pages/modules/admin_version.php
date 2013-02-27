@@ -305,7 +305,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'captcha_single_guess'),'',1);
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
 			$GLOBALS['SITE_DB']->alter_table_field('cache','langs_required','LONG_TEXT','dependencies');
-			$GLOBALS['SITE_DB']->add_table_field('url_monikers','m_manually_chosen','BINARY');
+			$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_manually_chosen','BINARY');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<17))

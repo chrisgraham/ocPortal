@@ -95,7 +95,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 			$url_moniker='';
 			$manually_chosen=false;
 		}
-		$fields->attach(form_input_codename(do_lang_tempcode('URL_MONIKER'),do_lang_tempcode('DESCRIPTION_META_URL_MONIKER',escape_html($url_moniker)),'url_moniker',$manually_chosen?$url_moniker:'',false,NULL,NULL,array('/')));
+		$fields->attach(form_input_codename(do_lang_tempcode('URL_MONIKER'),do_lang_tempcode('DESCRIPTION_META_URL_MONIKER',escape_html($url_moniker)),'meta_url_moniker',$manually_chosen?$url_moniker:'',false,NULL,NULL,array('/')));
 	}
 
 	if (!$fields->is_empty())
@@ -233,46 +233,114 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 		$url_moniker=post_param('meta_url_moniker','');
 		if ($url_moniker=='') $url_moniker=NULL;
 
-		require_code('type_validation');
-		if (!is_alphanumeric(str_replace('/','',$url_moniker)))
+		if ($url_moniker!==NULL)
 		{
-			attach_message(do_lang_tempcode('BAD_CODENAME'),'warn');
-			$url_moniker=NULL;
-		}
-
-		if (!is_null($url_moniker))
-		{
-			list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
-			$page=$attributes['page'];
-			$type=$attributes['type'];
-
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_resource_id',array(
-				'm_resource_page'=>$page,
-				'm_resource_type'=>$type,
-				'm_moniker'=>$url_moniker,
-				'm_deprecated'=>0
-			));
-
-			if (($test===NULL) || ($test===$content_id))
+			require_code('type_validation');
+			if (!is_alphanumeric(str_replace('/','',$url_moniker)))
 			{
-				// Insert
-				$GLOBALS['SITE_DB']->query_delete('url_id_monikers',array(	// It's possible we're re-activating/replacing a deprecated one
-					'm_resource_page'=>$page,
-					'm_resource_type'=>$type,
-					'm_resource_id'=>$content_id,
-					'm_moniker'=>$url_moniker,
-				),'',1);
-				$GLOBALS['SITE_DB']->query_insert('url_id_monikers',array(
-					'm_resource_page'=>$page,
-					'm_resource_type'=>$type,
-					'm_resource_id'=>$content_id,
-					'm_moniker'=>$url_moniker,
-					'm_deprecated'=>0,
-					'm_manually_chosen'=>1,
-				));
-			} else
+				attach_message(do_lang_tempcode('BAD_CODENAME'),'warn');
+				$url_moniker=NULL;
+			}
+
+			if (!is_null($url_moniker))
 			{
-				attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($page.':'.$type.':'.$test),escape_html($url_moniker)),'warn');
+				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+				$page=$attributes['page'];
+				$type=$attributes['type'];
+
+				$ok=true;
+
+				// Test for conflicts
+				$conflict_test_map=array(
+					'm_moniker'=>$url_moniker,
+					'm_deprecated'=>0
+				);
+				if (substr($url_moniker,0,1)!='/') // Can narrow the conflict-check scope if it's relative to a module rather than a zone ('/' prefix)
+				{
+					$conflict_test_map+=array(
+						'm_resource_page'=>$page,
+						'm_resource_type'=>$type,
+					);
+				}
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_resource_id',$conflict_test_map);
+				if (($test!==NULL) && ($test!==$content_id))
+				{
+					$ok=false;
+					attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($page.':'.$type.':'.$test),escape_html($url_moniker)),'warn');
+				}
+
+				if (substr($url_moniker,0,1)=='/') // ah, relative to zones, better run some anti-conflict tests!
+				{
+					$parts=explode('/',substr($url_moniker,1),3);
+
+					if ($ok)
+					{
+						// Test there are no zone conflicts
+						if ((file_exists(get_file_base().'/'.$parts[0])) || (file_exists(get_custom_file_base().'/'.$parts[0])))
+						{
+							$ok=false;
+							attach_message(do_lang_tempcode('URL_MONIKER_CONFLICT_ZONE'),'warn');
+						}
+					}
+
+					if ($ok)
+					{
+						// Test there are no page conflicts, from perspective of welcome zone
+						require_code('site');
+						$test1=_request_page($parts[0],'');
+						$test2=false;
+						if (isset($parts[1]))
+							$test2=_request_page($parts[1],$parts[0]);
+						if (($test1!==false) || ($test2!==false))
+						{
+							$ok=false;
+							attach_message(do_lang_tempcode('URL_MONIKER_CONFLICT_PAGE'),'warn');
+						}
+					}
+
+					if ($ok)
+					{
+						// Test there are no page conflicts, from perspective of deep zones
+						require_code('site');
+						$start=0;
+						$zones=array();
+						do
+						{
+							$zones=find_all_zones(false,false,false,$start,50);
+							foreach ($zones as $zone_name)
+							{
+								$test1=_request_page($parts[0],$zone_name);
+								if ($test1!==false)
+								{
+									$ok=false;
+									attach_message(do_lang_tempcode('URL_MONIKER_CONFLICT_PAGE'),'warn');
+									break 2;
+								}
+							}
+							$start+=50;
+						}
+						while (count($zones)!=0);
+					}
+				}
+
+				if ($ok)
+				{
+					// Insert
+					$GLOBALS['SITE_DB']->query_delete('url_id_monikers',array(	// It's possible we're re-activating/replacing a deprecated one
+						'm_resource_page'=>$page,
+						'm_resource_type'=>$type,
+						'm_resource_id'=>$content_id,
+						'm_moniker'=>$url_moniker,
+					),'',1);
+					$GLOBALS['SITE_DB']->query_insert('url_id_monikers',array(
+						'm_resource_page'=>$page,
+						'm_resource_type'=>$type,
+						'm_resource_id'=>$content_id,
+						'm_moniker'=>$url_moniker,
+						'm_deprecated'=>0,
+						'm_manually_chosen'=>1,
+					));
+				}
 			}
 		}
 	}

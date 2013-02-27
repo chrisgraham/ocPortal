@@ -148,7 +148,7 @@ class Module_cms_wiki
 		}
 
 		require_code('content2');
-		$fields->attach(meta_data_get_fields('wiki_page',strval($id)));
+		$fields2->attach(meta_data_get_fields('wiki_page',strval($id)));
 
 		require_code('permissions2');
 		$fields2->attach(get_category_permissions_for_environment('wiki_page',strval($page_id),'cms_wiki',NULL,($page_id==-1)));

@@ -442,8 +442,8 @@ function load_module_page($string,$codename)
  *
  * @param  boolean		Whether to search the file system and return zones that might not be fully in the system (otherwise will just use the database)
  * @param  boolean		Whether to get titles for the zones as well. Only if !$search
- * @param  boolean		Whether to insist on getting all zones (there could be thousands in theory...)
- * @param  integer		Start position to get results from
+ * @param  boolean		Whether to insist on getting all zones without $start/$max parameters (there could be thousands in theory...)
+ * @param  integer		Start position to get results from (ignored if $force_all is on)
  * @param  integer		Maximum zones to get
  * @return array			A list of zone names / a list of quartets (name, title, show in menu, default page)
  */
@@ -472,14 +472,18 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 
 	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE,$SITE_INFO;
 
-	if ($get_titles)
+	$using_default_params=(!$force_all) && ($start==0) && ($max==50);
+	if ($using_default_params)
 	{
-		if ($ALL_ZONES_TITLED_CACHE===NULL) $ALL_ZONES_TITLED_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
-		if ($ALL_ZONES_TITLED_CACHE!==NULL) return $ALL_ZONES_TITLED_CACHE;
-	} else
-	{
-		if ($ALL_ZONES_CACHE===NULL) $ALL_ZONES_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
-		if ($ALL_ZONES_CACHE!==NULL) return $ALL_ZONES_CACHE;
+		if ($get_titles)
+		{
+			if ($ALL_ZONES_TITLED_CACHE===NULL) $ALL_ZONES_TITLED_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
+			if ($ALL_ZONES_TITLED_CACHE!==NULL) return $ALL_ZONES_TITLED_CACHE;
+		} else
+		{
+			if ($ALL_ZONES_CACHE===NULL) $ALL_ZONES_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
+			if ($ALL_ZONES_CACHE!==NULL) return $ALL_ZONES_CACHE;
+		}
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query_select('zones',array('*','zone_title AS _zone_title'),NULL,'ORDER BY zone_name',$force_all?NULL:$max,$start);
@@ -503,10 +507,13 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		}
 	}
 
-	$ALL_ZONES_TITLED_CACHE=$zones_titled;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED_CACHE);
-	$ALL_ZONES_CACHE=$zones;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES_CACHE);
+	if ($using_default_params)
+	{
+		$ALL_ZONES_TITLED_CACHE=$zones_titled;
+		if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED_CACHE);
+		$ALL_ZONES_CACHE=$zones;
+		if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES_CACHE);
+	}
 
 	return $get_titles?$zones_titled:$zones;
 }
