@@ -59,6 +59,8 @@ You can even buy hosting with Arvixe and have ocPortal automatically installed f
 A bit of advice if you choose to not use our recommended host and go purely on a price comparison:
 Most companies competing on price may appear to be good if you compare features/limits but fail in the most important area -- quality of service. ocPortal is progressive software, and the price squeezed service we have seen from cheap web hosts are only suitable for those with very basic needs.
 
+[semihtml]<a class="link_exempt" href="http://www.arvixe.com/5256-223-3-122.html" target="_blank" title="ocPortal hosting (this link will open in a new window)"><img src="{$IMG*,468.60.ocportal}" alt="" /></a>[/semihtml]
+
 [title="2"]Forum drivers[/title]
 
 Please note that many 'forum systems' are referred to as 'bulletin boards', and that a 'forum' within 'forums' is often referred to as a 'board'. We consistently use the terms 'discussion forums', 'forums' and 'forum' to describe these.

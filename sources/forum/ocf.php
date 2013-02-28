@@ -1350,6 +1350,12 @@ class forum_driver_ocf extends forum_driver_base
 
 		// Do some flood control
 		$submitting=((count($_POST)>0) && (get_param('type',NULL)!=='ed') && (get_param('type',NULL)!=='ec') && (!running_script('preview')));
+		$captcha=post_param('captcha','');
+		if ($captcha!='') // Don't consider a CAPTCHA submitting, it'll drive people nuts to get flood control right after a CAPTCHA
+		{
+			require_code('captcha');
+			if (check_captcha($captcha,false)) $submitting=false;
+		}
 		$restrict=$submitting?'flood_control_submit_secs':'flood_control_access_secs';
 		$restrict_setting=$submitting?'m_last_submit_time':'m_last_visit_time';
 		$restrict_answer=ocf_get_best_group_property($this->get_members_groups($id),$restrict);

@@ -28,6 +28,33 @@ function init__import()
 }
 
 /**
+ * Load lots that the importer needs to run.
+ */
+function load_import_deps()
+{
+	require_all_lang();
+	require_code('config2');
+	require_code('ocf_moderation_action');
+	require_code('ocf_posts_action');
+	require_code('ocf_polls_action');
+	require_code('ocf_members_action');
+	require_code('ocf_groups_action');
+	require_code('ocf_general_action');
+	require_code('ocf_forums_action');
+	require_code('ocf_topics_action');
+	require_code('ocf_moderation_action2');
+	require_code('ocf_posts_action2');
+	require_code('ocf_polls_action2');
+	require_code('ocf_members_action2');
+	require_code('ocf_groups_action2');
+	require_code('ocf_general_action2');
+	require_code('ocf_forums_action2');
+	require_code('ocf_topics_action2');
+	require_css('importing');
+	require_code('database_action');
+}
+
+/**
  * Switch OCF to run over the local site-DB connection. Useful when importing and our forum driver is actually connected to a forum other than OCF.
  */
 function ocf_over_local()
@@ -153,4 +180,34 @@ function i_force_refresh()
 	}
 }
 
+/**
+ * Load lots that the importer needs to run.
+ */
+function post_import_cleanup()
+{
+	// Quick and simple decacheing. No need to be smart about this.
+	delete_value('ocf_member_count');
+	delete_value('ocf_topic_count');
+	delete_value('ocf_post_count');
+}
 
+/**
+ * Turn index maintenance off to help speed import, or back on.
+ *
+ * @param  boolean		Whether index maintenance should be on.
+ */
+function set_database_index_maintenance($on)
+{
+	if (strpos(get_db_type(),'mysql')!==false)
+	{
+		global $NO_DB_SCOPE_CHECK;
+		$NO_DB_SCOPE_CHECK=true;
+
+		$tables=$GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
+		foreach ($tables as $table)
+		{
+			$tbl=$table['m_table'];
+			$GLOBALS['SITE_DB']->query('ALTER TABLE '.$GLOBALS['SITE_DB']->get_table_prefix().$tbl.' '.($on?'ENABLE':'DISABLE').' KEYS');
+		}
+	}
+}

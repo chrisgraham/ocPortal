@@ -147,7 +147,8 @@ class Hook_search_ocf_posts
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_posts r LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics s ON r.p_topic_id=s.id',array('!','r.p_post'),$where_clause,$content_where,$remapped_orderer,'r.*,t_forum_id,t_cache_first_title',array('r.p_title','s.t_description'),'forums','t_forum_id');
+		$translate_join_type=(get_value('alternate_search_join_type')==='1')?'LEFT JOIN':'JOIN';
+		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_posts r '.$translate_join_type.' '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics s ON r.p_topic_id=s.id',array('!','r.p_post'),$where_clause,$content_where,$remapped_orderer,'r.*,t_forum_id,t_cache_first_title',array('r.p_title','s.t_description'),'forums','t_forum_id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

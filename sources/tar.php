@@ -441,10 +441,14 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NUL
 				fseek($resource['myfile'],$offset+512,SEEK_SET);
 				$resource['already_at_end']=false;
 				$data='';
-				while (strlen($data)<$stuff['size'])
+				$len=0;
+				while ($len<$stuff['size'])
 				{
 					$read_amount=min(4096,$stuff['size']-strlen($data));
-					$data.=fread($resource['myfile'],$read_amount);
+					$test=fread($resource['myfile'],$read_amount);
+					if ($test===false || $test===NULL || $test=='') break;
+					$data.=$test;
+					$len+=strlen($test);
 
 					if (!is_null($write_data_to))
 					{

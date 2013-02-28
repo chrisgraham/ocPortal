@@ -290,6 +290,7 @@ function phase_2()
 				<li>Upload <kbd>data_custom/addon_screenshots/*.png</kbd> (do not delete old files, as these files are directly referenced by old addons still in the database)</li>
 				<li>Add them (<a target="_blank" href="http://ocportal.com/adminzone/index.php?page=publish_addons_as_downloads&amp;cat=Version%20&amp;'.escape_html(urlencode($version_pretty)).'&amp;version_branch='.escape_html(urlencode($version_branch)).'">publish_addons_as_downloads</a> minimodule on ocPortal.com server)</li>
 				<li>Update the <kbd>community page</kbd> to point to the new addon locations</li>
+				<li>Update the secondary level navigation to link to the new addon locations</li>
 			</ul></li>
 			<li><strong>Documentation</strong>: Upload the latest new documentation&hellip;<ul>
 				<li>Create <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_zones&amp;type=add">docs'.strval(intval(ocp_version_number())).' zone</a> (Codename "docs'.strval(intval(ocp_version_number())).'", Title "Documentation (version '.strval(intval(ocp_version_number())).')", Theme "ocProducts", Default page "tutorials")</li>

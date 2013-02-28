@@ -347,7 +347,7 @@ function build_search_submitter_clauses($member_field_name,$member_id,$author,$a
  */
 function exact_match_sql($row,$i,$type='short',$param=NULL)
 {
-	$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+	$table=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 	$search_field='f'.strval($i).'.cv_value';
 	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';
@@ -380,7 +380,7 @@ function exact_match_sql($row,$i,$type='short',$param=NULL)
  */
 function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
 {
-	$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+	$table=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 	$search_field='f'.strval($i).'.cv_value';
 	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';

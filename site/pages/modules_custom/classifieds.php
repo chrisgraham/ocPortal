@@ -201,7 +201,7 @@ class Module_classifieds
 
 		$pagination=pagination(do_lang('_CLASSIFIED_ADVERTS'),$start,'classifieds_start',$max,'classifieds_max',$max_rows);
 
-		$tpl=do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID'=>'b25659c245a738b4f161dc87869d9edc','TITLE'=>$title,'RESULTS_BROWSER'=>$results_browser,'ADS'=>$ads));
+		$tpl=do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID'=>'b25659c245a738b4f161dc87869d9edc','TITLE'=>$title,'PAGINATION'=>$pagination,'ADS'=>$ads));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

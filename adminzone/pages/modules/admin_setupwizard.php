@@ -91,16 +91,19 @@ class Module_admin_setupwizard
 
 		require_code('form_templates');
 
-		$dh=opendir(get_custom_file_base().'/imports/addons/');
+		$dh=@opendir(get_custom_file_base().'/imports/addons/');
 		$addons_available=array();
-		while (($file=readdir($dh))!==false)
+		if ($dh!==false)
 		{
-			if (substr($file,-4)=='.tar')
+			while (($file=readdir($dh))!==false)
 			{
-				$addons_available[]=basename($file,'.tar');
+				if (substr($file,-4)=='.tar')
+				{
+					$addons_available[]=basename($file,'.tar');
+				}
 			}
+			closedir($dh);
 		}
-		closedir($dh);
 		foreach ($addons_available as $aa)
 		{
 			if (!addon_installed($aa))

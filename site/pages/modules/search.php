@@ -343,6 +343,8 @@ class Module_search
 	{
 		$id=get_param('id','');
 
+		$_GET['type']='results'; // To make it consistent for the purpose of URL generation (particularly how frames tie together)
+
 		$title=get_screen_title('SEARCH_TITLE');
 
 		require_code('templates_internalise_screen');

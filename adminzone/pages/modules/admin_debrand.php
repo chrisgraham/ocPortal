@@ -58,6 +58,8 @@ class Module_admin_debrand
 	 */
 	function run()
 	{
+		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+
 		require_lang('debrand');
 		require_lang('config');
 
@@ -193,9 +195,9 @@ class Module_admin_debrand
 		if (get_file_base()==get_custom_file_base()) // Only if not a shared install
 		{
 			$critical_errors=file_get_contents(get_file_base().'/sources/critical_errors.php');
-			$critical_errors=str_replace('ocPortal',post_param('rebrand_name'),$critical_errors);
-			$critical_errors=str_replace('http://ocportal.com',post_param('rebrand_base_url'),$critical_errors);
-			$critical_errors=str_replace('ocProducts','ocProducts/'.post_param('company_name'),$critical_errors);
+			$critical_errors=str_replace('ocPortal',addslashes(post_param('rebrand_name')),$critical_errors);
+			$critical_errors=str_replace('http://ocportal.com',addslashes(post_param('rebrand_base_url')),$critical_errors);
+			$critical_errors=str_replace('ocProducts','ocProducts/'.addslashes(post_param('company_name')),$critical_errors);
 			$critical_errors_path='sources_custom/critical_errors.php';
 
 			afm_make_file($critical_errors_path,$critical_errors,false);

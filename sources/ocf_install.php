@@ -756,6 +756,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_posts','p_validated',array('p_validated'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','in_topic',array('p_topic_id','p_time','id'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','post_order_time',array('p_time','id'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_since',array('p_time','p_cache_forum_id')); // p_cache_forum_id is used to not count PT posts
 		$GLOBALS['FORUM_DB']->create_index('f_posts','p_last_edit_time',array('p_last_edit_time'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by',array('p_poster'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','find_pp',array('p_intended_solely_for'));

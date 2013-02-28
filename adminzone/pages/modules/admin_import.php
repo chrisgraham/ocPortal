@@ -129,26 +129,8 @@ class Module_admin_import
 
 		disable_php_memory_limit();
 
-		require_all_lang();
 		require_code('import');
-		require_code('config2');
-		require_code('ocf_moderation_action');
-		require_code('ocf_posts_action');
-		require_code('ocf_polls_action');
-		require_code('ocf_members_action');
-		require_code('ocf_groups_action');
-		require_code('ocf_general_action');
-		require_code('ocf_forums_action');
-		require_code('ocf_topics_action');
-		require_code('ocf_moderation_action2');
-		require_code('ocf_posts_action2');
-		require_code('ocf_polls_action2');
-		require_code('ocf_members_action2');
-		require_code('ocf_groups_action2');
-		require_code('ocf_general_action2');
-		require_code('ocf_forums_action2');
-		require_code('ocf_topics_action2');
-		require_css('importing');
+		load_import_deps();
 
 		// Decide what we're doing
 		$type=get_param('type','misc');
@@ -386,6 +368,21 @@ class Module_admin_import
 		$import_source=is_null($db_name)?NULL:new database_driver($db_name,$db_host,$db_user,$db_password,$db_table_prefix);
 		unset($import_source);
 
+		// Save data
+		$old_base_dir=either_param('old_base_dir');
+		$refresh_time=either_param_integer('refresh_time',15); // Shouldn't default, but reported on some systems to do so
+		$GLOBALS['SITE_DB']->query_delete('import_session',array('imp_session'=>get_session_id()),'',1);
+		$GLOBALS['SITE_DB']->query_insert('import_session',array(
+			'imp_hook'=>$importer,
+			'imp_old_base_dir'=>$old_base_dir,
+			'imp_db_name'=>is_null($db_name)?'':$db_name,
+			'imp_db_user'=>is_null($db_user)?'':$db_user,
+			'imp_db_table_prefix'=>is_null($db_table_prefix)?'':$db_table_prefix,
+			'imp_db_host'=>is_null($db_host)?'':$db_host,
+			'imp_refresh_time'=>$refresh_time,
+			'imp_session'=>get_session_id()
+		));
+
 		$lang_array=array();
 		$hooks=find_all_hooks('modules','admin_import_types');
 		foreach (array_keys($hooks) as $hook)
@@ -568,8 +565,6 @@ class Module_admin_import
 		global $I_REFRESH_URL;
 		$I_REFRESH_URL=$refresh_url;
 
-		require_code('database_action');
-
 		$title=get_screen_title('IMPORT');
 
 		$importer=get_param('importer');
@@ -613,7 +608,7 @@ class Module_admin_import
 		// Save data
 		$GLOBALS['SITE_DB']->query_delete('import_session',array('imp_session'=>get_session_id()),'',1);
 		$GLOBALS['SITE_DB']->query_insert('import_session',array(
-			'imp_hook'=>'',
+			'imp_hook'=>$importer,
 			'imp_old_base_dir'=>$old_base_dir,
 			'imp_db_name'=>is_null($db_name)?'':$db_name,
 			'imp_db_user'=>is_null($db_user)?'':$db_user,
@@ -697,10 +692,7 @@ class Module_admin_import
 		}
 
 		log_it('IMPORT');
-		// Quick and simple decacheing. No need to be smart about this.
-		delete_value('ocf_member_count');
-		delete_value('ocf_topic_count');
-		delete_value('ocf_post_count');
+		post_import_cleanup();
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$importer.':session='.get_param('session'),do_lang_tempcode('IMPORT'))));
 		breadcrumb_set_self(do_lang_tempcode('START'));
