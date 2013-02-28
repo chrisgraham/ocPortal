@@ -460,14 +460,18 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 
 	global $ALL_ZONES,$ALL_ZONES_TITLED,$SITE_INFO;
 
-	if ($get_titles)
+	$using_default_params=(!$force_all) && ($start==0) && ($max==50);
+	if ($using_default_params)
 	{
-		if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
-		if ($ALL_ZONES_TITLED!==NULL) return $ALL_ZONES_TITLED;
-	} else
-	{
-		if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
-		if ($ALL_ZONES!==NULL) return $ALL_ZONES;
+		if ($get_titles)
+		{
+			if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistent_cache_set')?persistent_cache_set('ALL_ZONES_TITLED'):NULL;
+			if ($ALL_ZONES_TITLED!==NULL) return $ALL_ZONES_TITLED;
+		} else
+		{
+			if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistent_cache_set')?persistent_cache_set('ALL_ZONES'):NULL;
+			if ($ALL_ZONES!==NULL) return $ALL_ZONES;
+		}
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query_select('zones',array('*','zone_title AS _zone_title'),NULL,'ORDER BY zone_name',$force_all?NULL:$max,$start);
@@ -491,10 +495,13 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		}
 	}
 
-	$ALL_ZONES_TITLED=$zones_titled;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED);
-	$ALL_ZONES=$zones;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES);
+	if ($using_default_params)
+	{
+		$ALL_ZONES_TITLED=$zones_titled;
+		if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED);
+		$ALL_ZONES=$zones;
+		if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES);
+	}
 
 	return $get_titles?$zones_titled:$zones;
 }
