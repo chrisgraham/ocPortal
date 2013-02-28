@@ -165,6 +165,8 @@ The 'status symbol' of rank is an incentive for members to earn points (hence co
 
 If you would like to use rank, but not other point features, remove view permissions to the 'points' module and edit the 'Block options' (in the configuration) to not display point details. You cannot remove the points addon if you wish to use ranks.
 
+Note that rank changes are triggered by actions. Someone will not go up in rank based on things like how long they've been a member, until some action (e.g. posting on the forum) triggers a rank recalculation.
+
 [title="2"]The leader-board[/title]
 [surround]
 [exp_thumb="The points leader-board" float="right"]points_leaderboard[/exp_thumb]

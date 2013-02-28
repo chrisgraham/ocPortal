@@ -1,5 +1,17 @@
 <?php
 
+function init__locations_geopositioning()
+{
+	define('MIN_LAT',deg2rad(-90.0));
+	define('MAX_LAT',deg2rad(90.0));
+	define('MIN_LON',deg2rad(-180.0));
+	define('MAX_LON',deg2rad(180.0));
+
+	define('EARTH_RADIUS',6371010.0); // In m
+
+	define('GEO_SEARCH_EXPANSION_FACTOR',1.3);
+}
+
 function fix_geoposition($lstring,$category_id)
 {
 	$type='yahoo';
@@ -24,7 +36,9 @@ function fix_geoposition($lstring,$category_id)
 
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_catalogue_category'),'ORDER BY cf_order');
 		require_code('content');
+		require_code('fields');
 		$assocated_catalogue_entry_id=get_bound_content_entry('catalogue_category',strval($category_id));
+
 		$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$latitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[0]['id']),'',1);
 		$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$longitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[1]['id']),'',1);
 
@@ -33,51 +47,52 @@ function fix_geoposition($lstring,$category_id)
 	return '0';
 }
 
-function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$longitude_field_id=NULL,$error_tolerance=0.0005/*very roughly 60 metres each way*/)
+function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$longitude_field_id=NULL,$error_tolerance=NULL)
 {
-	$where='';
+	if (is_null($error_tolerance)) // Ah, pick a default
+	{
+		$error_tolerance=50.0/EARTH_RADIUS; // 50 metres radius
+	}
 
-	$where.='(';
-	$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance,10);
-	$where.=' AND ';
-	$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance,10).')';
-	if ($latitude-$error_tolerance<-45.0)
-	{
-		$where.=' OR ';
-		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance+90.0,10);
-		$where.=' AND ';
-		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance+90.0,10).')';
-	}
-	if ($latitude+$error_tolerance>45.0)
-	{
-		$where.=' OR ';
-		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance-90.0,10);
-		$where.=' AND ';
-		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance-90.0,10).')';
-	}
-	$where.=')';
+	// ====
+	// Much help from http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
 
-	$where.=' AND ';
+	$radLat=deg2rad($latitude);
+	$radLon=deg2rad($longitude);
 
-	$where.='(';
-	$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance,10);
-	$where.=' AND ';
-	$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance,10).')';
-	if ($longitude-$error_tolerance<-90.0)
+	$minLat=$radLat-$error_tolerance;
+	$maxLat=$radLat+$error_tolerance;
+
+	if ($minLat>MIN_LAT && $maxLat<MAX_LAT)
 	{
-		$where.=' OR ';
-		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance+180.0,10);
-		$where.=' AND ';
-		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance+180.0,10).')';
-	}
-	if ($longitude+$error_tolerance>90.0)
+		$deltaLon=asin(sin($error_tolerance)/cos($radLat));
+		$minLon=$radLon-$deltaLon;
+		if ($minLon<MIN_LON) $minLon+=2.0*M_PI;
+		$maxLon=$radLon+$deltaLon;
+		if ($maxLon>MAX_LON) $maxLon-=2.0*M_PI;
+	} else
 	{
-		$where.=' OR ';
-		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance-180.0,10);
-		$where.=' AND ';
-		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance-180.0,10).')';
+		// a pole is within the distance
+		$minLat=max($minLat,MIN_LAT);
+		$maxLat=min($maxLat,MAX_LAT);
+		$minLon=MIN_LON;
+		$maxLon=MAX_LON;
 	}
-	$where.=')';
+
+	$meridian180WithinDistance=($minLon>$maxLon);
+
+	$minLat=rad2deg($minLat);
+	$maxLat=rad2deg($maxLat);
+	$minLon=rad2deg($minLon);
+	$maxLon=rad2deg($maxLon);
+	$radLat=rad2deg($radLat);
+	$radLon=rad2deg($radLon);
+
+	$where='(l_latitude>='.float_to_raw_string($minLat,10).' AND l_latitude<='.float_to_raw_string($maxLat,10).') AND (l_longitude>='.float_to_raw_string($minLon,10).' '.
+				($meridian180WithinDistance?'OR':'AND').' l_longitude<='.float_to_raw_string($maxLon,10).') AND '.
+				'acos(sin('.float_to_raw_string($radLat,10).')*sin(l_latitude)+cos('.float_to_raw_string($radLat,10).')*cos(l_latitude)*cos(l_longitude-'.float_to_raw_string($radLon,10).'))<='.float_to_raw_string($error_tolerance,10);
+
+	// ==== ^^^
 
 	if ((is_null($latitude_field_id)) || (is_null($longitude_field_id))) // Just do a raw query on locations table
 	{
@@ -92,19 +107,19 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 
 	if (count($locations)==0)
 	{
-		if (($latitude-$error_tolerance<-90.0) && ($latitude+$error_tolerance>90.0) && ($longitude-$error_tolerance<-90.0) && ($longitude+$error_tolerance>90.0))
+		if ($error_tolerance>=1.0)
 		{
 			return NULL; // Nothing, in whole world
 		}
 
-		return find_nearest_location($latitude,$longitude,$latitude_field_id,$longitude_field_id,$error_tolerance*1.3);
+		return find_nearest_location($latitude,$longitude,$latitude_field_id,$longitude_field_id,$error_tolerance*GEO_SEARCH_EXPANSION_FACTOR);
 	}
 
 	$best=mixed();
 	$best_at=mixed();
 	foreach ($locations as $l)
 	{
-		$dist=sqrt($l['l_latitude']*$l['l_latitude']+$l['l_longitude']*$l['l_longitude']);
+		$dist=latlong_distance_miles($l['l_latitude'],$l['l_longitude'],$latitude,$longitude);
 
 		if ((is_null($best)) || ($dist<$best))
 		{
@@ -115,4 +130,22 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 	$locations=array($best_at);
 
 	return $locations[0];
+}
+
+function latlong_distance_miles($lat1,$lng1,$lat2,$lng2,$miles=true)
+{
+	$pi80 = M_PI / 180;
+	$lat1 *= $pi80;
+	$lng1 *= $pi80;
+	$lat2 *= $pi80;
+	$lng2 *= $pi80;
+ 
+	$r = 6372.797; // mean radius of Earth in km
+	$dlat = $lat2 - $lat1;
+	$dlng = $lng2 - $lng1;
+	$a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlng / 2) * sin($dlng / 2);
+	$c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+	$km = $r * $c;
+ 
+	return ($miles ? ($km * 0.621371192) : $km);
 }

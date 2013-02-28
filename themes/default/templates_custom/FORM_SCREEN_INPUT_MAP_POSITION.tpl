@@ -17,9 +17,9 @@
 				opened: true
 			},
 			styles: [{
-				featureType: "poi",
-				elementType: "labels",
-				stylers: [ { visibility: "off" } ]
+				featureType: 'poi',
+				elementType: 'labels',
+				stylers: [ { visibility: 'off' } ]
 			}]
 		});
 
@@ -39,15 +39,19 @@
 
 		{$,Save into hidden fields}
 		var lastPoint;
-		google.maps.event.addListener(map, "mousemove", function(point) {
+		google.maps.event.addListener(map, 'mousemove', function(point) {
 			lastPoint=point.latLng;
 		});
-		google.maps.event.addListener(map, "click", function() {
-			document.getElementById('{NAME;}_latitude').value=lastPoint.lat();
-			document.getElementById('{NAME;}_longitude').value=lastPoint.lng();
-			place_marker(lastPoint.lat(),lastPoint.lng());
-			marker.setMap(map);
-		});
+		google.maps.event.addListener(map, 'click', _place_marker);
+		google.maps.event.addListener(marker, 'click', _place_marker);
+	}
+
+	function _place_marker()
+	{
+		document.getElementById('{NAME;}_latitude').value=lastPoint.lat();
+		document.getElementById('{NAME;}_longitude').value=lastPoint.lng();
+		place_marker(lastPoint.lat(),lastPoint.lng());
+		marker.setMap(map);
 	}
 
 	function place_marker(latitude,longitude)
@@ -56,7 +60,7 @@
 		marker.setPosition(latLng);
 	}
 
-	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=false"});
+	google.load('maps', '3',  {callback: google_map_users_initialize, other_params:'sensor=false'});
 //]]></script>
 
 <div id="map_position_{NAME*}" style="width:100%; height:300px"></div>
