@@ -53,5 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_manually_chosen','BINARY');
 }

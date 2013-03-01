@@ -136,9 +136,38 @@ function member_personal_links_and_details($member_id)
 		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
 	}
 
+	// Subscription expiry date
+	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')))
+	{
+		$query='SELECT * FROM '.get_table_prefix().'subscriptions WHERE s_member_id='.strval($member_id).' AND '.db_string_equal_to('s_state','active').' AND '.db_string_equal_to('s_via','manual');
+		$subscriptions=$GLOBALS['SITE_DB']->query($query);
+		if (count($subscriptions)>0)
+		{
+			require_code('ecommerce');
+			foreach ($subscriptions as $sub)
+			{
+				$product_obj=find_product($sub['s_type_code']);
+				$products=$product_obj->get_products(true);
+				$product_name=$products[$sub['s_type_code']][4];
+				$s_length=$products[$sub['s_type_code']][3]['length'];
+				$s_length_units=$products[$sub['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
+				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+				$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$sub['s_time']);
+				if ((($expiry_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) && ($expiry_time>=time()))
+				{
+					$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
+					require_lang('ecommerce');
+					$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'65180134fbc4cf7e227011463d466677','KEY'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_MESSAGE',escape_html($product_name)),'VALUE'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_DATE',escape_html($expiry_date)))));
+				}
+			}
+		}
+	}
+
 	// Subscription links
 	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')) && (get_option('ocp_show_personal_sub_links')=='1') && (!has_zone_access($member_id,'adminzone')) && (has_actual_page_access($member_id,'purchase')))
 	{
+		require_lang('ecommerce');
+
 		$usergroup_subs=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title','s_group_id','s_cost'),array('s_enabled'=>1));
 		$in_one=false;
 		$members_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);

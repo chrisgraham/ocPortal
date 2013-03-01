@@ -275,7 +275,7 @@ function placeholder_url()
  */
 function placeholder_link()
 {
-	$text="<a href='http://www.example.com/'>test link</a>";
+	$text='<a href="http://www.example.com/">test link</a>';
 	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($text);
 	return make_string_tempcode($text);
 }
