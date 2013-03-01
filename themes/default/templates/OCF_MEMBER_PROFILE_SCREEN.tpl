@@ -51,8 +51,14 @@
 
 {+START,IF,{$GT,{TABS},1}}
 	<script type="text/javascript">// <![CDATA[
+		// we do not want it to scroll down
+		var old_hash=window.location.hash;
+		window.location.hash='#';
+
 		add_event_listener_abstract(window,'load',function () {
-			find_url_tab();
+			window.location.hash='#';
+
+			find_url_tab(old_hash);
 		} );
 	//]]></script>
 {+END}

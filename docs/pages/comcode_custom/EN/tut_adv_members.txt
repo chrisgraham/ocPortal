@@ -131,6 +131,18 @@ If synching is not enabled, or group memberships come from LDAP, then the follow
  - showing how many members there are in a usergroup
  - listing usergroup memberships when viewing a usergroup
 
+[title="2"]Forced password resets[/title]
+
+You can force a member to change their password upon next login (e.g. if you want to promote increased security for some reason), via this OcCLE command:
+[code]
+echo temporary > /members/bob/m_password_compat_scheme
+[/code]
+(this assumes you are doing it for a member, [tt]bob[/tt]).
+You can also run SQL queries. To force all members to change their passwords:
+[code]
+UPDATE ocp_f_members SET m_password_compat_scheme='temporary' WHERE m_password_compat_scheme=''
+[/code]
+
 
 [title="2"]See also[/title]
 

@@ -970,25 +970,32 @@ function require_javascript(script,lang)
 }
 
 /* Tabs */
-function find_url_tab()
+function find_url_tab(hash)
 {
-	if (window.location.hash.replace(/^#/,'')!='')
+	if (typeof hash=='undefined') var hash=window.location.hash;
+
+	if (hash.replace(/^#/,'')!='')
 	{
-		var tab=window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,'');
+		var tab=hash.replace(/^#/,'').replace(/^tab\_\_/,'');
 
 		if (tab.indexOf('__')!=-1)
 		{
 			if (document.getElementById('g_'+tab.substr(0,tab.indexOf('__'))))
-				select_tab('g',tab.substr(0,tab.indexOf('__')));
+				select_tab('g',tab.substr(0,tab.indexOf('__')),true);
 		}
 		if (document.getElementById('g_'+tab))
-			select_tab('g',tab);
+			select_tab('g',tab,true);
 	}
 }
-function select_tab(id,tab)
+function select_tab(id,tab,from_url)
 {
-	if (document.getElementById('tab__'+tab.toLowerCase()))
-		window.location.hash='#tab__'+tab.toLowerCase();
+	if (typeof from_url=='undefined') var from_url=false;
+
+	if (!from_url)
+	{
+		if (document.getElementById('tab__'+tab.toLowerCase()))
+			window.location.hash='#tab__'+tab.toLowerCase();
+	}
 
 	var tabs=[];
 	var i,element;

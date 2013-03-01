@@ -326,7 +326,36 @@ function get_member($quick_only=false)
 	// We call this to ensure any HTTP-auth specific code has a chance to run
 	is_httpauth_login();
 
+	if ($member!==NULL) enforce_temporary_passwords($member);
+
 	return $member;
+}
+
+/**
+ * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
+ *
+ * @param  MEMBER			The current member
+ */
+function enforce_temporary_passwords($member)
+{
+	if ((get_forum_type()=='ocf') && ($member!=db_get_first_id()) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
+	{
+		decache('side_users_online');
+
+		require_code('urls');
+		require_lang('ocf');
+
+		$screen=redirect_screen(
+			get_screen_title('LOGGED_IN'),
+			build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings'),
+			do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),
+			false,
+			'notice'
+		);
+		$out=globalise($screen,NULL,'',true);
+		$out->evaluate_echo();
+		exit();
+	}
 }
 
 /**
