@@ -188,12 +188,16 @@ function notifications_ui($member_id_of)
 		$auto_monitor_contrib_content=strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_auto_monitor_contrib_content'));
 	}
 
+	$fields=$GLOBALS['FORUM_DRIVER']->get_custom_fields(get_member());
+	$smart_topic_notification_content=($fields['smart_topic_notification']=='1');
+
 	return do_template('NOTIFICATIONS_MANAGE',array(
 		'_GUID'=>'838165ca739c45c2dcf994bed6fefe3e',
 		'COLOR'=>$color,
 		'AUTO_NOTIFICATION_CONTRIB_CONTENT'=>$auto_monitor_contrib_content,
 		'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
 		'NOTIFICATION_SECTIONS'=>$notification_sections,
+		'SMART_TOPIC_NOTIFICATION_CONTENT'=>$smart_topic_notification_content,
 	));
 }
 

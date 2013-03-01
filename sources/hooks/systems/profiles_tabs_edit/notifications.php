@@ -52,6 +52,9 @@ class Hook_Profiles_Tabs_Edit_notifications
 		{
 			$auto_monitor_contrib_content=post_param_integer('auto_monitor_contrib_content',0);
 			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_auto_monitor_contrib_content'=>$auto_monitor_contrib_content),array('id'=>$member_id_of),'',1);
+			
+			$smart_topic_notification_content=post_param_integer('smart_topic_notification_content',0);
+			$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id_of,'smart_topic_notification',$smart_topic_notification_content);
 
 			// Decache from run-time cache
 			unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id_of]);

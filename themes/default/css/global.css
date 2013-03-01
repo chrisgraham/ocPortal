@@ -2776,8 +2776,10 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 }
 .simple_neat_checkbox span {
 	float: {!en_right};
-	margin-{!en_left}: 2em;
+	padding-{!en_left}: 2em;
 	margin-top: -1.5em;
+	width: 100%;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
 .captcha_frame {

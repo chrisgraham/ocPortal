@@ -226,6 +226,38 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			$members=$this->_all_members_who_have_enabled_with_category_access($members,'forums',$notification_code,strval($forum_id),$to_member_ids,$start,$max);
 		} // We know PTs have been pre-filtered before notification is sent out, to limit them
 
+		// Filter members who has more than one unread posts in that topic
+		if (is_numeric($category))
+		{
+			$members_new=array();
+			foreach ($members[0] as $member_id=>$setting)
+			{
+				$fields=$GLOBALS['FORUM_DRIVER']->get_custom_fields($member_id);
+				$smart_topic_notification_enabled=($fields['smart_topic_notification']=='1');
+
+				if ($smart_topic_notification_enabled) // Maybe we don't send, based on identifying whether they have received a notification already since last reading the topic
+				{
+					$read_log_time=$GLOBALS['FORUM_DB']->query_value_null_ok('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>intval($category)));
+					if (!is_null($read_log_time)) // Has been visited at some point
+					{
+						$num_posts_since=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND p_topic_id='.strval(intval($category)).' AND p_time>'.strval($read_log_time));
+						if ($num_posts_since<=1) // Ah, just this one new post, so we can notify
+						{
+							$members_new[$member_id]=$setting;
+						} // Else we know there have been other posts since and not to send the notification
+					} else // We assume has never been visited
+					{
+						$members_new[$member_id]=$setting;
+						$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>$member_id,'l_topic_id'=>$category,'l_time'=>0)); // So we can count the number of posts since this
+					}
+				} else // Send as normal
+				{
+					$members_new[$member_id]=$setting;
+				}
+			}
+			$members[0]=$members_new;
+		}
+	
 		return $members;
 	}
 }
