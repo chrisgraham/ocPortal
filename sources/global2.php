@@ -198,7 +198,7 @@ function init__global2()
 	require_code('caches');
 	require_code('database'); // There's nothing without the database
 	require_code('config'); // Config is needed for much active stuff
-	require_code('support2');
+	require_code('global4');
 	if ((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0'))
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
 	if ($MICRO_BOOTUP==0)

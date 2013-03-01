@@ -312,6 +312,10 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
  * @param  ?MEMBER		The member doing the action (NULL: current member)
+ * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?integer		Views (NULL: do not change)
+ * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member=NULL,$edit_time=NULL,$add_time=NULL,$views=NULL,$null_is_literal=false)
 {

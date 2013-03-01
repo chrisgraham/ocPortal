@@ -29,7 +29,7 @@ public class Main {
     public static String phpPath = ".\\php.exe";
 
     // Memory
-    static Vector skipped_errors = new Vector();
+    static Vector<String> skipped_errors = new Vector<String>();
 
     /**
      * @param args the command line arguments

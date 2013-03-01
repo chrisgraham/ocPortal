@@ -185,7 +185,7 @@ class Module_vforums
 	 * @param  ?string		The table to query (NULL: topic table)
 	 * @return tempcode		The UI
 	 */
-	function _vforum($title,$condition,$order,$no_pin=false,$extra_tpl_map=NULL)
+	function _vforum($title,$condition,$order,$no_pin=false,$extra_tpl_map=NULL,$initial_table=NULL)
 	{
 		$breadcrumbs=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
 		breadcrumb_add_segment($breadcrumbs);
@@ -211,7 +211,7 @@ class Module_vforums
 			if ($extra!='') $extra.=' AND ';
 			$or_list='';
 			global $SITE_INFO;
-			if ((is_guest()) || (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old')))))
+			if (is_guest())
 			{
 				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
 			} else

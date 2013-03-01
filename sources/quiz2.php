@@ -307,7 +307,6 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
  * @param  integer		The number of points awarded for completing/passing the quiz/test
- * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
  * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME			Add time (NULL: do not change)
  * @param  ?MEMBER		Submitter (NULL: do not change)

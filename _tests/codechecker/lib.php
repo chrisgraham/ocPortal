@@ -131,7 +131,8 @@ function die_error($system,$pos,$line,$message)
 {
 	global $FILENAME;
 	echo 'ERROR "'.$FILENAME.'" '.$line.' '.$pos.' '.'PHP: '.$message.cnl();
-	die();
+	throw new Exception('Parsing error - parsing of file stopped');
+	exit();
 }
 
 function warn_error($system,$pos,$line,$message)

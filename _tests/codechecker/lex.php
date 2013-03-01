@@ -418,7 +418,7 @@ function lex($text=NULL)
 								if ($char!='}')
 								{
 									log_warning('Bad token found',$i,true);
-									exit();
+									break 2;
 								}
 
 								$tokens[]=array('IDENTIFIER',$token_found,$i);
@@ -473,7 +473,7 @@ function lex($text=NULL)
 						if ($token_found=='')
 						{
 							log_warning('Bad token found',$i,true);
-							exit();
+							break 2;
 						}
 						$tokens[]=array('IDENTIFIER',$token_found,$i);
 					}
@@ -600,7 +600,7 @@ function lex($text=NULL)
 							} else
 							{
 								log_warning('Bad token found',$i,true);
-								exit();
+								break 2;
 							}
 						}
 					} else
@@ -619,7 +619,7 @@ function lex($text=NULL)
 							if (strpos($matches[1],"'")!==false)
 							{
 								log_warning('Do not use quotes with the simple variable embedding syntax',$i,true);
-								exit();
+								break 2;
 							}
 							$heredoc_buildup[]=array((count($heredoc_buildup)==0)?'variable':'IDENTIFIER',$special_token_value_2,$i);
 							$special_token_value_2='';

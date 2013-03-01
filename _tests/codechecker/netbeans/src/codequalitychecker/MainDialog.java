@@ -208,7 +208,7 @@ public class MainDialog extends JFrame {
 
 		((DefaultListModel)this.files.getModel()).removeAllElements();
 
-		ArrayList finalFiles=initiateFileSearch(type, path, "", skip_custom);
+		ArrayList<SearchFile> finalFiles=initiateFileSearch(type, path, "", skip_custom);
 		if (sort_new) Collections.sort(finalFiles);
 
 		Iterator it=finalFiles.iterator();
@@ -219,11 +219,11 @@ public class MainDialog extends JFrame {
 		}
 	}
 
-	public ArrayList initiateFileSearch(String type, String path, String rec_subpath,
+	public ArrayList<SearchFile> initiateFileSearch(String type, String path, String rec_subpath,
 								   boolean skip_custom) {
 		Date d = new Date();
 		long currentTime = d.getTime() / 1000;
-		ArrayList finalFiles=new ArrayList();
+		ArrayList<SearchFile> finalFiles=new ArrayList<SearchFile>();
 
 		File myFile = new File(path);
 		String thefiles[] = myFile.list();
@@ -251,11 +251,11 @@ public class MainDialog extends JFrame {
 			last_m = tmpFile.lastModified() / 1000 + 60 * 60 * 24;
 
 			if (tmpFile.isDirectory()) {
-				if ((skip_custom) && (thefiles[i].indexOf("_custom") != -1)) {
+				if ((skip_custom) && ((thefiles[i].equals("tracker")) || (thefiles[i].equals("exports")) || (thefiles[i].equals("simpletest")) || (thefiles[i].indexOf("_custom") != -1))) {
 					continue;
 				}
 
-				ArrayList next=initiateFileSearch(type, tmpFile.getAbsolutePath(),
+				ArrayList<SearchFile> next=initiateFileSearch(type, tmpFile.getAbsolutePath(),
 												rec_subpath + ((rec_subpath.equals("")) ? "" : File.separator) +
 												tmpFile.getName(), skip_custom);
 				finalFiles.addAll(next);
@@ -348,8 +348,8 @@ public class MainDialog extends JFrame {
 				"Open up a web browser to the testing-tools directory, so the index.php loads and displays all available tools.");
 	}
 
-	private Vector decompose_line(String line) {
-		Vector decomposed = new Vector();
+	private Vector<String> decompose_line(String line) {
+		Vector<String> decomposed = new Vector<String>();
 
 		int i, num = 0;
 		String current = "";
@@ -380,8 +380,8 @@ public class MainDialog extends JFrame {
 	}
 
 	private boolean line_skippable(String line) {
-		Vector decomposed = decompose_line(line);
-		Vector skip_decomposition = null;
+		Vector<String> decomposed = decompose_line(line);
+		Vector<String> skip_decomposition = null;
 
 		boolean same_0, same_1, same_3, same_4;
 		int val_2_a, val_2_b;
@@ -537,7 +537,7 @@ public class MainDialog extends JFrame {
 
 		String selected = (String)this.errors.getSelectedValue();
 
-		Vector decomposed = decompose_line(selected);
+		Vector<String> decomposed = decompose_line(selected);
 
 		if ((decomposed.size() < 4) ||
 			((!((String) decomposed.get(1)).endsWith(".php")) &&
@@ -620,7 +620,7 @@ public class MainDialog extends JFrame {
 	}
 
 	public void ForgetErrorBtn_actionPerformed(ActionEvent e) {
-		Main.skipped_errors.addElement(errors.getSelectedValue());
+		Main.skipped_errors.addElement((String)errors.getSelectedValue());
 		DefaultListModel model=(DefaultListModel)errors.getModel();
 		model.remove(errors.getSelectedIndex());
 		String writePath="non_errors.txt";

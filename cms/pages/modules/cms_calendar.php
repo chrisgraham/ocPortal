@@ -329,7 +329,7 @@ class Module_cms_calendar extends standard_crud_module
 	 * @param  LONG_TEXT			Notes
 	 * @return array				A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
 	 */
-	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_monthly_spec_type='day_of_month',$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=0,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
+	function get_form_fields($id=NULL,$type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_monthly_spec_type='day_of_month',$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=0,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 

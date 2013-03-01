@@ -3773,6 +3773,7 @@ testing_platform
 ----------------
 
  - _tests/codechecker/.htaccess
+ - _tests/codechecker/build.sh
  - _tests/codechecker/checker.ini
  - _tests/codechecker/code_quality.php
  - _tests/codechecker/codechecker.app/.htaccess
@@ -3784,6 +3785,7 @@ testing_platform
  - _tests/codechecker/codechecker.app/Contents/MacOS/index.html
  - _tests/codechecker/codechecker.app/index.html
  - _tests/codechecker/codechecker.bat
+ - _tests/codechecker/codechecker.sh
  - _tests/codechecker/index.html
  - _tests/codechecker/lang/.htaccess
  - _tests/codechecker/lang/index.html
@@ -3795,7 +3797,6 @@ testing_platform
  - _tests/codechecker/netbeans/build/classes/.htaccess
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/.htaccess
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/AboutDialog.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1_aboutBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1_ClearErrorsBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1_countBtn_actionAdapter.class
@@ -3812,24 +3813,17 @@ testing_platform
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1_specialBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1_templatesBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog1_ViewCodeBtn_actionAdapter.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog2.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog2_cancelBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog2_closeBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog2_phpPathBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog2_projectPathBtn_actionAdapter.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog2_textEditorPathBtn_actionAdapter.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog3.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog3_closeBtn_actionAdapter.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/Dialog4.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/FSTransfer.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/index.html
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/Main.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/MainDialog$1.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/MainDialog.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/NewDialog$1.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/NewDialog$2$1.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/NewDialog$2.class
- - _tests/codechecker/netbeans/build/classes/codequalitychecker/NewDialog.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/OptionsDialog.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/ProcessingDialog.class
  - _tests/codechecker/netbeans/build/classes/codequalitychecker/SearchFile.class

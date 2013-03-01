@@ -708,7 +708,13 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 			continue;
 		}
 
-		check(parse_file($to_use,false,false,$i,count($files)));
+		try
+		{
+			check(parse_file($to_use,false,false,$i,count($files)));
+		}
+		catch (Exception $e)
+		{
+		}
 	}
 } else // Run for a specific file
 {
@@ -739,7 +745,13 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 			continue;
 		}
 
-		check(parse_file($full_path));
+		try
+		{
+			check(parse_file($full_path));
+		}
+		catch (Exception $e)
+		{
+		}
 	}
 }
 echo 'FINAL Done!';

@@ -1,6 +1,6 @@
 package codequalitychecker;
 
-class SearchFile implements Comparable
+class SearchFile implements Comparable<SearchFile>
 {
 	public String path;
 	public long date;
@@ -17,8 +17,8 @@ class SearchFile implements Comparable
 		return Long.toString(this.date);
 	}
 
-	public int compareTo(Object other)
+	public int compareTo(SearchFile other)
 	{
-		return ((SearchFile)other).date<this.date?-1:1;
+		return other.date<this.date?-1:1;
 	}
 }

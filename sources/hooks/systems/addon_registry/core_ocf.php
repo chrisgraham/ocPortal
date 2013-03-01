@@ -225,6 +225,7 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/ocf_emoticons/zzz.png',
 			'themes/default/images/ocf_emoticons/none.png',
 			'lang/EN/ocf.ini',
+			'lang/EN/ocf_components.ini',
 			'lang/EN/ocf_config.ini',
 			'sources/forum/ocf.php',
 			'sources/ocf_forum_driver_helper.php',

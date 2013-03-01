@@ -917,6 +917,7 @@ class Module_cms_news_cat extends standard_crud_module
 	/**
 	 * Get tempcode for a news category adding/editing form.
 	 *
+	 * @param  ?AUTO_LINK	The news category ID (NULL: new)
 	 * @param  SHORT_TEXT	The title of the news category
 	 * @param  SHORT_TEXT	The news category image
 	 * @param  LONG_TEXT		Notes relating to the news category
