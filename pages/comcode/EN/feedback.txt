@@ -8,6 +8,6 @@ You can leave us private feedback here. We don't normally reply directly to feed
 {+END}
 
 {+START,IF,{$ADDON_INSTALLED,staff_messaging}}
-	[block title="Leave feedback"]main_contact_us[/block]
+	[block title=""]main_contact_us[/block]
 {+END}
 [/semihtml]

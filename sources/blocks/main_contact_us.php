@@ -35,7 +35,7 @@ class Block_main_contact_us
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','title','email_optional');
+		$info['parameters']=array('param','title','email_optional','body_prefix','body_suffix','subject_prefix','subject_suffix','redirect');
 		return $info;
 	}
 
@@ -51,6 +51,11 @@ class Block_main_contact_us
 		require_code('feedback');
 
 		$type=array_key_exists('param',$map)?$map['param']:do_lang('GENERAL');
+
+		$body_prefix=array_key_exists('body_prefix',$map)?$map['body_prefix']:'';
+		$body_suffix=array_key_exists('body_suffix',$map)?$map['body_suffix']:'';
+		$subject_prefix=array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
+		$subject_suffix=array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
 
 		$id=uniqid('');
 		$_self_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'));
@@ -74,9 +79,9 @@ class Block_main_contact_us
 
 			// Handle notifications
 			require_code('notifications');
-			$notification_subject=do_lang('CONTACT_US_NOTIFICATION_SUBJECT',$title,NULL,NULL,get_site_default_lang());
-			$notification_message=do_lang('CONTACT_US_NOTIFICATION_MESSAGE',comcode_escape(get_site_name()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),array($post,comcode_escape($type)),get_site_default_lang());
-			dispatch_notification('messaging',$type.'_'.$id,$notification_subject,$notification_message,NULL,NULL,3,true);
+			$notification_subject=do_lang('CONTACT_US_NOTIFICATION_SUBJECT',$subject_prefix.$title.$subject_suffix,NULL,NULL,get_site_default_lang());
+			$notification_message=do_lang('CONTACT_US_NOTIFICATION_MESSAGE',comcode_escape(get_site_name()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),array($body_prefix.$post.$body_suffix,comcode_escape($type)),get_site_default_lang());
+			dispatch_notification('messaging',$type.'_'.$id,$notification_subject,$notification_message,NULL,NULL,3,true,false,NULL,NULL,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
 
 			// Send standard confirmation email to current user
 			$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
@@ -84,6 +89,15 @@ class Block_main_contact_us
 			{
 				require_code('mail');
 				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
+			}
+
+			$redirect=array_key_exists('redirect',$map)?$map['redirect']:'';
+			if ($redirect!='')
+			{
+				require_code('urls2');
+				$redirect=pagelink_as_url($redirect);
+				require_code('site2');
+				assign_refresh($redirect,0.0);
 			}
 		} else
 		{

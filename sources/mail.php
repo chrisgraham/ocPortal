@@ -849,11 +849,12 @@ function form_to_email_entry_script()
  * Send the posted form over email to the staff address.
  *
  * @param  ?string	The subject of the email (NULL: from posted subject parameter).
- * @param  string		The intro text to the mail.
+ * @param  string		The intro text to the mail (blank: none).
  * @param  ?array		A map of fields to field titles to transmit. (NULL: all posted fields, except subject and email)
  * @param  ?string	Email address to send to (NULL: look from post environment / staff address).
+ * @param  string		The outro text to the mail (blank: none).
  */
-function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
+function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$outro='')
 {
 	if (is_null($subject)) $subject=post_param('subject',get_site_name());
 	if (is_null($fields))
@@ -869,14 +870,15 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 		}
 	}
 
-	$message_raw=$intro;
-	if ($message_raw!='') $message_raw.="\n\n------------\n\n";
+	$message_raw='';
+	if ($intro!='') $message_raw.=$intro."\n\n------------\n\n";
 	foreach ($fields as $field=>$field_title)
 	{
 		$field_val=post_param($field,NULL);
 		if (!is_null($field_val))
 			$message_raw.=$field_title.': '.$field_val."\n\n";
 	}
+	if ($outro!='') $message_raw.="\n\n------------\n\n".$outro;
 	$from_email=trim(post_param('email',''));
 
 	$to_name=mixed();
