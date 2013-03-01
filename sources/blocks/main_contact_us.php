@@ -130,8 +130,14 @@ class Block_main_contact_us
 					}
 				} else $use_captcha=false;
 
+				$default_text=mixed();
+				$redirect=get_param('redirect','',true);
+				if ($redirect!='')
+					$default_text=do_lang('COMMENTS_DEFAULT_TEXT',$redirect);
+
 				$comment_details=do_template('COMMENTS_POSTING_FORM',array(
 					'_GUID'=>'31fe96c5ec3b609fbf19595a1de3886f',
+					'DEFAULT_TEXT'=>$default_text,
 					'JOIN_BITS'=>'',
 					'FIRST_POST_URL'=>'',
 					'FIRST_POST'=>'',

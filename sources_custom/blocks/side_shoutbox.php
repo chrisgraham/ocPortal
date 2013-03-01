@@ -42,6 +42,8 @@ class Block_side_shoutbox
 	 */
 	function run($map)
 	{
+		if (!addon_installed('chat')) return paragraph('The chat addon must be installed','','inline_wip_message');
+
 		require_lang('chat');
 		require_css('chat');
 		require_code('chat');
@@ -71,7 +73,6 @@ class Block_side_shoutbox
 			return new ocp_tempcode();
 		}
 
-		$last_message_id=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)',array('room_id'=>$room_id));
 		if (is_null($last_message_id)) $last_message_id=-1;
 
 		$zone=get_module_zone('chat');

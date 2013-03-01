@@ -2716,6 +2716,9 @@ ul.buttons_group, ul.associated_links_block_group {
 table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_block_group { /* In this case no margin is coming from above so we must define one */
 	margin-top: 1em !important;
 }
+.force_normal_margin {
+	margin-top: 1em !important;
+}
 .force_margin {
 	margin-top: 1.5em !important;
 }

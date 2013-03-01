@@ -254,6 +254,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 				$member=is_object($GLOBALS['FORUM_DRIVER'])?$GLOBALS['FORUM_DRIVER']->get_guest_id():0;
 				$insert_as_admin=true;
 			}
+			require_code('comcode');
 			$_text2=comcode_to_tempcode($text,$member,$insert_as_admin,$wrap_pos,$pass_id,$connection,false,$preparse_mode);
 			$text2=$_text2->to_assembly();
 		}

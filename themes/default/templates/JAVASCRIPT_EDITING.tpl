@@ -540,6 +540,7 @@ function do_emoticon(field_name,p,_opener)
 	if (_opener)
 	{
 		element=get_main_ocp_window().document.getElementById(field_name);
+		if (!element) element=opener.document.getElementById(field_name); // If it is really actually cascading popups
 	} else
 	{
 		element=document.getElementById(field_name);

@@ -3,16 +3,18 @@
 	{
 		var im_area_template='{IM_AREA_TEMPLATE;^/}';
 		var im_participant_template='{IM_PARTICIPANT_TEMPLATE;^/}';
-		var all_conversations=[];
 		var top_window=window;
 		var lobby_link='{$PAGE_LINK;,_SEARCH:chat:misc:enter_im=!!}';
+		var participants='';
 
 		function begin_im_chatting()
 		{
 			window.load_from_room_id=-1;
-			if ((window.chat_check) && (window.do_ajax_request)) chat_check(true,0); else window.setTimeout(begin_im_chatting,500);
+			if ((window.chat_check) && (window.do_ajax_request)) chat_check(true,0); else window.setTimeout(begin_im_chatting,100);
 		}
-		window.setTimeout(begin_im_chatting,6000); // To give chance for any existing popups to reopen
+		add_event_listener_abstract(window,'load',function () {
+			begin_im_chatting();
+		} );
 	}
 // ]]></script>
 

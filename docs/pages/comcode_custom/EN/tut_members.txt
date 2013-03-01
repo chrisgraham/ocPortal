@@ -166,6 +166,8 @@ To add new avatars, you need to add new theme images. You can add whole sets of 
 [tt]themes/default/images/ocf_default_avatars/<packname>[/tt]
 You can also do it using the Theme management tools, making sure the theme image names have a prefix of [tt]ocf_default_avatars/<packname>[/tt].
 
+If you don't want the avatar feature (many modern sites prefer to keep just photos), you can uninstall the [tt]ocf_member_avatars[/tt] addon. This will make member photos show where avatars normally would. Don't get confused with addon naming -- [tt]ocf_avatars[/tt] contains default avatar choices, but [tt]ocf_member_avatars[/tt] contains the functionality itself. If you just remove [tt]ocf_avatars[/tt] you'll probably end up with users with broken avatar images.
+
 [title="2"]Edit title[/title]
 
 [exp_thumb="Editing your/a member title" float="right"]members_edit_title[/exp_thumb]

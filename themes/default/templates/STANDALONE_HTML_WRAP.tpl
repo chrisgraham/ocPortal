@@ -40,7 +40,8 @@
 				} );
 			}
 
-			script_load_stuff();
+			{$,The typeof bit is working around a document.write problem in the chat IM system for IE8}
+			if (typeof script_load_stuff!='undefined') script_load_stuff();
 
 			{+START,IF,{$RUNNING_SCRIPT,preview}}
 				disable_preview_scripts();

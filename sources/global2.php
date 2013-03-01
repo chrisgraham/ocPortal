@@ -23,6 +23,12 @@
  */
 function init__global2()
 {
+	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally hackerish chat message precheck (for extra efficiency)
+	{
+		require_code('chat_poller');
+		chat_poller();
+	}
+
 	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX;
 
 	if (ini_get('output_buffering')=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
@@ -192,13 +198,9 @@ function init__global2()
 	require_code('caches');
 	require_code('database'); // There's nothing without the database
 	require_code('config'); // Config is needed for much active stuff
+	require_code('support2');
 	if ((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0'))
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
-	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally unsound chat message precheck (for extra efficiency)
-	{
-		require_code('chat_poller');
-		chat_poller();
-	}
 	if ($MICRO_BOOTUP==0)
 	{
 		load_user_stuff();
@@ -443,7 +445,7 @@ function init__global2()
 	// Initialise site-wide IM
 	if ((get_option('sitewide_im',true)==='1') && (running_script('index')) /* i.e. not running script */ && (get_param('type','misc',true)!='room'))
 	{
-		require_code('chat');
+		require_code('chat_lobby');
 		enter_chat_lobby();
 	}
 

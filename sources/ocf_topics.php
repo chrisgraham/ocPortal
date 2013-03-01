@@ -181,11 +181,12 @@ function ocf_may_delete_topics_by($forum_id,$member_id,$resource_owner)
 /**
  * Mark a topic as read by the current member.
  *
- * @param  AUTO_LINK The Id of the topic to mark as read.
+ * @param  AUTO_LINK		The ID of the topic to mark as read.
+ * @param  ?MEMBER		The member to do this for (NULL: current member).
  */
-function ocf_ping_topic_read($topic_id)
+function ocf_ping_topic_read($topic_id,$member_id=NULL)
 {
-	$member_id=get_member();
+	if (is_null($member_id)) $member_id=get_member();
 	$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id),'',1);
 	$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id,'l_time'=>time()),false,true); // race condition
 }

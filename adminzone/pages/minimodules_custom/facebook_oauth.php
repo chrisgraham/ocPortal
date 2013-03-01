@@ -17,6 +17,7 @@ if (is_null($facebook_appid))
 	add_config_option('FACEBOOK_APPID','facebook_appid','line','return \'\';','FEATURE','FACEBOOK_SYNDICATION');
 	add_config_option('FACEBOOK_SECRET','facebook_secret_code','line','return \'\';','FEATURE','FACEBOOK_SYNDICATION');
 	add_config_option('FACEBOOK_UID','facebook_uid','line','return \'\';','FEATURE','FACEBOOK_SYNDICATION');
+	add_config_option('FACEBOOK_ALLOW_SIGNUPS','facebook_allow_signups','tick','return \'1\';','FEATURE','FACEBOOK_SYNDICATION');
 
 	$facebook_appid='';
 }

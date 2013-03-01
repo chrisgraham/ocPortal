@@ -231,7 +231,7 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
  * Get breadcrumbs for a forum.
  *
  * @param  mixed			The ID of the forum we are at in our path (NULL: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
- * @param  ?string		The name of the given forum (NULL: find it from the DB).
+ * @param  ?mixed			The name of the given forum as string or Tempcode (NULL: find it from the DB).
  * @param  ?AUTO_LINK	The parent forum of the given forum (NULL: find it from the DB).
  * @param  boolean		Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
  * @param  ?AUTO_LINK	Virtual root (NULL: none).
@@ -253,7 +253,7 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 		$forum_details=$_forum_details[0];
 		$this_name=escape_html($forum_details['f_name']);
 		$parent_forum=$forum_details['f_parent_forum'];
-	} else $this_name=escape_html($this_name);
+	} elseif (is_string($this_name)) $this_name=escape_html($this_name);
 	if (((!$start) || (has_privilege(get_member(),'open_virtual_roots'))) && (is_integer($end_point_forum)))
 	{
 		$map=array('page'=>'forumview');
@@ -264,7 +264,10 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 		$_this_name=hyperlink(build_url($map,get_module_zone('forumview')),$this_name,false,false,$start?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode($this_name,ENT_QUOTES,get_charset())),NULL,NULL,'up');
 	} else
 	{
-		$_this_name=make_string_tempcode('<span>'.$this_name.'</span>');
+		$_this_name=new ocp_tempcode();
+		$_this_name->attach('<span>');
+		$_this_name->attach($this_name);
+		$_this_name->attach('</span>');
 	}
 	if ($end_point_forum!==$root)
 	{

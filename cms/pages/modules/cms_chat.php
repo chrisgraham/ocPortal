@@ -132,6 +132,8 @@ class Module_cms_chat
 			if ($sort_order=='DESC') $rows=array_reverse($rows);
 		}
 
+		require_code('chat_lobby');
+
 		$fields=new ocp_tempcode();
 		foreach ($rows as $row)
 		{

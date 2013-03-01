@@ -201,6 +201,13 @@ function handle_facebook_connection_login($current_logged_in_member)
 		// If we're still here, we have to create a new account...
 		// -------------------------------------------------------
 
+		if (get_option('facebook_allow_signups',true)==='0')
+		{
+			require_lang('facebook');
+			attach_message(do_lang_tempcode('FACEBOOK_SIGNUPS_DISABLED'),'warn');
+			return NULL;
+		}
+
 		$completion_form_submitted=post_param('email_address','')!='';
 
 		require_code('ocf_members_action2');

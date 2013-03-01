@@ -92,7 +92,10 @@ function script_load_stuff()
 				var stuck_nav_height=(typeof stuck_nav.real_height=='undefined')?find_height(stuck_nav,true,true):stuck_nav.real_height;
 				stuck_nav.real_height=stuck_nav_height;
 				var pos_y=find_pos_y(stuck_nav.parentNode);
-				if (stuck_nav_height<get_window_height()-260) /* 260 leaves space for footer */
+				var footer_height=find_height(document.getElementsByTagName('footer')[0]);
+				var panel_bottom=document.getElementById('panel_bottom');
+				if (panel_bottom) footer_height+=find_height(panel_bottom);
+				if (stuck_nav_height<get_window_height()-footer_height)
 				{
 					var extra_height=(get_window_scroll_y()-pos_y);
 					if (extra_height>0)
@@ -821,8 +824,10 @@ function browser_matches(code)
 
 	switch (code)
 	{
+		case 'non_concurrent':
+			return browser.indexOf('iphone')!=-1 || browser.indexOf('ipad')!=-1 || browser.indexOf('android')!=-1 || browser.indexOf('phone')!=-1 || browser.indexOf('tablet')!=-1;
 		case 'ios':
-			return browser.indexOf('iphone')!=-1;
+			return browser.indexOf('iphone')!=-1 || browser.indexOf('ipad')!=-1;
 		case 'android':
 			return browser.indexOf('android')!=-1;
 		case 'wysiwyg':
@@ -2152,6 +2157,9 @@ function maintain_theme_in_link(url)
 /* Get URL stub to propagate keep_* parameters */
 function keep_stub(starting_query_string) // starting_query_string means "Put a '?' for the first parameter"
 {
+	if (!window) return '';
+	if (typeof window.location=='undefined') return ''; // Can happen, in a document.write'd popup
+
 	var to_add='',i;
 	var search=(window.location.search=='')?'?':window.location.search.substr(1);
 	var bits=search.split('&');
@@ -2778,7 +2786,7 @@ function handle_comments_posting_form_submit(button,event)
 		form=button.form;
 	}
 
-	form.setAttribute('target','_top');
+	form.setAttribute('target','_self');
 	if (typeof form.old_action!='undefined') form.setAttribute('action',form.old_action);
 	if (form.onsubmit.call(form,event))
 	{

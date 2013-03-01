@@ -197,9 +197,11 @@ class Module_forumview
 		require_lang('ocf');
 		add_menu_item_simple('forum_features',NULL,'ROOT_FORUM','_SEARCH:forumview:type=misc');
 		add_menu_item_simple('forum_features',NULL,'PRIVATE_TOPICS','_SEARCH:forumview:type=pt');
-		add_menu_item_simple('forum_features',NULL,'POSTS_SINCE_LAST_VISIT','_SEARCH:vforums:type=misc');
+		add_menu_item_simple('forum_features',NULL,'POSTS_SINCE','_SEARCH:vforums:type=misc');
 		add_menu_item_simple('forum_features',NULL,'_TOPICS_UNREAD','_SEARCH:vforums:type=unread');
 		add_menu_item_simple('forum_features',NULL,'RECENTLY_READ','_SEARCH:vforums:type=recently_read');
+		add_menu_item_simple('forum_features',NULL,'UNANSWERED_TOPICS','_SEARCH:vforums:type=unanswered_topics');
+		add_menu_item_simple('forum_features',NULL,'INVOLVED_TOPICS','_SEARCH:vforums:type=involved_topics');
 	}
 
 	/**

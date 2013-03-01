@@ -117,6 +117,8 @@ class Module_admin_chat extends standard_crud_module
 	 */
 	function nice_get_entries()
 	{
+		require_code('chat_lobby');
+
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0),'ORDER BY room_name DESC',500);
 		if (count($rows)==500)
 		{

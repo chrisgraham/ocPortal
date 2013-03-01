@@ -92,6 +92,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_PT_BETWEEN.tpl',
 			'JAVASCRIPT_OCF_FORUM.tpl',
 			'BLOCK_MAIN_OCF_INVOLVED_TOPICS.tpl',
+			'OCF_VFORUM_FILTERING.tpl',
 			'forum/rules.php',
 			'themes/default/images/ocf_general/redirect.png',
 			'sources/hooks/modules/search/ocf_within_topic.php',
@@ -329,9 +330,37 @@ class Hook_addon_registry_ocf_forum
 			'OCF_PT_FILTERS.tpl'=>'ocf_forum',
 			'OCF_MEMBER_PROFILE_POSTS.tpl'=>'ocf_member_profile_posts',
 			'OCF_MEMBER_PROFILE_PTS.tpl'=>'ocf_member_profile_pts',
+			'OCF_VFORUM_FILTERING.tpl'=>'ocf_vforum_filtering',
 		);
 	}
 
+	function tpl_preview__ocf_vforum_filtering()
+	{
+		$filtering=do_lorem_template('OCF_VFORUM_FILTERING', array(
+		));
+
+		$content=do_lorem_template('OCF_FORUM', array(
+			'BREADCRUMBS'=>placeholder_breadcrumbs(),
+			'FILTERS'=>'',
+			'FILTERING'=>$filtering,
+			'FORUM_NAME'=>lorem_word_html(),
+			'STARTER_TITLE'=>lorem_phrase(),
+			'BUTTONS'=>'',
+			'TOPIC_WRAPPER'=>'',
+			'CATEGORIES'=>'',
+			'ID'=>placeholder_id(),
+			'DESCRIPTION'=>lorem_phrase()
+		));
+
+		$screen=do_lorem_template('OCF_FORUM_SCREEN', array(
+			'TITLE'=>lorem_title(),
+			'CONTENT'=>$content,
+		));
+
+		return array(
+			lorem_globalise($screen, NULL, '', true)
+		);
+	}
 	/**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -765,6 +794,8 @@ class Hook_addon_registry_ocf_forum
 			'UNREAD_TOPICS_URL'=>placeholder_url(),
 			'RECENTLY_READ_URL'=>placeholder_url(),
 			'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),
+         'UNANSWERED_TOPICS_URL'=>placeholder_url(),
+         'INVOLVED_TOPICS_URL'=>placeholder_url(),
 			'PT_EXTRA'=>'',
 			'NUM_UNREAD_PTS'=>placeholder_number(),
 			'NEW_TOPICS'=>placeholder_number(),

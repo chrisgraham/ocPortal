@@ -572,7 +572,6 @@ hr.ocf_sig_barrier {
 
 .ocf_information_bar { /* either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl */
 	font-size: 0.9em;
-	margin-bottom: 1em !important;
 }
 
 .ocf_information_bar_outer>.toggleable_tray {
@@ -658,10 +657,6 @@ hr.ocf_sig_barrier {
 	white-space: nowrap;
 }
 
-.ocf_member_column_d .actions_list {
-	margin: 5px 0 0 0;
-}
-
 .ocf_member_column_title {
 	font-weight: bold;
 	display: inline;
@@ -673,30 +668,37 @@ hr.ocf_sig_barrier {
 }
 
 .ocf_notification {
-	margin: 1em auto;
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 60%;
-	{+END}
-	display: block;
+	margin: 1em;
+	padding: 0 0.2em;
+	font-size: 0.95em;
+	border: 0px solid !important;
+	{$BETA_CSS_PROPERTY,border-radius: 15px !important;}
 }
 
 .ocf_notification strong {
 	white-space: nowrap;
 }
 
+.ocf_notification_intro_line {
+	font-size: 1.05em;
+	text-shadow: 0px 0px 50px {$GET,slightly_seeded_left_complement_text};
+	cursor: pointer;
+}
 .ocf_notification_type {
 	font-weight: bold;
-	text-align: center;
-	font-size: 1.1em;
+}
+.ocf_notification_type_title {
+	font-weight: bold;
+}
+.ocf_notification_by {
+	font-style: italic;
+}
+.ocf_notification_time {
+	font-style: italic;
 }
 
 .ocf_notification_post {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		padding: 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		padding: 1em 0;
-	{+END}
+	margin-top: 1.5em;
 }
 
 .ocf_search_box {
