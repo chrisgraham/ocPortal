@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2013
+ Copyright (c) ocProducts, 2004-2012
 
  See text/EN/licence.txt for full licencing information.
 
@@ -18,7 +18,7 @@
  * @package		core_fields
  */
 
-class Hook_fields_content_link
+class Hook_fields_reference_multi
 {
 
 	/**
@@ -28,18 +28,14 @@ class Hook_fields_content_link
 	 */
 	function get_field_types()
 	{
-		$hooks=find_all_hooks('systems','content_meta_aware');
-		$ret=array();
-		foreach (array_keys($hooks) as $hook)
-		{
-			if ($hook!='catalogue_entry'/*got a better field hook specifically for catalogue entries*/)
-			{
-				// HACKHACK: imperfect content type naming schemes
-				$declared_hook=$hook;
-				if ($hook=='topic') $declared_hook='forum_topic';
+		if (!addon_installed('catalogues')) return array();
 
-				$ret['at_'.$declared_hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($hook));
-			}
+		require_lang('fields');
+		$cats=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
+		$ret=array();
+		foreach ($cats as $cat)
+		{
+			$ret['cx_'.$cat['c_name']]=do_lang_tempcode('FIELD_TYPE_reference_multi_x',get_translated_tempcode($cat['c_title']));
 		}
 		return $ret;
 	}
@@ -85,11 +81,8 @@ class Hook_fields_content_link
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		/*if (!is_null($required))
-		{
-			Nothing special for this hook
-		}*/
-		return array('short_unescaped',$default,'short');
+		unset($field);
+		return array('long_unescaped',$default,'long');
 	}
 
 	/**
@@ -105,15 +98,18 @@ class Hook_fields_content_link
 
 		if ($ev=='') return new ocp_tempcode();
 
-		$type=preg_replace('#^choose\_#','',substr($field['cf_type'],3));
-
 		require_code('content');
-		list($title,,$info)=content_get_details($type,$ev);
 
-		$page_link=str_replace('_WILD',$ev,$info['view_pagelink_pattern']);
-		list($zone,$map)=page_link_decode($page_link);
+		$ret=new ocp_tempcode();
+		$evs=explode(chr(10),$ev);
+		foreach ($evs as $ev)
+		{
+			list($title)=content_get_details('catalogue_entry',$ev);
 
-		return hyperlink(build_url($map,$zone),$title,false,true);
+			$url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$ev),get_module_zone('catalogues'));
+			$ret->attach(paragraph(hyperlink($url,$title,false,true)));
+		}
+		return $ret;
 	}
 
 	// ======================
@@ -132,50 +128,18 @@ class Hook_fields_content_link
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
+		/*$_list=new ocp_tempcode();
+		$list=nice_get_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
+		if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
+			$_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));
+		$_list->attach($list);
+		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);*/
 		$options=array();
-		$type=substr($field['cf_type'],3);
-
-		// Nice tree list selection
-		if ((is_file(get_file_base().'/sources/hooks/systems/ajax_tree/choose_'.$type.'.php')) || (is_file(get_file_base().'/sources_custom/hooks/systems/ajax_tree/choose_'.$type.'.php')))
+		if (($field['cf_type']!='reference_multi') && (substr($field['cf_type'],0,3)=='cx_'))
 		{
-			require_code('content');
-			list($nice_label)=content_get_details($type,$actual_value);
-			return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_'.$type,$options,$field['cf_required']==1,$actual_value,false,NULL,false,$nice_label);
+			$options['catalogue_name']=substr($field['cf_type'],3);
 		}
-
-		// Simple list selection
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty($type));
-		$ob=object_factory('Hook_content_meta_aware_'.$type);
-		$info=$ob->info();
-		$db=$GLOBALS[(substr($type,0,4)=='ocf_')?'FORUM_DB':'SITE_DB'];
-		$select=array();
-		$select[]=$info['id_field'];
-		if ($type=='comcode_page') $select[]='the_zone';
-		if (!is_null($info['title_field'])) $select[]=$info['title_field'];
-		$rows=$db->query_select($info['table'],$select,NULL,is_null($info['add_time_field'])?'':('ORDER BY '.$info['add_time_field'].' DESC'),2000/*reasonable limit*/);
-		$list=new ocp_tempcode();
-		$_list=array();
-		foreach ($rows as $row)
-		{
-			$id=$info['id_field_numeric']?strval($row[$info['id_field']]):$row[$info['id_field']];
-			$id=$info['id_field_numeric']?strval($row[$info['id_field']]):$row[$info['id_field']];
-			if ($type=='comcode_page') $id=$row['the_zone'].':'.$id;
-			if (is_null($info['title_field']))
-			{
-				$text=$id;
-			} else
-			{
-				$text=$info['title_field_dereference']?get_translated_text($row[$info['title_field']]):$row[$info['title_field']];
-			}
-			$_list[$id]=$text;
-		}
-		if (count($_list)<2000) asort($_list);
-		foreach ($_list as $id=>$text)
-		{
-			if (!is_string($id)) $id=strval($id);
-			$list->attach(form_input_list_entry($id,is_null($actual_value)?false:($actual_value===$id),$text));
-		}
-		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$list,NULL,false,$field['cf_required']==1);
+		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',$options,$field['cf_required']==1,str_replace(chr(10),',',$actual_value),false,NULL,true);
 	}
 
 	/**
@@ -190,8 +154,19 @@ class Hook_fields_content_link
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
 		$id=$field['id'];
+		$i=0;
+		$value='';
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		if (!array_key_exists($tmp_name,$_POST)) return $editing?STRING_MAGIC_NULL:'';
+		foreach (explode(',',$_POST[$tmp_name]) as $_value)
+		{
+			if ($_value!='')
+			{
+				if ($value!='') $value.=chr(10);
+				$value.=$_value;
+			}
+		}
+		return $value;
 	}
 
 }

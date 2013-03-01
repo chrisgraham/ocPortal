@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2013
+ Copyright (c) ocProducts, 2004-2012
 
  See text/EN/licence.txt for full licencing information.
 
@@ -18,7 +18,7 @@
  * @package		core_fields
  */
 
-class Hook_fields_content_link
+class Hook_fields_content_link_multi
 {
 
 	/**
@@ -38,7 +38,7 @@ class Hook_fields_content_link
 				$declared_hook=$hook;
 				if ($hook=='topic') $declared_hook='forum_topic';
 
-				$ret['at_'.$declared_hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($hook));
+				$ret['ax_'.$declared_hook]=do_lang_tempcode('FIELD_TYPE_content_link_multi_x',escape_html($hook));
 			}
 		}
 		return $ret;
@@ -85,11 +85,12 @@ class Hook_fields_content_link
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
+		unset($field);
 		/*if (!is_null($required))
 		{
 			Nothing special for this hook
 		}*/
-		return array('short_unescaped',$default,'short');
+		return array('long_unescaped',$default,'long');
 	}
 
 	/**
@@ -107,13 +108,22 @@ class Hook_fields_content_link
 
 		$type=preg_replace('#^choose\_#','',substr($field['cf_type'],3));
 
-		require_code('content');
-		list($title,,$info)=content_get_details($type,$ev);
+		// HACKHACK: imperfect content type naming schemes
+		if ($type=='forum_topic') $type='topic';
 
-		$page_link=str_replace('_WILD',$ev,$info['view_pagelink_pattern']);
-		list($zone,$map)=page_link_decode($page_link);
+		$ret=new ocp_tempcode();
+		$evs=explode(chr(10),$ev);
+		foreach ($evs as $ev)
+		{
+			require_code('content');
+			list($title,,$info)=content_get_details($type,$ev);
 
-		return hyperlink(build_url($map,$zone),$title,false,true);
+			$page_link=str_replace('_WILD',$ev,$info['view_pagelink_pattern']);
+			list($zone,$map)=page_link_decode($page_link);
+
+			$ret->attach(paragraph(hyperlink(build_url($map,$zone),$title,false,true)));
+		}
+		return $ret;
 	}
 
 	// ======================
@@ -138,9 +148,7 @@ class Hook_fields_content_link
 		// Nice tree list selection
 		if ((is_file(get_file_base().'/sources/hooks/systems/ajax_tree/choose_'.$type.'.php')) || (is_file(get_file_base().'/sources_custom/hooks/systems/ajax_tree/choose_'.$type.'.php')))
 		{
-			require_code('content');
-			list($nice_label)=content_get_details($type,$actual_value);
-			return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_'.$type,$options,$field['cf_required']==1,$actual_value,false,NULL,false,$nice_label);
+			return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_'.$type,$options,$field['cf_required']==1,str_replace(chr(10),',',$actual_value),false,NULL,true);
 		}
 
 		// Simple list selection
@@ -158,7 +166,6 @@ class Hook_fields_content_link
 		foreach ($rows as $row)
 		{
 			$id=$info['id_field_numeric']?strval($row[$info['id_field']]):$row[$info['id_field']];
-			$id=$info['id_field_numeric']?strval($row[$info['id_field']]):$row[$info['id_field']];
 			if ($type=='comcode_page') $id=$row['the_zone'].':'.$id;
 			if (is_null($info['title_field']))
 			{
@@ -173,9 +180,9 @@ class Hook_fields_content_link
 		foreach ($_list as $id=>$text)
 		{
 			if (!is_string($id)) $id=strval($id);
-			$list->attach(form_input_list_entry($id,is_null($actual_value)?false:($actual_value===$id),$text));
+			$list->attach(form_input_list_entry($id,is_null($actual_value)?false:(strpos(chr(10).$actual_value.chr(10),$id)!==false),$text));
 		}
-		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$list,NULL,false,$field['cf_required']==1);
+		return form_input_multi_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$list,NULL,5,$field['cf_required']==1);
 	}
 
 	/**
@@ -190,8 +197,19 @@ class Hook_fields_content_link
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
 		$id=$field['id'];
+		$i=0;
+		$value='';
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		if (!array_key_exists($tmp_name,$_POST)) return $editing?STRING_MAGIC_NULL:'';
+		foreach (is_array($_POST[$tmp_name])?$_POST[$tmp_name]:explode(',',$_POST[$tmp_name]) as $_value)
+		{
+			if ($_value!='')
+			{
+				if ($value!='') $value.=chr(10);
+				$value.=$_value;
+			}
+		}
+		return $value;
 	}
 
 }

@@ -119,7 +119,16 @@ function content_get_details($content_type,$content_id)
 			$content_url=build_url(array('page'=>$page),$zone,NULL,false,false,false);
 			$content_url_email_safe=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 
-			return array($zone.':'.$page,$submitter_id,$cma_info,$content_row,$content_url,$content_url_email_safe);
+			$_content_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_zone'=>$zone,'the_page'=>$page));
+			if (!is_null($_content_title))
+			{
+				$content_title=get_translated_text($_content_title);
+			} else
+			{
+				$content_title=$zone.':'.$page;
+			}
+
+			return array($content_title,$submitter_id,$cma_info,$content_row,$content_url,$content_url_email_safe);
 		}
 
 		return array(NULL,NULL,NULL,NULL,NULL,NULL);

@@ -345,9 +345,9 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 		do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','short_trans_multi','short_text','short_text_multi','long_trans','long_text','posting_field','codename','password','email',
 		do_lang_tempcode('FIELD_TYPES__NUMBERS'),'integer','float',
 		do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick','multilist','tick_multi','combo','combo_multi',
-		do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','video','url','page_link','theme_image','theme_image_multi',
+		do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','upload_multi','picture','picture_multi','video','video_multi','url','url_multi','page_link','theme_image','theme_image_multi',
 		do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
-		do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','content_link','content_link_multi','member','member_multi','author',
+		do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','reference_multi','content_link','content_link_multi','member','member_multi','author',
 //			do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
 	);
 	$_types=array();
