@@ -341,7 +341,7 @@ function get_file_base()
 function get_custom_file_base()
 {
 	global $FILE_BASE,$SITE_INFO;
-	if (isset($SITE_INFO['custom_file_base_stub']))
+	if ((isset($SITE_INFO['custom_file_base_stub'])) && ($SITE_INFO['custom_file_base_stub']!=''))
 	{
 		require_code('shared_installs');
 		$u=current_share_user();

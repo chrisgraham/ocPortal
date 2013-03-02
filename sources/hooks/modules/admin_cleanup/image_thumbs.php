@@ -53,7 +53,7 @@ class Hook_image_thumbs
 			$GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name']=>''));
 		}
 		$full=get_custom_file_base().'/uploads/auto_thumbs';
-		$dh=opendir($full);
+		$dh=@opendir($full);
 		if ($dh!==false)
 		{
 			while (($file=readdir($dh))!==false)

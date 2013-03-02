@@ -242,7 +242,7 @@ function aspell_init()
 	$p_dict_path=sl_get_custom_file_base().'/data_custom/spelling/personal_dicts'.DIRECTORY_SEPARATOR.$p_dicts_name;
 	if (!file_exists($p_dict_path))
 	{
-		mkdir($p_dict_path,02770);
+		@mkdir($p_dict_path,02770);
 	}
 
 	if (is_null($temptext))
