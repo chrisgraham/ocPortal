@@ -517,7 +517,7 @@ class Module_cms_blogs extends standard_crud_module
 			}
 		}
 
-		$meta_data=actual_meta_data_get_fields('news',$id);
+		$meta_data=actual_meta_data_get_fields('news',strval($id));
 
 		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$meta_data['add_time'],$meta_data['edit_time'],$meta_data['views'],$meta_data['submitter'],true);
 	}

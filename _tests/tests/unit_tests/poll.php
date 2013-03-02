@@ -28,7 +28,7 @@ class poll_test_set extends ocp_test_case
 		require_code('polls');
 		require_code('polls2');
 
-		$this->poll_id=add_poll($question='Who are you ?','a','b','c');
+		$this->poll_id=add_poll('Who are you ?','a','b','c');
 
 		// Test the forum was actually created
 		$this->assertTrue('Who are you ?'==get_translated_text($GLOBALS['FORUM_DB']->query_select_value('poll','question ',array('id'=>$this->poll_id))));
@@ -38,7 +38,7 @@ class poll_test_set extends ocp_test_case
 	{
 		vote_in_poll($this->poll_id,2);
 
-		$poll_details=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$this->poll_id),'',1);
+		$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$this->poll_id),'',1);
 		$this->assertTrue(array_key_exists(0,$poll_details));
 
 		$this->assertTrue($poll_details[0]['votes2']==1);
@@ -47,7 +47,7 @@ class poll_test_set extends ocp_test_case
 	function testEditPoll()
 	{
 		// Test the forum edits
-		edit_poll($poll_id=$this->poll_id,$question='Who am I?','a','b','c','','','','','','','',3,1,1,1,'');
+		edit_poll($this->poll_id,'Who am I?','a','b','c','','','','','','','',3,1,1,1,'');
 
 		// Test the forum was actually created
 		$this->assertTrue('Who am I?'==get_translated_text($GLOBALS['FORUM_DB']->query_select_value('poll','question ',array('id'=>$this->poll_id))));
@@ -55,7 +55,7 @@ class poll_test_set extends ocp_test_case
 
 	function tearDown()
 	{
-		delete_poll($poll_id=$this->poll_id);
+		delete_poll($this->poll_id);
 		parent::tearDown();
 	}
 }

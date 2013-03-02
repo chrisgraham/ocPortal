@@ -750,8 +750,11 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 	{
 		require_code('gallery_syndication');
-		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
-		sync_video_syndication($id,true,false,$consider_deferring);
+		if (function_exists('sync_video_syndication'))
+		{
+			$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
+			sync_video_syndication($id,true,false,$consider_deferring);
+		}
 	}
 
 	return $id;
@@ -861,8 +864,11 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 	{
 		require_code('gallery_syndication');
-		$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
-		sync_video_syndication($id,false,$orig_url!=$url,$orig_url!=$url && $consider_deferring);
+		if (function_exists('sync_video_syndication'))
+		{
+			$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
+			sync_video_syndication($id,false,$orig_url!=$url,$orig_url!=$url && $consider_deferring);
+		}
 	}
 }
 
@@ -905,7 +911,10 @@ function delete_video($id,$delete_full=true)
 	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 	{
 		require_code('gallery_syndication');
-		sync_video_syndication($id,false,false);
+		if (function_exists('sync_video_syndication'))
+		{
+			sync_video_syndication($id,false,false);
+		}
 	}
 }
 

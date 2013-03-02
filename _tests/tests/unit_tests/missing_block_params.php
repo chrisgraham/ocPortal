@@ -27,7 +27,7 @@ class missing_block_params_test_set extends ocp_test_case
 	{
 		$need=array();
 		$dh=opendir(get_file_base().'/sources/blocks');
-		while ($f=readdir($dh))
+		while (($f=readdir($dh))!==false)
 		{
 			if (substr($f,-4)=='.php')
 			{

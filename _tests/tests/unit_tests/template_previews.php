@@ -103,7 +103,7 @@ class template_previews_test_set extends ocp_test_case
 				if ($list_2[1]==$function)
 				{
 					// Ignore templates designed for indirect inclusion
-					if ($temp_name_2=='GLOBAL_HELPER_PANEL' || $temp_name_2=='GLOBAL_mobile' || $temp_name_2=='HTML_HEAD' || $temp_name_2=='MEMBER_TOOLTIP' || $temp_name_2=='FORM_STANDARD_END' || $temp_name_2='MEMBER_BAR_SEARCH' || $temp_name_2=='MENU_LINK_PROPERTIES')
+					if ($temp_name_2=='GLOBAL_HELPER_PANEL' || $temp_name_2=='GLOBAL_mobile' || $temp_name_2=='HTML_HEAD' || $temp_name_2=='MEMBER_TOOLTIP' || $temp_name_2=='FORM_STANDARD_END' || $temp_name_2=='MEMBER_BAR_SEARCH' || $temp_name_2=='MENU_LINK_PROPERTIES')
 						continue;
 
 					$this->assertTrue(in_array($temp_name_2,$RECORDED_TEMPLATES_USED),$template_2.' not used in preview as claimed in '.$hook.'/'.$function);

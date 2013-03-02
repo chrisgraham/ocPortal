@@ -330,7 +330,7 @@ function lex($text=NULL)
 						} else
 						{
 							// Is it a perfect match?
-							if ((strlen($token_so_far)==strlen($token_value)) && ((!in_array($token_so_far{0},$PCONTINUATIONS)) || (!in_array($TEXT{$i},$PCONTINUATIONS))))
+							if ((strlen($token_so_far)==strlen($token_value)) && ((!in_array($token_so_far{0},$PCONTINUATIONS)) || (!in_array($TEXT[$i],$PCONTINUATIONS))))
 							{
 								$applicable_tokens[]=$token_name;
 								unset($maybe_applicable_tokens[$token_name]);
@@ -430,15 +430,15 @@ function lex($text=NULL)
 					/*$terse_style=!isset($GLOBALS['NON_TERSE']); TODO Maybe put back, but should be optional
 					if ($terse_style)
 					{
-						if (($i_current>0) && ($TEXT{$i_current-1}==' ') && (in_array($token_found,array('COMMA','IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER','OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
+						if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('COMMA','IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER','OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
 					} else
 					{
-						if (($i_current>0) && ($TEXT{$i_current-1}==' ') && (in_array($token_found,array('OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
-						if (($i_current>0) && (($TEXT{$i}!=' ') && ($TEXT{$i}!=chr(10)) && ($TEXT{$i}!=chr(13))) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
-						if (($i_current>0) && (($TEXT{$i_current-1}!=' ') || (($TEXT{$i}!=' ') && ($TEXT{$i}!=chr(10)) && ($TEXT{$i}!=chr(13)))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+						if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
+						if (($i_current>0) && (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13))) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+						if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13)))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
 					}
-					if (($TEXT{$i}!=' ') && ($TEXT{$i}!=chr(10)) && ($TEXT{$i}!=chr(13)) && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
-					if (($i_current>0) && (($TEXT{$i_current-1}!=' ') || (($TEXT{$i}!=' ') && ($TEXT{$i}!=chr(10)) && ($TEXT{$i}!=chr(13)))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
+					if (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13)) && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
+					if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13)))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
 
 					$tokens[]=array($token_found,$i);
 				} else
@@ -455,7 +455,7 @@ function lex($text=NULL)
 							$numeric=in_array($char,array('0','1','2','3','4','5','6','7','8','9'));
 						}
 
-						if ((!in_array($char,$PCONTINUATIONS)) && (($numeric===false) || ($char!='.') || (!is_numeric($TEXT{$i})))) break;
+						if ((!in_array($char,$PCONTINUATIONS)) && (($numeric===false) || ($char!='.') || (!is_numeric($TEXT[$i])))) break;
 
 						$token_found.=$char;
 					}
@@ -534,7 +534,7 @@ function lex($text=NULL)
 					else $actual_char='\\'.$char;
 				} else
 				{
-					$heredoc_simple=!((($char=='{') && ($TEXT{$i}=='$')) || (($char=='$') && ($TEXT{$i}=='{')));
+					$heredoc_simple=!((($char=='{') && ($TEXT[$i]=='$')) || (($char=='$') && ($TEXT[$i]=='{')));
 					if (($char=='$') || (!$heredoc_simple))
 					{
 						if (!$heredoc_simple) $i++;
@@ -573,7 +573,7 @@ function lex($text=NULL)
 						} else
 						{
 							$matches=array();
-							if (($char=='[') && ($TEXT{$i}=='\'') && (preg_match('#^\[\'([^\']*)\'\]#',substr($TEXT,$i-1,40),$matches)!=0)) // NOTE: Have disallowed escaping within the quotes
+							if (($char=='[') && ($TEXT[$i]=='\'') && (preg_match('#^\[\'([^\']*)\'\]#',substr($TEXT,$i-1,40),$matches)!=0)) // NOTE: Have disallowed escaping within the quotes
 							{
 								$heredoc_buildup[]=array((count($heredoc_buildup)==0)?'variable':'IDENTIFIER',$special_token_value_2,$i);
 								$special_token_value_2='';
@@ -591,7 +591,7 @@ function lex($text=NULL)
 								$heredoc_buildup[]=array('EXTRACT_CLOSE',$i);
 								$i+=strlen($matches[1])+1;
 							}
-							elseif (($char=='-') && ($TEXT{$i}=='>'))
+							elseif (($char=='-') && ($TEXT[$i]=='>'))
 							{
 								$heredoc_buildup[]=array((count($heredoc_buildup)==0)?'variable':'IDENTIFIER',$special_token_value_2,$i);
 								$special_token_value_2='';
@@ -607,7 +607,7 @@ function lex($text=NULL)
 					{
 						// Simple
 						$matches=array();
-						if (($char=='-') && ($TEXT{$i}=='>'))
+						if (($char=='-') && ($TEXT[$i]=='>'))
 						{
 							$heredoc_buildup[]=array((count($heredoc_buildup)==0)?'variable':'IDENTIFIER',$special_token_value_2,$i);
 							$special_token_value_2='';
@@ -650,7 +650,8 @@ function lex($text=NULL)
 						if ($heredoc_simple) $i--;
 						break;
 					}
-				} else {
+				} else
+				{
 					// Normal case
 					$special_token_value_2.=$char;
 				}
@@ -724,7 +725,7 @@ function lex($text=NULL)
 					elseif ($char=='t') $actual_char="\t";
 				} else
 				{
-					$heredoc_simple=!((($char=='{') && ($TEXT{$i}=='$')) || (($char=='$') && ($TEXT{$i}=='{')));
+					$heredoc_simple=!((($char=='{') && ($TEXT[$i]=='$')) || (($char=='$') && ($TEXT[$i]=='{')));
 					if (($char=='$') || (!$heredoc_simple))
 					{
 						if (!$heredoc_simple) $i++;
@@ -801,7 +802,7 @@ function plex__get_next_char($i)
 {
 	global $TEXT;
 	if ($i>=strlen($TEXT)) return array(true,$i+1,'');
-	$char=$TEXT{$i};
+	$char=$TEXT[$i];
 	return array(false,$i+1,$char);
 }
 

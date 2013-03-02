@@ -25,7 +25,7 @@ class news_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('news2');
 
-		$this->news_id=add_news($title='Today',$news="hiiiiiiiiiii",$author='rolly',$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$news_article='test article',$main_news_category=5,$news_category=NULL,$time='1262671781',$submitter=NULL,$views=0,$edit_date=NULL,$id=NULL,$image='');
+		$this->news_id=add_news('Today','hiiiiiiiiiii','rolly',1,1,1,1,'','test article',5,NULL,'1262671781',NULL,0,NULL,NULL,'');
 		// Test the forum was actually created
 		$this->assertTrue('Today'==get_translated_text($GLOBALS['SITE_DB']->query_select_value('news','title ',array('id'=>$this->news_id))));
 	}
@@ -33,7 +33,7 @@ class news_test_set extends ocp_test_case
 	function testEditNews()
 	{
 		// Test the forum edits
-		edit_news($id=$this->news_id,$title="Politics",$news="teheyehehj ",$author="rolly",$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes="yedd",$news_article="test article 22222222",$main_news_category=5,$news_category=NULL,$meta_keywords="",$meta_description="",$image="");
+		edit_news($this->news_id,'Politics','teheyehehj ','rolly',1,1,1,1,'yedd','test article 22222222',5,NULL,'','','');
 
 		// Test the forum was actually created
 		$this->assertTrue('Politics'==get_translated_text($GLOBALS['SITE_DB']->query_select_value('news','title ',array('id'=>$this->news_id))));

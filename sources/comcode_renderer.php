@@ -2139,8 +2139,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						4,
 						6,
 					);
-				}
-				else {
+				} else
+				{
 					$test_data=array(
 						6,
 						4,

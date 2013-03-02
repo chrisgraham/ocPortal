@@ -21,7 +21,7 @@ $OCPORTAL_PATH=dirname(dirname(dirname(__FILE__)));
 
 function parse_file($to_use,$verbose=false,$very_verbose=false,$i=NULL,$count=NULL)
 {
-	global $tokens,$TEXT,$FILENAME,$OCPORTAL_PATH;
+	global $TOKENS,$TEXT,$FILENAME,$OCPORTAL_PATH;
 	$FILENAME=$to_use;
 
 	if (($OCPORTAL_PATH!='') && (substr($FILENAME,0,strlen($OCPORTAL_PATH))==$OCPORTAL_PATH))
@@ -39,9 +39,9 @@ function parse_file($to_use,$verbose=false,$very_verbose=false,$i=NULL,$count=NU
 	if ($very_verbose) echo '<b>Our code...</b>'."\n";
 	if ($very_verbose) echo htmlentities($TEXT);
 	if ($verbose) echo "\n\n".'<b>Starting lexing...</b>'."\n";
-	$tokens=lex();
-	if ($very_verbose) print_r($tokens);
-	if ($very_verbose) echo count($tokens).' tokens';
+	$TOKENS=lex();
+	if ($very_verbose) print_r($TOKENS);
+	if ($very_verbose) echo count($TOKENS).' tokens';
 	if ($verbose) echo "\n\n".'<b>Starting parsing...</b>'."\n";
 	$structure=parse();
 	if ($very_verbose) print_r($structure);
@@ -130,9 +130,7 @@ function check_parameters()
 function die_error($system,$pos,$line,$message)
 {
 	global $FILENAME;
-	echo 'ERROR "'.$FILENAME.'" '.$line.' '.$pos.' '.'PHP: '.$message.cnl();
-	throw new Exception('Parsing error - parsing of file stopped');
-	exit();
+	throw new Exception('ERROR "'.$FILENAME.'" '.$line.' '.$pos.' '.'PHP: '.$message);
 }
 
 function warn_error($system,$pos,$line,$message)
@@ -172,10 +170,10 @@ function die_html_trace($message)
 
 function pos_to_line_details($i,$absolute=false)
 {
-	global $TEXT,$tokens;
-	if ((!$absolute) && (!isset($tokens[$i]))) $i=-1;
+	global $TEXT,$TOKENS;
+	if ((!$absolute) && (!isset($TOKENS[$i]))) $i=-1;
 	if ($i==-1) return array(0,0,'');
-	$j=$absolute?$i:$tokens[$i][count($tokens[$i])-1];
+	$j=$absolute?$i:$TOKENS[$i][count($TOKENS[$i])-1];
 	$line=substr_count(substr($TEXT,0,$j),chr(10))+1;
 	$pos=$j-strrpos(substr($TEXT,0,$j),chr(10));
 	$l_s=strrpos(substr($TEXT,0,$j+1),chr(10))+1;
@@ -189,7 +187,7 @@ function log_warning($warning,$i=-1,$absolute=false)
 {
 	global $TEXT,$FILENAME,$START_TIME,$myfile_WARNINGS;
 
-	if (($i==-1) && (isset($GLOBALS['i']))) $i=$GLOBALS['i'];
+	if (($i==-1) && (isset($GLOBALS['I']))) $i=$GLOBALS['I'];
 	list($pos,$line,$full_line)=pos_to_line_details($i,$absolute);
 
 	echo 'WARNING "'.$FILENAME.'" '.$line.' '.$pos.' '.'PHP: '.$warning.cnl();
@@ -202,8 +200,8 @@ function log_special($type,$value)
 {
 	global $START_TIME;
 
-	if (!isset($GLOBALS[$$type])) $GLOBALS[$$type]=fopen('special_'.$START_TIME.'_'.$type.'.log','at');
-	fwrite($GLOBALS[$$type],$value."\n");
+	if (!isset($GLOBALS[$type])) $GLOBALS[$type]=fopen('special_'.$START_TIME.'_'.$type.'.log','at');
+	fwrite($GLOBALS[$type],$value."\n");
 	//fclose($GLOBALS[$$type]);
 }
 

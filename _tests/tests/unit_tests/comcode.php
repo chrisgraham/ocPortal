@@ -38,7 +38,7 @@ class comcode_test_set extends ocp_test_case
 //			if (!$matches)
 //				exit(preg_replace('#\s#','',$html).' vs '.str_replace("&nbsp;","",preg_replace('#\s#','',$actual->evaluate())));
 
-  			$this->assertTrue($matches);
+			$this->assertTrue($matches);
 		}
 	}
 

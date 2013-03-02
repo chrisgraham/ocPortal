@@ -36,7 +36,7 @@ class forum_poll_test_set extends ocp_test_case
 
 		$this->topic_id=ocf_make_topic(db_get_first_id(),'Test');
 
-		$this->poll_id=ocf_make_poll($this->topic_id,$question='Who are you ?',$is_private=0,$is_open=0,$minimum_selections=2,$maximum_selections=4,$requires_reply=0,$answers=array('a','b','c'),$check_permissions=true);
+		$this->poll_id=ocf_make_poll($this->topic_id,'Who are you ?',0,0,2,4,0,array('a','b','c'),true);
 
 		// Test the forum was actually created
 		$this->assertTrue('Who are you ?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
@@ -45,7 +45,7 @@ class forum_poll_test_set extends ocp_test_case
 	function testEditPoll()
 	{
 		// Test the forum edits
-		ocf_edit_poll($poll_id=$this->poll_id,$question='Who am I?',$is_private=1,$is_open=1,$minimum_selections=1,$maximum_selections=4,$requires_reply=1,$answers=array(1,2,3),$reason='nothing');
+		ocf_edit_poll($this->poll_id,'Who am I?',1,1,1,4,1,array(1,2,3),'nothing');
 
 		// Test the forum was actually created
 		$this->assertTrue('Who am I?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
@@ -53,7 +53,7 @@ class forum_poll_test_set extends ocp_test_case
 
 	function tearDown()
 	{
-		ocf_delete_poll($poll_id=$this->poll_id,$reason='Simple');
+		ocf_delete_poll($this->poll_id,'Simple');
 		ocf_delete_topic($this->topic_id);
 		parent::tearDown();
 	}

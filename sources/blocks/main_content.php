@@ -310,7 +310,7 @@ class Block_main_content
 		if (!is_null($info['archive_url']))
 		{
 			list($archive_url_zone,$archive_url_map,$archive_url_hash)=page_link_decode($info['archive_url']);
-			$archive_url=_build_url($archive_url_map,$archive_url_zone,NULL,false,false,false,$archive_url_hash);
+			$archive_url=build_url($archive_url_map,$archive_url_zone,NULL,false,false,false,$archive_url_hash);
 		} else $archive_url=new ocp_tempcode();
 
 		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs,NULL,false,$guid);

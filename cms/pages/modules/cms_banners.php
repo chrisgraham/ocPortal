@@ -373,7 +373,7 @@ class Module_cms_banners extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('banner',NULL);
 
-		add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$meta_data['add_time'],0,0,0,0,$meta_data['edit_time']);
+		add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$meta_data['submitter'],$validated,$b_type,$meta_data['add_time'],0,0,0,0,$meta_data['edit_time']);
 
 		$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
 		if (array_key_exists(0,$_banner_type_row))
@@ -415,7 +415,7 @@ class Module_cms_banners extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('banner',$id);
 
-		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type,$meta_data['edit_time'],$meta_data['add_time'],true);
+		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$meta_data['submitter'],$validated,$b_type,$meta_data['edit_time'],$meta_data['add_time'],true);
 
 		$this->new_id=post_param('name');
 

@@ -98,8 +98,8 @@ function run_testset($testset)
 
    $loader=new SimpleFileLoader();
    $suite=$loader->createSuiteFromClasses(
-           $testset,
-           array(basename($testset).'_test_set'));
+		$testset,
+		array(basename($testset).'_test_set'));
    /*$result=*/$suite->run(new DefaultReporter());
 }
 

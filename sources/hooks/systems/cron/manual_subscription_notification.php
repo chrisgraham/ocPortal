@@ -27,7 +27,7 @@ class Hook_cron_manual_subscription_notification
 	function run()
 	{
 		$_last_time=get_long_value('last_cron_manual_subscription_notification');
-		$last_time=is_null($_last_time)?NULL:intval($_last_time);
+		$last_time=is_null($_last_time)?mixed():intval($_last_time);
 		if (!is_null($last_time))
 		{
 			if ($last_time<60*60*24) return; // Only do once per day

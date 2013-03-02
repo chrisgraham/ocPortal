@@ -37,7 +37,7 @@ class posts_test_set extends ocp_test_case
 
 		$this->topic_id=ocf_make_topic(db_get_first_id(),'Test');
 
-		$this->post_id=ocf_make_post($this->topic_id,$title='welcome',$post='welcome to the posts',$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false);
+		$this->post_id=ocf_make_post($this->topic_id,'welcome','welcome to the posts',0,false,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,true,true,NULL,true,'',0,NULL,false,false,false);
 
 		// Test the forum was actually created
 		$this->assertTrue('welcome'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title ',array('id'=>$this->post_id)));
@@ -48,7 +48,7 @@ class posts_test_set extends ocp_test_case
 		$this->establish_admin_session();
 
 		// Test the forum edits
-		ocf_edit_post($post_id=$this->post_id,$validated=1,$title='take care',$post='the post editing',$skip_sig=0,$is_emphasised=0,$intended_solely_for=NULL,$show_as_edited=1,$mark_as_unread=0,$reason='Nothing');
+		ocf_edit_post($this->post_id,1,'take care','the post editing',0,0,NULL,1,0,'Nothing');
 
 		// Test the forum was actually created
 		$this->assertTrue('take care'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title ',array('id'=>$this->post_id)));
@@ -56,7 +56,7 @@ class posts_test_set extends ocp_test_case
 
 	function tearDown()
 	{
-		if (!ocf_delete_posts_topic($topic_id=$this->topic_id,$posts=array($this->post_id),$reason='Nothing'))
+		if (!ocf_delete_posts_topic($this->topic_id,array($this->post_id),'Nothing'))
 			ocf_delete_topic($this->topic_id);
 		parent::tearDown();
 	}

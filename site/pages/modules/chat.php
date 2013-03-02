@@ -435,7 +435,7 @@ class Module_chat
 		} else $private_room=new ocp_tempcode();
 
 		// Friend list and IM
-		$can_im=has_specific_permission(get_member(),'start_im');
+		$can_im=has_privilege(get_member(),'start_im');
 		if (($member_id==get_member()) && (!is_guest()))
 		{
 			$post_url_add_friend=build_url(array('page'=>'_SELF','type'=>'friend_add','redirect'=>get_self_url(true)),'_SELF');
@@ -488,19 +488,15 @@ class Module_chat
 			'IM_AREA_TEMPLATE'=>$im_area_template,
 			'FRIENDS'=>$friends,
 			'CAN_IM'=>$can_im,
-			'ONLINE_URL'=>$online_url,
 			'URL_ADD_FRIEND'=>$post_url_add_friend,
 			'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,
-			'TITLE'=>$title,
 			'ROOMS'=>$fields,
 			'PRIVATE_ROOM'=>$private_room,
 			'MOD_LINK'=>$mod_link,
 			'BLOCKING_LINK'=>$blocking_link,
-			'SETEFFECTS_LINK'=>$seteffectslink,
+			'SETEFFECTS_LINK'=>$seteffects_link,
 			'CAN_IM'=>$can_im,
 			'FRIENDS'=>$friends,
-			'URL_ADD_FRIEND'=>$post_url_add_friend,
-			'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,
 			'MEMBER_ID'=>strval($member_id),
 		));
 	}

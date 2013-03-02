@@ -60,7 +60,7 @@ function show_im_contacts($member_id=NULL,$simpler=false,$max=15)
 
 	if (is_null($member_id)) $member_id=get_member();
 
-	$can_im=has_specific_permission(get_member(),'start_im');
+	$can_im=has_privilege(get_member(),'start_im');
 
 	$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
 	$friends_offline=array();

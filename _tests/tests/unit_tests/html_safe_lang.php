@@ -26,7 +26,7 @@ class html_safe_lang_test_set extends ocp_test_case
 {
 	function testHtmlSafeLang()
 	{
- 		require_code('files');
+		require_code('files');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 

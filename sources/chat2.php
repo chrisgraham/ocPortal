@@ -134,7 +134,7 @@ function friend_remove($likes,$liked)
  * @param  LONG_TEXT		The comma-separated list of usergroups that may NOT access it (blank: no restriction)
  * @return tempcode		The fields
  */
-function get_chatroom_fields($id,$is_made_by_me=false,$room_name='',$welcome='',$username='',$allow2='',$allow2_groups='',$disallow2='',$disallow2_groups='')
+function get_chatroom_fields($id=NULL,$is_made_by_me=false,$room_name='',$welcome='',$username='',$allow2='',$allow2_groups='',$disallow2='',$disallow2_groups='')
 {
 	require_code('form_templates');
 

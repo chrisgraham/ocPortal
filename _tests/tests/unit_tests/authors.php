@@ -24,9 +24,9 @@ class authors_test_set extends ocp_test_case
 
 		require_code('authors');
 
-		add_author($author='author1',$url='www.google.com',$forum_handle=3,$description='happy',$skills='play',$meta_keywords='',$meta_description='');
+		add_author('author1','www.google.com',3,'happy','play','','');
 
-		add_author($author='author2',$url='www.yahoo.com',$forum_handle=3,$description='welcome',$skills='drama',$meta_keywords='',$meta_description='');
+		add_author('author2','www.yahoo.com',3,'welcome','drama','','');
 
 		// Test the forum was actually created
 		$this->assertTrue('author1'==$GLOBALS['FORUM_DB']->query_select_value('authors','author',array('author'=>'author1')));
@@ -35,12 +35,12 @@ class authors_test_set extends ocp_test_case
 	function testMergeauthors()
 	{
 		// Test the forum edits
-		merge_authors($from='author1',$to='author2');
+		merge_authors('author1','author2');
 	}
 
 	function tearDown()
 	{
-		delete_author($author='author2');
+		delete_author('author2');
 		parent::tearDown();
 	}
 }

@@ -103,7 +103,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	$post_owner=$post_info[0]['p_poster'];
 	$forum_id=$post_info[0]['p_cache_forum_id'];
 	$topic_id=$post_info[0]['p_topic_id'];
-	$update=array();
+	$update_map=array();
 
 	require_code('ocf_posts_action');
 	require_code('ocf_posts');
@@ -116,12 +116,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 		if (($mark_as_unread)/* && (ocf_may_moderate_forum($forum_id))*/)
 		{
-			//			$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_cache_last_time'),array('id'=>$topic_id),'',1);
-
-			//			$seven_days_ago=time()-60*60*24*intval(get_option('post_history_days'));   Can't be conditional, as we need the vforums to update, and they depend on t_cache_last_time. We can't just update t_cache_last_time for consistency
-			//			if ($topic_info[0]['t_cache_last_time']<$seven_days_ago)
-					   	$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_last_time'=>time(),'t_cache_last_post_id'=>$post_id,'t_cache_last_title'=>$title,'t_cache_last_username'=>$GLOBALS['FORUM_DRIVER']->get_username($post_owner),'t_cache_last_member_id'=>$post_owner),array('id'=>$topic_id),'',1);
-			//				$update['p_time']=time();   Not viable- would reorder topic.
+	   	$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_last_time'=>time(),'t_cache_last_post_id'=>$post_id,'t_cache_last_title'=>$title,'t_cache_last_username'=>$GLOBALS['FORUM_DRIVER']->get_username($post_owner),'t_cache_last_member_id'=>$post_owner),array('id'=>$topic_id),'',1);
 
 			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
 		}
@@ -142,7 +137,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	require_code('attachments2');
 	require_code('attachments3');
 	if (!addon_installed('unvalidated')) $validated=1;
-	$update=array_merge($update,array(
+	$update_map=array_merge($update_map,array(
 		'p_title'=>$title,
 		'p_post'=>update_lang_comcode_attachments($_postdetails,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB'],false,$post_owner),
 		'p_is_emphasised'=>$is_emphasised,
@@ -153,12 +148,12 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 
 	if ($show_as_edited)
 	{
-		$update['p_last_edit_time']=$edit_time;
-		$update['p_last_edit_by']=get_member();
+		$update_map['p_last_edit_time']=$edit_time;
+		$update_map['p_last_edit_by']=get_member();
 	} else
 	{
-		$update['p_last_edit_time']=NULL;
-		$update['p_last_edit_by']=NULL;
+		$update_map['p_last_edit_time']=NULL;
+		$update_map['p_last_edit_by']=NULL;
 	}
 
 	if (!is_null($add_time))
@@ -166,7 +161,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	if (!is_null($submitter))
 		$update_map['p_poster']=$submitter;
 
-	$GLOBALS['FORUM_DB']->query_update('f_posts',$update,array('id'=>$post_id),'',1);
+	$GLOBALS['FORUM_DB']->query_update('f_posts',$update_map,array('id'=>$post_id),'',1);
 
 	// Update topic cacheing
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_cache_first_post_id','t_cache_first_title'),array('id'=>$topic_id),'',1);
@@ -397,7 +392,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		// Make informative post
 		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'[/page]';
 		$topic_title=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$to_topic_id));
-		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array('[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]',get_timezoned_date()));
+		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array('[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]',get_timezoned_date(time())));
 		ocf_make_post($from_topic_id,'',$lang,0,false,1,1,NULL,NULL,$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_time',array('id'=>$posts[0]))+1,NULL,NULL,NULL,NULL,false);
 
 		require_code('ocf_general_action2');

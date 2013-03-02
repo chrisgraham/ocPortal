@@ -124,7 +124,7 @@ $line=1;
 $pos=1;
 for ($i=0;$i<strlen($contents);$i++)
 {
-	$next=$contents{$i};
+	$next=$contents[$i];
 	if (ord($next)>128) echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('XHTML_UNSAFE_CHAR',$next,strval(ord($next)))."\n";
 	if ($next==chr(10))
 	{

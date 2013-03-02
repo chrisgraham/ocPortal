@@ -17,11 +17,11 @@ function parse($_tokens=NULL)
 {
 	ini_set('xdebug.max_nesting_level','2000');
 
-	global $tokens,$i,$OK_EXTRA_FUNCTIONS;
+	global $tokens,$I,$OK_EXTRA_FUNCTIONS;
 	$OK_EXTRA_FUNCTIONS=NULL;
 	if (!is_null($_tokens)) $tokens=$_tokens;
-	$i=0;
-	$structure=_parse_php($tokens,$i);
+	$I=0;
+	$structure=_parse_php($tokens,$I);
 	$structure['ok_extra_functions']=$OK_EXTRA_FUNCTIONS;
 	global $FILENAME;
 	if ((count($structure['main'])>0) && (substr($FILENAME,0,7)=='sources') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'global.php') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'critical_errors.php') && ((count($structure['main'])>1) || (($structure['main'][0][0]!='RETURN') && (($structure['main'][0][0]!='CALL_DIRECT') || ($structure['main'][0][1]!='require_code')))))
@@ -206,24 +206,24 @@ function _parse_command_actual($no_term_needed=false)
 	switch ($next[0])
 	{
 		case 'CLASS':
-			$command=array('INNER_CLASS',_parse_class_dec(),$GLOBALS['i']);
+			$command=array('INNER_CLASS',_parse_class_dec(),$GLOBALS['I']);
 			break;
 
 		case 'FUNCTION':
-			$command=array('INNER_FUNCTION',_parse_function_dec(),$GLOBALS['i']);
+			$command=array('INNER_FUNCTION',_parse_function_dec(),$GLOBALS['I']);
 			break;
 
 		case 'DEC':
 			pparse__parser_next();
 			$variable=_parse_variable($suppress_error);
-			$command=array('PRE_DEC',$variable,$GLOBALS['i']);
+			$command=array('PRE_DEC',$variable,$GLOBALS['I']);
 			if (!$no_term_needed) _test_command_end();
 			break;
 
 		case 'INC':
 			pparse__parser_next();
 			$variable=_parse_variable($suppress_error);
-			$command=array('PRE_INC',$variable,$GLOBALS['i']);
+			$command=array('PRE_INC',$variable,$GLOBALS['I']);
 			if (!$no_term_needed) _test_command_end();
 			break;
 
@@ -238,13 +238,13 @@ function _parse_command_actual($no_term_needed=false)
 				case 'DEC':
 					if (($target[0]=='LIST') || ($target[0]=='ARRAY_APPEND')) parser_error('LIST is only a one way type'); // We needed to read a target (for assignment), but we really wanted a variable (subset of target) -- we ended up with something that WAS target but NOT variable (we couldn't have known till now)
 					pparse__parser_next();
-					$command=array('DEC',$target,$GLOBALS['i']);
+					$command=array('DEC',$target,$GLOBALS['I']);
 					break;
 
 				case 'INC':
 					if (($target[0]=='LIST') || ($target[0]=='ARRAY_APPEND')) parser_error('LIST is only a one way type'); // We needed to read a target (for assignment), but we really wanted a variable (subset of target) -- we ended up with something that WAS target but NOT variable (we couldn't have known till now)
 					pparse__parser_next();
-					$command=array('INC',$target,$GLOBALS['i']);
+					$command=array('INC',$target,$GLOBALS['I']);
 					break;
 
 				default: // Either an assignment or an indirect function call or a method call
@@ -256,7 +256,7 @@ function _parse_command_actual($no_term_needed=false)
 					{
 						$assignment=_parse_assignment_operator();
 						$expression=_parse_expression();
-						$command=array('ASSIGNMENT',$assignment,$command,$expression,$GLOBALS['i']);
+						$command=array('ASSIGNMENT',$assignment,$command,$expression,$GLOBALS['I']);
 					}
 					break;
 			}
@@ -281,7 +281,7 @@ function _parse_command_actual($no_term_needed=false)
 				pparse__parser_expect('BRACKET_OPEN');
 				$parameters=_parse_comma_expressions();
 				pparse__parser_expect('BRACKET_CLOSE');
-				$command=array('CALL_DIRECT',$identifier,$parameters,$suppress_error,$GLOBALS['i']);
+				$command=array('CALL_DIRECT',$identifier,$parameters,$suppress_error,$GLOBALS['I']);
 			}
 			while (pparse__parser_peek()=='OBJECT_OPERATOR')
 			{
@@ -295,7 +295,7 @@ function _parse_command_actual($no_term_needed=false)
 		case 'ECHO':
 			pparse__parser_next();
 			$parameters=_parse_comma_expressions();
-			$command=array('ECHO',$parameters,$GLOBALS['i']);
+			$command=array('ECHO',$parameters,$GLOBALS['I']);
 			if (!$no_term_needed) _test_command_end();
 			break;
 
@@ -303,13 +303,13 @@ function _parse_command_actual($no_term_needed=false)
 			$target=_parse_target();
 			pparse__parser_expect('EQUAL');
 			$expression=_parse_expression();
-			$command=array('ASSIGNMENT','EQUAL',$target,$expression,$GLOBALS['i']);
+			$command=array('ASSIGNMENT','EQUAL',$target,$expression,$GLOBALS['I']);
 			if (!$no_term_needed) _test_command_end();
 			break;
 
 		case 'IF':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			pparse__parser_expect('BRACKET_OPEN');
 			$expression=_parse_expression();
 			pparse__parser_expect('BRACKET_CLOSE');
@@ -328,7 +328,7 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'SWITCH':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			$expression=_parse_expression();
 			pparse__parser_expect('CURLY_OPEN');
 			$cases=_parse_cases();
@@ -338,7 +338,7 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'FOREACH':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			pparse__parser_expect('BRACKET_OPEN');
 			$expression=_parse_expression();
 			pparse__parser_expect('AS');
@@ -366,7 +366,7 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'FOR':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			pparse__parser_expect('BRACKET_OPEN');
 			$next_2=pparse__parser_peek();
 			if ($next_2=='COMMAND_TERMINATE')
@@ -387,7 +387,7 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'DO':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			$loop_command=_parse_command();
 			pparse__parser_expect('WHILE');
 			pparse__parser_expect('BRACKET_OPEN');
@@ -398,7 +398,7 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'WHILE':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			pparse__parser_expect('BRACKET_OPEN');
 			$control_expression=_parse_expression();
 			pparse__parser_expect('BRACKET_CLOSE');
@@ -408,11 +408,11 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'TRY':
 			pparse__parser_next();		// Consume the "try"
-			$try_position=$GLOBALS['i'];
+			$try_position=$GLOBALS['I'];
 			if (pparse__parser_peek() != 'CURLY_OPEN') parser_error('Expected code block after "try".');
 			$try=_parse_command();
 			pparse__parser_expect('CATCH');
-			$catch_position=$GLOBALS['i'];
+			$catch_position=$GLOBALS['I'];
 			$exception=NULL;
 			switch (pparse__parser_peek())
 			{
@@ -438,7 +438,7 @@ function _parse_command_actual($no_term_needed=false)
 		case 'THROW':
 			pparse__parser_next();		// Consume the "throw"
 			$expr=_parse_expression();
-			$command=array('THROW',$expr,$GLOBALS['i']);
+			$command=array('THROW',$expr,$GLOBALS['I']);
 			break;
 
 		case 'RETURN':
@@ -447,11 +447,11 @@ function _parse_command_actual($no_term_needed=false)
 			switch ($next_2)
 			{
 				case 'COMMAND_TERMINATE':
-					$command=array('RETURN',array('SOLO',array('LITERAL',array('NULL')),$GLOBALS['i']),$GLOBALS['i']);
+					$command=array('RETURN',array('SOLO',array('LITERAL',array('NULL')),$GLOBALS['I']),$GLOBALS['I']);
 					break;
 
 				default:
-					$command=array('RETURN',_parse_expression(),$GLOBALS['i']);
+					$command=array('RETURN',_parse_expression(),$GLOBALS['I']);
 			}
 			if (!$no_term_needed) _test_command_end();
 			break;
@@ -462,11 +462,11 @@ function _parse_command_actual($no_term_needed=false)
 			switch ($next_2)
 			{
 				case 'COMMAND_TERMINATE':
-					$command=array('CONTINUE',array('SOLO',array('LITERAL',array('INTEGER',1)),$GLOBALS['i']),$GLOBALS['i']);
+					$command=array('CONTINUE',array('SOLO',array('LITERAL',array('INTEGER',1)),$GLOBALS['I']),$GLOBALS['I']);
 					break;
 
 				default:
-					$command=array('CONTINUE',_parse_expression(),$GLOBALS['i']);
+					$command=array('CONTINUE',_parse_expression(),$GLOBALS['I']);
 			}
 			if (!$no_term_needed) _test_command_end();
 			break;
@@ -477,18 +477,18 @@ function _parse_command_actual($no_term_needed=false)
 			switch ($next_2)
 			{
 				case 'COMMAND_TERMINATE':
-					$command=array('BREAK',array('SOLO',array('LITERAL',array('INTEGER',1)),$GLOBALS['i']),$GLOBALS['i']);
+					$command=array('BREAK',array('SOLO',array('LITERAL',array('INTEGER',1)),$GLOBALS['I']),$GLOBALS['I']);
 					break;
 
 				default:
-					$command=array('BREAK',_parse_expression(),$GLOBALS['i']);
+					$command=array('BREAK',_parse_expression(),$GLOBALS['I']);
 			}
 			if (!$no_term_needed) _test_command_end();
 			break;
 
 		case 'GLOBAL':
 			pparse__parser_next();
-			$command=array('GLOBAL',_parse_comma_variables(),$GLOBALS['i']);
+			$command=array('GLOBAL',_parse_comma_variables(),$GLOBALS['I']);
 			foreach ($command[1] as $variable)
 			{
 				if (strtoupper($variable[1])!=$variable[1]) log_warning('Globalised variable '.$variable[1].' is in non-canonical format');
@@ -502,8 +502,10 @@ function _parse_command_actual($no_term_needed=false)
 	return $command;
 }
 
-function _parse_call_chain($command=array(),$suppress_error=false)
+function _parse_call_chain($command=NULL,$suppress_error=false)
 {
+	if ($command===NULL) $command=array();
+
 	$i=pparse__parser_expect('IDENTIFIER');		// Silly PHP syntax makes $scoped_variables and scoped_functions() different, but member_variables and member_functions() the same...
 	switch (pparse__parser_peek())
 	{
@@ -512,7 +514,7 @@ function _parse_call_chain($command=array(),$suppress_error=false)
 			$args=_parse_comma_expressions();
 			pparse__parser_expect('BRACKET_CLOSE');		// Consume the ")"
 			$expression=$command; // Actually the 'command' was an expression, on which we will call our object
-			$command=array('CALL_METHOD',$expression,$args,$suppress_error,$GLOBALS['i']);
+			$command=array('CALL_METHOD',$expression,$args,$suppress_error,$GLOBALS['I']);
 			break;
 		default:
 			// Nothing of interest. Let the next pass handle it.
@@ -531,7 +533,7 @@ function _parse_target()
 		case 'LIST':
 			pparse__parser_next();
 			pparse__parser_expect('BRACKET_OPEN');
-			$target=array('LIST',_parse_comma_variables(true),$GLOBALS['i']);
+			$target=array('LIST',_parse_comma_variables(true),$GLOBALS['I']);
 			pparse__parser_expect('BRACKET_CLOSE');
 			break;
 
@@ -542,7 +544,7 @@ function _parse_target()
 			{
 				pparse__parser_next();
 				pparse__parser_expect('EXTRACT_CLOSE');
-				$target=array('ARRAY_APPEND',$variable,$GLOBALS['i']);
+				$target=array('ARRAY_APPEND',$variable,$GLOBALS['I']);
 			} else $target=$variable;
 	}
 	return $target;
@@ -563,7 +565,7 @@ function _parse_if_rest()
 
 		case 'ELSEIF':
 			pparse__parser_next();
-			$c_pos=$GLOBALS['i'];
+			$c_pos=$GLOBALS['I'];
 			pparse__parser_expect('BRACKET_OPEN');
 			$expression=_parse_expression();
 			pparse__parser_expect('BRACKET_CLOSE');
@@ -641,7 +643,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 // Choice{"VAR" "IDENTIFIER" "EQUAL" literal "COMMAND_TERMINATE" | "VAR" "IDENTIFIER" "COMMAND_TERMINATE" | function_dec}*
 
 	$next=pparse__parser_peek();
-	$class=array('functions'=>array(),'vars'=>array(),'i'=>$GLOBALS['i']);
+	$class=array('functions'=>array(),'vars'=>array(),'i'=>$GLOBALS['I']);
 	$modifiers=array();
 	while (($next=='CONST') || ($next=='VAR') || ($next=='FUNCTION') || ($next=='PUBLIC') || ($next=='PRIVATE') || ($next=='PROTECTED') || ($next=='ABSTRACT') || ($next=='STATIC'))
 	{
@@ -682,7 +684,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 							pparse__parser_expect('BRACKET_OPEN');
 							$details=_parse_create_array();
 							pparse__parser_expect('BRACKET_CLOSE');
-							$literal=array('CREATE_ARRAY',$details,$GLOBALS['i']);
+							$literal=array('CREATE_ARRAY',$details,$GLOBALS['I']);
 						}
 						else
 						{
@@ -691,7 +693,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 						$class['vars'][]=array($identifier[1],$literal);
 					} else
 					{
-						$class['vars'][]=array($identifier[1],array('SOLO',array('LITERAL',array('NULL')),$GLOBALS['i']));
+						$class['vars'][]=array($identifier[1],array('SOLO',array('LITERAL',array('NULL')),$GLOBALS['I']));
 					}
 
 					$next_2=pparse__parser_peek();
@@ -806,7 +808,7 @@ function _parse_class_dec($modifiers=array())
 function _parse_function_dec($function_modifiers=array())
 {
 	$function=array();
-	$function['offset']=$GLOBALS['i'];
+	$function['offset']=$GLOBALS['I'];
 	pparse__parser_expect('FUNCTION');
 	if (pparse__parser_peek()=='REFERENCE') pparse__parser_next();
 	$function['name']=pparse__parser_expect('IDENTIFIER');
@@ -836,7 +838,7 @@ function _parse_expression()
 
 	global $OPS;
 
-	$e_pos=$GLOBALS['i'];
+	$e_pos=$GLOBALS['I'];
 	$expression=_parse_expression_inner();
 	$op_list=array($expression);
 
@@ -923,24 +925,24 @@ function _parse_expression_inner()
 		case 'BW_NOT':
 			pparse__parser_next();
 			$_expression=_parse_expression_inner();
-			$expression=array('BW_NOT',$_expression,$GLOBALS['i']);
+			$expression=array('BW_NOT',$_expression,$GLOBALS['I']);
 			break;
 
 		case 'BOOLEAN_NOT':
 			pparse__parser_next();
 			$_expression=_parse_expression_inner();
-			$expression=array('BOOLEAN_NOT',$_expression,$GLOBALS['i']);
+			$expression=array('BOOLEAN_NOT',$_expression,$GLOBALS['I']);
 			break;
 
 		case 'SUBTRACT':
 			pparse__parser_next();
 			$_expression=_parse_expression_inner();
-			$expression=array('NEGATE',$_expression,$GLOBALS['i']);
+			$expression=array('NEGATE',$_expression,$GLOBALS['I']);
 			break;
 
 		case '*literal':
 			$literal=_parse_literal();
-			$expression=array('LITERAL',$literal,$GLOBALS['i']);
+			$expression=array('LITERAL',$literal,$GLOBALS['I']);
 			break;
 
 		case 'IDENTIFIER':
@@ -962,11 +964,11 @@ function _parse_expression_inner()
 				pparse__parser_next();
 				$parameters=_parse_comma_expressions();
 				pparse__parser_expect('BRACKET_CLOSE');
-				$expression=array('CALL_DIRECT',$next[1],$parameters,$suppress_error,$GLOBALS['i']);
+				$expression=array('CALL_DIRECT',$next[1],$parameters,$suppress_error,$GLOBALS['I']);
 				//log_special('functions',$next[1].'/'.count($parameters));
 			} else
 			{
-				$expression=array('CONSTANT',$next[1],$GLOBALS['i']);
+				$expression=array('CONSTANT',$next[1],$GLOBALS['I']);
 			}
 			break;
 
@@ -980,10 +982,10 @@ function _parse_expression_inner()
 				pparse__parser_next();
 				$expressions=_parse_comma_expressions();
 				pparse__parser_expect('BRACKET_CLOSE');
-				$expression=array('NEW_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,$expressions,$GLOBALS['i']);
+				$expression=array('NEW_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,$expressions,$GLOBALS['I']);
 			} else
 			{
-				$expression=array('NEW_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,array(),$GLOBALS['i']);
+				$expression=array('NEW_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,array(),$GLOBALS['I']);
 			}
 			break;
 
@@ -992,7 +994,7 @@ function _parse_expression_inner()
 			$identifier=pparse__parser_next(true);
 			if (($identifier[0]!='IDENTIFIER') && ($identifier[0]!='variable')) parser_error('Expected IDENTIFIER or variable but got '.$identifier[0]);
 			$next_2=pparse__parser_peek();
-			$expression=array('CLONE_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,array(),$GLOBALS['i']);
+			$expression=array('CLONE_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,array(),$GLOBALS['I']);
 			break;
 
 		case 'ARRAY':
@@ -1000,7 +1002,7 @@ function _parse_expression_inner()
 			pparse__parser_expect('BRACKET_OPEN');
 			$details=_parse_create_array();
 			pparse__parser_expect('BRACKET_CLOSE');
-			$expression=array('CREATE_ARRAY',$details,$GLOBALS['i']);
+			$expression=array('CREATE_ARRAY',$details,$GLOBALS['I']);
 			break;
 
 		case 'BRACKET_OPEN':
@@ -1014,17 +1016,17 @@ function _parse_expression_inner()
 				$target=_parse_variable($suppress_error);
 				pparse__parser_expect('EQUAL');
 				$_expression=_parse_expression();
-				$expression=array('EMBEDDED_ASSIGNMENT','EQUAL',$target,$_expression,$GLOBALS['i']);
+				$expression=array('EMBEDDED_ASSIGNMENT','EQUAL',$target,$_expression,$GLOBALS['I']);
 				pparse__parser_expect('BRACKET_CLOSE');
 			}
 			elseif (in_array($next_2,array('INTEGER','BOOLEAN','FLOAT','ARRAY','OBJECT','STRING')))
 			{
 				pparse__parser_next();
 				pparse__parser_next();
-				$expression=array('CASTED',$next_2,_parse_expression_inner(),$GLOBALS['i']);
+				$expression=array('CASTED',$next_2,_parse_expression_inner(),$GLOBALS['I']);
 			} else
 			{
-				$expression=array('BRACKETED',_parse_expression(),$GLOBALS['i']);
+				$expression=array('BRACKETED',_parse_expression(),$GLOBALS['I']);
 				pparse__parser_expect('BRACKET_CLOSE');
 			}
 			break;
@@ -1032,7 +1034,7 @@ function _parse_expression_inner()
 		case 'REFERENCE':
 			pparse__parser_next();
 			$variable=_parse_variable($suppress_error);
-			$expression=array('VARIABLE_REFERENCE',$variable,$GLOBALS['i']);
+			$expression=array('VARIABLE_REFERENCE',$variable,$GLOBALS['I']);
 			break;
 
 		default: // By elimination: Must be a variable or a call chained to a variable
@@ -1075,7 +1077,7 @@ function _parse_variable($suppress_error,$can_be_dangling_method_call_instead=fa
 			{
 				log_warning('Indirect call');
 			}
-			return array('CALL_INDIRECT',$variable,$parameters,$suppress_error,$GLOBALS['i']);
+			return array('CALL_INDIRECT',$variable,$parameters,$suppress_error,$GLOBALS['I']);
 		}
 	}
 
@@ -1083,7 +1085,7 @@ function _parse_variable($suppress_error,$can_be_dangling_method_call_instead=fa
 	if ($variable_chain!==array())
 	{
 		// Restructure the chain around any particular calls made
-		$actual_expression=array('VARIABLE',$variable[1],$variable_chain,$GLOBALS['i']);
+		$actual_expression=array('VARIABLE',$variable[1],$variable_chain,$GLOBALS['I']);
 
 		// Check if it's a true variable
 		if ((!$can_be_dangling_method_call_instead) && (_parse_is_non_pure_variable($actual_expression)))
@@ -1092,7 +1094,7 @@ function _parse_variable($suppress_error,$can_be_dangling_method_call_instead=fa
 		}
 	} else
 	{
-		$actual_expression=array('VARIABLE',$variable[1],array(),$GLOBALS['i']);
+		$actual_expression=array('VARIABLE',$variable[1],array(),$GLOBALS['I']);
 	}
 
 	if ((isset($GLOBALS['pedantic'])) && (in_array($variable[1],array('_GET','_POST','_COOKIE','_REQUEST','_FILES','_SESSION'))))
@@ -1127,12 +1129,12 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 			$next_2=pparse__parser_peek(true);
 			if (($next_2[0]!='IDENTIFIER') && ($next_2[0]!='variable')) parser_error('Expected variable/identifier to be dereferenced from object variable but got '.$next_2[0]);
 			pparse__parser_expect('IDENTIFIER');
-			$calling=array('VARIABLE',$next_2[1],array(),$GLOBALS['i']);
+			$calling=array('VARIABLE',$next_2[1],array(),$GLOBALS['I']);
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
 			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
-			$variable=array('DEREFERENCE',$calling,$tunnel,$GLOBALS['i']);
+			$variable=array('DEREFERENCE',$calling,$tunnel,$GLOBALS['I']);
 			break;
 
 		case 'EXTRACT_OPEN':
@@ -1150,7 +1152,7 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
 			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
-			$variable=array('ARRAY_AT',$expression,$tunnel,$GLOBALS['i']);
+			$variable=array('ARRAY_AT',$expression,$tunnel,$GLOBALS['I']);
 			break;
 
 		case 'BRACKET_OPEN':
@@ -1161,12 +1163,12 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
 			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
-			$variable=array('CALL_METHOD',NULL/*will be subbed later for preceding part of chain*/,$args,$suppress_error,$GLOBALS['i'],$tunnel);
+			$variable=array('CALL_METHOD',NULL/*will be subbed later for preceding part of chain*/,$args,$suppress_error,$GLOBALS['I'],$tunnel);
 			break;
 
 		/*case 'CURLY_OPEN':  Not in PHP 6
 			pparse__parser_next();
-			$variable=array('CHAR_OF_STRING',_parse_expression(),$GLOBALS['i']);
+			$variable=array('CHAR_OF_STRING',_parse_expression(),$GLOBALS['I']);
 			pparse__parser_expect('CURLY_CLOSE');
 			break;*/
 
@@ -1196,42 +1198,42 @@ function _parse_literal()
 		case 'SUBTRACT':
 			pparse__parser_next();
 			$_literal=_parse_literal();
-			$literal=array('NEGATE',$_literal,$GLOBALS['i']);
+			$literal=array('NEGATE',$_literal,$GLOBALS['I']);
 			break;
 
 		case 'integer_literal':
 			$_literal=pparse__parser_next(true);
-			$literal=array('INTEGER',$_literal[1],$GLOBALS['i']);
+			$literal=array('INTEGER',$_literal[1],$GLOBALS['I']);
 			break;
 
 		case 'float_literal':
 			$_literal=pparse__parser_next(true);
-			$literal=array('FLOAT',$_literal[1],$GLOBALS['i']);
+			$literal=array('FLOAT',$_literal[1],$GLOBALS['I']);
 			break;
 
 		case 'string_literal':
 			$_literal=pparse__parser_next(true);
-			$literal=array('STRING',$_literal[1],$GLOBALS['i']);
+			$literal=array('STRING',$_literal[1],$GLOBALS['I']);
 			break;
 
 		case 'true':
 			pparse__parser_next();
-			$literal=array('BOOLEAN',true,$GLOBALS['i']);
+			$literal=array('BOOLEAN',true,$GLOBALS['I']);
 			break;
 
 		case 'false':
 			pparse__parser_next();
-			$literal=array('BOOLEAN',false,$GLOBALS['i']);
+			$literal=array('BOOLEAN',false,$GLOBALS['I']);
 			break;
 
 		case 'NULL':
 			pparse__parser_next();
-			$literal=array('NULL',$GLOBALS['i']);
+			$literal=array('NULL',$GLOBALS['I']);
 			break;
 
 		case 'IDENTIFIER':
 			$_literal=pparse__parser_next(true);
-			$literal=array('CONSTANT',$_literal[1],$GLOBALS['i']);
+			$literal=array('CONSTANT',$_literal[1],$GLOBALS['I']);
 			break;
 
 		default:
@@ -1343,7 +1345,7 @@ function _parse_comma_variables($allow_blanks=false)
 				return $variables;
 			}
 
-		  $next_2=pparse__parser_peek();
+			$next_2=pparse__parser_peek();
 		}
 
 		$variable=_parse_variable(false);
@@ -1399,7 +1401,7 @@ function _parse_parameter()
 				pparse__parser_expect('REFERENCE');
 				$variable=pparse__parser_expect('variable');
 				// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-				$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['i'],'HINT'=>$hint);
+				$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I'],'HINT'=>$hint);
 			}
 			elseif (pparse__parser_peek()=='variable')
 			{
@@ -1416,7 +1418,7 @@ function _parse_parameter()
 						// NULL
 						pparse__parser_next();		// Consume the NULL
 						// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-						$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['i'],'HINT'=>'?'.$hint);
+						$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['I'],'HINT'=>'?'.$hint);
 					}
 					else
 					{
@@ -1426,7 +1428,7 @@ function _parse_parameter()
 				else
 				{
 					// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-					$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['i'],'HINT'=>$hint);
+					$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['I'],'HINT'=>$hint);
 				}
 			}
 			else
@@ -1437,7 +1439,7 @@ function _parse_parameter()
 		case 'REFERENCE':
 			$variable=pparse__parser_expect('variable');
 			// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-			$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['i']);
+			$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I']);
 			/*$next_2=pparse__parser_peek();		Not valid in all PHP versions
 			if ($next_2=='EQUAL')
 			{
@@ -1449,7 +1451,7 @@ function _parse_parameter()
 
 		case 'variable':
 			// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-			$parameter=array('RECEIVE_BY_VALUE',$next[1],NULL,$GLOBALS['i']);
+			$parameter=array('RECEIVE_BY_VALUE',$next[1],NULL,$GLOBALS['I']);
 			$next_2=pparse__parser_peek();
 			if ($next_2=='EQUAL')
 			{
@@ -1558,12 +1560,12 @@ function handle_comment($comment)
 	}
 	if (isset($GLOBALS['TODO']))
 	{
-		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
-		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
-		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
-		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
-		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
-		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
-		//if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['i']);	Don't want to report these
+		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		//if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['I']);	Don't want to report these
 	}
 }

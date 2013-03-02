@@ -714,6 +714,7 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 		}
 		catch (Exception $e)
 		{
+			echo $e->getMessage().cnl();
 		}
 	}
 } else // Run for a specific file
@@ -751,6 +752,7 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 		}
 		catch (Exception $e)
 		{
+			echo $e->getMessage().cnl();
 		}
 	}
 }

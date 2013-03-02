@@ -26,7 +26,7 @@ class missing_colour_equations_test_set extends ocp_test_case
 	function testMissingColourEquations()
 	{
 		$dh=opendir(get_file_base().'/themes/default/css');
-		while ($f=readdir($dh))
+		while (($f=readdir($dh))!==false)
 		{
 			if (substr($f,-4)=='.css')
 			{

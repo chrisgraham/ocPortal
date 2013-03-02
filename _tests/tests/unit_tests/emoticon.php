@@ -25,7 +25,7 @@ class emoticon_test_set extends ocp_test_case
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
 
-		ocf_make_emoticon($code='X:)',$theme_img_code='image/em.jpg',$relevance_level=1,$use_topics=1,$is_special=0);
+		ocf_make_emoticon('X:)','image/em.jpg',1,1,0);
 
 		// Test the forum was actually created
 		$this->assertTrue('X:)'==$GLOBALS['FORUM_DB']->query_select_value('f_emoticons','e_code ',array('e_code'=>'X:)')));
@@ -34,7 +34,7 @@ class emoticon_test_set extends ocp_test_case
 	function testEditemoticon()
 	{
 		// Test the forum edits
-		ocf_edit_emoticon($old_code='X:)',$code='Z:D',$theme_img_code='images/smile.jpg',$relevance_level=2,$use_topics=0,$is_special=0);
+		ocf_edit_emoticon('X:)','Z:D','images/smile.jpg',2,0,0);
 
 		// Test the forum was actually created
 		$this->assertTrue('Z:D'==$GLOBALS['FORUM_DB']->query_select_value('f_emoticons','e_code ',array('e_code'=>'Z:D')));

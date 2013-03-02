@@ -85,7 +85,6 @@ class Hook_continue_import
 					$function_name='import_'.$import;
 					ocf_over_local();
 					$func_output=call_user_func_array(array($object,$function_name),array($import_source,$db_table_prefix,$old_base_dir));
-					if (!is_null($func_output)) $out->attach($func_output);
 					ocf_over_msn();
 
 					$GLOBALS['SITE_DB']->query_insert('import_parts_done',array('imp_id'=>$import,'imp_session'=>get_session_id()));

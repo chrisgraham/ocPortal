@@ -62,6 +62,19 @@ function array_diff($array1,$array2,$array3=NULL)
 }
 
 /**
+ * Computes the intersection of arrays with additional index check.
+ *
+ * @param  array	First array.
+ * @param  array	Second array.
+ * @param  ?array	Third array (NULL: only 2).
+ * @return array	The difference.
+ */
+function array_diff_assoc($array1,$array2,$array3=NULL)
+{
+	return array();
+}
+
+/**
  * Exchanges all keys with their associated values in an array.
  *
  * @param  array	Array to flip.
@@ -105,6 +118,19 @@ function array_keys($input,$search_value=NULL)
  * @return array	The intersection.
  */
 function array_intersect($array1,$array2,$array3=NULL)
+{
+	return array();
+}
+
+/**
+ * Calculate the intersection of arrays with additional index check.
+ *
+ * @param  array	First array.
+ * @param  array	Second array.
+ * @param  ?array	Third array (NULL: only 2).
+ * @return array	The intersection.
+ */
+function array_intersect_assoc($array1,$array2,$array3=NULL)
 {
 	return array();
 }
@@ -1226,14 +1252,14 @@ function hexdec($hex_string)
 	return 0;
 }
 
-/*!ROADSEND*
+/**
  * Syntax highlighting of a string (output directly).
  *
  * @param  string	The string to highlight.
  */
-/*function highlight_string($str)
+function highlight_string($str)
 {
-}*/
+}
 
 /**
  * Convert all applicable characters to HTML entities.
@@ -2349,15 +2375,15 @@ function ksort(&$array)
 {
 }
 
-/*!ROADSEND*
+/**
  * Get numeric formatting information.
  *
  * @return array	Array of formatting information.
  */
-/*function localeconv()
+function localeconv()
 {
 	return array();
-}*/
+}
 
 /**
  * Strip whitespace from the beginning of a string.
@@ -3045,90 +3071,28 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 	return false;
 }
 
-/*!ROADSEND*
+/**
  * Set locale information.
  *
  * @param  integer	The locale category (LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME).
  * @param  mixed		The locale (Some PHP versions require an array, and some a string with multiple calls).
  * @return ~string	The set locale (false: error).
  */
-/*function setlocale($category,$locale)
+function setlocale($category,$locale)
 {
 	return '';
-}*/
+}
 
-/*!ROADSEND*
+/**
  * Calculate the sha1 hash of a string.
  *
  * @param  string	The string to hash.
  * @return string	The hash of the string.
  */
-/*function sha1($str)
+function sha1($str)
 {
 	return '';
-}*/
-
-/*!SPECIAL*
- * Get data from the persistent cache.
- *
- * @param  mixed			Key.
- * @return ?mixed			The data (NULL: not found / NULL entry).
- */
-/*function eaccelerator_get($id)
-{
-	return array();
-}*/
-
-/*!SPECIAL*
- * Put data into the persistent cache.
- *
- * @param  mixed			Key.
- * @param  mixed			The data.
- * @param  integer		Various flags (parameter not used).
- */
-/*function eaccelerator_put($id,$value,$timeout)
-{
-}*/
-
-/*!SPECIAL*
- * Delete data from the persistent cache.
- *
- * @param  mixed			Key name.
- */
-/*function eaccelerator_rm($id)
-{
-}*/
-
-/*!SPECIAL*
- * Get data from the persistent cache.
- *
- * @param  mixed			Key.
- * @return ?mixed			The data (NULL: not found / NULL entry).
- */
-/*function mmcache_get($id)
-{
-	return array();
-}*/
-
-/*!SPECIAL*
- * Put data into the persistent cache.
- *
- * @param  mixed			Key.
- * @param  mixed			The data.
- * @param  integer		Various flags (parameter not used).
- */
-/*function mmcache_put($id,$value,$flags)
-{
-}*/
-
-/*!SPECIAL*
- * Delete data from the persistent cache.
- *
- * @param  mixed			Key name.
- */
-/*function mmcache_rm($id)
-{
-}*/
+}
 
 /**
  * Prepare a command path for a shell call to it.
@@ -3713,16 +3677,16 @@ function xml_parse($parser,$data,$is_final=false)
 	return 0;
 }
 
-/*!ROADSEND*
+/**
  * Create an XML parser with namespace support.
  *
  * @param  ?string	Encoding (NULL: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource XML parser (false: could not create, happens on default PHP5 on Windows).
  */
-/*function xml_parser_create_ns($encoding=NULL)
+function xml_parser_create_ns($encoding=NULL)
 {
 	return array();
-}*/
+}
 
 /**
  * Free an XML parser.
@@ -3773,17 +3737,17 @@ function xml_set_element_handler($parser,$start_handler,$end_handler)
 	return false;
 }
 
-/*!ROADSEND*
+/**
  * Set up namespace-end decl handler.
  *
  * @param  resource  XML parser.
  * @param  mixed		The callback.
  * @return boolean	Success status.
  */
-/*function xml_set_end_namespace_decl_handler($parser,$handler)
+function xml_set_end_namespace_decl_handler($parser,$handler)
 {
 	return false;
-}*/
+}
 
 /**
  * Use XML Parser within an object.
@@ -3795,17 +3759,17 @@ function xml_set_object($parser,$object)
 {
 }
 
-/*!ROADSEND*
+/**
  * Set up namespace-start decl handler.
  *
  * @param  resource  XML parser.
  * @param  mixed		The callback.
  * @return boolean	Success status.
  */
-/*function xml_set_start_namespace_decl_handler($parser,$handler)
+function xml_set_start_namespace_decl_handler($parser,$handler)
 {
 	return false;
-}*/
+}
 
 /**
  * Generates XML for a method request.
@@ -3863,26 +3827,26 @@ function asin($arg)
 	return 0.0;
 }
 
-/*!ROADSEND*
+/**
  * Checks if assertion is FALSE.
  *
  * @param  string	The expression to assert on.
  */
-/*function assert($assertion)
+function assert($assertion)
 {
-}*/
+}
 
-/*!ROADSEND*
+/**
  * Set/get the various assert flags (and sometimes, options for them).
  *
  * @param  integer	The option (ASSERT_ACTIVE, ASSERT_WARNING, ASSERT_BAIL, ASSERT_QUIET_EVAL, ASSERT_CALLBACK).
  * @param  ?mixed		The value for flag (NULL: N/A).
  * @return ~mixed	 	Old value (false: error).
  */
-/*function assert_options($option,$value=NULL)
+function assert_options($option,$value=NULL)
 {
 	return 0;
-}*/
+}
 
 /**
  * Arc tan.
@@ -3920,16 +3884,16 @@ function basename($path,$ext='')
 	return '';
 }
 
-/*!ROADSEND*
+/**
  * Convert binary data (in string form) into hexadecimal representation.
  *
  * @param  string	Binary string.
  * @return string	Hex string.
  */
-/*function bin2hex($str)
+function bin2hex($str)
 {
 	return '';
-}*/
+}
 
 /**
  * Binary (string representation) to decimal (integer).
@@ -3954,25 +3918,25 @@ function call_user_func_array($callback,$parameters)
 	return 0;
 }
 
-/*!ROADSEND*
+/**
  * Whether the client has disconnected.
  *
  * @return boolean	Whether the client has disconnected.
  */
-/*function connection_aborted()
+function connection_aborted()
 {
 	return false;
-}*/
+}
 
-/*!ROADSEND*
+/**
  * Returns connection status bitfield.
  *
  * @return integer	Connection status bitfield.
  */
-/*function connection_status()
+function connection_status()
 {
 	return 0;
-}*/
+}
 
 /**
  * Calculates the crc32 polynomial of a string.
@@ -4163,17 +4127,17 @@ function key($array)
 	return 0;
 }
 
-/*!ROADSEND*  --> Use similar_text
+/**  --> Use similar_text
  * Calculate Levenshtein distance between two strings.
  *
  * @param  string		First string.
  * @param  string		Second string.
  * @return integer	Distance.
  */
-/*function levenshtein($str1,$str2)
+function levenshtein($str1,$str2)
 {
 	return 0;
-}*/
+}
 
 /**
  * Natural logarithm.
@@ -4208,28 +4172,28 @@ function long2ip($proper_address)
 	return 0;
 }
 
-/*!ROADSEND*
+/**
  * Calculates the md5 hash of the file identified by the given filename.
  *
  * @param  PATH		File name.
  * @return ~string	The hash of the file (false: error).
  */
-/*function md5_file($filename)
+function md5_file($filename)
 {
 	return '';
-}*/
+}
 
-/*!ROADSEND*
+/**
  * Formats a number as a currency string.
  *
  * @param  string	The formatting string.
  * @param  float	The number to format as currency.
  * @return string	The final currency string.
  */
-/*function money_format($format,$number)
+function money_format($format,$number)
 {
 	return '';
-}*/
+}
 
 /**
  * Advance the internal array pointer of an array.
@@ -4562,7 +4526,7 @@ function zend_version()
 	return '';
 }
 
-/*!ROADSEND*
+/*!WEIRD*
  * Gets the Zend guid.
  *
  * @return string	The ID which can be used to display the Zend logo using the built-in image.
@@ -4767,7 +4731,7 @@ function soundex($input)
 	return '';
 }
 
-/*!ROADSEND*
+/*!WEIRD*
  * Parses input from a string according to a format.
  *
  * @param  string	Input string.
@@ -4873,16 +4837,16 @@ function exp($arg)
 	return 0.0;
 }
 
-/*!ROADSEND*
+/**
  * Calculate the hash value needed by EZMLM mailing lists in a MySQL database.
  *
  * @param  string		The email address that's being hashed.
  * @return integer	Hash.
  */
-/*function ezmlm_hash($addr)
+function ezmlm_hash($addr)
 {
 	return 0;
-}*/
+}
 
 /**
  * Combined linear congruential generator.
@@ -4969,17 +4933,17 @@ function array_merge_recursive($array1,$array2,$array3=NULL,$array4=NULL,$array5
 	return array();
 }
 
-/*!ROADSEND*
+/**
  * Sort multiple or multi-dimensional array.
  *
  * @param  array		Array to sort.
  * @param  ?integer  Argument code (NULL: none given).
  * @return array		Result.
  */
-/*function array_multisort($array,$args=NULL)
+function array_multisort($array,$args=NULL)
 {
 	return array();
-}*/
+}
 
 /**
  * Pad array to the specified length with a value.
@@ -5285,7 +5249,7 @@ function pclose($handle)
 	return 0;
 }
 
-/*!ROADSEND*
+/**
  * Open persistent Internet or Unix domain socket connection.
  *
  *
@@ -5296,10 +5260,10 @@ function pclose($handle)
  * @param  ?float		How long to wait until timeout (NULL: no timeout).
  * @return ~resource The handle (false: error) (false: error).
  */
-/*function pfsockopen($target,$port,&$errno,&$errstr,$timeout=NULL)
+function pfsockopen($target,$port,&$errno,&$errstr,$timeout=NULL)
 {
 	return array();
-}*/
+}
 
 /**
  * Tells whether the filename is executable.
@@ -5335,17 +5299,17 @@ function is_subclass_of($object,$class_name)
 	return true;
 }
 
-/*!ROADSEND*
+/**
  * Calculate the metaphone key of a string.
  *
  * @param  string		String to do.
  * @param  integer	Phones value.
  * @return string		Metaphone key.
  */
-/*function metaphone($string,$value)
+function metaphone($string,$value)
 {
 	return '';
-}*/
+}
 
 /**
  * Sort an array using a case insensitive "natural order" algorithm .
@@ -5433,17 +5397,17 @@ function php_sapi_name()
 	return '';
 }
 
-/*!ROADSEND*
+/**
  * Returns information about the operating system PHP is running on.
  *
  * @param  string	Type of info to get.
  * @set    a s n r v m
  * @return string	The info.
  */
-/*function php_uname($mode='a')
+function php_uname($mode='a')
 {
 	return '';
-}*/
+}
 
 /**
  * Opens process file pointer.
@@ -5474,7 +5438,7 @@ function printf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL)
 	return '';
 }
 
-/*!ROADSEND*
+/**
  * Convert from one Cyrillic character set to another.
  *
  * @param  string	Input.
@@ -5482,10 +5446,10 @@ function printf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL)
  * @param  string	To.
  * @return string	Output.
  */
-/*function convert_cyr_string($in,$from,$to)
+function convert_cyr_string($in,$from,$to)
 {
 	return '';
-}*/
+}
 
 /**
  * Hyperbolic cosine.
@@ -5567,15 +5531,15 @@ function getimagesize($filename,$image_info=NULL)
 	return array();
 }
 
-/*!ROADSEND*
+/**
  * Gets time of last page modification.
  *
  * @return TIME		Last modification time.
  */
-/*function getlastmod()
+function getlastmod()
 {
 	return 0;
-}*/
+}
 
 /**
  * Gets PHP's process ID.
@@ -5607,16 +5571,16 @@ function gettimeofday()
 	return array();
 }
 
-/*!ROADSEND*
+/**
  * Gets the value of a PHP configuration option.
  *
  * @param  string		Value name to get.
  * @return ~string	Value (false: error).
  */
-/*function get_cfg_var($varname)
+function get_cfg_var($varname)
 {
 	return '';
-}*/
+}
 
 /**
  * Gets the current active configuration setting of magic_quotes_runtime.
@@ -5628,16 +5592,16 @@ function get_magic_quotes_runtime()
 	return true;
 }
 
-/*!ROADSEND*
+/**
  * Extracts all meta tag content attributes from a file and returns an array.
  *
  * @param  PATH		Filename.
  * @return ~array	 	Map of meta information (false: error).
  */
-/*function get_meta_tags($filename)
+function get_meta_tags($filename)
 {
 	return array();
-}*/
+}
 
 /**
  * Retrieves the parent class name for object or class.
@@ -5743,38 +5707,38 @@ function gzuncompress($data,$length)
 	return '';
 }
 
-/*!ROADSEND*
+/**
  * Convert logical Hebrew text to visual text.
  *
  * @param  string		In.
  * @param  ?integer  Maximum number of characters per line (NULL: no limit).
  * @return string		Out.
  */
-/*function hebrev($hebrew_text,$max_chars_per_line=NULL)
+function hebrev($hebrew_text,$max_chars_per_line=NULL)
 {
 	return '';
-}*/
+}
 
-/*!ROADSEND*
+/**
  * Convert logical Hebrew text to visual text with newline conversion.
  *
  * @param  string		In.
  * @param  ?integer  Maximum number of characters per line (NULL: no limit).
  * @return string		Out.
  */
-/*function hebrevc($hebrew_text,$max_chars_per_line=NULL)
+function hebrevc($hebrew_text,$max_chars_per_line=NULL)
 {
 	return '';
-}*/
+}
 
-/*!ROADSEND*
+/**
  * Syntax highlighting of a file.
  *
  * @param  PATH		File to highlight.
  */
-/*function highlight_file($file)
+function highlight_file($file)
 {
-}*/
+}
 
 /**
  * Calculate the length of the hypotenuse of a right-angle triangle.
