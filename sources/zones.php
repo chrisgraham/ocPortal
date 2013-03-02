@@ -469,7 +469,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 			if ($ALL_ZONES_TITLED!==NULL) return $ALL_ZONES_TITLED;
 		} else
 		{
-			if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistent_cache_set')?persistent_cache_set('ALL_ZONES'):NULL;
+			if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
 			if ($ALL_ZONES!==NULL) return $ALL_ZONES;
 		}
 	}
