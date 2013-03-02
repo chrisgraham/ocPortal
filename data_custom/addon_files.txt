@@ -4163,3 +4163,13 @@ calendar_from_6am
  - themes/default/templates_custom/CALENDAR_DAY_HOUR.tpl
  - themes/default/templates_custom/CALENDAR_WEEK.tpl
  - themes/default/templates_custom/CALENDAR_WEEK_HOUR.tpl
+
+psds
+----
+
+ - data_custom/psds/blank_emoticon.png
+ - data_custom/psds/chatcode.psd
+ - data_custom/psds/comcode.psd
+ - data_custom/psds/page-cart.psd
+ - data_custom/psds/page.psd
+ - data_custom/psds/pageitem.psd
