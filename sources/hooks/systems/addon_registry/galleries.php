@@ -77,6 +77,7 @@ class Hook_addon_registry_galleries
 			'data/zencoder_receive.php',
 			'sources/hooks/systems/notifications/gallery_entry.php',
 			'sources/hooks/systems/fields/video.php',
+			'sources/hooks/systems/fields/video_multi.php',
 			'sources/hooks/systems/snippets/exists_gallery.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/portfolio.php',
 			'sources/hooks/systems/config_default/audio_bitrate.php',

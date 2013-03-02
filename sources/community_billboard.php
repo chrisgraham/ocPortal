@@ -111,7 +111,7 @@ function nice_get_community_billboard_messages()
 		}
 		$message=get_translated_text($row['the_message']);
 		$text=do_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE',array('_GUID'=>'e4a5d54fa6cdc7848bd95bc017c60469','MESSAGE'=>$message,'STATUS'=>$status));
-		$out->attach(form_input_list_entry(strval($row['id']),$selected,$text->evaluate()));
+		$out->attach(form_input_list_entry(strval($row['id']),$selected,protect_from_escaping($text->evaluate())));
 	}
 	return $out;
 }

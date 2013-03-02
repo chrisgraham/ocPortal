@@ -81,7 +81,6 @@ class Hook_addon_registry_core_fields
 			'sources/hooks/systems/fields/reference_multi.php',
 			'sources/hooks/systems/fields/upload_multi.php',
 			'sources/hooks/systems/fields/url_multi.php',
-			'sources/hooks/systems/fields/video_multi.php',
 			'sources/hooks/systems/fields/guid.php',
 			'sources/hooks/systems/fields/auto_increment.php',
 			'sources/hooks/systems/fields/page_link.php',
