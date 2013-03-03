@@ -35,7 +35,7 @@ class Hook_feedback
 		{
 			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','feedback'));
 
-			$url='http://ocportal.com/pg/feedback';
+			$url=get_brand_page_url(array('page'=>'feedback'),'');
 			$post=array('title'=>'OcCLE feedback','post'=>'(From "'.get_custom_base_url().'" via OcCLE.)[quote]'.$parameters[0].'[/quote]');
 			http_download_file($url,NULL,true,true,'ocPortal',$post);
 

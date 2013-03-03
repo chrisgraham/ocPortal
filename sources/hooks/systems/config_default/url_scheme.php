@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_default_mod_rewrite
+class Hook_config_default_url_scheme
 {
 
 	/**
@@ -29,13 +29,13 @@ class Hook_config_default_mod_rewrite
 	function get_details()
 	{
 		return array(
-			'human_name'=>'MOD_REWRITE',
-			'the_type'=>'tick',
+			'human_name'=>'URL_SCHEME',
+			'the_type'=>'list',
 			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
-			'explanation'=>'CONFIG_OPTION_mod_rewrite',
+			'section'=>'GENERAL',
+			'explanation'=>'CONFIG_OPTION_url_scheme',
 			'shared_hosting_restricted'=>'0',
-			'c_data'=>'',
+			'c_data'=>'RAW|PG|HTM|SIMPLE',
 
 			'addon'=>'core_configuration',
 		);
@@ -48,7 +48,7 @@ class Hook_config_default_mod_rewrite
 	 */
 	function get_default()
 	{
-		return '0'; /*function_exists('apache_get_modules')?'1':'0';*/
+		return 'RAW';
 	}
 
 }

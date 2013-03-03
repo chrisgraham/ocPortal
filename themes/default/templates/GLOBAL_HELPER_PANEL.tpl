@@ -19,7 +19,7 @@
 			{+START,IF_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}}
 				<div id="help_tutorial">
 					<div class="box box___global_helper_panel__tutorial"><div class="box_inner">
-						<div class="global_helper_panel_text">{$URLISE_LANG,{!TUTORIAL_ON_THIS},{$BRAND_BASE_URL*}/docs{$VERSION*}/pg/{$GET*,HELPER_PANEL_TUTORIAL},,1}</div>
+						<div class="global_helper_panel_text">{$URLISE_LANG,{!TUTORIAL_ON_THIS},{$TUTORIAL_URL*,{$GET,HELPER_PANEL_TUTORIAL}},,1}</div>
 					</div></div>
 				</div>
 			{+END}

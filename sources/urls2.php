@@ -307,26 +307,48 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 
 	// Convert short URL path info into extra implied attribute data
 	require_code('url_remappings');
-	foreach (array(false,true) as $method)
+	$does_match=false;
+	foreach (array('PG','HTM','SIMPLE') as $url_scheme)
 	{
-		$mappings=get_remappings($method);
+		$mappings=get_remappings($url_scheme);
 		foreach ($mappings as $mapping) // e.g. array(array('page'=>'wiki','id'=>NULL),'pg/s/ID',true),
 		{
 			if (is_null($mapping)) continue;
 
 			list($params,$match_string,)=$mapping;
-			$match_string_pattern=preg_replace('#[A-Z]+#','[^\&\?]+',preg_quote($match_string));
+			$match_string_pattern=preg_replace('#[A-Z]+#','[^\&\?]+',preg_quote($match_string)); // Turn match string into a regexp
 
-			$zones=find_all_zones();
-			if (preg_match('#^'.$match_string_pattern.'(/index\.php|$)#',$parsed_url['path'])!=0)
+			switch ($url_scheme)
+			{
+				case 'PG':
+					$does_match=(preg_match('#^'.$match_string_pattern.'(/index\.php|$)#',$parsed_url['path'])!=0);
+					break;
+
+				case 'HTM':
+				case 'SIMPLE':
+					$does_match=(preg_match('#^'.$match_string_pattern.'#',$parsed_url['path'])!=0);
+					break;
+			}
+			if ($does_match)
 			{
 				$attributes=array_merge($attributes,$params);
 
-				$bits_pattern=explode('/',preg_replace('#\.htm$#','',$match_string));
-				$bits_real=explode('/',preg_replace('#\.htm$#','',$parsed_url['path']),count($bits_pattern));
+				switch ($url_scheme)
+				{
+					case 'PG':
+					case 'SIMPLE':
+						$bits_pattern=explode('/',$match_string);
+						$bits_real=explode('/',$parsed_url['path'],count($bits_pattern));
+						break;
+
+					case 'HTM':
+						$bits_pattern=explode('/',preg_replace('#\.htm$#','',$match_string));
+						$bits_real=explode('/',preg_replace('#\.htm$#','',$parsed_url['path']),count($bits_pattern));
+						break;
+				}
 				foreach ($bits_pattern as $i=>$bit)
 				{
-					if ((array_key_exists(strtolower($bit),$params)) && (strtoupper($bit)==$bit) && (is_null($params[strtolower($bit)])))
+					if ((strtoupper($bit)==$bit) && (array_key_exists(strtolower($bit),$params)) && (is_null($params[strtolower($bit)])))
 						$attributes[strtolower($bit)]=$bits_real[$i];
 				}
 
@@ -334,10 +356,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 			}
 		}
 	}
-	if (($attributes==array('page'=>'')) && ($parsed_url['path']!=''))
-	{
-		if ((strpos($parsed_url['path'],'/pg/')===false) && (strpos($parsed_url['path'],'.htm')===false) && ($parsed_url['path']!='index.php')) return '';
-	}
+	if (!$does_match) return ''; // No match was found
 
 	// Parse query string component into the waiting (and partly-filled-already) attribute data array
 	if (array_key_exists('query',$parsed_url))

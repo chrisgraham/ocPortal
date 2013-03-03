@@ -86,8 +86,7 @@ class Module_admin_debrand
 
 		$rebrand_name=get_value('rebrand_name');
 		if (is_null($rebrand_name)) $rebrand_name='ocPortal';
-		$rebrand_base_url=get_value('rebrand_base_url');
-		if (is_null($rebrand_base_url)) $rebrand_base_url='http://ocportal.com';
+		$rebrand_base_url=brand_base_url();
 		$company_name=get_value('company_name');
 		if (is_null($company_name)) $company_name='ocProducts';
 		$keyboard_map=file_exists(get_file_base().'/pages/comcode/'.get_site_default_lang().'/keymap.txt')?file_get_contents(get_file_base().'/pages/comcode/'.get_site_default_lang().'/keymap.txt'):file_get_contents(get_file_base().'/pages/comcode/'.fallback_lang().'/keymap.txt');

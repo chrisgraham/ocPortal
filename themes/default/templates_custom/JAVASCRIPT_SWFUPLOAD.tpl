@@ -2231,7 +2231,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 		var url_raw=url;
 		if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
 		{+START,IF,{$DEV_MODE}}
-			if (running_locally()) url='http://ocportal.com/themes/ocproducts/images//newlogo-top.gif';
+			if (running_locally()) url='{$BRAND_BASE_URL;}/themes/ocproducts/images/newlogo-top.gif';
 		{+END}
 		{+START,IF,{$NOT,{$DEV_MODE}}}
 			if (running_locally()) return;
@@ -2250,7 +2250,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 				url_raw=url;
 				if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
 				{+START,IF,{$DEV_MODE}}
-					if (running_locally()) url='http://ocportal.com/themes/ocproducts/images//newlogo-top.gif';
+					if (running_locally()) url='{$BRAND_BASE_URL;}/themes/ocproducts/images/newlogo-top.gif';
 				{+END}
 				{+START,IF,{$NOT,{$DEV_MODE}}}
 					if (running_locally()) return;

@@ -150,7 +150,7 @@ And these files don't need translating but could be replaced with equivalents in
 
 [title="3"]Images[/title]
 
-If you look under the [tt]themes/default/images/[/tt] directory you will see there is an [tt]EN[/tt] directory that contains images with English text on. You can copy this to the ISO codename of your language pack (e.g. [tt]FR[/tt]), and then replace the images with translated ones. Make sure you clear your theme image cache (Admin Zone, Tools section, Cleanup tools icon) after doing this. We have the PSD files (requires Adobe Photoshop or compatible software) for many of the images in our [url="downloads database"]http://ocportal.com/site/downloads.htm[/url]. The font is a commercial font called 'Kabel', so you may wish to use a free font like 'Arial' instead.
+If you look under the [tt]themes/default/images/[/tt] directory you will see there is an [tt]EN[/tt] directory that contains images with English text on. You can copy this to the ISO codename of your language pack (e.g. [tt]FR[/tt]), and then replace the images with translated ones. Make sure you clear your theme image cache (Admin Zone, Tools section, Cleanup tools icon) after doing this. We have the PSD files (requires Adobe Photoshop or compatible software) for many of the images in our [page="site:downloads"]downloads database[/page]. The font is a commercial font called 'Kabel', so you may wish to use a free font like 'Arial' instead.
 
 [title="3"]WYSIWYG editor[/title]
 
@@ -211,14 +211,14 @@ Also, you should not translate the strings marked as located as follows:
  - Located in [strings]en_right
 This is because the values are used for CSS, not human language. They should only be altered if you're trying to achieve a right-to-left layout (in which case you would switch them around).
 
-Need some help? [url="Try the translation forum"]http://ocportal.com/forum/forumview/misc/182.htm[/url].
+Need some help? [page="forum:forumview:misc:182"]Try the translation forum[/page].
 
 [title="3"]Downloading translations from Launchpad[/title]
 
 1) There is a link to download the [tt].po[/tt] files on the page for the version you are translating (it'll archive all files for you in all languages and then e-mail you a download link). Do not download individual po files because it'll name them in a weird way, download the whole set for the language.
 2) Extract all the files to a single directory (the download from Launchpad uses subdirectories, but ocPortal wants all the [tt].po[/tt] files together). You only need to extract the files relating to your language but it won't matter if you extract all languages as ocPortal can still find the right ones.
 3) If there are any [tt].ini[/tt] files with the same name as [tt].po[/tt] files you are about to place, they will need removing. [tt].ini[/tt] files take precedence so would block [tt].po[/tt] files from working. If the [tt].ini[/tt] files have stuff not in the [tt].po[/tt] files you should step back and export them to [tt].po[/tt] and into Launchpad, and restart the downloading process once they've merged back in.
-4) Copy the [tt].po[/tt] files to the usual language directory, i.e. [tt]lang_custom/XX[/tt], where XX-is the two-letter-codename for the language. So, for example you should have a [tt]lang_custom/XX/global-XX.po[/tt] file. More details are in the [url="Launchpad FAQ"]http://ocportal.com/forum/topicview/misc/internationalisation/launchpad_help_faq_and.htm[/url].
+4) Copy the [tt].po[/tt] files to the usual language directory, i.e. [tt]lang_custom/XX[/tt], where XX-is the two-letter-codename for the language. So, for example you should have a [tt]lang_custom/XX/global-XX.po[/tt] file. More details are in the [page="forum:topicview:misc:10535"]Launchpad FAQ[/page].
 5) You may need to create some extra language directories for Comcode pages and template cacheing if you are not on a SuExec server -- basically anywhere where ocPortal has an [tt]EN[/tt] directory create a directory for your language pack's 2-letter-codename too.
 
 [title="3"]Language packs[/title]

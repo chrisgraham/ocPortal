@@ -103,7 +103,7 @@ If you can't access this tree drop-down, there is a slightly less user-friendly 
 [code]<!-- START-TEMPLATE=MENU_BRANCH_popup -->
 <div class="non_current_page_2">
    <!-- START-TEMPLATE=HYPERLINK -->
-   <a href="http://ocportal.com/pg/start/index.php">Welcome</a>
+   <a href="http://example.com/start.htm">Welcome</a>
    <!-- END-TEMPLATE=HYPERLINK -->
 <div style="display: none">, </div>
 

@@ -86,7 +86,7 @@ The form of Comcode that is documented and primarily used is now formally known 
 Since version 3 of ocPortal we have introduced support for Comcode-XML. This is a formally specified XML language that is a bit harder to write, but is easier to integrate with other systems because a parser can be written using standard XML technology. If you do not know what XML is then you do not need to know about Comcode-XML because it won't provide any benefits to you.
 
 
-We do not intend to document Comcode-XML separately even though the set of tags and attributes is not exactly the same as Comcode-Text. Instead, we provide a schema that is available at http://ocportal.com/data/comcode4.xsd
+We do not intend to document Comcode-XML separately even though the set of tags and attributes is not exactly the same as Comcode-Text. Instead, we provide a schema that is available at {$BRAND_BASE_URL}/data/comcode4.xsd
 
 The following is an example of Comcode-XML:
 [code="XML"]

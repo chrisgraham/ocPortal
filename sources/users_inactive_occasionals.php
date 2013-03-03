@@ -47,7 +47,8 @@ function _enforce_sessioned_url($url)
 
 	if (strpos($url,'?')===false)
 	{
-		if (get_option('htm_short_urls')=='1')
+		$url_scheme=get_option('url_scheme');
+		if (($url_scheme=='HTM') || ($url_scheme=='SIMPLE'))
 		{
 			$url.='?';
 		} else

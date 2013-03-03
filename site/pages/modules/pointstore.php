@@ -123,7 +123,7 @@ class Module_pointstore
 				add_config_option('ENABLE_PURCHASE','is_on_forw_buy','tick','return \'0\';','POINTSTORE','FORWARDING',1);
 				add_config_option('FORW_MAINTAIN_URL','forw_url','line','return \'http://\'.get_domain().\':2082/frontend/x/mail/addfwd.html\';','POINTSTORE','FORWARDING',1);
 			//  Community billboard
-				add_config_option('ENABLE_PURCHASE','is_on_community_message_buy','tick','return (!addon_installed(\'community_billboard\'))?NULL:\'1\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
+				add_config_option('ENABLE_PURCHASE','is_on_community_billboard_buy','tick','return (!addon_installed(\'community_billboard\'))?NULL:\'1\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
 			//  Highlighted names
 				add_config_option('ENABLE_PURCHASE','is_on_highlight_name_buy','tick','return (get_forum_type()!=\'ocf\')?NULL:\'1\';','POINTSTORE','NAME_HIGHLIGHTING');
 				add_config_option('COST_highlight_name','highlight_name','integer','return (get_forum_type()!=\'ocf\')?NULL:\'2000\';','POINTSTORE','NAME_HIGHLIGHTING');
@@ -187,7 +187,7 @@ class Module_pointstore
 		{
 			rename_config_option('text','community_message');
 			$GLOBALS['SITE_DB']->query_update('config',array('human_name'=>'COST_COMMUNITY_MESSAGE'),array('the_name'=>'community_message'),'',1);
-			rename_config_option('is_on_flagrant_buy','is_on_community_message_buy');
+			rename_config_option('is_on_flagrant_buy','is_on_community_billboard_buy');
 		}
 	}
 

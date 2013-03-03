@@ -185,7 +185,7 @@ if ((!$is_bleeding_edge) && (isset($all_downloads_to_add[0]['download_id'])))
 		$last_version_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','d.id',array('text_original'=>'This is the latest version.'));
 		if ($last_version_id!=$all_downloads_to_add[0]['download_id'])
 		{
-			$description="A new version, {$version_pretty} is available. Upgrading to {$version_pretty} is considered {$needed} by ocProducts{$justification}. There may have been other upgrades since {$version_pretty} - see [url=\"the ocProducts news archive\" target=\"_blank\"]http://ocportal.com/site/pg/news[/url].";
+			$description="A new version, {$version_pretty} is available. Upgrading to {$version_pretty} is considered {$needed} by ocProducts{$justification}. There may have been other upgrades since {$version_pretty} - see [url=\"the ocProducts news archive\" target=\"_blank\"]http://ocportal.com/site/news.htm[/url].";
 			$GLOBALS['SITE_DB']->query_update('translate',array('text_original'=>$description),array('id'=>$last_version_str),'',1);
 		}
 	}

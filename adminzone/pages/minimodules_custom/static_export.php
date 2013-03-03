@@ -21,11 +21,10 @@ if (!addon_installed('staff_messaging'))
 	warn_exit('Staff Messaging addon must be installed.');
 }
 
-if ((get_option('htm_short_urls')!='1') || (get_option('mod_rewrite')!='1'))
+if (get_option('url_scheme')!='HTM')
 {
-	set_option('htm_short_urls','1');
-	set_option('mod_rewrite','1');
-	warn_exit('New-style short URLs must be enabled before te export can happen, as this is the tidy scheme we export to. It is now enabled - just refresh the browser.');
+	set_option('url_scheme','HTM');
+	warn_exit('A URL Scheme of "Use .htm to identify CMS pages" must be enabled before the export can happen, as this is the tidy scheme we export to. It is now enabled - just refresh the browser.');
 }
 
 if (get_option('show_inline_stats')=='1')

@@ -378,7 +378,7 @@ function placeholder_types()
  */
 function placeholder_image()
 {
-	$text='<img src="http://ocportal.com/themes/ocproducts/images/newlogo.gif" title="test" alt="test" />';
+	$text='<img src="'.escape_html(find_theme_image('logo/-logo')).'" title="test" alt="test" />';
 	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($text);
 	return make_string_tempcode($text);
 }
@@ -461,7 +461,7 @@ function placeholder_javascript_code()
  */
 function placeholder_image_url()
 {
-	return 'http://ocportal.com/themes/ocproducts/images/newlogo.gif';
+	return find_theme_image('logo/-logo');
 }
 
 /**

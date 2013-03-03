@@ -253,7 +253,7 @@ class Module_admin_ocf_join
 	{
 		$title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
 
-		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration')),'warn');
+		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(get_tutorial_url('tut_configuration'))),'warn');
 
 		set_helper_panel_pic('pagepics/usergroups_temp');
 

@@ -25,7 +25,7 @@ class menu_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('menus2');
 
-		$this->menu_id=add_menu_item('Test',1,NULL,'testing menu','www.ocportal.com',1,'downloads',0,1,'testing');
+		$this->menu_id=add_menu_item('Test',1,NULL,'testing menu','www.example.com',1,'downloads',0,1,'testing');
 
 		// Test the forum was actually created
 		$this->assertTrue('Test'==$GLOBALS['SITE_DB']->query_select_value('menu_items','i_menu',array('id'=>$this->menu_id)));

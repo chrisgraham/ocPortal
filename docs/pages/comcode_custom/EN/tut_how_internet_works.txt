@@ -86,17 +86,17 @@ Reliable message transfer on the Internet is done via 'TCP'. You may have heard 
 
 [title="2"]Names, not numbers[/title]
 
-When most people think of an 'Internet Address' they think of something like '[tt]www.ocportal.com[/tt]' rather than '[tt]69.60.115.116[/tt]'. People relate to names with greater ease than numbers, so special computers that humans need to access are typically assigned names ('domain names') using a system known as 'DNS' (the 'domain name system').
+When most people think of an 'Internet Address' they think of something like '[tt]www.example.com[/tt]' rather than '[tt]12.34.156.78[/tt]'. People relate to names with greater ease than numbers, so special computers that humans need to access are typically assigned names ('domain names') using a system known as 'DNS' (the 'domain name system').
 
 All Internet communication is still done using IP addresses (recall '[tt]69.60.115.116[/tt]' is an IP address). The 'domain names' are therefore translated to IP addresses behind the scenes, before the main communication starts.
 
-At the core, the process of looking up a domain name is quite simple -- it's a process of 'homing in' by moving leftwards through the name, following an interrogation path. This is best shown by example -- '[tt]www.ocportal.com[/tt]' would be looked up as follows:
+At the core, the process of looking up a domain name is quite simple -- it's a process of 'homing in' by moving leftwards through the name, following an interrogation path. This is best shown by example -- '[tt]www.example.com[/tt]' would be looked up as follows:
 
- - Every computer on the Internet knows how to contact the computers (the 'root' 'DNS servers') responsible for things like '[tt]com[/tt]', '[tt]org[/tt]', '[tt]net[/tt]' and '[tt]uk[/tt]'. There are a few such computers and one is contacted at random. The DNS server computer is asked if they know '[tt]www.ocportal.com[/tt]' and will respond saying they know which server computer is responsible for '[tt]com[/tt]'.
- - The '[tt]com[/tt]' server computer is asked it knows '[tt]www.ocportal.com[/tt]' and will respond saying they know which server computer is responsible for '[tt]ocportal.com[/tt]'.
- - 'The [tt]'ocportal.com[/tt]' server computer is asked if it knows '[tt]www.ocportal.com[/tt]' and will respond saying that it knows the corresponding server computer to be '[tt]69.60.115.116[/tt]'.
+ - Every computer on the Internet knows how to contact the computers (the 'root' 'DNS servers') responsible for things like '[tt]com[/tt]', '[tt]org[/tt]', '[tt]net[/tt]' and '[tt]uk[/tt]'. There are a few such computers and one is contacted at random. The DNS server computer is asked if they know '[tt]www.example.com[/tt]' and will respond saying they know which server computer is responsible for '[tt]com[/tt]'.
+ - The '[tt]com[/tt]' server computer is asked it knows '[tt]www.example.com[/tt]' and will respond saying they know which server computer is responsible for '[tt]example.com[/tt]'.
+ - 'The [tt]'example.com[/tt]' server computer is asked if it knows '[tt]www.example.com[/tt]' and will respond saying that it knows the corresponding server computer to be '[tt]69.60.115.116[/tt]'.
 
-Note that there is a difference between a server computer being 'responsible' for a domain name and the domain name actually corresponding to that computer. For example, the '[tt]ocportal.com[/tt]' responsible DNS server might not necessarily be the same server as '[tt]ocportal.com[/tt]' itself.
+Note that there is a difference between a server computer being 'responsible' for a domain name and the domain name actually corresponding to that computer. For example, the '[tt]example.com[/tt]' responsible DNS server might not necessarily be the same server as '[tt]example.com[/tt]' itself.
 
 As certain domain names, or parts of domain names, are very commonly used, computers will remember results to avoid doing a full interrogation for every name they need to lookup. In fact, I have simplified the process considerably in my example because the looking-up computer does not actually perform the full search itself. If all computers on the Internet did full searches it would overload the 'root DNS servers', as well as the DNS servers responsible for names like '[tt]com[/tt]'. Instead, the looking up computer would ask its own special 'local DNS server', which might remember a result of a partial result, or might solicit help (full, or partial) from its own 'local DNS server', and so on -- until, in a worst case scenario, the process has to be completed in full.
 
@@ -133,7 +133,7 @@ The Internet uses IP addresses (often found via domain names) to identify resour
 A typical URL looks like this:
 [indent][tt]<protocol>://<domain-name_OR_ip-address>/<resource_identifier>[/tt][/indent]
 For example:
-[indent][tt]http://www.ocportal.com/index.php[/tt][/indent]
+[indent][tt]http://www.example.com/index.php[/tt][/indent]
 That said that's not really a full URL, because occasionally URLs can be much more complex. For example:
 [indent][tt]<protocol>://<user>:<password>@<domain/ip>:<port>/<resource_identifier>[/tt][/indent]
 You can ignore the more complex example, because it's not really relevant for the purposes of this tutorial.

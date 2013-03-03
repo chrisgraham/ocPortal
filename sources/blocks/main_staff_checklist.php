@@ -88,7 +88,7 @@ class Block_main_staff_checklist
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_BING').'"]http://www.bing.com/webmaster/SubmitSitePage.aspx[/url]',
 //				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_YAHOO').'"]http://publisher.yahoo.com/rss_guide/submit.php[/url]',
 				'Facebook user? Like ocPortal on Facebook:[html]<iframe src="http://www.ocportal.com/facebook.html" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:430px; height:30px;" allowTransparency="true"></iframe>[/html]',
-				'[url="Consider helping out with the ocPortal project"]http://ocportal.com/site/helping_out.htm[/url]',
+				'[url="Consider helping out with the ocPortal project"]'.get_brand_page_url(array('page'=>'helping_out'),'site').'[/url]',
 			);
 			foreach ($tasks as $task)
 			{

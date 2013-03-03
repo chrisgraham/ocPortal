@@ -91,10 +91,10 @@ if (count($issues)==0)
 		$money_raised=$issue['money_raised'];
 		$suggested_by=$issue['reporter_id'];
 		$add_date=$issue['date_submitted'];
-		$vote_url='http://ocportal.com/tracker/bug_monitor_add.php?bug_id='.strval($issue['id']);
-		$unvote_url='http://ocportal.com/tracker/bug_monitor_delete.php?bug_id='.strval($issue['id']);
+		$vote_url=brand_base_url().'/tracker/bug_monitor_add.php?bug_id='.strval($issue['id']);
+		$unvote_url=brand_base_url().'/tracker/bug_monitor_delete.php?bug_id='.strval($issue['id']);
 		$voted=!is_null($db->query_select_value_if_there('mantis_bug_monitor_table','user_id',array('user_id'=>get_member(),'bug_id'=>$issue['id'])));
-		$full_url='http://ocportal.com/tracker/view.php?id='.strval($issue['id']);
+		$full_url=brand_base_url().'/tracker/view.php?id='.strval($issue['id']);
 		$num_comments=$issue['num_comments'];
 
 		$_cost=is_null($cost)?'unknown':(static_evaluate_tempcode(comcode_to_tempcode('[currency="GBP"]'.float_to_raw_string($cost).'[/currency]')));

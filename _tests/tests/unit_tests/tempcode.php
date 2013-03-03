@@ -111,7 +111,7 @@ class tempcode_test_set extends ocp_test_case
 		<td>-3</td>
 	</tr>
 	<tr>
-		<td>$OBFUSCATE,chris@ocportal.com (check HTML source to see if it is obfuscated)</td>
+		<td>$OBFUSCATE,chris@example.com (check HTML source to see if it is obfuscated)</td>
 		<td>&#99;&#x68;&#114;&#x69;&#115;&#x40;&#111;&#x63;&#112;&#x6f;&#114;&#x74;&#97;&#x6c;&#46;&#x63;&#111;&#x6d;</td>
 	</tr>
 	<tr>

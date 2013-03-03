@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Releasing a theme[/title]
 
-If you've developed your own theme for ocPortal, and would like to share it with others, we strongly encourage you to do so via ocportal.com's theme gallery.
+If you've developed your own theme for ocPortal, and would like to share it with others, we strongly encourage you to do so via the {$BRAND_BASE_URL} theme gallery.
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Why distribute a theme[/title]
@@ -34,7 +34,7 @@ You can edit your download via the edit link when viewing it.
 [title="2"]How other users get your theme pack[/title]
 
 Theme packs are just packaged as normal ocPortal addons, so are installed from the addons part of the Admin Zone (under the Setup section).
-The user will need to import the addon into their own site, which they can do either by point and click (all ocPortal.com's addons are shown for easy import), or via uploading the .tar file after downloading it manually from ocportal.com.
+The user will need to import the addon into their own site, which they can do either by point and click (all ocPortal.com's addons are shown for easy import), or via uploading the .tar file after downloading it manually from {$BRAND_BASE_URL}.
 Once a theme is installed, it is available from the 'Manage themes' section of ocPortal, and can be set as active.
 
 [title="2"]Automatic upgrades with new versions[/title]

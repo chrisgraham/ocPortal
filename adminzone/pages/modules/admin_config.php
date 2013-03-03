@@ -50,7 +50,7 @@ class Module_admin_config
 		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','validation',
 										'gzip_output','forum_in_portal','staff_address','is_on_gd','is_on_folder_create','site_closed','closed',
 										'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
-										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','mod_rewrite','is_on_trackbacks',
+										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','is_on_trackbacks',
 										'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser','enable_https',
 										'smtp_sockets_use','smtp_sockets_host','smtp_sockets_port','smtp_sockets_username','smtp_sockets_password',
 										'smtp_from_address','use_captchas','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
@@ -64,7 +64,7 @@ class Module_admin_config
 										'panel_width','panel_width_spaced','debug_mode','main_forum_name','allowed_post_submitters','ssw',
 										'root_zone_login_theme','show_docs','captcha_noise','captcha_on_feedback',
 										'show_post_validation','ip_forwarding','force_meta_refresh','use_contextual_dates','eager_wysiwyg',
-										'website_email','enveloper_override','bcc','allow_ext_images','htm_short_urls','ip_strict_for_sessions','enable_previews',
+										'website_email','enveloper_override','bcc','allow_ext_images','url_scheme','ip_strict_for_sessions','enable_previews',
 										'enable_keyword_density_check','enable_spell_check','enable_markup_validation','enable_image_fading','users_online_time','auto_submit_sitemap',
 										'user_postsize_errors','automatic_meta_extraction','is_on_emoticon_choosers','no_stats_when_closed',
 										'deeper_admin_breadcrumbs','has_low_memory_limit','is_on_comcode_page_children','global_donext_icons','no_bot_stats',
@@ -171,8 +171,15 @@ class Module_admin_config
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
 		{
+			delete_config_option('htm_short_urls');
+			delete_config_option('mod_rewrite');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<15))
+		{
 			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
 			add_config_option('CDN','cdn','line','return \'<autodetect>\';','SITE','ADVANCED');
+			add_config_option('URL_SCHEME','url_scheme','list','return \'RAW\';','SITE','GENERAL',0,'RAW|PG|HTM|SIMPLE');
 		}
 
 		if (is_null($upgrade_from))
@@ -196,7 +203,7 @@ class Module_admin_config
 			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('DETECT_LANG_BROWSER','detect_lang_browser','tick','return \'0\';','SITE','ADVANCED');
 
-			add_config_option('VALIDATION','validation','tick','return \'0\';','SITE','VALIDATION',1); /*(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'1':'0')*/ // return (!function_exists(\'memory_get_usage()\') || (ini_get(\'memory_limit\')!=\'8M\'))?\'1\':\'0\';
+			add_config_option('VALIDATION','validation','tick','return \'0\';','SITE','VALIDATION',1); /*(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))))?'1':'0')*/ // return (!function_exists(\'memory_get_usage()\') || (ini_get(\'memory_limit\')!=\'8M\'))?\'1\':\'0\';
 			add_config_option('VALIDATION_XHTML','validation_xhtml','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_WCAG','validation_wcag','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_CSS','validation_css','tick','return \'0\';','SITE','VALIDATION',1);
@@ -214,7 +221,6 @@ class Module_admin_config
 			add_config_option('SMS_HIGH_TRIGGER_LIMIT','sms_high_trigger_limit','integer','return addon_installed(\'sms\')?\'100\':NULL;','FEATURE','SMS');
 
 			add_config_option('MAX_SIZE','max_download_size','integer','return \'20000\';','SITE','UPLOAD');
-			add_config_option('MOD_REWRITE','mod_rewrite','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('test.ocportal.com'))?'1':'0').'\'; /*function_exists(\'apache_get_modules\')?\'1\':\'0\';*/','SITE','ADVANCED');
 			add_config_option('SESSION_EXPIRY_TIME','session_expiry_time','integer','return \'1\';','SECURITY','GENERAL');
 			add_config_option('TRACKBACKS','is_on_trackbacks','tick','return \'0\';','FEATURE','USER_INTERACTION');
 			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','SITE','ADVANCED',1);
@@ -269,7 +275,7 @@ class Module_admin_config
 			add_config_option('HAS_LOW_MEMORY_LIMIT','has_low_memory_limit','tick','return ((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL);','SITE','ADVANCED');
 			add_config_option('IS_ON_COMCODE_PAGE_CHILDREN','is_on_comcode_page_children','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('GLOBAL_DONEXT_ICONS','global_donext_icons','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
+			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
 			add_config_option('NO_BOT_STATS','no_bot_stats','tick','return \'0\';','SITE','GENERAL');
 			add_config_option('FILE_SYSTEM_CACHING','filesystem_caching','tick','return \'0\';','SITE','CACHES');
 			add_config_option('USERS_ONLINE_TIME','users_online_time','integer','return \'5\';','SITE','LOGGING');
@@ -298,7 +304,7 @@ class Module_admin_config
 				add_config_option('GD','is_on_gd','tick','return function_exists(\'imagetypes\')?\'1\':\'0\';','SITE','ENVIRONMENT',1);
 				add_config_option('FOLDER_CREATE','is_on_folder_create','tick','return \'1\';','SITE','ENVIRONMENT',1);
 			//  Closed Site
-				add_config_option('CLOSED_SITE','site_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
+				add_config_option('CLOSED_SITE','site_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
 				add_config_option('MESSAGE','closed','transtext','return do_lang(\'BEING_INSTALLED\');','SITE','CLOSED_SITE');
 				add_config_option('MAXIMUM_USERS','maximum_users','integer','return \'100\';','SITE','CLOSED_SITE',1);
 			//  Logging
@@ -817,7 +823,7 @@ class Module_admin_config
 		$title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
 
 		// Make sure we haven't locked ourselves out due to clean URL support
-		if ((post_param_integer('mod_rewrite',0)==1) && (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') && ((!file_exists(get_file_base().'/.htaccess')) || (strpos(file_get_contents(get_file_base().'/.htaccess'),'RewriteEngine on')===false)))
+		if ((post_param_integer('url_scheme','RAW')!='RAW') && (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') && ((!file_exists(get_file_base().'/.htaccess')) || (strpos(file_get_contents(get_file_base().'/.htaccess'),'RewriteEngine on')===false)))
 		{
 			warn_exit(do_lang_tempcode('BEFORE_MOD_REWRITE'));
 		}

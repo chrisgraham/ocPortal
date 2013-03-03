@@ -322,7 +322,7 @@ class Module_vforums
 			'STARTER_TITLE'=>'',
 			'BUTTONS'=>$_buttons,
 			'TOPIC_WRAPPER'=>$topic_wrapper,
-			'CATEGORIES'=>'',
+			'FORUM_GROUPINGS'=>'',
 		);
 		if (!is_null($extra_tpl_map)) $tpl_map+=$extra_tpl_map;
 		return do_template('OCF_FORUM',$tpl_map);

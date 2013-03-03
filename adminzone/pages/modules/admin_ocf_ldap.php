@@ -75,7 +75,7 @@ class Module_admin_ocf_ldap
 	{
 		if (is_null($upgrade_from))
 		{
-			add_config_option('LDAP_IS_ENABLED','ldap_is_enabled','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))?'0':'0').'\';','SECTION_FORUMS','LDAP',1);
+			add_config_option('LDAP_IS_ENABLED','ldap_is_enabled','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))?'0':'0').'\';','SECTION_FORUMS','LDAP',1);
 			add_config_option('LDAP_IS_WINDOWS','ldap_is_windows','tick','return (DIRECTORY_SEPARATOR==\'/\')?\'0\':\'1\';','SECTION_FORUMS','LDAP',1);
 			add_config_option('LDAP_ALLOW_JOINING','ldap_allow_joining','tick','return \'0\';','SECTION_FORUMS','LDAP',1);
 			add_config_option('LDAP_HOSTNAME','ldap_hostname','line','return \'localhost\';','SECTION_FORUMS','LDAP',1);

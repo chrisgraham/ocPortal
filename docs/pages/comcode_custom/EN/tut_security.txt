@@ -84,8 +84,7 @@ It is important that you don't use a public domain name, or give people access t
 
 We recommend the 'Enforce IP addresses for sessions' option is left enabled. If you are on some kind of network such as TOR where your IP address may randomly change, we advise to not use this when administering ocPortal -- it will greatly reduce your security. If you have an ISP where your IP address changes very frequently, you may want to consider a more reliable ISP.
 
-For a break-down of the risk of disabling this option, see this tracker discussion:
-http://ocportal.com/tracker/view.php?id=708
+For a break-down of the risk of disabling this option, see [url="this tracker discussion"]{$BRAND_BASE_URL}/tracker/view.php?id=708[/url].
 
 [title="2"]Client-side measures[/title]
 

@@ -80,7 +80,7 @@ class Hook_continue_import
 			$_import_list=$info['import'];
 			foreach ($_import_list as $import)
 			{
-				if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('import_parts_done','imp_session',array('imp_id'=>$import,'imp_session'=>get_session_id()))))
+				if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('import_parts_done','imp_session',array('imp_id'=>$import,'imp_session'=>get_session_id()))))
 				{
 					$function_name='import_'.$import;
 					ocf_over_local();

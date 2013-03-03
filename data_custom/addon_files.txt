@@ -2592,6 +2592,7 @@ ad_success
 
 ocportal_release_build
 ----------------------
+ - data_custom/build_rewrite_rules.php
  - sources_custom/make_release.php
  - adminzone/pages/minimodules_custom/make_release.php
  - sources_custom/hooks/systems/do_next_menus/make_release.php
@@ -4134,7 +4135,6 @@ nested_cpf_csv_lists
 
 gallery_syndication
 -------------------
-
  - adminzone/pages/minimodules_custom/vimeo_oauth.php
  - adminzone/pages/minimodules_custom/youtube_oauth.php
  - lang_custom/EN/gallery_syndication.ini
@@ -4154,12 +4154,10 @@ gallery_syndication
 
 pagination_protection
 ---------------------
-
  - sources_custom/hooks/systems/startup/param_restrict.php
 
 calendar_from_6am
 -----------------
-
  - themes/default/templates_custom/CALENDAR_DAY.tpl
  - themes/default/templates_custom/CALENDAR_DAY_HOUR.tpl
  - themes/default/templates_custom/CALENDAR_WEEK.tpl
@@ -4167,7 +4165,6 @@ calendar_from_6am
 
 psds
 ----
-
  - data_custom/psds/blank_emoticon.png
  - data_custom/psds/chatcode.psd
  - data_custom/psds/comcode.psd

@@ -14,9 +14,9 @@ You know what a website is from an experience point-of-view: a site consists of 
 A website is built with web pages. The natural thing is to think that a 'web page' is a self-contained document. In actual fact, a web page usually consists of separate files (such as images, sound-clips or videos) that are tied together by a programming language called 'HTML' (&dagger;). An HTML file contains code required to put all the pieces of a web page together like you see on your screen now (e-mails can also be made in HTML). Also specified in the HTML file are the instructions for displaying the text you are reading now, including the font-size, colour and style. All these elements will produce a web page, and the mix of Human-text and computer-code can often be very daunting when it comes to writing or editing an HTML -- this is why people often use additional computer software to create web pages for them.<br /><br /></li>
 <li><em>each page has a URL</em><br />
 URLs actually encode a number of things that together provide all the information needed to retrieve a page from the world-wide-web. This isn't unlike real-world addresses, which usually need to include a human name, a house number and a post-code/zip-code. The main two things a URL encodes are:<ol>
-<li>the computer a page is stored upon (a 'web server') &ndash; <b>http://ocportal.com</b>/example.html
+<li>the computer a page is stored upon (a 'web server') &ndash; <b>http://example.com</b>/example.html
 </li>
-<li>the name of the page on that computer &ndash; http://ocportal.com<b>/example.html</b></li>
+<li>the name of the page on that computer &ndash; http://example.com<b>/example.html</b></li>
 </ol>
 For a simple web-page, (2) is simply a filename that  the computer reads from its hard-disk and sends back.<br /><br /></li>
 <li><em>pages are joined to other pages via hyper-links</em><br />

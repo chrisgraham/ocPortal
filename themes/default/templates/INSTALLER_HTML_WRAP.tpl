@@ -6,7 +6,7 @@
 		<meta name="GENERATOR" content="ocPortal" />
 		<meta name="description" content="ocPortal installer" />
 		<meta name="language" content="{$LANG*}" />
-		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
+		<link rel="icon" href="{$BRAND_BASE_URL*}/favicon.ico" type="image/x-icon" />
 		<link href="{CSS_URL*}" rel="stylesheet" type="text/css" />
 		<link href="{CSS_URL_2*}" rel="stylesheet" type="text/css" />
 		<style type="text/css">
@@ -185,7 +185,7 @@
 				ocPortal, {!CREATED_BY,ocProducts}
 			</p>
 			<p>
-				<a target="_blank" title="ocPortal.com {!LINK_NEW_WINDOW}" href="http://ocportal.com">http://ocportal.com</a>
+				<a target="_blank" title="ocPortal.com {!LINK_NEW_WINDOW}" href="{$BRAND_BASE_URL*}">{$BRAND_BASE_URL*}</a>
 			</p>
 		</div>
 	</body>

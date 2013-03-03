@@ -7,14 +7,14 @@ This guide is not a substitute for learning PHP, HTML, CSS, or other languages. 
  - [page="docs:tut_hardcore_1"]Making an addon (part 1)[/page]
  - [page="docs:tut_hardcore_2"]Making an addon (part 2)[/page]
  - [page="docs:tut_hardcore_3"]Making an addon (part 3)[/page]
- - [url="Example addon (league standings)"]http://ocportal.com/docs/league_standings__example_addon.zip[/url]
- - [url="Example addon (property)"]http://ocportal.com/docs/custom_modules_example__pty.zip[/url]
+ - [url="Example addon (league standings)"]{$BRAND_BASE_URL}/docs/league_standings__example_addon.zip[/url]
+ - [url="Example addon (property)"]{$BRAND_BASE_URL}/docs/custom_modules_example__pty.zip[/url]
 and an introduction to the ocPortal framework:
  - [page="docs:tut_framework"]The ocPortal programming framework[/page]
 and information about integrating third-party code:
  - [page="docs:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page]
 
-To learn ocPortal's API, see the phpdoc comments in the source files. The source files are logically named, so it should be relatively easy to get a handle on it all. Alternatively, view the [url="auto-generated documentation"]http://ocportal.com/docs/api/[/url].
+To learn ocPortal's API, see the phpdoc comments in the source files. The source files are logically named, so it should be relatively easy to get a handle on it all. Alternatively, view the [url="auto-generated documentation"]{$BRAND_BASE_URL}/docs/api/[/url].
 
 [contents][/contents]
 
@@ -158,10 +158,10 @@ ocPortal contains many "cross-cutting" features that are often present in differ
 
 The documentation and tools on the ocPortal website may be out of date between ocPortal versions. For the latest resources, see our repositories and work tools:
  - [url="Github"]https://github.com/chrisgraham/ocPortal/[/url] (contains ocPortal, unit tests, all unbundled addons and support tools)
- - [url="Tracker"]http://ocportal.com/tracker/my_view_page.php[/url]
+ - [url="Tracker"]{$BRAND_BASE_URL}/tracker/my_view_page.php[/url]
  - [url="Written test sets"]https://www.dropbox.com/sh/07d7we9bu3voj8v/SPa1GlArQd[/url] (when tracker tasks are carried out, tests may be pasted onto the tracker issue; there is also a master list of manual test sets on ocportal.com, but access is limited is its within an interactive tool)
  - [url="Developer documentation source files"]https://www.dropbox.com/sh/qouvnrbmbwr09ad/tMZjhcyn7i[/url]
  - Patches for future https://www.dropbox.com/sh/2lg5c6qb035jw2c/ZEaKNhbE4z
  - Graphics https://www.dropbox.com/sh/3lt8yaj60wxeb24/PxztQ4hGJR
- - [url="Community documentation"]http://ocportal.com/site/wiki.htm[/url]
+ - [url="Community documentation"]{$BRAND_BASE_URL}/site/wiki.htm[/url]
 [/surround]

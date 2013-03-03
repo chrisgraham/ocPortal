@@ -68,7 +68,7 @@ if (get_page_name()!='commercial_support' || $credits_available==0)
 	if (is_object($commercial_support_url)) $commercial_support_url=$commercial_support_url->evaluate();
 	echo '<div class="gb_help">';
 	echo '<a href="'.escape_html($commercial_support_url).'">What\'s this?</a>';
-	if ($credits_available==0) echo ' and <a href="http://ocportal.com/site/news/view/chris_grahams_blog/the-ocportalocproducts.htm">why is it likely a problem?</a>';
+	if ($credits_available==0) echo ' and <a href="'.static_evaluate_tempcode(build_url(array('page'=>'news','type'=>'view','id'=>275),'site')).'">why is it likely a problem?</a>';
 	echo '</div>';
 }
 $tickets_url=build_url(array('page'=>'tickets','type'=>'misc'),get_module_zone('tickets'));

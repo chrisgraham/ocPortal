@@ -21,7 +21,7 @@ Anything that makes you think for more than 30 seconds is an issue we may want t
 [*]Edit the front page (there's a link to do it under it as long as you are logged in as an Administrator). On the form you'll see an "Add Block" button that can add all the different blocks. You don't actually need to add all the blocks to see them because there's a preview feature. Preview all the blocks and look at the options to see what they do.
 [*]Visit the site-map, and go to each screen on it. This will give you an idea what screens the system has.
 [/list]
-[*]Now that you know what features are available, you need to decide what features will be used for each part of your design. [url="Making_a_theme.pdf"]http://ocportal.com/docs/making_a_theme.pdf[/url] shows an annotated theme design that was done by someone who has never used ocPortal. You can see via the annotations how this clean-room-design can be implemented.
+[*]Now that you know what features are available, you need to decide what features will be used for each part of your design. [url="Making_a_theme.pdf"]{$BRAND_BASE_URL}/docs/making_a_theme.pdf[/url] shows an annotated theme design that was done by someone who has never used ocPortal. You can see via the annotations how this clean-room-design can be implemented.
 [/list]
 
 As a designer you will find a number of challenges that a designer does not normally face:
@@ -34,7 +34,7 @@ As a designer you will find a number of challenges that a designer does not norm
 7) Sometimes not everything should show for every user. For example a link to add content might only be shown to administrators.
 8) You may find ocPortal's default templates have large numbers of nested [tt]div[/tt] tags. This is because ocPortal is designed in various kinds of component which often are surrounded in [tt]div[/tt] tags to keep them together. We have to design our styles in a modular way, so typically each style concept is applied to a different [tt]div[/tt] tag so that things aren't muddled up and the system is properly organised and partitioned. For example, we might have a [tt]div[/tt] to contain a row of floats, and a [tt]div[/tt] for each box being floated and then various [tt]div[/tt] tags for the content within those boxes; a manual static theme could use less [tt]div[/tt] tags, but it would be more inflexible for re-styling, less modular, and not viable for easy use in a [acronym title="Content Management System"]CMS[/acronym].
 
-[semihtml][b]This section is accompanied by an [url="annotated PDF"]http://ocportal.com/docs/making_a_theme.pdf[/url].[/b][/semihtml]
+[semihtml][b]This section is accompanied by an [url="annotated PDF"]{$BRAND_BASE_URL}/docs/making_a_theme.pdf[/url].[/b][/semihtml]
 
 [title="2"]Implementing your design[/title]
 
@@ -310,7 +310,7 @@ The following default menus exist in ocPortal:
 
 [title="3"]Catalogues (for custom content types)[/title]
 
-When you have a custom content type to add (something that there isn't a specific ocPortal feature for, such as "Project Staff" or "Representatives" on [url="making_a_theme.pdf"]http://ocportal.com/docs/making_a_theme.pdf[/url]), you'll need to make a catalogue. Decide what fields you want then add the catalogue from the 'Content Management' zone.
+When you have a custom content type to add (something that there isn't a specific ocPortal feature for, such as "Project Staff" or "Representatives" on [url="making_a_theme.pdf"]{$BRAND_BASE_URL}/docs/making_a_theme.pdf[/url]), you'll need to make a catalogue. Decide what fields you want then add the catalogue from the 'Content Management' zone.
 
 You will probably want to have a non-tree catalogue, with a display type of 'field-maps' (these can be changed later if needed).
 

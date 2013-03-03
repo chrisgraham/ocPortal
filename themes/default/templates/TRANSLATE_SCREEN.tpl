@@ -2,7 +2,7 @@
 
 {+START,IF,{$NEQ,{LANG},EN}}
 	<p>
-		{!LAUNCHPAD,https://translations.launchpad.net/ocportal/+translations,{LANG},{$PAGE_LINK*,_SELF:_SELF:export_po:{LANG}}}
+		{!LAUNCHPAD,https://translations.launchpad.net/ocportal/+translations,{LANG},{$PAGE_LINK*,_SELF:_SELF:export_po:{LANG}},{$TUTORIAL_URL,tut_intl}}
 	</p>
 {+END}
 

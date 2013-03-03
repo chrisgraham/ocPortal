@@ -18,59 +18,93 @@
  * @package		core
  */
 
+/*
+This script defines the rewrite rules from ocPortal's end.
+
+Also see build_rewrite_rules.php for web-server script file generation [creates files like recommended.htaccess] (and to a lesser extent, urls.php and urls2.php).
+build_rewrite_rules.php is in git / the ocportal_release_build addon.
+*/
+
 /**
  * Find the list of URL remappings
  *
- * @param  boolean		Whether to use the old URL remapping style
+ * @param  ID_TEXT		The URL scheme to use
  * @return array			The list of URL remappings
  */
-function get_remappings($old_style=false)
+function get_remappings($url_scheme)
 {
 	// The target mapping... upper case means variable substitution, lower case means constant-string
 	// The source mapping... NULL means 'anything' (we'll use it in a variable substitution), else we require a certain value
 	// These have to be in longest to shortest number of bindings order, to reduce the potential for &'d attributes
+
 	$rules=array();
-	if ($old_style)
+	switch ($url_scheme)
 	{
-		if (addon_installed('wiki'))
-		{
-			$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false);
-		}
-		if (addon_installed('galleries'))
-		{
-			$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'pg/galleries/image/ID',false);
-			$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'pg/galleries/video/ID',false);
-		}
-		if (addon_installed('iotds'))
-		{
-			$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'pg/iotds/view/ID',false);
-		}
-		$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false);
-		$rules[]=array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false);
-		$rules[]=array(array('page'=>NULL),'pg/PAGE',false);
-		$rules[]=array(array('page'=>''),'pg',false);
-		$rules[]=array(array(),'',true);
-	} else
-	{
-		if (addon_installed('wiki'))
-		{
-			$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false);
-		}
-		if (addon_installed('galleries'))
-		{
-			$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'galleries/image/ID.htm',false);
-			$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'galleries/video/ID.htm',false);
-		}
-		if (addon_installed('iotds'))
-		{
-			$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'iotds/view/ID.htm',false);
-		}
-		$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false);
-		$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false);
-		$rules[]=array(array('page'=>NULL),'PAGE.htm',false);
-		$rules[]=array(array('page'=>''),'',false);
-		$rules[]=array(array(),'',true);
+		case 'PG':
+			if (addon_installed('wiki'))
+			{
+				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false);
+			}
+			if (addon_installed('galleries'))
+			{
+				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'pg/galleries/image/ID',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'pg/galleries/video/ID',false);
+			}
+			if (addon_installed('iotds'))
+			{
+				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'pg/iotds/view/ID',false);
+			}
+			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false);
+			$rules[]=array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false);
+			$rules[]=array(array('page'=>NULL),'pg/PAGE',false);
+			$rules[]=array(array('page'=>''),'pg',false);
+			$rules[]=array(array(),'pg',true);
+			break;
+
+		case 'HTM':
+			if (addon_installed('wiki'))
+			{
+				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false);
+			}
+			if (addon_installed('galleries'))
+			{
+				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'galleries/image/ID.htm',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'galleries/video/ID.htm',false);
+			}
+			if (addon_installed('iotds'))
+			{
+				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'iotds/view/ID.htm',false);
+			}
+			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false);
+			$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false);
+			$rules[]=array(array('page'=>NULL),'PAGE.htm',false);
+			$rules[]=array(array('page'=>''),'',false);
+			$rules[]=array(array(),'',false);
+			break;
+
+		case 'SIMPLE':
+			if (addon_installed('wiki'))
+			{
+				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID',false);
+			}
+			if (addon_installed('galleries'))
+			{
+				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'galleries/image/ID',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'galleries/video/ID',false);
+			}
+			if (addon_installed('iotds'))
+			{
+				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'iotds/view/ID',false);
+			}
+			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID',false);
+			$rules[]=array(array('page'=>NULL,'type'=>'misc'),'PAGE',false);
+			$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE',false);
+			$rules[]=array(array('page'=>NULL),'PAGE',false);
+			$rules[]=array(array('page'=>''),'',false);
+			$rules[]=array(array(),'',false);
+			break;
 	}
+
 	return $rules;
 }
 

@@ -292,7 +292,8 @@ function is_page_https($zone,$page)
  */
 function can_try_mod_rewrite($avoid_remap=false)
 {
-	return ((get_option('mod_rewrite',false)==='1') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite']=='0')) && (!$avoid_remap) && ((get_value('ionic_on','0')=='1') || (ocp_srv('SERVER_SOFTWARE')=='') || (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS7/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS8/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,10)=='LiteSpeed'))); // If we don't have the option on or are not using apache, return
+	$url_scheme=get_option('url_scheme',false);
+	return (($url_scheme!==NULL) && ($url_scheme!=='RAW') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite']=='0')) && (!$avoid_remap) && ((get_value('ionic_on','0')=='1') || (ocp_srv('SERVER_SOFTWARE')=='') || (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS7/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS8/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,10)=='LiteSpeed'))); // If we don't have the option on or are not using apache, return
 }
 
 /**
@@ -594,14 +595,16 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 	global $URL_REMAPPINGS;
 	if ($URL_REMAPPINGS===NULL)
 	{
-		$old_style=get_option('htm_short_urls')!='1';
 		require_code('url_remappings');
-		$URL_REMAPPINGS=get_remappings($old_style);
+		$URL_REMAPPINGS=get_remappings(get_option('url_scheme'));
 		foreach ($URL_REMAPPINGS as $i=>$_remapping)
 		{
 			$URL_REMAPPINGS[$i][3]=count($_remapping[0]);
 		}
 	}
+
+	static $url_scheme=NULL;
+	if ($url_scheme===NULL) $url_scheme=get_option('url_scheme');
 
 	// Find mapping
 	foreach ($URL_REMAPPINGS as $_remapping)
@@ -667,11 +670,20 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 			$makeup=str_replace('TYPE','misc',$makeup);
 			if ($makeup=='')
 			{
-				$makeup.=get_zone_default_page($zone_name).'.htm';
+				switch ($url_scheme)
+				{
+					case 'HTM':
+						$makeup.=get_zone_default_page($zone_name).'.htm';
+						break;
+
+					case 'SIMPLE':
+						$makeup.=get_zone_default_page($zone_name);
+						break;
+				}
 			}
 			if (($extra_vars!=array()) || ($force_index_php))
 			{
-				if (get_option('htm_short_urls')!='1') $makeup.='/index.php';
+				if ($url_scheme=='PG') $makeup.='/index.php';
 
 				$first=true;
 				foreach ($extra_vars as $key=>$val) // Add these in explicitly
@@ -714,7 +726,7 @@ function looks_like_url($value,$lax=false)
 	if (($lax) && (strpos($value,'/')!==false)) return true;
 	if (($lax) && (substr($value,0,1)=='%')) return true;
 	if (($lax) && (substr($value,0,1)=='{')) return true;
-	return (((strpos($value,'.php')!==false) || (strpos($value,'.htm')!==false) || (substr($value,0,1)=='#') || (substr($value,0,13)=='{$FIND_SCRIPT') || (substr($value,0,10)=='{$BASE_URL') || (substr(strtolower($value),0,11)=='javascript:') || (substr($value,0,4)=='tel:') || (substr($value,0,7)=='mailto:') || (substr($value,0,7)=='http://') || (substr($value,0,8)=='https://') || (substr($value,0,3)=='../') || (substr($value,0,7)=='sftp://') || (substr($value,0,6)=='ftp://'))) && (strpos($value,'<')===false);
+	return (((strpos($value,'.php')!==false) || (strpos($value,'.htm')!==false) || (substr($value,0,1)=='#') || (substr($value,0,15)=='{$TUTORIAL_URL') || (substr($value,0,13)=='{$FIND_SCRIPT') || (substr($value,0,17)=='{$BRAND_BASE_URL') || (substr($value,0,10)=='{$BASE_URL') || (substr(strtolower($value),0,11)=='javascript:') || (substr($value,0,4)=='tel:') || (substr($value,0,7)=='mailto:') || (substr($value,0,7)=='http://') || (substr($value,0,8)=='https://') || (substr($value,0,3)=='../') || (substr($value,0,7)=='sftp://') || (substr($value,0,6)=='ftp://'))) && (strpos($value,'<')===false);
 }
 
 /**

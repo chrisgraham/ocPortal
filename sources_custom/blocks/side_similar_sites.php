@@ -58,8 +58,8 @@ class Block_side_similar_sites
 		$criteria=array_key_exists('criteria',$map)?$map['criteria']:get_option('site_scope');
 		$max=(isset($map['max']) && intval($map['max'])>0)?intval($map['max']):3;
 
-		$setSearchTerms="";
-		$setSearchURL="related:".$criteria;
+		$setSearchTerms='';
+		$setSearchURL='related:'.$criteria;
 
 		$searchResultsArray=$this->retrieveGoogleSearch($setSearchTerms,$setSearchURL);
 
@@ -71,7 +71,7 @@ class Block_side_similar_sites
 			//$out .= '<li><strong><a href="'.$result["url"].'">'.$result["title"].'</a></strong> '.  $result["content"].' <em>'.$result["visibleUrl"].'</em></li>';
 			$links_count++;
 			if ($links_count<=$max)
-				$out.='<li><a href="'.$result["url"].'" target="_blank">'.$result["title"].'</a></li>';
+				$out.='<li><a href="'.$result['url'].'" target="_blank">'.$result['title'].'</a></li>';
 		}
 
 		$out.='</ul>';
@@ -79,18 +79,18 @@ class Block_side_similar_sites
 		return do_template('BLOCK_SIDE_SIMILAR_SITES',array('_GUID'=>'0eeeec88a1496aa8b0db3580dcaa4ed8','TITLE'=>do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT'=>$out,'CRITERIA'=>$criteria));
 	}
 
-	function retrieveGoogleSearch($searchTerms="ocportal",$searchURL="related:ocportal.com")
+	function retrieveGoogleSearch($searchTerms='example',$searchURL='related:example.com')
 	{
 		require_code('files');
-		$googleBaseUrl="http://ajax.googleapis.com/ajax/services/search/web";
-		$googleBaseQuery="?v=1.0&rsz=large&q=";
-		$googleFullUrl=$googleBaseUrl . $googleBaseQuery . $searchURL . "%20" . $searchTerms;
+		$googleBaseUrl='http://ajax.googleapis.com/ajax/services/search/web';
+		$googleBaseQuery='?v=1.0&rsz=large&q=';
+		$googleFullUrl=$googleBaseUrl . $googleBaseQuery . $searchURL . '%20' . $searchTerms;
 
 		$returnGoogleSearch=http_download_file($googleFullUrl);
 
 		$returnGoogleSearch=json_decode($returnGoogleSearch,true);
 
-		return $returnGoogleSearch["responseData"]["results"];
+		return $returnGoogleSearch['responseData']['results'];
 	}
 
 

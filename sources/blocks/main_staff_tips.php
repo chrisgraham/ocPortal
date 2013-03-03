@@ -99,7 +99,15 @@ class Block_main_staff_tips
 					$lang2=do_lang('TIP_'.$tip_id,NULL,NULL,NULL,NULL,false);
 					if (!is_null($lang2))
 					{
-						$lang=do_lang_tempcode('TIP_'.$tip_id);
+						$lang=do_lang_tempcode(
+							'TIP_'.$tip_id,
+							get_brand_page_url(array('page'=>'tickets','type'=>'ticket','ticket_template'=>'general_feedback','cost'=>'free'),'site'),
+							brand_name(),
+							array(
+								get_brand_page_url(array('page'=>'commercial_support'),'site'),
+								get_brand_page_url(array('page'=>''),'forum')
+							)
+						);
 						$tips[$i][$tip_id]=$lang;
 					}
 				}

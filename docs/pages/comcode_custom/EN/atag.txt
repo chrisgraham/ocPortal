@@ -14,7 +14,7 @@ At the time of writing we believe ocPortal does indeed fully comply with ATAG, a
 [b]ATAG version[/b]: [url="2.0 Working draft, 23rd November 2005"]http://www.w3.org/TR/2005/WD-ATAG20-20051123/#conf-claim[/url]
 [b]ATAG level[/b]: Triple-A
 [b]WCAG version[/b]: [url="1.0"]http://www.w3.org/TR/WAI-WEBCONTENT/[/url] [most of the checkpoints for WCAG 2.0 are met]
-[b]URL to this document[/b]: http://ocportal.com/docs/pg/atag
+[b]URL to this document[/b]: {$TUTORIAL_URL,atag}
 [b]User agents[/b]: Internet Explorer 6.0, Opera 8.0, Firefox 1.5
 [b]Content-type[/b]: XHTML 1.0 + CSS 2.0 + PNG images [ + optional Javascript: Javascript may not be accessible, therefore it is assumed to be disabled for the purposes of accessibility]
 
@@ -250,7 +250,7 @@ Documentation is not configurable.
 
 [title="2"]WCAG Compliance details[/title]
 
-Our WCAG compliance is detailed in a [url="separate document"]http://ocportal.com/docs/pg/tut_accessibility[/url].
+Our WCAG compliance is detailed in a [url="separate document"]{$TUTORIAL_URL,tut_accessibility}[/url].
 
 This is because the information is important for those who modify templates in ocPortal, so that they understand the techniques we have used and know how to apply them themselves.
 

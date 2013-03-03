@@ -2,7 +2,7 @@
 
 If you're not sure how the admin menu above is categorised, hold the mouse to see a tooltip explaining what is under that drop-down menu.
 
-For help, see the [url="http://ocportal.com/docs"]docs[/url]. Add content/categories from the [page="cms:"]content management zone[/page]. Manage site structure from the [page="adminzone:admin_sitetree:site_tree"]site tree editor[/page].
+For help, see the [url="{$BRAND_BASE_URL}/docs"]docs[/url]. Add content/categories from the [page="cms:"]content management zone[/page]. Manage site structure from the [page="adminzone:admin_sitetree:site_tree"]site tree editor[/page].
 
 
 [title="2"]To Do[/title]
@@ -27,7 +27,7 @@ For help, see the [url="http://ocportal.com/docs"]docs[/url]. Add content/catego
 | [box="Website Activity" options="tray_open"][block]main_staff_actions[/block][/box]
 | [block]main_db_notes[/block]
 
-{+START,IF,{$ADDON_INSTALLED,syndication_blocks}}[block="http://ocportal.com/backend.php?mode=news&type=rss&filter=1,2,3,29&days=100" title="ocPortal news" cache="1"]side_rss[/block]{+END}
+{+START,IF,{$ADDON_INSTALLED,syndication_blocks}}{$BLOCK,block=side_rss,param={$BRAND_BASE_URL}/backend.php?mode=news&type=rss&filter=1\,2\,3\,29&days=100,title=ocPortal news,cache=1}{+END}
 |}
 [title="2"]Other Websites[/title]
 {| 60%:37% wide floats
@@ -43,7 +43,7 @@ Know someone who needs a website? [page=":recommend:misc:ocp=1"]Recommend ocPort
 
 You're using [pulse max="5B87B2" min="222277" param="120"]ocPortal[/pulse] -- the world's most sophisticated free Content Management System.
 
-Please take this opportunity to see [url="ways you can help"]http://ocportal.com/site/helping_out.htm[/url] advance our effort to bring the best-quality integrated web technology to Open Source.
+Please take this opportunity to see [url="ways you can help"]{$BRAND_BASE_URL}/site/helping_out.htm[/url] advance our effort to bring the best-quality integrated web technology to Open Source.
 
 We're an ambitious lot. We plan to change how the whole world approaches web-site development. And, we need your help -- please consider giving some time to the project which has delivered so much for you for free. Our plans require big commitments from the world-class core team, so please help us keep our momentum sustainable.
 

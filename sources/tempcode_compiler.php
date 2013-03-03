@@ -153,7 +153,6 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				$__first_param=array_shift($opener_params);
 				if (count($__first_param)!=1)
 				{
-@var_dump($__first_param);exit();
 					warn_exit(do_lang_tempcode('COMPLEX_FIRST_PARAMETER'));
 				}
 				$_first_param=$__first_param[0];

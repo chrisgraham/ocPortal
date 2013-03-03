@@ -43,7 +43,7 @@ Some tips/guidelines for usage:
 
 [title="3"]Core APIs[/title]
 
-All the ocPortal APIs are [url="http://ocportal.com/docs/api/"]documented online[/url] and visible via the PHP-doc comments. If you need to look up the purpose/usage of a function the easiest way is to do a file search from your code editor for "[tt]function <function-name>[/tt]", so you can jump to the PHP-doc comment for it.
+All the ocPortal APIs are [url="{$BRAND_BASE_URL}/docs/api/"]documented online[/url] and visible via the PHP-doc comments. If you need to look up the purpose/usage of a function the easiest way is to do a file search from your code editor for "[tt]function <function-name>[/tt]", so you can jump to the PHP-doc comment for it.
 
 Note that as a general rule, you shouldn't be using any function/method that begins '_'. This indicates a private/helper function.
 
@@ -223,7 +223,7 @@ For AJAX handler scripts, less may be loaded into the global scope than indicate
 
 [title="3"]Database structure[/title]
 
-We describe ocPortal's database structure in a [url="separate document"]http://ocportal.com/docs/codebook_data_dictionary.doc[/url].
+We describe ocPortal's database structure in a [url="separate document"]{$BRAND_BASE_URL}/docs/codebook_data_dictionary.doc[/url].
 
 [title="3"]Diff tools[/title]
 

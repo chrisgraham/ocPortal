@@ -1584,12 +1584,18 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'BRAND_NAME':
-				$value=function_exists('get_value')?get_value('rebrand_name'):NULL;
-				if (is_null($value)) $value='ocPortal';
+				$value=brand_name();
 				break;
 
 			case 'BRAND_BASE_URL':
 				$value=brand_base_url();
+				break;
+
+			case 'TUTORIAL_URL':
+				if (array_key_exists(0,$param))
+				{
+					$value=get_tutorial_url($param[0]);
+				}
 				break;
 
 			case 'SHOW_DOCS':

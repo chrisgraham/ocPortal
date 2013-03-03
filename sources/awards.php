@@ -158,7 +158,7 @@ function get_award_fields($content_type,$id=NULL)
 	{
 		$help=paragraph(do_lang_tempcode('AWARDS_AFTER_VALIDATION'));
 		if (get_option('show_docs')=='1')
-			$help->attach(paragraph(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_featured','tut_featured','1'))));
+			$help->attach(paragraph(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),get_tutorial_url('tut_featured'),'tut_featured','1'))));
 		$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'5b91c53ff3966c13407d33680354fd5d','SECTION_HIDDEN'=>is_null(get_param_integer('award',NULL)),'TITLE'=>do_lang_tempcode('AWARDS'),'HELP'=>protect_from_escaping($help)));
 		$_fields->attach($fields);
 		$fields=$_fields;

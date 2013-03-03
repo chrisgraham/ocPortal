@@ -254,7 +254,7 @@ if (!is_null($our_version))
 		$descrip=$our_version['download_description'].' You are running the latest version.';
 	} else
 	{
-		$descrip='You are <strong>not</strong> running the latest version. Browse the <a title="ocPortal news archive (this link will open in a new window)" target="_blank" href="http://ocportal.com/site/news.htm">ocPortal news archive</a> for a full list of the updates or see below for recommended paths.';
+		$descrip='You are <strong>not</strong> running the latest version. Browse the <a title="ocPortal news archive (this link will open in a new window)" target="_blank" href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'news'),'site'))).'">ocPortal news archive</a> for a full list of the updates or see below for recommended paths.';
 	}
 	echo '<p>'.$descrip.'</p>';
 } else
@@ -268,7 +268,7 @@ if (!is_null($our_version))
 	if (!is_null($next_upgrade_version))
 	{
 		// NB: $has_jump should always be true in this branch, unless there are holes in the version DB
-		echo '<p>You are running an outdated version. The closest version is <a onclick="window.open(this.href,null,\'status=yes,toolbar=no,location=no,menubar=no,resizable=yes,scrollbars=yes,width=976,height=600\'); return false;" target="_blank" title="Version '.escape_html($next_upgrade_version['version']).' (this link will open in a new window)" href="http://ocportal.com/site/news/view/'.strval($next_upgrade_version['news_id']).'.htm?wide_high=1">version '.escape_html($next_upgrade_version['version']).'</a>, but read on for the latest recommended upgrade paths.</p>';
+		echo '<p>You are running an outdated version. The closest version is <a onclick="window.open(this.href,null,\'status=yes,toolbar=no,location=no,menubar=no,resizable=yes,scrollbars=yes,width=976,height=600\'); return false;" target="_blank" title="Version '.escape_html($next_upgrade_version['version']).' (this link will open in a new window)" href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'news','type'=>'view','id'=>$next_upgrade_version['news_id'],'wide_high'=>1),'site'))).'">version '.escape_html($next_upgrade_version['version']).'</a>, but read on for the latest recommended upgrade paths.</p>';
 	} elseif ((!is_null($our_version)) && (!$has_jump))
 	{
 		echo '<p>You are running the latest version.</p>';
@@ -306,7 +306,7 @@ if ($has_jump)
 
 			$tooltip=comcode_to_tempcode('[title="2"]Inbetween versions[/title]'.$higher_versions[$i]['download_description']);
 
-			$upgrade_url='http://ocportal.com/site/news/view/'.strval($higher_versions[$i]['news_id']).'.htm?wide_high=1&from_version='.$long_version_with_qualifier;
+			$upgrade_url=static_evaluate_tempcode(build_url(array('page'=>'news','type'=>'view','id'=>$higher_versions[$i]['news_id'],'from_version'=>$long_version_with_qualifier,'wide_high'=>1),'site'));
 			echo '<p class="version">';
 
 			// First line of details
@@ -324,12 +324,7 @@ if ($has_jump)
 			<span class=\"version_button\" id=\"link_pos_".strval($i)."\"></span>
 			<script type=\"text/javascript\">/* <![CDATA[ */
 				var div=document.getElementById('link_pos_".strval($i)."');
-				var stripped=window.location.href;
-				stripped=stripped.replace(/\/[^\/]*\.htm.*/g,'');
-				stripped=stripped.replace(/\/pg\/.*/g,'');
-				stripped=stripped.replace(/\/index.php\?.*/g,'');
-				stripped=stripped.replace(/\/version.php\?.*/g,'/adminzone');
-				var upgrader_link=stripped+'/../".$upgrade_script."';
+				var upgrader_link=get_base_url()+'/".$upgrade_script."';
 				var h='<form style=\"display: inline\" action=\"'+upgrader_link+'\" target=\"_blank\" method=\"post\"><button title=\"Upgrade to ".escape_html($higher_versions[$i]['version'])."\"><span>Launch upgrader<\/span><\/button><\/form>';
 				if (window.setInnerHTML)
 				{

@@ -234,7 +234,7 @@ class Module_recommend
 			}
 			if (get_param_integer('ocp',0)==1)
 			{
-				$message=do_lang('RECOMMEND_OCPORTAL');
+				$message=do_lang('RECOMMEND_OCPORTAL',brand_name(),brand_base_url());
 			}
 		}
 

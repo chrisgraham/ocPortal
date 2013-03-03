@@ -136,7 +136,7 @@ function messages_script()
 		{
 			// Resend invite (this is a self-invite)
 			$room['room_name']=$GLOBALS['FORUM_DRIVER']->get_username(intval($people));
-			$num_posts=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
+			$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
 			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="">'.strval($room['id']).'</chat_invite>'.chr(10);
 		}
 
@@ -322,8 +322,8 @@ function chat_room_prune($room_id,$room_row=NULL)
 			// Have they left the lobby? (or site, if it's site-wide IM)
 			if (is_null($p['room_id']))
 			{
-				$last_become_active=$GLOBALS['SITE_DB']->query_value_null_ok('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_ACTIVE','e_room_id'=>NULL));
-				$last_become_inactive=$GLOBALS['SITE_DB']->query_value_null_ok('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_INACTIVE','e_room_id'=>NULL));
+				$last_become_active=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_ACTIVE','e_room_id'=>NULL));
+				$last_become_inactive=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_INACTIVE','e_room_id'=>NULL));
 				if ((is_null($last_become_inactive)) || ($last_become_active>$last_become_inactive)) // If not already marked inactive
 				{
 					$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
@@ -612,8 +612,8 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		}
 	}
 
-	$last_msg=$GLOBALS['SITE_DB']->query_value('chat_messages','MAX(id)');
-	$last_event=$GLOBALS['SITE_DB']->query_value('chat_events','MAX(id)');
+	$last_msg=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)');
+	$last_event=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
 	$tracking_output='<chat_tracking last_msg="'.strval($last_msg).'" last_event="'.strval($last_event).'">'.strval($room_id).'</chat_tracking>'.chr(10);
 
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
@@ -884,13 +884,13 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 	if ((strpos($message,'[')!==false) && (strpos($message,']')!==false)) $wrap_pos=NULL;
 
 	// Have we been blocked by flood control?
-	$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
+	$is_im=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','is_im',array('id'=>$room_id));
 	if ($is_im==1) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else
 	{
-		$time_last_message=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','MAX(date_and_time)',array('user_id'=>get_member(),'system_message'=>0));
+		$time_last_message=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','MAX(date_and_time)',array('user_id'=>get_member(),'system_message'=>0));
 		if (!is_null($time_last_message)) $time_left=$time_last_message-time()+intval(get_option('chat_flood_timelimit'));
 	}
 	if ((is_null($time_last_message)) || ($time_left<=0))
@@ -937,7 +937,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 		// Mirror to private topic, if an IM
 		if (($is_im==1) && (get_forum_type()=='ocf') && (addon_installed('ocf_forum')))
 		{
-			$members=array_map('intval',explode(',',$GLOBALS['SITE_DB']->query_value('chat_rooms','allow_list',array('id'=>$room_id))));
+			$members=array_map('intval',explode(',',$GLOBALS['SITE_DB']->query_select_value('chat_rooms','allow_list',array('id'=>$room_id))));
 			if (count($members)>=2)
 			{
 				require_lang('chat');
@@ -946,7 +946,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 				{
 					$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access a'.strval($i).' ON a'.strval($i).'.s_topic_id=t.id AND a'.strval($i).'.s_member_id='.strval($members[$i]);
 				}
-				$topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok($table,'id',array('t_cache_first_title'=>do_lang('INSTANT_MESSAGING_CONVO'),'t_pt_from'=>$members[0],'t_pt_to'=>$members[1]));
+				$topic_id=$GLOBALS['FORUM_DB']->query_select_value_if_there($table,'id',array('t_cache_first_title'=>do_lang('INSTANT_MESSAGING_CONVO'),'t_pt_from'=>$members[0],'t_pt_to'=>$members[1]));
 				if (is_null($topic_id))
 				{
 					require_code('ocf_topics_action');

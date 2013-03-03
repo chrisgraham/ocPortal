@@ -599,6 +599,12 @@ class Module_cms_comcode_pages
 		$title=get_screen_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
 		if (!$simple_add && ($file!='')) breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
 
+		if ($file!='')
+		{
+			require_code('zones2');
+			check_page_name($zone,$new_file);
+		}
+
 		if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
 
 		// Default file contents
@@ -798,7 +804,7 @@ class Module_cms_comcode_pages
 				'_GUID'=>'a42341a9a2de532cecdcfbecaff00a0f',
 				'TITLE'=>do_lang_tempcode('SEO'),
 				'SECTION_HIDDEN'=>true,
-				'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1')))
+				'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),get_tutorial_url('tut_seo'),'tut_seo','1')))
 			)));
 			$fields2->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'),do_lang_tempcode('DESCRIPTION_META_KEYWORDS'),'meta_keywords[]',array_map('trim',explode(',',preg_replace('#,+#',',',$meta_keywords))),0));
 			$fields2->attach(form_input_line(do_lang_tempcode('META_DESCRIPTION'),do_lang_tempcode('DESCRIPTION_META_DESCRIPTION'),'meta_description',$meta_description,false));
@@ -884,6 +890,9 @@ class Module_cms_comcode_pages
 		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
 
 		$renaming_page=($new_file!=$file);
+
+		require_code('zones2');
+		check_page_name($zone,$new_file);
 
 		if ($renaming_page)
 		{

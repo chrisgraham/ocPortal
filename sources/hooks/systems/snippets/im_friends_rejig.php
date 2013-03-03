@@ -44,7 +44,7 @@ class Hook_im_friends_rejig
 		{
 			if ($add_member_id!=get_member())
 			{
-				if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$add_member_id))))
+				if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$add_member_id))))
 				{
 					require_code('chat2');
 					friend_add(get_member(),$add_member_id);

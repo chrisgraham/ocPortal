@@ -69,14 +69,16 @@ function init__site()
 	{
 		$ruri=ocp_srv('REQUEST_URI');
 
-		$old_style=get_option('htm_short_urls')!='1';
-
-		if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		$url_scheme=get_option('url_scheme');
+		if (($url_scheme=='PG') || ($url_scheme=='HTM'))
 		{
-			set_http_status_code('301');
-			header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
-			header('Location: '.get_self_url(true));
-			exit();
+			if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
+			{
+				set_http_status_code('301');
+				header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
+				header('Location: '.get_self_url(true));
+				exit();
+			}
 		}
 	}
 
@@ -824,7 +826,7 @@ function do_site()
 	// Validation
 	$novalidate=get_param_integer('keep_novalidate',get_param_integer('novalidate',0));
 	$show_edit_links=get_param_integer('show_edit_links',0);
-	if (((in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) && (($special_page_type=='code') || (($novalidate==0) && (get_option('validation')=='1'))) && ($GLOBALS['REFRESH_URL'][0]=='') && ($show_edit_links==0)) // Not a permission - a matter of performance
+	if (((in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) && (($special_page_type=='code') || (($novalidate==0) && (get_option('validation')=='1'))) && ($GLOBALS['REFRESH_URL'][0]=='') && ($show_edit_links==0)) // Not a permission - a matter of performance
 	{
 		require_code('view_modes');
 		$out_evaluated=$out->evaluate(NULL,false);

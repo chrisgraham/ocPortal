@@ -46,9 +46,9 @@ Super-members are an ocPortal concept for advanced members that have access to e
 It is very common for ocPortal users to install the portal, but get the forum base URL wrong. This can be easily corrected after installation by using the separate [tt]config_editor.php[/tt] script (the one where you need to enter the admin password you chose upon install to change the installation environment). Once this is done, it is necessary to clean the Comcode page cache (go to: Admin Zone, Tools section, Cleanup Tools icon).
 
 The forum base URL should not include a script name -- it should be a URL-prefix to your forums. For example,
- - [tt]http://forums.ocportal.com[/tt] is what we used to use for ocportal.com's forum base URL
- - [tt]http://forums.ocportal.com/index.php[/tt] would not have been correct, as ocPortal won't be able to find emoticon image URLs by using this as a prefix
- - [tt]http://forums.ocportal.com/[/tt] would have been over-specified -- the final slash is not required
+ - [tt]http://forums.example.com[/tt] would be okay
+ - [tt]http://forums.example.com/index.php[/tt] would not have been correct, as the software won't be able to find emoticon image URLs by using this as a prefix
+ - [tt]http://forums.example.com/[/tt] would have been over-specified -- the final slash is not required
 
 [title="2"]Show forum within website[/title]
 
@@ -108,7 +108,7 @@ Due to all these problems, ocProducts does not support this functionality offici
 
 Make sure:
  - That the forum cookie path is set to '/', or at least a URL path that both the forum and the portal exist underneath. A blank path will not work
- - That the cookie domain is valid for both the forums and the portal. If your portal and forum are on different sub-domains, then blank will not work. For example '.forums.ocportal.com' would not cover a portal on 'ocportal.com'. '.ocportal.com' would cover both -- and hence that should be used for the cookie domain. The proceeding 'dot' has a special meaning. Preferably, forum and portal will be on the same exact domain, so to avoid any confusion
+ - That the cookie domain is valid for both the forums and the portal. If your portal and forum are on different sub-domains, then blank will not work. For example '.forums.example.com' would not cover a portal on 'example.com'. '.example.com' would cover both -- and hence that should be used for the cookie domain. The proceeding 'dot' has a special meaning. Preferably, forum and portal will be on the same exact domain, so to avoid any confusion
  - That the cookies have the same names. For most forums this will be auto-detected. The names ocPortal use will be based on the real cookie names, whilst forums may ask you just to define a stub
  - That you clear cookies from the ocPortal/forums sites and reload your web browser between configuration changes. Please note that clearing all cookies indiscriminatingly is likely to be annoying for you because you will have to re-enter many passwords on Internet sites, and you may not remember them all
 

@@ -108,24 +108,45 @@ class Module_login
 
 		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-		global $ZONE;
+		$passion=new ocp_tempcode(); // Hidden fields
 
-		// Where we will be redirected to after login
-		$redirect_default=get_self_url(true,true); // Still won't redirect to root if we have $_POST, because we relay $_POST values and have intelligence later on
-		$redirect=get_param('redirect',$redirect_default);
-		if (($redirect!='') && (strpos($redirect,'page=logout')===false) && (strpos($redirect,'page=login')===false) && (strpos($redirect,'/login.htm')===false) && (strpos($redirect,'/login/misc.htm')===false) && (strpos($redirect,'/pg/login')===false))
+		// Where we will be redirected to after login, for GET requests (POST requests are handled further in the code)
+		$redirect_default=get_self_url(true,true); // The default is to go back to where we are after login. Note that this is not necessarily the URL to the login module, as login screens happen on top of screens you're not allowed to access. If it is the URL to the login module, we'll realise this later in this code. This URL is coded to not redirect to root if we have $_POST, because we relay $_POST values and have intelligence (via $passion).
+		$redirect=get_param('redirect',$redirect_default); // ... but often the login screen's URL tells us where to go back to
+		$unhelpful_redirect=false;
+		$unhelpful_url_stubs=array(
+			static_evaluate_tempcode(build_url(array('page'=>'login'),'',NULL,false,false,true)),
+			static_evaluate_tempcode(build_url(array('page'=>'login','type'=>'misc'),'',NULL,false,false,true)),
+			static_evaluate_tempcode(build_url(array('page'=>'login','type'=>'logout'),'',NULL,false,false,true)),
+		);
+		foreach ($unhelpful_url_stubs as $unhelpful_url_stub)
 		{
-			$passion=form_input_hidden('redirect',$redirect);
-		} else
+			if (substr($redirect,0,strlen($unhelpful_url_stub))==$unhelpful_url_stub)
+			{
+				$unhelpful_redirect=true;
+				break;
+			}
+		}
+		if (($redirect!='') && (!$unhelpful_redirect))
 		{
+			$passion->attach(form_input_hidden('redirect',$redirect));
+		} else // We will only go to the zone-default page if an explicitly blank redirect URL is given or if the redirect would take us direct to another login or logout page
+		{
+			global $ZONE;
 			$_url=build_url(array('page'=>$ZONE['zone_default_page']),'_SELF');
 			$url=$_url->evaluate();
-			$passion=form_input_hidden('redirect',$url);
+			$passion->attach(form_input_hidden('redirect',$url));
 		}
 
-		$login_url=build_url(array('page'=>'_SELF','type'=>'login'),'_SELF');
+		// POST field relaying
+		if (count($_FILES)==0) // Only if we don't have _FILES (which could never be relayed)
+		{
+			$passion->attach(build_keep_post_fields(array('redirect')));
+			$redirect_passon=post_param('redirect',NULL);
+			if (!is_null($redirect_passon))
+				$passion->attach(form_input_hidden('redirect_passon',$redirect_passon)); // redirect_passon is used when there are POST fields, as it says what the redirect will be on the post-login-check hop (post fields prevent us doing an immediate HTTP-level redirect).
+		}
 
-		// It's intentional that we will only go to the zone-default page if an explicitly blank redirect URL is given. If not we go to the given redirect URL or to the made-safe current URL (made-safe=zone root if we posted as we do not want to re-post). Note that 'redirect_passon' is simulated by injecting the self-URL as a URL parameter by access_denied() - as we want re-post in this case.
 		// If this is a new install test to see if we have any redirect issue that blocks form submissions
 		if (get_option('site_closed')=='1')
 		{
@@ -138,17 +159,7 @@ class Module_login
 			}
 		}
 
-		if (count($_FILES)==0) // Only if we don't have _FILES (which could never be relayed)
-		{
-			$passion->attach(build_keep_post_fields(array('redirect')));
-			$redirect_passon=post_param('redirect',NULL);
-			if (!is_null($redirect_passon))
-				$passion->attach(form_input_hidden('redirect_passon',$redirect_passon));
-		}
-
-		$username=trim(get_param('username',''));
-		if (!is_guest()) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-
+		// Lost password link
 		if (get_forum_type()=='ocf')
 		{
 			require_lang('ocf');
@@ -156,10 +167,12 @@ class Module_login
 			$extra=do_lang_tempcode('IF_FORGOTTEN_PASSWORD',escape_html($forgotten_link->evaluate()));
 		} else $extra=new ocp_tempcode();
 
-		require_css('login');
-
+		// Render
+		$login_url=build_url(array('page'=>'_SELF','type'=>'login'),'_SELF');
 		breadcrumb_set_parents(array());
-
+		require_css('login');
+		$username=trim(get_param('username',''));
+		if (!is_guest()) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_URL'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
 	}
 
@@ -178,8 +191,7 @@ class Module_login
 		if (!is_null($id))
 		{
 			$title=get_screen_title('LOGGED_IN');
-			$url=enforce_sessioned_url(either_param('redirect'));
-			//set_session_id(get_session_id()); // Just in case something earlier set it to a pre-logged-in one     Not needed
+			$url=enforce_sessioned_url(either_param('redirect')); // Now that we're logged in, we need to ensure the redirect URL contains our new session ID
 
 			if (count($_POST)<=4) // Only the login username, password, remember-me and redirect
 			{
@@ -192,7 +204,7 @@ class Module_login
 				$post=build_keep_post_fields(array('redirect','redirect_passon'));
 				$redirect_passon=post_param('redirect_passon',NULL);
 				if (!is_null($redirect_passon))
-					$post->attach(form_input_hidden('redirect',$redirect_passon));
+					$post->attach(form_input_hidden('redirect',enforce_sessioned_url($redirect_passon)));
 				$refresh=do_template('JS_REFRESH',array('_GUID'=>'c7d2f9e7a2cc637f3cf9ac4d1cf97eca','FORM_NAME'=>'redir_form'));
 			}
 			decache('side_users_online');

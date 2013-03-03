@@ -72,7 +72,7 @@ print_r($failure);
 ?>
 [/codebox]
 
-[exp_thumb="Our minimodule in action on ocportal.com. Heavily censored to protect our and our visitors privacy ;)." float="right"]hardcore_censor[/exp_thumb]
+[exp_thumb="Our minimodule in action on {$BRAND_BASE_URL}. Heavily censored to protect our and our visitors privacy ;)." float="right"]hardcore_censor[/exp_thumb]
 We call up the minimodule by going to [tt]http://baseurl/adminzone/?page=admin_tracking[/tt], as we saved it as a page in the Admin Zone.
 
 The minimodule is actually very simple -- mainly it just looks for all the hits to the website where a 'from' parameter was given, and then puts out all the URLs they visited since entering the site, by date, along with some other basic information. It also looks for whether each hit user joined or went to purchase and tallies it against each 'from' value it finds.

@@ -80,8 +80,8 @@
 		<td>{$NEGATE,3}</td>
 	</tr>
 	<tr>
-		<td>$OBFUSCATE,chris@ocportal.com (check HTML source to see if it is obfuscated)</td>
-		<td>{$OBFUSCATE,chris@ocportal.com}</td>
+		<td>$OBFUSCATE,chris@example.com (check HTML source to see if it is obfuscated)</td>
+		<td>{$OBFUSCATE,chris@example.com}</td>
 	</tr>
 	<tr>
 		<td>$FIX_ID,3+2</td>

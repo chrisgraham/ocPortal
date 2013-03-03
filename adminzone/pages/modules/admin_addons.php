@@ -251,7 +251,7 @@ class Module_admin_addons
 
 		$to_import=get_param('to_import',NULL);
 
-		$field_set->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM'),'url',NULL,'choose_ocportalcom_addon',array(),false,$to_import,false,NULL,true));
+		$field_set->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM',escape_html(get_brand_page_url(array('page'=>'community'),'site'))),'url',NULL,'choose_ocportalcom_addon',array(),false,$to_import,false,NULL,true));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 

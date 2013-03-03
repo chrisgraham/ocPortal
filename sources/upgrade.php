@@ -94,7 +94,7 @@ function upgrade_script()
 					$l_open_site=fu_link('upgrader.php?type=open_site',do_lang('FU_OPEN_SITE'),get_option('site_closed')=='0');
 					$l_error_correction=do_lang('FU_ERROR_CORRECTION');
 					$l_not_for_patch=do_lang('FU_NOT_FOR_PATCH');
-					$l_tutorial=fu_link('http://ocportal.com/docs/tut_upgrade.htm',do_lang('FU_TUTORIAL'));
+					$l_tutorial=fu_link(get_tutorial_url('tut_upgrade'),do_lang('FU_TUTORIAL'));
 					$l_release_notes=do_lang('FU_RELEASE_NOTES');
 					$l_refer_release_notes=do_lang('FU_REFER_RELEASE_NOTES');
 					$news_id=post_param_integer('news_id',NULL);

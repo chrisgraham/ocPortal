@@ -1702,18 +1702,6 @@ function escape_html($string)
 }
 
 /**
- * Find the base URL for documentation.
- *
- * @return URLPATH		The base URL for documentation
- */
-function brand_base_url()
-{
-	$value=get_value('rebrand_base_url');
-	if (($value===NULL) || ($value=='')) $value='http://ocportal.com';
-	return $value;
-}
-
-/**
  * See's if the current browser matches some special property code. Assumes users are keeping up on newish browsers (except for IE users, who are 6+)
  *
  * @param  string			The property code
@@ -2513,4 +2501,52 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 		$cache[$ip]=$ret;
 	}
 	return $ret;
+}
+
+/**
+ * Find the base URL for documentation.
+ *
+ * @return URLPATH		The base URL for documentation
+ */
+function brand_base_url()
+{
+	$value=get_value('rebrand_base_url');
+	if (($value===NULL) || ($value=='')) $value='http://ocportal.com';
+	return $value;
+}
+
+/**
+ * Get a URL to an ocPortal tutorial.
+ *
+ * @param  ID_TEXT		Name of a tutorial
+ * @return URLPATH		URL to a tutorial
+ */
+function get_tutorial_url($tutorial)
+{
+	return get_brand_page_url(array('page'=>$tutorial),'docs'.strval(ocp_version()));
+}
+
+/**
+ * Get a URL to an ocPortal.com page.
+ *
+ * @param  array			URL map
+ * @param  ID_TEXT		Zone
+ * @return URLPATH		URL to page
+ */
+function get_brand_page_url($params,$zone)
+{
+	//$value=brand_base_url().'/'.$zone.'/'.urlencode($params['page']).'.htm';	Actually it is better to assume the brand site uses an ocPortal URL scheme like this site...
+	return str_replace(get_base_url(),brand_base_url(),static_evaluate_tempcode(build_url($params,$zone)));
+}
+
+/**
+ * Get the brand name.
+ *
+ * @return string			The brand name
+ */
+function brand_name()
+{
+	$value=function_exists('get_value')?get_value('rebrand_name'):NULL;
+	if (is_null($value)) $value='ocPortal';
+	return $value;
 }

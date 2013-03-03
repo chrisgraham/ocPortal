@@ -1,247 +1,320 @@
 Server {
-  ErrorDocument404 = /index.php?page=404
+	ErrorDocument404 = /index.php?page=404
 
-  Port = 80
-  ThreadCount = 50
+	Port = 80
+	ThreadCount = 50
 
-  EnableStaticContentCache = false
-  EnableStaticContentFromDisk = false
+	EnableStaticContentCache = false
+	EnableStaticContentFromDisk = false
 
-  RequestTimeoutSeconds = -1
-  RequestMemoryMaxBytes = -1
+	RequestTimeoutSeconds = -1
+	RequestMemoryMaxBytes = -1
 
-  EnableMemoryManager = false
+	EnableMemoryManager = false
 
-  GzipCompressionLevel = 0
-  EnableMagicQuotesGpc = false
-  EnableKeepAlive = true
-  EnableEarlyFlush = true
-  ForceChunkedEncoding = false
-  MaxPostSize = 200  # in MB
-  LibEventSyncSend = true
-  ResponseQueueCount = 0
+	GzipCompressionLevel = 0
+	EnableMagicQuotesGpc = false
+	EnableKeepAlive = true
+	EnableEarlyFlush = true
+	ForceChunkedEncoding = false
+	MaxPostSize = 200	# in MB
+	LibEventSyncSend = true
+	ResponseQueueCount = 0
 
-  APC {
-    EnableApc = true
-    UseSharedMemory = false
-    SharedMemorySize = 300  # in MB
-  }
+	APC {
+		EnableApc = true
+		UseSharedMemory = false
+		SharedMemorySize = 300	# in MB
+	}
 }
 
 VirtualHost {
-  ocportal {
-    Disabled = false
-    Pattern = .*
+	ocportal {
+		Disabled = false
+		Pattern = .*
 
-    RewriteRules {
-      a {
-        pattern = ^/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      b {
-        pattern = ^/([^=]*)pg/s/([^\&\?]*)/index\.php$
-        to = $1index.php?page=wiki&id=$2
-        qsa = true
-      }
-
-      c {
-        pattern = ^/([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$
-        to = $1index.php?page=galleries&type=image&id=$2&wide=1$3
-        qsa = true
-      }
-
-      d {
-        pattern = ^/([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$
-        to = $1index.php?page=galleries&type=video&id=$2&wide=1$3
-        qsa = true
-      }
-
-      e {
-        pattern = ^/([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$
-        to = $1index.php?page=iotds&type=view&id=$2&wide=1$3
-        qsa = true
-      }
-
-      f {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$
-        to = $1index.php?page=$2&type=$3&id=$4$5
-        qsa = true
-      }
-
-      g {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$
-        to = $1index.php?page=$2&type=$3$4
-        qsa = true
-      }
-
-      h {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)/index\.php(.*)$
-        to = $1index.php?page=$2$3
-        qsa = true
-      }
-
-      i {
-        pattern = ^/([^=]*)pg/index\.php(.*)$
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      j {
-        pattern = ^/([^=]*)pg/s/([^\&\?]*)$
-        to = $1index.php?page=wiki&id=$2
-        qsa = true
-      }
-
-      k {
-        pattern = ^/([^=]*)pg/galleries/image/([^\&\?]*)$
-        to = $1index.php?page=galleries&type=image&id=$2&wide=1$3
-        qsa = true
-      }
-
-      l {
-        pattern = ^/([^=]*)pg/galleries/video/([^\&\?]*)$
-        to = $1index.php?page=galleries&type=video&id=$2&wide=1$3
-        qsa = true
-      }
-
-      m {
-        pattern = ^/([^=]*)pg/iotds/view/([^\&\?]*)$
-        to = $1index.php?page=iotds&type=view&id=$2&wide=1
-        qsa = true
-      }
-
-      n {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$
-        to = $1index.php?page=$2&type=$3&id=$4
-        qsa = true
-      }
-
-      o {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$
-        to = $1index.php?page=$2&type=$3&id=$4
-        qsa = true
-      }
-
-      p {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$
-        to = $1index.php?page=$2&type=$3
-        qsa = true
-      }
-
-      q {
-        pattern = ^/([^=]*)pg/([^/\&\?]*)$
-        to = $1index.php?page=$2
-        qsa = true
-      }
-
-      r {
-        pattern = ^/([^=]*)pg/s/([^\&\?\.]*)&(.*)$
-        to = $1index.php?$3&page=wiki&id=$2
-        qsa = true
-      }
-
-      s {
-        pattern = ^/([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$
-        to = $1index.php?$5&page=galleries&type=image&id=$2&wide=1&$3
-        qsa = true
-      }
-
-      t {
-        pattern = ^/([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ $1index.php?$5&page=galleries&type=video&id=$2&wide=1&$3
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      u {
-        pattern = ^/([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$ $1index.php?$3&page=iotds&type=view&id=$2&wide=1
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      v {
-        pattern = ^/([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php?$5&page=$2&type=$3&id=$4
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      w {
-        pattern = ^/([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php?$4&page=$2&type=$3
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      x {
-        pattern = ^/([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php?$3&page=$2
-        to = $1index.php?page=$3
-        qsa = true
-      }
-
-      y {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=wiki&id=$2&$3
-        qsa = true
-      }
-
-      z {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=galleries&type=image&id=$2&wide=1&$3
-        qsa = true
-      }
-
-      aa {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/galleries/video/([^\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=galleries&type=video&id=$2&wide=1&$3
-        qsa = true
-      }
-
-      ab {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/iotds/view/([^\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=iotds&type=view&id=$2&wide=1$3
-        qsa = true
-      }
-
-      ac {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=$2&type=$3&id=$4&$5
-        qsa = true
-      }
-
-      ad {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=$2&type=$3&$4
-        qsa = true
-      }
-
-      ae {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.htm(\?.*)?$
-        to = $1/index.php?page=$2&$3
-        qsa = true
-      }
-
-      af {
-        pattern = ^/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?.*)?$
-        to = index.php?page=$1&type=$2&id=$3&$4
-        qsa = true
-      }
-
-      ag {
-        pattern = ^/([^/\&\?]+)/([^/\&\?]*)\.htm(\?.*)?$
-        to = index.php?page=$1&type=$2&$3
-        qsa = true
-      }
-
-      ah {
-        pattern = ^/([^/\&\?]+)\.htm(\?.*)?$
-        to = index.php?page=$1&$2
-        qsa = true
-      }
-    }
-  }
+		RewriteRules {
+			# Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
+			rule1 {
+			   pattern = ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$
+			   to = $1index.php\?page=$3
+			   qsa = true
+			}
+			# PG STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+			rule2 {
+			   pattern = ^([^=]*)pg/s/([^\&\?]*)/index\.php$
+			   to = $1index.php\?page=wiki&id=$2
+			   qsa = true
+			}
+			# PG STYLE: These have a specially reduce form (wide is implied)
+			rule3 {
+			   pattern = ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$
+			   to = $1index.php\?page=galleries&type=image&id=$2&wide=1$3
+			   qsa = true
+			}
+			
+			rule3 {
+			   pattern = ^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$
+			   to = $1index.php\?page=galleries&type=video&id=$2&wide=1$3
+			   qsa = true
+			}
+			
+			rule3 {
+			   pattern = ^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$
+			   to = $1index.php\?page=iotds&type=view&id=$2&wide=1$3
+			   qsa = true
+			}
+			# PG STYLE: These are standard patterns
+			rule4 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$
+			   to = $1index.php\?page=$2&type=$3&id=$4$5
+			   qsa = true
+			}
+			
+			rule4 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$
+			   to = $1index.php\?page=$2&type=$3$4
+			   qsa = true
+			}
+			
+			rule4 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)/index\.php(.*)$
+			   to = $1index.php\?page=$2$3
+			   qsa = true
+			}
+			
+			rule4 {
+			   pattern = ^([^=]*)pg/index\.php(.*)$
+			   to = $1index.php\?page=$3
+			   qsa = true
+			}
+			# PG STYLE: Now the same as the above sets, but without any additional parameters (and thus no index.php)
+			rule5 {
+			   pattern = ^([^=]*)pg/s/([^\&\?]*)$
+			   to = $1index.php\?page=wiki&id=$2
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/galleries/image/([^\&\?]*)$
+			   to = $1index.php\?page=galleries&type=image&id=$2&wide=1$3
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/galleries/video/([^\&\?]*)$
+			   to = $1index.php\?page=galleries&type=video&id=$2&wide=1$3
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/iotds/view/([^\&\?]*)$
+			   to = $1index.php\?page=iotds&type=view&id=$2&wide=1
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$
+			   to = $1index.php\?page=$2&type=$3&id=$4
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$
+			   to = $1index.php\?page=$2&type=$3&id=$4
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$
+			   to = $1index.php\?page=$2&type=$3
+			   qsa = true
+			}
+			
+			rule5 {
+			   pattern = ^([^=]*)pg/([^/\&\?]*)$
+			   to = $1index.php\?page=$2
+			   qsa = true
+			}
+			# PG STYLE: And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
+			rule6 {
+			   pattern = ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$
+			   to = $1index.php\?$3&page=wiki&id=$2
+			   qsa = true
+			}
+			
+			rule6 {
+			   pattern = ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$
+			   to = $1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3
+			   qsa = true
+			}
+			
+			rule6 {
+			   pattern = ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$
+			   to = $1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3
+			   qsa = true
+			}
+			
+			rule6 {
+			   pattern = ^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$
+			   to = $1index.php\?$3&page=iotds&type=view&id=$2&wide=1
+			   qsa = true
+			}
+			
+			rule6 {
+			   pattern = ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$
+			   to = $1index.php\?$5&page=$2&type=$3&id=$4
+			   qsa = true
+			}
+			
+			rule6 {
+			   pattern = ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$
+			   to = $1index.php\?$4&page=$2&type=$3
+			   qsa = true
+			}
+			
+			rule6 {
+			   pattern = ^([^=]*)pg/([^/\&\?\.]*)&(.*)$
+			   to = $1index.php\?$3&page=$2
+			   qsa = true
+			}
+			# HTM STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+			rule7 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$
+			   to = $1/index.php\?page=wiki&id=$2
+			   qsa = true
+			}
+			
+			rule7 {
+			   pattern = ^s/([^\&\?]*)\.htm$
+			   to = index\.php\?page=wiki&id=$1
+			   qsa = true
+			}
+			# HTM STYLE: These have a specially reduce form (wide is implied)
+			rule8 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$
+			   to = $1/index.php\?page=galleries&type=image&id=$2&wide=1
+			   qsa = true
+			}
+			
+			rule8 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$
+			   to = $1/index.php\?page=galleries&type=video&id=$2&wide=1
+			   qsa = true
+			}
+			
+			rule8 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$
+			   to = $1/index.php\?page=iotds&type=view&id=$2&wide=1
+			   qsa = true
+			}
+			# HTM STYLE: These are standard patterns
+			rule9 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$
+			   to = $1/index.php\?page=$2&type=$3&id=$4
+			   qsa = true
+			}
+			
+			rule9 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$
+			   to = $1/index.php\?page=$2&type=$3
+			   qsa = true
+			}
+			
+			rule9 {
+			   pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm$
+			   to = $1/index.php\?page=$2
+			   qsa = true
+			}
+			
+			rule9 {
+			   pattern = ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$
+			   to = index.php\?page=$1&type=$2&id=$3
+			   qsa = true
+			}
+			
+			rule9 {
+			   pattern = ^([^/\&\?]+)/([^/\&\?]*)\.htm$
+			   to = index.php\?page=$1&type=$2
+			   qsa = true
+			}
+			
+			rule9 {
+			   pattern = ^([^/\&\?]+)\.htm$
+			   to = index.php\?page=$1
+			   qsa = true
+			}
+			# SIMPLE STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+			#rule10 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)$
+			   #to = $1/index.php\?page=wiki&id=$2
+			   #qsa = true
+			#}
+			
+			#rule10 {
+			   #pattern = ^s/([^\&\?]*)$
+			   #to = index\.php\?page=wiki&id=$1
+			   #qsa = true
+			#}
+			# SIMPLE STYLE: These have a specially reduce form (wide is implied)
+			#rule11 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$
+			   #to = $1/index.php\?page=galleries&type=image&id=$2&wide=1
+			   #qsa = true
+			#}
+			
+			#rule11 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$
+			   #to = $1/index.php\?page=galleries&type=video&id=$2&wide=1
+			   #qsa = true
+			#}
+			
+			#rule11 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$
+			   #to = $1/index.php\?page=iotds&type=view&id=$2&wide=1
+			   #qsa = true
+			#}
+			# SIMPLE STYLE: These are standard patterns
+			#rule12 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$
+			   #to = $1/index.php\?page=$2&type=$3&id=$4
+			   #qsa = true
+			#}
+			
+			#rule12 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)$
+			   #to = $1/index.php\?page=$2&type=$3
+			   #qsa = true
+			#}
+			
+			#rule12 {
+			   #pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)$
+			   #to = $1/index.php\?page=$2
+			   #qsa = true
+			#}
+			
+			#rule12 {
+			   #pattern = ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$
+			   #to = index.php\?page=$1&type=$2&id=$3
+			   #qsa = true
+			#}
+			
+			#rule12 {
+			   #pattern = ^([^/\&\?]+)/([^/\&\?]*)$
+			   #to = index.php\?page=$1&type=$2
+			   #qsa = true
+			#}
+			
+			#rule12 {
+			   #pattern = ^([^/\&\?]+)$
+			   #to = index.php\?page=$1
+			   #qsa = true
+			#}
+		} # end rules
+	}
 }
 
 Http {
-  DefaultTimeout = 3000       # in seconds
-  SlowQueryThreshold = 5000   # in ms, log slow HTTP requests as errors
+	DefaultTimeout = 3000			 # in seconds
+	SlowQueryThreshold = 5000	 # in ms, log slow HTTP requests as errors
 }

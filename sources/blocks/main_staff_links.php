@@ -75,7 +75,7 @@ class Block_main_staff_links
 
 			$default_links=array(
 				'ocPortal.com'=>'http://ocportal.com/',
-				'ocPortal.com (topics with unread posts)'=>'http://ocportal.com/forum/vforums/unread.htm',
+				'ocPortal.com (topics with unread posts)'=>get_brand_page_url(array('page'=>'vforums','type'=>'unread'),'forum'),
 				'ocProducts (web development services)'=>'http://ocproducts.com/',
 				'Launchpad (ocPortal language translations)'=>'https://translations.launchpad.net/ocportal/+translations',
 				'Google Alerts'=>'http://www.google.com/alerts',

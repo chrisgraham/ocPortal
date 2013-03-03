@@ -34,7 +34,7 @@
 		<input class="button_page" type="submit" value="{!PROCEED} (&hellip;)" />
 	</p>
 
-	<p>&dagger; Currently we do not ship additional languages with ocPortal. However a <a href="https://translations.launchpad.net/ocportal/4.2.0">growing number</a> of <a target="_blank" title="community translations are on Launchpad: {!LINK_NEW_WINDOW}" href="http://ocportal.com/docs/tut_intl.htm">community translations are on Launchpad</a>.</p>
+	<p>&dagger; Currently we do not ship additional languages with ocPortal. However a <a href="https://translations.launchpad.net/ocportal/4.2.0">growing number</a> of <a target="_blank" title="community translations are on Launchpad: {!LINK_NEW_WINDOW}" href="{$TUTORIAL_URL*,tut_intl}">community translations are on Launchpad</a>.</p>
 </form>
 
 

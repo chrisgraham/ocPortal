@@ -466,7 +466,7 @@ END;
 			$warnings->attach(do_template('INSTALLER_NOTICE',array('MESSAGE'=>do_lang_tempcode('RECURSIVE_SERVER'))));
 	}
 	if ((file_exists(get_file_base().'/_config.php')) && (!is_writable_wrap(get_file_base().'/_config.php')) && (!function_exists('posix_getuid')) && ((strpos(PHP_OS,'WIN')!==false)))
-		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('TROUBLESOME_WINDOWS_SERVER'))));
+		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('TROUBLESOME_WINDOWS_SERVER',escape_html(get_tutorial_url('tut_adv_installation'))))));
 
 	// Some sanity checks
 	if (!@is_array($FILE_ARRAY)) // Secondary to the file-by-file check. Aims to give more specific information
@@ -751,7 +751,7 @@ function step_4()
 	$cookie_days='120';
 	$use_persistent=false;
 	require_code('version');
-	$table_prefix=($domain=='test.ocportal.com')?($forum_type.'_ocp_'):('ocp_');
+	$table_prefix=($domain=='test.example.com')?($forum_type.'_ocp_'):('ocp_');
 	if (strpos(strtoupper(PHP_OS),'WIN')!==false)
 	{
 		$db_site_host='127.0.0.1';
@@ -1061,7 +1061,7 @@ function step_5()
 			return do_template('INSTALLER_STEP_4',array(
 				'_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6',
 				'URL'=>$url,
-				'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),
+				'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE',escape_html(get_tutorial_url('tut_upgrade'))),
 				'LANG'=>$INSTALL_LANG,
 				'DB_TYPE'=>post_param('db_type'),
 				'FORUM_TYPE'=>post_param('forum_type'),
@@ -2606,34 +2606,39 @@ AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application
 </IfModule>
 END;
 
-$clauses[]=<<<END
-Options +FollowSymLinks
-END;
+/*REWRITE RULES START*/$clauses[]=<<<END
 
-$clauses[]=<<<END
+# Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
+Options +FollowSymLinks
+
 RewriteEngine on
 
+# If rewrites are directing to bogus URLs, try adding a "RewriteBase /" line, or a "RewriteBase /subdir" line if you're in a subdirectory. Requirements vary from server to server.
+
+# Anything that would point to a real file should actually be allowed to do so. If you have a "RewriteBase /subdir" command, you may need to change to "%{DOCUMENT_ROOT}/subdir/$1".
+RewriteCond %{DOCUMENT_ROOT}/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/$1 -l [OR]
+RewriteCond %{DOCUMENT_ROOT}/$1 -d
+RewriteRule (.*) - [L]
+
 # Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
-RewriteRule ^([^=]*)webdav.php/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ - [L]
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
-#  We shouldn't shorten them too much, or the actual zone or base url might conflict
+# PG STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=wiki&id=$2 [L,QSA]
 
-# These have a specially reduce form (wide is implied)
+# PG STYLE: These have a specially reduce form (wide is implied)
 RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,QSA]
 RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=iotds&type=view&id=$2&wide=1$3 [L,QSA]
 
-# These are standard patterns
+# PG STYLE: These are standard patterns
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=$2&type=$3&id=$4$5 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$ $1index.php\?page=$2&type=$3$4 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/index\.php(.*)$ $1index.php\?page=$2$3 [L,QSA]
-# This one is weird... apache strips out // and turns to /, thus requiring an extra pattern...
 RewriteRule ^([^=]*)pg/index\.php(.*)$ $1index.php\?page=$3 [L,QSA]
 
-# Now the same, but without any additional parameters (and thus no index.php)
+# PG STYLE: Now the same as the above sets, but without any additional parameters (and thus no index.php)
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)$ $1index.php\?page=wiki&id=$2 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,QSA]
@@ -2643,7 +2648,7 @@ RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$ $1index.php\?page=$2&
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$ $1index.php\?page=$2&type=$3 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?]*)$ $1index.php\?page=$2 [L,QSA]
 
-# And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
+# PG STYLE: And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
 RewriteRule ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$ $1index.php\?$3&page=wiki&id=$2 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3 [L,QSA]
@@ -2652,24 +2657,40 @@ RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.p
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$4&page=$2&type=$3 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
-#  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=wiki&id=$2 [L,QSA]
+# HTM STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=wiki&id=$2 [L,QSA]
 RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=wiki&id=$1 [L,QSA]
 
-# These have a specially reduce form (wide is implied)
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
+# HTM STYLE: These have a specially reduce form (wide is implied)
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
 
-# These are standard patterns
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.htm$ $1/index.php\?page=$2 [L,QSA]
+# HTM STYLE: These are standard patterns
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm$ $1/index.php\?page=$2 [L,QSA]
 RewriteRule ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ index.php\?page=$1&type=$2&id=$3 [L,QSA]
 RewriteRule ^([^/\&\?]+)/([^/\&\?]*)\.htm$ index.php\?page=$1&type=$2 [L,QSA]
 RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,QSA]
-END;
+
+# SIMPLE STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)$ $1/index.php\?page=wiki&id=$2 [L,QSA]
+#RewriteRule ^s/([^\&\?]*)$ index\.php\?page=wiki&id=$1 [L,QSA]
+
+# SIMPLE STYLE: These have a specially reduce form (wide is implied)
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
+
+# SIMPLE STYLE: These are standard patterns
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)$ $1/index.php\?page=$2&type=$3 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)$ $1/index.php\?page=$2 [L,QSA]
+#RewriteRule ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$ index.php\?page=$1&type=$2&id=$3 [L,QSA]
+#RewriteRule ^([^/\&\?]+)/([^/\&\?]*)$ index.php\?page=$1&type=$2 [L,QSA]
+#RewriteRule ^([^/\&\?]+)$ index.php\?page=$1 [L,QSA]
+END;/*REWRITE RULES END*/
 
 $clauses[]=<<<END
 order allow,deny

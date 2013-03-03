@@ -136,7 +136,7 @@ function rain_get_country_image($ip_address)
 	$country=geolocate_ip($ip_address);
 	if (is_null($country)) return '';
 
-	return 'http://ocportal.com/uploads/website_specific/flags/'.$country.'.gif';
+	return find_theme_image('flags/'.$country);
 }
 
 /**

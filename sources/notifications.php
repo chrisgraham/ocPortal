@@ -248,7 +248,7 @@ class Notification_dispatcher
 			{
 				if (count($members)>20)
 				{
-					$members=array(6=>A_INSTANT_EMAIL); // This is just for testing on ocportal.com, if lots of notifications going out it's probably a scary bug, so send just to Chris (#6) with a note
+					$members=array(6=>A_INSTANT_EMAIL); // This is just for testing, if lots of notifications going out it's probably a scary bug, so send just to Chris (#6) with a note
 					$message='OVER-ADDRESSED?'."\n\n".$message;
 				}
 			}

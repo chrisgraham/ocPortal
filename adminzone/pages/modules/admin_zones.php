@@ -562,7 +562,10 @@ class Module_admin_zones
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		if (get_option('htm_short_urls')=='1')
+		$url_scheme=get_option('url_scheme');
+		$change_htaccess=(($url_scheme=='HTM') || ($url_scheme=='SIMPLE'));
+		$htaccess_path=get_file_base().'/.htaccess';
+		if (($change_htaccess) && (file_exists($htaccess_path)) && (!is_writable_wrap($htaccess_path)))
 		{
 			attach_message(do_lang_tempcode('HTM_SHORT_URLS_CARE'),'warn');
 		}
@@ -615,10 +618,13 @@ class Module_admin_zones
 
 		$title=get_screen_title('ADD_ZONE');
 
+		$zone=post_param('zone');
+
+		check_zone_name($zone);
+
 		require_code('abstract_file_manager');
 		force_have_afm_details();
 
-		$zone=post_param('zone');
 		$_title=post_param('title');
 		$default_page=post_param('default_page');
 		$header_text=post_param('header_text');
@@ -629,6 +635,8 @@ class Module_admin_zones
 		$displayed_in_menu=post_param_integer('displayed_in_menu',0);
 
 		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu);
+
+		sync_htaccess_with_zones();
 
 		$this->set_permissions($zone);
 
@@ -799,6 +807,7 @@ class Module_admin_zones
 			$displayed_in_menu=post_param_integer('displayed_in_menu',0);
 
 			$new_zone=post_param('new_zone');
+			if ($new_zone!=$zone) check_zone_name($new_zone);
 			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone);
 
 			if ($new_zone!='') $this->set_permissions($new_zone);
@@ -834,6 +843,8 @@ class Module_admin_zones
 					persistent_cache_delete('THEME_IMAGES');
 				}
 			}
+
+			sync_htaccess_with_zones();
 
 			// Show it worked / Refresh
 			$url=get_param('redirect',NULL);

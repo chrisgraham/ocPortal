@@ -84,7 +84,7 @@ class Hook_fields_url_multi
 		$evs=explode(chr(10),$ev);
 		foreach ($evs as $ev)
 		{
-			$link_captions_title=$GLOBALS['SITE_DB']->query_value_null_ok('url_title_cache','t_title',array('t_url'=>$ev));
+			$link_captions_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$ev));
 
 			if ((is_null($link_captions_title)) || (substr($link_captions_title,0,1)=='!'))
 			{

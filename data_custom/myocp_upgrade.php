@@ -75,7 +75,7 @@ set_option('site_closed','1');
 clear_caches_1();
 
 // Reset demo
-http_download_file('http://ocportal.com/data_custom/ocpcom_web_service.php?call=demo_reset');
+http_download_file(brand_base_url()'/data_custom/ocpcom_web_service.php?call=demo_reset');
 
 // Run upgrade
 global $SITE_INFO;

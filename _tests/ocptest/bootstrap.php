@@ -105,12 +105,14 @@ function run_testset($testset)
 
 function testset_do_header($title)
 {
+	$brand_base_url=brand_base_url();
+
 	echo <<<END
 <!DOCTYPE html>
 	<html lang="EN">
 	<head>
 		<title>{$title}</title>
-		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
+		<link rel="icon" href="{$brand_base_url}/favicon.ico" type="image/x-icon" />
 
 		<style type="text/css">
 END;

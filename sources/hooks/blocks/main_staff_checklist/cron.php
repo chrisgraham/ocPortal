@@ -34,7 +34,7 @@ class Hook_checklist_cron
 		{
 			$status=0;
 			$info=NULL;
-			$url=brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration';
+			$url=get_tutorial_url('tut_configuration');
 		} else
 		{
 			$status=1;

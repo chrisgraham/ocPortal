@@ -155,25 +155,14 @@ class Hook_html_site
 			require_code('abstract_file_manager');
 			force_have_afm_details();
 
-			$change_htaccess=(get_option('htm_short_urls')=='1');
-			$htaccess_path=get_file_base().'/.htaccess';
-			if (($change_htaccess) && (file_exists($htaccess_path)) && (is_writable_wrap($htaccess_path)))
-			{
-				$htaccess=file_get_contents($htaccess_path);
-				$htaccess=preg_replace('#\(site\|forum\|adminzone\|cms\|personalzone\|collaboration[^\)]*#','${0}|'.implode('|',$new_zones),$htaccess);
-				$myfile=fopen($htaccess_path,'wt');
-				fwrite($myfile,$htaccess);
-				fclose($myfile);
-				fix_permissions($htaccess_path);
-				sync_file($htaccess_path);
-			}
-
 			// Create new zones as needed (and set them to our chosen theme too)
 			require_code('zones2');
 			foreach ($new_zones as $zone)
 			{
 				actual_add_zone($zone,titleify($zone),'start','',$theme,0,0);
 			}
+
+			sync_htaccess_with_zones();
 		}
 
 		// Discern cruft in htm/html via looking for best levenshtein to length ratio over a few pages; scan by tag, not by byte

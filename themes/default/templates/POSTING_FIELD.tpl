@@ -25,8 +25,8 @@
 					{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,COMCODE_URL}
 						{$,<li><a class="link_exempt" title="\{!COMCODE_MESSAGE,Comcode\}: \{!LINK_NEW_WINDOW\}" target="_blank" href="\{COMCODE_URL*\}"><img class="comcode_supported_icon" alt="\{!COMCODE_MESSAGE,Comcode\}" src="\{$IMG*,comcode\}" title="\{!COMCODE_MESSAGE,Comcode\}" /></a> \{!COMCODE_MESSAGE,<a class="link_exempt" title="Comcode: \{!LINK_NEW_WINDOW\}" target="_blank" href="\{COMCODE_URL*\}">Comcode</a>\}</li>}
 						{+START,IF,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages}}
-							<li><a class="link_exempt" title="{!FULL_COMCODE_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$BRAND_BASE_URL*}/docs/tut_comcode.htm">{!FULL_COMCODE_TUTORIAL}</a></li>
-							<li><a class="link_exempt" title="{!FULL_BLOCK_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$BRAND_BASE_URL*}/docs/tut_adv_comcode_pages.htm">{!FULL_BLOCK_TUTORIAL}</a></li>
+							<li><a class="link_exempt" title="{!FULL_COMCODE_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$TUTORIAL_URL*,tut_comcode}">{!FULL_COMCODE_TUTORIAL}</a></li>
+							<li><a class="link_exempt" title="{!FULL_BLOCK_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$TUTORIAL_URL*,tut_adv_comcode_pages}">{!FULL_BLOCK_TUTORIAL}</a></li>
 						{+END}
 					{+END}{+END}
 					{+START,IF,{$IN_STR,{CLASS},wysiwyg}}

@@ -795,4 +795,85 @@ function _find_all_modules($zone)
 	return find_all_pages($zone,'modules')+find_all_pages($zone,'modules_custom');
 }
 
+/**
+ * Update the .htaccess file with the latest zone names.
+ */
+function sync_htaccess_with_zones()
+{
+	$url_scheme=get_option('url_scheme');
+	$change_htaccess=(($url_scheme=='HTM') || ($url_scheme=='SIMPLE'));
+	$htaccess_path=get_file_base().'/.htaccess';
+	if (($change_htaccess) && (file_exists($htaccess_path)) && (is_writable_wrap($htaccess_path)))
+	{
+		$zones=find_all_zones();
 
+		$htaccess=file_get_contents($htaccess_path);
+		$htaccess=preg_replace('#\(site[^\)]*#','('.implode('|',$zones),$htaccess);
+		$myfile=fopen($htaccess_path,'wt');
+		fwrite($myfile,$htaccess);
+		fclose($myfile);
+		fix_permissions($htaccess_path);
+		sync_file($htaccess_path);
+	}
+}
+
+/**
+ * Check a zone name doesn't conflict, according to our URL scheme.
+ *
+ * @param  ID_TEXT		The zone name
+ */
+function check_zone_name($zone)
+{
+	$url_scheme=get_option('url_scheme');
+	if (($url_scheme=='SIMPLE') || ($url_scheme=='HTM'))
+	{
+		if ($url_scheme=='SIMPLE')
+		{
+			// No naming a zone the same as a root directory (a std dir)
+			if ((file_exists(get_file_base().'/'.$zone)) || (file_exists(get_custom_file_base().'/'.$zone)))
+			{
+				require_lang('zones');
+				warn_exit(do_lang_tempcode('CONFLICTING_ZONE_NAME'));
+			}
+		}
+
+		// No naming a zone the same as a welcome zone page
+		if (_request_page($zone,'')!==false)
+		{
+			require_lang('zones');
+			warn_exit(do_lang_tempcode('CONFLICTING_ZONE_NAME__PAGE'));
+		}
+	}
+}
+
+/**
+ * Check a page name doesn't conflict, according to our URL scheme.
+ *
+ * @param  ID_TEXT		The zone name
+ * @param  ID_TEXT		The page name
+ */
+function check_page_name($zone,$page)
+{
+	if ($zone=='')
+	{
+		$url_scheme=get_option('url_scheme');
+		if ($url_scheme=='SIMPLE')
+		{
+			// No naming a welcome zone page the same as a root directory (be it a std dir or a zone name)
+			if ((file_exists(get_file_base().'/'.$page)) || (file_exists(get_custom_file_base().'/'.$page)))
+			{
+				require_lang('zones');
+				warn_exit(do_lang_tempcode('CONFLICTING_PAGE_NAME'));
+			}
+		}
+		if ($url_scheme=='HTM')
+		{
+			// No naming a welcome zone page the same as a zone
+			if ((file_exists(get_file_base().'/'.$page.'/index.php')) || (file_exists(get_custom_file_base().'/'.$page.'/index.php')))
+			{
+				require_lang('zones');
+				warn_exit(do_lang_tempcode('CONFLICTING_PAGE_NAME'));
+			}
+		}
+	}
+}

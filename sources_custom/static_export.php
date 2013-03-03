@@ -135,7 +135,7 @@ function static_remove_dynamic_references($data,$relative_root='')
 	$data=preg_replace('#<link\s[^>]*href="[^"]*\.php[^"]*"[^>]*>\s*#','',$data);
 	$data=preg_replace('#<li><a href="[^"]*keep_mobile=1">.*</a></li>#U','',$data);
 	$data=preg_replace('#<noscript><a href="[^"]*keep_has_js=0">.*</a></noscript>#U','',$data);
-	$data=preg_replace('#<li><a href="[^"]*login.htm[^"]*">.*</a></li>#U','',$data);
+	$data=preg_replace('#<li><a href="[^"]*login[^"]*">.*</a></li>#U','',$data);
 	$data=preg_replace('#\?redirect=[^&"]*&amp;#','?',$data);
 	$data=preg_replace('#\?redirect=[^&"]*#','',$data);
 	$data=preg_replace('#&amp;redirect=[^&"]*#','',$data);

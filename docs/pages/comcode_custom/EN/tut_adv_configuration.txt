@@ -36,13 +36,6 @@ If a module has been upgraded (i.e. The on-disk file has been replaced with a ne
  - Use the module management interface to upgrade the module
 There is also a concept of a 'hacked' module (a module modified as a part of an unofficial addon): the process of performing any upgrades an on-disk file needs for this is the same as for a conventional module upgrade.
 
-[title="2"]Supplementary features[/title]
-
-For licensing reasons there are some minor features ocProducts cannot include in the standard ocPortal.
-You can get the following addons:
- - [url="An improved Admin Zone search"]http://ocportal.com/site/downloads/entry/243.htm[/url]
- - [url="An icon pack"]http://ocportal.com/site/downloads/entry/244.htm[/url]
-
 [title="2"]Permissions[/title]
 
 ocPortal has a rich, multi-layered, permission system. In creation of this system we have tried to strike a balance to keep all of these factors high:
@@ -164,59 +157,83 @@ To install IIRF:
 2) In IIS manager add the dll as an ISAPI filter, but only to the website that runs ocPortal. This means that the IIRF plugin will only affect the ocPortal website, which is important because the IIRF configuration file is not modular -- if it were applied to all websites on the server, it could cause serious problems.
 
 3) Make an [tt]IirfGlobal.ini[/tt] file in your [tt]Inetpub[/tt] folder containing the following:
-[codebox]
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
-#  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^/([^=]*)pg/s/([^\&\?]*)/index\.php$ /$1index.php\?page=wiki&id=$2 [L,U]
+[staff_note]begin_rewrite_rules[/staff_note][codebox]
+# Anything that would point to a real file should actually be allowed to do so. If you have a "RewriteBase /subdir" command, you may need to change to "%{DOCUMENT_ROOT}/subdir/$1".
+RewriteCond %{DOCUMENT_ROOT}/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/$1 -l [OR]
+RewriteCond %{DOCUMENT_ROOT}/$1 -d
+RewriteRule (.*) - [L]
 
-# These have a specially reduce form (wide is implied)
-RewriteRule ^/([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$ /$1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,U]
-RewriteRule ^/([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$ /$1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,U]
-RewriteRule ^/([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$ /$1index.php\?page=iotds&type=view&id=$2&wide=1$3 [L,U]
+# Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
+RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,U,R]
 
-# These are standard patterns
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$ /$1index.php\?page=$2&type=$3&id=$4$5 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$ /$1index.php\?page=$2&type=$3$4 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)/index\.php(.*)$ /$1index.php\?page=$2$3 [L,U]
-# This one is weird... apache strips out // and turns to /, thus requiring an extra pattern...
-RewriteRule ^/([^=]*)pg/index\.php(.*)$ /$1index.php\?page=$3 [L,U]
+# PG STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=wiki&id=$2 [L,U]
 
-# Now the same, but without any additional parameters (and thus no index.php)
-RewriteRule ^/([^=]*)pg/s/([^&\?]*)$ /$1index.php\?page=wiki&id=$2 [L,U]
-RewriteRule ^/([^=]*)pg/galleries/image/([^\&\?]*)$ /$1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,U]
-RewriteRule ^/([^=]*)pg/galleries/video/([^\&\?]*)$ /$1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,U]
-RewriteRule ^/([^=]*)pg/iotds/view/([^/&\?]*)$ /$1index.php\?page=iotds&type=view&id=$2&wide=1 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)/([^\&\?]*)/([^/\&\?]*)/$ /$1index.php\?page=$2&type=$3&id=$4 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)/([^\&\?]*)/([^\&\?]*)$ /$1index.php\?page=$2&type=$3&id=$4 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$ /$1index.php\?page=$2&type=$3 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?]*)$ /$1index.php\?page=$2 [L,U]
+# PG STYLE: These have a specially reduce form (wide is implied)
+RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,U]
+RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,U]
+RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=iotds&type=view&id=$2&wide=1$3 [L,U]
 
-# And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
-RewriteRule ^/([^=]*)pg/s/([^\&\?\.]*)&(.*)$ /$1index.php\?$3&page=wiki&id=$2 [L,U]
-RewriteRule ^/([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$ /$1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3 [L,U]
-RewriteRule ^/([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ /$1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3 [L,U]
-RewriteRule ^/([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$ /$1index.php\?$3&page=iotds&type=view&id=$2&wide=1 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^\&\?\.]*)&(.*)$ /$1index.php\?$5&page=$2&type=$3&id=$4 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ /$1index.php\?$4&page=$2&type=$3 [L,U]
-RewriteRule ^/([^=]*)pg/([^/\&\?\.]*)&(.*)$ /$1index.php\?$3&page=$2 [L,U]
+# PG STYLE: These are standard patterns
+RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=$2&type=$3&id=$4$5 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$ $1index.php\?page=$2&type=$3$4 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?]*)/index\.php(.*)$ $1index.php\?page=$2$3 [L,U]
+RewriteRule ^([^=]*)pg/index\.php(.*)$ $1index.php\?page=$3 [L,U]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
-#  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/s/([^&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=wiki&id=$2&$4 [L,U]
+# PG STYLE: Now the same as the above sets, but without any additional parameters (and thus no index.php)
+RewriteRule ^([^=]*)pg/s/([^\&\?]*)$ $1index.php\?page=wiki&id=$2 [L,U]
+RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,U]
+RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,U]
+RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)$ $1index.php\?page=iotds&type=view&id=$2&wide=1 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$ $1index.php\?page=$2&type=$3&id=$4 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$ $1index.php\?page=$2&type=$3&id=$4 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$ $1index.php\?page=$2&type=$3 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?]*)$ $1index.php\?page=$2 [L,U]
 
-# These have a specially reduce form (wide is implied)
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=galleries&type=image&id=$2&wide=1&$4 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/galleries/video/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=galleries&type=video&id=$2&wide=1&$4 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/iotds/view/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=iotds&type=view&id=$2&wide=1$4 [L,U]
+# PG STYLE: And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
+RewriteRule ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$ $1index.php\?$3&page=wiki&id=$2 [L,U]
+RewriteRule ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3 [L,U]
+RewriteRule ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3 [L,U]
+RewriteRule ^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=iotds&type=view&id=$2&wide=1 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=$2&type=$3&id=$4 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$4&page=$2&type=$3 [L,U]
+RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,U]
 
-# These are standard patterns
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=$2&type=$3&id=$4&$6 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=$2&type=$3&$5 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.htm(\?(.*))?$ /$1/index.php\?page=$2&$4 [L,U]
-RewriteRule ^/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?(.*))?$ /index.php\?page=$1&type=$2&id=$3&$5 [L,U]
-RewriteRule ^/([^/\&\?]+)/([^/\&\?]*)\.htm(\?(.*))?$ /index.php\?page=$1&type=$2&$4 [L,U]
-RewriteRule ^/([^/\&\?]+)\.htm(\?(.*))?$ /index.php\?page=$1&$3 [L,U]
-[/codebox]
+# HTM STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=wiki&id=$2 [L,U]
+RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=wiki&id=$1 [L,U]
+
+# HTM STYLE: These have a specially reduce form (wide is implied)
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,U]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,U]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,U]
+
+# HTM STYLE: These are standard patterns
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3&id=$4 [L,U]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3 [L,U]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm$ $1/index.php\?page=$2 [L,U]
+RewriteRule ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ index.php\?page=$1&type=$2&id=$3 [L,U]
+RewriteRule ^([^/\&\?]+)/([^/\&\?]*)\.htm$ index.php\?page=$1&type=$2 [L,U]
+RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,U]
+
+# SIMPLE STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)$ $1/index.php\?page=wiki&id=$2 [L,U]
+#RewriteRule ^s/([^\&\?]*)$ index\.php\?page=wiki&id=$1 [L,U]
+
+# SIMPLE STYLE: These have a specially reduce form (wide is implied)
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,U]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,U]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,U]
+
+# SIMPLE STYLE: These are standard patterns
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$ $1/index.php\?page=$2&type=$3&id=$4 [L,U]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)$ $1/index.php\?page=$2&type=$3 [L,U]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)$ $1/index.php\?page=$2 [L,U]
+#RewriteRule ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$ index.php\?page=$1&type=$2&id=$3 [L,U]
+#RewriteRule ^([^/\&\?]+)/([^/\&\?]*)$ index.php\?page=$1&type=$2 [L,U]
+#RewriteRule ^([^/\&\?]+)$ index.php\?page=$1 [L,U]
+[/codebox][staff_note]end_rewrite_rules[/staff_note]
 
 4) Reset IIS
 

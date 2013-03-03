@@ -191,7 +191,7 @@ class Module_topics
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'85e30370bb9e45b2b9a7cd6463d69557',
 			'SKIP_VALIDATION'=>true,
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
 			'TEXT'=>$text,
@@ -423,7 +423,7 @@ class Module_topics
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'d62d2c81583398f26f900ee3df1894b1',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -468,7 +468,7 @@ class Module_topics
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'a476da1fecfbd932db4853cdbd7cfedd',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -892,7 +892,7 @@ class Module_topics
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'69908b7e2711414c13395535d6547096',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_forum_helpdesk'),
 			'PREVIEW'=>true,
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
@@ -960,7 +960,7 @@ class Module_topics
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'7532b5e7239e0f9ceb64d09c28fd7261',
 			'SKIP_VALIDATION'=>true,
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -1309,7 +1309,7 @@ class Module_topics
 			$username=($member_id==get_member())?false:$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 			if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
-			$staff_help_url=brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance';
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_correspondance'),
 		} else
 		{
 			if (!is_null($forum_id))
@@ -2274,7 +2274,7 @@ END;
 			return do_template('FORM_SCREEN',array(
 				'_GUID'=>'c10e882fa621b5230f455b41f40514c0',
 				'SKIP_VALIDATION'=>true,
-				'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+				'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 				'HIDDEN'=>$hidden,
 				'TITLE'=>$title,
 				'TEXT'=>$text,
@@ -2719,7 +2719,7 @@ END;
 		$title=get_screen_title('EDIT_POST');
 		return do_template('POSTING_SCREEN',array(
 			'_GUID'=>'347e469de58882bf77722bba6ed4aba4',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'TITLE'=>$title,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
@@ -2955,7 +2955,7 @@ END;
 		$submit_name=do_lang_tempcode('SAVE');
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'071b6747a1df1cf8e72f8f542422aa5b',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden_fields,
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -3045,7 +3045,7 @@ END;
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'00b84f337de3683bfcdb60ea3086afa0',
 			'SKIP_VALIDATION'=>true,
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -3103,7 +3103,7 @@ END;
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'9f28869bd74262ae20ba79ace14b87ca',
 			'SKIP_VALIDATION'=>true,
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_correspondance'),
 			'HIDDEN'=>'',
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -3174,7 +3174,7 @@ END;
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'992a1bfd025e3fabea9d13307cfd2a91',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'PREVIEW'=>true,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
@@ -3301,7 +3301,7 @@ END;
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'313fd175ccd376caa32794fedad21ac6',
 			'SKIP_VALIDATION'=>true,
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>'',
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -3505,7 +3505,7 @@ END;
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'2eef0c445d207bb10ff3fd28ea32ef8c',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_forum_helpdesk'),
 			'PREVIEW'=>true,
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
@@ -3592,7 +3592,7 @@ END;
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'9416df197ee157510e9d6be7458d510f',
-			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance',
+			'STAFF_HELP_URL'=>get_tutorial_url('tut_correspondance'),
 			'HIDDEN'=>$hidden,
 			'TITLE'=>$title,
 			'TEXT'=>$text,

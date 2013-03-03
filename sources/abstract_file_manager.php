@@ -25,7 +25,7 @@ The abstract file manager allows easy and transparent file system maintenance, e
 /**
  * Standard code module initialisation function.
  */
-function init__controller__abstract_file_manager()
+function init__abstract_file_manager()
 {
 	require_lang('abstract_file_manager');
 	require_lang('installer');

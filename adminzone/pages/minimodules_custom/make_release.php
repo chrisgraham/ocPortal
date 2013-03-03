@@ -90,7 +90,7 @@ function phase_0()
 		<br />
 		<fieldset>
 			<legend>Changes</legend>
-			<label for="changes">What are the changes in this release? You might find the <a href="http://ocportal.com/site/pg/catalogues/index/bugs">bug report database</a> handy, as well as git diffs and sweet-smelling roses.</label>
+			<label for="changes">What are the changes in this release? You might find the <a href="http://ocportal.com/site/catalogues/index/bugs.htm">bug report database</a> handy, as well as git diffs and sweet-smelling roses.</label>
 			<textarea name="changes" id="changes" style="width: 100%" cols="40" rows="20">'.escape_html($changes).'</textarea>
 			</fieldset>
 			<fieldset>

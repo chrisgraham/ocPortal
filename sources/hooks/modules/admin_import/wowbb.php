@@ -124,7 +124,6 @@ class Hook_wowbb
 			'POSTS_PER_PAGE'=>'forum_posts_per_page',
 			'TOPICS_PER_PAGE'=>'forum_topics_per_page',
 			'BOARD_EMAIL'=>'staff_address',
-			'SE_FRIENDLY_URLS'=>'mod_rewrite',
 			'ATTACHMENT_ALLOWED_EXTENSIONS'=>'valid_types',
 		);
 

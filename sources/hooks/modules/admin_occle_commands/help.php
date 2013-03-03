@@ -53,7 +53,7 @@ class Hook_help
 		else
 		{
 			// Output a standard "how to use Occle" help page
-			return array('window.open(unescape("'.urlencode('http://ocportal.com/docs'.strval(ocp_version()).'/pg/tut_occle').'"),"occle_window1","");','',do_lang('SUCCESS'),'');
+			return array('window.open(unescape("'.urlencode(get_tutorial_url('occle')).'"),"occle_window1","");','',do_lang('SUCCESS'),'');
 		}
 	}
 

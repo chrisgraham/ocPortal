@@ -32,7 +32,7 @@ The second option is the manual installer. This option requires you to manually 
 [title="2"]Preparing files[/title]
 
 [exp_thumb="Example of \"Download Now\" link" float="left"]install_download[/exp_thumb]
-To install ocPortal, you must first download it from our web site (http://www.ocportal.com/pg/download). It is generally best to choose the latest version, and, as stated above, we also recommend choosing the "quick method".
+To install ocPortal, you must first download it from our web site ({$BRAND_BASE_URL}). It is generally best to choose the latest version, and, as stated above, we also recommend choosing the "quick method".
 
 Download ocPortal from our website. Save it to a location where you'll be able to find it.
 
@@ -158,7 +158,7 @@ Remember -- if you chose the quick install option, it's likely that none of thes
 
 After you upload these files, you've completed the hardest part of the installation. The next step is to open your web browser and go to [tt]http://www.mywebsite.com/install.php[/tt] (substitute '[tt]http://www.mywebsite.com/[/tt]' as appropriate for your domain and install path). You should be greeted with a welcome screen, asking you which language you would like to use.
 
-On step two, you are shown a license agreement. You must agree to the license agreement before you can install ocPortal. You also have the opportunity to sign up for our newsletter, which will notify you by email of any updates to our software. ocPortal will never sell or rent your email address to a third party. You can read our [url="privacy policy"]http://ocportal.com/pg/privacy[/url] for more information.
+On step two, you are shown a license agreement. You must agree to the license agreement before you can install ocPortal. You also have the opportunity to sign up for our newsletter, which will notify you by email of any updates to our software. ocPortal will never sell or rent your email address to a third party. You can read our [page=":privacy"]privacy policy[/page] for more information.
 
 On step three, you are presented with a choice to choose which forum system you would like to use for your website. We recommend that you use ocPortal's own forum (OCF), which if chosen will be installed at the same time as ocPortal. If you're using a third-party forum software, then you will need to already have it installed. Select the name of the software on the left, and then choose the appropriate version from the right-hand column.
 
@@ -193,5 +193,5 @@ Congratulations on your successful installation![/urround]
  - [page="_SEARCH:tut_configuration"]Basic Configuration[/page]
  - [page="tut_webapp"]Web applications information[/page]
  - [page="tut_web_hosting"]Web hosting information[/page] (including ocPortal minimum requirements)
- - [url="ocProducts privacy policy"]http://ocportal.com/pg/privacy[/url]
+ - [page=":privacy"]ocProducts privacy policy[/page]
  - [page="tut_uninstall"]Uninstalling ocPortal[/page]

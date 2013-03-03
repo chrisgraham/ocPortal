@@ -852,6 +852,10 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 		<td>The brand URL, defaults to http://ocportal.com</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$TUTORIAL_URL}</td>
+		<td>A tutorial URL, linking under the brand URL's docs zone</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$COPPA_ON}</td>
 		<td>Whether COPPA is configured to be on</td>
 	</tr>
@@ -1354,7 +1358,7 @@ You can store and retrieve values in Tempcode variables. These work across templ
 					<li>the CSS width</li>
 					<li>'|' separated list of options (meaning dependant upon templates interpretation)</li>
 					<li>'|' separated list of meta information (key|value|key|value|...) (e.g. [/html][tt]Name|Allen|Gender|Male|Country|USA[/tt][html])</li>
-					<li>'|' separated list of link information (linkhtml|...)  (e.g. [/html][tt]<a href="http://ocportal.com">ocPortal</a>|<a href="http://ocproducts.com">ocProducts</a>[/tt][html])</li>
+					<li>'|' separated list of link information (linkhtml|...)  (e.g. [/html][tt]<a href="http://example.com">Example</a>|<a href="http://google.com">Example</a>[/tt][html])</li>
 					<li>the links added to the top left of the box (Defaults to false)</li>
 		</ol></td>
 	</tr>

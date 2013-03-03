@@ -610,7 +610,7 @@ function myocp_delete_old_sites()
 	foreach ($sites as $site)
 	{
 		$subject=do_lang('MO_EMAIL_EXPIRE_SUBJECT',$site['s_codename']);
-		$message=do_lang('MO_EMAIL_EXPIRE_BODY',comcode_escape($site['s_codename']));
+		$message=do_lang('MO_EMAIL_EXPIRE_BODY',comcode_escape($site['s_codename']),get_brand_page_url(array('page'=>'free_tickets'),'site'));
 		$email_address=$GLOBALS['SITE_DB']->query_select_value_if_there('sites_email','s_email_to',array('s_codename'=>$site['s_codename'],'s_email_from'=>'staff'));
 		if (!is_null($email_address))
 			mail_wrap($subject,$message,array($email_address));
