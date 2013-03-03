@@ -171,15 +171,21 @@ class Module_admin_config
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
 		{
-			delete_config_option('htm_short_urls');
-			delete_config_option('mod_rewrite');
+			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('CDN','cdn','line','return \'<autodetect>\';','SITE','ADVANCED');
+			$url_scheme='RAW';
+			if ($upgrade_from<15)
+			{
+				if (get_option('mod_rewrite')=='1') $url_scheme='PG';
+				if (get_option('htm_short_urls')=='1') $url_scheme='HTM';
+			}
+			add_config_option('URL_SCHEME','url_scheme','list','return \''.$url_scheme.'\';','SITE','GENERAL',0,'RAW|PG|HTM|SIMPLE');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
 		{
-			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
-			add_config_option('CDN','cdn','line','return \'<autodetect>\';','SITE','ADVANCED');
-			add_config_option('URL_SCHEME','url_scheme','list','return \'RAW\';','SITE','GENERAL',0,'RAW|PG|HTM|SIMPLE');
+			delete_config_option('htm_short_urls');
+			delete_config_option('mod_rewrite');
 		}
 
 		if (is_null($upgrade_from))
