@@ -17,7 +17,7 @@
 
 	{+START,IF_PASSED,ADD_REDIRECT_URL}
 		{+START,IF_NON_EMPTY,{ADD_REDIRECT_URL}}
-			<a href="{ADD_REDIRECT_URL*}"><img class="button_page" src="{$IMG*,page/redirect}" alt="{!REDIRECTING}" title="{!REDIRECTING}" /></a>
+			<a href="{ADD_REDIRECT_URL*}"><img class="button_page" src="{$IMG*,page/redirect}" alt="{!redirects:NEW_REDIRECT}" title="{!redirects:NEW_REDIRECT}" /></a>
 		{+END}
 	{+END}
 {+END}

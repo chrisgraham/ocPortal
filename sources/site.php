@@ -278,7 +278,7 @@ function attach_message($message,$type='inform')
 
 	foreach ($ATTACHED_MESSAGES_RAW as $last)
 	{
-		if (array(is_object($last[0])?$last[0]->evaluate():$last[0],$last[1])==array(is_object($message)?$message->evaluate():$message,$type))
+		if (array(strip_tags(is_object($last[0])?$last[0]->evaluate():$last[0]),$last[1])==array(strip_tags(is_object($message)?$message->evaluate():$message),$type))
 		{
 			$am_looping=false;
 			return ''; // Already shown
@@ -1307,9 +1307,9 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	}
 
 	// Redirect
-	if ((!$no_redirect_check) && (get_value('no_priority_redirects')==='1') && (addon_installed('redirects_editor')))
+	if ((!$no_redirect_check) && (addon_installed('redirects_editor')))
 	{
-		$test=_request_page__redirects($codename,$zone);
+		$test=_request_page__redirects($codename,$zone,true/*include wildcards as this is lowest priority*/);
 		if ($test!==false) return $test;
 	}
 
@@ -1321,18 +1321,33 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
  *
  * @param  ID_TEXT			The codename of the page to load
  * @param  ID_TEXT			The zone the page is being loaded in
+ * @param  boolean			Whether to also search in wildcard mode
  * @return ~array				A list of details (false: page not found)
  */
-function _request_page__redirects($codename,$zone)
+function _request_page__redirects($codename,$zone,$wildcard_mode=false)
 {
 	global $REDIRECT_CACHE;
 	if ($REDIRECT_CACHE===NULL) load_redirect_cache();
 	if (array_key_exists($zone,$REDIRECT_CACHE))
 	{
-		$redirect=array_key_exists($codename,$REDIRECT_CACHE[$zone])?array($REDIRECT_CACHE[$zone][$codename]):array();
+		if (array_key_exists($codename,$REDIRECT_CACHE[$zone]))
+		{
+			$redirect=array($REDIRECT_CACHE[$zone][$codename]);
+		}
+		elseif (($wildcard_mode) && (array_key_exists($codename,$REDIRECT_CACHE['*'])))
+		{
+			$redirect=array($REDIRECT_CACHE['*'][$codename]);
+		} else
+		{
+			$redirect=array();
+		}
 	} else
 	{
-		$redirect=$GLOBALS['SITE_DB']->query_select('redirects',array('*'),array('r_from_zone'=>$zone,'r_from_page'=>$codename),'',1);
+		$query='SELECT * FROM '.get_table_prefix().'redirects WHERE ('.db_string_equal_to('r_from_zone','*');
+		if ($wildcard_mode) $query.=' OR '.db_string_equal_to('r_from_zone',$zone);
+		$query.=') AND '.db_string_equal_to('r_from_page',$codename);
+		$query.=' ORDER BY r_from_zone DESC'; // The ordering ensures '*' comes last, as we want to deprioritise this
+		$redirect=$GLOBALS['SITE_DB']->query($query,1);
 	}
 	if (array_key_exists(0,$redirect))
 	{
