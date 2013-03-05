@@ -329,7 +329,7 @@ class Database_Static_postgresql
 	 */
 	function db_query($query,$db,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false)
 	{
-		if (strtoupper(substr($query,0,7))=='SELECT ')
+		if (strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ')
 		{
 			if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval(intval($max)).' OFFSET '.strval(intval($start));
 			elseif (!is_null($max)) $query.=' LIMIT '.strval(intval($max));
@@ -337,7 +337,7 @@ class Database_Static_postgresql
 		}
 
 		$results=@pg_query($db,$query);
-		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') && ($results===true))) && (!$fail_ok))
+		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results===true))) && (!$fail_ok))
 		{
 			$err=pg_last_error($db);
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
@@ -353,7 +353,7 @@ class Database_Static_postgresql
 			}
 		}
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') && ($results!==false) && ($results!==true))
+		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results!==false) && ($results!==true))
 		{
 			return $this->db_get_query_rows($results);
 		}

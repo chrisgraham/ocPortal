@@ -1057,7 +1057,7 @@ class database_driver
 		{
 			$before=microtime(false);
 		}
-		if (substr(strtoupper($query),0,7)=='SELECT ')
+		if ((substr(strtoupper($query),0,7)=='SELECT ') || (substr(strtoupper($query),0,8)=='(SELECT '))
 		{
 			$connection=&$this->connection_read;
 		} else

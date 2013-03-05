@@ -182,7 +182,6 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_threaded_buttons[/tt] -- set this to '1' if you don't want the buttons to switch between linear and threaded mode on the forum.
  - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost).
  - [tt]memory_tracking[/tt] -- set this to '1' if you want error mails to go out if a non-admin uses more than 50MB of memory. The check happens during Tempcode output phase.
- - [tt]max_rows_to_preload[/tt] -- set this to the number of rows the search system may load up, to get optimum sorting and result summarisation. Default is 500. Each record usually takes around 3kb.
  - [tt]ocselect_protected_fields[/tt] -- a comma-separated list of fields ocSelect cannot work on (above the ones hard-coded as forbidden).
  - [tt]memory_limit[/tt] -- set this to a memory limit to override ocPortal's built in one (e.g. "128M"). This will make memory bugs on your server more dangerous, so use at your own risk (a memory usage problem can take down a whole server) -- although memory bugs are unlikely given that ocPortal users report if they ever see this error.
  - [tt]no_call_home[/tt] -- disable the private sharing of your website URL to the ocPortal developers when the Admin Zone front page loads.
