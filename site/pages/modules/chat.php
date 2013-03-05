@@ -261,7 +261,9 @@ class Module_chat
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'CHAT_LOBBY','private'=>'CREATE_PRIVATE_ROOM','blocking_interface'=>'MEMBER_BLOCKING','set_effects'=>'CHAT_SET_EFFECTS');
+		$ret=array('misc'=>'CHAT_LOBBY','private'=>'CREATE_PRIVATE_ROOM','blocking_interface'=>'MEMBER_BLOCKING');
+		if (!is_guest()) $ret['set_effects']='CHAT_SET_EFFECTS';
+		return $ret;
 	}
 
 	/**
@@ -1120,6 +1122,8 @@ class Module_chat
 		$title=get_page_title('CHAT_SET_EFFECTS');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
+
+		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		require_lang('javascript');
 		require_javascript('javascript_chat');

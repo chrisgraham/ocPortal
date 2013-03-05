@@ -633,7 +633,11 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
 
-				if ($query!='') $query.=' UNION ';
+				if ($query!='')
+				{
+					$query.=' LIMIT '.strval($max);
+					$query.=' UNION ';
+				}
 
 				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
 				{
