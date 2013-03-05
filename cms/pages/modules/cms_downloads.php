@@ -430,7 +430,7 @@ class Module_cms_downloads extends standard_aed_module
 	 */
 	function nice_get_ajax_tree()
 	{
-		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'downloads'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));

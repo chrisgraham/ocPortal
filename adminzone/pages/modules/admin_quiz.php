@@ -306,7 +306,7 @@ class Module_admin_quiz
 		{
 			$entries->attach(form_input_list_entry(strval($m['id']),false,get_translated_text($m['q_name'])));
 		}
-		if ($entries->is_empty()) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($entries->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_list(do_lang_tempcode('SURVEY'),'','id',$entries,NULL,true));
@@ -394,7 +394,7 @@ class Module_admin_quiz
 
 			$fields->attach(results_entry(array($date_link,$member_link),false));
 		}
-		if ($fields->is_empty()) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		$results=results_table(do_lang_tempcode('SURVEY_RESULTS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
 		return do_template('SURVEY_RESULTS_SCREEN',array('_GUID'=>'3f38ac1b94fb4de8219b8f7108c7b0a3','TITLE'=>$title,'SUMMARY'=>$summary,'RESULTS'=>$results));

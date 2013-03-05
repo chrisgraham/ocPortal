@@ -459,7 +459,7 @@ class Module_admin_newsletter extends standard_aed_module
 		}
 		imap_close($mbox);
 
-		if ($num==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($num==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=get_self_url();
