@@ -32,7 +32,13 @@
 									window.location='{$PAGE_LINK;,:}';
 								} else
 								{
-									window.top.location.reload();
+									var current_url=window.top.location.href;
+									if (current_url.indexOf('keep_refreshed_once=1')==-1)
+									{
+										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'keep_refreshed_once=1';
+										window.top.location=current_url;
+									}
+									else window.alert('Could not login, probably due to restrictive cookie settings.');
 								}
 							},500);
 						{+END}
@@ -72,7 +78,13 @@
 									window.location='{$PAGE_LINK;,:}';
 								} else
 								{
-									window.top.location.reload();
+									var current_url=window.top.location.href;
+									if (current_url.indexOf('keep_refreshed_once=1')==-1)
+									{
+										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'keep_refreshed_once=1';
+										window.top.location=current_url;
+									}
+									else window.alert('Could not login, probably due to restrictive cookie settings.');
 								}
 							},500);
 						}
