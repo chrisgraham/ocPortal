@@ -635,7 +635,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($query!='(')
 				{
-					if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
+					if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 					{
 						$query.=' ORDER BY '.$order;
 						if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
@@ -648,7 +648,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
 			}
-			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
+			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 			{
 				$query.=' ORDER BY '.$order;
 				if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
