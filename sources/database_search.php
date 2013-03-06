@@ -494,15 +494,15 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
 			}
 
+			$keywords_query='SELECT '.$select.' FROM '.$_keywords_query;
 			if (!db_has_subqueries($db->connection_read))
 			{
-				$keywords_query='SELECT '.$select.' FROM '.$_keywords_query;
 				$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
 			} else
 			{
 				$_count_query_keywords_search='(SELECT COUNT(*) FROM (';
 				$_count_query_keywords_search.='SELECT 1 FROM '.$_keywords_query;
-				$_count_query_keywords_search.=' LIMIT 10000) counter)';
+				$_count_query_keywords_search.=' LIMIT 1000) counter)';
 			}
 
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
@@ -687,7 +687,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($_query!='') $_query.='+';
 
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where==''))
+				if (!db_has_subqueries($db->connection_read))
 				{
 					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
@@ -696,7 +696,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				{
 					$_query.='(SELECT COUNT(*) FROM (';
 					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
-					$_query.=' LIMIT 10000) counter)';
+					$_query.=' LIMIT 1000) counter)';
 				}
 			}
 			$_count_query_main_search='SELECT ('.$_query.')';
@@ -707,7 +707,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 		$query.=($group_by_ok?' GROUP BY r.id':'');
 
-		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
+		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 		{
 			$query.=' ORDER BY '.$order;
 			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';

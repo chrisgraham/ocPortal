@@ -239,6 +239,10 @@ class Module_forumview
 			$of_member_id=NULL;
 		}
 
+		// Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this
+		if (($start>$max*5) && (is_guest()) && (!is_null(get_bot_type())))
+			access_denied('NOT_AS_GUEST');
+
 		require_code('ocf_general');
 		ocf_set_context_forum($id);
 

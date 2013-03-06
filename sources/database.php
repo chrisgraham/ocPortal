@@ -526,7 +526,13 @@ class database_driver
 
 		if (count($all_values)==1) // usually $all_values only has length of 1
 		{
-			$query='INSERT INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
+			if (($table=='stats') && (substr(get_db_type(),0,5)=='mysql'))
+			{
+				$query='INSERT DELAYED INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
+			} else
+			{
+				$query='INSERT INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
+			}
 		} else
 		{
 			// So we can do batch inserts...

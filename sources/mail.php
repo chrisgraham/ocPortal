@@ -488,6 +488,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		{
 			$file_contents=mixed();
 			$matches=array();
+			require_code('attachments');
 			if ((preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches)!=0) && (strpos($img,'forum_db=1')===false))
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id'=>intval($matches[1])),'ORDER BY a_add_time DESC');
