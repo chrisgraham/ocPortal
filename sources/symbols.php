@@ -2213,8 +2213,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_FRIEND':
 				if (isset($param[0]))
 				{
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
-					$value=is_null($test)?'0':'1';
+					if (addon_installed('chat'))
+					{
+						$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
+						$value=is_null($test)?'0':'1';
+					} else
+					{
+						$value='0';
+					}
 				}
 				break;
 
