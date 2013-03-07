@@ -156,7 +156,7 @@ class Module_vforums
 		$title=do_lang_tempcode('TOPICS_UNREAD');
 		$condition=array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
 
-		return array(get_screen_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
+		return array(get_screen_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'p_time DESC',true));
 	}
 
 	/**
@@ -194,6 +194,10 @@ class Module_vforums
 		$start=get_param_integer('forum_start',0);
 		$type=get_param('type','misc');
 		$forum_name=do_lang_tempcode('VIRTUAL_FORUM');
+
+		// Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this
+		if (($start>$max*5) && (is_guest()) && (!is_null(get_bot_type())))
+			access_denied('NOT_AS_GUEST');
 
 		// Find topics
 		$extra='';
