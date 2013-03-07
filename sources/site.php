@@ -763,7 +763,8 @@ function do_site()
 	$last_space_check=get_value('last_space_check');
 	if (($last_space_check===NULL) || (intval($last_space_check)<time()-60*60*3))
 	{
-		set_value('last_space_check',strval(time()));
+		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+			set_value('last_space_check',strval(time()));
 
 		$low_space_check=intval(get_option('low_space_check'))*1024*1024;
 		$disk_space=@disk_free_space(get_file_base());
@@ -1491,9 +1492,17 @@ function log_stats($string,$pg_time)
 	if ((get_option('no_bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
 
 	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'the_user'=>$member,'date_and_time'=>$time,'referer'=>$referer,'get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)),false,true);
-	if (mt_rand(0,1000)==1) $GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*intval(get_option('stats_store_time'))));
+	if (mt_rand(0,1000)==1)
+	{
+		if (!$GLOBALS['SITE_DB']->table_is_locked('stats'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*intval(get_option('stats_store_time'))));
+	}
 
 	global $SITE_INFO;
-	if (isset($SITE_INFO['throttle_bandwidth_views_per_meg'])) set_value('page_views',strval(intval(get_value('page_views'))+1));
+	if (isset($SITE_INFO['throttle_bandwidth_views_per_meg']))
+	{
+		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+			set_value('page_views',strval(intval(get_value('page_views'))+1));
+	}
 }
 

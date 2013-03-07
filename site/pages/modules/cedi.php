@@ -438,7 +438,8 @@ class Module_cedi
 		if (get_db_type()!='xml')
 		{
 			$page['seedy_views']++;
-			$GLOBALS['SITE_DB']->query_update('seedy_pages',array('seedy_views'=>$page['seedy_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('seedy_pages')) // TODO: Update for v10
+				$GLOBALS['SITE_DB']->query_update('seedy_pages',array('seedy_views'=>$page['seedy_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		seo_meta_load_for('seedy_page',strval($id),$title_to_use_2);

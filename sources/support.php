@@ -1296,7 +1296,8 @@ function member_tracking_update()
 	if ($type=='/') $type='';
 	if ($id=='/') $id='';
 
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval((integer)get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
+	if (!$GLOBALS['SITE_DB']->table_is_locked('member_tracking'))
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval((integer)get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
 
 	$GLOBALS['SITE_DB']->query_insert('member_tracking',array(
 		'mt_member_id'=>get_member(),
@@ -1387,7 +1388,8 @@ function get_num_users_site()
 		if (strval($count)!=$NUM_USERS_SITE)
 		{
 			$NUM_USERS_SITE=strval($count);
-			set_value('users_online',$NUM_USERS_SITE);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('users_online',$NUM_USERS_SITE);
 		}
 	}
 	if ((intval($NUM_USERS_SITE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_specific_permission(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
@@ -1404,7 +1406,8 @@ function get_num_users_site()
 		{
 			$_peak_users_user=$GLOBALS['SITE_DB']->query_value_null_ok('usersonline_track','MAX(peak)',NULL,'',true);
 			$PEAK_USERS_EVER=($_peak_users_user===NULL)?$NUM_USERS_SITE:strval($_peak_users_user);
-			set_value('user_peak',$PEAK_USERS_EVER);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('user_peak',$PEAK_USERS_EVER);
 		}
 		if ($NUM_USERS_SITE>$PEAK_USERS_EVER)
 		{

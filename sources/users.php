@@ -393,7 +393,8 @@ function delete_expired_sessions_or_recover($member=NULL)
 	$ip=get_ip_address(3);
 
 	// Delete expired sessions
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
+	if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
 	$new_session=NULL;
 	$dirty_session_cache=false;
 	global $SESSION_CACHE;

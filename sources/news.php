@@ -253,7 +253,8 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		// Send out on RSS cloud
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'news_rss_cloud WHERE register_time<'.strval(time()-25*60*60));
+		if (!$GLOBALS['SITE_DB']->table_is_locked('news_rss_cloud'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'news_rss_cloud WHERE register_time<'.strval(time()-25*60*60));
 		$start=0;
 		do
 		{

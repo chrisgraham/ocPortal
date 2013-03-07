@@ -526,7 +526,7 @@ class database_driver
 
 		if (count($all_values)==1) // usually $all_values only has length of 1
 		{
-			if (($table=='stats') && (substr(get_db_type(),0,5)=='mysql'))
+			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql'))
 			{
 				$query='INSERT DELAYED INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
 			} else
@@ -1273,6 +1273,31 @@ class database_driver
 	{
 		require_code('database_helper');
 		_helper_refresh_field_definition($this,$type);
+	}
+
+	/**
+	 * Find if a table is locked for more than 5 seconds. Only works with MySQL.
+	 *
+	 * @param  ID_TEXT		The table name
+	 * @param  boolean		Whether the table is locked
+	 */
+	function table_is_locked($tbl)
+	{
+		if (substr(get_db_type(),0,5)!='mysql') return false;
+
+		$tries=0;
+		do
+		{
+			$locks=$GLOBALS['SITE_DB']->query('SHOW OPEN TABLES FROM '.get_db_site().' WHERE `Table`=\''.get_table_prefix().$tbl.'\' AND In_use>=1');
+			$locked=count($locks)>=1;
+			$tries++;
+			if ($locked)
+			{
+				sleep(1);
+			}
+		}
+		while (($locked) && ($tries<5));
+		return $locked;
 	}
 
 }

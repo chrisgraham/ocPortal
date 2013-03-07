@@ -57,8 +57,11 @@ function ocf_get_forums_stats()
 		$out['newest_member_username']=$newest_member[0]['m_username'];
 		if (get_db_type()!='xml')
 		{
-			set_value('ocf_newest_member_id',strval($out['newest_member_id']));
-			set_value('ocf_newest_member_username',$out['newest_member_username']);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+			{
+				set_value('ocf_newest_member_id',strval($out['newest_member_id']));
+				set_value('ocf_newest_member_username',$out['newest_member_username']);
+			}
 		}
 	}
 

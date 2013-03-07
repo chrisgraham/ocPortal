@@ -176,7 +176,8 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	{
 		if ((isset($ban['i_ban_until'])) && ($ban['i_ban_until']<time()))
 		{
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_until IS NOT NULL AND i_ban_until<'.strval(time()));
+			if (!$GLOBALS['SITE_DB']->table_is_locked('usersubmitban_ip'))
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_until IS NOT NULL AND i_ban_until<'.strval(time()));
 			continue;
 		}
 
