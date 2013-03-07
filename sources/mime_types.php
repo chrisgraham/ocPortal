@@ -116,6 +116,8 @@ function get_mime_type($extension)
 		$mime_types['flv']='video/x-flv';
 	}
 
+	$extension=strtolower($extension);
+
 	if (array_key_exists($extension,$mime_types)) return $mime_types[$extension];
 
 	return 'application/octet-stream';
