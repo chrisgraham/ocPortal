@@ -48,7 +48,7 @@ function load_html_page($string,$file_base=NULL)
 			$num_matches=preg_match_all('#<[^<>]* '.$attribute.'="([^&"]+\.[^&"\.]+)"[^<>]*>#mis',$html,$matches);
 			for ($i=0;$i<$num_matches;$i++)
 			{
-				$old_link=$matches[1][$i];
+				$old_link=html_entity_decode($matches[1][$i],ENT_QUOTES);
 
 				$zone='_SELF';
 				if ($old_link[0]=='/')
@@ -76,16 +76,20 @@ function load_html_page($string,$file_base=NULL)
 					$new_link=$old_link;
 					if (url_is_local($old_link))
 					{
-						if (is_file(get_custom_file_base().'/'.dirname($string).'/'.$old_link))
+						if (is_file(get_custom_file_base().'/'.dirname($string).'/'.urldecode($old_link))) // HTML pages dir
 						{
 							$new_link=get_base_url().'/'.dirname($string).'/'.$old_link;
 						}
-						elseif (is_file(get_custom_file_base().'/'.$old_link))
+						elseif (is_file(get_custom_file_base().'/'.get_zone_name().'/'.urldecode($old_link))) // Zone dir
+						{
+							$new_link=get_base_url().'/'.get_zone_name().'/'.$old_link;
+						}
+						elseif (is_file(get_custom_file_base().'/'.urldecode($old_link))) // Root dir
 						{
 							$new_link=get_base_url().'/'.$old_link;
 						} else
 						{
-							$new_link=get_base_url().'/uploads/website_specific/'.$old_link;
+							$new_link=get_base_url().'/uploads/website_specific/'.$old_link; // uploads/website_specific
 						}
 					}
 				}
