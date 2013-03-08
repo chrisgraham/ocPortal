@@ -415,6 +415,8 @@ class database_driver
 
 	var $static_ob;
 
+	var $dedupe_mode=false;
+
 	/**
 	 * Construct a database driver from connection parameters.
 	 *
@@ -1074,6 +1076,24 @@ class database_driver
 		{
 			$connection=call_user_func_array(array($this->static_ob,'db_get_connection'),$connection);
 			_general_db_init();
+		}
+
+		// Special handling for searches, which are slow and specific - we want to recognise if previous active searches were the same and kill them (as this would have been a double form submit)
+		if (($this->dedupe_mode) && (substr(get_db_type(),0,5)=='mysql'))
+		{
+			$real_query=$query;
+			if (($max!==NULL) && ($start!==NULL)) $real_query.=' LIMIT '.strval($start).','.strval($max);
+			elseif ($max!==NULL) $real_query.=' LIMIT '.strval($max);
+			elseif ($start!==NULL) $real_query.=' LIMIT '.strval($start).',30000000';
+
+			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection);
+			foreach ($ret as $process)
+			{
+				if ($process['Info']==$real_query)
+				{
+					$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
+				}
+			}
 		}
 
 		$ret=$this->static_ob->db_query($query,$connection,$max,$start,$fail_ok,$get_insert_id,false,$save_as_volatile);

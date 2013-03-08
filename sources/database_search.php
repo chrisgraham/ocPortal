@@ -421,6 +421,8 @@ function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
  */
 function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$fields,$where_clause,$content_where,$order,$select='*',$raw_fields=NULL,$permissions_module=NULL,$permissions_field=NULL,$permissions_field_is_string=false)
 {
+	@ignore_user_abort(false); // If the user multi-submits a search, we don't want to run parallel searches (very slow!). That said, this currently doesn't work in PHP, because PHP does not realise the connection has died until way too late :(. So we also use a different tact (dedupe_mode) but hope PHP will improve with time.
+
 	if (substr($where_clause,0,5)==' AND ') $where_clause=substr($where_clause,5);
 	if (substr($where_clause,-5)==' AND ') $where_clause=substr($where_clause,0,strlen($where_clause)-5);
 	$where_alternative_matches=array();
@@ -521,8 +523,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
 			}
 
+			$db->dedupe_mode=true;
 			$t_keyword_search_rows_count=$db->query_value_null_ok_full($_count_query_keywords_search);
 			$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
+			$db->dedupe_mode=false;
 			$t_count+=$t_keyword_search_rows_count;
 			$t_rows=array_merge($t_rows,$t_keyword_search_rows);
 		} else $_count_query_keywords_search=NULL;
@@ -729,8 +733,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
 		}
 
+		$db->dedupe_mode=true;
 		$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
 		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
+		$db->dedupe_mode=false;
 		$t_count+=$t_main_search_rows_count;
 	} else
 	{

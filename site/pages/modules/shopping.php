@@ -198,6 +198,8 @@ class Module_shopping
 	 */
 	function run()
 	{	
+		@ignore_user_abort(true); // Must keep going till completion
+
 		require_lang('shopping');
 		require_lang('catalogues');
 		require_code('shopping');

@@ -69,6 +69,8 @@ class Module_topics
 	 */
 	function run()
 	{
+		@ignore_user_abort(true); // Must keep going till completion
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_css('ocf');
 
