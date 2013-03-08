@@ -1081,6 +1081,8 @@ class database_driver
 		// Special handling for searches, which are slow and specific - we want to recognise if previous active searches were the same and kill them (as this would have been a double form submit)
 		if (($this->dedupe_mode) && (substr(get_db_type(),0,5)=='mysql'))
 		{
+			$query.='/* '.strval(get_session_id()).' */'; // Identify query to session, for accurate de-duping
+
 			$real_query=$query;
 			if (($max!==NULL) && ($start!==NULL)) $real_query.=' LIMIT '.strval($start).','.strval($max);
 			elseif ($max!==NULL) $real_query.=' LIMIT '.strval($max);
