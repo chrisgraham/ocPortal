@@ -63,9 +63,15 @@ class Hook_Syndication_facebook
 			}
 		}
 
-		$save_to='facebook_oauth_token';
-		if (!is_null($member_id)) $save_to.='__'.strval($member_id);
-		set_long_value($save_to,$access_token);
+		if (strpos($access_token,'|')===false) // Not if application access token, which will happen on a refresh (as user token will not confirm twice)
+		{
+			$save_to='facebook_oauth_token';
+			if (!is_null($member_id)) $save_to.='__'.strval($member_id);
+			set_long_value($save_to,$access_token);
+		}
+
+		header('Location: '.str_replace('&syndicate_start__facebook=1','',str_replace('oauth_in_progress=1&','oauth_in_progress=0&',$oauth_url->evaluate())));
+		exit();
 
 		return true;
 	}
@@ -82,8 +88,10 @@ class Hook_Syndication_facebook
 		if (($this->is_available()) && ($this->auth_is_set($member_id)))
 		{
 			return $this->_send(
-				get_value('facebook_oauth_token__'.strval($member_id)),
-				$row
+				get_long_value('facebook_oauth_token__'.strval($member_id)),
+				$row,
+				'me',
+				$member_id
 			);
 		}
 		return false;
@@ -107,7 +115,7 @@ class Hook_Syndication_facebook
 		return false;
 	}
 
-	function _send($token,$row,$post_to_uid='me')
+	function _send($token,$row,$post_to_uid='me',$member_id=NULL)
 	{
 		require_lang('facebook');
 		require_code('facebook_connect');
@@ -117,7 +125,7 @@ class Hook_Syndication_facebook
 		$name=$row['a_label_1'];
 		require_code('character_sets');
 		$name=convert_to_internal_encoding($name,get_charset(),'utf-8');
-		$link=static_evaluate_tempcode(pagelink_to_tempcode($row['a_pagelink_1']));
+		$link=($row['a_pagelink_1']=='')?'':static_evaluate_tempcode(pagelink_to_tempcode($row['a_pagelink_1']));
 		$message=html_entity_decode(strip_tags($message->evaluate()),ENT_COMPAT,get_charset());
 		$message=convert_to_internal_encoding($message,get_charset(),'utf-8');
 
@@ -128,14 +136,23 @@ class Hook_Syndication_facebook
 		$fb->setAccessToken($token);
 
 		$attachment=array('description'=>$message);
-		if ($name!='') $attachment['name']=$name;
+		if (($name!='') && ($name!=$message)) $attachment['name']=$name;
 		if ($link!='') $attachment['link']=$link;
+		if (count($attachment)==1) $attachment=array('message'=>$message);
+
+		if ($post_to_uid=='me') $post_to_uid=$fb->getUser(); // May not be needed, but just in case
+
 		try
 		{
 			$ret=$fb->api('/'.$post_to_uid.'/feed','POST',$attachment);
 		}
 		catch (Exception $e)
 		{
+			if ((!is_null($member_id)) && (count($_POST)==0))
+			{
+				$this->auth_set($member_id,get_self_url());
+			}
+
 			warn_exit($e->getMessage());
 		}
 
