@@ -801,6 +801,8 @@ class Module_admin_themes
 		$old_contents=@file_get_contents(get_file_base().'/themes/default/css/'.$file);
 		if ($old_contents===false) $old_contents='';
 
+		check_suhosin_request_size(strlen($css));
+
 		$GLOBALS['SEO_TITLE']=$file;
 
 		$entries=new ocp_tempcode();

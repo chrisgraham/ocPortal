@@ -465,7 +465,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 	{
 		if ($get_titles)
 		{
-			if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistent_cache_set')?persistent_cache_set('ALL_ZONES_TITLED'):NULL;
+			if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
 			if ($ALL_ZONES_TITLED!==NULL) return $ALL_ZONES_TITLED;
 		} else
 		{
