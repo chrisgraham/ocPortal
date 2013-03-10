@@ -34,6 +34,7 @@
 				{$,<p class="ocf_member_column_title">{!VIEW}:</p>}
 				<ul role="navigation" class="actions_list">
 					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE}</a></li>
+					<li><a href="{UNANSWERED_TOPICS_URL*}">{!UNANSWERED_TOPICS}</a></li>
 				</ul>
 			</nav>
 		</div>
