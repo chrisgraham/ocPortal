@@ -60,6 +60,12 @@ class Block_main_contact_catalogues
 	 */
 	function run($map)
 	{
+		if (addon_installed('captcha'))
+		{
+			require_code('captcha');
+			$use_captcha=((get_option('captcha_on_feedback')=='1') && (use_captcha()));
+		} else $use_captcha=false;
+
 		$catalogue_name=array_key_exists('param',$map)?$map['param']:'';
 		if ($catalogue_name=='') $catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogues','c_name'); // Random/arbitrary (first one that comes out of the DB)
 
@@ -74,6 +80,11 @@ class Block_main_contact_catalogues
 
 		if (post_param('subject','')!='')
 		{
+			if ($use_captcha)
+			{
+				enforce_captcha();
+			}
+
 			require_code('mail');
 			$to_email=array_key_exists('to',$map)?$map['to']:'';
 			if ($to_email=='') $to_email=NULL;
@@ -94,6 +105,13 @@ class Block_main_contact_catalogues
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
+		$text=new ocp_tempcode();
+
+		if ($use_captcha)
+		{
+			$fields->attach(form_input_captcha());
+			$text->attach(do_lang_tempcode('FORM_TIME_SECURITY'));
+		}
 
 		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 
@@ -164,7 +182,7 @@ class Block_main_contact_catalogues
 
 		$url=get_self_url();
 
-		return do_template('FORM',array('_GUID'=>'7dc3957edf3b47399b688d72fae54128','FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>''));
+		return do_template('FORM',array('_GUID'=>'7dc3957edf3b47399b688d72fae54128','FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>$text));
 	}
 
 }
