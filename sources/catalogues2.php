@@ -170,7 +170,19 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	// Create
 	if (!is_integer($description)) $description=insert_lang_comcode($description,2);
 	if (!is_integer($title)) $title=insert_lang($title,1);
-	$GLOBALS['SITE_DB']->query_insert('catalogues',array('c_name'=>$name,'c_title'=>$title,'c_send_view_reports'=>$send_view_reports,'c_ecommerce'=>$ecommerce,'c_description'=>$description,'c_display_type'=>$display_type,'c_is_tree'=>$is_tree,'c_notes'=>$notes,'c_add_date'=>$add_time,'c_submit_points'=>$submit_points));
+	$GLOBALS['SITE_DB']->query_insert('catalogues',array(
+		'c_name'=>$name,
+		'c_title'=>$title,
+		'c_send_view_reports'=>$send_view_reports,
+		'c_ecommerce'=>$ecommerce,
+		'c_description'=>$description,
+		'c_display_type'=>$display_type,
+		'c_is_tree'=>$is_tree,
+		'c_notes'=>$notes,
+		'c_add_date'=>$add_time,
+		'c_submit_points'=>$submit_points,
+		'c_default_review_freq'=>$default_review_freq,
+	));
 
 	if ($is_tree==1)
 	{
@@ -299,6 +311,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		'c_notes'=>$notes,
 		'c_add_date'=>$add_time,
 		'c_submit_points'=>$submit_points,
+		'c_default_review_freq'=>$default_review_freq,
 	);
 	if (!is_null($add_time))
 		$update_map['c_add_date']=$add_time;

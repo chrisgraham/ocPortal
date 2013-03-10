@@ -1953,7 +1953,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		{
 			if ($field['name']!='') $num_fields++;
 		}
-		if ($num_fields==0) warn_exit(do_lang_tempcode('NO_FIELDS'));
+		if (($num_fields==0) && (substr($name,0,1)!='_')) warn_exit(do_lang_tempcode('NO_FIELDS'));
 
 		$meta_data=actual_meta_data_get_fields('catalogue',NULL);
 
@@ -2113,7 +2113,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			{
 				if (!((array_key_exists('delete',$field)) && ($field['delete']=='1'))) $num_fields++;
 			}
-			if ($num_fields==0) warn_exit(do_lang_tempcode('NO_FIELDS'));
+			if (($num_fields==0) && (substr($name,0,1)!='_')) warn_exit(do_lang_tempcode('NO_FIELDS'));
 		}
 
 		if (($is_tree==1) && ($was_tree==0))

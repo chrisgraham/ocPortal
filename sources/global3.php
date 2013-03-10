@@ -1363,6 +1363,8 @@ function get_os_string()
  */
 function cron_installed()
 {
+	if ($GLOBALS['DEV_MODE']) return true;
+
 	$last_cron=get_value('last_cron');
 	if (is_null($last_cron)) return false;
 	return intval($last_cron)>(time()-60*60*5);

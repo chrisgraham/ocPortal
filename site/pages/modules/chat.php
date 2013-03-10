@@ -495,8 +495,6 @@ class Module_chat
 			'MOD_LINK'=>$mod_link,
 			'BLOCKING_LINK'=>$blocking_link,
 			'SETEFFECTS_LINK'=>$seteffects_link,
-			'CAN_IM'=>$can_im,
-			'FRIENDS'=>$friends,
 			'MEMBER_ID'=>strval($member_id),
 		));
 	}

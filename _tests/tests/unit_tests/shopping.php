@@ -145,7 +145,7 @@ class shopping_test_set extends ocp_test_case
 		$reason_code='';
 		$pending_reason='bar';
 		$memo='foo';
-		$mc_gross=68.35;
+		$mc_gross='68.35';
 		$mc_currency=get_option('currency');
 		$txn_id='0';
 		$parent_txn_id='0';

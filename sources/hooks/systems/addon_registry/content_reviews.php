@@ -79,6 +79,41 @@ class Hook_addon_registry_content_reviews
 			'adminzone/pages/modules/admin_content_reviews.php',
 			'sources/content_reviews.php',
 			'lang/EN/content_reviews.ini',
+			'REVIEW_STATUS.tpl',
+		);
+	}
+
+	/**
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
+	function tpl_previews()
+	{
+		return array(
+			'REVIEW_STATUS.tpl'=>'review_status',
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__review_status()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('REVIEW_STATUS', array(
+				'LAST_REVIEWED_TIME'=>placeholder_time(),
+				'NEXT_REVIEW_TIME'=>placeholder_time(),
+				'_LAST_REVIEWED_TIME'=>placeholder_date_raw(),
+				'_NEXT_REVIEW_TIME'=>placeholder_date_raw(),
+				'CONTENT_TYPE'=>placeholder_id(),
+				'CONTENT_ID'=>placeholder_id(),
+				'DISPLAY'=>true,
+			)), NULL, '', true)
 		);
 	}
 }

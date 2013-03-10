@@ -1308,8 +1308,6 @@ class Module_topics
 			$username=mixed();
 			$username=($member_id==get_member())?false:$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 			if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
-
-			'STAFF_HELP_URL'=>get_tutorial_url('tut_correspondance'),
 		} else
 		{
 			if (!is_null($forum_id))

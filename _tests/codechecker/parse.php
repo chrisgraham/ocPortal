@@ -17,11 +17,11 @@ function parse($_tokens=NULL)
 {
 	ini_set('xdebug.max_nesting_level','2000');
 
-	global $tokens,$I,$OK_EXTRA_FUNCTIONS;
+	global $TOKENS,$I,$OK_EXTRA_FUNCTIONS;
 	$OK_EXTRA_FUNCTIONS=NULL;
-	if (!is_null($_tokens)) $tokens=$_tokens;
+	if (!is_null($_tokens)) $TOKENS=$_tokens;
 	$I=0;
-	$structure=_parse_php($tokens,$I);
+	$structure=_parse_php($TOKENS,$I);
 	$structure['ok_extra_functions']=$OK_EXTRA_FUNCTIONS;
 	global $FILENAME;
 	if ((count($structure['main'])>0) && (substr($FILENAME,0,7)=='sources') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'global.php') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'critical_errors.php') && ((count($structure['main'])>1) || (($structure['main'][0][0]!='RETURN') && (($structure['main'][0][0]!='CALL_DIRECT') || ($structure['main'][0][1]!='require_code')))))
@@ -1469,59 +1469,59 @@ function _parse_parameter()
 
 function pparse__parser_expect($token)
 {
-	global $tokens,$i;
-	if (!isset($tokens[$i])) parser_error('Ran out of input when expecting '.$token,$tokens,$i);
-	$next=$tokens[$i];
+	global $TOKENS,$I;
+	if (!isset($TOKENS[$I])) parser_error('Ran out of input when expecting '.$token,$TOKENS,$I);
+	$next=$TOKENS[$I];
 	if ($next[0]=='comment')
 	{
 		handle_comment($next);
-		$i++;
+		$I++;
 		return pparse__parser_expect($token);
 	}
-	$i++;
-	if ($next[0]!=$token) parser_error('Expected '.$token.' but got '.$next[0].' ('.$next[1].')',$tokens,$i);
+	$I++;
+	if ($next[0]!=$token) parser_error('Expected '.$token.' but got '.$next[0].' ('.$next[1].')',$TOKENS,$I);
 	return $next[1];
 }
 
 function pparse__parser_peek($all=false)
 {
-	global $tokens,$i;
-	if (!isset($tokens[$i])) return NULL;
-	if ($tokens[$i][0]=='comment')
+	global $TOKENS,$I;
+	if (!isset($TOKENS[$I])) return NULL;
+	if ($TOKENS[$I][0]=='comment')
 	{
-		handle_comment($tokens[$i]);
-		$i++;
+		handle_comment($TOKENS[$I]);
+		$I++;
 		return pparse__parser_peek($all);
 	}
-	if ($all) return $tokens[$i];
-	return $tokens[$i][0];
+	if ($all) return $TOKENS[$I];
+	return $TOKENS[$I][0];
 }
 
 function pparse__parser_peek_dist($d,$p=NULL)
 {
-	global $tokens,$i;
-	if (is_null($p)) $p=$i;
+	global $TOKENS,$I;
+	if (is_null($p)) $p=$I;
 	while ($d!=0)
 	{
-		if (!isset($tokens[$p])) return NULL;
-		if ($tokens[$p][0]=='comment')
+		if (!isset($TOKENS[$p])) return NULL;
+		if ($TOKENS[$p][0]=='comment')
 		{
-			handle_comment($tokens[$p]);
+			handle_comment($TOKENS[$p]);
 			return pparse__parser_peek_dist($d,$p+1);
 		}
 		$p++;
 		$d--;
 	}
-	if (!isset($tokens[$p])) return NULL;
-	return $tokens[$p][0];
+	if (!isset($TOKENS[$p])) return NULL;
+	return $TOKENS[$p][0];
 }
 
 function pparse__parser_next($all=false)
 {
-	global $tokens,$i;
-	if (!isset($tokens[$i])) return NULL;
-	$next=$tokens[$i];
-	$i++;
+	global $TOKENS,$I;
+	if (!isset($TOKENS[$I])) return NULL;
+	$next=$TOKENS[$I];
+	$I++;
 	if ($next[0]=='comment')
 	{
 		handle_comment($next);
@@ -1533,21 +1533,21 @@ function pparse__parser_next($all=false)
 
 function parser_error($message)
 {
-	global $tokens,$i;
-	/*foreach ($tokens as $key=>$token)	Debug output
+	global $TOKENS,$I;
+	/*foreach ($TOKENS as $key=>$token)	Debug output
 	{
-		if ($key==$i) echo '<strong>';
+		if ($key==$I) echo '<strong>';
 		echo ' '.$token[0].' ';
-		if ($key==$i) echo '</strong>';
+		if ($key==$I) echo '</strong>';
 	}*/
-	list($pos,$line,$full_line)=pos_to_line_details($i);
+	list($pos,$line,$full_line)=pos_to_line_details($I);
 	die_error('PARSER',$pos,$line,$message);
 }
 
 function parser_warning($message)
 {
-	global $tokens,$i;
-	list($pos,$line,$full_line)=pos_to_line_details($i);
+	global $TOKENS,$I;
+	list($pos,$line,$full_line)=pos_to_line_details($I);
 	warn_error('PARSER',$pos,$line,$message);
 }
 

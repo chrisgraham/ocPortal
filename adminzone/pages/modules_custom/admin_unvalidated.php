@@ -100,21 +100,21 @@ class Module_admin_unvalidated
 				$content->attach(form_input_list_entry(is_integer($id)?strval($id):$id,false,strip_comcode($title)));
 			}
 
-			if (array_key_exists('uses_workflow',$info) && $info['uses_workflow'])
-			{
-				// Content that uses a workflow is validated via its view screen
-				$post_url=build_url(array('page'=>$info['view_module'],'type'=>$info['view_type'],'validated'=>1/*,'redirect'=>get_self_url(true)*/),get_module_zone($info['view_module']),NULL,false,true);
-			} else
-			{
-				// Content which isn't in a workflow is validated via its edit screen
-				$post_url=build_url(array('page'=>$info['edit_module'],'type'=>$info['edit_type'],'validated'=>1/*,'redirect'=>get_self_url(true)*/),get_module_zone($info['edit_module']),NULL,false,true);
-			}
-			$fields=form_input_list(do_lang_tempcode('EDIT'),do_lang_tempcode('DESCRIPTION_EDIT'),$info['edit_identifier'],$content);
-
 			if (!$content->is_empty())
 			{
+				if (array_key_exists('uses_workflow',$info) && $info['uses_workflow'])
+				{
+					// Content that uses a workflow is validated via its view screen
+					$post_url=build_url(array('page'=>$info['view_module'],'type'=>$info['view_type'],'validated'=>1/*,'redirect'=>get_self_url(true)*/),get_module_zone($info['view_module']),NULL,false,true);
+				} else
+				{
+					// Content which isn't in a workflow is validated via its edit screen
+					$post_url=build_url(array('page'=>$info['edit_module'],'type'=>$info['edit_type'],'validated'=>1/*,'redirect'=>get_self_url(true)*/),get_module_zone($info['edit_module']),NULL,false,true);
+				}
+				$fields=form_input_list(do_lang_tempcode('CONTENT'),'',$info['edit_identifier'],$content,NULL,true);
+
 				// Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
-				$content=do_template('FORM',array('_GUID'=>'0abb28f6b8543396c90c8c4395b7e7d4','GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+				$content=do_template('FORM',array('_GUID'=>'0abb28f6b8543396c90c8c4395b7e7d4','SKIP_REQUIRED'=>true,'GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 			}
 
 			$out->attach(do_template('UNVALIDATED_SECTION',array('_GUID'=>'044f99ca3c101f90b35fc4b64977b1c7','TITLE'=>$info['title'],'CONTENT'=>$content)));

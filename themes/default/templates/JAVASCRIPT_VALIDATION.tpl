@@ -546,7 +546,7 @@ function standard_alternate_fields(field_names,something_required,second_run)
 	for (var i=0;i<field_names.length;i++)
 	{
 		var field=fields[i];
-		if ((field) && (typeof field.alternating=='undefined')) // ... but only if not already set
+		if ((!field) || (typeof field.alternating=='undefined')) // ... but only if not already set
 		{
 			var self_function=function (e) { standard_alternate_fields(field_names,something_required,true); } ; // We'll re-call ourself on change
 			_standard_alternate_field_create_listeners(field,self_function);
@@ -557,13 +557,20 @@ function standard_alternate_fields(field_names,something_required,second_run)
 	for (var i=0;i<field_names.length;i++)
 	{
 		var field=fields[i];
-		if ((field) && (_standard_alternate_field_is_filled_in(field,second_run,false)))
+		if (_standard_alternate_field_is_filled_in(field,second_run,false))
 			return _standard_alternate_field_update_editability(field,fields,something_required);
 	}
 
 	// Hmm, force first one chosen then
 	for (var i=0;i<field_names.length;i++)
 	{
+		if (field_names[i]=='')
+		{
+			var radio_button=document.getElementById('choose_'); // Radio button handles field alternation
+			radio_button.checked=true;
+			return _standard_alternate_field_update_editability(null,fields,something_required);
+		}
+
 		var field=fields[i];
 		if ((field) && (_standard_alternate_field_is_filled_in(field,second_run,true)))
 			return _standard_alternate_field_update_editability(field,fields,something_required);
@@ -572,9 +579,11 @@ function standard_alternate_fields(field_names,something_required,second_run)
 
 function _standard_alternate_field_is_filled_in(field,second_run,force)
 {
+	if (!field) return false; // N/A input is considered unset
+
 	var is_set=force || ((field.value!='') && (field.value!='-1')) || ((typeof field.virtual_value!='undefined') && (field.virtual_value!='') && (field.virtual_value!='-1'));
 
-	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,'')); // Radio button handles field alternation
+	var radio_button=document.getElementById('choose_'+(field?field.name:'').replace(/\[\]$/,'')); // Radio button handles field alternation
 	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 	if (second_run)
 	{
@@ -588,7 +597,7 @@ function _standard_alternate_field_is_filled_in(field,second_run,force)
 
 function _standard_alternate_field_create_listeners(field,refreshFunction)
 {
-	if (typeof field.nodeName!='undefined')
+	if ((!field) || (typeof field.nodeName!='undefined'))
 	{
 		__standard_alternate_field_create_listeners(field,refreshFunction);
 	} else
@@ -606,18 +615,21 @@ function _standard_alternate_field_create_listeners(field,refreshFunction)
 
 function __standard_alternate_field_create_listeners(field,refreshFunction)
 {
-	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,''));
+	var radio_button=document.getElementById('choose_'+(field?field.name:'').replace(/\[\]$/,''));
 	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 	if (radio_button) // Radio button handles field alternation
 	{
 		add_event_listener_abstract(radio_button,'change',refreshFunction);
 	} else // Filling/blanking out handles field alternation
 	{
-		add_event_listener_abstract(field,'keyup',refreshFunction);
-		add_event_listener_abstract(field,'change',refreshFunction);
-		field.fakeonchange=refreshFunction;
+		if (field)
+		{
+			add_event_listener_abstract(field,'keyup',refreshFunction);
+			add_event_listener_abstract(field,'change',refreshFunction);
+			field.fakeonchange=refreshFunction;
+		}
 	}
-	field.alternating=true;
+	if (field) field.alternating=true;
 }
 
 function _standard_alternate_fields_get_object(field_name)
@@ -657,14 +669,13 @@ function _standard_alternate_field_update_editability(chosen,choices,something_r
 {
 	for (var i=0;i<choices.length;i++)
 	{
-		if (choices[i])
-			__standard_alternate_field_update_editability(choices[i],chosen,choices[i]!=chosen,choices[i]==chosen,something_required);
+		__standard_alternate_field_update_editability(choices[i],chosen,choices[i]!=chosen,choices[i]==chosen,something_required);
 	}
 }
 // NB: is_chosen may only be null if is_locked is false
 function __standard_alternate_field_update_editability(field,chosen_field,is_locked,is_chosen,something_required)
 {
-	if (typeof field.nodeName!='undefined')
+	if ((!field) || (typeof field.nodeName!='undefined'))
 	{
 		___standard_alternate_field_update_editability(field,chosen_field,is_locked,is_chosen,something_required);
 	} else // Radio list
@@ -680,6 +691,8 @@ function __standard_alternate_field_update_editability(field,chosen_field,is_loc
 }
 function ___standard_alternate_field_update_editability(field,chosen_field,is_locked,is_chosen,something_required)
 {
+	if (!field) return;
+
 	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,''));
 	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 
@@ -704,7 +717,7 @@ function set_locked(field,is_locked,chosen_ob)
 		var labels=document.getElementsByTagName('label'),label=null;
 		for (var i=0;i<labels.length;i++)
 		{
-			if (labels[i].getAttribute('for')==chosen_ob.id)
+			if ((chosen_ob) && (labels[i].getAttribute('for')==chosen_ob.id))
 			{
 				label=labels[i];
 				break;

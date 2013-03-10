@@ -602,7 +602,7 @@ class Module_cms_comcode_pages
 		if ($file!='')
 		{
 			require_code('zones2');
-			check_page_name($zone,$new_file);
+			check_page_name($zone,$file);
 		}
 
 		if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');

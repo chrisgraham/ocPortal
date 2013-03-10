@@ -32,13 +32,15 @@ class Hook_cron_content_reviews
 		$pending_content_reviews=$GLOBALS['SITE_DB']->query($query);
 		foreach ($pending_content_reviews as $pending_content_review)
 		{
+			$content_type=$pending_content_review['content_type'];
+			$content_id=$pending_content_review['content_id'];
+
 			// Mark as handled
 			$GLOBALS['SITE_DB']->query_update('content_reviews',array('review_notification_happened'=>1),array('content_type'=>$content_type,'content_id'=>$content_id),'',1);
 
 			require_code('content');
 
-			$content_type=$pending_content_review['content_type'];
-			$content_id=$pending_content_review['content_id'];
+			require_lang('content_reviews');
 
 			$auto_action=$pending_content_review['auto_action'];
 
@@ -51,9 +53,9 @@ class Hook_cron_content_reviews
 			}
 
 			// Dispatch notification
-			if ((!file_exists(get_file_base().'/sources/hooks/modules/content_meta_aware/'.filter_naughty_harsh($content_type))) && (!file_exists(get_file_base().'/sources_custom/hooks/modules/content_meta_aware/'.filter_naughty_harsh($content_type))))
+			if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')))
 				continue; // Weird :S
-			require_code('hooks/modules/content_meta_aware/'.filter_naughty_harsh($content_type));
+			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
 			$object=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
 			if (is_null($object)) continue; // Weird :S
 			$info=$object->info();
@@ -66,13 +68,13 @@ class Hook_cron_content_reviews
 					$attributes[$key]=$content_id;
 				}
 			}
-			$edit_url=build_url($attributes+array('validated'=>1),$zone,false,false,true);
+			$edit_url=build_url($attributes+array('validated'=>1),$zone,NULL,false,false,true);
 			require_code('notifications');
-			$subject=do_lang('NOTIFICATION_SUBJECT_CONTENT_REVIEWS'.($auto_action?'_delete':''),$title,$auto_action_str);
-			$message=do_lang('NOTIFICATION_BODY_CONTENT_REVIEWS'.($auto_action?'_delete':''),$title,$auto_action_str,$edit_url->evaluate());
-			dispatch_notification('content_reviews',$content_type,$subject,$message,NULL,NULL,4,true);
+			$subject=do_lang('NOTIFICATION_SUBJECT_CONTENT_REVIEWS'.(($auto_action=='delete')?'_delete':''),$title,$auto_action_str);
+			$message=do_lang('NOTIFICATION_BODY_CONTENT_REVIEWS'.(($auto_action=='delete')?'_delete':''),$title,$auto_action_str,$edit_url->evaluate());
+			dispatch_notification('content_reviews',$content_type,$subject,$message,NULL,NULL,4,false);
 			if (!is_null($submitter))
-				dispatch_notification('content_reviews__own',$content_type,$subject,$message,array($submitter),NULL,4,true);
+				dispatch_notification('content_reviews__own',$content_type,$subject,$message,array($submitter),NULL,4,false);
 
 			// Do auto-action
 			switch ($auto_action)

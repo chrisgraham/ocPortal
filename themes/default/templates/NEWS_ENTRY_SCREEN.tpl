@@ -31,8 +31,6 @@
 	{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,news,{ID}}}
 	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
-	{$REVIEW_STATUS,news,{ID}}
-
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
 	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
@@ -78,6 +76,8 @@
 			{+END}
 		</div></aside>
 	</div>
+
+	{$REVIEW_STATUS,news,{ID}}
 
 	<div class="content_screen_comments">
 		{COMMENT_DETAILS}

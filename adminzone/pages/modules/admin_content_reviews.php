@@ -86,6 +86,7 @@ class Module_admin_content_reviews
 			'last_reviewed_time'=>'TIME',
 		));
 		$GLOBALS['SITE_DB']->create_index('content_reviews','next_review_time',array('next_review_time','review_notification_happened'));
+		$GLOBALS['SITE_DB']->create_index('content_reviews','needs_review',array('next_review_time','content_type'));
 	}
 
 	/**
@@ -110,13 +111,16 @@ class Module_admin_content_reviews
 		$_hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($_hooks) as $content_type)
 		{
-			require_code('hooks/modules/content_meta_aware/'.filter_naughty_harsh($content_type));
+			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
 			$object=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
 			if (is_null($object)) continue;
 			$info=$object->info();
 			if (is_null($info)) continue;
 
-			$content_ids=collapse_1d_complexity('content_id',$GLOBALS['SITE_DB']->query('SELECT content_id FROM '.get_table_prefix().'content_reviews WHERE next_review_time<='.strval(time()),100));
+			if (is_null($info['edit_pagelink_pattern'])) continue;
+
+			$content=new ocp_tempcode();
+			$content_ids=collapse_1d_complexity('content_id',$GLOBALS['SITE_DB']->query('SELECT content_id FROM '.get_table_prefix().'content_reviews WHERE '.db_string_equal_to('content_type',$content_type).' AND next_review_time<='.strval(time()),100));
 			foreach ($content_ids as $content_id)
 			{
 				list($title,)=content_get_details($content_type,$content_id);
@@ -131,27 +135,27 @@ class Module_admin_content_reviews
 			}
 			if (count($content_ids)==100) attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'warn');
 
-			list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
-			$edit_identifier='id';
-			foreach ($attributes as $key=>$val)
-			{
-				if ($val=='_WILD')
-				{
-					$edit_identifier=$key;
-					unset($attributes[$key]);
-					break;
-				}
-			}
-			$post_url=build_url($attributes+array('redirect'=>get_self_url(true)),$zone);
-			$fields=form_input_list(do_lang_tempcode('EDIT'),do_lang_tempcode('DESCRIPTION_EDIT'),$edit_identifier,$content);
-
 			if (!$content->is_empty())
 			{
-				// Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
-				$content=do_template('FORM',array('GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
-			}
+				list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
+				$edit_identifier='id';
+				foreach ($attributes as $key=>$val)
+				{
+					if ($val=='_WILD')
+					{
+						$edit_identifier=$key;
+						unset($attributes[$key]);
+						break;
+					}
+				}
+				$post_url=build_url($attributes+array('redirect'=>get_self_url(true)),$zone);
+				$fields=form_input_list(do_lang_tempcode('CONTENT'),'',$edit_identifier,$content,NULL,true);
 
-			$out->attach(do_template('UNVALIDATED_SECTION',array('TITLE'=>$info['title'],'CONTENT'=>$content)));
+				// Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
+ 				$content=do_template('FORM',array('SKIP_REQUIRED'=>true,'GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+
+				$out->attach(do_template('UNVALIDATED_SECTION',array('TITLE'=>do_lang_tempcode($info['content_type_label']),'CONTENT'=>$content)));
+			}
 		}
 
 		return do_template('UNVALIDATED_SCREEN',array('TITLE'=>$_title,'SECTIONS'=>$out));

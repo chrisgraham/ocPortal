@@ -47,9 +47,9 @@ function content_review_get_fields($content_type,$content_id=NULL,$catalogue_nam
 			$display_review_status=$content_review_rows[0]['display_review_status'];
 		} else
 		{
-			if ($content_type=='catalogue')
+			if ($catalogue_name!==NULL)
 			{
-				$review_freq=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_default_review_freq',array('c_name'=>$cataloge_name));
+				$review_freq=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_default_review_freq',array('c_name'=>$catalogue_name));
 				if (!is_null($review_freq))
 				{
 					if ($review_freq<=0) $review_freq=mixed();
@@ -123,7 +123,7 @@ function content_review_get_fields($content_type,$content_id=NULL,$catalogue_nam
 		$auto_actions=array();
 		$auto_actions[]='leave';
 		if (!is_null($content_info['validated_field'])) $auto_actions[]='unvalidate';
-		if (($auto_action=='delete') || (has_privilege(get_member(),'delete_'.$content_info['permissions_type_code'].'range_content',$content_info['module']))) $auto_actions[]='delete';
+		if (($auto_action=='delete') || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ((!is_null($content_info['permissions_type_code'])) && (has_privilege(get_member(),'delete_'.$content_info['permissions_type_code'].'range_content',$content_info['module'])))) $auto_actions[]='delete';
 		foreach ($auto_actions as $type)
 		{
 			$auto_action_list->attach(form_input_list_entry($type,$auto_action==$type,do_lang_tempcode('CONTENT_REVIEW_AUTO_ACTION_'.$type)));
