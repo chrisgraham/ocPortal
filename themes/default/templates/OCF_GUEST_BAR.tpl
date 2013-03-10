@@ -25,12 +25,12 @@
 				</form>
 			</div>
 			{+START,IF,{$ADDON_INSTALLED,search}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}}
-				<div class="ocf_guest_column ocf_guest_column_b">
+				<div class="ocf_guest_column ocf_guest_column_c">
 					{+START,INCLUDE,MEMBER_BAR_SEARCH}{+END}
 				</div>
 			{+END}{+END}
 
-			<nav class="ocf_guest_column ocf_guest_column_b" role="navigation">
+			<nav class="ocf_guest_column ocf_member_column_d" role="navigation">
 				{$,<p class="ocf_member_column_title">{!VIEW}:</p>}
 				<ul role="navigation" class="actions_list">
 					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE}</a></li>
