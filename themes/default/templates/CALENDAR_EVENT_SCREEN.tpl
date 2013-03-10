@@ -129,6 +129,12 @@
 
 					{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,event,{ID}}}
 					{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
+
+					<tr>
+						<td colspan="2">
+							{$REVIEW_STATUS,event,{ID}}
+						</td>
+					</tr>
 				</tbody>
 			</table></div>
 		</div>

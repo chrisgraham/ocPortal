@@ -589,6 +589,12 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			if ((!is_null($member_id)) && ($member_id!=get_member())) // Can't ban someone new, and can't ban yourself
 				$fields->attach(form_input_tick(do_lang_tempcode('_BANNED'),do_lang_tempcode('DESCRIPTION_MEMBER_BANNED'),'is_perm_banned',$is_perm_banned==1));
 		}
+
+		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
+			$fields->attach(content_review_get_fields('member',is_null($member_id)?NULL:strval($member_id)));
+		}
 	}
 
 	return array($fields,$hidden);

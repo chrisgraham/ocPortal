@@ -118,7 +118,7 @@ function authors_script()
  */
 function get_author_id_from_name($author)
 {
-	$handle=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','forum_handle',array('author'=>$author));
+	$handle=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','member_id',array('author'=>$author));
 	if (!is_numeric($handle))
 	{
 		$handle=$GLOBALS['FORUM_DRIVER']->get_member_from_username($author);
@@ -137,9 +137,9 @@ function get_author_id_from_name($author)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  */
-function add_author($author,$url,$forum_handle,$description,$skills,$meta_keywords='',$meta_description='')
+function add_author($author,$url,$member_id,$description,$skills,$meta_keywords='',$meta_description='')
 {
-	log_it('DEFINE_AUTHOR',$author,is_null($forum_handle)?'':strval($forum_handle));
+	log_it('DEFINE_AUTHOR',$author,is_null($member_id)?'':strval($member_id));
 
 	$rows=$GLOBALS['SITE_DB']->query_select('authors',array('description','skills'),array('author'=>$author),'',1);
 	if (array_key_exists(0,$rows))
@@ -158,7 +158,7 @@ function add_author($author,$url,$forum_handle,$description,$skills,$meta_keywor
 		seo_meta_set_for_explicit('authors',$author,$meta_keywords,$meta_description);
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('authors',array('author'=>$author,'url'=>$url,'forum_handle'=>$forum_handle,'description'=>insert_lang_comcode($description,3),'skills'=>insert_lang_comcode($skills,3)));
+	$GLOBALS['SITE_DB']->query_insert('authors',array('author'=>$author,'url'=>$url,'member_id'=>$member_id,'description'=>insert_lang_comcode($description,3),'skills'=>insert_lang_comcode($skills,3)));
 }
 
 /**

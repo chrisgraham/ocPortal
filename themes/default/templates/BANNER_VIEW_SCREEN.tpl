@@ -12,6 +12,8 @@
 
 {$PARAGRAPH,{BANNER}}
 
+{$REVIEW_STATUS,banner,{NAME}}
+
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,INCLUDE,STAFF_ACTIONS}
 	1_URL={EDIT_URL*}

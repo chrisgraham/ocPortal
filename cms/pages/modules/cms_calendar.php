@@ -495,6 +495,9 @@ class Module_cms_calendar extends standard_crud_module
 
 		$fields2->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields2->attach(content_review_get_fields('event',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden,NULL,NULL,true,NULL,$fields2);
 	}
 
@@ -794,6 +797,9 @@ class Module_cms_calendar extends standard_crud_module
 			}
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('event',strval($id));
+
 		return array(strval($id),$_description);
 	}
 
@@ -947,6 +953,9 @@ class Module_cms_calendar extends standard_crud_module
 		$this->donext_type=$type;
 		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day_of_month);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('event',strval($id));
 
 		return $_description;
 	}
@@ -1139,6 +1148,9 @@ class Module_cms_calendar_cat extends standard_crud_module
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,($title=='')));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('calendar_type',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden);
 	}
 
@@ -1216,7 +1228,12 @@ class Module_cms_calendar_cat extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('calendar_type',NULL);
 
 		$id=add_event_type(post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
+
 		$this->set_permissions(strval($id));
+
+		if (addon_installed('content_reviews'))
+			content_review_set('calendar_type',strval($id));
+
 		return strval($id);
 	}
 
@@ -1232,10 +1249,14 @@ class Module_cms_calendar_cat extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('calendar_type',$id);
 
 		edit_event_type(intval($id),post_param('title'),fractional_edit()?STRING_MAGIC_NULL:get_theme_img_code('calendar'),post_param('external_feed',STRING_MAGIC_NULL));
+
 		if (!fractional_edit())
 		{
 			$this->set_permissions(strval($id));
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('calendar_type',$id);
 	}
 
 	/**

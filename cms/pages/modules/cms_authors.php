@@ -123,14 +123,14 @@ class Module_cms_authors
 			access_denied('PRIVILEGE','edit_midrange_content');
 		}
 
-		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('description','url','skills','forum_handle'),array('author'=>$author),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('description','url','skills','member_id'),array('author'=>$author),'',1);
 		if (array_key_exists(0,$rows))
 		{
 			$myrow=$rows[0];
 			$description=get_translated_text($myrow['description']);
 			$url=$myrow['url'];
 			$skills=get_translated_text($myrow['skills']);
-			$handle=$myrow['forum_handle'];
+			$handle=$myrow['member_id'];
 			$may_delete=true;
 		}
 		else
@@ -183,10 +183,10 @@ class Module_cms_authors
 		if (has_privilege(get_member(),'edit_midrange_content','cms_authors'))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b18ab131f72a024039eaa92814f0f4a9','SECTION_HIDDEN'=>!is_null($handle),'TITLE'=>do_lang_tempcode('ADVANCED'))));
-			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_ID'),do_lang_tempcode('DESCRIPTION_MEMBER_ID'),'forum_handle',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
+			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_ID'),do_lang_tempcode('DESCRIPTION_MEMBER_ID'),'member_id',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
 		} else
 		{
-			$hidden->attach(form_input_hidden('forum_handle',strval($handle)));
+			$hidden->attach(form_input_hidden('member_id',strval($handle)));
 		}
 
 		require_code('fields');
@@ -203,6 +203,12 @@ class Module_cms_authors
 		{
 			require_code('awards');
 			$fields->attach(get_award_fields('author',$author));
+		}
+
+		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
+			$fields->attach(content_review_get_fields('author',$author));
 		}
 
 		if ($may_delete)
@@ -232,17 +238,17 @@ class Module_cms_authors
 		}
 		if ($author=='')
 		{
-			$forum_handle_string=post_param('forum_handle',strval(get_member()));
-			$author=is_numeric($forum_handle_string)?$GLOBALS['FORUM_DRIVER']->get_username(intval($forum_handle_string)):$forum_handle_string;
+			$member_id_string=post_param('member_id',strval(get_member()));
+			$author=is_numeric($member_id_string)?$GLOBALS['FORUM_DRIVER']->get_username(intval($member_id_string)):$member_id_string;
 			if (is_null($author)) $author=do_lang('UNKNOWN');
 		}
 
-		$_forum_handle=post_param('forum_handle',NULL);
-		if ($_forum_handle=='') $_forum_handle=NULL;
-		if (!is_null($_forum_handle))
+		$_member_id=post_param('member_id',NULL);
+		if ($_member_id=='') $_member_id=NULL;
+		if (!is_null($_member_id))
 		{
-			$forum_handle=is_numeric($_forum_handle)?intval($_forum_handle):$GLOBALS['FORUM_DRIVER']->get_member_from_username($_forum_handle);
-		} else $forum_handle=NULL;
+			$member_id=is_numeric($_member_id)?intval($_member_id):$GLOBALS['FORUM_DRIVER']->get_member_from_username($_member_id);
+		} else $member_id=NULL;
 
 		if (post_param_integer('delete',0)==1)
 		{
@@ -269,7 +275,7 @@ class Module_cms_authors
 
 			$meta_data=actual_meta_data_get_fields('author',NULL);
 
-			add_author($author,$url,$forum_handle,post_param('description'),post_param('skills'),post_param('meta_keywords',''),post_param('meta_description',''));
+			add_author($author,$url,$member_id,post_param('description'),post_param('skills'),post_param('meta_keywords',''),post_param('meta_description',''));
 
 			require_code('fields');
 			if (has_tied_catalogue('author'))
@@ -281,6 +287,12 @@ class Module_cms_authors
 			{
 				require_code('awards');
 				handle_award_setting('author',$author);
+			}
+
+			if (addon_installed('content_reviews'))
+			{
+				require_code('content_reviews');
+				content_review_set('author',$author);
 			}
 		}
 

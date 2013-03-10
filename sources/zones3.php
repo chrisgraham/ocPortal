@@ -336,3 +336,86 @@ function get_zone_chooser($inline=false,$no_go=NULL,$reorder=NULL)
 	return $content;
 }
 
+/**
+ * Delete an ocPortal page.
+ *
+ * @param  ID_TEXT		The zone
+ * @param  ID_TEXT		The page
+ * @param  ?ID_TEXT		The page type (NULL: Comcode page in ocPortal's fallback language) [NB: page is deleted in all languages regardless of which is given]
+ * @param  boolean		Whether to use the AFM
+ */
+function delete_ocp_page($zone,$page,$type=NULL,$use_afm=false)
+{
+	if (is_null($type)) $type='comcode_custom/'.fallback_lang();
+
+	$_page='';
+	if (substr($type,0,7)=='modules') $_page=$page.'.php';
+	elseif (substr($type,0,7)=='comcode') $_page=$page.'.txt';
+	elseif (substr($type,0,4)=='html') $_page=$page.'.htm';
+
+	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'.$page));
+
+	if ((substr($type,0,7)=='comcode') || (substr($type,0,4)=='html'))
+	{
+		$type_shortened=preg_replace('#/.+#','',$type);
+
+		if ((substr($type,0,7)=='comcode') && (get_option('store_revisions')=='1'))
+		{
+			$time=time();
+			$fullpath=zone_black_magic_filterer(((strpos($type,'comcode/')!==false)?get_file_base():get_custom_file_base()).'/'.filter_naughty($zone).(($zone!='')?'/':'').'pages/'.filter_naughty($type).'/'.$_page);
+			$bs_path=zone_black_magic_filterer(str_replace('/comcode/','/comcode_custom/',$fullpath).'.'.strval($time));
+			@copy($fullpath,$bs_path) OR intelligent_write_error($fullpath);
+			sync_file($bs_path);
+			fix_permissions($bs_path);
+		}
+
+		$langs=find_all_langs(true);
+		foreach (array_keys($langs) as $lang)
+		{
+			$_path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/'.filter_naughty($type_shortened).'/'.$lang.'/'.$_page,true);
+			$path=((strpos($type,'comcode/')!==false)?get_file_base():get_custom_file_base()).'/'.$_path;
+			if (file_exists($path))
+			{
+				if ($use_afm)
+				{
+					afm_delete_file($_path);
+				} else
+				{
+					unlink(get_custom_file_base().'/'.$_path);
+				}
+			}
+		}
+
+		if (substr($type,0,7)=='comcode')
+		{
+			require_code('attachments2');
+			require_code('attachments3');
+			delete_comcode_attachments('comcode_page',$zone.':'.$page);
+			$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_page'=>$page,'the_zone'=>$zone));
+			$GLOBALS['SITE_DB']->query_delete('comcode_pages',array('the_page'=>$page,'the_zone'=>$zone));
+			persistent_cache_empty();
+			decache('main_comcode_page_children');
+
+			require_code('seo2');
+			seo_meta_erase_storage('comcode_page',$zone.':'.$page);
+		}
+	} else
+	{
+		$_path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/'.filter_naughty($type).'/'.$_page,true);
+		$path=((strpos($type,'_custom')===false)?get_file_base():get_custom_file_base()).'/'.$_path;
+		if (file_exists($path))
+		{
+			if ($use_afm)
+			{
+				afm_delete_file($_path);
+			} else
+			{
+				unlink(get_custom_file_base().'/'.$_path);
+			}
+		}
+	}
+
+	$GLOBALS['SITE_DB']->query_delete('https_pages',array('https_page_name'=>$page),'',1);
+
+	log_it('DELETE_PAGES',$page);
+}

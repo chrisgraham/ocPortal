@@ -152,10 +152,11 @@ function catalogue_file_script()
  * @param  BINARY				Whether the catalogue is an eCommerce catalogue
  * @param  ID_TEXT			How to send view reports
  * @set    never daily weekly monthly quarterly
+ * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
  * @param  ?TIME				The add time (NULL: now)
  * @return ?AUTO_LINK		The ID of the first new catalogues root category (NULL: no root, as it's not a tree catalogue)
  */
-function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never',$add_time=NULL)
+function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never',$default_review_freq=NULL,$add_time=NULL)
 {
 	if (is_null($add_time)) $add_time=time();
 
@@ -263,9 +264,10 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
  * @param  BINARY				Whether the catalogue is an eCommerce catalogue
  * @param  ID_TEXT			How to send view reports
  * @set    never daily weekly monthly quarterly
+ * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
  * @param  ?TIME				Add time (NULL: do not change)
  */
-function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$add_time=NULL)
+function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time=NULL)
 {
 	if ($old_name!=$name)
 	{

@@ -309,6 +309,9 @@ class Module_cms_news extends standard_crud_module
 
 		$fields2->attach(meta_data_get_fields('news',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields2->attach(content_review_get_fields('news',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/,$posting_form_tabindex);
 	}
 
@@ -468,6 +471,9 @@ class Module_cms_news extends standard_crud_module
 			regenerate_event_reminder_jobs($event_id,true);
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('news',strval($id));
+
 		return strval($id);
 	}
 
@@ -566,6 +572,9 @@ class Module_cms_news extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('news',strval($id));
 
 		edit_news($id,$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$meta_data['add_time'],$meta_data['edit_time'],$meta_data['views'],$meta_data['submitter'],true);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('news',strval($id));
 	}
 
 	/**
@@ -967,6 +976,9 @@ class Module_cms_news_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('news_category',is_null($id)?NULL:strval($id)),true);
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('news_category',is_null($id)?NULL:strval($id)));
+
 		$fields->attach($this->get_permission_fields(is_null($category_id)?'':strval($category_id),NULL,($title=='')));
 
 		return array($fields,$hidden);
@@ -1008,7 +1020,11 @@ class Module_cms_news_cat extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('news_category',NULL);
 
 		$id=add_news_category($title,$img,$notes);
+
 		$this->set_permissions($id);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('news_category',strval($id));
 
 		return strval($id);
 	}
@@ -1035,7 +1051,11 @@ class Module_cms_news_cat extends standard_crud_module
 		}
 
 		edit_news_category(intval($id),$title,$img,$notes,$meta_data['submitter']);
+
 		$this->set_permissions(intval($id));
+
+		if (addon_installed('content_reviews'))
+			content_review_set('news_category',$id);
 	}
 
 	/**

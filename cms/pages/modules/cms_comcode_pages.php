@@ -820,6 +820,12 @@ class Module_cms_comcode_pages
 		require_code('content2');
 		$fields2->attach(meta_data_get_fields('comcode_page',($page_link=='')?NULL:$page_link));
 
+		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
+			$fields2->attach(content_review_get_fields('comcode_page',($page_link=='')?NULL:$page_link));
+		}
+
 		require_code('permissions2');
 		$fields2->attach(get_page_permissions_for_environment($zone,$file));
 
@@ -1010,6 +1016,12 @@ class Module_cms_comcode_pages
 		} else
 		{
 			seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,$new_keywords,$new_description);
+		}
+
+		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
+			content_review_set('comcode_page',$zone.':'.$new_file,$zone.':'.$file);
 		}
 
 		$completion_text=($validated==0)?do_lang_tempcode('SUBMIT_UNVALIDATED'):do_lang_tempcode('SUCCESS');

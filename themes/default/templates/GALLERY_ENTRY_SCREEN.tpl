@@ -62,6 +62,12 @@
 									<td>{VIEWS*}</td>
 								</tr>
 							{+END}
+
+							<tr>
+								<td colspan="2">
+									{$REVIEW_STATUS,{MEDIA_TYPE},{ID}}
+								</td>
+							</tr>
 						</tbody>
 					</table>
 

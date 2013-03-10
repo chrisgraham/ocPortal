@@ -91,6 +91,12 @@
 								{NUM_DOWNLOADS*}
 							</td>
 						</tr>
+
+						<tr>
+							<td colspan="2">
+								{$REVIEW_STATUS,download,{ID}}
+							</td>
+						</tr>
 					</tbody>
 				</table></div>
 			</div>

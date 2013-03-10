@@ -35,6 +35,8 @@
 		{+END}
 
 		{POST}
+
+		{$REVIEW_STATUS,wiki_post,{ID}}
 	</div>
 </div>
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,wiki_post,{ID}}}

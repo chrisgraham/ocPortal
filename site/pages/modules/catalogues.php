@@ -36,7 +36,7 @@ class Module_catalogues
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=8;
+		$info['version']=9;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -105,6 +105,7 @@ class Module_catalogues
 				'c_add_date'=>'TIME',
 				'c_submit_points'=>'INTEGER',
 				'c_ecommerce'=>'BINARY',
+				'c_default_review_freq'=>'?INTEGER',
 				'c_send_view_reports'=>'ID_TEXT' // never,daily,weekly,monthly,quarterly
 			));
 
@@ -480,6 +481,11 @@ class Module_catalogues
 		{
 			$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'member'),array('cf_type'=>'user'));
 			$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'member_multi'),array('cf_type'=>'user_multi'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<9))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('catalogues','c_default_review_freq','?INTEGER',NULL);
 		}
 	}
 

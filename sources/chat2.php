@@ -221,6 +221,12 @@ function get_chatroom_fields($id=NULL,$is_made_by_me=false,$room_name='',$welcom
 	require_code('content2');
 	$fields->attach(meta_data_get_fields('chat',is_null($id)?NULL:strval($id)));
 
+	if (addon_installed('content_reviews'))
+	{
+		require_code('content_reviews');
+		$fields->attach(content_review_get_fields('chat',is_null($id)?NULL:strval($id)));
+	}
+
 	return $fields;
 }
 

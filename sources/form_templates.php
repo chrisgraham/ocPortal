@@ -1713,6 +1713,18 @@ function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$
 }
 
 /**
+ * Used to create a NULL option for field sets.
+ *
+ * @param  mixed			The human-readable name for this field
+ * @param  ?integer		The tab index (NULL: none specified)
+ * @return tempcode		The field
+ */
+function form_input_na($pretty_name,$tabindex=NULL)
+{
+	return _form_input('',$pretty_name,new ocp_tempcode(),new ocp_tempcode(),false,false,NULL);
+}
+
+/**
  * Helper function to show an input field.
  *
  * @param  ID_TEXT		The codename for this field (blank: N/A)

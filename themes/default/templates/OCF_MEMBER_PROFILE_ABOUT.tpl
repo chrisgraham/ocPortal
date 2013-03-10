@@ -97,6 +97,8 @@
 				</nav>
 			</div>
 		{+END}
+
+		{$REVIEW_STATUS,member,{MEMBER_ID}}
 	</div>
 
 	<div class="ocf_profile_main">

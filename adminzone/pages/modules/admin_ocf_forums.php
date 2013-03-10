@@ -183,6 +183,9 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('forum',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('forum',is_null($id)?NULL:strval($id)));
+
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,is_null($id)));
 
@@ -517,6 +520,9 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		$this->set_permissions($id);
 
+		if (addon_installed('content_reviews'))
+			content_review_set('forum',$id);
+
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',$id)))
 		{
 			require_code('activities');
@@ -554,6 +560,9 @@ class Module_admin_ocf_forums extends standard_crud_module
 			}
 
 			$this->set_permissions($id);
+
+			if (addon_installed('content_reviews'))
+				content_review_set('forum',$id);
 		}
 	}
 

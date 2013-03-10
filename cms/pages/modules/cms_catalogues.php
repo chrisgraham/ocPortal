@@ -465,6 +465,9 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('catalogue_entry',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('catalogue_entry',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden,NULL,NULL,false,NULL,NULL,NULL,$field_defaults);
 	}
 
@@ -609,6 +612,9 @@ class Module_cms_catalogues extends standard_crud_module
 			}
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('catalogue_entry',strval($id));
+
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
 
@@ -664,6 +670,9 @@ class Module_cms_catalogues extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('catalogue_entry',strval($id));
 
 		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('catalogue_entry',strval($id));
 
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
@@ -1464,6 +1473,9 @@ class Module_cms_catalogues_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('catalogue_category',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('catalogue_category',is_null($id)?NULL:strval($id)));
+
 		// Permissions
 		if (get_value('disable_cat_cat_perms')!=='1')
 			$fields->attach($this->get_permission_fields(is_null($id)?'':strval($id),NULL,is_null($id)));
@@ -1552,6 +1564,9 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		if (get_value('disable_cat_cat_perms')!=='1')
 			$this->set_permissions(strval($category_id));
 
+		if (addon_installed('content_reviews'))
+			content_review_set('catalogue_category',strval($category_id));
+
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
 
@@ -1602,6 +1617,9 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			if (get_value('disable_cat_cat_perms')!=='1')
 				$this->set_permissions(strval($category_id));
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('catalogue_category',strval($category_id));
 
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
@@ -1710,9 +1728,10 @@ class Module_cms_catalogues_alt extends standard_crud_module
 	 * @param  BINARY				Whether the catalogue is an eCommerce catalogue
 	 * @param  ID_TEXT			How to send view reports
 	 * @set    never daily weekly monthly quarterly
+	 * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
 	 * @return array				A tuple: the tempcode for the visible fields, and the tempcode for the hidden fields, ..., and action fields
 	 */
-	function get_form_fields($name='',$title='',$description='',$display_type=0,$is_tree=1,$notes='',$submit_points=0,$ecommerce=0,$send_view_reports='never')
+	function get_form_fields($name='',$title='',$description='',$display_type=0,$is_tree=1,$notes='',$submit_points=0,$ecommerce=0,$send_view_reports='never',$default_review_freq=NULL)
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
@@ -1786,6 +1805,9 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 			$fields->attach(meta_data_get_fields('catalogue',($name=='')?NULL:$name));
 
+			if (addon_installed('content_reviews'))
+				$fields->attach(content_review_get_fields('catalogue',($name=='')?NULL:$name));
+
 			// Permissions
 			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 
@@ -1794,6 +1816,12 @@ class Module_cms_catalogues_alt extends standard_crud_module
 				$actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'),do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'),'reset_category_permissions',false));
 			if ($name=='')
 				$actions->attach(form_input_tick(do_lang_tempcode('ADD_TO_MENU'),do_lang_tempcode('DESCRIPTION_ADD_TO_MENU'),'add_to_menu',true));
+		}
+
+		if (addon_installed('content_reviews'))
+		{
+			require_lang('content_reviews');
+			$fields->attach(form_input_integer(do_lang_tempcode('REVIEW_FREQ'),do_lang_tempcode('DESCRIPTION_CATALOGUE_REVIEW_FREQ'),'default_review_freq',$default_review_freq,false));
 		}
 
 		return array($fields,$hidden,NULL,NULL,false,NULL,$actions);
@@ -1881,7 +1909,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		$title=get_translated_text($myrow['c_title']);
 		$description=get_translated_text($myrow['c_description']);
 
-		return $this->get_form_fields($catalogue_name,$title,$description,$myrow['c_display_type'],$myrow['c_is_tree'],$myrow['c_notes'],$myrow['c_submit_points'],$myrow['c_ecommerce'],$myrow['c_send_view_reports']);
+		return $this->get_form_fields($catalogue_name,$title,$description,$myrow['c_display_type'],$myrow['c_is_tree'],$myrow['c_notes'],$myrow['c_submit_points'],$myrow['c_ecommerce'],$myrow['c_send_view_reports'],$myrow['c_default_review_freq']);
 	}
 
 	/**
@@ -1903,6 +1931,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		$cat_tab=post_param_integer('cat_tab',0);
 		$ecommerce=post_param_integer('ecommerce',0);
 		$send_view_reports=post_param('send_view_reports');
+		$default_review_freq=post_param_integer('default_review_freq',NULL);
 
 		// What fields do we have?
 		$new=array();
@@ -1928,9 +1957,13 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue',NULL);
 
-		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$meta_data['add_time']);
+		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$meta_data['add_time']);
+
 		$this->set_permissions($name);
 		if (!is_null($category_id)) $GLOBALS['MODULE_CMS_CATALOGUES']->cat_crud_module->set_permissions(strval($category_id));
+
+		if (addon_installed('content_reviews'))
+			content_review_set('catalogue',$name);
 
 		// Now onto the fields
 		foreach ($new as $field)
@@ -2044,6 +2077,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 				while (array_key_exists(0,$rows));
 			}
 		}
+		$default_review_freq=post_param_integer('default_review_freq',fractional_edit()?INTEGER_MAGIC_NULL:NULL);
 
 		$was_tree=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_is_tree',array('c_name'=>$old_name));
 		if (is_null($was_tree)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -2094,7 +2128,10 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue',$old_name);
 
-		actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$meta_data['add_time']);
+		actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$meta_data['add_time']);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('catalogue',$name,$old_name);
 
 		$this->new_id=$name;
 

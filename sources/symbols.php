@@ -2404,6 +2404,26 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'REVIEW_STATUS':
+				if (isset($param[1]))
+				{
+					if (addon_installed('content_reviews'))
+					{
+						$content_reviews=$GLOBALS['SITE_DB']->query_select('content_reviews',array('last_reviewed_time','next_review_time'),array(
+							'content_type'=>$content_type,
+							'content_id'=>$content_id,
+							'display_review_status'=>1,
+						),'',1);
+						if (isset($content_reviews[0]))
+						{
+							require_lang('content_reviews');
+							$review_status=do_lang_tempcode('DISPLAYED_REVIEW_STATUS',escape_html(get_timezoned_date($content_reviews[0]['last_reviewed_time'])),escape_html(get_timezoned_date($content_reviews[0]['next_review_time'])),escape_html($content_id));
+							$value=static_evaluate_tempcode(paragraph($review_status));
+						}
+					}
+				}
+				break;
+
 			default:
 				global $EXTRA_SYMBOLS;
 				if (is_null($EXTRA_SYMBOLS))

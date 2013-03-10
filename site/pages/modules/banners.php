@@ -404,7 +404,14 @@ class Module_banners
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
 
-		return do_template('BANNER_VIEW_SCREEN',array('_GUID'=>'ed923ae0682c6ed679c0efda688c49ea','TITLE'=>$title,'EDIT_URL'=>$edit_url,'MAP_TABLE'=>$map_table,'BANNER'=>$banner));
+		return do_template('BANNER_VIEW_SCREEN',array(
+			'_GUID'=>'ed923ae0682c6ed679c0efda688c49ea',
+			'TITLE'=>$title,
+			'EDIT_URL'=>$edit_url,
+			'MAP_TABLE'=>$map_table,
+			'BANNER'=>$banner,
+			'NAME'=>$source,
+		));
 	}
 
 }

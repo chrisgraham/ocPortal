@@ -167,7 +167,8 @@ class Hook_addon_registry_core_comcode_pages
 				'CONTENT'=>lorem_phrase(),
 				'EDIT_URL'=>placeholder_url(),
 				'ADD_CHILD_URL'=>placeholder_url(),
-				'NAME'=>lorem_word()
+				'NAME'=>lorem_word(),
+				'NATIVE_ZONE'=>lorem_word(),
 			)), NULL, '', true)
 		);
 	}

@@ -192,6 +192,12 @@ class Module_admin_ocf_join
 		$password_compatibility_scheme=((post_param_integer('temporary_password',0)==1)?'temporary':'');
 		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,'','',true,$password_compatibility_scheme,'',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
 
+		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
+			content_review_set('member',strval($id));
+		}
+
 		// Secondary groups
 		if (array_key_exists('secondary_groups',$_POST))
 		{

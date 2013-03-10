@@ -269,6 +269,9 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('group',is_null($id)?NULL:strval($id),false,array('submitter')));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('group',is_null($id)?NULL:strval($id)));
+
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'0fd215401ffaace7f2f9f6aa73db4ce1','TITLE'=>do_lang_tempcode('ACTIONS'))));
 
 		$copy_members_from_groups=new ocp_tempcode();
@@ -603,6 +606,9 @@ class Module_admin_ocf_groups extends standard_crud_module
 			$this->extra_donext_whatever_title=do_lang_tempcode('MODULE_TRANS_NAME_subscriptions');
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('group',strval($id));
+
 		return strval($id);
 	}
 
@@ -684,6 +690,9 @@ class Module_admin_ocf_groups extends standard_crud_module
 				$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>intval($id)));
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('group',$id);
 
 		return NULL;
 	}

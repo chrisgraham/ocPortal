@@ -36,7 +36,7 @@ class Module_authors
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['locked']=true;
 		return $info;
 	}
@@ -65,22 +65,28 @@ class Module_authors
 			$GLOBALS['SITE_DB']->create_table('authors',array(
 				'author'=>'*ID_TEXT',
 				'url'=>'URLPATH',
-				'forum_handle'=>'?MEMBER',
+				'member_id'=>'?MEMBER',
 				'description'=>'LONG_TRANS',	// Comcode
 				'skills'=>'LONG_TRANS'	// Comcode
 			));
 
-			$GLOBALS['SITE_DB']->create_index('authors','findmemberlink',array('forum_handle'));
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('authors','forum_handle','?MEMBER');
+			$GLOBALS['SITE_DB']->create_index('authors','findmemberlink',array('member_id'));
+
+			// collab_features
+			require_lang('authors');
+			add_menu_item_simple('collab_features',NULL,'VIEW_MY_AUTHOR_PROFILE','_SELF:authors:type=misc');
+			add_menu_item_simple('collab_features',NULL,'EDIT_MY_AUTHOR_PROFILE','_SEARCH:cms_authors:type=_ad',0,0,true,do_lang('ZONE_BETWEEN'),1);
 		}
 
-		// collab_features
-		require_lang('authors');
-		add_menu_item_simple('collab_features',NULL,'VIEW_MY_AUTHOR_PROFILE','_SELF:authors:type=misc');
-		add_menu_item_simple('collab_features',NULL,'EDIT_MY_AUTHOR_PROFILE','_SEARCH:cms_authors:type=_ad',0,0,true,do_lang('ZONE_BETWEEN'),1);
+		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('authors','member_id','?MEMBER');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('authors','forum_handle','?MEMBER','member_id');
+		}
 	}
 
 	/**
@@ -147,7 +153,7 @@ class Module_authors
 			{
 				$message=do_lang_tempcode('NO_SUCH_AUTHOR',escape_html($author));
 			}
-			$details=array('author'=>$author,'url'=>'','forum_handle'=>$GLOBALS['FORUM_DRIVER']->get_member_from_username($author),'description'=>NULL,'skills'=>NULL,);
+			$details=array('author'=>$author,'url'=>'','member_id'=>$GLOBALS['FORUM_DRIVER']->get_member_from_username($author),'description'=>NULL,'skills'=>NULL,);
 		} else
 		{
 			$details=$rows[0];

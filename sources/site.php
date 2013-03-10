@@ -1576,6 +1576,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		'EDIT_URL'=>$edit_url,
 		'ADD_CHILD_URL'=>$add_child_url,
 		'NAME'=>$codename,
+		'NATIVE_ZONE'=>$zone,
 	));
 	if (($is_panel) || ($being_included))
 	{

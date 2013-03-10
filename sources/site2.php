@@ -368,6 +368,12 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 		{
 			$comcode_page_row=$new_comcode_page_row;
 			$GLOBALS['SITE_DB']->query_insert('comcode_pages',$comcode_page_row,false,true);
+
+			if (addon_installed('content_reviews'))
+			{
+				require_code('content_reviews');
+				schedule_content_review('comcode_page',$zone.':'.$codename,intval(get_option('comcode_page_default_review_freq')));
+			}
 		}
 	} else
 	{
@@ -379,6 +385,12 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 		{
 			$comcode_page_row=$new_comcode_page_row;
 			$GLOBALS['SITE_DB']->query_insert('comcode_pages',$comcode_page_row,false,true);
+
+			if (addon_installed('content_reviews'))
+			{
+				require_code('content_reviews');
+				schedule_content_review('comcode_page',$zone.':'.$codename,intval(get_option('comcode_page_default_review_freq')));
+			}
 		}
 
 		// Check to see if it needs translating
@@ -469,6 +481,12 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 	{
 		$comcode_page_row=$new_comcode_page_row;
 		$GLOBALS['SITE_DB']->query_insert('comcode_pages',$comcode_page_row,false,true);
+
+		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
+			schedule_content_review('comcode_page',$zone.':'.$codename,intval(get_option('comcode_page_default_review_freq')));
+		}
 	}
 
 	return array($html,$comcode_page_row,$title_to_use);

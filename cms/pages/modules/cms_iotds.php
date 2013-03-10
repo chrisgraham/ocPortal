@@ -174,6 +174,9 @@ class Module_cms_iotds extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('iotd',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('iotd',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden);
 	}
 
@@ -322,6 +325,9 @@ class Module_cms_iotds extends standard_crud_module
 			set_iotd($id);
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('iotd',strval($id));
+
 		return strval($id);
 	}
 
@@ -389,6 +395,9 @@ class Module_cms_iotds extends standard_crud_module
 				set_iotd($id);
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('iotd',strval($id));
 	}
 
 	/**

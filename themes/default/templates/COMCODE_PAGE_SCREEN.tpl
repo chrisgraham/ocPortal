@@ -22,6 +22,8 @@
 			{$BLOCK,failsafe=1,block=main_screen_actions}
 		{+END}
 
+		{$REVIEW_STATUS,comcode_page,{NATIVE_ZONE}:{NAME}}
+
 		{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 	{+END}
 

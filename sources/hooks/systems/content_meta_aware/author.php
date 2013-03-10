@@ -22,7 +22,7 @@ class Hook_content_meta_aware_author
 {
 
 	/**
-	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
+	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
@@ -86,7 +86,19 @@ class Hook_content_meta_aware_author
 	}
 
 	/**
-	 * Standard modular run function for award hooks. Renders a content box for an award/randomisation.
+	 * Standard modular delete function for content hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT	The content ID
+	 */
+	function delete($content_id)
+	{
+		// TODO: This will be moved into OcCLE filesystem hook at some point, #218 on tracker
+		require_code('authors');
+		delete_author($content_id);
+	}
+
+	/**
+	 * Standard modular run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
 	 * @param  ID_TEXT	The zone to display in

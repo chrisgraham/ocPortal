@@ -240,6 +240,9 @@ class Module_cms_polls extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('poll',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('poll',is_null($id)?NULL:strval($id)));
+
 		return $fields;
 	}
 
@@ -329,6 +332,9 @@ class Module_cms_polls extends standard_crud_module
 			}
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('poll',strval($id));
+
 		return strval($id);
 	}
 
@@ -408,6 +414,9 @@ class Module_cms_polls extends standard_crud_module
 				}
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('poll',strval($id));
 	}
 
 	/**

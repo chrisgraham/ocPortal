@@ -190,6 +190,8 @@
 		{+END}{+END}{+END}{+END}
 	</div>
 
+	{$REVIEW_STATUS,topic,{ID}}
+
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
 </div>
 

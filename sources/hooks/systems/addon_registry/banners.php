@@ -469,7 +469,8 @@ class Hook_addon_registry_banners
 				'TITLE'=>lorem_title(),
 				'EDIT_URL'=>placeholder_url(),
 				'MAP_TABLE'=>lorem_phrase(),
-				'BANNER'=>lorem_phrase()
+				'BANNER'=>lorem_phrase(),
+				'NAME'=>placeholder_id(),
 			)), NULL, '', true)
 		);
 	}

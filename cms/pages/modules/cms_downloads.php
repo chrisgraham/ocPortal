@@ -516,7 +516,7 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			if ($author=='')
 			{
-				$author=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','author',array('forum_handle'=>get_member()));
+				$author=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','author',array('member_id'=>get_member()));
 				if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 			}
 		}
@@ -567,6 +567,9 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			$fields->attach(form_input_integer(do_lang_tempcode('NUM_DOWNLOADS'),do_lang_tempcode('DESCRIPTION_META_NUM_DOWNLOADS'),'meta_num_downloads',NULL,false));
 		}
+
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('download',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden);
 	}
@@ -705,6 +708,9 @@ class Module_cms_downloads extends standard_crud_module
 			}
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('download',strval($id));
+
 		return strval($id);
 	}
 
@@ -777,6 +783,9 @@ class Module_cms_downloads extends standard_crud_module
 			require_code('permissions2');
 			set_category_permissions_from_environment('galleries','download_'.strval($id));
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('download',strval($id));
 	}
 
 	/**
@@ -987,6 +996,9 @@ class Module_cms_downloads_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('download_category',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('download_category',is_null($id)?NULL:strval($id)));
+
 		// Permissions
 		$fields->attach($this->get_permission_fields(($category_id==-1)?NULL:strval($category_id),NULL,($category=='')));
 
@@ -1032,6 +1044,9 @@ class Module_cms_downloads_cat extends standard_crud_module
 		$category_id=add_download_category($category,$parent_id,$description,$notes,$rep_image,$meta_data['add_time']);
 		$this->set_permissions(strval($category_id));
 
+		if (addon_installed('content_reviews'))
+			content_review_set('download_category',strval($category_id));
+
 		return strval($category_id);
 	}
 
@@ -1063,6 +1078,9 @@ class Module_cms_downloads_cat extends standard_crud_module
 		{
 			$this->set_permissions(strval($category_id));
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('download_category',strval($category_id));
 	}
 
 	/**

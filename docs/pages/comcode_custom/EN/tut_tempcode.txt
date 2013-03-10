@@ -709,6 +709,10 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 		<td>Show how many views a content type has had. The first parameter is the table to read from, the second parameter is the name of the field (it must contain 'views' -- the code will not allow arbitrary field calling for security reasons) the third parameter is the ID for the resource.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$REVIEW_STATUS,download,3}</td>
+		<td>Show the periodic content review status for the given content, if configured for the content and set as publicly visible.</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$LOAD_PANEL,panel_left,site}</td>
 		<td>Load a panel-page into a template (first parameter is the page name, optional second parameter is the zone name which defaults to the current zone)</td>
 	</tr>

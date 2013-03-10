@@ -67,6 +67,8 @@
 
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
+	{$REVIEW_STATUS,author,{AUTHOR}}
+
 	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 	{+START,INCLUDE,STAFF_ACTIONS}
 		1_URL={EDIT_URL*}

@@ -182,7 +182,12 @@ class Module_admin_chat extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('chat',NULL);
 
 		$id=add_chatroom(post_param('c_welcome'),post_param('room_name'),$GLOBALS['FORUM_DRIVER']->get_member_from_username(post_param('room_owner')),$allow2,$allow2_groups,$disallow2,$disallow2_groups,post_param('room_lang',user_lang()));
+
 		$this->set_permissions($id);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('chat',strval($id));
+
 		return strval($id);
 	}
 
@@ -209,7 +214,11 @@ class Module_admin_chat extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('chat',$id);
 
 		edit_chatroom(intval($id),post_param('c_welcome',STRING_MAGIC_NULL),post_param('room_name'),$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,post_param('room_lang',STRING_MAGIC_NULL));
+
 		$this->set_permissions($id);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('chat',$id);
 	}
 
 	/**

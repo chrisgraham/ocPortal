@@ -304,6 +304,9 @@ class Module_cms_banners extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('banner',$name));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('banner',$name));
+
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 
@@ -389,6 +392,9 @@ class Module_cms_banners extends standard_crud_module
 
 		if (get_option('use_banner_permissions')=='1') $this->set_permissions($name);
 
+		if (addon_installed('content_reviews'))
+			content_review_set('banner',$name);
+
 		return array($name,$tpl);
 	}
 
@@ -420,6 +426,9 @@ class Module_cms_banners extends standard_crud_module
 		$this->new_id=post_param('name');
 
 		if (get_option('use_banner_permissions')=='1') $this->set_permissions($id);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('banner',$this->id,$id);
 	}
 
 	/**
@@ -554,6 +563,9 @@ class Module_cms_banners_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('banner_type',($id=='')?NULL:$id));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('banner_type',$id));
+
 		return array($fields,$hidden);
 	}
 
@@ -592,6 +604,9 @@ class Module_cms_banners_cat extends standard_crud_module
 
 		add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
 
+		if (addon_installed('content_reviews'))
+			content_review_set('banner_type',$id);
+
 		return array($id,do_lang_tempcode('ADD_BANNER_TEMPLATING'));
 	}
 
@@ -614,6 +629,9 @@ class Module_cms_banners_cat extends standard_crud_module
 		edit_banner_type($id,post_param('new_id'),$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
 
 		$this->new_id=post_param('new_id');
+
+		if (addon_installed('content_reviews'))
+			content_review_set('banner_type',$this->new_id,$id);
 
 		return do_lang_tempcode('ADD_BANNER_TEMPLATING');
 	}

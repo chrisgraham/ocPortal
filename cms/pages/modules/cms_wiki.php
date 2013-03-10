@@ -148,7 +148,10 @@ class Module_cms_wiki
 		}
 
 		require_code('content2');
-		$fields2->attach(meta_data_get_fields('wiki_page',strval($id)));
+		$fields2->attach(meta_data_get_fields('wiki_page',is_null($id)?NULL:strval($id)));
+
+		if (addon_installed('content_reviews'))
+			$fields2->attach(content_review_get_fields('wiki_page',is_null($id)?NULL:strval($id)));
 
 		require_code('permissions2');
 		$fields2->attach(get_category_permissions_for_environment('wiki_page',strval($page_id),'cms_wiki',NULL,($page_id==-1)));
@@ -214,6 +217,9 @@ class Module_cms_wiki
 			require_code('awards');
 			handle_award_setting('wiki_page',strval($id));
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('wiki_page',strval($id));
 
 		require_code('autosave');
 		clear_ocp_autosave();
@@ -408,6 +414,9 @@ class Module_cms_wiki
 			{
 				save_form_custom_fields('wiki_page',strval($id));
 			}
+
+			if (addon_installed('content_reviews'))
+				content_review_set('wiki_page',strval($id));
 
 			require_code('autosave');
 			clear_ocp_autosave();

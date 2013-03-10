@@ -247,6 +247,7 @@ $featuretree=array(
 				array('Classified ads','Entries can automatically expire and get archived. See view reports'),
 				array('Community interaction','Allow users to comment upon and rate entries'),
 				array('Import data from CSV files'),
+				array('Periodic content reviews','Helping you ensure ongoing accuracy of your content'),
 			),
 			'Think &ldquo;databases on my website&rdquo;',
 		),

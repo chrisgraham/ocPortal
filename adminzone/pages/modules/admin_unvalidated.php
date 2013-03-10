@@ -80,6 +80,7 @@ class Module_admin_unvalidated
 			$identifier_select=is_array($info['db_identifier'])?implode(',',$info['db_identifier']):$info['db_identifier'];
 			$db=array_key_exists('db',$info)?$info['db']:$GLOBALS['SITE_DB'];
 			$rows=$db->query('SELECT '.$identifier_select.(array_key_exists('db_title',$info)?(','.$info['db_title']):'').' FROM '.$db->get_table_prefix().$info['db_table'].' WHERE '.$info['db_validated'].'=0',100);
+			if (count($rows)==100) attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'warn');
 			$content=new ocp_tempcode();
 			foreach ($rows as $row)
 			{
@@ -116,7 +117,7 @@ class Module_admin_unvalidated
 			$out->attach(do_template('UNVALIDATED_SECTION',array('_GUID'=>'838240008e190b9cbaa0280fbddd6baf','TITLE'=>$info['title'],'CONTENT'=>$content)));
 		}
 
-		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'4e971f1c8851b821af030b5c7bbcb3fb','TITLE'=>$_title,'SECTIONS'=>$out));
+		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'4e971f1c8851b821af030b5c7bbcb3fb','TITLE'=>$_title,'TEXT'=>do_lang_tempcode('UNVALIDATED_PAGE_TEXT'),'SECTIONS'=>$out));
 	}
 
 }

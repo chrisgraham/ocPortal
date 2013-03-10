@@ -96,6 +96,8 @@
 
 		{LAST_EDITED}
 
+		{$REVIEW_STATUS,post,{ID}}
+
 		{+START,IF_NON_EMPTY,{SIGNATURE}}
 			<div>
 				<hr class="ocf_sig_barrier" />

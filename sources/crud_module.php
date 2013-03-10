@@ -192,8 +192,9 @@ class standard_crud_module
 			}
 		}
 
-		// Meta data
+		// Meta data etc
 		require_code('content2');
+		if (addon_installed('content_reviews')) require_code('content_reviews');
 
 		if (method_exists($this,'run_start'))
 		{

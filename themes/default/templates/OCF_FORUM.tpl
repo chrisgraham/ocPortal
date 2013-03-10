@@ -72,6 +72,8 @@
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,IF_PASSED,ID}
+	{$REVIEW_STATUS,forum,{ID}}
+
 	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forums}}
 		{+START,INCLUDE,STAFF_ACTIONS}
 			1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:ad:parent_forum={ID}}

@@ -55,6 +55,8 @@
 		set_up_change_monitor(e[i].childNodes[0]);
 //]]></script>
 
+{$REVIEW_STATUS,quiz,{ID}}
+
 {+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}

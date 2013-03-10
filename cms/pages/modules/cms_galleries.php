@@ -951,6 +951,9 @@ class Module_cms_galleries extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('image',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('image',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden);
 	}
 
@@ -1078,6 +1081,9 @@ class Module_cms_galleries extends standard_crud_module
 			$GLOBALS['SITE_DB']->query_update('galleries',array('rep_image'=>$urls[1]),array('name'=>$cat),'',1);
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('image',strval($id));
+
 		return strval($id);
 	}
 
@@ -1151,6 +1157,9 @@ class Module_cms_galleries extends standard_crud_module
 		{
 			$GLOBALS['SITE_DB']->query_update('galleries',array('rep_image'=>$thumb_url),array('name'=>$cat),'',1);
 		}
+
+		if (addon_installed('content_reviews'))
+			content_review_set('image',strval($id));
 	}
 
 	/**
@@ -1433,6 +1442,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('video',is_null($id)?NULL:strval($id)));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('video',is_null($id)?NULL:strval($id)));
+
 		return array($fields,$hidden);
 	}
 
@@ -1561,6 +1573,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 			}
 		}
 
+		if (addon_installed('content_reviews'))
+			content_review_set('video',strval($id));
+
 		return strval($id);
 	}
 
@@ -1650,6 +1665,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('video',strval($id));
 
 		edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('video',strval($id));
 	}
 
 	/**
@@ -1859,6 +1877,9 @@ class Module_cms_galleries_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('gallery',($name=='')?NULL:$name,true));
 
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('gallery',($name=='')?NULL:$name));
+
 		return array($fields,$hidden);
 	}
 
@@ -1921,7 +1942,11 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('gallery',NULL);
 
 		add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],$allow_rating,$allow_comments,false,$meta_data['add_time'],$meta_data['submitter']);
+
 		$this->set_permissions($name);
+
+		if (addon_installed('content_reviews'))
+			content_review_set('gallery',$name);
 
 		return $name;
 	}
@@ -1993,6 +2018,9 @@ class Module_cms_galleries_cat extends standard_crud_module
 		);
 
 		$this->new_id=$name;
+
+		if (addon_installed('content_reviews'))
+			content_review_set('gallery',$name,$id);
 
 		if (!fractional_edit())
 		{
