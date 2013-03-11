@@ -167,7 +167,7 @@ function new_html__initialise(element)
 
 			/* Convert a/img title attributes into ocPortal tooltips */
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
-				convert_tooltip(element);
+				if (typeof element['original-title']=='undefined'/*check tipsy not used*/) convert_tooltip(element);
 			{+END}
 			break;
 
