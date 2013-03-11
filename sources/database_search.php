@@ -691,15 +691,15 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($_query!='') $_query.='+';
 
+				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+
 				if (!db_has_subqueries($db->connection_read))
 				{
-					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
-
-					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3).')';
+					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3)).')';
 				} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
 				{
 					$_query.='(SELECT COUNT(*) FROM (';
-					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
+					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3));
 					$_query.=' LIMIT 1000) counter)';
 				}
 			}
