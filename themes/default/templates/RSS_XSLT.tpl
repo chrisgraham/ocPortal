@@ -30,13 +30,13 @@
 				</div>
 
 				<div class="rss_main_inner">
-					<div class="box box___rss_xslt"><div class="box_inner">
+					<div class="box box___rss_xslt"><div class="box_inner"><div>
 						<h1><span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/rss/channel/title" /></span></h1>
 
 						<p id="xslt_introduction">{!RSS_XSLT_INTRODUCTION}</p>
 						<xsl:apply-templates select="/rss/channel" />
 						<p class="rss_copyright"><span name="decodeable"><xsl:value-of select="/rss/channel/copyright" disable-output-escaping="yes" /></span></p>
-					</div></div>
+					</div></div></div>
 				</div>
 			</body>
 		</html>

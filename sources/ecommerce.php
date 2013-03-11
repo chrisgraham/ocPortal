@@ -235,7 +235,7 @@ function make_cancel_button($purchase_id,$via)
  */
 function send_invoice_mail($member_id,$id)
 {
-	// Send out mail
+	// Send out notification
 	require_code('notifications');
 	$_url=build_url(array('page'=>'invoices','type'=>'misc'),get_module_zone('invoices'),NULL,false,false,true);
 	$url=$_url->evaluate();
@@ -544,6 +544,29 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 			$found['ORDER_STATUS']='ORDER_STATUS_payment_received';
 		}
 		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$product));
+
+		// Send out notification to staff
+		if ($found[0]==PRODUCT_SUBSCRIPTION)
+		{
+			require_code('notifications');
+			$member_id=$GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
+			if (!is_null($member_id))
+			{
+				$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+				if (is_null($username)) $username=do_lang('GUEST');
+				if ($payment_status=='Completed')
+				{
+					$subject=do_lang('SERVICE_PAID_FOR',$item_name,$username,get_site_name(),get_site_default_lang());
+					$body=do_lang('_SERVICE_PAID_FOR',$item_name,$username,get_site_name(),get_site_default_lang());
+					dispatch_notification('service_paid_for_staff',NULL,$subject,$body);
+				} else
+				{
+					$subject=do_lang('SERVICE_CANCELLED',$item_name,$username,get_site_name(),get_site_default_lang());
+					$body=do_lang('_SERVICE_CANCELLED',$item_name,$username,get_site_name(),get_site_default_lang());
+					dispatch_notification('service_cancelled_staff',NULL,$subject,$body);
+				}
+			}
+		}
 	}
 
 	// Invoice handling

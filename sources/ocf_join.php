@@ -365,7 +365,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		mail_wrap(do_lang('COPPA_JOIN_SUBJECT',$username,get_site_name(),NULL,$language),$message,array($email_address),$username);
 	}
 
-	// Send 'validate this member' mail
+	// Send 'validate this member' notification
 	if ($require_new_member_validation)
 	{
 		require_code('notifications');
@@ -374,6 +374,13 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$message=do_lang('VALIDATE_NEW_MEMBER_MAIL',comcode_escape($username),comcode_escape($validation_url),comcode_escape(strval($member_id)),get_site_default_lang());
 		dispatch_notification('ocf_member_needs_validation',NULL,do_lang('VALIDATE_NEW_MEMBER_SUBJECT',$username,NULL,NULL,get_site_default_lang()),$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	}
+
+	// Send new member notification
+	require_code('notifications');
+	$_member_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,true);
+	$member_url=$_member_url->evaluate();
+	$message=do_lang('NEW_MEMBER_NOTIFICATION_MAIL',comcode_escape($username),comcode_escape(get_site_name()),array(comcode_escape($member_url),comcode_escape(strval($member_id))),get_site_default_lang());
+	dispatch_notification('ocf_new_member',NULL,do_lang('NEW_MEMBER_NOTIFICATION_MAIL_SUBJECT',$username,get_site_name(),NULL,get_site_default_lang()),$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 
 	// Intro post
 	if ($intro_message_if_enabled)
