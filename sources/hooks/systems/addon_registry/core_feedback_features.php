@@ -75,7 +75,6 @@ class Hook_addon_registry_core_feedback_features
 			'sources/topics.php',
 			'sources/hooks/systems/notifications/like.php',
 			'sources/hooks/systems/notifications/comment_posted.php',
-			'sources/hooks/systems/notifications/new_feedback.php',
 			'themes/default/images/pagepics/trackbacks.png',
 			'themes/default/images/bigicons/trackbacks.png',
 			'TRACKBACK_DELETE_SCREEN.tpl',
