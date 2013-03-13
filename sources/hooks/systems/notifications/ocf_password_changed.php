@@ -10,7 +10,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @package		core_ocf
  */
 
 class Hook_Notification_ocf_password_changed extends Hook_Notification
