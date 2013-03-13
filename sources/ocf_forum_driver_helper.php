@@ -462,7 +462,8 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	if ($mark_read)
 	{
 		require_code('ocf_topics');
-		ocf_ping_topic_read($topic_id);
+		if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
+			ocf_ping_topic_read($topic_id);
 	}
 
 	return $out;

@@ -416,11 +416,11 @@ function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
  */
 function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$fields,$where_clause,$content_where,$order,$select='*',$raw_fields=NULL,$permissions_module=NULL,$permissions_field=NULL,$permissions_field_is_string=false)
 {
+	@ignore_user_abort(false); // If the user multi-submits a search, we don't want to run parallel searches (very slow!). That said, this currently doesn't work in PHP, because PHP does not realise the connection has died until way too late :(. So we also use a different tact (dedupe_mode) but hope PHP will improve with time.
+
 	if (substr($where_clause,0,5)==' AND ') $where_clause=substr($where_clause,5);
 	if (substr($where_clause,-5)==' AND ') $where_clause=substr($where_clause,0,strlen($where_clause)-5);
 	$where_alternative_matches=array();
-
-	$had_limit_imposed=false;
 
 	if ((!is_null($permissions_module)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
@@ -485,11 +485,20 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				$extra_join.=' '.$translate_join_type.' '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 			}
-			$_keywords_query=$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+			$_keywords_query=$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
 			$_keywords_query.=' WHERE '.$keywords_where;
 			$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
+
 			$keywords_query='SELECT '.$select.' FROM '.$_keywords_query;
-			$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
+			if (!db_has_subqueries($db->connection_read))
+			{
+				$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
+			} else
+			{
+				$_count_query_keywords_search='(SELECT COUNT(*) FROM (';
+				$_count_query_keywords_search.='SELECT 1 FROM '.$_keywords_query;
+				$_count_query_keywords_search.=' LIMIT 1000) counter)';
+			}
 
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
 			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible
@@ -507,15 +516,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
 			}
 
+			$db->dedupe_mode=true;
 			$t_keyword_search_rows_count=$db->query_value_if_there($_count_query_keywords_search);
-			if ($t_keyword_search_rows_count>500) // Too much to sort in memory, so we will just put up with overlapping content types that aren't sorted together right
-			{
-				$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
-				$had_limit_imposed=true;
-			} else
-			{
-				$t_keyword_search_rows=$db->query($keywords_query);
-			}
+			$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
+			$db->dedupe_mode=false;
 			$t_count+=$t_keyword_search_rows_count;
 			$t_rows=array_merge($t_rows,$t_keyword_search_rows);
 		} else $_count_query_keywords_search=NULL;
@@ -606,21 +610,33 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 
 		// Work out main query
-		$query='';
+		$query='(';
 		foreach ($where_alternative_matches as $parts) // We UNION them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
 		{
 			list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
 
-			if ($query!='')
+			if ($query!='(')
 			{
-				$query.=' LIMIT '.strval($max);
-				$query.=' UNION ';
+				if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+				{
+					$query.=' ORDER BY '.$order;
+					if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+				}
+				$query.=' LIMIT '.strval($max+$start);
+				$query.=') UNION (';
 			}
 
 			$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
 			$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
 		}
+		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+		{
+			$query.=' ORDER BY '.$order;
+			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+		}
+		$query.=' LIMIT '.strval($max+$start);
+		$query.=')';
 		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
 		$_query='';
 		if (strpos(get_db_type(),'mysql')===false)
@@ -642,16 +658,16 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($_query!='') $_query.='+';
 
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where==''))
-				{
-					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
-					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3).')';
+				if (!db_has_subqueries($db->connection_read))
+				{
+					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3)).')';
 				} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
 				{
 					$_query.='(SELECT COUNT(*) FROM (';
-					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
-					$_query.=' LIMIT 10000) counter)';
+					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3));
+					$_query.=' LIMIT 1000) counter)';
 				}
 			}
 			$_count_query_main_search='SELECT ('.$_query.')';
@@ -662,7 +678,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 		$query.=($group_by_ok?' GROUP BY r.id':'');
 
-		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
+		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 		{
 			$query.=' ORDER BY '.$order;
 			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
@@ -684,19 +700,11 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
 		}
 
+		$db->dedupe_mode=true;
 		$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search);
-		$_max_rows_to_preload=get_value('max_rows_to_preload');
-		$max_rows_to_preload=is_null($_max_rows_to_preload)?500:intval($_max_rows_to_preload);
-		if ($t_main_search_rows_count>$max_rows_to_preload) // Too much to sort in memory, so we will just put up with overlapping content types that aren't sorted together right
-		{
-			$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
-			$had_limit_imposed=true;
-		} else
-		{
-			$t_main_search_rows=$db->query($query,NULL,NULL,false,true);
-		}
+		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
+		$db->dedupe_mode=false;
 		$t_count+=$t_main_search_rows_count;
-		$t_rows=array_merge($t_rows,$t_main_search_rows);
 	} else
 	{
 		$t_main_search_rows=array();
@@ -762,8 +770,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 	}
 	$final_result_rows=$t_rows;
-	if (!$had_limit_imposed) // More accurate, as filtered for dupes
-		$t_count=count($t_rows);
 	$GLOBALS['TOTAL_SEARCH_RESULTS']+=$t_count;
 	array_splice($final_result_rows,$max*2+$start); // We return more than max in case our search hook does some extra in-code filtering (Catalogues, Comcode pages). It shouldn't really but sometimes it has to, and it certainly shouldn't filter more than 50%. Also so our overall ordering can be better.
 

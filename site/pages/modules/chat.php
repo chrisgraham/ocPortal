@@ -233,7 +233,10 @@ class Module_chat
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'CHAT_LOBBY','private'=>'CREATE_PRIVATE_ROOM','blocking_interface'=>'MEMBER_BLOCKING','set_effects'=>'CHAT_SET_EFFECTS');
+		$ret=array('misc'=>'CHAT_LOBBY','private'=>'CREATE_PRIVATE_ROOM','blocking_interface'=>'MEMBER_BLOCKING');
+		if (!is_guest())
+			$ret['set_effects']='CHAT_SET_EFFECTS';
+		return $ret;
 	}
 
 	/**
@@ -390,7 +393,8 @@ class Module_chat
 			delete_chatroom($old['id']);
 		}
 		// Prune chat events
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_events WHERE e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE));
+		if (!$GLOBALS['SITE_DB']->table_is_locked('chat_events'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_events WHERE e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE));
 
 		enter_chat_lobby();
 
@@ -1065,6 +1069,8 @@ class Module_chat
 		require_code('chat_sounds');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
+
+		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		require_lang('javascript');
 		require_javascript('javascript_chat');

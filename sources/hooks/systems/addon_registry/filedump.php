@@ -84,6 +84,7 @@ class Hook_addon_registry_filedump
 			'uploads/filedump/index.html',
 			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
+			'sources/hooks/systems/config_default/is_on_folder_create.php',
 			'sources/hooks/modules/search/filedump.php',
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/modules/admin_occle_fs/home.php',

@@ -213,7 +213,8 @@ function ocf_has_read_topic($topic_id,$topic_last_time=NULL,$member_id=NULL,$mem
 	// Occasionally we need to delete old entries
 	if (mt_rand(0,1000)==123)
 	{
-		$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE l_time<'.strval($seven_days_ago).' AND l_time<>0');
+		if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
+			$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE l_time<'.strval($seven_days_ago).' AND l_time<>0');
 	}
 
 	if ($topic_last_time<$seven_days_ago) return true; // We don't store that old

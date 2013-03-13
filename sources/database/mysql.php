@@ -251,7 +251,7 @@ class Database_Static_mysql extends Database_super_mysql
 		}
 
 		$sub=substr(ltrim($query),0,7);
-		if (($results!==true) && (($sub=='SELECT ') || ($sub=='select ') || (strtoupper(substr(ltrim($query),0,8))=='EXPLAIN ') || (strtoupper(substr(ltrim($query),0,9))=='DESCRIBE ') || (strtoupper(substr(ltrim($query),0,5))=='SHOW ')) && ($results!==false))
+		if (($results!==true) && (($sub=='SELECT ') || ($sub=='select ') || (strtoupper(substr($query,0,8))=='(SELECT ') || (strtoupper(substr(ltrim($query),0,8))=='EXPLAIN ') || (strtoupper(substr(ltrim($query),0,9))=='DESCRIBE ') || (strtoupper(substr(ltrim($query),0,5))=='SHOW ')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}

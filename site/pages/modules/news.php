@@ -585,7 +585,8 @@ class Module_news
 		if (get_db_type()!='xml')
 		{
 			$myrow['news_views']++;
-			$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('news'))
+				$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		// Management links

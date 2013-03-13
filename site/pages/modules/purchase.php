@@ -163,6 +163,8 @@ class Module_purchase
 	 */
 	function run()
 	{
+		@ignore_user_abort(true); // Must keep going till completion
+
 		require_lang('ecommerce');
 		require_code('ecommerce');
 		require_lang('config');

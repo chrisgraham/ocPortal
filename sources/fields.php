@@ -219,6 +219,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_fi
 		if (is_array($result))
 		{
 			$field_groups[$field_cat]->attach($result[0]);
+			$hidden->attach($result[1]);
 		} else
 		{
 			$field_groups[$field_cat]->attach($result);

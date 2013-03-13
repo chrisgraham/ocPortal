@@ -173,7 +173,7 @@ The values you might want to manually change are:
  - [tt]disable_pt_restrict[/tt] -- set this to '1' if you want to disable the per-member "private topic restriction options".
  - [tt]disable_ecards[/tt] -- set this to '1' if you don't want ecards on galleries and still want the recommend addon on.
  - [tt]disable_csv_recommend[/tt] -- set this to '1' if you don't want the CSV upload option on the recommend-to-a-friend form.
- - [tt]disable_boolean_search[/tt] -- set this to '1' to disable the option to do boolean searches (which can be slow)
+ - [tt]disable_boolean_search[/tt] -- set this to '1' to disable an explit option to do boolean searches (which can be slow). It does not actually disable boolean searches fully, you can activate them by using [tt]+[/tt] and [tt]-[/tt] in queries; but really short keywords will fail because boolean search will work via the full-text search index, which has a character limit
  - [tt]proxy[/tt] -- set this to the hostname/IP-address of the machine acting as an HTTP proxy server. This can also be set via a server environmental variable of the same name, although you likely need to reset the whole server first (you definitely do on Windows with Apache, as it does not get into the environment until you do this).
  - [tt]proxy_port[/tt] -- set this to the port name of your HTTP proxy (if you do not set it it defaults to 8080). This can also be set via a server environmental variable of the same name (see above).
  - [tt]proxy_user/proxy_password[/tt] -- set this to the authentication user/password for your HTTP proxy (if you do not set it, no authentication will be used). This only works if 'prefer_curl' is on. This can also be set via a server environmental variable of the same name (see above).

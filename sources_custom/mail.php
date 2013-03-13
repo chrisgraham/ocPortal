@@ -42,7 +42,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	if (!$coming_out_of_queue)
 	{
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
+		if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
 		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
 
@@ -212,6 +213,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			if ((preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches)!=0) && (strpos($img,'forum_db=1')===false))
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id'=>intval($matches[1])),'ORDER BY a_add_time DESC');
+				require_code('attachments');
 				if ((array_key_exists(0,$rows)) && (has_attachment_access($as,intval($matches[1]))))
 				{
 					$myrow=$rows[0];

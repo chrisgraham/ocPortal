@@ -178,6 +178,12 @@ function strip_comcode($text)
 			$text=preg_replace('#\[/?'.$tag.'[^\]]*\]#','',$text);
 		}
 	}
+
+	$text=str_replace('&hellip;','...',$text);
+	$text=str_replace('&middot;','-',$text);
+	$text=str_replace('&ndash;','-',$text);
+	$text=str_replace('&mdash;','-',$text);
+
 	return $text;
 }
 

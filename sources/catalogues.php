@@ -1656,7 +1656,8 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	if (get_db_type()!='xml')
 	{
 		$entry['ce_views']++;
-		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_views'=>$entry['ce_views']),array('id'=>$id),'',1,NULL,false,true);
+		if (!$GLOBALS['SITE_DB']->table_is_locked('catalogue_entries'))
+			$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_views'=>$entry['ce_views']),array('id'=>$id),'',1,NULL,false,true);
 	}
 
 	// Validation

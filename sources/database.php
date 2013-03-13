@@ -413,6 +413,8 @@ class database_driver
 
 	var $static_ob;
 
+	var $dedupe_mode=false;
+
 	/**
 	 * Construct a database driver from connection parameters.
 	 *
@@ -600,7 +602,13 @@ class database_driver
 
 		if (count($all_values)==1) // usually $all_values only has length of 1
 		{
-			$query='INSERT INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
+			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql'))
+			{
+				$query='INSERT DELAYED INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
+			} else
+			{
+				$query='INSERT INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
+			}
 		} else
 		{
 			// So we can do batch inserts...
@@ -970,7 +978,7 @@ class database_driver
 			$before=microtime(false);
 		}
 		$sub=substr($query,0,7);
-		if ($sub=='SELECT ' || $sub=='select ')
+		if ($sub=='SELECT ' || $sub=='select ' || $sub=='(SELECT' || $sub=='(select')
 		{
 			$connection=&$this->connection_read;
 		} else
@@ -981,6 +989,26 @@ class database_driver
 		{
 			$connection=call_user_func_array(array($this->static_ob,'db_get_connection'),$connection);
 			_general_db_init();
+		}
+
+		// Special handling for searches, which are slow and specific - we want to recognise if previous active searches were the same and kill them (as this would have been a double form submit)
+		if (($this->dedupe_mode) && (substr(get_db_type(),0,5)=='mysql'))
+		{
+			$query.='/* '.strval(get_session_id()).' */'; // Identify query to session, for accurate de-duping
+
+			$real_query=$query;
+			if (($max!==NULL) && ($start!==NULL)) $real_query.=' LIMIT '.strval($start).','.strval($max);
+			elseif ($max!==NULL) $real_query.=' LIMIT '.strval($max);
+			elseif ($start!==NULL) $real_query.=' LIMIT '.strval($start).',30000000';
+
+			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection);
+			foreach ($ret as $process)
+			{
+				if ($process['Info']==$real_query)
+				{
+					$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
+				}
+			}
 		}
 
 		$ret=$this->static_ob->db_query($query,$connection,$max,$start,$fail_ok,$get_insert_id,false,$save_as_volatile);
@@ -1276,6 +1304,31 @@ class database_driver
 	{
 		require_code('database_helper');
 		_helper_refresh_field_definition($this,$type);
+	}
+
+	/**
+	 * Find if a table is locked for more than 5 seconds. Only works with MySQL.
+	 *
+	 * @param  ID_TEXT		The table name
+	 * @param  boolean		Whether the table is locked
+	 */
+	function table_is_locked($tbl)
+	{
+		if (substr(get_db_type(),0,5)!='mysql') return false;
+
+		$tries=0;
+		do
+		{
+			$locks=$GLOBALS['SITE_DB']->query('SHOW OPEN TABLES FROM '.get_db_site().' WHERE `Table`=\''.get_table_prefix().$tbl.'\' AND In_use>=1');
+			$locked=count($locks)>=1;
+			$tries++;
+			if ($locked)
+			{
+				sleep(1);
+			}
+		}
+		while (($locked) && ($tries<5));
+		return $locked;
 	}
 
 }

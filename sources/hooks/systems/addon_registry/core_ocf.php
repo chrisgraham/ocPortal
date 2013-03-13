@@ -74,6 +74,7 @@ class Hook_addon_registry_core_ocf
 		return array(
 			'sources/ocf_forum_driver_helper_auth.php',
 			'sources/hooks/modules/admin_import/emoticons.php',
+			'sources/hooks/systems/notifications/ocf_password_changed.php',
 			'sources/hooks/systems/snippets/email_exists.php',
 			'sources/hooks/systems/snippets/profile_tab.php',
 			'sources/hooks/systems/snippets/invite_missing.php',

@@ -1520,7 +1520,8 @@ function member_tracking_update()
 	if ($type=='/') $type='';
 	if ($id=='/') $id='';
 
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval(get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
+	if (!$GLOBALS['SITE_DB']->table_is_locked('member_tracking'))
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval(get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
 
 	$GLOBALS['SITE_DB']->query_insert('member_tracking',array(
 		'mt_member_id'=>get_member(),
@@ -1613,7 +1614,8 @@ function get_num_users_site()
 		if (strval($count)!=$NUM_USERS_SITE_CACHE)
 		{
 			$NUM_USERS_SITE_CACHE=strval($count);
-			set_value('users_online',$NUM_USERS_SITE_CACHE);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('users_online',$NUM_USERS_SITE_CACHE);
 		}
 	}
 	if ((intval($NUM_USERS_SITE_CACHE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_privilege(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
@@ -1630,7 +1632,8 @@ function get_num_users_site()
 		{
 			$_peak_users_user=$GLOBALS['SITE_DB']->query_select_value_if_there('usersonline_track','MAX(peak)',NULL,'',true);
 			$PEAK_USERS_EVER_CACHE=($_peak_users_user===NULL)?$NUM_USERS_SITE_CACHE:strval($_peak_users_user);
-			set_value('user_peak',$PEAK_USERS_EVER_CACHE);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('user_peak',$PEAK_USERS_EVER_CACHE);
 		}
 		if (intval($NUM_USERS_SITE_CACHE)>intval($PEAK_USERS_EVER_CACHE))
 		{
@@ -2551,4 +2554,52 @@ function brand_name()
 	$value=function_exists('get_value')?get_value('rebrand_name'):NULL;
 	if (is_null($value)) $value='ocPortal';
 	return $value;
+}
+
+/**
+ * Ensure Suhosin is not going to break a request due to request size.
+ *
+ * @param  integer		Most determinitve size within wider request size (we'll assume we actually need 500 more bytes than this)
+ */
+function check_suhosin_request_size($size)
+{
+	foreach (array('suhosin.request.max_value_length','suhosin.post.max_value_length') as $setting)
+	{
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))-500<$size))
+		{
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',$setting),'warn');
+		}
+	}
+}
+
+/**
+ * Ensure Suhosin is not going to break a request due to number of request form fields. Call this each time a field is added to the output.
+ *
+ * @param  integer		How much to increment the counter by
+ */
+function check_suhosin_request_quantity($inc=1)
+{
+	static $count=0;
+	$count+=$inc;
+
+	static $failed_already=false;
+	if ($failed_already) return;
+
+	foreach (array('max_input_vars','suhosin.post.max_vars','suhosin.request.max_vars') as $setting)
+	{
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count))
+		{
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+			$failed_already=true;
+		}
+	}
+
+	foreach (array('suhosin.post.max_totalname_length','suhosin.request.max_totalname_length') as $setting)
+	{
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count*20/*assuming field name length of 20*/))
+		{
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+			$failed_already=true;
+		}
+	}
 }

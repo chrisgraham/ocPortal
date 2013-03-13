@@ -359,6 +359,8 @@ class Module_admin_lang
 
 			if ($google!='') $actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'f625cf15c9db5e5af30fc772a7f0d5ff','LANG_FROM'=>$it['language'],'LANG_TO'=>$lang,'NAME'=>'trans_'.strval($id),'OLD'=>$old));
 
+			check_suhosin_request_quantity(2);
+
 			$line=do_template('TRANSLATE_LINE_CONTENT',array('_GUID'=>'87a0f5298ce9532839f3206cd0e06051','NAME'=>$name,'ID'=>strval($id),'OLD'=>$old,'CURRENT'=>$current,'ACTIONS'=>$actions,'PRIORITY'=>$priority));
 
 			$lines.=$line->evaluate(); /*XHTMLXHTML*/

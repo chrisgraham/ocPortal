@@ -444,7 +444,8 @@ class Module_wiki
 		if (get_db_type()!='xml')
 		{
 			$page['wiki_views']++;
-			$GLOBALS['SITE_DB']->query_update('wiki_pages',array('wiki_views'=>$page['wiki_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('wiki_pages'))
+				$GLOBALS['SITE_DB']->query_update('wiki_pages',array('wiki_views'=>$page['wiki_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		seo_meta_load_for('wiki_page',strval($id),$title_to_use_2);

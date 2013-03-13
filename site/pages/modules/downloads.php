@@ -617,7 +617,8 @@ class Module_downloads
 		if (get_db_type()!='xml')
 		{
 			$myrow['download_views']++;
-			$GLOBALS['SITE_DB']->query_update('download_downloads',array('download_views'=>$myrow['download_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('download_downloads'))
+				$GLOBALS['SITE_DB']->query_update('download_downloads',array('download_views'=>$myrow['download_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		// Title

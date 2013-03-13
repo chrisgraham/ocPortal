@@ -145,6 +145,8 @@ class standard_crud_module
 	 */
 	function run()
 	{
+		@ignore_user_abort(true); // Must keep going till completion
+
 		require_code('form_templates');
 		require_code('feedback');
 		require_code('autosave');

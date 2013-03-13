@@ -69,6 +69,8 @@ class Module_topics
 	 */
 	function run()
 	{
+		@ignore_user_abort(true); // Must keep going till completion
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_css('ocf');
 
@@ -569,7 +571,8 @@ class Module_topics
 		$too_old=$last_time<time()-60*60*24*intval(get_option('post_history_days'));
 		if (!$too_old)
 		{
-			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id,'l_member_id'=>get_member()),'',1);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
+				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id,'l_member_id'=>get_member()),'',1);
 			return true;
 		}
 		return false;

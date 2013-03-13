@@ -48,7 +48,7 @@ class Module_admin_config
 	function uninstall()
 	{
 		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','validation',
-										'gzip_output','forum_in_portal','staff_address','is_on_gd','is_on_folder_create','site_closed','closed',
+										'gzip_output','forum_in_portal','staff_address','is_on_gd','site_closed','closed',
 										'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
 										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','is_on_trackbacks',
 										'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser','enable_https',
@@ -308,7 +308,6 @@ class Module_admin_config
 				add_config_option('FORUM_IN_PORTAL','forum_in_portal','tick','return has_no_forum()?NULL:\'0\';','SITE','ENVIRONMENT',1);
 				add_config_option('EMAIL','staff_address','line','return \'staff@\'.get_domain();','SITE','EMAIL');
 				add_config_option('GD','is_on_gd','tick','return function_exists(\'imagetypes\')?\'1\':\'0\';','SITE','ENVIRONMENT',1);
-				add_config_option('FOLDER_CREATE','is_on_folder_create','tick','return \'1\';','SITE','ENVIRONMENT',1);
 			//  Closed Site
 				add_config_option('CLOSED_SITE','site_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
 				add_config_option('MESSAGE','closed','transtext','return do_lang(\'BEING_INSTALLED\');','SITE','CLOSED_SITE');

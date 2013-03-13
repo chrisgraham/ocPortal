@@ -125,7 +125,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/is_on_comcode_page_children.php',
 			'sources/hooks/systems/config_default/is_on_comments.php',
 			'sources/hooks/systems/config_default/is_on_emoticon_choosers.php',
-			'sources/hooks/systems/config_default/is_on_folder_create.php',
 			'sources/hooks/systems/config_default/is_on_gd.php',
 			'sources/hooks/systems/config_default/is_on_preview_validation.php',
 			'sources/hooks/systems/config_default/is_on_rating.php',

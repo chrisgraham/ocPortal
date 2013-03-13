@@ -174,6 +174,8 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 
 	$post=filter_form_field_default(is_object($submit_name)?$submit_name->evaluate():$submit_name,$post);
 
+	check_suhosin_request_size(strlen($post));
+
 	if (is_null($post_comment)) $post_comment=do_lang_tempcode('POST_COMMENT');
 	if (is_null($specialisation2)) $specialisation2=new ocp_tempcode();
 
@@ -732,6 +734,8 @@ function form_input_text($pretty_name,$description,$name,$default,$required,$tab
 
 	$default=filter_form_field_default($name,$default);
 
+	check_suhosin_request_size(strlen($default));
+
 	$_required=($required)?'_required':'';
 
 	$input=do_template('FORM_SCREEN_INPUT_TEXT',array('_GUID'=>'01626015c6ae36b1027e35e66a8b5d0b','RAW'=>true,'SCROLLS'=>$scrolls,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
@@ -769,6 +773,8 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 	$default_parsed=new ocp_tempcode();
 
 	$default=filter_form_field_default($name,$default);
+
+	check_suhosin_request_size(strlen($default));
 
 	if (!$force_non_wysiwyg)
 	{
@@ -828,6 +834,8 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 
 	$default=filter_form_field_default($name,$default);
 
+	check_suhosin_request_size(strlen($default));
+
 	$_required=($required)?'_required':'';
 	$default_parsed=new ocp_tempcode();
 
@@ -880,6 +888,8 @@ function form_input_huge($pretty_name,$description,$name,$default,$required,$tab
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$default=filter_form_field_default($name,$default);
+
+	check_suhosin_request_size(strlen($default));
 
 	$_required=($required)?'_required':'';
 	$default_parsed=new ocp_tempcode();
@@ -1741,6 +1751,8 @@ function form_input_na($pretty_name,$tabindex=NULL)
  */
 function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='')
 {
+	check_suhosin_request_quantity(2);
+
 	if (($GLOBALS['DEV_MODE']) && (user_lang()==fallback_lang()))
 	{
 		$_description=trim(strip_tags(is_object($description)?$description->evaluate():$description));

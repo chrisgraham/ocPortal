@@ -670,9 +670,20 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 			$field_cat=trim($matches[0],'() ');
 			$custom_field['trans_name']=str_replace($matches[0],'',$custom_field['trans_name']);
 		}
+
 		$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
+
 		if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
-		$field_groups[$field_cat]->attach($result);
+
+		if (is_array($result))
+		{
+			$field_groups[$field_cat]->attach($result[0]);
+			$hidden->attach($result[1]);
+		} else
+		{
+			$field_groups[$field_cat]->attach($result);
+		}
+
 		$hidden->attach(form_input_hidden('label_for__field_'.strval($custom_field['id']),$custom_field['trans_name']));
 	}
 	if (array_key_exists('',$field_groups)) // Blank prefix must go first

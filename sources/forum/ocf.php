@@ -1067,7 +1067,8 @@ class forum_driver_ocf extends forum_driver_base
 		if ($value==0)
 		{
 			$value=$this->connection->query_select_value('f_members','COUNT(*)')-1;
-			set_value('ocf_member_count',strval($value));
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('ocf_member_count',strval($value));
 		}
 
 		return $value;
@@ -1085,7 +1086,8 @@ class forum_driver_ocf extends forum_driver_base
 		if ($value==0)
 		{
 			$value=$this->connection->query_select_value('f_topics','COUNT(*)');
-			set_value('ocf_topic_count',strval($value));
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('ocf_topic_count',strval($value));
 		}
 
 		return $value;
@@ -1103,7 +1105,8 @@ class forum_driver_ocf extends forum_driver_base
 		if ($value==0)
 		{
 			$value=$this->connection->query_select_value('f_posts','COUNT(*)');
-			set_value('ocf_post_count',strval($value));
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('ocf_post_count',strval($value));
 		}
 
 		return $value;

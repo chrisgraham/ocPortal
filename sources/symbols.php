@@ -709,6 +709,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					// Strip 'Welcome to' off if it's there
 					$value=preg_replace('#'.preg_quote(do_lang('WELCOME_TO_STRIPPABLE').' '.get_site_name(),'#').'([^-]+\s*-\s*)?#','',$comcodeless);
+
 					// Strip site name off it it's there (it'll be put on in the templates, so we don't want it twice)
 					$stub=get_site_name().' - ';
 					if (substr($value,strlen($stub))==$stub) $value=substr($value,strlen($stub));
@@ -2350,8 +2351,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_FRIEND':
 				if (isset($param[0]))
 				{
-					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
-					$value=is_null($test)?'0':'1';
+					if (addon_installed('chat'))
+					{
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
+						$value=is_null($test)?'0':'1';
+					} else
+					{
+						$value='0';
+					}
 				}
 				break;
 

@@ -331,7 +331,7 @@ class Database_Static_ibm
 		{
 			if (is_null($start)) $max+=$start;
 
-			if (strtoupper(substr($query,0,7))=='SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
+			if (strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
 			{
 				$query.=' FETCH FIRST '.strval($max+$start).' ROWS ONLY';
 			}
@@ -354,7 +354,7 @@ class Database_Static_ibm
 			}
 		}
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') && (!$results!==false))
+		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && (!$results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}

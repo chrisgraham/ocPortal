@@ -279,7 +279,7 @@ class Module_cms_catalogues extends standard_crud_module
 	{
 		$catalogue_name=get_param('catalogue_name');
 
-		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$catalogue_name))==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$catalogue_name))==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$is_tree=$GLOBALS['SITE_DB']->query_select_value('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
 		if ($is_tree==0) return NULL;

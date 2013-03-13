@@ -108,7 +108,7 @@ class Module_admin_menus
 		if (get_forum_type()=='ocf')
 		{
 			add_menu_item_simple('zone_menu',NULL,'SECTION_SOCIAL','forum'.':',0,1);
-		} else
+		} elseif (get_forum_type()!='none')
 		{
 			add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS',get_forum_base_url(),0,1);
 		}

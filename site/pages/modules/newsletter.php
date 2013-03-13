@@ -211,7 +211,7 @@ class Module_newsletter
 		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
 
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
-		if (count($newsletters)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if (count($newsletters)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'do'),'_SELF');
 		$submit_name=do_lang_tempcode('NEWSLETTER_JOIN');

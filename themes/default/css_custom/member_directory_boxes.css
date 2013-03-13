@@ -13,6 +13,10 @@
 	min-height: 8em;
 }
 
+.ocf_member_directory_box .associated_details {
+	margin: 0;
+}
+
 .advanced_member_search .search_option {
 	width: 10em;
 	padding: 0.3em;

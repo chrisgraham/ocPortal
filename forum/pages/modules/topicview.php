@@ -23,6 +23,7 @@
  */
 class Module_topicview
 {
+	var $id;
 
 	/**
 	 * Standard modular info function.
@@ -105,12 +106,8 @@ class Module_topicview
 		// Mark as read
 		if (!is_null($id))
 		{
-			if (!is_guest())
-			{
-				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$id),'',1);
-				$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$id,'l_time'=>time()),false,true); // race condition
-			}
-			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_num_views=(t_num_views+1) WHERE id='.strval($id),1,NULL,true);
+			$this->id=$id;
+			register_shutdown_function(array($this,'_update_read_status')); // done at end after output in case of locking (don't make the user wait)
 		}
 
 		// Load up topic info
@@ -809,6 +806,23 @@ class Module_topicview
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($topic_tpl);
+	}
+
+	/**
+	 * Update the read status for a topic.
+	 */
+	function _update_read_status()
+	{
+		if (!is_guest())
+		{
+			if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
+			{
+				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$this->id),'',1);
+				$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$this->id,'l_time'=>time()),false,true); // race condition
+			}
+		}
+		if (!$GLOBALS['SITE_DB']->table_is_locked('f_topics'))
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_num_views=(t_num_views+1) WHERE id='.strval((integer)$this->id),1,NULL,true);
 	}
 
 }

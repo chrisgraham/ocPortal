@@ -1585,7 +1585,8 @@ class Module_calendar
 		if (get_db_type()!='xml')
 		{
 			$event['e_views']++;
-			$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('calendar_events'))
+				$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		// Breadcrumbs
