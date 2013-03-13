@@ -144,7 +144,7 @@ class Hook_addon_registry_realtime_rain
 			'themes/default/images/realtime_rain/sun-effect.png',
 			'themes/default/images/realtime_rain/halo-effect.png',
 			'themes/default/images/realtime_rain/horns-effect.png',
-			'themes/default/images/realtime_rain/shadow-effect.png'
+			'themes/default/images/realtime_rain/shadow-effect.png',
 
 			'themes/default/images/flags/AD.gif',
 			'themes/default/images/flags/AE.gif',
