@@ -48,14 +48,18 @@ class Hook_cron_manual_subscription_notification
 				$s_length=$products[$sub['s_type_code']][3]['length'];
 				$s_length_units=$products[$sub['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
 				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
-				$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$sub['s_time']);
+				$expiry_time=$sub['s_time'];
+				while ($expiry_time<time())
+				{
+					$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$expiry_time);
+				}
 
 				if (!is_null($last_time))
 				{
-					if (($last_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) continue; // Notification already sent!
+					if (($expiry_time-$last_time)<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) continue; // Notification already sent!
 				}
 
-				if ((($expiry_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) && ($expiry_time>=time()))
+				if (($expiry_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60))
 				{
 					$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
 					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($sub['s_member_id']);
