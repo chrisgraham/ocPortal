@@ -19,7 +19,7 @@
 
 	<h2>{!DETAILS}</h2>
 
-	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="results_table wide_table autosized_table">
+	<div class="wide_table_wrap"><table class="map_table results_table wide_table autosized_table">
 		<tbody>
 			<tr>
 				<th>{!NAME}</th>

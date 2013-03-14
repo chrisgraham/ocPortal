@@ -8,7 +8,7 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{SUB}}
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+		<div class="wide_table_wrap"><table class="columned_table results_table wide_table autosized_table">
 			<thead>
 				<tr>
 					<th>{!EMAIL_ADDRESS}</th>
@@ -42,7 +42,7 @@
 {+START,IF_NON_EMPTY,{DOMAINS}}
 	<h2>{!DOMAIN_STATISTICS,{$NUMBER_FORMAT*,{DOMAINS}},{$NUMBER_FORMAT*,{DOMAINS}}}</h2>
 
-	<div class="wide_table_wrap"><table class="wide_table results_table" summary="{!COLUMNED_TABLE}">
+	<div class="wide_table_wrap"><table class="columned_table wide_table results_table">
 		<thead>
 			<tr>
 				<th>{!DOMAIN}</th>

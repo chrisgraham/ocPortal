@@ -1,4 +1,4 @@
-<table class="shipping_address autosized_table" summary="{!MAP_TABLE}"><tbody>
+<table class="map_table shipping_address autosized_table"><tbody>
 	<tr><th>{!SHIPPING_ADDRESS_NAME}</th><td>{ADDRESS_NAME*}</td></tr>
 	<tr><th>{!SHIPPING_ADDRESS_STREET}</th><td>{ADDRESS_STREET*}</td></tr>
 	<tr><th>{!SHIPPING_ADDRESS_CITY}</th><td>{ADDRESS_CITY*}</td></tr>

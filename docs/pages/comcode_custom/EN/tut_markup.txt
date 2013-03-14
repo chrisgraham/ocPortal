@@ -113,7 +113,7 @@ Up until now, we've only been working with theoretical and fictional XHTML tags 
 Anyway: some XHTML elements.
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<tr>
 		<th>
 			Element
@@ -438,7 +438,7 @@ Anyway: some XHTML elements.
 Although this table doesn't list all of the XHTML elements (it lists approximately half of them), the others are used so rarely it's easier to look them up when required, than learn them first. This table also does not list all the attributes of all the elements. However, it lists the important ones, and the following table lists all the attributes that can be used with any XHTML element; the standard attributes.
 
 [html]
-	<table class="results_table" summary="Columned table">
+	<table class="columned_table results_table wide_table">
 		<tr>
 			<th>
 				Attribute
@@ -636,7 +636,7 @@ Now that the basic selectors have been covered, we move on to properties and pro
 Some commonly used properties are listed below.
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<tr>
 		<th>
 			Property
@@ -867,7 +867,7 @@ Javascript is most powerful when applied to the DOM -- the Document Object Model
 Another feature of Javascript is its event model. You can specify Javascript functions or code to be called when, for example, a link is clicked. You do this either via the event attributes in an XHTML document, or through event listening functions in Javascript.
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<tr>
 		<th>
 			Event attribute

@@ -2,7 +2,7 @@
 
 <p>{!SUCCESS}</p>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table autosized_table">
+<div class="wide_table_wrap"><table class="map_table wide_table results_table autosized_table">
 	<thead>
 		<tr>
 			<th>{!ACTION}</th>

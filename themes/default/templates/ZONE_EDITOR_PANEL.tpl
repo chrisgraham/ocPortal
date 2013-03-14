@@ -110,7 +110,7 @@
 {+START,IF_PASSED,SETTINGS}
 	<div id="settings_{ID*}" style="display: none" aria-labeledby="settings_tab_{ID*}" role="tabpanel">
 		<form title="{ID*}: {!SETTINGS}" id="middle_fields" action="index.php">
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+			<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
 						<col class="field_name_column" />

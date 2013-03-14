@@ -95,7 +95,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]General[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -194,7 +194,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Format conversion and obfuscation[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -257,7 +257,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Users, Members, and Usergroups[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -312,7 +312,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Date and time[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -355,7 +355,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Catalogues[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -386,7 +386,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Galleries[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -401,7 +401,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]eCommerce[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -420,7 +420,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Environmental querying[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -643,7 +643,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]Placement, and general ocPortal interfacing[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -766,7 +766,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 [title="3"]ocPortal configuration querying[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -872,7 +872,7 @@ Permission checks are useful if you want to show screen contents in a way that s
 These are advanced symbols, and mirror ocPortal's internal API. The parameters are not discussed here, but you may find them from looking at the code.
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -927,7 +927,7 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 [title="3"]ocPortal interfacing, specific/advanced features[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -1062,7 +1062,7 @@ Note that all logic symbols return Tempcode boolean values (except [tt]?[/tt]). 
 Understanding of these symbols requires an understanding of basic boolean operations but they are fairly intuitive (e.g. 'AND' will return true if all its parameters are true).
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -1125,7 +1125,7 @@ Understanding of these symbols requires an understanding of basic boolean operat
 [title="3"]Arithmetic[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -1184,7 +1184,7 @@ Understanding of these symbols requires an understanding of basic boolean operat
 [title="3"]String manipulation[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -1309,7 +1309,7 @@ Understanding of these symbols requires an understanding of basic boolean operat
 You can store and retrieve values in Tempcode variables. These work across templates, and also work in any-order due to the ocPortal Tempcode pre-processor (i.e. something can be [tt]SET[/tt] after the [tt]GET[/tt] for it).
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>Symbol name / example</th>
 		<th>Purpose</th>
@@ -1348,7 +1348,7 @@ You can store and retrieve values in Tempcode variables. These work across templ
 [title="2"]Directives[/title]
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Columned table"><tbody>
+<table class="columned_table results_table wide_table autosized_table"><tbody>
 	<tr>
       <th>Directive name</th>
       <th>Purpose</th>

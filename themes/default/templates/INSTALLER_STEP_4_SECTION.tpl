@@ -13,7 +13,7 @@
 
 			<h2>{TITLE}</h2>
 
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+			<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 				<colgroup>
 					<col class="installer_left_column" />
 					<col class="installer_right_column" />

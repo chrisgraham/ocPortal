@@ -1,4 +1,4 @@
-<div summary="<?php echo do_lang('COLUMNED_TABLE'); ?>" class="wide_table_wrap"><table class="results_table wide_table">
+<div class="wide_table_wrap"><table class="columned_table results_table wide_table">
 	<thead>
 		<tr>
 			<th>Avatar</th>

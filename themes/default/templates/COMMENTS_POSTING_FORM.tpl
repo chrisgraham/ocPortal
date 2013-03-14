@@ -22,7 +22,7 @@
 		{+END}
 		<div class="comments_posting_form_outer {+START,IF_PASSED,EXPAND_TYPE} toggleable_tray{+END}" {+START,IF_PASSED,EXPAND_TYPE}aria-expanded="false" {+END}id="comments_posting_form_outer" style="{$JS_ON,display: {DISPLAY*},}">
 			<div class="comments_posting_form_inner">
-				<div class="wide_table_wrap"><table class="wide_table" summary="{!MAP_TABLE}">
+				<div class="wide_table_wrap"><table class="map_table wide_table">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
 							<col class="comments_field_name_column" />

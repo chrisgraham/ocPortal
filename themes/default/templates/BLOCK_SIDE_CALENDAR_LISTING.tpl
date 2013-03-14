@@ -9,7 +9,7 @@
 			<h4 class="event_listing_day">{TIME*}</h4>
 
 			<div class="wide_table_wrap">
-				<table summary="{!MAP_TABLE}" class="results_table wide_table events_listing_table autosized_table">
+				<table class="map_table results_table wide_table events_listing_table autosized_table">
 					<colgroup>
 						<col class="event_listing_col_1" />
 						<col class="event_listing_col_2" />

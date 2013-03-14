@@ -64,6 +64,8 @@ class Module_banners
 		delete_privilege('full_banner_setup');
 		delete_privilege('view_anyones_banner_stats');
 		delete_privilege('banner_free');
+		delete_privilege('use_html_banner');
+		delete_privilege('use_php_banner');
 
 		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/banners',true);

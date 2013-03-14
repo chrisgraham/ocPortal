@@ -11,7 +11,7 @@
 		</h3>
 
 		<div class="toggleable_tray">
-			<div class="wide_table_wrap" id="website_monitoring_list{$GET,RAND}"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+			<div class="wide_table_wrap" id="website_monitoring_list{$GET,RAND}"><table class="columned_table results_table wide_table autosized_table">
 				<thead>
 					<tr>
 						<th>{!config:SITE_NAME}</th>

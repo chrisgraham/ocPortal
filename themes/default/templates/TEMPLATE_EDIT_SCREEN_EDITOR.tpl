@@ -55,7 +55,7 @@
 						<a class="non_link" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">GUIDs</a>
 					</h3>
 					<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-						<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="autosized_table revision_box results_table wide_table">
+						<div class="wide_table_wrap"><table class="columned_table autosized_table revision_box results_table wide_table">
 							<thead>
 								<tr>
 									<th>{!FILENAME}</th>

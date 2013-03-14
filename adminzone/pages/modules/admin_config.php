@@ -174,7 +174,7 @@ class Module_admin_config
 			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
 			add_config_option('CDN','cdn','line','return \'<autodetect>\';','SITE','ADVANCED');
 			$url_scheme='RAW';
-			if ($upgrade_from<15)
+			if ((!is_null($upgrade_from)) && ($upgrade_from<15))
 			{
 				if (get_option('mod_rewrite')=='1') $url_scheme='PG';
 				if (get_option('htm_short_urls')=='1') $url_scheme='HTM';

@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="autosized_table wide_table results_table">
+<div class="wide_table_wrap"><table class="columned_table autosized_table wide_table results_table">
 	<thead>
 		<tr>
 			<th>

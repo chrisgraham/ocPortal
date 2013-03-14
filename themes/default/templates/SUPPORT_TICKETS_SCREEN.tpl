@@ -23,7 +23,7 @@
 		<p>{!SUPPORT_NO_TICKETS}</p>
 	{+END}
 	{+START,IF_NON_EMPTY,{LINKS}}
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table support_tickets autosized_table">
+		<div class="wide_table_wrap"><table class="columned_table results_table wide_table support_tickets autosized_table">
 			<thead>
 				<tr>
 					<th>

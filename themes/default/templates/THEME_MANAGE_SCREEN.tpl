@@ -8,7 +8,7 @@
 <h2>{!EXISTING_THEMES}</h2>
 
 <div class="autosized_table theme_manage_table">
-	<table summary="{!COLUMNED_TABLE}">
+	<table class="columned_table">
 		<thead>
 			<tr>
 				<th>{!THEME}</th>

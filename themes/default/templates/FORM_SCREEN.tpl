@@ -42,7 +42,7 @@
 		{HIDDEN}
 
 		{+START,IF_NON_EMPTY,{FIELDS}}
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table scrollable_inside">
+			<div class="wide_table_wrap"><table class="map_table form_table wide_table scrollable_inside">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
 						<col class="field_name_column" />

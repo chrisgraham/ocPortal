@@ -36,7 +36,7 @@
 
 			{+START,IF_NON_EMPTY,{$TRIM,{FIELDS}}}
 				<div class="wide_table_wrap">
-					<table id="product-attribute-specs-table" class="catalogue_fields_table wide_table results_table" summary="{!MAP_TABLE}">
+					<table id="product-attribute-specs-table" class="map_table catalogue_fields_table wide_table results_table">
 						{+START,IF,{$NOT,{$MOBILE}}}
 							<colgroup>
 								<col class="catalogue_fieldmap_field_name_column" />

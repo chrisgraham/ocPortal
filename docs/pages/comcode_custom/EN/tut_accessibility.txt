@@ -46,7 +46,7 @@ Please note that whilst ocPortal works without Javascript, some times alternativ
 [title="3"]Priority 1 checkpoints[/title]
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<tr>
 		<th colspan="2">
 			In General (Priority 1)
@@ -279,7 +279,7 @@ Please note that whilst ocPortal works without Javascript, some times alternativ
 [title="3"]Priority 2 checkpoints[/title]
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<tr>
 		<th colspan="2">
 			In General (Priority 2)
@@ -662,7 +662,7 @@ Please note that whilst ocPortal works without Javascript, some times alternativ
 [title="3"]Priority 3 checkpoints[/title]
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<tr>
 		<th colspan="2">
 			In General (Priority 3)
@@ -1022,7 +1022,7 @@ If properly marked-up, the user would get an understand with greater ease. Whils
 A properly marked-up version, using ocPortal conventions, would look as follows:
 
 [code="HTML"]
-<table class="results_table" summary="{!MAP_TABLE}">
+<table class="map_table results_table">
    <tr>
       <th>Name</th>
       <td>Ronald</td>

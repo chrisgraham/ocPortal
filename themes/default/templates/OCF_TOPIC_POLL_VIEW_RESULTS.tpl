@@ -1,4 +1,4 @@
-<div class="wide_table_wrap"><table summary="{!POLL}" class="autosized_table wide_table ocf_topic_poll">
+<div class="wide_table_wrap"><table class="spread_table autosized_table wide_table ocf_topic_poll">
 	<tbody>
 		<tr>
 			<td colspan="2" class="table_heading_cell">

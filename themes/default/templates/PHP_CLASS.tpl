@@ -5,7 +5,7 @@
 <section class="box box___php_class"><div class="box_inner">
 	<h3>{!FUNCTION_SUMMARY}</h3>
 
-	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table">
+	<div class="wide_table_wrap"><table class="map_table autosized_table">
 		<tbody>
 			{FUNCTION_SUMMARIES}
 		</tbody>

@@ -64,7 +64,7 @@
 			<div class="menu_editor_lh_side">
 				<h2>{!EDIT_SELECTED_FIELD}</h2>
 
-				<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+				<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
 							<col class="field_name_column" />

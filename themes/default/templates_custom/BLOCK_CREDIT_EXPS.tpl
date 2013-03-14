@@ -9,7 +9,7 @@
 	<div class="creditsinfo" id="info_{NUM_CREDITS*}CREDITS">
 		<p><strong>{$NUMBER_FORMAT*,{NUM_CREDITS}}</strong> credits currently cost {$COMCODE,[currency="GBP" bracket="1"]{PRICE}[/currency]} &dagger;&dagger; and are good for:</p>
 
-		<div class="wide_table_wrap"><table summary="" class="wide_table">
+		<div class="wide_table_wrap"><table class="columned_table wide_table">
 			<tr>
 				<th>
 					Priority level

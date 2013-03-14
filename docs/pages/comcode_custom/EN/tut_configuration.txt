@@ -58,7 +58,7 @@ A Comcode page is a page in the system that you can edit either via a [concept]W
 Comcode pages may be selected for editing from the Comcode pages editor in the Admin Zone. The list to choose from has them listed in 'zone:page-name' format, which is a very common naming convention in ocPortal that is a bit like an 'ocPortal URL' (it's called a 'page link'). The default Comcode pages are:
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
    <tr>
       <th>Zone</th>
       <th>Page</th>

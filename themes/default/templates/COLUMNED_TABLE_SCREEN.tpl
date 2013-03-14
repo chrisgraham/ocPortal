@@ -13,7 +13,7 @@
 		{$SET,DEFER_RESULTS_TABLE_BROWSER,0}
 
 		{+START,IF_PASSED,FIELDS}
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table">
+			<div class="wide_table_wrap"><table class="map_table wide_table">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
 						<col class="field_name_column" />

@@ -22,7 +22,7 @@
 		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_URL*}">{NAME*}</a>}
 	</p>
 
-	<table summary="{!COLUMNED_TABLE}" class="autosized_table points_summary_table">
+	<table class="columned_table autosized_table points_summary_table">
 		<thead>
 			<tr>
 				<th>{!ACTIVITY}</th>

@@ -1,6 +1,6 @@
 <h2>{GROUP_NAME*}</h2>
 
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table spaced_table autosized_table">
+<div class="wide_table_wrap"><table class="columned_table results_table wide_table spaced_table autosized_table">
 	<thead>
 		<tr>
 			<th>{!USERNAME}</th>

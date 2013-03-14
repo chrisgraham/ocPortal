@@ -588,7 +588,8 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 												$xml.='</float>';
 											} else
 											{
-												$xml.='<table summary="'.escape_html($caption).'">';
+												if ($caption!='') $xml.='<p class="accessibility_hidden">'.escape_html($caption).'</p>';
+												$xml.='<table>';
 												foreach ($rows as $table_row)
 												{
 													$xml.='<tr>';

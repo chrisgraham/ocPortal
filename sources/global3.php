@@ -2518,7 +2518,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
  */
 function brand_base_url()
 {
-	$value=get_value('rebrand_base_url');
+	$value=function_exists('get_value')?get_value('rebrand_base_url'):NULL;
 	if (($value===NULL) || ($value=='')) $value='http://ocportal.com';
 	return $value;
 }

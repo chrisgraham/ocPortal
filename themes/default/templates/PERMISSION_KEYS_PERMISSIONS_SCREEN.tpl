@@ -6,7 +6,7 @@
 			{!PAGE_MATCH_KEY_ACCESS_TEXT}
 		</p>
 
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table results_table privileges">
+		<div class="wide_table_wrap"><table class="columned_table wide_table results_table privileges">
 			<colgroup>
 				<col class="permission_field_name_column" />
 				{COLS}
@@ -31,7 +31,7 @@
 			{!PAGE_MATCH_KEY_MESSAGES_TEXT}
 		</p>
 
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table results_table">
+		<div class="wide_table_wrap"><table class="columned_table wide_table results_table">
 			<colgroup>
 				<col class="permission_match_key_column" />
 				<col class="permission_match_key_message_column" />

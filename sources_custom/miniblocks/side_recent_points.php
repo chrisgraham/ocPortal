@@ -11,7 +11,7 @@ $max=array_key_exists('max',$map)?intval($map['max']):10;
 $truncate_to=array_key_exists('truncate_to',$map)?intval($map['truncate_to']):5;
 
 $gifts=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'gifts g LEFT JOIN '.get_table_prefix().'translate t ON t.id=g.reason WHERE gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY g.id DESC',$max);
-echo '<div class="wide_table_wrap"><table class="results_table wide_table autosized_table" summary="'.do_lang('COLUMNED_TABLE').'">';
+echo '<div class="wide_table_wrap"><table class="columned_table results_table wide_table autosized_table">';
 
 echo '<thead><tr>';
 //echo '<th>From</th>';

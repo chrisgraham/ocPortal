@@ -3,7 +3,7 @@
 
 	<p>{!LEADERBOARD_ABOUT,{LIMIT*}}</p>
 
-	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table leaderboard_table results_table wide_table">
+	<div class="wide_table_wrap"><table class="map_table autosized_table leaderboard_table results_table wide_table">
 		<tbody>
 			{ROWS}
 		</tbody>

@@ -6,7 +6,7 @@
 {+START,IF_NON_EMPTY,{FIELDS}}
 	{MESSAGE}
 	<div class="wide_table_wrap">
-		<table summary="{!COLUMNED_TABLE}" class="wide_table cart_table results_table">
+		<table class="columned_table wide_table cart_table results_table">
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{WIDTHS}}
 				<colgroup>
 					{+START,LOOP,WIDTHS}

@@ -153,6 +153,7 @@ function init__validation()
 		'button'=>array('input','select','textarea','label','button','form','fieldset','iframe'),
 		'p'=>array('p','table','div','form','h1','h2','h3','h4','h5','h6','blockquote','pre','hr'),
 		'form'=>array('form'),
+		'th'=>array('h1','h2','h3','h4','h5','h6'),
 		'em'=>array('em'),
 		'abbr'=>array('abbr'),
 		'strong'=>array('strong'),
