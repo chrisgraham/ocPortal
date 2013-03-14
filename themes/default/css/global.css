@@ -228,7 +228,7 @@ a:hover, .button_hyperlink:hover {
 	color: {$GET,a.hover};
 }
 
-h1, h2, h3 {
+h1, h2, h3, .faux_h2 {
 	font-weight: normal;
 	color: {$GET,heading_text};
 	border-bottom: 1px solid {$GET,pale_border};
@@ -237,7 +237,7 @@ h1 {
 	font-size: 1.6em;
 	margin-top: 0.27em; /* Consistency with boxes (so gap between header and content is consistent), but rationalised against higher em font size */
 }
-h2 {
+h2, .faux_h2 {
 	font-size: 1.3em;
 }
 h3 {

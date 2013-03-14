@@ -2,7 +2,7 @@
 	{+START,SET,posting_field}
 		{+START,IF_PASSED,POST_COMMENT}
 			{+START,IF_NON_EMPTY,{POST_COMMENT}}
-				<h2><label for="{NAME*}">{POST_COMMENT*}</label></h2>
+				<p class="faux_h2"><label for="{NAME*}">{POST_COMMENT*}</label></p>
 
 				<input type="hidden" name="label_for__{NAME*}" value="{$STRIP_TAGS,{POST_COMMENT*}}" />
 			{+END}
@@ -114,13 +114,13 @@
 				<a class="toggleable_tray_button" id="fes_attachments" onclick="toggle_subordinate_fields(this.getElementsByTagName('img')[0]); return false;" href="#"><img alt="{!EXPAND}: {!ATTACHMENTS}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 			{+END}
 
-			<h2{+START,IF,{$JS_ON}} class="toggleable_tray_button" onclick="toggle_subordinate_fields(this.parentNode.getElementsByTagName('img')[0],'fes_attachments_help'); return false;"{+END}>
+			<span class="faux_h2{+START,IF,{$JS_ON}} toggleable_tray_button{+END}"{+START,IF,{$JS_ON}} onclick="toggle_subordinate_fields(this.parentNode.getElementsByTagName('img')[0],'fes_attachments_help'); return false;"{+END}>
 				{!ATTACHMENTS}
 
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<img class="help_icon" onkeydown="this.onmouseover(event);" onkeyup="this.onmouseout(event);" onclick="this.onmouseover(event);" title="{!ATTACHMENT_HELP=}" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,help}" />
 				{+END}
-			</h2>
+			</span>
 
 			{+START,IF_PASSED,HELP}
 				<p style="display: none" id="fes_attachments_help">

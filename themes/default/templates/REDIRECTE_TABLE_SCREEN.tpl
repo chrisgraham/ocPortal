@@ -10,6 +10,8 @@
 </p>
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
+	<h2>{!EXISTING_REDIRECTS}</h2>
+
 	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table">
 		<colgroup>
 			<col class="redirect_table_input_column" />
@@ -42,17 +44,44 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td colspan="4">
-					<h2>{!EXISTING_REDIRECTS}&hellip;</h2>
-				</td>
-			</tr>
 			{FIELDS}
-			<tr>
-				<td colspan="4">
-					<h2>{!NEW_REDIRECT}&hellip;</h2>
-				</td>
+		</tbody>
+	</table></div>
+
+	<h2>{!NEW_REDIRECT}</h2>
+
+	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table">
+		<colgroup>
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_sup_column" />
+			<col class="redirect_table_sup_column" />
+		</colgroup>
+
+		<thead>
+			<tr class="results_table">
+				<th>
+					{!REDIRECT_FROM_ZONE}
+				</th>
+				<th>
+					{!REDIRECT_FROM_PAGE}
+				</th>
+				<th>
+					{!REDIRECT_TO_ZONE}
+				</th>
+				<th>
+					{!REDIRECT_TO_PAGE}
+				</th>
+				<th>
+					<abbr title="{!IS_TRANSPARENT_REDIRECT=}">{!REDIRECT_TRANS_SHORT}</abbr>
+				</th>
+				<th>
+				</th>
 			</tr>
+		</thead>
+		<tbody>
 			{NEW}
 		</tbody>
 	</table></div>

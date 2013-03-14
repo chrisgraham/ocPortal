@@ -60,11 +60,11 @@ span.form_field_name {
 }
 
 /* Overrides .toggleable_tray_button */
-.form_table h2.toggleable_tray_button {
+.form_table .toggleable_tray_button {
 	color: {$GET,heading_text} !important;
 	font-weight: normal !important;
 }
-.form_table h2.toggleable_tray_button .help_icon
+.form_table .toggleable_tray_button .help_icon
 {
 	float: none;
 }

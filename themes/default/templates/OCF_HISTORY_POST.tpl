@@ -1,6 +1,6 @@
 <tr>
 	<th colspan="2">
-		<h2 class="ocf_post_history_header"><span class="field_name">{!ACTION}:</span> {ACTION}</h2>
+		<span class="faux_h2 ocf_post_history_header"><span class="field_name">{!ACTION}:</span> {ACTION}</span>
 	</th>
 </tr>
 
