@@ -64,6 +64,8 @@ class Module_banners
 		delete_specific_permission('full_banner_setup');
 		delete_specific_permission('view_anyones_banner_stats');
 		delete_specific_permission('banner_free');
+		delete_specific_permission('use_html_banner');
+		delete_specific_permission('use_php_banner');
 
 		deldir_contents(get_custom_file_base().'/uploads/banners',true);
 
