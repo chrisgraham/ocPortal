@@ -542,24 +542,15 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
  */
 function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code)
 {
-	$matches=array();
-	if (preg_match('#^field\_(\d+)#',$filter_key,$matches)!=0)
+	if (preg_match('#^((.*)\.)?field\_(\d+)#',$filter_key)!=0)
 	{
 		$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
-		return $ret;
+		if (!is_null($ret)) return $ret;
 	}
 
 	// Named
-	require_code('fields');
-	$fields=get_catalogue_fields($catalogue_name);
-	foreach ($fields as $i=>$field)
-	{
-		if (get_translated_text($field['cf_name'])==$filter_key)
-		{
-			$ret=_fields_api_ocselect($db,$info,$catalogue_name,$extra_join,$extra_select,'field_'.strval($i),$filter_val,$db_fields,$table_join_code);
-			return $ret;
-		}
-	}
+	$ret=_fields_api_ocselect_named($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
+	if (!is_null($ret)) return $ret;
 
 	return _default_conv_func($db,$info,$catalogue_name,$extra_join,$extra_select,$filter_key,$filter_val,$db_fields,$table_join_code);
 }

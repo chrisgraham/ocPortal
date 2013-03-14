@@ -2289,6 +2289,9 @@ function titleify($boring)
 {
 	$ret=ucwords(str_replace('_',' ',$boring));
 	$ret=str_replace('Ocportal','ocPortal',$ret);
+	$ret=str_replace('Ocselect','ocSelect',$ret);
+	$ret=str_replace('Ocfilter','ocFilter',$ret);
+	$ret=str_replace('Occle','ocCLE',$ret);
 	if (substr($ret,0,3)=='Oc ') $ret='oc'.str_replace(' ','',substr($ret,3));
 	return $ret;
 }

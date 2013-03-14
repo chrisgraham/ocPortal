@@ -22,7 +22,7 @@
  * Ensure a catalogues fields are loaded up in a cache, and return them.
  *
  * @param  ?ID_TEXT			The name of the catalogue (NULL: all catalogues)
- * @return array				The fields
+ * @return array				The fields (empty array if the catalogue does not exist)
  */
 function get_catalogue_fields($catalogue_name=NULL)
 {

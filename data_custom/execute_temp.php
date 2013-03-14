@@ -53,7 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('hooks/systems/cron/content_reviews');
-	$ob=object_factory('Hook_cron_content_reviews');
-	$ob->run();
 }
