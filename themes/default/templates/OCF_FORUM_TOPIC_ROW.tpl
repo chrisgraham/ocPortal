@@ -11,7 +11,9 @@
 	{+END}
 
 	<td class="ocf_forum_topic_row_preview ocf_column2">
-		<a class="ocf_forum_topic_row_preview_button" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$TRUNCATE_LEFT*~;^,{POST},1000,0,1}','30%',null,null,null,true);" href="{URL*}">{!PREVIEW} <span style="display: none">{ID*}</span></a>
+		{+START,IF,{$NOT,{$MOBILE}}}
+			<a class="ocf_forum_topic_row_preview_button" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$TRUNCATE_LEFT*~;^,{POST},1000,0,1}','30%',null,null,null,true);" href="{URL*}">{!PREVIEW} <span style="display: none">{ID*}</span></a>
+		{+END}
 
 		<div>
 			{TOPIC_ROW_LINKS}
