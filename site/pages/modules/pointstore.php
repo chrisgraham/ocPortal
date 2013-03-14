@@ -70,7 +70,7 @@ class Module_pointstore
 		delete_config_option('banner_imp');
 		delete_config_option('banner_hit');
 		delete_config_option('quota');
-		delete_config_option('text');
+		delete_config_option('community_message');
 		delete_config_option('is_on_community_billboard_buy');
 		delete_config_option('is_on_highlight_name_buy');
 		delete_config_option('is_on_topic_pin_buy');

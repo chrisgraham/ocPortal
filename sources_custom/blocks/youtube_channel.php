@@ -36,7 +36,7 @@ class Block_youtube_channel
 	 */
 	function uninstall()
 	{
-		delete_config_option('youtube_channel_update_time');
+		delete_config_option('channel_update_time');
 	}
 
 	/**

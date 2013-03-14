@@ -60,11 +60,14 @@ class Module_calendar
 		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_interests');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_jobs');
 
-		$perms=array('set_reminders','view_event_subscriptions','view_calendar','add_public_events','edit_viewable_events','edit_owned_events','view_personal_events','sense_personal_conflicts');
-		foreach ($perms as $perm)
-		{
-			delete_privilege($perm);
-		}
+		delete_privilege('set_reminders');
+		delete_privilege('view_event_subscriptions');
+		delete_privilege('view_calendar');
+		delete_privilege('add_public_events');
+		delete_privilege('edit_viewable_events');
+		delete_privilege('edit_owned_events');
+		delete_privilege('view_personal_events');
+		delete_privilege('sense_personal_conflicts');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'calendar'));
 
