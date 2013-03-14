@@ -27,7 +27,7 @@
 				{+END}
 
 				{+START,IF,{$NOT,{$MOBILE}}}
-					<table summary="{!MAP_TABLE}" class="autosized_table login_page_form">
+					<table class="map_table autosized_table login_page_form">
 						<tbody>
 							<tr>
 								<th class="de_th"><label for="login_username">{!USERNAME}</label>:</th>

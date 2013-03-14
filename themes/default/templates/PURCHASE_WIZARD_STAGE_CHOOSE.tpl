@@ -1,5 +1,5 @@
 <div class="wide_table_wrap">
-	<table summary="{!MAP_TABLE}" class="form_table wide_table">
+	<table class="map_table form_table wide_table">
 		{+START,IF,{$NOT,{$MOBILE}}}
 			<colgroup>
 				<col class="purchase_wizard_field_name_column" />

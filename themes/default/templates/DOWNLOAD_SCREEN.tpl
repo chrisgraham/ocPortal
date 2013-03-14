@@ -37,7 +37,7 @@
 			</div>
 
 			<div class="download_stats_wrapper">
-				<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="download_stats results_table wide_table" role="contentinfo">
+				<div class="wide_table_wrap"><table class="map_table download_stats results_table wide_table" role="contentinfo">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
 							<col class="download_field_name_column" />

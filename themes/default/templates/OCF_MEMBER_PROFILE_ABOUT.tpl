@@ -109,7 +109,7 @@
 		{+END}
 
 		<div class="wide_table_wrap">
-			<table class="wide_table ocf_profile_fields" summary="{!MAP_TABLE}">
+			<table class="map_table wide_table ocf_profile_fields">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
 						<col class="ocf_profile_about_field_name_column" />
@@ -171,7 +171,7 @@
 			<meta itemprop="name" content="{USERNAME*}" />
 
 			<div class="wide_table_wrap">
-				<table class="wide_table ocf_profile_details" summary="{!MAP_TABLE}">
+				<table class="map_table wide_table ocf_profile_details">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
 							<col class="ocf_profile_about_field_name_column" />
@@ -255,7 +255,7 @@
 			<h2>{!ACTIVITY}</h2>
 
 			<div class="wide_table_wrap">
-				<table class="wide_table ocf_profile_statistics" summary="{!MAP_TABLE}">
+				<table class="map_table wide_table ocf_profile_statistics">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
 							<col class="ocf_profile_about_field_name_column" />

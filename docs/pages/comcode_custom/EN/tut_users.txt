@@ -11,7 +11,7 @@ This short tutorial aims simply to clarify what all these terms to relate to, an
 [title="2"]The terms[/title]
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
    <tr>
       <th>Term</th>
       <th>Meaning</th>

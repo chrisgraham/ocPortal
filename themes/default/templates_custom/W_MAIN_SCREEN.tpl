@@ -7,7 +7,11 @@
 		<h3>&ldquo;{REALM_NAME*}&rdquo;, &lsquo;{ROOM_NAME*}&rsquo;, <kbd>{REALM*}:{X*}:{Y*}</kbd></h3>
 
 		<div class="ocw_navigation">
-			<table summary="{!W_MOVEMENT_TABLE}" class="results_table">
+			<p class="accessibility_hidden">
+				{!W_MOVEMENT_TABLE}
+			</p>
+
+			<table class="results_table">
 				<thead>
 					<tr>
 						<th colspan="3" style="text-align: center">
@@ -140,7 +144,7 @@
 
 		<div class="ocw_in_room">
 			<div class="wide_table_wrap">
-				<table class="wide_table results_table autosized_table" summary="{!COLUMNED_TABLE}">
+				<table class="columned_table wide_table results_table autosized_table">
 					<thead>
 						<tr>
 							<th colspan="3" class="ocw_posttop">
@@ -170,7 +174,7 @@
 			{+START,IF_NON_EMPTY,{ITEMS}}
 				<br />
 
-				<table class="ocw_centered_contents wide_table results_table" summary="{!COLUMNED_TABLE}">
+				<table class="columned_table ocw_centered_contents wide_table results_table">
 					<thead>
 						<tr>
 							<th colspan="2" class="ocw_posttop">
@@ -193,7 +197,7 @@
 			{+START,IF_NON_EMPTY,{ITEMS_SALE}}
 				<br />
 
-				<table class="ocw_centered_contents wide_table results_table" summary="{!COLUMNED_TABLE}">
+				<table class="columned_table ocw_centered_contents wide_table results_table">
 					<thead>
 						<tr>
 							<th colspan="3" class="ocw_posttop">
@@ -257,7 +261,7 @@
 		</h2>
 
 		<div class="toggleable_tray" style="{$JS_ON,{HIDE_ACTIONS*},}"{+START,IF,{HIDE_ACTIONS}} aria-expanded="false"{+END}>
-			<table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+			<table class="columned_table results_table wide_table autosized_table">
 				<colgroup>
 					<col style="width: 20%" />
 					<col style="width: 20%" />
@@ -285,7 +289,7 @@
 			</table>
 			{+START,IF_NON_EMPTY,{ITEMS_HELD}}
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -314,7 +318,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -343,7 +347,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -372,7 +376,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -401,7 +405,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -431,7 +435,7 @@
 				</form>
 			{+END}
 			<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-				<table summary="" class="results_table wide_table autosized_table">
+				<table class="columned_table results_table wide_table autosized_table">
 					<colgroup>
 						<col style="width: 20%" />
 						<col style="width: 20%" />
@@ -460,7 +464,7 @@
 				</table>
 			</form>
 			{+START,IF,{IS_STAFF}}
-				<table summary="" class="results_table wide_table">
+				<table class="columned_table results_table wide_table">
 					<tr>
 						<td colspan="5">
 							&nbsp;
@@ -468,7 +472,7 @@
 					</tr>
 				</table>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -497,7 +501,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -526,7 +530,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -555,7 +559,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -584,7 +588,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -613,7 +617,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />
@@ -642,7 +646,7 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="results_table wide_table autosized_table">
+					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 20%" />

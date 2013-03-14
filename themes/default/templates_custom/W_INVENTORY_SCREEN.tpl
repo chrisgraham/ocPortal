@@ -16,7 +16,7 @@
 </div>
 
 {+START,IF_NON_EMPTY,{INVENTORY}}
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table ocw_inventory results_table ocw_centered_contents autosized_table">
+	<div class="wide_table_wrap"><table class="columned_table wide_table ocw_inventory results_table ocw_centered_contents autosized_table">
 		<thead>
 			<tr>
 				<th>{!W_PICTURE}</th>

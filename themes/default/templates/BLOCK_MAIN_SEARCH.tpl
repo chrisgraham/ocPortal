@@ -13,7 +13,7 @@
 			{+END}
 			{+START,IF,{$NEQ,{INPUT_FIELDS},1}}
 				{+START,LOOP,INPUT_FIELDS}
-					<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table wide_table search_field_table">
+					<div class="wide_table_wrap"><table class="map_table autosized_table wide_table search_field_table">
 						<tbody>
 							<tr>
 								<th class="de_th">

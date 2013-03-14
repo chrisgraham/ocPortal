@@ -2,7 +2,7 @@
 
 <a id="poll_jump" rel="dovote"></a>
 <form title="{!VOTE}" action="{VOTE_URL*}" method="post" onsubmit="return ocf_check_poll(this,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*},({MINIMUM_SELECTIONS*}=={MAXIMUM_SELECTIONS*})?'{!POLL_NOT_ENOUGH_ERROR_2;,{MINIMUM_SELECTIONS*}}':'{!POLL_NOT_ENOUGH_ERROR;,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*}}');">
-	<div class="wide_table_wrap"><table summary="{!POLL}" class="autosized_table ocf_topic_poll wide_table">
+	<div class="wide_table_wrap"><table class="spread_table autosized_table ocf_topic_poll wide_table">
 		<tbody>
 			<tr>
 				<td colspan="2" class="table_heading_cell">

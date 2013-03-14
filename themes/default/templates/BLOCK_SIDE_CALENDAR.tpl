@@ -2,7 +2,7 @@
 	<h3><a href="{CALENDAR_URL*}" title="{!CALENDAR}: {MONTH*}">{!CALENDAR}</a> &ndash; {MONTH*}</h3>
 
 	<div class="side_calendar_wrap">
-		<div class="wide_table_wrap"><table summary="{!SPREAD_TABLE}" class="autosized_table wide_table side_calendar calendar_year_month_table">
+		<div class="wide_table_wrap"><table class="spread_table autosized_table wide_table side_calendar calendar_year_month_table">
 			<colgroup>
 				<col class="calendar_weekly_column" />
 				<col class="calendar_weekly_column" />

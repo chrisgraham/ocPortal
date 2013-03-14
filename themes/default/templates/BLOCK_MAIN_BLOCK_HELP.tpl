@@ -1,6 +1,6 @@
 <h3>{NAME*}</h3>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table">
+<div class="wide_table_wrap"><table class="map_table wide_table results_table">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
 			<col class="block_help_field_name_column" />

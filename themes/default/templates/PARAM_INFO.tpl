@@ -1,5 +1,5 @@
 <div class="wide_table_wrap">
-	<table class="wide_table results_table autosized_table" summary="{!COLUMNED_TABLE}">
+	<table class="columned_table wide_table results_table autosized_table">
 		<thead>
 			<tr>
 				<th>{!NAME}</th>

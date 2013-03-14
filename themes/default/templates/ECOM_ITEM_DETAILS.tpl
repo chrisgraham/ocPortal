@@ -1,5 +1,5 @@
 <div class="wide_table_wrap">
-	<table summary="{!MAP_TABLE}" class="wide_table results_table spaced_table autosized_table">
+	<table class="map_table wide_table results_table spaced_table autosized_table">
 		<tbody>
 			{FIELDS}
 		</tbody>

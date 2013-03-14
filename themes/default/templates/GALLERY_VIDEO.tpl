@@ -6,7 +6,7 @@
 			</h3>
 		{+END}
 
-		<table summary="{!MAP_TABLE}" class="results_table">
+		<table class="map_table results_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
 					<col class="gallery_entry_field_name_column" />

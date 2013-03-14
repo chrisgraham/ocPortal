@@ -69,7 +69,7 @@
 			<img class="ocf_member_box_avatar" src="{AVATAR_URL*}" alt="{!SPECIFIC_AVATAR,{$USERNAME*,{MEMBER_ID}}}" title="{!SPECIFIC_AVATAR,{$USERNAME*,{MEMBER_ID}}}" />
 		{+END}
 
-		<table class="tooltip_fields autosized_table" summary="{!MAP_TABLE}">
+		<table class="map_table tooltip_fields autosized_table">
 			<tbody>
 				<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$USERNAME*,{MEMBER_ID}}</a></td></tr>
 				<tr><th class="de_th">{!ocf:SPECIFIC_FORUM_POSTS}:</th><td>{POSTS*}</td></tr>

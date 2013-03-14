@@ -12,7 +12,7 @@
 		<h2>{CAPTION*}</h2>
 
 		<form title="{CAPTION*}" onsubmit="if (check_field_for_blankness(this.elements['caption'],event) &amp;&amp; check_field_for_blankness(this.elements['page_link'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{$PAGE_LINK*,_SELF:_SELF:type=_edit:id={ID}}" method="post">
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table autosized_table">
+			<div class="wide_table_wrap"><table class="map_table wide_table results_table autosized_table">
 				<tbody>
 					<tr>
 						<th>{!CAPTION}</th>

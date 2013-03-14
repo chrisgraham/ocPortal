@@ -5,7 +5,7 @@
 	</h2>
 
 	<div class="toggleable_tray" id="{ID*}"{+START,IF_NON_PASSED_OR_FALSE,VISIBLE} style="display: {$JS_ON,none,block}" aria-expanded="false"{+END}>
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+		<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
 					<col class="field_name_column" />

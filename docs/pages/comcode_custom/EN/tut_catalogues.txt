@@ -104,7 +104,7 @@ Whilst the main [tt]CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl[/tt] template uses
 
 For example, take the [tt]CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl[/tt] template:
 [codebox]
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table spaced_table">
+<div class="wide_table_wrap"><table class="map_table wide_table results_table spaced_table">
 	<colgroup>
 		<col class="field_name_column" />
 		<col class="field_value_column" />
@@ -118,7 +118,7 @@ For example, take the [tt]CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl[/tt] templat
 
 If we wanted to jazz a 'classifieds' catalogue up a bit, we might change it to something like:
 [codebox]
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table spaced_table">
+<div class="wide_table_wrap"><table class="map_table wide_table results_table spaced_table">
 	<colgroup>
 		<col class="field_name_column" />
 		<col class="field_value_column" />

@@ -1,4 +1,8 @@
-<div class="wide_table_wrap"><table summary="{!CLASSIFIEDS_PRICING}" class="wide_table results_table autosized_table spaced_table">
+<p class="accessibility_hidden">
+	{!CLASSIFIEDS_PRICING}
+</p>
+
+<div class="wide_table_wrap"><table class="columned_table wide_table results_table autosized_table spaced_table">
 	<thead>
 		<tr>
 			<th>

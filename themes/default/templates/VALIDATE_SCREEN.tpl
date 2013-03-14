@@ -14,5 +14,5 @@
 	{+END}
 
 	<div class="validate_div">
-		<table summary="{!MAP_TABLE}" class="autosized_table validate_table">
+		<table class="map_table autosized_table validate_table">
 			<tbody>

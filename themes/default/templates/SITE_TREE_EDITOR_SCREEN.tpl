@@ -28,7 +28,7 @@
 				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';
 				var actions_tpl_item='<li><a href="[2]">[1]<\/a><\/li>';
 
-				var info_tpl='<div class="wide_table_wrap"><table class="results_table wide_table autosized_table" summary="{!MAP_TABLE;}"><tbody>[1]<\/tbody><\/table><\/div>';
+				var info_tpl='<div class="wide_table_wrap"><table class="map_table results_table wide_table autosized_table"><tbody>[1]<\/tbody><\/table><\/div>';
 				var info_tpl_item='<tr><th>[1]<\/th><td>[2]<\/td><\/tr>';
 
 				var edit_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=_edit:id=!}';

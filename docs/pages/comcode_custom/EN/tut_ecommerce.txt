@@ -35,7 +35,7 @@ To configure the payment gateway settings go to "eCommerce options" under the Co
 The options have the following requirement for PayPal:
 
 [html]
-<table class="results_table wide_table autosized_table" summary="Map table"><tbody>
+<table class="map_table results_table wide_table autosized_table"><tbody>
 	<tr>
 		<th>
 			Payment gateway

@@ -24,7 +24,7 @@
 				<div class="box box___gallery_entry_screen"><div class="box_inner" role="contentinfo">
 					<h2>{!DETAILS}</h2>
 
-					<table summary="{!MAP_TABLE}" class="results_table">
+					<table class="map_table results_table">
 						{+START,IF,{$NOT,{$MOBILE}}}
 							<colgroup>
 								<col class="gallery_entry_field_name_column" />

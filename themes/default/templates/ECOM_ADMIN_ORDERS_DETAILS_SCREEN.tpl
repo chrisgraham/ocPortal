@@ -3,7 +3,7 @@
 <p>{TEXT*}</p>
 
 <div class="wide_table_wrap">
-	<table summary="{!MAP_TABLE}" class="results_table wide_table autosized_table">
+	<table class="map_table results_table wide_table autosized_table">
 		<tbody>
 			<tr>
 				<th>{!ORDER_NUMBER}</th>

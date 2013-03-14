@@ -344,7 +344,7 @@ class comcode_xml_to_tempcode
 						$tempcode=new ocp_tempcode();
 						if (isset($attributes['summary']))
 						{
-							$tempcode->attach('<table summary="'.escape_html($attributes['summary']).'">');
+							$tempcode->attach((($attributes['summary']=='')?('<p class="accessibility_hidden">'.escape_html($attributes['summary']).'</p>'):'').'<table">');
 						} else
 						{
 							$tempcode->attach('<table>');

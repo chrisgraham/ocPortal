@@ -2,7 +2,7 @@
 	<h3><span class="name">{$TRUNCATE_LEFT,{FIELD_0},25,1,1}</h3>
 
 	{+START,SET,TOOLTIP}
-		<table summary="{!MAP_TABLE}" class="results_table">
+		<table class="map_table results_table">
 			<tbody>
 				{FIELDS_GRID}
 			</tbody>

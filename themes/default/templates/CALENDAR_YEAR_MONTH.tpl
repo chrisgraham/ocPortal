@@ -1,5 +1,5 @@
 <td class="calendar_year_month">
-	<table summary="{!SPREAD_TABLE}" class="calendar_year_month_table">
+	<table class="spread_table calendar_year_month_table">
 		<colgroup>
 			<col class="calendar_weekly_column" />
 			<col class="calendar_weekly_column" />

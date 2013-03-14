@@ -39,7 +39,7 @@ Knowing how to program, I now have written my code, with my modified files saved
    	<h4>{!_STATISTICS}</h4>
 
 		<div class="ocf_stats_1">
-			<table summary="{!MAP_TABLE}" cellpadding="0" cellspacing="0" class="map_table ocf_stats_2">
+			<table cellpadding="0" cellspacing="0" class="map_table ocf_stats_2">
             <colgroup span="2">
                <col class="ocf_bottom_bar_left_column" />
                <col class="ocf_bottom_bar_right_column" />

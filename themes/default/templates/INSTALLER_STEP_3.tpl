@@ -21,7 +21,7 @@
 		</p>
 
 		{+START,IF,{$JS_ON}}
-			<table summary="{!COLUMNED_TABLE}" class="installer_forums">
+			<table class="columned_table installer_forums">
 				<tbody>
 					<tr>
 						<th class="de_th">
@@ -56,7 +56,7 @@
 
 		<div id="forum_path" style="display: {$JS_ON,none,block}">
 			<p>{!FORUM_PATH_TEXT}</p>
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+			<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 				<colgroup>
 					<col class="installer_input_left_column" />
 					<col class="installer_input_right_column" />
@@ -74,7 +74,7 @@
 			</table></div>
 		</div>
 
-		<div class="wide_table_wrap"><table summary="" class="form_table wide_table">
+		<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 			<colgroup>
 				<col class="installer_left_column" />
 				<col class="installer_right_column" />

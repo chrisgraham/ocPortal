@@ -560,7 +560,7 @@ function init__validation2()
 	$TAG_ATTRIBUTES+=array(
 		'table.frame'=>'(void|above|below|hsides|lhs|rhs|vsides|box|border)',
 		'table.rules'=>'(none|groups|rows|cols|all)',
-		'table.summary'=>'.*',
+		//'table.summary'=>'.*', Not in HTML5
 		'tbody.char'=>$enforce_character,
 		'tbody.charoff'=>$enforce_length,
 		'td.axis'=>'.+',
@@ -688,7 +688,7 @@ function init__validation2()
 		'form'=>array('action','title'),
 		'textarea'=>array('cols','rows'),
 		//'input'=>array('value'), // accessibility, checked somewhere else
-		'table'=>array('summary'),
+		'table'=>array(/*'summary' not in html5*/),
 		'optgroup'=>array('label')
 	);
 

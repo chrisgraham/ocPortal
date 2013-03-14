@@ -33,7 +33,7 @@ Downloads may be used to release information indirectly, essentially via archive
 [title="2"]Comparison table[/title]
 
 [html]
-<table class="results_table" summary="Columned table">
+<table class="columned_table results_table wide_table">
 	<thead>
 		<tr>
 			<th>

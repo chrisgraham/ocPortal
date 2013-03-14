@@ -7,7 +7,7 @@
 			<section class="box box___gallery_flowmode_video"><div class="box_inner">
 				<h3>{!DETAILS}</h3>
 
-				<table summary="{!MAP_TABLE}" class="results_table">
+				<table class="map_table results_table">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
 							<col class="gallery_entry_field_name_column" />

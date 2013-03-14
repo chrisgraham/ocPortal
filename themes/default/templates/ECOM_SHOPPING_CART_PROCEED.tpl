@@ -1,4 +1,4 @@
-<table class="cart_payment_summary" summary="{!COLUMNED_TABLE}">
+<table class="columned_table cart_payment_summary">
 	<tbody>
 		<tr>
 			<th class="de_th">

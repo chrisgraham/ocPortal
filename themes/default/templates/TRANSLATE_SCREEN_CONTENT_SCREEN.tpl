@@ -9,7 +9,7 @@
 {+END}
 
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
-	<div class="wide_table_wrap really_long_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+	<div class="wide_table_wrap really_long_table_wrap"><table class="columned_table results_table wide_table autosized_table">
 		<thead>
 			<tr>
 				<th>

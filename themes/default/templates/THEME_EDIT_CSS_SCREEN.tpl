@@ -48,7 +48,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Background Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>
@@ -89,7 +89,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Border Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>
@@ -145,7 +145,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Dimension Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>
@@ -191,7 +191,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">List Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>
@@ -217,7 +217,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Margin/Padding Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>
@@ -283,7 +283,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Positioning Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>
@@ -354,7 +354,7 @@
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Text/Font Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					<table summary="{!COLUMNED_TABLE}" class="results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
+					<table class="columned_table results_table" cellspacing="0" cellpadding="0" border="1" width="100%">
 						<tbody><tr>
 							<th width="28%" align="left">Property</th>
 							<th width="67%" align="left">Description</th>

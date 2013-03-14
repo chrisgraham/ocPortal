@@ -1,4 +1,4 @@
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table ocf_topic_list">
+<div class="wide_table_wrap"><table class="columned_table wide_table ocf_topic_list">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
 			{+START,IF,{$CONFIG_OPTION,is_on_topic_emoticons}}

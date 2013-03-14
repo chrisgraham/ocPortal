@@ -10,7 +10,7 @@
 </p>
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table redirect_table">
+	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table">
 		<colgroup>
 			<col class="redirect_table_input_column" />
 			<col class="redirect_table_input_column" />

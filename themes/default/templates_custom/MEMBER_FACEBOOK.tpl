@@ -1,6 +1,6 @@
 {+START,IF_NON_EMPTY,{$USER_FB_CONNECT,{MEMBER_ID}}}
 	<div class="wide_table_wrap">
-		<table class="wide_table ocf_profile_fields" summary="{!MAP_TABLE}">
+		<table class="map_table wide_table ocf_profile_fields">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
 					<col class="ocf_profile_about_field_name_column" />

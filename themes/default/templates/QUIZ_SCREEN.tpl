@@ -30,7 +30,7 @@
 
 <form title="{!SAVE}" class="quiz_form" method="post" onsubmit="return check_form(this);" action="{URL*}">
 	<div>
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+		<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
 					<col class="quiz_field_name_column" />
