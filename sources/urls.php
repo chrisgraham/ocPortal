@@ -258,7 +258,7 @@ function is_page_https($zone,$page)
 	static $off=NULL;
 	if ($off===NULL)
 	{
-		$off=(get_option('enable_https',true)=='0') || (in_safe_mode());
+		$off=(!function_exists('get_option')) || (get_option('enable_https',true)=='0') || (in_safe_mode());
 	}
 	if ($off) return false;
 
@@ -292,6 +292,7 @@ function is_page_https($zone,$page)
  */
 function can_try_mod_rewrite($avoid_remap=false)
 {
+	if (!function_exists('get_option')) return false;
 	$url_scheme=get_option('url_scheme',false);
 	return (($url_scheme!==NULL) && ($url_scheme!=='RAW') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite']=='0')) && (!$avoid_remap) && ((get_value('ionic_on','0')=='1') || (ocp_srv('SERVER_SOFTWARE')=='') || (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS7/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS8/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,10)=='LiteSpeed'))); // If we don't have the option on or are not using apache, return
 }
@@ -394,6 +395,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
  */
 function url_monikers_enabled()
 {
+	if (!function_exists('get_option')) return false;
 	if (get_param_integer('keep_simpleurls',0)==1) return false;
 	if (get_option('url_monikers_enabled',true)!=='1') return false;
 	return true;
@@ -503,7 +505,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS_CACHE=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS_CACHE;
 	$test_rewrite=NULL;
-	$self_page=((!isset($vars['page'])) || ((get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_page_name())))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top') && (!$KNOWN_AJAX);
+	$self_page=((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_page_name())))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top') && (!$KNOWN_AJAX);
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE==='index'))
