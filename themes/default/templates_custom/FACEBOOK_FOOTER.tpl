@@ -29,16 +29,20 @@
 							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 								{
-									window.location='{$PAGE_LINK;,:}';
+									window.location='{$PAGE_LINK;,:refreshed_once=1}';
 								} else
 								{
 									var current_url=window.top.location.href;
-									if (current_url.indexOf('keep_refreshed_once=1')==-1)
+									if (current_url.indexOf('refreshed_once=1')==-1)
 									{
-										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'keep_refreshed_once=1';
+										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'refreshed_once=1';
 										window.top.location=current_url;
 									}
-									else window.alert('Could not login, probably due to restrictive cookie settings.');
+									else if (current_url.indexOf('keep_refreshed_once=1')==-1)
+									{
+										window.alert('Could not login, probably due to restrictive cookie settings.');
+										window.location+='&keep_refreshed_once=1';
+									}
 								}
 							},500);
 						{+END}
@@ -75,16 +79,20 @@
 							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 								{
-									window.location='{$PAGE_LINK;,:}';
+									window.location='{$PAGE_LINK;,:refreshed_once=1}';
 								} else
 								{
 									var current_url=window.top.location.href;
-									if (current_url.indexOf('keep_refreshed_once=1')==-1)
+									if (current_url.indexOf('refreshed_once=1')==-1)
 									{
-										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'keep_refreshed_once=1';
+										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'refreshed_once=1';
 										window.top.location=current_url;
 									}
-									else window.alert('Could not login, probably due to restrictive cookie settings.');
+									else if (current_url.indexOf('keep_refreshed_once=1')==-1)
+									{
+										window.alert('Could not login, probably due to restrictive cookie settings.');
+										window.location+='&keep_refreshed_once=1';
+									}
 								}
 							},500);
 						}
