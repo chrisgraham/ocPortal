@@ -305,6 +305,10 @@ class Block_main_multi_content
 
 		global $TABLE_LANG_FIELDS_CACHE;
 		$lang_fields=isset($TABLE_LANG_FIELDS_CACHE[$info['table']])?$TABLE_LANG_FIELDS_CACHE[$info['table']]:array();
+		foreach ($lang_fields as $i=>$lang_field)
+		{
+			$lang_fields[$i]='r.'.$lang_field;
+		}
 
 		// Find what kind of query to run and run it
 		if ($filter!='-1')
@@ -636,7 +640,7 @@ class Block_main_multi_content
 		$id_field_numeric=((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric']));
 		$category_is_string=((array_key_exists('category_is_string',$info)) && ($info['category_is_string']));
 		require_code('ocfiltering');
-		return ocfilter_to_sqlfragment($filter,$category_field_filter,$parent_spec__table_name,$parent_spec__parent_name,$parent_field_name,$parent_spec__field_name,$id_field_numeric,!$category_is_string);
+		return ocfilter_to_sqlfragment($filter,$category_field_filter,$parent_spec__table_name,$parent_spec__parent_name,'r.'.$parent_field_name,$parent_spec__field_name,$id_field_numeric,!$category_is_string);
 	}
 }
 

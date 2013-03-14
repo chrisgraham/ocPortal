@@ -105,6 +105,10 @@ class Block_main_content
 
 		global $TABLE_LANG_FIELDS_CACHE;
 		$lang_fields=isset($TABLE_LANG_FIELDS_CACHE[$info['table']])?$TABLE_LANG_FIELDS_CACHE[$info['table']]:array();
+		foreach ($lang_fields as $i=>$lang_field)
+		{
+			$lang_fields[$i]='r.'.$lang_field;
+		}
 
 		$submit_url=$info['add_url'];
 		if (!is_null($submit_url))
