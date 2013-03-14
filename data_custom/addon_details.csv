@@ -290,3 +290,4 @@ gallery_syndication,Third Party Integration,Chris Graham,Common Public Attributi
 pagination_protection,Development,Chris Graham,Licensed on the same terms as ocPortal,"Apply a maximum pagination value of 100, preventing people manipulating URLs to get out more data than the interface normally allows.",,,,
 calendar_from_6am,Graphical,Chris Graham,Common Public Attribution License,"Only display the calendar week and day views starting from 6am, unless there were events added during the night.","Calendar",,,
 psds,Graphical,Allen Ellis,Licensed on the same terms as ocPortal,These are the source PSD files for graphics that contain English text.,,,,
+user_sync,Development,Vivek Dinesh,Licensed on the same terms as ocPortal,"Sync user data between ocportal and a remote database.",PHP5,,,
