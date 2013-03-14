@@ -1331,11 +1331,11 @@ function _request_page__redirects($codename,$zone,$wildcard_mode=false)
 	if ($REDIRECT_CACHE===NULL) load_redirect_cache();
 	if (array_key_exists($zone,$REDIRECT_CACHE))
 	{
-		if (array_key_exists($codename,$REDIRECT_CACHE[$zone]))
+		if (isset($REDIRECT_CACHE[$zone][$codename]))
 		{
 			$redirect=array($REDIRECT_CACHE[$zone][$codename]);
 		}
-		elseif (($wildcard_mode) && (array_key_exists($codename,$REDIRECT_CACHE['*'])))
+		elseif (($wildcard_mode) && (isset($REDIRECT_CACHE['*'][$codename])))
 		{
 			$redirect=array($REDIRECT_CACHE['*'][$codename]);
 		} else

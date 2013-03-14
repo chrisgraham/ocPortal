@@ -23,6 +23,12 @@ class video_syndication_vimeo
 	var $_vimeo_ob;
 	var $_request_token=NULL;
 
+	function uninstall()
+	{
+		delete_config_option('vimeo_client_id');
+		delete_config_option('vimeo_client_secret');
+	}
+
 	function __construct()
 	{
 		require_code('vimeo');

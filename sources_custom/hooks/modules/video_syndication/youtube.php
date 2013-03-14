@@ -22,6 +22,13 @@ class video_syndication_youtube
 {
 	var $_access_token=NULL;
 
+	function uninstall()
+	{
+		delete_config_option('youtube_client_id');
+		delete_config_option('youtube_client_secret');
+		delete_config_option('youtube_developer_key');
+	}
+
 	function __construct()
 	{
 		// Ensure config options installed

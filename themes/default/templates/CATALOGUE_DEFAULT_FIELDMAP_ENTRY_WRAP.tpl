@@ -42,6 +42,11 @@
 					<a href="{VIEW_URL*}" title="{!VIEW}: {$STRIP_TAGS*,{FIELD_0}}"><img title="{!VIEW}{+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} ({$STRIP_TAGS,{$COMMENT_COUNT,catalogues,{ID}}}){+END}" alt="{!COMMENTS} / {!VIEW}" class="button_pageitem" src="{$IMG*,pageitem/goto}" /></a>
 				</p>
 			{+END}
+			{+START,IF_EMPTY,{VIEW_URL}}{+START,IF_NON_EMPTY,{EDIT_URL}}
+				<p class="{$?,{GIVE_CONTEXT},shunted_button,right}">
+					<a href="{EDIT_URL*}" title="{!EDIT}: {$STRIP_TAGS*,{FIELD_0}}"><img title="" alt="{!EDIT}" class="button_pageitem" src="{$IMG*,pageitem/edit}" /></a>
+				</p>
+			{+END}{+END}
 		</div>
 	{+END}
 {+START,IF,{$NOT,{GIVE_CONTEXT}}}
