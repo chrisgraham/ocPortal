@@ -74,12 +74,20 @@ function get_staff_actions_list()
 	}
 	$special_page_type=get_param('special_page_type','view');
 	$staff_actions='';
+	$started_opt_group=false;
 	foreach ($list as $name=>$text)
 	{
-		$disabled=(($name[0]=='s') && (substr($name,0,7)=='spacer_'));
-		$staff_actions.='<option '.($disabled?'disabled="disabled" ':'').(($name==$special_page_type)?'selected="selected" ':'').'value="'.escape_html($name).'">'.(is_object($text)?$text->evaluate():escape_html($text)).'</option>'; // XHTMLXHTML
-		//$staff_actions.=static_evaluate_tempcode(form_input_list_entry($name,($name==$special_page_type),$text,false,$disabled));
+		$is_group=(($name[0]=='s') && (substr($name,0,7)=='spacer_'));
+		if ($is_group)
+		{
+			if ($started_opt_group) $staff_actions.='</optgroup>';
+			$staff_actions.='<optgroup label="'.(is_object($text)?$text->evaluate():escape_html($text)).'">';
+			$started_opt_group=true;
+		}
+		$staff_actions.='<option'.(($staff_actions=='')?' disabled="disabled" class="label"':'').' '.(($name==$special_page_type)?'selected="selected" ':'').'value="'.escape_html($name).'">'.(is_object($text)?$text->evaluate():escape_html($text)).'</option>'; // XHTMLXHTML
+		//$staff_actions.=static_evaluate_tempcode(form_input_list_entry($name,($name==$special_page_type),$text,false,$disabled));	Disabled 'proper' way for performance reasons
 	}
+	if ($started_opt_group) $staff_actions.='</optgroup>';
 	return $staff_actions;
 }
 
@@ -95,7 +103,7 @@ function get_page_warning_details($zone,$codename,$edit_url)
 {
 	$warning_details=new ocp_tempcode();
 	if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
-		access_denied('SPECIFIC_PERMISSION','jump_to_unvalidated');
+		access_denied('PRIVILEGE','jump_to_unvalidated');
 	$uv_warning=do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'); // Wear sun cream
 	if (!$edit_url->is_empty())
 	{
@@ -112,7 +120,7 @@ function get_page_warning_details($zone,$codename,$edit_url)
 			$uv_warning=do_lang_tempcode('UNVALIDATED_TEXT_STAFF',$menu_items_linking);
 		}
 	}
-	$warning_details->attach(do_template('WARNING_TABLE',array('WARNING'=>$uv_warning)));
+	$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'ee79289f87986bcb916a5f1810a25330','WARNING'=>$uv_warning)));
 	return $warning_details;
 }
 
@@ -173,7 +181,6 @@ function closed_site()
 
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
-		$echo=do_header();
 		if (count($_POST)>0)
 		{
 			$redirect=build_url(array('page'=>''),'',array('keep_session'=>1));
@@ -184,9 +191,8 @@ function closed_site()
 		if (is_object($redirect)) $redirect=$redirect->evaluate();
 		$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
 		$join_url=(get_forum_type()=='none')?'':$GLOBALS['FORUM_DRIVER']->join_url();
-		$echo->attach(do_template('CLOSED_SITE',array('_GUID'=>'4e753c50eca7c98344d2107fc18c4554','CLOSED'=>comcode_to_tempcode(get_option('closed'),NULL,true),'LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url)));
-		$echo->attach(do_footer());
-		$echo->handle_symbol_preprocessing();
+		$middle=do_template('CLOSED_SITE',array('_GUID'=>'4e753c50eca7c98344d2107fc18c4554','CLOSED'=>comcode_to_tempcode(get_option('closed'),NULL,true),'LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
+		$echo=globalise($middle,NULL,'',true);
 		$echo->evaluate_echo();
 		exit();
 	}
@@ -248,7 +254,7 @@ function page_not_found($codename,$zone)
 		relay_error_notification(do_lang('_MISSING_RESOURCE',$zone.':'.$codename).' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_page');
 	}
 
-	$title=get_page_title('ERROR_OCCURRED');
+	$title=get_screen_title('ERROR_OCCURRED');
 	$add_access=has_actual_page_access(get_member(),'cms_comcode_pages',NULL,NULL,'submit_highrange_content');
 	$redirect_access=addon_installed('redirects_editor') && has_actual_page_access(get_member(),'admin_redirects');
 	require_lang('zones');
@@ -277,7 +283,22 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
 	// Not cached :(
-	$result=file_get_contents($file_base.'/'.$string,FILE_TEXT);
+	$result=file_get_contents($file_base.'/'.$string);
+
+	// Fix bad unicode
+	if (get_charset()=='utf-8')
+	{
+		$test_string=$result; // avoid being destructive 
+		$test_string=preg_replace('#[\x09\x0A\x0D\x20-\x7E]#','',$test_string); // ASCII 
+		$test_string=preg_replace('#[\xC2-\xDF][\x80-\xBF]#','',$test_string); // non-overlong 2-byte 
+		$test_string=preg_replace('#\xE0[\xA0-\xBF][\x80-\xBF]#','',$test_string); // excluding overlongs 
+		$test_string=preg_replace('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','',$test_string); // straight 3-byte 
+		$test_string=preg_replace('#\xED[\x80-\x9F][\x80-\xBF]#','',$test_string); // excluding surrogates 
+		$test_string=preg_replace('#\xF0[\x90-\xBF][\x80-\xBF]{2}#','',$test_string); // planes 1-3 
+		$test_string=preg_replace('#[\xF1-\xF3][\x80-\xBF]{3}#','',$test_string); //  planes 4-15 
+		$test_string=preg_replace('#\xF4[\x80-\x8F][\x80-\xBF]{2}#','',$test_string); // plane 16 
+		if ($test_string!='') $result=utf8_encode($result);
+	}
 
 	if (is_null($new_comcode_page_row['p_submitter']))
 	{
@@ -395,7 +416,7 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	require_code('attachments2');
-	$_new=do_comcode_attachments(file_get_contents($file_base.'/'.$string,FILE_TEXT),'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
+	$_new=do_comcode_attachments(file_get_contents($file_base.'/'.$string),'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
 	$html=$_new['tempcode'];
 	$LAX_COMCODE=$temp;
 	$title_to_use=is_null($COMCODE_PARSE_TITLE)?NULL:clean_html_title($COMCODE_PARSE_TITLE);

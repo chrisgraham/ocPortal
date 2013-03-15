@@ -35,7 +35,7 @@ class Hook_occle
 			require_code('occle');
 			require_lang('occle');
 
-			$title=get_page_title('OCCLE');
+			$title=get_screen_title('OCCLE');
 
 			return do_template('OCCLE_MAIN',array('COMMANDS'=>'','SUBMIT_URL'=>build_url(array('page'=>'admin_occle'),'adminzone'),'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())))));
 		}

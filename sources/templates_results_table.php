@@ -45,7 +45,7 @@
  */
 function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fields_title,$fields,$sortables=NULL,$sortable=NULL,$sort_order=NULL,$sort_name='sort',$message=NULL,$widths=NULL,$tplset=NULL,$max_page_links=8,$guid='1c8645bc2a3ff5bec2e003142185561f',$skip_sortables_form=false,$hash=NULL)
 {
-	require_code('templates_results_browser');
+	require_code('templates_pagination');
 
 	if (!is_null($sort_name))
 	{
@@ -85,43 +85,27 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 			$text_descending->attach(do_lang_tempcode('_DESCENDING'));
 			$selector_value=$_sortable.' ASC';
 			$selected=(($sortable.' '.$sort_order)==$selector_value);
-			$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>$guid,'SELECTED'=>$selected,'NAME'=>$text_ascending,'VALUE'=>$selector_value)));
+			$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'6a57bbaeed04743ba2cafa2d262a1c98','SELECTED'=>$selected,'NAME'=>$text_ascending,'VALUE'=>$selector_value)));
 			$selector_value=$_sortable.' DESC';
 			$selected=(($sortable.' '.$sort_order)==$selector_value);
-			$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>$guid,'SELECTED'=>$selected,'NAME'=>$text_descending,'VALUE'=>$selector_value)));
+			$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'bbf97817fa4f5e744a414b303a3d21fe','SELECTED'=>$selected,'NAME'=>$text_descending,'VALUE'=>$selector_value)));
 		}
-		if (strpos(ocp_srv('REQUEST_URI'),'/iframe.php')!==false)
-		{
-			$sort_url=find_script('iframe').'?zone='.get_zone_name();
-			$url_array=$_GET;
-			foreach ($url_array as $key=>$param)
-			{
-				if (is_array($param)) continue;
-				if ((substr($key,0,5)=='keep_') && (skippable_keep($key,$param))) continue;
-				if ($key=='wide_high') continue;
-				if ($param==='_SELF') $param=get_page_name();
-				if (get_magic_quotes_gpc()) $param=stripslashes($param);
-				$sort_url.='&'.$key.'='.urlencode($param);
-			}
-		} else
-		{
-			$sort_url=get_self_url();
-		}
+		$sort_url=get_self_url();
 		$hidden=build_keep_form_fields('_SELF',true);
 		if ($selectors->is_empty())
 		{
 			$sort=new ocp_tempcode();
 		} else
 		{
-			$sort=do_template('RESULTS_BROWSER_SORT',array('_GUID'=>$guid,'HASH'=>$hash,'HIDDEN'=>$hidden,'SORT'=>$sort_name,'RAND'=>strval($GLOBALS['INCREMENTAL_ID_GENERATOR']),'URL'=>$sort_url,'SELECTORS'=>$selectors));
+			$sort=do_template('PAGINATION_SORT',array('_GUID'=>'4afa1bae0f447b68e60192c515b13ca2','HASH'=>$hash,'HIDDEN'=>$hidden,'SORT'=>$sort_name,'URL'=>$sort_url,'SELECTORS'=>$selectors));
 		}
 		$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
 	} else $sort=new ocp_tempcode();
 
-	// Results browser
-	$browser=results_browser(is_object($text_id)?$text_id:make_string_tempcode($text_id),NULL,$start,$start_name,$max,$max_name,$max_rows,NULL,get_param('type','misc'),true,true,$max_page_links,NULL,is_null($hash)?'':$hash);
+	// Pagination
+	$pagination=pagination(is_object($text_id)?$text_id:make_string_tempcode($text_id),NULL,$start,$start_name,$max,$max_name,$max_rows,NULL,get_param('type','misc'),true,true,$max_page_links,NULL,is_null($hash)?'':$hash);
 
-	return do_template(is_null($tplset)?'RESULTS_TABLE':('RESULTS_'.$tplset.'_TABLE'),array('_GUID'=>$guid,'TEXT_ID'=>$text_id,'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>$message,'SORT'=>$skip_sortables_form?new ocp_tempcode():$sort,'BROWSER'=>$browser,'WIDTHS'=>$widths),NULL,false,'RESULTS_TABLE');
+	return do_template(is_null($tplset)?'RESULTS_TABLE':('RESULTS_'.$tplset.'_TABLE'),array('_GUID'=>$guid,'TEXT_ID'=>$text_id,'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>$message,'SORT'=>$skip_sortables_form?new ocp_tempcode():$sort,'PAGINATION'=>$pagination,'WIDTHS'=>$widths),NULL,false,'RESULTS_TABLE');
 }
 
 /**
@@ -174,33 +158,14 @@ function results_field_title($values,$sortables=NULL,$order_param='sort',$curren
 		}
 		if (!is_null($found))
 		{
-			if (strpos(ocp_srv('REQUEST_URI'),'/iframe.php')!==false)
-			{
-				$cat_url=find_script('iframe').'?zone='.get_zone_name();
-				$url_array=array_merge($_GET,$_POST);
-				unset($url_array[$order_param]);
-				foreach ($url_array as $key=>$param)
-				{
-					if (is_array($param)) continue;
-					if ($key=='wide_high') continue;
-					if ((substr($key,0,5)=='keep_') && (skippable_keep($key,$param))) continue;
-					if ($param==='_SELF') $param=get_page_name();
-					if (get_magic_quotes_gpc()) $param=stripslashes($param);
-					$cat_url.='&'.$key.'='.urlencode($param);
-				}
-				$sort_url_asc=$cat_url.'&'.$order_param.'='.urlencode($found).' ASC';
-				$sort_url_desc=$cat_url.'&'.$order_param.'='.urlencode($found).' DESC';
-			} else
-			{
-				$sort_url_asc=get_self_url(false,false,array($order_param=>$found.' ASC'),true);
-				$sort_url_desc=get_self_url(false,false,array($order_param=>$found.' DESC'),true);
-			}
+			$sort_url_asc=get_self_url(false,false,array($order_param=>$found.' ASC'),true);
+			$sort_url_desc=get_self_url(false,false,array($order_param=>$found.' DESC'),true);
 			$sort_asc_selected=($current_ordering==$found.' ASC');
 			$sort_desc_selected=($current_ordering==$found.' DESC');
-			$cells->attach(do_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE',array('_GUID'=>$guid,'VALUE'=>$value,'SORT_ASC_SELECTED'=>$sort_asc_selected,'SORT_DESC_SELECTED'=>$sort_desc_selected,'SORT_URL_DESC'=>$sort_url_desc,'SORT_URL_ASC'=>$sort_url_asc)));
+			$cells->attach(do_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE',array('_GUID'=>'e71df89abff7c7d51907867924dbfa7e','VALUE'=>$value,'SORT_ASC_SELECTED'=>$sort_asc_selected,'SORT_DESC_SELECTED'=>$sort_desc_selected,'SORT_URL_DESC'=>$sort_url_desc,'SORT_URL_ASC'=>$sort_url_asc)));
 		} else
 		{
-			$cells->attach(do_template('RESULTS_TABLE_FIELD_TITLE',array('_GUID'=>$guid,'VALUE'=>$value)));
+			$cells->attach(do_template('RESULTS_TABLE_FIELD_TITLE',array('_GUID'=>'80e9de91bb9e479766bc8568a790735c','VALUE'=>$value)));
 		}
 	}
 

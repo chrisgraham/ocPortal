@@ -90,7 +90,7 @@ class Block_main_comcode_page_children
 			}
 
 			if ($title=='')
-				$title=escape_html(ucwords(str_replace('_',' ',$child['the_page'])));
+				$title=escape_html(titleify($child['the_page']));
 
 			$child['TITLE']=$title;
 			$child['PAGE']=$child['the_page'];

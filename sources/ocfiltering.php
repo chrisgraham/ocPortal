@@ -135,6 +135,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 			if ((!is_null($child[$parent_name])) && ((($numeric_ids) && ($child[$parent_name]==intval($look_under))) || ((!$numeric_ids) && ($child[$parent_name]==$look_under))))
 			{
 				$under[]=$child[$field_name];
+
 				$under=array_merge($under,_ocfilter_subtree_fetch(is_integer($child[$field_name])?strval($child[$field_name]):$child[$field_name],$table_name,$parent_name,$field_name,$numeric_ids,$db,$cached_mappings,false));
 			}
 		}
@@ -434,11 +435,11 @@ function ocfilter_to_idlist_using_callback($filter,$ids_and_parents_callback,$pa
  * Turn an ocFilter (a filter specifying which records to match) into an SQL query fragment.
  *
  * @param  string		The filter
- * @param  string		The database's ID field for the record-set we're matching
- * @param  ?string	The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches)
- * @param  ?string	The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
- * @param  ?string	The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches)
- * @param  ?string	The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
+ * @param  string		The database's ID field for the record-set we're matching. E.g. 'id'.
+ * @param  ?string	The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches). E.g. 'categories'.
+ * @param  ?string	The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base). E.g. 'parent_id'.
+ * @param  ?string	The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches). E.g. 'cat'.
+ * @param  ?string	The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base). E.g. 'id'.
  * @param  boolean	Whether the record-set IDs are numeric
  * @param  boolean	Whether the category-set IDs are numeric
  * @param  ?object	Database connection to use (NULL: website)

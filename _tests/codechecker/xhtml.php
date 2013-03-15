@@ -13,6 +13,197 @@
  * @package		code_quality
  */
 
+if (!function_exists('html_entity_decode'))
+{
+	/**
+	 * Decode the HTML entitity encoded input string. Can give warning if unrecognised character set.
+	 *
+	 * @param  string		The text to decode
+	 * @param  integer	The quote style code
+	 * @param  ?string		Character set to decode to (NULL: default)
+	 * @return string		The decoded text
+	 */
+	function html_entity_decode($input,$quote_style,$charset=NULL)
+	{
+		unset($quote_style);
+		unset($charset);
+
+		$trans_tbl=get_html_translation_table(HTML_ENTITIES);
+		$trans_tbl=array_flip($trans_tbl);
+		return strtr($input,$trans_tbl);
+	}
+}
+if (!function_exists('str_word_count'))
+{
+	/**
+	 * Isolate the words in the input string.
+	 *
+	 * @param  string			String to count words in
+	 * @param  integer		The format
+	 * @set    0 1
+	 * @return mixed			Typically a list - the words of the input string
+	 */
+	function str_word_count($input,$format=0)
+	{
+		//count words
+		$pattern="/[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-\-|:|\&|@)]+/";
+		$all_words=trim(preg_replace($pattern,' ',$input));
+		$a=explode(' ',$all_words);
+		return ($format==0)?count($a):$a;
+	}
+}
+
+if (!function_exists('qualify_url'))
+{
+	/**
+	 * Take a URL and base-URL, and fully qualify the URL according to it.
+	 *
+	 * @param  URLPATH		The URL to fully qualified
+	 * @param  URLPATH		The base-URL
+	 * @return URLPATH		Fully qualified URL
+	 */
+	function qualify_url($url,$url_base)
+	{
+		if (($url!='') && ($url[0]!='#') && (substr($url,0,7)!='mailto:'))
+		{
+			if (strpos($url,'://')===false)
+			{
+				if ($url[0]=='/')
+				{
+					$parsed=parse_url($url_base);
+					if (!array_key_exists('scheme',$parsed)) $parsed['scheme']='http';
+					if (!array_key_exists('host',$parsed)) $parsed['host']='localhost';
+					if (substr($url,0,2)=='//')
+					{
+						$url=$parsed['scheme'].':'.$url;
+					} else
+					{
+						$url=$parsed['scheme'].'://'.$parsed['host'].(array_key_exists('port',$parsed)?(':'.$parsed['port']):'').$url;
+					}
+				} else $url=$url_base.'/'.$url;
+			}
+		} else return '';
+		return $url;
+	}
+}
+
+if (!function_exists('http_download_file'))
+{
+	/**
+	 * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
+	 *
+	 * @param  URLPATH		The URL to download
+	 * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
+	 * @range  1 max
+	 * @param  boolean		Whether to throw an ocPortal error, on error
+	 * @param  boolean		Whether to block redirects (returns NULL when found)
+	 * @param  string			The user-agent to identify as
+	 * @param  ?array			An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
+	 * @param  ?array			An optional array of cookies to send (NULL: none)
+	 * @param  ?string		'accept' header value (NULL: don't pass one)
+	 * @param  ?string		'accept-charset' header value (NULL: don't pass one)
+	 * @param  ?string		'accept-language' header value (NULL: don't pass one)
+	 * @param  ?resource		File handle to write to (NULL: do not do that)
+	 * @param  ?string		The HTTP referer (NULL: none)
+	 * @param  ?array			A pair: authentication username and password (NULL: none)
+	 * @param  float			The timeout
+	 * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
+	 * @param  ?array			Files to send. Map between field to file path (NULL: none)
+	 * @return ?string		The data downloaded (NULL: error)
+	 */
+	function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
+	{
+		@ini_set('allow_url_fopen','1');
+		return @file_get_contents($url); // Assumes URL-wrappers is on, whilst ocPortal's is much more sophisticated
+	}
+}
+
+if (!function_exists('do_lang'))
+{
+	/**
+	 * Get the human-readable form of a language id, or a language entry from a language INI file. (STUB)
+	 *
+	 * @param  ID_TEXT		The language id
+	 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
+	 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
+	 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+	 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
+	 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
+	 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+	 */
+	function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
+	{
+		if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
+
+		unset($lang);
+
+		switch ($a)
+		{
+			case 'LINK_NEW_WINDOW':
+				return 'new window';
+			case 'SPREAD_TABLE':
+				return 'Spread table';
+			case 'MAP_TABLE':
+				return 'Item to value mapper table';
+		}
+
+		return array($a,$param_a,$param_b,$param_c);
+	}
+}
+
+if (!function_exists('get_forum_type'))
+{
+	/**
+	 * Get the type of forums installed.
+	 *
+	 * @return string			The type of forum installed
+	 */
+	function get_forum_type()
+	{
+		return 'none';
+	}
+}
+
+if (!function_exists('ocp_srv'))
+{
+	/**
+	 * Get server environment variables. (STUB)
+	 *
+	 * @param  string			The variable name
+	 * @return string			The variable value ('' means unknown)
+	 */
+	function ocp_srv($value)
+	{
+		return '';
+	}
+}
+
+if (!function_exists('mailto_obfuscated'))
+{
+	/**
+	 * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
+	 *
+	 * @return string		The obfuscated 'mailto:' string
+	 */
+	function mailto_obfuscated()
+	{
+		return 'mailto:';
+	}
+}
+
+if (!function_exists('mixed'))
+{
+	/**
+	 * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
+	 *
+	 * @return ?mixed	Of mixed type (NULL: default)
+	 */
+	function mixed()
+	{
+		return NULL;
+	}
+}
+
 if (!function_exists('do_lang_local'))
 {
 	function do_lang_local($x,$a='',$b='',$c='')
@@ -20,7 +211,7 @@ if (!function_exists('do_lang_local'))
 		global $PARSED;
 		if (!isset($PARSED))
 		{
-			$temp=file_get_contents('lang/validation.ini');
+			$temp=file_get_contents($GLOBALS['OCPORTAL_PATH'].'/lang/EN/validation.ini');
 			$temp_2=explode(chr(10),$temp);
 			$PARSED=array();
 			foreach ($temp_2 as $p)
@@ -63,15 +254,19 @@ if (!$WITHIN_PHP)
 	error_reporting(E_ALL);
 
 	$extra=array();
-	foreach ($_SERVER['argv'] as $index=>$argv)
+	if (isset($_SERVER['argv']))
 	{
-		$explode=explode('=',$argv,2);
-		if (count($explode)==2)
-			$extra[$explode[0]]=$explode[1];
-	}
-	$_SERVER['argv']=array_merge($_SERVER['argv'],$extra);
+		foreach ($_SERVER['argv'] as $index=>$argv)
+		{
+			$explode=explode('=',$argv,2);
+			if (count($explode)==2)
+				$extra[$explode[0]]=$explode[1];
+		}
+		$_SERVER['argv']=array_merge($_SERVER['argv'],$extra);
 
-	if (array_key_exists('path',$_SERVER['argv'])) $GLOBALS['OCPORTAL_PATH']=$_SERVER['argv']['path'];
+		if (array_key_exists('path',$_SERVER['argv'])) $GLOBALS['OCPORTAL_PATH']=$_SERVER['argv']['path'];
+	}
+
 	require_once('lib.php');
 	global $OCPORTAL_PATH,$START_TIME;
 	$START_TIME=time();
@@ -79,29 +274,32 @@ if (!$WITHIN_PHP)
 	$to_use=isset($_SERVER['argv'][1])?$_SERVER['argv'][1]:$_GET['to_use'];
 }
 
+if (!isset($_SERVER['argv']))
+	$_SERVER['argv']=array();
+
 if (!function_exists('init__validation'))
 {
-	require_once('validation.php');
+	require_once('../../sources/validation.php');
 	init__validation();
-	if (file_exists('validation2.php'))
+	if (file_exists('../../sources/validation2.php'))
 	{
-		require_once('validation2.php');
+		require_once('../../sources/validation2.php');
 		init__validation2();
 	}
 }
 if (!function_exists('init__js_lex'))
 {
-	require_once('js_lex.php');
+	require_once('../../sources/js_lex.php');
 	init__js_lex();
 }
 if (!function_exists('init__js_parse'))
 {
-	require_once('js_parse.php');
+	require_once('../../sources/js_parse.php');
 	init__js_parse();
 }
 if (!function_exists('init__js_validator'))
 {
-	require_once('js_validator.php');
+	require_once('../../sources/js_validator.php');
 	init__js_validator();
 }
 

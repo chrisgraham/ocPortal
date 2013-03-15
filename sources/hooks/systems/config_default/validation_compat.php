@@ -48,7 +48,7 @@ class Hook_config_default_validation_compat
 	 */
 	function get_default()
 	{
-		return '0';
+		return NULL; // Disabled by default, as option stands against ideas of progressive enhancement
 	}
 
 }

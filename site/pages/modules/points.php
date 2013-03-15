@@ -36,7 +36,7 @@ class Module_points
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -63,6 +63,7 @@ class Module_points
 		delete_config_option('points_show_personal_stats_gift_points_used');
 		delete_config_option('points_show_personal_stats_total_points');
 		delete_config_option('points_show_personal_profile_link');
+		delete_config_option('points_per_currency_unit');
 
 		delete_specific_permission('give_points_self');
 		delete_specific_permission('have_negative_gift_points');
@@ -134,6 +135,7 @@ class Module_points
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_config_option('POINTS_IF_LIKED','points_if_liked','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('POINTS_PER_CURRENCY_UNIT','points_per_currency_unit','integer','return addon_installed(\'ecommerce\')?\'100.0\':NULL;','POINTS','ECOMMERCE');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
@@ -196,7 +198,7 @@ class Module_points
 	{
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter=';
 
-		$title=get_page_title('USER_POINT_FIND');
+		$title=get_screen_title('USER_POINT_FIND');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_search'),'_SELF',NULL,false,true);
 		require_code('form_templates');
@@ -207,7 +209,7 @@ class Module_points
 		{
 			$username='';
 		}
-		$fields=form_input_username(do_lang_tempcode('USERNAME'),'','membername',$username,true,false);
+		$fields=form_input_username(do_lang_tempcode('USERNAME'),'','username',$username,true,false);
 		$submit_name=do_lang_tempcode('SEARCH');
 		$text=new ocp_tempcode();
 		$text->attach(paragraph(do_lang_tempcode('POINTS_SEARCH_FORM')));
@@ -225,22 +227,22 @@ class Module_points
 	{
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter=';
 
-		$membername=str_replace('*','%',get_param('membername'));
-		if ((substr($membername,0,1)=='%') && ($GLOBALS['FORUM_DRIVER']->get_members()>3000))
+		$username=str_replace('*','%',get_param('username'));
+		if ((substr($username,0,1)=='%') && ($GLOBALS['FORUM_DRIVER']->get_members()>3000))
 			warn_exit(do_lang_tempcode('CANNOT_WILDCARD_START'));
-		if ((strpos($membername,'%')!==false) && (strpos($membername,'%')<6) && ($GLOBALS['FORUM_DRIVER']->get_members()>30000))
+		if ((strpos($username,'%')!==false) && (strpos($username,'%')<6) && ($GLOBALS['FORUM_DRIVER']->get_members()>30000))
 			warn_exit(do_lang_tempcode('CANNOT_WILDCARD_START'));
-		if ((strpos($membername,'%')!==false) && (strpos($membername,'%')<12) && ($GLOBALS['FORUM_DRIVER']->get_members()>300000))
+		if ((strpos($username,'%')!==false) && (strpos($username,'%')<12) && ($GLOBALS['FORUM_DRIVER']->get_members()>300000))
 			warn_exit(do_lang_tempcode('CANNOT_WILDCARD_START'));
-		$rows=$GLOBALS['FORUM_DRIVER']->get_matching_members($membername,100);
+		$rows=$GLOBALS['FORUM_DRIVER']->get_matching_members($username,100);
 		if (!array_key_exists(0,$rows))
 		{
-			$title=get_page_title('USER_POINT_FIND');
+			$title=get_screen_title('USER_POINT_FIND');
 			return warn_screen($title,do_lang_tempcode('NO_RESULTS'));
 		}
 	//	if (count($rows)>1)
 		{
-			$title=get_page_title('USER_POINT_FIND');
+			$title=get_screen_title('USER_POINT_FIND');
 
 			$results=new ocp_tempcode();
 			foreach ($rows as $myrow)
@@ -277,7 +279,7 @@ class Module_points
 
 		$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 		if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
-		$title=get_page_title('_POINTS',true,array(escape_html($name)));
+		$title=get_screen_title('_POINTS',true,array(escape_html($name)));
 
 		if (get_forum_type()=='ocf')
 		{
@@ -290,22 +292,22 @@ class Module_points
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
 
-		// Previous/Next links
+		// Previous/Next URLs
 		$max_rows=$GLOBALS['FORUM_DRIVER']->get_members();
 		$page_num=intval(floor(floatval($member_id_of-1)/1.0))+1;
 		$num_pages=intval(ceil(floatval($max_rows)/1.0));
 		$tempid=$GLOBALS['FORUM_DRIVER']->get_previous_member($member_id_of);
-		if (is_null($tempid)) $previous_link=new ocp_tempcode();
-			else $previous_link=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
+		if (is_null($tempid)) $previous_url=new ocp_tempcode();
+			else $previous_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
 		$tempid=$GLOBALS['FORUM_DRIVER']->get_next_member($member_id_of);
-		if (is_null($tempid)) $next_link=new ocp_tempcode();
-			else $next_link=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'188c059239b39ca8ee70f85b38019490','PREVIOUS_LINK'=>$previous_link,'NEXT_LINK'=>$next_link,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		if (is_null($tempid)) $next_url=new ocp_tempcode();
+			else $next_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'188c059239b39ca8ee70f85b38019490','PREVIOUS_URL'=>$previous_url,'NEXT_URL'=>$next_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		require_code('points3');
 		$content=points_profile($member_id_of,get_member());
 
-		return do_template('POINTS_SCREEN',array('TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('POINTS_SCREEN',array('_GUID'=>'7fadfc2886ba063008f6333fb3f19e75','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}
 
 	/**
@@ -319,7 +321,7 @@ class Module_points
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of))))));
 
-		$title=get_page_title('POINTS');
+		$title=get_screen_title('POINTS');
 
 		$trans_type=post_param('trans_type','gift');
 

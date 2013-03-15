@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_recommend
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_recommend
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,11 +72,10 @@ class Hook_addon_registry_recommend
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/points_RECOMMEND_SITE.php',
 			'sources/hooks/systems/realtime_rain/recommend.php',
 			'sources/hooks/systems/addon_registry/recommend.php',
-			'themes/default/images/menu_items/forum_navigation/recommend.png',
+			'themes/default/images/menu_items/community_navigation/recommend.png',
 			'lang/EN/recommend.ini',
 			'pages/modules/recommend.php',
 			'pages/comcode/EN/recommend_help.txt',
@@ -91,38 +89,40 @@ class Hook_addon_registry_recommend
 			'themes/default/images/recommend/print.gif',
 			'themes/default/images/recommend/recommend.gif',
 			'sources/blocks/main_screen_actions.php',
-			'BLOCK_MAIN_SCREEN_ACTIONS.tpl',
+			'screen_actions.css',
+			'BLOCK_MAIN_SCREEN_ACTIONS.tpl'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array                 The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array						The mapping
+	 */
 	function tpl_previews()
 	{
-	   return array('BLOCK_MAIN_SCREEN_ACTIONS.tpl'=>'block_main_screen_actions');
+		return array(
+			'BLOCK_MAIN_SCREEN_ACTIONS.tpl'=>'block_main_screen_actions'
+		);
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array						Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_main_screen_actions()
 	{
-		return array(lorem_globalise(
-								do_lorem_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
-									'PRINT_URL'=>placeholder_url(),
-									'RECOMMEND_URL'=>placeholder_url(),
-									'EASY_SELF_URL'=>placeholder_url(),
-									'TITLE'=>lorem_phrase(),
-								)
-							),NULL,'',true),
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_SCREEN_ACTIONS', array(
+				'PRINT_URL'=>placeholder_url(),
+				'RECOMMEND_URL'=>placeholder_url(),
+				'EASY_SELF_URL'=>placeholder_url(),
+				'TITLE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 }

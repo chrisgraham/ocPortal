@@ -4,7 +4,7 @@
 */
 
 .svg_graph {
-	border: 1px solid #b9c8e0; /* {$,wizard, 37% seed + 63% W/B} */
+	border: 1px solid {$GET,pale_border};
 	padding: 2px;
 }
 

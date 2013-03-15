@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_cpfs
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_ocf_cpfs
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_ocf_cpfs
 	function get_file_list()
 	{
 		return array(
-
 			'adminzone/pages/modules/admin_ocf_customprofilefields.php',
 			'OCF_CPF_STATS_LINE.tpl',
 			'OCF_CPF_STATS_SCREEN.tpl',
@@ -82,22 +80,22 @@ class Hook_addon_registry_ocf_cpfs
 			'OCF_CPF_PERMISSIONS_TAB.tpl',
 			'lang/EN/ocf_privacy.ini',
 			'sources/hooks/systems/profiles_tabs_edit/privacy.php',
-			'sources/hooks/systems/addon_registry/ocf_cpfs.php',
+			'sources/hooks/systems/addon_registry/ocf_cpfs.php'
 		);
 	}
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'OCF_CPF_PERMISSIONS_TAB.tpl'=>'ocf_cpf_permissions_tab',
-				'OCF_CPF_STATS_LINE.tpl'=>'administrative__ocf_cpf_stats_screen',
-				'OCF_CPF_STATS_SCREEN.tpl'=>'administrative__ocf_cpf_stats_screen',
-				);
+			'OCF_CPF_PERMISSIONS_TAB.tpl'=>'ocf_cpf_permissions_tab',
+			'OCF_CPF_STATS_LINE.tpl'=>'administrative__ocf_cpf_stats_screen',
+			'OCF_CPF_STATS_SCREEN.tpl'=>'administrative__ocf_cpf_stats_screen'
+		);
 	}
 
 	/**
@@ -110,11 +108,9 @@ class Hook_addon_registry_ocf_cpfs
 	function tpl_preview__ocf_cpf_permissions_tab()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_CPF_PERMISSIONS_TAB',array(
-					'FIELDS'=>placeholder_fields(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB', array(
+				'FIELDS'=>placeholder_fields()
+			)), NULL, '', true)
 		);
 	}
 
@@ -130,19 +126,17 @@ class Hook_addon_registry_ocf_cpfs
 		$lines=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$lines->attach(do_lorem_template('OCF_CPF_STATS_LINE',array(
-					'CNT'=>placeholder_number(),
-					'VAL'=>lorem_phrase(),
-						)));
+			$lines->attach(do_lorem_template('OCF_CPF_STATS_LINE', array(
+				'CNT'=>placeholder_number(),
+				'VAL'=>lorem_phrase()
+			)));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_CPF_STATS_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'STATS'=>$lines,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'STATS'=>$lines
+			)), NULL, '', true)
 		);
 	}
 

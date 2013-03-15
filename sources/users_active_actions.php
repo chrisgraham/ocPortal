@@ -165,6 +165,8 @@ function handle_active_login($username)
 		// Create session
 		require_code('users_inactive_occasionals');
 		create_session($member,1,post_param_integer('login_invisible',0)==1);
+		global $MEMBER_CACHED;
+		$MEMBER_CACHED=$member;
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));
@@ -217,7 +219,7 @@ function delete_session($session)
 	unset($SESSION_CACHE[$session]);
 	if (get_value('session_prudence')!=='1')
 	{
-		persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+		persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 }
 
@@ -232,7 +234,7 @@ function delete_session($session)
  */
 function ocp_setcookie($name,$value,$session=false,$http_only=false)
 {
-	if (($GLOBALS['DEBUG_MODE']) && (!running_script('occle')) && (get_forum_type()=='ocf') && (get_param_integer('keep_debug_has_cookies',0)==0)) return true;
+	if (($GLOBALS['DEV_MODE']) && (!running_script('occle')) && (get_forum_type()=='ocf') && (get_param_integer('keep_debug_has_cookies',0)==0)) return true;
 
 	$cookie_domain=get_cookie_domain();
 	$path=get_cookie_path();

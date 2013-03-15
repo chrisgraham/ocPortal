@@ -1,24 +1,25 @@
-{+START,BOX,{USERNAME*},,{$?,{$GET,in_panel},panel,classic},tray_open}
+<section class="box box___block_side_personal_stats"><div class="box_inner">
+	<h3>{USERNAME*}</h3>
+
 	{+START,IF_NON_EMPTY,{AVATAR_URL}}
 		<div class="personal_stats_avatar"><img src="{AVATAR_URL*}" title="{!AVATAR}" alt="{!AVATAR}" /></div>
 	{+END}
 
-	{+START,IF_NON_EMPTY,{CONTENT}}
+	{+START,IF_NON_EMPTY,{DETAILS}}
 		<ul class="compact_list">
-			{CONTENT}
+			{DETAILS}
 		</ul>
 	{+END}
+
 	{+START,IF_NON_EMPTY,{LINKS}}
-		<div class="community_block_tagline{+START,IF_NON_EMPTY,{CONTENT}} community_block_tagline_splitter{+END}">
+		<ul class="associated_links_block_group">
 			{LINKS}
-		</div>
+		</ul>
 	{+END}
 
 	{+START,IF,{$OCF}}{+START,IF,{$NEQ,{$CPF_VALUE,m_password_compat_scheme},facebook}}
 		{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-			<p class="community_block_tagline">
-				<div class="fb-login-button" data-scope="email,user_birthday"></div>
-			</p>
+			<div class="fb-login-button" data-scope="email,user_birthday"></div>
 		{+END}
 	{+END}{+END}
-{+END}
+</div></section>

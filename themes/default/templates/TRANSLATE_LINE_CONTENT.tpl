@@ -28,6 +28,6 @@
 </tr>
 <tr id="rexp_trans_{ID*}" style="display: none">
 	<td colspan="{$?,{$IS_EMPTY,{ACTIONS}},3,4}">
-		<div id="exp_trans_{ID*}">&nbsp;</div>
+		<div id="exp_trans_{ID*}"></div>
 	</td>
 </tr>

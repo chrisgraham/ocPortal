@@ -63,7 +63,7 @@ class Hook_Preview_poll
 		$question=comcode_to_tempcode($question_plain);
 		$archive_url=build_url(array('page'=>'polls','type'=>'misc'),get_module_zone('polls'));
 		$map2=array('VOTE_URL'=>'','SUBMITTER'=>strval(get_member()),'PID'=>'','FULL_URL'=>'','CONTENT'=>$tpl,'QUESTION'=>$question,'QUESTION_PLAIN'=>$question_plain,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'RESULT_URL'=>'','ZONE'=>'');
-		$output=do_template('POLL',$map2);
+		$output=do_template('POLL_BOX',$map2);
 
 		return array($output,NULL);
 	}

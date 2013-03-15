@@ -64,7 +64,7 @@ class Hook_awards_seedy_post
 	{
 		require_code('cedi');
 
-		return get_cedi_post_html($row,$zone);
+		return render_cedi_post_box($row,$zone);
 	}
 
 }

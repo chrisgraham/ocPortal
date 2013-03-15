@@ -36,12 +36,12 @@ class Hook_Preview_ocf_welcome_email
 			require_lang('ocf');
 			require_code('mail');
 
-			$subject_tag=post_param('subject');
-			$message_raw=do_template('NEWSLETTER_DEFAULT',array('CONTENT'=>post_param('text'),'LANG'=>get_site_default_lang()));
+			$subject_line=post_param('subject');
+			$message_raw=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('CONTENT'=>post_param('text'),'LANG'=>get_site_default_lang()));
 
 			$to=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 			if ($to=='' ) $to=get_option('staff_address');
-			mail_wrap($subject_tag,$message_raw->evaluate(get_site_default_lang()),array($to),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'','',3,NULL,false,get_member(),true);
+			mail_wrap($subject_line,$message_raw->evaluate(get_site_default_lang()),array($to),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'','',3,NULL,false,get_member(),true);
 		}
 		return array($applies,NULL);
 	}

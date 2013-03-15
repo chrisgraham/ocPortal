@@ -197,10 +197,17 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 		}
 	} else
 	{
-		$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT p_post FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$topic_id));
-		foreach ($_postdetails as $post)
-			delete_lang($post['p_post'],$GLOBALS['FORUM_DB']);
-		$GLOBALS['FORUM_DB']->query_delete('f_posts',array('p_topic_id'=>$topic_id));
+		$_postdetails=array();
+		do
+		{
+			$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT p_post,id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$topic_id),200);
+			foreach ($_postdetails as $post)
+			{
+				delete_lang($post['p_post'],$GLOBALS['FORUM_DB']);
+				$GLOBALS['FORUM_DB']->query_delete('f_posts',array('id'=>$post['id']),'',1);
+			}
+		}
+		while (count($_postdetails)!=0);
 	}
 
 	// Delete stuff
@@ -480,8 +487,8 @@ function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$
 	$post_comcode=get_translated_text((integer)$post_lang_id,$GLOBALS['FORUM_DB']);
 
 	require_code('notifications');
-	$msubject=do_lang('NEW_PERSONAL_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id));
-	$mmessage=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_url($topic_id)),$post_comcode),get_lang($to_id));
+	$msubject=do_lang('NEW_PRIVATE_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id));
+	$mmessage=do_lang('NEW_PRIVATE_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_url($topic_id)),$post_comcode),get_lang($to_id));
 	dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($to_id),$from_id);
 
 	if ($mark_unread)

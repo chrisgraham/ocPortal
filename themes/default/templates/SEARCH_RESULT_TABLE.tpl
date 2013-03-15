@@ -1,4 +1,4 @@
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder variable_table">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table results_table autosized_table">
 	<thead>
 		<tr>
 			{+START,LOOP,HEADERS}

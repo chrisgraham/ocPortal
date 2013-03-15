@@ -194,7 +194,7 @@ class Module_iotds
 	 */
 	function iotd_browse()
 	{
-		$title=get_page_title('IOTD_ARCHIVE');
+		$title=get_screen_title('IOTD_ARCHIVE');
 
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='max';
@@ -215,7 +215,7 @@ class Module_iotds
 			require_code('images');
 			$thumb_url=ensure_thumbnail($myrow['url'],$thumb_url,'iotds','iotd',$myrow['id']);
 			$thumb=do_image_thumb($thumb_url,'');
-			$content->attach(do_template('IOTD_VIEW_SCREEN_IOTD',array('SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($myrow['id']),'VIEWS'=>integer_format($myrow['iotd_views']),'THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'CAPTION'=>$caption)));
+			$content->attach(do_template('IOTD_ARCHIVE_SCREEN_IOTD',array('SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($myrow['id']),'VIEWS'=>integer_format($myrow['iotd_views']),'THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'CAPTION'=>$caption)));
 		}
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -224,7 +224,7 @@ class Module_iotds
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
 		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'b6933ab44e16fef7e1bec62014254383','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'b6933ab44e16fef7e1bec62014254383','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		return do_template('NEXT_BROWSER_SCREEN',array('_GUID'=>'d8a493c2b007d98074f104ea433c8091','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}
@@ -236,7 +236,7 @@ class Module_iotds
 	 */
 	function view()
 	{
-		$title=get_page_title('IOTD');
+		$title=get_screen_title('IOTD');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));
 
@@ -273,7 +273,8 @@ class Module_iotds
 		if (get_db_type()!='xml')
 		{
 			$myrow['iotd_views']++;
-			$GLOBALS['SITE_DB']->query_update('iotd',array('iotd_views'=>$myrow['iotd_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('iotd'))
+				$GLOBALS['SITE_DB']->query_update('iotd',array('iotd_views'=>$myrow['iotd_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		if ((has_actual_page_access(NULL,'cms_iotds',NULL,NULL)) && (has_edit_permission('high',get_member(),$myrow['submitter'],'cms_iotds')))
@@ -296,7 +297,7 @@ class Module_iotds
 			'image'=>$url,
 		);
 
-		return do_template('IOTD_VIEW_SCREEN',array('_GUID'=>'f508d483459b88fab44cd8b9f4db780b','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'I_TITLE'=>get_translated_tempcode($myrow['i_title']),'CAPTION'=>get_translated_tempcode($myrow['caption']),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['iotd_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'URL'=>$url));
+		return do_template('IOTD_ENTRY_SCREEN',array('_GUID'=>'f508d483459b88fab44cd8b9f4db780b','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'I_TITLE'=>get_translated_tempcode($myrow['i_title']),'CAPTION'=>get_translated_tempcode($myrow['caption']),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['iotd_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'URL'=>$url));
 	}
 
 }

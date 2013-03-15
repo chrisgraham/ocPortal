@@ -1,14 +1,13 @@
 <div class="float_surrounder">
-	{$SET,in_panel,1}
-	<div class="global_side" id="panel_left" style="float: left; width: 200px">
+	<div id="panel_left" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 		{$COMCODE,{LEFT}}
 	</div>
-	<div class="global_side" id="panel_right" style="float: right; width: 200px">
+
+	<div id="panel_right" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 		{$COMCODE,{RIGHT}}
 	</div>
 
-	{$SET,in_panel,0}
-	<div style="margin: 0 205px">
+	<article class="global_middle">
 		{$COMCODE,{START}}
-	</div>
+	</article>
 </div>

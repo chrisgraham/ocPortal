@@ -52,9 +52,9 @@ class Mx_chat extends Module_chat
 		if ($type=='blocking_set') return $this->blocking_set();
 		if ($type=='blocking_add') return $this->blocking_add();
 		if ($type=='blocking_remove') return $this->blocking_remove();
-		if ($type=='buddy_add') return $this->buddy_add();
-		if ($type=='buddy_remove') return $this->buddy_remove();
-		if ($type=='buddies_list') return $this->buddies_list();
+		if ($type=='friend_add') return $this->friend_add();
+		if ($type=='friend_remove') return $this->friend_remove();
+		if ($type=='friends_list') return $this->friends_list();
 		if ($type=='set_effects') return $this->set_effects();
 		if ($type=='_set_effects') return $this->_set_effects();
 
@@ -75,7 +75,7 @@ class Mx_chat extends Module_chat
 		if (!is_null($enter_im))
 		{
 			require_code('chat2');
-			buddy_add(get_member(),$enter_im);
+			friend_add(get_member(),$enter_im);
 
 			$you=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 			$them=$GLOBALS['FORUM_DRIVER']->get_username($enter_im);
@@ -83,7 +83,7 @@ class Mx_chat extends Module_chat
 		}
 
 		// Generic stuff: Title, feed URL
-		$title=get_page_title('CHAT_LOBBY');
+		$title=get_screen_title('CHAT_LOBBY');
 
 		// Rooms
 		$room_url=build_url(array('page'=>'_SELF','type'=>'room','id'=>'room_id'),'_SELF');
@@ -93,17 +93,17 @@ class Mx_chat extends Module_chat
 
 		$seteffectslink=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 
-		$buddies=array();
-		$buddy_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>get_member()));
-		foreach ($buddy_rows as $br)
+		$friends=array();
+		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>get_member()));
+		foreach ($friend_rows as $br)
 		{
 			$u=$GLOBALS['FORUM_DRIVER']->get_username($br['member_liked']);
 			if (!is_null($u))
-				$buddies[]=array('USERNAME'=>$u);
+				$friends[]=array('USERNAME'=>$u);
 		}
 
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-		return do_template('CHAT_LOBBY_SCREEN',array('_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2','ROOM_URL'=>$room_url,'BUDDIES'=>$buddies,'PASSWORD_HASH'=>$password_hash,'CHAT_SOUND'=>get_chat_sound_tpl(),'TITLE'=>$title,'ROOMS'=>$fields,'SETEFFECTS_LINK'=>$seteffectslink));
+		return do_template('CHAT_LOBBY_SCREEN',array('_GUID'=>'fb96937da8ac1796b80f1f618ba9a01e','ROOM_URL'=>$room_url,'FRIENDS'=>$friends,'PASSWORD_HASH'=>$password_hash,'CHAT_SOUND'=>get_chat_sound_tpl(),'TITLE'=>$title,'ROOMS'=>$fields,'SETEFFECTS_LINK'=>$seteffectslink));
 	}
 
 	/**
@@ -131,7 +131,7 @@ class Mx_chat extends Module_chat
 
 		$debug=(get_param_integer('debug',0)==1)?'block':'none';
 
-		$title=get_page_title('ROOM');
+		$title=get_screen_title('ROOM');
 
 		$seteffectslink=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 		$logslink=hyperlink(get_base_url().'/data_custom/jabber-logs/'.strtolower($room_id).'@conference.'.get_domain(),'Chat logs',true);
@@ -145,7 +145,7 @@ class Mx_chat extends Module_chat
 
 		$messages_php=find_script('messages');
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-		return do_template('CHAT_SCREEN',array('_GUID'=>'867a0b050c050c81d33482d131783eb0','MESSAGES_PHP'=>$messages_php,'PASSWORD_HASH'=>$password_hash,'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>$room_id,'DEBUG'=>$debug,'OPTIONS_URL'=>$cs_post_url,'ROOM_NAME'=>'','YOUR_NAME'=>$yourname,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
+		return do_template('CHAT_ROOM_SCREEN',array('_GUID'=>'0b4adbe09e9cf38b2104b12b4381b256','MESSAGES_PHP'=>$messages_php,'PASSWORD_HASH'=>$password_hash,'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>$room_id,'DEBUG'=>$debug,'OPTIONS_URL'=>$cs_post_url,'ROOM_NAME'=>'','YOUR_NAME'=>$yourname,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
 	}
 
 	/**
@@ -155,7 +155,7 @@ class Mx_chat extends Module_chat
 	 */
 	function chat_options()
 	{
-		$title=get_page_title('ROOM');
+		$title=get_screen_title('ROOM');
 
 		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');

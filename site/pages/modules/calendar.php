@@ -43,7 +43,7 @@ class Module_calendar
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -60,11 +60,13 @@ class Module_calendar
 		$GLOBALS['SITE_DB']->drop_if_exists('calendar_interests');
 		$GLOBALS['SITE_DB']->drop_if_exists('calendar_jobs');
 
-		$perms=array('view_event_subscriptions','view_calendar','add_public_events','edit_viewable_events','edit_owned_events','view_personal_events','sense_personal_conflicts');
+		$perms=array('set_reminders','view_event_subscriptions','view_calendar','add_public_events','edit_viewable_events','edit_owned_events','view_personal_events','sense_personal_conflicts');
 		foreach ($perms as $perm)
 		{
 			delete_specific_permission($perm);
 		}
+
+		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'calendar'));
 
 		delete_menu_item_simple('_SEARCH:calendar:type=misc:member_id={$USER_OVERIDE}');
 
@@ -106,11 +108,13 @@ class Module_calendar
 				'e_start_year'=>'INTEGER',
 				'e_start_month'=>'INTEGER',
 				'e_start_day'=>'INTEGER',
+				'e_start_monthly_spec_type'=>'ID_TEXT', // day_of_month|day_of_month_backwards|dow_of_month|dow_of_month_backwards
 				'e_start_hour'=>'?INTEGER',
 				'e_start_minute'=>'?INTEGER',
 				'e_end_year'=>'?INTEGER',
 				'e_end_month'=>'?INTEGER',
 				'e_end_day'=>'?INTEGER',
+				'e_end_monthly_spec_type'=>'ID_TEXT', // day_of_month|day_of_month_backwards|dow_of_month|dow_of_month_backwards
 				'e_end_hour'=>'?INTEGER',
 				'e_end_minute'=>'?INTEGER',
 				'e_timezone'=>'ID_TEXT', // The settings above are stored in GMT, were converted from this timezone, and back to this timezone if e_do_timezone_conv==1
@@ -122,7 +126,7 @@ class Module_calendar
 				'allow_trackbacks'=>'BINARY',
 				'notes'=>'LONG_TEXT',
 				'e_type'=>'AUTO_LINK',
-				'validated'=>'BINARY'
+				'validated'=>'BINARY',
 			));
 
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_views',array('e_views'));
@@ -156,6 +160,8 @@ class Module_calendar
 				'i_member_id'=>'*USER',
 				't_type'=>'*AUTO_LINK'
 			));
+
+			add_menu_item_simple('main_content',NULL,'CALENDAR','_SEARCH:calendar:type=misc',0,0,true,'',0,'',3);
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
@@ -238,6 +244,17 @@ class Module_calendar
 					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'calendar','category_name'=>strval($type['id']),'group_id'=>$group_id));
 				}
 			}
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('calendar_events','e_start_monthly_spec_type','ID_TEXT','day_of_month');
+			$GLOBALS['SITE_DB']->add_table_field('calendar_events','e_end_monthly_spec_type','ID_TEXT','day_of_month');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
+		{
+			add_specific_permission('CALENDAR','set_reminders',false);
 		}
 	}
 
@@ -464,7 +481,7 @@ class Module_calendar
 				$previous=date('Y-m-d',$previous_timestamp);
 				$next_timestamp=mktime(0,0,0,intval($explode[1]),intval($explode[2]),intval($explode[0]))+60*60*24;
 				$next=date('Y-m-d',$next_timestamp);
-				$title=get_page_title('CALENDAR_SPECIFIC',true,array(escape_html(locale_filter(date(do_lang('calendar_date_verbose'),$timestamp)))));
+				$title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html(locale_filter(date(do_lang('calendar_date_verbose'),$timestamp)))));
 				break;
 			case 'week': // Like a compressed diary
 				$id=get_param('id',get_week_number_for(utctime_to_usertime()));
@@ -481,7 +498,7 @@ class Module_calendar
 				$previous=get_week_number_for($previous_timestamp);
 				$next_timestamp=mktime(0,0,0,$start_month,$start_day,$start_year)+60*60*24*7;
 				$next=get_week_number_for($next_timestamp);
-				$title=get_page_title('CALENDAR_SPECIFIC_WEEK',true,array(escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
+				$title=get_screen_title('CALENDAR_SPECIFIC_WEEK',true,array(escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
 				break;
 			case 'month': // Like a main calendar page
 				$id=get_param('id',date('Y-m',utctime_to_usertime()));
@@ -511,7 +528,7 @@ class Module_calendar
 				$previous=date('Y-m',$previous_timestamp);
 				$next_timestamp=mktime(0,0,0,$next_month,1,$next_year);
 				$next=date('Y-m',$next_timestamp);
-				$title=get_page_title('CALENDAR_SPECIFIC',true,array(escape_html(locale_filter(my_strftime(do_lang('calendar_month_in_year_verbose'),$timestamp)))));
+				$title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html(locale_filter(my_strftime(do_lang('calendar_month_in_year_verbose'),$timestamp)))));
 				break;
 			case 'year': // Like front of a calendar
 				$id=get_param('id',date('Y'));
@@ -526,7 +543,7 @@ class Module_calendar
 				$previous=date('Y',$previous_timestamp);
 				$next_timestamp=mktime(0,0,0,1,1,intval($explode[0])+1);
 				$next=date('Y',$next_timestamp);
-				$title=get_page_title('CALENDAR_SPECIFIC',true,array(escape_html($id)));
+				$title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($id)));
 				break;
 			default:
 				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -749,7 +766,7 @@ class Module_calendar
 				}
 			}
 
-			$hours->attach(do_template('CALENDAR_DAY_HOUR',array('_GUID'=>'d967ce3f793942f78104c53b105f9f74','HOUR'=>$hour,'STREAMS'=>$_streams)));
+			$hours->attach(do_template('CALENDAR_DAY_HOUR',array('_GUID'=>'d967ce3f793942f78104c53b105f9f74','_HOUR'=>strval($i),'HOUR'=>$hour,'STREAMS'=>$_streams)));
 		}
 
 		return do_template('CALENDAR_DAY',array('_GUID'=>'60e102b38025c1b1618ac36070564065','HOURS'=>$hours,'PERIOD_START'=>strval($period_start),'PERIOD_END'=>strval($period_end)));
@@ -916,7 +933,7 @@ class Module_calendar
 				}
 			}
 
-			$hours->attach(do_template('CALENDAR_WEEK_HOUR',array('_GUID'=>'a57d0d6a683d30fc0a48168b43299607','HOUR'=>$hour,'DAYS'=>$days)));
+			$hours->attach(do_template('CALENDAR_WEEK_HOUR',array('_GUID'=>'a57d0d6a683d30fc0a48168b43299607','_HOUR'=>strval($i),'HOUR'=>$hour,'DAYS'=>$days)));
 		}
 
 		$offset=0;
@@ -1323,9 +1340,9 @@ class Module_calendar
 		if (($event['validated']==0) && ($event['e_is_public']==1))
 		{
 			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
-				access_denied('SPECIFIC_PERMISSION','jump_to_unvalidated');
+				access_denied('PRIVILEGE','jump_to_unvalidated');
 
-			$warning_details->attach(do_template('WARNING_TABLE',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
+			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
 		}
 
 		if (addon_installed('awards'))
@@ -1337,7 +1354,7 @@ class Module_calendar
 		$_title=get_translated_text($event['e_title']);
 		$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',escape_html($_title));
 		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
-		$title=get_page_title($title_to_use,false,NULL,NULL,$awards);
+		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 
 		seo_meta_load_for('event',strval($id),$title_to_use_2);
 
@@ -1355,13 +1372,14 @@ class Module_calendar
 					if (!is_null($username))
 					{
 						$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($subscription['n_member_id'],false,true);
-						$subscribed->attach(do_template('CALENDAR_SCREEN_SUBSCRIPTION',array('_GUID'=>'c756b8b3f0c57494fd46a94e9abce029','MEMBER_URL'=>$member_url,'USERNAME'=>$username)));
+						$subscribed->attach(do_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION',array('_GUID'=>'c756b8b3f0c57494fd46a94e9abce029','MEMBER_URL'=>$member_url,'USERNAME'=>$username)));
 					}
 				}
 			}
 		}
 
-		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
+		$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
+		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$start_day_of_month,$event['e_start_year']);
 		$_first_date=cal_utctime_to_usertime(
 			$__first_date,
 			$event['e_timezone'],
@@ -1398,7 +1416,7 @@ class Module_calendar
 			{
 				$time=display_time_period(intval($subscription['n_seconds_before']));
 				$unsubscribe_url=build_url(array('page'=>'_SELF','type'=>'unsubscribe_event','id'=>$id,'reminder_id'=>$subscription['id']),'_SELF');
-				$_subscriptions->attach(do_template('CALENDAR_SCREEN_PERSONAL_SUBSCRIPTION',array('_GUID'=>'cc36c75ea516abfab1c65328c0e290fc','UNSUBSCRIBE_URL'=>$unsubscribe_url,'TIME'=>$time)));
+				$_subscriptions->attach(do_template('CALENDAR_EVENT_SCREEN_PERSONAL_SUBSCRIPTION',array('_GUID'=>'cc36c75ea516abfab1c65328c0e290fc','UNSUBSCRIBE_URL'=>$unsubscribe_url,'TIME'=>$time)));
 			}
 			$subscribe_url=build_url(array('page'=>'_SELF','type'=>'subscribe_event','id'=>$id),'_SELF');
 		}
@@ -1423,33 +1441,86 @@ class Module_calendar
 			$explode=explode('-',$day);
 			if (count($explode)==3)
 			{
+				$orig_start_year=$event['e_start_year'];
+				$orig_start_month=$event['e_start_month'];
+				$orig_start_day=$event['e_start_day'];
+
+				$event['e_start_year']=intval($explode[0]);
+				$event['e_start_month']=intval($explode[1]);
+				$event['e_start_day']=intval($explode[2]);
+				$start_day_of_month=$event['e_start_day'];
+				$event['e_start_monthly_spec_type']='day_of_month';
+
+				// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
+				if (!is_null($event['e_start_hour']))
+				{
+					$event['e_start_hour']-=intval(date('H',tz_time(mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'])))-intval(date('H',tz_time(mktime(0,0,0,$orig_start_month,$orig_start_day,$orig_start_year),$event['e_timezone'])));
+					$event['e_start_minute']-=intval(date('i',tz_time(mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'])))-intval(date('i',tz_time(mktime(0,0,0,$orig_start_month,$orig_start_day,$orig_start_year),$event['e_timezone'])));
+				}
+
 				if (is_null($event['e_start_hour'])) // All day event
 				{
 					if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
 					{
-						$event['e_end_day']=$event['e_start_day'];
-						$event['e_end_month']=$event['e_start_month'];
-						$event['e_end_year']=$event['e_start_year'];
+						$event['e_end_day']=$orig_start_day;
+						$event['e_end_month']=$orig_start_month;
+						$event['e_end_year']=$orig_start_year;
 					}
 				}
 				if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 				{
-					$event['e_end_year']+=intval($explode[0])-$event['e_start_year'];
-					$event['e_end_month']+=intval($explode[1])-$event['e_start_month'];
-					$event['e_end_day']+=intval($explode[2])-$event['e_start_day'];
+					$orig_end_year=$event['e_end_year'];
+					$orig_end_month=$event['e_end_month'];
+					$orig_end_day=$event['e_end_day'];
+
+					if ($event['e_start_monthly_spec_type']!='day_of_month')
+					{
+						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
+						$event['e_end_day']=$event['e_start_day']+get_days_between($orig_start_year,$orig_start_month,$orig_start_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
+						$event['e_end_month']=$event['e_start_month'];
+						$event['e_end_year']=$event['e_start_year'];
+						$event['e_end_monthly_spec_type']='day_of_month';
+					}
+
+					$event['e_end_day']+=intval($explode[2])-$orig_start_day;
+					$event['e_end_month']+=intval($explode[1])-$orig_start_month;
+					$event['e_end_year']+=intval($explode[0])-$orig_start_year;
+
+					// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
+					if (!is_null($event['e_end_hour']))
+					{
+						$event['e_end_hour']-=intval(date('H',tz_time(mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'])))-intval(date('H',tz_time(mktime(0,0,0,$orig_end_month,$orig_end_day,$orig_end_year),$event['e_timezone'])));
+						$event['e_end_minute']-=intval(date('i',tz_time(mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'])))-intval(date('i',tz_time(mktime(0,0,0,$orig_end_month,$orig_end_day,$orig_end_year),$event['e_timezone'])));
+					}
 				}
-				$event['e_start_year']=intval($explode[0]);
-				$event['e_start_month']=intval($explode[1]);
-				$event['e_start_day']=intval($explode[2]);
 			}
 		}
-
-		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
+		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 		$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+		if ($day!='')
+		{
+			if (date('Y-m-d',$from)!=$day) // Possibly the day given in URL is invalid due to a day shift across timezones, adjust if required and recalculate
+			{
+				$day_dif=$event['e_start_day']-intval(date('d',$from));
+				$event['e_start_day']+=$day_dif;
+				$event['e_end_day']+=$day_dif;
+				$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
+				$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			}
+		}
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 		{
-			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
+			if ($event['e_end_monthly_spec_type']!='day_of_month')
+			{
+				$event['e_end_monthly_spec_type']='day_of_month';
+				$dif_days=get_days_between($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
+				$event['e_end_year']=$event['e_start_year'];
+				$event['e_end_month']=$event['e_start_month'];
+				$event['e_end_day']=$event['e_start_day']+$dif_days;
+			}
+
+			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
 			$to=cal_utctime_to_usertime($to_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),$to));
 			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
@@ -1482,7 +1553,8 @@ class Module_calendar
 		if (get_db_type()!='xml')
 		{
 			$event['e_views']++;
-			$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('calendar_events'))
+				$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
@@ -1540,7 +1612,7 @@ class Module_calendar
 			$map['TIMEZONE']=$timezone_map[$event['e_timezone']];
 		}
 
-		return do_template('CALENDAR_SCREEN',$map);
+		return do_template('CALENDAR_EVENT_SCREEN',$map);
 	}
 
 	/**
@@ -1550,7 +1622,7 @@ class Module_calendar
 	 */
 	function subscribe_event()
 	{
-		$title=get_page_title('SUBSCRIBE_EVENT');
+		$title=get_screen_title('SUBSCRIBE_EVENT');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CALENDAR'))));
 
@@ -1584,7 +1656,7 @@ class Module_calendar
 	 */
 	function _subscribe_event()
 	{
-		$title=get_page_title('SUBSCRIBE_EVENT');
+		$title=get_screen_title('SUBSCRIBE_EVENT');
 
 		$seconds_before=intval(floatval(post_param('hours_before'))*3600.0);
 
@@ -1600,12 +1672,13 @@ class Module_calendar
 
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($event['e_type']))))
 		{
-			$_from=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
+			$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			$_from=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 			$from=cal_utctime_to_usertime($_from,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to=mixed();
 			if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 			{
-				$_to=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
+				$_to=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
 				$to=cal_utctime_to_usertime($_to,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			}
 
@@ -1613,7 +1686,7 @@ class Module_calendar
 		}
 
 		// Add next reminder to job system
-		$recurrences=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?0:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']));
+		$recurrences=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?0:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']));
 		if (array_key_exists(0,$recurrences))
 		{
 			$GLOBALS['SITE_DB']->query_insert('calendar_jobs',array(
@@ -1635,7 +1708,7 @@ class Module_calendar
 	 */
 	function unsubscribe_event()
 	{
-		$title=get_page_title('UNSUBSCRIBE_EVENT');
+		$title=get_screen_title('UNSUBSCRIBE_EVENT');
 
 		$GLOBALS['SITE_DB']->query_delete('calendar_reminders',array('id'=>get_param_integer('reminder_id')),'',1); // reminder_id being the reminder ID
 
@@ -1668,7 +1741,7 @@ class Module_calendar
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','view'=>get_param('view'),'id'=>get_param('id')),'_SELF'); // id being the event ID
-		$title=get_page_title('DECLARE_EVENT_INTEREST');
+		$title=get_screen_title('DECLARE_EVENT_INTEREST');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -1679,7 +1752,7 @@ class Module_calendar
 	 */
 	function declare_interest()
 	{
-		$title=get_page_title('DECLARE_EVENT_INTEREST');
+		$title=get_screen_title('DECLARE_EVENT_INTEREST');
 
 		$GLOBALS['SITE_DB']->query_insert('calendar_interests',array('i_member_id'=>get_member(),'t_type'=>get_param_integer('t_type')));
 
@@ -1694,7 +1767,7 @@ class Module_calendar
 	 */
 	function undeclare_interest()
 	{
-		$title=get_page_title('UNDECLARE_EVENT_INTEREST');
+		$title=get_screen_title('UNDECLARE_EVENT_INTEREST');
 
 		$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('i_member_id'=>get_member(),'t_type'=>get_param('t_type')),'',1);
 

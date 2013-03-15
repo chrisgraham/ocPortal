@@ -76,7 +76,7 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('POST_TEMPLATES'),comcode_lang_string('DOC_POST_TEMPLATES'),
+		return do_next_manager(get_screen_title('POST_TEMPLATES'),comcode_lang_string('DOC_POST_TEMPLATES'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POST_TEMPLATE')),

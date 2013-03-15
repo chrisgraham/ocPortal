@@ -48,11 +48,13 @@ function init__users()
 	$IS_ACTUALLY_ADMIN=false;
 	global $IS_A_COOKIE_LOGIN;
 	$IS_A_COOKIE_LOGIN=false;
+	global $DOING_USERS_INIT;
+	$DOING_USERS_INIT=true;
 
 	// Load all sessions into memory, if possible
 	if (get_value('session_prudence')!=='1')
 	{
-		$SESSION_CACHE=persistant_cache_get('SESSION_CACHE');
+		$SESSION_CACHE=persistent_cache_get('SESSION_CACHE');
 	} else
 	{
 		$SESSION_CACHE=NULL;
@@ -65,7 +67,7 @@ function init__users()
 			$where='';
 		} else
 		{
-			$where=' WHERE the_session='.strval(get_session_id()).' OR '.db_string_equal_to('ip',get_ip_address());
+			$where=' WHERE the_session='.strval(get_session_id()).' OR '.db_string_equal_to('ip',get_ip_address(3));
 		}
 		$SESSION_CACHE=array();
 		if ((get_forum_type()=='ocf') && (get_db_site()==get_db_forums()) && (get_db_site_host()==get_db_forums_host()))
@@ -80,7 +82,7 @@ function init__users()
 		}
 		if (get_value('session_prudence')!=='1')
 		{
-			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
 	}
 
@@ -91,6 +93,8 @@ function init__users()
 		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['PHP_AUTH_USER']);
 	if (array_key_exists('REMOTE_USER',$_SERVER))
 		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
+
+	$DOING_USERS_INIT=NULL;
 }
 
 /**
@@ -207,11 +211,11 @@ function get_member($quick_only=false)
 
 			if (($member!==NULL) && ((time()-$member_row['last_activity'])>10)) // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
 			{
-				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_page_title now
+				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_screen_title now
 				$SESSION_CACHE[$session]['last_activity']=time();
 				if (get_value('session_prudence')!=='1')
 				{
-					persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+					persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 				}
 			}
 			global $SESSION_CONFIRMED;
@@ -337,7 +341,7 @@ function apply_forum_driver_md5_variant($data,$key)
  */
 function get_session_id()
 {
-	if ((!isset($_COOKIE['ocp_session'])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEBUG_MODE'] && running_script('occle')))
+	if ((!isset($_COOKIE['ocp_session'])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEV_MODE'] && running_script('occle')))
 	{
 		if (array_key_exists('keep_session',$_GET)) return get_param_integer('keep_session');
 		return (-1);
@@ -389,7 +393,8 @@ function delete_expired_sessions_or_recover($member=NULL)
 	$ip=get_ip_address(3);
 
 	// Delete expired sessions
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
+	if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
 	$new_session=NULL;
 	$dirty_session_cache=false;
 	global $SESSION_CACHE;
@@ -418,7 +423,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 	{
 		if (get_value('session_prudence')!=='1')
 		{
-			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
 	}
 

@@ -122,7 +122,8 @@ class Hook_search_polls
 	{
 		$url=build_url(array('page'=>'polls','type'=>'view','id'=>$row['id']),get_module_zone('polls'));
 		$question=get_translated_tempcode($row['question']);
-		return put_in_standard_box(hyperlink($url,$question),do_lang_tempcode('POLL'));
+
+		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('POLL'),'SUMMARY'=>hyperlink($url,$question)));
 	}
 
 }

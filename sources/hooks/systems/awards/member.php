@@ -63,7 +63,8 @@ class Hook_awards_member
 		require_code('ocf_members2');
 
 		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
-		return put_in_standard_box(ocf_show_member_box($row['id']),$row['m_username']);
+
+		return render_member_box($row['id']);
 	}
 
 }

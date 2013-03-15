@@ -3,7 +3,7 @@
 {+START,LOOP,DETAILS}
 	<h3>{BOOKABLE_TITLE*}</h3>
 
-	<div class="wide_table_wrap"><table class="wide_table solidborder"><tbody>
+	<div class="wide_table_wrap"><table class="wide_table results_table"><tbody>
 		<tr>
 			<th>{!QUANTITY}</th>
 			<td>{QUANTITY*}</td>
@@ -23,11 +23,13 @@
 				<th>{!OPTIONS}</th>
 				<td>
 					{+START,LOOP,SUPPLEMENTS}
-						{SUPPLEMENT_TITLE*} &times; {SUPPLEMENT_QUANTITY*}
-						{+START,IF_NON_EMPTY,{SUPPLEMENT_NOTES}}
-							({SUPPLEMENT_NOTES*})
-						{+END}
-						<br />
+						<div>
+							{SUPPLEMENT_TITLE*} &times; {SUPPLEMENT_QUANTITY*}
+
+							{+START,IF_NON_EMPTY,{SUPPLEMENT_NOTES}}
+								({SUPPLEMENT_NOTES*})
+							{+END}
+						</div>
 					{+END}
 				</td>
 			</tr>
@@ -37,14 +39,14 @@
 
 <h2>{!DETAILS}</h2>
 
-<div class="wide_table_wrap"><table class="wide_table solidborder"><tbody>
+<div class="wide_table_wrap"><table class="wide_table results_table"><tbody>
 	<tr>
 		<th>{!TOTAL_PRICE}</th>
 		<td>{PRICE*}</td>
 	</tr>
 	<tr>
 		<th>{!CUSTOMER_NAME}</th>
-		<td><a href="{$MEMBER_PROFILE_LINK*,{MEMBER_ID}}">{USERNAME*}</a></td>
+		<td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{USERNAME*}</a></td>
 	</tr>
 	<tr>
 		<th>{!CUSTOMER_EMAIL}</th>

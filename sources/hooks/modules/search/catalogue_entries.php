@@ -95,7 +95,7 @@ class Hook_search_catalogue_entries
 			$submit_name=do_lang_tempcode('PROCEED');
 			$hidden=build_keep_post_fields();
 
-			$title=get_page_title('SEARCH');
+			$title=get_screen_title('SEARCH');
 			$tpl=do_template('FORM_SCREEN',array('_GUID'=>'a2812ac8056903811f444682d45ee448','TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 			$echo=globalise($tpl,NULL,'',true);
 			$echo->evaluate_echo();
@@ -395,7 +395,6 @@ class Hook_search_catalogue_entries
 					}
 				}
 
-				//$out[$i]['template']=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_table(hyperlink($url,do_lang('_HERE')),'internal','middle','WIDE',1,do_lang('CATALOGUE_ENTRY').' ('.do_lang('IN',get_translated_text($catalogue['c_title'])).')');
 				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
 			}
 		} else
@@ -425,17 +424,18 @@ class Hook_search_catalogue_entries
 
 		$catalogue_name=$row['c_name'];
 		if (!array_key_exists($catalogue_name,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES)) return new ocp_tempcode();
-		if (($SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name]['c_display_type']==0) || (get_param_integer('specific',0)==0))
+		$display_type=$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name]['c_display_type'];
+		if (($display_type==C_DT_FIELDMAPS) || ($display_type==C_DT_GRID) || (get_param_integer('specific',0)==0)) // Singular results
 		{
 			$tpl_set=$catalogue_name;
 			$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'SEARCH',$tpl_set,-1);
 
-			$tpl=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');
+			$tpl=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_WRAP',$display,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 
-			$tree=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
-			if (!$tree->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
+			$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
+			if (!$breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$breadcrumbs)));
 
-			return put_in_standard_box($tpl,do_lang_tempcode('CATALOGUE_ENTRY'));
+			return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('CATALOGUE_ENTRY'),'SUMMARY'=>$tpl));
 		} else // Compound results
 		{
 			global $CATALOGUE_ENTRIES_BUILDUP;

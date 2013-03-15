@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_securitylogging
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -62,7 +61,9 @@ class Hook_addon_registry_securitylogging
 			'requires'=>array(),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('core_securitylogging'),
+			'previously_in_addon'=>array(
+				'core_securitylogging'
+			)
 		);
 	}
 
@@ -74,7 +75,6 @@ class Hook_addon_registry_securitylogging
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/realtime_rain/security.php',
 			'sources/hooks/systems/addon_registry/securitylogging.php',
 			'SECURITY_SCREEN.tpl',
@@ -84,23 +84,47 @@ class Hook_addon_registry_securitylogging
 			'themes/default/images/bigicons/securitylog.png',
 			'themes/default/images/pagepics/securitylog.png',
 			'HACK_ATTEMPT_MAIL.tpl',
-			'adminzone/pages/modules/admin_ipban.php',
+			'adminzone/pages/modules/admin_ipban.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'SECURITY_SCREEN.tpl'=>'administrative__security_screen',
-				'SECURITY_ALERT_SCREEN.tpl'=>'administrative__security_alert_screen',
-				'HACK_ATTEMPT_MAIL.tpl'=>'administrative__hack_attempt_mail',
-				);
+			'SECURITY_SCREEN.tpl'=>'administrative__security_screen',
+			'SECURITY_ALERT_SCREEN.tpl'=>'administrative__security_alert_screen',
+			'HACK_ATTEMPT_MAIL.tpl'=>'administrative__hack_attempt_mail',
+			'IPBAN_SCREEN.tpl'=>'ipban_screen'
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__ipban_screen()
+	{
+		require_lang('submitban');
+
+		return array(
+			lorem_globalise(do_lorem_template('IPBAN_SCREEN', array(
+				'PING_URL'=>placeholder_url(),
+				'WARNING_DETAILS'=>'',
+				'TITLE'=>lorem_title(),
+				'BANS'=>placeholder_ip(),
+				'LOCKED_BANS'=>placeholder_ip(),
+				'URL'=>placeholder_url()
+			)), NULL, '', true)
+		);
 	}
 
 	/**
@@ -113,22 +137,20 @@ class Hook_addon_registry_securitylogging
 	function tpl_preview__administrative__hack_attempt_mail()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('HACK_ATTEMPT_MAIL',array(
-					'STACK_TRACE'=>lorem_phrase(),
-					'USER_AGENT'=>lorem_phrase(),
-					'REFERER'=>lorem_phrase(),
-					'USER_OS'=>lorem_phrase(),
-					'REASON'=>lorem_phrase(),
-					'IP'=>placeholder_ip(),
-					'ID'=>placeholder_id(),
-					'USERNAME'=>lorem_word_html(),
-					'TIME_RAW'=>placeholder_date_raw(),
-					'TIME'=>placeholder_date(),
-					'URL'=>placeholder_url(),
-					'POST'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('HACK_ATTEMPT_MAIL', array(
+				'STACK_TRACE'=>lorem_phrase(),
+				'USER_AGENT'=>lorem_phrase(),
+				'REFERER'=>lorem_phrase(),
+				'USER_OS'=>lorem_phrase(),
+				'REASON'=>lorem_phrase(),
+				'IP'=>placeholder_ip(),
+				'ID'=>placeholder_id(),
+				'USERNAME'=>lorem_word_html(),
+				'TIME_RAW'=>placeholder_date_raw(),
+				'TIME'=>placeholder_date(),
+				'URL'=>placeholder_url(),
+				'POST'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -143,14 +165,12 @@ class Hook_addon_registry_securitylogging
 	{
 		require_lang('security');
 		return array(
-			lorem_globalise(
-				do_lorem_template('SECURITY_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'FAILED_LOGINS'=>placeholder_table(),
-					'ALERTS'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SECURITY_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'FAILED_LOGINS'=>placeholder_table(),
+				'ALERTS'=>lorem_phrase(),
+				'URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -165,19 +185,17 @@ class Hook_addon_registry_securitylogging
 	{
 		require_lang('security');
 		return array(
-			lorem_globalise(
-				do_lorem_template('SECURITY_ALERT_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'USER_AGENT'=>lorem_phrase(),
-					'REFERER'=>lorem_phrase(),
-					'USER_OS'=>lorem_phrase(),
-					'REASON'=>lorem_phrase(),
-					'IP'=>lorem_phrase(),
-					'USERNAME'=>lorem_word_html(),
-					'POST'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SECURITY_ALERT_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'USER_AGENT'=>lorem_phrase(),
+				'REFERER'=>lorem_phrase(),
+				'USER_OS'=>lorem_phrase(),
+				'REASON'=>lorem_phrase(),
+				'IP'=>lorem_phrase(),
+				'USERNAME'=>lorem_word_html(),
+				'POST'=>lorem_phrase(),
+				'URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 }

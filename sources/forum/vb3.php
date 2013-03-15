@@ -20,9 +20,12 @@
 
 require_code('forum/shared/vb');
 
+/**
+ * Forum Driver.
+ * @package		core_forum_drivers
+ */
 class forum_driver_vb3 extends forum_driver_vb_shared
 {
-
 	/**
 	 * Get a list of custom BBcode tags.
 	 *

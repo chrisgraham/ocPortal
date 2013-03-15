@@ -53,12 +53,12 @@ class Hook_admin_stats_downloads
 		require_lang('downloads');
 
 		//This will show a plain bar chart with all the downloads listed
-		$title=get_page_title('SECTION_DOWNLOADS');
+		$title=get_screen_title('SECTION_DOWNLOADS');
 
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_page_title('SECTION_DOWNLOADS');
+			$title=get_screen_title('SECTION_DOWNLOADS');
 
 			return $ob->get_between($title,false,NULL,do_lang_tempcode('DOWNLOAD_STATS_RANGE'));
 		}
@@ -74,7 +74,7 @@ class Hook_admin_stats_downloads
 			if (is_null($time_start)) $time_start=0;
 			if (is_null($time_end)) $time_end=time();
 
-			$title=get_page_title('SECTION_DOWNLOADS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+			$title=get_screen_title('SECTION_DOWNLOADS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 			$rows=$GLOBALS['SITE_DB']->query('SELECT id,num_downloads,name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'download_downloads WHERE add_date>'.strval($time_start).' AND add_date<'.strval($time_end));
 		}

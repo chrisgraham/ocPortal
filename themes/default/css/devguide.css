@@ -1,0 +1,29 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.block_help_field_name_column {
+	width: 10em;
+}
+
+.block_help_field_value_column {
+	width: 100%;
+}
+
+.code_parameter_name {
+	width: 20%;
+}
+
+.php_parameter_type {
+	font-weight: bold;
+}
+
+.php_function_inner {
+	margin-{!en_left}: 70px;
+}
+
+.php_function_inner p {
+	font-style: italic;
+}
+

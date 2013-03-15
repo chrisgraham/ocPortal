@@ -48,10 +48,10 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 
 	if (!is_null($GLOBALS['MEM_CACHE']))
 	{
-		$pcache=persistant_cache_get(array('CACHE',$codename));
+		$pcache=persistent_cache_get(array('CACHE',$codename));
 		if (is_null($pcache)) $pcache=array();
 		$pcache[$cache_identifier][$lang][$theme]=array('langs_required'=>$langs_required,'date_and_time'=>time(),'the_value'=>$cache);
-		persistant_cache_set(array('CACHE',$codename),$pcache,false,$ttl*60);
+		persistent_cache_set(array('CACHE',$codename),$pcache,false,$ttl*60);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_delete('cache',array('lang'=>$lang,'the_theme'=>$theme,'cached_for'=>$codename,'identifier'=>md5($cache_identifier)),'',1);

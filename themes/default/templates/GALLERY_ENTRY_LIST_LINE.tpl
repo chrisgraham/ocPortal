@@ -1,2 +1,2 @@
-{TREE*} : {URL*}
+{+START,IF_NON_EMPTY,{BREADCRUMBS}}{BREADCRUMBS*} &ndash; {+END}{URL*}
 

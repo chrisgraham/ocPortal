@@ -4,7 +4,7 @@
 // Multi-field
 // ===========
 
-function copyDates(theStub)
+function copy_dates(theStub)
 {
 	if (theStub!='end') return;
 
@@ -28,7 +28,7 @@ function copyDates(theStub)
 	}
 }
 
-function changeStubbed(theStub,value)
+function change_stubbed(theStub,value)
 {
 	var i,j,theForm,theElement;
 	for (i=0;i<document.forms.length;i++)
@@ -45,7 +45,7 @@ function changeStubbed(theStub,value)
 	}
 }
 
-function deselectAltURL(form)
+function deselect_alt_url(form)
 {
 	if (typeof form.elements['alt_url']!='undefined')
 	{
@@ -53,13 +53,13 @@ function deselectAltURL(form)
 	}
 }
 
-function _ensureNextField(event)
+function _ensure_next_field(event)
 {
 	if (typeof event=='undefined') var event=window.event;
-	if (!key_pressed(event,9)) ensureNextField(this);
+	if (!key_pressed(event,9)) ensure_next_field(this);
 }
 
-function ensureNextField(thisField)
+function ensure_next_field(thisField)
 {
 	var mid=thisField.id.lastIndexOf('_');
 	var nameStub=thisField.id.substring(0,mid+1);
@@ -98,7 +98,7 @@ function ensureNextField(thisField)
 		nextField.setAttribute('id',nameStub+nextNum);
 		if (thisField.onfocus) nextField.onfocus=thisField.onfocus;
 		if (thisField.onkeyup) nextField.onkeyup=thisField.onkeyup;
-		nextField.onkeypress=_ensureNextField;
+		nextField.onkeypress=_ensure_next_field;
 		if (thisField.onchange) nextField.onchange=thisField.onchange;
 		if (typeof thisField.onrealchange!='undefined') nextField.onchange=thisField.onrealchange;
 		if (thisField.nodeName.toLowerCase()!='textarea')
@@ -114,13 +114,13 @@ function ensureNextField(thisField)
 	}
 }
 
-function _ensureNextFieldUpload(event)
+function _ensure_next_field_upload(event)
 {
 	if (typeof event=='undefined') var event=window.event;
-	if (!key_pressed(event,9)) ensureNextFieldUpload(this);
+	if (!key_pressed(event,9)) ensure_next_field_upload(this);
 }
 
-function ensureNextFieldUpload(thisField)
+function ensure_next_field_upload(thisField)
 {
 	var mid=thisField.name.lastIndexOf('_');
 	var nameStub=thisField.name.substring(0,mid+1);
@@ -138,7 +138,7 @@ function ensureNextFieldUpload(thisField)
 		var nextField=document.createElement('input');
 		nextField.className='input_upload';
 		nextField.setAttribute('id','multi_'+nextNum);
-		nextField.onchange=_ensureNextFieldUpload;
+		nextField.onchange=_ensure_next_field_upload;
 		nextField.setAttribute('type','file');
 		nextField.name=nameStub+nextNum;
 		var br=document.createElement('br');

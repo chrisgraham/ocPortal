@@ -1,1 +1,1 @@
-<a href="{EDIT_URL*}">{NAME*} ({COUNT*})</a><br />
+<li><a href="{EDIT_URL*}">{NAME*} <span class="associated_details">({COUNT*})</span></a></li>

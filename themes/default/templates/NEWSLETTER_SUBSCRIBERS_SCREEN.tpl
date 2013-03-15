@@ -1,20 +1,24 @@
 {TITLE}
 
 {+START,LOOP,SUBSCRIBERS}
-	<p>
-		{TEXT}
-	</p>
+	{+START,IF,{$NEQ,{SUBSCRIBERS},1}}
+		<p>
+			{TEXT}
+		</p>
+	{+END}
 
 	{+START,IF_NON_EMPTY,{SUB}}
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table variable_table">
+		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
 			<thead>
 				<tr>
 					<th>{!EMAIL_ADDRESS}</th>
 					<th>{!FORENAME}</th>
 					<th>{!SURNAME}</th>
 					<th>{!NAME}</th>
-					<!--<th>{!NEWSLETTER_SEND_ID}</th>
-					<th>{!NEWSLETTER_HASH}</th>-->
+					<!--
+					<th>{!NEWSLETTER_SEND_ID}</th>
+					<th>{!NEWSLETTER_HASH}</th>
+					-->
 				</tr>
 			</thead>
 			<tbody>
@@ -22,9 +26,9 @@
 			</tbody>
 		</table></div>
 
-		{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
-			<div class="float_surrounder results_browser_spacing">
-				{RESULTS_BROWSER}
+		{+START,IF_NON_EMPTY,{PAGINATION}}
+			<div class="float_surrounder pagination_spacing">
+				{PAGINATION}
 			</div>
 		{+END}
 	{+END}
@@ -36,13 +40,13 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{DOMAINS}}
-	<h2>{!STATISTICS}</h2>
+	<h2>{!DOMAIN_STATISTICS,{$NUMBER_FORMAT*,{DOMAINS}},{$NUMBER_FORMAT*,{DOMAINS}}}</h2>
 
-	<div class="wide_table_wrap"><table class="wide_table solidborder" summary="{!COLUMNED_TABLE}">
+	<div class="wide_table_wrap"><table class="wide_table results_table" summary="{!COLUMNED_TABLE}">
 		<thead>
 			<tr>
 				<th>{!DOMAIN}</th>
-				<th>{!COUNT_TOTAL} ({!OF,{$NUMBER_FORMAT*,{DOMAINS}}})</th>
+				<th>{!COUNT_TOTAL}</th>
 			</tr>
 		</thead>
 		<tbody>

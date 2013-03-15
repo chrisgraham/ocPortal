@@ -2,11 +2,11 @@
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
 	<div>
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder specific_permissions">
+		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table privileges">
 			<colgroup>
-				<col style="width: 250px" />
+				<col class="permission_field_name_column" />
 				{COLS}
-				<col style="width: 35px" />
+				<col class="permission_copy_column" />
 			</colgroup>
 
 			<thead>
@@ -23,10 +23,9 @@
 
 		<input type="hidden" name="zone" value="{ZONE*}" />
 
-		<br />
-		<div class="proceed_button">
+		<p class="proceed_button">
 			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
-		</div>
+		</p>
 	</div>
 </form>
 

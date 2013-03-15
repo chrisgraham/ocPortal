@@ -42,7 +42,7 @@ function init__chat()
  */
 function messages_script()
 {
-	get_page_title('',false); // Force session time to be updated
+	get_screen_title('',false); // Force session time to be updated
 
 	// Closed site
 	$site_closed=get_option('site_closed');
@@ -229,7 +229,6 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 	require_lang('chat');
 	require_code('chat');
 	require_css('chat');
-	require_css('side_blocks');
 
 //	if (is_guest()) return; // No guests
 
@@ -292,7 +291,7 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 	if ($ret) return $tpl;
 
 	$keep=symbol_tempcode('KEEP');
-	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'aacac778b145bfe7b063317fbcae7fde','FRAME'=>true,'TARGET'=>'_top','TITLE'=>do_lang_tempcode('SHOUTBOX'),'CONTENT'=>$tpl));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'aacac778b145bfe7b063317fbcae7fde','FRAME'=>true,'TARGET'=>'_top','TITLE'=>do_lang_tempcode('SHOUTBOX'),'CONTENT'=>$tpl));
 	$echo->evaluate_echo();
 	return NULL;
 }
@@ -359,9 +358,7 @@ function chat_logs_script()
 	else
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 
-	//$message=put_in_standard_box($message_contents,do_lang_tempcode('ROOM'));
-
-	$message_contents=do_template('CHAT_LOGS_SCREEN',array('TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'MESSAGES'=>$message_contents));
+	$message_contents=do_template('BASIC_HTML_WRAP',array('TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT'=>$message_contents));
 
 	echo $message_contents->evaluate();
 }
@@ -585,7 +582,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		}
 
 		$template=do_template('CHAT_MESSAGE',array('_GUID'=>'6bcac8d9fdd166cde266f8d23b790b69','SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>$moderator,'OLD_MESSAGES'=>$backlog,'AVATAR_URL'=>$avatar_url,'STAFF_ACTIONS'=>$staff_actions,'USER'=>$user,'MESSAGE'=>$_message['the_message'],'TIME'=>$_message['date_and_time_nice'],'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
-		$messages_output.='<div xmlns="http://www.w3.org/1999/xhtml" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
+		$messages_output.='<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 	}
 
 	// Members update, but only for the room interface
@@ -780,7 +777,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 		$the_message=do_lang('BANNED_FROM_CHAT');
 		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
 		$template=do_template('CHAT_MESSAGE',array('SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>false,'OLD_MESSAGES'=>false,'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>strval($_message['member_id']),'MESSAGE'=>$the_message,'TIME'=>get_timezoned_date($_message['date_and_time']),'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
-		$messages_output='<div xmlns="http://www.w3.org/1999/xhtml" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
+		$messages_output='<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
@@ -1060,12 +1057,12 @@ function get_chatroom_id($room_name,$must_not_be_im=false)
 /**
  * Enter a message into the database for the specified room, and with the specified parameters. The message is filtered for banned words, and is compressed into a tempcode storage format.
  *
- * @param  AUTO_LINK		The room ID for the message to be posted in
- * @param  LONG_TEXT		The message body
- * @param  SHORT_TEXT	The font name for the message
- * @param  SHORT_TEXT	The text colour for the message
- * @param  SHORT_INTEGER  The wrap position for the message
- * @return boolean		Whether the message was successfully posted or not
+ * @param  AUTO_LINK			The room ID for the message to be posted in
+ * @param  LONG_TEXT			The message body
+ * @param  SHORT_TEXT		The font name for the message
+ * @param  SHORT_TEXT		The text colour for the message
+ * @param  SHORT_INTEGER	The wrap position for the message
+ * @return boolean			Whether the message was successfully posted or not
 */
 function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=60)
 {
@@ -1074,7 +1071,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 
 	// Have we been blocked by flood control?
 	$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
-	if ($is_im) // No flood control for IMs
+	if ($is_im==1) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else

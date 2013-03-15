@@ -21,14 +21,14 @@
 function init__site__pages__modules_custom__galleries($code)
 {
 	// Add a redirection for the workflow handling
-	$code = str_replace('if ($type==\'list\') return $this->list_galleries();',
+	$code=str_replace('if ($type==\'list\') return $this->list_galleries();',
 		'if ($type==\'list\') return $this->list_galleries();
 		if ($type=="workflow") return $this->workflow_handler();',
 		$code);
 
 	// Add workflow warnings to flow mode galleries. This has to be done for
 	// images...
-	$code = str_replace(
+	$code=str_replace(
 		'$current_entry=do_template(\'GALLERY_FLOWMODE_IMAGE\'',
 		'// Add the workflow form if this entry is unvalidated
 		if (array_key_exists("validated", $row) && $row["validated"]!=1)
@@ -36,7 +36,7 @@ function init__site__pages__modules_custom__galleries($code)
 			require_code("workflows");
 			require_lang("workflows");
 			// We need to find our ID first
-			$wf = get_workflow_of_content("image",strval($row["id"]));
+			$wf=get_workflow_of_content("image",strval($row["id"]));
 			if (!is_null($wf))
 			{
 				$workflow_content_id=get_workflow_content_id("image",strval($row["id"]));
@@ -48,14 +48,14 @@ function init__site__pages__modules_custom__galleries($code)
 	);
 
 	// ...and videos separately.
-	$code = str_replace('$current_entry=do_template(\'GALLERY_FLOWMODE_VIDEO',
+	$code=str_replace('$current_entry=do_template(\'GALLERY_FLOWMODE_VIDEO',
 		'// Add the workflow form if this entry is unvalidated
 		if (array_key_exists("validated", $row) && $row["validated"]!=1)
 		{
 			require_code("workflows");
 			require_lang("workflows");
 			// We need to find our ID first
-			$wf = get_workflow_of_content("video",strval($row["id"]));
+			$wf=get_workflow_of_content("video",strval($row["id"]));
 			if (!is_null($wf))
 			{
 				$workflow_content_id=get_workflow_content_id("video",strval($row["id"]));
@@ -68,7 +68,7 @@ function init__site__pages__modules_custom__galleries($code)
 
 
 	// Add workflow warnings to images
-	$code = str_replace(
+	$code=str_replace(
 		'} else $warning_details=new ocp_tempcode();
 
 		if ((has_actual_page_access',
@@ -88,7 +88,7 @@ function init__site__pages__modules_custom__galleries($code)
 	);
 
 	// Add workflow warnings to videos
-	$code = str_replace(
+	$code=str_replace(
 		'} else $warning_details=new ocp_tempcode();
 
 		// Comments',
@@ -104,7 +104,7 @@ function init__site__pages__modules_custom__galleries($code)
 	);
 
 	// Add workflow handling to the end of the class definition
-	$code = str_replace('\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
+	$code=str_replace('\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
 	}',
 		'\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
 	}

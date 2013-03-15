@@ -128,18 +128,18 @@ class Hook_Preview_ocf_post
 		if (!is_guest($post_owner))
 		{
 			require_code('ocf_members2');
-			$poster_details=ocf_show_member_box($post_owner,false,NULL,NULL,false);
+			$poster_details=render_member_box($post_owner,false,NULL,NULL,false);
 			$poster_username=$GLOBALS['FORUM_DRIVER']->get_username($post_owner);
 			if (is_null($poster_username)) $poster_username=do_lang('UNKNOWN');
 			$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'976a6ceb631bbdcdd950b723cb5d2487','ONLINE'=>true,'ID'=>strval($post_owner),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post_owner,false,true),'POSTER_USERNAME'=>$poster_username));
 		} else
 		{
 			$poster_details=new ocp_tempcode();
-			$custom_fields=do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>(get_ip_address())));
+			$custom_fields=do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>(get_ip_address())));
 			$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'2db48e17db9f060c04386843f2d0f105','CUSTOM_FIELDS'=>$custom_fields));
 			$poster_username=post_param('poster_name_if_guest',do_lang('GUEST'));
 			$ip_link=has_actual_page_access(get_member(),'admin_lookup')?build_url(array('page'=>'admin_lookup','param'=>get_ip_address()),get_module_zone('admin_lookup')):new ocp_tempcode();
-			$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'9c0ba6198663de96facc7399a08e8281','IP_LINK'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$poster_username));
+			$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'9c0ba6198663de96facc7399a08e8281','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$poster_username));
 		}
 
 		// Rank images
@@ -159,7 +159,7 @@ class Hook_Preview_ocf_post
 		} else $last_edited=new ocp_tempcode();
 
 		$post=do_template('OCF_TOPIC_POST',array('_GUID'=>'354473f96b4f7324d2a9c476ff78f0d7','POST_ID'=>'','TOPIC_FIRST_POST_ID'=>'','TOPIC_FIRST_POSTER'=>strval(get_member()),'POST_TITLE'=>$post_title,'CLASS'=>$class,'EMPHASIS'=>$emphasis,'FIRST_UNREAD'=>'','TOPIC_ID'=>'','ID'=>'','POST_DATE_RAW'=>strval($_post_date),'POST_DATE'=>$post_date,'UNVALIDATED'=>$unvalidated,'URL'=>'','POSTER'=>$poster,'POST_AVATAR'=>$post_avatar,'POSTER_TITLE'=>$poster_title,'RANK_IMAGES'=>$rank_images,'POST'=>$post_html,'LAST_EDITED'=>$last_edited,'SIGNATURE'=>$signature,'BUTTONS'=>'','POSTER_ID'=>strval($post_owner)));
-		$out=do_template('OCF_TOPIC_POST_CLEAN_WRAP',array('_GUID'=>'62bbfabfa5c16c2aa6724a0b79839626','POST'=>$post));
+		$out=do_template('OCF_POST_BOX',array('_GUID'=>'62bbfabfa5c16c2aa6724a0b79839626','POST'=>$post));
 
 		return array($out,$post_comcode);
 	}

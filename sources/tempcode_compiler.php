@@ -31,11 +31,11 @@ function init__tempcode_compiler()
 	define('PARSE_DIRECTIVE_INNER',5);
 
 	global $DIRECTIVES_NEEDING_VARS;
-	$DIRECTIVES_NEEDING_VARS=array('PARAM_INFO'=>1,'IF_NOT_IN_ARRAY'=>1,'NOT_IN_ARRAY'=>1,'IF_IN_ARRAY'=>1,'IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1);
+	$DIRECTIVES_NEEDING_VARS=array('IF_PASSED_AND_TRUE'=>1,'IF_NON_PASSED_OR_FALSE'=>1,'PARAM_INFO'=>1,'IF_NOT_IN_ARRAY'=>1,'IF_IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1);
 
 	// These are templates often used multiple times on a single screen. They are loaded as functions, rather than eval'd each time
 	global $FUNC_STYLE_TPL;
-	$FUNC_STYLE_TPL=defined('HIPHOP_PHP')?array():array('CSS_NEED','JAVASCRIPT_NEED','OCF_AUTO_TIME_ZONE_ENTRY','FORM_SCREEN_INPUT_LIST_ENTRY','FORM_SCREEN_INPUT_LINE','FORM_SCREEN_INPUT_PERMISSION','FORM_SCREEN_INPUT_PERMISSION_OVERRIDE','FORM_SCREEN_INPUT_RADIO_LIST_ENTRY','FORM_SCREEN_INPUT_HIDDEN','FORM_SCREEN_INPUT_TICK','FORM_SCREEN_INPUT_TEXT','FORM_SCREEN_FIELD','MENU_BRANCH','MENU_NODE','HYPERLINK','BREADCRUMB','RESULTS_TABLE_ENTRY','OCF_TOPIC_POST','POSTER','OCF_FORUM_TOPIC_ROW');
+	$FUNC_STYLE_TPL=defined('HIPHOP_PHP')?array():array('CSS_NEED','JAVASCRIPT_NEED','OCF_AUTO_TIME_ZONE_ENTRY','FORM_SCREEN_INPUT_LIST_ENTRY','FORM_SCREEN_INPUT_LINE','FORM_SCREEN_INPUT_PERMISSION','FORM_SCREEN_INPUT_PERMISSION_OVERRIDE','FORM_SCREEN_INPUT_RADIO_LIST_ENTRY','FORM_SCREEN_INPUT_HIDDEN','FORM_SCREEN_INPUT_TICK','FORM_SCREEN_INPUT_TEXT','FORM_SCREEN_FIELD','MENU_BRANCH','MENU_NODE','HYPERLINK','BREADCRUMB_SEPARATOR','RESULTS_TABLE_ENTRY','OCF_TOPIC_POST','POSTER','OCF_FORUM_TOPIC_ROW');
 }
 
 /**
@@ -150,7 +150,12 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 				$opener_params=array_merge($current_level_params,array($current_level_data));
 				$__first_param=array_shift($opener_params);
-				$_first_param=implode('.',$__first_param);
+				if (count($__first_param)!=1)
+				{
+@var_dump($__first_param);exit();
+					warn_exit(do_lang_tempcode('COMPLEX_FIRST_PARAMETER'));
+				}
+				$_first_param=$__first_param[0];
 
 				if ($bits[$i-1]=='') $current_level_data[]='""';
 
@@ -241,6 +246,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					if ($_opener_params!='') $_opener_params.=',';
 					$_opener_params.=implode('.',$param);
 				}
+
 				$first_param=str_replace(array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@'),array('','','','','','','','','','','','','','',''),$_first_param);
 				switch ($past_level_mode)
 				{
@@ -250,8 +256,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						{
 							switch ($first_param)
 							{
-								case '"CSS_INCLUDE"':
-								case '"JAVASCRIPT_INCLUDE"':
+								case '"REQUIRE_CSS"':
+								case '"REQUIRE_JAVASCRIPT"':
 								case '"JS_TEMPCODE"':
 								case '"CSS_TEMPCODE"':
 								case '"SET"':
@@ -473,22 +479,6 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 							case 'IF_NON_ADJACENT':
 								$current_level_data[]='(($last_attach!="'.php_addslashes($template_name).'")?('.implode('.',$past_level_data).'):\'\')';
 								break;
-							case 'SHIFT_ENCODE':
-								$eval=@eval('return '.implode('.',$directive_opener_params[2]).';');
-								if (!is_string($eval)) $eval='';
-								$key=$eval;
-								$set_op='$GLOBALS[\'SHIFT_VARIABLES\']["'.php_addslashes($key).'"]=make_string_tempcode('.implode('.',$past_level_data).')';
-								if (array_key_exists(3,$directive_opener_params))
-								{
-									$attach_op='$GLOBALS[\'SHIFT_VARIABLES\']["'.php_addslashes($key).'"]->attach('.implode('.',$past_level_data).')';
-									$is_set_check='array_key_exists("'.php_addslashes($key).'",$GLOBALS[\'SHIFT_VARIABLES\'])';
-									// NB: The "/*SHIFT_ENCODE*/" bit is critical, it's used as a marker for identifying the need for preexecution
-									$current_level_data[]='/*SHIFT_ENCODE*/(is_null(((!'.$is_set_check.') || ('.implode('.',$directive_opener_params[3]).'==\'0\'))'.'?'.$set_op.':'.$attach_op.')?\'\':\'\')';
-								} else
-								{
-									$current_level_data[]='/*SHIFT_ENCODE*/(is_null('.$set_op.')?\'\':\'\')';
-								}
-								break;
 							case 'INCLUDE':
 								global $FILE_ARRAY;
 								if ((count($directive_opener_params)==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
@@ -500,7 +490,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 									$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
 									if (!is_file($fullpath))
 										$fullpath=get_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
-									$filecontents=@file_get_contents($fullpath,FILE_TEXT);
+									$filecontents=@file_get_contents($fullpath);
 									if ($filecontents===false) $filecontents='';
 									list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);
 									$current_level_data=array_merge($current_level_data,$_current_level_data);
@@ -598,11 +588,11 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (isset($FILE_ARRAY))
 	{
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
-	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix,FILE_TEXT));
+	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix));
 
-	if (($GLOBALS['SEMI_DEBUG_MODE']) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
+	if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
 	{
-		attach_message('Do not use the .innerHTML property in your Javascript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global setInnerHTML/getInnerHTML functions.','warn');
+		attach_message('Do not use the .innerHTML property in your Javascript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.','warn');
 	}
 
 	// Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues

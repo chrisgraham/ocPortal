@@ -78,7 +78,7 @@ class Module_awards
 	 */
 	function choose_award()
 	{
-		$title=get_page_title('AWARDS');
+		$title=get_screen_title('AWARDS');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('award_types',array('*'));
 		$out=new ocp_tempcode();
@@ -106,7 +106,7 @@ class Module_awards
 		if (has_actual_page_access(get_member(),'admin_awards'))
 			$add_url=build_url(array('page'=>'admin_awards','type'=>'ad'),get_module_zone('admin_awards'));
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('ADD_URL'=>$add_url,'PRE'=>'','POST'=>'','TITLE'=>$title,'CONTENT'=>$out));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8351f627333434d426db3b9ffe09d1c','ADD_URL'=>$add_url,'PRE'=>'','POST'=>'','TITLE'=>$title,'CONTENT'=>$out));
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Module_awards
 	 */
 	function award_overview()
 	{
-		$title=get_page_title('AWARD_OVERVIEW');
+		$title=get_screen_title('AWARD_OVERVIEW');
 
 		$award_types=$GLOBALS['SITE_DB']->query_select('award_types',array('*'));
 
@@ -158,12 +158,12 @@ class Module_awards
 
 					$rendered=do_template('AWARDED_CONTENT',array('_GUID'=>'1a2a5b6e9b53a99e303b7ed17070cea9','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time']),'CONTENT'=>$rendered_content));
 					$archive_url=build_url(array('page'=>'_SELF','type'=>'award','id'=>$award_type_row['id']),'_SELF');
-					$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('URL'=>$archive_url,'TITLE'=>$_title,'NAME'=>$_title,'DESCRIPTION'=>$rendered)));
+					$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'edd7305b3a9e7777951d0cf04a9360a3','URL'=>$archive_url,'TITLE'=>$_title,'NAME'=>$_title,'DESCRIPTION'=>$rendered)));
 				}
 			}
 		}
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>$title,'PRE'=>do_lang_tempcode('DESCRIPTION_AWARD_OVERVIEW'),'CONTENT'=>$content,'POST'=>''));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'4d705418b837db3dc992de95c3b93f71','TITLE'=>$title,'PRE'=>do_lang_tempcode('DESCRIPTION_AWARD_OVERVIEW'),'CONTENT'=>$content,'POST'=>''));
 	}
 
 	/**
@@ -191,7 +191,7 @@ class Module_awards
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
-		$title=get_page_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
+		$title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
 		$description=paragraph(get_translated_tempcode($award_type_row['a_description']),'grdgdfghdfgodfs');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>$id),'ORDER BY date_and_time DESC',$max,$start);
@@ -219,9 +219,7 @@ class Module_awards
 					$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],false,true);
 				}
 
-				$content->attach(do_template('AWARDED_CONTENT',array('_GUID'=>'1a2a5b6e9b53a99e303b7ed17070cea9','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time'],false,false,false,true),'CONTENT'=>$rendered_content)));
-
-				$content->attach(do_template('BLOCK_SEPARATOR',array()));
+				$content->attach(do_template('AWARDED_CONTENT',array('_GUID'=>'67678ff081cb5996fd52cb369d946cf2','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time'],false,false,false,true),'CONTENT'=>$rendered_content)));
 			}
 		}
 		if ($content->is_empty())
@@ -236,7 +234,7 @@ class Module_awards
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
 		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'54690cd3d6ea1ee0722271ab428e6a31','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'54690cd3d6ea1ee0722271ab428e6a31','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		$sub_title=do_lang_tempcode('AWARD_HISTORY');
 

@@ -53,7 +53,7 @@ function ocf_nice_get_topic_tree($it=NULL)
 		foreach ($forum['entries'] as $topic_id=>$ttitle)
 		{
 			$selected=($topic_id==$it);
-			$line=do_template('OCF_FORUM_TOPIC_LIST_LINE',array('_GUID'=>'d58e4176ef0efefa85c83a8b9fa2de51','PRE'=>$forum['tree'],'TOPIC_TITLE'=>$ttitle));
+			$line=do_template('OCF_FORUM_TOPIC_LIST_LINE',array('_GUID'=>'d58e4176ef0efefa85c83a8b9fa2de51','PRE'=>$forum['breadcrumbs'],'TOPIC_TITLE'=>$ttitle));
 			$out.='<option value="'.strval($topic_id).'"'.($selected?'selected="selected"':'').'>'.$line->evaluate().'</option>';
 		}
 	}
@@ -67,28 +67,28 @@ function ocf_nice_get_topic_tree($it=NULL)
  * Get a list of maps containing all the topics, and path information, under the specified forum - and those beneath it, recursively.
  *
  * @param  ?AUTO_LINK	The forum being at the root of our recursion (NULL: true root forum)
- * @param  ?string		The tree up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?string		The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
  * @param  ?ID_TEXT		The forum name of the $forum_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
  * @param  ?integer		The number of recursive levels to search (NULL: all)
- * @return array			A list of maps for all forums. Each map entry containins the fields 'id' (forum ID) and 'tree' (tree path to the forum, including the forums own title), and more.
+ * @return array			A list of maps for all forums. Each map entry containins the fields 'id' (forum ID) and 'breadcrumbs' (path to the forum, including the forums own title), and more.
  */
-function ocf_get_topic_tree($forum_id=NULL,$tree=NULL,$title=NULL,$levels=NULL)
+function ocf_get_topic_tree($forum_id=NULL,$breadcrumbs=NULL,$title=NULL,$levels=NULL)
 {
 	if (is_null($forum_id)) $forum_id=db_get_first_id();
-	if (is_null($tree)) $tree='';
+	if (is_null($breadcrumbs)) $breadcrumbs='';
 
 	if (!has_category_access(get_member(),'forums',strval($forum_id))) return array();
 
-	// Put our title onto our tree
+	// Put our title onto our breadcrumbs
 	if (is_null($title)) $title=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$forum_id));
-	$tree.=$title;
+	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
 	$children=array();
 	$children[0]=array();
 	$children[0]['id']=$forum_id;
 	$children[0]['title']=$title;
-	$children[0]['tree']=$tree;
+	$children[0]['breadcrumbs']=$breadcrumbs;
 
 	// Children of this category
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name'),array('f_parent_forum'=>$forum_id),'ORDER BY f_category_id,f_position',200);
@@ -102,16 +102,16 @@ function ocf_get_topic_tree($forum_id=NULL,$tree=NULL,$title=NULL,$levels=NULL)
 		$children[0]['entries']=array();
 	}
 	$children[0]['child_count']=count($rows);
-	$tree.=' > ';
+	$breadcrumbs.=' > ';
 	if ($levels!==0)
 	{
 		foreach ($rows as $child)
 		{
 			$child_id=$child['id'];
 			$child_title=$child['f_name'];
-			$child_tree=$tree;
+			$child_breadcrumbs=$breadcrumbs;
 
-			$child_children=ocf_get_topic_tree($child_id,$child_tree,$child_title,is_null($levels)?NULL:max(0,$levels-1));
+			$child_children=ocf_get_topic_tree($child_id,$child_breadcrumbs,$child_title,is_null($levels)?NULL:max(0,$levels-1));
 
 			$children=array_merge($children,$child_children);
 		}
@@ -127,7 +127,7 @@ function ocf_get_topic_tree($forum_id=NULL,$tree=NULL,$title=NULL,$levels=NULL)
  * @param  ?AUTO_LINK	The forum we are starting from (NULL: capture the whole tree).
  * @param  boolean		Whether to get a tempcode list (as opposed to a list of maps).
  * @param  ?array			The forum(s) to select by default (NULL: no preference). Only applies if !$topics_too. An array of AUTO_LINK's (for IDs) or strings (for names).
- * @param  string			The ancester list at this point of the recursion (blank for the start).
+ * @param  string			The breadcrumbs at this point of the recursion (blank for the start).
  * @param  ?AUTO_LINK	ID of a forum to skip display/recursion for (NULL: none).
  * @param  ?boolean		Whether the child forums are ordered alphabetically (NULL: find from DB).
  * @param  boolean		Whether to generate a compound list (a list of all the ancesters, for each point in the forum tree) as well as the tree.
@@ -135,7 +135,7 @@ function ocf_get_topic_tree($forum_id=NULL,$tree=NULL,$title=NULL,$levels=NULL)
  * @param  boolean		Whether to generate tree statistics.
  * @return mixed			Each tempcode of the tree if $field_format or else a list of maps, OR (if $use_compound_list) a pair of the tempcode and the compound list.
  */
-function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_format=false,$selected_forum=NULL,$tree='',$skip=NULL,$order_sub_alpha=NULL,$use_compound_list=false,$levels=NULL,$do_stats=false)
+function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_format=false,$selected_forum=NULL,$breadcrumbs='',$skip=NULL,$order_sub_alpha=NULL,$use_compound_list=false,$levels=NULL,$do_stats=false)
 {
 	if (($levels==-1) && (!$use_compound_list)) return $use_compound_list?array(array(),''):array();
 
@@ -185,17 +185,17 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 			$cat_bit='';
 			if (!is_null($forum['f_category_id']))
 			{
-				global $CATEGORY_TITLES;
-				if (is_null($CATEGORY_TITLES))
+				global $GROUPING_TITLES;
+				if (is_null($GROUPING_TITLES))
 				{
-					$CATEGORY_TITLES=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_categories',array('id','c_title')));
+					$GROUPING_TITLES=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_categories',array('id','c_title')));
 				}
-				$cat_bit=array_key_exists($forum['f_category_id'],$CATEGORY_TITLES)?$CATEGORY_TITLES[$forum['f_category_id']]:do_lang('NA');
+				$cat_bit=array_key_exists($forum['f_category_id'],$GROUPING_TITLES)?$GROUPING_TITLES[$forum['f_category_id']]:do_lang('NA');
 				//if (strlen($pre.$cat_bit)>26) $cat_bit='...';
 			}
 			if ($field_format)
 			{
-				$pre=($tree=='')?'':($tree.' > ');
+				$pre=($breadcrumbs=='')?'':($breadcrumbs.' > ');
 				$below=ocf_get_forum_tree_secure($member_id,$forum['id'],true,$selected_forum,$pre.$forum['f_name'],$skip,$forum['f_order_sub_alpha'],$use_compound_list,NULL,$do_stats);
 				if ($use_compound_list)
 				{
@@ -229,7 +229,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 					list($below,$_compound_list)=$below;
 					$compound_list.=strval($forum['id']).','.$_compound_list;
 				}
-				$element=array('id'=>$forum['id'],'compound_list'=>(!$use_compound_list?strval($forum['id']):(strval($forum['id']).','.$_compound_list)),'second_cat'=>$cat_bit,'title'=>$forum['f_name'],'group'=>$forum['f_category_id'],'children'=>ocf_get_forum_tree_secure($member_id,$forum['id'],false,$selected_forum,$tree,$skip,false,false,$levels,$do_stats));
+				$element=array('id'=>$forum['id'],'compound_list'=>(!$use_compound_list?strval($forum['id']):(strval($forum['id']).','.$_compound_list)),'second_cat'=>$cat_bit,'title'=>$forum['f_name'],'group'=>$forum['f_category_id'],'children'=>ocf_get_forum_tree_secure($member_id,$forum['id'],false,$selected_forum,$breadcrumbs,$skip,false,false,$levels,$do_stats));
 				if ($do_stats)
 				{
 					$element['child_count']=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)',array('f_parent_forum'=>$forum['id']));

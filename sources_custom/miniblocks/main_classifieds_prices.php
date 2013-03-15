@@ -33,4 +33,4 @@ foreach ($prices as $price)
 	);
 }
 
-echo static_evaluate_tempcode(do_template('CLASSIFIEDS',array('DATA'=>$data)));
+echo static_evaluate_tempcode(do_template('CLASSIFIEDS',array('_GUID'=>'7216f4a435534cc609344101c8ea3031','DATA'=>$data)));

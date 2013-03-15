@@ -85,7 +85,7 @@ class Hook_rss_tickets
 
 			if (($prefix=='RSS_') && (get_option('is_on_comments')=='1'))
 			{
-				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'b4f25f5cf68304f8d402bb06851489d6','COMMENT_URL'=>$view_url,'ID'=>strval($ticket_id)));
+				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'32c536b95de70994d0a13cfed18aa6ec','COMMENT_URL'=>$view_url,'ID'=>strval($ticket_id)));
 			} else $if_comments=new ocp_tempcode();
 
 			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$ticket_id,'NEWS'=>'','DATE'=>$date)));

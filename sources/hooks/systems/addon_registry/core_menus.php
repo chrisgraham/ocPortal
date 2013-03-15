@@ -74,6 +74,7 @@ class Hook_addon_registry_core_menus
 	{
 		return array(
 
+			'menu_editor.css',
 			'themes/default/images/menu_items/management_navigation/cms.png',
 			'themes/default/images/menu_items/management_navigation/docs.png',
 			'themes/default/images/menu_items/management_navigation/index.html',
@@ -117,8 +118,8 @@ class Hook_addon_registry_core_menus
 			'adminzone/pages/modules/admin_menus.php',
 			'adminzone/menu_management.php',
 			'themes/default/images/bigicons/menus.png',
-			'themes/default/images/bottom/managementmenu.png',
-			'themes/default/images/bottom/managementmenu_off.png',
+			'themes/default/images/footer/managementmenu.png',
+			'themes/default/images/footer/managementmenu_off.png',
 			'themes/default/images/menus/index.html',
 			'themes/default/images/menus/menu.png',
 			'themes/default/images/menus/menu_bullet.png',
@@ -218,7 +219,7 @@ class Hook_addon_registry_core_menus
 					'CHILD_BRANCH_TEMPLATE'=>$child_branch_template,
 					'ROOT_BRANCH'=>$root_branch,
 					'TITLE'=>lorem_title(),
-						)
+				)
 			),NULL,'',true),
 		);
 	}
@@ -238,7 +239,7 @@ class Hook_addon_registry_core_menus
 				do_lorem_template('PAGE_LINK_CHOOSER',array(
 					'NAME'=>lorem_word(),
 					'VALUE'=>lorem_word(),
-						)
+				)
 			),NULL,'',true),
 		);
 	}
@@ -252,39 +253,37 @@ class Hook_addon_registry_core_menus
 	 */
 	function tpl_preview__block_side_stored_menu__tree()
 	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_tree',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>lorem_word_2(),
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
 		}
 		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_tree',array(
-				'RANDOM'=>placeholder_random(),
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
 				'URL'=>placeholder_url(),
@@ -301,19 +300,19 @@ class Hook_addon_registry_core_menus
 				'TOP_LEVEL'=>true,
 				'THE_LEVEL'=>'0',
 				'POSITION'=>'2',
+				'FIRST'=>false,
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
 				'CURRENT_ZONE'=>False,
-					))
-				);
+			)));
 
-				$content->attach(do_lorem_template('MENU_SPACER_tree',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_tree',array()));
 		}
-		$menu = do_lorem_template('MENU_tree',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
+		$menu=do_lorem_template('MENU_tree',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
 
 		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'tree','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
 
@@ -323,7 +322,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
+					'TITLE'=>lorem_phrase(),
+					'TYPE'=>'tree',
 				)
 			),NULL,'',true),
 		);
@@ -338,125 +338,39 @@ class Hook_addon_registry_core_menus
 	 */
 	function tpl_preview__block_side_stored_menu__dropdown()
 	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_dropdown',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>'test',
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
 
 			$child->attach(do_lorem_template('MENU_SPACER_dropdown',array('TOP_LEVEL'=>false,)));
 		}
 		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_dropdown',array(
-				'RANDOM'=>placeholder_random(),
-				'CAPTION'=>lorem_word(),
-				'IMG'=>'',
-				'URL'=>placeholder_url(),
-				'PAGE_LINK'=>placeholder_link(),
-				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
-				'NEW_WINDOW'=>false,
-				'TOOLTIP'=>lorem_phrase(),
-				'CHILDREN'=>$child,
-				'DISPLAY'=>'block',
-				'MENU'=>'test',
-				'TOP_LEVEL'=>true,
-				'THE_LEVEL'=>'0',
-				'POSITION'=>'2',
-				'LAST'=>false,
-				'BRETHREN_COUNT'=>'3',
-				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
-					))
-				);
-		}
-		$menu = do_lorem_template('MENU_dropdown',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
-
-		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'dropdown','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
-
-		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
-					'CONTENT'=>$menu,
-					'PARAM'=>lorem_phrase(),
-					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_side_stored_menu__embossed()
-	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
-		foreach (placeholder_array(3) as $v)
-		{
-			$child->attach(do_lorem_template('MENU_BRANCH_embossed',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>lorem_word_2(),
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
-		}
-		foreach (placeholder_array(3) as $v)
-		{
-			$content->attach(do_lorem_template('MENU_BRANCH_embossed',array(
-				'RANDOM'=>placeholder_random(),
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
 				'URL'=>placeholder_url(),
@@ -473,19 +387,94 @@ class Hook_addon_registry_core_menus
 				'TOP_LEVEL'=>true,
 				'THE_LEVEL'=>'0',
 				'POSITION'=>'2',
+				'FIRST'=>false,
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
 				'CURRENT_ZONE'=>False,
-					))
-				);
-
-				$content->attach(do_lorem_template('MENU_SPACER_embossed',array()));
+			)));
 		}
-		$menu = do_lorem_template('MENU_embossed',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
+		$menu=do_lorem_template('MENU_dropdown',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
+
+		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'dropdown','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
+
+		return array(
+			lorem_globalise($menu,NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_side_stored_menu__embossed()
+	{
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
+		foreach (placeholder_array(3) as $v)
+		{
+			$child->attach(do_lorem_template('MENU_BRANCH_embossed',array(
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
+		}
+		foreach (placeholder_array(3) as $v)
+		{
+			$content->attach(do_lorem_template('MENU_BRANCH_embossed',array(
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>true,
+				'POPUP_WIDTH'=>'500',
+				'POPUP_HEIGHT'=>'500',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>$child,
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+				'POSITION'=>'2',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>False,
+			)));
+
+			$content->attach(do_lorem_template('MENU_SPACER_embossed',array()));
+		}
+		$menu=do_lorem_template('MENU_embossed',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
 
 		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'embossed','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
 
@@ -495,7 +484,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
+					'TITLE'=>lorem_phrase(),
+					'TYPE'=>'embossed',
 				)
 			),NULL,'',true),
 		);
@@ -510,39 +500,37 @@ class Hook_addon_registry_core_menus
 	 */
 	function tpl_preview__block_side_stored_menu__popup()
 	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_popup',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>lorem_word_2(),
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
 		}
 		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_popup',array(
-				'RANDOM'=>placeholder_random(),
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
 				'URL'=>placeholder_url(),
@@ -559,19 +547,19 @@ class Hook_addon_registry_core_menus
 				'TOP_LEVEL'=>true,
 				'THE_LEVEL'=>'0',
 				'POSITION'=>'2',
+				'FIRST'=>false,
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
 				'CURRENT_ZONE'=>False,
-					))
-				);
+			)));
 
-				$content->attach(do_lorem_template('MENU_SPACER_popup',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_popup',array()));
 		}
-		$menu = do_lorem_template('MENU_popup',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
+		$menu=do_lorem_template('MENU_popup',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
 
 		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'popup','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
 
@@ -581,7 +569,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
+					'TITLE'=>lorem_phrase(),
+					'TYPE'=>'popup',
 				)
 			),NULL,'',true),
 		);
@@ -596,39 +585,37 @@ class Hook_addon_registry_core_menus
 	 */
 	function tpl_preview__block_side_stored_menu__select()
 	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_select',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>lorem_word_2(),
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
 		}
 		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_select',array(
-				'RANDOM'=>placeholder_random(),
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
 				'URL'=>placeholder_url(),
@@ -645,19 +632,19 @@ class Hook_addon_registry_core_menus
 				'TOP_LEVEL'=>true,
 				'THE_LEVEL'=>'0',
 				'POSITION'=>'2',
+				'FIRST'=>false,
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
 				'CURRENT_ZONE'=>False,
-					))
-				);
+			)));
 
-				$content->attach(do_lorem_template('MENU_SPACER_select',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_select',array()));
 		}
-		$menu = do_lorem_template('MENU_select',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
+		$menu=do_lorem_template('MENU_select',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
 
 		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'select','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
 
@@ -667,7 +654,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
+					'TITLE'=>lorem_phrase(),
+					'TYPE'=>'select',
 				)
 			),NULL,'',true),
 		);
@@ -682,42 +670,40 @@ class Hook_addon_registry_core_menus
 	 */
 	function tpl_preview__block_side_stored_menu__top()
 	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_top',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>lorem_word_2(),
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
 		}
 		foreach (placeholder_array(3) as $k=>$v)
 		{
-			if($k == 1)
+			if($k==1)
 				$content->attach(do_lorem_template('MENU_SPACER_top',array()));
 			else
 				$content->attach(do_lorem_template('MENU_BRANCH_top',array(
-					'RANDOM'=>placeholder_random(),
 					'CAPTION'=>lorem_word(),
 					'IMG'=>'',
 					'URL'=>placeholder_url(),
@@ -734,29 +720,22 @@ class Hook_addon_registry_core_menus
 					'TOP_LEVEL'=>true,
 					'THE_LEVEL'=>'0',
 					'POSITION'=>'2',
+					'FIRST'=>false,
 					'LAST'=>false,
 					'BRETHREN_COUNT'=>'3',
 					'CURRENT'=>false,
 					'CURRENT_ZONE'=>False,
-						))
-					);
+				)));
 		}
-		$menu = do_lorem_template('MENU_top',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
+		$menu=do_lorem_template('MENU_top',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
 
 		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'top','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
-					'CONTENT'=>$menu,
-					'PARAM'=>lorem_phrase(),
-					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-				)
-			),NULL,'',true),
+			lorem_globalise($menu,NULL,'',true),
 		);
 	}
 
@@ -769,39 +748,37 @@ class Hook_addon_registry_core_menus
 	 */
 	function tpl_preview__block_side_stored_menu__zone()
 	{
-		$child = new ocp_tempcode();
-		$content = new ocp_tempcode();
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_zone',array(
-					'RANDOM'=>placeholder_random(),
-					'CAPTION'=>lorem_word(),
-					'IMG'=>'',
-					'URL'=>placeholder_url(),
-					'PAGE_LINK'=>placeholder_link(),
-					'ACCESSKEY'=>'',
-					'POPUP'=>false,
-					'POPUP_WIDTH'=>'',
-					'POPUP_HEIGHT'=>'',
-					'NEW_WINDOW'=>false,
-					'TOOLTIP'=>lorem_phrase(),
-					'CHILDREN'=>'',
-					'DISPLAY'=>'block',
-					'MENU'=>lorem_word_2(),
-					'TOP_LEVEL'=>false,
-					'THE_LEVEL'=>'2',
-					'POSITION'=>'1',
-					'LAST'=>false,
-					'BRETHREN_COUNT'=>'3',
-					'CURRENT'=>false,
-					'CURRENT_ZONE'=>false,
-						)
-				));
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'POPUP'=>false,
+				'POPUP_WIDTH'=>'',
+				'POPUP_HEIGHT'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
 		}
 		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_zone',array(
-				'RANDOM'=>placeholder_random(),
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
 				'URL'=>placeholder_url(),
@@ -818,19 +795,19 @@ class Hook_addon_registry_core_menus
 				'TOP_LEVEL'=>true,
 				'THE_LEVEL'=>'0',
 				'POSITION'=>'2',
+				'FIRST'=>false,
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
 				'CURRENT_ZONE'=>False,
-					))
-				);
+			)));
 
-				$content->attach(do_lorem_template('MENU_SPACER_zone',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_zone',array()));
 		}
-		$menu = do_lorem_template('MENU_zone',array(
-					'CONTENT'=>$content,
-					'MENU'=>'test',
-						));
+		$menu=do_lorem_template('MENU_zone',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
 
 		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'zone','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
 
@@ -840,7 +817,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
+					'TITLE'=>lorem_phrase(),
+					'TYPE'=>'zone',
 				)
 			),NULL,'',true),
 		);

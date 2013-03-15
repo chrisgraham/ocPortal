@@ -12,6 +12,8 @@
 
 */
 
+/*EXTRA FUNCTIONS: TornUserinfoClass|SoapClient*/
+
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -41,33 +43,33 @@ function init__failure()
  */
 function zip_error($errno,$mzip=false)
 {
-	$zip_file_function_errors = array( // Based on comment from php.net
-		'ZIPARCHIVE::ER_MULTIDISK' => 'Multi-disk zip archives not supported.',
-		'ZIPARCHIVE::ER_RENAME' => 'Renaming temporary file failed.',
-		'ZIPARCHIVE::ER_CLOSE' => 'Closing zip archive failed',
-		'ZIPARCHIVE::ER_SEEK' => 'Seek error',
-		'ZIPARCHIVE::ER_READ' => 'Read error',
-		'ZIPARCHIVE::ER_WRITE' => 'Write error',
-		'ZIPARCHIVE::ER_CRC' => 'CRC error',
-		'ZIPARCHIVE::ER_ZIPCLOSED' => 'Containing zip archive was closed',
-		'ZIPARCHIVE::ER_NOENT' => 'No such file.',
-		'ZIPARCHIVE::ER_EXISTS' => 'File already exists',
-		'ZIPARCHIVE::ER_OPEN' => 'Can\'t open file',
-		'ZIPARCHIVE::ER_TMPOPEN' => 'Failure to create temporary file.',
-		'ZIPARCHIVE::ER_ZLIB' => 'Zlib error',
-		'ZIPARCHIVE::ER_MEMORY' => 'Memory allocation failure',
-		'ZIPARCHIVE::ER_CHANGED' => 'Entry has been changed',
-		'ZIPARCHIVE::ER_COMPNOTSUPP' => 'Compression method not supported.',
-		'ZIPARCHIVE::ER_EOF' => 'Premature EOF',
-		'ZIPARCHIVE::ER_INVAL' => 'Invalid argument',
-		'ZIPARCHIVE::ER_NOZIP' => 'Not a zip archive',
-		'ZIPARCHIVE::ER_INTERNAL' => 'Internal error',
-		'ZIPARCHIVE::ER_INCONS' => 'Zip archive inconsistent',
-		'ZIPARCHIVE::ER_REMOVE' => 'Can\'t remove file',
-		'ZIPARCHIVE::ER_DELETED' => 'Entry has been deleted',
+	$zip_file_function_errors=array( // Based on comment from php.net
+		'ZIPARCHIVE::ER_MULTIDISK'=>'Multi-disk zip archives not supported.',
+		'ZIPARCHIVE::ER_RENAME'=>'Renaming temporary file failed.',
+		'ZIPARCHIVE::ER_CLOSE'=>'Closing zip archive failed',
+		'ZIPARCHIVE::ER_SEEK'=>'Seek error',
+		'ZIPARCHIVE::ER_READ'=>'Read error',
+		'ZIPARCHIVE::ER_WRITE'=>'Write error',
+		'ZIPARCHIVE::ER_CRC'=>'CRC error',
+		'ZIPARCHIVE::ER_ZIPCLOSED'=>'Containing zip archive was closed',
+		'ZIPARCHIVE::ER_NOENT'=>'No such file.',
+		'ZIPARCHIVE::ER_EXISTS'=>'File already exists',
+		'ZIPARCHIVE::ER_OPEN'=>'Can\'t open file',
+		'ZIPARCHIVE::ER_TMPOPEN'=>'Failure to create temporary file.',
+		'ZIPARCHIVE::ER_ZLIB'=>'Zlib error',
+		'ZIPARCHIVE::ER_MEMORY'=>'Memory allocation failure',
+		'ZIPARCHIVE::ER_CHANGED'=>'Entry has been changed',
+		'ZIPARCHIVE::ER_COMPNOTSUPP'=>'Compression method not supported.',
+		'ZIPARCHIVE::ER_EOF'=>'Premature EOF',
+		'ZIPARCHIVE::ER_INVAL'=>'Invalid argument',
+		'ZIPARCHIVE::ER_NOZIP'=>'Not a zip archive',
+		'ZIPARCHIVE::ER_INTERNAL'=>'Internal error',
+		'ZIPARCHIVE::ER_INCONS'=>'Zip archive inconsistent',
+		'ZIPARCHIVE::ER_REMOVE'=>'Can\'t remove file',
+		'ZIPARCHIVE::ER_DELETED'=>'Entry has been deleted',
 	);
-	$errmsg = 'unknown';
-	foreach ($zip_file_function_errors as $const_name => $error_message)
+	$errmsg='unknown';
+	foreach ($zip_file_function_errors as $const_name=>$error_message)
 	{
 		if ((defined($const_name)) && (constant($const_name))==$errno)
 		{
@@ -239,7 +241,7 @@ function _generic_exit($text,$template)
 {
 	@ob_end_clean(); // Incase in minimodule
 
-	if (get_param_integer('keep_fatalistic',0)==1) fatal_exit($text);
+	if ((get_param_integer('keep_fatalistic',0)==1) || (running_script('occle'))) fatal_exit($text);
 
 	@header('Content-type: text/html; charset='.get_charset());
 	@header('Content-Disposition: inline');
@@ -287,7 +289,7 @@ function _generic_exit($text,$template)
 	}
 
 	global $EXITING;
-	if ((running_script('upgrader')) || (!function_exists('get_page_title'))) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
+	if ((running_script('upgrader')) || (!function_exists('get_screen_title'))) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
 
 	if (($EXITING==1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 	$EXITING++;
@@ -302,31 +304,83 @@ function _generic_exit($text,$template)
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
 
-	global $DONE_HEADER;
-	$bail_out=(isset($DONE_HEADER) && $DONE_HEADER);
-	$echo=$bail_out?new ocp_tempcode():do_header(running_script('preview') || running_script('iframe') || running_script('shoutbox'));
 	if (($template=='INFORM_SCREEN') && (is_object($GLOBALS['DISPLAYED_TITLE'])))
 	{
-		$title=get_page_title($GLOBALS['DISPLAYED_TITLE'],false);
+		$title=get_screen_title($GLOBALS['DISPLAYED_TITLE'],false);
 	} else
 	{
-		$title=get_page_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
+		$title=get_screen_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
 	}
 
-	if (running_script('preview') || running_script('iframe') || running_script('shoutbox'))
-	{
-		$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$text));
-		$echo->handle_symbol_preprocessing();
-		$echo->evaluate_echo();
-		exit();
-	}
-
-	$inside=do_template($template,array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>true));
-	$echo->attach((running_script('preview') || running_script('iframe') || running_script('shoutbox'))?$inside:globalise($inside));
-	$echo->attach(do_footer($bail_out));
-	$echo->handle_symbol_preprocessing();
+	$middle=do_template($template,array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>true));
+	$echo=globalise($middle,NULL,'',true);
 	$echo->evaluate_echo();
 	exit();
+}
+
+/**
+ * Normalise an IPv6 address.
+ *
+ * @param  IP				IP address
+ * @return IP				Normalised address
+ */
+function _inet_pton($ip)
+{
+	$_ip=explode(':',$ip);
+	$normalised_ip='';
+	$normalised_ip.=str_pad('',(4*(8-count($_ip))),'0000',STR_PAD_LEFT); // Fill out trimmed 0's on left
+	foreach ($_ip as $seg) // Copy rest in
+		$normalised_ip.=str_pad($seg,4,'0',STR_PAD_LEFT); // Pad out each component in full, building up $normalised_ip
+	return $normalised_ip;
+}
+
+/**
+ * Find if an IP address is within a CIDR range. Based on comment in PHP manual: http://php.net/manual/en/ref.network.php
+ *
+ * @param  IP				IP address
+ * @param  SHORT_TEXT	CIDR range (e.g. 204.93.240.0/24)
+ * @return boolean		Whether it is
+ */
+function ip_cidr_check($ip,$cidr)
+{
+	if ((strpos($ip,':')===false)!==(strpos($cidr,':')===false)) return false; // Different IP address type
+
+	if (strpos($ip,':')===false)
+	{
+		// IPv4...
+
+		list($net,$maskbits)=explode('/',$cidr,2);
+
+		$ip_net=ip2long($net);
+		$ip_mask=~((1<<(32-intval($maskbits)))-1);
+
+		$ip_ip=ip2long($ip);
+
+		return (($ip_ip&$ip_mask)==$ip_net);
+	}
+
+	// IPv6...
+
+	$unpacked=unpack('A16',_inet_pton($ip));
+	$binaryip='';
+	for ($i=0;$i<strlen($unpacked[1]);$i++)
+	{
+		$char=$unpacked[1][$i];
+		$binaryip.=str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+	}
+
+	list($net,$maskbits)=explode('/',$cidr,2);
+	$unpacked=unpack('A16',_inet_pton($net));
+	$binarynet='';
+	for ($i=0;$i<strlen($unpacked[1]);$i++)
+	{
+		$char=$unpacked[1][$i];
+		$binarynet.=str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+	}
+
+	$ip_net_bits=substr($binaryip,0,intval($maskbits));
+	$net_bits=substr($binarynet,0,intval($maskbits));
+	return ($ip_net_bits==$net_bits);
 }
 
 /**
@@ -335,8 +389,9 @@ function _generic_exit($text,$template)
  * @param  ID_TEXT		The reason for the hack attack. This has to be a language string codename
  * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
  * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
+ * @param  boolean		Whether to silently log the hack rather than also exiting
  */
-function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
+function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',$silent=false)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
@@ -345,13 +400,16 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$GLOBALS['HTTP_STATUS_CODE']='403';
-	if (!headers_sent())
+	if ((!headers_sent()) && (!$silent))
 	{
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 403 Forbidden'); // Stop spiders ever storing the URL that caused this
 	}
 
 	if (!addon_installed('securitylogging'))
+	{
+		if ($silent) return;
 		warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
+	}
 
 	$ip=get_ip_address();
 	$ip2=ocp_srv('REMOTE_ADDR');
@@ -373,7 +431,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	foreach ($_POST as $key=>$val)
 	{
 		if (!is_string($val)) continue;
-		$post.=$key.' => '.$val."\n\n";
+		$post.=$key.'=>'.$val."\n\n";
 	}
 
 	$count=$GLOBALS['SITE_DB']->query_value('hackattack','COUNT(*)',array('ip'=>$ip));
@@ -394,7 +452,20 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	if (($count>=$hack_threshold) && (get_option('autoban')!='0'))
 	{
 		// Test we're not banning a good bot
-		$se_ip_lists=array('http://www.iplists.com.nyud.net/nw/google.txt','http://www.iplists.com.nyud.net/nw/msn.txt','http://www.iplists.com.nyud.net/infoseek.txt','http://www.iplists.com.nyud.net/nw/inktomi.txt','http://www.iplists.com.nyud.net/nw/lycos.txt','http://www.iplists.com.nyud.net/nw/askjeeves.txt','http://www.iplists.com.nyud.net/northernlight.txt','http://www.iplists.com.nyud.net/nw/altavista.txt','http://www.iplists.com.nyud.net/nw/misc.txt');
+		$se_ip_lists=array(
+			'http://www.iplists.com.nyud.net/nw/google.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/msn.txt'=>false,
+			'http://www.iplists.com.nyud.net/infoseek.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/inktomi.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/lycos.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/askjeeves.txt'=>false,
+			'http://www.iplists.com.nyud.net/northernlight.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/altavista.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/misc.txt'=>false,
+			'https://www.cloudflare.com/ips-v4'=>true,
+			'https://www.cloudflare.com/ips-v6'=>true,
+		);
+		$se_ip_lists[get_base_url().'/data_custom/no_banning.txt']=false;
 		$ip_stack=array();
 		$ip_bits=explode((strpos($alt_ip?$ip2:$ip,'.')!==false)?'.':':',$alt_ip?$ip2:$ip);
 		foreach ($ip_bits as $i=>$ip_bit)
@@ -408,7 +479,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 			$ip_stack[]=$buildup;
 		}
 		$is_se=false;
-		foreach ($se_ip_lists as $ip_list)
+		foreach ($se_ip_lists as $ip_list=>$is_proxy)
 		{
 			$ip_list_file=http_download_file($ip_list,NULL,false);
 			if (is_string($ip_list_file))
@@ -416,7 +487,16 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 				$ip_list_array=explode(chr(10),$ip_list_file);
 				foreach ($ip_stack as $ip_s)
 				{
-					if (in_array($ip_s,$ip_list_array)) $is_se=true;
+					foreach ($ip_list_array as $_ip_list_array)
+					{
+						if (strpos($ip_s,'/')===false)
+						{
+							if ($ip_s==$_ip_list_array) $is_se=true;
+						} else
+						{
+							if (ip_cidr_check($ip_s,$_ip_list_array)) $is_se=true;
+						}
+					}
 				}
 				if ($is_se) break;
 			}
@@ -439,15 +519,22 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 			$rows=$GLOBALS['SITE_DB']->query_select('hackattack',array('*'),array('ip'=>$alt_ip?$ip2:$ip));
 			$rows[]=$new_row;
 			$summary='';
+			$is_spammer=false;
 			foreach ($rows as $row)
 			{
+				if ($row['reason']=='LAME_SPAM_HACK') $is_spammer=true;
 				$full_reason=do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b'],NULL,get_site_default_lang());
 				$summary.="\n".' - '.$full_reason.' ['.$row['url'].']';
 			}
-			add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
+			if ($is_spammer)
+			{
+				syndicate_spammer_report($alt_ip?$ip2:$ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
+			}
+			$ban_happened=add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
 			$_ip_ban_url=build_url(array('page'=>'admin_ipban','type'=>'misc'),get_module_zone('admin_ipban'),NULL,false,false,true);
 			$ip_ban_url=$_ip_ban_url->evaluate();
-			$ip_ban_todo=do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());
+			if ($ban_happened)
+				$ip_ban_todo=do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());
 		}
 	}
 	$GLOBALS['SITE_DB']->query_insert('hackattack',$new_row);
@@ -467,8 +554,11 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 
 		require_code('notifications');
 
-		$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
-		dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);
+		if (($reason!='CAPTCHAFAIL_HACK') && ($reason!='LAME_SPAM_HACK'))
+		{
+			$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
+			dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);
+		}
 
 		if (!is_null($ip_ban_todo))
 		{
@@ -477,6 +567,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		}
 	}
 
+	if ($silent) return;
 	if ((preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) && (substr(get_base_url(),0,17)=='http://localhost/')) fatal_exit(do_lang('HACK_ATTACK'));
 	warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
 }
@@ -486,17 +577,23 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
  *
  * @param  IP				The IP address to ban
  * @param  LONG_TEXT		Explanation for ban
+ * @param  ?TIME			When to ban until (NULL: no limit)
+ * @param  boolean		Whether this is a positive ban (as opposed to a cached negative)
+ * @return boolean		Whether a change actually happened
  */
-function add_ip_ban($ip,$descrip='')
+function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 {
-	if (!addon_installed('securitylogging')) return;
+	if (!addon_installed('securitylogging')) return false;
+
+	require_code('support2');
+	if ((!is_null($ban_until)) && (ip_banned($ip,true))) return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
 
 	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
-	$GLOBALS['SITE_DB']->query_insert('usersubmitban_ip',array('ip'=>$ip,'i_descrip'=>$descrip),false,true); // To stop weird race-like conditions
-	persistant_cache_delete('IP_BANS');
-	if (is_writable_wrap(get_file_base().'/.htaccess'))
+	$GLOBALS['SITE_DB']->query_insert('usersubmitban_ip',array('ip'=>$ip,'i_descrip'=>$descrip,'i_ban_until'=>$ban_until,'i_ban_positive'=>$ban_positive?1:0),false,true); // To stop weird race-like conditions
+	persistent_cache_delete('IP_BANS');
+	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
-		$original_contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
+		$original_contents=file_get_contents(get_file_base().'/.htaccess');
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
@@ -521,6 +618,8 @@ function add_ip_ban($ip,$descrip='')
 		}
 		sync_file(get_file_base().'/.htaccess');
 	}
+
+	return true;
 }
 
 /**
@@ -533,10 +632,10 @@ function remove_ip_ban($ip)
 	if (!addon_installed('securitylogging')) return;
 
 	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
-	persistant_cache_delete('IP_BANS');
+	persistent_cache_delete('IP_BANS');
 	if (is_writable_wrap(get_file_base().'/.htaccess'))
 	{
-		$contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
+		$contents=file_get_contents(get_file_base().'/.htaccess');
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
@@ -629,13 +728,13 @@ function _fatal_exit($text,$return=false)
 		header('HTTP/1.0 200 Ok');
 
 		header('Content-type: text/xml');
-		$output='<'.'?xml version="1.0" encoding="utf-8" ?'.'>
+		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>
-		<command>'.post_param('command','').'</command>
+		<command>'.xmlentities(post_param('command','')).'</command>
 		<stdcommand></stdcommand>
 		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">'.((get_param_integer('keep_fatalistic',0)==1)?static_evaluate_tempcode(get_html_trace()):'').'</div></stdhtml>
-		<stdout>'.xmlentities(is_object($text)?str_replace(array('&ldquo;','&rdquo;'),array('"','"'),html_entity_decode(strip_tags($text->evaluate()),ENT_QUOTES,get_charset())):$text).'</stdout>
+		<stdout>'.xmlentities(is_object($text)?strip_html($text->evaluate()):$text).'</stdout>
 		<stderr>'.xmlentities(do_lang('EVAL_ERROR')).'</stderr>
 		<stdnotifications><div xmlns="http://www.w3.org/1999/xhtml"></div></stdnotifications>
 	</result>
@@ -665,9 +764,9 @@ function _fatal_exit($text,$return=false)
 	}
 
 	// Supplement error message with some useful info
-	if ((function_exists('ocp_version_full')) && (function_exists('ocp_srv')))
+	if ((function_exists('ocp_version_pretty')) && (function_exists('ocp_srv')))
 	{
-		$sup=' (version: '.ocp_version_full().', PHP version: '.phpversion().', URL: '.ocp_srv('REQUEST_URI').')';
+		$sup=' (version: '.ocp_version_pretty().', PHP version: '.phpversion().', URL: '.ocp_srv('REQUEST_URI').')';
 	} else
 	{
 		$sup='';
@@ -705,7 +804,7 @@ function _fatal_exit($text,$return=false)
 		$trace=paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_NOTIFICATION'),'yrthrty4ttewdf');
 	}
 
-	$title=get_page_title('ERROR_OCCURRED');
+	$title=get_screen_title('ERROR_OCCURRED');
 
 	if (get_param_integer('keep_fatalistic',0)==0)
 		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy(),0);
@@ -717,7 +816,7 @@ function _fatal_exit($text,$return=false)
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
 		$trace=get_html_trace();
-		$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
+		$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'1cb286dd9fc75950c2cd41ca9607e0cf','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
 		relay_error_notification((is_object($text)?$text->evaluate():$text).'[html]'.$error_tpl->evaluate().'[/html]');
 	}
 
@@ -739,7 +838,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		$num=intval(get_value('num_error_mails_'.date('Y-m-d')))+1;
 		if ($num==51) return; // We've sent too many error mails today
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'values WHERE the_name LIKE \''.db_encode_like('num\_error\_mails\_%').'\'');
-		persistant_cache_delete('VALUES');
+		persistent_cache_delete('VALUES');
 		set_value('num_error_mails_'.date('Y-m-d'),strval($num));
 	}
 
@@ -793,13 +892,13 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 	)
 	{
 		require_code('mail');
-		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_pretty(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
 	}
 	if (($ocproducts) && (!is_null(get_value('agency_email_address'))))
 	{
 		require_code('mail');
 		$agency_email_address=get_value('agency_email_address');
-		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_pretty(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
 	}
 }
 
@@ -831,7 +930,7 @@ function die_html_trace($message)
 	if (!function_exists('var_export')) critical_error('EMERGENCY',$message);
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$_trace=debug_backtrace();
-	$trace='<div class="medborder medborder_box"><h2>Stack trace&hellip;</h2>';
+	$trace='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
 	foreach ($_trace as $stage)
 	{
 		$traces='';
@@ -859,7 +958,7 @@ function die_html_trace($message)
 		}
 		$trace.='<p>'.$traces.'</p>'.chr(10);
 	}
-	$trace.='</div>';
+	$trace.='</div></div>';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($trace);
 
@@ -875,6 +974,7 @@ function get_html_trace()
 {
 	if (!function_exists('debug_backtrace')) return new ocp_tempcode();
 	if (!function_exists('var_export')) return new ocp_tempcode();
+	require_code('templates');
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
@@ -956,8 +1056,8 @@ function get_html_trace()
 /**
  * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
  *
- * @param  ID_TEXT		The class of error (e.g. SPECIFIC_PERMISSION)
- * @param  string			The parameteter given to the error message
+ * @param  ID_TEXT		The class of error (e.g. PRIVILEGE)
+ * @param  string			The parameter given to the error message
  * @param  boolean		Force the user to login (even if perhaps they are logged in already)
  */
 function _access_denied($class,$param,$force_login)
@@ -991,7 +1091,7 @@ function _access_denied($class,$param,$force_login)
 			$message=make_string_tempcode($class);
 		} else
 		{
-			if ($class=='SPECIFIC_PERMISSION') $param=do_lang('PT_'.$param);
+			if ($class=='PRIVILEGE') $param=do_lang('PT_'.$param);
 			$message=do_lang_tempcode('ACCESS_DENIED__'.$class,escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())),escape_html($param));
 		}
 	}
@@ -1032,3 +1132,100 @@ function _access_denied($class,$param,$force_login)
 	warn_exit($message);
 }
 
+/**
+ * Syndicate a spammer report out to wherever we can.
+ *
+ * @param  IP				IP address to report
+ * @param  ID_TEXT		Username address to report
+ * @param  EMAIL			Email address to report
+ * @param  string			The reason for the report (blank: none)
+ * @param  boolean		Whether to throw an ocPortal error, on error. Should not be 'true' for automatic spammer reports, as the spammer should not see the submission process in action!
+ */
+function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_error=false)
+{
+	$did_something=false;
+
+	// Syndicate to dnsbl.tornevall.org
+	// ================================
+
+	$can_do_torn=(class_exists('SoapClient')) && (get_option('tornevall_api_username')!='');
+
+	if ($can_do_torn)
+	{
+		$torn_url='http://dnsbl.tornevall.org/soap/soapsubmit.php';
+
+		if (!class_exists('TornUserinfoClass'))
+		{
+			/**
+			 * Tornevall interfacing class (antispam).
+			 * @package		core_database_drivers
+			 */
+			class TornUserinfoClass
+			{
+				var $Username;
+				var $Password;
+			}
+		}
+
+		$soapconf=array(
+			'location'=>$torn_url,
+			'uri'=>$torn_url,
+			'trace'=>0,
+			'exceptions'=>0,
+			'connection_timeout'=>0
+		);
+
+		$userinfo=new TornUserinfoClass();
+		$userinfo->Username=get_option('tornevall_api_username');
+		$userinfo->Password=get_option('tornevall_api_password');
+
+		$add=array();
+		$add['ip']=$ip_addr;
+		if ($username!='') $add['username']=$username;
+		if ($email!='') $add['mail']=$email;
+
+		$client=new SoapClient(null,$soapconf);
+		$udata=array('userinfo'=>$userinfo);
+		$result=$client->submit($udata,array('add'=>$add));
+		if ($trigger_error)
+		{
+			if (isset($result['error']))
+			{
+				attach_message('dnsbl.tornevall.org: '.$result['error']['message'],'warn');
+			}
+		}
+
+		$did_something=true;
+	}
+
+	// Syndicate to Stop Forum Spam
+	// ============================
+
+	$stopforumspam_key=get_option('stopforumspam_api_key');
+	$can_do_stopforumspam=($stopforumspam_key!='') && ($username!='') && ($email!='');
+
+	if ($can_do_stopforumspam)
+	{
+		require_code('files');
+		require_code('character_sets');
+		$url='http://www.stopforumspam.com/add.php?api_key='.urlencode($stopforumspam_key).'&ip_addr='.urlencode($ip_addr);
+		if ($username!='') $url.='&username='.urlencode(convert_to_internal_encoding($username,get_charset(),'utf-8'));
+		if ($email!='') $url.='&email='.urlencode(convert_to_internal_encoding($email,get_charset(),'utf-8'));
+		if ($reason!='') $url.='&evidence='.urlencode(convert_to_internal_encoding($reason,get_charset(),'utf-8'));
+		$result=http_download_file($url,NULL,$trigger_error);
+		if (($trigger_error) && ($result!=''))
+		{
+			attach_message($result.' [ '.$url.' ]','warn');
+		}
+
+		$did_something=true;
+	}
+
+	// ---
+
+	// Did we get anything done?
+	if (($trigger_error) && (!$did_something))
+	{
+		attach_message(do_lang('SPAM_REPORT_NO_EMAIL_OR_USERNAME'),'warn');
+	}
+}

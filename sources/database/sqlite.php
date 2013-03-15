@@ -11,6 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
+
 /*EXTRA FUNCTIONS: sqlite\_.+*/
 
 /**
@@ -36,6 +37,10 @@ function init__database__sqlite()
 	$CACHE_DB=array();
 }
 
+/**
+ * Database Driver.
+ * @package		core_database_drivers
+ */
 class Database_Static_sqlite
 {
 
@@ -259,7 +264,7 @@ class Database_Static_sqlite
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
-	 * @param  boolean		Whether to create a persistant connection
+	 * @param  boolean		Whether to create a persistent connection
 	 * @param  string			The database name
 	 * @param  string			The database host (the server)
 	 * @param  string			The database connection username
@@ -349,7 +354,7 @@ class Database_Static_sqlite
 		}
 
 		$results=@sqlite_query($db,$query);
-		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') && ($results===true))) && (!$fail_ok))
+		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results===true))) && (!$fail_ok))
 		{
 			$err=sqlite_last_error($db);
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
@@ -365,7 +370,7 @@ class Database_Static_sqlite
 			}
 		}
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') && ($results!==false) && ($results!==true))
+		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results!==false) && ($results!==true))
 		{
 			return $this->db_get_query_rows($results);
 		}

@@ -33,7 +33,7 @@ class Module_cms_downloads extends standard_aed_module
 	var $user_facing=true;
 	var $seo_type='downloads_download';
 	var $upload='file';
-	var $javascript='standardAlternateFields(\'file\',\'url\'); var url=document.getElementById(\'url\'); var form=url.form; var crf=function() { var s=url.value!=\'\'; if (form.elements[\'copy_to_server\']) form.elements[\'copy_to_server\'].disabled=!s; if (form.elements[\'file_size\']) form.elements[\'file_size\'].disabled=!s; }; crf(); url.onchange=crf; url.onkeyup=crf; var cost=document.getElementById(\'cost\'); if (cost) { var form=cost.form; var crf2=function() { var s=(cost.value!=\'\') && (cost.value!=\'0\'); if (form.elements[\'submitter_gets_points\']) form.elements[\'submitter_gets_points\'].disabled=!s; }; crf2(); cost.onchange=crf2; cost.onkeyup=crf2; }';
+	var $javascript='var url=document.getElementById(\'url\'); var form=url.form; var crf=function() { var s=url.value!=\'\'; if (form.elements[\'copy_to_server\']) form.elements[\'copy_to_server\'].disabled=!s; if (form.elements[\'file_size\']) form.elements[\'file_size\'].disabled=!s; }; crf(); url.onchange=crf; url.onkeyup=crf; var cost=document.getElementById(\'cost\'); if (cost) { var form=cost.form; var crf2=function() { var s=(cost.value!=\'\') && (cost.value!=\'0\'); if (form.elements[\'submitter_gets_points\']) form.elements[\'submitter_gets_points\'].disabled=!s; }; crf2(); cost.onchange=crf2; cost.onkeyup=crf2; }';
 	var $award_type='download';
 	var $menu_label='SECTION_DOWNLOADS';
 	var $table='download_downloads';
@@ -101,7 +101,7 @@ class Module_cms_downloads extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_page_title('MANAGE_DOWNLOADS'),comcode_lang_string('DOC_DOWNLOADS'),
+		return do_next_manager(get_screen_title('MANAGE_DOWNLOADS'),comcode_lang_string('DOC_DOWNLOADS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_midrange_content','cms_downloads')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_DOWNLOAD_CATEGORY')):NULL,
@@ -124,7 +124,7 @@ class Module_cms_downloads extends standard_aed_module
 	 */
 	function import_interface()
 	{
-		$title=get_page_title('FTP_DOWNLOADS');
+		$title=get_screen_title('FTP_DOWNLOADS');
 
 		if (!function_exists('ftp_connect')) warn_exit(do_lang_tempcode('FTP_NEEDED'));
 
@@ -212,8 +212,8 @@ class Module_cms_downloads extends standard_aed_module
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		// Show it worked / Refresh
-		$title=get_page_title('FTP_DOWNLOADS');
-		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL);
+		$title=get_screen_title('FTP_DOWNLOADS');
+		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL,$destination);
 	}
 
 	/**
@@ -252,7 +252,7 @@ class Module_cms_downloads extends standard_aed_module
 					if (is_null($category_id))
 					{
 						// Add the directory
-						$category_id=add_download_category(ucwords(str_replace('_',' ',$entry)),$dest_cat,'','','');
+						$category_id=add_download_category(titleify($entry),$dest_cat,'','','');
 						foreach (array_keys($groups) as $group_id)
 							$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id),'group_id'=>$group_id));
 					}
@@ -271,7 +271,7 @@ class Module_cms_downloads extends standard_aed_module
 				if (is_null($test))
 				{
 					// It is a file, so add it
-					add_download($dest_cat,ucwords(str_replace('_',' ',$entry)),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,ftp_size($conn_id,$entry),0,0);
+					add_download($dest_cat,titleify($entry),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,ftp_size($conn_id,$entry),0,0);
 					$num_added++;
 				}
 			}
@@ -287,7 +287,7 @@ class Module_cms_downloads extends standard_aed_module
 	 */
 	function import_interface2()
 	{
-		$title=get_page_title('FILESYSTEM_DOWNLOADS');
+		$title=get_screen_title('FILESYSTEM_DOWNLOADS');
 
 		check_specific_permission('mass_import');
 
@@ -343,7 +343,7 @@ class Module_cms_downloads extends standard_aed_module
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		// Show it worked / Refresh
-		$title=get_page_title('FILESYSTEM_DOWNLOADS');
+		$title=get_screen_title('FILESYSTEM_DOWNLOADS');
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL);
 	}
 
@@ -382,7 +382,7 @@ class Module_cms_downloads extends standard_aed_module
 							if (is_null($category_id))
 							{
 								// Add the directory
-								$category_id=add_download_category(ucwords(str_replace('_',' ',$entry)),$dest_cat,'','','');
+								$category_id=add_download_category(titleify($entry),$dest_cat,'','','');
 								foreach (array_keys($groups) as $group_id)
 									$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id),'group_id'=>$group_id));
 							}
@@ -411,7 +411,7 @@ class Module_cms_downloads extends standard_aed_module
 							{
 								// Ok, add it
 								$filesize=filesize($full_path);
-								add_download($dest_cat,ucwords(str_replace('_',' ',$entry)),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,$filesize,0,0);
+								add_download($dest_cat,titleify($entry),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,$filesize,0,0);
 								$num_added++;
 							}
 						}
@@ -430,7 +430,7 @@ class Module_cms_downloads extends standard_aed_module
 	 */
 	function nice_get_ajax_tree()
 	{
-		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'downloads'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
@@ -497,8 +497,18 @@ class Module_cms_downloads extends standard_aed_module
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
 		if (!is_null($original_filename)) $fields->attach(form_input_line(do_lang_tempcode('ORIGINAL_FILENAME'),do_lang_tempcode('DESCRIPTION_ORIGINAL_FILENAME'),'original_filename',$original_filename,false));
 		$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_download_category',array(),true,strval(is_null($category_id)?db_get_first_id():$category_id)));
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
+
+		$set_name='file';
+		$required=true;
+		$set_title=do_lang_tempcode('FILE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		if (has_specific_permission(get_member(),'draw_to_server'))
 			$fields->attach(form_input_tick(do_lang_tempcode('COPY_TO_SERVER'),do_lang_tempcode('DESCRIPTION_COPY_TO_SERVER'),'copy_to_server',false));
 		$fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'),do_lang_tempcode('DESCRIPTION_FILE_SIZE'),'file_size',$file_size,false));
@@ -551,6 +561,9 @@ class Module_cms_downloads extends standard_aed_module
 
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+
+		if (!is_null($id))
+			$hidden->attach(form_input_hidden('id',strval($id)));
 
 		return array($fields,$hidden);
 	}
@@ -764,7 +777,7 @@ class Module_cms_downloads extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (events only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -877,7 +890,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (events only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1045,7 +1058,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1058,7 +1071,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: delete/NA)
 	 * @param  ?AUTO_LINK	The category ID we were working in (NULL: deleted/NA)

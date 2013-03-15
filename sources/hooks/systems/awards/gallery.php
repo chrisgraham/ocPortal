@@ -64,7 +64,10 @@ class Hook_awards_gallery
 	{
 		require_css('galleries');
 		require_code('galleries');
-		return put_in_standard_box(show_gallery_box($row,'root',false,$zone,false,false));
+
+		$gallery=show_gallery_box($row,'root',false,$zone,false,false);
+
+		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'812a515c22dc5af9738d8537d3c8ce9b','SUMMARY'=>$gallery));
 	}
 
 }

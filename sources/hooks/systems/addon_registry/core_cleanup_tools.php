@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_cleanup_tools
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_core_cleanup_tools
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_core_cleanup_tools
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/is_on_block_cache.php',
 			'sources/hooks/systems/config_default/is_on_comcode_page_cache.php',
 			'sources/hooks/systems/config_default/is_on_lang_cache.php',
@@ -100,23 +98,23 @@ class Hook_addon_registry_core_cleanup_tools
 			'sources/hooks/modules/admin_cleanup/orphaned_lang_strings.php',
 			'sources/hooks/modules/admin_cleanup/orphaned_uploads.php',
 			'sources/hooks/modules/admin_cleanup/templates.php',
-			'sources/hooks/modules/admin_cleanup/criticise_mysql_fields.php',
+			'sources/hooks/modules/admin_cleanup/criticise_mysql_fields.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'CLEANUP_COMPLETED_SCREEN.tpl'=>'administrative__cleanup_completed_screen',
-				'CLEANUP_ORPHANED_UPLOADS.tpl'=>'administrative__cleanup_completed_screen',
-				'CLEANUP_PAGE_STATS.tpl'=>'administrative__cleanup_completed_screen',
-				);
+			'CLEANUP_COMPLETED_SCREEN.tpl'=>'administrative__cleanup_completed_screen',
+			'CLEANUP_ORPHANED_UPLOADS.tpl'=>'administrative__cleanup_completed_screen',
+			'CLEANUP_PAGE_STATS.tpl'=>'administrative__cleanup_completed_screen'
+		);
 	}
 
 	/**
@@ -132,22 +130,22 @@ class Hook_addon_registry_core_cleanup_tools
 		$url=array();
 		foreach (placeholder_array() as $v)
 		{
-			$url[]	=	array('URL'=>placeholder_url());
+			$url[]=array(
+				'URL'=>placeholder_url()
+			);
 		}
 
-		$message = do_lorem_template('CLEANUP_ORPHANED_UPLOADS',array(
-					'FOUND'=>$url,
-						));
-		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS',array(
-					'STATS_BACKUP_URL'=>placeholder_url(),
-					)));
+		$message=do_lorem_template('CLEANUP_ORPHANED_UPLOADS', array(
+			'FOUND'=>$url
+		));
+		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS', array(
+			'STATS_BACKUP_URL'=>placeholder_url()
+		)));
 		return array(
-			lorem_globalise(
-				do_lorem_template('CLEANUP_COMPLETED_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'MESSAGES'=>$message,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'MESSAGES'=>$message
+			)), NULL, '', true)
 		);
 	}
 }

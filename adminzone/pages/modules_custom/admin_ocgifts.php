@@ -28,7 +28,6 @@ class Module_admin_ocgifts extends standard_aed_module
 	var $menu_label='OCGIFTS_TITLE';
 	var $do_preview=NULL;
 	var $view_entry_point='_SEARCH:admin_ocgifts:view:id=_ID';
-	var $javascript='standardAlternateFields(\'image\',\'url\');';
 
 	/**
 	 * Standard modular info function.
@@ -169,7 +168,7 @@ class Module_admin_ocgifts extends standard_aed_module
 		require_code('templates_donext');
 		require_lang('ocgifts');
 
-		return do_next_manager(get_page_title('OCGIFTS_TITLE'),comcode_lang_string('DOC_OCGIFTS'),
+		return do_next_manager(get_screen_title('OCGIFTS_TITLE'),comcode_lang_string('DOC_OCGIFTS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GIFT')),
@@ -212,8 +211,8 @@ class Module_admin_ocgifts extends standard_aed_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCGIFTS_TITLE'))));
 		breadcrumb_set_self(do_lang_tempcode('VIEW_GIFT'));
 
-		require_code('templates_view_space');
-		return view_space(get_page_title('VIEW_GIFT'),array('NAME'=>$name,'IMAGE'=>$image,'PRICE'=>integer_format($price),'CATEGORY'=>$category,'ENABLED'=>$enabled));
+		require_code('templates_map_table');
+		return map_table(get_screen_title('VIEW_GIFT'),array('NAME'=>$name,'IMAGE'=>$image,'PRICE'=>integer_format($price),'CATEGORY'=>$category,'ENABLED'=>$enabled));
 
 	}
 
@@ -228,12 +227,20 @@ class Module_admin_ocgifts extends standard_aed_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_GIFT_CATEGORY'),'category',$category,true));
 
-		$fields->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'image',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$image,false));
+		$set_name='image';
+		$required=true;
+		$set_title=do_lang_tempcode('IMAGE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','image',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$image,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		handle_max_file_size($hidden,'image');
 
-
-		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),'','price',strval($price),true));
+		$fields->attach(form_input_integer(do_lang_tempcode('PRICE'),'','price',$price,true));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('GIFT_ENABLED'),do_lang_tempcode('DESCRIPTION_GIFT_ENABLED'),'enabled',$enabled==1));
 
@@ -295,8 +302,8 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		$name=post_param('name');
 		$category=post_param('category');
-		$price=post_param('price',0);
-		$enabled=post_param('enabled',0);
+		$price=post_param_integer('price');
+		$enabled=post_param_integer('enabled',0);
 
 		require_code('uploads');
 
@@ -327,8 +334,8 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		$name=post_param('name');
 		$category=post_param('category');
-		$price=post_param('price',0);
-		$enabled=post_param('enabled',0);
+		$price=post_param_integer('price');
+		$enabled=post_param_integer('enabled',0);
 
 		require_code('uploads');
 

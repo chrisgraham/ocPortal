@@ -36,7 +36,7 @@ function do_next_manager_admin_simplified()
 	$sections->attach(do_next_manager_hooked('TOOLS',NULL,'tools'));
 	$sections->attach(do_next_manager_hooked('SECURITY',NULL,'security'));
 	$GLOBALS['HELPER_PANEL_TEXT']=do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN');
-	return do_template('DO_NEXT_SCREEN',array('INTRO'=>'','QUESTION'=>do_lang_tempcode('WHAT_NEXT'),'TITLE'=>get_page_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),'SECTIONS'=>$sections));
+	return do_template('DO_NEXT_SCREEN',array('INTRO'=>'','QUESTION'=>do_lang_tempcode('WHAT_NEXT'),'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),'SECTIONS'=>$sections));
 }
 
 /**
@@ -87,13 +87,13 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 		} else $_text=make_string_tempcode($text);
 	} else $_text=new ocp_tempcode();
 
-	return do_next_manager(is_null($text)?NULL:get_page_title($title),$_text,$links,do_lang($main_title));
+	return do_next_manager(is_null($text)?NULL:get_screen_title($title),$_text,$links,do_lang($main_title));
 }
 
 /**
  * Get the tempcode for a do next manager. A do next manager is a series of linked icons that are presented after performing an action. Modules that do not use do-next pages, usually use REFRESH_PAGE's.
  *
- * @param  ?tempcode		The title of what we just did (should have been passed through get_page_title already) (NULL: don't do full page)
+ * @param  ?tempcode		The title of what we just did (should have been passed through get_screen_title already) (NULL: don't do full page)
  * @param  tempcode		The 'text' (actually, a full XHTML lump) to show on the page
  * @param  ?array			An array of entry types, with each array entry being -- an array consisting of the type codename and a URL array as per following parameters (NULL: none)
  * @param  ?string		The title to use for the main links (NULL: none)
@@ -121,6 +121,8 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	if (is_null($intro)) $intro=new ocp_tempcode();
 
 	require_lang('do_next');
+
+	require_css('do_next');
 
 	global $BREADCRUMB_SET_SELF;
 	if (is_null($BREADCRUMB_SET_SELF)) breadcrumb_set_self(is_null($main_title)?do_lang_tempcode('MENU'):make_string_tempcode($main_title));
@@ -292,36 +294,49 @@ function _do_next_section($list,$title)
 
 	$next_items=new ocp_tempcode();
 
+	$num_siblings=0;
+	foreach ($list as $i=>$_option)
+	{
+		$url=$_option[1];
+		if (!is_null($url))
+		{
+			$zone=array_key_exists(2,$url)?$url[2]:'';
+			$page=$url[0];
+			if ($page=='_SELF') $page=get_page_name();
+			if (((is_null($page)) && (has_zone_access(get_member(),$zone))) || ((!is_null($page)) && (has_actual_page_access(get_member(),$page,$zone))))
+			{
+				$num_siblings++;
+			} else $list[$i]=NULL;
+		} else $list[$i]=NULL;
+	}
 	$i=0;
 	foreach ($list as $_option)
 	{
+		if (is_null($_option)) continue;
+
 		$option=$_option[0];
 		$url=$_option[1];
-		if (is_null($url)) continue;
 		$zone=array_key_exists(2,$url)?$url[2]:'';
 		$page=$url[0];
 		if ($page=='_SELF') $page=get_page_name();
 
-		if (((is_null($page)) && (has_zone_access(get_member(),$zone))) || ((!is_null($page)) && (has_actual_page_access(get_member(),$page,$zone))))
+		$description=(array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_'.$option);
+		$link=(is_null($page))?build_url(array_merge($url[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url[1]),$zone);
+		$doc=array_key_exists(3,$_option)?$_option[3]:'';
+		if ((is_string($doc)) && ($doc!=''))
 		{
-			$description=(array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_'.$option);
-			$link=(is_null($page))?build_url(array_merge($url[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url[1]),$zone);
-			$doc=array_key_exists(3,$_option)?$_option[3]:'';
-			if ((is_string($doc)) && ($doc!=''))
+			if (preg_match('#^[\w\d]+$#',$doc)==0)
 			{
-				if (preg_match('#^[\w\d]+$#',$doc)==0)
-				{
-					$doc=comcode_to_tempcode($doc,NULL,true);
-				} else
-				{
-					$doc=comcode_lang_string($doc);
-				}
+				$doc=comcode_to_tempcode($doc,NULL,true);
+			} else
+			{
+				$doc=comcode_lang_string($doc);
 			}
-			$target=array_key_exists(4,$_option)?$_option[4]:NULL;
-			$auto_add=array_key_exists(5,$_option)?$_option[5]:NULL;
-			$next_items->attach(do_template('DO_NEXT_ITEM',array('_GUID'=>'f39b6055d1127edb452595e7eeaf2f01','AUTO_ADD'=>$auto_add,'I'=>strval($i),'I2'=>strval(mt_rand(0,32000)).'_'.strval($i),'TARGET'=>$target,'PICTURE'=>$option,'DESCRIPTION'=>$description,'LINK'=>$link,'DOC'=>$doc,'WARNING'=>array_key_exists(3,$url)?$url[3]:'')));
-			$i++;
 		}
+		$target=array_key_exists(4,$_option)?$_option[4]:NULL;
+		$auto_add=array_key_exists(5,$_option)?$_option[5]:NULL;
+		$next_items->attach(do_template('DO_NEXT_ITEM',array('_GUID'=>'f39b6055d1127edb452595e7eeaf2f01','AUTO_ADD'=>$auto_add,'I'=>strval($i),'I2'=>strval(mt_rand(0,32000)).'_'.strval($i),'NUM_SIBLINGS'=>strval($num_siblings),'TARGET'=>$target,'PICTURE'=>$option,'DESCRIPTION'=>$description,'LINK'=>$link,'DOC'=>$doc,'WARNING'=>array_key_exists(3,$url)?$url[3]:'')));
+		$i++;
 	}
 
 	if ($next_items->is_empty()) return new ocp_tempcode();

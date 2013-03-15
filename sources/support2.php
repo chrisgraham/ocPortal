@@ -114,11 +114,30 @@ function shuffle_for($by,$in)
  * Check to see if an IP address is banned.
  *
  * @param  string			The IP address to check for banning (potentially encoded with *'s)
- * @return boolean		Whether the IP address is banned
+ * @param  boolean		Force check via database
+ * @param  boolean		Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
+ * @return ?boolean		Whether the IP address is banned (NULL: unknown)
  */
-function ip_banned($ip) // This is the very first query called, so we will be a bit smarter, checking for errors
+function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is the very first query called, so we will be a bit smarter, checking for errors
 {
+	static $cache=array();
+	if ($handle_uncertainties)
+	{
+		if (array_key_exists($ip,$cache)) return $cache[$ip];
+	}
+
 	if (!addon_installed('securitylogging')) return false;
+
+	// Check exclusions first
+	$_exclusions=get_option('spam_check_exclusions',true);
+	if (!is_null($_exclusions))
+	{
+		$exclusions=explode(',',$_exclusions);
+		foreach ($exclusions as $exclusion)
+		{
+			if (trim($ip)==$exclusion) return false;
+		}
+	}
 
 	$ip4=(strpos($ip,'.')!==false);
 	if ($ip4)
@@ -130,7 +149,7 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 	}
 
 	global $SITE_INFO;
-	if (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess')))
+	if ((!$force_db) && (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess'))))
 	{
 		$bans=array();
 		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().'/.htaccess'),$bans);
@@ -141,13 +160,13 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 		}
 	} else
 	{
-		$ip_bans=persistant_cache_get('IP_BANS');
+		$ip_bans=persistent_cache_get('IP_BANS');
 		if (is_null($ip_bans))
 		{
-			$ip_bans=$GLOBALS['SITE_DB']->query('SELECT ip FROM '.get_table_prefix().'usersubmitban_ip',NULL,NULL,true);
+			$ip_bans=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'usersubmitban_ip',NULL,NULL,true);
 			if (!is_null($ip_bans))
 			{
-				persistant_cache_set('IP_BANS',$ip_bans);
+				persistent_cache_set('IP_BANS',$ip_bans);
 			}
 		}
 		if (is_null($ip_bans)) critical_error('DATABASE_FAIL');
@@ -155,6 +174,13 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 	$self_ip=NULL;
 	foreach ($ip_bans as $ban)
 	{
+		if ((isset($ban['i_ban_until'])) && ($ban['i_ban_until']<time()))
+		{
+			if (!$GLOBALS['SITE_DB']->table_is_locked('usersubmitban_ip'))
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_until IS NOT NULL AND i_ban_until<'.strval(time()));
+			continue;
+		}
+
 		if ((($ip4) && (compare_ip_address_ip4($ban['ip'],$ip_parts))) || ((!$ip4) && (compare_ip_address_ip6($ban['ip'],$ip_parts))))
 		{
 			if (is_null($self_ip))
@@ -176,10 +202,29 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 			if (($self_ip!='') && (!compare_ip_address($ban['ip'],$self_ip))) continue;
 			if (compare_ip_address($ban['ip'],'127.0.0.1')) continue;
 			if (compare_ip_address($ban['ip'],'fe00:0000:0000:0000:0000:0000:0000:0000')) continue;
-			return true;
+
+			if (array_key_exists('i_ban_positive',$ban))
+			{
+				$ret=($ban['i_ban_positive']==1);
+			} else
+			{
+				$ret=true;
+			}
+
+			if ($handle_uncertainties)
+			{
+				$cache[$ip]=$ret;
+			}
+			return $ret;
 		}
 	}
-	return false;
+
+	$ret=$handle_uncertainties?NULL:false;
+	if ($handle_uncertainties)
+	{
+		$cache[$ip]=$ret;
+	}
+	return $ret;
 }
 
 /**

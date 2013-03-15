@@ -1,1 +1,3 @@
-<div class="comcode_snapback">[ {!FROM} &ldquo;<a href="{URL*}">{TITLE*}</a>&rdquo; ]</div>
+<div class="comcode_snapback associated_link">
+	{!FROM} &ldquo;<a href="{URL*}">{TITLE*}</a>&rdquo;
+</div>

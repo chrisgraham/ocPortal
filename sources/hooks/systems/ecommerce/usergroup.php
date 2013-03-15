@@ -106,6 +106,9 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 	}
 }
 
+/**
+ * eCommerce product hook.
+ */
 class Hook_usergroup
 {
 
@@ -204,12 +207,12 @@ class Hook_usergroup
 	 *
 	 * @param  ID_TEXT	The product.
 	 * @param  MEMBER	The member.
-	 * @return boolean	Whether it is.
+	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
 	 */
 	function is_available($product,$member)
 	{
-		if (is_guest($member)) return false;
-		if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return true;
+		if (is_guest($member)) return ECOMMERCE_PRODUCT_NO_GUESTS;
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return ECOMMERCE_PRODUCT_AVAILABLE;
 
 		$id=intval(substr($product,9));
 		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
@@ -218,7 +221,7 @@ class Hook_usergroup
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 
 		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member);
-		if (in_array($group_id,$groups)) return false;
-		return true;
+		if (in_array($group_id,$groups)) return ECOMMERCE_PRODUCT_ALREADY_HAS;
+		return ECOMMERCE_PRODUCT_AVAILABLE;
 	}
 }

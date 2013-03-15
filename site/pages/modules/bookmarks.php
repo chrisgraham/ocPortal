@@ -108,7 +108,7 @@ class Module_bookmarks
 	 */
 	function manage_bookmarks()
 	{
-		$title=get_page_title('MANAGE_BOOKMARKS');
+		$title=get_screen_title('MANAGE_BOOKMARKS');
 
 		require_code('form_templates');
 		require_lang('zones');
@@ -122,12 +122,22 @@ class Module_bookmarks
 		{
 			if ($row['b_folder']!='') $list->attach(form_input_list_entry($row['b_folder']));
 		}
-		$fields->attach(form_input_list(do_lang_tempcode('OLD_BOOKMARK_FOLDER'),do_lang_tempcode('DESCRIPTION_OLD_BOOKMARK_FOLDER'),'folder',$list,NULL,false,false));
-		$fields->attach(form_input_line(do_lang_tempcode('NEW_BOOKMARK_FOLDER'),do_lang_tempcode('DESCRIPTION_NEW_BOOKMARK_FOLDER'),'folder_new','',false));
+
+		$set_name='choose_folder';
+		$required=true;
+		$set_title=do_lang_tempcode('BOOKMARK_FOLDER');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('DESCRIPTION_OLD_BOOKMARK_FOLDER'),'folder',$list,NULL,false,false));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('NEW'),do_lang_tempcode('DESCRIPTION_NEW_BOOKMARK_FOLDER'),'folder_new','',false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_manage'),'_SELF');
-		$form=do_template('FORM',array('HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('MOVE_OR_DELETE_BOOKMARKS'),'JAVASCRIPT'=>'standardAlternateFields(\'folder\',\'folder_new\');'));
+		$form=do_template('FORM',array('HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('MOVE_OR_DELETE_BOOKMARKS')));
 
 		$bookmarks=array();
 		$_bookmarks=$GLOBALS['SITE_DB']->query_select('bookmarks',array('*'),array('b_owner'=>get_member()),'ORDER BY b_folder');
@@ -146,7 +156,7 @@ class Module_bookmarks
 	 */
 	function _manage_bookmarks()
 	{
-		$title=get_page_title('MANAGE_BOOKMARKS');
+		$title=get_screen_title('MANAGE_BOOKMARKS');
 
 		$bookmarks=$GLOBALS['SITE_DB']->query_select('bookmarks',array('id'),array('b_owner'=>get_member()));
 		if (post_param('delete','')!='') // A delete
@@ -194,7 +204,7 @@ class Module_bookmarks
 	 */
 	function _ad()
 	{
-		$title=get_page_title('ADD_BOOKMARK');
+		$title=get_screen_title('ADD_BOOKMARK');
 
 		$folder=post_param('folder_new','');
 		if ($folder=='') $folder=post_param('folder');
@@ -219,7 +229,7 @@ class Module_bookmarks
 	 */
 	function _edit_bookmark()
 	{
-		$title=get_page_title('EDIT_BOOKMARK');
+		$title=get_screen_title('EDIT_BOOKMARK');
 
 		$id=get_param_integer('id');
 

@@ -23,11 +23,11 @@
  */
 function init__permissions()
 {
-	global $SPECIFIC_PERMISSION_CACHE;
-	$SPECIFIC_PERMISSION_CACHE=array();
+	global $PRIVILEGE_CACHE;
+	$PRIVILEGE_CACHE=array();
 
-	global $GROUP_SPECIFIC_PERMISSION_CACHE;
-	$GROUP_SPECIFIC_PERMISSION_CACHE=array();
+	global $GROUP_PRIVILEGE_CACHE;
+	$GROUP_PRIVILEGE_CACHE=array();
 
 	global $ZONE_ACCESS_CACHE;
 	$ZONE_ACCESS_CACHE=array();
@@ -48,6 +48,9 @@ function init__permissions()
 	global $PERMISSION_CHECK_LOGGER,$PERMISSIONS_ALREADY_LOGGED;
 	$PERMISSION_CHECK_LOGGER=NULL;
 	$PERMISSIONS_ALREADY_LOGGED=array();
+
+	global $SPAM_REMOVE_VALIDATION;
+	$SPAM_REMOVE_VALIDATION=false;
 }
 
 /**
@@ -91,7 +94,7 @@ function handle_permission_check_logging($member,$op,$params,$result)
 /**
  * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
  *
- * @param  ID_TEXT		The class of error (e.g. SPECIFIC_PERMISSION)
+ * @param  ID_TEXT		The class of error (e.g. PRIVILEGE). This is a language string.
  * @param  string			The parameteter given to the error message
  * @param  boolean		Force the user to login (even if perhaps they are logged in already)
  */
@@ -116,9 +119,9 @@ function has_zone_access($member,$zone)
 
 	global $ZONE_ACCESS_CACHE;
 
-	if ((!isset($ZONE_ACCESS_CACHE[$member])) && (function_exists('persistant_cache_get')) && (is_guest($member)))
+	if ((!isset($ZONE_ACCESS_CACHE[$member])) && (function_exists('persistent_cache_get')) && (is_guest($member)))
 	{
-		$ZONE_ACCESS_CACHE=persistant_cache_get('GUEST_ZONE_ACCESS');
+		$ZONE_ACCESS_CACHE=persistent_cache_get('GUEST_ZONE_ACCESS');
 	}
 
 	if (isset($ZONE_ACCESS_CACHE[$member]))
@@ -146,9 +149,9 @@ function has_zone_access($member,$zone)
 	}
 	if (!array_key_exists($zone,$ZONE_ACCESS_CACHE[$member])) $ZONE_ACCESS_CACHE[$member][$zone]=false;
 
-	if ((function_exists('persistant_cache_set')) && (is_guest($member)))
+	if ((function_exists('persistent_cache_set')) && (is_guest($member)))
 	{
-		persistant_cache_set('GUEST_ZONE_ACCESS',$ZONE_ACCESS_CACHE);
+		persistent_cache_set('GUEST_ZONE_ACCESS',$ZONE_ACCESS_CACHE);
 	}
 
 	$result=$ZONE_ACCESS_CACHE[$member][$zone];
@@ -236,9 +239,9 @@ function has_page_access($member,$page,$zone,$at_now=false)
 
 	global $PAGE_ACCESS_CACHE;
 
-	if ((!isset($PAGE_ACCESS_CACHE[$member])) && (function_exists('persistant_cache_get')) && (is_guest($member)))
+	if ((!isset($PAGE_ACCESS_CACHE[$member])) && (function_exists('persistent_cache_get')) && (is_guest($member)))
 	{
-		$PAGE_ACCESS_CACHE=persistant_cache_get('GUEST_PAGE_ACCESS');
+		$PAGE_ACCESS_CACHE=persistent_cache_get('GUEST_PAGE_ACCESS');
 	}
 
 	if ((isset($PAGE_ACCESS_CACHE[$member])) && (isset($PAGE_ACCESS_CACHE[$member][$zone.':'.$page])) && ((!$at_now) || ($PAGE_ACCESS_CACHE[$member][$zone.':'.$page])))
@@ -300,9 +303,9 @@ function has_page_access($member,$page,$zone,$at_now=false)
 				$PAGE_ACCESS_CACHE[$member][$zone.':'.$page]=$result;
 			}
 
-			if ((function_exists('persistant_cache_set')) && (is_guest($member)))
+			if ((function_exists('persistent_cache_set')) && (is_guest($member)))
 			{
-				persistant_cache_set('GUEST_PAGE_ACCESS',$PAGE_ACCESS_CACHE);
+				persistent_cache_set('GUEST_PAGE_ACCESS',$PAGE_ACCESS_CACHE);
 			}
 
 			return $result;
@@ -315,9 +318,9 @@ function has_page_access($member,$page,$zone,$at_now=false)
 		$PAGE_ACCESS_CACHE[$member][$zone.':'.$page]=$result;
 	}
 
-	if ((function_exists('persistant_cache_set')) && (is_guest($member)))
+	if ((function_exists('persistent_cache_set')) && (is_guest($member)))
 	{
-		persistant_cache_set('GUEST_PAGE_ACCESS',$PAGE_ACCESS_CACHE);
+		persistent_cache_set('GUEST_PAGE_ACCESS',$PAGE_ACCESS_CACHE);
 	}
 
 	return $result;
@@ -489,8 +492,8 @@ function enforce_personal_access($member_id,$permission=NULL,$permission2=NULL,$
 	{
 		if (($member_id!=$member_viewing) || ((!is_null($permission)) && (!has_specific_permission($member_viewing,$permission))))
 		{
-			if (!is_null($permission)) access_denied('SPECIFIC_PERMISSION',$permission);
-			else access_denied('SPECIFIC_PERMISSION',is_null($permission2)?'assume_any_member':$permission2);
+			if (!is_null($permission)) access_denied('PRIVILEGE',$permission);
+			else access_denied('PRIVILEGE',is_null($permission2)?'assume_any_member':$permission2);
 		}
 	}
 }
@@ -508,7 +511,7 @@ function check_specific_permission($permission,$cats=NULL,$member_id=NULL,$page=
 	if (is_null($page)) $page=get_page_name();
 
 	if (is_null($member_id)) $member_id=get_member();
-	if (!has_specific_permission($member_id,$permission,get_page_name(),$cats)) access_denied('SPECIFIC_PERMISSION',$permission);
+	if (!has_specific_permission($member_id,$permission,get_page_name(),$cats)) access_denied('PRIVILEGE',$permission);
 }
 
 /**
@@ -525,10 +528,10 @@ function has_some_cat_specific_permission($member,$permission,$page,$permission_
 	$page_wide_test=has_specific_permission($member,$permission,$page); // To make sure permissions are cached, and test if page-wide or site-wide exists
 	if ($page_wide_test) return true;
 
-	global $SPECIFIC_PERMISSION_CACHE;
-	if ((array_key_exists($member,$SPECIFIC_PERMISSION_CACHE)) && (array_key_exists($permission,$SPECIFIC_PERMISSION_CACHE[$member])) && (array_key_exists('',$SPECIFIC_PERMISSION_CACHE[$member][$permission])) && (array_key_exists($permission_module,$SPECIFIC_PERMISSION_CACHE[$member][$permission][''])))
+	global $PRIVILEGE_CACHE;
+	if ((array_key_exists($member,$PRIVILEGE_CACHE)) && (array_key_exists($permission,$PRIVILEGE_CACHE[$member])) && (array_key_exists('',$PRIVILEGE_CACHE[$member][$permission])) && (array_key_exists($permission_module,$PRIVILEGE_CACHE[$member][$permission][''])))
 	{
-		foreach ($SPECIFIC_PERMISSION_CACHE[$member][$permission][''][$permission_module] as $_permission)
+		foreach ($PRIVILEGE_CACHE[$member][$permission][''][$permission_module] as $_permission)
 		{
 			if ($_permission==1) return true;
 		}
@@ -553,11 +556,17 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 
 	if ($page===NULL) $page=get_page_name();
 
+	global $SPAM_REMOVE_VALIDATION;
+	if (($SPAM_REMOVE_VALIDATION) && ($member==get_member()) && (($permission=='bypass_validation_highrange_content') || ($permission=='bypass_validation_midrange_content') || ($permission=='bypass_validation_lowrange_content')))
+	{
+		return false;
+	}
+
 	$groups=_get_where_clause_groups($member);
 	if ($groups===NULL) return true;
 
-	global $SPECIFIC_PERMISSION_CACHE;
-	if (isset($SPECIFIC_PERMISSION_CACHE[$member]))
+	global $PRIVILEGE_CACHE;
+	if (isset($PRIVILEGE_CACHE[$member]))
 	{
 		if ($cats!==NULL)
 		{
@@ -565,9 +574,9 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 			for ($i=0;$i<intval(floor((float)count($cats)/2.0));$i++)
 			{
 				if (is_null($cats[$i*2])) continue;
-				if (isset($SPECIFIC_PERMISSION_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
+				if (isset($PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
 				{
-					$result=$SPECIFIC_PERMISSION_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
+					$result=$PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
 					if (!$result)
 					{
 						handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
@@ -585,16 +594,16 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		}
 		if ($page!='')
 		{
-			if (isset($SPECIFIC_PERMISSION_CACHE[$member][$permission][$page]['']['']))
+			if (isset($PRIVILEGE_CACHE[$member][$permission][$page]['']['']))
 			{
-				$result=$SPECIFIC_PERMISSION_CACHE[$member][$permission][$page]['']['']==1;
+				$result=$PRIVILEGE_CACHE[$member][$permission][$page]['']['']==1;
 				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 				return $result;
 			}
 		}
-		if (isset($SPECIFIC_PERMISSION_CACHE[$member][$permission]['']['']['']))
+		if (isset($PRIVILEGE_CACHE[$member][$permission]['']['']['']))
 		{
-			$result=$SPECIFIC_PERMISSION_CACHE[$member][$permission]['']['']['']==1;
+			$result=$PRIVILEGE_CACHE[$member][$permission]['']['']['']==1;
 			handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 			return $result;
 		}
@@ -622,18 +631,18 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'msp WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
 		}
 	}
-	$SPECIFIC_PERMISSION_CACHE[$member]=array();
+	$PRIVILEGE_CACHE[$member]=array();
 	foreach ($perhaps as $p)
 	{
-		if (@$SPECIFIC_PERMISSION_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
-			$SPECIFIC_PERMISSION_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
+		if (@$PRIVILEGE_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
+			$PRIVILEGE_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
 	}
 
 	// Note: due to the way the "detect at override level" code works, the "best of" permission system does not hold with inconsistant overriding against all usergroups
 
 	$result=has_specific_permission($member,$permission,$page,$cats);
 	handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
-	if ($member!=get_member()) unset($SPECIFIC_PERMISSION_CACHE[$member]);
+	if ($member!=get_member()) unset($PRIVILEGE_CACHE[$member]);
 	return $result;
 }
 
@@ -650,7 +659,7 @@ function check_submit_permission($range,$cats=NULL,$page=NULL)
 	if (is_null($page)) $page=get_page_name();
 
 	if (!has_submit_permission($range,get_member(),get_ip_address(),$page,$cats))
-		access_denied('SPECIFIC_PERMISSION','submit_'.$range.'range_content');
+		access_denied('PRIVILEGE','submit_'.$range.'range_content');
 }
 
 /**
@@ -706,7 +715,7 @@ function check_some_edit_permission($range,$cats=NULL,$page=NULL)
 	if (has_specific_permission($member,'edit_'.$range.'range_content',get_page_name(),$cats)) $ret=true;
 	if (has_specific_permission($member,'edit_own_'.$range.'range_content',get_page_name(),$cats)) $ret=true;
 
-	if (!$ret) access_denied('SPECIFIC_PERMISSION','edit_own_'.$range.'range_content');
+	if (!$ret) access_denied('PRIVILEGE','edit_own_'.$range.'range_content');
 }
 
 /**
@@ -723,7 +732,7 @@ function check_edit_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 	if (is_null($page)) $page=get_page_name();
 
 	if (!has_edit_permission($range,get_member(),$resource_owner,$page,$cats))
-		access_denied('SPECIFIC_PERMISSION','edit_'.(($resource_owner==get_member())?'own_':'').$range.'range_content');
+		access_denied('PRIVILEGE','edit_'.(($resource_owner==get_member())?'own_':'').$range.'range_content');
 }
 
 /**
@@ -759,7 +768,7 @@ function check_delete_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 	if (is_null($page)) $page=get_page_name();
 
 	if (!has_delete_permission($range,get_member(),$resource_owner,$page,$cats))
-		access_denied('SPECIFIC_PERMISSION','delete_'.(($resource_owner==get_member())?'own_':'').$range.'range_content');
+		access_denied('PRIVILEGE','delete_'.(($resource_owner==get_member())?'own_':'').$range.'range_content');
 }
 
 /**

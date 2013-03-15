@@ -71,7 +71,7 @@ class Hook_Preview_comments
 		if (!is_guest())
 		{
 			require_code('ocf_members2');
-			$poster_details=ocf_show_member_box(get_member(),false,$hooks,$hook_objects,false);
+			$poster_details=render_member_box(get_member(),false,$hooks,$hook_objects,false);
 		} else
 		{
 			$custom_fields=new ocp_tempcode();
@@ -111,6 +111,8 @@ class Hook_Preview_comments
 			'UNVALIDATED'=>'',
 			'IS_SPACER_POST'=>false,
 			'NUM_TO_SHOW_LIMIT'=>'0',
+			'LAST_EDITED_RAW'=>'',
+			'LAST_EDITED'=>'',
 		));
 		return array($tpl,NULL);
 	}

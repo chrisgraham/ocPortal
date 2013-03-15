@@ -1,6 +1,6 @@
 {$SET,RAND_ID_RANDOM,rand{$RAND}}
 
-<div id="comcoderandom{$GET%,RAND_ID_RANDOM}">&nbsp;</div>
+<div id="comcoderandom{$GET,RAND_ID_RANDOM}"></div>
 <script type="text/javascript">// <![CDATA[
 	var parts={};
 	{PARTS}
@@ -11,8 +11,8 @@
 		use=parts[i];
 		if (i>rand) break;
 	}
-	var comcoderandom=document.getElementById('comcoderandom{$GET%,RAND_ID_RANDOM}');
-	setInnerHTML(comcoderandom,use);
+	var comcoderandom=document.getElementById('comcoderandom{$GET,RAND_ID_RANDOM}');
+	set_inner_html(comcoderandom,use);
 //]]></script>
 <noscript>
 	{FULL*}

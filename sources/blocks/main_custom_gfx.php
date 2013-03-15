@@ -89,7 +89,7 @@ class Block_main_custom_gfx
 			$file_base=get_custom_file_base().'/data_custom/fonts/';
 			if (!file_exists($file_base.'/'.$font.'.ttf')) $file_base=get_file_base().'/data/fonts/';
 
-			$file_contents=file_get_contents(((strpos($img_path,'/default/images/')!==false)?get_file_base():get_custom_file_base()).'/'.$img_path,FILE_BINARY);
+			$file_contents=file_get_contents(((strpos($img_path,'/default/images/')!==false)?get_file_base():get_custom_file_base()).'/'.$img_path);
 			$img=@imagecreatefromstring($file_contents);
 			if ($img===false)
 			{

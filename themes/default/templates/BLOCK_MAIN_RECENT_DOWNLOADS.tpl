@@ -1,11 +1,5 @@
-{+START,IF,{$GET,in_panel}}
-	{+START,BOX,{TITLE},,panel}
-		{CONTENT}
-	{+END}
-{+END}
-
-{+START,IF,{$NOT,{$GET,in_panel}}}
-	<h2>{TITLE}</h2>
+<section class="box box___block_main_recent_downloads"><div class="box_inner">
+	{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
 
 	{CONTENT}
-{+END}
+</div></section>

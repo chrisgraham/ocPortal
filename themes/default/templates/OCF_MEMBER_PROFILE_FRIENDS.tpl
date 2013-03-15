@@ -1,12 +1,16 @@
 {+START,IF_NON_EMPTY,{FRIENDS_A}{FRIENDS_B}}
 	<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
-	<ul class="ocf_profile_friends">
+	<ul class="ocf_profile_friends actions_list">
 		{+START,LOOP,FRIENDS_A}
-			<li onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{BOX*;~}','500px');">&raquo; <a href="{URL*}">{USERNAME*}</a><br />&nbsp;&nbsp;&nbsp;{USERGROUP*}</li>
+			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');">
+				<a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span>
+			</li>
 		{+END}
 		{+START,LOOP,FRIENDS_B}
-			<li onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{BOX*;~}','500px');">&raquo; <a href="{URL*}">{USERNAME*}</a><br />&nbsp;&nbsp;&nbsp;{USERGROUP*}</li>
+			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');">#
+				<a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span>
+			</li>
 		{+END}
 	</ul>
 {+END}
@@ -17,18 +21,16 @@
 	</p>
 {+END}
 
-{+START,IF_NON_EMPTY,{ADD_FRIEND_URL}{REMOVE_FRIEND_URL}{ALL_BUDDIES_LINK}}
-	<p class="ocf_profile_add_friend">
-		{+START,IF,{$NOT,{$MOBILE}}}[{+END}
+{+START,IF_NON_EMPTY,{ADD_FRIEND_URL}{REMOVE_FRIEND_URL}{ALL_FRIENDS_URL}}
+	<ul class="horizontal_links associated_links_block_group force_margin">
 		{+START,IF_NON_EMPTY,{ADD_FRIEND_URL}}
-			<a href="{ADD_FRIEND_URL*}">{!_ADD_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a>
+			<li><a href="{ADD_FRIEND_URL*}">{!ocf:_ADD_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a></li>
 		{+END}
 		{+START,IF_NON_EMPTY,{REMOVE_FRIEND_URL}}
-			<a href="{REMOVE_FRIEND_URL*}">{!_REMOVE_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a>
+			<li><a href="{REMOVE_FRIEND_URL*}">{!ocf:_REMOVE_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a></li>
 		{+END}
-		{+START,IF_NON_EMPTY,{ALL_BUDDIES_LINK}}
-			<a href="{ALL_BUDDIES_LINK*}">{!VIEW_ARCHIVE}</a>
+		{+START,IF_NON_EMPTY,{ALL_FRIENDS_URL}}
+			<li><a href="{ALL_FRIENDS_URL*}">{!VIEW_ARCHIVE}</a></li>
 		{+END}
-		{+START,IF,{$NOT,{$MOBILE}}}]{+END}
-	</p>
+	</ul>
 {+END}

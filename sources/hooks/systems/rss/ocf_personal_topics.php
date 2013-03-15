@@ -70,14 +70,14 @@ class Hook_rss_ocf_personal_topics
 
 			if ($prefix=='RSS_')
 			{
-				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('COMMENT_URL'=>$view_url,'ID'=>strval($row['p_id'])));
+				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'448f736ecf0154960177c131dde76125','COMMENT_URL'=>$view_url,'ID'=>strval($row['p_id'])));
 			} else $if_comments=new ocp_tempcode();
 
 			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 		}
 
 		require_lang('ocf');
-		return array($content,do_lang('PERSONAL_TOPICS'));
+		return array($content,do_lang('PRIVATE_TOPICS'));
 	}
 
 }

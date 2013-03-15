@@ -45,7 +45,7 @@ class Hook_admin_theme_images
 	{
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'theme_images WHERE path LIKE \'themes/%/images/%\'');
 
-		persistant_cache_delete('THEME_IMAGES');
+		persistent_cache_delete('THEME_IMAGES');
 
 		$paths=$GLOBALS['SITE_DB']->query_select('theme_images',array('path','id'));
 		foreach ($paths as $path)

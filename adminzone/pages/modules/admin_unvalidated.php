@@ -63,7 +63,7 @@ class Module_admin_unvalidated
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/unvalidated';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
 
-		$_title=get_page_title('UNVALIDATED_RESOURCES');
+		$_title=get_screen_title('UNVALIDATED_RESOURCES');
 
 		$out=new ocp_tempcode();
 		require_code('form_templates');

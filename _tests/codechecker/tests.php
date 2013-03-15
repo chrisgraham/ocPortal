@@ -532,7 +532,7 @@ class A
 \$irrelevant_variable_name=new A();
 \$irrelevant_variable_name->intermediate_function()->critical_type_part();
 \$irrelevant_variable_name->b()->x();
-\$irrelevant_variable_name->b()->b()->b()->b()->a = 5;
+\$irrelevant_variable_name->b()->b()->b()->b()->a=5;
 END;
 
 	// Tests interfaces
@@ -569,7 +569,7 @@ END;
 	$tests[61]=<<<END
 class A
 {
-	public function foo(A \$a, A \$b=NULL, A &\$c, array \$d, array \$e = NULL, array &\$f, array &\$g, \$h, \$i=5)
+	public function foo(A \$a, A \$b=NULL, A &\$c, array \$d, array \$e=NULL, array &\$f, array &\$g, \$h, \$i=5)
 	{
 	}
 }

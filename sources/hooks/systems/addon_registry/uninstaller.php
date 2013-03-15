@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_uninstaller
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_uninstaller
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,23 +72,22 @@ class Hook_addon_registry_uninstaller
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/uninstaller.php',
 			'uninstall.php',
-			'UNINSTALL_SCREEN.tpl',
+			'UNINSTALL_SCREEN.tpl'
 		);
 	}
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'UNINSTALL_SCREEN.tpl'=>'administrative__uninstall_screen',
-				);
+			'UNINSTALL_SCREEN.tpl'=>'administrative__uninstall_screen'
+		);
 	}
 
 	/**
@@ -102,10 +100,7 @@ class Hook_addon_registry_uninstaller
 	function tpl_preview__administrative__uninstall_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('UNINSTALL_SCREEN',array(
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('UNINSTALL_SCREEN', array()), NULL, '', true)
 		);
 	}
 

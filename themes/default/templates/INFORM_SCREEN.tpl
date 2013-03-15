@@ -1,10 +1,12 @@
 {TITLE}
 
-<div class="site_special_message ssm_inform"{$?,{$VALUE_OPTION,html5}, role="alert"}>
+{$REQUIRE_CSS,messages}
+
+<div class="site_special_message ssm_inform" role="alert">
 	<div class="site_special_message_inner">
-		{+START,BOX,,,curved}
+		<div class="box box___inform_screen"><div class="box_inner">
 			{TEXT*}
-		{+END}
+		</div></div>
 	</div>
 </div>
 

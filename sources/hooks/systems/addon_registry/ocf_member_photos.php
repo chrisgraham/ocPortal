@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_member_photos
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_ocf_member_photos
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_ocf_member_photos
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/ocf_member_photos.php',
 			'uploads/ocf_photos/index.html',
 			'uploads/ocf_photos_thumbs/index.html',
@@ -81,20 +79,20 @@ class Hook_addon_registry_ocf_member_photos
 			'uploads/ocf_photos_thumbs/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/photo.php',
 			'sources/hooks/systems/notifications/ocf_choose_photo.php',
-			'OCF_EDIT_PHOTO_TAB.tpl',
+			'OCF_EDIT_PHOTO_TAB.tpl'
 		);
 	}
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'OCF_EDIT_PHOTO_TAB.tpl'=>'ocf_edit_photo_tab',
-				);
+			'OCF_EDIT_PHOTO_TAB.tpl'=>'ocf_edit_photo_tab'
+		);
 	}
 
 	/**
@@ -110,13 +108,11 @@ class Hook_addon_registry_ocf_member_photos
 		require_css('ocf');
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_EDIT_PHOTO_TAB',array(
-					'USERNAME'=>lorem_word(),
-					'PHOTO'=>placeholder_image_url(),
-					'TEXT'=>'',
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB', array(
+				'USERNAME'=>lorem_word(),
+				'PHOTO'=>placeholder_image_url(),
+				'TEXT'=>''
+			)), NULL, '', true)
 		);
 	}
 

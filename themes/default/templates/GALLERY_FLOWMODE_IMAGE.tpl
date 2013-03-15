@@ -1,37 +1,32 @@
-<div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ImageObject"}>
-	<div class="gallery_media_full_expose">
-		<img src="{THUMB_URL*}" alt="{!IMAGE}" title=""{$?,{$VALUE_OPTION,html5}, itemprop="contentURL"} />
+<div itemscope="itemscope" itemtype="http://schema.org/ImageObject">
+	<div class="media_box">
+		<img src="{THUMB_URL*}" alt="{!IMAGE}" itemprop="contentURL" />
 	</div>
-
-	<br />
 
 	<div class="float_surrounder lined_up_boxes">
 		<div class="gallery_entry_details right">
-			{+START,BOX,{!DETAILS},,med}
-				<table summary="{!MAP_TABLE}" class="solidborder">
+			<section class="box box___gallery_flowmode_image"><div class="box_inner">
+				<h3>{!DETAILS}</h3>
+
+				<table summary="{!MAP_TABLE}" class="results_table">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
-							<col style="width: 100px" />
-							<col style="width: 180px" />
+							<col class="gallery_entry_field_name_column" />
+							<col class="gallery_entry_field_value_column" />
 						</colgroup>
 					{+END}
 
 					<tbody>
 						<tr>
-							<th class="de_th meta_data_title">{!_ADDED}</th>
+							<th class="de_th meta_data_title">{!ADDED}</th>
 							<td>
-								{+START,IF,{$VALUE_OPTION,html5}}
-									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}</time>
-								{+END}
-								{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-									{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}
-								{+END}
+								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}</time>
 							</td>
 						</tr>
 
 						<tr>
 							<th class="de_th meta_data_title">{!BY}</th>
-							<td><a rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}"{$?,{$VALUE_OPTION,html5}, itemprop="author"}>{$USERNAME*,{SUBMITTER}}</a></td>
+							<td><a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}</a></td>
 						</tr>
 
 						{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
@@ -50,17 +45,19 @@
 					</tbody>
 				</table>
 
-				{+START,IF,{$ADDON_INSTALLED,recommend}}
-					<p class="ecard_link"><img class="inline_image" src="{$IMG*,filetypes/email_link}" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{FULL_URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></p>
-				{+END}
-				<p class="view_alone_link"><a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></p>
+				<ul class="horizontal_links associated_links_block_group">
+					{+START,IF,{$ADDON_INSTALLED,recommend}}
+						<li><img class="vertical_alignment" src="{$IMG*,filetypes/email_link}" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{FULL_URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></li>
+					{+END}
+					<li><a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></li>
+				</ul>
 
 				{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 				{+START,INCLUDE,STAFF_ACTIONS}
 					1_URL={EDIT_URL*}
 					1_TITLE={!EDIT_IMAGE}
 				{+END}
-			{+END}
+			</div></section>
 		</div>
 
 		<div class="ratings right">
@@ -68,7 +65,7 @@
 		</div>
 
 		{+START,IF_PASSED,DESCRIPTION}
-			<div{$?,{$VALUE_OPTION,html5}, itemprop="caption"}>
+			<div itemprop="caption">
 				{DESCRIPTION}
 			</div>
 		{+END}

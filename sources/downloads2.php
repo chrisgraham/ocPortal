@@ -17,6 +17,7 @@
  * @copyright	ocProducts Ltd
  * @package		downloads
  */
+
 /*EXTRA FUNCTIONS: shell_exec*/
 
 /**
@@ -249,6 +250,12 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 	seo_meta_set_for_implicit('downloads_category',strval($id),array($category,$description),$description);
 
 	decache('main_download_category');
+
+	if (!is_null($parent_id))
+	{
+		require_code('notifications2');
+		copy_notifications_to_new_child('download',strval($parent_id),strval($id));
+	}
 
 	return $id;
 }
@@ -690,6 +697,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 			$download_gallery_root=get_option('download_gallery_root');
 			if (is_null($download_gallery_root)) $download_gallery_root='root';
 			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','','',$download_gallery_root);
+			set_download_gallery_permissions($id,$submitter);
 		}
 	}
 
@@ -718,6 +726,43 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 }
 
 /**
+ * Set the permissions for a download gallery.
+ *
+ * @param  ?AUTO_LINK		The ID of the download (NULL: lookup from download)
+ * @param  ?MEMBER			The submitter (NULL: work out automatically)
+ */
+function set_download_gallery_permissions($id,$submitter=NULL)
+{
+	if (is_null($submitter)) $submitter=$GLOBALS['SITE_DB']->query_value('download_downloads','submitter',array('id'=>$id));
+
+	$download_gallery_root=get_option('download_gallery_root');
+	if (is_null($download_gallery_root)) $download_gallery_root='root';
+
+	// Copy through requisite permissions
+	// TODO: This code will need updating in v10
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
+	$perms=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name'=>'galleries','category_name'=>$download_gallery_root));
+	foreach ($perms as $perm)
+	{
+		$perm['category_name']='download_'.strval($id);
+		$GLOBALS['SITE_DB']->query_insert('group_category_access',$perm);
+	}
+	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
+	$perms=$GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('module_the_name'=>'galleries','category_name'=>$download_gallery_root));
+	foreach ($perms as $perm)
+	{
+		$perm['category_name']='download_'.strval($id);
+		$GLOBALS['SITE_DB']->query_insert('gsp',$perm);
+	}
+	// If they were able to submit the download, they should be able to submit extra images
+	$GLOBALS['SITE_DB']->query_delete('msp',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
+	foreach (array('submit_midrange_content') as $privilege)
+	{
+		$GLOBALS['SITE_DB']->query_insert('msp',array('active_until'=>2147483647/*FUDGEFUDGE*/,'member_id'=>$submitter,'specific_permission'=>$privilege,'the_page'=>'','module_the_name'=>'galleries','category_name'=>'download_'.strval($id),'the_value'=>'1'));
+	}
+}
+
+/**
  * Edit a download.
  *
  * @param  AUTO_LINK			The ID of the download to edit
@@ -727,7 +772,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
  * @param  LONG_TEXT			The description of the download
  * @param  ID_TEXT			The author of the download (not necessarily same as the submitter)
  * @param  LONG_TEXT			The comments for the download
- * @param  AUTO_LINK			The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting
+ * @param  ?AUTO_LINK		The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (NULL: none)
  * @param  integer			The ordered number of the gallery image to use as the download representative image
  * @param  BINARY				Whether the download has been validated
  * @param  BINARY				Whether the download may be rated

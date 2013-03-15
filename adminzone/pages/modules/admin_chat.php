@@ -84,7 +84,7 @@ class Module_admin_chat extends standard_aed_module
 		$this->edit_one_label=do_lang_tempcode('EDIT_CHATROOM');
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MANAGE_CHATROOMS'),comcode_lang_string('DOC_CHAT'),
+		return do_next_manager(get_screen_title('MANAGE_CHATROOMS'),comcode_lang_string('DOC_CHAT'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
@@ -223,7 +223,7 @@ class Module_admin_chat extends standard_aed_module
 	 */
 	function delete_all()
 	{
-		$title=get_page_title('DELETE_ALL_ROOMS');
+		$title=get_screen_title('DELETE_ALL_ROOMS');
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
@@ -249,7 +249,7 @@ class Module_admin_chat extends standard_aed_module
 		}
 		else
 		{
-			$title=get_page_title('DELETE_ALL_ROOMS');
+			$title=get_screen_title('DELETE_ALL_ROOMS');
 
 			delete_all_chatrooms();
 

@@ -1,9 +1,13 @@
 <div class="topic_list_topic">
 	<div class="topic_list_title">
-		<a title="{!POST_PLU,{NUM_POSTS*}}, {TITLE*~}" href="{TOPIC_LINK*}">{$TRUNCATE_LEFT,{TITLE},30,0,1}</a>
+		<a class="associated_link suggested" title="{!POST_PLU,{NUM_POSTS*}}, {TITLE*~}" href="{TOPIC_URL*}">{$TRUNCATE_LEFT,{TITLE},30,0,1}</a>
 	</div>
-	<span class="topic_list_meta">
-		{!BY_SIMPLE,<a class="topic_list_by" href="{USER_LINK*}">{USERNAME*}</a>} &middot; {DATE*}
-	</span>
+
+	<ul class="topic_list_meta horizontal_meta_details">
+		{+START,IF_NON_EMPTY,{USERNAME}}
+			<li>{!BY_SIMPLE,<a class="topic_list_by" href="{POSTER_URL*}">{USERNAME*}</a>}</li>
+		{+END}
+		<li>{DATE*}</li>
+	</ul>
 </div>
 

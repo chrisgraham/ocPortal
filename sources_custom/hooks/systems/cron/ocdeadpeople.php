@@ -73,6 +73,7 @@ class Hook_cron_ocdeadpeople
 						}
 					}
 				}
+
 				$friends_list=implode(",",$friends_a);
 				$friends_healthy=array();
 				foreach ($friends_a as $friend)
@@ -80,9 +81,9 @@ class Hook_cron_ocdeadpeople
 					if (!in_array($friend,$sick_members))
 						$friends_healthy[]=$friend;
 				}
-				$to_infect = array_rand($friends_healthy);
 
-				// infect random friend
+				$to_infect=array_rand($friends_healthy);
+
 				if (isset($friends_healthy[$to_infect]) && ($friends_healthy[$to_infect]!=0))
 				{
 					$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
@@ -136,11 +137,12 @@ class Hook_cron_ocdeadpeople
 			$sick_and_immunised_members=array();
 			$sick_and_immunised_members=array_merge($sick_members,$immunised_members);
 
-			// create a list of members to be avoided - sick and immunised members should be avoided !!!
-			$avoid_members=implode(",",$sick_and_immunised_members);
+			// create a csv list of members to be avoided - sick and immunised members should be avoided !!!
+			$avoid_members=implode(',',$sick_and_immunised_members);
+
 			$avoid_members=(strlen($avoid_members)==0)?'0':$avoid_members;
 
-			// if there is a randomly selected members that can be infected, otherwise all of the members are already infected or immunised
+			// if there is a rondomly selected members that can be infected, otherwise all of the members are already infected or immunised
 			$random_member=$GLOBALS['SITE_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND id NOT IN ('.$avoid_members.') ORDER BY RAND()',1,NULL,true);
 			if (isset($random_member[0]['id']) && $random_member[0]['id']>0)
 			{

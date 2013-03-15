@@ -23,10 +23,11 @@
  */
 function init__files2()
 {
-	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET;
+	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
 	$HTTP_DOWNLOAD_MIME_TYPE=NULL;
 	$HTTP_DOWNLOAD_SIZE=NULL;
 	$HTTP_DOWNLOAD_URL=NULL;
+	$HTTP_DOWNLOAD_MTIME=NULL;
 	$HTTP_MESSAGE=NULL;
 	$HTTP_MESSAGE_B=NULL;
 	$HTTP_NEW_COOKIES=NULL;
@@ -215,9 +216,10 @@ function find_php_path()
  * @param  PATH			The path we prepend to everything we find (intended to be used inside the recursion)
  * @param  boolean		Whether to also get special files
  * @param  boolean		Whether to recurse (if not, will return directories as files)
+ * @param  boolean		Whether to get files (if not, will return directories as files)
  * @return array			The contents of the directory
  */
-function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=true)
+function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=true,$files_wanted=true)
 {
 	$out=array();
 
@@ -229,12 +231,16 @@ function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=t
 			if (should_ignore_file($rel_path.(($rel_path=='')?'':'/').$file,IGNORE_ACCESS_CONTROLLERS)) continue;
 		} elseif (($file=='.') || ($file=='..')) continue;
 
-		if ((is_file($path.'/'.$file)) || (!$recurse))
+		$is_file=is_file($path.'/'.$file);
+		if (($is_file) || (!$recurse))
 		{
-			$out[]=$rel_path.(($rel_path=='')?'':'/').$file;
+			if (($files_wanted) || (!$is_file))
+				$out[]=$rel_path.(($rel_path=='')?'':'/').$file;
 		} elseif (is_dir($path.'/'.$file))
 		{
-			$out=array_merge($out,get_directory_contents($path.'/'.$file,$rel_path.(($rel_path=='')?'':'/').$file,$special_too,$recurse));
+			if (!$files_wanted)
+				$out[]=$rel_path.(($rel_path=='')?'':'/').$file;
+			$out=array_merge($out,get_directory_contents($path.'/'.$file,$rel_path.(($rel_path=='')?'':'/').$file,$special_too,$recurse,$files_wanted));
 		}
 	}
 	closedir($d);
@@ -246,9 +252,10 @@ function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=t
  * Get the size in bytes of a directory. It is assumed that the directory exists.
  *
  * @param  PATH			The path to search
+ * @param  boolean		Whether to recurse (if not, will return directories as files)
  * @return integer		The extra space requested
  */
-function get_directory_size($path)
+function get_directory_size($path,$recurse=true)
 {
 	$size=0;
 
@@ -262,7 +269,10 @@ function get_directory_size($path)
 			$size+=filesize($path.'/'.$e);
 		} else
 		{
-			$size+=get_directory_size($path.'/'.$e);
+			if ($recurse)
+			{
+				$size+=get_directory_size($path.'/'.$e,$recurse);
+			}
 		}
 	}
 
@@ -530,6 +540,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	$HTTP_DOWNLOAD_SIZE=0;
 	global $HTTP_DOWNLOAD_URL;
 	$HTTP_DOWNLOAD_URL=$url;
+	global $HTTP_DOWNLOAD_MTIME;
+	$HTTP_DOWNLOAD_MTIME=NULL;
 	global $HTTP_MESSAGE;
 	$HTTP_MESSAGE=NULL;
 	global $HTTP_MESSAGE_B;
@@ -956,6 +968,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					{
 						$HTTP_DOWNLOAD_SIZE=intval($matches[1]);
 					}
+					if (preg_match("#^Last-Modified: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
+					{
+						$HTTP_DOWNLOAD_MTIME=strtotime($matches[1]);
+					}
 					if (preg_match("#^Content-Type: ([^;\r\n]*)(;[^\r\n]*)?\r\n#i",$line,$matches)!=0)
 					{
 						$HTTP_DOWNLOAD_MIME_TYPE=$matches[1];
@@ -1001,12 +1017,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					}
 					if (preg_match("#HTTP/(\d*\.\d*) (\d*) #",$line,$matches)!=0)
 					{
-						// 200 = Ok
-						// 301/302 = Redirected: Not good, we should not be here
-						// 401 = Unauthorized
-						// 403 = Forbidden
-						// 404 = Not found
-						// 500 = Internal server error
+						// 200=Ok
+						// 301/302=Redirected: Not good, we should not be here
+						// 401=Unauthorized
+						// 403=Forbidden
+						// 404=Not found
+						// 500=Internal server error
 						$HTTP_MESSAGE=$matches[2];
 						switch ($matches[2])
 						{

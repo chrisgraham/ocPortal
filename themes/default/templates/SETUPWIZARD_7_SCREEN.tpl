@@ -3,12 +3,12 @@
 {FORM}
 
 <script type="text/javascript">// <![CDATA[
-	document.getElementById('rules').onclick=function() { smoothScroll(findPosY(document.getElementById('rules_set'))); };
+	document.getElementById('rules').onclick=function() { smooth_scroll(find_pos_y(document.getElementById('rules_set'))); };
 //]]></script>
 
-<br />
+<div class="box box___setupwizard_7_screen"><div class="box_inner">
+	<h2>{!PREVIEW}</h2>
 
-{+START,BOX,{!PREVIEW},,med}
 	<div id="rules_set">
 		<div id="preview_box_balanced" style="display: block">
 			{BALANCED}
@@ -20,5 +20,5 @@
 			{LIBERAL}
 		</div>
 	</div>
-{+END}
+</div></div>
 

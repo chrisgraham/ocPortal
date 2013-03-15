@@ -153,7 +153,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('CUSTOM_COMCODE'),comcode_lang_string('DOC_CUSTOM_COMCODE'),
+		return do_next_manager(get_screen_title('CUSTOM_COMCODE'),comcode_lang_string('DOC_CUSTOM_COMCODE'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_COMCODE_TAG')),

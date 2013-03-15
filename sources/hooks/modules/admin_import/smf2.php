@@ -97,16 +97,12 @@ class Hook_smf2
 		$db_user='';
 		$db_passwd='';
 		$db_prefix='';
+		$db_server='';
 		if (!file_exists($file_base.'/Settings.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('Settings.php')));
 		require($file_base.'/Settings.php');
-		$INFO=array();
-		$INFO['sql_database']=$db_name;
-		$INFO['sql_user']=$db_user;
-		$INFO['sql_pass']=$db_passwd;
-		$INFO['sql_tbl_prefix']=$db_prefix;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($db_name,$db_user,$db_passwd,$db_prefix,$db_server);
 	}
 
 	/**
@@ -195,7 +191,7 @@ class Hook_smf2
 				continue;
 			}
 /*
- 			/// Disabled due to possible problems on some systems.
+			// Disabled due to possible problems on some systems.
 			if (isset($row['variable'])&&$row['variable']=='enableCompressedOutput')
 			{
 				$config_remapping['gzip_output']=$row['value'];
@@ -210,26 +206,25 @@ class Hook_smf2
 
 			if (isset($row['variable'])&&$row['variable']=='attachmentNumPerPostLimit')
 			{
-				$ADDITIONAL_DATA['maxattachments']=(int)$row['value']; // Edited by Duck
+				$ADDITIONAL_DATA['maxattachments']=(integer)$row['value']; // Edited by Duck
 				continue;
 			}
 
 			if (isset($row['variable'])&&$row['variable']=='avatar_max_width_upload')
 			{
-				$ADDITIONAL_DATA['avatar_max_width']=(int)$row['value']; // Edited by Duck
+				$ADDITIONAL_DATA['avatar_max_width']=(integer)$row['value']; // Edited by Duck
 				continue;
 			}
 
 			if (isset($row['variable'])&&$row['variable']=='avatar_max_height_upload')
 			{
-				$ADDITIONAL_DATA['avatar_max_height']=(int)$row['value']; // Edited by Duck
+				$ADDITIONAL_DATA['avatar_max_height']=(integer)$row['value']; // Edited by Duck
 				continue;
 			}
 
 			/*
 			 * Todo Add for SMF2 signature_settings parse first value for enabled/disable and second value for max characters
 			 */
-
 		}
 
 		foreach ($config_remapping as $key=>$value)
@@ -241,21 +236,22 @@ class Hook_smf2
 			{
 				set_value('timezone',str_replace('Etc/GMT+','',$value));
 			}
-
 		}
-
 	}
 
 	/**
 	 * Standard import function.
 	 *
 	 */
-	function import_ocf_remove_old_groups(){
-		$delete_groups = array('Local hero','Regular','Local','Old timer');
-		$rows = $GLOBALS['SITE_DB']->query('SELECT g.id, t.text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_groups AS g INNER JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate AS t ON g.g_name = t.id');
-		if(!$rows == NULL){
-			foreach ($rows as $row){
-				if(!in_array($row['text_original'],$delete_groups)) continue;
+	function import_ocf_remove_old_groups()
+	{
+		$delete_groups=array('Local hero','Regular','Local','Old timer');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT g.id,t.text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_groups AS g INNER JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate AS t ON g.g_name=t.id');
+		if ($rows!==NULL)
+		{
+			foreach ($rows as $row)
+			{
+				if (!in_array($row['text_original'],$delete_groups)) continue;
 				ocf_delete_group($row['id']);
 			}
 		}
@@ -266,20 +262,20 @@ class Hook_smf2
 	 *
 	 * @param  object			The DB connection to import from
 	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
 	 */
 	function import_ocf_groups($db,$table_prefix)
 	{
 		global $ADDITIONAL_DATA;
 
-		$avatar_max_width =  !empty($ADDITIONAL_DATA['avatar_max_width'])? $ADDITIONAL_DATA['avatar_max_width'] : 100; //added by Duck
-		$avatar_max_height = !empty($ADDITIONAL_DATA['avatar_max_height'])? $ADDITIONAL_DATA['avatar_max_height'] : 100; //added by Duck
-		$max_attachments_upload = !empty($ADDITIONAL_DATA['maxattachments'])? $ADDITIONAL_DATA['maxattachments'] : 10; //added by Duck
+		$avatar_max_width=!empty($ADDITIONAL_DATA['avatar_max_width'])?$ADDITIONAL_DATA['avatar_max_width']:100; //added by Duck
+		$avatar_max_height=!empty($ADDITIONAL_DATA['avatar_max_height'])?$ADDITIONAL_DATA['avatar_max_height']:100; //added by Duck
+		$max_attachments_upload=!empty($ADDITIONAL_DATA['maxattachments'])?$ADDITIONAL_DATA['maxattachments']:10; //added by Duck
 
-		$group_leaders = array();
+		$group_leaders=array();
 		$grps=$db->query('SELECT * FROM '.$table_prefix.'group_moderators ORDER BY id_group');
-		foreach ($grps as $grp){
-			$group_leaders[$grp['id_group']] = $grp['id_member'];
+		foreach ($grps as $grp)
+		{
+			$group_leaders[$grp['id_group']]=$grp['id_member'];
 		}
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'membergroups ORDER BY id_group');
@@ -287,13 +283,17 @@ class Hook_smf2
 		{
 			if (import_check_if_imported('group',strval($row['id_group']))) continue; //Edited by Duck
 
-			$leader = key_exists($row['id_group'],$group_leaders)? $group_leaders[$row['id_group']]:NULL;
-			if($row['group_name']=='Administrator'){
-				$group_name = 'Administrators';
-			} elseif($row['group_name']=='Global Moderator') {
-				$group_name = 'Super-moderators';
-			} else {
-				$group_name = $row['group_name'];
+			$leader=array_key_exists($row['id_group'],$group_leaders)? $group_leaders[$row['id_group']]:NULL;
+			if ($row['group_name']=='Administrator')
+			{
+				$group_name='Administrators';
+			}
+			elseif ($row['group_name']=='Global Moderator')
+			{
+				$group_name='Super-moderators';
+			} else
+			{
+				$group_name=$row['group_name'];
 			}
 			$is_super_admin=0;
 			$is_super_moderator=0;
@@ -324,32 +324,32 @@ class Hook_smf2
 		// This will be needed when we finish our cycle to point to the last updated group
 		$default_group=get_first_default_group();
 		// Set this to Null for the first group updated as we progress it will be updated to the last updated id
-		$promotion_target = NULL;
+		$promotion_target=NULL;
 		// Set this to Null for the first group updated as we progress it will be updated to the last updated threshold
-		$promotion_threshold = NULL;
+		$promotion_threshold=NULL;
 		// We willl us this to decide whether to update the default group or not.
-		$updates = false;
+		$updates=false;
 
-		$rows=$db->query('SELECT id_group, group_name, min_posts FROM '.$table_prefix.'membergroups WHERE min_posts > 0 ORDER BY min_posts DESC');
+		$rows=$db->query('SELECT id_group,group_name,min_posts FROM '.$table_prefix.'membergroups WHERE min_posts > 0 ORDER BY min_posts DESC');
 		// Lets check we are actually going to be performing some updates
-		if(count($rows)>0)
+		if (count($rows)>0)
 		{
-			$updates = true;
+			$updates=true;
 		}
-			foreach ($rows as $row)
-			{
-				// Cast this to string to be used in remap get function
-				$old_id = strval($row['id_group']);
-				// Here we get the ocPortal id of the group
-				$id_new=import_id_remap_get('group',$old_id,true);
-				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_promotion_target'=>$promotion_target,'g_promotion_threshold'=>$promotion_threshold),array('id'=>$id_new));
-				// On the next run the promotin target will be this last updated group
-				$promotion_target = $id_new;
-				// On the next run the promotin threshold will be this last updated groups required posts
-				$promotion_threshold = $row['min_posts'];
-			}
+		foreach ($rows as $row)
+		{
+			// Cast this to string to be used in remap get function
+			$old_id=strval($row['id_group']);
+			// Here we get the ocPortal ID of the group
+			$id_new=import_id_remap_get('group',$old_id,true);
+			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_promotion_target'=>$promotion_target,'g_promotion_threshold'=>$promotion_threshold),array('id'=>$id_new));
+			// On the next run the promotin target will be this last updated group
+			$promotion_target=$id_new;
+			// On the next run the promotin threshold will be this last updated groups required posts
+			$promotion_threshold=$row['min_posts'];
+		}
 		// Now we've done all the groups based on posts lets check whether to update the default group
-		if($updates)
+		if ($updates)
 		{
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_promotion_target'=>$promotion_target,'g_promotion_threshold'=>$promotion_threshold),array('id'=>$default_group));
 		}
@@ -447,21 +447,20 @@ class Hook_smf2
 				$password=$row['passwd'];
 				$type='smf';
 				$salt=$row['password_salt'];
-				$allow_emails = intval($row['instant_messages']) > 0? 1:0;
+				$allow_emails=intval($row['instant_messages']) > 0? 1:0;
 
 				if ($row['date_registered']==0) $row['date_registered']=time();
 				$id_new=ocf_make_member($row['member_name'],$password,$row['email_address'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['date_registered'],$row['last_login'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$allow_emails,1,'','','',false,$type,$salt,1);
 
 				//cpf stuff
-				if($id_new){
-					$cpf_rows = $db->query('SELECT id_field, col_name FROM '.$table_prefix.'custom_fields');
-					foreach ($cpf_rows as $cpf_row)
-					{
-						$cpf_id=import_id_remap_get('cpf',strval($cpf_row['id_field']));
-						if(!$cpf_value = $db->query('SELECT value FROM '.$table_prefix.'themes WHERE id_member='.$row['id_member'].' AND variable=\''.$cpf_row['col_name'].'\''))continue;
-						$value = isset($cpf_value[0]['value'])?$cpf_value[0]['value']:'';
-						ocf_set_custom_field(strval($id_new),strval($cpf_id),$value);
-					}
+				$cpf_rows=$db->query('SELECT id_field,col_name FROM '.$table_prefix.'custom_fields');
+				foreach ($cpf_rows as $cpf_row)
+				{
+					$cpf_id=import_id_remap_get('cpf',strval($cpf_row['id_field']));
+					$cpf_value=$db->query('SELECT value FROM '.$table_prefix.'themes WHERE id_member='.$row['id_member'].' AND variable=\''.$cpf_row['col_name'].'\'');
+					if (!isset($cpf_value[0])) continue;
+					$value=isset($cpf_value[0]['value'])?$cpf_value[0]['value']:'';
+					ocf_set_custom_field($id_new,$cpf_id,$value);
 				}
 
 				// Fix usergroup leadership
@@ -486,7 +485,6 @@ class Hook_smf2
 	 *
 	 * @param  object			The DB connection to import from
 	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
 	 */
 	function import_ocf_custom_profile_fields($db,$table_prefix)
 	{
@@ -501,52 +499,52 @@ class Hook_smf2
 			if (is_null($id_new))
 			{
 				$default=$row['default_value'];
-				$options = $row['field_options'];
-				$pub_view = 1;
-				$own_view = 1;
-				$own_set = 1;
-				$req = 0;
-				$on_join = 0;
-				$show_in_posts = $row['show_display'];
-				$desc = $row['field_desc'];
-				$private = (int)$row['private'];
+				$options=$row['field_options'];
+				$pub_view=1;
+				$own_view=1;
+				$own_set=1;
+				$req=0;
+				$on_join=0;
+				$show_in_posts=$row['show_display'];
+				$desc=$row['field_desc'];
+				$private=(integer)$row['private'];
 
 				switch ($private)
 				{
 					case 0:
-						$pub_view = 1;
-						$own_view = 1;
-						$own_set = 1;
+						$pub_view=1;
+						$own_view=1;
+						$own_set=1;
 						break;
 					case 1:
-						$pub_view = 1;
-						$own_view = 1;
-						$own_set = 0;
+						$pub_view=1;
+						$own_view=1;
+						$own_set=0;
 						break;
 					case 2:
-						$pub_view = 0;
-						$own_view = 1;
-						$own_set = 1;
+						$pub_view=0;
+						$own_view=1;
+						$own_set=1;
 						break;
 					case 3:
-						$pub_view = 0;
-						$own_view = 0;
-						$own_set = 0;
+						$pub_view=0;
+						$own_view=0;
+						$own_set=0;
 						break;
 				}
 
 				switch ($row['show_reg'])
 				{
 					case 0:
-						$on_join = 0;
-						$req = 0;
+						$on_join=0;
+						$req=0;
 						break;
 					case 1:
-						$on_join = 1;
+						$on_join=1;
 						break;
 					case 2:
-						$on_join = 1;
-						$req = 1;
+						$on_join=1;
+						$req=1;
 						break;
 				}
 
@@ -554,19 +552,23 @@ class Hook_smf2
 				switch ($row['field_type'])
 				{
 					case 'text':
-						if($row['bbc']==1){
-							$type = 'short_trans';
-						} else {
-							$type = 'short_text';
+						if ($row['bbc']==1)
+						{
+							$type='short_trans';
+						} else
+						{
+							$type='short_text';
 						}
 						break;
 
 					case 'textarea':
-						$default = '';
-						if($row['bbc']==1){
-							$type = 'long_trans';
-						} else {
-							$type = 'long_text';
+						$default='';
+						if ($row['bbc']==1)
+						{
+							$type='long_trans';
+						} else
+						{
+							$type='long_text';
 						}
 						break;
 
@@ -582,9 +584,10 @@ class Hook_smf2
 						$type='radiolist';
 						break;
 				}
-				$def = !empty($default)? $default:'';
-				if(!empty($options) && !empty($def)){
-					$def = $this->cpf_options_string($def,$options);
+				$def=!empty($default)? $default:'';
+				if (!empty($options) && !empty($def))
+				{
+					$def=$this->cpf_options_string($def,$options);
 				}
 
 				$id_new=ocf_make_custom_field($name,0,$desc,$def,$pub_view,$own_view,$own_set,0,$type,$req,$show_in_posts,0,NULL,'',false,$on_join);
@@ -597,26 +600,26 @@ class Hook_smf2
 	/**
 	 * Used with ocf_custom_profile_fields
 	 *
-	 * @param string Default value
-	 * @param string List of coma seperated options
-	 * @return String imploded with pipe
+	 * @param  string		Default value
+	 * @param  string		List of coma seperated options
+	 * @return string		Imploded with pipe
 	 */
 	function cpf_options_string($default,$options)
 	{
-		$temp_array = array();
-		$default = trim($default);
+		$temp_array=array();
+		$default=trim($default);
 		array_push($temp_array,$default);
 		$values=explode(',',$options);
-			foreach ($values as $value)
+		foreach ($values as $value)
+		{
+			$value=trim($value);
+			if ($value!=$default)
 			{
-				$value = trim($value);
-				if ($value!=$default)
-				{
-					if ($value=='') continue;
-					array_push($temp_array,$value);
-				}
+				if ($value=='') continue;
+				array_push($temp_array,$value);
 			}
-		$result = implode('|',$temp_array);
+		}
+		$result=implode('|',$temp_array);
 		return $result;
 	}
 
@@ -651,7 +654,7 @@ class Hook_smf2
 			if ($option['variable']=='avatar_url') $avatar_gallery_path=$option['value'];
 		}
 
-		$avatar_gallery_path=str_replace($boardurl, '', $avatar_gallery_path);
+		$avatar_gallery_path=str_replace($boardurl,'',$avatar_gallery_path);
 
 		$host=preg_replace('#\.#','\.',$_SERVER['HTTP_HOST']);
 		$doc_root=$_SERVER['DOCUMENT_ROOT'];
@@ -797,7 +800,6 @@ class Hook_smf2
 		}
 	}
 
-
 	/**
 	 * Standard import function.
 	 *
@@ -860,65 +862,70 @@ class Hook_smf2
 			$parent_forum=($row['id_parent']>0)?$row['id_parent']:db_get_first_id();
 			$cat_id=$row['id_cat'];
 
-			$profile_id=(int)$row['id_profile'];
-			$redirection = isset($row['redirect']) && !empty($row['redirect'])? $row['redirect']: '';
+			$profile_id=(integer)$row['id_profile'];
+			$redirection=isset($row['redirect']) && !empty($row['redirect'])?$row['redirect']:'';
 
 			$category_id=import_id_remap_get('category',strval($cat_id),true);
 
 			$access_mapping=NULL;
 
 			$id_new=ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position,$post_count_increment,0,'','',$redirection);
-			$done_all_groups = false;
+			$done_all_groups=false;
 			/// Now lets do Permissions
-			if(isset($row['member_groups']) && !empty($row['member_groups']) && !empty($profile_id))
+			if (isset($row['member_groups']) && !empty($row['member_groups']) && !empty($profile_id))
 			{
-				$permissions_on_groups = explode(',', $row['member_groups']);
-				if(in_array('0',$permissions_on_groups)){
-					$this->fill_static_perms_all($profile_id ,$id_new, $db, $table_prefix);
-					$done_all_groups = true;
+				$permissions_on_groups=explode(',',$row['member_groups']);
+				if (in_array('0',$permissions_on_groups))
+				{
+					$this->fill_static_perms_all($profile_id ,$id_new,$db,$table_prefix);
+					$done_all_groups=true;
 				}
 				foreach ($permissions_on_groups as $gid)
 				{
 					// Let's deal with Guest group
-					if((int)$gid === -1){
+					if ((integer)$gid===-1)
+					{
 						//Yup its Guests so let's get value
-						$v=$this->get_role_value(-1,$profile_id, $db, $table_prefix);
+						$v=$this->get_role_value(-1,$profile_id,$db,$table_prefix);
 						//Now set Forum view access
-						$this->set_forum_view_accesss(1, $id_new);
+						$this->set_forum_view_accesss(1,$id_new);
 						// Now Set the static permissions array
-						$this->static_perm_arr(1, $profile_id, $v);
+						$this->static_perm_arr(1,$profile_id,$v);
 						continue;
 					}
-					if((int)$gid === 0) continue; //We already did all groups so skip
-					if((int)$gid === 1) continue; //Admin so skip
+					if ((integer)$gid===0) continue; //We already did all groups so skip
+					if ((integer)$gid===1) continue; //Admin so skip
 					// Check for SMF Global Moderators Group and map to ocp SuperModerators
-					if((int)$gid === 2){
+					if ((integer)$gid===2)
+					{
 						//Yup its Moderators so let's get value
-						$v=$this->get_role_value(2,$profile_id, $db, $table_prefix);
+						$v=$this->get_role_value(2,$profile_id,$db,$table_prefix);
 						//Now set Forum view access
-						if(!$done_all_groups) $this->set_forum_view_accesss(3, $id_new);
+						if (!$done_all_groups) $this->set_forum_view_accesss(3,$id_new);
 						// Now Set the static permissions array
-						$this->static_perm_arr(3, $profile_id, $v);
+						$this->static_perm_arr(3,$profile_id,$v);
 						continue;
 					}
 					// Ok now it's regular groups so lets deal with them
 					// First let's get value
-					$v=$this->get_role_value((int)$gid,$profile_id, $db, $table_prefix);
+					$v=$this->get_role_value((integer)$gid,$profile_id,$db,$table_prefix);
 					//get the mapped group id
-					$new_gid = import_id_remap_get('group',strval((int)$gid),true);
+					$new_gid=import_id_remap_get('group',strval((integer)$gid),true);
 					//Now set Forum view access
-					if(!$done_all_groups && $new_gid != NULL){
-						$this->set_forum_view_accesss((int)$new_gid, $id_new);
+					if (!$done_all_groups && $new_gid!==NULL)
+					{
+						$this->set_forum_view_accesss((integer)$new_gid,$id_new);
 					}
 						// Now Set the static permissions array
-					if($new_gid != NULL){
-						$this->static_perm_arr((int)$new_gid, $profile_id, $v);
+					if ($new_gid!==NULL)
+					{
+						$this->static_perm_arr((integer)$new_gid,$profile_id,$v);
 					}
 				}
-				// Let's get theArray map of groups and profile ids
-				$arr = $this->static_perm_arr(0, $profile_id, $v, true);
+				// Let's get the Array map of groups and profile ids
+				$arr=$this->static_perm_arr(0,$profile_id,$v,true);
 				// Now let's set permissions as we cycle through the static array map and apply permission based on best values
-				$this->sort_set_forum_perms_array($arr, $id_new);
+				$this->sort_set_forum_perms_array($arr,$id_new);
 			}
 
 			$remap_id[$row['id_board']]=$id_new;
@@ -939,28 +946,33 @@ class Hook_smf2
 	/**
 	 * Fills the static_perm_arr with profile permissions for all ocPgroups
 	 *
-	 * @param INTEGER Profile id to use
-	 * @param INTEGER Forum id to use
+	 * @param integer		Profile ID to use
+	 * @param integer		Forum ID to use
+	 * @param object		The DB connection to import from
+	 * @param string		The table prefix the target prefix is using
 	 */
-	function fill_static_perms_all($pid, $fid, $db, $table_prefix){
+	function fill_static_perms_all($pid,$fid,$db,$table_prefix)
+	{
 		// Get the permission profile
-		$v=$this->get_role_value(0,$pid, $db, $table_prefix);
+		$v=$this->get_role_value(0,$pid,$db,$table_prefix);
 		/// Do all ocpGroups with these permissions
 		// Admins always have access so no need to do and we skip Guests cause this is for Regular Members in SMF not guests
-		$ignore_groups = array('Guests','Administrators');
+		$ignore_groups=array('Guests','Administrators');
 		// Get the query
-		$rows = $GLOBALS['SITE_DB']->query('SELECT g.id, t.text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_groups AS g INNER JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate AS t ON g.g_name = t.id');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT g.id,t.text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_groups AS g INNER JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate AS t ON g.g_name=t.id');
 		// Added this in cause of import issues in the past.
-		if(!$rows == NULL){
+		if ($rows!==NULL)
+		{
 			// Loop it
-			foreach ($rows as $row){
+			foreach ($rows as $row)
+			{
 				// K Skip Admins and guests
-				if(in_array($row['text_original'],$ignore_groups)) continue;
-				$gid = (int)$row['id'];
+				if (in_array($row['text_original'],$ignore_groups)) continue;
+				$gid=(integer)$row['id'];
 				// Set them to view
-				$this->set_forum_view_accesss($gid, $fid);
+				$this->set_forum_view_accesss($gid,$fid);
 				//fill the static profile array map
-				$this->static_perm_arr($gid, $pid, $v);
+				$this->static_perm_arr($gid,$pid,$v);
 			}
 		}
 	}
@@ -968,14 +980,18 @@ class Hook_smf2
 	/**
 	 * Gets the role value for permissions of group
 	 *
-	 * @param INTEGER Group Id to use
-	 * @param INTEGER Profile id to use
+	 * @param  integer		Group ID to use
+	 * @param  integer		Profile ID to use
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @return integer		The role value
 	 */
-	function get_role_value($gid, $pid, $db, $table_prefix){
+	function get_role_value($gid,$pid,$db,$table_prefix)
+	{
 		// Set default 0 as Read Only
 		$v=0;
 		// Get the permission profile
-		$permissions=$db->query('SELECT * FROM '.$table_prefix.'board_permissions WHERE id_group='.(int)$gid.' AND id_profile='.(int)$pid);
+		$permissions=$db->query('SELECT * FROM '.$table_prefix.'board_permissions WHERE id_group='.strval((integer)$gid).' AND id_profile='.strval((integer)$pid));
 		// Loop it
 		foreach ($permissions as $p)
 		{
@@ -1010,7 +1026,7 @@ class Hook_smf2
 				if (import_check_if_imported('topic',strval($row['id_topic']))) continue;
 
 				$forum_id=import_id_remap_get('forum',strval($row['id_board']));
-				$emoticon = $this->convert_topic_emoticon($row['icon']);
+				$emoticon=$this->convert_topic_emoticon($row['icon']);
 				$id_new=ocf_make_topic($forum_id,$row['subject'],$emoticon,1,($row['locked']==0)?1:0,0,0,0,NULL,NULL,false,$row['num_views']);
 
 				import_id_remap_put('topic',strval($row['id_topic']),$id_new);
@@ -1055,9 +1071,7 @@ class Hook_smf2
 				$title=$row['subject'];
 				$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-
 				$post_description=html_to_comcode($row['body']);
-
 
 				$post=$this->fix_links($post_description,$db,$table_prefix,$file_base);
 
@@ -1142,10 +1156,11 @@ class Hook_smf2
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  string			The filename to output to
 	 * @param  PATH			The base directory we are importing from
-	 * @param  string			Attachment ID
+	 * @param  string			The attachment ID
+	 * @param  string			The file extension to use
 	 * @return URLPATH		The URL
 	 */
-	function data_to_disk($data,$filename,$sections, $db,$table_prefix='', $output_filename='',$file_base='',$attachment_id='', $ext='.png')
+	function data_to_disk($data,$filename,$sections,$db,$table_prefix='',$output_filename='',$file_base='',$attachment_id='',$ext='.png')
 	{
 		$boardurl='';
 		$boarddir='';
@@ -1156,7 +1171,7 @@ class Hook_smf2
 		$forum_dir=preg_replace('#\\\\#','/',$boarddir); //full path to the forum folder
 
 		$attachments_dir=$forum_dir.'/attachments/'; //forum attachments directory
-		$filename_fixed = $filename.$ext;
+		$filename_fixed=$filename.$ext;
 		$file_path=$attachments_dir.$filename;
 		$data=($data=='')?@file_get_contents($file_path):$data;
 		$filename=($output_filename=='')?$filename_fixed:$output_filename;
@@ -1196,7 +1211,7 @@ class Hook_smf2
 			$rows=remove_duplicate_rows($rows,'id_attach');
 			foreach ($rows as $row)
 			{
-				if(substr($row['filename'],-5)=='thumb') continue;
+				if (substr($row['filename'],-5)=='thumb') continue;
 				if (import_check_if_imported('post_files',strval($row['id_attach']))) continue;
 
 				$post_id=import_id_remap_get('post',strval($row['id_msg']));
@@ -1210,8 +1225,8 @@ class Hook_smf2
 				$post=$post_row[0]['text_original'];
 				$lang_id=$post_row[0]['p_post'];
 				$member_id=$post_row[0]['p_poster'];
-				$ext = '.'.$row['fileext'];
-				$filename = $row['id_attach'].'_'.$row['file_hash'];
+				$ext='.'.$row['fileext'];
+				$filename=$row['id_attach'].'_'.$row['file_hash'];
 
 				$url=$this->data_to_disk('',$filename,'attachments',$db,$table_prefix,$row['filename'],$file_base,$row['id_attach'],$ext);
 				$a_id=$GLOBALS['SITE_DB']->query_insert('attachments',array('a_member_id'=>$member_id,'a_file_size'=>$row['size'],'a_url'=>$url,'a_thumb_url'=>$url,'a_original_filename'=>$row['filename'],'a_num_downloads'=>$row['downloads'],'a_last_downloaded_time'=>NULL,'a_add_time'=>$row['poster_time'],'a_description'=>''),true);
@@ -1247,7 +1262,6 @@ class Hook_smf2
 			if (!isset($poll_topic_id[0]['id_topic'])) continue;
 			$poll_topic_id=$poll_topic_id[0]['id_topic'];
 
-
 			$topic_id=import_id_remap_get('topic',strval($poll_topic_id),true);
 			if (is_null($topic_id))
 			{
@@ -1261,7 +1275,7 @@ class Hook_smf2
 			$poll_choices=$db->query('SELECT * FROM '.$table_prefix.'poll_choices WHERE id_poll='.strval($row['id_poll']));
 
 			$answers_array=array();
-			foreach($poll_choices as $key=>$value)
+			foreach ($poll_choices as $key=>$value)
 			{
 				$answers_array[]=$value['label'];
 			}
@@ -1312,8 +1326,8 @@ class Hook_smf2
 		$member_rows=$db->query('SELECT id_member FROM '.$table_prefix.'members');
 		foreach ($member_rows as $member_row)
 		{
-   			$member_id=$member_row['id_member'];
-   			$rows=$db->query('SELECT * FROM '.$table_prefix.'personal_messages p LEFT JOIN '.$table_prefix.'pm_recipients r ON p.id_pm=r.id_pm WHERE r.id_member='.strval($member_id).' OR id_member_from='.strval($member_id).' ORDER BY msgtime');
+			$member_id=$member_row['id_member'];
+			$rows=$db->query('SELECT * FROM '.$table_prefix.'personal_messages p LEFT JOIN '.$table_prefix.'pm_recipients r ON p.id_pm=r.id_pm WHERE r.id_member='.strval($member_id).' OR id_member_from='.strval($member_id).' ORDER BY msgtime');
 
 			// Group them up into what will become topics
 			$groups=array();
@@ -1359,9 +1373,7 @@ class Hook_smf2
 
 					$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-
 					$post_description=html_to_comcode($_post['body']);
-
 
 					$post=$this->fix_links($post_description,$db,$table_prefix,$old_base_dir);
 					$validated=1;
@@ -1383,14 +1395,12 @@ class Hook_smf2
 		}
 	}
 
-
 	/**
 	 * Convert a SMF topic icon code into a standard ocPortal theme image code.
 	 *
 	 * @param  string		smf icon
-	 * @return ID_TEXT		ocPortal code
+	 * @return ID_TEXT	ocPortal code
 	 */
-
 	function convert_topic_emoticon($icon)
 	{
 		switch ($icon)
@@ -1422,7 +1432,6 @@ class Hook_smf2
 		}
 		return '';
 	}
-
 
 	/**
 	 * Standard import function.
@@ -1489,62 +1498,65 @@ class Hook_smf2
 	}
 
 	/**
-	 * Used to build privillage permission access to Forums
+	 * Used to build privilege permission access to Forums
 	 *
-	 * @param string Group Id to map
-	 * @param string Profile Id to map
-	 * @param integer Value to map
-	 * @param bool Wether to return the map or not
-	 *
-	 * @return Array the mapped Groups and Profile with highest privillage calculated.
+	 * @param  string		Group ID to map
+	 * @param  string		Profile ID to map
+	 * @param  integer	Value to map
+	 * @param  boolean 	Whether to return the map or not
+	 * @return array		The mapped Groups and Profile with highest privilege calculated.
 	 */
-
-	function static_perm_arr($gid, $pid, $v, $r=false){
+	function static_perm_arr($gid,$pid,$v,$r=false)
+	{
 		// create the static array
-  		static $st = array();
-  		// Are we returning this run or not?
-	  	if($r) {
-	  		// Yes we are so lets move the static aray to a temp one so we can unset it
-  			$rt = $st;
-  			// Ok Cleanup
-  			unset($st);
-  			// Now send back the info
-  			return $rt;
-  		}
-  		// Lets see if we've added the group to map yet?
- 	 	if(array_key_exists($gid,$st)){
- 	 		// yes we have so lets check if the Forum Id for this group?
- 	 		if(array_key_exists($pid,$st[$gid])){
- 	 			// yes we have now let's check if its current value is less than the on sent
-	  			if($st[$gid][$pid] < $v){
-	  				// Yes it is so let's update it to the new higher value
-  					$st[$gid][$pid] = $v;
-  				}
-	  		}
-  			else
-  			{
-  				//No the Forum ID wasn't set yet so we can set it with the Value
-  				$st[$gid][$pid]=$v;
-  			}
-  		}
-	  	else
-  		{
-  			//No the Group ID wasn't set yet so we can set it with the Forum ID and Value
-  			$st[$gid] = array($pid=>$v);
-  		}
-  	}
+		static $st=array();
+		// Are we returning this run or not?
+		if ($r)
+		{
+			// Yes we are so lets move the static aray to a temp one so we can unset it
+			$rt=$st;
+			// Ok Cleanup
+			unset($st);
+			// Now send back the info
+			return $rt;
+		}
+		// Lets see if we've added the group to map yet?
+		if (array_key_exists($gid,$st))
+		{
+			// yes we have so lets check if the Forum ID for this group?
+			if (array_key_exists($pid,$st[$gid]))
+			{
+				// yes we have now let's check if its current value is less than the on sent
+				if ($st[$gid][$pid] < $v)
+				{
+					// Yes it is so let's update it to the new higher value
+					$st[$gid][$pid]=$v;
+				}
+			} else
+			{
+				//No the Forum ID wasn't set yet so we can set it with the Value
+				$st[$gid][$pid]=$v;
+			}
+		} else
+		{
+			//No the Group ID wasn't set yet so we can set it with the Forum ID and Value
+			$st[$gid]=array($pid=>$v);
+		}
+	}
 
 	/**
 	 * Used to set view access to Forums
 	 *
-	 * @param INTEGER The Group ID to set
-	 * @param STRING The Forum ID to set
+	 * @param integer The Group ID to set
+	 * @param string 	The Forum ID to set
 	 */
-	function set_forum_view_accesss($gid, $fid){
+	function set_forum_view_accesss($gid,$fid)
+	{
 		// Make a Compounded Name ID for the immporter map
-		$check_import_id = strval($gid).'_'.strval($fid);
+		$check_import_id=strval($gid).'_'.strval($fid);
 		// Now Check we didn't import this already?
-		if (!import_check_if_imported('forum_view',$check_import_id)) {
+		if (!import_check_if_imported('forum_view',$check_import_id))
+		{
 			// We didn't so update
 			$GLOBALS['FORUM_DB']->query_insert('group_category_access',array(
 				'module_the_name'=>'forums',
@@ -1552,63 +1564,67 @@ class Hook_smf2
 				'group_id'=>$gid
 			));
 			// Now we put the remap in so we know it is imported.
-			import_id_remap_put('forum_view',$check_import_id,'1');
+			import_id_remap_put('forum_view',$check_import_id,1);
 		}
 	}
 
 	/**
 	 * Used to set view access to Forums
 	 *
-	 * @param ARRAY The static array map built from static_perm_arr
-	 * @param INTEGER The Forum ID to set
+	 * @param array 	The static array map built from static_perm_arr
+	 * @param integer The Forum ID to set
 	 */
-	function sort_set_forum_perms_array($arr, $forum_id){
+	function sort_set_forum_perms_array($arr,$forum_id)
+	{
 		//Let's start the cycle
-		foreach($arr as $key=>$val){
-			if((int)$key === 0) continue; //That's the one we set for return so skip!
+		foreach ($arr as $key=>$val)
+		{
+			if ((integer)$key===0) continue; //That's the one we set for return so skip!
 			//Set default value of 0 lowest so we can sort to highest
-			$v = 0;
+			$v=0;
 			//So it should be!
-			if(is_array($val)){
+			if (is_array($val))
+			{
 				//and it is so let's loop it!
-				foreach($val as $key2=>$val2){
+				foreach ($val as $key2=>$val2)
+				{
 					// ok check what's highest and set if needed
-					if($val2 > $v)
+					if ($val2 > $v)
 					{
-						$v = $val2;
+						$v=$val2;
 					}
 				}
 			}
 			else
 			{
-				if($val > $v)
+				if ($val > $v)
 				{
-					$v = $val;
+					$v=$val;
 				}
 			}
 			//Now set the permissions!
-			$this->set_forums_perms($key, $forum_id, $v);
+			$this->set_forums_perms($key,$forum_id,$v);
 		}
 	}
 
 	/**
 	 * Used to Set Forum Permissions
 	 *
-	 * @param INTEGER The Group ID to set
-	 * @param STRING The Forum ID to set
-	 * @param INTEGER The basic Role they have: 0=ReadOnly, 1=Post/Submit, 2=Unvetted, 3=Moderate
+	 * @param integer	The Group ID to set
+	 * @param string 	The Forum ID to set
+	 * @param integer	The basic Role they have: 0=ReadOnly, 1=Post/Submit, 2=Unvetted, 3=Moderate
 	 */
-	function set_forums_perms($group_id, $forum_id, $role=0){
+	function set_forums_perms($group_id,$forum_id,$role=0)
+	{
 		// Make a Compounded Name ID for the immporter map
-		$check_import_id = strval($group_id).'_'.strval($forum_id);
+		$check_import_id=strval($group_id).'_'.strval($forum_id);
 		// Now Check we didn't import this already?
-		if (!import_check_if_imported('forum_perms',$check_import_id)) {
-
+		if (!import_check_if_imported('forum_perms',$check_import_id))
+		{
 			switch ($role)
 			{
 				//read only
 				case 0:
-
 					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
 					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
 					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
@@ -1669,7 +1685,7 @@ class Hook_smf2
 					break;
 			}
 			// Now we put the remap in so we know it is imported.
-			import_id_remap_put('forum_perms',$check_import_id,'1');
+			import_id_remap_put('forum_perms',$check_import_id,1);
 		}
 	}
 
@@ -1695,7 +1711,6 @@ class Hook_smf2
 			$recurrence='none';
 			$recurrences=NULL;
 
-
 			$days=intval(floor((strtotime($row['end_date']) - strtotime($row['start_date'])) / (60 * 60 * 24))); //Max 7 days in SMF
 			if ($days==0)
 			{
@@ -1716,25 +1731,24 @@ class Hook_smf2
 			if ($row['id_topic']!=0)
 			{
 				$atts=$db->query('SELECT * FROM '.$table_prefix.'attachments WHERE id_msg='.strval($row['id_topic']).' ORDER BY id_msg ASC');
-				$attid = isset($atts[0]['id_attach'])? $atts[0]['id_attach']:0;
-				$att_imported = $attid > 0 && import_check_if_imported('post_files',strval($attid))? true:false;
+				$attid=isset($atts[0]['id_attach'])? $atts[0]['id_attach']:0;
+				$att_imported=$attid > 0 && import_check_if_imported('post_files',strval($attid))? true:false;
 				$messages=$db->query('SELECT * FROM '.$table_prefix.'messages WHERE id_topic='.strval($row['id_topic']).' ORDER BY id_topic ASC');
 				$description=(isset($messages[0]['body'])&&($messages[0]['body']!=''))?html_to_comcode($messages[0]['body']):'';
 			}
-			if($att_imported)
+			if ($att_imported)
 			{
 				$attid_new=import_id_remap_get('post_files',strval($attid),true);
 				$description.="\n\n".'[attachment]'.strval($attid_new).'[/attachment]';
 			}
 
 			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$description,3,1,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
-			if($att_imported)
+			if ($att_imported)
 			{
 				$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>'calendar','r_referer_id'=>strval($id_new),'a_id'=>$attid_new));
 			}
 			import_id_remap_put('event',strval($row['id_event']),$id_new);
 		}
-
 
 		$rows=array();
 		$rows=$db->query_select('calendar_holidays');
@@ -1747,13 +1761,10 @@ class Hook_smf2
 			$recurrence='none';
 			$recurrences=NULL;
 
-
 			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=array_map('intval',explode('-',date('Y-m-d-h-i',strtotime($row['event_date']))));
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array_map('intval',explode('-',date('Y-m-d-h-i',strtotime($row['event_date']))));
 
-
 			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['title'],3,1,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
-
 
 			import_id_remap_put('event_holiday',strval($row['id_holiday']),$id_new);
 		}

@@ -3,7 +3,7 @@
 function load_occle()
 {
 	// (Still?) loading
-	if ((typeof window.occle_command_response=='undefined') || (!window.ajax_supported))
+	if ((typeof window.occle_command_response=='undefined') || (typeof window.do_ajax_request=='undefined'))
 	{
 		if (document.getElementById('occle_img_loader'))
 		{
@@ -12,25 +12,24 @@ function load_occle()
 		}
 
 		var img=document.getElementById('occle_img');
-		setOpacity(img,0.4);
+		img.className='footer_button_loading';
 		var tmp_element=document.createElement('img');
-		tmp_element.src="{$IMG,bottom/loading}".replace(/^http:/,window.location.protocol);
+		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
 		tmp_element.style.position='absolute';
-		tmp_element.style.left=findPosX(img)+'px';
-		tmp_element.style.top=findPosY(img)+'px';
+		tmp_element.style.left=find_pos_x(img)+'px';
+		tmp_element.style.top=find_pos_y(img)+'px';
 		tmp_element.id='occle_img_loader';
 		img.parentNode.appendChild(tmp_element);
-		fixImage(img);
 
-		require_javascript("javascript_ajax");
-		require_javascript("javascript_occle","occle");
-		require_css("occle");
+		require_javascript('javascript_ajax');
+		require_javascript('javascript_occle','occle');
+		require_css('occle');
 		window.setTimeout(load_occle,200);
 		return false;
 	}
 
 	// Loaded
-	if ((window.ajax_supported) && (ajax_supported()) && (typeof window.occle_command_response!='undefined'))
+	if ((typeof window.do_ajax_request!='undefined') && (typeof window.occle_command_response!='undefined'))
 	{
 		confirm_session(
 			function(result)
@@ -50,15 +49,15 @@ function load_occle()
 					occle_box.setAttribute('id','occle_box');
 					occle_box.style.position='absolute';
 					occle_box.style.zIndex=2000;
-					occle_box.style.left=(getWindowWidth()-800)/2+"px";
-					var top_temp=(getWindowHeight()-600)/2;
+					occle_box.style.left=(get_window_width()-800)/2+'px';
+					var top_temp=(get_window_height()-600)/2;
 					if (top_temp<100) top_temp=100;
-					occle_box.style.top=top_temp+"px";
+					occle_box.style.top=top_temp+'px';
 					occle_box.style.display='none';
 					occle_box.style.width='800px';
 					occle_box.style.height='500px';
 					document.body.appendChild(occle_box);
-					setInnerHTML(occle_box,load_snippet("occle"));
+					set_inner_html(occle_box,load_snippet('occle'));
 				}
 
 				if (occle_box.style.display=='none') // Showing OcCLE again
@@ -67,52 +66,50 @@ function load_occle()
 
 					if (img)
 					{
-						img.src="{$IMG,bottom/occle_off}".replace(/^http:/,window.location.protocol);
-						fixImage(img);
-						setOpacity(img,1.0);
+						img.src='{$IMG;,footer/occle_off}'.replace(/^http:/,window.location.protocol);
+						img.className='';
 					}
 
-					smoothScroll(0,null,null,function() { document.getElementById("occle_command").focus(); } );
-					if (typeof window.nereidFade!='undefined')
+					smooth_scroll(0,null,null,function() { document.getElementById('occle_command').focus(); } );
+					if (typeof window.fade_transition!='undefined')
 					{
-						setOpacity(document.getElementById('command_line'),0.0);
-						nereidFade(document.getElementById('command_line'),80,30,5);
+						set_opacity(document.getElementById('command_line'),0.0);
+						fade_transition(document.getElementById('command_line'),90,30,5);
 					}
 
-					var bi=document.getElementById('body_inner');
+					var bi=document.getElementById('main_website_inner');
 					if (bi)
 					{
-						if (typeof window.nereidFade!='undefined')
+						if (typeof window.fade_transition!='undefined')
 						{
-							setOpacity(bi,1.0);
-							nereidFade(bi,30,30,-5);
+							set_opacity(bi,1.0);
+							fade_transition(bi,30,30,-5);
 						} else
 						{
-							setOpacity(bi,0.3);
+							set_opacity(bi,0.3);
 						}
 					}
 
-					document.getElementById("occle_command").focus();
+					document.getElementById('occle_command').focus();
 				}
 				else // Hiding OcCLE
 				{
 					if (img)
 					{
-						img.src="{$IMG,bottom/occle}".replace(/^http:/,window.location.protocol);
-						fixImage(img);
-						setOpacity(img,1.0);
+						img.src='{$IMG;,footer/occle}'.replace(/^http:/,window.location.protocol);
+						set_opacity(img,1.0);
 					}
 
 					occle_box.style.display='none';
-					var bi=document.getElementById('body_inner');
+					var bi=document.getElementById('main_website_inner');
 					if (bi)
 					{
-						if (typeof window.nereidFade!='undefined')
+						if (typeof window.fade_transition!='undefined')
 						{
-							nereidFade(bi,100,30,5);
+							fade_transition(bi,100,30,5);
 						} else
 						{
-							setOpacity(bi,1.0);
+							set_opacity(bi,1.0);
 						}
 					}
 				}

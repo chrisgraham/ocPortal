@@ -82,7 +82,7 @@ class Module_admin_notifications
 	{
 		require_lang('notifications');
 
-		$title=get_page_title('NOTIFICATIONS_LOCKDOWN');
+		$title=get_screen_title('NOTIFICATIONS_LOCKDOWN');
 
 		require_css('notifications');
 		require_javascript('javascript_notifications');
@@ -228,9 +228,9 @@ class Module_admin_notifications
 		{
 			$tmp_file=file_get_contents($css_path);
 			$matches=array();
-			if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+			if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 			{
-				$color=$matches[1];
+				$color=$matches[3].'&fgcolor='.$matches[4];
 			}
 		}
 

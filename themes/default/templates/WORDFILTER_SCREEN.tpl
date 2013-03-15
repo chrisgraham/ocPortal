@@ -7,14 +7,16 @@
 </p>
 
 {+START,IF_NON_EMPTY,{TPL}}
-<div>
-	<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('evil','block'); return false;"><img id="e_evil" alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-	<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('evil','block'); return false;">{!PROCEED}</a>
-	<div class="hide_button_spacing" id="evil" style="display: {$JS_ON,none,block}">
-		{TPL}
-	</div></div>
+	<div>
+		<h3 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!PROCEED}</a>
+		</h3>
 
-<br />
+		<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
+			{TPL}
+		</div>
+	</div>
 {+END}
 {+START,IF_EMPTY,{TPL}}
 	<p class="nothing_here">
@@ -26,7 +28,7 @@
 
 <p>{!HELP_ADD_WORDFILTER}</p>
 
-{+START,IF_NON_PASSED,SKIP_REQUIRED_NOTICE}
+{+START,IF_NON_PASSED_OR_FALSE,SKIP_REQUIRED_NOTICE}
 <div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
 {+END}
 

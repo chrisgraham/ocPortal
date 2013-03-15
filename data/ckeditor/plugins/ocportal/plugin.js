@@ -11,7 +11,7 @@
 					var func= {
 						exec: function(e) { return function() { e.onclick.call(e); } }(elements[0])
 					};
-					var label=elements[0].title;
+					var label=elements[0].alt;
 					var icon='plugins/ocportal/images/'+buttonName+'.png';
 
 					editor.addCommand('ocportal_'+buttonName,func);

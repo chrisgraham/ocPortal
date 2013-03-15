@@ -127,7 +127,7 @@ class Module_authors
 			require_code('awards');
 			$awards=find_awards_for('author',$author);
 		} else $awards=array();
-		$title=get_page_title('_AUTHOR',true,array(escape_html($author)),NULL,$awards);
+		$title=get_screen_title('_AUTHOR',true,array(escape_html($author)),NULL,$awards);
 
 		seo_meta_load_for('authors',$author);
 
@@ -218,13 +218,10 @@ class Module_authors
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('author'=>$author,'validated'=>1));
 				require_code('downloads');
-				foreach ($rows as $i=>$myrow)
+				foreach ($rows as $myrow)
 				{
-					if ($i!=0)
-						$downloads_released->attach(do_template('BLOCK_SEPARATOR',array('_GUID'=>'ea789367b15bsddsdsdsc586e6e6536')));
-
 					if (has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
-						$downloads_released->attach(get_download_html($myrow));
+						$downloads_released->attach(render_download_box($myrow));
 				}
 			}
 		}

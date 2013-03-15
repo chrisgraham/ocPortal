@@ -65,62 +65,62 @@ class Block_side_last_fm
 
 		if ($username=='')
 		{
-			$profile_url = 'http://www.last.fm/';
+			$profile_url='http://www.last.fm/';
 		} else
 		{
-			$profile_url = 'http://www.last.fm/user/'.$username;
+			$profile_url='http://www.last.fm/user/'.$username;
 		}
 
 		if($height!='100%')
 		{
-			$out = '<div style="overflow: auto; width: '.$width.'!important; height: '.$height.'!important;">';
+			$out='<div style="overflow: auto; width: '.$width.'!important; height: '.$height.'!important;">';
 		}
 		else
 		{
-			$out = '<div style="overflow: auto; width: '.$width.'!important;">';
+			$out='<div style="overflow: auto; width: '.$width.'!important;">';
 		}
 
-		$rss_url = '';
+		$rss_url='';
 
 		if ($username=='')
 		{
-			if ($display == 'artists')
+			if ($display=='artists')
 			{
-				$rss_url = 'http://ws.audioscrobbler.com/2.0/chart/topartists.xml';
-			} elseif ($display == 'albums')
+				$rss_url='http://ws.audioscrobbler.com/2.0/chart/topartists.xml';
+			} elseif ($display=='albums')
 			{
-				$rss_url = 'http://ws.audioscrobbler.com/2.0/chart/topalbums.xml';
-			} elseif ($display == 'tracks')
+				$rss_url='http://ws.audioscrobbler.com/2.0/chart/topalbums.xml';
+			} elseif ($display=='tracks')
 			{
-				$rss_url = 'http://ws.audioscrobbler.com/2.0/chart/toptracks.xml';
+				$rss_url='http://ws.audioscrobbler.com/2.0/chart/toptracks.xml';
 			}
 		} else
 		{
-			if ($display == 'artists')
+			if ($display=='artists')
 			{
-				$rss_url = 'http://ws.audioscrobbler.com/2.0/user/'.$username.'/topartists.xml';
-			} elseif ($display == 'albums')
+				$rss_url='http://ws.audioscrobbler.com/2.0/user/'.$username.'/topartists.xml';
+			} elseif ($display=='albums')
 			{
-				$rss_url = 'http://ws.audioscrobbler.com/2.0/user/'.$username.'/topalbums.xml';
-			} elseif ($display == 'tracks')
+				$rss_url='http://ws.audioscrobbler.com/2.0/user/'.$username.'/topalbums.xml';
+			} elseif ($display=='tracks')
 			{
-				$rss_url = 'http://ws.audioscrobbler.com/2.0/user/'.$username.'/toptracks.xml';
+				$rss_url='http://ws.audioscrobbler.com/2.0/user/'.$username.'/toptracks.xml';
 			}
 		}
 
 
-		if ($period == 3)
+		if ($period==3)
 		{
-			$rss_url .= '?period=3month';
-		} elseif ($period == 6)
+			$rss_url.='?period=3month';
+		} elseif ($period==6)
 		{
-			$rss_url .= '?period=6month';
-		} elseif ($period == 12)
+			$rss_url.='?period=6month';
+		} elseif ($period==12)
 		{
-			$rss_url .= '?period=12month';
-		} elseif ($period == 'overall' || $period == '' || !isset($period))
+			$rss_url.='?period=12month';
+		} elseif ($period=='overall' || $period=='' || !isset($period))
 		{
-			$rss_url .= '?period=overall';
+			$rss_url.='?period=overall';
 		}
 
 		//read XML into array
@@ -134,16 +134,16 @@ class Block_side_last_fm
 				foreach($xml['toptracks']['_c']['track'] as $track)
 				{
 
-					$track_name = (isset($track['_c']['name']['_v']) && strlen($track['_c']['name']['_v'])>0)?$track['_c']['name']['_v']:'';
+					$track_name=(isset($track['_c']['name']['_v']) && strlen($track['_c']['name']['_v'])>0)?$track['_c']['name']['_v']:'';
 
-					$playcount = (isset($track['_c']['playcount']['_v']) && $track['_c']['playcount']['_v']>0)?$track['_c']['playcount']['_v']:0;
+					$playcount=(isset($track['_c']['playcount']['_v']) && $track['_c']['playcount']['_v']>0)?$track['_c']['playcount']['_v']:0;
 
-					$track_url = (isset($track['_c']['url']['_v']) && strlen($track['_c']['url']['_v'])>0)?$track['_c']['url']['_v']:'';
+					$track_url=(isset($track['_c']['url']['_v']) && strlen($track['_c']['url']['_v'])>0)?$track['_c']['url']['_v']:'';
 
 
-					$artist = (isset($track['_c']['artist']['_c']['name']['_v']) && strlen($track['_c']['artist']['_c']['name']['_v'])>0)?$track['_c']['artist']['_c']['name']['_v']:'';
+					$artist=(isset($track['_c']['artist']['_c']['name']['_v']) && strlen($track['_c']['artist']['_c']['name']['_v'])>0)?$track['_c']['artist']['_c']['name']['_v']:'';
 
-					$artist_url = (isset($track['_c']['artist']['_c']['url']['_v']) && strlen($track['_c']['artist']['_c']['url']['_v'])>0)?$track['_c']['artist']['_c']['url']['_v']:'';
+					$artist_url=(isset($track['_c']['artist']['_c']['url']['_v']) && strlen($track['_c']['artist']['_c']['url']['_v'])>0)?$track['_c']['artist']['_c']['url']['_v']:'';
 
 					$images=array();
 
@@ -153,7 +153,7 @@ class Block_side_last_fm
 						{
 							if(isset($image['_a']['size']) && strlen($image['_a']['size'])>0)
 							{
-								$images[$image['_a']['size']] = (isset($image['_v']) && strlen($image['_v'])>0)?$image['_v']:'';
+								$images[$image['_a']['size']]=(isset($image['_v']) && strlen($image['_v'])>0)?$image['_v']:'';
 							}
 						}
 					}
@@ -164,7 +164,7 @@ class Block_side_last_fm
 
 					if($track_images!='')
 					{
-						$out.='<div class="float_surrounder"><img width="64" src="'.$track_images.'" title="" style="float: left; margin: 3px;" /><a href="'.$track_url.'" target="_blank">'.$track_name.'</a><br />';
+						$out.='<div class="float_surrounder"><img width="64" src="'.$track_images.'" style="float: left; margin: 3px;" /><a href="'.$track_url.'" target="_blank">'.$track_name.'</a><br />';
 						$out.='<a href="'.$artist_url.'" target="_blank" style="font-style: italic;">'.$artist.'</a><br />';
 						$out.='Total Plays: '.$playcount.'</div><br />';
 					} else
@@ -185,11 +185,11 @@ class Block_side_last_fm
 				foreach($xml['topartists']['_c']['artist'] as $artist_item)
 				{
 
-					$playcount = (isset($artist_item['_c']['playcount']['_v']) && $artist_item['_c']['playcount']['_v']>0)?$artist_item['_c']['playcount']['_v']:0;
+					$playcount=(isset($artist_item['_c']['playcount']['_v']) && $artist_item['_c']['playcount']['_v']>0)?$artist_item['_c']['playcount']['_v']:0;
 
-					$artist = (isset($artist_item['_c']['name']['_v']) && strlen($artist_item['_c']['name']['_v'])>0)?$artist_item['_c']['name']['_v']:'';
+					$artist=(isset($artist_item['_c']['name']['_v']) && strlen($artist_item['_c']['name']['_v'])>0)?$artist_item['_c']['name']['_v']:'';
 
-					$artist_url = (isset($artist_item['_c']['url']['_v']) && strlen($artist_item['_c']['url']['_v'])>0)?$artist_item['_c']['url']['_v']:'';
+					$artist_url=(isset($artist_item['_c']['url']['_v']) && strlen($artist_item['_c']['url']['_v'])>0)?$artist_item['_c']['url']['_v']:'';
 
 					$images=array();
 
@@ -199,7 +199,7 @@ class Block_side_last_fm
 						{
 							if(isset($image['_a']['size']) && strlen($image['_a']['size'])>0)
 							{
-								$images[$image['_a']['size']] = (isset($image['_v']) && strlen($image['_v'])>0)?$image['_v']:'';
+								$images[$image['_a']['size']]=(isset($image['_v']) && strlen($image['_v'])>0)?$image['_v']:'';
 							}
 						}
 					}
@@ -210,7 +210,7 @@ class Block_side_last_fm
 
 					if($artist_image!='')
 					{
-						$out.='<div class="float_surrounder"><img width="64" src="'.$artist_image.'" title="" style="float: left; margin: 3px;" />';
+						$out.='<div class="float_surrounder"><img width="64" src="'.$artist_image.'" style="float: left; margin: 3px;" />';
 						$out.='<a href="'.$artist_url.'" target="_blank" style="font-style: italic;">'.$artist.'</a><br />';
 						$out.='Total Plays: '.$playcount.'</div><br />';
 					} else
@@ -230,16 +230,16 @@ class Block_side_last_fm
 				foreach($xml['topalbums']['_c']['album'] as $album)
 				{
 
-					$album_name = (isset($album['_c']['name']['_v']) && strlen($album['_c']['name']['_v'])>0)?$album['_c']['name']['_v']:'';
+					$album_name=(isset($album['_c']['name']['_v']) && strlen($album['_c']['name']['_v'])>0)?$album['_c']['name']['_v']:'';
 
-					$playcount = (isset($album['_c']['playcount']['_v']) && $album['_c']['playcount']['_v']>0)?$album['_c']['playcount']['_v']:0;
+					$playcount=(isset($album['_c']['playcount']['_v']) && $album['_c']['playcount']['_v']>0)?$album['_c']['playcount']['_v']:0;
 
-					$album_url = (isset($album['_c']['url']['_v']) && strlen($album['_c']['url']['_v'])>0)?$album['_c']['url']['_v']:'';
+					$album_url=(isset($album['_c']['url']['_v']) && strlen($album['_c']['url']['_v'])>0)?$album['_c']['url']['_v']:'';
 
 
-					$artist = (isset($album['_c']['artist']['_c']['name']['_v']) && strlen($album['_c']['artist']['_c']['name']['_v'])>0)?$album['_c']['artist']['_c']['name']['_v']:'';
+					$artist=(isset($album['_c']['artist']['_c']['name']['_v']) && strlen($album['_c']['artist']['_c']['name']['_v'])>0)?$album['_c']['artist']['_c']['name']['_v']:'';
 
-					$artist_url = (isset($album['_c']['artist']['_c']['url']['_v']) && strlen($album['_c']['artist']['_c']['url']['_v'])>0)?$album['_c']['artist']['_c']['url']['_v']:'';
+					$artist_url=(isset($album['_c']['artist']['_c']['url']['_v']) && strlen($album['_c']['artist']['_c']['url']['_v'])>0)?$album['_c']['artist']['_c']['url']['_v']:'';
 
 					$images=array();
 
@@ -249,7 +249,7 @@ class Block_side_last_fm
 						{
 							if(isset($image['_a']['size']) && strlen($image['_a']['size'])>0)
 							{
-								$images[$image['_a']['size']] = (isset($image['_v']) && strlen($image['_v'])>0)?$image['_v']:'';
+								$images[$image['_a']['size']]=(isset($image['_v']) && strlen($image['_v'])>0)?$image['_v']:'';
 							}
 						}
 					}
@@ -260,7 +260,7 @@ class Block_side_last_fm
 
 					if($album_images!='')
 					{
-						$out.='<div class="float_surrounder"><img width="64" src="'.$album_images.'" title="" style="float: left; margin: 3px;" /><a href="'.$album_url.'" target="_blank">'.$album_name.'</a><br />';
+						$out.='<div class="float_surrounder"><img width="64" src="'.$album_images.'" style="float: left; margin: 3px;" /><a href="'.$album_url.'" target="_blank">'.$album_name.'</a><br />';
 						$out.='<a href="'.$artist_url.'" target="_blank" style="font-style: italic;">'.$artist.'</a><br />';
 						$out.='Total Plays: '.$playcount.'</div><br />';
 					} else
@@ -277,7 +277,7 @@ class Block_side_last_fm
 		$out.='<br style="" /><a href="'.escape_html($profile_url).'" target="_blank" style="font-style: italic;">Click here for more...</a></div>';						
 
 
-		return do_template('BLOCK_SIDE_LAST_FM',array('TITLE'=>$title,'CONTENT'=>$out));
+		return do_template('BLOCK_SIDE_LAST_FM',array('_GUID'=>'6fd41bbdbd441d4d82691e0e7e8cd3ee','TITLE'=>$title,'CONTENT'=>$out));
 	}
 }
 
@@ -289,7 +289,7 @@ class Block_side_last_fm
 // XML to Array
 function xml2ary(&$string)
 {
-	$parser = xml_parser_create();
+	$parser=xml_parser_create();
 	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
 	$vals=array();
 	$index=array();

@@ -1,6 +1,8 @@
 {+START,IF,{$NOR,{$GET,login_screen},{$MATCH_KEY_MATCH,_WILD:login}}}
-	{+START,BOX,{TITLE},,{$?,{$GET,in_panel},panel,classic}}
-		<form title="{!_LOGIN}" onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete side_block_form">
+	<section class="box box___block_side_personal_stats_no"><div class="box_inner">
+		{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
+
+		<form title="{!_LOGIN}" onsubmit="if (check_field_for_blankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
 			<div>
 				<div class="constrain_field">
 					<div class="accessibility_hidden"><label for="s_login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
@@ -8,6 +10,7 @@
 					<input maxlength="80" accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="s_login_username" name="login_username" />
 					<input maxlength="255" class="wide_field" type="password" value="" name="password" id="s_password" />
 				</div>
+
 				<div class="login_block_cookies">
 					<div class="float_surrounder">
 						<label for="s_remember">{!REMEMBER_ME}</label>
@@ -20,11 +23,14 @@
 						</div>
 					{+END}
 				</div>
-				<div class="constrain_field"><input class="wide_button" type="submit" value="{!_LOGIN}" /></div>
+
+				<p class="constrain_field"><input class="wide_button" type="submit" value="{!_LOGIN}" /></p>
 			</div>
 		</form>
-		<p class="button_panel">
-			[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
-		</p>
-	{+END}
+
+		<ul class="horizontal_links associated_links_block_group force_margin">
+			{+START,IF_NON_EMPTY,{JOIN_URL}}<li><a href="{JOIN_URL*}">{!_JOIN}</a></li>{+END}
+			<li><a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LOGIN_URL*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a></li>
+		</ul>
+	</div></section>
 {+END}

@@ -88,7 +88,7 @@ class Hook_paypal
 	{
 		$payment_address=$this->_get_payment_address();
 		$ipn_url=$this->get_ipn_url();
-		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array('PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'LENGTH'=>strval($length),'LENGTH_UNITS'=>$length_units,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array('_GUID'=>'7c8b9ce1f60323e118da1bef416adff3','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'LENGTH'=>strval($length),'LENGTH_UNITS'=>$length_units,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url));
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Hook_paypal
 	 */
 	function make_cancel_button($purchase_id)
 	{
-		return do_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL',array('PURCHASE_ID'=>$purchase_id));
+		return do_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL',array('_GUID'=>'091d7449161eb5c4f6129cf89e5e8e7e','PURCHASE_ID'=>$purchase_id));
 	}
 
 	/**
@@ -131,13 +131,6 @@ class Hook_paypal
 	 */
 	function handle_transaction()
 	{	
-		if ((file_exists(get_file_base().'/data_custom/ecommerce.log')) && (is_writable_wrap(get_file_base().'/data_custom/ecommerce.log')))
-		{
-			$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
-			fwrite($myfile,serialize($_POST).chr(10));
-			fclose($myfile);
-		}
-
 		// assign posted variables to local variables
 		$purchase_id=post_param_integer('custom','-1');
 
@@ -170,6 +163,7 @@ class Hook_paypal
 		{
 			require_code('files');
 			$pure_post=isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
+			if (get_magic_quotes_gpc()) $pure_post=array_map('stripslashes',$pure_post);
 			$x=0;
 			$res=mixed();
 			do
@@ -182,7 +176,7 @@ class Hook_paypal
 			if (!(strcmp($res,'VERIFIED')==0))
 			{
 				if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
-				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post),strpos($res,'<html')!==false);
+				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post,true),strpos($res,'<html')!==false);
 			}
 		}
 
@@ -252,7 +246,7 @@ class Hook_paypal
 			$user_details['country']=get_ocp_cpf('country');
 		}
 
-		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));
+		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('_GUID'=>'89b7edf976ef0143dd8dfbabd3378c95','ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));
 	}
 
 	/**

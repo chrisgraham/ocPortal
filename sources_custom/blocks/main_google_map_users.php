@@ -55,7 +55,7 @@ class Block_main_google_map_users
 	function run($map)
 	{
 		require_javascript('javascript_ajax');
-		require_lang('main_google_map_users');
+		require_lang('google_map_users');
 
 		// Set up config/defaults
 		$geolocate_user=array_key_exists('geolocate_user',$map)?$map['geolocate_user']:'1';
@@ -118,7 +118,7 @@ class Block_main_google_map_users
 		}
 
 		// Make marker data Javascript-friendly
-		$member_data_js = "var data=[";
+		$member_data_js="var data=[";
 		foreach($members_to_show as $i=>$member_data)
 		{
 			if ($i!=0) $member_data_js.=',';

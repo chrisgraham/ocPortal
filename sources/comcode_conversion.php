@@ -474,24 +474,24 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 							}
 							if (($textual_area) && (trim($next)!='') && (!$differented) && (addon_installed('cedi')))
 							{
-								// CEDI pages
+								// Wiki+ pages
 								if (($pos<$len) && ($next=='['))
 								{
 									$matches=array();
 									if (preg_match('#^\[([^\[\]]*)\]\]#',substr($comcode,$pos,40),$matches)!=0)
 									{
-										$cedi_page_name=$matches[1];
+										$wiki_page_name=$matches[1];
 										$xml.=$continuation;
 										$continuation='';
-										$hash_pos=strpos($cedi_page_name,'#');
+										$hash_pos=strpos($wiki_page_name,'#');
 										if ($hash_pos!==false)
 										{
-											$jump_to=substr($cedi_page_name,$hash_pos+1);
-											$cedi_page_name=substr($cedi_page_name,0,$hash_pos);
-											$xml.='<cedi anchor="'.escape_html($jump_to).'">'.escape_html($cedi_page_name).'</cedi>';
+											$jump_to=substr($wiki_page_name,$hash_pos+1);
+											$wiki_page_name=substr($wiki_page_name,0,$hash_pos);
+											$xml.='<wiki anchor="'.escape_html($jump_to).'">'.escape_html($wiki_page_name).'</wiki>';
 										} else
 										{
-											$xml.='<cedi>'.escape_html($cedi_page_name).'</cedi>';
+											$xml.='<wiki>'.escape_html($wiki_page_name).'</wiki>';
 										}
 										$pos+=strlen($matches[1])+3;
 										$differented=true;
@@ -778,12 +778,6 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 							{
 								$xml.='<listElement>'.$sub_element.'</listElement>';
 							}
-						}
-
-						if (($_last[0]=='box') && (isset($attributes['breadth'])) && (!isset($attributes['dimensions'])))
-						{
-							$attributes['dimensions']=$attributes['breadth'];
-							unset($attributes['breadth']);
 						}
 
 						if (($_last[0]=='page') && (array_keys($attributes)!=array('param')))
@@ -1412,6 +1406,10 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 	return array(array(),TC_KNOWN,'',NULL);
 }
 
+/**
+ * Static implementation of Tempcode.
+ * @package		core_rich_media
+ */
 class ocp_tempcode_static
 {
 	// An array of bits where each bit is array($escape,$type,$value)
@@ -1526,7 +1524,7 @@ class ocp_tempcode_static
 		{
 			// Can we add into another string at our edge
 			if (is_null($escape)) $escape=array();
-			if (($last==-1) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$escape) && (((array_merge($escape,$this->bits[$last][0]))!=array(ENTITY_ESCAPED)) || (preg_match('#[&<>:쮢\']#',$attach)!=0)))) // No
+			if (($last==-1) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$escape) && (((array_merge($escape,$this->bits[$last][0]))!=array(ENTITY_ESCAPED)) || (preg_match('#[&<>:��"\']#',$attach)!=0)))) // No
 			{
 				$this->bits[]=array($escape,TC_KNOWN,$attach,NULL);
 			} else // Yes

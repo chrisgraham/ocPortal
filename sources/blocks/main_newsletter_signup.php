@@ -92,7 +92,7 @@ class Block_main_newsletter_signup
 			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array('_GUID'=>'9953c83685df4970de8f23fcd5dd15bb','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'PASSWORD'=>$password));
 		} else
 		{
-			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array('NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'URL'=>get_self_url()));
+			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array('_GUID'=>'c0e6f9cdab3d624bf3d27b745e3de38f','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'URL'=>get_self_url()));
 		}
 	}
 

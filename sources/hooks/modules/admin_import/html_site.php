@@ -175,7 +175,7 @@ class Hook_html_site
 			require_code('zones2');
 			foreach ($new_zones as $zone)
 			{
-				actual_add_zone($zone,ucwords(str_replace('_',' ',$zone)),'start','',$theme,0,0);
+				actual_add_zone($zone,titleify($zone),'start','',$theme,0,0);
 			}
 		}
 
@@ -349,36 +349,10 @@ class Hook_html_site
 		if ($head_end_pos===false) $head_end_pos=strpos($header,'</head');
 		if ($header_start_pos===false) $header_start_pos=strpos($header,'>',$body_start_pos)+1;
 		if ($header_start_pos!==false) $header=substr($header,0,$header_start_pos);
-		$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom/HEADER.tpl';
-		$myfile=fopen($path,'wt');
-		$header_to_write=substr($header,0,$head_end_pos).'	<script type="text/javascript">// <![CDATA[
-		{+START,IF,{$AND,{$EQ,,{$_GET,keep_has_js}},{$NOT,{$JS_ON}}}}
-		if ((window.location.href.indexOf(\'upgrader.php\')==-1) && (window.location.search.indexOf(\'keep_has_js\')==-1)) {$,Redirect with JS on, and then hopefully we can remove keep_has_js after one click. This code only happens if JS is marked off, no infinite loops can happen.}
-			window.location=window.location.href+((window.location.search==\'\')?(((window.location.href.indexOf(\'.htm\')==-1)&&(window.location.href.indexOf(\'.php\')==-1))?(((window.location.href.substr(window.location.href.length-1)!=\'/\')?\'/\':\'\')+\'index.php?\'):\'?\'):\'&\')+\'keep_has_js=1{+START,IF,{$DEV_MODE}}&keep_devtest=1{+END}\';
-		{+END}
-		{+START,IF,{$NOT,{$BROWSER_MATCHES,ie}}}{+START,IF,{$HAS_SPECIFIC_PERMISSION,sees_javascript_error_alerts}}window.take_errors=true;{+END}{+END}
-		var {+START,IF,{$CONFIG_OPTION,is_on_timezone_detection}}server_timestamp={$FROM_TIMESTAMP%},{+END}ocp_lang=\'{$LANG;}\',ocp_theme=\'{$THEME;}\';
-	//]]></script>
-
-	<meta name="description" content="{+START,IF,{$NEQ,{DESCRIPTION},{!NA}}}{DESCRIPTION*}{+END}" />
-	<meta name="keywords" content="{KEYWORDS*}" />
-
-	{$CSS_TEMPCODE}
-
-	{+START,IF_PASSED,EXTRA_HEAD}
-		{EXTRA_HEAD}
-	{+END}
-
-	{$JS_TEMPCODE,header}
-
-	{REFRESH}'.substr($header,$head_end_pos);
+		$header_to_write=substr($header,0,$head_end_pos).'{+START,INCLUDE,HTML_HEAD}{+END}'.substr($header,$head_end_pos);
 		$header_to_write=preg_replace('#<title>[^<>]*</title>#','<title>{+START,IF_NON_EMPTY,{HEADER_TEXT}}{HEADER_TEXT*} - {+END}{$SITE_NAME*}</title>',$header_to_write);
 		$header_to_write=preg_replace('#<meta name="keywords" content="([^"]*)"[^>]*>#','',$header_to_write);
 		$header_to_write=preg_replace('#<meta name="description" content="([^"]*)"[^>]*>#','',$header_to_write);
-		fwrite($myfile,$header_to_write);
-		fclose($myfile);
-		fix_permissions($path);
-		sync_file($path);
 
 		// Extract footer from cruft (</body> and below); SAVE
 		$footer=$cruft['FOOTER'];
@@ -392,25 +366,19 @@ class Hook_html_site
 		if ($footer_start_pos===false)
 			$footer_start_pos=strpos($footer,'</body');
 		if ($footer_start_pos!==false) $footer=substr($footer,$footer_start_pos);
-		$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom/FOOTER.tpl';
-		$myfile=fopen($path,'wt');
 		$footer_to_write=$footer;
-		fwrite($myfile,$footer_to_write);
-		fclose($myfile);
-		fix_permissions($path);
-		sync_file($path);
 
-		// What remains is saved to GLOBAL (note that we don't try and be clever about panels - this is up to the user, and they don't really need them anyway)
+		// What remains is saved to GLOBAL_HTML_WRAP (note that we don't try and be clever about panels - this is up to the user, and they don't really need them anyway)
 		if (count($compare_file_contents)>1)
 		{
-			$global_to_write=substr($cruft['HEADER'],strlen($header))."\n{MIDDLE}\n".substr($cruft['FOOTER'],0,strlen($cruft['FOOTER'])-strlen($footer));
+			$global_to_write=$header_to_write.substr($cruft['HEADER'],strlen($header))."\n{MIDDLE}\n".substr($cruft['FOOTER'],0,strlen($cruft['FOOTER'])-strlen($footer)).$footer_to_write;
 		} else
 		{
 			$cruft['HEADER']=$header_to_write;
 			$cruft['FOOTER']=$footer_to_write;
-			$global_to_write='{MIDDLE}';
+			$global_to_write=$header_to_write.'{MIDDLE}'.$footer_to_write;
 		}
-		$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom/GLOBAL.tpl';
+		$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom/GLOBAL_HTML_WRAP.tpl';
 		$myfile=fopen($path,'wt');
 		fwrite($myfile,$global_to_write);
 		fclose($myfile);

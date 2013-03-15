@@ -97,18 +97,18 @@ function transcode($path)
 		//video bitrate to be set
 		$video_bitrate=VIDEO_BITRATE;//250;
 
-		$file_path = preg_replace('#\\\#','/',$path);
+		$file_path=preg_replace('#\\\#','/',$path);
 
-		$matches = array();
+		$matches=array();
 		preg_match('/[^?]*/', $file_path, $matches);
-		$string = $matches[0];
+		$string=$matches[0];
 
-		$pattern = preg_split('/\./', $string, -1, PREG_SPLIT_OFFSET_CAPTURE);
+		$pattern=preg_split('/\./', $string, -1, PREG_SPLIT_OFFSET_CAPTURE);
 
 		$file_ext='';
 		if(count($pattern) > 1)
 		{
-			$filenamepart = $pattern[count($pattern)-1][0];
+			$filenamepart=$pattern[count($pattern)-1][0];
 			preg_match('/[^?]*/', $filenamepart, $matches);
 			$file_ext=$matches[0];
 		}
@@ -126,12 +126,12 @@ function transcode($path)
 		if($is_video)
 		{
 			$file_type='m4v';
-			$path = preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $path).$file_type;
+			$path=preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $path).$file_type;
 			$path=str_replace('/queue/','/done/',$path);
 		}
 		elseif($is_audio)
 		{
-			$path = preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $path).'mp3';
+			$path=preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $path).'mp3';
 			$path=str_replace('/queue/','/done/',$path);
 		}
 
@@ -143,13 +143,13 @@ function transcode($path)
 			/* mencoder too buggy
 			if ($file_type=='m4v')
 			{
-				$shell_command = '"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc x264 -oac mp3lame -x264encopts bitrate='.escapeshellcmd($video_bitrate).' -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
+				$shell_command='"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc x264 -oac mp3lame -x264encopts bitrate='.escapeshellcmd($video_bitrate).' -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
 				echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command.chr(10);
 				shell_exec($shell_command.' 2>&1 >> log.txt');
 			}
 			else // flv
 			{
-				$shell_command = '"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc lavc -oac mp3lame -lavcopts vcodec=flv:vbitrate='.escapeshellcmd($video_bitrate).':autoaspect:acodec=libmp3lame -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
+				$shell_command='"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc lavc -oac mp3lame -lavcopts vcodec=flv:vbitrate='.escapeshellcmd($video_bitrate).':autoaspect:acodec=libmp3lame -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
 				echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command.chr(10);
 				shell_exec($shell_command.' 2>&1 >> log.txt');
 			}
@@ -157,7 +157,7 @@ function transcode($path)
 
 			if ($file_type=='m4v')
 			{
-				$shell_command = '"'.$mencoder_path.'ffmpeg" -i '.escapeshellarg($file_path).' -y -f mp4 -vcodec libx264 -b '.escapeshellcmd($video_bitrate).'K -ab '.escapeshellcmd($audio_bitrate).'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -strict experimental -ar 22050 -ac 2 -aspect 16:9 -s '.escapeshellcmd($video_width_setting.':'.$video_height_setting).' '.escapeshellarg($output_path);
+				$shell_command='"'.$mencoder_path.'ffmpeg" -i '.escapeshellarg($file_path).' -y -f mp4 -vcodec libx264 -b '.escapeshellcmd($video_bitrate).'K -ab '.escapeshellcmd($audio_bitrate).'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -strict experimental -ar 22050 -ac 2 -aspect 16:9 -s '.escapeshellcmd($video_width_setting.':'.$video_height_setting).' '.escapeshellarg($output_path);
 				foreach (array($shell_command.' -map 0.1:0.0 -map 0.0:0.1',$shell_command.' -map 0.0:0.0 -map 0.1:0.1') as $shell_command)
 				{
 					echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command.chr(10);
@@ -168,7 +168,7 @@ function transcode($path)
 			}
 			else // flv
 			{
-				$shell_command = '"'.$mencoder_path.'ffmpeg" -i '.escapeshellarg($file_path).' -y -f flv -vcodec flv -b '.escapeshellcmd($video_bitrate).'K -ab '.escapeshellcmd($audio_bitrate).'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -acodec libmp3lame -ar 22050 -ac 2 -aspect 16:9 -s '.escapeshellcmd($video_width_setting.':'.$video_height_setting).' '.escapeshellarg($output_path);
+				$shell_command='"'.$mencoder_path.'ffmpeg" -i '.escapeshellarg($file_path).' -y -f flv -vcodec flv -b '.escapeshellcmd($video_bitrate).'K -ab '.escapeshellcmd($audio_bitrate).'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -acodec libmp3lame -ar 22050 -ac 2 -aspect 16:9 -s '.escapeshellcmd($video_width_setting.':'.$video_height_setting).' '.escapeshellarg($output_path);
 				foreach (array($shell_command.' -map 0.1:0.0 -map 0.0:0.1',$shell_command.' -map 0.0:0.0 -map 0.1:0.1') as $shell_command)
 				{
 					echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command.chr(10);
@@ -183,7 +183,7 @@ function transcode($path)
 			$output_path=str_replace('/queue/','/done/',$output_path);
 
 			//it is audio
-			$shell_command = '"'.$mencoder_path.'ffmpeg" -y -i '.escapeshellarg($file_path).' -ab '.escapeshellcmd($audio_bitrate).'K '.escapeshellarg($output_path);
+			$shell_command='"'.$mencoder_path.'ffmpeg" -y -i '.escapeshellarg($file_path).' -ab '.escapeshellcmd($audio_bitrate).'K '.escapeshellarg($output_path);
 
 			echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command.chr(10);
 			shell_exec($shell_command.' 2>&1 >> log.txt');
@@ -224,7 +224,7 @@ while (true)
 				if(is_string(strstr($done_path, '/done/')))
 				{
 					$relative_url='done/'.rawurlencode(str_replace(dirname($done_path).'/','',$done_path));
-					$call = $liveserver.'/data_custom/receive_transcoded_file.php?url='.$transcoder_server.$relative_url;
+					$call=$liveserver.'/data_custom/receive_transcoded_file.php?url='.$transcoder_server.$relative_url;
 					echo '['.date('d/m/Y h:i:s').'] Calling: '.$call.chr(10);
 					file_get_contents($call);
 				}

@@ -60,13 +60,13 @@ function blocking_remove($blocker,$blocked)
 }
 
 /**
- * Add a buddy.
+ * Add a friend.
  *
  * @param  MEMBER			The member befriending
  * @param  MEMBER			The member being befriended
  * @param  ?TIME			The logged time of the friendship (NULL: now)
  */
-function buddy_add($likes,$liked,$time=NULL)
+function friend_add($likes,$liked,$time=NULL)
 {
 	if (is_null($time)) $time=time();
 
@@ -87,32 +87,32 @@ function buddy_add($likes,$liked,$time=NULL)
 		require_code('notifications');
 		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($liked);
 		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($likes);
-		$subject_tag=do_lang('YOURE_MY_BUDDY_SUBJECT',$from_name,get_site_name(),NULL,get_lang($liked));
-		$befriend_url=build_url(array('page'=>'chat','type'=>'buddy_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
-		$message_raw=do_lang('YOURE_MY_BUDDY_BODY',comcode_escape($to_name),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_name)),get_lang($liked));
-		dispatch_notification('new_buddy',NULL,$subject_tag,$message_raw,array($liked),$likes);
+		$subject_line=do_lang('YOURE_MY_FRIEND_SUBJECT',$from_name,get_site_name(),NULL,get_lang($liked));
+		$befriend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
+		$message_raw=do_lang('YOURE_MY_FRIEND_BODY',comcode_escape($to_name),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_name)),get_lang($liked));
+		dispatch_notification('new_friend',NULL,$subject_line,$message_raw,array($liked),$likes);
 
 		// Log the action
-		log_it('MAKE_BUDDY',strval($likes),strval($liked));
+		log_it('MAKE_FRIEND',strval($likes),strval($liked));
 		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
 		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
 	}
 }
 
 /**
- * Remove ('dump') a buddy.
+ * Remove ('dump') a friend.
  *
  * @param  MEMBER			The member befriending
  * @param  MEMBER			The member being dumped
  */
-function buddy_remove($likes,$liked)
+function friend_remove($likes,$liked)
 {
 	$GLOBALS['SITE_DB']->query_delete('chat_buddies',array(
 		'member_likes'=>$likes,
 		'member_liked'=>$liked
 	),'',1); // Just in case page refreshed
 
-	log_it('DUMP_BUDDY',strval($likes),strval($liked));
+	log_it('DUMP_FRIEND',strval($likes),strval($liked));
 }
 
 /**

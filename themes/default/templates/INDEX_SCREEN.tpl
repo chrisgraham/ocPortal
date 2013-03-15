@@ -1,13 +1,13 @@
 {TITLE}
 
 {+START,IF_NON_EMPTY,{PRE}}
-	<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
-		{+START,IF,{$NOT,{$IN_STR,{PRE},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{PRE}{+START,IF,{$NOT,{$IN_STR,{PRE},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
+	<div itemprop="description">
+		{$PARAGRAPH,{PRE}}
 	</div>
 {+END}
 
 {+START,IF_NON_EMPTY,{CONTENT}}
-<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+<ul role="navigation" class="actions_list" itemprop="significantLinks">
 	{CONTENT}
 </ul>
 {+END}
@@ -18,6 +18,6 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{POST}}
-	{+START,IF,{$NOT,{$IN_STR,{POST},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{POST}{+START,IF,{$NOT,{$IN_STR,{POST},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
+	{$PARAGRAPH,{POST}}
 {+END}
 

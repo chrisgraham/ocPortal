@@ -10,11 +10,7 @@ Comcode is used for formatting input data (the data marked as being comcode).
 [title="2"]Lists[/title]
 
 [html]
-<table summary="" class="wide_table solidborder spaced_table">
-<colgroup>
-	<col style="width: 50%" />
-	<col style="width: 50%" />
-</colgroup>
+<table summary="" class="wide_table results_table spaced_table autosized_table"><tbody>
 <tr class="row1"><td colspan="2">
 <p>The list shown on the right is generated using the Comcode below.<br />Numbers are used on the list to provide a frame of reference &ndash; your lists would have text rather than numbers.</p>
 </td></tr>
@@ -39,7 +35,7 @@ A list
  - 3
 [html]
 </td></tr>
-</table>
+</tbody></table>
 [/html]
 
 [title="2"]Emoticons[/title]
@@ -53,24 +49,17 @@ A list
 [html]Shortcuts are also entered just by inputting their code (c)[/html]
 
 [html]
-<table summary="Map table" class="wide_table solidborder spaced_table">
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
+<table summary="Map table" class="wide_table results_table spaced_table autosized_table"><tbody>
 	<tr class="row1"><td>(c)</td><td>[/html](c)[html]</td></tr>
 	<tr class="row1"><td>(r)</td><td>[/html](r)[html]</td></tr>
-</table>
+</tbody></table>
 [/html]
 
 [title="2"]Code blocks[/title]
 
 [html]
-<table summary="" class="wide_table solidborder spaced_table"><tr class="row1"><td>
-<colgroup>
-	<col style="width: 50%" />
-	<col style="width: 50%" />
-</colgroup>
+<table summary="" class="wide_table results_table spaced_table autosized_table"><tbody>
+<tr class="row1"><td>
 [code="php"]
 function ocp()<br />
 {<br />
@@ -83,21 +72,18 @@ function ocp()
 {
 	echo "Example PHP syntax highlighting";
 }
-[/code][html]</td></tr></table>[/html]
+[/code][html]</td></tr>
+</tbody></table>[/html]
 
 [title="2"]Images[/title]
 
 [html]You can put inline images into your text easily and quickly, with the [img] tag. There is also a thumbnail tag [thumb] which will show (and cache) a thumbnail of an image. If the tag is given a URL as a parameter as well as the main URL, then that will be used as the thumbnail.[/html]
 
 [html]
-<table summary="Map table" class="wide_table solidborder spaced_table">
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
+<table summary="Map table" class="wide_table results_table spaced_table autosized_table"><tbody>
 	<tr class="row1"><td>[img="Logo"][/html]{$IMG,comcode}[html][/img]</td><td>[/html][img="Logo"]themes/default/images/comcode.png[/img][html]</td></tr>
 	<tr class="row1"><td>[thumb="Logo"][/html]{$IMG,comcode}[html][/thumb]</td><td>[/html][thumb="Logo"]themes/default/images/comcode.png[/thumb][html]</td></tr>
-</table>
+</tbody></table>
 [/html]
 
 [title="2"]Security[/title]
@@ -111,15 +97,11 @@ JavaScript script tags, onX handlers and URLs will all be filtered/blocked. Don'
 [title="2"]Links[/title]
 
 [html]
-<table summary="Map table" class="wide_table solidborder spaced_table">
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
+<table summary="Map table" class="wide_table results_table spaced_table autosized_table"><tbody>
 	<tr class="row1"><td>[url="This is a link"][/html]{$BASE_URL}[html][/url]</td><td>[/html][url="This is a link"]{$BASE_URL}[/url][html]</td></tr>
 	<tr class="row1"><td>[email="My E-Mail"]fake_address@example.com[/email]</td><td>[/html][email="My E-Mail"]fake_address@example.com[/email][html]</td></tr>
 	<tr class="row1"><td>[page="cms:cms"]Content Management[/page]</td><td>[/html][page="cms:cms"]Content Management[/page][html]</td></tr>
-</table>
+</tbody></table>
 [/html]
 
 [title="2"]Boxes[/title]
@@ -131,11 +113,7 @@ JavaScript script tags, onX handlers and URLs will all be filtered/blocked. Don'
 [title="2"]Formatting[/title]
 
 [html]
-<table summary="Map table" class="wide_table solidborder spaced_table">
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
+<table summary="Map table" class="wide_table results_table spaced_table autosized_table"><tbody>
 	<tr class="row1"><td>[b]text[/b]</td><td>[/html][b]text[/b][html]</td></tr>
 	<tr class="row1"><td>[u]text[/u]</td><td>[/html][u]text[/u][html]</td></tr>
 	<tr class="row1"><td>[i]text[/i]</td><td>[/html][i]text[/i][html]</td></tr>
@@ -144,20 +122,16 @@ JavaScript script tags, onX handlers and URLs will all be filtered/blocked. Don'
 	<tr class="row1"><td>----------------------</td><td>[/html]
 ----------------------
 [html]</td></tr>
-</table>
+</tbody></table>
 [/html]
 
 [title="2"]Scientific notation[/title]
 
 [html]
-<table summary="Map table" class="wide_table solidborder spaced_table">
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
+<table summary="Map table" class="wide_table results_table spaced_table autosized_table"><tbody>
 	<tr class="row1"><td>a[sub]2[/sub]</td><td>[/html]a[sub]2[/sub][html]</td></tr>
 	<tr class="row1"><td>a[sup]2[/sup]</td><td>[/html]a[sup]2[/sup][html]</td></tr>
-</table>
+</tbody></table>
 [/html]
 
 [title="2"]Attachments[/title]
@@ -171,16 +145,12 @@ Users may add attachments according to their quota, and re-use other people's at
 [title="2"]Advanced[/title]
 
 [html]
-<table summary="Map table" class="wide_table solidborder spaced_table">
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
+<table summary="Map table" class="wide_table results_table spaced_table autosized_table"><tbody>
 	<tr class="row1"><td>[hide="Secret"]This is an example of hidden text.[/hide]</td><td>[/html][hide="Secret"]This is an example of hidden text.[/hide][html]</td></tr>
 	<tr class="row1"><td>[reference type="url" param="Wikipedia"]http://wikipedia.org[/reference]</td><td>[/html][reference type="url" param="Wikipedia"]http://wikipedia.org[/reference][html]</td></tr>
 	<tr class="row1"><td>[quote param="Philip"]This is an example of a quote.[/quote]</td><td>[/html][quote param="Philip"]This is an example of a quote.[/quote][html]</td></tr>
 	<tr class="row1"><td>[staff_note]This isn't rendered (not even for staff), but is saved. Staff can view it when editing the comcode.[/staff_note]</td><td>[/html][staff_note]This isn't rendered (not even for staff), but is saved. Staff can view it when editing the comcode.[/staff_note][html]</td></tr>
-</table>
+</tbody></table>
 [/html]
 {+START,IF,{$ADDON_INSTALLED,custom_comcode}}
 [title="2"]Custom Comcode tags[/title]

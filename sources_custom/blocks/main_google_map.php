@@ -29,7 +29,7 @@ class Block_main_google_map
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('filter_rating','title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','filter_hours','max_results','extra_sources');
+		$info['parameters']=array('filter','filter_rating','title','region','cluster','filter_term','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','filter_hours','max_results','extra_sources');
 		return $info;
 	}
 
@@ -42,7 +42,7 @@ class Block_main_google_map
 	function run($map)
 	{
 		require_code('catalogues');
-		require_lang('main_google_map');
+		require_lang('google_map');
 
 		// Set up config/defaults
 		if (!array_key_exists('title',$map)) $map['title']='';
@@ -69,22 +69,57 @@ class Block_main_google_map
 		$star_entry=array_key_exists('star_entry',$map)?$map['star_entry']:'';
 		$max_results=((array_key_exists('max_results',$map)) && ($map['max_results']!=''))?intval($map['max_results']):1000;
 		$icon=array_key_exists('icon',$map)?$map['icon']:'';
-		if (!array_key_exists('filter_category',$map)) $map['filter_category']='';
+		if (!array_key_exists('filter',$map)) $map['filter']='';
 		if (!array_key_exists('filter_rating',$map)) $map['filter_rating']='';
 		if (!array_key_exists('filter_term',$map)) $map['filter_term']='';
 		if (!array_key_exists('filter_hours',$map)) $map['filter_hours']='';
 
 		$data=array();
+
+		// Info about our catalogue
+		$catalogue_row=mixed();
+		if ($catalogue_name!='')
+		{
+			$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
+			if (!array_key_exists(0,$catalogue_rows))
+			{
+				return paragraph('Could not find the catalogue named "'.escape_html($catalogue_name).'".','','nothing_here');
+			}
+			$catalogue_row=$catalogue_rows[0];
+		}
+
+		$hooks_to_use=explode('|',array_key_exists('extra_sources',$map)?$map['extra_sources']:'');
+		$hooks=find_all_hooks('blocks','main_google_map');
+		$entries_to_load=array();
+		foreach (array_keys($hooks) as $hook)
+		{
+			if (in_array($hook,$hooks_to_use))
+			{
+				require_code('hooks/blocks/main_google_map/'.$hook);
+				$ob=object_factory('Hook_Map_'.$hook);
+				$hook_results=$ob->get_data($map,$max_results,$min_latitude,$max_latitude,$min_longitude,$max_longitude,$latitude_key,$longitude_key,$catalogue_row,$catalogue_name);
+				$data=array_merge($data,$hook_results[0]);
+				$entries_to_load=$hook_results[1]+$entries_to_load;
+			}
+		}
+
+		if ($star_entry!='') // Ensure this entry loads
+		{
+			$entries_to_load[intval($star_entry)]=true;
+		}
+
 		if ($catalogue_name!='')
 		{
 			// Data query
-			$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND '.db_string_equal_to('c_name',$catalogue_name);
+			$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries e WHERE ce_validated=1 AND '.db_string_equal_to('c_name',$catalogue_name).' AND ';
 
 			// Filtering
-			if ($map['filter_category']!='')
+			$query.='(';
+			$query.='(1=1';
+			if ($map['filter']!='')
 			{
 				require_code('ocfiltering');
-				$query.=' AND ('.ocfilter_to_sqlfragment($map['filter_category'],'id','catalogue_categories','cc_parent_id','cc_id','id').')';
+				$query.=' AND ('.ocfilter_to_sqlfragment($map['filter'],'e.id','catalogue_categories','cc_parent_id','cc_id','e.id').')';
 			}
 			if ($map['filter_hours']!='')
 			{
@@ -92,24 +127,21 @@ class Block_main_google_map
 			}
 			if ($map['filter_rating']!='')
 			{
-				$query.=' AND (SELECT AVG(rating) FROM rating WHERE '.db_string_equal_to('rating_for_type','catalogue_entry').' AND rating_for_id=id)>'.strval(intval($map['filter_rating']));
+				$query.=' AND (SELECT AVG(rating) FROM rating WHERE '.db_string_equal_to('rating_for_type','catalogue_entry').' AND rating_for_id=e.id)>'.strval(intval($map['filter_rating']));
 			}
-
-			// Info about our catalogue
-			$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-			if (!array_key_exists(0,$catalogue_rows))
+			$query.=')';
+			if (count($entries_to_load)!=0)
 			{
-				return paragraph('Could not find the catalogue named "'.escape_html($catalogue_name).'".','','nothing_here');
+				foreach ($entries_to_load as $entry_id=>$allow)
+				{
+					if ($allow)
+						$query.=' OR e.id='.strval($entry_id);
+				}
 			}
-			$catalogue_row=$catalogue_rows[0];
+			$query.=')';
 
 			// Get results
 			$entries_to_show=array();
-			if ($star_entry!='') // Ensure this entry loads
-			{
-				$entries_to_show=array_merge($entries_to_show,$GLOBALS['SITE_DB']->query($query.' AND id='.strval(intval($star_entry))));
-				$query.=' AND id<>'.strval(intval($star_entry));
-			}
 			$entries_to_show=array_merge($entries_to_show,$GLOBALS['SITE_DB']->query($query.' ORDER BY ce_add_date DESC',$max_results));
 			if ((count($entries_to_show)==0) && (($min_latitude=='') || ($max_latitude=='') || ($min_longitude=='') || ($max_longitude==''))) // If there's nothing to show and no given bounds
 			{
@@ -117,7 +149,7 @@ class Block_main_google_map
 			}
 
 			// Make marker data Javascript-friendly
-			foreach($entries_to_show as $i=>$entry_row)
+			foreach ($entries_to_show as $i=>$entry_row)
 			{
 				$entry_row['allow_rating']=0; // Performance: So rating is not loaded
 
@@ -144,12 +176,12 @@ class Block_main_google_map
 				{
 					if (($map['filter_term']=='') || (strpos(strtolower($all_output),strtolower($map['filter_term']))!==false))
 					{
-						$details['LONGITUDE']=float_to_raw_string(floatval($longitude));
-						$details['LATITUDE']=float_to_raw_string(floatval($latitude));
+						$details['LONGITUDE']=float_to_raw_string(floatval($longitude),10);
+						$details['LATITUDE']=float_to_raw_string(floatval($latitude),10);
 
 						$details['ENTRY_TITLE']=$entry_title;
 
-						$entry_content=do_template('CATALOGUE_googlemap_ENTRY_EMBED',$details,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_standard_box(hyperlink($url,do_lang_tempcode('VIEW')),do_lang_tempcode('CATALOGUE_ENTRY').' ('.do_lang_tempcode('IN',get_translated_text($catalogue['c_title'])).')');
+						$entry_content=do_template('CATALOGUE_googlemap_FIELDMAP_ENTRY_WRAP',$details,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 						$details['ENTRY_CONTENT']=$entry_content;
 
 						$details['STAR']='0';
@@ -166,18 +198,6 @@ class Block_main_google_map
 						$data[]=$details;
 					}
 				}
-			}
-		}
-
-		$hooks_to_use=explode('|',array_key_exists('extra_sources',$map)?$map['extra_sources']:'');
-		$hooks=find_all_hooks('blocks','main_google_map');
-		foreach (array_keys($hooks) as $hook)
-		{
-			if (in_array($hook,$hooks_to_use))
-			{
-				require_code('hooks/blocks/main_google_map/'.$hook);
-				$ob=object_factory('Hook_Map_'.$hook);
-				$data=array_merge($data,$ob->get_data($map,$max_results,$min_latitude,$max_latitude,$min_longitude,$max_longitude,$latitude_key,$longitude_key,$catalogue_row,$catalogue_name));
 			}
 		}
 

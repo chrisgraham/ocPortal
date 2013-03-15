@@ -49,7 +49,7 @@ function edit_flagrant($id,$message,$notes,$validated)
 	$_message=$GLOBALS['SITE_DB']->query_value('text','the_message',array('id'=>$id));
 	log_it('EDIT_FLAGRANT',strval($id),$message);
 	$GLOBALS['SITE_DB']->query_update('text',array('notes'=>$notes,'the_message'=>lang_remap_comcode($_message,$message),'active_now'=>$validated),array('id'=>$id),'',1);
-	if ($validated==1) choose_flagrant($id); else persistant_cache_delete('FLAGRANT');
+	if ($validated==1) choose_flagrant($id); else persistent_cache_delete('FLAGRANT');
 }
 
 /**
@@ -65,7 +65,7 @@ function delete_flagrant($id)
 	$GLOBALS['SITE_DB']->query_delete('text',array('id'=>$id),'',1);
 	delete_lang($message);
 
-	persistant_cache_delete('FLAGRANT'); // In case it was active
+	persistent_cache_delete('FLAGRANT'); // In case it was active
 }
 
 /**
@@ -81,7 +81,7 @@ function choose_flagrant($id)
 	$GLOBALS['SITE_DB']->query_update('text',array('active_now'=>0));
 	$GLOBALS['SITE_DB']->query_update('text',array('activation_time'=>time(),'active_now'=>1),array('id'=>$id),'',1);
 
-	persistant_cache_delete('FLAGRANT');
+	persistent_cache_delete('FLAGRANT');
 }
 
 /**
@@ -111,7 +111,7 @@ function nice_get_flagrant()
 		}
 		$message=get_translated_text($row['the_message']);
 		$text=do_template('FLAGRANT_STORE_LIST_LINE',array('_GUID'=>'e4a5d54fa6cdc7848bd95bc017c60469','MESSAGE'=>$message,'STATUS'=>$status));
-		$out->attach(form_input_list_entry(strval($row['id']),$selected,$text->evaluate()));
+		$out->attach(form_input_list_entry(strval($row['id']),$selected,protect_from_escaping($text->evaluate())));
 	}
 	return $out;
 }

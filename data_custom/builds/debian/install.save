@@ -1,0 +1,8 @@
+info.php /etc/ocportal/info.php
+adminzone /usr/share/ocportal
+b* /usr/share/ocportal
+c* /usr/share/ocportal
+data* /usr/share/ocportal
+decache.sh /usr/share/ocportal
+
+

@@ -86,6 +86,9 @@ function make_functions_dat_do_dir($dir,$no_custom=false)
 	return $out;
 }
 
+/**
+ * OcCLE command hook.
+ */
 class Hook_find_function
 {
 	/**
@@ -107,11 +110,11 @@ class Hook_find_function
 			require_lang('phpdoc');
 			$tpl=new ocp_tempcode();
 
-			$contents=file_get_contents(get_custom_file_base().'/data_custom/functions.dat',FILE_TEXT);
+			$contents=file_get_contents(get_custom_file_base().'/data_custom/functions.dat');
 			if ($contents=='')
 			{
 				make_functions_dat();
-				$contents=file_get_contents(get_custom_file_base().'/data_custom/functions.dat',FILE_TEXT);
+				$contents=file_get_contents(get_custom_file_base().'/data_custom/functions.dat');
 			}
 			$_classes=unserialize($contents);
 			foreach ($_classes as $class)

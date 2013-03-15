@@ -30,6 +30,9 @@ function init__hooks__modules__admin_import__shared__ipb()
 	$STRICT_FILE=false; // Disable this for a quicker import that is quite liable to go wrong if you don't have the files in the right place
 }
 
+/**
+ * Forum Driver.
+ */
 class Hook_ipb_base
 {
 
@@ -71,7 +74,7 @@ class Hook_ipb_base
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('conf_global.php')));
 		require_once($file_base.'/conf_global.php');
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix'],$INFO['sql_host']);
 	}
 
 	/**
@@ -251,9 +254,9 @@ class Hook_ipb_base
 			}
 
 			ocf_over_msn();
-			//$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,0,0,$end_year,$end_month,$end_day,NULL,1,0,0,$submitter); //old code
+			//$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,'day_of_month',0,0,$end_year,$end_month,$end_day,'day_of_month',NULL,1,0,0,$submitter); //old code
 
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,0,0,$end_year,$end_month,$end_day,NULL,NULL,NULL,1,1,1,1,1,'',$submitter);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,'day_of_month',0,0,$end_year,$end_month,$end_day,'day_of_month',NULL,NULL,NULL,1,1,1,1,1,'',$submitter);
 
 			ocf_over_local();
 

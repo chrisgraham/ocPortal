@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_post_templates
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,11 @@ class Hook_addon_registry_ocf_post_templates
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('ocf_forum'),
+			'requires'=>array(
+				'ocf_forum'
+			),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,24 +74,23 @@ class Hook_addon_registry_ocf_post_templates
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/ocf_post_templates.php',
 			'OCF_POST_TEMPLATE_SELECT.tpl',
 			'adminzone/pages/modules/admin_ocf_post_templates.php',
 			'themes/default/images/bigicons/posttemplates.png',
-			'themes/default/images/pagepics/posttemplates.png',
+			'themes/default/images/pagepics/posttemplates.png'
 		);
 	}
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-			'OCF_POST_TEMPLATE_SELECT.tpl'=>'ocf_post_template_select',
+			'OCF_POST_TEMPLATE_SELECT.tpl'=>'ocf_post_template_select'
 		);
 	}
 
@@ -109,29 +109,42 @@ class Hook_addon_registry_ocf_post_templates
 		$list=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>false,'DISABLED'=>false,'CLASS'=>'','NAME'=>strval($key),'TEXT'=>lorem_phrase())));
+			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
+				'SELECTED'=>false,
+				'DISABLED'=>false,
+				'CLASS'=>'',
+				'NAME'=>lorem_word().strval($key),
+				'TEXT'=>lorem_phrase()
+			)));
 		}
 
-		$input=do_lorem_template('OCF_POST_TEMPLATE_SELECT',array(
-					'TABINDEX'=>placeholder_number(),
-					'LIST'=>$list,
+		$input=do_lorem_template('OCF_POST_TEMPLATE_SELECT', array(
+			'TABINDEX'=>placeholder_number(),
+			'LIST'=>$list
 		));
 
 		$fields=new ocp_tempcode();
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>'','NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'PRETTY_NAME'=>lorem_word(),
+			'NAME'=>'post_template',
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('FORM_SCREEN',array(
-					'SKIP_VALIDATION'=>true,
-					'HIDDEN'=>'',
-					'TITLE'=>lorem_title(),
-					'URL'=>placeholder_url(),
-					'FIELDS'=>$fields,
-					'SUBMIT_NAME'=>lorem_word(),
-					'TEXT'=>lorem_sentence_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>'',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_phrase(),
+				'TEXT'=>lorem_sentence_html()
+			)), NULL, '', true)
 		);
 	}
 

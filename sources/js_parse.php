@@ -642,6 +642,18 @@ function _js_parse_expression_inner()
 			$function=_js_parse_function_dec(true);
 			if (is_null($function)) return NULL;
 			$expression=array('NEW_OBJECT_FUNCTION',$function,$GLOBALS['JS_PARSE_POSITION']);
+
+			$test=parser_peek();
+			if ($test=='BRACKET_OPEN')
+			{
+				parser_next();
+
+				$parameters=_js_parse_comma_expressions();
+				if (is_null($parameters)) return NULL;
+				if (is_null(parser_expect('BRACKET_CLOSE'))) return NULL;
+				$expression=array('CALL',array('VARIABLE','_',array(),$GLOBALS['JS_PARSE_POSITION']),$parameters,$GLOBALS['JS_PARSE_POSITION']);
+			}
+
 			break;
 
 		case 'NEW':

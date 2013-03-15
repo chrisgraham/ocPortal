@@ -22,10 +22,10 @@
  * Find a different content type code from the one had. In future we intend to change everything to be cma_hook internally.
  *
  * @param  ID_TEXT		Content type type we know
- * @set addon cma_hook award_hook search_hook table seo_type_code feedback_type_code permissions_type_code module
+ * @set addon cma_hook award_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table
  * @param  ID_TEXT		Content type ID we know
  * @param  ID_TEXT		Desired content type
- * @set addon cma_hook search_hook table seo_type_code feedback_type_code permissions_type_code module
+ * @set addon cma_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table
  * @return ID_TEXT		Corrected content type type (blank: could not find)
  */
 function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
@@ -70,6 +70,7 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 		if ($found_type_id=='iotd') $found_type_id=''; // TODO: No award hook right now
 	}
 
+	if ($found_type_id===NULL) $found_type_id='';
 	return $found_type_id;
 }
 

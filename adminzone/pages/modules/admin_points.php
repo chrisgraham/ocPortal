@@ -81,7 +81,7 @@ class Module_admin_points
 	 */
 	function points_log()
 	{
-		$title=get_page_title('GIFT_TRANSACTIONS');
+		$title=get_screen_title('GIFT_TRANSACTIONS');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -143,7 +143,7 @@ class Module_admin_points
 	 */
 	function reverse()
 	{
-		$title=get_page_title('REVERSE_TITLE');
+		$title=get_screen_title('REVERSE_TITLE');
 
 		$id=post_param_integer('id');
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),array('id'=>$id),'',1);
@@ -191,7 +191,7 @@ class Module_admin_points
 	 */
 	function points_charge()
 	{
-		$title=get_page_title('CHARGE_USER');
+		$title=get_screen_title('CHARGE_USER');
 
 		$member=post_param_integer('user');
 		$amount=post_param_integer('amount');

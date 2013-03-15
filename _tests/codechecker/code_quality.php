@@ -20,8 +20,13 @@ Not doing (from Zend's Code Analyzer):
  - error for breaking with a variable (Reason: would only get used for a good reason, so let programmers do it if they have one)
  - Values overwritten before use (Reason: we may be initialising them for code clarity; PHPStorm's inspector can show these)
 Not doing (from HPHP's warnings):
+ - Anything specific to compilation (Reason: we must manually ensure that works, often code branching structures will be involved but warnings still happen)
  - Wrong number of parameters, on method of subclass (Reason: very hard to do)
  - Undeclared constant (Reason: we don't track these)
+Not doing (from CodeLobster Errors):
+ - IF and ELSEIF have same conditions (theoretically the prior IF might have changed the state)
+Not doing (from PhpStorm Code Inspector):
+ - Many (lots of false positives in here)
 */
 
 @ini_set('memory_limit','-1');
@@ -1640,10 +1645,6 @@ function check_assignment($c,$c_pos,$function_guard='')
 function check_expression($e,$assignment=false,$equate_false=false,$function_guard='')
 {
 	$c_pos=$e[count($e)-1];
-	if ($e[0]=='CREATE_ARRAY')
-	{
-		return 'array';
-	}
 	if ($e[0]=='VARIABLE_REFERENCE')
 	{
 		$e=$e[1];
@@ -1727,7 +1728,7 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 		$type_b=check_expression($e[2],false,false,$function_guard);
 		ensure_type(array('integer','float','string'),$type_a,$c_pos-1,'Can only use arithmetical comparators with numbers or strings');
 		ensure_type(array('integer','float','string'),$type_b,$c_pos,'Can only use arithmetical comparators with numbers or strings');
-		ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
+		ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 		return 'boolean';
 	}
 	if (in_array($e[0],array('IS_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_NOT_EQUAL')))
@@ -1760,7 +1761,7 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 		if (strpos($e[0],'IDENTICAL')===false)
 		{
 			if ($type_b=='NULL') log_warning('Comparing to NULL is considered bad',$c_pos);
-			$passes=ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
+			$passes=ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 			if ($passes) infer_expression_type_to_variable_type($type_a,$e[2]);
 		}
 		return 'boolean';
@@ -1840,7 +1841,8 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 			global $FUNCTION_SIGNATURES;
 			if ((!isset($FUNCTION_SIGNATURES[$inner[1]])) && ($FUNCTION_SIGNATURES!=array()) && (strpos($function_guard,','.$inner[1].',')===false))
 			{
-				if (!is_null($inner[1])) log_warning('Unknown class, '.$inner[1],$c_pos);
+				if (((is_null($GLOBALS['OK_EXTRA_FUNCTIONS'])) || (preg_match('#^'.$GLOBALS['OK_EXTRA_FUNCTIONS'].'#',$inner[1])==0)))
+					if (!is_null($inner[1])) log_warning('Unknown class, '.$inner[1],$c_pos);
 			}
 			foreach ($inner[2] as $param)
 			{

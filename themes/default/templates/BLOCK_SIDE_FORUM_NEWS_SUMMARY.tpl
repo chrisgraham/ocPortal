@@ -1,13 +1,14 @@
-{+START,BOX,,,light}
-	<p class="tiny_para"><a title="{$STRIP_TAGS,{NEWS_TITLE}} {!LINK_NEW_WINDOW}" rel="external" target="_blank" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},30,0,1}</a></p>
-
-	<p class="tiny_para associated_details">
-		{!BY_SIMPLE,{FIRSTUSERNAME*}} &middot; {!_COMMENTS,{$SUBTRACT,{REPLIES},1}}
+<div class="box box___block_side_forum_news_summary"><div class="box_inner">
+	<p class="tiny_paragraph">
+		<a title="{$STRIP_TAGS,{NEWS_TITLE}} {!LINK_NEW_WINDOW}" rel="external" target="_blank" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},30,0,1}</a>
 	</p>
 
-	<p class="tiny_para associated_details">
-		{!LAST_POST}: {DATE*}
-	</p>
-{+END}
+	<ul class="horizontal_meta_details tiny_paragraph associated_details" role="contentinfo">
+		<li>{!BY_SIMPLE,{FIRSTUSERNAME*}}</li>
+		<li>{!_COMMENTS,{$SUBTRACT,{REPLIES},1}}</li>
+	</ul>
 
-<div class="tiny_linebreak">&nbsp;</div>
+	<p class="tiny_paragraph associated_details">
+		<span class="field_name">{!LAST_POST}:</span> {DATE*}
+	</p>
+</div></div>

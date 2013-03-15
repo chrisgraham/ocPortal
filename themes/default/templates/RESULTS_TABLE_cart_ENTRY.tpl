@@ -1,3 +1,3 @@
 <tr class="first last odd">
-{VALUES}
+	{VALUES}
 </tr>

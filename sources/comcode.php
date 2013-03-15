@@ -27,7 +27,7 @@ function init__comcode()
 	$VALID_COMCODE_TAGS=array( 'samp'=>1,'q'=>1,'var'=>1,'overlay'=>1,'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'acronym'=>1,'abbr'=>1,'contents'=>1,'concepts'=>1,'list'=>1,'flash'=>1,'indent'=>1,'staff_note'=>1,'menu'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
 										'if_in_group'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'tt'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'img'=>1,
 										'url'=>1,'email'=>1,'reference'=>1,'upload'=>1,'page'=>1,'php'=>1,'codebox'=>1,'sql'=>1,'no_parse'=>1,'code'=>1,'hide'=>1,
-										'quote'=>1,'block'=>1,'semihtml'=>1,'html'=>1,'exp_thumb'=>1,'exp_ref'=>1,'concept'=>1,'thumb'=>1,'attachment'=>1,'attachment2'=>1,'attachment_safe'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
+										'quote'=>1,'block'=>1,'semihtml'=>1,'html'=>1,'exp_thumb'=>1,'exp_ref'=>1,'concept'=>1,'thumb'=>1,'attachment'=>1,'attachment_safe'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
 										'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'ticker'=>1,'jumping'=>1,'surround'=>1,'pulse'=>1,'shocker'=>1);
 	//if (addon_installed('ecommerce'))
 	{
@@ -77,7 +77,7 @@ function html_to_comcode($html)
 
 	require_code('comcode_from_html');
 
-	return semihtml_to_comcode($html);
+	return semihtml_to_comcode($html,true);
 }
 
 /**
@@ -212,6 +212,12 @@ function strip_comcode($text)
 			$text=preg_replace('#\[/?'.$tag.'[^\]]*\]#','',$text);
 		}
 	}
+
+	$text=str_replace('&hellip;','...',$text);
+	$text=str_replace('&middot;','-',$text);
+	$text=str_replace('&ndash;','-',$text);
+	$text=str_replace('&mdash;','-',$text);
+
 	return $text;
 }
 

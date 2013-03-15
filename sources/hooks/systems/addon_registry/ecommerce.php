@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ecommerce
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_ecommerce
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_ecommerce
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/callback_password.php',
 			'sources/hooks/systems/config_default/currency.php',
 			'sources/hooks/systems/config_default/ecommerce_test_mode.php',
@@ -160,46 +158,46 @@ class Hook_addon_registry_ecommerce
 			'themes/default/images/pagepics/cash_flow.png',
 			'themes/default/images/pagepics/transactions.png',
 			'themes/default/images/pagepics/profit_loss.png',
-			'sources/currency.php',
+			'sources/currency.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'ECOM_OUTSTANDING_INVOICES_SCREEN.tpl'=>'administrative__ecom_outstanding_invoices_screen',
-				'ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER.tpl'=>'ecom_subscriptions_screen',
-				'ECOM_TRANSACTION_LOGS_SCREEN.tpl'=>'administrative__ecom_transaction_logs_screen',
-				'ECOM_CASH_FLOW_SCREEN.tpl'=>'administrative__ecom_cash_flow_screen',
-				'PURCHASE_WIZARD_STAGE_TRANSACT.tpl'=>'purchase_wizard_stage_transact',
-				'PURCHASE_WIZARD_SCREEN.tpl'=>'purchase_wizard_screen',
-				'ECOM_LOGOS_WORLDPAY.tpl'=>'ecom_logos_worldpay',
-				'ECOM_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_button_via_worldpay',
-				'ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_subscription_button_via_worldpay',
-				'ECOM_CANCEL_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_cancel_button_via_worldpay',
-				'ECOM_BUTTON_VIA_PAYPAL.tpl'=>'ecom_button_via_paypal',
-				'ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL.tpl'=>'ecom_subscription_button_via_paypal',
-				'ECOM_CANCEL_BUTTON_VIA_PAYPAL.tpl'=>'ecom_cancel_button_via_paypal',
-				'ECOM_BUTTON_VIA_SECPAY.tpl'=>'ecom_button_via_secpay',
-				'ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY.tpl'=>'ecom_subscription_button_via_secpay',
-				'ECOM_CANCEL_BUTTON_VIA_SECPAY.tpl'=>'ecom_cancel_button_via_secpay',
-				'PURCHASE_WIZARD_STAGE_GUEST.tpl'=>'purchase_wizard_stage_guest',
-				'PURCHASE_WIZARD_STAGE_CHOOSE.tpl'=>'purchase_wizard_stage_choose',
-				'PURCHASE_WIZARD_STAGE_MESSAGE.tpl'=>'purchase_wizard_stage_message',
-				'PURCHASE_WIZARD_STAGE_LICENCE.tpl'=>'purchase_wizard_stage_licence',
-				'PURCHASE_WIZARD_STAGE_DETAILS.tpl'=>'purchase_wizard_stage_details',
-				'PURCHASE_WIZARD_STAGE_FINISH.tpl'=>'purchase_wizard_stage_finish',
-				'ECOM_INVOICES_SCREEN.tpl'=>'ecom_invoices_screen',
-				'ECOM_SUBSCRIPTIONS_SCREEN.tpl'=>'ecom_subscriptions_screen',
-				'PURCHASE_WIZARD_STAGE_SUBSCRIBE.tpl'=>'purchase_wizard_stage_subscribe',
-				'PURCHASE_WIZARD_STAGE_PAY.tpl'=>'purchase_wizard_stage_pay',
-				);
+			'ECOM_OUTSTANDING_INVOICES_SCREEN.tpl'=>'administrative__ecom_outstanding_invoices_screen',
+			'ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER.tpl'=>'ecom_subscriptions_screen',
+			'ECOM_TRANSACTION_LOGS_SCREEN.tpl'=>'administrative__ecom_transaction_logs_screen',
+			'ECOM_CASH_FLOW_SCREEN.tpl'=>'administrative__ecom_cash_flow_screen',
+			'PURCHASE_WIZARD_STAGE_TRANSACT.tpl'=>'purchase_wizard_stage_transact',
+			'PURCHASE_WIZARD_SCREEN.tpl'=>'purchase_wizard_screen',
+			'ECOM_LOGOS_WORLDPAY.tpl'=>'ecom_logos_worldpay',
+			'ECOM_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_button_via_worldpay',
+			'ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_subscription_button_via_worldpay',
+			'ECOM_CANCEL_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_cancel_button_via_worldpay',
+			'ECOM_BUTTON_VIA_PAYPAL.tpl'=>'ecom_button_via_paypal',
+			'ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL.tpl'=>'ecom_subscription_button_via_paypal',
+			'ECOM_CANCEL_BUTTON_VIA_PAYPAL.tpl'=>'ecom_cancel_button_via_paypal',
+			'ECOM_BUTTON_VIA_SECPAY.tpl'=>'ecom_button_via_secpay',
+			'ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY.tpl'=>'ecom_subscription_button_via_secpay',
+			'ECOM_CANCEL_BUTTON_VIA_SECPAY.tpl'=>'ecom_cancel_button_via_secpay',
+			'PURCHASE_WIZARD_STAGE_GUEST.tpl'=>'purchase_wizard_stage_guest',
+			'PURCHASE_WIZARD_STAGE_CHOOSE.tpl'=>'purchase_wizard_stage_choose',
+			'PURCHASE_WIZARD_STAGE_MESSAGE.tpl'=>'purchase_wizard_stage_message',
+			'PURCHASE_WIZARD_STAGE_LICENCE.tpl'=>'purchase_wizard_stage_licence',
+			'PURCHASE_WIZARD_STAGE_DETAILS.tpl'=>'purchase_wizard_stage_details',
+			'PURCHASE_WIZARD_STAGE_FINISH.tpl'=>'purchase_wizard_stage_finish',
+			'ECOM_INVOICES_SCREEN.tpl'=>'ecom_invoices_screen',
+			'ECOM_SUBSCRIPTIONS_SCREEN.tpl'=>'ecom_subscriptions_screen',
+			'PURCHASE_WIZARD_STAGE_SUBSCRIBE.tpl'=>'purchase_wizard_stage_subscribe',
+			'PURCHASE_WIZARD_STAGE_PAY.tpl'=>'purchase_wizard_stage_pay'
+		);
 	}
 
 	/**
@@ -214,17 +212,25 @@ class Hook_addon_registry_ecommerce
 		$invoices=array();
 		foreach (placeholder_array() as $invoice)
 		{
-			$invoices[]=array('INVOICE_TITLE'=>lorem_word(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word_2(),'ID'=>placeholder_id(),'STATE'=>lorem_phrase(),'AMOUNT'=>placeholder_number(),'TIME'=>placeholder_time(),'NOTE'=>lorem_phrase(),'TYPE_CODE'=>lorem_phrase());
+			$invoices[]=array(
+				'INVOICE_TITLE'=>lorem_word(),
+				'PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_word_2(),
+				'ID'=>placeholder_id(),
+				'STATE'=>lorem_phrase(),
+				'AMOUNT'=>placeholder_number(),
+				'TIME'=>placeholder_time(),
+				'NOTE'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase()
+			);
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_OUTSTANDING_INVOICES_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'FROM'=>lorem_phrase(),
-					'INVOICES'=>$invoices
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_OUTSTANDING_INVOICES_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'FROM'=>lorem_phrase(),
+				'INVOICES'=>$invoices
+			)), NULL, '', true)
 		);
 	}
 
@@ -237,48 +243,13 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__administrative__ecom_transaction_logs_screen()
 	{
-		$results_browser = placeholder_result_browser();
-
-		//results_table starts
-		//results_entry starts
-		$cells = new ocp_tempcode();
-		foreach (placeholder_array(11) as $k=>$v)
-		{
-			$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>$v)));
-		}
-		$fields_title = $cells;
-
-		$order_entries = new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$cells = new ocp_tempcode();
-			foreach (placeholder_array(11) as $k=>$v)
-			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>lorem_word()),NULL,false,'RESULTS_TABLE_FIELD'));
-			}
-			$order_entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false,'RESULTS_TABLE_ENTRY'));
-		}
-		//results_entry ends
-
-		$selectors = new ocp_tempcode();
-		foreach (placeholder_array(11) as $k=>$v)
-		{
-			$selectors->attach(do_lorem_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>'','NAME'=>$v,'VALUE'=>$v)));
-		}
-		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
-
-		$results_table = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$order_entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>$results_browser,'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
-		//results_table ends
-
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_TRANSACTION_LOGS_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'PRODUCTS'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'RESULTS_TABLE'=>$results_table,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_TRANSACTION_LOGS_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'PRODUCTS'=>placeholder_options(),
+				'URL'=>placeholder_url(),
+				'RESULTS_TABLE'=>placeholder_table(),
+			)), NULL, '', true)
 		);
 	}
 
@@ -291,18 +262,20 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__administrative__ecom_cash_flow_screen()
 	{
-		$types = array();
+		$types=array();
 		foreach (placeholder_array() as $v)
 		{
-			$types[]=array('TYPE'=>lorem_word(),'AMOUNT'=>placeholder_number(),'SPECIAL'=>placeholder_number());
+			$types[]=array(
+				'TYPE'=>lorem_word(),
+				'AMOUNT'=>placeholder_number(),
+				'SPECIAL'=>placeholder_number()
+			);
 		}
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_CASH_FLOW_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'TYPES'=>$types,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_CASH_FLOW_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'TYPES'=>$types
+			)), NULL, '', true)
 		);
 	}
 
@@ -316,11 +289,9 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_transact()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT',array(
-					'FIELDS'=>placeholder_fields(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT', array(
+				'FIELDS'=>placeholder_fields()
+			)), NULL, '', true)
 		);
 	}
 
@@ -333,19 +304,16 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__purchase_wizard_screen()
 	{
-		$fields	=	do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT',array(
-							'FIELDS'=>placeholder_fields(),
-							)
-						);
+		$fields=do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT', array(
+			'FIELDS'=>placeholder_fields()
+		));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'CONTENT'=>$fields,
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'CONTENT'=>$fields,
+				'URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -359,15 +327,13 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_logos_worldpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_LOGOS_WORLDPAY',array(
-					'INST_ID'=>placeholder_id(),
-					'PD_ADDRESS'=>lorem_phrase(),
-					'PD_EMAIL'=>lorem_word(),
-					'PD_NUMBER'=>placeholder_number(),
-					'PAYMENT_CANCEL_DTR'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_LOGOS_WORLDPAY', array(
+				'INST_ID'=>placeholder_id(),
+				'PD_ADDRESS'=>lorem_phrase(),
+				'PD_EMAIL'=>lorem_word(),
+				'PD_NUMBER'=>placeholder_number(),
+				'PAYMENT_CANCEL_DTR'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -381,20 +347,18 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_button_via_worldpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_BUTTON_VIA_WORLDPAY',array(
-					'PRODUCT'=>lorem_phrase(),
-					'ITEM_NAME'=>lorem_word(),
-					'DIGEST'=>lorem_phrase(),
-					'TEST_MODE'=>lorem_phrase(),
-					'PURCHASE_ID'=>placeholder_id(),
-					'AMOUNT'=>placeholder_number(),
-					'CURRENCY'=>lorem_phrase(),
-					'USERNAME'=>lorem_word(),
-					'IPN_URL'=>placeholder_url(),
-					'EMAIL_ADDRESS'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_WORLDPAY', array(
+				'PRODUCT'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST_MODE'=>lorem_phrase(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'EMAIL_ADDRESS'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -408,24 +372,22 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_subscription_button_via_worldpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY',array(
-					'PRODUCT'=>lorem_phrase(),
-					'DIGEST'=>lorem_phrase(),
-					'TEST'=>lorem_phrase(),
-					'LENGTH'=>lorem_phrase(),
-					'LENGTH_UNITS_2'=>lorem_phrase(),
-					'ITEM_NAME'=>lorem_word(),
-					'PURCHASE_ID'=>placeholder_id(),
-					'AMOUNT'=>placeholder_number(),
-					'FIRST_REPEAT'=>lorem_phrase(),
-					'CURRENCY'=>lorem_phrase(),
-					'USERNAME'=>lorem_word(),
-					'IPN_URL'=>placeholder_url(),
-					'TEST_MODE'=>true,
-					'EMAIL_ADDRESS'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY', array(
+				'PRODUCT'=>lorem_phrase(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST'=>lorem_phrase(),
+				'LENGTH'=>lorem_phrase(),
+				'LENGTH_UNITS_2'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'FIRST_REPEAT'=>lorem_phrase(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'TEST_MODE'=>true,
+				'EMAIL_ADDRESS'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -439,12 +401,10 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_cancel_button_via_worldpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_CANCEL_BUTTON_VIA_WORLDPAY',array(
-					'CANCEL_URL'=>placeholder_url(),
-					'PURCHASE_ID'=>placeholder_id(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_CANCEL_BUTTON_VIA_WORLDPAY', array(
+				'CANCEL_URL'=>placeholder_url(),
+				'PURCHASE_ID'=>placeholder_id()
+			)), NULL, '', true)
 		);
 	}
 
@@ -458,18 +418,16 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_button_via_paypal()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_BUTTON_VIA_PAYPAL',array(
-					'PRODUCT'=>lorem_phrase(),
-					'ITEM_NAME'=>lorem_word(),
-					'PURCHASE_ID'=>placeholder_id(),
-					'AMOUNT'=>placeholder_number(),
-					'CURRENCY'=>lorem_phrase(),
-					'PAYMENT_ADDRESS'=>lorem_word(),
-					'IPN_URL'=>placeholder_url(),
-					'MEMBER_ADDRESS'=>placeholder_array(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_PAYPAL', array(
+				'PRODUCT'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'PAYMENT_ADDRESS'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'MEMBER_ADDRESS'=>placeholder_array()
+			)), NULL, '', true)
 		);
 	}
 
@@ -483,19 +441,17 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_subscription_button_via_paypal()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array(
-					'PRODUCT'=>lorem_phrase(),
-					'ITEM_NAME'=>lorem_word_html(),
-					'LENGTH'=>lorem_phrase(),
-					'LENGTH_UNITS'=>lorem_phrase(),
-					'PURCHASE_ID'=>placeholder_id(),
-					'AMOUNT'=>placeholder_number(),
-					'CURRENCY'=>lorem_phrase(),
-					'PAYMENT_ADDRESS'=>lorem_word(),
-					'IPN_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL', array(
+				'PRODUCT'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word_html(),
+				'LENGTH'=>lorem_phrase(),
+				'LENGTH_UNITS'=>lorem_phrase(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'PAYMENT_ADDRESS'=>lorem_word(),
+				'IPN_URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -509,11 +465,9 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_cancel_button_via_paypal()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL',array(
-					'PURCHASE_ID'=>placeholder_id(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL', array(
+				'PURCHASE_ID'=>placeholder_id()
+			)), NULL, '', true)
 		);
 	}
 
@@ -527,20 +481,18 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_button_via_secpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_BUTTON_VIA_SECPAY',array(
-					'PRODUCT'=>lorem_phrase(),
-					'DIGEST'=>lorem_phrase(),
-					'TEST'=>lorem_phrase(),
-					'TRANS_ID'=>placeholder_id(),
-					'ITEM_NAME'=>lorem_word_html(),
-					'PURCHASE_ID'=>placeholder_id(),
-					'AMOUNT'=>placeholder_number(),
-					'CURRENCY'=>lorem_phrase(),
-					'USERNAME'=>lorem_word(),
-					'IPN_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_SECPAY', array(
+				'PRODUCT'=>lorem_phrase(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST'=>lorem_phrase(),
+				'TRANS_ID'=>placeholder_id(),
+				'ITEM_NAME'=>lorem_word_html(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -554,24 +506,22 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_subscription_button_via_secpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array(
-					'PRODUCT'=>lorem_phrase(),
-					'DIGEST'=>lorem_phrase(),
-					'TEST'=>lorem_phrase(),
-					'TRANS_ID'=>placeholder_id(),
-					'FIRST_REPEAT'=>lorem_phrase(),
-					'LENGTH'=>lorem_phrase(),
-					'LENGTH_UNITS_2'=>lorem_phrase(),
-					'ITEM_NAME'=>lorem_word_html(),
-					'PURCHASE_ID'=>placeholder_id(),
-					'AMOUNT'=>placeholder_number(),
-					'CURRENCY'=>lorem_phrase(),
-					'USERNAME'=>lorem_word(),
-					'IPN_URL'=>placeholder_url(),
-					'PRICE'=>placeholder_number(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY', array(
+				'PRODUCT'=>lorem_phrase(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST'=>lorem_phrase(),
+				'TRANS_ID'=>placeholder_id(),
+				'FIRST_REPEAT'=>lorem_phrase(),
+				'LENGTH'=>lorem_phrase(),
+				'LENGTH_UNITS_2'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word_html(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'PRICE'=>placeholder_number()
+			)), NULL, '', true)
 		);
 	}
 
@@ -585,12 +535,10 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__ecom_cancel_button_via_secpay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_CANCEL_BUTTON_VIA_SECPAY',array(
-					'CANCEL_URL'=>placeholder_url(),
-					'PURCHASE_ID'=>placeholder_id(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_CANCEL_BUTTON_VIA_SECPAY', array(
+				'CANCEL_URL'=>placeholder_url(),
+				'PURCHASE_ID'=>placeholder_id()
+			)), NULL, '', true)
 		);
 	}
 
@@ -603,13 +551,15 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__purchase_wizard_stage_guest()
 	{
+		require_lang('ocf');
+
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_GUEST',array(
-					'TITLE'=>lorem_title(),
-					'TEXT'=>lorem_sentence_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_GUEST', array(
+				'TEXT'=>lorem_sentence_html(),
+				'JAVASCRIPT'=>'',
+				'FORM'=>placeholder_form(),
+				'HIDDEN'=>''
+			)), NULL, '', true)
 		);
 	}
 
@@ -623,12 +573,10 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_choose()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_CHOOSE',array(
-					'FIELDS'=>placeholder_fields(),
-					'TITLE'=>lorem_title(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_CHOOSE', array(
+				'FIELDS'=>placeholder_fields(),
+				'TITLE'=>lorem_title()
+			)), NULL, '', true)
 		);
 	}
 
@@ -642,12 +590,10 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_message()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_MESSAGE',array(
-					'TITLE'=>lorem_title(),
-					'TEXT'=>lorem_sentence_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_MESSAGE', array(
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence_html()
+			)), NULL, '', true)
 		);
 	}
 
@@ -662,13 +608,11 @@ class Hook_addon_registry_ecommerce
 	{
 		require_lang('installer');
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_LICENCE',array(
-					'TITLE'=>lorem_title(),
-					'URL'=>placeholder_url(),
-					'LICENCE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_LICENCE', array(
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'LICENCE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -682,12 +626,10 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_details()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_DETAILS',array(
-					'TEXT'=>lorem_sentence_html(),
-					'FIELDS'=>placeholder_fields()
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_DETAILS', array(
+				'TEXT'=>lorem_sentence_html(),
+				'FIELDS'=>placeholder_fields()
+			)), NULL, '', true)
 		);
 	}
 
@@ -701,12 +643,10 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_finish()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_FINISH',array(
-					'TITLE'=>lorem_title(),
-					'MESSAGE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_FINISH', array(
+				'TITLE'=>lorem_title(),
+				'MESSAGE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -719,20 +659,29 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__ecom_invoices_screen()
 	{
-		$invoices = array();
+		$invoices=array();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$invoices[] = array('TRANSACTION_BUTTON'=>placeholder_button(),'INVOICE_TITLE'=>lorem_phrase(),'ID'=>placeholder_id(),'AMOUNT'=>placeholder_number(),'TIME'=>placeholder_date(),'STATE'=>lorem_word(),'DELIVERABLE'=>lorem_word(),'PAYABLE'=>lorem_word(),'NOTE'=>lorem_phrase(),'TYPE_CODE'=>lorem_word());
+			$invoices[]=array(
+				'TRANSACTION_BUTTON'=>placeholder_button(),
+				'INVOICE_TITLE'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'TIME'=>placeholder_date(),
+				'STATE'=>lorem_word(),
+				'DELIVERABLE'=>lorem_word(),
+				'PAYABLE'=>lorem_word(),
+				'NOTE'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_word()
+			);
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_INVOICES_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'CURRENCY'=>lorem_phrase(),
-					'INVOICES'=>$invoices
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_INVOICES_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'CURRENCY'=>lorem_phrase(),
+				'INVOICES'=>$invoices
+			)), NULL, '', true)
 		);
 	}
 
@@ -745,23 +694,30 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__ecom_subscriptions_screen()
 	{
-		$button = do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array(
-					'STATUS'=>lorem_phrase(),
-					'TRIGGER_URL'=>placeholder_url(),
-						));
-		$subscriptions = array();
+		$button=do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER', array(
+			'STATUS'=>lorem_phrase(),
+			'TRIGGER_URL'=>placeholder_url()
+		));
+		$subscriptions=array();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$subscriptions[] = array('SUBSCRIPTION_TITLE'=>lorem_phrase(),'ID'=>placeholder_id(),'PER'=>lorem_word(),'AMOUNT'=>placeholder_number(),'TIME'=>placeholder_date(),'STATE'=>lorem_word(),'TYPE_CODE'=>lorem_word(),'CANCEL_BUTTON'=>$button);
+			$subscriptions[]=array(
+				'SUBSCRIPTION_TITLE'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'PER'=>lorem_word(),
+				'AMOUNT'=>placeholder_number(),
+				'TIME'=>placeholder_date(),
+				'STATE'=>lorem_word(),
+				'TYPE_CODE'=>lorem_word(),
+				'CANCEL_BUTTON'=>$button
+			);
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('ECOM_SUBSCRIPTIONS_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'SUBSCRIPTIONS'=>$subscriptions
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTIONS_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'SUBSCRIPTIONS'=>$subscriptions
+			)), NULL, '', true)
 		);
 	}
 
@@ -775,19 +731,17 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_subscribe()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_SUBSCRIBE',array(
-					'LOGOS'=>placeholder_image(),
-					'TRANSACTION_BUTTON'=>placeholder_button(),
-					'CURRENCY'=>placeholder_number(),
-					'ITEM_NAME'=>lorem_word(),
-					'TITLE'=>lorem_phrase(),
-					'LENGTH'=>"3",
-					'LENGTH_UNITS'=>"$",
-					'PURCHASE_ID'=>placeholder_id(),
-					'PRICE'=>"123.45"
-					)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_SUBSCRIBE', array(
+				'LOGOS'=>placeholder_image(),
+				'TRANSACTION_BUTTON'=>placeholder_button(),
+				'CURRENCY'=>placeholder_number(),
+				'ITEM_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'LENGTH'=>"3",
+				'LENGTH_UNITS'=>"$",
+				'PURCHASE_ID'=>placeholder_id(),
+				'PRICE'=>"123.45"
+			)), NULL, '', true)
 		);
 	}
 
@@ -801,19 +755,17 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_stage_pay()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PURCHASE_WIZARD_STAGE_PAY',array(
-					'LOGOS'=>placeholder_image(),
-					'TRANSACTION_BUTTON'=>placeholder_button(),
-					'CURRENCY'=>placeholder_number(),
-					'ITEM_NAME'=>lorem_word(),
-					'TITLE'=>lorem_phrase(),
-					'LENGTH'=>"3",
-					'LENGTH_UNITS'=>"$",
-					'PURCHASE_ID'=>placeholder_id(),
-					'PRICE'=>"123.45"
-					)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_PAY', array(
+				'LOGOS'=>placeholder_image(),
+				'TRANSACTION_BUTTON'=>placeholder_button(),
+				'CURRENCY'=>placeholder_number(),
+				'ITEM_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'LENGTH'=>"3",
+				'LENGTH_UNITS'=>"$",
+				'PURCHASE_ID'=>placeholder_id(),
+				'PRICE'=>"123.45"
+			)), NULL, '', true)
 		);
 	}
 }

@@ -83,7 +83,7 @@ class Module_admin_tickets
 	 */
 	function ticket_type_interface()
 	{
-		$title=get_page_title('MANAGE_TICKET_TYPES');
+		$title=get_screen_title('MANAGE_TICKET_TYPES');
 
 		require_lang('permissions');
 
@@ -131,7 +131,7 @@ class Module_admin_tickets
 	 */
 	function add_ticket_type()
 	{
-		$title=get_page_title('ADD_TICKET_TYPE');
+		$title=get_screen_title('ADD_TICKET_TYPE');
 
 		$ticket_type=post_param('ticket_type',post_param('ticket_type_2'));
 		add_ticket_type($ticket_type,post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
@@ -152,7 +152,7 @@ class Module_admin_tickets
 	 */
 	function edit_ticket_type()
 	{
-		$title=get_page_title('EDIT_TICKET_TYPE');
+		$title=get_screen_title('EDIT_TICKET_TYPE');
 
 		require_code('form_templates');
 		require_code('permissions2');
@@ -181,13 +181,13 @@ class Module_admin_tickets
 	 */
 	function _edit_ticket_type()
 	{
-		$title=get_page_title('EDIT_TICKET_TYPE');
+		$title=get_screen_title('EDIT_TICKET_TYPE');
 
 		$type=get_param_integer('ticket_type');
 
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_page_title('DELETE_TICKET_TYPE');
+			$title=get_screen_title('DELETE_TICKET_TYPE');
 			delete_ticket_type($type);
 		}
 		else

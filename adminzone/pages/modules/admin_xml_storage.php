@@ -89,7 +89,7 @@ class Module_admin_xml_storage
 	 */
 	function ui()
 	{
-		$title=get_page_title('XML_DATA_MANAGEMENT');
+		$title=get_screen_title('XML_DATA_MANAGEMENT');
 
 		require_code('form_templates');
 
@@ -110,7 +110,7 @@ class Module_admin_xml_storage
 		$export_fields->attach(form_input_tick(do_lang_tempcode('EXPORT_WITH_COMCODE_XML'),do_lang_tempcode('DESCRIPTION_EXPORT_WITH_COMCODE_XML'),'comcode_xml',false));
 		$export_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$export_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_EXPORT_TEXT'),'FIELDS'=>$export_fields,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT')));
 
-		return do_template('XML_STORAGE_SCREEN',array('TITLE'=>$title,'IMPORT_FORM'=>$import_form,'EXPORT_FORM'=>$export_form));
+		return do_template('XML_STORAGE_SCREEN',array('_GUID'=>'8618fbb96fe29689dbbf8edd60444b1e','TITLE'=>$title,'IMPORT_FORM'=>$import_form,'EXPORT_FORM'=>$export_form));
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Module_admin_xml_storage
 	 */
 	function _import()
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		$xml=post_param('xml');
 
@@ -139,12 +139,12 @@ class Module_admin_xml_storage
 		erase_comcode_page_cache();
 		require_code('view_modes');
 		erase_tempcode_cache();
-		persistant_cache_empty();
+		persistent_cache_empty();
 
 		breadcrumb_set_self(do_lang_tempcode('_RESULTS'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_DATA_MANAGEMENT'))));
 
-		return do_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array('TITLE'=>$title,'OPS'=>$ops_nice));
+		return do_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array('_GUID'=>'6960a7ab06fdccf81f480c3895eb8442','TITLE'=>$title,'OPS'=>$ops_nice));
 	}
 
 	/**
@@ -154,7 +154,7 @@ class Module_admin_xml_storage
 	 */
 	function _export()
 	{
-		$title=get_page_title('EXPORT');
+		$title=get_screen_title('EXPORT');
 
 		if (!array_key_exists('tables',$_POST)) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
@@ -163,7 +163,7 @@ class Module_admin_xml_storage
 		breadcrumb_set_self(do_lang_tempcode('_RESULTS'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_DATA_MANAGEMENT'))));
 
-		return do_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array('TITLE'=>$title,'XML'=>$xml));
+		return do_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array('_GUID'=>'c7053f328b27709b529f2cd88513d85d','TITLE'=>$title,'XML'=>$xml));
 	}
 
 }

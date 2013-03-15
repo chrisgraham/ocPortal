@@ -1,0 +1,56 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.screen_actions_outer {
+	margin: 2em 0;
+}
+
+.screen_actions {
+	overflow: hidden;
+}
+
+.screen_actions div {
+	margin-{!en_right}: 20px;
+	background-repeat: no-repeat;
+	float: {!en_left};
+}
+
+.screen_actions div a {
+	width: 20px;
+	height: 16px;
+	display: inline-block;
+}
+
+.screen_actions .print {
+	background-image: url('{$IMG;,recommend/print}');
+}
+
+.screen_actions .recommend {
+	background-image: url('{$IMG;,recommend/recommend}');
+}
+
+.screen_actions .favorites {
+	background-image: url('{$IMG;,recommend/favorites}');
+}
+
+.screen_actions .facebook {
+	background-image: url('{$IMG;,recommend/facebook}');
+}
+
+.screen_actions .twitter {
+	background-image: url('{$IMG;,recommend/twitter}');
+}
+
+.screen_actions .stumbleupon {
+	background-image: url('{$IMG;,recommend/stumbleupon}');
+}
+
+.screen_actions .digg {
+	background-image: url('{$IMG;,recommend/digg}');
+}
+
+.screen_actions .google_plusone {
+	margin-top: 1px;
+}
