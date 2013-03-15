@@ -117,8 +117,8 @@ class Block_main_gallery_embed
 			$extra_join_sql='';
 		}
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
+		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$image_select.$where_sup);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$video_select.$where_sup);
 
 		if ($_sort=='random')
 		{
@@ -132,13 +132,13 @@ class Block_main_gallery_embed
 			{
 				if ((mt_rand(0,1)==0) || ($total_videos-count($rows_videos)==0))
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
+					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
 					$rows_images[]=$rows[0];
 					$done_images.=' AND ';
 					$done_images.='id<>'.strval($rows[0]['id']);
 				} else
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
+					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
 					$rows_videos[]=$rows[0];
 					$done_videos.=' AND ';
 					$done_videos.='id<>'.strval($rows[0]['id']);
@@ -156,7 +156,7 @@ class Block_main_gallery_embed
 			{
 				$rating_sort='';
 			}
-			$rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.' ORDER BY '.$sort,$max+$start);
 			if ($_sort=='compound_rating')
 			{
 				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=r.id) AS compound_rating';
@@ -167,7 +167,7 @@ class Block_main_gallery_embed
 			{
 				$rating_sort='';
 			}
-			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
+			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.' ORDER BY '.$sort,$max+$start);
 		}
 
 		// Sort

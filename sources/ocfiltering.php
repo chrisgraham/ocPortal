@@ -443,7 +443,7 @@ function ocfilter_to_idlist_using_callback($filter,$ids_and_parents_callback,$pa
  * @param  boolean	Whether the record-set IDs are numeric
  * @param  boolean	Whether the category-set IDs are numeric
  * @param  ?object	Database connection to use (NULL: website)
- * @return string		SQL query fragment
+ * @return string		SQL query fragment. Note that brackets will be put around this automatically if required, so there's no need to do this yourself.
  */
 function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NULL,$parent_spec__parent_name=NULL,$parent_field_name=NULL,$parent_spec__field_name=NULL,$numeric_record_set_ids=true,$numeric_category_set_ids=true,$db=NULL)
 {
