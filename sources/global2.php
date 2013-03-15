@@ -23,7 +23,7 @@
  */
 function init__global2()
 {
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT;
 
 	if (ini_get('output_buffering')=='1') @ob_end_clean();
 
@@ -59,10 +59,16 @@ function init__global2()
 
 	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
 	{
-		if ((is_file('closed.html')) || (@is_file('../closed.html')))
+		if (is_file('closed.html'))
 		{
 			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
-			header('Location: '.get_base_url().'closed.html');
+			header('Location: closed.html');
+			exit();
+		}
+		if (@is_file('../closed.html'))
+		{
+			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
+			header('Location: ../closed.html');
 			exit();
 		}
 	}
@@ -198,7 +204,6 @@ function init__global2()
 	$TEMP_CHARSET=NULL;
 	$CURRENTLY_HTTPS=NULL;
 	$CACHE_FIND_SCRIPT=array();
-	$WHAT_IS_RUNNING=current_script();
 
 	error_reporting(E_ALL);
 	@ini_set('html_errors','1');
@@ -207,29 +212,28 @@ function init__global2()
 
 	$SERVER_TIMEZONE=function_exists('date_default_timezone_get')?@date_default_timezone_get():ini_get('date.timezone');
 	@ini_set('date.timezone','UTC');
-	if (function_exists('date_default_timezone_set')) date_default_timezone_set('UTC'); else putenv('TZ=UTC');
+	if (function_exists('date_default_timezone_set')) date_default_timezone_set('UTC'); // Needed for HPHP
 
 	$HAS_SET_ERROR_HANDLER=false;
 	$DYING_BADLY=false; // If ocPortal is bailing out uncontrollably, setting this will make sure the error hander does not try and suppress
 
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
 
-	$GLOBALS['DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_dev_mode',$_GET) || ($_GET['keep_no_dev_mode']=='0'))));
-	$GLOBALS['SEMI_DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
-	$GLOBALS['SEMI_DEBUG_MODE']=$GLOBALS['SEMI_DEV_MODE']; // TODO: Remove (legacy)
+	$GLOBALS['DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))));
+	$GLOBALS['SEMI_DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
 	if (function_exists('set_time_limit')) @set_time_limit(60);
-	if ($GLOBALS['DEV_MODE'])
+	if ($GLOBALS['DEBUG_MODE'])
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(10);
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');
 	}
-	if ($GLOBALS['DEV_MODE'])
+	if ($GLOBALS['DEBUG_MODE'])
 	{
 		require_code('developer_tools');
 	}
 
-	$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
+	$JAVASCRIPTS=array('javascript'=>1,'javascript_thumbnails'=>1);
 	if (($GLOBALS['CURRENT_SHARE_USER']!==NULL) || (get_domain()=='myocp.com')) $JAVASCRIPTS['javascript_ajax']=1;
 	$CSSS=array('no_cache'=>1,'global'=>1);
 
@@ -274,7 +278,7 @@ function init__global2()
 	require_code_no_override('version');
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
 	{
-		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
+		@header('X-Powered-By: ocPortal '.ocp_version_full().' (PHP '.phpversion().')');
 
 		$QUERY_LOG=false;
 		if ((isset($_REQUEST['special_page_type'])) && ($_REQUEST['special_page_type']=='query'))
@@ -300,9 +304,11 @@ function init__global2()
 	}
 	require_code('caches'); // Recently taken out of 'support' so makes sense to load it here
 	require_code('database'); // There's nothing without the database
-	require_code('config'); // Config is needed for much active stuff
-	require_code('support2');
-	if (ip_banned(get_ip_address())) critical_error('BANNED');
+	if (((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0')) && (!is_writable_wrap(get_file_base().'/.htaccess'))) // If we have to run this in software
+	{
+		require_code('support2');
+		if (ip_banned(get_ip_address())) critical_error('BANNED');
+	}
 	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally unsound chat message precheck (for extra efficiency)
 	{
 		require_code('chat_poller');
@@ -325,7 +331,7 @@ function init__global2()
 		}
 	}
 	require_code('zones'); // Zone is needed because zones are where all ocPortal pages reside
-
+	require_code('config'); // Config is needed for much active stuff
 	if ((get_option('collapse_user_zones',true)==='1') && ($RELATIVE_PATH=='site'))
 	{
 		get_base_url();/*force calculation first*/
@@ -383,17 +389,6 @@ function init__global2()
 
 	@header('Content-type: text/html; charset='.get_charset());
 
-	// Check RBL's
-	$spam_check_level=get_option('spam_check_level',true);
-	if ($spam_check_level==='EVERYTHING')
-	{
-		if (get_option('spam_block_lists')!='')
-		{
-			require_code('antispam');
-			check_rbls(true);
-		}
-	}
-
 	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
 	{
 		// Before anything gets outputted
@@ -415,7 +410,7 @@ function init__global2()
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_specific_permission(get_member(),'see_php_errors'))))
 	{
 		@ini_set('display_errors','1');
-	} elseif (!$GLOBALS['DEV_MODE']) @ini_set('display_errors','0');
+	} elseif (!$GLOBALS['DEBUG_MODE']) @ini_set('display_errors','0');
 
 	// G-zip?
 	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
@@ -443,7 +438,7 @@ function init__global2()
 			erase_tempcode_cache();
 			erase_cached_templates(!$changed_base_url);
 			erase_cached_language();
-			persistent_cache_empty();
+			persistant_cache_empty();
 			if ($changed_base_url)
 			{
 				require_lang('zones');
@@ -473,11 +468,11 @@ function init__global2()
 
 	$BOOTSTRAPPING=0;
 
-	if (($GLOBALS['SEMI_DEV_MODE']) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
+	if (($GLOBALS['SEMI_DEBUG_MODE']) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
 	{
-		if ($GLOBALS['SEMI_DEV_MODE'])
+		if ($GLOBALS['SEMI_DEBUG_MODE'])
 		{
-			/*if ((mt_rand(0,2)==1) && ($GLOBALS['DEV_MODE']) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
+			/*if ((mt_rand(0,2)==1) && ($GLOBALS['DEBUG_MODE']) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
 			{
 				require_code('view_modes');
 				erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
@@ -490,24 +485,29 @@ function init__global2()
 			} else $_GET['keep_devtest']='1';
 		}
 
+		if ((browser_matches('true_xhtml')) && (get_value('html5')!=='1') && (get_value('html5')!=='_true'/*TODO: deprecate old _true check*/) && (get_param_integer('keep_no_xhtml',0)==0) && (!running_script('upgrader'))) // In theory this is supported (and mostly does work), but a lot of necessary Javascript is not standardised, and the browser's that support XHTML properly do not agree on how to implement this Javascript in a usable way when it is enabled. This leads to a lot of corner-cases. If you're seeing this code enabled, it was possible for us to resolve them, otherwise not yet.
+		{
+			@header('Content-type: application/xhtml+xml; charset='.get_charset());
+		}
+
 		if (isset($_CREATED_FILES)) // Comes from ocProducts custom PHP version
 		{
 			/**
 			 * Run after-tests for debug mode, to make sure coding standards are met.
 			 */
-			function dev_mode_aftertests()
+			function debug_mode_aftertests()
 			{
 				global $_CREATED_FILES,$_MODIFIED_FILES;
 
 				// Use the info from ocProduct's custom PHP version to make sure that all files that were created/modified got synched as they should have been.
 				foreach ($_CREATED_FILES as $file)
 				{
-					if ((substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
+					if ((substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
 						@exit(escape_html('File not permission-synched: '.$file));
 				}
 				foreach ($_MODIFIED_FILES as $file)
 				{
-					if ((strpos($file,'_cache')===false) && (substr($file,0,strlen(get_file_base()))==get_file_base()) && (strpos($file,'/incoming/')===false) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
+					if ((strpos($file,'_cache')===false) && (substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
 						@exit(escape_html('File not change-synched: '.$file));
 				}
 
@@ -516,12 +516,12 @@ function init__global2()
 				if ((!$TITLE_CALLED) && ((is_null($SCREEN_TEMPLATE_CALLED)) || ($SCREEN_TEMPLATE_CALLED!='')) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No title used on screen.'));
 			}
 
-			register_shutdown_function('dev_mode_aftertests');
+			register_shutdown_function('debug_mode_aftertests');
 		}
 
-		if ((ocp_srv('SCRIPT_FILENAME')!='') && ($GLOBALS['DEV_MODE']) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
+		if ((ocp_srv('SCRIPT_FILENAME')!='') && ($GLOBALS['DEBUG_MODE']) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
 		{
-			if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME')))>4500)
+			if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME'),FILE_TEXT))>4500)
 			{
 				fatal_exit('Entry scripts (front controllers) should not be shoved full of code.');
 			}
@@ -537,8 +537,6 @@ function init__global2()
 	$default_memory_limit=get_value('memory_limit');
 	if ((is_null($default_memory_limit)) || ($default_memory_limit=='') || ($default_memory_limit=='0') || ($default_memory_limit=='-1'))
 		$default_memory_limit='64M';
-	if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
-	if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
 	@ini_set('memory_limit',$default_memory_limit);
 	if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
@@ -557,15 +555,6 @@ function init__global2()
 	{
 		require_code('chat');
 		enter_chat_lobby();
-	}
-
-	// Detect and deal with spammers that triggered the spam blackhole
-	if (get_option('spam_blackhole_detection')=='1')
-	{
-		if (post_param(md5(get_site_name().': antispam'),'')!='')
-		{
-			log_hack_attack_and_exit('LAME_SPAM_HACK','<blackhole>'.post_param(md5(get_site_name().': antispam'),'').'</blackhole>');
-		}
 	}
 
 	// Startup hooks
@@ -621,7 +610,7 @@ function fast_spider_cache($bot=true)
 
 	if (!can_fast_spider_cache()) return;
 
-	$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize(get_self_url_easy()));
+	$fast_cache_path=get_custom_file_base().'/persistant_cache/'.md5(serialize(get_self_url_easy()));
 	if (!$bot) $fast_cache_path.='__non-bot';
 	if (!array_key_exists('js_on',$_COOKIE)) $fast_cache_path.='__no-js';
 	if (is_mobile()) $fast_cache_path.='_mobile';
@@ -766,7 +755,7 @@ function load_user_stuff()
 		if (!array_key_exists('forum_type',$SITE_INFO)) $SITE_INFO['forum_type']='ocf';
 		require_code('forum/'.$SITE_INFO['forum_type']);	 // So we can at least get user details
 		$GLOBALS['FORUM_DRIVER']=object_factory('forum_driver_'.filter_naughty_harsh($SITE_INFO['forum_type']));
-		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix()==get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) // NB: In debug mode needs separating so we can properly test our boundaries
+		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix()==get_table_prefix()) && (!$GLOBALS['DEBUG_MODE'])) // NB: In debug mode needs separating so we can properly test our boundaries
 		{
 			$GLOBALS['FORUM_DRIVER']->connection=$GLOBALS['SITE_DB'];
 		}
@@ -787,7 +776,6 @@ function catch_fatal_errors()
 	if (!function_exists('error_get_last')) return;
 
 	$error=error_get_last();
-
 	if (!is_null($error))
 	{
 		if (!array_key_exists('message',$error)) return; // Needed for HipHop PHP
@@ -912,23 +900,6 @@ function is_browser_decacheing()
 }
 
 /**
- * Find out what script is running.
- *
- * @return ID_TEXT			The script running (usually 'index')
- */
-function current_script()
-{
-	// Strip down current URL so we can do a simple compare
-	global $WHAT_IS_RUNNING;
-	if ($WHAT_IS_RUNNING===NULL)
-	{
-		$stripped_current_url=preg_replace('#^.*/#','',function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
-		$WHAT_IS_RUNNING=substr($stripped_current_url,0,strpos($stripped_current_url,'.'));
-	}
-	return $WHAT_IS_RUNNING;
-}
-
-/**
  * Find whether a certain script is being run to get here.
  *
  * @param  string				Script filename (canonically we want NO .php file type suffix)
@@ -941,8 +912,14 @@ function running_script($is_this_running)
 	if (isset($RUNNING_SCRIPT_CACHE[$is_this_running.'.php'])) return $RUNNING_SCRIPT_CACHE[$is_this_running.'.php'];
 	if (isset($RUNNING_SCRIPT_CACHE[$is_this_running])) return $RUNNING_SCRIPT_CACHE[$is_this_running];
 
+	// Make $is_this_running fully-qualified, to stop common filename prefixes matching with a stem compare
+	if (substr($is_this_running,-4)!='.php') $is_this_running.='.php';
+
+	// Strip down current URL so we can do a simple stem compare
+	$stripped_current_url=preg_replace('#^.*/#','',function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
+
 	// Do the stem compare
-	$answer=(current_script()==$is_this_running);
+	$answer=(substr($stripped_current_url,0,strlen($is_this_running))==$is_this_running);
 
 	// Cache and return result
 	$RUNNING_SCRIPT_CACHE[$is_this_running]=$answer;
@@ -1018,12 +995,11 @@ function fatal_exit($text)
  * @param  ID_TEXT		The reason for the hack attack. This has to be a language string codename
  * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
  * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
- * @param  boolean		Whether to silently log the hack rather than also exiting
  */
-function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',$silent=false)
+function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
 {
 	require_code('failure');
-	_log_hack_attack_and_exit($reason,$reason_param_a,$reason_param_b,$silent);
+	_log_hack_attack_and_exit($reason,$reason_param_a,$reason_param_b);
 }
 
 /**
@@ -1060,25 +1036,14 @@ function make_seed()
 }
 
 /**
- * Get the major version of your installation.
- *
- * @return integer		The major version number of your installation
- */
-function ocp_version()
-{
-	return intval(ocp_version_number());
-}
-
-/**
- * Get the full string version of ocPortal that you are running, in 'pretty' format.
- * This is (and must be kept) equivalent to get_version_pretty__from_dotted(get_version_dotted())
+ * Get the full string version of ocPortal that you are running.
  *
  * @return string			The string saying the full ocPortal version number
  */
-function ocp_version_pretty()
+function ocp_version_full()
 {
 	$minor=ocp_version_minor();
-	return preg_replace('#\.(alpha|beta|RC)#',' ${1}',strval(ocp_version()).(($minor=='')?'':'.'.$minor));
+	return strval(ocp_version()).(($minor=='')?'':(is_numeric($minor[0])?'.':'-').$minor);
 }
 
 /**
@@ -1215,7 +1180,7 @@ function find_script($name,$append_keep=false,$base_url_code=0)
 	global $CACHE_FIND_SCRIPT;
 	if ($CACHE_FIND_SCRIPT===array())
 	{
-		if (function_exists('persistent_cache_get')) $CACHE_FIND_SCRIPT=persistent_cache_get('SCRIPT_PLACES');
+		if (function_exists('persistant_cache_get')) $CACHE_FIND_SCRIPT=persistant_cache_get('SCRIPT_PLACES');
 		if ($CACHE_FIND_SCRIPT===NULL) $CACHE_FIND_SCRIPT=array();
 	}
 	if (isset($CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code])) return $CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code].$append;
@@ -1235,14 +1200,14 @@ function find_script($name,$append_keep=false,$base_url_code=0)
 			{
 				$ret=get_base_url().'/'.$zone.(($zone!='')?'/':'').$name.'.php';
 				$CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code]=$ret;
-				if (function_exists('persistent_cache_set')) persistent_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
+				if (function_exists('persistant_cache_set')) persistant_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
 				return $ret.$append;
 			}
 		}
 	}
 	$ret=get_base_url(($base_url_code==0)?NULL:($base_url_code==2)).'/site/'.$name.'.php';
 	$CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code]=$ret;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
+	if (function_exists('persistant_cache_set')) persistant_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
 	return $ret.$append;
 }
 
@@ -1261,7 +1226,6 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$https=$CURRENTLY_HTTPS;
 		if ($https===NULL)
 		{
-			require_code('urls');
 			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
 			{
 				$https=false;
@@ -1589,7 +1553,7 @@ function post_param_integer($name,$default=false)
 	$retf=floatval($reti);
 	if (($retf>2147483647.0) || ($retf<-2147483648.0))
 	{
-		if ($name!='captcha')
+		if ($name!='security_image')
 		{
 			require_code('failure');
 			_param_invalid($name,NULL,true);
@@ -1780,7 +1744,7 @@ function javascript_tempcode($position=NULL)
 				$merge_from=javascript_enforce($j2);
 				if (is_file($merge_from))
 				{
-					$data.=unixify_line_format(file_get_contents($merge_from));
+					$data.=unixify_line_format(file_get_contents($merge_from,FILE_TEXT));
 				} else // race condition
 				{
 					$good_to_merge=false;
@@ -1801,12 +1765,12 @@ function javascript_tempcode($position=NULL)
 		if ($good_to_merge)
 		{
 			if ($position!='header')
-				$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'12e3bd481b7d24d9d999acce95f33916','CODE'=>$j)));
+				$js->attach(do_template('JAVASCRIPT_NEED',array('CODE'=>$j)));
 		}
 	}
 
 	// Our main loop
-	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1,'javascript_button_realtime_rain'=>1);
+	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_thumbnails'=>1,'javascript_button_realtime_rain'=>1);
 	foreach (array_keys($JAVASCRIPTS) as $j)
 	{
 		if (($good_to_merge) && (in_array($j,$to_merge))) continue;
@@ -1825,11 +1789,7 @@ function javascript_tempcode($position=NULL)
 			if ($https) $j.='_ssl';
 			if ($mobile) $j.='_mobile';
 
-			global $SITE_INFO;
-			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-			$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
-
-			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j,'SUP'=>$sup)));
+			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j)));
 		}
 	}
 	if (!is_null($JAVASCRIPT)) $js->attach($JAVASCRIPT);
@@ -1843,13 +1803,22 @@ function javascript_tempcode($position=NULL)
  */
 function require_javascript($javascript)
 {
-	if ($javascript=='javascript_forums_embed') // Has to be first
-	{
-		$GLOBALS['JAVASCRIPTS']=array_merge(array('javascript_forums_embed'=>1),$GLOBALS['JAVASCRIPTS']);
-	} else
+	//if ((!array_key_exists('DONE_HEADER',$GLOBALS)) || (!$GLOBALS['DONE_HEADER']))
+	//{
+		if ($javascript=='javascript_forums_embed') // Has to be first
+		{
+			$GLOBALS['JAVASCRIPTS']=array_merge(array('javascript_forums_embed'=>1),$GLOBALS['JAVASCRIPTS']);
+		} else
+		{
+			$GLOBALS['JAVASCRIPTS'][$javascript]=1;
+		}
+	/*} else	 -- Won't work, as we can't sync with the output properly
 	{
 		$GLOBALS['JAVASCRIPTS'][$javascript]=1;
-	}
+		$file=javascript_enforce($javascript);
+		$temp=do_template('JAVASCRIPT_NEED_INLINE',array('_GUID'=>'a6c907e26c5a8dd8c65f1d36a1a674a9','CODE'=>file_get_contents($file,FILE_TEXT)));
+		$temp->evaluate_echo();
+	}*/
 }
 
 /**
@@ -1953,7 +1922,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 		if ($seed!='')
 		{
 			$keep=symbol_tempcode('KEEP');
-			$css->attach(do_template('CSS_NEED_FULL',array('URL'=>find_script('themewizard').'?type=css&show='.urlencode($c).'.css'.$keep->evaluate()),user_lang(),false,NULL,'.tpl','templates',$theme));
+			$css->attach(do_template('CSS_NEED_FULL',array('URL'=>find_script('themewizard').'?type=css&show='.$c.'.css'.$keep->evaluate()),user_lang(),false,NULL,'.tpl','templates',$theme));
 		}
 		elseif (($c=='no_cache') || ($inline))
 		{
@@ -1979,13 +1948,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 			if ($https) $c.='_ssl';
 			if ($mobile) $c.='_mobile';
 			if ($temp!='')
-			{
-				global $SITE_INFO;
-				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-				$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
-
-				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));
-			}
+				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c),user_lang(),false,NULL,'.tpl','templates',$theme));
 		}
 	}
 	$css_need_inline->attach($css);
@@ -1999,7 +1962,16 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
  */
 function require_css($css)
 {
-	$GLOBALS['CSSS'][$css]=1;
+//	if ((!array_key_exists('DONE_HEADER',$GLOBALS)) || (!$GLOBALS['DONE_HEADER']))
+	{
+		$GLOBALS['CSSS'][$css]=1;
+	}/* else	 -- Won't work, as we can't sync with the output properly
+	{
+		$GLOBALS['CSSS'][$css]=1;
+		$file=css_enforce($css);
+		$temp=do_template('CSS_NEED_INLINE',array('_GUID'=>'b6c907e26c5a8dd8c65f1d36a1a674a9','CSS'=>file_get_contents($file,FILE_TEXT)));
+		$temp->evaluate_echo();
+	}*/
 }
 
 /**
@@ -2182,22 +2154,4 @@ function will_be_unicode_neutered($data)
 		if (ord($data[$i])>0x7F) return false;
 	}
 	return true;
-}
-
-/**
- * Should be called when an action happens that results in content submission. Does a spammer check.
- *
- * @param ?string		Check this particular username that has just been supplied (NULL: none)
- * @param ?string		Check this particular email address that has just been supplied (NULL: none)
- */
-function inject_action_spamcheck($username=NULL,$email=NULL)
-{
-	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') && (is_guest()))
-	{
-		require_code('antispam');
-		check_rbls();
-		check_stopforumspam($username,$email);
-	}
 }

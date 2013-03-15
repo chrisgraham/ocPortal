@@ -99,44 +99,14 @@ class Module_cms_calendar extends standard_aed_module
 
 		$this->javascript="
 			var form=document.getElementById('recurrence_pattern').form;
-
-			var start_day=document.getElementById('start_day');
-			var start_month=document.getElementById('start_month');
-			var start_year=document.getElementById('start_year');
-			var start_hour=document.getElementById('start_hour');
-			var start_minute=document.getElementById('start_minute');
-			var do_timezone_conv=document.getElementById('do_timezone_conv');
-			var all_day_event=document.getElementById('all_day_event');
-
-			var crf=function(event) {
+			var crf=function() {
 				var s=(form.elements['recurrence'][0].checked);
 				if (form.elements['recurrence_pattern']) form.elements['recurrence_pattern'].disabled=s;
 				if (form.elements['recurrences']) form.elements['recurrences'].disabled=s;
 				if (form.elements['seg_recurrences']) form.elements['seg_recurrences'].disabled=s;
-
-				if ((typeof event!='undefined') && (start_day.selectedIndex!=0) && (start_month.selectedIndex!=0) && (start_year.selectedIndex!=0)) // Something changed
-				{
-					var new_data=load_snippet('calendar_recurrence_suggest&monthly_spec_type='+window.encodeURIComponent(radio_value(form.elements['monthly_spec_type']))+'&day='+window.encodeURIComponent(start_day.options[start_day.selectedIndex].value)+'&month='+window.encodeURIComponent(start_month.options[start_month.selectedIndex].value)+'&year='+window.encodeURIComponent(start_year.options[start_year.selectedIndex].value)+'&hour='+window.encodeURIComponent(start_hour.options[start_hour.selectedIndex].value)+'&minute='+window.encodeURIComponent(start_minute.options[start_minute.selectedIndex].value)+'&do_timezone_conv='+(do_timezone_conv.checked?'1':'0')+'&all_day_event='+(all_day_event.checked?'1':'0'));
-					var tr=form.elements['monthly_spec_type'][0];
-					while (tr.nodeName.toLowerCase()!='tr')
-					{
-						tr=tr.parentNode;
-					}
-					set_inner_html(tr,new_data.replace(/<tr [^>]*>/,'').replace(/<\/tr>/,''));
-				}
-				var monthly_recurrence=form.elements['recurrence'][3].checked;
-				for (var i=0;i<form.elements['monthly_spec_type'].length;i++)
-				{
-					form.elements['monthly_spec_type'][i].disabled=!monthly_recurrence;
-				}
 			};
 			crf();
 			for (var i=0;i<form.elements['recurrence'].length;i++) form.elements['recurrence'][i].onclick=crf;
-			start_day.onchange=crf;
-			start_month.onchange=crf;
-			start_year.onchange=crf;
-			start_hour.onchange=crf;
-			start_minute.onchange=crf;
 
 			var crf2=function() {
 				var s=document.getElementById('all_day_event').checked;
@@ -198,7 +168,7 @@ class Module_cms_calendar extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_CALENDARS'),comcode_lang_string('DOC_CALENDAR'),
+		return do_next_manager(get_page_title('MANAGE_CALENDARS'),comcode_lang_string('DOC_CALENDAR'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_calendar')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_EVENT_TYPE')):NULL,
@@ -270,8 +240,7 @@ class Module_cms_calendar extends standard_aed_module
 				$types[$row['e_type']]=$type;
 			}
 
-			$start_day_of_month=find_concrete_day_of_month($row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type'],is_null($row['e_start_hour'])?find_timezone_start_hour_in_utc($row['e_timezone'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type']):$row['e_start_hour'],is_null($row['e_start_minute'])?find_timezone_start_minute_in_utc($row['e_timezone'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type']):$row['e_start_minute'],$row['e_timezone'],$row['e_do_timezone_conv']==1);
-			$time_raw=mktime($row['e_start_hour'],$row['e_start_minute'],0,$row['e_start_month'],$start_day_of_month,$row['e_start_year']);
+			$time_raw=mktime($row['e_start_hour'],$row['e_start_minute'],0,$row['e_start_month'],$row['e_start_day'],$row['e_start_year']);
 			$date=get_timezoned_date($time_raw,!is_null($row['e_start_hour']));
 
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar')),get_translated_text($row['e_title']))),$date,$type,($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
@@ -301,8 +270,6 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  ?integer			The year the event starts at (NULL: default)
 	 * @param  ?integer			The month the event starts at (NULL: default)
 	 * @param  ?integer			The day the event starts at (NULL: default)
-	 * @param  ID_TEXT			In-month specification type for start date
-	 * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
 	 * @param  ?integer			The hour the event starts at (NULL: default)
 	 * @param  ?integer			The minute the event starts at (NULL: default)
 	 * @param  SHORT_TEXT		The title of the event
@@ -316,8 +283,6 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  ?integer			The year the event ends at (NULL: not a multi day event)
 	 * @param  ?integer			The month the event ends at (NULL: not a multi day event)
 	 * @param  ?integer			The day the event ends at (NULL: not a multi day event)
-	 * @param  ID_TEXT			In-month specification type for end date
-	 * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
 	 * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
 	 * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
 	 * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
@@ -329,7 +294,7 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  LONG_TEXT			Notes
 	 * @return array				A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
 	 */
-	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_monthly_spec_type='day_of_month',$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=0,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
+	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=0,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -361,7 +326,6 @@ class Module_cms_calendar extends standard_aed_module
 				{
 					$exploded=explode(':',$date2[1]);
 					//if (count($exploded)!=2) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-
 					$start_hour=intval($exploded[0]);
 					$start_minute=intval($exploded[1]);
 				}
@@ -405,14 +369,9 @@ class Module_cms_calendar extends standard_aed_module
 
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
-		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
-		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,$start_month,$start_day_of_month,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone,get_param('date','')==''));
-		$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,$timezone,$do_timezone_conv==1);
-		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,$end_month,$end_day_of_month,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
-		//$hidden->attach(form_input_hidden('start_monthly_spec_type',$start_monthly_spec_type));
-		//$hidden->attach(form_input_hidden('end_monthly_spec_type',$end_monthly_spec_type));
+		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day):$start_minute,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day):$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone,get_param('date','')==''));
+		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day):$end_hour,$end_month,$end_day,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
 
-		// Validation
 		if ($validated==0) $validated=get_param_integer('validated',0);
 		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
@@ -464,14 +423,8 @@ class Module_cms_calendar extends standard_aed_module
 		$fields2->attach(form_input_line(do_lang_tempcode('RECURRENCE_PATTERN'),do_lang_tempcode('DESCRIPTION_RECURRENCE_PATTERN'),'recurrence_pattern',$recurrence_pattern,false));
 		$fields2->attach(form_input_integer(do_lang_tempcode('RECURRENCES'),do_lang_tempcode('DESCRIPTION_RECURRENCES'),'recurrences',$recurrences,false));
 		$fields2->attach(form_input_tick(do_lang_tempcode('SEG_RECURRENCES'),do_lang_tempcode('DESCRIPTION_SEG_RECURRENCES'),'seg_recurrences',$seg_recurrences==1));
-		$start_time=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
-		$start_time=tz_time($start_time,get_users_timezone());
-		$conv_month=intval(date('n',$start_time));
-		$conv_day=intval(date('j',$start_time));
-		$conv_year=intval(date('Y',$start_time));
-		$fields2->attach(monthly_spec_type_chooser($conv_day,$conv_month,$conv_year,$start_monthly_spec_type));
 
-		if (($adding) && (cron_installed()) && (has_specific_permission(get_member(),'set_reminders'))) // Some more stuff only when adding
+		if (($adding) && (cron_installed())) // Some more stuff only when adding
 		{
 			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('REMINDERS'))));
 
@@ -531,7 +484,6 @@ class Module_cms_calendar extends standard_aed_module
 			$start_day=INTEGER_MAGIC_NULL;
 			$start_hour=INTEGER_MAGIC_NULL;
 			$start_minute=INTEGER_MAGIC_NULL;
-			$start_monthly_spec_type=STRING_MAGIC_NULL;
 		} else
 		{
 			$start_year=intval(date('Y',$start));
@@ -546,11 +498,6 @@ class Module_cms_calendar extends standard_aed_module
 				$start_hour=intval(date('H',$start));
 				$start_minute=intval(date('i',$start));
 			}
-			$start_monthly_spec_type=post_param('start_monthly_spec_type',post_param('monthly_spec_type','day_of_month')); // We actually don't suppose separate spec-types for the ends and starts in the UI
-			if ($start_monthly_spec_type!='day_of_month')
-			{
-				$start_day=find_abstract_day(post_param_integer('start_year'),post_param_integer('start_month'),post_param_integer('start_day'),$start_monthly_spec_type);
-			}
 		}
 		if (fractional_edit())
 		{
@@ -559,7 +506,6 @@ class Module_cms_calendar extends standard_aed_module
 			$end_day=INTEGER_MAGIC_NULL;
 			$end_hour=INTEGER_MAGIC_NULL;
 			$end_minute=INTEGER_MAGIC_NULL;
-			$end_monthly_spec_type=STRING_MAGIC_NULL;
 		} else
 		{
 			$end=get_input_date('end');
@@ -578,15 +524,8 @@ class Module_cms_calendar extends standard_aed_module
 					$end_minute=intval(date('i',$end));
 				}
 
-				$end_monthly_spec_type=post_param('end_monthly_spec_type',$start_monthly_spec_type);
-				if ($end_monthly_spec_type!='day_of_month')
-				{
-					$end_day=find_abstract_day(post_param_integer('end_year'),post_param_integer('end_month'),post_param_integer('end_day'),$end_monthly_spec_type);
-				} else
-				{
-					// Error if wrong way around
-					if ($start>$end) warn_exit(do_lang_tempcode('EVENT_CANNOT_AROUND'));
-				}
+				// Error if wrong way around
+				if ($start>$end) warn_exit(do_lang_tempcode('EVENT_CANNOT_AROUND'));
 			} else
 			{
 				$end_year=NULL;
@@ -594,17 +533,10 @@ class Module_cms_calendar extends standard_aed_module
 				$end_day=NULL;
 				$end_hour=NULL;
 				$end_minute=NULL;
-				$end_monthly_spec_type='day_of_month';
 			}
 		}
 
-		if ($recurrence!='monthly')
-		{
-			$start_monthly_spec_type='day_of_month';
-			$end_monthly_spec_type='day_of_month';
-		}
-
-		return array($type,$recurrence,$recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv);
+		return array($type,$recurrence,$recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv);
 	}
 
 	/**
@@ -652,7 +584,7 @@ class Module_cms_calendar extends standard_aed_module
 
 		check_edit_permission(($myrow['e_is_public']==1)?'mid':'low',$myrow['e_submitter']);
 		$content=get_translated_text($myrow['e_content']);
-		$fields=$this->get_form_fields($myrow['e_type'],$myrow['e_start_year'],$myrow['e_start_month'],$myrow['e_start_day'],$myrow['e_start_monthly_spec_type'],$myrow['e_start_hour'],$myrow['e_start_minute'],get_translated_text($myrow['e_title']),$content,$myrow['e_recurrence'],$myrow['e_recurrences'],$myrow['e_seg_recurrences'],$myrow['e_is_public'],$myrow['e_priority'],$myrow['e_end_year'],$myrow['e_end_month'],$myrow['e_end_day'],$myrow['e_end_monthly_spec_type'],$myrow['e_end_hour'],$myrow['e_end_minute'],$myrow['e_timezone'],$myrow['e_do_timezone_conv'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
+		$fields=$this->get_form_fields($myrow['e_type'],$myrow['e_start_year'],$myrow['e_start_month'],$myrow['e_start_day'],$myrow['e_start_hour'],$myrow['e_start_minute'],get_translated_text($myrow['e_title']),$content,$myrow['e_recurrence'],$myrow['e_recurrences'],$myrow['e_seg_recurrences'],$myrow['e_is_public'],$myrow['e_priority'],$myrow['e_end_year'],$myrow['e_end_month'],$myrow['e_end_day'],$myrow['e_end_hour'],$myrow['e_end_minute'],$myrow['e_timezone'],$myrow['e_do_timezone_conv'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
 
 		if (has_delete_permission('low',get_member(),$myrow['e_submitter'],'cms_calendar'))
 		{
@@ -672,7 +604,7 @@ class Module_cms_calendar extends standard_aed_module
 	 */
 	function add_actualisation()
 	{
-		list($type,$recurrence,$recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv)=$this->get_event_parameters();
+		list($type,$recurrence,$recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv)=$this->get_event_parameters();
 
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$allow_rating=post_param_integer('allow_rating',0);
@@ -681,110 +613,106 @@ class Module_cms_calendar extends standard_aed_module
 		$validated=post_param_integer('validated',0);
 		$seg_recurrences=post_param_integer('seg_recurrences',0);
 
-		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
 		// Reminders
-		if (has_specific_permission(get_member(),'set_reminders'))
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+		$rem_groups=array();
+		if ((has_specific_permission(get_member(),'add_public_events')) && (array_key_exists('sign_up_reminder_groups',$_POST)))
 		{
-			if (function_exists('set_time_limit')) @set_time_limit(0);
-			$rem_groups=array();
-			if ((has_specific_permission(get_member(),'add_public_events')) && (array_key_exists('sign_up_reminder_groups',$_POST)))
+			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
+			$multi_code=read_multi_code('sign_up_reminder_groups'); // Usergroups signed up
+			require_code('ocfiltering');
+			if ((substr($multi_code,0,1)=='-') || (substr($multi_code,0,1)=='*'))
 			{
-				$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
-				$multi_code=read_multi_code('sign_up_reminder_groups'); // Usergroups signed up
-				require_code('ocfiltering');
-				if ((substr($multi_code,0,1)=='-') || (substr($multi_code,0,1)=='*'))
-				{
-					$rem_groups=$all_groups;
-					if (get_forum_type()=='ocf')
-						unset($rem_groups[db_get_first_id()]);
-				}
-				foreach (explode(',',substr($multi_code,1)) as $m)
-				{
-					if (substr($multi_code,0,1)=='-')
-					{
-						unset($rem_groups[intval($m)]);
-					} elseif (substr($multi_code,0,1)=='+')
-					{
-						$rem_groups[intval($m)]=$all_groups[intval($m)];
-					}
-				}
-				$rem_groups=array_keys($rem_groups);
+				$rem_groups=$all_groups;
+				if (get_forum_type()=='ocf')
+					unset($rem_groups[db_get_first_id()]);
 			}
+			foreach (explode(',',substr($multi_code,1)) as $m)
+			{
+				if (substr($multi_code,0,1)=='-')
+				{
+					unset($rem_groups[intval($m)]);
+				} elseif (substr($multi_code,0,1)=='+')
+				{
+					$rem_groups[intval($m)]=$all_groups[intval($m)];
+				}
+			}
+			$rem_groups=array_keys($rem_groups);
+		}
+		$start=0;
+		do
+		{
+			$members=array();
+			if (count($rem_groups)!=0)
+			{
+				$members=array_keys($GLOBALS['FORUM_DRIVER']->member_group_query($rem_groups,300,$start));
+				$members=array_diff($members,array(get_member(),$GLOBALS['FORUM_DRIVER']->get_guest_id()));
+			}
+			if (($start==0) && (post_param_integer('sign_up_reminder',0)==1)) // If this member is signing up
+				$members[]=get_member();
+			if (count($members)!=0) // Now add their reminders
+			{
+				$secs_before=floatval(post_param('hours_before','1.0'))*3600.0;
+
+				$filled1=array();
+				for ($i=0;$i<count($members);$i++) $filled1[]=$id;
+				$filled2=array();
+				for ($i=0;$i<count($members);$i++) $filled2[]=intval($secs_before);
+				$GLOBALS['SITE_DB']->query_insert('calendar_reminders',array(
+					'e_id'=>$filled1,
+					'n_member_id'=>array_values($members),
+					'n_seconds_before'=>$filled2
+				));
+			}
+			$start+=300;
+		}
+		while (array_key_exists(0,$members));
+		if ($is_public==1)
+		{
 			$start=0;
 			do
 			{
 				$members=array();
-				if (count($rem_groups)!=0)
+				$interested=$GLOBALS['SITE_DB']->query_select('calendar_interests',array('i_member_id'),array('t_type'=>$type),'',300,$start);
+				foreach ($interested as $int) // Members with declarations of interest
 				{
-					$members=array_keys($GLOBALS['FORUM_DRIVER']->member_group_query($rem_groups,300,$start));
-					$members=array_diff($members,array(get_member(),$GLOBALS['FORUM_DRIVER']->get_guest_id()));
+					if (!in_array($int['i_member_id'],$members)) $members[]=$int['i_member_id'];
 				}
-				if (($start==0) && (post_param_integer('sign_up_reminder',0)==1)) // If this member is signing up
-					$members[]=get_member();
-				if (count($members)!=0) // Now add their reminders
+				$members=array_diff($members,array(get_member(),$GLOBALS['FORUM_DRIVER']->get_guest_id()));
+				foreach ($members as $member) // Now add their reminders. Can't do this as multi-insert as there may be dupes, so we need to skip over errors individually
 				{
 					$secs_before=floatval(post_param('hours_before','1.0'))*3600.0;
-
-					$filled1=array();
-					for ($i=0;$i<count($members);$i++) $filled1[]=$id;
-					$filled2=array();
-					for ($i=0;$i<count($members);$i++) $filled2[]=intval($secs_before);
 					$GLOBALS['SITE_DB']->query_insert('calendar_reminders',array(
-						'e_id'=>$filled1,
-						'n_member_id'=>array_values($members),
-						'n_seconds_before'=>$filled2
-					));
+						'e_id'=>$id,
+						'n_member_id'=>$member,
+						'n_seconds_before'=>intval($secs_before),
+					),false,true);
 				}
 				$start+=300;
 			}
 			while (array_key_exists(0,$members));
-			if ($is_public==1)
-			{
-				$start=0;
-				do
-				{
-					$members=array();
-					$interested=$GLOBALS['SITE_DB']->query_select('calendar_interests',array('i_member_id'),array('t_type'=>$type),'',300,$start);
-					foreach ($interested as $int) // Members with declarations of interest
-					{
-						if (!in_array($int['i_member_id'],$members)) $members[]=$int['i_member_id'];
-					}
-					$members=array_diff($members,array(get_member(),$GLOBALS['FORUM_DRIVER']->get_guest_id()));
-					foreach ($members as $member) // Now add their reminders. Can't do this as multi-insert as there may be dupes, so we need to skip over errors individually
-					{
-						$secs_before=floatval(post_param('hours_before','1.0'))*3600.0;
-						$GLOBALS['SITE_DB']->query_insert('calendar_reminders',array(
-							'e_id'=>$id,
-							'n_member_id'=>$member,
-							'n_seconds_before'=>intval($secs_before),
-						),false,true);
-					}
-					$start+=300;
-				}
-				while (array_key_exists(0,$members));
-			}
 		}
 
 		regenerate_event_reminder_jobs($id);
 
-		$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$start_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+		$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences);
 		$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUBMIT_THANKYOU')):$conflicts;
 
 		$this->donext_type=$type;
-		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
-		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day_of_month);
+		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day);
 
 		if ($validated==1)
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,true);
+				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute,true);
 				$from=cal_utctime_to_usertime($_from,$timezone,false);
 				$to=mixed();
 				if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 				{
-					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,true);
+					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,true);
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
@@ -814,7 +742,7 @@ class Module_cms_calendar extends standard_aed_module
 
 		$delete_status=post_param('delete','0');
 
-		list($type,$recurrence,$_recurrences,$title,$content,$priority,$is_public,$_start_year,$_start_month,$_start_day,$start_monthly_spec_type,$_start_hour,$_start_minute,$_end_year,$_end_month,$_end_day,$end_monthly_spec_type,$_end_hour,$_end_minute,$timezone,$do_timezone_conv)=$this->get_event_parameters();
+		list($type,$recurrence,$_recurrences,$title,$content,$priority,$is_public,$_start_year,$_start_month,$_start_day,$_start_hour,$_start_minute,$_end_year,$_end_month,$_end_day,$_end_hour,$_end_minute,$timezone,$do_timezone_conv)=$this->get_event_parameters();
 		if ($delete_status!='3')
 		{
 			$start_year=$_start_year;
@@ -841,7 +769,7 @@ class Module_cms_calendar extends standard_aed_module
 		if (($delete_status=='3') && (!fractional_edit()))
 		{
 			// Fix past occurences
-			$past_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],utctime_to_usertime(mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year'])),utctime_to_usertime(time()));
+			$past_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],utctime_to_usertime(mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year'])),utctime_to_usertime(time()));
 			foreach ($past_times as $past_time)
 			{
 				list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',usertime_to_utctime($past_time[0])));
@@ -857,7 +785,7 @@ class Module_cms_calendar extends standard_aed_module
 					$end_hour=intval($explode[3]);
 					$end_minute=intval($explode[4]);
 				}
-				add_calendar_event($event['e_type'],'none',NULL,0,get_translated_text($event['e_title']),get_translated_text($event['e_content']),$event['e_priority'],$event['e_is_public'],intval($start_year),intval($start_month),intval($start_day),'day_of_month',intval($start_hour),intval($start_minute),$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+				add_calendar_event($event['e_type'],'none',NULL,0,get_translated_text($event['e_title']),get_translated_text($event['e_content']),$event['e_priority'],$event['e_is_public'],intval($start_year),intval($start_month),intval($start_day),intval($start_hour),intval($start_minute),$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 			}
 			if (is_null($_recurrences))
 			{
@@ -881,7 +809,7 @@ class Module_cms_calendar extends standard_aed_module
 				$end_hour=$_end_hour;
 				$end_minute=$_end_minute;
 			}
-			$past_times=find_periods_recurrence($event['e_timezone'],1,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$event['e_recurrence'],1,time());
+			$past_times=find_periods_recurrence($event['e_timezone'],1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$event['e_recurrence'],1,time());
 			if (array_key_exists(0,$past_times))
 			{
 				$past_time=$past_times[0];
@@ -914,12 +842,12 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,true);
+				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute,true);
 				$from=cal_utctime_to_usertime($_from,$timezone,false);
 				$to=mixed();
 				if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 				{
-					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,true);
+					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,true);
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
@@ -929,19 +857,18 @@ class Module_cms_calendar extends standard_aed_module
 			}
 		}
 
-		edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
 		if (!fractional_edit())
 		{
-			$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+			$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences);
 			$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUCCESS')):$conflicts;
 
 			regenerate_event_reminder_jobs($id);
 		} else $_description=do_lang_tempcode('SUCCESS');
 
 		$this->donext_type=$type;
-		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
-		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day_of_month);
+		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day);
 
 		return $_description;
 	}
@@ -967,7 +894,7 @@ class Module_cms_calendar extends standard_aed_module
 	/**
 	 * The do-next manager for after calendar content management (events only).
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -990,7 +917,7 @@ class Module_cms_calendar extends standard_aed_module
 
 		require_code('calendar_ical');
 
-		$title=get_screen_title('IMPORT_ICAL');
+		$title=get_page_title('IMPORT_ICAL');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_ical','old_type'=>get_param('type','')),'_SELF');
 		$submit_name=do_lang_tempcode('IMPORT_ICAL');
@@ -1005,7 +932,7 @@ class Module_cms_calendar extends standard_aed_module
 		$hidden->attach(form_input_hidden('lang',$lang));
 		handle_max_file_size($hidden);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'5a970cd3766a6d32b64015b4dfd4b25e','TITLE'=>$title,'TEXT'=>do_lang_tempcode('IMPORT_ICAL_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('IMPORT_ICAL_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -1017,7 +944,7 @@ class Module_cms_calendar extends standard_aed_module
 	{
 		check_specific_permission('mass_import');
 
-		$title=get_screen_title('IMPORT_ICAL');
+		$title=get_page_title('IMPORT_ICAL');
 
 		require_code('calendar_ical');
 
@@ -1045,10 +972,10 @@ class Module_cms_calendar extends standard_aed_module
 	 */
 	function export_ical()
 	{
-		$title=get_screen_title('EXPORT_ICAL');
+		$title=get_page_title('EXPORT_ICAL');
 
-		$fields=new ocp_tempcode();
-		$type_list=nice_get_event_types();
+		$fields		=	new ocp_tempcode();
+		$type_list	=	nice_get_event_types();
 
 		//Add all cal option
 		$type_list->attach(form_input_list_entry('0',true,'All types'));
@@ -1057,7 +984,7 @@ class Module_cms_calendar extends standard_aed_module
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_ICAL');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'fa308cb6dd4f82f5ed2dd2fab45b0fef','TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_ICAL_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'GET'=>true));
+		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_ICAL_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'GET'=>true));
 	}
 
 	/**
@@ -1065,7 +992,7 @@ class Module_cms_calendar extends standard_aed_module
 	 */
 	function _export_ical()
 	{
-		$title=get_screen_title('EXPORT_ICAL');
+		$title=get_page_title('EXPORT_ICAL');
 		require_code('calendar_ical');
 		output_ical();
 	}
@@ -1087,6 +1014,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	var $table='calendar_types';
 	var $permissions_require='cat_high';
 	var $permission_module='calendar';
+	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\');';
 	var $menu_label='CALENDAR';
 
 	/**
@@ -1107,18 +1035,8 @@ class Module_cms_calendar_cat extends standard_aed_module
 
 		require_code('themes2');
 		$ids=get_all_image_ids_type('calendar');
-
-		$set_name='image';
-		$required=true;
-		$set_title=do_lang_tempcode('IMAGE');
-		$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
-		$field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$logo,NULL,false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
-
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		$fields->attach(form_input_picture_choose_specific(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('STOCK')),do_lang_tempcode('DESCRIPTION_ALTERNATE_STOCK'),'theme_img_code',$ids,NULL,$logo,NULL,true));
 		handle_max_file_size($hidden,'image');
 
 		if (addon_installed('syndication_blocks'))
@@ -1241,7 +1159,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after calendar content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1254,11 +1172,11 @@ class Module_cms_calendar_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after calendar content management.
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @param  ?AUTO_LINK	The category ID we were working in (NULL: N/A)
-	 * @param  string			The Y-m-d of the added/edited event (first occurence) (blank: whatever)
+	 * @param  string			The Y-m-d of the added/edited event (first occurance) (blank: whatever)
 	 * @return tempcode		The UI
 	 */
 	function _do_next_manager($title,$description,$id,$type,$date)

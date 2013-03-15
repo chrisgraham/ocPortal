@@ -2,7 +2,7 @@
 <a id="title__{ID*}"></a>
 {+END}
 
-<h1 class="screen_title"{+START,IF,{$NOT,{$GET,name_set_elsewhere}}} itemprop="name"{+END} role="banner">
+<h1 class="screen_title"{+START,IF,{$VALUE_OPTION,html5}}{+START,IF,{$NOT,{$GET,name_set_elsewhere}}} itemprop="name"{+END} role="banner"{+END}>
 	{TITLE}
 
 	{+START,IF_PASSED,AWARDS}
@@ -19,7 +19,7 @@
 					{+END}
 				</ul>
 			{+END}
-			<img onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,AWARDS_TEXT}','auto',null,null,false,true);" title="" alt="{!AWARD_WINNER}" src="{$IMG*,awarded}" />
+			<img onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,AWARDS_TEXT}','auto',null,null,false,true);" title="" alt="{!AWARD_WINNER}" src="{$IMG*,awarded}" />
 		{+END}
 	{+END}
 

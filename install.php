@@ -28,15 +28,25 @@ if ((!array_key_exists('type',$_GET)) && (file_exists('install_locked')))
 global $IN_MINIKERNEL_VERSION;
 $IN_MINIKERNEL_VERSION=1;
 
-// Find ocPortal base directory, and chdir into it
+// FIX PATH
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=dirname($FILE_BASE);
+$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
+if (substr($FILE_BASE,-4)=='.php')
+{
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+}
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);
 
 error_reporting(E_ALL);
 
+if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
+if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 @ini_set('display_errors','1');
 @ini_set('assert.active','0');
 
@@ -58,8 +68,8 @@ $CACHE_DB=array();
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
 
-$GLOBALS['DEV_MODE']=false;
-$GLOBALS['SEMI_DEV_MODE']=true;
+$GLOBALS['DEBUG_MODE']=false;
+$GLOBALS['SEMI_DEBUG_MODE']=true;
 
 @ob_end_clean();
 
@@ -71,7 +81,7 @@ if (!array_key_exists('type',$_GET))
 	if (count($_GET)==0)
 		header('Content-type: text/html');
 
-	echo '<!DOCTYPE html>'.chr(10);
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10);
 	if (count($_GET)==0) // Special code to skip checks if need-be. The XHTML here is invalid but unfortunately it does need to be.
 	{
 		echo '<script type="text/javascript">// <![CDATA[
@@ -213,7 +223,7 @@ $logo_url='install.php?type=logo';
 if (is_null($DEFAULT_FORUM)) $DEFAULT_FORUM='ocf'; // Shouldn't happen, but who knows
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION));
+$out_final=do_template('INSTALLER_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION));
 unset($css_nocache);
 unset($content);
 $out_final->evaluate_echo();
@@ -284,7 +294,7 @@ function step_1()
 				$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('INSTALL_SLOW_SERVER'))));
 		} else
 		{
-			$files=@unserialize(file_get_contents(get_file_base().'/data/files.dat'));
+			$files=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
 			if (($files!==false) && (!file_exists(get_file_base().'/.svn')))
 			{
 				$missing=array();
@@ -292,12 +302,9 @@ function step_1()
 
 				foreach ($files as $file=>$file_info)
 				{
-					// Volatile files (see also list in make_release.php)
 					if ($file=='data_custom/errorlog.php') continue;
 					if ($file=='ocp_sitemap.xml') continue;
-					if ($file=='site/pages/html_custom/EN/download_tree_made.htm') continue;
-					if ($file=='site/pages/html_custom/EN/cedi_tree_made.htm') continue;
-					if ($file=='data_custom/execute_temp.php') continue;
+					if ($file=='data_custom/spelling/output.log') continue;
 					if ($file=='info.php') continue;
 					if ($file=='themes/map.ini') continue;
 					if ($file=='sources/version.php') continue;
@@ -310,7 +317,7 @@ function step_1()
 					if ($file=='data/areaedit/plugins/SpellChecker/aspell/bin/en-only.rws') continue;
 					if (substr($file,-4)=='.ttf') continue;
 
-					$contents=@file_get_contents(get_file_base().'/'.$file);
+					$contents=@file_get_contents(get_file_base().'/'.$file,FILE_BINARY);
 					if (!file_exists(get_file_base().'/'.$file))
 					{
 						$missing[]=$file;
@@ -465,6 +472,8 @@ END;
 			warn_exit(do_lang_tempcode('CORRUPT_FILES_CROP'));
 		if ((!file_exists(get_file_base().'/themes/default/templates/ANCHOR.tpl')) && (file_exists(get_file_base().'/themes/default/templates/anchor.tpl')))
 			warn_exit(do_lang_tempcode('CORRUPT_FILES_LOWERCASE'));
+/*		if (!file_exists(get_file_base().'/themes/default/templates/ADDITIONAL.tpl')) Redundant now
+			warn_exit(do_lang_tempcode('MISSING_FILES'));*/
 	}
 
 	if (file_exists('lang_custom/langs.ini')) $lookup=better_parse_ini_file(get_custom_file_base().'/lang_custom/langs.ini');
@@ -512,13 +521,10 @@ END;
 		}
 	}
 
-	$url='install.php?step=2';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
-
 	$hidden=build_keep_post_fields();
 	$max=strval(get_param_integer('max',1000));
 	$hidden->attach(form_input_hidden('max',$max));
-	return do_template('INSTALLER_STEP_1',array('_GUID'=>'83f0ca881b9f63ab9378264c6ff507a3','URL'=>$url,'WARNINGS'=>$warnings,'HIDDEN'=>$hidden,'LANGUAGES'=>$tlanguages));
+	return do_template('INSTALLER_STEP_1',array('_GUID'=>'83f0ca881b9f63ab9378264c6ff507a3','WARNINGS'=>$warnings,'HIDDEN'=>$hidden,'LANGUAGES'=>$tlanguages));
 }
 
 /**
@@ -537,15 +543,12 @@ function step_2()
 	}
 	else
 	{
-		$licence=@file_get_contents(get_file_base().'/text/'.$_POST['default_lang'].'/licence.txt');
-		if ($licence=='') $licence=file_get_contents(get_file_base().'/text/EN/licence.txt');
+		$licence=@file_get_contents(get_file_base().'/text/'.$_POST['default_lang'].'/licence.txt',FILE_TEXT);
+		if ($licence=='') $licence=file_get_contents(get_file_base().'/text/EN/licence.txt',FILE_TEXT);
 	}
 
-	$url='install.php?step=3';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
-
 	$hidden=build_keep_post_fields();
-	return do_template('INSTALLER_STEP_2',array('_GUID'=>'b08b0268784c9a0f44863ae3aece6789','URL'=>$url,'HIDDEN'=>$hidden,'LICENCE'=>$licence));
+	return do_template('INSTALLER_STEP_2',array('_GUID'=>'b08b0268784c9a0f44863ae3aece6789','HIDDEN'=>$hidden,'LICENCE'=>$licence));
 }
 
 /**
@@ -565,7 +568,7 @@ function step_3()
 	if ($email==do_lang('EMAIL_ADDRESS')) $email='';
 	if (($email!='') || ($advertise_on==1))
 	{
-		$call='/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$LANG;
+		$call='/join_hook.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$LANG;
 		$errno=0;
 		$errstr='';
 		$mysock=@fsockopen('ocportal.com',80,$errno,$errstr,6.0);
@@ -667,11 +670,8 @@ function step_3()
 	$js->attach(chr(10));
 	$js->attach(do_template('JAVASCRIPT_AJAX'));
 
-	$url='install.php?step=4';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
-
 	$hidden=build_keep_post_fields();
-	return do_template('INSTALLER_STEP_3',array('_GUID'=>'af52ecea73e9a8e2a92c12adbabbf4ab','URL'=>$url,'JS'=>$js,'HIDDEN'=>$hidden,'SIMPLE_FORUMS'=>$simple_forums,'FORUM_PATH_DEFAULT'=>get_file_base().DIRECTORY_SEPARATOR.'forums','FORUMS'=>$tforums,'DATABASES'=>$tdatabase,'VERSION'=>$default_version));
+	return do_template('INSTALLER_STEP_3',array('_GUID'=>'af52ecea73e9a8e2a92c12adbabbf4ab','JS'=>$js,'HIDDEN'=>$hidden,'SIMPLE_FORUMS'=>$simple_forums,'FORUM_PATH_DEFAULT'=>get_file_base().DIRECTORY_SEPARATOR.'forums','FORUMS'=>$tforums,'DATABASES'=>$tdatabase,'VERSION'=>$default_version));
 }
 
 /**
@@ -912,7 +912,7 @@ function step_4()
 	if (($use_msn==0) && ($forum_type!='ocf')) // Merge into one set of options
 	{
 		$forum_options->attach($options);
-		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'48a122b54d68d9893533ece7237ea5e0','HIDDEN'=>$hidden,'TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
+		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('HIDDEN'=>$hidden,'TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
 	} else
 	{
 		$title=do_lang_tempcode('OCPORTAL_SETTINGS');
@@ -940,10 +940,7 @@ function step_4()
 	if (($forum_type!='none') && ($forum_type!='ocf'))
 		$message->attach(paragraph(do_lang_tempcode('FORUM_DRIVER_NATIVE_LOGIN')));
 
-	$url='install.php?step=5';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
-
-	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','URL'=>$url,'JS'=>$js,'MESSAGE'=>$message,'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
+	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','JS'=>$js,'MESSAGE'=>$message,'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
 }
 
 /**
@@ -958,7 +955,6 @@ function step_5()
 	if (function_exists('set_time_limit')) @set_time_limit(180);
 
 	$url='install.php?step=6';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	$use_msn=post_param_integer('use_msn',0);
 	if ($use_msn==0) $use_msn=post_param_integer('use_multi_db',0);
@@ -1026,11 +1022,7 @@ function step_5()
 			global $LANG;
 			$sections=build_keep_post_fields(array('forum_type','db_type','board_path','default_lang'));
 			$sections->attach(form_input_hidden('confirm','1'));
-
-			$url='install.php?step=5';
-			if (in_safe_mode()) $url.='&keep_safe_mode=1';
-
-			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','URL'=>$url,'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
+			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
 		}
 	}
 
@@ -1052,7 +1044,6 @@ function step_5()
 		if ($ftp_status[1]!=-1)
 		{
 			$url='install.php?step=5&start_from='.strval($ftp_status[1]);
-			if (in_safe_mode()) $url.='&keep_safe_mode=1';
 			$still_ftp=true;
 		}
 	}
@@ -1210,7 +1201,7 @@ function step_5_ftp()
 		} else
 		{
 			@ftp_mkdir($conn,$dir);
-			if (($dir=='exports/addons') && (!is_suexec_like()))
+			if (($dir=='exports/mods') && (!is_suexec_like()))
 			{
 				@ftp_site($conn,'CHMOD 777 '.$dir);
 			} else
@@ -1453,13 +1444,13 @@ function step_5_write_config()
 	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
 	$info=fopen(get_file_base().'/'.$info_file,'wt');
 	fwrite($info,"<"."?php\nglobal \$SITE_INFO;\n");
-	fwrite($info,"\$SITE_INFO['use_mem_cache']='0';\n");
-	fwrite($info,"\$SITE_INFO['fast_spider_cache']='0';\n");
-	fwrite($info,"\$SITE_INFO['on_msn']='0';\n");
-	fwrite($info,"\$SITE_INFO['disable_smart_decaching']='0';\n");
-	fwrite($info,"\$SITE_INFO['no_disk_sanity_checks']='0';\n");
-	fwrite($info,"\$SITE_INFO['hardcode_common_module_zones']='0';\n");
-	fwrite($info,"\$SITE_INFO['prefer_direct_code_call']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['use_mem_cache']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['fast_spider_cache']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['on_msn']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['disable_smart_decaching']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['no_disk_sanity_checks']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['hardcode_common_module_zones']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['prefer_direct_code_call']='0';\n");
 	if ($info===false)
 		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($info_file)));
 
@@ -1781,7 +1772,6 @@ function step_6()
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
 	$url='install.php?step=7';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	$log=new ocp_tempcode();
 
@@ -1862,7 +1852,6 @@ function step_7()
 	}
 
 	$url='install.php?step=8';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	return do_template('INSTALLER_STEP_LOG',array('_GUID'=>'c016b2a364d20cf711af7e14c60a7921','PREVIOUS_STEP'=>'6','URL'=>$url,'LOG'=>$log,'HIDDEN'=>build_keep_post_fields()));
 }
@@ -1886,7 +1875,6 @@ function step_8()
 	}
 
 	$url='install.php?step=9';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	return do_template('INSTALLER_STEP_LOG',array('_GUID'=>'27fad5aa7f96d26a51e6afb6b7e5c7b1','PREVIOUS_STEP'=>'7','URL'=>$url,'LOG'=>$log,'HIDDEN'=>build_keep_post_fields()));
 }
@@ -1924,7 +1912,6 @@ function step_9()
 	}
 
 	$url='install.php?step=10';
-	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	return do_template('INSTALLER_STEP_LOG',array('_GUID'=>'b20121b8f4f84dd8e625e3b821c753b3','PREVIOUS_STEP'=>'8','URL'=>$url,'LOG'=>$log,'HIDDEN'=>build_keep_post_fields()));
 }
@@ -1950,8 +1937,8 @@ function step_10()
 		$final->attach(do_lang_tempcode('FINAL_INSTRUCTIONS_A_SUP'));
 	}
 
-	// Empty persistent cache
-	$path=get_custom_file_base().'/persistent_cache/';
+	// Empty persistant cache
+	$path=get_custom_file_base().'/persistant_cache/';
 	$_dir=@opendir($path);
 	if ($_dir!==false)
 	{
@@ -2080,7 +2067,7 @@ function require_code($codename)
 			$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):'/'.str_replace('_custom','',$codename));
 		if (!file_exists($path))
 		{
-			exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+			exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 		}
 
 		require_once($path);
@@ -2200,13 +2187,13 @@ function handle_self_referencing_embedment()
 		if ($type=='logo')
 		{
 			header('Content-type: image/png');
-			if (!file_exists(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png'))
+			if (!file_exists(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed-logo.png'))
 			{
-				$out=file_array_get('themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png');
+				$out=file_array_get('themes/default/images/'.get_site_default_lang().'/logo/trimmed-logo.png');
 				echo $out;
 			} else
 			{
-				print(file_get_contents(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png'));
+				print(file_get_contents(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed-logo.png'));
 				exit();
 			}
 
@@ -2257,31 +2244,21 @@ function handle_self_referencing_embedment()
 
 			exit();
 		}
-		if (($type=='css') || ($type=='css_2')/*So colours are parsed initially*/)
+		if ($type=='css')
 		{
 			header('Content-Type: text/css');
-
-			$output='';
-
-			$css_files=array('global','forms');
-			foreach ($css_files as $css_file)
+			if (!file_exists(get_file_base().'/themes/default/css/global.css'))
 			{
-				if (!file_exists(get_file_base().'/themes/default/css/'.$css_file.'.css'))
-				{
-					$file=file_array_get('themes/default/css/'.$css_file.'.css');
-				} else $file=file_get_contents(get_file_base().'/themes/default/css/'.$css_file.'.css');
-				$file=preg_replace('#\{\$IMG;?\,([^,\}\']+)\}#','install.php?type=themes/default/images/${1}.png',$file);
+				$file=file_array_get('themes/default/css/global.css');
+			} else $file=file_get_contents(get_file_base().'/themes/default/css/global.css',FILE_TEXT);
+			$file=preg_replace('#\{\$IMG;?\,([^,\}\']+)\}#','install.php?type=themes/default/images/${1}.png',$file);
 
-				require_code('tempcode_compiler');
-				$css=template_to_tempcode($file,0,false,'');
-				$output.=$css->evaluate();
-			}
+			require_code('tempcode_compiler');
+			$css=template_to_tempcode($file,0,false,'');
+			$file=$css->evaluate();
 
-			if ($type=='css')
-			{
-				print($output);
-				exit();
-			}
+			print($file);
+			exit();
 		}
 		if ($type=='css_2')
 		{
@@ -2289,14 +2266,15 @@ function handle_self_referencing_embedment()
 			if (!file_exists(get_file_base().'/themes/default/css/install.css'))
 			{
 				$file=file_array_get('themes/default/css/install.css');
-			} else $file=file_get_contents(get_file_base().'/themes/default/css/install.css');
+				echo $file;
+			} else $file=file_get_contents(get_file_base().'/themes/default/css/install.css',FILE_TEXT);
 			$file=preg_replace('#\{\$IMG\,([^,\}\']+)\}#','themes/default/images/${1}.png',$file);
 
 			require_code('tempcode_compiler');
 			$css=template_to_tempcode($file,0,false,'');
-			$output=$css->evaluate();
+			$file=$css->evaluate();
 
-			print($output);
+			print($file);
 			exit();
 		}
 
@@ -2328,7 +2306,8 @@ function make_option($nice_name,$description,$name,$value,$hidden=false,$require
 		if ((substr($name,0,3)!='db_') && ($name!='ftp_password'))
 		{
 			$input2=do_template('INSTALLER_INPUT_PASSWORD',array('_GUID'=>'0f15bfe5b58f3ca7830a48791f1a6a6d','REQUIRED'=>$_required,'NAME'=>$name.'_confirm','VALUE'=>$value));
-			$nice_name_2=do_lang_tempcode('RELATED_FIELD',$nice_name);
+			$nice_name_2=do_lang_tempcode('dont_escape_trick','&raquo; ');
+			$nice_name_2->attach($nice_name);
 			$b=do_template('INSTALLER_STEP_4_SECTION_OPTION',array('_GUID'=>'c99e7339b7ffe81318ae84953e3c03a3','NAME'=>$name,'INPUT'=>$input2,'NICE_NAME'=>$nice_name_2,'DESCRIPTION'=>do_lang_tempcode('CONFIRM_PASSWORD')));
 			$a->attach($b);
 		}
@@ -2588,7 +2567,7 @@ RewriteEngine on
 RewriteRule ^([^=]*)webdav.php/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ - [L]
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
+# These have a specially reduced form (no need to make it too explicit that these are CEDI)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=cedi&id=$2 [L,QSA]
 
@@ -2623,7 +2602,7 @@ RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.p
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$4&page=$2&type=$3 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
+# These have a specially reduced form (no need to make it too explicit that these are CEDI)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=cedi&id=$2 [L,QSA]
 RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=cedi&id=$1 [L,QSA]
@@ -2656,7 +2635,7 @@ ErrorDocument 404 {$base}/index.php?page=404
 </FilesMatch>
 END;
 
-	if ((is_writable_wrap(get_file_base().'/exports/addons')) && ((!file_exists(get_file_base().'/.htaccess')) || (trim(file_get_contents(get_file_base().'/.htaccess'))=='')))
+	if ((is_writable_wrap(get_file_base().'/exports/mods')) && ((!file_exists(get_file_base().'/.htaccess')) || (trim(file_get_contents(get_file_base().'/.htaccess'))=='')))
 	{
 		global $HTTP_MESSAGE;
 
@@ -2673,7 +2652,7 @@ END;
 
 		foreach ($clauses as $i=>$clause)
 		{
-			$myfile=fopen(get_file_base().'/exports/addons/index.php','wt');
+			$myfile=fopen(get_file_base().'/exports/mods/index.php','wt');
 			fwrite($myfile,"<"."?php
 			@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 			@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
@@ -2681,13 +2660,13 @@ END;
 			");
 			fclose($myfile);
 
-			$myfile=fopen(get_file_base().'/exports/addons/.htaccess','wt');
+			$myfile=fopen(get_file_base().'/exports/mods/.htaccess','wt');
 			fwrite($myfile,$clause);
 			fclose($myfile);
 			$HTTP_MESSAGE='';
-			http_download_file($base_url.'/exports/addons/index.php',NULL,false);
+			http_download_file($base_url.'/exports/mods/index.php',NULL,false);
 			if ($HTTP_MESSAGE!='200') $clauses[$i]=NULL;
-			unlink(get_file_base().'/exports/addons/.htaccess');
+			unlink(get_file_base().'/exports/mods/.htaccess');
 		}
 
 		$out='';

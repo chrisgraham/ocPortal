@@ -45,7 +45,7 @@ function is_swf_upload($fake_prepopulation=false)
 {
 	//check whatever is used the swfuploader
 	$swfupload=false;
-	foreach ($_POST as $key=>$value)
+	foreach($_POST as $key=>$value)
 	{
 		if (!is_string($value)) continue;	
 
@@ -115,10 +115,9 @@ function is_swf_upload($fake_prepopulation=false)
  * @param  boolean		Whether to copy a URL (if a URL) to the server, and return a local reference
  * @param  boolean		Whether to accept upload errors
  * @param  boolean		Whether to give a (deferred?) error if no file was given at all
- * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return array			An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
-function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false)
+function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false)
 {
 	require_code('files2');
 
@@ -316,8 +315,6 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				}
 			}
 			$result=@rename($path2,$place);
-			global $HTTP_DOWNLOAD_MTIME;
-			if (!is_null($HTTP_DOWNLOAD_MTIME)) @touch($place,$HTTP_DOWNLOAD_MTIME);
 			if (!$result)
 			{
 				unlink($path2);
@@ -410,7 +407,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 
 			if ($gd)
 			{
-				if ((!is_saveable_image($url[0])) && (get_file_extension($url[0])!='svg')) $ext='.png'; else $ext='';
+				if (!is_saveable_image($url[0])) $ext='.png'; else $ext='';
 				$file=basename($url[0]);
 				$_file=$file;
 				$place=get_custom_file_base().'/'.$thumb_folder.'/'.$_file.$ext;
@@ -422,8 +419,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 					$i++;
 				}
 				$url_full=url_is_local($url[0])?get_custom_base_url().'/'.$url[0]:$url[0];
-
-				convert_image($url_full,$place,-1,-1,intval(get_option('thumb_width')),true,NULL,false,$only_make_smaller);
+				convert_image($url_full,$place,-1,-1,intval(get_option('thumb_width')));
 
 				$thumb=$thumb_folder.'/'.rawurlencode($_file).$ext;
 			} else
@@ -500,7 +496,7 @@ function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_e
 		$missing_ok=false;
 
 		// Its not in the upload folder, so maybe we aren't allowed to download it
-		if (((substr($url[0],0,strlen($upload_folder)+1)!=$upload_folder.'/') && (substr($url[0],0,strlen('data/images/')+1)!='data/images/')) || (strpos($url[0],'..')!==false))
+		if ((substr($url[0],0,strlen($upload_folder)+1)!=$upload_folder.'/') || (strpos($url[0],'..')!==false))
 		{
 			$myfile=@fopen(get_custom_file_base().'/'.rawurldecode($url[0]),'rb');
 			if ($myfile!==false)

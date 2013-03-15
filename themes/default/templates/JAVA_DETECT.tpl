@@ -12,5 +12,5 @@
 	java_detect+='			</embed>';
 	java_detect+='		</comment>';
 	java_detect+='	</object>';
-	set_inner_html(document.getElementById('java_detect'),java_detect);
+	setInnerHTML(document.getElementById('java_detect'),java_detect);
 //]]></script>

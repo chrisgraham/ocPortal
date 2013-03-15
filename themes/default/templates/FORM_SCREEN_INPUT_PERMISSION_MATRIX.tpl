@@ -2,12 +2,12 @@
 	window.perm_serverid='{SERVER_ID;/}';
 //]]></script>
 
-<div class="permissions_matrix_wrap" id="enter_the_matrix">
-	<table summary="{!COLUMNED_TABLE}" class="autosized_table results_table">
+<div id="enter_the_matrix">
+	<table summary="{!MAP_TABLE}" class="variable_table dottedborder">
 		<thead>
 			<tr>
 				<th>
-					{!GROUP} &amp; {!PINTERFACE_PRESETS}
+					{!GROUP}<br /><br />{!PINTERFACE_PRESETS}
 				</th>
 
 				<th class="view_header">
@@ -31,21 +31,21 @@
 			{PERMISSION_ROWS}
 
 			<tr>
-				<td class="form_table_field_name">
+				<td class="dottedborder_barrier_b_nonrequired sp_cell">
 				</td>
 
-				<td class="form_table_field_input">
-					<input class="button_micro" type="button" value="+/-" onclick="permissions_toggle(this.parentNode);" />
+				<td class="dottedborder_barrier_b_nonrequired sp_cell">
+					<input type="button" value="+/-" onclick="permissions_toggle(this.parentNode);" />
 				</td>
 
 				{+START,LOOP,OVERRIDES}
-					<td class="form_table_field_input">
-						<input class="button_micro" type="button" value="+/-" onclick="permissions_toggle(this.parentNode);" />
+					<td class="dottedborder_barrier_b_nonrequired sp_cell">
+						<input type="button" value="+/-" onclick="permissions_toggle(this.parentNode);" />
 					</td>
 				{+END}
 
 				{+START,IF,{$JS_ON}}
-					<td class="form_table_field_input">
+					<td class="dottedborder_barrier_b_nonrequired sp_cell">
 					</td>
 				{+END}
 			</tr>

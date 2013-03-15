@@ -9,7 +9,13 @@
 {+END}
 
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
-	<div class="wide_table_wrap really_long_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+	<div class="wide_table_wrap really_long_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table">
+		<colgroup>
+			<col style="width: 50%" />
+			<col style="width: 50%" />
+			<col style="width: 100px" />
+		</colgroup>
+
 		<thead>
 			<tr>
 				<th>
@@ -19,9 +25,9 @@
 					{LANG_NICE_NAME*}
 				</th>
 				{+START,IF_NON_EMPTY,{INTERTRANS}}
-					<th>
-						{!ACTIONS}
-					</th>
+				<th>
+					{!ACTIONS}
+				</th>
 				{+END}
 			</tr>
 		</thead>
@@ -31,9 +37,9 @@
 		</tbody>
 	</table></div>
 
-	<p class="proceed_button">
+	<div class="proceed_button">
 		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
-	</p>
+	</div>
 
 	{+START,IF,{TOO_MANY}}
 		<p class="more_here">{!TRANSLATE_TOO_MANY,{TOTAL*},{MAX*}}</p>

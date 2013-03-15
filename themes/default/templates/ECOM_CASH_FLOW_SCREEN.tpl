@@ -1,6 +1,13 @@
 {TITLE}
 
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table">
+	{+START,IF,{$NOT,{$MOBILE}}}
+		<colgroup>
+			<col style="width: 100%" />
+			<col style="width: 75px" />
+		</colgroup>
+	{+END}
+
 	<thead>
 		<tr>
 			<th>{!TYPE}</th>

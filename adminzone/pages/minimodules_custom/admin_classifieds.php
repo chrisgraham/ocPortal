@@ -80,7 +80,7 @@ if (count($_POST)!=0)
 	attach_message(do_lang_tempcode('SUCCESS','inform'));
 }
 
-$title=get_screen_title('CLASSIFIEDS');
+$title=get_page_title('CLASSIFIEDS');
 
 $_prices=$GLOBALS['SITE_DB']->query_select('classifieds_prices',array('*'),NULL,'ORDER BY c_catalogue_name,c_days,c_price');
 $prices=array();
@@ -113,5 +113,5 @@ foreach ($_catalogues as $_catalogue)
 	$catalogues[$_catalogue['c_name']]=get_translated_text($_catalogue['c_title']);
 }
 
-$ret=do_template('CLASSIFIEDS_PRICING_SCREEN',array('_GUID'=>'8fd97a8bc88dfdd5c8455d41d290ae56','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'CATALOGUES'=>$catalogues,'PRICES'=>$prices,'POST_URL'=>get_self_url()));
+$ret=do_template('CLASSIFIEDS_PRICING_SCREEN',array('TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'CATALOGUES'=>$catalogues,'PRICES'=>$prices,'POST_URL'=>get_self_url()));
 $ret->evaluate_echo();

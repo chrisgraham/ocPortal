@@ -64,7 +64,7 @@ class Module_admin_bulkupload
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_comcode';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_BULK_UPLOAD');
 
-		$title=get_screen_title('BULK_UPLOAD');
+		$title=get_page_title('BULK_UPLOAD');
 
 		$parameter=post_param('parameter','');
 		require_code('form_templates');

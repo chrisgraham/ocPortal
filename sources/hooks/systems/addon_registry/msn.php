@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_msn
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_msn
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_msn
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/config_default/network_links.php',
 			'sources/hooks/systems/addon_registry/msn.php',
 			'sources/hooks/blocks/main_notes/msn.php',
@@ -84,22 +86,22 @@ class Hook_addon_registry_msn
 			'themes/default/images/bigicons/multisitenetwork.png',
 			'themes/default/images/pagepics/multisitenetworking.png',
 			'sources/multi_site_networks.php',
-			'sources/blocks/side_network.php'
+			'sources/blocks/side_network.php',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_NETWORK.tpl'=>'block_side_network',
-			'NETLINK.tpl'=>'netlink'
-		);
+				'BLOCK_SIDE_NETWORK.tpl'=>'block_side_network',
+				'NETLINK.tpl'=>'netlink',
+				);
 	}
 
 	/**
@@ -112,9 +114,11 @@ class Hook_addon_registry_msn
 	function tpl_preview__block_side_network()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK', array(
-				'CONTENT'=>lorem_phrase()
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('BLOCK_SIDE_NETWORK',array(
+					'CONTENT'=>lorem_phrase(),
+						)
+			),NULL,'',true),
 		);
 	}
 
@@ -127,17 +131,19 @@ class Hook_addon_registry_msn
 	 */
 	function tpl_preview__netlink()
 	{
-		$content=new ocp_tempcode();
+		$content = new ocp_tempcode();
 		$url=placeholder_url();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$content->attach(form_input_list_entry($url->evaluate(), false, lorem_word()));
+			$content->attach(form_input_list_entry($url->evaluate(),false,lorem_word()));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('NETLINK', array(
-				'CONTENT'=>$content
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('NETLINK',array(
+					'CONTENT'=>$content,
+						)
+			),NULL,'',true),
 		);
 	}
 }

@@ -21,63 +21,6 @@
  */
 
 /**
- * Find updated addons via checking the ocPortal.com web service.
- *
- * @return array		List of addons updated
- */
-function find_updated_addons()
-{
-	$addons=find_installed_addons(true);
-	if (count($addons)==0) return array();
-
-	$url='http://ocportal.com/uploads/website_specific/ocportal.com/scripts/addon_manifest.php?version='.urlencode(float_to_raw_string(ocp_version_number()));
-	foreach (array_keys($addons) as $i=>$addon)
-	{
-		$url.='&addon_'.strval($i).'='.urlencode($addon);
-	}
-
-	require_code('files');
-	$addon_data=http_download_file($url,NULL,false);
-	if ((is_null($addon_data)) || ($addon_data==''))
-	{
-		return array();
-		//warn_exit(do_lang('INTERNAL_ERROR'));
-	}
-
-	$available_addons=find_available_addons();
-	global $M_SORT_KEY;
-	$M_SORT_KEY='mtime'; // TODO: In v10 this syntax will change
-	usort($available_addons,'multi_sort');
-	$available_addons=array_reverse($available_addons);
-
-	$updated_addons=array();
-	foreach (unserialize($addon_data) as $i=>$addon)
-	{
-		$found=false;
-
-		foreach ($available_addons as $available_addon)
-		{
-			if ($available_addon['name']==$addon[3])
-			{
-				$found=true;
-				if ((!is_null($addon[0])) && ($available_addon['mtime']<$addon[0])) // If known to server, and updated
-				{
-					$updated_addons[$addon[3]]=array($addon[1]); // Is known to server though
-				}
-				break;
-			}
-		}
-		if (!$found) // Don't have our original .tar, so lets say we need to reinstall
-		{
-			$mtime=find_addon_effective_mtime($addon[3]);
-			if ((!is_null($addon[0])) && (!is_null($mtime)) && ($mtime<$addon[0])) // If server has it and is newer
-				$updated_addons[$addon[3]]=array($addon[1]);
-		}
-	}
-	return $updated_addons;
-}
-
-/**
  * Change an ocProducts new style addon file list to have real paths.
  *
  * @param  array		Shorthand list
@@ -110,10 +53,9 @@ function make_global_file_list($list)
 /**
  * Find all the installed addons.
  *
- * @param  boolean	Whether to only return details on on-bundled addons
  * @return array		List of maps describing the available addons (simulating partial-extended versions of the traditional ocPortal-addon database row)
  */
-function find_installed_addons($just_non_bundled=false)
+function find_installed_addons()
 {
 	// Find installed addons- database registration method
 	$_rows=$GLOBALS['SITE_DB']->query_select('addons',array('*'));
@@ -128,7 +70,6 @@ function find_installed_addons($just_non_bundled=false)
 		}
 		$addons_installed[$row['addon_name']]=$row;
 	}
-	if ($just_non_bundled) return $addons_installed;
 
 	// Find installed addons- file system method (for ocProducts addons). ocProducts addons don't need to be in the DB, although they will be if they are (re)installed after the original ocPortal installation finished.
 	$hooks=find_all_hooks('systems','addon_registry');
@@ -181,7 +122,7 @@ function find_installed_addons($just_non_bundled=false)
 				'addon_name'=>$hook,
 				'addon_author'=>'Core Team',
 				'addon_organisation'=>'ocProducts',
-				'addon_version'=>($version==ocp_version_number())?ocp_version_pretty():float_format($version,1),
+				'addon_version'=>($version==ocp_version_number())?ocp_version_full():float_format($version,1),
 				'addon_description'=>$description,
 				'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$hook.'.php'),
 				'addon_files'=>implode(chr(10),make_global_file_list($file_list)),
@@ -193,49 +134,24 @@ function find_installed_addons($just_non_bundled=false)
 }
 
 /**
- * Find effective modification date of an addon.
- *
- * @param  string		The name of the addon
- * @return ?TIME		Modification time (NULL: could not find any files)
- */
-function find_addon_effective_mtime($addon_name)
-{
-	$files_rows=array_unique(collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'),array('addon_name'=>$addon_name))));
-	$mtime=mixed();
-	foreach ($files_rows as $filename)
-	{
-		if (file_exists(get_file_base().'/'.$filename))
-		{
-			$_mtime=filemtime(get_file_base().'/'.$filename);
-			$mtime=is_null($mtime)?$_mtime:max($mtime,$_mtime);
-		}
-	}
-	return $mtime;
-}
-
-/**
- * Find all the available addons (addons in imports/addons that are not necessarily installed).
+ * Find all the available addons (addons in imports/mods that are not necessarily installed).
  *
  * @return array		List of maps describing the available addons
  */
 function find_available_addons()
 {
+	// Find addons available for installation
+	$dh=opendir(get_custom_file_base().'/imports/mods/');
 	$addons_available_for_installation=array();
 	$files=array();
-
-	// Find addons available for installation
-	$dh=@opendir(get_custom_file_base().'/imports/addons/');
-	if ($dh!==false)
+	while (($file=readdir($dh))!==false)
 	{
-		while (($file=readdir($dh))!==false)
+		if (substr($file,-4)=='.tar')
 		{
-			if (substr($file,-4)=='.tar')
-			{
-				$files[]=array($file,filemtime(get_custom_file_base().'/imports/addons/'.$file));
-			}
+			$files[]=array($file,filemtime(get_custom_file_base().'/imports/mods/'.$file));
 		}
-		closedir($dh);
 	}
+	closedir($dh);
 
 	global $M_SORT_KEY;
 	$M_SORT_KEY='1';
@@ -245,7 +161,7 @@ function find_available_addons()
 	{
 		$file=$_file[0];
 
-		$full=get_custom_file_base().'/imports/addons/'.$file;
+		$full=get_custom_file_base().'/imports/mods/'.$file;
 		require_code('tar');
 		$tar=tar_open($full,'rb');
 		$info_file=tar_get_file($tar,'mod.inf',true);
@@ -256,12 +172,10 @@ function find_available_addons()
 
 			$files_rows=tar_get_directory($tar);
 			$info['files']='';
-			$mtime=filemtime($full);
 			foreach ($files_rows as $file_row)
 			{
 				$info['files'].=$file_row['path'].chr(10);
 			}
-			$info['mtime']=$mtime;
 
 			$addons_available_for_installation[$file]=$info;
 		}
@@ -355,7 +269,7 @@ function read_addon_info($name)
 			'addon_name'=>$name,
 			'addon_author'=>'Core Team',
 			'addon_organisation'=>'ocProducts',
-			'addon_version'=>float_to_raw_string($version,2,true),
+			'addon_version'=>($version==ocp_version_number())?ocp_version_full():float_format($version,1),
 			'addon_description'=>$description,
 			'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php'),
 			'addon_files'=>make_global_file_list($file_list),
@@ -371,7 +285,7 @@ function read_addon_info($name)
 /**
  * Create an addon to spec.
  *
- * @param  string			Filename to create in exports/addons directory (should end in .tar)
+ * @param  string			Filename to create in exports/mods directory (should end in .tar)
  * @param  array			List of files to include
  * @param  string			Addon name
  * @param  string			Addon incompatibilities (comma-separated)
@@ -382,7 +296,7 @@ function read_addon_info($name)
  * @param  string			Addon description
  * @param  PATH			Directory to save to
  */
-function create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,$organisation,$version,$description,$dir='exports/addons')
+function create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,$organisation,$version,$description,$dir='exports/mods')
 {
 	require_code('tar');
 
@@ -492,7 +406,7 @@ description=".$description."
  */
 function install_addon($file,$files=NULL)
 {
-	$full=get_custom_file_base().'/imports/addons/'.$file;
+	$full=get_custom_file_base().'/imports/mods/'.$file;
 
 	require_code('zones2');
 	require_code('zones3');
@@ -513,10 +427,6 @@ function install_addon($file,$files=NULL)
 	$dependencies=explode(',',array_key_exists('dependencies',$info)?$info['dependencies']:'');
 	$incompatibilities=explode(',',array_key_exists('incompatibilities',$info)?$info['incompatibilities']:'');
 	$description=$info['description'];
-
-	$GLOBALS['SITE_DB']->query_delete('addons_files',array('addon_name'=>$addon));
-	$GLOBALS['SITE_DB']->query_delete('addons_dependencies',array('addon_name'=>$addon));
-	$GLOBALS['SITE_DB']->query_delete('addons',array('addon_name'=>$addon),'',1);
 
 	$GLOBALS['SITE_DB']->query_delete('addons',array('addon_name'=>$addon),'',1);
 	$GLOBALS['SITE_DB']->query_insert('addons',array(
@@ -631,7 +541,7 @@ function install_addon($file,$files=NULL)
 	require_code('zones3');
 	erase_comcode_page_cache();
 	erase_tempcode_cache();
-	persistent_cache_empty();
+	persistant_cache_empty();
 	erase_cached_templates();
 	erase_cached_language();
 
@@ -690,7 +600,7 @@ function uninstall_addon($name)
 	require_code('zones3');
 	erase_comcode_page_cache();
 	erase_tempcode_cache();
-	persistent_cache_empty();
+	persistant_cache_empty();
 	erase_cached_templates();
 	erase_cached_language();
 	global $HOOKS_CACHE;
@@ -751,7 +661,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	if (is_null($also_uninstalling)) $also_uninstalling=array();
 	if (is_null($also_installing)) $also_installing=array();
 
-	$full=get_custom_file_base().'/imports/addons/'.$file;
+	$full=get_custom_file_base().'/imports/mods/'.$file;
 
 	// Look in the tar
 	require_code('tar');
@@ -863,7 +773,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 		if (!$_incompatibilities->is_empty()) $_incompatibilities->attach(do_lang_tempcode('LIST_SEP'));
 		$_incompatibilities->attach(escape_html($in));
 	}
-	if (count($incompatibilities)!=0) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_INCOMPATIBILITIES',$_incompatibilities,escape_html($file)))));
+	if (count($incompatibilities)!=0) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_INCOMPATIBILITIES',$_incompatibilities))));
 
 	// Check dependencies
 	$_dependencies=explode(',',array_key_exists('dependencies',$info)?$info['dependencies']:'');
@@ -911,12 +821,12 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 			warn_exit(do_lang_tempcode('_ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str->evaluate(),escape_html($addon),array(escape_html($url),$post_fields)));
 		} else
 		{
-			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str,escape_html($file)))));
+			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str))));
 		}
 	}
 
-//	if (!$overwrite->is_empty()) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'fe40ed8192a452a835be4c0fde64406b','WARNING'=>do_lang_tempcode('ADDON_WARNING_OVERWRITE',escape_html($overwrite),escape_html($file)))));
-	if ($info['author']!='Core Team') if ($php) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'8cf249a119d10b2e97fc94cb9981dcea','WARNING'=>do_lang_tempcode('ADDON_WARNING_PHP',escape_html($file)))));
+//	if (!$overwrite->is_empty()) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'fe40ed8192a452a835be4c0fde64406b','WARNING'=>do_lang_tempcode('ADDON_WARNING_OVERWRITE',escape_html($overwrite)))));
+	if ($info['author']!='Core Team') if ($php) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'8cf249a119d10b2e97fc94cb9981dcea','WARNING'=>do_lang_tempcode('ADDON_WARNING_PHP'))));
 //	if ($chmod!='') $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'78121e40b9a26c2f33d09f7eee7b74be','WARNING'=>do_lan g_tempcode('ADDON_WARNING_CHMOD',escape_html($chmod))))); // Now uses AFM
 
 	$files_combined=new ocp_tempcode();
@@ -991,10 +901,10 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 	// If its an array then we use it as-is, if it's a string then we explode it first.
 	if (is_array($addon_row['addon_files']))
 	{
-		$loopable=$addon_row['addon_files'];
+		$loopable = $addon_row['addon_files'];
 	} else
 	{
-		$loopable=explode(chr(10),$addon_row['addon_files']);
+		$loopable = explode(chr(10),$addon_row['addon_files']);
 	}
 	foreach ($loopable as $i=>$filename)
 	{

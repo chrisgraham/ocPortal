@@ -62,7 +62,7 @@ class Hook_page_stats
 			$submit_name=do_lang_tempcode('DELETE');
 			$hidden=build_keep_post_fields();
 
-			$title=get_screen_title('PAGE_STATS_DELETE');
+			$title=get_page_title('PAGE_STATS_DELETE');
 			$tpl=do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('DELETE_DATA_AVAILABLE'),'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 			$echo=globalise($tpl,NULL,'',true);
 			$echo->evaluate_echo();

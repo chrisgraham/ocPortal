@@ -169,7 +169,7 @@ class Block_side_news_archive
 
 		$title=array_key_exists('title',$map)?$map['title']:do_lang('ARCHIVES');
 
-		return do_template('BLOCK_SIDE_NEWS_ARCHIVE',array('_GUID'=>'10d6267d943ad77a4025a4e286c41ee7','YEARS'=>$years,'TITLE'=>$title));
+		return do_template('BLOCK_SIDE_NEWS_ARCHIVE',array('YEARS'=>$years,'TITLE'=>$title));
 	}
 
 }

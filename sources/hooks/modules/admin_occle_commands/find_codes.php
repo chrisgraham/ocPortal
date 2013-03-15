@@ -47,7 +47,7 @@ class Hook_find_codes
 					{
 						if (!is_dir($path.$file))
 						{
-							$contents=file_get_contents($path.$file);
+							$contents=file_get_contents($path.$file,FILE_TEXT);
 							if (strpos($contents,$parameters[0])!==false) $files[]=$path.$file;
 						}
 						unset($contents); // Got to be careful with that memory :-(

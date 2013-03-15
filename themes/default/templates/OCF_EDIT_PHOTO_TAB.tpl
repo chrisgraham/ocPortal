@@ -1,7 +1,7 @@
 <div class="float_surrounder">
 	<div class="ocf_avatar_page_old_avatar">
 		{+START,IF_NON_EMPTY,{PHOTO}}
-			<img class="ocf_topic_post_avatar" alt="{!PHOTO}" src="{PHOTO*}" />
+			<img class="ocf_topic_post_avatar" title="" alt="{!PHOTO}" src="{PHOTO*}" />
 		{+END}
 		{+START,IF_EMPTY,{PHOTO}}
 			{!NONE_EM}
@@ -13,3 +13,5 @@
 		{TEXT}
 	</div>
 </div>
+
+<br />

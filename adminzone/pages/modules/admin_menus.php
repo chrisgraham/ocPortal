@@ -78,18 +78,17 @@ class Module_admin_menus
 		//add_menu_item_simple('root_website',NULL,'FEEDBACK','_SEARCH:feedback');
 		if (!in_array(get_forum_type(),array('ocf','none'))) add_menu_item_simple('root_website',NULL,'SECTION_FORUMS',get_forum_base_url(true));
 
-		// main_website
-		add_menu_item_simple('main_website',NULL,'FRONT_PAGE','site:');
-		add_menu_item_simple('main_website',NULL,'HELP','_SEARCH:help');
+		// main_features
+		add_menu_item_simple('main_features',NULL,'FRONT_PAGE','site:');
+		add_menu_item_simple('main_features',NULL,'GUIDE','_SEARCH:help');
+		add_menu_item_simple('main_features',NULL,'RULES','_SEARCH:rules');
 
 		// main_content
 
 		// main_community
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'SECTION_FORUMS','forum:forumview',0,0,true,'',0,'menu_items/community_navigation/forums');
-		elseif (!in_array(get_forum_type(),array('none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true),0,0,true,'',0,'menu_items/community_navigation/forums');
-		add_menu_item_simple('main_community',NULL,'RULES','_SEARCH:rules',0,0,true,'',0,'menu_items/community_navigation/rules');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc',0,0,true,'',0,'menu_items/community_navigation/members');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc',0,0,true,'',0,'menu_items/community_navigation/groups');
+		if (!in_array(get_forum_type(),array('ocf','none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true));
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc');
 
 		// member_features
 		add_menu_item_simple('member_features',NULL,'_JOIN','_SEARCH:join:type=misc',0,1);
@@ -107,8 +106,8 @@ class Module_admin_menus
 		add_menu_item_simple('zone_menu',NULL,'SITE','site'.':',0,1);
 		if (get_forum_type()=='ocf')
 		{
-			add_menu_item_simple('zone_menu',NULL,'SECTION_SOCIAL','forum'.':',0,1);
-		} elseif (get_forum_type()!='none')
+			add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS','forum'.':',0,1);
+		} else
 		{
 			add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS',get_forum_base_url(),0,1);
 		}
@@ -143,8 +142,6 @@ class Module_admin_menus
 		require_lang('menus');
 		require_code('menus2');
 
-		require_css('menu_editor');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->get_menu_name();
@@ -164,34 +161,26 @@ class Module_admin_menus
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/menus';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_menus';
 
-		$title=get_screen_title('MENU_MANAGEMENT');
+		$title=get_page_title('MENU_MANAGEMENT');
 
 		require_code('form_templates');
 		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
-		$list=new ocp_tempcode();//form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
+		$list=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		foreach ($rows as $row)
 		{
 			$list->attach(form_input_list_entry($row['i_menu']));
 		}
 		$fields=new ocp_tempcode();
-
-		$set_name='menu';
-		$required=true;
-		$set_title=do_lang_tempcode('MENU');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('EXISTING_MENU'),'id',$list,NULL,true,false));
-
-		$field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_MENU'),'id_new','',false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
-
+		$fields->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('EXISTING_MENU'),'id',$list,NULL,true,false));
+		$fields->attach(form_input_codename(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('NEW')),do_lang_tempcode('NEW_MENU'),'id_new','',false));
 		$map=array('page'=>'_SELF','type'=>'edit','wide'=>1);
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('CHOOSE');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		$javascript='standardAlternateFields(\'id\',\'id_new\');';
+
+		return do_template('FORM_SCREEN',array('_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$javascript));
 	}
 
 	/**
@@ -207,7 +196,13 @@ class Module_admin_menus
 		if ($id=='') $id=get_param('id_new');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
 
-		$title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
+		if (($id=='zone_menu') && (get_option('use_custom_zone_menu')=='0'))
+		{
+			$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'THEME'),get_module_zone('admin_config'));
+			attach_message(do_lang_tempcode('EDITING_UNUSED_MENU',escape_html($config_url->evaluate())),'notice');
+		}
+
+		$title=get_page_title('_EDIT_MENU',true,array(escape_html($id)));
 
 		$clickable_sections=(get_param_integer('clickable_sections',0)==1); // This is set to '1 if we have a menu type where pop out sections may be clicked on to be loaded. If we do then we make no UI distinction between page nodes and contracted/expanded, so people don't get compelled to choose a URL for everything, it simply becomes an option for them.
 
@@ -330,7 +325,7 @@ class Module_admin_menus
 	 */
 	function _edit_menu()
 	{
-		$title=get_screen_title('_EDIT_MENU',true,array(escape_html(get_param('id'))));
+		$title=get_page_title('_EDIT_MENU',true,array(escape_html(get_param('id'))));
 
 		post_param_integer('confirm'); // Just to make sure hackers don't try and get people to erase this form via a URL
 
@@ -393,7 +388,7 @@ class Module_admin_menus
 		}
 
 		decache('side_stored_menu');
-		persistent_cache_delete(array('MENU',$menu_id));
+		persistant_cache_delete(array('MENU',$menu_id));
 
 		log_it((count($_POST)==1)?'DELETE_MENU':'EDIT_MENU',$menu_id);
 

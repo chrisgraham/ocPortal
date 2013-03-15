@@ -64,10 +64,7 @@ class Block_bottom_rss
 
 		require_code('rss');
 		$rss=new rss($url);
-		if (!is_null($rss->error))
-		{
-			return do_template('WARNING_BOX',array('WARNING'=>$rss->error));
-		}
+		if (!is_null($rss->error)) return paragraph($rss->error,'gfgrtyhyyfhd');
 
 		global $NEWS_CATS;
 		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));

@@ -112,6 +112,7 @@ function _get_details_comcode_tags()
 	unset($VALID_COMCODE_TAGS['acronym']);
 	unset($VALID_COMCODE_TAGS['block']);
 	unset($VALID_COMCODE_TAGS['attachment']);
+	unset($VALID_COMCODE_TAGS['attachment2']);
 	unset($VALID_COMCODE_TAGS['attachment_safe']);
 	unset($VALID_COMCODE_TAGS['thread']);
 	foreach (array_keys($tag_list) as $tag)
@@ -234,7 +235,7 @@ function comcode_helper_script()
 
 	if ($type=='step1')
 	{
-		$title=get_screen_title('COMCODE_TAG');
+		$title=get_page_title('COMCODE_TAG');
 		$keep=symbol_tempcode('KEEP');
 		$comcode_groups='';
 		$groups=_get_group_tags();
@@ -242,7 +243,7 @@ function comcode_helper_script()
 		$non_wysiwyg_tags=_get_non_wysiwyg_tags();
 		$in_wysiwyg=get_param_integer('in_wysiwyg',0)==1;
 
-		foreach($groups as $groupname=>$grouptags)
+		foreach ($groups as $groupname=>$grouptags)
 		{
 			sort($grouptags);
 
@@ -267,7 +268,7 @@ function comcode_helper_script()
 				$link_caption=escape_html($tag);
 				$usage='';
 
-				$comcode_types.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('_GUID'=>'bf0d7ae2e7de61e1f079ebd80423b60d','USAGE'=>$usage,'DESCRIPTION'=>$description,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));
+				$comcode_types.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('USAGE'=>$usage,'DESCRIPTION'=>$description,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));
 			}
 			if ($comcode_types!='')
 				$comcode_groups.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_GROUP',array('IMG'=>NULL,'TITLE'=>do_lang_tempcode('COMCODE_GROUP_'.$groupname),'LINKS'=>$comcode_types)));
@@ -284,7 +285,7 @@ function comcode_helper_script()
 		$tag=$actual_tag;
 		if ($tag=='attachment_safe') $tag='attachment';
 
-		$title=get_screen_title('_COMCODE_HELPER',true,array($tag));
+		$title=get_page_title('_COMCODE_HELPER',true,array($tag));
 
 		$fields=new ocp_tempcode();
 		$fields_advanced=new ocp_tempcode();
@@ -320,7 +321,7 @@ function comcode_helper_script()
 				foreach ($params as $param)
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),1));
+					$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),1));
 				}
 			}
 			elseif ($tag=='jumping')
@@ -328,7 +329,7 @@ function comcode_helper_script()
 				foreach ($params as $param)
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+					$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),2));
 				}
 			}
 			elseif ($tag=='shocker')
@@ -337,9 +338,9 @@ function comcode_helper_script()
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 					if ($param=='left' || $param=='right')
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),2));
 					else
-						$fields->attach(form_input_line(titleify($param),protect_from_escaping($description),$param,'',false));
+						$fields->attach(form_input_line(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,'',false));
 				}
 			}
 			elseif ($tag=='random')
@@ -347,7 +348,7 @@ function comcode_helper_script()
 				foreach ($params as $param)
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),($param!='X')?2:0));
+					$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),($param!='X')?2:0));
 				}
 			}
 			elseif ($tag=='sections')
@@ -357,12 +358,12 @@ function comcode_helper_script()
 					if($param=='default')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,1,false));
+						$fields->attach(form_input_integer(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,1,false));
 					}
 					elseif($param=='name')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),2));
 					}
 				}
 			}
@@ -373,17 +374,17 @@ function comcode_helper_script()
 					if($param=='default')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,1,false));
+						$fields->attach(form_input_integer(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,1,false));
 					}
 					elseif($param=='name')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),2));
 					}
 					elseif($param=='switch_time')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,6000,false));
+						$fields->attach(form_input_integer(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,6000,false));
 					}
 				}
 			}
@@ -394,12 +395,12 @@ function comcode_helper_script()
 					if($param=='default')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,1,false));
+						$fields->attach(form_input_integer(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,1,false));
 					}
 					elseif($param=='name')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,array(),2));
 					}
 				}
 			}
@@ -411,7 +412,7 @@ function comcode_helper_script()
 					foreach ($params as $param)
 					{
 						$parameter_name=do_lang('COMCODE_TAG_'.$tag.'_NAME_OF_PARAM_'.$param,NULL,NULL,NULL,NULL,false);
-						if (is_null($parameter_name)) $parameter_name=titleify($param);
+						if (is_null($parameter_name)) $parameter_name=ucwords(str_replace('_',' ',$param));
 
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
@@ -502,7 +503,7 @@ function comcode_helper_script()
 					{
 						if (get_option('eager_wysiwyg')=='0')
 						{
-							$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe');
+							$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe' || $actual_tag=='attachment2');
 							$fields_advanced->attach($field);
 						}
 					}
@@ -551,11 +552,11 @@ function comcode_helper_script()
 			{
 				$default_embed='-contracted section
  +expanded section
-  page=URL
-  page=URL
+  page = URL
+  page = URL
 +expanded section
- page=URL
- page=URL';
+ page = URL
+ page = URL';
 			}
 			$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_EMBED');
 			$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
@@ -612,7 +613,7 @@ function comcode_helper_script()
 
 		$field_name=get_param('field_name');
 		$tag=post_param('tag');
-		$title=get_screen_title('_COMCODE_HELPER',true,array($tag));
+		$title=get_page_title('_COMCODE_HELPER',true,array($tag));
 
 		if (get_option('eager_wysiwyg')=='0')
 		{
@@ -627,11 +628,11 @@ function comcode_helper_script()
 
 		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
-		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'d5d5888d89b764f81769823ac71d0827','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
+		$content=do_template('BLOCK_HELPER_DONE',array('TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
 	$content->handle_symbol_preprocessing();
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'EXTRA_HEAD'=>$GLOBALS['EXTRA_HEAD'],'EXTRA_FOOT'=>$GLOBALS['EXTRA_FOOT'],'CONTENT'=>$content));
 	exit($echo->evaluate());
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
@@ -657,7 +658,7 @@ function _get_preview_environment_comcode($tag)
 	} else
 	{
 		$_params=$custom_tag_list[$tag];
-		$parameters=explode(',',$_params['tag_parameters']);
+		$parameters=explode(",",$_params['tag_parameters']);
 	}
 
 	if (in_array('param',$parameters))
@@ -743,15 +744,15 @@ function _get_preview_environment_comcode($tag)
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
-				$def=' default="1"';
+				$def=" default=\"1\"";
 			}
 			$comcode.="[section=\"$name\"$def]".$content."[/section]";
 			$controller[]=$name;
 			$bparameters.="<section=\"$name\"$def>".$content."</section>";
 			$i++;
 		}
-		$comcode.='[section_controller]'.implode(',',$controller).'[/section_controller]';
-		$bparameters.='<section_controller>'.implode(',',$controller).'</section_controller>';
+		$comcode.="[section_controller]".implode(",", $controller)."[/section_controller]";
+		$bparameters.="<section_controller>".implode(",", $controller)."</section_controller>";
 	}
 	elseif ($tag=='big_tabs')
 	{
@@ -767,15 +768,15 @@ function _get_preview_environment_comcode($tag)
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
-				$def=' default="1"';
+				$def=" default=\"1\"";
 			}
 			$comcode.="[big_tab=\"$name\"$def]".$content."[/big_tab]";
 			$controller[]=$name;
 			$bparameters.="<big_tab=\"$name\"$def>".$content."</big_tab>";
 			$i++;
 		}
-		$comcode='[surround][big_tab_controller switch_time="'.strval($time).'"]'.implode(',',$controller).'[/big_tab_controller]'.$comcode.'[/surround]';
-		$bparameters.='[surround]<big_tab_controller switch_time="'.strval($time).'">'.implode(',',$controller).'</big_tab_controller>[/surround]';
+		$comcode="[surround][big_tab_controller switch_time=\"$time\"]".implode(",", $controller)."[/big_tab_controller]".$comcode."[/surround]";
+		$bparameters.="[surround]<big_tab_controller switch_time=\"$time\">".implode(",", $controller)."</big_tab_controller>[/surround]";
 	}
 	elseif ($tag=='tabs')
 	{
@@ -790,15 +791,15 @@ function _get_preview_environment_comcode($tag)
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
-				$def=' default="1"';
+				$def=" default=\"1\"";
 			}
 			$comcode.="[tab=\"$name\"$def]".$content."[/tab]";
 			$controller[]=$name;
 			$bparameters.="<tab=\"$name\"$def>".$content."</tab>";
 			$i++;
 		}
-		$comcode='[tabs="'.implode(',',$controller).'"]'.$comcode.'[/tabs]';
-		$bparameters='<tabs="'.implode(',',$controller).'">'.$bparameters.'</tabs>';
+		$comcode="[tabs=\"".implode(",", $controller)."\"]".$comcode."[/tabs]";
+		$bparameters="<tabs=\"".implode(",", $controller)."\">".$bparameters."</tabs>";
 	}
 	elseif ($tag=='list')
 	{

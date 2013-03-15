@@ -7,10 +7,10 @@
 {+START,IF_NON_EMPTY,{POST}}
 	<h2>{!PARAMETERS}</h2>
 
-	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table">
+	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder">
 		<colgroup>
-			<col class="field_name_column" />
-			<col class="field_value_column" />
+			<col style="width: 200px" />
+			<col style="width: 100%" />
 		</colgroup>
 
 		<tbody>
@@ -20,7 +20,7 @@
 						{_loop_key*}
 					</th>
 					<td>
-						<div class="whitespace_visible">{+START,IF_PASSED,_loop_var}{_loop_var*}{+END}{+START,IF_NON_PASSED,_loop_var}?{+END}</div>
+						<div class="whitespace">{+START,IF_PASSED,_loop_var}{_loop_var*}{+END}{+START,IF_NON_PASSED,_loop_var}?{+END}</div>
 					</td>
 				</tr>
 			{+END}

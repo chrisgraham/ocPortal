@@ -1,6 +1,6 @@
 <h2>{FIELD*}</h2>
 
-<table summary="{!COLUMNED_TABLE}" class="autosized_table results_table spaced_table">
+<table summary="{!COLUMNED_TABLE}" class="variable_table solidborder">
 	<thead>
 		<tr>
 			<th>{!KEYWORD}</th>

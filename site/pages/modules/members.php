@@ -48,7 +48,7 @@ class Module_members
 	 */
 	function get_entry_points()
 	{
-		$ret=array('misc'=>'MEMBERS');
+		$ret=array('misc'=>'MEMBERS'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
 		if (!is_guest()) $ret['view']='MY_PROFILE';
 		return $ret;
 	}
@@ -71,9 +71,9 @@ class Module_members
 			$start=0;
 			do
 			{
-				$members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username AS title','m_join_time'),NULL,'',500,$start);
+				$groups=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username AS title','m_join_time'),NULL,'',500,$start);
 
-				foreach ($members as $row)
+				foreach ($groups as $row)
 				{
 					if ($row['id']!=db_get_first_id())
 					{
@@ -84,7 +84,7 @@ class Module_members
 
 				$start+=500;
 			}
-			while (array_key_exists(0,$members));
+			while (array_key_exists(0,$groups));
 		}
 	}
 
@@ -102,6 +102,7 @@ class Module_members
 
 		if ($type=='misc') return $this->directory();
 		if ($type=='view') return $this->profile();
+		//if ($type=='remote') return $this->remote();
 
 		return new ocp_tempcode();
 	}
@@ -113,7 +114,7 @@ class Module_members
 	 */
 	function remote()
 	{
-		$title=get_screen_title('LEARN_ABOUT_REMOTE_LOGINS');
+		$title=get_page_title('LEARN_ABOUT_REMOTE_LOGINS');
 
 		if (get_option('allow_member_integration')=='off') warn_exit(do_lang_tempcode('NO_REMOTE_ON'));
 
@@ -130,13 +131,19 @@ class Module_members
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_ajax_people_lists');
 
-		$title=get_screen_title('MEMBERS');
+		$title=get_page_title('MEMBERS');
 
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);
 		if (is_object($test_tpl)) return $test_tpl;
 
-		$get_url=preg_replace('#\?.*#','',get_self_url(true));
+		if (running_script('iframe'))
+		{
+			$get_url=find_script('iframe');
+		} else
+		{
+			$get_url=find_script('index');
+		}
 		$hidden=build_keep_form_fields('_SELF',true,array('filter'));
 
 		$start=get_param_integer('md_start',0);
@@ -164,57 +171,33 @@ class Module_members
 			$usergroups[$group_id]=array('USERGROUP'=>$group,'NUM'=>strval($num));
 		}
 
-		// ocSelect
-		$ocselect=either_param('active_filter','');
-		if ($ocselect!='')
-		{
-			require_code('ocselect');
-			$content_type='member';
-			list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
-			$extra_select_sql=implode('',$ocselect_extra_select);
-			$extra_join_sql=implode('',$ocselect_extra_join);
-		} else
-		{
-			$extra_select_sql='';
-			$extra_join_sql='';
-			$ocselect_extra_where='';
-		}
-
-		$where_clause='id<>'.strval(db_get_first_id()).$ocselect_extra_where;
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $where_clause.=' AND m_validated=1';
-
+		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE id<>'.strval(db_get_first_id());
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $query.=' AND m_validated=1';
 		if ($group_filter!='')
 		{
 			if (is_numeric($group_filter))
-				$title=get_screen_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
+				$title=get_page_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
 
 			require_code('ocfiltering');
 			$filter=ocfilter_to_sqlfragment($group_filter,'m_primary_group','f_groups',NULL,'m_primary_group','id');
-			$where_clause.=' AND '.$filter;
+			$query.=' AND '.$filter;
 		}
 		$search=get_param('filter','');
-		if ($search!='')
-		{
-			$where_clause.=' AND (m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
-			if (has_specific_permission(get_member(),'member_maintenance'))
-				$where_clause.=' OR m_email_address LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
-			$where_clause.=')';
-		}
-		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
-
-		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT r.id) '.$query);
-
-		if (can_arbitrary_groupby()) $query.=' GROUP BY r.id';
+		$sup=($search!='')?(' AND m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\''):'';
 		if ($sortable=='m_join_time')
 		{
-			$query.=' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
+			$query.=$sup.' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
 		} else
 		{
-			$query.=' ORDER BY '.$sortable.' '.$sort_order;
+			$query.=$sup.' ORDER BY '.$sortable.' '.$sort_order;
 		}
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT r.*'.$extra_select_sql.' '.$query,$max,$start);
-		$rows=remove_duplicate_rows($rows,'id');
 
+		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query,$max,$start);
+		if (count($rows)==0)
+		{
+			return inform_screen($title,do_lang_tempcode('NO_RESULTS'));
+		}
 		$members=new ocp_tempcode();
 		$member_boxes=array();
 		require_code('templates_results_table');
@@ -223,7 +206,6 @@ class Module_members
 		foreach ($rows as $row)
 		{
 			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],true,$row['m_username']);
-			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],true);
 			if ($row['m_validated']==0) $link->attach(do_lang_tempcode('MEMBER_IS_UNVALIDATED'));
 			if ($row['m_validated_email_confirm_code']!='') $link->attach(do_lang_tempcode('MEMBER_IS_UNCONFIRMED'));
 			$member_primary_group=ocf_get_member_primary_group($row['id']);
@@ -231,31 +213,11 @@ class Module_members
 
 			$members->attach(results_entry(array($link,$primary_group,integer_format($row['m_cache_num_posts']),escape_html(get_timezoned_date($row['m_join_time'])))));
 
-			$box=render_member_box($row['id'],true);
-			$member_boxes[]=$box;
+			$member_boxes[]=ocf_show_member_box($row['id'],true);
 		}
-		$results_table=(count($rows)==0)?new ocp_tempcode():results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
+		$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
 
-		$other_ids=array();
-		$_max_rows_to_preload=get_value('max_rows_to_preload');
-		$max_rows_to_preload=is_null($_max_rows_to_preload)?500:intval($_max_rows_to_preload);
-		if (($max_rows<$max_rows_to_preload) && ($max_rows>count($rows)))
-		{
-			$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
-			$or_list='';
-			foreach ($rows as $row)
-			{
-				$or_list=' AND r.id<>'.strval($row['id']);
-			}
-			$rows=$GLOBALS['FORUM_DB']->query('SELECT r.id'.$extra_select_sql.' '.$query.$or_list);
-			foreach ($rows as $row)
-			{
-				$other_ids[]=strval($row['id']);
-			}
-		}
-
-		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
+		$results_browser=results_browser(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
 
 		$symbols=NULL;
 		if (get_option('allow_alpha_search')=='1')
@@ -276,7 +238,7 @@ class Module_members
 			}
 		}
 
-		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'PAGINATION'=>$pagination,'MEMBER_BOXES'=>$member_boxes,'OTHER_IDS'=>$other_ids,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'RESULTS_BROWSER'=>$results_browser,'MEMBER_BOXES'=>$member_boxes,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
 	}
 
 	/**
@@ -286,7 +248,7 @@ class Module_members
 	 */
 	function profile()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.propagate_ocselect_pagelink(),do_lang_tempcode('MEMBERS'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBERS'))));
 
 		disable_php_memory_limit();
 

@@ -243,8 +243,8 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 				if (addon_installed('chat'))
 				{
 					require_code('chat2');
-					friend_add($inviter,$member_id);
-					friend_add($member_id,$inviter);
+					buddy_add($inviter,$member_id);
+					buddy_add($member_id,$inviter);
 				}
 			}
 		}
@@ -318,9 +318,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 function ocf_make_boiler_custom_field($type)
 {
 	$_type='long_trans';
-
 	if (substr($type,0,3)=='im_' || substr($type,0,3)=='sn_') $_type='short_text';
-
 	elseif ($type=='location') $_type='short_text';
 	elseif ($type=='occupation') $_type='short_text';
 	elseif ($type=='website') $_type='short_trans';

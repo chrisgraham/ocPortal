@@ -36,7 +36,7 @@ class Module_admin_import
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=5;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -60,11 +60,6 @@ class Module_admin_import
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('import_session','imp_db_host','ID_TEXT');
-		}
-
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('import_id_remap','id_old','ID_TEXT');
@@ -83,7 +78,6 @@ class Module_admin_import
 				'imp_db_user'=>'ID_TEXT',
 				'imp_hook'=>'ID_TEXT',
 				'imp_db_table_prefix'=>'ID_TEXT',
-				'imp_db_host'=>'ID_TEXT',
 				'imp_refresh_time'=>'INTEGER',
 				'imp_session'=>'*INTEGER'
 			));
@@ -132,8 +126,25 @@ class Module_admin_import
 
 		disable_php_memory_limit();
 
+		require_all_lang();
 		require_code('import');
-		load_import_deps();
+		require_code('config2');
+		require_code('ocf_moderation_action');
+		require_code('ocf_posts_action');
+		require_code('ocf_polls_action');
+		require_code('ocf_members_action');
+		require_code('ocf_groups_action');
+		require_code('ocf_general_action');
+		require_code('ocf_forums_action');
+		require_code('ocf_topics_action');
+		require_code('ocf_moderation_action2');
+		require_code('ocf_posts_action2');
+		require_code('ocf_polls_action2');
+		require_code('ocf_members_action2');
+		require_code('ocf_groups_action2');
+		require_code('ocf_general_action2');
+		require_code('ocf_forums_action2');
+		require_code('ocf_topics_action2');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');
@@ -156,7 +167,7 @@ class Module_admin_import
 	 */
 	function choose_importer()
 	{
-		$title=get_screen_title('IMPORT');
+		$title=get_page_title('IMPORT');
 
 		$hooks=new ocp_tempcode();
 		$_hooks=find_all_hooks('modules','admin_import');
@@ -189,7 +200,7 @@ class Module_admin_import
 	 */
 	function choose_session()
 	{
-		$title=get_screen_title('IMPORT');
+		$title=get_page_title('IMPORT');
 
 		/* Codes to detect redirect hooks for import */
 		$importer=filter_naughty(get_param('importer'));
@@ -218,13 +229,10 @@ class Module_admin_import
 			}
 			$sessions->attach(form_input_list_entry(strval($session['imp_session']),false,$text));
 		}
-		$text=do_lang_tempcode((count($_sessions)==0)?'IMPORT_SESSION_NEW':'IMPORT_SESSION_NEW_DELETE');
+		$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE');
 		$sessions->attach(form_input_list_entry(strval(-1),false,$text));
-		if ($importer=='ocp_merge')
-		{
-			$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE_OCF_SATELLITE');
-			$sessions->attach(form_input_list_entry(strval(-2),false,$text));
-		}
+		$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE_OCF_SATELLITE');
+		$sessions->attach(form_input_list_entry(strval(-2),false,$text));
 		$fields=form_input_list(do_lang_tempcode('IMPORT_SESSION'),do_lang_tempcode('DESCRIPTION_IMPORT_SESSION'),'session',$sessions,NULL,true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session2','importer'=>get_param('importer')),'_SELF');
@@ -242,7 +250,7 @@ class Module_admin_import
 	 */
 	function choose_session2()
 	{
-		$title=get_screen_title('IMPORT');
+		$title=get_page_title('IMPORT');
 
 		/* Three cases:
 			  1) We are continuing (therefore do nothing)
@@ -334,7 +342,7 @@ class Module_admin_import
 	 */
 	function choose_actions($extra='')
 	{
-		$title=get_screen_title('IMPORT');
+		$title=get_page_title('IMPORT');
 
 		$session=either_param_integer('session',get_session_id());
 		$importer=filter_naughty(get_param('importer'));
@@ -343,39 +351,20 @@ class Module_admin_import
 		$object=object_factory('Hook_'.filter_naughty_harsh($importer));
 
 		// Test import source is good
-		$db_host=get_db_site_host();
 		if (method_exists($object,'probe_db_access'))
 		{
-			$probe=$object->probe_db_access(either_param('old_base_dir'));
-			list($db_name,$db_user,$db_password,$db_table_prefix)=$probe;
-			if (array_key_exists(4,$probe)) $db_host=$probe[4];
+			list($db_name,$db_user,$db_password,$db_table_prefix)=$object->probe_db_access(either_param('old_base_dir'));
 		} else
 		{
 			$db_name=either_param('db_name');
 			$db_user=either_param('db_user');
 			$db_password=either_param('db_password');
 			$db_table_prefix=either_param('db_table_prefix');
-			$db_host=either_param('db_host',$db_host);
 		}
 		if (($db_name==get_db_site()) && ($importer=='ocp_merge') && ($db_table_prefix==$GLOBALS['SITE_DB']->get_table_prefix()))
 			warn_exit(do_lang_tempcode('IMPORT_SELF_NO'));
-		$import_source=is_null($db_name)?NULL:new database_driver($db_name,$db_host,$db_user,$db_password,$db_table_prefix);
+		$import_source=is_null($db_name)?NULL:new database_driver($db_name,get_db_site_host(),$db_user,$db_password,$db_table_prefix);
 		unset($import_source);
-
-		// Save data
-		$old_base_dir=either_param('old_base_dir');
-		$refresh_time=either_param_integer('refresh_time',15); // Shouldn't default, but reported on some systems to do so
-		$GLOBALS['SITE_DB']->query_delete('import_session',array('imp_session'=>get_session_id()),'',1);
-		$GLOBALS['SITE_DB']->query_insert('import_session',array(
-			'imp_hook'=>$importer,
-			'imp_old_base_dir'=>$old_base_dir,
-			'imp_db_name'=>is_null($db_name)?'':$db_name,
-			'imp_db_user'=>is_null($db_user)?'':$db_user,
-			'imp_db_table_prefix'=>is_null($db_table_prefix)?'':$db_table_prefix,
-			'imp_db_host'=>is_null($db_host)?'':$db_host,
-			'imp_refresh_time'=>$refresh_time,
-			'imp_session'=>get_session_id()
-		));
 
 		$lang_array=array();
 		$hooks=find_all_hooks('modules','admin_import_types');
@@ -395,7 +384,6 @@ class Module_admin_import
 			$db_name=$session_row[0]['imp_db_name'];
 			$db_user=$session_row[0]['imp_db_user'];
 			$db_table_prefix=$session_row[0]['imp_db_table_prefix'];
-			$db_host=$session_row[0]['imp_db_host'];
 			$refresh_time=$session_row[0]['imp_refresh_time'];
 		} else
 		{
@@ -403,7 +391,6 @@ class Module_admin_import
 			$db_name=get_db_site();
 			$db_user=get_db_site_user();
 			$db_table_prefix=array_key_exists('prefix',$info)?$info['prefix']:$GLOBALS['SITE_DB']->get_table_prefix();
-			$db_host=get_db_site_host();
 			$refresh_time=15;
 		}
 
@@ -472,7 +459,7 @@ class Module_admin_import
 	 */
 	/*function advanced_choose_actions()
 	{
-		$title=get_screen_title('IMPORT');
+		$title=get_page_title('IMPORT');
 
 		$session=either_param_integer('session',get_session_id());
 		$importer=filter_naughty(get_param('importer'));
@@ -492,7 +479,7 @@ class Module_admin_import
 		require_code('form_templates');
 
 		// Selector for the content to import
-		$javascript='standard_alternate_fields([\'import_all\',\'import_items\'],true);';
+		$javascript='standardAlternateFields(\'import_all\',\'import_items\',NULL,false);';
 		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_ALL'),do_lang_tempcode('DESCRIPTION_IMPORT_ALL'),'import_all',true));
 		$fields->attach($importer_object->get_import_items_selector($content_type)); // Returns a form field called import_items
 
@@ -546,7 +533,9 @@ class Module_admin_import
 		global $I_REFRESH_URL;
 		$I_REFRESH_URL=$refresh_url;
 
-		$title=get_screen_title('IMPORT');
+		require_code('database_action');
+
+		$title=get_page_title('IMPORT');
 
 		$importer=get_param('importer');
 		require_code('hooks/modules/admin_import/'.filter_naughty_harsh($importer));
@@ -556,24 +545,20 @@ class Module_admin_import
 		$old_base_dir=either_param('old_base_dir');
 		if ((method_exists($object,'verify_base_path')) && (!$object->verify_base_path($old_base_dir)))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html($old_base_dir)));
-		$db_host=get_db_site_host();
 		if (method_exists($object,'probe_db_access'))
 		{
-			$probe=$object->probe_db_access(either_param('old_base_dir'));
-			list($db_name,$db_user,$db_password,$db_table_prefix)=$probe;
-			if (array_key_exists(4,$probe)) $db_host=$probe[4];
+			list($db_name,$db_user,$db_password,$db_table_prefix)=$object->probe_db_access(either_param('old_base_dir'));
 		} else
 		{
 			$db_name=either_param('db_name');
 			$db_user=either_param('db_user');
 			$db_password=either_param('db_password');
 			$db_table_prefix=either_param('db_table_prefix');
-			$db_host=either_param('db_host',$db_host);
 		}
 		if (($db_name==get_db_site()) && ($importer=='ocp_merge') && ($db_table_prefix==$GLOBALS['SITE_DB']->get_table_prefix()))
 			warn_exit(do_lang_tempcode('IMPORT_SELF_NO'));
 
-		$import_source=is_null($db_name)?NULL:new database_driver($db_name,$db_host,$db_user,$db_password,$db_table_prefix);
+		$import_source=is_null($db_name)?NULL:new database_driver($db_name,get_db_site_host(),$db_user,$db_password,$db_table_prefix);
 
 		// Some preliminary tests
 		$happy=get_param_integer('happy',0);
@@ -589,12 +574,11 @@ class Module_admin_import
 		// Save data
 		$GLOBALS['SITE_DB']->query_delete('import_session',array('imp_session'=>get_session_id()),'',1);
 		$GLOBALS['SITE_DB']->query_insert('import_session',array(
-			'imp_hook'=>$importer,
+			'imp_hook'=>'',
 			'imp_old_base_dir'=>$old_base_dir,
 			'imp_db_name'=>is_null($db_name)?'':$db_name,
 			'imp_db_user'=>is_null($db_user)?'':$db_user,
 			'imp_db_table_prefix'=>is_null($db_table_prefix)?'':$db_table_prefix,
-			'imp_db_host'=>is_null($db_host)?'':$db_host,
 			'imp_refresh_time'=>$refresh_time,
 			'imp_session'=>get_session_id()
 		));
@@ -673,7 +657,10 @@ class Module_admin_import
 		}
 
 		log_it('IMPORT');
-		post_import_cleanup();
+		// Quick and simple decacheing. No need to be smart about this.
+		delete_value('ocf_member_count');
+		delete_value('ocf_topic_count');
+		delete_value('ocf_post_count');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$importer.':session='.get_param('session'),do_lang_tempcode('IMPORT'))));
 		breadcrumb_set_self(do_lang_tempcode('START'));

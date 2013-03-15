@@ -26,7 +26,7 @@
  * @param  ?MEMBER	The member to get Private Topics of (NULL: current member).
  * @return array		The details.
  */
-function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
+function ocf_get_personal_topics($start=0,$max=NULL,$member_id=NULL)
 {
 	if (is_null($max)) $max=intval(get_option('forum_topics_per_page'));
 
@@ -36,7 +36,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	} else
 	{
 		if ((!has_specific_permission(get_member(),'view_other_pt')) && ($member_id!=get_member()))
-			access_denied('PRIVILEGE','view_other_pt');
+			access_denied('SPECIFIC_PERMISSION','view_other_pt');
 	}
 
 	// Find topics
@@ -125,7 +125,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 		$out['may_delete_topics']=1;
 		$out['may_change_max']=1;
 	}
-	if (ocf_may_make_private_topic()) $out['may_post_topic']=1;
+	if (ocf_may_make_personal_topic()) $out['may_post_topic']=1;
 
 	return $out;
 }

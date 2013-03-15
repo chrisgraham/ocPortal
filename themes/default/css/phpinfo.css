@@ -11,10 +11,10 @@
 }
 
 #page_running_admin_phpinfo table td, #page_running_admin_phpinfo table th {
-	border: 1px solid {$GET,standard_border};
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
-#page_running_admin_phpinfo .e {font-weight: bold; color: {$GET,native_ui_foreground};}
-#page_running_admin_phpinfo .h {font-weight: bold; color: {$GET,native_ui_foreground};}
-#page_running_admin_phpinfo .v {color: {$GET,native_ui_foreground};}
-#page_running_admin_phpinfo .vr {text-align: right; color: {$GET,native_ui_foreground};}
+#page_running_admin_phpinfo .e {font-weight: bold; color: black;}
+#page_running_admin_phpinfo .h {font-weight: bold; color: black;}
+#page_running_admin_phpinfo .v {color: black;}
+#page_running_admin_phpinfo .vr {text-align: right; color: black;}

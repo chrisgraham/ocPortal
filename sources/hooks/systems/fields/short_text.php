@@ -32,9 +32,12 @@ class Hook_fields_short_text
 			'short_text'=>do_lang_tempcode('FIELD_TYPE_short_text'),
 		);
 
-		$ret+=array(
-			'tel'=>do_lang_tempcode('FIELD_TYPE_tel'),
-		);
+		if (get_value('html5')==='1')
+		{
+			$ret+=array(
+				'tel'=>do_lang_tempcode('FIELD_TYPE_tel'),
+			);
+		}
 
 		return $ret;
 	}

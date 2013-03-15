@@ -74,32 +74,7 @@ class Block_main_recent_cc_entries
 		$catalogue_row=$catalogues[0];
 		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('c_name'=>$catalogue,'ce_validated'=>1),'ORDER BY ce_add_date DESC',$number);
 		$tpl_set=$catalogue;
-		$_display_type=((array_key_exists('display_type',$map)) && ($map['display_type']!=''))?$map['display_type']:NULL;
-		$display_type=mixed();
-		if (!is_null($_display_type))
-		{
-			if (is_numeric($_display_type))
-			{
-				$display_type=intval($_display_type);
-			} else
-			{
-				switch ($_display_type)
-				{
-					case 'FIELDMAPS':
-						$display_type=C_DT_FIELDMAPS;
-						break;
-					case 'TITLELIST':
-						$display_type=C_DT_TITLELIST;
-						break;
-					case 'TABULAR':
-						$display_type=C_DT_TABULAR;
-						break;
-					case 'GRID':
-						$display_type=C_DT_GRID;
-						break;
-				}
-			}
-		}
+		$display_type=array_key_exists('display_type',$map)?intval($map['display_type']):NULL;
 		list($content,,)=get_catalogue_category_entry_buildup(db_get_first_id() /* ignored */,$catalogue,$catalogue_row,'SEARCH',$tpl_set,$number,0,NULL,$root,$display_type,false,$entries);
 
 		$catalogue_title=get_translated_text($catalogue_row['c_title']);

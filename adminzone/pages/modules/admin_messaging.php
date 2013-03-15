@@ -114,7 +114,7 @@ class Module_admin_messaging
 	 */
 	function choose_message()
 	{
-		$title=get_screen_title('CONTACT_US_MESSAGING');
+		$title=get_page_title('CONTACT_US_MESSAGING');
 
 		$fields=new ocp_tempcode();
 
@@ -140,14 +140,14 @@ class Module_admin_messaging
 				//$display_string=do_lang_tempcode('MESSAGE_DETAILS',get_timezoned_date($row['firsttime']),$message_type);
 
 				$fields->attach(results_entry(array(hyperlink($url,$name,false,true),get_timezoned_date($row['firsttime']),$message_type),true));
-//			do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'5e2d0d35e30402f3e7db284010cd359c','URL'=>$url,'NAME'=>$name,'DISPLAY_STRING'=>$display_string))
+//			do_template('INDEX_SCREEN_ENTRY',array('URL'=>$url,'NAME'=>$name,'DISPLAY_STRING'=>$display_string))
 			}
 		}
 
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE'),do_lang_tempcode('TYPE')));
 		$results_table=results_table('messages',$start,'start',$max,'max',$max_rows,$fields_title,$fields,NULL,NULL,NULL,NULL,paragraph(do_lang_tempcode('SELECT_A_MESSAGE')));
 
-		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'6ced89e25a12a45deb6cf10bd42869ee','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		return do_template('RESULTS_TABLE_SCREEN',array('TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Module_admin_messaging
 	 */
 	function view_message()
 	{
-		$title=get_screen_title('CONTACT_US_MESSAGING');
+		$title=get_page_title('CONTACT_US_MESSAGING');
 
 		$id=get_param('id');
 		$message_type=get_param('message_type');
@@ -210,7 +210,7 @@ class Module_admin_messaging
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['l_member_id']);
 				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['l_member_id'],false,true);
 				$date=get_timezoned_date($row['l_time']);
-				$whos_read[]=array('USERNAME'=>$username,'MEMBER_URL'=>$member_link,'DATE'=>$date);
+				$whos_read[]=array('USERNAME'=>$username,'MEMBER_LINK'=>$member_link,'DATE'=>$date);
 			}
 		}
 
@@ -227,7 +227,7 @@ class Module_admin_messaging
 	 */
 	function take_responsibility()
 	{
-		$title=get_screen_title('CONTACT_US_MESSAGING');
+		$title=get_page_title('CONTACT_US_MESSAGING');
 
 		$id=get_param('id');
 		$message_type=get_param('message_type');

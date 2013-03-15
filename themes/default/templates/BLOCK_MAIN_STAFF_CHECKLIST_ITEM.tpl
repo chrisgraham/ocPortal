@@ -1,4 +1,4 @@
-<div class="checklist_row"{+START,IF_PASSED,CONFIG_URL} onmouseover="this.getElementsByTagName('img')[0].setAttribute('src','{$IMG*;,checklist/toggleicon2}');" onmouseout="this.getElementsByTagName('img')[0].setAttribute('src','{$IMG*;,checklist/toggleicon}');"{+END}>
+<div class="checklist_row" onmouseover="{+START,IF_PASSED,CONFIG_URL}this.getElementsByTagName('img')[0].setAttribute('src','{$IMG;*,checklist/toggleicon2}'); {+END}this.className='checklist_row_highlight';" onmouseout="{+START,IF_PASSED,CONFIG_URL}this.getElementsByTagName('img')[0].setAttribute('src','{$IMG;*,checklist/toggleicon}'); {+END}this.className='checklist_row';">
 	<div class="float_surrounder">
 		{+START,IF_PASSED,INFO}{+START,IF_NON_EMPTY,{INFO}}
 			<p class="checklist_task_status">{INFO*}
@@ -18,7 +18,7 @@
 				<a href="{URL*}">{TASK}</a>
 			{+END}
 			{+START,IF_EMPTY,{URL}}
-				<span>{TASK}</span>
+				{TASK}
 			{+END}
 		</p>
 	</div>

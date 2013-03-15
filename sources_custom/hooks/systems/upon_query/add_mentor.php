@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2010
 
  See text/EN/licence.txt for full licencing information.
 
@@ -45,9 +45,9 @@ class upon_query_add_mentor
 			$mentor_usergroup_id=0; //0 ?
 
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			foreach($groups as $group_id=>$group)
+			foreach($groups as $group_id => $group)
 			{
-				if($group==$mentor_usergroup) $mentor_usergroup_id=$group_id;
+				if($group == $mentor_usergroup) $mentor_usergroup_id = $group_id;
 			}
 
 			$random_mentor=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (g.gm_member_id=m.id AND gm_validated=1) WHERE gm_group_id='.strval($mentor_usergroup_id).' OR m_primary_group='.strval($mentor_usergroup_id).' ORDER BY RAND( ) LIMIT 1',NULL, NULL,true);
@@ -78,7 +78,7 @@ class upon_query_add_mentor
 				'mentor_id'=>$mentor_id,
 			));
 
-			log_it('MAKE_FRIEND',strval($mentor_id),strval($member_id));
+			log_it('MAKE_BUDDY',strval($mentor_id),strval($member_id));
 
 			$subject=do_lang('MENTOR_PT_TOPIC',$GLOBALS['FORUM_DRIVER']->get_username($mentor_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 			$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$mentor_id,$member_id,false,0,NULL,'');

@@ -17,7 +17,7 @@
 		if (newState==0) playerStopped();
 	}
 
-	add_event_listener_abstract(window,'real_load',function () {
+	addEventListenerAbstract(window,'real_load',function () {
 		if (document.getElementById('next_slide'))
 		{
 			stop_slideshow_timer('{!STOPPED;}');

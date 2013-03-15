@@ -266,7 +266,7 @@ class Hook_secpay
 		$message_raw=array_key_exists('message',$map)?$map['message']:'';
 		$message=$success?do_lang('ACCEPTED_MESSAGE',$message_raw):do_lang('DECLINED_MESSAGE',$message_raw);
 
-		$purchase_id=post_param_integer('customfld1','-1');
+		$purchase_id	=	post_param_integer('customfld1','-1');
 		if(addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
@@ -423,13 +423,13 @@ class Hook_secpay
 		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
 		{
 			$shipping_address=array();
-			$shipping_address['order_id']=$order_id;
-			$shipping_address['address_name']=post_param('first_name','')." ".post_param('last_name','');
-			$shipping_address['address_street']=post_param('ship_addr_1','');
-			$shipping_address['address_zip']=post_param('ship_post_code','');
-			$shipping_address['address_city']=post_param('ship_city','');
+			$shipping_address['order_id']			=	$order_id;
+			$shipping_address['address_name']	=	post_param('first_name','')." ".post_param('last_name','');
+			$shipping_address['address_street']	=	post_param('ship_addr_1','');
+			$shipping_address['address_zip']		=	post_param('ship_post_code','');
+			$shipping_address['address_city']	=	post_param('ship_city','');
 			$shipping_address['address_country']=	post_param('ship_country','');
-			$shipping_address['receiver_email']='';//post_param('receiver_email','');
+			$shipping_address['receiver_email']	=	'';//post_param('receiver_email','');
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}

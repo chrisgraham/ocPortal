@@ -2,11 +2,11 @@
 
 {!SETUP_WIZARD_2_DESCRIBE}
 
-<div class="box box___setupwizard_2_screen"><div class="box_inner">
-	<h2>{!WHAT_TO_EXPECT}</h2>
+<br />
 
+{+START,BOX,{!WHAT_TO_EXPECT},,light}
 	{!SETUP_WIZARD_2_DESCRIBE_EXPECTATIONS}
-</div></div>
+{+END}
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
 	<div>

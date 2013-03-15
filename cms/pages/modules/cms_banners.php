@@ -34,6 +34,7 @@ class Module_cms_banners extends standard_aed_module
 	var $upload='image';
 	var $non_integer_id=true;
 	var $permission_module='banners';
+	var $javascript='standardAlternateFields(\'file\',\'image_url\',null,true); var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf;';
 	var $menu_label='BANNERS';
 	var $array_key='name';
 	var $title_is_multi_lang=false;
@@ -49,6 +50,18 @@ class Module_cms_banners extends standard_aed_module
 	function run_start($type)
 	{
 //		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+
+		// Message if banners not on
+		if (get_option('is_on_banners')=='0')
+		{
+			if (has_actual_page_access(get_member(),'admin_config'))
+			{
+				$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'FEATURE'),get_module_zone('admin_config'));
+				$config_url=$_config_url->evaluate();
+				$config_url.='#group_BANNERS';
+				attach_message(do_lang_tempcode('BANNERS_NOT_ENABLED',escape_html($config_url)),'warn');
+			}
+		}
 
 		if ((has_specific_permission(get_member(),'banner_free')) && (get_option('admin_banners')=='0'))
 		{
@@ -75,10 +88,10 @@ class Module_cms_banners extends standard_aed_module
 					var _im_total=document.getElementById("im_total");
 					var im_here=window.parseInt(document.getElementById("importancemodulus").value);
 					var im_total=window.parseInt(_im_total.className.replace("im_",""))+im_here;
-					set_inner_html(_im_here,im_here);
-					set_inner_html(document.getElementById("im_here_2"),im_here);
-					set_inner_html(_im_total,im_total);
-					set_inner_html(document.getElementById("im_total_2"),im_total);
+					setInnerHTML(_im_here,im_here);
+					setInnerHTML(document.getElementById("im_here_2"),im_here);
+					setInnerHTML(_im_total,im_total);
+					setInnerHTML(document.getElementById("im_total_2"),im_total);
 				}
 			}
 		';
@@ -167,7 +180,7 @@ class Module_cms_banners extends standard_aed_module
 		}
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
+		return do_next_manager(get_page_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_banners')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BANNER_TYPE')):NULL,
@@ -199,7 +212,7 @@ class Module_cms_banners extends standard_aed_module
 			//'campaign_remaining'=>do_lang_tempcode('HITS_ALLOCATED'),
 			'importance_modulus'=>do_lang_tempcode('IMPORTANCE_MODULUS'),
 			'expiry_date'=>do_lang_tempcode('EXPIRY_DATE'),
-			'add_date'=>do_lang_tempcode('ADDED'),
+			'add_date'=>do_lang_tempcode('_ADDED'),
 		);
 		if (addon_installed('unvalidated')) $sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
@@ -214,7 +227,7 @@ class Module_cms_banners extends standard_aed_module
 			//do_lang_tempcode('HITS_ALLOCATED'),
 			do_lang_tempcode('IMPORTANCE_MODULUS'),
 			do_lang_tempcode('EXPIRY_DATE'),
-			do_lang_tempcode('ADDED'),
+			do_lang_tempcode('_ADDED'),
 		);
 		if (addon_installed('unvalidated')) $hr[]=do_lang_tempcode('VALIDATED');
 		$hr[]=do_lang_tempcode('ACTIONS');
@@ -279,7 +292,6 @@ class Module_cms_banners extends standard_aed_module
 	 * @param  URLPATH			The URL to the banner image
 	 * @param  URLPATH			The URL to the site the banner leads to
 	 * @param  SHORT_TEXT		The caption of the banner
-	 * @param  LONG_TEXT			Complete HTML/PHP for the banner
 	 * @param  LONG_TEXT			Any notes associated with the banner
 	 * @param  integer			The banners "importance modulus"
 	 * @range  1 max
@@ -294,20 +306,19 @@ class Module_cms_banners extends standard_aed_module
 	 * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
 	 * @return array				Bits
 	 */
-	function get_form_fields($name='',$image_url='',$site_url='',$caption='',$direct_code='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=0,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
+	function get_form_fields($name='',$image_url='',$site_url='',$caption='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=1,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
 	{
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='b_type';
 
 		if ($b_type=='') $b_type=get_param('b_type','');
 
-		list($fields,$_javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,$submitter,$validated,$b_type,$title_text);
-		$this->javascript.=$_javascript;
+		$fields=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,is_null($submitter)?NULL:$GLOBALS['FORUM_DRIVER']->get_username($submitter),$validated,$b_type,$title_text);
 
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 
-		$edit_text=($name=='')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('PREVIEW'=>show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$direct_code,$image_url,'',$site_url,$b_type,is_null($submitter)?get_member():$submitter)));
+		$edit_text=($name=='')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('PREVIEW'=>show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$image_url,'',$site_url,$b_type)));
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
@@ -343,7 +354,7 @@ class Module_cms_banners extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		return $this->get_form_fields($id,$myrow['img_url'],$myrow['site_url'],get_translated_text($myrow['caption']),$myrow['b_direct_code'],$myrow['notes'],$myrow['importance_modulus'],$myrow['campaign_remaining'],$myrow['the_type'],$myrow['expiry_date'],$myrow['submitter'],$myrow['validated'],$myrow['b_type'],$myrow['b_title_text']);
+		return $this->get_form_fields($id,$myrow['img_url'],$myrow['site_url'],get_translated_text($myrow['caption']),$myrow['notes'],$myrow['importance_modulus'],$myrow['campaign_remaining'],$myrow['the_type'],$myrow['expiry_date'],$myrow['submitter'],$myrow['validated'],$myrow['b_type'],$myrow['b_title_text']);
 	}
 
 	/**
@@ -355,7 +366,6 @@ class Module_cms_banners extends standard_aed_module
 	{
 		$name=post_param('name');
 		$caption=post_param('caption');
-		$direct_code=post_param('direct_code','');
 		$campaignremaining=post_param_integer('campaignremaining',0);
 		$siteurl=fixup_protocolless_urls(post_param('site_url',''));
 		$importancemodulus=post_param_integer('importancemodulus',3);
@@ -371,9 +381,9 @@ class Module_cms_banners extends standard_aed_module
 		$b_type=post_param('b_type');
 		$this->donext_type=$b_type;
 
-		list($url,$title_text)=check_banner($title_text,$direct_code,$b_type);
+		list($url,$title_text)=check_banner($title_text,$b_type);
 
-		add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type);
+		add_banner($name,$url,$title_text,$caption,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type);
 
 		$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
 		if (array_key_exists(0,$_banner_type_row))
@@ -405,17 +415,16 @@ class Module_cms_banners extends standard_aed_module
 		$b_type=post_param('b_type');
 
 		$title_text=post_param('title_text','');
-		$direct_code=post_param('direct_code','');
 		$b_type=post_param('b_type');
 		$this->donext_type=$b_type;
 
-		list($url,$title_text)=check_banner($title_text,$direct_code,$b_type);
+		list($url,$title_text)=check_banner($title_text,$b_type);
 
 		$validated=post_param_integer('validated',0);
 		$_submitter=post_param('submitter',strval(get_member()));
 		$submitter=!is_numeric($_submitter)?$GLOBALS['FORUM_DRIVER']->get_member_from_username($_submitter):intval($_submitter);
 
-		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
+		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
 
 		$this->new_id=post_param('name');
 
@@ -438,7 +447,7 @@ class Module_cms_banners extends standard_aed_module
 	/**
 	 * The do-next manager for after banner content management (banners only).
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -534,7 +543,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	 * @param  BINARY			Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id='',$is_textual=0,$image_width=160,$image_height=600,$max_file_size=250,$comcode_inline=0)
+	function get_form_fields($id='',$is_textual=0,$image_width=160,$image_height=600,$max_file_size=70,$comcode_inline=0)
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
@@ -625,7 +634,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -638,7 +647,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after banner content management.
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @param  ID_TEXT		The type ID we were working in (NULL: N/A)
@@ -685,7 +694,7 @@ class Module_cms_banners_cat extends standard_aed_module
 					array('_SELF',array('type'=>'ad','b_type'=>$type),'_SELF',do_lang_tempcode('ADD_BANNER')),											// Add one
 					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')),							 // Edit this
 					has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL,											// Edit one
-					((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/get_option('simplified_donext')=='1'))?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')),						  // View this
+					is_null($id)?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')),						  // View this
 					array('admin_banners',array('type'=>'misc'),get_module_zone('admin_banners')),				// View archive
 					NULL,																						// Add to category
 					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):NULL,				// Add one category

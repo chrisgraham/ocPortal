@@ -1,4 +1,4 @@
-<div class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
+<div class="float_surrounder"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ContactPage"}>
 	{+START,IF_NON_EMPTY,{MESSAGE}}
 		<p>
 			{MESSAGE}
@@ -7,7 +7,7 @@
 
 	{COMMENT_DETAILS}
 
-	{+START,IF_PASSED_AND_TRUE,NOTIFICATIONS_ENABLED}
+	{+START,IF_PASSED,NOTIFICATIONS_ENABLED}
 		<div class="right">
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=messaging

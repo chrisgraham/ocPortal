@@ -99,12 +99,13 @@ function _find_all_langs($even_empty_langs=false)
 }
 
 /**
- * Get the title for a language.
+ * Get a nice formatted XHTML listed language selector.
  *
- * @param  LANGUAGE_NAME	The language to have selected by default
- * @return string				The language title
+ * @param  ?LANGUAGE_NAME	The language to have selected by default (NULL: uses the current language)
+ * @param  boolean			Whether to show languages that have no language details currently defined for them
+ * @return tempcode			The language selector
  */
-function get_language_title($lang)
+function _nice_get_langs($select_lang=NULL,$show_unset=false)
 {
 	global $LANGS_MAP;
 
@@ -116,18 +117,6 @@ function get_language_title($lang)
 		$LANGS_MAP=better_parse_ini_file($map_b);
 	}
 
-	return array_key_exists($lang,$LANGS_MAP)?$LANGS_MAP[$lang]:$lang;
-}
-
-/**
- * Get a nice formatted XHTML listed language selector.
- *
- * @param  ?LANGUAGE_NAME	The language to have selected by default (NULL: uses the current language)
- * @param  boolean			Whether to show languages that have no language details currently defined for them
- * @return tempcode			The language selector
- */
-function _nice_get_langs($select_lang=NULL,$show_unset=false)
-{
 	$langs=new ocp_tempcode();
 	$_langs=find_all_langs();
 
@@ -135,12 +124,11 @@ function _nice_get_langs($select_lang=NULL,$show_unset=false)
 
 	foreach (array_keys($_langs) as $lang)
 	{
-		$langs->attach(form_input_list_entry($lang,($lang==$select_lang),get_language_title($lang)));
+		$langs->attach(form_input_list_entry($lang,($lang==$select_lang),array_key_exists($lang,$LANGS_MAP)?$LANGS_MAP[$lang]:$lang));
 	}
 
 	if ($show_unset)
 	{
-		global $LANGS_MAP;
 		asort($LANGS_MAP);
 		foreach ($LANGS_MAP as $lang=>$full)
 		{
@@ -417,8 +405,6 @@ function _comcode_lang_string($lang_code)
 {
 	global $COMCODE_LANG_STRING_CACHE;
 	if (array_key_exists($lang_code,$COMCODE_LANG_STRING_CACHE)) return $COMCODE_LANG_STRING_CACHE[$lang_code];
-
-	if ((substr($lang_code,0,4)=='DOC_') && (is_wide()==1)) return new ocp_tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
 
 	$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=string_index AND '.db_string_equal_to('t.language',user_lang()),array('string_index','text_parsed'),array('the_page'=>$lang_code,'the_zone'=>'!'),'',1);
 	if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))

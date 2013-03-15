@@ -63,7 +63,7 @@ class Block_main_code_documentor
 		require_code('type_validation');
 		require_lang('phpdoc');
 		require_code('php');
-		require_css('devguide');
+		require_css('adminzone');
 
 		disable_php_memory_limit();
 

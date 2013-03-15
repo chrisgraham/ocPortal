@@ -92,7 +92,7 @@ class Module_cms_polls extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
+		return do_next_manager(get_page_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
@@ -128,10 +128,10 @@ class Module_cms_polls extends standard_aed_module
 		}
 		$sortables=array(
 			'question'=>do_lang_tempcode('QUESTION'),
-			'add_time'=>do_lang_tempcode('ADDED'),
+			'add_time'=>do_lang_tempcode('_ADDED'),
 			'is_current DESC,add_time'=>do_lang_tempcode('CURRENT'),
 			'submitter'=>do_lang_tempcode('OWNER'),
-			'poll_views'=>do_lang_tempcode('COUNT_VIEWS'),
+			'poll_views'=>do_lang_tempcode('_VIEWS'),
 			'votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10'=>do_lang_tempcode('COUNT_TOTAL'),
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
@@ -141,11 +141,11 @@ class Module_cms_polls extends standard_aed_module
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('QUESTION'),
-			do_lang_tempcode('ADDED'),
+			do_lang_tempcode('_ADDED'),
 			do_lang_tempcode('CURRENT'),
 			do_lang_tempcode('USED_PREVIOUSLY'),
 			do_lang_tempcode('OWNER'),
-			do_lang_tempcode('COUNT_VIEWS'),
+			do_lang_tempcode('_VIEWS'),
 			do_lang_tempcode('COUNT_TOTAL'),
 			do_lang_tempcode('ACTIONS'),
 		),$sortables,'sort',$sortable.' '.$sort_order);

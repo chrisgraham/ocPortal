@@ -41,7 +41,7 @@ class Hook_Notification_activity extends Hook_Notification
 		$notification_category=get_param('id',NULL);
 		$done_in_url=is_null($notification_category);
 
-		$types=addon_installed('chat')?$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member())):array(); // Only show options for friends to simplify
+		$types=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member())); // Only show options for friends to simplify
 		$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>$notification_code,'l_member_id'=>get_member())); // Already monitoring members who may not be friends
 		foreach ($types2 as $type)
 		{

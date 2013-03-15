@@ -135,7 +135,7 @@ class Hook_search_cedi_posts
 	 */
 	function render($row)
 	{
-		return render_cedi_post_box($row);
+		return get_cedi_post_html($row);
 	}
 
 }

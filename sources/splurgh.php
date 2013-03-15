@@ -68,7 +68,7 @@ function splurgh_master_build($key_name,$map,$url_stub,$_cache_file,$last_change
 		return $ev;
 	}
 
-	return file_get_contents($cache_file);
+	return file_get_contents($cache_file,FILE_TEXT);
 }
 
 /**

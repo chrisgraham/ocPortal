@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_backup
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_backup
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_backup
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/notifications/backup_finished.php',
 			'sources/hooks/systems/config_default/backup_overwrite.php',
 			'sources/hooks/systems/config_default/backup_server_hostname.php',
@@ -83,7 +85,7 @@ class Hook_addon_registry_backup
 			'data/modules/admin_backup/.htaccess',
 			'data_custom/modules/admin_backup/.htaccess',
 			'sources/hooks/systems/addon_registry/backup.php',
-			'RESTORE_HTML_WRAP.tpl',
+			'RESTORE_WRAP.tpl',
 			'exports/backups/index.html',
 			'BACKUP_LAUNCH_SCREEN.tpl',
 			'adminzone/pages/modules/admin_backup.php',
@@ -98,22 +100,22 @@ class Hook_addon_registry_backup
 			'sources/hooks/systems/cron/backups.php',
 			'sources/hooks/systems/do_next_menus/backup.php',
 			'sources/hooks/systems/snippets/backup_size.php',
-			'exports/backups/.htaccess'
+			'exports/backups/.htaccess',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'RESTORE_HTML_WRAP.tpl'=>'administrative__restore_wrap',
-			'BACKUP_LAUNCH_SCREEN.tpl'=>'administrative__backup_launch_screen'
-		);
+				'RESTORE_WRAP.tpl'=>'administrative__restore_wrap',
+				'BACKUP_LAUNCH_SCREEN.tpl'=>'administrative__backup_launch_screen',
+				);
 	}
 
 	/**
@@ -126,12 +128,14 @@ class Hook_addon_registry_backup
 	function tpl_preview__administrative__backup_launch_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BACKUP_LAUNCH_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'TEXT'=>lorem_sentence(),
-				'RESULTS'=>lorem_phrase(),
-				'FORM'=>placeholder_form_with_field('submit_button')
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('BACKUP_LAUNCH_SCREEN',array(
+					'TITLE'=>lorem_title(),
+					'TEXT'=>lorem_sentence(),
+					'RESULTS'=>lorem_phrase(),
+					'FORM'=>placeholder_form_with_field('submit_button'),
+						)
+			),NULL,'',true),
 		);
 	}
 
@@ -144,14 +148,14 @@ class Hook_addon_registry_backup
 	 */
 	function tpl_preview__administrative__restore_wrap()
 	{
-		// This preview inevitably looks ugly because the install CSS can't be shown (its loaded via self-reference to a non-existent file)
-
 		return array(
-			lorem_globalise(do_lorem_template('RESTORE_HTML_WRAP', array(
-				'MESSAGE'=>lorem_sentence_html(),
-				'CSS_NOCACHE'=>'',
-				'SUCCESS'=>'1'
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('RESTORE_WRAP',array(
+					'MESSAGE'=>lorem_sentence_html(),
+					'CSS_NOCACHE'=>'',
+					'SUCCESS'=>'1',
+						)
+			),NULL,'',true),
 		);
 	}
 

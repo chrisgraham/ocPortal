@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_core_fields
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_core_fields
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_core_fields
 	function get_file_list()
 	{
 		return array(
+
 			'lang/EN/fields.ini',
 			'sources/fields.php',
 			'sources/hooks/systems/addon_registry/core_fields.php',
@@ -112,25 +114,23 @@ class Hook_addon_registry_core_fields
 			'sources/hooks/systems/fields/user_multi.php',
 			'sources/hooks/systems/fields/multilist.php',
 			'sources/hooks/systems/fields/tick_multi.php',
-			'sources/hooks/systems/fields/combo.php',
-			'sources/hooks/systems/fields/combo_multi.php',
-			'CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl',
-			'CATALOGUE_DEFAULT_FIELD_PICTURE.tpl',
+			'CATALOGUE_DEFAULT_MULTILIST.tpl',
+			'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_FOR.php',
 		);
 	}
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl'=>'catalogue_multilist',
-			'CATALOGUE_DEFAULT_FIELD_PICTURE.tpl'=>'catalogue_picture'
-		);
+				'CATALOGUE_DEFAULT_MULTILIST.tpl'=>'catalogue_multilist',
+				'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl'=>'catalogue_picture',
+			);
 	}
 
 	/**
@@ -143,18 +143,11 @@ class Hook_addon_registry_core_fields
 	function tpl_preview__catalogue_multilist()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_MULTILIST', array(
-				'ALL'=>array(
-					array(
-						'HAS'=>true,
-						'OPTION'=>lorem_phrase()
-					),
-					array(
-						'HAS'=>false,
-						'OPTION'=>lorem_phrase()
-					)
-				)
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('CATALOGUE_DEFAULT_MULTILIST',array(
+					'ALL'=>array(array('HAS'=>true,'OPTION'=>lorem_phrase()),array('HAS'=>false,'OPTION'=>lorem_phrase()))
+						)
+			),NULL,'',true),
 		);
 	}
 
@@ -168,11 +161,11 @@ class Hook_addon_registry_core_fields
 	function tpl_preview__catalogue_picture()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE', array(
-				'URL'=>placeholder_url(),
-				'THUMB_URL'=>placeholder_image_url(),
-				'I'=>'0'
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE',array(
+					'URL'=>placeholder_url(),'THUMB_URL'=>placeholder_image_url(),'I'=>'0'
+						)
+			),NULL,'',true),
 		);
 	}
 }

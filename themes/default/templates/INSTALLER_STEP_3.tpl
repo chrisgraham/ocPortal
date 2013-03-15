@@ -1,10 +1,10 @@
 {+START,IF_PASSED,JS}
 <script type="text/javascript">// <![CDATA[
-	{JS/}
+{JS/}
 //]]></script>
 {+END}
 
-<form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
+<form title="{!PRIMARY_PAGE_FORM}" method="post" action="install.php?step=4">
 	{HIDDEN}
 
 	<div class="installer_main_min">
@@ -21,51 +21,46 @@
 		</p>
 
 		{+START,IF,{$JS_ON}}
-			<table summary="{!COLUMNED_TABLE}" class="installer_forums">
-				<tbody>
-					<tr>
-						<th class="de_th">
-							<div class="left">
-								{!FORUM_SOFTWARE}
-							</div>
-						</th>
-
-						<th class="de_th">
-							<div class="right">
-								{!FORUM_VERSION}
-							</div>
-						</th>
-					</tr>
-					<tr>
-						<td class="installer_forum_list">
-							{FORUMS}
-						</td>
-
-						<td class="installer_forum_version">
-							<div id="versions">
-								{VERSION}
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<!-- Layout table needed due to ensure perfect alignment -->
+		<table summary="" class="installer_forums">
+			<tbody>
+				<tr>
+					<td colspan="2" class="installer_forum_headers">
+						<div id="install_versiontop">
+							<div class="left">{!FORUM_SOFTWARE}</div>
+							<div class="right">{!FORUM_VERSION}</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="installer_forum_list">
+						{FORUMS}
+					</td>
+					<td class="installer_forum_version">
+						<div id="versions">
+							{VERSION}
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		{+END}
 		{+START,IF,{$NOT,{$JS_ON}}}
 			{SIMPLE_FORUMS}
 		{+END}
-
+		<br />
 		<div id="forum_path" style="display: {$JS_ON,none,block}">
 			<p>{!FORUM_PATH_TEXT}</p>
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 				<colgroup>
-					<col class="installer_input_left_column" />
-					<col class="installer_input_right_column" />
+					<col style="width: 30%" />
+					<col style="width: 70%" />
 				</colgroup>
 
 				<tbody>
 					<tr>
-						<th class="form_table_field_name">{!FORUM_PATH}</th>
-						<td class="form_table_field_input">
+						<th{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} abbr="{!_FORUM_PATH}"{+END} class="dottedborder_barrier">{!FORUM_PATH}</th>
+						<td class="dottedborder_barrier">
 							<div class="accessibility_hidden"><label for="board_path">{!_FORUM_PATH}</label></div>
 							<div class="constrain_field"><input class="wide_field" type="text" size="60" id="board_path" name="board_path" value="{FORUM_PATH_DEFAULT*}" /></div>
 						</td>
@@ -73,25 +68,25 @@
 				</tbody>
 			</table></div>
 		</div>
-
-		<div class="wide_table_wrap"><table summary="" class="form_table wide_table">
+		<br />
+		<div class="wide_table_wrap"><table summary="" class="dottedborder wide_table">
 			<colgroup>
-				<col class="installer_left_column" />
-				<col class="installer_right_column" />
+				<col style="width: 50%" />
+				<col style="width: 50%" />
 			</colgroup>
 
 			<tbody>
 				<tr>
-					<td class="form_table_field_name">{!USE_MULTI_DB} <div class="associated_details">{!REQUIRES_MORE_INFO}</div></td>
-					<td class="form_table_field_input">
+					<td class="dottedborder_barrier">{!USE_MULTI_DB} <div class="associated_details">{!REQUIRES_MORE_INFO}</div></td>
+					<td class="dottedborder_barrier">
 						<input type="radio" name="use_multi_db" value="1" id="yes" /><label for="yes">{!YES}</label>
 						<input type="radio" name="use_multi_db" value="0" id="no" checked="checked" /><label class="radio_horiz_spacer" for="no">{!NO}</label>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="form_table_field_name">{!USE_MSN} <div class="associated_details">{!REQUIRES_MORE_INFO}</div></td>
-					<td class="form_table_field_input">
+					<td class="dottedborder_barrier">{!USE_MSN} <div class="associated_details">{!REQUIRES_MORE_INFO}</div></td>
+					<td class="dottedborder_barrier">
 						<input type="radio" name="use_msn" value="1" id="yes2" /><label for="yes2">{!YES}</label>
 						<input type="radio" name="use_msn" value="0" id="no2" checked="checked" /><label class="radio_horiz_spacer" for="no2">{!NO}</label>
 					</td>
@@ -99,16 +94,17 @@
 			</tbody>
 		</table></div>
 
-		<p>
+		<br />
+		<div>
 			<label for="db_type">{!DB_CHOICE}</label>:
 			<select id="db_type" name="db_type">
 				{DATABASES}
 			</select>
-		</p>
+		</div>
 	</div>
 
-	<p class="proceed_button">
+	<div class="proceed_button">
 		<input class="button_page" type="submit" value="{!SURE}" />
-	</p>
+	</div>
 </form>
 

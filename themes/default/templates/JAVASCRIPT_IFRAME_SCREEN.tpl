@@ -18,7 +18,7 @@ function detect_change(change_detection_url,refresh_if_changed)
 
 		if (typeof window.soundManager!='undefined')
 		{
-			window.soundManager.play('message_received');
+			soundManager.play('message_received');
 		}
 
 		window.clearInterval(window.detect_interval);

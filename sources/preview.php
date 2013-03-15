@@ -26,13 +26,10 @@
  */
 function build_preview($multi_return=false)
 {
-	require_css('forms');
-	require_javascript('javascript_validation');
-
 	// Check CAPTCHA if it is passed
 	if (addon_installed('captcha'))
 	{
-		if (((array_key_exists('post',$_POST)) && ($_POST['post']!='')) && (array_key_exists('captcha',$_POST)))
+		if (((array_key_exists('post',$_POST)) && ($_POST['post']!='')) && (array_key_exists('security_image',$_POST)))
 		{
 			require_code('captcha');
 			enforce_captcha(false);
@@ -106,6 +103,7 @@ function build_preview($multi_return=false)
 				$_val_orig=$val;
 
 				require_lang('validation');
+				require_css('adminzone');
 				require_code('view_modes');
 				require_code('obfuscate');
 				require_code('validation');
@@ -129,8 +127,8 @@ function build_preview($multi_return=false)
 		require_once(get_file_base().'/data/areaedit/plugins/SpellChecker/spell-check-logic.php');
 	}
 	$db=$forum_db?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
-	$map_table_map=array();
-	require_code('templates_map_table');
+	$view_space_map=array();
+	require_code('templates_view_space');
 	foreach ($_POST as $key=>$val)
 	{
 		if (!is_string($val)) continue;
@@ -143,7 +141,7 @@ function build_preview($multi_return=false)
 
 		if ((substr($key,0,14)=='review_rating') || (substr($key,0,7)=='rating')) $val.='/10';
 
-		$is_hidden=in_array($key,array('password','confirm_password','edit_password','MAX_FILE_SIZE','perform_validation','_validated','id','posting_ref_id','f_face','f_colour','f_size','http_referer')) || (strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName') || (($key[0]=='x') && (strlen($key)==33));
+		$is_hidden=in_array($key,array('password','confirm_password','edit_password','MAX_FILE_SIZE','perform_validation','_validated','id','posting_ref_id','f_face','f_colour','f_size','http_referer')) || (strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (preg_match('#^caption\d+$#',$key)!=0) || (preg_match('#^attachmenttype\d+$#',$key)!=0) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
 		if (substr($key,0,14)=='tick_on_form__')
 		{
 			if (post_param_integer(substr($key,14),0)==1) $is_hidden=true; else $key=substr($key,14);
@@ -163,7 +161,7 @@ function build_preview($multi_return=false)
 		}
 		elseif ((substr($key,-6)=='_month') || (substr($key,-5)=='_year')) $is_hidden=true;
 
-		$key_nice=post_param('label_for__'.$key,titleify($key));
+		$key_nice=post_param('label_for__'.$key,ucwords(str_replace('_',' ',$key)));
 		if ($key_nice=='') $is_hidden=true;
 
 		if (!$is_hidden)
@@ -244,7 +242,7 @@ function build_preview($multi_return=false)
 					$valt=make_string_tempcode(escape_html($val));
 				}
 
-				$map_table_map[$key_nice]=$valt;
+				$view_space_map[$key_nice]=$valt;
 			} else // An attachment-supporting field
 			{
 				$tempcodecss=false;
@@ -253,7 +251,7 @@ function build_preview($multi_return=false)
 				$post_bits=do_comcode_attachments($val,$attachment_type,strval(-$posting_ref_id),true,$db);
 				$new_post_value=$post_bits['comcode'];
 
-				$map_table_map[$key_nice]=$post_bits['tempcode'];
+				$view_space_map[$key_nice]=$post_bits['tempcode'];
 
 				$val=$post_bits['tempcode'];
 				$supports_comcode=true;
@@ -278,17 +276,17 @@ function build_preview($multi_return=false)
 
 	if (is_null($output))
 	{
-		if (count($map_table_map)==1)
+		if (count($view_space_map)==1)
 		{
-			$output=array_pop($map_table_map);
+			$output=array_pop($view_space_map);
 		} else
 		{
-			$map_table_fields=new ocp_tempcode();
-			foreach ($map_table_map as $key=>$val)
+			$view_space_fields=new ocp_tempcode();
+			foreach ($view_space_map as $key=>$val)
 			{
-				$map_table_fields->attach(map_table_field($key,$val,true));
+				$view_space_fields->attach(view_space_field($key,$val,true));
 			}
-			$output=do_template('MAP_TABLE',array('_GUID'=>'3f548883b9eb37054c500d1088d9efa3','WIDTH'=>'170','FIELDS'=>$map_table_fields));
+			$output=do_template('VIEW_SPACE',array('_GUID'=>'3f548883b9eb37054c500d1088d9efa3','WIDTH'=>'170','FIELDS'=>$view_space_fields));
 		}
 	}
 

@@ -198,7 +198,7 @@ function site_tree_script()
 
 		decache('main_sitemap');
 		$GLOBALS['SITE_DB']->query_delete('cache');
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		if (function_exists('persistant_cache_empty')) persistant_cache_empty();
 
 		// Tra la la tada
 		return;

@@ -143,7 +143,7 @@ class Module_admin_ocf_ldap
 	 */
 	function gui()
 	{
-		$title=get_screen_title('LDAP_SYNC');
+		$title=get_page_title('LDAP_SYNC');
 
 		$groups_add=new ocp_tempcode();
 		$groups_delete=new ocp_tempcode();
@@ -202,7 +202,7 @@ class Module_admin_ocf_ldap
 	 */
 	function actual()
 	{
-		$title=get_screen_title('LDAP_SYNC');
+		$title=get_page_title('LDAP_SYNC');
 
 		$all_ldap_groups=ocf_get_all_ldap_groups();
 		foreach ($all_ldap_groups as $group)

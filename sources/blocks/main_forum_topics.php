@@ -180,7 +180,7 @@ class Block_main_forum_topics
 					if ((!is_null($forum_names_map)) && (!array_key_exists($topic['forum_id'],$forum_names_map))) continue; // Maybe Private Topic, slipped in via reference to a missing forum
 					$forum_name=is_null($forum_names_map)?NULL:$forum_names_map[$topic['forum_id']];
 
-					$out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('_GUID'=>'ae4e351b3fa5422bf8ecdfb7e49076d1','POST'=>$topic['firstpost'],'FORUM_ID'=>is_null($forum_names_map)?NULL:strval($topic['forum_id']),'FORUM_NAME'=>$forum_name,'TOPIC_URL'=>$topic_url,'TOPIC_URL_UNREAD'=>$topic_url_unread,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic[$date_key]),'USERNAME'=>$username,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'NUM_POSTS'=>integer_format($topic['num']))));
+					$out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('_GUID'=>'ae4e351b3fa5422bf8ecdfb7e49076d1','POST'=>$topic['firstpost'],'FORUM_ID'=>is_null($forum_names_map)?NULL:strval($topic['forum_id']),'FORUM_NAME'=>$forum_name,'TOPIC_LINK'=>$topic_url,'TOPIC_LINK_UNREAD'=>$topic_url_unread,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic[$date_key]),'USERNAME'=>$username,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'NUM_POSTS'=>integer_format($topic['num']))));
 
 					$done++;
 

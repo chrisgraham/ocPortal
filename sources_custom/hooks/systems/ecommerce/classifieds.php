@@ -67,11 +67,11 @@ class Hook_classifieds
 	/**
 	 * Whether this product is available.
 	 *
-	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
+	 * @return boolean	Whether it is.
 	 */
 	function is_available()
 	{
-		return ECOMMERCE_PRODUCT_AVAILABLE;
+		return true;
 	}
 
 	/**

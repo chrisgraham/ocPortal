@@ -3,7 +3,14 @@
 <p>{TEXT*}</p>
 
 <div class="wide_table_wrap">
-	<table summary="{!MAP_TABLE}" class="results_table wide_table autosized_table">
+	<table summary="{!MAP_TABLE}" class="solidborder wide_table">
+		{+START,IF,{$NOT,{$MOBILE}}}
+			<colgroup>
+				<col style="width: 167px" />
+				<col style="width: 100%" />
+			</colgroup>
+		{+END}
+
 		<tbody>
 			<tr>
 				<th>{!ORDER_NUMBER}</th>
@@ -16,7 +23,7 @@
 				<th>{!ORDERED_BY}</th>
 				<td>
 					{+START,IF_NON_EMPTY,{$USERNAME,{ORDERED_BY_MEMBER_ID}}}
-						<a href="{$MEMBER_PROFILE_URL*,{ORDERED_BY_MEMBER_ID}}">{ORDERED_BY_USERNAME*}</a>
+						<a href="{$MEMBER_PROFILE_LINK*,{ORDERED_BY_MEMBER_ID}}">{ORDERED_BY_USERNAME*}</a>
 					{+END}
 					{+START,IF_EMPTY,{$USERNAME,{ORDERED_BY_MEMBER_ID}}}
 						{ORDERED_BY_USERNAME*}
@@ -31,7 +38,7 @@
 				</td>
 			</tr>
 
-
+		
 			<tr>
 				<th>{!TOTAL_PRICE}</th>
 				<td>
@@ -65,13 +72,12 @@
 		</tbody>
 	</table>
 
-	<h2>{!ORDERED_PRODUCTS}</h2>
+	<br />
+	{RESULT_TABLE}
 
-	{RESULTS_TABLE}
-
-	{+START,IF_NON_EMPTY,{PAGINATION}}
-		<div class="float_surrounder pagination_spacing">
-			{PAGINATION}
+	{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
+		<div class="float_surrounder results_browser_spacing">
+			{RESULTS_BROWSER}
 		</div>
 	{+END}
 </div>

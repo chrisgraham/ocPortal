@@ -63,8 +63,32 @@ class Hook_awards_news
 	 */
 	function run($row,$zone)
 	{
-		require_code('news');
-		return render_news_box($row,$zone);
+		$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone);
+		$title=get_translated_tempcode($row['title']);
+		$title_plain=get_translated_text($row['title']);
+		$news_cat_rows=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title','nc_img'),array('id'=>$row['news_category']),'',1);
+		if (!array_key_exists(0,$news_cat_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$news_cat_row=$news_cat_rows[0];
+		$category=get_translated_text($news_cat_row['nc_title']);
+		$img=find_theme_image($news_cat_row['nc_img']);
+		if ($row['news_image']!='')
+		{
+			$img=$row['news_image'];
+			if (url_is_local($img)) $img=get_base_url().'/'.$img;
+		}
+		$news=get_translated_tempcode($row['news']);
+		if ($news->is_empty())
+		{
+			$news=get_translated_tempcode($row['news_article']);
+			$truncate=true;
+		} else $truncate=false;
+		$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors')):new ocp_tempcode();
+		$author=$row['author'];
+		require_css('news');
+		$seo_bits=seo_meta_get_for('news',strval($row['id']));
+		$map=array('_GUID'=>'jd89f893jlkj9832gr3uyg2u','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'AUTHOR'=>$author,'BLOG'=>false,'AUTHOR_URL'=>$author_url,'CATEGORY'=>$category,'IMG'=>$img,'NEWS'=>$news,'ID'=>strval($row['id']),'SUBMITTER'=>strval($row['submitter']),'DATE'=>get_timezoned_date($row['date_and_time']),'DATE_RAW'=>strval($row['date_and_time']),'FULL_URL'=>$url,'NEWS_TITLE'=>$title,'NEWS_TITLE_PLAIN'=>$title_plain);
+		if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($row['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
+		return put_in_standard_box(do_template('NEWS_PIECE_SUMMARY',$map));
 	}
 
 }

@@ -28,12 +28,12 @@ function init__config()
 	{
 		load_options();
 
-		$VALUES=persistent_cache_get('VALUES');
+		$VALUES=persistant_cache_get('VALUES');
 		if ($VALUES===NULL)
 		{
 			$VALUES=$GLOBALS['SITE_DB']->query_select('values',array('*'));
 			$VALUES=list_to_map('the_name',$VALUES);
-			persistent_cache_set('VALUES',$VALUES);
+			persistant_cache_set('VALUES',$VALUES);
 		}
 	} else $VALUES=array();
 
@@ -139,7 +139,7 @@ function multi_lang()
 function load_options()
 {
 	global $OPTIONS;
-	$OPTIONS=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
+	$OPTIONS=function_exists('persistant_cache_get')?persistant_cache_get('OPTIONS'):NULL;
 	if (is_array($OPTIONS)) return;
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
@@ -152,7 +152,7 @@ function load_options()
 
 	if ($OPTIONS===NULL) critical_error('DATABASE_FAIL');
 	$OPTIONS=list_to_map('the_name',$OPTIONS);
-	if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$OPTIONS);
+	if (function_exists('persistant_cache_set')) persistant_cache_set('OPTIONS',$OPTIONS);
 }
 
 /**
@@ -186,7 +186,7 @@ function set_tutorial_link($name,$value)
  */
 function get_long_value($name)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('long_values','the_value',array('the_name'=>$name),'',running_script('install'));
+	return $GLOBALS['SITE_DB']->query_value_null_ok('long_values','the_value',array('the_name'=>$name));
 }
 
 /**
@@ -275,7 +275,7 @@ function set_value($name,$value)
 	{
 		$GLOBALS['SITE_DB']->query_insert('values',array('date_and_time'=>time(),'the_value'=>$value,'the_name'=>$name),false,true); // Allow failure, if there is a race condition
 	}
-	if (function_exists('persistent_cache_set')) persistent_cache_set('VALUES',$VALUES);
+	if (function_exists('persistant_cache_set')) persistant_cache_set('VALUES',$VALUES);
 }
 
 /**
@@ -286,7 +286,7 @@ function set_value($name,$value)
 function delete_value($name)
 {
 	$GLOBALS['SITE_DB']->query_delete('values',array('the_name'=>$name),'',1);
-	if (function_exists('persistent_cache_delete')) persistent_cache_delete('VALUES');
+	if (function_exists('persistant_cache_delete')) persistant_cache_delete('VALUES');
 }
 
 /**
@@ -325,7 +325,7 @@ function get_option($name,$missing_ok=false)
 		$option['config_value_translated']=$option['config_value']; // Allows slightly better code path next time
 		if ($option['config_value_translated']===NULL) $option['config_value_translated']='<null>';
 		$OPTIONS[$name]=$option;
-		if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$OPTIONS);
+		if (function_exists('persistant_cache_set')) persistant_cache_set('OPTIONS',$OPTIONS);
 		if ($option['config_value']=='<null>') return NULL;
 		return $option['config_value'];
 	}
@@ -379,14 +379,12 @@ function get_option($name,$missing_ok=false)
 				$OPTIONS=list_to_map('the_name',$OPTIONS);
 				$option=&$OPTIONS[$name];
 			}
-			if ((function_exists('do_lang')) || (strpos($option['eval'],'lang')===false)) // Something in set_option may need do_lang
+			require_code('lang');
+			$option['config_value']=eval($option['eval'].';');
+			if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 			{
-				$option['config_value']=eval($option['eval'].';');
-				if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
-				{
-					require_code('config2');
-					set_option($name,$option['config_value']);
-				}
+				require_code('config2');
+				set_option($name,$option['config_value']);
 			}
 		}
 		if (is_object($option['config_value'])) $option['config_value']=$option['config_value']->evaluate(); elseif (is_integer($option['config_value'])) $option['config_value']=strval($option['config_value']);
@@ -403,7 +401,7 @@ function get_option($name,$missing_ok=false)
 		{
 			$option['config_value_translated']=get_translated_text(intval($option['config_value']));
 			$OPTIONS[$name]=$option;
-			persistent_cache_set('OPTIONS',$OPTIONS);
+			persistant_cache_set('OPTIONS',$OPTIONS);
 		}
 		// Answer
 		$GET_OPTION_LOOP=0;

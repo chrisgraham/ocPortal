@@ -19,6 +19,46 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__ajax()
+{
+	if (!function_exists('do_lang'))
+	{
+		/**
+		 * Get the human-readable form of a language id, or a language entry from a language INI file. (STUB)
+		 *
+		 * @param  ID_TEXT		The language id
+		 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
+		 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
+		 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+		 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
+		 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
+		 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+		 */
+		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
+		{
+			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
+
+			switch ($a)
+			{
+				case 'LINK_NEW_WINDOW':
+					return 'new window';
+				case 'SPREAD_TABLE':
+					return 'Spread table';
+				case 'MAP_TABLE':
+					return 'Item to value mapper table';
+				case 'charset':
+					return NULL;
+			}
+
+			if (is_null($param_a)) return $a;
+			return serialize(array($a,$param_a,$param_b,$param_c));
+		}
+	}
+}
+
+/**
  * AJAX script for checking if a new username is valid.
  */
 function username_check_script()
@@ -220,7 +260,7 @@ function comcode_convert_script()
 	$data=post_param('data',NULL,false,false);
 	if (is_null($data))
 	{
-		$title=get_screen_title('_COMCODE');
+		$title=get_page_title('_COMCODE');
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_huge(do_lang_tempcode('TEXT'),'','data','',true));
@@ -233,6 +273,18 @@ function comcode_convert_script()
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'dd82970fa1196132e07049871c51aab7','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('VIEW'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('comcode_convert',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
 		return;
+	}
+	$panel=either_param_integer('panel',NULL);
+	if (!is_null($panel))
+	{
+		global $TEMPCODE_SETGET;
+		if ($panel==0)
+		{
+			$TEMPCODE_SETGET['in_panel']='0';
+		} else
+		{
+			$TEMPCODE_SETGET['in_panel']='1';
+		}
 	}
 	if (either_param_integer('to_comcode_xml',0)==1)
 	{
@@ -534,7 +586,6 @@ function snippet_script()
 	require_code('hooks/systems/snippets/'.$hook,true);
 	$object=object_factory('Hook_'.$hook);
 	$tempcode=$object->run();
-	$tempcode->handle_symbol_preprocessing();
 	$out=$tempcode->evaluate();
 
 	if (strpos($out,chr(10))!==false) // Is HTML

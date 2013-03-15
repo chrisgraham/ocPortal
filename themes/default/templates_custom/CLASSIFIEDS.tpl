@@ -1,4 +1,4 @@
-<div class="wide_table_wrap"><table summary="{!CLASSIFIEDS_PRICING}" class="wide_table results_table autosized_table spaced_table">
+<div class="wide_table_wrap"><table summary="{!CLASSIFIEDS_PRICING}" class="wide_table solidborder variable_table spaced_table">
 	<thead>
 		<tr>
 			<th>

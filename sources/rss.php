@@ -29,10 +29,6 @@ function extract_plain_links($matches)
 	return '<a href="'.@html_entity_decode($matches[0],ENT_QUOTES,get_charset()).'">'.$matches[0].'</a>';
 }
 
-/**
- * RSS loader.
- * @package		core
- */
 class rss
 {
 	// Used during parsing
@@ -53,8 +49,6 @@ class rss
 	function rss($url,$is_filesystem_path=false)
 	{
 		require_lang('rss');
-
-		$url=str_replace('{$FIND_SCRIPT,backend}',find_script('backend'),$url);
 
 		$this->namespace_stack=array();
 		$this->tag_stack=array();
@@ -77,7 +71,7 @@ class rss
 
 		//echo $url;exit();
 
-		if ($is_filesystem_path)
+		if($is_filesystem_path)
 		{
 			$GLOBALS['HTTP_CHARSET']='';
 			$data=@file_get_contents($url);
@@ -484,7 +478,7 @@ class rss
 								$current_item['category']=$data;
 								break;
 							case 'SOURCE':
-								$current_item['author']=$data;
+								$current_item['author']	=	$data;
 								break;
 							case 'COMMENTS':
 								$current_item['comment_url']=$data;

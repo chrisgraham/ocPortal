@@ -169,7 +169,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		}
 	} else
 	{
-		persistent_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
+		persistant_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
 	}
 
 	if ($desire_cache) $LANGUAGE[$lang]+=$load_target;

@@ -1,11 +1,9 @@
 <?php
 
-$title=get_screen_title('Generate an upgrade',false);
+$title=get_page_title('Generate an upgrade',false);
 
 $auto_probe=array();
-$default_cutoff_days=intval(ceil((time()-filemtime(get_file_base().'/sources/version.php'))/60/60/24));
-if ($default_cutoff_days<=1) $default_cutoff_days=100;
-$cutoff_days=post_param_integer('cutoff_days',$default_cutoff_days);
+$cutoff_days=post_param_integer('cutoff_days',intval(ceil((time()-filemtime(get_file_base().'/sources/version.php'))/60/60/24)));
 
 $type=get_param('type','misc');
 
@@ -53,11 +51,8 @@ if ($type=='auto_probe')
 		$SITE_INFO=$backup;
 
 		// Via filesystem (non-bundled ones)
-		$has_openid=in_array('openid',$auto_probe);
 		foreach ($addons['non_bundled'] as $addon=>$files)
 		{
-			if ($addon=='utf8' || $addon=='simplified_emails') continue; // Two common false positives
-
 			foreach ($files as $file)
 			{
 				if (file_exists($probe_dir.'/'.$file))
@@ -66,8 +61,6 @@ if ($type=='auto_probe')
 				}
 			}
 		}
-		if ((!$has_openid) && (in_array('openid',$auto_probe)) && (in_array('facebook',$auto_probe))) // OpenID and Facebook shared files, probably they only wanted Facebook!
-			unset($auto_probe[array_search('openid',$auto_probe)]);
 
 		$auto_probe=array_unique($auto_probe);
 
@@ -146,7 +139,7 @@ if ($type=='auto_probe')
 				}
 			} else
 			{
-				if (!should_ignore_file($file,IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_HIDDEN_FILES | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_ZONES | IGNORE_REVISION_FILES | IGNORE_EDITFROM_FILES | IGNORE_BUNDLED_VOLATILE))
+				if (!should_ignore_file($file,IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_HIDDEN_FILES | IGNORE_THEMES | IGNORE_CUSTOM_ZONES | IGNORE_REVISION_FILES | IGNORE_EDITFROM_FILES))
 					$manual_changes['maybe_delete'][$file]=NULL;
 			}
 		}
@@ -208,7 +201,7 @@ if ($type=='go')
 
 	require_code('tar');
 	$generate_filename='upgrade-to-git--'.get_timezoned_date(time(),false,false,false,true).'.tar';
-	$gpath=get_custom_file_base().'/exports/addons/'.$generate_filename;
+	$gpath=get_custom_file_base().'/exports/mods/'.$generate_filename;
 	$tar=tar_open($gpath,'wb');
 
 	$probe_dir=post_param('probe_dir','');
@@ -280,7 +273,7 @@ echo '
 
 		<p>
 			<label for="cutoff_days">
-				Files modified since (in days)
+				Files modified since
 				<input style="width: 4em" max="3000" type="number" name="cutoff_days" id="cutoff_days" value="'.strval($cutoff_days).'" />
 			</label>
 		</p>

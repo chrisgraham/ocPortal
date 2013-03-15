@@ -70,7 +70,7 @@ class Hook_Preview_banner
 		}
 
 		require_code('banners');
-		$preview=show_banner(post_param('name'),post_param('title_text',''),comcode_to_tempcode(post_param('caption')),post_param('direct_code',''),$img_url,'',post_param('site_url'),post_param('b_type'),get_member());
+		$preview=show_banner(post_param('name'),post_param('title_text',''),comcode_to_tempcode(post_param('caption')),$img_url,'',post_param('site_url'),post_param('b_type'));
 
 		return array($preview,NULL);
 	}

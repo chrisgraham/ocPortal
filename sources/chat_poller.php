@@ -27,8 +27,8 @@ function chat_poller()
 	$event_id=get_param_integer('event_id',-1);
 	if (
 		((file_exists(get_custom_file_base().'/data_custom/modules/chat/chat_last_full_check.dat')) && (filemtime(get_custom_file_base().'/data_custom/modules/chat/chat_last_full_check.dat')>time()-3)) && // If we've done a check within the last 3 seconds don't try again (global flood control)
-		(($message_id!=-1) && (file_exists(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat')) && (intval(file_get_contents(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat'))<=$message_id)) &&
-		(($event_id!=-1) && (file_exists(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat')) && (intval(file_get_contents(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat'))<=$event_id))
+		(($message_id!=-1) && (file_exists(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat')) && (intval(file_get_contents(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat',FILE_TEXT))<=$message_id)) &&
+		(($event_id!=-1) && (file_exists(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat')) && (intval(file_get_contents(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat',FILE_TEXT))<=$event_id))
 	)
 	{
 		load_user_stuff();

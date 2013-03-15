@@ -25,7 +25,7 @@
  * @param  string			The zone to show in
  * @return tempcode		The rendered quiz link
  */
-function render_quiz_box($row,$zone='_SEARCH')
+function show_quiz_html($row,$zone='_SEARCH')
 {
 	$date=get_timezoned_date($row['q_add_date']);
 	$url=build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),$zone);
@@ -36,7 +36,7 @@ function render_quiz_box($row,$zone='_SEARCH')
 	$timeout=is_null($row['q_timeout'])?'':display_time_period($row['q_timeout']*60);
 	$redo_time=((is_null($row['q_redo_time'])) || ($row['q_redo_time']==0))?'':display_time_period($row['q_redo_time']*60*60);
 
-	return do_template('QUIZ_BOX',array('_TYPE'=>$row['q_type'],'POINTS'=>strval($row['q_points_for_passing']),'TIMEOUT'=>$timeout,'REDO_TIME'=>$redo_time,'TYPE'=>do_lang_tempcode($row['q_type']),'DATE'=>$date,'URL'=>$url,'NAME'=>$name,'START_TEXT'=>$start_text));
+	return do_template('QUIZ_LINK',array('_TYPE'=>$row['q_type'],'POINTS'=>strval($row['q_points_for_passing']),'TIMEOUT'=>$timeout,'REDO_TIME'=>$redo_time,'TYPE'=>do_lang_tempcode($row['q_type']),'DATE'=>$date,'URL'=>$url,'NAME'=>$name,'START_TEXT'=>$start_text));
 }
 
 /**
@@ -430,7 +430,7 @@ function delete_quiz($id)
  * @param	AUTO_LINK	Quiz ID
  * @return	array			Quiz data array	
  */
-function get_quiz_data_for_csv($quiz_id)
+function get_quizz_data_for_csv($quiz_id)
 {
 	$questions_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 

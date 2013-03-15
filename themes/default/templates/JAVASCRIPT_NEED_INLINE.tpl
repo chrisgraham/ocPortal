@@ -1,4 +1,4 @@
 <script type="text/javascript">// <![CDATA[
-	{CODE/}
+{CODE/}
 //]]></script>
 

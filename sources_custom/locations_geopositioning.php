@@ -1,81 +1,48 @@
 <?php
 
-function fix_geoposition($lstring,$category_id)
-{
-	$type='yahoo';
-
-	// Web service to get remaining latitude/longitude
-	if ($type=='bing')
-	{
-		$url='http://dev.virtualearth.net/REST/v1/Locations?query='.urlencode($lstring).'&o=xml&key=AvmgsVWtIoJeCnZXdDnu3dQ7izV9oOowHCNDwbN4R1RPA9OXjfsQX1Cr9HSrsY4j';
-	} elseif ($type=='yahoo')
-	{
-		$url='http://where.yahooapis.com/geocode?q='.urlencode($lstring).'&appid=dj0yJmk9N0x3TTdPaDNvdElCJmQ9WVdrOWFGWjVOa3hzTldFbWNHbzlNVFU0TXpBMU9EWTJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD1mNg--';
-	} elseif ($type=='google')
-	{
-		$url='http://maps.googleapis.com/maps/api/geocode/xml?address='.urlencode($lstring).'&sensor=false';
-	} else exit('unknown type');
-	$result=http_download_file($url);
-	$matches=array();
-	if ((($type=='bing') && (preg_match('#<Latitude>([\-\d\.]+)</Latitude>\s*<Longitude>([\-\d\.]+)</Longitude>#',$result,$matches)!=0)) || (($type=='google') && (preg_match('#<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>#',$result,$matches)!=0)) || (($type=='yahoo') && (preg_match('#<latitude>([\-\d\.]+)</latitude>\s*<longitude>([\-\d\.]+)</longitude>#',$result,$matches)!=0)))
-	{
-		$latitude=floatval($matches[1]);
-		$longitude=floatval($matches[2]);
-
-		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_catalogue_category'),'ORDER BY cf_order');
-		require_code('content');
-		$assocated_catalogue_entry_id=get_bound_content_entry('catalogue_category',strval($category_id));
-		$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$latitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[0]['id']),'',1);
-		$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$longitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[1]['id']),'',1);
-
-		return '1';
-	}
-	return '0';
-}
-
 function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$longitude_field_id=NULL,$error_tolerance=0.0005/*very roughly 60 metres each way*/)
 {
 	$where='';
 
 	$where.='(';
-	$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance,10);
+	$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance);
 	$where.=' AND ';
-	$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance,10).')';
+	$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance).')';
 	if ($latitude-$error_tolerance<-45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance+90.0,10);
+		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance+90.0);
 		$where.=' AND ';
-		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance+90.0,10).')';
+		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance+90.0).')';
 	}
 	if ($latitude+$error_tolerance>45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance-90.0,10);
+		$where.='(l_latitude>'.float_to_raw_string($latitude-$error_tolerance-90.0);
 		$where.=' AND ';
-		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance-90.0,10).')';
+		$where.='l_latitude<'.float_to_raw_string($latitude+$error_tolerance-90.0).')';
 	}
 	$where.=')';
 
 	$where.=' AND ';
 
 	$where.='(';
-	$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance,10);
+	$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance);
 	$where.=' AND ';
-	$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance,10).')';
-	if ($longitude-$error_tolerance<-90.0)
+	$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance).')';
+	if ($longitude-$error_tolerance<-45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance+180.0,10);
+		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance+90.0);
 		$where.=' AND ';
-		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance+180.0,10).')';
+		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance+90.0).')';
 	}
-	if ($longitude+$error_tolerance>90.0)
+	if ($longitude+$error_tolerance>45.0)
 	{
 		$where.=' OR ';
-		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance-180.0,10);
+		$where.='(l_longitude>'.float_to_raw_string($longitude-$error_tolerance-90.0);
 		$where.=' AND ';
-		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance-180.0,10).')';
+		$where.='l_longitude<'.float_to_raw_string($longitude+$error_tolerance-90.0).')';
 	}
 	$where.=')';
 

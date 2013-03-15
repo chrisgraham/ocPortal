@@ -3,64 +3,61 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.news_piece_summary h3, .rss_summary h3 {
+	margin-{!en_right}: 130px !important;
+	border-bottom: 1px solid #6b81a1 !important; /* {$,wizard, 100% medborder.border} */
+}
+
 .rss_summary nobr { /* Stops naughty Google news from breaking layout */
 	white-space: normal;
 }
 
-.news_piece_summary h3 {
-	font-size: 1.2em;
-}
-
-.newscat_img {
-	margin-{!en_left}: 1.5em;
-	margin-bottom: 1.5em;
+.newscat_img_author, .newscat_img_member {
+	padding: 7px 7px 7px 12px;
 	float: {!en_right};
 	width: 100px;
 }
 
-.newscat_img img {
+.newscat_img_author img, .newscat_img_member img {
 	max-width: 100px;
 }
 
 .newscat_img_member {
-	margin-top: 1em;
+	margin-top: 15px;
 	text-align: center;
 }
 
 .newscat_img_author img {
-	margin-top: 0.5em;
+	margin-top: 8px;
 }
 
 .newscat_img_author .news_by {
-	margin-top: 0.5em;
-	padding-bottom: 0.5em;
+	margin-top: 5px;
+	padding-bottom: 3px;
 }
 
 .newscat_img_member, .newscat_img_author .news_by {
-	border: 1px dashed {$GET,point_of_interest_border};
-	background-color: {$GET,point_of_interest_background};
-	padding: 0.5em;
-	font-size: 0.9em;
+	border: 1px dashed #8497b3; /* {$,wizard, 50% bordcolor + 50% W/B } */
+	background-color: #d8dde6; /* {$,wizard, 95% bgcol + 5% !W/B} */
 }
 
 .news_summary_p {
-	margin-top: 0.5em;
+	margin-top: 5px;
 }
 
 .news_goto {
-	font-size: 0.9em;
-	padding-bottom: 0.5em;
-	margin-bottom: 1.5em;
+	font-size: 0.85em;
+	padding-bottom: 4px;
+	margin-bottom: 30px;
+}
+
+.standardbox_wrap_classic .news_goto {
 	text-align: center;
+	border-bottom: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
 }
 
-.boxless_space .news_goto {
-	text-align: left;
-}
-
-.news_piece_summary + .news_piece_summary {
-	border-top: 1px dotted {$GET,pale_border};
-	padding-top: 0.5em;
+.standardbox_wrap_classic .news_goto a:link, .standardbox_wrap_classic .news_goto a:visited, .standardbox_wrap_classic .news_goto a:active {
+	text-decoration: none;
 }
 
 .news_by {
@@ -68,7 +65,7 @@
 }
 
 .chicklet {
-	margin: 0.3em 0;
+	padding-bottom: 5px;
 }
 
 .chicklets {
@@ -79,19 +76,3 @@
 	margin-{!en_right}: 120px;
 }
 
-.wide_ticker {
-	overflow: hidden;
-	height: 24em;
-}
-
-/*
-=========================
-=======Print rules=======
-=========================
-*/
-
-@media print {
-	#news_archive_link {
-		display: none;
-	}
-}

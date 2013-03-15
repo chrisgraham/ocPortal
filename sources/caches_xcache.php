@@ -20,14 +20,10 @@
 
 /*EXTRA FUNCTIONS: xcache\_.+*/
 
-/**
- * Cache Driver.
- * @package		core
- */
 class xcache
 {
 	/**
-	 * (Plug-in replacement for memcache API) Get data from the persistent cache.
+	 * (Plug-in replacement for memcache API) Get data from the persistant cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
@@ -42,7 +38,7 @@ class xcache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Put data into the persistent cache.
+	 * (Plug-in replacement for memcache API) Put data into the persistant cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  mixed			The data
@@ -65,7 +61,7 @@ class xcache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Delete data from the persistent cache.
+	 * (Plug-in replacement for memcache API) Delete data from the persistant cache.
 	 *
 	 * @param  mixed			Key name
 	 */
@@ -81,7 +77,7 @@ class xcache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Remove all data from the persistent cache.
+	 * (Plug-in replacement for memcache API) Remove all data from the persistant cache.
 	 */
 	function flush()
 	{

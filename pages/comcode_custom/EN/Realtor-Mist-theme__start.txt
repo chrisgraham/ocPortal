@@ -1,0 +1,45 @@
+[semihtml]
+[surround]
+	[surround="col1"]
+		[box="News"]
+			[block="3"]side_news[/block]
+		[/box]
+		[block]main_iotd[/block]
+	[/surround]
+
+	[surround="col2"]
+		[box="Lorem ipsum dolor sed do eiusmod"]
+			Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />
+			Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt.
+			[surround="more"]
+				[page=":about"]read more[/page]
+			[/surround]
+		[/box]
+
+		[surround="lined_boxes"]	
+			[box="Lorem ipsum dolor"]
+				Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit.
+				[surround="more"]
+					[page=":about"]read more[/page]
+				[/surround]
+			[/box]
+
+			[box="Lorem ipsum dolor"]
+				Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit.
+				[surround="more"]
+					[page=":about"]read more[/page]
+				[/surround]
+			[/box]
+
+			[box="Lorem ipsum dolor"]
+				Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit.
+				[surround="more"]
+					[page=":about"]read more[/page]
+				[/surround]
+			[/box]
+		[/surround]
+
+		[block="4" catalogue="projects"]main_recent_cc_entries[/block]
+	[/surround]
+[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

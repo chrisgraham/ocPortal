@@ -1,4 +1,4 @@
-<p class="lonely_label">{!CATEGORIES}:</p>
+{!CATEGORIES}:
 <ul>
 	{CONTENT}
 </ul>

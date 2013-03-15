@@ -2,19 +2,15 @@
 
 <div class="float_surrounder">
 	<div class="site_tree_right">
-		<div class="box box___site_tree_editor_screen"><div class="box_inner">
-			<h2>{!SELECTION_DETAILS}</h2>
-
+		{+START,BOX,{!SELECTION_DETAILS}}
 			<div id="details_target">
 				{!NO_ENTRY_POINT_SELECTED}
 			</div>
-		</div></div>
+		{+END}
 	</div>
 
 	<div class="site_tree_left">
-		<div class="box box___site_tree_editor_screen"><div class="box_inner">
-			<h2>{!SITE_TREE}</h2>
-
+		{+START,BOX,{!SITE_TREE}}
 			<div class="accessibility_hidden"><label for="tree_list">{!ENTRY}</label></div>
 			<form title="{!PRIMARY_PAGE_FORM}" action="index.php" method="post">
 				<input onchange="update_details_box(this)" style="display: none" type="text" id="tree_list" name="tree_list" value="{$_GET*,id}" />
@@ -25,10 +21,10 @@
 			<script type="text/javascript">// <![CDATA[
 				var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
 
-				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';
-				var actions_tpl_item='<li><a href="[2]">[1]<\/a><\/li>';
+				var actions_tpl='{!ACTIONS;}:<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">[1]<\/ul>';
+				var actions_tpl_item='<li>&raquo; <a href="[2]">[1]<\/a><br /><\/li>';
 
-				var info_tpl='<div class="wide_table_wrap"><table class="results_table wide_table autosized_table" summary="{!MAP_TABLE;}"><tbody>[1]<\/tbody><\/table><\/div>';
+				var info_tpl='<br /><br /><div class="wide_table_wrap"><table class="solidborder wide_table" summary="{!MAP_TABLE;}"><colgroup><col style="width: 100px" /><\/colgroup><tbody>[1]<\/tbody><\/table><\/div>';
 				var info_tpl_item='<tr><th>[1]<\/th><td>[2]<\/td><\/tr>';
 
 				var edit_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=_edit:id=!}';
@@ -42,7 +38,7 @@
 				var stats_url='{+START,IF,{$ADDON_INSTALLED,stats}}{$PAGE_LINK*;,_SEARCH:admin_stats:type=_page:iscreen=!}{+END}';
 				var move_url='{$PAGE_LINK;,_SELF:_SELF:type=_move:zone=[1]:destination_zone=[3]:page__[2]=1}'; // Intentionally not escaped
 			//]]></script>
-		</div></div>
+		{+END}
 	</div>
 </div>
 

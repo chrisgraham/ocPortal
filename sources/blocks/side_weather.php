@@ -155,21 +155,21 @@ class Block_side_weather
 				$out=array();
 				$content=$item['news'];
 				if (preg_match('/<img src="(.*)"\/?'.'>/Usm',$item['news'],$out)!=0)
-					$image=$out[1];
+					$image = $out[1];
 				else
-					$image='';
+					$image = '';
 				if (preg_match('/Current Conditions:<\/b><br \/>(.*)<BR \/>/Uism',$item['news'],$out)!=0)
-					$cur_conditions=$out[1];
+					$cur_conditions = $out[1];
 				else
-					$cur_conditions='';
+					$cur_conditions = '';
 				if (preg_match('/Forecast:<\/b><BR \/>(.*)<br \/>/ism',$item['news'],$out)!=0)
-					$forecast=$out[1];
+					$forecast = $out[1];
 				else
-					$forecast='';
+					$forecast = '';
 			}
 		}
 
-		return do_template('BLOCK_SIDE_WEATHER',array('_GUID'=>'8b46b3437fbe05e587b11dd3347fa195','TITLE'=>$title,'LOC_CODE'=>$loc_code,'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
+		return do_template('BLOCK_SIDE_WEATHER',array('TITLE'=>$title,'LOC_CODE'=>$loc_code,'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
 	}
 }
 

@@ -147,7 +147,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration')),'warn');
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('WELCOME_EMAILS'),comcode_lang_string('DOC_WELCOME_EMAILS'),
+		return do_next_manager(get_page_title('WELCOME_EMAILS'),comcode_lang_string('DOC_WELCOME_EMAILS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WELCOME_EMAIL')),

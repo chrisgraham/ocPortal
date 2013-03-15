@@ -64,24 +64,24 @@ class Block_main_ebay
 		$lang=(isset($map['lang']) && $map['lang']!='')?('&lang='.$map['lang']):'';
 
 
-		$type=(isset($map['type']) && strlen($map['type'])>0)?$map['type']:'store';
-		$seller=$map['seller'];//'yourrightchoice';//ecomelectronics
-		$query=(isset($map['query']) && strlen($map['query'])>0)?preg_replace('#\s#','+',$map['query']):''; //i.e. Gadgets
+		$type = (isset($map['type']) && strlen($map['type'])>0)?$map['type']:'store';
+		$seller = $map['seller'];//'yourrightchoice';//ecomelectronics
+		$query = (isset($map['query']) && strlen($map['query'])>0)?preg_replace('#\s#','+',$map['query']):''; //i.e. Gadgets
 
 		$out='';
 
-		if($type=='seller')
+		if($type == 'seller')
 		{
 			//ebay seller: yourrightchoice
 			$out.='<object width="'.$width.'" height="'.$height.'"><param name="movie" value="http://togo.ebay.'.$domain.'/togo/seller.swf" /><param name="flashvars" value="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'" /><embed src="http://togo.ebay.'.$domain.'/togo/seller.swf" type="application/x-shockwave-flash" width="'.$width.'" height="'.$height.'" flashvars="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'"></embed></object>';
 		}
 		else
 		{
-			//e-bay store code using i.e. seller id=ecomelectronics :
+			//e-bay store code using i.e. seller id = ecomelectronics :
 			$out.='<object width="'.$width.'" height="'.$height.'"><param name="movie" value="http://togo.ebay.'.$domain.'/togo/store.swf" /><param name="flashvars" value="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'&query='.$query.'" /><embed src="http://togo.ebay.'.$domain.'/togo/store.swf" type="application/x-shockwave-flash" width="'.$width.'" height="'.$height.'" flashvars="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'&query='.$query.'"></embed></object>';
 		}
 
-		return do_template('BLOCK_MAIN_EBAY',array('_GUID'=>'ffda4477bf08164f80dd45ef2985dfe9','TITLE'=>$title,'CONTENT'=>($out)));
+		return do_template('BLOCK_MAIN_EBAY',array('TITLE'=>$title,'CONTENT'=>($out)));
 
 	}
 }

@@ -27,9 +27,9 @@ function init__captcha()
 }
 
 /**
- * Outputs and stores information for a CAPTCHA.
+ * Outputs and stores information regarding, a security image.
  */
-function captcha_script()
+function securityimage_script()
 {
 	$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
@@ -44,7 +44,7 @@ function captcha_script()
 				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
 		}
 
-		warn_exit(do_lang_tempcode('CAPTCHA_NO_SESSION'));*/
+		warn_exit(do_lang_tempcode('SECURITY_IMAGE_NO_SESSION'));*/
 	}
 	if (strlen(strval($_code_needed))>6) // Encoded in ASCII (we did it like this to avoid breaking DB compatibility)
 	{
@@ -179,7 +179,7 @@ function captcha_script()
 	if (get_option('css_captcha')==='1')
 	{
 		echo '
-		<!DOCTYPE html>
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 			<title>'.do_lang('CONTACT_STAFF_TO_JOIN_IF_IMPAIRED').'</title>
@@ -223,7 +223,7 @@ function form_input_captcha()
 
 	// Show template
 	$input=do_template('FORM_SCREEN_INPUT_CAPTCHA',array('_GUID'=>'f7452af9b83db36685ae8a86f9762d30','TABINDEX'=>strval($tabindex)));
-	return _form_input('captcha',do_lang_tempcode('CAPTCHA'),do_lang_tempcode('DESCRIPTION_CAPTCHA'),$input,true,false);
+	return _form_input('security_image',do_lang_tempcode('SECURITY_IMAGE'),do_lang_tempcode('DESCRIPTION_SECURITY_IMAGE'),$input,true,false);
 }
 
 /**
@@ -294,7 +294,7 @@ function enforce_captcha($regenerate_on_error=true)
 {
 	if (use_captcha())
 	{
-		$code_entered=post_param('captcha');
+		$code_entered=post_param('security_image');
 		if (!check_captcha($code_entered,$regenerate_on_error))
 		{
 			$GLOBALS['HTTP_STATUS_CODE']='500';
@@ -360,19 +360,6 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 				if (!$ret) generate_captcha();
 			}
 		}
-		if (!$ret)
-		{
-			$data=serialize($_POST);
-
-			if (
-				(strpos($data,'[url=http://')!==false) ||
-				(strpos($data,'[link=')!==false) ||
-				((strpos($data,' href="')!==false) && (strpos($data,'[html')===false) && (strpos($data,'[semihtml')===false) && (strpos($data,'__is_wysiwyg')===false))
-			)
-			{
-				log_hack_attack_and_exit('CAPTCHAFAIL_HACK','','',true); // This is done to stop spammers hogging server resources via repeatedly re-trying CAPTCHAs
-			}
-		}
 		return $ret;
 	}
 	return true;
@@ -396,7 +383,7 @@ function captcha_ajax_check()
 		form.onsubmit=function()
 			{
 				document.getElementById('submit_button').disabled=true;
-				var url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
+				var url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
 				if (!do_ajax_field_test(url))
 				{
 					document.getElementById('captcha').src+='&'; // Force it to reload latest captcha

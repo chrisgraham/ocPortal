@@ -70,9 +70,9 @@ class Module_admin_orders
 		if ($type=='misc') return $this->misc();
 		if ($type=='show_orders') return $this->show_orders();
 		if ($type=='order_det') 	return $this->order_details();
-		if ($type=='order_act')
+		if($type=='order_act')
 		{
-			$action=either_param('action');
+			$action		=	either_param('action');
 
 			if ($action=='add_note') 	return $this->add_note();			
 			if ($action=='dispatch') 	return $this->dispatch();
@@ -99,7 +99,7 @@ class Module_admin_orders
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('ORDERS'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_page_title('ORDERS'),comcode_lang_string('DOC_ECOMMERCE'),
 					array(
 						array('show_orders',array('_SELF',array('type'=>'show_orders'),'_SELF'),do_lang('SHOW_ORDERS')),
 						array('undispatched',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('UNDISPATCHED_ORDERS')),
@@ -117,37 +117,38 @@ class Module_admin_orders
 	{
 		require_code('shopping');
 
-		$title=get_screen_title('ORDER_LIST');
+		$title		=	get_page_title('ORDER_LIST');
 
-		$filter=get_param('filter',NULL);
+		$filter		=	get_param('filter',NULL);
 
-		$search=get_param('search','',true);
+		$search		=	get_param('search','',true);
 
-		$cond='WHERE 1=1';
+		$cond		=	"WHERE 1=1";
 
-		if ($filter=='undispatched')
+		if($filter=='undispatched')
 		{
-			$cond	.=' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_payment_received');
-			$title=get_screen_title('UNDISPATCHED_ORDER_LIST');
+			$cond	.=	" AND t1.order_status='ORDER_STATUS_payment_received'";
+			$title	 =	get_page_title('UNDISPATCHED_ORDER_LIST');
 		}
 
 		$extra_join='';
-		if ((!is_null($search)) && ($search!=''))
+		if((!is_null($search)) && ($search!=''))
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-			$cond	.=' AND (t1.id LIKE \''.db_encode_like(str_replace('#','',$search).'%').'\' OR t2.m_username LIKE \''.db_encode_like(str_replace('#','',$search).'%').'\')';
+			$cond	.=	" AND (t1.id LIKE '".db_encode_like(str_replace('#','',$search).'%')."' OR t2.m_username LIKE '".db_encode_like(str_replace('#','',$search).'%')."')";
 			$extra_join=' JOIN '.get_table_prefix().'f_members t2 ON t2.id=t1.c_member';
 		}
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS'))));
 
-		$orders=array();
+		$orders		=	array();
+		//pagination
+		$start		=	get_param_integer('start',0);
 
-		// Pagination
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',10);
-		require_code('templates_pagination');
+		$max		=	get_param_integer('max',10);
+
+		require_code('templates_results_browser');
 
 		require_code('templates_results_table');
 
@@ -166,100 +167,101 @@ class Module_admin_orders
 		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fields_title=results_field_title(
-			array(
-				do_lang_tempcode('ECOM_ORDER'),
-				do_lang_tempcode('THE_PRICE'),
-				do_lang_tempcode('TAX_PAID'),
-				do_lang_tempcode('ORDERED_DATE'),
-				do_lang_tempcode('ORDERED_BY'),
-				do_lang_tempcode('TRANSACTION_ID'),
-				do_lang_tempcode('STATUS'),
-				do_lang_tempcode('ACTIONS')
-			),$sortables,'sort',$sortable.' '.$sort_order
-		);
+							array(
+								do_lang_tempcode('ECOM_ORDER'),
+								do_lang_tempcode('THE_PRICE'),
+								do_lang_tempcode('TAX_PAID'),
+								do_lang_tempcode('ORDERED_DATE'),
+								do_lang_tempcode('ORDERED_BY'),
+								do_lang_tempcode('TRANSACTION_ID'),
+								do_lang_tempcode('STATUS'),
+								do_lang_tempcode('ACTIONS')
+							),$sortables,'sort',$sortable.' '.$sort_order
+						);
 
 		global $NO_DB_SCOPE_CHECK;
 		$NO_DB_SCOPE_CHECK=true;
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond);
+		$max_rows		=	$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond);
 
-		$pagination=pagination(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
+		$results_browser	=	results_browser(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start);
+		$rows		=	$GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start);
 
-		$order_entries=new ocp_tempcode();
+		$order_entries	=	new ocp_tempcode();
 
 		foreach ($rows as $row)
 		{	
-			if ($row['purchase_through']=='cart')
+			if($row['purchase_through']=='cart')
 			{
-				$order_det_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
+				$order_det_url	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
-				$order_title=do_lang('CART_ORDER',strval($row['id']));
-			} else
+				$order_title	=	do_lang('CART_ORDER',strval($row['id']));
+			}
+			else
 			{
-				$res=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('p_id','p_name'),array('order_id'=>$row['id']));
+				$res	=	$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('p_id','p_name'),array('order_id'=>$row['id']));
 
 				if (!array_key_exists(0,$res)) continue; // DB corruption
-				$product_det=$res[0];
+				$product_det	=	$res[0];
 
-				$order_title=do_lang('PURCHASE_ORDER',strval($row['id']));
+				$order_title	=	do_lang('PURCHASE_ORDER',strval($row['id']));
 
-				$order_det_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_det['p_id']),get_module_zone('catalogues'));			
+				$order_det_url	=	build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_det['p_id']),get_module_zone('catalogues'));			
 			}
 
-			$submitted_by=$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
+			$submitted_by	=	$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
 
-			$order_status=do_lang($row['order_status']);
+			$order_status	=	do_lang($row['order_status']);
 
-			$ordr_act_submit=build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$row['id']),'_SELF');	
+			$ordr_act_submit=	build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$row['id']),'_SELF');	
 
-			$actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'19ad8393aa5dba3f2f768818f22d8837','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
+			$actions	=	do_template('ADMIN_ORDER_ACTIONS',array('ORDER_TITLE'=>$order_title,'ORDR_ACT_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
 
-			$url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),'_SELF');
+			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),'_SELF');
 
-			$member=hyperlink($url,$submitted_by,false,false,do_lang('INDEX'));
+			$member		=	hyperlink($url,$submitted_by,false,false,do_lang('INDEX'));
 
-			$view_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
+			$view_url	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
-			$order_date=hyperlink($view_url,get_timezoned_date($row['add_date'],true,false,true,true));
+			$order_date	=	hyperlink($view_url,get_timezoned_date($row['add_date'],true,false,true,true));
 
-			$transaction_details_link=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
+			$transaction_details_link	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
-			if ($row['transaction_id']!='')
+			if($row['transaction_id']!='')
 			{	
-				$transaction_details_link=build_url(array('page'=>'admin_ecommerce','type'=>'logs','product'=>$order_title,'id'=>$row['id']),get_module_zone('admin_ecommerce'));
+				$transaction_details_link	=	build_url(array('page'=>'admin_ecommerce','type'=>'logs','product'=>$order_title,'id'=>$row['id']),get_module_zone('admin_ecommerce'));
 
-				$transaction_id=hyperlink($transaction_details_link,strval($row['transaction_id']));
-			} else
-			{
-				$transaction_id=do_lang_tempcode('INCOMPLETED_TRANCACTION');
+				$transaction_id	=	hyperlink($transaction_details_link,strval($row['transaction_id']));
 			}
+			else
+				$transaction_id	=	do_lang_tempcode('INCOMPLETED_TRANCACTION');
 
 			$order_entries->attach(results_entry(
-				array(
-					escape_html($order_title),
-					ecommerce_get_currency_symbol().escape_html(strval($row['tot_price'])),
-					escape_html(float_format($row['tax'],2)),
-					$order_date,
-					$member,
-					$transaction_id,
-					$order_status,
-					$actions
-				),false,NULL)
-			);
+						array(
+							escape_html($order_title),
+							ecommerce_get_currency_symbol().escape_html(strval($row['tot_price'])),
+							escape_html(float_format($row['tax'],2)),
+							$order_date,
+							$member,
+							$transaction_id,
+							$order_status,
+							$actions
+						),false,NULL
+					)
+			);			
 		}
 
-		$width=mixed();//array('110','70','80','200','120','180','180','200');
+		$width		=	array('110','70','80','200','120','180','180','200');
 
-		$results_table=results_table(do_lang_tempcode('ORDERS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$order_entries,$sortables,$sortable,$sort_order,'sort',NULL,$width,'cart');
+		$results_table	=	results_table(do_lang_tempcode('ORDERS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$order_entries,$sortables,$sortable,$sort_order,'sort',NULL,$width,'cart');
 
 		if (is_null($order_entries)) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		$hidden=build_keep_form_fields('_SELF',true,array('filter'));
+		$hidden		=	build_keep_form_fields('_SELF',true,array('filter'));
 
-		$search_url=get_self_url(true);
+		$search_url	=	get_self_url(true);
 
-		return do_template('ECOM_ADMIN_ORDERS_SCREEN',array('_GUID'=>'08afb0204c061644ec9c562b4eba24f4','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders,'PAGINATION'=>$pagination,'RESULTS_TABLE'=>$results_table,'SEARCH_URL'=>$search_url,'HIDDEN'=>$hidden,'SEARCH_VAL'=>$search));	
+		return do_template('ECOM_ADMIN_ORDERS_SCREEN',array('TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders,'RESULTS_BROWSER'=>$results_browser,'RESULT_TABLE'=>$results_table,'SEARCH_URL'=>$search_url,'HIDDEN'=>$hidden,'SEARCH_VAL'=>$search));	
 	}
 
 	/**
@@ -271,14 +273,16 @@ class Module_admin_orders
 	{
 		$id=get_param_integer('id');
 
-		$title=get_screen_title('MY_ORDER_DETAILS');
+		$title		=	get_page_title('MY_ORDER_DETAILS');
 
-		$order_title=do_lang('CART_ORDER',$id);
+		$order_title	=	do_lang('CART_ORDER',$id);
 
-		// Pagination
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',10);
-		require_code('templates_pagination');
+		//pagination
+		$start		=	get_param_integer('start',0);
+
+		$max		=	get_param_integer('max',10);
+
+		require_code('templates_results_browser');
 
 		require_code('templates_results_table');
 
@@ -291,78 +295,78 @@ class Module_admin_orders
 		list($sortable,$sort_order)=$query_sort;
 
 		$fields_title=results_field_title(
-			array(
-				do_lang_tempcode('SLNO'),
-				do_lang_tempcode('PRODUCT_NAME'),
-				do_lang_tempcode('THE_PRICE'),
-				do_lang_tempcode('QUANTITY'),
-				do_lang_tempcode('STATUS'),
-			),$sortables,'sort',$sortable.' '.$sort_order
-		);
+							array(
+								do_lang_tempcode('SLNO'),
+								do_lang_tempcode('PRODUCT_NAME'),
+								do_lang_tempcode('THE_PRICE'),
+								do_lang_tempcode('QUANTITY'),
+								do_lang_tempcode('STATUS'),
+							),$sortables,'sort',$sortable.' '.$sort_order
+						);
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_details','COUNT(*)',array('order_id'=>$id));
+		$max_rows	=	$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_details','COUNT(*)',array('order_id'=>$id));
 
-		$pagination=pagination(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
+		$results_browser	=	results_browser(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$rows		=	$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 
-		$product_entries=new ocp_tempcode();	
+		$product_entries	=	new ocp_tempcode();	
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 
 		foreach ($rows as $row)
 		{
-			$product_info_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
+			$product_info_url	=	build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
 
-			$product_name=$row['p_name'];
+			$product_name	=	$row['p_name'];
 
-			$product=hyperlink($product_info_url,$product_name,false,false,do_lang('INDEX'));
+			$product	=	hyperlink($product_info_url,$product_name,false,false,do_lang('INDEX'));
 
 			$product_entries->attach(results_entry(
-				array(
-					escape_html(strval($row['p_id'])),
-					$product,
-					ecommerce_get_currency_symbol().escape_html(strval($row['p_price'])),
-					escape_html(strval($row['p_quantity'])),
-					do_lang($row['dispatch_status'])
-				),false,NULL)
+					array(
+						escape_html(strval($row['p_id'])),
+						$product,
+						ecommerce_get_currency_symbol().escape_html(strval($row['p_price'])),
+						escape_html(strval($row['p_quantity'])),
+						do_lang($row['dispatch_status'])
+					),false,NULL
+				)
 			);
 		}
 
-		$text=do_lang_tempcode('ORDER_DETAILS_TEXT');
+		$text	=	do_lang_tempcode('ORDER_DETAILS_TEXT');
 
-		// Collecting order details
-		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
+		//Collecting order details
+		$rows		=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
 
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$data=$rows[0];
+		$data		=	$rows[0];
 
-		$results_table=results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL,'cart');
+		$results_table	=	results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL,'cart');
 
-		$ordered_by_member_id=$data['c_member'];
+		$ordered_by_member_id = $data['c_member'];
 
-		$ordered_by_username=$GLOBALS['FORUM_DRIVER']->get_username($data['c_member']);
+		$ordered_by_username	=	$GLOBALS['FORUM_DRIVER']->get_username($data['c_member']);
 
-		$self_url=get_self_url(true,true);
+		$self_url		=	get_self_url(true,true);
 
-		$ordr_act_submit=build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$id,'redirect'=>$self_url),'_SELF');	
+		$ordr_act_submit	=	build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$id,'redirect'=>$self_url),'_SELF');	
 
-		$order_actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'6a24f6fb7c23f60b049ebce0f9765736','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>do_lang($data['order_status'])));
+		$order_actions	=	do_template('ADMIN_ORDER_ACTIONS',array('ORDER_TITLE'=>$order_title,'ORDR_ACT_URL'=>$ordr_act_submit,'ORDER_STATUS'=>do_lang($data['order_status'])));
 
-		// Shipping address display
-		$row=$GLOBALS['SITE_DB']->query_select('shopping_order_addresses',array('*'),array('order_id'=>$id),'',1);
+		//Shipping address display
+		$row	=	$GLOBALS['SITE_DB']->query_select('shopping_order_addresses',array('*'),array('order_id'=>$id),'',1);
 
-		if (array_key_exists(0,$row))
+		if(array_key_exists(0,$row))
 		{
-			$address=$row[0];
-			$shipping_address=do_template('ECOM_SHIPPING_ADDRESS',array('ADDRESS_NAME'=>$address['address_name'],'ADDRESS_STREET'=>$address['address_street'],'ADDRESS_CITY'=>$address['address_city'],'ADDRESS_ZIP'=>$address['address_zip'],'ADDRESS_COUNTRY'=>$address['address_country'],'RECEIVER_EMAIL'=>$address['receiver_email']));	
-		} else
-		{
-			$shipping_address=new ocp_tempcode();
+			$address		=	$row[0];
+			$shipping_address	=	do_template('SHIPPING_ADDRESS',array('ADDRESS_NAME'=>$address['address_name'],'ADDRESS_STREET'=>$address['address_street'],'ADDRESS_CITY'=>$address['address_city'],'ADDRESS_ZIP'=>$address['address_zip'],'ADDRESS_COUNTRY'=>$address['address_country'],'RECEIVER_EMAIL'=>$address['receiver_email']));	
 		}
+		else
+			$shipping_address	=	new ocp_tempcode();
 
-		return do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array('_GUID'=>'3ae59a343288eb6aa67e3627b5ea7eda','TITLE'=>$title,'TEXT'=>$text,'CURRENCY'=>get_option('currency'),'RESULTS_TABLE'=>$results_table,'PAGINATION'=>$pagination,'ORDER_NUMBER'=>strval($id),'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),'TOTAL_PRICE'=>strval($data['tot_price']),'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),'ORDERED_BY_USERNAME'=>$ordered_by_username,'ORDER_STATUS'=>do_lang($data['order_status']),'NOTES'=>$data['notes'],'PURCHASED_VIA'=>$data['purchase_through'],'ORDER_ACTIONS'=>$order_actions,'SHIPPING_ADDRESS'=>$shipping_address));	
+		return do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'CURRENCY'=>get_option('currency'),'RESULT_TABLE'=>$results_table,'RESULTS_BROWSER'=>$results_browser,'ORDER_NUMBER'=>strval($id),'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),'TOTAL_PRICE'=>strval($data['tot_price']),'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),'ORDERED_BY_USERNAME'=>$ordered_by_username,'ORDER_STATUS'=>do_lang($data['order_status']),'NOTES'=>$data['notes'],'PURCHASED_VIA'=>$data['purchase_through'],'ORDER_ACTIONS'=>$order_actions,'SHIPPING_ADDRESS'=>$shipping_address));	
 	}
 
 	/**
@@ -374,46 +378,46 @@ class Module_admin_orders
 	{
 		require_code('form_templates');
 
-		$id=get_param_integer('id');
+		$id		=	get_param_integer('id');
 
-		$redirect_url=get_param('redirect',NULL);
+		$redirect_url	=	get_param('redirect',NULL);
 
-		$last_action=get_param('last_act',NULL);
+		$last_action	=	get_param('last_act',NULL);
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 
-		$update_url=build_url(array('page'=>'_SELF','type'=>'_add_note','redirect'=>$redirect_url),'_SELF');
+		$update_url	=	build_url(array('page'=>'_SELF','type'=>'_add_note','redirect'=>$redirect_url),'_SELF');
 
-		$fields=new ocp_tempcode();
+		$fields		=	new ocp_tempcode();
 
-		$note=$GLOBALS['SITE_DB']->query_value('shopping_order','notes',array('id'=>$id));
+		$note		=	$GLOBALS['SITE_DB']->query_value('shopping_order','notes',array('id'=>$id));
 
-		if (!is_null($last_action))
+		if(!is_null($last_action))
 		{
-			$note.=do_lang('ADD_NOTE_UPPEND_TEXT',get_timezoned_date(time(),true,false,true,true),do_lang('ORDER_STATUS_'.$last_action));
+			$note	.=	do_lang('ADD_NOTE_UPPEND_TEXT',get_timezoned_date(time(),true,false,true,true),do_lang('ORDER_STATUS_'.$last_action));
 		}
 
 		$fields->attach(form_input_text(do_lang_tempcode('NOTE'),do_lang_tempcode('NOTE_DESCRIPTION'),'note',$note,true));
 
 		$fields->attach(form_input_hidden('order_id',strval($id)));
 
-		$title=get_screen_title('ADD_NOTE_TITLE',true,array($id));
+		$title		=	get_page_title('ADD_NOTE_TITLE',true,array($id));
 
-		if ($last_action=='dispatched')
+		if($last_action=='dispatched')
 		{	
-			// Display dispatch mail preview
-			$res=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
+			//Display dispatch mail preview
+			$res		=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
 
-			$order_det=$res[0];
+			$order_det	=	$res[0];
 
-			$member_name=$GLOBALS['FORUM_DRIVER']->get_username($order_det['c_member']);
+			$member_name	=	$GLOBALS['FORUM_DRIVER']->get_username($order_det['c_member']);
 
-			$message=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($id)),get_lang($order_det['c_member']));
+			$message	=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($id)),get_lang($order_det['c_member']));
 
 			$fields->attach(form_input_text(do_lang_tempcode('DISPATCH_MAIL_PREVIEW'),do_lang_tempcode('DISPATCH_MAIL_PREVIEW_DESCRIPTION'),'dispatch_mail_content',$message,true));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'a5bd2fd3e7f326fd7559e78015d70715','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NOTE_DESCRIPTION'),'HIDDEN'=>'','FIELDS'=>$fields,'URL'=>$update_url,'SUBMIT_NAME'=>do_lang_tempcode('ADD_NOTE')));
+		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('NOTE_DESCRIPTION'),'HIDDEN'=>'','FIELDS'=>$fields,'URL'=>$update_url,'SUBMIT_NAME'=>do_lang_tempcode('ADD_NOTE')));
 	}
 
 	/**
@@ -423,23 +427,23 @@ class Module_admin_orders
 	 */
 	function _add_note()
 	{
-		$id=post_param_integer('order_id');
+		$id			=	post_param_integer('order_id');
 
-		$title=get_screen_title('ADD_NOTE_TITLE',true,array($id));
+		$title		=	get_page_title('ADD_NOTE_TITLE',true,array($id));
 
-		$notes=post_param('note');
+		$notes		=	post_param('note');
 
-		$redirect=get_param('redirect',NULL);
+		$redirect	=	get_param('redirect',NULL);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('notes'=>$notes),array('id'=>$id),'',1);
 
-		// Send dispatch notification mail
+		//Send dispatch notification mail
 		$this->send_dispatch_notification($id);
 
-		if (is_null($redirect))	// If redirect url is not passed, redirect to order list
+		if(is_null($redirect))	//If redirect url is not passed, redirect to order list
 		{
-			$_redirect=build_url(array('page'=>'_SELF','type'=>'show_orders'),get_module_zone('admin_orders'));
-			$redirect=$_redirect->evaluate();
+			$_redirect	=	build_url(array('page'=>'_SELF','type'=>'show_orders'),get_module_zone('admin_orders'));
+			$redirect = $_redirect->evaluate();
 		}
 
 		return redirect_screen($title,$redirect,do_lang_tempcode('SUCCESS'));	
@@ -452,18 +456,18 @@ class Module_admin_orders
 	 */
 	function dispatch()
 	{
-		$title=get_screen_title('ORDER_STATUS_dispatched');
+		$title=get_page_title('ORDER_STATUS_dispatched');
 
-		$id=get_param_integer('id');
+		$id	=	get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_dispatched'),array('id'=>$id),'',1);
 
-		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_dispatched'),array('order_id'=>$id)); // There may be more than one items to update status
+		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_dispatched'),array('order_id'=>$id)); //There may be more than one items to update status
 
 		require_code('shopping');
 		update_stock($id);
 
-		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'dispatched','id'=>$id),get_module_zone('admin_orders'));
+		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'dispatched','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));
 	}
@@ -475,17 +479,17 @@ class Module_admin_orders
 	 */
 	function send_dispatch_notification($order_id)
 	{
-		// Mail dispatch notification to customer
+		//Mail dispatch notification to customer
 
-		$message=post_param('dispatch_mail_content',NULL);
+		$message			=	post_param('dispatch_mail_content',NULL);
 
-		if (is_null($message)) return;
+		if(is_null($message)) return;
 
-		$res=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$order_id),'',1);
+		$res		=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$order_id),'',1);
 
-		$order_det=$res[0];
+		$order_det	=	$res[0];
 
-		//$message=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($order_id)));
+		//$message	=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($order_id)));
 
 		require_code('notifications');
 
@@ -499,15 +503,15 @@ class Module_admin_orders
 	 */
 	function delete_order()
 	{
-		$title=get_screen_title('ORDER_STATUS_cancelled');
+		$title=get_page_title('ORDER_STATUS_cancelled');
 
-		$id=get_param_integer('id');
+		$id	=	get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_cancelled'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_cancelled'),array('order_id'=>$id),'',1);
 
-		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'cancelled','id'=>$id),get_module_zone('admin_orders'));
+		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'cancelled','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
 	}
@@ -519,15 +523,15 @@ class Module_admin_orders
 	 */
 	function return_order()
 	{
-		$title=get_screen_title('ORDER_STATUS_returned');
+		$title=get_page_title('ORDER_STATUS_returned');
 
-		$id=get_param_integer('id');
+		$id	=	get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_returned'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_returned'),array('order_id'=>$id),'',1);
 
-		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'returned','id'=>$id),get_module_zone('admin_orders'));
+		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'returned','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
 	}
@@ -539,15 +543,15 @@ class Module_admin_orders
 	 */
 	function hold_order()
 	{
-		$title=get_screen_title('ORDER_STATUS_onhold');
+		$title=get_page_title('ORDER_STATUS_onhold');
 
-		$id=get_param_integer('id');
+		$id	=	get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_onhold'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_onhold'),array('order_id'=>$id),'',1);
 
-		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'onhold','id'=>$id),get_module_zone('admin_orders'));
+		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'onhold','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
 	}
@@ -563,13 +567,13 @@ class Module_admin_orders
 
 		require_code('form_templates');
 
-		$title=get_screen_title('EXPORT_ORDER_LIST');
+		$title	=	get_page_title('EXPORT_ORDER_LIST');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 
-		$fields=new ocp_tempcode();
+		$fields	=	new ocp_tempcode();
 
-		$order_status_list=get_order_status_list();
+		$order_status_list	=	get_order_status_list();
 
 		$fields->attach(form_input_list(do_lang_tempcode('ORDER_STATUS'),do_lang_tempcode('ORDER_STATUS_FILTER_DESCRIPTION'),'order_status',$order_status_list,NULL,false,false));
 
@@ -602,56 +606,56 @@ class Module_admin_orders
 	{
 		require_code('shopping');
 
-		$start_date=get_input_date('start_date',true);
-		$end_date=get_input_date('end_date',true);
-		$order_status=post_param('order_status');
+		$start_date		=	get_input_date('start_date',true);
+		$end_date		=	get_input_date('end_date',true);
+		$order_status	=	post_param('order_status');
 
-		$filename='Orders_'.$order_status.'__'.get_timezoned_date($start_date,false,false,false,true).'-'.get_timezoned_date($end_date,false,false,false,true).'.csv';
+		$filename		=	'Orders_'.$order_status.'__'.get_timezoned_date($start_date,false,false,false,true).'-'.get_timezoned_date($end_date,false,false,false,true).'.csv';
 
-		$orders=array();
-		$data=array();
+		$orders			=	array();
+		$data				=	array();
 
-		$cond='t1.add_date BETWEEN '.strval($start_date).' AND '.strval($end_date);
+		$cond				=	"t1.add_date BETWEEN ".strval($start_date)." AND ".strval($end_date);
 
-		if ($order_status!='all')
-			$cond.=' AND '.db_string_equal_to('t1.order_status',$order_status);
+		if($order_status!='all')
+				$cond		.=	" AND t1.order_status='".db_escape_string($order_status)."'";
 
-		$qry='SELECT t1.*,(t2.included_tax*t2.p_quantity) as 	
+		$qry				=	"SELECT t1.*,(t2.included_tax*t2.p_quantity) as 	
 								tax_amt,t3.address_name,t3.address_street,t3.address_city,t3.address_zip,
 								t3.address_country,t3.receiver_email
-								FROM '.get_table_prefix().'shopping_order t1
-								LEFT JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id
-								LEFT JOIN '.get_table_prefix().'shopping_order_addresses t3 ON t1.id=t3.order_id
-								WHERE '.$cond;
+								FROM ".get_table_prefix()."shopping_order t1
+								LEFT JOIN ".get_table_prefix()."shopping_order_details t2 ON t1.id = t2.order_id
+								LEFT JOIN ".get_table_prefix()."shopping_order_addresses t3 ON t1.id = t3.order_id
+								WHERE ".$cond;
 
-		$row=$GLOBALS['SITE_DB']->query($qry);
+		$row				=	$GLOBALS['SITE_DB']->query($qry);
 		remove_duplicate_rows($row);
 
-		foreach ($row as $order)
+		foreach($row as $order)
 		{
-			$orders[do_lang('ORDER_NUMBER')]=strval($order['id']);
-			$orders[do_lang('ORDERED_DATE')]=get_timezoned_date($order['add_date'],true,false,true,true);
-			$orders[do_lang('ORDER_PRICE')]=$order['tot_price'];
-			$orders[do_lang('ORDER_STATUS')]=do_lang($order['order_status']);
-			$orders[do_lang('ORDER_TAX_OPT_OUT')]=($order['tax_opted_out'])? do_lang('YES'):do_lang('NO');
-			$orders[do_lang('TOTAL_TAX_PAID')]=is_null($order['tax_amt'])?float_format(0.0):float_format($order['tax_amt']);
-			$orders[do_lang('ORDERED_PRODUCTS')]=get_ordered_product_list_string($order['id']);
-			$orders[do_lang('ORDERED_BY')]=$GLOBALS['FORUM_DRIVER']->get_username($order['c_member']);
+			$orders[do_lang('ORDER_NUMBER')]			=	strval($order['id']);
+			$orders[do_lang('ORDERED_DATE')]			=	get_timezoned_date($order['add_date'],true,false,true,true);
+			$orders[do_lang('ORDER_PRICE')]			=	$order['tot_price'];
+			$orders[do_lang('ORDER_STATUS')]			=	do_lang($order['order_status']);
+			$orders[do_lang('ORDER_TAX_OPT_OUT')]	=	($order['tax_opted_out'])? do_lang('YES'):do_lang('NO');
+			$orders[do_lang('TOTAL_TAX_PAID')]		=	is_null($order['tax_amt'])?float_format(0.0):float_format($order['tax_amt']);
+			$orders[do_lang('ORDERED_PRODUCTS')]	=	get_ordered_product_list_string($order['id']);
+			$orders[do_lang('ORDERED_BY')]			=	$GLOBALS['FORUM_DRIVER']->get_username($order['c_member']);
 
 			$address=array();
-			$address['name']=(array_key_exists('address_name',$order))?$order['address_name']:NULL;
-			$address['city']=(array_key_exists('address_city',$order))?$order['address_city']:NULL;
-			$address['zip']=(array_key_exists('address_zip',$order))?$order['address_zip']:NULL;
-			$address['country']=(array_key_exists('address_country',$order))?$order['address_country']:NULL;
+			$address['name']=	(array_key_exists('address_name',$order))?$order['address_name']:NULL;
+			$address['city']=	(array_key_exists('address_city',$order))?$order['address_city']:NULL;
+			$address['zip']=	(array_key_exists('address_zip',$order))?$order['address_zip']:NULL;
+			$address['country']=	(array_key_exists('address_country',$order))?$order['address_country']:NULL;
 
-			if (!is_null($address['name']))
-				$full_address=implode(chr(10),$address);
+			if(!is_null($address['name']))
+				$full_address	=	implode(chr(10),$address);
 			else
-				$full_address='';
+				$full_address	=	"";
 
-			$orders[do_lang('FULL_ADDRESS')]=$full_address;
+			$orders[do_lang('FULL_ADDRESS')]			=	$full_address;
 
-			$data[]=$orders;
+			$data[]	=	$orders;
 		}
 
 		require_code('files2');

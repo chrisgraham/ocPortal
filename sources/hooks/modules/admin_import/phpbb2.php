@@ -33,9 +33,6 @@ function init__hooks__modules__admin_import__phpbb2()
 	$OLD_BASE_URL=NULL;
 }
 
-/**
- * Forum Driver.
- */
 class Hook_phpbb2
 {
 
@@ -95,13 +92,17 @@ class Hook_phpbb2
 		$dbname='';
 		$dbuser='';
 		$dbpasswd='';
-		$dbhost='';
 		$table_prefix='';
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
+		$INFO=array();
+		$INFO['sql_database']=$dbname;
+		$INFO['sql_user']=$dbuser;
+		$INFO['sql_pass']=$dbpasswd;
+		$INFO['sql_tbl_prefix']=$table_prefix;
 
-		return array($dbname,$dbuser,$dbpasswd,$table_prefix,$dbhost);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
 	}
 
 	/**

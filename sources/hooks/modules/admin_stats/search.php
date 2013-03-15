@@ -48,7 +48,7 @@ class Hook_admin_stats_search
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('SEARCH_STATISTICS');
+			$title=get_page_title('SEARCH_STATISTICS');
 
 			return $ob->get_between($title);
 		}
@@ -58,7 +58,7 @@ class Hook_admin_stats_search
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
 
-		$title=get_screen_title('SEARCH_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$title=get_page_title('SEARCH_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);

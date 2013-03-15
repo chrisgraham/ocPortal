@@ -7,11 +7,11 @@
 <form title="{!NOTIFICATIONS}" method="post" action="{ACTION_URL*}">
 	<div>
 		{+START,IF_NON_EMPTY,{$TRIM,{TREE}}}
-			<div class="wide_table"><table class="wide_table results_table notifications_form" summary="{!COLUMNED_TABLE}">
+			<div class="wide_table"><table class="wide_table solidborder notifications_form" summary="{!COLUMNED_TABLE}">
 				<colgroup>
-					<col class="notifications_field_name_column" />
+					<col style="width: 100%" />
 					{+START,LOOP,NOTIFICATION_TYPES_TITLES}
-						<col class="notifications_tick_column" />
+						<col style="width: 40px" />
 					{+END}
 				</colgroup>
 

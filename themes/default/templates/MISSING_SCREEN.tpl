@@ -22,7 +22,7 @@
 	{+END}
 {+END}
 {+START,IF_NON_EMPTY,{$TRIM,{$GET,BUTTONS}}}
-	<p class="buttons_group">
+	<p>
 		{$GET,BUTTONS}
 	</p>
 {+END}

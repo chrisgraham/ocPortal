@@ -2,6 +2,33 @@
 
 <p>{!BOOKING_FLESH_OUT}</p>
 
+<script type="text/javascript">// <![CDATA[
+	function recalculate_price(form)
+	{
+		var post='',value,type;
+		for (var i=0;i<form.elements.length;i++)
+		{
+			if (!form.elements[i].name) continue;
+			value='';
+			type=form.elements[i].nodeName.toLowerCase();
+			if (type=='input') type=form.elements[i].type;
+			switch (type)
+			{
+				case 'hidden':
+				case 'text':
+				case 'textarea':
+					value=form.elements[i].value;
+					break;
+				case 'select':
+					value=form.elements[i].options[form.elements[i].selectedIndex].value;
+					break;
+			}
+			post+=form.elements[i].name+'='+window.encodeURIComponent(value)+'&';
+		}
+		setInnerHTML(document.getElementById('price'),escape_html(do_ajax_request('{$FIND_SCRIPT;,booking_price_ajax}'+keep_stub(true),null,post).responseText));
+	}
+//]]></script>
+
 <form action="{POST_URL*}" method="post">
 	<div>
 		{HIDDEN}
@@ -41,8 +68,12 @@
 						</p>
 
 						{+START,IF,{SUPPLEMENT_SUPPORTS_NOTES}}
-							<p class="lonely_label"><label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">{!NOTES_FOR_US}:</label></p>
-							<textarea cols="50" rows="1" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">{SUPPLEMENT_NOTES*}</textarea>
+							<p>
+								<label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">
+									{!NOTES_FOR_US}<br />
+									<textarea cols="50" rows="1" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">{SUPPLEMENT_NOTES*}</textarea>
+								</label>
+							</p>
 						{+END}
 					</div>
 				{+END}
@@ -53,9 +84,9 @@
 	<hr class="spaced_rule" />
 
 	{+START,IF,{$JS_ON}}
-		<div class="box box___booking_flesh_out_screen"><div class="box_inner">
+		{+START,BOX,,,curved}
 			<strong>{!PRICE_AUTO_CALC}:</strong> {$CURRENCY_SYMBOL} <span id="price">{PRICE*}</span>
-		</div></div>
+		{+END}
 	{+END}
 
 	<p class="proceed_button">

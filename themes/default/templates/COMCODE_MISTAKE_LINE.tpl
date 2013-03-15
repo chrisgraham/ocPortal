@@ -1,4 +1,4 @@
 <tr>
-	<th>{NUMBER*}</th>
+	<th style="width: 30px">{NUMBER*}</th>
 	<td>{LINE}</td>
 </tr>

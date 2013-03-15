@@ -132,7 +132,7 @@ class Module_chat
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_chat',20,1,0,0,0,'','integer');
 
 			require_lang('chat');
-			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'menu_items/community_navigation/chat');
+			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc');
 		}
 		if (($upgrade_from<3) || (is_null($upgrade_from)))
 		{
@@ -262,8 +262,7 @@ class Module_chat
 	function get_entry_points()
 	{
 		$ret=array('misc'=>'CHAT_LOBBY','private'=>'CREATE_PRIVATE_ROOM','blocking_interface'=>'MEMBER_BLOCKING');
-		if (!is_guest())
-			$ret['set_effects']='CHAT_SET_EFFECTS';
+		if (!is_guest()) $ret['set_effects']='CHAT_SET_EFFECTS';
 		return $ret;
 	}
 
@@ -374,10 +373,9 @@ class Module_chat
 		if ($type=='blocking_set') return $this->blocking_set();
 		if ($type=='blocking_add') return $this->blocking_add();
 		if ($type=='blocking_remove') return $this->blocking_remove();
-		if ($type=='buddy_add') return $this->friend_add(); // TODO: Remove after a while. This is legacy, as emails may have gone out using the old URL, from before upgrade
-		if ($type=='friend_add') return $this->friend_add();
-		if ($type=='friend_remove') return $this->friend_remove();
-		if ($type=='friends_list') return $this->friends_list();
+		if ($type=='buddy_add') return $this->buddy_add();
+		if ($type=='buddy_remove') return $this->buddy_remove();
+		if ($type=='buddies_list') return $this->buddies_list();
 		if ($type=='set_effects') return $this->set_effects();
 		if ($type=='_set_effects') return $this->_set_effects();
 
@@ -423,13 +421,12 @@ class Module_chat
 			delete_chatroom($old['id']);
 		}
 		// Prune chat events
-		if (!$GLOBALS['SITE_DB']->table_is_locked('chat_events'))
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_events WHERE e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE));
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_events WHERE e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE));
 
 		enter_chat_lobby();
 
 		// Generic stuff: Title, feed URL
-		$title=get_screen_title('CHAT_LOBBY');
+		$title=get_page_title('CHAT_LOBBY');
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=chat&filter=';
 
 		// Rooms
@@ -469,47 +466,47 @@ class Module_chat
 			$private_room=hyperlink(build_url(array('page'=>'_SELF','type'=>'private'),'_SELF'),do_lang_tempcode('CREATE_PRIVATE_ROOM'));
 		} else $private_room=new ocp_tempcode();
 
-		// Friend list and IM
+		// Buddy list and IM
 		if (($member_id==get_member()) && (!is_guest()))
 		{
-			$post_url_add_friend=build_url(array('page'=>'_SELF','type'=>'friend_add','redirect'=>get_self_url(true)),'_SELF');
-			$post_url_remove_friends=build_url(array('page'=>'_SELF','type'=>'friend_remove','redirect'=>get_self_url(true)),'_SELF');
+			$post_url_add_buddy=build_url(array('page'=>'_SELF','type'=>'buddy_add','redirect'=>get_self_url(true)),'_SELF');
+			$post_url_remove_buddies=build_url(array('page'=>'_SELF','type'=>'buddy_remove','redirect'=>get_self_url(true)),'_SELF');
 		} else
 		{
-			$post_url_add_friend=new ocp_tempcode();
-			$post_url_remove_friends=new ocp_tempcode();
+			$post_url_add_buddy=new ocp_tempcode();
+			$post_url_remove_buddies=new ocp_tempcode();
 		}
 		$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
 		$can_im=has_specific_permission(get_member(),'start_im');
-		$friends=array();
-		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);
-		$friend_active=get_chatters_in_room(NULL);
+		$buddies=array();
+		$buddy_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);
+		$buddy_active=get_chatters_in_room(NULL);
 		global $SESSION_CACHE;
 		$users_online_time_seconds=CHAT_ACTIVITY_PRUNE;
-		foreach ($friend_rows as $friend)
+		foreach ($buddy_rows as $buddy)
 		{
-			if ((array_key_exists($friend['member_liked'],$friend_active)) && (!member_blocked(get_member(),$friend['member_liked'])))
+			if ((array_key_exists($buddy['member_liked'],$buddy_active)) && (!member_blocked(get_member(),$buddy['member_liked'])))
 			{
 				$online_text=do_lang_tempcode('ACTIVE');
 			} else
 			{
-				$online_text=member_is_online($friend['member_liked'])?do_lang_tempcode('ONLINE'):do_lang_tempcode('OFFLINE');
+				$online_text=member_is_online($buddy['member_liked'])?do_lang_tempcode('ONLINE'):do_lang_tempcode('OFFLINE');
 			}
-			$username=array_key_exists($friend['member_liked'],$friend_active)?$friend_active[$friend['member_liked']]:$GLOBALS['FORUM_DRIVER']->get_username($friend['member_liked']);
+			$username=array_key_exists($buddy['member_liked'],$buddy_active)?$buddy_active[$buddy['member_liked']]:$GLOBALS['FORUM_DRIVER']->get_username($buddy['member_liked']);
 			if (!is_null($username))
 			{
-				$member_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($friend['member_liked'],true,true);
-				$friends[]=array('DATE_AND_TIME_RAW'=>strval($friend['date_and_time']),'DATE_AND_TIME'=>get_timezoned_date($friend['date_and_time'],false),'MEMBER_PROFILE_URL'=>$member_profile_url,'MEMBER_ID'=>strval($friend['member_liked']),'USERNAME'=>$username,'ONLINE_TEXT'=>$online_text);
+				$member_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($buddy['member_liked'],true,true);
+				$buddies[]=array('DATE_AND_TIME_RAW'=>strval($buddy['date_and_time']),'DATE_AND_TIME'=>get_timezoned_date($buddy['date_and_time'],false),'MEMBER_PROFILE_LINK'=>$member_profile_url,'MEMBER_ID'=>strval($buddy['member_liked']),'USERNAME'=>$username,'ONLINE_TEXT'=>$online_text);
 			}
 		}
 		$messages_php=find_script('messages');
 		$im_area_template=do_template('CHAT_LOBBY_IM_AREA',array('_GUID'=>'cd230527da03caa596135f74647b2ca7','MESSAGES_PHP'=>$messages_php,'ROOM_ID'=>'__room_id__'));
-		$make_friend_url=build_url(array('page'=>'_SELF','type'=>'friend_add','member_id'=>'__id__'),'_SELF');
+		$make_buddy_url=build_url(array('page'=>'_SELF','type'=>'buddy_add','member_id'=>'__id__'),'_SELF');
 		$block_member_url=build_url(array('page'=>'_SELF','type'=>'blocking_add','member_id'=>'__id__'),'_SELF');
 		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(-100,true,true);
 		if (is_object($profile_url)) $profile_url=$profile_url->evaluate();
 		$profile_url=str_replace('-100','__id__',$profile_url);
-		$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array('_GUID'=>'9a36efe3a449dabac6ef9866d1f6f48a','PROFILE_URL'=>$profile_url,'ID'=>'__id__','ROOM_ID'=>'__room_id__','USERNAME'=>'__username__','ONLINE'=>'__online__','AVATAR_URL'=>'__avatar_url__','MAKE_FRIEND_URL'=>$make_friend_url,'BLOCK_MEMBER_URL'=>$block_member_url));
+		$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array('_GUID'=>'9a36efe3a449dabac6ef9866d1f6f48a','PROFILE_URL'=>$profile_url,'ID'=>'__id__','ROOM_ID'=>'__room_id__','USERNAME'=>'__username__','ONLINE'=>'__online__','AVATAR_URL'=>'__avatar_url__','MAKE_BUDDY_URL'=>$make_buddy_url,'BLOCK_MEMBER_URL'=>$block_member_url));
 
 		if (!is_guest())
 		{
@@ -524,7 +521,7 @@ class Module_chat
 			$add_room_url=build_url(array('page'=>'admin_chat','type'=>'ad'),get_module_zone('admin_chat'));
 		} else $add_room_url=new ocp_tempcode();
 
-		return do_template('CHAT_LOBBY_SCREEN',array('_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2','ADD_ROOM_URL'=>$add_room_url,'MESSAGE'=>$message,'CHAT_SOUND'=>get_chat_sound_tpl(),'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,'IM_AREA_TEMPLATE'=>$im_area_template,'FRIENDS'=>$friends,'CAN_IM'=>$can_im,'ONLINE_URL'=>$online_url,'URL_ADD_FRIEND'=>$post_url_add_friend,'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,'TITLE'=>$title,'ROOMS'=>$fields,'PRIVATE_ROOM'=>$private_room,'MOD_LINK'=>$modlink,'BLOCKING_LINK'=>$blocking_link,'SETEFFECTS_LINK'=>$seteffectslink));
+		return do_template('CHAT_LOBBY_SCREEN',array('_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2','ADD_ROOM_URL'=>$add_room_url,'MESSAGE'=>$message,'CHAT_SOUND'=>get_chat_sound_tpl(),'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,'IM_AREA_TEMPLATE'=>$im_area_template,'BUDDIES'=>$buddies,'CAN_IM'=>$can_im,'ONLINE_URL'=>$online_url,'URL_ADD_BUDDY'=>$post_url_add_buddy,'URL_REMOVE_BUDDIES'=>$post_url_remove_buddies,'TITLE'=>$title,'ROOMS'=>$fields,'PRIVATE_ROOM'=>$private_room,'MOD_LINK'=>$modlink,'BLOCKING_LINK'=>$blocking_link,'SETEFFECTS_LINK'=>$seteffectslink));
 	}
 
 	/**
@@ -597,7 +594,7 @@ class Module_chat
 		$messages_php=find_script('messages');
 		$debug=(get_param_integer('debug',0)==1)?'block':'none';
 
-		$title=get_screen_title('ROOM');
+		$title=get_page_title('ROOM');
 
 		if (has_actual_page_access(get_member(),'cms_chat',NULL,array('chat',strval($room_id)),array('edit_lowrange_content',($room_check[0]['room_owner']==get_member())?'moderate_my_private_rooms':NULL)))
 		{
@@ -626,7 +623,7 @@ class Module_chat
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 
-		return do_template('CHAT_ROOM_SCREEN',array('_GUID'=>'867a0b050c050c81d33482d131783eb0','CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>strval($room_id),'DEBUG'=>$debug,'MESSAGES_PHP'=>$messages_php,'TEXT_COLOUR_DEFAULT'=>$user_colour,'FONT_NAME_DEFAULT'=>$line_contents,'OPTIONS_URL'=>$cs_post_url,'COMCODE_HELP'=>$comcode_help,'CHATCODE_HELP'=>$chatcode_help,'ROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),'MICRO_BUTTONS'=>$micro_buttons,'BUTTONS'=>$buttons,'YOUR_NAME'=>$yourname,'MESSAGES_URL'=>$messages_link,'POSTING_URL'=>$posting_url,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
+		return do_template('CHAT_SCREEN',array('_GUID'=>'867a0b050c050c81d33482d131783eb0','CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>strval($room_id),'DEBUG'=>$debug,'MESSAGES_PHP'=>$messages_php,'TEXT_COLOUR_DEFAULT'=>$user_colour,'FONT_NAME_DEFAULT'=>$line_contents,'OPTIONS_URL'=>$cs_post_url,'COMCODE_HELP'=>$comcode_help,'CHATCODE_HELP'=>$chatcode_help,'ROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),'MICRO_BUTTONS'=>$micro_buttons,'BUTTONS'=>$buttons,'YOUR_NAME'=>$yourname,'MESSAGES_LINK'=>$messages_link,'POSTING_URL'=>$posting_url,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
 	}
 
 	/**
@@ -643,7 +640,7 @@ class Module_chat
 		check_specific_permission('create_private_room');
 
 		// This function instantiates a private room...WE MUST BE TIGHT ON SECURITY WITH THIS ONE!
-		$title=get_screen_title('CREATE_PRIVATE_ROOM');
+		$title=get_page_title('CREATE_PRIVATE_ROOM');
 
 		require_code('form_templates');
 
@@ -666,7 +663,7 @@ class Module_chat
 	 */
 	function _chat_private()
 	{
-		$title=get_screen_title('CREATE_PRIVATE_ROOM');
+		$title=get_page_title('CREATE_PRIVATE_ROOM');
 
 		require_code('chat2');
 
@@ -722,7 +719,7 @@ class Module_chat
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$title=get_screen_title('MEMBER_BLOCKING');
+		$title=get_page_title('MEMBER_BLOCKING');
 
 		require_code('form_templates');
 
@@ -761,7 +758,7 @@ class Module_chat
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$title=get_screen_title('MEMBER_BLOCKING');
+		$title=get_page_title('MEMBER_BLOCKING');
 
 		$blocked=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>get_member()));
 
@@ -808,10 +805,10 @@ class Module_chat
 			if (strpos(do_lang($action),'{1}')!==false)
 			{
 				$preview=do_lang_tempcode($action,escape_html($param));
-				$title=get_screen_title($preview,false);
+				$title=get_page_title($preview,false);
 			} else
 			{
-				$title=get_screen_title($action);
+				$title=get_page_title($action);
 				$preview=do_lang_tempcode('PERFORM_ACTION_ON_PREVIEW',do_lang_tempcode($action),escape_html($param));
 			}
 			$fields=form_input_hidden('member_id',strval($member_id));
@@ -833,7 +830,7 @@ class Module_chat
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$title=get_screen_title('BLOCK_MEMBER');
+		$title=get_page_title('BLOCK_MEMBER');
 
 		$member_id=either_param_integer('member_id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
@@ -867,7 +864,7 @@ class Module_chat
 
 		$lang='UNBLOCK_MEMBER';
 
-		$title=get_screen_title($lang);
+		$title=get_page_title($lang);
 
 		$member_id=either_param_integer('member_id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
@@ -889,20 +886,20 @@ class Module_chat
 	}
 
 	/**
-	 * Add a friend.
+	 * Add a buddy.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function friend_add()
+	function buddy_add()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$title=get_screen_title('MAKE_FRIEND');
+		$title=get_page_title('MAKE_BUDDY');
 
 		$member_id=either_param_integer('member_id',NULL);
 		if (is_null($member_id))
 		{
-			$username=post_param('friend_username');
+			$username=post_param('buddy_username');
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 			if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 		} else
@@ -915,11 +912,11 @@ class Module_chat
 		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
 			warn_exit(do_lang('ALREADY_FRIENDS',escape_html($username)));
 
-		$test=$this->handle_repost('ADD_FRIEND_ACTION_DESCRIPTION',$username);
+		$test=$this->handle_repost('ADD_BUDDY_ACTION_DESCRIPTION',$username);
 		if (!is_null($test)) return $test;
 
 		require_code('chat2');
-		friend_add(get_member(),$member_id);
+		buddy_add(get_member(),$member_id);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
@@ -932,15 +929,15 @@ class Module_chat
 	}
 
 	/**
-	 * Remove a friend.
+	 * Remove a buddy.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function friend_remove()
+	function buddy_remove()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$title=get_screen_title('DUMP_FRIEND');
+		$title=get_page_title('DUMP_BUDDY');
 
 		$member_id=either_param_integer('member_id',NULL);
 		if (is_null($member_id))
@@ -963,13 +960,13 @@ class Module_chat
 				warn_exit(do_lang('NOT_CURRENTLY_FRIENDS',escape_html($username)));
 		}
 
-		$test=$this->handle_repost('DUMP_FRIEND',$username);
+		$test=$this->handle_repost('DUMP_BUDDY',$username);
 		if (!is_null($test)) return $test;
 
 		require_code('chat2');
 		foreach ($members as $member_id)
 		{
-			friend_remove(get_member(),$member_id);
+			buddy_remove(get_member(),$member_id);
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
@@ -983,17 +980,17 @@ class Module_chat
 	}
 
 	/**
-	 * List all the friends of a member.
+	 * List all the buddies of a member.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function friends_list()
+	function buddies_list()
 	{
 		$member_id=get_param_integer('id');
 
-		$title=get_screen_title('FRIENDS',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
+		$title=get_page_title('BUDDIES',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
 
-		$text_id=do_lang_tempcode('FRIENDS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
+		$text_id=do_lang_tempcode('BUDDIES',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
 
 		$mode=get_param('mode','both'); // single, both
 		$max=get_param_integer('max',100);
@@ -1010,7 +1007,7 @@ class Module_chat
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$query);
 
-		$friends=array();
+		$buddies=array();
 		$blocked=collapse_1d_complexity('member_blocked',$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$member_id)));
 		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 		foreach ($rows as $i=>$row)
@@ -1025,19 +1022,19 @@ class Module_chat
 				$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
 				$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
 				$mutual_label=do_lang('MUTUAL_FRIEND');
-				$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
+				$box=ocf_show_member_box($f_id,false,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
 				if ($box->is_empty()) continue;
 				$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
-				$friends[]=$friend_map;
+				$buddies[]=$friend_map;
 			}
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
-		require_code('templates_pagination');
-		$pagination=pagination($text_id,NULL,$start,'start',$max,'max',$max_rows,NULL,'friends_list',true);
+		require_code('templates_results_browser');
+		$results_browser=results_browser($text_id,NULL,$start,'start',$max,'max',$max_rows,NULL,'buddies_list',true);
 
-		return do_template('CHAT_FRIENDS_LIST_SCREEN',array('_GUID'=>'70b11d3c01ff551be42a0472d27dd207','TITLE'=>$title,'FRIENDS'=>$friends,'PAGINATION'=>$pagination));
+		return do_template('CHAT_BUDDIES_LIST_SCREEN',array('TITLE'=>$title,'BUDDIES'=>$buddies,'RESULTS_BROWSER'=>$results_browser));
 	}
 
 	/**
@@ -1047,7 +1044,7 @@ class Module_chat
 	 */
 	function chat_options()
 	{
-		$title=get_screen_title('ROOM');
+		$title=get_page_title('ROOM');
 
 		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');
@@ -1064,7 +1061,7 @@ class Module_chat
 	 */
 	function chat_download_logs()
 	{
-		$title=get_screen_title('CHAT_DOWNLOAD_LOGS');
+		$title=get_page_title('CHAT_DOWNLOAD_LOGS');
 
 		$chatrooms=chat_get_all_rooms();
 		$select=new ocp_tempcode();
@@ -1097,7 +1094,7 @@ class Module_chat
 	 */
 	function _chat_download_logs()
 	{
-		$title=get_screen_title('CHAT_DOWNLOAD_LOGS');
+		$title=get_page_title('CHAT_DOWNLOAD_LOGS');
 
 		$start_date_and_time=get_input_date('start',true);
 		$finish_date_and_time=get_input_date('finish',true);
@@ -1108,7 +1105,7 @@ class Module_chat
 		$keep=symbol_tempcode('KEEP');
 		$modlink=find_script('dllogs').'?room='.strval($room).'&start='.strval($start_date_and_time).'&finish='.strval($finish_date_and_time).'&zone='.get_zone_name().$keep->evaluate();
 		//$modlink=hyperlink($modlink,do_lang_tempcode('CHAT_DOWNLOAD_LOGS'));
-		//return do_template('CHAT_ROOM_SCREEN',array('_GUID'=>'18dd8ecf06301add0f44bdaf801fbdca','TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$modlink,'LINKS'=>array()));
+		//return do_template('CHAT_SCREEN',array('_GUID'=>'18dd8ecf06301add0f44bdaf801fbdca','TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$modlink,'LINKS'=>array()));
 
 		require_code('site2');
 		assign_refresh($modlink,0.0);
@@ -1122,7 +1119,7 @@ class Module_chat
 	 */
 	function set_effects()
 	{
-		$title=get_screen_title('CHAT_SET_EFFECTS');
+		$title=get_page_title('CHAT_SET_EFFECTS');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
@@ -1181,16 +1178,16 @@ class Module_chat
 		$setting_blocks->attach($block);
 
 		// Per-friend overrides
-		$friend_count=$GLOBALS['SITE_DB']->query_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
-		if ($friend_count<200)
+		$buddy_count=$GLOBALS['SITE_DB']->query_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
+		if ($buddy_count<200)
 		{
-			$friends=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
-			foreach ($friends as $friend)
+			$buddies=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
+			foreach ($buddies as $buddy)
 			{
-				$effect_settings=get_effect_settings(false,$friend['member_liked']); // Find what the member has it set to
+				$effect_settings=get_effect_settings(false,$buddy['member_liked']); // Find what the member has it set to
 				$has_some=false;
 				foreach ($effect_settings as $s) if ($s['VALUE']!='-1') $has_some=true;
-				$block=do_template('CHAT_SET_EFFECTS_SETTING_BLOCK',array('_GUID'=>'28916255c41e5cad386cbd0a045a3373','HAS_SOME'=>$has_some,'MEMBER_ID'=>strval($friend['member_liked']),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($friend['member_liked']),'EFFECTS'=>$effect_settings,'LIBRARY'=>$library));
+				$block=do_template('CHAT_SET_EFFECTS_SETTING_BLOCK',array('_GUID'=>'28916255c41e5cad386cbd0a045a3373','HAS_SOME'=>$has_some,'MEMBER_ID'=>strval($buddy['member_liked']),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($buddy['member_liked']),'EFFECTS'=>$effect_settings,'LIBRARY'=>$library));
 				$setting_blocks->attach($block);
 			}
 		}
@@ -1208,22 +1205,22 @@ class Module_chat
 	 */
 	function _set_effects()
 	{
-		$title=get_screen_title('CHAT_SET_EFFECTS');
+		$title=get_page_title('CHAT_SET_EFFECTS');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
 		require_code('uploads');
 
 		// Find all our suffixes to check for
-		$friend_count=$GLOBALS['SITE_DB']->query_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
+		$buddy_count=$GLOBALS['SITE_DB']->query_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
 		$suffixes=array();
-		if ($friend_count<200)
+		if ($buddy_count<200)
 		{
-			$friends=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
+			$buddies=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
 			$suffixes=array('');
-			foreach ($friends as $friend)
+			foreach ($buddies as $buddy)
 			{
-				$suffixes[]='_'.strval($friend['member_liked']);
+				$suffixes[]='_'.strval($buddy['member_liked']);
 			}
 		}
 

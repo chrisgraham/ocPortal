@@ -2870,7 +2870,7 @@ class GeSHi {
 
                         // If we haven't matched a multiline comment, try single-line comments
                         if (!$COMMENT_MATCHED) {
-                            // cache potential single line comment occurences
+                            // cache potential single line comment occurances
                             if (!empty($this->language_data['COMMENT_SINGLE']) && $next_comment_single_pos < $i) {
                                 $next_comment_single_pos = $length;
                                 foreach ($this->language_data['COMMENT_SINGLE'] as $comment_key => $comment_mark) {

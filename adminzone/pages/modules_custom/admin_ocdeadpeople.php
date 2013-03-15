@@ -146,7 +146,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_lang('ocdeadpeople');
-		return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
+		return do_next_manager(get_page_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DISEASE')),
@@ -192,8 +192,8 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCDEADPEOPLE_TITLE'))));
 		breadcrumb_set_self(do_lang_tempcode('VIEW_DISEASE'));
 
-		require_code('templates_map_table');
-		return map_table(get_screen_title('VIEW_DISEASE'),array('NAME'=>$name,'IMAGE'=>$image,'CURE'=>$cure,'CURE_PRICE'=>integer_format($cure_price),'IMMUNIZATION'=>$immunization,'IMMUNIZATION_PRICE'=>integer_format($immunization_price),'SPREAD_RATE'=>integer_format($spread_rate),'POINTS_PER_SPREAD'=>integer_format($points_per_spread),'ENABLED'=>$enabled));
+		require_code('templates_view_space');
+		return view_space(get_page_title('VIEW_DISEASE'),array('NAME'=>$name,'IMAGE'=>$image,'CURE'=>$cure,'CURE_PRICE'=>integer_format($cure_price),'IMMUNIZATION'=>$immunization,'IMMUNIZATION_PRICE'=>integer_format($immunization_price),'SPREAD_RATE'=>integer_format($spread_rate),'POINTS_PER_SPREAD'=>integer_format($points_per_spread),'ENABLED'=>$enabled));
 
 	}
 
@@ -206,17 +206,8 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('DISEASE'),do_lang_tempcode('DESCRIPTION_DISEASE'),'name',$name,true));
 
-		$set_name='image';
-		$required=true;
-		$set_title=do_lang_tempcode('IMAGE');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','image',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$image,false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
-
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'image',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$image,false));
 		handle_max_file_size($hidden,'image');
 
 		$fields->attach(form_input_line(do_lang_tempcode('CURE'),do_lang_tempcode('DESCRIPTION_CURE'),'cure',$cure,true));

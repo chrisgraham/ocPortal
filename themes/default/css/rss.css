@@ -3,27 +3,31 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-.rss_main {
+.rss_main
+{
 	width: 324px;
 	text-align: center;
-	margin: 2em auto 0 auto;
+	margin: 25px auto 0 auto;
 	border: 1px solid;
 }
 
-.rss_main_inner {
+.rss_main_internal
+{
 	width: 80%;
 	margin: 0 10%;
 	overflow: hidden;
 }
 
-.rss_copyright {
-	margin-top: 2em;
+.rss_copyright
+{
+	margin-top: 25px;
 	font-size: 0.8em;
 	text-align: center;
-	color: {$GET,area_text};
+	color: #333333; /* {$,wizard, 80% !W/B + 20% W/B} */
 }
 
-#xslt_introduction {
-	padding-bottom: 1em;
+#xslt_introduction
+{
+	padding-bottom: 10px;
 	font-size: 1.2em;
 }

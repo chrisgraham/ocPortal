@@ -18,28 +18,34 @@
  * @package		core
  */
 
-/*
-The version numbers here are not for interchange. sources/version2.php provides a way to turn these into the 'dotted' interchange format that the ocPortal platform recognises progmatically.
-*/
+/**
+ * Get the major version of your installation.
+ *
+ * @return integer		The major version number of your installation
+ */
+function ocp_version()
+{
+	return 8;
+}
 
 /**
  * Get the minor/patch version of your installation. This changes with each release, including bug fix releases. It generally consists of 'a' or 'a.b', where 'a' increments represent major changes and 'b' increments represent tiny changes or alpha/beta/RC numbering.
  *
- * @return string			The minor/patch version number of your installation (e.g. 0.1 or 1.1 or RC1 or 1.RC1)
+ * @return string			The minor/patch version number of your installation (e.g. 0.1 or 1.1 or RC1 or 1 RC1)
  */
 function ocp_version_minor()
 {
-	return '0.6';
+	return '1.7';
 }
 
 /**
- * Get the general version number of your installation (incorporates major and first [numeric] component of minor version number).
+ * Get the general version number of your installation (incorporates major and minor verson number).
  *
  * @return float			The general version number of your installation
  */
 function ocp_version_number()
 {
-	return 9.0;
+	return 8.1;
 }
 
 /**

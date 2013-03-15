@@ -70,7 +70,7 @@ function read_text_file($codename,$lang=NULL,$missing_blank=false)
 {
 	$path=_find_text_file_path($codename,$lang);
 
-	$in=@file_get_contents($path);
+	$in=@file_get_contents($path,FILE_TEXT);
 	if ($in===false)
 	{
 		if ($missing_blank) return '';

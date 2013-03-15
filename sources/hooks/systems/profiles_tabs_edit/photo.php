@@ -65,34 +65,14 @@ class Hook_Profiles_Tabs_Edit_photo
 		// UI fields
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-
-		$set_name='photo';
-		$required=false;
-		$set_title=do_lang_tempcode('PHOTO');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','photo_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','photo_url',$photo_url,false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
-
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'photo_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'photo_url',$photo_url,false));
 		if (get_option('is_on_gd')=='0')
 		{
 			$thumb_width=get_option('thumb_width');
-
-			$set_name='thumbnail';
-			$required=false;
-			$set_title=do_lang_tempcode('THUMBNAIL');
-			$field_set=alternate_fields_set__start($set_name);
-
-			$field_set->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),'','photo_file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
-			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','photo_thumb_url',$thumb_url,false));
-
-			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
+			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'photo_file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'photo_thumb_url',$thumb_url,false));
 		}
-
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 		$hidden->attach(form_input_hidden('submitting_photo_tab','1'));
@@ -107,7 +87,7 @@ class Hook_Profiles_Tabs_Edit_photo
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),is_null($config_url)?'':escape_html($config_url))));
 		}
 
-		$text=do_template('OCF_EDIT_PHOTO_TAB',array('_GUID'=>'ae0eb6d27bc8b576b326b54a9a792554','TEXT'=>$text,'MEMBER_ID'=>strval($member_id_of),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id_of),'PHOTO'=>$GLOBALS['FORUM_DRIVER']->get_member_photo_url($member_id_of)));
+		$text=do_template('OCF_EDIT_PHOTO_TAB',array('TEXT'=>$text,'MEMBER_ID'=>strval($member_id_of),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id_of),'PHOTO'=>$GLOBALS['FORUM_DRIVER']->get_member_photo_url($member_id_of)));
 
 		$javascript='';
 

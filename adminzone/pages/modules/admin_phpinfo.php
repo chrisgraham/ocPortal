@@ -61,7 +61,7 @@ class Module_admin_phpinfo
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		require_lang('menus');
-		get_screen_title('PHP_INFO');
+		get_page_title('PHP_INFO');
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 		$GLOBALS['TITLE_CALLED']=true;
 

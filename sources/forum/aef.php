@@ -18,12 +18,9 @@
  * @package 	core_forum_drivers
  */
 
-/**
- * Forum Driver.
- * @package		core_forum_drivers
- */
 class forum_driver_aef extends forum_driver_base
 {
+
 	/**
 	 * Check the connected DB is valid for this forum driver.
 	 *
@@ -43,7 +40,7 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function get_top_posters($limit)
 	{
-		return $this->connection->query("SELECT u.*,count(p.pid) AS submited_posts FROM ".$this->connection->get_table_prefix()."users AS u LEFT JOIN ".$this->connection->get_table_prefix()."posts AS p ON ( u.id=p.poster_id ) WHERE u.id<>".strval((integer)$this->get_guest_id())." GROUP BY u.id,u.language,u.ppic,u.avatar_type,u.avatar,u.username,u.email,u.hideemail,u.r_time,u.temp_ban_time,u.temp_ban,u.user_theme,u.u_member_group");
+		return $this->connection->query("SELECT u.*,count(p.pid) AS submited_posts FROM ".$this->connection->get_table_prefix()."users AS u LEFT JOIN ".$this->connection->get_table_prefix()."posts AS p ON ( u.id = p.poster_id ) WHERE u.id<>".strval((integer)$this->get_guest_id())." GROUP BY u.id,u.language,u.ppic,u.avatar_type,u.avatar,u.username,u.email,u.hideemail,u.r_time,u.temp_ban_time,u.temp_ban,u.user_theme,u.u_member_group");
 	}
 
 	/**
@@ -204,7 +201,7 @@ class forum_driver_aef extends forum_driver_base
 		foreach ($emoticons as $emo)
 		{
 			$code=$emo['smcode'];
-			$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'681b0be397b1892c1ee76e58409822f3','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
+			$em->attach(do_template('EMOTICON_CLICK_CODE',array('FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
 		}
 
 		return $em;
@@ -675,10 +672,10 @@ class forum_driver_aef extends forum_driver_base
 			$topic_last_post_row=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE pid='.strval((integer)$topic_last_post_id));
 			$topic_last_post_row=(!empty($topic_last_post_row[0]))?$topic_last_post_row[0]:array();
 
-			$r['topic_time']=$topic_first_post_row['ptime'];
-			$r['topic_poster']=$topic_first_post_row['poster_id'];
-			$r['last_poster']=$topic_last_post_row['poster_id'];
-			$r['last_time']=$topic_last_post_row['ptime'];
+			$r['topic_time'] = $topic_first_post_row['ptime'];
+			$r['topic_poster'] = $topic_first_post_row['poster_id'];
+			$r['last_poster'] = $topic_last_post_row['poster_id'];
+			$r['last_time'] = $topic_last_post_row['ptime'];
 
 			$firsttime[$id]=$topic_first_post_row['ptime'];
 
@@ -902,9 +899,9 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function is_banned($member)
 	{
-		$ban_time=$this->get_member_row_field($member,'temp_ban_time'); //when is banned user
-		$ban_period=$this->get_member_row_field($member,'temp_ban'); //how many days is banned
-		$ban_till=$ban_time+$ban_period; //the user is banned till this date/time
+		$ban_time = $this->get_member_row_field($member,'temp_ban_time'); //when is banned user
+		$ban_period = $this->get_member_row_field($member,'temp_ban'); //how many days is banned
+		$ban_till = $ban_time+$ban_period; //the user is banned till this date/time
 
 		if (empty($ban_till))
 		{
@@ -987,7 +984,7 @@ class forum_driver_aef extends forum_driver_base
 				$skin=$this->get_member_row_field($member,'user_theme'); else $skin=0;
 			if ($skin>0) // User has a custom theme
 			{
-				$user_theme=$this->connection->query("SELECT * FROM ".$this->connection->get_table_prefix()."themes t LEFT JOIN ".$this->connection->get_table_prefix()."theme_registry tr ON tr.thid =t.thid WHERE t.thid=".strval($skin));
+				$user_theme=$this->connection->query("SELECT * FROM ".$this->connection->get_table_prefix()."themes t LEFT JOIN ".$this->connection->get_table_prefix()."theme_registry tr ON tr.thid =t.thid WHERE t.thid = ".strval($skin));
 
 				$user_theme=(!empty($user_theme[0]))?$user_theme[0]:'';
 				$user_theme=(!empty($user_theme['user_theme']))?$user_theme['user_theme']:'';
@@ -1182,22 +1179,22 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function generateRandStr($length)
 	{
-		$randstr="";
+		$randstr = "";
 
-		for($i=0; $i < $length; $i++)
+		for($i = 0; $i < $length; $i++)
 		{
-			$randnum=mt_rand(0,61);
+			$randnum = mt_rand(0,61);
 
 			if($randnum < 10)
 			{
-				$randstr.=chr($randnum+48);
+				$randstr .= chr($randnum+48);
 			}
 			elseif($randnum < 36)
 			{
-				$randstr.=chr($randnum+55);
+				$randstr .= chr($randnum+55);
 			} else
 			{
-				$randstr.=chr($randnum+61);
+				$randstr .= chr($randnum+61);
 			}
 		}
 
@@ -1221,11 +1218,11 @@ class forum_driver_aef extends forum_driver_base
 		unset($password);
 
 		$row=$this->get_member_row($id);
-		$logpass=$row['cookpass']; //cookie var [logpass]
-		$loguid=$row['id']; //cookie var [loguid]
+		$logpass = $row['cookpass']; //cookie var [logpass]
+		$loguid = $row['id']; //cookie var [loguid]
 		if (empty($logpass)) //this means that it is not set
 		{
-			$logpass=$this->generateRandStr(32);
+			$logpass = $this->generateRandStr(32);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'users SET cookpass=\''.db_escape_string($logpass).'\' WHERE id='.strval((integer)$id),1);
 		}
 
@@ -1244,7 +1241,7 @@ class forum_driver_aef extends forum_driver_base
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'sessions SET time='.strval(time()).' WHERE uid='.strval((integer)$id),1);
 		} else
 		{
-			$session_id=strtolower($this->generateRandStr(32));
+			$session_id = strtolower($this->generateRandStr(32));
 			$this->connection->query_insert('sessions', array('sid'=>$session_id,'uid'=>$id,'time'=>time(),'data'=>'','ip'=>$row['r_ip']));
 		}
 

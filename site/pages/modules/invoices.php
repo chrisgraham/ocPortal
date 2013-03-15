@@ -109,7 +109,7 @@ class Module_invoices
 	 */
 	function my()
 	{
-		$title=get_screen_title('MY_INVOICES');
+		$title=get_page_title('MY_INVOICES');
 
 		$member_id=get_member();
 		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
@@ -156,7 +156,7 @@ class Module_invoices
 			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 		}
 
-		$title=get_screen_title('MAKE_PAYMENT');
+		$title=get_page_title('MAKE_PAYMENT');
 
 		$post_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 

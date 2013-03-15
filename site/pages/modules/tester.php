@@ -148,7 +148,7 @@ class Module_tester
 	 */
 	function stats()
 	{
-		$title=get_screen_title('TEST_STATISTICS');
+		$title=get_page_title('TEST_STATISTICS');
 
 		$num_tests_successful=$GLOBALS['SITE_DB']->query_value('tests','COUNT(*)',array('t_status'=>1,'t_enabled'=>1));
 		$num_tests_failed=$GLOBALS['SITE_DB']->query_value('tests','COUNT(*)',array('t_status'=>2,'t_enabled'=>1));
@@ -185,7 +185,7 @@ class Module_tester
 	{
 		require_code('comcode_renderer');
 
-		$title=get_screen_title('RUN_THROUGH_TESTS');
+		$title=get_page_title('RUN_THROUGH_TESTS');
 
 		$show_for_all=get_param_integer('show_for_all',0);
 		$show_successful=get_param_integer('show_successful',0);
@@ -282,7 +282,7 @@ class Module_tester
 
 		$self_title=$section.'/'.substr($test,0,20);
 
-		$title=get_screen_title('BUG_REPORT_FOR',true,array(escape_html($self_title)));
+		$title=get_page_title('BUG_REPORT_FOR',true,array(escape_html($self_title)));
 
 		require_code('feedback');
 
@@ -303,7 +303,7 @@ class Module_tester
 	 */
 	function _go()
 	{
-		$title=get_screen_title('RUN_THROUGH_TESTS');
+		$title=get_page_title('RUN_THROUGH_TESTS');
 
 		foreach ($_POST as $key=>$val)
 		{
@@ -436,7 +436,7 @@ class Module_tester
 	 */
 	function add_test()
 	{
-		$title=get_screen_title('ADD_TEST');
+		$title=get_page_title('ADD_TEST');
 
 		check_specific_permission('add_tests');
 
@@ -462,7 +462,7 @@ class Module_tester
 	 */
 	function _add_test()
 	{
-		$title=get_screen_title('ADD_TEST');
+		$title=get_page_title('ADD_TEST');
 
 		check_specific_permission('add_tests');
 
@@ -481,7 +481,7 @@ class Module_tester
 	 */
 	function ad()
 	{
-		$title=get_screen_title('ADD_TEST_SECTION');
+		$title=get_page_title('ADD_TEST_SECTION');
 
 		check_specific_permission('add_tests');
 
@@ -534,7 +534,7 @@ class Module_tester
 	 */
 	function _ad()
 	{
-		$title=get_screen_title('ADD_TEST_SECTION');
+		$title=get_page_title('ADD_TEST_SECTION');
 
 		check_specific_permission('add_tests');
 
@@ -562,7 +562,7 @@ class Module_tester
 	 */
 	function ed()
 	{
-		$title=get_screen_title('EDIT_TEST_SECTION');
+		$title=get_page_title('EDIT_TEST_SECTION');
 
 		check_specific_permission('edit_own_tests');
 		if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) access_denied('STAFF_ONLY');
@@ -589,7 +589,7 @@ class Module_tester
 	 */
 	function _ed()
 	{
-		$title=get_screen_title('EDIT_TEST_SECTION');
+		$title=get_page_title('EDIT_TEST_SECTION');
 
 		check_specific_permission('edit_own_tests');
 
@@ -648,7 +648,7 @@ class Module_tester
 
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_screen_title('DELETE_TEST_SECTION');
+			$title=get_page_title('DELETE_TEST_SECTION');
 
 			$GLOBALS['SITE_DB']->query_delete('test_sections',array('id'=>$id),'',1);
 			$GLOBALS['SITE_DB']->query_delete('tests',array('t_section'=>$id));
@@ -656,7 +656,7 @@ class Module_tester
 			return inform_screen($title,do_lang_tempcode('SUCCESS'));
 		} else
 		{
-			$title=get_screen_title('EDIT_TEST_SECTION');
+			$title=get_page_title('EDIT_TEST_SECTION');
 
 			// New tests
 			$this->_add_new_tests($id);

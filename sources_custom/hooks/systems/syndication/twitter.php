@@ -105,7 +105,7 @@ class Hook_Syndication_twitter
 		$link=static_evaluate_tempcode(pagelink_to_tempcode($row['a_pagelink_1']));
 
 		// Shorten message for Twitter purposes
-		$chopped_message=strip_html($message->evaluate());
+		$chopped_message=html_entity_decode(strip_tags($message->evaluate()),ENT_COMPAT,get_charset());
 		$max_length=255;
 		$shortened_link=mixed();
 		if ($link!='')

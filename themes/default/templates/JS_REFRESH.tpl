@@ -1,5 +1,9 @@
 <script type="text/javascript">// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
-		document.getElementById('{FORM_NAME;*}').submit();
-	} );
+	function refresh(form_name)
+	{
+		document.getElementById(form_name).submit();
+	}
+
+	var timer=setTimeout(function() { refresh('{FORM_NAME;;}'); }, 2500);
 //]]></script>
+

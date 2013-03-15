@@ -96,6 +96,7 @@ class Block_main_staff_links
 				'Kompozer (Web design tool)'=>'http://www.kompozer.net/',
 				'DiffMerge'=>'http://www.sourcegear.com/diffmerge/',
 				'Jing (record screencasts)'=>'http://www.jingproject.com/',
+				'Elief hosting (quality shared hosting)'=>'http://www.elief.com/billing/aff.php?aff=035',
 				'Rackspace Cloud hosting'=>'http://www.rackspacecloud.com/1043-0-3-13.html',
 				'GoDaddy (Domains and SSL certificates)'=>'http://www.jdoqocy.com/click-3972552-10378406',
 				'SiteRay (site quality auditing)'=>'http://www.silktide.com/siteray',
@@ -123,13 +124,13 @@ class Block_main_staff_links
 	{
 		require_lang('staff_checklist');
 
-		$newdata=post_param('staff_links_edit', NULL);
-		if (!is_null($newdata))
+		$newdata=post_param('stafflinksedit', NULL);
+		if(!is_null($newdata))
 		{
 			$items=explode("\n", $newdata);
 			$GLOBALS['SITE_DB']->query_delete('stafflinks');
 
-			foreach ($items as $i)
+			foreach($items as $i)
 			{
 				$q=trim($i);
 				if(!empty($q))
@@ -184,24 +185,24 @@ class Block_main_staff_links
 		}
 
 		$rows=$GLOBALS['SITE_DB']->query_select('stafflinks',array('*'));
-		$formatted_staff_links=array();
-		$unformatted_staff_links=array();
+		$formattedstafflinks=array();
+		$unformattedstafflinks=array();
 		foreach($rows as $r)
 		{
 			if ($r['link_title']=='') $r['link_title']=$r['link_desc'];
 			if (strlen($r['link_title'])>strlen($r['link_desc'])) $r['link_title']=$r['link_desc'];
 
-			$formatted_staff_links[]=array(
+			$formattedstafflinks[]=array(
 				'URL'=>$r['link'],
 				'TITLE'=>$r['link_title'],
 				'DESC'=>($r['link_title']==$r['link_desc'])?'':$r['link_desc'],
 			);
-			$unformatted_staff_links[]=array('LINKS'=>$r['link'].'='.$r['link_desc']);
+			$unformattedstafflinks[]=array('LINKS'=>$r['link'].'='.$r['link_desc']);
 		}
 
 		$map_comcode='';
 		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
-		return do_template('BLOCK_MAIN_STAFF_LINKS',array('URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_links','MAP'=>$map_comcode,'FORMATTED_LINKS'=>$formatted_staff_links,'UNFORMATTED_LINKS'=>$unformatted_staff_links));
+		return do_template('BLOCK_MAIN_STAFF_LINKS',array('URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_links','MAP'=>$map_comcode,'FORMATTEDLINKS'=>$formattedstafflinks,'UNFORMATTEDLINKS'=>$unformattedstafflinks));
 	}
 
 }

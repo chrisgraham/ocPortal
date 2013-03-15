@@ -1,35 +1,33 @@
 {TITLE}
 
-{+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
+{+START,INCLUDE,handle_conflict_resolution}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
 {+END}
 
 {+START,IF_NON_EMPTY,{TEXT}}
-	{$PARAGRAPH,{TEXT}}
+	<div>
+		{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{TEXT}{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
+	</div>
 {+END}
 
 {+START,IF,{$IN_STR,{FIELDS},_required}}
 	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
 {+END}
 
-{$REQUIRE_JAVASCRIPT,javascript_validation}
+{$JAVASCRIPT_INCLUDE,javascript_validation}
 {+START,IF_NON_PASSED,IFRAME_URL}
-<form title="{!PRIMARY_PAGE_FORM}" id="main_form" {+START,IF_NON_PASSED_OR_FALSE,GET}method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED_AND_TRUE,GET}method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END} {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}{+START,IF_NON_PASSED,TARGET}target="_top" {+END}{+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
-	{+START,IF_NON_PASSED_OR_FALSE,GET}{$INSERT_SPAMMER_BLACKHOLE}{+END}
-
-	{+START,IF_PASSED_AND_TRUE,GET}{$HIDDENS_FOR_GET_FORM,{URL}}{+END}
+<form title="{!PRIMARY_PAGE_FORM}" id="main_form" {+START,IF_NON_PASSED,GET}method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED,GET}method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END} {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}{+START,IF_NON_PASSED,TARGET}target="_top" {+END}{+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
+	{+START,IF_PASSED,GET}{$HIDDENS_FOR_GET_FORM,{URL}}{+END}
 {+END}
 {+START,IF_PASSED,IFRAME_URL}
-<form title="{!PRIMARY_PAGE_FORM}" id="main_form" {+START,IF_NON_PASSED_OR_FALSE,GET}method="post" action="{IFRAME_URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED_AND_TRUE,GET}method="get" action="{$URL_FOR_GET_FORM*,{IFRAME_URL}}"{+END} target="iframe_under" {+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
-	{$INSERT_SPAMMER_BLACKHOLE}
-
-	{+START,IF_PASSED_AND_TRUE,GET}{$HIDDENS_FOR_GET_FORM,{IFRAME_URL}}{+END}
+<form title="{!PRIMARY_PAGE_FORM}" id="main_form" {+START,IF_NON_PASSED,GET}method="post" action="{IFRAME_URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED,GET}method="get" action="{$URL_FOR_GET_FORM*,{IFRAME_URL}}"{+END} target="iframe_under" {+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
+	{+START,IF_PASSED,GET}{$HIDDENS_FOR_GET_FORM,{IFRAME_URL}}{+END}
 {+END}
 
 	{+START,IF_PASSED,SKIPPABLE}
 		{+START,IF,{$JS_ON}}
-			<div class="skip_step_button_wrap{+START,IF,{$IN_STR,{FIELDS},_required}} skip_step_button_wrap_with_req_note{+END}">
+			<div class="form_skip{+START,IF,{$IN_STR,{FIELDS},_required}} form_skip_with_req_note{+END}">
 				<div>
 					<input type="hidden" id="{SKIPPABLE*}" name="{SKIPPABLE*}" value="0" />
 					<input onclick="document.getElementById('{SKIPPABLE;}').value='1'; disable_button_just_clicked(this);" tabindex="151" class="button_pageitem" type="submit" value="{!SKIP}" />
@@ -42,11 +40,11 @@
 		{HIDDEN}
 
 		{+START,IF_NON_EMPTY,{FIELDS}}
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table scrollable_inside">
+			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table scrollable_inside">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
-						<col class="field_name_column" />
-						<col class="field_input_column" />
+						<col style="width: 198px" />
+						<col style="width: 100%" />
 					</colgroup>
 				{+END}
 
@@ -61,25 +59,25 @@
 </form>
 
 {+START,IF_PASSED,IFRAME_URL}
-	<a id="edit_space"></a>
+	<a name="edit_space" id="edit_space"></a>
 
 	<div class="arrow_ruler">
 		<form action="#" method="post">
-			<div class="associated_link">
-				<input onclick="var f=document.getElementById('main_form'); f.action=this.checked?non_iframe_url:iframe_url; f.elements['opens_below'].value=this.checked?'0':'1'; f.target=this.checked?'_blank':'iframe_under';" type="checkbox" name="will_open_new" id="will_open_new" /> <label for="will_open_new">{!CHOOSE_OPEN_NEW_WINDOW}</label>
+			<div>
+				[ <input onclick="var f=document.getElementById('main_form'); f.action=this.checked?non_iframe_url:iframe_url; f.elements['opens_below'].value=this.checked?'0':'1'; f.elements['wide_high'].value=this.checked?'0':'1'; f.target=this.checked?'_blank':'iframe_under';" type="checkbox" name="will_open_new" id="will_open_new" /> <label for="will_open_new">{!CHOOSE_OPEN_NEW_WINDOW}</label> ]
 			</div>
 		</form>
 
 		<img alt="" src="{$IMG*,arrow_ruler}" />
 	</div>
 
-	<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} class="form_screen_iframe" title="{!EDIT}" name="iframe_under" id="iframe_under" src="{$BASE_URL*}/uploads/index.html">{!EDIT}</iframe>
+	<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} class="form_page_iframe" title="{!EDIT}" name="iframe_under" id="iframe_under" src="{$BASE_URL*}/uploads/index.html">{!EDIT}</iframe>
 
 	<script type="text/javascript">// <![CDATA[
 		if (typeof window.try_to_simplify_iframe_form!='undefined') try_to_simplify_iframe_form();
-		var non_iframe_url='{URL*;}';
-		var iframe_url='{IFRAME_URL*;}';
-		window.setInterval(function() { resize_frame('iframe_under'); },1500);
+		var non_iframe_url='{URL;*}';
+		var iframe_url='{IFRAME_URL;*}';
+		window.setInterval(function() { resizeFrame('iframe_under'); },1500);
 	//]]></script>
 {+END}
 {+START,IF_NON_PASSED,IFRAME_URL}
@@ -88,10 +86,8 @@
 	//]]></script>
 {+END}
 
-{+START,IF_PASSED_AND_TRUE,BACK}
+{+START,IF_PASSED,BACK}
 	{+START,IF,{$JS_ON}}
-		<p class="back_button">
-			<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
-		</p>
+	<p><a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a></p>
 	{+END}
 {+END}

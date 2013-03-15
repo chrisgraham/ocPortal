@@ -100,7 +100,7 @@ class Module_cms_quiz extends standard_aed_module
 
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
+		return do_next_manager(get_page_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),
@@ -227,7 +227,7 @@ class Module_cms_quiz extends standard_aed_module
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEST'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('COMPLETION_PERCENTAGE'),do_lang_tempcode('DESCRIPTION_COMPLETION_PERCENTAGE'),'percentage',$percentage,true));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEXT'),'SECTION_HIDDEN'=>$start_text=='' && $end_text=='')));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEXT'),'SECTION_HIDDEN'=>true)));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,false));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
 

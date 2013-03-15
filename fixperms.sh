@@ -21,7 +21,7 @@ if [ -z "$1" ]; then
 	echo "ocPortal file permissions fixed"
 fi
 
-if [ $(id -u) = 0 ]; then
+if [[ $EUID -ne 0 ]]; then
 	echo "By the way, you are logged in as root or some weird user. Make sure the files aren't owned by root if you want to maintain via FTP. Useful command follows..."
 	echo "  find . -user root -exec chown <correctuser> '{}' \;"
 fi

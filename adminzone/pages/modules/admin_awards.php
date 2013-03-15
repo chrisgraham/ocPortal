@@ -158,7 +158,7 @@ class Module_admin_awards extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('MANAGE_AWARDS'),comcode_lang_string('DOC_AWARDS'),
+		return do_next_manager(get_page_title('MANAGE_AWARDS'),comcode_lang_string('DOC_AWARDS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AWARD_TYPE')),

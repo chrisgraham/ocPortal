@@ -16,39 +16,33 @@ It provides a function to open an image link as a 'lightbox' (we use the term li
 
 */
 
-window.overlay_zIndex=999999; // Has to be higher than plupload, which is 99999
+var overlay_zIndex=999999; // Has to be higher than plupload, which is 99999
 
 function open_link_as_overlay(ob,width,height,target)
 {
-	{+START,IF,{$MOBILE}}
-		if (typeof height=='undefined') return true; // Would probably not fit, and unfortunately cannot scroll
-	{+END}
-
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		if ((typeof width=='undefined') || (!width)) var width=800;
 		if ((typeof height=='undefined') || (!height)) var height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
 		if ((typeof target=='undefined') || (!target)) var target='_top';
-		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1&overlay=1',null,'width='+width+';height='+height,target);
+		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
 		return false;
 	{+END}
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
-		return true;
-	{+END}
+	return true;
 }
 
 {+START,IF,{$CONFIG_OPTION,js_overlays}}
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="{$IMG*,loading}" /></p><p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
+		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" class="inline_image_2" src="{$IMG*,bottom/loading}" /></p><p class="community_block_tagline">[ <a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a> ]</p>';
 
 		// Show overlay
-		var myLightbox={
-			type: 'lightbox',
+		var myLightbox = {
+			type: "lightbox",
 			text: lightbox_code,
-			yes_button: '{!INPUTSYSTEM_CLOSE;^}',
+			yes_button: "{!INPUTSYSTEM_CLOSE#}",
 			width: 450,
 			height: 300
 		};
@@ -67,31 +61,25 @@ function open_link_as_overlay(ob,width,height,target)
 				var real_height=img.height;
 				var height=real_height;
 
-				var dims_func=function()
+				// Might need to rescale using some maths, if natural size is too big
+				var max_width=modal.topWindow.getWindowWidth()-20;
+				var max_height=modal.topWindow.getWindowHeight()-180;
+				if (width>max_width)
 				{
-					// Might need to rescale using some maths, if natural size is too big
-					var max_width=modal.topWindow.get_window_width()-20;
-					var max_height=modal.topWindow.get_window_height()-180;
-					if (width>max_width)
-					{
-						width=max_width;
-						height=window.parseInt(max_width*real_height/real_width-1);
-					}
-					if (height>max_height)
-					{
-						width=window.parseInt(max_height*real_width/real_height-1);
-						height=max_height;
-					}
-					modal.resetDimensions(width,height);
-
-					img.width=width;
-					img.height=height;
-				};
-
-				dims_func();
-				modal.addEvent( window, 'resize', function() { dims_func(); } );
+					width=max_width;
+					height=window.parseInt(max_width*real_height/real_width-1);
+				}
+				if (height>max_height)
+				{
+					width=window.parseInt(max_height*real_width/real_height-1);
+					height=max_height;
+				}
+				modal.resetDimensions(width,height);
 
 				var sup=modal.topWindow.document.getElementById('lightbox_image').parentNode;
+				img.className='no_alpha';
+				img.width=width;
+				img.height=height;
 				sup.removeChild(sup.childNodes[0]);
 				sup.appendChild(img);
 				sup.className='';
@@ -108,11 +96,11 @@ function fauxmodal_confirm(question,callback,title)
 	if (typeof title=='undefined') var title='{!Q_SURE;}';
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		var myConfirm={
-			type: 'confirm',
-			text: escape_html(question).replace(/\n/g,'<br />'),
-			yes_button: '{!YES;^}',
-			no_button: '{!NO;^}',
+		var myConfirm = {
+			type: "confirm",
+			text: escape_html(question),
+			yes_button: "{!YES#}",
+			no_button: "{!NO#}",
 			title: title,
 			yes: function() {
 				callback(true);
@@ -137,10 +125,10 @@ function fauxmodal_alert(notice,callback,title)
 	if (typeof title=='undefined') var title='{!MESSAGE;}';
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		var myAlert={
-			type: 'alert',
-			text: escape_html(notice).replace(/\n/g,'<br />'),
-			yes_button: '{!INPUTSYSTEM_OK;^}',
+		var myAlert = {
+			type: "alert",
+			text: escape_html(notice),
+			yes_button: "{!INPUTSYSTEM_OK#}",
 			width: 600,
 			yes: callback,
 			title: title
@@ -157,12 +145,12 @@ function fauxmodal_alert(notice,callback,title)
 function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 {
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		var myPrompt={
-			type: 'prompt',
-			text: escape_html(question).replace(/\n/g,'<br />'),
-			yes_button: '{!INPUTSYSTEM_OK;^}',
-			cancel_button: '{!INPUTSYSTEM_CANCEL;^}',
-			defaultValue: (this.defaultValue===null)?'':this.defaultValue,
+		var myPrompt = {
+			type: "prompt",
+			text: escape_html(question),
+			yes_button: "{!INPUTSYSTEM_OK#}",
+			cancel_button: "{!INPUTSYSTEM_CANCEL#}",
+			defaultValue: defaultValue,
 			title: title,
 			yes: function(value) {
 				callback(value);
@@ -188,7 +176,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var width=null,height=null,scrollbars=null,unadorned=null;
 
-		if (typeof cancel_text=='undefined') var cancel_text='{!INPUTSYSTEM_CANCEL;^}';
+		if (typeof cancel_text=='undefined') var cancel_text="{!INPUTSYSTEM_CANCEL#}";
 
 		if (options)
 		{
@@ -204,7 +192,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 					{
 						if (bits[1]=='100%')
 						{
-							height=get_window_height() - 200;
+							height = getWindowHeight() - 200;
 						} else
 						{
 							height=window.parseInt(bits[1].replace(/px$/,''));
@@ -217,8 +205,8 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 			}
 		}
 
-		var myFrame={
-			type: 'iframe',
+		var myFrame = {
+			type: "iframe",
 			finished: function(value) {
 				callback(value);
 			},
@@ -243,7 +231,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 		var timer_now=new Date().getTime();
 		if (timer_now-100>timer) // Not popup blocked
 		{
-			if ((typeof result=='undefined') || (result===null))
+			if ((typeof result=="undefined") || (result===null))
 			{
 				callback(null);
 			} else
@@ -256,7 +244,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 
 function faux_open(url,name,options,target,cancel_text)
 {
-	if (typeof cancel_text=='undefined') var cancel_text='{!INPUTSYSTEM_CLOSE;^}';
+	if (typeof cancel_text=='undefined') var cancel_text="{!INPUTSYSTEM_CLOSE#}";
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		faux_showModalDialog(url,name,options,null,target,cancel_text);
@@ -296,17 +284,17 @@ function ModalWindow()
 		topWindow: null,
 
 		open: function() {
-			var options=arguments[0] || {};
-			var defaults={
-				'type': 'alert',
-				'opacity': '0.5',
+			var options = arguments[0] || {};
+			var defaults = {
+				'type': "alert",
+				'opacity': "0.5",
 				'width': null,
 				'height': 'auto',
-				'title': '',
-				'text': '',
-				'yes_button': '{!YES;^}',
-				'no_button': '{!NO;^}',
-				'cancel_button': '{!INPUTSYSTEM_CANCEL;^}',
+				'title': "",
+				'text': "",
+				'yes_button': "{!YES#}",
+				'no_button': "{!NO#}",
+				'cancel_button': "{!INPUTSYSTEM_CANCEL#}",
 				'yes': null,
 				'no': null,
 				'finished': null,
@@ -322,30 +310,35 @@ function ModalWindow()
 			this.topWindow=this.topWindow.top;
 
 			for(var key in defaults) {
-				this[key]=(typeof options[key] != 'undefined') ? options[key] : defaults[key] ;
+				this[key] = (typeof options[key] != "undefined") ? options[key] : defaults[key] ;
 			}
 
 			this.close(this.topWindow);
 			this.initBox();
+
+			if (browser_matches('ie6'))
+			{
+				this.topWindow.smoothScroll(0);
+			}
 		},
 
 		close: function(win) {
 			if(this.box) {
 				this.remove(this.box, win);
-				this.box=null;
+				this.box = null;
 
-				this.removeEvent(document, 'keyup', this.keyup);
+				this.removeEvent(document, "keyup", this.keyup);
 			}
-			this.opened=false;
+			this.opened = false;
 		},
 
 		option: function(method) {
-			var win=this.topWindow; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
+			var win = this.topWindow; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
 			if(this[ method ]) {
-				if(this.type=='prompt') {
+				if(this.type == "prompt") {
 					this[ method ](this.input.value);
 				}
-				else if(this.type=='iframe') {
+				else if(this.type == "iframe") {
 					this[ method ](this.returnValue);
 				}
 				else this[ method ]();
@@ -356,36 +349,30 @@ function ModalWindow()
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
 			if (!this.box) return;
 
-			var dim=this.getPageSize();
-			if (width>dim.pageWidth) width=dim.pageWidth-30;
+			var dim = this.getPageSize();
 
-			var boxWidth=((width) ? (width + 8) : (dim.pageWidth / 4))  + 'px';
-			var extra_box_height=(this.type=='iframe' ) ? 160 : 120;
-			if (this.cancel_button === null) extra_box_height=0;
-			var boxHeight=(typeof height=='string' || height === null || this.type=='iframe') ? 'auto' : (height + extra_box_height) + 'px' ;
+			if (width>dim.pageWidth) width=dim.pageWidth;
 
-			var boxPosVCentre=(typeof height=='string' || height === null || this.type=='iframe') ? ((this.type=='iframe') ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
-			if (boxPosVCentre < 20) boxPosVCentre=20;
-			var boxPosHCentre=((dim.pageWidth / 2) - (parseInt(boxWidth) / 2));
+			var boxWidth = ((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
+			var extra_box_height = (this.type == "iframe" ) ? 160 : 120;
+			if (this.cancel_button === null) extra_box_height = 0;
+			var boxHeight = (typeof height == "string" || height === null || this.type == "iframe") ? "auto" : (height + extra_box_height) + "px" ;
 
-			var boxPosTop=(/*get_window_scroll_y() + */boxPosVCentre) + 'px' ;
-			var boxPosLeft=boxPosHCentre + 'px';
+			var boxPosVCentre = (typeof height == "string" || height === null || this.type == "iframe") ? ((this.type == "iframe") ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
+			if (boxPosVCentre < 20) boxPosVCentre = 20;
+			var boxPosHCentre = ((dim.pageWidth / 2) - (parseInt(boxWidth) / 2));
 
-			this.width=width;
-			this.height=height;
+			var boxPosTop = (/*getWindowScrollY() + */boxPosVCentre) + "px" ;
+			var boxPosLeft = boxPosHCentre + "px";
 
-			this.box.childNodes[0].style.width=boxWidth;
-			this.box.childNodes[0].style.height=boxHeight;
+			this.width = width;
+			this.height = height;
 
-			this.box.childNodes[0].style.top=boxPosTop;
-			this.box.childNodes[0].style.left=boxPosLeft;
+			this.box.childNodes[0].style.width = boxWidth;
+			this.box.childNodes[0].style.height = boxHeight;
 
-			var iframe=this.box.getElementsByTagName('iframe');
-			if (typeof iframe[0]!='undefined')
-			{
-				iframe[0].style.width=this.width?(this.width+'px'):'100%';
-				iframe[0].style.height=this.width?(this.height+'px'):'50%';
-			}
+			this.box.childNodes[0].style.top = boxPosTop;
+			this.box.childNodes[0].style.left = boxPosLeft;
 
 			if (((boxHeight=='auto') && ('{$MOBILE}'==1)) || (height>dim.windowHeight))
 			{
@@ -401,14 +388,14 @@ function ModalWindow()
 		},
 
 		initBox: function() {
-			var dim=this.getPageSize();
+			var dim = this.getPageSize();
 
-			this.box=this.element('div', {
+			this.box = this.element("div", {
 				'styles' : {
 					'background': 'rgba(0,0,0,0.7)',
 					'zIndex': this.topWindow.overlay_zIndex++,
 					'overflow': 'hidden',
-					'position': 'fixed',
+					'position': 'absolute',
 					'left': '0',
 					'top': '0',
 					'width': '100%',
@@ -416,101 +403,99 @@ function ModalWindow()
 				}
 			});
 
-			this.box.appendChild(this.element('div', {
-				'class': 'box overlay',
+			this.box.appendChild(this.element("div", {
+				'class': 'medborder medborder_box overlay',
 				'role': 'dialog',
 				'styles' : {
-					'position': 'fixed'
+					'position': browser_matches('ie_old')?"absolute":"fixed",
+					'borderRadius': "15px",
+					'overflow': (this.type == "iframe") ? "auto" : "hidden"
 				}
 			}));
 
-			var _this=this;
-			var width=this.width;
-			var height=this.height;
 			this.resetDimensions(this.width,this.height);
-			this.addEvent( window, 'resize', function() { _this.resetDimensions(width,height); } );
 
 			this.inject(this.box);
 
-			var container=this.element('div', {
-				'class': 'box_inner',
+			var container = this.element("div", {
+				'class': "standardbox_main_classic",
 				'styles' : {
-					'width': 'auto',
-					'height': 'auto'
+					'width': "auto",
+					'height': "auto"
 				}
 			});
 
-			var overlay_header=null;
-			if (this.title != '' || this.type=='iframe') {
-				overlay_header=this.element('h3', {
+			var overlay_header = null;
+			if (this.title != '' || this.type == "iframe") {
+				overlay_header = this.element("h3", {
 					'html': this.title,
 					'styles' : {
-						'display': (this.title=='') ? 'none' : 'block'
+						'display': (this.title == "") ? "none" : "block"
 					}
 				});
 				container.appendChild(overlay_header);
 			}
 
 			if (this.text != '') {
-				if (this.type=='prompt')
+				if (this.type == "prompt")
 				{
-					var p=this.element('p');
-					p.appendChild(this.element('label', {
-						'for': 'overlay_prompt',
+					var p = this.element("p");
+					p.appendChild(this.element("label", {
+						'for': "overlay_prompt",
 						'html': this.text
 					}));
 					container.appendChild(p);
 				} else
 				{
-					container.appendChild(this.element('p', {
+					container.appendChild(this.element("p", {
 						'html': this.text
 					}));
 				}
 			}
 
-			var buttonContainer=this.element('div', {
-				'class': 'proceed_button'
+			var buttonContainer = this.element("div", {
+				'class': "proceed_button"
 			});
 
-			var _this=this;
+			var _this = this;
 
-			this.clickout_cancel=function() {
+			this.clickout_cancel = function() {
 				_this.option('cancel');
 			};
 
-			this.clickout_finished=function() {
+			this.clickout_finished = function() {
 				_this.option('finished');
 			};
 
-			this.clickout_yes=function() {
+			this.clickout_yes = function() {
 				_this.option('yes');
 			};
 
-			this.keyup=function(e) {
-				if(!e) e=window.event ;
-				var keyCode=(e) ? (e.which || e.keyCode) : null ;
+			this.keyup = function(e) {
+				if(!e) e = window.event ;
 
-				if(keyCode==13) {
+				var keyCode = (e) ? (e.which || e.keyCode) : null ;
+
+				if(keyCode == 13) {
 					_this.option('yes');
 				}
 			};
 
-			this.addEvent( this.box, 'click', function(e) { try { _this.topWindow.cancel_bubbling(e); } catch (e) {}; } );
+			this.addEvent( this.box, "click", function(e) { try { _this.topWindow.cancelBubbling(e); } catch (e) {}; } );
 
 			switch(this.type) {
-				case 'iframe':
-					var iframe=this.element('iframe', {
-						'frameBorder': '0',
-						'scrolling': (browser_matches('ie') || browser_matches('gecko'))?'auto':'no',
-						'title': '',
-						'name': 'overlay_iframe',
-						'id': 'overlay_iframe',
-						'allowTransparency': 'true',
-						//'seamless': 'seamless',	Not supported, and therefore testable yet. Would be great for mobile browsing.
+				case "iframe":
+					var iframe = this.element("iframe", {
+						'frameBorder': "0",
+						'scrolling': browser_matches('ie')?"auto":"no",
+						'title': "",
+						'name': "overlay_iframe",
+						'id': "overlay_iframe",
+						'allowTransparency': "true",
 						'styles' : {
-							'width': this.width?(this.width+'px'):'100%',
-							'height': this.height?(this.height+'px'):'50%',
-							'background': 'transparent'
+							'width': this.width?(this.width+'px'):"100%",
+							'height': this.height?(this.height+'px'):"50%",
+							'background': "transparent"
 						}
 					});
 
@@ -518,23 +503,23 @@ function ModalWindow()
 
 					if (this.cancel_button)
 					{
-						var button=this.element('button', {
+						var button=this.element("button", {
 							'html': this.cancel_button,
-							'class': 'button_pageitem'
+							'class': "button_pageitem"
 						});
-						this.addEvent( button, 'click', function() { _this.option('finished'); } );
+						this.addEvent( button, "click", function() { _this.option('finished'); } );
 						buttonContainer.appendChild(button);
-						container.appendChild(this.element('hr', { 'class': 'spaced_rule' } ));
+						container.appendChild(this.element("hr", { 'class': 'spaced_rule' } ));
 						container.appendChild(buttonContainer);
 					}
-					window.setTimeout(function() { _this.addEvent( _this.box, 'click', _this.clickout_finished); }, 1000);
+					window.setTimeout(function() { _this.addEvent( _this.box, "click", _this.clickout_finished); }, 1000);
 
-					this.addEvent( iframe, 'load', function() {
-						if (typeof iframe.contentWindow.document.getElementsByTagName('h1')[0]=='undefined' && typeof iframe.contentWindow.document.getElementsByTagName('h2')[0]=='undefined')
+					this.addEvent( iframe, "load", function() {
+						if (typeof iframe.contentWindow.document.getElementsByTagName('h1')[0] == 'undefined' && typeof iframe.contentWindow.document.getElementsByTagName('h2')[0] == 'undefined')
 						{
 							if (iframe.contentWindow.document.title!='')
 							{
-								set_inner_html(overlay_header,escape_html(iframe.contentWindow.document.title));
+								setInnerHTML(overlay_header,escape_html(iframe.contentWindow.document.title));
 								overlay_header.style.display='block';
 							}
 						}
@@ -551,11 +536,11 @@ function ModalWindow()
 								iframe.contentWindow.document.body.className+=' overlay';
 
 							// Allow scrolling, if we want it
-							iframe.scrolling=(_this.scrollbars === false)?'no':'auto';
+							iframe.scrolling=(_this.scrollbars === false)?"no":"auto";
 
 							// Remove fixed width
-							var main_website_inner=iframe.contentWindow.document.getElementById('main_website_inner');
-							if (main_website_inner) main_website_inner.id='';
+							var body_inner=iframe.contentWindow.document.getElementById('body_inner');
+							if (body_inner) body_inner.id='';
 
 							// Remove main_website marker
 							var main_website=iframe.contentWindow.document.getElementById('main_website');
@@ -607,76 +592,76 @@ function ModalWindow()
 								};
 							}
 
-							if (get_inner_html(iframe.contentWindow.document.body).length>300) // Loaded now
+							if (getInnerHTML(iframe.contentWindow.document.body).length>300) // Loaded now
 								iframe.contentWindow.document.body.done_popup_trans=true;
 						}
 					};
-					window.setTimeout(function() { illustrate_frame_load(iframe,'overlay_iframe'); iframe.src=_this.href; makeFrameLikePopup(); },0);
+					window.setTimeout(function() { illustrateFrameLoad(iframe,'overlay_iframe'); iframe.src=_this.href; makeFrameLikePopup(); },0);
 					window.setInterval(makeFrameLikePopup,100); // In case internal nav changes
 					break;
 
-				case 'lightbox':
-				case 'alert':
+				case "lightbox":
+				case "alert":
 					if(this.yes != false) {
-						var button=this.element('button', {
+						var button=this.element("button", {
 							'html': this.yes_button,
-							'class': 'button_pageitem'
+							'class': "button_pageitem"
 						});
-						this.addEvent( button, 'click', function() { _this.option('yes'); } );
-						window.setTimeout(function() { _this.addEvent( _this.box, 'click', _this.clickout_yes); }, 1000);
+						this.addEvent( button, "click", function() { _this.option('yes'); } );
+						window.setTimeout(function() { _this.addEvent( _this.box, "click", _this.clickout_yes); }, 1000);
 						buttonContainer.appendChild(button);
 						container.appendChild(buttonContainer);
 					}
 					break;
 
-				case 'confirm':
-					var button=this.element('button', {
+				case "confirm":
+					var button=this.element("button", {
 						'html': this.yes_button,
-						'class': 'button_pageitem',
-						'style': 'font-weight: bold;'
+						'class': "button_pageitem",
+						'style': "font-weight: bold;"
 					});
-					this.addEvent( button, 'click', function() { _this.option('yes'); } );
+					this.addEvent( button, "click", function() { _this.option('yes'); } );
 					buttonContainer.appendChild(button);
-					var button=this.element('button', {
+					var button=this.element("button", {
 						'html': this.no_button,
-						'class': 'button_pageitem'
+						'class': "button_pageitem"
 					});
-					this.addEvent( button, 'click', function() { _this.option('no'); } );
+					this.addEvent( button, "click", function() { _this.option('no'); } );
 					buttonContainer.appendChild(button);
 
 					container.appendChild(buttonContainer);
 					break;
 
-				case 'prompt':
-					this.input=this.element('input', {
-						'name': 'prompt',
-						'id': 'overlay_prompt',
+				case "prompt":
+					this.input = this.element("input", {
+						'name': "prompt",
+						'id': "overlay_prompt",
 						'type': this.input_type,
-						'size': '40',
-						'class': 'wide_field',
-						'value': (this.defaultValue===null)?'':this.defaultValue
+						'size': "40",
+						'class': "wide_field",
+						'value': this.defaultValue
 					});
-					var input_wrap=this.element('div', {
-						'class': 'constrain_field'
+					var input_wrap = this.element("div", {
+						'class': "constrain_field"
 					});
 					input_wrap.appendChild(this.input);
 					container.appendChild(input_wrap);
 
 					if(this.yes) {
-						var button=this.element('button', {
+						var button=this.element("button", {
 							'html': this.yes_button,
-							'class': 'button_pageitem',
-							'style': 'font-weight: bold;'
+							'class': "button_pageitem",
+							'style': "font-weight: bold;"
 						});
-						this.addEvent( button, 'click', function() { _this.option('yes'); } );
+						this.addEvent( button, "click", function() { _this.option('yes'); } );
 						buttonContainer.appendChild(button);
 					}
-					var button=this.element('button', {
+					var button=this.element("button", {
 						'html': this.cancel_button,
-						'class': 'button_pageitem'
+						'class': "button_pageitem"
 					});
-					this.addEvent( button, 'click', function() { _this.option('cancel'); } );
-					window.setTimeout(function() { _this.addEvent( _this.box, 'click', _this.clickout_cancel); }, 1000);
+					this.addEvent( button, "click", function() { _this.option('cancel'); } );
+					window.setTimeout(function() { _this.addEvent( _this.box, "click", _this.clickout_cancel); }, 1000);
 					buttonContainer.appendChild(button);
 
 					container.appendChild(buttonContainer);
@@ -697,7 +682,7 @@ function ModalWindow()
 			if(this.yes || this.yes != false)
 			{
 				window.setTimeout(function() { // Timeout needed else keyboard activation of overlay opener may cause instant shutdown also
-					_this.addEvent(document, 'keyup', _this.keyup );
+					_this.addEvent(document, "keyup", _this.keyup );
 				},100);
 			}
 		},
@@ -707,29 +692,29 @@ function ModalWindow()
 		},
 
 		remove: function(el, win) {
-			if (!win) win=this.topWindow;
+			if (!win) win = this.topWindow;
 			win.document.body.removeChild(el);
 		},
 
 		element: function() {
-			var tag=arguments[0], options=arguments[1];
-			var el=this.topWindow.document.createElement(tag);
-			var attributes={
+			var tag = arguments[0], options = arguments[1];
+			var el = this.topWindow.document.createElement(tag);
+			var attributes = {
 				'html': 'innerHTML',
 				'class': 'className',
 				'for': 'htmlFor',
 				'text': 'innerText'
 			};
 			if(options) {
-				if(typeof options=='object') {
+				if(typeof options == "object") {
 					for(var name in options) {
-						var value=options[name];
-						if(name=='styles') {
+						var value = options[name];
+						if(name == "styles") {
 							this.setStyles(el, value);
-						} else if(name=='html') {
-							set_inner_html(el, value);
+						} else if(name == "html") {
+							setInnerHTML(el, value);
 						} else if (attributes[name]) {
-							el[attributes[name]]=value;
+							el[attributes[name]] = value;
 						} else {
 							el.setAttribute(name, value);
 						}
@@ -760,19 +745,19 @@ function ModalWindow()
 		},
 
 		setStyle: function(e, p, v) {
-			if (p=='opacity') {
-				this.topWindow.set_opacity(e,v);
+			if (p == 'opacity') {
+				this.topWindow.setOpacity(e,v);
 			} else {
 				try
 				{
-					e.style[p]=v;
+					e.style[p] = v;
 				}
 				catch (e){};
 			}
 		},
 
 		getPageSize: function() {
-			return { 'pageWidth': this.topWindow.get_window_width(this.topWindow)/*intentionally not scroll width, we don't want overlays over horizontal scrolling*/, 'pageHeight': this.topWindow.get_window_scroll_height(this.topWindow), 'windowWidth' : this.topWindow.get_window_width(), 'windowHeight': this.topWindow.get_window_height() };
+			return { 'pageWidth': this.topWindow.getWindowScrollWidth(this.topWindow), 'pageHeight': this.topWindow.getWindowScrollHeight(this.topWindow), 'windowWidth' : this.topWindow.getWindowWidth(), 'windowHeight': this.topWindow.getWindowHeight() };
 		}
 	};
 }

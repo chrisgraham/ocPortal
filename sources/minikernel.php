@@ -37,12 +37,13 @@ function init__minikernel()
 		 * Get the contents of a file.
 		 *
 		 * @param  SHORT_TEXT	The file name.
+		 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 		 * @return ~LONG_TEXT	The file contents (false: error).
 		 */
-		function file_get_contents($filename)
+		function file_get_contents($filename,$type=0)
 		{
 			$data='';
-			$file=@fopen($filename,'rb');
+			$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
 			if ($file)
 			{
 				while (!feof($file)) $data.=fread($file, 1024);
@@ -168,13 +169,13 @@ function get_html_trace()
 					ob_end_clean();
 				}
 			}
-			$traces->attach(do_template('STACK_TRACE_LINE',array('_GUID'=>'a3bdbe9f0980b425f6aeac5d00fe4f96','LINE'=>$line,'FILE'=>$file,'KEY'=>ucfirst($key),'VALUE'=>$_value)));
+			$traces->attach(do_template('STACK_TRACE_LINE',array('_GUID'=>'40752b5212f56534ebe7970baa638e5a','LINE'=>$line,'FILE'=>$file,'KEY'=>ucfirst($key),'VALUE'=>$_value)));
 		}
-		$trace->attach(do_template('STACK_TRACE_WRAP',array('_GUID'=>'748860b0c83ea19d56de594fdc04fe12','TRACES'=>$traces)));
+		$trace->attach(do_template('STACK_TRACE_WRAP',array('_GUID'=>'beb78896baefd0f623c1c480840dace1','TRACES'=>$traces)));
 	}
 	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
-	return do_template('STACK_TRACE_HYPER_WRAP',array('_GUID'=>'da6c0ef0d8d793807d22e51555d73929','CONTENT'=>$trace,'POST'=>''));
+	return do_template('STACK_TRACE_HYPER_WRAP',array('_GUID'=>'9620695fb8c3e411a6a4926432cea64f','CONTENT'=>$trace,'POST'=>''));
 }
 
 /**
@@ -201,7 +202,7 @@ function fatal_exit($text)
 	}
 	$EXITING=1;
 
-	$title=get_screen_title('ERROR_OCCURRED');
+	$title=get_page_title('ERROR_OCCURRED');
 
 	$trace=get_html_trace();
 	$echo=new ocp_tempcode();
@@ -217,7 +218,7 @@ function fatal_exit($text)
 	}
 	require_code('tempcode_compiler');
 	$css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-	$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'990e78523cee0b6782e1e09d73a700a7','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>'','PASSWORD_PROMPT'=>'','CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$echo,'VERSION'=>$version));
+	$out_final=do_template('INSTALLER_WRAP',array('_GUID'=>'990e78523cee0b6782e1e09d73a700a7','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>'','PASSWORD_PROMPT'=>'','CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$echo,'VERSION'=>$version));
 	$out_final->evaluate_echo();
 
 	exit();
@@ -313,7 +314,7 @@ function is_guest($member_id=NULL)
  */
 function in_safe_mode()
 {
-	return get_param_integer('keep_safe_mode',0)==1;
+	return false;
 }
 
 /**
@@ -394,10 +395,10 @@ function warn_exit($text)
 	}
 	$EXITING=1;
 
-	$title=get_screen_title('ERROR_OCCURRED');
+	$title=get_page_title('ERROR_OCCURRED');
 
 	$echo=new ocp_tempcode();
-	$echo->attach(do_template('WARN_SCREEN',array('_GUID'=>'723ede24462dfc4cd4485851819786bc','TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>false)));
+	$echo->attach(do_template('WARN_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>false)));
 	$css_url='install.php?type=css';
 	$css_url_2='install.php?type=css_2';
 	$logo_url='install.php?type=logo';
@@ -409,20 +410,10 @@ function warn_exit($text)
 	}
 	require_code('tempcode_compiler');
 	$css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-	$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'710e7ea5c186b4c42bb3a5453dd915ed','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>'','PASSWORD_PROMPT'=>'','CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$echo,'VERSION'=>$version));
+	$out_final=do_template('INSTALLER_WRAP',array('CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>'','PASSWORD_PROMPT'=>'','CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$echo,'VERSION'=>$version));
 	$out_final->evaluate_echo();
 
 	exit();
-}
-
-/**
- * Get the major version of your installation.
- *
- * @return integer		The major version number of your installation
- */
-function ocp_version()
-{
-	return intval(ocp_version_number());
 }
 
 /**
@@ -430,7 +421,7 @@ function ocp_version()
  *
  * @return string			The string saying the full ocPortal version number
  */
-function ocp_version_pretty()
+function ocp_version_full()
 {
 	return '';
 }
@@ -722,13 +713,5 @@ function unixify_line_format($in)
 	return str_replace(chr(13),chr(10),$in);
 }
 
-/**
- * Make sure that the given CSS file is loaded up.
- *
- * @param  ID_TEXT		The CSS file required
- */
-function require_css($css)
-{
-}
 
 

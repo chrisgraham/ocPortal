@@ -10,14 +10,26 @@
 global $IN_MINIKERNEL_VERSION;
 $IN_MINIKERNEL_VERSION=1;
 
-// Find ocPortal base directory, and chdir into it
+// FIX PATH
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=dirname($FILE_BASE);
-if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
+$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
+if (substr($FILE_BASE,-4)=='.php')
 {
-	$RELATIVE_PATH=basename($FILE_BASE);
-	$FILE_BASE=dirname($FILE_BASE);
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+}
+if (!is_file($FILE_BASE.'/sources/global.php'))
+{
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
 } else
 {
 	$RELATIVE_PATH='';
@@ -26,6 +38,8 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 
 error_reporting(E_ALL);
 
+if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
+if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 @ini_set('display_errors','1');
 assert_options(ASSERT_ACTIVE,0);
 @ini_set('assert.active','0');
@@ -48,8 +62,8 @@ $OPTIONS=array();
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
 
-$GLOBALS['DEV_MODE']=false;
-$GLOBALS['SEMI_DEV_MODE']=true;
+$GLOBALS['DEBUG_MODE']=false;
+$GLOBALS['SEMI_DEBUG_MODE']=true;
 
 @ob_end_clean();
 
@@ -104,7 +118,7 @@ require_lang('version');
 
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$tpl=do_template('RESTORE_HTML_WRAP',array('_GUID'=>'ce3aebec8c995ea93ac7c1a095c66a51','CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
+$tpl=do_template('RESTORE_WRAP',array('CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
 echo $tpl->evaluate();
 
 /**

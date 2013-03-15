@@ -184,24 +184,24 @@ class Hook_chat_bot_octavius
 				  PRIMARY KEY  (id)
 				) TYPE=MyISAM",NULL,NULL,true);
 
-				$fp="";
+				$fp = "";
 
 				$templatesinserted=0;
 
-				$depth=array();
-				$whaton="";
+				$depth = array();
+				$whaton = "";
 
-				$pattern="";
-				$topic="";
-				$that="";
-				$template="";
+				$pattern = "";
+				$topic = "";
+				$that = "";
+				$template = "";
 
-				$startupwhich="";
-				$splitterarray=array();
-				$inputarray=array();
-				$genderarray=array();
-				$personarray=array();
-				$person2array=array();
+				$startupwhich = "";
+				$splitterarray = array();
+				$inputarray = array();
+				$genderarray = array();
+				$personarray = array();
+				$person2array = array();
 
 				require_code('programe/botloaderfuncs');
 
@@ -223,62 +223,62 @@ class Hook_chat_bot_octavius
 		// Eliza...
 
 		// setup initial variables and values
-		$kwarray=array();
-		$vararray=array();
-		$resparray=array();
-		$priarray=array();
-		$wordarray=array();
+		$kwarray = array();
+		$vararray = array();
+		$resparray = array();
+		$priarray = array();
+		$wordarray = array();
 		$kwcount=0; $varcount=0; $respcount=0; $syncount=0;
 
 		mt_srand ((double) microtime() * 1000000);
 
 		// load knowledge file
-		$lines_array=file(get_custom_file_base()."/sources_custom/hooks/modules/chat_bots/knowledge.txt");
+		$lines_array = file(get_custom_file_base()."/sources_custom/hooks/modules/chat_bots/knowledge.txt");
 
-		$count=count($lines_array);
+		$count = count($lines_array);
 
 		// This for loop goes through the entire knowledge file and places
 		// the elements into arrays.  This later allows us to pull the information
 		// (ie. key words, variances on the keywords, and responses) out of the
 		// arrays.
 		for ($x=0;$x<$count;$x++){
-			$lines_array[$x]=trim($lines_array[$x]);
-			$lines_array[$x]=ereg_replace("[\]","",$lines_array[$x]);
+			$lines_array[$x] = trim($lines_array[$x]);
+			$lines_array[$x] = ereg_replace("[\]","",$lines_array[$x]);
 		    if (strstr($lines_array[$x],"key:")){
 			eregi("key: (.*)",$lines_array[$x],$kw);
-			$kwarray[$kwcount]=strtoupper($kw[1]);
-			$currentkw=$kwcount;
+			$kwarray[$kwcount] = strtoupper($kw[1]);
+			$currentkw = $kwcount;
 			$kwcount++;
 			$varcount=0; // reset varcount to null
 			$respcount=0; // reset respcount to null
 			$pricount=0; // reset pricount to null
 		    }else if (strstr($lines_array[$x],"var:")){
 		       	eregi("var: (.*)",$lines_array[$x],$variance);
-			$vararray[$currentkw][$varcount]=strtoupper($variance[1]);
+			$vararray[$currentkw][$varcount] = strtoupper($variance[1]);
 			$varcurrent=$varcount;
 			$varcount++;
 			$respcount=0;
 		    }else if (strstr($lines_array[$x],"pri:")){
 			eregi("pri: (.*)",$lines_array[$x],$priority);
-			$priarray[$currentkw]=$priority[1];
+			$priarray[$currentkw] = $priority[1];
 		    }else if (strstr($lines_array[$x],"resp:")){
 		        eregi("resp: (.*)",$lines_array[$x],$response);
-			$resparray[$currentkw][$varcurrent][$respcount]=$response[1];
+			$resparray[$currentkw][$varcurrent][$respcount] = $response[1];
 			$respcount++;
 		    }else if (strstr($lines_array[$x],"syn:")){
 			eregi("syn: (.*)",$lines_array[$x],$synonym);
-			$synonymarray[$syncount]=strtoupper($synonym[1]);
+			$synonymarray[$syncount] = strtoupper($synonym[1]);
 			$syncount++;
 		    }else if (strstr($lines_array[$x],"goto:")){
 			eregi("goto: (.*)",$lines_array[$x],$goto);
-			$goto=strtoupper($goto[1]);
+			$goto = strtoupper($goto[1]);
 			// find the keyword
 			for ($zcount=0;$zcount<count($kwarray);$zcount++){
 			   // if the keyword already exists
 			   if (eregi($goto,$kwarray[$zcount])){
 				// then we assign properties of the keyword
-				$vararray[$currentkw][0]=$kwarray[$currentkw];
-				$resparray[$currentkw]=$resparray[$zcount];
+				$vararray[$currentkw][0] = $kwarray[$currentkw];
+				$resparray[$currentkw] = $resparray[$zcount];
 			   }
 			}
 		   }
@@ -288,34 +288,34 @@ class Hook_chat_bot_octavius
 		$z=0;
 		$v=0;
 		$bestpriority=-2;
-		$originalstring=$string;
+		$originalstring = $string;
 		if (!$string){
-		    $string="hello";
+		    $string = "hello";
 		}
-		$string=strtoupper($string);
+		$string = strtoupper($string);
 
 		// Figures out what word in the string has the most priority.
 		// It can then check words to the left/right of this word depending
 		// upon settings in the knowledge.txt file.
 		while ($y < count($kwarray)){
 			// remove beginning and trailing white space, breaks, etc
-			$string=trim($string);
+			$string = trim($string);
 			// remove puncuation from string
-			$string=ereg_replace('[!?,.]','',$string);
+			$string = ereg_replace('[!?,.]','',$string);
 		    // split the string up into seperate words
-		    $wordarray=explode(" ",$string);
+		    $wordarray = explode(" ",$string);
 		    while ($v < count($wordarray)){
 		        if(eregi($wordarray[$v]."$",$kwarray[$y])){
 			    // find which word holds the most weight in the sentance
 			    if($bestpriority==-2){
 			       $bestpriority=$y;
 		            }else if ($priarray[$bestpriority] < $priarray[$y]){
-				$bestpriority=$y;
+				$bestpriority = $y;
 		    	    }
 			}
 		    $v++;
 		    }
-		    $v=0;
+		    $v = 0;
 		    $y++;
 		}
 
@@ -324,18 +324,18 @@ class Hook_chat_bot_octavius
 		while ($vcount < count($vararray[$bestpriority])){
 			if (strstr($vararray[$bestpriority][$vcount],"@")){
 				eregi("@(.*)",$vararray[$bestpriority][$vcount],$syn); // fix this
-				$syn=$syn[1];
+				$syn = $syn[1];
 				for($x=0;$x<count($synonymarray);$x++){
 					if (eregi($syn,strtoupper($synonymarray[$x]))){
-						$sarray=explode(" ",$synonymarray[$x]);
+						$sarray = explode(" ",$synonymarray[$x]);
 						for($f=0;$f<count($sarray);$f++){
-							$newstring=ereg_replace("@(.*)$",$sarray[$f],$vararray[$bestpriority][$vcount]);
+							$newstring = ereg_replace("@(.*)$",$sarray[$f],$vararray[$bestpriority][$vcount]);
 							// works to this point
 							if(eregi($newstring."$",$string)){
-							   $varray=explode(" ",$vararray[$bestpriority][$vcount]);
+							   $varray = explode(" ",$vararray[$bestpriority][$vcount]);
 							   if(count($varray) > $pvarray){
-								  $bestvariance=$vcount;
-								  $pvarray=count($varray);
+								  $bestvariance = $vcount;
+								  $pvarray = count($varray);
 							   }
 							}
 						 }
@@ -343,10 +343,10 @@ class Hook_chat_bot_octavius
 				}
 			}else{
 			if(ereg($vararray[$bestpriority][$vcount],$string)){
-			   $varray=explode(" ",$vararray[$bestpriority][$vcount]);
+			   $varray = explode(" ",$vararray[$bestpriority][$vcount]);
 			   if(count($varray) > $pvarray){
-				  $bestvariance=$vcount;
-				  $pvarray=count($varray);
+				  $bestvariance = $vcount;
+				  $pvarray = count($varray);
 			   }
 			}
 			}
@@ -357,16 +357,16 @@ class Hook_chat_bot_octavius
 		// and the bestvariance (aka, the variance (var:) phrase that most fits the context of
 		// the original sentence, we form a response.
 		if (count($resparray[$bestpriority][$bestvariance]) > 1){
-			$random=mt_rand(0,count($resparray[$bestpriority][$bestvariance])-1);
+			$random = mt_rand(0,count($resparray[$bestpriority][$bestvariance])-1);
 		}else{
-			$random=0;
+			$random = 0;
 		}
-		$response=$resparray[$bestpriority][$bestvariance][$random];
+		$response = $resparray[$bestpriority][$bestvariance][$random];
 		if ($response==""){
-			$response="Sorry, I don't understand what you're trying to say.";
+			$response = "Sorry, I don't understand what you're trying to say.";
 		}
 
-		$originalstring=ereg_replace("[\]","",$originalstring);
+		$originalstring = ereg_replace("[\]","",$originalstring);
 
 		restrictify();
 

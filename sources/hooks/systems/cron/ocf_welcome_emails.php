@@ -72,7 +72,7 @@ class Hook_cron_ocf_welcome_emails
 			{
 				$subject=get_translated_text($mail['w_subject'],NULL,get_lang($member['id']));
 				$text=get_translated_text($mail['w_text'],NULL,get_lang($member['id']));
-				$_text=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'8ffc0470c6e457cee14c413c10f7a90f','CONTENT'=>$text,'LANG'=>get_site_default_lang()));
+				$_text=do_template('NEWSLETTER_DEFAULT',array('CONTENT'=>$text,'LANG'=>get_site_default_lang()));
 				for ($i=0;$i<100;$i++)
 				{
 					if (strpos($text,'{{'.strval($i).'}}')!==false)

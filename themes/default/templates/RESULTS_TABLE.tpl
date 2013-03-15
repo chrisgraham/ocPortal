@@ -5,10 +5,9 @@
 		{!NO_ENTRIES}
 	</p>
 {+END}
-
 {+START,IF_NON_EMPTY,{FIELDS}}
 	{MESSAGE}
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table{+START,IF_EMPTY,{WIDTHS}} autosized_table{+END}" itemprop="significantLinks">
+	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="dottedborder wide_table{+START,IF_EMPTY,{WIDTHS}} variable_table{+END}"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
 		{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{WIDTHS}}
 			<colgroup>
 				{+START,LOOP,WIDTHS}
@@ -27,19 +26,19 @@
 		</tbody>
 	</table></div>
 
-	{+START,SET,RESULTS_TABLE_PAGINATION}
-		{+START,IF_NON_EMPTY,{SORT}{PAGINATION}}
-			<div class="box results_table_under"><div class="box_inner float_surrounder">
-				<div class="results_table_sorter">
-					{SORT}
+	{+START,SET,RESULTS_TABLE_BROWSER}
+		{+START,IF_NON_EMPTY,{SORT}{BROWSER}}
+			<div class="lightborder medborder_box results_table">
+				<div class="float_surrounder">
+					<div class="results_table_sorter">{SORT}</div>
+	
+					{BROWSER}
 				</div>
-
-				{PAGINATION}
-			</div></div>
+			</div>
 		{+END}
 	{+END}
-	{+START,IF,{$NOT,{$GET,DEFER_RESULTS_TABLE_PAGINATION}}}
-		{$GET,RESULTS_TABLE_PAGINATION}
+	{+START,IF,{$NOT,{$GET,DEFER_RESULTS_TABLE_BROWSER}}}
+		{$GET,RESULTS_TABLE_BROWSER}
 	{+END}
 {+END}
 

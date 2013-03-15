@@ -14,7 +14,7 @@ RewriteEngine on
 RewriteRule ^([^=]*)webdav.php/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ - [L]
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
+# These have a specially reduced form (no need to make it too explicit that these are CEDI)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=cedi&id=$2 [L,QSA]
 
@@ -49,7 +49,7 @@ RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.p
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$4&page=$2&type=$3 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
 
-# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
+# These have a specially reduced form (no need to make it too explicit that these are CEDI)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=cedi&id=$2 [L,QSA]
 RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=cedi&id=$1 [L,QSA]

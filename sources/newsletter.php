@@ -395,7 +395,7 @@ function newsletter_shutdown_function()
 		foreach ($addresses as $i=>$email_address)
 		{
 			// Variable substitution in body
-			$newsletter_message_substituted=(strpos($NEWSLETTER_MESSAGE,'{')===false)?$NEWSLETTER_MESSAGE:newsletter_variable_substitution($NEWSLETTER_MESSAGE,$NEWSLETTER_SUBJECT,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+			$newsletter_message_substituted=newsletter_variable_substitution($NEWSLETTER_MESSAGE,$NEWSLETTER_SUBJECT,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
 			$in_html=false;
 			if (strpos($newsletter_message_substituted,'<html')===false)
 			{
@@ -431,8 +431,6 @@ function newsletter_shutdown_function()
 			{
 				mail_wrap($NEWSLETTER_SUBJECT,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,NULL,true,NULL,true,$in_html,false,$NEWSLETTER_MAIL_TEMPLATE);
 			}
-
-			if (function_exists('gc_collect_cycles')) gc_collect_cycles(); // Stop problem with PHP leaking memory
 		}
 		$start+=100;
 	}

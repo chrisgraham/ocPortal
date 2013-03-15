@@ -78,7 +78,7 @@ class Module_notifications
 	 */
 	function overall()
 	{
-		$title=get_screen_title('NOTIFICATIONS');
+		$title=get_page_title('NOTIFICATIONS');
 
 		$interface=notifications_ui(get_member());
 

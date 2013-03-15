@@ -1,11 +1,11 @@
 {TITLE}
 
-<p itemprop="description">
+<p{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
 	{PRE}
 </p>
 
 {+START,IF_NON_EMPTY,{CONTENT}}
-<ul itemprop="significantLinks">
+<ul{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
 	{CONTENT}
 </ul>
 {+END}

@@ -2,19 +2,21 @@
 
 {RESULTS_TABLE}
 
-<p class="lonely_label">{!ACTIONS}:</p>
-<ul role="navigation" class="actions_list">
+<br />
+
+<p>{!ACTIONS}:</p>
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 	<li class="actions_list_strong">
-		<a href="{ADD_WARNING_URL*}">{!ADD_WARNING}</a>
+		&raquo; <a href="{ADD_WARNING_URL*}">{!ADD_WARNING}</a>
 	</li>
 	<li class="actions_list_strong">
-		<a href="{VIEW_PROFILE_URL*}">{!VIEW_PROFILE}</a>
+		&raquo; <a href="{VIEW_PROFILE_URL*}">{!VIEW_PROFILE}</a>
 	</li>
 	<li class="actions_list_strong">
-		<a href="{EDIT_PROFILE_URL*}">{!EDIT_PROFILE}</a>
+		&raquo; <a href="{EDIT_PROFILE_URL*}">{!EDIT_PROFILE}</a>
 	</li>
 	<li class="actions_list_strong">
-		<a href="{$PAGE_LINK*,_SEARCH:rules}">{!RULES}</a>
+		&raquo; <a href="{$PAGE_LINK*,_SEARCH:rules}">{!RULES}</a>
 	</li>
 </ul>
 

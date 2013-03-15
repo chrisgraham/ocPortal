@@ -19,9 +19,10 @@
 *
 */
 
-// Find ocPortal base directory, and chdir into it
+// FIX PATH
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
+$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
 $deep='data_custom/upload-crop/';
 $FILE_BASE=str_replace($deep,'',$FILE_BASE);
 $FILE_BASE=str_replace(str_replace('/','\\',$deep),'',$FILE_BASE);
@@ -29,7 +30,7 @@ if (substr($FILE_BASE,-4)=='.php')
 {
    $a=strrpos($FILE_BASE,'/');
    $b=strrpos($FILE_BASE,'\\');
-   $FILE_BASE=dirname($FILE_BASE);
+   $FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
 }
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);
@@ -46,21 +47,21 @@ css_enforce('global');
 if (!has_zone_access(get_member(),'adminzone')) exit('Security error (did you get logged out?)');
 
 $max_width=800;
-$large_image_location=$_GET['file'];
+$large_image_location = $_GET['file'];
 if (get_magic_quotes_gpc()) $large_image_location=stripslashes($large_image_location);
-$thumb_image_location=$_GET['thumb'];
+$thumb_image_location = $_GET['thumb'];
 if (get_magic_quotes_gpc()) $thumb_image_location=stripslashes($thumb_image_location);
 if (substr($large_image_location,0,strlen('uploads/attachments/'))!='uploads/attachments/') exit('Security error');
 if (strpos($large_image_location,'..')!==false) exit('Security error');
 if (substr($thumb_image_location,0,strlen('uploads/attachments_thumbs/'))!='uploads/attachments_thumbs/') exit('Security error');
 if (strpos($thumb_image_location,'..')!==false) exit('Security error');
-$thumb_width=intval(isset($_POST['thumb_width'])?$_POST['thumb_width']:$_GET['thumb_width']);						// Width of thumbnail image
-$thumb_height=intval(isset($_POST['thumb_height'])?$_POST['thumb_height']:$_GET['thumb_height']);						// Height of thumbnail image
+$thumb_width = intval(isset($_POST['thumb_width'])?$_POST['thumb_width']:$_GET['thumb_width']);						// Width of thumbnail image
+$thumb_height = intval(isset($_POST['thumb_height'])?$_POST['thumb_height']:$_GET['thumb_height']);						// Height of thumbnail image
 // Only one of these image types should be allowed for upload
-$allowed_image_types=array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
-$allowed_image_ext=array_unique($allowed_image_types); // do not change this
-$image_ext="";	// initialise variable, do not change this.
-foreach ($allowed_image_ext as $mime_type=>$ext) {
+$allowed_image_types = array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
+$allowed_image_ext = array_unique($allowed_image_types); // do not change this
+$image_ext = "";	// initialise variable, do not change this.
+foreach ($allowed_image_ext as $mime_type => $ext) {
     $image_ext.= strtoupper($ext)." ";
 }
 
@@ -70,11 +71,11 @@ foreach ($allowed_image_ext as $mime_type=>$ext) {
 # You do not need to alter these functions																 #
 ##########################################################################################################
 function resizeImage($image,$width,$height,$scale) {
-	list($imagewidth, $imageheight, $imageType)=getimagesize($image);
-	$imageType=image_type_to_mime_type($imageType);
-	$newImageWidth=ceil($width * $scale);
-	$newImageHeight=ceil($height * $scale);
-	$newImage=imagecreatetruecolor($newImageWidth,$newImageHeight);
+	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
+	$imageType = image_type_to_mime_type($imageType);
+	$newImageWidth = ceil($width * $scale);
+	$newImageHeight = ceil($height * $scale);
+	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
 	switch($imageType) {
 		case "image/gif":
 			$source=imagecreatefromgif($image); 
@@ -111,12 +112,12 @@ function resizeImage($image,$width,$height,$scale) {
 }
 //You do not need to alter these functions
 function resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start_width, $start_height, $scale){
-	list($imagewidth, $imageheight, $imageType)=getimagesize($image);
-	$imageType=image_type_to_mime_type($imageType);
+	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
+	$imageType = image_type_to_mime_type($imageType);
 
-	$newImageWidth=ceil($width * $scale);
-	$newImageHeight=ceil($height * $scale);
-	$newImage=imagecreatetruecolor($newImageWidth,$newImageHeight);
+	$newImageWidth = ceil($width * $scale);
+	$newImageHeight = ceil($height * $scale);
+	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
 	switch($imageType) {
 		case "image/gif":
 			$source=imagecreatefromgif($image); 
@@ -151,61 +152,61 @@ function resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start
 }
 //You do not need to alter these functions
 function getHeight($image) {
-	$size=getimagesize($image);
-	$height=$size[1];
+	$size = getimagesize($image);
+	$height = $size[1];
 	return $height;
 }
 //You do not need to alter these functions
 function getWidth($image) {
-	$size=getimagesize($image);
-	$width=$size[0];
+	$size = getimagesize($image);
+	$width = $size[0];
 	return $width;
 }
 
 //Check to see if any images with the same name already exist
 if (file_exists($large_image_location)){
 	if(file_exists($thumb_image_location)){
-		$thumb_photo_exists="<img src=\"../../".$thumb_image_location."\" alt=\"Thumbnail Image\"/>";
+		$thumb_photo_exists = "<img src=\"../../".$thumb_image_location."\" alt=\"Thumbnail Image\"/>";
 	}else{
-		$thumb_photo_exists="";
+		$thumb_photo_exists = "";
 	}
-	$large_photo_exists="<img src=\"../../".$large_image_location."\" alt=\"Large Image\"/>";
+	$large_photo_exists = "<img src=\"../../".$large_image_location."\" alt=\"Large Image\"/>";
 } else {
-	$large_photo_exists="";
-	$thumb_photo_exists="";
+	$large_photo_exists = "";
+	$thumb_photo_exists = "";
 }
 
 // Check our large file is not too large
-$width=getWidth($large_image_location);
-$height=getHeight($large_image_location);
+$width = getWidth($large_image_location);
+$height = getHeight($large_image_location);
 //Scale the image if it is greater than the width set above
 if ($width > $max_width){
-	$scale=$max_width/$width;
-	$uploaded=resizeImage($large_image_location,$width,$height,$scale);
+	$scale = $max_width/$width;
+	$uploaded = resizeImage($large_image_location,$width,$height,$scale);
 }else{
-	$scale=1;
-	$uploaded=resizeImage($large_image_location,$width,$height,$scale);
+	$scale = 1;
+	$uploaded = resizeImage($large_image_location,$width,$height,$scale);
 }
 
 $message='';
 
 if (isset($_POST["upload_thumbnail"]) && strlen($large_photo_exists)>0) {
 	//Get the new coordinates to crop the image.
-	$x1=$_POST["x1"];
-	$y1=$_POST["y1"];
-	$x2=$_POST["x2"];
-	$y2=$_POST["y2"];
-	$w=$_POST["w"];
-	$h=$_POST["h"];
+	$x1 = $_POST["x1"];
+	$y1 = $_POST["y1"];
+	$x2 = $_POST["x2"];
+	$y2 = $_POST["y2"];
+	$w = $_POST["w"];
+	$h = $_POST["h"];
 	//Scale the image to the thumb_width set above
-	$scale=$thumb_width/$w;
-	$cropped=resizeThumbnailImage($thumb_image_location, $large_image_location,$w,$h,$x1,$y1,$scale);
+	$scale = $thumb_width/$w;
+	$cropped = resizeThumbnailImage($thumb_image_location, $large_image_location,$w,$h,$x1,$y1,$scale);
 
 	$message='Saved!';
 }
 
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -238,12 +239,12 @@ if (isset($_POST["upload_thumbnail"]) && strlen($large_photo_exists)>0) {
 <?php
 //Only display the javacript if an image has been uploaded
 if(strlen($large_photo_exists)>0){
-	$current_large_image_width=getWidth($large_image_location);
-	$current_large_image_height=getHeight($large_image_location);?>
+	$current_large_image_width = getWidth($large_image_location);
+	$current_large_image_height = getHeight($large_image_location);?>
 <script type="text/javascript">
 function preview(img, selection) { 
-	var scaleX=<?php echo $thumb_width;?> / selection.width; 
-	var scaleY=<?php echo $thumb_height;?> / selection.height; 
+	var scaleX = <?php echo $thumb_width;?> / selection.width; 
+	var scaleY = <?php echo $thumb_height;?> / selection.height; 
 
 	$('#thumbnail + div > img').css({ 
 		width: Math.round(scaleX * <?php echo $current_large_image_width;?>) + 'px', 
@@ -261,12 +262,12 @@ function preview(img, selection) {
 
 $(document).ready(function () { 
 	$('#save_thumb').click(function() {
-		var x1=$('#x1').val();
-		var y1=$('#y1').val();
-		var x2=$('#x2').val();
-		var y2=$('#y2').val();
-		var w=$('#w').val();
-		var h=$('#h').val();
+		var x1 = $('#x1').val();
+		var y1 = $('#y1').val();
+		var x2 = $('#x2').val();
+		var y2 = $('#y2').val();
+		var w = $('#w').val();
+		var h = $('#h').val();
 		if(x1=="" || y1=="" || x2=="" || y2=="" || w=="" || h==""){
 			alert("You must make a selection first");
 			return false;

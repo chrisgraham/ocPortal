@@ -29,7 +29,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		// Not cached :(
-		$result=file_get_contents($file_base.'/'.$string);
+		$result=file_get_contents($file_base.'/'.$string,FILE_TEXT);
 		$non_trans_result=$result;
 		if ((strpos($string,'/'.get_site_default_lang().'/')!==false) && (user_lang()!=get_site_default_lang()))
 		{
@@ -154,7 +154,7 @@ if (!function_exists('_load_comcode_page_cache_off'))
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
-		$result=file_get_contents($file_base.'/'.$string);
+		$result=file_get_contents($file_base.'/'.$string,FILE_TEXT);
 		if ((strpos($string,'/'.get_site_default_lang().'/')!==false) && (user_lang()!=get_site_default_lang()))
 		{
 			$result=google_translate($result,user_lang());

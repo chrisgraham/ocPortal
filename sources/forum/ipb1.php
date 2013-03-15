@@ -29,12 +29,9 @@ function init__forum__ipb1()
 	$IPB_STATS_CACHE=NULL;
 }
 
-/**
- * Forum Driver.
- * @package		core_forum_drivers
- */
 class forum_driver_ipb1 extends forum_driver_ipb_shared
 {
+
 	/**
 	 * From a member profile-row, get the member's name.
 	 *

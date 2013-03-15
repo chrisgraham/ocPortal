@@ -20,7 +20,7 @@ foreach ($members as $i=>$member)
 {
 	if ($i==intval($map['max'])) break;
 
-	$tpl=render_member_box($member['id']);
+	$tpl=ocf_show_member_box($member['id']);
 	$tpl->evaluate_echo();
 	echo '<br />';
 }

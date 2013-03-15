@@ -71,7 +71,7 @@ class Block_main_staff_tips
 	{
 		unset($map);
 
-		require_css('adminzone_frontpage');
+		require_css('adminzone');
 		require_lang('tips');
 
 		if (get_value('no_frames')==='1')

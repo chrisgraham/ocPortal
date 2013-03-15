@@ -66,7 +66,7 @@ class Block_main_facebook_friends
 		$show_fanpage_link=array_key_exists('show_fanpage_link',$map)?$map['show_fanpage_link']:'0';
 		$fanpage_name=(isset($map['fanpage_name']) && strlen($map['fanpage_name'])>0)?$map['fanpage_name']:get_site_name();
 
-		$out=new ocp_tempcode();
+		$out = new ocp_tempcode();
 
 		return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS',array('TITLE'=>do_lang_tempcode('BLOCK_FACEBOOK_FRIENDS_TITLE'),'CONTENT'=>$out,'FANPAGE_NAME'=>$fanpage_name,'SHOW_FANPAGE_LINK'=>$show_fanpage_link,'LOGOBAR'=>$logobar,'FANS'=>$fans,'STREAM'=>$stream));
 	}

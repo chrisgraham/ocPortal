@@ -1,0 +1,52 @@
+[semihtml]
+<div id="col1">
+	<div class="list-box-left">
+		[box type="panel"]
+			<h4>Features</h4>
+			[block="member_features" type="tree"]side_stored_menu[/block]
+		[/box]
+	</div>
+
+	<div class="list-box-left0">
+		[box type="panel"]
+			<h4>Community</h4>
+			[block="main_community" type="tree"]side_stored_menu[/block]
+		[/box]
+	</div>
+
+	<div class="list-box-left1">
+		[box type="panel"]
+			<h4>Content</h4>
+			[block="main_content" type="tree"]side_stored_menu[/block]
+		[/box]
+	</div>
+
+	<div class="list-box-left2">
+		[box type="panel"]
+			<h4>Forums</h4>
+			[block="!!!forum:forumview:misc" type="top"]side_stored_menu[/block]
+		[/box]
+	</div>
+
+	<div class="bottom-but">
+		[block="zone_menu" type="tree"]side_stored_menu[/block]
+	</div>
+</div>
+<div id="col2">
+	<div class="welcome">
+		<h4>Welcome</h4>
+
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+		<span class="more-link"><a href="{$PAGE_LINK*,:about}">Read more&hellip;</a></span>
+	</div>
+
+	<div class="welcome">
+		[block="0" blogs="-1" fallback_full="2" fallback_archive="0"]main_news[/block]
+	</div>
+
+	<div class="social">
+		[block]main_screen_actions[/block]
+	</div>
+</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

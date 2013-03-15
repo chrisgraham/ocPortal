@@ -1,8 +1,8 @@
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
-			<col class="gallery_entry_field_name_column" />
-			<col class="gallery_entry_field_value_column" />
+			<col style="width: 110px" />
+			<col style="width: 110px" />
 		</colgroup>
 	{+END}
 

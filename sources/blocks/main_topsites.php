@@ -76,7 +76,7 @@ class Block_main_topsites
 		{
 			$description=get_translated_tempcode($banner['caption']);
 
-			$bd=show_banner($banner['name'],$banner['b_title_text'],$description,$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
+			$bd=show_banner($banner['name'],$banner['b_title_text'],$description,$banner['img_url'],'',$banner['site_url'],$banner['b_type']);
 
 			$banners[]=array(
 				'BANNER'=>$bd,

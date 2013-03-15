@@ -84,7 +84,6 @@ class Module_admin_stats
 
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_1',array('the_user'));
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_2',array('ip'));
-			$GLOBALS['SITE_DB']->create_index('stats','member_track_3',array('the_user','date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('stats','pages',array('the_page'));
 			$GLOBALS['SITE_DB']->create_index('stats','date_and_time',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('stats','milliseconds',array('milliseconds'));
@@ -243,7 +242,7 @@ class Module_admin_stats
 		}
 		if ($test==0) $actions[]=array('geolocate',array('_SELF',array('type'=>'install_data'),'_SELF'),do_lang('INSTALL_GEOLOCATION_DATA'),('DOC_INSTALL_GEOLOCATION_DATA'));
 		$actions[]=array('clear_stats',array('_SELF',array('type'=>'clear'),'_SELF'),do_lang('CLEAR_STATISTICS'),do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS'));
-		return do_next_manager(get_screen_title('SITE_STATISTICS'),comcode_lang_string('DOC_STATISTICS'),
+		return do_next_manager(get_page_title('SITE_STATISTICS'),comcode_lang_string('DOC_STATISTICS'),
 					$actions,
 					do_lang('SITE_STATISTICS')
 		);
@@ -312,7 +311,7 @@ class Module_admin_stats
 	function users_online()
 	{
 		//This needs to show a big scatter graph with the users online every day
-		$title=get_screen_title('USERS_ONLINE_STATISTICS');
+		$title=get_page_title('USERS_ONLINE_STATISTICS');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50); // Intentionally the browse is disabled, as the graph will show all - we fudge $max_rows to $i
@@ -386,7 +385,7 @@ class Module_admin_stats
 	function submission_rates()
 	{
 		//Like the users online above, we need to use a nice scatter graph
-		$title=get_screen_title('SUBMISSION_STATISTICS');
+		$title=get_page_title('SUBMISSION_STATISTICS');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50); // Intentionally the browse is disabled, as the graph will show all - we fudge $max_rows to $i
@@ -458,7 +457,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('LOAD_TIMES');
+			$title=get_page_title('LOAD_TIMES');
 
 			return $this->get_between($title,true);
 		}
@@ -482,7 +481,7 @@ class Module_admin_stats
 			$time_end=time();
 		}
 
-		$title=get_screen_title('LOAD_TIMES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$title=get_page_title('LOAD_TIMES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		// We calculate MIN not AVG, because data can be made very dirty by slow clients or if the server is having trouble at one specfic point. It's a shame.
 		$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,MIN(milliseconds) AS avg FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end).' GROUP BY the_page');
@@ -563,7 +562,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('TOP_REFERRERS');
+			$title=get_page_title('TOP_REFERRERS');
 
 			return $this->get_between($title,true);
 		}
@@ -587,7 +586,7 @@ class Module_admin_stats
 			$time_end=time();
 		}
 
-		$title=get_screen_title('TOP_REFERRERS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$title=get_page_title('TOP_REFERRERS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$non_local_filter='referer NOT LIKE \''.db_encode_like(get_custom_base_url().'%').'\'';
 		if (get_param_integer('debug',0)==1) $non_local_filter='1=1';
@@ -680,7 +679,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('TOP_SEARCH_KEYWORDS');
+			$title=get_page_title('TOP_SEARCH_KEYWORDS');
 
 			return $this->get_between($title,true);
 		}
@@ -704,7 +703,7 @@ class Module_admin_stats
 			$time_end=time();
 		}
 
-		$title=get_screen_title('TOP_SEARCH_KEYWORDS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$title=get_page_title('TOP_SEARCH_KEYWORDS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$sortables=array('referer'=>do_lang_tempcode('TOP_SEARCH_KEYWORDS'));
 		$test=explode(' ',get_param('sort','referer DESC'),2);
@@ -803,7 +802,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('PAGES_STATISTICS');
+			$title=get_page_title('PAGES_STATISTICS');
 
 			return $this->get_between($title,true);
 		}
@@ -827,7 +826,7 @@ class Module_admin_stats
 			$time_end=time();
 		}
 
-		$title=get_screen_title('PAGES_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$title=get_page_title('PAGES_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$rows=$GLOBALS['SITE_DB']->query_select('stats',array('the_page'),NULL,'GROUP BY the_page ORDER BY COUNT(*) DESC',3000);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -930,7 +929,7 @@ class Module_admin_stats
 		if (!file_exists(get_file_base().'/'.$page))
 			$page='pages/comcode/'.fallback_lang().'/start.txt';
 
-		$title=get_screen_title('OVERVIEW_STATISTICS');
+		$title=get_page_title('OVERVIEW_STATISTICS');
 
 		list($graph_views_monthly,$list_views_monthly)=array_values($this->views_per_x($page,'views_hourly','VIEWS_PER_MONTH','DESCRIPTION_VIEWS_PER_MONTH',730,8766));
 
@@ -995,7 +994,7 @@ class Module_admin_stats
 	{
 		$page=get_param('iscreen');
 
-		$title=get_screen_title(do_lang_tempcode('PAGE_STATISTICS',escape_html($page)),false);
+		$title=get_page_title(do_lang_tempcode('PAGE_STATISTICS',escape_html($page)),false);
 
 		//************************************************************************************************
 		// Views per hour/day/week/month
@@ -1029,7 +1028,7 @@ class Module_admin_stats
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
+		$ip_filter=$GLOBALS['DEBUG_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
 		$rows=$GLOBALS['SITE_DB']->query('SELECT id,referer FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' AND referer LIKE \''.db_encode_like('http://www.google.%q=%').'\' ORDER BY '.$sortable.' '.$sort_order,2000/*reasonable limit*/);
 		if (count($rows)<1)
 		{
@@ -1126,7 +1125,7 @@ class Module_admin_stats
 
 			$where=db_string_equal_to('the_page',$page);
 			if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-			$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
+			$ip_filter=$GLOBALS['DEBUG_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
 			$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT ip FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,1000/*reasonable limit*/);
 			shuffle($rows);
 			if (count($rows)<1)
@@ -1208,7 +1207,7 @@ class Module_admin_stats
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
+		$ip_filter=$GLOBALS['DEBUG_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
 		$rows=$GLOBALS['SITE_DB']->query('SELECT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,10000/*reasonable limit*/);
 		if (count($rows)<1)
 		{
@@ -1255,7 +1254,7 @@ class Module_admin_stats
 	{
 		//Someone obviously wants to clear out all their statistics
 		//Let's give them the option of only clearing out stored graphs, or deleting everything
-		$title=get_screen_title('CLEAR_STATISTICS');
+		$title=get_page_title('CLEAR_STATISTICS');
 
 		require_code('form_templates');
 		$controls=new ocp_tempcode();
@@ -1285,7 +1284,7 @@ class Module_admin_stats
 		{
 			while (false!==($file=readdir($handle)))
 			{
-				if ((!should_ignore_file(get_custom_file_base().'/data_custom/modules/admin_stats/'.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) && ($file!='IP_Country.txt') && (!is_dir($file)))
+				if (($file!='.') && ($file!='..') && ($file!='index.html') && ($file!='Thumbs.db') && ($file!='Thumbs.db:encryptable') && ($file!='.htaccess') && ($file!='IP_Country.txt') && (!is_dir($file)))
 				{
 					$path=get_custom_file_base().'/data_custom/modules/admin_stats/'.$file;
 					@unlink($path)
@@ -1307,7 +1306,7 @@ class Module_admin_stats
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS')),array('_SELF:_SELF:clear',do_lang_tempcode('CLEAR_STATISTICS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
-		return inform_screen(get_screen_title('CLEAR_STATISTICS'),do_lang_tempcode('SUCCESS'));
+		return inform_screen(get_page_title('CLEAR_STATISTICS'),do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1317,7 +1316,7 @@ class Module_admin_stats
 	 */
 	function install_geolocation_data()
 	{
-		$title=get_screen_title('INSTALL_GEOLOCATION_DATA');
+		$title=get_page_title('INSTALL_GEOLOCATION_DATA');
 
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -1414,7 +1413,7 @@ class Module_admin_stats
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
+		$ip_filter=$GLOBALS['DEBUG_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
 		$query='SELECT id,date_and_time FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' AND date_and_time>'.strval(time()-($total*60*60)).' AND date_and_time<='.strval(time()).' ORDER BY '.$sortable.' '.$sort_order;
 		$rows=$GLOBALS['SITE_DB']->query($query,5000/*reasonable limit*/);
 		if ((count($rows)<1) || (count($rows)==5000))
@@ -1486,7 +1485,7 @@ class Module_admin_stats
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
+		$ip_filter=$GLOBALS['DEBUG_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
 		$rows=$GLOBALS['SITE_DB']->query('SELECT id,'.$type.' FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,5000/*reasonable limit*/);
 		if (count($rows)<1)
 		{

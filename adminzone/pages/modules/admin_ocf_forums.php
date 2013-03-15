@@ -72,7 +72,6 @@ class Module_admin_ocf_forums extends standard_aed_module
 		require_code('ocf_forums_action2');
 		require_code('ocf_forums2');
 		require_css('ocf');
-		require_css('ocf_editor');
 
 		load_up_all_module_category_permissions($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums');
 
@@ -104,7 +103,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_FORUMS'),comcode_to_tempcode(do_lang('DOC_FORUMS')."\n\n".do_lang('DOC_FORUM_CATEGORIES'),NULL,true),
+		return do_next_manager(get_page_title('MANAGE_FORUMS'),comcode_to_tempcode(do_lang('DOC_FORUMS')."\n\n".do_lang('DOC_FORUM_CATEGORIES'),NULL,true),
 					array_merge($menu_links,manage_custom_fields_donext_link('post'),manage_custom_fields_donext_link('topic'),manage_custom_fields_donext_link('forum')),
 					do_lang('MANAGE_FORUMS')
 		);
@@ -270,7 +269,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 			{
 				if (!is_null($forums))
 				{
-					$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING',array('_GUID'=>'889173769e237b917b7e06eda0fb4350','ORDERINGS'=>$orderings,'GROUPING'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
+					$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_CATEGORY',array('_GUID'=>'889173769e237b917b7e06eda0fb4350','ORDERINGS'=>$orderings,'CATEGORY'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
 					$category_position++;
 				}
 				$forums=new ocp_tempcode();
@@ -307,7 +306,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 			unset($subforums[$i]);
 		}
 		if (!is_null($category_id))
-			$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING',array('_GUID'=>'6cb30ec5189f75a9631b2bb430c89fd0','ORDERINGS'=>$orderings,'GROUPING'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
+			$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_CATEGORY',array('_GUID'=>'6cb30ec5189f75a9631b2bb430c89fd0','ORDERINGS'=>$orderings,'CATEGORY'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
 
 		$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$id),'_SELF');
 		$view_map=array('page'=>'forumview');
@@ -338,7 +337,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 	 */
 	function ed()
 	{
-		$title=get_screen_title('EDIT_FORUM');
+		$title=get_page_title('EDIT_FORUM');
 
 		$huge=($GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>300);
 
@@ -363,7 +362,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 	 */
 	function reorder()
 	{
-		$title=get_screen_title('EDIT_FORUM');
+		$title=get_page_title('EDIT_FORUM');
 
 		$all=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum','f_category_id'));
 		$ordering=array();

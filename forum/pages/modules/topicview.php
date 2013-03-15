@@ -23,7 +23,6 @@
  */
 class Module_topicview
 {
-	var $id;
 
 	/**
 	 * Standard modular info function.
@@ -90,7 +89,7 @@ class Module_topicview
 			$redirect=find_post_id_url($post_id);
 			require_code('site2');
 			assign_refresh($redirect,0.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'76e6d34c20a4f5284119827e41c7752f','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
+			return do_template('REDIRECT_SCREEN',array('_GUID'=>'76e6d34c20a4f5284119827e41c7752f','URL'=>$redirect,'TITLE'=>get_page_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
 		} else
 		{
 			if ($type=='first_unread')
@@ -98,7 +97,7 @@ class Module_topicview
 				$redirect=find_first_unread_url($id);
 				require_code('site2');
 				assign_refresh($redirect,0.0);
-				return do_template('REDIRECT_SCREEN',array('_GUID'=>'12c5d16f60e8c4df03536d9a7a932528','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
+				return do_template('REDIRECT_SCREEN',array('_GUID'=>'12c5d16f60e8c4df03536d9a7a932528','URL'=>$redirect,'TITLE'=>get_page_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
 			}
 		}
 
@@ -110,8 +109,12 @@ class Module_topicview
 		// Mark as read
 		if (!is_null($id))
 		{
-			$this->id=$id;
-			register_shutdown_function(array($this,'_update_read_status')); // done at end after output in case of locking (don't make the user wait)
+			if (!is_guest())
+			{
+				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$id),'',1);
+				$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$id,'l_time'=>time()),false,true); // race condition
+			}
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_num_views=(t_num_views+1) WHERE id='.strval((integer)$id),1,NULL,true);
 		}
 
 		// Load up topic info
@@ -203,13 +206,13 @@ class Module_topicview
 					if (!is_guest($_postdetails['poster']))
 					{
 						require_code('ocf_members2');
-						$poster_details=render_member_box($_postdetails,false,$hooks,$hook_objects,false);
+						$poster_details=ocf_show_member_box($_postdetails,false,$hooks,$hook_objects,false);
 					} else
 					{
 						$custom_fields=new ocp_tempcode();
 						if (array_key_exists('ip_address',$_postdetails))
 						{
-							$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'d85be094dff0d039a64120d6f8f381bb','NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($_postdetails['ip_address']))));
+							$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('_GUID'=>'d85be094dff0d039a64120d6f8f381bb','NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($_postdetails['ip_address']))));
 							$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'e43534acaf598008602e8da8f9725f38','CUSTOM_FIELDS'=>$custom_fields));
 						} else
 						{
@@ -227,7 +230,7 @@ class Module_topicview
 				} else
 				{
 					$ip_link=((array_key_exists('ip_address',$_postdetails)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$_postdetails['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
-					$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'36a8e550222cdac5165ef8f722be3def','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$_postdetails['poster_username']));
+					$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'36a8e550222cdac5165ef8f722be3def','IP_LINK'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$_postdetails['poster_username']));
 				}
 
 				// Signature
@@ -501,23 +504,23 @@ class Module_topicview
 			$poll=do_template('OCF_TOPIC_POLL'.($poll_results?'_VIEW_RESULTS':''),array('ID'=>strval($_poll['id']),'NUM_CHOICES'=>$num_choices,'PRIVATE'=>$private,'QUESTION'=>$_poll['question'],'ANSWERS'=>$answers,'REAL_BUTTON'=>$real_button,'BUTTON'=>$button,'VOTE_URL'=>$vote_url,'MINIMUM_SELECTIONS'=>integer_format($_poll['minimum_selections']),'MAXIMUM_SELECTIONS'=>integer_format($_poll['maximum_selections'])));
 		} else $poll=new ocp_tempcode();
 
-		// Forum breadcrumbs
+		// Forum nav tree
 		if (!is_null($topic_info['forum_id']))
 		{
-			$breadcrumbs=ocf_forum_breadcrumbs($topic_info['forum_id'],NULL,NULL,false);
+			$tree=ocf_forum_breadcrumbs($topic_info['forum_id'],NULL,NULL,false);
 		} else
 		{
-			$breadcrumbs=new ocp_tempcode();
-			$breadcrumbs->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
-			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+			$tree=new ocp_tempcode();
+			$tree->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
+			$tree->attach(do_template('BREADCRUMB_ESCAPED'));
 			if (has_specific_permission(get_member(),'view_other_pt'))
 			{
 				$of_member=($topic_info['pt_from']==get_member())?$topic_info['pt_from']:$topic_info['pt_to'];
 			} else $of_member=get_member();
 			$of_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member);
 			if (is_null($of_username)) $of_username=do_lang('UNKNOWN');
-			$private_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>$of_member),get_module_zone('members'),NULL,true,false,false,'tab__pts');
-			$breadcrumbs->attach(hyperlink($private_topic_url,do_lang_tempcode('MEMBER_PROFILE',escape_html($of_username)),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
+			$personal_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>$of_member),get_module_zone('members'),NULL,true,false,false,'tab__pts');
+			$tree->attach(hyperlink($personal_topic_url,do_lang_tempcode('MEMBER_PROFILE',escape_html($of_username)),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
 		}
 
 		// Quick reply
@@ -651,11 +654,11 @@ class Module_topicview
 		$max_rows=$topic_info['max_rows'];
 		if (($max_rows>$max) && (!$threaded))
 		{
-			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false);
+			require_code('templates_results_browser');
+			$results_browser=results_browser(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false);
 		} else
 		{
-			$pagination=new ocp_tempcode();
+			$results_browser=new ocp_tempcode();
 		}
 
 		// Members viewing this topic
@@ -692,50 +695,26 @@ class Module_topicview
 		}
 
 		if (!is_null($id))
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang(is_null($topic_info['forum_id'])?'VIEW_PRIVATE_TOPIC':'VIEW_TOPIC').'</span>'));
+			breadcrumb_add_segment($tree,do_lang_tempcode(is_null($topic_info['forum_id'])?'VIEW_PERSONAL_TOPIC':'VIEW_TOPIC'));
 
 		if (is_null($id)) // Just inline personal posts
 		{
-			$root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>db_get_first_id()));
-			$breadcrumbs=hyperlink(build_url(array('page'=>'forumview','id'=>db_get_first_id()),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang('GO_BACKWARDS_TO'));
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('INLINE_PERSONAL_POSTS').'</span>'));
+         $root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>db_get_first_id()));
+         $tree=hyperlink(build_url(array('page'=>'forumview','id'=>db_get_first_id()),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang('GO_BACKWARDS_TO'));
+	      breadcrumb_add_segment($tree,do_lang('INLINE_PERSONAL_POSTS'));
 		}
 
 		if ($topic_info['validated']==0)
 		{
-			$warning_details=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
+			$warning_details=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
 		} else $warning_details=new ocp_tempcode();
 
-		if (is_null($id)) // Just inline personal posts
-		{
-			$title=get_screen_title('INLINE_PERSONAL_POSTS');
-		} else
-		{
-			if (is_null($topic_info['forum_id']))
-			{
-				$title=get_screen_title(do_lang_tempcode('NAMED_PRIVATE_TOPIC',escape_html($topic_info['title'])),false,NULL,do_lang_tempcode('READING_PRIVATE_TOPIC'));
-			} else
-			{
-				if (addon_installed('awards'))
-				{
-					require_code('awards');
-					$awards=find_awards_for('topic',strval($id));
-				} else $awards=array();
-
-				$title=get_screen_title(do_lang_tempcode('NAMED_TOPIC',escape_html($topic_info['title'])),false,NULL,NULL,$awards);
-			}
-		}
-
-		require_code('ocf_general');
-		ocf_set_context_forum($topic_info['forum_id']);
-
-		$topic_tpl=do_template('OCF_TOPIC_SCREEN',array(
+		$topic_tpl=do_template('OCF_TOPIC_WRAP',array(
 			'_GUID'=>'bb201d5d59559e5e2bd60e7cf2e6f7e9',
-			'TITLE'=>$title,
 			'SERIALIZED_OPTIONS'=>$serialized_options,
 			'HASH'=>$hash,
 			'ID'=>strval($id),
-			'_TITLE'=>$topic_info['title'],
+			'TITLE'=>$topic_info['title'],
 			'MAY_DOUBLE_POST'=>has_specific_permission(get_member(),'double_post'),
 			'LAST_POSTER'=>array_key_exists('last_poster',$topic_info)?(is_null($topic_info['last_poster'])?'':strval($topic_info['last_poster'])):'',
 			'WARNING_DETAILS'=>$warning_details,
@@ -745,35 +724,36 @@ class Module_topicview
 			'NUM_GUESTS'=>integer_format($num_guests),
 			'NUM_MEMBERS'=>integer_format($num_members),
 			'MEMBERS_VIEWING'=>$members_viewing,
-			'PAGINATION'=>$pagination,
+			'RESULTS_BROWSER'=>$results_browser,
 			'MODERATOR_ACTIONS'=>$moderator_actions,
 			'MARKED_POST_ACTIONS'=>$marked_post_actions,
 			'QUICK_REPLY'=>$quick_reply,
-			'BREADCRUMBS'=>$breadcrumbs,
+			'TREE'=>$tree,
 			'POLL'=>$poll,
 			'SCREEN_BUTTONS'=>$buttons,
 			'POSTS'=>$posts,
 			'THREADED'=>$threaded,
 		));
-
-		return $topic_tpl;
-	}
-
-	/**
-	 * Update the read status for a topic.
-	 */
-	function _update_read_status()
-	{
-		if (!is_guest())
+		if (is_null($id)) // Just inline personal posts
 		{
-			if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
+			$title=get_page_title('INLINE_PERSONAL_POSTS');
+		} else
+		{
+			if (is_null($topic_info['forum_id']))
 			{
-				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$this->id),'',1);
-				$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$this->id,'l_time'=>time()),false,true); // race condition
+				$title=get_page_title(do_lang_tempcode('NAMED_PERSONAL_TOPIC',escape_html($topic_info['title'])),false,NULL,do_lang_tempcode('READING_PERSONAL_TOPIC'));
+			} else
+			{
+				if (addon_installed('awards'))
+				{
+					require_code('awards');
+					$awards=find_awards_for('topic',strval($id));
+				} else $awards=array();
+
+				$title=get_page_title(do_lang_tempcode('NAMED_TOPIC',escape_html($topic_info['title'])),false,NULL,NULL,$awards);
 			}
 		}
-		if (!$GLOBALS['SITE_DB']->table_is_locked('f_topics'))
-			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_num_views=(t_num_views+1) WHERE id='.strval((integer)$this->id),1,NULL,true);
+		return ocf_wrapper($title,$topic_tpl,true,false,$topic_info['forum_id']);
 	}
 
 }

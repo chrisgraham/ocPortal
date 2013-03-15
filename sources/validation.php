@@ -11,7 +11,6 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-
 /*EXTRA FUNCTIONS: pspell\_.+*/
 
 /**
@@ -24,12 +23,6 @@
 
 This file is designed to be usable from outside ocPortal, as a library.
 
-It is designed for a special blend between uber-modern-standards and cross-browser stability - to only allow XHTML5 and CSS3 that runs (or gracefully degrades) on IE8.
-
-We favour the W3C standard over the WHATWG living document.
-
-We continue to maintain much of what was deprecated in XHTML but brought back into HTML5 (e.g. 'b' tag).
-
 */
 
 /**
@@ -37,14 +30,218 @@ We continue to maintain much of what was deprecated in XHTML but brought back in
  */
 function init__validation()
 {
-	// These are old doctypes we'll recognise for gracefulness, but we don't accept them as valid
+	if (!function_exists('html_entity_decode'))
+	{
+		/**
+		 * Decode the HTML entitity encoded input string. Can give warning if unrecognised character set.
+		 *
+		 * @param  string		The text to decode
+		 * @param  integer	The quote style code
+		 * @param  ?string		Character set to decode to (NULL: default)
+		 * @return string		The decoded text
+		 */
+		function html_entity_decode($input,$quote_style,$charset=NULL)
+		{
+			unset($quote_style);
+			unset($charset);
+			/*			// NB: &nbsp does not go to <space>. It's not something you use with html escaping, it's for hard-space-formatting. URL's don't contain spaces, but that's due to URL escaping (%20)
+			$replace_array=array(
+				'&amp;'=>'&',
+				'&gt;'=>'>',
+				'&lt;'=>'<',
+				'&#039;'=>'\'',
+				'&quot;'=>'"',
+			);
+
+			foreach ($replace_array as $from=>$to)
+			{
+				$input=str_replace($from,$to,$input);
+			}
+
+			return $input;
+*/
+
+			$trans_tbl=get_html_translation_table(HTML_ENTITIES);
+			$trans_tbl=array_flip($trans_tbl);
+			return strtr($input,$trans_tbl);
+		}
+	}
+	if (!function_exists('str_word_count'))
+	{
+		/**
+		 * Isolate the words in the input string.
+		 *
+		 * @param  string			String to count words in
+		 * @param  integer		The format
+		 * @set    0 1
+		 * @return mixed			Typically a list - the words of the input string
+		 */
+		function str_word_count($input,$format=0)
+		{
+			//count words
+			$pattern="/[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-\-|:|\&|@)]+/";
+			$all_words=trim(preg_replace($pattern,' ',$input));
+			$a=explode(' ',$all_words);
+			return ($format==0)?count($a):$a;
+		}
+	}
+
+	if (!function_exists('qualify_url'))
+	{
+		/**
+		 * Take a URL and base-URL, and fully qualify the URL according to it.
+		 *
+		 * @param  URLPATH		The URL to fully qualified
+		 * @param  URLPATH		The base-URL
+		 * @return URLPATH		Fully qualified URL
+		 */
+		function qualify_url($url,$url_base)
+		{
+			if (($url!='') && ($url[0]!='#') && (substr($url,0,7)!='mailto:'))
+			{
+				if (strpos($url,'://')===false)
+				{
+					if ($url[0]=='/')
+					{
+						$parsed=parse_url($url_base);
+						if (!array_key_exists('scheme',$parsed)) $parsed['scheme']='http';
+						if (!array_key_exists('host',$parsed)) $parsed['host']='localhost';
+						if (substr($url,0,2)=='//')
+						{
+							$url=$parsed['scheme'].':'.$url;
+						} else
+						{
+							$url=$parsed['scheme'].'://'.$parsed['host'].(array_key_exists('port',$parsed)?(':'.$parsed['port']):'').$url;
+						}
+					} else $url=$url_base.'/'.$url;
+				}
+			} else return '';
+			return $url;
+		}
+	}
+
+	if (!function_exists('http_download_file'))
+	{
+		/**
+		 * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
+		 *
+		 * @param  URLPATH		The URL to download
+		 * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
+		 * @range  1 max
+		 * @param  boolean		Whether to throw an ocPortal error, on error
+		 * @param  boolean		Whether to block redirects (returns NULL when found)
+		 * @param  string			The user-agent to identify as
+		 * @param  ?array			An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
+		 * @param  ?array			An optional array of cookies to send (NULL: none)
+		 * @param  ?string		'accept' header value (NULL: don't pass one)
+		 * @param  ?string		'accept-charset' header value (NULL: don't pass one)
+		 * @param  ?string		'accept-language' header value (NULL: don't pass one)
+		 * @param  ?resource		File handle to write to (NULL: do not do that)
+		 * @param  ?string		The HTTP referer (NULL: none)
+		 * @param  ?array			A pair: authentication username and password (NULL: none)
+		 * @param  float			The timeout
+		 * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
+		 * @param  ?array			Files to send. Map between field to file path (NULL: none)
+		 * @return ?string		The data downloaded (NULL: error)
+		 */
+		function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
+		{
+			@ini_set('allow_url_fopen','1');
+			return @file_get_contents($url); // Assumes URL-wrappers is on, whilst ocPortal's is much more sophisticated
+		}
+	}
+
+	if (!function_exists('do_lang'))
+	{
+		/**
+		 * Get the human-readable form of a language id, or a language entry from a language INI file. (STUB)
+		 *
+		 * @param  ID_TEXT		The language id
+		 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
+		 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
+		 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+		 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
+		 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
+		 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+		 */
+		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
+		{
+			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
+
+			unset($lang);
+
+			switch ($a)
+			{
+				case 'LINK_NEW_WINDOW':
+					return 'new window';
+				case 'SPREAD_TABLE':
+					return 'Spread table';
+				case 'MAP_TABLE':
+					return 'Item to value mapper table';
+			}
+
+			return array($a,$param_a,$param_b,$param_c);
+		}
+	}
+
+	if (!function_exists('get_forum_type'))
+	{
+		/**
+		 * Get the type of forums installed.
+		 *
+		 * @return string			The type of forum installed
+		 */
+		function get_forum_type()
+		{
+			return 'none';
+		}
+	}
+
+	if (!function_exists('ocp_srv'))
+	{
+		/**
+		 * Get server environment variables. (STUB)
+		 *
+		 * @param  string			The variable name
+		 * @return string			The variable value ('' means unknown)
+		 */
+		function ocp_srv($value)
+		{
+			return '';
+		}
+	}
+
+	if (!function_exists('mailto_obfuscated'))
+	{
+		/**
+		 * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
+		 *
+		 * @return string		The obfuscated 'mailto:' string
+		 */
+		function mailto_obfuscated()
+		{
+			return 'mailto:';
+		}
+	}
+
+	if (!function_exists('mixed'))
+	{
+		/**
+		 * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
+		 *
+		 * @return ?mixed	Of mixed type (NULL: default)
+		 */
+		function mixed()
+		{
+			return NULL;
+		}
+	}
+
 	define('DOCTYPE_HTML','<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
 	define('DOCTYPE_HTML_STRICT','<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
-	define('DOCTYPE_XHTML','<!DOCTYPE html>');
+	define('DOCTYPE_XHTML','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">');
 	define('DOCTYPE_XHTML_STRICT','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
-	define('DOCTYPE_XHTML_11','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
-
-	// (X)HTML5, the future
+	define('DOCTYPE_XHTML_NEW','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
 	define('DOCTYPE_XHTML5','<!DOCTYPE html>');
 
 	global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL;
@@ -122,13 +319,12 @@ function init__validation()
 		'a'=>1, // When it's an anchor only - we will detect this with custom code
 		'div'=>1,
 		'span'=>1,
+//		'p'=>1, // Sometimes we need to do an empty-p to workaround browser bugs
 		'td'=>1,
 		'th'=>1, // Only use for 'corner' ones
 		'textarea'=>1,
 		'button'=>1,
 		'script'=>1, // If we have one of these as self-closing in IE... it kills it!
-		'noscript'=>1,
-		'li'=>1,
 	);
 	if ($strict_form_accessibility) unset($POSSIBLY_EMPTY_TAGS['textarea']);
 
@@ -153,6 +349,7 @@ function init__validation()
 	$PROHIBITIONS=array(
 		'a'=>array('a'),
 		'button'=>array('input','select','textarea','label','button','form','fieldset','iframe'),
+	//	'label'=>array('label'),  Not sure, but used this for a reason - when we had one label for two things
 		'p'=>array('p','table','div','form','h1','h2','h3','h4','h5','h6','blockquote','pre','hr'),
 		'form'=>array('form'),
 		'em'=>array('em'),
@@ -200,10 +397,13 @@ function init__validation()
 		'basefont'=>array(),
 		'col'=>array()
 	);
-	$ONLY_CHILDREN+=array(
-		'details'=>array('summary'),
-		'datalist'=>array('option'),
-	);
+	if (get_value('html5')=='1')
+	{
+		$ONLY_CHILDREN+=array(
+			'details'=>array('summary'),
+			'datalist'=>array('option'),
+			);
+	}
 
 	// A can only occur underneath B's
 	global $ONLY_PARENT;
@@ -233,12 +433,19 @@ function init__validation()
 		'colgroup'=>array('table'),
 		'option'=>array('select','optgroup','datalist'),
 		'noembed'=>array('embed'),
-	);
-	$ONLY_PARENT+=array(
-		'figcaption'=>array('figure'),
-		'summary'=>array('details'),
-		'track'=>array('audio','video'),
-	);
+		);
+	if (get_value('html5')=='1')
+	{
+		$ONLY_PARENT+=array(
+			'figcaption'=>array('figure'),
+			'summary'=>array('details'),
+		);
+	} else
+	{
+		$ONLY_PARENT+=array(
+			'meta'=>array('head'),
+		);
+	}
 
 	global $REQUIRE_ANCESTER;
 	$REQUIRE_ANCESTER=array(
@@ -248,7 +455,7 @@ function init__validation()
 		'option'=>'form',
 		'optgroup'=>'form',
 		'select'=>'form',
-	);
+		);
 
 	global $TEXT_NO_BLOCK;
 	$TEXT_NO_BLOCK=array(
@@ -265,10 +472,13 @@ function init__validation()
 		'map'=>1,
 		'body'=>1,
 		'form'=>1,
-	);
-	$TEXT_NO_BLOCK+=array(
-		'menu'=>1,
-	);
+		);
+	if (get_value('html5')=='1')
+	{
+		$TEXT_NO_BLOCK+=array(
+			'menu'=>1,
+		);
+	}
 
 	define('IN_XML_TAG',-3);
 	define('IN_DTD_TAG',-2);
@@ -303,16 +513,12 @@ function init__validation()
  */
 function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation_javascript=true,$validation_css=true,$validation_wcag=true,$validation_compat=true,$validation_ext_files=true,$validation_manual=false)
 {
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-
-	disable_php_memory_limit();
-
 	global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$UNDER_XMLNS;
 	$XHTML_VALIDATOR_OFF=mixed();
 	$WELL_FORMED_ONLY=$well_formed_only;
 	if (!$WELL_FORMED_ONLY)
 	{
-		if (function_exists('require_code')) require_code('validation2');
+		require_code('validation2');
 	}
 	$VALIDATION_JAVASCRIPT=$validation_javascript;
 	$VALIDATION_CSS=$validation_css;
@@ -384,7 +590,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 	$token=_get_next_tag();
 	while (!is_null($token))
 	{
-		//echo $T_POS.'-'.$POS.' ('.$stack_size.')<br />';
+//		echo $T_POS.'-'.$POS.' ('.$stack_size.')<br />';
 
 		if ((is_array($token)) && (count($token)!=0)) // Some kind of error in our token
 		{
@@ -426,7 +632,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 				$only_one_of[$basis_token]--;
 			}
 
-			//echo 'Push $basis_token<br />';
+//			echo 'Push $basis_token<br />';
 			$level_ranges[]=array($stack_size,$T_POS,$POS);
 			if (isset($to_find[$basis_token])) unset($to_find[$basis_token]);
 			if ((!$WELL_FORMED_ONLY) && (is_null($XHTML_VALIDATOR_OFF)))
@@ -548,7 +754,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 				}
 				$stack_size--;
 				$level_ranges[]=array($stack_size,$T_POS,$POS);
-				//echo 'Popped $previous<br />';
+	//			echo 'Popped $previous<br />';
 
 				if ((is_null($XHTML_VALIDATOR_OFF)) && (!$WELL_FORMED_ONLY) && (is_null($XHTML_VALIDATOR_OFF)))
 				{
@@ -690,7 +896,7 @@ function _xhtml_error($error,$param_a='',$param_b='',$param_c='',$raw=false,$rel
  */
 function is_hex($string)
 {
-	return preg_match('#^[\da-f]+$#i',$string)!=0;
+	return preg_match('#^(\d*[abcdef]*)*$#',$string)!=0;
 }
 
 
@@ -824,7 +1030,7 @@ function _get_next_tag()
 			$LINENO++;
 			$LINESTART=$POS;
 		}
-		//echo $status.' for '.$next.'<br />';
+//		echo $status.' for '.$next.'<br />';
 
 		// Entity checking
 		if (($next=='&') && ($status!=IN_CDATA) && ($status!=IN_COMMENT) && (is_null($XHTML_VALIDATOR_OFF)))
@@ -945,12 +1151,16 @@ function _get_next_tag()
 				elseif ($next=='<')
 				{
 					$errors[]=array('XML_TAG_OPEN_ANOMALY','2');
+//					return array(NULL,$errors);
+					// We have to assume the first < was not for a real opening tag
 					$POS--;
 					$status=NO_MANS_LAND;
 				}
 				elseif ($next=='>')
 				{
 					$errors[]=array('XML_TAG_CLOSE_ANOMALY','3');
+//					return array(NULL,$errors);
+					// We have to assume neither were for a real tag
 					$status=NO_MANS_LAND;
 				}
 				else
@@ -1030,7 +1240,7 @@ function _get_next_tag()
 
 					if ($GLOBALS['XML_CONSTRAIN']) $errors[]=array('XML_TAG_CLOSE_ANOMALY');
 					// Things like nowrap, checked, etc
-					//return array(NULL,$errors);
+//					return array(NULL,$errors);
 
 					if (isset($attribute_map[$current_attribute_name])) $errors[]=array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
 					$attribute_map[$current_attribute_name]=$current_attribute_name;
@@ -1080,10 +1290,12 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','6');
+//						return array(NULL,$errors);
 					}
 					elseif ($next=='>')
 					{
 						$errors[]=array('XML_TAG_CLOSE_ANOMALY');
+//						return array(NULL,$errors);
 					}
 
 					if ($GLOBALS['XML_CONSTRAIN']) $errors[]=array('XML_ATTRIBUTE_ERROR');
@@ -1116,6 +1328,7 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','7');
+	//					return array(NULL,$errors);
 					}
 
 					$current_attribute_value.=$next;
@@ -1155,10 +1368,12 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','7');
+	//					return array(NULL,$errors);
 					}
 					elseif ($next=='>')
 					{
 						$errors[]=array('XML_TAG_CLOSE_ANOMALY');
+	//					return array(NULL,$errors);
 					}
 
 					$current_attribute_value.=$next;
@@ -1201,7 +1416,8 @@ function _get_next_tag()
 						global $THE_DOCTYPE,$TAGS_DEPRECATE_ALLOW,$FOUND_DOCTYPE,$XML_CONSTRAIN,$BLOCK_CONSTRAIN;
 
 						$FOUND_DOCTYPE=true;
-						$valid_doctypes=array(DOCTYPE_XHTML5);
+						$valid_doctypes=array(DOCTYPE_HTML,DOCTYPE_HTML_STRICT,DOCTYPE_XHTML,DOCTYPE_XHTML_STRICT,DOCTYPE_XHTML_NEW);
+						/*if (get_value('html5')==='1') */$valid_doctypes[]=DOCTYPE_XHTML5;
 						$doc_type=preg_replace('#//EN"\s+"#','//EN" "',$doc_type);
 						if (!in_array('<'.$doc_type,$valid_doctypes))
 						{
@@ -1209,9 +1425,14 @@ function _get_next_tag()
 						} else
 						{
 							$THE_DOCTYPE='<'.$doc_type;
-							$TAGS_DEPRECATE_ALLOW=false;
-							$BLOCK_CONSTRAIN=true;
-							$XML_CONSTRAIN=true;
+							if (($THE_DOCTYPE==DOCTYPE_HTML_STRICT) || ($THE_DOCTYPE==DOCTYPE_XHTML_STRICT) || ($THE_DOCTYPE==DOCTYPE_XHTML_NEW) || ($THE_DOCTYPE==DOCTYPE_XHTML5))
+								$TAGS_DEPRECATE_ALLOW=false;
+
+							if (($THE_DOCTYPE==DOCTYPE_XHTML_STRICT) || ($THE_DOCTYPE==DOCTYPE_XHTML_NEW) || ($THE_DOCTYPE==DOCTYPE_XHTML5))
+								$BLOCK_CONSTRAIN=true;
+
+							if (($THE_DOCTYPE==DOCTYPE_XHTML) || ($THE_DOCTYPE==DOCTYPE_XHTML_STRICT) || ($THE_DOCTYPE==DOCTYPE_XHTML_NEW) || ($THE_DOCTYPE==DOCTYPE_XHTML5))
+								$XML_CONSTRAIN=true;
 						}
 					}
 					$status=NO_MANS_LAND;
@@ -1271,7 +1492,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 		$self_close=true; // Will be flagged later
 	}
 
-	if (((isset($attributes['class'])) && (in_array($attributes['class'],array('comcode_code_inner','xhtml_validator_off')))) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml')===false)))
+	if (((isset($attributes['class'])) && (in_array($attributes['class'],array('comcode_code_content','xhtml_validator_off')))) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml')===false)))
 	{
 		$XHTML_VALIDATOR_OFF=0;
 	}

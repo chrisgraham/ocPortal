@@ -81,6 +81,8 @@ class Block_side_network
 	{
 		unset($map);
 
+		require_css('side_blocks');
+
 		$netlinks=get_option('network_links');
 		if (strlen($netlinks)>0)
 		{

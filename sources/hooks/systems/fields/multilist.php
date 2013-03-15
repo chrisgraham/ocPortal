@@ -92,13 +92,13 @@ class Hook_fields_multilist
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=($ev=='')?array():explode(chr(10),$ev);
+		$exploded=explode(chr(10),$ev);
 		foreach (explode('|',$field['cf_default']) as $option)
 		{
 			if (in_array($option,$exploded)) $all[]=array('OPTION'=>$option,'HAS'=>true);
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+		return do_template('CATALOGUE_'.$field['c_name'].'_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_MULTILIST');
 	}
 
 	// ======================

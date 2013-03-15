@@ -121,7 +121,7 @@ class Hook_search_quiz
 	function render($row)
 	{
 		require_code('quiz');
-		return render_quiz_box($row);
+		return show_quiz_html($row);
 	}
 
 }

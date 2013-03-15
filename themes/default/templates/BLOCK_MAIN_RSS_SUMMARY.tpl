@@ -1,25 +1,20 @@
 <div class="float_surrounder rss_summary">
-	{+START,IF,{$NOT,{$IN_STR,{CATEGORY},<}}}
+	<div class="newscat_img_author">
 		{+START,IF_NON_EMPTY,{AUTHOR}}
-			<div class="newscat_img_author">
-				<div class="news_by">{AUTHOR}</div>
-			</div>
+			<div class="news_by">{AUTHOR}</div>
 		{+END}
-	{+END}
-	{+START,IF,{$IN_STR,{CATEGORY},<}}
-		<div class="newscat_img_author">
-			{CATEGORY}
-		</div>
-	{+END}
+	</div>
 
 	<h3><a href="{FULL_URL_RAW*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a></h3>
 
-	{+START,IF,{$OR,{$IS_NON_EMPTY,{DATE}},{$AND,{$NOT,{$IN_STR,{CATEGORY},<img}},{$IS_NON_EMPTY,{CATEGORY}}}}}
-		<div class="meta_details" role="contentinfo">
-			<ul class="meta_details_list">
-				{+START,IF_NON_EMPTY,{DATE}}<li>{!POSTED_TIME_SIMPLE,{DATE*}}</li>{+END}
-				{+START,IF,{$AND,{$NOT,{$IN_STR,{CATEGORY},<img}},{$IS_NON_EMPTY,{CATEGORY}}}}<li>{!IN,{CATEGORY}}</li>{+END}
-			</ul>
+	{+START,IF_NON_EMPTY,{DATE}}
+		<div class="page_subtitle_tagline">
+			{!POSTED_TIME,{DATE*}}{+START,IF,{$AND,{$NOT,{$IN_STR,{CATEGORY},<img}},{$IS_NON_EMPTY,{CATEGORY}}}}. {!IN,{CATEGORY}}.{+END}
+		</div>
+	{+END}
+	{+START,IF,{$AND,{$IN_STR,{CATEGORY},<img},{$IS_NON_EMPTY,{CATEGORY}}}}
+		<div class="newscat_img_author">
+			{CATEGORY}
 		</div>
 	{+END}
 

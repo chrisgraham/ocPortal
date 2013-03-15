@@ -62,6 +62,8 @@ class Block_side_language
 	{
 		unset($map);
 
+		require_css('side_blocks');
+
 		$langs=nice_get_langs(user_lang());
 		return do_template('BLOCK_SIDE_LANGUAGE',array('_GUID'=>'5dd7dd434722d7fd958773bd08e838c7','LANGS'=>$langs));
 	}

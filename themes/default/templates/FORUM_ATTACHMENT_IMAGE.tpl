@@ -1,3 +1,3 @@
 <div>
-	<img alt="{!_ATTACHMENT}" src="{URL*}" />
+	<img title="" alt="{!_ATTACHMENT}" src="{URL*}" />
 </div>

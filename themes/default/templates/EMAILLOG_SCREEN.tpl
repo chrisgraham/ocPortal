@@ -2,7 +2,9 @@
 
 {RESULTS_TABLE}
 
-<div class="buttons_group">
+<br />
+
+<div class="float_surrounder">
 	<form title="{!DELETE_ALL}" class="right" action="{MASS_DELETE_URL*}" method="post">
 		<div class="inline">
 			<input class="button_page" type="submit" value="{!DELETE_ALL}" />

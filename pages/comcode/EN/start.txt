@@ -1,38 +1,33 @@
 {+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-[semihtml]
-[surround="hero_section"]
-	[title="1"]Welcome to {$SITE_NAME}[/title]
+[title="1"]Welcome to {$SITE_NAME}[/title]
 
-	[block failsafe="1"]main_greeting[/block]
-	[surround="hero_button"][page="site:start"]{$SITE_NAME}[/page][/surround]
+[block failsafe="1"]main_greeting[/block]
+You are in the welcome zone. Proceed to the [page="site:start"]main website[/page].
+
+[if_in_group="2"]
+----
+[b]Note to administrators[/b]: There is an option called "Single public zone" that you can enable to get rid of the welcome zone/site zone distinction. This is advisable on most web sites as splash pages are considered poor usability. However they are also useful sometimes, especially if the main site requires special access such as being subscription-only.[/if_in_group]
+
+[surround="accessibility_hidden"]
+If you are a screen reader user, and use JAWS, please visit the Keymap page in the site footer to get important instructions for making JAWS more accessible with the {$SITE_NAME} website.
+The short cut key is Alt+O for IE users, or Alt+Shift+O for Firefox users.
 [/surround]
-
-[block failsafe="1"]main_image_fader[/block]
-[/semihtml]
 {+END}
-
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
-[semihtml]
 [title="1"]{$SITE_NAME}[/title]
 
 [block="3" failsafe="1"]main_greeting[/block]
 
-[block failsafe="1"]main_news[/block]
+
+[semihtml]
+<div class="float_surrounder">
+<div class="fp_col_block" style="float: left">[block failsafe="1"]main_content[/block]</div>
+<div class="fp_col_block" style="float: right">[block failsafe="1"]main_poll[/block]</div>
+</div>
+[/semihtml]
 
 [block failsafe="1"]main_leader_board[/block]
 
-[surround="fp_col_blocks_wrap pale_box"]
-	[surround="fp_col_block left"]
-		[block failsafe="1"]main_iotd[/block]
-	[/surround]
+[block="http://news.google.co.uk/news?hs=UTT&tab=wn&topic=w&output=atom" failsafe="1"]main_rss[/block]
 
-	[surround="fp_col_block right"]
-		[block failsafe="1"]main_poll[/block]
-	[/surround]
-[/surround]
-
-[block failsafe="1"]main_quotes[/block]
-
-[block]main_comcode_page_children[/block]
-[/semihtml]
-{+END}
+[block]main_comcode_page_children[/block]{+END}

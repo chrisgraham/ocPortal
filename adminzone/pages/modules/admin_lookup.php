@@ -77,7 +77,7 @@ class Module_admin_lookup
 		{
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
-			$title=get_screen_title('INVESTIGATE_USER');
+			$title=get_page_title('INVESTIGATE_USER');
 
 			require_code('form_templates');
 			$submit_name=do_lang_tempcode('INVESTIGATE_USER');
@@ -92,14 +92,14 @@ class Module_admin_lookup
 		{
 			if (is_numeric($param))
 			{
-				$title=get_screen_title('INVESTIGATE_USER_BY_MEMBER_ID');
+				$title=get_page_title('INVESTIGATE_USER_BY_MEMBER_ID');
 			}
 			elseif (strpos($param,'.')!==false)
 			{
-				$title=get_screen_title('INVESTIGATE_USER_BY_IP');
+				$title=get_page_title('INVESTIGATE_USER_BY_IP');
 			} else
 			{
-				$title=get_screen_title('INVESTIGATE_USER_BY_USERNAME');
+				$title=get_page_title('INVESTIGATE_USER_BY_USERNAME');
 			}
 
 			$test=explode(' ',get_param('sort','date_and_time DESC'),2);
@@ -116,7 +116,7 @@ class Module_admin_lookup
 			if (is_null($id)) $id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			if (is_null($ip)) $ip='';
 
-			$all_banned=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query('SELECT ip FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL OR i_ban_until>'.strval(time()).')'));
+			$all_banned=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('ip')));
 
 			$ip_list=new ocp_tempcode();
 			$groups=array();
@@ -178,7 +178,7 @@ class Module_admin_lookup
 					$inner_ip_list->attach(do_template('LOOKUP_IP_LIST_ENTRY',array('_GUID'=>'94a133f5f711bbf09100346661e3f7c9','UNIQID'=>uniqid(''),'LOOKUP_URL'=>$lookup_url,'DATE'=>$date,'_DATE'=>strval($row['date_and_time']),'IP'=>$row['ip'],'BANNED'=>in_array($row['ip'],$all_banned))));
 					if (in_array($row['ip'],$all_banned)) $one_sub_is_banned=true;
 				}
-				$ip_list->attach(do_template('LOOKUP_IP_LIST_GROUP',array('_GUID'=>'10612a64654f3a75fca65d089e039e9a','OPEN_DEFAULT'=>$one_sub_is_banned,'UNIQID'=>uniqid(''),'BANNED'=>in_array($mask,$all_banned),'MASK'=>$mask,'GROUP'=>$inner_ip_list)));
+				$ip_list->attach(do_template('LOOKUP_IP_LIST_GROUP',array('OPEN_DEFAULT'=>$one_sub_is_banned,'UNIQID'=>uniqid(''),'BANNED'=>in_array($mask,$all_banned),'MASK'=>$mask,'GROUP'=>$inner_ip_list)));
 			}
 
 			$stats=get_stats_track($id,$ip,get_param_integer('start',0),get_param_integer('max',10),$sortable,$sort_order);
@@ -204,15 +204,7 @@ class Module_admin_lookup
 			$alerts=($ip=='')?new ocp_tempcode():find_security_alerts(array('ip'=>$ip));
 
 			$member_banned=$GLOBALS['FORUM_DRIVER']->is_banned($id);
-			$ip_banned=false;
-			if ($ip!='')
-			{
-				$ban_until=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('i_ban_until'),array('i_ban_positive'=>1,'ip'=>$ip));
-				if (array_key_exists(0,$ban_until))
-				{
-					$ip_banned=is_null($ban_until[0]['i_ban_until']) || $ban_until[0]['i_ban_until']>time();
-				}
-			}
+			$ip_banned=($ip!='') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_ip','ip',array('ip'=>$ip))));
 			$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$id));
 			$submitter_banned=!is_null($banned_test_2);
 
@@ -238,30 +230,7 @@ class Module_admin_lookup
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('SEARCH'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
-			return do_template(
-				'LOOKUP_SCREEN',
-				array(
-					'_GUID'=>'dc6effaa043949940b809f6aa5a1f944',
-					'TITLE'=>$title,
-					'ALERTS'=>$alerts,
-					'STATS'=>$stats,
-					'IP_LIST'=>$ip_list,
-					'IP_BANNED'=>$ip_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
-					'SUBMITTER_BANNED'=>$submitter_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
-					'MEMBER_BANNED'=>$member_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
-					'MEMBER_BAN_LINK'=>$member_ban_link,
-					'SUBMITTER_BAN_LINK'=>$submitter_ban_link,
-					'IP_BAN_LINK'=>$ip_ban_link,
-					'ID'=>strval($id),
-					'IP'=>$ip,
-					'NAME'=>$name,
-					'SEARCH_URL'=>$search_url,
-					'AUTHOR_URL'=>$author_url,
-					'POINTS_URL'=>$points_url,
-					'PROFILE_URL'=>$profile_url,
-					'ACTION_LOG_URL'=>$action_log_url
-				)
-			);
+			return do_template('LOOKUP_SCREEN',array('_GUID'=>'dc6effaa043949940b809f6aa5a1f944','TITLE'=>$title,'ALERTS'=>$alerts,'STATS'=>$stats,'IP_LIST'=>$ip_list,'IP_BANNED'=>$ip_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'SUBMITTER_BANNED'=>$submitter_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'MEMBER_BANNED'=>$member_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'MEMBER_BAN_LINK'=>$member_ban_link,'SUBMITTER_BAN_LINK'=>$submitter_ban_link,'IP_BAN_LINK'=>$ip_ban_link,'ID'=>strval($id),'IP'=>$ip,'NAME'=>$name,'SEARCH_URL'=>$search_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'ACTION_LOG_URL'=>$action_log_url));
 		}
 	}
 

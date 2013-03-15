@@ -15,6 +15,19 @@
 	fclose($x);*/
 
 
+if (!function_exists('do_lang'))
+{
+	/**
+	 * Stub for translations. Really doesn't do anything
+	 *
+	 * @param  string			Code to translate (currently ignored - only one hard-coded translation in here)
+	 * @return string			"Translated" version of code
+	 */
+	function do_lang($x)
+	{
+		return 'utf-8'; // or ISO-8859-1
+	}
+}
 if (strpos($_SERVER['PHP_SELF'],'spell-check-logic.php')!==false)
 	spellchecklogic();
 
@@ -125,7 +138,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 function wrap_exec($cmd)
 {
 	//echo htmlentities($cmd.' > '.get_custom_file_base().'/data_custom/spelling/output.log').'<br />';
-	if (shell_exec($cmd.' > '.get_custom_file_base().'/data_custom/spelling/output.log')===false)
+	if (shell_exec($cmd.' > output.log')===false)
 	{
 		return false;
 	}
@@ -263,7 +276,7 @@ function aspell_init()
 			if ($aspellconfig===false) $aspellconfig=pspell_config_create('en',$spelling,'',$charset);
 			pspell_config_personal($aspellconfig,$p_dict_path.'/'.$lang_stub.'.pws');
 			pspell_config_repl($aspellconfig,$p_dict_path.'/'.$lang_stub.'.prepl');
-			$aspellcommand=@pspell_new_config($aspellconfig);
+			$aspellcommand=pspell_new_config($aspellconfig);
 		}
 
 		if (is_null($aspellcommand)) exit();
@@ -343,8 +356,8 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 
 	if (trim($text)!='')
 	{
-		$varlines='<script type="text/javascript">var suggested_words={ ';
-		$infolines='var spellcheck_info={';
+		$varlines='<script type="text/javascript">var suggested_words = { ';
+		$infolines='var spellcheck_info = {';
 		$counter=0;
 		$suggest_count=0;
 		$textarray=array();

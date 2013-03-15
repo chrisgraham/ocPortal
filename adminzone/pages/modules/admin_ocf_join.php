@@ -99,7 +99,7 @@ class Module_admin_ocf_join
 		if (addon_installed('staff')) require_lang('staff');
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('MEMBERS'),comcode_lang_string('DOC_MEMBERS'),
+		return do_next_manager(get_page_title('MEMBERS'),comcode_lang_string('DOC_MEMBERS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('addmember',array('admin_ocf_join',array('type'=>'misc'),get_module_zone('admin_ocf_join')),do_lang_tempcode('ADD_MEMBER'),('DOC_ADD_MEMBER')),
@@ -126,7 +126,7 @@ class Module_admin_ocf_join
 	 */
 	function step1()
 	{
-		$title=get_screen_title('ADD_MEMBER');
+		$title=get_page_title('ADD_MEMBER');
 
 		list($fields,$hidden)=ocf_get_member_fields(false);
 
@@ -147,7 +147,7 @@ class Module_admin_ocf_join
 	 */
 	function step2()
 	{
-		$title=get_screen_title('ADD_MEMBER');
+		$title=get_page_title('ADD_MEMBER');
 
 		// Read in data
 		$username=trim(post_param('username'));
@@ -250,7 +250,7 @@ class Module_admin_ocf_join
 	 */
 	function group_member_timeouts()
 	{
-		$title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
+		$title=get_page_title('GROUP_MEMBER_TIMEOUTS');
 
 		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration')),'warn');
 
@@ -303,7 +303,7 @@ class Module_admin_ocf_join
 
 		$form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 
-		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
+		return do_template('RESULTS_TABLE_SCREEN',array('TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
 	}
 
 	/**
@@ -313,7 +313,7 @@ class Module_admin_ocf_join
 	 */
 	function _group_member_timeouts()
 	{
-		$title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
+		$title=get_page_title('GROUP_MEMBER_TIMEOUTS');
 
 		$group_id=post_param_integer('group_id');
 
@@ -345,7 +345,7 @@ class Module_admin_ocf_join
 	 */
 	function delurk()
 	{
-		$title=get_screen_title('DELETE_LURKERS');
+		$title=get_page_title('DELETE_LURKERS');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
@@ -426,7 +426,7 @@ class Module_admin_ocf_join
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND id<>'.strval(get_member()).' AND m_cache_num_posts<='.strval(intval($max_posts)).' AND m_last_visit_time<'.strval(time()-$min_days_since_login*60*60*24).' AND m_join_time<'.strval(time()-$min_days_since_join*60*60*24),500,$start);
+			$rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND m_cache_num_posts<'.strval(intval($max_posts)).' AND m_last_visit_time<'.strval(time()-$min_days_since_login*60*60*24).' AND m_join_time<'.strval(time()-$min_days_since_join*60*60*24),500,$start);
 			$out=array();
 			if (addon_installed('points'))
 			{
@@ -468,7 +468,7 @@ class Module_admin_ocf_join
 	 */
 	function _delurk()
 	{
-		$title=get_screen_title('DELETE_LURKERS');
+		$title=get_page_title('DELETE_LURKERS');
 
 		if (function_exists('set_time_limit')) @set_time_limit(100);
 
@@ -512,7 +512,7 @@ class Module_admin_ocf_join
 	 */
 	function __delurk()
 	{
-		$title=get_screen_title('DELETE_LURKERS');
+		$title=get_page_title('DELETE_LURKERS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletelurkers';
 
@@ -768,7 +768,7 @@ class Module_admin_ocf_join
 	 */
 	function import_csv()
 	{
-		$title=get_screen_title('IMPORT_MEMBER_CSV');
+		$title=get_page_title('IMPORT_MEMBER_CSV');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
@@ -789,7 +789,7 @@ class Module_admin_ocf_join
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_csv'),'_SELF');
 		$text='';
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'9196652a093d7f3a0e5dd0922f74cc51','TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -799,7 +799,7 @@ class Module_admin_ocf_join
 	 */
 	function _import_csv()
 	{
-		$title=get_screen_title('IMPORT_MEMBER_CSV');
+		$title=get_page_title('IMPORT_MEMBER_CSV');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/import_csv';
 
@@ -833,15 +833,12 @@ class Module_admin_ocf_join
 		{
 			$_csv_data=array();
 
-			if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) // Cleanup possible line ending problems, but only if file not too big
+			$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
+			$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
+			if ($myfile!==false)
 			{
-				$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
-				$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
-				if ($myfile!==false)
-				{
-					fwrite($myfile,$fixed_contents);
-					fclose($myfile);
-				}
+				fwrite($myfile,$fixed_contents);
+				fclose($myfile);
 			}
 
 			$myfile=fopen($_FILES['file']['tmp_name'],'rb');
@@ -999,7 +996,7 @@ class Module_admin_ocf_join
 					$join_time=NULL;
 				}
 
-				$avatar_url=array_key_exists('Avatar',$line)?$line['Avatar']:NULL;
+				$avatar_url=array_key_exists('Avatar',$line)?$line['Avatar']:'';
 				if (substr($avatar_url,0,strlen(get_base_url()))==get_base_url()) $avatar_url=substr($avatar_url,strlen(get_base_url()));
 				$signature=array_key_exists('Signature',$line)?$line['Signature']:'';
 				$is_perm_banned=array_key_exists('Banned',$line)?((strtoupper($line['Banned'])=='YES' || $line['Banned']=='1' || strtoupper($line['Banned'])=='Y' || strtoupper($line['Banned'])=='ON')?1:0):0;
@@ -1035,15 +1032,9 @@ class Module_admin_ocf_join
 				$photo_url=array_key_exists('Photo',$line)?$line['Photo']:'';
 				if ($photo_url!='')
 				{
-					if ((!$new_member) && ($photo_url==$GLOBALS['FORUM_DRIVER']->get_member_row_field($linked_id,'m_photo_url')))
-					{
-						$photo_thumb_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($linked_id,'m_photo_url');
-					} else
-					{
-						require_code('images');
-						$photo_thumb_url='uploads/ocf_photos_thumbs/'.uniqid('').'.png';
-						convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false);
-					}
+					require_code('images');
+					$photo_thumb_url='uploads/ocf_photos_thumbs/'.uniqid('').'.png';
+					convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false);
 				} else $photo_thumb_url='';
 				$custom_fields=array();
 				foreach ($all_cpfs as $cpf)
@@ -1119,17 +1110,6 @@ class Module_admin_ocf_join
 					if ($old_username==$username) $username=NULL;
 
 					ocf_edit_member($linked_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,NULL,$primary_group,$custom_fields,NULL,$reveal_age,NULL,NULL,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,NULL,NULL,NULL,NULL,NULL,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
-					if (!is_null($groups))
-					{
-						foreach ($groups as $g_id)
-						{
-							$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
-								'gm_group_id'=>$g_id,
-								'gm_member_id'=>$linked_id,
-								'gm_validated'=>1
-							),false,true); // Allow failure, if member is already in (handy for importers)
-						}
-					}
 					$num_edited++;
 				}
 

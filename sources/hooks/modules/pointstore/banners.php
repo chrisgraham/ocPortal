@@ -58,7 +58,7 @@ class Hook_pointstore_banners
 	{
 		if (get_option('is_on_banner_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_BANNER');
+		$title=get_page_title('TITLE_BANNER');
 
 		$banner_name=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>get_member(),'purchasetype'=>'banner'));
 		if (!is_null($banner_name))
@@ -104,13 +104,15 @@ class Hook_pointstore_banners
 
 		$this->handle_has_banner_already();
 
-		// We can purchase a banner...
+		//We can purchase a banner...
 		$initial_hits=intval(get_option('initial_banner_hits'));
 		$banner_price=intval(get_option('banner_setup'));
 		$text=paragraph(do_lang_tempcode('BANNERS_DESCRIPTION',integer_format($initial_hits),integer_format($banner_price)));
-		list($fields,$javascript)=get_banner_form_fields(true);
-		$title=get_screen_title('ADD_BANNER');
+		$fields=get_banner_form_fields(true);
+		$title=get_page_title('ADD_BANNER');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_newbanner','id'=>'banners','uploading'=>1),'_SELF');
+
+		$javascript='standardAlternateFields(\'file\',\'image_url\',\'title_text\',true); if (document.getElementById(\'campaignremaining\')) { var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf; }';
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
@@ -129,7 +131,7 @@ class Hook_pointstore_banners
 
 		require_code('uploads');
 
-		$title=get_screen_title('ADD_BANNER');
+		$title=get_page_title('ADD_BANNER');
 
 		$member_id=get_member(); // the ID of the member who is logged in right now
 		$cost=intval(get_option('banner_setup'));
@@ -141,14 +143,13 @@ class Hook_pointstore_banners
 		$image_url=$urls[0];
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
-		$direct_code=post_param('direct_code','');
 		$notes=post_param('notes','');
 
 		$this->check_afford_banner();
 
 		$this->handle_has_banner_already();
 
-		$banner=show_banner($name,'',comcode_to_tempcode($caption),$direct_code,(url_is_local($image_url)?(get_custom_base_url().'/'):'').$image_url,'',$site_url,'',get_member());
+		$banner=show_banner($name,'',comcode_to_tempcode($caption),(url_is_local($image_url)?(get_custom_base_url().'/'):'').$image_url,'',$site_url,'');
 		$proceed_url=build_url(array('page'=>'_SELF','type'=>'__newbanner','id'=>'banners'),'_SELF');
 		$cancel_url=build_url(array('page'=>'_SELF'),'_SELF');
 		$keep=new ocp_tempcode();
@@ -189,7 +190,6 @@ class Hook_pointstore_banners
 		$image_url=post_param('image_url');
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
-		$direct_code=post_param('direct_code','');
 		$notes=post_param('notes','');
 		$name=post_param('name');
 
@@ -198,7 +198,7 @@ class Hook_pointstore_banners
 		$this->handle_has_banner_already();
 
 		check_banner();
-		add_banner($name,$image_url,'',$caption,$direct_code,intval(get_option('initial_banner_hits')),$site_url,3,$notes,1,NULL,get_member(),0);
+		add_banner($name,$image_url,'',$caption,intval(get_option('initial_banner_hits')),$site_url,3,$notes,1,NULL,get_member(),0);
 		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'banner','details'=>$name,'details2'=>''));
 		require_code('points2');
 		charge_member(get_member(),$cost,do_lang('ADD_BANNER'));
@@ -209,7 +209,7 @@ class Hook_pointstore_banners
 		if (addon_installed('unvalidated'))
 			send_validation_request('ADD_BANNER','banners',true,$name,$edit_url);
 
-		$title=get_screen_title('ADD_BANNER');
+		$title=get_page_title('ADD_BANNER');
 		$stats_url=build_url(array('page'=>'banners','type'=>'misc'),get_module_zone('banners'));
 		$text=do_lang_tempcode('PURCHASED_BANNER');
 
@@ -262,7 +262,7 @@ class Hook_pointstore_banners
 	{
 		if (get_option('is_on_banner_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_BANNER_UPGRADE');
+		$title=get_page_title('TITLE_BANNER_UPGRADE');
 
 		$impcost=intval(get_option('banner_imp'));
 		$hitcost=intval(get_option('banner_hit'));
@@ -287,7 +287,7 @@ class Hook_pointstore_banners
 	{
 		if (get_option('is_on_banner_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_BANNER_UPGRADE');
+		$title=get_page_title('TITLE_BANNER_UPGRADE');
 
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);

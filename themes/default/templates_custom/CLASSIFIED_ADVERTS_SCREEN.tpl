@@ -2,11 +2,11 @@
 
 <p>{!CLASSIFIEDS_MY_ADVERTS_TEXT}</p>
 
-<table summary="{!COLUMNED_TABLE}" class="wide_table results_table autosized_table spaced_table">
+<table summary="{!COLUMNED_TABLE}" class="wide_table solidborder variable_table spaced_table">
 	<tr>
 		<th>{!TITLE}</th>
 		<th>{!COUNT_VIEWS}</th>
-		<th>{!ADDED}</th>
+		<th>{!_ADDED}</th>
 		<th>{!CLASSIFIED_EXPIRES_ON}</th>
 		<th>{!CLASSIFIED_ACTIVE}</th>
 	</tr>
@@ -14,11 +14,11 @@
 		{$SET,cycle,{$CYCLE,results_table_zebra,zebra_0,zebra_1}}
 
 		<tr class="{$GET,cycle} thick_border">
-			<td><a href="{URL*}">{AD_TITLE}</td>
-			<td>{NUM_VIEWS*}</td>
-			<td>{DATE*}</td>
-			<td>{EXPIRES_DATE*}</td>
-			<td>
+			<td class="dottedborder_barrier_b_nonrequired"><a href="{URL*}">{AD_TITLE}</td>
+			<td class="dottedborder_barrier_b_nonrequired">{NUM_VIEWS*}</td>
+			<td class="dottedborder_barrier_b_nonrequired">{DATE*}</td>
+			<td class="dottedborder_barrier_b_nonrequired">{EXPIRES_DATE*}</td>
+			<td class="dottedborder_barrier_b_nonrequired">
 				{+START,IF,{ACTIVE}}
 					{+START,IF_NON_EMPTY,{TRANSACTION_DETAILS}}
 						{!YES}:
@@ -42,7 +42,7 @@
 		</tr>
 		{+START,IF_NON_EMPTY,{TRANSACTION_DETAILS}}
 			<tr class="{$GET,cycle}">
-				<td colspan="5">
+				<td class="dottedborder_barrier_b_nonrequired" colspan="5">
 					{+START,LOOP,TRANSACTION_DETAILS}
 						<p class="mini_indent">
 							<span class="right">{STATUS*} ({$?,{$IS_EMPTY,{T_VIA}},{!ecommerce:MANUAL_TRANSACTION},{T_VIA*}})</span>
@@ -50,7 +50,7 @@
 						</p>
 						{+START,IF_NON_EMPTY,{PENDING_REASON}{REASON}{T_MEMO}}
 							<p class="standard_indent">
-								<span class="field_name">{!DETAILS}:</span> {PENDING_REASON*}{REASON*}{T_MEMO*}
+								<span class="field_name">{!DETAILS}</span>: {PENDING_REASON*}{REASON*}{T_MEMO*}
 							</p>
 						{+END}
 					{+END}
@@ -60,8 +60,9 @@
 	{+END}
 </table>
 
-{+START,IF_NON_EMPTY,{PAGINATION}}
+{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
+	<br />
 	<div class="float_surrounder">
-		{PAGINATION}
+		{RESULTS_BROWSER}
 	</div>
 {+END}

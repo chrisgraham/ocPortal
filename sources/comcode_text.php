@@ -66,7 +66,7 @@ function init__comcode_text()
 	// In theory, almost any tag is reversable. However these tags can be converted ROBUSTLY and hence the WYSIWYG editor can manipulate them as HTML rather than having to display as Comcode
 	// If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
 	global $REVERSABLE_TAGS;
-	$REVERSABLE_TAGS=array('surround'=>1,'attachment_safe'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
+	$REVERSABLE_TAGS=array('surround'=>1,'attachment_safe'=>1,'attachment2'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
 										'title'=>1,'size'=>1,'color'=>1,'font'=>1,'tt'=>1,'img'=>'#\s(rollover|refresh\_time)=#','url'=>1,'email'=>1,'upload'=>1,
 										'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
 
@@ -74,7 +74,7 @@ function init__comcode_text()
 										'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'reference'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,);
 	// These are not reversable, but we want them WYSIWYGABLE
 	global $PUREHTML_TAGS;
-	$PUREHTML_TAGS=array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
+	$PUREHTML_TAGS=array(/*'attachment2'=>1,'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
 	// The following could conceivably not need to be reversed, as they're pure HTML. However, it's better not to let the WYSIWYG'd HTML get too complex.
 	// 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
 
@@ -84,11 +84,11 @@ function init__comcode_text()
 
 	// The contents of these tags is human readable text. It may be altered for reasons of bork, or word-wrapping, or textcode; they have hard white space
 	global $TEXTUAL_TAGS;
-	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'hide'=>1,'quote'=>1,'tab'=>1,'big_tab'=>1);
+	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'hide'=>1,'quote'=>1,'tab'=>1,'big_tab'=>1);
 
 	// These tags don't have <br />'s done right after them because they are their own block-end (like a paragraph). They may contain textcode lists and rules
 	global $BLOCK_TAGS;
-	$BLOCK_TAGS=array('section'=>1,'section_controller'=>1,'tabs'=>1,'tab'=>1,'big_tab'=>1,'big_tab_controller'=>1,'carousel'=>1,'surround'=>1,'if_in_group'=>1,'exp_thumb'=>1,'contents'=>1,'concepts'=>1,'php'=>1,'codebox'=>1,'sql'=>1,'code'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'staff_note'=>1,'reference'=>1,'menu'=>1,'title'=>1,'box'=>1,'quote'=>1,'block'=>1,'hide'=>1);
+	$BLOCK_TAGS=array('section'=>1,'section_controller'=>1,'tabs'=>1,'tab'=>1,'big_tab'=>1,'big_tab_controller'=>1,'carousel'=>1,'surround'=>1,'if_in_group'=>1,'exp_thumb'=>1,'contents'=>1,'concepts'=>1,'php'=>1,'codebox'=>1,'sql'=>1,'code'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'staff_note'=>1,'reference'=>1,'menu'=>1,'title'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'quote'=>1,'block'=>1,'hide'=>1);
 
 	// These tags can only be used by privileged members
 	global $DANGEROUS_TAGS;
@@ -152,7 +152,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 	if ((function_exists('set_time_limit')) && (ini_get('max_execution_time')!='0')) @set_time_limit(300);
 
-	$allowed_html_seqs=array('<table>','<table class="[^"]*">','<table class="[^"]*" summary="[^"]*">','<table summary="[^"]*">','</table>','<tr>','</tr>','<td>','</td>','<th>','</th>','<pre>','</pre>','<br />','<br/>','<br >','<br>','<p>','</p>','<p />','<b>','</b>','<u>','</u>','<i>','</i>','<em>','</em>','<strong>','</strong>','<ul>','</ul>','<ol>','</ol>','<del>','</del>','<dir>','</dir>','<s>','</s>','</a>','</font>','<!--','<h1 id="screen_title">','<h1 class="screen_title">','<h1 id="screen_title" class="screen_title">','</h1>','<img (class="vertical_alignment" )?alt="[^"]*" src="[^"]*" (complete="true" )*/>','<img src=["\'][^"\'<>]*["\']( border=["\'][^"\'<>]*["\'])?( alt=["\'][^"\'<>]*["\'])?( )?(/)?'.'>','<a href=["\'][^"\'<>]*["\']( target=["\'][^"\'<>]*["\'])?'.'>'); // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
+	$allowed_html_seqs=array('<table>','<table class="[^"]*">','<table class="[^"]*" summary="[^"]*">','<table summary="[^"]*">','</table>','<tr>','</tr>','<td>','</td>','<th>','</th>','<pre>','</pre>','<br />','<br/>','<br >','<br>','<p>','</p>','<p />','<b>','</b>','<u>','</u>','<i>','</i>','<em>','</em>','<strong>','</strong>','<ul>','</ul>','<ol>','</ol>','<del>','</del>','<dir>','</dir>','<s>','</s>','</a>','</font>','<!--','<h1 id="main_page_title">','<h1 class="main_page_title">','<h1 id="main_page_title" class="main_page_title">','</h1>','<img (class="inline_image" )?alt="[^"]*" src="[^"]*" (complete="true" )*/>','<img src=["\'][^"\'<>]*["\']( border=["\'][^"\'<>]*["\'])?( alt=["\'][^"\'<>]*["\'])?( )?(/)?'.'>','<a href=["\'][^"\'<>]*["\']( target=["\'][^"\'<>]*["\'])?'.'>'); // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
 	if ($as_admin)
 	{
 		$comcode_dangerous=true;
@@ -755,28 +755,28 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							}
 							if ((trim($next)!='') && (!$in_code_tag) && (!$differented))
 							{
-								// Wiki pages
+								// CEDI pages
 								if (($pos<$len) && ($next=='[') && ($pos+1<$len) && ($comcode[$pos]=='[') && (!$semiparse_mode) && (addon_installed('cedi')))
 								{
 									$matches=array();
 									if (preg_match('#^\[([^\[\]]*)\]\]#',substr($comcode,$pos,200),$matches)!=0)
 									{
-										$wiki_page_name=$matches[1];
+										$cedi_page_name=$matches[1];
 										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 										$tag_output->attach($continuation);
 										$continuation='';
-										$hash_pos=strpos($wiki_page_name,'#');
+										$hash_pos=strpos($cedi_page_name,'#');
 										if ($hash_pos!==false)
 										{
-											$jump_to=substr($wiki_page_name,$hash_pos+1);
-											$wiki_page_name=substr($wiki_page_name,0,$hash_pos);
+											$jump_to=substr($cedi_page_name,$hash_pos+1);
+											$cedi_page_name=substr($cedi_page_name,0,$hash_pos);
 										} else $jump_to='';
-										$wiki_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$wiki_page_name),get_module_zone('cedi'));
+										$cedi_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$cedi_page_name),get_module_zone('cedi'));
 										if ($jump_to!='')
 										{
-											$wiki_page_url->attach('#'.$jump_to);
+											$cedi_page_url->attach('#'.$jump_to);
 										}
-										$tag_output->attach(do_template('COMCODE_WIKI_LINK',array('_GUID'=>'ebcd7ba5290c5b2513272a53b4d666e5','URL'=>$wiki_page_url,'TEXT'=>$wiki_page_name)));
+										$tag_output->attach(do_template('COMCODE_CEDI_LINK',array('_GUID'=>'ebcd7ba5290c5b2513272a53b4d666e5','URL'=>$cedi_page_url,'TEXT'=>$cedi_page_name)));
 										$pos+=strlen($matches[1])+3;
 										$differented=true;
 									}
@@ -796,28 +796,22 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											$username=substr($username,1);
 										} else $username_info=false;
 										$this_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-										if (!is_null($this_member_id))
+										if ((!is_null($this_member_id)) && (!is_guest($this_member_id)))
 										{
 											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 											$tag_output->attach($continuation);
 											$continuation='';
 
-											if (!is_guest($this_member_id))
+											$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
+											if ((get_forum_type()=='ocf') && ($username_info))
 											{
-												$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
-												if ((get_forum_type()=='ocf') && ($username_info))
-												{
-													require_lang('ocf');
-													require_code('ocf_members2');
-													$details=render_member_box($this_member_id);
-													$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
-												} else
-												{
-													$tag_output->attach(hyperlink($poster_url,$username));
-												}
+												require_lang('ocf');
+												require_code('ocf_members2');
+												$details=ocf_show_member_box($this_member_id);
+												$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
 											} else
 											{
-												$tag_output->attach(escape_html($username));
+												$tag_output->attach(hyperlink($poster_url,$username));
 											}
 
 											$pos+=strlen($matches[1])+3;
@@ -884,6 +878,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 												foreach ($rows as $h=>$row)
 												{
+													if ($h!=0) $tag_output->attach(do_template('BLOCK_SEPARATOR'));
+
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
 													array_shift($cells); // First one is non-existant empty
 													$spec=true;
@@ -963,25 +959,15 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												{
 													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID'=>'0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION'=>$caption)));
 												}
-												$finished_thead=false;
 												foreach ($rows as $table_row)
 												{
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START'));
+
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
 													array_shift($cells); // First one is non-existant empty
 													$spec=true;
 													$c_type='';
 													$cell_i=0;
-													$finished_thead_prior=$finished_thead;
-													foreach ($cells as $i=>$cell)
-													{
-														if ($spec)
-														{
-															if (strpos($cell,'!')===false) $finished_thead=true;
-														}
-														$spec=!$spec;
-													}
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
-													$spec=true;
 													foreach ($cells as $i=>$cell)
 													{
 														if ($spec)
@@ -1001,10 +987,10 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 														$spec=!$spec;
 													}
 
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('END_HEAD'=>!$finished_thead)));
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END'));
 												}
 
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID'=>'6a843e072e92b60cc950f69576231fe1','END_BODY'=>$finished_thead)));
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END'));
 											}
 
 											$pos=$end_tbl+3;
@@ -1064,7 +1050,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													$tag_output->attach($continuation);
 													$continuation='';
 													$differented=true;
-													$ad_text=show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode($ad_bits['caption']),$ad_bits['b_direct_code'],$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type'],$ad_bits['submitter']);
+													$ad_text=show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode($ad_bits['caption']),$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type']);
 													$embed_output=_do_tags_comcode('tooltip',array('param'=>$ad_text,'url'=>(url_is_local($ad_bits['site_url']) && ($ad_bits['site_url']!=''))?(get_custom_base_url().'/'.$ad_bits['site_url']):$ad_bits['site_url']),substr($comcode,$pos-1,strlen($ad_trigger)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
 													$pos+=strlen($ad_trigger)-1;
 													$tag_output->attach($embed_output);
@@ -1192,13 +1178,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 											$tag_output->attach($continuation);
 											$continuation='';
-											if (!$semiparse_mode)
-											{
-												$tag_output->attach($embed_output);
-											} else
-											{
-												$tag_output->attach(escape_html($auto_link));
-											}
+											$tag_output->attach($embed_output);
 											$pos+=$link_end_pos-$pos;
 											$differented=true;
 										}
@@ -1298,12 +1278,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 						if (count($tag_stack)==0)
 						{
-							if ($current_tag=='semihtml') // Ignore, as people in WYSIWYG often incorrectly try and nest semihtml tags
-							{
-								$status=CCP_NO_MANS_LAND;
-								break;
-							}
-
 							if ($lax)
 							{
 								$status=CCP_NO_MANS_LAND;
@@ -1817,7 +1791,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 	$textual_area=isset($TEXTUAL_TAGS[$current_tag]);
 
 	$white_space_area=$textual_area;
-	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(($attribute_map['param']=='HTML')?'html4strict':strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty(($attribute_map['param']=='HTML')?'html4strict':strtolower($attribute_map['param'])).'.php')))) || ($current_tag=='php') || ($current_tag=='attachment') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
+	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty($attribute_map['param']).'.php')))) || ($current_tag=='php') || ($current_tag=='attachment') || ($current_tag=='attachment2') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
 	{
 		$in_separate_parse_section=true;
 	} else
@@ -1852,7 +1826,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 		$in_separate_parse_section=false;
 	}
 
-	if (($current_tag=='quote') && (count($attribute_map)>0))
+	if ($current_tag=='quote')
 	{
 		$comcode_dangerous=false;
 		$comcode_dangerous_html=false;

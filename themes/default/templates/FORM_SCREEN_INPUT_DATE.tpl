@@ -21,23 +21,23 @@
 {TIME}
 
 {+START,IF,{$JS_ON}}
-	<img class="top_vertical_alignment" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
+	<img class="inline_image" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
 {+END}
 
-<div id="cal{STUB#}Container" class="inline"></div>
+<div id="cal{STUB#}Container" class="inline">&nbsp;</div>
 
 <script type="text/javascript">// <![CDATA[
 	var mindate=null,maxdate=null;
 
 	{+START,IF_PASSED,MIN_DATE_DAY}{+START,IF_PASSED,MIN_DATE_MONTH}{+START,IF_PASSED,MIN_DATE_YEAR}
-		minDate=new Date();
+		minDate = new Date();
 		minDate.setDate({MIN_DATE_DAY%});
 		minDate.setMonth({MIN_DATE_MONTH%}-1);
 		minDate.setFullYear({MIN_DATE_YEAR%});
 	{+END}{+END}{+END}
 
 	{+START,IF_PASSED,MAX_DATE_DAY}{+START,IF_PASSED,MAX_DATE_MONTH}{+START,IF_PASSED,MAX_DATE_YEAR}
-		maxDate=new Date();
+		maxDate = new Date();
 		maxDate.setDate({MAX_DATE_DAY%});
 		maxDate.setMonth({MAX_DATE_MONTH%}-1);
 		maxDate.setFullYear({MAX_DATE_YEAR%});
@@ -51,7 +51,7 @@
 		var year_field=document.getElementById('{STUB%}_year');
 		var special_option=document.createElement('option');
 		special_option.value='-';
-		set_inner_html(special_option,'&hellip;');
+		setInnerHTML(special_option,'&hellip;');
 		year_field.onchange=function() {
 			if (this.options[this.selectedIndex].value=='-')
 			{
@@ -69,7 +69,7 @@
 							year=year.replace(/^0+/,'');
 							var custom_option=document.createElement('option');
 							custom_option.value=year;
-							set_inner_html(custom_option,year);
+							setInnerHTML(custom_option,year);
 							_this.appendChild(custom_option);
 							_this.selectedIndex=_this.options.length-1;
 						}

@@ -1,12 +1,12 @@
 <div>
-	<h2>
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!OCGIFTS_TITLE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-		<span class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!OCGIFTS_TITLE}</span>
-	</h2>
+	<h2 onclick="event.returnValue=false; hideTag(this.parentNode); return false;">
+		<a class="hide_button right" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}: {!OCGIFTS_TITLE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 
-	<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
+		{!OCGIFTS_TITLE}
+	</h2>
+	<div class="hide_tag" style="display: {$JS_ON,none,block}">
 		{+START,LOOP,GIFTS}
-			<div class="box box___ocf_member_screen_gifts_wrap"><div class="box_inner">
+			{+START,BOX}
 				{+START,IF_NON_EMPTY,{IMAGE_URL}}
 					<img src="{$THUMBNAIL*,{IMAGE_URL},50}" style="margin: 0 5px 5px 0; float: left;" />
 				{+END}
@@ -14,7 +14,13 @@
 				<div>
 					{GIFT_EXPLANATION}
 				</div>
-			</div></div>
+
+				{+START,IF_NON_EMPTY,{GIFT_URL}}
+					<p class="right">
+						<span class="associated_details">(<a href="{GIFT_URL*}">{!SEE_MORE}</a>)</span>
+					</p>
+				{+END}
+			{+END}
 		{+END}
 
 		{+START,IF_EMPTY,{GIFTS}}

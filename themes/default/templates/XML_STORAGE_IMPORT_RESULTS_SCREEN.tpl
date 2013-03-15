@@ -2,7 +2,13 @@
 
 <p>{!SUCCESS}</p>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table autosized_table">
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder">
+	<colgroup>
+		<col style="width: 200px" />
+		<col style="width: 50%" />
+		<col style="width: 50%" />
+	</colgroup>
+
 	<thead>
 		<tr>
 			<th>{!ACTION}</th>
@@ -15,8 +21,8 @@
 		{+START,LOOP,OPS}
 			<tr>
 				<td>{OP*}</td>
-				<td class="whitespace_visible">{PARAM_A*}</td>
-				<td class="whitespace_visible">{PARAM_B*}</td>
+				<td class="whitespace">{PARAM_A*}</td>
+				<td class="whitespace">{PARAM_B*}</td>
 			</tr>
 		{+END}
 	</tbody>

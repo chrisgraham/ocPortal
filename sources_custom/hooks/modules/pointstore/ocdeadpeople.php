@@ -49,7 +49,7 @@ class Hook_pointstore_ocdeadpeople
 		require_code('database_action');
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		$title=get_screen_title('DISEASES_CURES_IMMUNIZATIONS_TITLE');
+		$title=get_page_title('DISEASES_CURES_IMMUNIZATIONS_TITLE');
 
 		require_code('form_templates');
 		//$fields=new ocp_tempcode();
@@ -126,7 +126,7 @@ class Hook_pointstore_ocdeadpeople
 			$fields.='<tr><td colspan="4">'.do_lang('NO_ENTRIES_TO_DISPLAY').'</td></tr>';
 		$fields.='</table>';
 
-		return do_template('POINTSTORE_OCDEADPEOPLE_DISEASES',array('_GUID'=>'fbbe019ec60abf82b585618ec7f1453c','TITLE'=>$title,'FIELDS'=>$fields));
+		return do_template('POINTSTORE_OCDEADPEOPLE_DISEASES',array('TITLE'=>$title,'FIELDS'=>$fields));
 	}
 
 	/**
@@ -170,7 +170,7 @@ class Hook_pointstore_ocdeadpeople
 		$immunization_price=(isset($rows[0]['immunisation_price']) && (intval($rows[0]['immunisation_price'])>0))?intval($rows[0]['immunisation_price']):0;
 		$amount=($get_immunization==1)?$immunization_price:$cure_price;
 
-		$title=get_screen_title('DISEASES_CURES_IMMUNIZATIONS_TITLE');
+		$title=get_page_title('DISEASES_CURES_IMMUNIZATIONS_TITLE');
 
 		// Check points
 		$points_left=available_points(get_member());

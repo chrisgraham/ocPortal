@@ -80,7 +80,7 @@ class Block_main_staff_checklist
 				do_lang('CHECKLIST_INITIAL_TASK_WEBCLIP'),
 				do_lang('CHECKLIST_INITIAL_TASK_THEME'),
 				do_lang('CHECKLIST_INITIAL_TASK_CONTENT'),
-				'[page="adminzone:admin_themes:edit_image:logo/trimmed_logo:theme=default"]'.do_lang('CHECKLIST_INITIAL_TASK_MAIL_LOGO').'[/page]',
+				'[page="adminzone:admin_themes:edit_image:logo/trimmed-logo:theme=default"]'.do_lang('CHECKLIST_INITIAL_TASK_MAIL_LOGO').'[/page]',
 				'[page="adminzone:admin_themes:_edit_templates:theme=default:f0file=MAIL.tpl"]'.do_lang('CHECKLIST_INITIAL_TASK_MAIL').'[/page]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_P3P').'"]http://www.p3pwiz.com/[/url]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_GOOGLE').'"]http://www.google.com/addurl/[/url]',
@@ -132,7 +132,7 @@ class Block_main_staff_checklist
 			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$newtask,'datetimeadded'=>time(),'recurinterval'=>$recurint,'recurevery'=>$recurevery,'taskisdone'=>NULL));
 		}
 		$custasks=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
+		$rows = $GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
 		foreach($rows as $r)
 		{
 			$recurevery='';
@@ -152,11 +152,11 @@ class Block_main_staff_checklist
 					break;
 			}
 			$custasks->attach(do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
-				'TASK_TITLE'=>comcode_to_tempcode($r['tasktitle']),
-				'ADD_DATE'=>display_time_period($r['datetimeadded']),
-				'RECUR_INTERVAL'=>($r['recurinterval']==0)?'':integer_format($r['recurinterval']),
-				'RECUR_EVERY'=>$recurevery,
-				'TASK_DONE'=>((!is_null($r['taskisdone'])) && (($r['recurinterval']==0) || (($r['recurevery']!='mins') || (time()<$r['taskisdone']+60*$r['recurinterval'])) && (($r['recurevery']!='hours') || (time()<$r['taskisdone']+60*60*$r['recurinterval'])) && (($r['recurevery']!='days') || (time()<$r['taskisdone']+24*60*60*$r['recurinterval'])) && (($r['recurevery']!='months') || (time()<$r['taskisdone']+31*24*60*60*$r['recurinterval']))))?'checklist1':'not_completed',
+				'TASKTITLE'=>comcode_to_tempcode($r['tasktitle']),
+				'DATETIMEADDED'=>display_time_period($r['datetimeadded']),
+				'RECURINTERVAL'=>($r['recurinterval']==0)?'':integer_format($r['recurinterval']),
+				'RECUREVERY'=>$recurevery,
+				'TASKDONE'=>((!is_null($r['taskisdone'])) && (($r['recurinterval']==0) || (($r['recurevery']!='mins') || (time()<$r['taskisdone']+60*$r['recurinterval'])) && (($r['recurevery']!='hours') || (time()<$r['taskisdone']+60*60*$r['recurinterval'])) && (($r['recurevery']!='days') || (time()<$r['taskisdone']+24*60*60*$r['recurinterval'])) && (($r['recurevery']!='months') || (time()<$r['taskisdone']+31*24*60*60*$r['recurinterval']))))?'checklist1':'not_completed',
 				'ID'=>strval($r['id']),
 				'ADD_TIME'=>do_lang_tempcode('DAYS_AGO',escape_html(integer_format(intval(round(floatval(time()-$r['datetimeadded'])/60.0/60.0/24.0))))),
 			)));
@@ -174,7 +174,7 @@ class Block_main_staff_checklist
 		if (is_null($notes)) $notes='';
 
 		require_lang('staff_checklist');
-		require_css('adminzone_frontpage');
+		require_css('adminzone');
 
 		// Handle built in items
 
@@ -231,7 +231,7 @@ class Block_main_staff_checklist
 			$out_dates->attach($item[0]);
 		}
 
-		return do_template('BLOCK_MAIN_STAFF_CHECKLIST',array('_GUID'=>'aefbca8252dc1d6edc44fc6d1e78b3ec','URL'=>get_self_url(),'DATES'=>$out_dates,'NO_TIMES'=>$out_no_times,'TODO_COUNTS'=>$out_todo_counts,'CUSTOM_TASKS'=>$custasks));
+		return do_template('BLOCK_MAIN_STAFF_CHECKLIST',array('_GUID'=>'aefbca8252dc1d6edc44fc6d1e78b3ec','URL'=>get_self_url(),'DATES'=>$out_dates,'NO_TIMES'=>$out_no_times,'TODO_COUNTS'=>$out_todo_counts,'CUSTOMTASKS'=>$custasks));
 	}
 
 }
@@ -245,7 +245,7 @@ class Block_main_staff_checklist
  */
 function staff_checklist_time_ago_and_due($seconds_ago,$recur_hours=NULL)
 {
-	if (is_null($recur_hours)) // None recurring
+	if (is_null($recur_hours))
 	{
 		$seconds_to_go=$seconds_ago; // Actually, if only one parameter given, meaning is different
 		$seconds_ago=mixed();
@@ -253,18 +253,17 @@ function staff_checklist_time_ago_and_due($seconds_ago,$recur_hours=NULL)
 		{
 			return array(do_lang_tempcode('DUE_NOT'),1000000);
 		}
-	} else // Recurring
+	} else
 	{
 		if (is_null($seconds_ago))
 		{
-			return array(do_lang_tempcode('DUE_NOW'),0); // Due for first time now
+			return array(do_lang_tempcode('DUE_NOW'),0);
 		} else
 		{
 			$seconds_to_go=$recur_hours*60*60-$seconds_ago;
 		}
 	}
 
-	if ($seconds_to_go==0) return array(do_lang_tempcode('DUE_NOW'),0); // Due for first time now (this is a special encoding for non-recurring tasks that still need doing on some form of schedule and need doing for first time now)
 	if ($seconds_to_go>0)
 	{
 		return array(do_lang_tempcode('DUE_TIME',is_null($seconds_ago)?do_lang_tempcode('NA_EM'):make_string_tempcode(escape_html(display_time_period($seconds_ago))),make_string_tempcode(escape_html(display_time_period($seconds_to_go)))),$seconds_to_go);

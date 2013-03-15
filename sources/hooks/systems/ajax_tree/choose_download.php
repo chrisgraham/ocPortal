@@ -33,7 +33,7 @@ class Hook_choose_download
 	{
 		require_code('downloads');
 
-		if ((!is_numeric($id)) && ($id!='')) // This code is actually for ocPortal.com, for the addon directory
+		if ((!is_numeric($id)) && ($id!=''))
 		{
 			if (substr($id,0,8)=='Version ')
 			{
@@ -83,10 +83,10 @@ class Hook_choose_download
 					$description=get_translated_text($lang_id);
 					$description_html=get_translated_tempcode($lang_id);
 
+					$images_details=new ocp_tempcode();
 					if (addon_installed('galleries'))
 					{
 						// Images
-						$images_details=new ocp_tempcode();
 						$_out=new ocp_tempcode();
 						require_lang('galleries');
 						$cat='download_'.strval($eid);
@@ -109,22 +109,23 @@ class Hook_choose_download
 							$comment=get_translated_tempcode($row['comments']);
 							$thumb=do_image_thumb($thumb_url,'');
 							$iedit_url=new ocp_tempcode();
-							$_content=do_template('DOWNLOAD_SCREEN_IMAGE',array('_GUID'=>'45905cd5823af4b066ccbc18a39edd74','ID'=>strval($row['id']),'VIEW_URL'=>$view_url,'EDIT_URL'=>$iedit_url,'THUMB'=>$thumb,'COMMENT'=>$comment));
+							$_content=do_template('DOWNLOAD_SCREEN_IMAGE',array('_GUID'=>'fba0e309aa0ae04891e32c65a625b177','ID'=>strval($row['id']),'VIEW_URL'=>$view_url,'EDIT_URL'=>$iedit_url,'THUMB'=>$thumb,'COMMENT'=>$comment));
 
-							$_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL',array('_GUID'=>'e016f7655dc6519d9536aa51e4bed57b','CONTENT'=>$_content)));
+							$_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL',array('_GUID'=>'8400a832dbed64bb63f264eb3a038895','CONTENT'=>$_content)));
 
 							if (($counter%$div==1) && ($counter!=0))
 							{
-								$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'59744ea8227da11901ddb3f4de04c88d','CELLS'=>$_row)));
+								$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'205c4f5387e98c534d5be1bdfcccdd7d','CELLS'=>$_row)));
 								$_row=new ocp_tempcode();
 							}
 
 							$counter++;
 						}
 						if (!$_row->is_empty())
-							$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'3f368a6baa7e544f76e66d4bd8291c4b','CELLS'=>$_row)));
-						$description_html=do_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX',array('_GUID'=>'a273f4beb94672ee44bdfdf06bf328c8','DESCRIPTION'=>$description_html,'IMAGES'=>$_out));
+							$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'e9667ca2545ac72f85a873f236cbbd6f','CELLS'=>$_row)));
+						$images_details=put_in_standard_box($_out);
 					}
+					$description_html->attach($images_details);
 
 					$out.='<entry id="'.xmlentities(strval($eid)).'" description="'.xmlentities(strip_comcode($description)).'" description_html="'.xmlentities($description_html->evaluate()).'" title="'.xmlentities($etitle).'" selectable="true"></entry>';
 				}

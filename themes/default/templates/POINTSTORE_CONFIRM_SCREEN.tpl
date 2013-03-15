@@ -4,23 +4,23 @@
 	{!INFO_CONFIRM}
 </p>
 
-<div class="box box___pointstore_confirm_screen"><div class="box_inner">
-	{+START,IF_NON_EMPTY,{ACTION}}
-		<p>
-			{ACTION}
-		</p>
-	{+END}
+{+START,IF_NON_EMPTY,{ACTION}}
+<p>
+	{ACTION}
+</p>
+{+END}
 
-	<p>{MESSAGE}</p>
-</div></div>
+{+START,BOX,,,med}
+	{MESSAGE}
+{+END}
 
 <p>
 	{!CHARGE_INFO,{COST*},{POINTS_AFTER*}}
 </p>
 
-<hr class="spaced_rule" />
+<br />
 
-<div class="box box___pointstore_confirm_screen"><div class="box_inner">
+{+START,BOX}
 	<div class="float_surrounder">
 		<div class="right">
 			<form title="{!NO}" class="inline" method="post" action="{CANCEL_URL*}">
@@ -39,4 +39,4 @@
 
 		{!Q_SURE}
 	</div>
-</div></div>
+{+END}

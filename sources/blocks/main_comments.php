@@ -68,7 +68,7 @@ class Block_main_comments
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		//add_menu_item_simple('main_website',NULL,'GUESTBOOK','_SEARCH:guestbook');		Not in this addon anymore. But nowhere else to put the code.
+		//add_menu_item_simple('main_features',NULL,'GUESTBOOK','_SEARCH:guestbook');		Not in this addon anymore. But nowhere else to put the code.
 	}
 
 	/**

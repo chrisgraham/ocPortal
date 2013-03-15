@@ -15,11 +15,33 @@
 		//]]></script>
 	{+END}
 
-	{$,If is for deletion}
 	{+START,IF,{$EQ,{NAME},delete}}
 		<script type="text/javascript">// <![CDATA[
-			add_event_listener_abstract(window,'load',function () {
-				assign_radio_deletion_confirm('{NAME;}');
+			addEventListenerAbstract(window,'load',function () {
+				for (var i=1;i<3;i++)
+				{
+					var e=document.getElementById('j_{NAME;}_'+i);
+					if (e)
+					{
+						e.onchange=function()
+						{
+							if (this.checked)
+							{
+								window.fauxmodal_confirm(
+									"{!ARE_YOU_SURE_DELETE^#}",
+									function(result)
+									{
+										if (!result)
+										{
+											var e=document.getElementById('j_{NAME;}_0');
+											if (e) e.checked=true;
+										}
+									}
+								);
+							}
+						}
+					}
+				}
 			} );
 		//]]></script>
 	{+END}

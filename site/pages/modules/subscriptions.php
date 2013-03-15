@@ -149,7 +149,7 @@ class Module_subscriptions
 	 */
 	function my()
 	{
-		$title=get_screen_title('MY_SUBSCRIPTIONS');
+		$title=get_page_title('MY_SUBSCRIPTIONS');
 
 		$member_id=get_member();
 		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
@@ -184,7 +184,7 @@ class Module_subscriptions
 	 */
 	function cancel()
 	{
-		$title=get_screen_title('SUBSCRIPTION_CANCEL');
+		$title=get_page_title('SUBSCRIPTION_CANCEL');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MY_SUBSCRIPTIONS'))));
 

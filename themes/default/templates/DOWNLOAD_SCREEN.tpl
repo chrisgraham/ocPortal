@@ -1,116 +1,128 @@
-<div itemscope="itemscope" itemtype="http://schema.org/ItemPage">
+<div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ItemPage"}>
 	{TITLE}
 
 	{+START,IF_NON_EMPTY,{OUTMODE_URL}}
-		<p class="red_alert">
-			<a href="{OUTMODE_URL*}">{!OUTMODED}</a>
-		</p>
+		{+START,BOX}
+			<p class="download_outmoded">
+				<a href="{OUTMODE_URL*}">{!OUTMODED}</a>
+			</p>
+		{+END}
+		<br />
 	{+END}
 
 	{WARNING_DETAILS}
 
 	<div class="float_surrounder">
 		<div class="download_meta_data">
-			<div class="download_now_wrapper">
-				<div class="box box___download_screen">
-					{+START,IF_PASSED,LICENCE_HYPERLINK}
-					<p class="download_licence">
-						{!D_BEFORE_PROCEED_AGREE,{LICENCE_HYPERLINK}}
-					</p>
+			<div class="standardbox_spaced">
+				<div class="download_now_wrapper">
+					{+START,BOX,,,med}
+						{+START,IF_PASSED,LICENCE_HYPERLINK}
+						<p class="download_licence">
+							{!D_BEFORE_PROCEED_AGREE,{LICENCE_HYPERLINK}}
+						</p>
+						<a class="hide_button" href="#" onclick="hideTag(this.parentNode); return false;"><img alt="{!EXPAND}: {!_I_AGREE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 
-					<div class="toggleable_tray_title">
-						<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!_I_AGREE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-						<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!_I_AGREE}</a>
-					</div>
-
-					<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-					{+END}
-					{+START,IF_NON_PASSED,LICENCE_HYPERLINK}
-					<div class="box_inner">
-					{+END}
-						<div class="download_now" itemprop="significantLinks">
-							<p class="download_link associated_link suggested_link"><a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
+						<a class="hide_button non_link" href="#" onclick="hideTag(this.parentNode); return false;">{!_I_AGREE}</a>
+						<div class="hide_tag hide_button_spacing" style="display: {$JS_ON,none,block}">
+						{+END}
+						<div class="download_now"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+							<p class="download_link">[ <a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a> ]</p>
 							<p class="download_filesize">({FILE_SIZE*})</p>
 						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="download_stats_wrapper">
-				<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="download_stats results_table wide_table" role="contentinfo">
-					{+START,IF,{$NOT,{$MOBILE}}}
-						<colgroup>
-							<col class="download_field_name_column" />
-							<col class="download_field_value_column" />
-						</colgroup>
+						{+START,IF_PASSED,LICENCE_HYPERLINK}
+						</div>
+						{+END}
 					{+END}
+				</div>
 
-					<tbody>
-						<tr>
-							<th class="de_th meta_data_title">{!ADDED}</th>
-							<td>
-								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>
-							</td>
-						</tr>
+				<div id="download_stats_wrapper">
+					<div class="wide_table_wrap"><table id="download_stats" summary="{!MAP_TABLE}" class="solidborder wide_table">
+						{+START,IF,{$NOT,{$MOBILE}}}
+							<colgroup>
+								<col style="width: 45%" />
+								<col style="width: 55%" />
+							</colgroup>
+						{+END}
 
-						<tr>
-							{+START,IF_NON_EMPTY,{AUTHOR_URL}}
-								<th class="de_th meta_data_title">{!BY}</th>
-								<td><a rel="author" href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a></td>
+						<tbody>
+							<tr>
+								<th class="de_th meta_data_title">{!_ADDED}</th>
+								<td>
+									{+START,IF,{$VALUE_OPTION,html5}}
+										<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>
+									{+END}
+									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+										{DATE*}
+									{+END}
+								</td>
+							</tr>
+
+							<tr>
+								{+START,IF_NON_EMPTY,{AUTHOR_URL}}
+									<th class="de_th meta_data_title">{!BY}</th>
+									<td><a rel="author" href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a></td>
+								{+END}
+
+								{+START,IF_EMPTY,{AUTHOR_URL}}{+START,IF_NON_EMPTY,{$USERNAME,{SUBMITTER}}}
+									<th class="de_th meta_data_title">{!BY}</th>
+									<td><a rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a></td>
+								{+END}{+END}
+							</tr>
+
+							{+START,IF_NON_EMPTY,{EDIT_DATE}}
+								<tr>
+									<th class="de_th meta_data_title">{!EDITED}</th>
+									<td>
+										{+START,IF,{$VALUE_OPTION,html5}}
+											<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}">{EDIT_DATE*}</time>
+										{+END}
+										{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+											{EDIT_DATE*}
+										{+END}
+									</td>
+								</tr>
 							{+END}
 
-							{+START,IF_EMPTY,{AUTHOR_URL}}{+START,IF_NON_EMPTY,{$USERNAME,{SUBMITTER}}}
-								<th class="de_th meta_data_title">{!BY}</th>
-								<td>
-									<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
-									{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
-								</td>
-							{+END}{+END}
-						</tr>
+							{+START,IF,{$INLINE_STATS}}
+								<tr>
+									<th class="de_th meta_data_title">{!COUNT_VIEWS}</th>
+									<td>{VIEWS*}</td>
+								</tr>
+							{+END}
 
-						{+START,IF_NON_EMPTY,{EDIT_DATE}}
 							<tr>
-								<th class="de_th meta_data_title">{!EDITED}</th>
+								<th class="de_th meta_data_title">{!COUNT_DOWNLOADS}</th>
 								<td>
-									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}">{EDIT_DATE*}</time>
+									{+START,IF,{$VALUE_OPTION,html5}}
+										<meta itemprop="interactionCount" content="UserDownloads:{$PREG_REPLACE*,[^\d],,{NUM_DOWNLOADS}}"/>
+									{+END}
+									{NUM_DOWNLOADS*}
 								</td>
 							</tr>
-						{+END}
+						</tbody>
+					</table></div>
+				</div>
 
-						{+START,IF,{$INLINE_STATS}}
-							<tr>
-								<th class="de_th meta_data_title">{!COUNT_VIEWS}</th>
-								<td>{VIEWS*}</td>
-							</tr>
-						{+END}
+				{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={NAME}}{+END}
 
-						<tr>
-							<th class="de_th meta_data_title">{!COUNT_DOWNLOADS}</th>
-							<td>
-								<meta itemprop="interactionCount" content="UserDownloads:{$PREG_REPLACE*,[^\d],,{NUM_DOWNLOADS}}"/>
-								{NUM_DOWNLOADS*}
-							</td>
-						</tr>
-					</tbody>
-				</table></div>
+				{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+					<div class="ratings right">
+						{RATING_DETAILS}
+					</div>
+				{+END}
+
+				{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
+					<div class="trackbacks right">
+						{TRACKBACK_DETAILS}
+					</div>
+				{+END}
 			</div>
-
-			{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-				<div class="ratings right">
-					{RATING_DETAILS}
-				</div>
-			{+END}
-
-			{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
-				<div class="trackbacks right">
-					{TRACKBACK_DETAILS}
-				</div>
-			{+END}
 		</div>
 
-		<div class="download_description" itemprop="description">
+		<div class="download_description"{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
 			{+START,IF_NON_EMPTY,{DESCRIPTION}}
-				{$PARAGRAPH,{DESCRIPTION}}
+				{DESCRIPTION}
 			{+END}
 
 			{+START,IF_NON_EMPTY,{ADDITIONAL_DETAILS}}
@@ -120,21 +132,20 @@
 			{+END}
 
 			{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,download,{ID}}}
-			{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+			{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br /><br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 		</div>
 	</div>
 
 	{+START,IF_NON_EMPTY,{IMAGES_DETAILS}}
-		<div class="box box___download_screen"><div class="box_inner">
-			<h2>{!IMAGES}</h2>
-
-			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+		<br />
+		{+START,BOX,{!IMAGES},,med}
+			{$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
 
 			{$SET,carousel_id,{$RAND}}
 
 			<div id="carousel_{$GET*,carousel_id}" class="carousel" style="display: none">
-				<div class="move_left" onmousedown="carousel_move({$GET*,carousel_id},-100); return false;"></div>
-				<div class="move_right" onmousedown="carousel_move({$GET*,carousel_id},+100); return false;"></div>
+				<div class="move_left" onmousedown="carousel_move({$GET*,carousel_id},-100); return false;" onmouseover="this.className='move_left move_left_hover';" onmouseout="this.className='move_left';"></div>
+				<div class="move_right" onmousedown="carousel_move({$GET*,carousel_id},+100); return false;" onmouseover="this.className='move_right move_right_hover';" onmouseout="this.className='move_right';"></div>
 
 				<div class="main">
 				</div>
@@ -145,16 +156,14 @@
 			</div>
 
 			<script type="text/javascript">// <![CDATA[
-				add_event_listener_abstract(window,'load',function () {
+				addEventListenerAbstract(window,'load',function () {
 					initialise_carousel({$GET,carousel_id});
 				} );
 			//]]></script>
 
-			{$,<p class="download_start_slideshow"><span class="associated_link"><a target="_blank" title="\{!galleries:_SLIDESHOW\}: \{!LINK_NEW_WINDOW\}" href="\{$PAGE_LINK*,_SEARCH:galleries:image:\{$GET*,FIRST_IMAGE_ID\}:slideshow=1:wide_high=1\}">\{!galleries:_SLIDESHOW\}</a></span></p>}
-		</div></div>
+			<!--<p class="download_start_slideshow">&laquo; <a target="_blank" title="{!galleries:_SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SEARCH:galleries:image:{$GET*,FIRST_IMAGE_ID}:slideshow=1:wide_high=1}">{!galleries:_SLIDESHOW}</a> &raquo;</p>-->
+		{+END}
 	{+END}
-
-	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={NAME}}{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
@@ -170,7 +179,5 @@
 		{+END}
 	{+END}
 
-	<div class="content_screen_comments">
-		{COMMENT_DETAILS}
-	</div>
+	{COMMENTS_DETAILS}
 </div>

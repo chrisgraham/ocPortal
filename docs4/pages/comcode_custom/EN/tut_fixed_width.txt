@@ -1,0 +1,106 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: How to create a fixed-width layout[/title]
+
+[b]In ocPortal 5.1 fixed width is available as a theme option. Never-the-less this tutorial explains the implementation and pros & cons nicely.[/b]
+
+A topic of regular disagreement in web design is whether 'fixed-width' designs or 'fluid' designs are better. A fixed-width design is one where the horizontal width of the website is fixed, so that it doesn't change when different resolutions are selected.
+
+Proponents of fixed-width argue:
+ - that fluid designs (non fixed-width designs) can not function well, because things will always break down when the width significantly exceeds what was tested
+ - that fixed-width designs are graphically easier to achieve
+ - that fixed-width designs are easier to read from
+ - that fixed-width designs are more attractive, because it allows more artistic control
+Opponents of fixed-width argue:
+ - that fixed-width designs make unreasonable assumptions about how web sites should be viewed; for example, PDAs would fail to have enough width for a typical fixed-width design yet are prevented from automatically performing adjustments
+ - that people with large resolutions can always make their browser window smaller
+ - that using fixed-width is done by those that are applying traditional design skills to the new online medium without adjusting them properly for that medium
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]ocPortal[/title]
+
+[exp_thumb="A 800x600 fixed-width layout in action" float="right"]fixed_width[/exp_thumb]
+ocPortal's default theme is designed to be fluid, as we avoid making assumptions and follow all web standards, but it is possible to re-theme ocPortal to make it use a fixed-width. I believe there are merits to both, and that you should carefully consider your audience and priorities when choosing which kind of design to use.
+
+ocPortal includes a theme wizard which will make it very easy to generate new colour schemes -- this is what we expect the majority of users to use to retheme their website. Advanced tools, advanced documentation, and a very robust mature framework, are provided to allow complete redesigning to be possible, but it is inherently complex and requires a good understanding of the technology being worked with. As ocPortal is an architectural system, made up of an elaborate construction of shared and carefully tailored components with very strongly defined behaviour, it unfortunately just isn't possible that we could implement a WYSIWYG style editing interface for ocPortal. Therefore to make major changes it is necessary to be able to manually re-craft templates (written in XHTML and Tempcode) and CSS as we do, and this requires some skill. This skill isn't based around our own technology (it is based around the technology of the W3C -- the web standards organisation).
+
+If you want a very customised website layout, but do not have the skills and the experience, or the time to invest obtaining, then consider [page="site:support"]contracting ocProducts out[/page] to perform any necessary customisation work.
+
+The rest of this tutorial will focus on a step-by-step solution to achieving a fixed-width layout. ocPortal is designed on the assumption of a minimum 1024x768 resolution, so this is what we'll use (800x600 is possible, but requires additional changes, in particular to the forum header and footer).
+
+ocPortal's layout is heavily based on CSS positioning, and hence this must be understood and worked with in order to make the layout work -- it is definitely not a table based layout. Unfortunately CSS positioning is a very complex thing that requires experience, but it's also the only standards-compliant solution that ocPortal could use.
+
+For this tutorial we will assume we wish to have a fixed-width layout of 980px (980+scrollbar+other windowing 'chrome' is about equal to 1024), and have a top image banner spanning the full width of the website.
+
+[title="2"]Step-by-step: fixed-width[/title]
+
+To quickly get a fixed-width layout, we can add this to your custom theme's [tt]global.css[/tt]:
+[code]
+#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
+	background: red; /* this is the background seen around our fixed width */
+}
+#main_website #body_inner {
+	width: 980px;
+	position: relative;
+	margin: 0 auto 0 auto;
+	background: white; /* set the background colour back to white for the area within our fixed width */
+}
+[/code]
+(anywhere will do really, but it makes sense to put it near [tt].re_body[/tt])
+
+Add it to your own custom theme, and [b]not[/b] direct to the default theme. The default theme is used by the Admin Zone and CMS Zone (unless you have changed that), and it's better if we leave these parts of ocPortal alone. You don't want to have to worry about themeing these as well as the main part of your website -- and you definitely want to avoid breaking the Admin Zone as this is what you are probably actually needing to use to make the theme changes.
+
+[title="2"]Step-by-step: top banner[/title]
+
+Now that we have our fixed-width, we just need to get our banner sorted out to get our basic draft layout done. You'll still have width assumption problems to resolve, but you can tackle each of those individually as they come.
+
+Before we starting writing code, let's sort out some ocPortal terminology. At the top of ocPortal there are provisions for:
+ - a site logo
+ - the banner rotation
+I often have clients referring to a larger version of the logo as a banner and not wanting the banner rotation at all. So let's ignore ocPortal terminology now, and just refer to the single image that we want as 'the banner'.
+
+To change ocPortal's logo to the banner image that we want, hold down ctrl+alt+shift and click it (or ctrl+alt and click in Firefox). This will take you to the theme image editor and you can just upload your own replacement image (a much larger image).
+
+This will inevitably make a mess as there's no space for the image, so now we have to do some template editing. The default logo/banner are defined in the 'HEADER.tpl' template. What we can actually do is just edit that template and totally wipe out a big chunk of it:
+[codebox]
+<div class="global_top"><div class="float_surrounder">
+	<a href="{$PAGE_LINK*,:}"><img class="logo" src="{LOGOURL*}" title="{!FRONT_PAGE}" alt="{!FRONT_PAGE}" /></a>
+
+	<div class="global_zones">
+		{+START,IF,{$CONFIG_OPTION,use_custom_zone_menu}}
+			{$BLOCK,block=side_stored_menu,param=zone_menu,type=zone}
+		{+END}
+		{+START,IF,{$NOT,{$CONFIG_OPTION,use_custom_zone_menu}}}
+			{$BLOCK,block=side_stored_menu,param=_zone_menu,type=zone}
+		{+END}
+	</div>
+	{+START,IF,{$OR,{$EQ,{$ZONE},adminzone},{$AND,{$HAS_ZONE_ACCESS,adminzone},{$EQ,{$ZONE},cms}}}}
+		<div class="adminzone_search">
+			<form action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
+				{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,adminzone:admin:search}}
+
+				<div>
+					<label for="search_content">{!search:SEARCH_FOR}</label>:
+					<input type="text" id="search_content" name="id" value="{+START,IF,{$MATCH_KEY_MATCH,adminzone:admin:search}}{$_GET*,id}{+END}" /><input type="submit" value="{!search:SEARCH}" />
+				</div>
+			</form>
+		</div>
+	{+END}
+	{+START,IF,{$NOT,{$OR,{$EQ,{$ZONE},adminzone},{$AND,{$HAS_ZONE_ACCESS,adminzone},{$EQ,{$ZONE},cms}}}}}
+		{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
+		{+START,IF_NON_EMPTY,{$GET,BANNER}}
+			<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
+		{+END}
+	{+END}
+</div></div>
+[/codebox]
+If you are editing the template more carefully then beware of corrupting the Tempcode directives. If you cause those to not match up properly then you may need to fiddle around in order to get your site functioning again (you can put [tt]&keep_theme=default[/tt] onto the end of a URL to temporarily use ocPortal with the default theme whilst you conduct repairs to yours).
+
+Because we removed the zone navigation menu, it's a good idea to put that somewhere else, lest your members have trouble finding their way to their Accounts. ocPortal actually comes with a 'side_zone_jump' block that you can place on one of your panels -- this will provide an excellent substitute. Otherwise you could keep the same kind of zone navigation menu as is there by default, but just redesign it to be placed underneath your banner (for example). I don't want to tell you what to do exactly, because it's your choice -- ocPortal is your toolkit, to do with as you please. The best site designs usually don't use any kind of zone menu, but instead have their own carefully crafted multi-level navigations (and ocPortal does support all that very well).
+
+[title="2"]See Also[/title]
+
+ - [page caption="Introduction to XHTML, CSS and Javascript"]tut_markup[/page]
+ - [page caption="Themeing your site"]tut_releasing_themes[/page]
+ - [page caption="Tempcode programming"]tut_tempcode[/page]
+ - [page caption="ocPortal site structure"]tut_structure[/page]
+

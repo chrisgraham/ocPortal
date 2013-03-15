@@ -68,7 +68,7 @@ class Hook_awards_post
 		require_code('ocf_posts2');
 		require_code('ocf_forums');
 
-		return render_post_box($row);
+		return ocf_show_isolated_post($row);
 	}
 
 }

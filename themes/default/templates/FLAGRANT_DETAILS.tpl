@@ -1,11 +1,9 @@
-<div class="box box___flagrant_details"><div class="box_inner">
-	<h2>{!DETAILS}</h2>
-
-	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table">
+{+START,BOX,{!DETAILS},,light}
+	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder">
 		{+START,IF,{$NOT,{$MOBILE}}}
 			<colgroup>
-				<col class="field_name_column" />
-				<col class="field_value_column" />
+				<col style="width: 200px" />
+				<col style="width: 100%" />
 			</colgroup>
 		{+END}
 
@@ -44,5 +42,5 @@
 			</tr>
 		</tbody>
 	</table></div>
-</div></div>
+{+END}
 

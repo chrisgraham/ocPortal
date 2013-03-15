@@ -45,7 +45,7 @@ class Hook_blocks
 	{
 		$GLOBALS['SITE_DB']->query_delete('cache_on');
 		$GLOBALS['SITE_DB']->query_delete('cache');
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		if (function_exists('persistant_cache_empty')) persistant_cache_empty();
 
 		return new ocp_tempcode();
 	}

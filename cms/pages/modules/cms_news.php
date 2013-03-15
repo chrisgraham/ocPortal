@@ -99,7 +99,7 @@ class Module_cms_news extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_NEWS'),comcode_lang_string('DOC_NEWS'),
+		return do_next_manager(get_page_title('MANAGE_NEWS'),comcode_lang_string('DOC_NEWS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_NEWS_CATEGORY')):NULL,
@@ -128,8 +128,8 @@ class Module_cms_news extends standard_aed_module
 		$sortables=array(
 			'title'=>do_lang_tempcode('TITLE'),
 			'news_category'=>do_lang_tempcode('MAIN_CATEGORY'),
-			'date_and_time'=>do_lang_tempcode('ADDED'),
-			'news_views'=>do_lang_tempcode('COUNT_VIEWS'),
+			'date_and_time'=>do_lang_tempcode('_ADDED'),
+			'news_views'=>do_lang_tempcode('_VIEWS'),
 			'submitter'=>do_lang_tempcode('OWNER'),
 		);
 		if (addon_installed('unvalidated'))
@@ -140,8 +140,8 @@ class Module_cms_news extends standard_aed_module
 		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('MAIN_CATEGORY'));
-		$fh[]=do_lang_tempcode('ADDED');
-		$fh[]=do_lang_tempcode('COUNT_VIEWS');
+		$fh[]=do_lang_tempcode('_ADDED');
+		$fh[]=do_lang_tempcode('_VIEWS');
 		if (addon_installed('unvalidated'))
 			$fh[]=do_lang_tempcode('VALIDATED');
 		$fh[]=do_lang_tempcode('OWNER');
@@ -454,7 +454,7 @@ class Module_cms_news extends standard_aed_module
 			$start_hour=post_param_integer('schedule_hour');
 			$start_minute=post_param_integer('schedule_minute');
 			require_code('calendar2');
-			$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+			$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 			regenerate_event_reminder_jobs($event_id,true);
 		}
 
@@ -532,7 +532,7 @@ class Module_cms_news extends standard_aed_module
 				$start_day=post_param_integer('schedule_day');
 				$start_hour=post_param_integer('schedule_hour');
 				$start_minute=post_param_integer('schedule_minute');
-				$event_id=add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+				$event_id=add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 				regenerate_event_reminder_jobs($event_id,true);
 			}
 		}
@@ -569,7 +569,7 @@ class Module_cms_news extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (events only).
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -590,7 +590,7 @@ class Module_cms_news extends standard_aed_module
 
 		$lang=post_param('lang',user_lang());
 
-		$title=get_screen_title('IMPORT_NEWS');
+		$title=get_page_title('IMPORT_NEWS');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_news','old_type'=>get_param('type','')),'_SELF');
 		$submit_name=do_lang_tempcode('IMPORT_NEWS');
@@ -599,16 +599,9 @@ class Module_cms_news extends standard_aed_module
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
-		$set_name='rss_file';
-		$required=true;
-		$set_title=do_lang_tempcode('FILE');
-		$field_set=alternate_fields_set__start($set_name);
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_RSS_FEED'),'file_novalidate',false,NULL,NULL,true,'rss,xml,atom'));
 
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file_novalidate',false,NULL,NULL,true,'rss,xml,atom'));
-
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','rss_feed_url','',false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_RSS_FEED'),$field_set,$required));
+		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'rss_feed_url','',false));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'auto_validate',true));
 		$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'download_images',true));
@@ -617,7 +610,7 @@ class Module_cms_news extends standard_aed_module
 		$hidden->attach(form_input_hidden('lang',$lang));
 		handle_max_file_size($hidden);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'4ac8c667fa38c1e6338eedcb138e7fd4','TITLE'=>$title,'TEXT'=>do_lang_tempcode('IMPORT_NEWS_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('IMPORT_NEWS_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -629,7 +622,7 @@ class Module_cms_news extends standard_aed_module
 	{
 		check_specific_permission('mass_import');
 
-		$title=get_screen_title('IMPORT_NEWS');
+		$title=get_page_title('IMPORT_NEWS');
 
 		require_code('rss');
 		require_code('news');
@@ -839,6 +832,7 @@ class Module_cms_news_cat extends standard_aed_module
 	var $select_name='TITLE';
 	var $permissions_require='cat_high';
 	var $permission_module='news';
+	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\');';
 	var $menu_label='NEWS';
 	var $table='news_categories';
 	var $orderer='nc_title';
@@ -919,31 +913,14 @@ class Module_cms_news_cat extends standard_aed_module
 		require_code('form_templates');
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 
-		require_code('themes2');
-		$ids=get_all_image_ids_type('newscats');
-
 		if (get_base_url()==get_forum_base_url())
 		{
-			$set_name='rep_image';
-			$required=true;
-			$set_title=do_lang_tempcode('IMAGE');
-			$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
-
-			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
-			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$img,NULL,false);
-			$field_set->attach($image_chooser_field);
-
-			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
-
+			$fields->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 			handle_max_file_size($hidden,'image');
-		} else
-		{
-			if (count($ids)==0) warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN','newscats'));
-
-			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$img,NULL,true);
-			$fields->attach($image_chooser_field);
 		}
+		require_code('themes2');
+		$ids=get_all_image_ids_type('newscats');
+		$fields->attach(form_input_picture_choose_specific(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('STOCK')),do_lang_tempcode('DESCRIPTION_ALTERNATE_STOCK'),'theme_img_code',$ids,NULL,$img,NULL,true));
 
 		if (!is_null($owner))
 		{
@@ -993,7 +970,7 @@ class Module_cms_news_cat extends standard_aed_module
 		require_code('themes2');
 
 		$title=post_param('title');
-		$img=get_theme_img_code('newscats',true);
+		$img=get_theme_img_code('newscats');
 		$notes=post_param('notes','');
 
 		$id=add_news_category($title,$img,$notes);
@@ -1012,8 +989,7 @@ class Module_cms_news_cat extends standard_aed_module
 		require_code('themes2');
 
 		$title=post_param('title');
-		$img=get_theme_img_code('newscats',true);
-		if (fractional_edit()) $img=STRING_MAGIC_NULL;
+		$img=get_theme_img_code('newscats',STRING_MAGIC_NULL);
 		$notes=post_param('notes',STRING_MAGIC_NULL);
 		$_owner=post_param('owner',fractional_edit()?STRING_MAGIC_NULL:NULL);
 		$owner=is_null($_owner)?NULL:$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
@@ -1046,7 +1022,7 @@ class Module_cms_news_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1059,7 +1035,7 @@ class Module_cms_news_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after news content management.
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @param  ?AUTO_LINK	The category ID we were working in (NULL: deleted)

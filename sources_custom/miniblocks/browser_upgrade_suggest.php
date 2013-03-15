@@ -11,7 +11,7 @@ require_lang('browser_upgrade_suggest');
 
 $message='';
 
-$browser=new Browser();
+$browser = new Browser();
 if (($browser->getBrowser()==Browser::BROWSER_FIREFOX) && (floatval($browser->getVersion())<$firefox_needed))
 {
 	if ($browser->getPlatform()==Browser::PLATFORM_LINUX)
@@ -68,6 +68,6 @@ if (($browser->getBrowser()==Browser::BROWSER_OPERA) && (floatval($browser->getV
 
 if ($message!='')
 {
-	$out=put_in_standard_box(make_string_tempcode($message));
+	$out=put_in_standard_box(make_string_tempcode($message),'',NULL,'curved');
 	$out->evaluate_echo();
 }

@@ -80,7 +80,7 @@ class Module_admin_emaillog
 	{
 		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/email';
 
-		$title=get_screen_title('EMAIL_LOG');
+		$title=get_page_title('EMAIL_LOG');
 
 		// Put errors into table
 		$start=get_param_integer('start',0);
@@ -138,7 +138,7 @@ class Module_admin_emaillog
 		$mass_delete_url=build_url(array('page'=>'_SELF','type'=>'mass_delete'),'_SELF');
 		$mass_send_url=build_url(array('page'=>'_SELF','type'=>'mass_send'),'_SELF');
 
-		return do_template('EMAILLOG_SCREEN',array('_GUID'=>'8c249a372933e1215d8b9ff6d4bb0de3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'MASS_DELETE_URL'=>$mass_delete_url,'MASS_SEND_URL'=>$mass_send_url));
+		return do_template('EMAILLOG_SCREEN',array('TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'MASS_DELETE_URL'=>$mass_delete_url,'MASS_SEND_URL'=>$mass_send_url));
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Module_admin_emaillog
 	 */
 	function edit()
 	{
-		$title=get_screen_title('HANDLE_QUEUED_MESSAGE');
+		$title=get_page_title('HANDLE_QUEUED_MESSAGE');
 
 		$id=get_param_integer('id');
 
@@ -199,7 +199,7 @@ class Module_admin_emaillog
 	 */
 	function _edit()
 	{
-		$title=get_screen_title('HANDLE_QUEUED_MESSAGE');
+		$title=get_page_title('HANDLE_QUEUED_MESSAGE');
 
 		$id=get_param_integer('id');
 
@@ -272,7 +272,7 @@ class Module_admin_emaillog
 	 */
 	function mass_send()
 	{
-		$title=get_screen_title('SEND_ALL');
+		$title=get_page_title('SEND_ALL');
 
 		require_code('mail');
 		$rows=$GLOBALS['SITE_DB']->query_select('logged_mail_messages',array('*'),array('m_queued'=>1));
@@ -301,7 +301,7 @@ class Module_admin_emaillog
 	 */
 	function mass_delete()
 	{
-		$title=get_screen_title('DELETE_ALL');
+		$title=get_page_title('DELETE_ALL');
 
 		$count=$GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)',array('m_queued'=>1));
 

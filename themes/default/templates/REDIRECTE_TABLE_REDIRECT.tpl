@@ -30,7 +30,12 @@
 	</td>
 	<td>
 		<div class="accessibility_hidden"><label for="is_transparent_{I*}">{!IS_TRANSPARENT_REDIRECT}</label></div>
-		<input onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{!IS_TRANSPARENT_REDIRECT;}','40%');" title="{!IS_TRANSPARENT_REDIRECT}" class="input_tick" type="checkbox" id="{NAME*}" name="{NAME*}"{+START,IF,{TICKED}} checked="checked"{+END} value="1" />
+		{+START,IF,{TICKED}}
+			<input onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{!IS_TRANSPARENT_REDIRECT;}','40%');" title="{!IS_TRANSPARENT_REDIRECT}" class="input_tick" type="checkbox" id="{NAME*}" name="{NAME*}" checked="checked" value="1" />
+		{+END}
+		{+START,IF,{$NOT,{TICKED}}}
+			<input onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{!IS_TRANSPARENT_REDIRECT;}','40%');" title="{!IS_TRANSPARENT_REDIRECT}" class="input_tick" type="checkbox" id="{NAME*}" name="{NAME*}" value="1" />
+		{+END}
 	</td>
 	<td>
 		{+START,IF,{$NEQ,{I},new}}

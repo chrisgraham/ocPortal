@@ -1,20 +1,17 @@
-<section class="box box___block_side_personal_stats"><div class="box_inner">
-	<h3>{USERNAME*}</h3>
-
+{+START,BOX,{USERNAME*},,{$?,{$GET,in_panel},panel,classic},tray_open}
 	{+START,IF_NON_EMPTY,{AVATAR_URL}}
 		<div class="personal_stats_avatar"><img src="{AVATAR_URL*}" title="{!AVATAR}" alt="{!AVATAR}" /></div>
 	{+END}
 
-	{+START,IF_NON_EMPTY,{DETAILS}}
+	{+START,IF_NON_EMPTY,{CONTENT}}
 		<ul class="compact_list">
-			{DETAILS}
+			{CONTENT}
 		</ul>
 	{+END}
-
 	{+START,IF_NON_EMPTY,{LINKS}}
-		<ul class="associated_links_block_group">
+		<div class="community_block_tagline{+START,IF_NON_EMPTY,{CONTENT}} community_block_tagline_splitter{+END}">
 			{LINKS}
-		</ul>
+		</div>
 	{+END}
-</div></section>
+{+END}
 

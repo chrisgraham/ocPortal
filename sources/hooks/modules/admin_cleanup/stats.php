@@ -52,7 +52,7 @@ class Hook_stats
 		{
 			$GLOBALS['SITE_DB']->query_delete('values',array('the_name'=>$hook),'',1);
 		}
-		persistent_cache_delete('VALUES');
+		persistant_cache_delete('VALUES');
 
 		return new ocp_tempcode();
 	}

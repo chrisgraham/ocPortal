@@ -1,15 +1,15 @@
 <div class="points_boxes">
-	<div class="points_box box">
-		{+START,IF,{$HAS_PRIVILEGE,use_points,{MEMBER}}}
+	<div class="points_box medborder">
+		{+START,IF,{$HAS_SPECIFIC_PERMISSION,use_points,{MEMBER}}}
 			<p class="intro">{!CURRENT_POINTS}:</p>
 			<p>{!POINTS_TO_SPEND,<span class="figure">{REMAINING*}</span>}</p>
 		{+END}
-		{+START,IF,{$NOT,{$HAS_PRIVILEGE,use_points,{MEMBER}}}}
+		{+START,IF,{$NOT,{$HAS_SPECIFIC_PERMISSION,use_points,{MEMBER}}}}
 			{!NO_PERMISSION_TO_USE_POINTS}
 		{+END}
 	</div>
 
-	<div class="points_box box">
+	<div class="points_box medborder">
 		<p class="intro">{!COUNT_GIFT_POINTS_LEFT}:</p>
 		<p>{!POINTS_TO_GIVE,<span class="figure">{GIFT_POINTS_AVAILABLE*}</span>}</p>
 	</div>
@@ -19,10 +19,10 @@
 	<h2>{!POINTS_EARNED}</h2>
 
 	<p>
-		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_URL*}">{NAME*}</a>}
+		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_LINK*}">{NAME*}</a>}
 	</p>
 
-	<table summary="{!COLUMNED_TABLE}" class="autosized_table points_summary_table">
+	<table summary="{!COLUMNED_TABLE}" class="variable_table points_summary_table">
 		<thead>
 			<tr>
 				<th>{!ACTIVITY}</th>
@@ -53,11 +53,11 @@
 					<td class="answer">= {MULT_POINTS_POSTING*} {!POINTS_UNIT}</td>
 				</tr>
 			{+END}{+END}
-			{+START,IF,{$NEQ,{POINTS_WIKI_POSTING},0}}{+START,IF,{$ADDON_INSTALLED,cedi}}
+			{+START,IF,{$NEQ,{POINTS_CEDI_POSTING},0}}{+START,IF,{$ADDON_INSTALLED,cedi}}
 				<tr>
 					<td>&bull; {!cedi:CEDI_POSTS}:</td>
-					<td class="equation">{WIKI_POST_COUNT*} &times; {POINTS_WIKI_POSTING*} {!POINTS_UNIT}</td>
-					<td class="answer">= {MULT_POINTS_WIKI_POSTING*} {!POINTS_UNIT}</td>
+					<td class="equation">{CEDI_POST_COUNT*} &times; {POINTS_CEDI_POSTING*} {!POINTS_UNIT}</td>
+					<td class="answer">= {MULT_POINTS_CEDI_POSTING*} {!POINTS_UNIT}</td>
 				</tr>
 			{+END}{+END}
 			{+START,IF,{$NEQ,{POINTS_CHAT_POSTING},0}}{+START,IF,{$ADDON_INSTALLED,chat}}
@@ -97,9 +97,9 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{GIVE}}
-	<div class="box box___points_profile"><div class="box_inner">
+	{+START,BOX,,,light}
 		{GIVE}
-	</div></div>
+	{+END}
 {+END}
 
 {+START,IF_NON_EMPTY,{FROM}}

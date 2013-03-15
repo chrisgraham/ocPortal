@@ -5245,7 +5245,7 @@ function doSubmit(e,ob,recurse) {
 	e = e || window.event;
 	if ((typeof e!='undefined') && (e))
 	{
-		cancel_bubbling(e);
+		cancelBubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
 
@@ -5597,7 +5597,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='</object>';
 		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
 		out+='</applet>';*/
-		set_inner_html(progressDiv,out);
+		setInnerHTML(progressDiv,out);
 
 		var old_onclick=btnSubmit.onclick;
 		btnSubmit.onclick=function() {
@@ -5645,15 +5645,14 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var referrer_favicon='{$IMG;,favicon}';
 		var posturl='{$FIND_SCRIPT;,incoming_uploads}';
 
-		var picup_url='fileupload://new?callbackURL='+window.encodeURIComponent('{$BASE_URL;}/data_custom/picup.html?window_url='+window.encodeURIComponent(window.encodeURIComponent(callback_url))+'&window_name='+window.encodeURIComponent(window.encodeURIComponent(window.name)))+
-							'&referrername='+window.encodeURIComponent(referrer_name)+
-							'&referrerfavicon='+window.encodeURIComponent(referrer_favicon)+
-							'&debug=false&imagesize=1600&postimageparam=file'+
-							'&posturl='+window.encodeURIComponent(posturl)+
-							'&postvalues='+window.encodeURIComponent('name=image.jpg')+
-							'&postimagefilename=image.jpg&returnstatus=true&returnserverresponse=true';
+		var picup_url='fileupload://new?callbackURL='+window.encodeURIComponent('{$BASE_URL;}/data_custom/picup.html?window_url='+window.encodeURIComponent(window.encodeURIComponent(callback_url))+'&field_name='+window.encodeURIComponent(window.encodeURIComponent(name))+'&window_name='+window.encodeURIComponent(window.encodeURIComponent(window.name)))+
+							'&referrerName='+window.encodeURIComponent(referrer_name)+
+							'&referrerFavicon='+window.encodeURIComponent(referrer_favicon)+
+							'&debug=false&imageSize=1600&postFileParamName=file'+
+							'&postURL='+window.encodeURIComponent(posturl)+
+							'&postFileName=image.jpg&returnStatus=true&returnServerResponse=true';
 
-		set_inner_html(message,'iOS doesn\'t support direct file uploads, but if you have the <a target=\"_blank\" href=\"http://itunes.apple.com/gb/app/picup/id354101378?mt=8\">Picup app</a> then you can<br /><a style="display: block; font-size: 1.3em; line-height: 1.4em" href=\"'+escape_html(picup_url)+'\">Upload using Picup</a>');
+		setInnerHTML(message,'iOS doesn\'t support direct file uploads, but if you have the <a target=\"_blank\" href=\"http://itunes.apple.com/gb/app/picup/id354101378?mt=8\">Picup app</a> then you can<br /><a style="display: block; font-size: 1.3em; line-height: 1.4em" href=\"'+escape_html(picup_url)+'\">Upload using Picup</a>');
 
 		subdiv.insertBefore(message,filenameField);
 	}
@@ -5856,7 +5855,7 @@ function FileProgress(file, targetID) {
 
 		var progressStatus = document.createElement("div");
 		progressStatus.className = "progressBarStatus";
-		set_inner_html(progressStatus,"&nbsp;");
+		setInnerHTML(progressStatus,"&nbsp;");
 
 		this.fileProgressElement.appendChild(progressCancel);
 		this.fileProgressElement.appendChild(progressText);
@@ -5869,7 +5868,7 @@ function FileProgress(file, targetID) {
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
 		if (file && typeof file.name!='undefined')
-			set_inner_html(this.fileProgressElement.childNodes[1],file.name);
+			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
 	}
 
 	this.height = this.fileProgressWrapper.offsetHeight;
@@ -5914,7 +5913,7 @@ FileProgress.prototype.setCancelled = function () {
 	}, 2000);
 };
 FileProgress.prototype.setStatus = function (status) {
-	set_inner_html(this.fileProgressElement.childNodes[2],status);
+	setInnerHTML(this.fileProgressElement.childNodes[2],status);
 };
 
 // Makes sure the FileProgress box is visible
@@ -6021,7 +6020,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 		{+END}
 
 		var edit_link=document.createElement('a');
-		set_inner_html(edit_link,'({!EDIT;})');
+		setInnerHTML(edit_link,'({!EDIT;})');
 		edit_link.className='associated_details';
 		edit_link.id='edit_for_'+field.id;
 		edit_link.target='_blank';
@@ -6067,7 +6066,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 function initialise_dragdrop_upload(key,key2)
 {
 	var ob=document.getElementById(key);
-	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
+	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
 	ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
 }
 
@@ -6081,7 +6080,7 @@ function html5_upload(event,field_name,files)
 
 	if (count>0)
 	{
-		cancel_bubbling(event);
+		cancelBubbling(event);
 		if (typeof event.preventDefault!='undefined') event.preventDefault();
 	}
 
@@ -6099,7 +6098,7 @@ function html5_upload(event,field_name,files)
 
 		if ((typeof file.size!='undefined') && (file.size>3000000))
 		{
-			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP;^}');
+			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
 			continue;
 		}
 
@@ -6119,7 +6118,7 @@ function html5_upload(event,field_name,files)
 		}
 		if (!good_type)
 		{
-			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
 			continue;
 		}
 
@@ -6247,7 +6246,7 @@ function build_upload_handler(request,fileProgress,attachmentBase,field_name)
 					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
 				} else
 				{
-					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name.replace(/"/g,'\'')+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+					insertTextbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
 
 					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
 					progress.setProgress(100);

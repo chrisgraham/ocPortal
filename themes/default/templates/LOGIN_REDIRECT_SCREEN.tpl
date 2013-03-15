@@ -1,21 +1,20 @@
-{TITLE}
+{REFRESH}
 
-{$REQUIRE_CSS,messages}
+{TITLE}
 
 <div class="site_special_message">
 	<div class="site_special_message_inner">
 		<form title="{!PROCEED}" action="{URL*}" id="redir_form" method="post">
-			<div class="box box___login_redirect_screen"><div class="box_inner">
+			{+START,BOX,,,curved}
 				{TEXT}
 
 				<p>
-					{!PROCEED_TEXT,<input accesskey="c" class="button_hyperlink" type="submit" value="{!HERE}" />}
+					{!PROCEED_TEXT,<input accesskey="c" class="buttonhyperlink" type="submit" value="{!HERE}" />}
 				</p>
 
 				{POST}
-			</div></div>
+			 {+END}
 		 </form>
 	</div>
 </div>
 
-{REFRESH}

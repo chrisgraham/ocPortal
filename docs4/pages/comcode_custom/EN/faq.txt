@@ -1,0 +1,455 @@
+[title]ocPortal/ocProducts FAQ[/title]
+
+This page will answer frequently asked questions (FAQs) about ocPortal and ocProducts. These are true FAQs, not a substitute for documentation, and not a piece of marketing material in disguise.
+
+[contents]decimal,lower-alpha[/contents]
+
+
+[title="2"]About ocPortal[/title]
+
+[b]What is ocPortal?[/b]
+ocPortal is a CMS (Content Management System) that allows you to create and manage your interactive and dynamic website from an easy to use administration interface. ocPortal is unique by the combination of a vast and diverse range of provided functionality, out-of-the-box usability, and an ability for unlimited customisation.
+
+[b]What does the name ocPortal mean?[/b]
+It stands for Online [jumping a="[b]Content[/b]" b="[b]Community[/b]" c="[b]Corporate[/b]" d="[b]Collaboration[/b]" e="[b]Commerce[/b]"]2000[/jumping] Portal.
+
+[html]<a name="oss" id="oss"></a>[/html][b]How much does ocPortal cost?[/b]
+ocPortal is completely free under an OSI-approved Open Source licence (Common Public Attribution License). There are no restrictions on usage, and we don't keep away any 'pro' features from our users.
+The team has always been very pro Open Source. Given that software can be easily copied and therefore the value of ocPortal can be distributed across the world effortlessly, we think we have a social responsibility to take advantage of this and structure our business in a way that can work with it. Software has such great potential to empower individuals from all walks of life, so we believe wherever possible companies should not put the brakes on it by restricting the way things can be used via economic levies.
+Therefore we have structured our business so that ocProducts makes money from commercial projects. We also encourage other people to contribute to ocPortal, as a community project.
+There is no requirement to display our logo or copyright notices on your website, we don't want to box people in from a design and marketing perspective either.
+
+[b]What features set it apart from other systems?[/b]
+ocPortal offers many powerful features that aren't to be found built-in to any competing products. Features such as:
+ - sophisticated tools to help you build and manage your website, such as the Theme Wizard to allow you to set up your own colour scheme in just a few minutes.
+ - functionality for all forms of content, includes articles, pages, downloads, banners, and your own custom forms of content.
+ - the 'points' system, and the point-store, that allow users to earn, donate and spend points in your community.
+ - integration with 8 different popular forums, as well as our own leading forum that is (optionally) seamlessly integrated into the system.
+If this all sounds just like a powerful portal solution... we have support for completely customised page, sub-site and menu creation and layout entirely from within the powerful Admin Zone. To read more about ocPortal's extensive features, see our [page caption="features page" page="features"]site[/page].
+
+[b]How secure is ocPortal?[/b]
+No honest and competent company can guarantee their web application to be completely secure. To make ocPortal as secure as possible, we:
+ - actively examine our code in great detail for possible security flaws and make sure we can find none before releasing our product
+ - have a written set of security standards that all developers comply with
+ - have designed the ocPortal architecture to abstract away common security problems, such as 'SQL injections'
+ - have written our code to pro-actively detect suspicious activity, alerting the user to it
+ - have prepared a [page caption="'security' tutorial" page="tut_security"]docs[/page] giving a high level of technical detail on how to 'lock down' ocPortal beyond the high level of security provided by default
+
+If there does turn out to be a security flaw in ocPortal, we will endeavour to fix it as quickly as we possibly can.
+
+If you believe you have found a security flaw in ocPortal please [page="site:free_tickets"]contact us[/page], so we may fix it before hackers can find and exploit it.
+
+We have a [page="site:maintenance"]published policy[/page] on how we handle security and stability issues.
+
+[b]What are the host requirements for ocPortal?[/b]
+Please see the [page caption="'Web Hosting' tutorial" page="tut_web_hosting"]docs[/page].
+
+[b]Is ocPortal standards-compliant?[/b]
+We have gone to great lengths to make our code 100% compliant with all major standards, and present well in popular modern browsers (not just [i]Microsoft Internet Explorer[/i]). ocPortal even includes an inbuilt validator that ensures compliance with these standards, as well as identifies common mistakes and browser incompatibilities.
+Supported standards include true XHTML support, valid hack-free CSS and the highest WAI accessibility standard (level 3) -- very few, if any, competing systems can claim this.
+
+[b]Do you support blogging?[/b]
+ocPortal has excellent support for blogging, through the news system. The news system features both RSS and Atom syndication, for both input and output of news. Members of an ocPortal site may have their own blogs.
+
+[b]Do you support form building?[/b]
+We suggest people build forms using the catalogue system, and disable 'bypass validation' permissions for that catalogue. This way the staff get an alert whenever a new entry is added, and can act on that like an e-mail from a form builder. Generally this approach is more scalable and flexible.
+However, if people do require a simpler form to e-mail system then ocPortal has a script that can receive and relay HTML forms ([tt]data/form_to_email.php[/tt]), which is simple to hook up HTML to point to.
+
+[b]Why are e-mails sent by users shown as 'from' the website?[/b]
+When you click reply it should show the email address of the sender, assuming they gave/have one.
+The 'from' address (different to the 'reply address' you see when you click reply) is the site's address, which is necessary to stop some email services blocking the email as spam. Basically it's because if your server sends mail 'from' someone whose email account is not on your server, it looks suspicious.
+
+[b]Does ocPortal support eCommerce?[/b]
+ocPortal supports usergroup subscription in OCF, and includes an extendable eCommerce framework for making dynamically-dispatched purchases (as originally used on ocportal.com to serve out registration keys). It also has shopping cart functionality.
+
+[b]Do you support classified ads?[/b]
+Classified ads are supported in the 'catalogues' system. You'd add a catalogue for the ads:
+ - you'd define some fields (such as 'Ad title' and 'Ad message')
+ - you'd define timeout settings
+ - you'd then add some categories to the catalogue
+ - you'd assign various permissions so that members could submit to this catalogue
+ - you'd link the catalogue onto your menus
+ - possible you'd place a 'recent entries' block onto your front page
+
+[b]Why is ocPortal not a portal?[/b]
+The definition of a 'portal' is very fraught, as it is used by different people in different ways. In the discussion forum world, it refers to a simple front end to the forum itself. In the business world, it refers to a place for visitors to make their 'home' for a specific subject. The third definition is what ocPortal is -- a rich web application for providing different kinds of functionality. Many would think of ocPortal as a Content Management System (CMS), but we dislike this term as it is very vague and does not have any indication of ocPortal's advanced functionality for things like discussion forums and chat rooms.
+
+[b]Does ocPortal include its own forum? What forum would you recommend I use?[/b]
+Since version 2.5, ocPortal includes a leading forum that can stand up to the toughest standalone competition. We strongly recommend that you use this forum, OCF, as it has the best possible integration with the rest of the system, and offers many innovative features that make it more effective than other forums.
+
+You may also choose to use one of the forums from our list of [page="docs:tut_web_hosting"]supported forums[/page]. We have importers for some of these forums, which allows you to migrate to OCF at the time of your choosing.
+
+[b]Do you recommend Windows or Linux servers?[/b]
+We feel Linux is more suited for PHP purposes than Windows. ocPortal will work fine on Windows, however setting file permissions remotely can be very tricky and non-standard between different Windows servers.
+
+[b]Do you recommend any web hosts / provide your own hosting?[/b]
+We emphatically recommend [url="Elief"]http://www.elief.com/billing/aff.php?aff=035[/url]: it's fast, secure, feature-rich, well configured, and [page="docs:tut_web_hosting"]ideally suited to hosting ocPortal[/page].
+
+[b]Does ocPortal support (some forum vendor and version)?[/b]
+Compatible forum software is listed in the [page="docs:tut_web_hosting"]web hosting requirements tutorial[/page], and any issues are listed in the [page="docs:tut_nuances"]nuances of forum integration tutorial[/page].
+
+[b]Will you implement (some feature)?[/b]
+ocProducts is very open to new ideas and we are very fortunate in that we regularly get new ideas directly from our users. Ideas are organised in public view on our [url="feature tracker"]http://ocportal.com/tracker/[/url]. We regret that there are [page="feedback_policy"]a variety of unavoidable reasons[/page] that prevent us from confirming acceptance of suggestions or providing a public road-map:
+ - we need to integrate any changes into our long-term development roadmap, but this is always changing as the Internet (and economy) evolves very rapidly and priorities shift, and new ideas often make old ideas irrelevant
+ - we need for us to design a clean product suitable for our wider user-base, which makes decisions on features almost impossible to do in advance because it requires multiple levels of design before we can be completely clear on how things might work, and how well they would in relation to other plans and wider goals
+Users who need a new feature should bear in mind that ocPortal is Open Source and thus third-parties may advance development, or we support feature sponsorship on our tracker. We therefore try to explain that ocPortal as it stands today is a solid reliable product, but if you require enhancements then you should take responsibility to budget or plan for this in terms of sponsoring or contributing (this is part of the spirit of Open Source -- it is free, but it requires community investment to move forward).
+
+[b]Will you implement a point-bank/games-arcade/auctions?[/b]
+These significant new feature categories are often requested, but are unlikely to be produced as official ocPortal features. This is because these features are very specific, and particularly contrary to the needs of most websites. We are not against these feature categories in any way, but these are best developed and released as third party addons.
+
+[b]Will you implement per-user permissions?[/b]
+For reasons of simplicity we have opted to only provide per-usergroup permissions. ocPortal does have internal functionality for per-user permissions (used by the point-store), but we feel that this would add unneeded complexity if it were placed in the administrative interface.
+
+[b]Is ocPortal available in (some language)?[/b]
+ocProducts does not officially get involved in the translation of ocPortal. Please check the [url="internationalisation forum"]http://ocportal.com/forum/forumview/misc/internationalisation.htm[/url] for more information on specific languages and [url="check this topic if you would like to get involved with translation"]http://ocportal.com/forum/topicview/misc/internationalisation/if_youd_like_to_do_a.htm[/url] (please do!). We provide an [page="docs:tut_intl"]internationalisation tutorial[/page], and tools, to translate ocPortal, and ocPortal has excellent internationalisation support.
+
+[b]Why does the language pack I installed mess up the layout?[/b]
+Often people will accidentally translate these language strings:
+ - left
+ - right
+These are there to control [acronym="Cascading Style Sheets"]CSS[/acronym] settings, for the potential of supporting right-to-left languages. Valid values for each are 'left' or 'right' (you flip them for a right-to-left language pack). They should never be literally translated.
+If someone has mucked up the translation on Launchpad you'll need to correct it yourself.
+Unfortunately as Launchpad is not our code, so we cannot add hints onto it about this kind of thing.
+
+[b]Does ocPortal support unicode?[/b]
+Whilst PHP does not properly support unicode itself yet, we have worked around that -- ocPortal can fully support utf-8.
+
+[b]Can you import this particular product?[/b]
+Our importers are listed to the left of our download page.
+If your software is not supported and you want to send us a database dump it might help us if we decide to support in the future; it might not happen, but it helps us to have these databases on hand should we decide to at some point.
+Alternatively it may be possible to import by first converting to some other software that we do have an importer from. You'd need to identify a software product we can import and which also can itself import what you currently have.
+Finally, we could give you a quote to have an importer developed.
+
+[title="2"]About ocProducts / Services[/title]
+
+[b]Who are ocProducts?[/b]
+We wrote the original ocPortal and maintain it, and we maintain the ocPortal website. We consider ourselves sponsors of the project and community, which is wider than any one organisation.
+
+[b]Can you write us a system that supports <insert-blank> specifications?[/b]
+We almost always can (commercially). Please contact us with details.
+
+[b]Is ocProducts available to perform some custom work for me?[/b]
+Yes, please [page="site:support"]contact us[/page].
+
+[b]Why is your spelling so terrible?[/b]
+ocPortal is a British (in fact, English) company, so spelling is in British English.
+
+[b]The ocProducts development services are expensive aren't they?[/b]
+The cost of developing complex websites often does shock people, but we are proud that we are actually a lot cheaper than the real competition, and our software provides substantial savings in the amount of time it takes to develop a complex site. Some people have an understanding of prices based on how the web was 10 years ago, when sites did a lot less and looked a lot worse, but over the years prices have risen in line with expectations (here's a [url="nice pricing explanation"]http://www.bigclick.com.au/blog/2009/04/05/is-web-development-expensive/[/url]).
+Professional service fees are calculated based on [url="logic and past statistics"]http://ocportal.com/forum/topicview/misc/addons/ocproducts_as_a_business.htm[/url], or in other words, it's what has to be charged to remain a viable business (it's very competitive out there).
+Generally there are [url="3 brackets of professional fee"]http://www.howmuchdoesawebsitecost.com/[/url]:
+ - Companies. Here you get proper project management, a much stronger guarantee of quality work (e.g. a range of standards and quality management), a company with proper insurance, a range of staff who are well trained and work well together as a team, coverage for if staff are sick or on holiday, a proper infrastructure (revision control, backups, legally licensed development software, proper communication tools, etc), and particular expertise and reputation in the area of work. This is where ocProducts sits, and our fees are [url="lower than the average"]http://www.jboye.com/blogpost/are-you-paying-competitive-hourly-rates/[/url]. Most of our competitors actually hide their fees because they are higher and they want to trap you (just to try and find how much other CMS companies charge per hour without contacting a salesman). In fact, also most competing products to ocPortal also are commercial, and they hide their prices too -- but $5,000 would be on the low-end for a basic license for a middle-tier commercial CMS equivalent to ocPortal.
+ - Freelancers. Freelancers will typically charge about 1/2 what companies charge, but don't have most of the above advantages, and you may be surprised that they can often take twice as long to get things done due to the lack of support structure for them to work in. There are some excellent freelancers out there (in fact you may be one of them -- full respect to you if you are!), but a lot of mediocre and poor ones too. A lot of low quoting companies are really freelancers that have invested in a corporate image.
+ - Offshoring. Offshore developers typically will charge about 1/5 of what American/European companies charge, which is quite striking; you often won't realise it, but whenever you see a company out there quoting really low prices it is likely because the company has just one part-time non-skilled person working in Europe/America, and otherwise it is entirely offshore. In our expertise offshore development requires a [i]lot[/i] of work on first developing clear project specifications (which is a professional skill in itself, that is a key part of software engineering degrees), takes about 3 times longer than in-house development (due to complexity of communication), and then requires a lot of work to correct quality problems such as spelling (English is not likely the programmers native language) and design issues (outsourced programmers rarely work in teams, so have no exposure to designers -- and without design experience, the technical mind of the programmer is reflected by a very 'functional' result). There are also often [url="serious cultural problems"]http://www.lessonsoffailure.com/developers/real-reason-outsourcing-fails/[/url]. At ocProducts we do use offshore development ourselves to some degree (which is why we are able to keep ocPortal free and still remain on the bottom end for company fees), but it has taken us years to get to the point where we have the infrastructure/relationships/processes/training-materials to work around the aforementioned problems (it still takes multiples of the hours we can quote), and we place full responsibility with highly trained UK/US staff who oversee everything and can correct/take-over things at any point should it be needed.
+We acknowledge that most people don't have thousands of pounds/dollars to spend on web developers (in fact, we have a corporate responsibility policy of [url="not letting users bankrupt themselves"]http://ocportal.com/forum/topicview/misc/addons/ocproducts_as_a_business.htm[/url]), so we try and foster a strong ecosystem for Open Source development, and we give out all our developer documentation freely.
+
+[b]How can I make a donation?[/b]
+As we're a company we don't really accept direct donations, but you can sponsor features on the [url="tracker"]http://ocportal.com/tracker/[/url].
+
+[title="2"]Installation issues[/title]
+
+[b]The install is failing, how can I make it work?[/b]
+The installer presents the most common point of failure for users, as it is a very sophisticated part of ocPortal, and also is the first piece of the ocPortal-framework used and thus first to catch framework problems.
+
+[b]The installation failed and the config file is blank, what do I fill it with?[/b]
+Please report the problem you suffered. Manually filling the config file will not result in a working configuration.
+
+Please submit a [page="site:free_tickets"]bug report[/page] to us. If we are unable to identify the problem, we may ask if we can access your server to resolve it ourselves.
+If we suspect user error, we may offer to sell services to install it for you.
+
+[b]Why are you taking our FTP passwords in the installer? What dark plan have you got?[/b]
+Passwords are only taken because of how PHP security works. PHP cannot extract files from the installation archive and place them on your website (normally) for complex reasons: the only way it can do it is to know your FTP password and to place the files there through FTP.
+
+[b]I get FTP errors using the quick installer, what can I do?[/b]
+Some servers have buggy or overloaded FTP configurations that fail 'randomly'. You may need to use the manual installation package instead.
+
+[b]Why won't ocPortal work on my server, even though it meets the minimum requirements?[/b]
+ocPortal is extremely compatible with different server configurations, tuned to work with many different problematic servers over a number of years, and developed with automatic compatibility detection software. Unfortunately some web hosts provide crippled versions of PHP, that are either rewritten to limit functionality, or configured to disable basic functionality (unfortunately PHP allows any piece of hundreds of items of basic functionality to be arbitrarily disabled). In addition, cheap web hosts often fit large numbers of users onto a single shared server, which can result in a rationing of server resources that is not in any way workable.
+
+[b]I used uploaded files manually using FTP and installed with the manual installer -- why won't it work?[/b]
+Unfortunately FTP can be slow and often results in corrupted uploads. This is why we developed the quick installer, and we strongly recommend using it if possible. Common reasons for corrupted upload include:
+ - files that only have partially uploaded (or even uploaded as blank)
+ - uploading in 'text mode' instead of 'binary mode' (only matters on a minority of servers)
+ - files that never uploaded at all
+
+[b]What file permissions should ocPortal have?[/b]
+Please check the [page="docs:tut_install"]installation tutorial[/page].
+
+Essentially, the installer is automating via its archive what most web applications make the user do by hand: uploading all the files.
+If you do not trust us -- the installer is a script, and thus the source code to it is plainly viewable, so you can see precisely what is happening.
+
+[title="2"]Forum integration (third-party forums)[/title]
+
+[b]Can I embed my third-party forum between the portal menus?[/b]
+Yes. You need to enable the 'Show forum within website' option from the Admin Zone (Environment option group, under the Site options configuration page, under the Configuration icon, in the Setup section of the Admin Zone), and change the forum link on your menus to point to [tt]index.php?page=forums[/tt].
+
+[b]Can I share login between the portal and my forum if I am using a forum driver?[/b]
+ocPortal uses the forum for authentication, but users may have difficulty sharing cookies between the forum and the portal.
+
+It is recommended that you set the cookie names to be different between the portal and forum, making them run on separate cookies. The disadvantage to this is only minor, whilst you are a lot less likely to suffer from cookie conflict issues.
+
+[b]Why does my cookie integration not work?[/b]
+There are many factors to cookie integration, and it is renowned to be problematic. These problems include: strange and inconsistent browser/privacy behaviour, the trickiness of getting exactly matching and correct paths and domains, the change of format between forum versions, secondary usage to forum session cookies, and old cookies masking new cookies. Due to all these problems, we cannot provide personal support for cookie integration except on a commercial basis.
+
+[b]How do I change the forum base-URL (because my forum links and emoticons are broken)?[/b]
+You must correct it using the config editor script, available under the 'Environment' link in the 'Configuration' box of the Admin Zone. The installer asked for this value, but many users (wrongly) do not change it from the default auto-detected value.
+Note that once the value in the config editor is changed, the 'Comcode page cache' must be cleared so as to update the value. To do this, hold down Ctrl+Alt+Shift and reload a page from your ocPortal site in a browser, when logged into ocPortal as an administrator. Clearing the caches manually is only necessary when using the config editor, as it is separated from ocPortal for fail-safe reasons.
+
+[b]Why do I not have commenting boxes on my portal?[/b]
+You must create a comment forum with the name specified in your configuration settings. Also, commenting must be enabled for the content involved, and must be enabled globally (-- although both these elements allow commenting by default).
+
+[b]How do I use my forum skin for an ocPortal theme?[/b]
+There is no way to do this. Skins/themes define the visual appearance of applications by specifying visual properties for specific aspects of the specific application, they are not like all-purpose coats of paint.
+
+[b]Can I switch to OCF from my existing forum?[/b]
+This is only supported if there is an available importer to perform this. Currently this is only the case for IPB and vBulletin.
+It may seem possible to perform this action by editing the info.php file, but this is highly ill-advised because it will result in misassociated members and usergroups.
+
+[b]Can I switch from OCF to another forum?[/b]
+This is not supported.
+
+[title="2"]Common problems[/title]
+
+[b]Why is the text bigger/smaller than it should be?[/b]
+You accidentally enlarged the text size in the browser. Whilst most sites don't scale properly with browser text size (in Internet Explorer, at least), ocPortal is designed so that it does. This is why you only notice it in ocPortal -- the other sites don't adhere to the accessibility standards, and thus it is the other sites that are at fault.
+
+[b]Why do images files start gray, then blend?[/b]
+This is due to a flaw in Microsoft Internet Explorer 6, which is now a very dated web browser. Please upgrade to Internet Explorer 7, Safari, Firefox, Opera, or Google Chrome.
+
+[b]Why do my backups not work?[/b]
+If there is something about your server configuration that prevents PHP scripts from executing for a long time, even if left running in the background, this will cause the backup system to fail. To check this is not an error, rather than a time-out, check your ocPortal error log.
+
+[b]How do I get more than <just a few megabytes> of upload support?[/b]
+PHP defines its own upload limits, which ocPortal can not exceed. Try renaming the bundled 'recommended.htaccess' file to '.htaccess'. If this fails read the answer to "Why does [tt]recommended.htaccess[/tt] not work?". If you still have problems you will need to persuade the server administrator to increase the limits defined in the PHP 'post_max_size' and 'upload_max_filesize' options.
+
+Please note that it is not advisable to try and upload more than around 10MB, regard of server limits. HTTP uploads (uploads from web forms) are very unreliable -- the smallest connection problem results in the entire download failing, as there is no error correction or resume support.
+ocPortal provides ways to reference files uploaded via other means (e.g. [abbr="File Transfer Protocol"]FTP[/abbr]):
+ - the Comcode [tt]attachment[/tt] tag can reference files by URL ([tt][attachment]url_<url>[/attachment][/tt])
+ - the downloads addon supports referencing existing URLs, copying of existing remote URLs, and even batch importing from FTP directories
+ - the galleries addon supports referencing existing URLs, and batch importing of files placed in the [tt]uploads/galleries[/tt] directory that aren't yet linked in
+
+[b]Why do I get blank pages? OR, Why do I get errors saying the script has run out of memory?[/b]
+ocPortal is designed to run on a PHP memory limit of 16MB or higher; very old PHP configurations come with an 8MB limit, but the majority of web-hosts have it raised to a more reasonable level: take into account that every ocPortal interface, even the installer which unpacks a large archive, is being asked to run within a tiny 8MB, which includes the space taken up by the PHP source code being run. If you encounter these problems, please submit a bug report, and we will optimise the area where they are occurring for you.
+
+Note that the 'blank page' problem is likely to be due to memory running out, as some PHP installations do not give errors in this event, even if the PHP 'display_errors' option is enabled.
+
+Also note that some web hosts have PHP installations that report memory limits that are higher than they actually are. If you see an error like:
+[code]
+PHP[1] Out of memory (allocated 6815744) (tried to allocate 311296 bytes)
+[/code]
+then this is telling you PHP [i]actually[/i] has a memory limit of approximately 6815744+311296 bytes (about 7MB).
+
+It may be possible to get ocPortal to raise the memory limit for you. Our default [tt]recommended.htaccess[/tt] file does this -- try renaming it to [tt].htaccess[/tt] to activate it. If you get the problem during the quick installer and thus don't have this file yet, you can find it in the manual installer package.
+If renaming the [tt]recommended.htaccess[/tt] file results in "Internal Server Error" error messages, see the "I've renamed recommended.htaccess to .htaccess, but why ocPortal won't load anymore" answer below.
+If you are not successful in raising the memory limit you will need to contact the web host to ask them to do it, as on some hosts the limit is locked down at a server level.
+
+[b]Why do I get errors about 'imagetypes()' or other errors relating to image or GD?[/b]
+You may have enabled 'GD' in your configuration, but do not actually have GD configured into PHP. GD comes as standard, and is very widespread across web-hosts, and ocPortal uses it for various areas. Officially, GD is required, but if you encounter problems when it is disabled in your configuration, please submit a bug report.
+
+[b]Why do I get an Internal Server Error or '500' error when saving the site configuration, using the WYSIWYG editor, or editing templates?[/b]
+Your server has an extension called 'mod_security' enabled, which is thinking the presence of a configuration option that contains HTML is an attack on the server. Disable mod_security by renaming [tt]recommended.htaccess[/tt] to [tt].htaccess[/tt]. If this doesn't work, try the file with just leaving these 5 lines at the top:
+[codebox]
+# Disable inaccurate security scanning (ocPortal has it's own)
+<IfModule mod_security.c>
+SecFilterEngine Off
+SecFilterScanPOST Off
+</IfModule>
+[/codebox]
+ocPortal is securely coded, and also has it's own proactive security, so mod_security does not serve a useful purpose and only interferes with normal routines.
+
+[b]Why do I get an Internal Server Error or '500' error (often when adding a new zone or going to the Installation Options)?[/b]
+Check that the PHP file you are loaded up by URL (e.g. [tt]config_editor.php[/tt] or [tt]mynewzone/index.php[/tt]) does [b]not[/b] have write access (use your FTP tool to 'chmod' the file). Often Apache servers will not allow script files to load if they have write access.
+
+[b]I've renamed recommended.htaccess to .htaccess, but why ocPortal won't load anymore (Internal Server Error or '500' error)?[/b]
+Unfortunately the Apache web server gives very poor error feedback, and setting features that it's configuration environment doesn't understand can cause it to fail. Try commenting out lines (put "#" at the start of the line) to work out what lines cause the problems, and leave those lines commented out.
+Read the next question's answer also.
+
+[b]Why does [tt]recommended.htaccess[/tt] not work?[/b]
+If you are getting "Internal Server Error"'s or '500' errors first read the answer above, to narrow down to the problem.
+If you're not getting actual errors but things just aren't applying, it's probably because either:
+ - [tt].htaccess[/tt] has been disabled on the server (you'll need to consult your web-host)
+ - The PHP options you're trying to override with php_value or php_flag have been locked down in the main Apache configuration (via php_admin_value or php_admin_flag)
+ - or, you're using Windows IIS which does not have this feature. You'll need to:
+  - change settings through the IIS Administrative Tools or your web hosting control panel)
+  - or, if the settings you want to change are for PHP, and PHP is configured as CGI, see "How do I set PHP settings on a CGI server?").
+
+If you are getting actual errors you have probably narrowed it down and found that all the "php_value"/"php_flag" lines fail. If this is the case it is because PHP on your server is set up as CGI, and on CGI you need to set PHP settings differently (read the answer to the next question).
+
+[b]How do I set PHP settings on a CGI server?[/b]
+You need to create [tt]php.ini[/tt] files that override your web-server's default [tt]php.ini[/tt] file. This can be tricky for two reasons:
+1) You need to place duplicates of the file in a number of different directories.
+2) You may need to replicate settings from the original [tt]php.ini[/tt] file into your own one. Usually your web-host will provide some kind of documentation that you can copy&paste from.
+
+This is what your [tt]php.ini[/tt] file should look like, assuming you do not need to add any extra lines (see "2" above).
+[codebox]
+; ocPortal needs uploads; many hosts leave these low
+post_max_size="16M"
+upload_max_filesize="16M"
+
+; Turn insecure things off
+allow_url_fopen="off"
+register_globals="off"
+
+; Put some limits up. ocPortal is stable enough not to cause problems- it'll only use higher limits when it really needs them
+memory_limit="128M"
+max_input_time="60"
+
+; This unavoidably kills filedump folder creation, and stops us controlling our script execution time
+safe_mode="off"
+
+; Suhosin can cause problems on configuration and Catalogue forms, which use a lot of fields
+suhosin.post.max_vars="2000"
+suhosin.request.max_vars="2000"
+suhosin.cookie.max_vars="400"
+suhosin.cookie.max_name_length="150"
+suhosin.cookie.encrypt="off"
+suhosin.post.max_value_length="100000000"
+suhosin.request.max_value_length="100000000"
+suhosin.post.max_totalname_length="10000"
+suhosin.request.max_totalname_length="10000"
+suhosin.cookie.encrypt="off"
+suhosin.sql.union=off
+
+
+; Sandbox ocPortal to it's own directory
+; open_basedir="/tmp:/home/blah/public_html/ocportal/"		Customise this line for your server, or leave it commented out
+[/codebox]
+
+Theoretically the file should be placed in any directory from which a PHP file might be called up by URL. Practically though you can just put it in the base directory, [tt]adminzone[/tt], [tt]cms[/tt], [tt]collaboration[/tt], [tt]data[/tt], [tt]data_custom[/tt], [tt]forum[/tt], [tt]personalzone[/tt] and [tt]site[/tt] directories.
+
+[b]ocPortal has gone very slow after changing the configuration / will not save configuration changes / catalogue adding or editing will not work?[/b]
+
+It is likely you have suhosin on the server and it is limiting the number of fields that forms may use.
+ocPortal's sample [tt].htaccess[/tt] and [tt]php.ini[/tt] files contain a remedy for this.
+
+[title="2"]Common usage queries[/title]
+
+[b]Why do I need to keep entering my FTP password?[/b]
+ocPortal must not remember the password in order to maintain security. It would present a very significant security vulnerability if it was stored in a database or configuration file on a shared server, and it is ill-advised on any server.
+The FTP password is required for some file-based operations, as PHP only has limited file access on most servers. If you are running a Windows server, or a "SUID" Apache server, you can tell the abstract file manager that you don't need to use FTP.
+
+[b]How do I change the header text (title bar text) away from 'A site about ocPortal-?'?[/b]
+In order to change the ocPortal header text that is shown in page titles, you must choose to edit zones from the Admin Zone. This is because header text is defined on a per-zone basis, rather than globally. To change the text regular visitors see, edit the Welcome and Site Zones.
+
+[b]My custom HTML is corrupted[/b]
+ocPortal tries to turn XHTML from the WYSIWYG editor into Comcode, to keep things neat/consistent/tidy. This can cause some problems if you're trying to write custom HTML. For those without privileges it also applies some security restrictions like stripping scripting.
+
+There are a couple of different things you can do:
+ - Turn off the WYSIWYG editor.
+ - There's also a config option called "Convert XHTML to Comcode" which you can disable.
+
+Also, if there are specific things ocPortal is breaking, we can also look into it because it could be a bug.
+
+[b]Can I include PHP code in my templates?[/b]
+This is not possible: we could have very easily allowed this, but it would mean that themes could essentially be distributed that delete files, for instance. Templates could still be abused, to steal password cookies, for example: but direct server attacks are less likely.
+Instead, use our tempcode language, which provides all the power you should need: and if you need more power, you should be working with source code in conjunction with the templates.
+
+[b]Can new items be added to the point-store?[/b]
+At this time, they can only be added via custom programming new point-store 'hooks'.
+
+[b]What are catalogues?[/b]
+Catalogues holds structured records of data. The system is extremely powerful, as the staff can create new catalogues with any structure of their choosing. The default FAQ page on an ocPortal install is a catalogue.
+
+[b]What is CEDI?[/b]
+CEDI is our equivalent to a WIKI: a community-built ad-hoc database.
+
+[b]Why are Comcode pages stored as files?[/b]
+This is because a number of them need to be provided by default, so that they may easily be created and edited in a text editor, and so that they may easily be transferred between portals.
+
+[b]How do I open my site?[/b]
+This is available in the configuration. Please read our [page caption="'Basic Configuration' tutorial" page="tut_configuration"]docs[/page].
+
+[b]I turned on short URLs, but they won't work, and now ocPortal links are all broken. How do I fix it?[/b]
+Use the [tt]config_editor.php[/tt] script to force short URLs to be off.
+
+[b]How do I move to another server?[/b]
+Please check the documentation -- we have a [page="docs:tut_moving"]tutorial about moving sites[/page].
+
+[b]Why won't WYSIWYG work on Safari?[/b]
+Unfortunately Safari currently does not (or has not had until recently) adequate functionality to support this. The WYSIWYG editor is third-party software integrated with ocPortal, and we are dependant both on what web browsers that software supports, and by extension the limitations of different web browsers. WYSIWYG functionality works using non-standard features of web browsers.
+
+[b]Why don't non-validated posts show up in the staff checklist?[/b]
+This is an intentional design decision, to make sure the tally only took into account website resources, and wasn't always 'spammed to the point of meaninglessness' by an ongoing stream of forum posts. However, we have since learnt that some users prefer the tally to be more transparent, and thus we have made an unofficial method to set this. Please see the 'hidden functionality' section of our Code Book (available from our Documentation section):
+
+[b]Why do I get an error about a missing comment topic forum when I try to use comment topics?[/b]
+You may have renamed the default OCF comment forum, or you may have changed the name used for it in the configuration. These need to match up.
+
+[b]Why is mail not getting sent from the server?[/b]
+This can be very difficult to debug, but is unlikely to be the fault of ocPortal. One possibility is if your server is on a spam blacklist. Another is that the outgoing email server you are using is clogged or broken. Another possibility is that your website name could look like spam, or your server is not on an SPF list for the website email address. If you are using the inbuilt SMTP sending functionality (if you filled it in in the configuration), please be aware that it is best to not use this unless the inbuilt PHP functionality (which is auto-configured by the web host) is not working.
+
+[b]How can I show different content to different usergroups?[/b]
+Permissions are usually the tool to use to customise things for different users, but sometimes the actual message is what you need to customise rather than just limiting access. In this case, use the Comcode [tt]if_in_group[/tt] tag in your Comcode pages to deliver targetted portions of Comcode to limited sets of usergroups.
+
+[b]How do I show random content in a box in the front page?[/b]
+Place the [tt]main_content[/tt] block on the page with the right parameters. Here is an example to pick a random download: [tt][block="download"]main_content[/block][/tt].
+To get a full list of valid content-types, look to see what filenames exist in the [tt]sources/hooks/systems/awards[/tt] directory.
+The [tt]main_content[/tt] block is actually very flexible, and can also show specific content items of your choice, or randomise from sets.
+
+[b]Various blocks require ID codes for what content to include. Where do I find these?[/b]
+Look at the URL you see in the web browser address bar when you have clicked through to edit that piece of content. It'll include the ID (usually a number) near the end. If the ID is not a number, it will have been manually chosen.
+
+[b]PHP files need to end with "?>" but none of ocPortal's do[/b]
+This is a common misunderstanding. It is actually the documented PHP best practice (as described in the PHP manual) to leave off "?>" from the end of PHP files. Some text editors (especially online ones) insert white-space at the end of files, and if that happens after "?>" then it can cause operational problems relating to HTTP headers and cookies.
+
+[title="2"]Themes/Appearance[/title]
+
+[b]Where do I get new themes?[/b]
+The default theme can be modified to have a colour scheme of your choice, and can also be manually customised in any way. At this point not many third party themes have been released, but we really encourage users to [page="site:helping_out"]contribute[/page] their own themes.
+
+[b]How do I change (some aspect of ocPortal's appearance)?[/b]
+ocPortal is displayed to web browser's using standard web technologies wherever possible, employing best practices. The appearance is fully configurable and defined using a combination of XHTML (in templates), CSS, and images. Sometimes these technologies can be complex to edit and require a good technical understanding, and this is unfortunately unavoidable; an analogy, is that writing or painting also require practice. Unfortunately for economic reasons ocProducts is not able to step through specific changes for free. It is often worth asking on the forum in case other user's can help.
+
+[b]I've edited template/CSS and my changes won't show?[/b]
+These files are evaluated and cached by ocPortal, so changes will only show if either the cache is disabled, or the cache is emptied. A quick way to empty the cache is to hold down ctrl+alt+shift and click refresh in the web browser (you need to be logged in as staff). Alternative ways to empty the cache including using the cleanup tools in the Admin Zone, or to manually delete cache files from the filesystem.
+
+[b]How do I know which template to edit?[/b]
+Use the 'template tree' feature available from the drop-down list in your personal stats block. It'll show the template structure for the screen you're viewing. If the personal stats block is not available, add [tt]&special_page_type=tree[/tt] to the URL.
+
+[b]How do I change the logo?[/b]
+Hold the mouse over it for a few seconds and an edit button will appear.
+
+[b]A template is used in two aspects of the system, but I need it to work differently in each?[/b]
+Please read about the GUID feature in our [page="docs:tut_tempcode"]tempcode tutorial[/page].
+
+[b]Can I put PHP in templates?[/b]
+This is not supported for security and architectural reasons. Instead, you can create a miniblock, and then place that miniblock into a template using the [tt]BLOCK[/tt] symbol.
+
+[b]Is there a CSS map?[/b]
+No, there is too much CSS to feasibly make a map as is often used for forum software. Instead, we would recommend using the Firefox 'Firebug' extension (or similar for other browsers) to identify what CSS is used where.
+
+[b]How can I change how times are displayed?[/b]
+You can either change the settings for the whole of ocPortal by changing key strings in the [tt]global[/tt] language file, or you can make specific changes for individual templates. To make changes for individual templates, use the [tt]FROM_TIMESTAMP[/tt] symbol on the [tt]RAW_[/tt] prefixed equivalent that usually exists to the default date/time parameter to the template. For example, [tt]{$FROM_TIMESTAMP*,%d %y,{RAW_DATE}}[/tt]. For documentation about the syntax, please see the PHP manual:
+http://uk2.php.net/manual/en/function.strftime.php
+
+[b]How do I edit the XHTML head and/or the opening and closing XHTML body tags?[/b]
+The actual XHTML header and opening body tag is in [tt]HEADER.tpl[/tt].
+The actual XHTML footer (including the closing body tag) is in [tt]FOOTER.tpl[/tt].
+[tt]GLOBAL.tpl[/tt] holds the panels, and main screen together.
+
+[b]How do I edit ocPortal in an HTML editor?[/b]
+It is not possible to do this, as ocPortal screens are constructed by an amalgamation of many template files. It is possible, however, to construct HTML pages, using an HTML editor. HTML pages can be placed into ocPortal zones much like a Comcode page can: however, we would advise you use Comcode pages instead.
+
+[b]How can I include flash?[/b]
+You may insert it using regular HTML via the 'html' Comcode tag, or you may use our 'flash' Comcode tag.
+
+[b]Can I include HTML?[/b]
+Yes, using the 'html' Comcode tag.
+
+If you have the WYSIWYG editor enabled:
+[indent]Put [tt][html][/tt] and [tt][/html][/tt] into your Comcode, then put the HTML you desire inbetween. If you want to mix HTML and Comcode more freely, use the [tt]semihtml[/tt] Comcode tag instead of the aforementioned [tt]html[/tt] Comcode tag.[/indent]
+
+If you [i]don't[/i] have the WYSIWYG editor enabled:
+[indent]There is a button on the editor's toolbar to toggle HTML source viewing mode. When inside the HTML source viewing mode you can paste in your HTML directly.[/indent]
+
+[b]How can I add a block / How can I change how a block looks / How can I add a box?[/b]
+There is often confusion about the difference between a block and a box. A block is an embeddable dynamic unit, and whilst most blocks are rendered in boxes, this is not necessarily the case. It also certainly isn't the case that all boxes are around blocks. Boxes can be placed around anything, and are used in many places.
+The box type a block uses is changeable by editing the template of that block; this is often useful if you want to place a [tt]main[/tt] block on a panel where a [tt]side[/tt] block would usually go.
+If you want to make your own box in Comcode, just use the 'box' Comcode tag around some existing Comcode.
+If you want to place a block, use the 'Add block' button you see whilst editing Comcode pages.
+
+---
+
+[b]Do you have another question?[/b]
+Please first check the documentation, and if there is no obvious answer, post your question on our public forums so anyone can answer.
+If you need an answer from an ocProducts employee, we have a commercial support scheme called "Experts by the hour".
+

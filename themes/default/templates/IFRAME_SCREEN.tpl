@@ -13,7 +13,7 @@
 	</script>
 
 	<script type="text/javascript">// <![CDATA[
-		//window.setInterval(function() { resize_frame('iframe_page'); },500);
+		//window.setInterval(function() { resizeFrame('iframe_page'); },500);
 		{+START,IF_NON_EMPTY,{REFRESH_TIME}}
 			window.detect_interval=window.setInterval(
 				function() {

@@ -42,6 +42,7 @@ if (isset($_SERVER['argv']))
 require(dirname(__FILE__).'/php.php');
 
 $files=do_dir($OCPORTAL_PATH,true,true);
+$files[]='phpstub.php';
 
 $classes=array();
 $global=array();
@@ -59,7 +60,14 @@ foreach ($files as $filename)
 
 	$TO_USE=$filename;
 
-	$_filename=($OCPORTAL_PATH=='')?$filename:substr($filename,strlen($OCPORTAL_PATH)+1);
+	if ($filename=='phpstub.php')
+	{
+		$_filename='phpstub.php';
+		$TO_USE=getcwd().DIRECTORY_SEPARATOR.'phpstub.php';
+	} else
+	{
+		$_filename=($OCPORTAL_PATH=='')?$filename:substr($filename,strlen($OCPORTAL_PATH)+1);
+	}
 	if ($_filename=='sources'.DIRECTORY_SEPARATOR.'minikernel.php') continue;
 	//echo 'SIGNATURES-DOING '.$_filename.cnl();
 	if (strpos($_filename,'_tests'.DIRECTORY_SEPARATOR)===0)
@@ -115,7 +123,13 @@ echo 'Done';
 function require_code($codename)
 {
 	global $OCPORTAL_PATH;
-	require_once($OCPORTAL_PATH.'/sources/'.$codename.'.php');
+	require_once($codename.'.php');
+}
+
+function get_file_base()
+{
+	global $OCPORTAL_PATH;
+	return $OCPORTAL_PATH;
 }
 
 function filter_naughty($in)
@@ -163,5 +177,11 @@ function fatal_exit($message)
 {
 	global $TO_USE,$LINE;
 	echo('ISSUE "'.$TO_USE.'" '.strval($LINE).' 0 '.$message.cnl());
+}
+
+function unixify_line_format($in)
+{
+	$in=str_replace(chr(13).chr(10),chr(10),$in);
+	return str_replace(chr(13),chr(10),$in);
 }
 

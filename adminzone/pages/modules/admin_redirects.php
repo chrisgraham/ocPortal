@@ -36,7 +36,7 @@ class Module_admin_redirects
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=3;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -73,25 +73,13 @@ class Module_admin_redirects
 			$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'authors','r_from_zone'=>'collaboration','r_to_page'=>'authors','r_to_zone'=>'site','r_is_transparent'=>1));
 		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
+		if ((is_null($upgrade_from)) || ($upgrade_from<4))
 		{
 			$zones=find_all_zones();
-			if (!in_array('site',$zones)) $zones[]='site';
 			foreach ($zones as $zone)
 			{
 				if (!file_exists(get_file_base().'/'.$zone.'/pages/comcode/'.fallback_lang().'/panel_top.txt'))
 					$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_top','r_from_zone'=>$zone,'r_to_page'=>'panel_top','r_to_zone'=>'','r_is_transparent'=>1));
-			}
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			$zones=find_all_zones();
-			if (!in_array('site',$zones)) $zones[]='site';
-			foreach ($zones as $zone)
-			{
-				if (!file_exists(get_file_base().'/'.$zone.'/pages/comcode/'.fallback_lang().'/panel_bottom.txt'))
-					$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_bottom','r_from_zone'=>$zone,'r_to_page'=>'panel_bottom','r_to_zone'=>'','r_is_transparent'=>1),false,true);
 			}
 		}
 	}
@@ -130,9 +118,7 @@ class Module_admin_redirects
 	 */
 	function gui()
 	{
-		require_css('redirects_editor');
-
-		$title=get_screen_title('REDIRECTS');
+		$title=get_page_title('REDIRECTS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$fields=new ocp_tempcode();
 		$rows=$GLOBALS['SITE_DB']->query_select('redirects',array('*'));
@@ -164,7 +150,7 @@ class Module_admin_redirects
 	 */
 	function actual()
 	{
-		$title=get_screen_title('REDIRECTS');
+		$title=get_page_title('REDIRECTS');
 
 		$found=array();
 		foreach ($_POST as $key=>$val)
@@ -184,7 +170,7 @@ class Module_admin_redirects
 		}
 
 		$GLOBALS['SITE_DB']->query_delete('redirects');
-		persistent_cache_empty();
+		persistant_cache_empty();
 
 		foreach ($found as $i=>$val)
 		{

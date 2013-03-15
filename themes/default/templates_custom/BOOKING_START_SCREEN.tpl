@@ -9,7 +9,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{SHARED_MESSAGES}}
-	<p class="lonely_label">{!NOTICES}:</p>
+	{!NOTICES}:
 	<ul>
 		{+START,LOOP,SHARED_MESSAGES}
 			<li>{_loop_var}</li>
@@ -62,7 +62,7 @@
 				<h2>{CATEGORY_TITLE}</h2>
 
 				<div class="wide_table_wrap">
-					<table class="wide_table results_table spaced_table">
+					<table class="wide_table solidborder spaced_table">
 						<thead>
 							<tr>
 								<th>{!ITEM}</th>
@@ -81,11 +81,11 @@
 						<tbody>
 							{+START,LOOP,BOOKABLES}
 								<tr>
-									<th class="de_th vertical_alignment">
+									<th class="de_th inline_image_2">
 										<strong>{BOOKABLE_TITLE*}</strong>
 									</th>
 
-									<td class="vertical_alignment">
+									<td class="inline_image_2">
 										<label class="accessibility_hidden" for="bookable_{BOOKABLE_ID*}_quantity">{!QUANTITY}, {BOOKABLE_TITLE*}</label>
 										<select name="bookable_{BOOKABLE_ID*}_quantity" id="bookable_{BOOKABLE_ID*}_quantity">
 											{$SET,quantity,0}
@@ -97,7 +97,7 @@
 									</td>
 
 									{+START,IF,{HAS_MIXED_DATE_TYPES}}
-										<td class="vertical_alignment">
+										<td class="inline_image_2">
 											{+START,INCLUDE,BOOK_DATE_CHOOSE}
 												NAME=bookable_{BOOKABLE_ID}_date_from
 												CURRENT_DAY={BOOKABLE_DATE_FROM_DAY}
@@ -112,7 +112,7 @@
 											{+END}
 										</td>
 
-										<td class="vertical_alignment">
+										<td class="inline_image_2">
 											{+START,IF,{BOOKABLE_SELECT_DATE_RANGE}}
 												{+START,INCLUDE,BOOK_DATE_CHOOSE}
 													NAME=bookable_{BOOKABLE_ID}_date_to
@@ -131,7 +131,7 @@
 									{+END}
 
 									{+START,IF,{HAS_DETAILS}}
-										<td class="vertical_alignment">
+										<td class="inline_image_2">
 											{BOOKABLE_DESCRIPTION}
 
 											{+START,IF_NON_EMPTY,{BOOKABLE_MESSAGES}}
@@ -144,7 +144,7 @@
 										</td>
 									{+END}
 
-									<td class="vertical_alignment">
+									<td class="inline_image_2">
 										{$CURRENCY_SYMBOL} {$PREG_REPLACE*,\.00$,,{BOOKABLE_PRICE}}
 										(<a title="{!CURRENCY_CONVERT} {!LINK_NEW_WINDOW}" target="_blank" href="http://coinmill.com/SOS_calculator.html#{$CONFIG_OPTION,currency}={BOOKABLE_PRICE_RAW*}">{!CURRENCY_CONVERT}</a>)
 										{$,{$COMCODE,[currency bracket="1"]{BOOKABLE_PRICE_RAW}[/currency]}}

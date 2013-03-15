@@ -1,5 +1,3 @@
-<section class="box box___block_main_facebook_comments"><div class="box_inner">
-	<h3>{!facebook:FACEBOOK_COMMENTS}</h3>
-
+{+START,BOX,{!facebook:FACEBOOK_COMMENTS},,light}
 	<div class="fb-comments" data-href="{$SELF_URL*}"></div>
-</div></section>
++END}

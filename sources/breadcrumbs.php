@@ -46,10 +46,6 @@ function load_breadcrumb_substitutions($current_breadcrumb,$data)
 	return $BREADCRUMB_SUBSTITIONS;
 }
 
-/**
- * Breadcrumb composition class.
- * @package		breadcrumbs
- */
 class breadcrumb_substitution_loader
 {
 	// Used during parsing
@@ -72,7 +68,7 @@ class breadcrumb_substitution_loader
 		$this->substitution_current_label=NULL;
 		$this->links=array();
 		$this->substitutions=array();
-		$breadcrumb_tpl=do_template('BREADCRUMB_SEPARATOR');
+		$breadcrumb_tpl=do_template('BREADCRUMB_ESCAPED');
 		$this->breadcrumb_tpl=$breadcrumb_tpl->evaluate();
 		$this->current_breadcrumbs=$current_breadcrumbs;
 

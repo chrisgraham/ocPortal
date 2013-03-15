@@ -1,36 +1,32 @@
-.openid_wrap {
-	overflow: scroll;
-	width: 100%;
-}
-
 #openid {
-	background: url({$IMG;,openid/indicator}) center center no-repeat;
-	margin: 0 auto;
-	width: 440px;
-	/*height: 162px;*/
-	font: 12px 'Arial';
+  background: url({$IMG;,openid/indicator}) center center no-repeat;
+  margin: 0 auto;
+  width: 440px;
+  height: 162px;
+  font: 12px 'Arial';
 }
 
 #openid_inputarea {
-	clear: both;
-	display: none;
-	background: url({$IMG;,openid/balloon}) no-repeat;
-	width: 410px;
-	height: 48px;
-	color: white;
-	position: absolute;visibility: hidden; /* Intentionally take the message out of the flow and hide it - it takes too much space */
-	text-align: center;
-	margin-top: 35px;
-	padding-top: 17px;
+  clear: both;
+  display: none;
+  background: url({$IMG;,openid/balloon}) no-repeat;
+  width: 410px;
+  height: 48px;
+  color: white;
+  text-align: center;
+  margin-top: 35px;
+  padding-top: 17px;
 }
 
 #openid_inputarea #openid_username {
-	margin: 0 4px 0 8px;
-	width: 120px;
+  margin: 0 4px 0 8px;
+  width: 120px;
 }
 
 #openid_btns {
-	overflow: hidden;
+  width: 100%;
+  overflow: hidden;
+  outline: 0;
 }
 
 #openid_btns br {
@@ -38,26 +34,27 @@
 }
 
 #openid_highlight {
-	{$BETA_CSS_PROPERTY,border-radius: 10px;}
-	padding: 2px;
-	background-color: {$GET,area_background};
-	float: left;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 2px;
+  background-color: #FFFCC9;
+  float: left;
 }
 
 .openid_large_btn, .openid_small_btn {
-	background: url({$IMG;,openid/openid-icons}) no-repeat;
-	margin: 3px;
-	float: left;
+  background: url({$IMG;,openid/openid-icons}) no-repeat;
+  margin: 3px;
+  float: left;
 }
 
 .openid_large_btn {
-	width: 91px;
-	height: 51px;
+  width: 91px;
+  height: 51px;
 }
 
 .openid_small_btn {
-	width: 16px;
-	height: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .Google { background-position: 0 0; }
@@ -76,6 +73,6 @@
 .MySpace { background-position: -68px -220px; }
 
 a.openid_large_btn:focus {
-	outline: none;
-	-moz-outline-style: none;
+  outline: none;
+  -moz-outline-style: none;
 }

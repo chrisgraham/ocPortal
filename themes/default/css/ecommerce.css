@@ -9,22 +9,15 @@
 
 .purchase_licence {
 	width: 100%;
-	font-family: Courier, monospace;
+	font-family: Courier;
 }
 
-.purchase_screen_contents {
+.purchase_table {
 	min-height: 18em;
+	width: 100%;
 }
 
 .subscriptions_cancel_button {
 	text-align: {!en_right};
-}
-
-.purchase_wizard_field_name_column {
-	width: 16em;
-}
-
-.purchase_wizard_field_input_column {
-	width: 100%;
 }
 

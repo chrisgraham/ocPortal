@@ -84,8 +84,6 @@ class Module_admin_zones
 		require_code('zones2');
 		require_code('zones3');
 
-		require_css('zone_editor');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->misc();
@@ -112,7 +110,7 @@ class Module_admin_zones
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('ZONES'),comcode_lang_string('DOC_ZONES'),
+		return do_next_manager(get_page_title('ZONES'),comcode_lang_string('DOC_ZONES'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'add'),'_SELF'),do_lang('ADD_ZONE')),
@@ -131,7 +129,7 @@ class Module_admin_zones
 	{
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
-		return $this->edit_zone('_editor',get_screen_title('ZONE_EDITOR'));
+		return $this->edit_zone('_editor',get_page_title('ZONE_EDITOR'));
 	}
 
 	/**
@@ -148,7 +146,7 @@ class Module_admin_zones
 
 		$nice_zone_name=($id=='')?do_lang('_WELCOME'):$id;
 
-		$title=get_screen_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
+		$title=get_page_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
 
 		$lang=choose_language($title,true);
 		if (is_object($lang)) return $lang;
@@ -251,7 +249,7 @@ class Module_admin_zones
 				if (!file_exists($fullpath)) $fullpath=zone_black_magic_filterer((($page_info[0]=='comcode' || $pure)?get_file_base():get_custom_file_base()).'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.get_site_default_lang().'/'.$current_for.'.txt');
 				if (file_exists($fullpath))
 				{
-					$comcode=file_get_contents($fullpath);
+					$comcode=file_get_contents($fullpath,FILE_TEXT);
 					$default_parsed=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true);
 				} else
 				{
@@ -293,6 +291,14 @@ class Module_admin_zones
 				$comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID'=>'1acc5dcf299325d0cf55871923148a54','DIVIDER'=>false,'FIELD_NAME'=>$field_name,'TITLE'=>do_lang_tempcode('INPUT_COMCODE_'.$button),'B'=>$button)));
 			}
 
+			global $TEMPCODE_SETGET;
+			if ($for==$default_page)
+			{
+				$TEMPCODE_SETGET['in_panel']='0';
+			} else
+			{
+				$TEMPCODE_SETGET['in_panel']='1';
+			}
 			$preview=(substr($page_info[0],0,6)=='MODULE')?NULL:request_page($for,false,$id,NULL,true);
 			if (!is_null($preview))
 			{
@@ -339,7 +345,7 @@ class Module_admin_zones
 	 */
 	function __editor()
 	{
-		$title=get_screen_title('ZONE_EDITOR');
+		$title=get_page_title('ZONE_EDITOR');
 
 		$lang=choose_language($title,true);
 		if (is_object($lang)) return $lang;
@@ -427,7 +433,7 @@ class Module_admin_zones
 			}
 		}
 
-		persistent_cache_empty();
+		persistant_cache_empty();
 
 		// Redirect
 		$url=get_param('redirect');
@@ -486,16 +492,9 @@ class Module_admin_zones
 			{
 				$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
 
+				$fields.=static_evaluate_tempcode(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'logo_upload_'.$theme,false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 				require_code('themes2');
 				$ids=get_all_image_ids_type('logo',false,NULL,$theme);
-
-				$set_name='logo_choose_'.$theme;
-				$required=true;
-				$set_title=do_lang_tempcode('LOGO');
-				$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
-
-				$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','logo_upload_'.$theme,$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
 				$current_logo='logo/'.$zone.'-logo';
 				if (!in_array($current_logo,$ids)) $current_logo='logo/-logo';
 
@@ -505,9 +504,9 @@ class Module_admin_zones
 					if ($test=='') $test=find_theme_image($id,false,false,'default');
 					if (($test=='') && ($id==$current_logo)) $current_logo=$ids[0];
 				}
-				$field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','logo_select_'.$theme,$ids,NULL,$current_logo,NULL,false,NULL,$theme));
+				$fields.=static_evaluate_tempcode(form_input_picture_choose_specific(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('STOCK')),do_lang_tempcode('DESCRIPTION_ALTERNATE_STOCK'),'logo_select_'.$theme,$ids,NULL,$current_logo,NULL,true,NULL,$theme));
 
-				$fields.=static_evaluate_tempcode(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+				$javascript.='standardAlternateFields(\'logo_upload_'.$theme.'\',\'logo_select_'.$theme.'*\');';
 			}
 		}
 
@@ -547,7 +546,7 @@ class Module_admin_zones
 			attach_message(do_lang_tempcode('HTM_SHORT_URLS_CARE'),'warn');
 		}
 
-		$title=get_screen_title('ADD_ZONE');
+		$title=get_page_title('ADD_ZONE');
 
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
@@ -593,7 +592,7 @@ class Module_admin_zones
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		$title=get_screen_title('ADD_ZONE');
+		$title=get_page_title('ADD_ZONE');
 
 		require_code('abstract_file_manager');
 		force_have_afm_details();
@@ -629,7 +628,7 @@ class Module_admin_zones
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
 
-		if (is_null($title)) $title=get_screen_title('EDIT_ZONE');
+		if (is_null($title)) $title=get_page_title('EDIT_ZONE');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -685,7 +684,7 @@ class Module_admin_zones
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
 		$text=do_lang_tempcode('CHOOSE_EDIT_LIST');
-		return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'a33d3ff1178e7898b42acd83b38b5dcb','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+		return do_template('TABLE_TABLE_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
 	}
 
 	/**
@@ -695,9 +694,7 @@ class Module_admin_zones
 	 */
 	function _edit_zone()
 	{
-		$title=get_screen_title('EDIT_ZONE');
-
-		require_lang('themes');
+		$title=get_page_title('EDIT_ZONE');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
@@ -756,7 +753,7 @@ class Module_admin_zones
 
 		if ($delete==1)
 		{
-			$title=get_screen_title('DELETE_ZONE');
+			$title=get_page_title('DELETE_ZONE');
 
 			actual_delete_zone($zone);
 
@@ -780,7 +777,7 @@ class Module_admin_zones
 
 			if ($new_zone!='') $this->set_permissions($new_zone);
 
-			$title=get_screen_title('EDIT_ZONE'); // Get title late, as we might be changing the theme this title is got from
+			$title=get_page_title('EDIT_ZONE'); // Get title late, as we might be changing the theme this title is got from
 
 			// Handle logos
 			if (addon_installed('zone_logos'))
@@ -808,7 +805,7 @@ class Module_admin_zones
 					}
 					$GLOBALS['SITE_DB']->query_delete('theme_images',array('id'=>'logo/'.$new_zone.'-logo','theme'=>$theme,'lang'=>get_site_default_lang()),'',1);
 					$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>'logo/'.$new_zone.'-logo','theme'=>$theme,'path'=>$iurl,'lang'=>get_site_default_lang()));
-					persistent_cache_delete('THEME_IMAGES');
+					persistant_cache_delete('THEME_IMAGES');
 				}
 			}
 
@@ -846,7 +843,7 @@ class Module_admin_zones
 
 		decache('main_sitemap');
 		$GLOBALS['SITE_DB']->query_delete('cache');
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		if (function_exists('persistant_cache_empty')) persistant_cache_empty();
 	}
 
 }

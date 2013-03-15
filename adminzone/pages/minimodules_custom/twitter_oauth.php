@@ -6,7 +6,7 @@ destrictify();
 require_code('twitter');
 require_lang('twitter');
 
-$title=get_screen_title('TWITTER_OAUTH');
+$title=get_page_title('TWITTER_OAUTH');
 
 $api_key=get_option('twitter_api_key',true);
 $api_secret=get_option('twitter_api_secret',true);
@@ -27,7 +27,7 @@ if ($api_key=='' || $api_secret=='')
 	$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'FEATURE','redirect'=>get_self_url(true)),'_SELF',NULL,false,false,false,'group_TWITTER_SYNDICATION');
 	require_code('site2');
 	assign_refresh($config_url,0.0);
-	$echo=do_template('REDIRECT_SCREEN',array('_GUID'=>'18fe4234d995bd855331cc9a6f66b3e5','URL'=>$config_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('TWITTER_SETUP_FIRST')));
+	$echo=do_template('REDIRECT_SCREEN',array('URL'=>$config_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('TWITTER_SETUP_FIRST')));
 	$echo->evaluate_echo();
 	return;
 }

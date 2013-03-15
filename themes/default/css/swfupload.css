@@ -15,13 +15,24 @@ div.fieldset span.legend {
 }
 
 div.flash {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 365px;
+	{+END}
 	margin: 10px 5px;
 	border-color: #D9E4FF;
-	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+	-moz-border-radius-topleft : 5px;
+	-webkit-border-top-left-radius : 5px;
+	-moz-border-radius-topright : 5px;
+	-webkit-border-top-right-radius : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	-webkit-border-bottom-left-radius : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-webkit-border-bottom-right-radius : 5px;
 }
 
 /* -- Table Styles ------------------------------- */
 .progressWrapper {
+	width: 357px;
 	overflow: hidden;
 }
 
@@ -64,6 +75,7 @@ div.flash {
 	font-size: 8pt;
 	font-weight: 700;
 	color: #555;
+	width: 323px;
 	height: 14px;
 	text-align: left;
 	white-space: nowrap;
@@ -94,7 +106,9 @@ div.flash {
 
 .progressBarStatus {
 	margin-top: 2px;
+	width: 337px;
 	font-size: 7pt;
+	font-family: Arial;
 	text-align: left;
 	white-space: nowrap;
 }
@@ -104,14 +118,14 @@ a.progressCancel {
 	display: block;
 	height: 14px;
 	width: 14px;
-	background-image: url('{$IMG;,swfupload/cancelbutton}');
+	background-image: url('{$IMG,swfupload/cancelbutton}');
 	background-repeat: no-repeat;
-	background-position: -14px 0;
+	background-position: -14px 0px;
 	float: right;
 }
 
 a.progressCancel:hover {
-	background-position: 0 0;
+	background-position: 0px 0px;
 }
 
 /* -- SWFUpload Object Styles ------------------------------- */

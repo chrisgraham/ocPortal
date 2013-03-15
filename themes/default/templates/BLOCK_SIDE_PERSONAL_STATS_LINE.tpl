@@ -1,1 +1,1 @@
-<li><span class="field_name">{KEY*}:</span> {VALUE}</li>
+<li>{KEY*}: {+START,IF,{$GT,{$LENGTH,{$STRIP_TAGS,{KEY*}: {VALUE}}},22}}<br />{+END}{VALUE}</li>

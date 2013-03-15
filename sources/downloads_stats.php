@@ -46,8 +46,7 @@ function get_download_bandwidth()
 					if (file_exists($file)) $value+=filesize($file)*$myrow['num_downloads'];
 				}
 			}
-			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-				set_value('download_bandwidth',strval($value));
+			set_value('download_bandwidth',strval($value));
 		}
 	}
 
@@ -66,8 +65,7 @@ function get_download_archive_size()
 	{
 		$value=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','SUM(file_size)',array('validated'=>1));
 		if (!(intval($value)>0)) $value=0;
-		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-			set_value('archive_size',strval($value));
+		set_value('archive_size',strval($value));
 	}
 
 	if (intval($value)>1024*1024*1024) $_value=integer_format(intval(round(floatval($value)/floatval(1024*1024*1024),2))).' Gb';
@@ -90,8 +88,7 @@ function get_num_archive_downloads()
 	{
 		$value=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','COUNT(*)',array('validated'=>1));
 		if (!(intval($value)>0)) $value=0;
-		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-			set_value('num_archive_downloads',strval($value));
+		set_value('num_archive_downloads',strval($value));
 	}
 
 	return $value;
@@ -110,8 +107,7 @@ function get_num_downloads_downloaded()
 	{
 		$value=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','SUM(num_downloads)',array('validated'=>1));
 		if (!(intval($value)>0)) $value=0;
-		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-			set_value('num_downloads_downloaded',strval($value));
+		set_value('num_downloads_downloaded',strval($value));
 	}
 
 	return $value;

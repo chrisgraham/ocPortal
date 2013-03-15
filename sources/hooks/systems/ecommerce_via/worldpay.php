@@ -272,13 +272,13 @@ class Hook_worldpay
 		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
 		{
 			$shipping_address=array();
-			$shipping_address['order_id']=$order_id;
-			$shipping_address['address_name']=post_param('delvName','');
-			$shipping_address['address_street']=post_param('delvAddress','');
-			$shipping_address['address_zip']=post_param('delvPostcode','');
-			$shipping_address['address_city']=post_param('city','');
+			$shipping_address['order_id']			=	$order_id;
+			$shipping_address['address_name']	=	post_param('delvName','');
+			$shipping_address['address_street']	=	post_param('delvAddress','');
+			$shipping_address['address_zip']		=	post_param('delvPostcode','');
+			$shipping_address['address_city']	=	post_param('city','');
 			$shipping_address['address_country']=	post_param('delvCountryString','');
-			$shipping_address['receiver_email']=post_param('email','');
+			$shipping_address['receiver_email']	=	post_param('email','');
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}

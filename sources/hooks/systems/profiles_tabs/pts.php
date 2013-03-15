@@ -43,7 +43,7 @@ class Hook_Profiles_Tabs_pts
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
-		$title=do_lang_tempcode('PRIVATE_TOPICS_INBOX');
+		$title=do_lang_tempcode('PERSONAL_TOPICS_INBOX');
 
 		$order=80;
 

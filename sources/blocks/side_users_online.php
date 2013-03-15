@@ -87,6 +87,8 @@ class Block_side_users_online
 	{
 		unset($map);
 
+		require_css('side_blocks');
+
 		$count=0;
 		$members=get_online_members(false,NULL,$count);
 		if (is_null($members)) return new ocp_tempcode(); // Too many to show
@@ -153,7 +155,6 @@ class Block_side_users_online
 			{
 				require_code('ocf_members');
 				$_birthdays=ocf_find_birthdays();
-
 				foreach ($_birthdays as $_birthday)
 				{
 					$colour=get_group_colour(ocf_get_member_primary_group($_birthday['id']));

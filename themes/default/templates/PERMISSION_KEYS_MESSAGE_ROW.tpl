@@ -1,4 +1,4 @@
-<tr class="{$CYCLE,zebra,zebra_0,zebra_1}">
+<tr>
 	<td>
 		<label class="accessibility_hidden" for="mkey_{UID*}">{!MATCH_KEY}</label>
 		<div class="constrain_field">

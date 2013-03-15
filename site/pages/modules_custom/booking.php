@@ -179,7 +179,6 @@ class Module_booking
 		require_lang('booking');
 		require_code('booking');
 		require_code('ocf_join');
-		require_javascript('javascript_booking');
 
 		$type=get_param('type','misc');
 
@@ -205,9 +204,7 @@ class Module_booking
 	 */
 	function choose_bookables_and_dates()
 	{
-		global $M_SORT_KEY;
-
-		$title=get_screen_title('CREATE_BOOKING');
+		$title=get_page_title('CREATE_BOOKING');
 
 		$query='SELECT * FROM '.get_table_prefix().'bookable WHERE enabled=1';
 		$filter=get_param('filter','*');
@@ -285,9 +282,9 @@ class Module_booking
 			$category=get_translated_text($bookable['categorisation']);
 
 			if (!array_key_exists($category,$categories))
-				$categories[$category]=array('CATEGORY_TITLE'=>$category,'BOOKABLES'=>array());
+	         $categories[$category]=array('CATEGORY_TITLE'=>$category,'BOOKABLES'=>array());
 
-			$quantity_available=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
+	      $quantity_available=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
 
 			list($quantity,$date_from,$date_to)=$this->_read_chosen_bookable_settings($bookable);
 
@@ -406,7 +403,7 @@ class Module_booking
 		if (is_null($date_from)) $date_from=time();
 		$date_to=get_input_date('bookable_'.strval($bookable['id']).'_date_to');
 		if (is_null($date_to)) $date_to=get_input_date('bookable_date_to'); // allow to be specified for whole form (the norm actually); may still be null, if ranges not being used
-		if (is_null($date_to)) $date_to=$date_from;
+      if (is_null($date_to)) $date_to=$date_from;
 
 		return array($quantity,$date_from,$date_to);
 	}
@@ -418,7 +415,7 @@ class Module_booking
 	 */
 	function flesh_out()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
+		$title=get_page_title('CREATE_BOOKING');
 
 		// Check booking: redirect to last step as re-entrant if not valid
 		$request=get_booking_request_from_form();
@@ -488,7 +485,7 @@ class Module_booking
 	 */
 	function join_or_login()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
+		$title=get_page_title('CREATE_BOOKING');
 
 		// Check login: skip to thanks if logged in
 		if (!is_guest())
@@ -501,7 +498,7 @@ class Module_booking
 		list($javascript,$form)=ocf_join_form($url,true,false,false,false);
 
 		$hidden=build_keep_post_fields();
-		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('_GUID'=>'b6e499588de8e2136122949478bac2e7','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
+		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -511,7 +508,7 @@ class Module_booking
 	 */
 	function thanks()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
+		$title=get_page_title('CREATE_BOOKING');
 
 		// Finish join operation, if applicable
 		if (is_guest())

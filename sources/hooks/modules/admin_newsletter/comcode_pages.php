@@ -73,7 +73,7 @@ class Hook_whats_news_comcode_pages
 				$id=$zone.':'.$page;
 				$_url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 				$url=$_url->evaluate();
-				$name=titleify($page);
+				$name=ucfirst(str_replace('_',' ',$page));
 				if (array_key_exists($id,$rows))
 				{
 					$_name=get_translated_text($rows[$id]['cc_page_title'],NULL,NULL,true);

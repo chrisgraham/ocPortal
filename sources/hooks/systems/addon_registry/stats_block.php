@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_stats_block
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_stats_block
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_stats_block
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/config_default/activity_show_stats_count_page_views_this_month.php',
 			'sources/hooks/systems/config_default/activity_show_stats_count_page_views_this_week.php',
 			'sources/hooks/systems/config_default/activity_show_stats_count_page_views_today.php',
@@ -96,52 +98,48 @@ class Hook_addon_registry_stats_block
 			'sources/blocks/side_stats.php',
 			'sources/hooks/blocks/side_stats/stats_forum.php',
 			'sources/hooks/blocks/side_stats/.htaccess',
-			'sources/hooks/blocks/side_stats/index.html'
+			'sources/hooks/blocks/side_stats/index.html',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array						The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array                 The mapping
+	*/
 	function tpl_previews()
 	{
-		return array(
-			'BLOCK_SIDE_STATS_SUBLINE.tpl'=>'block_side_stats',
-			'BLOCK_SIDE_STATS_SECTION.tpl'=>'block_side_stats',
-			'BLOCK_SIDE_STATS.tpl'=>'block_side_stats'
+				return array(
+		'BLOCK_SIDE_STATS_SUBLINE.tpl'=>'block_side_stats',
+		'BLOCK_SIDE_STATS_SECTION.tpl'=>'block_side_stats',
+		'BLOCK_SIDE_STATS.tpl'=>'block_side_stats',
 		);
 	}
 
 	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array						Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
 	function tpl_preview__block_side_stats()
 	{
-		$full_tpl=new ocp_tempcode();
-		$bits=new ocp_tempcode();
+		$full_tpl = new ocp_tempcode();
+		$bits = new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE', array(
-				'KEY'=>lorem_phrase(),
-				'VALUE'=>placeholder_number()
-			)));
+			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>lorem_phrase(),'VALUE'=>placeholder_number())));
 		}
-		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION', array(
-			'SECTION'=>lorem_phrase(),
-			'CONTENT'=>$bits
-		)));
+		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION',array('SECTION'=>lorem_phrase(),'CONTENT'=>$bits)));
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS', array(
-				'CONTENT'=>$full_tpl
-			)), NULL, '', true)
+				lorem_globalise(
+							do_lorem_template('BLOCK_SIDE_STATS',array(
+						'CONTENT'=>$full_tpl,
+					)
+				),NULL,'',true),
 		);
 	}
 }

@@ -253,7 +253,6 @@ class Module_search
 	{
 		require_lang('search');
 		require_css('search');
-		require_css('forms');
 		require_code('database_search');
 
 		if (function_exists('set_time_limit')) @set_time_limit(15); // We really don't want to let it thrash the DB too long
@@ -278,7 +277,7 @@ class Module_search
 
 		require_code('templates_results_table');
 
-		$title=get_screen_title('SAVED_SEARCHES');
+		$title=get_page_title('SAVED_SEARCHES');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -326,7 +325,7 @@ class Module_search
 	 */
 	function _delete()
 	{
-		$title=get_screen_title('DELETE_SAVED_SEARCH');
+		$title=get_page_title('DELETE_SAVED_SEARCH');
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
@@ -347,9 +346,7 @@ class Module_search
 
 		$id=get_param('id','');
 
-		$_GET['type']='results'; // To make it consistent for the purpose of URL generation (particularly how frames tie together)
-
-		$title=get_screen_title('SEARCH_TITLE');
+		$title=get_page_title('SEARCH_TITLE');
 
 		require_code('templates_internalise_screen');
 
@@ -360,7 +357,7 @@ class Module_search
 			$info=$object->info();
 
 			if (!is_null($info))
-				$title=get_screen_title('_SEARCH_TITLE',true,array($info['lang']));
+				$title=get_page_title('_SEARCH_TITLE',true,array($info['lang']));
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('SEARCH_FOR'))));
 			breadcrumb_set_self($info['lang']);
@@ -390,8 +387,6 @@ class Module_search
 		$days_label=do_lang_tempcode('SUBMITTED_WITHIN');
 
 		$extra_sort_fields=array();
-
-		$has_template_search=false;
 
 		if ($id!='') // Specific screen
 		{
@@ -438,7 +433,7 @@ class Module_search
 				}
 
 				require_code('form_templates');
-				$tree=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'25368e562be3b4b9c6163aa008b47c91','MULTI_SELECT'=>false,'TABINDEX'=>strval(get_form_field_tabindex()),'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'END_OF_FORM'=>true,'REQUIRED'=>false,'USE_SERVER_ID'=>false,'NAME'=>'search_under','DEFAULT'=>$under,'HOOK'=>$ajax_hook,'ROOT_ID'=>'','OPTIONS'=>serialize($ajax_options)));
+				$tree=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'25368e562be3b4b9c6163aa008b47c91','TABINDEX'=>strval(get_form_field_tabindex()),'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'END_OF_FORM'=>true,'REQUIRED'=>false,'USE_SERVER_ID'=>false,'NAME'=>'search_under','DEFAULT'=>$under,'HOOK'=>$ajax_hook,'ROOT_ID'=>'','OPTIONS'=>serialize($ajax_options)));
 			} else
 			{
 				$ajax=false;
@@ -464,8 +459,6 @@ class Module_search
 				{
 					$options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION'.$field['TYPE'],array('_GUID'=>'a223ada7636c85e6879feb9a6f6885d2','NAME'=>'option_'.$field['NAME'],'DISPLAY'=>$field['DISPLAY'],'SPECIAL'=>$field['SPECIAL'],'CHECKED'=>array_key_exists('checked',$field)?$field['CHECKED']:false)));
 				}
-
-				$has_template_search=true;
 			}
 
 			$specialisation=do_template('SEARCH_ADVANCED',array('_GUID'=>'fad0c147b8291ba972f105c65715f1ac','AJAX'=>$ajax,'OPTIONS'=>$options,'TREE'=>$tree,'UNDERNEATH'=>!is_null($under)));
@@ -494,9 +487,9 @@ class Module_search
 
 				$checked=(get_param_integer('search_'.$hook,((is_null($content)) || (get_param_integer('all_defaults',0)==1))?($is_default_or_advanced?1:0):0)==1);
 
-				$options_url=((array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (array_key_exists('extra_sort_fields',$info)) || (method_exists($object,'get_fields')) || (method_exists($object,'get_tree')) || (method_exists($object,'get_ajax_tree')))?build_url(array('page'=>'_SELF','id'=>$hook),'_SELF',NULL,false,true):new ocp_tempcode();
+				$options=((array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (array_key_exists('extra_sort_fields',$info)) || (method_exists($object,'get_fields')) || (method_exists($object,'get_tree')) || (method_exists($object,'get_ajax_tree')))?build_url(array('page'=>'_SELF','id'=>$hook),'_SELF',NULL,false,true):new ocp_tempcode();
 
-				$_search_domains[]=array('_GUID'=>'3d3099872184923aec0f49388f52c750','ADVANCED_ONLY'=>(array_key_exists('advanced_only',$info)) && ($info['advanced_only']),'CHECKED'=>$checked,'OPTIONS_URL'=>$options_url,'LANG'=>$info['lang'],'NAME'=>$hook);
+				$_search_domains[]=array('_GUID'=>'3d3099872184923aec0f49388f52c750','ADVANCED_ONLY'=>(array_key_exists('advanced_only',$info)) && ($info['advanced_only']),'CHECKED'=>$checked,'OPTIONS'=>$options,'LANG'=>$info['lang'],'NAME'=>$hook);
 			}
 			global $M_SORT_KEY;
 			$M_SORT_KEY='LANG';
@@ -539,11 +532,11 @@ class Module_search
 
 		// Perform search, if we did one
 		$out=NULL;
-		$pagination='';
+		$results_browser='';
 		$num_results=0;
 		if (!is_null($content))
 		{
-			list($out,$pagination,$num_results)=$this->results($id,$author,$author_id,$days,$sort,$direction,$only_titles,$search_under);
+			list($out,$results_browser,$num_results)=$this->results($id,$author,$author_id,$days,$sort,$direction,$only_titles,$search_under);
 
 			if (has_zone_access(get_member(),'adminzone'))
 			{
@@ -552,7 +545,7 @@ class Module_search
 			}
 		}
 
-		return do_template('SEARCH_FORM_SCREEN',array('_GUID'=>'8bb208185740183323a6fe6e89d55de5','SEARCH_TERM'=>is_null($content)?'':$content,'HAS_TEMPLATE_SEARCH'=>$has_template_search,'NUM_RESULTS'=>integer_format($num_results),'CAN_ORDER_BY_RATING'=>$can_order_by_rating,'EXTRA_SORT_FIELDS'=>$extra_sort_fields,'USER_LABEL'=>$user_label,'DAYS_LABEL'=>$days_label,'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),'AND'=>$boolean_operator=='AND','ONLY_TITLES'=>$only_titles,'DAYS'=>strval($days),'SORT'=>$sort,'DIRECTION'=>$direction,'CONTENT'=>$content,'RESULTS'=>$out,'PAGINATION'=>$pagination,'OLD_MYSQL'=>$old_mysql,'TITLE'=>$title,'AUTHOR'=>$author,'SPECIALISATION'=>$specialisation,'URL'=>$url));
+		return do_template('SEARCH_FORM_SCREEN',array('_GUID'=>'8bb208185740183323a6fe6e89d55de5','SEARCH_TERM'=>is_null($content)?'':$content,'NUM_RESULTS'=>integer_format($num_results),'CAN_ORDER_BY_RATING'=>$can_order_by_rating,'EXTRA_SORT_FIELDS'=>$extra_sort_fields,'USER_LABEL'=>$user_label,'DAYS_LABEL'=>$days_label,'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),'AND'=>$boolean_operator=='AND','ONLY_TITLES'=>$only_titles,'DAYS'=>strval($days),'SORT'=>$sort,'DIRECTION'=>$direction,'CONTENT'=>$content,'RESULTS'=>$out,'RESULTS_BROWSER'=>$results_browser,'OLD_MYSQL'=>$old_mysql,'TITLE'=>$title,'AUTHOR'=>$author,'SPECIALISATION'=>$specialisation,'URL'=>$url));
 	}
 
 	/**
@@ -592,7 +585,7 @@ class Module_search
 	 */
 	function results($id,$author,$author_id,$days,$sort,$direction,$only_titles,$search_under)
 	{
-		$title=get_screen_title('SEARCH_RESULTS');
+		$title=get_page_title('RESULTS');
 
 		cache_module_installed_status();
 
@@ -686,7 +679,6 @@ class Module_search
 				foreach ($hook_results as $i=>$result)
 				{
 					$result['object']=$object;
-					$result['type']=$hook;
 					$hook_results[$i]=$result;
 				}
 
@@ -716,8 +708,8 @@ class Module_search
 			return array(new ocp_tempcode(),new ocp_tempcode(),0);
 		}
 
-		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('RESULTS'),NULL,$start,'start',$max,'max',$GLOBALS['TOTAL_RESULTS'],NULL,'results',true,true);
+		require_code('templates_results_browser');
+		$results_browser=results_browser(do_lang_tempcode('RESULTS'),NULL,$start,'start',$max,'max',$GLOBALS['TOTAL_RESULTS'],NULL,'results',true,true);
 
 		if ($start==0)
 		{
@@ -730,7 +722,7 @@ class Module_search
 			));
 		}
 
-		return array($out,$pagination,$GLOBALS['TOTAL_RESULTS']);
+		return array($out,$results_browser,$GLOBALS['TOTAL_RESULTS']);
 	}
 
 }

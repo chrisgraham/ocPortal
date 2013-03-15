@@ -75,7 +75,8 @@ class Module_vforums
 			$content=new ocp_tempcode();
 		}
 
-		return do_template('OCF_VFORUM_SCREEN',array('_GUID'=>'8dca548982d65500ab1800ceec2ddc61','TITLE'=>$title,'CONTENT'=>$content));
+		$ret=ocf_wrapper($title,do_template('OCF_VFORUM',array('_GUID'=>'8dca548982d65500ab1800ceec2ddc61','CONTENT'=>$content)));
+		return $ret;
 	}
 
 	/**
@@ -94,7 +95,7 @@ class Module_vforums
 		if (get_value('disable_sunk')!=='1')
 			$order2='t_sunk ASC,'.$order2;
 
-		return array(get_screen_title('POSTS_SINCE_LAST_VISIT'),$this->_vforum($title,$condition,'t_cascading DESC,t_pinned DESC,'.$order2,true));
+		return array(get_page_title('POSTS_SINCE_LAST_VISIT'),$this->_vforum($title,$condition,'t_cascading DESC,t_pinned DESC,'.$order2,true));
 	}
 
 	/**
@@ -107,7 +108,7 @@ class Module_vforums
 		$title=do_lang('TOPICS_UNREAD');
 		$condition=array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
 
-		return array(get_screen_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
+		return array(get_page_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
 	}
 
 	/**
@@ -120,7 +121,7 @@ class Module_vforums
 		$title=do_lang('RECENTLY_READ');
 		$condition='l_time>'.strval(time()-60*60*24*2);
 
-		return array(get_screen_title('RECENTLY_READ'),$this->_vforum($title,$condition,'l_time DESC',true));
+		return array(get_page_title('RECENTLY_READ'),$this->_vforum($title,$condition,'l_time DESC',true));
 	}
 
 	/**
@@ -200,7 +201,7 @@ class Module_vforums
 		// Display topics
 		$topics=new ocp_tempcode();
 		$pinned=false;
-		require_code('templates_pagination');
+		require_code('templates_results_browser');
 		$topic_wrapper=new ocp_tempcode();
 		$forum_name_map=collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
 		foreach ($topics_array as $topic)
@@ -211,13 +212,13 @@ class Module_vforums
 			}
 			$pinned=in_array('pinned',$topic['modifiers']);
 			$forum_id=array_key_exists('forum_id',$topic)?$topic['forum_id']:NULL;
-			$_forum_name=array_key_exists($forum_id,$forum_name_map)?$forum_name_map[$forum_id]:do_lang_tempcode('PRIVATE_TOPICS');
+			$_forum_name=array_key_exists($forum_id,$forum_name_map)?$forum_name_map[$forum_id]:do_lang_tempcode('PERSONAL_TOPICS');
 			$topics->attach(ocf_render_topic($topic,true,false,$_forum_name));
 		}
-		$breadcrumbs=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
+		$tree=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
 		if (!$topics->is_empty())
 		{
-			$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'start',$max,'max',$max_rows,NULL,$type,true);
+			$results_browser=results_browser(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'start',$max,'max',$max_rows,NULL,$type,true);
 
 			$moderator_actions='';
 			$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';
@@ -226,14 +227,14 @@ class Module_vforums
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
 			$action_url=build_url(array('page'=>'topics','redirect'=>get_self_url(true)),get_module_zone('topics'));
-			$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'67356b4daacbed3e3d960d89a57d0a4a','MAX'=>strval($max),'ORDER'=>'','MAY_CHANGE_MAX'=>false,'BREADCRUMBS'=>$breadcrumbs,'BUTTONS'=>'','STARTER_TITLE'=>'','PAGINATION'=>$pagination,'MODERATOR_ACTIONS'=>$moderator_actions,'ACTION_URL'=>$action_url,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));
+			$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'67356b4daacbed3e3d960d89a57d0a4a','MAX'=>strval($max),'ORDER'=>'','MAY_CHANGE_MAX'=>false,'TREE'=>$tree,'BUTTONS'=>'','STARTER_TITLE'=>'','RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>$moderator_actions,'ACTION_URL'=>$action_url,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));
 		}
 
 		$_buttons=new ocp_tempcode();
 		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
 		$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
 
-		breadcrumb_add_segment($breadcrumbs);
+		breadcrumb_add_segment($tree);
 		return do_template('OCF_FORUM',array('_GUID'=>'d3fa84575727af935eadb2ce2b7c7b3e','FILTERS'=>'','FORUM_NAME'=>$forum_name,'STARTER_TITLE'=>'','BUTTONS'=>$_buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'CATEGORIES'=>''));
 	}
 

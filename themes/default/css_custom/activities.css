@@ -1,30 +1,23 @@
-/*
- {$BRAND_NAME`}
- Copyright (c) ocProducts, 2004-2012
-*/
+/* CSS for the activities feed and the status posting box */
 
-/* Activities feed */
-
-.activities_holder {
-	padding-left: 0;
-	margin-left: 0;
-	display: block;
-	list-style: none;
-}
-
-.activities_box {
+.activities-box {
 	overflow: hidden;
 	height: auto;
 	list-style: none;
-	margin: 0.5em 0;
-	padding-right: 0;
-	padding-top: 0;
-	padding-bottom: 0;
+	/*float: {!en_left};
+	width: 100%;*/
+	margin-top: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-bottom: 1px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 	padding-{!en_left}: 5px;
 	vertical-align: top;
 }
 
-.activities_avatar_box {
+.avatar-box {
 	width: 40px;
 	float: left;
 	margin-top: 5px;
@@ -32,17 +25,17 @@
 }
 
 .activities_line {
-	margin-top: 0;
+	margin-top: 0px;
 	font-size: 0.95em;
 }
 
-form.activities_remove {
+.remove {
 	float: right;
 	overflow: hidden;
 	width: 22px;
 }
 
-form.activities_remove .remove_cross {
+.remove .remove_cross {
 	width: 14px;
 	height: 14px;
 	background: url('{$IMG;,stop12}') transparent no-repeat;
@@ -53,29 +46,31 @@ form.activities_remove .remove_cross {
 	padding: 0;
 }
 
-form.activities_remove .remove_cross:hover {
+.remove .remove_cross:hover {
 	background: url('{$IMG;,stop12Hover}') transparent no-repeat;
 	cursor: pointer;
 }
 
-form.activities_remove .remove_cross:active {
+.remove .remove_cross:active {
 	background: url('{$IMG;,stop12Active}') transparent no-repeat;
 	cursor: pointer;
 }
 
-form.activities_remove input.remove_cross::-moz-focus-inner { /* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
-	border: 0;
+/* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
+.remove input.remove_cross::-moz-focus-inner {
+	border: 0px;
 }
 
-.activities_content {
+.activities-content {
 	width: auto;
 	float: none;
 	padding: 6px 5px 5px 45px;
 	font-size: 1.1em;
-	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
+	color: #333;
+	word-wrap: break-word;
 }
 
-.activities_line .activity_name {
+.name {
 	float: left;
 	padding-{!en_right}: 10px;
 	margin-top: 10px;
@@ -83,53 +78,55 @@ form.activities_remove input.remove_cross::-moz-focus-inner { /* What's this all
 	font-weight: bold;
 }
 
-.activities_line .activity_name a, .activities_line .activity_name a[href*=".php"] {
+.name a, .activities-box .name a[href*=".php"] {
+	color: #333;
 	text-decoration: none;
 }
 
-.activities_line .activity_time {
+.name a:hover, .activities-box .name a[href*=".php"]:hover {
+	color: #005567;
+}
+
+.time {
 	float: right;
-	{$BETA_CSS_PROPERTY,opacity: 0.8;}
+	color: #999;
 }
 
-.activities_line .activity_name, .activities_line .activity_time {
+.name, .time {
 	margin: 5px 10px 0 0;
-	font-size: 0.80em;
+	font-size: 0.70em;
 	text-decoration: none;
 }
-
-.activities_content__remove_success {
-	color: {$GET,green_highlight_text};
-}
-
-.activities_content__remove_failure {
-	color: {$GET,red_highlight_text};
-}
-
-/* Status posting */
 
 .status_box_outer {
-	margin: 0 1em 0 0;
-	margin-right: 14em;
+	border: 1px solid #999;
+	margin: 0 10px 0 0;
+	font-size: 0.90em;
+	padding: 5px 5px 0 5px;
 }
 
 .status_box {
+	border: none;
+	background: #FFFFFF;
 	width: 100%;
 	overflow: auto;
-	height: 2.3em;
-	font-size: 1.1em;
+	height: 3.5em;
 }
 
 .status_controls {
-	float: right;
-	text-align: right;
-	width: 14em;
+
 }
 
-#activities_update_notify {
+.status_table {
+	width: 100%;
+}
+
+#notify {
 	white-space: normal;
 	font-size: 0.85em;
-	margin: 0.2em;
-	margin: 0;
 }
 
+.activities_holder {
+	padding-left: 0px;
+	margin-left: 0;
+}

@@ -5,7 +5,7 @@
 	{NAME*}
 {+END}
 {+START,IF_ARRAY_NON_EMPTY,CHILDREN}
-	<ul aria-haspopup="true">
+	<ul{$?,{$VALUE_OPTION,html5}, aria-haspopup="true"}>
 		{+START,LOOP,CHILDREN}
 			<li>
 				{_loop_var}

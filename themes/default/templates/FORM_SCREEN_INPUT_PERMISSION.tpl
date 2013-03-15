@@ -1,5 +1,5 @@
-<tr id="access_{GROUP_ID*}_sp_container" class="{$CYCLE,permissions_zebra,zebra_0,zebra_1}">
-	<th class="de_th">
+<tr id="access_{GROUP_ID*}_sp_container">
+	<th{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} abbr="{GROUP_NAME*}"{+END} class="de_th dottedborder_barrier_a_nonrequired">
 		<p class="form_field_name field_name">{GROUP_NAME*}</p>
 		{+START,IF,{$OR,{FORCE_PRESETS},{$IS_NON_EMPTY,{OVERRIDES}}}}
 			<label for="access_{GROUP_ID*}_presets">
@@ -24,7 +24,7 @@
 		{+END}
 	</th>
 
-	<td class="form_table_field_input">
+	<td class="dottedborder_barrier_b_nonrequired">
 		{+START,IF_EMPTY,{OVERRIDES}}
 			<label for="access_{GROUP_ID*}">
 		{+END}
@@ -58,10 +58,10 @@
 	{OVERRIDES}
 
 	{+START,IF,{$OR,{FORCE_PRESETS},{$IS_NON_EMPTY,{OVERRIDES}}}}
-		{+START,IF,{$JS_ON}}
-			<td class="form_table_field_input">
-				<button class="button_micro button_pageitem_tall" type="button" id="copy_button_access_{GROUP_ID*}" onclick="permission_repeating(this,'access_{GROUP_ID%}'); return false;">{!REPEAT_PERMISSION}</button>
-			</td>
-		{+END}
+	{+START,IF,{$JS_ON}}
+		<td class="dottedborder_barrier_b_nonrequired">
+			<button class="button_pageitem button_pageitem_tall" type="button" id="copy_button_access_{GROUP_ID*}" onclick="permission_repeating(this,'access_{GROUP_ID%}'); return false;">{!REPEAT_PERMISSION}</button>
+		</td>
+	{+END}
 	{+END}
 </tr>

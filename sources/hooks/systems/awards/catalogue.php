@@ -63,7 +63,7 @@ class Hook_awards_catalogue
 			$url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$row['c_name']),$zone);
 		}
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>get_translated_text($row['c_title']),'SUMMARY'=>get_translated_text($row['c_description']),'URL'=>$url));
+		return put_in_standard_box(do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>get_translated_text($row['c_description']),'URL'=>$url)),get_translated_text($row['c_title']));
 	}
 
 }

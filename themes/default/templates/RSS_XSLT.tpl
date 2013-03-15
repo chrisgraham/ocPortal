@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="{$CHARSET*}"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<?xml version="1.0" encoding="{!charset}"?>
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="html" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
 	<xsl:template match="/">
-		<html lang="{$LANG*}" dir="{!dir}">
+		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$LANG*}" lang="{$LANG*}" dir="{!dir}">
 			<head>
 				<title><xsl:value-of select="/rss/channel/title" disable-output-escaping="yes" /></title>
 				<meta name="GENERATOR" content="{$BRAND_NAME*}" />
@@ -12,9 +12,11 @@
 					<xsl:attribute name="content"><xsl:value-of select="/rss/channel/title" /></xsl:attribute>
 				</xsl:element>
 				{$CSS_TEMPCODE}
-				<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
+				<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={!charset}" />
+				<meta http-equiv="Content-Script-Type" content="text/javascript" />
+				<meta http-equiv="Content-Style-Type" content="text/css" />
 			</head>
-			<body class="website_body" onload="go_decoding();">
+			<body class="re_body" onload="go_decoding();">
 				<div id="cometestme" style="display: none">
 					<xsl:text disable-output-escaping="yes">&amp;amp;</xsl:text>
 				</div>
@@ -28,15 +30,14 @@
 						</xsl:element>
 					</xsl:element>
 				</div>
+				<br class="tiny_linebreak" />
 
-				<div class="rss_main_inner">
-					<div class="box box___rss_xslt"><div class="box_inner"><div>
-						<h1><span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/rss/channel/title" /></span></h1>
-
+				<div class="rss_main_internal">
+					{+START,BOX,<span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/rss/channel/title" /></span>}
 						<p id="xslt_introduction">{!RSS_XSLT_INTRODUCTION}</p>
 						<xsl:apply-templates select="/rss/channel" />
 						<p class="rss_copyright"><span name="decodeable"><xsl:value-of select="/rss/channel/copyright" disable-output-escaping="yes" /></span></p>
-					</div></div></div>
+					{+END}
 				</div>
 			</body>
 		</html>

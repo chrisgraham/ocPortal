@@ -130,9 +130,9 @@ class Hook_addon_registry_syndication
 	 */
 	function tpl_preview__rss_wrapper()
 	{
-		$comments=do_lorem_template('RSS_ENTRY_COMMENTS',array('COMMENT_URL'=>placeholder_url(),'ID'=>placeholder_id()));
+		$comments = do_lorem_template('RSS_ENTRY_COMMENTS',array('COMMENT_URL'=>placeholder_url(),'ID'=>placeholder_id()));
 
-		$content=do_lorem_template('RSS_ABBR',array(
+		$content = do_lorem_template('RSS_ABBR',array(
 		));
 		$content->attach(do_lorem_template('RSS_ENTRY',array(
 			'TITLE'=>lorem_phrase(),
@@ -144,11 +144,11 @@ class Hook_addon_registry_syndication
 			'DATE'=>placeholder_date(),
 		)));
 
-		$cloud=do_lorem_template('RSS_CLOUD',array(
-			'TYPE'=>'news',
-			'PORT'=>'80',
-			'LOCAL_BASE_URL'=>placeholder_url(),
-		));
+		$cloud = do_lorem_template('RSS_CLOUD',array(
+					'TYPE'=>'news',
+					'PORT'=>'80',
+					'LOCAL_BASE_URL'=>placeholder_url(),
+						));
 
 		return array(
 			lorem_globalise(
@@ -161,7 +161,7 @@ class Hook_addon_registry_syndication
 					'LOGO_URL'=>placeholder_image_url(),
 					'DATE'=>placeholder_date(),
 					'CONTENT'=>$content,
-				)
+						)
 			),NULL,'',true),
 		);
 	}
@@ -202,7 +202,7 @@ class Hook_addon_registry_syndication
 					'ABOUT'=>lorem_paragraph(),
 					'VERSION'=>lorem_word(),
 					'COPYRIGHT'=>lorem_phrase(),
-				)
+						)
 			),NULL,'',true),
 		);
 	}
@@ -222,7 +222,7 @@ class Hook_addon_registry_syndication
 			lorem_globalise(
 				do_lorem_template('RSS_XSLT',array(
 					'JAVASCRIPT_XSL_MOPUP'=>'',
-				)
+						)
 			),NULL,'',true),
 		);
 	}
@@ -242,7 +242,7 @@ class Hook_addon_registry_syndication
 			lorem_globalise(
 				do_lorem_template('ATOM_XSLT',array(
 					'JAVASCRIPT_XSL_MOPUP'=>'',
-				)
+						)
 			),NULL,'',true),
 		);
 	}
@@ -261,7 +261,7 @@ class Hook_addon_registry_syndication
 			lorem_globalise(
 				do_lorem_template('OPML_XSLT',array(
 					'JAVASCRIPT_XSL_MOPUP'=>'',
-				)
+						)
 			),NULL,'',true),
 		);
 	}
@@ -284,7 +284,7 @@ class Hook_addon_registry_syndication
 					'DATE'=>placeholder_time(),
 					'TITLE'=>lorem_phrase(),
 					'MODE'=>lorem_word(),
-				)
+						)
 			),NULL,'',true),
 		);
 	}
@@ -302,7 +302,7 @@ class Hook_addon_registry_syndication
 			lorem_globalise(
 				do_lorem_template('RSS_HEADER',array(
 					'FEED_URL'=>placeholder_url(),
-				)
+						)
 			),NULL,'',true),
 		);
 	}

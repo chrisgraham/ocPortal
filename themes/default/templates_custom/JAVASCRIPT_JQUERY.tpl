@@ -782,7 +782,7 @@ function evalScript( i, elem ) {
 			dataType: "script"
 		});
 	} else {
-		jQuery.globalEval( elem.text || elem.textContent || (get_inner_html(elem)=='') || "" );
+		jQuery.globalEval( elem.text || elem.textContent || (getInnerHTML(elem)=='') || "" );
 	}
 
 	if ( elem.parentNode ) {
@@ -832,7 +832,7 @@ function now() {
 		id = "script" + now();
 
 	div.style.display = "none";
-	set_inner_html(div," <link/><table></table><a href='/a' style='color:red;float:left;opacity:.55;'>a</a><input type='checkbox'/>");
+	setInnerHTML(div," <link/><table></table><a href='/a' style='color:red;float:left;opacity:.55;'>a</a><input type='checkbox'/>");
 
 	var all = div.getElementsByTagName("*"),
 		a = div.getElementsByTagName("a")[0];
@@ -927,7 +927,7 @@ function now() {
 	}
 
 	div = document.createElement("div");
-	set_inner_html(div,"<input type='radio' name='radiotest' checked='checked'/>");
+	setInnerHTML(div,"<input type='radio' name='radiotest' checked='checked'/>");
 
 	var fragment = document.createDocumentFragment();
 	fragment.appendChild( div.firstChild );
@@ -2638,7 +2638,7 @@ var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^
 // Here we check if the JavaScript engine is using some sort of
 // optimization where it does not always call our comparision
 // function. If that is the case, discard the hasDuplicate value.
-// Thus far that includes Google Chrome.
+//   Thus far that includes Google Chrome.
 [0, 0].sort(function(){
 	baseHasDuplicate = false;
 	return 0;
@@ -3441,7 +3441,7 @@ function getText( elems ) {
 	// We're going to inject a fake input element with a specified name
 	var form = document.createElement("div"),
 		id = "script" + (new Date).getTime();
-	set_inner_html(form, "<a name='" + id + "'/>");
+	setInnerHTML(form, "<a name='" + id + "'/>");
 
 	// Inject it into the root element, check its status, and remove it quickly
 	var root = document.documentElement;
@@ -3498,7 +3498,7 @@ function getText( elems ) {
 	}
 
 	// Check to see if an attribute returns normalized href attributes
-	set_inner_html(div, "<a href='#'></a>");
+	setInnerHTML(div, "<a href='#'></a>");
 	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
 			div.firstChild.getAttribute("href") !== "#" ) {
 		Expr.attrHandle.href = function(elem){
@@ -3512,7 +3512,7 @@ function getText( elems ) {
 if ( document.querySelectorAll ) {
 	(function(){
 		var oldSizzle = Sizzle, div = document.createElement("div");
-		set_inner_html(div, "<p class='TEST'></p>");
+		setInnerHTML(div, "<p class='TEST'></p>");
 
 		// Safari can't handle uppercase or unicode characters when
 		// in quirks mode.
@@ -3545,7 +3545,7 @@ if ( document.querySelectorAll ) {
 (function(){
 	var div = document.createElement("div");
 
-	set_inner_html(div, "<div class='test e'></div><div class='test'></div>");
+	setInnerHTML(div, "<div class='test e'></div><div class='test'></div>");
 
 	// Opera can't find a second classname (in 9.6)
 	// Also, make sure that getElementsByClassName actually exists
@@ -4159,7 +4159,7 @@ jQuery.fn.extend({
 				if ( !html ) {
 					var div = ownerDocument.createElement("div");
 					div.appendChild( this.cloneNode(true) );
-					html = get_inner_html(div);
+					html = getInnerHTML(div);
 				}
 
 				return jQuery.clean([html.replace(rinlinejQuery, "")
@@ -4184,7 +4184,7 @@ jQuery.fn.extend({
 	html: function( value ) {
 		if ( value === undefined ) {
 			return this[0] && this[0].nodeType === 1 ?
-				get_inner_html(this[0]).replace(rinlinejQuery, "") :
+				getInnerHTML(this[0]).replace(rinlinejQuery, "") :
 				null;
 
 		// See if we can take a shortcut and just use innerHTML
@@ -4199,7 +4199,7 @@ jQuery.fn.extend({
 					// Remove element nodes and prevent memory leaks
 					if ( this[i].nodeType === 1 ) {
 						jQuery.cleanData( this[i].getElementsByTagName("*") );
-						set_inner_html(this[i], value);
+						setInnerHTML(this[i], value);
 					}
 				}
 
@@ -4445,7 +4445,7 @@ jQuery.extend({
 					div = context.createElement("div");
 
 				// Go to html and back, then peel off extra wrappers
-				set_inner_html(div, wrap[1] + elem + wrap[2]);
+				setInnerHTML(div, wrap[1] + elem + wrap[2]);
 
 				// Move to the right depth
 				while ( depth-- ) {
@@ -6023,7 +6023,7 @@ jQuery.offset = {
 
 		jQuery.extend( container.style, { position: "absolute", top: 0, left: 0, margin: 0, border: 0, width: "1px", height: "1px", visibility: "hidden" } );
 
-		set_inner_html(container, html);
+		setInnerHTML(container, html);
 		body.insertBefore( container, body.firstChild );
 		innerDiv = container.firstChild;
 		checkDiv = innerDiv.firstChild;
@@ -6065,10 +6065,10 @@ jQuery.offset = {
 		if ( /static/.test( jQuery.curCSS( elem, "position" ) ) ) {
 			elem.style.position = "relative";
 		}
-		var curElem = jQuery( elem ),
+		var curElem   = jQuery( elem ),
 			curOffset = curElem.offset(),
-			curTop = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) || 0,
-			curLeft = parseInt( jQuery.curCSS( elem, "left", true ), 10 ) || 0;
+			curTop    = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) || 0,
+			curLeft   = parseInt( jQuery.curCSS( elem, "left", true ), 10 ) || 0;
 
 		if ( jQuery.isFunction( options ) ) {
 			options = options.call( elem, i, curOffset );
@@ -6100,7 +6100,7 @@ jQuery.fn.extend({
 		offsetParent = this.offsetParent(),
 
 		// Get correct offsets
-		offset = this.offset(),
+		offset       = this.offset(),
 		parentOffset = /^body|html$/i.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset();
 
 		// Subtract element margins

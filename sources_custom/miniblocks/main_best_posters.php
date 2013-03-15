@@ -1,4 +1,4 @@
-<div class="wide_table_wrap"><table class="results_table wide_table">
+<div class="wide_table_wrap"><table class="solidborder wide_table">
 	<tr>
 		<th>Avatar</th>
 		<th>Username</th>

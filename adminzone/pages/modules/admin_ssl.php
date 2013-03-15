@@ -87,7 +87,7 @@ class Module_admin_ssl
 	 */
 	function ssl_interface()
 	{
-		$title=get_screen_title('SSL_CONFIGURATION');
+		$title=get_page_title('SSL_CONFIGURATION');
 
 		$content=new ocp_tempcode();
 		$zones=find_all_zones();
@@ -129,9 +129,9 @@ class Module_admin_ssl
 			}
 		}
 
-		$title=get_screen_title('SSL_CONFIGURATION');
+		$title=get_page_title('SSL_CONFIGURATION');
 
-		persistent_cache_empty();
+		persistant_cache_empty();
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

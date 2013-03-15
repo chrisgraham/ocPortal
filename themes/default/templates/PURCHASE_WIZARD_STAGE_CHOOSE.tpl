@@ -1,9 +1,9 @@
 <div class="wide_table_wrap">
-	<table summary="{!MAP_TABLE}" class="form_table wide_table">
+	<table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 		{+START,IF,{$NOT,{$MOBILE}}}
 			<colgroup>
-				<col class="purchase_wizard_field_name_column" />
-				<col class="purchase_wizard_field_input_column" />
+				<col style="width: 200px" />
+				<col style="width: 100%" />
 			</colgroup>
 		{+END}
 

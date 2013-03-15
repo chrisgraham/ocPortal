@@ -1,0 +1,1781 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Comcode and the attachment system[/title]
+
+Comcode is the ocPortal 'mark-up language'. Using Comcode you can add rich text to your website with minimal effort, but with maximum control. Unlike HTML, you do not need to use any complex syntax unless you wish to create special formatting effects, or embed dynamic elements. Comcode does a great deal of work itself to make things so easy for you -- behind a simple, intuitive, and easy to use set of syntaxes is a very sophisticated 'parsing' (parsing is the name for the technique of conversion of one language into a much more 'finicky' lower level language, HTML in this case) system. Comcode adds a lot of power that HTML cannot itself provide; for example, with Comcode you can easily add an automatically-generated table of contents, or draw on the power from any of our pre-designed dynamic 'blocks' (blocks are described in our 'Advanced Pages of information (via Comcode)' tutorial).
+
+Many fields in ocPortal support Comcode, and 'Comcode pages' may be used to layout pages and menus of your site without having to do complex template editing, and without needing to use a restrictive layout editor. The front pages and panels of ocPortal are, by default, Comcode pages.
+
+Those familiar with forum systems may see that Comcode is similar to [concept]BBCode[/concept] in some respects.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Syntax[/title]
+
+Comcode is written and laid out as plain-text. Within this plain text certain syntaxes can be used to make changes or additions:
+[list]
+[*] emoticon codes may be used (for OCF, these are listed in the 'The ocPortal emoticon system' tutorial)
+[*] Comcode tags may be used to change content, such as [tt][b]text[/b][/tt] to make some text bold
+[*] Comcode tags may be used to add content, such as  [tt][block]main_feedback[/block][/tt] to add a dynamic comments box
+[*] horizontal lines may be added by placing a few '-'s on their own line
+[*] HTML style entities can be use to place special characters inside the text
+[*] member profile links can be placed by typing [tt]{{username-goes-here}}[/tt], or [tt]{{?username-goes-here}}[/tt] to show extra details when the mouse is hovered over ([concept]OCF[/concept] only)
+[*] [concept]CEDI[/concept] page-links can be placed by typing [tt][[pagename-goes-here]][/tt], or [tt][[pagename-goes-here#anchor]][/tt]
+[*] table syntax (described in separate section)
+[*] list syntax (described in separate section)
+[*] [concept]Tempcode[/concept] symbols and directives may be used, such as [tt]{$USERNAME}[/tt] to display the username of the current user (described in separate section)
+[*] certain shortcuts may be used, such as [tt](c)[/tt] for (c) (described in separate section)
+[/list]
+
+The following functions are also performed automatically by the Comcode parser:
+ - Hyperlinks may be written directly, and are automatically detected
+ - Long text is forcibly word-wrapped if it would break layout
+
+There is also an XML version of Comcode, which is described in further detail in the 'Advanced Comcode' tutorial.
+
+[title="3"]Table syntax[/title]
+
+Table syntax is written as in the following examples...
+
+[code]
+{| This is the table summary
+! Header 1, row 1
+! Header 2, row 1
+|-
+| Cell 1, row 1
+| Cell 2, row 1
+|-
+| Cell 1, row 2
+| Cell 2, row 2
+|}
+[/code]
+
+or in reduced form,
+
+[code]
+{| This is the table summary
+! Header 1, row 1 !! Header 2, row 1
+|-
+| Cell 1, row 1 || Cell 2, row 1
+|-
+| Cell 1, row 2 || Cell 2, row 2
+|}
+[/code]
+
+[title="3"]List syntax[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The example in action" float="right"]comcode_list[/exp_thumb]
+To create a list, you just need to start typing elements of the list using the list syntax. A line that is in the first level of a list is identified by the line starting with ' - '. Subsequent lines that have the same prefix are shown as subsequent items in the same list. If you wish to extend the list to a second level, just add the first line of the second level with two spaces before the hyphen, so that the line starts with '  - '; of course, you should start a second level of a list somewhere within the first level. Your list may have as many levels as you like, just by adding extra spaces in the lines at a certain depth. Be careful to not jump from, for instance, a depth of 1 straight to a depth of 3, as this will result in a Comcode error. This all sounds more complex than it is, so I will give an example to show how in fact, it is really very easy to do:
+[html]</div>[/html]
+[code]
+ - 1
+ - 2
+  - 2.1
+   - 2.1.1
+  - 2.2
+ - 3
+  - 3.1
+[/code]
+
+See how simple it is: the number of spaces before the hyphen identifies the list level, the hyphen identifies it is a list, and then after a space (to make it look better when writing it) comes the actual line of the list.
+
+You can also create ordered lists...
+[code]
+Easy as:
+a) a
+b) bee
+c) sea
+
+Easy as:
+1) one
+2) two
+3) three
+[/code]
+
+If you need a list element to span multiple lines, you'll need to use the Comcode 'list' tag instead.
+
+[title="3"]Shortcuts[/title]
+
+There are some short-cuts for use to use:
+ - [tt](c)[/tt] for (c)
+ - [tt](r)[/tt] for (r)
+ - [tt]--[/tt] for --
+ - [tt]---[/tt] for ---
+
+[title="3"]Symbols and directives[/title]
+
+Symbols and directives from [concept]Tempcode[/concept] may also be used in Comcode. For a list of symbols/directives, see the 'Tempcode programming' tutorial. It is rare that you will want to include these as they are primarily designed for usage from templates. However, sometimes they can be useful.
+
+[title="3"]Tag syntax[/title]
+
+Tags are written as in a way similar to HTML, except using the '[]' brackets instead of the '<>' brackets, and a slightly more user-friendly notation.
+All tags have an opening tag, written [tag], and a closing tag, written [/tag]. The text between the tags is either:
+ - something the tags modify
+ - an otherwise critical parameter for the tags; for example, for the 'block' tag, it is the name of the block
+
+Tags may also take other parameters rather than the tag 'contents' (what the tag has 'embedded'). These are written in like as follows:
+[tt][tag a="a-value" b="b-value"]contents[/tag][/tt], where 'a' and 'b' are merely examples of named parameters, of which there can be any number. Often tags have a special parameter that is of critical importance, that we name 'param'. A short-hand for writing:
+[code]
+[tag param="value"]contents[/tag]
+[/code]
+is writing:
+[code]
+[tag="value"]contents[/tag]
+[/code]
+This only applies to the 'param' parameter, and does not need to be used if you do not want to.
+
+If a tag is referenced that does not actually exist, then it won't be read as a tag: it'll just display as plain text.
+
+If you need to include the [tt]"[/tt] symbol inside a tag parameter, you can put it in as [tt]\"[/tt] (e.g. [tt][quote="Mr \"Happy\""][/quote][/tt]).
+Also, if you need to literally display a tag without it being parsed, you may type [tt]\[[/tt] for the opening bracket (e.g. [tt]\[i do not want this as italics][/tt]).
+
+[title="2"]WYSIWYG[/title]
+
+ocPortal provides a [concept]WYSIWYG[/concept] editor for those who would rather not type Comcode directly. You may mix in raw Comcode with the normal formatted text of the WYSIWYG editor if you wish; this is necessary if you need to insert things that don't have a regular appearance, such as blocks.
+
+The HTML produced by the WYSIWYG editor is normally automatically converted back into Comcode (unless the "Convert HTML to Comcode" option is disabled). However, if a full conversion is not possible, the Comcode 'semihtml' tag is used in order to allow a partial conversion. If this is the case, the remaining HTML would then be subjected to the whitelist/blacklist filter (see the "Security" section of the "Advanced Comcode" tutorial), unless the Comcode was submitted by staff in which case it would not be filtered.
+
+[title="2"]Tag reference[/title]
+
+This section lays out all the tags available to you. In addition, new tags may be created (discussed in the 'Advanced Comcode' tutorial).
+
+[title="3"]Notes[/title]
+
+When only certain parameters are allowed they are shown as, [i]param[/i]=option1|option2(|...) for brevity. In that example it means you could choose to use either "option1" or "option2" as values for the "param" parameter.
+
+When a tag is said to 'wrap' Comcode, it essentially adds on properties. For example:
+[code]
+[b][i]text[/i][/b]
+[/code]
+The 'text' is both emboldened and italicised.
+
+A 'string' is just a length of text. That text may be a number written as text, or any other form of text.
+
+For tags where it makes no sense for certain syntaxes to be interpreted within the embedded contents of the tag, the syntaxes will not be interpreted. For example, the 'code' and 'html' tags naturally do not actually parse Comcode within them.
+
+For tags that would add their own blank lines (visually speaking) after them (e.g. [tt]title[/tt]), blank lines in Comcode after them are skipped in order to allow the Comcode itself to be attractive without affecting layout.
+
+Some parameter values actually support Comcode themselves. To use this, you will need to use the \" escaping syntax described in the 'Tag syntax' section if you need to quote parameter values.
+
+Few tags really need parameters (i.e. most parameters are optional). Often giving parameters will greatly improve the usefulness of a tag though: for example, without a 'param' parameter, the quote tag does virtually nothing except put something in a box.
+
+Tags shown in [font color="FFDDDD"]red[/font] are only usable for those with permission to use dangerous tags.
+Tags shown in [font color="FFDD66"]orange[/font] are restricted based on HTML filtering permissions.
+
+[title="3"]Formatting tags[/title]
+
+These tags define formatting, but some also have semantic meaning (meaning that is interpreted by computers, to give cues to search engines or accessibility devices). Try to think in terms of making your styling have combined presentational and semantic meaning, for accessibility as well as making your writing intuitive.
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>list</strong></p>
+		</td>
+		<td>
+			<p>Show a list (alternative to direct syntax). Use it if you are making use of the of 'param', or want list elements to span multiple lines. Beware that this tag isn't entirely cache-safe, so any links in it won't propagate 'keep_' parameters properly.</p>
+		</td>
+		<td>
+			<p><em>param</em>=1|a|i| (defaults to blank, meaning a
+			normal list)</p><p>'1' means 'numeric list'</p>
+			<p>'a' means 'alphabetical list'</p>
+			<p>'i' means 'Roman numerals'</p>
+			<p>'x' means 'No list symbol'</p>
+		</td>
+		<td>
+			<p>List elements, separated by [*] (which is
+			not a proper Comcode tag, as it has no [/*] closing tag.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>indent</strong></p>
+		</td>
+		<td>
+			<p>Indent.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; indentation (defaults to 10)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>ins</strong></p>
+		</td>
+		<td>
+			<p>Mark some text as inserted by a modification (this is intended to express meaning, rather than style).</p>
+		</td>
+		<td>
+			<p><em>cite</em> &ndash; a URL that explains the change (optional &ndash; most people will never use this)</p>
+			<p><em>datetime</em> &ndash; date of change, in <kbd>YYYY-MM-DDThh:mm:ssTZD</kbd> format (optional &ndash; most people will never use this)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>del</strong></p>
+		</td>
+		<td>
+			<p>Mark some text as deleted by a modification.</p>
+		</td>
+		<td>
+			<p><em>cite</em> &ndash; a URL that explains the change (optional &ndash; most people will never use this)</p>
+			<p><em>datetime</em> &ndash; date of change, in <kbd>YYYY-MM-DDThh:mm:ssTZD</kbd> format (optional &ndash; most people will never use this)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>b</strong></p>
+		</td>
+		<td>
+			<p>Embolden. This creates an XHTML <var>strong</var> tag, which is 'semantic'.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>u</strong></p>
+		</td>
+		<td>
+			<p>Underline.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>i</strong></p>
+		</td>
+		<td>
+			<p>Italicise. This creates an XHTML <var>em</var> tag, which is 'semantic'.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>s</strong></p>
+		</td>
+		<td>
+			<p>Strike-through.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>sup</strong></p>
+		</td>
+		<td>
+			<p>Make superscript (used in mathematics to
+			'raise to the power of', e.g. x<sup>2</sup>).</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>sub</strong></p>
+		</td>
+		<td>
+			<p>Make subscript (used in mathematics to
+			'distinguish variables', e.g. x<sub>2</sub>).</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>size</strong></p>
+		</td>
+		<td>
+			<p>Change size. Short-hand for using 'font'
+			with a 'size'.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; a size number</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>color</strong></p>
+		</td>
+		<td>
+			<p>Change colour. Short-hand for using 'font'
+			with a 'color'.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; an HTML/CSS colour code</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>highlight</strong></p>
+		</td>
+		<td>
+			<p>Highlight text.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>font</strong></p>
+		</td>
+		<td>
+			<p>Change font.</p>
+		</td>
+		<td>
+			<p><em>param</em>
+			&ndash; the font face name</p><p><em>color</em> &ndash; the colour</p><p><em>size</em> &ndash; the size</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>align</strong></p>
+		</td>
+		<td>
+			<p>Change the justification of text (not XHTML block elements, and thus most ocPortal blocks).</p>
+		</td>
+		<td>
+			<p><em>param</em>=left|center|right|justify</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>left</strong></p>
+		</td>
+		<td>
+			<p>The same as using 'align' with 'left'.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>center</strong></p>
+		</td>
+		<td>
+			<p>The same as using 'align' with 'center'. Note it can only center text, not XHTML block elements (like most ocPortal blocks). To center blocks you need to use CSS centering like, [/html][tt][semihtml]<div style="margin: 0 auto; width: 300px;">[block]main_iotd[/block]</div>[/semihtml][/tt][html]. In old versions of HTML centering was easy but that support was dropped, and unfortunately this more complex hand-coded CSS needs using nowadays to be standards-compliant.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>right</strong></p>
+		</td>
+		<td>
+			<p>The same as using 'align' with 'right'.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>abbr</strong></p>
+		</td>
+		<td>
+			<p>Create a special abbreviation.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the full version</p>
+		</td>
+		<td>
+			<p>The abbreviation (i.e. short version).</p>
+		</td>
+	</tr>
+  	<tr>
+  		<td>
+			<p><strong>box</strong></p>
+  		</td>
+  		<td>
+  			<p>Show the wrapped Comcode inside an
+			ocPortal 'standard box'.</p><p>Most standard boxes may have a title. If you look at an
+  			ocPortal page, you will likely see a number of standard boxes of
+			various configuration: basically, boxed content.</p><p>(Some box types support 'meta' and 'link' content, that attach inside the box in a special way. These aren't supported in Comcode for security reasons, and the BOX tempcode directive must be used instead. It is rare that these would be wanted outside templates, and these are only supported for use by administrators).</p>
+  		</td>
+  		<td>
+			<p><em>float</em>=left|right (defaults to right)</p>
+			<p><em>dimensions</em>=width|"width|height" (default: 100%)	&ndash; the width/heights are given in CSS units - examples: "100%" (100% width), "100%|50px" (100% width, 50px height)</p>
+			<p><em>type</em>=classic|panel|med|curved|invisible|light|accordion (default: classic) &ndash; these represent different templates (STANDARDBOX_type.tpl).</p>
+				<div style="margin-left: 10px"><ul><li>Classic - the default box</li>
+				<li>Panel &ndash; a box for use in side-panels</li>
+				<li>Med &ndash; a box with medium-sized borders</li>
+				<li>Curved &ndash; a box with curved corners</li>
+				<li>Light &ndash; a box with light borders</li>
+				<li>Accordion &ndash; a box that expands, but contracts all other accordion boxes when it does</li>
+				<li>Invisible &ndash; a box with no borders or background</li>
+			</ul></div>
+			<p><em>options</em> &ndash; "|"-separated options that may exist in custom themes.</p>
+			<p><em>param</em> &ndash; The title of the box. This field supports Comcode.</p>
+  		</td>
+  		<td>
+  			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>quote</strong></p>
+		</td>
+		<td>
+			<p>Quote somebody.</p><p>The quote is itself Comcode, rendered in a
+			special box.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; who or what is being quoted (e.g. Wikipedia, or a username).</p><p><em>saidless</em> &ndash; set to '1' if you do not want the 'said' text to appear</p>
+			<p><em>cite</em> &ndash; a URL that explains the change (optional &ndash; most people will never use this)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Semantic tags[/title]
+
+These are 'semantic' tags, meaning they do very few (if any) display changes, but code up extra meanings into your documents.
+Comcode has excellent support for semantics, but there is just one small area where it isn't able to support them, which is paragraphs. In Comcode the XHTML is created using XHTML <kbd>br</kbd> (line break) tags to separate lines. This has few practical ramifications known to us, and it is by necessity to make sure Comcode produces validating and consistent XHTML. However if you want to use 'p' tags, you should use the Comcode 'semihtml' tag so that you have full control over how whitespace will display.
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>cite</strong></p>
+		</td>
+		<td>
+			<p>Make an inline citation (this is intended to express meaning, but will make little visual difference to your text, as it is designed to be read by search-engines).</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>samp</strong></p>
+		</td>
+		<td>
+			<p>Used for writing out computer code. We also have the 'tt' tag which is very similar (produces an XHTML <var>kbd</var> tag).</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>q</strong></p>
+		</td>
+		<td>
+			<p>Used for writing out an inline quotation. We also have the 'quote' tag which produces a block quotation.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>var</strong></p>
+		</td>
+		<td>
+			<p>Used for writing out a computer variable. If you don't know what this means, you don't need this tag.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>dfn</strong></p>
+		</td>
+		<td>
+			<p>Marks text as being a definition (this is intended to express meaning, but will make no visual differences to your text, as it is designed to be read by search-engines).</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>address</strong></p>
+		</td>
+		<td>
+			<p>Marks text as being an address (this is intended to express meaning, but will make no visual differences to your text, as it is designed to be read by search-engines).</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Structure/navigation tags[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>title</strong></p>
+		</td>
+		<td>
+			<p>Show a title.</p><p>Note that a level 1 title will automatically affect the title
+			in the page title bar, for purposes of search engine
+			optimisation.</p>
+		</td>
+		<td>
+			<p><em>param</em>=1|2|3 &ndash; the level of title
+			(i.e. the first title would be level 1, and sub-titles of that,
+			level 2)</p><p><em>sub</em> &ndash; the sub-text of the title (only applies to level
+			1, in default templates)</p>
+			<p><em>number</em> &ndash; set to a comma-separated list of list-style codes, as used by the contents tag: this will cause numbering to be placed before titles (defaults to no numbering, and a blank value may be used for default numbering)</p>
+			<p><em>base</em> &ndash; the minimum level this title will be numbered against (default 2)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>contents</strong></p>
+		</td>
+		<td>
+			<p>Automatically generate a table of contents from the title tags in the Comcode</p>
+		</td>
+		<td>
+			<p><em>files</em> &ndash; a prefix for selecting which files to search in to gather Comcode titles (defaults to only searching the current Comcode page). These titles will form the contents-list.</p><p><em>zone</em> &ndash; the zone to search in for the Comcode pages if we are doing a file search (defaults to the zone that the Comcode page containing this tag is in)</p><p><em>levels</em> &ndash; the maximum depth of Title-tag levels to put in (defaults to all)</p><p><em>base</em> &ndash; the Title-tag level to begin titling from</p>
+			<br />
+		</td>
+		<td>
+			<p>A comma-separated list of CSS list style
+			codes. Or nothing at all.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDDDD">
+		<td>
+			<p><strong>include</strong></p>
+		</td>
+		<td>
+			<p>Include the full contents of a
+			Comcode page at this point in the Comcode.</p><p>It goes without saying (but we will!) that you should not
+			create an include that includes the including Comcode page (a
+			loop). It is advisable to name your included page beginning with a '_' symbol, as pages named like this will not show in the site-map.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the zone to include from
+			(default is to search)</p>
+		</td>
+		<td>
+			<p>The Comcode page name.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDDDD">
+		<td>
+			<p><strong>concepts</strong></p>
+		</td>
+		<td>
+			<p>Show a concepts table and store the concepts so that the
+			'concept' tag may link to them from any other Comcode.</p>
+		</td>
+		<td>
+			<p><em>x_key</em> &ndash; concept name (where 'x' is any identifier you wish to create).</p>
+			<p><em>x_value</em>
+			&ndash; the explanation of the concept (where 'x' is the same identifier as you created for 'x_key'). This parameter supports Comcode.</p>
+			<p>You may create multiple concepts within the same tag, replacing the 'x' identifiers with different values. For example: <kbd>[concepts 1_key="Concept name" 1_value="The explanation of the concept" 2_key="Concept name 2" 2_value="The explanation of the concept 2"]The title of the concepts table[/concepts]</kbd></p>
+		</td>
+		<td>
+			<p>The title of the concepts table.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>concept</strong></p>
+		</td>
+		<td>
+			<p>Show a concept, and if it is known, a link
+			to the concept table that defines it.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; text to display for definition (will display instead of linking) (defaults to blank, which will link to a stored concept if it exists)</p>
+		</td>
+		<td>
+			<p>Name of the concept.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>staff_note</strong></p>
+		</td>
+		<td>
+			<p>A note available for any one who is viewing
+			the Comcode source (usually, staff, validating a resource). It is
+			a comment, and not ever rendered.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>The note.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDDDD">
+		<td>
+			<p><strong>menu</strong></p>
+		</td>
+		<td>
+			<p>Display a Comcode menu (not a menu editor
+			style menu).</p><p>(This is a dangerous because it can confuse the layout and break menu
+			expansion via conflicting name).</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; menu name</p>
+			<p><em>type</em> &ndash;
+			menu type (defaults to tree, and only types available that have a
+			template set for them)</p>
+			<p>The menu tag and its usage is covered on the 'Advanced Custom pages of information (via Comcode)' tutorial</p>
+		</td>
+		<td>
+			<p>The menu syntax.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>surround</strong></p>
+		</td>
+		<td>
+			<p>Place an XHTML <var>div</var> tag around the embedded Comcode. By default this tag has a CSS class that will lock its contents from leaking out (useful for tieing floated attachments to paragraphs). It can also be useful for inserting class names into your output so that you can apply CSS rules that override using the new class name as an anchor.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; CSS class, or multiple separated by spaces</p>
+		</td>
+		<td>
+			<p>The locked-in Comcode.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Code tags (for displaying code)[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>php</strong></p>
+		</td>
+		<td>
+			<p>This is equivalent to using the 'code' tag
+			with the 'param' parameter as 'php'.</p><p>Note that it does <strong>not</strong> execute PHP code, it displays it
+			nicely.</p>
+		</td>
+		<td>
+			<p>Those as for the 'code' tag, except 'param'.</p>
+		</td>
+		<td>
+			<p>The code to show.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>codebox</strong></p>
+		</td>
+		<td>
+			<p>This is equivalent to using the 'code' tag
+			with the 'scroll' parameter as '1'.</p>
+		</td>
+		<td>
+			<p>Those as for the 'code' tag, except 'scroll'.</p>
+		</td>
+		<td>
+			<p>The code to show.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>sql</strong></p>
+		</td>
+		<td>
+			<p>This is equivalent to using the 'code' tag
+			with the 'param' parameter as 'sql'.</p><p>Note that it does <strong>not</strong> execute SQL code, it displays it
+			nicely.</p>
+		</td>
+		<td>
+			<p>Those as for the 'code' tag, except 'param'.</p>
+		</td>
+		<td>
+			<p>The code to show.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>code</strong></p>
+		</td>
+		<td>
+			<p>This displays code in a box and monospaced font, with possible syntax
+			highlighting (depending on code type &ndash; at the time of
+			writing only PHP supports this).</p><p>Note that it does <strong>not</strong> execute or extract code, it only displays
+			it.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the language to highlight
+			for: doesn't have to be supported, so you may be specific in case
+			it is supported in the future</p><p><em>scroll</em>=0|1 &ndash; whether to show the code in a nice
+			scrollable box (defaults to 1 if the length exceeds 1000,
+			otherwise defaults to 0)</p><p><em>numbers</em>=0|1 &ndash; whether to show line numbers, when possible (defaults to 0). Note: this requires the GeSHi library installed into ocPortal: see the 'Advanced Custom pages of information (via Comcode)' tutorial.</p>
+		</td>
+		<td>
+			<p>The code to show.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>tt</strong></p>
+		</td>
+		<td>
+			<p>Show as teletyped. (Written like it was done on a typewriter,
+			so as to make it stand out as something to type).</p><p>Comcode in 'tt' is not scanned for
+			automatic link checking, amongst other things. 'tt' creates an XHTML <var>kbd</var> tag, which is 'semantic'.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>no_parse</strong></p>
+		</td>
+		<td>
+			<p>Do not parse the contents of the tag, but otherwise display as normal.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Code tags (for executing code in standard formats)[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr style="background-color: #FFDD66">
+		<td>
+			<p><strong>semihtml</strong></p>
+		</td>
+		<td>
+			<p>Treat the embedded text as freely mixed Comcode tags and HTML. This	is used by the WYSIWYG editor. This tag is particularly handy if you're using complex Comcode (e.g. Tempcode directives or the <var>if_in_group</var> tag) and you want to be able to use white-space to layout your code (semihtml does not have 'hard white-space' -- if you do want spaces, use the XHTML <var>br</var> tag and the <kbd>nbsp</kbd> entity). Note that this tag does not work in the WYSIWYG editor: to enter HTML in the WYSIWYG editor use the 'View source' feature and paste it in directly. Also note that purely textual syntaxes like emoticons will not work from inside semihtml for stability reasons, only HTML and Comcode tags work.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>Comcode and HTML mixed freely.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDD66">
+		<td>
+			<p><strong>html</strong></p>
+		</td>
+		<td>
+			<p>Treat the embedded text as HTML. Note that this tag does not work in the WYSIWYG editor: to enter HTML in the WYSIWYG editor use the 'View source' feature and paste it in directly.</p>
+		</td>
+		<td>
+			<p>/</p>
+		</td>
+		<td>
+			<p>HTML.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Dynamic (front-end) tags[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>overlay</strong></p>
+		</td>
+		<td>
+			<p>Produce an overlay. This is like a popup window, but it's not a real popup. (Note: the placement of the tag within the Comcode page will have no effect on the positioning of the overlay.)</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; an identifier for the overlay. If this is provided, the user may permanently dismiss all overlays with the same identifier.</p><p><em>x</em> &ndash; the left-hand offset to place the overlay at (in pixels, defaults to 100)</p><p><em>y</em> &ndash; the screen-top offset to place the overlay at (in pixels, defaults to 100)</p><p><em>width</em> &ndash; the width of the overlay (in pixels, defaults to 300)</p><p><em>height</em> &ndash; the height of the overlay (in pixels, defaults to 300)</p><p><em>timein</em> &ndash; the number of milliseconds until the overlay is displayed (defaults to 0)</p><p><em>timeout</em> &ndash; the number of milliseconds until the overlay is hidden, measured from the timein (defaults to -1, which means there is no timeout)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode. The contents of the overlay.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDDDD">
+		<td>
+			<p><strong>random</strong></p>
+		</td>
+		<td>
+			<p>Show a random choice from a number of possibilities.</p><p>A random number is picked, and then it is linked to a string
+			by what range it fits within.</p><p>(This is a a dangerous tag because it could be used to hide things like random
+			obscenities from staff).</p>
+			<div>Usage example:
+[/html][codebox]
+[random 1=1 2=2 3="Three" 10="TeN"]20[/random]
+[/codebox][html]
+			</div>
+		</td>
+		<td>
+			<p><em>X</em>
+			&ndash; the string to show if our random number is between our X
+			and the next highest X. Supports Comcode.</p><p>Where there may be any number of Xs, which are all numbers.
+			The first X should be 0 (zero).</p>
+			<p>For example: [tt][random 0="Zero to Three" 4="Four to Seven"]7[/random][/tt]</p>
+		</td>
+		<td>
+			<p><em>No meaning</em>.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>pulse</strong></p>
+		</td>
+		<td>
+			<p>Show a wave of colour moving through some text.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the speed, in milliseconds per frame (e.g. 500)</p>
+			<p><em>min</em> &ndash; the minimum colour in the pulse as a hexadecimal colour (e.g. FF00EE)</p>
+			<p><em>max</em> &ndash; the maximum colour in the pulse as a hexadecimal colour (e.g. EE00FF)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>ticker</strong></p>
+		</td>
+		<td>
+			<p>Show a scrolling marquee.</p><p>You should not use this site on a page that
+			is meant to meet accessibility guidelines.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the width in pixels</p>
+			<p><em>speed</em> &ndash; a multiplier for the default speed</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>shocker</strong></p>
+		</td>
+		<td>
+			<p>Jump between a number of string pairs, showing coupled facts (typically statements with figures). It includes colour pulsing and fading.</p><p>You should not use this site on a page that
+			is meant to meet accessibility guidelines.</p>
+			<div>Usage example:
+[/html][codebox]
+[shocker left_1="A" right_1="a" left_2="B" right_2="b"]1000[/shocker]
+[/codebox][html]
+			</div>
+		</td>
+		<td>
+			<p>Any number of parameters that start 'left_', and matching parameters that start 'right_'. For example, 'left_1' and 'right_1'. Supports Comcode.</p>
+			<p><em>min</em> &ndash; the minimum colour in the pulse as a hexadecimal colour (e.g. FF00EE)</p>
+			<p><em>max</em> &ndash; the maximum colour in the pulse as a hexadecimal colour (e.g. EE00FF)</p>
+		</td>
+		<td>
+			<p>The number of milliseconds between jumps.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>jumping</strong></p>
+		</td>
+		<td>
+			<p>Jump between a number of strings.</p><p>You should not use this site on a page that
+			is meant to meet accessibility guidelines.</p>
+			<div>Usage example:
+[/html][codebox]
+[jumping a="A" b="B" c="C"]1000[/jumping]
+[/codebox][html]
+			</div>
+		</td>
+		<td>
+			<p>Any number of strings given any name (names are ignored, only
+			values are used). Supports Comcode.</p>
+		</td>
+		<td>
+			<p>The number of milliseconds between jumps.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>section</strong></p>
+		</td>
+		<td>
+			<p>Define an embedded 'section', for content spread across embedded 'sections'.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the name of the section (required)</p><p><em>default</em> &ndash; set this to 1 if the section is the default section (otherwise leave it out, or set it to 0). There should only be one default section (or none), unless multiple sections should be opened initially.</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>section_controller</strong></p>
+		</td>
+		<td>
+			<p>Provides the interface to move between sections. Note that this does not surround <var>section</var> tags, it follows them. The contents of this tag are a list of the names of sections it controls.</p>
+			<div>Usage example:
+[/html][codebox]
+[section="1"]
+Section 1
+[/section]
+[section="2"]
+Section 2
+[/section]
+[section="3"]
+Section 3
+[/section]
+[section_controller]1,2,3[/section_controller]
+[/codebox][html]
+			</div>
+		</td>
+		<td>
+		</td>
+		<td>
+			<p>A comma-separated list of section names, which will be shown in the order given.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>big_tab</strong></p>
+		</td>
+		<td>
+			<p>Define an embedded 'big tab', for content spread across 'big tabs'. These are often used on front pages.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the name of the big tab (required)</p><p><em>default</em> &ndash; set this to 1 if the big tab is the 1st big tab (otherwise leave it out, or set it to 0). It should only ever be set on the 1st big tab in the document.</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>big_tab_controller</strong></p>
+		</td>
+		<td>
+			<p>Provides the interface to move between big tabs. Note that this does not surround <var>big_tab</var> tags, it follows them. The contents of this tag are a list of the names of big tabs it controls.</p>
+			<div>Usage example:
+			[/html][codebox]
+[surround]
+[big_tab_controller]A,B,C,D[/big_tab_controller]
+[big_tab="A" default="1"]
+...a
+[/big_tab]
+[big_tab="B"]
+...b
+[/big_tab]
+[big_tab="C"]
+...c
+[/big_tab]
+[big_tab="D"]
+...d
+[/big_tab]
+[/surround]
+[/codebox][html]
+			</div>
+		</td>
+		<td>
+			<p><em>switch_time</em> &ndash; the number of milliseconds between automatic big tab cycling. The default is 6000.</p>
+		</td>
+		<td>
+			<p>A comma-separated list of big tab names, which will be shown in the order given.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>tab</strong></p>
+		</td>
+		<td>
+			<p>Define an embedded 'tab', for content spread across embedded 'tabs'.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the title of the table (required)</p><p><em>default</em> &ndash; set this to 1 if the tab is the default tab (otherwise leave it out, or set it to 0). There should only be one default tab (or none), unless multiple tabs should be opened initially.</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>tabs</strong></p>
+		</td>
+		<td>
+			<p>Provides the interface to move between sections. Note that this does not surround <var>section</var> tags, it follows them. The contents of this tag are a list of the names of sections it controls.</p>
+			<div>Usage example:
+			[/html][codebox][tabs="A,B,C"][tab="A" default="1"]a[/tab][tab="B"]b[/tab][tab="C"]c[/tab][/tabs][/codebox][html]
+			</div>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; a comma-separated list of tab titles (must be consistent with the titles given to the embedded tabs).</p>
+		</td>
+		<td>
+			<p>Comcode composed solely of <var>tab</var> tags.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>carousel</strong></p>
+		</td>
+		<td>
+			<p>A horizontal scroller for content.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the amount of pixels to scroll per scroll click.</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>hide</strong></p>
+		</td>
+		<td>
+			<p>Hide some text such that it needs to be consciously
+			expanded to see what it is. This is useful for giving warnings
+			before viewing. For those without Javascript enabled, the text will be expanded by default.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the warning (defaults to a
+			translated 'Expand' string). Supports Comcode.</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>tooltip</strong></p>
+		</td>
+		<td>
+			<p>Display a tooltip over the wrapped Comcode. The tooltip should be not be used to display critical information when accessibility is required as it depends on Javascript being enabled and cannot work on touch screen systems (e.g. the iPhone).</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; The tooltip</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Dynamic (back-end) tags[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>currency</strong></p>
+		</td>
+		<td>
+			<p>Perform an automated currency conversion.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the currency the amount is in (see <a href="http://en.wikipedia.org/wiki/ISO_4217#Active_codes" target="_blank" title="Currency codes (this link will open in a new window)">Wikipedia</a> for a list of active currency codes).</p><p><em>bracket</em>=0|1 &ndash; rather than perform a hidden conversion, show the conversion in brackets after the source value</p>
+		</td>
+		<td>
+			<p>The money amount.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDDDD">
+		<td>
+			<p><strong>block</strong></p>
+		</td>
+		<td>
+			<p>Insert a dynamic block (described in the
+			'Advanced Custom Pages of Information (via Comcode)' tutorial.</p>
+		</td>
+		<td>
+			<p>Whatever the block takes.</p>
+		</td>
+		<td>
+			<p>The block name.</p>
+		</td>
+	</tr>
+	<tr style="background-color: #FFDDDD">
+		<td>
+			<p><strong>if_in_group</strong></p>
+		</td>
+		<td>
+			<p>Only present the wrapped text if the current member is in one of the usergroups.</p><p>(This is a dangerous tag because it could be used to pass secret messages that moderators do not see).</p>
+		</td>
+		<td>
+			<p><em>param</em>=filter of usergroups (either IDs or names) in [concept]ocFilter[/concept] format.</p>
+			<p><em>type</em>=|primary|secondary (if non blank limits to given usergroup membership type)</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Media linking tags[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>flash</strong></p>
+		</td>
+		<td>
+			<p>Display an inline flash file (SWF or FLV). You may wish to use a flash attachment instead.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; resolution (defaults to "300x300")</p>
+		</td>
+		<td>
+			<p>Wrapped Comcode.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>attachment</strong></p>
+		</td>
+		<td>
+			<p>Show an attachment. Normally you do not
+			type this tag directly, but rather use the posting forms
+			attachment functionality to have it added for you. You might also
+			choose to copy&amp;paste these automatically-made attachment
+			tags.</p><p>The one case where this would be typed directly is if you are
+			creating an attachment from a URL. This is a rare case and should
+			be avoided, as external URLs may cease to be valid over time.
+			Downloading and then uploading the file is better.</p>
+			<p>Note that the thumb tag provides similar functionality to
+			using an image attachment by URL, and the url tag provides
+			similar functionality to using a download attachment, and the
+			flash tag, a flash attachment.</p><p>Embedded attachments are also supported, but these are only
+			created by and for use by Comcode pages. To create a Comcode page
+			with embedded attachments you must use the export feature in the
+			editor. Once an embedded attachment is found, it is extracted,
+			and the Comcode is rewritten to reference the extracted file.</p><p>This tag is tightly controlled for security.</p>
+		</td>
+		<td>
+			<p><em>description</em> &ndash; description for the
+			attachment, shown inside a box. Use '/' to say  not to put an
+			image in a box. Note that for new uploads, descriptions are
+			addable in the attachment editor, and automatically moved them
+			into the tag after form submission. Supports Comcode.</p><p><em>filename</em> &ndash; the filename to have the attachment
+			downloaded under.</p><p><em>type</em>=auto|island|inline|download|code|hyperlink|mail|inline_extract|island_extract &ndash; what type of
+			attachment display should be used (default is auto). For auto,
+			ocPortal detects what the file is from file extension, and uses
+			appropriate templates to tie to relevant XHTML tags or plugins. 'mail' only applies to Comcode included in an e-mail and takes the attachment out-of-context, running it into a real e-mail attachment.</p><p><em>width</em> &ndash; width, if appropriate.</p><p><em>height</em> &ndash; height, if appropriate</p><p><em>align</em> &ndash; alignment</p><p><em>float</em>=left|right &ndash; Float the tag to the left/right. Normally this parameter would not be given.</p><p><em>thumbnail_url</em> &ndash; Optional, the URL to a thumbnail to show before a movie starts playing (only works with h.264 media files)</p>
+		</td>
+		<td>
+			<p>This can be many things, and determines how the attachment
+			works.</p><p>If it is 'new_X' then ocPortal will look for an attached file
+			to the posted form.</p><p>If it is a number, it will tie to that numbered attachment.</p><p>If it is 'url_URL' it will make an attachment from that URL.</p><p>If it is something else, it will be interpreted as an encoded
+			file.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>attachment_safe</strong></p>
+		</td>
+		<td>
+			<p>Do an attachment that is WYSIWYG editable (essentially the attachment will not be deleted if you change the XHTML in the WYSIWYG editor, whilst for the 'attachment' tag this would result in a disassociation and the now-unreferenced attachment would be automatically deleted).</p>
+		</td>
+		<td>
+			<p>As for 'attachment'</p>
+		</td>
+		<td>
+			<p>As for 'attachment'</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>img</strong></p>
+		</td>
+		<td>
+			<p>Place an image specified by URL.</p>
+		</td>
+		<td>
+			<p><em>align</em> &ndash; CSS alignment code to show how the image aligns
+			to other Comcode near it (<kbd>top</kbd>|<kbd>middle</kbd>|<kbd>bottom</kbd>).</p>
+			<p><em>float</em>=<kbd>left</kbd>|<kbd>right</kbd> (defaults to blank, meaning it will not be floated)</p>
+			<p><em>param</em> &ndash; the textual equivalent to the image (the alt attribute, needed for accessibility reasons), also shown as the image mouse-over caption if no title is given. Supports Comcode.</p>
+			<p><em>title</em> &ndash; the tooltip. May be blank. Supports Comcode.</p>
+			<p><em>rollover</em> &ndash; alternative image to show when the mouse hovers over.</p>
+			<p><em>refresh_time</em> &ndash; the number of milliseconds between image refreshes (leave it out unless you want the image to reload, e.g. to show a webcam feed).</p>
+		</td>
+		<td>
+			<p>The URL.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>upload</strong></p>
+		</td>
+		<td>
+			<p>Provide a link to an uploaded file. It is
+			not recommended that you use this tag, as it was created before
+			the attachment system existed and is very much inferior to it.</p>
+		</td>
+		<td>
+			<p><em>type</em> &ndash; the uploads directory to link
+			to a file in</p><p><em>param</em> &ndash; the link caption. Supports Comcode.</p>
+		</td>
+		<td>
+			<p>The filename to link to.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>exp_thumb</strong></p>
+		</td>
+		<td>
+			<p>Show a thumbnail to a special 'example'
+			image. Intended for putting thumbnails into Comcode documents
+			without using the attachment system (which relies on DB entries
+			or exported documents).</p>
+		</td>
+		<td>
+			<p><em>float</em>=left|right (defaults to right)</p>
+		</td>
+		<td>
+			<p>The image code. The image is stored in
+			data/images/&lt;zone&gt;/&lt;code&gt;.&lt;ext&gt;</p><p>e.g. 'foo' would typically be
+			'data/images/docs/foo.png'.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>exp_ref</strong></p>
+		</td>
+		<td>
+			<p>Similar to exp_thumb, but shows a link
+			rather than a thumbnail. Useful for putting a link in-line to the
+			text to pinpoint what is also shown as a thumbnail.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; The text to show (defaults to a
+			translated 'Example' string)</p>
+		</td>
+		<td>
+			<p>The image code as with exp_thumb.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>thumb</strong></p>
+		</td>
+		<td>
+			<p>Show and cache an automatically generated
+			thumbnail to a URL.</p><p>The thumbnail width is that of the configuration options
+			specification.</p>
+		</td>
+		<td>
+			<p><em>align</em> &ndash; CSS alignment code to show how the image aligns
+			to other Comcode near it.</p><p><em>param</em> &ndash; a local relative URL to a thumbnail to forcibly
+			use. Normally this parameter would not be given.</p><p><em>caption</em> &ndash; a caption shown as a tooltip.</p><p><em>float</em>=left|right &ndash; Float the tag to the left/right. Normally this parameter would not be given.</p>
+		</td>
+		<td>
+			<p>The URL.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="3"]Linking tags[/title]
+
+[html]
+<table class="solidborder wide_table emblue" summary="Columned table">
+	<colgroup>
+		<col style="width: 150px" />
+		<col style="width: 30%" />
+		<col style="width: 30%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>
+				Tag
+			</th>
+			<th>
+				Purpose
+			</th>
+			<th>
+				Parameters
+			</th>
+			<th>
+				Embeds
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<p><strong>url</strong></p>
+		</td>
+		<td>
+			<p>Place a link.</p><p>Because this tag has the URL and text opposite to in BBCode,
+			Comcode supports them to be reversed via
+			auto-detection. Comcode does it differently as it is designed
+			policy to make the embedded text the most critical piece, which
+			is naturally the URL (doing it the other way favours wrapping,
+			but many Comcode tags aren't wrapped anyway).</p><p>Search engines are instructed not to follow links unless the
+			Comcode maker has special permission to allow them to do it. This
+			is a utilitarian act of participation between web developers and
+			search engine developers to help massively disincentive
+			spam-bots.</p><p>Where possible, use the 'page' tag rather than the 'url' tag.
+			It is much less sensitive to changes in ocPortal structure that
+			would leave URLs broken.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the link text. Defaults to
+			the link itself, but shortened. Supports Comcode.</p><p><em>title</em> &ndash; the tooltip.</p><p><em>target</em>=_blank|_self (defaults to _blank for an external link).
+			Links that open in a new window will be marked as doing so on
+			mouse-over, for accessibility reasons.</p>
+		</td>
+		<td>
+			<p>The URL.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>email</strong></p>
+		</td>
+		<td>
+			<p>Place an e-mail link, with anti-spam obfuscation.</p><p>Like the URL tag, the embedded text and
+			caption may be switched around if you so choose.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; caption. Supports Comcode.</p><p><em>title</em> &ndash; the tooltip.</p><p><em>subject</em> &ndash; the default subject for the new email.</p><p><em>body</em> &ndash; the default body for the new email.</p>
+		</td>
+		<td>
+			<p>The e-mail address.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>reference</strong></p>
+		</td>
+		<td>
+			<p>Show a reference. This tag is rarely used,
+			but is designed for citations.</p>
+		</td>
+		<td>
+			<p><em>type</em>=url (URL is the only specific
+			type at the moment &ndash; if it is not a URL, leave this
+			parameter out)</p><p><em>param</em> &ndash; the reference title (only give if different from
+			the reference code). Supports Comcode.</p>
+		</td>
+		<td>
+			<p>The reference code (e.g. &ldquo;Webster's
+			encyclopaedia&rdquo;)</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>page</strong></p>
+		</td>
+		<td>
+			<p>Show a link to an ocPortal page. It is much preferable to use
+			this rather than the 'url' tag, because it is more resistant
+			to architectural changes (for example, if suddenly ocPortal was
+			written in something other than PHP, URLs to index.php would no
+			longer work, but page links would; if the domain name was changed the links would also continue to work).</p><p>This tag has two very distinct usage
+			patterns, where parameters/embed-text are interpreted
+			differently.</p>
+			<ol>
+			<li>If <strong>only</strong> a 'param' parameter and embed-text is
+			given, then the embed-text becomes the caption, and 'param'
+			becomes a [/html][concept]page-link[/concept][html].</li>
+			<li>The other usage pattern is as described on the right.</li>
+			</ol>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the zone the page is in</p><p><em>caption</em> &ndash; the link caption. Supports Comcode.</p>
+			<p><em>ignore_if_hidden</em> &ndash; whether to skip the link if it is broken</p>
+			<p>Other parameters are actual parameters to place inside the
+			URL. For instance 'type' and 'id' are likely to be used, as these
+			are very commonly found in ocPortal URLs.</p>
+		</td>
+		<td>
+			<p>The page name</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4">
+		Examples:
+		<ol>
+		<li><samp>[page="site:downloads:misc:2:foo=bar"]Downloads[/page]</samp></li>
+		<li><samp>[page="site" type="misc" id="2" foo="bar" caption="Downloads"]downloads[/page]</samp></li>
+		</ol>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>snapback</strong></p>
+		</td>
+		<td>
+			<p>Link to a forum post, with specific graphics. This is used automatically across forum posts (when using ocPortal's own forum), but its manual usage is somewhat limited at this time.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the title to give for the
+			link
+			</p>
+			<p><em>forum</em> &ndash; the forum to look in
+			(unneeded for most forum drivers)</p>
+		</td>
+		<td>
+			<p>The ID of the forum post.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>post</strong></p>
+		</td>
+		<td>
+			<p>Link to a forum post.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the title to give for the
+			link
+			</p>
+			<p><em>forum</em> &ndash; the forum to look in
+			(unneeded for most forum drivers)</p>
+		</td>
+		<td>
+			<p>The ID of the forum post.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>topic</strong> (alias: thread)</p>
+		</td>
+		<td>
+			<p>Link to a forum topic.</p>
+		</td>
+		<td>
+			<p><em>param</em> &ndash; the title to give for the
+			link
+			</p>
+			<p><em>forum</em> &ndash; the forum to look in
+			(unneeded for most forum drivers)</p>
+		</td>
+		<td>
+			<p>The ID of the forum topic.</p>
+		</td>
+	</tr>
+	</tbody>
+</table>
+[/html]
+
+[title="2"]Attachments[/title]
+
+[exp_thumb="Adding an attachment" float="left"]comcode_attachment_add[/exp_thumb]
+[exp_thumb="Editing an attachment" float="right"]comcode_attachment_edit[/exp_thumb]
+ocPortal has a powerful attachment system that is integrated into Comcode, with a number of content types support attachments, such as news articles and OCF forum posts.
+Using them couldn't be easier: you just choose a file (or many files) from your computer, and ocPortal will automatically add an 'attachment' tag into the Comcode you are writing. You may then move that tag to any location you want, for placement of the actual attachment when the content is viewed. There is special built in support for in-line display of various media forms, and support of download of other types of file; any file can be added so long as the file type is in the allowed list of file types defined in the Admin Zone (see the security tutorial for a discussion on  this).
+
+Attachments may be given special captions, which are usually displayed as a part of the attachment box.
+Images have automatically generated and cached thumbnails.
+[html]<div class="float_surrounder">[/html]
+[box="Important note" breadth="250px" type="light" float="right"]Be careful when placing attachment tags in a Comcode spot that does not support attachments natively. This is supported, but the attachment will be deleted if its original content is deleted, as non-native Comcode spots have no way of recording that they have used it. In addition, if a viewer does not have access to the attachment's original content, they won't have access to your copy&pasted usage to a non-native Comcode spot.[/box]
+If you go back to edit the content with your attachment, you will see that it has been given a number, whereas it as just marked as 'new' when being added. You may actually copy and paste the attachment tag into any other area of Comcode, so as to re-use the attachment. Anyone with permission to access any of the attachment supporting content locations that the attachment is placed in will be able to view/download it. The attachment will remain in the system until all content that using it is edited to stop using it, or deleted.
+[html]</div>[/html]
+
+
+
+[concepts
+ 0_key="Mark-up language" 0_value="A language designed so that text may be laid out by surrounding special elements around portions of the text to define meta-properties (such as font)"
+ 1_key="Comcode"          1_value="ocPortal's mark-up language for the creation of formatted text and inclusion of dynamic elements"
+ 2_key="Attachment"       2_value="A file attached to Comcode via a 'posting page' supporting Comcode field; attachments have special support for rich media"
+ 3_key="Semi-HTML"        3_value="HTML and Comcode mixed freely together"
+ 4_key="WYSIWYG"          4_value="What-You-See-Is-What-You-Get: the name of the type of interactive editing interface used for formatting text in many programs, including modern word processors"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page caption="Custom pages of information (via Comcode)"]tut_comcode_pages[/page]
+ - [page caption="Advanced Custom pages of information (via Comcode)"]tut_adv_comcode_pages[/page]
+ - [page caption="The ocPortal emoticon system"]tut_emoticons[/page]
+ - [page caption="Advanced Comcode"]tut_adv_comcode[/page]
+ - [page caption="WYSIWYG editing"]tut_wysiwyg[/page]
+ - [page caption="Tempcode Programming"]tut_tempcode[/page]
+ - [page caption="Security"]tut_security[/page]
+ - [page caption="Filtering using ocFilter syntax"]tut_filter[/page]
+ - [page="site" caption="Comcode User-guide"]userguide_comcode[/page]
+
+

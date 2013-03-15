@@ -5,7 +5,7 @@
 	</div>
 </form>
 
-<form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
+<form title="{!PRIMARY_PAGE_FORM}" action="install.php?step=3" method="post">
 	{HIDDEN}
 
 	<div class="float_surrounder">
@@ -14,6 +14,8 @@
 			<div class="constrain_field">
 				<input maxlength="255" class="wide_field" id="email" name="email" type="text" alt="{!EMAIL_ADDRESS}" value="{!EMAIL_ADDRESS}" size="25" onfocus="if (this.value=='{!EMAIL_ADDRESS;}') this.value='';" />
 			</div>
+
+			<br />
 
 			<p class="accessibility_hidden"><label for="interest_level">{!INST_SUBSCRIPTION_LEVEL}</label></p>
 			<div class="constrain_field">
@@ -27,11 +29,11 @@
 
 			<p><input type="checkbox" checked="checked" value="1" name="advertise_on" id="advertise_on" /><label for="advertise_on">{!ADVERTISE_ON_OCPORTAL}</label></p>
 		</div>
-
+		<br />
 		<p>{!EMAIL_NEWSLETTER}</p>
 	 </div>
 
-	<p class="proceed_button">
+	<div class="proceed_button">
 		<input class="button_page" type="submit" value="{!I_AGREE}" />
-	</p>
+	</div>
 </form>

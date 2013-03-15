@@ -1,7 +1,7 @@
-<div class="box box___banner_preview"><div class="box_inner">
-	<h2>{!CURRENT_BANNER_IS}</h2>
-
+{+START,BOX,{!CURRENT},,med}
 	<div class="lonely_preview">
 		{PREVIEW}
+		<p class="associated_caption">{!CURRENT_BANNER_IS}</p>
 	</div>
-</div></div>
+{+END}
+<br />

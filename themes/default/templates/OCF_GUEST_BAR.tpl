@@ -1,43 +1,61 @@
-<section id="tray_{!MEMBER|}" class="box ocf_information_bar_outer">
-	<h2 class="toggleable_tray_title">
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!_LOGIN}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+<div class="standardbox_wrap_light ocf_information_bar_outer">
+	<div class="standardbox_classic">
+		<h2 class="standardbox_title_light">{!_LOGIN}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</h2>
 
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');">{!_LOGIN}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</a>
-	</h2>
-
-	<div class="toggleable_tray">
 		<div class="ocf_information_bar float_surrounder">
 			<div class="ocf_guest_column ocf_guest_column_a">
-				<form title="{!_LOGIN}" onsubmit="if (check_field_for_blankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete inline">
+				<form title="{!_LOGIN}" onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete inline">
 					<div>
-						<div class="accessibility_hidden"><label for="member_bar_login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
-						<div class="accessibility_hidden"><label for="member_bar_s_password">{!PASSWORD}</label></div>
-						<input accesskey="l" maxlength="80" size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="member_bar_login_username" name="login_username" />
-						<input maxlength="255" size="15" type="password" value="password" name="password" id="member_bar_s_password" />
+						<div class="accessibility_hidden"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
+						<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
+						<input accesskey="l" maxlength="80" size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
+						<input maxlength="255" size="15" type="password" value="password" name="password" id="s_password" />
 						<label for="remember">{!REMEMBER_ME}</label> <input {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) t.checked=false; } );  }" {+END}type="checkbox" value="1" id="remember" name="remember" />
 						<input class="button_pageitem" type="submit" value="{!_LOGIN}" />
-
-						<ul class="horizontal_links associated_links_block_group horiz_field_sep">
-							<li><a href="{JOIN_URL*}">{!_JOIN}</a></li>
-							<li><a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LOGIN_URL*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a></li>
-						</ul>
+						&nbsp;[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
 					</div>
 				</form>
 			</div>
 			{+START,IF,{$ADDON_INSTALLED,search}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}}
 				<div class="ocf_guest_column ocf_guest_column_b">
-					{+START,INCLUDE,MEMBER_BAR_SEARCH}{+END}
+					{+START,IF,{$EQ,{$PAGE},forumview}}
+						{+START,IF,{$EQ,{$_GET,type},pt}}
+							<div class="ocf_search_box">
+								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_own_pt,1}}" method="get">
+									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_own_pt,1}}
+
+									<div>
+										<label class="accessibility_hidden" for="search">{!SEARCH_PERSONAL_TOPICS}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_PERSONAL_TOPICS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_PERSONAL_TOPICS;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_PERSONAL_TOPICS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_own_pt}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
+									</div>
+								</form>
+							</div>
+						{+END}
+						{+START,IF,{$NEQ,{$_GET,type},pt}}
+							<div class="ocf_search_box">
+								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}" method="get">
+									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}
+
+									<div>
+										<label class="accessibility_hidden" for="search">{!SEARCH_FORUM_POSTS}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_FORUM_POSTS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_FORUM_POSTS;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_FORUM_POSTS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_posts:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
+									</div>
+								</form>
+							</div>
+						{+END}
+					{+END}
+					{+START,IF,{$EQ,{$PAGE},topicview}}
+						<div class="ocf_search_box">
+							<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}" method="get">
+								{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}
+
+								<div>
+									<label class="accessibility_hidden" for="search">{!SEARCH_POSTS_WITHIN_TOPIC}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_POSTS_WITHIN_TOPIC;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_POSTS_WITHIN_TOPIC;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_POSTS_WITHIN_TOPIC}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_within_topic:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
+								</div>
+							</form>
+						</div>
+					{+END}
 				</div>
 			{+END}{+END}
 		</div>
 	</div>
-</section>
-
-<script type="text/javascript">// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
-		{+START,IF,{$JS_ON}}
-			handle_tray_cookie_setting('{!MEMBER|}');
-		{+END}
-	} );
-//]]></script>
+</div>
 

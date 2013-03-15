@@ -1,5 +1,5 @@
-<div class="box box___occle_box"><div class="box_inner">
-	<div class="website_body">
+{+START,BOX}
+	<div class="re_body">
 		{HTML}
 	</div>
-</div></div>
+{+END}

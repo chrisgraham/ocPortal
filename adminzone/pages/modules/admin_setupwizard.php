@@ -87,23 +87,20 @@ class Module_admin_setupwizard
 	 */
 	function step1()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(1),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(1),integer_format(10)));
 
 		require_code('form_templates');
 
-		$dh=@opendir(get_custom_file_base().'/imports/addons/');
+		$dh=opendir(get_custom_file_base().'/imports/mods/');
 		$addons_available=array();
-		if ($dh!==false)
+		while (($file=readdir($dh))!==false)
 		{
-			while (($file=readdir($dh))!==false)
+			if (substr($file,-4)=='.tar')
 			{
-				if (substr($file,-4)=='.tar')
-				{
-					$addons_available[]=basename($file,'.tar');
-				}
+				$addons_available[]=basename($file,'.tar');
 			}
-			closedir($dh);
 		}
+		closedir($dh);
 		foreach ($addons_available as $aa)
 		{
 			if (!addon_installed($aa))
@@ -121,7 +118,7 @@ class Module_admin_setupwizard
 		$text=new ocp_tempcode();
 		$text->attach(paragraph(do_lang_tempcode($done_once?'SETUP_WIZARD_1_DESCRIBE_ALT':'SETUP_WIZARD_1_DESCRIBE')));
 		$rescue_url=build_url(array('page'=>'','keep_safe_mode'=>'1'),'');
-		$text->attach(paragraph(do_lang_tempcode('SETUP_WIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('footer/ocpchat')))));
+		$text->attach(paragraph(do_lang_tempcode('SETUP_WIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('bottom/ocpchat')))));
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$fields=new ocp_tempcode();
@@ -138,7 +135,7 @@ class Module_admin_setupwizard
 	 */
 	function step2()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(2),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(2),integer_format(10)));
 
 		require_code('form_templates');
 
@@ -157,7 +154,7 @@ class Module_admin_setupwizard
 	 */
 	function step3()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(3),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(3),integer_format(10)));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step4'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_3_DESCRIBE');
@@ -226,7 +223,7 @@ class Module_admin_setupwizard
 	 */
 	function step4()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(4),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(4),integer_format(10)));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step5'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_4_DESCRIBE');
@@ -288,7 +285,7 @@ class Module_admin_setupwizard
 			'uninstaller',
 			'unvalidated',
 			'phpinfo',
-			'hphp_buildkit',
+			'roadsend_compiler_buildkit',
 			'apache_config_files',
 			'code_editor',
 			'linux_helper_scripts',
@@ -300,13 +297,14 @@ class Module_admin_setupwizard
 		$addon_list_advanced_off_by_default=array(
 			'installer',
 			'tester',
-			'textbased_persistent_cacheing',
+			'textbased_persistant_cacheing',
 			'rootkit_detector',
 			'msn',
 			'backup',
 			'bookmarks',
 			'bulkupload',
 			'devguide',
+			'zone_jump_block',
 			'supermember_directory',
 		);
 
@@ -350,7 +348,7 @@ class Module_admin_setupwizard
 	 */
 	function step5()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(5),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(5),integer_format(10)));
 
 		require_lang('menus');
 
@@ -418,7 +416,7 @@ class Module_admin_setupwizard
 	 */
 	function step6()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(6),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(6),integer_format(10)));
 
 		require_all_lang();
 
@@ -548,7 +546,7 @@ class Module_admin_setupwizard
 	 */
 	function step7()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(7),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(7),integer_format(10)));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>(addon_installed('themewizard') && (function_exists('imagecreatefromstring')))?'step8':'step9'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_7_DESCRIBE');
@@ -587,7 +585,7 @@ class Module_admin_setupwizard
 	 */
 	function step8()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(8),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(8),integer_format(10)));
 
 		require_lang('themes');
 		require_code('themewizard');
@@ -613,7 +611,7 @@ class Module_admin_setupwizard
 	 */
 	function step9()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(9),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(9),integer_format(10)));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step10'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_9_DESCRIBE');
@@ -638,7 +636,7 @@ class Module_admin_setupwizard
 	 */
 	function step10()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
 
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -660,7 +658,7 @@ class Module_admin_setupwizard
 		if ($installprofile!='')
 		{
 			// Simplify down to a single menu
-			foreach (array('main_content','main_website') as $merge_item)
+			foreach (array('main_community','main_content','main_features','main_website','root_website') as $merge_item)
 			{
 				$GLOBALS['SITE_DB']->query_update('menu_items',array('i_menu'=>'site'),array('i_menu'=>$merge_item));
 			}
@@ -671,6 +669,22 @@ class Module_admin_setupwizard
 					delete_menu_item($duplicate['id']);
 			}
 			delete_menu_item_simple('site:');
+
+			// Remove panel_top
+			if (addon_installed('redirects_editor'))
+			{
+				$GLOBALS['SITE_DB']->query_delete('redirects',array('r_to_page'=>'panel_top'));
+			}
+			$fullpath=get_custom_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/panel_top.txt';
+			if (file_exists($fullpath)) @copy($fullpath,$fullpath.'.'.strval(time()));
+			$myfile=@fopen($fullpath,'wt');
+			if ($myfile!==false)
+			{
+				fwrite($myfile,'');
+				fclose($myfile);
+				fix_permissions($fullpath);
+				sync_file($fullpath);
+			}
 
 			// Run any specific code for the profile
 			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
@@ -692,17 +706,17 @@ class Module_admin_setupwizard
 			}
 			foreach (array($theme,'default') as $logo_save_theme)
 			{
-				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo_template');
+				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo-template');
 				$path='themes/'.$logo_save_theme.'/images_custom/-logo.png';
 				@imagepng($logo,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 				actual_edit_theme_image('logo/-logo',$logo_save_theme,get_site_default_lang(),'logo/-logo',$path,true);
 				if (addon_installed('collaboration_zone'))
 					actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,get_site_default_lang(),'logo/collaboration-logo',$path,true);
 				imagedestroy($logo);
-				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'trimmed_logo_template');
-				$path='themes/'.$logo_save_theme.'/images_custom/trimmed_logo.png';
+				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'trimmed-logo-template');
+				$path='themes/'.$logo_save_theme.'/images_custom/trimmed-logo.png';
 				@imagepng($logo,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
-				actual_edit_theme_image('logo/trimmed_logo',$logo_save_theme,get_site_default_lang(),'logo/trimmed_logo',$path,true);
+				actual_edit_theme_image('logo/trimmed-logo',$logo_save_theme,get_site_default_lang(),'logo/trimmed-logo',$path,true);
 				imagedestroy($logo);
 			}
 			$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini','wt');
@@ -769,9 +783,9 @@ class Module_admin_setupwizard
 
 						if (count($dependencies)==0)
 						{
-							// Archive it off to exports/addons
+							// Archive it off to exports/mods
 							$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-							create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+							create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
 
 							uninstall_addon($addon_row['addon_name']);
 						}
@@ -915,8 +929,8 @@ class Module_admin_setupwizard
 		require_code('zones3');
 		erase_comcode_page_cache();
 		erase_tempcode_cache();
-		//persistent_cache_delete('OPTIONS');  Done by set_option
-		persistent_cache_empty();
+		//persistant_cache_delete('OPTIONS');  Done by set_option
+		persistant_cache_empty();
 		erase_cached_templates();
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
@@ -933,7 +947,7 @@ class Module_admin_setupwizard
 	 */
 	function step11()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
+		$title=get_page_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
 
 		require_code('templates_donext');
 

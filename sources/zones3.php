@@ -36,7 +36,7 @@ function erase_comcode_page_cache()
 		}
 	}
 	while (count($rows)!=0);
-	persistent_cache_empty();
+	persistant_cache_empty();
 
 	$GLOBALS['NO_QUERY_LIMIT']=false;
 }
@@ -75,20 +75,6 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 	$_header_text=$GLOBALS['SITE_DB']->query_value('zones','zone_header_text',array('zone_name'=>$zone));
 	$_title=$GLOBALS['SITE_DB']->query_value('zones','zone_title',array('zone_name'=>$zone));
 
-	if (get_translated_text($_title)!=$title)
-	{
-		// Update menu item
-		$i_caption=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','i_caption',array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
-		if (!is_null($i_caption))
-		{
-			if (get_translated_text($i_caption)==get_translated_text($_title))
-			{
-				lang_remap($i_caption,$title);
-				decache('side_stored_menu');
-			}
-		}
-	}
-
 	$GLOBALS['SITE_DB']->query_update('zones',array('zone_name'=>$new_zone,'zone_title'=>lang_remap($_title,$title),'zone_default_page'=>$default_page,'zone_header_text'=>lang_remap($_header_text,$header_text),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu),array('zone_name'=>$zone),'',1);
 
 	if ($new_zone!=$zone)
@@ -105,10 +91,11 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		$ZONE['theme']=$theme;
 	}
 
+	decache('side_zone_jump');
 	decache('side_stored_menu');
 	decache('main_sitemap');
-	persistent_cache_delete(array('ZONE',$zone));
-	persistent_cache_delete('ALL_ZONES');
+	persistant_cache_delete(array('ZONE',$zone));
+	persistant_cache_delete('ALL_ZONES');
 
 	log_it('EDIT_ZONE',$zone);
 }
@@ -218,10 +205,11 @@ function actual_delete_zone_lite($zone)
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
 	log_it('DELETE_ZONE',$zone);
+	decache('side_zone_jump');
 	decache('side_stored_menu');
 	decache('main_sitemap');
-	persistent_cache_delete(array('ZONE',$zone));
-	persistent_cache_delete('ALL_ZONES');
+	persistant_cache_delete(array('ZONE',$zone));
+	persistant_cache_delete('ALL_ZONES');
 
 	global $ALL_ZONES,$ALL_ZONES_TITLED;
 	$ALL_ZONES=NULL;
@@ -231,7 +219,7 @@ function actual_delete_zone_lite($zone)
 /**
  * The do-next manager for after content management.
  *
- * @param  tempcode		The title (output of get_screen_title)
+ * @param  tempcode		The title (output of get_page_title)
  * @param  ?ID_TEXT		The name of the page just handled (NULL: none)
  * @param  ID_TEXT		The name of the zone just handled (blank: none/welcome-zone)
  * @param  tempcode		The text to show (blank: default)

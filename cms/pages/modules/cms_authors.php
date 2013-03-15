@@ -96,7 +96,7 @@ class Module_cms_authors
 	{
 		require_code('fields');
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('AUTHOR_MANAGE'),comcode_lang_string('DOC_AUTHORS'),
+		return do_next_manager(get_page_title('AUTHOR_MANAGE'),comcode_lang_string('DOC_AUTHORS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
@@ -120,8 +120,8 @@ class Module_cms_authors
 		$author=get_param('author',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if (!has_edit_author_permission(get_member(),$author))
 		{
-			if (get_author_id_from_name($author)==get_member()) access_denied('PRIVILEGE','set_own_author_profile');
-			access_denied('PRIVILEGE','edit_midrange_content');
+			if (get_author_id_from_name($author)==get_member()) access_denied('SPECIFIC_PERMISSION','set_own_author_profile');
+			access_denied('SPECIFIC_PERMISSION','edit_midrange_content');
 		}
 
 		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('description','url','skills','forum_handle'),array('author'=>$author),'',1);
@@ -162,10 +162,10 @@ class Module_cms_authors
 
 		if (($author=='') || (is_null($handle)))
 		{
-			$title=get_screen_title('DEFINE_AUTHOR');
+			$title=get_page_title('DEFINE_AUTHOR');
 		} else
 		{
-			$title=get_screen_title('_DEFINE_AUTHOR',true,array($author));
+			$title=get_page_title('_DEFINE_AUTHOR',true,array($author));
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__ad','author'=>$author),'_SELF');
@@ -224,12 +224,12 @@ class Module_cms_authors
 	 */
 	function __ad()
 	{
-		$title=get_screen_title('DEFINE_AUTHOR');
+		$title=get_page_title('DEFINE_AUTHOR');
 
 		$author=post_param('author',get_param('author'));
 		if (!has_edit_author_permission(get_member(),$author))
 		{
-			access_denied('PRIVILEGE','edit_midrange_content');
+			access_denied('SPECIFIC_PERMISSION','edit_midrange_content');
 		}
 		if ($author=='')
 		{
@@ -249,7 +249,7 @@ class Module_cms_authors
 		{
 			if (!has_delete_author_permission(get_member(),$author))
 			{
-				access_denied('PRIVILEGE','delete_midrange_content');
+				access_denied('SPECIFIC_PERMISSION','delete_midrange_content');
 			}
 			delete_author($author);
 			$author=NULL;
@@ -291,7 +291,7 @@ class Module_cms_authors
 	/**
 	 * The do-next manager for after author content management.
 	 *
-	 * @param  tempcode		The title (output of get_screen_title)
+	 * @param  tempcode		The title (output of get_page_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?SHORT_TEXT	The author we were working with (NULL: not working with one)
 	 * @return tempcode		The UI
@@ -331,7 +331,7 @@ class Module_cms_authors
 	 */
 	function ed()
 	{
-		$title=get_screen_title('EDIT_MERGE_AUTHORS');
+		$title=get_page_title('EDIT_MERGE_AUTHORS');
 
 		$authors=$this->nice_get_authors();
 		if ($authors->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
@@ -365,7 +365,7 @@ class Module_cms_authors
 	{
 		check_specific_permission('delete_midrange_content');
 
-		$title=get_screen_title('MERGE_AUTHORS');
+		$title=get_page_title('MERGE_AUTHORS');
 
 		$from=post_param('mauthor');
 		$to=post_param('mauthor2');

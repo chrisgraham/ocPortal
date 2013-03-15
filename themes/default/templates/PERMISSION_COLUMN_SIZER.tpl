@@ -1,1 +1,1 @@
-<col class="permission_column" />
+<col style="width: 25px" />

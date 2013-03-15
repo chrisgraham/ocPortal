@@ -698,6 +698,7 @@ function render_php_function($function,$class,$show_filename=false)
 	{
 //				if (!array_key_exists('type',$parameter)) exit($function['name']);
 
+		if (!$parameters->is_empty()) $parameters->attach(', ');
 		$parameters->attach(do_template('PHP_PARAMETER_LIST',array('_GUID'=>'03e76c19ec2cf9cb7f283db72728fc13','TYPE'=>$parameter['type'],'NAME'=>$parameter['name'])));
 
 		$bits=render_php_function_do_bits($parameter);

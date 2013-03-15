@@ -77,7 +77,7 @@ class Module_cms_cedi
 
 		require_code('cedi');
 		require_lang('cedi');
-		require_css('wiki');
+		require_css('cedi');
 
 		// Decide what to do
 		if ($type=='misc') return $this->misc();
@@ -101,7 +101,7 @@ class Module_cms_cedi
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_CEDI'),comcode_lang_string('DOC_CEDI'),
+		return do_next_manager(get_page_title('MANAGE_CEDI'),comcode_lang_string('DOC_CEDI'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('CEDI_ADD_PAGE')),
@@ -129,13 +129,6 @@ class Module_cms_cedi
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('SCREEN_TITLE'),do_lang_tempcode('SCREEN_TITLE_DESC'),'title',$title,true));
 		$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
-
-		require_lang('notifications');
-		$notify=($page_id==-1) || ($GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
-		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
-		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
-		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
-
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		if (get_value('disable_staff_notes')!=='1')
 			$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
@@ -159,7 +152,7 @@ class Module_cms_cedi
 	 */
 	function add_page()
 	{
-		$title=get_screen_title('CEDI_ADD_PAGE');
+		$title=get_page_title('CEDI_ADD_PAGE');
 
 		check_submit_permission('cat_low');
 
@@ -188,7 +181,7 @@ class Module_cms_cedi
 	 */
 	function _add_page()
 	{
-		$title=get_screen_title('CEDI_ADD_PAGE');
+		$title=get_page_title('CEDI_ADD_PAGE');
 
 		check_submit_permission('cat_low');
 
@@ -228,7 +221,7 @@ class Module_cms_cedi
 	 */
 	function choose_page_to_edit()
 	{
-		$title=get_screen_title('CEDI_EDIT_PAGE');
+		$title=get_page_title('CEDI_EDIT_PAGE');
 
 		$list=cedi_show_tree();
 		require_code('form_templates');
@@ -255,7 +248,7 @@ class Module_cms_cedi
 	 */
 	function edit_page()
 	{
-		$title=get_screen_title('CEDI_EDIT_PAGE');
+		$title=get_page_title('CEDI_EDIT_PAGE');
 
 		$__id=get_param('id','',true);
 		if (($__id=='') || (strpos($__id,'/')!==false))
@@ -335,8 +328,8 @@ class Module_cms_cedi
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		$breadcrumbs=cedi_breadcrumbs(get_param('id',false,true),NULL,true,true);
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('CEDI_EDIT_PAGE').'</span>'));
+		$tree=cedi_breadcrumbs(get_param('id',false,true),NULL,true,true);
+		breadcrumb_add_segment($tree,do_lang_tempcode('CEDI_EDIT_PAGE'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'REVISION_HISTORY'=>$revision_history,'POSTING_FORM'=>$posting_form,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('CEDI_EDIT_PAGE_TEXT'))));
@@ -356,7 +349,7 @@ class Module_cms_cedi
 
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_screen_title('CEDI_DELETE_PAGE');
+			$title=get_page_title('CEDI_DELETE_PAGE');
 
 			check_delete_permission('cat_low',NULL,array('seedy_page',$id));
 
@@ -375,7 +368,7 @@ class Module_cms_cedi
 			$url=$_url->evaluate();
 		} else
 		{
-			$title=get_screen_title('CEDI_EDIT_PAGE');
+			$title=get_page_title('CEDI_EDIT_PAGE');
 
 			check_edit_permission('cat_low',NULL,array('seedy_page',$id));
 
@@ -412,7 +405,7 @@ class Module_cms_cedi
 	 */
 	function edit_tree()
 	{
-		$title=get_screen_title('CEDI_EDIT_TREE');
+		$title=get_page_title('CEDI_EDIT_TREE');
 
 		list($id,$chain)=get_param_cedi_chain('id');
 
@@ -442,15 +435,15 @@ class Module_cms_cedi
 		require_code('form_templates');
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		$breadcrumbs=cedi_breadcrumbs($chain,NULL,true,true);
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('CEDI_EDIT_TREE').'</span>'));
+		$tree=cedi_breadcrumbs($chain,NULL,true,true);
+		breadcrumb_add_segment($tree,do_lang_tempcode('CEDI_EDIT_TREE'));
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'),new ocp_tempcode(),'children',$children,false,NULL,true));
 		$form=do_template('FORM',array('_GUID'=>'b908438ccfc9be6166cf7c5c81d5de8b','FIELDS'=>$fields,'URL'=>$post_url,'HIDDEN'=>'','TEXT'=>'','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 
-		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'FORM'=>$form,'CEDI_TREE'=>$cedi_tree));
+		return do_template('CEDI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TREE'=>$tree,'TITLE'=>$title,'FORM'=>$form,'CEDI_TREE'=>$cedi_tree));
 	}
 
 	/**
@@ -460,7 +453,7 @@ class Module_cms_cedi
 	 */
 	function _edit_tree()
 	{
-		$_title=get_screen_title('CEDI_EDIT_TREE');
+		$_title=get_page_title('CEDI_EDIT_TREE');
 
 		$_id=get_param_cedi_chain('id');
 		$id=$_id[0];
@@ -494,7 +487,6 @@ class Module_cms_cedi
 				{
 					$title=substr($newlink,$q_pos+1);
 					$child_id=intval(substr($newlink,0,$q_pos));
-					if ($child_id==$id) continue;
 					$title_id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>$child_id));
 					if (is_null($title_id)) continue;
 					if ($title=='')
@@ -518,9 +510,6 @@ class Module_cms_cedi
 
 						$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'seedy_page','category_name'=>strval($child_id),'group_id'=>$group_id));
 					}
-
-					require_code('notifications2');
-					copy_notifications_to_new_child('cedi',strval($id),strval($child_id));
 				}
 
 				$GLOBALS['SITE_DB']->query_delete('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id),'',1); // Just in case it was repeated

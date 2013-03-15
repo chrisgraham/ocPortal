@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_bulkupload
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_bulkupload
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_bulkupload
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/addon_registry/bulkupload.php',
 			'BULK_HELPER_ENTRY.tpl',
 			'BULK_HELPER_RESULTS_SCREEN.tpl',
@@ -79,22 +81,22 @@ class Hook_addon_registry_bulkupload
 			'themes/default/images/bigicons/bulkupload.png',
 			'themes/default/images/pagepics/bulkuploadassistant.png',
 			'lang/EN/bulkupload.ini',
-			'sources/hooks/systems/do_next_menus/bulkupload.php'
+			'sources/hooks/systems/do_next_menus/bulkupload.php',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'BULK_HELPER_RESULTS_SCREEN.tpl'=>'administrative__bulk_helper_results_screen',
-			'BULK_HELPER_ENTRY.tpl'=>'administrative__bulk_helper_results_screen'
-		);
+				'BULK_HELPER_RESULTS_SCREEN.tpl'=>'administrative__bulk_helper_results_screen',
+				'BULK_HELPER_ENTRY.tpl'=>'administrative__bulk_helper_results_screen',
+				);
 	}
 
 	/**
@@ -106,14 +108,16 @@ class Hook_addon_registry_bulkupload
 	 */
 	function tpl_preview__administrative__bulk_helper_results_screen()
 	{
-		$test=do_lorem_template('BULK_HELPER_ENTRY', array(
-			'FILEFULL'=>lorem_phrase()
-		));
+		$test = do_lorem_template('BULK_HELPER_ENTRY',array(
+					'FILEFULL'=>lorem_phrase(),
+						));
 		return array(
-			lorem_globalise(do_lorem_template('BULK_HELPER_RESULTS_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'RESULTS'=>$test
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('BULK_HELPER_RESULTS_SCREEN',array(
+					'TITLE'=>lorem_title(),
+					'RESULTS'=>$test,
+						)
+			),NULL,'',true),
 		);
 	}
 }

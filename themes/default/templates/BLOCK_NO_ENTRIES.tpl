@@ -1,11 +1,3 @@
-<section class="box box___block_no_entries_{$LCASE|,{TITLE}}"><div class="box_inner">
-	<h3>{TITLE*}</h3>
-
-	<p class="nothing_here">{MESSAGE*}</p>
-
-	{+START,IF_PASSED,SUBMIT_URL}{+START,IF_NON_EMPTY,{SUBMIT_URL}}
-		<ul class="horizontal_links associated_links_block_group">
-			<li><a target="_top" href="{SUBMIT_URL*}">{ADD_NAME*}</a></li>
-		</ul>
-	{+END}{+END}
-</div></section>
+{+START,BOX,{TITLE*},{$?,{$AND,{HIGH},{$NOT,{$GET,in_panel}}},100%|230px,100%},{$?,{$GET,in_panel},panel,{$?,{HIGH},curved,classic}},,,{$?,{$IS_NON_EMPTY,{SUBMIT_URL}},<a title="{ADD_NAME*}: {TITLE*}" target="_top" href="{SUBMIT_URL*}">{ADD_NAME*}</a>,}}
+	<p class="block_no_entries">&raquo; {MESSAGE*}</p>
+{+END}

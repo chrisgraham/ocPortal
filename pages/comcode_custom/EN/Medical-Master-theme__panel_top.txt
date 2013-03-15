@@ -1,0 +1,44 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+	<div id="banner">
+		<div id="banner-image">
+		</div>
+
+		<div id="banner-text">
+			<h4>Lorem ipsum dolor sit amet</h4>
+
+			<h1>Lorem ipsum dolor sit amet</h1>
+
+			<h5>Lorem ipsum dolor sit amet</h5>
+		</div>
+	</div>
+{+END}
+
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+	<ul id="tab">
+		<li class="tab-inside">
+			<h4>Lorem ipsum dolor sit amet</h4>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />
+			<br />
+			[page=":about_1"]READ MORE[/page]<br />
+			<br />
+		</li>
+
+		<li class="tab-inside">
+			<h4>Lorem ipsum dolor sit amet</h4>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />
+			<br />
+			[page=":about_2"]READ MORE[/page]<br />
+			<br />
+		</li>
+
+		<li class="tab-inside">
+			<h4>Lorem ipsum dolor sit amet</h4>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />
+			<br />
+			[page=":about_3"]READ MORE[/page]<br />
+			<br />
+		</li>
+	</ul>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

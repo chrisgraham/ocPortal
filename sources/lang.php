@@ -94,7 +94,7 @@ function init__lang()
 		$cache_path=get_custom_file_base().'/lang_cached/'.user_lang().'/'.filter_naughty($key,true).'.lcd';
 		if (!is_null($GLOBALS['MEM_CACHE']))
 		{
-			$PAGE_CACHE_LANG_LOADED=persistent_cache_get($cache_path);
+			$PAGE_CACHE_LANG_LOADED=persistant_cache_get($cache_path);
 			if (is_array($PAGE_CACHE_LANG_LOADED))
 			{
 				$PAGE_CACHE_LAZY_LOAD=true;
@@ -103,7 +103,7 @@ function init__lang()
 			$PAGE_CACHE_FILE=$cache_path;
 		} else
 		{
-			$contents=@file_get_contents($cache_path);
+			$contents=@file_get_contents($cache_path,FILE_TEXT);
 			if ($contents!==false)
 			{
 				$PAGE_CACHE_LANG_LOADED=@unserialize($contents);
@@ -248,7 +248,7 @@ function user_lang()
 		$USER_LANG_CACHED=$lang;
 	} else
 	{
-		if (((get_forum_type()=='ocf') || (get_option('detect_lang_forum',true)=='1') || (get_option('detect_lang_browser',true)=='1')) && ((!$GLOBALS['DEV_MODE']) || (get_site_default_lang()!='Gibb')))
+		if (((get_forum_type()=='ocf') || (get_option('detect_lang_forum',true)=='1') || (get_option('detect_lang_browser',true)=='1')) && ((!$GLOBALS['DEBUG_MODE']) || (get_site_default_lang()!='Gibb')))
 		{
 			// In forum?
 			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_forum',true)=='1'))
@@ -518,10 +518,10 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 				$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.po';
 				if (!is_file($lang_file)) $lang_file=$fb.'/lang/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
 			}
-			$pcache=persistent_cache_get(array('LANG',$lang,$codename),is_file($lang_file)?filemtime($lang_file):NULL);
+			$pcache=persistant_cache_get(array('LANG',$lang,$codename),is_file($lang_file)?filemtime($lang_file):NULL);
 		} else
 		{
-			$pcache=persistent_cache_get(array('LANG',$lang,$codename));
+			$pcache=persistant_cache_get(array('LANG',$lang,$codename));
 		}
 		if (is_array($pcache))
 		{
@@ -556,7 +556,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
 			if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default)))))
 			{
-				$tmp=@file_get_contents($cache_path);
+				$tmp=@file_get_contents($cache_path,FILE_TEXT);
 				if ($tmp!='')
 				{
 					$unserialized=@unserialize($tmp);
@@ -708,7 +708,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 		$lang=($USER_LANG_CACHED===NULL)?user_lang():$USER_LANG_CACHED;
 	}// else // This else assumes we initially load all language files in the users language. Reasonable. EDIT: Actually, no it is not - the user_lang() initially is not accurate until ocPortal gets past a certain startup position
 	{
-		if ($GLOBALS['SEMI_DEV_MODE']) // Special syntax for easily inlining language strings
+		if ($GLOBALS['SEMI_DEBUG_MODE']) // Special syntax for easily inlining language strings
 		{
 			$pos=strpos($codename,'=');
 			if ($pos!==false)
@@ -791,7 +791,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					$PAGE_CACHE_LANG_LOADED[$lang][$codename]=NULL;
 					if ($GLOBALS['MEM_CACHE']!==NULL)
 					{
-						persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+						persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 					} else
 					{
 						open_page_cache_file();
@@ -822,7 +822,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
 					if ($GLOBALS['MEM_CACHE']!==NULL)
 					{
-						persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+						persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 					} else
 					{
 						open_page_cache_file();
@@ -859,7 +859,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE[$lang][$codename];
 			if ($GLOBALS['MEM_CACHE']!==NULL)
 			{
-				persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+				persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 			} else
 			{
 				open_page_cache_file();

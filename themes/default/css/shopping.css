@@ -3,57 +3,116 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-table.cart_table {
-	width: 100%;
+.cart-table {
+	border-width:1px 0;
 }
 
-table.cart_table thead {
-	font-size: 0.85em;
+.cart-table thead {
+	font-size:0.85em;
 }
 
-table.cart_table .product_fields {
-	font-size: 0.85em;
-	vertical-align: middle;
-	border-bottom: 1px solid {$GET,divider_line};
+.cart-table th {
+	color:#2D2D2D; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
+	font-weight:normal;
+	white-space:nowrap;
+	text-align:left;
 }
 
-table.cart_payment_summary {
-	width: 100%;
-	table-layout: fixed;
-	font-size: 1.2em;
+.nobr {
+	white-space:nowrap !important;
 }
 
-table.cart_payment_summary th {
-	text-align: right;
-	padding-right: 2em;
-	width: 100%;
+.amount-totals {
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	float:right;
+	font-size:0.90em;
+	width:100%;
+	margin-top:15px;
 }
 
-table.cart_payment_summary td {
-	text-align: left;
-	width: 10em;
+.cart-checkout {
+	text-align:right;
+	padding-right:15px;
 }
 
-table.cart_payment_summary .price {
-	font-weight: bold;
+.result-table {
+	width:100%;
 }
 
-.cart_proceed_button {
-	float: right;
-	padding-right: 2em;
+.cart-actions {
+	width:100%;
+	margin-top:25px;
+	padding-left:10px;
 }
 
-.checkout_text {
-	color: {$GET,slightly_seeded_text};
-	font-size: 0.85em;
-	margin-top: 1em;
-	margin-left: 1em;
+.product-fields {
+	font-size:0.85em;
+	vertical-align:middle;
+	border-bottom: 1px solid #8ba4ca; /* {$,wizard, 61% seed + 39% W/B} */
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	background-color: #e3eaf6; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
 }
 
-.orders_actions_dropdown {
-	width: 10em;
+.price {
+	white-space:nowrap !important;
+	padding-left:25px;
+	font-weight:bold;
 }
 
-table.shipping_address {
-	border: 0;
+.a-right {
+	text-align:right;
+	padding-right:15px;
+	background-color: #e3e9f2; /* {$,wizard, 100% sb_color } */
+}
+
+.a-middle {
+	text-align:center;
+	padding-right:15px;
+	background-color: #e3e9f2; /* {$,wizard, 100% sb_color } */
+}
+
+.proceed-button {
+	float:right;
+	padding-right:15px;
+	padding-bottom:10px;
+}
+
+.result-table th {
+	font-size:0.85em;
+	font-weight:bold;
+	text-align:left;
+	vertical-align:top;
+}
+
+.checkout-text {
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	font-size:0.85em;
+	margin-top: 10px;
+	margin-left:10px;
+}
+
+.ecom_actions_list {
+	width:100px;
+}
+
+.receiver-det {
+	border:0px;
+}
+
+.proceed-box {
+	float:right;
+	width:100%;
+}
+
+.purchase_button {
+	float:right;
+	margin-left: 20px;
+}
+
+.show_in_bold {
+	font-weight:bold;
+}
+
+.product_title {
+	padding:5px;
 }

@@ -7,9 +7,9 @@
 		</select>
 	</div>
 	{+START,IF,{$JS_ON}}
-		<div class="right">
-			<input class="button_micro" name="f{ID*}dd_{NAME*}" onclick="return template_edit_page('f{ID*}{NAME*}','{ID*}');" type="button" value="{LANG*}" />
-		</div>
+	<div class="right">
+		<input name="f{ID*}dd_{NAME*}" onclick="return templateEditPage('f{ID*}{NAME*}','{ID*}');" type="button" value="{LANG*}" />
+	</div>
 	{+END}
 </div>
 

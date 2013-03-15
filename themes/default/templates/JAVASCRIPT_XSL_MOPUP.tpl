@@ -69,7 +69,7 @@ function go_decoding () {
 	 ) {
 		// the null or markupless element needs no reworking
 	 } else {
-		set_inner_html(to_decode[i],s);  // that's the magic
+		setInnerHTML(to_decode[i],s);  // that's the magic
 	 }
   }
 

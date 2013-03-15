@@ -137,7 +137,7 @@ function actual_add_theme($name)
 		if (strtolower(substr($file,-4,4))=='.css')
 		{
 			$path='themes/'.$name.'/css_custom/'.$file;
-			$new_css_file="@import url(../../../default/css/$file);\n\n".file_get_contents(get_custom_file_base().'/themes/default/css/'.$file);
+			$new_css_file="@import url(../../../default/css/$file);\n\n".file_get_contents(get_custom_file_base().'/themes/default/css/'.$file,FILE_TEXT);
 			afm_make_file($path,$new_css_file,false);
 		}
 	}
@@ -183,7 +183,7 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
 
 	log_it('ADD_THEME_IMAGE',$id,$theme);
 
-	persistent_cache_delete('THEME_IMAGES');
+	persistant_cache_delete('THEME_IMAGES');
 }
 
 /**
@@ -216,7 +216,7 @@ function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_ch
 
 		$db->query_insert('theme_images',array('id'=>$theme_img_code,'theme'=>'default','path'=>$urls[0],'lang'=>get_site_default_lang()));
 
-		persistent_cache_delete('THEME_IMAGES');
+		persistant_cache_delete('THEME_IMAGES');
 	} else
 	{
 		$theme_img_code=post_param($field_choose,'');

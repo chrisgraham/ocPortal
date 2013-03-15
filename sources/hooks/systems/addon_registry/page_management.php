@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_page_management
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,9 +62,7 @@ class Hook_addon_registry_page_management
 			'requires'=>array(),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
-			'previously_in_addon'=>array(
-				'core_page_management'
-			)
+			'previously_in_addon'=>array('core_page_management'),
 		);
 	}
 
@@ -75,6 +74,7 @@ class Hook_addon_registry_page_management
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/addon_registry/page_management.php',
 			'VALIDATE_CHECK_SCREEN.tpl',
 			'VALIDATE_CHECK_ERROR.tpl',
@@ -86,23 +86,23 @@ class Hook_addon_registry_page_management
 			'themes/default/images/pagepics/move.png',
 			'themes/default/images/pagepics/deletepage.png',
 			'themes/default/images/pagepics/addpagewizard.png',
-			'themes/default/images/under_construction_animated.gif'
+			'themes/default/images/under_construction_animated.gif',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'SITE_TREE_EDITOR_SCREEN.tpl'=>'administrative__site_tree_editor_screen',
-			'VALIDATE_CHECK_SCREEN.tpl'=>'administrative__validate_check_screen',
-			'VALIDATE_CHECK_ERROR.tpl'=>'administrative__validate_check_screen'
-		);
+				'SITE_TREE_EDITOR_SCREEN.tpl'=>'administrative__site_tree_editor_screen',
+				'VALIDATE_CHECK_SCREEN.tpl'=>'administrative__validate_check_screen',
+				'VALIDATE_CHECK_ERROR.tpl'=>'administrative__validate_check_screen',
+				);
 	}
 
 	/**
@@ -121,9 +121,11 @@ class Hook_addon_registry_page_management
 		require_javascript('javascript_site_tree_editor');
 		require_lang('zones');
 		return array(
-			lorem_globalise(do_lorem_template('SITE_TREE_EDITOR_SCREEN', array(
-				'TITLE'=>lorem_title()
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('SITE_TREE_EDITOR_SCREEN',array(
+					'TITLE'=>lorem_title(),
+						)
+			),NULL,'',true),
 		);
 	}
 
@@ -137,19 +139,22 @@ class Hook_addon_registry_page_management
 	function tpl_preview__administrative__validate_check_screen()
 	{
 		require_lang('validation');
-		$content=new ocp_tempcode();
+		$content = new ocp_tempcode();
 		foreach (placeholder_array() as $val)
 		{
-			$content->attach(do_lorem_template('VALIDATE_CHECK_ERROR', array(
+			$content->attach(do_lorem_template('VALIDATE_CHECK_ERROR',array(
 				'URL'=>placeholder_url(),
-				'POINT'=>lorem_phrase()
-			)));
+				'POINT'=>lorem_phrase(),
+					)
+			));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'CONTENTS'=>$content
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('VALIDATE_CHECK_SCREEN',array(
+					'TITLE'=>lorem_title(),
+					'CONTENTS'=>$content,
+						)
+			),NULL,'',true),
 		);
 	}
 }

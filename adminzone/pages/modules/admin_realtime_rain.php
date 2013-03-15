@@ -83,7 +83,7 @@ class Module_admin_realtime_rain
 		require_lang('realtime_rain');
 		require_css('realtime_rain');
 
-		$title=get_screen_title('REALTIME_RAIN');
+		$title=get_page_title('REALTIME_RAIN');
 
 		if (!has_js())
 		{
@@ -91,8 +91,12 @@ class Module_admin_realtime_rain
 			$url=build_url(array('page'=>'admin_stats','type'=>'misc'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'d364f4b7afc82e32d1d7c59316908a50','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_REALTIME')));
+			return do_template('REDIRECT_SCREEN',array('URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_REALTIME')));
 		}
+
+		$GLOBALS['TEMPCODE_SETGET']['chrome_frame']=make_string_tempcode('1');
+		if (browser_matches('ie6'))
+			attach_message(do_lang_tempcode('IE_OLD_PLEASE_UPGRADE'),'warn');
 
 		if (!has_js())
 		{
@@ -100,7 +104,7 @@ class Module_admin_realtime_rain
 			$url=build_url(array('page'=>'admin_stats','type'=>'misc'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'7b7f4d3e565f010723aa5c414a64b467','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_REALTIME_RAIN')));
+			return do_template('REDIRECT_SCREEN',array('URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_REALTIME_RAIN')));
 		}
 
 		$min_time=$GLOBALS['SITE_DB']->query_value('stats','MIN(date_and_time)');

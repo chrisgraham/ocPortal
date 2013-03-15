@@ -1,3 +1,3 @@
-<div class="download_gallery_image">
+<span class="download_gallery_image">
 	{CONTENT}
-</div>
+</span>

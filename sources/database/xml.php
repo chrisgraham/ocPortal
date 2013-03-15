@@ -117,10 +117,6 @@ function _get_sql_keywords()
 	);
 }
 
-/**
- * Database Driver.
- * @package		core_database_drivers
- */
 class Database_Static_xml
 {
 
@@ -371,7 +367,7 @@ class Database_Static_xml
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
-	 * @param  boolean		Whether to create a persistent connection
+	 * @param  boolean		Whether to create a persistant connection
 	 * @param  string			The database name
 	 * @param  string			The database host (the server)
 	 * @param  string			The database connection username

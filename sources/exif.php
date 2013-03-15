@@ -60,28 +60,28 @@ function _get_simple_gps($exif)
 {
 	// Based on http://stackoverflow.com/questions/2526304/php-extract-gps-exif-data
 
-	$result=array();
+	$result = array();
 
 	if (!isset($exif['GPSLatitude'])) return array();
 	if (!isset($exif['GPSLongitude'])) return array();
 
 	// get the Hemisphere multiplier
-	$lat_m=1; $long_m=1;
-	if($exif['GPSLatitudeRef']=='S')
+	$lat_m = 1; $long_m = 1;
+	if($exif['GPSLatitudeRef'] == 'S')
 	{
-		$lat_m=-1;
+		$lat_m = -1;
 	}
-	if($exif['GPSLongitudeRef']=='W')
+	if($exif['GPSLongitudeRef'] == 'W')
 	{
-		$long_m=-1;
+		$long_m = -1;
 	}
 
 	// get the GPS data
 	$gps=array();
 	if (!is_array($exif['GPSLatitude']))
 	{
-		$result['Latitude']=$exif['GPSLatitude'];
-		$result['Latitude']=$exif['GPSLatitude'];
+		$result['Latitude'] = $exif['GPSLatitude'];
+		$result['Latitude'] = $exif['GPSLatitude'];
 		return $result;
 	}
 	$gps['LatDegree']=$exif['GPSLatitude'][0];
@@ -92,8 +92,8 @@ function _get_simple_gps($exif)
 	$gps['LongSeconds']=isset($exif['GPSLongitude'][2])?$exif['GPSLongitude'][2]:0;
 
 	// calculate the decimal degree
-	$result['Latitude']=float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)));
-	$result['Longitude']=float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)));
+	$result['Latitude'] = float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)));
+	$result['Longitude'] = float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)));
 
 	return $result;
 }

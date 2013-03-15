@@ -43,6 +43,7 @@ class Block_side_shoutbox
 	function run($map)
 	{
 		require_lang('chat');
+		require_css('side_blocks');
 		require_css('chat');
 
 		require_javascript('javascript_text_ghosts');

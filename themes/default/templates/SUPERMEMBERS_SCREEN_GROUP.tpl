@@ -1,6 +1,22 @@
 <h2>{GROUP_NAME*}</h2>
 
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table spaced_table autosized_table">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table">
+	{+START,IF,{$NOT,{$MOBILE}}}
+		<colgroup>
+			<col style="width: 10%" />
+			<col style="width: 10%" />
+			<col style="width: 10%" />
+			{+START,IF,{$ADDON_INSTALLED,authors}}
+				<col style="width: 10%" />
+			{+END}
+			{+START,IF,{$ADDON_INSTALLED,points}}
+				<col style="width: 10%" />
+			{+END}
+			<col style="width: 10%" />
+			<col style="width: 10%" />
+		</colgroup>
+	{+END}
+
 	<thead>
 		<tr>
 			<th>{!USERNAME}</th>

@@ -21,9 +21,9 @@ Members of staff have the ability to give any number of points they like to peop
 
 Please have fun with the system and use your gift-points well.
 {+END}
-{+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]The Point Store[/title]
+{+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]The point-store[/title]
 
-{$ANCHOR,POINT_STORE}The [page="_SEARCH:pointstore"]Point Store[/page] contains all the items you can buy using your points. You can then select some and buy them.
+{$ANCHOR,POINT_STORE}The [page caption="point-store"]pointstore[/page] contains all the items you can buy using your points. You can then select some and buy them.
 
 The items that are purchasable may include:
  - Flagrant text messages. These are messages displayed in a prominent position on the website. All flagrant messages are placed in a queue and activated manually (and thus subject to moderation).
@@ -34,18 +34,18 @@ Products that require manual set-up will usually only be charged for upon activa
 {+END}
 {+START,IF,{$ADDON_INSTALLED,news}}[title="2"]News/Blogs[/title]
 
-{$ANCHOR,ADD_NEWS}[page="_SEARCH:cms_news:ad"]The add news page[/page] allows you to add your news to the site. For most members, this will put the news into a validation queue and inform the staff of the submission.
-{+START,IF,{$HAS_PRIVILEGE,have_personal_category,cms_news}}You may also get a chance to submit to your own personal news category; this is your own blog on the website.{+END}
+{$ANCHOR,ADD_NEWS}[page="_SEARCH" caption="The add news page" type="ad"]cms_news[/page] allows you to add your news to the site. For most members, this will put the news into a validation queue and inform the staff of the submission.
+{+START,IF,{$HAS_SPECIFIC_PERMISSION,have_personal_category,cms_news}}You may also get a chance to submit to your own personal news category; this is your own blog on the website.{+END}
 
 {+END}[title="2"]Other things you may do[/title]
 
 You may see submission links on the menus, and in other places. Submitting any kind of entry will be a similar process to submitting news: your entry will likely be put in a validation queue.
 
-{+START,IF,{$ADDON_INSTALLED,cedi}}[title="2"]Wiki+[/title]
+{+START,IF,{$ADDON_INSTALLED,cedi}}[title="2"]CEDI[/title]
 
-Wiki+ is a system that allows users to post content into a database of posts. This system is similar to that of a forum, however rather than having a structure of forums and user created topics, it has a staff-managed hierarchical structure of pages.
+CEDI stands for 'Collaborative/encyclopaedic database interface', and is a system that allows users to post content into a database of posts. This system is similar to that of a forum, however rather than having a structure of forums and user created topics, it has a staff-managed hierarchical structure of pages.
 
 The system can be used for all kinds of things, such as posting reference material indexed hierarchically by category, organising ideas indexed by topic, or discussing TV programmes indexed by episode name.
 
-The staff will make clear how the Wiki+ system is employed on this website.
+The staff will make clear how the CEDI system is employed on this website.
 {+END}

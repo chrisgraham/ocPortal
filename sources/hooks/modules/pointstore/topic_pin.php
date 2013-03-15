@@ -55,7 +55,7 @@ class Hook_pointstore_topic_pin
 
 		if (get_option('is_on_'.$class.'_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TOPIC_PINNING');
+		$title=get_page_title('TOPIC_PINNING');
 
 		$cost=intval(get_option($class));
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class),'_SELF');
@@ -71,16 +71,8 @@ class Hook_pointstore_topic_pin
 		$fields=new ocp_tempcode();
 		if (get_forum_type()=='ocf')
 		{
-			$set_name='topic';
-			$required=true;
-			$set_title=do_lang_tempcode('FORUM_TOPIC');
-			$field_set=alternate_fields_set__start($set_name);
-
-			$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
-
-			$field_set->attach(form_input_integer(do_lang_tempcode('IDENTIFIER'),do_lang_tempcode('DESCRIPTION_FORUM_TOPIC_ID'),'manual_topic_id',NULL,false));
-
-			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+			$fields->attach(form_input_tree_list(do_lang_tempcode('FORUM_TOPIC'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
+			$fields->attach(form_input_integer(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('FORUM_TOPIC')),do_lang_tempcode('DESCRIPTION_FORUM_TOPIC_ID'),'manual_topic_id',NULL,false));
 		} else
 		{
 			$fields->attach(form_input_integer(do_lang_tempcode('FORUM_TOPIC'),do_lang_tempcode('ENTER_TOPIC_ID_MANUALLY'),'manual_topic_id',NULL,false));
@@ -88,7 +80,7 @@ class Hook_pointstore_topic_pin
 
 		$text=do_lang_tempcode('PIN_TOPIC_A',integer_format($cost),integer_format($points_left-$cost));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'8cabf882d5cbe4d354cc6efbcf92ebf9','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PURCHASE')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'8cabf882d5cbe4d354cc6efbcf92ebf9','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'JAVASCRIPT'=>'standardAlternateFields(\'select_topic_id\',\'manual_topic_id\');'));
 	}
 
 	/**
@@ -109,7 +101,7 @@ class Hook_pointstore_topic_pin
 			$topic_id=intval($_topic_id);
 		}
 
-		$title=get_screen_title('TOPIC_PINNING');
+		$title=get_page_title('TOPIC_PINNING');
 
 		// Check points
 		$cost=intval(get_option($class));

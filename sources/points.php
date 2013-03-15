@@ -32,7 +32,7 @@ function init__points()
 }
 
 /**
- * Get the price of the specified item for sale in the Point Store (only for tableless items).
+ * Get the price of the specified item for sale in the point-store (only for tableless items).
  *
  * @param  ID_TEXT		The name of the item
  * @return integer		The price of the item

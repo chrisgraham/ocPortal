@@ -123,7 +123,7 @@ class Hook_pointstore_pop3
 	{
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_POP3');
+		$title=get_page_title('TITLE_POP3');
 
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>get_member(),'purchasetype'=>'pop3'));
 		if (is_null($test))
@@ -150,7 +150,7 @@ class Hook_pointstore_pop3
 	{
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWPOP3');
+		$title=get_page_title('TITLE_NEWPOP3');
 
 		pointstore_handle_error_already_has('pop3');
 
@@ -200,7 +200,7 @@ class Hook_pointstore_pop3
 	{
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWPOP3');
+		$title=get_page_title('TITLE_NEWPOP3');
 
 		// Getting User Information
 		$member_id=get_member();
@@ -258,7 +258,7 @@ class Hook_pointstore_pop3
 	{
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWPOP3');
+		$title=get_page_title('TITLE_NEWPOP3');
 
 		$member_id=get_member();
 		$pointsleft=available_points($member_id); // the number of points this member has left
@@ -310,7 +310,7 @@ class Hook_pointstore_pop3
 	{
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_QUOTA');
+		$title=get_page_title('TITLE_QUOTA');
 
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);
@@ -347,7 +347,7 @@ class Hook_pointstore_pop3
 	{
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_QUOTA');
+		$title=get_page_title('TITLE_QUOTA');
 
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);

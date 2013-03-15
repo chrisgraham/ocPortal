@@ -74,7 +74,7 @@ class Module_admin_banners
 	 */
 	function banner_statistics()
 	{
-		$title=get_screen_title('BANNER_STATISTICS');
+		$title=get_page_title('BANNER_STATISTICS');
 
 		check_specific_permission('view_anyones_banner_stats');
 
@@ -107,7 +107,7 @@ class Module_admin_banners
 		$field_titles_arr=array(do_lang_tempcode('NAME'),do_lang_tempcode('TYPE'),do_lang_tempcode('_BANNER_TYPE'));
 		if ($has_banner_network)
 			$field_titles_arr=array_merge($field_titles_arr,array(do_lang_tempcode('BANNER_HITSFROM'),do_lang_tempcode('BANNER_VIEWSFROM')));
-		$field_titles_arr=array_merge($field_titles_arr,array(do_lang_tempcode('BANNER_HITSTO'),do_lang_tempcode('BANNER_VIEWSTO'),do_lang_tempcode('BANNER_CLICKTHROUGH'),do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('SUBMITTER'),do_lang_tempcode('ADDED')));
+		$field_titles_arr=array_merge($field_titles_arr,array(do_lang_tempcode('BANNER_HITSTO'),do_lang_tempcode('BANNER_VIEWSTO'),do_lang_tempcode('BANNER_CLICKTHROUGH'),do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('SUBMITTER'),do_lang_tempcode('_ADDED')));
 		if (addon_installed('unvalidated')) $field_titles_arr[]=do_lang_tempcode('VALIDATED');
 		$fields_title=results_field_title($field_titles_arr,$sortables,'sort',$sortable.' '.$sort_order);
 

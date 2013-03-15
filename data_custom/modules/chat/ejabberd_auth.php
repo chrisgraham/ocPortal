@@ -26,13 +26,13 @@ Altered for ocPortal by ocProducts
 */
 
 error_reporting(0);
-$auth=new JabberAuth();
+$auth = new JabberAuth();
 chdir(dirname(__FILE__));
 require('../../../info.php');
-$auth->dbhost=isset($SITE_INFO['db_site_host'])?$SITE_INFO['db_site_host']:'localhost';
-$auth->dbuser=$SITE_INFO['db_site_user'];
-$auth->dbpass=$SITE_INFO['db_site_password'];
-$auth->dbbase=$SITE_INFO['db_site'];
+$auth->dbhost = isset($SITE_INFO['db_site_host'])?$SITE_INFO['db_site_host']:'localhost';
+$auth->dbuser = $SITE_INFO['db_site_user'];
+$auth->dbpass = $SITE_INFO['db_site_password'];
+$auth->dbbase = $SITE_INFO['db_site'];
 $auth->play(); // We simply start process !
 
 class JabberAuth {
@@ -41,8 +41,8 @@ class JabberAuth {
 	var $dbpass; /* MySQL password */
 	var $dbbase; /* MySQL database where users are stored */
 
-	var $debug=true; 				      /* Debug mode */
-	var $debugfile="../../errorlog.php";  /* Debug output */
+	var $debug 		= true; 				      /* Debug mode */
+	var $debugfile 	= "../../errorlog.php";  /* Debug output */
 	/*
 	 * For both debug and logging, ejabberd have to be able to write.
 	 */
@@ -53,7 +53,7 @@ class JabberAuth {
 	var $jid;           /* Simply the JID, if you need it, you have to fill. */
 	var $data;          /* This is what SM component send to us. */
 
-	var $dateformat="M d H:i:s"; /* Check date() for string format. */
+	var $dateformat = "M d H:i:s"; /* Check date() for string format. */
 	var $command; /* This is the command sent ... */
 	var $mysock;  /* MySQL connection ressource */
 	var $stdin;   /* stdin file pointer */
@@ -83,20 +83,20 @@ class JabberAuth {
 
 	function openstd()
 	{
-		$this->stdout=@fopen("php://stdout", "w"); // We open STDOUT so we can read
-		$this->stdin=@fopen("php://stdin", "r"); // and STDIN so we can talk !
+		$this->stdout = @fopen("php://stdout", "w"); // We open STDOUT so we can read
+		$this->stdin  = @fopen("php://stdin", "r"); // and STDIN so we can talk !
 	}
 
 	function readstdin()
 	{
-		$l=@fgets($this->stdin, 3); // We take the length of string
-		$length=@unpack("n", $l); // ejabberd give us something to play with ...
-		$len=$length["1"]; // and we now know how long to read.
+		$l      = @fgets($this->stdin, 3); // We take the length of string
+		$length = @unpack("n", $l); // ejabberd give us something to play with ...
+		$len    = $length["1"]; // and we now know how long to read.
 		if($len > 0) { // if not, we'll fill logfile ... and disk full is just funny once
 			$this->logg("Reading $len bytes ... "); // We notice ...
-			$data=@fgets($this->stdin, $len+1);
-			// $data=iconv("UTF-8", "ISO-8859-15", $data); // To be tested, not sure if still needed.
-			$this->data=rtrim($data,"\n"); // We set what we got.
+			$data   = @fgets($this->stdin, $len+1);
+			// $data = iconv("UTF-8", "ISO-8859-15", $data); // To be tested, not sure if still needed.
+			$this->data = rtrim($data,"\n"); // We set what we got.
 			$this->logg("IN: ".$data);
 		}
 	}
@@ -110,8 +110,8 @@ class JabberAuth {
 	function out($message)
 	{
 		@fwrite($this->stdout, $message); // We reply ...
-		$dump=@unpack("nn", $message);
-		$dump=$dump["n"];
+		$dump = @unpack("nn", $message);
+		$dump = $dump["n"];
 		$this->logg("OUT: ". $dump);
 	}
 
@@ -129,22 +129,22 @@ class JabberAuth {
 	{
 		do {
 			$this->readstdin(); // get data
-			$length=strlen($this->data); // compute data length
+			$length = strlen($this->data); // compute data length
 			if($length > 0 ) { // for debug mainly ...
 				$this->logg("GO: ".$this->data);
 				$this->logg("data length is : ".$length);
 			}
-			$ret=$this->command(); // play with data !
+			$ret = $this->command(); // play with data !
 			$this->logg("RE: " . $ret); // this is what WE send.
 			$this->out($ret); // send what we reply.
-			$this->data=NULL; // more clean. ...
+			$this->data = NULL; // more clean. ...
 		} while (true);
 	}
 
 	function command()
 	{
-		$data=$this->splitcomm(); // This is an array, where each node is part of what SM sent to us :
-		// 0=>the command,
+		$data = $this->splitcomm(); // This is an array, where each node is part of what SM sent to us :
+		// 0 => the command,
 		// and the others are arguments .. e.g. : user, server, password ...
 
 		if($this->myalive()) { // Check we can play with MySQL
@@ -153,20 +153,20 @@ class JabberAuth {
 			}
 			switch($data[0]) {
 				case "isuser": // this is the "isuser" command, used to check for user existance
-						$this->jabber_user=$data[1];
-						$parms=$data[1];  // only for logging purpose
-						$return=$this->checkuser();
+						$this->jabber_user = $data[1];
+						$parms = $data[1];  // only for logging purpose
+						$return = $this->checkuser();
 					break;
 
 				case "auth": // check login, password
-						$this->jabber_user=$data[1];
-						$this->jabber_pass=$data[3];
-						$parms=$data[1].":".$data[2].":".md5($data[3]); // only for logging purpose
-						$return=$this->checkpass();
+						$this->jabber_user = $data[1];
+						$this->jabber_pass = $data[3];
+						$parms = $data[1].":".$data[2].":".md5($data[3]); // only for logging purpose
+						$return = $this->checkpass();
 					break;
 
 				case "setpass":
-						$return=false; // We do not want jabber to be able to change password
+						$return = false; // We do not want jabber to be able to change password
 					break;
 
 				default:
@@ -175,7 +175,7 @@ class JabberAuth {
 					break;
 			}
 
-			$return=($return) ? 1 : 0;
+			$return = ($return) ? 1 : 0;
 
 			if(strlen($data[0]) > 0 && strlen($parms) > 0) {
 				$this->logg("Command : ".$data[0].":".$parms." ==> ".$return." ");
@@ -263,7 +263,7 @@ class JabberAuth {
 
 	function mysql() // "MySQL abstraction", this opens a permanent MySQL connection, and fill the ressource
 	{
-		$this->mysock=@mysql_pconnect($this->dbhost, $this->dbuser, $this->dbpass);
+		$this->mysock = @mysql_pconnect($this->dbhost, $this->dbuser, $this->dbpass);
 		@mysql_select_db($this->dbbase, $this->mysock);
 		$this->logg("MySQL :: ". (is_resource($this->mysock) ? "Connect�" : "D�connect�"));
 	}

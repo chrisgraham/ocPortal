@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_errorlog
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_errorlog
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,27 +73,27 @@ class Hook_addon_registry_errorlog
 	function get_file_list()
 	{
 		return array(
-			'errorlog.css',
+
 			'sources/hooks/systems/addon_registry/errorlog.php',
 			'lang/EN/errorlog.ini',
 			'data_custom/errorlog.php',
 			'themes/default/images/pagepics/errorlog.png',
 			'themes/default/images/bigicons/errorlog.png',
 			'adminzone/pages/modules/admin_errorlog.php',
-			'ERRORLOG_SCREEN.tpl'
+			'ERRORLOG_SCREEN.tpl',
 		);
 	}
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'ERRORLOG_SCREEN.tpl'=>'administrative__errorlog_screen'
-		);
+				'ERRORLOG_SCREEN.tpl'=>'administrative__errorlog_screen',
+				);
 	}
 
 	/**
@@ -105,11 +106,13 @@ class Hook_addon_registry_errorlog
 	function tpl_preview__administrative__errorlog_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ERRORLOG_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'ERROR'=>lorem_phrase(),
-				'PERMISSION'=>lorem_phrase()
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('ERRORLOG_SCREEN',array(
+					'TITLE'=>lorem_title(),
+					'ERROR'=>lorem_phrase(),
+					'PERMISSION'=>lorem_phrase(),
+						)
+			),NULL,'',true),
 		);
 	}
 }

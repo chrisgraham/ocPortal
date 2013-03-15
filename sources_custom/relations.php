@@ -388,7 +388,6 @@ function get_relation_map()
 		'members_gifts.topic_id'=>'f_topics.id',
 		'members_gifts.gift_id'=>'gifts.id',
 		'temp_block_permissions.p_session_id'=>'sessions.id',
-		'credit_purchases.member_id'=>'f_members.id',
 	);
 
 	return $relation_map;

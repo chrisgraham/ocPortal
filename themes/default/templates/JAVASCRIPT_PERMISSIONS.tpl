@@ -37,8 +37,8 @@ function fade_icons_out()
 	var icons=get_elements_by_class_name(document,'perm_icon');
 	for (var i=0;i<icons.length;i++)
 	{
-		set_opacity(icons[i],1.0);
-		if (typeof window.fade_transition!='undefined') fade_transition(icons[i],20,50,-10);
+		setOpacity(icons[i],1.0);
+		if (typeof window.nereidFade!='undefined') nereidFade(icons[i],20,50,-10);
 	}
 }
 
@@ -47,7 +47,7 @@ function fade_icons_in()
 	var icons=get_elements_by_class_name(document,'perm_icon');
 	for (var i=0;i<icons.length;i++)
 	{
-		if (typeof window.fade_transition!='undefined') fade_transition(icons[i],100,50,10);
+		if (typeof window.nereidFade!='undefined') nereidFade(icons[i],100,50,10);
 	}
 }
 
@@ -67,8 +67,8 @@ function show_permission_setting(ob,event)
 
 			if (value.indexOf(',')!=-1) return; // Can't find any single value, as multiple resources are selected
 
-			var node=window.site_tree.getElementByIdHack(value);
-			serverid=node.getAttribute('serverid');
+		   var node=site_tree.getElementByIdHack(value);
+		   serverid=node.getAttribute('serverid');
 		} else
 		{
 			serverid=window.perm_serverid+':_new_';
@@ -80,7 +80,7 @@ function show_permission_setting(ob,event)
 		ob.full_setting=ret.responseText;
 	}
 
-	ob.title+=' [{!permissions:DEFAULT_PERMISSION;^} '+ob.full_setting+']';
+	ob.title+=' [{!DEFAULT_PERMISSION^;} '+ob.full_setting+']';
 }
 
 function cleanup_permission_list(name)
@@ -96,7 +96,7 @@ function permissions_overridden(select)
 	if (element.options[0].id!=select+'_custom_option')
 	{
 		var new_option=document.createElement('option');
-		set_inner_html(new_option,'{!permissions:PINTERFACE_LEVEL_CUSTOM;^}');
+		setInnerHTML(new_option,'{!PINTERFACE_LEVEL_CUSTOM^;}');
 		new_option.id=select+'_custom_option';
 		new_option.value='';
 		element.insertBefore(new_option,element.options[0]);
@@ -118,7 +118,7 @@ function copy_permission_presets(name,value,just_track)
 	var i,j,test,stub=name+'_sp_',name2,x;
 
 	var node=null;
-	if (typeof window.site_tree!='undefined') node=window.site_tree.getElementByIdHack(document.getElementById('tree_list').value.split(',')[0]);
+	if (typeof window.site_tree!='undefined') node=site_tree.getElementByIdHack(document.getElementById('tree_list').value.split(',')[0]);
 
 	if (value!='-1')
 	{
@@ -166,7 +166,7 @@ function copy_permission_presets(name,value,just_track)
 
 	if ((!just_track) && (elements.length==2) && (made_change))
 	{
-		window.fauxmodal_alert('{!permissions:JUST_PRESETS;^}');
+		window.fauxmodal_alert('{!JUST_PRESETS^;}');
 	}
 
 	return made_change;
@@ -175,12 +175,12 @@ function copy_permission_presets(name,value,just_track)
 function setup_sp_override_selector(name,default_access,sp,title,all_global)
 {
 	eval('window.'+name+'_sp_'+sp+'='+default_access);
-	var select_element=document.getElementById(name+'_sp_'+sp);
+	var selectElement=document.getElementById(name+'_sp_'+sp);
 	if (all_global)
 	{
 		// Any disabled ones will be set to show the default permission rather than the "use-default" one, WHILST all-global is on
-		select_element.selectedIndex=eval(name+'_sp_'+sp)+1; // -1 is at index 0
-		if (typeof window.site_tree=='undefined') select_element.disabled=true;
+		selectElement.selectedIndex=eval(name+'_sp_'+sp)+1; // -1 is at index 0
+		if (typeof window.site_tree=='undefined') selectElement.disabled=true;
 	}
 }
 
@@ -205,7 +205,7 @@ function permission_repeating(button,name)
 	{
 		button.style.textDecoration='blink';
 		window.permission_copying=name;
-		window.fauxmodal_alert('{!permissions:REPEAT_PERMISSION_NOTICE;^}');
+		window.fauxmodal_alert('{!REPEAT_PERMISSION_NOTICE^;}');
 		for (var i=0;i<trs.length;i++)
 		{
 			if (trs[i]!=tr) trs[i].onclick=copy_permissions_function(trs[i],tr,name);
@@ -253,7 +253,7 @@ function update_permission_box(setting)
 	{
 		document.getElementById('selection_form_fields').style.display='none';
 		document.getElementById('selection_button').disabled=true;
-		set_inner_html(document.getElementById('selection_message'),'{!permissions:PERMISSIONS_TREE_EDITOR_NONE_SELECTED;^}');
+		setInnerHTML(document.getElementById('selection_message'),'{!PERMISSIONS_TREE_EDITOR_NONE_SELECTED^;}');
 	} else
 	{
 		// Go through and set maximum permissions/override from those selected
@@ -264,7 +264,7 @@ function update_permission_box(setting)
 		var is_cms=null;
 		for (i=0;i<values.length;i++) // For all items that we are loading permissions for (we usually just do it for one, but sometimes we load whole sets if we are batch setting permissions)
 		{
-			node=window.site_tree.getElementByIdHack(values[i]);
+			node=site_tree.getElementByIdHack(values[i]);
 
 			if (i==0) // On first iteration we do a cleanup
 			{
@@ -288,7 +288,7 @@ function update_permission_box(setting)
 					if (element.options[0].id!='access_'+group+'_custom_option')
 					{
 						new_option=document.createElement('option');
-						set_inner_html(new_option,'{!permissions:PINTERFACE_LEVEL_CUSTOM;^}');
+						setInnerHTML(new_option,'{!PINTERFACE_LEVEL_CUSTOM^;}');
 						new_option.id='access_'+group+'_custom_option';
 						new_option.value='';
 						element.insertBefore(new_option,element.options[0]);
@@ -360,7 +360,7 @@ function update_permission_box(setting)
 								row=matrix.getElementsByTagName('tr')[0];
 								new_cell=row.insertBefore(document.createElement('th'),row.cells[row.cells.length-1]);
 								new_cell.className='sp_header';
-								set_inner_html(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+window.column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
+								setInnerHTML(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
 
 								num_sp_total++;
 							}
@@ -368,8 +368,8 @@ function update_permission_box(setting)
 							// Manually build up cell
 							row=document.getElementById('access_'+group+'_sp_container');
 							new_cell=row.insertBefore(document.createElement('td'),row.cells[row.cells.length-1]);
-							new_cell.className='form_table_field_input sp_cell';
-							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!permissions:OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!permissions:NO_COMPACT;^}</option><option value="1">{!permissions:YES_COMPACT;^}</option></select>');
+							new_cell.className='dottedborder_barrier_b_nonrequired sp_cell';
+							setInnerHTML(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!OVERRIDE^;}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&nbsp;</option><option value="0">{!NO_COMPACT^;}</option><option value="1">{!YES_COMPACT^;}</option></select>');
 
 							element=document.getElementById('access_'+group+'_sp_'+sp);
 
@@ -422,21 +422,21 @@ function update_permission_box(setting)
 			// Hide certain things if we only have view settings here, else show them
 			if (num_sp_total==0)
 			{
-				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'{!GROUP;^}');
+				setInnerHTML(matrix.getElementsByTagName('tr')[0].cells[0],'{!GROUP^;}');
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='none';
 					var button=document.getElementById('access_'+known_groups[k]+'_sp_container').getElementsByTagName('button')[0]
-					if (typeof button!='undefined') button.disabled=true;
+					if (typeof button!='undefined') button.style.display='none';
 				}
 			} else
 			{
-				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'<div>{!GROUP;^}</div><br /><div>{!permissions:PINTERFACE_PRESETS;^}</div>');
+				setInnerHTML(matrix.getElementsByTagName('tr')[0].cells[0],'{!GROUP^;}<br /><br />{!PINTERFACE_PRESETS^;}');
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='block';
 					var button=document.getElementById('access_'+known_groups[k]+'_sp_container').getElementsByTagName('button')[0]
-					if (typeof button!='undefined') button.disabled=false;
+					if (typeof button!='undefined') button.style.display='block';
 				}
 			}
 
@@ -454,7 +454,7 @@ function update_permission_box(setting)
 
 		document.getElementById('selection_form_fields').style.display='block';
 		document.getElementById('selection_button').disabled=false;
-		set_inner_html(document.getElementById('selection_message'),(values.length<=1)?'{!permissions:PERMISSIONS_TREE_EDITOR_ONE_SELECTED;^}':'{!permissions:PERMISSIONS_TREE_EDITOR_MULTI_SELECTED;^}');
+		setInnerHTML(document.getElementById('selection_message'),(values.length<=1)?'{!PERMISSIONS_TREE_EDITOR_ONE_SELECTED^;}':'{!PERMISSIONS_TREE_EDITOR_MULTI_SELECTED^;}');
 	}
 }
 
@@ -473,7 +473,7 @@ function set_permissions(setting)
 		var id,i,node,j,group,element,sp,known_groups=[],k,serverid,set_request='',set_request_b,new_value;
 		for (i=0;i<values.length;i++)
 		{
-			node=window.site_tree.getElementByIdHack(values[i]);
+			node=site_tree.getElementByIdHack(values[i]);
 			serverid=node.getAttribute('serverid');
 
 			// Find usergroups
@@ -531,16 +531,16 @@ function set_permissions(setting)
 				}
 
 				// Update UI indicators
-				set_inner_html(document.getElementById('tree_listextra_'+id),permissions_img_func_1(node,id)+permissions_img_func_2(node,id));
+				setInnerHTML(document.getElementById('tree_listextra_'+id),permissions_img_func_1(node,id)+permissions_img_func_2(node,id));
 			}
 
 			if (set_request_b!='') set_request=set_request+'&map_'+i+'='+window.encodeURIComponent(serverid)+set_request_b;
 		}
 
 		// Send AJAX request
-		if (set_request!='') do_ajax_request('{$BASE_URL_NOHTTP;}/data/site_tree.php?set_perms=1'+keep_stub(),null,set_request);
+		if (set_request!='') do_ajax_request("{$BASE_URL_NOHTTP#}/data/site_tree.php?set_perms=1"+keep_stub(),null,set_request);
 	}
-	window.fauxmodal_alert('{!permissions:PERMISSIONS_TREE_EDITOR_SAVED;^}');
+	window.fauxmodal_alert('{!PERMISSIONS_TREE_EDITOR_SAVED^;}');
 }
 
 function permissions_img_func_1(node,id)
@@ -548,7 +548,7 @@ function permissions_img_func_1(node,id)
 	var temp=permissions_img_func_1_b(node,id);
 	var url=temp[0];
 	var title=temp[1];
-	return '<img class="vertical_alignment perm_icon" src="'+url+'" alt="'+title+'" title="'+title+'" />&nbsp;';
+	return '<img class="inline_image perm_icon" src="'+url+'" alt="'+title+'" title="'+title+'" />&nbsp;';
 }
 
 function permissions_img_func_1_b(node,id)
@@ -563,24 +563,24 @@ function permissions_img_func_1_b(node,id)
 	if (((window.attributes_full[id]['gsp_delete_highrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_delete_midrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_delete_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/3}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_3;^}');
+			return Array('{$IMG;,permlevels/3}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_3^;}');
 	else
 	if (((window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/2}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_2;^}');
+			return Array('{$IMG;,permlevels/2}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_2^;}');
 	else
 	if (((window.attributes_full[id]['gsp_submit_highrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_submit_midrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_submit_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/1}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_1;^}');
+			return Array('{$IMG;,permlevels/1}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_1^;}');
 	else
 	if (window.attributes_full[id]['inherits_something'])
-			return Array('{$IMG;,permlevels/inherit}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_GLOBAL;^}');
+			return Array('{$IMG;,permlevels/inherit}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_GLOBAL^;}');
 	else
 	if (window.attributes_full[id]['no_sps']) return Array('{$IMG;,blank}'.replace(/^http:/,window.location.protocol),'');
 
-	return Array('{$IMG;,permlevels/0}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_0;^}');
+	return Array('{$IMG;,permlevels/0}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_0^;}');
 }
 
 function permissions_img_func_2(node,id)
@@ -588,7 +588,7 @@ function permissions_img_func_2(node,id)
 	var temp=permissions_img_func_2_b(node,id);
 	var url=temp[0];
 	var title=temp[1];
-	return '<img class="vertical_alignment" src="'+url+'" alt="'+title+'" title="'+title+'" />';
+	return '<img class="inline_image" src="'+url+'" alt="'+title+'" title="'+title+'" />';
 }
 
 function permissions_img_func_2_b(node,id)
@@ -598,17 +598,17 @@ function permissions_img_func_2_b(node,id)
 	var group=document.getElementById('group').value;
 
 	if (node.getAttribute('g_view_'+group)=='true')
-		return Array('{$IMG;,led_on}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_VIEW;^}');
-	return Array('{$IMG;,led_off}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_VIEW_NO;^}');
+		return Array('{$IMG;,led_on}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_VIEW^;}');
+	return Array('{$IMG;,led_off}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_VIEW_NO^;}');
 }
 
 function update_group_displayer(setting)
 {
 	if (typeof window.site_tree=='undefined') return;
 
-	set_inner_html(document.getElementById('group_name'),escape_html(window.usergroup_titles[setting.options[setting.selectedIndex].value]));
+	setInnerHTML(document.getElementById('group_name'),escape_html(window.usergroup_titles[setting.options[setting.selectedIndex].value]));
 	var html=document.getElementById('tree_list__root_tree_list');
-	set_inner_html(html,'');
-	window.site_tree.render_tree(window.site_tree.tree_list_data,html);
+	setInnerHTML(html,'');
+	site_tree.render_tree(site_tree.tree_list_data,html);
 }
 

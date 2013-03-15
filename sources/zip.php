@@ -36,7 +36,7 @@ function zip_scan_folder($path,$subpath='')
 		while (($entry=readdir($dh))!==false)
 		{
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
-			if (!should_ignore_file($_subpath))
+			if ((!should_ignore_file($_subpath)) && ($entry!='backups'))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;
@@ -84,6 +84,65 @@ function crc32_file($filename)
 	}
 
 	return crc32(file_get_contents($filename));
+
+	/* The below code is not 64-bit compatible :( */
+
+/*   $f = @fopen($filename,'rb');
+   if ($f===false) return NULL;
+   
+   static $crc32table=array();
+	static $reflect8table=array();
+   if ($crc32table==array())
+   {
+      $polynomial = 0x04c11db7;
+      $top_bit = 1 << 31;
+       
+      for($i = 0; $i < 256; $i++) 
+      { 
+         $remainder = $i << 24;
+         for ($j = 0; $j < 8; $j++)
+         {
+            if ($remainder & $top_bit)
+               $remainder = ($remainder << 1) ^ $polynomial;
+            else $remainder = $remainder << 1;
+         }
+         
+         $crc32table[$i] = $remainder;
+         
+         if (isset($reflect8table[$i])) continue;
+         $str = str_pad(decbin($i), 8, '0', STR_PAD_LEFT);
+         $num = bindec(strrev($str));
+         $reflect8table[$i] = $num;
+         $reflect8table[$num] = $i;
+      }
+   }
+
+   $remainder = 0xffffffff;
+   do
+   {
+		$data = fread($f,1024);
+		if ($data===false) break;
+      $len = strlen($data);
+		if ($len==0) break;
+
+      for ($i = 0; $i < $len; $i++)
+      {
+         $byte = $reflect8table[ord($data[$i])];
+         $index = @(($remainder >> 24) & 0xff) ^ $byte;
+         $crc = $crc32table[$index];
+         $remainder = @($remainder << 8) ^ $crc;
+      }
+   }
+	while (true);
+   
+   $str = decbin($remainder);
+   $str = str_pad($str, 32, '0', STR_PAD_LEFT);
+   $remainder = bindec(strrev($str));
+
+   $crc=@($remainder ^ 0xffffffff);
+   if(@($crc & 0x80000000))
+
+	return $crc;*/
 }
 
 /**
@@ -151,7 +210,7 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 		{
 			if ((!array_key_exists('data',$file)) || (is_null($file['data'])))
 			{
-				$out.=file_get_contents($file['full_path']);
+				$out.=file_get_contents($file['full_path'],FILE_BINARY);
 			} else
 			{
 				$out.=$file['data'];

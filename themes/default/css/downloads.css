@@ -7,7 +7,7 @@
 
 .download_box_pic {
 	float: {!en_right};
-	padding-{!en_left}: 1em;
+	padding-{!en_left}: 10px;
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -22,19 +22,16 @@
 
 /* Download screen */
 
-.download_field_name_column {
-	width: 45%;
-}
-
-.download_field_value_column {
-	width: 55%;
-}
-
 {+START,IF,{$NOT,{$MOBILE}}}
 	.download_description {
 		margin-{!en_right}: 18em;
 	}
 {+END}
+
+.download_outmoded {
+	text-align: center;
+	font-weight: bold;
+}
 
 .download_start_slideshow {
 	text-align: center;
@@ -42,7 +39,7 @@
 
 .download_gallery_image {
 	display: inline-block;
-	margin: 0 1em;
+	margin: 0 10px;
 	vertical-align: top;
 }
 
@@ -63,6 +60,10 @@
 	}
 {+END}
 
+.download_meta_data .standardbox_spaced {
+	padding-left: 0;
+}
+
 .download_meta_data .ratings, .download_meta_data .trackbacks {
 	width: 100%;
 }
@@ -75,15 +76,14 @@
 	padding-left: 47px;
 	background: url('{$IMG;,bigicons/downloads}') no-repeat;
 	text-align: center;
-	min-height: 55px;
 }
 
 .download_now h4 {
 	font-size: 1.15em;
 }
 
-.download_licence {
-	margin: 0.5em;
+.download_link, .download_licence {
+	margin-top: 0;
 }
 
 .download_filesize {
@@ -91,12 +91,12 @@
 	margin-bottom: 0;
 }
 
-.download_stats_wrapper {
+#download_stats_wrapper {
 	margin-top: 1em;
 }
 
-.download_stats th, .download_stats td {
-	background-color: {$GET,area_background};
+#download_stats th, #download_stats td {
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
 	font-size: 0.85em;
-	padding: 0.5em;
+	padding: 3px;
 }

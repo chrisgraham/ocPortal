@@ -47,7 +47,14 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 		$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',dirname($_SERVER['PHP_SELF']))));
 	} else
 	{
-		@include($FILE_BASE.'/info.php');
+		/*if (is_file($FILE_BASE.'/use_comp_name'))
+		{
+			@include($FILE_BASE.'/'.filter_naughty((array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME'])).'.php');
+		} else
+		{*/
+			@include($FILE_BASE.'/info.php');
+			/*@include($FILE_BASE.'/info-override.php');
+		}*/
 		if (array_key_exists('base_url',$SITE_INFO))
 		{
 			$base_url=$SITE_INFO['base_url'];
@@ -118,7 +125,7 @@ function require_code($codename,$light_exit=false)
 		global $CODE_OVERRIDES;
 		if (!isset($CODE_OVERRIDES))
 		{
-			$CODE_OVERRIDES=persistent_cache_get('CODE_OVERRIDES');
+			$CODE_OVERRIDES=persistant_cache_get('CODE_OVERRIDES');
 			if ($CODE_OVERRIDES===NULL) $CODE_OVERRIDES=array();
 		}
 		if (isset($CODE_OVERRIDES[$codename]))
@@ -131,7 +138,7 @@ function require_code($codename,$light_exit=false)
 			$has_original=is_file($path_b);
 			$CODE_OVERRIDES[$codename]=$has_override;
 			$CODE_OVERRIDES['!'.$codename]=$has_original;
-			persistent_cache_set('CODE_OVERRIDES',$CODE_OVERRIDES,true);
+			persistant_cache_set('CODE_OVERRIDES',$CODE_OVERRIDES,true);
 		}
 	} else
 	{
@@ -148,7 +155,7 @@ function require_code($codename,$light_exit=false)
 		if (!isset($has_original)) $has_original=is_file($path_b);
 		if (($path_a!=$path_b) && ($has_original))
 		{
-			$orig=str_replace(array('?'.'>','<'.'?php'),array('',''),file_get_contents($path_b));
+			$orig=str_replace(array('?'.'>','<?php'),array('',''),file_get_contents($path_b));
 			$a=file_get_contents($path_a);
 
 			if (((strpos($codename,'.php')===false) || (strpos($a,'class Mx_')===false)) && ((function_exists('quercus_version')) || (!$hphp)))
@@ -217,7 +224,7 @@ function require_code($codename,$light_exit=false)
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
 					@ini_set('display_errors','0');
-					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_b)));
+					$orig=str_replace('?'.'>','',str_replace('<?php','',file_get_contents($path_b)));
 					if (eval($orig)===false)
 					{
 						if ((!function_exists('fatal_exit')) || ($codename=='failure')) critical_error('PASSON',@strval($php_errormsg).' [sources/'.$codename.'.php]');
@@ -230,7 +237,7 @@ function require_code($codename,$light_exit=false)
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
 					@ini_set('display_errors','0');
-					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
+					$orig=str_replace('?'.'>','',str_replace('<?php','',file_get_contents($path_a)));
 					if (eval($orig)===false)
 					{
 						if ((!function_exists('fatal_exit')) || ($codename=='failure')) critical_error('PASSON',@strval($php_errormsg).' [sources_custom/'.$codename.'.php]');
@@ -246,7 +253,7 @@ function require_code($codename,$light_exit=false)
 			if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 			{
 				@ini_set('display_errors','0');
-				$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
+				$orig=str_replace('?'.'>','',str_replace('<?php','',file_get_contents($path_a)));
 				if (eval($orig)===false)
 				{
 					if ((!function_exists('fatal_exit')) || ($codename=='failure')) critical_error('PASSON',@strval($php_errormsg).' [sources_custom/'.$codename.'.php]');
@@ -322,7 +329,7 @@ function require_code($codename,$light_exit=false)
 	{
 		if ($codename=='critical_errors')
 		{
-			exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The ocPortal critical error message file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($GLOBALS['FILE_BASE'].'/sources/global.php');
+			exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The ocPortal critical error message file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($GLOBALS['FILE_BASE'].'/sources/global.php');
 		}
 		critical_error('MISSING_SOURCE',$codename);
 	}
@@ -458,7 +465,7 @@ if (ini_get('register_globals')=='1') // Unregister globals
 
 /*if (is_file('closed'))
 {
-	exit(file_get_contents('closed'));
+	exit(file_get_contents('closed',FILE_TEXT));
 }*/
 
 if (!function_exists('file_get_contents'))
@@ -467,12 +474,13 @@ if (!function_exists('file_get_contents'))
 	 * Get the contents of a file.
 	 *
 	 * @param  SHORT_TEXT	The file name.
+	 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 	 * @return ~LONG_TEXT	The file contents (false: error).
 	 */
-	function file_get_contents($filename)
+	function file_get_contents($filename,$type=0)
 	{
 		$data='';
-		$file=@fopen($filename,'rb');
+		$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
 		if ($file)
 		{
 			while (!feof($file)) $data.=fread($file,1024);
@@ -481,6 +489,12 @@ if (!function_exists('file_get_contents'))
 		return $data;
 	}
 }
+
+// These are allowed for accessible form reasons
+/*foreach ($_GET as $key=>$val)
+	if ($val=='****') $val='';
+foreach ($_POST as $key=>$val)
+	if ($val=='****') $val='';*/
 
 global $_REQUIRED_CODE;
 $_REQUIRED_CODE=array();
@@ -506,11 +520,18 @@ if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 	@include($FILE_BASE.'/sources/critical_errors.php');
 	if ($php_errormsg!='')
 	{
-		exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The third most basic ocPortal startup file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+		exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The third most basic ocPortal startup file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 	}
 }
 
-@include($FILE_BASE.'/info.php');
+/*if (is_file($FILE_BASE.'/use_comp_name'))
+{
+	@include($FILE_BASE.'/'.filter_naughty((array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME'])).'.php');
+} else
+{*/
+	@include($FILE_BASE.'/info.php');
+/*	@include($FILE_BASE.'/info-override.php');
+}*/
 
 global $SITE_INFO;
 if (!isset($SITE_INFO))
@@ -526,8 +547,10 @@ if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_EN
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 
 @ini_set('allow_url_fopen','0');
+if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
 
 //require_code('critical_errors');
+if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 $GLOBALS['PURE_POST']=$_POST;
 require_code('global2');
 $GLOBALS['NO_QUERY_LIMIT']=true;

@@ -144,7 +144,7 @@ class Hook_bin
 
 		if ((is_dir($path)) && (file_exists($path.'/'.$file_name)) && (is_readable($path.'/'.$file_name)))
 		{
-			return file_get_contents($path.'/'.$file_name);
+			return file_get_contents($path.'/'.$file_name,FILE_TEXT);
 		}
 		else return false; //File doesn't exist
 	}

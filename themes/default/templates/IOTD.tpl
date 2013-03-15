@@ -1,10 +1,10 @@
-<div class="media_box">
+<p class="iotd_expose">
 	<a href="{VIEW_URL*}">{IMAGE}</a>
-</div>
+</p>
 
 {+START,IF_NON_EMPTY,{CAPTION}}
 	<div class="associated_details">
-		{$PARAGRAPH,{CAPTION}}
+		{CAPTION}
 	</div>
 {+END}
 

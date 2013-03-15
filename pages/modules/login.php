@@ -103,7 +103,7 @@ class Module_login
 	 */
 	function login_before()
 	{
-		$title=get_screen_title('_LOGIN');
+		$title=get_page_title('_LOGIN');
 
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
@@ -160,7 +160,7 @@ class Module_login
 
 		breadcrumb_set_parents(array());
 
-		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_URL'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
+		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_LINK'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
 	}
 
 	/**
@@ -177,7 +177,7 @@ class Module_login
 		$id=$feedback['id'];
 		if (!is_null($id))
 		{
-			$title=get_screen_title('LOGGED_IN');
+			$title=get_page_title('LOGGED_IN');
 			$url=enforce_sessioned_url(either_param('redirect'));
 			//set_session_id(get_session_id()); // Just in case something earlier set it to a pre-logged-in one     Not needed
 
@@ -200,8 +200,7 @@ class Module_login
 			return do_template('LOGIN_REDIRECT_SCREEN',array('_GUID'=>'82e056de9150bbed185120eac3571f40','REFRESH'=>$refresh,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('_LOGIN_TEXT'),'URL'=>$url,'POST'=>$post));
 		} else
 		{
-			$title=get_screen_title('USER_LOGIN_ERROR');
-
+			get_page_title('USER_LOGIN_ERROR');
 			$text=$feedback['error'];
 
 			attach_message($text,'warn');
@@ -228,7 +227,7 @@ class Module_login
 	{
 		decache('side_users_online');
 
-		$title=get_screen_title('LOGGED_OUT');
+		$title=get_page_title('LOGGED_OUT');
 
 		$url=get_param('redirect',NULL);
 		if (is_null($url))
@@ -246,7 +245,7 @@ class Module_login
 	 */
 	function concede()
 	{
-		$title=get_screen_title('CONCEDED_MODE');
+		$title=get_page_title('CONCEDED_MODE');
 
 		$GLOBALS['SITE_DB']->query_update('sessions',array('session_confirmed'=>0),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
@@ -255,7 +254,7 @@ class Module_login
 			$SESSION_CACHE[get_session_id()]['session_confirmed']=0;
 			if (get_value('session_prudence')!=='1')
 			{
-				persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+				persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}
 		}
 
@@ -283,7 +282,7 @@ class Module_login
 			$visible=false; // Small fudge: always say thay are not visible now, so this will make them visible -- because they don't have permission to be invisible
 		}
 
-		$title=get_screen_title($visible?'INVISIBLE':'BE_VISIBLE');
+		$title=get_page_title($visible?'INVISIBLE':'BE_VISIBLE');
 
 		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>$visible?1:0),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
@@ -292,7 +291,7 @@ class Module_login
 			$SESSION_CACHE[get_session_id()]['session_invisible']=$visible?1:0;
 			if (get_value('session_prudence')!=='1')
 			{
-				persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+				persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}
 		}
 

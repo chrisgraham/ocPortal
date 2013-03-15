@@ -6,11 +6,13 @@
 	</p>
 {+END}
 {+START,IF_PASSED,TEXT}
-	{$PARAGRAPH,{TEXT}}
+	<div>
+		{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{TEXT}{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
+	</div>
 {+END}
 
 <form method="post" enctype="multipart/form-data" action="{$PAGE_LINK*,_SELF:_SELF:uploading=1}">
-	 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table results_table wide_table"><tbody>
+	 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="variable_table solidborder wide_table"><tbody>
 		  <tr>
 				<th>{!NAME}</th>
 				<td><label class="accessibility_hidden" for="name">{!NAME}</label><input type="text" size="20" name="name" id="name" value="{NAME*}" /></td>
@@ -137,9 +139,9 @@
 					<th>{!W_POSITION}</th>
 					<td>
 						<label for="position_0">{!W_UP} <input type="radio" checked="checked" id="position_0" name="position" value="0" /></label>
-						<label for="position_1" class="horiz_field_sep">{!W_DOWN}<input type="radio" id="position_1" name="position" value="1" /></label>
-						<label for="position_2" class="horiz_field_sep">{!W_RIGHT} <input type="radio" id="position_2" name="position" value="2" /></label>
-						<label for="position_3" class="horiz_field_sep">{!W_LEFT} <input type="radio" id="position_3" name="position" value="3" /></label>
+						<label for="position_1" class="tick_list_spacer">{!W_DOWN}<input type="radio" id="position_1" name="position" value="1" /></label>
+						<label for="position_2" class="tick_list_spacer">{!W_RIGHT} <input type="radio" id="position_2" name="position" value="2" /></label>
+						<label for="position_3" class="tick_list_spacer">{!W_LEFT} <input type="radio" id="position_3" name="position" value="3" /></label>
 					</td>
 					<td>{!W_ROOM_POS}</td>
 			  </tr>

@@ -5,71 +5,51 @@
 
 /* Both flow mode and viewing entries */
 
+.ecard_link, .view_alone_link {
+	text-align: center;
+	margin: 5px 0 1px 0;
+}
+
 .gallery_entry_details {
 	margin-bottom: 1em;
-}
-
-.gallery_entry_field_name_column {
-	width: 8.5em;
-}
-
-.gallery_entry_field_value_column {
-	width: 16em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 250px;
+	{+END}
 }
 
 /* Non flow-mode only */
 
-{$,Our standard ocPortal-wide thumbnail image size is defined by the thumb_width option}
-{$SET,gallery_thumb_size,{$CONFIG_OPTION,thumb_width}px}
-{$,However actually lets make them smaller custom sizes for the gallery and let CSS scale-down the larger thumbnail images}
-{$SET,gallery_thumb_size,175px}
-{$,That is not the most efficient approach - which would be to use the Tempcode THUMBNAIL symbol in the GALLERY_IMAGE/GALLERY_VIDEO templates to generate idealised thumbnails and tie them into the HTML - but that is fiddly and messy, requires more thought and planning by the web designer}
-{$,Or, of course we could use the standard thumbnail size, or change the standard thumbnail size, but that would affect other systems which may want the larger thumbnails}
-
-.gallery_grid_cell_wrap {
+.gallery_media_expose_wrap {
 	overflow: hidden;
-
-	/* Fiddle it so our grid cells will be flush with the left */
-	margin-left: -0.5em;
 	width: 100%;
-	padding-right: 0.5em;
-}
-
-.gallery_grid_cell {
-	float: {!en_left};
-	padding: 0.5em;
-}
-
-.gallery_regular_thumb {
-	font-size: 0.85em;
-	border: 1px solid {$GET,standard_border};
-	background-color: {$GET,area_background};
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
-}
-
-.img_thumb_wrap {
-	/* Essentially adds padding around thumbnails; the thumbnails are sized to fit a box as tightly as possible, but unused space is not stored inside the images themselves */
-	width: {$GET,gallery_thumb_size};
-	height: {$GET,gallery_thumb_size};
-	text-align: center;
-	vertical-align: middle;
-	display: table-cell;
-}
-
-.img_thumb_wrap a {
 	outline: 0;
 }
 
-.img_thumb_wrap .img_thumb {
-	vertical-align: bottom; /* Removes gap under this centered inline image, by moving it to baseline */
-
-	/* Maybe the thumbnail size has been reduced at some point - guard against this */
-	max-width: {$GET,gallery_thumb_size};
-	max-height: {$GET,gallery_thumb_size};
+.gallery_media_expose {
+	overflow: hidden;
+	outline: 0;
+	float: {!en_left};
+	margin: 8px 8px 0 0;
+	width: 152px;
 }
 
-.gallery_regular_thumb p, .gallery_regular_thumb .grating {
-	margin: 0.5em;
+.gallery_regular_thumb {
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	background-color: #e3e9f2; /* {$,wizard, 100% sb_color } */
+	font-size: 0.85em;
+}
+
+.gallery_regular_thumb a {
+	outline: 0;
+}
+
+.gallery_regular_thumb a img {
+	width: 150px;
+	display: block;
+}
+
+.gallery_regular_thumb .gmeta {
+	margin: 3px;
 }
 
 .gallery_regular_thumb .grating {
@@ -80,8 +60,9 @@
 	font-size: 0.85em;
 }
 
-.gallery_tooltip h3 {
+.gallery_tooltip_description {
 	margin-bottom: 0.85em;
+	max-width: 245px;
 }
 
 /* Flow-mode only */
@@ -89,15 +70,15 @@
 .flowmode_thumb {
 	display: inline-block;
 	{+START,IF,{$MOBILE}}
-		margin: 0.5em;
+		margin: 4px;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin: 0 1em;
+		margin: 0 10px;
 	{+END}
 }
 
 .flowmode_thumb img {
-	max-width: 150px; /* Smaller, for carousel */
+	max-width: 150px;
 }
 
 .flowmode_video {
@@ -110,7 +91,7 @@
 
 /* Viewing entries */
 
-.gallery_entry_screen {
+#gallery_entry_screen {
 	width: 100%;
 	min-height: 100%;
 }
@@ -129,23 +110,20 @@
 	width: 3em;
 }
 
-/* The timer countdown */
-.changer {
+#changer {
 	font-weight: bold;
-	font-family: Courier, monospace;
+	font-family: Courier;
 	font-size: 1.2em;
 }
 
-/* side_root_galleries block */
+/* side_root galleries block */
 
 .side_galleries_block p {
-	margin-top: 0.5em;
+	margin-top: 0.4em;
 }
 
 .side_galleries_block_exp {
 	font-weight: bold;
-	background: none;
-	color: {$GET,slightly_seeded_text};
 }
 
 .side_galleries_block ul.compact_list {
@@ -158,64 +136,22 @@
 	padding: 0;
 }
 
-/* Tease block / Image fader block */
+/* Tease block */
 
 .gallery_tease_pic_wrap {
-	margin-bottom: 1.5em;
-}
-
-.gallery_tease_pic_wrap h2, .gallery_tease_pic_wrap h3 {
-	max-width: 18em;
+	margin-bottom: 15px;
 }
 
 .gallery_tease_pic {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 40em;
+		width: 600px;
 	{+END}
 	margin: 0 auto;
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,point_of_interest_border};}
 }
 
 .gallery_tease_pic_pic {
 	float: {!en_right};
-	margin-{!en_left}: 0.5em;
 	text-align: {!en_right};
-}
-
-.gallery_tease_pic>.box {
-	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 0;}
-}
-
-#tease_scrolling_text {
-	width: 23em;
-}
-
-/* Make sure it fits okay on the side panel */
-.global_side_panel .gallery_tease_pic {
-	width: auto;
-}
-.global_side_panel .gallery_tease_pic_wrap h2, .global_side_panel .gallery_tease_pic_wrap h3 {
-	display: none;
-}
-.global_side_panel .img_thumb_wrap .img_thumb {
-	max-width: 100%;
-}
-
-/* Image fader block */
-
-.image_fader_box {
-	position: relative;
-	border: 1px solid {$GET,standard_border};
-	display: inline-block;
-}
-
-.image_fader_box img {
-	display: block;
-}
-
-/* If nested in a box already */
-.box_inner>.image_fader_box {
-	border: 0;
 }
 
 /* Miscellaneous media handling */

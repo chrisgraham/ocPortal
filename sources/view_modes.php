@@ -83,7 +83,9 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 
 	if (function_exists('set_time_limit')) @set_time_limit(280);
 
-	$middle_spt=new ocp_tempcode();
+	$echo=do_header();
+	//$echo->evaluate_echo();
+	$echo2=new ocp_tempcode();
 
 	if (is_null($out_evaluated))
 	{
@@ -92,7 +94,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		ob_end_clean();
 	}
 
-	// HACKHACK: Yuck. We have to after-the-fact make it wide, and empty lots of internal caching to reset the state.
+	// HACKHACK: Yuck. we have to after-the-fact make it wide, and empty lots of internal caching to reset the state.
 	$_GET['wide_high']='1';
 	$_GET['wide']='1';
 	$GLOBALS['LOADED_PANELS']=array();
@@ -124,7 +126,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	// IDE linkage
 	if ($special_page_type=='ide_linkage')
 	{
-		$title=get_screen_title('IDE_LINKAGE');
+		$title=get_page_title('IDE_LINKAGE');
 
 		$file_links=new ocp_tempcode();
 
@@ -132,7 +134,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		/*foreach (array_keys($JAVASCRIPTS) as $name)	Already in list of templates
 		{
 			$txtmte_url='txmt://open?url=file://'.$name;
-			$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'ef68ed85bfc07b45e1fe2d94bd2672f2','URL'=>$txtmte_url,'NAME'=>$name)));
+			$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('URL'=>$txtmte_url,'NAME'=>$name)));
 		}*/
 		foreach (array_keys($CSSS) as $name)
 		{
@@ -141,7 +143,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			{
 				list($theme,$type)=$search;
 				$txtmte_url='txmt://open?url=file://'.get_file_base().'/themes/'.$theme.'/'.$type.'/'.$name.'.css';
-				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'c3d6bdf723918aae23541d91ebf09f0b','DISPLAY_STRING'=>'(CSS)','URL'=>$txtmte_url,'NAME'=>$name.'.css')));
+				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('DISPLAY_STRING'=>'(CSS)','URL'=>$txtmte_url,'NAME'=>$name.'.css')));
 			}
 		}
 		foreach (array_keys($_REQUIRED_CODE) as $name)
@@ -152,12 +154,12 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			if (file_exists($path_a))
 			{
 				$txtmte_url='txmt://open?url=file://'.$path_a;
-				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'3d99e7c51959f12cb1a935d302e0fac2','DISPLAY_STRING'=>'(PHP)','URL'=>$txtmte_url,'NAME'=>$name.(((strpos($name,'.php')===false)?'.php':'')))));
+				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('DISPLAY_STRING'=>'(PHP)','URL'=>$txtmte_url,'NAME'=>$name.(((strpos($name,'.php')===false)?'.php':'')))));
 			}
 			if (file_exists($path_b))
 			{
 				$txtmte_url='txmt://open?url=file://'.$path_b;
-				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'6c9fbce894cc841776123781906ebd88','DISPLAY_STRING'=>'(PHP)','URL'=>$txtmte_url,'NAME'=>$name.(((strpos($name,'.php')===false)?'.php':'')))));
+				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('DISPLAY_STRING'=>'(PHP)','URL'=>$txtmte_url,'NAME'=>$name.(((strpos($name,'.php')===false)?'.php':'')))));
 			}
 		}
 		foreach (array_keys($LANGS_REQUESTED) as $name)
@@ -165,12 +167,12 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			if (file_exists(get_file_base().'/lang_custom/'.fallback_lang().'/'.$name.'.ini'))
 			{
 				$txtmte_url='txmt://open?url=file://'.get_file_base().'/lang_custom/'.fallback_lang().'/'.$name.'.ini';
-				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'f04c9d10f87f7a728b8a347992340ee4','DISPLAY_STRING'=>'(Language)','URL'=>$txtmte_url,'NAME'=>$name.'.ini')));
+				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('DISPLAY_STRING'=>'(Language)','URL'=>$txtmte_url,'NAME'=>$name.'.ini')));
 			}
 			if (file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$name.'.ini'))
 			{
 				$txtmte_url='txmt://open?url=file://'.get_file_base().'/lang/'.fallback_lang().'/'.$name.'.ini';
-				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'b41dfcb41b4fea5a12c25e880f7bccfd','DISPLAY_STRING'=>'(Language)','URL'=>$txtmte_url,'NAME'=>$name.'.ini')));
+				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('DISPLAY_STRING'=>'(Language)','URL'=>$txtmte_url,'NAME'=>$name.'.ini')));
 			}
 		}
 		foreach (array_unique($RECORDED_TEMPLATES_USED) as $name)
@@ -180,17 +182,17 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			{
 				list($theme,$type)=$search;
 				$txtmte_url='txmt://open?url=file://'.get_file_base().'/themes/'.$theme.'/'.$type.'/'.$name.'.tpl';
-				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'c2a5f66b9d6564b30c506afafd59b676','DISPLAY_STRING'=>'(Templates)','URL'=>$txtmte_url,'NAME'=>$name.'.tpl')));
+				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('DISPLAY_STRING'=>'(Templates)','URL'=>$txtmte_url,'NAME'=>$name.'.tpl')));
 			}
 		}
 
-		$middle_spt=do_template('INDEX_SCREEN',array('_GUID'=>'7722ab1c391c86adccde04dbc0ef7ba9','TITLE'=>$title,'CONTENT'=>$file_links,'PRE'=>do_lang_tempcode('TXMT_PROTOCOL_EXPLAIN'),'POST'=>''));
+		$echo2=do_template('INDEX_SCREEN',array('TITLE'=>$title,'CONTENT'=>$file_links,'PRE'=>do_lang_tempcode('TXMT_PROTOCOL_EXPLAIN'),'POST'=>''));
 	}
 
 	// Theme images mode
 	if ($special_page_type=='theme_images')
 	{
-		$title=get_screen_title('THEME_IMAGE_EDITING');
+		$title=get_page_title('THEME_IMAGE_EDITING');
 
 		$theme_images=new ocp_tempcode();
 
@@ -204,10 +206,10 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			$image=find_theme_image($id,false,false,$theme,$lang);
 			if ($image=='') continue;
 
-			$theme_images->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'65ea324fb12a488adae780915624a268','IMG'=>$image,'DESCRIPTION'=>'','URL'=>$url,'NAME'=>$id)));
+			$theme_images->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('IMG'=>$image,'DESCRIPTION'=>'','URL'=>$url,'NAME'=>$id)));
 		}
 
-		$middle_spt=do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b16d40ad36f209b1a3559df6f1ebac55','TITLE'=>$title,'CONTENT'=>$theme_images,'PRE'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'POST'=>''));
+		$echo2=do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>$title,'CONTENT'=>$theme_images,'PRE'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'POST'=>''));
 	}
 
 	// Profile mode?
@@ -219,7 +221,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			xdebug_dump_function_profile($type);
 		} else
 		{
-			$middle_spt=make_string_tempcode('Check out the dump using KCacheGrind.');
+			$echo2=make_string_tempcode('Check out the dump using KCacheGrind.');
 		}
 	}
 
@@ -259,11 +261,11 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			}
 		}
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NOTHING_TO_TRANSLATE'));
-		$title=get_screen_title('__TRANSLATE_CONTENT',true,array($lang_name));
+		$title=get_page_title('__TRANSLATE_CONTENT',true,array($lang_name));
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_content','contextual'=>1),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
-		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$echo2=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	// Language mode
@@ -301,11 +303,11 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 				$fields->attach(form_input_text($key,$description,'l_'.$key,str_replace('\n',chr(10),$value_found),false));
 			}
 		}
-		$title=get_screen_title('__TRANSLATE_CODE',true,array($lang_name));
+		$title=get_page_title('__TRANSLATE_CODE',true,array($lang_name));
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_code2'),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
-		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'47a2934eaec30ed5eea635d4c462cee0','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$echo2=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	// Template mode?
@@ -319,7 +321,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 
 		if ($special_page_type=='templates')
 		{
-			$title=get_screen_title('TEMPLATES');
+			$title=get_page_title('TEMPLATES');
 
 			$_RECORDED_TEMPLATES_USED=array_count_values($RECORDED_TEMPLATES_USED);
 			ksort($_RECORDED_TEMPLATES_USED);
@@ -332,7 +334,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			}
 		} else
 		{
-			$title=get_screen_title('TEMPLATE_TREE');
+			$title=get_page_title('TEMPLATE_TREE');
 
 			$hidden=new ocp_tempcode();
 			global $CSSS,$JAVASCRIPTS;
@@ -349,7 +351,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			$templates=do_template('TEMPLATE_TREE',array('_GUID'=>'ff2a2233b8b4045ba4d8777595ef64c7','HIDDEN'=>$hidden,'EDIT_URL'=>$edit_url,'TREE'=>$tree));
 		}
 
-		$middle_spt=do_template('TEMPLATE_LIST_SCREEN',array('_GUID'=>'ab859f67dcb635fcb4d1747d3c6a2c17','TITLE'=>$title,'TEMPLATES'=>$templates));
+		$echo2=do_template('TEMPLATE_LIST_SCREEN',array('_GUID'=>'ab859f67dcb635fcb4d1747d3c6a2c17','TITLE'=>$title,'TEMPLATES'=>$templates));
 	}
 
 	// Query mode?
@@ -369,12 +371,14 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			$queries->attach(do_template('QUERY_LOG',array('_GUID'=>'ab88e1e92609136229ad920c30647647','TIME'=>float_format($query['time'],3),'TEXT'=>$query['text'])));
 			$total_time+=$query['time'];
 		}
-		$title=get_screen_title("VIEW_PAGE_QUERIES");
+		$title=get_page_title("VIEW_PAGE_QUERIES");
 		$total=count($QUERY_LIST);
-		$middle_spt=do_template('QUERY_SCREEN',array('_GUID'=>'5f679c8f657b4e4ae94ae2d0ed4843fa','TITLE'=>$title,'TOTAL'=>integer_format($total),'TOTAL_TIME'=>float_format($total_time,3),'QUERIES'=>$queries));
+		$echo2=do_template('QUERY_SCREEN',array('_GUID'=>'5f679c8f657b4e4ae94ae2d0ed4843fa','TITLE'=>$title,'TOTAL'=>integer_format($total),'TOTAL_TIME'=>float_format($total_time,3),'QUERIES'=>$queries));
 	}
 
-	$echo=globalise($middle_spt,NULL,'',true);
+	$echo->attach(globalise($echo2));
+	$echo->attach(do_footer());
+	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 
 	exit();
@@ -547,7 +551,7 @@ function erase_tempcode_cache()
 {
 	$GLOBALS['SITE_DB']->query_delete('cache_on',NULL,'',NULL,NULL,true);
 	$GLOBALS['SITE_DB']->query_delete('cache');
-	if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+	if (function_exists('persistant_cache_empty')) persistant_cache_empty();
 }
 
 /**
@@ -555,16 +559,13 @@ function erase_tempcode_cache()
  */
 function erase_comcode_cache()
 {
-	static $done_once=false; // Useful to stop it running multiple times in admin_cleanup module, as this code takes time
-	if ($done_once) return;
 	if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
 	{
-		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE text_parsed>\'\''/*this where is so indexing helps*/);
 	} else
 	{
-		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this where is so indexing helps*/);
 	}
-	$done_once=true;
 }
 
 /**
@@ -666,22 +667,6 @@ function erase_cached_templates($preserve_some=false)
 			}
 		}
 	}
-	foreach (array_keys($langs) as $lang)
-	{
-		$path=get_custom_file_base().'/site/pages/html_custom/'.$lang.'/';
-		$_dir=@opendir($path);
-		if ($_dir!==false)
-		{
-			while (false!==($file=readdir($_dir)))
-			{
-				if (substr($file,-14)=='_tree_made.htm')
-				{
-					@unlink($path.$file);
-				}
-			}
-			closedir($_dir);
-		}
-	}
 
 	// Often the back button will be used to return to a form, so we need to ensure we have not broken the Javascript
 	if (function_exists('get_member'))
@@ -711,7 +696,7 @@ function do_xhtml_validation($out,$display_regardless=false,$preview_mode=0,$ret
 	}
 
 	require_lang('validation');
-	require_css('validation');
+	require_css('adminzone');
 	require_code('obfuscate');
 	require_code('validation');
 
@@ -758,11 +743,18 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 
 	if (function_exists('set_time_limit')) @set_time_limit(280);
 
-	require_css('validation');
+	require_css('adminzone');
 
-	ob_start();
+	if (!$ret)
+	{
+		$echo=do_header($preview_mode);
+		$echo->evaluate_echo();
+	} else
+	{
+		ob_start();
+	}
 
-	$title=get_screen_title('VALIDATION_ERROR');
+	$title=get_page_title('VALIDATION_ERROR');
 
 	// Escape and colourfy
 	$i=0;
@@ -795,7 +787,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 		$echo->evaluate_echo();
 	} else
 	{
-		$echo=do_template('VALIDATE_SCREEN',array('_GUID'=>'d8de848803287e4c592418d57450b7db','MSG'=>do_lang_tempcode('_NEXT_ITEM_BACK'),'RETURN_URL'=>$return_url,'TITLE'=>get_screen_title('VIEWING_SOURCE'),'MESSY_URL'=>$messy_url,'RET'=>$ret));
+		$echo=do_template('VALIDATE_SCREEN',array('_GUID'=>'d8de848803287e4c592418d57450b7db','MSG'=>do_lang_tempcode('_NEXT_ITEM_BACK'),'RETURN_URL'=>$return_url,'TITLE'=>get_page_title('VIEWING_SOURCE'),'MESSY_URL'=>$messy_url,'RET'=>$ret));
 		$echo->evaluate_echo();
 	}
 
@@ -982,8 +974,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 	$echo->evaluate_echo();
 	if (!$ret)
 	{
-		$echo=globalise(make_string_tempcode(ob_get_contents()),NULL,'',true);
-		@ob_end_clean();
+		$echo=do_footer();
 		$echo->evaluate_echo();
 		exit();
 	}

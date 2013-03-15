@@ -83,7 +83,7 @@ class Hook_fields_short_text_multi
 	{
 		if (is_object($ev)) return $ev;
 		$ret=new ocp_tempcode();
-		foreach (($ev=='')?array():explode(chr(10),$ev) as $ev)
+		foreach (explode(chr(10),$ev) as $ev)
 		{
 			$ret->attach(paragraph(escape_html($ev)));
 		}

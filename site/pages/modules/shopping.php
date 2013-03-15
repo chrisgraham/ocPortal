@@ -48,14 +48,19 @@ class Module_shopping
 	function uninstall()
 	{		
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_cart');
+
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_details');
+
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order');
+
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_logging');
+
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_addresses');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'shopping'));
 
 		delete_config_option('shipping_cost_factor');
+
 		delete_config_option('allow_opting_out_of_tax');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=category:catalogue_name=products');
@@ -198,8 +203,6 @@ class Module_shopping
 	 */
 	function run()
 	{	
-		@ignore_user_abort(true); // Must keep going till completion
-
 		require_lang('shopping');
 		require_lang('catalogues');
 		require_code('shopping');
@@ -249,7 +252,7 @@ class Module_shopping
 
 		require_javascript('javascript_shopping');
 
-		$title=get_screen_title('SHOPPING');
+		$title=get_page_title('SHOPPING');
 
 		log_cart_actions('View cart');
 
@@ -313,7 +316,7 @@ class Module_shopping
 				else
 					$tax=0;
 
-
+				
 
 				//Shipping
 				if (method_exists($object,'calculate_shipping_cost'))
@@ -334,11 +337,11 @@ class Module_shopping
 
 			$empty_cart=build_url(array('page'=>'_SELF','type'=>'empty_cart'),'_SELF');
 
-			$checkout=build_url(array('page'=>'_SELF','type'=>'pay'),'_SELF');
+			$checkout 	= 	build_url(array('page'=>'_SELF','type'=>'pay'),'_SELF');
 
 			$payment_form=payment_form();			
 
-			$proceed_box=do_template('ECOM_SHOPPING_CART_PROCEED',array('SUB_TOTAL'=>float_format($sub_tot),'SHIPPING_COST'=>float_format($shipping_cost),'GRAND_TOTAL'=>float_format($sub_tot),'CHECKOUT_URL'=>$checkout,'PROCEED'=>do_lang_tempcode('PROCEED'),'CURRENCY'=>ecommerce_get_currency_symbol(),'PAYMENT_FORM'=>$payment_form));
+			$proceed_box=do_template('SHOPPING_CART_PROCEED',array('SUB_TOTAL'=>float_format($sub_tot),'SHIPPING_COST'=>float_format($shipping_cost),'GRAND_TOTAL'=>float_format($sub_tot),'CHECKOUT_URL'=>$checkout,'PROCEED'=>do_lang_tempcode('PROCEED'),'CURRENCY'=>ecommerce_get_currency_symbol(),'PAYMENT_FORM'=>$payment_form));
 
 		}
 		else
@@ -356,7 +359,7 @@ class Module_shopping
 
 		$ecom_catalogue=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_ecommerce'=>1));
 
-		$cont_shopping=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
+		$cont_shopping = 	is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 
 		//Product id string for hidden field in Shopping cart
 		$pro_ids_val=is_array($pro_ids)?implode(',',$pro_ids):'';
@@ -365,7 +368,7 @@ class Module_shopping
 
 		$allow_opt_out_tax_value=get_order_tax_opt_out_status();
 
-		return do_template('ECOM_SHOPPING_CART_SCREEN',array('_GUID'=>'badff09daf52ee1c84b472c44be1bfae','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'CONTENT'=>'','FORM_URL'=>$update_cart,'CONT_SHOPPING'=>$cont_shopping,'MESSAGE'=>'','BACK'=>$cont_shopping,'PRO_IDS'=>$pro_ids_val,'EMPTY_CART'=>$empty_cart,'EMPTY'=>do_lang_tempcode('EMPTY_CART'),'UPDATE'=>do_lang_tempcode('UPDATE'),'CONTINUE_SHOPPING'=>do_lang_tempcode('CONTINUE_SHOPPING'),'PROCEED_BOX'=>$proceed_box,'ALLOW_OPTOUT_TAX'=>$allow_opt_out_tax,'ALLOW_OPTOUT_TAX_VALUE'=>strval($allow_opt_out_tax_value)),NULL,false);
+		return do_template('SHOPPING_CART_SCREEN',array('TITLE'=>$title,'RESULT_TABLE'=>$results_table,'CONTENT'=>'','FORM_URL'=>$update_cart,'CONT_SHOPPING'=>$cont_shopping,'MESSAGE'=>'','BACK'=>$cont_shopping,'PRO_IDS'=>$pro_ids_val,'EMPTY_CART'=>$empty_cart,'EMPTY'=>do_lang_tempcode('EMPTY_CART'),'UPDATE'=>do_lang_tempcode('UPDATE'),'CONTINUE_SHOPPING'=>do_lang_tempcode('CONTINUE_SHOPPING'),'PROCEED_BOX'=>$proceed_box,'ALLOW_OPTOUT_TAX'=>$allow_opt_out_tax,'ALLOW_OPTOUT_TAX_VALUE'=>strval($allow_opt_out_tax_value)),NULL,false);
 	}
 
 	/**
@@ -381,7 +384,7 @@ class Module_shopping
 			set_session_id(get_session_id(),true); // Persist guest sessions longer
 		}
 
-		$title=get_screen_title('SHOPPING');	
+		$title=get_page_title('SHOPPING');	
 
 		$product_details=get_product_details();
 
@@ -401,7 +404,7 @@ class Module_shopping
 	 */
 	function update_cart()
 	{
-		$title=get_screen_title('SHOPPING');
+		$title=get_page_title('SHOPPING');
 
 		$p_ids=post_param('product_ids');
 
@@ -459,7 +462,7 @@ class Module_shopping
 	 */
 	function empty_cart()
 	{
-		$title=get_screen_title('SHOPPING');
+		$title=get_page_title('SHOPPING');
 
 		log_cart_actions('Cart emptied');
 
@@ -494,7 +497,7 @@ class Module_shopping
 		if (is_null($url)) $url='';
 		require_javascript('javascript_validation');
 
-		return do_template('PURCHASE_WIZARD_SCREEN',array('_GUID'=>'02fd80e2b4d4fc2348736a72e504a208','GET'=>$get?true:NULL,'TITLE'=>$title,'CONTENT'=>$content,'URL'=>$url));
+		return do_template('PURCHASE_WIZARD_SCREEN',array('_GUID'=>'a32c99acc28e8ad05fd9b5e2f2cda029','GET'=>$get?true:NULL,'TITLE'=>$title,'CONTENT'=>$content,'URL'=>$url));
 	}
 
 	/**
@@ -504,7 +507,7 @@ class Module_shopping
 	 */
 	function finish()
 	{
-		$title=get_screen_title('_PURCHASE_FINISHED');
+		$title=get_page_title('_PURCHASE_FINISHED');
 
 		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:misc',do_lang_tempcode('SHOPPING'))));
 
@@ -581,7 +584,7 @@ class Module_shopping
 
 			if (count($_POST)!=0)
 			{
-				$order_id=handle_transaction_script();
+				$order_id = handle_transaction_script();
 
 				$object=find_product(do_lang('CART-ORDER',$order_id));
 
@@ -591,12 +594,12 @@ class Module_shopping
 				}
 			}
 
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'3857e761ab75f314f4960805bc76b936','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
+			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
 
 		if (!is_null($message))
 		{
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'6eafce1925e5069ceb438ec24754b47d','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
+			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
 
 		warn_exit(do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
@@ -610,7 +613,7 @@ class Module_shopping
 	 */
 	function my_orders()
 	{
-		$title=get_screen_title('MY_ORDERS');
+		$title=get_page_title('MY_ORDERS');
 
 		$member_id=get_member();
 
@@ -646,7 +649,7 @@ class Module_shopping
 
 		if (count($orders)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('ECOM_ORDERS_SCREEN',array('_GUID'=>'79eb5f17cf4bc2dc4f0cccf438261c73','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders));
+		return do_template('ECOM_ORDERS_SCREEN',array('TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders));
 	}
 
 	/**
@@ -658,7 +661,7 @@ class Module_shopping
 	{
 		$id=get_param_integer('id');
 
-		$title=get_screen_title('_MY_ORDER_DETAILS',true,array($id));
+		$title=get_page_title('_MY_ORDER_DETAILS',true,array($id));
 
 		$products=array();
 
@@ -675,7 +678,7 @@ class Module_shopping
 
 		if (count($products)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('ECOM_ORDERS_DETAILS_SCREEN',array('_GUID'=>'8122a53dc0ccf27648af460759a2b6f6','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'PRODUCTS'=>$products));
+		return do_template('ECOM_ORDERS_DETAILS_SCREEN',array('TITLE'=>$title,'CURRENCY'=>get_option('currency'),'PRODUCTS'=>$products));
 	}
 }
 

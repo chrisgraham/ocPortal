@@ -1,15 +1,4 @@
-<table summary="{!SPREAD_TABLE}" class="calendar_month">
-	<colgroup>
-		<col class="calendar_month_column_heading" />
-		<col class="calendar_month_column_day" />
-		<col class="calendar_month_column_day" />
-		<col class="calendar_month_column_day" />
-		<col class="calendar_month_column_day" />
-		<col class="calendar_month_column_day" />
-		<col class="calendar_month_column_day" />
-		<col class="calendar_month_column_day" />
-	</colgroup>
-
+<table summary="{!SPREAD_TABLE}" class="calendar_month variable_table">
 	<thead>
 		<tr>
 			<th></th>

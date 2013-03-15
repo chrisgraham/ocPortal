@@ -47,8 +47,6 @@ class Block_main_count
 	 */
 	function run($map)
 	{
-		require_css('counting_blocks');
-
 		// The counter we're using
 		$name=array_key_exists('param',$map)?$map['param']:'';
 		if ($name=='') $name=get_page_name().':'.get_param('type','misc').':'.get_param('id','');
@@ -78,7 +76,7 @@ class Block_main_count
 			update_stat($name,1);
 		}
 
-		return do_template('BLOCK_MAIN_COUNT',array('_GUID'=>'49d3ba8fb5b5544ac817f9a7d18f9d35','NAME'=>$name,'VALUE'=>strval($current_value)));
+		return do_template('MAIN_COUNT',array('NAME'=>$name,'VALUE'=>strval($current_value)));
 	}
 
 }

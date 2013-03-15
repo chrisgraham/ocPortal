@@ -105,7 +105,7 @@ class Hook_fields_picture
 			'image'=>$img_url,
 		);
 
-		return do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
+		return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE');
 	}
 
 	// ======================

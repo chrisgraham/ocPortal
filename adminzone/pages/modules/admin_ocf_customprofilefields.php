@@ -81,7 +81,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('CUSTOM_PROFILE_FIELDS'),comcode_lang_string('DOC_CUSTOM_PROFILE_FIELDS'),
+		return do_next_manager(get_page_title('CUSTOM_PROFILE_FIELDS'),comcode_lang_string('DOC_CUSTOM_PROFILE_FIELDS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_PROFILE_FIELD')),
@@ -275,7 +275,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			{
 				$orderlist->attach(form_input_list_entry(strval($order),true,integer_format($order+1)));
 			}
-			$orderer=do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist));
+			$orderer=do_template('TABLE_TABLE_ROW_CELL_SELECT',array('LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist));
 
 			$fr=array();
 			$fr[]=$trans;
@@ -400,7 +400,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	 */
 	function stats()
 	{
-		$title=get_screen_title('CUSTOM_PROFILE_FIELD_STATS');
+		$title=get_page_title('CUSTOM_PROFILE_FIELD_STATS');
 
 		breadcrumb_set_parents(array());
 
@@ -434,7 +434,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	 */
 	function _stats()
 	{
-		$title=get_screen_title('CUSTOM_PROFILE_FIELD_STATS');
+		$title=get_page_title('CUSTOM_PROFILE_FIELD_STATS');
 
 		breadcrumb_set_parents(array());
 

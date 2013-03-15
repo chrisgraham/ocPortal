@@ -44,7 +44,7 @@ class Hook_version
 		elseif (((array_key_exists('g',$options)) || (array_key_exists('general-version',$options))) && ((!array_key_exists('v',$options)) && (!array_key_exists('major-version',$options))))
 			return array('','',ocp_version_number(),'');
 		else
-			return array('','',ocp_version_pretty(),'');
+			return array('','',ocp_version_full(),'');
 	}
 
 }

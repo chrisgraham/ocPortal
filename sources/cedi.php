@@ -19,31 +19,32 @@
  */
 
 /*
-The concept of a chain is crucial to proper understanding of the Wiki+ system. Pages in Wiki+ are not tied to any paticular hierarchical location, but rather may be found via a "chain" of links. For usability, a "bread crumb" trail is shown as you move through Wiki+, and this should reflect the path chosen to get to the current page - thus a chain is passed through the URLs to encode this.
+The concept of a chain is crucial to proper understanding of the CEDI system. Pages in CEDI are not tied to any paticular hierarchical location, but rather may be found via a "chain" of links. For usability, a "bread crumb" trail is shown as you move through CEDI, and this should reflect the path chosen to get to the current page - thus a chain is passed through the URLs to encode this.
 */
 
 /**
- * Get tempcode for a Wiki+ post 'feature box' for the given row
+ * Get tempcode for a CEDI post 'feature box' for the given row
  *
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to put it in a box
  * @return tempcode		A box for it, linking to the full page
  */
-function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
+function get_cedi_post_html($row,$zone='_SEARCH',$put_in_box=true)
 {
 	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']),$zone);
 	$url->attach('#post_'.strval($row['id']));
+	$content=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>get_translated_tempcode($row['the_message']),'URL'=>$url));
 
-	$breadcrumbs=mixed();
-	$title=mixed();
+	if (!$put_in_box) return $content;
+
 	if ($put_in_box)
 	{
-		$breadcrumbs=cedi_breadcrumbs(strval($row['page_id']),NULL,true);
-		$title=do_lang_tempcode('CEDI_POST');
+		$tree=cedi_breadcrumbs(strval($row['page_id']),NULL,true);
+		if (!$tree->is_empty()) $content->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode($row['the_message']),'URL'=>$url));
+	return put_in_standard_box($content,do_lang_tempcode('CEDI_POST'));
 }
 
 /**
@@ -51,27 +52,30 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
  *
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to put it in a box with a title
+ * @param  boolean		Whether to put it in a box
  * @return tempcode		A box for it, linking to the full page
  */
-function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
+function get_cedi_page_html($row,$zone='_SEARCH',$put_in_box=true)
 {
 	$content=paragraph(get_translated_tempcode($row['description']),'tyrtfjhggfdf');
 	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
 
-	$breadcrumbs=mixed();
-	$title=mixed();
 	if ($put_in_box)
 	{
-		$title=do_lang_tempcode('CEDI_PAGE',escape_html(get_translated_text($row['title'])));
-
 		$chain=cedi_derive_chain($row['id']);
 		$chain=preg_replace('#/[^/]+#','',$chain);
 		if ($chain!='')
-			$breadcrumbs=cedi_breadcrumbs($chain,NULL,true);
+		{
+			$tree=cedi_breadcrumbs($chain,NULL,true);
+			if (!$tree->is_empty()) $content->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
+		}
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'d2c37a1f68e684dc4ac85e3d4e4bf959','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'URL'=>$url));
+	$preview=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>$content,'URL'=>$url));
+
+	if (!$put_in_box) return $preview;
+
+	return put_in_standard_box($preview,do_lang_tempcode('CEDI_PAGE',escape_html(get_translated_text($row['title']))));
 }
 
 /**
@@ -81,10 +85,10 @@ function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
  * @param  string			The new post
  * @param  BINARY			Whether the post will be validated
  * @param  ?MEMBER		The member doing the action (NULL: current member)
- * @param  boolean		Whether to send out a notification out
+ * @param  boolean		Whether to send out a staff e-mail about the new CEDI post
  * @return AUTO_LINK		The post ID
  */
-function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notification=true)
+function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_mail=true)
 {
 	if (is_null($member)) $member=get_member();
 
@@ -113,12 +117,10 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	update_stat('num_seedy_posts',1);
 	//update_stat('num_seedy_files',count($_FILES));
 
-	if ($send_notification)
+	// Send e-mail to the staff. These exist because CEDI exists in the 'space' between a forum, and a website- usually there is no validation, but the content does need moderation (and unlike a forum, staff are unlikely to 'lurk')
+	if ($send_mail)
 	{
-		if (post_param_integer('send_notification',NULL)!==0)
-		{
-			dispatch_cedi_post_notification($id,'ADD');
-		}
+		dispatch_cedi_post_notification($id,'ADD');
 	}
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
@@ -127,7 +129,7 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 }
 
 /**
- * Edit a Wiki+ post
+ * Edit a CEDI post
  *
  * @param  AUTO_LINK		The post ID
  * @param  string			The new post
@@ -162,20 +164,17 @@ function cedi_edit_post($id,$message,$validated,$member=NULL)
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
 
-	if (post_param_integer('send_notification',NULL)!==0)
+	if ($just_validated)
 	{
-		if ($just_validated)
-		{
-			dispatch_cedi_post_notification($id,'ADD');
-		} else
-		{
-			dispatch_cedi_post_notification($id,'EDIT');
-		}
+		dispatch_cedi_post_notification($id,'ADD');
+	} else
+	{
+		dispatch_cedi_post_notification($id,'EDIT');
 	}
 }
 
 /**
- * Delete a Wiki+ post
+ * Delete a CEDI post
  *
  * @param  AUTO_LINK		The post ID
  * @param  ?MEMBER		The member doing the action (NULL: current member)
@@ -202,7 +201,7 @@ function cedi_delete_post($post_id,$member=NULL)
 }
 
 /**
- * Add a Wiki+ page
+ * Add a CEDI page
  *
  * @param  SHORT_TEXT	The page title
  * @param  LONG_TEXT		The page description
@@ -236,16 +235,13 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 	require_code('seo2');
 	seo_meta_set_for_implicit('seedy_page',strval($id),array($title,$description),$description);
 
-	if (post_param_integer('send_notification',NULL)!==0)
-	{
-		dispatch_cedi_page_notification($id,'ADD');
-	}
+	dispatch_cedi_page_notification($id,'ADD');
 
 	return $id;
 }
 
 /**
- * Edit a Wiki+ page
+ * Edit a CEDI page
  *
  * @param  AUTO_LINK		The page ID
  * @param  SHORT_TEXT	The page title
@@ -274,14 +270,11 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	require_code('seo2');
 	seo_meta_set_for_explicit('seedy_page',strval($id),$meta_keywords,$meta_description);
 
-	if (post_param_integer('send_notification',NULL)!==0)
-	{
-		dispatch_cedi_page_notification($id,'EDIT');
-	}
+	dispatch_cedi_page_notification($id,'EDIT');
 }
 
 /**
- * Delete a Wiki+ page
+ * Delete a CEDI page
  *
  * @param  AUTO_LINK		The page ID
  */
@@ -337,18 +330,18 @@ function get_param_cedi_chain($parameter_name,$default_value=NULL)
 }
 
 /**
- * Convert a Wiki+ chain to a nice breadcrumb trail.
+ * Convert a CEDI chain to a nice formatted XHTML tree.
  *
  * @param  string			The chain to convert (which should include the current page ID)
- * @param  ?string		The title of the current Wiki+ page (if not given, it is looked up) (NULL: work it out)
- * @param  boolean		Whether to show the final breadcrumbs element with a link to it (all others will always have links if $links is true)
- * @param  boolean		Whether to show links to pages in the breadcrumbs
+ * @param  ?string		The title of the current CEDI page (if not given, it is looked up) (NULL: work it out)
+ * @param  boolean		Whether to show the final tree element with a link to it (all others will always have links if $links is true)
+ * @param  boolean		Whether to show links to pages in the tree
  * @param  boolean		Whether to make the link as a virtual-root link (only applies if $final_link is true)
  * @return tempcode		Tempcode of the breadcrumb XHTML
  */
 function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=true,$this_link_virtual_root=false)
 {
-	$insbreadcrumbs=new ocp_tempcode();
+	$instree=new ocp_tempcode();
 	$token=strtok($chain,'/');
 	$rebuild_chain='';
 	while ($token!==false)
@@ -365,20 +358,20 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			if (is_null($title)) continue;
 			$token_title=get_translated_text($title);
 			$content=($links)?hyperlink($url,escape_html($token_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$token_title),NULL,NULL,'up'):make_string_tempcode(escape_html($token_title));
-			if ($insbreadcrumbs->is_empty())
+			if ($instree->is_empty())
 			{
-				$insbreadcrumbs->attach($content);
+				$instree->attach($content);
 			}
 			else
 			{
-				$insbreadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-				$insbreadcrumbs->attach($content);
+				$instree->attach(do_template('BREADCRUMB_ESCAPED'));
+				$instree->attach($content);
 			}
 		} else
 		{
-			if (!$insbreadcrumbs->is_empty())
+			if (!$instree->is_empty())
 			{
-				$insbreadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+				$instree->attach(do_template('BREADCRUMB_ESCAPED'));
 			}
 			if (is_null($current_title))
 			{
@@ -387,24 +380,24 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			}
 			if ($final_link)
 			{
-				$insbreadcrumbs->attach(hyperlink($url,escape_html($current_title),false,false,$this_link_virtual_root?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',$current_title),NULL,NULL,'up'));
+				$instree->attach(hyperlink($url,escape_html($current_title),false,false,$this_link_virtual_root?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',$current_title),NULL,NULL,'up'));
 			} else
 			{
-				$insbreadcrumbs->attach($current_title);
+				$instree->attach($current_title);
 			}
 		}
 
 		$token=$next_token;
 	}
 
-	return $insbreadcrumbs;
+	return $instree;
 }
 
 /**
- * Create a Wiki+ chain from the specified page ID
+ * Create a CEDI chain from the specified page ID
  *
  * @param  AUTO_LINK		The ID of the page to derive a chain for
- * @return string			The Wiki+ chain derived
+ * @return string			The CEDI chain derived
  */
 function cedi_derive_chain($id)
 {
@@ -427,17 +420,17 @@ function cedi_derive_chain($id)
 }
 
 /**
- * Get a nice formatted XHTML list of all the children beneath the specified Wiki+ page. This function is recursive.
+ * Get a nice formatted XHTML list of all the children beneath the specified CEDI page. This function is recursive.
  *
- * @param  ?AUTO_LINK	The Wiki+ page to select by default (NULL: none)
- * @param  ?AUTO_LINK	The Wiki+ page to look beneath (NULL: the root)
- * @param  string			Breadcrumbs built up so far, in recursion (blank: starting recursion)
- * @param  boolean		Whether to include orphaned pages in the breadcrumbs
+ * @param  ?AUTO_LINK	The CEDI page to select by default (NULL: none)
+ * @param  ?AUTO_LINK	The CEDI page to look beneath (NULL: the root)
+ * @param  string			Tree built up so far, in recursion (blank: starting recursion)
+ * @param  boolean		Whether to include orphaned pages in the tree
  * @param  boolean		Whether to create a compound list (gets pairs: tempcode, and comma-separated list of children)
  * @param  boolean		Whether to use titles in IDs after a ! (used on tree edit page)
  * @return mixed			Tempcode for the list / pair of tempcode and compound
  */
-function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=true,$use_compound_list=false,$ins_format=false)
+function cedi_show_tree($select=NULL,$id=NULL,$tree='',$include_orphans=true,$use_compound_list=false,$ins_format=false)
 {
 	if (is_null($id)) $id=db_get_first_id();
 
@@ -445,7 +438,7 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 
 	$cedi_seen=array();
 	$title=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$id)));
-	$out=_cedi_show_tree($cedi_seen,$select,$id,$breadcrumbs,$title,$use_compound_list,$ins_format);
+	$out=_cedi_show_tree($cedi_seen,$select,$id,$tree,$title,$use_compound_list,$ins_format);
 
 	if ($include_orphans)
 	{
@@ -479,7 +472,7 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($orphan['text_original'])) $orphan['text_original']=get_translated_text($orphan['title']);
 
 			$title=$orphan['text_original'];
-			//$out->attach(form_input_list_entry(strval($orphan['id']),($select==$orphan['id']),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'e3eb3decfac32382cdcb5b745ef0ad7e','BREADCRUMBS'=>'?','TITLE'=>$title,'ID'=>$orphan['id']))));
+			//$out->attach(form_input_list_entry(strval($orphan['id']),($select==$orphan['id']),do_template('CEDI_LIST_TREE_LINE',array('_GUID'=>'e3eb3decfac32382cdcb5b745ef0ad7e','DEPTH'=>'?','TITLE'=>$title,'ID'=>$orphan['id']))));
 //			$out.='<option value="'.$orphan['id'].'"> ? '.$title.'</option>';
 			$out->attach(form_input_list_entry($ins_format?(strval($orphan['id']).'!'.$title):strval($orphan['id']),false,do_lang('CEDI_ORPHANED').' > '.$title));
 		}
@@ -489,22 +482,22 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 }
 
 /**
- * Helper function. Get a nice formatted XHTML list of all the children beneath the specified Wiki+ page. This function is recursive.
+ * Helper function. Get a nice formatted XHTML list of all the children beneath the specified CEDI page. This function is recursive.
  *
  * @param  array			A list of pages we've already seen (we don't repeat them in multiple list positions)
- * @param  ?AUTO_LINK	The Wiki+ page to select by default (NULL: none)
- * @param  AUTO_LINK		The Wiki+ page to look beneath
- * @param  string			Breadcrumbs built up so far, in recursion (blank: starting recursion)
- * @param  SHORT_TEXT	The title of the Wiki+ page to look beneath
+ * @param  ?AUTO_LINK	The CEDI page to select by default (NULL: none)
+ * @param  AUTO_LINK		The CEDI page to look beneath
+ * @param  string			Tree built up so far, in recursion (blank: starting recursion)
+ * @param  SHORT_TEXT	The title of the CEDI page to look beneath
  * @param  boolean		Whether to create a compound list (gets pairs: tempcode, and comma-separated list of children)
  * @param  boolean		Whether to use titles in IDs after a ! (used on tree edit page)
  * @return mixed			Tempcode for the list / pair of tempcode and compound
  */
-function _cedi_show_tree(&$cedi_seen,$select,$id,$breadcrumbs,$title,$use_compound_list=false,$ins_format=false)
+function _cedi_show_tree(&$cedi_seen,$select,$id,$tree,$title,$use_compound_list=false,$ins_format=false)
 {
 	$cedi_seen[]=$id;
 
-	$sub_breadcrumbs=($breadcrumbs=='')?($title.' > '):($breadcrumbs.$title.' > ');
+	$sub_tree=($tree=='')?($title.' > '):($tree.$title.' > ');
 
 	$rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('*'),array('parent_id'=>$id),'ORDER BY title',300/*reasonable limit*/);
 	$compound_list=strval($id).',';
@@ -522,7 +515,8 @@ function _cedi_show_tree(&$cedi_seen,$select,$id,$breadcrumbs,$title,$use_compou
 				$rows[$i]['title']=$myrow['title'];
 				$GLOBALS['SITE_DB']->query_update('seedy_children',array('title'=>$myrow['title']),array('parent_id'=>$id,'child_id'=>$myrow['child_id']));
 			}
-			$below=_cedi_show_tree($cedi_seen,$select,$myrow['child_id'],$sub_breadcrumbs,$myrow['title'],$use_compound_list,$ins_format);
+//			$out->attach(_cedi_show_tree($cedi_seen,$select,$myrow['child_id'],do_template('CEDI_LIST_TREE_DEPTH',array('_GUID'=>'7a416b76aebd74a59abec8f9aed7e82f','BEFORE'=>$tree)),$myrow['title']));
+			$below=_cedi_show_tree($cedi_seen,$select,$myrow['child_id'],$sub_tree,$myrow['title'],$use_compound_list,$ins_format);
 			if ($use_compound_list)
 			{
 				list($below,$_compound_list)=$below;
@@ -532,10 +526,10 @@ function _cedi_show_tree(&$cedi_seen,$select,$id,$breadcrumbs,$title,$use_compou
 		}
 	}
 
-//	$out=form_input_list_entry(strval($id),($select==$id),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'d9d4a951df598edd3f08f87be634965b','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'ID'=>$id)));
-//	$out='<option value="'.(!$use_compound_list?$id:$compound_list).'">'.$breadcrumbs.$title.'</option>';
+//	$out=form_input_list_entry(strval($id),($select==$id),do_template('CEDI_LIST_TREE_LINE',array('_GUID'=>'d9d4a951df598edd3f08f87be634965b','DEPTH'=>$tree,'TITLE'=>$title,'ID'=>$id)));
+//	$out='<option value="'.(!$use_compound_list?$id:$compound_list).'">'.$tree.$title.'</option>';
 //	$out.=$_below;
-	$out=form_input_list_entry(((!$use_compound_list)?strval($id):$compound_list).($ins_format?('!'.$title):''),false,$breadcrumbs.$title);
+	$out=form_input_list_entry(((!$use_compound_list)?strval($id):$compound_list).($ins_format?('!'.$title):''),false,$tree.$title);
 	$out->attach($_below);
 
 	if ($use_compound_list) return array($out,$compound_list); else return $out;
@@ -546,39 +540,39 @@ function _cedi_show_tree(&$cedi_seen,$select,$id,$breadcrumbs,$title,$use_compou
  *
  * @param  array			A list of pages we've already seen (we don't repeat them in multiple list positions)
  * @param  ?AUTO_LINK	The page being at the root of our recursion (NULL: true root page)
- * @param  ?string		The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?string		The tree up to this point in the recursion (NULL: blank, as we are starting the recursion)
  * @param  ?ID_TEXT		The name of the $page_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  boolean		Whether to collect post counts with our breadcrumbs information
+ * @param  boolean		Whether to collect post counts with our tree information
  * @param  boolean		Whether to make a compound list (a pair of a comma-separated list of children, and the child array)
  * @param  ?integer		The number of recursive levels to search (NULL: all)
- * @return array			A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
+ * @return array			A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'tree' (tree path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
  */
-function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$breadcrumbs=NULL,$title=NULL,$do_stats=true,$use_compound_list=false,$levels=NULL)
+function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$tree=NULL,$title=NULL,$do_stats=true,$use_compound_list=false,$levels=NULL)
 {
 	if ($levels==-1) return array();
 
 	if (is_null($page_id)) $page_id=db_get_first_id();
 	$cedi_seen[]=$page_id;
 
-	if (is_null($breadcrumbs)) $breadcrumbs='';
+	if (is_null($tree)) $tree='';
 
-	// Put our title onto our breadcrumbs
+	// Put our title onto our tree
 	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
-	$breadcrumbs.=$title;
+	$tree.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
 	$children=array();
 	$children[0]=array();
 	$children[0]['id']=$page_id;
 	$children[0]['title']=$title;
-	$children[0]['breadcrumbs']=$breadcrumbs;
+	$children[0]['tree']=$tree;
 	$children[0]['compound_list']=strval($page_id).',';
 	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$page_id));
 
 	// Children of this category
 	$rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('*'),array('parent_id'=>$page_id),'ORDER BY title',300/*reasonable limit*/);
 	$children[0]['child_count']=count($rows);
-	$breadcrumbs.=' > ';
+	$tree.=' > ';
 	if ($levels!==0)
 	{
 		foreach ($rows as $child)
@@ -597,9 +591,9 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$breadcrumbs=NULL,$title=N
 
 				$child_id=$child['child_id'];
 				$child_title=$child['title'];
-				$child_breadcrumbs=$breadcrumbs;
+				$child_tree=$tree;
 
-				$child_children=get_cedi_page_tree($cedi_seen,$child_id,$child_breadcrumbs,$child_title,$do_stats,$use_compound_list,is_null($levels)?NULL:($levels-1));
+				$child_children=get_cedi_page_tree($cedi_seen,$child_id,$child_tree,$child_title,$do_stats,$use_compound_list,is_null($levels)?NULL:($levels-1));
 				if ($use_compound_list)
 				{
 					list($child_children,$_compound_list)=$child_children;
@@ -615,7 +609,7 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$breadcrumbs=NULL,$title=N
 }
 
 /**
- * Dispatch a notification about a Wiki+ post
+ * Dispatch a notification about a CEDI post
  *
  * @param  AUTO_LINK		The post ID
  * @param  ID_TEXT		The action type
@@ -640,7 +634,7 @@ function dispatch_cedi_post_notification($post_id,$type)
 }
 
 /**
- * Dispatch a notification about a Wiki+ page
+ * Dispatch a notification about a CEDI page
  *
  * @param  AUTO_LINK		The page ID
  * @param  ID_TEXT		The action type

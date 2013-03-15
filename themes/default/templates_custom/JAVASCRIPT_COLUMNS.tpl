@@ -1,7 +1,7 @@
 // Based on http://welcome.totheinter.net/columnizer-jquery-plugin/
 //  But with fixes and better flexibility, and pure CSS-based activation
 
-add_event_listener_abstract(window,'real_load',function () {
+addEventListenerAbstract(window,'real_load',function () {
 	$('.column_wrapper').columnize({ columns: 3 });
 	$('.column_wrapper_2').columnize({ columns: 2 });
 } );
@@ -71,28 +71,28 @@ add_event_listener_abstract(window,'real_load',function () {
 
 		$cache.append($inBox.contents().clone(true));
 
-		// images loading after dom load
-		// can screw up the column heights,
-		// so recolumnize after images load
-		if(!options.ignoreImageLoading && !options.target) {
-			if(!$inBox.data("imageLoaded")) {
-				$inBox.data("imageLoaded", true);
-				if($inBox.find("img").length > 0) {
-					// only bother if there are
-					// actually images...
-					var func = function($inBox,$cache) { return function() {
-						if(!$inBox.data("firstImageLoaded")) {
-							$inBox.data("firstImageLoaded", "true");
-							$inBox.empty().append($cache.children().clone(true));
-							$inBox.columnize(options);
-						}
-					}}($inBox, $cache);
-					$inBox.find("img").one("load", func);
-					$inBox.find("img").one("abort", func);
-					return;
-				}
-			}
-		}
+	    // images loading after dom load
+	    // can screw up the column heights,
+	    // so recolumnize after images load
+	    if(!options.ignoreImageLoading && !options.target) {
+	    	if(!$inBox.data("imageLoaded")) {
+		    	$inBox.data("imageLoaded", true);
+		    	if($inBox.find("img").length > 0) {
+		    		// only bother if there are
+		    		// actually images...
+			    	var func = function($inBox,$cache) { return function() {
+				    	if(!$inBox.data("firstImageLoaded")) {
+				    		$inBox.data("firstImageLoaded", "true");
+					    	$inBox.empty().append($cache.children().clone(true));
+					    	$inBox.columnize(options);
+				    	}
+			    	}}($inBox, $cache);
+				    $inBox.find("img").one("load", func);
+				    $inBox.find("img").one("abort", func);
+				    return;
+		    	}
+	    	}
+	    }
 
 		$inBox.empty();
 
@@ -481,6 +481,6 @@ add_event_listener_abstract(window,'real_load',function () {
 			}
 			options.doneFunc();
 		}
-	});
+    });
  };
 })(jQuery);

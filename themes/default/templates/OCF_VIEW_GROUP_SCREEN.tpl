@@ -9,43 +9,44 @@
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,group,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
-{+START,IF_NON_EMPTY,{PRIMARY_MEMBERS}}
-	{PRIMARY_MEMBERS}
-{+END}
+<div class="sliverised_page">
+	{+START,IF_NON_EMPTY,{PRIMARY_MEMBERS}}
+		{PRIMARY_MEMBERS}
+		<br />
+	{+END}
 
-{+START,IF_NON_EMPTY,{SECONDARY_MEMBERS}}
-	{SECONDARY_MEMBERS}
-{+END}
+	{+START,IF_NON_EMPTY,{SECONDARY_MEMBERS}}
+		{SECONDARY_MEMBERS}
+		<br />
+	{+END}
 
-{+START,IF_NON_EMPTY,{PROSPECTIVE_MEMBERS}}
-	{PROSPECTIVE_MEMBERS}
-{+END}
+	{+START,IF_NON_EMPTY,{PROSPECTIVE_MEMBERS}}
+		{PROSPECTIVE_MEMBERS}
+		<br />
+	{+END}
 
-{+START,IF_EMPTY,{PRIMARY_MEMBERS}{SECONDARY_MEMBERS}{PROSPECTIVE_MEMBERS}}
-	<p class="nothing_here">{!NO_MEMBERS}</p>
-{+END}
+	{+START,IF_EMPTY,{PRIMARY_MEMBERS}{SECONDARY_MEMBERS}{PROSPECTIVE_MEMBERS}}
+		<p class="nothing_here">{!NO_MEMBERS}</p>
+	{+END}
 
-{+START,IF_NON_EMPTY,{ADD_URL}}
-	<div class="group_add_member">
-		<div class="box box___ocf_view_group_screen"><div class="box_inner">
-			<h2>{!ADD_MEMBER_TO_GROUP}</h2>
-
-			<form title="{!ADD_MEMBER_TO_GROUP}" onsubmit="if (check_field_for_blankness(this.elements['username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{ADD_URL*}" method="post">
+	{+START,IF_NON_EMPTY,{ADD_URL}}
+		{+START,BOX,{!ADD_MEMBER_TO_GROUP},,light}
+			<form title="{!ADD_MEMBER_TO_GROUP}" onsubmit="if (checkFieldForBlankness(this.elements['username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{ADD_URL*}" method="post">
 				<div>
 					<label for="vga_username">{!USERNAME}: </label>
-					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" alt="{!USERNAME}" type="text" id="vga_username" name="username" value="" />
+					<input maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" alt="{!USERNAME}" type="text" id="vga_username" name="username" value="" />
 					<input class="button_pageitem" type="submit" value="{!ADD_MEMBER_TO_GROUP}" />
 				</div>
 			</form>
-		</div></div>
-	</div>
-{+END}
+		{+END}
+		<br />
+	{+END}
 
-{+START,IF_NON_EMPTY,{APPLY_URL}}
-	<ul class="force_margin actions_list" role="navigation">
-		<li><a href="{APPLY_URL*}">{APPLY_TEXT*}</a></li>
-	</ul>
-{+END}
+	{+START,IF_NON_EMPTY,{APPLY_URL}}
+		<p>&raquo; <a href="{APPLY_URL*}">{APPLY_TEXT*}</a></p>
+		<br />
+	{+END}
+</div>
 
 {+START,INCLUDE,NOTIFICATION_BUTTONS}
 	NOTIFICATIONS_TYPE=ocf_member_joined_group

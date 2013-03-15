@@ -383,7 +383,7 @@ function referrer_report_script($ret=false)
 
 		if ($ret) return $table;
 
-		$title=get_screen_title('REFERRALS');
+		$title=get_page_title('REFERRALS');
 
 		$out=new ocp_tempcode();
 		$out->attach($title);

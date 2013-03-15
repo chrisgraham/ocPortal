@@ -1,19 +1,7 @@
-<section class="box box___block_side_users_online"><div class="box_inner">
-	<h3>{!USERS_ONLINE}</h3>
+{+START,BOX,{!USERS_ONLINE},,{$?,{$GET,in_panel},panel,classic},tray_closed,,{$?,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,onlinemembers},{$OCF}},<a href="{$PAGE_LINK*,_SEARCH:onlinemembers}">{!DETAILS}</a>}}
+	{CONTENT} {!NUM_GUESTS,{GUESTS*}}
 
-	<p>{CONTENT} <span class="associated_details">{!NUM_GUESTS,{GUESTS*}}</span></p>
+	{NEWEST}
 
-	{+START,IF_NON_EMPTY,{NEWEST}}
-		<p>{NEWEST}</p>
-	{+END}
-
-	{+START,IF_NON_EMPTY,{BIRTHDAYS}}
-		<div>{BIRTHDAYS}</div>
-	{+END}
-
-	{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,onlinemembers},{$OCF}}}
-		<ul class="horizontal_links associated_links_block_group">
-			<li><a href="{$PAGE_LINK*,_SEARCH:onlinemembers}" title="{!USERS_ONLINE}">{!DETAILS}</a></li>
-		</ul>
-	{+END}
-</div></section>
+	{+START,IF_NON_EMPTY,{BIRTHDAYS}}<div>{BIRTHDAYS}</div>{+END}
+{+END}

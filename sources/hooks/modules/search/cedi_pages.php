@@ -116,7 +116,7 @@ class Hook_search_cedi_pages
 	 */
 	function render($row)
 	{
-		return render_cedi_page_box($row);
+		return get_cedi_page_html($row);
 	}
 
 }

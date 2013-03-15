@@ -11,7 +11,7 @@
 	<input type="hidden" name="rm" value="2" />
 
 	{+START,IF_NON_EMPTY,{MEMBER_ADDRESS}}
-		<!-- <input type="hidden" name="address_override" value="1" /> -->
+		<!--		<input type="hidden" name="address_override" value="1" />-->
 		{+START,LOOP,MEMBER_ADDRESS}
 			{+START,IF_NON_EMPTY,{_loop_key*}}
 				<input type="hidden" name="{_loop_key*}" value="{_loop_var*}" />
@@ -24,12 +24,10 @@
 		<input type="hidden" name="amount_{$ADD*,1,{_loop_key}}" value="{PRICE*}" />
 		<input type="hidden" name="quantity_{$ADD*,1,{_loop_key}}" value="{QUANTITY*}" />
 	{+END}
-
-	<p class="purchase_button">
+	<br />
+	<div class="purchase_button">
 		<input class="button_page" type="image" src="{$IMG*,page/cart_checkout}" name="submit" alt="{!PROCEED}" title="{!PROCEED}" />
-	</p>	
+	</div>	
+	<br />
 </form>
-
-{+START,IF_NON_EMPTY,{NOTIFICATION_TEXT}}
-	<div class="checkout_text">{NOTIFICATION_TEXT}</div>
-{+END}
+{+START,IF_NON_EMPTY,{NOTIFICATION_TEXT}}<div class="checkout-text">{NOTIFICATION_TEXT}</div>{+END}

@@ -25,15 +25,6 @@ function check_joining_allowed()
 {
 	if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
 
-	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
-	{
-		require_code('antispam');
-		check_rbls();
-		check_stopforumspam();
-	}
-
 	global $LDAP_CONNECTION;
 	if ((!is_null($LDAP_CONNECTION)) && (get_option('ldap_allow_joining',true)==='0'))
 		warn_exit(do_lang_tempcode('JOIN_DISALLOW'));
@@ -175,7 +166,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 			if (use_captcha())
 			{
 				$javascript.="
-						url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
+						url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
 						if (!do_ajax_field_test(url))
 						{
 							document.getElementById('submit_button').disabled=false;
@@ -210,7 +201,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
  * @param  boolean		Whether to instantly log the user in
  * @return array			A tuple: Messages to show (currently nothing else in tuple)
  */
-function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true,$invites_if_enabled=true,$one_per_email_address_if_enabled=true,$confirm_if_enabled=true,$validate_if_enabled=true,$coppa_if_enabled=true,$instant_login=true)
+function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true,$invites_if_enabled=true,$one_per_email_address_if_enabled=true,$confirm_if_enabled=true,$validate_if_enabled=true,$coppa_if_enabled=true,$instant_login=false)
 {
 	ocf_require_all_forum_stuff();
 
@@ -289,15 +280,6 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		}
 	}
 
-	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
-	{
-		require_code('antispam');
-		check_rbls();
-		check_stopforumspam($username,$email_address);
-	}
-
 	if ($captcha_if_enabled)
 	{
 		if (addon_installed('captcha'))
@@ -355,7 +337,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		{
 			if ($custom_field['cf_type']!='upload')
 			{
-				$fields_done.=do_lang('THIS_WITH_COMCODE',$custom_field['trans_name'],post_param('field_'.$custom_field['id']))."\n";
+				$fields_done.=do_lang('THIS_WITH_COMCODE',$custom_field['trans_name'],post_param('custom_'.$custom_field['id'].'_value'))."\n";
 			}
 		}
 		$_privacy_url=build_url(array('page'=>'privacy'),'_SEARCH',NULL,false,false,true);

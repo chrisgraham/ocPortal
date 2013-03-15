@@ -33,9 +33,6 @@ function init__hooks__modules__admin_import__aef()
 	$OLD_BASE_URL=NULL;
 }
 
-/**
- * Forum Driver.
- */
 class Hook_aef
 {
 
@@ -101,8 +98,13 @@ class Hook_aef
 		if (!file_exists($file_base.'/universal.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH','universal.php'));
 		require($file_base.'/universal.php');
+		$INFO=array();
+		$INFO['sql_database']=$globals['database'];
+		$INFO['sql_user']=$globals['user'];
+		$INFO['sql_pass']=$globals['password'];
+		$INFO['sql_tbl_prefix']=$globals['dbprefix'];
 
-		return array($globals['database'],$globals['user'],$globals['password'],$globals['dbprefix'],$globals['server']);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
 	}
 
 	/**
@@ -463,9 +465,9 @@ class Hook_aef
 
 		foreach ($rows as $row)
 		{
-			$ban_time=$row['temp_ban_time']; //when is banned user
-			$ban_period=$row['temp_ban']; //how many days is banned
-			$ban_till=$ban_time+$ban_period; //the user is banned till this date/time
+			$ban_time = $row['temp_ban_time']; //when is banned user
+			$ban_period = $row['temp_ban']; //how many days is banned
+			$ban_till = $ban_time+$ban_period; //the user is banned till this date/time
 
 			if ($ban_till < time()) continue;
 

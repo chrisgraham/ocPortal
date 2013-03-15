@@ -4,9 +4,10 @@
 	<div>
 		{SECTIONS}
 
-		<p class="proceed_button">
+		<br />
+		<div class="proceed_button">
 			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
-		</p>
+		</div>
 	</div>
 </form>
 

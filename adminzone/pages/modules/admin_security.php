@@ -126,7 +126,7 @@ class Module_admin_security
 	 */
 	function security_interface()
 	{
-		$title=get_screen_title('SECURITY_LOGGING');
+		$title=get_page_title('SECURITY_LOGGING');
 
 		// Failed logins
 		$start=get_param_integer('failed_start',0);
@@ -170,7 +170,7 @@ class Module_admin_security
 	 */
 	function clean_alerts()
 	{
-		$title=get_screen_title('SECURITY_LOGGING');
+		$title=get_page_title('SECURITY_LOGGING');
 
 		// Actualiser
 		$count=0;
@@ -203,7 +203,7 @@ class Module_admin_security
 
 		$time=get_timezoned_date($row['date_and_time']);
 
-		$title=get_screen_title('VIEW_ALERT',true,array(escape_html($time)));
+		$title=get_page_title('VIEW_ALERT',true,array(escape_html($time)));
 
 		$lookup_url=build_url(array('page'=>'admin_lookup','param'=>$row['ip']),'_SELF');
 		$member_url=build_url(array('page'=>'admin_lookup','param'=>$row['the_user']),'_SELF');

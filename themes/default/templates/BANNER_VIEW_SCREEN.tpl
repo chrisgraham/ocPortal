@@ -2,7 +2,7 @@
 
 <h2>{!DETAILS}</h2>
 
-{MAP_TABLE}
+{VIEW_SPACE}
 
 <h2>{!VIEW}</h2>
 
@@ -10,7 +10,9 @@
 	{!BANNER_LOOKS}
 </p>
 
-{$PARAGRAPH,{BANNER}}
+<p>
+	{BANNER}
+</p>
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,INCLUDE,STAFF_ACTIONS}

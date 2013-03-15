@@ -11,7 +11,6 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-
 /*EXTRA FUNCTIONS: fb*/
 
 /**
@@ -74,7 +73,7 @@ function _general_db_init()
 	global $TABLE_LANG_FIELDS;
 	if (count($TABLE_LANG_FIELDS)>0) return;
 
-	$TABLE_LANG_FIELDS=function_exists('persistent_cache_get')?persistent_cache_get('TABLE_LANG_FIELDS'):NULL;
+	$TABLE_LANG_FIELDS=function_exists('persistant_cache_get')?persistant_cache_get('TABLE_LANG_FIELDS'):NULL;
 	if ($TABLE_LANG_FIELDS===NULL)
 	{
 		$TABLE_LANG_FIELDS=array();
@@ -91,8 +90,8 @@ function _general_db_init()
 			}
 		}
 
-		if (function_exists('persistent_cache_set'))
-			persistent_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
+		if (function_exists('persistant_cache_set'))
+			persistant_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
 	}
 }
 
@@ -399,10 +398,6 @@ function microtime_diff($a,$b)
 	}
 }
 
-/**
- * Database handling.
- * @package		core
- */
 class database_driver
 {
 	var $table_prefix;
@@ -414,8 +409,6 @@ class database_driver
 	var $table_exists_cache;
 
 	var $static_ob;
-
-	var $dedupe_mode=false;
 
 	/**
 	 * Construct a database driver from connection parameters.
@@ -517,7 +510,7 @@ class database_driver
 						$v=' ';
 					}
 					if (is_integer($v)) $values.=strval($v);
-					elseif (is_float($v)) $values.=float_to_raw_string($v,10);
+					elseif (is_float($v)) $values.=float_to_raw_string($v);
 					elseif (($key=='begin_num') || ($key=='end_num')) $values.=$v; // Fudge, for all our known large unsigned integers
 					else $values.='\''.$this->static_ob->db_escape_string($v).'\'';
 				}
@@ -528,13 +521,7 @@ class database_driver
 
 		if (count($all_values)==1) // usually $all_values only has length of 1
 		{
-			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql'))
-			{
-				$query='INSERT DELAYED INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
-			} else
-			{
-				$query='INSERT INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
-			}
+			$query='INSERT INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
 		} else
 		{
 			// So we can do batch inserts...
@@ -582,7 +569,7 @@ class database_driver
 	}
 
 	/**
-	 * Get the specified value from the database. This is the specified value of the first row returned. A fatal error is produced if there is no matching row.
+	 * Get the specified value from the database. This is a first value of the first row returned.
 	 *
 	 * @param  string			The table name
 	 * @param  string			The field to select
@@ -590,11 +577,11 @@ class database_driver
 	 * @param  string			Something to tack onto the end
 	 * @return mixed			The first value of the first row returned
 	 */
-	function query_value($table,$selected_value,$where_map=NULL,$end='')
+	function query_value($table,$select,$where_map=NULL,$end='')
 	{
-		$values=$this->query_select($table,array($selected_value),$where_map,$end,1,NULL);
+		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL);
 		if ($values===NULL) return NULL; // error
-		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($selected_value),$where_map,$end)))); // No result found
+		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($select),$where_map,$end)))); // No result found
 		return $this->_query_value($values);
 	}
 
@@ -613,7 +600,7 @@ class database_driver
 	}
 
 	/**
-	 * Get the specified value from the database, or NULL if there is no matching row (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
+	 * Get the specified value from the database, or NULL if it is not there (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
 	 *
 	 * @param  string			The table name
 	 * @param  string			The field to select
@@ -679,7 +666,7 @@ class database_driver
 		{
 			if ($where!='') $where.=' AND ';
 
-			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value,10);
+			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
 			elseif (is_integer($value)) $where.=$key.'='.strval($value);
 			elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 			else
@@ -723,7 +710,7 @@ class database_driver
 			{
 				if ($where!='') $where.=' AND ';
 
-				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value,10);
+				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
 				elseif (is_integer($value)) $where.=$key.'='.strval($value);
 				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 				else
@@ -746,7 +733,7 @@ class database_driver
 			if ($value===NULL) $update.=$key.'=NULL';
 			else
 			{
-				if (is_float($value)) $update.=$key.'='.float_to_raw_string($value,10);
+				if (is_float($value)) $update.=$key.'='.float_to_raw_string($value);
 				elseif (is_integer($value)) $update.=$key.'='.strval($value);
 				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 				else $update.=$key.'=\''.$this->static_ob->db_escape_string($value).'\'';
@@ -795,7 +782,7 @@ class database_driver
 
 				if ($where!='') $where.=' AND ';
 
-				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value,10);
+				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
 				elseif (is_integer($value)) $where.=$key.'='.strval($value);
 				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
 				else
@@ -825,7 +812,7 @@ class database_driver
 	{
 		global $FILECACHE_OBJECT;
 		require_code('database/xml');
-		$chain_db=new database_driver(get_custom_file_base().'/persistent_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
+		$chain_db=new database_driver(get_custom_file_base().'/persistant_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
 		$chain_connection=&$chain_db->connection_write;
 		if (count($chain_connection)>4) // Okay, we can't be lazy anymore
 		{
@@ -836,7 +823,7 @@ class database_driver
 	}
 
 	/**
-	 * Get the database rows found matching the specified parameters. Unlike 'query', it doesn't take raw SQL -- it assembles SQL based the parameters requested.
+	 * Get the DB results found from the specified parameters.
 	 *
 	 * @param  string			The table name
 	 * @param  ?array			The SELECT map (NULL: all fields)
@@ -926,7 +913,7 @@ class database_driver
 	}
 
 	/**
-	 * This function is a raw query executor. It shouldn't usually be used unless you need to write SQL involving 'OR' statements or other complexities. There are abstracted versions available which you probably want instead (mainly, query_select).
+	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available (see below).
 	 *
 	 * @param  string			The complete SQL query
 	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
@@ -964,14 +951,14 @@ class database_driver
 	 */
 	function _query($query,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false,$lang_fields=NULL,$field_prefix='',$save_as_volatile=false)
 	{
-		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEV_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS;
+		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEBUG_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS;
 
 		if ($QUERY_FILE_LOG!==NULL)
 		{
 			fwrite($QUERY_FILE_LOG,$query.';'.chr(10).chr(10));
 		}
 
-		if ($DEV_MODE)
+		if ($DEBUG_MODE)
 		{
 			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
 			{
@@ -1004,7 +991,7 @@ class database_driver
 				fwrite($myfile,get_self_url_easy().chr(10));
 				fclose($myfile);
 			}
-			if ($DEV_MODE)
+			if ($DEBUG_MODE)
 			{
 				$QUERY_COUNT=0;
 				fatal_exit(do_lang_tempcode('TOO_MANY_QUERIES'));
@@ -1065,7 +1052,7 @@ class database_driver
 		{
 			$before=microtime(false);
 		}
-		if ((substr(strtoupper($query),0,7)=='SELECT ') || (substr(strtoupper($query),0,8)=='(SELECT '))
+		if (substr(strtoupper($query),0,7)=='SELECT ')
 		{
 			$connection=&$this->connection_read;
 		} else
@@ -1076,26 +1063,6 @@ class database_driver
 		{
 			$connection=call_user_func_array(array($this->static_ob,'db_get_connection'),$connection);
 			_general_db_init();
-		}
-
-		// Special handling for searches, which are slow and specific - we want to recognise if previous active searches were the same and kill them (as this would have been a double form submit)
-		if (($this->dedupe_mode) && (substr(get_db_type(),0,5)=='mysql'))
-		{
-			$query.='/* '.strval(get_session_id()).' */'; // Identify query to session, for accurate de-duping
-
-			$real_query=$query;
-			if (($max!==NULL) && ($start!==NULL)) $real_query.=' LIMIT '.strval($start).','.strval($max);
-			elseif ($max!==NULL) $real_query.=' LIMIT '.strval($max);
-			elseif ($start!==NULL) $real_query.=' LIMIT '.strval($start).',30000000';
-
-			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection);
-			foreach ($ret as $process)
-			{
-				if ($process['Info']==$real_query)
-				{
-					$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
-				}
-			}
 		}
 
 		$ret=$this->static_ob->db_query($query,$connection,$max,$start,$fail_ok,$get_insert_id,false,$save_as_volatile);
@@ -1113,14 +1080,11 @@ class database_driver
 			if (!function_exists('find_all_hooks')) return $ret;
 
 			$UPON_QUERY_HOOKS=array();
-			if (!running_script('restore'))
+			$hooks=find_all_hooks('systems','upon_query');
+			foreach (array_keys($hooks) as $hook)
 			{
-				$hooks=find_all_hooks('systems','upon_query');
-				foreach (array_keys($hooks) as $hook)
-				{
-					require_code('hooks/systems/upon_query/'.filter_naughty($hook));
-					$UPON_QUERY_HOOKS[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
-				}
+				require_code('hooks/systems/upon_query/'.filter_naughty($hook));
+				$UPON_QUERY_HOOKS[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
 			}
 		}
 		foreach ($UPON_QUERY_HOOKS as $ob)
@@ -1295,31 +1259,6 @@ class database_driver
 	{
 		require_code('database_helper');
 		_helper_refresh_field_definition($this,$type);
-	}
-
-	/**
-	 * Find if a table is locked for more than 5 seconds. Only works with MySQL.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  boolean		Whether the table is locked
-	 */
-	function table_is_locked($tbl)
-	{
-		if (substr(get_db_type(),0,5)!='mysql') return false;
-
-		$tries=0;
-		do
-		{
-			$locks=$GLOBALS['SITE_DB']->query('SHOW OPEN TABLES FROM '.get_db_site().' WHERE `Table`=\''.get_table_prefix().$tbl.'\' AND In_use>=1');
-			$locked=count($locks)>=1;
-			$tries++;
-			if ($locked)
-			{
-				sleep(1);
-			}
-		}
-		while (($locked) && ($tries<5));
-		return $locked;
 	}
 
 }

@@ -4,17 +4,17 @@
 */
 
 .support_tickets td {
-	padding: 1em;
+	padding: 4px;
 }
 
 .closed_ticket {
 	font-style: italic;
 	float: right;
-	padding-{!en_left}: 3em;
+	padding-{!en_left}: 30px;
 }
 
 .unclosed_ticket {
-	background-color: {$GET,red_highlight_background};
+	background-color: #FF8888; /* {$,wizard, 100% #FF8888} */
 }
 
 .ticket_last_poster {

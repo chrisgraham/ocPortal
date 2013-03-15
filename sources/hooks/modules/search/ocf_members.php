@@ -314,8 +314,7 @@ class Hook_search_ocf_members
 		}
 		require_code('ocf_members2');
 		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
-		$box=render_member_box($row['id']);
-		return $box;
+		return ocf_show_member_box($row['id']);
 	}
 
 	/**

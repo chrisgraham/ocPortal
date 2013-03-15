@@ -1,4 +1,5 @@
-[block="forum_features" title="{!SECTION_FORUMS}"]side_stored_menu[/block]
-[block]side_personal_stats[/block]
+[block="forum_features" type="tree" caption="Forums"]side_stored_menu[/block]
 [block]side_ocf_personal_topics[/block]
-[block]main_leader_board[/block]
+[block failsafe="1"]side_users_online[/block]
+[block failsafe="1"]side_stats[/block]
+[block]side_personal_stats[/block]

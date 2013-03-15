@@ -48,9 +48,7 @@ class Hook_members_gifts
 
 		foreach ($rows as $gift)
 		{
-			$gift_info=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']),'',1);
-			if (!array_key_exists(0,$gift_info)) continue;
-
+			$gift_info=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']));
 			if (strlen($gift_info[0]['name'])>0)
 			{
 				if ($gift['is_anonymous']==0)

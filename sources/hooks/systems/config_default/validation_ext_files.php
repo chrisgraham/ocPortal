@@ -48,7 +48,7 @@ class Hook_config_default_validation_ext_files
 	 */
 	function get_default()
 	{
-		return NULL;//'0';	Way too slow for modern sites
+		return '0';
 	}
 
 }

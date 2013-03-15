@@ -26,7 +26,6 @@ No support for:
  - Full DOM	REASON: not implemented on any browser. If however, conditional testing is used, the validator will let it pass
  - (Most) HTML attributes hardcoded into DOM objects	REASON: no reason to do it, and less compatible and clear than getAttribute
  - ";" insertion	REASON: very sloppy
- - New 'HTML5' APIs (not well supported yet)
  - checking against argument types	REASON: Javascript extension, but we could do. Not a lot of advantage, quite a lot of work
  - checking for locked	REASON: Javascript extension, but we could do. Not a lot of advantage, quite a lot of work
 */
@@ -71,14 +70,14 @@ function init__js_validator()
 		'Node'=>array('Object',array(array('String','nodeName'),array('Number','nodeType'),array('String','nodeValue'),array('NodeArray','childNodes'),array('!Node','firstChild'),array('!Node','lastChild'),array('!Node','nextSibling'),array('!Node','parentNode'),array('!Node','previousSibling'),array('!XMLDocument','ownerDocument'),array('function','appendChild','!Node'),array('function','cloneNode','!Node'),array('function','insertBefore','!Node'),array('function','removeChild','!Node'),array('function','replaceChild','!Node'),array('function','hasChildNodes','Boolean'),)), // nodeType: 1=Element,2=Attribute,3=Text,9=Document
 		'XMLDocument'=>array('Node',array(array('Implementation','implementation'),array('function','createElement','!Element'),array('function','createTextNode','TextNode'),array('function','getElementById','!Element'),array('function','createAttribute','Attribute'),array('HTML','documentElement'),array('Boolean','async'),array('function','load'),array('function','loadXML'),array('function','importNode','!Node'),array('function','cloneNode','!Node'),)),
 		'Document'=>array('XMLDocument',array(array('String','referrer'),array('String','title'),array('String','URL'),array('String','cookie'),array('Body','body'),array('function','getElementsByName','ElementArray'),array('function','getElementsByTagName','ElementArray'),/*array('ElementArray','images'),array('ElementArray','links'),array('FormArray','forms'),*/array('Selection','selection'),array('function','createRange','Range'),array('function','open'),array('function','write'),array('function','close'),array('Boolean','designMode'),array('function','execCommand','Boolean'),array('function','queryCommandEnabled','Boolean'),array('function','queryCommandState','Boolean'),array('function','queryCommandValue','!Object'),)),
-		'Element'=>array('Node',array(array('function','addEventListener','Boolean'),array('function','attachEvent','Boolean'),array('function','getElementsByTagName','ElementArray'),array('function','setAttribute'),array('function','getAttribute'),array('function','Attribute'),array('Array','attributes' /* this is only good for Raw-XML, not XHTML-in-IE */),array('function','onresize'),array('function','onmouseup'),array('function','onmouseover'),array('function','onmouseout'),array('function','onmousemove'),array('function','onmousedown'),array('function','onkeyup'),array('function','onkeypress'),array('function','onkeydown'),array('function','ondblclick'),array('function','onclick'),array('Number','selectionStart'),array('Number','selectionEnd'),array('String','className'),array('String','id'),/*array('String','innerHTML'),*/array('String','innerText'),array('!Object','style'),array('Number','selectionStart'),array('Number','selectionEnd'),array('Number','offsetWidth'),array('Number','offsetHeight'),array('Number','offsetLeft'),array('Number','offsetTop'),array('String','role'),array('!Element','offsetParent'),)),
+		'Element'=>array('Node',array(array('function','addEventListener','Boolean'),array('function','attachEvent','Boolean'),array('function','getElementsByTagName','ElementArray'),array('function','setAttribute'),array('function','getAttribute'),array('function','Attribute'),array('Array','attributes' /* this is only good for Raw-XML, not XHTML-in-IE */),array('function','onresize'),array('function','onmouseup'),array('function','onmouseover'),array('function','onmouseout'),array('function','onmousemove'),array('function','onmousedown'),array('function','onkeyup'),array('function','onkeypress'),array('function','onkeydown'),array('function','ondblclick'),array('function','onclick'),array('Number','selectionStart'),array('Number','selectionEnd'),array('String','className'),array('String','id'),/*array('String','innerHTML'),*/array('String','innerText'),array('!Object','style'),array('Number','selectionStart'),array('Number','selectionEnd'),array('Number','offsetWidth'),array('Number','offsetHeight'),array('Number','offsetLeft'),array('Number','offsetTop'),array('!Element','offsetParent'),)),
 		'TextNode'=>array('Node',array(array('function','appendData'),array('function','deleteData'),array('function','insertData'),array('function','replaceData'),array('function','substringData','String'),array('function','splitText','TextNode'),array('String','data'),)),
 		'Attribute'=>array('Object',array(array('String','name'),array('String','value'),)),
 		'Body'=>array('Element',array(/*array('function','onmousewheel'),*/array('function','onpagehide'),array('function','onpageshow'),array('function','onunload'),array('function','onload'),array('Number','offsetWidth'),array('Number','offsetHeight'),array('Number','scrollWidth'),array('Number','scrollHeight'),array('Number','scrollTop'),array('Number','scrollLeft'),)),
 		'Caption'=>array('Element',array()),
 		'HTML'=>array('Element',array(array('Number','clientWidth'),array('Number','clientHeight'),array('Number','scrollWidth'),array('Number','scrollHeight'),array('Number','scrollTop'),array('Number','scrollLeft'),)),
-		'Form'=>array('Element',array(array('String','method'),array('String','action'),array('String','title'),array('Array','elements'),array('function','submit'),array('function','reset'),)),
-		'Img'=>array('Element',array(array('String','alt'),array('String','title'),array('String','src'),array('Boolean','complete'),)),
+		'Form'=>array('Element',array(array('Array','elements'),array('function','submit'),array('function','reset'),)),
+		'Img'=>array('Element',array(array('Boolean','complete'),)),
 		'FormField'=>array('Element',array(array('Form','form'),array('function','focus'),array('function','onfocus'),array('function','onchange'),array('function','onblur'),array('Boolean','disabled'),array('String','name'),)),
 		'Select'=>array('FormField',array(array('function','onselect'),array('function','select'),array('Number','selectedIndex'),array('Boolean','multiple'),array('Array','options'),)),
 		'Option'=>array('FormField',array(array('String','value'),array('Boolean','defaultSelected'),array('Boolean','selected'),)),
@@ -91,7 +90,7 @@ function init__js_validator()
 		'TableRow'=>array('Element',array(array('ElementArray','cells'),array('Number','sectionRowIndex'),array('Number','rowIndex'),array('function','insertCell','TableData'),array('function','deleteCell'),)),
 		'Self'=>array('Window',array(array('Number','outerHeight'),array('Number','outerWidth'),array('Number','screenTop'),array('Number','screenLeft'),array('Number','screenX'),array('Number','screenY'),)),
 		'Screen'=>array('Object',array(array('Number','availWidth'),array('Number','availHeight'),array('Number','colorDepth'),array('Number','width'),array('Number','height'),)),
-		'Window'=>array('Object',array(array('JSON','JSON'),array('Console','console'),array('Storage','sessionStorage'),array('Storage','localStorage'),/*array('function','onmousewheel'),*/array('function','onpagehide'),array('function','onpageshow'),array('function','onunload'),array('function','onload'),array('History','history'),array('Event','event'),array('String','status'),array('Document','document'),array('WindowArray','frames'),array('Navigator','navigator'),array('Location','location'),array('Screen','screen'),array('Boolean','closed'),array('Window','opener'),array('Window','parent'),array('Self','self'),array('Window','top'),array('function','alert'),array('function','blur'),array('function','focus'),array('function','clearInterval'),array('function','clearTimeout'),array('function','close'),array('function','confirm','Boolean'),array('function','moveBy'),array('function','open','Window'),array('function','print'),array('function','prompt','!Object'),array('function','scrollBy'),array('function','scrollTo'),array('function','setInterval','Number'),array('function','setTimeout','Number'),array('function','encodeURIComponent','String'),array('function','encodeURI','String'),array('function','decodeURIComponent','String'),array('function','decodeURI','String'),array('function','isFinite','Boolean'),array('function','isNaN','Boolean'),array('function','parseFloat','Number'),array('function','parseInt','Number'),array('function','eval','!Object'),array('function','void','undefined')/*,array('function','getAttention')*/,)),
+		'Window'=>array('Object',array(/*array('function','onmousewheel'),*/array('function','onpagehide'),array('function','onpageshow'),array('function','onunload'),array('function','onload'),array('History','history'),array('Event','event'),array('String','status'),array('Document','document'),array('FrameArray','frames'),array('Navigator','navigator'),array('Location','location'),array('Screen','screen'),array('Boolean','closed'),array('Window','opener'),array('Window','parent'),array('Self','self'),array('Window','top'),array('function','alert'),array('function','blur'),array('function','focus'),array('function','clearInterval'),array('function','clearTimeout'),array('function','close'),array('function','confirm','Boolean'),array('function','moveBy'),array('function','open','Window'),array('function','print'),array('function','prompt','!Object'),array('function','scrollBy'),array('function','scrollTo'),array('function','setInterval','Number'),array('function','setTimeout','Number'),array('function','encodeURIComponent','String'),array('function','encodeURI','String'),array('function','decodeURIComponent','String'),array('function','decodeURI','String'),array('function','isFinite','Boolean'),array('function','isNaN','Boolean'),array('function','parseFloat','Number'),array('function','parseInt','Number'),array('function','eval','!Object'),array('function','void','undefined')/*,array('function','getAttention')*/,)),
 		'Event'=>array('Object',array(array('function','stopPropagation'),array('Boolean','cancelBubble'),array('!Element','target'),array('!Element','srcElement'),array('!Element','fromElement'),array('!Element','relatedTarget'),array('Number','clientX'),array('Number','clientY'),array('Number','offsetX'),array('Number','offsetY'),array('Number','pageX'),array('Number','pageY'),array('Number','screenX'),array('Number','screenY'),array('Boolean','altKey'),array('Boolean','metaKey'),array('Boolean','ctrlKey'),array('Boolean','shiftKey'),array('Number','keyCode'),array('Number','which'),array('String','charCode'),array('Number','button'),array('String','type'),)),
 		'History'=>array('Object',array(array('Number','length'),array('function','back'),array('function','forward'),array('function','go'),)),
 		'Location'=>array('Object',array(array('String','hash'),array('String','host'),array('String','hostname'),array('String','href'),array('String','pathname'),array('Number','port'),array('String','protocol'),array('String','search'),array('function','assign'),array('function','reload'),array('function','replace'),)),
@@ -106,19 +105,13 @@ function init__js_validator()
 		'EmbedActiveXFlash'=>array('Object',array(array('Number','ReadyState'),array('Number','TotalFrames'),array('Number','FrameNum'),array('Boolean','Playing'),array('String','Quality'),array('Number','ScaleMode'),array('Number','AlignMode'),array('String','Backgroundcolor'),array('Boolean','Loop'),array('String','Movie'),array('function','Play'),array('function','Stop'),array('function','Back'),array('function','Forward'),array('function','Rewind'),)),
 		'EmbedLiveConnectFlash'=>array('Object',array(array('function','LoadMovie'),array('function','GetVariable','!Object'),array('function','Play'),array('function','StopPlay'),array('function','IsPlaying','Boolean'),array('function','GotoFrame'),array('function','TotalFrames','Number'),array('function','Rewind'),array('function','SetZoomRect'),array('function','Zoom'),array('function','Pan'),array('function','PercentLoaded','Number'),)),
 		'DomException'=>array('Error',array(array('Number','code'),array('Number','!INDEX_SIZE_ERR'),array('Number','!DOMSTRING_SIZE_ERR'),array('Number','!HIERARCHY_REQUEST_ERR'),array('Number','!WRONG_DOCUMENT_ERR'),array('Number','!INVALID_CHARACTER_ERR'),array('Number','!NO_DATA_ALLOWED_ERR'),array('Number','!NO_MODIFICATION_ALLOWED_ERR'),array('Number','!NOT_FOUND_ERR'),array('Number','!NOT_SUPPORTED_ERR'),array('Number','!INUSE_ATTRIBUTE_ERR'),array('Number','!INVALID_STATE_ERR'),array('Number','!SYNTAX_ERR'),array('Number','!INVALID_MODIFICATION_ERR'),array('Number','!NAMESPACE_ERR'),array('Number','!INVALID_ACCESS_ERR'),array('Number','!VALIDATION_ERR'),array('Number','!TYPE_MISMATCH_ERR'),)),
-		'Storage'=>array('Object',array(array('Number','length'),array('function','getItem','Object'),array('function','setItem'),array('function','removeItem'),array('function','clear'))),
-		'Console'=>array('Object',array(array('function','log'))),
-		'JSON'=>array('Object',array(array('function','parse','Object'),array('function','stringify','String'))),
 
 		'StringArray'=>array('Array',array()),
 		'NodeArray'=>array('Array',array()),
 		'ElementArray'=>array('Array',array()),
 		'FormArray'=>array('Array',array()),
 		'TableRowArray'=>array('Array',array()),
-		'WindowArray'=>array('Array',array()),
-
-		// Future things coming, but not currently here (may not be added, not strictly needed as we ignore missing properties/methods, and the API scope has mushroomed since 'HTML5'):
-		//  Audio, Video, Canvas, File, WebRTC, SVG, WebGL, Crypto, HTML5 DOM APIs, Device, devicePixelRatio, Web Workers, Web Sockets
+		'FrameArray'=>array('Array',array()),
 	);
 
 	// Hard-code all the inheritance
@@ -369,7 +362,7 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
 		// Check for non-used variables
 		if (($v['unused_value']) && ($name!='__return') && ($name!='_') && (!$v['is_global']) && (!in_array($name,array('this','arguments','event'))))
 		{
-//			js_log_warning('CHECKER','Non-used '.($v['unused_value']?'value':'variable').' (\''.$name.'\')',$v['first_mention']);	Annoying error, unneeded, inaccurate
+			js_log_warning('CHECKER','Non-used '.($v['unused_value']?'value':'variable').' (\''.$name.'\')',$v['first_mention']);
 		}
 	}
 }
@@ -480,8 +473,6 @@ function js_check_command($command,$depth)
 				js_check_command($c[1],$depth+1);
 				break;
 			case 'CATCH':
-				js_add_variable_reference($c[1],$c[3],true);
-				js_set_ocportal_type($c[1],'Error');
 				js_check_command($c[2],$depth+1);
 				break;
 			case 'FINALLY':
@@ -556,7 +547,7 @@ function js_check_assignment($c,$c_pos)
 		{
 			if ($target[1]=='this') js_log_warning('CHECKER','\'this\' is immutable',$c_pos);
 
-			js_add_variable_reference($target[1],$c_pos,true,$e_type=='Null');
+			js_add_variable_reference($target[1],$c_pos,false,$e_type=='Null');
 			js_set_ocportal_type($target[1],$e_type);
 		}
 		$type=js_check_variable($target);
@@ -572,24 +563,23 @@ function js_check_assignment($c,$c_pos)
  *
  * @param  list				The complex expression
  * @param  boolean			Whether the expression is being used as a command (i.e. whether the expression is not used for the result, but rather, the secondary consequences of calculating it)
- * @param  boolean			Whether the expression is being guarded and hence is not a proper reference
  * @return string				The type
  */
-function js_check_expression($e,$secondary=false,$is_guarded=false)
+function js_check_expression($e,$secondary=false)
 {
 	$c_pos=$e[count($e)-1];
 
 	if ($e[0]=='VARIABLE_REFERENCE') $e[0]='VARIABLE'; // Handled in the same way
 	if ($e[0]=='SOLO')
 	{
-		$type=js_check_expression($e[1],false,$is_guarded);
+		$type=js_check_expression($e[1]);
 		return $type;
 	}
 	if ($e[0]=='UNARY_IF')
 	{
 		$rem=$GLOBALS['JS_PARSING_CONDITIONAL'];
 		$GLOBALS['JS_PARSING_CONDITIONAL']=true;
-		$t=js_check_expression($e[1],false,$is_guarded);
+		$t=js_check_expression($e[1]);
 		$GLOBALS['JS_PARSING_CONDITIONAL']=$rem;
 		//$passes=js_ensure_type(array('Boolean'),$t,$c_pos,'Conditionals must be Boolean (unary)');
 		//if ($passes) js_infer_expression_type_to_variable_type('Boolean',$e[1]);
@@ -604,7 +594,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if (in_array($e[0],array('BOOLEAN_AND','BOOLEAN_OR')))
 	{
-		$exp=js_check_expression($e[1],false,$is_guarded);
+		$exp=js_check_expression($e[1]);
 		//$passes=js_ensure_type(array('Boolean'),$exp,$c_pos-1,'Can only use Boolean combinators with Booleans');
 		//if ($passes) js_infer_expression_type_to_variable_type('Boolean',$e[1]);
 		$exp=js_check_expression($e[2]);
@@ -614,7 +604,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if (in_array($e[0],array('BW_XOR','BW_AND','BW_OR','SL','SR','ZSR','REMAINDER')))
 	{
-		$passes=js_ensure_type(array('Number'),js_check_expression($e[1],false,$is_guarded),$c_pos-1,'Can only use integer combinators with Numbers');
+		$passes=js_ensure_type(array('Number'),js_check_expression($e[1]),$c_pos-1,'Can only use integer combinators with Numbers');
 		//if ($passes) js_infer_expression_type_to_variable_type('Number',$e[1]);
 		$passes=js_ensure_type(array('Number'),js_check_expression($e[2]),$c_pos,'Can only use integer combinators with Numbers');
 		//if ($passes) js_infer_expression_type_to_variable_type('Number',$e[2]);
@@ -622,7 +612,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if (in_array($e[0],array('CONC')))
 	{
-		$type_a=js_check_expression($e[1],false,$is_guarded);
+		$type_a=js_check_expression($e[1]);
 		$type_b=js_check_expression($e[2]);
 		$passes=js_ensure_type(array('String'),$type_a,$c_pos-1,'Can only use string combinators with Strings (1) (not '.$type_a.')');
 		//if ($passes) js_infer_expression_type_to_variable_type('String',$e[1]);
@@ -632,7 +622,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if (in_array($e[0],array('SUBTRACT','MULTIPLY','DIVIDE')))
 	{
-		$type_a=js_check_expression($e[1],false,$is_guarded);
+		$type_a=js_check_expression($e[1]);
 		$t=js_check_expression($e[2]);
 		js_ensure_type(array('Number','Date'),$type_a,$c_pos-1,'Can only use arithmetical combinators with Numbers (1) (not '.$type_a.')');
 		js_ensure_type(array('Number','Date'),$t,$c_pos,'Can only use arithmetical combinators with Numbers (2) (not '.$t.')');
@@ -640,16 +630,15 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if (in_array($e[0],array('ADD')))
 	{
-		$type_a=js_check_expression($e[1],false,$is_guarded);
+		$type_a=js_check_expression($e[1]);
 		$t=js_check_expression($e[2]);
-		js_ensure_type(array('Number','Array','String','Date','Location'),$type_a,$c_pos-1,'Can only use + combinator with Strings/Numbers/Arrays (1) (not '.$type_a.')');
-		js_ensure_type(array('Number','Array','String','Date','Location'),$t,$c_pos,'Can only use + combinator with Strings/Numbers/Arrays (2) (not '.$t.')');
-		if ($type_a=='Location') $type_a='String';
+		js_ensure_type(array('Number','Array','String','Date'),$type_a,$c_pos-1,'Can only use + combinator with Strings/Numbers/Arrays (1) (not '.$type_a.')');
+		js_ensure_type(array('Number','Array','String','Date'),$t,$c_pos,'Can only use + combinator with Strings/Numbers/Arrays (2) (not '.$t.')');
 		return $type_a;
 	}
 	if (in_array($e[0],array('IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_GREATER','IS_SMALLER')))
 	{
-		$type_a=js_check_expression($e[1],false,$is_guarded);
+		$type_a=js_check_expression($e[1]);
 		$type_b=js_check_expression($e[2]);
 		js_ensure_type(array('Number','String','Date'),$type_a,$c_pos-1,'Can only use arithmetical comparators with Numbers or Strings');
 		js_ensure_type(array('Number','String','Date'),$type_b,$c_pos,'Can only use arithmetical comparators with Numbers or Strings');
@@ -658,7 +647,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if (in_array($e[0],array('IS_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_NOT_EQUAL')))
 	{
-		$type_a=js_check_expression($e[1],false,$is_guarded);
+		$type_a=js_check_expression($e[1]);
 		$type_b=js_check_expression($e[2]);
 		if (($e[0]=='IS_EQUAL') && ($e[2][0]=='LITERAL') && ($e[2][1][0]=='Boolean')) js_log_warning('CHECKER','It\'s redundant to equate to truths',$c_pos);
 		$passes=js_ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
@@ -667,29 +656,29 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 	}
 	if ($e[0]=='INSTANCEOF')
 	{
-		js_check_variable($e[1],false,$is_guarded);
+		js_check_variable($e[1]);
 		return 'Boolean';
 	}
 	$inner=$e;
 	switch ($inner[0])
 	{
 		case 'PRE_DEC':
-			js_ensure_type(array('Number'),js_check_variable($inner[1],false,$is_guarded),$c_pos,'Can only decrement numbers');
+			js_ensure_type(array('Number'),js_check_variable($inner[1]),$c_pos,'Can only decrement numbers');
 			break;
 		case 'PRE_INC':
-			js_ensure_type(array('Number'),js_check_variable($inner[1],false,$is_guarded),$c_pos,'Can only increment numbers');
+			js_ensure_type(array('Number'),js_check_variable($inner[1]),$c_pos,'Can only increment numbers');
 			break;
 		case 'DEC':
-			js_ensure_type(array('Number'),js_check_variable($inner[1],false,$is_guarded),$c_pos,'Can only decrement numbers');
+			js_ensure_type(array('Number'),js_check_variable($inner[1]),$c_pos,'Can only decrement numbers');
 			break;
 		case 'INC':
-			js_ensure_type(array('Number'),js_check_variable($inner[1],false,$is_guarded),$c_pos,'Can only increment numbers');
+			js_ensure_type(array('Number'),js_check_variable($inner[1]),$c_pos,'Can only increment numbers');
 			break;
 		case 'ASSIGNMENT':
 			$ret=js_check_assignment($inner,$c_pos);
 			return $ret;
 		case 'OBJECT_OPERATOR':
-			$class=js_check_expression($inner[1],false,$is_guarded);
+			$class=js_check_expression($inner[1]);
 			if (is_null($class)) return 'Null';
 			if ($inner[2][0]=='CALL')
 			{
@@ -707,13 +696,13 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 			{
 				global $JS_LOCAL_VARIABLES;
 				$tmp=$JS_LOCAL_VARIABLES;
-				js_check_expression($inner[2],false,true); // Chains with guarded on, because things further in the chain are not free expressions so we can't ground them to run checks
+				js_check_expression($inner[2]);
 				$JS_LOCAL_VARIABLES=$tmp;
 				$ret='!Object';
 			}
 			return $ret;
 		case 'CALL':
-			$ret=js_check_call($inner,$c_pos,$is_guarded?'Object':NULL);
+			$ret=js_check_call($inner,$c_pos);
 			if (is_null($ret))
 			{
 				if (!$secondary) js_log_warning('CHECKER','(Function (\''.(is_array($inner[1])?'(complex)':$inner[1]).'\') that returns no value used in an expression',$c_pos);
@@ -721,21 +710,21 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 			}
 			return $ret;
 		case 'BRACKETED':
-			return js_check_expression($inner[1],false,$is_guarded);
+			return js_check_expression($inner[1]);
 		case 'BOOLEAN_NOT':
-			$expression=js_check_expression($inner[1],false,$is_guarded);
+			$expression=js_check_expression($inner[1]);
 			//$passes=js_ensure_type(array('Boolean'),$expression,$c_pos,'Can only \'NOT\' a Boolean');
 			//if ($passes) js_infer_expression_type_to_variable_type('Boolean',$inner[1]);
 			return 'Boolean';
 		case 'TYPEOF':
-			js_check_expression($inner[1],false,true);
+			js_check_expression($inner[1]);
 			return 'String';
 		case 'BW_NOT':
-			$type=js_check_expression($inner[1],false,$is_guarded);
+			$type=js_check_expression($inner[1]);
 			js_ensure_type(array('Number'),$type,$c_pos,'Can only negate a Number');
 			return $type;
 		case 'NEGATE':
-			$type=js_check_expression($inner[1],false,$is_guarded);
+			$type=js_check_expression($inner[1]);
 			js_ensure_type(array('Number'),$type,$c_pos,'Can only negate a Number');
 			return $type;
 		case 'LITERAL':
@@ -756,8 +745,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 			if ($inner[1]=='Array') return '!Array';
 			return $inner[1];
 		case 'VARIABLE':
-			if (!$is_guarded)
-				return js_check_variable($inner,true);
+			return js_check_variable($inner,true);
 	}
 	return '!Object';
 }
@@ -772,7 +760,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
  */
 function js_check_call($c,$c_pos,$class=NULL)
 {
-	list($type,$ret)=js_check_variable($c[1],true,true,$class,false,true);
+	list($type,$ret)=js_check_variable($c[1],true,true,$class);
 	if (($type!='function') && ($type!='!Object') && ($c[1][1]!=$type)) // Latter check for case of calling a prototype as a function (e.g. Array)  [a shorthand for construction]
 	{
 		js_log_warning('CHECKER','Calling an object that does not seem to be of type \'function\' (\''.$type.'\')',$c_pos);
@@ -794,10 +782,9 @@ function js_check_call($c,$c_pos,$class=NULL)
  * @param  boolean			Whether to return the type and function-return-type pair, rather than just the type
  * @param  ?string			The class the variable is referencing within (NULL: global)
  * @param  boolean			Whether the given class is being referenced directly in static form
- * @param  boolean			Whether this is for a function call
  * @return mixed				The return type and possibly function return type (if requested)
  */
-function js_check_variable($variable,$reference=false,$function_duality=false,$class=NULL,$allow_static=false,$is_call=false)
+function js_check_variable($variable,$reference=false,$function_duality=false,$class=NULL,$allow_static=false)
 {
 	global $JS_LOCAL_VARIABLES;
 
@@ -806,7 +793,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 	{
 		$exp_type=js_check_expression($identifier);
 		$variable[1]=$exp_type;
-		return js_check_variable($variable,$reference,$function_duality,NULL,false,$is_call);
+		return js_check_variable($variable,$reference,$function_duality);
 	}
 
 	$_class=NULL;
@@ -818,7 +805,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 			// Add to reference count if: this specifically is a reference, or it's complex therefore the base is explicitly a reference, or we are forced to add it because it is yet unseen
 			if (($reference) || (count($variable[2])!=0) || (!isset($JS_LOCAL_VARIABLES[$identifier])))
 			{
-				js_add_variable_reference($identifier,$variable[count($variable)-1],!$reference,($reference) || (count($variable[2])!=0),NULL,$is_call && count($variable[2])==0);
+				js_add_variable_reference($identifier,$variable[count($variable)-1],false,($reference) || (count($variable[2])!=0));
 			} else
 			{
 				if ((!isset($JS_LOCAL_VARIABLES[$identifier])) && ($identifier!='this') && ($identifier!='__return'))
@@ -848,7 +835,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 					// We add the variable, because it might have been guaranteed. We're screwed if it is not a guaranteeing conditional, but it's impossible to test that ("the halting problem")
 					if (($class=='Window') || ($class=='Self'))
 					{
-						//js_add_variable_reference($identifier,$variable[count($variable)-1],true,false,NULL,true);	Causes confusion
+						js_add_variable_reference($identifier,$variable[count($variable)-1],true);
 					}
 					$JS_PROTOTYPES[$class][1][]=array('!Object',$identifier); // Could be any type
 				}
@@ -995,21 +982,20 @@ function js_set_ocportal_type($identifier,$type)
  *
  * @param  string				The variable name
  * @param  integer			Where the first mention of the variable is
- * @param  boolean			Whether this is an instantiation reference
+ * @param  boolean			Whether this is an instantation reference
  * @param  boolean			Whether this is a reference (as opposed to instantiation/setting)
  * @param  ?string			The result-type (NULL: not a function)
- * @param  boolean			Whether this is a function call
  */
-function js_add_variable_reference($identifier,$first_mention,$instantiation=true,$reference=false,$function_return=NULL,$is_call=false)
+function js_add_variable_reference($identifier,$first_mention,$instantiation=true,$reference=false,$function_return=NULL)
 {
 	global $JS_LOCAL_VARIABLES;
 	if (!isset($JS_LOCAL_VARIABLES[$identifier]))
 	{
 		$JS_LOCAL_VARIABLES[$identifier]=array('function_return'=>$function_return,'is_global'=>false,'types'=>array(),'unused_value'=>!$reference && !$instantiation,'first_mention'=>$first_mention);
-
-		if ((!$instantiation) && ($identifier!='__return') && (!is_numeric($identifier)) && (!$is_call))
+		if ((!$instantiation) && ($identifier!='__return'))
 		{
-			js_log_warning('CHECKER','A variable ('.$identifier.') was used without being declared',$first_mention);
+// Reenable this if desired - but it's too strict for most uses
+//			js_log_warning('CHECKER','A variable/function ('.$identifier.') was used without being declared',$first_mention);
 		}
 	} else
 	{

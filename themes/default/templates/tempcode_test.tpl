@@ -88,8 +88,8 @@
 		<td>{$FIX_ID,3+2}</td>
 	</tr>
 	<tr>
-		<td>$GET,foobar</td>
-		<td>{$GET,foobar}</td>
+		<td>$SHIFT_DECODE,foobar</td>
+		<td>{$SHIFT_DECODE,foobar}</td>
 	</tr>
 </tbody></table>
 
@@ -395,15 +395,15 @@
 {+START,IF,{$IN_STR,x,<a }}
 {+END}
 
-{+START,SET,foobar}
-	Move contents towards end of first template showing.
+{+START,SHIFT_ENCODE,foobar}
+	Shift encoded towards end of first template showing.
 {+END}
 
 {$INIT,i,0}
 {+START,WHILE,{$NEQ,{$GET,i},3}}
 	<p>
 		Should see this text 3 times.
-{$INC,i}
+		{$INC,i}
 	</p>
 {+END}
 

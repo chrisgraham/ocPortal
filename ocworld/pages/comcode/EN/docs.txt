@@ -126,7 +126,7 @@ If you click on the 'realms' link, you will be brought to a page that displays t
 
 [b]# of Rooms[/b]: This is the number of rooms currently located on the realm. Remember.. Everything is basically a room a 'Corridor' is a room...
 
-[b]Realm Status[/b]: This determines if you can modify (add to) the realm or not. Private=only the owner and staff members can modify the realm. Public=anyone can modify the realm.
+[b]Realm Status[/b]: This determines if you can modify (add to) the realm or not. Private = only the owner and staff members can modify the realm. Public = anyone can modify the realm.
 
 [b]Owner of Realm[/b]: This is basically the person who created the realm. If the realm is private,only this person (and staff members) can modify the realm. The owner can also delete his realm, and everything on it.
 
@@ -458,7 +458,7 @@ Make your way to the portal spot then scroll down and select 'add portal'. A new
 [b]Dest. X[/b]: The co-ordinate for X. The only available number here is 0 as only 1 room exists.
 [b]Dest. Y[/b]: The co-ordinate for Y. The only available number here is 0 as only 1 room exists.
 
-After the portal is created, you can click the new link and voilï¿½, you're in your own realm!
+After the portal is created, you can click the new link and voilà, you're in your own realm!
 
 [title="3"]Realms: The objective of a troll[/title]
 

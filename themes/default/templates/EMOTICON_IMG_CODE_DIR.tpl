@@ -1,1 +1,1 @@
-<img class="top_vertical_alignment" alt="{EMOTICON*}" src="{SRC*}" />
+<img class="inline_image" title="" alt="{EMOTICON*}" src="{SRC*}" />

@@ -3,44 +3,22 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-.page_running_login #main_website_inner {
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to top right\, {$GET,main_background}\, {$GET,main_2_background});}
-}
-
 .login_page {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		text-align: center;
-		width: 80%;
-		padding: 5px;
-		margin: 0 auto;
-	{+END}
-	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
-}
-
-.login_page input[type="text"], .login_page input[type="password"] {
-	background: rgba(255,255,255,0.5);
-}
-
-.login_page .box {
-	margin-top: 0;
+	text-align: center;
+	width: 80%;
+	margin: 0 auto;
 }
 
 .login_extra_info {
 	margin-top: 60px;
 }
 
-{+START,IF,{$MOBILE}}
-	.login_page_form label {
-		width: 7em;
-		display: inline-block;
-	}
-{+END}
-
-table.login_page_form {
+.login_page_form {
 	width: 45%;
 	float: left;
-	padding-right: 1em;
+	padding-right: 12px;
 	margin-top: 1em;
+	margin-right: 12px;
 }
 
 .login_page_form th {
@@ -57,29 +35,21 @@ table.login_page_form {
 
 .login_page_options {
 	text-align: left;
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 285px;
-		float: left;
-	{+END}
-	margin-top: 0.5em;
-}
-
-.login_page_options label {
-	display: block;
+	width: 285px;
+	float: left;
 }
 
 .login_page_options .associated_details {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		padding-left: 2.5em;
-	{+END}
+	padding-left: 2.5em;
 	display: inline-block;
-}
-
-.login_note {
-	font-size: 0.85em;
-	{$BETA_CSS_PROPERTY,opacity: 0.9;}
 }
 
 .login_note a {
 	font-size: 1.1em;
 }
+
+.login_note {
+	font-size: 0.85em;
+	opacity: 0.9;
+}
+

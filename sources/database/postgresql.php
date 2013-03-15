@@ -11,7 +11,6 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-
 /*EXTRA FUNCTIONS: pg\_.+*/
 
 /**
@@ -29,10 +28,6 @@ function init__database__postgresql()
 	$CACHE_DB=array();
 }
 
-/**
- * Database Driver.
- * @package		core_database_drivers
- */
 class Database_Static_postgresql
 {
 
@@ -249,7 +244,7 @@ class Database_Static_postgresql
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
-	 * @param  boolean		Whether to create a persistent connection
+	 * @param  boolean		Whether to create a persistant connection
 	 * @param  string			The database name
 	 * @param  string			The database host (the server)
 	 * @param  string			The database connection username
@@ -329,7 +324,7 @@ class Database_Static_postgresql
 	 */
 	function db_query($query,$db,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false)
 	{
-		if (strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ')
+		if (strtoupper(substr($query,0,7))=='SELECT ')
 		{
 			if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval(intval($max)).' OFFSET '.strval(intval($start));
 			elseif (!is_null($max)) $query.=' LIMIT '.strval(intval($max));
@@ -337,7 +332,7 @@ class Database_Static_postgresql
 		}
 
 		$results=@pg_query($db,$query);
-		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results===true))) && (!$fail_ok))
+		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') && ($results===true))) && (!$fail_ok))
 		{
 			$err=pg_last_error($db);
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
@@ -353,7 +348,7 @@ class Database_Static_postgresql
 			}
 		}
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results!==false) && ($results!==true))
+		if ((strtoupper(substr($query,0,7))=='SELECT ') && ($results!==false) && ($results!==true))
 		{
 			return $this->db_get_query_rows($results);
 		}

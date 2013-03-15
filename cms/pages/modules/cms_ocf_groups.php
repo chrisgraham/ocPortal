@@ -78,7 +78,7 @@ class Module_cms_ocf_groups extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('MANAGE_CLUBS'),comcode_lang_string('DOC_CLUBS'),
+		return do_next_manager(get_page_title('MANAGE_CLUBS'),comcode_lang_string('DOC_CLUBS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CLUB')),

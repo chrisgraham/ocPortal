@@ -40,12 +40,9 @@ function init__forum__ocf()
 	$TOPIC_IS_THREADED=array();
 }
 
-/**
- * Forum Driver.
- * @package		core_forum_drivers
- */
 class forum_driver_ocf extends forum_driver_base
 {
+
 	/**
 	 * Initialise LDAP. To see if LDAP is running we check LDAP_CONNECTION for NULL. ldap_is_enabled is not good enough - we don't want ocPortal to bomb out under faulty LDAP settings, hence making it unfixable.
 	 */
@@ -520,14 +517,10 @@ class forum_driver_ocf extends forum_driver_base
 		if (get_value('username_profile_links')=='1')
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($id);
-			$map=array('page'=>'members','type'=>'view','id'=>is_null($username)?strval($id):$username);
-			if (get_page_name()=='members') $map+=propagate_ocselect();
-			$_url=build_url($map,get_module_zone('members'),NULL,false,false,!$tempcode_okay);
+			$_url=build_url(array('page'=>'members','type'=>'view','id'=>is_null($username)?strval($id):$username),get_module_zone('members'),NULL,false,false,!$tempcode_okay);
 		} else
 		{
-			$map=array('page'=>'members','type'=>'view','id'=>$id);
-			if (get_page_name()=='members') $map+=propagate_ocselect();
-			$_url=build_url($map,get_module_zone('members'),NULL,false,false,!$tempcode_okay);
+			$_url=build_url(array('page'=>'members','type'=>'view','id'=>$id),get_module_zone('members'),NULL,false,false,!$tempcode_okay);
 		}
 		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
@@ -1036,8 +1029,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($value==0)
 		{
 			$value=$this->connection->query_value('f_members','COUNT(*)')-1;
-			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-				set_value('ocf_member_count',strval($value));
+			set_value('ocf_member_count',strval($value));
 		}
 
 		return $value;
@@ -1055,8 +1047,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($value==0)
 		{
 			$value=$this->connection->query_value('f_topics','COUNT(*)');
-			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-				set_value('ocf_topic_count',strval($value));
+			set_value('ocf_topic_count',strval($value));
 		}
 
 		return $value;
@@ -1074,8 +1065,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($value==0)
 		{
 			$value=$this->connection->query_value('f_posts','COUNT(*)');
-			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-				set_value('ocf_post_count',strval($value));
+			set_value('ocf_post_count',strval($value));
 		}
 
 		return $value;
@@ -1414,6 +1404,7 @@ class forum_driver_ocf extends forum_driver_base
 			$password_compatibility_scheme=$row['m_password_compat_scheme'];
 			switch ($password_compatibility_scheme)
 			{
+				case 'remote': // This will work too - we're logging in with the username of a remote profile, so no resynching will happen
 				case '': // ocPortal style salted MD5 algorithm
 					if ($cookie_login)
 					{
@@ -1548,12 +1539,6 @@ class forum_driver_ocf extends forum_driver_base
 
 		// Do some flood control
 		$submitting=((count($_POST)>0) && (get_param('type',NULL)!=='ed') && (get_param('type',NULL)!=='ec') && (!running_script('preview')));
-		$captcha=post_param('captcha','');
-		if ($captcha!='') // Don't consider a CAPTCHA submitting, it'll drive people nuts to get flood control right after a CAPTCHA
-		{
-			require_code('captcha');
-			if (check_captcha($captcha,false)) $submitting=false;
-		}
 		$restrict=$submitting?'flood_control_submit_secs':'flood_control_access_secs';
 		$restrict_setting=$submitting?'m_last_submit_time':'m_last_visit_time';
 		$restrict_answer=ocf_get_best_group_property($this->get_members_groups($id),$restrict);
@@ -1576,10 +1561,9 @@ class forum_driver_ocf extends forum_driver_base
 			{
 				$ip=get_ip_address();
 				require_code('failure');
-				add_ip_ban($ip,do_lang('SPAM_REPORT_SITE_FLOODING'));
+				add_ip_ban($ip);
 				require_code('notifications');
 				dispatch_notification('auto_ban',NULL,do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
-				syndicate_spammer_report($ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_SITE_FLOODING'));
 			}
 			if (!function_exists('require_lang')) require_code('lang');
 			if (!function_exists('do_lang_tempcode')) require_code('tempcode');

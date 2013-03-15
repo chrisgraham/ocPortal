@@ -4,7 +4,7 @@
 			{!NA_EM}
 		{+END}
 		{+START,IF_NON_EMPTY,{PIC_URL}}
-			<img style="{WIDTH*}" alt="{ITEM_NAME*}" src="{PIC_URL*}" />
+			<img style="{WIDTH*}" title="" alt="{ITEM_NAME*}" src="{PIC_URL*}" />
 		{+END}
 	</td>
 	<td>

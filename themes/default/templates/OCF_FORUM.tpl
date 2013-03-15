@@ -1,9 +1,11 @@
 {+START,IF_PASSED,DESCRIPTION}{+START,IF_NON_EMPTY,{DESCRIPTION}}
-	<div class="box box___ocf_forum"><div class="box_inner">
-		<div itemprop="description">
+	{+START,BOX,,,med}
+		<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
 			{DESCRIPTION}
 		</div>
-	</div></div>
+	{+END}
+
+	<br />
 {+END}{+END}
 
 {+START,IF_PASSED,ID}
@@ -11,13 +13,14 @@
 {+END}
 
 {+START,IF_NON_PASSED,ID}{+START,IF,{$MATCH_KEY_MATCH,_WILD:members}}
-	<p>{!DESCRIPTION_PRIVATE_TOPICS}</p>
+	<p>{!DESCRIPTION_PERSONAL_TOPICS}</p>
 {+END}{+END}
 
 {+START,IF_NON_EMPTY,{$TRIM,{FILTERS}}}
-	<div class="box box___ocf_forum"><div class="box_inner">
-		<span class="ocf_pt_category_filters">{!CATEGORIES}:</span> {FILTERS}
-	</div></div>
+	{+START,BOX,,,light}
+		<span class="ocf_pt_category_filters">{!CATEGORIES}</span>: {FILTERS}
+	{+END}
+	<br />
 {+END}
 
 {CATEGORIES}
@@ -30,7 +33,7 @@
 
 {+START,SET,BUTTONS}
 	<div class="float_surrounder">
-		<div class="buttons_group ocf_screen_buttons">
+		<div class="ocf_screen_buttons">
 			{+START,IF_PASSED,ID}
 				{+START,INCLUDE,NOTIFICATION_BUTTONS}
 					NOTIFICATIONS_TYPE=ocf_topic
@@ -49,6 +52,7 @@
 			<div class="non_accessibility_redundancy">
 				{$GET,BUTTONS}
 			</div>
+			<br />
 		{+END}
 	{+END}
 {+END}
@@ -59,10 +63,10 @@
 
 {+START,IF_PASSED,ID}
 	<div class="non_accessibility_redundancy">
-		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
-			<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
-			{BREADCRUMBS}
-		</nav>
+		<div class="breadcrumbs_always">
+			<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
+			{TREE}
+		</div>
 	</div>
 {+END}
 

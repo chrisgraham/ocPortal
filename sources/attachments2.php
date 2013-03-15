@@ -88,7 +88,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 						}
 						while (file_exists($new_path));
 						imagepng($image,$new_path);
-
+	
 						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
 							'a_member_id'=>get_member(),
 							'a_file_size'=>strlen($data),
@@ -100,7 +100,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							'a_description'=>'',
 							'a_add_time'=>time()),true);
 						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
-
+	
 						$original_comcode=str_replace($original_comcode,$matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]');
 					}
 				}
@@ -108,7 +108,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		}
 	}
 
-	// Find out about attachments already involving this content
 	global $ATTACHMENTS_ALREADY_REFERENCED;
 	$old_already=$ATTACHMENTS_ALREADY_REFERENCED;
 	$ATTACHMENTS_ALREADY_REFERENCED=array();
@@ -118,10 +117,9 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		$ATTACHMENTS_ALREADY_REFERENCED[$ref['a_id']]=1;
 	}
 
-	// Find if we have an attachment(s), and tidy up the Comcode enough to handle the attachment Comcode properly
 	$has_one=false;
 	$may_have_one=false;
-	foreach ($_POST as $key=>$value)
+	foreach($_POST as $key=>$value)
 	{
 		if (preg_match('#^hidFileID\_#i',$key)!=0)
 		{
@@ -137,7 +135,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		require_code('comcode_from_html');
 		$original_comcode=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$original_comcode);
 	}
-
 	$myfile=mixed();
 	foreach ($_FILES as $key=>$file)
 	{
@@ -146,17 +143,15 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		{
 			$has_one=true;
 
-			// Handle attachment extraction
-			$matches_extract=array();
-			$is_extract=(preg_match('#\[attachment [^\]]*type="(\w)+_extract"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode,$matches_extract)!=0) || (preg_match('#<attachment [^>]*type="(\w+)_extract"[^>]*>new_'.$matches[1].'</#',$original_comcode,$matches_extract)!=0);
-			if ($is_extract)
-			{
-				$atype=$matches_extract[1];
+			$atype=post_param('attachmenttype'.$matches[1],'');
+			$is_extract=(preg_match('#\[attachment [^\]]*type="\w+_extract"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode)!=0) || (preg_match('#<attachment [^>]*type="\w+_extract"[^>]*>new_'.$matches[1].'</#',$original_comcode)!=0);
 
+			if ((substr($atype,-8)=='_extract') || ($is_extract))
+			{
 				require_code('uploads');
 				require_code('files');
 				require_code('files2');
-				$is_thumb=(preg_match('#\[(attachment|attachment_safe) [^\]]*thumb="1"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode)!=0) || (preg_match('#<(attachment|attachment_safe) [^>]*thumb="1"[^>]*>new_'.$matches[1].'</#',$original_comcode)!=0);
+				$thumb=(preg_match('#\[(attachment|attachment_safe) [^\]]*thumb="1"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode)!=0) || (preg_match('#<(attachment|attachment_safe) [^>]*thumb="1"[^>]*>new_'.$matches[1].'</#',$original_comcode)!=0);
 
 				$arcext=get_file_extension($_FILES[$key]['name']);
 				if (($arcext=='tar') || ($arcext=='zip'))
@@ -301,11 +296,11 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 							if ($comcode_text)
 							{
-								$original_comcode.=chr(10).chr(10).'[attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" description="'.comcode_escape($description).'" thumb="'.($is_thumb?'1':'0').'"]'.strval($attachment_id).'[/attachment]';
+								$original_comcode.=chr(10).chr(10).'[attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" description="'.comcode_escape($description).'" thumb="'.($thumb?'1':'0').'"]'.strval($attachment_id).'[/attachment]';
 							} else
 							{
 								require_code('comcode_xml');
-								//$original_comcode.=chr(10).chr(10).'<attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" thumb="'.($is_thumb?'1':'0').'"><attachmentDescription>'.comcode_text__to__comcode_xml($description).'</attachmentDescription>'.strval($attachment_id).'</attachment>';			Would go in bad spot
+								//$original_comcode.=chr(10).chr(10).'<attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" thumb="'.($thumb?'1':'0').'"><attachmentDescription>'.comcode_text__to__comcode_xml($description).'</attachmentDescription>'.strval($attachment_id).'</attachment>';			Would go in bad spot
 							}
 						}
 					}
@@ -319,7 +314,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 				}
 			} else
 			{
-				// Handle missing attachment markup for uploaded attachments
 				if ((strpos($original_comcode,']new_'.$matches[1].'[/attachment]')===false) && (strpos($original_comcode,'>new_'.$matches[1].'</attachment>')===false) && (strpos($original_comcode,']new_'.$matches[1].'[/attachment_safe]')===false) && (strpos($original_comcode,'>new_'.$matches[1].'</attachment_safe>')===false))
 				{
 					if ((preg_match('#\]\d+\[/attachment\]#',$original_comcode)==0) && (preg_match('#>\d+</attachment>#',$original_comcode)==0)) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
@@ -337,7 +331,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		}
 	}
 
-	// Parse to find details of (and add into the database) attachments
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	if ($has_one) $LAX_COMCODE=true; // We don't want a simple syntax error to cause us to lose our attachments
@@ -345,7 +338,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	$LAX_COMCODE=$temp;
 	$ATTACHMENTS_ALREADY_REFERENCED=$old_already;
 
-	if ((array_key_exists($id,$COMCODE_ATTACHMENTS)) && (array_key_exists(0,$COMCODE_ATTACHMENTS[$id]))) // This is necessary if multiple items of Comcode were parsed in sequence, global variables can be tricky so we must keep good track
+	if ((array_key_exists($id,$COMCODE_ATTACHMENTS)) && (array_key_exists(0,$COMCODE_ATTACHMENTS[$id])))
 	{
 		$original_comcode=$COMCODE_ATTACHMENTS[$id][0]['comcode'];
 	}
@@ -354,24 +347,57 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 	if (array_key_exists($id,$COMCODE_ATTACHMENTS))
 	{
-		// Put in correct attachment IDs
 		$ids_present=array();
 		for ($i=0;$i<count($COMCODE_ATTACHMENTS[$id]);$i++)
 		{
 			$attachment=$COMCODE_ATTACHMENTS[$id][$i];
 
-			$marker_matches=array();
-			preg_match('#(.|\n)*new_(\d+)[\[<]#',substr($original_comcode,0,$attachment['marker']),$marker_matches);
-			$marker_id=array_key_exists(2,$marker_matches)?intval($marker_matches[2]):strval($i+1); // Should always exist, but if not (some weird internal Comcode parsing error -- this stuff is complex) then pick a sensible default
-
 			// If it's a new one, we need to change the comcode to reference the ID we made for it
 			if ($attachment['type']=='new')
 			{
-				$new_comcode=preg_replace('#(\[(attachment|attachment_safe)[^\]]*\])new_'.strval($marker_id).'(\[/)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
-				$new_comcode=preg_replace('#(<(attachment|attachment_safe)[^>]*>)new_'.strval($marker_id).'(</)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
+				$marker=$attachment['marker'];
+//				echo $marker.'!'.$new_comcode;
+				$a_id=$attachment['id'];
+
+				$old_length=strlen($new_comcode);
+
+				// Search backwards from $marker
+				$tag_end_start=$marker-strlen('[/'.$attachment['tag_type'].']'); // </attachment> would be correct if it is Comcode-XML, but they have the same length, so it's irrelevant
+				$tag_start_end=$tag_end_start;
+				while (($tag_start_end>1) && ((!isset($new_comcode[$tag_start_end-1])) || (($new_comcode[$tag_start_end-1]!=']') && ($new_comcode[$tag_start_end-1]!='>')))) $tag_start_end--;
+				$param_keep=substr($new_comcode,0,$tag_start_end-1);
+				$end_keep=substr($new_comcode,$tag_end_start);
+				if ($comcode_text)
+				{
+					$new_comcode=$param_keep;
+					if (strpos(substr($param_keep,strrpos($param_keep,'[')),' type=')===false) $new_comcode.=' type="'.comcode_escape($attachment['attachmenttype']).'"';
+					if (strpos(substr($param_keep,strrpos($param_keep,'[')),' description=')===false) $new_comcode.=' description="'.comcode_escape($attachment['description']).'"';
+					$new_comcode.=']'.strval($a_id).$end_keep;
+				} else
+				{
+					require_code('comcode_xml');
+					$new_comcode=$param_keep;
+					if (strpos(substr($param_keep,strrpos($param_keep,'<')),' type=')===false) $new_comcode.=' type="'.comcode_escape($attachment['attachmenttype']);
+					$new_comcode.='">';
+					if (strpos(substr($param_keep,strrpos($param_keep,'<')),' description=')===false)
+					{
+						require_code('comcode_xml');
+						$new_comcode.='<attachmentDescription>'.comcode_text__to__comcode_xml($attachment['description'],true).'</attachmentDescription>';
+					}
+					$new_comcode.=strval($a_id).$end_keep;
+				}
+//				echo $new_comcode.'<br />!<br />';
+
+				// Update other attachment markers
+				$dif=strlen($new_comcode)-$old_length;
+				for ($j=$i+1;$j<count($COMCODE_ATTACHMENTS[$id]);$j++)
+				{
+//					echo $COMCODE_ATTACHMENTS[$id][$i]['marker'].'!';
+					$COMCODE_ATTACHMENTS[$id][$j]['marker']+=$dif;
+				}
 
 				if (!is_null($type))
-					$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']));
+					$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$a_id));
 			} else
 			{
 				// (Re-)Reference it
@@ -381,9 +407,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 			$ids_present[]=$attachment['id'];
 		}
-		// Tidy out any attachment references to files that clearly are not here
-		$new_comcode=preg_replace('#\[(attachment|attachment_safe)[^\]]*\]new_\d+\[/attachment\]#','',$new_comcode);
-		$new_comcode=preg_replace('#<(attachment|attachment_safe)[^>]*>new_\d+</attachment>#','',$new_comcode);
 
 		if (!$previewing_only)
 		{

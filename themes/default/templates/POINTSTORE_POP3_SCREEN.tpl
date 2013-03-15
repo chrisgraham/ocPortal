@@ -10,6 +10,7 @@
 
 {+START,IF_NON_EMPTY,{ACTIVATE}}
 	{ACTIVATE}
+	<br />
 {+END}
 
 {QUOTA}

@@ -13,14 +13,26 @@
  * @package		rootkit_detector
  */
 
-// Find ocPortal base directory, and chdir into it
+// FIX PATH
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=dirname($FILE_BASE);
-if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
+$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
+if (substr($FILE_BASE,-4)=='.php')
 {
-	$RELATIVE_PATH=basename($FILE_BASE);
-	$FILE_BASE=dirname($FILE_BASE);
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+}
+if (!is_file($FILE_BASE.'/sources/global.php'))
+{
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
 } else
 {
 	$RELATIVE_PATH='';
@@ -69,7 +81,7 @@ END;
 		}
 	}
 
-	$info_file=file_get_contents('info.php');
+	$info_file=file_get_contents('info.php',FILE_TEXT);
 	$matches=array();
 	if (preg_match('#\$SITE_INFO\[\'admin_password\'\]=\'([^\']*)\';#',$info_file,$matches)==0) exit(':(');
 	global $SITE_INFO;
@@ -224,21 +236,21 @@ function rd_do_dir($dir)
 function rd_do_header()
 {
 	echo <<<END
-<!DOCTYPE html>
-	<html lang="EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
 	<head>
 		<title>ocPortal rootkit detector</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-		<style type="text/css">/*<![CDATA[*/
+		<style type="text/css">
 END;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo <<<END
-			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+			.main_page_title { text-decoration: underline; display: block; background: url('themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		/*]]>*/</style>
+		</style>
 	</head>
-	<body class="website_body"><div class="global_middle">
-		<h1 class="screen_title">ocPortal rootkit detector</h1>
+	<body class="re_body"><div class="global_middle">
+		<h1 class="main_page_title">ocPortal rootkit detector</h1>
 		<form title="Proceed" action="rootkit_detection.php?type=go" method="post">
 END;
 }

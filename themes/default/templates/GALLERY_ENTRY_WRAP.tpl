@@ -1,4 +1,4 @@
-<div class="gallery_grid_cell">
+<div class="gallery_media_expose">
 	{ENTRY}
 </div>
 

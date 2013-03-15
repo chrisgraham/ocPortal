@@ -1,24 +1,18 @@
-<a id="group_{GROUP_NAME*}"></a>
+<a name="group_{GROUP_NAME*}" id="group_{GROUP_NAME*}"></a>
+<div class="no_stbox_padding">
+	{+START,BOX,{CURRENT_GROUP}}
+		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
+			<colgroup>
+				<col style="width: 198px" />
+				<col style="width: 100%" />
+			</colgroup>
 
-<h3>{CURRENT_GROUP}</h3>
+			<tbody>
+				{+START,IF_NON_EMPTY,{GROUP_DESCRIPTION}}<tr><th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="de_th forcedottedborder"><div>{GROUP_DESCRIPTION*}</div></th></tr>{+END}
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
-	{+START,IF,{$NOT,{$MOBILE}}}
-		<colgroup>
-			<col class="field_name_column" />
-			<col class="field_input_column" />
-		</colgroup>
+				{GROUP}
+			</tbody>
+		</table></div>
 	{+END}
-
-	<tbody>
-		{+START,IF_NON_EMPTY,{GROUP_DESCRIPTION}}
-			<tr class="form_table_field_spacer">
-				<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="table_heading_cell">
-					{GROUP_DESCRIPTION*}
-				</th>
-			</tr>
-		{+END}
-
-		{GROUP}
-	</tbody>
-</table></div>
+</div>
+<br />

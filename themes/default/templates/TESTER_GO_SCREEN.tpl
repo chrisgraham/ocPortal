@@ -19,8 +19,8 @@
 	</div>
 
 	<script type="text/javascript">// <![CDATA[
-		document.getElementById('test_form').elements['show_for_all'].checked={SHOW_FOR_ALL%};
-		document.getElementById('test_form').elements['show_successful'].checked={SHOW_SUCCESSFUL%};
+		document.getElementById('test_form').elements['show_for_all'].checked={SHOW_FOR_ALL*};
+		document.getElementById('test_form').elements['show_successful'].checked={SHOW_SUCCESSFUL*};
 
 		function mark_all_undone()
 		{
@@ -36,15 +36,17 @@
 		}
 	//]]></script>
 
-	<p class="buttons_group">
+	<p class="proceed_button">
 		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!PROCEED}" />
-		<input class="button_page" type="button" value="{!MARK_ALL_UNDONE}" onclick="window.fauxmodal_confirm('{!MARK_ALL_UNDONE_SURE}',function(answer) { if (answer) mark_all_undone(); });" />
+	</p>
+	<p class="proceed_button">
+		<input type="button" value="{!MARK_ALL_UNDONE}" onclick="window.fauxmodal_confirm('{!MARK_ALL_UNDONE_SURE}',function(answer) { if (answer) mark_all_undone(); });" />
 	</p>
 </form>
 
 {+START,IF_NON_EMPTY,{ADD_TEST_SECTION_URL}}
-	<ul class="actions_list">
-		<li><a rel="add" href="{ADD_TEST_SECTION_URL*}">{!ADD_TEST_SECTION}</a></li>
-	</ul>
+	<p>
+		<a rel="add" href="{ADD_TEST_SECTION_URL*}">{!ADD_TEST_SECTION}</a>
+	</p>
 {+END}
 

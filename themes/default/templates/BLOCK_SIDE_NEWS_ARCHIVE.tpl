@@ -1,6 +1,4 @@
-<section class="box box___block_side_news_archive"><div class="box_inner">
-	<h3>{TITLE*}</h3>
-
+{+START,BOX,{TITLE*},,{$?,{$GET,in_panel},panel,classic}}
 	<ul class="compact_list">
 		{+START,LOOP,YEARS}
 			<li>{YEAR}
@@ -14,4 +12,4 @@
 			</li>
 		{+END}
 	</ul>
-</div></section>
+{+END}

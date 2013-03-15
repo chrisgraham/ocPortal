@@ -290,10 +290,9 @@ function base64_encode($data)
  * @param  ?mixed	Optional parameter (NULL: none).
  * @param  ?mixed	Optional parameter (NULL: none).
  * @param  ?mixed	Optional parameter (NULL: none).
- * @param  ?mixed	Optional parameter (NULL: none).
  * @return mixed	Whatever the function returns.
  */
-function call_user_func($function,$param_a=NULL,$param_b=NULL,$param_c=NULL,$param_d=NULL)
+function call_user_func($function,$param_a=NULL,$param_b=NULL,$param_c=NULL)
 {
 	return 0;
 }
@@ -1616,8 +1615,8 @@ function imagetypes()
  * @param  integer	Y@top-left.
  * @param  integer	width.
  * @param  integer	height.
- * @param  integer	start degrees (0 degrees=3 o clock).
- * @param  integer	end degrees (0 degrees=3 o clock).
+ * @param  integer	start degrees (0 degrees = 3 o clock).
+ * @param  integer	end degrees (0 degrees = 3 o clock).
  * @param  integer	Colour code.
  * @return boolean	Success status.
  */
@@ -1634,8 +1633,8 @@ function imagearc($image,$cx,$cy,$w,$h,$s,$e,$color)
  * @param  integer	Y@top-left.
  * @param  integer	width.
  * @param  integer	height.
- * @param  integer	start degrees (0 degrees=3 o clock).
- * @param  integer	end degrees (0 degrees=3 o clock).
+ * @param  integer	start degrees (0 degrees = 3 o clock).
+ * @param  integer	end degrees (0 degrees = 3 o clock).
  * @param  integer	Style, bitwise of IMG_ARC_PIE, IMG_ARC_CHORD, IMG_ARC_NOFILL, IMG_ARC_EDGED.
  * @param  integer	Colour code.
  * @return boolean	Success status.
@@ -3079,7 +3078,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Get data from the persistent cache.
+ * Get data from the persistant cache.
  *
  * @param  mixed			Key
  * @return ?mixed			The data (NULL: not found / NULL entry)
@@ -3090,7 +3089,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Put data into the persistent cache.
+ * Put data into the persistant cache.
  *
  * @param  mixed			Key
  * @param  mixed			The data
@@ -3101,7 +3100,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Delete data from the persistent cache.
+ * Delete data from the persistant cache.
  *
  * @param  mixed			Key name
  */
@@ -3110,7 +3109,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Get data from the persistent cache.
+ * Get data from the persistant cache.
  *
  * @param  mixed			Key
  * @return ?mixed			The data (NULL: not found / NULL entry)
@@ -3121,7 +3120,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Put data into the persistent cache.
+ * Put data into the persistant cache.
  *
  * @param  mixed			Key
  * @param  mixed			The data
@@ -3132,7 +3131,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Delete data from the persistent cache.
+ * Delete data from the persistant cache.
  *
  * @param  mixed			Key name
  */
@@ -4277,10 +4276,9 @@ function pow($base,$exp)
  * Quote regular expression characters.
  *
  * @param  string	The string to escape.
- * @param  string	Extra character to escape, was used in regular expression to surround it.
  * @return string	The escape string.
  */
-function preg_quote($str,$surround_char='/')
+function preg_quote($str)
 {
 	return '';
 }

@@ -183,7 +183,7 @@ class Block_main_rss
 			} else
 			{
 				$news=$item['news'];
-				if (array_key_exists('news_article',$item)) $news_full=do_template('BLOCK_MAIN_RSS_FULL',array('_GUID'=>'adcd82c64966f54fb0173b8edc626bd7','NEWS_FULL'=>$item['news_article'])); else $news_full=new ocp_tempcode();
+				if (array_key_exists('news_article',$item)) $news_full=do_template('BLOCK_MAIN_RSS_FULL',array('_GUID'=>'adcd82c64966f54fb0173b8edc626bd7','RAND'=>strval(mt_rand(0,999999)),'NEWS_FULL'=>$item['news_article'])); else $news_full=new ocp_tempcode();
 			}
 
 			if (array_key_exists('author',$item))
@@ -212,7 +212,7 @@ class Block_main_rss
 				}
 				if (!is_null($cat))
 				{
-					$img=($NEWS_CATS[$cat]['nc_img']=='')?'':find_theme_image($NEWS_CATS[$cat]['nc_img']);
+					$img=find_theme_image($NEWS_CATS[$cat]['nc_img']);
 					if (is_null($img)) $img='';
 					if (($img!='') && (url_is_local($img))) $img=get_base_url().'/'.$img;
 					$category=do_template('BLOCK_MAIN_RSS_CATEGORY',array('_GUID'=>'9b70a0d7524b62ea74bdb8071f4e88b5','IMG'=>$img,'CATEGORY'=>$item['category']));

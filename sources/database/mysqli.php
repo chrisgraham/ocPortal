@@ -11,7 +11,6 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-
 /*EXTRA FUNCTIONS: mysqli\_.+*/
 
 /**
@@ -33,17 +32,13 @@ function init__database__mysqli()
 	$CACHE_DB=array();
 }
 
-/**
- * Database Driver.
- * @package		core_database_drivers
- */
 class Database_Static_mysqli extends Database_super_mysql
 {
 
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
-	 * @param  boolean		Whether to create a persistent connection
+	 * @param  boolean		Whether to create a persistant connection
 	 * @param  string			The database name
 	 * @param  string			The database host (the server)
 	 * @param  string			The database connection username

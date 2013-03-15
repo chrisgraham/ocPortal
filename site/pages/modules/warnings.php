@@ -59,7 +59,7 @@ class Module_warnings extends standard_aed_module
 		require_code('ocf_moderation_action2');
 
 		if (!ocf_may_warn_members())
-			access_denied('PRIVILEGE','warn_members');
+			access_denied('SPECIFIC_PERMISSION','warn_members');
 
 		if ($type=='history') return $this->history();
 		if ($type=='undo_charge') return $this->undo_charge();
@@ -79,7 +79,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function history()
 	{
-		$title=get_screen_title('PUNITIVE_HISTORY');
+		$title=get_page_title('PUNITIVE_HISTORY');
 
 		require_code('templates_results_table');
 
@@ -143,7 +143,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function undo_charge()
 	{
-		$title=get_screen_title('UNDO_CHARGE');
+		$title=get_page_title('UNDO_CHARGE');
 
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
@@ -166,7 +166,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function undo_probation()
 	{
-		$title=get_screen_title('UNDO_PROBATION');
+		$title=get_page_title('UNDO_PROBATION');
 
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
@@ -190,7 +190,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function undo_banned_ip()
 	{
-		$title=get_screen_title('UNBAN_IP');
+		$title=get_page_title('UNBAN_IP');
 
 		require_code('failure');
 
@@ -214,7 +214,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function undo_banned_member()
 	{
-		$title=get_screen_title('UNBAN_MEMBER');
+		$title=get_page_title('UNBAN_MEMBER');
 
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
@@ -236,7 +236,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function undo_silence_from_topic()
 	{
-		$title=get_screen_title('UNSILENCE_TOPIC');
+		$title=get_page_title('UNSILENCE_TOPIC');
 
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
@@ -264,7 +264,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function undo_silence_from_forum()
 	{
-		$title=get_screen_title('UNSILENCE_FORUM');
+		$title=get_page_title('UNSILENCE_FORUM');
 
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
@@ -370,11 +370,6 @@ class Module_warnings extends standard_aed_module
 				{
 					$fields->attach(form_input_tick(do_lang_tempcode('WHETHER_BANNED_IP'),do_lang_tempcode('DESCRIPTION_WHETHER_BANNED_IP'),'banned_ip',false));
 				}
-			}
-			if (get_option('stopforumspam_api_key').get_option('tornevall_api_username')!='')
-			{
-				require_lang('security');
-				$fields->attach(form_input_tick(do_lang_tempcode('SYNDICATE_TO_STOPFORUMSPAM'),do_lang_tempcode('DESCRIPTION_SYNDICATE_TO_STOPFORUMSPAM'),'stopforumspam',false));
 			}
 			if (addon_installed('points'))
 			{
@@ -682,15 +677,6 @@ class Module_warnings extends standard_aed_module
 					add_ip_ban($banned_ip);
 				}
 			}
-		}
-
-		// Stop Forum Spam report
-		$stopforumspam=post_param_integer('stopforumspam',0);
-		if ($stopforumspam==1)
-		{
-			$banned_ip=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_ip_address');
-			require_code('failure');
-			syndicate_spammer_report($banned_ip,$GLOBALS['FORUM_DRIVER']->get_username($member_id),$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),$explanation,true);
 		}
 
 		// Change group

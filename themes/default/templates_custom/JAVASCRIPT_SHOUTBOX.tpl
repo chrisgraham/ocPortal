@@ -34,12 +34,12 @@ function sb_handle_signals(ajax_result)
 			if (id>window.sb_last_message_id)
 			{
 				window.sb_last_message_id=id;
-				if (get_inner_html(messages[i]).indexOf('((SHAKE))')!=-1)
+				if (getInnerHTML(messages[i]).indexOf('((SHAKE))')!=-1)
 				{
 					do_shake();
 				} else
 				{
-					show_ghost(get_inner_html(messages[i]));
+					show_ghost(getInnerHTML(messages[i]));
 				}
 
 				var frames=window.parent.document.getElementsByTagName('iframe');

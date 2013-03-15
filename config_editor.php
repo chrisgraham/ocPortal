@@ -13,14 +13,26 @@
  * @package		core
  */
 
-// Find ocPortal base directory, and chdir into it
+// FIX PATH
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=dirname($FILE_BASE);
-if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
+$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
+if (substr($FILE_BASE,-4)=='.php')
 {
-	$RELATIVE_PATH=basename($FILE_BASE);
-	$FILE_BASE=dirname($FILE_BASE);
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+}
+if (!is_file($FILE_BASE.'/sources/global.php'))
+{
+	$a=strrpos($FILE_BASE,'/');
+	if ($a===false) $a=0;
+	$b=strrpos($FILE_BASE,'\\');
+	if ($b===false) $b=0;
+	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
+	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
 } else
 {
 	$RELATIVE_PATH='';
@@ -77,8 +89,8 @@ ce_do_footer();
 function ce_do_header()
 {
 	echo '
-<!DOCTYPE html>
-<html lang="EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
 <head>
 	<title>ocPortal Installation Options editor</title>
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
@@ -86,14 +98,14 @@ function ce_do_header()
 ';
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo '
-		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/bigicons/ocp-logo.png\') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+		.main_page_title { text-decoration: underline; display: block; background: url(\'themes/default/images/bigicons/ocp-logo.png\') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>
 
 	<meta name="robots" content="noindex, nofollow" />
 </head>
-<body class="website_body"><div class="global_middle">
-	<h1 class="screen_title">ocPortal Installation Options editor</h1>
+<body class="re_body"><div class="global_middle">
+	<h1 class="main_page_title">ocPortal Installation Options editor</h1>
 	<p>This is an editor kept as simple as possible, to allow fixing of configuration problems when ocPortal is not in a workable state. It is provided in English only, and only modifies the configuration file, not the database.</p>
 	<form action="config_editor.php" method="post">
 ';
@@ -113,9 +125,9 @@ if (array_key_exists('base_url',$SITE_INFO))
 $_base_url=htmlentities($SITE_INFO['base_url']);
 echo <<<END
 		<hr />
-		<ul class="actions_list" role="navigation">
-			<li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
-		</ul>
+		<p>
+		&raquo; <a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a>
+		</p>
 END;
 }
 echo <<<END
@@ -145,7 +157,7 @@ function do_access($given_password)
 {
 	global $SITE_INFO;
 echo <<<END
-	<table class="results_table">
+	<table class="solidborder">
 END;
 	if (!array_key_exists('block_mod_rewrite',$SITE_INFO)) $SITE_INFO['block_mod_rewrite']='0';
 	if (!array_key_exists('use_mem_cache',$SITE_INFO)) $SITE_INFO['use_mem_cache']='1';
@@ -177,7 +189,7 @@ vb_unique_id
 stronghold_cookies
 vb_version*/
 			case 'use_mem_cache':
-				$notes='Set this to \'1\' if persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available). You should only do this if you have a well-configured PHP extension installed for this (e.g. APC), otherwise an inefficient filesystem cache will be used which may cause intermittent problems and higher memory usage.';
+				$notes='Set this to \'1\' if persistant memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).';
 				break;
 			case 'fast_spider_cache':
 				$notes='The number of hours that the spider/bot cache lasts for (this sets both HTTP cacheing, and server retention of cached screens).';
@@ -198,7 +210,7 @@ vb_version*/
 				$notes='This is the base-URL for the forums. If it is not correct, various links, such as links to topics, will not function correctly.';
 				break;
 			case 'domain':
-				$notes='The domain that e-mail addresses are registered on. This applies only to the Point Store and may be ignored by most.';
+				$notes='The domain that e-mail addresses are registered on. This applies only to the point-store and may be ignored by most.';
 				break;
 			case 'base_url':
 				$notes='A critical option, that defines the URL of the site (no trailing slash). If the URL changes, the base URL must be changed to reflect it. If you change this option you will need to empty your template and image caches (in the Cleanup Tools or Upgrader), else you may get strange error messages, broken images, and an ocPortal warning about an inconsistency.';
@@ -276,9 +288,6 @@ vb_version*/
 				break;
 			case 'backdoor_ip':
 				$notes='Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.';
-				break;
-			case 'full_ips':
-				$notes='Whether to match sessions to the full IP addresses. Set this to 1 if you are sure users don\'t jump around IP addresses on the same 255.255.255.0 subnet (e.g. due to proxy server randomisation). This increases security.';
 				break;
 		}
 		if (strpos($key,'_table_prefix')!==false)

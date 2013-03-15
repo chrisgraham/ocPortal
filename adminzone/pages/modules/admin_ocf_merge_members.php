@@ -78,21 +78,14 @@ class Module_admin_ocf_merge_members
 	 */
 	function gui()
 	{
-		$title=get_screen_title('MERGE_MEMBERS');
+		$title=get_page_title('MERGE_MEMBERS');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
 		$fields=new ocp_tempcode();
-
 		require_code('form_templates');
-
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),do_lang_tempcode('DESCRIPTION_MEMBER_FROM'),'from','',true));
 		$fields->attach(form_input_username(do_lang_tempcode('TO'),do_lang_tempcode('DESCRIPTION_MEMBER_TO'),'to','',true));
-
-		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write)
-		{
-			$fields->attach(form_input_tick(do_lang_tempcode('MERGING_ON_MSN'),do_lang_tempcode('DESCRIPTION_MERGING_ON_MSN'),'keep',true));
-		}
 
 		$submit_name=do_lang_tempcode('MERGE_MEMBERS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
@@ -107,7 +100,7 @@ class Module_admin_ocf_merge_members
 	 */
 	function actual()
 	{
-		$title=get_screen_title('MERGE_MEMBERS');
+		$title=get_page_title('MERGE_MEMBERS');
 
 		$to_username=post_param('to');
 		$to_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($to_username);
@@ -124,8 +117,7 @@ class Module_admin_ocf_merge_members
 		$meta=$GLOBALS['SITE_DB']->query('SELECT m_table,m_name FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','USER').' OR '.db_string_equal_to('m_type','?USER').' OR '.db_string_equal_to('m_type','*USER'));
 		foreach ($meta as $m)
 		{
-			$db=(substr($m['m_table'],0,2)=='f_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
-			$db->query_update($m['m_table'],array($m['m_name']=>$to_id),array($m['m_name']=>$from_id),'',NULL,NULL,false,true);
+			$GLOBALS['SITE_DB']->query_update($m['m_table'],array($m['m_name']=>$to_id),array($m['m_name']=>$from_id),'',NULL,NULL,false,true);
 		}
 
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_poster_name_if_guest'=>$to_username),array('p_poster'=>$from_id));
@@ -142,8 +134,7 @@ class Module_admin_ocf_merge_members
 			if ($val!='') ocf_set_custom_field($to_id,$key,$val);
 		}
 
-		if (post_param_integer('keep',0)!=1)
-			ocf_delete_member($from_id);
+		ocf_delete_member($from_id);
 
 		// Cache emptying ...
 		ocf_require_all_forum_stuff();

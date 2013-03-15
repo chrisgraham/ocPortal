@@ -28,21 +28,21 @@
  */
 function _hash_encode64($input, $count, &$itoa64)
 {
-	$output='';
-	$i=0;
+	$output = '';
+	$i = 0;
 
 	do
 	{
-		$value=ord($input[$i]);
+		$value = ord($input[$i]);
 		$i++;
-		$output.=$itoa64[$value & 0x3f];
+		$output .= $itoa64[$value & 0x3f];
 
 		if ($i < $count)
 		{
 			$value |= ord($input[$i]) << 8;
 		}
 
-		$output.=$itoa64[($value >> 6) & 0x3f];
+		$output .= $itoa64[($value >> 6) & 0x3f];
 
 		if ($i >= $count)
 		{
@@ -56,7 +56,7 @@ function _hash_encode64($input, $count, &$itoa64)
 			$value |= ord($input[$i]) << 16;
 		}
 
-		$output.=$itoa64[($value >> 12) & 0x3f];
+		$output .= $itoa64[($value >> 12) & 0x3f];
 
 		if ($i >= $count)
 		{
@@ -65,7 +65,7 @@ function _hash_encode64($input, $count, &$itoa64)
 		}
 		$i++;
 
-		$output.=$itoa64[($value >> 18) & 0x3f];
+		$output .= $itoa64[($value >> 18) & 0x3f];
 	}
 	while ($i < $count);
 
@@ -83,7 +83,7 @@ function _hash_encode64($input, $count, &$itoa64)
  */
 function _hash_crypt_private($password, $setting, &$itoa64)
 {
-	$output='*';
+	$output = '*';
 
 	// Check for correct hash
 	if (substr($setting, 0, 3) != '$H$')
@@ -91,15 +91,15 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 		return $output;
 	}
 
-	$count_log2=strpos($itoa64, $setting[3]);
+	$count_log2 = strpos($itoa64, $setting[3]);
 
 	if ($count_log2 < 7 || $count_log2 > 30)
 	{
 		return $output;
 	}
 
-	$count=1 << $count_log2;
-	$salt=substr($setting, 4, 8);
+	$count = 1 << $count_log2;
+	$salt = substr($setting, 4, 8);
 
 	if (strlen($salt) != 8)
 	{
@@ -107,33 +107,30 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 	}
 
 	/**
-	* We're kind of forced to use MD5 here since it's the only
-	* cryptographic primitive available in all versions of PHP
-	* currently in use.  To implement our own low-level crypto
-	* in PHP would result in much worse performance and
-	* consequently in lower iteration counts and hashes that are
-	* quicker to crack (by non-PHP code).
-	*/
-	$hash=pack('H*', md5($salt . $password));
+	 * We're kind of forced to use MD5 here since it's the only
+	 * cryptographic primitive available in all versions of PHP
+	 * currently in use.  To implement our own low-level crypto
+	 * in PHP would result in much worse performance and
+	 * consequently in lower iteration counts and hashes that are
+	 * quicker to crack (by non-PHP code).
+	 */
+	$hash = pack('H*', md5($salt . $password));
 	do
 	{
-		$hash=pack('H*', md5($hash . $password));
+		$hash = pack('H*', md5($hash . $password));
 		--$count;
 	}
 	while ($count>0);
 
-	$output=substr($setting, 0, 12);
-	$output.=_hash_encode64($hash, 16, $itoa64);
+	$output = substr($setting, 0, 12);
+	$output .= _hash_encode64($hash, 16, $itoa64);
 
 	return $output;
 }
 
-/**
- * Forum Driver.
- * @package		core_forum_drivers
- */
 class forum_driver_phpbb3 extends forum_driver_base
 {
+
 	/**
 	 * Check the connected DB is valid for this forum driver.
 	 *
@@ -1279,8 +1276,8 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function forum_md5($data,$key,$just_first=false)
 	{
-		$itoa64='./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-		$hash=$GLOBALS['FORUM_DB']->query_value_null_ok('users','user_password',array('username_clean'=>strtolower($key)));
+		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+		$hash = $GLOBALS['FORUM_DB']->query_value_null_ok('users','user_password',array('username_clean'=>strtolower($key)));
 		if (is_null($hash)) return '';
 
 		return _hash_crypt_private($data, $hash, $itoa64);

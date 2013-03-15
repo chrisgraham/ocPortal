@@ -4,9 +4,7 @@
 
 <div class="float_surrounder">
 	<div class="pte_help_box">
-		<div class="box box___permissions_tree_editor_screen"><div class="box_inner">
-			<h2>{!PERMISSIONS_TREE_EDITOR_HOW_WORK}</h2>
-
+		{+START,BOX,{!PERMISSIONS_TREE_EDITOR_HOW_WORK},,light}
 			<p>{!PERMISSIONS_TREE_EDITOR_ABOUT_BARRIERS,<img src="{$IMG*,led_on}" alt="" />}</p>
 
 			<p>{!PERMISSIONS_TREE_EDITOR_ABOUT_GROUP,<img src="{$IMG*,permlevels/3}" alt="" />}</p>
@@ -16,17 +14,15 @@
 			<p class="pte_tips">{!PERMISSIONS_TREE_EDITOR_ABOUT_HOVER_FOR_PERMISSIONS}</p>
 
 			<p class="pte_tips">{!PERMISSIONS_TREE_EDITOR_INHERIT}</p>
-		</div></div>
+		{+END}
 	</div>
 
 	<div>
-		<div class="box box___permissions_tree_editor_screen"><div class="box_inner">
-			<h2>{!SITE_TREE}</h2>
-
+		{+START,BOX,{!SITE_TREE}}
 			<div class="pte_tree">
 				<!-- onmouseover="fade_icons_out();" onmouseout="fade_icons_in();" firefox too buggy -->
 				<div class="pte_icon_box">
-					<div class="box box___permissions_tree_editor_screen"><div class="box_inner">
+					{+START,BOX,,,light}
 						<form title="{!CHOOSE} {!_USERGROUP}" action="index.php" method="post">
 							<img alt="" src="{$IMG*,pte_view_help}" /><strong><label for="group">{!PERMISSIONS_TREE_EDITOR_ICON_LABEL}:</label></strong>
 							<select id="group" name="group" onclick="this.onchange(event);" onchange="update_group_displayer(this)">
@@ -34,7 +30,7 @@
 							</select>
 						</form>
 						<p>{!PERMISSIONS_TREE_EDITOR_ICON_SPECIFIC,<span id="group_name">{INITIAL_GROUP*}</span>}</p>
-					</div></div>
+					{+END}
 				</div>
 
 				<form title="{!PRIMARY_PAGE_FORM}" action="index.php" method="post">
@@ -54,14 +50,12 @@
 					{+END}
 				//]]></script>
 			</div>
-		</div></div>
+		{+END}
 	</div>
 </div>
 
 <div class="pte_set_box">
-	<div class="box box___permissions_tree_editor_screen"><div class="box_inner">
-		<h2>{!PERMISSIONS_TREE_EDITOR_PERMISSIONS_FOR_SELECTION}</h2>
-
+	{+START,BOX,{!PERMISSIONS_TREE_EDITOR_PERMISSIONS_FOR_SELECTION}}
 		<p>
 			{!PERMISSION_INHERITANCE_HOVER}
 		</p>
@@ -70,15 +64,17 @@
 			<div class="float_surrounder">
 				<div style="display: none" id="selection_form_fields">
 					{EDITOR}
+
+					<br />
 				</div>
 
-				<p class="right" id="selection_message">
-					<em>{!PERMISSIONS_TREE_EDITOR_NONE_SELECTED}</em>
+				<p style="float: {!en_right}" id="selection_message">
+					{!PERMISSIONS_TREE_EDITOR_NONE_SELECTED}
 				</p>
 				<div>
 					<input type="button" class="button_page" id="selection_button" disabled="disabled" value="{!SET}" onclick="set_permissions(document.getElementById('tree_list'));" />
 				</div>
 			</div>
 		</form>
-	</div></div>
+	{+END}
 </div>

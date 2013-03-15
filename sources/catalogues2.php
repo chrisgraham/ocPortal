@@ -171,7 +171,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	if ($is_tree==1)
 	{
 		// Create root node
-		$root_title=($is_tree==1)?do_lang('_HOME',get_translated_text($title)):get_translated_text($title);
+		$root_title=($display_type==1)?do_lang('_HOME',get_translated_text($title)):get_translated_text($title);
 		$category=$GLOBALS['SITE_DB']->query_insert('catalogue_categories',array('cc_move_days_lower'=>30,'cc_move_days_higher'=>60,'cc_move_target'=>NULL,'rep_image'=>'','c_name'=>$name,'cc_title'=>insert_lang($root_title,1),'cc_description'=>insert_lang_comcode('',3),'cc_notes'=>'','cc_add_date'=>time(),'cc_parent_id'=>NULL),true);
 	} else $category=NULL;
 
@@ -445,12 +445,6 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 
 	store_in_catalogue_cat_treecache($id,$parent_id);
 
-	if (!is_null($parent_id))
-	{
-		require_code('notifications2');
-		copy_notifications_to_new_child('catalogue_entry',strval($parent_id),strval($id));
-	}
-
 	return $id;
 }
 
@@ -689,6 +683,12 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	// Delete lang
 	delete_lang($myrow['cc_title']);
 	delete_lang($myrow['cc_description']);
+
+	/*$entries=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('cc_id'=>$id)));
+	foreach ($entries as $entry)
+	{
+		actual_delete_catalogue_entry($entry);
+	}*/
 
 	$old_parent_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_parent_id',array('id'=>$id));
 

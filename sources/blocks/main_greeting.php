@@ -74,7 +74,7 @@ class Block_main_greeting
 				$redirect=get_self_url(true,true);
 				$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
 				$join_url=$GLOBALS['FORUM_DRIVER']->join_url();
-				$join_bits=do_template('JOIN_OR_LOGIN',array('_GUID'=>'8ced2271aa280a03ba9e03a84bc1dabf','LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
+				$join_bits=do_template('JOIN_OR_LOGIN',array('LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
 
 				$p=do_lang_tempcode('WELCOME',$join_bits);
 				$out->attach(paragraph($p,'hhrt4dsgdsgd'));
@@ -87,7 +87,7 @@ class Block_main_greeting
 		$message=get_option('welcome_message');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
-			if ($message!='') $message.=' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SITE#group_GENERAL}">'.do_lang('EDIT').'</a></span>[/semihtml]';
+			if ($message!='') $message.=' [[page="_SEARCH:admin_config:category:SITE#group_GENERAL"]'.do_lang('EDIT').'[/page]]';
 		}
 		$out->attach(comcode_to_tempcode($message,NULL,true));
 

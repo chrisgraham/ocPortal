@@ -63,7 +63,7 @@ function incoming_uploads_script()
 		sync_file(get_custom_file_base().'/uploads/incoming');
 	}
 
-	$savename='uploads/incoming/'.uniqid('').'.dat';
+	$savename = 'uploads/incoming/'.uniqid('').'.dat';
 
 	if (array_key_exists('file',$_FILES)) // nice multi-part upload
 	{
@@ -118,10 +118,10 @@ function incoming_uploads_script()
 
 	if ($is_uploaded)
 	{
-		$max_length=255;
-		$field_type_test=$GLOBALS['SITE_DB']->query_value('db_meta','m_type',array('m_name'=>'i_orig_filename'));
-		if ($field_type_test=='ID_TEXT') $max_length=80; // Legacy
-		$name=substr($name,max(0,strlen($name)-$max_length));
+		$max_length = 255;
+		$field_type_test = $GLOBALS['SITE_DB']->query_value('db_meta','m_type',array('m_name'=>'i_orig_filename'));
+		if ($field_type_test == 'ID_TEXT') $max_length = 80; // Legacy
+		$name = substr($name,max(0,strlen($name)-$max_length));
 
 		header('Content-type: text/plain; charset='.get_charset());
 
@@ -178,12 +178,12 @@ function incoming_uploads_script()
 		header('HTTP/1.1 500 File Upload Error');
 
 		// Test harness
-		$title=get_screen_title('UPLOAD');
+		$title=get_page_title('UPLOAD');
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_upload(do_lang_tempcode('FILE'),'','file',true,NULL,NULL,false));
 		$hidden=new ocp_tempcode();
-		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'632edbf0ca9f6f644cd9ebbd817b90f3','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('incoming_uploads',true),'FIELDS'=>$fields)),NULL,'',true);
+		$out2=globalise(do_template('FORM_SCREEN',array('TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('incoming_uploads',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
 	}
 

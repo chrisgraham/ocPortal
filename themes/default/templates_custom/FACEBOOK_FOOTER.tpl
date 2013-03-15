@@ -14,7 +14,7 @@
 
 			{$,Calling this effectively waits until the login is active on the client side, which we must do before we can call a log out}
 			FB.getLoginStatus(function(response) {
-				if (response.status=='connected' && response.authResponse) {
+				if (response.status=='connected') {
 					{$,If ocP is currently logging out, tell FB connect to disentangle}
 					{$,Must have JS FB login before can instruct to logout. Will not re-auth -- we know we have authed due to FB_CONNECT_LOGGED_OUT being set}
 					{+START,IF,{$FB_CONNECT_LOGGED_OUT}}
@@ -25,30 +25,20 @@
 
 					{$,Facebook has automatically rebuilt its expired fbsr cookie, auth.login not triggered as already technically logged in}
 					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}}
-						{+START,IF_EMPTY,{$FB_CONNECT_UID}}{$,Definitive mismatch between server-side and client-side}
+						{+START,IF_EMPTY,{$FB_CONNECT_UID}}
 							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 								{
-									window.location='{$PAGE_LINK;,:refreshed_once=1}';
+									window.location='{$PAGE_LINK;,:}';
 								} else
 								{
-									var current_url=window.top.location.href;
-									if (current_url.indexOf('refreshed_once=1')==-1)
-									{
-										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'refreshed_once=1';
-										window.top.location=current_url;
-									}
-									else if (current_url.indexOf('keep_refreshed_once=1')==-1)
-									{
-										window.alert('Could not login, probably due to restrictive cookie settings.');
-										window.location+='&keep_refreshed_once=1';
-									}
+									window.top.location.reload();
 								}
 							},500);
 						{+END}
 					{+END}
 
-					{+START,IF_NON_EMPTY,{$FB_CONNECT_UID}}{$,No point this code being in the request for non-FB users}
+					{+START,IF_NON_EMPTY,{$FB_CONNECT_UID}}
 						{$,Map Facebook logout action to logout links}
 						var forms=document.getElementsByTagName('form');
 						for (var i=0;i<forms.length;i++)
@@ -71,31 +61,18 @@
 
 			/*Facebook: Current user is "{$FB_CONNECT_UID*}"*/
 			{+START,IF_EMPTY,{$FB_CONNECT_UID}} {$,If not already in an ocPortal Facebook login session}
-				FB.Event.subscribe('auth.login',function(response) { {$,New login status arrived - so an ocPortal Facebook login session should be established, or ignore as we are calling a logout within this request (above)}
+				FB.Event.subscribe('auth.login',function() { {$,New login status arrived - so an ocPortal Facebook login session should be established, or ignore as we are calling a logout within this request (above)}
 					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}} {$,Check it is not that logout}
 						{$,... and therefore only refresh to let ocPortal adapt, if this was a new login initiated just now on the client side}
-						if (response.status=='connected' && response.authResponse) {$,Check we really are logged in, in case this event calls without us being}
-						{
-							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
-								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
-								{
-									window.location='{$PAGE_LINK;,:refreshed_once=1}';
-								} else
-								{
-									var current_url=window.top.location.href;
-									if (current_url.indexOf('refreshed_once=1')==-1)
-									{
-										current_url+=((current_url.indexOf('?')==-1)?'?':'&')+'refreshed_once=1';
-										window.top.location=current_url;
-									}
-									else if (current_url.indexOf('keep_refreshed_once=1')==-1)
-									{
-										window.alert('Could not login, probably due to restrictive cookie settings.');
-										window.location+='&keep_refreshed_once=1';
-									}
-								}
-							},500);
-						}
+						window.setTimeout(function() { {$,Firefox needs us to wait a bit}
+							if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
+							{
+								window.location='{$PAGE_LINK;,:}';
+							} else
+							{
+								window.top.location.reload();
+							}
+						},500);
 					{+END}
 				});
 			{+END}

@@ -48,7 +48,7 @@ class Hook_config_default_is_on_block_cache
 	 */
 	function get_default()
 	{
-		return $GLOBALS['SEMI_DEV_MODE']?'0':'1';
+		return $GLOBALS['SEMI_DEBUG_MODE']?'0':'1';
 	}
 
 }

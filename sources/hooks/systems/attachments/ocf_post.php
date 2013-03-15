@@ -36,8 +36,6 @@ class Hook_attachments_ocf_post
 		$info=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_cache_forum_id','p_intended_solely_for','p_poster','p_topic_id'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$info)) return false;
 		$forum_id=$info[0]['p_cache_forum_id'];
-		$forum_id_parent=is_null($forum_id)?NULL:$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id));
-		$forum_id_parent_parent=is_null($forum_id_parent)?NULL:$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id_parent));
 		$poster=$info[0]['p_poster'];
 		$forum_id_parent=is_null($forum_id)?NULL:$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id));
 		$forum_id_parent_parent=is_null($forum_id_parent)?NULL:$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id_parent));

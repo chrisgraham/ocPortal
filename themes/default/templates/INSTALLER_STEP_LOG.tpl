@@ -4,7 +4,7 @@
 
 <div class="actions_list installer_main_min">
 	<div class="install_log_table">
-		<p class="lonely_label">{!INSTALL_LOG}:</p>
+		<span class="install_log_table_title">{!INSTALL_LOG}:</span>
 		<ul>
 			{LOG}
 		</ul>
@@ -15,9 +15,9 @@
 	<div>
 		{HIDDEN}
 
-		<p class="proceed_button">
+		<div class="proceed_button">
 			<input id="proceed_button" class="button_page" type="submit" value="{!PROCEED}" />
-		</p>
+		</div>
 	</div>
 </form>
 

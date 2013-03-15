@@ -21,7 +21,7 @@
 /**
  * Get the tempcode for a confirmation page.
  *
- * @param  tempcode		The title for the confirmation page (out of get_screen_title)
+ * @param  tempcode		The title for the confirmation page (out of get_page_title)
  * @param  tempcode		The preview that's being confirmed for actualisation
  * @param  ID_TEXT		The URL type to confirm through to
  * @param  mixed			The URL type if we click back OR a full URL (if long, or if tempcode)
@@ -29,7 +29,7 @@
  * @param  ?tempcode		Form fields to pass through as post data on confirmation (NULL: none)
  * @return tempcode		The confirmation page
  */
-function confirm_screen($title,$preview,$url_type,$back_url_type,$sup_post=NULL,$fields=NULL)
+function form_confirm_screen($title,$preview,$url_type,$back_url_type,$sup_post=NULL,$fields=NULL)
 {
 	if (is_null($sup_post)) $sup_post=array();
 
@@ -46,6 +46,6 @@ function confirm_screen($title,$preview,$url_type,$back_url_type,$sup_post=NULL,
 		$fields->attach(form_input_hidden($key,is_string($val)?$val:strval($val)));
 	}
 
-	return do_template('CONFIRM_SCREEN',array('_GUID'=>'a99b861d24ab876a40cc010af2b26bc8','URL'=>$url,'BACK_URL'=>$back_url,'PREVIEW'=>$preview,'FIELDS'=>$fields,'TITLE'=>$title));
+	return do_template('FORM_CONFIRM_SCREEN',array('_GUID'=>'a99b861d24ab876a40cc010af2b26bc8','URL'=>$url,'BACK_URL'=>$back_url,'PREVIEW'=>$preview,'FIELDS'=>$fields,'TITLE'=>$title));
 }
 

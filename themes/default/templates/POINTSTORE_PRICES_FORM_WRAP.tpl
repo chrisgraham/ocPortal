@@ -1,13 +1,9 @@
 <h3>{TITLE*}</h3>
 
 <div>
-	<h4 class="toggleable_tray_title">
-		<a class="toggleable_tray_button" title="{!SETTINGS}: {!EXPAND}" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {TITLE*}" title="{!EXPAND}" src="{$IMG*,expand}" /></a> <a class="toggleable_tray_button" title="{!SETTINGS}: {!EXPAND}" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!SETTINGS}</a>
-	</h4>
-	<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-		<div class="form_set_indent">
-			{FORM}
-		</div>
+	<a class="hide_button" title="{!SETTINGS}: {!EXPAND}" href="#" onclick="event.returnValue=false; hideTag(this.parentNode); return false;"><img alt="{!EXPAND}: {TITLE*}" title="{!EXPAND}" src="{$IMG*,expand}" /></a> <a class="hide_button" title="{!SETTINGS}: {!EXPAND}" href="#" onclick="event.returnValue=false; hideTag(this.parentNode); return false;">{!SETTINGS}</a>
+	<div class="hide_tag hide_button_spacing form_set_indent" style="display: {$JS_ON,none,block}">
+		{FORM}
 	</div>
 </div>
 

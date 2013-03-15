@@ -48,7 +48,7 @@ class Module_topics
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array():array('new_pt'=>'ADD_PRIVATE_TOPIC');
+		return is_guest()?array():array('new_pt'=>'ADD_PERSONAL_TOPIC');
 	}
 
 	/**
@@ -69,8 +69,6 @@ class Module_topics
 	 */
 	function run()
 	{
-		@ignore_user_abort(true); // Must keep going till completion
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_css('ocf');
 
@@ -157,7 +155,7 @@ class Module_topics
 			$valid_types[]='_multimod';
 		}
 
-		if (in_array($type,$valid_types)) return call_user_func(array($this,$type));
+		if (in_array($type,$valid_types)) return ocf_wrapper(new ocp_tempcode(),call_user_func(array($this,$type)),false,false);
 
 		if (substr($type,0,3)=='mm_') return $this->multimod();
 		if (substr($type,0,4)=='mmt_') return $this->mass_multimod();
@@ -181,7 +179,7 @@ class Module_topics
 	 */
 	function relay_with_reason($_title)
 	{
-		$title=get_screen_title($_title);
+		$title=get_page_title($_title);
 		$text=paragraph(do_lang_tempcode('OPTIONAL_REASON'));
 		$submit_name=do_lang_tempcode('PROCEED');
 		$type='_'.get_param('type','misc');
@@ -209,7 +207,7 @@ class Module_topics
 		require_code('ocf_topicview');
 
 		if (is_null($lang)) $lang=do_lang_tempcode('SUCCESS');
-		$title=get_screen_title($_title);
+		$title=get_page_title($_title);
 
 		// Show it worked / Refresh
 		if (is_null($post_id))
@@ -234,7 +232,7 @@ class Module_topics
 	function redirect_to_forum($_title,$forum_id,$lang=NULL)
 	{
 		if (is_null($lang)) $lang=do_lang_tempcode('SUCCESS');
-		$title=get_screen_title($_title);
+		$title=get_page_title($_title);
 
 		// Show it worked / Refresh
 		if (is_null($forum_id))
@@ -396,26 +394,16 @@ class Module_topics
 		// Certain aspects relating to the posting system
 		$fields=new ocp_tempcode();
 		$hidden=$this->keep_markers();
-
-		$set_name='destination';
-		$required=true;
-		$set_title=do_lang_tempcode('DESTINATION_TOPIC');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
-
-		$field_set->attach(form_input_integer(do_lang_tempcode('DESTINATION_TOPIC_ID'),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
-
+		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_TOPIC'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
+		$fields->attach(form_input_integer(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('DESTINATION_TOPIC_ID')),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE_IF_EMPTY'),do_lang_tempcode('DESCRIPTION_DELETE_IF_EMPTY'),'delete_if_empty',true));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
 
-		$title=get_screen_title('MOVE_POSTS');
+		$title=get_page_title('MOVE_POSTS');
 		$submit_name=do_lang_tempcode('MOVE_POSTS');
 		$text=do_lang_tempcode('MOVE_POSTS_A_TEXT');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'d62d2c81583398f26f900ee3df1894b1','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'d62d2c81583398f26f900ee3df1894b1','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'JAVASCRIPT'=>'standardAlternateFields(\'select_topic_id\',\'manual_topic_id\');'));
 	}
 
 	/**
@@ -447,7 +435,7 @@ class Module_topics
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE_IF_EMPTY'),do_lang_tempcode('DESCRIPTION_DELETE_IF_EMPTY'),'delete_if_empty',true));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
 
-		$title=get_screen_title('MOVE_POSTS');
+		$title=get_page_title('MOVE_POSTS');
 		$submit_name=do_lang_tempcode('MOVE_POSTS');
 		$text=do_lang_tempcode('MOVE_POSTS_B_TEXT');
 
@@ -522,7 +510,7 @@ class Module_topics
 			decache('_new_pp',array(get_member()));
 		}
 
-		$title=get_screen_title('MARK_READ');
+		$title=get_page_title('MARK_READ');
 
 		// Show it worked / Refresh
 		$url=get_param('redirect',NULL);
@@ -537,7 +525,7 @@ class Module_topics
 	 * Mark a topic as unread by the current member.
 	 *
 	 * @param  AUTO_LINK The ID of the topic to mark as unread.
-	 * @return boolean	Success status.
+	 * @return boolean   Success status.
 	 */
 	function ocf_ping_topic_unread($topic_id)
 	{
@@ -545,8 +533,7 @@ class Module_topics
 		$too_old=$last_time<time()-60*60*24*intval(get_option('post_history_days'));
 		if (!$too_old)
 		{
-			if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
-				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id,'l_member_id'=>get_member()),'',1);
+			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id,'l_member_id'=>get_member()),'',1);
 			return true;
 		}
 		return false;
@@ -817,10 +804,10 @@ class Module_topics
 			$this->check_has_mod_access($topic_id);
 		}
 
-		$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('PERFORM_MULTI_MODERATION').'</span>'));
+		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
+		breadcrumb_add_segment($tree,do_lang_tempcode('PERFORM_MULTI_MODERATION'));
 
-		$title=get_screen_title('PERFORM_MULTI_MODERATION');
+		$title=get_page_title('PERFORM_MULTI_MODERATION');
 		$mm=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),array('id'=>$mm_id),'',1);
 		if (!array_key_exists(0,$mm)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$_mm=$mm[0];
@@ -919,10 +906,10 @@ class Module_topics
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'description','',false));
 		$hidden=$this->keep_markers();
 
-		$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('MOVE_TOPICS').'</span>'));
+		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
+		breadcrumb_add_segment($tree,do_lang_tempcode('MOVE_TOPICS'));
 
-		$title=get_screen_title('MOVE_TOPICS');
+		$title=get_page_title('MOVE_TOPICS');
 		$submit_name=do_lang_tempcode('MOVE_TOPICS');
 		return do_template('FORM_SCREEN',array('_GUID'=>'7532b5e7239e0f9ceb64d09c28fd7261','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
@@ -1008,23 +995,13 @@ class Module_topics
 			$filter_cat_text=($filter_cat=='')?do_lang_tempcode('NONE_EM'):make_string_tempcode($filter_cat);
 			$list->attach(form_input_list_entry($filter_cat,$filter_cat=='',$filter_cat_text));
 		}
-
-		$set_name='category';
-		$required=true;
-		$set_title=do_lang_tempcode('CATEGORY');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),'','category_a',$list,NULL,true));
-
-		$field_set->attach(form_input_line(do_lang_tempcode('NEW'),'','category_b','',false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_CATEGORY'),$field_set,$required));
-
+		$fields->attach(form_input_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY'),'category_a',$list,NULL,true));
+		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('NEW')),do_lang_tempcode('DESCRIPTION_ALTERNATE',protect_from_escaping(strtolower(do_lang('CATEGORY')))),'category_b','',false));
 		$hidden=$this->keep_markers();
 
-		breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PRIVATE_TOPICS'))));
+		breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PERSONAL_TOPICS'))));
 
-		$title=get_screen_title('CATEGORISE_PTS');
+		$title=get_page_title('CATEGORISE_PTS');
 		$submit_name=do_lang_tempcode('CATEGORISE_PTS');
 		return do_template('FORM_SCREEN',array('_GUID'=>'c6d0e273b5ce0e84d50a1c6294ece157','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
@@ -1083,7 +1060,7 @@ class Module_topics
 	 */
 	function whisper()
 	{
-		$title=get_screen_title('WHISPER');
+		$title=get_page_title('WHISPER');
 
 		$url=build_url(array('page'=>'_SELF'),'_SELF',array('type'=>1),true,true);
 
@@ -1115,21 +1092,23 @@ class Module_topics
 	{
 		$tabindex=get_form_field_tabindex(NULL);
 
-		$content=new ocp_tempcode();
+		$content=array();
 		$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT e_theme_img_code FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_use_topics=1'.$extra);
-		$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'d9f9399072af3f19f21695aef01168c7','PRETTY'=>do_lang_tempcode('NONE'),'CODE'=>'','URL'=>find_theme_image('ocf_emoticons/none'),'CHECKED'=>$selected_path=='','NAME'=>'emoticon')));
+		$content[]=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_3_NA',array('_GUID'=>'d9f9399072af3f19f21695aef01168c7','CHECKED'=>$selected_path=='','NAME'=>'emoticon'));
 
-		if (count($rows)==0) return new ocp_tempcode();
 		foreach ($rows as $row)
 		{
 			$path=$row['e_theme_img_code'];
 
 			$url=find_theme_image($path);
-			$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('PRETTY'=>'','CHECKED'=>$path==$selected_path,'NAME'=>'emoticon','CODE'=>$path,'URL'=>$url)));
+			$content[]=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_3',array('PRETTY'=>'','CHECKED'=>$path==$selected_path,'NAME'=>'emoticon','CODE'=>$path,'URL'=>$url));
 		}
+		if (count($content)==0) return new ocp_tempcode();
 
-		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'80fe581b26d04876180605cdbb111f6a','NAME'=>'emoticon','REQUIRED'=>false,'CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
+		$_content=wrap_image_radio_list($content);
+
+		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('NAME'=>'emoticon','REQUIRED'=>false,'CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$_content));
 
 		return _form_input('',do_lang_tempcode('TOPIC_EMOTICON'),'',$input,false);
 	}
@@ -1247,9 +1226,9 @@ class Module_topics
 	 * @param  ?tempcode		Text of screen (NULL: none)
 	 * @return tempcode		The UI
 	 */
-	function new_topic($private_topic=false,$member_id=NULL,$img_path='',$text=NULL) // Type
+	function new_topic($personal_topic=false,$member_id=NULL,$img_path='',$text=NULL) // Type
 	{
-		if (!$private_topic)
+		if (!$personal_topic)
 		{
 			$forum_id=get_param_integer('id');
 		} else
@@ -1258,11 +1237,11 @@ class Module_topics
 		}
 
 		// Breadcrumbs etc
-		if ($private_topic)
+		if ($personal_topic)
 		{
 			check_specific_permission('use_pt');
 
-			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PRIVATE_TOPICS'))));
+			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PERSONAL_TOPICS'))));
 
 			$username=mixed();
 			$username=($member_id==get_member())?false:$GLOBALS['FORUM_DRIVER']->get_username($member_id);
@@ -1273,13 +1252,13 @@ class Module_topics
 		{
 			if (!is_null($forum_id))
 			{
-				if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+	         if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
 			}
 
 			$staff_help_url=NULL;
 
-			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('ADD_TOPIC').'</span>'));
+			$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
+			breadcrumb_add_segment($tree,do_lang_tempcode('ADD_TOPIC'));
 		}
 
 		$hidden_fields=new ocp_tempcode();
@@ -1298,7 +1277,7 @@ class Module_topics
 		$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),true,1));
 
 		// Where it goes to
-		if ($private_topic)
+		if ($personal_topic)
 		{
 			if ($member_id==get_member())
 			{
@@ -1327,7 +1306,7 @@ class Module_topics
 			$_postdetails=$this->attach_quotes(array($quote));
 			$post=$_postdetails->evaluate();
 		}
-		if (!$private_topic)
+		if (!$personal_topic)
 		{
 			list($post_templates,$post2)=$this->post_templates($forum_id);
 			if ($post=='') $post=$post2;
@@ -1353,7 +1332,7 @@ class Module_topics
 		}*/
 
 		// Various kinds of tick options
-		if ((!$private_topic) && (ocf_may_moderate_forum($forum_id,get_member())))
+		if ((!$personal_topic) && (ocf_may_moderate_forum($forum_id,get_member())))
 		{
 			$moderation_options=array(
 								array(do_lang_tempcode('OPEN'),'open',true,do_lang_tempcode('DESCRIPTION_OPEN')),
@@ -1364,7 +1343,7 @@ class Module_topics
 				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode('DESCRIPTION_VALIDATED'));
 			if (get_value('disable_sunk')!=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',false,do_lang_tempcode('DESCRIPTION_SUNK'));
-			if (!$private_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
+			if (!$personal_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('open','1'));
@@ -1444,28 +1423,28 @@ class Module_topics
 		}
 
 		// Render form
-		$posting_form=get_posting_form(do_lang($private_topic?'ADD_PRIVATE_TOPIC':'ADD_TOPIC'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
+		$posting_form=get_posting_form(do_lang($personal_topic?'ADD_PERSONAL_TOPIC':'ADD_TOPIC'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
 
 		// Work out title to show
-		if (!$private_topic)
+		if (!$personal_topic)
 		{
 			$forum_name=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$forum_id));
 			if (is_null($forum_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
-		if ($private_topic)
+		if ($personal_topic)
 		{
 			if ($username===false)
 			{
-				$title=do_lang_tempcode('_ADD_PRIVATE_TOPIC_UNKNOWN');
+				$title=do_lang_tempcode('_ADD_PERSONAL_TOPIC_UNKNOWN');
 			} else
 			{
-				$title=do_lang_tempcode('_ADD_PRIVATE_TOPIC',escape_html($username));
+				$title=do_lang_tempcode('_ADD_PERSONAL_TOPIC',escape_html($username));
 			}
 		} else
 		{
 			$title=do_lang_tempcode('_ADD_TOPIC',escape_html($forum_name));
 		}
-		$_title=get_screen_title($title,false);
+		$_title=get_page_title($title,false);
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'ba5308fe0a8f9f9a24988209423a3a16','STAFF_HELP_URL'=>$staff_help_url,'TEXT'=>$text,'TITLE'=>$_title,'POSTING_FORM'=>$posting_form));
 	}
@@ -1492,12 +1471,12 @@ class Module_topics
 			if (($agreed==0) && (!$rules->is_empty()))
 			{
 				$url=get_self_url(false,false,array('agreed'=>'1'));
-				$title=get_screen_title('NEW_PRIVATE_TOPIC');
+				$title=get_page_title('NEW_PERSONAL_TOPIC');
 				return do_template('OCF_MEMBER_PT_RULES_SCREEN',array('_GUID'=>'0c39906d4aeb728cc386cd9a79a338c7','TITLE'=>$title,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'MEMBER_ID'=>strval($member_id),'URL'=>$url,'RULES'=>$rules));
 			}
 		}
 
-		$text=do_lang_tempcode('PRIVATE_TOPIC_DOC');
+		$text=do_lang_tempcode('PERSONAL_TOPIC_DOC');
 
 		return $this->new_topic(true,$member_id,'',$text);
 	}
@@ -1514,11 +1493,11 @@ class Module_topics
 	{
 		if (is_null($forum_id))
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PRIVATE_TOPICS')),array('_SEARCH:topicview:id='.strval($topic_id),$topic_title)));
+			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PERSONAL_TOPICS')),array('_SEARCH:topicview:id='.strval($topic_id),$topic_title)));
 		} else
 		{
-			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',$doing)));
+			$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
+			breadcrumb_add_segment($tree,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',$doing)));
 		}
 	}
 
@@ -1559,7 +1538,7 @@ class Module_topics
 		if (is_null($topic_title)) $topic_title='';
 		if (!is_null($forum_id))
 		{
-			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+         if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
 		} else
 		{
 			// It must be a Private Topic. Do we have access?
@@ -1568,7 +1547,7 @@ class Module_topics
 
 			if (($from!=get_member()) && ($to!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')))
 			{
-				access_denied('PRIVILEGE','view_other_pt');
+				access_denied('SPECIFIC_PERMISSION','view_other_pt');
 			}
 		}
 		$this->handle_topic_breadcrumbs($forum_id,$topic_id,$topic_title,do_lang_tempcode('ADD_POST'));
@@ -1637,7 +1616,7 @@ class Module_topics
 			$_intended_solely_for=$GLOBALS['FORUM_DRIVER']->get_username($intended_solely_for);
 			if (is_null($_intended_solely_for)) $_intended_solely_for='';
 		}
-		if (ocf_may_make_private_topic())
+		if (ocf_may_make_personal_topic())
 		{
 			if (($_intended_solely_for!='') || (get_value('no_inline_pp_advertise')!=='1'))
 				$specialisation->attach(form_input_username(do_lang_tempcode('WHISPER'),do_lang_tempcode('DESCRIPTION_WHISPER'),'intended_solely_for',$_intended_solely_for,false));
@@ -1719,14 +1698,14 @@ class Module_topics
 		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.p_post WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',30);
 		foreach ($posts as $row)
 		{
-			$topic_posts->attach(do_template('OCF_POSTING_SCREEN_POST',array('TITLE'=>$row['p_title'],'ID'=>strval($row['id']),'POSTER'=>strval($row['p_poster']),'POST'=>render_post_box($row,true))));
+			$topic_posts->attach(do_template('OCF_POSTING_SCREEN_POST',array('TITLE'=>$row['p_title'],'ID'=>strval($row['id']),'POSTER'=>strval($row['p_poster']),'POST'=>ocf_show_isolated_post($row,true))));
 		}
 		if (!$topic_posts->is_empty()) $topic_posts=do_template('OCF_POSTING_SCREEN_POSTS',array('_GUID'=>'3d3b14cf3a48b2a16eed5b1bd92b1187','POSTS'=>$topic_posts));
 
 		if (is_object($post)) $post=$post->evaluate();
 		$posting_form=get_posting_form(do_lang('ADD_POST'),$post,$post_url,$hidden_fields,$specialisation,NULL,$topic_posts->evaluate(),$specialisation2,NULL,$this->_post_javascript());
 
-		$title=get_screen_title('_ADD_POST',true,array(escape_html($topic_title)));
+		$title=get_page_title('_ADD_POST',true,array(escape_html($topic_title)));
 
 		if (post_param_integer('add_poll',0)==1)
 		{
@@ -1760,7 +1739,7 @@ class Module_topics
 		$poster=$post_info[0]['p_poster_name_if_guest'];
 
 		$member=$poster;
-		if (!is_guest($post_info[0]['p_poster'])) $member='[page="_SEARCH:members:view:'.strval($post_info[0]['p_poster']).'"]'.$poster.'[/page]';
+		if (!is_guest($post_info[0]['p_poster'])) $member='[page type="view" id="'.strval($post_info[0]['p_poster']).'" param="'.get_module_zone('members').'" caption="'.$poster.'"]members[/page]';
 
 		$_postdetails=post_param('post',NULL);
 		if (is_null($_postdetails))
@@ -1809,7 +1788,7 @@ class Module_topics
 
 		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false);
 
-		$title=get_screen_title('REPORT_POST');
+		$title=get_page_title('REPORT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}
 
@@ -1930,7 +1909,7 @@ class Module_topics
 				check_specific_permission('use_pt');
 
 				$topic_id=ocf_make_topic(NULL,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),get_member(),$member_id);
-				$_title=get_screen_title('ADD_PRIVATE_TOPIC');
+				$_title=get_page_title('ADD_PERSONAL_TOPIC');
 			}
 			elseif ($forum_id==-2) // New reported post topic
 			{
@@ -1947,12 +1926,12 @@ class Module_topics
 					$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false);
 				}
 
-				$_title=get_screen_title('REPORT_POST');
+				$_title=get_page_title('REPORT_POST');
 				$check_permissions=false;
 			} else // New topic
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
-				$_title=get_screen_title('ADD_TOPIC');
+				$_title=get_page_title('ADD_TOPIC');
 
 				if (addon_installed('awards'))
 				{
@@ -1969,7 +1948,7 @@ class Module_topics
 			}
 		} else
 		{
-			$_title=get_screen_title('ADD_POST');
+			$_title=get_page_title('ADD_POST');
 			$first_post=false;
 
 			$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_cache_first_title','t_sunk','t_forum_id','t_is_open','t_description'),array('id'=>$topic_id),'',1);
@@ -2018,7 +1997,7 @@ END;
 					$start_hour=post_param_integer('schedule_hour');
 					$start_minute=post_param_integer('schedule_minute');
 					require_code('calendar2');
-					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 					regenerate_event_reminder_jobs($event_id);
 
 					$text=do_lang_tempcode('SUCCESS');
@@ -2157,7 +2136,7 @@ END;
 			decache('_new_pp',array(get_member()));
 		}
 
-		$title=get_screen_title('MARK_READ');
+		$title=get_page_title('MARK_READ');
 
 		if (get_param_integer('ajax',0)==1) exit();
 
@@ -2202,7 +2181,7 @@ END;
 
 		if (has_specific_permission(get_member(),'mass_delete_from_ip'))
 		{
-			$title=get_screen_title('DELETE_POST');
+			$title=get_page_title('DELETE_POST');
 			$post_rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_ip_address','p_time'),array('id'=>$post_id));
 			if (!array_key_exists(0,$post_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$ip=$post_rows[0]['p_ip_address'];
@@ -2234,8 +2213,8 @@ END;
 	 */
 	function _delete_post() // Type
 	{
-		$post_id=either_param_integer('id',NULL);
-		if (is_null($post_id)) $post_id=either_param_integer('post_id');
+      $post_id=either_param_integer('id',NULL);
+      if (is_null($post_id)) $post_id=either_param_integer('post_id');
 		$reason=post_param('reason');
 
 		require_code('ocf_posts_action');
@@ -2277,7 +2256,7 @@ END;
 					}
 				}
 
-				return do_template('CONFIRM_SCREEN',array('TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden));
+				return do_template('YESNO_SCREEN',array('TITLE'=>get_page_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden));
 			}
 
 			foreach ($posts as $post)
@@ -2449,13 +2428,13 @@ END;
 			}
 			$fields->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('COPY_EXISTING_POLL'),'existing',$list,NULL,false,false));
 
-			$javascript='var existing=document.getElementById(\'existing\'); var form=existing.form; var ch_func=function() { var disable_all=(existing.selectedIndex!=0); var i; for (i=0;i<form.elements.length;i++) if ((form.elements[i]!=existing) && (form.elements[i].id!=\'perform_keywordcheck\') && ((form.elements[i].getAttribute(\'type\')==\'checkbox\') || (form.elements[i].getAttribute(\'type\')==\'text\'))) { set_required(form.elements[i].name,(!disable_all) && ((form.elements[i].id==\'question\') || (form.elements[i].id==\'answer_0\'))); set_locked(form.elements[i].name,disable_all); } }; for (i=0;i<form.elements.length;i++) add_event_listener_abstract(form.elements[i],\'change\',ch_func);';
+			$javascript='var existing=document.getElementById(\'existing\'); var form=existing.form; var ch_func=function() { var disable_all=(existing.selectedIndex!=0); var i; for (i=0;i<form.elements.length;i++) if ((form.elements[i]!=existing) && (form.elements[i].id!=\'perform_keywordcheck\') && ((form.elements[i].getAttribute(\'type\')==\'checkbox\') || (form.elements[i].getAttribute(\'type\')==\'text\'))) { setRequired(form.elements[i].name,(!disable_all) && ((form.elements[i].id==\'question\') || (form.elements[i].id==\'answer_0\'))); setLocked(form.elements[i].name,disable_all); } }; for (i=0;i<form.elements.length;i++) addEventListenerAbstract(form.elements[i],\'change\',ch_func);';
 		} else
 		{
 			$javascript='';
 		}
 
-		$title=get_screen_title('ADD_TOPIC_POLL');
+		$title=get_page_title('ADD_TOPIC_POLL');
 		$submit_name=do_lang_tempcode('ADD_TOPIC_POLL');
 
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
@@ -2648,7 +2627,7 @@ END;
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		$title=get_screen_title('EDIT_POST');
+		$title=get_page_title('EDIT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'347e469de58882bf77722bba6ed4aba4','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','TITLE'=>$title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'POSTING_FORM'=>$posting_form));
 	}
 
@@ -2661,7 +2640,9 @@ END;
 	{
 		$size=ocf_get_member_best_group_property(get_member(),'max_post_length_comcode');
 
-		$javascript="
+		$javascript='';
+
+		$javascript.="
 			var form=document.getElementById('post').form;
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()
@@ -2747,7 +2728,7 @@ END;
 		// Show it worked / Refresh
 		$url=get_param('redirect',NULL);
 		if (!is_null($url))
-			return redirect_screen(get_screen_title('EDIT_POST'),$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen(get_page_title('EDIT_POST'),$url,do_lang_tempcode('SUCCESS'));
 
 		return $this->redirect_to('EDIT_POST',$topic_id,NULL,$post_id);
 	}
@@ -2769,7 +2750,7 @@ END;
 		$redirect=get_param('redirect','');
 		if ($redirect!='')
 		{
-			return redirect_screen(get_screen_title('VALIDATE_POST'),$redirect,do_lang_tempcode('SUCCESS'));
+			return redirect_screen(get_page_title('VALIDATE_POST'),$redirect,do_lang_tempcode('SUCCESS'));
 		}
 
 		return $this->redirect_to('VALIDATE_POST',$topic_id);
@@ -2789,12 +2770,12 @@ END;
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$forum_id=$topic_info[0]['t_forum_id'];
-		$private_topic=is_null($forum_id);
+		$personal_topic=is_null($forum_id);
 
-		if (($private_topic) && ($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')))
+		if (($personal_topic) && ($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')))
 			access_denied('I_ERROR');
 
-		if (!$private_topic)
+		if (!$personal_topic)
 		{
 			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('I_ERROR');
 		}
@@ -2812,7 +2793,7 @@ END;
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$forum_id=$topic_info[0]['t_forum_id'];
-		$private_topic=is_null($forum_id);
+		$personal_topic=is_null($forum_id);
 
 		$this->handle_topic_breadcrumbs($forum_id,$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('EDIT_TOPIC'));
 
@@ -2847,7 +2828,7 @@ END;
 			}
 			if (get_value('disable_sunk')!=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',$topic_info[0]['t_sunk']==1,do_lang_tempcode('DESCRIPTION_SUNK'));
-			if (!$private_topic) $options[]=array(do_lang_tempcode('CASCADING'),'cascading',$topic_info[0]['t_cascading']==1,do_lang_tempcode('DESCRIPTION_CASCADING'));
+			if (!$personal_topic) $options[]=array(do_lang_tempcode('CASCADING'),'cascading',$topic_info[0]['t_cascading']==1,do_lang_tempcode('DESCRIPTION_CASCADING'));
 		} else
 		{
 			$moderation_options=array();
@@ -2869,7 +2850,7 @@ END;
 			$fields->attach(get_award_fields('topic',strval($topic_id)));
 		}
 
-		$title=get_screen_title('EDIT_TOPIC');
+		$title=get_page_title('EDIT_TOPIC');
 		$submit_name=do_lang_tempcode('SAVE');
 		return do_template('FORM_SCREEN',array('_GUID'=>'071b6747a1df1cf8e72f8f542422aa5b','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden_fields,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
@@ -2930,22 +2911,12 @@ END;
 		$hidden=new ocp_tempcode();
 		$hidden->attach(build_keep_post_fields());
 		$hidden->attach(build_keep_form_fields());
-
-		$set_name='destination';
-		$required=false;
-		$set_title=do_lang_tempcode('DESTINATION_TOPIC');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
-
-		$field_set->attach(form_input_integer(do_lang_tempcode('DESTINATION_TOPIC_ID'),'','manual_topic_id',NULL,false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),$field_set,$required));
-
+		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_TOPIC'),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'select_topic_id',NULL,'choose_forum_topic',array(),false));
+		$fields->attach(form_input_integer(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('DESTINATION_TOPIC_ID')),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
 
 		$topic_title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$topic_id));
-		$title=get_screen_title('_DELETE_TOPIC',true,array(escape_html($topic_title)));
+		$title=get_page_title('_DELETE_TOPIC',true,array(escape_html($topic_title)));
 		$submit_name=do_lang_tempcode('DELETE');
 		$text=paragraph(do_lang_tempcode('DELETE_TOPIC_TEXT'));
 		return do_template('FORM_SCREEN',array('_GUID'=>'00b84f337de3683bfcdb60ea3086afa0','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
@@ -2988,7 +2959,7 @@ END;
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('MEMBER_TO_INVITE'),'username','',false));
 
-		$title=get_screen_title('INVITE_MEMBER_TO_PT');
+		$title=get_page_title('INVITE_MEMBER_TO_PT');
 		$submit_name=do_lang_tempcode('INVITE_MEMBER_TO_PT');
 		$text=paragraph(do_lang_tempcode('INVITE_MEMBER_TO_PT_TEXT'));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_invite_member','topic_id'=>$topic_id),'_SELF');
@@ -3049,7 +3020,7 @@ END;
 		$fields=$this->get_poll_form_fields($question,$answers,$is_private,$is_open,$requires_reply,$minimum_selections,$maximum_selections);
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
 
-		$title=get_screen_title('EDIT_TOPIC_POLL');
+		$title=get_page_title('EDIT_TOPIC_POLL');
 		$submit_name=do_lang_tempcode('SAVE');
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
@@ -3165,7 +3136,7 @@ END;
 		$fields->attach(form_input_tick(do_lang_tempcode('REDIRECT_TO_TOPIC'),do_lang_tempcode('DESCRIPTION_REDIRECT_TO_TOPIC'),'redir_topic',false));
 
 		$topic_title=$topic_info[0]['t_cache_first_title'];
-		$title=get_screen_title('_MOVE_TOPIC',true,array(escape_html($topic_title)));
+		$title=get_page_title('_MOVE_TOPIC',true,array(escape_html($topic_title)));
 		$submit_name=do_lang_tempcode('MOVE_TOPIC');
 		return do_template('FORM_SCREEN',array('_GUID'=>'313fd175ccd376caa32794fedad21ac6','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
@@ -3316,7 +3287,7 @@ END;
 		$topic_title=$topic_info[0]['t_cache_first_title'];
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('_PERFORM_MULTI_MODERATION',escape_html($topic_title)));
 
-		$title=get_screen_title('_PERFORM_MULTI_MODERATION',true,array(escape_html($topic_title)));
+		$title=get_page_title('_PERFORM_MULTI_MODERATION',true,array(escape_html($topic_title)));
 		$mm=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),array('id'=>$mm_id),'',1);
 		if (!array_key_exists(0,$mm)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$_mm=$mm[0];
@@ -3388,7 +3359,7 @@ END;
 	 */
 	function topic_history() // Type
 	{
-		$title=get_screen_title('POST_HISTORY');
+		$title=get_page_title('POST_HISTORY');
 
 		// We should be somewhere else entirely - it's just our moderator action list took us here
 		$url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','topic_id'=>get_param_integer('id')),'adminzone');
@@ -3430,7 +3401,7 @@ END;
 		$a=$topic_info[0]['t_cache_first_username'];
 		$b=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
-		$title=get_screen_title('MAKE_PERSONAL');
+		$title=get_page_title('MAKE_PERSONAL');
 		$text=do_lang_tempcode('MAKE_PERSONAL_DESCRIPTION');
 		$submit_name=do_lang_tempcode('MAKE_PERSONAL');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_personal'),'_SELF');
@@ -3482,7 +3453,7 @@ END;
 		$topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_first_time>'.strval(time()-60*60*24*3).' AND '.db_string_equal_to('t_cache_first_title',do_lang('HAPPY_BIRTHDAY_PERSON',$id)));
 		if (!is_null($topic_id))
 		{
-			$title=get_screen_title('REDIRECTING');
+			$title=get_page_title('REDIRECTING');
 			$url=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id);
 			require_code('site2');
 			assign_refresh($url,0.0);

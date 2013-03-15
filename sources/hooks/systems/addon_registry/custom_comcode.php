@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_custom_comcode
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,9 +62,7 @@ class Hook_addon_registry_custom_comcode
 			'requires'=>array(),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
-			'previously_in_addon'=>array(
-				'core_page_management'
-			)
+			'previously_in_addon'=>array('core_page_management'),
 		);
 	}
 
@@ -75,6 +74,7 @@ class Hook_addon_registry_custom_comcode
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/snippets/exists_tag.php',
 			'sources/hooks/systems/preview/custom_comcode.php',
 			'sources/hooks/systems/meta/comcode_page.php',
@@ -87,30 +87,39 @@ class Hook_addon_registry_custom_comcode
 			'sources/blocks/main_custom_comcode_tags.php',
 			'sources/hooks/systems/do_next_menus/custom_comcode.php',
 			'sources/hooks/blocks/main_custom_gfx/index.html',
+			'sources/hooks/blocks/main_custom_gfx/sifr.php',
 			'sources/hooks/blocks/main_custom_gfx/text_overlay.php',
+			'data/sifr/index.html',
 			'sources/hooks/blocks/main_custom_gfx/.htaccess',
+			'data/sifr/customize_me.as',
+			'data/sifr/dont_customize_me.as',
+			'sifr.css',
+			'JAVASCRIPT_SIFR.tpl',
 			'themes/default/images/button1.png',
 			'themes/default/images/button2.png',
+			'data/sifr/sifr.fla',
+			'data/sifr/tradegothic.swf',
 			'sources/blocks/main_custom_gfx.php',
 			'sources/hooks/blocks/main_custom_gfx/rollover_button.php',
+			'data_custom/sifr/index.html',
 			'themes/default/images/bigicons/custom-comcode.png',
 			'sources/hooks/systems/comcode/.htaccess',
-			'sources/hooks/systems/comcode/index.html'
+			'sources/hooks/systems/comcode/index.html',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'CUSTOM_COMCODE_TAG_ROW.tpl'=>'block_main_custom_comcode_tags',
-			'BLOCK_MAIN_CUSTOM_COMCODE_TAGS.tpl'=>'block_main_custom_comcode_tags'
-		);
+				'CUSTOM_COMCODE_TAG_ROW.tpl'=>'block_main_custom_comcode_tags',
+				'BLOCK_MAIN_CUSTOM_COMCODE_TAGS.tpl'=>'block_main_custom_comcode_tags',
+				);
 	}
 
 	/**
@@ -125,17 +134,15 @@ class Hook_addon_registry_custom_comcode
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $tag)
 		{
-			$content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW', array(
-				'TITLE'=>lorem_word(),
-				'DESCRIPTION'=>lorem_paragraph(),
-				'EXAMPLE'=>lorem_word()
-			)));
+			$content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW',array('TITLE'=>lorem_word(),'DESCRIPTION'=>lorem_paragraph(),'EXAMPLE'=>lorem_word())));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS', array(
-				'TAGS'=>$content
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS',array(
+					'TAGS'=>$content,
+						)
+			),NULL,'',true),
 		);
 	}
 }

@@ -58,9 +58,6 @@ class Hook_content_meta_aware_catalogue_entry
 			'addon_name'=>'catalogues',
 
 			'module'=>'catalogues',
-
-			'ocselect'=>'catalogues::_catalogues_ocselect',
-			'ocselect_protected_fields'=>array(), // These are ones even some staff should never know
 		);
 	}
 

@@ -30,7 +30,7 @@ function check_input_field($name,$val)
 	{
 		log_hack_attack_and_exit('SCRIPT_URL_HACK_2',$val);
 	}
-	if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val,'[url=http://')!==false) || (strpos($val,'[link')!==false)) && (strpos($val,'<a ')!==false)) // Combination of non-ocPortal-supporting bbcode and HTML, almost certainly a bot trying too hard to get link through
+	if (((!function_exists('is_guest')) || (is_guest())) && (strpos($val,'[link')!==false) && (strpos($val,'<a ')!==false))
 	{
 		log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
 	}
@@ -244,10 +244,6 @@ function load_field_restrictions($this_page=NULL,$this_type=NULL)
 	return $FIELD_RESTRICTIONS;
 }
 
-/**
- * Field restriction loader.
- * @package		core
- */
 class field_restriction_loader
 {
 	// Used during parsing
@@ -281,7 +277,7 @@ class field_restriction_loader
 		xml_set_character_data_handler($xml_parser,'startText');
 
 		// Run the parser
-		$data=file_get_contents(get_custom_file_base().'/data_custom/fields.xml');
+		$data=file_get_contents(get_custom_file_base().'/data_custom/fields.xml',FILE_TEXT);
 		if (trim($data)=='') return;
 		if (@xml_parse($xml_parser,$data,true)==0)
 		{

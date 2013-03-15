@@ -1,0 +1,27 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: How domain names work[/title]
+
+We'd use an HTML solution in the case where we can leverage no control over any domain settings whatsoever. Two situations for this would be:
+ - the domain is somehow tied up
+ - the client does not want us to make these kinds of changes
+
+[box]
+Note that for all the methods other than 'Use an HTML solution', it is necessary to set up the web hosting to listen for traffic for the new domain name. Otherwise it has no way of knowing how to associate the files on its web file system with the URL requests it receives.
+[/box]
+
+[title="2"]Finding out domain and DNS settings[/title]
+
+I recommend using http://www.dnsstuff.com/ to lookup settings for domain names. Use a "WHOIS Lookup" to find out:
+ - The contact details for a domain
+ - A domain's name servers
+ - Who the registrar is
+ - When the domain will expire (need renewing)
+
+To find where web traffic is sent, do a DNS lookup of type 'A' against the domain name.
+If it doesn't give a result, try adding 'www.' to the start, as sometimes DNS is set up so that URLs need that on there.
+To find where mail traffic is sent, do a DNS lookup of type 'MX'.
+
+[title="2"]See Also[/title]
+
+ - [page caption="How the Internet works"]tut_how_internet_works[/page]
+ - [page caption="Introduction to Cookies and sessions (and Javascript)"]tut_cookies[/page]
+ - [page caption="Understanding and configuring e-mail"]tut_email[/page]

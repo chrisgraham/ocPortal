@@ -32,11 +32,11 @@ class Hook_cron_catalogue_view_reports
 
 		$done_reports=array('daily'=>false,'weekly'=>false,'monthly'=>false,'quarterly'=>false);
 
-		$catalogues=$GLOBALS['SITE_DB']->query('SELECT c_title,c_name,c_send_view_reports FROM '.get_table_prefix().'catalogues WHERE '.db_string_not_equal_to('c_send_view_reports','').' AND '.db_string_not_equal_to('c_send_view_reports',''));
+		$catalogues=$GLOBALS['SITE_DB']->query('SELECT c_title,c_name,c_send_view_reports FROM '.get_table_prefix().'catalogues WHERE '.db_string_not_equal_to('c_send_view_reports',''));
 		$doing=array();
 		foreach ($catalogues as $catalogue)
 		{
-			switch ($catalogue['c_send_view_reports'])
+			switch($catalogue['c_send_view_reports'])
 			{
 				case 'daily':
 					$amount=60*60*24;
@@ -117,11 +117,11 @@ class Hook_cron_catalogue_view_reports
 					}
 					$mail=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT',$buildup,comcode_escape($catalogue_title),$regularity,get_lang($member_id),false);
 					if (is_null($mail)) $mail=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT',$buildup,comcode_escape($catalogue_title),array($regularity,get_site_name()),get_lang($member_id));
-					$subject_line=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT_SUBJECT',$catalogue_title,get_site_name(),NULL,get_lang($member_id),false);
-					if (is_null($subject_line)) $subject_line=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT_SUBJECT',comcode_escape($catalogue_title),comcode_escape(get_site_name()),NULL,get_lang($member_id));
+					$subject_tag=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT_SUBJECT',$catalogue_title,get_site_name(),NULL,get_lang($member_id),false);
+					if (is_null($subject_tag)) $subject_tag=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT_SUBJECT',comcode_escape($catalogue_title),comcode_escape(get_site_name()),NULL,get_lang($member_id));
 
 					// Send actual notification
-					dispatch_notification('catalogue_view_reports__'.$catalogue['c_name'],NULL,$subject_line,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+					dispatch_notification('catalogue_view_reports__'.$catalogue['c_name'],NULL,$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 				}
 
 				$start+=2000;

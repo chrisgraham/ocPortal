@@ -4,9 +4,9 @@
 // COLOUR CHOOSER
 // ==============
 
-function dec_to_hex(number)
+function decToHex(number)
 {
-	var hexbase='0123456789ABCDEF';
+	var hexbase="0123456789ABCDEF";
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 
@@ -15,10 +15,10 @@ function hexToDec(number)
 	return parseInt(number,16);
 }
 
-window.names_to_numbers=[];
-window.last_cc=[];
-window.last_cc_i=[];
-function do_color_change(e)
+var names_to_numbers=[];
+var last_cc=[];
+var last_cc_i=[];
+function doColorChange(e)
 {
 	// Find our colour element we clicked on
 	if (typeof e=='undefined') var e=window.event;
@@ -42,15 +42,15 @@ function do_color_change(e)
 
 	var rgb=[];
 	rgb[0]=0; rgb[1]=0; rgb[2]=0;
-	rgb[d]=window.last_cc_i[d+window.names_to_numbers[_id]*3];
+	rgb[d]=last_cc_i[d+names_to_numbers[_id]*3];
 	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+_id);
 	if (temp_last_cc!=targ)
 	{
-		temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]);
+		temp_last_cc.style.backgroundColor='#'+decToHex(rgb[0])+decToHex(rgb[1])+decToHex(rgb[2]);
 		temp_last_cc.style.cursor='pointer';
 		temp_last_cc.style.outline='none';
 		temp_last_cc.style.position='static';
-		window.last_cc_i[d+window.names_to_numbers[_id]*3]=i;
+		last_cc_i[d+names_to_numbers[_id]*3]=i;
 
 		// Show a white line over the colour we clicked
 		targ.style.backgroundColor='#FFFFFF';
@@ -65,24 +65,24 @@ function do_color_change(e)
 		var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
 		var _rgb=s_rgb.split(',');
 		_rgb[d]=i;
-		element.style.backgroundColor='#'+dec_to_hex(_rgb[0])+dec_to_hex(_rgb[1])+dec_to_hex(_rgb[2]);
-		element.style.color='#'+dec_to_hex(255-_rgb[0])+dec_to_hex(255-_rgb[1])+dec_to_hex(255-_rgb[2]);
+		element.style.backgroundColor='#'+decToHex(_rgb[0])+decToHex(_rgb[1])+decToHex(_rgb[2]);
+		element.style.color='#'+decToHex(255-_rgb[0])+decToHex(255-_rgb[1])+decToHex(255-_rgb[2]);
 
-		finality.value=dec_to_hex(_rgb[0])+dec_to_hex(_rgb[1])+dec_to_hex(_rgb[2]);
+		finality.value=decToHex(_rgb[0])+decToHex(_rgb[1])+decToHex(_rgb[2]);
 	}
 }
 
-function update_chooser(chooser)
+function updateChooser(chooser)
 {
 	var ob=document.getElementById(chooser);
 	if (ob.disabled) return false;
 
-	return update_choose(chooser,0,ob.value.substr(0,2))
-		 && update_choose(chooser,1,ob.value.substr(2,2))
-		 && update_choose(chooser,2,ob.value.substr(4,2));
+	return updateChoose(chooser,0,ob.value.substr(0,2))
+		 && updateChoose(chooser,1,ob.value.substr(2,2))
+		 && updateChoose(chooser,2,ob.value.substr(4,2));
 }
 
-function update_choose(id,d,i)
+function updateChoose(id,d,i)
 {
 	i=hexToDec(i);
 	i=i-i%4;
@@ -92,12 +92,12 @@ function update_choose(id,d,i)
 	if (!targ) return false;
 	var rgb=[];
 	rgb[0]=0; rgb[1]=0; rgb[2]=0;
-	rgb[d]=window.last_cc_i[d+window.names_to_numbers[id]*3];
+	rgb[d]=last_cc_i[d+names_to_numbers[id]*3];
 	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+id);
-	temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]); // Reset old
+	temp_last_cc.style.backgroundColor='#'+decToHex(rgb[0])+decToHex(rgb[1])+decToHex(rgb[2]); // Reset old
 	temp_last_cc.style.outline='none';
 	temp_last_cc.style.position='static';
-	window.last_cc_i[d+window.names_to_numbers[id]*3]=i;
+	last_cc_i[d+names_to_numbers[id]*3]=i;
 
 	var element=document.getElementById('cc_target_'+id);
 	var bgColor=element.style.backgroundColor;
@@ -105,8 +105,8 @@ function update_choose(id,d,i)
 	var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
 	rgb=s_rgb.split(',');
 	rgb[d]=i;
-	element.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]);
-	element.style.color='#'+dec_to_hex(255-rgb[0])+dec_to_hex(255-rgb[1])+dec_to_hex(255-rgb[2]);
+	element.style.backgroundColor='#'+decToHex(rgb[0])+decToHex(rgb[1])+decToHex(rgb[2]);
+	element.style.color='#'+decToHex(255-rgb[0])+decToHex(255-rgb[1])+decToHex(255-rgb[2]);
 
 	targ.style.backgroundColor='#FFFFFF';
 	targ.style.outline='3px solid gray';
@@ -115,7 +115,7 @@ function update_choose(id,d,i)
 	return true;
 }
 
-function do_color_chooser()
+function doColorChooser()
 {
 	var elements=document.getElementsByTagName('div');
 	var ce,a=0,my_elements=[];
@@ -129,11 +129,11 @@ function do_color_chooser()
 	}
 	for (ce=0;ce<a;ce++)
 	{
-		do_color_chooser_element(my_elements[ce]);
+		doColorChooserElement(my_elements[ce]);
 	}
 }
 
-function do_color_chooser_element(element)
+function doColorChooserElement(element)
 {
 	var id=element.id.substring(10);
 
@@ -150,8 +150,11 @@ function do_color_chooser_element(element)
 	if (rgb[1]>=256) rgb[1]=252;
 	if (rgb[2]>=256) rgb[2]=252;
 
-	element.style.color='rgb('+(255-rgb[0])+','+(255-rgb[1])+','+(255-rgb[2])+')';
-	source.style.color=element.style.color;
+	if (!is_ie())
+	{
+		element.style.color='rgb('+(255-rgb[0])+','+(255-rgb[1])+','+(255-rgb[2])+')';
+		source.style.color=element.style.color;
+	}
 
 	var c=[];
 	c[0]=document.getElementById('cc_0_'+id);
@@ -161,7 +164,7 @@ function do_color_chooser_element(element)
 	var d,i,_rgb=[],bg,innert,tid,selected,style;
 	for (d=0;d<=2;d++)
 	{
-		window.last_cc_i[d+window.names_to_numbers[id]*3]=0;
+		last_cc_i[d+names_to_numbers[id]*3]=0;
 		innert='';
 //		for (i=0;i<256;i++)
 		for (i=0;i<256;i+=4)
@@ -174,20 +177,20 @@ function do_color_chooser_element(element)
 			} else
 			{
 				_rgb[0]=255; _rgb[1]=255; _rgb[2]=255;
-				window.last_cc_i[d+window.names_to_numbers[id]*3]=i;
+				last_cc_i[d+names_to_numbers[id]*3]=i;
 			}
 			bg='rgb('+_rgb[0]+','+_rgb[1]+','+_rgb[2]+')';
 			tid='cc_col_'+d+'_'+i+'#'+id;
 
 			style=((i==rgb[d])?'':'cursor: pointer; ')+'background-color: '+bg+';';
 			if (selected) style+='outline: 3px solid gray; position: relative;';
-			innert=innert+'<div onclick="do_color_change(event);" class="css_colour_strip" style="'+style+'" id="'+tid+'"></div>';
+			innert=innert+'<div onclick="doColorChange(event);" class="css_colour_strip" style="'+style+'" id="'+tid+'"></div>';
 		}
-		set_inner_html(c[d],innert);
+		setInnerHTML(c[d],innert);
 	}
 }
 
-function make_colour_chooser(name,color,context,tabindex,label,className)
+function makeColourChooser(name,color,context,tabindex,label,className)
 {
 	if ((typeof label=='undefined') || (!label)) var label='&lt;color-'+name+'&gt;';
 	if (typeof className=='undefined')
@@ -198,29 +201,29 @@ function make_colour_chooser(name,color,context,tabindex,label,className)
 		className='class="'+className+'" ';
 	}
 
-	window.names_to_numbers[name]=window.names_to_numbers.length;
+	names_to_numbers[name]=names_to_numbers.length;
 
 	var p=document.getElementById('colours_go_here');
 
 	if ((color!='') && (color.substr(0,1)!='#') && (color.substr(0,3)!='rgb'))
 	{
-		if (color.match(/[A-Fa-f\d]\{6\}/)) color='#'+color;
+		if (color.match(/[A-Fa-f\d]{6}/)) color='#'+color;
 		elsecolor='#000000';
 	}
 
 	var t='';
 	t=t+'<div class="css_colour_chooser">';
 	t=t+'	<div class="css_colour_chooser_name">';
-	t=t+'		<label class="field_name" for="'+name+'"> '+label+'</label>';
-	t=t+'		<input type="button" '+(tabindex?('tabindex="'+tabindex+'" '):'')+'value="#" onclick="update_chooser(\''+name+'\'); return false;" />';
-	t=t+    '<input '+className+'alt="{!themes:COLOUR;^}" type="text" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
+	t=t+'		<label for="'+name+'"> '+label+'</label><br />';
+	t=t+'		<input type="button" '+(tabindex?('tabindex="'+tabindex+'" '):'')+'value="#" onclick="updateChooser(\''+name+'\'); return false;" />';
+	t=t+    '<input '+className+'alt="{!COLOUR^;}" type="{+START,IF,{$VALUE_OPTION,html5}}color{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}text{+END}" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_fixed">';
 	t=t+'	<div class="css_colour_chooser_from" style="background-color: '+((color=='')?'#000':color)+'" id="cc_source_'+name+'">';
-	t=t+"		{!themes:FROM_COLOUR^#}";
+	t=t+"		{!FROM_COLOUR^#}";
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_to" style="background-color: '+((color=='')?'#000':color)+'" id="cc_target_'+name+'">';
-	t=t+"		{!themes:TO_COLOUR^#}";
+	t=t+"		{!TO_COLOUR^#}";
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_colour">';
 	t=t+'		<div id="cc_0_'+name+'"></div>';
@@ -231,6 +234,6 @@ function make_colour_chooser(name,color,context,tabindex,label,className)
 	t=t+'</div>';
 	if (context!='') t=t+'<div class="css_colour_chooser_context">'+context+'</div>';
 
-	set_inner_html(p,t,true);
+	setInnerHTML(p,t,true);
 }
 

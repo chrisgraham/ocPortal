@@ -66,7 +66,7 @@ class Hook_awards_forum
 		if ($row['id']!=db_get_first_id()) $view_map['id']=$row['id'];
 		$url=build_url($view_map,get_module_zone('forumview'));
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['f_name'],'SUMMARY'=>get_translated_tempcode($row['f_description']),'URL'=>$url));
+		return put_in_standard_box(do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>get_translated_tempcode($row['f_description']),'URL'=>$url)),$row['f_name']);
 	}
 
 }

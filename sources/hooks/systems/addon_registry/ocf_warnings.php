@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_ocf_warnings
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_ocf_warnings
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_ocf_warnings
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/addon_registry/ocf_warnings.php',
 			'site/pages/modules/warnings.php',
 			'OCF_SAVED_WARNING.tpl',
@@ -79,22 +81,22 @@ class Hook_addon_registry_ocf_warnings
 			'lang/EN/ocf_warnings.ini',
 			'site/warnings.php',
 			'sources/hooks/systems/profiles_tabs/warnings.php',
-			'OCF_MEMBER_PROFILE_WARNINGS.tpl'
+			'OCF_MEMBER_PROFILE_WARNINGS.tpl',
 		);
 	}
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'OCF_SAVED_WARNING.tpl'=>'ocf_saved_warning',
-			'OCF_WARNING_HISTORY_SCREEN.tpl'=>'administrative__ocf_warning_history_screen',
-			'OCF_MEMBER_PROFILE_WARNINGS.tpl'=>'ocf_member_profile_warnings'
-		);
+				'OCF_SAVED_WARNING.tpl'=>'ocf_saved_warning',
+				'OCF_WARNING_HISTORY_SCREEN.tpl'=>'administrative__ocf_warning_history_screen',
+				'OCF_MEMBER_PROFILE_WARNINGS.tpl'=>'ocf_member_profile_warnings',
+				);
 	}
 
 	/**
@@ -106,12 +108,12 @@ class Hook_addon_registry_ocf_warnings
 	 */
 	function tpl_preview__ocf_member_profile_warnings()
 	{
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS', array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS',array(
 			'MEMBER_ID'=>placeholder_id(),
-			'WARNINGS'=>lorem_phrase()
+			'WARNINGS'=>lorem_phrase(),
 		));
 		return array(
-			lorem_globalise($tab_content, NULL, '', true)
+			lorem_globalise($tab_content,NULL,'',true),
 		);
 	}
 
@@ -126,12 +128,14 @@ class Hook_addon_registry_ocf_warnings
 	{
 		require_css('ocf');
 		return array(
-			lorem_globalise(do_lorem_template('OCF_SAVED_WARNING', array(
-				'MESSAGE'=>lorem_phrase(),
-				'EXPLANATION'=>lorem_phrase(),
-				'TITLE'=>lorem_word(),
-				'DELETE_LINK'=>placeholder_link()
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('OCF_SAVED_WARNING',array(
+					'MESSAGE'=>lorem_phrase(),
+					'EXPLANATION'=>lorem_phrase(),
+					'TITLE'=>lorem_word(),
+					'DELETE_LINK'=>placeholder_link(),
+						)
+			),NULL,'',true),
 		);
 	}
 
@@ -147,14 +151,16 @@ class Hook_addon_registry_ocf_warnings
 		require_lang('ocf');
 		require_css('ocf');
 		return array(
-			lorem_globalise(do_lorem_template('OCF_WARNING_HISTORY_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'MEMBER_ID'=>placeholder_id(),
-				'EDIT_PROFILE_URL'=>placeholder_url(),
-				'VIEW_PROFILE_URL'=>placeholder_url(),
-				'ADD_WARNING_URL'=>placeholder_url(),
-				'RESULTS_TABLE'=>placeholder_table()
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('OCF_WARNING_HISTORY_SCREEN',array(
+					'TITLE'=>lorem_title(),
+					'MEMBER_ID'=>placeholder_id(),
+					'EDIT_PROFILE_URL'=>placeholder_url(),
+					'VIEW_PROFILE_URL'=>placeholder_url(),
+					'ADD_WARNING_URL'=>placeholder_url(),
+					'RESULTS_TABLE'=>placeholder_table(),
+						)
+			),NULL,'',true),
 		);
 	}
 

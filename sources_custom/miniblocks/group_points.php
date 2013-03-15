@@ -18,7 +18,7 @@ $fields=new ocp_tempcode();
 
 asort($group_points);
 
-echo '<div class="wide_table_wrap"><table class="results_table wide_table spaced_table"><thead></thead><tbody><tr><th>Usergroup</th><th>One-off point bonus</th><th>Monthly points</th><th>'.escape_html($username).' in this group?</th></tr>';
+echo '<div class="wide_table_wrap"><table class="solidborder wide_table spaced_table"><thead></thead><tbody><tr><th>Usergroup</th><th>One-off point bonus</th><th>Monthly points</th><th>'.escape_html($username).' in this group?</th></tr>';
 
 $groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true,true);
 

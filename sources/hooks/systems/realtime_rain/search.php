@@ -50,7 +50,7 @@ class Hook_realtime_rain_search
 					'TIMESTAMP'=>strval($timestamp),
 					'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
 					'TICKER_TEXT'=>NULL,
-					'URL'=>build_url(array('page'=>'search','type'=>'results','content'=>$row['s_primary']),'_SEARCH'),
+					'URL'=>build_url(array('page'=>'search','type'=>'misc','content'=>$row['s_primary']),'_SEARCH'),
 					'IS_POSITIVE'=>false,
 					'IS_NEGATIVE'=>false,
 

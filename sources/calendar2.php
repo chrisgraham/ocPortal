@@ -30,18 +30,14 @@
  * @param  integer			The priority
  * @range  1 5
  * @param  BINARY				Whether it is a public event
- * @param  integer			The year the event starts at
- * @param  integer			The month the event starts at
- * @param  integer			The day the event starts at
- * @param  ID_TEXT			In-month specification type for start date
- * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer			The hour the event starts at
- * @param  integer			The minute the event starts at
+ * @param  ?integer			The year the event starts at (NULL: default)
+ * @param  ?integer			The month the event starts at (NULL: default)
+ * @param  ?integer			The day the event starts at (NULL: default)
+ * @param  ?integer			The hour the event starts at (NULL: default)
+ * @param  ?integer			The minute the event starts at (NULL: default)
  * @param  ?integer			The year the event ends at (NULL: not a multi day event)
  * @param  ?integer			The month the event ends at (NULL: not a multi day event)
  * @param  ?integer			The day the event ends at (NULL: not a multi day event)
- * @param  ID_TEXT			In-month specification type for end date
- * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
  * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
@@ -58,7 +54,7 @@
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
@@ -82,13 +78,11 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'e_start_year'=>$start_year,
 		'e_start_month'=>$start_month,
 		'e_start_day'=>$start_day,
-		'e_start_monthly_spec_type'=>$start_monthly_spec_type,
 		'e_start_hour'=>$start_hour,
 		'e_start_minute'=>$start_minute,
 		'e_end_year'=>$end_year,
 		'e_end_month'=>$end_month,
 		'e_end_day'=>$end_day,
-		'e_end_monthly_spec_type'=>$end_monthly_spec_type,
 		'e_end_hour'=>$end_hour,
 		'e_end_minute'=>$end_minute,
 		'e_timezone'=>$timezone,
@@ -141,18 +135,14 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  integer			The priority
  * @range  1 5
  * @param  BINARY				Whether it is a public event
- * @param  integer			The year the event starts at
- * @param  integer			The month the event starts at
- * @param  integer			The day the event starts at
- * @param  ID_TEXT			In-month specification type for start date
- * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer			The hour the event starts at
- * @param  integer			The minute the event starts at
+ * @param  ?integer			The year the event starts at (NULL: default)
+ * @param  ?integer			The month the event starts at (NULL: default)
+ * @param  ?integer			The day the event starts at (NULL: default)
+ * @param  ?integer			The hour the event starts at (NULL: default)
+ * @param  ?integer			The minute the event starts at (NULL: default)
  * @param  ?integer			The year the event ends at (NULL: not a multi day event)
  * @param  ?integer			The month the event ends at (NULL: not a multi day event)
  * @param  ?integer			The day the event ends at (NULL: not a multi day event)
- * @param  ID_TEXT			In-month specification type for end date
- * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
  * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
@@ -165,7 +155,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  BINARY				Whether the download may be trackbacked
  * @param  LONG_TEXT			Hidden notes pertaining to the download
  */
-function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
+function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
 {
 	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter'),array('id'=>$id),'',1);
 	$myrow=$myrows[0];
@@ -198,13 +188,11 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'e_start_year'=>$start_year,
 		'e_start_month'=>$start_month,
 		'e_start_day'=>$start_day,
-		'e_start_monthly_spec_type'=>$start_monthly_spec_type,
 		'e_start_hour'=>$start_hour,
 		'e_start_minute'=>$start_minute,
 		'e_end_year'=>$end_year,
 		'e_end_month'=>$end_month,
 		'e_end_day'=>$end_day,
-		'e_end_monthly_spec_type'=>$end_monthly_spec_type,
 		'e_end_hour'=>$end_hour,
 		'e_end_minute'=>$end_minute,
 		'e_timezone'=>$timezone,

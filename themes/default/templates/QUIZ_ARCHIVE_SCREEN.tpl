@@ -1,6 +1,6 @@
 {TITLE}
 
-<div itemprop="significantLinks">
+<div{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
 	{+START,IF_NON_EMPTY,{CONTENT_TESTS}}
 		<h2>{!TESTS}</h2>
 

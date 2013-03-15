@@ -115,6 +115,8 @@ class Block_side_stats
 	{
 		unset($map);
 
+		require_css('side_blocks');
+
 		$full_tpl=new ocp_tempcode();
 
 		// Inbuilt

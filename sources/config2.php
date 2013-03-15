@@ -128,6 +128,6 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 		log_it('CONFIGURATION',$name,$value);
 	}
 
-	if (function_exists('persistent_cache_delete'))
-		persistent_cache_delete('OPTIONS');
+	if (function_exists('persistant_cache_delete'))
+		persistant_cache_delete('OPTIONS');
 }

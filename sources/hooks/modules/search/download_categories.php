@@ -118,7 +118,7 @@ class Hook_search_download_categories
 	function render($row)
 	{
 		require_code('downloads');
-		return render_download_category_box($row);
+		return get_download_category_html($row);
 	}
 
 }

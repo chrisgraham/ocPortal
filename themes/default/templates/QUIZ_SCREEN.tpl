@@ -2,39 +2,40 @@
 
 {WARNING_DETAILS}
 
-{$REQUIRE_CSS,quizzes}
+{$CSS_INCLUDE,quizzes}
 
 {+START,IF_NON_EMPTY,{START_TEXT}}
-	<div class="box box___quiz_screen"><div class="box_inner">
-		<div itemprop="description">
+	{+START,BOX,,,curved}
+		<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
 			{START_TEXT}
 		</div>
-	</div></div>
+	{+END}
 
 	<hr class="spaced_rule" />
 {+END}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,quiz,{ID}}}
-{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 {+START,IF_NON_EMPTY,{TIMEOUT}}
 	<script type="text/javascript">// <![CDATA[
 		setTimeout(function() { window.fauxmodal_alert('{!OUT_OF_TIME;;}',function() { document.getElementById('survey').submit(); } ); }, {TIMEOUT%}*1000);
-		setInterval(function() { var st=document.getElementById('survey_timer'); var new_value=window.parseInt(get_inner_html(st))-1; if (new_value>=0) set_inner_html(st,new_value); }, 1000);
+		setInterval(function() { var st=document.getElementById('survey_timer'); var new_value=window.parseInt(getInnerHTML(st))-1; if (new_value>=0) setInnerHTML(st,new_value); }, 1000);
 	//]]></script>
 
 	<p>
 		{!TIME_REMAINING,<strong><span id="survey_timer">{TIMEOUT*}</span></strong>}
 	</p>
+	<br />
 {+END}
 
-<form title="{!SAVE}" class="quiz_form" method="post" onsubmit="return check_form(this);" action="{URL*}">
+<form title="{!SAVE}" id="survey" method="post" onsubmit="return checkForm(this);" action="{URL*}">
 	<div>
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
-					<col class="quiz_field_name_column" />
-					<col class="quiz_field_input_column" />
+					<col style="width: 280px" />
+					<col style="width: 100%" />
 				</colgroup>
 			{+END}
 
@@ -50,9 +51,16 @@
 </form>
 
 <script type="text/javascript">// <![CDATA[
-	var e=get_elements_by_class_name(document.getElementById('survey'),'field_input');
-	for (var i=0;i<e.length;i++)
-		set_up_change_monitor(e[i].childNodes[0]);
+	addEventListenerAbstract(window,'load',function () {
+		if (typeof window.setUpChangeMonitor!='undefined')
+		{
+			var e=get_elements_by_class_name(document.getElementById('survey'),'field_input');
+			for (var i=0;i<e.length;i++)
+			{
+				setUpChangeMonitor(e[i]);
+			}
+		}
+	} );
 //]]></script>
 
 {+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}

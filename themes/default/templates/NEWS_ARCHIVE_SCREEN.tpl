@@ -2,30 +2,27 @@
 
 {+START,IF_PASSED,BLOGGER}
 	{+START,IF,{$OCF}}
-		<div class="box box___news_archive_screen"><div class="box_inner">
-			<h2>{!WELCOME_BLOG_OF,{$USERNAME*,{BLOGGER}},{$MEMBER_PROFILE_URL*,{BLOGGER}}}</h2>
-
+		{+START,BOX,{!WELCOME_BLOG_OF,{$USERNAME*,{BLOGGER}},{$MEMBER_PROFILE_LINK*,{BLOGGER}}},,med}
 			{$OCF_MEMBER_HTML,{BLOGGER}}
-		</div></div>
+		{+END}
+		<br />
 
 		<h2>{!BLOGS_POSTS}</h2>
 	{+END}
 {+END}
 
-<div class="float_surrounder" itemprop="significantLinks">
-	{+START,SET,commented_out}
-		<div class="chicklets">
-			{+START,INCLUDE,NEWS_CHICKLETS}RSS_URL={$FIND_SCRIPT*,backend}{+END}
-		</div>
-	{+END}
+<div class="float_surrounder"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+	<!--<div class="chicklets">
+		{+START,INCLUDE,NEWS_CHICKLETS}RSS_URL={$FIND_SCRIPT*,backend}{+END}
+	</div>-->
 
-	{$,<div class="chicklets_spacer">}
+	<!--<div class="chicklets_spacer">-->
 		{CONTENT}
 
 		{+START,IF_EMPTY,{CONTENT}}
 			<p class="nothing_here">{!NO_ENTRIES}</p>
 		{+END}
-	{$,</div>}
+	<!--</div>-->
 </div>
 
 {BROWSE}

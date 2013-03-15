@@ -144,8 +144,6 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 				if (($page=='forums') && (substr($page_type,0,7)=='modules') && ((get_forum_type()=='ocf') || (get_forum_type()=='none'))) continue;
 				if (($page=='join') && (substr($page_type,0,7)=='modules') && (!is_guest($member_id))) continue;
 
-				if (get_value('disable_sitemap_for__'.$page)==='1') continue;
-
 				if (has_page_access($member_id,$page,$zone))
 				{
 					// Page level
@@ -184,7 +182,7 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 						$add_date=NULL;
 						$edit_date=NULL;
 						$pagelink=($zone_default_page==$page)?$zone:($zone.':'.$page);
-						$title=titleify($page);
+						$title=ucwords(str_replace('_',' ',$page));
 						if (substr($page_type,0,7)=='comcode')
 						{
 							foreach ($comcode_page_rows as $page_row)
@@ -257,7 +255,7 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 						}
 						//ksort($_entrypoints);
 						$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
-						if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.str_replace('#','\#',preg_quote($zone)).'_#','',preg_replace('#^'.str_replace('#','\#',preg_quote(str_replace('zone','',$zone))).'_#','',$page))));
+						if (is_null($title)) $title=ucwords(str_replace('_',' ',preg_replace('#^ocf\_#','',preg_replace('#^'.str_replace('#','\#',preg_quote($zone)).'_#','',preg_replace('#^'.str_replace('#','\#',preg_quote(str_replace('zone','',$zone))).'_#','',$page)))));
 						if ((count($_entrypoints)>1) && (!$done_top))
 						{
 							// Callback
@@ -316,7 +314,7 @@ function sitemaps_xml_initialise($file_path)
 		}
 	}
 
-	// Load ALL guest permissions (for efficiency)
+	// Load ALL guest permissions (for effiency)
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	load_up_all_self_page_permissions($guest_id);
 	load_up_all_module_category_permissions($guest_id);

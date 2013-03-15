@@ -1,9 +1,9 @@
-{+START,IF,{$GET,gallery_carousel}}
+{+START,IF,{$EQ,{_GUID},13134830e1ebea158ab44885eeec0953,a0ff010ae7fd1f7b3341993072ed23cf}}
 	{ENTRY}
 {+END}
 
-{+START,IF,{$NOT,{$GET,gallery_carousel}}}
-	<div class="gallery_grid_cell">
+{+START,IF,{$NEQ,{_GUID},13134830e1ebea158ab44885eeec0953,a0ff010ae7fd1f7b3341993072ed23cf}}
+	<div class="gallery_media_expose">
 		{ENTRY}
 	</div>
 {+END}

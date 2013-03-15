@@ -47,8 +47,6 @@ class Block_main_countdown
 	 */
 	function run($map)
 	{
-		require_css('counting_blocks');
-
 		require_lang('dates');
 
 		$precision=array_key_exists('precision',$map)?intval($map['precision']):4;
@@ -61,7 +59,7 @@ class Block_main_countdown
 		if (!is_numeric($target))
 		{
 			$target=strtotime($target);
-			if ($target===false) return paragraph(do_lang_tempcode('OUT_OF_BOUNDS_TIME'),'','red_alert');
+			if ($target===false) return paragraph(do_lang_tempcode('OUT_OF_BOUNDS_TIME'),'','error_marker');
 		} else
 		{
 			$target=intval($target); // Let's accept either a timestamp or human strings that PHP's 'strtotime' can understand
@@ -134,7 +132,7 @@ class Block_main_countdown
 				break;
 		}
 
-		return do_template('BLOCK_MAIN_COUNTDOWN',array('TAILING'=>strval($tailing),'LANG'=>$lang,'POSITIVE'=>$positive,'PRECISION'=>strval($precision),'MILLISECONDS_FOR_PRECISION'=>strval($milliseconds_for_precision),'DISTANCE_FOR_PRECISION'=>strval($distance_for_precision)));
+		return do_template('MAIN_COUNTDOWN',array('TAILING'=>strval($tailing),'LANG'=>$lang,'POSITIVE'=>$positive,'PRECISION'=>strval($precision),'MILLISECONDS_FOR_PRECISION'=>strval($milliseconds_for_precision),'DISTANCE_FOR_PRECISION'=>strval($distance_for_precision)));
 	}
 
 }

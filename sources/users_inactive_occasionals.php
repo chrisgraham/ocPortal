@@ -103,8 +103,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>$invisible?1:0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
-		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) // Better to have no session than a 5+ second loading page
-			$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
+		$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
 
 		$SESSION_CACHE[$new_session]=$new_session_row;
 
@@ -116,23 +115,20 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 		$new_session_row=array('the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(either_param('type',''),0,80),'the_id'=>substr(either_param('id',''),0,80),'last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
 		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=$session_confirmed) || ($prior_session_row['ip']!=$new_session_row['ip']);
 		if ($big_change)
-		{
-			if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) // Better to have wrong session than a 5+ second loading page
-				$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session),'',1,NULL,false,true);
-		}
+			$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session),'',1,NULL,false,true);
 
 		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$new_session_row);
 	}
 
-	if ($big_change) // Only update the persistent cache for non-trivial changes.
+	if ($big_change) // Only update the persistant cache for non-trivial changes.
 	{
-		if (get_value('session_prudence')!=='1') // With session prudence we don't store all these in persistent cache due to the size of it all. So only re-save if that's not on.
-			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+		if (get_value('session_prudence')!=='1') // With session prudence we don't store all these in persistant cache due to the size of it all. So only re-save if that's not on.
+			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 
 	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it
 
-	// New sessions=Login points
+	// New sessions = Login points
 	if ((!is_null($member)) && (addon_installed('points')) && (addon_installed('stats')) && (!is_guest($member)))
 	{
 		$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
@@ -163,13 +159,9 @@ function create_session($member,$session_confirmed=0,$invisible=false)
  */
 function set_session_id($id,$guest_session=false)  // NB: Guests sessions can persist because they are more benign
 {
-	// If checking safe mode, can really get in a spin. Don't let it set a session cookie till we've completed startup properly.
-	global $CHECKING_SAFEMODE;
-	if (($CHECKING_SAFEMODE) && ($id==-1)) return;
-
 	// Save cookie
 	$timeout=$guest_session?(time()+60*60*max(1,intval(get_option('session_expiry_time')))):NULL;
-	/*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))
+	/*if (($GLOBALS['DEBUG_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))
 	{
 		$test=false;
 	} else*/

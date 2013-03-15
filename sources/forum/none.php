@@ -18,12 +18,9 @@
  * @package		core_forum_drivers
  */
 
-/**
- * Forum Driver.
- * @package		core_forum_drivers
- */
 class forum_driver_none extends forum_driver_base
 {
+
 	/**
 	 * Get the administration username for the site.
 	 *

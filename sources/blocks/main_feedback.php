@@ -69,7 +69,7 @@ class Block_main_feedback
 					$redirect=get_param('redirect',NULL);
 					if (!is_null($redirect))
 					{
-						$redirect_screen=redirect_screen(get_screen_title('_FEEDBACK'),$redirect,do_lang_tempcode('FEEDBACK_THANKYOU'));
+						$redirect_screen=redirect_screen(get_page_title('_FEEDBACK'),$redirect,do_lang_tempcode('FEEDBACK_THANKYOU'));
 
 						@ob_end_clean();
 						$echo=globalise($redirect_screen,NULL,'',true);

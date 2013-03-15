@@ -1,6 +1,6 @@
 {TITLE}
 
-{+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
+{+START,INCLUDE,handle_conflict_resolution}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
 {+END}
@@ -8,7 +8,14 @@
 {+START,IF_NON_EMPTY,{GIFTS}}
 	{$, Old table style
 		<div class="wide_table_wrap">
-			<table class="wide_table results_table autosized_table">
+			<table class="wide_table solidborder">
+				<colgroup>
+					<col width="100" />
+					<col width="100%" />
+					<col width="100" />
+					<col width="100" />
+				</colgroup>
+
 				<thead>
 					<tr style="border: 1px solid #ccc; background-color: #E3EAF6;">
 						<th colspan="2">{!GIFT}</th>
@@ -41,19 +48,21 @@
 
 	<p>{!CHOOSE_YOUR_GIFT}</p>
 
-	<div class="box box___pointstore_ocgifts_gifts"><div class="box_inner">
+	{+START,BOX}
 		{+START,LOOP,GIFTS}
-			<div style="float: left; margin: 15px" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{NAME*;^}.&lt;br /&gt;&lt;br /&gt;{!GIFT_POPULARITY*;^,{POPULARITY}}','auto');">
+			<div style="float: left; margin: 15px" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{NAME^;*}.&lt;br /&gt;&lt;br /&gt;{!GIFT_POPULARITY^;*,{POPULARITY}}','auto');">
 				<a href="{GIFT_URL*}"><img title="{NAME*}" src="{$THUMBNAIL*,{IMAGE_URL},80x80,,,,pad,both,#FFFFFF00}" /></a>
 
-				<p class="associated_links_block_group associated_link"><a title="{NAME*}" href="{GIFT_URL*}">{!_GIFT_PRICE,{PRICE*}}</a></p>
+				<p style="text-align: center" class="associated_details">[ <a title="{NAME*}" href="{GIFT_URL*}">{!_GIFT_PRICE,{PRICE*}}</a> ]</p>
 			</div>
 		{+END}
-	</div></div>
+	{+END}
+
+	<br />
 
 	<div class="float_surrounder">
 		<form style="float: left; margin-top: 3px" title="{!SORT_BY}" action="{$SELF_URL*,,,,category=<null>,start=0}" method="post">
-			<p>
+			<div class="inline">
 				<label for="category">{!CATEGORY}</label>
 				<select id="category" name="category">
 					<option value="">{!ALL_EM}</option>
@@ -63,11 +72,11 @@
 				</select>
 
 				<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!FILTER}" />
-			</p>
+			</div>
 		</form>
 
-		{+START,IF_NON_EMPTY,{PAGINATION}}
-			{PAGINATION}
+		{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
+			{RESULTS_BROWSER}
 		{+END}
 	</div>
 {+END}

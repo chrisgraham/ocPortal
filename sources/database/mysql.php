@@ -11,7 +11,6 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-
 /*EXTRA FUNCTIONS: mysql\_.+*/
 
 /**
@@ -24,7 +23,6 @@ require_code('database/shared/mysql');
 
 /**
  * Standard code module initialisation function.
- * @package		core_database_drivers
  */
 function init__database__mysql()
 {
@@ -34,17 +32,13 @@ function init__database__mysql()
 	$CACHE_DB=array();
 }
 
-/**
- * Database Driver.
- * @package		core_database_drivers
- */
 class Database_Static_mysql extends Database_super_mysql
 {
 
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
-	 * @param  boolean		Whether to create a persistent connection
+	 * @param  boolean		Whether to create a persistant connection
 	 * @param  string			The database name
 	 * @param  string			The database host (the server)
 	 * @param  string			The database connection username
@@ -83,7 +77,7 @@ class Database_Static_mysql extends Database_super_mysql
 		$db=$persistent?@mysql_pconnect($db_host,$db_user,$db_password):@mysql_connect($db_host,$db_user,$db_password);
 		if ($db===false)
 		{
-			$error='Could not connect to database-server ('.mysql_error().', '.(@strval($php_errormsg)).')';
+			$error='Could not connect to database-server ('.mysql_error().', '.escape_html(@strval($php_errormsg)).')';
 			if ($fail_ok)
 			{
 				echo $error.chr(10);
@@ -122,8 +116,7 @@ class Database_Static_mysql extends Database_super_mysql
 		}
 		@mysql_query('SET WAIT_TIMEOUT=28800',$db);
 		@mysql_query('SET SQL_BIG_SELECTS=1',$db);
-		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'',$db); else @mysql_query('SET sql_mode=\'MYSQL40\'',$db);
-		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
+		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=STRICT_ALL_TABLES',$db); else @mysql_query('SET sql_mode=MYSQL40',$db);
 
 		/*$mysql_version=mysql_get_server_info($db);
 		if (($mysql_version[0]=='3') && (!file_exists(get_file_base().'/old_mysql'))) exit('The mySQL version used is too old (Version '.$mysql_version.' used, whilst at least Version 4.0 is required)');*/
@@ -214,7 +207,7 @@ class Database_Static_mysql extends Database_super_mysql
 			if (!is_array($test_result)) return NULL;
 			if (intval($test_result[0]['Value'])<intval(strlen($query)*1.2))
 			{
-				/*@mysql_query('SET session max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); Does not work well, as MySQL server has gone away error will likely just happen instead */
+				//@mysql_query('SET @@max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); // Does not work
 
 				if ($get_insert_id) fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG',escape_html($query)));
 				return NULL;
@@ -258,7 +251,7 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 		}
 
-		if (($results!==true) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==false))
+		if (($results!==true) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}

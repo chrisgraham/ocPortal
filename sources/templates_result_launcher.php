@@ -34,7 +34,7 @@ function results_launcher($title,$page,$category_id,$max,$max_rows,$type,$max_pa
 {
 	if ($max<1) $max=1;
 
-	require_javascript('javascript_pagination');
+	require_javascript('javascript_results_browser');
 
 	$out=new ocp_tempcode();
 

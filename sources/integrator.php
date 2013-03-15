@@ -135,7 +135,7 @@ function reprocess_url($url,$operation_base_url)
 		global $SEO_TITLE;
 		$title=str_replace('&bull;','-',str_replace('&ndash;','-',str_replace('&mdash;','-',@html_entity_decode($matches[1],ENT_QUOTES,get_charset()))));
 		$SEO_TITLE=$title;
-		get_screen_title(trim($title),false);
+		get_page_title(trim($title),false);
 	}
 
 	// Better base?

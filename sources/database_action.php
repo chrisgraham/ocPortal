@@ -248,7 +248,7 @@ function add_config_option($human_name,$name,$type,$eval,$category,$group,$share
 	{
 		$GLOBALS['SITE_DB']->query_insert('config',$map); // From installer we want to know if there are errors in our install cycle
 	}
-	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
+	if (function_exists('persistant_cache_delete')) persistant_cache_delete('OPTIONS');
 	global $OPTIONS;
 	if ($OPTIONS==array()) // Installer might not have loaded any yet
 	{
@@ -282,7 +282,7 @@ function delete_config_option($name)
 		/*global $OPTIONS;  Don't do this, it will cause problems in some parts of the code
 		unset($OPTIONS[$name]);*/
 	}
-	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
+	if (function_exists('persistant_cache_delete')) persistant_cache_delete('OPTIONS');
 }
 
 /**

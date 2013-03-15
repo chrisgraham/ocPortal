@@ -4,166 +4,6 @@
 */
 
 /*
-This is ocPortal's main CSS file. It defines colours, re-used styles, and core styles for core functionality.
-
-The CSS is written to CSS3/HTML5 standards. Parts that are still considered experimental on some browsers are surrounded using the Tempcode 'BETA_CSS_PROPERTY' symbol, which automatically injects CSS prefixes for all major browsers.
-
-Most sizes are defined in 'em' units. 1em is roughly 10px, depending on font size. If a size is not defined in 'em' then it is probably due to it being dependent on the size of some related image.
-'em' units are great because they scale very well. If you reduce the font size, the spacings will reduce as well, in proportion.
-
-{!en_left} and {!en_right} usually resolve to left and right respectively. Right-to-left languages (commonly Arabic and Hebrew) will be the opposite. We only test with Left-to-right, but are likely to accept patches to fix any little glitches that may have developed over time.
-
-When editing theme CSS we recommend you comment out code you're removing and heavily comment your own changes - this will make it much easier for you to upgrade your theme to new versions. ocPortal minifies outputted CSS, so there is no performance penalty for doing this.
-*/
-
-/*
-=========================
-========Colours==========
-=========================
-*/
-
-/* Used to initiate equations (although running the Theme Wizard replaces these with what the user chooses - which is how it works) */
-{$THEME_WIZARD_COLOR,#94979d,seed,100% 94979D}
-{$THEME_WIZARD_COLOR,#ffffff,WB,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#000000,BW,100% 000000}
-/*Theme seed is: {$GET,seed}*/
-
-/* The fundamental website */
-{$THEME_WIZARD_COLOR,#e3eaf6,fixed_width_background,11% (seed sat_to 100) + 89% WB}
-{$THEME_WIZARD_COLOR,#8ba4ca,fixed_width_border,61% seed + 39% WB}
-{$THEME_WIZARD_COLOR,#ffffff,main_background,100% WB}
-{$THEME_WIZARD_COLOR,#ebebeb,main_2_background,92% WB + 8% BW}
-
-/* Header */
-{$THEME_WIZARD_COLOR,#e3e9f2,header_background,100% area_2_background}
-{$THEME_WIZARD_COLOR,#426aa9,navigation_background,100% seed}
-{$THEME_WIZARD_COLOR,#edf2f9,navigation_text,15% navigation_top + 85% WB}
-{$THEME_WIZARD_COLOR,#426aa9,navigation_message_text,100% seed}
-{$THEME_WIZARD_COLOR,#a5bde1,global_navigation_underline_current,75% navigation_top + 25% FFFFFF}
-{$THEME_WIZARD_COLOR,#ffffff,global_navigation_hover,100% WB}
-{$THEME_WIZARD_COLOR,#edf2f9,global_navigation_text,15% navigation_top + 85% WB}
-{$THEME_WIZARD_COLOR,#fbffc1,zone_jump_out_1_shadow,100% FBFFC1}
-{$THEME_WIZARD_COLOR,#ff4264,zone_jump_out_2_shadow,100% FF4264}
-
-/* Colours to mirror UI conventions (i.e. non-thematic) */
-{$THEME_WIZARD_COLOR,#000000,native_ui_foreground,100% 000000}
-{$THEME_WIZARD_COLOR,#ffffff,native_ui_background,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#feffcb,native_ui_active_background,100% FEFFCB}
-{$THEME_WIZARD_COLOR,#316AC5,native_ui_selected_background,100% 316AC5}
-{$THEME_WIZARD_COLOR,#ffffff,native_ui_selected_foreground,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#ffffff,native_ui_button_foreground,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#ff0000,native_ui_alertfield_background,100% FF0000}
-{$THEME_WIZARD_COLOR,#ffffff,native_ui_alertfield_foreground,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#888888,unfilled_input_text,100% 888888}
-{$THEME_WIZARD_COLOR,#888888,locked_input_field,100% 888888}
-{$THEME_WIZARD_COLOR,#94979d,comfortable_input_field_text,65% area_2_background + 35% WB}
-{$THEME_WIZARD_COLOR,#b5b5b5,tab_border,100% b5b5b5}
-{$THEME_WIZARD_COLOR,#008000,adwords_style_text,100% 008000} /* Google adwords style */
-{$THEME_WIZARD_COLOR,#ffffff,floating_section_background,100% WB}
-{$THEME_WIZARD_COLOR,#fffcc4,floating_alert_background,100% fffcc4}
-
-/* Colours to mirror human understandings (i.e. non-thematic) */
-{$THEME_WIZARD_COLOR,#ffffaa,yellow_highlight_background,100% #FFFFAA}
-{$THEME_WIZARD_COLOR,#ff8888,red_highlight_background,100% FF8888}
-{$THEME_WIZARD_COLOR,#ff8888,light_error_border,100% FF8888}
-{$THEME_WIZARD_COLOR,#fff2f2,light_error_background,95% WB + 5% FF0000}
-{$THEME_WIZARD_COLOR,#d91522,red_highlight_text,80% FF0000 + 20% seed}
-{$THEME_WIZARD_COLOR,#00aa00,green_highlight_text,100% 00AA00}
-{$THEME_WIZARD_COLOR,#ede2e4,required_background,60% (area_4_background hue_to 0) + 40% area_background}
-{$THEME_WIZARD_COLOR,#ebe6eb,required_2_background,40% (area_4_background hue_to 0) + 60% area_background}
-{$THEME_WIZARD_COLOR,#000000,dark_shadow,100% BW}
-
-/* For standard elements */
-{$THEME_WIZARD_COLOR,#325180,heading_text,76% seed + 24% BW}
-{$THEME_WIZARD_COLOR,#051225,a.hover,30% a.link + 70% BW}
-{$THEME_WIZARD_COLOR,#113871,a.visited,67% (seed sat_to 85) + 33% BW}
-{$THEME_WIZARD_COLOR,#123d7b,a.link,73% (seed sat_to 85) + 27% BW}
-{$THEME_WIZARD_COLOR,#bdcbe1,th_secondary_text,35% seed + 65% WB}
-{$THEME_WIZARD_COLOR,#a2b6d5,hr,60% area_background + 40% seed}
-{$THEME_WIZARD_COLOR,#325180,divider_line,76% seed + 24% BW}
-
-/* Borders */
-{$THEME_WIZARD_COLOR,#6b81a1,standard_border,95% (seed sat_to 33) + 5% BW}
-{$THEME_WIZARD_COLOR,#4b5a71,dark_border,70% standard_border + 30% BW}
-{$THEME_WIZARD_COLOR,#c1cee3,pale_border,33% seed + 67% WB}
-
-/* Backgrounds (quiet a variety, as we need to be able to stack them, to have both hover and active effects, to have zebra striping, and various other levels of perceived focus) */
-{$THEME_WIZARD_COLOR,#eaeff6,area_background,11% seed + 89% WB}
-{$THEME_WIZARD_COLOR,#e3e9f2,area_2_background,15% seed + 85% WB}
-{$THEME_WIZARD_COLOR,#eef2f7,area_3_background,60% area_2_background + 40% WB}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_4_background,20% seed + 80% WB}
-{$THEME_WIZARD_COLOR,#f4f4f4,area_5_background,3% seed + 97% WB}
-{$THEME_WIZARD_COLOR,#f2f5f9,area_faded_background,80% area_background + 20% WB}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_zebra_background,20% seed + 80% WB}
-{$THEME_WIZARD_COLOR,#e6d8df,area_hover_background,92% (area_background hue_to 92) + 8% BW}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_hover_2_background,20% seed + 80% WB}
-{$THEME_WIZARD_COLOR,#c2d1e5,area_hover_3_background,93% (area_background sat_to 15) + 7% BW}
-{$THEME_WIZARD_COLOR,#c2d1e5,area_current_background,93% (area_background sat_to 15) + 7% BW}
-{$THEME_WIZARD_COLOR,#dce2eb,point_of_interest_background,97% area_2_background + 2% BW}
-{$THEME_WIZARD_COLOR,#6b81a1,footer_background,95% (seed sat_to 33) + 5% BW}
-{$THEME_WIZARD_COLOR,#607490,footer_2_background,85% (seed sat_to 33) + 15% BW}
-/* Backgrounds, employing color wheel theory */
-{$THEME_WIZARD_COLOR,#d9e1ee,area_highlight_background,20% seed + 80% WB}
-{$THEME_WIZARD_COLOR,#d9ecee,area_highlight_left_complement_background,20% (seed hue_add -21) + 80% WB}
-{$THEME_WIZARD_COLOR,#dbd9ee,area_highlight_right_complement_background,20% (seed hue_add +21) + 80% WB}
-{$THEME_WIZARD_COLOR,#eee6d9,area_highlight_complement_background,20% (seed hue_add 128) + 80% WB}
-
-/* Text */
-{$THEME_WIZARD_COLOR,#0d1522,slightly_seeded_text,20% seed + 80% BW}
-{$THEME_WIZARD_COLOR,#3d434c,slightly_seeded_gray_text,20% WB + 65% BW + 15% seed}
-{$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% BW}
-{$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% BW}
-{$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% BW}
-{$THEME_WIZARD_COLOR,#0a1019,area_2_link,15% seed + 85% BW}
-{$THEME_WIZARD_COLOR,#1a2a44,area_2_link_hover,40% seed + 60% BW}
-{$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% WB}
-/* Text, employing color wheel theory */
-{$THEME_WIZARD_COLOR,#214f55,slightly_seeded_left_complement_text,50% (seed hue_add -21) + 50% BW}
-{$THEME_WIZARD_COLOR,#262155,slightly_seeded_right_complement_text,50% (seed hue_add +21) + 50% BW}
-{$THEME_WIZARD_COLOR,#554121,slightly_seeded_complement_text,50% (seed hue_add 128) + 50% BW}
-
-/* Special colour for box titles */
-{$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
-{$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
-
-/* Special colour for code/quote boxes */
-{$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% WB}
-{$THEME_WIZARD_COLOR,#3f3f3f,code_text,25% code_background + 85% BW}
-{$THEME_WIZARD_COLOR,#fafbfd,code_background,25% area_background + 75% WB}
-{$THEME_WIZARD_COLOR,#7f9ac5,code_border,68% seed + 32% WB}
-
-/* Drop down menus should look 'above' the site */
-{$THEME_WIZARD_COLOR,#c1cee3,dropdown_menu_background,33% seed + 67% WB}
-{$THEME_WIZARD_COLOR,#d9e1ee,dropdown_menu_text,20% seed + 80% WB}
-
-/* Global-level messages should stand out compared to other styling */
-{$THEME_WIZARD_COLOR,#ebe773,message_border,100% EBE773} /* Intentionally coloured on all themes */
-{$THEME_WIZARD_COLOR,#4b5a71,message_highlighted_part,70% standard_border + 30% BW}
-
-/* Footer */
-{$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% WB}
-{$THEME_WIZARD_COLOR,#ffffff,footer_text,100% WB}
-{$THEME_WIZARD_COLOR,#dbe6f7,inverted_text,35% footer_tinting + 65% WB}
-
-/* Used for image generation */
-{$THEME_WIZARD_COLOR,#e8edf6,washed_out,10% (seed sat_to 85) + 90% WB}
-{$THEME_WIZARD_COLOR,#5a85c5,lgrad,67% (seed sat_to 95) + 33% FFFFFF} /* We always want the light source coming from the top */
-{$THEME_WIZARD_COLOR,#345495,dgrad,95% (seed sat_to 65) + 5% 000000} /* We always want the light source coming from the top */
-{$THEME_WIZARD_COLOR,#5477bd,ltgrad,67% (seed sat_to 135) + 33% FFFFFF}  /* We always want the light source coming from the top */
-{$THEME_WIZARD_COLOR,#707c95,dtgrad,95% (seed sat_to 25) + 5% 000000} /* We always want the shadows at the bottom */
-{$THEME_WIZARD_COLOR,#e1e2e3,comcode_quote_left,48% comcode_quote_right + 52% WB}
-{$THEME_WIZARD_COLOR,#bfc1c4,comcode_quote_right,100% code_title_background}
-{$THEME_WIZARD_COLOR,#0e2a63,a.link__dark,63% (seed sat_to 85) + 37% BW}
-{$THEME_WIZARD_COLOR,#030a17,a.hover__dark,20% a.link + 80% BW}
-{$THEME_WIZARD_COLOR,#707377,special_borderer,76% seed + 24% BW}
-{$THEME_WIZARD_COLOR,#0a1e47,special_middle,45% (seed sat_to 85) + 65% BW}
-{$THEME_WIZARD_COLOR,#597bbf,ocfpostindicator,65% (seed sat_to 100) + 35% WB}
-{$THEME_WIZARD_COLOR,#597bf7,ocfredirectindicator,65% (seed sat_to 100) + 35% WB + 000038 - 061600}
-{$THEME_WIZARD_COLOR,#93a9d5,navigation_peak,90% navigation_top + 10% WB}
-{$THEME_WIZARD_COLOR,#869fd0,navigation_top,48% (seed sat_to 98) + 52% FFFFFF}
-{$THEME_WIZARD_COLOR,#2d5098,navigation_bot,97% (seed sat_to 71) + 3% 000000}
-
-/*
 =========================
 ===Overridden Elements===
 =========================
@@ -171,140 +11,149 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 
 html, body {
 	border: 0;
+	{+START,IF,{$MOBILE}}
+		word-wrap: break-word;
+	{+END}
 }
 
 body, textarea, input, td, th {
-	/* 'Open Sans' is a Google font, and only will be enabled if uncommented in HTML_HEAD.tpl -- so normally it is Segoe UI (Windows, newer version of Tahoma) or Tahoma that is active (available on Windows and Mac since Leopard) or a similar humanist sans-serif font */
-	font-family: 'Open Sans', 'Segoe UI', Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	font-family: 'Verdana', 'Arial', 'Helvetica', sans-serif;
 }
 
 tt, kbd, samp {
 	font-weight: bold;
-	font-size: 1.25em;
 }
 
-abbr, acronym {
+abbr,acronym {
 	border-bottom: 1px dotted; /* For Safari, which does not have it by default */
 }
 
-/* Give all browsers a 'q' tag with smart quotes */
-q:before {
-	content: "\201c";
-}
-q:after {
-	content: "\201d";
-}
+{+START,IF,{$VALUE_OPTION,html5}}
+	/* Reapply default styles non-HTML5-aware browsers */
+	aside,footer,header,nav,hgroup,article {
+		display: block;
+	}
+{+END}
 
-/* Re-apply default styles non-HTML5-aware browsers */
-aside, header, footer, nav, hgroup, article, section, figure {
-	display: block;
-}
-
-textarea, input, code {
+textarea, input {
 	font-size: 1em;
 }
 
-/* Our little 'typing' effect */
 input[type="text"]:focus, input[type="password"]:focus {
 	background: url('{$IMG;,keyboard}') right center no-repeat white;
 }
 
-/* Normally a browser default, but gets inherited on some phones */
-input[type="text"], input[type="password"], input[type="color"], input[type="email"], input[type="number"], input[type="range"], input[type="search"], input[type="tel"], input[type="url"], textarea, select {
-	background-color: {$GET,native_ui_background};
-	color: {$GET,native_ui_foreground};
+input[type="text"],input[type="password"],input[type="color"],input[type="email"],input[type="number"],input[type="range"],input[type="search"],input[type="tel"],input[type="url"],textarea,select { /* Normally a browser default, but gets inherited on some phones */
+	background: white;
 }
 
-a, .button_hyperlink {
-	color: {$GET,a.link};
+a:link, a:visited, a:hover, a:active {
+	text-decoration: underline;
+}
+a:link, .buttonhyperlink {
+	color: #123d7b; /* {$,a.link, 73% (seed sat_to 85) + 27% !W/B} */
+	-webkit-transition: color 1s linear;
+	-moz-transition: color 1s linear;
+	-o-transition: color 1s linear;
 }
 a:visited {
-	color: {$GET,a.visited};
+	color: #113871; /* {$,wizard, 67% (seed sat_to 85) + 33% !W/B} */
+	-webkit-transition: color 1s linear;
+	-moz-transition: color 1s linear;
+	-o-transition: color 1s linear;
 }
-a:hover, .button_hyperlink:hover {
-	color: {$GET,a.hover};
+a:hover, .buttonhyperlink:hover {
+	-webkit-transition: color 1s linear;
+	-moz-transition: color 1s linear;
+	-o-transition: color 1s linear;
+	color: #051225; /* {$,a.hover, 30% a.link + 70% !W/B } */
 }
 
-h1, h2, h3 {
-	font-weight: normal;
-	color: {$GET,heading_text};
-	border-bottom: 1px solid {$GET,pale_border};
-}
-h1 {
-	font-size: 1.6em;
-	margin-top: 0.27em; /* Consistency with boxes (so gap between header and content is consistent), but rationalised against higher em font size */
-}
-h2 {
-	font-size: 1.3em;
-}
-h3 {
-	font-size: 1.1em;
-}
-h3 a, h3 a:hover {
-	text-decoration: none;
-}
-h4 {
+code {
 	font-size: 1em;
-	font-weight: bold;
 }
+
 /* An iframe screen */
 .opens_below h1 {
 	display: none;
 }
 
-td, th {
+h1 {
+	font-weight: normal;
+	font-family: "Georgia", "Times New Roman", "Times", serif;
+	font-size: 1.9em;
+	color: #325180; /* {$,wizard, 76% seed + 24% !W/B} */
+	border-bottom: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+h2 {
+	font-size: 1.3em;
+	color: #325180; /* {$,wizard, 76% seed + 24% !W/B} */
+	border-bottom: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	font-weight: normal;
+	margin-top: 1em;
+}
+
+h3 {
+	font-size: 1.1em;
+	color: #325180; /* {$,wizard, 76% seed + 24% !W/B} */
+	border-bottom: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	font-weight: normal;
+}
+
+h3 a:link,
+h3 a:active,
+h3 a:visited,
+h3 a:hover {
+	text-decoration: none;
+}
+
+h4 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+table {
 	vertical-align: top;
-	padding: 0.25em;
+	font-size: 1em;
 }
-th>p:first-child, td>p:first-child, th>h2:first-child, td>h3:first-child {
-	margin-top: 0;
+
+td, table th.de_th {
+	vertical-align: top;
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	font-size: 1em;
+	font-weight: normal;
 }
-th>p:last-child, td>p:last-child {
-	margin-bottom: 0;
-}
+
 th, .fake_th {
-	background-color: {$GET,box_title_background};
-	color: {$GET,box_title_text};
+	vertical-align: top;
+	background-color: #a2b6d5; /* {$,th.bgcolor, 60% sb_color + 40% seed} */
+	font-size: 0.85em;
+	color: #313740; /* {$,wizard, 30% th.bgcolor + 70% !W/B} */
 	font-weight: bold;
 	text-align: center;
 }
-th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
-	color: {$GET,box_title_text};
-}
-thead>tr>th {
-	background-color: {$GET,box_title_background};
-	background-repeat: repeat-x;
-}
-/* .de_th makes a th look like a td, yet allows us to use correct markup */
-td, th.de_th {
-	color: {$GET,slightly_seeded_text};
-	font-weight: normal;
+
+.de_th { /* {$,Allows structurally accurate but visually non-interfering markup}  */
 	text-align: {!en_left};
+	background-color: transparent;
 	font-weight: normal;
 	border: 0;
 }
-th.de_th {
-	background-color: transparent;
-	background-image: none;
-}
-th.de_th a, th.de_th a:hover, th.de_th a:visited {
-	color: {$GET,slightly_seeded_text};
+
+.de_th a {
+	font-weight: normal;
 }
 
 hr {
 	height: 0;
 	border: 0;
-	border-bottom: 2px dotted {$GET,hr};
-	text-align: left; /* Fixes difference with Opera */
+	border-bottom: 2px dotted #a2b6d5; /* {$,wizard, 60% sb_color + 40% seed} */
 }
 
 img {
 	display: inline;
 	border: 0;
-}
-
-blockquote {
-	margin: 1em 0;
 }
 
 iframe {
@@ -313,119 +162,118 @@ iframe {
 	border: 0;
 }
 
+hr { /* Fixes difference with Opera */
+	text-align: left;
+}
+
 /*input[type="text"],textarea {  So Comcode can be typed
 	unicode-bidi: bidi-override;
 	direction: ltr;
 }*/
+
 #htmlarea input[type="text"], #htmlarea textarea {
 	unicode-bidi: normal;
 	direction: {!dir};
+}
+
+form { /* For IE6 */
+	margin-bottom: 0;
 }
 
 {+START,IF,{$MOBILE}}
 	select {
 		max-width: 100px;
 	}
-
-	/* On mobiles we want maximum fluidity */
-
-	table, table.do_next_section {
-		table-layout: auto !important;
-
-		/* Allows wrapping */
-		overflow-x: visible !important;
-		overflow-y: visible !important;
-	}
-	col {
-		width: auto !important;
-	}
-	* {
-		white-space: normal !important;
-		{$BETA_CSS_PROPERTY,word-wrap: break-word !important;}
-	}
 {+END}
-
-/* Cool effect to change how text selection looks; not valid CSS, but is safe */
-::selection {
-	background: {$GET,yellow_highlight_background};
-}
 
 /*
 =========================
-======Global Layout======
+=====Global interface====
 =========================
 */
 
-/* Consider .website_body as 'body': it is just we cannot put our styles directly on body because sometimes this gets used in things we should not mess with such as the WYSIWYG editors frame (which is #htmlarea) and e-mails */
-body.website_body {
-	padding: 0 !important;
+/* {$,washed_out, 10% (seed sat_to 85) + 90% W/B} */
+
+/* {$,lgradcolor, 67% (seed sat_to 95) + 33% FFFFFF} */ /* {$,We always want the light source coming from the top} */
+/* {$,dgradcolor, 95% (seed sat_to 65) + 5% 000000} */ /* {$,We always want the shadows at the bottom} */
+/* {$,bordcolor, 60% (seed sat_to 93) + 40% !W/B} */
+/* {$,lightborder, 33% seed + 67% W/B} */
+/* {$,bgcol, 15% seed + 85% W/B} */
+/* {$,ltgradcolor, 67% (seed sat_to 135) + 33% FFFFFF} */  /* {$,We always want the light source coming from the top} */
+/* {$,dtgradcolor, 95% (seed sat_to 25) + 5% 000000} */ /* {$,We always want the shadows at the bottom} */
+/* {$,sb_color, 15% seed + 85% W/B} */
+
+/* {$,ocf_row2, 11% seed + 89% W/B}*/
+
+/* {$,comcode_quote_left, 48% comcode_quote_right + 52% W/B} */
+/* {$,comcode_quote_right, 100% comcode_code_h4} */
+
+/* {$,zg_peak,90% zg_top + 10% W/B} */
+/* {$,zg_top,48% (seed sat_to 98) + 52% FFFFFF} */
+/* {$,zg_bot,97% (seed sat_to 71) + 3% 000000} */
+
+/* {$,medborder.border, 95% (seed sat_to 33) + 5% !W/B} */
+
+/* {$,ocfpostindicator, 65% (seed sat_to 100) + 35% W/B} */
+/* {$,ocfredirectindicator, 65% (seed sat_to 100) + 35% W/B + 000038 - 061600} */
+
+/* {$,a.link__dark, 63% (seed sat_to 85) + 37% !W/B} */
+/* {$,a.hover__dark, 20% a.link + 80% !W/B } */
+
+/* {$,special_borderer, 76% seed + 24% !W/B} */
+/* {$,special_middle, 45% (seed sat_to 85) + 65% !W/B} */
+
+.re_body, #htmlarea {
 	margin: 0;
-	color: {$GET,slightly_seeded_text};
-	background: {$GET,main_background};
+	font-size: 0.8em;
 }
-body.website_body.frame {
-	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
+
+/* Consider .re_body as 'body': it is just we cannot put our styles directly on body because sometimes this gets used in things we should not mess with such as the WYSIWYG editors frame (which is #htmlarea) and e-mails */
+.re_body {
+	padding: 0 !important;
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	background: #FFFFFF; /* {$,wizard, 100% W/B} */
 }
 
 {+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
-	html>body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
-		background-color: {$GET,fixed_width_background};
-		background-attachment: fixed;
+	#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
+		background-color: #e3eaf6 !important; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
 
 		/* Want to change the tiled background?
 			Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
-			Find how to edit the referenced "outer_background" theme image by doing an Admin Zone search for "outer_background"
+			Find how to edit the referenced "outer-background" theme image by doing an Admin Zone search for "outer-background"
 		*/
-		background: url('{$IMG;,outer_background}');
+		background: url('{$IMG;,outer-background}');
 	}
-	#main_website #main_website_inner {
+	#main_website #body_inner {
 		width: 980px;
 		position: relative;
-		margin: 15px auto 15px auto;
-		border: 1px solid {$GET,fixed_width_border};
-		{$BETA_CSS_PROPERTY,box-shadow: 0 0 20px {$GET,standard_border};}
+		margin: 0 auto 0 auto;
+		border-left: 1px solid #8ba4ca; /* {$,wizard, 61% seed + 39% W/B} */
+		border-right: 1px solid #8ba4ca; /* {$,wizard, 61% seed + 39% W/B} */
+		border-bottom: 1px solid #8ba4ca; /* {$,wizard, 61% seed + 39% W/B} */
+		-webkit-box-shadow: 0 0 30px #6b81a1; /* {$,wizard, 100% medborder.border} */
+		-moz-box-shadow: 0 0 30px #6b81a1; /* {$,wizard, 100% medborder.border} */
+		box-shadow: 0 0 30px #6b81a1; /* {$,wizard, 100% medborder.border} */
 	}
 {+END}{+END}
 
-/* htmlarea=WYSIWYG editor */
-body.website_body, #htmlarea {
-	font-size: 13px;
-}
-#htmlarea {
-	margin: 0;
-}
-
-body#main_website {
-	margin: 0;
-}
-
-body#main_website #main_website_inner {
-	min-height: 450px;
-	overflow: hidden;
-}
-
-/* If not #main_website, it'll be one of these (the names correspond to the templates used) */
-body#basic_html_wrap {
-	margin: 0;
-}
-body#standalone_html_wrap {
-	margin: 0;
-}
-
-header {
-	background-color: {$GET,header_background};
+.global_top {
+	background-color: #e3e9f2; /* {$,topcolor, 100% bgcol } */
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
-		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,navigation_background};}
+		-webkit-box-shadow: 0 0 2px 2px #426aa9; /* {$,wizard, 100% seed} */
+		-moz-box-shadow: 0 0 2px 2px #426aa9; /* {$,wizard, 100% seed} */
+		box-shadow: 0 0 2px 2px #426aa9; /* {$,wizard, 100% seed} */
 	{+END}
 }
 
-header h1 {
+.global_top h1 {
 	margin: 0;
 	{+START,IF,{$MOBILE}}
 		width: 100%;
+		float: left;
 		text-align: center;
 	{+END}
-	border: 0;
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -453,31 +301,30 @@ header h1 {
 		display: none;
 	}
 
-	.global_navigation {
+	#global_zones {
 		margin-top: 99px !important;
 	}
 	*/
 {+END}
 
-.global_navigation {
-	font-size: 0.95em;
+#global_zones {
 	{+START,IF,{$MOBILE}}
 		text-align: center !important;
 		margin: 0 auto;
-		padding: 8px 0 9px 0;
+		padding: 8px 0px 9px 0;
+		font-size: 0.95em;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: right;
-		margin-top: 60px;
-		padding: 5px 5px 0 0;
+		margin-top: 59px;
+		padding: 6px 5px 8px 0;
 		background: url('{$IMG;,zone_gradient}') repeat-x;
-		min-height: 24px;
 	{+END}
+	min-height: 15px;
 	font-weight: bold;
-	color: {$GET,navigation_text};
-	background-color: {$GET,navigation_background};
+	color: #edf2f9; /* {$,wizard, 15% zg_top + 85% W/B} */
+	background-color: #426aa9; /* {$,wizard, 100% seed} */
 	background-position: left bottom;
-	background-size: 100% 100%;
 }
 
 .global_banner {
@@ -489,249 +336,142 @@ header h1 {
 .text_banner {
 	width: 13.5em;
 	font-family: 'Arial', sans-serif;
-	background-color: {$GET,native_ui_background};
+	background-color: white;
 }
 
 .text_banner a {
-	font-size: 1.3em;
-	display: block;
+	font-size: 1.4em;
 }
 
 .text_banner_l_text {
-	color: {$GET,adwords_style_text};
+	color: #008000; /* {$,wizard, 100% 008000} */ /* Google adwords style */
 	font-size: 0.9em;
 }
 
 /* This is applied to the screen title, which is specially included on each screen; in the case of Comcode pages it is the first level 1 title. The screen title is by default an h1, but we define the styles separately so we can style this special title independently (there are lots of cool things we could do to it) */
-.screen_title {
+.main_page_title {
 	margin-top: 0.35em;
 	margin-bottom: 0.8em;
 	min-width: 300px;
-	padding-bottom: 6px; /* For better alignment with breadcrumbs to the right */
-}
-.screen_title li span {
-	display: block;
-}
-
-/* .hero_section is specially designed to wrap around a title and some text, to give a 'hero' introduction for the front page of a site (standard marketing technique) */
-.hero_section {
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom right\, {$GET,main_background}\, {$GET,main_2_background});}
-	font-size: 1.25em;
-	color: {$GET,slightly_seeded_text};
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Choose better font for larger text */
-	padding: 2em 3em;
-	margin-bottom: 3em;
-	position: relative;
-	left: -0.8em;
-}
-.hero_section h1 {
-	font-size: 2.6em;
-	margin-bottom: 0.1em;
-	text-decoration: none;
-	border-bottom: none;
-	color: inherit;
-}
-.hero_section * {
-	margin-top: 0;
-}
-.hero_section .hero_button a {
-	text-decoration: none;
-	padding: 0.5em;
-	background-image: none !important;
-	margin-bottom: 1em;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
-	font-size: 0.9em;
-}
-
-.global_breadcrumbs {
-	padding: 7px 0 0 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
-		{+START,IF,{$CONFIG_OPTION,fixed_width}}
-			text-align: {!en_right};
-		{+END}
-		{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
-			float: {!en_right};
-		{+END}
-		margin-left: 0.5em;
-	{+END}
-}
-.global_breadcrumbs abbr {
-	white-space: nowrap;
-}
-{+START,IF,{$MOBILE}}
-	.global_breadcrumbs {
-		margin-bottom: 1em;
-	}
-{+END}
-
-.non_accessibility_redundancy .breadcrumbs {
-	width: 100%;
 }
 
 .breadcrumbs {
+	padding: 5px 0 0 0;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_right};
+		margin-left: 5px;
+	{+END}
+	zoom: 1;
+}
+
+.breadcrumbs abbr {
+	white-space: nowrap;
+}
+
+.breadcrumbs_always {
 	font-weight: bold;
 }
 
-.breadcrumbs .sep:after {
-	content: " \00A0\00BB " !important;
-	display: inline-block;
-	font-size: 0.9em;
-	{$BETA_CSS_PROPERTY,opacity: 0.5;}
-}
-.breadcrumbs .sep:last-child:after {
-	content: "" !important;
-}
-
 .breadcrumbs_img {
+	vertical-align: middle;
 	margin-{!en_right}: 4px;
 }
 
-.breadcrumbs_img, .breadcrumbs span .breadcrumbs_img a {
-	vertical-align: middle;
+.page_title_tagline, .page_subtitle_tagline {
+	font-size: 0.8em;
 }
 
-.title_tagline {
-	font-size: 0.95em;
-	padding-bottom: 2em;
+.page_title_tagline {
+	padding-bottom: 20px;
 	margin-top: -1.5em;
-	color: {$GET,area_key_text};
+	color: #444649; /* {$,wizard, 30% sb_color + 70% !W/B} */
 }
 
-body#main_website #main_website_inner, html>body div.global_middle_faux {
-	background-color: {$GET,main_background};
+.page_subtitle_tagline {
+	margin: -8px 0 0 19px;
+}
+
+.global_div {
+	padding-bottom: 15px;
+}
+
+#global_surround {
+	min-height: 450px;
+}
+
+.fake_middle_continuation, #main_website #body_inner {
+	background-color: #ffffff; /* {$,maincolor, 100% W/B} */
 
 	/* Want to set a tiled background?
 		Uncomment the code below
 		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
-		Find how to edit the referenced "inner_background" theme image by doing an Admin Zone search for "inner_background"
+		Find how to edit the referenced "inner-background" theme image by doing an Admin Zone search for "inner-background"
 	*/
-	/*background: url('{$IMG;,inner_background}');*/
+	/*background: url('{$IMG;,inner-background}');*/
 }
-
-.global_middle_outer {
-	margin-top: 0.8em;
-}
-{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-	.zone_running_ .global_middle_outer {
-		margin-top: 0; /* Splash page style design, tighter spacing */
-	}
-	.zone_running_ .global_side_panel {
-		margin-top: 0.8em;
-	}
-{+END}
 
 .global_middle {
-	/*overflow: hidden; Breaks Safari so we'll let the surrounding element contain floats*/
-
-	margin-bottom: 1em;
-
-	/* Add some spacing. This will be overwritten to 1.5em in rules below if we have panels */
-	padding-{!en_left}: 1em;
-	padding-{!en_right}: 1em;
+	padding: 5px;
 }
 
-{+START,IF,{$MOBILE}}
-	.global_middle {
-		padding-{!en_left}: 0.4em;
-		padding-{!en_right}: 0.4em;
-		{$BETA_CSS_PROPERTY,text-size-adjust: none;}
-	}
-
-	.overlay {
-		width: 285px;
-	}
-
-	.overlay h1 {
-		display: none;
-	}
-{+END}
-
-body.popup_spacer {
-	padding: 1em !important;
+#global_middle_ph {
+	padding-bottom: 6px; /* {$,Stops margin collapsing} */
+	width: 100%; /* Needed for IE7 */
 }
-body.popup_spacer h2 {
+
+#popup_spacer {
+	padding: 20px;
+}
+
+#popup_spacer h2 {
 	margin-top: 0;
-}
-
-#panel_bottom {
-	margin: 0 1em;
-}
-
-#panel_top .ocf_member_bar_etc { /* Should not be flush with site borders (but the menu above it will be, so don't do the whole panel */
-	margin: 0 1em;
 }
 
 #panel_left {
 	float: {!en_left};
-	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-{!en_left}: 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		padding-{!en_left}: 1em;
-		padding-{!en_right}: 0.5em;
-		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-	{+END}
 }
 
 #panel_right {
 	float: {!en_right};
+}
+
+#panel_left, #panel_right {
+	padding-bottom: 10px;
+}
+
+.fp_col_block {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-{!en_right}: 1em;
+		width: 48%;
 	{+END}
 	{+START,IF,{$MOBILE}}
-		padding-{!en_right}: 1em;
-		padding-{!en_left}: 0.5em;
-		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+		margin: 0.5em 0;
+		width: 100%;
 	{+END}
 }
 
-.global_side_panel {
-	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 13em;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		width: 50%;
-	{+END}
-	color: {$GET,slightly_seeded_gray_text};
-}
-.global_middle_faux>.global_side_panel {
-	width: auto;
-}
-{+START,IF,{$MOBILE}}
-	.panel_solo {
-		width: 100% !important;
-		padding-left: 1em !important;
-		padding-right: 1em !important;
-	}
-{+END}
-
-/* Spacing around middle column if it adjoins panels */
-#panel_left ~ .global_middle {
-	margin-{!en_left}: 13em;
-	padding-{!en_left}: 3.5em;
-}
-#panel_right ~ .global_middle {
-	margin-{!en_right}: 13em;
-	padding-{!en_right}: 3.5em;
-}
-#panel_right:first-child ~ .global_middle { /* If no left panel, lets give some extra space */
-	margin-{!en_right}: 16em;
+.global_message {
+	padding: 4px 4px 8px 4px;
 }
 
-.global_side_panel .hide_if_in_panel {
-	display: none;
+.fake_middle_continuation {
+	padding: 1px; /* {$,Needed to force border draw of inner-contents} */
 }
 
-.hide_if_not_in_panel {
-	display: none;
+/* fake_middle_continuation is defined to make it easy for us to reapply the same styling that goes to global_middle to something else such as the contents of an iframe */
+.global_middle, .fake_middle_continuation {
 }
 
-.global_side_panel .hide_if_not_in_panel {
-	display: block;
+.global_side {
+	word-wrap: break-word;
+	padding-top: 1em;
 }
 
-.global_side_panel h2 {
+.global_side .standardbox_wrap_panel {
+	font-size: 0.9em;
+}
+
+.global_side h2 {
+	font-size: 1.3em;
 	border-bottom: 1px solid;
 	text-transform: lowercase;
 	font-weight: normal;
@@ -740,196 +480,999 @@ body.popup_spacer h2 {
 	margin-{!en_left}: 10px;
 }
 
-.global_messages {
-	margin: 1em;
-}
-.global_middle_faux .global_messages {
-	margin: 1em 0; /* Probably inside a frame, hence already indented outside said frame */
-}
-
-.global_message {
-	min-height: 21px;
+#helper_panel_toggle {
+	outline: 0;
+	float: {!en_right};
+	margin: 11px 0;
 }
 
-.global_message span, .global_message img {
-	vertical-align: middle;
+.top_level_wrap .horiz_help_panel { /* {$,Long definition to force precedence} */
+	width: 100% !important;
+	float: none !important;
+	overflow: auto;
+	outline: 0;
 }
-.global_message strong {
-	text-shadow: 1px 1px 0px {$GET,message_highlighted_part};
+
+.horiz_help_panel #help {
+	width: {$?,{$MOBILE},315,380}px;
+	float: {!en_left};
+}
+
+.horiz_help_panel #help_tutorial {
+	width: {$?,{$MOBILE},315,380}px;
+	float: {!en_left};
+}
+
+.horiz_help_panel #global_helper_panel_pic {
+	display: none;
+}
+
+.horiz_help_panel .global_helper_panel_html {
+	display: none;
+}
+
+.horiz_help_panel .global_helper_panel {
+	padding: 0;
+	height: auto;
+	position: static;
+}
+
+.horiz_help_panel .global_helper_panel_text {
+	position: static;
+}
+
+.global_helper_panel_wrap {
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	margin-left: 10px;
+	overflow: hidden;
+	position: relative;
+	zoom: 1; /* Fixes scrollbar due to IE6 double border counting bug */
+}
+
+.global_helper_panel {
+	padding: 15px;
+	position: relative;
+	font-size: 0.85em;
+}
+
+.global_helper_panel_text {
+	z-index: 4;
+	position: relative;
+}
+
+.global_helper_panel_text_over {
+}
+
+.global_helper_panel_pic {
+	opacity: 0.2;
+	position: absolute;
+	z-index: 2;
+	bottom: 0;
+}
+
+.global_helper_panel_html {
+	position: absolute;
+	/*bottom: -270px;*/
+	z-index: 2;
+	width: {$?,{$MOBILE},315,390}px;
+}
+
+.login_page {
+	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
+	padding: 5px;
+}
+
+.important_notification {
+	text-align: center;
+}
+
+.global_notification {
+	margin: 3px 0;
+}
+
+.global_notification strong {
+	text-shadow: 1px 1px 1px #4b5a71; /* {$,wizard, 70% medborder.border + 30% !W/B} */
 	font-weight: normal;
 }
-.global_message img {
-	margin-{!en_right}: 0.5em;
-	float: left;
-}
-.global_message>span {
-	margin-left: 22px;
-	padding-left: 0.5em;
-	display: block;
+
+.global_notification img {
+	margin-top: -3px;
+	margin-{!en_right}: 5px;
 }
 
-footer {
-	background-color: {$GET,footer_background};
-	margin-top: 2em;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,footer_background}\, {$GET,footer_2_background});}
+.site_special_message {
+	padding: {$?,{$MOBILE},30,100}px 0;
+	text-align: center;
+}
 
-	color: {$GET,footer_text};
-	padding: 1.5em;
+.ssm_warn {
+	background: url('{$IMG;,am_icons/warn_large}') right 20px no-repeat;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding: 100px 220px 100px 30px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		padding-bottom: 170px;
+	{+END}
+}
+
+.expanded_advice {
+	padding: 0 {$?,{$MOBILE},0,230px} 200px 0;
+}
+
+.ssm_inform {
+	background: url('{$IMG;,am_icons/inform_large}') right 20px no-repeat;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding: 100px 220px 100px 30px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		padding-bottom: 170px;
+	{+END}
+}
+
+.site_special_message_inner, .site_special_message_alt_inner {
+	display: inline-block;
+}
+
+.closed_site_special_message {
+	margin: {$?,{$MOBILE},30px 2em,100px auto};
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 600px;
+	{+END}
+	text-align: center;
+}
+
+.bottom {
+	background-color: #6b81a1; /* {$,wizard, 100% medborder.border} */
+
+	color: #ffffff; /* {$,wizard, 100% W/B} */
+	padding: 10px 0;
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
-		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,footer_tinting};}
+		-webkit-box-shadow: 0 0 2px 2px #8ba4ca; /* {$,footer_bg, 61% seed + 39% W/B} */
+		-moz-box-shadow: 0 0 2px 2px #8ba4ca; /* {$,footer_bg, 61% seed + 39% W/B} */
+		box-shadow: 0 0 2px 2px #8ba4ca; /* {$,footer_bg, 61% seed + 39% W/B} */
 	{+END}
 	{+START,IF,{$MOBILE}}
 		text-align: center;
 	{+END}
 }
 
-footer .button_hyperlink,
-footer a,
-footer a:visited,
-footer .horizontal_links {
-	color: {$GET,area_2_link};
+.bottom .buttonhyperlink,
+.bottom a:link,
+.bottom a:visited,
+.bottom a:active,
+.bottom .linkcolor {
+	color: #000000; /* {$,wizard, 100% !W/B} */
 }
 
-footer a:hover {
-	color: {$GET,area_2_link_hover};
+.bottom a:hover {
+	color: #FFFFFF !important; /* {$,wizard, 100% W/B} */
 }
 
-footer .global_footer_left {
-	float: {!en_left};
+.bottom_under {
+	padding: 0 10px;
 }
 
-footer .footer_button_loading {
-	{$BETA_CSS_PROPERTY,opacity: 0.4;} display: inline-block;/*Needed for IE8*/
+.global_bottom {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+	{+END}
+	display: inline-block; /* For IE6 - force shrink to width */
 }
 
-footer .global_footer_left .horizontal_buttons {
-	width: auto;
-	white-space: nowrap;
-	padding-top: 4px;
-	margin-top: 0;
-	font-size: 0; /* Fixes wrapping problem */
-}
-
-footer .global_footer_left .horizontal_buttons>li:first-child {
-	padding-left: 0 !important;
-}
-footer .global_footer_left .horizontal_buttons>li {
-	padding-left: 8px !important;
-}
-
-footer .su_form input {
-	padding-top: 0;
-	padding-bottom: 0;
-}
-
-footer .special_page_type_form select, footer .special_page_type_form select option.label {
-	color: {$GET,unfilled_input_text};
-}
-
-footer .special_page_type_form select option {
-	color: {$GET,native_ui_foreground};
-}
-
-footer .global_footer_left .horizontal_buttons, footer .su_form, footer .special_page_type_form {
-	float: left;
-	padding-right: 20px;
-	margin-top: 5px;
-}
-
-footer .global_footer_left img {
+.global_bottom img {
 	vertical-align: middle;
-	{$BETA_CSS_PROPERTY,transition: all 0.3s ease-in-out;}
-	{$BETA_CSS_PROPERTY,transform: scale(0.9);}
 }
 
-footer .global_footer_left img:hover {/*, .menu_type__dropdown li:hover>img*/
-	{$BETA_CSS_PROPERTY,transform: scale(1.0);}
-}
-
-footer .global_footer_button_ref_point {
+.global_bottom_button_ref_point {
 	position: absolute;
-	font-size: 13px; /* Puts it back, as was set to zero elsewhere */
 }
 
-footer .global_footer_left #special_page_type {
+#special_page_type {
 	width: 17em;
 }
 
-footer .global_footer_right {
-}
-
-footer .global_community_message {
-	float: {!en_right};
-	font-size: 0.9em;
-	padding-top: 1px;
-	color: {$GET,inverted_text};
+.global_flagrant {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_right};
+	{+END}
+	font-size: .9em;
+	color: #dbe6f7; /* {$,wizard, 35% footer_bg + 65% W/B} */
 	font-weight: bold;
 	padding-bottom: 4px;
-	text-shadow: 2px 2px 2px {$GET,standard_border};
+	text-shadow: 2px 2px 2px #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
-footer .invisible_ref_point {
+.invisible_ref_point {
 	position: absolute;
-	width: 0;
+	width: 0px;
 }
 
-footer .global_copyright {
+.global_copyright {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: center;
 	{+END}
+	font-size: 0.85em;
 }
 
-footer .global_minilinks {
-	padding-top: 0.3em;
+.global_minilinks {
+	padding-top: 3px;
 	font-size: 0.9em;
 	white-space: nowrap; /* Stops logout link wrapping around in Firefox 3.6 */
-	{+START,IF,{$NOT,{$MOBILE}}}
-		text-align: center;
-	{+END}
 }
 
-footer .global_minilinks .horizontal_links {
-	width: auto;
-	font-size: 1.1em;
-}
-
-footer .global_minilinks a {
-	white-space: nowrap !important; /* So works on mobiles */
+.global_minilinks a {
+	white-space: nowrap;
 	{+START,IF,{$MOBILE}}
 		padding: 4px;
 	{+END}
 }
 
+.global_minilinks a:hover {
+	color: #97aed0; /* {$,wizard, 10% W/B + 90% footer_bg} */
+}
+
+{+START,IF,{$MOBILE}}
+	/* On mobiles we want maximum fluidity */
+
+	table, table.do_next_section {
+		table-layout: auto !important;
+
+		/* Allows wrapping */
+		overflow-x: visible !important;
+		overflow-y: visible !important;
+	}
+	col {
+		width: auto !important;
+	}
+	* {
+		white-space: normal !important;
+		word-wrap: break-word !important;
+	}
+{+END}
+
 /*
 =========================
-==With Special Meanings==
+=====Software Styles=====
 =========================
 */
 
-.autocomplete { /* Membership of this class is used as a tag to allow form autocompletion */
+.standardbox_spaced {
+	padding: 0 5px 5px 5px;
 }
 
-.xhtml_validator_off { /* Membership of this class is used as a tag to turn off the XHTML-validator */
+.standardbox_wrap_classic {
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+
+	/* To prevent horizontal overlapping with floats */
+	overflow: auto;
+	outline: 0;
+}
+
+.standardbox_wrap_panel {
+	margin: 5px 5px 0 5px;
+}
+
+.standardbox_wrap_panel img {
+	max-width: 98%;
+}
+
+{+START,IF,{$MOBILE}}
+	.standardbox_wrap_panel {
+		float: left;
+		width: 145px;
+	}
+{+END}
+
+/* Basic styling */
+.standardbox_wrap_panel {
+	border: 1px solid #8ba4ca; /* {$,wizard, 61% seed + 39% W/B} */
+	zoom: 1; /* IE6 does not display bottom borders if this is not here */
+}
+/* Precedence (!important) for browsers that support the > and + selectors; precedence stops it relying on .interlock being right */
+html>body .standardbox_wrap_panel { /* Runs before the below selector, the best we can to given we don't have multiple levels of important or negation in CSS; it's needed to take precedence over the .interlock selector */
+	border-top: 1px solid #8ba4ca !important; /* {$,wizard, 61% seed + 39% W/B} */
+	margin-top: 5px !important;
+}
+{+START,IF,{$NOT,{$MOBILE}}}
+	.standardbox_wrap_panel + .standardbox_wrap_panel, html>body.fake_middle_continuation div.interlock {
+		border-top: 0px !important;
+		margin-top: 0 !important;
+	}
+	/* Otherwise (IE6) will use the following, which depends on Tempcode correctly tracking the template inclusion orders via .interlock */
+	.interlock {
+		border-top: 0px;
+		margin-top: 0;
+	}
+{+END}
+
+.standardbox_wrap_curved {
+	text-align: left; /* fixes IE bug */
+}
+
+.standardbox_curved_ie_hack {
+	line-height: 0px;
+}
+
+.standardbox_meta_classic {
+	font-style: italic;
+	font-size: 0.8em;
+	border-bottom: 1px solid;
+}
+
+.standardbox_title_curved, .standardbox_title_curved_iesucks {
+	padding-top: 2px;
+	margin-top: 0;
+	margin-bottom: 0;
+	{+START,IF,{$MOBILE}}
+		min-height: 18px;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		height: 18px;
+	{+END}
+	border-top: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	border-bottom: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.standardbox_title_curved {
+	margin-left: 6px;
+	margin-right: 6px;
+}
+
+.standardbox_title_curved_iesucks {
+}
+
+.standardbox_curved_nontitle_middle, .standardbox_curved_bottom_middle {
+	margin-left: 6px;
+	margin-right: 6px;
+	font-size: 0em;
+	line-height: 1px; /*0px causes gap on IE7*/
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	height: 4px;
+}
+
+.standardbox_curved_nontitle_middle {
+	border-top: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.standardbox_curved_bottom_middle {
+	border-bottom: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.standardbox_curved_title_left {
+	background: url('{$IMG;,standardboxes/title_left}') 0 0 no-repeat;
+}
+
+.standardbox_curved_nontitle_left {
+	background: url('{$IMG;,standardboxes/nontitle_left}') 0 0 no-repeat;
+}
+
+.standardbox_curved_bottom_left {
+	background: url('{$IMG;,standardboxes/bottom_left}') 0 100% no-repeat;
+}
+
+.standardbox_curved_title_right {
+	background: url('{$IMG;,standardboxes/title_right}') 100% 0 no-repeat;
+}
+
+.standardbox_curved_nontitle_right {
+	background: url('{$IMG;,standardboxes/nontitle_right}') 100% 0 no-repeat;
+}
+
+.standardbox_curved_bottom_right {
+	background: url('{$IMG;,standardboxes/bottom_right}') 100% 100% no-repeat;
+}
+
+.standardbox_iesucks_curved_left, .standardbox_iesucks_curved_right {
+	width: 5px;
+}
+
+.standardbox_iesucks_curved_left {
+	border-{!en_left}: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.standardbox_iesucks_curved_right {
+	border-{!en_right}: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.standardbox_iesucks_curved_rule {
+}
+
+.standardbox_curved {
+	margin: 0;
+}
+
+.standardbox_inner_curved, .standardbox_iesucks {
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+}
+
+.standardbox_classic, .standardbox_wrap_classic .standardbox_links_classic {
+	margin: 0;
+
+	/* Want to change the tiled background?
+		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
+		Find how to edit the referenced "block-background" theme image by doing an Admin Zone search for "block-background"
+	*/
+	background: url('{$IMG;,block-background}') #eaeff6; /* {$,wizard, 100% ocf_row2} */
+}
+
+.standardbox_t_panel, .standardbox_nt_panel {
+	margin: 0px;
+}
+
+.standardbox_t_panel {
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+}
+
+.standardbox_nt_panel {
+	background-color: #e3eaf6; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
+}
+
+.standardbox_inner_curved {
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	border-top: 0px;
+	border-bottom: 0px;
+}
+
+.tabletitle_internal {
+	padding: 2px;
+}
+
+.standardbox_title_classic, .tabletitle_internal, .standardbox_title_med, .standardbox_title_curved, .standardbox_title_curved_iesucks {
+	/* Structure */
+	background-color: #426aa9; /* {$,wizard, 100% seed} */
+	background-image: url('{$IMG;,standardboxes/title_gradient}');
+	background-repeat: repeat-x;
+
+	/* Text */
+	color: #ffffff; /* {$,wizard, 100% W/B} */
+	text-align: center;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 1em;
+}
+
+h3.standardbox_title_classic {
+	border-bottom: 0;
+}
+
+.standardbox_title_classic a, .tabletitle_internal a, .standardbox_title_med a, .standardbox_title_curved a, .standardbox_title_curved_iesucks a {
+	color: #ffffff !important; /* {$,wizard, 100% W/B} */
+}
+
+.standardbox_title_panel {
+	/* Structure */
+	border-bottom: 1px solid #8ba4ca !important; /* {$,wizard, 61% seed + 39% W/B} */
+	background-color: #e3eaf6 !important; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
+
+	/* Text */
+	padding-top: 0.6em !important;
+	padding-bottom: 0.6em !important;
+	padding-{!en_left}: 5px !important;
+	color: #0d1522 !important; /* {$,wizard, 20% seed + 80% !W/B} */
+	font-weight: bold !important;
+	font-size: 1em !important;
+	text-transform: none !important;
+	width: auto !important;
+	margin-left: 0 !important;
+}
+
+.menu_block .standardbox_title_panel {
+	background-color: #426aa9 !important; /* {$,wizard, 100% seed} */
+	color: white !important;
+	background-image: url('{$IMG;,standardboxes/title_gradient}');
+	background-repeat: repeat-x;
+}
+
+.standardbox_title_panel, .standardbox_title_classic, .tabletitle_internal, .standardbox_title_med {
+	margin: 0;
+}
+
+.standardbox_title_light, .standardbox_main_classic .standardbox_title_med {
+	/* Structure */
+	background-image: none;
+	background-color: #a2b6d5; /* {$,wizard, 60% sb_color + 40% seed} */
+	margin: 0;
+
+	/* Text */
+	color: #313740; /* {$,wizard, 30% th.bgcolor + 70% !W/B} */
+	text-align: center;
+	font-weight: bold;
+	font-size: 1em;
+}
+
+.standardbox_title_classic, .standardbox_title_med, .standardbox_title_light {
+	padding-top: 0.35em;
+	padding-bottom: 0.35em;
+}
+
+.no_stbox_padding .standardbox_main_classic {
+	padding: 0;
+}
+
+.overlay .dottedborder_huge_a, .overlay .dottedborder_barrier_a_nonrequired, .overlay .dottedborder_barrier_b_nonrequired, .overlay .dottedborder_divider, .overlay .dottedborder_divider_continue, .overlay .no_stbox_padding .forcedottedborder, .overlay .dottedborder {
+	border: 0;
+}
+
+.no_stbox_padding .dottedborder {
+	border: 0;
+}
+
+.no_stbox_padding .dottedborder td {
+	border-right: 0;
+	border-top: 0;
+}
+
+.no_stbox_padding .dottedborder th {
+	border-{!en_left}: 0;
+	border-top: 0;
+}
+
+.no_stbox_padding .dottedborder thead tr:last-child td,
+.no_stbox_padding .dottedborder thead tr:last-child th {
+	border-bottom: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.no_stbox_padding .forcedottedborder  {
+	padding: 0;
+}
+
+.no_stbox_padding .forcedottedborder div {
+	border-bottom: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+	padding: 5px 5px 15px 5px;
+}
+
+.standardbox_main_classic {
+	{+START,IF,{$MOBILE}}
+		padding: 2px;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding: 3px 6px;
+	{+END}
+}
+
+.standardbox_links_classic {
+	bottom: 0;
+	padding: 3px 6px;
+}
+
+.standardbox_custom_wide {
+	width: 100%;
+}
+
+.standardbox_links_classic a:link, .standardbox_title_panel a:link, .standardbox a:link, .standardbox_main_classic a:link {
+	color: #123d7b; /* {$,wizard, 73% (seed sat_to 85) + 27% !W/B} */
+}
+.standardbox_links_classic a:visited, .standardbox_title_panel a:visited, .standardbox a:visited, .standardbox_main_classic a:visited {
+	color: #113871; /* {$,wizard, 67% (seed sat_to 85) + 33% !W/B} */
+}
+.standardbox_links_classic a:hover, .standardbox_title_panel a:hover, .standardbox a:hover, .standardbox_main_classic a:hover {
+	color: #9C202F; /* {$,wizard, 100% a.hover}*/
+}
+
+.standardbox_tray {
+	float: {!en_right};
+	padding: 0 5px !important;
+}
+
+/* {$,lightborder is very similar to a standard-box, but more like a 'featured island' (less box-like, more fluid). It is also used for the 'light' box} */
+.lightborder {
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+
+	/* To prevent horizontal overlapping with floats */
+	overflow: hidden;
+	outline: 0;
+}
+
+/* {$,dottedborder is for input forms usually} */
+.dottedborder {
+	border-collapse: collapse;
+	border: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.dottedborder_barrier,
+.dottedborder_barrier_a_nonrequired,
+.dottedborder_barrier_b_nonrequired,
+.dottedborder_barrier_a_required,
+.dottedborder_barrier_b_required,
+.dottedborder_huge_a,
+.dottedborder_divider,
+.dottedborder_divider_continue {
+	border: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+	padding: {$?,{$MOBILE},2,5}px;
+}
+
+.dottedborder select {
+	max-width: 100%;
+}
+
+.thick_border .dottedborder_barrier_b_nonrequired {
+	border-top-width: 3px;
+}
+
+.dottedborder_huge_a, .dottedborder_barrier_a_nonrequired, .dottedborder_barrier_b_nonrequired, .dottedborder_divider, .dottedborder_divider_continue, .no_stbox_padding .forcedottedborder {
+	background-color: #eaeff5; /* {$,barrier_a, 72% bgcol + 28% W/B} */
+}
+
+.zebra_0 .dottedborder_barrier_b_nonrequired {
+	background-color: #d9e1ee; /* {$,wizard, 20% seed + 80% W/B} */
+}
+
+.zebra_1 .dottedborder_barrier_b_nonrequired {
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+}
+
+.dottedborder_barrier_a_required, .dottedborder_barrier_a_required .lightborder, .dottedborder_barrier_b_required {
+	background-color: #e9dede; /* {$,barrier_a_required, 95% (barrier_a hue_to 0) + 5% !W/B} */
+}
+
+.filledin .dottedborder_barrier_a_required, .filledin .dottedborder_barrier_a_required .lightborder, .filledin .dottedborder_barrier_b_required {
+	background-color: #eaeff5; /* {$,barrier_a, 72% bgcol + 28% W/B} */
+}
+
+.dottedborder_divider_continue {
+	border-top: 0 !important;
+}
+
+.dottedborder_divider {
+	border-bottom: 0 !important;
+}
+
+.dottedborder_huge_a {
+	border-bottom: 0px;
+}
+.dottedborder_huge_b {
+	border-top: 0px;
+}
+
+#word_count {
+	float: right;
+	font-size: 0.8em;
+	padding: 4px;
+}
+
+/* medborder is similar to lightborder; in fact, there isn't any rule as to when to use each: it is just artistic */
+.medborder,
+.results_browser a,
+.results_browser span,
+.results_launcher a,
+.results_launcher span {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	{+END}
+	{+START,IF,{$MOBILE}}
+		border: 2px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	{+END}
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+}
+
+.boxes_together_follower { /* boxes_together_follower is just for IE6, which does not support +, we have to go to extra effort in our templates to add this class */
+	border-top: 0 !important;
+}
+.boxes_together + .boxes_together {
+	border-top: 0;
+}
+
+.results_browser a:hover, .results_launcher a:hover {
+	background-color: #c2d1e5 !important; /* {$,hover_bg, 93% (mm_c_tab sat_to 15) + 7% !W/B} */
+}
+
+{+START,IF,{$NOT,{$MOBILE}}}
+	.results_browser a,
+	.results_browser span,
+	.results_launcher a,
+	.results_launcher span {
+		margin-{!en_left}: -1px;
+	}
+{+END}
+
+.medborder_collapse {
+	border-collapse: collapse;
+}
+
+.medborder_detailhead {
+	font-size: 0.8em;
+	color: #325180; /* {$,wizard, 76% seed + 24% !W/B} */
+	border-bottom: 1px solid;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 300px;
+	{+END}
+	max-width: 100%;
+	padding-{!en_left}: 5px;
+	padding-bottom: 0.5em;
+}
+
+.medborder_detailhead a {
+	text-decoration: none;
+	color: #0d2d5d; /* {$,wizard, 55% (seed sat_to 86) + 45% !W/B} */
+}
+
+.medborder_detailhead a:hover {
+	color: #9C202F; /* {$,wizard, 100% a.hover}*/
+}
+
+.global_side .medborder_detailhead_wrap {
+	padding: 0;
+}
+
+.global_side .medborder_detailhead {
+	border-bottom: 0;
+	padding-left: 0;
+	padding-top: 5px;
+}
+
+.medborder_box {
+	{+START,IF,{$MOBILE}}
+		padding: 2px;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding: 5px;
+	{+END}
+}
+
+.global_side .medborder_box {
+	padding: 1px;
+}
+
+.medborder_detailhead_wrap {
+	padding: 10px;
+}
+
+.help_jumpout {
+	float: {!en_left};
+	margin-{!en_right}: 5px;
+	margin-top: -2px;
+}
+
+.solidborder {
+	border-collapse: collapse;
+}
+
+.solidborder, .solidborder td, .solidborder th {
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+/* Undo for nested tables from WYSIWYG */
+.solidborder table[border="0"] td, .solidborder table[border="0"] th {
+	border: 0;
+}
+
+.do_next_page_question {
+	font-size: 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-bottom: 50px;
+	{+END}
+}
+
+.do_next_section_wrap {
+	padding-bottom: 10px;
+}
+
+.do_next_section {
+	margin: 0 auto;
+	font-size: 0.9em;
+	table-layout: fixed !important;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 543px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		width: 100%;
+	{+END}
+	border-collapse: collapse;
+}
+
+.do_next_section td {
+	padding: 0;
+}
+
+.do_next_section table td {
+	padding: 6px;
+}
+
+.do_next_section_inner {
+	background-color: #e3e9f2; /* {$,wizard, 100% sb_color } */
+}
+
+.do_next_section table {
+	border-collapse: collapse;
+}
+
+.do_next_item_spacer {
+	border: 1px;
+}
+
+.do_next_item, .do_theme_item {
+	background-color: #eaeff6; /* {$,do_next_item, 100% ocf_row2 } */
+}
+
+.do_next_item, .do_next_item_hover {
+	width: 25%;
+	cursor: pointer;
+}
+
+.do_theme_item, .do_theme_item_hover {
+	width: 16%;
+}
+
+.do_next_item, .do_next_item_hover, .do_theme_item, .do_theme_item_hover {
+	border: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+	text-align: center;
+	font-size: 0.9em;
+	padding-bottom: 5px;
+	-webkit-transition: background-color 0.5s linear;
+	-moz-transition: background-color 0.5s linear;
+	-o-transition: background-color 0.5s linear;
+}
+
+.do_next_item_hover, .do_theme_item_hover {
+	background-color: #E6D8DF; /* {$,wizard, 92% (do_next_item hue_to 92) + 8% !W/B} */
+}
+
+.do_next_item_hover {
+	border-style: solid;
+}
+
+.do_next_icon {
+	width: 45px;
+	height: 45px;
+}
+
+.do_next_pretty_title_left {
+	width: 21px;
+	background-image: url('{$IMG;,donext/titleleft}');
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+
+.do_next_pretty_title {
+	height: 10px;
+	color: #ffffff; /* {$,wizard,100% W/B} */
+	background-color: #5985c7; /* {$,donextbordercolor, 65% (seed sat_to 100) + 35% W/B} */
+	text-align: center;
+}
+
+.do_next_pretty_pad {
+	width: 0;
+}
+
+.do_next_pretty_title_right {
+	width: 21px;
+	background-image: url('{$IMG;,donext/titleright}');
+	background-repeat: no-repeat;
+	background-position: bottom left;
+}
+
+.do_next_pretty_top_left {
+	height: 10px;
+	background-repeat: no-repeat;
+	background-image: url('{$IMG;,donext/topleft}');
+}
+
+.do_next_pretty_top {
+	height: 10px;
+	background-repeat: repeat-x;
+	background-image: url('{$IMG;,donext/topcent}');
+}
+
+.do_next_pretty_top_right {
+	height: 10px;
+	background-repeat: no-repeat;
+	background-image: url('{$IMG;,donext/topright}');
+}
+
+.do_next_pretty_mid_left {
+	background-repeat: repeat-y;
+	background-image: url('{$IMG;,donext/midleft}');
+}
+
+.do_next_pretty_mid_right {
+	background-repeat: repeat-y;
+	background-image: url('{$IMG;,donext/midright}');
+}
+
+.do_next_pretty_bottom_left {
+	height: 10px;
+	background-repeat: no-repeat;
+	background-image: url('{$IMG;,donext/botleft}');
+}
+
+.do_next_pretty_bottom {
+	background-repeat: repeat-x;
+	background-image: url('{$IMG;,donext/botmid}');
+}
+
+.do_next_pretty_bottom_right {
+	height: 10px;
+	background-repeat: no-repeat;
+	background-image: url('{$IMG;,donext/botright}');
+}
+
+.control_functions {
+	font-weight: bold;
+}
+
+.expansive_section {
+	overflow: auto;
+	padding-right: 1px; /* For non-aligning table borders */
+}
+
+#tree_list__root_tree_list {
+	padding-bottom: 4px;
+}
+
+.ajax_tree_list_loading {
+	padding: 80px;
+	text-align: center;
+}
+
+.tree_list_highlighted a, .tree_list_nonhighlighted a {
+	background-color: white;
+	color: black;
+}
+
+.tree_list_highlighted a {
+	font-weight: bold;
+}
+
+.tree_list_nonhighlighted a {
+}
+
+.block_no_entries {
+	font-size: 0.85em;
+	margin: 1em;
+}
+
+.confirm_area_wrap {
+	margin-bottom: 10px;
+}
+
+.comcode_errored {
+	background-color: #fff2f2; /* {$,wizard, 95% W/B + 5% FF0000} */
+	padding: 5px 0;
+}
+
+/*
+=========================
+==With Loaded meanings===
+=========================
+*/
+
+.autocomplete { /* {$,Membership of this class is used as a tag to allow form autocompletion} */
+}
+
+.xhtml_validator_off { /* {$,Membership of this class is used as a tag to turn off the XHTML-validator} */
 	display: inline-block; /* To stop it breaking text-align: center */
 	width: 100%;
 }
 
-.textarea_scroll { /* Turns off word-wrapping for a textarea: this has to be done using Javascript so that the invalid 'wrap' property isn't written into the XHTML */
+.img_thumb { /* {$,Membership of this class is used as a tag to turn on the nereid blend effect} */
+	opacity: 0.7;
 }
 
-body .accessibility_hidden { /* Contents should be made visible (or interpreted) for accessibly representation but hidden for normal visual display */
+.textarea_scroll { /* {$,Turns off word-wrapping for a textarea: this has to be done using Javascript so that the invalid 'wrap' property isn't written into the XHTML} */
+}
+
+body .accessibility_hidden { /* {$,Contents should be made visible (or interpreted) for accessibly representation but hidden for normal visual display} */
 	/* Shift it out of the viewport */
 	position: absolute;
 	top: -256000px;
 	left: 0;
-	visibility: hidden; /* So browser doesn't waste resources rendering */
 	display: block; /* stops browser bugs where it interacts with the layout flow incorrectly */
 }
 
-.non_accessibility_redundancy { /* Contents should be skipped by screen readers */
+.non_accessibility_redundancy { /* {$,Contents should be skipped by screen readers} */
 	{+START,IF,{$MOBILE}}
 		display: none;
 	{+END}
+}
+
+.dequirk, .dequirk_w, .dequirk_h { /* {$,Make a special effort for this to work right in IE quirks mode} */
+}
+
+.scale_down { /* {$,Membership of this class is used as a tag to turn on image scaling} */
+	max-width: 100%;
+	box-sizing: border-box;
 }
 
 /*
@@ -938,131 +1481,81 @@ body .accessibility_hidden { /* Contents should be made visible (or interpreted)
 =========================
 */
 
-/* All floats within this will be contained to it */
-.float_surrounder {
-	overflow: hidden;
+table.scrollable_inside {
+	table-layout: fixed; /* {$,for permission setting stuff that can scroll off} */
 }
 
-/* Commonly used to indicate there is no content to display */
-.nothing_here, .more_here {
-	font-size: 0.95em;
-	padding-{!en_left}: 15px;
-	margin: 1.5em;
-	margin-{!en_left}: 10px;
-	background-image: url('{$IMG;,cannot_show}');
-	background-position: {!en_left} 5px;
-	background-repeat: no-repeat;
-}
-
-/* Used for styling the 'last edited' information */
-.edited {
-	font-size: 0.85em;
-	padding-{!en_left}: {$?,{$MOBILE},0.7,2}em;
-	font-style: italic;
-}
-div.edited {
-	margin: 2em 0;
-}
-
-/* Usage guide: Use on the immediate surrounding element, and make sure that there is no loose text inside (put that in a span) */
-.vertical_alignment, .vertical_alignment>* {
-	vertical-align: middle !important;
-}
-
-/* Used to align inline images to the top of the rendering context */
-.top_vertical_alignment, .top_vertical_alignment * {
-	vertical-align: top;
-}
-
-/* Makes an item of media (e.g. an image) get framed nicely. NB: We do not use this for galleries (which are more elaborate), although that has similar styling with .gallery_grid_cell */
-.media_box {
-	margin: {$?,{$MOBILE},1,1.5}em 0;
-	text-align: center;
-}
-.media_box a {
+.float_surrounder, .float_surrounder_precise, .float_surrounder_hidden {
+	width: 100%;
 	outline: 0;
 }
-.media_box img {
-	border: 1px solid {$GET,standard_border};
-	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
-	max-width: 100%;
+
+.float_surrounder_hidden {
+	overflow: hidden;
 }
 
-.scale_down { /* Membership of this class is used as a tag to turn on image scale-to-fit */
-	max-width: 100%;
-	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+.float_surrounder_table_protect {
+	padding: 1px;
 }
 
-/* Used in a few places to make member links stand out */
-a.fancy_user_link em {
-	text-shadow: 2px 2px 2px {$GET,point_of_interest_border};
-	padding: 4px 0;
-	letter-spacing: 1px;
-}
-a.fancy_user_link, a.fancy_user_link:visited, a.fancy_user_link:hover {
-	font-size: 1em;
-	font-weight: bold;
-	border: 1px dashed {$GET,point_of_interest_border};
-	border-left: 0;
-	border-right: 0;
-	display: block;
-	background-color: {$GET,point_of_interest_background};
-	margin-bottom: 7px;
-	text-decoration: none;
-	padding: 2px 2px !important;
-}
-.post_poster a.fancy_user_link, .post_poster a.fancy_user_link:visited, .post_poster a.fancy_user_link:hover {
-	display: inline-block;
-}
-a.fancy_user_link:hover {
-	border-color: {$GET,dark_border};
-	background-color: {$GET,area_faded_background};
-}
-
-/* A button styled to look like a link */
-input.button_hyperlink {
-	border-style: none;
-	background-color: transparent;
-	text-decoration: underline;
-	font-weight: bold;
-	border: 0;
+ul.compact_list, ol.compact_list {
 	margin: 0;
 	padding: 0;
-	cursor: pointer;
-	text-align: {!en_left};
 }
 
-/* Used to make a button look more like an icon - i.e. undoes button-face styling */
-.button_icon {
-	background: none;
-	border: none;
-	cursor: pointer;
+ul.compact_list li, ol.compact_list li {
+	margin: 0 0 0 17px;
+	padding: 0;
 }
 
-/* Makes a link tag (a) look like it's not anything special (we use these tags as tab points sometimes) */
-.non_link,
-.non_link:visited,
-.non_link:hover {
-	color: inherit !important;
-	text-decoration: none;
-	cursor: default;
+ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {
+	margin: 0;
+	padding: 0 !important;
+	list-style-type: square;
 }
 
-.trinav_wrap {
+ul.tick_list, ul.tick_list li {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.spaced_list li {
+	margin: 0 0 10px 25px !important;
+	padding: 0;
+}
+
+input.input_box_label_within {
+	color: gray;
+}
+
+.comcode_supported {
+	font-size: 0.85em;
+}
+
+.comcode_button {
+	vertical-align: middle;
+}
+
+.required_field_warning {
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 	overflow: hidden;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
-	margin-bottom: 2em;
-	{$BETA_CSS_PROPERTY,border-radius: 20px;}
-}
-.trinav_wrap.nograd {
-	background-image: none;
+	padding: 5px;
+	background-color: #e9dede; /* {$,wizard, 95% (barrier_a hue_to 0) + 5% !W/B} */
+	font-weight: bold;
+	font-size: 0.85em;
+	margin: 28px auto;
+	width: {$?,{$MOBILE},96%,11em};
 }
 
-/* Used e.g. for "paginating" through the calendar (i.e. infinite pagination left/right) */
-.trinav_left, .trinav_mid, .trinav_right {
-	margin: 1em 0 2em 0;
+.required_star {
+	float: right;
+	opacity: 0.4;
 }
+
+.standard_meta_block {
+}
+
 .trinav_left {
 	float: left;
 	{+START,IF,{$NOT,{$MOBILE}}}
@@ -1073,18 +1566,18 @@ input.button_hyperlink {
 	{+END}
 	text-align: left;
 }
-.trinav_mid { /* Used for putting a button in the middle of the left/right pagination, for example */
+
+.trinav_mid {
+	float: left;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-left: 26px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		width: 33%;
+	{+END}
 	text-align: center;
 }
-.trinav_mid.text {
-	padding-top: 6px;
-}
-.trinav_mid.text>span:before {
-	content: "(";
-}
-.trinav_mid.text>span:after {
-	content: ")";
-}
+
 .trinav_right {
 	float: right;
 	{+START,IF,{$NOT,{$MOBILE}}}
@@ -1097,429 +1590,49 @@ input.button_hyperlink {
 	text-align: right;
 }
 
-/* An inline avatar */
-.embedded_mini_avatar {
-	width: 0.9em;
-	height: 0.9em;
-	vertical-align: bottom;
-	cursor: pointer;
-	border: 1px solid {$GET,standard_border};
-}
-
-/* Error/status messages */
-span.red_alert, a.red_alert, strong.red_alert, em.red_alert {
-	color: {$GET,red_highlight_text};
-	font-weight: bold;
-}
-div.red_alert, p.red_alert, .inline_wip_message {
-	{$BETA_CSS_PROPERTY,border-radius: 5px;}
-	padding: 1em 1em 1em 40px;
-}
-div.red_alert, p.red_alert {
-	border: 1px solid {$GET,light_error_border};
-	background: url('{$IMG;,messageicons/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
-}
-.inline_wip_message {
-	border: 1px solid {$GET,dark_border};
-	background: url('{$IMG;,messageicons/notice}') 0.6em 0.75em no-repeat {$GET,area_background};
-}
-
-.field_name {
-	font-weight: bold;
-}
-
-/* Used when a label is the only thing in front of a textarea/list */
-.lonely_label  {
-	margin-bottom: 0.2em;
-	display: block;
-	font-size: 1.1em;
-}
-.lonely_label+ul, .lonely_label+ol, .lonely_label+p {
-	margin-top: 0.2em;
-}
-
-/* Used for a little 'X comments' box, but with the comments bit showing as an HTML tooltip */
-.comment_count {
-	display: inline-block;
+.table_cell_nowrap {
 	white-space: nowrap;
-	border: 1px dotted {$GET,dark_border};
-	background: {$GET,main_background} !important;
-	text-align: center;
-	width: 1.1em;
-	font-size: 0.9em;
-	position: relative;
-}
-.comment_count:hover {
-	border-right-color: transparent;
-}
-.comment_count strong {
-	background: {$GET,main_background} !important;
-}
-.comment_count span {
-	display: none;
-	padding-right: 2px;
-	background: {$GET,main_background} !important;
-}
-.comment_count:hover span {
-	display: inline-block;
-	position: absolute;
-	padding-left: 0.3em;
-	margin-top: -1px; /* Brings it up to the 1px dotted borders level (need to do as out of flow) */
-
-	/* Similar styles to tooltips */
-	background-color: {$GET,area_faded_background};
-	border: 1px dotted {$GET,dark_border};
-	z-index: 1000;
-
-	border-left: 0;
 }
 
-th.meta_data_title {
-	font-weight: bold !important;
+.toggle_div_title {
+	padding: 2px;
 }
 
-.global_navigation .inline_wip_message {
-	background-color: {$GET,navigation_message_text};
+.toggler_main {
+	background-color: #d8dde6; /* {$,wizard, 95% bgcol + 5% !W/B} */
+	border-collapse: collapse;
+	border: 1px solid #D8DEE6; /* {$,To break margin collapsing} */
 }
 
-.help_jumpout {
-	padding: 2px 0;
-	padding-left: 50px;
-	background: url('{$IMG;,help_jumpout}') no-repeat left center;
-}
-
-.being_dragged {
-	background: {$GET,native_ui_background};
-}
-
-.img_thumb { /* Membership of this class is used as a tag to turn on the thumbnail blend effect */
-	{$BETA_CSS_PROPERTY,opacity: 0.7;}
-}
-.img_thumb:hover {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;}
-	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
-}
-
-/*
-=========================
-=========Boxes===========
-=========================
-*/
-
-/* Boxes, which most blocks use to wrap their output */
-
-.box {
-	border: 1px solid {$GET,standard_border};
-	{$BETA_CSS_PROPERTY,border-radius: 5px;}
-
-	margin: 1em 0;
-
-	/* Want to change the tiled background?
-		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
-		Find how to edit the referenced "block_background" theme image by doing an Admin Zone search for "block_background"
-	*/
-	background: url('{$IMG;,block_background}') {$GET,area_background};
-	/* If the browser supports gradients, we'll put a nice box-filling gradient in here instead */
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_4_background});}
-
-	overflow: hidden;
-}
-/* Accordion boxes don't have margins */
-.box___standardbox_accordion {
-	margin: 0 !important;
-}
-/* Don't do margins for boxes at the end of frames */
-/*#standalone_html_wrap>div>.box:first-child {	Actually we want this, due to how .fp_col_block has been written
-	margin-top: 0;
-}*/
-#standalone_html_wrap>div>.box:last-child {
-	margin-bottom: 0;
-}
-
-/* Don't let boxes on side panels get too much styling (focuses the eye away) */
-.global_side_panel .box, .box.nested {
-	background: {$GET,area_5_background};
-}
-.box.nested {
-	border: 1px solid {$GET,pale_border};
-}
-.global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6 {
-	background-image: none;
-}
-
-.box>.box_inner, .box>.toggleable_tray {
-	margin: 0.5em;
-}
-
-.box_inner>h1, .box_inner>h2, .box_inner>h3, .box_inner>h4, .box_inner>h5, .box_inner>h6, .toggleable_tray_title, #standalone_html_wrap .box .box .box_inner>h2, #standalone_html_wrap .box .box .box_inner>h3 {
-	{$BETA_CSS_PROPERTY,border-top-left-radius: 3px;}
-	{$BETA_CSS_PROPERTY,border-top-right-radius: 3px;}
-	background-color: {$GET,box_title_background};
-	background-image: url('{$IMG;,gradient}');
-	background-repeat: repeat-x;
-	color: {$GET,box_title_text};
-	text-align: center;
-	font-weight: bold;
-	text-decoration: none;
-	font-size: 1em;
-	border: 0;
-
-	/* .box_inner set us in the wrong position, so fiddle around a bit to move us back to be flush */
-	margin: -0.506em 0 0.506em -0.506em; /* Would be -0.5 but Opera does not seem to like */
-	padding: 0.4em 0.8em 0.4em 0.3em;
-	width: 100%;
-}
-.box_inner>h2>.right .button_page {
-	vertical-align: top;
-}
-
-.box_inner>h1 a, .box_inner>h2 a, .box_inner>h3 a, .box_inner>h4 a, .box_inner>h5 a, .box_inner>h6 a, .toggleable_tray_title a, .box_inner>h1 a:visited, .box_inner>h2 a:visited, .box_inner>h3 a:visited, .box_inner>h4 a:visited, .box_inner>h5 a:visited, .box_inner>h6 a:visited, .toggleable_tray_title a:visited {
-	color: inherit;
-	text-decoration: underline;
-}
-a.toggleable_tray_button { /* Override above for toggleable_tray_button */
-	text-decoration: none !important;
-}
-.box_inner>h1 a:hover, .box_inner>h2 a:hover, .box_inner>h3 a:hover, .box_inner>h4 a:hover, .box_inner>h5 a:hover, .box_inner>h6 a:hover, .toggleable_tray_title a:hover {
-	color: {$GET,area_2_link_hover};
-}
-
-/* If we want a box to standout less, give it 'pale_box' */
-.pale_box.box, .pale_box .box {
-	border: 1px solid {$GET,pale_border} !important;
-}
-.pale_box.box h2, .pale_box .box h2, .pale_box.box h3, .pale_box .box h3 {
-	background: {$GET,point_of_interest_background} !important;
-	color: {$GET,area_key_text} !important;
-}
-
-/* If you want to mark a region as box-less, wrap a div with class 'boxless_space' around it -- it'll invoke a very different kind of modern styling */
-.boxless_space .box {
-	background: none;
-	border: none !important;
-	padding: 0;
-	margin: 1em 0; /* Big margin, necessary as the boxes have no border around them */
-	{$BETA_CSS_PROPERTY,border-radius: 0;}
-}
-.frame>.boxless_space .box:first-child {
-	margin-top: 0; /* No top margin for boxes in a frame */
-}
-.boxless_space .box:last-child {
-	margin-bottom: 0; /* No margin on the last box */
-}
-.boxless_space .fp_col_blocks_wrap .box {
-	margin: 0.5em 0; /* Half-sized margins for the fake-columns on front pages, as the overflow blocks margin collapsing */
-}
-.boxless_space .box>.box_inner {
-	margin: 0;
-}
-.boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6, .boxless_space .box>.toggleable_tray_title {
-	background: url('{$IMG;,boxless_title_leadin_rightcomp}') no-repeat !important;
-	color: {$GET,slightly_seeded_right_complement_text} !important;
-	text-align: {!en_left};
-	font-size: 15px;
-	margin: 0.5em 0;
-	font-family: Arial;
-	padding: 0 0 2px 21px;
-	width: auto;
-	font-weight: bold;
-	text-transform: uppercase;
-	{$BETA_CSS_PROPERTY,border-radius: 0;}
-}
-.global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
-	background: url('{$IMG;,boxless_title_leadin_leftcomp}') no-repeat !important;
-	color: {$GET,slightly_seeded_left_complement_text} !important;
-}
-.boxless_space .buttons_group, .boxless_space .associated_links_block_group, .boxless_space .media_box, .boxless_space .proceed_button {
-	text-align: left;
-}
-
-/* ... Dividers within boxless area... */
-.boxless_space .box + .box, .boxless_space .box + .fp_col_blocks_wrap, .boxless_space .fp_col_blocks_wrap + .box {
-	border-top: 2px solid {$GET,standard_border} !important;
-	margin-top: 1.5em;
-	padding-top: 0.5em;
-}
-.boxless_space .box .box + .box, .comments_wrapper .boxless_space .box + .box { /* Nested dividers more subtle */
-	border-top: 0 !important;
-}
-.global_side_panel .boxless_space .box .box + .box {
-	padding-top: 0;
-}
-.global_middle .boxless_space .box .box + .box:before, .comments_wrapper .boxless_space .box + .box:before {
-	content: "";
-	width: 60%;
-	display: block;
-	margin: 0 auto;
-	border-top: 2px dotted {$GET,pale_border} !important;
-	padding-top: 0.4em;
-}
-.boxless_space .box + .fp_col_blocks_wrap {
-	padding-top: 0;
-}
-
-/* Boxes under boxes shouldn't have the title style - would be ugly */
-
-.box .box .box_inner>h1, .box .box .box_inner>h2, .box .box .box_inner>h3, .box .box .box_inner>h4, .box .box .box_inner>h5, .box .box .box_inner>h6, .box .box .toggleable_tray_title, #standalone_html_wrap .box .box .box .box_inner>h2, #standalone_html_wrap .box .box .box .box_inner>h3 {
-	background: none !important;
-	color: inherit !important;
-	padding-left: 0;
-	font-size: 1.1em;
-} /* This rule is not applied to boxes under the top level box in the preview (#standalone_html_wrap) as those should show verbatim */
-
-/* Expanding and contracting, mostly for boxes but not necessarily always */
-
-.toggleable_tray_title {
-	font-size: 1.1em;
-	font-weight: bold;
+.page_icon {
 	vertical-align: middle;
-	margin: 0; /* Outside .box_inner so remove the margin added above */
-	padding: 0.3em 0; /* Centered so needs no horizontal padding, which would also mess with our 100% width */
-}
-
-.toggleable_tray_button {
-	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
-	outline: 0;
-	font-weight: bold;
-	text-decoration: none;
-	color: inherit !important;
-	cursor: pointer;
-}
-
-.toggleable_tray_button img {
-	float: {!en_right};
-	padding: 0 5px !important;
-}
-.toggleable_tray_button.ttb_left img {
-	float: {!en_left};
-}
-
-.toggleable_tray {
-	overflow: hidden;
-}
-
-/* Used very rarely if our toggleable boxes need some extra space at their top) */
-.toggleable_tray_pulldown_spacer {
-	padding-top: 1em;
-}
-
-/* Used in the Setup Wizard constructed block layouts in the start page */
-
-.fp_col_blocks_wrap {
-	overflow: hidden;
-}
-
-.fp_col_block {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 50%;
-	{+END}
 	{+START,IF,{$MOBILE}}
-		margin: 1em 0;
-		max-width: 100%;
+		margin-bottom: 5px;
 	{+END}
-	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
-.fp_col_block .box {
-	margin-bottom: 0; /* margin-top from boxes below will work instead. This is needed as the "overflow: hidden" stops margin collapsing between the block contents and outside it */
+.standardbox_title_classic .page_icon {
+	margin: -1px 3px 0 0;
 }
 
-.fp_col_block.left {
-	padding-{!en_right}: 0.5em;
-}
-.fp_col_block.right {
-	padding-{!en_left}: 0.5em;
-}
-.fp_col_block.left:last-child {
-	padding-{!en_right}: 0; /* Undo padding if actually there is nothing to the right of this */
+.button_options_spacer {
+	margin-{!en_left}: {$?,{$MOBILE},10,30}px;
 }
 
-/* Box/title-attached meta details */
-
-.meta_details {
-	font-size: 0.9em;
-	color: {$GET,area_text};
-	border-bottom: 1px dotted {$GET,pale_border};
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 25em;
-	{+END}
-	max-width: 100%;
-	padding-{!en_left}: 0.5em;
-	padding-bottom: 0.5em;
-	margin-bottom: 1em;
+.horiz_field_sep, .tick_list_spacer {
+	padding-{!en_left}: 30px;
 }
 
-h3+.meta_details, .newscat_img+.meta_details {
-	border-bottom: 0;
-	margin-top: -1em;
-	margin-bottom: 0.5em;
-}
-.box_inner>h3+.meta_details {
-	margin-top: 0;
+span.long_space {
+	padding-{!en_left}: 30px;
+	display: inline-block;
 }
 
-.meta_details a, .meta_details a:visited {
-	text-decoration: none;
-	color: {$GET,area_link};
-}
-.meta_details a:hover {
-	color: {$GET,a.hover};
+hr.long_break {
+	margin: 20px 0;
 }
 
-.global_side_panel .meta_details {
-	border-bottom: 0;
-	padding-left: 0;
-	padding-top: 0.5em;
-}
-
-/* Overlays are also based on boxes */
-
-.box.overlay {
-	{$BETA_CSS_PROPERTY,box-shadow: 0px 0px 20px {$GET,dark_shadow};}
-}
-
-/*
-=========================
-========Spacing==========
-=========================
-*/
-
-/* These are short hand for defining very common layout patterns. They are quasi-semantic in that they tie into ocPortal's visual language. */
-
-.not_too_tall {
-	max-height: 30em;
-	overflow: auto;
-}
-
-.horizontal_scrolling {
-	overflow: auto;
-	padding-right: 1px; /* For non-aligning table borders */
-}
-
-.tiny_paragraph {
-	margin: 0.3em 0;
-}
-
-.whitespace_visible {
-	overflow: auto;
-	outline: 0;
-	white-space: pre;
-}
-
-.standard_indent {
-	padding-{!en_left}: 4em;
-}
-
-.mini_indent {
-	padding-{!en_left}: 2em;
-}
-
-hr.spaced_rule {
-	margin: 2em 0;
-}
-
-/* Used to indicate something showing underneath, in conjunction with an arrow image */
-.arrow_ruler {
+.centered_inline_block {
 	text-align: center;
 }
 
@@ -1533,73 +1646,276 @@ hr.spaced_rule {
 	overflow-y: visible;
 }
 
-.inline {
-	display: inline;
-}
-.left {
-	float: {!en_left};
-}
-.left.float_separation {
-	margin-{!en_right}: 1em;
+.quite_wide_field {
+	width: 88%;
 }
 
-.right {
-	float: {!en_right};
-}
-.right.float_separation {
-	margin-{!en_left}: 1em;
-}
+{+START,IF,{$NOT,{$MOBILE}}}
+	.sliverised_page {
+		padding: 0 20%;
+	}
+{+END}
 
-/* Something being shown for previewing, on its own so needs focus */
-.lonely_preview {
+.sliverised_page table {
 	text-align: center;
 }
 
-/* Used to align stuff horizontally, i.e. force a gap between separate bits */
-.horiz_field_sep, ul.horizontal_links.horiz_field_sep {
-	padding-{!en_left}: 0.8em;
-}
-.horiz_field_sep {
-	display: inline-block !important;
-}
-ul.horizontal_links.horiz_field_sep {
-	display: inline !important;
+.nothing_here, .more_here {
+	font-size: 0.9em;
+	padding-{!en_left}: 15px;
+	margin-{!en_left}: 10px;
+	background-image: url('{$IMG;,edited}');
+	background-position: {!en_left} 4px;
+	background-repeat: no-repeat;
 }
 
-/* Used e.g. on links that should not get split between lines */
-.must_show_together {
-	white-space: nowrap;
+.staff_actions {
+	margin-top: 2em;
+	font-size: 0.85em;
+	{+START,IF,{$MOBILE}}
+		border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	{+END}
 }
 
-/*
-=========================
-=========Tables==========
-=========================
-*/
-
-.table_cell_nowrap {
-	white-space: nowrap;
+.staff_actions a {
+	white-space: nowrap !important;
 }
 
-.autosized_table {
+.bookmarks_menu_box {
+	width: 320px;
+}
+
+.edited {
+	font-size: 0.85em;
+	padding-{!en_left}: {$?,{$MOBILE},0.7,2}em;
+	font-style: italic;
+}
+
+.edited_block {
+	padding-top: {$?,{$MOBILE},10,30}px;
+}
+
+.category_list {
+	margin: 0;
+	padding: 0 0 0 20px;
+	overflow: auto;
+	zoom: 1;
+}
+
+.category_entry {
+	padding: 6px 0;
+	margin: 6px 0;
+	clear: both;
+	overflow: hidden;
+	width: 100%;
+}
+
+.category_entry a img {
+	max-width: 150px;
+}
+
+.category_entry + .category_entry {
+	border-top: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.category_entry a {
+	font-size: 1.1em;
+}
+
+.category_entry .associated_details {
+	margin-bottom: 0;
+}
+
+.community_block_tagline {
+	text-align: center;
+	font-size: 0.8em;
+}
+
+.global_side .community_block_tagline {
+	font-size: 0.9em;
+}
+
+.community_block_tagline_splitter {
+	background-color: #d8dde6; /* {$,wizard, 95% bgcol + 5% !W/B} */
+	margin-top: 20px;
+	border-top: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.whitespace {
+	width: 100%;
+	overflow: auto;
+	outline: 0;
+	white-space: pre;
+}
+
+hr.spaced_rule {
+	margin: 20px 0;
+}
+
+.special_category_sorter {
+	text-align: center;
+	margin: 20px auto 0 auto;
+	padding: 5px;
+}
+
+.special_category_sorter label {
+	font-weight: bold;
+}
+
+.special_category_sorter br {
+	line-height: 1.3em;
+}
+
+.block_reduced_size {
+	font-size: 0.85em;
+}
+
+ul.actions_list {
+	padding: 0 0 0 {$?,{$MOBILE},10,40}px;
+	margin: 0;
+}
+
+.global_side ul.actions_list {
+	padding-left: 15px;
+}
+
+ul.actions_list li, ul.actions_list_compact li, ul.actions_list_super_compact li {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	list-style-image: none;
+}
+
+ul.actions_list h4 {
+	display: inline;
+	line-height: 2em;
+}
+
+ul.actions_list_compact {
+	padding: 0 0 0 20px;
+	margin: 0;
+}
+
+ul.actions_list_super_compact {
+	padding: 0;
+	margin: 0;
+}
+
+li.actions_list_strong {
+	font-weight: bold;
+}
+
+a.poster_member em {
+	text-shadow: 2px 2px 2px #8497b3; /* {$,wizard, 50% bordcolor + 50% W/B } */
+	padding: 4px 0;
+	letter-spacing: 1px;
+}
+
+a.poster_member:link, a.poster_member:active, a.poster_member:visited, a.poster_member:hover {
+	font-size: 1em;
+	font-weight: bold;
+	border: 1px dashed #8497b3; /* {$,wizard, 50% bordcolor + 50% W/B } */
+	border-left: 0;
+	border-right: 0;
+	display: block;
+	background-color: #f0f3f9; /* {$,wizard, 75% ocf_row2 + 25% W/B }*/
+	margin-bottom: 7px;
+	text-decoration: none;
+	padding: 2px 2px;
+}
+
+.post_poster a.poster_member:link, .post_poster a.poster_member:active, .post_poster a.poster_member:visited, .post_poster a.poster_member:hover {
+	display: inline-block;
+}
+
+a.poster_member:hover {
+	border-color: #072d65; /* {$,wizard, 100% bordcolor}*/
+	background-color: #f5f8fb; /* {$,wizard, 50% ocf_row2 + 50% W/B }*/ /*50% white over medborder color*/
+}
+
+input.buttonhyperlink {
+	border-style: none;
+	background-color: transparent;
+	text-decoration: underline;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	text-align: {!en_left};
+}
+
+/* {$,This will push back 100% width elements that would cause CSS-overflows or table-stretches. Input fields do it a lot because they have built in borders. Doesn't happen for drop-downs and buttons} */
+.constrain_field {
+	padding-{!en_right}: 9px; /* Tested for precision on Firefox */
+}
+
+.container_for_wysiwyg {
+	width: 98%; /* Fix firefox bug with scrollbars on WYSIWYG */
+}
+
+/* {$,Makes a link tag (a) look like it's not anything special (we use these tags as tab points sometimes)} */
+.non_link,
+.non_link:link,
+.non_link:visited,
+.non_link:hover,
+.non_link:active {
+	color: #0d1522 !important; /* {$,wizard, 20% seed + 80% !W/B} */
+	text-decoration: none;
+	cursor: default;
+}
+
+.pulldown_spacer {
+	padding-top: 20px;
+}
+
+.form_with_gap {
+	padding-top: 30px;
+}
+
+.aside_info {
+	font-style: italic;
+}
+
+.button_panel_spaced {
+	margin-top: 10px;
+}
+
+.button_panel {
+	text-align: center;
+}
+
+.button_panel_left {
+}
+
+.standard_indent {
+	padding-{!en_left}: 100px;
+}
+
+.mini_indent {
+	padding-{!en_left}: 20px;
+}
+
+.shunted_button {
+	text-align: {!en_right};
+}
+
+/* Works around Firefox bug on Windows */
+.really_long_table_wrap {
+	overflow-x: visible !important;
+	overflow-y: visible !important;
+}
+
+.variable_table {
 	table-layout: auto !important;
 }
 
-table.scrollable_inside {
-	table-layout: fixed; /* For permission setting stuff that can scroll off */
-}
-
-.centered_table_contents th, .centered_table_contents td {
+.variable_table img {
 	vertical-align: middle;
-	text-align: center;
 }
 
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
-
-	/* To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate http://fantasai.inkedblade.net/style/discuss/collapsed-outer-border/ */
-	padding-right: 3px; /* Actually Chrome seems to need 2 (observed on form tables) */
 }
 
 .wide_table {
@@ -1610,204 +1926,561 @@ table.scrollable_inside {
 }
 
 .spaced_table th, .spaced_table td {
-	padding: 0.7em;
+	padding: 3px;
 }
 
-/* Undo any descendant spacing for nested tables made in WYSIWYG */
-.results_table table[cellpadding="0"] td, .results_table table[cellpadding="0"] th {
+/* Undo for nested tables from WYSIWYG */
+.solidborder table[cellpadding="0"] td, .solidborder table[cellpadding="0"] th {
 	padding: 0;
-}
-.results_table table[border="0"] td, .results_table table[border="0"] th {
-	border: 0;
 }
 
 .highlighted_table_cell {
-	background-color: {$GET,area_current_background};
+	background-color: #c1cee3; /* {$,wizard, 100% lightborder} */
 }
 
-.results_table {
-	border-collapse: separate;
-	border-spacing: 0;
-	margin: 1em 0;
-}
-.wide_table_wrap>.results_table {
-	margin: 0; /* As overflow would cause margin doubling */
-}
-.wide_table_wrap + .wide_table_wrap>.results_table {
-	margin-top: 1em;
+.field_name {
+	font-weight: bold;
 }
 
-.results_table>thead>tr:first-child *:first-child, .results_table>tbody>tr:first-child>*:first-child {
-	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
-}
-.results_table>thead>tr:first-child *:last-child, .results_table>tbody>tr:first-child>*:last-child {
-	{$BETA_CSS_PROPERTY,border-top-right-radius: 5px;}
-}
-.results_table[summary*="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:first-child {
-	{$BETA_CSS_PROPERTY,border-top-left-radius: 0px;}
-}
-.results_table[summary*="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:last-child {
-	{$BETA_CSS_PROPERTY,border-top-right-radius: 0px;}
-}
-.results_table>tbody>tr:last-child>*:first-child {
-	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
-}
-.results_table>tbody>tr:last-child>*:last-child {
-	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
+.field_secondary_title_left {
+	font-style: italic;
 }
 
-.results_table th {
-	text-align: right;
-}
-
-.results_table thead th {
+.nav_mid {
 	text-align: center;
+	{+START,IF,{$MOBILE}}
+		margin: 10px auto 0px;
+		width: 100%;
+		float: left;
+	{+END}
 }
 
-.results_table td, .results_table th {
-	border-top: 1px solid {$GET,standard_border};
-	border-right: 1px solid {$GET,standard_border};
-	padding: 0.5em;
-}
-.results_table td:first-child, .results_table th:first-child {
-	border-left: 1px solid {$GET,standard_border};
-}
-.results_table tbody tr:last-child td, .results_table tbody tr:last-child th {
-	border-bottom: 1px solid {$GET,standard_border};
-}
-
-.results_table .zebra_0 th, .results_table .zebra_0 td, div.zebra_0 {
-	background-color: {$GET,area_zebra_background} !important;
-	color: {$GET,slightly_seeded_text};
-}
-.results_table .zebra_1 th, .results_table .zebra_1 td, div.zebra_1 {
-	background-color: {$GET,area_background} !important;
-	color: {$GET,slightly_seeded_text};
-}
-div.zebra_0, div.zebra_1 {
-	border: 1px solid {$GET,standard_border};
-	padding: 0.5em;
-}
-div.zebra_0 p, div.zebra_1 p {
-	margin-top: 0;
-}
-div.zebra_0 p:last-child, div.zebra_1 p:last-child {
-	margin-bottom: 0;
-}
-div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
-	border-top: 0;
-}
-
-.table_heading_cell {
-	padding: 1em 0.5em !important;
-	text-align: {!en_left};
-	background-color: {$GET,area_background} !important; /*  !important so precedence over th.dh */
-	font-weight: normal;
-}
-.table_heading_cell h2 {
-	margin: 0;
-}
-
-.thick_border th, .thick_border td {
-	border-top-width: 3px !important;
-}
-
-.field_name_column {
-	width: 14em;
-}
-
-.field_name_column_shorter {
-	width: 11em;
-}
-
-.field_input_column, .field_value_column {
+.wide_field, .wide_button {
 	width: 100%;
 }
 
-.field_sup_column {
-	width: 10em;
+input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
+input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
+input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
+button.wide_button, button.button_micro, button.button_page, button.button_pageitem
+{
+	-webkit-transition: opacity 0.5s linear;
+	-moz-transition: opacity 0.5s linear;
+	-o-transition: opacity 0.5s linear;
+	display: inline-block;
+	border: none;
+	cursor: pointer;
+	border: 1px solid #072d65; /* {$,wizard, 100% bordcolor}*/
+	background-color: #5a85c5; /* {$,wizard, 100% lgradcolor} */
+	color: #ffffff; /* {$,wizard, 100% W/B} */
+	border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px;
+	background-image: url('{$IMG;,standardboxes/title_gradient}');
+	opacity: 0.85;
+	text-shadow: 1px 1px 1px #000000; /* {$,wizard, 100% !W/B} */
+	margin: 0 2px;
+	overflow: visible; /* stops button padding on IE7 */
+}
+
+.button_pageitem_tall {
+	background-image: none !important;
+}
+
+input[type="reset"].button_micro, input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
+{
+	padding: 0 3px 1px 3px !important;
+	opacity: 1.0; /* Needed for Opera */
+}
+
+input[type="reset"].wide_button, input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
+{
+	padding: 2px 4px 3px 4px !important;
+}
+
+input[type="reset"].button_page, input[type="submit"].button_page, input[type="button"].button_page, button.button_page
+{
+	padding: 3px 5px 4px 5px !important;
+	min-width: {$?,{$MOBILE},5.8,9.8}em;
+}
+
+input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
+input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover, input[type="submit"].button_page:hover, input[type="submit"].button_pageitem:hover,
+input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
+button.wide_button:hover, button.button_micro:hover, button.button_page:hover, button.button_pageitem:hover
+{
+	opacity: 1.0;
+}
+
+input[type="reset"].wide_button:disabled, input[type="reset"].button_micro:disabled, input[type="reset"].button_page:disabled, input[type="reset"].button_pageitem:disabled,
+input[type="submit"].wide_button:disabled, input[type="submit"].button_micro:disabled, input[type="submit"].button_page:disabled, input[type="submit"].button_pageitem:disabled,
+input[type="button"].wide_button:disabled, input[type="button"].button_micro:disabled, input[type="button"].button_page:disabled, input[type="button"].button_pageitem:disabled,
+button.wide_button:disabled, button.button_micro:disabled, button.button_page:disabled, button.button_pageitem:disabled
+{
+	opacity: 0.4 !important;
+	cursor: default;
+}
+
+.float_separation {
+	padding-{!en_right}: 10px;
+}
+
+.hide_button {
+	vertical-align: middle;
+	-webkit-transition: opacity 0.2s linear !important;
+	-moz-transition: opacity 0.2s linear !important;
+	-o-transition: opacity 0.2s linear !important;
+	outline: 0;
+	font-weight: bold;
+}
+
+{+START,IF,{$NOT,{$MOBILE}}}
+	.hide_button_spacing {
+		padding-top: 20px;
+	}
+{+END}
+
+.expanding_page {
+	padding-bottom: 500px;
+}
+
+.inline_image {
+	vertical-align: top !important;
+}
+
+.inline_image_2 {
+	vertical-align: middle !important;
+}
+
+.inline_image_3 {
+	vertical-align: baseline !important;
+}
+
+.inline_image_4 {
+	margin-top: -4px !important;
+}
+
+.proceed_button {
+	text-align: center;
+	padding: 15px 0; /* Can't be margin, as in Firefox it can collapse below the body */
+	margin: 0;
+}
+
+.global_side .proceed_button {
+	padding: 5px 0;
+}
+
+div.proceed_button_left {
+	text-align: {!en_left};
+}
+
+div.proceed_button_left_2 {
+	text-align: {!en_left};
+	margin-{!en_left}: -20px;
+}
+
+.mini_proceed_button {
+	padding-top: 20px;
+}
+
+.important_notification, .error_marker {
+	color: #d91522; /* {$,red_highlights, 80% FF0000 + 20% seed} */
+	font-weight: bold;
+}
+
+.arrow_ruler {
+	text-align: center;
+}
+
+.tiny_linebreak {
+	line-height: 0.5em;
+}
+
+.tiny_para {
+	margin: 0.5em 0;
+}
+
+.associated_details {
+	font-size: 0.8em;
+}
+
+/* {$,Used for divs that need to be very close together (vertically)} */
+.compact_spacing {
+	margin-bottom: 2px;
+	padding-bottom: 2px;
+}
+
+.associated_breadcrumbs {
+	font-size: 0.8em;
+	color: #123d7b; /* {$,a.link, 73% (seed sat_to 85) + 27% !W/B} */
+}
+
+.associated_caption {
+	font-size: 0.8em;
+	margin: 5px;
+	font-weight: normal;
+}
+
+.dottedborder .associated_caption {
+	font-size: 0.87em;
+}
+
+.associated_link_to_small {
+	font-size: 0.8em;
+}
+
+.global_side .associated_link_to_small {
+	font-size: 0.9em;
+}
+
+.red_alert {
+	color: #d91522; /* {$,red_highlights, 80% FF0000 + 20% seed} */
+	font-weight: bold;
+}
+
+.highlight_red {
+	color: red;
+}
+
+.up_alert {
+	text-transform: uppercase;
+}
+
+.not_too_tall {
+	max-height: 300px;
+	overflow: auto;
+}
+
+th.meta_data_title {
+	font-weight: bold !important;
+}
+
+.gallery_media_full_expose {
+	overflow: hidden;
+	width: 100%;
+	outline: 0;
+	margin: {$?,{$MOBILE},1,3}em 0;
+	text-align: center;
+	position: relative;
+}
+
+.gallery_media_full_expose img, .img_thumb {
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
+	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
+	box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
+	max-width: 100%;
+	box-sizing: border-box;
 }
 
 /*
 =========================
-=====Core Interfaces=====
+====Core interfaces======
 =========================
 */
+
+.inline {
+	display: inline;
+}
+
+.left {
+	float: {!en_left};
+}
+
+.right {
+	float: {!en_right};
+}
+
+.br_space {
+	margin-bottom: 1em;
+}
 
 .question_ui_buttons {
 	text-align: center;
 	margin-top: 15px;
 }
 
-.tooltip {
-	font-size: 1em;
-	padding: 0.5em;
-	background-color: {$GET,area_faded_background};
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_faded_background}\, {$GET,area_background});}
-	border: 1px solid {$GET,point_of_interest_border};
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,point_of_interest_border};}
-	z-index: 1000;
-	{$BETA_CSS_PROPERTY,opacity: 0.9;}
-	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
-	{$BETA_CSS_PROPERTY,border-radius: 10px;}
-	color: {$GET,area_text};
+.sp_header, .view_header {
+	vertical-align: bottom;
 }
-.tooltip img {
+
+.ocp_tooltip {
+	font-size: 1em;
+	padding: 3px;
+	background-color: #f5f7fa; /* {$,wizard, 5% seed + 95% W/B} */
+	border: 1px solid #4b5a71; /* {$,wizard, 70% medborder.border + 30% !W/B} */
+	z-index: 1000;
+	opacity: 0.9;
+	word-wrap: break-word;
+}
+
+.ocp_tooltip img {
 	max-width: 100%;
 }
-.tooltip .shunted_button {
+
+.ocp_tooltip .shunted_button {
 	display: none;
 }
-.tooltip .whitespace_visible {
+
+.ocp_tooltip .whitespace {
 	max-height: 5em;
 	overflow: auto;
 }
-.tooltip .associated_link {
+
+.ocp_tooltip .standardbox_links_classic {
 	display: none;
 }
+
 .tooltip_img {
 	position: absolute;
 	right: 3px;
 	top: 3px;
 }
-.tooltip h2 {
+
+.ocp_tooltip h2 {
 	margin-top: 0;
 }
-.tooltip a, .tooltip a:visited, .tooltip a:hover {
+
+.ocp_tooltip a, .ocp_tooltip a:visited, .ocp_tooltip a:link, .ocp_tooltip a:active, .ocp_tooltip a:hover {
 	text-decoration: none !important;
 	color: inherit !important;
 }
+
 .tooltip_fields {
 	border-collapse: collapse;
 	font-size: 0.85em;
 }
+
 .tooltip_fields th {
-	border-right: 1px solid {$GET,dark_border};
+	border-right: 1px solid #4b5a71; /* {$,wizard, 70% medborder.border + 30% !W/B} */
 	font-weight: bold !important;
 	padding-right: 1em;
-	white-space: nowrap;
 }
+
 .tooltip_fields td {
 	padding-left: 1em;
 }
-.tooltip_with_img {
-	padding-right: 30px;
-}
-.faded_tooltip_img {
-	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
-}
 
 .diff del {
-	color: {$GET,red_highlight_text};
+	color: red;
 }
+
 .diff ins {
 	font-weight: bold;
 	text-decoration: none;
 }
 
-.results_table_under {
+.field_checkbox_description {
+	margin-top: -16px;
+	margin-{!en_left}: 25px;
+}
+
+.form_field_name {
+	margin: 4px;
+	display: inline-block;
+}
+
+.input_huge_field {
+}
+
+.password_strength {
+	float: right;
+	width: 100px;
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	display: none;
+}
+
+.password_strength_inner {
+	height: 1em;
+	width: 0px;
+}
+
+.input_colour, .input_list, .input_line, .input_integer,
+.input_author, .input_username, .input_colour, .input_email, .input_codename,
+.input_tick, .input_float, .input_text, .input_upload, .input_radio {
+}
+
+.input_colour_required, .input_list_required, .input_line_required, .input_integer_required,
+.input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,
+.input_tick_required, .input_float_required, .input_text_required, .input_upload_required {
+/*	background-color: # F0D0D6*/
+}
+
+.input_erroneous {
+	background-color: #ffbfbf !important; /* {$,wizard, 25% FF0000 + 75% FFFFFF} */
+}
+
+#enter_the_matrix { /* {$,Used for the permission setting display matrix} */
+	width: 100%;
+	overflow-x: auto;
+	outline: 0;
+	padding-bottom: 1px;
+}
+
+.form_group {
+	margin-bottom: 15px;
+}
+
+.form_skip {
+	height: 35px;
+}
+
+.form_skip div {
+	float: {!en_right};
+}
+
+.form_skip_with_req_note {
+	margin: -52px 0 0 0;
+}
+
+.input_error_here {
+	padding-bottom: 3px;
+	color: #a30000; /* {$,wizard, 70% (barrier_a_required sat_to 100) + 30% !W/B} */
+	font-size: 0.9em;
+	display: block;
+	text-align: center;
+	text-shadow: 2px 2px 2px #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.input_compound_ticks {
+	margin: -4px 0 -5px -5px;
+	white-space: nowrap;
+}
+
+.input_compound_tick_first input, .input_compound_tick input {
+	margin-bottom: 0px;
+}
+
+.input_compound_tick {
+	margin-{!en_left}: -1px;
+	border-{!en_left}: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.input_compound_tick, .input_compound_tick_first {
+	padding: 8px;
+	float: {!en_left};
+	font-size: 0.9em;
+	vertical-align: middle;
+}
+
+.people_list {
+	background-color: #d4e0f1; /* {$,wizard, 17% (seed sat_to 100) + 83% W/B} */
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	width: auto;
+}
+
+.members_viewing {
+	padding: 4px;
+	text-indent: 25px;
+	padding-{!en_left}: 0;
+}
+
+.ocf_topic_0 .members_viewing {
+	border-top: 0;
+}
+
+.post .post_title {
+	font-weight: bold;
+	padding-left: 0;
+	margin-bottom: 0.2em;
+}
+
+.post .post_avatar {
+	float: right;
+	margin: 10px 0 0 20px;
+	width: 60px;
+}
+
+.post .post_subline {
+	margin-bottom: 1em;
+	font-size: 0.8em;
+}
+
+.post .post_poster {
+	font-weight: bold;
+}
+
+.post .post_time {
+}
+
+.post .post_action_link {
+}
+
+.post .post_thread_children {
+	margin-top: 1em;
+	{+START,IF,{$MOBILE}}
+		margin-left: 7px;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-left: 20px;
+	{+END}
+}
+
+.post .ocf_post_buttons {
+	margin-top: 1.3em;
+}
+
+.ocf_post_buttons a {
+	opacity: 0.0;
+	-webkit-transition-property : opacity;
+	-webkit-transition-duration : 0.5s;
+	-moz-transition-property : opacity;
+	-moz-transition-duration : 0.5s;
+	-o-transition-property : opacity;
+	-o-transition-duration : 0.5s;
+	transition-property : opacity;
+	transition-duration : 0.5s;
+}
+
+.ocf_post_buttons a[rel="add reply"] {
+	opacity: 1.0;
+}
+
+.ocf_post_buttons:hover a {
+	opacity: 1.0;
+}
+
+.post_show_more {
+	text-align: center;
+	border: 1px dashed #c1cee3; /* {$,wizard, 100% lightborder} */
+	border-bottom-left-radius: 40px;
+	border-bottom-right-radius: 40px;
+	padding: 15px;
+	font-weight: bold;
 	font-size: 0.85em;
-	margin: 1em 0;
+}
+
+.post .post_show_more {
+	margin-left: 20px;
+}
+
+.radio_list_picture_cat .hide_button img {
+	vertical-align: bottom;
+}
+
+.radio_list_picture {
+	float: {!en_left};
+	white-space: nowrap;
+	padding: 3px;
+	min-width: 40px;
+	min-height: 40px;
+	font-size: 0.8em;
+	min-height: 35px;
+	min-width: 35px;
+}
+
+#page_running_admin_themes .radio_list_picture {
+	float: none;
+	margin: 15px;
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.radio_list_picture img {
+	max-width: 100px;
+}
+
+.results_table {
+	font-size: 0.85em;
+	margin: 8px 0;
 }
 
 .results_table_sorter {
@@ -1816,51 +2489,27 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	float: left;
 }
 
-.pagination_spacing {
-	margin: 1em 0;
+.results_browser_spacing {
+	padding: 10px 0;
 }
 
-.pagination {
+.results_browser {
 	float: {$?,{$MOBILE},{!en_left},{!en_right}};
 	padding: 0;
 	margin: 2px 0 0 0;
 /*	max-width: 540px; Looks bad on forumview */
 }
 
-.pagination a,
-.pagination span,
-.results_launcher a,
-.results_launcher span {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		border: 1px solid {$GET,standard_border};
-	{+END}
-	{+START,IF,{$MOBILE}}
-		border: 2px solid {$GET,standard_border};
-	{+END}
-	background-color: {$GET,area_background};
-}
-.pagination a:hover, .results_launcher a:hover {
-	background-color: {$GET,area_hover_3_background} !important;
-}
-{+START,IF,{$NOT,{$MOBILE}}}
-	.pagination a,
-	.pagination span,
-	.results_launcher a,
-	.results_launcher span {
-		margin-{!en_left}: -1px;
-	}
-{+END}
-
-.alphabetical_jumper {
+.alpha_jumper {
 	float: none !important;
-	margin-left: -2px !important;
+	margin-left: 2px !important;
 	margin-bottom: 10px !important;
 	max-width: 100% !important;
 	padding: 3px;
 }
 
-.alphabetical_jumper.pagination a, .alphabetical_jumper.pagination a:hover {
-	padding: 3px 5.8px !important;
+.alpha_browser_cont {
+	padding: 2px 8px 2px 8px !important;
 }
 
 .results_continue, .results_page_num {
@@ -1871,7 +2520,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	font-weight: bold;
 }
 
-.pagination_per_page {
+.results_browser_per_page {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		display: inline;
 		padding: 0 20px;
@@ -1881,17 +2530,20 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	{+END}
 }
 
-.pagination_pages {
+.results_browser_pages {
 	display: inline;
 }
 
-.pagination a,
-.pagination a:visited,
-.pagination a:hover,
-.pagination span,
-.results_launcher a,
+/* {$,see also medborder declaration near bottom and .ocf_on declaration above} */
+.results_browser a:link,
+.results_browser a:visited,
+.results_browser a:hover,
+.results_browser a:active,
+.results_browser span,
+.results_launcher a:link,
 .results_launcher a:visited,
 .results_launcher a:hover,
+.results_launcher a:active,
 .results_launcher span {
 	display: inline-block;
 	text-decoration: none;
@@ -1900,19 +2552,30 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 		margin-{!en_left}: -1px;
 	{+END}
 }
-.pagination a:hover,
+.results_browser a:hover,
 .results_launcher a:hover {
-	background-color: {$GET,area_hover_2_background};
+	background-color: #d9e1ee; /* {$,wizard, 20% seed + 80% W/B} */
 }
-.pagination a,
-.pagination a:visited,
-.pagination a:hover,
-.pagination span,
-.results_launcher a,
+
+.results_browser a:link,
+.results_browser a:visited,
+.results_browser a:hover,
+.results_browser a:active,
+.results_browser span,
+.results_launcher a:link,
 .results_launcher a:visited,
 .results_launcher a:hover,
+.results_launcher a:active,
 .results_launcher span {
-	padding: 2px {$?,{$MOBILE},10,5}px !important;
+	padding: 2px {$?,{$MOBILE},10,5}px;
+}
+
+.results_launcher a:link,
+.results_launcher a:visited,
+.results_launcher a:hover,
+.results_launcher a:active,
+.results_launcher span {
+	padding: 0 3px;
 }
 
 .results_launcher {
@@ -1920,188 +2583,484 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	display: inline;
 	padding-{!en_left}: 20px;
 }
-.results_launcher a,
-.results_launcher a:visited,
-.results_launcher a:hover,
-.results_launcher span {
-	padding: 0 3px;
+
+.index_page_fancier_page_pre {
+	margin-bottom: 15px;
 }
 
-.category_list {
-	margin: 0;
-	padding: 0 0 0 20px;
-	overflow: auto;
-}
-.category_list>li {
-	border-top: 2px solid {$GET,standard_border} !important;
-	padding: 0.5em 0;
-	margin: 0.5em 0;
-	clear: both;
-	overflow: hidden;
-}
-.category_list>li:first-child {
-	border-top: 0 !important;
-}
-.category_list>li.box { /* For a variety of combined box and category_list */
-	padding: 0 !important;
-}
-.category_list>li a img {
-	max-width: 150px;
-}
-.category_list>li+.category_list>li {
-	border-top: 1px solid {$GET,standard_border};
-}
-.category_list>li a {
-	font-size: 1.1em;
-}
-.category_list>li .associated_details {
-	margin-bottom: 0;
-}
-
-.category_sorter {
-}
-.category_sorter label {
-	font-weight: bold;
-}
-
-.index_screen_fancier_screen_pre {
-	margin-bottom: 1.5em;
-}
-.index_screen_fancier_screen_post {
-	margin-top: 1.5em;
+.index_page_fancier_page_post {
+	margin-top: 15px;
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.index_screen_fancier_screen_entries {
-		margin-{!en_left}: 1em;
+	.index_page_fancier_page_entries {
+		margin-{!en_left}: 30px;
 	}
 {+END}
-.index_screen_fancier_entry {
-	margin: 0.5em;
-	padding: 0.5em;
-}
-.index_screen_fancier_entry_link {
-	font-weight: bold;
-	margin-bottom: 0.3em;
-	padding: 0 0 0 18px;
-	background: url('{$IMG;,action_link}') 0 5px no-repeat;
-}
-.index_screen_fancier_entry_count {
-	font-size: 0.9em;
-	font-weight: normal;
-}
-.index_screen_fancier_entry_description {
-	font-size: 0.9em;
-	margin-{!en_left}: 18px; /* Due to action_link image */
+
+.index_page_fancier_entry {
+	margin: 3px;
+	padding: 3px;
 }
 
-.splurgh {
+.index_page_fancier_entry_link {
+	font-weight: bold;
+	margin-bottom: 0.3em;
+}
+
+.index_page_fancier_entry_count {
+	font-size: 0.8em;
+	font-weight: normal;
+}
+
+.index_page_fancier_entry_description {
+	font-size: 0.8em;
+	margin-{!en_left}: 1.3em;
+}
+
+#splurgh {
 	font-weight: bold;
 }
-.splurgh ul {
+
+#splurgh ul {
 	list-style: none;
 	margin-{!en_left}: 0;
 	padding-{!en_left}: 0;
 	font-size: 1.5em;
 }
-.splurgh li {
+
+#splurgh li {
 	margin-{!en_left}: 0;
 	padding-{!en_left}: 0;
 }
 
-.splurgh ul ul {
+#splurgh ul ul {
 	list-style: circle;
 	font-size: 0.9em;
 	padding-top: 6px;
 }
-.splurgh li li {
+
+#splurgh li li {
 	margin-{!en_left}: 40px;
 	padding-{!en_left}: 0;
 }
-.splurgh ul ul ul {
+
+#splurgh ul ul ul {
 	font-size: 0.8em;
 }
-.splurgh ul ul ul ul {
-	font-size: 1em;
+
+#splurgh ul ul ul ul {
+    font-size: 1em;
 }
 
-div.wysiwyg_toolbar_color_finder {
-	color: {$GET,area_background};
+.captcha {
+	font-size: 0.8em;
+	margin-bottom: 3px;
 }
 
-.fractional_edit {
-	margin: -3px;
-	border: 1px dashed {$GET,point_of_interest_border};
-	padding: 2px;
-}
-.fractional_edit_nonover {
+.captcha a {
+	float: {!en_right};
+	margin: 10px 0 0 5px;
 }
 
-.loading_box {
-	width: 10em;
-	display: inline-block;
-}
-.site_unloading {
-	{$BETA_CSS_PROPERTY,opacity: 0.2;}
+/*
+=========================
+========Site-Map=========
+=========================
+*/
+
+ul.sitemap {
+	list-style-type: none;
+	list-style-image: none;
+	margin-left: 0;
+	padding-left: 0;
 }
 
-.ajax_tree_list_loading {
-	padding: 2em;
-	text-align: center;
+ul.sitemap ul {
+	margin-left: 0;
+	padding-left: 0;
 }
 
-.ajax_tree_expand_icon {
-	width: 11px;
-	height: 11px;
+ul.sitemap li {
+	margin-top: 2em;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: 0;
+	padding-left: 0;
 }
 
-.ajax_tree_cat_icon {
-	width: 14px;
-	height: 14px;
+ul.sitemap li li {
+	margin-top: 0.5em;
+	font-weight: normal;
+	font-size: 0.9em;
+	margin-left: 2em;
+	padding-left: 0;
 }
 
-.ajax_tree_magic_button {
-	background-color: {$GET,native_ui_background};
-	color: {$GET,native_ui_foreground};
-	cursor: pointer;
+/*
+=========================
+=========Comcode=========
+=========================
+*/
+
+.shocker {
+	text-align: right;
+	width: 100%;
+	font-size: 1.2em;
 }
 
-.tree_list__root_tree_list {
-	padding-bottom: 0.5em;
-}
-.tree_list_highlighted a, .tree_list_nonhighlighted a {
-	background-color: {$GET,native_ui_background};
-	color: {$GET,native_ui_foreground};
-}
-.tree_list_highlighted a {
+.shocker_left {
+	float: left;
 	font-weight: bold;
 }
-.tree_list_nonhighlighted a {
+
+.shocker_right {
 }
 
-.ocp_chat {
-	margin: 20px;
-	font-size: 0.9em;
-	float: right;
-	width: 260px;
+.comcode_snapback {
+	text-align: {!en_right};
+	font-size: 0.7em;
 }
-.ocp_chat_iframe {
+
+.comcode_overlay {
+	padding: 15px;
+	margin: 0;
+	background-color: #fafbfd; /* {$,code_content, 25% ocf_row2 + 75% W/B} */
+	border: 1px solid #7f9ac5; /* {$,wizard, 68% seed + 32% W/B} */
+}
+
+.comcode_overlay_main {
+	margin-bottom: 3em;
+}
+
+.comcode_overlay_dismiss {
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 0.5em; /* For IE6 */
+	width: 90%;
+}
+
+.comcode_code_wrap {
+	width: 100%;
+	overflow-x: auto;
+}
+
+/* {$,.comcode_quote is used where the [quote] tag is parsed.} */
+/* {$,.comcode_code is used where the [code] tag is parsed.} */
+.comcode_quote, .comcode_code, .comcode_hide {
+	margin: 15px;
+
+	/* To prevent horizontal overlapping with floats */
+	outline: 0;
+}
+.comcode_quote, .comcode_code {
+	overflow: auto;
+}
+.comcode_hide {
 	overflow: hidden;
-	width: 450px;
-	height: 90%;
 }
 
-/* Specific field types */
+.comcode_quote_h4,
+.comcode_code_h4 {
+	border: 1px solid #7f9ac5; /* {$,wizard, 68% seed + 32% W/B} */
+	padding: 4px;
+	margin-bottom: 0;
+	background: #8ea6cb url('{$IMG;,quote_gradient}') repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+}
 
-.multilist_mark {
-	width: 1em;
+.comcode_quote_content,
+.comcode_code_content {
+	border: 1px solid #7f9ac5; /* {$,wizard, 68% seed + 32% W/B} */
+	display: block;
+	padding: 5px;
+	margin-{!en_left}: 8px;
+	background-color: #fafbfd; /* {$,code_content, 25% ocf_row2 + 75% W/B} */
+	color: #3f3f3f; /* {$,wizard, 25% code_content + 85% !W/B} */
+	overflow: auto;
+}
+
+.comcode_quote_content_titled {
+	border-top: 0;
+}
+
+.comcode_code_content {
+	font-family: 'Courier New', 'Courier', monospace;
+	font-size: 1.1em;
+	border-top: 0;
+	white-space: nowrap;
+}
+
+.hit_counter {
+	font-family: 'Courier New', 'Courier', monospace;
+	font-size: 1.5em;
+}
+
+.hit_counter, .hit_counter div {
 	display: inline-block;
 }
-.multilist_mark.yes {
-	color: {$GET,green_highlight_text};
+
+.comcode_code_scroll {
+	max-height: 300px;
 }
-.multilist_mark.no {
-	color: {$GET,red_highlight_text};
+
+.comcode_highlight {
+	font-weight: bold;
+	color: #d91522; /* {$,wizard, 100% red_highlights} */
+	background-color: #ffffcc; /* {$,orange_highlights,100% #ffffcc} */
+}
+
+.cedi_link, .comcode_exp_ref {
+	color: #444649; /* {$,wizard, 30% sb_color + 70% !W/B} */
+	font-size: 0.85em;
+}
+
+.comcode_exp_ref a {
+	background-image: url('{$IMG;,arrow_box}') !important;
+}
+
+.cedi_link a {
+	background-image: url('{$IMG;,cedi_link}') !important;
+}
+
+.comcode_exp_ref a, .cedi_link a {
+	padding-{!en_right}: 17px !important;
+	background-repeat: no-repeat !important;
+	background-position: 100% 30% !important;
+}
+
+.comcode_exp_ref a:hover {
+	background-image: url('{$IMG;,arrow_box_hover}') !important;
+}
+
+.cedi_link a:hover {
+	background-image: url('{$IMG;,cedi_link_hover}') !important;
+}
+
+.comcode_exp_ref a:hover, .cedi_link a:hover {
+	padding-{!en_right}: 17px !important;
+	background-repeat: no-repeat !important;
+	background-position: 100% 30% !important;
+}
+
+.comcode_exp_thumb {
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	width: 10%;
+	padding: 0;
+	margin: 5px;
+	margin-{!en_left}: 0;
+}
+
+.comcode_exp_thumb td {
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.comcode_exp_thumb p {
+	color: #325180; /* {$,wizard, 76% seed + 24% !W/B} */
+	font-size: 0.8em;
+	padding: 2px;
+	margin: 0;
+	margin-bottom: 3px;
+}
+
+.comcode_exp_thumb img {
+	margin: 1px;
+}
+
+.comcode_concept_inline, a.comcode_concept_inline:link, a.comcode_concept_inline:visited, a.comcode_concept_inline:hover, a.comcode_concept_inline:active {
+	border-bottom: 1px dashed #325180; /* {$,wizard, 76% seed + 24% !W/B} */
+	display: inline-block;
+}
+
+.comcode_concepts {
+	font-size: 0.85em;
+	border: 1px solid #bdcbe1; /* {$,wizard, 35% seed + 65% W/B} */
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	width: 80%;
+	margin: 0 auto;
+}
+
+.comcode_concepts_header {
+	font-weight: bold;
+	text-align: center;
+	background-color: #a2b6d5; /* {$,wizard, 60% sb_color + 40% seed} */
+	color: #313740; /* {$,wizard, 30% th.bgcolor + 70% !W/B} */
+	height: 1.8em;
+}
+
+.comcode_concepts_title {
+	background-image: url('{$IMG;,checklist/checklist1}');
+	background-repeat: no-repeat;
+	background-position: 1px 0;
+	vertical-align: top;
+	text-indent: 14px;
+	margin: 0;
+}
+
+.comcode_concepts_content {
+	padding-bottom: 0.8em;
+}
+
+.comcode_table_of_contents {
+	border: 1px solid #bdcbe1; /* {$,wizard, 35% seed + 65% W/B} */
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	display: inline-block;
+	padding-{!en_right}: 10px;
+	white-space: nowrap;
+	font-size: 0.9em;
+}
+
+.search_result .comcode_table_of_contents {
+	display: none;
+}
+
+.comcode_table_of_contents ol {
+	list-style-position: inside;
+	padding-{!en_left}: 12px;
+	margin: 0;
+}
+.comcode_table_of_contents li {
+	margin: 0;
+	padding: 0;
+}
+
+.comcode_table_of_contents a {
+	margin: 0;
+}
+
+.comcode_table_of_contents_title {
+	text-align: center;
+	color: #444649; /* {$,wizard, 30% sb_color + 70% !W/B} */
+	margin: 3px;
+	font-weight: bold;
+}
+
+.comcode_italic {
+	font-style: italic;
+}
+
+.comcode_bold {
+	font-weight: bold;
+}
+
+.comcode_underline {
+	text-decoration: underline;
+}
+
+.comcode_strike {
+	text-decoration: line-through;
+}
+
+.image_fader_box {
+	position: relative;
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	display: inline-block;
+}
+
+.image_fader_box img {
+	display: block;
+}
+
+.carousel {
+	overflow: hidden;
+	width: 100%;
+	white-space: nowrap;
+	position: relative;
+}
+
+.carousel .img_thumb {
+	max-width: 140px;
+}
+
+.carousel .move_left, .carousel .move_right {
+	min-height: 16px;
+	width: 17px;
+}
+
+.carousel .move_left {
+	margin-right: 20px;
+	padding-right: 5px;
+	float: left;
+	background: url('{$IMG;,carousel/button_left}') left center no-repeat;
+	border-right: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.carousel .move_left_hover {
+	background-image: url('{$IMG;,carousel/button_left_hover}');
+}
+
+.carousel .move_right {
+	margin-left: 20px;
+	padding-left: 5px;
+	float: right;
+	background: url('{$IMG;,carousel/button_right}') right center no-repeat;
+	border-left: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
+}
+
+.carousel .move_right_hover {
+	background-image: url('{$IMG;,carousel/button_right_hover}');
+}
+
+.carousel .main {
+	overflow: hidden;
+}
+
+.comcode_section_controller {
+	padding-top: 10px;
+	margin-bottom: 20px;
+}
+
+{+START,IF,{$NOT,{$MOBILE}}}
+	.attachment {
+		min-width: 450px;
+		margin: 1em 0;
+		border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	}
+
+	.attachment legend {
+		border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+		padding: 0.15em 0.3em;
+		font-size: 0.9em;
+		font-style: italic;
+	}
+{+END}
+
+.attachment_details {
+	margin-top: 8px;
+}
+
+.attachment_left {
+	float: left;
+	margin: 0 15px 5px 0;
+}
+
+.attachment_right {
+	float: right;
+	margin: 0 0 5px 15px;
+}
+
+.attachment_left .attachment, .attachment_right .attachment {
+	width: 200px;
+}
+
+.attachment_action {
+	font-size: 0.8em;
+}
+
+.attachment_action a {
+	font-weight: bold;
+}
+
+.attachment_img {
+	max-width: 100%;
+}
+
+.ticker {
+	margin: 0 auto;
+	height: 15px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-align: left;
 }
 
 /*
@@ -2110,7 +3069,60 @@ div.wysiwyg_toolbar_color_finder {
 =========================
 */
 
+.trackback_inside {
+	white-space: nowrap;
+}
+
+.trackback_result {
+	padding: 5px;
+}
+
+.no_trackbacks {
+	margin-top: 0.68em;
+}
+
+.RATING_BOX .rating_inner {
+	text-align: center;
+}
+
+.RATING_INLINE_DYNAMIC .rating_inner, .RATING_INLINE_DYNAMIC form {
+	display: inline;
+}
+
+.post_action_link .RATING_INLINE_DYNAMIC {
+	padding-left: 20px;
+}
+
+.rating_inner {
+	white-space: nowrap;
+}
+
+.rating_inner img {
+	cursor: pointer;
+}
+
+.addtocart {
+	width: 100px;
+	height:34px;
+	padding-top: 10px;
+}
+
+.trackbacks {
+	width: {$?,{$MOBILE},100%,14em};
+	margin-top: 1em;
+	margin-left: 1em;
+}
+
+.ratings {
+	width: {$?,{$MOBILE},100%,10em};
+	margin-top: 1em;
+}
+
 {+START,IF,{$NOT,{$MOBILE}}}
+	.lined_up_boxes .ratings, .lined_up_boxes .trackbacks {
+		margin-top: 0;
+	}
+
 	.lined_up_boxes .right {
 		margin-left: 1em;
 	}
@@ -2130,235 +3142,69 @@ div.wysiwyg_toolbar_color_finder {
 	}
 {+END}
 
-.ratings {
-	width: {$?,{$MOBILE},100%,10em};
+.ratings .standardbox_spaced {
+	padding: 0 0 5px 5px;
 }
 
-.RATING_BOX .rating_inner {
-	text-align: center;
-}
-
-.RATING_INLINE_DYNAMIC, .RATING_INLINE_STATIC, .RATING_INLINE_DYNAMIC div, .RATING_INLINE_STATIC div, .RATING_INLINE_DYNAMIC form, .RATING_INLINE_STATIC form {
-	display: inline;
-}
-.RATING_INLINE_DYNAMIC .rating_outer, .RATING_INLINE_STATIC .rating_outer {
-	padding-left: 2em;
-}
-.RATING_INLINE_DYNAMIC .rating_outer:first-child, .RATING_INLINE_STATIC .rating_outer:first-child {
-	padding-left: 0;
-}
-
-.post_action_link .RATING_INLINE_DYNAMIC {
-	padding-left: 20px;
-}
-
-.rating_inner img {
-	cursor: pointer;
-}
-
-.rating_error {
-	text-align: center;
-}
-
-.rating_star {
-	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
-}
-.rating_star_highlight {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
-}
-
-.trackbacks {
-	width: {$?,{$MOBILE},100%,14em};
-}
-
-.box___trackback label {
-	display: block;
-}
-
-.content_screen_comments .comments_wrapper {
-	margin-top: 2em;
-}
-
-.post .post_title {
-	font-weight: bold;
-	padding-left: 0;
-	margin-bottom: 0.3em;
-}
-
-.post .post_avatar {
-	float: right;
-	margin: 1em 0 0 2em;
-	width: 60px;
-	height: 60px;
-}
-
-.post .post_subline {
-	margin: 1em 0;
-	font-size: 0.9em;
-}
-
-.post .post_poster {
-	font-weight: bold;
-}
-
-.post .post_time {
-	margin-left: 0.5em;
-}
-
-.post .post_action_link {
-}
-
-.post .post_thread_children {
-	margin-top: 1em;
-	{+START,IF,{$MOBILE}}
-		margin-left: 7px;
-	{+END}
+.highlighted_post {
+	background-color: #fafbfd; /* {$,code_content, 25% ocf_row2 + 75% W/B} */
+	padding: 15px;
+	border: 1px dotted #6b81a1; /* {$,wizard, 100% medborder.border} */
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-left: 20px;
+		margin-right: 70px;
 	{+END}
 }
 
-.post_buttons {
-	text-align: left !important; /* Overrides buttons_group */
-}
-.box .buttons_group {
-	margin-bottom: 0 !important;
+#comments_form .standardbox_wrap_internal {
+	margin: 0;
+	border: 0;
 }
 
-.post .post_buttons {
-	margin-top: 1.3em;
+#comments_posting_form_outer .attachments {
+	text-align: {!en_left};
+	padding: 5px;
 }
 
-.post_buttons a {
-	{$BETA_CSS_PROPERTY,opacity: 0.1;} display: inline-block;/*Needed for IE8*/
-	{$BETA_CSS_PROPERTY,transition-property : opacity;}
-	{$BETA_CSS_PROPERTY,transition-duration : 0.5s;}
-}
-
-.post_buttons a[rel="add reply"] {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
-}
-
-.post_buttons:hover a {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
-}
-
-.post_show_more {
-	text-align: center;
-	border: 1px solid {$GET,standard_border};
-	border-bottom-left-radius: 40px;
-	border-bottom-right-radius: 40px;
-	padding: 1em;
-	font-weight: bold;
-	font-size: 0.85em;
-}
-
-.post .post_show_more {
-	margin-left: 2em;
-}
-
-.comment_wrapper {
-	margin: 1em 0;
-}
-
-.comment_wrapper .highlighted_post {
-	background: {$GET,point_of_interest_background} !important;
-	padding: 1em !important;
-	border: 1px dotted {$GET,slightly_seeded_complement_text} !important;
-}
-.comments_wrapper .boxless_space .comment_wrapper .highlighted_post.box {
-	border-top: 1px dotted {$GET,slightly_seeded_complement_text} !important; /* Needs to be more explicit as boxless-space rules will remove borders */
-}
-
-.reviews_average {
-	font-size: 0.8em;
-	{$BETA_CSS_PROPERTY,opacity: 0.7;} display: inline-block;/*Needed for IE8*/
-}
-
-.comments_field_name_column {
-	width: 12em;
-}
-
-.comments_field_input_column {
-	width: 100%;
-}
+{+START,IF,{$MOBILE}}
+	.contact-form { width: 100%; outline: 0; overflow: hidden; font-size: 0.85em; font-weight: bold; }
+	.contact-form ul { margin: 0; padding: 10px; }
+	.contact-form li { list-style: none; float: left; width: 100%; margin: 5px 0; }
+	.contact-form li span { width: 150px; display: block; float: left; }
+	.contact-form li span b { font-size: 0.75em; }
+	.contact-form li .text-input { float: left; width: 265px; border: 1px solid #072d65; height: 24px; } /* {$,wizard, 100% bordcolor}*/
+	.contact-form li .text-input1 { float: left; width: 265px; border: 1px solid #072d65; height: 156px; } /* {$,wizard, 100% bordcolor}*/
+	.comments_posting_form_outer .button_pageitem { float: left; }
+{+END}
 
 .comments_posting_form_inner {
 	text-align: {!en_left};
-	padding: 1em 0 0 0;
+	padding: 0px;
 	margin: 0 auto;
 	width: {$?,{$MOBILE},100%,525}px;
 	{+START,IF,{$MOBILE}}
 		overflow: hidden;
+		outline: 0;
 	{+END}
 }
 
-.comments_posting_form_inner th {
-	font-weight: bold !important;
-	padding: 0.5em 1.5em 0.5em 0;
-	border-right: 1px solid {$GET,pale_border};
-	text-align: right;
-}
-.comments_posting_form_inner th * {
-	text-align: right !important;
-}
-
-.comments_posting_form_inner td {
-	padding-left: 1.5em;
-}
-
 .comments_posting_form_inner textarea {
-	color: {$GET,comfortable_input_field_text};
+	color: #94979d; /* {$,wizard, 65% bgcol + 35% !W/B} */
 }
 
 .comments_posting_form_inner table {
 	border-collapse: collapse;
 }
 
-.comments_posting_form_emoticons {
-	float: {!en_left};
-	width: 140px;
-	padding-{!en_right}: 5px;
-	text-align: center;
-	padding-top: 0.5em;
-}
-
-.comments_posting_form_emoticons p {
-	margin-bottom: 0;
-}
-
-.comments_posting_form_inner .associated_links_block_group {
-	font-size: 0.85em;
-	font-weight: normal;
-}
-
 .comments_posting_form_end {
 	overflow: hidden;
 	{+START,IF,{$MOBILE}}
-		margin: 0 2em 1em 0;
+		margin: 4px 20px 10px 0px;
 		padding: 0;
 		text-align: center;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin: 0 0 1em 160px;
+		margin-left: 160px;
 	{+END}
-}
-
-.comments_posting_form_end .proceed_button {
-	margin-top: 1em;
-	text-align: center !important;
-}
-
-.comments_captcha {
-	width: 200px;
-	margin: 1em auto 0 auto;
-	font-size: 0.85em;
-	text-align: center;
-}
-
-.comments_captcha img, .comments_captcha iframe, .comments_captcha input {
-	margin: 0 5px 2px 5px;
-	vertical-align: middle;
 }
 
 {+START,IF,{$MOBILE}}
@@ -2367,588 +3213,235 @@ div.wysiwyg_toolbar_color_finder {
 	}
 {+END}
 
-.comments_posting_form_outer .attachments {
-	text-align: {!en_left};
-	margin: 1em;
+.comments_captcha img, .comments_captcha iframe, .comments_captcha input {
+	margin: 0 5px 2px 5px;
+	vertical-align: middle;
 }
 
-/*
-=========================
-==========Lists==========
-=========================
-*/
-
-ul.compact_list, ol.compact_list {
-	margin: 0;
-	padding: 0;
-	text-align: left; /* In case cascading from somewhere */
-}
-ul.compact_list>li, ol.compact_list>li {
-	margin: 0 0 0 17px;
-	padding: 0;
-}
-.compact_list>li>p {
-	margin-top: 0;
+.comments_captcha {
+	width: 200px;
+	margin: 20px auto 0 auto;
+	font-size: 0.85em;
+	text-align: center;
 }
 
-dl.compact_list {
-	margin: 0.4em 0;
-	overflow: hidden;
-}
-dl.compact_list>dt {
-	display: list-item;
-	list-style-type: circle;
-	float: left;
-	margin: 0 0.5em 0 8px;
-	clear: both;
-}
-dl.compact_list>dt:after {
-	content: ":";
-}
-dl.compact_list>dd {
-	margin: 0;
+.comments_posting_form_inner th {
+	font-weight: bold !important;
+	padding: 3px 15px 3px 0;
+	border-right: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
-ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {
-	margin: 0;
-	padding: 0 !important;
-	list-style-type: square;
-}
-.spaced_list li {
-	margin: 0.5em 0 0.5em 25px !important;
-	padding: 0;
+.comments_posting_form_inner td {
+	padding-left: 15px;
 }
 
-ul.tick_list, ul.tick_list li {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-ul.actions_list {
-	padding: 0;
-	margin: 0;
-}
-ul.actions_list>li {
-	padding: 1px 0 2px 18px;
-	background: url('{$IMG;,action_link}') left 5px no-repeat;
-}
-ul.actions_list_compact>li, ul.actions_list_super_compact>li {
-	padding: 0 0 0 18px;
-	background: url('{$IMG;,action_link}') left 2px no-repeat;
-}
-ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li {
-	margin: 0;
-	list-style-type: none;
-	list-style-image: none;
-}
-ul.actions_list h4 {
-	display: inline;
-	line-height: 2em;
-}
-
-ul.actions_list_compact, ul.actions_list_super_compact {
-	padding: 0;
-	margin: 0;
-}
-
-li.actions_list_strong {
-	font-weight: bold;
-}
-
-/*
-A note about display of meta data...
-
-It may be displayed using:
- - meta_details_list (usually used on full screen views of content)
- - horizontal_meta_details (usually used on blocks where the meta details are important to encourage a click through)
- - a table (usually used where the content defines its own meta data beyond what all ocPortal content has, such as a length or resolution)
- - a tooltip (good for tucking it away, although it's not touch friendly so should only be used if non-important)
-But it should always have role="contentinfo" on it (ARIA)
-*/
-
-ul.meta_details_list {
-	display: block;
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-
-ul.meta_details_list>li {
-	padding: 0;
-	margin: 0.2em 0;
-}
-
-dl.meta_details_list>dt {
+.comments_posting_form_emoticons {
 	float: {!en_left};
-	padding-{!en_right}: 0.4em !important;
-}
-dl.meta_details_list>dt, dl.meta_details_list>dd {
-	margin: 0;
-	padding: 0.2em 0;
+	width: 120px;
+	padding-{!en_right}: 5px;
+	text-align: center;
+	padding-top: 5px;
+	font-size: 0.8em;
 }
 
-.meta_details>ul.meta_details_list>li {
-	margin: 0.5em 0;
-}
-.meta_details>dl.meta_details_list {
+.comments_posting_form_emoticons p {
 	margin-bottom: 0;
 }
 
-/*
-=========================
-=Associations/Summaries==
-=========================
-*/
-
-.comcode_supported_icon {
-	vertical-align: middle;
+.comments_posting_form_links {
+	text-align: right;
+	font-size: 0.85em;
+	font-weight: normal;
 }
 
-.quick_self_edit_link {
+.reviews_average {
 	font-size: 0.8em;
-	text-align: center;
-	border: 1px solid {$GET,pale_border};
-	{$BETA_CSS_PROPERTY,border-radius: 5px;}
-	padding: 0.5em;
-	{$BETA_CSS_PROPERTY,opacity: 0.4;}
-	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
-	margin-top: 3em;
-}
-.quick_self_edit_link:hover {
-	{$BETA_CSS_PROPERTY,opacity: 1;}
-}
-#panel_top .quick_self_edit_link {
-	display: none;
+	opacity: 0.7;
 }
 
-.staff_actions {
-	margin-top: 2em;
-	font-size: 0.95em;
-	{$BETA_CSS_PROPERTY,opacity: 0.4;}
-	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
-	background: url('{$IMG;,action}') right 3px no-repeat;
-	padding-right: 5px;
-	background-origin: content-box;
-}
-.staff_actions:hover {
-	{$BETA_CSS_PROPERTY,opacity: 1;}
-}
-.staff_actions .box_inner {
-	padding-right: 25px;
-	margin-bottom: 0.54em; /* Fixes weird bug on Chrome where bottom border disappears when not hovered */
-}
-.staff_actions .field_name.standard_field_name {
-	display: none;
-}
-.staff_actions ul.horizontal_links {
-	width: auto;
-	font-size: 1em;
-}
-.staff_actions a {
-	white-space: nowrap !important;
-}
-
-.associated_details {
-	font-weight: normal; /* Undo what may be set on a surrounding element */
-}
-
-.associated_minor_button_action, .associated_details {
+.inline_wip_message {
+	background-color: #F2F5F9; /* {$,wizard, 80% ocf_row2 + 20% W/B}*/
+	padding: 4px;
+	margin: 0;
+	border: 1px solid #EBE773; /* {$,wizard, 100% EBE773} */ /* {$,Intentionally redish} */
 	font-size: 0.9em;
 }
 
-.global_side_panel .associated_minor_button_action, .global_side_panel .associated_details, .associated_link {
-	font-size: 0.95em;
+#global_zones .inline_wip_message {
+	background-color: #426aa9; /* {$,wizard, 100% seed} */
 }
 
-.associated_minor_button_overlayed {
-	position: absolute;
+.inline_wip_message img {
+	float: {!en_left};
 }
 
-div.associated_details {
-	margin: 1em 0;
-}
-
-.associated_breadcrumbs {
-	font-size: 0.85em;
-	color: {$GET,a.link};
+.inline_wip_message p {
+	margin: 1px 0 0 28px;
 }
 
 /*
-a.associated_link / form.associated_link / span.associated_link - a single associated link displayed inline, with CSS-generated brackets around
-p.associated_link / div.associated_link - a single associated link displayed in a block, with CSS-generated brackets around
-ul.associated_links_block_group - a group of associated links displayed in a block, each link on its own line with its own CSS-generated brackets around
-ul.horizontal_links / ul.horizontal_links_comma - a group of associated links displayed in a block, the links on the same line with a CSS-generated separation character; often used to represent block actions; often used in conjunction with associated_links_block_group to get the CSS-generated brackets
-.horizontal_meta_details / .horizontal_buttons / .horizontal_ticker - Additional horizontal list types for things other than links
-.buttons_group - used for a button set, like horizontal_links but for centred buttons
-
-There is 'actions_list' too (defined elsewhere). These are for links that are given more focus as key navigation mechanisms in a task-based UI.
+=========================
+===Specific interfaces===
+=========================
 */
 
-ul.associated_links_block_group.horizontal_links>li:first-child:before, p.associated_link:before, div.associated_link:before {
-	content: "( " !important;
-	{$BETA_CSS_PROPERTY,opacity: 0.7;}
-	font-size: 0.8em;
+div.wysiwyg_color_finder {
+	color: #EAEFF5; /* {$,barrier_a, 72% bgcol + 28% W/B} */
 }
-ul.associated_links_block_group.horizontal_links>li:last-child:after, p.associated_link:after, div.associated_link:after {
-	content: " )" !important;
-	{$BETA_CSS_PROPERTY,opacity: 0.7;}
-	font-size: 0.8em;
+
+.banner_side {
+	text-align: center;
 }
-span.associated_link, a.associated_link, form.associated_link {
+
+.lonely_preview {
+	text-align: center;
+}
+
+.preview_iframe {
+	width: 100%;
+	height: 0;
+}
+
+.preview_box {
+	margin: 8px 0;
+}
+
+{+START,IF,{$MOBILE}}
+	.preview_box {
+		padding: 209px 33px 159px 31px;
+		background: url('{$IMG;,iphone}') no-repeat;
+		cursor: crosshair;
+	}
+	.preview_box_inner {
+		overflow: hidden;
+		width: 320px;
+		height: 355px;
+	}
+{+END}
+
+.fractional_edit {
+	margin: -3px;
+	border: 1px dashed #94979d; /* {$,wizard, 65% bgcol + 35% !W/B} */
+	padding: 2px;
+}
+
+.fractional_edit_nonover {
+}
+
+.preview_validation_box {
+	width: 34em;
+	margin: 10px auto 30px auto;
+}
+
+.posting_form_comcode_button {
+	float: {!en_right};
+	padding-top: 30px;
+}
+
+.posting_form_main_comcode_button {
+	float: {!en_right};
+	padding-top: 10px;
+}
+
+.posting_form_sup_link {
+	font-size: 0.85em;
+}
+
+.posting_form_insert_buttons {
+	float: {!en_left};
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	margin-left: 9px;
+}
+
+.posting_form_wrap_buttons {
+	float: {!en_right};
+	background-color: #d8dde6; /* {$,wizard, 95% bgcol + 5% !W/B} */
+	margin-right: 28px;
+}
+
+.posting_form_wrap_buttons, .posting_form_insert_buttons {
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	padding: 3px 6px;
+	margin-top: 3px;
+}
+
+.posting_form_insert_buttons span, .posting_form_insert_buttons img, .posting_form_wrap_buttons img, .posting_form_insert_buttons input, .posting_form_wrap_buttons input, .posting_form_wrap_buttons select {
+	vertical-align: middle;
+}
+
+.posting_form_insert_buttons .divider {
+	margin-left: 5px;
+	border-left: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+	padding-left: 8px;
+}
+
+.upload_field_msg {
 	white-space: nowrap;
 }
-ul.associated_links_block_group>li:before, span.associated_link:before, a.associated_link:before, form.associated_link:before {
-	content: "(" !important;
-	{$BETA_CSS_PROPERTY,opacity: 0.7;}
-}
-ul.associated_links_block_group.horizontal_links>li:after { /* Undoes the above rules for if 'horizontal_links' is set (the rule further up will run instead and the middot one below) */
-	content: "" !important;
-}
-ul.associated_links_block_group>li:after, span.associated_link:after, a.associated_link:after, form.associated_link:after {
-	content: ")" !important;
-	{$BETA_CSS_PROPERTY,opacity: 0.7;}
-}
 
-ul.associated_links_block_group.horizontal_links>li:before,
-.horizontal_links>li:before,
-.horizontal_meta_details li:before,
-.horizontal_ticker li:before {
-	content: "\00b7" !important; /* a &middot; */
-	padding: 0 0.5em 0 0.1em;
-	vertical-align: middle;
-}
-.horizontal_buttons li {
-	padding-left: 3px !important;
-}
-.horizontal_buttons li:first-child {
-	/* Undoes the li padding defined above */
-	padding-left: 0 !important;
-}
-.horizontal_links_comma li:before {
-	content: ", \A";
-}
-.horizontal_meta_details li:first-child:before,
-.horizontal_links li:first-child:before,
-.horizontal_buttons li:first-child:before,
-.horizontal_ticker li:first-child:before,
-.horizontal_links_comma li:first-child:before {
-	/* Undoes the middot/comma separator */
-	content: "" !important;
-	padding-left: 0 !important;
-	padding-right: 0 !important;
-}
-ul.associated_link, ul.horizontal_meta_details, ul.horizontal_links, ul.horizontal_links_comma, ul.horizontal_buttons, .horizontal_ticker {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.horizontal_buttons {
-	list-style: none;
-}
-ul.horizontal_links_comma {
-	vertical-align: baseline !important;
-	width: auto !important;
-}
-ul.associated_link {
-	display: block;
-}
-ul.horizontal_meta_details, ul.horizontal_links, ul.horizontal_links_comma, ul.horizontal_buttons, .horizontal_ticker {
-	/* As these go across horizontally, we need to do this to allow centering to work for the group */
-	display: inline-block !important;
-	width: 100%;
-}
-ul.associated_link>li, .horizontal_meta_details>li, .horizontal_links>li, ul.horizontal_links_comma>li, .horizontal_buttons>li, .horizontal_ticker>li {
-	display: inline;
-	margin: 0;
-	padding: 0;
-}
-ul.associated_link>li {
-	display: block !important; /* Undoes "display: inline" above */
-}
-
-.associated_links_block_group>li{
-	margin: 0.5em 0 !important;
-}
-.buttons_group, .associated_links_block_group {
-	text-align: center;
-	padding: 0;
-	margin: 2em 0;
-	display: block;
-	list-style: none;
-}
-.horizontal_links, .associated_link {
-	font-size: 0.9em;
-}
-ul.buttons_group, ul.associated_links_block_group {
-	margin: 0; /* Margin will go on li elements if its a list */
-}
-table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_block_group { /* In this case no margin is coming from above so we must define one */
-	margin-top: 1em !important;
-}
-.force_margin {
-	margin-top: 1.5em !important;
-}
-.buttons_group>* {
-	margin-left: 5px !important;
-}
-.buttons_group>*:first-child {
-	margin-left: 0 !important;
-}
-
-.associated_link.suggested {
+.author_defined {
 	font-weight: bold;
 }
 
-.alt_field:before {
-	content: "\00bb"; /* raquo */
-}
-.related_field:before {
-	content: "\203a"; /* rsaquo */
-	font-size: 1.2em;
-}
-.alt_field:before, .related_field:before {
-	padding-left: 1em;
-	padding-right: 0.2em;
+.author_undefined {
 }
 
-/*
-=========================
-=======Misc Forms========
-=========================
-*/
-
-.field_input_non_filled {
-	color: {$GET,unfilled_input_text} !important;
-}
-.field_input_filled {
-	color: {$GET,native_ui_foreground};
-}
-
-.locked_input_field {
-	color: {$GET,locked_input_field};
-}
-
-.native_ui_foreground {
-	color: {$GET,native_ui_foreground};
-}
-
-.native_ui_selected {
-	color: {$GET,native_ui_selected_foreground};
-	background-color: {$GET,native_ui_selected_background};
-}
-
-.simple_neat_checkbox {
-	overflow: hidden;
-}
-.simple_neat_checkbox input {
-	float: {!en_left};
-}
-.simple_neat_checkbox span {
-	float: {!en_right};
-	margin-{!en_left}: 2em;
-	margin-top: -1.5em;
-}
-
-.captcha_frame {
-	width: 100px;
-	height: 52px;
-}
-
-.captcha {
-	font-size: 0.8em;
-	margin-bottom: 3px;
-}
-
-.captcha a {
-	float: {!en_right};
-	margin: 10px 0 0 5px;
-}
-
-.quite_wide_field {
-	width: 88%;
-}
-
-.wide_field, .wide_button {
-	width: 100%;
-	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-}
-
-input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
-input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
-input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
-button.wide_button, button.button_micro, button.button_page, button.button_pageitem, .hero_section .hero_button a
-{
-	display: inline-block;
-	border: none;
-	cursor: pointer;
-	border: 1px solid {$GET,dark_border};
-	background-color: {$GET,lgrad};
-	color: {$GET,box_title_text};
-	{$BETA_CSS_PROPERTY,border-radius: 6px;}
-	background-image: url('{$IMG;,gradient}');
-	text-shadow: 1px 1px 1px {$GET,dark_shadow};
-	margin: 0 2px;
-}
-.button_micro {
-	background-image: none !important; /* Too loud for such a small space */
-}
-
-/* This is used to overlay special out-of-flow edit buttons, for staff only */
-.magic_image_edit_link {
-	font-size: 15px;
-	border: 1px solid {$GET,light_error_border} !important;
-	background: {$GET,light_error_background} !important;
-	color: {$GET,slightly_seeded_text} !important;
-}
-
-.button_pageitem_tall {
-	background-image: none !important;
-}
-
-input[type="reset"].button_micro, input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
-{
-	padding: 0 3px 1px 3px !important;
-}
-input[type="reset"].wide_button, input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
-{
-	padding: 2px 4px 3px 4px !important;
-}
-input[type="reset"].button_page, input[type="submit"].button_page, input[type="button"].button_page, button.button_page
-{
-	padding: 3px 5px 4px 5px !important;
-	min-width: {$?,{$MOBILE},5.8,9.8}em;
-}
-input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
-input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover, input[type="submit"].button_page:hover, input[type="submit"].button_pageitem:hover,
-input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
-button.wide_button:hover, button.button_micro:hover, button.button_page:hover, button.button_pageitem:hover
-{
-	{$BETA_CSS_PROPERTY,opacity: 1.0;}
-}
-input[type="reset"].wide_button:disabled, input[type="reset"].button_micro:disabled, input[type="reset"].button_page:disabled, input[type="reset"].button_pageitem:disabled,
-input[type="submit"].wide_button:disabled, input[type="submit"].button_micro:disabled, input[type="submit"].button_page:disabled, input[type="submit"].button_pageitem:disabled,
-input[type="button"].wide_button:disabled, input[type="button"].button_micro:disabled, input[type="button"].button_page:disabled, input[type="button"].button_pageitem:disabled,
-button.wide_button:disabled, button.button_micro:disabled, button.button_page:disabled, button.button_pageitem:disabled
-{
-	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
-	cursor: default;
-}
-
-.button_page, .button_pageitem, .button_micro, .wide_button, .toggleable_tray_button img {
-	{$BETA_CSS_PROPERTY,opacity: 0.85;}
-	display: inline-block;
-}
-
-.button_page:hover, .button_pageitem:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
-}
-
-.button_page, .button_pageitem {
-	vertical-align: middle;
-	{+START,IF,{$MOBILE}}
-		margin-bottom: 5px;
+.comcode_error_help_div {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_right};
+		width: 40%;
+		padding: 0 10px;
 	{+END}
 }
 
-.proceed_button {
+.comcode_error_details_div {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 55%;
+		padding-{!en_left}: 10px;
+	{+END}
+}
+
+.emoticon_chooser {
+	padding: 3px;
+}
+
+#panel_top .mini_edit_me {
+	display: none;
+}
+
+.mini_edit_me {
+	font-size: 0.8em;
 	text-align: center;
 }
-div.proceed_button_left {
-	text-align: {!en_left};
-}
-div.proceed_button_left_2 {
-	text-align: {!en_left};
-	margin-{!en_left}: -2em;
-}
 
-.shunted_button {
-	text-align: {!en_right};
+.wysiwyg_button {
+	font-size: 0.95em;
 }
-
-.innocuous_fieldset {
-	border: 0;
-	padding: 0;
-	margin: 0;
-}
-
-/*
-Form buttons are wrapped in either:
- - .shunted_button
- - .proceed_button
- - .mini_proceed_button
- - .buttons_group (defined elsewhere, in "Associations/Summaries")
-*/
-
-/*
-=========================
-====Frame Interfaces=====
-=========================
-*/
 
 .dynamic_iframe {
 	width: 100%;
-	height: 900px; /* This is dynamically resized; 900px is referenced from JAVASCRIPT.tpl so don't change it */
+	height: 900px; /* {$,This is dynamically resized; 900px is referenced from JAVASCRIPT.tpl so don't change it} */
 }
 
 .expandable_iframe {
 	width: 100%;
-	height: 150px; /* Referenced also in JAVASCRIPT.tpl */
 }
 
-.hidden_save_frame, .hidden_preview_frame {
+.form_page_iframe {
 	width: 100%;
-	height: 0;
-	float: left; /* Stops it breaking up margin collapsing */
+	height: 0; /* {$,Will be dynamically adjusted} */
 }
 
-/*
-=========================
-=======Carousels=========
-=========================
-*/
-
-.carousel {
-	overflow: hidden;
+.zone_choose_inline {
 	white-space: nowrap;
-	position: relative;
 }
 
-.carousel .img_thumb {
-	max-width: 140px;
+#i_new_window {
+	vertical-align: bottom;
 }
 
-.carousel .move_left, .carousel .move_right {
-	min-height: 16px;
-	width: 17px;
-}
-
-.carousel .move_left {
-	margin-right: 20px;
-	padding-right: 5px;
-	float: left;
-	background: url('{$IMG;,carousel/button_left}') left center no-repeat;
-	border-right: 1px dotted {$GET,standard_border};
-}
-
-.carousel .move_left:hover {
-	background-image: url('{$IMG;,carousel/button_left_hover}');
-}
-
-.carousel .move_right {
-	margin-left: 20px;
-	padding-left: 5px;
-	float: right;
-	background: url('{$IMG;,carousel/button_right}') right center no-repeat;
-	border-left: 1px dotted {$GET,standard_border};
-}
-
-.carousel .move_right:hover {
-	background-image: url('{$IMG;,carousel/button_right_hover}');
-}
-
-.carousel .main {
-	overflow: hidden;
+blockquote.quotes_block {
+	margin: 0;
 }
 
 /*
@@ -2961,21 +3454,9 @@ Form buttons are wrapped in either:
 	border-left: 1px solid;
 	border-right: 1px solid;
 	border-bottom: 1px solid;
-	border-color: {$GET,tab_border};
-	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 10px;}
-	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 10px;}
-	padding: 0.5em;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
-}
-
-/* Tighten up subtab display */
-.tab_surround .tab_surround {
-	background-image: none;
-	background: {$GET,main_background};
-	overflow: hidden; /* To stop margin collapsing bleeding backgrounds */
-}
-.tab_surround .tab_surround .form_table {
-	margin: 0;
+	border-color: #b5b5b5; /* {$,wizard, 100% b5b5b5} */
+	padding: 8px;
+	margin-left: 1px;
 }
 
 .tabs {
@@ -2983,32 +3464,29 @@ Form buttons are wrapped in either:
 	border-right: 0;
 	border-top: 0;
 	border-bottom: 1px solid;
-	border-color: {$GET,tab_border};
+	border-color: #b5b5b5; /* {$,wizard, 100% b5b5b5} */
 	height: 22px;
 }
 
-a.tab, a.tab:visited, a.tab:hover {
+a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	text-decoration: none;
 }
 
 .tab {
 	float: left;
-	background-image: url('{$IMG;,tab}') !important;
+	background: url('{$IMG;,tab}') !important;
 	padding: 3px 7px 0 7px !important;
 	height: 20px;
 	text-align: center;
 	cursor: pointer;
-	{$BETA_CSS_PROPERTY,opacity: 0.6;}
 }
 
 .tab_active {
-	text-shadow: 1px 1px 1px {$GET,standard_border};
-	{$BETA_CSS_PROPERTY,opacity: 1 !important;}
+	font-weight: bold;
 }
 
 .tab:hover {
 	text-decoration: underline !important;
-	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 
 .tab strong {
@@ -3021,7 +3499,7 @@ a.tab, a.tab:visited, a.tab:hover {
 
 .tab_last {
 	border-right: 1px solid;
-	border-color: {$GET,tab_border};
+	border-color: #b5b5b5; /* {$,wizard, 100% b5b5b5} */
 }
 
 .tab_surround .tab { /* subtabs */
@@ -3036,13 +3514,13 @@ a.tab, a.tab:visited, a.tab:hover {
 =========================
 */
 
-ul.nl, .nl ul {
+.nl, .nl ul {
 	display: block;
 	margin: 0;
 	padding-{!en_left}: 0;
 }
 
-.nl ul>li, ul.nl>li {
+.nl li {
 	display: block;
 	margin-{!en_left}: 0;
 	padding-{!en_left}: 0;
@@ -3050,11 +3528,11 @@ ul.nl, .nl ul {
 	list-style-image: none;
 }
 
-.menu_type__tree .has_no_img .drawer {
+.menu_type__tree .has_no_img .drawer, .menu_type__popup .has_no_img .drawer {
 	background: url('{$IMG;,menus/menu_bullet_expand}') no-repeat 0 5px !important;
 }
 
-.menu_type__tree .has_no_img .drawer:hover {
+.menu_type__tree .has_no_img .drawer:hover, .menu_type__popup .has_no_img .drawer:hover {
 	background: url('{$IMG;,menus/menu_bullet_expand_hover}') no-repeat 0 5px !important;
 }
 
@@ -3073,13 +3551,11 @@ ul.nl, .nl ul {
 
 .menu_type__dropdown .nlevel .has_img img, .menu_type__popup .has_img img {
 	width: 20px;
+	max-height: 20px; /* Needed for IE6 PNG hack */
 }
 
 .menu_type__tree ul li a, .menu_type__popup ul li a, .menu_type__dropdown ul.nlevel li a { /* ul li added to ensure precedence over ".nl li" selector, whilst not forcing us to use up our only !important */
-	padding-{!en_left}: 14px;
-}
-.menu_type__tree ul li a, .menu_type__popup ul li a {
-	display: inline-block; /* This says that we want to encourage greedy space consumption rather than wrapping */
+	display: inline-block;
 	padding-{!en_left}: 14px;
 }
 
@@ -3111,45 +3587,55 @@ ul.nl, .nl ul {
 	white-space: nowrap;
 }
 
-.menu_type__popup {
-	min-width: 15em;
-	max-width: 30em; /* Really this is just to make the screen preview work! Normally a panel would constrain the width. */
+.global_bottom img {
+	-webkit-transition: -webkit-transform 0.5s linear;
+	-moz-transition: -moz-transform 0.5s linear;
+	-o-transition: -o-transform 0.5s linear;
 }
-.box .menu_type__popup {
-	min-width: 0;
+
+.global_bottom img:hover {/*, .menu_type__dropdown li:hover>img*/
+   -webkit-transform: rotate(10deg);
+   -moz-transform: rotate(10deg);
+}
+
+.menu_type__popup {
+	min-width: 150px;
 }
 
 .menu_type__dropdown ul.nlevel, .menu_type__popup ul {
 	line-height: 1.4em;
-	border-top: 1px solid {$GET,standard_border};
-	border-left: 1px solid {$GET,standard_border};
-	border-right: 1px solid {$GET,standard_border};
+	border-top: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	border-left: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	border-right: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
 .menu_type__dropdown ul.nlevel {
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
+	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
+	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
+	box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
 .menu_type__popup .menu_spacer, .menu_type__popup li, .menu_type__dropdown .nlevel li, .menu_type__dropdown .nlevel .menu_spacer {
-	border-bottom: 1px solid {$GET,standard_border};
+	border-bottom: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	white-space: nowrap; /* Needed for IE6, which would not give enough width on second opening of same menu, due to weird bug */
 }
 
 .menu_type__popup .menu_spacer, .menu_type__popup li {
-	background-color: {$GET,area_background} !important;
+	background-color: #eaeff6 !important; /* {$,mm_c_tab, 100% ocf_row2} */
 }
 
-.menu_type__popup li a, .menu_type__popup li a:visited {
-	color: {$GET,a.link};
+.menu_type__popup li a:link, .menu_type__popup li a:visited, .menu_type__popup li a:active {
+	color: #123d7b; /* {$,wizard, 73% (seed sat_to 85) + 27% !W/B} */
 }
 .menu_type__popup li a:hover {
-	color: {$GET,a.hover} !important;
+	color: #9C202F !important; /* {$,wizard, 100% a.hover}*/
 }
 
 .menu_type__popup ul ul {
 	margin-top: -1px;
 }
 
-.menu_type__popup a, .menu_type__popup a:visited, .menu_type__dropdown .nlevel a, .menu_type__dropdown .nlevel a:visited {
+.menu_type__popup a:link, .menu_type__popup a:visited, .menu_type__popup a:active, .menu_type__dropdown .nlevel a:link, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:active {
 	text-decoration: none;
 }
 
@@ -3159,16 +3645,11 @@ ul.nl, .nl ul {
 }
 
 .menu_type__dropdown .nlevel li, .menu_type__dropdown .nlevel .menu_spacer {
-	background-color: {$GET,dropdown_menu_background};
-	font-weight: normal;
-
-	/* We do want wrapping for this, as menu labels could be longer than the available space between the start of the dropdown label and the edge of the fixed width */
-	max-width: 15em;
-	white-space: normal;
+	background-color: #c1cee3; /* {$,wizard, 100% lightborder} */
 }
 
 .menu_type__dropdown .nlevel li:hover {
-	background-color: {$GET,dropdown_menu_text};
+	background-color: #d9e1ee; /* {$,wizard, 20% seed + 80% W/B} */
 }
 
 .menu_type__dropdown .nlevel .menu_spacer {
@@ -3176,68 +3657,39 @@ ul.nl, .nl ul {
 	padding-{!en_right}: 0;
 }
 
-.menu_type__dropdown .nlevel, .menu_type__dropdown .nlevel a, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:hover {
-	color: {$GET,slightly_seeded_text} !important;
-}
-
-/* Embossed menus should be flush to their box */
-.box___block_side_stored_menu_embossed>.box_inner>h3 {
-	margin: 0;
-	padding-left: 0;
-	padding-right: 0;
-}
-.box___block_side_stored_menu_embossed>.box_inner {
-	margin: 0;
-	position: relative;
-}
-.box___block_side_stored_menu_embossed .edit_menu_link_inline {
-	position: absolute;
-	right: 0;
-	bottom: 1px;
-}
-.box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li {
-	border-left: 0;
-	border-right: 0;
-}
-.box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li:last-child {
-	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
-	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
-	border-bottom: 0;
+.menu_type__dropdown .nlevel, .menu_type__dropdown .nlevel a:active, .menu_type__dropdown .nlevel a:link, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:hover {
+	color: #0d1522 !important; /* {$,wizard, 20% seed + 80% !W/B} */
 }
 
 .menu_type__embossed, .menu_type__top, .menu_type__dropdown {
 	overflow: hidden;
+	outline: 0;
+	zoom: 1; /* IE6 fix, can't use width 100% as we normally would for this */
 }
 
 .menu_type__embossed, .menu_type__top, .menu_type__dropdown, .menu_type__embossed li, .menu_type__top li, .menu_type__dropdown li.toplevel {
-	background-color: {$GET,area_background};
+	background-color: #eaeff6 !important; /* {$,mm_c_tab, 100% ocf_row2} */
 }
 
 .menu_type__embossed .current, .menu_type__top .current, .menu_type__dropdown .toplevel.current {
-	color: {$GET,slightly_seeded_text};
-	background-color: {$GET,area_highlight_left_complement_background} !important;
-	font-weight: bold;
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	background-color: #c2d1e5 !important; /* {$,hover_bg, 93% (mm_c_tab sat_to 15) + 7% !W/B} */
 }
 
-.menu_type__embossed a, .menu_type__embossed a:visited, .menu_type__embossed a:hover, .menu_type__top a, .menu_type__top a:visited, .menu_type__top a:hover {
+.menu_type__embossed a:link, .menu_type__embossed a:visited, .menu_type__embossed a:hover, .menu_type__embossed a:active, .menu_type__top a:link, .menu_type__top a:visited, .menu_type__top a:hover, .menu_type__top a:active {
 	text-decoration: none;
 }
 
 .menu_type__embossed a:hover, .menu_type__top a:hover, .menu_type__dropdown a.toplevel_link:hover {
-	background-color: {$GET,area_highlight_right_complement_background} !important;
-	{$BETA_CSS_PROPERTY,transition: color\,background-color 0.5s linear;}
-}
-
-.menu_type__top a, .menu_type__dropdown a.toplevel_link {
-	padding: 0.5em 0.5em 0.6em 0.5em !important;
-}
-
-.menu_type__embossed a {
-	padding: 0.7em 0.7em 0.5em 0.7em !important;
+	background-color: #c2d1e5 !important; /* {$,hover_bg, 93% (mm_c_tab sat_to 15) + 7% !W/B} */
+	-webkit-transition: color,background-color 0.5s linear;
+	-moz-transition: color,background-color 0.5s linear;
+	-o-transition: color,background-color 0.5s linear;
 }
 
 .menu_type__embossed a, .menu_type__top a, .menu_type__dropdown a.toplevel_link {
 	display: block;
+	padding: 3px 4px 5px 4px !important;
 	outline: 0;
 }
 
@@ -3252,35 +3704,32 @@ ul.nl, .nl ul {
 {+END}
 
 .menu_type__embossed {
-	border-left: 1px solid {$GET,standard_border};
-	border-right: 1px solid {$GET,standard_border};
-	border-bottom: 1px solid {$GET,standard_border};
+	border-left: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	border-right: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	border-bottom: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
 .menu_type__embossed li {
-	border-top: 1px solid {$GET,standard_border};
-}
-
-.menu_type__embossed img {
-	vertical-align: middle;
-	margin-right: 3px;
+	border-top: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
 .menu_type__top, .menu_type__dropdown {
-	/* Invisible borders to stop margin collapsing */
-	border-top: 1px solid {$GET,standard_border};
-	border-bottom: 1px solid {$GET,standard_border};
+	border-top: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	border-bottom: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	border-{!en_right}: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
 }
 
 .menu_type__top li, .menu_type__dropdown li.toplevel {
 	float: {!en_left};
-	border-{!en_left}: 1px solid {$GET,standard_border};
+	border-{!en_left}: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
 	margin-{!en_right}: -1px;
 	margin-bottom: 0;
 	{+START,IF,{$MOBILE}}
-		font-size: 0.9em;
+		font-size: 0.8em;
 	{+END}
-	{$BETA_CSS_PROPERTY,transition: color\,background-color 0.5s linear;}
+	-webkit-transition: color,background-color 0.5s linear;
+	-moz-transition: color,background-color 0.5s linear;
+	-o-transition: color,background-color 0.5s linear;
 }
 
 .menu_type__top li.last, .menu_type__dropdown li.toplevel.last {
@@ -3288,15 +3737,18 @@ ul.nl, .nl ul {
 	overflow: hidden; /* so it is shunted against it's left-hand neighbours without overlapping */
 	margin-{!en_right}: 0 !important; /* as would cause wrapping with the overflow hidden */
 	position: relative; {!en_left}: -1px; /* In place of margin-right */
-	border-left: 0;
 }
 
-.menu_type__top li.first, .menu_type__dropdown li.toplevel.first {
-	border-left: 0;
+.menu_type__top li a, .menu_type__dropdown li.toplevel a {
+	min-height: 19px;
+	height: auto !important; /* IE6 hack, IE still takes the 19px value due to a bug */
+	height: 19px; /* IE6, does not take precedence */
+	padding-bottom: 0 !important; /* Otherwise IE6/IE7 doubles it - so is built into height */
 }
 
 .menu_type__top li.last a, .menu_type__dropdown li.toplevel.last a {
-	border-left: 1px solid {$GET,standard_border};
+	border-left: 0 !important; /* IE6 hack */
+	border-left: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
 }
 
 .menu_type__top img, .menu_type__dropdown .toplevel_link img {
@@ -3323,6 +3775,11 @@ ul.nl, .nl ul {
 	padding-{!en_left}: 5px;
 }
 
+.menu_type__zone {
+	font-size: 0.9em;
+	max-height: 15px;
+}
+
 .menu_type__zone ul {
 	display: inline;
 	margin: 0;
@@ -3347,33 +3804,33 @@ ul.nl, .nl ul {
 	list-style-image: none;
 }
 
-/* Give Admin Zones special icon */
-.menu_type__zone li a[href*="/cms/"], .menu_type__zone li a[href*="/adminzone/"] {
-	padding-right: 17px;
-	background: url('{$IMG;,action_small}') right top no-repeat;
-}
-
 .menu_type__zone li * {
 	vertical-align: middle;
 }
 
-.global_navigation .menu_type__zone a, .global_navigation .menu_type__zone a:visited {
-	color: {$GET,global_navigation_text};
+.menu_type__zone .divider {
+	color: #bdcbe1; /* {$,wizard, 35% seed + 65% W/B} */
 }
 
-.menu_type__zone a, .menu_type__zone a:visited {
+#global_zones .menu_type__zone a:link, #global_zones .menu_type__zone a:visited, #global_zones .menu_type__zone a:active {
+	color: #edf2f9; /* {$,wizard, 15% zg_top + 85% W/B} */
+}
+
+.menu_type__zone a:link, .menu_type__zone a:visited, .menu_type__zone a:active {
 	margin-{!en_right}: 1px;
 	text-decoration: none;
 }
 
-.global_navigation .menu_type__zone a:hover {
-	color: {$GET,global_navigation_hover};
+#global_zones .menu_type__zone a:hover {
+	color: #ffffff; /* {$,global_zones_hover, 100% W/B } */
 }
 
 .menu_type__zone a {
-	border-bottom: 1px solid transparent;
-	white-space: nowrap !important;
-	{$BETA_CSS_PROPERTY,transition: border-bottom-color 0.5s linear;}
+	border-bottom: 1px transparent;
+	-webkit-transition: border-bottom-color 0.5s linear;
+	-moz-transition: border-bottom-color 0.5s linear;
+	-o-transition: border-bottom-color 0.5s linear;
+	border-bottom-color: #426aa9; /* {$,wizard, 100% seed} */
 }
 
 .menu_type__zone a:hover {
@@ -3381,322 +3838,109 @@ ul.nl, .nl ul {
 	border-bottom: 1px dashed;
 }
 
-.menu_type__zone a:hover {
-	text-shadow: 0 0 10px {$GET,zone_jump_out_1_shadow};
-}
-.menu_type__zone li:last-child a:hover {
-	text-shadow: 0 0 10px {$GET,zone_jump_out_2_shadow};
-}
-
 .menu_type__zone .current {
 	border-bottom: 1px dashed;
-	border-bottom-color: {$GET,global_navigation_underline_current};
+	border-bottom-color: #a5bde1; /* {$,wizard, 75% zg_top + 25% FFFFFF} */
 }
 
 .menu_type__zone .current:hover {
 	border-bottom: 1px dashed;
-	border-bottom-color: {$GET,global_navigation_hover};
+	border-bottom-color: #ffffff; /* {$,wizard, 100% global_zones_hover} */
 }
 
-.menu_type__zone li:before, .menu_type__zone .divider {
-	/*content: "\221E";*/ /* Swanky-looking infinity symbol */
-	content: "\00A0"; /* an nbsp */
-	vertical-align: middle;
-	color: {$GET,pale_border};
+.menu_type__zone .menu_spacer {
+	padding: 0 3em;
+}
+
+.edit_menu_link {
+	text-align: {!en_right};
 	font-size: 0.8em;
-	{$BETA_CSS_PROPERTY,opacity: 0.5;}
-	padding: 0 7px;
-}
-.menu_type__zone li:first-child:before {
-	content: "";
 }
 
-/* We hide the inline edit menu links for design reasons, they fade in on top of stuff when hovering the menu */
-.edit_menu_link_inline, .edit_page_link_inline {
-	{$BETA_CSS_PROPERTY,opacity: 0 !important;} display: inline-block;/*Needed for IE8*/
-	{$BETA_CSS_PROPERTY,transition: opacity 0.5s linear;}
+.menu_block .edit_menu_link a, #global_zones .edit_menu_link_inline, #panel_top .edit_menu_link_inline, #panel_bottom .edit_menu_link_inline {
+	opacity: 0.4;
+	-webkit-transition: opacity 0.5s linear;
+	-moz-transition: opacity 0.5s linear;
+	-o-transition: opacity 0.5s linear;
 }
-div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
-	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
+.menu_block:hover .edit_menu_link a, #global_zones:hover .edit_menu_link_inline, #panel_top:hover .edit_menu_link_inline, #panel_bottom:hover .edit_menu_link_inline {
+	opacity: 1.0;
 }
-.edit_page_link_inline, .edit_menu_link_inline {
+
+*>.edit_menu_link_inline {
+	display: none;
+}
+
+*:hover>.edit_menu_link_inline {
+	display: block;
+}
+
+.edit_menu_link_inline {
 	position: absolute;
 	right: 1px;
 	z-index: 10000;
-	margin-top: 3px;
-}
-.edit_page_link_inline {
-	margin-top: -1em;
 }
 
 /*
 =========================
-=========Comcode=========
+=====Screen actions======
 =========================
 */
 
-.comcode_snapback {
-	text-align: {!en_right};
-	font-size: 0.75em;
+#screen_actions_outer {
+	margin: 20px 0;
 }
 
-.comcode_overlay_main {
-	margin-bottom: 3em;
-}
-
-.comcode_overlay_dismiss {
-	text-align: center;
-	position: absolute;
-	bottom: 0;
-	width: 90%;
-}
-
-.comcode_code_wrap {
-	overflow-x: auto;
-}
-
-/* .comcode_quote is used where the [quote] tag is parsed. */
-/* .comcode_code is used where the [code] tag is parsed. */
-.comcode_quote, .comcode_code {
-	margin: 15px;
-
-	/* To prevent horizontal overlapping with floats */
-	outline: 0;
-	overflow: auto;
-}
-
-.comcode_quote>h4, .comcode_code>h4 {
-	border: 1px solid {$GET,code_border};
-	padding: 4px;
-	margin-bottom: 0;
-	background: {$GET,code_title_background} url('{$IMG;,quote_gradient}') repeat-y;
-}
-
-.comcode_quote_inner, .comcode_code_inner {
-	border: 1px solid {$GET,code_border};
-	display: block;
-	padding: 5px;
-	margin-{!en_left}: 8px;
-	background-color: {$GET,code_background};
-	color: {$GET,code_text};
+#screen_actions {
 	overflow: hidden;
+	width: 100%;
 }
 
-.comcode_quote_inner_titled {
-	border-top: 0;
-}
-
-.comcode_code_inner {
-	font-family: 'Courier New', 'Courier', monospace;
-	font-size: 1.1em;
-	border-top: 0;
-	white-space: nowrap;
-	overflow: auto;
-}
-
-.comcode_code_scroll {
-	max-height: 300px;
-}
-
-.comcode_highlight {
-	font-weight: bold;
-	color: {$GET,red_highlight_text};
-	background-color: {$GET,yellow_highlight_background};
-}
-
-.wiki_link, .comcode_exp_ref {
-	color: {$GET,area_key_text};
-	font-size: 0.85em;
-}
-
-.comcode_exp_ref a {
-	background-image: url('{$IMG;,arrow_box}') !important;
-}
-
-.wiki_link a {
-	background-image: url('{$IMG;,wiki_link}') !important;
-}
-
-.comcode_exp_ref a, .wiki_link a {
-	padding-{!en_right}: 17px !important;
-	background-repeat: no-repeat !important;
-	background-position: 100% 30% !important;
-}
-
-.comcode_exp_ref a:hover {
-	background-image: url('{$IMG;,arrow_box_hover}') !important;
-}
-
-.wiki_link a:hover {
-	background-image: url('{$IMG;,wiki_link_hover}') !important;
-}
-
-.comcode_exp_ref a:hover, .wiki_link a:hover {
-	padding-{!en_right}: 17px !important;
-	background-repeat: no-repeat !important;
-	background-position: 100% 30% !important;
-}
-
-.comcode_exp_thumb {
-	width: 150px;
-	padding: 0.5em;
-}
-
-.comcode_exp_thumb p {
-	color: {$GET,area_text};
-	font-size: 0.85em;
-	margin: 0.5em;
-}
-
-.comcode_exp_thumb img {
-	margin: 1px;
-}
-
-.comcode_concept_inline, a.comcode_concept_inline, a.comcode_concept_inline:visited, a.comcode_concept_inline:hover {
-	border-bottom: 1px dashed {$GET,divider_line};
-	display: inline-block;
-}
-
-.comcode_concepts {
-	font-size: 0.85em;
-	width: 80%;
-	margin: 0 auto;
-}
-
-.comcode_concepts_title {
-	background-image: url('{$IMG;,checklist/checklist1}');
+#screen_actions div {
+	margin-{!en_right}: 20px;
 	background-repeat: no-repeat;
-	background-position: 1px 0;
-	vertical-align: top;
-	text-indent: 14px;
-	margin: 0;
+	float: {!en_left};
 }
 
-.comcode_concepts_content {
-	padding-bottom: 0.85em;
-}
-
-.comcode_table_of_contents {
-	display: inline-block;
-	white-space: nowrap;
-	font-size: 0.9em;
-}
-
-.search_result .comcode_table_of_contents {
-	display: none;
-}
-
-.comcode_table_of_contents ol {
-	list-style-position: inside;
-	padding-{!en_left}: 12px !important;
-	margin: 0 !important;
-}
-.comcode_table_of_contents li {
-	margin: 0.2em 0 !important;
-	padding: 0 !important;
-}
-
-.comcode_table_of_contents a {
-	margin: 0;
-}
-
-.comcode_table_of_contents_title {
-	text-align: center;
-	color: {$GET,area_key_text};
-	margin: 0.5em;
-	font-weight: bold;
-}
-
-.comcode_italic {
-	font-style: italic;
-}
-
-.comcode_bold {
-	font-weight: bold;
-}
-
-.comcode_underline {
-	text-decoration: underline;
-}
-
-.comcode_strike {
-	text-decoration: line-through;
-}
-
-.comcode_section_controller {
-	padding-top: 10px;
-	margin-bottom: 20px;
-}
-
-.ticker_wrap {
-	display: inline-block;
-}
-.ticker {
-	margin: 0 auto;
-	height: 1.5em;
-	white-space: nowrap;
-	overflow: hidden;
-	text-align: left;
+#screen_actions div a {
+	padding-{!en_left}: 20px;
+	height: 1.7em;
 	display: inline-block;
 }
 
-.shocker {
-	text-align: right;
-	font-size: 1.2em;
+{+START,IF,{$ADDON_INSTALLED,recommend}}
+#screen_actions .print {
+	background-image: url('{$IMG;,recommend/print}');
 }
 
-.shocker_left {
-	float: left;
-	font-weight: bold;
+#screen_actions .recommend {
+	background-image: url('{$IMG;,recommend/recommend}');
 }
 
-.shocker_right {
+#screen_actions .favorites {
+	background-image: url('{$IMG;,recommend/favorites}');
 }
 
-.attachment {
-	margin: 1em 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
-		border: 1px solid {$GET,standard_border};
-		padding: 0.5em;
-	{+END}
-	font-size: 0.9em;
-	white-space: nowrap;
-	display: inline-block;
+#screen_actions .facebook {
+	background-image: url('{$IMG;,recommend/facebook}');
 }
 
-.attachment figcaption {
-	border: 1px solid {$GET,standard_border};
-	padding: 0.15em 0.3em;
-	font-style: italic;
-	margin-bottom: 0.5em;
-	display: inline-block;
+#screen_actions .twitter {
+	background-image: url('{$IMG;,recommend/twitter}');
 }
 
-.attachment_details {
-	margin-top: 0.2em;
+#screen_actions .stumbleupon {
+	background-image: url('{$IMG;,recommend/stumbleupon}');
 }
 
-.attachment_details .actions_list_strong {
-	background-position: left 4px;
+#screen_actions .digg {
+	background-image: url('{$IMG;,recommend/digg}');
 }
 
-.attachment_left {
-	float: left;
-	margin: 0 1.5em 0.5em 0;
+#screen_actions .google_plusone {
+	margin-top: 1px;
 }
-
-.attachment_right {
-	float: right;
-	margin: 0 0 0.5em 1.5em;
-}
-
-.attachment_left .attachment, .attachment_right .attachment {
-	width: 200px;
-}
-
-.attachment_img {
-	max-width: 100%;
-}
+{+END}
 
 /*
 =========================
@@ -3706,134 +3950,29 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 =========================
 */
 
-{+START,IF,{$CONFIG_OPTION,filetype_icons}}
-	a[href^="mailto:"] {
-		background: url('{$IMG;,filetypes/email_link}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".pdf"], a[href$=".ps"], body div a.pdf_link {
-		background: url('{$IMG;,filetypes/page_pdf}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".doc"], a[href$=".docx"], a[href$=".rtf"], body div a.doc_link {
-		background: url('{$IMG;,filetypes/page_doc}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".xls"], a[href$=".xlsx"], body div a.xls_link {
-		background: url('{$IMG;,filetypes/page_xls}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".ppt"], a[href$=".pptx"], body div a.ppt_link {
-		background: url('{$IMG;,filetypes/page_ppt}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".log"], a[href$=".txt"], body div a.txt_link {
-		background: url('{$IMG;,filetypes/page_txt}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".odt"], body div a.odt_link {
-		background: url('{$IMG;,filetypes/page_odt}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".odp"], body div a.odp_link {
-		background: url('{$IMG;,filetypes/page_odt}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".ods"], body div a.ods_link {
-		background: url('{$IMG;,filetypes/page_ods}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".rss"], body div a.feed_link {
-		background: url('{$IMG;,filetypes/feed}') no-repeat right top; 
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".torrent"], body div a.torrent_link {
-		background: url('{$IMG;,filetypes/page_torrent}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".zip"], a[href$=".gz"], a[href$=".bz2"], a[href$=".tar"], a[href$=".rar"], body div a.archive_link {
-		background: url('{$IMG;,filetypes/page_archive}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[href$=".asf"], a[href$=".ra"], a[href$=".wma"], a[href$=".wav"], a[href$=".mp3"], a[href$=".ogg"], a[href$=".mid"], a[href$=".mov"], a[href$=".qt"], a[href$=".wmv"], a[href$=".ram"], a[href$=".rm"], a[href$=".avi"], a[href$=".mpg"], a[href$=".mpe"], a[href$=".mpeg"], a[href$=".mp4"], a[href$=".webm"], body div a.media_link {
-		background: url('{$IMG;,filetypes/page_media}') no-repeat right top;
-		padding: 0 22px 5px 0;
-	}
-
-	a[target="_blank"] { /* Detected external links have styling */
-		background: url('{$IMG;,filetypes/external_link}') no-repeat right top;
-		padding-right: 10px;
-	}
-	body div a.external_link { /* Explicitly marked external links must show the styling with precedence */
-		background: url('{$IMG;,filetypes/external_link}') no-repeat right top !important;
-		padding-right: 10px !important;
-	}
-
-	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
-		background-image: none;
-		padding: 0px;
-	}
-
-	body a.link_exempt2 {
-		background-image: none;
-	}
-{+END}
-
+a[href^="mailto:"] {background: url('{$IMG;,filetypes/email_link}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".pdf"], a[href$=".ps"], body div a.pdf_link {background: url('{$IMG;,filetypes/page_pdf}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".doc"], a[href$=".docx"], a[href$=".rtf"], body div a.doc_link {background: url('{$IMG;,filetypes/page_doc}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".xls"], a[href$=".xlsx"], body div a.xls_link {background: url('{$IMG;,filetypes/page_xls}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".ppt"], a[href$=".pptx"], body div a.ppt_link {background: url('{$IMG;,filetypes/page_ppt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".log"], a[href$=".txt"], body div a.txt_link {background: url('{$IMG;,filetypes/page_txt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".odt"], body div a.odt_link {background: url('{$IMG;,filetypes/page_odt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".odp"], body div a.odp_link {background: url('{$IMG;,filetypes/page_odt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".ods"], body div a.ods_link {background: url('{$IMG;,filetypes/page_ods}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".rss"], body div a.feed_link {background: url('{$IMG;,filetypes/feed}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".torrent"], body div a.torrent_link {background: url('{$IMG;,filetypes/page_torrent}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".zip"], a[href$=".gz"], a[href$=".bz2"], a[href$=".tar"], a[href$=".rar"], body div a.archive_link {background: url('{$IMG;,filetypes/page_archive}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".asf"], a[href$=".ra"], a[href$=".wma"], a[href$=".wav"], a[href$=".mp3"], a[href$=".ogg"], a[href$=".mid"], a[href$=".mov"], a[href$=".qt"], a[href$=".wmv"], a[href$=".ram"], a[href$=".rm"], a[href$=".avi"], a[href$=".mpg"], a[href$=".mpe"], a[href$=".mpeg"], a[href$=".mp4"], a[href$=".webm"], body div a.media_link {background: url('{$IMG;,filetypes/page_media}') no-repeat right top; padding: 0 22px 5px 0;}
+a[target="_blank"] {background: url('{$IMG;,filetypes/external_link}') no-repeat right top; padding-right:10px;}
+a[onclick$="window.open"], body div a.external_link {background: url('{$IMG;,filetypes/external_link}') no-repeat right top !important; padding-right:10px !important;}
+body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] {background-image:none; padding:0px;}
+body a.link_exempt2 {background-image:none;}
 {+START,IF,{$ADDON_INSTALLED,recommend}}
-	.print_icon {
-		background: url('{$IMG;,recommend/print}') no-repeat left top !important;
-		padding: 0 0 5px 22px !important;
-	}
+.print_icon {background: url('{$IMG;,recommend/print}') no-repeat left top !important; padding: 0 0 5px 22px !important;}
 {+END}
 
 a[title="{!VIRTUAL_ROOT}"]:hover {
-	color: {$GET,red_highlight_text};
-}
-
-/*
-=========================
-========Admin Zone=======
-=========================
-*/
-
-.adminzone_search {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		position: absolute;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		padding: 10px 0;
-		float: left;
-	{+END}
-	top: 20px;
-	right: 80px;
-}
-
-.adminzone_search label strong {
-	text-shadow: 1px 1px 1px {$GET,standard_border};
-	font-weight: normal;
-}
-
-.adminzone_search input {
-	vertical-align: middle;
-}
-
-.adminzone_search #search_button {
-	{$BETA_CSS_PROPERTY,opacity: 0.6;} display: inline-block;/*Needed for IE8*/
-}
-.adminzone_search #search_button:hover {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
+	color: #d91522; /* {$,red_highlights, 80% FF0000 + 20% seed} */
 }
 
 /*
@@ -3847,14 +3986,6 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 		background: none;
 	}
 
-	#main_website_inner {
-		width: auto !important;
-		margin: 0 !important;
-		background: none !important;
-		box-shadow: none !important;
-		border:0 !important;
-	}
-
 	h1 {
 		display: none;
 	}
@@ -3863,30 +3994,17 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 		overflow-y: visible !important;
 	}
 
-	.global_middle {
-		margin: 0 !important;
-		padding: 0 !important;
-		background: none !important;
-	}
-
-	.buttons_group,
-	.associated_links_block_group,
-	.screen_actions_outer,
-	.adminzone_search,
-	.global_banner,
-	header,
-	footer,
-	.global_side_panel,
-	.toggleable_tray_button,
-	.post_buttons,
-	.quick_self_edit_link, .staff_actions,
-	.comments_form,
-	.community_message,
-	.ratings, .trackbacks {
+	.ocf_member_signature .comcode_hide, .button_panel, #screen_actions_outer, .adminzone_search, .global_top, .global_banner, .hide_button, .bottom, .global_side, .mini_edit_me, .control_functions, .staff_actions, .ocf_page_buttons, .ocf_member_bar, .ocf_post_buttons, .ocf_topic_marker, #comments_form, .members_viewing, .member_bar_etc, .ratings, .trackbacks, #news_archive_link {
 		display: none;
 	}
 
-	.global_navigation {
+	#global_zones {
 		visibility: hidden;
+	}
+
+	#global_middle_ph {
+		position: absolute;
+		{!en_left}: 0;
+		width: auto;
 	}
 }

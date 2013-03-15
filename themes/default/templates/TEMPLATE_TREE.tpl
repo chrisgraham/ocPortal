@@ -7,8 +7,8 @@
 		{HIDDEN}
 	</div>
 
-	<p class="proceed_button">
+	<div class="proceed_button">
 		<input onclick="disable_button_just_clicked(this);" value="{!EDIT_TEMPLATES}" class="button_page" type="submit" />
-	</p>
+	</div>
 </form>
 

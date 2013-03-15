@@ -34,11 +34,6 @@ function occle_script()
 {
 	$cli=(php_sapi_name()=='cli' && empty($_SERVER['REMOTE_ADDR']));
 
-	if ($cli)
-	{
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-	}
-
 	// Closed site
 	if (!$cli)
 	{
@@ -123,10 +118,6 @@ function occle_script()
 	}
 }
 
-/**
- * OcCLE.
- * @package		occle
- */
 class virtual_bash
 {
 	var $current_input;
@@ -231,23 +222,7 @@ class virtual_bash
 		if (is_object($this->output[STREAM_STDOUT])) $this->output[STREAM_STDOUT]=$this->output[STREAM_STDOUT]->evaluate();
 		if (is_object($this->output[STREAM_STDERR])) $this->output[STREAM_STDERR]=$this->output[STREAM_STDERR]->evaluate();
 
-		// Make the HTML not use non-XML entities
-		$table=array_flip(get_html_translation_table(HTML_ENTITIES));
-		if (strtoupper(get_charset())=='UTF-8')
-		{
-			foreach ($table as $x=>$y)
-				$table[$x]=utf8_encode($y);
-		}
-		unset($table['&amp;']);
-		unset($table['&gt;']);
-		unset($table['&lt;']);
-		unset($table['&quot;']);
-		$html_bak=$this->output[STREAM_STDHTML];
-		$this->output[STREAM_STDHTML]=strtr($this->output[STREAM_STDHTML],$table);
-
-		@ob_end_clean(); // Cleanup any output that may have somehow leaked to this point
-
-		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+		$output='<'.'?xml version="1.0" encoding="utf-8" ?'.'>
 <response>
 	<result>
 		<command>'.xmlentities($this->current_input).'</command>
@@ -260,7 +235,7 @@ class virtual_bash
 </response>';
 
 		if ($GLOBALS['XSS_DETECT'])
-			if (ocp_is_escaped($html_bak)) ocp_mark_as_escaped($output);
+			if (ocp_is_escaped($this->output[STREAM_STDHTML])) ocp_mark_as_escaped($output);
 
 		echo $output;
 
@@ -988,7 +963,7 @@ class virtual_bash
 				{
 					//It *is* a script, so let's run it :)
 					$this->parse_runtime['occle_command']=COMMAND_SCRIPT;
-					$script_contents=unixify_line_format(file_get_contents($script_file));
+					$script_contents=unixify_line_format(file_get_contents($script_file,FILE_TEXT));
 					$script_lines=explode("\n",$script_contents);
 
 					foreach ($script_lines as $script_line)
@@ -1246,8 +1221,7 @@ class virtual_bash
 				{
 					if (!is_scalar($occle_val)) continue;
 
-					if (is_bool($occle_val)) eval('$'.$occle_key.'='.($occle_val?'true':'false').';');
-					elseif ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
+					if ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
 					else eval('$'.$occle_key.'='.strval($occle_val).';');
 				}
 			}
@@ -1343,10 +1317,6 @@ class virtual_bash
 	}
 }
 
-/**
- * Virtual filesystems.
- * @package		occle
- */
 class virtual_fs
 {
 	/**
@@ -2037,7 +2007,7 @@ function get_queued_messages($xml=true)
  *
  * @param  string			Command name
  * @param  array			Options
- * @param  array			Parameters (keys are the parameters, values are always set to true, i.e. it is an array of as many trues as there are parameters)
+ * @param  array			Parameters
  * @return tempcode		Help template
 */
 function do_command_help($command,$options,$parameters)
@@ -2051,10 +2021,9 @@ function do_command_help($command,$options,$parameters)
 		else $_options['-'.$option_name]=do_lang('CMD_'.strtoupper($command).'_HELP_'.strtoupper($option_name));
 	}
 
-	foreach (array_keys($parameters) as $parameter_number)
+	foreach ($parameters as $parameter_number=>$parameter)
 	{
-		$_parameter=do_lang('CMD_'.strtoupper($command).'_HELP_PARAM_'.strval($parameter_number),NULL,NULL,NULL,NULL,false);
-		if (is_null($_parameter)) continue;
+		$_parameter=do_lang('CMD_'.strtoupper($command).'_HELP_PARAM_'.strval($parameter_number));
 		$matches=array();
 		if (preg_match('#/sources/hooks/(.*)/(.*)/#',$_parameter,$matches)!=0)
 		{

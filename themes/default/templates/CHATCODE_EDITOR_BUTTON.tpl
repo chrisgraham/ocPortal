@@ -1,1 +1,1 @@
-<input type="image" onclick="do_input_{B%}('post'); return false;" title="{TITLE}" alt="{TITLE}" src="{$IMG*,chatcodeeditor/{B}}" />
+<input type="image" onclick="doInput_{B%}('post'); return false;" title="{TITLE}" alt="{TITLE}" src="{$IMG*,chatcodeeditor/{B}}" />

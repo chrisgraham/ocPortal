@@ -1,1 +1,1 @@
-<li>{KEY*} &rarr; {VALUE*}</li>
+<li>{KEY*} -&gt; {VALUE*}</li>

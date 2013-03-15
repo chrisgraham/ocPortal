@@ -53,12 +53,13 @@
 
   <setAcl path="ocportal/data_custom/modules/chat" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/modules/admin_backup" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/data_custom/spelling" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/data_custom/spelling/output.log" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/data_custom/spelling/write.log" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/spelling/personal_dicts" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/themes" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/text_custom" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/text_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/persistent_cache" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/persistant_cache" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/safe_mode_temp" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/lang_cached/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/lang_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
@@ -72,10 +73,10 @@
   <setAcl path="ocportal/data_custom/errorlog.php" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/ocp_sitemap.xml" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/modules/admin_stats" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/imports/addons" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/imports/mods" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/exports/backups" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/exports/file_backups" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/exports/addons" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/exports/mods" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/uploads/banners" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/uploads/catalogues" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/uploads/downloads" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />

@@ -8,6 +8,8 @@
 	<sup>*</sup> {!STAR_ALREADY_DEFINED}
 </p>
 
+<br />
+
 {+START,IF_NON_EMPTY,{MERGE_FORM}}
 	<h2>{!MERGE_AUTHORS}</h2>
 

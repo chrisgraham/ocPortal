@@ -86,7 +86,7 @@ class Module_contactmember
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 		if (is_null($username)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 
-		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($username)));
+		$title=get_page_title('EMAIL_MEMBER',true,array(escape_html($username)));
 
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
@@ -157,7 +157,7 @@ class Module_contactmember
 		if (!is_valid_email_address($from_email)) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 		$from_name=post_param('name');
 
-		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
+		$title=get_page_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
 
 		require_code('mail');
 		$attachments=array();

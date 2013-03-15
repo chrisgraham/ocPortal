@@ -36,7 +36,7 @@ class Module_admin_version
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=16;
+		$info['version']=15;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -511,7 +511,6 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_ford',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_fore',array('cached_for'));
-			$GLOBALS['SITE_DB']->create_index('cache','cached_fore2',array('cached_for','identifier'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_forf',array('lang'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_forg',array('identifier'));
 			$GLOBALS['SITE_DB']->create_index('cache','cached_forh',array('the_theme'));
@@ -564,12 +563,16 @@ class Module_admin_version
 				'c_map'=>'LONG_TEXT',
 				'c_timezone'=>'ID_TEXT',
 				'c_is_bot'=>'BINARY',
+				'c_in_panel'=>'BINARY',
+				'c_interlock'=>'BINARY',
 				'c_store_as_tempcode'=>'BINARY',
 				'c_lang'=>'LANGUAGE_NAME',
 				'c_theme'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_compound',array('c_codename','c_theme','c_lang','c_timezone'));
 			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_is_bot',array('c_is_bot'));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_in_panel',array('c_in_panel'));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_interlock',array('c_interlock'));
 			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_store_as_tempcode',array('c_store_as_tempcode'));
 
 			$GLOBALS['SITE_DB']->create_table('notifications_enabled',array(
@@ -603,12 +606,6 @@ class Module_admin_version
 				'c_frequency'=>'*INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
 				'c_time'=>'TIME',
 			));
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from==15))
-		{
-			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_interlock');
-			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_in_panel');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

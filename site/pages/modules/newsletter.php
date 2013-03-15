@@ -251,10 +251,10 @@ class Module_newsletter
 	 */
 	function newsletter_form()
 	{
-		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+		$title=get_page_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
 
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
-		if (count($newsletters)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
+		if (count($newsletters)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'do'),'_SELF');
 		$submit_name=do_lang_tempcode('NEWSLETTER_JOIN');
@@ -266,7 +266,7 @@ class Module_newsletter
 		$message=get_option('newsletter_text');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
-			if ($message!='') $message.=' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:FEATURE#group_NEWSLETTER}">'.do_lang('EDIT').'</a></span>[/semihtml]';
+			if ($message!='') $message.=' [[page="_SEARCH:admin_config:category:FEATURE#group_NEWSLETTER"]'.do_lang('EDIT').'[/page]]';
 		}
 		$text=comcode_to_tempcode($message,NULL,true);
 
@@ -335,7 +335,7 @@ class Module_newsletter
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
 
-		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+		$title=get_page_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
 
 		// Add
 		$email=trim(post_param('email'));
@@ -425,7 +425,7 @@ class Module_newsletter
 	 */
 	function newsletter_password_reset()
 	{
-		$title=get_screen_title(get_option('newsletter_title'),false);
+		$title=get_page_title(get_option('newsletter_title'),false);
 
 		$email=trim(get_param('email'));
 		$lang=$GLOBALS['SITE_DB']->query_value('newsletter','language',array('email'=>$email));
@@ -465,7 +465,7 @@ class Module_newsletter
 			warn_exit(do_lang_tempcode('COULD_NOT_UNSUBSCRIBE'));
 		}
 
-		$title=get_screen_title('NEWSLETTER_UNSUBSCRIBED');
+		$title=get_page_title('NEWSLETTER_UNSUBSCRIBED');
 
 		$GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('email'=>$subscriber['email']));
 
@@ -500,7 +500,7 @@ class Module_newsletter
 	 */
 	function newsletter_confirm_joining()
 	{
-		$title=get_screen_title(get_option('newsletter_title'),false);
+		$title=get_page_title(get_option('newsletter_title'),false);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
 

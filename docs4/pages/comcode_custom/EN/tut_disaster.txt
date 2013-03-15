@@ -1,0 +1,97 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Disaster recovery[/title]
+
+[i]The ocPortal 'error log' screen points to this tutorial. If you think you have found a bug, please [page="site:free_tickets"]report it[/page]. The rest of this tutorial deals with potential disaster situations -- an error in the error log does not imply a disaster has happened.[/i]
+
+This tutorial will go through some solutions to 'disasterous' scenarios that could happen on an unstable web server configuration. It does not cover all that could go wrong by any means, as there are literally an infinite number of things that could go wrong if ocPortal is running in an unreliable environment.
+
+I am going to assume that you have access to phpMyAdmin for the purposes of this tutorial. phpMyAdmin is a user-friendly web-based frontend to mySQL, and is available from most hosting control panels. For more information, see the [page caption="Manually editing your database with phpMyAdmin"]tut_sql[/page] tutorial.
+
+If you need a quick data rescue, consider [page="site:support"]using ocProducts support[/page] (you can submit an emergency ticket, so long as you have some credit in your support account).
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Repairing a corrupted copy of ocPortal[/title]
+
+The upgrader tool (accessible via [tt]upgrader.php[/tt]) contains a very useful 'integrity checker' which can find out-dated and corrupt files. You can use this tool at any point, regardless of whether you have recently upgraded or not.
+
+[title="2"]Fixing a theme[/title]
+
+If you've set up a theme, that is activated, and you've edited it in such a way that you can no longer realistically use the Admin Zone, you'll need to rescue your theme.
+
+If you still are logged in as admin or the default theme is accessible from guest accounts, use the 'Safe mode' link you were asked to bookmark during the Setup Wizard -- this will allow you to use your website, using the default theme. If you have forgotten the link, it's any link to your website with [tt]&keep_theme=default[/tt] added to the end of the URL.
+
+If you are not logged in as admin, connect to your web server using FTP, then rename all the folders inside the [tt]themes[/tt] folder except [tt]default[/tt]. For instance, if you have folders [tt]my_theme[/tt] and [tt]another_theme[/tt] and [tt]default[/tt], rename the first two to [tt]my_theme.old[/tt] and [tt]another_theme.old[/tt], but leave [tt]default[/tt] along. This renaming will essentially temporarily erase your themes and force ocPortal to use the default theme regardless of permissions. Now change the theme selection on your site back back to default, rename your theme folders back to their prior names (remove the [tt].old[/tt] suffix you added), fix your theme, and then restore your theme selection.
+
+[title="2"]Changing a login password[/title]
+
+If you've misset a password and for whatever reason can't use the 'lost password' feature to reset it (perhaps because of an invalid/non-existant e-mail address for that account, or a faulty/non-existant mail server), then you'll want to manually reset it.
+Obviously this needs a greater level of access than ordinary members would have. We could either use:
+ - Database access
+ - Disk access
+
+[title="3"]Via the database[/title]
+
+For this, I am assuming that you are using [concept]OCF[/concept]. If you are using another forum then the method will be similar, but will be done upon the data of that forum.
+
+[exp_thumb="Select to browse the f_members table" float="left"]disaster_pass_1[/exp_thumb]
+[exp_thumb="Edit the row for the username for which the password should be changed" float="right"]disaster_pass_2[/exp_thumb]
+1) Enter phpMyAdmin
+
+2) Browse the contents of the ocPortal f_members table (named [tt]ocp2_f_members[/tt] if you used the default table prefix).
+
+3) You will see rows for all usernames. Click the little edit icon and you'll see an editing screen.
+
+[exp_thumb="Change the settings and 'Go'" float="right"]disaster_pass_3[/exp_thumb]
+4) There are numerous fields, but we only need to change three:
+ - [tt]m_pass_hash_salted[/tt] should be given the new password. It is essential that you also choose 'MD5' from the list to the left of the input field, so that the password gets 'encrypted' (ocPortal assumes an encrypted password and if it is not then it will not succesfully log in).
+ - [tt]m_pass_salt[/tt] should be blanked out.
+ - [tt]m_password_compatibility_scheme[/tt] should be set to 'md5'.
+
+5) Scroll to the bottom of the form and click 'Go'.
+
+You should now be able to log in to ocPortal using your new password.
+
+[title="3"]Via the disk[/title]
+
+If you open up sources/users.php in a text editor and go to line 407 you'll find an interesting line of code:
+[codebox]
+   $backdoor_ip_address=mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
+[/codebox]
+
+All you need to do is to go to http://www.myipaddress.com/ and copy your IP address, with quotation marks, in substitution of false.
+For example:
+[codebox]
+   $backdoor_ip_address='12.45.56.78'; // Enable to a real IP address to force login from FTP access (if lost admin password)
+[/codebox]
+
+You will then be logged in as member 2, which is 'admin' on OCF. If you need a different member ID, change line 351.
+
+It should go without saying that you should only use this 'backdoor' for a short space of time and not disclose your IP address when doing it. ocProducts makes no claims to how secure this backdoor might be and you open it up entirely at your own risk.
+
+[title="2"]Unbanning an IP[/title]
+
+[exp_thumb="Select to browse the usersubmitban_ip table" float="left"]disaster_ban_1[/exp_thumb]
+[exp_thumb="Delete the row corresponding to your IP address" float="right"]disaster_ban_2[/exp_thumb]
+If you are unfortunate enough to have somehow been banned from your own website, use phpMyAdmin to browse the 'usersubmitban_ip' table, and delete the row containing your IP address. If you don't know your IP address then you can find it out from http://www.myipaddress.com/.
+
+[title="2"]Resetting page ownerships[/title]
+
+If you delete or demote an admin, you may find lots of pages now show Comcode permission errors (even default ones, which are assigned to the first site admin automatically).
+
+To fix this, edit the Comcode page and assign a new submitter via the edit form.
+
+To do it en-masse, you can run this in OcCLE (this example assumes you are reassigning from member #5 to member #2):
+[code]
+:$GLOBALS['SITE_DB']->query_update('comcode_pages',array('p_submitter'=>2),array('p_submitter'=>5));
+[/code]
+and then clear the Comcode page cache from Admin Zone > Tools > Cleanup tools.
+
+[title="2"]Changing base configuration[/title]
+
+If your server base configuration has changed (such as your database password, for example) then you need to update ocPortal's [tt]info.php[/tt] config file to reflect this. You can either do this directly, or you can do it via launching the [tt]config_editor.php[/tt] script installed at the base of your website (you will need your master password to do this).
+
+[title="2"]See also[/title]
+
+ - [page caption="Manually editing your database with phpMyAdmin"]tut_sql[/page]
+ - [page caption="Web hosting for ocPortal users"]tut_web_hosting[/page]
+

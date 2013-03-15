@@ -1,1 +1,6 @@
-<li>{+START,IF_PASSED_AND_TRUE,POST}<form title="{NAME*}" class="inline" method="post" action="{URL*}"><input title="{DESCRIPTION*}" class="button_hyperlink" type="submit" value="{NAME*}" /></form>{+END}{+START,IF_NON_PASSED_OR_FALSE,POST}<a title="{NAME*}: {DESCRIPTION*}" href="{URL*}">{NAME*}</a>{+END}</li>
+{+START,IF_PASSED,POST}
+	[&nbsp;<form title="{NAME*}" class="inline" method="post" action="{URL*}"><input title="{DESCRIPTION*}" class="buttonhyperlink" type="submit" value="{NAME*}" /></form>&nbsp;]<br />
+{+END}
+{+START,IF_NON_PASSED,POST}
+	[&nbsp;<a title="{NAME*}: {DESCRIPTION*}" href="{URL*}">{NAME*}</a>&nbsp;]<br />
+{+END}

@@ -128,11 +128,9 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
 	}
 }
 
-/**
- * Dispatcher object.
- * Used to create a closure for a notification dispatch, so we can then tell that to send in the background (register_shutdown_function), for performance reasons.
- * @package		core_notifications
- */
+/*
+Dispatcher object. Used to create a closure for a notification dispatch, so we can then tell that to send in the background (register_shutdown_function), for performance reasons.
+*/
 class Notification_dispatcher
 {
 	var $notification_code=NULL;
@@ -190,7 +188,7 @@ class Notification_dispatcher
 		$message=$this->message;
 		$no_cc=$this->no_cc;
 
-		if ($GLOBALS['DEV_MODE'])
+		if ($GLOBALS['DEBUG_MODE'])
 		{
 			if ((strpos($this->message,'keep_devtest')!==false) && ($this->notification_code!='hack_attack') && (strpos($this->message,running_script('index')?static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true)):get_self_url_easy())===false) && ((strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')===false) || (strpos($this->message,ocp_srv('HTTP_REFERER'))===false))) // Bad URL - it has to be general, not session-specific
 				fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -402,7 +400,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			$successes=sms_wrap($wrapped_message,array($to_member_id));
 			if ($successes==0) // Could not send
 			{
-				$setting=$setting | A_INSTANT_EMAIL; // Make sure it also goes to email then
+				$setting = $setting | A_INSTANT_EMAIL; // Make sure it also goes to email then
 				$message_to_send=do_lang('INSTEAD_OF_SMS',$message);
 			}
 		}
@@ -644,7 +642,6 @@ function delete_all_notifications_on($notification_code,$notification_category)
 
 /**
  * Base class for notification hooks. Provides default implementations for all methods that provide full access to everyone, and interact with enabled table.
- * @package		core_notifications
  */
 class Hook_Notification
 {
@@ -985,7 +982,7 @@ class Hook_Notification
 	}
 
 	/**
-	 * Find whether someone has permission to view any notifications (yes) and possibly if they actually are.
+	 * Find whether someone has permisson to view any notifications (yes) and possibly if they actually are.
 	 *
 	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
@@ -1002,7 +999,6 @@ class Hook_Notification
 
 /**
  * Derived abstract base class of notification hooks that provides only staff access.
- * @package		core_notifications
  */
 class Hook_Notification__Staff extends Hook_Notification
 {
@@ -1104,7 +1100,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	}
 
 	/**
-	 * Find whether someone has permission to view staff notifications and possibly if they actually are.
+	 * Find whether someone has permisson to view staff notifications and possibly if they actually are.
 	 *
 	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)

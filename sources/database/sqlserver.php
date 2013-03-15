@@ -11,7 +11,6 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-
 /*EXTRA FUNCTIONS: (mssql|sqlsrv)\_.+*/
 
 /**
@@ -39,10 +38,6 @@ function init__database__sqlserver()
 	@ini_set('mssql.textsize','300000');
 }
 
-/**
- * Database Driver.
- * @package		core_database_drivers
- */
 class Database_Static_sqlserver
 {
 
@@ -286,7 +281,7 @@ class Database_Static_sqlserver
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
-	 * @param  boolean		Whether to create a persistent connection
+	 * @param  boolean		Whether to create a persistant connection
 	 * @param  string			The database name
 	 * @param  string			The database host (the server)
 	 * @param  string			The database connection username
@@ -401,7 +396,7 @@ class Database_Static_sqlserver
 		{
 			if (is_null($start)) $max+=$start;
 
-			if (strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
+			if (strtoupper(substr($query,0,7))=='SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
 			{
 				$query='SELECT TOP '.strval(intval($max)).substr($query,6);
 			}
@@ -438,7 +433,7 @@ class Database_Static_sqlserver
 				@mssql_data_seek($results,$start);
 			}
 		}
-		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results===true))) && (!$fail_ok))
+		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') && ($results===true))) && (!$fail_ok))
 		{
 			if (function_exists('sqlsrv_errors'))
 			{
@@ -462,7 +457,7 @@ class Database_Static_sqlserver
 			}
 		}
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results!==false) && ($results!==true))
+		if ((strtoupper(substr($query,0,7))=='SELECT ') && ($results!==false) && ($results!==true))
 		{
 			return $this->db_get_query_rows($results);
 		}

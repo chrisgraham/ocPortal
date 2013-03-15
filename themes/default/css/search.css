@@ -7,16 +7,16 @@
 */
 
 .search_advanced_title {
-	padding: 1em 0;
+	padding: 15px 0;
 }
 
 .google_search_box {
-	margin-top: 3em;
+	margin-top: 30px;
 	text-align: center;
 }
 
 .search_tabular_header {
-	padding: 1em 0;
+	margin: 20px 0;
 }
 
 .google_search_button {
@@ -33,7 +33,7 @@
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.main_search_form .search_content {
+	.main_search_form #search_content {
 		width: 300px;
 		max-width: 100%;
 	}
@@ -48,50 +48,37 @@
 	text-align: {!en_right};
 }
 
-.boolean_options {
+#boolean_options {
 	margin-{!en_left}: 40px;
 }
 
-.boolean_options label {
-	display: block;
-}
-
-.search_option {
-	margin: 0.2em 0;
-}
-
 {+START,IF,{$MOBILE}}
-	.search_option label {
+	.search_option {
 		float: {!en_left};
 	}
 {+END}
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.search_option label {
+	.search_option {
 		float: {!en_left};
 		width: 350px;
 		max-width: 100%;
 	}
 
-	.search_option_value, .search_option select {
-		width: 20em;
+	.search_option_value {
+		width: 200px;
 		max-width: 100%;
-		font-size: 1em; /* Makes em units consistent for both input types */
 	}
 {+END}
 
-.search_option * {
-	margin-left: 0;
-}
-
 .search_result {
-	margin-top: 1em;
+	margin-top: 10px;
 }
 
 .search_field_table th {
 	vertical-align: middle;
 }
 
-.search_sort {
+#search_sort {
 	max-width: 100%;
 }

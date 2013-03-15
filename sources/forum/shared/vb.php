@@ -18,12 +18,9 @@
  * @package		core_forum_drivers
  */
 
-/**
- * Base class for VB forum drivers.
- * @package		core_forum_drivers
- */
 class forum_driver_vb_shared extends forum_driver_base
 {
+
 	/**
 	 * Check the connected DB is valid for this forum driver.
 	 *

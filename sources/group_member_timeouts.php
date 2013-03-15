@@ -129,6 +129,5 @@ function cleanup_member_timeouts()
 	}
 	while (count($timeouts)==100);
 
-	if (!$GLOBALS['SITE_DB']->table_is_locked('f_group_member_timeouts'))
-		$timeouts=$db->query('DELETE FROM '.$db->get_table_prefix().'f_group_member_timeouts WHERE timeout<'.strval($time));
+	$timeouts=$db->query('DELETE FROM '.$db->get_table_prefix().'f_group_member_timeouts WHERE timeout<'.strval($time));
 }

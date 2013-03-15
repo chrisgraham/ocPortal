@@ -77,9 +77,10 @@ class Block_main_recent_downloads
 		if ((array_key_exists('title',$map)) && ($map['title']!='')) $title=make_string_tempcode(escape_html($map['title']));
 
 		$out=new ocp_tempcode();
-		foreach ($rows as $row)
+		foreach ($rows as $i=>$row)
 		{
-			$out->attach(render_download_box($row,true,true,$zone));
+			if ($i!=0) $out->attach(do_template('BLOCK_SEPARATOR'));
+			$out->attach(get_download_html($row,true,true,$zone));
 		}
 		if ($out->is_empty())
 		{

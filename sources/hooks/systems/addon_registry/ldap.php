@@ -20,6 +20,7 @@
 
 class Hook_addon_registry_ldap
 {
+
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -60,7 +61,7 @@ class Hook_addon_registry_ldap
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Hook_addon_registry_ldap
 	function get_file_list()
 	{
 		return array(
+
 			'sources/hooks/systems/config_default/ldap_allow_joining.php',
 			'sources/hooks/systems/config_default/ldap_base_dn.php',
 			'sources/hooks/systems/config_default/ldap_bind_password.php',
@@ -95,22 +97,22 @@ class Hook_addon_registry_ldap
 			'sources/ocf_ldap.php',
 			'themes/default/images/bigicons/ldap.png',
 			'themes/default/images/pagepics/ldap.png',
-			'sources/hooks/systems/do_next_menus/ldap.php'
+			'sources/hooks/systems/do_next_menus/ldap.php',
 		);
 	}
 
 
 	/**
-	 * Get mapping between template names and the method of this class that can render a preview of them
-	 *
-	 * @return array			The mapping
-	 */
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
 	function tpl_previews()
 	{
 		return array(
-			'OCF_LDAP_LIST_ENTRY.tpl'=>'administrative__ocf_ldap_sync_screen',
-			'OCF_LDAP_SYNC_SCREEN.tpl'=>'administrative__ocf_ldap_sync_screen'
-		);
+				'OCF_LDAP_LIST_ENTRY.tpl'=>'administrative__ocf_ldap_sync_screen',
+				'OCF_LDAP_SYNC_SCREEN.tpl'=>'administrative__ocf_ldap_sync_screen',
+				);
 	}
 
 	/**
@@ -126,41 +128,34 @@ class Hook_addon_registry_ldap
 		$members_delete=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
-				'NAME'=>lorem_word() . placeholder_random(),
-				'NICE_NAME'=>lorem_word()
-			));
+			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array('NAME'=>lorem_word().placeholder_random(),'NICE_NAME'=>lorem_word()));
 			$members_delete->attach($tpl);
 		}
 
 		$groups_delete=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
-				'NAME'=>lorem_word() . placeholder_random(),
-				'NICE_NAME'=>lorem_word()
-			));
+			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array('NAME'=>lorem_word().placeholder_random(),'NICE_NAME'=>lorem_word()));
 			$groups_delete->attach($tpl);
 		}
 
 		$groups_add=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
-				'NAME'=>lorem_word() . placeholder_random(),
-				'NICE_NAME'=>lorem_word()
-			));
+			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array('NAME'=>lorem_word().placeholder_random(),'NICE_NAME'=>lorem_word()));
 			$groups_add->attach($tpl);
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_LDAP_SYNC_SCREEN', array(
-				'URL'=>placeholder_url(),
-				'TITLE'=>lorem_title(),
-				'MEMBERS_DELETE'=>$members_delete,
-				'GROUPS_DELETE'=>$groups_delete,
-				'GROUPS_ADD'=>$groups_add
-			)), NULL, '', true)
+			lorem_globalise(
+				do_lorem_template('OCF_LDAP_SYNC_SCREEN',array(
+					'URL'=>placeholder_url(),
+					'TITLE'=>lorem_title(),
+					'MEMBERS_DELETE'=>$members_delete,
+					'GROUPS_DELETE'=>$groups_delete,
+					'GROUPS_ADD'=>$groups_add,
+						)
+			),NULL,'',true),
 		);
 	}
 }

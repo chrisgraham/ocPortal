@@ -224,7 +224,7 @@ if (!function_exists('require_lang_compile'))
 			}
 		} else
 		{
-			persistent_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
+			persistant_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
 		}
 
 		if ($desire_cache) $LANGUAGE[$lang]+=$load_target;

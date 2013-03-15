@@ -33,9 +33,6 @@ function init__hooks__modules__admin_import__mybb()
 	$OLD_BASE_URL=NULL;
 }
 
-/**
- * Forum Driver.
- */
 class Hook_mybb
 {
 
@@ -102,8 +99,13 @@ class Hook_mybb
 		if (!file_exists($file_base.'/inc/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('inc/config.php')));
 		require($file_base.'/inc/config.php');
+		$INFO=array();
+		$INFO['sql_database']=$config['database']['database'];
+		$INFO['sql_user']=$config['database']['username'];
+		$INFO['sql_pass']=$config['database']['password'];
+		$INFO['sql_tbl_prefix']=$config['database']['table_prefix'];
 
-		return array($config['database']['database'],$config['database']['username'],$config['database']['password'],$config['database']['table_prefix'],$config['database']['hostname']);
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
 	}
 
 	/**
@@ -549,14 +551,14 @@ class Hook_mybb
 	 */
 	function import_ip_bans($db,$table_prefix,$file_base)
 	{
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'users u LEFT JOIN '.$table_prefix.'banned b ON u.uid=b.uid WHERE b.gid=7');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'users u LEFT JOIN '.$table_prefix.'banned b ON u.uid = b.uid WHERE b.gid=7');
 
 		require_code('failure');
 
 		foreach ($rows as $row)
 		{
-			$ban_time=$row['dateline']; //when is banned user
-			$ban_period=$row['bantime']; //how many days/months/years is banned
+			$ban_time = $row['dateline']; //when is banned user
+			$ban_period = $row['bantime']; //how many days/months/years is banned
 			$perm_banned=false;
 
 			if ($ban_period=='---')
@@ -569,19 +571,19 @@ class Hook_mybb
 				$period_array=array_map('intval',explode('-',$ban_period));
 				if (isset($period_array[0])&&($period_array[0]>0))
 				{
-					$ban_till=$ban_time+strtotime("+ ".$period_array[0]." day",strtotime($ban_time)); //the user is banned till this date/time
+					$ban_till = $ban_time+strtotime("+ ".$period_array[0]." day",strtotime($ban_time)); //the user is banned till this date/time
 				}
 				elseif (isset($period_array[1])&&($period_array[1]>0))
 				{
-					$ban_till=$ban_time+strtotime("+ ".$period_array[1]." month",strtotime($ban_time)); //the user is banned till this date/time
+					$ban_till = $ban_time+strtotime("+ ".$period_array[1]." month",strtotime($ban_time)); //the user is banned till this date/time
 				}
 				elseif (isset($period_array[2])&&($period_array[2]>0))
 				{
-					$ban_till=$ban_time+strtotime("+ ".$period_array[2]." year",strtotime($ban_time)); //the user is banned till this date/time
+					$ban_till = $ban_time+strtotime("+ ".$period_array[2]." year",strtotime($ban_time)); //the user is banned till this date/time
 				}
 			}
 
-			$ban_till=$ban_time+$ban_period; //the user is banned till this date/time
+			$ban_till = $ban_time+$ban_period; //the user is banned till this date/time
 
 			if (!$perm_banned) continue; //add just IPs of permanently banned users
 
@@ -1345,7 +1347,7 @@ class Hook_mybb
 			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',strtotime($row['starttime'])));
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=explode('-',date('Y-m-d-h-i',strtotime($row['endtime'])));
 			ocf_over_msn();
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['name'],$row['description'],3,$row['visible'],$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,$submitter,0,$row['dateline']);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['name'],$row['description'],3,$row['visible'],$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,$submitter,0,$row['dateline']);
 			ocf_over_local();
 
 			import_id_remap_put('event',strval($row['eid']),$id_new);

@@ -1,1 +1,1 @@
-<img class="vertical_alignment" alt="{EMOTICON*}" src="{$IMG*,{EMOTICON},1}" />
+<img class="inline_image" title="" alt="{EMOTICON*}" src="{$IMG*,{EMOTICON},1}" />

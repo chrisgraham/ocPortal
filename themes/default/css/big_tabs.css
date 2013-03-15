@@ -38,13 +38,13 @@
 .comcode_big_tab {
 	{+START,IF,{$MOBILE}}
 		float: left;
-		margin: 1em 0;
+		margin: 10px 0;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
 		margin-left: 186px; /* 2px gap to workaround IE lameness */
 		min-height: 190px;
 	{+END}
-	padding: 1em;
-	border: 2px solid {$GET,pale_border};
-	background-color: {$GET,area_background};
+	padding: 10px;
+	border: 2px solid #e3e9f2; /* {$,wizard, 15% seed + 85% W/B} */
+	background-color: #f5f8fb; /* {$,wizard, 50% ocf_row2 + 50% W/B }*/ /*50% white over medborder color*/
 }

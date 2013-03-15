@@ -6,11 +6,15 @@
 	</p>
 {+END}
 {+START,IF_PASSED,TEXT}
-	{$PARAGRAPH,{TEXT}}
+	<div>
+		{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{TEXT}{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
+	</div>
 {+END}
 
+<p>{!W_PORTAL_HELP}</p>
+
 <form method="post" enctype="multipart/form-data" action="{$PAGE_LINK*,_SELF:_SELF:uploading=1}">
-	 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table results_table wide_table"><tbody>
+	 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="variable_table solidborder wide_table"><tbody>
 		  <tr>
 				<th>{!NAME}</th>
 				<td><label class="accessibility_hidden" for="name">{!NAME}</label><input type="text" size="20" name="name" id="name" value="{NAME*}" /></td>

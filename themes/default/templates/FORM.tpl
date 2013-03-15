@@ -1,22 +1,22 @@
 {+START,IF_NON_EMPTY,{TEXT}}
-	{$PARAGRAPH,{TEXT}}
+	<div>
+		{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{TEXT}{+START,IF,{$NOT,{$IN_STR,{TEXT},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
+	</div>
 {+END}
 
-{+START,IF_NON_PASSED_OR_FALSE,SKIP_REQUIRED}
+{+START,IF_NON_PASSED,SKIP_REQUIRED}
 	{+START,IF,{$IN_STR,{FIELDS},_required}}
 		<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
 	{+END}
 {+END}
 
-{$REQUIRE_JAVASCRIPT,javascript_validation}
-<form title="{!PRIMARY_PAGE_FORM}" {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END} {+START,IF_NON_PASSED_OR_FALSE,GET}method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED_AND_TRUE,GET}method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END} {+START,IF_NON_PASSED,TARGET}target="_top" {+END}{+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
-	{+START,IF_NON_PASSED_OR_FALSE,GET}{$INSERT_SPAMMER_BLACKHOLE}{+END}
-
-	{+START,IF_PASSED_AND_TRUE,GET}{$HIDDENS_FOR_GET_FORM,{URL}}{+END}
+{$JAVASCRIPT_INCLUDE,javascript_validation}
+<form title="{!PRIMARY_PAGE_FORM}" {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END} {+START,IF_NON_PASSED,GET}method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED,GET}method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END} {+START,IF_NON_PASSED,TARGET}target="_top" {+END}{+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
+	{+START,IF_PASSED,GET}{$HIDDENS_FOR_GET_FORM,{URL}}{+END}
 
 	{+START,IF_PASSED,SKIPPABLE}
 		{+START,IF,{$JS_ON}}
-			<div class="skip_step_button_wrap">
+			<div class="form_skip">
 				<input type="hidden" id="{SKIPPABLE*}" name="{SKIPPABLE*}" value="0" />
 				<div>
 					<input onclick="document.getElementById('{SKIPPABLE;}').value='1'; disable_button_just_clicked(this);" tabindex="151" class="button_pageitem" type="submit" value="{!SKIP}" />
@@ -28,11 +28,11 @@
 	<div>
 		{HIDDEN}
 
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
-					<col class="field_name_column" />
-					<col class="field_input_column" />
+					<col style="width: 198px" />
+					<col style="width: 100%" />
 				</colgroup>
 			{+END}
 

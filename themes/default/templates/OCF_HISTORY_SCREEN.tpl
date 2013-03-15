@@ -5,7 +5,7 @@
 </p>
 
 {+START,IF_NON_EMPTY,{CONTENT}}
-	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table results_table wide_table">
+	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="variable_table solidborder wide_table">
 		<tbody>
 			{CONTENT}
 		</tbody>
@@ -17,8 +17,8 @@
 	</p>
 {+END}
 
-{+START,IF_NON_EMPTY,{PAGINATION}}
-	<div class="float_surrounder pagination_spacing">
-		{PAGINATION}
+{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
+	<div class="float_surrounder results_browser_spacing">
+		{RESULTS_BROWSER}
 	</div>
 {+END}

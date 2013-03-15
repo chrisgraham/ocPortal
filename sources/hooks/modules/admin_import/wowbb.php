@@ -33,9 +33,6 @@ function init__hooks__modules__admin_import__wowbb()
 	$OLD_BASE_URL=NULL;
 }
 
-/**
- * Forum Driver.
- */
 class Hook_wowbb
 {
 
@@ -102,8 +99,13 @@ class Hook_wowbb
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
+		$INFO=array();
+		$INFO['sql_database']=constant('DB_NAME');
+		$INFO['sql_user']=constant('DB_USER_NAME');
+		$INFO['sql_pass']=constant('DB_PASSWORD');
+		$INFO['sql_tbl_prefix']='wowbb_';
 
-		return array(constant('DB_NAME'),constant('DB_USER_NAME'),constant('DB_PASSWORD'),'wowbb_',constant('DB_HOST'));
+		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
 	}
 
 	/**
@@ -987,7 +989,7 @@ class Hook_wowbb
 			}
 			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',strtotime($row['event_start'])));
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=explode('-',date('Y-m-d-h-i',strtotime($row['event_end'])));
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,intval(floor($recurrences)),0,$row['event_title'],$row['event_note'],3,$row['event_public'],$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,$submitter,0,strtotime($row['event_start']));
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,intval(floor($recurrences)),0,$row['event_title'],$row['event_note'],3,$row['event_public'],$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,$submitter,0,strtotime($row['event_start']));
 
 			import_id_remap_put('event',strval($row['event_id']),$id_new);
 		}

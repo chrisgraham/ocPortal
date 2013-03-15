@@ -1,0 +1,159 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+/* Both flow mode and viewing entries */
+
+.ecard_link, .view_alone_link {
+	text-align: center;
+	margin: 5px 0 1px 0;
+}
+
+.gallery_entry_details {
+	{+START,IF,{$MOBILE}}
+		margin-bottom: 1em;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 300px;
+	{+END}
+}
+
+/* Non flow-mode only */
+
+.gallery_media_expose_wrap {
+	overflow: hidden;
+	width: 100%;
+	outline: 0;
+	text-align:center;
+}
+
+.gallery_media_expose {
+	overflow: hidden;
+	outline: 0;
+	margin: 8px auto 0 auto;
+	width: 152px;
+}
+
+.gallery_regular_thumb {
+
+	font-size: 0.85em;
+}
+
+.gallery_regular_thumb a {
+	outline: 0;
+}
+
+.gallery_regular_thumb a img {
+	width: 150px;
+	display: block;
+}
+
+.gallery_regular_thumb .gmeta {
+	margin: 3px;
+}
+
+.gallery_regular_thumb .grating {
+	float: right;
+}
+
+.gallery_tooltip {
+	font-size: 0.85em;
+}
+
+.gallery_tooltip_description {
+	margin-bottom: 0.85em;
+	max-width: 245px;
+}
+
+/* Flow-mode only */
+
+.flowmode_thumb {
+	display: inline-block;
+	{+START,IF,{$MOBILE}}
+		margin: 4px;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin: 0 10px;
+	{+END}
+}
+
+.flowmode_thumb img {
+	max-width: 150px;
+}
+
+.gallery_start_slideshow {
+	text-align: center;
+}
+
+/* Viewing entries */
+
+#gallery_entry_screen {
+	width: 100%;
+	min-height: 100%;
+}
+
+.nav_mid {
+	margin-top: 0.5em;
+}
+
+.slideshow_speed {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.slideshow_speed input {
+	width: 3em;
+}
+
+#changer {
+	font-weight: bold;
+	font-family: Courier;
+	font-size: 1.2em;
+}
+
+/* side_root galleries block */
+
+.side_galleries_block p {
+	margin-top: 0.4em;
+}
+
+.side_galleries_block_exp {
+	font-weight: bold;
+}
+
+.side_galleries_block ul.compact_list {
+	margin: 0;
+	padding: 0;
+}
+
+.side_galleries_block ul.compact_list li {
+	margin: 0 0 0 22px;
+	padding: 0;
+}
+
+/* Tease block */
+
+.gallery_tease_pic_wrap {
+	margin-bottom: 15px;
+}
+
+.gallery_tease_pic {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 600px;
+	{+END}
+	margin: 0 auto;
+}
+
+.gallery_tease_pic_pic {
+	float: {!en_right};
+	text-align: {!en_right};
+}
+
+/* Miscellaneous media handling */
+
+.gallery_pdf {
+	width: 100%;
+	height: 600px;
+}
