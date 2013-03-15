@@ -104,7 +104,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		$tabindex=get_form_field_tabindex();
 
-		$post_comment=do_lang_tempcode('SIGNATURE');
+		$post_comment=NULL;//do_lang_tempcode('SIGNATURE');
 
 		list($attachments,$attach_size_field)=get_attachments('signature');
 

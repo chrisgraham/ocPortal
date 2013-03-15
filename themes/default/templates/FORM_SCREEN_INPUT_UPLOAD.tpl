@@ -6,7 +6,7 @@
 			{!UNLINK_EXISTING_UPLOAD}
 		{+END}
 		{+START,IF,{IS_IMAGE}}
-			{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL^;*}&quot; title=&quot;&quot; alt=&quot;{!EXISTING^;}&quot; /&gt;}
+			{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL*;^}&quot; title=&quot;&quot; alt=&quot;{!EXISTING;^}&quot; /&gt;}
 		{+END}
 	</label>
 {+END}
@@ -21,11 +21,9 @@
 {+END}
 
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
-	<script type="text/javascript">
-	// <![CDATA[
-		addEventListenerAbstract(window,'load',function () {
+	<script type="text/javascript">// <![CDATA[
+		add_event_listener_abstract(window,'load',function () {
 			preinitFileInput('upload','{NAME;}',null,null,'{FILTER;}');
 		} );
-	//]]>
-	</script>
+	//]]></script>
 {+END}{+END}

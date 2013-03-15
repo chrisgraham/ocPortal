@@ -2,13 +2,13 @@ function do_shake()
 {
 	var seconds=1,amount=30;
 
-	var overflow_before=abstractGetComputedStyle(document.body,'overflow');
+	var overflow_before=abstract_get_computed_style(document.body,'overflow');
 	document.body.style.overflow='hidden';
 
 	var divs=document.getElementsByTagName('div'),current_positioning;
 	for (var i=0;i<divs.length;i++)
 	{
-		current_positioning=abstractGetComputedStyle(divs[i],'position');
+		current_positioning=abstract_get_computed_style(divs[i],'position');
 		if ((current_positioning=='') || (current_positioning=='static'))
 		{
 			divs[i].vector_speed=Math.round(Math.random()*2);

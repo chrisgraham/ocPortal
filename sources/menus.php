@@ -139,15 +139,21 @@ function build_management_menu()
 		{
 			$sections=array();
 			$sections['']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>''),'site'),'CAPTION'=>do_lang('SITE'),'IMG'=>'menu_items/management_navigation/start');
-			if (has_zone_access(get_member(),'adminzone')) $sections['start']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>''),'adminzone'),'CAPTION'=>do_lang('GUIDE'),'IMG'=>'menu_items/management_navigation/setup');
+			if ((has_zone_access(get_member(),'adminzone')) && (has_page_access(get_member(),'start','adminzone')))
+			{
+				$sections['start']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>''),'adminzone'),'CAPTION'=>do_lang('GUIDE'),'IMG'=>'menu_items/management_navigation/setup');
+			}
 			$sections['admin']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>'cms'),'cms'),'CAPTION'=>do_lang('OPTIONS'),'IMG'=>'menu_items/management_navigation/cms');
 		}
 	}
 
 	if (has_zone_access(get_member(),'adminzone'))
 	{
-		$docs_url=(get_option('show_docs')=='0')?build_url(array('page'=>'website'),'adminzone'):make_string_tempcode(brand_base_url().'/docs'.strval(ocp_version()).'/');
-		$sections['docs']=array('TOOLTIP'=>do_lang('MM_TOOLTIP_DOCS'),'CURRENT'=>false,'URL'=>$docs_url,'CAPTION'=>do_lang('DOCS'),'IMG'=>'menu_items/management_navigation/docs');
+		if ((get_option('show_docs')=='1') || ((is_file(get_custom_file_base().'/adminzone/pages/comcode_custom/'.fallback_lang().'/website.txt')) && (has_page_access(get_member(),'website','adminzone'))))
+		{
+			$docs_url=(get_option('show_docs')=='0')?build_url(array('page'=>'website'),'adminzone'):make_string_tempcode(brand_base_url().'/docs'.strval(ocp_version()).'/');
+			$sections['docs']=array('TOOLTIP'=>do_lang('MM_TOOLTIP_DOCS'),'CURRENT'=>false,'URL'=>$docs_url,'CAPTION'=>do_lang('DOCS'),'IMG'=>'menu_items/management_navigation/docs');
+		}
 	}
 
 	$items=array();
@@ -190,94 +196,6 @@ function build_management_menu()
 }
 
 /**
- * Build community menu.
- *
- * @return array			Faked database rows
- */
-function build_community_menu()
-{
-	if (!addon_installed('ocf_forum')) return array();
-	if (get_forum_type()!='ocf') return array();
-
-	require_lang('ocf');
-	require_lang('menus');
-	//require_lang('chat');
-
-	$sections=array(
-		'forumview'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:forumview','CAPTION'=>do_lang('SECTION_FORUMS'),'IMG'=>'menu_items/forum_navigation/forums'),
-		'rules'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:rules','CAPTION'=>do_lang('RULES'),'IMG'=>'menu_items/forum_navigation/rules'),
-		'members'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:members','CAPTION'=>do_lang('MEMBERS'),'IMG'=>'menu_items/forum_navigation/members'),
-		'groups'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:groups','CAPTION'=>do_lang('GROUPS'),'IMG'=>'menu_items/forum_navigation/groups'),
-//		'points'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:points','CAPTION'=>do_lang('POINTS'),'IMG'=>'menu_items/forum_navigation/points'),
-//		'chat'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:chat','CAPTION'=>do_lang('SHORT_SECTION_CHAT'),'IMG'=>'menu_items/forum_navigation/chat'),
-//		'staff'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:staff','CAPTION'=>do_lang('STAFF'),'IMG'=>'menu_items/forum_navigation/staff'),
-		'vforums'=>array('LAST'=>false,'CURRENT'=>false,'URL'=>'_SEARCH:vforums:unread','CAPTION'=>do_lang('SHORT_TOPICS_UNREAD'),'TOOLTIP'=>do_lang('TOPICS_UNREAD'),'IMG'=>'menu_items/forum_navigation/unread_topics'),
-	);
-
-	if (addon_installed('recommend'))
-	{
-		require_lang('recommend');
-		$sections['recommend']=array('LAST'=>true,'CURRENT'=>false,'URL'=>'_SEARCH:recommend','CAPTION'=>do_lang('SHORT_RECOMMEND_SITE'),'IMG'=>'menu_items/forum_navigation/recommend');
-	}
-
-	$items=array();
-
-	$i=1;
-	foreach ($sections as $section)
-	{
-		$items[]=array('id'=>$i,'i_parent'=>NULL,'cap'=>$section['CAPTION'],'i_url'=>$section['URL'],'i_theme_img_code'=>$section['IMG'],'i_check_permissions'=>1,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'','i_caption_long'=>array_key_exists('TOOLTIP',$section)?$section['TOOLTIP']:'');
-		$i++;
-	}
-
-	return $items;
-}
-
-/**
- * Build zone menu.
- *
- * @return array			Faked database rows
- */
-function build_zone_menu()
-{
-	$_zones=find_all_zones(false,true);
-	$zones=array();
-	$zones2=array();
-	// Some adhoc reordering
-	$zone_reorder_list=array('welcome','site','forum','collaboration','cms','adminzone','docs');
-	foreach ($zone_reorder_list as $zone_reorder)
-	{
-		foreach ($_zones as $i=>$_zone)
-		{
-			list($zone,,)=$_zone;
-			if ($zone==$zone_reorder)
-			{
-				$zones[]=$_zone;
-				unset($_zones[$i]);
-				break;
-			}
-		}
-	}
-	if (count($_zones)<40) // If not huge numbers of zones show all, otherwise will just leave the main ones
-	{
-		$zones=array_merge($zones,$_zones);
-	}
-	$items=array();
-
-	$i=1;
-	foreach ($zones as $_zone)
-	{
-		list($zone,$title,$display_in_menu)=$_zone;
-		if ((has_zone_access(get_member(),$zone)) && ($display_in_menu==1))
-		{
-			$items[]=array('id'=>$i,'i_parent'=>NULL,'cap'=>escape_html($title),'i_url'=>$zone.':','i_check_permissions'=>0,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'');
-		}
-		$i++;
-	}
-
-	return $items;
-}
-
-/**
  * Take a stored menu identifier, and return an XHTML menu created from it.
  *
  * @param  ID_TEXT		The type of the menu (determines which templates to use)
@@ -298,15 +216,6 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 	{
 		$items=build_management_menu();
 	}
-	elseif ($menu=='_community')
-	{
-		$items=build_community_menu();
-		if (count($items)==0) return new ocp_tempcode();
-	}
-	elseif ($menu=='_zone_menu')
-	{
-		$items=build_zone_menu();
-	}
 	elseif (substr($menu,0,3)=='!!!')
 	{
 		require_code('menus_sitemap');
@@ -314,7 +223,7 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 		$items=build_sitetree_menu($parts);
 	} else
 	{
-		$items=persistant_cache_get(array('MENU',$menu));
+		$items=persistent_cache_get(array('MENU',$menu));
 		if (is_null($items))
 		{
 			$items=$GLOBALS['SITE_DB']->query_select('menu_items',array('id','i_caption_long','i_new_window','i_expanded','i_parent','i_caption','i_url','i_check_permissions','i_page_only','i_theme_img_code'),array('i_menu'=>$menu),'ORDER BY i_order');
@@ -323,7 +232,7 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 				$items[$i]['cap']=get_translated_text($item['i_caption']);
 				$items[$i]['i_caption_long']=get_translated_text($item['i_caption_long']);
 			}
-			persistant_cache_set(array('MENU',$menu),$items);
+			persistent_cache_set(array('MENU',$menu),$items);
 		}
 	}
 
@@ -429,7 +338,7 @@ function build_stored_menu_branch($thisitem,$items)
 		{
 			if ($bit=='') continue;
 
-			$_extra=persistant_cache_get(array('MENU',$bit));
+			$_extra=persistent_cache_get(array('MENU',$bit));
 			if (is_null($_extra))
 			{
 				$_extra=$GLOBALS['SITE_DB']->query_select('menu_items',array('id','i_caption_long AS _i_caption_long','i_new_window','i_expanded','i_parent','i_caption AS _cap','i_url','i_check_permissions','i_page_only','i_theme_img_code'),array('i_menu'=>$bit),'ORDER BY i_order');
@@ -438,7 +347,7 @@ function build_stored_menu_branch($thisitem,$items)
 					$_extra[$i]['cap']=get_translated_text($_e['_cap']);
 					$_extra[$i]['i_caption_long']=get_translated_text($_e['_i_caption_long']);
 				}
-				persistant_cache_set(array('MENU',$bit),$_extra);
+				persistent_cache_set(array('MENU',$bit),$_extra);
 			}
 
 			$extra=array_merge($extra,$_extra);
@@ -551,6 +460,7 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 		{
 			$content->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
 				'POSITION'=>strval($i),
+				'FIRST'=>$i==0,
 				'LAST'=>$i==$num-1,
 				'BRETHREN_COUNT'=>strval($num),
 			),NULL,false,'MENU_BRANCH_tree'));
@@ -707,7 +617,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 						}
 					}
 					$pv=get_param($k,($k=='page')?$dp:NULL,true);
-					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($zone_name!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc')) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
+					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($zone_name!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc') || ($pv!==NULL)) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
 					{
 						$current_page=false;
 						break;
@@ -777,6 +687,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 			{
 				$children->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
 					'POSITION'=>strval($i),
+					'FIRST'=>$i==0,
 					'LAST'=>$i==$num-1,
 					'BRETHREN_COUNT'=>strval($num),
 				),NULL,false,'MENU_BRANCH_tree'));
@@ -812,9 +723,6 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 
 	// Render!
 	$rendered_branch=array(
-		// Useful
-		'RANDOM'=>substr(md5(uniqid('')),0,7),
-
 		// Basic properties
 		'CAPTION'=>$caption,
 		'IMG'=>array_key_exists('img',$branch)?$branch['img']:'',

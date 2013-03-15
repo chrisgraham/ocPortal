@@ -78,7 +78,7 @@ class Module_admin_trackbacks
 	 */
 	function choose()
 	{
-		$title=get_page_title('MANAGE_TRACKBACKS');
+		$title=get_screen_title('MANAGE_TRACKBACKS');
 
 		$trackback_rows=$GLOBALS['SITE_DB']->query_select('trackbacks',array('*'),NULL,'ORDER BY id DESC',1000);
 
@@ -98,7 +98,7 @@ class Module_admin_trackbacks
 	 */
 	function delete_trackbacks()
 	{
-		$title=get_page_title('DELETE_TRACKBACKS');
+		$title=get_screen_title('DELETE_TRACKBACKS');
 
 		foreach ($_POST as $key=>$val)
 		{
@@ -116,6 +116,7 @@ class Module_admin_trackbacks
 							if (is_null($trackback_ip)) break;
 							require_code('failure');
 							add_ip_ban($trackback_ip,do_lang('TRACKBACK_SPAM'));
+							syndicate_spammer_report($trackback_ip,'','',do_lang('TRACKBACK_SPAM'),true);
 						}
 						// Intentionally no 'break' line below
 					case '1':

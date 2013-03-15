@@ -53,12 +53,12 @@ class Hook_admin_stats_ocf_demographics
 		require_lang('ocf');
 
 		//This will show a plain bar chart with all the downloads listed
-		$title=get_page_title('DEMOGRAPHICS');
+		$title=get_screen_title('DEMOGRAPHICS');
 
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_page_title('DEMOGRAPHICS');
+			$title=get_screen_title('DEMOGRAPHICS');
 
 			return $ob->get_between($title,false,NULL,do_lang_tempcode('DEMOGRAPHICS_STATS_RANGE'));
 		}
@@ -74,7 +74,7 @@ class Hook_admin_stats_ocf_demographics
 			if (is_null($time_start)) $time_start=0;
 			if (is_null($time_end)) $time_end=time();
 
-			$title=get_page_title('SECTION_DEMOGRAPHICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+			$title=get_screen_title('SECTION_DEMOGRAPHICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 			$rows=$GLOBALS['FORUM_DB']->query('SELECT m_dob_year,COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_join_time>'.strval($time_start).' AND m_join_time<'.strval($time_end).' GROUP BY m_dob_year');
 		}
@@ -143,7 +143,7 @@ class Hook_admin_stats_ocf_demographics
 
 		$graph=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Demographics.xml','TITLE'=>do_lang_tempcode('DEMOGRAPHICS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_DEMOGRAPHICS')));
 
-		return do_template('STATS_SCREEN',array('TITLE'=>$title,'NO_CSV'=>'1','GRAPH'=>$graph,'STATS'=>$list));
+		return do_template('STATS_SCREEN',array('_GUID'=>'f60cb424d07969f1e74eb10bb6a5eeda','TITLE'=>$title,'NO_CSV'=>'1','GRAPH'=>$graph,'STATS'=>$list));
 	}
 
 }

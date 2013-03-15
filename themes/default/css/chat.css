@@ -3,215 +3,74 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-.chat_im_convos_wrap {
-	margin-top: 30px;
-}
+/* Chat lobby (except IM) */
 
-.chat_lobby_options_header {
-	margin-top: 30px;
-}
-
-#alert_box_wrap {
-	padding-top: 30px;
+.box___chat_lobby_screen_rooms {
+	margin-top: 2em;
 }
 
 .chat_rooms {
-	width: 48%;
+	width: 50%;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+}
+
+.chat_rooms .associated_details:last-child {
+	display: block;
 }
 
 .chat_actions {
 	float: {!en_right};
-	width: 46%;
-	margin-bottom: 15px;
+	width: 50%;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	margin-bottom: 1.5em;
 }
 
-.chat_lobby_buddies {
-	float: {!en_left};
-	width: 209px;
-}
-
-.chat_lobby_convos {
-	float: {!en_left};
-	width: 360px;
-	margin-{!en_right}: 10px;
-	border-{!en_right}: 1px solid #c1cee3; /* {$,wizard, 33% seed + 67% W/B} */
-	padding: 0 5px;
-}
-
-.chat_im_convos_wrap .medborder_box, .chat_im_convos_wrap .standardbox_main_classic {
-	padding: 0;
-}
-
-#chat_lobby_convos_tabs {
-	border-left: 0;
-	border-right: 0;
-	border-top: 0;
-	border-bottom: 1px solid;
-	border-color: #b5b5b5; /* {$,wizard, 100% B5B5B5} */
-	height: 21px;
-}
-
-.chat_lobby_convos_tab_first {
-}
-
-.chat_lobby_convos_current_tab {
-	font-weight: bold;
-}
-
-.chat_lobby_convos_tab_new_messages {
-	color: red;
-}
-
-.chat_lobby_convos_tab_uptodate {
-	color: ButtonText;
-}
-
-.chat_lobby_convos_tab_uptodate, .chat_lobby_convos_tab_new_messages {
-	background: url('{$IMG,tab}');
-	background-repeat: no-repeat;
-	float: {!en_left};
-	margin-top: -1px;
-	padding: 3px 5px 0 5px;
-	height: 20px;
-	border-right: 1px solid #a2b6c1; /* {$,wizard, 100% A2B6C1} */
-	text-align: center;
-}
-
-#chat_lobby_convos_areas {
-}
-
-.chat_avatar {
-	float: {!en_right};
-	width: 50px;
-	margin: 0 5px 5px 5px;
-}
-
-.loading_overlay {
-	position: absolute;
-	left: 20%;
-	width: 60%;
-	top: 30%;
-	border: 1px solid #c1cee3; /* {$,wizard, 33% seed + 67% W/B} */
-	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
-	font-size: 1.5em;
-	padding: 30px;
-	text-align: center;
-}
-
-.chat_participant_avatar {
-	display: block;
-	width: 45px;
-	float: {!en_left};
-	margin-{!en_right}: 3px;
-}
-
-.chat_lobby_convos_area {
-	overflow: hidden;
-	width: 100%;
-}
-
-.chat_lobby_convos_area_main {
-	width: 225px;
-	overflow: hidden;
-	float: left;
-}
-
-.chat_lobby_convos_area_messages {
-	margin: 10px 0;
-	height: 350px;
-}
-
-#messages_window {
-	height: 500px;
-	overflow: auto; /* Needed for Opera, very strange */
-}
-
-.messages_window {
-	vertical-align: middle;
-	overflow: auto;
-	border: 1px solid #000000; /* {$,wizard, 100% !W/B} */
-	padding: 2px 0;
-	margin-top: 20px;
-}
-
-.im_post_bits {
-	margin-bottom: -8px;
-}
-
-.im_post_bits span {
-	float: {!en_right};
-}
-
-.im_post_field {
-	margin-top: 5px;
-	width: 218px;
-	overflow: hidden;
-}
-
-.im_close_button {
-	width: 125px;
-	text-align: {!en_right};
-}
-
-.im_close_button input {
-	width: 10em;
-}
-
-.buddy_actions {
-	margin: 10px 0;
-}
-
-.buddy_actions input {
-	width: 98%;
-	margin: 0.1em 0 !important;
-}
-
-.chat_lobby_convos_area_bar {
-	float: {!en_right};
-	width: 130px;
-	overflow: hidden;
-	outline: 0;
-}
-
-.chat_lobby_convos_area_participants {
-	height: 350px;
-}
-
-.shoutbox_by, .shoutbox_time {
-	font-size: 0.8em;
-}
-
-.shoutbox_message {
-	font-weight: bold;
+.chat_multi_tab {
+	background: url('{$IMG;,help}') no-repeat;
+	padding-{!en_left}: 20px;
+	margin: 21px 0 8px 4px;
 	font-size: 0.9em;
-	text-indent: 0;
-	margin: 0;
+	width: 70%;
 }
 
-.shoutbox_by {
-}
-
-.shoutbox_time {
-	white-space: nowrap;
-}
+/* Chat rooms */
 
 .chat_you_are {
 	float: {!en_right};
-}
-
-.chat_you_are {
-	float: {!en_right};
-	width: 20em; /* Fix for IE7 - stops it floating off past a long scrollbar */
+	width: 19em; /* Fix for IE7 - stops it floating off past a long scrollbar */
 	text-align: {!en_right};
+}
+
+.chat_posting_area {
+	border: 1px solid {$GET,pale_border};
+	padding: 0.5em;
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+}
+
+.chat_posting_area textarea, .chat_posting_area input, .chat_posting_area img, .chat_posting_area a {
+	vertical-align: middle;
+}
+.chat_posting_area a img {
+	vertical-align: bottom;
+}
+.chat_posting_area .right img {
+	margin-top: 3px;
+}
+
+.chat_posting_area textarea {
+	margin-top: 0;
+	width: 20em;
+	margin-right: 1em;
 }
 
 .below_main_chat_window {
-	margin-top: 20px;
-	margin-bottom: 40px;
+	margin-top: 2em;
+	margin-bottom: 4em;
 }
 
 #chat_comcode_panel {
 	text-align: center;
+	margin-top: 1em;
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -232,6 +91,10 @@
 		margin-{!en_right}: 7px;
 	}
 
+	.chat_colour_option .field_name {
+		display: block;
+	}
+
 	.chat_font_option {
 		float: {!en_left};
 		width: 28%;
@@ -244,64 +107,263 @@
 	}
 {+END}
 
-.chat_posting_area input {
+/* Chat message stream */
+
+.messages_window_full_chat {
+	max-height: 35em;
+	overflow: auto; /* Needed for Opera, very strange */
+}
+
+.messages_window {
 	vertical-align: middle;
-}
-
-.chat_message_by {
-	font-style: italic;
-}
-
-.chat_lobby_convos_area_messages .chat_message {
-	padding-{!en_left}: 5px;
-}
-
-#messages_window .chat_message {
-	padding-{!en_left}: 40px;
-}
-
-.chat_message blockquote {
-	margin-{!en_left}: 0;
+	overflow: auto;
+	margin-top: 1em;
 }
 
 .chat_message {
-	border-bottom: 2px solid #555555; /* {$,wizard, 73% (seed sat_to 0) + 27% !W/B} */
-	background-color: #dae0e9; /* {$,wizard, 25% (seed sat_to 36) + 75% W/B} */
-	margin-bottom: 3px;
-	overflow-x: auto;
-	outline: 0;
+	border: 1px solid {$GET,pale_border};
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
+	background-color: {$GET,area_background};
+	padding: 0.5em;
+	margin: 1em 0;
+	overflow: hidden;
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
-.ghost .chat_message .c_staff_actions {
+.chat_lobby_convos_area_messages .chat_message {
+	margin: 0.6em 0;
+}
+
+.chat_message blockquote {
+	margin: 0 0 1em 0;
+}
+
+.ghost .chat_message .associated_links_block_group {
 	display: none;
 }
 
 .chat_message_old {
-	background-color: #f5f6f9 !important; /* {$,wizard, 7% (seed sat_to 36) + 93% W/B} */
+	background-color: {$GET,area_faded_background} !important;
 }
 
+.chat_avatar {
+	float: {!en_right};
+	width: 50px;
+	margin: 0 0.5em 0.5em 0.5em;
+}
+.chat_lobby_convos_area_messages .chat_avatar {
+	width: 30px;
+}
+
+/* Post details */
+.chat_message>div {
+	border: 1px dotted {$GET,standard_border};
+	border-left: 0;
+	display: inline-block;
+	margin: 0.5em 0.5em 0.5em -0.5em;
+	padding: 0.2em;
+	font-size: 0.9em;
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
+	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
+}
+.chat_message>div:hover {
+	{$BETA_CSS_PROPERTY,opacity: 1;}
+}
+.chat_operator_staff a, .chat_operator_staff a:visited, .chat_operator_staff a:hover {
+	color: {$GET,red_highlight_text};
+}
+.chat_message_by {
+	font-style: italic;
+}
+.chat_lobby_convos_area_messages .chat_message>div {
+	font-size: 0.8em; /* Space extra tight for IMs */
+}
+
+/* Instant messaging */
+
+.loading_overlay {
+	position: absolute;
+	left: 20%;
+	width: 60%;
+	top: 30%;
+	border: 1px solid {$GET,pale_border};
+	background-color: {$GET,area_background};
+	font-size: 1.5em;
+	padding: 3em;
+	text-align: center;
+}
+
+.chat_im_convos_wrap {
+	margin-top: 3em;
+}
+
+.chat_lobby_options_header {
+	margin-top: 3em;
+}
+
+.alert_box_wrap {
+	padding-top: 3em;
+}
+
+.chat_lobby_friends {
+	float: {!en_left};
+	width: 16em;
+}
+
+.chat_lobby_convos {
+	float: {!en_left};
+	width: 24em;
+	margin-{!en_right}: 0.5em;
+	border-{!en_right}: 1px solid {$GET,pale_border};
+}
+
+.chat_lobby_convos_tabs {
+	border-left: 0;
+	border-right: 0;
+	border-top: 0;
+	border-bottom: 1px solid;
+	border-color: {$GET,pale_border};
+	min-height: 21px;
+	overflow: hidden;
+}
+
+.chat_lobby_convos_tab_first {
+}
+
+.chat_lobby_convos_current_tab {
+	text-shadow: 1px 1px 1px {$GET,standard_border};
+}
+
+.chat_lobby_convos_tab_new_messages {
+	color: {$GET,red_highlight_text};
+}
+
+.chat_lobby_convos_tab_uptodate, .chat_lobby_convos_tab_new_messages {
+	background: url('{$IMG;,tab}');
+	background-repeat: no-repeat;
+	float: {!en_left};
+	padding: 3px 5px 0 5px;
+	height: 20px;
+	border-right: 1px solid {$GET,pale_border};
+	text-align: center;
+}
+
+.chat_lobby_convos_areas {
+}
+
+.chat_participant_avatar {
+	display: block;
+	width: 45px;
+	float: {!en_left};
+	margin-{!en_right}: 3px;
+}
+
+.chat_lobby_convos_area {
+	overflow: hidden;
+}
+
+.chat_lobby_convos_area_main {
+	width: 14em;
+	overflow: hidden;
+	float: left;
+}
+
+.chat_lobby_convos_area_messages {
+	margin: 1em 0;
+	height: 20em;
+}
+
+.im_post_bits {
+}
+
+.im_post_bits .horiz_field_sep {
+	display: inline !important;
+}
+
+.im_post_bits input, .im_post_bits img {
+	vertical-align: top;
+	margin-top: 3px !important;
+	/* For some reason aligning to middle added extra space */
+}
+
+.im_post_bits span {
+	float: {!en_right};
+}
+
+.im_post_field {
+	margin: 0 0 0 1px;
+	width: 13.5em;
+	overflow: hidden;
+}
+
+.im_close_button {
+	text-align: {!en_right};
+}
+
+.im_close_button input {
+	width: 8em;
+}
+
+.friend_active {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
+}
+.friend_inactive {
+	{$BETA_CSS_PROPERTY,opacity: 0.4;}
+}
+
+.friend_actions {
+	margin: 1em 0;
+}
+
+.friend_actions input {
+	width: 100%;
+	margin: 0.1em 0 !important;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+}
+
+.chat_lobby_convos_area_bar {
+	float: {!en_right};
+	width: 9.2em;
+	overflow: hidden;
+}
+
+.chat_lobby_convos_area_participants {
+	height: 19em;
+	overflow: auto;
+}
+
+.chat_lobby_convos_area_participants .none {
+	color: {$GET,red_highlight_text};
+}
+
+.chat_lobby_im_participant .float_surrounder a {
+	display: block;
+}
+
+/* Instant messaging (site-wide) */
+
 .sitewide_im_popup_body, .sitewide_im_popup {
-	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	background-color: {$GET,area_background};
 }
 
 .sitewide_im_popup {
-	padding: 15px;
+	padding: 1em;
 	height: 100%;
 }
 
 .im_event {
 	position: absolute;
-	width: 280px;
-	overflow: auto;
-	outline: 0;
-	background-color: #fffcc4; /* {$,wizard, 100% fffcc4} */
-	border: 1px solid #c1cee3; /* {$,wizard, 33% seed + 67% W/B} */
-	padding: 10px;
+	width: 25em;
+	overflow: hidden;
+	background-color: {$GET,floating_alert_background};
+	color: {$GET,native_ui_foreground};
+	border: 1px solid {$GET,pale_border};
+	padding: 1em;
 }
 
 .im_event .im_popup_close_button {
 	float: {!en_right};
-	margin: 0 0 5px 5px;
+	margin: 0 0 0.5em 0.5em;
 	cursor: pointer;
 }
 
@@ -312,11 +374,11 @@
 }
 
 .im_event .im_popup_link {
-	margin-top: 5px;
+	margin-top: 0.5em;
 }
 
 .im_event .im_event_lobby_link {
-	margin-top: 10px;
+	margin-top: 1em;
 }
 
 .im_event .im_popup_link, .im_event .im_event_lobby_link {
@@ -325,14 +387,12 @@
 	text-align: {!en_right};
 }
 
-.chat_operator_staff a:visited, .chat_operator_staff a:active, .chat_operator_staff a:hover, .chat_operator_staff a:link {
-	color: red;
+/* Shoutbox */
+
+.shoutbox_message {
+	font-weight: bold;
+	font-size: 0.9em;
+	text-indent: 0;
+	margin: 0;
 }
 
-.chat_multi_tab {
-	background: url('{$IMG;,help}') no-repeat;
-	padding-{!en_left}: 20px;
-	margin: 21px 0 8px 4px;
-	font-size: 0.9em;
-	width: 70%;
-}

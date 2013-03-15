@@ -18,9 +18,12 @@
  * @package		core_forum_drivers
  */
 
+/**
+ * Forum Driver.
+ * @package		core_forum_drivers
+ */
 class forum_driver_phpbb2 extends forum_driver_base
 {
-
 	/**
 	 * Check the connected DB is valid for this forum driver.
 	 *

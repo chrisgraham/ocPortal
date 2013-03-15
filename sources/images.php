@@ -11,6 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
+
 /*EXTRA FUNCTIONS: shell_exec*/
 
 /**
@@ -122,23 +123,23 @@ function _symbol_thumbnail($param)
 			{
 				// This branch does the new behaviour described above
 
-				$file_prefix = '/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.trim($param[5]);
-				if (isset($param[6])) $file_prefix .= '__'.trim($param[6]);
-				if (isset($param[7])) $file_prefix .= '__'.trim(str_replace('#','',$param[7]));
-				$save_path = get_custom_file_base().$file_prefix.'__'.$filename;
-				$value = get_custom_base_url().$file_prefix.'__'.rawurlencode($filename);
+				$file_prefix='/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.trim($param[5]);
+				if (isset($param[6])) $file_prefix.='__'.trim($param[6]);
+				if (isset($param[7])) $file_prefix.='__'.trim(str_replace('#','',$param[7]));
+				$save_path=get_custom_file_base().$file_prefix.'__'.$filename;
+				$value=get_custom_base_url().$file_prefix.'__'.rawurlencode($filename);
 
 				// Only bother calculating the image if we've not already
 				// made one with these options
 				if ((!is_file($save_path)) && (!is_file($save_path.'.png')))
 				{
 					// Branch based on the type of thumbnail we're making
-					if (trim($param[5]) == 'width' || trim($param[5]) == 'height')
+					if (trim($param[5])=='width' || trim($param[5])=='height')
 					{
 						// We just need to scale to the given dimension
-						$result = convert_image($orig_url,$save_path,(trim($param[5]) == 'width')?intval($exp_dimensions[0]):-1,(trim($param[5]) == 'height')?intval($exp_dimensions[1]):-1,-1,false,NULL,false,$only_make_smaller);
+						$result=convert_image($orig_url,$save_path,(trim($param[5])=='width')?intval($exp_dimensions[0]):-1,(trim($param[5])=='height')?intval($exp_dimensions[1]):-1,-1,false,NULL,false,$only_make_smaller);
 					}
-					elseif (trim($param[5]) == 'crop' || trim($param[5]) == 'pad' || trim($param[5]) == 'pad_horiz_crop_horiz' || trim($param[5]) == 'pad_vert_crop_vert')
+					elseif (trim($param[5])=='crop' || trim($param[5])=='pad' || trim($param[5])=='pad_horiz_crop_horiz' || trim($param[5])=='pad_vert_crop_vert')
 					{
 						// We need to shrink a bit and crop/pad
 						require_code('files');
@@ -152,18 +153,18 @@ function _symbol_thumbnail($param)
 							list($source_x,$source_y)=$sizes;
 						} else
 						{
-							$source = @imagecreatefromstring(http_download_file($orig_url,NULL,false));
+							$source=@imagecreatefromstring(http_download_file($orig_url,NULL,false));
 							if ($source===false) return '';
-							$source_x = imagesx($source);
-							$source_y = imagesy($source);
+							$source_x=imagesx($source);
+							$source_y=imagesy($source);
 							imagedestroy($source);
 						}
 
 						// We only need to crop/pad if the aspect ratio
 						// differs from what we want
-						$source_aspect = floatval($source_x) / floatval($source_y);
+						$source_aspect=floatval($source_x) / floatval($source_y);
 						if ($exp_dimensions[1]=='0') $exp_dimensions[1]='1';
-						$destination_aspect = floatval($exp_dimensions[0]) / floatval($exp_dimensions[1]);
+						$destination_aspect=floatval($exp_dimensions[0]) / floatval($exp_dimensions[1]);
 
 						// We test the scaled sizes, rather than the ratios
 						// directly, so that differences too small to affect
@@ -171,60 +172,60 @@ function _symbol_thumbnail($param)
 						if ($source_aspect > $destination_aspect)
 						{
 							// The image is wider than the output.
-							if ((trim($param[5]) == 'crop') || (trim($param[5]) == 'pad_horiz_crop_horiz'))
+							if ((trim($param[5])=='crop') || (trim($param[5])=='pad_horiz_crop_horiz'))
 							{
 								// Is it too wide, requiring cropping?
-								$scale = floatval($source_y) / floatval($exp_dimensions[1]);
-								$modify_image = intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
+								$scale=floatval($source_y) / floatval($exp_dimensions[1]);
+								$modify_image=intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
 							}
 							else
 							{
 								// Is the image too short, requiring padding?
-								$scale = floatval($source_x) / floatval($exp_dimensions[0]);
-								$modify_image = intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
+								$scale=floatval($source_x) / floatval($exp_dimensions[0]);
+								$modify_image=intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
 							}
 						}
 						elseif ($source_aspect < $destination_aspect)
 						{
 							// The image is taller than the output
-							if ((trim($param[5]) == 'crop') || (trim($param[5]) == 'pad_vert_crop_vert'))
+							if ((trim($param[5])=='crop') || (trim($param[5])=='pad_vert_crop_vert'))
 							{
 								// Is it too tall, requiring cropping?
-								$scale = floatval($source_x) / floatval($exp_dimensions[0]);
-								$modify_image = intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
+								$scale=floatval($source_x) / floatval($exp_dimensions[0]);
+								$modify_image=intval(round(floatval($source_y) / $scale)) != intval($exp_dimensions[1]);
 							}
 							else
 							{
 								// Is the image too narrow, requiring padding?
-								$scale = floatval($source_y) / floatval($exp_dimensions[1]);
-								$modify_image = intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
+								$scale=floatval($source_y) / floatval($exp_dimensions[1]);
+								$modify_image=intval(round(floatval($source_x) / $scale)) != intval($exp_dimensions[0]);
 							}
 						}
 						else
 						{
 							// They're the same, within the tolerances of
 							// floating point arithmentic. Just scale it.
-							$modify_image = false;
+							$modify_image=false;
 						}
 
 						// We have a special case here, since we can "pad" an
 						// image with nothing, ie. shrink it to fit in the
 						// output dimensions. This means we don't need to
 						// modify the image contents either, just scale it.
-						if ((trim($param[5]) == 'pad' || trim($param[5]) == 'pad_horiz_crop_horiz' || trim($param[5]) == 'pad_vert_crop_vert') && isset($param[5]) && (!isset($param[6]) || trim($param[6]) == ''))
+						if ((trim($param[5])=='pad' || trim($param[5])=='pad_horiz_crop_horiz' || trim($param[5])=='pad_vert_crop_vert') && isset($param[5]) && (!isset($param[6]) || trim($param[6])==''))
 						{
-							$modify_image = false;
+							$modify_image=false;
 						}
 
 						// Now do the cropping, padding and scaling
 						if ($modify_image)
 						{
-							$result = convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller,array('type'=>trim($param[5]),'background'=>(isset($param[7])?trim($param[7]):NULL),'where'=>(isset($param[6])?trim($param[6]):'both'),'scale'=>$scale));
+							$result=convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller,array('type'=>trim($param[5]),'background'=>(isset($param[7])?trim($param[7]):NULL),'where'=>(isset($param[6])?trim($param[6]):'both'),'scale'=>$scale));
 						}
 						else
 						{
 							// Just resize
-							$result = convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller);
+							$result=convert_image($orig_url,$save_path,intval($exp_dimensions[0]),intval($exp_dimensions[1]),-1,false,NULL,false,$only_make_smaller);
 						}
 					}
 
@@ -233,8 +234,7 @@ function _symbol_thumbnail($param)
 					if (!$result) $value=(trim($param[4])=='')? $orig_url : $param[4];
 				}
 
-				if (!is_file($save_path))
-					$value.='.png'; // was saved as PNG
+				if (!file_exists($save_path)) $value.='.png';
 			}
 			else
 			{
@@ -280,29 +280,37 @@ function get_max_image_size()
  * @param  mixed			The caption for the thumbnail (string or Tempcode)
  * @param  boolean		Whether to use a JS tooltip. Forcibly set to true if you pass Tempcode
  * @param  boolean		Whether already a thumbnail (if not, function will make one)
- * @param  integer		Thumbnail width to use
- * @param  integer		Thumbnail height to use
+ * @param  ?integer		Thumbnail width to use (NULL: default)
+ * @param  ?integer		Thumbnail height to use (NULL: default)
  * @return tempcode		The thumbnail
  */
-function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=true,$width=90,$height=90)
+function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=true,$width=NULL,$height=NULL)
 {
 	if (is_object($caption))
 	{
 		$js_tooltip=true;
 	}
 
-	if(!$is_thumbnail_already)
+	$box_size=((is_null($width)) && (is_null($height)));
+
+	if (is_null($width)) $width=intval(get_option('thumb_width'));
+	if (is_null($height)) $height=intval(get_option('thumb_width'));
+
+	if (!$is_thumbnail_already)
 	{	
 		$new_name=strval($width).'_'.strval($height).'_'.url_to_filename($url);
 
-		if (!is_saveable_image($new_name)) $new_name.='.png';
+		if ((!is_saveable_image($new_name)) && (get_file_extension($new_name)!='svg')) $new_name.='.png';
 
 		$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
 
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
 		if (!file_exists($file_thumb))
-			convert_image($url,$file_thumb,$width,$height,$width,false);
+		{
+			convert_image($url,$file_thumb,$box_size?-1:$width,$box_size?-1:$height,$box_size?$width:-1,false);
+			if (!file_exists($file_thumb)) $new_name.='.png';
+		}
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 	}
@@ -327,9 +335,10 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
  * @param  AUTO_LINK		The ID of the table record that is storing what we are doing the thumbnail for
  * @param  ID_TEXT		The name of the table field where thumbnails are saved
  * @param  ?integer		The thumbnail width to use (NULL: default)
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return URLPATH		The URL to the thumbnail
  */
-function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_field_name='thumb_url',$thumb_width=NULL)
+function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_field_name='thumb_url',$thumb_width=NULL,$only_make_smaller=false)
 {
 	if (is_null($thumb_width)) $thumb_width=intval(get_option('thumb_width'));
 
@@ -355,7 +364,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 					create_video_thumb($full_url,$thumb_path);
 				} else
 				{
-					convert_image($from,$thumb_path,intval($thumb_width),-1,-1,false);
+					convert_image($from,$thumb_path,-1,-1,intval($thumb_width),false);
 				}
 			}
 			return get_custom_base_url().'/'.$thumb_url;
@@ -368,7 +377,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	$_file=$url_parts[count($url_parts)-1];
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
-	if (!is_saveable_image($_file)) $ext='png';
+	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $ext.='.png';
 	$_file=substr($_file,0,$dot_pos);
 	$thumb_path='';
 	do
@@ -397,7 +406,8 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 			create_video_thumb($full_url,$thumb_path);
 		} else
 		{
-			convert_image($from,$thumb_path,intval($thumb_width),-1,-1,false);
+			convert_image($from,$thumb_path,-1,-1,intval($thumb_width),false);
+			if (!file_exists($thumb_path)) $thumb_url.='.png';
 		}
 	}
 
@@ -502,6 +512,13 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	if ($using_path)
 	{
 		if (!check_memory_limit_for($from,$exit_on_error)) return false;
+		if ($ext=='svg') // SVG is pass-through
+		{
+			copy($from,$to);
+			fix_permissions($to);
+			sync_file($to);
+			return true;
+		}
 		$from_file=@file_get_contents($from);
 	} else
 	{
@@ -509,11 +526,32 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		if (!is_null($file_path_stub))
 		{
 			if (!check_memory_limit_for($file_path_stub,$exit_on_error)) return false;
+			if ($ext=='svg') // SVG is pass-through
+			{
+				copy($file_path_stub,$to);
+				fix_permissions($to);
+				sync_file($to);
+				return true;
+			}
 			$from_file=@file_get_contents($file_path_stub);
 		} else
 		{
 			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/,false);
-			if (is_null($from_file)) $from_file=false;
+			if (is_null($from_file))
+			{
+				$from_file=false;
+			} else
+			{
+				if ($ext=='svg') // SVG is pass-through
+				{
+					$myfile=fopen($to,'wb');
+					fwrite($myfile,$from_file);
+					fclose($myfile);
+					fix_permissions($to);
+					sync_file($to);
+					return true;
+				}
+			}
 		}
 	}
 	if ($from_file===false)
@@ -608,10 +646,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 
 		// Pad out options for imagecopyresized
 		// $dst_im,$src_im,$dst_x,$dst_y,$src_x,$src_y,$dst_w,$dst_h,$src_w,$src_h
-		$dest_x = 0;
-		$dest_y = 0;
-		$source_x = 0;
-		$source_y = 0;
+		$dest_x=0;
+		$dest_y=0;
+		$source_x=0;
+		$source_y=0;
 	}
 	else
 	{
@@ -626,65 +664,65 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		// with or without transparency.
 
 		// Grab the dimensions we would get if we didn't crop or scale
-		$wrong_x = intval(round(floatval($sx) / $thumb_options['scale']));
-		$wrong_y = intval(round(floatval($sy) / $thumb_options['scale']));
+		$wrong_x=intval(round(floatval($sx) / $thumb_options['scale']));
+		$wrong_y=intval(round(floatval($sy) / $thumb_options['scale']));
 
 		// Handle cropping here
-		if (($thumb_options['type'] == 'crop') || (($thumb_options['type'] == 'pad_horiz_crop_horiz') && ($wrong_x > $width)) || (($thumb_options['type'] == 'pad_vert_crop_vert') && ($wrong_y > $height)))
+		if (($thumb_options['type']=='crop') || (($thumb_options['type']=='pad_horiz_crop_horiz') && ($wrong_x > $width)) || (($thumb_options['type']=='pad_vert_crop_vert') && ($wrong_y > $height)))
 		{
 			// See which direction we're cropping in
 			if (intval(round(floatval($sx) / $thumb_options['scale'])) != $width)
 			{
-				$crop_direction = 'x';
+				$crop_direction='x';
 			}
 			else
 			{
-				$crop_direction = 'y';
+				$crop_direction='y';
 			}
 			// We definitely have to crop, since symbols.php only tells us to crop
 			// if it has to. Thus we know we're going to fill the output image, the
 			// only question is with what part of the source image?
 
 			// Get the amount we'll lose from the source
-			if ($crop_direction == 'x') $crop_off = intval(($sx - ($width * $thumb_options['scale'])));
-			elseif ($crop_direction == 'y') $crop_off = intval(($sy - ($height * $thumb_options['scale'])));
+			if ($crop_direction=='x') $crop_off=intval(($sx - ($width * $thumb_options['scale'])));
+			elseif ($crop_direction=='y') $crop_off=intval(($sy - ($height * $thumb_options['scale'])));
 
 			// Now we see how much to chop off the start (we don't care about the
 			// end, as this will be handled by using an appropriate window size)
-			$displacement = 0;
-			if (($thumb_options['where'] == 'start') || (($thumb_options['where'] == 'start_if_vertical') && ($crop_direction == 'y')) || (($thumb_options['where'] == 'start_if_horizontal') && ($crop_direction == 'x')))
+			$displacement=0;
+			if (($thumb_options['where']=='start') || (($thumb_options['where']=='start_if_vertical') && ($crop_direction=='y')) || (($thumb_options['where']=='start_if_horizontal') && ($crop_direction=='x')))
 			{
-				$displacement = 0;
+				$displacement=0;
 			}
-			elseif (($thumb_options['where'] == 'end') || (($thumb_options['where'] == 'end_if_vertical') && ($crop_direction == 'y')) || (($thumb_options['where'] == 'end_if_horizontal') && ($crop_direction == 'x')))
+			elseif (($thumb_options['where']=='end') || (($thumb_options['where']=='end_if_vertical') && ($crop_direction=='y')) || (($thumb_options['where']=='end_if_horizontal') && ($crop_direction=='x')))
 			{
-				$displacement = intval(floatval($crop_off));
+				$displacement=intval(floatval($crop_off));
 			}
 			else
 			{
-				$displacement = intval(floatval($crop_off) / 2.0);
+				$displacement=intval(floatval($crop_off) / 2.0);
 			}
 
 			// Now we convert this to the right x and y start locations for the
 			// window
-			$source_x = ($crop_direction == 'x')? $displacement : 0;
-			$source_y = ($crop_direction == 'y')? $displacement : 0;
+			$source_x=($crop_direction=='x')? $displacement : 0;
+			$source_y=($crop_direction=='y')? $displacement : 0;
 
 			// Now we set the width and height of our window, which will be scaled
 			// versions of the width and height of the output
-			$sx = intval(($width * $thumb_options['scale']));
-			$sy = intval(($height * $thumb_options['scale']));
+			$sx=intval(($width * $thumb_options['scale']));
+			$sy=intval(($height * $thumb_options['scale']));
 
 			// We start at the origin of our output
-			$dest_x = 0;
-			$dest_y = 0;
+			$dest_x=0;
+			$dest_y=0;
 
 			// and it is always the full size it can be (or else we'd be cropping
 			// too much)
-			$_width = $width;
-			$_height = $height;
+			$_width=$width;
+			$_height=$height;
 		}
-		elseif ($thumb_options['type'] == 'pad' || (($thumb_options['type'] == 'pad_horiz_crop_horiz') && ($wrong_x < $width)) || (($thumb_options['type'] == 'pad_vert_crop_vert') && ($wrong_y < $height)))
+		elseif ($thumb_options['type']=='pad' || (($thumb_options['type']=='pad_horiz_crop_horiz') && ($wrong_x < $width)) || (($thumb_options['type']=='pad_vert_crop_vert') && ($wrong_y < $height)))
 		{
 			// Padding code lives here. We definitely need to pad some excess space
 			// because otherwise symbols.php would not call us. Thus we need a
@@ -694,10 +732,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				if (substr($thumb_options['background'],0,1)=='#') $thumb_options['background']=substr($thumb_options['background'],1);
 
 				// We've been given a background, let's find out what it is
-				if (strlen($thumb_options['background']) == 8)
+				if (strlen($thumb_options['background'])==8)
 				{
 					// We've got an alpha channel
-					$using_alpha = true;
+					$using_alpha=true;
 					$red_str=substr($thumb_options['background'],0,2);
 					$green_str=substr($thumb_options['background'],2,2);
 					$blue_str=substr($thumb_options['background'],4,2);
@@ -706,32 +744,32 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				else
 				{
 					// We've not got an alpha channel
-					$using_alpha = false;
+					$using_alpha=false;
 					$red_str=substr($thumb_options['background'],0,2);
 					$green_str=substr($thumb_options['background'],2,2);
 					$blue_str=substr($thumb_options['background'],4,2);
 				}
-				$red = intval($red_str,16);
-				$green = intval($green_str,16);
-				$blue = intval($blue_str,16);
-				if ($using_alpha) $alpha = intval($alpha_str,16);
+				$red=intval($red_str,16);
+				$green=intval($green_str,16);
+				$blue=intval($blue_str,16);
+				if ($using_alpha) $alpha=intval($alpha_str,16);
 			}
 			else
 			{
 				// We've not got a background, so let's find a representative color
 				// for the image by resampling the whole thing to 1 pixel.
-				$temp_img = imagecreatetruecolor(1,1);		// Make an image to map on to
+				$temp_img=imagecreatetruecolor(1,1);		// Make an image to map on to
 				imagecopyresampled($temp_img,$source,0,0,0,0,1,1,$sx,$sy);		// Map the source image on to the 1x1 image
-				$rgb_index = imagecolorat($temp_img, 0, 0);		// Grab the color index of the single pixel
-				$rgb_array = imagecolorsforindex($temp_img, $rgb_index);		// Get the channels for it
-				$red = $rgb_array['red'];		// Grab the red
-				$green = $rgb_array['green'];		// Grab the green
-				$blue = $rgb_array['blue'];		// Grab the blue
+				$rgb_index=imagecolorat($temp_img, 0, 0);		// Grab the color index of the single pixel
+				$rgb_array=imagecolorsforindex($temp_img, $rgb_index);		// Get the channels for it
+				$red=$rgb_array['red'];		// Grab the red
+				$green=$rgb_array['green'];		// Grab the green
+				$blue=$rgb_array['blue'];		// Grab the blue
 
 				// Sort out if we're using alpha
-				$using_alpha = false;
-				if (array_key_exists('alpha',$rgb_array)) $using_alpha = true;
-				if ($using_alpha) $alpha = 255-($rgb_array['alpha']*2+1);
+				$using_alpha=false;
+				if (array_key_exists('alpha',$rgb_array)) $using_alpha=true;
+				if ($using_alpha) $alpha=255-($rgb_array['alpha']*2+1);
 
 				// Destroy the temporary image
 				imagedestroy($temp_img);
@@ -742,35 +780,35 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			// The axis
 			if (intval(round(floatval($sx) / $thumb_options['scale'])) != $width)
 			{
-				$pad_axis = 'x';
+				$pad_axis='x';
 			}
 			else
 			{
-				$pad_axis = 'y';
+				$pad_axis='y';
 			}
 
 			// The amount
-			if ($pad_axis == 'x') $padding = intval(round(floatval($width) - (floatval($sx) / $thumb_options['scale'])));
-			else $padding = intval(round(floatval($height) - (floatval($sy) / $thumb_options['scale'])));
+			if ($pad_axis=='x') $padding=intval(round(floatval($width) - (floatval($sx) / $thumb_options['scale'])));
+			else $padding=intval(round(floatval($height) - (floatval($sy) / $thumb_options['scale'])));
 
 			// The distribution
-			if (($thumb_options['where'] == 'start') || (($thumb_options['where'] == 'start_if_vertical') && ($pad_axis == 'y')) || (($thumb_options['where'] == 'start_if_horizontal') && ($pad_axis == 'x')))
+			if (($thumb_options['where']=='start') || (($thumb_options['where']=='start_if_vertical') && ($pad_axis=='y')) || (($thumb_options['where']=='start_if_horizontal') && ($pad_axis=='x')))
 			{
-				$pad_amount = 0;
+				$pad_amount=0;
 			}
 			else
 			{
-				$pad_amount = intval(floatval($padding) / 2.0);
+				$pad_amount=intval(floatval($padding) / 2.0);
 			}
 
 			// Now set all of the parameters needed for blitting our image
 			// $sx and $sy are fine, since they cover the whole image
-			$source_x = 0;
-			$source_y = 0;
-			$_width = ($pad_axis == 'x')? intval(round(floatval($sx) / $thumb_options['scale'])) : $width;
-			$_height = ($pad_axis == 'y')? intval(round(floatval($sy) / $thumb_options['scale'])) : $height;
-			$dest_x = ($pad_axis == 'x')?  $pad_amount : 0;
-			$dest_y = ($pad_axis == 'y')?  $pad_amount : 0;
+			$source_x=0;
+			$source_y=0;
+			$_width=($pad_axis=='x')? intval(round(floatval($sx) / $thumb_options['scale'])) : $width;
+			$_height=($pad_axis=='y')? intval(round(floatval($sy) / $thumb_options['scale'])) : $height;
+			$dest_x=($pad_axis=='x')?  $pad_amount : 0;
+			$dest_y=($pad_axis=='y')?  $pad_amount : 0;
 		}
 	}
 	// Resample/copy
@@ -782,8 +820,8 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$dest=imagecreatetruecolor($width,$height);
 			imagealphablending($dest,false);
-			if ((function_exists('imagecolorallocatealpha')) && ($using_alpha)) $back_col = imagecolorallocatealpha($dest, $red, $green, $blue, 127-intval(floatval($alpha)/2.0));
-			else $back_col = imagecolorallocate($dest, $red, $green, $blue);
+			if ((function_exists('imagecolorallocatealpha')) && ($using_alpha)) $back_col=imagecolorallocatealpha($dest, $red, $green, $blue, 127-intval(floatval($alpha)/2.0));
+			else $back_col=imagecolorallocate($dest, $red, $green, $blue);
 			imagefilledrectangle($dest,0,0,$width,$height,$back_col);
 			if (function_exists('imagesavealpha')) imagesavealpha($dest,true);
 		} else
@@ -801,7 +839,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$dest=imagecreate($width,$height);
 
-			$back_col = imagecolorallocate($dest, $red, $green, $blue);
+			$back_col=imagecolorallocate($dest, $red, $green, $blue);
 			imagefill($dest,0,0,$back_col);
 		} else
 		{
@@ -822,7 +860,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 
 	if ($ext2=='png')
 	{
-		if (strtolower(substr($to,-4)) != '.png') $to = $to . '.png';
+		if (strtolower(substr($to,-4)) != '.png') $to=$to . '.png';
 		$test=@imagepng($dest,$to);
 		if (!$test)
 		{

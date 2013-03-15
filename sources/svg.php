@@ -322,7 +322,7 @@ function create_bar_chart($data,$x_label='X axis',$y_label='Y axis',$x_units='',
 		$labels.='<text style="fill: '.(($height==0.0)?'black':'white').'; font-weight: normal" id="'.float_to_raw_string($x).float_to_raw_string($y).'" transform="translate('.float_to_raw_string($x+TEXT_HEIGHT-3).','.float_to_raw_string(PLOT_HEIGHT+PLOT_HEIGHT_BIAS-TEXT_HEIGHT).') rotate(270)" class="bar_chart_text">'.escape_html($key).'</text>
 		<script type="text/javascript">
 		<![CDATA[
-			pageLoaded=true;
+			page_loaded=true;
 			addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"mouseover",function(event) { if (window.current_bar) window.current_bar.de_clarify(); window.current_bar=this; document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'").setAttribute("style","fill: red; background-color: black; z-index: 999999;"); },false);
 			document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'").de_clarify=function(event) { document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'").setAttribute("style","fill: '.(($height==0.0)?'black':'white').'"); };
 			addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"focus",function(event) { this.onmouseover(event); },false);
@@ -419,7 +419,7 @@ function create_scatter_graph($data,$x_label='X Axis',$y_label='Y Axis',$x_units
 				$labels.='<text id="'.float_to_raw_string($x).float_to_raw_string($y).'" transform="translate('.float_to_raw_string($x+TEXT_HEIGHT/2).','.float_to_raw_string(PLOT_HEIGHT+X_AXIS_HEIGHT+PLOT_HEIGHT_BIAS).') rotate(270)" class="scatter_graph_text">'.escape_html($value['key']).'</text>
 				<script type="text/javascript">
 				<![CDATA[
-					pageLoaded=true;
+					page_loaded=true;
 					addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"mouseover",function(event) { this.setAttribute("style","fill: red; stroke: red; background-color: black; z-index: 999999;"); },false);
 					addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"mouseout",function(event) { this.setAttribute("style",""); },false);
 					addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"focus",function(event) { this.onmouseover(event); },false);

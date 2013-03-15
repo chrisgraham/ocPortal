@@ -6,18 +6,19 @@
 
 {+START,IF,{$JS_ON}}{+START,IF_PASSED,URL}
 	<form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
-		<div class="proceed_button">
-			<input onclick="if (addFormMarkedPosts(this.form,'del_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!DELETE}" />
-		</div>
+		<p class="proceed_button">
+			<input onclick="if (add_form_marked_posts(this.form,'del_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!DELETE}" />
+		</p>
 	</form>
 {+END}{+END}
 
 {+START,IF_NON_EMPTY,{LINKS}}
-   <hr class="spaced_rule" />
-   <p>{!ACTIONS}:</p>
-   <ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
-      {+START,LOOP,LINKS}
-         <li>&raquo; {_loop_var}</li>
-      {+END}
-   </ul>
+	<hr class="spaced_rule" />
+
+	<p class="lonely_label">{!ACTIONS}:</p>
+	<ul role="navigation" class="actions_list">
+		{+START,LOOP,LINKS}
+			<li>{_loop_var}</li>
+		{+END}
+	</ul>
 {+END}

@@ -83,7 +83,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		$cache=NULL;
 		if ($site=='site')
 		{
-			$cache=persistant_cache_get('THEME_IMAGES');
+			$cache=persistent_cache_get('THEME_IMAGES');
 		}
 
 		if (!isset($cache[$true_theme][$true_lang]))
@@ -95,7 +95,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 			{
 				if ($cache===NULL) $cache=array();
 				$cache[$theme][$lang]=$IMG_CODES[$site];
-				persistant_cache_set('THEME_IMAGES',$cache);
+				persistent_cache_set('THEME_IMAGES',$cache);
 			}
 		} else
 		{
@@ -190,14 +190,14 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		if ($db->connection_write==$GLOBALS['SITE_DB']->connection_write) // If guard is here because a MSN site can't make assumptions about the file system of the central site
 		{
-			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && ($GLOBALS['SEMI_DEBUG_MODE'])))
+			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && ($GLOBALS['SEMI_DEV_MODE'])))
 			{
 				$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 				$GLOBALS['NO_QUERY_LIMIT']=true;
 				$db->query_delete('theme_images',array('id'=>$id,'theme'=>$theme,'lang'=>$lang)); // Allow for race conditions
 				$db->query_insert('theme_images',array('id'=>$id,'theme'=>$theme,'path'=>($path===NULL)?'':$path,'lang'=>$lang),false,true); // Allow for race conditions
 				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
-				persistant_cache_delete('THEME_IMAGES');
+				persistent_cache_delete('THEME_IMAGES');
 			}
 		}
 

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_news_shared
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_news_shared
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,26 +72,25 @@ class Hook_addon_registry_news_shared
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/news_shared.php',
-			'NEWS_PIECE_SUMMARY.tpl',
+			'NEWS_BOX.tpl',
 			'NEWS_BRIEF.tpl',
 			'news.css',
-			'lang/EN/news.ini',
+			'lang/EN/news.ini'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'NEWS_PIECE_SUMMARY.tpl'=>'news_piece_summary',
-				);
+			'NEWS_BOX.tpl'=>'news_piece_summary'
+		);
 	}
 
 	/**
@@ -105,8 +103,7 @@ class Hook_addon_registry_news_shared
 	function tpl_preview__news_piece_summary()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('NEWS_PIECE_SUMMARY',array(
+			lorem_globalise(do_lorem_template('NEWS_BOX', array(
 				'BLOG'=>lorem_phrase(),
 				'AUTHOR_URL'=>placeholder_url(),
 				'TAGS'=>'',
@@ -114,7 +111,7 @@ class Hook_addon_registry_news_shared
 				'IMG'=>placeholder_image_url(),
 				'AUTHOR'=>lorem_phrase(),
 				'_AUTHOR'=>lorem_phrase(),
-				'SUBMITTER'=>lorem_phrase(),
+				'SUBMITTER'=>placeholder_id(),
 				'AVATAR'=>lorem_phrase(),
 				'NEWS_TITLE'=>lorem_phrase(),
 				'DATE'=>lorem_phrase(),
@@ -133,9 +130,8 @@ class Hook_addon_registry_news_shared
 				'LASTUSERNAME'=>lorem_word(),
 				'FIRSTMEMBERID'=>lorem_word(),
 				'LASTMEMBERID'=>lorem_word(),
-				'DATE_RAW'=>lorem_word(),
-						)
-			),NULL,'',true),
+				'DATE_RAW'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 }

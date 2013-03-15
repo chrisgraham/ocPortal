@@ -198,9 +198,9 @@ class Module_forumview
 	{
 		require_lang('ocf');
 		add_menu_item_simple('forum_features',NULL,'ROOT_FORUM','_SEARCH:forumview:type=misc');
-		add_menu_item_simple('forum_features',NULL,'PERSONAL_TOPICS','_SEARCH:forumview:type=pt');
+		add_menu_item_simple('forum_features',NULL,'PRIVATE_TOPICS','_SEARCH:forumview:type=pt');
 		add_menu_item_simple('forum_features',NULL,'POSTS_SINCE_LAST_VISIT','_SEARCH:vforums:type=misc');
-		add_menu_item_simple('forum_features',NULL,'TOPICS_UNREAD','_SEARCH:vforums:type=unread');
+		add_menu_item_simple('forum_features',NULL,'_TOPICS_UNREAD','_SEARCH:vforums:type=unread');
 		add_menu_item_simple('forum_features',NULL,'RECENTLY_READ','_SEARCH:vforums:type=recently_read');
 	}
 
@@ -239,10 +239,17 @@ class Module_forumview
 			$of_member_id=NULL;
 		}
 
+		// Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this
+		if (($start>$max*5) && (is_guest()) && (!is_null(get_bot_type())))
+			access_denied('NOT_AS_GUEST');
+
+		require_code('ocf_general');
+		ocf_set_context_forum($id);
+
 		$test=ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_member_id);
 		if (is_array($test))
 		{
-			list($content,$ltitle,$tree,$forum_name)=$test;
+			list($content,$ltitle,$breadcrumbs,$forum_name)=$test;
 		} else
 		{
 			return $test;
@@ -253,7 +260,7 @@ class Module_forumview
 			global $SEO_TITLE;
 			$SEO_TITLE=$forum_name;
 
-			breadcrumb_add_segment($tree);
+			breadcrumb_add_segment($breadcrumbs);
 		}
 
 		if (addon_installed('awards'))
@@ -262,11 +269,9 @@ class Module_forumview
 			$awards=is_null($id)?array():find_awards_for('forum',strval($id));
 		} else $awards=array();
 
-		$title=get_page_title($ltitle,false,NULL,NULL,$awards);
+		$title=get_screen_title($ltitle,false,NULL,NULL,$awards);
 
-		$ret=ocf_wrapper($title,$content,true,($type!='pt'),$id);
-
-		return $ret;
+		return do_template('OCF_FORUM_SCREEN',array('_GUID'=>'9e9fd9110effd8a92b7a839a4fea60c5','TITLE'=>$title,'CONTENT'=>$content));
 	}
 
 }

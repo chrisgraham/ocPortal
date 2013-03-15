@@ -13,8 +13,7 @@ if (count($files)==0)
 } else
 {
 	natsort($files);
-	echo '<div class="wide_table_wrap"><table class="wide_table solidborder">';
-	echo '<colgroup><col width="25%" /><col width="75%" /><col width="100px" /></colgroup>';
+	echo '<div class="wide_table_wrap"><table class="wide_table results_table autosized_table">';
 	echo '<thead><tr><th>Filename</th><th>Description</th><th>File size</th></tr></thead>';
 	echo '<tbody>';
 	foreach ($files as $file)

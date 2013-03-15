@@ -106,7 +106,7 @@ class Hook_catalogue_items
 	 * @param  ID_TEXT	The product.
 	 * @param  ?MEMBER	The member we are checking against (NULL: current meber).
 	 * @param  integer	The number required.
-	 * @return boolean	Whether it is.
+	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
 	 */
 	function is_available($product,$member=NULL,$req_quantity=1)
 	{
@@ -114,7 +114,7 @@ class Hook_catalogue_items
 
 		$res=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$product),'',1);
 
-		if (!array_key_exists(0,$res)) return false;
+		if (!array_key_exists(0,$res)) return ECOMMERCE_PRODUCT_MISSING;
 
 		$product_det=$res[0];
 
@@ -122,17 +122,19 @@ class Hook_catalogue_items
 
 		$str=NULL;
 
-		if (!array_key_exists(3,$fields)) return true;
+		if (!array_key_exists(3,$fields)) return ECOMMERCE_PRODUCT_INTERNAL_ERROR;
 
 		if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
-		if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0)) return true;
+
+		if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0))
+			return ECOMMERCE_PRODUCT_AVAILABLE;
 
 		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ($fields[3]['effective_value']!='')
 		{
 			$available_stock=intval($fields[3]['effective_value']);
 
-			//Locked order check
+			// Locked order check
 			$res=$GLOBALS['SITE_DB']->query('SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1,'.get_table_prefix().'shopping_order_details t2 WHERE t1.id=t2.order_id AND t1.order_status=\'ORDER_STATUS_awaiting_payment\' AND t2.p_id='.strval(intval($product)));
 
 			if (array_key_exists(0,$res))
@@ -140,10 +142,10 @@ class Hook_catalogue_items
 			else
 				$item_count=0;
 
-			if (($available_stock-$item_count)<$req_quantity) return false; else return true;
+			return ($available_stock-$item_count>=$req_quantity)?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_OUT_OF_STOCK;
 		}
 
-		return true;
+		return ECOMMERCE_PRODUCT_AVAILABLE;
 	}
 
 	/**
@@ -215,13 +217,13 @@ class Hook_catalogue_items
 
 		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$product),'',1);
 
-		if (!array_key_exists(0,$entries)) return warn_screen(get_page_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
+		if (!array_key_exists(0,$entries)) return warn_screen(get_screen_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
 
 		$entry=$entries[0];
 
 		$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$catalogue_name,$product,NULL,NULL,true,true);
 
-		return do_template('ECOMMERCE_ITEM_DETAILS',$map,NULL,false,'ECOMMERCE_ITEM_DETAILS');
+		return do_template('ECOM_ITEM_DETAILS',$map,NULL,false,'ECOM_ITEM_DETAILS');
 	}
 
 	/**
@@ -253,16 +255,16 @@ class Hook_catalogue_items
 		}
 
 		$product=array(
-						'product_id'=>$pid,
-						'product_name'=>$product_det[0],
-						'product_code'=>$product_det[1],
-						'price'=>$product_det[2],
-						'tax'=>preg_replace('#[^\d\.]#','',$product_det[6]),
-						'description'=>$product_det[9],
-						'quantity'=>$qty,
-						'product_type'=>'catalogue_items',
-						'product_weight'=>floatval($product_det[8])
-					);
+			'product_id'=>$pid,
+			'product_name'=>$product_det[0],
+			'product_code'=>$product_det[1],
+			'price'=>$product_det[2],
+			'tax'=>preg_replace('#[^\d\.]#','',$product_det[6]),
+			'description'=>$product_det[9],
+			'quantity'=>$qty,
+			'product_type'=>'catalogue_items',
+			'product_weight'=>floatval($product_det[8])
+		);
 
 		return $product;
 	}
@@ -270,14 +272,15 @@ class Hook_catalogue_items
 	/**
 	 * Add an order
 	 *
-	 * @param  array	Array of product details.
-	 * @return AUTO_LINK	Order id of newly added order.
+	 * @param  array			Array of product details.
+	 * @return AUTO_LINK		Order ID of newly added order.
 	 */
 	function add_order($product_det)
 	{
-		if (!$this->is_available($product_det['product_id'],get_member(),1))
+		if ($this->is_available($product_det['product_id'],get_member(),1)!=ECOMMERCE_PRODUCT_AVAILABLE)
 		{
-			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE_NAMED',escape_html($product_det['product_name'])));
+			require_lang('shopping');
+			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE_WARNING',escape_html($product_det['product_name'])));
 		}
 
 		$where=array('product_code'=>$product_det['product_code'],'is_deleted'=>0);
@@ -293,20 +296,20 @@ class Hook_catalogue_items
 		if ($qty==0)
 		{
 			$id=$GLOBALS['SITE_DB']->query_insert('shopping_cart',
-					array(
-						'session_id'=>get_session_id(),
-						'ordered_by'=>get_member(),
-						'product_id'=>$product_det['product_id'],
-						'product_name'=>$product_det['product_name'],
-						'product_code'=>$product_det['product_code'],
-						'quantity'=>$product_det['quantity'],
-						'price'=>round(floatval($product_det['price']),2),
-						'price_pre_tax'=>$product_det['tax'],
-						'product_description'=>$product_det['description'],
-						'product_type'=>$product_det['product_type'],
-						'product_weight'=>$product_det['product_weight'],
-						'is_deleted' => 0,
-					)
+				array(
+					'session_id'=>get_session_id(),
+					'ordered_by'=>get_member(),
+					'product_id'=>$product_det['product_id'],
+					'product_name'=>$product_det['product_name'],
+					'product_code'=>$product_det['product_code'],
+					'quantity'=>$product_det['quantity'],
+					'price'=>round(floatval($product_det['price']),2),
+					'price_pre_tax'=>$product_det['tax'],
+					'product_description'=>$product_det['description'],
+					'product_type'=>$product_det['product_type'],
+					'product_weight'=>$product_det['product_weight'],
+					'is_deleted' => 0,
+				)
 			);
 		}
 		else
@@ -336,9 +339,9 @@ class Hook_catalogue_items
 	/**
 	 * Add order - (order coming from purchase module)
 	 *
-	 * @param AUTO_LINK	Product id
-	 * @param array		Product details
-	 * @return AUTO_LINK	order id
+	 * @param  AUTO_LINK		Product ID
+	 * @param  array			Product details
+	 * @return AUTO_LINK		Order ID
 	 */
 	function add_purchase_order($product,$product_det)
 	{
@@ -404,20 +407,22 @@ class Hook_catalogue_items
 
 		require_code('images');
 
-		$edit_qnty=do_template('SHOPPING_ITEM_QUANTITY_FIELD',array(
-						'PRODUCT_ID'=>strval($entry['product_id']),
-						'QUANTITY'=>strval($entry['quantity'])
-						)
-					);
+		$edit_qnty=do_template('ECOM_SHOPPING_ITEM_QUANTITY_FIELD',
+			array(
+				'PRODUCT_ID'=>strval($entry['product_id']),
+				'QUANTITY'=>strval($entry['quantity'])
+			)
+		);
 
 		$tax=$this->calculate_tax($entry['price'],$entry['price_pre_tax']);
 
 		$shipping_cost=$this->calculate_shipping_cost($entry['product_weight']);
 
-		$del_item=do_template('SHOPPING_ITEM_REMOVE_FIELD',array(
-							'PRODUCT_ID'=>strval($entry['product_id']),
-							)
-					);
+		$del_item=do_template('ECOM_SHOPPING_ITEM_REMOVE_FIELD',
+			array(
+				'PRODUCT_ID'=>strval($entry['product_id']),
+			)
+		);
 
 		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry['product_id']));
 
@@ -440,20 +445,21 @@ class Hook_catalogue_items
 
 		$product_link=hyperlink($product_url,$entry['product_name'],false,false,do_lang('INDEX'));
 
-		$shopping_cart->attach(results_entry(
-						array(
-							$product_image,
-							$product_link,
-							$currency.escape_html(float_format(round($entry["price"],2))),
-							$edit_qnty,
-							$currency.escape_html(float_format($order_price)),
-							$currency.escape_html(float_format(round($total_tax,2))),
-							$currency.escape_html(float_format(round($total_shipping,2))),
-							$currency.escape_html(float_format(round($price,2))),
-							$del_item
-						),false,$tpl_set
-					)
-				);
+		$shopping_cart->attach(
+			results_entry(
+				array(
+					$product_image,
+					$product_link,
+					$currency.escape_html(float_format(round($entry["price"],2))),
+					$edit_qnty,
+					$currency.escape_html(float_format($order_price)),
+					$currency.escape_html(float_format(round($total_tax,2))),
+					$currency.escape_html(float_format(round($total_shipping,2))),
+					$currency.escape_html(float_format(round($price,2))),
+					$del_item
+				),false,$tpl_set
+			)
+		);
 
 		return $shopping_cart;
 	}
@@ -518,7 +524,7 @@ class Hook_catalogue_items
 	 * Find product image for a specific catalogue product
 	 *
 	 * @param  ID_TEXT		Catalogue name
-	 * @param  AUTO_LINK		Catalogue entry id
+	 * @param  AUTO_LINK		Catalogue entry ID
 	 * @return ?SHORT_TEXT	Image name (NULL: no image)
 	 */
 	function get_product_image($catalogue_name,$entry_id)
@@ -538,8 +544,8 @@ class Hook_catalogue_items
 	/**
 	 * Calculate product price
 	 *
-	 * @param  AUTO_LINK	Catalogue entry id
-	 * @param  integer	Quantity to deduct
+	 * @param  AUTO_LINK		Catalogue entry ID
+	 * @param  integer		Quantity to deduct
 	 */
 	function update_stock($entry_id,$quantity)
 	{
@@ -610,7 +616,7 @@ class Hook_catalogue_items
 	/**
 	 * Function to return dispatch type of product.
 	 *
-	 * @return  ID_TEXT	Dispatch type (manual/automatic)
+	 * @return  ID_TEXT		Dispatch type (manual/automatic)
 	 */
 	function get_product_dispatch_type()
 	{
@@ -620,8 +626,8 @@ class Hook_catalogue_items
 	/**
 	 * Return product info details
 	 *
-	 * @param  AUTO_LINK	Product id
-	 * @return tempcode	Product information
+	 * @param  AUTO_LINK		Product ID
+	 * @return tempcode		Product information
 	 */
 	function product_info($id)
 	{
@@ -670,17 +676,17 @@ class Hook_catalogue_items
 
 		$purchase_mod_url=build_url(array('page'=>'purchase','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>strval($id),'id'=>$id),'_SELF');
 
-		$map['CART_BUTTONS']=do_template('CATALOGUE_ENTRY_ADD_TO_CART',array('OUT_OF_STOCK'=>$out_of_stock,'ACTION_URL'=>$cart_url,'PRODUCT_ID'=>strval($id),'ALLOW_OPTOUT_TAX'=>get_option('allow_opting_out_of_tax'),'PURCHASE_ACTION_URL'=>$purchase_mod_url,'CART_URL'=>$shopping_cart_url));
+		$map['CART_BUTTONS']=do_template('CATALOGUE_ENTRY_ADD_TO_CART',array('_GUID'=>'d4491c6e221b1f06375a6427da062bac','OUT_OF_STOCK'=>$out_of_stock,'ACTION_URL'=>$cart_url,'PRODUCT_ID'=>strval($id),'ALLOW_OPTOUT_TAX'=>get_option('allow_opting_out_of_tax'),'PURCHASE_ACTION_URL'=>$purchase_mod_url,'CART_URL'=>$shopping_cart_url));
 
 		$map['CART_LINK']=show_cart_image();
 	}
 }
 
 /**
- * Update order status,transaction id after transaction
+ * Update order status,transaction ID after transaction
  *
- * @param  AUTO_LINK	Purchase/Order id.
- * @param  array		Details of product.
+ * @param  AUTO_LINK		Purchase/Order ID.
+ * @param  array			Details of product.
  */
 function handle_catalogue_items($entry_id,$details)
 {

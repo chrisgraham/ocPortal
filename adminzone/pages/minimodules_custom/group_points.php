@@ -6,7 +6,7 @@
  * @package		group_points
  */
 
-$title=get_page_title('Usergroup point assignments',false);
+$title=get_screen_title('Usergroup point assignments',false);
 
 require_code('points');
 require_code('form_templates');
@@ -54,11 +54,11 @@ foreach ($groups as $group_id=>$group_name)
 		$points=array('p_points_one_off'=>0,'p_points_per_month'=>0);
 	}
 
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$group_name)));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'096274e977e4cd99ef20eb4b1c2174e3','TITLE'=>$group_name)));
 	$fields->attach(form_input_integer('One-off bonus','','points_one_off_'.strval($group_id),$points['p_points_one_off'],true));
 	$fields->attach(form_input_integer('Points per month','','points_per_month_'.strval($group_id),$points['p_points_per_month'],true));
 }
 
-$form=do_template('FORM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>'','TEXT'=>paragraph('Enter how many points being in each usergroup is worth. For the one-off bonuses, ocPortal will look at all the usergroups each member is in, and count these numbers within the point totals. The monthly points are assigned to members as system gifts, on the 1st of each month (the CRON scheduler must be enabled).'),'FIELDS'=>$fields,'SUBMIT_NAME'=>'Set points','URL'=>get_self_url()));
+$form=do_template('FORM_SCREEN',array('_GUID'=>'8677d9f9c1c4ad969188ddff850a1b2c','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>paragraph('Enter how many points being in each usergroup is worth. For the one-off bonuses, ocPortal will look at all the usergroups each member is in, and count these numbers within the point totals. The monthly points are assigned to members as system gifts, on the 1st of each month (the CRON scheduler must be enabled).'),'FIELDS'=>$fields,'SUBMIT_NAME'=>'Set points','URL'=>get_self_url()));
 
 $form->evaluate_echo();

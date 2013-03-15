@@ -1,0 +1,10 @@
+[semihtml]
+{+START,IF,{$GET,HAS_SOCIAL_MENU}}
+	{+START,IF,{$ADDON_INSTALLED,ocf_forum}}
+		{+START,IF,{$OR,{$MOBILE},{$NOR,{$WIDE},{$EQ,{$PAGE},forumview,members}}}} {$,If wide, it would have been shown at the top; we show at top for forumview; we do not show on members page as would be confusing}
+			[block]main_member_bar[/block]
+		{+END}
+		[block]main_bottom_bar[/block]
+	{+END}
+{+END}
+[/semihtml]

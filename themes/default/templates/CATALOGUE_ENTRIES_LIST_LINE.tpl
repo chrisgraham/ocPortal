@@ -1,1 +1,1 @@
-{TREE} &ndash; {NAME*}
+{+START,IF_NON_EMPTY,{BREADCRUMBS}}{BREADCRUMBS} &ndash; {+END}{NAME*}

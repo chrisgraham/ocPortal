@@ -1,30 +1,25 @@
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table ocf_topic_list">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table ocf_topic_list">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
 			{+START,IF,{$CONFIG_OPTION,is_on_topic_emoticons}}
-				<col style="width: 43px" />
+				<col class="ocf_forum_topic_wrapper_column_column1" />
 			{+END}
-			<col style="width: 100%" />
-			<col style="width: 100px" />
-			<col style="width: 50px" />
-			<col style="width: 50px" />
-			<col style="width: {$?,{$MATCH_KEY_MATCH,_WILD:members},90,185}px" />
+			<col class="ocf_forum_topic_wrapper_column_column2" />
+			<col class="ocf_forum_topic_wrapper_column_column3" />
+			<col class="ocf_forum_topic_wrapper_column_column4" />
+			<col class="ocf_forum_topic_wrapper_column_column5" />
+			<col class="ocf_forum_topic_wrapper_column_column6{$?,{$MATCH_KEY_MATCH,_WILD:members},_shorter}" />
 			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
-				<col style="width: 25px" />
+				<col class="ocf_forum_topic_wrapper_column_column7" />
 			{+END}
 		</colgroup>
 	{+END}
 
 	<thead>
-		{+START,IF_PASSED,ID}
-			<tr>
-				<td colspan="{$?,{$CONFIG_OPTION,is_on_topic_emoticons},7,6}" class="tabletitle_internal">{FORUM_NAME*}</td>
-			</tr>
-		{+END}
 		<tr>
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{+START,IF,{$CONFIG_OPTION,is_on_topic_emoticons}}
-					<th> </th>
+					<th class="ocf_forum_box_left"></th>
 				{+END}
 			{+END}
 			<th>{!TITLE}</th>
@@ -33,11 +28,11 @@
 				<th>{!COUNT_POSTS}</th>
 				<th>{!COUNT_VIEWS}</th>
 			{+END}
-			<th>{!LAST_POST}</th>
+			<th{+START,IF_EMPTY,{MODERATOR_ACTIONS}} class="ocf_forum_box_right"{+END}>{!LAST_POST}</th>
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
-					<th>
-						<a href="#" onclick="event.returnValue=false; markAllTopics(event); return false;"><img src="{$IMG*,ocf_topic_modifiers/unvalidated}" alt="{!TOGGLE_SELECTION}" title="{!TOGGLE_SELECTION}" /></a>
+					<th class="ocf_forum_box_right">
+						<a href="#" onclick="event.returnValue=false; mark_all_topics(event); return false;"><img src="{$IMG*,ocf_topic_modifiers/unvalidated}" alt="{!TOGGLE_SELECTION}" title="{!TOGGLE_SELECTION}" /></a>
 					</th>
 				{+END}
 			{+END}
@@ -46,30 +41,50 @@
 
 	<tbody>
 		{TOPICS}
+
+		<tr>
+			{+START,IF,{$NOT,{$MOBILE}}}
+				{+START,IF,{$CONFIG_OPTION,is_on_topic_emoticons}}
+					<td class="ocf_column1 ocf_forum_box_bleft"></td>
+				{+END}
+			{+END}
+			<td class="ocf_column1{+START,IF,{$MOBILE}} ocf_forum_box_bleft{+END}"></td>
+			<td class="ocf_column1"></td>
+			{+START,IF,{$NOT,{$MOBILE}}}
+				<td class="ocf_column1"></td>
+				<td class="ocf_column1"></td>
+			{+END}
+			<td class="ocf_column1{+START,IF,{$OR,{$MOBILE},{$IS_EMPTY,{MODERATOR_ACTIONS}}}} ocf_forum_box_bright{+END}"></td>
+			{+START,IF,{$NOT,{$MOBILE}}}
+				{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
+					<td class="ocf_column1 ocf_forum_box_bright"></td>
+				{+END}
+			{+END}
+		</tr>
 	</tbody>
 </table></div>
 
-{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
-	<div class="float_surrounder results_browser_spacing">
-		{RESULTS_BROWSER}
+{+START,IF_NON_EMPTY,{PAGINATION}}
+	<div class="float_surrounder pagination_spacing">
+		{PAGINATION}
 	</div>
 {+END}
 
 {+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		<div class="medborder medborder_box ocf_topic_actions">
-			<span class="control_functions">
+		<div class="box ocf_topic_actions"><div class="box_inner">
+			<span class="field_name">
 				<label for="fma_type">{!TOPIC_ACTIONS}: </label>
 			</span>
 			<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline">
 				{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
 
 				<div class="inline">
-					<select class="inline" name="type" id="fma_type">
+					<select class="dropdown_actions" name="type" id="fma_type">
 						<option value="misc">-</option>
 						{MODERATOR_ACTIONS}
 					</select>
-					<input onclick="if (addFormMarkedPosts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
+					<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
 				</div>
 			</form>
 
@@ -113,6 +128,6 @@
 					</div>
 				</form>
 			{+END}
-		</div>
+		</div></div>
 	{+END}
 {+END}

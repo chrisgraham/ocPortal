@@ -19,24 +19,24 @@ $cache_id=$id.'_'.strval($cols).'_'.strval($rows).'_'.strval($max_words);
 $cached=get_cache_entry('main_crossword',$cache_id);
 if (is_null($cached))
 {
-	$pc = new PHP_Crossword($rows, $cols);
+	$pc=new PHP_Crossword($rows, $cols);
 
 	$pc->setMaxWords($max_words);
 
-	$charset = get_charset();
+	$charset=get_charset();
 
-	$success = $pc->generate();
+	$success=$pc->generate();
 
 	if (!$success) warn_exit('Sorry, unable to generate demo crossword - try with more area or less words.');
 
-	$params = array(
+	$params=array(
 		'colors'	=> 0,
 		'fillflag'	=> 0,
 		'cellflag'	=> ''
 		);
 
-	$html = $pc->getHTML($params);
-	$words = $pc->getWords();
+	$html=$pc->getHTML($params);
+	$words=$pc->getWords();
 
 	require_code('caches2');
 	put_into_cache('main_crossword',60*60*24*5000,$cache_id,array($html,$words));
@@ -48,7 +48,7 @@ if (is_null($cached))
 echo '<div class="float_surrounder crossword">';
 
 echo <<<END
-<table class="questionTable solidborder" border="0" cellpadding="4">
+<table class="questionTable results_table" border="0" cellpadding="4">
 <tr>
 	<th>Num.</th>
 	<th>Question</th>

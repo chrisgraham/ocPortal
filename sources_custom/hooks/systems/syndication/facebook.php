@@ -126,7 +126,7 @@ class Hook_Syndication_facebook
 		require_code('character_sets');
 		$name=convert_to_internal_encoding($name,get_charset(),'utf-8');
 		$link=($row['a_pagelink_1']=='')?'':static_evaluate_tempcode(pagelink_to_tempcode($row['a_pagelink_1']));
-		$message=html_entity_decode(strip_tags($message->evaluate()),ENT_COMPAT,get_charset());
+		$message=strip_html($message->evaluate());
 		$message=convert_to_internal_encoding($message,get_charset(),'utf-8');
 
 		// Send message
@@ -153,7 +153,7 @@ class Hook_Syndication_facebook
 				$this->auth_set($member_id,get_self_url());
 			}
 
-			warn_exit($e->getMessage());
+			attach_message($e->getMessage(),'warn');
 		}
 
 		return true;

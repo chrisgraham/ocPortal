@@ -1,1 +1,1 @@
-<a name="errorat" id="errorat"></a><span class="error_marker">!{!HERE}!</span>
+<a id="errorat"></a><span class="red_alert">&laquo;{!HERE}&raquo;</span>

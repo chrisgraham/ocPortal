@@ -1,6 +1,6 @@
 {TITLE}
 
-{+START,INCLUDE,handle_conflict_resolution}{+END}
+{+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
 {+END}
@@ -10,9 +10,9 @@
 <h2>{!CONTENTS}</h2>
 
 <ul>
-{+START,LOOP,_GROUPS}
-	<li><a href="#group_{_loop_key*}">{_loop_var}</a></li>
-{+END}
+	{+START,LOOP,_GROUPS}
+		<li><a href="#group_{_loop_key*}">{_loop_var}</a></li>
+	{+END}
 </ul>
 
 <h2>{!OPTION_GROUPS}</h2>

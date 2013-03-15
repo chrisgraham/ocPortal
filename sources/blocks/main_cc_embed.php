@@ -35,7 +35,7 @@ class Block_main_cc_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('root','sort','search','max','param','select','template_set','display_type');
+		$info['parameters']=array('ocselect','root','sort','max','param','select','template_set','display_type');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_cc_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'root\',NULL),array_key_exists(\'search\',$map)?$map[\'search\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
+		$info['cache_on']='array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'root\',NULL),array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -68,8 +68,9 @@ class Block_main_cc_embed
 		$start=get_param_integer('start',0);
 		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('root',NULL);
 
+		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
+
 		$sort=array_key_exists('sort',$map)?$map['sort']:'';
-		$search=array_key_exists('search',$map)?$map['search']:'';
 
 		require_lang('catalogues');
 		require_code('catalogues');
@@ -80,7 +81,7 @@ class Block_main_cc_embed
 		if ((!is_null($map)) && (array_key_exists('select',$map)))
 		{
 			require_code('ocfiltering');
-			$select=ocfilter_to_sqlfragment($map['select'],'e.id','catalogue_categories','cc_parent_id','cc_id','id');
+			$select=ocfilter_to_sqlfragment($map['select'],'r.id','catalogue_categories','cc_parent_id','cc_id','id');
 		}
 
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$category_id),'',1);
@@ -95,11 +96,53 @@ class Block_main_cc_embed
 		$catalogue=$catalogues[0];
 
 		$tpl_set=array_key_exists('template_set',$map)?$map['template_set']:$catalogue_name;
-		$display_type=array_key_exists('display_type',$map)?intval($map['display_type']):NULL;
+		$_display_type=((array_key_exists('display_type',$map)) && ($map['display_type']!=''))?$map['display_type']:NULL;
+		$display_type=mixed();
+		if (!is_null($_display_type))
+		{
+			if (is_numeric($_display_type))
+			{
+				$display_type=intval($_display_type);
+			} else
+			{
+				switch ($_display_type)
+				{
+					case 'FIELDMAPS':
+						$display_type=C_DT_FIELDMAPS;
+						break;
+					case 'TITLELIST':
+						$display_type=C_DT_TITLELIST;
+						break;
+					case 'TABULAR':
+						$display_type=C_DT_TABULAR;
+						break;
+					case 'GRID':
+						$display_type=C_DT_GRID;
+						break;
+				}
+			}
+		}
 
-		list($entry_buildup,,,)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$search,$sort);
+		list($entry_buildup,,,)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$ocselect,$sort);
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array('ROOT'=>strval($root),'CATALOGUE'=>$catalogue_name,'ENTRIES'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
+		$display_type_str='';
+		switch ($display_type)
+		{
+			case C_DT_FIELDMAPS:
+				$display_type_str='FIELDMAPS';
+				break;
+			case C_DT_TITLELIST:
+				$display_type_str='TITLELIST';
+				break;
+			case C_DT_TABULAR:
+				$display_type_str='TABULAR';
+				break;
+			case C_DT_GRID:
+				$display_type_str='GRID';
+				break;
+		}
+
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array('DISPLAY_TYPE'=>$display_type_str,'ROOT'=>is_null($root)?'':strval($root),'CATALOGUE'=>$catalogue_name,'ENTRIES'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
 	}
 
 }

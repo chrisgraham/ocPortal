@@ -252,7 +252,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 
 			if (($from!=get_member()) && ($to!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')))
 			{
-				access_denied('SPECIFIC_PERMISSION','view_other_pt');
+				access_denied('PRIVILEGE','view_other_pt');
 			}
 
 			decache('_new_pp',array(get_member()));
@@ -262,7 +262,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		if ($topic_info['t_validated']==0)
 		{
 			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
-				access_denied('SPECIFIC_PERMISSION','jump_to_unvalidated');
+				access_denied('PRIVILEGE','jump_to_unvalidated');
 		}
 
 		if (is_null(get_param_integer('threaded',NULL)))
@@ -462,7 +462,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		if ((is_null($forum_id)) || (ocf_may_post_in_topic($forum_id,$topic_id,$topic_info['t_cache_last_member_id'])))
 			$out['may_reply']=true;
 		if (ocf_may_report_post()) $out['may_report_posts']=true;
-		if (ocf_may_make_personal_topic()) $out['may_pt_members']=true;
+		if (ocf_may_make_private_topic()) $out['may_pt_members']=true;
 		if (ocf_may_edit_topics_by($forum_id,get_member(),$topic_info['t_cache_first_member_id'])) $out['may_edit_topic']=true;
 		require_code('ocf_moderation');
 		require_code('ocf_forums');
@@ -687,7 +687,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$action_url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','post_id'=>$_postdetails['id']),'adminzone');
 		$_title=do_lang_tempcode('POST_HISTORY');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'history','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'6086b2ae226bf2a69d1e34641d22ae21','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'history','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	return $buttons;
 }

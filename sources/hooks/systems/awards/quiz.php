@@ -62,7 +62,7 @@ class Hook_awards_quiz
 	function run($row,$zone)
 	{
 		require_code('quiz');
-		return show_quiz_html($row,$zone);
+		return render_quiz_box($row,$zone);
 	}
 
 }

@@ -17,6 +17,6 @@
 	{+START,IF,{$MOBILE}}
 		float: left;
 	{+END}
-	border-left: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
-	padding-left: 20px;
+	border-left: 1px solid {$GET,standard_border};
+	padding-left: 2em;
 }

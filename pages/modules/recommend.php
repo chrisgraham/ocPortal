@@ -158,13 +158,36 @@ class Module_recommend
 
 			$already[]=$email_address;
 		}
+
 		if (is_guest())
 		{
 			$fields->attach(form_input_email(do_lang_tempcode('FRIEND_EMAIL_ADDRESS'),'','email_address_0',array_key_exists(0,$already)?$already[0]:'',true));
 		} else
 		{
-			$fields->attach(form_input_line_multi(do_lang_tempcode('FRIEND_EMAIL_ADDRESS'),do_lang_tempcode('THEIR_ADDRESS'),'email_address_',$already,1,NULL,'email'));
+			if (get_value('disable_csv_recommend')!=='1')
+			{
+				$set_name='people';
+				$required=true;
+				$set_title=do_lang_tempcode('TO');
+				$field_set=alternate_fields_set__start($set_name);
+
+				$email_address_field=form_input_line_multi(do_lang_tempcode('FRIEND_EMAIL_ADDRESS'),do_lang_tempcode('THEIR_ADDRESS'),'email_address_',$already,1,NULL,'email');
+				$field_set->attach($email_address_field);
+
+				//add an upload CSV contacts file field
+				$_help_url=build_url(array('page'=>'recommend_help'),get_page_zone('recommend_help'));
+				$help_url=$_help_url->evaluate();
+
+				$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_FILE',escape_html($help_url)),'upload',false,NULL,NULL,false));
+
+				$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+			} else
+			{
+				$email_address_field=form_input_line_multi(do_lang_tempcode('FRIEND_EMAIL_ADDRESS'),do_lang_tempcode('THEIR_ADDRESS'),'email_address_',$already,1,NULL,'email');
+				$fields->attach($email_address_field);
+			}
 		}
+
 		if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()))
 		{
 			$invites=get_num_invites(get_member());
@@ -223,10 +246,10 @@ class Module_recommend
 		{
 			if (is_null($page_title))
 			{
-				$title=get_page_title('RECOMMEND_LINK');
+				$title=get_screen_title('RECOMMEND_LINK');
 			} else
 			{
-				$title=get_page_title($page_title,false);
+				$title=get_screen_title($page_title,false);
 			}
 			$submit_name=do_lang_tempcode('SEND');
 			$text=do_lang_tempcode('RECOMMEND_AUTO_TEXT',get_site_name());
@@ -235,20 +258,15 @@ class Module_recommend
 		{
 			if (is_null($page_title))
 			{
-				$title=get_page_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
+				$title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
 			} else
 			{
-				$title=get_page_title($page_title,false);
+				$title=get_screen_title($page_title,false);
 			}
 			$hidden->attach(form_input_hidden('wrap_message','1'));
 			$need_message=false;
 		}
 
-		//add an upload CSV contacts file field
-		$_help_url=build_url(array('page'=>'recommend_help'),get_page_zone('recommend_help'));
-		$help_url=$_help_url->evaluate();
-		if ((get_value('disable_csv_recommend')!=='1') && (!is_guest()))
-			$fields->attach(form_input_upload(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('UPLOAD')),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_FILE',escape_html($help_url)),'upload',false,NULL,NULL,false));
 		handle_max_file_size($hidden);
 
 		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),'','subject',$subject,true));
@@ -267,11 +285,7 @@ class Module_recommend
 
 		$hidden->attach(form_input_hidden('comcode__message','1'));
 
-		if ((get_value('disable_csv_recommend')!=='1') && (!is_guest()))
-			$javascript='standardAlternateFields(\'upload\',\'email_address_0\');';
-		else $javascript='';
-
-		$javascript.=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
+		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'08a538ca8d78597b0417f464758a59fd','JAVASCRIPT'=>$javascript,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
 	}
@@ -318,19 +332,19 @@ class Module_recommend
 		{
 			if (is_null($page_title))
 			{
-				$title=get_page_title('RECOMMEND_LINK');
+				$title=get_screen_title('RECOMMEND_LINK');
 			} else
 			{
-				$title=get_page_title($page_title,false);
+				$title=get_screen_title($page_title,false);
 			}
 		} else
 		{
 			if (is_null($page_title))
 			{
-				$title=get_page_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
+				$title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
 			} else
 			{
-				$title=get_page_title($page_title,false);
+				$title=get_screen_title($page_title,false);
 			}
 			$hidden->attach(form_input_hidden('wrap_message','1'));
 		}
@@ -611,7 +625,7 @@ class Module_recommend
 
 			if (post_param_integer('wrap_message',0)==1)
 			{
-				$title=get_page_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
+				$title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
 
 				$referring_username=is_guest()?NULL:get_member();
 				$_url=(post_param_integer('invite',0)==1)?build_url(array('page'=>'join','email_address'=>$email_address,'keep_referrer'=>$referring_username),get_module_zone('join')):build_url(array('page'=>'','keep_referrer'=>$referring_username),'');
@@ -620,7 +634,7 @@ class Module_recommend
 				$message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name(),$join_url)).$message;
 			} else
 			{
-				$title=get_page_title('RECOMMEND_LINK');
+				$title=get_screen_title('RECOMMEND_LINK');
 			}
 
 			if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()) && (post_param_integer('invite',0)==1))

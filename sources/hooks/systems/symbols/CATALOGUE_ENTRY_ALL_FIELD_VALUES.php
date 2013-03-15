@@ -38,13 +38,13 @@ class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 				require_code('catalogues');
 				$catalogue_name=$rows[0]['c_name'];
 				$tpl_set=$catalogue_name;
-				$display=get_catalogue_entry_map($rows[0],array('c_name'=>$catalogue_name,'c_display_type'=>C_DT_MAPS),'PAGE',$tpl_set,-1);
+				$display=get_catalogue_entry_map($rows[0],array('c_name'=>$catalogue_name,'c_display_type'=>C_DT_FIELDMAPS),'PAGE',$tpl_set,-1);
 				if ((array_key_exists(1,$param)) && ($param[1]=='1'))
 				{
 					$value=$display['FIELDS']->evaluate();
 				} else
 				{
-					$_value=do_template('CATALOGUE_'.$tpl_set.'_ENTRY',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY');
+					$_value=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('ENTRY_SCREEN'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 					$value=$_value->evaluate();
 				}
 			}

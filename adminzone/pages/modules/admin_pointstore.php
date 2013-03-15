@@ -77,7 +77,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * The UI to view point-store logs.
+	 * The UI to view Point Store logs.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -86,12 +86,12 @@ class Module_admin_pointstore
 		$also_url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
 		attach_message(do_lang_tempcode('ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
 
-		$title=get_page_title('POINTSTORE_MANAGE_SALES');
+		$title=get_screen_title('POINTSTORE_MANAGE_SALES');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('sales',array('*'),NULL,'ORDER BY date_and_time DESC');
 		$out=new ocp_tempcode();
 		require_code('templates_results_table');
-		require_code('templates_table_table');
+		require_code('templates_columned_table');
 		$do_other_details=false;
 		foreach ($rows as $row)
 		{
@@ -123,14 +123,14 @@ class Module_admin_pointstore
 			$date=get_timezoned_date($row['date_and_time']);
 
 			$url=build_url(array('page'=>'_SELF','type'=>'_logs','date_and_time'=>$row['date_and_time'],'memberid'=>$row['memberid']),'_SELF');
-			$actions=do_template('TABLE_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'12e3ea365f1a1ed2e7800293f3203283','NAME'=>$member,'URL'=>$url));
+			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'12e3ea365f1a1ed2e7800293f3203283','NAME'=>$member,'URL'=>$url));
 
 			if ($do_other_details)
 			{
-				$out->attach(table_table_row(array($member,$type,$details_1,$details_2,$date,$actions)));
+				$out->attach(columned_table_row(array($member,$type,$details_1,$details_2,$date,$actions)));
 			} else
 			{
-				$out->attach(table_table_row(array($member,$type,$details_1,$date,$actions)));
+				$out->attach(columned_table_row(array($member,$type,$details_1,$date,$actions)));
 			}
 		}
 		if ($out->is_empty())
@@ -140,13 +140,13 @@ class Module_admin_pointstore
 
 		if ($do_other_details)
 		{
-			$header_row=table_table_header_row(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('PURCHASE'),do_lang_tempcode('DETAILS'),do_lang_tempcode('OTHER_DETAILS'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTIONS')));
+			$header_row=columned_table_header_row(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('PURCHASE'),do_lang_tempcode('DETAILS'),do_lang_tempcode('OTHER_DETAILS'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTIONS')));
 		} else
 		{
-			$header_row=table_table_header_row(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('PURCHASE'),do_lang_tempcode('DETAILS'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTIONS')));
+			$header_row=columned_table_header_row(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('PURCHASE'),do_lang_tempcode('DETAILS'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTIONS')));
 		}
 
-		$content=do_template('TABLE_TABLE',array('_GUID'=>'d87800ff26e9e5b8f7593fae971faa73','HEADER_ROW'=>$header_row,'ROWS'=>$out));
+		$content=do_template('COLUMNED_TABLE',array('_GUID'=>'d87800ff26e9e5b8f7593fae971faa73','HEADER_ROW'=>$header_row,'ROWS'=>$out));
 
 		return do_template('POINTSTORE_LOG_SCREEN',array('_GUID'=>'014cf9436ece951edb55f2f7b0efb597','TITLE'=>$title,'CONTENT'=>$content));
 	}
@@ -158,7 +158,7 @@ class Module_admin_pointstore
 	 */
 	function delete_log_entry()
 	{
-		$title=get_page_title('POINTSTORE_MANAGE_SALES');
+		$title=get_screen_title('POINTSTORE_MANAGE_SALES');
 
 		$this->_delete_log_entry(get_param_integer('date_and_time'),get_param_integer('memberid'));
 
@@ -168,7 +168,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * Delete a point-store purchase.
+	 * Delete a Point Store purchase.
 	 *
 	 * @param  integer		The time of the purchase
 	 * @param  MEMBER			The member that made the purchase
@@ -179,7 +179,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * The UI to set point-store prices.
+	 * The UI to set Point Store prices.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -188,7 +188,7 @@ class Module_admin_pointstore
 		$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		attach_message(do_lang_tempcode('ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
 
-		$title=get_page_title('POINTSTORE_MANAGE_INVENTORY');
+		$title=get_screen_title('POINTSTORE_MANAGE_INVENTORY');
 
 		$field_groups=new ocp_tempcode();
 		$add_forms=new ocp_tempcode();
@@ -231,13 +231,13 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * The actualiser to set point-store prices.
+	 * The actualiser to set Point Store prices.
 	 *
 	 * @return tempcode		The UI
 	 */
 	function set_prices()
 	{
-		$title=get_page_title('POINTSTORE_MANAGE_INVENTORY');
+		$title=get_screen_title('POINTSTORE_MANAGE_INVENTORY');
 
 		// Save configuration for hooks
 		$_hooks=find_all_hooks('modules','pointstore');

@@ -62,24 +62,25 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	}
 
 	// Read a raw
-	$sheet=file_get_contents($fullpath,FILE_TEXT);
+	$sheet=file_get_contents($fullpath);
 
 	// Re-seed
 	if (!is_null($seed))
 	{
-		require_code('themewizard');
+		// Not actually needed
+		$sheet=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},seed,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#'.$seed.',seed,100% '.$seed.'}',$sheet);
+		$sheet=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},WB,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#'.$seed.',WB,100% '.($dark?'000000':'FFFFFF').'}',$sheet);
+		$sheet=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},BW,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#'.$seed.',BW,100% '.($dark?'FFFFFF':'000000').'}',$sheet);
 
+		require_code('themewizard');
 		list($colours,$landscape)=calculate_theme($seed,$theme,$algorithm,'colours',$dark);
+
+		// The main thing (THEME_WIZARD_COLOR is not executed in full by Tempcode, so we need to sub it according to our theme wizard landscape)
 		foreach ($landscape as $peak)
 		{
-			$matches=array();
-
-			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$sheet,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-				$sheet=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$sheet);
-			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{3}([^A-Fa-f0-9].*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$sheet,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-				$sheet=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$sheet);
+			$from=$peak[2];
+			$to=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[\da-fA-F]{6},#','{$THEME_WIZARD_COLOR,#'.$peak[3].',',$peak[2]);
+			$sheet=str_replace($from,$to,$sheet);
 		}
 	}
 
@@ -91,7 +92,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	fix_permissions($temp_file);
 
 	// Load up as Tempcode
-	$_sheet=_css_compile($destination_theme,$theme,$css_file.'__tmp_copy',$temp_file,false);
+	$_sheet=_css_compile($destination_theme,$destination_theme,$css_file.'__tmp_copy',$temp_file,false);
 	unlink($temp_file);
 	sync_file($temp_file);
 	$sheet=$_sheet[1];
@@ -183,6 +184,17 @@ function js_compile($j,$js_cache_path,$minify=true)
  */
 function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
+	if ($c!='global') // We need to make sure the global.css file is parsed, as it contains some shared THEME_WIZARD_COLOR variables that Tempcode will pick up on
+	{
+		$found=find_template_place('global','',$active_theme,'.css','css');
+		$d_theme=$found[0];
+		$global_fullpath=get_custom_file_base().'/themes/'.$d_theme.$found[1].'global.css';
+		if (!is_file($global_fullpath))
+			$global_fullpath=get_file_base().'/themes/'.$d_theme.$found[1].'global.css';
+
+		_css_compile($active_theme,$d_theme,'global',$global_fullpath,false);
+	}
+
 	list($success_status,$out)=_css_compile($active_theme,$theme,$c,$fullpath,$minify);
 	$css_file=@fopen($css_cache_path,'wt');
 	if ($css_file===false) intelligent_write_error($css_cache_path);
@@ -307,7 +319,7 @@ function js_minify($js)
 
 	if (!class_exists('JSMin')) return $js;
 
-	$jsmin = new JSMin($js);
+	$jsmin=new JSMin($js);
 	return $jsmin->min();
 }
 
@@ -332,6 +344,7 @@ function js_minify($js)
  * @copyright 	2008 Joe Scylla <joe.scylla@gmail.com>
  * @license 	http://opensource.org/licenses/mit-license.php MIT License
  * @version 	1.0 (2008-01-31)
+ * @package		core
  */
 
 /**
@@ -342,15 +355,15 @@ function js_minify($js)
  */
 function css_minify($v) 
 {
-	$v = trim($v);
-	$v = str_replace("\r\n", "\n", $v);
-	$search = array("/\/\*[\d\D]*?\*\/|\t+/", "/\s+/", "/\}\s+/");
-	$replace = array('', " ", "}\n");
-	$v = preg_replace($search, $replace, $v);
-	$search = array("/\\;\s/", "/\s+\{\\s+/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9]+|[A-F]+)/i");
-	$replace = array(";", "{", ":#", ",", ":\'", ":$1");
-	$v = preg_replace($search, $replace, $v);
-	$v = str_replace("\n", '', $v);
+	$v=trim($v);
+	$v=str_replace("\r\n", "\n", $v);
+	$search=array("/\/\*[\d\D]*?\*\/|\t+/", "/\s+/", "/\}\s+/");
+	$replace=array('', " ", "}\n");
+	$v=preg_replace($search, $replace, $v);
+	$search=array("/\\;\s/", "/\s+\{\\s+/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9]+|[A-F]+)/i");
+	$replace=array(";", "{", ":#", ",", ":\'", ":$1");
+	$v=preg_replace($search, $replace, $v);
+	$v=str_replace("\n", '', $v);
 	return $v;	
 }
 

@@ -1,9 +1,9 @@
 {+START,IF_NON_EMPTY,{CONTENT}}
-	<{$?,{$VALUE_OPTION,html5},nav,div} class="menu_type__dropdown"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
-		<ul onmouseout="return desetActiveMenu()" class="nl" id="r_{MENU|*}_d">
+	<nav class="menu_type__dropdown" role="navigation">
+		<ul onmouseout="return deset_active_menu()" class="nl" id="r_{MENU|*}_d">
 			{CONTENT}
 		</ul>
 
-		{$JAVASCRIPT_INCLUDE,javascript_menu_popup}
-	</{$?,{$VALUE_OPTION,html5},nav,div}>
+		{$REQUIRE_JAVASCRIPT,javascript_menu_popup}
+	</nav>
 {+END}

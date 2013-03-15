@@ -241,8 +241,11 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			{
 				if ($cpf_permissions[0]['friend_view']==1)
 				{
-					if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_likes'=>$member_id,'member_liked'=>get_member()))))
-						$display_cpf=true;
+					if (addon_installed('chat'))
+					{
+						if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_likes'=>$member_id,'member_liked'=>get_member()))))
+							$display_cpf=true;
+					}
 				}
 
 				if (strlen($cpf_permissions[0]['group_view'])>0)

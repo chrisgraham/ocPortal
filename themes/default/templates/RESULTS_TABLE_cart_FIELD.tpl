@@ -1,3 +1,3 @@
-<td class="product-fields {CLASS}">
+<td class="product_fields {CLASS}">
 	{VALUE}
 </td>

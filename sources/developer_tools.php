@@ -51,8 +51,11 @@ function destrictify($change_content_type=true,$mysql_too=false)
 	$include_path.=PATH_SEPARATOR.get_file_base().'/';
 	$include_path.=PATH_SEPARATOR.get_file_base().'/sources_custom/';
 	$include_path.=PATH_SEPARATOR.get_file_base().'/uploads/website_specific/';
-	if (get_zone_name()!='') $include_path.=PATH_SEPARATOR.get_file_base().'/'.get_zone_name().'/';
-	@ini_set('include_path',$include_path);
+	if (function_exists('get_zone_name'))
+	{
+		if (get_zone_name()!='') $include_path.=PATH_SEPARATOR.get_file_base().'/'.get_zone_name().'/';
+		@ini_set('include_path',$include_path);
+	}
 	//disable_php_memory_limit();	Don't do this, recipe for disaster
 	@ini_set('allow_url_fopen','1');
 	@ini_set('suhosin.executor.disable_emodifier','0');
@@ -76,7 +79,7 @@ function restrictify()
 	error_reporting(E_ALL);
 	if (function_exists('set_time_limit')) @set_time_limit(25);
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
-	if ($GLOBALS['DEBUG_MODE'])
+	if ($GLOBALS['DEV_MODE'])
 	{
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');

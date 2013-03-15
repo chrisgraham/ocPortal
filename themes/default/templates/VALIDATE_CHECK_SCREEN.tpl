@@ -1,6 +1,6 @@
 {TITLE}
 
-<p>
+<p class="lonely_label">
 	{!VALIDATION_ERRORS_HERE}
 </p>
 

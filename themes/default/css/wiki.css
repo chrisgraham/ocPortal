@@ -1,0 +1,48 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.pe_wiki_page_description {
+	margin-bottom: 1.5em;
+}
+
+.wiki_post_below {
+	padding-top: 0.5em;
+}
+
+.wiki_post_expand_button {
+	text-align: {!en_right};
+	padding: 11px 5px 0 5px;
+}
+
+.wiki_merge_posts_button {
+	padding-top: 1em;
+	float: {!en_right};
+}
+
+.wiki_rating_inside {
+	padding-left: 3em;
+}
+
+.wiki_poster_name {
+	padding: 0 !important;
+	font-size: 0.85em;
+}
+
+.wiki_page_children {
+	margin-bottom: 1.5em;
+}
+
+.wiki_screen .wiki_exp_ref {
+	font-size: 1em !important;
+}
+
+.wiki_screen .wiki_exp_ref a {
+	background: none !important;
+	padding: 0 !important;
+}
+
+.wiki_table>div>div>div:first-child {
+	width: 9em;
+}

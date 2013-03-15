@@ -37,17 +37,26 @@ class Hook_pointstore_custom
 	 * @param  BINARY			Whether it is enabled
 	 * @param  ?integer		The cost in points (NULL: not set)
 	 * @param  BINARY			Whether it is restricted to one per member
+	 * @param  SHORT_TEXT	Confirmation mail subject
+	 * @param  LONG_TEXT		Confirmation mail body
 	 * @return tempcode		The fields
 	 */
-	function get_fields($name_suffix='',$title='',$description='',$enabled=1,$cost=NULL,$one_per_member=0)
+	function get_fields($name_suffix='',$title='',$description='',$enabled=1,$cost=NULL,$one_per_member=0,$mail_subject='',$mail_body='')
 	{
 		require_lang('points');
+
 		$fields=new ocp_tempcode();
+
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'custom_title'.$name_suffix,$title,true));
 		$fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'custom_description'.$name_suffix,$description,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('COST'),do_lang_tempcode('HOW_MUCH_THIS_COSTS'),'custom_cost'.$name_suffix,$cost,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('ONE_PER_MEMBER'),do_lang_tempcode('DESCRIPTION_ONE_PER_MEMBER'),'custom_one_per_member'.$name_suffix,$one_per_member==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','custom_enabled'.$name_suffix,$enabled==1));
+
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PURCHASE_MAIL'),'HELP'=>do_lang_tempcode('DESCRIPTION_PURCHASE_MAIL'))));
+		$fields->attach(form_input_line(do_lang_tempcode('PURCHASE_MAIL_SUBJECT'),'','custom_mail_subject'.$name_suffix,$mail_subject,false));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('PURCHASE_MAIL_BODY'),'','custom_mail_body'.$name_suffix,$mail_body,false));
+
 		return $fields;
 	}
 
@@ -64,7 +73,7 @@ class Hook_pointstore_custom
 		{
 			$fields=new ocp_tempcode();
 			$hidden=new ocp_tempcode();
-			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['c_title']),get_translated_text($row['c_description']),$row['c_enabled'],$row['c_cost'],$row['c_one_per_member']));
+			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['c_title']),get_translated_text($row['c_description']),$row['c_enabled'],$row['c_cost'],$row['c_one_per_member'],get_translated_text($row['c_mail_subject']),get_translated_text($row['c_mail_body'])));
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_custom_'.strval($i),false));
 			$hidden->attach(form_input_hidden('custom_'.strval($i),strval($row['id'])));
@@ -89,13 +98,22 @@ class Hook_pointstore_custom
 			$enabled=post_param_integer('custom_enabled_'.strval($i),0);
 			$cost=post_param_integer('custom_cost_'.strval($i));
 			$one_per_member=post_param_integer('custom_one_per_member_'.strval($i),0);
+			$mail_subject=post_param('custom_mail_subject_'.strval($i));
+			$mail_body=post_param('custom_mail_body_'.strval($i));
+
 			$delete=post_param_integer('delete_custom_'.strval($i),0);
+
 			$_title=$rows[$id]['c_title'];
 			$_description=$rows[$id]['c_description'];
+			$_mail_subject=$rows[$id]['c_mail_subject'];
+			$_mail_body=$rows[$id]['c_mail_body'];
+
 			if ($delete==1)
 			{
 				delete_lang($_title);
 				delete_lang($_description);
+				delete_lang($_mail_subject);
+				delete_lang($_mail_body);
 				$GLOBALS['SITE_DB']->query_delete('pstore_customs',array('id'=>$id),'',1);
 			} else
 			{
@@ -105,6 +123,8 @@ class Hook_pointstore_custom
 					'c_enabled'=>$enabled,
 					'c_cost'=>$cost,
 					'c_one_per_member'=>$one_per_member,
+					'c_mail_subject'=>lang_remap($_mail_subject,$mail_subject),
+					'c_mail_body'=>lang_remap($_mail_body,$mail_body),
 				),array('id'=>$id),'',1);
 			}
 			$i++;
@@ -116,6 +136,8 @@ class Hook_pointstore_custom
 			$enabled=post_param_integer('custom_enabled',0);
 			$cost=post_param_integer('custom_cost');
 			$one_per_member=post_param_integer('custom_one_per_member',0);
+			$mail_subject=post_param('custom_mail_subject');
+			$mail_body=post_param('custom_mail_body');
 
 			$GLOBALS['SITE_DB']->query_insert('pstore_customs',array(
 				'c_title'=>insert_lang($title,2),
@@ -123,6 +145,8 @@ class Hook_pointstore_custom
 				'c_enabled'=>$enabled,
 				'c_cost'=>$cost,
 				'c_one_per_member'=>$one_per_member,
+				'c_mail_subject'=>insert_lang($mail_subject,2),
+				'c_mail_body'=>insert_lang($mail_body,2),
 			));
 		}
 	}
@@ -167,7 +191,7 @@ class Hook_pointstore_custom
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$c_title=get_translated_text($rows[0]['c_title']);
-		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
+		$title=get_screen_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
 
 		$cost=$rows[0]['c_cost'];
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class,'sub_id'=>$id),'_SELF');
@@ -193,13 +217,15 @@ class Hook_pointstore_custom
 
 		post_param_integer('confirm'); // Make sure POSTed
 		$id=get_param_integer('sub_id');
-		$rows=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title','c_cost','c_one_per_member'),array('id'=>$id,'c_enabled'=>1));
+		$rows=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('*'),array('id'=>$id,'c_enabled'=>1));
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$cost=$rows[0]['c_cost'];
+		$row=$rows[0];
 
-		$c_title=get_translated_text($rows[0]['c_title']);
-		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
+		$cost=$row['c_cost'];
+
+		$c_title=get_translated_text($row['c_title']);
+		$title=get_screen_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
 
 		// Check points
 		$points_left=available_points(get_member());
@@ -208,23 +234,36 @@ class Hook_pointstore_custom
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
 
-		if ($rows[0]['c_one_per_member']==1)
+		if ($row['c_one_per_member']==1)
 		{
 			// Test to see if it's been bought
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($rows[0]['id']),'memberid'=>get_member()));
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($row['id']),'memberid'=>get_member()));
 			if (!is_null($test))
 				warn_exit(do_lang_tempcode('ONE_PER_MEMBER_ONLY'));
 		}
 
 		require_code('points2');
 		charge_member(get_member(),$cost,$c_title);
-		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($rows[0]['id'])),true);
+		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($row['id'])),true);
 
 		require_code('notifications');
 		$subject=do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$message_raw=do_lang('MAIL_REQUEST_CUSTOM_BODY',comcode_escape($c_title),$username,NULL,get_site_default_lang());
 		dispatch_notification('pointstore_request_custom','custom'.strval($id).'_'.strval($sale_id),$subject,$message_raw,NULL,NULL,3,true);
+
+		$member=get_member();
+
+		// Email member
+		require_code('mail');
+		$subject_line=get_translated_text($row['c_mail_subject']);
+		if ($subject_line!='')
+		{
+			$message_raw=get_translated_text($row['c_mail_body']);
+			$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
+			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
+			mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,NULL,false,NULL,true);
+		}
 
 		// Show message
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

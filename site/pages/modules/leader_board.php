@@ -62,7 +62,7 @@ class Module_leader_board
 		require_code('points');
 		require_css('points');
 
-		$title=get_page_title('POINT_LEADERBOARD');
+		$title=get_screen_title('POINT_LEADERBOARD');
 
 		$start_date=intval(get_option('leaderboard_start_date'));
 

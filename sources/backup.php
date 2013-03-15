@@ -49,7 +49,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 
 		$fields=$GLOBALS['SITE_DB']->query_select($db_meta,array('*'),array('m_table'=>$table));
 
-		fwrite($install_php_file,"   \$GLOBALS['SITE_DB']->drop_if_exists('$table');\n");
+		fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->drop_if_exists('$table');\n"));
 		$array='';
 		foreach ($fields as $field)
 		{
@@ -59,9 +59,9 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 			if ($array!='') $array.=",\n";
 			$array.="		'".$name."'=>'".$type."'";
 		}
-		fwrite($install_php_file,"   \$GLOBALS['SITE_DB']->create_table('$table',array(\n$array));\n");
+		fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->create_table('$table',array(\n$array),true,true);\n"));
 
-		if (($table=='stats') || ($table=='cache'))
+		if (($table=='stats') || ($table=='incoming_uploads') || ($table=='cache') || ($table=='url_title_cache') || ($table=='ip_country'))
 		{
 			$data=array();
 		} else
@@ -75,6 +75,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 					foreach ($data as $d)
 					{
 						$list='';
+						$value=mixed();
 						foreach ($d as $name=>$value)
 						{
 							if (($table=='translate') && ($name=='text_parsed')) $value='';
@@ -82,9 +83,19 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 							if (is_null($value)) continue;
 							if ($list!='') $list.=',';
 							$list.="'".(is_string($name)?$name:strval($name))."'=>";
-							if (!is_integer($value)) $list.='"'.php_addslashes($value).'"'; else $list.=strval($value);
+							if (is_integer($value))
+							{
+								$list.=strval($value);
+							}
+							elseif (is_float($value))
+							{
+								$list.=float_to_raw_string($value);
+							} else
+							{
+								$list.='"'.php_addslashes($value).'"';
+							}
 						}
-						fwrite($install_php_file,"   \$GLOBALS['SITE_DB']->query_insert('$table',array($list));\n");
+						fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->query_insert('$table',array($list));\n"));
 					}
 
 					$start+=100;
@@ -100,7 +111,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 	$indices=$GLOBALS['SITE_DB']->query_select($db_meta_indices,array('*'));
 	foreach ($indices as $index)
 	{
-		if (fwrite($install_php_file,'   $GLOBALS[\'SITE_DB\']->create_index(\''.$index['i_table'].'\',\''.$index['i_name'].'\',array(\''.str_replace(',','\',\'',$index['i_fields']).'\'));'."\n")==0)
+		if (fwrite($install_php_file,preg_replace('#^#m','//','   $GLOBALS[\'SITE_DB\']->create_index(\''.$index['i_table'].'\',\''.$index['i_name'].'\',array(\''.str_replace(',','\',\'',$index['i_fields']).'\'));'."\n"))==0)
 			warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	}
 
@@ -148,13 +159,34 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	$_install_php_file=file_get_contents($template);
 	$place=strpos($_install_php_file,'{!!DB!!}');
 	$__install_php_file=ocp_tempnam('ocpbak');
+	$__install_data_php_file=ocp_tempnam('ocpbak_data');
 	$install_php_file=fopen($__install_php_file,'wb');
+	$install_data_php_file=fopen($__install_data_php_file,'wb');
 	fwrite($install_php_file,substr($_install_php_file,0,$place));
-	get_table_backup($logfile,'db_meta','db_meta_indices',$install_php_file);
+	fwrite($install_data_php_file,"<"."?php
+
+//COMMANDS BEGIN
+//\$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
+//\$GLOBALS['SITE_DB']->create_table('db_meta',array(
+//	'm_table'=>'*ID_TEXT',
+//	'm_name'=>'*ID_TEXT',
+//	'm_type'=>'ID_TEXT'
+//));
+//
+//\$GLOBALS['SITE_DB']->drop_if_exists('db_meta_indices');
+//\$GLOBALS['SITE_DB']->create_table('db_meta_indices',array(
+//	'i_table'=>'*ID_TEXT',
+//	'i_name'=>'*ID_TEXT',
+//	'i_fields'=>'*ID_TEXT',
+//));
+");
+	get_table_backup($logfile,'db_meta','db_meta_indices',$install_data_php_file);
 	if (fwrite($install_php_file,substr($_install_php_file,$place+8))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($install_php_file);
+	fclose($install_data_php_file);
 
 	tar_add_file($myfile,'restore.php',$__install_php_file,0664,time(),true);
+	tar_add_file($myfile,'restore_data.php',$__install_data_php_file,0664,time(),true);
 	@unlink($__install_php_file);
 
 	if ($b_type=='full')
@@ -167,7 +199,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 			'lang','lang_custom',
 			'lang_cached',
 			'pages',
-			'persistant_cache','safe_mode_temp',
+			'persistent_cache','safe_mode_temp',
 			'sources','sources_custom',
 			'text','text_custom',
 			'themes',
@@ -175,7 +207,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 
 			'site', // In case of collapsed zones blocking in
 		));
-		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'),true);
+		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'));
 	} elseif ($b_type=='incremental')
 	{
 		$threshold=intval(get_value('last_backup'));

@@ -15,22 +15,19 @@
 global $IN_MINIKERNEL_VERSION;
 $IN_MINIKERNEL_VERSION=1;
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
 if (substr($FILE_BASE,-4)=='.php')
 {
 	$a=strrpos($FILE_BASE,'/');
 	$b=strrpos($FILE_BASE,'\\');
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+	$FILE_BASE=dirname($FILE_BASE);
 }
 @chdir($FILE_BASE);
 
 error_reporting(E_ALL);
 
-if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
-if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 @ini_set('display_errors','1');
 assert_options(ASSERT_ACTIVE,0);
 @ini_set('assert.active','0');
@@ -53,8 +50,8 @@ $OPTIONS=array();
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
 
-$GLOBALS['DEBUG_MODE']=false;
-$GLOBALS['SEMI_DEBUG_MODE']=true;
+$GLOBALS['DEV_MODE']=false;
+$GLOBALS['SEMI_DEV_MODE']=true;
 
 @ob_end_clean();
 
@@ -106,26 +103,95 @@ require_lang('critical_error');
 require_lang('installer');
 require_lang('version');
 
-$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
-$GLOBALS['SITE_DB']->create_table('db_meta',array(
-	'm_table'=>'*ID_TEXT',
-	'm_name'=>'*ID_TEXT',
-	'm_type'=>'ID_TEXT'
-));
 
-$GLOBALS['SITE_DB']->drop_if_exists('db_meta_indices');
-$GLOBALS['SITE_DB']->create_table('db_meta_indices',array(
-	'i_table'=>'*ID_TEXT',
-	'i_name'=>'*ID_TEXT',
-	'i_fields'=>'*ID_TEXT',
-));
+
+// Now we actually read into the data file and execute the commented out reinstallation code. This is necessary for re-entrant code, and because we can't load it all through the PHP parser at once!
+
+$time_start=time();
+
+$myfile=fopen(dirname(__FILE__).'/restore_data.php','rb');
+$i=0;
+$offset=get_param_integer('start_offset',0);
+if ($offset!=0)
+{
+	fseek($myfile,$offset);
+	$found_start=true;
+} else
+{
+	$found_start=false;
+}
+$sql_buildup='';
+$start_line=0;
+while (($line=fgets($myfile,10000000))!==false)
+{
+	if (!$found_start)
+	{
+		if (trim($line)=='//COMMANDS BEGIN')
+		{
+			$found_start=true;
+			$start_line=$i;
+		}
+	} else
+	{
+		if (substr($line,0,2)!='//') break; // Done
+
+		$line=substr($line,2);
+
+		$is_new_command=false;
+		$valid_cmd_starts=array(
+			'$GLOBALS[\'SITE_DB\']->query_insert(\'',
+			'$GLOBALS[\'SITE_DB\']->drop_if_exists(\'',
+			'$GLOBALS[\'SITE_DB\']->create_table(\'',
+			'$GLOBALS[\'SITE_DB\']->delete_index_if_exists(\'',
+			'$GLOBALS[\'SITE_DB\']->create_index(\'',
+		);
+		foreach ($valid_cmd_starts as $valid_cmd_start)
+			$is_new_command=$is_new_command || (substr(ltrim($line),0,strlen($valid_cmd_start))==$valid_cmd_start);
+		if (($is_new_command) && ($sql_buildup!=''))
+		{
+			$success=@eval($sql_buildup); // NB: Query errors are echo'd out as DB API knows restoration script is running
+			if ($success===false)
+			{
+				header('Content-type: text/plain');
+				exit('Failed on: '.$sql_buildup);
+			}
+			$sql_buildup='';
+		}
+		if ((time()>=$time_start+20) && ($sql_buildup==''))
+		{
+			$refresh_url='restore.php?start='.strval($i+$start_line+get_param_integer('start',0)).'&start_offset='.strval(ftell($myfile));
+			echo '<meta http-equiv="refresh" content="0;url='.$refresh_url.'" /> Please wait, continuing.';
+			//header('Location: '.$refresh_url);	Can result in "This web page has a redirect loop" error
+			exit();
+		}
+
+		$sql_buildup.=$line.chr(10);
+
+		$i++;
+	}
+}
+fclose($myfile);
+
+if ($sql_buildup!='')
+{
+	$success=@eval($sql_buildup);
+	if ($success===false)
+	{
+		header('Content-type: text/plain');
+		exit('Failed on: '.$sql_buildup);
+	}
+	$sql_buildup='';
+}
+
+
+
 
 {!!DB!!}
 
 
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$tpl=do_template('RESTORE_WRAP',array('CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
+$tpl=do_template('RESTORE_HTML_WRAP',array('_GUID'=>'8e3b9d894d8ef06b5057fb654f7db59b','CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
 echo $tpl->evaluate();
 
 /**

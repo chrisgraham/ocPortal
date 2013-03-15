@@ -62,8 +62,9 @@ class Module_admin_errorlog
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_disaster';
 
 		require_lang('errorlog');
+		require_css('errorlog');
 
-		$title=get_page_title('ERROR_LOG');
+		$title=get_screen_title('ERROR_LOG');
 
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);

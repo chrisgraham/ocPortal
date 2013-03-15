@@ -31,12 +31,12 @@ function internalise_own_screen($title,$refresh_time=NULL,$refresh_if_changed=NU
 	if ((get_value('no_frames')==='1') || (get_param_integer('no_frames',0)==1) || (get_param_integer('keep_no_frames',0)==1)) return NULL;
 
 	if (!has_js()) return NULL; // We need JS to make this a seamless process
-	if (strpos(ocp_srv('REQUEST_URI'),'/iframe.php')!==false) return NULL; // This is already in the iframe
+	if (running_script('iframe')) return NULL; // This is already in the iframe
 
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_iframe_screen');
 
-	$url=find_script('iframe').'?zone='.rawurlencode(get_zone_name()).'&wide_high=1&utheme='.rawurlencode($GLOBALS['FORUM_DRIVER']->get_theme());
+	$url=find_script('iframe').'?zone='.rawurlencode(get_zone_name()).'&utheme='.rawurlencode($GLOBALS['FORUM_DRIVER']->get_theme());
 	foreach (array_merge($_GET,$_POST) as $key=>$param)
 	{
 		if (!is_string($param)) continue;

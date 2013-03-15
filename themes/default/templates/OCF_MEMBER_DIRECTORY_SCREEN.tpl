@@ -1,11 +1,16 @@
 {TITLE}
 
-{+START,IF_PASSED,SYMBOLS}
-	<div class="float_surrounder"><div class="results_browser alpha_jumper">
-		{+START,LOOP,SYMBOLS}<a class="results_continue alpha_jumper_cont" target="_top" href="{$PAGE_LINK*,_SELF:_SELF:md_start={START}:md_max={MAX*}:md_sort=m_username ASC}">{SYMBOL*}</a>{+END}
-	</div></div>
+{+START,IF_NON_EMPTY,{RESULTS_TABLE}}
+	{+START,IF_PASSED,SYMBOLS}
+		<div class="float_surrounder"><div class="pagination alphabetical_jumper">
+			{+START,LOOP,SYMBOLS}<a class="results_continue alphabetical_jumper_cont" target="_self" href="{$PAGE_LINK*,_SELF:_SELF:md_start={START}:md_max={MAX*}:md_sort=m_username ASC}">{SYMBOL*}</a>{+END}
+		</div></div>
+	{+END}
+	{RESULTS_TABLE}
 {+END}
-{RESULTS_TABLE}
+{+START,IF_EMPTY,{RESULTS_TABLE}}
+	<p class="nothing_here">{!NO_RESULTS}</p>
+{+END}
 
 <h2>{!SEARCH}</h2>
 
@@ -13,7 +18,7 @@
 	<div>
 		{HIDDEN}
 
-		<label for="member_filter"><span class="invisible_ref_point">&nbsp;</span><input maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" id="member_filter" name="filter" value="{SEARCH*}" /> <input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SEARCH}" /> ({!SEARCH_MEMBER_EXAMPLE})</label>
+		<label for="member_filter"><span class="invisible_ref_point"></span><input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" id="member_filter" name="filter" value="{SEARCH*}" /> <input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SEARCH}" /> ({!SEARCH_MEMBER_EXAMPLE})</label>
 	</div>
 </form>
 

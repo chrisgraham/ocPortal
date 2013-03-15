@@ -19,6 +19,15 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__ocf_general()
+{
+	global $SET_CONTEXT_FORUM;
+	$SET_CONTEXT_FORUM=NULL;
+}
+
+/**
  * Get some forum stats.
  *
  * @return array	A map of forum stats.
@@ -48,8 +57,11 @@ function ocf_get_forums_stats()
 		$out['newest_member_username']=$newest_member[0]['m_username'];
 		if (get_db_type()!='xml')
 		{
-			set_value('ocf_newest_member_id',strval($out['newest_member_id']));
-			set_value('ocf_newest_member_username',$out['newest_member_username']);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+			{
+				set_value('ocf_newest_member_id',strval($out['newest_member_id']));
+				set_value('ocf_newest_member_username',$out['newest_member_username']);
+			}
 		}
 	}
 
@@ -166,206 +178,6 @@ function get_group_colour($gid)
 }
 
 /**
- * Do the wrapper that fits around OCF module output.
- *
- * @param  tempcode		The title for the module output that we are wrapping.
- * @param  tempcode		The module output that we are wrapping.
- * @param  boolean		Whether to include the personal bar in the wrap.
- * @param  boolean		Whether to include statistics in the wrap.
- * @param  ?AUTO_LINK	The forum to make the search link search under (NULL: Users own PT forum/unknown).
- * @return tempcode		The wrapped output.
- */
-function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$forum_id=NULL)
-{
-	global $ZONE;
-	$wide=is_wide();
-	if (($wide==0) && (get_value('force_forum_bar')!=='1'))
-	{
-		$show_personal_bar=false;
-		$show_stats=false;
-	}
-
-	// Notifications
-	if ((!is_guest()) && ((get_page_name()=='forumview') || (get_page_name()=='topicview') || (get_page_name()=='vforums')))
-	{
-		$cache_identifier=serialize(array(get_member()));
-		$_notifications=NULL;
-		if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0)))
-		{
-			$_notifications=get_cache_entry('_new_pp',$cache_identifier,10000);
-		}
-		if (is_null($_notifications))
-		{
-			require_code('ocf_notifications');
-			list($notifications,$num_unread_pps)=generate_notifications($cache_identifier);
-		} else
-		{
-			list($__notifications,$num_unread_pps)=$_notifications;
-			$notifications=new ocp_tempcode();
-			if (!$notifications->from_assembly($__notifications,true))
-			{
-				require_code('ocf_notifications');
-				list($notifications,$num_unread_pps)=generate_notifications($cache_identifier);
-			}
-			if (!$notifications->is_empty())
-			{
-				require_javascript('javascript_ajax');
-			}
-		}
-	} else
-	{
-		$notifications=new ocp_tempcode();
-		$num_unread_pps=0;
-	}
-
-	if ($show_personal_bar)
-	{
-		if (get_member()!=$GLOBALS['OCF_DRIVER']->get_guest_id()) // Logged in user
-		{
-			$member_info=ocf_read_in_member_profile(get_member(),true);
-
-			$profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url(get_member(),true,true);
-
-			$_new_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE NOT t_forum_id IS NULL AND t_cache_first_time>'.strval((integer)$member_info['last_visit_time']));
-			$new_topics=$_new_topics[0]['mycnt'];
-			$_new_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE NOT p_cache_forum_id IS NULL AND p_time>'.strval((integer)$member_info['last_visit_time']));
-			$new_posts=$_new_posts[0]['mycnt'];
-
-			$max_avatar_height=ocf_get_member_best_group_property(get_member(),'max_avatar_height');
-
-			// Any unread PT-PPs?
-			$pt_extra=($num_unread_pps==0)?new ocp_tempcode():do_lang_tempcode('NUM_UNREAD',integer_format($num_unread_pps));
-
-			$personal_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>get_member()),get_module_zone('members'),NULL,true,false,false,'tab__pts');
-
-			$head=do_template('OCF_MEMBER_BAR',array(
-					'_GUID'=>'s3kdsadf0p3wsjlcfksdj',
-					'AVATAR'=>array_key_exists('avatar',$member_info)?$member_info['avatar']:'',
-					'PROFILE_URL'=>$profile_url,
-					'USERNAME'=>$member_info['username'],
-					'LOGOUT_URL'=>build_url(array('page'=>'login','type'=>'logout'),get_module_zone('login')),
-					'NUM_POINTS_ADVANCE'=>array_key_exists('num_points_advance',$member_info)?make_string_tempcode(integer_format($member_info['num_points_advance'])):do_lang('NA'),
-					'NUM_POINTS'=>array_key_exists('points',$member_info)?integer_format($member_info['points']):'',
-					'NUM_POSTS'=>integer_format($member_info['posts']),
-					'PRIMARY_GROUP'=>$member_info['primary_group_name'],
-					'LAST_VISIT_DATE_RAW'=>strval($member_info['last_visit_time']),
-					'LAST_VISIT_DATE'=>$member_info['last_visit_time_string'],
-					'PERSONAL_TOPIC_URL'=>$personal_topic_url,
-					'NEW_POSTS_URL'=>build_url(array('page'=>'vforums','type'=>'misc'),get_module_zone('vforums')),
-					'UNREAD_TOPICS_URL'=>build_url(array('page'=>'vforums','type'=>'unread'),get_module_zone('vforums')),
-					'RECENTLY_READ_URL'=>build_url(array('page'=>'vforums','type'=>'recently_read'),get_module_zone('vforums')),
-					'INLINE_PERSONAL_POSTS_URL'=>build_url(array('page'=>'topicview'),get_module_zone('topicview')),
-					'PT_EXTRA'=>$pt_extra,
-					'NEW_TOPICS'=>integer_format($new_topics),
-					'NEW_POSTS'=>integer_format($new_posts),
-					'MAX_AVATAR_HEIGHT'=>strval($max_avatar_height),
-			));
-
-		} else // Guest
-		{
-			if (count($_POST)>0)
-			{
-				$_this_url=build_url(array('page'=>'forumview'),'forum',array('keep_session'=>1));
-			} else
-			{
-				$_this_url=build_url(array('page'=>'_SELF'),'_SELF',array('keep_session'=>1),true);
-			}
-			$this_url=$_this_url->evaluate();
-			$login_url=build_url(array('page'=>'login','type'=>'login','redirect'=>$this_url),get_module_zone('login'));
-			$full_link=build_url(array('page'=>'login','type'=>'misc','redirect'=>$this_url),get_module_zone('login'));
-			$join_url=build_url(array('page'=>'join','redirect'=>$this_url),get_module_zone('join'));
-			$head=do_template('OCF_GUEST_BAR',array('NAVIGATION'=>''/*deprecated*/,'LOGIN_URL'=>$login_url,'JOIN_LINK'=>$join_url,'FULL_LINK'=>$full_link));
-		}
-	} else $head=new ocp_tempcode();
-
-	if ($show_stats)
-	{
-		$stats=ocf_get_forums_stats();
-
-		// Users online
-		$users_online=new ocp_tempcode();
-		$count=0;
-		$members=get_online_members(false,NULL,$count);
-		$groups_seen=array();
-		if (!is_null($members))
-		{
-			//$members=collapse_2d_complexity('the_user','cache_username',$members);
-			$guests=0;
-			foreach ($members as $bits)
-			{
-				$member=$bits['the_user'];
-				$username=$bits['cache_username'];
-
-				if ($member==$GLOBALS['OCF_DRIVER']->get_guest_id())
-				{
-					$guests++;
-					continue;
-				}
-				if (is_null($username)) continue;
-				$url=$GLOBALS['OCF_DRIVER']->member_profile_url($member,false,true);
-				if (!array_key_exists('m_primary_group',$bits))
-					$bits['m_primary_group']=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
-				$pgid=$bits['m_primary_group'];//$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
-				if (is_null($pgid)) continue; // Deleted member
-				$groups_seen[$pgid]=1;
-				$col=get_group_colour($pgid);
-				$usergroup=ocf_get_group_name($pgid);
-				if (get_value('disable_user_online_groups')==='1')
-				{
-					$usergroup=NULL;
-					$col=NULL;
-					$groups_seen=array();
-				}
-				$users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$col,'PROFILE_URL'=>$url,'USERNAME'=>$username,'USERGROUP'=>$usergroup)));
-			}
-			if ($guests!=0)
-			{
-				if (!$users_online->is_empty()) $users_online->attach(do_lang_tempcode('LIST_SEP'));
-				$users_online->attach(do_lang_tempcode('NUM_GUESTS',integer_format($guests)));
-			}
-		}
-
-		// Birthdays
-		$_birthdays=ocf_find_birthdays();
-		$birthdays=new ocp_tempcode();
-		foreach ($_birthdays as $_birthday)
-		{
-			$birthday_link=build_url(array('page'=>'topics','type'=>'birthday','id'=>$_birthday['username']),get_module_zone('topics'));
-			$birthday=do_template('OCF_BIRTHDAY_LINK',array('_GUID'=>'a98959187d37d80e134d47db7e3a52fa','AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,true),'USERNAME'=>$_birthday['username'],'BIRTHDAY_LINK'=>$birthday_link));
-			$birthdays->attach($birthday);
-		}
-		if (!$birthdays->is_empty()) $birthdays=do_template('OCF_BIRTHDAYS',array('_GUID'=>'03da2c0d46e76407d63bff22aac354bd','BIRTHDAYS'=>$birthdays));
-
-		// Usergroup keys
-		$groups=array();
-		$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,NULL,NULL,true);
-		foreach ($all_groups as $gid=>$gtitle)
-		{
-			if ($gid==db_get_first_id()) continue; // Throw out the first, guest
-			if (array_key_exists($gid,$groups_seen))
-				$groups[]=array('GCOLOUR'=>get_group_colour($gid),'GID'=>strval($gid),'GTITLE'=>$gtitle);
-		}
-
-		$foot=do_template('OCF_STATS',array(
-			'_GUID'=>'sdflkdlfd303frksdf',
-			'NEWEST_MEMBER_PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($stats['newest_member_id'],false,true),
-			'NEWEST_MEMBER_USERNAME'=>$stats['newest_member_username'],
-			'NUM_MEMBERS'=>integer_format($stats['num_members']),
-			'NUM_TOPICS'=>integer_format($stats['num_topics']),
-			'NUM_POSTS'=>integer_format($stats['num_posts']),
-			'BIRTHDAYS'=>$birthdays,
-			'USERS_ONLINE'=>$users_online,
-			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'onlinemembers')?build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')):new ocp_tempcode(),
-			'GROUPS'=>$groups
-		));
-	} else $foot=new ocp_tempcode();
-
-	$wrap=do_template('OCF_WRAPPER',array('_GUID'=>'456c21db6c09ae260accfa4c2a59fce7','TITLE'=>$title,'NOTIFICATIONS'=>$notifications,'HEAD'=>$head,'FOOT'=>$foot,'CONTENT'=>$content));
-
-	return $wrap;
-}
-
-/**
  * Find all the birthdays in a certain day.
  *
  * @param  ?TIME	A timestamps that exists in the certain day (NULL: now).
@@ -411,4 +223,13 @@ function ocf_screen_button_wrap($buttons)
 	return $b;
 }
 
-
+/**
+ * Set the forum context.
+ *
+ * @param  AUTO_LINK	Forum ID.
+ */
+function ocf_set_context_forum($forum_id)
+{
+	global $SET_CONTEXT_FORUM;
+	$SET_CONTEXT_FORUM=$forum_id;
+}

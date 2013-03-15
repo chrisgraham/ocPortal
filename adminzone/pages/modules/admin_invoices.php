@@ -87,7 +87,7 @@ class Module_admin_invoices
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('INVOICES'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_screen_title('INVOICES'),comcode_lang_string('DOC_ECOMMERCE'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('CREATE_INVOICE')),
@@ -105,7 +105,7 @@ class Module_admin_invoices
 	 */
 	function ad()
 	{
-		$title=get_page_title('CREATE_INVOICE');
+		$title=get_screen_title('CREATE_INVOICE');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
@@ -145,7 +145,7 @@ class Module_admin_invoices
 	 */
 	function _ad()
 	{
-		$title=get_page_title('CREATE_INVOICE');
+		$title=get_screen_title('CREATE_INVOICE');
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:ad',do_lang_tempcode('CREATE_INVOICE'))));
@@ -190,7 +190,7 @@ class Module_admin_invoices
 	 */
 	function outstanding()
 	{
-		$title=get_page_title('OUTSTANDING_INVOICES');
+		$title=get_screen_title('OUTSTANDING_INVOICES');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
@@ -216,7 +216,7 @@ class Module_admin_invoices
 	 */
 	function undelivered()
 	{
-		$title=get_page_title('UNDELIVERED_INVOICES');
+		$title=get_screen_title('UNDELIVERED_INVOICES');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
@@ -242,7 +242,7 @@ class Module_admin_invoices
 	 */
 	function delete()
 	{
-		$title=get_page_title('DELETE_INVOICE');
+		$title=get_screen_title('DELETE_INVOICE');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
 
@@ -275,7 +275,7 @@ class Module_admin_invoices
 	 */
 	function deliver()
 	{
-		$title=get_page_title('MARK_AS_DELIVERED');
+		$title=get_screen_title('MARK_AS_DELIVERED');
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));

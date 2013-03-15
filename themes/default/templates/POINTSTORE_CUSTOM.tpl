@@ -1,9 +1,15 @@
 <div class="pointstore_item">
-	{+START,BOX,{TITLE*},,med,,,<a title="{!ENTER}: {TITLE*}" href="{NEXT_URL*}">{!ENTER}</a>}
+	<div class="box box___pointstore_custom"><div class="box_inner">
+		<h2>{TITLE*}</h2>
+
 		<p>
 			{DESCRIPTION}
 		</p>
-	{+END}
-</div>
-<br />
 
+		{+START,IF_NON_EMPTY,{NEXT_URL}}
+			<ul class="horizontal_links associated_links_block_group">
+				<li><a title="{!ENTER}: {TITLE*}" href="{NEXT_URL*}">{!ENTER}</a></li>
+			</ul>
+		{+END}
+	</div></div>
+</div>

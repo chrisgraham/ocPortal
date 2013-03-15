@@ -46,18 +46,18 @@ class Hook_Preview_news
 		$post_comcode=$post_bits['comcode'];
 		$post_html=$post_bits['tempcode'];
 
-		$view_space_map=array();
-		$view_space_map[post_param('label_for__title')]=post_param('title');
-		$view_space_map[post_param('label_for__post')]=$post_html;
-		$view_space_map[post_param('label_for__news')]=comcode_to_tempcode(post_param('news',''));
+		$map_table_map=array();
+		$map_table_map[post_param('label_for__title')]=post_param('title');
+		$map_table_map[post_param('label_for__post')]=$post_html;
+		$map_table_map[post_param('label_for__news')]=comcode_to_tempcode(post_param('news',''));
 
-		require_code('templates_view_space');
-		$view_space_fields=new ocp_tempcode();
-		foreach ($view_space_map as $key=>$val)
+		require_code('templates_map_table');
+		$map_table_fields=new ocp_tempcode();
+		foreach ($map_table_map as $key=>$val)
 		{
-			$view_space_fields->attach(view_space_field($key,$val,true));
+			$map_table_fields->attach(map_table_field($key,$val,true));
 		}
-		$output=do_template('VIEW_SPACE',array('WIDTH'=>'170','FIELDS'=>$view_space_fields));
+		$output=do_template('MAP_TABLE',array('_GUID'=>'780aeedc08a960750fa4634e26db56d5','WIDTH'=>'170','FIELDS'=>$map_table_fields));
 
 		return array($output,$post_comcode);
 	}

@@ -1,7 +1,7 @@
 {TITLE}
 
 {+START,IF,{$NOT,{$ISSET,SVG_ONCE}}}
-	<p class="lightborder svg_exp">{!SVG_EXPLANATION}</p>
+	<div class="box svg_exp"><p class="box_inner">{!SVG_EXPLANATION}</p></div>
 	{$SET,SVG_ONCE,1}
 {+END}
 
@@ -10,8 +10,8 @@
 	{STATS}
 </div>
 
-{+START,IF_NON_PASSED,NO_CSV}
-	<p>
-		<a href="{$SELF_URL*}&amp;csv=1" class="xls_link">{!EXPORT_STATS_TO_CSV}</a>
-	</p>
+{+START,IF_NON_PASSED_OR_FALSE,NO_CSV}
+	<ul class="actions_list force_margin">
+		<li><a href="{$SELF_URL*}&amp;csv=1" class="xls_link">{!EXPORT_STATS_TO_CSV}</a></li>
+	</ul>
 {+END}

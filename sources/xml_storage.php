@@ -631,6 +631,10 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 	return $ops;
 }
 
+/**
+ * Simple XML reader.
+ * @package		core
+ */
 class ocp_simple_xml_reader
 {
 	// Used during parsing

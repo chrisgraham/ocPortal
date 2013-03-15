@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_setupwizard
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -62,7 +61,9 @@ class Hook_addon_registry_setupwizard
 			'requires'=>array(),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('core_setupwizard'),
+			'previously_in_addon'=>array(
+				'core_setupwizard'
+			)
 		);
 	}
 
@@ -74,7 +75,6 @@ class Hook_addon_registry_setupwizard
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/modules/admin_setupwizard_installprofiles/.htaccess',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/index.html',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/community.php',
@@ -94,23 +94,23 @@ class Hook_addon_registry_setupwizard
 			'themes/default/images/pagepics/configwizard.png',
 			'sources/hooks/modules/admin_setupwizard/.htaccess',
 			'sources/hooks/modules/admin_setupwizard/index.html',
-			'sources/hooks/systems/do_next_menus/setupwizard.php',
+			'sources/hooks/systems/do_next_menus/setupwizard.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'SETUPWIZARD_2_SCREEN.tpl'=>'administrative__setupwizard_2_screen',
-				'SETUPWIZARD_7_SCREEN.tpl'=>'administrative__setupwizard_7_screen',
-				'SETUPWIZARD_BLOCK_PREVIEW.tpl'=>'administrative__setupwizard_block_preview',
-				);
+			'SETUPWIZARD_2_SCREEN.tpl'=>'administrative__setupwizard_2_screen',
+			'SETUPWIZARD_7_SCREEN.tpl'=>'administrative__setupwizard_7_screen',
+			'SETUPWIZARD_BLOCK_PREVIEW.tpl'=>'administrative__setupwizard_block_preview'
+		);
 	}
 
 	/**
@@ -123,13 +123,11 @@ class Hook_addon_registry_setupwizard
 	function tpl_preview__administrative__setupwizard_block_preview()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW',array(
-					'LEFT'=>lorem_paragraph(),
-					'RIGHT'=>lorem_paragraph(),
-					'START'=>lorem_paragraph(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW', array(
+				'LEFT'=>lorem_paragraph(),
+				'RIGHT'=>lorem_paragraph(),
+				'START'=>lorem_paragraph()
+			)), NULL, '', true)
 		);
 	}
 
@@ -144,14 +142,12 @@ class Hook_addon_registry_setupwizard
 	{
 		require_lang('config');
 		return array(
-			lorem_globalise(
-				do_lorem_template('SETUPWIZARD_2_SCREEN',array(
-					'SKIP_VALIDATION'=>true,
-					'TITLE'=>lorem_title(),
-					'URL'=>placeholder_url(),
-					'SUBMIT_NAME'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SETUPWIZARD_2_SCREEN', array(
+				'SKIP_VALIDATION'=>true,
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'SUBMIT_NAME'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -165,15 +161,13 @@ class Hook_addon_registry_setupwizard
 	function tpl_preview__administrative__setupwizard_7_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('SETUPWIZARD_7_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'FORM'=>placeholder_form(),
-					'BALANCED'=>lorem_phrase(),
-					'LIBERAL'=>lorem_phrase(),
-					'CORPORATE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SETUPWIZARD_7_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'FORM'=>placeholder_form(),
+				'BALANCED'=>lorem_phrase(),
+				'LIBERAL'=>lorem_phrase(),
+				'CORPORATE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 }

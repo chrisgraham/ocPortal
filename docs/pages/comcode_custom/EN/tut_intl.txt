@@ -1,0 +1,342 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Localisation and internationalisation[/title]
+
+This tutorial is designed as a comprehensive guide to ocPortal's translation features, written for people wanting to make a complete ocPortal translation and understand the full technical details. We also have a [page="_SELF:tut_intl_users"]simpler tutorial[/page].
+
+ocPortal has support for internationalisation, including:
+ - time zones
+ - translation of text into different languages ([tt].ini[/tt] or [tt].po[/tt] files)
+ - translation of text into different languages (Comcode pages)
+ - translation of text into different languages (text files)
+ - translation of images into different languages (e.g. labelled buttons)
+ - different character sets (for example, Cyrillic)
+ - different locales, for different numbering systems (for example, European comma and decimal-point difference)
+ - there is support for translating content into different languages
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Time zones[/title]
+
+In ocPortal, time zones can be adjusted in two ways:
+ - adjusting the site time-zone relative to server time (this is a site configuration option). This is convenient if the server is located in a different time-zone to the site (e.g. A British website using an American hosting company)
+ - adjusting member time-zones, relative to the site time-zone ([concept]OCF[/concept] only)
+
+[title="2"]ocProducts relationship with translations[/title]
+
+The core development team really want ocPortal to be widely used by people in any language, but do not get involved in maintaining or developing individual language packs (other than the standard English). We may distribute third-party packs (which you can make from within ocPortal) if there is popular request.
+
+Internationalisation can be difficult and time consuming if someone has not already created a language pack for your language. We recommend that you try to plan ahead and bring together a team from your country to make translations go faster.
+
+If you have any feedback on how translation can be easier without the core development team having to get involved with the work/maintenance/politics of your individual language then please report it. The team is willing to work hard to make translation easier, but doesn't have the resources to work alongside each individual translator.
+
+If someone has already created a language pack it might be as simple as installing it from the ocPortal addon directory.
+
+[title="2"]Language file format (technical overview)[/title]
+
+This section will describe the format used to store [concept]language string[/concept]s in ocPortal. In theory, this is not needed to be known, as an interface in the Admin Zone is provided that works with this behind-the-scenes; however it is useful to know, especially if you are wishing to work through the language files in a text editor.
+
+ocPortal language packs are made up of [tt].ini[/tt] files, containing mappings between special codes (based on the English) and the actual string as displayed. For example, a common string in the 'global' language file (the one containing common strings used throughout the portal), is coded as:
+[code]PROCEED=Proceed[/code]
+ocPortal is developed in British English, and this is technically known as the 'fall-back language', because it always has a complete set of language files and strings.
+[exp_thumb="Choosing a language and language file to edit in the language editor" float="right"]intl_trans_choose[/exp_thumb]
+
+The .ini files for any translation are stored together in a directory that is named with the standard two-letter code to denote that language; for example, English is 'EN'. A list of these codes is in [tt]lang/langs.ini[/tt].
+
+All bundled languages packs are located in the 'lang' directory of ocPortal. There is also a 'lang_custom' directory which contains custom language packs, or language packs that 'override' those available in the 'lang' directory on a file-by-file basis. Whenever language files are edited in the Admin Zone, the file is automatically overridden to a lang_custom one if it has not been already.
+[surround]
+Not all language files need to be translated, and language files do not have to be complete, as if a string cannot be found and the fall-back language (English) isn't being used, ocPortal will look in the English language pack using the fall-back mechanism.
+[exp_thumb="Using the language editor to translate language strings" float="right"]intl_trans_screen[/exp_thumb][/surround]
+
+[title="2"]The language editor (i.e. how to change strings)[/title]
+
+{!lang:DOC_TRANSLATE}
+
+You can reach the language editor from the 'Style' section of the Admin Zone, under the 'Language' icon.
+
+[b]We now recommend doing translations via Launchpad (although you can translate locally and transfer onto Launchpad, see below). See the "Collaborative translations on Launchpad" section.[/b]
+
+Many users like to translate stuff just on the public part of their own website. There is an option to change the language strings that you see on a page from the page footer.
+
+It is possible to export local language changes to Launchpad, so that you can pass them back to the community to co-operate and collaborate. This is done by exporting your local translations (.ini files) to .po files and then uploading those on Launchpad.
+
+[title="2"]Special strings[/title]
+
+Language string codes that are in lower-case are special strings, that should not be translated directly. These strings contain encoded information relating to the language pack.
+
+[html]
+<table class="results_table" summary="Columned table">
+   <tr>
+      <th>String codename</th>
+      <th>Purpose</th>
+   </tr>
+   <tr>
+      <td>charset</td>
+      <td>The character set needed for the language (standard code for an ASCII character set). Many people change this to 'utf-8' (Unicode, works with any characters), although regional character sets are supported also.</td>
+   </tr>
+   <tr>
+      <td>locale</td>
+      <td>The locale: there are standard locale codes for unix, based on language codes, but they vary across operating system: use what works on your server.<br />The locale code is used to prepare certain operating system date strings, and number formatting.</td>
+   </tr>
+   <tr>
+      <td>dir</td>
+      <td>The direction of text (usually ltr, but sometimes rtl for languages such as Arabic). An "rtl" language would likely require many few template changes as well as language changes. If someone does this we would consider integrating the changes back into a future version of ocPortal.</td>
+   </tr>
+   <tr>
+      <td>en_right</td>
+      <td>Sometimes templates have to apply CSS properties values of 'left' or 'right', according to the text direction. For a rtl language, this becomes 'left' instead of 'right'.</td>
+   </tr>
+   <tr>
+      <td>en_left</td>
+      <td>As above, but opposite.</td>
+   </tr>
+   <tr>
+      <td>language_author</td>
+      <td>Your name</td>
+   </tr>
+   <tr>
+      <td>date_* / time_* / calendar_*</td>
+      <td>Date/time formatting in one of the two PHP time formats ([/html][url="1"]http://uk.php.net/manual/en/function.date.php[/url], [url="2"]http://uk2.php.net/manual/en/function.strftime.php[/url][html]). If there are no '%' signs it's "date", if there are % signs it's "strftime".</td>
+   </tr>
+   <tr>
+      <td>dont_escape_trick</td>
+      <td>Ignore this one</td>
+   </tr>
+</table>
+[/html]
+
+Also, generally you should not translate things inside single quotes.
+
+For example,
+[code]
+The renderer to use (hook-type: 'blocks/main_custom_gfx').
+[/code]
+would be translated like:
+[code]
+Le moteur de rendu à utiliser (type crochet: 'blocks/main_custom_gfx').
+[/code]
+
+[title="2"]Character sets[/title]
+
+There are three systems that are in common usage to allow diverse characters to be displayed in a document:
+ - HTML entities
+ - Unicode
+ - Character sets
+
+ocPortal supports character sets and mostly supports Unicode too. In some places, HTML entities will work, but there are definitely places where, in the current version of ocPortal, they will not. Unicode is not ideal for PHP systems like ocPortal, due to the 'binary safe' design of PHP strings &ndash; however, in practice it does work due to backwards-compatibility in Unicode and the fact that ocPortal has special code to take Unicode into account when it matters.
+
+To understand character sets, you need to understand how strings (or text files) are composed. Each character (a symbol, represented by a 'glyph' on the screen) is essentially represented a number, 0-255; 0-127 are usually standard, and specified using the '7-bit ASCII code': the 128-255 range is essentially free, and what the numbers map to depends on the 'character set' used. As different languages use different characters (for example, accented characters, or a whole different alphabet, or even a pictographical language), different languages use different character sets.
+
+A file that uses 'high' characters will look different when viewed in editors set to different character sets. In order to put in text in the appropriate character set, and to view it, your editor must be set to it; this is to be expected to be by default if you are translating to your native language.
+
+[title="2"]Things you can translate[/title]
+
+As well as the core .ini files, there are other things that may be translated.
+
+[title="3"]Comcode (and HTML) pages[/title]
+
+To translate a Comcode page, either manually copy the Comcode page [tt].txt[/tt] file from the [tt]pages/comcode/EN[/tt] directory, to the appropriate pages/comcode/<lang> directory and change it there, or simply choose the target language and edit the file using ocPortal.
+
+As HTML pages are created outside ocPortal, you must manually copy the file in the equivalent way to as stated for Comcode pages.
+
+[title="3"]Text files[/title]
+
+There are some other text files you might want to translate are, in a similar way to Comcode pages (see above):
+ - [tt]text/EN/quotes.txt[/tt]
+ - [tt]text/EN/rules*.txt[/tt]
+And these files don't need translating but could be replaced with equivalents in your language:
+ - [tt]text/EN/too_common_words.txt[/tt] (a list of words that should not be considered in search results, for example)
+ - [tt]text/EN/word_characters.txt[/tt] (a list of characters that appear in words in your language -- most languages have all the English characters, but also accented ones)
+
+[i]None of these files are very important, only translate them if you want to.[/i]
+
+[title="3"]Images[/title]
+
+If you look under the [tt]themes/default/images/[/tt] directory you will see there is an [tt]EN[/tt] directory that contains images with English text on. You can copy this to the ISO codename of your language pack (e.g. [tt]FR[/tt]), and then replace the images with translated ones. Make sure you clear your theme image cache (Admin Zone, Tools section, Cleanup tools icon) after doing this. We have the PSD files (requires Adobe Photoshop or compatible software) for many of the images in our [url="downloads database"]http://ocportal.com/site/downloads.htm[/url]. The font is a commercial font called 'Kabel', so you may wish to use a free font like 'Arial' instead.
+
+[title="3"]WYSIWYG editor[/title]
+
+ocPortal uses a third-party WYSIWYG editor &ndash; CKEditor.
+It has it's own translations which should automatically be linked to your own by the standard ISO language name.
+
+[title="3"]Template/CSS editor[/title]
+
+ocPortal uses a third-party code editor &ndash; a modified version of EditArea.
+You need to make sure you have translated versions of all [tt]data/editarea/lang/<lang>.js[/tt] files. There are quite a few translations already in there.
+
+[title="3"]MySQL collations[/title]
+
+MySQL has 'collations' which basically sets the MySQL character set. ocPortal does not handle these, it uses whatever is there.
+This generally does not matter a lot (because anything that you ask to store will be correctly stored and retrieved regardless of collation), but there are two special cases:
+1) It does make a small difference in searches. For example, in languages there are usually 'equivalent' characters (e.g. lower case and upper case), and the MySQL collation tells MySQL about those.
+2) If the charset ocPortal is using is not matching up with what MySQL is using in terms of unicode vs non-unicode (e.g. MySQL uses UTF-8 but ocPortal uses ISO-8859-1) then conversion errors can happen as there are character code sequences that non-Unicode text might use which are totally invalid in Unicode and hence won't be stored at all. Users of English (who have limited alphabet that is all in lower ASCII and thus interchangeably compatible with both latin1 and UTF-8) would likely not notice this problem, but it becomes a problem for anyone doing internationalisation who have such a unicode vs non-unicode conflict.
+
+The normal Western European collation (used by English) is 'latin1_swedish_ci'. If anybody wonders why 'Swedish' is used for 'English', it is because English does not use accented characters and hence was considered a subset of Swedish, which does.
+
+When ocPortal 9 or earlier installs, it will use latin1 by default, because this is what the default English language pack uses. MySQL doesn't make it easy to convert the character set of the database, so the best way to do it is to export to an SQL dump, edit the dump in a text editor, and reimport into a new database:
+ - Use phpMyAdmin to export all the tables to a [tt].sql[/tt] file on your computer
+ - Do whatever you would normally do to backup your database; that will usually mean keeping a copy of the above file (but ensure it is complete before relying on it, sometimes SQL dumps don't download correctly)
+ - Use a text editor to replace latin1 with utf8 in the file
+ - Save the edited file
+ - Use phpMyAdmin to drop all tables in your database
+ - Use phpMyAdmin to import the edited file
+
+[title="3"]GD fonts[/title]
+
+If you find that the vertical text shown on permission editing interfaces is incorrect, it may be due to an incompatibility between PHP and the free Bitstream fonts that ocPortal bundles.
+This is known to happen with Russian characters. The solution is to replace the [tt]data/fonts/FreeMonoBoldOblique.ttf[/tt] file with [tt]Courier New Bold Italic.ttf[/tt] from your own computer. We would distribute this file with ocPortal, except we don't have a license to; however if you have a copy of Windows or Mac OS you should have your own licensed copy of this file.
+This OcCLE command can also be used to grab it from a URL that works at the time of writing:
+[code]
+:file_put_contents(get_file_base().'/data/fonts/Vera.ttf',http_download_file('http://typo3.org/extensions/repository/fulllist/pdf_generator2_fonts/0.0.1/info/?tx_terfe_pi1%5BdownloadFile%5D=fonts%252Fverdana.ttf&cHash=909a78c3bd'));
+[/code]
+
+[title="2"]Collaborative translations on Launchpad[/title]
+
+You can use [url="Launchpad"]https://translations.launchpad.net/ocportal[/url] to translate ocPortal into your language with the help of others.
+
+Launchpad is great because:
+ - You do not need to feel that you are alone translating everything yourself anymore
+ - It's very easy to work together. People can be translating the same language at the same time
+ - Anyone can download the current set of translations at any time
+
+The process is as follows:
+1) Go to the [url="Launchpad"]https://translations.launchpad.net/ocportal[/url] site.
+2) Sign up
+3) Log in
+4) Set your languages
+5) Start translating (the strings are split across about 60 files, often it works well to work with other people, each doing different files)
+6) It is advisable to translate something inside the 'global' language file before doing any downloading, as ocPortal needs a partially or fully translated global language file Launchpad [tt].po[/tt] file to automatically flip the site into utf-8, which is what Launchpad encodes language in.
+
+Note that some of the "English" will be written as "English: (English value). Explanation: (Explanation)". This is because Launchpad has no specific way to explain what strings are used for, so when importing we have put the explanation and original English together like this. These particular strings are just documentation strings, they should not be translated.
+
+Also, you should not translate the strings marked as located as follows:
+ - Located in [strings]en_left
+ - Located in [strings]en_right
+This is because the values are used for CSS, not human language. They should only be altered if you're trying to achieve a right-to-left layout (in which case you would switch them around).
+
+Need some help? [url="Try the translation forum"]http://ocportal.com/forum/forumview/misc/182.htm[/url].
+
+[title="3"]Downloading translations from Launchpad[/title]
+
+1) There is a link to download the [tt].po[/tt] files on the page for the version you are translating (it'll archive all files for you in all languages and then e-mail you a download link). Do not download individual po files because it'll name them in a weird way, download the whole set for the language.
+2) Extract all the files to a single directory (the download from Launchpad uses subdirectories, but ocPortal wants all the [tt].po[/tt] files together). You only need to extract the files relating to your language but it won't matter if you extract all languages as ocPortal can still find the right ones.
+3) If there are any [tt].ini[/tt] files with the same name as [tt].po[/tt] files you are about to place, they will need removing. [tt].ini[/tt] files take precedence so would block [tt].po[/tt] files from working. If the [tt].ini[/tt] files have stuff not in the [tt].po[/tt] files you should step back and export them to [tt].po[/tt] and into Launchpad, and restart the downloading process once they've merged back in.
+4) Copy the [tt].po[/tt] files to the usual language directory, i.e. [tt]lang_custom/XX[/tt], where XX-is the two-letter-codename for the language. So, for example you should have a [tt]lang_custom/XX/global-XX.po[/tt] file. More details are in the [url="Launchpad FAQ"]http://ocportal.com/forum/topicview/misc/internationalisation/launchpad_help_faq_and.htm[/url].
+5) You may need to create some extra language directories for Comcode pages and template cacheing if you are not on a SuExec server -- basically anywhere where ocPortal has an [tt]EN[/tt] directory create a directory for your language pack's 2-letter-codename too.
+
+[title="3"]Language packs[/title]
+
+Once you have a perfect translation on Launchpad, and have imported it into your site, and your completely happy, you can export it to a language pack. This is done from the addon section of ocPortal. We encourage you to make these language packs and upload them to ocPortal.com's addon section, to make it easier for people who don't understand Launchpad.
+
+[title="2"]Turning on a different language[/title]
+
+[exp_thumb="Changing the default site language" float="right"]intl_config_2[/exp_thumb]
+To change the default language used on the whole site, use the [tt]http://yourbaseurl/config_editor.php[/tt] script (load up the URL, with [tt]yourbaseurl[/tt] substituted with your real base URL).
+
+[exp_thumb="Language configuration" float="right"]intl_config[/exp_thumb]
+It is possible to configure ocPortal such that members may select which language to use on your site, and pages are then presented in this language. There are a number of ways a user may choose a language:
+ - via the language block (which inserts a [tt]keep_lang[/tt] parameter into the URL, to preserve their choice until they close the browser window)
+ - via their member profile (OCF supports this better than other language drivers, although the integration can be improved by editing the [tt]lang/map.ini[/tt] file)
+ - via their web browser stated language (disabled by default, as most users unfortunately have it misconfigured)
+
+As members can select their language by editing their member profile it may be necessary to edit your own profile to the language you're trying to check even if you changed the default, because you might already have your profile saved as the previous different language (usually English).
+
+To test a language without editing anything you can append [tt]&keep_lang=FR[/tt] to the URL (this is an example for French). If the URL did not contain an "?" symbol already you would need to append [tt]?keep_lang=FR[/tt] instead.
+If this confuses you, put the [tt]side_language[/tt] block onto one of your panels. This does the same thing.
+
+[title="3"]Debugging[/title]
+
+If you're having problems getting things working a good early diagnosis step is to check what your site is trying to do. If you look at your page source from inside your web browser, you will see something like the following near the top of the code:
+[code]
+<html lang="EN" dir="ltr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+[/code]
+
+Here you can see the site is running for you with the language "EN" which is specifying a charset of "ISO-8859-1" and a text direction of "ltr" (left to right).
+
+If this is not what you thought was the case it might just tell you where your problem exists.
+
+[title="2"]Criticising language packs[/title]
+
+[exp_thumb="Choosing a language to criticise the translation of" float="right"]intl_crit_choose[/exp_thumb]
+{!lang:DOC_CRITICISE_LANGUAGE_PACK}
+
+[title="2"]Advanced: Translating content[/title]
+
+ocPortal can have its content translated and delivered for each language, without requiring any duplication.
+
+ocPortal's multi-language support automatically becomes available when you have more than one language installed and have the [concept]OCF[/concept] "Enable regionalisation" option enabled.
+
+We need to consider the following cases:
+1) Sending newsletters
+2) Editing theme images
+3) Editing Comcode pages
+4) Using the Zone Editor
+5) [i]Everything else[/i]
+
+For '1' (newsletters), you will get a choice what language to send it for when you go to the newsletter module. Subscribers choose their language when they sign up.
+
+For '2'-'4', you will get a choice of language which to edit under when you go to the respective section of ocPortal. What you save will be saved accordingly.
+
+You will notice for any of '1'-'4', when you choose your language you will temporarily see the website in the language you are working under, until you finish. This is useful, but also ocPortal does it for architectural reasons. Be aware however, that the reason content is saved in a certain language here is due to the language selection you just made, and not necessarily directly related to the language you are viewing. This will be clarified in the next paragraph.
+
+For '5', translation is performed in a special 'Translate content' part of the Admin Zone. It is crucial to understand that it is [b]not[/b] performed just by editing content to your own language on normal edit screens. Content added to ocPortal is saved against the language being used by the submitter (except from '1' to '4' above). Therefore, when adding content you must ensure you have the right language choice, and a good rule of thumb to check this is by seeing if the language ocPortal is uses in its interface matches the language you expect to be submitting content in. When editing content, the content is always saved against the language you see it in when you are editing -- if it has been translated already then it will be edited as such, otherwise it will still be in the original submitted language -- [b]never translate from an edit screen[/b]. If something is edited (so long as there were actual changes), all translations are automatically marked 'broken', and will be put back into the translation queue.
+
+You will see there is an option in the footer for opening up a 'Translate content' screen just with language strings that were included on the page you are viewing.
+
+In ocPortal almost [i]everything[/i] (*) can be translated, but obviously you would not want to translate every forum post for a large community (for example). For this reason, ocPortal saves language with 'priorities', and that of the highest priority will be presented for translation first. For example, the names of zones would be the highest priority, whilst forum posts would be the lowest.
+
+(*) A few things cannot be translated such as forum names. The reasoning is that you [i]do not want[/i] such things translated, but rather you should have a different copy of each forum for each language. This is an exceptional situation, and is only designed like this due to the way forums are used. Other kinds of category may be translated as described above.
+
+[title="2"]Advanced: Non-ISO languages[/title]
+
+By default ocPortal supplies language codes and their names, based on the ISO 639 standards. You can add new codes by overriding the [tt]lang/langs.ini[/tt] file to [tt]lang_custom/langs.ini[/tt] if you like. When you add a new language pack in ocPortal you are limited to either choosing an existing code or typing a new one of 1-4 characters -- the 1-4 character code would be mapped to a nice name via [tt]langs.ini[/tt], or if no mapping exists, it would be shown as-is.
+
+[title="2"]Advanced: Right-to-left languages[/title]
+
+ocPortal has built-in support for right-to-left languages. You need to change the 'dir', 'en_left' and 'en_right' language strings to activate it.
+However there is one issue. Because Comcode is written in English, and punctuation symbols are considered right-to-left punctuation when "automatic bi-directional detection" is enabled, there is a conflict between the desire to type Comcode in English and the desire to type normal right-to-left script.
+The following is in our CSS, but commented out:
+[codebox]
+input[type="text"],textarea { /* So Comcode can be typed */
+	unicode-bidi: bidi-override;
+	direction: ltr;
+}
+[/codebox]
+Uncommenting this makes text input areas work in left-to-right. You can choose to enable it, to make Comcode easier to type, but it will make right-to-left languages harder to type and understand.
+
+We have tried to make our default theme support right-to-left nicely, but unfortunately there are many cases where we could not elegantly do it because we are setting things on a pixel-way instead of a left/right-way. For example, you may see list bullets displaying on the wrong side of a list element. It is caused by CSS like:
+[code]
+ul.compact_list li {
+	margin: 0 0 0 17px;
+	padding: 0;
+}
+[/code]
+which would need changing to:
+[code]
+ul.compact_list li {
+	margin: 0 17px 0 0;
+	padding: 0;
+}
+[/code]
+Therefore to make things display neatly you will need to make a modified theme that makes these kinds of changes for margin settings, padding settings, and background settings.
+
+[title="2"]Advanced: just one language[/title]
+
+If you don't want multiple languages, just your own, you can do this. In other words, you can disable the English language pack as a choice (anything non-translated would still be in English, e.g. most of the admin stuff if you didn't translate that).
+
+Two steps are required:
+1) Disable the 'Enable regionalisation' option
+2) Open up [tt]http://yoursite/config_editor.php[/tt] and change the default language
+
+[title="2"]Cheating[/title]
+
+If you don't want to worry about a proper translation, but do want to support multiple languages, Google provide some code for Google Translate that you can easily include in your site footer (or header, or a panel) to allow people to translate the site.
+
+[concepts
+ 1_key="language string"   1_value="A piece of text, often a phrase, used by ocPortal; identified by a short code WRITTEN_LIKE_THIS"
+ 2_key="character set"     2_value="A set of characters that the one-byte-per-character representation system ties to; used to allow more than 255 characters to be represented on computers so that they may show many different language scripts"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_intl_users"]Translating ocPortal[/page]

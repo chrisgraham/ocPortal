@@ -77,6 +77,8 @@ class Module_admin_lang
 		require_code('lang_compile');
 		require_lang('lang');
 
+		require_css('translations_editor');
+
 		$type=get_param('type','misc');
 
 		if ($type=='content') return $this->interface_content();
@@ -108,28 +110,44 @@ class Module_admin_lang
 
 		require_code('form_templates');
 		$langs=new ocp_tempcode();
-		if ($provide_na) $langs->attach(form_input_list_entry('',false,do_lang_tempcode('NA')));
 		$langs->attach(nice_get_langs(NULL,$add_lang));
-		$fields=form_input_list(do_lang_tempcode('LANGUAGE'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),$param_name,$langs,NULL,false,false);
 
 		$javascript='';
 
+		$fields=new ocp_tempcode();
+
 		if ($add_lang)
 		{
-			$fields->attach(form_input_codename(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('LANGUAGE')),do_lang_tempcode('DESCRIPTION_NEW_LANG'),'lang_new','',false));
-			$javascript.='standardAlternateFields(\'lang\',\'lang_new\');';
+			$set_name='language';
+			$required=true;
+			$set_title=do_lang_tempcode('LANGUAGE');
+			$field_set=alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),$param_name,$langs,NULL,false,false));
+
+			$field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('DESCRIPTION_NEW_LANG'),'lang_new','',false));
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+		} else
+		{
+			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),$param_name,$langs,NULL,false,false));
 		}
 
 		if ($choose_lang_file)
 		{
+			$set_name='language_file';
+			$required=true;
+			$set_title=do_lang_tempcode('LANGUAGE_FILE');
+			$field_set=alternate_fields_set__start($set_name);
+
 			$lang_files=new ocp_tempcode();
 			$lang_files->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
 			$lang_files->attach(nice_get_lang_files());
-			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE_FILE'),do_lang_tempcode('DESCRIPTION_LANGUAGE_FILE'),'lang_file',$lang_files,NULL,true));
+			$field_set->attach(form_input_list(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_LANGUAGE_FILE'),'lang_file',$lang_files,NULL,true));
 
-			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang('SEARCH')),'','search','',false));
+			$field_set->attach(form_input_line(do_lang('SEARCH'),'','search','',false));
 
-			$javascript.='standardAlternateFields(\'lang_file\',\'search\');';
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 		}
 
 		$post_url=get_self_url(false,false,NULL,false,true);
@@ -177,7 +195,7 @@ class Module_admin_lang
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_intl';
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/criticise_language';
 
-		$title=get_page_title('CRITICISE_LANGUAGE_PACK');
+		$title=get_screen_title('CRITICISE_LANGUAGE_PACK');
 
 		$lang=get_param('crit_lang','');
 		if ($lang=='') return $this->choose_lang($title,false,false,do_lang_tempcode('CHOOSE_CRITICISE_LIST_LANG_FILE'),false,'crit_lang');
@@ -270,7 +288,7 @@ class Module_admin_lang
 	 */
 	function interface_content()
 	{
-		$title=get_page_title('TRANSLATE_CONTENT');
+		$title=get_screen_title('TRANSLATE_CONTENT');
 
 		if (!multi_lang()) warn_exit(do_lang_tempcode('MULTILANG_OFF'));
 
@@ -330,6 +348,8 @@ class Module_admin_lang
 
 			if ($intertrans!='') $actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'f625cf15c9db5e5af30fc772a7f0d5ff','LANG_FROM'=>$it['language'],'LANG_TO'=>$lang,'NAME'=>'trans_'.strval($id),'OLD'=>$old));
 
+			check_suhosin_request_quantity(2);
+
 			$line=do_template('TRANSLATE_LINE_CONTENT',array('_GUID'=>'87a0f5298ce9532839f3206cd0e06051','NAME'=>$name,'ID'=>strval($id),'OLD'=>$old,'CURRENT'=>$current,'ACTIONS'=>$actions,'PRIORITY'=>$priority));
 
 			$lines.=$line->evaluate(); /*XHTMLXHTML*/
@@ -351,7 +371,7 @@ class Module_admin_lang
 	 */
 	function set_lang_content()
 	{
-		$title=get_page_title('TRANSLATE_CONTENT');
+		$title=get_screen_title('TRANSLATE_CONTENT');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
@@ -378,7 +398,7 @@ class Module_admin_lang
 
 		require_code('view_modes');
 		erase_tempcode_cache();
-		persistant_cache_empty();
+		persistent_cache_empty();
 
 		if (get_param_integer('contextual',0)==1)
 		{
@@ -444,7 +464,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-ocPortal-Export-Date: '.gmdate('Y-m-d H:i',$mtime).'+0000\n"
-"X-Generator: ocPortal ('.ocp_version_full().')\n"
+"X-Generator: ocPortal ('.ocp_version_pretty().')\n"
 
 ';
 					$entries2=array();
@@ -529,7 +549,7 @@ msgstr ""
 		}
 		if ($lang=='')
 		{
-			$title=get_page_title('TRANSLATE_CODE');
+			$title=get_screen_title('TRANSLATE_CODE');
 			$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_FIND_LANG_STRING_TIP');
 			return $this->choose_lang($title,true,true,do_lang_tempcode('CHOOSE_EDIT_LIST_LANG_FILE'));
 		}
@@ -545,7 +565,7 @@ msgstr ""
 		$search=get_param('search','',true);
 		if ($search!='')
 		{
-			$title=get_page_title('TRANSLATE_CODE');
+			$title=get_screen_title('TRANSLATE_CODE');
 
 			require_code('form_templates');
 			$fields=new ocp_tempcode();
@@ -567,7 +587,7 @@ msgstr ""
 		$lang_file=get_param('lang_file');
 		if (!file_exists($map_b)) $map_b=$map_a;
 		$map=better_parse_ini_file($map_b);
-		$title=get_page_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(array_key_exists($lang,$map)?$map[$lang]:$lang)));
+		$title=get_screen_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(array_key_exists($lang,$map)?$map[$lang]:$lang)));
 
 		// Upgrade to custom if not there yet (or maybe we are creating a new lang - same difference)
 		$custom_dir=get_custom_file_base().'/lang_custom/'.$lang;
@@ -756,11 +776,7 @@ msgstr ""
 		$for_base_lang_2=get_lang_file_map($lang,$lang_file,false);
 		$descriptions=get_lang_file_descriptions(fallback_lang(),$lang_file);
 
-		// Just to make sure the posted data is at least partially there, before we wipe out the old file
-		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
-		{
-			$val=post_param($key);
-		}
+		if ((count($_POST)==0) && (strtolower(ocp_srv('REQUEST_METHOD'))!='post')) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
 		$path=get_custom_file_base().'/lang_custom/'.filter_naughty($lang).'/'.filter_naughty($lang_file).'.ini';
 		$path_backup=$path.'.'.strval(time());
@@ -780,8 +796,8 @@ msgstr ""
 		fwrite($myfile,"[strings]\n");
 		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
 		{
-			$val=post_param($key);
-			if (($val!='') && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
+			$val=post_param($key,NULL);
+			if (($val!==NULL) && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
 			{
 				if (fwrite($myfile,$key.'='.str_replace(chr(10),'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			}
@@ -793,7 +809,7 @@ msgstr ""
 		@copy($path,$path_backup2) OR intelligent_write_error($path_backup2);
 		sync_file($path_backup2);
 
-		$title=get_page_title('TRANSLATE_CODE');
+		$title=get_screen_title('TRANSLATE_CODE');
 
 		log_it('TRANSLATE_CODE');
 
@@ -860,7 +876,7 @@ msgstr ""
 		}
 
 
-		$title=get_page_title('TRANSLATE_CODE');
+		$title=get_screen_title('TRANSLATE_CODE');
 
 		log_it('TRANSLATE_CODE');
 

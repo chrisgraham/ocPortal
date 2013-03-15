@@ -1,0 +1,18 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.not_too_tall_addons {
+	overflow: scroll;
+	height: 500px;
+}
+
+.addon_name {
+	font-style: italic;
+}
+
+.addon_actions * {
+	vertical-align: middle;
+}
+

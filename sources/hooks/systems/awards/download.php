@@ -65,7 +65,7 @@ class Hook_awards_download
 	{
 		require_code('downloads');
 
-		return get_download_html($row,true,true,$zone);
+		return render_download_box($row,true,true,$zone);
 	}
 
 }

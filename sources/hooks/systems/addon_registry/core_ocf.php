@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_ocf
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_core_ocf
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,7 @@ class Hook_addon_registry_core_ocf
 	function get_file_list()
 	{
 		return array(
-
+			'sources/hooks/modules/admin_import/emoticons.php',
 			'sources/hooks/systems/notifications/ocf_password_changed.php',
 			'sources/hooks/systems/snippets/email_exists.php',
 			'sources/hooks/systems/snippets/profile_tab.php',
@@ -315,6 +314,7 @@ class Hook_addon_registry_core_ocf
 			'OCF_TOPIC_POST_AVATAR.tpl',
 			'OCF_GROUP_DIRECTORY_SCREEN.tpl',
 			'ocf.css',
+			'ocf_editor.css',
 			'data/username_check.php',
 			'sources/hooks/systems/ocf_auth/aef.php',
 			'sources/hooks/systems/ocf_auth/converge.php',
@@ -323,41 +323,47 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/ocf_auth/vb3.php',
 			'sources/hooks/systems/ocf_auth/index.html',
 			'POSTING_FIELD.tpl',
-			'OCF_POSTER_DETAILS.tpl',
+			'OCF_MEMBER_BOX.tpl',
 			'OCF_RANK_IMAGE.tpl',
+			'themes/default/images/menu_items/community_navigation/forums.png',
+			'themes/default/images/menu_items/community_navigation/groups.png',
+			'themes/default/images/menu_items/community_navigation/index.html',
+			'themes/default/images/menu_items/community_navigation/members.png',
+			'themes/default/images/menu_items/community_navigation/rules.png',
+			'themes/default/images/menu_items/community_navigation/unread_topics.png',
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'OCF_DELURK_CONFIRM.tpl'=>'administrative__ocf_delurk_confirm',
-				'OCF_JOIN_STEP1_SCREEN.tpl'=>'ocf_join_step1_screen',
-				'OCF_JOIN_STEP2_SCREEN.tpl'=>'ocf_join_step2_screen',
-				'OCF_AUTO_TIME_ZONE_ENTRY.tpl'=>'ocf_auto_time_zone_entry',
-				'OCF_USER_MEMBER.tpl'=>'ocf_user_member',
-				'OCF_MEMBER_ACTION.tpl'=>'ocf_member_profile_screen',
-				'OCF_EMOTICON_ROW.tpl'=>'ocf_emoticon_table',
-				'OCF_EMOTICON_CELL.tpl'=>'ocf_emoticon_table',
-				'OCF_EMOTICON_TABLE.tpl'=>'ocf_emoticon_table',
-				'OCF_MEMBER_DIRECTORY_SCREEN.tpl'=>'ocf_member_directory_screen',
-				'OCF_MEMBER_PROFILE_SCREEN.tpl'=>'ocf_member_profile_screen',
-				'OCF_MEMBER_PROFILE_ABOUT.tpl'=>'ocf_member_profile_screen',
-				'OCF_MEMBER_PROFILE_EDIT.tpl'=>'ocf_member_profile_screen',
-				'OCF_MEMBER_ONLINE_ROW.tpl'=>'ocf_members_online_screen',
-				'OCF_MEMBERS_ONLINE_SCREEN.tpl'=>'ocf_members_online_screen',
-				'OCF_GROUP_DIRECTORY_SCREEN.tpl'=>'ocf_group_directory_screen',
-				'OCF_VIEW_GROUP_MEMBER.tpl'=>'ocf_view_group_screen',
-				'OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl'=>'ocf_view_group_screen',
-				'OCF_VIEW_GROUP_MEMBER_SECONDARY.tpl'=>'ocf_view_group_screen',
-				'OCF_VIEW_GROUP_SCREEN.tpl'=>'ocf_view_group_screen',
-				);
+			'OCF_DELURK_CONFIRM.tpl'=>'administrative__ocf_delurk_confirm',
+			'OCF_JOIN_STEP1_SCREEN.tpl'=>'ocf_join_step1_screen',
+			'OCF_JOIN_STEP2_SCREEN.tpl'=>'ocf_join_step2_screen',
+			'OCF_AUTO_TIME_ZONE_ENTRY.tpl'=>'ocf_auto_time_zone_entry',
+			'OCF_USER_MEMBER.tpl'=>'ocf_user_member',
+			'OCF_MEMBER_ACTION.tpl'=>'ocf_member_profile_screen',
+			'OCF_EMOTICON_ROW.tpl'=>'ocf_emoticon_table',
+			'OCF_EMOTICON_CELL.tpl'=>'ocf_emoticon_table',
+			'OCF_EMOTICON_TABLE.tpl'=>'ocf_emoticon_table',
+			'OCF_MEMBER_DIRECTORY_SCREEN.tpl'=>'ocf_member_directory_screen',
+			'OCF_MEMBER_PROFILE_SCREEN.tpl'=>'ocf_member_profile_screen',
+			'OCF_MEMBER_PROFILE_ABOUT.tpl'=>'ocf_member_profile_screen',
+			'OCF_MEMBER_PROFILE_EDIT.tpl'=>'ocf_member_profile_screen',
+			'OCF_MEMBER_ONLINE_ROW.tpl'=>'ocf_members_online_screen',
+			'OCF_MEMBERS_ONLINE_SCREEN.tpl'=>'ocf_members_online_screen',
+			'OCF_GROUP_DIRECTORY_SCREEN.tpl'=>'ocf_group_directory_screen',
+			'OCF_VIEW_GROUP_MEMBER.tpl'=>'ocf_view_group_screen',
+			'OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl'=>'ocf_view_group_screen',
+			'OCF_VIEW_GROUP_MEMBER_SECONDARY.tpl'=>'ocf_view_group_screen',
+			'OCF_VIEW_GROUP_SCREEN.tpl'=>'ocf_view_group_screen'
+		);
 	}
 
 	/**
@@ -370,13 +376,22 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__administrative__ocf_delurk_confirm()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_DELURK_CONFIRM',array(
-					'TITLE'=>lorem_title(),
-					'LURKERS'=>array(array('ID'=>"1",'USERNAME'=>lorem_word(),'PROFILE_URL'=>placeholder_url()),array('ID'=>"2",'USERNAME'=>lorem_word_2(),'PROFILE_URL'=>placeholder_url())),
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_DELURK_CONFIRM', array(
+				'TITLE'=>lorem_title(),
+				'LURKERS'=>array(
+					array(
+						'ID'=>"1",
+						'USERNAME'=>lorem_word(),
+						'PROFILE_URL'=>placeholder_url()
+					),
+					array(
+						'ID'=>"2",
+						'USERNAME'=>lorem_word_2(),
+						'PROFILE_URL'=>placeholder_url()
+					)
+				),
+				'URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -389,21 +404,19 @@ class Hook_addon_registry_core_ocf
 	 */
 	function tpl_preview__ocf_join_step1_screen()
 	{
-		$group_select	=	new ocp_tempcode();
+		$group_select=new ocp_tempcode();
 
 		foreach (placeholder_array() as $key=>$value)
-			$group_select->attach(form_input_list_entry(strval($key),false,$value));
+			$group_select->attach(form_input_list_entry(strval($key), false, $value));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_JOIN_STEP1_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'GENERATE_HOST'=>'',
-					'RULES'=>lorem_chunk_html(),
-					'URL'=>placeholder_url(),
-					'GROUP_SELECT'=>$group_select,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_JOIN_STEP1_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'GENERATE_HOST'=>'',
+				'RULES'=>lorem_chunk_html(),
+				'URL'=>placeholder_url(),
+				'GROUP_SELECT'=>$group_select
+			)), NULL, '', true)
 		);
 	}
 
@@ -416,58 +429,193 @@ class Hook_addon_registry_core_ocf
 	 */
 	function tpl_preview__ocf_join_step2_screen()
 	{
+		require_css('forms');
+
 		require_lang('dates');
-		$fields = new ocp_tempcode();
+		$fields=new ocp_tempcode();
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_LINE',array('MAXLENGTH'=>'3','TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'DEFAULT'=>''));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
+			'MAXLENGTH'=>'3',
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'VALUE'=>''));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'VALUE'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'VALUE'=>''));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'VALUE'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_EMAIL',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'DEFAULT'=>''));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_EMAIL', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array('UNLIMITED'=>false,'NULL_OK'=>'','DISABLED'=>'','TABINDEX'=>placeholder_number(),'YEARS'=>placeholder_options(),'MONTHS'=>placeholder_options(),'DAYS'=>placeholder_options(),'STUB'=>$name,'NULL'=>'','TIME'=>''));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE', array(
+			'UNLIMITED'=>false,
+			'NULL_OK'=>'',
+			'DISABLED'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'YEARS'=>placeholder_options(),
+			'MONTHS'=>placeholder_options(),
+			'DAYS'=>placeholder_options(),
+			'STUB'=>$name,
+			'NULL'=>'',
+			'TIME'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_TICK',array('CHECKED'=>'true','TABINDEX'=>placeholder_number(),'NAME'=>$name));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
+			'CHECKED'=>'true',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>lorem_phrase(),'THEME_ALSO_INCLUDE_PAGES'=>false)));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER', array(
+			'TITLE'=>lorem_phrase(),
+			'THEME_ALSO_INCLUDE_PAGES'=>false
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$timezone_list = new ocp_tempcode();
+		$name=lorem_word() . placeholder_random();
+		$timezone_list=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$timezone_list->attach(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY',array('HOUR'=>$value,'DW'=>placeholder_date_raw(),'NAME'=>$name,'SELECTED'=>'','CLASS'=>'','TEXT'=>lorem_phrase())));
+			$timezone_list->attach(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY', array(
+				'HOUR'=>$value,
+				'DW'=>placeholder_date_raw(),
+				'NAME'=>$name,
+				'SELECTED'=>'',
+				'CLASS'=>'',
+				'TEXT'=>lorem_phrase()
+			)));
 		}
-		$input = do_lorem_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'CONTENT'=>$timezone_list,'INLINE_LIST'=>false));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'CONTENT'=>$timezone_list,
+			'INLINE_LIST'=>false
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_TICK',array('CHECKED'=>'true','TABINDEX'=>placeholder_number(),'NAME'=>$name));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$name=lorem_word() . placeholder_random();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
+			'CHECKED'=>'true',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
-		$form = do_lorem_template('FORM',array('TEXT'=>'','HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'URL'=>placeholder_url(),'BATCH_IMPORT_ARCHIVE_CONTENTS'=>lorem_phrase(),));
+		$form=do_lorem_template('FORM', array(
+			'TEXT'=>'',
+			'HIDDEN'=>'',
+			'FIELDS'=>$fields,
+			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
+			'URL'=>placeholder_url(),
+			'BATCH_IMPORT_ARCHIVE_CONTENTS'=>lorem_phrase()
+		));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_JOIN_STEP2_SCREEN',array(
-					'JAVASCRIPT'=>'',
-					'TITLE'=>lorem_title(),
-					'FORM'=>$form,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_JOIN_STEP2_SCREEN', array(
+				'JAVASCRIPT'=>'',
+				'TITLE'=>lorem_title(),
+				'FORM'=>$form
+			)), NULL, '', true)
 		);
 	}
 
@@ -481,16 +629,14 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_auto_time_zone_entry()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY',array(
-					'HOUR'=>placeholder_number(),
-					'DW'=>date('w',time()),
-					'NAME'=>lorem_word(),
-					'SELECTED'=>false,
-					'CLASS'=>'',
-					'TEXT'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY', array(
+				'HOUR'=>placeholder_number(),
+				'DW'=>date('w', time()),
+				'NAME'=>lorem_word(),
+				'SELECTED'=>false,
+				'CLASS'=>'',
+				'TEXT'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -504,15 +650,13 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_user_member()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_USER_MEMBER',array(
-					'COLOUR'=>'',
-					'PROFILE_URL'=>placeholder_url(),
-					'USERNAME'=>lorem_word(),
-					'USERGROUP'=>lorem_word_2(),
-					'AT'=>lorem_phrase(),
-				)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_USER_MEMBER', array(
+				'COLOUR'=>'',
+				'PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_word(),
+				'USERGROUP'=>lorem_word_2(),
+				'AT'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -528,23 +672,34 @@ class Hook_addon_registry_core_ocf
 		$content=new ocp_tempcode();
 		$cols=4;
 		$current_row=new ocp_tempcode();
-		for($i=0;$i<10;$i++)
+		for ($i=0; $i < 10; $i++)
 		{
-			if (($i%$cols==0) && ($i!=0))
+			if (($i % $cols==0) && ($i != 0))
 			{
-				$content->attach(do_lorem_template('OCF_EMOTICON_ROW',array('CELLS'=>$current_row)));
+				$content->attach(do_lorem_template('OCF_EMOTICON_ROW', array(
+					'CELLS'=>$current_row
+				)));
 				$current_row=new ocp_tempcode();
 			}
-			$current_row->attach(do_lorem_template('OCF_EMOTICON_CELL',array('FIELD_NAME'=>lorem_word(),'CODE_ESC'=>'','THEME_IMG_CODE'=>'ocf_emoticons/smile','CODE'=>':)')));
+			$current_row->attach(do_lorem_template('OCF_EMOTICON_CELL', array(
+				'FIELD_NAME'=>lorem_word(),
+				'COLS'=>strval($cols),
+				'CODE_ESC'=>'',
+				'THEME_IMG_CODE'=>'ocf_emoticons/smile',
+				'CODE'=>':)'
+			)));
 		}
 		if (!$current_row->is_empty())
-			$content->attach(do_lorem_template('OCF_EMOTICON_ROW',array('CELLS'=>$current_row)));
+			$content->attach(do_lorem_template('OCF_EMOTICON_ROW', array(
+				'CELLS'=>$current_row
+			)));
 
-		$content=do_lorem_template('OCF_EMOTICON_TABLE',array('ROWS'=>$content));
+		$content=do_lorem_template('OCF_EMOTICON_TABLE', array(
+			'ROWS'=>$content
+		));
 
 		return array(
-			lorem_globalise(
-				$content,NULL,'',true),
+			lorem_globalise($content, NULL, '', true)
 		);
 	}
 
@@ -558,20 +713,32 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_member_directory_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN',array(
-					'USERGROUPS'=>lorem_phrase(),
-					'HIDDEN'=>'',
-					'MAX'=>'30',
-					'SYMBOLS'=>array(array('START'=>'0','SYMBOL'=>'a'),array('START'=>'1','SYMBOL'=>'b'),array('START'=>'3','SYMBOL'=>'c')),
-					'SEARCH'=>lorem_phrase(),
-					'GET_URL'=>placeholder_url(),
-					'TITLE'=>lorem_title(),
-					'RESULTS_TABLE'=>placeholder_table(),
-					'MEMBER_BOXES'=>array(),
-					'RESULTS_BROWSER'=>'',
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN', array(
+				'USERGROUPS'=>lorem_phrase(),
+				'HIDDEN'=>'',
+				'MAX'=>'30',
+				'SYMBOLS'=>array(
+					array(
+						'START'=>'0',
+						'SYMBOL'=>'a'
+					),
+					array(
+						'START'=>'1',
+						'SYMBOL'=>'b'
+					),
+					array(
+						'START'=>'3',
+						'SYMBOL'=>'c'
+					)
+				),
+				'SEARCH'=>lorem_phrase(),
+				'GET_URL'=>placeholder_url(),
+				'TITLE'=>lorem_title(),
+				'OTHER_IDS'=>placeholder_array(),
+				'RESULTS_TABLE'=>placeholder_table(),
+				'MEMBER_BOXES'=>array(),
+				'PAGINATION'=>''
+			)), NULL, '', true)
 		);
 	}
 
@@ -585,21 +752,39 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_member_profile_screen()
 	{
 		require_lang('news');
-		$sections=array('contact'=>lorem_word(),'profile'=>lorem_word_2(),'views'=>lorem_word(),'usage'=>lorem_word_2(),'content'=>lorem_word());
+		$sections=array(
+			'contact'=>lorem_word(),
+			'profile'=>lorem_word_2(),
+			'views'=>lorem_word(),
+			'usage'=>lorem_word_2(),
+			'content'=>lorem_word()
+		);
 		$actions=array();
-		$i	=	0;
-		$links	=	new ocp_tempcode();
+		$i=0;
+		$links=new ocp_tempcode();
 		foreach ($sections as $section_code=>$section_title)
 		{
-			$links->attach(do_lorem_template('OCF_MEMBER_ACTION',array('ID'=>strval($i),'URL'=>placeholder_url(),'LANG'=>lorem_word(),'REL'=>'')));
-			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION',array('ID'=>strval($i),'URL'=>placeholder_url(),'LANG'=>lorem_word(),'REL'=>'','NAME'=>$section_title,'VALUE'=>$links));
+			$links->attach(do_lorem_template('OCF_MEMBER_ACTION', array(
+				'ID'=>strval($i),
+				'URL'=>placeholder_url(),
+				'LANG'=>lorem_word(),
+				'REL'=>''
+			)));
+			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION', array(
+				'ID'=>strval($i),
+				'URL'=>placeholder_url(),
+				'LANG'=>lorem_word(),
+				'REL'=>'',
+				'NAME'=>$section_title,
+				'VALUE'=>$links
+			));
 			$i++;
 		}
 
 		require_lang('menus');
 
 		$tabs=array();
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_ABOUT',array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_ABOUT', array(
 			'RIGHT_MARGIN'=>lorem_phrase(),
 			'AVATAR_WIDTH'=>placeholder_id(),
 			'PHOTO_WIDTH'=>placeholder_id(),
@@ -627,7 +812,13 @@ class Hook_addon_registry_core_ocf
 			'SIGNATURE'=>lorem_phrase(),
 			'JOIN_DATE'=>placeholder_time(),
 			'JOIN_DATE_RAW'=>placeholder_date_raw(),
-			'CUSTOM_FIELDS'=>array(array('NAME'=>lorem_phrase(),'VALUE'=>lorem_phrase(),'ENCRYPTED_VALUE'=>'')),
+			'CUSTOM_FIELDS'=>array(
+				array(
+					'NAME'=>lorem_phrase(),
+					'VALUE'=>lorem_phrase(),
+					'ENCRYPTED_VALUE'=>''
+				)
+			),
 			'ACTIONS_contact'=>$actions['contact'],
 			'ACTIONS_profile'=>$actions['profile'],
 			'ACTIONS_views'=>$actions['views'],
@@ -639,33 +830,63 @@ class Hook_addon_registry_core_ocf
 			'VIEW_PROFILES'=>true,
 			'ON_PROBATION'=>lorem_phrase(),
 			'USERGROUP'=>lorem_word(),
-			'CLUBS'=>lorem_phrase(),
+			'CLUBS'=>lorem_phrase()
 		));
-		$tabs[]=array('TAB_CODE'=>placeholder_id().'0','TAB_TITLE'=>lorem_title(),'TAB_CONTENT'=>$tab_content,'TAB_FIRST'=>true,'TAB_LAST'=>false);
+		$tabs[]=array(
+			'TAB_CODE'=>placeholder_id() . '0',
+			'TAB_TITLE'=>lorem_phrase(),
+			'TAB_CONTENT'=>$tab_content,
+			'TAB_FIRST'=>true,
+			'TAB_LAST'=>false
+		);
 		$tabs2=array();
 		$fields=new ocp_tempcode();
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'DEFAULT'=>''));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
-		$tabs2[]=array('TAB_TITLE'=>lorem_title(),'TAB_FIELDS'=>$fields,'TAB_TEXT'=>lorem_paragraph(),'TAB_FIRST'=>true,'TAB_LAST'=>true);
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_EDIT',array(
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
+		$tabs2[]=array(
+			'TAB_TITLE'=>lorem_phrase(),
+			'TAB_FIELDS'=>$fields,
+			'TAB_TEXT'=>lorem_paragraph(),
+			'TAB_FIRST'=>true,
+			'TAB_LAST'=>true
+		);
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_EDIT', array(
 			'URL'=>placeholder_url(),
 			'SUBMIT_NAME'=>lorem_phrase(),
 			'AUTOCOMPLETE'=>false,
 			'SKIP_VALIDATION'=>true,
 			'TABS'=>$tabs2,
-			'HIDDEN'=>'',
+			'HIDDEN'=>''
 		));
-		$tabs[]=array('TAB_CODE'=>placeholder_id().'1','TAB_TITLE'=>lorem_title(),'TAB_CONTENT'=>$tab_content,'TAB_FIRST'=>false,'TAB_LAST'=>true);
+		$tabs[]=array(
+			'TAB_CODE'=>placeholder_id() . '1',
+			'TAB_TITLE'=>lorem_phrase(),
+			'TAB_CONTENT'=>$tab_content,
+			'TAB_FIRST'=>false,
+			'TAB_LAST'=>true
+		);
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_MEMBER_PROFILE_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'MEMBER_ID'=>placeholder_id(),
-					'TABS'=>$tabs,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_MEMBER_PROFILE_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'MEMBER_ID'=>placeholder_id(),
+				'TABS'=>$tabs
+			)), NULL, '', true)
 		);
 	}
 
@@ -678,19 +899,23 @@ class Hook_addon_registry_core_ocf
 	 */
 	function tpl_preview__ocf_members_online_screen()
 	{
-		$rows	=	new ocp_tempcode();
+		$rows=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$rows->attach(do_lorem_template('OCF_MEMBER_ONLINE_ROW',array('IP'=>placeholder_ip(),'AT_URL'=>placeholder_url(),'LOCATION'=>lorem_word(),'MEMBER'=>placeholder_link(),'TIME'=>placeholder_time())));
+			$rows->attach(do_lorem_template('OCF_MEMBER_ONLINE_ROW', array(
+				'IP'=>placeholder_ip(),
+				'AT_URL'=>placeholder_url(),
+				'LOCATION'=>lorem_word(),
+				'MEMBER'=>placeholder_link(),
+				'TIME'=>placeholder_time()
+			)));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_MEMBERS_ONLINE_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'ROWS'=>$rows,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_MEMBERS_ONLINE_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'ROWS'=>$rows
+			)), NULL, '', true)
 		);
 	}
 
@@ -703,56 +928,13 @@ class Hook_addon_registry_core_ocf
 	 */
 	function tpl_preview__ocf_group_directory_screen()
 	{
-		$_rank = array(placeholder_array());
-		$ranks=array();
-		foreach($_rank as $g_id=>$_rank)
-		{
-			$rank = new ocp_tempcode();
-			foreach ($_rank as $row)
-			{
-				$entries = new ocp_tempcode();
-				foreach (placeholder_array() as $k=>$v)
-				{
-					$cells = new ocp_tempcode();
-					$values = array(placeholder_link(),placeholder_number(),lorem_word());
-
-					foreach ($values as $k=>$v)
-					{
-						$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$v),NULL,false,'RESULTS_TABLE_FIELD'));
-					}
-					$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false,'RESULTS_TABLE_ENTRY'));
-				}
-
-				$rank->attach($entries);
-			}
-
-			$selectors = new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
-			{
-				$selectors->attach(do_lorem_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>'','NAME'=>lorem_word(),'VALUE'=>lorem_word())));
-			}
-			$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
-
-			$results_browser = placeholder_result_browser();
-
-			$fields_title = new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
-			{
-				$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>$v)));
-			}
-
-			$ranks[]=do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$rank,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>$results_browser,'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
-		}
-
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_GROUP_DIRECTORY_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'STAFF'=>lorem_phrase(),
-					'OTHERS'=>lorem_phrase(),
-					'RANKS'=>$ranks,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_GROUP_DIRECTORY_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'STAFF'=>lorem_phrase(),
+				'OTHERS'=>lorem_phrase(),
+				'RANKS'=>array(placeholder_table(),placeholder_table())
+			)), NULL, '', true)
 		);
 	}
 
@@ -765,94 +947,135 @@ class Hook_addon_registry_core_ocf
 	 */
 	function tpl_preview__ocf_view_group_screen()
 	{
-		$_primary_members =	placeholder_array();
-		$primary_members = new ocp_tempcode();
-		$_secondary_members = new ocp_tempcode();
-		$secondary_members = new ocp_tempcode();
-		$prospective_members = new ocp_tempcode();
-		$_prospective_members = new ocp_tempcode();
+		$_primary_members=placeholder_array();
+		$primary_members=new ocp_tempcode();
+		$_secondary_members=new ocp_tempcode();
+		$secondary_members=new ocp_tempcode();
+		$prospective_members=new ocp_tempcode();
+		$_prospective_members=new ocp_tempcode();
 		foreach ($_primary_members as $i=>$primary_member)
 		{
-			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER',array('NAME'=>$primary_member,'URL'=>placeholder_url()));
+			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER', array(
+				'NAME'=>$primary_member,
+				'URL'=>placeholder_url()
+			));
 
 			//results_entry starts
-			$cells = do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$temp),NULL,false);
-			$entries = do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false);
+			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
+				'VALUE'=>$temp
+			), NULL, false);
+			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
+				'VALUES'=>$cells
+			), NULL, false);
 			//results_entry ends
 
 			$primary_members->attach($entries);
 		}
 
-		$fields_title = do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word()));
+		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+			'VALUE'=>lorem_word()
+		));
 
 		//results_table
-		$primary_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$primary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
+		$primary_members=do_lorem_template('RESULTS_TABLE', array(
+			'WIDTHS'=>array(),
+			'TEXT_ID'=>lorem_phrase(),
+			'FIELDS_TITLE'=>$fields_title,
+			'FIELDS'=>$primary_members,
+			'MESSAGE'=>'',
+			'SORT'=>'',
+			'PAGINATION'=>''
+		), NULL, false);
 
-		$temp = new ocp_tempcode();
+		$temp=new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$v)
 		{
-			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_SECONDARY',array(
-						'URL'=>placeholder_url(),
-						'REMOVE_URL'=>placeholder_url(),
-						'NAME'=>$v,
-							)
-				);
-			$cells = do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$temp),NULL,false);
-		/*	$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
+			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_SECONDARY', array(
+				'URL'=>placeholder_url(),
+				'REMOVE_URL'=>placeholder_url(),
+				'NAME'=>$v
+			));
+			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
+				'VALUE'=>$temp
+			), NULL, false);
+			/*	$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
 			$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));*/
-			$entries = do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false);
+			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
+				'VALUES'=>$cells
+			), NULL, false);
 
 			$_secondary_members->attach($entries);
 		}
-		$fields_title = do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word()));
+		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+			'VALUE'=>lorem_word()
+		));
 		/*$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));
 		$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));*/
 
 		//results_table
-		$secondary_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_secondary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
+		$secondary_members=do_lorem_template('RESULTS_TABLE', array(
+			'WIDTHS'=>array(),
+			'TEXT_ID'=>lorem_phrase(),
+			'FIELDS_TITLE'=>$fields_title,
+			'FIELDS'=>$_secondary_members,
+			'MESSAGE'=>'',
+			'SORT'=>'',
+			'PAGINATION'=>''
+		), NULL, false);
 
 		foreach (placeholder_array() as $i=>$v)
 		{
-			$temp = do_lorem_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array(
-					'ACCEPT_URL'=>placeholder_url(),
-					'DECLINE_URL'=>placeholder_url(),
-					'NAME'=>lorem_word(),
-					'URL'=>placeholder_url(),
-						)
-			);
-			$cells = do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$temp),NULL,false);
+			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE', array(
+				'ACCEPT_URL'=>placeholder_url(),
+				'DECLINE_URL'=>placeholder_url(),
+				'NAME'=>lorem_word(),
+				'URL'=>placeholder_url()
+			));
+			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
+				'VALUE'=>$temp
+			), NULL, false);
 			//$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
-			$entries = do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false);
+			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
+				'VALUES'=>$cells
+			), NULL, false);
 
 			$_prospective_members->attach($entries);
 		}
-		$fields_title = do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word()));
+		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+			'VALUE'=>lorem_word()
+		));
 		//$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));
 
 		//results_table
-		$prospective_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_prospective_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
+		$prospective_members=do_lorem_template('RESULTS_TABLE', array(
+			'WIDTHS'=>array(),
+			'TEXT_ID'=>lorem_phrase(),
+			'FIELDS_TITLE'=>$fields_title,
+			'FIELDS'=>$_prospective_members,
+			'MESSAGE'=>'',
+			'SORT'=>'',
+			'PAGINATION'=>''
+		), NULL, false);
 
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_VIEW_GROUP_SCREEN',array(
-					'GROUP_NAME'=>lorem_phrase(),
-					'ID'=>placeholder_id(),
-					'FORUM'=>'',
-					'CLUB'=>false,
-					'EDIT_URL'=>placeholder_url(),
-					'TITLE'=>lorem_title(),
-					'LEADER'=>lorem_phrase(),
-					'NAME'=>lorem_word(),
-					'PROMOTION_INFO'=>new ocp_tempcode(),
-					'ADD_URL'=>placeholder_url(),
-					'APPLY_URL'=>placeholder_url(),
-					'APPLY_TEXT'=>lorem_sentence(),
-					'PRIMARY_MEMBERS'=>$primary_members,
-					'SECONDARY_MEMBERS'=>$secondary_members,
-					'PROSPECTIVE_MEMBERS'=>$prospective_members,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_VIEW_GROUP_SCREEN', array(
+				'GROUP_NAME'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'FORUM'=>'',
+				'CLUB'=>false,
+				'EDIT_URL'=>placeholder_url(),
+				'TITLE'=>lorem_title(),
+				'LEADER'=>lorem_phrase(),
+				'NAME'=>lorem_word(),
+				'PROMOTION_INFO'=>new ocp_tempcode(),
+				'ADD_URL'=>placeholder_url(),
+				'APPLY_URL'=>placeholder_url(),
+				'APPLY_TEXT'=>lorem_phrase(),
+				'PRIMARY_MEMBERS'=>$primary_members,
+				'SECONDARY_MEMBERS'=>$secondary_members,
+				'PROSPECTIVE_MEMBERS'=>$prospective_members
+			)), NULL, '', true)
 		);
 	}
 }

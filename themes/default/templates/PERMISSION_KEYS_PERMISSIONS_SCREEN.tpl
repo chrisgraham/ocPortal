@@ -6,11 +6,11 @@
 			{!PAGE_MATCH_KEY_ACCESS_TEXT}
 		</p>
 
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder specific_permissions">
+		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table results_table privileges">
 			<colgroup>
-				<col style="width: 250px" />
+				<col class="permission_field_name_column" />
 				{COLS}
-				<col style="width: 35px" />
+				<col class="permission_copy_column" />
 			</colgroup>
 
 			<thead>
@@ -31,10 +31,10 @@
 			{!PAGE_MATCH_KEY_MESSAGES_TEXT}
 		</p>
 
-		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder specific_permissions">
+		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table results_table">
 			<colgroup>
-				<col style="width: 250px" />
-				<col style="width: 100%" />
+				<col class="permission_match_key_column" />
+				<col class="permission_match_key_message_column" />
 			</colgroup>
 
 			<thead>
@@ -49,10 +49,9 @@
 			</tbody>
 		</table></div>
 
-		<br />
-		<div class="proceed_button">
+		<p class="proceed_button">
 			<input onmouseover="this.form.disable_size_change=true;" onmouseout="this.form.disable_size_change=false;" accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
-		</div>
+		</p>
 	</div>
 </form>
 

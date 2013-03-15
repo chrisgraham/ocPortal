@@ -123,7 +123,7 @@ class Hook_pointstore_forwarding
 	{
 		if (get_option('is_on_forw_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('TITLE_NEWFORWARDING');
+		$title=get_screen_title('TITLE_NEWFORWARDING');
 
 		$member_id=get_member();
 
@@ -160,7 +160,7 @@ class Hook_pointstore_forwarding
 
 		require_code('type_validation');
 
-		$title=get_page_title('TITLE_NEWFORWARDING');
+		$title=get_screen_title('TITLE_NEWFORWARDING');
 
 		//Getting User Information
 		$member_id=get_member();
@@ -217,7 +217,7 @@ class Hook_pointstore_forwarding
 	{
 		if (get_option('is_on_forw_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('TITLE_NEWFORWARDING');
+		$title=get_screen_title('TITLE_NEWFORWARDING');
 
 		$member_id=get_member();
 		$pointsleft=available_points($member_id); // the number of points this member has left

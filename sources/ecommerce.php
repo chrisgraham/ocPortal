@@ -31,6 +31,15 @@ function init__ecommerce()
 		define('PRODUCT_OTHER',3);
 		define('PRODUCT_CATALOGUE',4);
 		define('PRODUCT_ORDERS',5);
+
+		define('ECOMMERCE_PRODUCT_AVAILABLE',0);
+		define('ECOMMERCE_PRODUCT_NO_GUESTS',1); // Only used if current user really is a Guest
+		define('ECOMMERCE_PRODUCT_ALREADY_HAS',2);
+		define('ECOMMERCE_PRODUCT_DISABLED',3);
+		define('ECOMMERCE_PRODUCT_PROHIBITED',4);
+		define('ECOMMERCE_PRODUCT_OUT_OF_STOCK',5);
+		define('ECOMMERCE_PRODUCT_MISSING',6);
+		define('ECOMMERCE_PRODUCT_INTERNAL_ERROR',7);
 	}
 }
 
@@ -115,7 +124,7 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	require_code('form_templates');
 	$fields=new ocp_tempcode();
 	$fields->attach(form_input_hidden('trans_id',$trans_id));
-	$fields->attach(form_input_line(do_lang_tempcode('CARDHOLDER_NAME'),do_lang_tempcode('DESCRIPTION_CARDHOLDER_NAME'),'name',ecommerce_test_mode()?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):get_ocp_cpf('TODO'),true));
+	$fields->attach(form_input_line(do_lang_tempcode('CARDHOLDER_NAME'),do_lang_tempcode('DESCRIPTION_CARDHOLDER_NAME'),'name',ecommerce_test_mode()?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):get_ocp_cpf('payment_cardholder_name'),true));
 	$fields->attach(form_input_list(do_lang_tempcode('CARD_TYPE'),'','card_type',$object->nice_get_card_types(ecommerce_test_mode()?'Visa':get_ocp_cpf('payment_type'))));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_NUMBER'),'card_number',ecommerce_test_mode()?'4444333322221111':get_ocp_cpf('payment_card_number'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_START_DATE'),do_lang_tempcode('DESCRIPTION_CARD_START_DATE'),'start_date',ecommerce_test_mode()?date('m/y',utctime_to_usertime(time()-60*60*24*365)):get_ocp_cpf('payment_card_start_date'),true));
@@ -357,6 +366,13 @@ function perform_local_payment()
  */
 function handle_transaction_script()
 {
+	if ((file_exists(get_file_base().'/data_custom/ecommerce.log')) && (is_writable_wrap(get_file_base().'/data_custom/ecommerce.log')))
+	{
+		$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
+		fwrite($myfile,serialize($_POST).chr(10));
+		fclose($myfile);
+	}
+
 	require_lang('ecommerce');
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
@@ -409,8 +425,8 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 {
 	/*#####################################################################################*/
 	//Temporary setting - force payment setting to "completed" for test mode transactions
-	if(get_option('ecommerce_test_mode')=="1")
-		$payment_status	=	'Completed';
+	if (get_option('ecommerce_test_mode')=="1")
+		$payment_status='Completed';
 	/*#####################################################################################*/
 
 	// Try and locate the product
@@ -452,7 +468,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	// Store
 	$GLOBALS['SITE_DB']->query_insert('transactions',array('id'=>$txn_id,'t_memo'=>$memo,'purchase_id'=>$purchase_id,'status'=>$payment_status,'pending_reason'=>$pending_reason,'reason'=>$reason_code,'amount'=>$mc_gross,'t_currency'=>$mc_currency,'linked'=>$parent_txn_id,'t_time'=>time(),'item'=>$product,'t_via'=>$source));
 
-	$found['txn_id']	=	$txn_id;
+	$found['txn_id']=$txn_id;
 
 	// Check currency
 	if ($mc_currency!=get_option('currency'))
@@ -513,19 +529,19 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	{
 		//Find product hooks of this order to check dispatch type
 
-		$object	=	find_product($product,true);
+		$object=find_product($product,true);
 
 		if(is_object($object) && !method_exists($object,'get_product_dispatch_type'))	
 		{	//If hook does not have dispatch method setting take dispatch method as automatic
-			$found['ORDER_STATUS']	=	'ORDER_STATUS_dispatched';	
+			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';	
 		}
 		elseif(is_object($object) && $object->get_product_dispatch_type($purchase_id)=='automatic')
 		{	
-			$found['ORDER_STATUS']	=	'ORDER_STATUS_dispatched';
+			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';
 		}
 		else
 		{	
-			$found['ORDER_STATUS']	=	'ORDER_STATUS_payment_received';
+			$found['ORDER_STATUS']='ORDER_STATUS_payment_received';
 		}
 		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$product));
 
@@ -790,7 +806,7 @@ function make_cart_payment_button($order_id,$currency)
 
 	if (!method_exists($object,'make_cart_transaction_button'))
 	{
-		$amount	=	$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
+		$amount=$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
 		return $object->make_transaction_button($order_id,do_lang('CART_ORDER',$order_id),$order_id,$amount,$currency);
 	}
 

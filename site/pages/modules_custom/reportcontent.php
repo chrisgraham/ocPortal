@@ -102,7 +102,7 @@ class Module_reportcontent
 
 	function form()
 	{
-		$title=get_page_title('REPORT_CONTENT');
+		$title=get_screen_title('REPORT_CONTENT');
 
 		require_code('form_templates');
 
@@ -127,7 +127,7 @@ class Module_reportcontent
 
 		$member=$poster;
 		if (!is_guest($poster_id))
-			$member='[page type="view" id="'.strval($poster_id).'" param="'.get_module_zone('members').'" caption="'.$poster.'"]members[/page]';
+			$member='[page="'.get_module_zone('members').':members:view:'.strval($poster_id).']'.$poster.'[/page]';
 
 		$hidden_fields=build_keep_form_fields('',true);
 
@@ -160,15 +160,15 @@ class Module_reportcontent
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 
-		$post=do_template('REPORTED_CONTENT_FCOMCODE',array('URL'=>$url,'CONTENT_ID'=>$content_id,'MEMBER'=>$member,'CONTENT_TITLE'=>$content_title,'POSTER'=>$poster));
+		$post=do_template('REPORTED_CONTENT_FCOMCODE',array('_GUID'=>'cb40aa1900eefcd24a0786b9d980fef6','URL'=>$url,'CONTENT_ID'=>$content_id,'MEMBER'=>$member,'CONTENT_TITLE'=>$content_title,'POSTER'=>$poster));
 		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,NULL,NULL,true,false);
 
-		return do_template('POSTING_SCREEN',array('TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
+		return do_template('POSTING_SCREEN',array('_GUID'=>'92a0a35a7c07edd0d3f8a960710de608','TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}
 
 	function actualiser()
 	{
-		$title=get_page_title('REPORT_CONTENT');
+		$title=get_screen_title('REPORT_CONTENT');
 
 		// Test CAPTCHA
 		if (addon_installed('captcha'))

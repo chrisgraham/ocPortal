@@ -76,11 +76,9 @@ class Block_main_download_tease
 		$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('validated'=>1),'ORDER BY num_downloads DESC',$max,$start);
 
 		$content=new ocp_tempcode();
-		foreach ($rows as $i=>$row)
+		foreach ($rows as $row)
 		{
-			if ($i!=0) $content->attach(do_template('BLOCK_SEPARATOR'));
-
-			$content->attach(get_download_html($row,true,true,$zone));
+			$content->attach(render_download_box($row,true,true,$zone));
 		}
 
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
@@ -90,7 +88,7 @@ class Block_main_download_tease
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start-$max),'_SELF');
 		$next_url=($page_num==$num_pages)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'15ca70ec400629f67edefa869fb1f1a8','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'15ca70ec400629f67edefa869fb1f1a8','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		return do_template('BLOCK_MAIN_DOWNLOAD_TEASE',array('_GUID'=>'a164e33c0b4ace4bae945c39f2f00ca9','CONTENT'=>$content,'BROWSE'=>$browse));
 	}

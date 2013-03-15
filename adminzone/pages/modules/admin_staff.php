@@ -123,7 +123,7 @@ class Module_admin_staff
 	{
 		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_MEMBER_SYSTEM_INSTALLED'));
 
-		$title=get_page_title('MANAGE_STAFF');
+		$title=get_screen_title('MANAGE_STAFF');
 
 		if (get_option('is_on_staff_filter')=='0') $text=do_lang_tempcode('STAFF_FILTER_OFF'); else $text=do_lang_tempcode('STAFF_FILTER_ON');
 
@@ -179,7 +179,7 @@ class Module_admin_staff
 	 */
 	function staff_edit()
 	{
-		$title=get_page_title('EDIT_STAFF');
+		$title=get_screen_title('EDIT_STAFF');
 		foreach ($_POST as $key=>$val)
 		{
 			if (!is_string($val)) continue;

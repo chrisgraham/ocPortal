@@ -1,6 +1,8 @@
-{+START,BOX,{!CURRENT},,med}
+<div class="box box___theme_image_preview"><div class="box_inner">
+	<h2>{!CURRENT}</h2>
+
 	<div class="float_surrounder">
-		<img class="theme_image_preview" src="{URL*}" title="" alt="{!THEME_IMAGE}" />
+		<img class="theme_image_preview" src="{URL*}" alt="{!THEME_IMAGE}" />
 
 		<p>{!THEME_IMAGE_CURRENTLY_LIKE,{WIDTH*},{HEIGHT*}}</p>
 
@@ -10,5 +12,5 @@
 
 		<p>{!RIGHT_CLICK_SAVE_AS}</p>
 	</div>
-{+END}
+</div></div>
 

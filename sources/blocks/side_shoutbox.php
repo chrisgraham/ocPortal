@@ -61,7 +61,6 @@ class Block_side_shoutbox
 	function run($map)
 	{
 		require_lang('chat');
-		require_css('side_blocks');
 
 		$room_id=array_key_exists('param',$map)?intval($map['param']):NULL;
 		$num_messages=array_key_exists('max',$map)?intval($map['max']):5;
@@ -86,7 +85,7 @@ class Block_side_shoutbox
 		$content=NULL;
 		if (get_value('no_frames')==='1') $content=shoutbox_script(true,$room_id,$num_messages);
 
-		return do_template('BLOCK_SIDE_SHOUTBOX_IFRAME',array('CONTENT'=>$content,'ROOM_ID'=>strval($room_id),'NUM_MESSAGES'=>strval($num_messages)));
+		return do_template('BLOCK_SIDE_SHOUTBOX_IFRAME',array('_GUID'=>'dd737145479155961a1252162a43d4ef','CONTENT'=>$content,'ROOM_ID'=>strval($room_id),'NUM_MESSAGES'=>strval($num_messages)));
 	}
 
 }

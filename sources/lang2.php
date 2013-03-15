@@ -34,7 +34,7 @@ function get_lang_files($lang=NULL)
 	{
 		while (false!==($file=readdir($_dir)))
 		{
-			if (($file!='.') && ($file!='..') && ((substr($file,-4)=='.ini') || (substr($file,-3)=='.po')))
+			if (($file!='.') && ($file!='..') && ((substr($file,-4)=='.ini') || (substr($file,-3)=='.po')) && (!should_ignore_file(get_file_base().'/lang/'.$lang.'/'.$file,0,0)))
 			{
 				if (substr($file,-3)=='.po')
 				{
@@ -53,7 +53,7 @@ function get_lang_files($lang=NULL)
 	{
 		while (false!==($file=readdir($_dir)))
 		{
-			if (($file!='.') && ($file!='..') && ((substr($file,-4)=='.ini') || (substr($file,-3)=='.po')))
+			if (($file!='.') && ($file!='..') && ((substr($file,-4)=='.ini') || (substr($file,-3)=='.po')) && (!should_ignore_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file,0,0)))
 			{
 				if (substr($file,-3)=='.po')
 				{
@@ -74,7 +74,7 @@ function get_lang_files($lang=NULL)
 		{
 			while (false!==($file=readdir($_dir)))
 			{
-				if (($file!='.') && ($file!='..') && ((substr($file,-4)=='.ini') || (substr($file,-3)=='.po')))
+				if (($file!='.') && ($file!='..') && ((substr($file,-4)=='.ini') || (substr($file,-3)=='.po')) && (!should_ignore_file(get_file_base().'/lang_custom/'.$lang.'/'.$file,0,0)))
 				{
 					if (substr($file,-3)=='.po')
 					{

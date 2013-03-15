@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_counting_blocks
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_counting_blocks
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,27 +72,27 @@ class Hook_addon_registry_counting_blocks
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/counting_blocks.php',
 			'sources/blocks/main_count.php',
 			'sources/blocks/main_countdown.php',
-			'MAIN_COUNTDOWN.tpl',
-			'MAIN_COUNT.tpl',
+			'counting_blocks.css',
+			'BLOCK_MAIN_COUNTDOWN.tpl',
+			'BLOCK_MAIN_COUNT.tpl'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'MAIN_COUNTDOWN.tpl'=>'main_countdown',
-				'MAIN_COUNT.tpl'=>'main_count',
-				);
+			'BLOCK_MAIN_COUNTDOWN.tpl'=>'main_countdown',
+			'BLOCK_MAIN_COUNT.tpl'=>'main_count'
+		);
 	}
 
 	/**
@@ -106,16 +105,14 @@ class Hook_addon_registry_counting_blocks
 	function tpl_preview__main_countdown()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('MAIN_COUNTDOWN',array(
-					'LANG'=>placeholder_number(),
-					'POSITIVE'=>true,
-					'PRECISION'=>placeholder_number(),
-					'MILLISECONDS_FOR_PRECISION'=>placeholder_number(),
-					'DISTANCE_FOR_PRECISION'=>placeholder_number(),
-					'TAILING'=>false,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNTDOWN', array(
+				'LANG'=>placeholder_number(),
+				'POSITIVE'=>true,
+				'PRECISION'=>placeholder_number(),
+				'MILLISECONDS_FOR_PRECISION'=>placeholder_number(),
+				'DISTANCE_FOR_PRECISION'=>placeholder_number(),
+				'TAILING'=>false
+			)), NULL, '', true)
 		);
 	}
 
@@ -129,12 +126,10 @@ class Hook_addon_registry_counting_blocks
 	function tpl_preview__main_count()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('MAIN_COUNT',array(
-					'NAME'=>lorem_word(),
-					'VALUE'=>placeholder_random(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT', array(
+				'NAME'=>lorem_word(),
+				'VALUE'=>placeholder_random()
+			)), NULL, '', true)
 		);
 	}
 }

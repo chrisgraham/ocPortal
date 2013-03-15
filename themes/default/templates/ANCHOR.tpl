@@ -1,1 +1,1 @@
-<a name="{NAME*}" id="{NAME*}"></a>
+<a id="{NAME*}"></a>

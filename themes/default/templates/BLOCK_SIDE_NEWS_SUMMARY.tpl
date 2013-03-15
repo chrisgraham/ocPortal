@@ -1,16 +1,13 @@
-{+START,IF,{$GET,done_one_side_news}}
-	<div class="tiny_linebreak">&nbsp;</div>
-{+END}
-{$SET,done_one_side_news,1}
+<div class="box box___block_side_news_summary"><div class="box_inner">
+	<p class="tiny_paragraph">
+		<a title="{$STRIP_TAGS,{NEWS_TITLE}}" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},30,0,1}</a>
+	</p>
 
-{+START,BOX,,,light}
-	<p class="tiny_para"><a title="{$STRIP_TAGS,{NEWS_TITLE}}" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},30,0,1}</a></p>
-
-	<p class="tiny_para associated_details">
+	<p class="tiny_paragraph associated_details">
 		{!BY_SIMPLE,{AUTHOR*}}
 	</p>
 
-	<p class="tiny_para associated_details">
-		{!LAST_POST}: {DATE*}
+	<p class="tiny_paragraph associated_details">
+		{!POSTED_TIME_SIMPLE,{DATE*}}
 	</p>
-{+END}
+</div></div>

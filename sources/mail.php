@@ -127,20 +127,20 @@ function comcode_to_clean_text($message_plain)
 	if (preg_match("#\[semihtml\](.*)\[\/semihtml\]#Us",$message_plain,$match)!=0)
 	{
 		require_code('comcode_from_html');
-		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0]),$message_plain);
+		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0],true),$message_plain);
 	}
 	if (preg_match("#\[html\](.*)\[\/html\]#Us",$message_plain,$match)!=0)
 	{
 		require_code('comcode_from_html');
-		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0]),$message_plain);
+		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0],true),$message_plain);
 	}
 	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 
-	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1}',$message_plain);
+	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
-	$message_plain=@html_entity_decode(strip_tags($message_plain),ENT_QUOTES,get_charset());
+	$message_plain=strip_html($message_plain);
 
 	$message_plain=str_replace(']http',']'.chr(10).'http',str_replace('[/url]',chr(10).'[/url]',$message_plain));
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);
@@ -148,7 +148,7 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us','_indent_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[title([^\]])*\](.*)\[/title\]#Us','_title_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[box="([^"]*)"[^\]]*\](.*)\[/box\]#Us','_box_callback',$message_plain);
-	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment2','attachment_safe','contents','block','random');
+	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment_safe','contents','block','random');
 	foreach ($tags_to_strip_inards as $s)
 	{
 		$message_plain=preg_replace('#\['.$s.'[^\]]*\].*\[/'.$s.'\]#Us','',$message_plain);
@@ -205,9 +205,11 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
  * @param  boolean		Whether to bypass queueing
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
 {
 	if (running_script('stress_test_loader')) return NULL;
+
+	if (@$GLOBALS['SITE_INFO']['no_email_output']==='1') return NULL;
 
 	global $EMAIL_ATTACHMENTS;
 	$EMAIL_ATTACHMENTS=array();
@@ -219,12 +221,13 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 	if (!$coming_out_of_queue)
 	{
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
+		if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
 		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>substr($subject_tag,0,255),
+			'm_subject'=>substr($subject_line,0,255),
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
@@ -329,7 +332,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	$boundary3=$_boundary.'_3';
 
 	// Our subject
-	$subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_TAG'=>$subject_tag),$lang,false,NULL,'.tpl','templates',$theme);
+	$subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_LINE'=>$subject_line),$lang,false,NULL,'.tpl','templates',$theme);
 	$tightened_subject=$subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
 	$tightened_subject=str_replace(chr(10),'',$tightened_subject);
 	$tightened_subject=str_replace(chr(13),'',$tightened_subject);
@@ -368,7 +371,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$headers='From: "'.$from_name.'" <'.$website_email.'>'.$line_term;
 	} else
 	{
-		$headers='From: <'.$from_email.'>'.$line_term;
+		$headers='From: "'.$from_name.'" <'.$from_email.'>'.$line_term;
 	}
 	$headers.='Reply-To: <'.$from_email.'>'.$line_term;
 	$headers.='Return-Path: <'.$website_email.'>'.$line_term;
@@ -484,9 +487,45 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
 		{
-			$file_contents=http_download_file($img,NULL,false);
-			if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
-			if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			$file_contents=mixed();
+			$matches=array();
+			require_code('attachments');
+			if ((preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches)!=0) && (strpos($img,'forum_db=1')===false))
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id'=>intval($matches[1])),'ORDER BY a_add_time DESC');
+				if ((array_key_exists(0,$rows)) && (has_attachment_access($as,intval($matches[1]))))
+				{
+					$myrow=$rows[0];
+
+					if ($matches[2]=='1')
+					{
+						$full=$myrow['a_thumb_url'];
+					}
+					else
+					{
+						$full=$myrow['a_url'];
+					}
+
+					if (url_is_local($full))
+					{
+						$_full=get_custom_file_base().'/'.rawurldecode($full);
+						if (file_exists($_full))
+						{
+							$filename=$myrow['a_original_filename'];
+							require_code('mime_types');
+							$file_contents=file_get_contents($_full);
+							$mime_type=get_mime_type(get_file_extension($filename));
+						}
+					}
+				}
+			}
+			if ($file_contents===NULL)
+			{
+				$file_contents=http_download_file($img,NULL,false);
+				if (is_null($file_contents)) continue;
+				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
+				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			}
 		}
 		$sending_message.='Content-Type: '.str_replace("\r",'',str_replace("\n",'',$mime_type)).$line_term;
 		$sending_message.='Content-ID: <'.$id.'>'.$line_term;
@@ -511,12 +550,15 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 			if (strpos($path,'://')===false)
 			{
-				$sending_message.=chunk_split(base64_encode(file_get_contents($path)),76,$line_term);
+				if (!is_file($path)) continue;
+				$contents=file_get_contents($path);
 			} else
 			{
 				require_code('files');
-				$sending_message.=chunk_split(base64_encode(http_download_file($path)),76,$line_term);
+				$contents=http_download_file($path,NULL,false);
+				if (is_null($contents)) continue;
 			}
+			$sending_message.=chunk_split(base64_encode($contents),76,$line_term);
 		}
 
 		$sending_message.=$line_term.'--'.$boundary.'--'.$line_term;
@@ -544,7 +586,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 				fwrite($socket,'HELO '.$domain."\r\n");
 				$rcv=fgets($socket,1024);
 
-				// Login if necessary
+				// Log in if necessary
 				$username=get_option('smtp_sockets_username');
 				$password=get_option('smtp_sockets_password');
 				if ($username!='')
@@ -645,6 +687,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 				$to_line='"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>';
 			}
 			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
+			$php_errormsg=mixed();
 			if (ini_get('safe_mode')=='1')
 			{
 				$worked=mail($to_line,$tightened_subject,$sending_message,$headers);
@@ -665,7 +708,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
 		} else
 		{
-			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
 		}
 	}
 
@@ -734,17 +777,14 @@ function filter_css($css,$context)
 						// We let all tag-name selectors through if the tag exists in the document, unless they contain a class/ID specifier -- in which case we toe to the presence of that class/ID
 						if ((strpos($selector,'.')===false) && (strpos($selector,'#')===false) && (preg_match('#(^|\s)(\w+)([\[\#\.:\s]|$)#',$selector,$matches)!=0))
 						{
-							//if (($matches[2]=='html') || ($matches[2]=='body') || ($matches[2]=='div') || ($matches[2]=='a') || (strpos($context,'<'.$matches[2])!==false))
-							{
-								$applies=true;
-								break;
-							}
+							$applies=true;
+							break;
 						}
 
 						// ID selectors
 						foreach ($ids as $id)
 						{
-							if (preg_match('#\#'.str_replace('#','\#',preg_quote($id)).'([\[\.:\s]|$)#',$selector)!=0)
+							if (preg_match('#\#'.preg_quote($id,'#').'([\[\.:\s]|$)#',$selector)!=0)
 							{
 								$applies=true;
 								break;
@@ -754,7 +794,7 @@ function filter_css($css,$context)
 						// Class name selectors
 						foreach ($classes as $class)
 						{
-							if (preg_match('#\.'.str_replace('#','\#',preg_quote($class)).'([\[\#:\s]|$)#',$selector)!=0)
+							if (preg_match('#\.'.preg_quote($class,'#').'([\[\#:\s]|$)#',$selector)!=0)
 							{
 								$applies=true;
 								break;
@@ -793,13 +833,12 @@ function form_to_email_entry_script()
 
 	global $PAGE_NAME_CACHE;
 	$PAGE_NAME_CACHE='_form_to_email';
-	$title=get_page_title('MAIL_SENT');
+	$title=get_screen_title('MAIL_SENT');
 	$text=do_lang_tempcode('MAIL_SENT_TEXT',escape_html(post_param('to_written_name',get_site_name())));
 	$redirect=get_param('redirect',NULL);
 	if (!is_null($redirect))
 	{
 		require_code('site2');
-		$GLOBALS['NON_PAGE_SCRIPT']=0;
 		$tpl=redirect_screen($title,$redirect,$text);
 	} else
 	{
@@ -825,11 +864,11 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 		$fields=array();
 		foreach (array_diff(array_keys($_POST),array('MAX_FILE_SIZE','perform_validation','_validated','posting_ref_id','f_face','f_colour','f_size','x','y','name','subject','email','to_members_email','to_written_name','redirect','http_referer')) as $key)
 		{
-			$is_hidden=(strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (preg_match('#^caption\d+$#',$key)!=0) || (preg_match('#^attachmenttype\d+$#',$key)!=0) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
+			$is_hidden=(strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
 			if ($is_hidden) continue;
 
 			if (substr($key,0,1)!='_')
-				$fields[$key]=post_param('label_for__'.$key,ucwords(str_replace('_',' ',$key)));
+				$fields[$key]=post_param('label_for__'.$key,titleify($key));
 		}
 	}
 
@@ -860,10 +899,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 	is_swf_upload(true);
 	foreach ($_FILES as $file)
 	{
-		//if (is_uploaded_file($file['tmp_name']))
-		{
-			$attachments[$file['tmp_name']]=$file['name'];
-		}
+		$attachments[$file['tmp_name']]=$file['name'];
 	}
 
 	if (addon_installed('captcha'))

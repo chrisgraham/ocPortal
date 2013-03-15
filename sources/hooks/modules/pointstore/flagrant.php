@@ -56,7 +56,7 @@ class Hook_pointstore_flagrant
 	{
 		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWTEXT');
 
 		$results=$GLOBALS['SITE_DB']->query('SELECT SUM(days) As days FROM '.get_table_prefix().'text WHERE activation_time IS NULL');
 		$queue=$results[0]['days'];
@@ -64,7 +64,7 @@ class Hook_pointstore_flagrant
 		$text_link=build_url(array('page'=>'_SELF','type'=>'_text','id'=>'flagrant'),'_SELF');
 		$cost=intval(get_option('text'));
 
-		return do_template('POINTSTORE_FLAGRANT_SCREEN',array('_GUID'=>'92d51c5b87745c31397d9165595262d3','TITLE'=>$title,'TEXT_LINK'=>$text_link,'QUEUE'=>integer_format($queue),'COST'=>integer_format($cost)));
+		return do_template('POINTSTORE_FLAGRANT_SCREEN',array('_GUID'=>'92d51c5b87745c31397d9165595262d3','TITLE'=>$title,'TEXT_URL'=>$text_link,'QUEUE'=>integer_format($queue),'COST'=>integer_format($cost)));
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Hook_pointstore_flagrant
 	{
 		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWTEXT');
 
 		// Build up fields
 		require_code('form_templates');
@@ -100,7 +100,7 @@ class Hook_pointstore_flagrant
 	{
 		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWTEXT');
 
 		//So we don't need to call this big long ugly name...
 		$days=post_param_integer('days');
@@ -142,7 +142,7 @@ class Hook_pointstore_flagrant
 	{
 		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWTEXT');
 
 		// Define variables
 		$member_id=get_member();

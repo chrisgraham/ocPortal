@@ -61,6 +61,7 @@ class Module_admin_themewizard
 		require_lang('themes');
 		require_code('themes2');
 		require_code('themewizard');
+		require_css('themes_editor');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/themewizard';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
@@ -86,7 +87,7 @@ class Module_admin_themewizard
 	 */
 	function step1()
 	{
-		$title=get_page_title('_THEMEWIZARD',true,array(integer_format(1),integer_format(4)));
+		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(1),integer_format(4)));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'),false,true);
 		$text=do_lang_tempcode('THEMEWIZARD_1_DESCRIBE');
@@ -111,7 +112,7 @@ class Module_admin_themewizard
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'))));
 
-		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed','#'.get_param('seed',find_theme_seed('default')),true));
+		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed','#'.preg_replace('/^\#/','',get_param('seed',find_theme_seed('default'))),true));
 
 		if (count(find_all_themes())!=1)
 		{
@@ -165,11 +166,11 @@ class Module_admin_themewizard
 	 */
 	function step2()
 	{
-		$title=get_page_title('_THEMEWIZARD',true,array(integer_format(2),integer_format(4)));
+		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(2),integer_format(4)));
 
 		$source_theme=get_param('source_theme');
 		$algorithm=get_param('algorithm');
-		$seed=get_param('seed');
+		$seed=preg_replace('/^\#/','',get_param('seed'));
 		$dark=get_param_integer('dark',0);
 		$inherit_css=get_param_integer('inherit_css',0);
 		$themename=get_param('themename');
@@ -194,8 +195,8 @@ class Module_admin_themewizard
 		$theme['SEED']=$_theme['seed'];
 		//$theme=$theme['css']; // this will simplify things a bit, since we only use the 'css' sub-array.
 		$theme['TITLE']=$title;
-		$theme['CHANGE_LINK']=build_url(array('page'=>'_SELF','type'=>'misc','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
-		$theme['STAGE3_LINK']=build_url(array('page'=>'_SELF','type'=>'step3','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
+		$theme['CHANGE_URL']=build_url(array('page'=>'_SELF','type'=>'misc','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
+		$theme['STAGE3_URL']=build_url(array('page'=>'_SELF','type'=>'step3','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));
 		return do_template('THEMEWIZARD_2_SCREEN',$theme);
@@ -208,7 +209,7 @@ class Module_admin_themewizard
 	 */
 	function step3()
 	{
-		$title=get_page_title('_THEMEWIZARD',true,array(integer_format(3),integer_format(4)));
+		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(3),integer_format(4)));
 
 		$source_theme=get_param('source_theme');
 		$algorithm=get_param('algorithm');
@@ -266,7 +267,7 @@ class Module_admin_themewizard
 		sync_file('themes/'.filter_naughty($themename).'/theme.ini');
 
 		// We're done
-		$title=get_page_title('_THEMEWIZARD',true,array(integer_format(4),integer_format(4)));
+		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(4),integer_format(4)));
 		$message=do_lang_tempcode('THEMEWIZARD_4_DESCRIBE',escape_html('#'.$seed),escape_html($themename));
 
 		require_code('templates_donext');
@@ -309,7 +310,7 @@ class Module_admin_themewizard
 	{
 		if (!function_exists('imagepng')) warn_exit(do_lang_tempcode('GD_NEEDED'));
 
-		$title=get_page_title('_LOGOWIZARD',true,array(integer_format(1),integer_format(3)));
+		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(1),integer_format(3)));
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/logowizard';
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_logo'),'_SELF');
@@ -348,15 +349,15 @@ class Module_admin_themewizard
 	 */
 	function _make_logo()
 	{
-		$title=get_page_title('_LOGOWIZARD',true,array(integer_format(2),integer_format(3)));
+		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(2),integer_format(3)));
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/logowizard';
 
-		$preview=do_template('LOGOWIZARD_2_SCREEN',array('NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
+		$preview=do_template('LOGOWIZARD_2',array('NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('LOGOWIZARD'))));
 
 		require_code('templates_confirm_screen');
-		return form_confirm_screen($title,$preview,'__make_logo','make_logo');
+		return confirm_screen($title,$preview,'__make_logo','make_logo');
 	}
 
 	/**
@@ -366,7 +367,7 @@ class Module_admin_themewizard
 	 */
 	function __make_logo()
 	{
-		$title=get_page_title('_LOGOWIZARD',true,array(integer_format(3),integer_format(3)));
+		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(3),integer_format(3)));
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/logowizard';
 
 		$theme=post_param('theme');
@@ -377,7 +378,7 @@ class Module_admin_themewizard
 		foreach (array($theme,'default') as $logo_save_theme)
 		{
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
-			$img=generate_logo(post_param('name'),post_param('title'),false,$logo_save_theme,'logo-template');
+			$img=generate_logo(post_param('name'),post_param('title'),false,$logo_save_theme,'logo_template');
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
 			actual_edit_theme_image('logo/-logo',$logo_save_theme,user_lang(),'logo/-logo',$path);
@@ -385,12 +386,12 @@ class Module_admin_themewizard
 				actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,user_lang(),'logo/collaboration-logo',$path);
 			$rand=uniqid('');
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
-			$img=generate_logo(post_param('name'),post_param('title'),false,NULL,'trimmed-logo-template');
+			$img=generate_logo(post_param('name'),post_param('title'),false,NULL,'trimmed_logo_template');
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
-			actual_edit_theme_image('logo/trimmed-logo',$logo_save_theme,user_lang(),'logo/trimmed-logo',$path);
+			actual_edit_theme_image('logo/trimmed_logo',$logo_save_theme,user_lang(),'logo/trimmed_logo',$path);
 		}
-		persistant_cache_delete('THEME_IMAGES');
+		persistent_cache_delete('THEME_IMAGES');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('START'))));
 

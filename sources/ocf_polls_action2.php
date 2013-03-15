@@ -44,7 +44,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 	$poll_info=$GLOBALS['FORUM_DB']->query_select('f_polls',array('*'),array('id'=>$poll_id),'',1);
 
 	if ((!has_specific_permission(get_member(),'may_unblind_own_poll')) && ($is_private==0) && ($poll_info[0]['po_is_private']==1))
-		access_denied('SPECIFIC_PERMISSION','may_unblind_own_poll');
+		access_denied('PRIVILEGE','may_unblind_own_poll');
 
 	$GLOBALS['FORUM_DB']->query_update('f_polls',array(
 		'po_question'=>$question,

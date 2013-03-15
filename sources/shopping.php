@@ -193,7 +193,7 @@ function show_cart_image()
 	else
 		$title=do_lang_tempcode('CART_EMPTY');
 
-	return do_template('CART_LOGO',array('URL'=>$cart_url,'ITEMS'=>strval($item_count),'TITLE'=>$title));
+	return do_template('ECOM_CART_LOGO',array('_GUID'=>'46ae00c8a605b84fee1b1c68fc57cd32','URL'=>$cart_url,'ITEMS'=>strval($item_count),'TITLE'=>$title));
 }
 
 /**
@@ -282,7 +282,7 @@ function payment_form()
 {
 	require_code('ecommerce');
 
-	$title=get_page_title('PAYMENT_HEADING');
+	$title=get_screen_title('PAYMENT_HEADING');
 
 	$cart_items=find_products_in_cart();
 
@@ -312,7 +312,7 @@ function payment_form()
 		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',$insert,true);
 	} else
 	{
-		$order_id = NULL;
+		$order_id=NULL;
 	}
 
 	$total_price=0;	
@@ -376,7 +376,7 @@ function payment_form()
 
 	$GLOBALS['SITE_DB']->query_update('shopping_order',array('tot_price'=>$total_price),array('id'=>$order_id),'',1);
 
-	
+
 	if (!perform_local_payment()) // Pass through to the gateway's HTTP server
 	{
 		$result=make_cart_payment_button($order_id,get_option('currency'));
@@ -396,11 +396,11 @@ function payment_form()
 		$ipn_url=$object->get_ipn_url();*/
 		$finish_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 
-		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('FIELDS'=>$fields));
+		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'a70d6995baabb7e41e1af68409361f3c','FIELDS'=>$fields));
 
 		require_javascript('javascript_validation');
 
-		return do_template('PURCHASE_WIZARD_SCREEN',array('TITLE'=>$title,'CONTENT'=>$result,'URL'=>$finish_url));
+		return do_template('PURCHASE_WIZARD_SCREEN',array('_GUID'=>'dfc7b8460e81dfd6d083e5f5d2b606a4','TITLE'=>$title,'CONTENT'=>$result,'URL'=>$finish_url));
 	}
 
 	return $result;

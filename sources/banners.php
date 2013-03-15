@@ -36,11 +36,10 @@ function init__banners()
  * @set    "click" ""
  * @param  ?string		Specific banner to display (NULL: get from URL param) (blank: randomise)
  * @param  ?string		Banner type to display (NULL: get from URL param)
- * @param  ?integer		Whether we are only showing our own banners, rather than allowing external rotation ones (NULL: get from URL param)
  * @param  ?string		The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
  * @return ?tempcode		Result (NULL: we weren't asked to return the result)
  */
-function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_only=NULL,$source=NULL)
+function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NULL)
 {
 	require_code('images');
 	require_lang('banners');
@@ -73,12 +72,18 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 		if ($unique)
 		{
 			if (get_db_type()!='xml')
-				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET hits_to=(hits_to+1) WHERE '.db_string_equal_to('name',$dest),1);
+			{
+				if (!$GLOBALS['SITE_DB']->table_is_locked('banners'))
+					$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET hits_to=(hits_to+1) WHERE '.db_string_equal_to('name',$dest),1);
+			}
 			$campaignremaining=$myrow['campaign_remaining'];
 			if (!is_null($campaignremaining))
 			{
 				if (get_db_type()!='xml')
-					$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET campaign_remaining=(campaign_remaining-1) WHERE '.db_string_equal_to('name',$dest),1);
+				{
+					if (!$GLOBALS['SITE_DB']->table_is_locked('banners'))
+						$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET campaign_remaining=(campaign_remaining-1) WHERE '.db_string_equal_to('name',$dest),1);
+				}
 			}
 		}
 
@@ -94,7 +99,10 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 			if (!is_null($campaignremaining))
 			{
 				if (get_db_type()!='xml')
-					$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET campaign_remaining=(campaign_remaining+1) WHERE '.db_string_equal_to('name',$source),1);
+				{
+					if (!$GLOBALS['SITE_DB']->table_is_locked('banners'))
+						$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET campaign_remaining=(campaign_remaining+1) WHERE '.db_string_equal_to('name',$source),1);
+				}
 			}
 		}
 
@@ -118,19 +126,6 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 	{
 		if (is_null($dest)) $dest=get_param('dest','');
 		if (is_null($b_type)) $b_type=get_param('b_type','');
-		if (is_null($internal_only)) $internal_only=get_param_integer('internal_only',0);
-
-		if (($internal_only==0) && ($dest=='') && ($b_type=='')) // If we haven't specified that we may only show internal banners (not paid ones)
-		{
-			$adcode=get_option('money_ad_code');
-			if (($adcode!='') && ((0==$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)',array('validated'=>1))) || (mt_rand(0,100)>intval(get_option('advert_chance')))))
-			{
-				if ($ret) return make_string_tempcode($adcode);
-				$echo=do_template('BASIC_HTML_WRAP',array('_GUID'=>'fd6fc24384dd13e7931ceb369a500672','TITLE'=>do_lang_tempcode('BANNER'),'CONTENT'=>$adcode));
-				$echo->evaluate_echo();
-				return NULL;
-			}
-		}
 
 		// A community banner then...
 		// ==========================
@@ -219,17 +214,23 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 
 		// Update the counts (ones done per-view)
 		if (get_db_type()!='xml')
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_to=(views_to+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
+		{
+			if (!$GLOBALS['SITE_DB']->table_is_locked('banners'))
+				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_to=(views_to+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
+		}
 		if ($source!='')
 		{
 			if (get_db_type()!='xml')
-				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_from=(views_from+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
+			{
+				if (!$GLOBALS['SITE_DB']->table_is_locked('banners'))
+					$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_from=(views_from+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
+			}
 		}
 
 		// Display!
 		$img=$rows[$i]['img_url'];
 		$caption=get_translated_tempcode($rows[$i]['caption']);
-		$content=show_banner($name,$rows[$i]['b_title_text'],$caption,$img,$source,$rows[$i]['site_url'],$rows[$i]['b_type']);
+		$content=show_banner($name,$rows[$i]['b_title_text'],$caption,array_key_exists('b_direct_code',$rows[$i])?$rows[$i]['b_direct_code']:'',$img,$source,$rows[$i]['site_url'],$rows[$i]['b_type'],$rows[$i]['submitter']);
 		if ($ret) return $content;
 		$echo=do_template('BASIC_HTML_WRAP',array('_GUID'=>'d23424ded86c850f4ae0006241407ff9','TITLE'=>do_lang_tempcode('BANNER'),'CONTENT'=>$content));
 		$echo->evaluate_echo();
@@ -247,7 +248,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 function nice_get_banner_types($it=NULL)
 {
 	$list=new ocp_tempcode();
-	$rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('id','t_image_width','t_image_height','t_is_textual'));
+	$rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('id','t_image_width','t_image_height','t_is_textual'),NULL,'ORDER BY id');
 	foreach ($rows as $row)
 	{
 		$caption=($row['id']=='')?do_lang('GENERAL'):$row['id'];
@@ -271,19 +272,21 @@ function nice_get_banner_types($it=NULL)
  * @param  ID_TEXT		The name of the banner
  * @param  SHORT_TEXT	The title text of the banner (displayed for a text banner only)
  * @param  tempcode		The caption of the banner
+ * @param  LONG_TEXT		The full HTML/PHP for the banner
  * @param  URLPATH		The URL to the banner image
  * @param  ID_TEXT		The name of the banner for the site that will get the return-hit
  * @param  URLPATH		The URL to the banner's target
  * @param  ID_TEXT		The banner type
+ * @param  MEMBER			The submitting user
  * @return tempcode		The rendered banner
  */
-function show_banner($name,$title_text,$caption,$img_url,$source,$url,$b_type)
+function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$url,$b_type,$submitter)
 {
 	// If this is an image, we <img> it, else we <iframe> it
 	require_code('images');
-	if ($img_url!='')
+	if ($img_url!='') // Flash/Image/Iframe
 	{
-		if (substr($img_url,-4)=='.swf')
+		if (substr($img_url,-4)=='.swf') // Flash
 		{
 			if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
 			$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
@@ -296,7 +299,7 @@ function show_banner($name,$title_text,$caption,$img_url,$source,$url,$b_type)
 			}
 			$content=do_template('BANNER_FLASH',array('_GUID'=>'25525a3722715e79a83af4cec53fe072','B_TYPE'=>$b_type,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height']),'SOURCE'=>$source,'DEST'=>$name,'CAPTION'=>$caption,'IMG'=>$img_url));
 		}
-		elseif (($url!='') || (is_image($img_url))) // Can't rely on image check, because often they have script-generated URLs
+		elseif (($url!='') || (is_image($img_url))) // Image; Can't rely on image check, because often they have script-generated URLs
 		{
 			if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
 			$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
@@ -308,7 +311,7 @@ function show_banner($name,$title_text,$caption,$img_url,$source,$url,$b_type)
 				$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
 			}
 			$content=do_template('BANNER_IMAGE',array('_GUID'=>'6aaf45b7bb7349393024c24458549e9e','URL'=>$url,'B_TYPE'=>$b_type,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height']),'SOURCE'=>$source,'DEST'=>$name,'CAPTION'=>$caption,'IMG'=>$img_url));
-		} else
+		} else // Iframe
 		{
 			if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
 			$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
@@ -321,17 +324,53 @@ function show_banner($name,$title_text,$caption,$img_url,$source,$url,$b_type)
 			}
 			$content=do_template('BANNER_IFRAME',array('_GUID'=>'deeef9834bc308b5d07e025ab9c04c0e','B_TYPE'=>$b_type,'IMG'=>$img_url,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height'])));
 		}
-	} else
+	} else // Text/HTML/PHP
 	{
-		if ($url=='')
+		if ($direct_code=='') // Text
 		{
-			$filtered_url='';
-		} else
+			if ($url=='')
+			{
+				$filtered_url='';
+			} else
+			{
+				$filtered_url=(strpos($url,'://')!==false)?substr($url,strpos($url,'://')+3):$url;
+				if (strpos($filtered_url,'/')!==false) $filtered_url=substr($filtered_url,0,strpos($filtered_url,'/'));
+			}
+			$content=do_template('BANNER_TEXT',array('_GUID'=>'18ff8f7b14f5ca30cc19a2ad11ecdd62','B_TYPE'=>$b_type,'TITLE_TEXT'=>$title_text,'CAPTION'=>$caption,'SOURCE'=>$source,'DEST'=>$name,'URL'=>$url,'FILTERED_URL'=>$filtered_url));
+		} else // HTML/PHP
 		{
-			$filtered_url=(strpos($url,'://')!==false)?substr($url,strpos($url,'://')+3):$url;
-			if (strpos($filtered_url,'/')!==false) $filtered_url=substr($filtered_url,0,strpos($filtered_url,'/'));
+			load_user_stuff();
+			require_code('permissions');
+			if (has_specific_permission($submitter,'use_html_banner'))
+			{
+				if (get_file_base()==get_custom_file_base()) // Only allow PHP code if not a shared install
+				{
+					$matches=array();
+					$num_matches=preg_match_all('#\<\?(.*)\?\>#U',$direct_code,$matches);
+					for ($i=0;$i<$num_matches;$i++)
+					{
+						if (has_specific_permission($submitter,'use_php_banner'))
+						{
+							$php_code=$matches[1][$i];
+							if (substr($php_code,0,3)=='php') $php_code=substr($php_code,3);
+							ob_start();
+							$evaled=eval($php_code);
+							if (!is_string($evaled)) $evaled='';
+							$evaled.=ob_get_contents();
+							ob_end_clean();
+						} else
+						{
+							$evaled=do_lang('BANNER_PHP_NOT_RUN');
+						}
+						$direct_code=str_replace($matches[0][$i],$evaled,$direct_code);
+					}
+				}
+				$content=make_string_tempcode($direct_code);
+			} else
+			{
+				$content=do_lang_tempcode('BANNER_HTML_NOT_RUN');
+			}
 		}
-		$content=do_template('BANNER_TEXT',array('_GUID'=>'18ff8f7b14f5ca30cc19a2ad11ecdd62','B_TYPE'=>$b_type,'TITLE_TEXT'=>$title_text,'CAPTION'=>$caption,'SOURCE'=>$source,'DEST'=>$name,'URL'=>$url,'FILTERED_URL'=>$filtered_url));
 	}
 
 	return $content;

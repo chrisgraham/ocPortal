@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="{!charset}"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://www.w3.org/2005/Atom" version="1.0">
+<?xml version="1.0" encoding="{$CHARSET*}"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://www.w3.org/2005/Atom" version="1.0">
 	<xsl:output method="html" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
 	<xsl:template match="/">
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$LANG*}" lang="{$LANG*}" dir="{!dir}">
+		<html lang="{$LANG*}" dir="{!dir}">
 			<head>
 				<title><xsl:value-of select="/atom:feed/atom:title" disable-output-escaping="yes" /></title>
 				<meta name="GENERATOR" content="{$BRAND_NAME*}" />
@@ -11,12 +11,10 @@
 					<xsl:attribute name="name"><xsl:text>description</xsl:text></xsl:attribute>
 					<xsl:attribute name="content"><xsl:value-of select="/atom:feed/atom:subtitle" /></xsl:attribute>
 				</xsl:element>
-				<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={!charset}" />
-				<meta http-equiv="Content-Script-Type" content="text/javascript" />
-				<meta http-equiv="Content-Style-Type" content="text/css" />
+				<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 				{$CSS_TEMPCODE}
 			</head>
-			<body class="re_body" onload="go_decoding();">
+			<body class="website_body" onload="go_decoding();">
 				<div id="cometestme" style="display: none;">
 					<xsl:text disable-output-escaping="yes">&amp;amp;</xsl:text>
 				</div>
@@ -27,14 +25,15 @@
 						<xsl:attribute name="title"><xsl:value-of select="/atom:feed/atom:title" /></xsl:attribute>
 					</xsl:element>
 				</div>
-				<br class="tiny_linebreak" />
 
-				<div class="rss_main_internal">
-					{+START,BOX,<span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/atom:feed/atom:title" /></span>}
+				<div class="rss_main_inner">
+					<div class="box box___atom_xslt"><div class="box_inner">
+						<h1><span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/atom:feed/atom:title" /></span></h1>
+
 						<p id="xslt_introduction">{!RSS_XSLT_INTRODUCTION}</p>
 						<xsl:apply-templates select="atom:feed" />
 						<p class="rss_copyright"><span name="decodeable"><xsl:value-of select="/atom:feed/atom:rights" disable-output-escaping="yes" /></span></p>
-					{+END}
+					</div></div>
 				</div>
 			</body>
 		</html>

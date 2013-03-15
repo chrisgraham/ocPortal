@@ -4,5 +4,7 @@
 	{!CONTEXTUAL_EDITING_SCREEN}
 </p>
 
-{TEMPLATES}
+<ul>
+	{TEMPLATES}
+</ul>
 

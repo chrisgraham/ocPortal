@@ -6,7 +6,7 @@ destrictify();
 require_code('facebook/facebook');
 require_lang('facebook');
 
-$title=get_page_title('FACEBOOK_OAUTH');
+$title=get_screen_title('FACEBOOK_OAUTH');
 
 $facebook_appid=get_option('facebook_appid',true);
 
@@ -26,7 +26,7 @@ if ($facebook_appid=='')
 	$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'FEATURE','redirect'=>get_self_url(true)),'_SELF',NULL,false,false,false,'group_FACEBOOK_SYNDICATION');
 	require_code('site2');
 	assign_refresh($config_url,0.0);
-	$echo=do_template('REDIRECT_SCREEN',array('URL'=>$config_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('FACEBOOK_SETUP_FIRST')));
+	$echo=do_template('REDIRECT_SCREEN',array('_GUID'=>'056998219c2fb3e4872e33e9041e2614','URL'=>$config_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('FACEBOOK_SETUP_FIRST')));
 	$echo->evaluate_echo();
 	return;
 }

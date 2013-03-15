@@ -219,7 +219,7 @@ function ocf_ldap_bind()
 				require_code('site');
 				$extended_error='';
 				ldap_get_option($LDAP_CONNECTION,LDAP_OPT_DIAGNOSTIC_MESSAGE,$extended_error);
-				attach_message(make_string_tempcode('LDAP: '.ldap_error($LDAP_CONNECTION).'; '.$extended_error),'warn');
+				attach_message(make_string_tempcode('LDAP: '.ldap_error($LDAP_CONNECTION).'; '.$extended_error.' -- (initial connection bind)'),'warn');
 				fatal_exit(ldap_error($LDAP_CONNECTION));
 			}
 		}
@@ -239,7 +239,10 @@ function ocf_ldap_bind()
 			require_code('site');
 			$extended_error='';
 			ldap_get_option($LDAP_CONNECTION,LDAP_OPT_DIAGNOSTIC_MESSAGE,$extended_error);
-			attach_message(make_string_tempcode('LDAP: '.ldap_error($LDAP_CONNECTION).'; '.$extended_error),'warn');
+			$message='LDAP: '.ldap_error($LDAP_CONNECTION).'; '.$extended_error;
+			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) || $GLOBALS['IS_ACTUALLY_ADMIN'])
+				$message.=' -- for binding (initial connection bind) with '.$login;
+			attach_message(make_string_tempcode($message),'warn');
 			if (get_param_integer('keep_ldap_debug',0)==1)
 				fatal_exit(ldap_error($LDAP_CONNECTION));
 		}
@@ -261,7 +264,10 @@ function ocf_is_on_ldap($cn)
 	if ($results===false)
 	{
 		require_code('site');
-		attach_message(make_string_tempcode('LDAP: '.ldap_error($LDAP_CONNECTION)),'warn');
+		$message='LDAP: '.ldap_error($LDAP_CONNECTION);
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) || $GLOBALS['IS_ACTUALLY_ADMIN'])
+			$message.=' -- for '.$query.' under '.$path;
+		attach_message(make_string_tempcode($message),'warn');
 		if (get_param_integer('keep_ldap_debug',0)==1)
 			fatal_exit(ldap_error($LDAP_CONNECTION));
 		return false;
@@ -420,7 +426,10 @@ function ocf_ldap_authorise_login($cn,$password)
 		if ($test===false)
 		{
 			require_code('site');
-			attach_message(make_string_tempcode('LDAP: '.ldap_error($LDAP_CONNECTION)),'warn');
+			$message='LDAP: '.ldap_error($LDAP_CONNECTION);
+			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) || $GLOBALS['IS_ACTUALLY_ADMIN'])
+				$message.=' -- for binding (active login) with '.$login;
+			attach_message(make_string_tempcode($message),'warn');
 			fatal_exit(ldap_error($LDAP_CONNECTION));
 		}
 	}

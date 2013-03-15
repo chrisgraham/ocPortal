@@ -25,9 +25,9 @@ class Hook_do_next_menus_db_schema
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('sql_schema_generate',array(),'adminzone'),make_string_tempcode('Generate database schema')),
-			array('tools','admin_home',array('sql_schema_generate_by_addon',array(),'adminzone'),make_string_tempcode('Generate database schema, by addon')),
-			array('tools','admin_home',array('sql_show_tables_by_addon',array(),'adminzone'),make_string_tempcode('Show database tables, by addon'))
+			array('tools','admin_home',array('sql_schema_generate',array(),'adminzone'),make_string_tempcode('Doc build: Generate database schema')),
+			array('tools','admin_home',array('sql_schema_generate_by_addon',array(),'adminzone'),make_string_tempcode('Doc build: Generate database schema, by addon')),
+			array('tools','admin_home',array('sql_show_tables_by_addon',array(),'adminzone'),make_string_tempcode('Doc build: Show database tables, by addon'))
 		);
 	}
 

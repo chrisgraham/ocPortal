@@ -1,0 +1,44 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.ocf_edit_forum_category {
+	background-color: {$GET,box_title_background};
+}
+
+.ocf_edit_forum_category, .ocf_edit_forum_forum {
+	border: 1px solid {$GET,dark_border};
+	margin-top: -1px;
+	padding: 1em;
+	font-size: 1em;
+}
+
+.ocf_edit_forum_forum {
+}
+
+.ocf_edit_forum_type {
+	float: {!en_right};
+}
+
+.ocf_edit_forum_title {
+	float: {!en_left};
+	width: 40%;
+}
+
+.ocf_edit_forum_orderings {
+	padding-top: 1em;
+}
+
+.ocf_edit_forum_title h3, .ocf_edit_forum_orderings label, .ocf_edit_forum_type {
+	color: {$GET,box_title_text};
+	border: none;
+}
+
+.ocf_edit_forum_orderings_f {
+	padding-{!en_left}: 25px;
+}
+
+.ocf_edit_forum_under {
+	padding-{!en_left}: 50px;
+}

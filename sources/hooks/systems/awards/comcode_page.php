@@ -84,7 +84,7 @@ class Hook_awards_comcode_page
 			$cc_page_title='';
 		}
 
-		return put_in_standard_box(do_template('COMCODE_PAGE_PREVIEW',array('PAGE'=>$row['the_page'],'ZONE'=>$row['the_zone'],'URL'=>$url,'SUMMARY'=>$summary)),$cc_page_title);
+		return do_template('COMCODE_PAGE_BOX',array('_GUID'=>'ac70e0b5a003f8dac1ff42f46af28e1d','TITLE'=>$cc_page_title,'PAGE'=>$row['the_page'],'ZONE'=>$row['the_zone'],'URL'=>$url,'SUMMARY'=>$summary));
 	}
 
 }
