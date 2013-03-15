@@ -54,7 +54,7 @@ class Hook_pointstore_gambling
 
 		if (get_option('is_on_'.$class.'_buy')=='0') return new ocp_tempcode();
 
-		$title=get_page_title('GAMBLING');
+		$title=get_screen_title('GAMBLING');
 
 		$cost=intval(get_option('minimum_gamble_amount'));
 		$points_left=available_points(get_member());
@@ -89,7 +89,7 @@ class Hook_pointstore_gambling
 
 		$amount=post_param_integer('amount',-1);
 
-		$title=get_page_title('GAMBLING');
+		$title=get_screen_title('GAMBLING');
 
 		// Check points
 		$cost=intval(get_option('minimum_gamble_amount'));

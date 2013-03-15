@@ -1,6 +1,6 @@
 <!-- CC-error -->
 
-<p class="important_notification"{$?,{$VALUE_OPTION,html5}, role="alert"}>
+<p class="red_alert" role="error">
 	{!CCP_ERROR,{LINE*},{MESSAGE*}}
 </p>
 

@@ -63,6 +63,8 @@ class Block_main_quotes
 		$file=array_key_exists('param',$map)?$map['param']:'quotes';
 		$title=array_key_exists('title',$map)?$map['title']:do_lang('QUOTES');
 
+		require_css('random_quotes');
+
 		require_code('textfiles');
 		require_lang('quotes');
 

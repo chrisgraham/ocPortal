@@ -1,6 +1,6 @@
 {TITLE}
 
-{+START,INCLUDE,handle_conflict_resolution}{+END}
+{+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
 {+END}
@@ -12,20 +12,23 @@
 		</div>
 
 		{+START,SET,EXTRA_COMMENTS_FIELDS_1}
-			<div>
-				<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}</label></span>:
-				<select id="ticket_type" name="ticket_type" class="input_list_required">
-					<option value="">---</option>
-					{+START,LOOP,TYPES}
-					<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
-					{+END}
-				</select>
-			</div>
-			<div id="error_ticket_type" style="display: none" class="input_error_here">&nbsp;</div>
+			<tr>
+				<th class="de_th">
+					<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}:</label></span>
+				</th>
+				<td>
+					<select id="ticket_type" name="ticket_type" class="input_list_required wide_field">
+						<option value="">---</option>
+						{+START,LOOP,TYPES}
+							<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
+						{+END}
+					</select>
+					<div id="error_ticket_type" style="display: none" class="input_error_here"></div>
+				</td>
+			</tr>
 		{+END}
 	{+END}
 
-	<br />
 	<div id="comments_wrapper">
 		{COMMENTS}
 	</div>
@@ -37,9 +40,9 @@
 		//]]></script>
 	{+END}{+END}
 
-	{+START,IF_PASSED,RESULTS_BROWSER}
+	{+START,IF_PASSED,PAGINATION}
 		<div class="float_surrounder">
-			{RESULTS_BROWSER}
+			{PAGINATION}
 		</div>
 	{+END}
 
@@ -55,48 +58,33 @@
 {+START,IF_NON_EMPTY,{COMMENT_FORM}}
 	{+START,SET,EXTRA_COMMENTS_FIELDS_2}
 		{+START,IF_NON_EMPTY,{STAFF_ONLY}}
-			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
-				{+START,IF,{$NOT,{$MOBILE}}}
-					<colgroup>
-						<col style="width: 198px" />
-						<col style="width: 100%" />
-					</colgroup>
-				{+END}
-
-				<tbody>
-					{STAFF_ONLY}
-				</tbody>
-			</table></div>
+			{STAFF_ONLY}
 		{+END}
-
-		<br />
 	{+END}
 
-	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (checkFieldForBlankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type']) || (checkFieldForBlankness(this.elements['ticket_type'],event)));" action="{URL*}" method="post" enctype="multipart/form-data"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ContactPage"}>
+	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type']) || (check_field_for_blankness(this.elements['ticket_type'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
 		{COMMENT_FORM}
 	</form>
 {+END}
 
-<div class="float_surrounder">
-	<div>
+<div class="buttons_group">
+	{+START,IF,{$NEQ,{$_GET,type},ticket}}
 		{+START,INCLUDE,SCREEN_BUTTON}
 			TITLE={!CREATE_SUPPORT_TICKET}
 			IMG=add_ticket
 			URL={ADD_TICKET_URL}
 			IMMEDIATE=0
 		{+END}
-		{+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
-			{+START,INCLUDE,SCREEN_BUTTON}
-				TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
-				IMG={$?,{CLOSED},closed,close}
-				IMMEDIATE=1
-				URL={TOGGLE_TICKET_CLOSED_URL}
-			{+END}
+	{+END}
+	{+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
+		{+START,INCLUDE,SCREEN_BUTTON}
+			TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
+			IMG={$?,{CLOSED},closed,close}
+			IMMEDIATE=1
+			URL={TOGGLE_TICKET_CLOSED_URL}
 		{+END}
-	</div>
+	{+END}
 </div>
-
-<br />
 
 <h2>{!OTHER_TICKETS_BY_MEMBER,{USERNAME*}}</h2>
 
@@ -104,16 +92,7 @@
 	<p class="nothing_here">{!NONE}</p>
 {+END}
 {+START,IF_NON_EMPTY,{OTHER_TICKETS}}
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table support_tickets">
-		{+START,IF,{$NOT,{$MOBILE}}}
-			<colgroup>
-				<col style="width: 100%" />
-				<col style="width: 120px" />
-				<col style="width: 198px" />
-				<col style="width: 120px" />
-			</colgroup>
-		{+END}
-
+	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table support_tickets autosized_table">
 		<thead>
 			<tr>
 				<th>

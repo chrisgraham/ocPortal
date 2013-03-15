@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2010
+ Copyright (c) ocProducts, 2004-2012
 
  See text/EN/licence.txt for full licencing information.
 
@@ -33,26 +33,13 @@ class Hook_profile_tab
 
 		$hook=filter_naughty_harsh(get_param('tab'));
 
-		require_lang('ocf');
-
-		// HACKHACK
-		$_GET['page']='members';
-		$_GET['type']='view';
-		$_GET['id']=strval($member_id_of);
-		unset($_GET['snippet']);
-		unset($_GET['member_id']);
-		unset($_GET['tab']);
-		unset($_GET['url']);
-		unset($_GET['title']);
-		unset($_GET['utheme']);
-		global $RELATIVE_PATH,$ZONE;
-		$RELATIVE_PATH=get_module_zone('members');
-		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$RELATIVE_PATH),'',1);
-		$ZONE=$zones[0];
-		global $PAGE_NAME_CACHE;
-		$PAGE_NAME_CACHE='members';
-		global $RUNNING_SCRIPT_CACHE;
-		$RUNNING_SCRIPT_CACHE=array('index'=>true);
+		$keep_get=array();
+		foreach (array_keys($_GET) as $key)
+		{
+			if (in_array($key,array('snippet','tab','url','title','member_id'))) continue;
+			$keep_get[$key]=get_param($key,NULL,true);
+		}
+		set_execution_context(array('page'=>'members','type'=>'view','id'=>$member_id_of)+$keep_get);
 
 		require_code('hooks/systems/profiles_tabs/'.$hook);
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);

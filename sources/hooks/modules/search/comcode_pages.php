@@ -190,7 +190,7 @@ class Hook_search_comcode_pages
 
 						$path=zone_black_magic_filterer((($dir=='comcode_custom')?get_custom_file_base():get_file_base()).'/'.$zone.'/pages/'.$dir.'/'.$page.'.txt');
 						if ((!is_null($cutoff)) && (filemtime($path)<$cutoff)) continue;
-						$contents=file_get_contents($path,FILE_TEXT);
+						$contents=file_get_contents($path);
 
 						if (in_memory_search_match(array('content'=>$content,'conjunctive_operator'=>$boolean_operator),$contents))
 						{
@@ -238,6 +238,8 @@ class Hook_search_comcode_pages
 	{
 		global $SEARCH__CONTENT_BITS;
 
+		if (function_exists('set_time_limit')) @set_time_limit(30); // This can be slow.
+
 		require_code('xhtml');
 
 		$url=build_url(array('page'=>$page),$zone);
@@ -263,7 +265,7 @@ class Hook_search_comcode_pages
 			{
 				global $LAX_COMCODE;
 				$LAX_COMCODE=true;
-				/*$temp_summary=comcode_to_tempcode(file_get_contents($comcode_file,FILE_TEXT),NULL,true); Tempcode compiler slowed things down so easier just to show full thing
+				/*$temp_summary=comcode_to_tempcode(file_get_contents($comcode_file),NULL,true); Tempcode compiler slowed things down so easier just to show full thing
 				$_temp_summary=$temp_summary->evaluate();
 				if (strlen($_temp_summary)<500)
 				{
@@ -292,8 +294,6 @@ class Hook_search_comcode_pages
 			}
 		}
 
-		$tpl=do_template('COMCODE_PAGE_PREVIEW',array('_GUID'=>'79cd9e7d0b63ee916c4cd74b26c2f652','PAGE'=>$page,'ZONE'=>$zone,'URL'=>$url,'SUMMARY'=>$summary));
-
 		require_lang('comcode');
 		$title=do_lang_tempcode('_SEARCH_RESULT_COMCODE_PAGE',escape_html($page));
 		global $LAST_COMCODE_PARSED_TITLE;
@@ -301,10 +301,9 @@ class Hook_search_comcode_pages
 		if ($LAST_COMCODE_PARSED_TITLE!='')
 			$title=do_lang_tempcode('_SEARCH_RESULT_COMCODE_PAGE_NICE',$LAST_COMCODE_PARSED_TITLE);
 
-		$tree=comcode_breadcrumbs($page,$zone);
-		if (!$tree->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
+		$breadcrumbs=comcode_breadcrumbs($page,$zone);
 
-		return put_in_standard_box($tpl,$title);
+		return do_template('COMCODE_PAGE_BOX',array('_GUID'=>'79cd9e7d0b63ee916c4cd74b26c2f652','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'PAGE'=>$page,'ZONE'=>$zone,'URL'=>$url,'SUMMARY'=>$summary));
 	}
 
 }

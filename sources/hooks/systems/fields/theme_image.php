@@ -125,7 +125,7 @@ class Hook_fields_theme_image
 			'image'=>$img_url,
 		);
 
-		return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_url),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE');
+		return do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
 	}
 
 	// ======================
@@ -145,7 +145,7 @@ class Hook_fields_theme_image
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		$ids=get_all_image_ids_type(substr($field['cf_type'],3),true);
-		return form_input_picture_choose_specific($_cf_name,$_cf_description,'field_'.strval($field['id']),$ids,NULL,$actual_value,NULL,$field['cf_required']==0);
+		return form_input_theme_image($_cf_name,$_cf_description,'field_'.strval($field['id']),$ids,NULL,$actual_value,NULL,$field['cf_required']==0);
 	}
 
 	/**

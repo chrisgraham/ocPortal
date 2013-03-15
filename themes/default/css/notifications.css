@@ -3,6 +3,26 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.notifications_field_name_column {
+	width: 100%;
+}
+
+.notifications_privileges_column {
+	width: 10em;
+}
+
+.notifications_tick_column {
+	width: 4em;
+}
+
+.notifications_advanced_column {
+	width: 10em;
+}
+
+.notifications_form .form_table_field_spacer>th {
+	border-top: 1px solid {$GET,standard_border};
+}
+
 .notifications_form h2 {
 	text-align: left;
 	text-decoration: none;
@@ -22,5 +42,6 @@
 	display: inline;
 }
 
-/* Advanced screens */
-
+.notification_code th {
+	text-align: left;
+}

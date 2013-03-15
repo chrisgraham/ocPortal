@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_staff
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_staff
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_staff
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/is_on_staff_filter.php',
 			'sources/hooks/systems/config_default/is_on_sync_staff.php',
 			'sources/hooks/systems/config_default/staff_text.php',
@@ -87,22 +85,22 @@ class Hook_addon_registry_staff
 			'lang/EN/staff.ini',
 			'themes/default/images/pagepics/staff.png',
 			'themes/default/images/bigicons/staff.png',
-			'sources/hooks/systems/ocf_cpf_filter/staff_filter.php',
+			'sources/hooks/systems/ocf_cpf_filter/staff_filter.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array                 The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array						The mapping
+	 */
 	function tpl_previews()
 	{
-	   return array(
-		'STAFF_SCREEN.tpl'=>'staff_screen',
-		'STAFF_EDIT_WRAPPER.tpl'=>'administrative__staff_admin_screen',
-		'STAFF_ADMIN_SCREEN.tpl'=>'administrative__staff_admin_screen',
+		return array(
+			'STAFF_SCREEN.tpl'=>'staff_screen',
+			'STAFF_EDIT_WRAPPER.tpl'=>'administrative__staff_admin_screen',
+			'STAFF_ADMIN_SCREEN.tpl'=>'administrative__staff_admin_screen'
 		);
 	}
 
@@ -115,20 +113,21 @@ class Hook_addon_registry_staff
 	 */
 	function tpl_preview__administrative__staff_admin_screen()
 	{
-		$available = new ocp_tempcode();
+		$available=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER',array('FORM'=>placeholder_form(),'NAME'=>lorem_word())));
+			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER', array(
+				'FORM'=>placeholder_form(),
+				'NAME'=>lorem_word()
+			)));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('STAFF_ADMIN_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'TEXT'=>lorem_sentence_html(),
-					'FORUM_STAFF'=>$available,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('STAFF_ADMIN_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence_html(),
+				'FORUM_STAFF'=>$available
+			)), NULL, '', true)
 		);
 	}
 
@@ -142,18 +141,16 @@ class Hook_addon_registry_staff
 	function tpl_preview__staff_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('STAFF_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'REAL_NAME'=>lorem_phrase(),
-					'ROLE'=>lorem_phrase(),
-					'ADDRESS'=>lorem_phrase(),
-					'NAME'=>lorem_word(),
-					'MEMBER_ID'=>placeholder_id(),
-					'PROFILE_URL'=>placeholder_url(),
-					'ALL_LINK'=>placeholder_url(),
-						)
-                        ),NULL,'',true),
-                  );
+			lorem_globalise(do_lorem_template('STAFF_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'REAL_NAME'=>lorem_phrase(),
+				'ROLE'=>lorem_phrase(),
+				'ADDRESS'=>lorem_phrase(),
+				'NAME'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
+				'PROFILE_URL'=>placeholder_url(),
+				'ALL_STAFF_URL'=>placeholder_url()
+			)), NULL, '', true)
+		);
 	}
 }

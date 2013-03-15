@@ -70,7 +70,7 @@ function attachments_script()
 	{
 		$full=$myrow['a_thumb_url'];
 		require_code('images');
-		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',intval($myrow['id']),'a_thumb_url');
+		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',intval($myrow['id']),'a_thumb_url',NULL,true);
 	}
 	else
 	{
@@ -267,7 +267,7 @@ function attachment_popup_script()
 	}
 
 	$field_name=get_param('field_name','post');
-	$keep=symbol_tempcode('KEEP',array(0,1));
+	$keep=symbol_tempcode('KEEP',array('0','1'));
 	$post_url=find_script('attachment_popup').'?field_name='.$field_name.$keep->evaluate();
 	if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
 
@@ -275,9 +275,25 @@ function attachment_popup_script()
 	$content=new ocp_tempcode();
 	foreach ($rows as $myrow)
 	{
+		$may_delete=(get_member()==$myrow['a_member_id']) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()));
+
+		if ((post_param_integer('delete_'.strval($myrow['id']),0)==1) && ($may_delete))
+		{
+			require_code('attachments3');
+			_delete_attachment($myrow['id'],$connection);
+			continue;
+		}
+
 		$myrow['description']=$myrow['a_description'];
 		$tpl=render_attachment('attachment',array(),$myrow,uniqid(''),get_member(),false,$connection,NULL,get_member());
-		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array('_GUID'=>'64356d30905c99325231d3bbee92128c','FIELD_NAME'=>$field_name,'TPL'=>$tpl,'DESCRIPTION'=>$myrow['a_description'],'ID'=>strval($myrow['id']))));
+		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array(
+			'_GUID'=>'64356d30905c99325231d3bbee92128c',
+			'FIELD_NAME'=>$field_name,
+			'TPL'=>$tpl,
+			'DESCRIPTION'=>$myrow['a_description'],
+			'ID'=>strval($myrow['id']),
+			'MAY_DELETE'=>$may_delete,
+		)));
 	}
 
 	$content=do_template('ATTACHMENTS_BROWSER',array('_GUID'=>'7773aad46fb0bfe563a142030beb1a36','LIST'=>$list,'CONTENT'=>$content,'URL'=>$post_url));
@@ -286,7 +302,8 @@ function attachment_popup_script()
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
+
 	$echo->evaluate_echo();
 }
 
@@ -294,7 +311,7 @@ function attachment_popup_script()
  * Get tempcode for a Comcode rich-media attachment.
  *
  * @param  ID_TEXT		The attachment tag
- * @set attachment attachment_safe attachment2
+ * @set attachment attachment_safe
  * @param  array			A map of the attributes (name=>val) for the tag
  * @param  array			A map of the attachment properties (name=>val) for the attachment
  * @param  string			A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
@@ -318,7 +335,6 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 	$attachment['MIME_TYPE']=$mime_type;
 	$attachment['PASS_ID']=(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id;
 	$attachment['SCRIPT']=find_script('attachment');
-	$attachment['RAND']=strval(mt_rand(0,32000));
 	if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 	{
 		$attachment['SUP_PARAMS']='&forum_db=1';
@@ -414,7 +430,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			{
 				if (($type=='inline') || ($type=='left_inline') || ($type=='right_inline')) $attachment['mini']='1';
 				require_code('images');
-				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url');
+				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url',NULL,true);
 
 				$temp_tpl=do_template('ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':''),map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				if (($type=='left') || ($type=='left_inline'))

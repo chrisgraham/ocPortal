@@ -1,39 +1,42 @@
-{$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 
-<div class="medborder">
-	<div id="{TITLE|}" style="height: {HEIGHT'}; width: {WIDTH'}">
-		{+START,IF_NON_EMPTY,{TITLE}}
-			<h3 class="standardbox_title_classic" onkeypress="this.onclick(event);" onclick="this.getElementsByTagName('a')[0].onclick(event);">
-				{+START,IF_NOT_IN_ARRAY,tray_open,OPTIONS}
-					{+START,IF,{$JS_ON}}<a class="standardbox_tray hide_button" href="#" onclick="accordion(this.parentNode.parentNode); cancelBubbling(event,this); return false;"><img alt="{!EXPAND}: {$STRIP_TAGS,{TITLE}}" title="{!EXPAND}" src="{$IMG*,expand}" /></a> {+END}
-				{+END}
-				{+START,IF_IN_ARRAY,tray_open,OPTIONS}
-					{+START,IF,{$JS_ON}}<a class="standardbox_tray hide_button" href="#" onclick="accordion(this.parentNode.parentNode); cancelBubbling(event,this); return false;"><img alt="{!CONTRACT}: {$STRIP_TAGS,{TITLE}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a> {+END}
-				{+END}
-				{TITLE}
-			</h3>
-		{+END}
-		<div class="hide_tag medborder_box"{+START,IF_NOT_IN_ARRAY,tray_open,OPTIONS}{+START,IF,{$JS_ON}} style="display: none"{+END}{+END}>
-			{+START,IF_NON_EMPTY,{META}}
-				<div class="medborder_detailhead_wrap">
-					<div class="medborder_detailhead">
-						{+START,LOOP,META}
-							<div>{KEY}: {VALUE}</div>
-						{+END}
-					</div>
-				</div>
+<div class="box box___standardbox_accordion"{+START,IF_NON_EMPTY,{WIDTH}} style="width: {WIDTH*}"{+END}>
+	{+START,IF_NON_EMPTY,{TITLE}}
+		<h3 class="toggleable_tray_title" onkeypress="this.onclick(event);" onclick="this.getElementsByTagName('a')[0].onclick(event);">
+			{+START,IF_NOT_IN_ARRAY,OPTIONS,tray_open}
+				{+START,IF,{$JS_ON}}<a class="toggleable_tray_button" href="#" onclick="return accordion(this.parentNode.parentNode);"><img alt="{!EXPAND}: {$STRIP_TAGS,{TITLE}}" title="{!EXPAND}" src="{$IMG*,expand}" /></a> {+END}
 			{+END}
-			<div class="standardbox_main_classic"><div class="float_surrounder">
-				{CONTENT}
-			</div></div>
-			{+START,IF_NON_EMPTY,{LINKS}}
-				{$SET,linkbar,0}
-				<div class="standardbox_links_classic community_block_tagline"> [
-					{+START,LOOP,LINKS}
-						{+START,IF,{$GET,linkbar}} &middot; {+END}{_loop_var}{$SET,linkbar,1}
+			{+START,IF_IN_ARRAY,OPTIONS,tray_open}
+				{+START,IF,{$JS_ON}}<a class="toggleable_tray_button" href="#" onclick="return accordion(this.parentNode.parentNode);"><img alt="{!CONTRACT}: {$STRIP_TAGS,{TITLE}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a> {+END}
+			{+END}
+
+			{+START,IF_NON_EMPTY,{TOP_LINKS}}{+START,IF,{$JS_ON}}
+				{TOP_LINKS}
+			{+END}{+END}
+
+			{+START,IF,{$JS_ON}}<a class="toggleable_tray_button" href="#" onclick="return accordion(this.parentNode.parentNode);">{TITLE}</a>{+END}
+			{+START,IF,{$NOT,{$JS_ON}}}{TITLE}{+END}
+		</h3>
+	{+END}
+	<div class="toggleable_tray"{+START,IF_NOT_IN_ARRAY,OPTIONS,tray_open}{+START,IF,{$JS_ON}} style="display: none" aria-expanded="false"{+END}{+END}>
+		{+START,IF_NON_EMPTY,{META}}
+			<div class="meta_details" role="contentinfo">
+				<dl class="meta_details_list">
+					{+START,LOOP,META}
+						<dt class="field_name">{KEY}:</dt> <dd>{VALUE}</dd>
 					{+END}
-				] </div>
-			{+END}
-		</div>
+				</dl>
+			</div>
+		{+END}
+
+		{$PARAGRAPH,{CONTENT}}
+
+		{+START,IF_NON_EMPTY,{LINKS}}
+			<ul class="horizontal_links associated_links_block_group">
+				{+START,LOOP,LINKS}
+					<li>{_loop_var}</li>
+				{+END}
+			</ul>
+		{+END}
 	</div>
 </div>

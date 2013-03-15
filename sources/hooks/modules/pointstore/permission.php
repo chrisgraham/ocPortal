@@ -40,23 +40,25 @@ class Hook_pointstore_permission
 	 * @param  LONG_TEXT		Description
 	 * @param  BINARY			Whether it is enabled
 	 * @param  ?integer		The cost in points (NULL: not set)
-	 * @param  integer		Number of hours for it to last for
+	 * @param  ?integer		Number of hours for it to last for (NULL: unlimited)
 	 * @param  ID_TEXT		Permission scope 'type'
 	 * @param  ID_TEXT		Permission scope 'specific_permission'
 	 * @param  ID_TEXT		Permission scope 'zone'
 	 * @param  ID_TEXT		Permission scope 'page'
 	 * @param  ID_TEXT		Permission scope 'module'
 	 * @param  ID_TEXT		Permission scope 'category'
+	 * @param  SHORT_TEXT	Confirmation mail subject
+	 * @param  LONG_TEXT		Confirmation mail body
 	 * @return tempcode		The fields
 	 */
-	function get_fields($name_suffix='',$title='',$description='',$enabled=1,$cost=NULL,$hours=24,$type='msp',$specific_permission='',$zone='',$page='',$module='',$category='')
+	function get_fields($name_suffix='',$title='',$description='',$enabled=1,$cost=NULL,$hours=NULL,$type='msp',$specific_permission='',$zone='',$page='',$module='',$category='',$mail_subject='',$mail_body='')
 	{
 		require_lang('points');
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'permission_title'.$name_suffix,$title,true));
 		$fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'permission_description'.$name_suffix,$description,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('COST'),do_lang_tempcode('HOW_MUCH_THIS_COSTS'),'permission_cost'.$name_suffix,$cost,true));
-		$fields->attach(form_input_integer(do_lang_tempcode('PERMISSION_HOURS'),do_lang_tempcode('DESCRIPTION_PERMISSION_HOURS'),'permission_hours'.$name_suffix,$hours,true));
+		$fields->attach(form_input_integer(do_lang_tempcode('PERMISSION_HOURS'),do_lang_tempcode('DESCRIPTION_PERMISSION_HOURS'),'permission_hours'.$name_suffix,$hours,false));
 		$types=new ocp_tempcode();
 		$_types=array('msp','member_zone_access','member_page_access','member_category_access');
 		foreach ($_types as $_type)
@@ -79,7 +81,7 @@ class Hook_pointstore_permission
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_specific_permission'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_specific_permission'),'permission_specific_permission'.$name_suffix,$specific_permissions,NULL,false,false));
 		$zones=new ocp_tempcode();
-		$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
+		//$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
 		require_code('zones2');
 		require_code('zones3');
 		$zones->attach(nice_get_zones($zone));
@@ -112,6 +114,11 @@ class Hook_pointstore_permission
 		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_module'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_module'),'permission_module'.$name_suffix,$modules,NULL,false,false));
 		$fields->attach(form_input_line(do_lang_tempcode('PERMISSION_SCOPE_category'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_category'),'permission_category'.$name_suffix,$category,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','permission_enabled'.$name_suffix,$enabled==1));
+
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PURCHASE_MAIL'),'HELP'=>do_lang_tempcode('DESCRIPTION_PURCHASE_MAIL'))));
+		$fields->attach(form_input_line(do_lang_tempcode('PURCHASE_MAIL_SUBJECT'),'','permission_mail_subject'.$name_suffix,$mail_subject,false));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('PURCHASE_MAIL_BODY'),'','permission_mail_body'.$name_suffix,$mail_body,false));
+
 		return $fields;
 	}
 
@@ -130,7 +137,9 @@ class Hook_pointstore_permission
 		{
 			$fields=new ocp_tempcode();
 			$hidden=new ocp_tempcode();
-			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['p_title']),get_translated_text($row['p_description']),$row['p_enabled'],$row['p_cost'],$row['p_hours'],$row['p_type'],$row['p_specific_permission'],$row['p_zone'],$row['p_page'],$row['p_module'],$row['p_category']));
+			$hours=$row['p_hours'];
+			if ($hours==400000) $hours=NULL; // Around 100 years, but meaning unlimited
+			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['p_title']),get_translated_text($row['p_description']),$row['p_enabled'],$row['p_cost'],$hours,$row['p_type'],$row['p_specific_permission'],$row['p_zone'],$row['p_page'],$row['p_module'],$row['p_category'],get_translated_text($row['p_mail_subject']),get_translated_text($row['p_mail_body'])));
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_permission_'.strval($i),false));
 			$hidden->attach(form_input_hidden('permission_'.strval($i),strval($row['id'])));
@@ -154,21 +163,30 @@ class Hook_pointstore_permission
 			$description=post_param('permission_description_'.strval($i));
 			$enabled=post_param_integer('permission_enabled_'.strval($i),0);
 			$cost=post_param_integer('permission_cost_'.strval($i));
-			$delete=post_param_integer('delete_permission_'.strval($i),0);
-			$hours=post_param_integer('permission_hours_'.strval($i));
-			if ($hours>24*365*5) warn_exit(do_lang_tempcode('HOURS_MUST_BE_LESS_5_YEARS'));
+			$hours=post_param_integer('permission_hours_'.strval($i),400000);
+			$hours=max($hours,400000);
 			$type=post_param('permission_type_'.strval($i));
 			$specific_permission=post_param('permission_specific_permission_'.strval($i));
 			$zone=post_param('permission_zone_'.strval($i));
 			$page=post_param('permission_page_'.strval($i));
 			$module=post_param('permission_module_'.strval($i));
 			$category=post_param('permission_category_'.strval($i));
+			$mail_subject=post_param('permission_mail_subject_'.strval($i));
+			$mail_body=post_param('permission_mail_body_'.strval($i));
+
+			$delete=post_param_integer('delete_permission_'.strval($i),0);
+
 			$_title=$rows[$id]['p_title'];
 			$_description=$rows[$id]['p_description'];
+			$_mail_subject=$rows[$id]['p_mail_subject'];
+			$_mail_body=$rows[$id]['p_mail_body'];
+
 			if ($delete==1)
 			{
 				delete_lang($_title);
 				delete_lang($_description);
+				delete_lang($_mail_subject);
+				delete_lang($_mail_body);
 				$GLOBALS['SITE_DB']->query_delete('pstore_permissions',array('id'=>$id),'',1);
 			} else
 			{
@@ -184,6 +202,8 @@ class Hook_pointstore_permission
 					'p_page'=>$page,
 					'p_module'=>$module,
 					'p_category'=>$category,
+					'p_mail_subject'=>lang_remap($_mail_subject,$mail_subject),
+					'p_mail_body'=>lang_remap($_mail_body,$mail_body),
 				),array('id'=>$id),'',1);
 			}
 			$i++;
@@ -194,14 +214,16 @@ class Hook_pointstore_permission
 			$description=post_param('permission_description');
 			$enabled=post_param_integer('permission_enabled',0);
 			$cost=post_param_integer('permission_cost');
-			$hours=post_param_integer('permission_hours');
-			if ($hours>24*365*5) warn_exit(do_lang_tempcode('HOURS_MUST_BE_LESS_5_YEARS'));
+			$hours=post_param_integer('permission_hours',400000);
+			$hours=max($hours,400000);
 			$type=post_param('permission_type');
 			$specific_permission=post_param('permission_specific_permission');
 			$zone=post_param('permission_zone');
 			$page=post_param('permission_page');
 			$module=post_param('permission_module');
 			$category=post_param('permission_category');
+			$mail_subject=post_param('permission_mail_subject');
+			$mail_body=post_param('permission_mail_body');
 
 			$GLOBALS['SITE_DB']->query_insert('pstore_permissions',array(
 				'p_title'=>insert_lang($title,2),
@@ -215,6 +237,8 @@ class Hook_pointstore_permission
 				'p_page'=>$page,
 				'p_module'=>$module,
 				'p_category'=>$category,
+				'p_mail_subject'=>insert_lang($mail_subject,2),
+				'p_mail_body'=>insert_lang($mail_body,2),
 			));
 		}
 	}
@@ -260,7 +284,7 @@ class Hook_pointstore_permission
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$p_title=get_translated_text($rows[0]['p_title']);
-		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array($p_title));
+		$title=get_screen_title('PURCHASE_SOME_PRODUCT',true,array($p_title));
 
 		$cost=$rows[0]['p_cost'];
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class,'sub_id'=>$id),'_SELF');
@@ -289,10 +313,12 @@ class Hook_pointstore_permission
 		$rows=$GLOBALS['SITE_DB']->query_select('pstore_permissions',array('*'),array('id'=>$id,'p_enabled'=>1));
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$cost=$rows[0]['p_cost'];
+		$row=$rows[0];
 
-		$p_title=get_translated_text($rows[0]['p_title']);
-		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array($p_title));
+		$cost=$row['p_cost'];
+
+		$p_title=get_translated_text($row['p_title']);
+		$title=get_screen_title('PURCHASE_SOME_PRODUCT',true,array($p_title));
 
 		// Check points
 		$points_left=available_points(get_member());
@@ -302,17 +328,30 @@ class Hook_pointstore_permission
 		}
 
 		// Test to see if it's been bought
-		if ($this->bought($rows[0]))
+		if ($this->bought($row))
 			warn_exit(do_lang_tempcode('_ALREADY_HAVE'));
 
 		require_code('points2');
 		charge_member(get_member(),$cost,$p_title);
-		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_PERMISSION_PRODUCT','details'=>$p_title,'details2'=>strval($rows[0]['id'])));
+		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_PERMISSION_PRODUCT','details'=>$p_title,'details2'=>strval($row['id'])));
 
 		// Actuate
-		$map=$this->get_map($rows[0]);
-		$map['active_until']=time()+$rows[0]['p_hours']*60*60;
-		$GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($rows[0]['p_type']),$map);
+		$map=$this->get_map($row);
+		$map['active_until']=time()+$row['p_hours']*60*60;
+		$GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($row['p_type']),$map);
+
+		$member=get_member();
+
+		// Email member
+		require_code('mail');
+		$subject_line=get_translated_text($row['p_mail_subject']);
+		if ($subject_line!='')
+		{
+			$message_raw=get_translated_text($row['p_mail_body']);
+			$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
+			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
+			mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,NULL,false,NULL,true);
+		}
 
 		// Show message
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

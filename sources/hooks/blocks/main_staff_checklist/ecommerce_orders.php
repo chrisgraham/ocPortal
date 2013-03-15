@@ -28,7 +28,7 @@ class Hook_checklist_ecommerce_orders
 
 		require_lang('shopping');
 
-		$to_dispatch_order_cnt	=	$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','count(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
+		$to_dispatch_order_cnt=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','count(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
 
 		if ($to_dispatch_order_cnt>0)
 		{
@@ -40,7 +40,7 @@ class Hook_checklist_ecommerce_orders
 
 		$url=build_url(array('page'=>'admin_orders','type'=>'show_orders','filter'=>'undispatched'),get_module_zone('admin_orders'));
 
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('ORDERS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($to_dispatch_order_cnt)))));
+		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'440a79b164533416f4d086a93efba9ea','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('ORDERS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($to_dispatch_order_cnt)))));
 		return array(array($tpl,NULL,$to_dispatch_order_cnt,NULL));
 	}
 

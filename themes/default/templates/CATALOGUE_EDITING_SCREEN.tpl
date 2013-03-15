@@ -1,16 +1,18 @@
 {TITLE}
 
-{TEXT}
+{$PARAGRAPH,{TEXT}}
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}" target="_top">
 	<div>
 		{HIDDEN}
 
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table scrollable_inside">
-			<colgroup>
-				<col style="width: 198px" />
-				<col style="width: 100%" />
-			</colgroup>
+		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table scrollable_inside">
+			{+START,IF,{$NOT,{$MOBILE}}}
+				<colgroup>
+					<col class="field_name_column" />
+					<col class="field_input_column" />
+				</colgroup>
+			{+END}
 
 			<tbody>
 				{FIELDS}
@@ -27,9 +29,6 @@
 		<script type="text/javascript">// <![CDATA[
 			catalogue_field_change_watching();
 		//]]></script>
-
-		<br />
-		<br />
 
 		{+START,INCLUDE,FORM_STANDARD_END}{+END}
 	</div>

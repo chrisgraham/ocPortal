@@ -21,8 +21,7 @@ function catalogue_field_change_watching()
 
 function catalogue_field_reindex_around(all_orderers,ob)
 {
-	return function()
-	{
+	return function() {
 		var next_index=0;
 
 		// Sort our all_orderers array by selectedIndex

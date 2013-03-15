@@ -49,7 +49,7 @@ function getObjectProperties(item)
   {
 	 if (item[prop].constructor != Function)
 	 {
-		retVal += prop + ' => ' + item[prop] + "\n";
+		retVal += prop + ' => ' + item[prop] + '\n';
 	 }
   }
   return retVal;
@@ -75,7 +75,7 @@ function getUserFunctions()
   {
 //	 if (document[prop].constructor == Function)
 //	 {
-//		retVal += prop + ' => ' + document[prop] + "\n";
+//		retVal += prop + ' => ' + document[prop] + '\n';
 //	 }
   }
   return document;
@@ -104,7 +104,7 @@ function window_ob(expr)
   win.document.close()
   try
   {
-    win.focus();
+		win.focus();
   }
   catch (e) {};
 }
@@ -308,7 +308,7 @@ Array.prototype.inArray = function(needle)
 /**
  * arrayDelete
  *
- * Removes the first occurance of a value from an array. This function is NEW (24/2/06) by ocProducts.
+ * Removes the first occurence of a value from an array. This function is NEW (24/2/06) by ocProducts.
  *
  * object array
  * param  mixed
@@ -534,7 +534,7 @@ String.prototype.htmlEntities = function()
 
 String.prototype.addSlashes = function(needle)
 {
-  return this.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  return this.replace(/\\/g,'\\\\').replace(/'/g,'\'');
 }
 
 
@@ -554,7 +554,7 @@ String.prototype.addSlashes = function(needle)
  */
 String.prototype.trim = function()
 {
-  return this.replace(/^\s*([^ ]*)\s*$/, "$1");
+  return this.replace(/^\s*([^ ]*)\s*$/, '$1');
 }
 
 
@@ -635,14 +635,14 @@ String.prototype.strPad = function(pad_length, pad_string, pad_type)
   if (arguments.length < 2 || arguments.length > 4)
   {
 	 error	  = true;
-	 error_msg = "Wrong parameter count.";
+	 error_msg = 'Wrong parameter count.';
   }
 
 
   else if (isNaN(arguments[0]))
   {
 	 error	  = true;
-	 error_msg = "Padding length must be an integer.";
+	 error_msg = 'Padding length must be an integer.';
   }
   /* Setup the padding string values if specified. */
   if (arguments.length >= 2)
@@ -650,7 +650,7 @@ String.prototype.strPad = function(pad_length, pad_string, pad_type)
 	 if (pad_string.length == 0)
 	 {
 		error	  = true;
-		error_msg = "Padding string cannot be empty.";
+		error_msg = 'Padding string cannot be empty.';
 	 }
 	 pad_str_val = pad_string;
 	 //pad_str_len = pad_string.length;
@@ -661,7 +661,7 @@ String.prototype.strPad = function(pad_length, pad_string, pad_type)
 		if (pad_type_val < STR_PAD_LEFT || pad_type_val > STR_PAD_BOTH)
 		{
 		  error	  = true;
-		  error_msg = "Padding type has to be STR_PAD_LEFT, STR_PAD_RIGHT, or STR_PAD_BOTH."
+		  error_msg = 'Padding type has to be STR_PAD_LEFT, STR_PAD_RIGHT, or STR_PAD_BOTH.'
 		}
 	 }
   }

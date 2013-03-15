@@ -15,26 +15,14 @@
 
 /* Standalone script to extract a tar file */
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
-if (substr($FILE_BASE,-4)=='.php')
+$FILE_BASE=dirname($FILE_BASE);
+if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
 {
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
-}
-if (!is_file($FILE_BASE.'/sources/global.php'))
-{
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+	$RELATIVE_PATH=basename($FILE_BASE);
+	$FILE_BASE=dirname($FILE_BASE);
 } else
 {
 	$RELATIVE_PATH='';
@@ -66,13 +54,12 @@ if (!function_exists('file_get_contents'))
 	 * Get the contents of a file.
 	 *
 	 * @param  SHORT_TEXT	The file name.
-	 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 	 * @return ~LONG_TEXT	The file contents (false: error).
 	 */
-	function file_get_contents($filename,$type=0)
+	function file_get_contents($filename)
 	{
 		$data='';
-		$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
+		$file=@fopen($filename,'rb');
 		if ($file)
 		{
 			while (!feof($file)) $data.=fread($file,1024);
@@ -116,8 +103,14 @@ foreach ($todo as $i=>$_target_file)
 {
 	list($target_file,,$offset,$length,)=$_target_file;
 
-	if ($i<$file_offset) continue;
-	if ($i>$file_offset+20) break;
+	if ($_target_file=='data/upgrader2.php')
+	{
+		if ($file_offset+20<count($todo)) continue; // Only extract on last step, to avoid possible transitionary bugs between versions of this file (this is the file running and refreshing now, i.e this file!)
+	} else
+	{
+		if ($i<$file_offset) continue;
+		if ($i>$file_offset+20) break;
+	}
 
 	// Make any needed directories
 	$build_up=$FILE_BASE;
@@ -130,7 +123,12 @@ foreach ($todo as $i=>$_target_file)
 
 	// Copy in the data
 	fseek($myfile,$offset);
-	$myfile2=fopen($FILE_BASE.'/'.$target_file,'wb');
+	$myfile2=@fopen($FILE_BASE.'/'.$target_file,'wb');
+	if ($myfile2===false)
+	{
+		header('Content-type: text/plain');
+		exit('Filesystem permission error when trying to extract '.$target_file.'. Maybe you needed to give FTP details when logging in?');
+	}
 	while ($length>0)
 	{
 		$amount_to_read=min(1024,$length);
@@ -145,7 +143,7 @@ fclose($myfile);
 
 // Show HTML
 $next_offset_url='';
-if ($file_offset<count($todo))
+if ($file_offset+20<count($todo))
 {
 	$next_offset_url='upgrader2.php?';
 	foreach ($_GET as $key=>$val)
@@ -156,6 +154,7 @@ if ($file_offset<count($todo))
 			$next_offset_url.=urlencode($key).'='.urlencode($val).'&';
 	}
 	$next_offset_url.='file_offset='.urlencode(strval($file_offset+20));
+	$next_offset_url.='#progress';
 }
 up2_do_header($next_offset_url);
 if ($next_offset_url=='')
@@ -166,12 +165,15 @@ if ($next_offset_url=='')
 }
 else
 {
-	echo '<p><img alt="" src="../themes/default/images/bottom/loading.gif" /></p>';
+	echo '<p><img alt="" src="../themes/default/images/loading.gif" /></p>';
 }
 echo '<ol>';
 foreach ($todo as $i=>$target_file)
 {
-	echo '<li><input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset+20)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label></li>';
+	echo '<li>';
+	echo '<input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset+20)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label>';
+	if ($i==$file_offset) echo '<a name="progress" id="progress"></a>';
+	echo '</li>';
 }
 echo '</ol>';
 echo '<script type="text/javascript">// <![CDATA[
@@ -195,8 +197,8 @@ function up2_do_header($refresh_url='')
 {
 	$_refresh_url=htmlentities($refresh_url);
 	echo <<<END
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
+<!DOCTYPE html>
+	<html lang="EN">
 	<head>
 		<title>Extracting files</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
@@ -205,18 +207,18 @@ END;
 		<meta http-equiv="refresh" content="3;url={$_refresh_url}" />
 END;
 	echo <<<END
-		<style type="text/css">
+		<style type="text/css">/*<![CDATA[*/
 END;
 global $FILE_BASE;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($FILE_BASE.'/themes/default/css/global.css'))))));
 echo <<<END
-			.main_page_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		</style>
+		/*]]>*/</style>
 
 		<meta name="robots" content="noindex, nofollow" />
 	</head>
-	<body class="re_body"><div class="global_middle">
+	<body class="website_body"><div class="global_middle">
 END;
 }
 

@@ -1,1 +1,1 @@
-<a href="{URL*}">{NAME*}</a><br />
+<a href="{URL*}">{NAME*}</a>

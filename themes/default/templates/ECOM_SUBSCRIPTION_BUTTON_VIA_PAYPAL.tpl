@@ -9,11 +9,11 @@
 	<input type="hidden" name="custom" value="{PURCHASE_ID*}" />
 	<input type="hidden" name="a3" value="{AMOUNT*}" />
 	<input type="hidden" name="p3" value="{LENGTH*}" />
-	<input type="hidden" name="t3" value="{$UCASE,{LENGTH_UNITS*}}" />
+	<input type="hidden" name="t3" value="{$UCASE*,{LENGTH_UNITS}}" />
 	<input type="hidden" name="src" value="1" />
 	<input type="hidden" name="sra" value="1" />
 	<input type="hidden" value="1" name="no_note" />
-	<input type="hidden" value="{!SUBSCRIPTION}" name="item_name" />
+	<input type="hidden" value="{!SUBSCRIPTION_FOR,{$USERNAME}}" name="item_name" />
 	<input type="hidden" name="rm" value="2" />
 
 	<div class="purchase_button">

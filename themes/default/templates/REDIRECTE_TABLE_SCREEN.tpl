@@ -1,6 +1,6 @@
 {TITLE}
 
-{+START,INCLUDE,handle_conflict_resolution}{+END}
+{+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
 {+END}
@@ -10,18 +10,18 @@
 </p>
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table">
+	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table redirect_table">
 		<colgroup>
-			<col style="width: 25%" />
-			<col style="width: 25%" />
-			<col style="width: 25%" />
-			<col style="width: 25%" />
-			<col style="width: 40px" />
-			<col style="width: 40px" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_input_column" />
+			<col class="redirect_table_sup_column" />
+			<col class="redirect_table_sup_column" />
 		</colgroup>
 
 		<thead>
-			<tr class="solidborder">
+			<tr class="results_table">
 				<th>
 					{!REDIRECT_FROM_ZONE}
 				</th>
@@ -50,20 +50,22 @@
 			{FIELDS}
 			<tr>
 				<td colspan="4">
-					<br /><h2>{!NEW_REDIRECT}&hellip;</h2>
+					<h2>{!NEW_REDIRECT}&hellip;</h2>
 				</td>
 			</tr>
 			{NEW}
 		</tbody>
 	</table></div>
 
-	<br />
-	<div class="proceed_button">
+	<p class="proceed_button">
 		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
-	</div>
+	</p>
 
-	<br />
-	{+START,BOX,{!NOTES},,light}
+	<hr class="spaced_rule" />
+
+	<div class="box box___redirecte_table_screen"><div class="box_inner">
+		<h2>{!NOTES}</h2>
+
 		<p>
 			<label for="m_notes">{!NOTES_ABOUT_REDIRECTS}</label>
 		</p>
@@ -71,5 +73,5 @@
 		<div class="constrain_field">
 			<textarea class="wide_field" id="m_notes" name="notes" cols="50" rows="10">{NOTES*}</textarea>
 		</div>
-	{+END}
+	</div></div>
 </form>

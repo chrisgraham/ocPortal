@@ -60,7 +60,7 @@ class Module_onlinemembers
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 
-		$title=get_page_title('USERS_ONLINE');
+		$title=get_screen_title('USERS_ONLINE');
 
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML

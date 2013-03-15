@@ -63,7 +63,7 @@ class Module_admin_cleanup
 	{
 		if (is_null($upgrade_from))
 		{
-			add_config_option('BLOCK_CACHE','is_on_block_cache','tick','return $GLOBALS[\'SEMI_DEBUG_MODE\']?\'0\':\'1\';','SITE','CACHES',1);
+			add_config_option('BLOCK_CACHE','is_on_block_cache','tick','return $GLOBALS[\'SEMI_DEV_MODE\']?\'0\':\'1\';','SITE','CACHES',1);
 			add_config_option('TEMPLATE_CACHE','is_on_template_cache','tick','return \'1\';','SITE','CACHES',1);
 			add_config_option('COMCODE_PAGE_CACHE','is_on_comcode_page_cache','tick','return \'1\';','SITE','CACHES',1);
 		}
@@ -114,7 +114,7 @@ class Module_admin_cleanup
 	{
 		$hooks=find_all_hooks('modules','admin_cleanup');
 
-		$title=get_page_title('CLEANUP_TOOLS');
+		$title=get_screen_title('CLEANUP_TOOLS');
 
 		$url=build_url(array('page'=>'_SELF','type'=>'rebuild'),'_SELF');
 
@@ -185,7 +185,7 @@ class Module_admin_cleanup
 		$messages=ocportal_cleanup($todo);
 		$messages->attach(paragraph(do_lang_tempcode('SUCCESS')));
 
-		$title=get_page_title('CLEANUP_TOOLS');
+		$title=get_screen_title('CLEANUP_TOOLS');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CLEANUP_TOOLS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));

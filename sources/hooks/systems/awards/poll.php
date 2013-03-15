@@ -66,7 +66,7 @@ class Hook_awards_poll
 	function run($row,$zone)
 	{
 		require_code('polls');
-		return poll_script(true,$row['id']);
+		return render_poll_box(true,$row);
 	}
 
 }

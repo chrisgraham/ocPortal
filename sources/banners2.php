@@ -21,11 +21,12 @@
 /**
  * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
  *
- * @param  boolean			Whether to simplify the banner interface (for the point-store buy process)
+ * @param  boolean			Whether to simplify the banner interface (for the Point Store buy process)
  * @param  ID_TEXT			The name of the banner
  * @param  URLPATH			The URL to the banner image
  * @param  URLPATH			The URL to the site the banner leads to
  * @param  SHORT_TEXT		The caption of the banner
+ * @param  LONG_TEXT			Complete HTML/PHP for the banner
  * @param  LONG_TEXT			Any notes associated with the banner
  * @param  integer			The banners "importance modulus"
  * @range  1 max
@@ -34,20 +35,20 @@
  * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
  * @param  ?TIME				The banner expiry date (NULL: never expires)
- * @param  ?ID_TEXT			The username of the banners submitter (NULL: current member)
+ * @param  ?MEMBER			The banners submitter (NULL: current member)
  * @param  BINARY				Whether the banner has been validated
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
- * @return tempcode			The input field tempcode
+ * @return array				A pair: The input field tempcode, Javascript code
  */
-function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_url='',$caption='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=1,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
+function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_url='',$caption='',$direct_code='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=1,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
 {
 	require_code('images');
 
 	$fields=new ocp_tempcode();
 	require_code('form_templates');
 	$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_BANNER_NAME'),'name',$name,true));
-	$fields->attach(form_input_line(do_lang_tempcode('DESTINATION_URL'),do_lang_tempcode('DESCRIPTION_BANNER_URL'),'site_url',$site_url,false)); // Blank implies iframe
+	$fields->attach(form_input_line(do_lang_tempcode('DESTINATION_URL'),do_lang_tempcode('DESCRIPTION_BANNER_URL'),'site_url',$site_url,false)); // Blank implies iframe or direct code
 	if (!$simplified)
 	{
 		$types=nice_get_banner_types($b_type);
@@ -59,7 +60,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	}
 	if (has_specific_permission(get_member(),'full_banner_setup'))
 	{
-		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',is_null($submitter)?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):$submitter,false));
+		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',$GLOBALS['FORUM_DRIVER']->get_username(is_null($submitter)?get_member():$submitter),true));
 	}
 	if (get_value('disable_staff_notes')!=='1')
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
@@ -76,9 +77,23 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	}
 
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SOURCE_MEDIA'))));
-	$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_BANNER'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-	$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('IMAGE_URL')),do_lang_tempcode('DESCRIPTION_URL_BANNER'),'image_url',$image_url,false));
-	$fields->attach(form_input_line_comcode(do_lang_tempcode('BANNER_TITLE_TEXT'),do_lang_tempcode('DESCRIPTION_BANNER_TITLE_TEXT'),'title_text',$title_text,false));
+
+	$set_name='media';
+	$required=false;
+	$set_title=do_lang_tempcode('MEDIA');
+	$field_set=alternate_fields_set__start($set_name);
+
+	$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_BANNER'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+	$field_set->attach(form_input_line(do_lang_tempcode('IMAGE_URL'),do_lang_tempcode('DESCRIPTION_URL_BANNER'),'image_url',$image_url,false));
+
+	$field_set->attach(form_input_line_comcode(do_lang_tempcode('BANNER_TITLE_TEXT'),do_lang_tempcode('DESCRIPTION_BANNER_TITLE_TEXT'),'title_text',$title_text,false));
+
+	if (has_specific_permission(get_member(),'use_html_banner'))
+		$field_set->attach(form_input_text(do_lang_tempcode('BANNER_DIRECT_CODE'),do_lang_tempcode('DESCRIPTION_BANNER_DIRECT_CODE'),'direct_code',$direct_code,false));
+
+	$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 	$fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_BANNER_DESCRIPTION'),'caption',$caption,false));
 
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('DEPLOYMENT_DETERMINATION'))));
@@ -96,24 +111,41 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	}
 	$fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',true,is_null($expiry_date),true,$expiry_date,2));
 
-	return $fields;
+	$javascript='
+		if (document.getElementById(\'campaignremaining\'))
+		{
+			var form=document.getElementById(\'campaignremaining\').form;
+			var crf=function() {
+				form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked);
+			};
+			crf();
+			form.elements[\'the_type\'][0].onclick=crf;
+			form.elements[\'the_type\'][1].onclick=crf;
+			form.elements[\'the_type\'][2].onclick=crf;
+		}
+	';
+
+	return array($fields,$javascript);
 }
 
 /**
  * Check the uploaded banner is valid.
  *
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+ * @param  LONG_TEXT			Complete HTML/PHP for the banner
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
  * @return array				A pair: The URL, and the title text
  * @param  string				Param name for possible URL field
  * @param  string				Param name for possible upload field
  */
-function check_banner($title_text='',$b_type='',$url_param_name='image_url',$file_param_name='file')
+function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name='image_url',$file_param_name='file')
 {
 	require_code('uploads');
 	$is_upload=(is_swf_upload()) || (array_key_exists($file_param_name,$_FILES)) && (array_key_exists('tmp_name',$_FILES[$file_param_name]) && (is_uploaded_file($_FILES[$file_param_name]['tmp_name'])));
 
 	require_code('uploads');
+
+	$url='';
 
 	// Check according to banner type
 	$_banner_type_rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('*'),array('id'=>$b_type),'',1);
@@ -121,62 +153,72 @@ function check_banner($title_text='',$b_type='',$url_param_name='image_url',$fil
 	$banner_type_row=$_banner_type_rows[0];
 	if ($banner_type_row['t_is_textual']==0)
 	{
-		$urls=get_url($url_param_name,$file_param_name,'uploads/banners',0,$is_upload?OCP_UPLOAD_IMAGE_OR_SWF:OCP_UPLOAD_ANYTHING);
-		$url=fixup_protocolless_urls($urls[0]);
-		if ($url=='')
+		if ($direct_code=='')
 		{
-			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD_BANNERS'));
-		}
+			$urls=get_url($url_param_name,$file_param_name,'uploads/banners',0,$is_upload?OCP_UPLOAD_IMAGE_OR_SWF:OCP_UPLOAD_ANYTHING);
+			$url=fixup_protocolless_urls($urls[0]);
+			if ($url=='')
+			{
+				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD_BANNERS'));
+			}
 
-		// Check width, height, size
-		$test_url=$url;
-		if (url_is_local($test_url))
-		{
-			$data=file_get_contents(get_custom_file_base().'/'.rawurldecode($test_url),FILE_BINARY);
-			$test_url=get_custom_base_url().'/'.$test_url;
+			// Check width, height, size
+			$test_url=$url;
+			if (url_is_local($test_url))
+			{
+				$data=file_get_contents(get_custom_file_base().'/'.rawurldecode($test_url));
+				$test_url=get_custom_base_url().'/'.$test_url;
+			} else
+			{
+				$data=http_download_file($test_url);
+			}
+			if (strlen($data)>$banner_type_row['t_max_file_size']*1024)
+			{
+				if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
+				warn_exit(do_lang_tempcode('BANNER_TOO_LARGE',integer_format(intval(ceil(strlen($data)/1024))),integer_format($banner_type_row['t_max_file_size'])));
+			}
+			if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')) && (substr($test_url,-4)!='.swf'))
+			{
+				require_code('images');
+				if (is_image($test_url))
+				{
+					require_code('files');
+					$img_res=@imagecreatefromstring($data);
+					if ($img_res===false)
+					{
+						if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
+						warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($test_url)));
+					}
+
+					if (get_file_extension($test_url)=='gif')
+					{
+						$header=unpack('@6/'.'vwidth/'.'vheight',$data);
+						$sx=$header['width'];
+						$sy=$header['height'];
+					} else
+					{
+						$sx=imagesx($img_res);
+						$sy=imagesy($img_res);
+					}
+
+					if ((get_option('banner_autosize')!='1') && (($sx!=$banner_type_row['t_image_width']) || ($sy!=$banner_type_row['t_image_height'])))
+					{
+						if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
+						warn_exit(do_lang_tempcode('BANNER_RES_BAD',integer_format($banner_type_row['t_image_width']),integer_format($banner_type_row['t_image_height'])));
+					}
+				}
+			}
 		} else
 		{
-			$data=http_download_file($test_url);
-		}
-		if (strlen($data)>$banner_type_row['t_max_file_size']*1024)
-		{
-			if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
-			warn_exit(do_lang_tempcode('BANNER_TOO_LARGE',integer_format(intval(ceil(strlen($data)/1024))),integer_format($banner_type_row['t_max_file_size'])));
-		}
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')) && (substr($test_url,-4)!='.swf'))
-		{
-			require_code('images');
-			if (is_image($test_url))
+			check_specific_permission('use_html_banner');
+			if (strpos($direct_code,'<?')!==false)
 			{
-				require_code('files');
-				$img_res=@imagecreatefromstring($data);
-				if ($img_res===false)
-				{
-					if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
-					warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($test_url)));
-				}
-
-				if (get_file_extension($test_url)=='gif')
-				{
-					$header=unpack('@6/'.'vwidth/'.'vheight',$data);
-					$sx=$header['width'];
-					$sy=$header['height'];
-				} else
-				{
-					$sx=imagesx($img_res);
-					$sy=imagesy($img_res);
-				}
-
-				if ((get_option('banner_autosize')!='1') && (($sx!=$banner_type_row['t_image_width']) || ($sy!=$banner_type_row['t_image_height'])))
-				{
-					if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
-					warn_exit(do_lang_tempcode('BANNER_RES_BAD',integer_format($banner_type_row['t_image_width']),integer_format($banner_type_row['t_image_height'])));
-				}
+				check_specific_permission('use_php_banner');
+				if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 			}
 		}
 	} else
 	{
-		$url='';
 		if ($title_text=='')
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_BANNERS'));
 
@@ -194,6 +236,7 @@ function check_banner($title_text='',$b_type='',$url_param_name='image_url',$fil
  * @param  URLPATH			The URL to the banner image
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
  * @param  SHORT_TEXT		The caption of the banner
+ * @param  LONG_TEXT			Complete HTML/PHP for the banner
  * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
  * @range  0 max
  * @param  URLPATH			The URL to the site the banner leads to
@@ -213,7 +256,7 @@ function check_banner($title_text='',$b_type='',$url_param_name='image_url',$fil
  * @param  integer			The number of banner views to this banners site
  * @param  ?TIME				The banner edit date  (NULL: never)
  */
-function add_banner($name,$imgurl,$title_text,$caption,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated=0,$b_type='',$time=NULL,$hits_from=0,$hits_to=0,$views_from=0,$views_to=0,$edit_date=NULL)
+function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated=0,$b_type='',$time=NULL,$hits_from=0,$hits_to=0,$views_from=0,$views_to=0,$edit_date=NULL)
 {
 	if (!is_numeric($importancemodulus)) $importancemodulus=3;
 	if (!is_numeric($campaignremaining)) $campaignremaining=NULL;
@@ -224,7 +267,28 @@ function add_banner($name,$imgurl,$title_text,$caption,$campaignremaining,$site_
 	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>$title_text,'b_type'=>$b_type,'edit_date'=>$edit_date,'add_date'=>$time,'expiry_date'=>$expiry_date,'the_type'=>$the_type,'submitter'=>$submitter,'name'=>$name,'img_url'=>$imgurl,'caption'=>insert_lang_comcode($caption,2),'campaign_remaining'=>$campaignremaining,'site_url'=>$site_url,'importance_modulus'=>$importancemodulus,'notes'=>$notes,'validated'=>$validated,'hits_from'=>$hits_from,'hits_to'=>$hits_to,'views_from'=>$views_from,'views_to'=>$views_to));
+	$GLOBALS['SITE_DB']->query_insert('banners',array(
+		'b_title_text'=>$title_text,
+		'b_direct_code'=>$direct_code,
+		'b_type'=>$b_type,
+		'edit_date'=>$edit_date,
+		'add_date'=>$time,
+		'expiry_date'=>$expiry_date,
+		'the_type'=>$the_type,
+		'submitter'=>$submitter,
+		'name'=>$name,
+		'img_url'=>$imgurl,
+		'caption'=>insert_lang_comcode($caption,2),
+		'campaign_remaining'=>$campaignremaining,
+		'site_url'=>$site_url,
+		'importance_modulus'=>$importancemodulus,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'hits_from'=>$hits_from,
+		'hits_to'=>$hits_to,
+		'views_from'=>$views_from,
+		'views_to'=>$views_to
+	));
 
 	decache('main_banner_wave');
 	decache('main_topsites');
@@ -240,6 +304,7 @@ function add_banner($name,$imgurl,$title_text,$caption,$campaignremaining,$site_
  * @param  URLPATH			The URL to the banner image
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
  * @param  SHORT_TEXT		The caption of the banner
+ * @param  LONG_TEXT			Complete HTML/PHP for the banner
  * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
  * @range  0 max
  * @param  URLPATH			The URL to the site the banner leads to
@@ -253,7 +318,7 @@ function add_banner($name,$imgurl,$title_text,$caption,$campaignremaining,$site_
  * @param  BINARY				Whether the banner has been validated
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
  */
-function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type)
+function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type)
 {
 	if ($old_name!=$name)
 	{
@@ -262,8 +327,6 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$campaignremai
 	}
 
 	$_caption=$GLOBALS['SITE_DB']->query_value('banners','caption',array('name'=>$old_name));
-
-	if (!has_specific_permission(get_member(),'bypass_validation_midrange_content','cms_banners')) $validated=0;
 
 	require_code('files2');
 	delete_upload('uploads/banners','banners','img_url','name',$old_name,$imgurl);
@@ -282,7 +345,23 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$campaignremai
 		send_content_validated_notification('banner',$name);
 	}
 
-	$GLOBALS['SITE_DB']->query_update('banners',array('b_title_text'=>$title_text,'edit_date'=>time(),'expiry_date'=>$expiry_date,'the_type'=>$the_type,'submitter'=>$submitter,'name'=>$name,'img_url'=>$imgurl,'caption'=>lang_remap_comcode($_caption,$caption),'campaign_remaining'=>$campaignremaining,'site_url'=>$site_url,'importance_modulus'=>$importancemodulus,'notes'=>$notes,'validated'=>$validated,'b_type'=>$b_type),array('name'=>$old_name),'',1);
+	$GLOBALS['SITE_DB']->query_update('banners',array(
+		'b_title_text'=>$title_text,
+		'b_direct_code'=>$direct_code,
+		'edit_date'=>time(),
+		'expiry_date'=>$expiry_date,
+		'the_type'=>$the_type,
+		'submitter'=>$submitter,
+		'name'=>$name,
+		'img_url'=>$imgurl,
+		'caption'=>lang_remap_comcode($_caption,$caption),
+		'campaign_remaining'=>$campaignremaining,
+		'site_url'=>$site_url,
+		'importance_modulus'=>$importancemodulus,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'b_type'=>$b_type
+	),array('name'=>$old_name),'',1);
 }
 
 /**

@@ -28,6 +28,10 @@ function init__forum_stub()
 	$IS_STAFF_CACHE=array();
 }
 
+/**
+ * Forum Driver base class.
+ * @package		core
+ */
 class forum_driver_base
 {
 	var $connection;

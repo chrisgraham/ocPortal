@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_random_quotes
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_random_quotes
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_random_quotes
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/blocks/main_notes/quotes.php',
 			'sources/hooks/modules/admin_import_types/quotes.php',
 			'sources/hooks/modules/admin_setupwizard/random_quotes.php',
@@ -86,20 +84,21 @@ class Hook_addon_registry_random_quotes
 			'lang/EN/quotes.ini',
 			'sources/blocks/main_quotes.php',
 			'sources/hooks/systems/do_next_menus/quotes.php',
+			'random_quotes.css',
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BLOCK_MAIN_QUOTES.tpl'=>'block_main_quotes',
-				);
+			'BLOCK_MAIN_QUOTES.tpl'=>'block_main_quotes'
+		);
 	}
 
 	/**
@@ -112,14 +111,12 @@ class Hook_addon_registry_random_quotes
 	function tpl_preview__block_main_quotes()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_QUOTES',array(
-					'EDIT_URL'=>placeholder_url(),
-					'FILE'=>lorem_phrase(),
-					'CONTENT'=>lorem_phrase(),
-					'TITLE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_QUOTES', array(
+				'EDIT_URL'=>placeholder_url(),
+				'FILE'=>lorem_phrase(),
+				'CONTENT'=>lorem_phrase(),
+				'TITLE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 }

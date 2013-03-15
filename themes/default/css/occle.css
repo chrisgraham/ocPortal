@@ -3,39 +3,46 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-#command_line {
-	/*Style to look like generic command prompt*/
+{$THEME_WIZARD_COLOR,#222222,occle_background,100% 222222}
+{$THEME_WIZARD_COLOR,#dddddd,occle_faded_text,100% DDDDDD}
+{$THEME_WIZARD_COLOR,#ffffff,occle_text,100% FFFFFF}
+{$THEME_WIZARD_COLOR,#ffffff,occle_border_color,100% 666666}
+{$THEME_WIZARD_COLOR,#ffa500,occle_notification_border,100% FFA500}
+{$THEME_WIZARD_COLOR,#444400,occle_notification_background,100% 444400}
+{$THEME_WIZARD_COLOR,#ffffaa,occle_notification_color,100% FFFFAA}
+{$THEME_WIZARD_COLOR,#39669f,occle_directory_listing,100% 39669F}
+{$THEME_WIZARD_COLOR,#39ff9f,occle_file_listing,100% 39FF9F}
+
+#command_line { /* This wraps the OcCLE module/window as a whole */
+	/* Styled to look like generic command prompt */
 	height: 600px;
 	overflow-y: auto;
-	background-color: #000;
-	border-left: 2px solid #666666;
-	border-top: 2px solid #666666;
-	border-bottom: 2px solid #999999;
-	border-right: 2px solid #999999;
-	padding: 3px;
-	color: #FFF;
+	background-color: {$GET,occle_background};
+	border: 2px solid {$GET,occle_border_color};
+	{$BETA_CSS_PROPERTY,box-shadow: 2px 2px {$GET,occle_border_color};}
+	padding: 0.5em;
+	color: {$GET,occle_text};
 	font-family: monospace;
-	font-size: 1.2em;
 	direction: ltr;
 }
 
+#command_prompt {
+	width: 100%;
+}
+
 #occle_command {
-	/*Style to blend in with #command_line*/
-	background-color: #444;
+	/* Styled to blend in with #command_line */
 	padding: 2px;
-	color: #FFF;
+	color: {$GET,occle_text};
+	background-color: {$GET,occle_background};
 	border: 0;
-	border-bottom: 1px dashed #777;
+	border-bottom: 1px dashed {$GET,occle_border_color};
 	font-family: monospace;
 	width: 400px;
 }
 
-#command_prompt {
-	width: 98%; /* not 100% for IE6 */
-}
-
 .past_command {
-	color: #DDDDDD;
+	color: {$GET,occle_faded_text};
 	margin-left: 10px;
 }
 
@@ -44,34 +51,29 @@
 	overflow-x: auto;
 }
 
-.command_output {
-	color: #454545;
-}
-
-.error_output {
-	color: #FF0000;
+.command_output, .past_command td {
+	color: {$GET,occle_text};
 }
 
 .occle_dir {
-	color: #39669F;
+	color: {$GET,occle_directory_listing};
 	font-weight: bold;
 }
 
 .occle_file {
-	color: #39FF9F;
+	color: {$GET,occle_file_listing};
 }
 
 .occle_notification {
-	border: 1px solid orange;
-	background-color: #444400;
-	color: #FFFFAA;
-/*	font-family: sans-serif;*/
-	margin: 5px;
-	padding: 3px;
+	border: 1px solid {$GET,occle_notification_border};
+	background-color: {$GET,occle_notification_background};
+	color: {$GET,occle_notification_color};
+	margin: 1em;
+	padding: 0.5em;
 }
 
 .whois_ip {
 	font-weight: bolder;
-	color: #FFF;
+	color: {$GET,occle_text};
 }
 

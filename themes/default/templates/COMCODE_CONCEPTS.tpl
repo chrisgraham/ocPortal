@@ -1,7 +1,9 @@
 <div class="comcode_concepts">
-	{+START,BOX,{TITLE},,light}
-	<dl>
-		{CONCEPTS}
-	</dl>
-	{+END}
+	<div class="box box___comcode_concepts"><div class="box_inner">
+		<h2>{TITLE}</h2>
+
+		<dl>
+			{CONCEPTS}
+		</dl>
+	</div></div>
 </div>

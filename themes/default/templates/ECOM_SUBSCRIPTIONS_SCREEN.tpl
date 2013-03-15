@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap variable_table"><table summary="{!MAP_TABLE}" class="variable_table solidborder wide_table">
+<div class="wide_table_wrap autosized_table"><table summary="{!MAP_TABLE}" class="autosized_table results_table wide_table">
 	<thead>
 		<tr>
 			<th>
@@ -29,7 +29,7 @@
 
 					{+START,IF,{$MOBILE}}
 						<p class="assocated_details">
-							{!STATUS}: {STATE*}
+							<span class="field_name">{!STATUS}:</span> {STATE*}
 						</p>
 					{+END}
 				</th>
@@ -49,7 +49,7 @@
 						{CANCEL_BUTTON}
 					{+END}
 					{+START,IF_NON_PASSED,CANCEL_BUTTON}
-						&nbsp; <a onclick="var t=this; window.fauxmodal_confirm('{!SUBSCRIPTION_CANCEL_WARNING_GENERAL=;}',function(result) { if (result) { click_link(t); } }); return false;" href="{$PAGE_LINK*,_SELF:_SELF:cancel:{ID}}">{!SUBSCRIPTION_CANCEL}</a>
+						<a onclick="var t=this; window.fauxmodal_confirm('{!SUBSCRIPTION_CANCEL_WARNING_GENERAL=;}',function(result) { if (result) { click_link(t); } }); return false;" href="{$PAGE_LINK*,_SELF:_SELF:cancel:{ID}}">{!SUBSCRIPTION_CANCEL}</a>
 					{+END}
 				</td>
 			</tr>

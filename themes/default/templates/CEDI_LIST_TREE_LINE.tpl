@@ -1,2 +1,0 @@
-{DEPTH*}{TITLE*}  ({ID*})
-

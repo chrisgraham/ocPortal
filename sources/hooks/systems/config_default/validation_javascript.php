@@ -48,7 +48,7 @@ class Hook_config_default_validation_javascript
 	 */
 	function get_default()
 	{
-		return '0';
+		return NULL; // Way too slow, and unlikely to be accurate with quickly-evolving JS standards
 	}
 
 }

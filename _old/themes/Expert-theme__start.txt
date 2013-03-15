@@ -1,0 +1,43 @@
+[semihtml]
+	[surround="rep"]
+		[surround="header"]
+			Representatives
+		[/surround]
+		[block="14" member_based="0" multiplier="1" fallback_full="1" fallback_archive="1" blogs="1" title="Welcome" show_in_full="1"]main_news[/block]
+	[/surround]
+	[surround]
+		[surround="col2-in1"]
+			[surround="welcome"]
+				[surround="head"]
+					Welcome to&hellip;
+				[/surround]
+				
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ullamcorper augue. Maecenas non est venenatis diam laoreet varius. Donec posuere massa sagittis risus sollicitudin id vestibulum ligula vehicula. Sed a ligula nulla, sit amet ultricies elit. Nullam eget orci purus, eget ullamcorper velit. Phasellus ac nisl in lectus hendrerit elementum eget ac arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus convallis quam et massa auctor id convallis neque tincidunt. Maecenas in sodales lacus.
+
+				[surround="more-link"][page=":about"]more[/page][/surround]
+			[/surround]
+			[surround="extra"]
+				[block="3"]main_news[/block]
+			[/surround]
+		[/surround]
+		[surround="col2-in2"]
+			[surround="staff"]
+				[surround="head"]
+					Project Staff Details
+				[/surround]
+				[surround]
+					[block="5" display_type="1"]main_cc_embed[/block]
+				[/surround]
+			[/surround]
+			[surround="logo-box"]
+				[surround="head"]
+					Partners
+				[/surround]
+				[surround]
+					[block="180x106" extra="side"]main_banner_wave[/block]
+				[/surround]
+			[/surround]
+		[/surround]
+	[/surround]
+[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

@@ -31,7 +31,6 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	var $array_key='e_code';
 	var $title_is_multi_lang=false;
 	var $non_integer_id=true;
-	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\');';
 	var $possibly_some_kind_of_upload=true;
 	var $do_preview=NULL;
 	var $menu_label='EMOTICONS';
@@ -65,6 +64,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		require_code('images');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
+
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
 
@@ -105,7 +105,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('EMOTICONS'),comcode_lang_string('DOC_EMOTICONS'),
+		return do_next_manager(get_screen_title('EMOTICONS'),comcode_lang_string('DOC_EMOTICONS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('emoticons',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_EMOTICONS')),
@@ -123,7 +123,12 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	 */
 	function import()
 	{
-		$title=get_page_title('IMPORT_EMOTICONS');
+		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+		{
+			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
+		}
+
+		$title=get_screen_title('IMPORT_EMOTICONS');
 
 		require_code('form_templates');
 
@@ -269,7 +274,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 			}
 		}
 
-		$title=get_page_title('IMPORT_EMOTICONS');
+		$title=get_screen_title('IMPORT_EMOTICONS');
 
 		log_it('IMPORT_EMOTICONS');
 
@@ -305,7 +310,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 			'e_is_special'=>0
 		));
 
-		persistant_cache_delete('THEME_IMAGES');
+		persistent_cache_delete('THEME_IMAGES');
 	}
 
 	/**
@@ -321,19 +326,41 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	 */
 	function get_form_fields($code=':-]',$theme_img_code='',$relevance_level=1,$use_topics=1,$is_special=0)
 	{
+		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+		{
+			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
+		}
+
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
 		$fields->attach(form_input_line(do_lang_tempcode('CODE'),do_lang_tempcode('DESCRIPTION_EMOTICON_CODE'),'code',$code,true));
 
-		if (get_base_url()==get_forum_base_url())
-		{
-			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-			handle_max_file_size($hidden,'image');
-		}
 		require_code('themes2');
 		$ids=get_all_image_ids_type('ocf_emoticons',false,$GLOBALS['FORUM_DB']);
-		$fields->attach(form_input_picture_choose_specific(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('STOCK')),do_lang_tempcode('DESCRIPTION_ALTERNATE_STOCK'),'theme_img_code',$ids,NULL,$theme_img_code,NULL,true,$GLOBALS['FORUM_DB']));
+
+		if (get_base_url()==get_forum_base_url())
+		{
+			$set_name='image';
+			$required=true;
+			$set_title=do_lang_tempcode('IMAGE');
+			$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$theme_img_code,NULL,false,$GLOBALS['FORUM_DB']);
+			$field_set->attach($image_chooser_field);
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
+			handle_max_file_size($hidden,'image');
+		} else
+		{
+			if (count($ids)==0) warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN','ocf_emoticons'));
+
+			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$theme_img_code,NULL,true,$GLOBALS['FORUM_DB']);
+			$fields->attach($image_chooser_field);
+		}
 
 		$list=new ocp_tempcode();
 		for ($i=0;$i<=4;$i++)
@@ -356,18 +383,16 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	function nice_get_radio_entries()
 	{
 		$_m=$GLOBALS['FORUM_DB']->query_select('f_emoticons',array('e_code','e_theme_img_code'));
-		$entries=array();
+		$entries=new ocp_tempcode();
 		$first=true;
 		foreach ($_m as $m)
 		{
 			$url=find_theme_image($m['e_theme_img_code']);
-			$entries[]=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_3',array('_GUID'=>'f7f64637d1c4984881f7acc68c2fe6c7','PRETTY'=>$m['e_code'],'CHECKED'=>$first,'NAME'=>'id','CODE'=>$m['e_code'],'URL'=>$url));
+			$entries->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'f7f64637d1c4984881f7acc68c2fe6c7','PRETTY'=>$m['e_code'],'CHECKED'=>$first,'NAME'=>'id','CODE'=>$m['e_code'],'URL'=>$url)));
 			$first=false;
 		}
 
-		$_entries=wrap_image_radio_list($entries);
-
-		return $_entries;
+		return $entries;
 	}
 
 	/**

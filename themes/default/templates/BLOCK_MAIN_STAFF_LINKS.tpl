@@ -1,52 +1,40 @@
+{$SET,RAND,_{$RAND}}
+
 <div class="form_ajax_target">
-	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,1,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="var linkslist=document.getElementById('stafflinkslist'); var editlinksform=next(linkslist); return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
-		<div class="wide_table_wrap">
+	<section id="tray_{!EXTERNAL_LINKS|}" class="box box___block_main_staff_links">
+		<h3 class="toggleable_tray_title">
+			<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="top_left_toggleicon" onclick="return staff_block_flip_over('staff_links_list{$GET,RAND}');">{!EDIT}</a>
+
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!EXTERNAL_LINKS|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!EXTERNAL_LINKS}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!EXTERNAL_LINKS|}');">{!EXTERNAL_LINKS}</a>
+		</h3>
+
+		<div class="toggleable_tray">
 			{+START,IF,{$JS_ON}}
-				<ol id="stafflinkslist">
-					{+START,LOOP,FORMATTEDLINKS}
-						<li><a target="_blank" title="{TITLE*}: {!LINK_NEW_WINDOW}" href="{URL}">{TITLE*}</a>{+START,IF_NON_EMPTY,{DESC}}<br />{DESC*}{+END}</li>
+				<ol id="staff_links_list{$GET,RAND}" class="spaced_list">
+					{+START,LOOP,FORMATTED_LINKS}
+						<li><a target="_blank" title="{TITLE*}: {!LINK_NEW_WINDOW}" href="{URL}">{TITLE*}</a></li>
 					{+END}
 				</ol>
 			{+END}
-			<form title="{!EDIT}: {!LINKS}" action="{URL*}" method="post" {+START,IF,{$JS_ON}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-hidden="true"}{+END}>
-				<div class="constrain_field"><label for="stafflinksedit" class="accessibility_hidden">{!EDIT}</label><textarea cols="100" rows="30" id="stafflinksedit" name="stafflinksedit" class="wide_field">{+START,LOOP,UNFORMATTEDLINKS}{LINKS*}
+			<form id="staff_links_list{$GET,RAND}_form" title="{!EDIT}: {!LINKS}" action="{URL*}" method="post" {+START,IF,{$JS_ON}} style="display: none" aria-hidden="true"{+END}>
+				<div class="constrain_field"><label for="staff_links_edit" class="accessibility_hidden">{!EDIT}</label><textarea cols="100" rows="30" id="staff_links_edit" name="staff_links_edit" class="wide_field">{+START,LOOP,UNFORMATTED_LINKS}{LINKS*}&#10;&#10;{+END}</textarea></div>
 
-{+END}</textarea></div>
-				<div class="button_panel">
-					<input onclick="disable_button_just_clicked(this);{+START,IF,{$HAS_SPECIFIC_PERMISSION,comcode_dangerous}} return ajax_form_submit(event,this.form,'{BLOCK_NAME~;*}','{MAP~;*}');{+END}" class="button_pageitem" type="submit" value="{!SAVE}" />
+				<div class="buttons_group">
+					<input onclick="disable_button_just_clicked(this);{+START,IF,{$HAS_PRIVILEGE,comcode_dangerous}} return ajax_form_submit(event,this.form,'{BLOCK_NAME*;~}','{MAP*;~}');{+END}" class="button_pageitem" type="submit" value="{!SAVE}" />
 				</div>
 			</form>
+
+			{$REQUIRE_JAVASCRIPT,javascript_ajax}
+			{$REQUIRE_JAVASCRIPT,javascript_validation}
+			{$REQUIRE_JAVASCRIPT,javascript_staff}
 		</div>
-
-		<script type="text/javascript">// <![CDATA[
-			require_javascript('javascript_ajax');
-			require_javascript('javascript_validation');
-
-			function next(elem)
-			{
-				do
-				{
-					elem=elem.nextSibling;
-				}
-				while (elem && elem.nodeType!=1);
-
-				return elem;
-			};
-
-			function switcheroo(hide, show)
-			{
-				if (hide.style.display=='none')
-				{
-					set_display_with_aria(hide,'block');
-					set_display_with_aria(show,'none');
-				} else
-				{
-					set_display_with_aria(hide,'none');
-					set_display_with_aria(show,'block');
-				}
-
-				return false;
-			};
-		//]]></script>
-	{+END}
+	</section>
 </div>
+
+{+START,IF,{$JS_ON}}
+	<script type="text/javascript">// <![CDATA[
+		handle_tray_cookie_setting('{!EXTERNAL_LINKS|}');
+	//]]></script>
+{+END}

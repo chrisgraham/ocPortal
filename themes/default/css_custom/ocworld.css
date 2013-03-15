@@ -84,3 +84,10 @@
 .ocw_self_member {
 	font-weight: bold;
 }
+
+.results_table[summary*="{!ocworld:W_MOVEMENT_TABLE}"]>tbody>tr:first-child>*:first-child {
+	{$BETA_CSS_PROPERTY,border-top-left-radius: 0px;}
+}
+.results_table[summary*="{!ocworld:W_MOVEMENT_TABLE}"]>tbody>tr:first-child>*:last-child {
+	{$BETA_CSS_PROPERTY,border-top-right-radius: 0px;}
+}

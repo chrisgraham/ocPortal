@@ -1,21 +1,29 @@
-<p class="associated_details">
-	{TEXT}
-</p>
+{+START,IF_NON_EMPTY,{TEXT}}
+	<p class="associated_details">
+		{TEXT}
+	</p>
+{+END}
 
 {HIDDEN}
 
 <div class="installer_section">
-	{+START,BOX,{TITLE}}
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
-			<colgroup>
-				<col style="width: 60%" />
-				<col style="width: 40%" />
-			</colgroup>
+	<div class="box box___installer_step_4_section"><div class="box_inner">
+		<fieldset class="innocuous_fieldset">
+			<legend class="accessibility_hidden">{TITLE}</legend>
 
-			<tbody>
-				{OPTIONS}
-			</tbody>
-		</table></div>
-	{+END}
+			<h2>{TITLE}</h2>
+
+			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+				<colgroup>
+					<col class="installer_left_column" />
+					<col class="installer_right_column" />
+				</colgroup>
+
+				<tbody>
+					{OPTIONS}
+				</tbody>
+			</table></div>
+		</fieldset>
+	</div></div>
 </div>
 

@@ -1,8 +1,8 @@
 {TITLE}
 
-<div class="pointstore_welcome medborder">
-	{!POINTS_LEFT,{$USERNAME},{POINTS_LEFT*}}
-</div>
+<div class="pointstore_welcome box"><div class="box_inner">
+	<p>{!POINTS_LEFT,{$USERNAME*},{POINTS_LEFT*}}</p>
+</div></div>
 
 <p>
 	{!POINTSTORE_INTRO}
@@ -12,6 +12,6 @@
 	{!POINTSTORE_ITEMS}
 </p>
 
-<div{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+<div itemprop="significantLinks">
 	{ITEMS}
 </div>

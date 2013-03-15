@@ -114,7 +114,8 @@ class Hook_search_catalogue_categories
 			$rows=get_search_rows('catalogue_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_categories r',array('r.cc_title','r.cc_description'),$where_clause,$content_where,$remapped_orderer,'r.*');
 		} else
 		{
-			$rows=get_search_rows('catalogue_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_categories r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name','catalogues_category').' AND z.category_name=r.id AND '.str_replace('group_id','z.group_id',$g_or).') LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access p ON ('.db_string_equal_to('p.module_the_name','catalogues_catalogue').' AND p.category_name=r.c_name AND '.str_replace('group_id','p.group_id',$g_or).')',array('r.cc_title','r.cc_description'),$where_clause,$content_where,$remapped_orderer,'r.*');
+			$translate_join_type=(get_value('alternate_search_join_type')==='1')?'LEFT JOIN':'JOIN';
+			$rows=get_search_rows('catalogue_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_categories r '.$translate_join_type.' '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name','catalogues_category').' AND z.category_name=r.id AND '.str_replace('group_id','z.group_id',$g_or).') '.$translate_join_type.' '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access p ON ('.db_string_equal_to('p.module_the_name','catalogues_catalogue').' AND p.category_name=r.c_name AND '.str_replace('group_id','p.group_id',$g_or).')',array('r.cc_title','r.cc_description'),$where_clause,$content_where,$remapped_orderer,'r.*');
 		}
 
 		$out=array();
@@ -136,7 +137,7 @@ class Hook_search_catalogue_categories
 	 */
 	function render($row)
 	{
-		return get_catalogue_category_html($row);
+		return render_catalogue_category_box($row);
 	}
 
 }

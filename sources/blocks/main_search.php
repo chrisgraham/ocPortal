@@ -125,17 +125,18 @@ class Block_main_search
 			}
 		}
 
-		unset($map['input_fields']);
-		unset($map['extra']);
-		unset($map['zone']);
-		unset($map['title']);
-		unset($map['limit_to']);
-		unset($map['block']);
-		$full_link=build_url(array('page'=>'search','type'=>'misc')+$map+$extra+$extrax,$zone);
+		$url_map=$map;
+		unset($url_map['input_fields']);
+		unset($url_map['extra']);
+		unset($url_map['zone']);
+		unset($url_map['title']);
+		unset($url_map['limit_to']);
+		unset($url_map['block']);
+		$full_link=build_url(array('page'=>'search','type'=>'misc')+$url_map+$extra+$extrax,$zone);
 
 		if ((!array_key_exists('content',$input_fields)) && (count($input_fields)!=1)) $extra['content']='';
 
-		return do_template('BLOCK_MAIN_SEARCH',array('_GUID'=>'4d239be8e7d846106c951d21d7979f78','TITLE'=>$title,'INPUT_FIELDS'=>$input_fields,'EXTRA'=>$extra,'SORT'=>$sort,'AUTHOR'=>$author,'DAYS'=>strval($days),'DIRECTION'=>$direction,'ONLY_TITLES'=>$only_titles?'1':'0','ONLY_SEARCH_META'=>$only_search_meta?'1':'0','BOOLEAN_SEARCH'=>$boolean_search?'1':'0','CONJUNCTIVE_OPERATOR'=>$conjunctive_operator,'LIMIT_TO'=>$limit_to,'URL'=>$url,'FULL_LINK'=>$full_link));
+		return do_template('BLOCK_MAIN_SEARCH',array('_GUID'=>'4d239be8e7d846106c951d21d7979f78','TITLE'=>$title,'INPUT_FIELDS'=>$input_fields,'EXTRA'=>$extra,'SORT'=>$sort,'AUTHOR'=>$author,'DAYS'=>strval($days),'DIRECTION'=>$direction,'ONLY_TITLES'=>$only_titles?'1':'0','ONLY_SEARCH_META'=>$only_search_meta?'1':'0','BOOLEAN_SEARCH'=>$boolean_search?'1':'0','CONJUNCTIVE_OPERATOR'=>$conjunctive_operator,'LIMIT_TO'=>$limit_to,'URL'=>$url,'FULL_LOGIN_URL'=>$full_link));
 	}
 
 }

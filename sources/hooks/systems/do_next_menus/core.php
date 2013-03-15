@@ -73,7 +73,7 @@ class Hook_do_next_menus_core
 			addon_installed('match_key_permissions')?array('security','matchkeysecurity',array('admin_permissions',array('type'=>'keys'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'),('DOC_PAGE_MATCH_KEY_ACCESS')):NULL,
 			//array('security','sitetree',array('admin_permissions',array('type'=>'page'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_ACCESS'), ('DOC_PAGE_PERMISSIONS')),  // Disabled as not needed - but tree permission editor will redirect to it if no javascript available
 			addon_installed('securitylogging')?array('security','ipban',array('admin_ipban',array('type'=>'misc'),get_module_zone('admin_ipban')),do_lang_tempcode('BANNED_ADDRESSES'),('DOC_IPBAN')):NULL,
-			array('security','privileges',array('admin_permissions',array('type'=>'specific'),get_module_zone('admin_permissions')),do_lang_tempcode('GLOBAL_SPECIFIC_PERMISSIONS'),('DOC_SPECIFIC_PERMISSIONS')),
+			array('security','privileges',array('admin_permissions',array('type'=>'specific'),get_module_zone('admin_permissions')),do_lang_tempcode('GLOBAL_PRIVILEGES'),('DOC_PRIVILEGES')),
 			(get_forum_type()!='ocf')?NULL:array('security','usergroups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups')),do_lang_tempcode('USERGROUPS'),('DOC_GROUPS')),
 			(get_forum_type()=='ocf')?NULL:array('security','usergroups',array('admin_permissions',array('type'=>'absorb'),get_module_zone('admin_security')),do_lang_tempcode('ABSORB_PERMISSIONS'),('DOC_ABSORB_PERMISSIONS')),
 

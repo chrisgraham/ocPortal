@@ -58,6 +58,8 @@ class Module_admin_debrand
 	 */
 	function run()
 	{
+		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+
 		require_lang('debrand');
 		require_lang('config');
 
@@ -78,7 +80,7 @@ class Module_admin_debrand
 	 */
 	function misc()
 	{
-		$title=get_page_title('SUPER_DEBRAND');
+		$title=get_screen_title('SUPER_DEBRAND');
 
 		require_code('form_templates');
 
@@ -193,17 +195,17 @@ class Module_admin_debrand
 		if (get_file_base()==get_custom_file_base()) // Only if not a shared install
 		{
 			$critical_errors=file_get_contents(get_file_base().'/sources/critical_errors.php');
-			$critical_errors=str_replace('ocPortal',post_param('rebrand_name'),$critical_errors);
-			$critical_errors=str_replace('http://ocportal.com',post_param('rebrand_base_url'),$critical_errors);
-			$critical_errors=str_replace('ocProducts','ocProducts/'.post_param('company_name'),$critical_errors);
+			$critical_errors=str_replace('ocPortal',addslashes(post_param('rebrand_name')),$critical_errors);
+			$critical_errors=str_replace('http://ocportal.com',addslashes(post_param('rebrand_base_url')),$critical_errors);
+			$critical_errors=str_replace('ocProducts','ocProducts/'.addslashes(post_param('company_name')),$critical_errors);
 			$critical_errors_path='sources_custom/critical_errors.php';
 
 			afm_make_file($critical_errors_path,$critical_errors,false);
 		}
 
-		$save_header_path=get_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_custom/HEADER.tpl';
+		$save_header_path=get_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_custom/GLOBAL_HTML_WRAP.tpl';
 		$header_path=$save_header_path;
-		if (!file_exists($header_path)) $header_path=get_file_base().'/themes/default/templates/HEADER.tpl';
+		if (!file_exists($header_path)) $header_path=get_file_base().'/themes/default/templates/GLOBAL_HTML_WRAP.tpl';
 		$header_tpl=file_get_contents($header_path);
 		$header_tpl=str_replace('Copyright ocProducts Limited','',$header_tpl);
 		$myfile=@fopen($save_header_path,'wb');
@@ -268,7 +270,7 @@ class Module_admin_debrand
 				$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$path[0]),array('id'=>'ocf_default_avatars/default_set/ocp_fanatic'));
 		}
 
-		$title=get_page_title('SUPER_DEBRAND');
+		$title=get_screen_title('SUPER_DEBRAND');
 
 		// Redirect them back to editing screen
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

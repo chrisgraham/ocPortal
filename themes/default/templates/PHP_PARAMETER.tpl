@@ -1,12 +1,5 @@
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table">
-	<colgroup>
-		<col style="width: 110px" />
-		<col style="width: 100%" />
-	</colgroup>
-
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table">
 	<tbody>
 		{BITS}
 	</tbody>
 </table></div>
-
-<br />

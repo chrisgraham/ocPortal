@@ -1,8 +1,15 @@
 <div class="pointstore_item">
-	{+START,BOX,{!BANNER_ADS},,med,,,<a title="{!ENTER}: {!BANNER_ADS}" href="{BANNER_URL*}">{!ENTER}</a>}
+	<div class="box box___pointstore_banners_2"><div class="box_inner">
+		<h2>{!BANNER_ADS}</h2>
+
 		<p>
 			{!BANNER_DESCRIPTION,{$SITE_NAME*}}
 		</p>
-	{+END}
+
+		{+START,IF_NON_EMPTY,{BANNER_URL}}
+			<ul class="horizontal_links associated_links_block_group">
+				<li><a title="{!ENTER}: {!BANNER_ADS}" href="{BANNER_URL*}">{!ENTER}</a></li>
+			</ul>
+		{+END}
+	</div></div>
 </div>
-<br />

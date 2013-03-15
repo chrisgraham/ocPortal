@@ -27,7 +27,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 {
 	var $lang_type='GROUP';
 	var $select_name='NAME';
-	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\',null,true); if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { if (form.elements[\'new_usergroup\']) form.elements[\'new_usergroup\'].disabled=(form.elements[\'delete\'] && !form.elements[\'delete\'].checked); }; crf(); if (form.elements[\'delete\']) form.elements[\'delete\'].onchange=crf; } if (document.getElementById(\'is_presented_at_install\')) { var form=document.getElementById(\'is_presented_at_install\').form; var crf2=function() { if (form.elements[\'is_default\']) form.elements[\'is_default\'].disabled=(form.elements[\'is_presented_at_install\'].checked); if (form.elements[\'is_presented_at_install\'].checked) form.elements[\'is_default\'].checked=false; }; crf2(); form.elements[\'is_presented_at_install\'].onchange=crf2; var crf3=function() { if (form.elements[\'absorb\']) form.elements[\'absorb\'].disabled=(form.elements[\'is_private_club\'] && form.elements[\'is_private_club\'].checked); }; crf3(); if (form.elements[\'is_private_club\']) form.elements[\'is_private_club\'].onchange=crf3; }';
+	var $javascript='if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { if (form.elements[\'new_usergroup\']) form.elements[\'new_usergroup\'].disabled=(form.elements[\'delete\'] && !form.elements[\'delete\'].checked); }; crf(); if (form.elements[\'delete\']) form.elements[\'delete\'].onchange=crf; } if (document.getElementById(\'is_presented_at_install\')) { var form=document.getElementById(\'is_presented_at_install\').form; var crf2=function() { if (form.elements[\'is_default\']) form.elements[\'is_default\'].disabled=(form.elements[\'is_presented_at_install\'].checked); if (form.elements[\'is_presented_at_install\'].checked) form.elements[\'is_default\'].checked=false; }; crf2(); form.elements[\'is_presented_at_install\'].onchange=crf2; var crf3=function() { if (form.elements[\'absorb\']) form.elements[\'absorb\'].disabled=(form.elements[\'is_private_club\'] && form.elements[\'is_private_club\'].checked); }; crf3(); if (form.elements[\'is_private_club\']) form.elements[\'is_private_club\'].onchange=crf3; }';
 	var $award_type='group';
 	var $possibly_some_kind_of_upload=true;
 	var $output_of_action_is_confirmation=true;
@@ -107,7 +107,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_page_title('MANAGE_USERGROUPS'),comcode_lang_string('DOC_GROUPS'),
+		return do_next_manager(get_screen_title('MANAGE_USERGROUPS'),comcode_lang_string('DOC_GROUPS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GROUP')),
@@ -151,6 +151,11 @@ class Module_admin_ocf_groups extends standard_aed_module
 	 */
 	function get_form_fields($id=NULL,$name='',$is_default=0,$is_super_admin=0,$is_super_moderator=0,$group_leader='',$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$flood_control_submit_secs=0,$flood_control_access_secs=0,$gift_points_base=25,$gift_points_per_day=1,$max_daily_upload_mb=5,$max_attachments_per_post=20,$max_avatar_width=80,$max_avatar_height=80,$max_post_length_comcode=40000,$max_sig_length_comcode=1000,$enquire_on_new_ips=0,$is_presented_at_install=0,$group_is_hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
 	{
+		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+		{
+			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
+		}
+
 		if (is_null($group_leader)) $group_leader='';
 
 		$fields=new ocp_tempcode();
@@ -197,14 +202,33 @@ class Module_admin_ocf_groups extends standard_aed_module
 			$fields->attach(form_input_list(do_lang_tempcode('PROMOTION_TARGET'),do_lang_tempcode('DESCRIPTION_PROMOTION_TARGET'),'promotion_target',$promotion_target_groups));
 			$fields->attach(form_input_integer(do_lang_tempcode('PROMOTION_THRESHOLD'),do_lang_tempcode('DESCRIPTION_PROMOTION_THRESHOLD'),'promotion_threshold',$promotion_threshold,false));
 		}
-		if (get_base_url()==get_forum_base_url())
-		{
-			handle_max_file_size($hidden,'image');
-			$fields->attach(form_input_upload(do_lang_tempcode('RANK_IMAGE'),do_lang_tempcode('DESCRIPTION_RANK_IMAGE'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		}
+
 		require_code('themes2');
 		$ids=get_all_image_ids_type('ocf_rank_images',false,$GLOBALS['FORUM_DB']);
-		$fields->attach(form_input_picture_choose_specific(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('STOCK')),do_lang_tempcode('DESCRIPTION_ALTERNATE_STOCK'),'theme_img_code',$ids,NULL,$rank_image,NULL,true,$GLOBALS['FORUM_DB']));
+
+		if (get_base_url()==get_forum_base_url())
+		{
+			$set_name='rank_image';
+			$required=false;
+			$set_title=do_lang_tempcode('RANK_IMAGE');
+			$field_set=(count($ids)==0)?new ocp_tempcode():alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$rank_image,NULL,false,$GLOBALS['FORUM_DB']);
+			$field_set->attach($image_chooser_field);
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_RANK_IMAGE'),$field_set,$required));
+
+			handle_max_file_size($hidden,'image');
+		} else
+		{
+			if (count($ids)==0) warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN','ocf_rank_images'));
+
+			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$rank_image,NULL,true,$GLOBALS['FORUM_DB']);
+			$fields->attach($image_chooser_field);
+		}
+
 		$fields->attach(form_input_tick(do_lang_tempcode('RANK_IMAGE_PRI_ONLY'),do_lang_tempcode('RANK_IMAGE_PRI_ONLY_DESCRIPTION'),'rank_image_pri_only',$rank_image_pri_only==1));
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('BENEFITS'))));
@@ -374,7 +398,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 			{
 				$orderlist->attach(form_input_list_entry(strval($order),true,integer_format($order+1)));
 			}
-			$ordererx=protect_from_escaping(do_template('TABLE_TABLE_ROW_CELL_SELECT',array('LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist)));
+			$ordererx=protect_from_escaping(do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist)));
 
 			$fr[]=$ordererx;
 
@@ -594,7 +618,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		if ((!is_null($group_leader)) && (post_param_integer('confirm',0)==0) && (!in_array(intval($id),$GLOBALS['FORUM_DRIVER']->get_members_groups($group_leader))))
 		{
 			require_code('templates_confirm_screen');
-			return form_confirm_screen(get_page_title('EDIT_GROUP'),paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER',post_param('group_leader'))),'__ed','_ed',array('confirm'=>1));
+			return confirm_screen(get_screen_title('EDIT_GROUP'),paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER',post_param('group_leader'))),'__ed','_ed',array('confirm'=>1));
 		}
 
 		$was_club=($GLOBALS['FORUM_DB']->query_value('f_groups','g_is_private_club',array('id'=>intval($id)))==1);

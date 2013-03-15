@@ -479,7 +479,7 @@ function getthat($index,$offset){
 
 	$query="select id from thatindex where uid='$uid' order by id desc limit $index,1";
 
-	
+
 	$selectcode = mysql_query($query);
 	if ($selectcode){
 		if(!mysql_numrows($selectcode)){

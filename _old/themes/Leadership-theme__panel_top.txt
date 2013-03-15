@@ -1,0 +1,46 @@
+[semihtml]
+	{+START,IF,{$MATCH_KEY_MATCH,:start}}
+		[surround]
+			<ul class="top-banner">
+				<li id="image-slider">
+					[block]main_image_fader[/block]
+				</li>
+				<li id="text-slider">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+					<br />
+					<br />
+				</li>
+			</ul>
+			<ul class="info-box">
+				<li class="info-box1">
+					[title="4"]Lorem Ipsum[/title]
+					
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
+					<br />
+					[surround="more-link"][url="#"]Read more[/url][/surround]
+				</li>
+				<li class="info-box2">
+					[title="4"]Lorem Ipsum[/title]
+					
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
+					<br />
+					[surround="more-link"][url="#"]Read more[/url][/surround]
+				</li>
+				<li class="info-box3">
+					[title="4"]Lorem Ipsum[/title]
+					
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
+					<br />
+					[surround="more-link"][url="#"]Read more[/url][/surround]
+				</li>
+				<li class="info-box4">
+					[title="4"]Lorem Ipsum[/title]
+					
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
+					<br />
+					[surround="more-link"][url="#"]Read more[/url][/surround]
+				</li>
+			</ul>
+		[/surround]
+	{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

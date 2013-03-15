@@ -1,23 +1,20 @@
-<div class="no_stbox_padding">
-	{+START,BOX,{CURRENT_SECTION}}
-		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table specific_permissions">
-			<colgroup>
-				<col style="width: 250px" />
-				{COLS}
-				<col style="width: 25px" />
-			</colgroup>
+<h2>{CURRENT_SECTION}</h2>
 
-			<thead>
-				<tr>
-					<th></th>
-					{HEADER_CELLS}
-				</tr>
-			</thead>
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table results_table wide_table privileges">
+	<colgroup>
+		<col class="permission_field_name_column" />
+		{COLS}
+		<col class="permission_copy_column" />
+	</colgroup>
 
-			<tbody>
-				{SECTION}
-			</tbody>
-		</table></div>
-	{+END}
-</div>
-<br />
+	<thead>
+		<tr>
+			<th></th>
+			{HEADER_CELLS}
+		</tr>
+	</thead>
+
+	<tbody>
+		{SECTION}
+	</tbody>
+</table></div>

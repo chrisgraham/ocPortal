@@ -41,17 +41,17 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (isset($FILE_ARRAY))
 	{
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
-	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix,FILE_TEXT));
+	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix));
 
 	if (strpos($html,'{$,Parser hint: pure}')!==false)
 	{
 		return make_string_tempcode(preg_replace('#\{\$,.*\}#U','/*no minify*/',$html));
 	}
 
-	if (($GLOBALS['SEMI_DEBUG_MODE']) && (strpos($html,'.innerHTML')!==false) && (strpos($html,'Parser hint: .innerHTML okay')===false))
+	if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html,'.innerHTML')!==false) && (strpos($html,'Parser hint: .innerHTML okay')===false))
 	{
 		require_code('site');
-		attach_message('Do not use the .innerHTML property in your Javascript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global setInnerHTML/getInnerHTML functions.','warn');
+		attach_message('Do not use the .innerHTML property in your Javascript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.','warn');
 	}
 
 	// Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues
@@ -71,7 +71,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	{
 		if (!is_null($MEM_CACHE))
 		{
-			persistant_cache_set(array('TEMPLATE',$theme,$lang,$_codename),$result->to_assembly(),strpos($path,'default/templates/')!==false);
+			persistent_cache_set(array('TEMPLATE',$theme,$lang,$_codename),$result->to_assembly(),strpos($path,'default/templates/')!==false);
 		} else
 		{
 			$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';

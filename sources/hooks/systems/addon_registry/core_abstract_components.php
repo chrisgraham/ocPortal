@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_abstract_components
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_core_abstract_components
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_core_abstract_components
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/core_abstract_components.php',
 			'CROP_TEXT_MOUSE_OVER.tpl',
 			'CROP_TEXT_MOUSE_OVER_INLINE.tpl',
@@ -84,17 +82,12 @@ class Hook_addon_registry_core_abstract_components
 			'CATEGORY_LIST.tpl',
 			'SCREEN_BUTTON.tpl',
 			'SCREEN_ITEM_BUTTON.tpl',
-			'STANDARDBOX_classic.tpl',
-			'STANDARDBOX_curved.tpl',
-			'STANDARDBOX_invisible.tpl',
-			'STANDARDBOX_light.tpl',
-			'STANDARDBOX_med.tpl',
-			'STANDARDBOX_panel.tpl',
-			'BLOCK_SEPARATOR.tpl',
+			'STANDARDBOX_default.tpl',
+			'STANDARDBOX_accordion.tpl',
 			'REVISION_HISTORY_LINE.tpl',
 			'REVISION_HISTORY_WRAP.tpl',
 			'REVISION_RESTORE.tpl',
-			'handle_conflict_resolution.tpl',
+			'HANDLE_CONFLICT_RESOLUTION.tpl',
 			'FRACTIONAL_EDIT.tpl',
 			'JAVASCRIPT_FRACTIONAL_EDIT.tpl',
 			'data/fractional_edit.php',
@@ -102,40 +95,35 @@ class Hook_addon_registry_core_abstract_components
 			'data/change_detection.php',
 			'STAFF_ACTIONS.tpl',
 			'sources/hooks/systems/change_detection/.htaccess',
-			'sources/hooks/systems/change_detection/index.html',
+			'sources/hooks/systems/change_detection/index.html'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'REVISION_HISTORY_LINE.tpl'=>'administrative__show_revision_history',
-				'REVISION_HISTORY_WRAP.tpl'=>'administrative__show_revision_history',
-				'REVISION_RESTORE.tpl'=>'administrative__revision_restore',
-				'BLOCK_SEPARATOR.tpl'=>'block_separator',
-				'SCREEN_ITEM_BUTTON.tpl'=>'screen_item_button',
-				'FRACTIONAL_EDIT.tpl'=>'administrative__fractional_edit',
-				'CROP_TEXT_MOUSE_OVER_INLINE.tpl'=>'crop_text_mouse_over_inline',
-				'CATEGORY_ENTRY.tpl'=>'category_list',
-				'CATEGORY_LIST.tpl'=>'category_list',
-				'IMG_THUMB.tpl'=>'img_thumb',
-				'CROP_TEXT_MOUSE_OVER.tpl'=>'crop_text_mouse_over',
-				'SCREEN_BUTTON.tpl'=>'screen_button',
-				'STANDARDBOX_classic.tpl'=>'standardbox_classic',
-				'STANDARDBOX_curved.tpl'=>'standardbox_curved',
-				'STANDARDBOX_invisible.tpl'=>'standardbox_invisible',
-				'STANDARDBOX_light.tpl'=>'standardbox_light',
-				'STANDARDBOX_med.tpl'=>'standardbox_med',
-				'STANDARDBOX_panel.tpl'=>'standardbox_panel',
-				'handle_conflict_resolution.tpl'=>'administrative__handle_conflict_resolution',
-				'STAFF_ACTIONS.tpl'=>'staff_actions',
-			);
+			'REVISION_HISTORY_LINE.tpl'=>'administrative__show_revision_history',
+			'REVISION_HISTORY_WRAP.tpl'=>'administrative__show_revision_history',
+			'REVISION_RESTORE.tpl'=>'administrative__revision_restore',
+			'SCREEN_ITEM_BUTTON.tpl'=>'screen_item_button',
+			'FRACTIONAL_EDIT.tpl'=>'administrative__fractional_edit',
+			'CROP_TEXT_MOUSE_OVER_INLINE.tpl'=>'crop_text_mouse_over_inline',
+			'CATEGORY_ENTRY.tpl'=>'category_list',
+			'CATEGORY_LIST.tpl'=>'category_list',
+			'IMG_THUMB.tpl'=>'img_thumb',
+			'CROP_TEXT_MOUSE_OVER.tpl'=>'crop_text_mouse_over',
+			'SCREEN_BUTTON.tpl'=>'screen_button',
+			'STANDARDBOX_default.tpl'=>'standardbox_default',
+			'STANDARDBOX_accordion.tpl'=>'standardbox_accordion',
+			'HANDLE_CONFLICT_RESOLUTION.tpl'=>'administrative__handle_conflict_resolution',
+			'STAFF_ACTIONS.tpl'=>'staff_actions'
+		);
 	}
 
 	/**
@@ -147,23 +135,20 @@ class Hook_addon_registry_core_abstract_components
 	 */
 	function tpl_preview__administrative__show_revision_history()
 	{
-		$revision_history	=	do_lorem_template('REVISION_HISTORY_LINE',array(
-							'RENDERED_DIFF'=>lorem_phrase(),
-							'EDITOR'=>lorem_phrase(),
-							'DATE'=>placeholder_time(),
-							'DATE_RAW'=>placeholder_date_raw(),
-							'RESTORE_URL'=>placeholder_url(),
-							'URL'=>placeholder_url(),
-							'SIZE'=>placeholder_filesize(),
-								)
-							);
+		$revision_history=do_lorem_template('REVISION_HISTORY_LINE', array(
+			'RENDERED_DIFF'=>lorem_phrase(),
+			'EDITOR'=>lorem_phrase(),
+			'DATE'=>placeholder_time(),
+			'DATE_RAW'=>placeholder_date_raw(),
+			'RESTORE_URL'=>placeholder_url(),
+			'URL'=>placeholder_url(),
+			'SIZE'=>placeholder_filesize()
+		));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('REVISION_HISTORY_WRAP',array(
-					'CONTENT'=>$revision_history,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP', array(
+				'CONTENT'=>$revision_history
+			)), NULL, '', true)
 		);
 	}
 
@@ -177,18 +162,16 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__staff_actions()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('STAFF_ACTIONS',array(
-					'1_TITLE'=>lorem_phrase(),
-					'1_URL'=>placeholder_url(),
-					'2_TITLE'=>lorem_phrase(),
-					'2_URL'=>placeholder_url(),
-					'3_TITLE'=>lorem_phrase(),
-					'3_URL'=>placeholder_url(),
-					'4_TITLE'=>lorem_phrase(),
-					'4_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('STAFF_ACTIONS', array(
+				'1_TITLE'=>lorem_phrase(),
+				'1_URL'=>placeholder_url(),
+				'2_TITLE'=>lorem_phrase(),
+				'2_URL'=>placeholder_url(),
+				'3_TITLE'=>lorem_phrase(),
+				'3_URL'=>placeholder_url(),
+				'4_TITLE'=>lorem_phrase(),
+				'4_URL'=>placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -202,27 +185,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__revision_restore()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('REVISION_RESTORE',array(
-						)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_separator()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SEPARATOR',array(
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('REVISION_RESTORE', array()), NULL, '', true)
 		);
 	}
 
@@ -236,15 +199,13 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__screen_item_button()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('SCREEN_ITEM_BUTTON',array(
-					'REL'=>lorem_phrase(),
-					'IMMEDIATE'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'TITLE'=>lorem_word(),
-					'IMG'=>'edit',
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SCREEN_ITEM_BUTTON', array(
+				'REL'=>lorem_phrase(),
+				'IMMEDIATE'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_word(),
+				'IMG'=>'edit'
+			)), NULL, '', true)
 		);
 	}
 
@@ -258,14 +219,12 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__fractional_edit()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('FRACTIONAL_EDIT',array(
-					'VALUE'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'EDIT_TEXT'=>lorem_sentence_html(),
-					'EDIT_PARAM_NAME'=>lorem_word_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FRACTIONAL_EDIT', array(
+				'VALUE'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'EDIT_TEXT'=>lorem_sentence_html(),
+				'EDIT_PARAM_NAME'=>lorem_word_html()
+			)), NULL, '', true)
 		);
 	}
 
@@ -279,12 +238,10 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__crop_text_mouse_over_inline()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE',array(
-					'TEXT_SMALL'=>lorem_sentence_html(),
-					'TEXT_LARGE'=>lorem_sentence_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE', array(
+				'TEXT_SMALL'=>lorem_sentence_html(),
+				'TEXT_LARGE'=>lorem_sentence_html()
+			)), NULL, '', true)
 		);
 	}
 
@@ -297,33 +254,30 @@ class Hook_addon_registry_core_abstract_components
 	 */
 	function tpl_preview__category_list()
 	{
-		$cat_entry	= new ocp_tempcode();
+		$cat_entry=new ocp_tempcode();
 
 		foreach (placeholder_array() as $key=>$values)
 		{
-			$cat_entry->attach(do_lorem_template('CATEGORY_ENTRY',array(
-						'ID'=>placeholder_id(),
-						'NAME_FIELD'=>$values,
-						'AJAX_EDIT_URL'=>placeholder_url(),
-						'URL'=>placeholder_url(),
-						'REP_IMAGE'=>placeholder_image(),
-						'CHILDREN'=>lorem_phrase(),
-						'NAME'=>lorem_word(),
-						'NAME_PLAIN'=>lorem_word_html(),
-						'NUM_CHILDREN'=>'3',
-						'NUM_ENTRIES'=>'2',
-						'NUM_CHILDREN_RECURSIVE'=>'3',
-						'NUM_ENTRIES_DIRECT'=>'2',
-							)
-				));
+			$cat_entry->attach(do_lorem_template('CATEGORY_ENTRY', array(
+				'ID'=>placeholder_id(),
+				'NAME_FIELD'=>$values,
+				'AJAX_EDIT_URL'=>placeholder_url(),
+				'URL'=>placeholder_url(),
+				'REP_IMAGE'=>placeholder_image(),
+				'CHILDREN'=>lorem_phrase(),
+				'NAME'=>lorem_word(),
+				'NAME_PLAIN'=>lorem_word_html(),
+				'NUM_CHILDREN'=>'3',
+				'NUM_ENTRIES'=>'2',
+				'NUM_CHILDREN_RECURSIVE'=>'3',
+				'NUM_ENTRIES_DIRECT'=>'2'
+			)));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('CATEGORY_LIST',array(
-					'CONTENT'=>$cat_entry,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CATEGORY_LIST', array(
+				'CONTENT'=>$cat_entry
+			)), NULL, '', true)
 		);
 	}
 
@@ -337,13 +291,11 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__img_thumb()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('IMG_THUMB',array(
-					'JS_TOOLTIP'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-					'URL'=>placeholder_image_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('IMG_THUMB', array(
+				'JS_TOOLTIP'=>lorem_phrase(),
+				'CAPTION'=>lorem_phrase(),
+				'URL'=>placeholder_image_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -357,12 +309,10 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__crop_text_mouse_over()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CROP_TEXT_MOUSE_OVER',array(
-					'TEXT_LARGE'=>lorem_phrase(),
-					'TEXT_SMALL'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER', array(
+				'TEXT_LARGE'=>lorem_phrase(),
+				'TEXT_SMALL'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -375,16 +325,14 @@ class Hook_addon_registry_core_abstract_components
 	 */
 	function tpl_preview__screen_button()
 	{
-		$img	=	"login";
+		$img="login";
 		return array(
-			lorem_globalise(
-				do_lorem_template('SCREEN_BUTTON',array(
-					'IMMEDIATE'=>true,
-					'URL'=>placeholder_url(),
-					'TITLE'=>lorem_word(),
-					'IMG'=>$img,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SCREEN_BUTTON', array(
+				'IMMEDIATE'=>true,
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_word(),
+				'IMG'=>$img
+			)), NULL, '', true)
 		);
 	}
 
@@ -395,9 +343,9 @@ class Hook_addon_registry_core_abstract_components
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__standardbox_classic()
+	function tpl_preview__standardbox_default()
 	{
-		return $this->_tpl_preview__standardbox('classic');
+		return $this->_tpl_preview__standardbox('default');
 	}
 
 	/**
@@ -407,9 +355,9 @@ class Hook_addon_registry_core_abstract_components
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__standardbox_curved()
+	function tpl_preview__standardbox_accordion()
 	{
-		return $this->_tpl_preview__standardbox('curved');
+		return $this->_tpl_preview__standardbox('accordion');
 	}
 
 	/**
@@ -417,83 +365,50 @@ class Hook_addon_registry_core_abstract_components
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
 	 *
+	 * @param  string			View type.
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__standardbox_invisible()
-	{
-		return $this->_tpl_preview__standardbox('invisible');
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__standardbox_light()
-	{
-		return $this->_tpl_preview__standardbox('light');
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__standardbox_med()
-	{
-		return $this->_tpl_preview__standardbox('med');
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__standardbox_panel()
-	{
-		return $this->_tpl_preview__standardbox('panel');
-	}
-
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @param  string			View type.
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
 	function _tpl_preview__standardbox($type)
 	{
-		$links = array();
-		$meta = array();
-		foreach (placeholder_array() as $k => $v)
+		$links=array();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$links[] = placeholder_link();
+			$links[]=placeholder_link();
 		}
-		foreach (placeholder_array() as $k => $v)
+
+		$meta=array();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$meta[] = array('KEY'=>strval($k),'VALUE'=>$v);
+			$meta[]=array(
+				'KEY'=>strval($k),
+				'VALUE'=>$v
+			);
 		}
+
+		$boxes=new ocp_tempcode();
+		$box=do_lorem_template('STANDARDBOX_' . $type, array(
+				'CONTENT'=>lorem_sentence(),
+				'LINKS'=>$links,
+				'META'=>$meta,
+				'OPTIONS'=>placeholder_array(),
+				'TITLE'=>lorem_phrase(),
+				'TOP_LINKS'=>placeholder_link(),
+				'WIDTH'=>'',
+		));
+		$boxes->attach($box);
+		$box=do_lorem_template('STANDARDBOX_' . $type, array(
+				'CONTENT'=>lorem_sentence(),
+				'LINKS'=>$links,
+				'META'=>$meta,
+				'OPTIONS'=>placeholder_array(),
+				'TITLE'=>'',
+				'TOP_LINKS'=>placeholder_link(),
+				'WIDTH'=>'',
+		));
+		$boxes->attach($box);
+
 		return array(
-			lorem_globalise(
-				do_lorem_template('STANDARDBOX_'.$type,array(
-					'CONTENT'=>lorem_sentence(),
-					'LINKS'=>$links,
-					'META'=>$meta,
-					'OPTIONS'=>placeholder_array(),
-					'WIDTH'=>'auto',
-					'HEIGHT'=>'auto',
-					'TITLE'=>lorem_phrase(),
-					'TOPLINK'=>placeholder_link(),
-					'EXPAND'=>true
-						)
-			),NULL,'',true),
+			lorem_globalise($boxes, NULL, '', true)
 		);
 	}
 
@@ -507,10 +422,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__handle_conflict_resolution()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('handle_conflict_resolution',array()
-				)
-			)
+			lorem_globalise(do_lorem_template('HANDLE_CONFLICT_RESOLUTION', array()))
 		);
 	}
 }

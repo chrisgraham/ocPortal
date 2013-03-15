@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_html_abstractions
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_core_html_abstractions
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_core_html_abstractions
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/core_html_abstractions.php',
 			'JS_REFRESH.tpl',
 			'META_REFRESH_LINE.tpl',
@@ -87,37 +85,39 @@ class Hook_addon_registry_core_html_abstractions
 			'PARAGRAPH.tpl',
 			'FLOATER.tpl',
 			'BASIC_HTML_WRAP.tpl',
-			'STYLED_HTML_WRAP.tpl',
+			'STANDALONE_HTML_WRAP.tpl',
+			'HTML_HEAD.tpl',
 			'POOR_XHTML_WRAPPER.tpl',
-			'WITH_WHITESPACE.tpl',
+			'WITH_WHITESPACE.tpl'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'POOR_XHTML_WRAPPER.tpl'=>'poor_xhtml_wrapper',
-				'JS_REFRESH.tpl'=>'js_refresh',
-				'ANCHOR.tpl'=>'anchor',
-				'STYLED_HTML_WRAP.tpl'=>'styled_html_wrap',
-				'META_REFRESH_LINE.tpl'=>'meta_refresh_line',
-				'HYPERLINK_POPUP_WINDOW.tpl'=>'hyperlink_popup_window',
-				'BASIC_HTML_WRAP.tpl'=>'basic_html_wrap',
-				'FLOATER.tpl'=>'floater',
-				'HYPERLINK.tpl'=>'hyperlink',
-				'HYPERLINK_BUTTON.tpl'=>'hyperlink_button',
-				'HYPERLINK_EMAIL.tpl'=>'hyperlink_email',
-				'HYPERLINK_TOOLTIP.tpl'=>'hyperlink_tooltip',
-				'PARAGRAPH.tpl'=>'paragraph',
-				'DIV.tpl'=>'div',
-				'WITH_WHITESPACE.tpl'=>'with_whitespace',
-				);
+			'POOR_XHTML_WRAPPER.tpl'=>'poor_xhtml_wrapper',
+			'JS_REFRESH.tpl'=>'js_refresh',
+			'ANCHOR.tpl'=>'anchor',
+			'STANDALONE_HTML_WRAP.tpl'=>'standalone_html_wrap',
+			'META_REFRESH_LINE.tpl'=>'meta_refresh_line',
+			'HYPERLINK_POPUP_WINDOW.tpl'=>'hyperlink_popup_window',
+			'BASIC_HTML_WRAP.tpl'=>'basic_html_wrap',
+			'HTML_HEAD.tpl'=>'basic_html_wrap',
+			'FLOATER.tpl'=>'floater',
+			'HYPERLINK.tpl'=>'hyperlink',
+			'HYPERLINK_BUTTON.tpl'=>'hyperlink_button',
+			'HYPERLINK_EMAIL.tpl'=>'hyperlink_email',
+			'HYPERLINK_TOOLTIP.tpl'=>'hyperlink_tooltip',
+			'PARAGRAPH.tpl'=>'paragraph',
+			'DIV.tpl'=>'div',
+			'WITH_WHITESPACE.tpl'=>'with_whitespace'
+		);
 	}
 
 	/**
@@ -130,11 +130,9 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__poor_xhtml_wrapper()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('POOR_XHTML_WRAPPER',array(
-					'CONTENT'=>lorem_phrase_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('POOR_XHTML_WRAPPER', array(
+				'CONTENT'=>lorem_phrase_html()
+			)), NULL, '', true)
 		);
 	}
 
@@ -148,11 +146,9 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__js_refresh()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('JS_REFRESH',array(
-					'FORM_NAME'=>lorem_word_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('JS_REFRESH', array(
+				'FORM_NAME'=>lorem_word_html()
+			)), NULL, '', true)
 		);
 	}
 
@@ -166,11 +162,9 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__anchor()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ANCHOR',array(
-					'NAME'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ANCHOR', array(
+				'NAME'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -181,18 +175,13 @@ class Hook_addon_registry_core_html_abstractions
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__styled_html_wrap()
+	function tpl_preview__standalone_html_wrap()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('STYLED_HTML_WRAP',array(
-					'TITLE'=>lorem_phrase(),
-					'CONTENT'=>lorem_phrase_html(),
-					'NOFOLLOW'=>lorem_word(),
-					'UNINSTALL'=>lorem_word(),
-					'UNINSTALL_SCREEN'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('STANDALONE_HTML_WRAP', array(
+				'TITLE'=>lorem_phrase(),
+				'CONTENT'=>lorem_chunk_html(),
+			)), NULL, '', true)
 		);
 	}
 
@@ -206,12 +195,10 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__meta_refresh_line()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('META_REFRESH_LINE',array(
-					'URL'=>placeholder_url(),
-					'TIME'=>placeholder_date_raw(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('META_REFRESH_LINE', array(
+				'URL'=>placeholder_url(),
+				'TIME'=>placeholder_date_raw()
+			)), NULL, '', true)
 		);
 	}
 
@@ -225,16 +212,14 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_popup_window()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('HYPERLINK_POPUP_WINDOW',array(
-					'TITLE'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-					'REL'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('HYPERLINK_POPUP_WINDOW', array(
+				'TITLE'=>lorem_phrase(),
+				'CAPTION'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
+				'REL'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -248,12 +233,10 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__basic_html_wrap()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BASIC_HTML_WRAP',array(
-					'TITLE'=>lorem_phrase(),
-					'CONTENT'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BASIC_HTML_WRAP', array(
+				'TITLE'=>lorem_phrase(),
+				'CONTENT'=>lorem_chunk_html()
+			)), NULL, '', true)
 		);
 	}
 
@@ -267,12 +250,10 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__floater()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('FLOATER',array(
-					'FLOAT'=>'left',
-					'CONTENT'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FLOATER', array(
+				'FLOAT'=>'left',
+				'CONTENT'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -286,11 +267,9 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_email()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('HYPERLINK_EMAIL',array(
-					'VALUE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('HYPERLINK_EMAIL', array(
+				'VALUE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -304,14 +283,12 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_tooltip()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('HYPERLINK_TOOLTIP',array(
-					'TOOLTIP'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'NEW_WINDOW'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('HYPERLINK_TOOLTIP', array(
+				'TOOLTIP'=>lorem_phrase(),
+				'CAPTION'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'NEW_WINDOW'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -325,12 +302,10 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__paragraph()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PARAGRAPH',array(
-					'TEXT'=>lorem_sentence_html(),
-					'CLASS'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('PARAGRAPH', array(
+				'TEXT'=>lorem_sentence_html(),
+				'CLASS'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -344,11 +319,9 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__div()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('DIV',array(
-					'TEMPCODE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('DIV', array(
+				'TEMPCODE'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -362,11 +335,9 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__with_whitespace()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('WITH_WHITESPACE',array(
-					'CONTENT'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('WITH_WHITESPACE', array(
+				'CONTENT'=>lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -380,17 +351,15 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('HYPERLINK',array(
-					'REL'=>NULL,
-					'POST_DATA'=>NULL,
-					'ACCESSKEY'=>NULL,
-					'NEW_WINDOW'=>false,
-					'TITLE'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'CAPTION'=>lorem_word(),
-					)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('HYPERLINK', array(
+				'REL'=>NULL,
+				'POST_DATA'=>NULL,
+				'ACCESSKEY'=>NULL,
+				'NEW_WINDOW'=>false,
+				'TITLE'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'CAPTION'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -404,17 +373,15 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_button()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('HYPERLINK_BUTTON',array(
-					'REL'=>NULL,
-					'POST_DATA'=>lorem_word(),
-					'ACCESSKEY'=>NULL,
-					'NEW_WINDOW'=>false,
-					'TITLE'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'CAPTION'=>lorem_word(),
-					)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('HYPERLINK_BUTTON', array(
+				'REL'=>NULL,
+				'POST_DATA'=>'',
+				'ACCESSKEY'=>NULL,
+				'NEW_WINDOW'=>false,
+				'TITLE'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'CAPTION'=>lorem_word()
+			)), NULL, '', true)
 		);
 	}
 }

@@ -21,9 +21,9 @@ function find_text_nodes(e)
 	return found;
 }
 
-function decToHex(number)
+function dec_to_hex(number)
 {
-	var hexbase="0123456789ABCDEF";
+	var hexbase='0123456789ABCDEF';
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 
@@ -45,7 +45,7 @@ function color_interpolation(max_color,min_color,fraction)
 	var color_g=min_color_g+fraction*(max_color_g-min_color_g);
 	var color_b=min_color_b+fraction*(max_color_b-min_color_b);
 
-	return decToHex(window.parseInt(color_r))+decToHex(window.parseInt(color_g))+decToHex(window.parseInt(color_b));
+	return dec_to_hex(window.parseInt(color_r))+dec_to_hex(window.parseInt(color_g))+dec_to_hex(window.parseInt(color_b));
 }
 
 function process_wave(e)

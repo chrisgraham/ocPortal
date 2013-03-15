@@ -24,11 +24,13 @@
  * @param  boolean		Whether to bypass queueing
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
 {
-	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_tag,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
+	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
 
 	if (running_script('stress_test_loader')) return NULL;
+
+	if (@$GLOBALS['SITE_INFO']['no_email_output']==='1') return NULL;
 
 	global $EMAIL_ATTACHMENTS;
 	$EMAIL_ATTACHMENTS=array();
@@ -40,12 +42,13 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 	if (!$coming_out_of_queue)
 	{
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
+		if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
 		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>$subject_tag,
+			'm_subject'=>$subject_line,
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
@@ -122,7 +125,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	}
 
 	// Our subject
-	$_subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_TAG'=>$subject_tag),$lang,false,NULL,'.tpl','templates',$theme);
+	$_subject=do_template('MAIL_SUBJECT',array('_GUID'=>'4c7eefb7296e7b7d4f3a4ef0eeeca658','SUBJECT_LINE'=>$subject_line),$lang,false,NULL,'.tpl','templates',$theme);
 	$subject=$_subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
 
 	// Evaluate message. Needs doing early so we know if we have any headers
@@ -205,10 +208,49 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			);
 		} else
 		{
-			$myfile=ocp_tempnam('email_attachment');
-			http_download_file($img,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
-			if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
-			if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			$myfile=mixed();
+			$matches=array();
+			if ((preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches)!=0) && (strpos($img,'forum_db=1')===false))
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id'=>intval($matches[1])),'ORDER BY a_add_time DESC');
+				require_code('attachments');
+				if ((array_key_exists(0,$rows)) && (has_attachment_access($as,intval($matches[1]))))
+				{
+					$myrow=$rows[0];
+
+					if ($matches[2]=='1')
+					{
+						$full=$myrow['a_thumb_url'];
+					}
+					else
+					{
+						$full=$myrow['a_url'];
+					}
+
+					if (url_is_local($full))
+					{
+						$_full=get_custom_file_base().'/'.rawurldecode($full);
+						if (file_exists($_full))
+						{
+							$filename=$myrow['a_original_filename'];
+							require_code('mime_types');
+							$myfile=$_full;
+							$mime_type=get_mime_type(get_file_extension($filename));
+						} else
+						{
+							continue;
+						}
+					}
+				}
+			}
+			if ($myfile===NULL)
+			{
+				$myfile=ocp_tempnam('email_attachment');
+				http_download_file($img,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
+				if (is_null($file_contents)) continue;
+				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
+				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
+			}
 
 			$cid_attachment=array(
 				'mime'=>$mime_type,
@@ -352,7 +394,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
 		} else
 		{
-			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
 		}
 	}
 	return NULL;

@@ -1,7 +1,7 @@
-{$JAVASCRIPT_INCLUDE,javascript_yahoo}
-{$JAVASCRIPT_INCLUDE,javascript_yahoo_events}
-{$JAVASCRIPT_INCLUDE,javascript_date_chooser}
-{$CSS_INCLUDE,date_chooser}
+{$REQUIRE_JAVASCRIPT,javascript_yahoo}
+{$REQUIRE_JAVASCRIPT,javascript_yahoo_events}
+{$REQUIRE_JAVASCRIPT,javascript_date_chooser}
+{$REQUIRE_CSS,date_chooser}
 
 {+START,INCLUDE,FORM_SCREEN_INPUT_DATE}
 	STUB={NAME}

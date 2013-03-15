@@ -4,7 +4,7 @@ function advanced_notifications_copy_under(row,num_children)
 {
 	var inputs_from=row.getElementsByTagName('input');
 
-	var parent_depth=abstractGetComputedStyle(row.getElementsByTagName('th')[0],'padding-left');
+	var parent_depth=abstract_get_computed_style(row.getElementsByTagName('th')[0],'padding-left');
 
 	var children_ticked=0;
 	var child_depth=null;
@@ -17,7 +17,7 @@ function advanced_notifications_copy_under(row,num_children)
 			if (!row) return; // Should not happen
 		}
 
-		var this_child_depth=abstractGetComputedStyle(row.getElementsByTagName('th')[0],'padding-left');
+		var this_child_depth=abstract_get_computed_style(row.getElementsByTagName('th')[0],'padding-left');
 		if (child_depth==null) child_depth=this_child_depth;
 
 		if (this_child_depth==parent_depth)

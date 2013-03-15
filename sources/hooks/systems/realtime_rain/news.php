@@ -43,7 +43,7 @@ class Hook_realtime_rain_news
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
 
-				$image=find_theme_image($row['nc_img']);
+				$image=($row['nc_img']=='')?'':find_theme_image($row['nc_img']);
 
 				$ticker_text=strip_comcode(get_translated_text($row['title']));
 

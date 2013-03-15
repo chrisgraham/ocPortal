@@ -13,26 +13,14 @@
  * @package		code_editor
  */
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
-if (substr($FILE_BASE,-4)=='.php')
+$FILE_BASE=dirname($FILE_BASE);
+if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
 {
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
-}
-if (!is_file($FILE_BASE.'/sources/global.php'))
-{
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+	$RELATIVE_PATH=basename($FILE_BASE);
+	$FILE_BASE=dirname($FILE_BASE);
 } else
 {
 	$RELATIVE_PATH='';
@@ -75,13 +63,12 @@ if (!function_exists('file_get_contents'))
 	 * Get the contents of a file.
 	 *
 	 * @param  SHORT_TEXT	The file name.
-	 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 	 * @return ~LONG_TEXT	The file contents (false: error).
 	 */
-	function file_get_contents($filename,$type=0)
+	function file_get_contents($filename)
 	{
 		$data='';
-		$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
+		$file=@fopen($filename,'rb');
 		if ($file)
 		{
 			while (!feof($file)) $data.=fread($file, 1024);
@@ -123,8 +110,8 @@ code_editor_do_footer();
 function code_editor_do_header($type,$target='_top')
 {
 	echo '
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
+<!DOCTYPE html>
+<html lang="EN">
 <head>
 	<title>ocPortal code editor</title>
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
@@ -132,7 +119,7 @@ function code_editor_do_header($type,$target='_top')
 ';
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo '
-		.main_page_title { text-decoration: underline; display: block; background: url(\'themes/default/images/bigicons/ocp-logo.png\') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/bigicons/ocp-logo.png\') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>';
 	echo '
@@ -142,7 +129,7 @@ echo '
 		';
 	echo '
 </head>
-<body class="re_body"><div class="global_middle">
+<body class="website_body"><div class="global_middle">
 <form target="'.$target.'" action="code_editor.php?type='.$type.'" method="post">
 ';
 }
@@ -210,7 +197,7 @@ function code_editor_do_login()
 		$ftp_folder='/'.$webdir_stub.substr($_SERVER['PHP_SELF'],0,$pos);
 	} else $ftp_folder=$SITE_INFO['ftp_folder'];
 	echo <<<END
-	<h1 class="main_page_title">ocPortal Code Editor</h1>
+	<h1 class="screen_title">ocPortal Code Editor</h1>
 END;
 	if (@$_POST['given_password']) echo '<p><strong>Invalid password</strong></p>';
 	$_ftp_domain=code_editor_escape_html($ftp_domain);
@@ -232,19 +219,18 @@ END;
 		<input type="submit" value="Login" />
 	</p>
 	<hr />
-	<p>
-		&raquo; <a title="ocProducts programming tutorial (this link will open in a new window)" target="_blank" href="http://ocportal.com/docs/pg/tut_programming">Read the ocProducts programming tutorial</a>
+	<ul class="actions_list" role="navigation">
+		<li><a title="ocProducts programming tutorial (this link will open in a new window)" target="_blank" href="http://ocportal.com/docs/pg/tut_programming">Read the ocProducts programming tutorial</a></li>
 END;
 if (array_key_exists('base_url',$SITE_INFO))
 {
 $_base_url=code_editor_escape_html($SITE_INFO['base_url']);
 echo <<<END
-		<br />
-		&raquo; <a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a>
+		<li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
 END;
 }
 echo <<<END
-	</p>
+	</ul>
 END;
 }
 
@@ -295,7 +281,7 @@ function do_get_path($given_password)
 	$test=open_up_ftp_connection();
 	if (is_string($test))
 	{
-		echo '<h1 class="main_page_title">An FTP error occurred</h1>';
+		echo '<h1 class="screen_title">An FTP error occurred</h1>';
 		echo '<p>'.code_editor_escape_html($test).'</p>';
 		return;
 	}
@@ -313,7 +299,7 @@ echo <<<END
 END;
 }
 	echo <<<END
-	<h1 class="main_page_title">ocPortal Code Editor</h1>
+	<h1 class="screen_title">ocPortal Code Editor</h1>
 	<p>
 		New File: <input type="text" name="path_new" />
 	</p>
@@ -422,7 +408,7 @@ function do_page($given_password,$path)
 		$line=(array_key_exists('line',$_POST)?intval($_POST['line']):(array_key_exists('line',$_POST)?intval($_POST['line']):0));
 		$_path=code_editor_escape_html($path);
 echo <<<END
-<h1 class="main_page_title">ocPortal <a onclick="window.back(); return false;" href="code_editor.php">Code Editor</a>: Editing {$_path}</h1>
+<h1 class="screen_title">ocPortal <a onclick="window.back(); return false;" href="code_editor.php">Code Editor</a>: Editing {$_path}</h1>
 <input type="hidden" name="path" value="{$_path}" />
 END;
 foreach ($_POST as $key=>$val)

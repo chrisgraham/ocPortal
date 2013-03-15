@@ -61,7 +61,7 @@ if (!function_exists('_do_lang'))
 						$PAGE_CACHE_LANG_LOADED[$lang][$codename]=NULL;
 						if ($GLOBALS['MEM_CACHE']!==NULL)
 						{
-							persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+							persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 						} else
 						{
 							@rewind($PAGE_CACHE_FILE);
@@ -134,7 +134,7 @@ if (!function_exists('_do_lang'))
 						$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$ret; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
 						if ($GLOBALS['MEM_CACHE']!==NULL)
 						{
-							persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+							persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 						} else
 						{
 							@rewind($PAGE_CACHE_FILE);
@@ -167,7 +167,7 @@ if (!function_exists('_do_lang'))
 				$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE[$lang][$codename];
 				if ($GLOBALS['MEM_CACHE']!==NULL)
 				{
-					persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+					persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 				} else
 				{
 					@rewind($PAGE_CACHE_FILE);
@@ -359,22 +359,22 @@ function google_translate($str_in, $lang)
 
 	if (strpos($str_in,'gtranslate_cache')!==false) return $tempcode?protect_from_escaping($str_in):$str_in; // Stop loops about corrupt/missing database tables
 
-	$language_list = array( 'ar'=>'Arabic', 'bg'=>'Bulgarian', 'zh-cn'=>'Simplified Chinese', 'zh-tw'=>'Traditional Chinese', 'hr'=>'Croatian', 'cs'=>'Czech', 'da'=>'Danish', 'nl'=>'Dutch', 'en'=>'English', 'fi'=>'Finnish', 'fr'=>'French', 'de'=>'German', 'el'=>'Greek', 'hi'=>'Hindi', 'it'=>'Italian', 'ja'=>'Japanese', 'ko'=>'Korean', 'pl'=>'Polish', 'pt'=>'Portuguese', 'ro'=>'Romanian', 'ru'=>'Russian', 'es'=>'Spanish', 'sv'=>'Swedish');
+	$language_list=array( 'ar'=>'Arabic', 'bg'=>'Bulgarian', 'zh-cn'=>'Simplified Chinese', 'zh-tw'=>'Traditional Chinese', 'hr'=>'Croatian', 'cs'=>'Czech', 'da'=>'Danish', 'nl'=>'Dutch', 'en'=>'English', 'fi'=>'Finnish', 'fr'=>'French', 'de'=>'German', 'el'=>'Greek', 'hi'=>'Hindi', 'it'=>'Italian', 'ja'=>'Japanese', 'ko'=>'Korean', 'pl'=>'Polish', 'pt'=>'Portuguese', 'ro'=>'Romanian', 'ru'=>'Russian', 'es'=>'Spanish', 'sv'=>'Swedish');
 	$lang=strtolower($lang);
 	if (!array_key_exists($lang,$language_list)) return $tempcode?protect_from_escaping($str_in):$str_in;
 
 	$DOING_TRANSLATE=true;
 
 	require_lang('lang');
-	$chache = check_google_cache($str_in, $lang);
-	if(count($chache) == 0)
+	$chache=check_google_cache($str_in, $lang);
+	if(count($chache)==0)
 	{
 		require_code('GTranslate');
-		$translate = new GTranslate();
+		$translate=new GTranslate();
 		$num_matches=array();
 		$matches=array();
 		$rep=array();
-		$prepped = $str_in;
+		$prepped=$str_in;
 		$j=0;
 		foreach (array(array('[',']'),array('{','}')) as $symbol)
 		{
@@ -427,11 +427,11 @@ function google_translate($str_in, $lang)
 			return $tempcode?protect_from_escaping($str_in):$str_in; // Cannot translate as it has very complex Tempcode in it
 		}
 
-		$to = $language_list[$lang];
+		$to=$language_list[$lang];
 		$from_lang=strtolower(get_site_default_lang());
 		try
 		{
-			$convertedstring = $translate->Text($prepped)->From(array_key_exists($from_lang,$language_list)?$language_list[$from_lang]:'English')->To($to);
+			$convertedstring=$translate->Text($prepped)->From(array_key_exists($from_lang,$language_list)?$language_list[$from_lang]:'English')->To($to);
 		}
 		catch (Exception $e)
 		{
@@ -454,10 +454,10 @@ function google_translate($str_in, $lang)
 		$convertedstring=str_replace('&#39;','',$convertedstring);
 
 		save_google_cache($str_in, $lang, $convertedstring);
-		$str = $convertedstring;
+		$str=$convertedstring;
 	} else
 	{
-		$str = $chache['t_result'];
+		$str=$chache['t_result'];
 	}
 	$DOING_TRANSLATE=false;
 	if ((function_exists('ocp_mark_as_escaped')) && (ocp_is_escaped($str_in))) ocp_mark_as_escaped($str);
@@ -484,10 +484,10 @@ function check_google_cache($str, $lang)
 	$_result=$GLOBALS['SITE_DB']->query_select('gtranslate_cache',array('*'),$where,'',1);
 	if(count($_result)==1)
 	{
-		$data = $_result[0];
+		$data=$_result[0];
 	} else
 	{
-		$data = array();
+		$data=array();
 	}
 	return $data;
 }
@@ -502,7 +502,7 @@ function check_google_cache($str, $lang)
  */
 function save_google_cache($str, $lang, $result)
 {
-	$time = time();
+	$time=time();
 	$GLOBALS['SITE_DB']->query_insert('gtranslate_cache',array('language'=>$lang,'stringtoconvert'=>$str,'t_result'=>$result,'create_time'=>$time));
 	return true;
 }

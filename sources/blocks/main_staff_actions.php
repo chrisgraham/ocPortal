@@ -96,7 +96,7 @@ class Block_main_staff_actions
 
 		require_all_lang();
 
-		require_css('adminzone');
+		require_css('adminzone_frontpage');
 
 		require_code('actionlog');
 

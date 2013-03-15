@@ -59,7 +59,7 @@ class Block_side_google_search
 		$page_id=!empty($map['page_id'])?$map['page_id']:'google_search';
 
 
-		$out = new ocp_tempcode();
+		$out=new ocp_tempcode();
 
 		return do_template('BLOCK_SIDE_GOOGLE_SEARCH',array('TITLE'=>do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'CONTENT'=>$out,'USER_SEARCH_ID'=>$user_search_id,'PAGE_ID'=>$page_id));
 	}

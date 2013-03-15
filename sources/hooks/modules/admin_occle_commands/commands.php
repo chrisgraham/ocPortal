@@ -38,7 +38,7 @@ class Hook_commands
 			$commands=array_keys($hooks);
 			sort($commands);
 
-			return array('',do_template('OCCLE_COMMANDS',array('COMMANDS'=>$commands)),'','');
+			return array('',do_template('OCCLE_COMMANDS',array('_GUID'=>'bd0354a12a05a6116be62f4d77b47657','COMMANDS'=>$commands)),'','');
 		}
 	}
 

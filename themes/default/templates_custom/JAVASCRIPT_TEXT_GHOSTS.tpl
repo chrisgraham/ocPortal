@@ -3,7 +3,7 @@ function show_ghost(html_message)
 	var div=document.createElement('div');
 	div.style.position='absolute';
 	div.className='ghost';
-	setInnerHTML(div,html_message);
+	set_inner_html(div,html_message);
 	var limit=36;
 	for (var counter=0;counter<limit;counter++)
 	{
@@ -17,8 +17,8 @@ function build_ghost_func(div,counter,limit)
 {
 	return function() {
 		div.style.fontSize=(1+0.05*counter)+'em';
-		setOpacity(div,1.0-counter/limit/1.3);
-		div.style.left=((getWindowWidth()-findWidth(div))/2+getWindowScrollX())+'px';
-		div.style.top=((getWindowHeight()-findHeight(div))/2-20+getWindowScrollY())+'px';
+		set_opacity(div,1.0-counter/limit/1.3);
+		div.style.left=((get_window_width()-find_width(div))/2+get_window_scroll_x())+'px';
+		div.style.top=((get_window_height()-find_height(div))/2-20+get_window_scroll_y())+'px';
 	}
 }

@@ -94,12 +94,12 @@ class Module_supermembers
 		if (addon_installed('points')) require_lang('points');
 		require_lang('supermembers');
 
-		$title=get_page_title('SUPER_MEMBERS');
+		$title=get_screen_title('SUPER_MEMBERS');
 
 		$message=get_option('supermembers_text');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
-			if ($message!='') $message.=' [[page="_SEARCH:admin_config:category:SECURITY#group_SUPER_MEMBERS"]'.do_lang('EDIT').'[/page]]';
+			if ($message!='') $message.=' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SECURITY#group_SUPER_MEMBERS}">'.do_lang('EDIT').'</a></span>[/semihtml]'; // XHTMLXHTML
 		}
 		$text=comcode_to_tempcode($message,NULL,true);
 

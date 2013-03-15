@@ -1,14 +1,20 @@
 {TITLE}
 
-{+START,BOX,{!NAVIGATION}}
-	{+START,BOX,&ldquo;{REALM_NAME*}&rdquo;\, &lsquo;{ROOM_NAME*}&rsquo;\, <kbd>{REALM*}:{X*}:{Y*}</kbd>,,light}
+<section class="box"><div class="box_inner">
+	<h3>{!NAVIGATION}</h3>
+
+	<section class="box box__realm_main"><div class="box_inner">
+		<h3>&ldquo;{REALM_NAME*}&rdquo;, &lsquo;{ROOM_NAME*}&rsquo;, <kbd>{REALM*}:{X*}:{Y*}</kbd></h3>
+
 		<div class="ocw_navigation">
-			<table summary="{!W_MOVEMENT_TABLE}" class="solidborder">
-				<tr>
-					<th colspan="3">
-						{!NAVIGATION}
-					</th>
-				</tr>
+			<table summary="{!W_MOVEMENT_TABLE}" class="results_table">
+				<thead>
+					<tr>
+						<th colspan="3" style="text-align: center">
+							{!NAVIGATION}
+						</th>
+					</tr>
+				</thead>
 				<tbody>
 					<tr>
 						<td>
@@ -19,7 +25,7 @@
 								{+START,IF,{HAS_UP_ROOM}}
 									<div>
 										&uarr;<br />
-										<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="up" /><input class="buttonhyperlink" type="submit" value="{UP_ROOM}" /></form>
+										<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="up" /><input class="button_hyperlink" type="submit" value="{UP_ROOM}" /></form>
 									</div>
 								{+END}
 								{+START,IF,{$NOT,{HAS_UP_ROOM}}}
@@ -38,7 +44,7 @@
 						<td>
 							{+START,IF,{HAS_LEFT_ROOM}}
 								<div style="text-align: right">
-									&larr;&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="left" /><input class="buttonhyperlink" type="submit" value="{LEFT_ROOM}" /></form>
+									&larr;&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="left" /><input class="button_hyperlink" type="submit" value="{LEFT_ROOM}" /></form>
 								</div>
 							{+END}
 							{+START,IF,{$NOT,{HAS_LEFT_ROOM}}}
@@ -53,7 +59,7 @@
 						<td>
 							{+START,IF,{HAS_RIGHT_ROOM}}
 								<div style="text-align: left">
-									&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="right" /><input class="buttonhyperlink" type="submit" value="{RIGHT_ROOM}" /></form>&nbsp;&rarr;
+									&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="right" /><input class="button_hyperlink" type="submit" value="{RIGHT_ROOM}" /></form>&nbsp;&rarr;
 								</div>
 							{+END}
 							{+START,IF,{$NOT,{HAS_RIGHT_ROOM}}}
@@ -71,7 +77,7 @@
 							<div style="text-align: center">
 								{+START,IF,{HAS_DOWN_ROOM}}
 								<div>
-									<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="down" /><input class="buttonhyperlink" type="submit" value="{DOWN_ROOM}" /></form><br />
+									<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="down" /><input class="button_hyperlink" type="submit" value="{DOWN_ROOM}" /></form><br />
 									<div class="ocw_arrow">
 										&darr;
 									</div>
@@ -109,14 +115,16 @@
 				{PORTALS}
 			{+END}
 		</div>
-	{+END}
-{+END}
+	</div></section>
+</div></section>
 
 <br />
 
-{+START,BOX,{!W_ROOM_INFORMATION}}
+<section class="box box__room_info"><div class="box_inner">
+	<h3>{!W_ROOM_INFORMATION}</h3>
+
 	<div class="float_surrounder">
-		<div class="ocw_room_chat solidborder">
+		<div class="ocw_room_chat results_table">
 			<div class="ocw_posttop">{!MESSAGES}</div>
 			<div>
 				<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!MESSAGES}" src="{$FIND_SCRIPT*,wmessages}{$KEEP*,1}">{!MESSAGES}</iframe> {EMOTICON_CHOOSER}
@@ -132,7 +140,7 @@
 
 		<div class="ocw_in_room">
 			<div class="wide_table_wrap">
-				<table class="wide_table solidborder variable_table" summary="{!COLUMNED_TABLE}">
+				<table class="wide_table results_table autosized_table" summary="{!COLUMNED_TABLE}">
 					<thead>
 						<tr>
 							<th colspan="3" class="ocw_posttop">
@@ -162,7 +170,7 @@
 			{+START,IF_NON_EMPTY,{ITEMS}}
 				<br />
 
-				<table class="ocw_centered_contents wide_table solidborder" summary="{!COLUMNED_TABLE}">
+				<table class="ocw_centered_contents wide_table results_table" summary="{!COLUMNED_TABLE}">
 					<thead>
 						<tr>
 							<th colspan="2" class="ocw_posttop">
@@ -185,7 +193,7 @@
 			{+START,IF_NON_EMPTY,{ITEMS_SALE}}
 				<br />
 
-				<table class="ocw_centered_contents wide_table solidborder" summary="{!COLUMNED_TABLE}">
+				<table class="ocw_centered_contents wide_table results_table" summary="{!COLUMNED_TABLE}">
 					<thead>
 						<tr>
 							<th colspan="3" class="ocw_posttop">
@@ -209,12 +217,14 @@
 			{+END}
 		</div>
 	{+END}
-{+END}
+</div></section>
 
 <br />
 
 <div class="ocw_centered_contents">
-	{+START,BOX,{!W_TOOLS},,light}
+	<section class="box"><div class="box_inner">
+		<h3>{!W_TOOLS}</h3>
+
 		<div class="ocw_icon" style="width: 14%;">
 			<a title="{!W_INVENTORY}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SELF:_SELF:type=inventory}"><img alt="{!W_INVENTORY}" src="{$IMG,ocworld/inventory}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=inventory}">{!W_INVENTORY}</a>
 		</div>
@@ -236,28 +246,25 @@
 		<div class="ocw_icon" style="width: 14%;">
 			<a title="{!HELP}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SELF:docs}"><img alt="{!HELP}" src="{$IMG,ocworld/help}" /></a><br /><a href="{$PAGE_LINK*,_SELF:docs}">{!HELP}</a>
 		</div>
-	{+END}
+	</div></section>
 
-	<div class="lightborder">
-		<div class="standardbox_classic">
-			<div class="standardbox_title_light toggle_div_title">
-				{!W_ENVIRONMENT_ACTIONS}
-				{+START,IF,{$JS_ON}}
-					<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('env_act','block'); SetCookie('hideActions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img id="e_env_act" alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-				{+END}
-			</div>
-		</div>
+	<div class="box box___w_main_screen">
+		<h2 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideActions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_ACTIONS}</a>
+			{+START,IF,{$JS_ON}}
+				<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideActions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			{+END}
+		</h2>
 
-		<div class="toggler_main" id="env_act" style="{$JS_ON,{HIDE_ACTIONS*},}">
-			<table summary="{!COLUMNED_TABLE}" class="solidborder wide_table">
+		<div class="toggleable_tray" style="{$JS_ON,{HIDE_ACTIONS*},}"{+START,IF,{HIDE_ACTIONS}} aria-expanded="false"{+END}>
+			<table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
 				<colgroup>
-					<col style="width: 22%" />
-					<col style="width: 22%" />
-					<col style="width: 22%" />
-					<col style="width: 22%" />
-					<col style="width: 12%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
 				</colgroup>
-
 				<tr class="ocw_posttop">
 					<th>
 						{!ACTION}
@@ -278,15 +285,14 @@
 			</table>
 			{+START,IF_NON_EMPTY,{ITEMS_HELD}}
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_DROP}
@@ -308,15 +314,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_GIVE}
@@ -338,15 +343,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_PICKPOCKET}
@@ -368,15 +372,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_USE}
@@ -398,15 +401,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_DELETE_MATCHING_MESSAGES}
@@ -429,15 +431,14 @@
 				</form>
 			{+END}
 			<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-				<table summary="" class="solidborder wide_table">
+				<table summary="" class="results_table wide_table autosized_table">
 					<colgroup>
-						<col style="width: 22%" />
-						<col style="width: 22%" />
-						<col style="width: 22%" />
-						<col style="width: 22%" />
-						<col style="width: 12%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
 					</colgroup>
-
 					<tr>
 						<td>
 							{!W_FIND_PERSON}
@@ -459,7 +460,7 @@
 				</table>
 			</form>
 			{+START,IF,{IS_STAFF}}
-				<table summary="" class="solidborder wide_table">
+				<table summary="" class="results_table wide_table">
 					<tr>
 						<td colspan="5">
 							&nbsp;
@@ -467,15 +468,14 @@
 					</tr>
 				</table>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_TELEPORT_PERSON}
@@ -497,15 +497,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_IMPRISON_PERSON}
@@ -527,15 +526,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_HURT_PERSON}
@@ -557,15 +555,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_HEAL_PERSON}
@@ -587,15 +584,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_BAN_PERSON}
@@ -617,15 +613,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_UNBAN_PERSON}
@@ -647,15 +642,14 @@
 					</table>
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
-					<table summary="" class="solidborder wide_table">
+					<table summary="" class="results_table wide_table autosized_table">
 						<colgroup>
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 22%" />
-							<col style="width: 12%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
 						</colgroup>
-
 						<tr>
 							<td>
 								{!W_TAKE_FROM_PERSON}
@@ -681,17 +675,15 @@
 	</div>
 
 	{+START,IF,{MAY_DO_STUFF}}
-		<div class="lightborder">
-			<div class="standardbox_classic">
-				<div class="standardbox_title_light toggle_div_title">
-					{!W_ENVIRONMENT_ADDITIONS}
-					{+START,IF,{$JS_ON}}
-						<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('env_add','block'); SetCookie('hideAdditions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img id="e_env_add" alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-					{+END}
-				</div>
-			</div>
+		<div class="box box___w_main_screen">
+			<h2 class="toggleable_tray_title">
+				<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideAdditions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_ADDITIONS}</a>
+				{+START,IF,{$JS_ON}}
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideAdditions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+				{+END}
+			</h2>
 
-			<div class="toggler_main" id="env_add" style="{$JS_ON,{HIDE_ADDITIONS*},}">
+			<div class="toggleable_tray" style="{$JS_ON,{HIDE_ADDITIONS*},}"{+START,IF,{HIDE_ADDITIONS}} aria-expanded="false"{+END}>
 				<div class="float_surrounder">
 					<div class="ocw_icon" style="width: {$?,{MAY_ADD_PORTAL},20%,25%};">
 						<a href="{$PAGE_LINK*,_SELF:_SELF:type=addrealm}"><img alt="{!W_ADD_REALM}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=addrealm}">{!W_ADD_REALM}</a>
@@ -715,17 +707,15 @@
 		</div>
 	{+END}
 
-	<div class="lightborder">
-		<div class="standardbox_classic">
-			<div class="standardbox_title_light toggle_div_title">
-				{!W_ENVIRONMENT_MODIFICATIONS}
-				{+START,IF,{$JS_ON}}
-					<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('hide_mod','block'); SetCookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img id="e_hide_mod" alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-				{+END}
-			</div>
-		</div>
+	<div class="box box___w_main_screen">
+		<h2 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_MODIFICATIONS}</a>
+			{+START,IF,{$JS_ON}}
+				<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			{+END}
+		</h2>
 
-		<div class="toggler_main" id="hide_mod" style="{$JS_ON,{HIDE_MODIFICATIONS*},}">
+		<div class="toggleable_tray" style="{$JS_ON,{HIDE_MODIFICATIONS*},}"{+START,IF,{HIDE_MODIFICATIONS}} aria-expanded="false"{+END}>
 			{+START,IF_NON_EMPTY,{ITEMS_OWNED}}
 				<form method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><div>
 					<label for="item">{!W_ITEMS}</label>: {ITEMS_OWNED} <input type="hidden" name="type" value="edititem" /> <input class="button_pageitem" type="submit" value="{!W_EDIT_ITEM}" onclick="form.elements['type']='edititem';" /> <input class="button_pageitem" type="submit" value="{!W_DELETE_ITEM}" onclick="form.elements['type']='confirm';" />

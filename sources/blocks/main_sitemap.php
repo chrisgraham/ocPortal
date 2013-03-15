@@ -60,6 +60,8 @@ class Block_main_sitemap
 	 */
 	function run($map)
 	{
+		require_css('sitemap');
+
 		require_all_lang();
 		require_code('zones2');
 
@@ -70,6 +72,7 @@ class Block_main_sitemap
 		$_zones=array();
 		$zones=find_all_zones(false,true);
 
+		disable_php_memory_limit();
 		$GLOBALS['MEMORY_OVER_SPEED']=true;
 		$low_memory=((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') && (ini_get('memory_limit')!='') && (intval(preg_replace('#M$#','',ini_get('memory_limit')))<26)) || (get_option('has_low_memory_limit')==='1');
 
@@ -146,7 +149,7 @@ class Block_main_sitemap
 						if ($entrypoints==array('!'))
 						{
 							$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
-							$title=ucwords(str_replace('_',' ',$page));
+							$title=titleify($page);
 							if (substr($page_type,0,7)=='comcode')
 							{
 								foreach ($comcode_page_rows as $page_row)
@@ -213,7 +216,7 @@ class Block_main_sitemap
 							}
 							//ksort($_entrypoints);
 							$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
-							if (is_null($title)) $title=ucwords(str_replace('_',' ',preg_replace('#^ocf\_#','',preg_replace('#^'.str_replace('#','\#',preg_quote($zone)).'_#','',preg_replace('#^'.str_replace('#','\#',preg_quote(str_replace('zone','',$zone))).'_#','',$page)))));
+							if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.str_replace('#','\#',preg_quote($zone)).'_#','',preg_replace('#^'.str_replace('#','\#',preg_quote(str_replace('zone','',$zone))).'_#','',$page))));
 							if (count($_entrypoints)==1)
 							{
 								$temp_keys=array_keys($_entrypoints);

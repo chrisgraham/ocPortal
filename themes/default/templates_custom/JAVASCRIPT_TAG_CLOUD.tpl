@@ -170,7 +170,7 @@ Scene3D.prototype.renderCamera = function (camera){
 				currItem.style.left = currItem._x+'px';
 				currItem.style.fontSize = 100*currItem.scale+'%';
 
-				setOpacity(currItem,(currItem.scale-0.75)*2);
+				set_opacity(currItem,(currItem.scale-0.75)*2);
 
 			}
 
@@ -193,28 +193,28 @@ var axisRotation = new DisplayObject3D().make3DPoint(0,0,0);
 
 var Sphere = function (radius,sides, numOfItems){
 
-    numOfItems++; // Makes maths work
+	numOfItems++; // Makes maths work
 
-    //Step through the number of rings.
-    for (var j = sides ; j >= 0; j--){
+	//Step through the number of rings.
+	for (var j = sides ; j >= 0; j--){
 
-        //Step through each point on a ring.
-        for (var i = numOfItems / sides; i >= 0; i--)
-        {
-            //Space out each point evenly.
-            var angle = i * Math.PI * 2 / (numOfItems/sides);
-            var angleB = j * Math.PI * 2 / sides;
+		//Step through each point on a ring.
+		for (var i = numOfItems / sides; i >= 0; i--)
+		{
+			//Space out each point evenly.
+			var angle = i * Math.PI * 2 / (numOfItems/sides);
+			var angleB = j * Math.PI * 2 / sides;
 
-            //Figure out the x,y,z co-ordinates of each point.
-            var x =  Math.sin(angle) * Math.sin(angleB)*radius;
-            var y =  Math.cos(angle) * Math.sin(angleB)*radius;
-            var z =  Math.cos(angleB)* radius;
+			//Figure out the x,y,z co-ordinates of each point.
+			var x =  Math.sin(angle) * Math.sin(angleB)*radius;
+			var y =  Math.cos(angle) * Math.sin(angleB)*radius;
+			var z =  Math.cos(angleB)* radius;
 
-            //Put the point in an array.
-            this.pointsArray.push(this.make3DPoint(x,y,z));
-        }
+			//Put the point in an array.
+			this.pointsArray.push(this.make3DPoint(x,y,z));
+		}
 
-    };
+	};
 
 	var shuffle = function(o){ //v1.0
 		for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -232,8 +232,8 @@ Sphere.prototype = new DisplayObject3D();
 
 function load_tag_cloud(container)
 {
-	var width=findWidth(container);
-	var height=findHeight(container);
+	var width=find_width(container);
+	var height=find_height(container);
 
 	// Make sure that the links are actually clickable
 	var lis=container.getElementsByTagName("li");
@@ -269,10 +269,10 @@ function load_tag_cloud(container)
 	var speed = 1000;
 
 	var animateIt = function(){
-		var offsetX = findPosX(container,true);
-		var offsetY = findPosY(container,true);
-		var width=findWidth(container);
-		var height=findHeight(container);
+		var offsetX = find_pos_x(container,true);
+		var offsetY = find_pos_y(container,true);
+		var width=find_width(container);
+		var height=find_height(container);
 
 		var mouseX = window.mouseX - offsetX - (width / 2);
 		var mouseY = window.mouseY - offsetY - (height / 2);

@@ -109,9 +109,9 @@ class Block_main_contact_catalogues
 
 			$_cf_description=escape_html(get_translated_text($field['cf_description']));
 
-			$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
+			$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
 			$result=$ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,true,!array_key_exists($field_num+1,$special_fields));
-			$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+			$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=false;
 
 			if (is_null($result)) continue;
 
@@ -140,7 +140,7 @@ class Block_main_contact_catalogues
 			if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
 
 			if ($field_group_title!='')
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c0b9f22ef5767da57a1ff65c06af96a1','TITLE'=>$field_group_title)));
 			$fields->attach($extra_fields);
 		}
 
@@ -148,7 +148,7 @@ class Block_main_contact_catalogues
 
 		$url=get_self_url();
 
-		return do_template('FORM',array('FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>''));
+		return do_template('FORM',array('_GUID'=>'7dc3957edf3b47399b688d72fae54128','FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>''));
 	}
 
 }

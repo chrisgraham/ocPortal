@@ -364,13 +364,8 @@
   </parameter>
 
   <parameter
-    name="SetAclParameter2" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/output.log" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/output.log" />
-  </parameter>
-
-  <parameter
-    name="SetAclParameter3" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/write.log" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/write.log" />
+    name="SetAclParameter3" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling" />
   </parameter> 
 
   <parameter
@@ -394,8 +389,8 @@
   </parameter>
 
   <parameter
-    name="SetAclParameter8" description="Sets the ACL on the right file" defaultValue="{Application Path}/persistant_cache" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/persistant_cache" />
+    name="SetAclParameter8" description="Sets the ACL on the right file" defaultValue="{Application Path}/persistent_cache" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/persistent_cache" />
   </parameter> 
 
   <parameter
@@ -469,8 +464,8 @@
   </parameter> 
 
   <parameter
-    name="SetAclParameter36" description="Sets the ACL on the right file" defaultValue="{Application Path}/imports/mods" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/imports/mods" />
+    name="SetAclParameter36" description="Sets the ACL on the right file" defaultValue="{Application Path}/imports/addons" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/imports/addons" />
   </parameter>
 
   <parameter
@@ -484,8 +479,8 @@
   </parameter>
 
   <parameter
-    name="SetAclParameter40" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/mods" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/mods" />
+    name="SetAclParameter40" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/addons" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/addons" />
   </parameter> 
 
   <parameter

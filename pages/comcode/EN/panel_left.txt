@@ -1,14 +1,6 @@
-{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-[block="root_website" type="tree" caption="Web site"]side_stored_menu[/block]
-[block failsafe="1"]side_users_online[/block]
-[block failsafe="1"]side_stats[/block]
-[block]side_personal_stats[/block]
-{+END}
-
+{$,We'll only show a menu here if we have not collapsed zones - otherwise we'll consider this a splash page with no left panel}
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
-[block="main_features" type="tree" caption="Features"]side_stored_menu[/block]
-[block="main_content" type="tree" caption="Content"]side_stored_menu[/block]
-[block="main_community" type="tree" caption="Community"]side_stored_menu[/block]
-[block="main_website" type="tree" caption="Web site"]side_stored_menu[/block]
-[block="cedi_features" type="tree" silent_failure="1" caption="CEDI"]side_stored_menu[/block]
+[block="main_website" title="{$SITE_NAME}"]side_stored_menu[/block]
+[block="main_content" title="{!CONTENT}"]side_stored_menu[/block]
+[block="wiki_features" silent_failure="1" title="{!WIKI}"]side_stored_menu[/block]
 {+END}

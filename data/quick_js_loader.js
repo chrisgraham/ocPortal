@@ -9,7 +9,7 @@ function loaded()
 	{
 		html=JSON.parse(localStorage[loc])[0];
 		if (html.indexOf('<!DOCTYPE')==-1)
-			html='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'+html;
+			html='<!DOCTYPE html>'+html;
 		html=html.replace('<TITLE />','').replace(/<script([^>]*)\/>/ig,'<script$1></script>').replace(/<textarea([^>]*)\/>/ig,'<textarea$1></textarea>').replace(/<style([^>]*)\/>/ig,'<style$1></style>');
 		document.close();
 		document.open('text/html',true);
@@ -31,7 +31,7 @@ function loaded()
 				img.style.top='3px'; \
 				img.id='quick_js_loader'; \
 				img.title=img.alt='Refreshing from cache'; \
-				img.src=base+'themes/default/images/bottom/loading.gif'.replace(/^http:/,window.location.protocol); \
+				img.src=base+'themes/default/images/loading.gif'.replace(/^http:/,window.location.protocol); \
 				document.body.appendChild(img); \
 				var last_values=find_form_values(false); \
 				 \

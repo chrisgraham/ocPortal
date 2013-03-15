@@ -23,7 +23,7 @@ class Hook_ocf_cpf_filter_latitude
 	 */
 	function to_enable()
 	{
-		require_lang('main_google_map_users');
+		require_lang('google_map_users');
 		$cpf=array();
 		$cpf['latitude']=1;
 		$cpf['longitude']=1;

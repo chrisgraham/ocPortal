@@ -40,7 +40,7 @@ echo '
 		}
 	</script>
 	<p class="proceed_button">
-		<input onclick="if (checkForm(this.form)) window.fauxmodal_alert(\''.$message.'\'.replace(\'xxx\',calculate_sum_'.$uniqid.'(this.form.elements))); return false;" type="submit" value="Calculate" />
+		<input onclick="if (check_form(this.form)) window.fauxmodal_alert(\''.$message.'\'.replace(\'xxx\',calculate_sum_'.$uniqid.'(this.form.elements))); return false;" type="submit" value="Calculate" />
 	</p>
 </form>
 ';

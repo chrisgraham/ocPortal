@@ -32,32 +32,18 @@ function init__templates()
  *
  * @param  tempcode		The content being put inside the box
  * @param  mixed			The title of the standard box, string or Tempcode (blank: titleless standard box)
- * @param  ?string		The width/height classification (e.g. 100%, 100%|300px, ...) (NULL: unset)
- * @param  ID_TEXT		The type of the table. Refers to a template (STANDARDBOX_type)
+ * @param  ID_TEXT		The type of the box. Refers to a template (STANDARDBOX_type)
+ * @param  string			The CSS width
  * @param  string			'|' separated list of options (meaning dependant upon templates interpretation)
  * @param  string			'|' separated list of meta information (key|value|key|value|...)
  * @param  string			'|' separated list of link information (linkhtml|...)
- * @param  boolean		If the box will be allowed to expand.
  * @param  string			Link to be added to the header of the box
  * @return tempcode		The contents, put inside a standard box, according to the other parameters
  */
-function put_in_standard_box($content,$title='',$dimensions=NULL,$type='classic',$options='',$meta='',$links='',$expand=false,$toplink='')
+function put_in_standard_box($content,$title='',$type='default',$width='',$options='',$meta='',$links='',$top_links='')
 {
-	if ((get_page_name()=='start') && (get_zone_name()=='adminzone') && (($options=='') || ($options=='tray_open')))
-	{
-		$expand=true;
-		$options='tray_open';
-	}
+	if ($type=='') $type='default';
 
-	if ($dimensions===NULL) $dimensions=($type=='panel')?get_option('panel_width'):'100%';
-	if ($type=='') $type='classic';
-	$height='auto';
-	$dimensions_bits=explode('|',$dimensions);
-	$width=$dimensions_bits[0];
-	if (is_numeric($width)) $width.='px';
-	if ($width=='') $width='auto';
-	if (array_key_exists(1,$dimensions_bits)) $height=$dimensions_bits[1];
-	if (is_numeric($height)) $height.='px';
 	$_meta=array();
 	if ($meta!='')
 	{
@@ -66,15 +52,20 @@ function put_in_standard_box($content,$title='',$dimensions=NULL,$type='classic'
 		for ($i=0;$i<count($meta_bits);$i+=2)
 			$_meta[]=array('KEY'=>$meta_bits[$i+0],'VALUE'=>$meta_bits[$i+1]);
 	}
+
 	$_links=array();
 	if ($links!='')
 	{
 		$_links=explode('|',$links);
 		if ($_links[count($_links)-1]=='') array_pop($_links);
 	}
+
 	$_options=explode('|',$options);
-	//$interlock=in_array('interlock',$_options);
-	return do_template('STANDARDBOX_'.filter_naughty($type),array(/*'INTERLOCK'=>$interlock,*/'CONTENT'=>$content,'LINKS'=>$_links,'META'=>$_meta,'OPTIONS'=>$_options,'WIDTH'=>$width,'HEIGHT'=>$height,'TITLE'=>$title,'EXPAND'=>$expand,'TOPLINK'=>$toplink),NULL,true);
+
+	if ($width=='auto') $width='';
+	if (is_numeric($width)) $width=strval(intval($width)).'px';
+
+	return do_template('STANDARDBOX_'.filter_naughty($type),array('WIDTH'=>$width,'CONTENT'=>$content,'LINKS'=>$_links,'META'=>$_meta,'OPTIONS'=>$_options,'TITLE'=>$title,'TOP_LINKS'=>$top_links),NULL,true);
 }
 
 /**
@@ -87,7 +78,7 @@ function put_in_standard_box($content,$title='',$dimensions=NULL,$type='classic'
  * @param  ?array			Awards to say this has won (NULL: none)
  * @return tempcode		The title tempcode
  */
-function get_page_title($title,$dereference_lang=true,$params=NULL,$user_online_title=NULL,$awards=NULL)
+function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_online_title=NULL,$awards=NULL)
 {
 	global $TITLE_CALLED;
 	$TITLE_CALLED=true;
@@ -110,7 +101,8 @@ function get_page_title($title,$dereference_lang=true,$params=NULL,$user_online_
 
 	if (function_exists('get_session_id'))
 	{
-		$GLOBALS['SITE_DB']->query_update('sessions',array('the_title'=>is_null($user_online_title)?substr($_title->evaluate(),0,255):$user_online_title->evaluate(),'the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'last_activity'=>time(),'the_id'=>substr(get_param('id','',true),0,80)),array('the_session'=>get_session_id()),'',1,NULL,false,true);
+		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
+			$GLOBALS['SITE_DB']->query_update('sessions',array('the_title'=>is_null($user_online_title)?substr($_title->evaluate(),0,255):$user_online_title->evaluate(),'the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'last_activity'=>time(),'the_id'=>substr(get_param('id','',true),0,80)),array('the_session'=>get_session_id()),'',1,NULL,false,true);
 	}
 
 	global $DISPLAYED_TITLE;
@@ -238,6 +230,26 @@ function form_input_hidden($name,$value)
 }
 
 /**
+ * Get the tempcode for a group of list entry. May be attached directly to form_input_list_entry (i.e. this is a group node in a shared tree), and also fed into form_input_list.
+ *
+ * @param  mixed			The title for the group
+ * @param  tempcode		List entries for group
+ * @return tempcode		The group
+ */
+function form_input_list_group($title,$entries)
+{
+	if (browser_matches('ios')) // Workaround to iOS bug
+	{
+		$entries2=new ocp_tempcode();
+		$entries2->attach(form_input_list_entry('',false,$title,false,true));
+		$entries2->attach($entries);
+		return $entries2;
+	}
+ 
+	return do_template('FORM_SCREEN_INPUT_LIST_GROUP',array('_GUID'=>'dx76a2685d0fba5f819ef160b0816d03','TITLE'=>$title,'ENTRIES'=>$entries));
+}
+
+/**
  * Get the tempcode for a list entry. (You would gather together the outputs of several of these functions, then put them in as the $content in a form_input_list function call).
  *
  * @param  string			The value for this entry
@@ -275,14 +287,14 @@ function with_whitespace($in)
  * @param  tempcode		Title to display on redirect page
  * @param  mixed			Destination URL (may be Tempcode)
  * @param  mixed			Message to show (may be Tempcode)
- * @param  boolean		For intermediatory hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediatory)
+ * @param  boolean		For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
  * @param  ID_TEXT	Code of message type to show
  * @set    warn inform fatal
  * @return tempcode		Redirection message (likely to not actually be seen due to instant redirection)
  */
-function redirect_screen($title,$url,$text,$intermediatory_hop=false,$msg_type='inform')
+function redirect_screen($title,$url,$text,$intermediary_hop=false,$msg_type='inform')
 {
 	require_code('templates_redirect_screen');
-	return _redirect_screen($title,$url,$text,$intermediatory_hop,$msg_type);
+	return _redirect_screen($title,$url,$text,$intermediary_hop,$msg_type);
 }
 

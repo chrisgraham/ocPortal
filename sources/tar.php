@@ -21,31 +21,41 @@
 /**
  * Open up a TAR archive, and return the resource.
  *
- * @param  PATH			The path to the TAR archive
+ * @param  ?PATH			The path to the TAR archive (NULL: write out directly to stdout)
  * @param  string			The mode to open the TAR archive (rb=read, wb=write)
  * @set    rb wb w+b
  * @return array			The TAR file handle
  */
 function tar_open($path,$mode)
 {
-	$exists=file_exists($path) && (strpos($mode,'a')!==false);
-	$myfile=@fopen($path,$mode);
-	if ($myfile===false)
+	if (is_null($path))
 	{
-		if (substr($mode,0,1)=='r')
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		else
-			intelligent_write_error($path);
+		$myfile=mixed();
+	} else
+	{
+		$exists=file_exists($path) && (strpos($mode,'a')!==false);
+		$myfile=@fopen($path,$mode);
+		if ($myfile===false)
+		{
+			if (substr($mode,0,1)=='r')
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			else
+				intelligent_write_error($path);
+		}
 	}
 	$resource=array();
 	$resource['new']=!$exists;
+	$resource['mode']=$mode;
 	$resource['myfile']=$myfile;
 	$resource['full']=$path;
 	$resource['already_at_end']=false;
 	if (((!$exists) || (!(filesize($path)>0))) && (strpos($mode,'r')===false))
 	{
-		$chunk=pack('a512','');
-		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		$chunk=pack('a1024','');
+		if (!is_null($myfile))
+		{
+			if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		}
 		$resource['directory']=array();
 		$resource['end']=0;
 	}
@@ -68,6 +78,7 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 	fseek($myfile,0,SEEK_SET);
 	$resource['already_at_end']=false;
 	$directory=array();
+	$next_name=mixed();
 
 	do
 	{
@@ -90,7 +101,17 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 			$resource['end']=$offset;
 		} else
 		{
-			$path=str_replace('\\','/',substr($header,345,min(512,strpos($header,chr(0),345)-345)).substr($header,0,min(100,strpos($header,chr(0),0))));
+			if (substr($header,257,5)=='ustar')
+			{
+				$path=str_replace('\\','/',substr($header,345,min(512,strpos($header,chr(0),345)-345)).substr($header,0,min(100,strpos($header,chr(0),0))));
+			} else
+			{
+				$path=substr($header,0,min(100,strpos($header,chr(0),0)));
+			}
+			if ($next_name!==NULL) $path=$next_name;
+
+			if (strtoupper(substr(PHP_OS,0,3))==='WIN')
+				$path=utf8_decode($path);
 
 			$mode=octdec(substr($header,100,8));
 			$size=octdec(trim(substr($header,124,12)));
@@ -110,10 +131,19 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 
 //			if ($is_ok)
 			{
-				$directory[$offset]=array('path'=>$path,'mode'=>$mode,'size'=>$size,'mtime'=>$mtime);
+				if ($path!='././@LongLink')
+				{
+					$directory[$offset]=array('path'=>$path,'mode'=>$mode,'size'=>$size,'mtime'=>$mtime);
+					$next_name=NULL;
+					fseek($myfile,$block_size,SEEK_CUR);
+				} else
+				{
+					fseek($myfile,512,SEEK_CUR);
+					$next_name=fread($myfile,$size);
+					fseek($myfile,$block_size-512-$size,SEEK_CUR);
+				}
 			}
 
-			fseek($myfile,$block_size,SEEK_CUR);
 			$resource['already_at_end']=false;
 		}
 	}
@@ -162,7 +192,7 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 			if (($entry=='.') || ($entry=='..')) continue;
 
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
-			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
+			if (($all_files) || (!should_ignore_file($_subpath)))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;
@@ -226,7 +256,7 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 			if ($tick) @print(' ');
 
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
-			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
+			if (($all_files) || (!should_ignore_file($_subpath)))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;
@@ -255,7 +285,7 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
  * Extract all the files in the specified TAR file to the specified path.
  *
  * @param  array			The TAR file handle
- * @param  PATH			The full path to the folder to extract to
+ * @param  PATH			The path to the folder to extract to, relative to the base directory
  * @param  boolean		Whether to extract via the AFM (assumes AFM has been set up prior to this function call)
  * @param  ?array			The files to extract (NULL: all)
  * @param  boolean		Whether to take backups of Comcode pages
@@ -277,9 +307,9 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 			{
 				if (!$use_afm)
 				{
-					@mkdir($path.$file['path'],0777);
-					fix_permissions($path.$file['path'],0777);
-					sync_file($path.$file['path']);
+					@mkdir(get_custom_file_base().'/'.$path.$file['path'],0777);
+					fix_permissions(get_custom_file_base().'/'.$path.$file['path'],0777);
+					sync_file(get_custom_file_base().'/'.$path.$file['path']);
 				} else
 				{
 					afm_make_directory($path.$file['path'],true);
@@ -287,6 +317,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 				continue;
 			}
 
+			// Make directory where file will be extracted to
 			$data=tar_get_file($resource,$file['path']);
 			$path_components=explode('/',$file['path']);
 			$buildup='';
@@ -299,11 +330,11 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 						$buildup.=$component.'/';
 						if (!$use_afm)
 						{
-							if (!file_exists($path.$buildup))
+							if (!file_exists(get_custom_file_base().'/'.$path.$buildup))
 							{
-								@mkdir($path.$buildup,0777);
-								fix_permissions($path.$buildup,0777);
-								sync_file($path.$buildup);
+								@mkdir(get_custom_file_base().'/'.$path.$buildup,0777);
+								fix_permissions(get_custom_file_base().'/'.$path.$buildup,0777);
+								sync_file(get_custom_file_base().'/'.$path.$buildup);
 							}
 						} else
 						{
@@ -321,7 +352,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 					if (!$use_afm)
 					{
 						if (file_exists(get_custom_file_base().'/'.$path.$file['path']))
-							copy(get_custom_file_base().'/'.$path.$file['path'],$path.$file['path'].'.'.strval(time()));
+							copy(get_custom_file_base().'/'.$path.$file['path'],get_custom_file_base().'/'.$path.$file['path'].'.'.strval(time()));
 					} else
 					{
 						if (file_exists(get_custom_file_base().'/'.$path.$file['path']))
@@ -352,11 +383,18 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 			}
 			if (!$use_afm)
 			{
+				if (file_exists(get_custom_file_base().'/'.$path.$file['path']))
+				{
+					$changed=(file_get_contents(get_custom_file_base().'/'.$path.$file['path'])!=$data['data']);
+					if (!$changed) continue; // So old mtime can stay as is
+				}
+
 				$myfile=@fopen(get_custom_file_base().'/'.$path.$file['path'],'wb');
-				if ($myfile===false) intelligent_write_error($path.$file['path']);
+				if ($myfile===false) intelligent_write_error(get_custom_file_base().'/'.$path.$file['path']);
 				if (fwrite($myfile,$data['data'])<strlen($data['data'])) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 				$fullpath=get_custom_file_base().'/'.$path.$file['path'];
 				@chmod($fullpath,$data['mode']);
+				@touch($fullpath,$data['mtime']);
 				fclose($myfile);
 				fix_permissions($fullpath);
 				sync_file($fullpath);
@@ -444,20 +482,33 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NUL
  * @param  integer		The file mode (permissions)
  * @param  TIME			The modification time we wish for our file
  * @param  boolean		Whether the $data variable is actually a full file path
+ * @param  boolean		Whether to return on errors
  */
-function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path=false)
+function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path=false,$return_on_errors=false)
 {
 	if (!array_key_exists('directory',$resource)) tar_get_directory($resource);
 
 	if (substr($target_path,0,1)=='/') $target_path=substr($target_path,1);
 
+	if (strtoupper(substr(PHP_OS,0,3))==='WIN')
+		$target_path=utf8_encode($target_path);
+
 	$directory=$resource['directory'];
 
-	foreach ($directory as $entry) // Make sure it does not exist
+	if ($target_path!='././@LongLink')
 	{
-		if ($entry['path']==$target_path)
+		foreach ($directory as $entry) // Make sure it does not exist
 		{
-			warn_exit(do_lang_tempcode('FILE_IN_ARCHIVE_TWICE',escape_html($target_path)));
+			if ($entry['path']==$target_path)
+			{
+				if ($return_on_errors) return;
+				warn_exit(do_lang_tempcode('FILE_IN_ARCHIVE_TWICE',escape_html($target_path)));
+			}
+		}
+
+		if (strlen($target_path)>100)
+		{
+			tar_add_file($resource,'././@LongLink',$target_path,$_mode,$_mtime,false,$return_on_errors);
 		}
 	}
 
@@ -465,20 +516,32 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 
 //	if (!$resource['already_at_end'])
 	{
-		fseek($myfile,$resource['end'],SEEK_SET);
+		if (!is_null($myfile))
+		{
+			fseek($myfile,$resource['end'],SEEK_SET);
+		}
 		$resource['already_at_end']=true;
 	}
 	$resource['directory'][$resource['end']]=array('path'=>$target_path,'mode'=>$_mode,'size'=>$data_is_path?filesize($data):strlen($data));
 
 	if (strlen($target_path)>100)
 	{
-		$prefix_length=strlen($target_path)-100;
-		$prefix=pack('a155',substr($target_path,0,$prefix_length));
+		$slash_pos=strpos(substr($target_path,strlen($target_path)-100),'/');
+		if ($slash_pos===false) // Must chop off start of filename because $prefix must be a directory :S
+		{
+			$slash_pos=0;
+			$target_path=substr($target_path,0,strrpos(substr($target_path,0,-100),'/')).substr($target_path,-100);
+		} else
+		{
+			$slash_pos++;
+		}
+		$prefix_length=strlen($target_path)-100+$slash_pos;
+		$prefix=rtrim(pack('a155',substr($target_path,0,$prefix_length)),'/');
 		$name=pack('a100',substr($target_path,$prefix_length));
 	} else
 	{
-		$name=pack('a100',$target_path);
 		$prefix=pack('a155','');
+		$name=pack('a100',$target_path);
 	}
 
 	$mode=sprintf('%7s ',decoct($_mode));
@@ -489,7 +552,7 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 	$size=sprintf('%11s ',decoct($data_is_path?filesize($data):strlen($data)));
 	$mtime=sprintf('%11s ',decoct($_mtime));
 	$chksum='        ';
-	$typeflag=pack('a1','');
+	$typeflag=pack('a1',($target_path=='././@LongLink')?'L':'');
 	$linkname=pack('a100','');
 	$magic=pack('a6','ustar');
 	$version=pack('a2','');
@@ -506,7 +569,13 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 	$whole=pack('a512',$name.$mode.$uid.$gid.$size.$mtime.$chksum.$typeflag.$linkname.$magic.$version.$uname.$gname.$devmajor.$devminor.$prefix);
 
 	$chunk=pack('a512',$whole);
-	if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+	if (is_null($myfile))
+	{
+		echo $chunk;
+	} else
+	{
+		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+	}
 
 	$block_size=file_size_to_tar_block_size($data_is_path?filesize($data):strlen($data));
 	if ($data_is_path)
@@ -515,20 +584,38 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 		while (!feof($infile))
 		{
 			$in=fread($infile,8000);
-			if (fwrite($myfile,$in)<strlen($in)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			if (is_null($myfile))
+			{
+				echo $in;
+			} else
+			{
+				if (fwrite($myfile,$in)<strlen($in)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			}
 		}
 		fclose($infile);
 		$extra_to_write=$block_size-filesize($data);
 		if ($extra_to_write!=0)
-			if (fwrite($myfile,pack('a'.strval($extra_to_write),''))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		{
+			if (is_null($myfile))
+			{
+				echo pack('a'.strval($extra_to_write),'');
+			} else
+			{
+				if (fwrite($myfile,pack('a'.strval($extra_to_write),''))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			}
+		}
 	} else
 	{
 		$chunk=pack('a'.strval($block_size),$data);
-		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (is_null($myfile))
+		{
+			echo $chunk;
+		} else
+		{
+			if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		}
 	}
-	$chunk=pack('a512','');
-	if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	$resource['end']+=512+$block_size;
+	$resource['end']+=$block_size+512;
 }
 
 /**
@@ -555,8 +642,24 @@ function tar_crc($header)
  */
 function tar_close($resource)
 {
-	fclose($resource['myfile']);
-	fix_permissions($resource['full']);
+	if (substr($resource['mode'],0,1)!='r')
+	{
+		if (is_null($resource['myfile']))
+		{
+			$chunk=pack('a1024','');
+			echo $chunk;
+		} else
+		{
+			$chunk=pack('a1024','');
+			if (fwrite($resource['myfile'],$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+
+			fclose($resource['myfile']);
+			fix_permissions($resource['full']);
+		}
+	} else
+	{
+		fclose($resource['myfile']);
+	}
 }
 
 

@@ -34,15 +34,15 @@ function load_html_page($string,$file_base=NULL)
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
 
-	$html=file_get_contents($file_base.'/'.$string,FILE_TEXT);
+	$html=file_get_contents($file_base.'/'.$string);
 
 	// Post-processing
 	if (strpos($html,'<html')!==false)
 	{
 		$matches=array();
 
-		// Fix links to anything in same dir, by assuming either uploads/website_specific or an ocP page in same zone
-		$link_attributes=array('src','href','action','data','codebase');
+		// Fix links to anything in same dir, by assuming eitheran ocP page in same zone -- or uploads/website_specific, or next to html files, or in root
+		$link_attributes=array('src','href','action','data','codebase','background');
 		foreach ($link_attributes as $attribute)
 		{
 			$num_matches=preg_match_all('#<[^<>]* '.$attribute.'="([^&"]+\.[^&"\.]+)"[^<>]*>#mis',$html,$matches);
@@ -79,6 +79,10 @@ function load_html_page($string,$file_base=NULL)
 						if (is_file(get_custom_file_base().'/'.dirname($string).'/'.$old_link))
 						{
 							$new_link=get_base_url().'/'.dirname($string).'/'.$old_link;
+						}
+						elseif (is_file(get_custom_file_base().'/'.$old_link))
+						{
+							$new_link=get_base_url().'/'.$old_link;
 						} else
 						{
 							$new_link=get_base_url().'/uploads/website_specific/'.$old_link;

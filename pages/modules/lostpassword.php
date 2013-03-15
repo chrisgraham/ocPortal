@@ -76,19 +76,29 @@ class Module_lostpassword
 	 */
 	function step1()
 	{
-		$title=get_page_title('RESET_PASSWORD');
+		$title=get_screen_title('RESET_PASSWORD');
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','username',trim(get_param('username','')),false));
-		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),'','email_address',trim(get_param('email_address','')),false));
+
+		$set_name='account';
+		$required=true;
+		$set_title=do_lang_tempcode('ACCOUNT');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_username(do_lang_tempcode('USERNAME'),'','username',trim(get_param('username','')),false));
+
+		$field_set->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),'','email_address',trim(get_param('email_address','')),false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		$text=do_lang_tempcode('_PASSWORD_RESET_TEXT');
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF');
 
 		breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'080e516fef7c928dbb9fb85beb6e435a','SKIP_VALIDATION'=>true,'JAVASCRIPT'=>'standardAlternateFields(\'username\',\'email_address\');','TITLE'=>$title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'080e516fef7c928dbb9fb85beb6e435a','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -98,7 +108,7 @@ class Module_lostpassword
 	 */
 	function step2()
 	{
-		$title=get_page_title('RESET_PASSWORD');
+		$title=get_screen_title('RESET_PASSWORD');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('RESET_PASSWORD'))));
 		breadcrumb_set_self(do_lang_tempcode('START'));
@@ -120,10 +130,6 @@ class Module_lostpassword
 		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='') && (has_specific_permission($member,'disable_lost_passwords')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
 			warn_exit(do_lang_tempcode('NO_RESET_ACCESS'));
-		}
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='remote')
-		{
-			warn_exit(do_lang_tempcode('NO_PASSWORD_RESET_REMOTE',ocp_srv('HTTP_HOST')));
 		}
 		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='httpauth')
 		{
@@ -163,7 +169,7 @@ class Module_lostpassword
 	 */
 	function step3()
 	{
-		$title=get_page_title('RESET_PASSWORD');
+		$title=get_screen_title('RESET_PASSWORD');
 
 		$code=get_param('code','');
 		if ($code=='')

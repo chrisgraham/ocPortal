@@ -106,6 +106,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 		require_code('form_templates');
 		require_code('themes2');
 		$ids=get_all_image_ids_type('ocf_default_avatars',true);
+
 		$found_it=false;
 		foreach ($ids as $id)
 		{
@@ -116,15 +117,23 @@ class Hook_Profiles_Tabs_Edit_avatar
 		$hidden=new ocp_tempcode();
 		if (has_specific_permission($member_id_viewing,'own_avatars'))
 		{
-			$javascript='standardAlternateFields(\'avatar_file\',\'avatar_alt_url\',\'avatar_stock*\',true);';
-			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'avatar_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$set_name='avatar';
+			$required=false;
+			$set_title=do_lang_tempcode('IMAGE');
+			$field_set=alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','avatar_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','avatar_alt_url',$found_it?'':$avatar_url,false));
+
+			$field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','avatar_stock',$ids,$avatar_url,NULL,NULL,false));
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 			handle_max_file_size($hidden,'image');
-			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'avatar_alt_url',$found_it?'':$avatar_url,false));
-			$fields->attach(form_input_picture_choose_specific(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('STOCK')),do_lang_tempcode('DESCRIPTION_ALTERNATE_STOCK'),'avatar_stock',$ids,$avatar_url,NULL,NULL,true));
 		} else
 		{
-			$javascript='';
-			$fields->attach(form_input_picture_choose_specific(do_lang_tempcode('STOCK'),'','avatar_stock',$ids,$avatar_url,NULL,NULL,true));
+			$fields->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','avatar_stock',$ids,$avatar_url,NULL,NULL,true));
 		}
 
 		if ($avatar_url!='')
@@ -143,6 +152,8 @@ class Hook_Profiles_Tabs_Edit_avatar
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('submitting_avatar_tab','1'));
+
+		$javascript='';
 
 		return array($title,$fields,$text,$javascript,$order,$hidden);
 	}

@@ -1,0 +1,23 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.comcode_error_help_div {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_right};
+		width: 45%;
+		padding: 0 1em;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+		margin-bottom: 1em;
+	{+END}
+}
+
+.comcode_error_details_div {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 55%;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+		padding-{!en_left}: 1em;
+		margin-bottom: 1em;
+	{+END}
+}

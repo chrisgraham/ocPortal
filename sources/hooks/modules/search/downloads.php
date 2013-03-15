@@ -160,7 +160,7 @@ class Hook_search_downloads
 		$text_summary_h=comcode_to_tempcode($_text_summary,NULL,false,60,NULL,NULL,false,false,false,false,false,$highlight_bits);
 		$LAX_COMCODE=false;
 		$text_summary=generate_text_summary($text_summary_h->evaluate(),$highlight_bits);
-		return get_download_html($row,true,true,NULL,$text_summary);
+		return render_download_box($row,true,true,NULL,$text_summary);
 	}
 
 }

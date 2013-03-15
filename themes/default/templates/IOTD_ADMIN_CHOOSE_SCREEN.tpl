@@ -18,7 +18,7 @@
 	<p class="nothing_here">{!NONE}</p>
 {+END}
 
-<a name="used" id="used"></a>
+<a id="used"></a>
 <h2>{!USED_IOTDS}</h2>
 
 {+START,IF,{SHOWING_OLD}}

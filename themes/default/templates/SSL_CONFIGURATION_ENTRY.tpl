@@ -1,10 +1,5 @@
-<div class="float_surrounder">
-	<label for="ssl_{ZONE*}__{PAGE*}">{ZONE*}:{PAGE*}</label>
-	{+START,IF,{TICKED}}
-		<input class="inline_image_2" type="checkbox" value="1" id="ssl_{ZONE*}__{PAGE*}" name="ssl_{ZONE*}__{PAGE*}" checked="checked" />
-	{+END}
-	{+START,IF,{$NOT,{TICKED}}}
-		<input class="inline_image_2" type="checkbox" value="1" id="ssl_{ZONE*}__{PAGE*}" name="ssl_{ZONE*}__{PAGE*}" />
-	{+END}
+<div class="float_surrounder vertical_alignment">
+	<label for="ssl_{ZONE*}__{PAGE*}"><kbd>{ZONE*}:{PAGE*}</kbd></label>
+	<input type="checkbox" value="1" id="ssl_{ZONE*}__{PAGE*}" name="ssl_{ZONE*}__{PAGE*}"{+START,IF,{TICKED}} checked="checked"{+END} />
 </div>
 

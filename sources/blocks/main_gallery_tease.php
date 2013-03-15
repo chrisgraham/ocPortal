@@ -87,6 +87,10 @@ class Block_main_gallery_tease
 		}
 		$query='FROM '.get_table_prefix().'galleries WHERE ('.$where.') AND name NOT LIKE \''.db_encode_like('download\_%').'\'';
 		$galleries=$GLOBALS['SITE_DB']->query('SELECT * '.$query.' ORDER BY add_date DESC',$max,$start);
+		if (count($galleries)==0) // Hmm, gallery itself then
+		{
+			$galleries=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'galleries WHERE '.db_string_equal_to('name',$parent_id).' ORDER BY add_date DESC',$max,$start);
+		}
 		foreach ($galleries as $child)
 		{
 			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name']),$zone);
@@ -101,7 +105,7 @@ class Block_main_gallery_tease
 			{
 				require_code('ocf_members');
 				require_code('ocf_members2');
-				$member_info=ocf_show_member_box($member_id,true);
+				$member_info=render_member_box($member_id,true);
 			} else $member_info=new ocp_tempcode();
 			list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($child['name']);
 			if (($num_images==0) && ($num_videos==0)) continue;
@@ -113,7 +117,7 @@ class Block_main_gallery_tease
 			if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
 			$add_date=get_timezoned_date($child['add_date'],false);
 
-			$sub=do_template('GALLERY_TEASE_PIC',array('_GUID'=>'37cd5f3fc64ac1c76f85980e69a50154','TEASER'=>$teaser,'ADD_DATE'=>$add_date,'NUM_CHILDREN'=>integer_format($num_children),'NUM_IMAGES'=>integer_format($num_images),'NUM_VIDEOS'=>integer_format($num_videos),'MEMBER_INFO'=>$member_info,'URL'=>$url,'PIC'=>$pic,'TITLE'=>$_title));
+			$sub=do_template('GALLERY_TEASE_PIC',array('_GUID'=>'37cd5f3fc64ac1c76f85980e69a50154','GALLERY'=>$child['name'],'TEASER'=>$teaser,'ADD_DATE'=>$add_date,'NUM_CHILDREN'=>integer_format($num_children),'NUM_IMAGES'=>integer_format($num_images),'NUM_VIDEOS'=>integer_format($num_videos),'MEMBER_INFO'=>$member_info,'URL'=>$url,'PIC'=>$pic,'TITLE'=>$_title));
 			$content->attach($sub);
 		}
 
@@ -124,7 +128,7 @@ class Block_main_gallery_tease
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start-$max),'_SELF');
 		$next_url=($page_num==$num_pages)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'6fb2def18957c246ddb2f19bf74abf9a','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'6fb2def18957c246ddb2f19bf74abf9a','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		return do_template('BLOCK_MAIN_GALLERY_TEASE',array('_GUID'=>'0e7f84042ab0c873155998eae41b8a16','CONTENT'=>$content,'BROWSE'=>$browse));
 	}

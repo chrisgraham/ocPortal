@@ -20,10 +20,12 @@
 
 require_code('forum/shared/vb');
 
+/**
+ * Forum Driver.
+ * @package		core_forum_drivers
+ */
 class forum_driver_vb22 extends forum_driver_vb_shared
 {
-
-
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *

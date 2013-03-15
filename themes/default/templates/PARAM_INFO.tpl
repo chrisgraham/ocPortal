@@ -1,10 +1,5 @@
 <div class="wide_table_wrap">
-	<table class="wide_table solidborder" summary="{!COLUMNED_TABLE}">
-		<colgroup>
-			<col style="width: 200px" />
-			<col style="width: 100%" />
-		</colgroup>
-
+	<table class="wide_table results_table autosized_table" summary="{!COLUMNED_TABLE}">
 		<thead>
 			<tr>
 				<th>{!NAME}</th>
@@ -20,7 +15,7 @@
 					</th>
 					<td>
 						{+START,IF_PASSED,_loop_var} {$,Is not NULL}
-							<div class="whitespace">{$PREG_REPLACE,\s*$,,{$PREG_REPLACE,^\s*,,{_loop_var*}}}</div>
+							<div class="whitespace_visible">{$PREG_REPLACE,\s*$,,{$PREG_REPLACE,^\s*,,{_loop_var*}}}</div>
 						{+END}
 					</td>
 				</tr>

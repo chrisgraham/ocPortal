@@ -75,10 +75,9 @@ class Block_main_recent_members
 			return do_template('BLOCK_NO_ENTRIES',array('HIGH'=>false,'TITLE'=>do_lang_tempcode('RECENT',make_string_tempcode(integer_format($number)),do_lang_tempcode('MEMBERS')),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>'','SUBMIT_URL'=>''));
 		} else
 		{
-			foreach ($rows as $i=>$row)
+			foreach ($rows as $row)
 			{
-				if ($i!=0) $out->attach(do_template('BLOCK_SEPARATOR'));
-				$out->attach(ocf_show_member_box($row['id'],true));
+				$out->attach(render_member_box($row['id'],true));
 			}
 		}
 

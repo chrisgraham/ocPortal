@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_member_avatars
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -61,7 +60,7 @@ class Hook_addon_registry_ocf_member_avatars
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -73,27 +72,26 @@ class Hook_addon_registry_ocf_member_avatars
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/notifications/ocf_choose_avatar.php',
 			'sources/hooks/systems/addon_registry/ocf_member_avatars.php',
 			'OCF_EDIT_AVATAR_TAB.tpl',
 			'uploads/ocf_avatars/index.html',
 			'uploads/ocf_avatars/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/avatar.php',
-			'themes/default/images/ocf_default_avatars/index.html',
+			'themes/default/images/ocf_default_avatars/index.html'
 		);
 	}
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'OCF_EDIT_AVATAR_TAB.tpl'=>'ocf_edit_avatar_tab',
-				);
+			'OCF_EDIT_AVATAR_TAB.tpl'=>'ocf_edit_avatar_tab'
+		);
 	}
 
 	/**
@@ -107,20 +105,17 @@ class Hook_addon_registry_ocf_member_avatars
 	{
 		require_lang('ocf');
 		require_css('ocf');
-		$avatar	=	do_lorem_template('OCF_TOPIC_POST_AVATAR',array(
-							'AVATAR'=>placeholder_image_url(),
-							)
-						);
+		$avatar=do_lorem_template('OCF_TOPIC_POST_AVATAR', array(
+			'AVATAR'=>placeholder_image_url()
+		));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_EDIT_AVATAR_TAB',array(
-					'USERNAME'=>lorem_word(),
-					'AVATAR'=>$avatar,
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_EDIT_AVATAR_TAB', array(
+				'USERNAME'=>lorem_word(),
+				'AVATAR'=>$avatar,
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number()
+			)), NULL, '', true)
 		);
 	}
 }

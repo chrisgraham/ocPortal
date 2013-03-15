@@ -1,17 +1,16 @@
-<div class="standardbox_classic"{$?,{$VALUE_OPTION,html5}, role="marquee"}>
+{+START,IF,{$NOT,{$VALUE_OPTION,no_frames}}}<div class="boxless_space global_side_panel">{+END}
 	{MESSAGES}
 
-	<form title="{!SHOUTBOX}" onsubmit="if (checkFieldForBlankness(this.elements['shoutbox_message'],event)) { disable_button_just_clicked(this); return true; } return false;" target="_self" action="{URL*}" method="post">
-		<div class="constrain_field">
-			<p class="accessibility_hidden"><label for="shoutbox_message">{!MESSAGE}</label></p>
-			<input value="" type="text" onfocus="if (this.value=='{!MESSAGE;}') this.value='';" id="shoutbox_message" name="shoutbox_message" alt="{!MESSAGE}" class="wide_field" />
-		</div>
-		<div class="proceed_button">
-			<input type="submit" value="{!SEND_MESSAGE}" class="wide_button" />
-		</div>
-	</form>
+	<form title="{!SHOUTBOX}" onsubmit="if (check_field_for_blankness(this.elements['shoutbox_message'],event)) { disable_button_just_clicked(this); return true; } return false;" target="_self" action="{URL*}" method="post">
+		{$INSERT_SPAMMER_BLACKHOLE}
 
-	<script type="text/javascript">// <![CDATA[
-		document.getElementById('shoutbox_message').setAttribute('autocomplete','off');
-	//]]></script>
-</div>
+		<div>
+			<p class="accessibility_hidden"><label for="shoutbox_message">{!MESSAGE}</label></p>
+			<p class="constrain_field"><input autocomplete="off" value="" type="text" onfocus="if (this.value=='{!MESSAGE;}') this.value='';" id="shoutbox_message" name="shoutbox_message" alt="{!MESSAGE}" class="wide_field" /></p>
+		</div>
+
+		<p class="proceed_button">
+			<input type="submit" value="{!SEND_MESSAGE}" class="wide_button" />
+		</p>
+	</form>
+{+START,IF,{$NOT,{$VALUE_OPTION,no_frames}}}</div>{+END}

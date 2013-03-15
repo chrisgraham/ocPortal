@@ -61,7 +61,7 @@ function foxy_utf8_to_nce($data='')
 		else return $data;
 	}
 
-	$max_count=5; // flag-bits in $max_mark ( 1111 1000 == 5 times 1)
+	$max_count=5; // flag-bits in $max_mark ( 1111 1000==5 times 1)
 	$max_mark=248; // marker for a (theoretical ;-)) 5-byte-char and mask for a 4-byte-char;
 
 	$html='';
@@ -80,7 +80,7 @@ function foxy_utf8_to_nce($data='')
 			for($byte_ctr=$max_count;$byte_ctr>2;$byte_ctr--)
 			{
 				// actual byte is utf-8-marker?
-				if (($old_val&$mark) == (($mark<<1) & 255 ))
+				if (($old_val&$mark)==(($mark<<1) & 255 ))
 				{
 					$utf8_marker=$byte_ctr-1;
 					break;
@@ -134,48 +134,48 @@ function foxy_utf8_to_nce($data='')
  */
 function utf8tohtml($utf8)
 {
-	$result = '';
-	for ($i = 0; $i < strlen($utf8); $i++)
+	$result='';
+	for ($i=0; $i < strlen($utf8); $i++)
 	{
-		$char = $utf8[$i];
-		$ascii = ord($char);
+		$char=$utf8[$i];
+		$ascii=ord($char);
 		if ($ascii < 128)
 		{
 			// one-byte character
-			$result .= $char;
+			$result.=$char;
 		} elseif ($ascii < 192)
 		{
 			// non-utf8 character or not a start byte
 		} elseif ($ascii < 224)
 		{
 			// two-byte character
-			$ascii1 = ord($utf8[$i+1]);
-			$unicode = (63 & $ascii) * 64 +
+			$ascii1=ord($utf8[$i+1]);
+			$unicode=(63 & $ascii) * 64 +
 					   (63 & $ascii1);
-			$result .= '&#'.strval($unicode).';';
-			$i += 1;
+			$result.='&#'.strval($unicode).';';
+			$i+=1;
 		} elseif ($ascii < 240)
 		{
 			// three-byte character
-			$ascii1 = ord($utf8[$i+1]);
-			$ascii2 = ord($utf8[$i+2]);
-			$unicode = (15 & $ascii) * 4096 +
+			$ascii1=ord($utf8[$i+1]);
+			$ascii2=ord($utf8[$i+2]);
+			$unicode=(15 & $ascii) * 4096 +
 					   (63 & $ascii1) * 64 +
 					   (63 & $ascii2);
-			$result .= '&#'.strval($unicode).';';
-			$i += 2;
+			$result.='&#'.strval($unicode).';';
+			$i+=2;
 		} elseif ($ascii < 248)
 		{
 			// four-byte character
-			$ascii1 = ord($utf8[$i+1]);
-			$ascii2 = ord($utf8[$i+2]);
-			$ascii3 = ord($utf8[$i+3]);
-			$unicode = (15 & $ascii) * 262144 +
+			$ascii1=ord($utf8[$i+1]);
+			$ascii2=ord($utf8[$i+2]);
+			$ascii3=ord($utf8[$i+3]);
+			$unicode=(15 & $ascii) * 262144 +
 					   (63 & $ascii1) * 4096 +
 					   (63 & $ascii2) * 64 +
 					   (63 & $ascii3);
-			$result .= '&#'.strval($unicode).';';
-			$i += 3;
+			$result.='&#'.strval($unicode).';';
+			$i+=3;
 		}
 	}
 	return $result;

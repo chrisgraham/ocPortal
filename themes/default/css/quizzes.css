@@ -3,96 +3,104 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-#survey table {
+.quiz_form table {
 	counter-reset: quiz_num;
 }
 
-#survey th, #survey td {
-	padding: 20px 20px 30px 20px;
+.quiz_field_name_column {
+	width: 28em;
 }
 
-#survey th>span {
+.quiz_field_input_column {
+	width: 100%;
+}
+
+.quiz_form th, .quiz_form td {
+	padding: 0.5em 2em 5em 4em;
+}
+
+.quiz_form th>span {
 	position: relative;
 	display: block;
 	padding-left: 60px;
 	z-index: 10;
 }
 
-#survey th:before {
+.quiz_form th:before {
 	content: counter(quiz_num);
 	counter-increment: quiz_num;
 	z-index: 5;
-	line-height: 1.6em;
-	font-size: 4em;
+	line-height: 1.8em;
+	font-size: 3.5em;
 	position: absolute;
-	margin-left: -10px;
-	color: #bdcbe1; /* {$,wizard, 35% seed + 65% W/B} */
+	margin-left: -1em;
+	color: {$GET,th_secondary_text};
 }
 
-#survey .filledin th:before {
+.quiz_form .filledin th:before {
 	font-size: 1.5em;
 }
 
-#survey .filledin td:before {
+.quiz_form .filledin td:before {
 	float: right;
 	width: 30px;
 	height: 30px;
 	content: " ";
-/*	content: "\221a"; Cool but misleading */
-	color: green;
-	opacity: 0.6;
+	/*content: "\221a"; Cool but misleading*/
+	color: {$GET,green_highlight_text};
+	{$BETA_CSS_PROPERTY,opacity: 0.6;}
 	background: url('{$IMG;,ocf_emoticons/thumbs}') top right no-repeat; /* For IE8, which doesn't support CSS3 */
 }
 
-#survey .filledin:nth-child(7n+1) td:before {
+.quiz_form .filledin:nth-child(7n+1) td:before {
 	background: url('{$IMG;,ocf_emoticons/thumbs}') top right no-repeat;
 }
 
-#survey .filledin:nth-child(7n+2) td:before {
+.quiz_form .filledin:nth-child(7n+2) td:before {
 	background: url('{$IMG;,ocf_emoticons/hippie}') top right no-repeat;
 }
 
-#survey .filledin:nth-child(7n+3) td:before {
+.quiz_form .filledin:nth-child(7n+3) td:before {
 	background: url('{$IMG;,ocf_emoticons/guitar}') top right no-repeat;
 }
 
-#survey .filledin:nth-child(7n+4) td:before {
+.quiz_form .filledin:nth-child(7n+4) td:before {
 	background: url('{$IMG;,ocf_emoticons/cool}') top right no-repeat;
 }
 
-#survey .filledin:nth-child(7n+5) td:before {
+.quiz_form .filledin:nth-child(7n+5) td:before {
 	background: url('{$IMG;,ocf_emoticons/glee}') top right no-repeat;
 }
 
-#survey .filledin:nth-child(7n+6) td:before {
+.quiz_form .filledin:nth-child(7n+6) td:before {
 	background: url('{$IMG;,ocf_emoticons/nod}') top right no-repeat;
 }
 
-#survey .filledin:nth-child(7n+7) td:before {
+.quiz_form .filledin:nth-child(7n+7) td:before {
 	background: url('{$IMG;,ocf_emoticons/party}') top right no-repeat;
 }
 
-#survey tr.filledin.field_input th, #survey tr.filledin.field_input td {
-	opacity: 0.5;
+.quiz_form tr.filledin.field_input th, .quiz_form tr.filledin.field_input td {
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
 
-#survey tr.field_input th, #survey tr.field_input td {
-	opacity: 0.8;
+.quiz_form tr.field_input th, .quiz_form tr.field_input td {
+	{$BETA_CSS_PROPERTY,opacity: 0.8;}
 }
 
-#survey tr.field_input:hover th, #survey tr.field_input:hover td {
-	opacity: 1.0 !important;
+.quiz_form tr.field_input:hover th, .quiz_form tr.field_input:hover td {
+	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;}
 }
 
-#survey td .input_radio {
+.quiz_form td .input_radio {
 	margin-bottom: 10px;
 	display: inline-block;
 }
 
-#survey td label {
+.quiz_form td label {
 	vertical-align: top;
 }
 
-#survey tr.field_input .constrain_field {
+.quiz_form tr.field_input .constrain_field {
 	margin-right: 35px;
 }

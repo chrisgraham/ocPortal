@@ -1,6 +1,32 @@
 <td class="calendar_year_month">
-	<!-- Layout table needed for grid alignment -->
-	<table summary="" class="variable_table">
+	<table summary="{!SPREAD_TABLE}" class="calendar_year_month_table">
+		<colgroup>
+			<col class="calendar_weekly_column" />
+			<col class="calendar_weekly_column" />
+			<col class="calendar_weekly_column" />
+			<col class="calendar_weekly_column" />
+			<col class="calendar_weekly_column" />
+			<col class="calendar_weekly_column" />
+			<col class="calendar_weekly_column" />
+		</colgroup>
+
+		<thead>
+			<tr>
+				{+START,IF,{$SSW}}
+				<th><span>{$SUBSTR,{!SUNDAY},0,1}</span></th>
+				{+END}
+				<th><span>{$SUBSTR,{!MONDAY},0,1}</span></th>
+				<th><span>{$SUBSTR,{!TUESDAY},0,1}</span></th>
+				<th><span>{$SUBSTR,{!WEDNESDAY},0,1}</span></th>
+				<th><span>{$SUBSTR,{!THURSDAY},0,1}</span></th>
+				<th><span>{$SUBSTR,{!FRIDAY},0,1}</span></th>
+				<th><span>{$SUBSTR,{!SATURDAY},0,1}</span></th>
+				{+START,IF,{$NOT,{$SSW}}}
+				<th><span>{$SUBSTR,{!SUNDAY},0,1}</span></th>
+				{+END}
+			</tr>
+		</thead>
+
 		<tbody>
 			{ENTRIES}
 		</tbody>

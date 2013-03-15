@@ -32,7 +32,7 @@ function seo_meta_erase_storage($type,$id)
 	delete_lang($rows[0]['meta_description']);
 	$GLOBALS['SITE_DB']->query_delete('seo_meta',array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
 
-	if (function_exists('persistant_cache_delete')) persistant_cache_delete(array('seo',$type,$id));
+	if (function_exists('persistent_cache_delete')) persistent_cache_delete(array('seo',$type,$id));
 }
 
 /**
@@ -90,7 +90,7 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 
 	if (function_exists('decache')) decache('side_tag_cloud');
 
-	if (function_exists('persistant_cache_delete')) persistant_cache_delete(array('seo',$type,$id));
+	if (function_exists('persistent_cache_delete')) persistent_cache_delete(array('seo',$type,$id));
 }
 
 /**

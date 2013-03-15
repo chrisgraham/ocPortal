@@ -178,9 +178,9 @@ function notifications_ui($member_id_of)
 	{
 		$tmp_file=file_get_contents($css_path);
 		$matches=array();
-		if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+		if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 		{
-			$color=$matches[1];
+			$color=$matches[3].'&fgcolor='.$matches[4];
 		}
 	}
 
@@ -190,7 +190,7 @@ function notifications_ui($member_id_of)
 		$auto_monitor_contrib_content=strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_auto_monitor_contrib_content'));
 	}
 
-	return do_template('NOTIFICATIONS_MANAGE',array('COLOR'=>$color,'AUTO_NOTIFICATION_CONTRIB_CONTENT'=>$auto_monitor_contrib_content,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
+	return do_template('NOTIFICATIONS_MANAGE',array('_GUID'=>'838165ca739c45c2dcf994bed6fefe3e','COLOR'=>$color,'AUTO_NOTIFICATION_CONTRIB_CONTENT'=>$auto_monitor_contrib_content,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
 }
 
 /**
@@ -218,7 +218,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	$ob=_get_notification_ob_for_code($notification_code);
 	$info_details=$ob->list_handled_codes();
 
-	$title=get_page_title('NOTIFICATION_MANAGEMENT_FOR',true,array(escape_html($info_details[$notification_code][1])));
+	$title=get_screen_title('NOTIFICATION_MANAGEMENT_FOR',true,array(escape_html($info_details[$notification_code][1])));
 
 	if (is_guest()) access_denied('NOT_AS_GUEST');
 
@@ -230,18 +230,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	$_notification_types=_get_available_notification_types(get_member());
 
 	$notification_category=get_param('id',NULL);
-	if (!is_null($notification_category))
-	{
-		if (notifications_enabled($notification_code,$notification_category))
-		{
-			enable_notifications($notification_code,$notification_category,NULL,A_NA);
-			attach_message($disable_message,'inform');
-		} else
-		{
-			enable_notifications($notification_code,$notification_category);
-			attach_message($enable_message,'inform');
-		}
-	} else
+	if (is_null($notification_category))
 	{
 		if (count($_POST)!=0) // If we've just saved
 		{
@@ -276,6 +265,15 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 				return redirect_screen($title,$redirect,do_lang_tempcode('SUCCESS'));
 			}
 		}
+	} else
+	{
+		if (notifications_enabled($notification_code,$notification_category))
+		{
+			attach_message($disable_message,'inform');
+		} else
+		{
+			attach_message($enable_message,'inform');
+		}
 	}
 
 	$tree=_notifications_build_category_tree($_notification_types,$notification_code,$ob,NULL);
@@ -296,9 +294,9 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	{
 		$tmp_file=file_get_contents($css_path);
 		$matches=array();
-		if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+		if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 		{
-			$color=$matches[1];
+			$color=$matches[3].'&fgcolor='.$matches[4];
 		}
 	}
 
@@ -320,9 +318,10 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
  * @param  object			Notificiation hook object
  * @param  ?ID_TEXT		Category we're looking under (NULL: root)
  * @param  integer		Recursion depth
+ * @param  ?boolean		Value to change setting to (NULL: do not change)
  * @return tempcode		UI
  */
-function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0)
+function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0,$force_change_children_to=NULL)
 {
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
 
@@ -335,6 +334,27 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 
 		$current_setting=notifications_setting($notification_code,$notification_category);
 		if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
+
+		$notification_category_being_changed=get_param('id',NULL);
+		if (($notification_category_being_changed===$notification_category) || ($force_change_children_to!==NULL))
+		{
+			if (($force_change_children_to===false/*If recursively disabling*/) || (($force_change_children_to===NULL) && ($current_setting!=A_NA)/*If explicitly toggling this one to disabled*/))
+			{
+				enable_notifications($notification_code,$notification_category,NULL,A_NA);
+				$force_change_children_to_children=false;
+			} else
+			{
+				enable_notifications($notification_code,$notification_category);
+				$force_change_children_to_children=true;
+			}
+		} else
+		{
+			$force_change_children_to_children=$force_change_children_to;
+		}
+
+		$current_setting=notifications_setting($notification_code,$notification_category);
+		if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
+
 		$notification_types=array();
 		foreach ($_notification_types as $possible=>$ntype)
 		{
@@ -367,7 +387,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		$children=new ocp_tempcode();
 		if ((array_key_exists('num_children',$c)) && ($c['num_children']!=0))
 		{
-			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1);
+			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1,$force_change_children_to_children);
 		}
 
 		$notification_categories[]=array(
@@ -387,4 +407,34 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 	));
 
 	return $tree;
+}
+
+/**
+ * Copy notification settings from a parent category to a child category.
+ *
+ * @param  ID_TEXT		Parent category type
+ * @param  ID_TEXT		Parent category ID
+ * @param  ID_TEXT		Child category ID
+ */
+function copy_notifications_to_new_child($notification_code,$id,$child_id)
+{
+	// Copy notifications over to new children
+	$_start=0;
+	do
+	{
+		$notifications_to=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_member_id','l_setting'),array('l_notification_code'=>$notification_code,'l_code_category'=>$id),'',100,$_start);
+
+		foreach ($notifications_to as $notification_to)
+		{
+			$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
+				'l_member_id'=>$notification_to['l_member_id'],
+				'l_notification_code'=>$notification_code,
+				'l_code_category'=>$child_id,
+				'l_setting'=>$notification_to['l_setting'],
+			));
+		}
+
+		$_start+=100;
+	}
+	while (count($notifications_to)!=0);
 }

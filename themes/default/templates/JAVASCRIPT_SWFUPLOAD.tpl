@@ -5,7 +5,7 @@
  *
  * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
  *
- * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzen and Mammon Media and is released under the MIT License:
+ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzon and Mammon Media and is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
  * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
@@ -62,7 +62,7 @@ SWFUpload.QUEUE_ERROR = {
 };
 SWFUpload.UPLOAD_ERROR = {
 	HTTP_ERROR				  		: -200,
-	MISSING_UPLOAD_URL	      		: -210,
+	MISSING_UPLOAD_URL					: -210,
 	IO_ERROR				  		: -220,
 	SECURITY_ERROR			  		: -230,
 	UPLOAD_LIMIT_EXCEEDED	  		: -240,
@@ -220,7 +220,7 @@ SWFUpload.prototype.loadFlash = function () {
 
 	// Append the container and load the flash
 	tempParent = document.createElement("div");
-	setInnerHTML(tempParent,this.getFlashHTML());
+	set_inner_html(tempParent,this.getFlashHTML());
 	var next=tempParent.firstChild.nextSibling;
 	targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
 	if (next) targetElement.appendChild(next);
@@ -358,7 +358,7 @@ SWFUpload.prototype.destroy = function () {
 		this.eventQueue = null;
 		this.movieName = null;
 
-		
+
 		return true;
 	} catch (ex2) {
 		return false;
@@ -377,47 +377,47 @@ SWFUpload.prototype.displayDebugInfo = function () {
 			"Version: ", SWFUpload.version, "\n",
 			"Movie Name: ", this.movieName, "\n",
 			"Settings:\n",
-			"\t", "upload_url:               ", this.settings.upload_url, "\n",
-			"\t", "flash_url:                ", this.settings.flash_url, "\n",
-			"\t", "use_query_string:         ", this.settings.use_query_string.toString(), "\n",
-			"\t", "requeue_on_error:         ", this.settings.requeue_on_error.toString(), "\n",
-			"\t", "http_success:             ", this.settings.http_success.join(", "), "\n",
-			"\t", "assume_success_timeout:   ", this.settings.assume_success_timeout, "\n",
-			"\t", "file_post_name:           ", this.settings.file_post_name, "\n",
-			"\t", "post_params:              ", this.settings.post_params.toString(), "\n",
-			"\t", "file_types:               ", this.settings.file_types, "\n",
-			"\t", "file_types_description:   ", this.settings.file_types_description, "\n",
-			"\t", "file_size_limit:          ", this.settings.file_size_limit, "\n",
-			"\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
-			"\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
-			"\t", "debug:                    ", this.settings.debug.toString(), "\n",
+			"\t", "upload_url:					", this.settings.upload_url, "\n",
+			"\t", "flash_url:					 ", this.settings.flash_url, "\n",
+			"\t", "use_query_string:			", this.settings.use_query_string.toString(), "\n",
+			"\t", "requeue_on_error:			", this.settings.requeue_on_error.toString(), "\n",
+			"\t", "http_success:				 ", this.settings.http_success.join(", "), "\n",
+			"\t", "assume_success_timeout:	", this.settings.assume_success_timeout, "\n",
+			"\t", "file_post_name:			  ", this.settings.file_post_name, "\n",
+			"\t", "post_params:				  ", this.settings.post_params.toString(), "\n",
+			"\t", "file_types:					", this.settings.file_types, "\n",
+			"\t", "file_types_description:	", this.settings.file_types_description, "\n",
+			"\t", "file_size_limit:			 ", this.settings.file_size_limit, "\n",
+			"\t", "file_upload_limit:		  ", this.settings.file_upload_limit, "\n",
+			"\t", "file_queue_limit:			", this.settings.file_queue_limit, "\n",
+			"\t", "debug:						  ", this.settings.debug.toString(), "\n",
 
-			"\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
+			"\t", "prevent_swf_caching:		", this.settings.prevent_swf_caching.toString(), "\n",
 
-			"\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
-			"\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
-			"\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
-			"\t", "button_width:             ", this.settings.button_width.toString(), "\n",
-			"\t", "button_height:            ", this.settings.button_height.toString(), "\n",
-			"\t", "button_text:              ", this.settings.button_text.toString(), "\n",
-			"\t", "button_text_style:        ", this.settings.button_text_style.toString(), "\n",
+			"\t", "button_placeholder_id:	 ", this.settings.button_placeholder_id.toString(), "\n",
+			"\t", "button_placeholder:		 ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
+			"\t", "button_image_url:			", this.settings.button_image_url.toString(), "\n",
+			"\t", "button_width:				 ", this.settings.button_width.toString(), "\n",
+			"\t", "button_height:				", this.settings.button_height.toString(), "\n",
+			"\t", "button_text:				  ", this.settings.button_text.toString(), "\n",
+			"\t", "button_text_style:		  ", this.settings.button_text_style.toString(), "\n",
 			"\t", "button_text_top_padding:  ", this.settings.button_text_top_padding.toString(), "\n",
 			"\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
-			"\t", "button_action:            ", this.settings.button_action.toString(), "\n",
-			"\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
+			"\t", "button_action:				", this.settings.button_action.toString(), "\n",
+			"\t", "button_disabled:			 ", this.settings.button_disabled.toString(), "\n",
 
-			"\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
+			"\t", "custom_settings:			 ", this.settings.custom_settings.toString(), "\n",
 			"Event Handlers:\n",
 			"\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
 			"\t", "file_dialog_start_handler assigned: ", (typeof this.settings.file_dialog_start_handler === "function").toString(), "\n",
-			"\t", "file_queued_handler assigned:       ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
+			"\t", "file_queued_handler assigned:		 ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
 			"\t", "file_queue_error_handler assigned:  ", (typeof this.settings.file_queue_error_handler === "function").toString(), "\n",
-			"\t", "upload_start_handler assigned:      ", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
-			"\t", "upload_progress_handler assigned:   ", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
-			"\t", "upload_error_handler assigned:      ", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
-			"\t", "upload_success_handler assigned:    ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
-			"\t", "upload_complete_handler assigned:   ", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
-			"\t", "debug_handler assigned:             ", (typeof this.settings.debug_handler === "function").toString(), "\n"
+			"\t", "upload_start_handler assigned:		", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
+			"\t", "upload_progress_handler assigned:	", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
+			"\t", "upload_error_handler assigned:		", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
+			"\t", "upload_success_handler assigned:	 ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
+			"\t", "upload_complete_handler assigned:	", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
+			"\t", "debug_handler assigned:				 ", (typeof this.settings.debug_handler === "function").toString(), "\n"
 		].join("")
 	);
 };
@@ -474,7 +474,7 @@ SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	-- Flash control methods --
 	Your UI should use these
 	to operate SWFUpload
-   ***************************** */
+	***************************** */
 
 // WARNING: this function does not work in Flash Player 10
 // Public: selectFile causes a File Selection Dialog window to appear.  This
@@ -518,10 +518,10 @@ SWFUpload.prototype.stopUpload = function () {
 
 /* ************************
  * Settings methods
- *   These methods change the SWFUpload settings.
- *   SWFUpload settings should not be changed directly on the settings object
- *   since many of the settings need to be passed to Flash in order to take
- *   effect.
+ *	These methods change the SWFUpload settings.
+ *	SWFUpload settings should not be changed directly on the settings object
+ *	since many of the settings need to be passed to Flash in order to take
+ *	effect.
  * *********************** */
 
 // Public: getStats gets the file statistics object.
@@ -914,7 +914,7 @@ SWFUpload.prototype.uploadComplete = function (file) {
 };
 
 /* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
-   internal debug console.  You can override this event and have messages written where you want. */
+	internal debug console.  You can override this event and have messages written where you want. */
 SWFUpload.prototype.debug = function (message) {
 	this.queueEvent("debug_handler", message);
 };
@@ -932,7 +932,7 @@ SWFUpload.prototype.debug = function (message) {
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
-   
+
 // Private: debugMessage is the default debug_handler.  If you want to print debug messages
 // call the debug() function.  When overriding the function your own function should
 // check to see if the debug setting is true before outputting debug information.
@@ -947,7 +947,7 @@ SWFUpload.prototype.debugMessage = function (message) {
 					exceptionValues.push(key + ": " + message[key]);
 				}
 			}
-			exceptionMessage = exceptionValues.join("\n") || "";
+			exceptionMessage = exceptionValues.join("\n");
 			exceptionValues = exceptionMessage.split("\n");
 			exceptionMessage = "EXCEPTION: " + exceptionValues.join("\nEXCEPTION: ");
 			SWFUpload.Console.writeLine(exceptionMessage);
@@ -1029,7 +1029,7 @@ function FileProgress(file, targetID) {
 
 		var progressStatus = document.createElement("div");
 		progressStatus.className = "progressBarStatus";
-		setInnerHTML(progressStatus,"&nbsp;");
+		set_inner_html(progressStatus,"&nbsp;");
 
 		this.fileProgressElement.appendChild(progressCancel);
 		this.fileProgressElement.appendChild(progressText);
@@ -1042,7 +1042,7 @@ function FileProgress(file, targetID) {
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
 		if (typeof file.name!='undefined')
-			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
+			set_inner_html(this.fileProgressElement.childNodes[1],file.name);
 	}
 
 	this.height = this.fileProgressWrapper.offsetHeight;
@@ -1087,7 +1087,7 @@ FileProgress.prototype.setCancelled = function () {
 	}, 2000);
 };
 FileProgress.prototype.setStatus = function (status) {
-	setInnerHTML(this.fileProgressElement.childNodes[2],status);
+	set_inner_html(this.fileProgressElement.childNodes[2],status);
 };
 
 // Show/Hide the cancel button
@@ -1177,94 +1177,99 @@ function swfUploadLoaded(ob) {
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
 	ob.originalClickHandler = old_onclick;
-	btnSubmit.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
+	btnSubmit.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob,recurse); };
 
 	// Preview button too
 	var btnSubmit2 = document.getElementById('preview_button');
 	if (btnSubmit2)
 	{
 		var old_onclick2=btnSubmit2.onclick;
-		btnSubmit2.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
+		btnSubmit2.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob,recurse); };
 	}
 }
 
 // Called by the submit button to start the upload
-function doSubmit(e,ob) {
+function doSubmit(e,ob,recurse) {
+	/*
+	This routine is rather complex. Essentially the uploader takes control of form submission, sitting in front of it, cancelling the form submission in it's own code.
+	Rather than a normal form submit, click handlers on the submit button are chained after the upload is confirmed okay.
+	If the full chain of click handlers returns true (same as checking the top click handler, which is put in originalClickHandler) then the form submit is manually triggered.
+	*/
+
 	if (formChecker != null) {
 		clearInterval(formChecker);
 		formChecker = null;
 	}
 
-	ob.submitting=true;
+	window.just_checking_requirements=true;
 
-	window.just_checking_requirements=false;
+	ob.submitting=true;
 
 	var btnSubmit=document.getElementById(ob.settings.btnSubmitID);
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-	if (txtFileName.value == '')
+	if (txtFileName.value == '') // Field not filled in
 	{
 		var ret=true;
 		if (ob.settings.required)
 		{
-			setFieldError(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
+			set_field_error(document.getElementById(ob.settings.txtName),'{!REQUIRED_NOT_FILLED_IN;^}');
 			ret=false;
-			window.just_checking_requirements=true;
 		}
-
 		window.form_submitting=btnSubmit.form; // For IE
 		if (typeof ob.originalClickHandler=='undefined')
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return false;
 			if (!ret) return false;
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
-		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
-		if (ret2 && !ret)
-			window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
 
-		return ret && ret2;
+		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
+		if (ret2 && !ret)
+			window.fauxmodal_alert('{!REQUIRED_NOT_FILLED_IN;^}');
+		if (!recurse && ret && ret2) btnSubmit.form.submit(); // If we aren't stuck in a recursion, and the field did not need filling in, and submit handler says otherwise okay, trigger the form to submit explicitly
+		return ret && ret2; // Whether submit may happen (the field did not need filling in, and submit handler says otherwise okay)
 	}
 
 	e = e || window.event;
 	if ((typeof e!='undefined') && (e))
 	{
-		cancelBubbling(e);
+		cancel_bubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
 
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
-	if (txtID.value == '-1')
+	if (txtID.value == '-1') // Has not uploaded yet
 	{
 		btnSubmit.disabled = true;
-		ob.startUpload();
-		smoothScroll(findPosY(txtFileName,true));
-	} else
+		ob.startUpload(); // Start the upload
+		smooth_scroll(find_pos_y(txtFileName,true));
+	} else // Has uploaded
 	{
 		window.form_submitting=btnSubmit.form; // For IE
 
 		if (typeof ob.originalClickHandler=='undefined')
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return false;
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 
-		if (ob.originalClickHandler(e,ob,btnSubmit.form))
+		if (ob.originalClickHandler(e,ob,btnSubmit.form,true))
 		{
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 	}
 
-	return false;
+	return false; // Either has not uploaaded yet, or a submit handler otherwise blocked submission (which we must relay)
 }
 
 function fileDialogStart(ob) {
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-	txtFileName.value = "";
+	txtFileName.value = '';
 	var id = document.getElementById(ob.settings.txtFileDbID);
-	id.value = "-1";
+	id.value = '-1';
 	ob.customSettings.upload_successful = false;
 
 	this.cancelUpload();
@@ -1276,23 +1281,23 @@ function fileQueueError(file, errorCode, message, ob)  {
 	// Handle this error separately because we don't want to create a FileProgress element for it.
 	switch (errorCode) {
 		case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
-			window.fauxmodal_alert("You have attempted to queue too many files.\n" + (message === 0 ? "You have reached the upload limit." : "You may select " + (message > 1 ? "up to " + message + " files." : "one file.")));
+			window.fauxmodal_alert('You have attempted to queue too many files.\n' + (message === 0 ? 'You have reached the upload limit.' : 'You may select ' + (message > 1 ? 'up to ' + message + ' files.' : 'one file.')));
 			return;
 		case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-			window.fauxmodal_alert("{!FILE_TOO_BIG_GENERAL^#}");
-			this.debug("Error Code: File too big, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			window.fauxmodal_alert('{!FILE_TOO_BIG_GENERAL;^}');
+			this.debug('Error Code: File too big, File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			return;
 		case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-			window.fauxmodal_alert("{!FILE_WAS_EMPTY^#}");
-			this.debug("Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			window.fauxmodal_alert('{!FILE_WAS_EMPTY;^}');
+			this.debug('Error Code: Zero byte file, File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			return;
 		case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-			window.fauxmodal_alert("{!INVALID_FILE_TYPE_GENERAL^#,xxx}".replace(/xxx/,ob.settings.file_types));
-			this.debug("Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL^#,xxx}'.replace(/xxx/,ob.settings.file_types));
+			this.debug('Error Code: Invalid File Type, File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			return;
 		default:
-			window.fauxmodal_alert("{!INTERNAL_ERROR^#}");
-			this.debug("Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			window.fauxmodal_alert('{!INTERNAL_ERROR;^}');
+			this.debug('Error Code: ' + errorCode + ', File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			return;
 	}
 }
@@ -1309,13 +1314,13 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
 	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
 
-	if (page_type=="attachment")
+	if (page_type=='attachment')
 	{
 		var current_num=name.replace('file', '');
-		setAttachment(posting_field_name,current_num,file_name);
+		set_attachment(posting_field_name,current_num,file_name);
 		document.getElementById(name).onchange=null;
 	}
-	if (page_type=="upload_multi")
+	if (page_type=='upload_multi')
 	{
 		document.getElementById(name).onchange=null;
 
@@ -1334,7 +1339,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 			var nextField=document.createElement('input');
 			nextField.className='input_upload';
 			nextField.setAttribute('id','multi_'+nextNum);
-			nextField.onchange=_ensureNextFieldUpload;
+			nextField.onchange=window._ensure_next_field_upload;
 			nextField.setAttribute('type','file');
 			nextField.name=nameStub+nextNum;
 			var br=document.createElement('br');
@@ -1364,7 +1369,7 @@ function fireFakeChangeFor(name,value)
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-		if ((txtID.value == '-1') && (txtFileName.value != ""))
+		if ((txtID.value == '-1') && (txtFileName.value != ''))
 		{
 			ob.submitting=false;
 			ob.startUpload();
@@ -1381,16 +1386,16 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 
 	var progress = new FileProgress(file, this.customSettings.progress_target);
 	progress.setProgress(percent);
-	progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+	progress.setStatus('{!SWFUPLOAD_UPLOADING;^}');
 }
 
 function uploadSuccess(file, serverData, _, ob) {
 	var progress = new FileProgress(file, this.customSettings.progress_target);
 	progress.setComplete();
-	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
+	progress.setStatus('{!SWFUPLOAD_COMPLETE;^}');
 	progress.toggleCancel(false);
 
-	if (serverData === " ") {
+	if (serverData === ' ') {
 		this.customSettings.upload_successful = false;
 	} else {
 		this.customSettings.upload_successful = true;
@@ -1417,15 +1422,15 @@ function uploadComplete(file, ob) {
 	} else {
 		var progress = new FileProgress(file, this.customSettings.progress_target);
 		progress.setError();
-		progress.setStatus("File rejected");
+		progress.setStatus('File rejected');
 		progress.toggleCancel(false);
 
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 
-		if (txtFileName.value != "")
-			window.fauxmodal_alert("{!INTERNAL_ERROR^#}");
+		if (txtFileName.value != '')
+			window.fauxmodal_alert('{!INTERNAL_ERROR;^}');
 
-		txtFileName.value = "";
+		txtFileName.value = '';
 		fireFakeChangeFor(ob.settings.txtName,'');
 		document.getElementById(ob.settings.btnSubmitID).disabled = false;
 	}
@@ -1438,22 +1443,22 @@ function uploadError(file, errorCode, message, ob) {
 	}
 
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-	txtFileName.value = "";
+	txtFileName.value = '';
 	fireFakeChangeFor(ob.settings.txtName,'');
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
 
 	// Handle this error separately because we don't want to create a FileProgress element for it.
 	switch (errorCode) {
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
-			window.fauxmodal_alert("{!ONLY_ONE_FILE^#}");
-			this.debug("Error Code: Upload Limit Exceeded, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			window.fauxmodal_alert('{!ONLY_ONE_FILE;^}');
+			this.debug('Error Code: Upload Limit Exceeded, File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			return;
 		case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
 			break;
 		default:
-			window.fauxmodal_alert("An error occurred in the upload. Try again later.");
-			this.debug("Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			window.fauxmodal_alert('An error occurred in the upload. Try again later.');
+			this.debug('Error Code: ' + errorCode + ', File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			return;
 	}
 
@@ -1463,28 +1468,28 @@ function uploadError(file, errorCode, message, ob) {
 
 	switch (errorCode) {
 		case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
-			progress.setStatus("Upload Error");
-			this.debug("Error Code: HTTP Error, File name: " + file.name + ", Message: " + message);
+			progress.setStatus('Upload Error');
+			this.debug('Error Code: HTTP Error, File name: ' + file.name + ', Message: ' + message);
 			break;
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
-			progress.setStatus("{!SWFUPLOAD_FAILED^#}");
-			this.debug("Error Code: Upload Failed, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+			progress.setStatus('{!SWFUPLOAD_FAILED;^}');
+			this.debug('Error Code: Upload Failed, File name: ' + file.name + ', File size: ' + file.size + ', Message: ' + message);
 			break;
 		case SWFUpload.UPLOAD_ERROR.IO_ERROR:
-			progress.setStatus("Server (IO) Error");
-			this.debug("Error Code: IO Error, File name: " + file.name + ", Message: " + message);
+			progress.setStatus('Server (IO) Error');
+			this.debug('Error Code: IO Error, File name: ' + file.name + ', Message: ' + message);
 			break;
 		case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:
-			progress.setStatus("Security Error");
-			this.debug("Error Code: Security Error, File name: " + file.name + ", Message: " + message);
+			progress.setStatus('Security Error');
+			this.debug('Error Code: Security Error, File name: ' + file.name + ', Message: ' + message);
 			break;
 		case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
-			progress.setStatus("{!SWFUPLOAD_CANCELLED^#}");
-			this.debug("Error Code: Upload Cancelled, File name: " + file.name + ", Message: " + message);
+			progress.setStatus('{!SWFUPLOAD_CANCELLED;^}');
+			this.debug('Error Code: Upload Cancelled, File name: ' + file.name + ', Message: ' + message);
 			break;
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
-			progress.setStatus("{!SWFUPLOAD_STOPPED^#}");
-			this.debug("Error Code: Upload Stopped, File name: " + file.name + ", Message: " + message);
+			progress.setStatus('{!SWFUPLOAD_STOPPED;^}');
+			this.debug('Error Code: Upload Stopped, File name: ' + file.name + ', Message: ' + message);
 			break;
 	}
 }
@@ -1504,8 +1509,8 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
-	if (typeof filter=='undefined') var filter="{$CONFIG_OPTION#,valid_types}";
-	if (filter=='') filter="{$CONFIG_OPTION#,valid_types}";
+	if (typeof filter=='undefined') var filter='{$CONFIG_OPTION;,valid_types}';
+	if (filter=='') filter='{$CONFIG_OPTION;,valid_types}';
 	filter+=','+filter.toUpperCase();
 
 	var rep=document.getElementById(name);
@@ -1535,9 +1540,9 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			{
 				try
 				{
-					if(navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin)
+					if(navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin)
 					{
-						return (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]).description.replace(/\D+/g, ",").match(/^,?(.+),?$/)[1];
+						return (navigator.plugins['Shockwave Flash 2.0'] || navigator.plugins['Shockwave Flash']).description.replace(/\D+/g, ',').match(/^,?(.+),?$/)[1];
 					}
 				}
 				catch(e) {}
@@ -1630,11 +1635,24 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	maindiv.appendChild(hidFileID);
 
 	var disable_link=document.createElement('a');
-	setInnerHTML(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
+	set_inner_html(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
 	disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
 	disable_link.className='associated_details';
+	disable_link.target='_blank';
 	disable_link.onclick=function(e) {
-		if ((window.handle_form_saving) && document.getElementById('post')) handle_form_saving(e,document.getElementById('post'),true);
+		if ((window.handle_form_saving) && document.getElementById(posting_field_name)) handle_form_saving(e,document.getElementById(posting_field_name),true);
+
+		window.fauxmodal_confirm(
+			'{!DISABLE_SWFUPLOAD_CONFIRM;}',
+			function(proceeding)
+			{
+				if (proceeding)
+					click_link(disable_link);
+			},
+			'{!Q_SURE;}'
+		);
+
+		return false;
 	}
 	maindiv.appendChild(disable_link);
 
@@ -1667,30 +1685,30 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 		var random=Math.floor(Math.random()*100000);
 
-		var base="{$CONFIG_OPTION#*,java_ftp_path}";
+		var base='{$CONFIG_OPTION*;,java_ftp_path}';
 		if (base.substr(base.length-1,1)!='/') base+='/';
 		hidFileID.value=''+random+'.dat';
 
 		var colorAt=rep.parentNode,backgroundColor;
 		do
 		{
-			backgroundColor=abstractGetComputedStyle(colorAt,'background-color');
+			backgroundColor=abstract_get_computed_style(colorAt,'background-color');
 			colorAt=colorAt.parentNode;
 		}
 		while ((colorAt) && (backgroundColor) && (backgroundColor=='transparent'));
 		if ((!backgroundColor) || (backgroundColor=='transparent')) backgroundColor='#FFFFFF';
-		var foregroundColor=abstractGetComputedStyle(rep.parentNode,'color');
+		var foregroundColor=abstract_get_computed_style(rep.parentNode,'color');
 		if (!foregroundColor) foregroundColor='#000000';
 		var matches;
-		function decToHex(number)
+		function dec_to_hex(number)
 		{
-			var hexbase="0123456789ABCDEF";
+			var hexbase='0123456789ABCDEF';
 			return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 		}
 		matches=backgroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) backgroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) backgroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 		matches=foregroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) foregroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) foregroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 
 		var out='';
 		var maxLength=(typeof btnSubmit.form.elements['MAX_FILE_SIZE']=='undefined')?'2000000000':(btnSubmit.form.elements['MAX_FILE_SIZE'].value);
@@ -1713,28 +1731,28 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
 		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
 		out+='	<param name="types" value="'+escape_html(filter)+'" />';
-		out+='	<param name="fail_message" value="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" />';
-		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message^;*}" />';
-		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title^;*}" />';
-		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label^;*}" />';
-		out+='	<param name="refused_connection" value="{!JAVA_FTP_refused_connection^;*}" />';
-		out+='	<param name="output_complete" value="{!JAVA_FTP_output_complete^;*}" />';
-		out+='	<param name="transfer_error" value="{!JAVA_FTP_transfer_error^;*}" />';
-		out+='	<param name="file_name_label" value="{!JAVA_FTP_file_name_label^;*}" />';
-		out+='	<param name="browse_label" value="{!JAVA_FTP_browse_label^;*}" />';
-		out+='	<param name="upload_label" value="{!JAVA_FTP_upload_label^;*}" />';
-		out+='	<param name="please_choose_file" value="{!JAVA_FTP_please_choose_file^;*}" />';
-		out+='	<param name="wrong_path" value="{!JAVA_FTP_wrong_path^;*}" />';
-		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label^;*}" />';
-		out+='	<param name="too_large" value="{!JAVA_FTP_too_large^;*}" />';
+		out+='	<param name="fail_message" value="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" />';
+		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message*;^}" />';
+		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title*;^}" />';
+		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label*;^}" />';
+		out+='	<param name="refused_connection" value="{!JAVA_FTP_refused_connection*;^}" />';
+		out+='	<param name="output_complete" value="{!JAVA_FTP_output_complete*;^}" />';
+		out+='	<param name="transfer_error" value="{!JAVA_FTP_transfer_error*;^}" />';
+		out+='	<param name="file_name_label" value="{!JAVA_FTP_file_name_label*;^}" />';
+		out+='	<param name="browse_label" value="{!JAVA_FTP_browse_label*;^}" />';
+		out+='	<param name="upload_label" value="{!JAVA_FTP_upload_label*;^}" />';
+		out+='	<param name="please_choose_file" value="{!JAVA_FTP_please_choose_file*;^}" />';
+		out+='	<param name="wrong_path" value="{!JAVA_FTP_wrong_path*;^}" />';
+		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label*;^}" />';
+		out+='	<param name="too_large" value="{!JAVA_FTP_too_large*;^}" />';
 		out+='	<comment>';
-		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" uploaded_message="{!JAVA_FTP_uploaded_message^;*}" reverting_title="{!JAVA_FTP_reverting_title^;*}" valid_types_label="{!JAVA_FTP_valid_types_label^;*}" refused_connection="{!JAVA_FTP_refused_connection^;*}" output_complete="{!JAVA_FTP_output_complete^;*}" transfer_error="{!JAVA_FTP_transfer_error^;*}" file_name_label="{!JAVA_FTP_file_name_label^;*}" browse_label="{!JAVA_FTP_browse_label^;*}" upload_label="{!JAVA_FTP_upload_label^;*}" please_choose_file="{!JAVA_FTP_please_choose_file^;*}" wrong_path="{!JAVA_FTP_wrong_path^;*}" max_size_label="{!JAVA_FTP_max_size_label^;*}" too_large="{!JAVA_FTP_too_large^;*}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
+		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" uploaded_message="{!JAVA_FTP_uploaded_message*;^}" reverting_title="{!JAVA_FTP_reverting_title*;^}" valid_types_label="{!JAVA_FTP_valid_types_label*;^}" refused_connection="{!JAVA_FTP_refused_connection*;^}" output_complete="{!JAVA_FTP_output_complete*;^}" transfer_error="{!JAVA_FTP_transfer_error*;^}" file_name_label="{!JAVA_FTP_file_name_label*;^}" browse_label="{!JAVA_FTP_browse_label*;^}" upload_label="{!JAVA_FTP_upload_label*;^}" please_choose_file="{!JAVA_FTP_please_choose_file*;^}" wrong_path="{!JAVA_FTP_wrong_path*;^}" max_size_label="{!JAVA_FTP_max_size_label*;^}" too_large="{!JAVA_FTP_too_large*;^}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
 		out+='		</embed>';
 		out+='	</comment>';
 		out+='</object>';
 		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
 		out+='</applet>';*/
-		setInnerHTML(progressDiv,out);
+		set_inner_html(progressDiv,out);
 
 		var old_onclick=btnSubmit.onclick;
 		btnSubmit.onclick=function() {
@@ -1744,7 +1762,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				old_onclick();
 				return;
 			}
-			window.fauxmodal_alert('{!UPLOAD_FIRST^;}');
+			window.fauxmodal_alert('{!UPLOAD_FIRST;^}');
 			btnSubmit.disabled=true;
 			var timer=window.setInterval(function() {
 				if (rep2.value=='1')
@@ -1778,15 +1796,15 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			posting_field_name: posting_field_name,
 
 			// Backend settings
-			upload_url: "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
-			file_post_name: "file",
+			upload_url: '{$FIND_SCRIPT;,incoming_uploads}'+keep_stub(true),
+			file_post_name: 'file',
 
 			// Flash file settings
 			file_size_limit : (typeof mfs=='undefined')?'2 GB':(((typeof mfs[0]!='undefined')?mfs[0].value:mfs.value)+' B'),
-			file_types : (name.indexOf('file_novalidate')==-1)?filter:"*.*",
-			file_types_description : "{!ALLOWED_FILES^#}",
-			file_upload_limit : "0",
-			file_queue_limit : "1",
+			file_types : (name.indexOf('file_novalidate')==-1)?filter:'*.*',
+			file_types_description : '{!ALLOWED_FILES;^}',
+			file_upload_limit : '0',
+			file_queue_limit : '1',
 
 			// Event handler settings
 			swfupload_loaded_handler : swfUploadLoaded,
@@ -1803,17 +1821,17 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			upload_complete_handler : uploadComplete,
 
 			// Button Settings
-			button_image_url : "{$IMG#,pageitem/upload}".replace(/^http:/,window.location.protocol),
-			button_placeholder_id : "spanButtonPlaceholder_"+name,
+			button_image_url : '{$IMG;,pageitem/upload}'.replace(/^http:/,window.location.protocol),
+			button_placeholder_id : 'spanButtonPlaceholder_'+name,
 			button_width: 66,
 			button_height: 20,
 			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
 
 			// Flash Settings
-			flash_url : "{$BASE_URL_NOHTTP#}"+"/data/swfupload/swfupload.swf",
+			flash_url : '{$BASE_URL_NOHTTP;}'+'/data/swfupload/swfupload.swf',
 
 			custom_settings : {
-				progress_target : "fsUploadProgress_"+name,
+				progress_target : 'fsUploadProgress_'+name,
 				upload_successful : false
 			},
 
@@ -1828,18 +1846,18 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 		newClearBtn.style.marginLeft='8px';
 		newClearBtn.style.verticalAlign='top';
-		newClearBtn.value='{!UPLOAD^;}: {!CLEAR^;}';
+		newClearBtn.value='{!UPLOAD;^}: {!CLEAR;^}';
 		subdiv.appendChild(newClearBtn);
 
 		newClearBtn.onclick=function() {
 			var txtFileName = document.getElementById('txtFileName_'+name);
-			txtFileName.value = "";
+			txtFileName.value = '';
 			if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 			{
-				var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+				var new_contents=get_textbox(rep.form.elements[posting_field_name]);
 				new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
-				new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title=""[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
-				setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
+				new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]*[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
+				set_textbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 			}
 			fireFakeChangeFor(name,'');
 			ob.setButtonDisabled(false);
@@ -1901,24 +1919,24 @@ function isValidJVM()
 			var full = navigator.plugins[i][j].type;
 			if (full.substr(0,pluginWanted.length) == pluginWanted)
 			{
-				if ((full.substr(pluginWanted.length) != "1.0")
+				if ((full.substr(pluginWanted.length) != '1.0')
 				&&
-				(full.substr(pluginWanted.length) != "1.1")
+				(full.substr(pluginWanted.length) != '1.1')
 				&&
-				(full.substr(pluginWanted.length) != "1.2")
+				(full.substr(pluginWanted.length) != '1.2')
 				&&
-				(full.substr(pluginWanted.length) != "1.3")
+				(full.substr(pluginWanted.length) != '1.3')
 				&&
-				(full.substr(pluginWanted.length) != "1.4")
+				(full.substr(pluginWanted.length) != '1.4')
 				)
 					return true;
 			}
 		}
 	}
 
-	var checker = document.getElementById("java_checker_2");
+	var checker = document.getElementById('java_checker_2');
 	if (checker) if (_isValidJVM(checker)) return true;
-	var checker = document.getElementById("java_checker_1");
+	var checker = document.getElementById('java_checker_1');
 	if (checker) if (_isValidJVM(checker)) return true;
 	return false;
 }  
@@ -1927,16 +1945,16 @@ function _isValidJVM(checker)
 {  
 	return (checker.getVersion != null &&
 		checker.getVendor != null &&
-		checker.getVendor().indexOf("Sun") > -1 &&
-		checker.getVersion().substr(0,3) != "1.0"
+		checker.getVendor().indexOf('Sun') > -1 &&
+		checker.getVersion().substr(0,3) != '1.0'
 		&&
-		checker.getVersion().substr(0,3) != "1.1"
+		checker.getVersion().substr(0,3) != '1.1'
 		&&
-		checker.getVersion().substr(0,3) != "1.2"
+		checker.getVersion().substr(0,3) != '1.2'
 		&&
-		checker.getVersion().substr(0,3) != "1.3"
+		checker.getVersion().substr(0,3) != '1.3'
 		&&
-		checker.getVersion().substr(0,3) != "1.4"
+		checker.getVersion().substr(0,3) != '1.4'
 	);
 }
 
@@ -1945,7 +1963,7 @@ function _isValidJVM(checker)
 function initialise_dragdrop_upload(key,key2)
 {
 	var ob=document.getElementById(key);
-	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
+	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
 	ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
 }
 
@@ -1959,7 +1977,7 @@ function html5_upload(event,field_name,files)
 
 	if (count>0)
 	{
-		cancelBubbling(event);
+		cancel_bubbling(event);
 		if (typeof event.preventDefault!='undefined') event.preventDefault();
 	}
 
@@ -1977,7 +1995,7 @@ function html5_upload(event,field_name,files)
 
 		if ((typeof file.size!='undefined') && (file.size>3000000))
 		{
-			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
+			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP;^}');
 			continue;
 		}
 
@@ -1997,7 +2015,7 @@ function html5_upload(event,field_name,files)
 		}
 		if (!good_type)
 		{
-			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
 			continue;
 		}
 
@@ -2006,7 +2024,7 @@ function html5_upload(event,field_name,files)
 			name: file.name
 		};
 
-		fileUpload.addEventListener("progress", function(e) { if (typeof e=='undefined') var e=window.event; html5_upload_progress(e,field_name); }, false);
+		fileUpload.addEventListener('progress', function(e) { if (typeof e=='undefined') var e=window.event; html5_upload_progress(e,field_name); }, false);
 		request.onreadystatechange = build_upload_handler(request,fileUpload.fileProgress,window.extraAttachmentBase,field_name);
 
 		/* Generate headers. */
@@ -2062,10 +2080,10 @@ function html5_upload(event,field_name,files)
 
 		if (typeof request.sendAsBinary=='undefined')
 		{
-			request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true)+"&base64=1");
+			request.open('POST', '{$FIND_SCRIPT;,incoming_uploads}'+keep_stub(true)+'&base64=1');
 		} else
 		{
-			request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true));
+			request.open('POST', '{$FIND_SCRIPT;,incoming_uploads}'+keep_stub(true));
 		}
 		request.overrideMimeType('multipart/form-data; boundary=' + boundary);
 		request.setRequestHeader('content-type','multipart/form-data; boundary=' + boundary);
@@ -2093,7 +2111,7 @@ function html5_upload(event,field_name,files)
 
 		var progress = new FileProgress(fileUpload.fileProgress, 'container_for_'+field_name);
 		progress.setProgress(0);
-		progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+		progress.setStatus('{!SWFUPLOAD_UPLOADING;^}');
 
 		/* Keep tabs of it */
 		window.extraAttachmentBase++;
@@ -2107,7 +2125,7 @@ function html5_upload_progress(event,field_name)
 		if (percentage < 100) {
 			var progress = new FileProgress(event.target.fileProgress, 'container_for_'+field_name);
 			progress.setProgress(percentage);
-			progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+			progress.setStatus('{!SWFUPLOAD_UPLOADING;^}');
 		}
 	}
 }
@@ -2122,15 +2140,15 @@ function build_upload_handler(request,fileProgress,attachmentBase,field_name)
 
 					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
 					progress.setProgress(100);
-					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
+					progress.setStatus('{!SWFUPLOAD_FAILED;^}');
 				} else
 				{
-					insertTextbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+					insert_textbox(document.getElementById(field_name),'[attachment description=\"'+fileProgress.name.replace(/"/g,'\'')+'\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n');
 
 					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
 					progress.setProgress(100);
 					progress.setComplete();
-					progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
+					progress.setStatus('{!SWFUPLOAD_COMPLETE;^}');
 
 					var decodedData = eval('(' + request.responseText + ')');
 					document.getElementById('hidFileID_file'+attachmentBase).value = decodedData['upload_id'];
@@ -2143,13 +2161,13 @@ function build_upload_handler(request,fileProgress,attachmentBase,field_name)
 
 function base64_encode(input) // Based on http://www.webtoolkit.info/javascript-base64.html
 {
-	var output = "";
+	var output = '';
 	var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
 	var i = 0;
 
 	//input = _utf8_encode(input);
 
-	var _keyStr="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+	var _keyStr='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
 	while (i < input.length) {
 

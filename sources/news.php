@@ -18,6 +18,56 @@
  * @package		news
  */
 
+/**
+ * Show a news entry box.
+ *
+ * @param  array				The news row
+ * @param  ID_TEXT			The zone our news module is in
+ * @return tempcode			The box
+ */
+function render_news_box($row,$zone='_SEARCH')
+{
+	$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone);
+	$title=get_translated_tempcode($row['title']);
+	$title_plain=get_translated_text($row['title']);
+
+	global $NEWS_CATS;
+	if (!isset($NEWS_CATS)) $NEWS_CATS=array();
+	if (!array_key_exists($row['news_category'],$NEWS_CATS))
+	{
+		$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$row['news_category']),'',1);
+		if (array_key_exists(0,$_news_cats))
+			$NEWS_CATS[$row['news_category']]=$_news_cats[0];
+	}
+	if ((!array_key_exists($row['news_category'],$NEWS_CATS)) || (!array_key_exists('nc_title',$NEWS_CATS[$row['news_category']])))
+		$row['news_category']=db_get_first_id();
+	$news_cat_row=$NEWS_CATS[$row['news_category']];
+	$img=($news_cat_row['nc_img']=='')?'':find_theme_image($news_cat_row['nc_img']);
+	if (is_null($img)) $img='';
+	if ($row['news_image']!='')
+	{
+		$img=$row['news_image'];
+		if (url_is_local($img)) $img=get_base_url().'/'.$img;
+	}
+	$category=get_translated_text($news_cat_row['nc_title']);
+
+	$news=get_translated_tempcode($row['news']);
+	if ($news->is_empty())
+	{
+		$news=get_translated_tempcode($row['news_article']);
+		$truncate=true;
+	} else $truncate=false;
+	$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors')):new ocp_tempcode();
+	$author=$row['author'];
+	require_css('news');
+	$seo_bits=seo_meta_get_for('news',strval($row['id']));
+	$map=array('_GUID'=>'jd89f893jlkj9832gr3uyg2u','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'AUTHOR'=>$author,'BLOG'=>false,'AUTHOR_URL'=>$author_url,'CATEGORY'=>$category,'IMG'=>$img,'NEWS'=>$news,'ID'=>strval($row['id']),'SUBMITTER'=>strval($row['submitter']),'DATE'=>get_timezoned_date($row['date_and_time']),'DATE_RAW'=>strval($row['date_and_time']),'FULL_URL'=>$url,'NEWS_TITLE'=>$title,'NEWS_TITLE_PLAIN'=>$title_plain);
+	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($row['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
+
+	$box=do_template('NEWS_BOX',$map);
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'47eeed9d10cb6ad1f1631056d3744ea2','SUMMARY'=>$box));
+}
 
 /**
  * Add a news category of the specified details.
@@ -203,7 +253,8 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		// Send out on RSS cloud
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'news_rss_cloud WHERE register_time<'.strval(time()-25*60*60));
+		if (!$GLOBALS['SITE_DB']->table_is_locked('news_rss_cloud'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'news_rss_cloud WHERE register_time<'.strval(time()-25*60*60));
 		$start=0;
 		do
 		{
@@ -477,6 +528,14 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	global $M_SORT_KEY;
 	$M_SORT_KEY='nice_title';
 	usort($_cats,'multi_sort');
+
+	// Sort so blogs go after news
+	$title_ordered_cats=$_cats;
+	$_cats=array();
+	foreach ($title_ordered_cats as $cat)
+		if (is_null($cat['nc_owner'])) $_cats[]=$cat;
+	foreach ($title_ordered_cats as $cat)
+		if (!is_null($cat['nc_owner'])) $_cats[]=$cat;
 
 	$categories=new ocp_tempcode();
 	$add_cat=true;
