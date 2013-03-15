@@ -164,7 +164,7 @@ class Module_admin_quiz
 
 		require_code('form_templates');
 
-		$_m=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.db_string_equal_to('q_type','COMPETITION').' ORDER BY q_validated DESC,q_add_date DESC',300);
+		$_m=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('q_type'=>'COMPETITION'),'ORDER BY q_validated DESC,q_add_date DESC',300);
 		$entries=new ocp_tempcode();
 		foreach ($_m as $m)
 		{

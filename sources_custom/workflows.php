@@ -445,7 +445,7 @@ function get_default_workflow()
 	if (count($workflows)>1)
 	{
 		// Look for those which are set as default
-		$defaults=$GLOBALS['SITE_DB']->query('SELECT DISTINCT workflow_name FROM '.get_table_prefix().'workflow_requirements WHERE is_default=1');
+		$defaults=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('DISTINCT workflow_name'),array('is_default'=>1));
 		// If there aren't any then we can't presume to know which should
 		// be returned, so return an empty array
 		if ($defaults==array())

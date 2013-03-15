@@ -431,7 +431,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		//		$where_clause.=' AND ';
 		//		$where_clause.='z.category_name IS NOT NULL';
 
-		$cat_access=list_to_map('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name',$permissions_module).(($g_or!='')?(' AND ('.$g_or.')'):'')));
+		$cat_access=list_to_map('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name',$permissions_module).(($g_or!='')?(' AND ('.$g_or.')'):''),NULL,NULL,false,true));
 	}
 
 	if (($only_titles) && (array_key_exists(0,$fields)) && ($fields[0]=='')) return array();

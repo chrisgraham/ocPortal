@@ -65,7 +65,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 			if ($_groups!='') $_groups.=' OR ';
 			$_groups.='groupid='.strval($group);
 		}
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE '.$_groups.' ORDER BY groupid,userid ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE '.$_groups.' ORDER BY groupid,userid ASC',$max,$start,false,true);
 	}
 
 	/**

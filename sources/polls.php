@@ -197,10 +197,10 @@ function may_vote_in_poll($poll_id,$member_id,$ip)
 		if (is_guest($member_id))
 		{
 			if (is_null($ip)) return true;
-			return is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($poll_id).' AND '.db_string_equal_to('v_voter_ip',$ip)));
+			return is_null($GLOBALS['SITE_DB']->query_select_value_if_there('poll_votes','id',array('v_poll_id'=>$poll_id,'v_voter_ip'=>$ip)));
 		} else
 		{
-			return is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($poll_id).' AND v_voter_id='.strval($member_id)));
+			return is_null($GLOBALS['SITE_DB']->query_select_value_if_there('poll_votes','id',array('v_poll_id'=>$poll_id,'v_voter_id'=>$member_id)));
 		}
 	}
 

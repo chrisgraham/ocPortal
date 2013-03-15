@@ -597,8 +597,8 @@ class forum_driver_wowbb extends forum_driver_base
 		$topic_filter=($filter_topic_title!='')?'AND topic_name LIKE \''.db_encode_like($filter_topic_title).'\'':'';
 		if ($filter_topic_description!='')
 			$topic_filter.=' AND topic_description LIKE \''.db_encode_like($filter_topic_description).'\'';
-		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter,$limit*2,$start);
-		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
+		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter,$limit*2,$start,false,true);
+		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter,false,true);
 		$i=0;
 		$firsttime=array();
 		$username=array();
@@ -688,7 +688,7 @@ class forum_driver_wowbb extends forum_driver_base
 			$_groups.='user_group_id='.strval($group).'';
 		}
 		if ($_groups=='') return array();
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE '.$_groups.' ORDER BY user_group_id ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE '.$_groups.' ORDER BY user_group_id ASC',$max,$start,false,true);
 	}
 
 	/**

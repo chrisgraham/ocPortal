@@ -75,7 +75,7 @@ function init__users()
 		if ((get_forum_type()=='ocf') && (get_db_site()==get_db_forums()) && (get_db_site_host()==get_db_forums_host()))
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$_s=$GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM '.get_table_prefix().'sessions s LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members m ON m.id=s.member_id'.$where);
+			$_s=$GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM '.get_table_prefix().'sessions s LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members m ON m.id=s.member_id'.$where,NULL,NULL,false,true);
 			$SESSION_CACHE=list_to_map('the_session',$_s);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 		} else

@@ -654,7 +654,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 				list($new_key,)=$bits;
 				if (strpos($new_key,'.text_original')!==false)
 				{
-					$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
+					$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause,false,true);
 					if ($num_entries>300) // For large data sets too slow as after two MySQL joins it can't then use index for ordering
 					{
 						$virtual_order_by='r.id';
@@ -678,7 +678,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 	}
 
 	if (is_null($num_entries))
-		$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
+		$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause,false,true);
 
 	if ($num_entries>300) // Needed to stop huge slow down, so reduce to sorting by ID
 	{
@@ -1388,7 +1388,7 @@ function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filt
 	if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
 
 	$tree=array();
-	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
+	$temp_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('c_name'=>$catalogue_name,'cc_parent_id'=>NULL),'ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
 	if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	foreach ($temp_rows as $row)
 	{

@@ -1348,7 +1348,7 @@ function _request_page__redirects($codename,$zone,$wildcard_mode=false)
 		if ($wildcard_mode) $query.=' OR '.db_string_equal_to('r_from_zone',$zone);
 		$query.=') AND '.db_string_equal_to('r_from_page',$codename);
 		$query.=' ORDER BY r_from_zone DESC'; // The ordering ensures '*' comes last, as we want to deprioritise this
-		$redirect=$GLOBALS['SITE_DB']->query($query,1);
+		$redirect=$GLOBALS['SITE_DB']->query($query,1,NULL,false,true);
 	}
 	if (array_key_exists(0,$redirect))
 	{

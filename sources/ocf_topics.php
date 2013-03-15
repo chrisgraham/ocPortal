@@ -112,7 +112,7 @@ function ocf_may_post_topic($forum_id,$member_id=NULL)
 	if (!has_privilege($member_id,'submit_midrange_content','topics',array('forums',$forum_id))) return false;
 	if (is_null($forum_id)) return true;
 
-	$test=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE p_silence_from_forum='.strval($forum_id).' AND w_member_id='.strval($member_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_warnings','id',array('p_silence_from_forum'=>$forum_id,'w_member_id'=>$member_id));
 	if (!is_null($test)) return false;
 
 	return true;

@@ -2436,9 +2436,9 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 		$ip_bans=persistent_cache_get('IP_BANS');
 		if (is_null($ip_bans))
 		{
-			$ip_bans=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'banned_ip',NULL,NULL,true);
+			$ip_bans=$GLOBALS['SITE_DB']->query_select('banned_ip',array('*'),NULL,'',NULL,NULL,true);
 			if (is_null($ip_bans))
-				$ip_bans=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'usersubmitban_ip',NULL,NULL,true); // LEGACY
+				$ip_bans=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('*'),NULL,'',NULL,NULL,true);
 			if (!is_null($ip_bans))
 			{
 				persistent_cache_set('IP_BANS',$ip_bans);

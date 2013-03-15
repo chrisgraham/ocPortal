@@ -206,7 +206,7 @@ function ocf_ping_forum_read_all($forum_id)
 		$or_list.='l_topic_id='.strval($topic['id']);
 	}
 	if ($or_list=='') return;
-	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE l_member_id='.strval($member_id).' AND ('.$or_list.')');
+	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE l_member_id='.strval($member_id).' AND ('.$or_list.')',NULL,NULL,false,true);
 	$mega_insert=array('l_member_id'=>array(),'l_topic_id'=>array(),'l_time'=>array());
 	foreach ($topics as $topic)
 	{
@@ -233,7 +233,7 @@ function ocf_ping_forum_unread_all($forum_id)
 		$or_list_2.='l_topic_id='.strval($topic['id']);
 	}
 	if ($or_list_2=='') return;
-	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE '.$or_list_2);
+	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE '.$or_list_2,NULL,NULL,false,true);
 }
 
 /**

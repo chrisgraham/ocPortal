@@ -41,8 +41,8 @@ function init__ocf_members()
  */
 function ocf_get_filter_cats($only_exists_now=false)
 {
-	$filter_rows_a=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_from_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval(get_member()));
-	$filter_rows_b=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_to_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_to='.strval(get_member()));
+	$filter_rows_a=$GLOBALS['FORUM_DB']->query_select('f_topics',array('DISTINCT t_pt_from_category'),array('t_pt_from'=>get_member()));
+	$filter_rows_b=$GLOBALS['FORUM_DB']->query_select('f_topics',array('DISTINCT t_pt_to_category'),array('t_pt_to'=>get_member()));
 	$filter_cats=array(''=>1);
 	if (!$only_exists_now)
 		$filter_cats[do_lang('TRASH')]=1;
@@ -142,7 +142,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
 		if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval($show_on_join_form);
 
 		global $TABLE_LANG_FIELDS_CACHE;
-		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,false,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
+		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,true,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
 		$result=array();
 		foreach ($_result as $row)
 		{

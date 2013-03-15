@@ -177,7 +177,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 				if ($view_others_tickets) $query.='f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_parent_forum='.strval($fid).')';
 				else $query.='f_parent_forum='.strval($fid);
 
-				$rows=$GLOBALS['FORUM_DB']->query($query);
+				$rows=$GLOBALS['FORUM_DB']->query($query,NULL,NULL,false,true);
 				$forums=collapse_2d_complexity('id','id',$rows);
 			}
 		}

@@ -41,7 +41,7 @@ class Hook_rss_ocf_forumview
 
 		$filters=ocfilter_to_sqlfragment($_filters,'t_forum_id','f_forums','f_parent_forum','t_forum_id','id',true,true,$GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval($cutoff).(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND t_validated=1 ':'').' AND '.$filters.' ORDER BY t_cache_last_time DESC',$max);
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval($cutoff).(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND t_validated=1 ':'').' AND '.$filters.' ORDER BY t_cache_last_time DESC',$max,NULL,false,true);
 		$categories=collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
 
 		$content=new ocp_tempcode();

@@ -1160,8 +1160,8 @@ class Module_topics
 		$tabindex=get_form_field_tabindex(NULL);
 
 		$content=new ocp_tempcode();
-		$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT e_theme_img_code FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_use_topics=1'.$extra);
+		$extra=has_privilege(get_member(),'use_special_emoticons')?array():array('e_is_special'=>0);
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_emoticons',array('e_theme_img_code'),array('e_use_topics'=>1)+$extra);
 		$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'d9f9399072af3f19f21695aef01168c7','PRETTY'=>do_lang_tempcode('NONE'),'CODE'=>'','URL'=>find_theme_image('ocf_emoticons/none'),'CHECKED'=>$selected_path=='','NAME'=>'emoticon')));
 
 		if (count($rows)==0) return new ocp_tempcode();
@@ -2512,7 +2512,7 @@ END;
 		$groups=_get_where_clause_groups(get_member());
 		if (!is_null($groups))
 		{
-			$perhaps=$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','forums').' AND ('.$groups.')');
+			$perhaps=$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','forums').' AND ('.$groups.')',NULL,NULL,false,true);
 			$or_list='';
 			foreach ($perhaps as $row)
 			{

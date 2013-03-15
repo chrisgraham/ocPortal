@@ -78,7 +78,7 @@ function lookup_member_page($member,&$name,&$id,&$ip)
 		if (is_null($ip)) $ip='127.0.0.1';
 	}
 
-	return $GLOBALS['SITE_DB']->query('SELECT ip,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'stats WHERE member_id='.strval($id).' GROUP BY ip ORDER BY date_and_time DESC');
+	return $GLOBALS['SITE_DB']->query_select('stats',array('ip','MAX(date_and_time) AS date_and_time'),array('member_id'=>$id),'GROUP BY ip ORDER BY date_and_time DESC');
 }
 
 /**
@@ -110,8 +110,8 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 	{
 		$query.='ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\'';
 	}
-	$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query);
-	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+	$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query,false,true);
+	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start,false,true);
 
 	$out=new ocp_tempcode();
 	require_code('templates_results_table');

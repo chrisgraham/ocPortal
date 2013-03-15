@@ -43,12 +43,12 @@ class Hook_rss_catalogues
 
 		require_code('catalogues');
 
-		$_categories=$GLOBALS['SITE_DB']->query('SELECT id,c_name,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.$filters_1,300);
+		$_categories=$GLOBALS['SITE_DB']->query('SELECT id,c_name,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.$filters_1,300,NULL,false,true);
 		foreach ($_categories as $i=>$_category)
 		{
 			$_categories[$i]['text_original']=get_translated_text($_category['cc_title']);
 		}
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_add_date>'.strval(time()-$cutoff).(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND ce_validated=1 ':'').' AND '.$filters.' ORDER BY ce_add_date DESC',$max);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_add_date>'.strval(time()-$cutoff).(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND ce_validated=1 ':'').' AND '.$filters.' ORDER BY ce_add_date DESC',$max,NULL,false,true);
 		$categories=array();
 		foreach ($_categories as $category)
 		{
@@ -69,7 +69,7 @@ class Hook_rss_catalogues
 		{
 			if ((count($_categories)==300) && (!array_key_exists($row['cc_id'],$categories)))
 			{
-				$val=$GLOBALS['SITE_DB']->query_value_if_there('SELECT cc_title FROM '.get_table_prefix().'catalogue_categories WHERE id='.strval($row['cc_id']).' AND ('.$filters_1.')');
+				$val=$GLOBALS['SITE_DB']->query_value_if_there('SELECT cc_title FROM '.get_table_prefix().'catalogue_categories WHERE id='.strval($row['cc_id']).' AND ('.$filters_1.')',false,true);
 				if (!is_null($val))
 					$categories[$row['cc_id']]=get_translated_text($val);
 			}

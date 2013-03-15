@@ -737,7 +737,7 @@ class database_driver
 	 *
 	 * @param  string			The complete SQL query
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @param  boolean		Whether to skip the query safety check
+	 * @param  boolean		Whether to skip the query safety checks
 	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
 	 */
 	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
@@ -845,7 +845,7 @@ class database_driver
 	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
 	 * @param  ?integer		The start row to affect (NULL: no specification)
 	 * @param  boolean		Whether to output an error on failure
-	 * @param  boolean		Whether to skip the query safety check
+	 * @param  boolean		Whether to skip the query safety checks
 	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @param  string			All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
 	 * @return ?mixed			The results (NULL: no results)

@@ -58,8 +58,7 @@ class Hook_pointstore_community_billboard
 
 		$title=get_screen_title('TITLE_NEWTEXT');
 
-		$results=$GLOBALS['SITE_DB']->query('SELECT SUM(days) As days FROM '.get_table_prefix().'community_billboard WHERE activation_time IS NULL');
-		$queue=$results[0]['days'];
+		$queue=$GLOBALS['SITE_DB']->query_select_value('community_billboard','SUM(days) AS days',array('activation_time'=>NULL));
 		if (is_null($queue)) $queue=0;
 		$community_billboard_url=build_url(array('page'=>'_SELF','type'=>'_community_billboard','id'=>'community_billboard'),'_SELF');
 		$cost=intval(get_option('community_billboard'));

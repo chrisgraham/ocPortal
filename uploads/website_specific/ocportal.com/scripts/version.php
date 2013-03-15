@@ -417,7 +417,7 @@ function load_news_rows()
 			);
 		} else
 		{
-			$NEWS_ROWS=$GLOBALS['SITE_DB']->query('SELECT n.*,text_original AS nice_title,date_and_time AS add_date FROM '.get_table_prefix().'news n LEFT JOIN '.get_table_prefix().'translate t ON t.id=n.title WHERE validated=1 AND news_category=29 ORDER BY add_date');
+			$NEWS_ROWS=$GLOBALS['SITE_DB']->query('SELECT n.*,text_original AS nice_title,date_and_time AS add_date FROM '.get_table_prefix().'news n LEFT JOIN '.get_table_prefix().'translate t ON t.id=n.title WHERE validated=1 AND news_category=29 ORDER BY add_date',NULL,NULL,false,true);
 		}
 	}
 }

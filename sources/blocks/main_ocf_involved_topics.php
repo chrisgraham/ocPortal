@@ -68,10 +68,10 @@ class Block_main_ocf_involved_topics
 		$where_more='';
 		if (!is_null($forum1)) $where_more.=' AND p_cache_forum_id<>'.strval($forum1);
 		if (!is_null($forum2)) $where_more.=' AND p_cache_forum_id<>'.strval($forum2);
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval($member_id_of).$where_more.' ORDER BY p_time DESC',$max,$start);
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval($member_id_of).$where_more.' ORDER BY p_time DESC',$max,$start,false,true);
 		if (count($rows)!=0)
 		{
-			$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT p_topic_id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval($member_id_of).$where_more);
+			$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT p_topic_id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval($member_id_of).$where_more,false,true);
 
 			$where='';
 			foreach ($rows as $row)
@@ -79,7 +79,7 @@ class Block_main_ocf_involved_topics
 				if ($where!='') $where.=' OR ';
 				$where.='t.id='.strval($row['p_topic_id']);
 			}
-			$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT t.*,lan.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate lan ON t.t_cache_first_post=lan.id WHERE '.$where);
+			$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT t.*,lan.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate lan ON t.t_cache_first_post=lan.id WHERE '.$where,NULL,NULL,false,true);
 			$topic_rows_map=array();
 			foreach ($topic_rows as $topic_row)
 			{

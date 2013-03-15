@@ -645,7 +645,7 @@ class Module_admin_ocf_join
 					if ($or_list!='') $or_list.=' OR ';
 					$or_list.='mf_member_id='.strval($m['id']);
 				}
-				$member_cpfs=list_to_map('mf_member_id',$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields WHERE '.$or_list));
+				$member_cpfs=list_to_map('mf_member_id',$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields WHERE '.$or_list,NULL,NULL,false,true));
 			}
 
 			foreach ($members as $m)

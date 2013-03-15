@@ -45,15 +45,15 @@ function run()
 	$file=basename(rawurldecode($_GET['url']));
 
 	//get old media file data
-	$get_old_file=$GLOBALS['SITE_DB']->query('SELECT url FROM '.get_table_prefix().'videos WHERE url LIKE "uploads/galleries/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%"');
+	$get_old_file=$GLOBALS['SITE_DB']->query('SELECT url FROM '.get_table_prefix().'videos WHERE url LIKE \'uploads/galleries/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%\'');
 	$type='galleries';
 	if (!array_key_exists(0,$get_old_file))
 	{
-		$get_old_file=$GLOBALS['SITE_DB']->query('SELECT a_url AS url FROM '.get_table_prefix().'attachments WHERE a_url LIKE "uploads/attachments/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%"');
+		$get_old_file=$GLOBALS['SITE_DB']->query('SELECT a_url AS url FROM '.get_table_prefix().'attachments WHERE a_url LIKE \'uploads/attachments/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%\'');
 		$type='attachments';
 		if (!array_key_exists(0,$get_old_file))
 		{
-			$get_old_file=$GLOBALS['SITE_DB']->query('SELECT cv_value AS url FROM '.get_table_prefix().'catalogue_efv_short WHERE cv_value LIKE "uploads/catalogues/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%"');
+			$get_old_file=$GLOBALS['SITE_DB']->query('SELECT cv_value AS url FROM '.get_table_prefix().'catalogue_efv_short WHERE cv_value LIKE \'uploads/catalogues/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%\'');
 			$type='catalogues';
 		}
 	}
@@ -77,15 +77,15 @@ function run()
 	switch ($type)
 	{
 		case 'galleries':
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'videos SET video_width=600,video_height=400,url="'.db_escape_string($new_url).'" WHERE url LIKE "uploads/'.$type.'/'.db_escape_string(rawurlencode(basename(basename($file,'.m4v'),'.mp3'))).'%"'); // Replaces row that referenced $file without .m4v on the end (the original filename) with row that references the new $file we just copied
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'videos SET video_width=600,video_height=400,url=\''.db_escape_string($new_url).'\' WHERE url LIKE \'uploads/'.$type.'/'.db_escape_string(rawurlencode(basename(basename($file,'.m4v'),'.mp3'))).'%\''); // Replaces row that referenced $file without .m4v on the end (the original filename) with row that references the new $file we just copied
 			break;
 
 		case 'attachments':
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'attachments SET a_url="'.db_escape_string($new_url).'" WHERE a_url LIKE "uploads/'.$type.'/'.db_escape_string(rawurlencode(basename(basename($file,'.m4v'),'.mp3'))).'%"'); // Replaces row that referenced $file without .m4v on the end (the original filename) with row that references the new $file we just copied
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'attachments SET a_url=\''.db_escape_string($new_url).'\' WHERE a_url LIKE \'uploads/'.$type.'/'.db_escape_string(rawurlencode(basename(basename($file,'.m4v'),'.mp3'))).'%\''); // Replaces row that referenced $file without .m4v on the end (the original filename) with row that references the new $file we just copied
 			break;
 
 		case 'catalogues':
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'catalogue_efv_short SET cv_value="'.db_escape_string($new_url).'" WHERE cv_value LIKE "uploads/'.$type.'/'.db_escape_string(rawurlencode(basename(basename($file,'.m4v'),'.mp3'))).'%"'); // Replaces row that referenced $file without .m4v on the end (the original filename) with row that references the new $file we just copied
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'catalogue_efv_short SET cv_value=\''.db_escape_string($new_url).'\' WHERE cv_value LIKE \'uploads/'.$type.'/'.db_escape_string(rawurlencode(basename(basename($file,'.m4v'),'.mp3'))).'%\''); // Replaces row that referenced $file without .m4v on the end (the original filename) with row that references the new $file we just copied
 			break;
 	}
 

@@ -513,6 +513,7 @@ class forum_driver_aef extends forum_driver_base
 		$post_id=$this->connection->query_insert('posts',$map,true);
 
 		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET first_post_id='.strval($post_id).', last_post_id='.strval($post_id).' WHERE tid='.strval($topic_id),1);
+		$this->connection->query_update('TODO',array('TODO'=>TODO),array('TODO'=>TODO),'',1);
 		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET ntopic=(ntopic+1),nposts=(nposts+1), f_last_pid='.strval($post_id).' WHERE fid='.strval($forum_id),1);
 
 		return array($topic_id,false);
@@ -661,11 +662,11 @@ class forum_driver_aef extends forum_driver_base
 			$id=$r['tid'];
 
 			$topic_first_post_id=$r['first_post_id']; //because there is no info in topics for time we will use the first and last posts in the topic
-			$topic_first_post_row=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE pid='.strval($topic_first_post_id));
+			$topic_first_post_row=$this->connection->query_select('posts',array('*'),array('pid'=>$topic_first_post_id));
 			$topic_first_post_row=(!empty($topic_first_post_row[0]))?$topic_first_post_row[0]:array();
 
 			$topic_last_post_id=$r['last_post_id'];
-			$topic_last_post_row=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE pid='.strval($topic_last_post_id));
+			$topic_last_post_row=$this->connection->query_select('posts',array('*'),array('pid'=>$topic_last_post_id));
 			$topic_last_post_row=(!empty($topic_last_post_row[0]))?$topic_last_post_row[0]:array();
 
 			$r['topic_time']=$topic_first_post_row['ptime'];
@@ -761,7 +762,7 @@ class forum_driver_aef extends forum_driver_base
 		if ($_groups=='') return array();
 
 		//Query looks like this: SELECT * FROM `aef_users` u LEFT JOIN aef_user_groups g on u.`u_member_group`=g.member_group WHERE u.`u_member_group`=0
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users u LEFT JOIN '.$this->connection->get_table_prefix().'user_groups g ON u.u_member_group=g.member_group WHERE '.$_groups.' ORDER BY u.u_member_group ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users u LEFT JOIN '.$this->connection->get_table_prefix().'user_groups g ON u.u_member_group=g.member_group WHERE '.$_groups.' ORDER BY u.u_member_group ASC',$max,$start,false,true);
 	}
 
 	/**
@@ -1216,7 +1217,7 @@ class forum_driver_aef extends forum_driver_base
 		if (empty($logpass)) //this means that it is not set
 		{
 			$logpass=$this->generateRandStr(32);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'users SET cookpass=\''.db_escape_string($logpass).'\' WHERE id='.strval($id),1);
+			$this->connection->query_update('users',array('cookpass'=>$logpass),array('id'=>$id),'',1);
 		}
 
 		//Set a COOKIE of User ID
@@ -1231,7 +1232,7 @@ class forum_driver_aef extends forum_driver_base
 
 		if (!empty($session_id))
 		{
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'sessions SET time='.strval(time()).' WHERE uid='.strval($id),1);
+			$this->connection->query_update('sessions',array('time'=>time()),array('uid'=>$id),'',1);
 		} else
 		{
 			$session_id=strtolower($this->generateRandStr(32));

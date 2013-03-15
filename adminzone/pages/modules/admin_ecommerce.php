@@ -861,10 +861,10 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		disable_php_memory_limit();
 
-		$where=db_string_equal_to('s_via','manual');
-		if (get_param_integer('all',0)==1) $where='1=1';
+		$where=array('s_via'=>'manual');
+		if (get_param_integer('all',0)==1) $where=NULL;
 
-		$subscriptions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE '.$where.' ORDER BY s_type_code,s_time');
+		$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),$where,'ORDER BY s_type_code,s_time',10000/*reasonable limit*/);
 		if (count($subscriptions)==0)
 			inform_exit(do_lang_tempcode('NO_ENTRIES'));
 

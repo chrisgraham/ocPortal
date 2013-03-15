@@ -33,8 +33,7 @@ class Hook_cron_manual_subscription_notification
 			if ($last_time<60*60*24) return; // Only do once per day
 		}
 
-		$query='SELECT * FROM '.get_table_prefix().'subscriptions WHERE '.db_string_equal_to('s_state','active').' AND '.db_string_equal_to('s_via','manual');
-		$subscriptions=$GLOBALS['SITE_DB']->query($query);
+		$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_state'=>'active','s_via'=>'manual'));
 		if (count($subscriptions)>0)
 		{
 			require_code('ecommerce');

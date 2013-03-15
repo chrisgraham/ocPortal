@@ -381,7 +381,7 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
 			}
 		}
 		$member_post_count+=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>NULL));
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts='.strval($member_post_count).' WHERE id='.strval($member_id));
+		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_num_posts'=>$member_post_count),array('id'=>$member_id));
 	}
 	else
 	{

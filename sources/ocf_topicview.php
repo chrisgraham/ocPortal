@@ -33,7 +33,7 @@ function find_post_id_url($post_id)
 	if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	// What page is it on?
-	$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval($post_id).' AND '.ocf_get_topic_where($id));
+	$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval($post_id).' AND '.ocf_get_topic_where($id),false,true);
 	$start=intval(floor(floatval($before)/floatval($max)))*$max;
 
 	// Now redirect accordingly
@@ -72,14 +72,14 @@ function find_first_unread_url($id)
 	if (!is_null($first_unread_id))
 	{
 		// What page is it on?
-		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval($first_unread_id).' AND '.ocf_get_topic_where($id));
+		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval($first_unread_id).' AND '.ocf_get_topic_where($id),false,true);
 		$start=intval(floor(floatval($before)/floatval($max)))*$max;
 	} else
 	{
 		$first_unread_id=-2;
 
 		// What page is it on?
-		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.ocf_get_topic_where($id));
+		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.ocf_get_topic_where($id),false,true);
 		$start=intval(floor(floatval($before)/floatval($max)))*$max;
 		if ($start==$before) $start=$before-$max;
 	}
@@ -541,10 +541,10 @@ function ocf_cache_member_details($members)
 	}
 	if ($member_or_list!='')
 	{
-		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.*,text_parsed AS signature FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.m_signature=t.id WHERE '.$member_or_list);
+		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.*,text_parsed AS signature FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.m_signature=t.id WHERE '.$member_or_list,NULL,NULL,false,true);
 		global $TABLE_LANG_FIELDS_CACHE;
-		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,false,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_member_custom_fields']:array());
-		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')');
+		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_member_custom_fields']:array());
+		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')',NULL,NULL,false,true);
 		global $MEMBER_CACHE_FIELD_MAPPINGS,$GROUP_MEMBERS_CACHE,$SIGNATURES_CACHE;
 		$found_groups=array();
 		foreach ($member_rows as $row)

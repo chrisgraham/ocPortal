@@ -50,10 +50,10 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 
 	if ($userid===NULL)
 	{
-		$rows=$this_ref->connection->query('SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_username',$username),1);
+		$rows=$this_ref->connection->query_select('f_members',array('*'),array('m_username'=>$username),'',1);
 		if ((!array_key_exists(0,$rows)) && (get_option('one_per_email_address')=='1'))
 		{
-			$rows=$this_ref->connection->query('SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_email_address',$username).' ORDER BY id ASC',1);
+			$rows=$this_ref->connection->query_select('f_members',array('*'),array('m_email_address'=>$username),'ORDER BY id ASC',1);
 		}
 		if (array_key_exists(0,$rows))
 		{

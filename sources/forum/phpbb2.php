@@ -506,7 +506,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$map=array('post_id'=>$post_id,'bbcode_uid'=>'','post_subject'=>'','post_text'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()));
 			$this->connection->query_insert('posts_text',$map);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_first_post_id='.strval($post_id).' WHERE topic_id='.strval($topic_id),1);
+			$this->connection->query_update('topics',array('topic_first_post_id'=>$post_id),array('topic_id'=>$topic_id),'',1);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval($forum_id),1);
 		}
 
@@ -741,7 +741,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 			$_groups.='g.group_id='.strval($group);
 		}
 		if ($_groups=='') return array();
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE '.$_groups.' AND user_pending=0 ORDER BY g.group_id ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE ('.$_groups.') AND user_pending=0 ORDER BY g.group_id ASC',$max,$start,false,true);
 	}
 
 	/**
