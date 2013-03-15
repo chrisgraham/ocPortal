@@ -101,6 +101,7 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'sources/hooks/blocks/main_staff_checklist/copyright.php',
 			'sources/hooks/blocks/main_staff_checklist/cron.php',
 			'sources/hooks/blocks/main_staff_checklist/open_site.php',
+			'sources/hooks/blocks/main_staff_checklist/profile.php',
 			'sources/blocks/main_staff_actions.php',
 			'sources/blocks/main_staff_checklist.php',
 			'sources/blocks/main_staff_new_version.php',
