@@ -46,7 +46,7 @@ $g_cache_user = array();
 #  if the user can't be found.  If the second parameter is
 #  false, return false if the user can't be found.
 function user_cache_row( $p_user_id, $p_trigger_errors = true ) {
-	global $g_cache_user;
+	global $g_cache_user, $ocp_sc_db_prefix;
 
 	if( isset( $g_cache_user[$p_user_id] ) ) {
 		return $g_cache_user[$p_user_id];
@@ -54,7 +54,7 @@ function user_cache_row( $p_user_id, $p_trigger_errors = true ) {
 
 
 	// HACKHACK: Rebuild row from ocPortal's DB
-	$result = db_query_bound("SELECT * FROM ocp2_f_members WHERE id=" . db_param(), Array( $p_user_id ) );
+	$result = db_query_bound("SELECT * FROM ".$ocp_sc_db_prefix."f_members WHERE id=" . db_param(), Array( $p_user_id ) );
 	if( 0 == db_num_rows( $result ) ) {
 		$g_cache_user[$p_user_id] = false;
 
@@ -651,7 +651,7 @@ function user_delete( $p_user_id ) {
 # get a user id from a username
 #  return false if the username does not exist
 function user_get_id_by_name( $p_username ) {
-	global $g_cache_user;
+	global $g_cache_user, $ocp_sc_db_prefix;
 	if( $t_user = user_search_cache( 'username', $p_username ) ) {
 		return $t_user['id'];
 	}
@@ -659,7 +659,7 @@ function user_get_id_by_name( $p_username ) {
 	$t_user_table = db_get_table( 'mantis_user_table' );
 
 	$query = "SELECT id
-				  FROM ocp2_f_members
+				  FROM ".$ocp_sc_db_prefix."f_members
 				  WHERE m_username=" . db_param();
 	$result = db_query_bound( $query, Array( $p_username ) );
 

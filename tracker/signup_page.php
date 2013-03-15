@@ -1,6 +1,6 @@
 <?php
-
-header('Location: http://ocportal.com/join.htm');
+require_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'config_inc.php' );
+header('Location:'.$ocp_sc_join_url);
 exit();
 
 # MantisBT - a php based bugtracking system
