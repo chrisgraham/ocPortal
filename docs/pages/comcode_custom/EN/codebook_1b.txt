@@ -803,4 +803,12 @@ To add the addon as non-bundled:
  - 'Add' the files to git, commit and push
 
 Your addon can then be managed through the bugfix push system, and will be pushed when the addons are bulk-uploaded (done as a part of the new version release process).
+
+[title="3"]Setting default parameters[/title]
+
+Sometimes on a complex project you will want a module to have a default ocSelect string, or a default virtual root, or some other default parameter different to what ocPortal hard-codes.
+
+The best way to achieve this is to code up a startup hook. Using PHP code you can detect non-presence of a URL variable, and then set your own default directly into [tt]$_GET[/tt] according to your own context.
+
+For example, if you wanted a module as seen in one zone to have one virtual root, and the same module as seen in another zone, to have another -- you could code up a startup hook that sets the default root accordingly.
 [/surround]
