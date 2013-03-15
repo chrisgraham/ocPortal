@@ -76,14 +76,56 @@
 	</tr>
 
 <?php
-	$gbp_needed = $hours*6*5.5;
+	$f_hours = floatval($hours);
+	$f_credits_per = floatval($ocp_sc_credits_per_hour);
+	$f_price_per = floatval($ocp_sc_price_per_credit);
+	$f_hours_by_credits = $f_hours*$f_credits_per;
+	$cash_needed = $f_hours*$f_credits_per*$f_price_per;
+	$cash_needed_string = $ocp_sc_main_currency_symbol.number_format($cash_needed).' '.strtoupper($ocp_sc_main_currency);
+	$ocp_sc_main_currency = strtoupper($ocp_sc_main_currency);
+	$alternate_currencies_links = '';
+	if(!empty($ocp_sc_alternate_currencies)){
+		if(is_array($ocp_sc_alternate_currencies)){
+			$cur_count = count($ocp_sc_alternate_currencies);
+			$z = 1;
+			foreach($ocp_sc_alternate_currencies as $v){
+				$alternate_currencies_links .= '<a href="http://www.xe.com/ucc/convert/?Amount='.strval($cash_needed).'&amp;From='.$ocp_sc_main_currency.'&amp;To='.strtoupper($v).'" target="_blank">'.strtoupper($v).'</a>';
+				if($z !== $cur_count){
+					$alternate_currencies_links .= ',&nbsp; ';
+				}
+				$z++;
+			}
+			unset($z);		
+		} else {
+			$alternate_currencies_links .= '<a href="http://www.xe.com/ucc/convert/?Amount='.strval($cash_needed).'&amp;From='.$ocp_sc_main_currency.'&amp;To='.strtoupper($ocp_sc_alternate_currencies).'" target="_blank">&nbsp;'.strtoupper($ocp_sc_alternate_currencies).' etc</a>';
+		}
+	
+	} else {
+		switch ($ocp_sc_main_currency){
+			case 'EUR':
+				$ocp_sc_alternate_currencies = 'USD';
+				break;
+			case 'GBP':
+				$ocp_sc_alternate_currencies = 'USD';
+				break;
+			case 'USD':
+				$ocp_sc_alternate_currencies = 'EUR';
+				break;
+			case 'CAD':
+				$ocp_sc_alternate_currencies = 'USD';
+				break;
+			default:
+				$ocp_sc_alternate_currencies = 'EUR';
+				break;	
+		}
+		$alternate_currencies_links .= '<a href="http://www.xe.com/ucc/convert/?Amount='.strval($cash_needed).'&amp;From='.$ocp_sc_main_currency.'&amp;To='.$ocp_sc_alternate_currencies .'" target="_blank">&nbsp;'.$ocp_sc_alternate_currencies .' etc</a>';
+	}
 
 	if ( $t_can_sponsor ) {
 
-		$result=db_query_bound('SELECT f.id FROM ocp2_f_custom_fields f LEFT JOIN ocp2_translate t ON f.cf_name=t.id WHERE text_original=\'ocp_support_credits\'',array());
+		$result=db_query_bound('SELECT f.id FROM '.$ocp_sc_db_prefix.'f_custom_fields f LEFT JOIN '.$ocp_sc_db_prefix.'translate t ON f.cf_name=t.id WHERE text_original=\''.$ocp_sc_custom_profile_field.'\'',array());
 		$field_num = db_fetch_array( $result );
-
-		$result=db_query_bound('SELECT field_'.strval($field_num['id']).' AS result FROM ocp2_f_member_custom_fields WHERE mf_member_id='.auth_get_current_user_id(),array());
+		$result=db_query_bound('SELECT field_'.strval($field_num['id']).' AS result FROM '.$ocp_sc_db_prefix.'f_member_custom_fields WHERE mf_member_id='.auth_get_current_user_id(),array());
 		$num_credits = db_fetch_array( $result );
 		$credits_available=isset($num_credits['result'])?$num_credits['result']:0;
 		if ($credits_available=='') $credits_available=0;
@@ -93,7 +135,7 @@
 		$total_user_sponsored=isset($amount_sponsored['result'])?$amount_sponsored['result']:0;
 		if ($total_user_sponsored=='') $total_user_sponsored=0;
 		$credits_available_real=$credits_available;
-		$credits_sponsored=intval(round($total_user_sponsored/5.5));
+		$credits_sponsored=intval(round($total_user_sponsored/$f_price_per));
 		$credits_available-=$credits_sponsored;
 
 		$result=db_query_bound('SELECT SUM(amount) AS result FROM mantis_sponsorship_table WHERE bug_id='.$f_bug_id,array());
@@ -103,19 +145,21 @@
 
 ?>
 	<tr class="row-1">
-		<td class="category" width="15%"><?php echo lang_get( 'sponsor_issue' ) ?> / Cost</td>
+		<td class="category" width="15%"><?php echo lang_get( 'sponsor_issue' ).lang_get('divide_cost');?></td>
 		<td>
 			<form method="post" action="bug_set_sponsorship.php">
-				<?php if ($hours!=0) { ?>
-				<p>At <?php echo number_format(floatval($hours)); ?> hours, this would cost <?php echo number_format($hours*6); ?> support credits at budget priority (&pound;<?php echo number_format($gbp_needed); ?> GBP [ <a href="http://www.xe.com/ucc/convert/?Amount=<?php echo strval($gbp_needed); ?>&amp;From=GBP&amp;To=USD" target="_blank">convert to USD etc</a> ] ). If this is reached and sponsors have this much in their accounts, ocProducts will prioritise the feature and release the code early in this tracker. If a feature is not sponsored then it may also be done anyway, but there is no guarantee that any features posted in the tracker are planned as ocPortal is non-commercial and no roadmap is maintained. <strong>Important:</strong> all the normal commercial work guidelines apply to sponsored work, the time quote is only valid for the developers <em>interpretation</em> of what was written up for the task at the time for the hour-estimate, and may be <em>subject to re-review</em> before work begins. In short, make sure you are patient and very clear and precise.</p>
+				<?php if ($hours!=0) { 
+				
+				?>
+				<p><?php echo sprintf(lang_get('ocp_sponsor_first_message'), number_format($f_hours), number_format($f_hours_by_credits), $cash_needed_string, $alternate_currencies_links, $ocp_sc_business_name, $ocp_sc_product_name);?></p>
 				<?php } ?>
-				<p>Please be aware that even with sponsorship a requested feature may not end up in the main ocPortal distribution, to avoid software bloat.</p>
+				<p><?php echo sprintf(lang_get('ocp_sponsor_second_message'), $ocp_sc_product_name); ?></p>
 
 				<?php echo form_security_field( 'bug_set_sponsorship' ) ?>
 				<input type="hidden" name="bug_id" value="<?php echo $f_bug_id ?>" size="4" />
 				<p>
-					<label><input type="text" name="amount_credits" onblur="if (this.value.match(/^\d+$/)) this.form.elements['amount'].value=this.value*5.5;" value="" size="20" /> Amount in support credits</label><br />You currently have <?php echo strval($credits_available); ?> support credits. If you sponsor more than this, you will be able to buy more credits after clicking the 'Sponsor' button' (next to your listed sponsorship).<br />
-					<span style="display: none">or&hellip;<label><input type="text" name="amount" onblur="if (this.value.match(/^\d+$/)) this.form.elements['amount_credits'].value=Math.ceil(this.value/5.5);" value="" size="20" /> Amount in GBP</label></span>
+					<label><input type="text" name="amount_credits" onblur="if (this.value.match(/^\d+$/)) this.form.elements['amount'].value=this.value*<?php echo $f_price_per;?>;" value="" size="20" /> <?php echo lang_get('amount_in_support_credits'); ?></label><?php echo sprintf(lang_get('current_credits_balance'), $credits_available)?> <br />
+					<label><input type="text" name="amount" onblur="if (this.value.match(/^\d+$/)) this.form.elements['amount_credits'].value=Math.ceil(this.value/<?php echo $f_price_per;?>);" value="" size="20" /> <?php echo sprintf(lang_get('amount_in_main_currency'), $ocp_sc_main_currency)?></label>
 				</p>
 				<p>
 					<input type="submit" class="button" name="sponsor" value="<?php echo lang_get( 'sponsor_verb' ) ?>" />
@@ -126,7 +170,7 @@
 					if ($t_sponsorship->user_id==auth_get_current_user_id()) {
 				?>
 				<p>
-					Filling in this form replaces your previous sponsorship, it does not add to it. To remove re-sponsor with zero.
+					<?php echo lang_get('filling_in_form_message');?>
 				</p>
 				<?php
 					}
@@ -163,25 +207,25 @@
 
 					echo $t_date_added . ': ';
 					print_user( $t_sponsorship->user_id );
-					echo ' - ' , sponsorship_format_amount( $t_sponsorship->amount ) , ' ('.round(floatval($t_sponsorship->amount)/5.5).' support credits)';
+					echo ' - ' , sponsorship_format_amount( $t_sponsorship->amount ) , ' ('.round(floatval($t_sponsorship->amount)/$ocp_sc_price_per_credit).' '.lang_get('support_credits').' )';
 					if ( access_has_bug_level( config_get( 'handle_sponsored_bugs_threshold' ), $f_bug_id ) ) {
 						echo ' ' . get_enum_element( 'sponsorship', $t_sponsorship->paid );
 					}
 					
-					$result=db_query_bound('SELECT f.id FROM ocp2_f_custom_fields f LEFT JOIN ocp2_translate t ON f.cf_name=t.id WHERE text_original=\'ocp_support_credits\'',array());
+					$result=db_query_bound('SELECT f.id FROM '.$ocp_sc_db_prefix.'f_custom_fields f LEFT JOIN '.$ocp_sc_db_prefix.'translate t ON f.cf_name=t.id WHERE text_original=\''.$ocp_sc_custom_profile_field.'\'',array());
 					$field_num = db_fetch_array( $result );
-					$result=db_query_bound('SELECT field_'.strval($field_num['id']).' AS result FROM ocp2_f_member_custom_fields WHERE mf_member_id='.$t_sponsorship->user_id,array());
+					$result=db_query_bound('SELECT field_'.strval($field_num['id']).' AS result FROM '.$ocp_sc_db_prefix.'f_member_custom_fields WHERE mf_member_id='.$t_sponsorship->user_id,array());
 					$num_credits = db_fetch_array( $result );
-					if ($num_credits['result']*5.5>=$t_sponsorship->amount)
+					if ($num_credits['result']*$ocp_sc_price_per_credit >=$t_sponsorship->amount)
 					{
-						echo ' - backed by existing support credits';
+						echo lang_get('backed_by_existing_support_credits');
 						$t_total_sponsorship_confirmed += $t_sponsorship->amount;
 					} else
 					{
-						echo ' - not backed by existing support credits';
+						echo lang_get('not_backed_by_existing_support_credits');
 						if ($t_sponsorship->user_id==auth_get_current_user_id())
 						{
-							echo ' - <a href="http://ocportal.com/site/commercial_support.htm" target="_blank">buy some</a>';
+							echo sprintf(lang_get( 'buy_some' ), $ocp_sc_commercial_support_url);
 						}
 					}
 				}
@@ -190,18 +234,18 @@
 		</td>
 		</tr>
 		<tr class="row-1">
-			<td class="category" width="15%">Funding progress (theory)</td>
+			<td class="category" width="15%"><?php echo lang_get('progress_theory')?></td>
 			<td>
-				<progress style="width: 100%" value="<?php echo $t_total_sponsorship; ?>" max="<?php echo $gbp_needed; ?>"></progress>
-				<?php echo round(100*$t_total_sponsorship/$gbp_needed).'% ('.round(($gbp_needed-$t_total_sponsorship)/5.5).' credits remaining)'; ?>
+				<progress style="width: 100%" value="<?php echo $t_total_sponsorship; ?>" max="<?php echo $cash_needed; ?>"></progress>
+				<?php echo round(100*$t_total_sponsorship/$cash_needed).'% ('.round(($cash_needed-$t_total_sponsorship)/$f_price_per).' '.lang_get('credits_remaining').')'; ?>
 			</td>
 		</tr>
 		<?php if ($tpl_bug->status!=80) { ?>
 		<tr class="row-1">
-			<td class="category" width="15%">Funding progress (paid up)</td>
+			<td class="category" width="15%"><?php echo lang_get('progress_paid_up')?></td>
 			<td>
-				<progress style="width: 100%" value="<?php echo $t_total_sponsorship_confirmed; ?>" max="<?php echo $gbp_needed; ?>"></progress>
-				<?php echo round(100*$t_total_sponsorship_confirmed/$gbp_needed).'% ('.round(($gbp_needed-$t_total_sponsorship_confirmed)/5.5).' credits remaining)'; ?>
+				<progress style="width: 100%" value="<?php echo $t_total_sponsorship_confirmed; ?>" max="<?php echo $cash_needed; ?>"></progress>
+				<?php echo round(100*$t_total_sponsorship_confirmed/$cash_needed).'% ('.round(($cash_needed-$t_total_sponsorship_confirmed)/$f_price_per).' '.lang_get('credits_remaining').')'; ?>
 			</td>
 		</tr>
 		<?php } ?>

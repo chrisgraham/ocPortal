@@ -1,8 +1,8 @@
 <?php
-
+require_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'config_inc.php' );
 if ($_GET['id']!='1')
 {
-	header('Location: http://ocportal.com/site/members/view/'.strval($_GET['id']).'.htm');
+	header('Location: '.sprintf($ocp_sc_member_view_url, strval($_GET['id'])));
 	exit();
 }
 

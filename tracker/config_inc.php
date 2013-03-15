@@ -51,7 +51,9 @@ $g_hostname      = $SITE_INFO['db_site_host'];
 $g_db_username   = $SITE_INFO['db_site_user'];
 $g_db_password   = $SITE_INFO['db_site_password'];
 $g_database_name = $SITE_INFO['db_site'];
-$g_db_type       = 'mysql';
+$g_db_type       = $SITE_INFO['db_type'];
+$ocp_sc_db_prefix = $SITE_INFO['table_prefix'];
+$ocp_sc_session_cookie_name = 'ocp_session';
 
 # --- Anonymous Access / Signup ---
 $g_allow_signup				= ON;
@@ -62,16 +64,12 @@ $g_lost_password_feature = OFF;
 # --- Attachments / File Uploads ---
 $g_allow_file_upload	= ON;
 $g_file_upload_method	= DISK; # or DISK
-$g_absolute_path_default_upload_folder = dirname(__FILE__).'/uploads/'; # used with DISK, must contain trailing \ or /.
+$g_absolute_path_default_upload_folder = dirname(__FILE__).DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR ; # used with DISK, must contain trailing \ or /.
 $g_max_file_size		= 25000000;	# in bytes
 $g_preview_attachments_inline_max_size = 256 * 1024;
 $g_allowed_files		= 'patch,diff,swf,sql,odg,odp,odt,ods,ps,pdf,doc,ppt,csv,xls,docx,pptx,xlsx,pub,txt,psd,tga,tif,gif,png,bmp,jpg,jpeg,flv,avi,mov,mpg,mpeg,mp4,asf,wmv,ram,ra,rm,qt,zip,tar,rar,gz,wav,mp3,ogg,torrent,php,css,tpl,ini,eml';		# extensions comma separated, e.g. 'php,html,java,exe,pl'
 $g_disallowed_files		= '';		# extensions comma separated
 
-# --- Branding ---
-$g_window_title			= 'ocPortal feature tracker'; // TODO: Customise
-$g_logo_image			= '../themes/ocproducts/images/newlogo-top.gif'; // TODO: Customise
-$g_favicon_image		= $SITE_INFO['base_url'].'/themes/default/images/favicon.ico';
 
 # --- Email Configuration ---
 $g_phpMailer_method		= PHPMAILER_METHOD_MAIL; # or PHPMAILER_METHOD_SMTP, PHPMAILER_METHOD_SENDMAIL
@@ -91,12 +89,29 @@ $g_show_realname = OFF;
 $g_show_user_realname_threshold = NOBODY;	# Set to access level (e.g. VIEWER, REPORTER, DEVELOPER, MANAGER, etc)
 
 # --- Others ---
+$ocp_sc_site_url = $SITE_INFO['base_url'];
+$ocp_sc_site_name = 'ocPortal.com';
 $g_default_home_page = 'my_view_page.php';	# Set to name of page to go to after login
-$g_logo_url = $SITE_INFO['base_url'].'/';
+$g_logo_url = $ocp_sc_site_url.'/';
+$ocp_sc_profile_url = $ocp_sc_site_url.'/personalzone/editprofile.htm';
+$ocp_sc_commercial_support_url = $ocp_sc_site_url.'/site/commercial_support.htm';
+$ocp_sc_community_doc_url = $ocp_sc_site_url.'/site/s/1/39.htm';
+$ocp_sc_join_url = $ocp_sc_site_url.'/join.htm';
+$ocp_sc_member_view_url = $ocp_sc_site_url.'/site/members/view/%1$d.htm';  # Set the user id as variable in the url ie %1$d
+$ocp_sc_sourcecode_link = '<a href="https://github.com/chrisgraham/ocPortal">Github</a>';
+$ocp_sc_product_name = 'ocPortal';
+$ocp_sc_business_name = 'ocProducts';
+$ocp_sc_business_name_possesive = 'ocProduct\'s';
+$ocp_sc_credits_per_hour = 6;
+$ocp_sc_price_per_credit = 5.5;
+$ocp_sc_main_currency = 'GBP';
+$ocp_sc_main_currency_symbol = '&pound';
+$ocp_sc_alternate_currencies = array('USD', 'CAD', 'EUR');
+$ocp_sc_custom_profile_field = 'ocp_support_credits';
 
 $g_enable_sponsorship = ON;
-$g_sponsorship_currency = 'GBP &pound;';
-$g_minimum_sponsorship_amount = 5.5;
+$g_sponsorship_currency = $ocp_sc_main_currency.' '.$ocp_sc_main_currency_symbol;
+$g_minimum_sponsorship_amount = $ocp_sc_price_per_credit;
 
 $g_source_control_set_status_to = RESOLVED;
 $g_source_control_set_resolution_to = FIXED;
@@ -112,3 +127,10 @@ $g_default_bug_severity = FEATURE;
 $g_default_bug_reproducibility = 100;
 
 $g_html_valid_tags		= '';
+
+# --- Branding ---
+$g_window_title			= 'ocPortal feature tracker'; // TODO: Customise
+$g_logo_image			= '../themes/ocproducts/images/newlogo-top.gif'; // TODO: Customise
+$g_favicon_image		= $ocp_sc_site_url.'/themes/default/images/favicon.ico';
+
+

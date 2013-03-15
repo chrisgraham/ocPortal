@@ -477,7 +477,7 @@ function html_top_banner() {
 		if( $t_show_url ) {
 			echo '</a>';
 		}
-		echo '<p><em>feature request / bug tracker</em></p>';
+		echo '<p><em>'.lang_get('ocp_sc_banner_message').'</em></p>';
 	}
 
 	event_signal( 'EVENT_LAYOUT_PAGE_HEADER' );
@@ -708,6 +708,7 @@ function prepare_custom_menu_options( $p_config ) {
  * @return null
  */
 function print_menu() {
+	global $ocp_sc_sourcecode_link;
 	if( auth_is_user_authenticated() ) {
 		$t_protected = current_user_get_field( 'protected' );
 		$t_current_project = helper_get_current_project();
@@ -836,14 +837,14 @@ function print_menu() {
 			$t_menu_options_account[] = '<a href="' . helper_mantis_url( 'logout_page.php">' ) . lang_get( 'logout_link' ) . '</a>';
 		}
 
-		echo ' <div class="menu_section"><span class="menu_divider">Issues:</span> '.implode( $t_menu_options_issues, ' | ' ).'</div>';
-		echo ' <div class="menu_section"><span class="menu_divider">Analysis:</span> '.implode( $t_menu_options_analysis, ' | ' ).'</div>';
+		echo ' <div class="menu_section"><span class="menu_divider">'.lang_get('issues').':</span> '.implode( $t_menu_options_issues, ' | ' ).'</div>';
+		echo ' <div class="menu_section"><span class="menu_divider">'.lang_get('analysis').':</span> '.implode( $t_menu_options_analysis, ' | ' ).'</div>';
 		if (count($t_menu_options_admin)!=0)
-				echo ' <div class="menu_section"><span class="menu_divider">Administration:</span> '.implode( $t_menu_options_admin, ' | ' ).'</div>';
+				echo ' <div class="menu_section"><span class="menu_divider">'.lang_get('administration').':</span> '.implode( $t_menu_options_admin, ' | ' ).'</div>';
 		if (count($t_menu_options_account)!=0)
-				echo ' <div class="menu_section"><span class="menu_divider">Account:</span> '.implode( $t_menu_options_account, ' | ' ).'</div>';
+				echo ' <div class="menu_section"><span class="menu_divider">'.lang_get('account').':</span> '.implode( $t_menu_options_account, ' | ' ).'</div>';
 
-		echo ' <div class="menu_section"><span class="menu_divider"><acronym title="Source Code Management">SCM</acronym>:</span> <a href="https://github.com/chrisgraham/ocPortal">Github</a></div>';
+		echo ' <div class="menu_section"><span class="menu_divider">'.lang_get('scm_acronym').':</span> '.$ocp_sc_sourcecode_link .'</div>';
 
 		echo '</td>';
 		echo '<td class="menu right nowrap">';

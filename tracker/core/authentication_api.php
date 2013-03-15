@@ -518,7 +518,7 @@ function auth_is_cookie_string_unique( $p_cookie_string ) {
  * @access public
  */
 function auth_get_current_user_cookie( $p_login_anonymous=true ) {
-	global $g_script_login_cookie, $g_cache_anonymous_user_cookie_string;
+	global $g_script_login_cookie, $g_cache_anonymous_user_cookie_string, $ocp_sc_db_prefix, $ocp_sc_session_cookie_name;
 
 	# if logging in via a script, return that cookie
 	if( $g_script_login_cookie !== null ) {
@@ -535,10 +535,10 @@ function auth_get_current_user_cookie( $p_login_anonymous=true ) {
 			if( $g_cache_anonymous_user_cookie_string === null ) {
 				if( function_exists( 'db_is_connected' ) && db_is_connected() ) {
 					// Try ocPortal session authentication
-					if (isset($_COOKIE['ocp_session']))
+					if (isset($_COOKIE[$ocp_sc_session_cookie_name]))
 					{
 						$query = 'SELECT the_user
-									  FROM ocp2_sessions WHERE the_session=' . strval(intval($_COOKIE['ocp_session']));
+									  FROM '.$ocp_sc_db_prefix.'sessions WHERE the_session=' . strval(intval($_COOKIE[$ocp_sc_session_cookie_name]));
 						$result = db_query( $query );
 
 						if( 1 == db_num_rows( $result ) ) {
@@ -546,13 +546,13 @@ function auth_get_current_user_cookie( $p_login_anonymous=true ) {
 							user_cache_row( $user);
 
 							$query = 'SELECT u.id,u.cookie_string
-										  FROM ocp2_f_members m LEFT JOIN ' . db_get_table( 'mantis_user_table' ) . ' u ON u.username=m.m_username
+										  FROM '.$ocp_sc_db_prefix.'f_members m LEFT JOIN ' . db_get_table( 'mantis_user_table' ) . ' u ON u.username=m.m_username
 										  WHERE m.id<>1 AND m.id=' . strval($user);
 							$result = db_query( $query );
 						}
 					}
 
-					if((!isset($_COOKIE['ocp_session'])) || ( db_num_rows( $result ) == 0 )) {
+					if((!isset($_COOKIE[$ocp_sc_session_cookie_name])) || ( db_num_rows( $result ) == 0 )) {
 						# get anonymous information if database is available
 						$query = 'SELECT id, cookie_string FROM ' . db_get_table( 'mantis_user_table' ) . ' WHERE username = ' . db_param();
 						$result = db_query_bound( $query, Array( config_get( 'anonymous_account' ) ) );
