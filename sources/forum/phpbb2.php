@@ -744,7 +744,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 			$_groups.='g.group_id='.strval((integer)$group);
 		}
 		if ($_groups=='') return array();
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE '.$_groups.' AND user_pending=0 ORDER BY g.group_id ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE ('.$_groups.') AND user_pending=0 ORDER BY g.group_id ASC',$max,$start);
 	}
 
 	/**
