@@ -198,8 +198,8 @@ class Module_banners
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
-			add_specific_permission('_BANNERS','use_html_banner',false);
-			add_specific_permission('_BANNERS','use_php_banner',false,true);
+			add_specific_permission('BANNERS','use_html_banner',false);
+			add_specific_permission('BANNERS','use_php_banner',false,true);
 		}
 	}
 
