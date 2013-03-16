@@ -1122,9 +1122,10 @@ function get_class($obj)
  *
  * @param  integer	The table to select (HTML_ENTITIES or HTML_SPECIALCHARS).
  * @param  integer	The quote style (ENT_QUOTES or ENT_NOQUOTES or ENT_COMPAT).
+ * @param  string		The character set to use
  * @return array		The translation table.
  */
-function get_html_translation_table($table,$quote_style=ENT_COMPAT)
+function get_html_translation_table($table,$quote_style=ENT_COMPAT,$charset='UTF-8')
 {
 	return array();
 }

@@ -709,7 +709,7 @@ class database_driver
 	 */
 	function _query_select_value($values)
 	{
-		if (!array_key_exists(0,$values)) return NULL; // No result found
+		if (!isset($values[0])) return NULL; // No result found
 		$first=$values[0];
 		$v=current($first); // Result found. Maybe a value of 'null'
 		return $v;
@@ -1045,6 +1045,8 @@ class database_driver
 		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 		if ($ret!==NULL)
 		{
+			$cnt_orig=count($this->text_lookup_original_cache);
+			$cnt_parsed=count($this->text_lookup_cache);
 			foreach ($lang_strings_expecting as $bits)
 			{
 				list($field,$original,$parsed)=$bits;
@@ -1053,10 +1055,16 @@ class database_driver
 				{
 					$entry=$row[$field];
 
-					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
+					if (($row[$original]!==NULL) && ($cnt_orig<=1000))
+					{
 						$this->text_lookup_original_cache[$entry]=$row[$original];
-					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
+						$cnt_orig++;
+					}
+					if (($row[$parsed]!==NULL) && ($cnt_parsed<=1000))
+					{
 						$this->text_lookup_cache[$entry]=$row[$parsed];
+						$cnt_parsed++;
+					}
 
 					unset($row[$original]);
 					unset($row[$parsed]);

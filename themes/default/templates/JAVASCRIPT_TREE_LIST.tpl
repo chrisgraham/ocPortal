@@ -168,7 +168,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				var html_node=document.getElementById(this.name+'tree_list_c_'+get_inner_html(node));
 				var expanding=(html_node.style.display!='block');
 				if (expanding)
-					e.onmousedown(null,true);
+					e.onclick(null,true);
 			} else
 			{
 				// Now try against serverid
@@ -181,7 +181,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 						var html_node=document.getElementById(this.name+'tree_list_c_'+xml_node.getAttribute('id'));
 						var expanding=(html_node.style.display!='block');
 						if (expanding)
-							e.onmousedown(null,true);
+							e.onclick(null,true);
 					}
 				}
 			}
@@ -226,14 +226,28 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				description_in_use=escaped_title+': {!TREE_LIST_SELECT*;^}'+description+((node.getAttribute('serverid')=='')?(' ('+escape_html(node.getAttribute('serverid'))+')'):'');
 			}
 			set_inner_html(node_self,'<div><input class="ajax_tree_expand_icon"'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' type="image" alt="'+((!initially_expanded)?'{!EXPAND;^}':'{!CONTRACT;^}')+': '+escaped_title+'" title="'+((!initially_expanded)?'{!EXPAND;^}':'{!CONTRACT;^}')+'" id="'+this.name+'texp_c_'+node.getAttribute('id')+'" src="'+((!initially_expanded)?'{$IMG*,treefield/plus}':'{$IMG*,treefield/minus}').replace(/^http:/,window.location.protocol)+'" /> <img class="ajax_tree_cat_icon" alt="{!CATEGORY;^}" src="'+'{$IMG*,treefield/category}'.replace(/^http:/,window.location.protocol)+'" /> <label id="'+this.name+'tsel_c_'+node.getAttribute('id')+'" for="'+this.name+'tsel_r_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivate_tooltip!=\'undefined\') deactivate_tooltip(this,event);" onmousemove="if (typeof window.activate_tooltip!=\'undefined\') reposition_tooltip(this,event);" onmouseover="if (typeof window.activate_tooltip!=\'undefined\') activate_tooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(this.childNodes[0].title),\'auto\');" class="ajax_tree_magic_button '+colour+'"><input '+(this.tabindex?('tabindex="'+this.tabindex+'" '):'')+'id="'+this.name+'tsel_r_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" title="'+description_in_use+'" />'+escaped_title+'</label> <span id="'+this.name+'extra_'+node.getAttribute('id')+'">'+extra+'</span></div>');
-			var img=node_self.getElementsByTagName('input')[0];
-			img.onmousedown=this.handle_tree_click;
-			img.onmouseup=function() { return false; };
-			img.oncontextmenu=function() { return false; };
-			img.onclick=function() { return false; };
-			img.object=this;
+			var expand_button=node_self.getElementsByTagName('input')[0];
+			var _this=this;
+			expand_button.oncontextmenu=function() { return false; };
+			expand_button.object=this;
+			expand_button.onclick=function(expand_button) { return function(event,automated) {
+				if (!event) var event=window.event;
+				if (event)
+				{
+					event.returnValue=false;
+					if (typeof event.preventDefault!='undefined') event.preventDefault();
+				}
+				_this.handle_tree_click.call(expand_button,event,automated);
+				return false;
+			}}(expand_button);
 			var a=node_self.getElementsByTagName('label')[0];
-			img.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(img) { return function(event) { if (typeof event=='undefined') var event=window.event; if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-'].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))) img.onmousedown(event); } } (img);
+			expand_button.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(expand_button) {
+				return function(event) {
+					if (typeof event=='undefined') var event=window.event;
+					if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-','='].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode)))
+						expand_button.onclick(event);
+				}
+			} (expand_button);
 			a.oncontextmenu=function() { return false; };
 			a.handle_selection=this.handle_selection;
 			a.childNodes[0].onfocus=function() { this.parentNode.style.outline='1px dotted'; };
@@ -273,7 +287,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			if (window.ctrl_pressed || window.alt_pressed || window.meta_pressed || window.shift_pressed)
 			{
 				if (!initially_expanded)
-					img.onmousedown();
+					expand_button.onclick();
 			}
 		} else // Assume entry
 		{
@@ -448,7 +462,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 	var clicked_id=this.getAttribute('id').substr(7+this.object.name.length);
 
 	var html_node=document.getElementById(this.object.name+'tree_list_c_'+clicked_id);
-	var img=document.getElementById(this.object.name+'texp_c_'+clicked_id);
+	var expand_button=document.getElementById(this.object.name+'texp_c_'+clicked_id);
 
 	var expanding=(html_node.style.display!='block');
 
@@ -486,9 +500,9 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 			fade_transition(html_node,100,30,4);
 		}
 
-		img.src='{$IMG;,treefield/minus}'.replace(/^http:/,window.location.protocol);
-		img.title=img.title.replace('{!EXPAND;^}','{!CONTRACT;^}');
-		img.alt=img.alt.replace('{!EXPAND;^}','{!CONTRACT;^}');
+		expand_button.src='{$IMG;,treefield/minus}'.replace(/^http:/,window.location.protocol);
+		expand_button.title=expand_button.title.replace('{!EXPAND;^}','{!CONTRACT;^}');
+		expand_button.alt=expand_button.alt.replace('{!EXPAND;^}','{!CONTRACT;^}');
 	} else
 	{
 		var xml_node=this.object.getElementByIdHack(clicked_id,'c');
@@ -501,9 +515,9 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 
 		html_node.style.display='none';
 
-		img.src='{$IMG;,treefield/plus}'.replace(/^http:/,window.location.protocol);
-		img.title=img.title.replace('{!CONTRACT;^}','{!EXPAND;^}');
-		img.alt=img.alt.replace('{!CONTRACT;^}','{!EXPAND;^}');
+		expand_button.src='{$IMG;,treefield/plus}'.replace(/^http:/,window.location.protocol);
+		expand_button.title=expand_button.title.replace('{!CONTRACT;^}','{!EXPAND;^}');
+		expand_button.alt=expand_button.alt.replace('{!CONTRACT;^}','{!EXPAND;^}');
 	}
 
 	fixup_node_positions(this.object.name);

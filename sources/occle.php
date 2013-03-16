@@ -233,18 +233,8 @@ class virtual_bash
 		if (is_object($this->output[STREAM_STDERR])) $this->output[STREAM_STDERR]=$this->output[STREAM_STDERR]->evaluate();
 
 		// Make the HTML not use non-XML entities
-		$table=array_flip(get_html_translation_table(HTML_ENTITIES));
-		if (strtoupper(get_charset())=='UTF-8')
-		{
-			foreach ($table as $x=>$y)
-				$table[$x]=utf8_encode($y);
-		}
-		unset($table['&amp;']);
-		unset($table['&gt;']);
-		unset($table['&lt;']);
-		unset($table['&quot;']);
 		$html_bak=$this->output[STREAM_STDHTML];
-		$this->output[STREAM_STDHTML]=strtr($this->output[STREAM_STDHTML],$table);
+		$this->output[STREAM_STDHTML]=convert_bad_entities($this->output[STREAM_STDHTML],get_charset());
 
 		@ob_end_clean(); // Cleanup any output that may have somehow leaked to this point
 

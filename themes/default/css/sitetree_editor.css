@@ -11,6 +11,7 @@
 .site_tree_left {
 	width: 50%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	padding-right: 1em;
 }
 
 .site_tree_right {

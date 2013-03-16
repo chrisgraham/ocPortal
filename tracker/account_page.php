@@ -1,6 +1,6 @@
 <?php
-
-header('Location: http://ocportal.com/personalzone/editprofile.htm');
+require_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'config_inc.php' );
+header('Location: '.$ocp_sc_profile_url);
 exit();
 
 # MantisBT - a php based bugtracking system

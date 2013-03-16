@@ -83,7 +83,7 @@ function _find_all_langs($even_empty_langs=false)
 	$_langs=array();
 	while (false!==($file=readdir($_dir)))
 	{
-		if ((!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file)<=5))
+		if (($file[0]!='.') && /*(!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS)) && */(strlen($file)<=5))
 		{
 			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
 		}
@@ -96,7 +96,7 @@ function _find_all_langs($even_empty_langs=false)
 		{
 			while (false!==($file=readdir($_dir)))
 			{
-				if ((!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file)<=5))
+				if (($file[0]!='.') && /*(!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS)) && */(strlen($file)<=5))
 				{
 					if (is_dir(get_custom_file_base().'/lang_custom/'.$file))
 					{

@@ -178,8 +178,8 @@ class Module_banners
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
-			add_privilege('_BANNERS','use_html_banner',false);
-			add_privilege('_BANNERS','use_php_banner',false,true);
+			add_privilege('BANNERS','use_html_banner',false);
+			add_privilege('BANNERS','use_php_banner',false,true);
 		}
 	}
 

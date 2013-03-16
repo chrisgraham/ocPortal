@@ -3,7 +3,7 @@
 
 	<div{+START,IF,{$AND,{$NEQ,{$PAGE},admin_themes,admin_zones},{$JS_ON}}} class="accessibility_hidden"{+END}>
 		<label for="{$FIX_ID*,j_{NAME}_{CODE}}">
-			<input{+START,IF,{$JS_ON}} class="accessibility_hidden"{+END} onclick="if (this.disabled) return; if (typeof window.deselect_alt_url!='undefined') deselect_alt_url(this.form); if (typeof window.main_form_very_simple!='undefined') this.form.submit(); cancel_bubbling(event);" class="input_radio" type="radio" id="{$FIX_ID*,j_{NAME}_{CODE}}" name="{NAME*}" value="{CODE*}"{+START,IF,{CHECKED}} checked="checked"{+END} />
+			<input onclick="if (this.disabled) return; if (typeof window.deselect_alt_url!='undefined') deselect_alt_url(this.form); if (typeof window.main_form_very_simple!='undefined') this.form.submit(); cancel_bubbling(event);" class="input_radio{+START,IF,{$JS_ON}} accessibility_hidden{+END}" type="radio" id="{$FIX_ID*,j_{NAME}_{CODE}}" name="{NAME*}" value="{CODE*}"{+START,IF,{CHECKED}} checked="checked"{+END} />
 			{PRETTY*}
 		</label>
 	</div>

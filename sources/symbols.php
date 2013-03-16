@@ -25,7 +25,7 @@
  */
 function init__symbols()
 {
-	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$SYMBOL_CACHE;
+	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$SYMBOL_CACHE,$THEME_IMG_DIMS_CACHE;
 	$BLOCKS_CACHE=array();
 	$PAGES_CACHE=array();
 	$PANELS_CACHE=array();
@@ -33,6 +33,7 @@ function init__symbols()
 	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
 	$SYMBOL_CACHE=array();
+	$THEME_IMG_DIMS_CACHE=mixed();
 }
 
 /**
@@ -201,11 +202,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'AND':
 				$count=0;
+				$total=0;
 				foreach ($param as $test)
 				{
 					if (($test=='1') || ($test=='1')) $count++;
+					$total++;
 				}
-				$value=($count==count($param))?'1':'0';
+				$value=($count==$total)?'1':'0';
 				break;
 
 			case 'HAS_ACTUAL_PAGE_ACCESS':
@@ -473,7 +476,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=strip_tags(str_replace('))',')',str_replace('((','(',str_replace('<em>','(',str_replace('</em>',')',$param[0])))));
 					} else
 					{
-						$value=strip_tags($param[0],array_key_exists(2,$param)?$param[2]:'');
+						if (strpos($param[0],'<')===false)
+						{ // optimisation
+							$value=$param[0];
+						} else
+						{
+							$value=strip_tags($param[0],isset($param[2])?$param[2]:'');
+						}
 					}
 					if ((isset($param[1])) && ($param[1]=='1')) $value=@html_entity_decode($value,ENT_QUOTES,get_charset());
 					if ((!isset($param[2])) || ($param[2]=='0')) $value=trim($value);
@@ -1212,7 +1221,16 @@ function ecv($lang,$escaped,$type,$name,$param)
 					global $THEME_IMG_DIMS_CACHE;
 					if (!isset($THEME_IMG_DIMS_CACHE))
 					{
-						$THEME_IMG_DIMS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('THEME_IMG_DIMS'):array();
+						if ((function_exists('persistent_cache_get')) && (!is_null($GLOBALS['MEM_CACHE'])))
+						{
+							$THEME_IMG_DIMS_CACHE=persistent_cache_get('THEME_IMG_DIMS');
+						} else
+						{
+							$_theme_img_dims_cache=get_long_value('THEME_IMG_DIMS');
+							if (!is_null($_theme_img_dims_cache))
+								$THEME_IMG_DIMS_CACHE=unserialize($_theme_img_dims_cache);
+						}
+						if (!is_array($THEME_IMG_DIMS_CACHE)) $THEME_IMG_DIMS_CACHE=array();
 					}
 					if (isset($THEME_IMG_DIMS_CACHE[$param[0]]))
 					{
@@ -1228,7 +1246,16 @@ function ecv($lang,$escaped,$type,$name,$param)
 						list($width,$height)=_symbol_image_dims(array($img_url));
 						$value=($name=='IMG_WIDTH')?$width:$height;
 						$THEME_IMG_DIMS_CACHE[$param[0]]=array($width,$height);
-						if (function_exists('persistent_cache_set')) persistent_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
+						if ((array_key_exists(3,$param)) || ($param[3]=='1'))
+						{
+							if ((function_exists('persistent_cache_set')) && (!is_null($GLOBALS['MEM_CACHE'])))
+							{
+								persistent_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
+							} else
+							{
+								set_long_value('THEME_IMG_DIMS',serialize($THEME_IMG_DIMS_CACHE));
+							}
+						}
 					}
 				}
 				break;
@@ -2180,7 +2207,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'FIX_ID':
 				if (isset($param[0]))
 				{
-					$value=fix_id($param[0]);
+					if (preg_match('#^\w[\w\-\.]*$#',$param[0])!=0) // Optimisation
+					{
+						$value=$param[0];
+					} else
+					{
+						$value=fix_id($param[0]);
+					}
 					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
 				}
 				break;
@@ -2993,7 +3026,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 		$html=escape_html($param[0]);
 	}
 
-	if (ocp_mb_strlen($not_html)>$amount)
+	if ((isset($not_html[$amount])/*optimisation*/) && (ocp_mb_strlen($not_html)>$amount))
 	{
 		$tooltip=((isset($param[2])) && ($param[2]=='1'));
 		$literal_pos=isset($param[4])?($param[4]=='1'):false;

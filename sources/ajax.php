@@ -535,8 +535,11 @@ function snippet_script()
 
 	if (strpos($out,chr(10))!==false) // Is HTML
 	{
-		require_code('xhtml');
-		$out=xhtmlise_html($out,true,true);
+		if ((!function_exists('simplexml_load_string')) || (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false)) // Optimisation-- check first via optimised native PHP function if possible
+		{
+			require_code('xhtml');
+			$out=xhtmlise_html($out,true,true);
+		}
 	}
 
 	// End early execution listening (this means register_shutdown_function will run after connection closed - faster)
