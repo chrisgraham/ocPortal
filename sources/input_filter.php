@@ -91,7 +91,11 @@ function check_posted_field($name,$val)
  */
 function filter_form_field_default($name,$val)
 {
-	$restrictions=load_field_restrictions();
+	global $FIELD_RESTRICTIONS;
+	if ($FIELD_RESTRICTIONS===NULL)
+		$restrictions=load_field_restrictions();
+	else
+		$restrictions=$FIELD_RESTRICTIONS;
 
 	foreach ($restrictions as $_r=>$_restrictions)
 	{
@@ -104,7 +108,7 @@ function filter_form_field_default($name,$val)
 				{
 					list($restriction,$attributes)=$bits;
 
-					if ((array_key_exists('error',$attributes)) && (substr($attributes['error'],0,1)=='!'))
+					if ((isset($attributes['error'])) && (substr($attributes['error'],0,1)=='!'))
 					{
 						$attributes['error']=do_lang(substr($attributes['error'],1));
 					}

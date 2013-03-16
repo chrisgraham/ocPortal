@@ -72,9 +72,9 @@ function xhtmlise_html($html,$definitely_want=false)
 	if ($ang_pos!==false) $INBETWEEN_TEXT=substr($INBETWEEN_TEXT,$ang_pos+1);
 
 	$new.=fix_entities($INBETWEEN_TEXT);
-	while (!is_null($token))
+	while ($token!==NULL)
 	{
-		if ((is_array($token)) && (count($token)!=0)) // Some kind of error in our token
+		if ((is_array($token)) && (isset($token[0]))) // Some kind of error in our token
 		{
 			$token=$token[0];
 		}
@@ -128,7 +128,8 @@ function xhtmlise_html($html,$definitely_want=false)
 					$new.='<'.$basis_token;
 					foreach ($LAST_TAG_ATTRIBUTES as $key=>$val)
 					{
-						$new.=' '.$key.'="'.fix_entities($val).'"';
+						if (strpos($val,'&')!==false) $val=fix_entities($val);
+						$new.=' '.$key.'="'.$val.'"';
 					}
 					$new.='>';
 				} else // Self-closing tag
@@ -136,7 +137,8 @@ function xhtmlise_html($html,$definitely_want=false)
 					$new.='<'.$basis_token;
 					foreach ($LAST_TAG_ATTRIBUTES as $key=>$val)
 					{
-						$new.=' '.$key.'="'.fix_entities($val).'"';
+						if (strpos($val,'&')!==false) $val=fix_entities($val);
+						$new.=' '.$key.'="'.$val.'"';
 					}
 					$new.=' />';
 				}
@@ -186,7 +188,7 @@ function xhtmlise_html($html,$definitely_want=false)
 		} else
 		{
 			$token=_get_next_tag();
-			if (is_null($token))
+			if ($token===NULL)
 			{
 				// If we actually have a partial tag right at the end (ie. we're breaking out of some HTML at a bad point)
 				$ang_pos=strpos($INBETWEEN_TEXT,'<');
@@ -197,7 +199,7 @@ function xhtmlise_html($html,$definitely_want=false)
 	}
 
 	// Check we have everything closed
-	while (count($TAG_STACK)!=0)
+	while (isset($TAG_STACK[0]))
 	{
 		$previous=array_pop($TAG_STACK);
 		$new.='</'.$previous.'>';

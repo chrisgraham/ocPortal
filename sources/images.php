@@ -961,7 +961,8 @@ function is_image($name)
 
 	$ext=get_file_extension($name);
 
-	$types=explode(',',get_option('valid_images'));
+	static $types=NULL;
+	if ($types===NULL) $types=explode(',',get_option('valid_images'));
 	foreach ($types as $val)
 		if (strtolower($val)==$ext) return true;
 

@@ -71,6 +71,8 @@ function notifications_ui($member_id_of)
 
 	$lockdown=collapse_2d_complexity('l_notification_code','l_setting',$GLOBALS['SITE_DB']->query_select('notification_lockdown',array('*')));
 
+	$cnt_post=count($_POST);
+
 	$notification_sections=array();
 	$hooks=find_all_hooks('systems','notifications');
 	foreach (array_keys($hooks) as $hook)
@@ -95,7 +97,7 @@ function notifications_ui($member_id_of)
 				foreach ($_notification_types as $possible=>$ntype)
 				{
 					$available=(($possible & $allowed_setting) != 0);
-					if (count($_POST)!=0)
+					if ($cnt_post!=0)
 					{
 						$checked=post_param_integer('notification_'.$notification_code.'_'.$ntype,0);
 					} else

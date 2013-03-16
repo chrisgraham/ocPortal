@@ -1656,7 +1656,11 @@ function unixify_line_format($in,$desired_charset=NULL,$html=false,$from_disk=fa
 
 	if ($desired_charset===NULL) $desired_charset=get_charset();
 
-	$in=str_replace(array(chr(13).chr(10),'&#8298;',chr(13)),array(chr(10),'',chr(10)),$in); // &#8298; is very odd- seems to come from open office copy & paste
+	static $from=NULL;
+	if ($from===NULL) $from=array(chr(13).chr(10),'&#8298;',chr(13));
+	static $to=NULL;
+	if ($to===NULL) $to=array(chr(10),'',chr(10));
+	$in=str_replace($from,$to,$in); // &#8298; is very odd- seems to come from open office copy & paste
 	if (!$from_disk)
 	{
 		if ($desired_charset=='ISO-8859-1') // Fix up Windows ANSI characters

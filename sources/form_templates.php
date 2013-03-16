@@ -1287,7 +1287,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 		$category_expanded=false;
 		foreach ($ids as $id)
 		{
-			if (!is_null($selected_url))
+			if ($selected_url!==NULL)
 			{
 				$pos=strpos($selected_url,'/'.$id);
 				$selected=($pos!==false) && ($id!='');
@@ -1435,8 +1435,9 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	for ($minute=0;$minute<60;$minute++)
 	{
 		$_minute=strval($minute);
-		$temp=form_input_list_entry($_minute,$minute===$default_minute,($minute<10)?str_pad($_minute,2,'0',STR_PAD_LEFT):$_minute);
-		$temp->evaluate_echo();
+		//$temp=form_input_list_entry($_minute,$minute===$default_minute,($minute<10)?str_pad($_minute,2,'0',STR_PAD_LEFT):$_minute);
+		//$temp->evaluate_echo();
+		echo '<option '.(($minute===$default_minute)?'selected="selected" ':'').'value="'.escape_html($_minute).'">'.escape_html(($minute<10)?str_pad($_minute,2,'0',STR_PAD_LEFT):$_minute).'</option>'; // XHTMLXHTML
 	}
 	$minutes=ob_get_contents();
 	ob_end_clean();
@@ -1444,8 +1445,9 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	for ($hour=0;$hour<24;$hour++)
 	{
 		$text_hour=locale_filter(gmdate(do_lang('time_hour'),intval($hour*60*60)));
-		$temp=form_input_list_entry(strval($hour),$hour===$default_hour,$text_hour);
-		$temp->evaluate_echo();
+		//$temp=form_input_list_entry(strval($hour),$hour===$default_hour,$text_hour);
+		//$temp->evaluate_echo();
+		echo '<option '.(($hour===$default_hour)?'selected="selected" ':'').'value="'.escape_html(strval($hour)).'">'.escape_html($text_hour).'</option>'; // XHTMLXHTML
 	}
 	$hours=ob_get_contents();
 	ob_end_clean();
@@ -1457,8 +1459,9 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	ob_start();
 	for ($i=1;$i<=31;$i++)
 	{
-		$temp=form_input_list_entry(strval($i),($i===$default_day));
-		$temp->evaluate_echo();
+		//$temp=form_input_list_entry(strval($i),($i===$default_day));
+		//$temp->evaluate_echo();
+		echo '<option '.(($i===$default_day)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.escape_html(strval($i)).'</option>'; // XHTMLXHTML
 	}
 	$days=ob_get_contents();
 	ob_end_clean();
@@ -1505,8 +1508,9 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 				break;
 		}
 
-		$temp=form_input_list_entry(strval($i),($i===$default_month),$month_text);
-		$temp->evaluate_echo();
+		//$temp=form_input_list_entry(strval($i),($i===$default_month),$month_text);
+		//$temp->evaluate_echo();
+		echo '<option '.(($i===$default_month)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.$month_text->evaluate().'</option>'; // XHTMLXHTML
 	}
 	$months=ob_get_contents();
 	ob_end_clean();
@@ -1516,8 +1520,9 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		$yt=$year_start+$total_years_to_show/*remember $total_years_to_show is negative so this is a subtraction in effect*/;
 		for ($i=max($untuned_year_start,$year_start);$i>=$yt;$i--)
 		{
-			$temp=form_input_list_entry(strval($i),$i===$default_year);
-			$temp->evaluate_echo();
+			//$temp=form_input_list_entry(strval($i),$i===$default_year);
+			//$temp->evaluate_echo();
+			echo '<option '.(($i===$default_year)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.escape_html(strval($i)).'</option>'; // XHTMLXHTML
 		}
 	} else
 	{
@@ -1530,8 +1535,9 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		}
 		for ($i=$year_start;$i<=$yt;$i++)
 		{
-			$temp=form_input_list_entry(strval($i),$i===$default_year);
-			$temp->evaluate_echo();
+			//$temp=form_input_list_entry(strval($i),$i===$default_year);
+			//$temp->evaluate_echo();
+			echo '<option '.(($i===$default_year)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.escape_html(strval($i)).'</option>'; // XHTMLXHTML
 		}
 	}
 	$years=ob_get_contents();

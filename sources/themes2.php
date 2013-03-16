@@ -365,7 +365,9 @@ function _get_all_image_ids_type(&$ids,$dir,$type,$recurse,$dirs_only=false)
 	{
 		while (false!==($file=readdir($_dir)))
 		{
-			if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS))
+			if ($file[0]=='.' || $file=='index.html') continue; // Optimisation, so no need for should_ignore_file call
+
+			if ((preg_match('#^[\w\-]+\.(png|jpg|gif)$#',$file)!=0/*optimisation*/) || (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS)))
 			{
 				if (!is_dir($dir.'/'.$file))
 				{

@@ -705,6 +705,8 @@ function array_peek($array,$depth_down=1)
  */
 function fix_id($param)
 {
+	if (preg_match('#^\w[\w\-\.]*$#',$param[0])!=0) return $param; // Optimisation
+
 	$length=strlen($param);
 	$new='';
 	for ($i=0;$i<$length;$i++)
@@ -2339,6 +2341,8 @@ function member_personal_links_and_details($member_id)
  */
 function strip_html($in)
 {
+	if ((strpos($in,'<')===false) && (strpos($in,'&')===false)) return $in; // Optimisation
+
 	$search=array(
 		'#<script[^>]*?'.'>.*?</script>#si',	// Strip out Javascript
 		'#<style[^>]*?'.'>.*?</style>#siU',		// Strip style tags properly
@@ -2396,4 +2400,35 @@ function check_suhosin_request_quantity($inc=1)
 			$failed_already=true;
 		}
 	}
+}
+
+/**
+ * Convert HTML entities to plain characters for XML validity.
+ *
+ * @param  string			HTML to convert entities from
+ * @param  string			The character set we are using for $data (both in and out)
+ * @return string			Valid XHTML
+ */
+function convert_bad_entities($data,$charset='ISO-8859-1')
+{
+	if (defined('ENT_HTML401')) // PHP5.4+, we must explicitly give the charset, but when we do it helps us
+	{
+		if ((strtoupper($charset)!='ISO-8859-1') && (strtoupper($charset)!='UTF-8')) $charset='ISO-8859-1';
+		$table=array_flip(get_html_translation_table(HTML_ENTITIES,ENT_COMPAT|ENT_HTML401,$charset));
+	} else
+	{
+		$table=array_flip(get_html_translation_table(HTML_ENTITIES));
+
+		if (strtoupper($charset)=='UTF-8')
+		{
+			foreach ($table as $x=>$y)
+				$table[$x]=utf8_encode($y);
+		}
+	}
+
+	unset($table['&amp;']);
+	unset($table['&gt;']);
+	unset($table['&lt;']);
+
+	return strtr($data,$table);
 }

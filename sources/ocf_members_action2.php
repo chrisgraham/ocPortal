@@ -37,12 +37,14 @@ function nice_get_timezone_list($timezone=NULL)
 {
 	if (is_null($timezone)) $timezone=get_site_timezone();
 
-	$timezone_list=new ocp_tempcode();
+	$timezone_list='';//new ocp_tempcode();
+	$time_now=time();
 	foreach (get_timezone_list() as $_timezone=>$timezone_nice)
 	{
-		$timezone_list->attach(do_template('OCF_AUTO_TIME_ZONE_ENTRY',array('HOUR'=>date('H',tz_time(time(),$_timezone)),'DW'=>date('w',tz_time(time(),$_timezone)),'NAME'=>$_timezone,'SELECTED'=>($timezone==$_timezone),'CLASS'=>'','TEXT'=>$timezone_nice)));
+		$timezone_list.='<option '.(($timezone==$_timezone)?'selected="selected" ':'').'value="'.escape_html($_timezone).'">'.escape_html($timezone_nice).'</option>'; // XHTMLXHTML
+		//$timezone_list->attach(do_template('OCF_AUTO_TIME_ZONE_ENTRY',array('HOUR'=>date('H',tz_time($time_now,$_timezone)),'DW'=>date('w',tz_time(time(),$_timezone)),'NAME'=>$_timezone,'SELECTED'=>($timezone==$_timezone),'CLASS'=>'','TEXT'=>$timezone_nice)));
 	}
-	return $timezone_list;
+	return make_string_tempcode($timezone_list);
 }
 
 /**
@@ -606,6 +608,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 	$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
 	$field_groups=array();
 	require_code('fields');
+	require_code('encryption');
 	foreach ($_custom_fields as $custom_field)
 	{
 //		if (($custom_field['cf_locked']==0) || (!is_null($member_id)))

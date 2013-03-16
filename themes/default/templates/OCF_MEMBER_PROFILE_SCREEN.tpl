@@ -25,7 +25,7 @@
 							function load_tab__{TAB_CODE%}()
 							{
 								try { window.scrollTo(0,0); } catch (e) {};
-
+console.log('!');
 								load_snippet('profile_tab&tab={TAB_CODE%}&member_id={MEMBER_ID%}'+window.location.search.replace('?','&'),null,function(result) {
 									set_inner_html(document.getElementById('g_{TAB_CODE*}'),result.responseText);
 								} );

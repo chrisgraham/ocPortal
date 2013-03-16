@@ -344,9 +344,7 @@ function entity_utf8_decode($data,$internal_charset)
 		$test=preg_replace_callback('/&#([0-9]+);/','unichrm',$test); // imperfect as it can only translate lower ascii back, but better than nothing. htmlentities would have encoded key other ones as named entities though which get_html_translation_table can handle
 		if (strtolower($internal_charset)=='iso-8859-1') // trans table only valid for this charset. Else we just need to live with things getting turned into named entities. However we don't allow this function to be called if this code branch would be skipped here.
 		{
-			$trans_tbl=get_html_translation_table(HTML_ENTITIES);
-			$trans_tbl=array_flip($trans_tbl);
-			$test2=strtr($test,$trans_tbl);
+			$test2=convert_bad_entities($test,$internal_charset);
 			if ((strlen($test2)!=0) || ($data=='')) $test=$test2;
 		}
 	}
