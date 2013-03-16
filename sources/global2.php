@@ -1867,7 +1867,7 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 		// Regenerate hash if we support smart decaching, it might have changed and hence we need to do recompiling with a new hash OR this may be the first time ("???" is placeholder)
 		global $SITE_INFO;
 		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-		if ($support_smart_decaching)
+		if (($support_smart_decaching) || ($hash=='???'))
 		{
 			// Work out a hash (checksum) for cache busting on this merged file. Does it using an mtime has chain for performance (better than reading and hashing all the file contents)
 			$old_hash=$hash;

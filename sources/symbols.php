@@ -1246,7 +1246,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						list($width,$height)=_symbol_image_dims(array($img_url));
 						$value=($name=='IMG_WIDTH')?$width:$height;
 						$THEME_IMG_DIMS_CACHE[$param[0]]=array($width,$height);
-						if ((array_key_exists(3,$param)) || ($param[3]=='1'))
+						if ((array_key_exists(3,$param)) && ($param[3]=='1'))
 						{
 							if ((function_exists('persistent_cache_set')) && (!is_null($GLOBALS['MEM_CACHE'])))
 							{
