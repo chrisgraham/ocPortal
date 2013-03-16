@@ -1,7 +1,5 @@
 <?php
 
-//ini_set('display_errors','1');
-
 # MantisBT - a php based bugtracking system
 
 # MantisBT is free software: you can redistribute it and/or modify
