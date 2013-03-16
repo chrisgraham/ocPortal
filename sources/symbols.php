@@ -1134,18 +1134,21 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						if (strpos($param[0],'://')===false)
 						{
-							$img_url=find_theme_image($param[0],false,false,array_key_exists(2,$param)?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+							$img_url=find_theme_image($param[0],false,false,((array_key_exists(2,$param)) && ($param[2])!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 						} else $img_url=$param[0];
 						require_code('images');
 						list($width,$height)=_symbol_image_dims(array($img_url));
 						$value=($name=='IMG_WIDTH')?$width:$height;
 						$THEME_IMG_DIMS_CACHE[$param[0]]=array($width,$height);
-						if ((function_exists('persistent_cache_set')) && (!is_null($GLOBALS['MEM_CACHE'])))
+						if ((array_key_exists(3,$param)) || ($param[3]=='1'))
 						{
-							persistent_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
-						} else
-						{
-							set_long_value('THEME_IMG_DIMS',serialize($THEME_IMG_DIMS_CACHE));
+							if ((function_exists('persistent_cache_set')) && (!is_null($GLOBALS['MEM_CACHE'])))
+							{
+								persistent_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
+							} else
+							{
+								set_long_value('THEME_IMG_DIMS',serialize($THEME_IMG_DIMS_CACHE));
+							}
 						}
 					}
 				}
