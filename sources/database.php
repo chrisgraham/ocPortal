@@ -84,6 +84,8 @@ function _general_db_init()
 		{
 			foreach ($_table_lang_fields as $lang_field)
 			{
+				if ($lang_field['m_table']=='f_member_custom_fields') continue;
+
 				if (!isset($TABLE_LANG_FIELDS[$lang_field['m_table']]))
 					$TABLE_LANG_FIELDS[$lang_field['m_table']]=array();
 
