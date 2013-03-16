@@ -162,7 +162,7 @@
 <br />
 
 <p>
-	Bug reporting guidance is on the <a href="http://ocportal.com/site/s/1/39.htm">community documentation</a>.
+	<?php echo sprintf(lang_get('bug_report_guidance'), $ocp_sc_community_doc_url);?>
 </p>
 
 <div align="center">
