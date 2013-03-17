@@ -2432,3 +2432,14 @@ function convert_bad_entities($data,$charset='ISO-8859-1')
 
 	return strtr($data,$table);
 }
+
+/**
+ * Find if we're on an OCF satellite site.
+ *
+ * @return boolean		If we are
+ */
+function is_ocf_satellite_site()
+{
+	if (get_forum_type()!='ocf') return false;
+	return (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write);
+}
