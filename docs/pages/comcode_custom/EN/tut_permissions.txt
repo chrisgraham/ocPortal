@@ -112,6 +112,11 @@ ocPortal has a special feature to help you diagnose problems with your permissio
 3) Bring up your website and add [tt]&keep_firephp=1[/tt] to the end of the URL
 You will then find that details of all the permission checks, templates, and queries, used to generate the ocPortal screen are logged to the Firebug/FirePHP Console. By looking to see what permission checks pass or fail you can work out what settings you might want to change.
 
+[title="4"]Refreshing forms[/title]
+
+Be aware that privilege changes may require refreshing of any currently-open forms where the privilege may be used.
+For example, bypass-validation privileges add a checkbox to the form, and if the privilege is not enabled that checkbox will not be there. When the form is submitted ocPortal requires that checkbox to be checked, in addition to the secure re-testing of access that will happen automatically at this point.
+
 [title="2"]Adding a new usergroup for a non-OCF site[/title]
 
 If you are not using [concept]OCF[/concept] and decide to add a new usergroup, then ocPortal will not have any permissions associated with it.
