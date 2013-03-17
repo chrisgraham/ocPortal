@@ -171,10 +171,10 @@ This generally does not matter a lot (because anything that you ask to store wil
 
 The normal Western European collation (used by English) is 'latin1_swedish_ci'. If anybody wonders why 'Swedish' is used for 'English', it is because English does not use accented characters and hence was considered a subset of Swedish, which does.
 
-When ocPortal 9 or earlier installs, it will use latin1 by default, because this is what the default English language pack uses. MySQL doesn't make it easy to convert the character set of the database, so the best way to do it is to export to an SQL dump, edit the dump in a text editor, and reimport into a new database:
- - Use phpMyAdmin to export all the tables to a [tt].sql[/tt] file on your computer
+When ocPortal 9 or earlier installs, it will use latin1 (equivalent of ISO-8859-1) by default, because this is what the default English language pack uses. MySQL doesn't make it easy to convert the character set of the database, so the best way to do it is to export to an SQL dump, edit the dump in a text editor, and reimport into a new database:
+ - Use phpMyAdmin to export all the tables to a [tt].sql[/tt] file on your computer; if it asks what character set to make the file, choose UTF-8
  - Do whatever you would normally do to backup your database; that will usually mean keeping a copy of the above file (but ensure it is complete before relying on it, sometimes SQL dumps don't download correctly)
- - Use a text editor to replace latin1 with utf8 in the file
+ - Use a text editor to replace all instances of [tt]latin1[/tt] with [tt]utf8[/tt] in the file
  - Save the edited file
  - Use phpMyAdmin to drop all tables in your database
  - Use phpMyAdmin to import the edited file
