@@ -204,7 +204,7 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
 /**
  * Delete a menu item.
  *
- * @param  AUTO_LINK	The ID of the menu item to delete.
+ * @param  AUTO_LINK		The ID of the menu item to delete.
  */
 function delete_menu_item($id)
 {
