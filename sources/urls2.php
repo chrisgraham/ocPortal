@@ -654,3 +654,29 @@ function _give_moniker_scope($page,$type,$id,$main)
 
 	return $moniker;
 }
+
+/**
+ * Take a moniker and it's page link details, and make a full path from it.
+ *
+ * @param  ID_TEXT		The content type.
+ * @param  SHORT_TEXT	The URL moniker.
+ * @return ?ID_TEXT		The ID (NULL: not found).
+ */
+function find_id_via_url_moniker($content_type,$url_moniker)
+{
+	$path='hooks/systems/content_meta_aware/'.filter_naughty($content_type,true);
+	if ((!file_exists(get_file_base().'/sources/'.$path.'.php')) && (!file_exists(get_file_base().'/sources_custom/'.$path.'.php')))
+		return NULL;
+
+	require_code($path);
+
+	$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+	$cma_info=$cma_ob->info();
+	if (!$cma_info['support_url_monikers']) return NULL;
+
+	list(,$url_bits)=page_link_decode($cma_info['view_pagelink_pattern']);
+	$where=array('m_resource_page'=>$url_bits['page'],'m_resource_type'=>$url_bits['type'],'m_moniker'=>$url_moniker);
+
+	$ret=$cma_info['connection']->query_select_value_if_there('url_id_monikers','m_resource_id',$where);
+	return $ret;
+}

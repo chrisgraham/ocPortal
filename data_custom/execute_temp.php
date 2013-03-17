@@ -53,4 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('urls2');
+	echo '!'.@strval(find_id_via_url_moniker('news','art/test'));
 }

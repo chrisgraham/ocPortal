@@ -744,6 +744,11 @@ class database_driver
 	 */
 	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
 	{
+		if ($GLOBALS['DEV_MODE'])
+		{
+			if (!is_bool($fail_ok)) fatal_exit('You probably wanted to use query_select_value_if_there');
+		}
+
 		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check);
 		if ($values===NULL) return NULL; // error
 		return $this->_query_select_value($values);

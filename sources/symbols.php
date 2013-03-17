@@ -2444,6 +2444,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'FIND_ID_VIA_URL_MONIKER':
+				if (isset($param[1]))
+				{
+					require_code('urls2');
+					$value=find_id_via_url_moniker($param[0],$param[1]);
+				}
+				break;
+
 			case 'REVIEW_STATUS':
 				if (isset($param[1]))
 				{
