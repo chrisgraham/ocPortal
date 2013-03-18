@@ -177,7 +177,7 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 		}
 		if ($last) // We're updating cacheing of the last
 		{
-			$posts=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND p_topic_id='.strval($topic_id).' ORDER BY p_time DESC,id DESC',1);
+			$posts=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('p_intended_solely_for'=>NULL,'p_topic_id'=>$topic_id),'ORDER BY p_time DESC,id DESC',1);
 			if (!array_key_exists(0,$posts))
 			{
 				$last_post_id=NULL;
@@ -224,10 +224,13 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET '.
 		($first?$update_first:'').
 		($last?$update_last:'').
-		((!is_null($post_count_dif)?
-		('t_cache_num_posts=(t_cache_num_posts+'.strval($post_count_dif).')')
-		:
-		('t_cache_num_posts='.strval($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($topic_id).' AND p_intended_solely_for IS NULL'))))).
+		(
+			!is_null($post_count_dif)
+			?
+			('t_cache_num_posts=(t_cache_num_posts+'.strval($post_count_dif).')')
+			:
+			('t_cache_num_posts='.strval($GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','COUNT(*)',array('p_topic_id'=>$topic_id,'p_intended_solely_for'=>NULL))))
+		).
 		' WHERE id='.strval($topic_id)
 	);
 }
@@ -254,7 +257,7 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment=NULL,$n
 	{
 		require_code('ocf_forums');
 		$or_list=ocf_get_all_subordinate_forums($forum_id,'t_forum_id',NULL,true);
-		$last_topic=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE ('.$or_list.') AND t_validated=1 ORDER BY t_cache_last_time DESC',1);
+		$last_topic=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE ('.$or_list.') AND t_validated=1 ORDER BY t_cache_last_time DESC',1,NULL,false,true);
 		if (!array_key_exists(0,$last_topic)) // No topics left apparently
 		{
 			$last_topic_id=NULL;
@@ -278,11 +281,9 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment=NULL,$n
 	}
 	if (is_null($num_topics_increment)) // Apparently we're doing a recount
 	{
-		$_num_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS topic_count FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list);
-		$num_topics=$_num_topics[0]['topic_count'];
+		$num_topics=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) AS topic_count FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list,false,true);
 		$or_list_2=str_replace('t_forum_id','p_cache_forum_id',$or_list);
-		$_num_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS post_count FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND ('.$or_list_2.')');
-		$num_posts=$_num_posts[0]['post_count'];
+		$num_posts=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) AS post_count FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND ('.$or_list_2.')',false,true);
 	}
 
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET '.

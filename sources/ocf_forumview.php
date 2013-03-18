@@ -762,7 +762,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	}
 	if ($or_list!='')
 	{
-		$forum_grouping_rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forum_groupings WHERE '.$or_list);
+		$forum_grouping_rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forum_groupings WHERE '.$or_list,NULL,NULL,false,true);
 		foreach ($forum_grouping_rows as $forum_grouping_row)
 		{
 			$forum_grouping_id=$forum_grouping_row['id'];
@@ -866,9 +866,9 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	{
 		$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	}
-	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);
+	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,true);
 	if (($start==0) && (count($topic_rows)<$max)) $max_rows=$max; // We know that they're all on this screen
-	else $max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where);
+	else $max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where,false,true);
 	$topics=array();
 	$hot_topic_definition=intval(get_option('hot_topic_definition'));
 	$or_list='';
@@ -879,7 +879,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	}
 	if (($or_list!='') && (!is_guest()))
 	{
-		$involved=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.') AND p_poster='.strval(get_member()));
+		$involved=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.') AND p_poster='.strval(get_member()),NULL,NULL,false,true);
 		$involved=collapse_1d_complexity('p_topic_id',$involved);
 	} else $involved=array();
 	foreach ($topic_rows as $topic_row)

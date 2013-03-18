@@ -48,7 +48,7 @@ class Hook_cron_newsletter_drip_send
 				if ($id_list!='') $id_list.=' OR ';
 				$id_list.='id='.strval($mail['id']);
 			}
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'newsletter_drip_send WHERE '.$id_list);
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'newsletter_drip_send WHERE '.$id_list,NULL,NULL,false,true);
 
 			// Send
 			require_code('mail');

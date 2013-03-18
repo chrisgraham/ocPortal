@@ -77,9 +77,9 @@
 
 	html_page_top( null/*, $p_redirect_to */);
 	echo '<br /><div class="center">';
-	echo 'You are now monitoring this issue, and your vote is added to the tally.<br />';
-	print_bracket_link( $p_redirect_to, 'View full details of bug' );
-	echo ' (close this window to return to where you were)';
+	echo lang_get('vote_added').'<br />';
+	print_bracket_link( $p_redirect_to, lang_get('ocp_sc_view_details') );
+	echo lang_get('cp_sc_close_window');
 	echo '</div>';
 	html_page_bottom();
 

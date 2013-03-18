@@ -45,7 +45,7 @@ function ocf_list_multi_moderations($forum_id)
 		if ($lots_of_forums)
 		{
 			$sql=ocfilter_to_sqlfragment($row['mm_forum_multi_code'],'id','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
-			if (!is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND ('.$sql.')')))
+			if (!is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND ('.$sql.')',false,true)))
 				$out[$row['id']]=$row['_mm_name'];
 		} else
 		{

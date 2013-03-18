@@ -161,7 +161,7 @@ class Module_admin_ipban
 	{
 		require_code('failure');
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/,NULL,NULL,false,true);
 		$old_bans=collapse_1d_complexity('ip',$rows);
 		$bans=post_param('bans');
 		$_bans=explode(chr(10),$bans);

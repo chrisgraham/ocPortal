@@ -511,7 +511,7 @@ class Module_downloads
 
 		// Load up all data
 		$cats=array();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.') ORDER BY text_original ASC');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.') ORDER BY text_original ASC',NULL,NULL,false,true);
 		foreach ($rows as $row)
 		{
 			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['name']);

@@ -1122,9 +1122,10 @@ function get_class($obj)
  *
  * @param  integer	The table to select (HTML_ENTITIES or HTML_SPECIALCHARS).
  * @param  integer	The quote style (ENT_QUOTES or ENT_NOQUOTES or ENT_COMPAT).
+ * @param  string		The character set to use
  * @return array		The translation table.
  */
-function get_html_translation_table($table,$quote_style=ENT_COMPAT)
+function get_html_translation_table($table,$quote_style=ENT_COMPAT,$charset='UTF-8')
 {
 	return array();
 }
@@ -6227,17 +6228,6 @@ function image_type_to_mime_type($image_type)
 }
 
 /**
- * Calculate the sha1 hash of a string.
- *
- * @param  string 		The input string.
- * @return string			Hash.
- */
-function sha1($str)
-{
-	return '';
-}
-
-/**
  * Determine the type of an image.
  *
  * @param  PATH 	 		Image path.
@@ -6256,18 +6246,6 @@ function exif_imagetype($filename)
 function ob_get_clean()
 {
 	return '';
-}
-
-/**
- * Computes the difference of arrays with additional index check.
- *
- * @param  array 	 		Array 1.
- * @param  array 	 		Array 2.
- * @return array			Result.
- */
-function array_diff_assoc($a,$b)
-{
-	return array();
 }
 
 /**

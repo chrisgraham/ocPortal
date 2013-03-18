@@ -63,7 +63,7 @@ class Hook_ocf_topics
 
 				// NB: p_cache_forum_id must not be intval'd as may be null
 				if (is_null($topic['t_forum_id'])) $topic['t_forum_id']=NULL;
-				$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.(is_null($topic['t_forum_id'])?'NULL':strval($topic['t_forum_id'])).' WHERE p_topic_id='.(is_null($topic['id'])?'NULL':strval($topic['id'])));
+				$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_cache_forum_id'=>is_null($topic['t_forum_id'])?NULL:$topic['t_forum_id']),array('p_topic_id'=>is_null($topic['id'])?NULL:$topic['id']));
 			}
 
 			$start+=500;

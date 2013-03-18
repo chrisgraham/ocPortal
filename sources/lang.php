@@ -76,7 +76,6 @@ function init__lang()
 			$PAGE_CACHE_LANG_LOADED=persistent_cache_get($cache_path);
 			if (is_array($PAGE_CACHE_LANG_LOADED))
 			{
-				$PAGE_CACHE_LAZY_LOAD=true;
 				$LANGUAGE_STRINGS_CACHE=$PAGE_CACHE_LANG_LOADED;
 			}
 			$PAGE_CACHE_FILE=$cache_path;
@@ -88,12 +87,12 @@ function init__lang()
 				$PAGE_CACHE_LANG_LOADED=@unserialize($contents);
 				if (is_array($PAGE_CACHE_LANG_LOADED))
 				{
-					$PAGE_CACHE_LAZY_LOAD=true;
 					$LANGUAGE_STRINGS_CACHE=$PAGE_CACHE_LANG_LOADED;
 				}
 			}
 			$PAGE_CACHE_FILE=$cache_path;
 		}
+		$PAGE_CACHE_LAZY_LOAD=true;
 	}
 
 	require_lang('critical_error');
@@ -156,7 +155,7 @@ function open_page_cache_file()
 		$PAGE_CACHE_FILE=@fopen($cache_path,'at');
 		if ($PAGE_CACHE_FILE!==false)
 		{
-			if (!$PAGE_CACHE_LAZY_LOAD)
+			if (ftell($PAGE_CACHE_FILE)==0)
 			{
 				require_code('files');
 				fix_permissions($cache_path,0666);
@@ -597,6 +596,8 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
  */
 function require_all_lang($lang=NULL,$only_if_for_lang=false)
 {
+	$GLOBALS['SITE_INFO']['disable_smart_decaching']='1'; // We'll temporarily set this to stop hundreds of disk checks happening
+
 	if (is_null($lang))
 	{
 		global $REQUIRED_ALL_LANG;

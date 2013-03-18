@@ -59,7 +59,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 		{
 			$query2='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list;
 			$union=' UNION SELECT * '.$query2;
-			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query2);
+			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query2,false,true);
 		}
 	}
 	$order=get_param('order','last_time');

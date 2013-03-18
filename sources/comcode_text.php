@@ -150,6 +150,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 	$wml=false; // removed feature from ocPortal now
 	$print_mode=get_param_integer('wide_print',0)==1;
 
+	static $chr_10=NULL;
+	if ($chr_10===NULL) $chr_10=chr(10);
+
 	$len=strlen($comcode);
 
 	if ((function_exists('set_time_limit')) && (ini_get('max_execution_time')!='0')) @set_time_limit(300);
@@ -338,7 +341,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 				if ((($in_html) || ((($in_semihtml) && (!$in_code_tag)) && (($next=='<') || ($next=='>') || ($next=='"')))))
 				{
-					if ($next==chr(10)) ++$NUM_COMCODE_LINES_PARSED;
+					if ($next==$chr_10) ++$NUM_COMCODE_LINES_PARSED;
 
 					if ((!$comcode_dangerous_html) && ($next=='<')) // Special filtering required
 					{
@@ -356,7 +359,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						}
 					}
 
-					if (substr($comcode,$pos-1,4)=='<!--') // To stop shortcut interpretation
+					if ((isset($comcode[$pos])) && ($comcode[$pos]=='!') && (substr($comcode,$pos-1,4)=='<!--')) // To stop shortcut interpretation
 					{
 						$continuation.='<!--';
 						$pos+=3;
@@ -1055,7 +1058,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												$groups=_get_where_clause_groups($source_member);
 												if (!is_null($groups))
 												{
-													$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')'));
+													$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')',NULL,NULL,false,true));
 													$new_rows=array();
 													foreach ($rows as $row)
 													{

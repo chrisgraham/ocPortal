@@ -211,7 +211,7 @@ class Module_booking
 		$filter=get_param('filter','*');
 		require_code('ocfiltering');
 		$query.=' AND '.ocfilter_to_sqlfragment($filter,'id');
-		$bookables=$GLOBALS['SITE_DB']->query($query.' ORDER BY sort_order');
+		$bookables=$GLOBALS['SITE_DB']->query($query.' ORDER BY sort_order',NULL,NULL,false,true);
 
 		$has_date_ranges=false;
 		$has_single_dates=false;

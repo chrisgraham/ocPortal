@@ -439,7 +439,7 @@ class Module_catalogues
 			$sql_float=db_string_equal_to('cf_type','float');
 			foreach (array($sql_float=>'float',$sql_integer=>'integer') as $where=>$new_type)
 			{
-				$fields=$GLOBALS['SITE_DB']->query('SELECT id FROM '.get_table_prefix().'catalogue_fields WHERE '.$where);
+				$fields=$GLOBALS['SITE_DB']->query('SELECT id FROM '.get_table_prefix().'catalogue_fields WHERE '.$where,NULL,NULL,false,true);
 				foreach ($fields as $field)
 				{
 					do
@@ -464,7 +464,7 @@ class Module_catalogues
 						}
 						if ($or_list!='')
 						{
-							$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'catalogue_efv_short WHERE '.$or_list);
+							$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'catalogue_efv_short WHERE '.$or_list,NULL,NULL,false,true);
 						}
 					}
 					while (count($rows)!=0);
@@ -902,12 +902,12 @@ class Module_catalogues
 		require_code('ocfiltering');
 		$sql_filter=ocfilter_to_sqlfragment(strval($id).'*','cc_id','catalogue_categories','cc_parent_id','cc_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
-		if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')')>1000)
+		if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')',false,true)>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$cats=array();
 
 		// Not done via main_cc_entries block due to complex organisation
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')',NULL,NULL,false,true);
 		foreach ($rows as $row)
 		{
 			$entry_map=get_catalogue_entry_map($row,$catalogue,'CATEGORY','DEFAULT',$root,NULL,array(0),false,false);

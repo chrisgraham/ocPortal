@@ -603,12 +603,12 @@ function notifications_enabled($notification_code,$notification_category,$member
  */
 function notifications_setting($notification_code,$notification_category,$member_id=NULL)
 {
-	if (is_null($member_id)) $member_id=get_member();
+	if ($member_id===NULL) $member_id=get_member();
 
 	$specific_where=array(
 		'l_member_id'=>$member_id,
 		'l_notification_code'=>$notification_code,
-		'l_code_category'=>is_null($notification_category)?'':$notification_category,
+		'l_code_category'=>($notification_category===NULL)?'':$notification_category,
 	);
 
 	global $NOTIFICATION_SETTING_CACHE;
@@ -620,11 +620,11 @@ function notifications_setting($notification_code,$notification_category,$member
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
 		'l_notification_code'=>$notification_code,
 	));
-	if (is_null($test))
+	if ($test===NULL)
 	{
 		$test=$db->query_select_value_if_there('notifications_enabled','l_setting',$specific_where);
 
-		if ((is_null($test)) && (!is_null($notification_category)))
+		if (($test===NULL) && ($notification_category!==NULL))
 		{
 			$test=$db->query_select_value_if_there('notifications_enabled','l_setting',array(
 				'l_member_id'=>$member_id,
@@ -632,11 +632,11 @@ function notifications_setting($notification_code,$notification_category,$member
 				'l_code_category'=>'',
 			));
 		}
-		if (is_null($test))
+		if ($test===NULL)
 		{
 			$ob=_get_notification_ob_for_code($notification_code);
-			if (is_null($ob)) return A_NA; // Can happen in template test sets, as this can be called up by a symbol
-			//if (is_null($ob)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			if ($ob===NULL) return A_NA; // Can happen in template test sets, as this can be called up by a symbol
+			//if ($ob===NULL) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 			$test=$ob->get_initial_setting($notification_code,$notification_category);
 		}
 	}

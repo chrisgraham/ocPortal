@@ -204,7 +204,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	}
 
 	// Check access
-	$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT id,p_post,p_poster,p_time,p_intended_solely_for,p_validated FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list);
+	$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT id,p_post,p_poster,p_time,p_intended_solely_for,p_validated FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list,NULL,NULL,false,true);
 	$num_posts_counted=0;
 	foreach ($_postdetails as $post)
 	{
@@ -232,7 +232,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_post_count_increment',array('id'=>$forum_id));
 	if ($post_counts==1)
 	{
-		$_member_post_counts=$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list);
+		$_member_post_counts=$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list,NULL,NULL,false,true);
 		$member_post_counts=array();
 		foreach ($_member_post_counts as $_member_post_count)
 		{
@@ -253,8 +253,8 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	foreach ($_postdetails as $post)
 		delete_lang_comcode_attachments($post['p_post'],'ocf_post',$post['id'],$GLOBALS['FORUM_DB']);
 
-	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list);
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'review_supplement WHERE '.str_replace('id=','r_post_id=',$or_list));
+	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list,NULL,NULL,false,true);
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'review_supplement WHERE '.str_replace('id=','r_post_id=',$or_list),NULL,NULL,false,true);
 
 	$test=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_topic_id'=>$topic_id));
 	if ($test==0)
@@ -333,7 +333,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 
 	// Check access
 	if (!ocf_may_moderate_forum($from_forum_id)) access_denied('I_ERROR');
-	$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT p_cache_forum_id,p_intended_solely_for,p_validated FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list);
+	$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT p_cache_forum_id,p_intended_solely_for,p_validated FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list,NULL,NULL,false,true);
 	$num_posts_counted=0;
 	foreach ($_postdetails as $post)
 	{
@@ -341,7 +341,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		if ($post['p_cache_forum_id']!=$from_forum_id) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
 
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to_forum_id).', p_topic_id='.strval($to_topic_id).' WHERE '.$or_list);
+	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to_forum_id).', p_topic_id='.strval($to_topic_id).' WHERE '.$or_list,NULL,NULL,false,true);
 
 	// Update cacheing
 	require_code('ocf_posts_action2');
@@ -368,7 +368,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 			}
 			if ($from!=$to)
 			{
-				$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list));
+				$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list,NULL,NULL,false,true));
 				$member_post_counts=array_count_values($_member_post_counts);
 
 				foreach ($member_post_counts as $member_id=>$member_post_count)

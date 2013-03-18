@@ -1,30 +1,4 @@
 <?php
-
-/*function get_self_url_easy()
-{
-	$protocol=((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'))?'https':'http';
-	if (!array_key_exists('HTTP_HOST',$_SERVER))
-	{
-		$domain=get_domain();
-	} else
-	{
-		$domain=$_SERVER['HTTP_HOST'];
-	}
-	$colon_pos=strpos($domain,':');
-	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-	$self_url=$protocol.'://'.$domain;
-	$port=ocp_srv('SERVER_PORT');
-	if (($port!='') && ($port!='80')) $self_url.=':'.$port;
-	$s=ocp_srv('PHP_SELF');
-	if (substr($s,0,1)!='/') $self_url.='/';
-	$self_url.=$s;
-	if ((array_key_exists('QUERY_STRING',$_SERVER)) && ($_SERVER['QUERY_STRING']!='')) $self_url.='?'.$_SERVER['QUERY_STRING'];
-	return $self_url;
-}
-
-header('Location: http://ocportal.com/login.htm?redirect_url='.urlencode(get_self_url_easy()));
-exit();*/
-
 # MantisBT - a php based bugtracking system
 
 # MantisBT is free software: you can redistribute it and/or modify
@@ -103,7 +77,7 @@ exit();*/
 		echo lang_get( 'login_cookies_disabled' ) . '<br />';
 	}
 
-	echo '<p>Login using your regular ocportal.com username and password.</p>';
+	echo '<p>'.sprintf(lang_get('ocp_login_instruct'), $ocp_sc_site_name).'</p>';
 
 	# Determine if secure_session should default on or off?
 	# - If no errors, and no cookies set, default to on.
@@ -195,8 +169,7 @@ exit();*/
 	echo '&nbsp;';
 	print_lost_password_link();
 	echo '</div>';
-
-	echo '<p>Return to the main <a href="http://ocportal.com/">ocPortal.com website</a>.</p>';
+	echo '<p>'.sprintf(lang_get('ocp_return_instruct'), $ocp_sc_site_url, $ocp_sc_site_name).'</p>';
 
 	#
 	# Do some checks to warn administrators of possible security holes.

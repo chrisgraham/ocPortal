@@ -405,7 +405,7 @@ class Block_main_multi_content
 					$awarded_content_ids=array();
 				} else
 				{
-					$awarded_content_ids=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive WHERE '.$where.' GROUP BY a_type_id ORDER BY date_and_time DESC'));
+					$awarded_content_ids=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive WHERE '.$where.' GROUP BY a_type_id ORDER BY date_and_time DESC',NULL,NULL,false,true));
 				}
 			} else
 			{
@@ -414,7 +414,7 @@ class Block_main_multi_content
 				{
 					if (trim($p)=='') continue;
 					$where='a_type_id='.strval(intval($p));
-					$awarded_content_ids+=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive WHERE '.$where.' ORDER BY date_and_time DESC',1));
+					$awarded_content_ids+=collapse_2d_complexity('a_type_id','content_id',$GLOBALS['SITE_DB']->query('SELECT a_type_id,content_id FROM '.get_table_prefix().'award_archive WHERE '.$where.' ORDER BY date_and_time DESC',1,NULL,false,true));
 				}
 			}
 

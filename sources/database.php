@@ -82,6 +82,8 @@ function _general_db_init()
 		{
 			foreach ($_table_lang_fields as $lang_field)
 			{
+				if ($lang_field['m_table']=='f_member_custom_fields') continue;
+
 				if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]))
 					$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
 
@@ -737,7 +739,7 @@ class database_driver
 	 */
 	function _query_select_value($values)
 	{
-		if (!array_key_exists(0,$values)) return NULL; // No result found
+		if (!isset($values[0])) return NULL; // No result found
 		$first=$values[0];
 		$v=current($first); // Result found. Maybe a value of 'null'
 		return $v;
@@ -765,7 +767,7 @@ class database_driver
 	 *
 	 * @param  string			The complete SQL query
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @param  boolean		Whether to skip the query safety check
+	 * @param  boolean		Whether to skip the query safety checks
 	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
 	 */
 	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
@@ -873,7 +875,7 @@ class database_driver
 	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
 	 * @param  ?integer		The start row to affect (NULL: no specification)
 	 * @param  boolean		Whether to output an error on failure
-	 * @param  boolean		Whether to skip the query safety check
+	 * @param  boolean		Whether to skip the query safety checks
 	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @param  string			All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
 	 * @return ?mixed			The results (NULL: no results)
@@ -1087,6 +1089,8 @@ class database_driver
 		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 		if ($ret!==NULL)
 		{
+			$cnt_orig=count($this->text_lookup_original_cache);
+			$cnt_parsed=count($this->text_lookup_cache);
 			foreach ($lang_strings_expecting as $bits)
 			{
 				list($field,$original,$parsed)=$bits;
@@ -1095,10 +1099,16 @@ class database_driver
 				{
 					$entry=$row[$field];
 
-					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
+					if (($row[$original]!==NULL) && ($cnt_orig<=1000))
+					{
 						$this->text_lookup_original_cache[$entry]=$row[$original];
-					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
+						$cnt_orig++;
+					}
+					if (($row[$parsed]!==NULL) && ($cnt_parsed<=1000))
+					{
 						$this->text_lookup_cache[$entry]=$row[$parsed];
+						$cnt_parsed++;
+					}
 
 					unset($row[$original]);
 					unset($row[$parsed]);

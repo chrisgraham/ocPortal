@@ -372,7 +372,7 @@ function chat_room_prune($room_id,$room_row=NULL)
 	}
 
 	// Prune 'active' indication (delete's us, and anything that needs pruning)
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_active WHERE (member_id='.strval(get_member()).' AND '.$extra2.')'.$extra);
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_active WHERE (member_id='.strval(get_member()).' AND '.$extra2.')'.$extra,NULL,NULL,false,true);
 
 	// Note that *we are still here*
 	$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>($room_id==-1)?NULL:$room_id));

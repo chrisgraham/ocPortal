@@ -161,7 +161,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	if (!is_null($forum_id))
 	{
 		// Update member post counts if we've switched between post-count countable forums
-		$post_count_info=$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).(!is_null($post_target_topic_id)?(' OR id='.strval($to)):''),2);
+		$post_count_info=$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).(!is_null($post_target_topic_id)?(' OR id='.strval($to)):''),2,NULL,false,true);
 		if ($post_count_info[0]['id']==$forum_id)
 		{
 			$from_cnt=$post_count_info[0]['f_post_count_increment'];
@@ -174,7 +174,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 		require_code('ocf_posts_action');
 		if ($from_cnt!=$to_cnt)
 		{
-			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($topic_id)));
+			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_poster'),array('p_topic_id'=>$topic_id)));
 			$member_post_counts=array_count_values($_member_post_counts);
 
 			foreach ($member_post_counts as $member_id=>$member_post_count)
@@ -203,7 +203,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 		$_postdetails=array();
 		do
 		{
-			$_postdetails=$GLOBALS['FORUM_DB']->query('SELECT p_post,id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($topic_id),200);
+			$_postdetails=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_post','id'),array('p_topic_id'=>$topic_id),200);
 			foreach ($_postdetails as $post)
 			{
 				delete_lang($post['p_post'],$GLOBALS['FORUM_DB']);
@@ -348,14 +348,14 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 			}
 		}
 
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_forum_id='.strval($to).',t_pt_from=NULL,t_pt_to=NULL WHERE t_forum_id'.(is_null($from)?' IS NULL':('='.strval($from))).' AND ('.$or_list.')');
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_forum_id='.strval($to).',t_pt_from=NULL,t_pt_to=NULL WHERE t_forum_id'.(is_null($from)?' IS NULL':('='.strval($from))).' AND ('.$or_list.')',NULL,NULL,false,true);
 		log_it('MOVE_TOPICS',do_lang('MULTIPLE'));
 
-		$post_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT SUM(t_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list);
+		$post_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT SUM(t_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list,false,true);
 
 		// Update forum IDs' for posts
 		$or_list_2=str_replace('id','p_topic_id',$or_list);
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to).' WHERE '.$or_list_2);
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to).' WHERE '.$or_list_2,NULL,NULL,false,true);
 	}
 
 	require_code('ocf_posts_action2');
@@ -382,7 +382,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		require_code('ocf_posts_action');
 		if ($from_cnt!=$to_cnt)
 		{
-			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list_2));
+			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list_2,NULL,NULL,false,true));
 			$member_post_counts=array_count_values($_member_post_counts);
 
 			foreach ($member_post_counts as $member_id=>$member_post_count)
@@ -409,7 +409,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 	$start=0;
 	do
 	{
-		$topics2=$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title,t_cache_last_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list,100,$start);
+		$topics2=$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title,t_cache_last_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list,100,$start,false,true);
 		require_code('urls2');
 		foreach ($topics2 as $_topic)
 		{

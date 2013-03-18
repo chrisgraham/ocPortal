@@ -159,7 +159,7 @@ function ocf_ensure_groups_cached($groups)
 		}
 	}
 	if ($counter==0) return;
-	$extra_groups=$GLOBALS['FORUM_DB']->query('SELECT g.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE '.$groups_to_load,NULL,NULL,false,false,array('g_name','g_title'));
+	$extra_groups=$GLOBALS['FORUM_DB']->query('SELECT g.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE '.$groups_to_load,NULL,NULL,false,true,array('g_name','g_title'));
 
 	if (count($extra_groups)!=$counter) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 

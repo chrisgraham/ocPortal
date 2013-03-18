@@ -766,14 +766,14 @@ class forum_driver_ocf extends forum_driver_base
 			$_groups.='gm_group_id='.strval($group);
 		}
 		if ($_groups=='') return array();
-		$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start);
+		$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start,false,true);
 		$_groups='';
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
 			$_groups.='m_primary_group='.strval($group);
 		}
-		$b=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$_groups.' ORDER BY m_primary_group ASC',$max,$start);
+		$b=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$_groups.' ORDER BY m_primary_group ASC',$max,$start,false,true);
 		$out=array();
 		foreach ($a as $x)
 			if (!array_key_exists($x['id'],$out)) $out[$x['id']]=$x;
@@ -841,7 +841,7 @@ class forum_driver_ocf extends forum_driver_base
 		} else
 		{
 			$a=$this->connection->query_select('f_members',array('DISTINCT id'),array('m_ip_address'=>$ip));
-			$b=$this->connection->query('SELECT DISTINCT p_poster AS id FROM '.$this->connection->get_table_prefix().'f_posts WHERE '.db_string_equal_to('p_ip_address',$ip));
+			$b=$this->connection->query('f_posts',array('DISTINCT p_poster AS id'),array('p_ip_address'=>$ip));
 		}
 		return array_merge($a,$b);
 	}
@@ -1202,7 +1202,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($hide_hidden) $select.=',g.g_hidden';
 		$sup=' ORDER BY g_order,g.id';
 		if (running_script('upgrader')) $sup='';
-		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where);
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where,false,true);
 		if (($count>100) && ((!$force_show_all) || ($count>4000)))
 		{
 			if (is_null($force_find)) $force_find=NULL;

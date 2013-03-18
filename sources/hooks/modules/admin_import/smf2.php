@@ -298,7 +298,7 @@ class Hook_smf2
 			$is_super_admin=0;
 			$is_super_moderator=0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$group_name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$group_name),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($group_name,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$leader,5,0,5,$max_attachments_upload,$avatar_max_width,$avatar_max_height,30000); //Edited by Duck
@@ -495,7 +495,7 @@ class Hook_smf2
 			if (import_check_if_imported('cpf',$row['id_field'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['default_value'];

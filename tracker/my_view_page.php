@@ -67,7 +67,7 @@
 
 <div style="text-align: left; font-size: 1.2em">
 	<p>
-		Welcome to the feature tracker, the tool used to plan new versions of ocPortal (amongst other things). All ocProduct's planned features are organised on this feature tracker. Please be aware that ocProducts maintains no formal roadmap for ocPortal (for good reasons that we explain in our FAQ &ndash; in summary, it wouldn't work) so no conclusions about &ldquo;what is around the corner&rdquo; should be drawn from the issues here (unless you can sponsor/contribute things). It does however provide a real foundation for transparency and engagement. For more information, see the appropriate part of the <a href="http://ocportal.com/site/s/1/38.htm">community documentation</a>.
+		<?php echo sprintf(lang_get('my_view_welcome_message'), $ocp_sc_product_name, $ocp_sc_business_name_possesive, $ocp_sc_business_name, $ocp_sc_community_doc_url);?>
 	</p>
 </div>
 

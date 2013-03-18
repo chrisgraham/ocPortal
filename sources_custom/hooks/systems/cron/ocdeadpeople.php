@@ -36,7 +36,7 @@ class Hook_cron_ocdeadpeople
 		foreach ($diseases_to_spread as $disease)
 		{
 			// select infected by the disease members
-			$sick_by_disease_members=$GLOBALS['SITE_DB']->query('SELECT member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_diseases WHERE sick=1 AND disease_id='.strval($disease['id']).' ',NULL, NULL,true);
+			$sick_by_disease_members=$GLOBALS['SITE_DB']->query_select('members_diseases',array('member_id'),array('sick'=>1,'disease_id'=>$disease['id']),'',NULL,NULL,true);
 			if (is_null($sick_by_disease_members)) return;
 
 			$sick_members=array();
@@ -126,7 +126,7 @@ class Hook_cron_ocdeadpeople
 			// =============================================================================
 
 			// get immunised members first
-			$immunised_members_rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_diseases WHERE disease_id='.strval($disease['id']).' AND immunisation=1',NULL,NULL,true);
+			$immunised_members_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('disease_id'=>$disease['id'],'immunisation'=>1),'',NULL,NULL,true);
 			$immunised_members=array();
 			foreach ($immunised_members_rows as  $im_member)
 			{

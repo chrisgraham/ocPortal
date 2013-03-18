@@ -272,7 +272,7 @@ function is_page_https($zone,$page)
 		$HTTPS_PAGES_CACHE=persistent_cache_get('HTTPS_PAGES_CACHE');
 	if ($HTTPS_PAGES_CACHE===NULL)
 	{
-		$results=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'https_pages',NULL,NULL,true);
+		$results=$GLOBALS['SITE_DB']->query_select('https_pages',array('*'),NULL,'',NULL,NULL,true);
 		if (($results===false) || ($results===NULL)) // No HTTPS support (probably not upgraded yet)
 		{
 			$HTTPS_PAGES_CACHE=array();
@@ -1029,7 +1029,7 @@ function find_id_moniker($url_parts)
 				$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 				$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 				$query='SELECT m_moniker,m_resource_page,m_resource_type,m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE m_deprecated=0 AND ('.$or_list.')';
-				$results=$GLOBALS['SITE_DB']->query($query);
+				$results=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true);
 				$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 				foreach ($results as $result)
 				{

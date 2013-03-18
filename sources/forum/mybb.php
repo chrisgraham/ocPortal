@@ -745,7 +745,7 @@ class forum_driver_mybb extends forum_driver_base
 		}
 		if ($_groups=='') return array();
 
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users u LEFT JOIN '.$this->connection->get_table_prefix().'usergroups g ON u.usergroup=g.gid WHERE '.$_groups.' ORDER BY u.usergroup ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users u LEFT JOIN '.$this->connection->get_table_prefix().'usergroups g ON u.usergroup=g.gid WHERE '.$_groups.' ORDER BY u.usergroup ASC',$max,$start,false,true);
 	}
 
 	/**
@@ -1196,7 +1196,7 @@ class forum_driver_mybb extends forum_driver_base
 
 		if (!empty($session_id))
 		{
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'sessions SET time='.strval(time()).', uid='.strval($loguid).' WHERE '.db_string_equal_to('sid',$session_id),1);
+			$this->connection->query_update('sessions',array('time'=>time(),'uid'=>$loguid),array('sid'=>$session_id),'',1);
 		} else
 		{
 			$session_id=md5(strval(time()));

@@ -424,8 +424,8 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 		$select.=',COALESCE((SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),5) AS average_rating';
 		$select.=',COALESCE((SELECT SUM(rating-1) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),0) AS compound_rating';
 	}
-	$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start);
-	$count=$this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where);
+	$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true);
+	$count=$this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where,false,true);
 
 	$out=array();
 	foreach ($rows as $myrow)
@@ -496,8 +496,8 @@ function _helper_get_emoticon_chooser($this_ref,$field_name)
 {
 	if (get_option('is_on_emoticon_choosers')=='0') return new ocp_tempcode();
 
-	$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
-	$emoticons=$this_ref->connection->query('SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_emoticons WHERE e_relevance_level=0'.$extra);
+	$extra_where=has_privilege(get_member(),'use_special_emoticons')?array():array('e_is_special'=>0);
+	$emoticons=$this_ref->connection->query_select('f_emoticons',array('*'),array('e_relevance_level'=>0)+$extra_where);
 	$em=new ocp_tempcode();
 	foreach ($emoticons as $emo)
 	{

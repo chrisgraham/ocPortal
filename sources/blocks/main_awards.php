@@ -103,7 +103,7 @@ class Block_main_awards
 		$sup='';
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'award_archive WHERE a_type_id='.strval($award).' '.$sup.' ORDER BY date_and_time DESC',1);
+			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'award_archive WHERE a_type_id='.strval($award).' '.$sup.' ORDER BY date_and_time DESC',1,NULL,false,true);
 			if (!array_key_exists(0,$rows))
 			{
 				return do_template('BLOCK_NO_ENTRIES',array(

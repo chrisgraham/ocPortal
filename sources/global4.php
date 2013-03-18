@@ -139,8 +139,7 @@ function member_personal_links_and_details($member_id)
 	// Subscription expiry date
 	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')))
 	{
-		$query='SELECT * FROM '.get_table_prefix().'subscriptions WHERE s_member_id='.strval($member_id).' AND '.db_string_equal_to('s_state','active').' AND '.db_string_equal_to('s_via','manual');
-		$subscriptions=$GLOBALS['SITE_DB']->query($query);
+		$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_member_id'=>$member_id,'s_state'=>'active','s_via'=>'manual'));
 		if (count($subscriptions)>0)
 		{
 			require_code('ecommerce');

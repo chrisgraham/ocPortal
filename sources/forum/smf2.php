@@ -475,7 +475,7 @@ class forum_driver_smf2 extends forum_driver_base
 			$post_id=$this->connection->query_insert('messages',array('id_topic'=>$topic_id,'id_board'=>$forum_id,'poster_time'=>$time,'id_member'=>$this->get_guest_id(),'subject'=>$content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'poster_name'=>do_lang('SYSTEM','','','',get_site_default_lang()),'poster_email'=>get_option('staff_address'),'poster_ip'=>'127.0.0.1','modified_name'=>'','body'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang())),true);
 
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET num_posts=(num_posts+1), num_topics=(num_topics+1) WHERE id_board='.strval($forum_id),1);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET id_first_msg='.strval($post_id).' WHERE id_topic='.strval($topic_id),1);
+			$this->connection->query_update('topics',array('id_first_msg'=>$post_id),array('id_topic'=>$topic_id),'',1);
 		} else $post_id=$this->connection->query_select_value('messages','MIN(id_msg)',array('id_topic'=>$topic_id));
 
 		if ($post=='') return array($topic_id,false);
@@ -596,9 +596,9 @@ class forum_driver_smf2 extends forum_driver_base
 			if ($id_list=='') return NULL;
 		}
 
-		$topic_filter=($filter_topic_title!='')?'AND p.subject LIKE \''.db_encode_like($filter_topic_title).'\'':'';
-		$rows=$this->connection->query('SELECT t.num_replies, t.id_topic AS t_id_topic, t.id_member_updated AS t_id_member_updated, t.id_member_started AS t_id_member_started, t.locked AS t_locked, p.subject AS p_subject FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.id_first_msg=p.id_msg WHERE ('.$id_list.') '.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'id_last_msg':'id_first_msg').' DESC',$limit,$start);
-		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.ID_FIRST_MSG=p.ID_MSG WHERE ('.$id_list.') '.$topic_filter);
+		$topic_filter=($filter_topic_title!='')?' AND p.subject LIKE \''.db_encode_like($filter_topic_title).'\'':'';
+		$rows=$this->connection->query('SELECT t.num_replies, t.id_topic AS t_id_topic, t.id_member_updated AS t_id_member_updated, t.id_member_started AS t_id_member_started, t.locked AS t_locked, p.subject AS p_subject FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.id_first_msg=p.id_msg WHERE ('.$id_list.')'.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'id_last_msg':'id_first_msg').' DESC',$limit,$start,NULL,false,true);
+		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.ID_FIRST_MSG=p.ID_MSG WHERE ('.$id_list.')'.$topic_filter);
 		$out=array();
 		foreach ($rows as $i=>$r)
 		{

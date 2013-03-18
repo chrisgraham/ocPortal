@@ -135,11 +135,8 @@ class Hook_catalogue_items
 			$available_stock=intval($fields[3]['effective_value']);
 
 			// Locked order check
-			$res=$GLOBALS['SITE_DB']->query('SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1,'.get_table_prefix().'shopping_order_details t2 WHERE t1.id=t2.order_id AND t1.order_status=\'ORDER_STATUS_awaiting_payment\' AND t2.p_id='.strval(intval($product)));
-
-			if (array_key_exists(0,$res))
-				$item_count=intval($res[0]['qty']);
-			else
+			$item_count=$GLOBALS['SITE_DB']->query_select_value('shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id','SUM(t2.p_quantity) as qty',array('t1.order_status'=>'ORDER_STATUS_awaiting_payment','t2.p_id'=>intval($product)));
+			if (is_null($item_count))
 				$item_count=0;
 
 			return ($available_stock-$item_count>=$req_quantity)?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_OUT_OF_STOCK;

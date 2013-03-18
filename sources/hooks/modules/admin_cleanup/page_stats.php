@@ -102,7 +102,7 @@ class Hook_page_stats
 			}
 
 			if ($or_list!='')
-				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE '.$or_list);
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE '.$or_list,NULL,NULL,false,true);
 		}
 		while ($data!=array());
 

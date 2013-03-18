@@ -435,7 +435,7 @@ class Module_admin_permissions
 		}
 
 		// Match-key permissions
-		$p_rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT page_name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE '.db_string_equal_to('zone_name','/').' ORDER BY page_name');
+		$p_rows=$GLOBALS['SITE_DB']->query_select('group_page_access',array('DISTINCT page_name'),array('zone_name'=>'/'),'ORDER BY page_name');
 		$p_rows[]=array('page_name'=>'');
 		$p_rows[]=array('page_name'=>'');
 		$p_rows[]=array('page_name'=>'');

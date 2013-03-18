@@ -307,7 +307,6 @@ function sitemaps_xml_initialise($file_path)
 	// Load ALL URL ID monikers (for efficiency)
 	if ($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','COUNT(*)',array('m_deprecated'=>0))<10000)
 	{
-		$query='SELECT m_moniker,m_resource_page,m_resource_type,m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE m_deprecated=0';
 		$results=$GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_moniker','m_resource_page','m_resource_type','m_resource_id'),array('m_deprecated'=>0));
 		foreach ($results as $result)
 		{

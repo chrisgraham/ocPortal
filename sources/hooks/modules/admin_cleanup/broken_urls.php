@@ -127,7 +127,7 @@ class Hook_broken_urls
 			}
 			if ($or_list!='')
 			{
-				$values=$GLOBALS['SITE_DB']->query('SELECT id,cv_value,ce_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short WHERE '.$or_list);
+				$values=$GLOBALS['SITE_DB']->query('SELECT id,cv_value,ce_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short WHERE '.$or_list,NULL,NULL,false,true);
 				foreach ($values as $value)
 				{
 					$url=$value['cv_value'];

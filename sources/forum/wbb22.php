@@ -65,7 +65,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 			if ($_groups!='') $_groups.=' OR ';
 			$_groups.='groupid='.strval($group);
 		}
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user2groups g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON g.userid=u.userid WHERE '.$_groups.' ORDER BY groupid ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user2groups g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON g.userid=u.userid WHERE '.$_groups.' ORDER BY groupid ASC',$max,$start,false,true);
 	}
 
 	/**
@@ -190,7 +190,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 	 */
 	function _get_moderator_groups()
 	{
-		return collapse_1d_complexity('groupid',$this->connection->query('SELECT groupid FROM '.$this->connection->get_table_prefix().'groups WHERE securitylevel=3'));
+		return collapse_1d_complexity('groupid',$this->connection->query('groups',array('groupid'),array('securitylevel'=>3));
 	}
 
 	/**

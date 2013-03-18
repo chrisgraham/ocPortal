@@ -423,7 +423,7 @@ function already_rated($rating_for_types,$content_id)
 		$query.='1=0';
 	}
 	$query.=$more.')';
-	$has_rated=$GLOBALS['SITE_DB']->query_value_if_there($query);
+	$has_rated=$GLOBALS['SITE_DB']->query_value_if_there($query,false,true);
 
 	return ($has_rated>=count($rating_for_types));
 }

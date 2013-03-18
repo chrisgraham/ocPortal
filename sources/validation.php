@@ -726,7 +726,7 @@ function test_entity($offset=0)
 		}
 	}
 
-	if (count($errors)==0) return NULL;
+	if (!isset($errors[0])) return NULL;
 	return $errors;
 }
 
@@ -742,23 +742,30 @@ function fix_entities($in)
 
 	$out='';
 
+	if ((strpos($in,'&')===false) && (strpos($in,'<')===false))
+	{
+		return $in;
+	}
+
 	$len=strlen($in);
 	$cdata=false;
 	for ($i=0;$i<$len;$i++)
 	{
-		$out.=$in[$i];
+		$char=$in[$i];
 
-		if (substr($in,$i,9)=='<![CDATA[')
+		$out.=$char;
+
+		if (($char=='<') && (substr($in,$i,9)=='<![CDATA['))
 		{
 			$cdata=true;
 		}
 
 		if ($cdata)
 		{
-			if (substr($in,$i,5)=='//]]>') $cdata=false;
+			if (($char=='/') && (substr($in,$i,5)=='//]]>')) $cdata=false;
 		} else
 		{
-			if ($in[$i]=='&')
+			if ($char=='&')
 			{
 				$lump=substr($in,$i+1,8);
 				$pos=strpos($lump,';');
@@ -806,9 +813,12 @@ function _get_next_tag()
 
 	$errors=array();
 
-	$chr_10=chr(10);
-	$chr_13=chr(13);
-	$special_chars=array('='=>1,'"'=>1,'&'=>1,'/'=>1,'<'=>1,'>'=>1,' '=>1,$chr_10=>1,$chr_13=>1);
+	static $chr_10=NULL;
+	if ($chr_10===NULL) $chr_10=chr(10);
+	static $chr_13=NULL;
+	if ($chr_13===NULL) $chr_13=chr(13);
+	$special_chars=NULL;
+	if ($special_chars===NULL) $special_chars=array('='=>1,'"'=>1,'&'=>1,'/'=>1,'<'=>1,'>'=>1,' '=>1,$chr_10=>1,$chr_13=>1);
 
 	while ($POS<$LEN)
 	{
@@ -999,7 +1009,7 @@ function _get_next_tag()
 				if ($next=='=')
 				{
 					require_code('type_validation');
-					if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name)))
+					if ((preg_match('#^\w+$#',$current_attribute_name)==0/*optimisation*/) && (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name))))
 					{
 						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
 						$current_attribute_name='wrong'.strval($POS);
@@ -1131,10 +1141,10 @@ function _get_next_tag()
 					}
 					$more_to_come=(!isset($special_chars[$next])) && ($POS<$LEN);
 				}
-				if (($next=='&') && (is_null($XHTML_VALIDATOR_OFF)))
+				if (($next=='&') && ($XHTML_VALIDATOR_OFF===NULL))
 				{
 					$test=test_entity();
-					if (!is_null($test)) $errors=array_merge($errors,$test);
+					if ($test!==NULL) $errors=array_merge($errors,$test);
 				}
 
 				if ($next=='"')
@@ -1265,7 +1275,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 		$self_close=true; // Will be flagged later
 	}
 
-	if (((isset($attributes['class'])) && (in_array($attributes['class'],array('comcode_code_inner','xhtml_validator_off')))) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml')===false)))
+	if (((isset($attributes['class'])) && ($attributes['class']=='xhtml_validator_off')) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml')===false)))
 	{
 		$XHTML_VALIDATOR_OFF=0;
 	}

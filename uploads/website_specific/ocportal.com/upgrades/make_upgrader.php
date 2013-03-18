@@ -155,7 +155,7 @@ function load_download_rows()
 			);
 		} else
 		{
-			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query('SELECT d.*,t.text_original AS nice_title,t2.text_original AS nice_description,t2.text_parsed AS nice_description_parsed,add_date,edit_date,url FROM '.get_table_prefix().'download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name LEFT JOIN '.get_table_prefix().'translate t2 ON t2.id=d.description WHERE validated=1 ORDER BY add_date');
+			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query('SELECT d.*,t.text_original AS nice_title,t2.text_original AS nice_description,t2.text_parsed AS nice_description_parsed,add_date,edit_date,url FROM '.get_table_prefix().'download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name LEFT JOIN '.get_table_prefix().'translate t2 ON t2.id=d.description WHERE validated=1 ORDER BY add_date',NULL,NULL,false,true);
 		}
 	}
 }

@@ -112,7 +112,7 @@ class Hook_cron_calendar
 			}
 
 			// Delete jobs just run
-			if ($or_list!='') $GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_jobs WHERE '.$or_list);
+			if ($or_list!='') $GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_jobs WHERE '.$or_list,NULL,NULL,false,true);
 
 			$start+=300;
 		}

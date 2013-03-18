@@ -101,7 +101,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 				{
 					if (strpos($code,'ocp_fanatic')!==false) continue;
 
-					$count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT SUM(m_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_avatar_url',find_theme_image($code,false,true)));
+					$count=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','SUM(m_cache_num_posts)',array('m_avatar_url'=>find_theme_image($code,false,true)));
 					if (is_null($count)) $count=0;
 					$results[$code]=$count;
 				}

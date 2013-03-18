@@ -4173,3 +4173,7 @@ psds
  - data_custom/psds/page-cart.psd
  - data_custom/psds/page.psd
  - data_custom/psds/pageitem.psd
+
+user_sync
+----------
+ - sources/hooks/systems/cron/user_sync.php

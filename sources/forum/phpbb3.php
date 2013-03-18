@@ -631,7 +631,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 			$map=array('topic_id'=>$topic_id,'forum_id'=>$forum_id,'poster_id'=>-1,'post_text'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'post_time'=>$time,'poster_ip'=>$local_ip_address,'post_username'=>$this->get_username($member),'enable_bbcode'=>1,'enable_smilies'=>1,'enable_sig'=>1,'post_edit_time'=>0,'post_edit_count'=>0);
 			if ($fm) $map=array_merge($map,array('post_attachment'=>0,'post_edit_user'=>NULL,'post_icon'=>0,'post_bluecard'=>NULL,'rating_rank_id'=>0,'user_avatar'=>NULL,'user_avatar_type'=>0,'urgent_post'=>0));
 			$post_id=$this->connection->query_insert('posts',$map,true);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_first_post_id='.strval($post_id).' WHERE topic_id='.strval($topic_id),1);
+			$this->connection->query_update('topics',array('topic_first_post_id'=>$post_id),array('topic_id'=>$topic_id),'',1);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics_real=(forum_topics_real+1),forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval($forum_id),1);
 		}
 
@@ -879,7 +879,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 			$_groups.='g.group_id='.strval($group);
 		}
 		if ($_groups=='') return array();
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE '.$_groups.' AND user_pending=0 ORDER BY g.group_id ASC',$max,$start);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE ('.$_groups.') AND user_pending=0 ORDER BY g.group_id ASC',$max,$start,false,true);
 	}
 
 	/**

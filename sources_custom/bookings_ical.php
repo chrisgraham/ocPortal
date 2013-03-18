@@ -33,7 +33,7 @@ function bookables_ical_script()
 	$filter=get_param('filter','*');
 	require_code('ocfiltering');
 	$query.=' AND '.ocfilter_to_sqlfragment($filter,'id');
-	$events=$GLOBALS['SITE_DB']->query($query);
+	$events=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true);
 	echo "BEGIN:VCALENDAR\n";
 	echo "VERSION:2.0\n";
 	echo "PRODID:-//ocProducts/ocPortal//NONSGML v1.0//EN\n";

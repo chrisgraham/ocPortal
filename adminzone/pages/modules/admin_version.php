@@ -182,7 +182,7 @@ class Module_admin_version
 
 		if (($upgrade_from<11) && (!is_null($upgrade_from)))
 		{
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'comcode_pages SET p_submitter=2 WHERE p_submitter='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()));
+			$GLOBALS['SITE_DB']->query_update('comcode_pages',array('p_submitter'=>2),array('p_submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()));
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<12))

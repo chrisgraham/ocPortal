@@ -53,7 +53,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 		return; // The usergroup subscription has been deleted, and this was to remove the payment for it
 	}
 
-	$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE ('.db_string_equal_to('s_state','cancelled').') AND '.db_string_equal_to('id',$purchase_id));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','id',array('s_state'=>'cancelled','id'=>$purchase_id));
 	if (!is_null($test))
 	{
 		$test=in_array($new_group,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));

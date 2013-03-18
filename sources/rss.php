@@ -144,16 +144,7 @@ class rss
 				if (($extra_data!='') && (strpos($data,$extra_data)===false)) $data=$extra_data.$data;
 				if ((strtoupper($GLOBALS['HTTP_CHARSET'])=='ISO-8859-1') || (strtoupper($GLOBALS['HTTP_CHARSET'])=='UTF-8')) // Hack to fix bad use of entities (we can't encode them all above)
 				{
-					$table=array_flip(get_html_translation_table(HTML_ENTITIES));
-					if (strtoupper($GLOBALS['HTTP_CHARSET'])=='UTF-8')
-					{
-						foreach ($table as $x=>$y)
-							$table[$x]=utf8_encode($y);
-					}
-					unset($table['&amp;']);
-					unset($table['&gt;']);
-					unset($table['&lt;']);
-					$data=strtr($data,$table);
+					$data=convert_bad_entities($data,$GLOBALS['HTTP_CHARSET']);
 				}
 				$convert_bad_entities=true;
 			} else
@@ -169,11 +160,7 @@ class rss
 			{
 				if (strtoupper(get_charset())=='ISO-8859-1') // Hack to fix bad use of entities (we can't encode them all above)
 				{
-					$table=array_flip(get_html_translation_table(HTML_ENTITIES));
-					unset($table['&amp;']);
-					unset($table['&gt;']);
-					unset($table['&lt;']);
-					$data=strtr($data,$table);
+					$data=convert_bad_entities($data,get_charset());
 				}
 			}
 			if (xml_parse($xml_parser,$data,true)==0)
