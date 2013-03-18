@@ -28,7 +28,7 @@
  * @param  ?integer			Day of date of birth (NULL: unknown).
  * @param  ?integer			Month of date of birth (NULL: unknown).
  * @param  ?integer			Year of date of birth (NULL: unknown).
- * @param  array				A map of custom field values (field-id=>value).
+ * @param  array				A map of custom field values (fieldID=>value).
  * @param  ?ID_TEXT			The member timezone (NULL: auto-detect).
  * @param  ?GROUP				The member's primary (NULL: default).
  * @param  BINARY				Whether the profile has been validated.

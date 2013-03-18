@@ -80,7 +80,8 @@ class Hook_content_meta_aware_download
 			'cms_page'=>'cms_downloads',
 			'module'=>'downloads',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'downloads',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'downloads',
 

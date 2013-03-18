@@ -506,7 +506,7 @@ function ocportal_cleanup($caches=NULL)
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 	}
 	$messages=new ocp_tempcode();
-	$hooks=find_all_hooks('modules','admin_cleanup');
+	$hooks=find_all_hooks('systems','cleanup');
 	if ((array_key_exists('ocf',$hooks)) && (array_key_exists('ocf_topics',$hooks)))
 	{
 		// A little re-ordering
@@ -521,7 +521,7 @@ function ocportal_cleanup($caches=NULL)
 		{
 			if (array_key_exists($cache,$hooks))
 			{
-				require_code('hooks/modules/admin_cleanup/'.filter_naughty_harsh($cache));
+				require_code('hooks/systems/cleanup/'.filter_naughty_harsh($cache));
 				$object=object_factory('Hook_'.filter_naughty_harsh($cache),true);
 				if (is_null($object)) continue;
 				$messages->attach($object->run());
@@ -535,7 +535,7 @@ function ocportal_cleanup($caches=NULL)
 	{
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/modules/admin_cleanup/'.filter_naughty_harsh($hook));
+			require_code('hooks/systems/cleanup/'.filter_naughty_harsh($hook));
 			$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 			if (is_null($object)) continue;
 			$info=$object->info();

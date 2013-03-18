@@ -73,6 +73,8 @@ class Hook_addon_registry_wiki
 	{
 		return array(
 			'sources/hooks/systems/content_meta_aware/wiki_page.php',
+			'sources/hooks/systems/content_meta_aware/wiki_post.php',
+			'sources/hooks/systems/occle_fs/wiki.php',
 			'sources/hooks/systems/config_default/wiki_show_stats_count_pages.php',
 			'sources/hooks/systems/config_default/wiki_show_stats_count_posts.php',
 			'sources/hooks/systems/config_default/points_wiki.php',
@@ -116,7 +118,6 @@ class Hook_addon_registry_wiki
 			'sources/hooks/systems/preview/wiki_post.php',
 			'sources/hooks/systems/rss/wiki.php',
 			'sources/hooks/systems/module_permissions/wiki_page.php',
-			'sources/hooks/systems/content_meta_aware/wiki_post.php',
 			'themes/default/images/EN/page/edit_tree.png',
 			'site/pages/html_custom/EN/wiki_tree_made.htm',
 			'sources/hooks/systems/notifications/wiki.php'

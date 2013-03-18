@@ -109,7 +109,7 @@ class Module_admin_cleanup
 	 */
 	function choose_cache_type()
 	{
-		$hooks=find_all_hooks('modules','admin_cleanup');
+		$hooks=find_all_hooks('systems','cleanup');
 
 		$title=get_screen_title('CLEANUP_TOOLS');
 
@@ -121,7 +121,7 @@ class Module_admin_cleanup
 		$fields_optimise=new ocp_tempcode();
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/modules/admin_cleanup/'.filter_naughty_harsh($hook));
+			require_code('hooks/systems/cleanup/'.filter_naughty_harsh($hook));
 			$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 			if (is_null($object)) continue;
 			$output=$object->info();
@@ -154,7 +154,7 @@ class Module_admin_cleanup
 	 */
 	function do_rebuild()
 	{
-		$hooks=find_all_hooks('modules','admin_cleanup');
+		$hooks=find_all_hooks('systems','cleanup');
 
 		// Fiddle the order a bit
 		if (array_key_exists('ocf_topics',$hooks))

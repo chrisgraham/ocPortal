@@ -116,7 +116,7 @@ class Hook_addon_registry_points
 			'sources/hooks/systems/rss/points.php',
 			'sources/points.php',
 			'sources/points2.php',
-			'sources/hooks/modules/admin_occle_commands/give.php',
+			'sources/hooks/systems/occle_commands/give.php',
 			'site/pages/modules/leader_board.php',
 			'sources/blocks/main_leader_board.php',
 			'lang/EN/leader_board.ini'

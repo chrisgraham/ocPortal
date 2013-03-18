@@ -940,14 +940,14 @@ class virtual_bash
 		if ($this->parse_runtime['occle_command']==COMMAND_NATIVE)
 		{
 			//See if it's a lone command first
-			$hooks=find_all_hooks('modules','admin_occle_commands');
+			$hooks=find_all_hooks('systems','occle_commands');
 			$hook_return=NULL;
 			foreach (array_keys($hooks) as $hook)
 			{
 				if ($hook==$this->parsed_input[SECTION_COMMAND])
 				{
-					require_code('hooks/modules/admin_occle_commands/'.filter_naughty_harsh($hook));
-					$object=object_factory('Hook_'.filter_naughty_harsh($hook));
+					require_code('hooks/systems/occle_commands/'.filter_naughty_harsh($hook));
+					$object=object_factory('Hook_occle_command_'.filter_naughty_harsh($hook));
 					$hook_return=$object->run($this->parsed_input[SECTION_OPTIONS],$this->parsed_input[SECTION_PARAMETERS],$this->fs);
 					$this->parse_runtime['occle_command']=COMMAND_LONE;
 					break;
@@ -1370,7 +1370,7 @@ class virtual_fs
 			'raw'=>'raw', //List of files in /sources (NOT sources_custom)
 			'home'=>'home' //Member's home directory in the filedump
 		);*/
-		$hooks=find_all_hooks('modules','admin_occle_fs');
+		$hooks=find_all_hooks('systems','occle_fs');
 		$this->virtual_fs=array();
 		foreach (array_keys($hooks) as $hook)
 		{
@@ -1453,8 +1453,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			$current_dir=$object->listing($meta_dir,$meta_root_node,array(),$this);
 
 			if ($full_paths)
@@ -1762,8 +1762,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->make_directory($meta_dir,$meta_root_node,$directory_name,$this);
 		}
 		else return false;
@@ -1786,8 +1786,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			$listing=$object->listing($meta_dir,$meta_root_node,$directory,$this);
 
 			foreach ($listing as $key=>$value)
@@ -1899,8 +1899,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->remove_file($meta_dir,$meta_root_node,$filename,$this);
 		}
 		else return false;
@@ -1923,8 +1923,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->read_file($meta_dir,$meta_root_node,$filename,$this);
 		}
 		else return false;
@@ -1948,8 +1948,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->write_file($meta_dir,$meta_root_node,$filename,$contents,$this)!==false;
 		}
 		else return false;
@@ -1973,8 +1973,8 @@ class virtual_fs
 		if (!is_null($meta_root_node))
 		{
 			//We're underneath a meta root node (a directory which is generated dynamically)
-			require_code('hooks/modules/admin_occle_fs/'.filter_naughty_harsh($meta_root_node_type));
-			$object=object_factory('Hook_'.filter_naughty_harsh($meta_root_node_type));
+			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
+			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			$old_contents=$object->read_file($meta_dir,$meta_root_node,$filename,$this);
 			return $object->write_file($meta_dir,$meta_root_node,$filename,$old_contents.$contents,$this);
 		}
@@ -1990,7 +1990,7 @@ class virtual_fs
 */
 function get_queued_messages($xml=true)
 {
-	$hooks=find_all_hooks('modules','admin_occle_notifications');
+	$hooks=find_all_hooks('systems','occle_notifications');
 	$output=mixed();
 	if ($xml) $output='';
 	else $output=new ocp_tempcode();
@@ -2000,8 +2000,8 @@ function get_queued_messages($xml=true)
 
 	foreach (array_keys($hooks) as $hook)
 	{
-		require_code('hooks/modules/admin_occle_notifications/'.filter_naughty_harsh($hook));
-		$object=object_factory('Hook_Notification_'.filter_naughty_harsh($hook));
+		require_code('hooks/systems/occle_notifications/'.filter_naughty_harsh($hook));
+		$object=object_factory('Hook_occle_notification_'.filter_naughty_harsh($hook));
 		$object_values=$object->run($loc);
 		if ($object_values===false) continue;
 

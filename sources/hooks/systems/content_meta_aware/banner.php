@@ -77,7 +77,8 @@ class Hook_content_meta_aware_banner
 			'cms_page'=>'cms_banners',
 			'module'=>'banners',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'banners',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>NULL,
 

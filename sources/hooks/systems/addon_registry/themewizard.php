@@ -72,8 +72,8 @@ class Hook_addon_registry_themewizard
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/modules/admin_occle_commands/themewizard_find_color.php',
-			'sources/hooks/modules/admin_occle_commands/themewizard_compute_equation.php',
+			'sources/hooks/systems/occle_commands/themewizard_find_color.php',
+			'sources/hooks/systems/occle_commands/themewizard_compute_equation.php',
 			'sources/hooks/modules/admin_themewizard/.htaccess',
 			'sources/hooks/systems/snippets/themewizard_equation.php',
 			'sources/hooks/modules/admin_themewizard/index.html',

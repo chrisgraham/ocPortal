@@ -118,6 +118,7 @@ class Hook_addon_registry_banners
 			'sources/hooks/systems/do_next_menus/banners.php',
 			'sources/hooks/systems/content_meta_aware/banner.php',
 			'sources/hooks/systems/content_meta_aware/banner_type.php',
+			'sources/hooks/systems/occle_fs/banners.php',
 			'data/images/advertise_here.png',
 			'data/images/donate.png',
 			'site/pages/comcode/EN/advertise.txt',

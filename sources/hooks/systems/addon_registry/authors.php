@@ -93,6 +93,7 @@ class Hook_addon_registry_authors
 			'sources/hooks/systems/rss/authors.php',
 			'themes/default/images/bigicons/set-own-profile.png',
 			'sources/hooks/systems/content_meta_aware/author.php',
+			'sources/hooks/systems/occle_fs/authors.php',
 		);
 	}
 

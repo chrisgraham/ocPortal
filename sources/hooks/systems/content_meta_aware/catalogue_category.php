@@ -80,7 +80,8 @@ class Hook_content_meta_aware_catalogue_category
 			'cms_page'=>'cms_catalogues',
 			'module'=>'catalogues',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'catalogues',
+			'occle_filesystem__is_folder'=>true,
 
 			'rss_hook'=>NULL,
 

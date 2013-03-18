@@ -81,7 +81,8 @@ class Hook_content_meta_aware_member
 			'cms_page'=>'admin_ocf_join',
 			'module'=>'members',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'groups',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'ocf_members',
 

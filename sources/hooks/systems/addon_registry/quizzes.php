@@ -83,6 +83,7 @@ class Hook_addon_registry_quizzes
 			'QUIZ_ARCHIVE_SCREEN.tpl',
 			'QUIZ_TEST_ANSWERS_MAIL.tpl',
 			'sources/hooks/systems/content_meta_aware/quiz.php',
+			'sources/hooks/systems/occle_fs/quizzes.php',
 			'sources/hooks/systems/addon_registry/quizzes.php',
 			'sources/hooks/modules/admin_import_types/quizzes.php',
 			'QUIZ_BOX.tpl',

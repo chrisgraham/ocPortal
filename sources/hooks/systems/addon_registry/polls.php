@@ -81,6 +81,7 @@ class Hook_addon_registry_polls
 			'sources/hooks/systems/realtime_rain/polls.php',
 			'BLOCK_MAIN_POLL.tpl',
 			'sources/hooks/systems/content_meta_aware/poll.php',
+			'sources/hooks/systems/occle_fs/polls.php',
 			'sources/hooks/systems/addon_registry/polls.php',
 			'sources/hooks/systems/preview/poll.php',
 			'sources/hooks/modules/admin_setupwizard/polls.php',

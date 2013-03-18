@@ -77,7 +77,7 @@ class Hook_addon_registry_stats
 			'sources/hooks/systems/config_default/super_logging.php',
 			'sources/hooks/systems/realtime_rain/stats.php',
 			'data/modules/admin_cleanup/page_stats.php.pre',
-			'sources/hooks/modules/admin_cleanup/page_stats.php',
+			'sources/hooks/systems/cleanup/page_stats.php',
 			'sources/hooks/systems/cron/stats_clean.php',
 			'sources/hooks/systems/do_next_menus/stats.php',
 			'sources/hooks/systems/non_active_urls/stats.php',
@@ -98,7 +98,7 @@ class Hook_addon_registry_stats
 			'data/modules/admin_stats/IP_Country.txt', // http://geolite.maxmind.com/download/geoip/database/
 			'data_custom/modules/admin_stats/index.html',
 			'lang/EN/stats.ini',
-			'sources/hooks/modules/admin_cleanup/stats.php',
+			'sources/hooks/systems/cleanup/stats.php',
 			'themes/default/images/bigicons/users_online.png',
 			'themes/default/images/pagepics/statistics_usersonline.png',
 			'themes/default/images/bigicons/statistics_search.png',

@@ -78,7 +78,7 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
  * @param  SHORT_TEXT	The title of the post (may be blank).
  * @param  LONG_TEXT		The post.
  * @param  BINARY			Whether to skip showing the posters signature in the post.
- * @param  boolean		Whether the post is the first in the topic.
+ * @param  ?boolean		Whether the post is the first in the topic (NULL: work it out).
  * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially).
  * @param  BINARY			Whether the post is marked emphasised.
  * @param  ?string		The name of the person making the post (NULL: username of current member).
@@ -97,7 +97,7 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
  * @param  ?AUTO_LINK 	Force an ID (NULL: don't force an ID)
  * @param  boolean		Whether to make the post anonymous
  * @param  boolean		Whether to skip post checks
- * @param  boolean		Whether this is for a new Private Topic
+ * @param  ?boolean		Whether this is for a new Private Topic (NULL: work it out)
  * @param  boolean		Whether to explicitly insert the Comcode with admin privileges
  * @param  ?AUTO_LINK	Parent post ID (NULL: none-threaded/root-of-thread)
  * @return AUTO_LINK		The ID of the new post.
@@ -105,6 +105,19 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
 function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false,$parent_id=NULL)
 {
 	if (is_null($poster)) $poster=get_member();
+
+	if (is_null($is_starter))
+	{
+		$is_starter=is_null($GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','id',array('p_topic_id'=>$topic_id)));
+	}
+	if (is_null($is_pt))
+	{
+		$is_pt=false;
+		if ($is_starter)
+		{
+			$is_pt=is_null($GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topic_id)));
+		}
+	}
 
 	if (!running_script('install'))
 	{

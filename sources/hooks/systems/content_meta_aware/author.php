@@ -77,7 +77,8 @@ class Hook_content_meta_aware_author
 			'cms_page'=>'cms_authors',
 			'module'=>'authors',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'authors',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'authors',
 

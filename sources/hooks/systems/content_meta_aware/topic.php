@@ -82,7 +82,8 @@ class Hook_content_meta_aware_topic
 			'cms_page'=>'topics',
 			'module'=>'forumview',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'forums',
+			'occle_filesystem__is_folder'=>true,
 
 			'rss_hook'=>'ocf_forumview',
 

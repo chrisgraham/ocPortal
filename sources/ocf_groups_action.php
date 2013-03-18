@@ -30,8 +30,8 @@
  * @param  ?GROUP			The that members of this usergroup get promoted to at point threshold (NULL: no promotion prospects).
  * @param  ?integer		The point threshold for promotion (NULL: no promotion prospects).
  * @param  ?MEMBER		The leader of this usergroup (NULL: none).
- * @param  integer		The number of seconds that members of this usergroup must endure between submits (group 'best of' applies).
- * @param  integer		The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies).
+ * @param  integer		The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A.
+ * @param  integer		The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A.
  * @param  integer		The number of megabytes that members of this usergroup may attach per day (group 'best of' applies).
  * @param  integer		The number of attachments that members of this usergroup may attach to something (group 'best of' applies).
  * @param  integer		The maximum avatar width that members of this usergroup may have (group 'best of' applies).

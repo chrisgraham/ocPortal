@@ -81,7 +81,8 @@ class Hook_content_meta_aware_iotd
 			'cms_page'=>'cms_iotds',
 			'module'=>'iotd',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'iotds',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'iotds',
 

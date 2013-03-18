@@ -108,6 +108,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/systems/content_meta_aware/image.php',
 			'sources/hooks/systems/content_meta_aware/video.php',
 			'sources/hooks/systems/content_meta_aware/gallery.php',
+			'sources/hooks/systems/occle_fs/galleries.php',
 			'sources/hooks/systems/video_embed/.htaccess',
 			'sources/hooks/systems/video_embed/index.html',
 			'sources/hooks/systems/video_embed/youtube.php',

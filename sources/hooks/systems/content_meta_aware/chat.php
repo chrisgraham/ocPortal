@@ -77,7 +77,8 @@ class Hook_content_meta_aware_chat
 			'cms_page'=>'cms_chat',
 			'module'=>'chat',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'chat',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>NULL,
 

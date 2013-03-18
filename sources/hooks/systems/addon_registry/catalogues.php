@@ -88,8 +88,10 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/systems/meta/catalogue_entry.php',
 			'JAVASCRIPT_CATALOGUES.tpl',
 			'sources/hooks/modules/admin_import_types/catalogues.php',
+			'sources/hooks/systems/content_meta_aware/catalogue.php',
 			'sources/hooks/systems/content_meta_aware/catalogue_category.php',
 			'sources/hooks/systems/content_meta_aware/catalogue_entry.php',
+			'sources/hooks/systems/occle_fs/catalogues.php',
 			'sources/hooks/systems/addon_registry/catalogues.php',
 			'CATALOGUE_ADDING_SCREEN.tpl',
 			'CATALOGUE_EDITING_SCREEN.tpl',
@@ -143,7 +145,6 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_FIELD_VALUE_PLAIN.php',
 			'sources/blocks/main_contact_catalogues.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_ALL_FIELD_VALUES.php',
-			'sources/hooks/systems/content_meta_aware/catalogue.php',
 			'sources/hooks/systems/block_ui_renderers/catalogues.php',
 		);
 	}

@@ -77,7 +77,8 @@ class Hook_content_meta_aware_news_category
 			'cms_page'=>'cms_news',
 			'module'=>'news',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'news',
+			'occle_filesystem__is_folder'=>true,
 
 			'rss_hook'=>NULL,
 

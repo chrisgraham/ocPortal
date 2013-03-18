@@ -81,7 +81,8 @@ class Hook_content_meta_aware_gallery
 			'cms_page'=>'cms_galleries',
 			'module'=>'galleries',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'galleries',
+			'occle_filesystem__is_folder'=>true,
 
 			'rss_hook'=>NULL,
 

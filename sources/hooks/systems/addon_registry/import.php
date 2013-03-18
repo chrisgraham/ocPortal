@@ -112,7 +112,7 @@ class Hook_addon_registry_import
 			'XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl',
 			'XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl',
 			'adminzone/pages/modules/admin_xml_storage.php',
-			'sources/hooks/modules/admin_occle_commands/continue_import.php',
+			'sources/hooks/systems/occle_commands/continue_import.php',
 		);
 	}
 

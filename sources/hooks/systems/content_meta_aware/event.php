@@ -80,7 +80,8 @@ class Hook_content_meta_aware_event
 			'cms_page'=>'cms_calendar',
 			'module'=>'calendar',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'calendar',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'calendar',
 

@@ -80,7 +80,8 @@ class Hook_content_meta_aware_poll
 			'cms_page'=>'cms_polls',
 			'module'=>'polls',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'polls',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'polls',
 

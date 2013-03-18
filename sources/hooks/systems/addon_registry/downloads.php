@@ -86,6 +86,7 @@ class Hook_addon_registry_downloads
 			'sources/hooks/systems/config_default/show_dload_trees.php',
 			'sources/hooks/systems/content_meta_aware/download.php',
 			'sources/hooks/systems/content_meta_aware/download_category.php',
+			'sources/hooks/systems/occle_fs/downloads.php',
 			'sources/hooks/systems/meta/downloads_category.php',
 			'sources/hooks/systems/meta/downloads_download.php',
 			'sources/hooks/systems/disposable_values/archive_size.php',

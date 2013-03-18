@@ -84,7 +84,8 @@ class Hook_content_meta_aware_catalogue_entry
 			'ocselect'=>'catalogues::_catalogues_ocselect',
 			'ocselect_protected_fields'=>array(), // These are ones even some staff should never know
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'catalogues',
+			'occle_filesystem__is_folder'=>false,
 
 			'rss_hook'=>'catalogues',
 

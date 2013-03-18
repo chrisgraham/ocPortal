@@ -80,7 +80,8 @@ class Hook_content_meta_aware_wiki_page
 			'cms_page'=>'wiki',
 			'module'=>'wiki',
 
-			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+			'occle_filesystem_hook'=>'wiki',
+			'occle_filesystem__is_folder'=>true,
 
 			'rss_hook'=>'wiki',
 
