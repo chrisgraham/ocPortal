@@ -109,7 +109,7 @@ class Module_admin_workflow extends standard_aed_module
 			'id'=>'*AUTO',		// ID for reference. Larger IDs will override smaller ones if they report a different status (nondeterministic for non-incremental IDs!)
 			'workflow_content_id'=>'INTEGER',		// The ID of this content in the workflow_content table
 			'workflow_approval_name'=>'SHORT_TRANS',		// The name of the ID field in the source table
-			'status_code'=>'INTEGER',		// A code indicating the status TODO: Use TINY_INTEGER here? Can't find any other use of this type to investigate though.
+			'status_code'=>'SHORT_INTEGER',		// A code indicating the status
 			'approved_by'=>'USER'		// Remember who set this status, if the need arises to investigate this later
 		));
 
