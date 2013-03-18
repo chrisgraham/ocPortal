@@ -224,6 +224,7 @@ function db_has_expression_ordering($db)
  */
 function db_escape_string($string)
 {
+	$GLOBALS['DB_ESCAPE_STRING_LIST'][]=$string;
 	return $GLOBALS['DB_STATIC_OBJECT']->db_escape_string($string);
 }
 
@@ -395,6 +396,33 @@ function microtime_diff($a,$b)
 	{ // $a_int<$b_int
 		return ($b_int-$a_int)+($b_micro-$a_micro);
 	}
+}
+
+function is_simple_query($query)
+{
+	$complex_keywords=array(' JOIN ',' ORDER ',' GROUP ',' AS ',' OR ','SHOW ',' NOT ',' LIKE ',' IN ',' BETWEEN ',' UNION ',' HAVING ');
+	$complex_operators=array('<','>','!');
+	$query_parts=explode(' ',$query);
+	if (in_array(strtolower(trim($query_parts[0])),array('select','update','delete')))
+	{
+		foreach ($complex_keywords as $keyword)
+		{
+			if (strpos($query,$keyword)!==false) return false;
+		}
+		foreach ($complex_operators as $operator)
+		{
+			if (strpos($query,$operator)!==false) return false;
+		}
+		echo $query.'<br><br>';
+		//return true;
+	}
+	return false;
+}
+
+function has_escaped_dynamic_sql($query)
+{
+	//var_dump($GLOBALS['DB_ESCAPE_STRING_LIST']);echo '<br><br>';
+	return true;
 }
 
 /**
@@ -852,11 +880,25 @@ class database_driver
 	 */
 	function query($query,$max=NULL,$start=NULL,$fail_ok=false,$skip_safety_check=false,$lang_fields=NULL,$field_prefix='')
 	{
+		global $DEV_MODE;
 		if (!$skip_safety_check)
 		{
 			$_query=strtolower($query);
 			$queries=1;//substr_count($_query,'insert into ')+substr_count($_query,'replace into ')+substr_count($_query,'update ')+substr_count($_query,'select ')+substr_count($_query,'delete from '); Not reliable
 			if ((strpos(preg_replace('#\'[^\']*\'#','\'\'',str_replace('\\\'','',$_query)),' union ')!==false) || ($queries>1)) log_hack_attack_and_exit('SQL_INJECTION_HACK',$query);
+			
+			if ($DEV_MODE)
+			{
+				if (is_simple_query($query))
+				{
+					fatal_exit('It is highly recommended to use query_select/query_update/query_delete function instead of query function for this query.');
+				}
+				
+				if (!has_escaped_dynamic_sql($query))
+				{
+					fatal_exit('Dynamic SQL has not been escaped properly.');
+				}
+			}
 		}
 
 		return $this->_query($query,$max,$start,$fail_ok,false,$lang_fields,$field_prefix);
