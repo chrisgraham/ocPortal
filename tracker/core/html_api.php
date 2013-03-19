@@ -974,9 +974,9 @@ function print_manage_menu( $p_page = '' ) {
 	}
 
 	echo '<div align="center"><p>';
-	/*if( access_has_global_level( config_get( 'manage_user_threshold' ) ) ) {
+	if( access_has_global_level( config_get( 'manage_user_threshold' ) ) ) {
 		print_bracket_link( helper_mantis_url( $t_manage_user_page ), lang_get( 'manage_users_link' ) );
-	}*/
+	}
 	if( access_has_project_level( config_get( 'manage_project_threshold' ) ) ) {
 		print_bracket_link( helper_mantis_url( $t_manage_project_menu_page ), lang_get( 'manage_projects_link' ) );
 	}
