@@ -3971,6 +3971,7 @@ testing_platform
  - _tests/tests/testatom.cms
  - _tests/tests/testrss.cms
  - _tests/tests/unit_tests/.htaccess
+ - _tests/tests/unit_tests/template_xss.php
  - _tests/tests/unit_tests/notifications_all_coded.php
  - _tests/tests/unit_tests/specsettings_documented.php
  - _tests/tests/unit_tests/overused_globals.php
@@ -4044,7 +4045,6 @@ testing_platform
  - _tests/tests/unit_tests/shopping.php
  - _tests/tests/unit_tests/standard_dir_files.php
  - _tests/tests/unit_tests/tempcode.php
- - _tests/tests/unit_tests/template.php
  - _tests/tests/unit_tests/template_previews.php
  - _tests/tests/unit_tests/tickettype.php
  - _tests/tests/unit_tests/user.php

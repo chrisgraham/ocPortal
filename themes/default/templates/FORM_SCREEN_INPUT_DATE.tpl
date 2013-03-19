@@ -44,7 +44,7 @@
 	{+END}{+END}{+END}
 
 	var cal{STUB%}=null;
-	var link{STUB%}=document.getElementById('cal{STUB;}Button');
+	var link{STUB%}=document.getElementById('cal{STUB/;}Button');
 	if (link{STUB%}) link{STUB%}.onclick=function() { initialise_date_field('{STUB%}','cal{STUB%}','link{STUB%}', {$?,{UNLIMITED},true,false}, mindate, maxdate); };
 
 	{+START,IF,{UNLIMITED}}

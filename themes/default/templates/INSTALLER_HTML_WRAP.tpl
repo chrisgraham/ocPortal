@@ -21,10 +21,10 @@
 			{
 				//set_cookie('js_on',1,120);
 
-				var none=document.getElementById('{DEFAULT_FORUM;}');
+				var none=document.getElementById('{DEFAULT_FORUM/;}');
 				if (none) none.checked=true;
 
-				if (('{DEFAULT_FORUM;}'!='none') && ('{DEFAULT_FORUM;}'!='ocf'))
+				if (('{DEFAULT_FORUM/;}'!='none') && ('{DEFAULT_FORUM/;}'!='ocf'))
 				{
 					var d=document.getElementById('forum_path');
 					if (d) d.style.display='block';
@@ -142,7 +142,7 @@
 					}
 				}
 
-				window.alert('{PASSWORD_PROMPT;}','');
+				window.alert('{PASSWORD_PROMPT/;}','');
 
 				if (form.elements['master_password'].value.length<5)
 				{

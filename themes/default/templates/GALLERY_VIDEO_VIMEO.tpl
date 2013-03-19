@@ -20,7 +20,7 @@
 				}
 
 				var player=document.getElementById('{$GET*,player_id}');
-				player.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'finish' }),'http://player.vimeo.com/video/{URL;}');
+				player.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'finish' }),'http://player.vimeo.com/video/{URL/;}');
 			}, 1000);
 		}
 	} );

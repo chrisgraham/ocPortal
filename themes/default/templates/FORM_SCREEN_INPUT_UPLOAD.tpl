@@ -25,7 +25,7 @@
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script type="text/javascript">// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput('upload','{NAME;}',null,null,'{FILTER;}');
+			preinitFileInput('upload','{NAME/;}',null,null,'{FILTER/;}');
 		} );
 	//]]></script>
 {+END}{+END}

@@ -11,13 +11,13 @@
 	window.setTimeout(function () {
 		var element;
 		var target_window=window.opener?window.opener:window.parent;
-		element=target_window.document.getElementById('{FIELD_NAME;}');
+		element=target_window.document.getElementById('{FIELD_NAME/;}');
 		if (!element)
 		{
 			target_window=target_window.frames['iframe_page'];
-			element=target_window.document.getElementById('{FIELD_NAME;}');
+			element=target_window.document.getElementById('{FIELD_NAME/;}');
 		}
-		element=ensure_true_id(element,'{FIELD_NAME;}');
+		element=ensure_true_id(element,'{FIELD_NAME/;}');
 
 		var comcode,comcode_semihtml;
 		if (is_comcode_xml(element))

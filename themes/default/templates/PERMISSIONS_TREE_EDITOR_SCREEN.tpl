@@ -50,7 +50,7 @@
 
 					window.usergroup_titles=[];
 					{+START,LOOP,USERGROUPS}
-						window.usergroup_titles[{_loop_key}]='{_loop_var;}';
+						window.usergroup_titles[{_loop_key}]='{_loop_var/;}';
 					{+END}
 				//]]></script>
 			</div>
