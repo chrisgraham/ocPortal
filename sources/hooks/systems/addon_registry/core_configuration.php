@@ -106,7 +106,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/detect_lang_forum.php',
 			'sources/hooks/systems/config_default/display_php_errors.php',
 			'sources/hooks/systems/config_default/eager_wysiwyg.php',
-			'sources/hooks/systems/config_default/enable_https.php',
 			'sources/hooks/systems/config_default/enable_keyword_density_check.php',
 			'sources/hooks/systems/config_default/enable_markup_validation.php',
 			'sources/hooks/systems/config_default/enable_previews.php',

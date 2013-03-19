@@ -65,13 +65,6 @@ class Module_admin_ssl
 
 		require_lang('ssl');
 
-		if (get_option('enable_https')=='0')
-		{
-			$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SECURITY'),get_module_zone('admin_config'));
-			$config_url=$_config_url->evaluate();
-			inform_exit(do_lang_tempcode('HTTPS_DISABLED',escape_html($config_url.'#group_GENERAL')));
-		}
-
 		$type=get_param('type','misc');
 
 		if ($type=='set') return $this->set();

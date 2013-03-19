@@ -51,7 +51,7 @@ class Module_admin_config
 										'gzip_output','forum_in_portal','staff_address','is_on_gd','site_closed','closed',
 										'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
 										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','is_on_trackbacks',
-										'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser','enable_https',
+										'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser',
 										'smtp_sockets_use','smtp_sockets_host','smtp_sockets_port','smtp_sockets_username','smtp_sockets_password',
 										'smtp_from_address','use_captchas','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
 										'validation_xhtml','validation_wcag','validation_css','validation_javascript','validation_ext_files','validation_compat',
@@ -77,7 +77,7 @@ class Module_admin_config
 										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
 										'filetype_icons','infinite_scrolling',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
-										'cdn',
+										'cdn','enable_https',
 										);
 
 		foreach ($config_options as $option)
@@ -204,7 +204,6 @@ class Module_admin_config
 			add_config_option('EMAIL_ADDRESS','smtp_from_address','line','return \'\';','SITE','SMTP',1);
 
 			add_config_option('USE_CAPTCHAS','use_captchas','tick','return \'1\';','SECURITY','GENERAL');
-			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
 
 			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('DETECT_LANG_BROWSER','detect_lang_browser','tick','return \'0\';','SITE','ADVANCED');

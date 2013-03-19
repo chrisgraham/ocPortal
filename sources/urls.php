@@ -258,7 +258,7 @@ function is_page_https($zone,$page)
 	static $off=NULL;
 	if ($off===NULL)
 	{
-		$off=(!function_exists('get_option')) || (get_option('enable_https',true)=='0') || (in_safe_mode());
+		$off=(!addon_installed('ssl')) || (in_safe_mode());
 	}
 	if ($off) return false;
 

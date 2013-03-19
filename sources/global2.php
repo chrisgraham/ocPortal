@@ -1104,7 +1104,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($https===NULL)
 		{
 			require_code('urls');
-			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
+			if ((!addon_installed('ssl')) || (!running_script('index')))
 			{
 				$https=tacit_https();
 			} else
@@ -1540,7 +1540,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	}
 	$js_cache_path=$dir.'/'.filter_naughty_harsh($j);
 	if (!$minify) $js_cache_path.='_non_minified';
-	if ((get_option('enable_https',true)=='1') && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())))
+	if ((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())))
 		$js_cache_path.='_ssl';
 	if (is_mobile()) $js_cache_path.='_mobile';
 	$js_cache_path.='.js';
@@ -1584,7 +1584,7 @@ function javascript_tempcode($position=NULL)
 	$js=new ocp_tempcode();
 
 	$minify=(get_param_integer('keep_no_minify',0)==0);
-	$https=((get_option('enable_https',true)=='1') && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
+	$https=((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
 	$mobile=is_mobile();
 
 	$grouping_codename=_handle_web_resource_merging('.js',$JAVASCRIPTS,$minify,$https,$mobile);
@@ -1678,7 +1678,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	}
 	$css_cache_path=$dir.'/'.filter_naughty_harsh($c);
 	if (!$minify) $css_cache_path.='_non_minified';
-	if ((get_option('enable_https',true)=='1') && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())))
+	if ((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())))
 		$css_cache_path.='_ssl';
 	if (is_mobile()) $css_cache_path.='_mobile';
 	$css_cache_path.='.css';
@@ -1730,7 +1730,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 
 	$text_only=(get_param_integer('keep_textonly',0)==1);
 	$minify=(get_param_integer('keep_no_minify',0)==0);
-	$https=((get_option('enable_https',true)=='1') && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
+	$https=((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
 	$mobile=is_mobile();
 
 	if (!$only_global)
