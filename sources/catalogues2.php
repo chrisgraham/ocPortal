@@ -299,6 +299,9 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		}
 	}
 
+	// Update field references
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'ck_'.$name),array('cf_type'=>'ck_'.$old_name));
+
 	decache('main_cc_embed');
 	decache('main_recent_cc_entries');
 
@@ -354,6 +357,9 @@ function actual_delete_catalogue($name)
 	delete_lang($myrow['c_description']);
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>$name));
 	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'catalogues_catalogue','category_name'=>$name));
+
+	// Update field references
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'at_catalogue_entry'),array('cf_type'=>'ck_'.$name));
 
 	log_it('DELETE_CATALOGUE',$name);
 }
