@@ -109,6 +109,11 @@ $ocp_sc_main_currency_symbol = '&pound';
 $ocp_sc_alternate_currencies = array('USD', 'CAD', 'EUR');
 $ocp_sc_custom_profile_field = 'ocp_support_credits';
 
+$ocp_updater_groups=array();
+$ocp_developer_groups=array(22);
+$ocp_manager_groups=array();
+$ocp_admin_groups=array(2,3);
+
 $g_enable_sponsorship = ON;
 $g_sponsorship_currency = $ocp_sc_main_currency.' '.$ocp_sc_main_currency_symbol;
 $g_minimum_sponsorship_amount = $ocp_sc_price_per_credit;

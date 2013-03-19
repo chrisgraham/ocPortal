@@ -47,6 +47,7 @@ $g_cache_user = array();
 #  false, return false if the user can't be found.
 function user_cache_row( $p_user_id, $p_trigger_errors = true ) {
 	global $g_cache_user, $ocp_sc_db_prefix;
+	global $ocp_updater_groups,$ocp_developer_groups,$ocp_manager_groups,$ocp_admin_groups;
 
 	if( isset( $g_cache_user[$p_user_id] ) ) {
 		return $g_cache_user[$p_user_id];
@@ -67,6 +68,28 @@ function user_cache_row( $p_user_id, $p_trigger_errors = true ) {
 	}
 	$ocp_row = db_fetch_array( $result );
 
+	// Find access level
+	$access_level = ($ocp_row['m_primary_group']==1)?VIEWER:REPORTER;
+	if (in_array($ocp_row['m_primary_group'],$ocp_updater_groups)) $access_level = UPDATER;
+	if (in_array($ocp_row['m_primary_group'],$ocp_developer_groups)) $access_level = DEVELOPER;
+	if (in_array($ocp_row['m_primary_group'],$ocp_manager_groups)) $access_level = MANAGER;
+	if (in_array($ocp_row['m_primary_group'],$ocp_admin_groups)) $access_level = ADMINISTRATOR;
+
+	// Process additional groups
+	$result = db_query_bound("SELECT gm_group_id FROM ".$ocp_sc_db_prefix."f_group_members WHERE gm_validated=1 AND gm_member_id=" . db_param(), Array( $p_user_id ) );
+	$num_groups = db_num_rows( $result );
+	for ($i=0;$i<$num_groups;$i++)
+	{
+		$group_row = db_fetch_array( $result );
+		$secondary_group_id = $group_row['gm_group_id'];
+		$access_level_2 = ($secondary_group_id==1)?VIEWER:REPORTER;
+		if (in_array($secondary_group_id,$ocp_updater_groups)) $access_level_2 = UPDATER;
+		if (in_array($secondary_group_id,$ocp_developer_groups)) $access_level_2 = DEVELOPER;
+		if (in_array($secondary_group_id,$ocp_manager_groups)) $access_level_2 = MANAGER;
+		if (in_array($secondary_group_id,$ocp_admin_groups)) $access_level_2 = ADMINISTRATOR;
+		if ($access_level_2 > $access_level) $access_level = $access_level_2;
+	}
+
 	$row= Array (
 		'id'=>$p_user_id,
 		'username'=>$ocp_row['m_username'],
@@ -75,7 +98,7 @@ function user_cache_row( $p_user_id, $p_trigger_errors = true ) {
 		'date_created'=>$ocp_row['m_join_time'],
 		'last_visit'=>$ocp_row['m_last_visit_time'],
 		'enabled'=>$ocp_row['m_validated'],
-		'access_level'=>($ocp_row['m_primary_group']==2 || $ocp_row['m_primary_group']==3)?ADMINISTRATOR:(($ocp_row['m_primary_group']==1)?VIEWER:REPORTER),
+		'access_level'=>$access_level,
 		'login_count'=>0,
 		'cookie_string'=>$ocp_row['m_pass_hash_salted'],
 		'realname'=>'',
