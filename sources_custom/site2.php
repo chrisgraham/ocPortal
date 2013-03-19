@@ -19,7 +19,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 	 * @param  ?array			Row from database (holds submitter etc) (NULL: no row, originated first from disk)
 	 * @param  array			New row for database, used if necessary (holds submitter etc)
 	 * @param  boolean		Whether the page is being included from another
-	 * @return array			A triple: The page, Title to use, New Comcode page row
+	 * @return array			A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
 	 */
 	function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included=false)
 	{
@@ -115,7 +115,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 
-		return array($_text2,$title_to_use,$comcode_page_row);
+		return array($_text2,$title_to_use,$comcode_page_row,$result);
 	}
 }
 
@@ -130,7 +130,7 @@ if (!function_exists('_load_comcode_page_cache_off'))
 	 * @param  PATH			The file base to load from
 	 * @param  array			New row for database, used if nesessary (holds submitter etc)
 	 * @param  boolean		Whether the page is being included from another
-	 * @return array			A tuple: The page, New Comcode page row, Title
+	 * @return array			A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
 	 */
 	function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included=false)
 	{
@@ -174,6 +174,6 @@ if (!function_exists('_load_comcode_page_cache_off'))
 			$GLOBALS['SITE_DB']->query_insert('comcode_pages',$comcode_page_row,false,true);
 		}
 
-		return array($html,$comcode_page_row,$title_to_use);
+		return array($html,$comcode_page_row,$title_to_use,$result);
 	}
 }
