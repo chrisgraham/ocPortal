@@ -82,8 +82,6 @@ function _general_db_init()
 		{
 			foreach ($_table_lang_fields as $lang_field)
 			{
-				if ($lang_field['m_table']=='f_member_custom_fields') continue;
-
 				if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]))
 					$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
 
@@ -161,6 +159,9 @@ function db_string_not_equal_to($attribute,$compare)
  */
 function db_encode_like($pattern)
 {
+	if ($GLOBALS['DEV_MODE'])
+		$GLOBALS['DB_ESCAPE_STRING_LIST'][trim($GLOBALS['DB_STATIC_OBJECT']->db_escape_string($pattern),' %')]=true;
+
 	return $GLOBALS['DB_STATIC_OBJECT']->db_encode_like($pattern);
 }
 
@@ -226,6 +227,9 @@ function db_has_expression_ordering($db)
  */
 function db_escape_string($string)
 {
+	if ($GLOBALS['DEV_MODE'])
+		$GLOBALS['DB_ESCAPE_STRING_LIST'][trim($GLOBALS['DB_STATIC_OBJECT']->db_escape_string($string),' %')]=true;
+
 	return $GLOBALS['DB_STATIC_OBJECT']->db_escape_string($string);
 }
 
@@ -711,7 +715,7 @@ class database_driver
 	 */
 	function _query_select_value($values)
 	{
-		if (!isset($values[0])) return NULL; // No result found
+		if (!array_key_exists(0,$values)) return NULL; // No result found
 		$first=$values[0];
 		$v=current($first); // Result found. Maybe a value of 'null'
 		return $v;
@@ -739,14 +743,27 @@ class database_driver
 	 *
 	 * @param  string			The complete SQL query
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @param  boolean		Whether to skip the query safety checks
+	 * @param  boolean		Whether to skip the query safety check
 	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
 	 */
 	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
 	{
-		if ($GLOBALS['DEV_MODE'])
+		global $DEV_MODE;
+
+		if ($DEV_MODE)
 		{
 			if (!is_bool($fail_ok)) fatal_exit('You probably wanted to use query_select_value_if_there');
+
+			if (!$skip_safety_check)
+			{
+				require_code('database_security_filter');
+
+				if (is_simple_query($query))
+					fatal_exit('It is highly recommended to use query_select/query_update/query_delete method instead of the \'query\' method for this query');
+
+				if (!has_escaped_dynamic_sql($query))
+					fatal_exit('Dynamic SQL has not been escaped properly');
+			}
 		}
 
 		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check);
@@ -852,18 +869,30 @@ class database_driver
 	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
 	 * @param  ?integer		The start row to affect (NULL: no specification)
 	 * @param  boolean		Whether to output an error on failure
-	 * @param  boolean		Whether to skip the query safety checks
+	 * @param  boolean		Whether to skip the query safety check
 	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @param  string			All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
 	 * @return ?mixed			The results (NULL: no results)
 	 */
 	function query($query,$max=NULL,$start=NULL,$fail_ok=false,$skip_safety_check=false,$lang_fields=NULL,$field_prefix='')
 	{
+		global $DEV_MODE;
 		if (!$skip_safety_check)
 		{
 			$_query=strtolower($query);
 			$queries=1;//substr_count($_query,'insert into ')+substr_count($_query,'replace into ')+substr_count($_query,'update ')+substr_count($_query,'select ')+substr_count($_query,'delete from '); Not reliable
 			if ((strpos(preg_replace('#\'[^\']*\'#','\'\'',str_replace('\\\'','',$_query)),' union ')!==false) || ($queries>1)) log_hack_attack_and_exit('SQL_INJECTION_HACK',$query);
+			
+			if ($DEV_MODE)
+			{
+				require_code('database_security_filter');
+
+				if (is_simple_query($query))
+					fatal_exit('It is highly recommended to use query_select/query_update/query_delete method instead of the \'query\' method for this query');
+
+				if (!has_escaped_dynamic_sql($query))
+					fatal_exit('Dynamic SQL has not been escaped properly');
+			}
 		}
 
 		return $this->_query($query,$max,$start,$fail_ok,false,$lang_fields,$field_prefix);
@@ -1052,8 +1081,6 @@ class database_driver
 		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 		if ($ret!==NULL)
 		{
-			$cnt_orig=count($this->text_lookup_original_cache);
-			$cnt_parsed=count($this->text_lookup_cache);
 			foreach ($lang_strings_expecting as $bits)
 			{
 				list($field,$original,$parsed)=$bits;
@@ -1062,16 +1089,10 @@ class database_driver
 				{
 					$entry=$row[$field];
 
-					if (($row[$original]!==NULL) && ($cnt_orig<=1000))
-					{
+					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
 						$this->text_lookup_original_cache[$entry]=$row[$original];
-						$cnt_orig++;
-					}
-					if (($row[$parsed]!==NULL) && ($cnt_parsed<=1000))
-					{
+					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
 						$this->text_lookup_cache[$entry]=$row[$parsed];
-						$cnt_parsed++;
-					}
 
 					unset($row[$original]);
 					unset($row[$parsed]);
@@ -1334,7 +1355,7 @@ class database_driver
 		$tries=0;
 		do
 		{
-			$locks=$GLOBALS['SITE_DB']->query('SHOW OPEN TABLES FROM '.get_db_site().' WHERE `Table`=\''.get_table_prefix().$tbl.'\' AND In_use>=1');
+			$locks=$GLOBALS['SITE_DB']->query('SHOW OPEN TABLES FROM '.get_db_site().' WHERE `Table`=\''.db_escape_string(get_table_prefix().$tbl).'\' AND In_use>=1');
 			$locked=count($locks)>=1;
 			$tries++;
 			if ($locked)

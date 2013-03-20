@@ -293,7 +293,7 @@ class standard_crud_module
 
 		if (is_null($allow_comments))
 		{
-			$val=$GLOBALS['SITE_DB']->query_value_if_there('SELECT allow_comments,count(allow_comments) AS qty FROM '.get_table_prefix().$this->table.' GROUP BY allow_comments ORDER BY qty DESC',1); // We need the mode here, not the mean
+			$val=$GLOBALS['SITE_DB']->query_value_if_there('SELECT allow_comments,count(allow_comments) AS qty FROM '.get_table_prefix().$this->table.' GROUP BY allow_comments ORDER BY qty DESC',false,true); // We need the mode here, not the mean
 			$allow_comments=is_null($val)?1:$val;
 		}
 

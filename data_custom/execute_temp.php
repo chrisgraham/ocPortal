@@ -53,6 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('urls2');
-	echo '!'.@strval(find_id_via_url_moniker('news','art/test'));
+	$GLOBALS['FORUM_DB']->query('SELECT 1 FROM '.get_table_prefix().'f_members WHERE m_username=\'evil\' OR id=1 OR id=-10');
 }

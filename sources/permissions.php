@@ -249,7 +249,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 	$groups=_get_where_clause_groups($member,false);
 	if ($groups===NULL) return true;
 
-	$pg_where='('.db_string_equal_to('zone_name',$zone).' AND '.db_string_equal_to('page_name',$page).')';
+	$pg_where=db_string_equal_to('zone_name',$zone).' AND '.db_string_equal_to('page_name',$page);
 	$select='page_name,zone_name';
 
 	if ($at_now)
@@ -265,7 +265,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 		$pg_where.=' OR page_name LIKE \''.db_encode_like($zone).'\'';
 	}
 	$select.=',group_id';
-	$perhaps=((array_key_exists($groups,$GLOBALS['TOTAL_PP_CACHE'])) && (!$at_now))?$GLOBALS['TOTAL_PP_CACHE'][$groups]:$GLOBALS['SITE_DB']->query('SELECT '.$select.' FROM '.get_table_prefix().'group_page_access WHERE ('.$pg_where.') AND ('.$groups.')');
+	$perhaps=((array_key_exists($groups,$GLOBALS['TOTAL_PP_CACHE'])) && (!$at_now))?$GLOBALS['TOTAL_PP_CACHE'][$groups]:$GLOBALS['SITE_DB']->query('SELECT '.$select.' FROM '.get_table_prefix().'group_page_access WHERE ('.$pg_where.') AND ('.$groups.')',NULL,NULL,false,true);
 	$groups2=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups($member,false));
 
 	$found_match_key_one=false;

@@ -708,6 +708,7 @@ class Hook_addon_registry_core
 			'sources/config2.php',
 			'sources/critical_errors.php',
 			'sources/database.php',
+			'sources/database_security_filter.php',
 			'sources/database_helper.php',
 			'sources/database_action.php',
 			'sources/database_search.php',
