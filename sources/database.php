@@ -82,8 +82,6 @@ function _general_db_init()
 		{
 			foreach ($_table_lang_fields as $lang_field)
 			{
-				if ($lang_field['m_table']=='f_member_custom_fields') continue;
-
 				if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]))
 					$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
 
@@ -226,7 +224,7 @@ function db_has_expression_ordering($db)
  */
 function db_escape_string($string)
 {
-	$GLOBALS['DB_ESCAPE_STRING_LIST'][]=$string;
+	$GLOBALS['DB_ESCAPE_STRING_LIST'][]=$GLOBALS['DB_STATIC_OBJECT']->db_escape_string($string);
 	return $GLOBALS['DB_STATIC_OBJECT']->db_escape_string($string);
 }
 
@@ -402,29 +400,116 @@ function microtime_diff($a,$b)
 
 function is_simple_query($query)
 {
-	$complex_keywords=array(' JOIN ',' ORDER ',' GROUP ',' AS ',' OR ','SHOW ',' NOT ',' LIKE ',' IN ',' BETWEEN ',' UNION ',' HAVING ');
-	$complex_operators=array('<','>','!');
+	$complex_keywords=array('JOIN','ORDER','GROUP','AS','OR','NOT','LIKE','IN','BETWEEN','UNION','HAVING');
+	$complex_operators=array('<','>','!','+','-','/','*');
+	$query=trim_quoted_substrings($query);
 	$query_parts=explode(' ',$query);
 	if (in_array(strtolower(trim($query_parts[0])),array('select','update','delete')))
 	{
-		foreach ($complex_keywords as $keyword)
+		foreach ($query_parts as $part)
 		{
-			if (strpos($query,$keyword)!==false) return false;
+			if (in_array(strtoupper(trim(strval($part))),$complex_keywords)) return false;
 		}
-		foreach ($complex_operators as $operator)
+		if (strpos($query,' WHERE ')!==false)
 		{
-			if (strpos($query,$operator)!==false) return false;
+			$where_clause=substr($query,strpos($query,' WHERE '));
+			foreach ($complex_operators as $operator)
+			{
+				if (strpos($where_clause,$operator)!==false) return false;
+			}
+			if (preg_match('/[a-z]\(/',strtolower($where_clause))) return false;
 		}
-		echo $query.'<br><br>';
-		//return true;
+		return true;
 	}
 	return false;
 }
 
 function has_escaped_dynamic_sql($query)
 {
-	//var_dump($GLOBALS['DB_ESCAPE_STRING_LIST']);echo '<br><br>';
+	$strings=get_quoted_substrings($query);
+	foreach ($strings as $str)
+	{
+		if (!in_array(trim($str),$GLOBALS['DB_ESCAPE_STRING_LIST']))
+		{
+			foreach (debug_backtrace() as $backtrace)
+			{
+				if (isset($backtrace['file']) && file_exists($backtrace['file']))
+				{
+					$file=file($backtrace['file']);
+					if (strpos($file[$backtrace['line']-1],'query(')!==false)
+					{
+						$string=get_quoted_substrings(substr($file[$backtrace['line']-1],strpos($file[$backtrace['line']-1],'query(')));
+						if (count($string)>0)
+						{
+							if (!in_array($str,$string)) return false;
+						} else
+						{
+							$string=get_quoted_substrings(file_get_contents($backtrace['file']));
+							if (!in_array($str,$string)) return false;
+						}
+					}
+				}
+			}
+		}
+	}
 	return true;
+}
+
+function get_quoted_substrings($string)
+{
+	$buffer='';
+	$output=array();
+	$found_start=false;
+	$ignore=false;
+	for ($i=0;$i<strlen($string);$i++)
+	{
+		if (!$found_start && ($string[$i]=='\''))
+		{
+			$found_start=true;
+			continue;
+		}
+		if ($found_start)
+		{
+			if (($ignore!==$i) && ($string[$i]=='\''))
+			{
+				$output[]=$buffer;
+				$buffer='';
+				$found_start=false;
+				continue;
+			}
+			if (($ignore!==$i) && ($string[$i]=='\\')) $ignore=$i+1;
+			$buffer.=$string[$i];
+		}
+	}
+	$found_start=false;
+	$ignore=false;
+	$buffer='';
+	return $output;
+}
+
+function trim_quoted_substrings($string)
+{
+	$found_start=false;
+	$ignore=false;
+	for ($i=0;$i<strlen($string);$i++)
+	{
+		if (!$found_start && ($string[$i]=='\''))
+		{
+			$found_start=true;
+			continue;
+		}
+		if ($found_start)
+		{
+			if (($ignore!==$i) && ($string[$i]=='\''))
+			{
+				$found_start=false;
+				continue;
+			}
+			if (($ignore!==$i) && ($string[$i]=='\\')) $ignore=$i+1;
+			$string[$i]=' ';
+		}
+	}
+	return $string;
 }
 
 /**
@@ -739,7 +824,7 @@ class database_driver
 	 */
 	function _query_select_value($values)
 	{
-		if (!isset($values[0])) return NULL; // No result found
+		if (!array_key_exists(0,$values)) return NULL; // No result found
 		$first=$values[0];
 		$v=current($first); // Result found. Maybe a value of 'null'
 		return $v;
@@ -767,11 +852,24 @@ class database_driver
 	 *
 	 * @param  string			The complete SQL query
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @param  boolean		Whether to skip the query safety checks
+	 * @param  boolean		Whether to skip the query safety check
 	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
 	 */
 	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
 	{
+		global $DEV_MODE;
+		if ($DEV_MODE && !$skip_safety_check)
+		{
+			if (is_simple_query($query))
+			{
+				fatal_exit('It is highly recommended to use query_select/query_update/query_delete function instead of query function for this query: '.$query);
+			}
+			
+			if (!has_escaped_dynamic_sql($query))
+			{
+				fatal_exit('Dynamic SQL has not been escaped properly. Query: '.$query);
+			}
+		}
 		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check);
 		if ($values===NULL) return NULL; // error
 		return $this->_query_select_value($values);
@@ -875,7 +973,7 @@ class database_driver
 	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
 	 * @param  ?integer		The start row to affect (NULL: no specification)
 	 * @param  boolean		Whether to output an error on failure
-	 * @param  boolean		Whether to skip the query safety checks
+	 * @param  boolean		Whether to skip the query safety check
 	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @param  string			All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
 	 * @return ?mixed			The results (NULL: no results)
@@ -893,12 +991,12 @@ class database_driver
 			{
 				if (is_simple_query($query))
 				{
-					fatal_exit('It is highly recommended to use query_select/query_update/query_delete function instead of query function for this query.');
+					fatal_exit('It is highly recommended to use query_select/query_update/query_delete function instead of query function for this query: '.$query);
 				}
 				
 				if (!has_escaped_dynamic_sql($query))
 				{
-					fatal_exit('Dynamic SQL has not been escaped properly.');
+					fatal_exit('Dynamic SQL has not been escaped properly. Query: '.$query);
 				}
 			}
 		}
@@ -1089,8 +1187,6 @@ class database_driver
 		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 		if ($ret!==NULL)
 		{
-			$cnt_orig=count($this->text_lookup_original_cache);
-			$cnt_parsed=count($this->text_lookup_cache);
 			foreach ($lang_strings_expecting as $bits)
 			{
 				list($field,$original,$parsed)=$bits;
@@ -1099,16 +1195,10 @@ class database_driver
 				{
 					$entry=$row[$field];
 
-					if (($row[$original]!==NULL) && ($cnt_orig<=1000))
-					{
+					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
 						$this->text_lookup_original_cache[$entry]=$row[$original];
-						$cnt_orig++;
-					}
-					if (($row[$parsed]!==NULL) && ($cnt_parsed<=1000))
-					{
+					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
 						$this->text_lookup_cache[$entry]=$row[$parsed];
-						$cnt_parsed++;
-					}
 
 					unset($row[$original]);
 					unset($row[$parsed]);
