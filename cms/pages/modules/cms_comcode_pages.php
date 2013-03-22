@@ -149,7 +149,6 @@ class Module_cms_comcode_pages
 		$type=get_param('type','misc');
 
 		if ($type=='__ed') return $this->__ed();
-		if ($type=='export') return $this->export();
 		if ($type=='_ed') return $this->_ed();
 		if ($type=='misc') return $this->ed();
 
@@ -836,8 +835,6 @@ class Module_cms_comcode_pages
 
 		$posting_form=get_posting_form(do_lang($simple_add?'COMCODE_PAGE_ADD':'SAVE'),$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed,NULL,NULL,false);
 
-		$export_url=build_url(array('page'=>'_SELF','type'=>'export','page_link'=>$page_link,'export'=>$restore_from,'lang'=>$lang),'_SELF');
-
 		$text=new ocp_tempcode();
 		if (addon_installed('points'))
 		{
@@ -861,7 +858,6 @@ class Module_cms_comcode_pages
 			'DELETE_URL'=>$delete_url,
 			'ZONE'=>$zone,
 			'FILE'=>$file,
-			'EXPORT_URL'=>$export_url,
 			'POSTING_FORM'=>$posting_form,
 			'REVISION_HISTORY'=>$revision_history,
 		));
@@ -1131,51 +1127,6 @@ class Module_cms_comcode_pages
 			return redirect_screen($title,$url,$completion_text);
 		}
 		return $this->do_next_manager($title,$file,$zone,$completion_text);
-	}
-
-	/**
-	 * The actualiser to export a Comcode page.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function export()
-	{
-		$title=get_screen_title('EXPORT_COMCODE_PAGE');
-
-		$lang=choose_language($title);
-		if (is_object($lang)) return $lang;
-
-		$path=filter_naughty(get_param('export',''));
-		$page_link=filter_naughty(get_param('page_link'));
-		if ($path=='')
-		{
-			$page_link_parts=explode(':',$page_link);
-			if (count($page_link_parts)!=2) warn_exit(do_lang_tempcode('ZONE_COLON_FILE'));
-
-			$path=$this->find_comcode_page($lang,$page_link_parts[1],$page_link_parts[0]);
-		}
-		$file_base=strpos($path,'comcode_custom/')?get_custom_file_base():get_file_base();
-		if (!file_exists($file_base.'/'.$path))
-		{
-			$path=str_replace('comcode/','comcode_custom/',$path);
-			$file_base=get_custom_file_base();
-		}
-		if (!file_exists($file_base.'/'.$path)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$export=file_get_contents($file_base.'/'.$path);
-
-		$matches=array();
-		preg_match_all('#\[attachment(.*)\](\d+)\[/attachment\]#',$export,$matches);
-		for ($i=0;$i<count($matches[0]);$i++)
-		{
-			$attachment=$GLOBALS['SITE_DB']->query_select('attachments',array('a_url','a_original_filename'),array('id'=>$matches[2][$i]),'',1);
-			$file=file_get_contents(get_custom_file_base().'/'.filter_naughty(rawurldecode($attachment[0]['a_url'])));
-			$replace='[attachment filename="'.$attachment[0]['a_original_filename'].'"'.$matches[1][$i].']'.chunk_split(base64_encode($file)).'[/attachment]';
-			$export=str_replace($matches[0][$i],$replace,$export);
-		}
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_ed:pagelink='.$page_link,do_lang_tempcode('COMCODE_PAGE_EDIT'))));
-
-		return do_template('COMCODE_PAGE_EXPORT_SCREEN',array('_GUID'=>'2bbae0dad2dd559b68b628cecdf610fc','TITLE'=>$title,'EXPORT'=>$export));
 	}
 
 }

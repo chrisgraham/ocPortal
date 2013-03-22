@@ -40,17 +40,25 @@ class Hook_occle_fs_members
 			$cnt=$GLOBALS['SITE_DB']->query_select_value('f_members','COUNT(*)');
 			if ($cnt>1000) return false; // Too much to process
 
-			$users=$GLOBALS['SITE_DB']->query_select('f_members',array('m_username'));
-			foreach ($users as $user) $listing[$user['m_username']]=array();
+			$users=$GLOBALS['SITE_DB']->query_select('f_members',array('m_username','m_join_time'));
+			foreach ($users as $user)
+			{
+				$listing[]=array(
+					$user['m_username'],
+					OCCLEFS_DIR,
+					NULL/*don't calculate a filesize*/,
+					$user['m_join_time'],
+				);
+			}
 		}
 		elseif (count($meta_dir)==1)
 		{
 			// We're listing the profile fields and custom profile fields of the specified member
 			$username=$meta_dir[0];
-			$member_data=$GLOBALS['SITE_DB']->query_select('f_members',array('*'),array('m_username'=>$username),'',1);
-			if (!array_key_exists(0,$member_data)) return false;
-			$member_data=$member_data[0];
-			$listing=array(
+			$_member_data=$GLOBALS['SITE_DB']->query_select('f_members',array('*'),array('m_username'=>$username),'',1);
+			if (!array_key_exists(0,$_member_data)) return false;
+			$member_data=$_member_data[0];
+			$props=array(
 				'id',
 				'theme',
 				'avatar',
@@ -76,20 +84,40 @@ class Hook_occle_fs_members
 				'wide',
 				'max_attach_size'
 			);
-			$listing['groups']=array();
+
+			$listing=array();
+			foreach ($props as $prop)
+			{
+				$listing[]=array(
+					$prop,
+					OCCLEFS_FILE,
+					strlen($member_data['m_'.$prop]),
+					$member_data['m_join_time'],
+				);
+			}
+			$listing[]=array(
+				'groups',
+				OCCLEFS_DIR,
+				NULL/*don't calculate a filesize*/,
+				$member_data['m_join_time'],
+			);
 
 			// Custom profile fields
-			$member_custom_fields=$GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_data['id']));
-			if (!array_key_exists(0,$member_custom_fields)) return false;
-			$member_custom_fields=$member_custom_fields[0];
+			$_member_custom_fields=$GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_data['id']));
+			if (!array_key_exists(0,$_member_custom_fields)) return false;
+			$member_custom_fields=$_member_custom_fields[0];
 
-			$i=db_get_first_id();
-
-			while (array_key_exists('field_'.strval($i),$member_custom_fields))
+			foreach (array_keys($member_custom_fields) as $_i)
 			{
-				if ($member_custom_fields['field_'.strval($i)]!='')
-					$listing[]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields','cf_name',array('id'=>$i)));
-				$i++;
+				$i=intval(substr($_i,strlen('field_')));
+				$cpf_value=$member_custom_fields['field_'.strval($i)];
+				$cpf_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields','cf_name',array('id'=>$i)));
+				$listing[]=array(
+					$cpf_name,
+					OCCLEFS_FILE,
+					strlen($cpf_value),
+					$member_data['m_join_time'],
+				);
 			}
 		}
 		elseif (count($meta_dir)==2)
@@ -101,7 +129,15 @@ class Hook_occle_fs_members
 			$group_names=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			foreach ($groups as $group)
 			{
-				if (array_key_exists($group,$group_names)) $listing[]=$group_names[$group];
+				if (array_key_exists($group,$group_names))
+				{
+					$listing[]=array(
+						$group_names[$group],
+						OCCLEFS_FILE,
+						0,
+						$member_data['m_join_time'],
+					);
+				}
 			}
 		}
 		else return false; // Directory doesn't exist

@@ -456,9 +456,11 @@ function actual_delete_catalogue_field($id)
  * @param  ?AUTO_LINK	The expiry category (NULL: do not expire)
  * @param  ?TIME			The add time (NULL: now)
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the new category
  */
-function actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image='',$move_days_lower=30,$move_days_higher=60,$move_target=NULL,$add_date=NULL,$id=NULL)
+function actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image='',$move_days_lower=30,$move_days_higher=60,$move_target=NULL,$add_date=NULL,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($add_date)) $add_date=time();
 	if (!is_integer($description)) $description=insert_lang_comcode($description,3);
@@ -472,7 +474,14 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	log_it('ADD_CATALOGUE_CATEGORY',strval($id),get_translated_text($title));
 
 	require_code('seo2');
-	if (!is_numeric($title)) seo_meta_set_for_implicit('catalogue_category',strval($id),array($title,$description),$title);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		if (!is_numeric($title))
+			seo_meta_set_for_implicit('catalogue_category',strval($id),array($title,$description),$title);
+	} else
+	{
+		seo_meta_set_for_explicit('catalogue_category',strval($id),$meta_keywords,$meta_description);
+	}
 
 	store_in_catalogue_cat_treecache($id,$parent_id);
 
@@ -750,9 +759,11 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
  * @param  ?TIME				The edit time (NULL: never)
  * @param  integer			The number of views
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK			The ID of the newly added entry
  */
-function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time=NULL,$submitter=NULL,$edit_date=NULL,$views=0,$id=NULL)
+function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time=NULL,$submitter=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
@@ -821,26 +832,32 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	}
 
 	require_code('seo2');
-	$seo_source_map=$map;
-	$seo_source_map__specific=get_value('catalogue_seo_source_map__'.$catalogue_name);
-	if (!is_null($seo_source_map__specific))
+	if (($meta_keywords=='') && ($meta_description==''))
 	{
-		$seo_source_map=array();
-		foreach (explode(',',$seo_source_map__specific) as $_map_source)
+		$seo_source_map=$map;
+		$seo_source_map__specific=get_value('catalogue_seo_source_map__'.$catalogue_name);
+		if (!is_null($seo_source_map__specific))
 		{
-			if (substr($seo_source_map__specific,-1)=='!')
+			$seo_source_map=array();
+			foreach (explode(',',$seo_source_map__specific) as $_map_source)
 			{
-				$must_use=true;
-				$seo_source_map__specific=substr($seo_source_map__specific,0,strlen($seo_source_map__specific)-1);
-			} else
-			{
-				$must_use=false;
+				if (substr($seo_source_map__specific,-1)=='!')
+				{
+					$must_use=true;
+					$seo_source_map__specific=substr($seo_source_map__specific,0,strlen($seo_source_map__specific)-1);
+				} else
+				{
+					$must_use=false;
+				}
+				if (isset($map[intval($seo_source_map__specific)]))
+					$seo_source_map[]=array($map[intval($seo_source_map__specific)],$must_use);
 			}
-			if (isset($map[intval($seo_source_map__specific)]))
-				$seo_source_map[]=array($map[intval($seo_source_map__specific)],$must_use);
 		}
+		seo_meta_set_for_implicit('catalogue_entry',strval($id),$seo_source_map,'');
+	} else
+	{
+		seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);
 	}
-	seo_meta_set_for_implicit('catalogue_entry',strval($id),$seo_source_map,'');
 
 	calculate_category_child_count_cache($category_id);
 

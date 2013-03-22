@@ -105,7 +105,7 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
  * @param  SHORT_TEXT	The description to use
  * @return array			A pair: Keyword string generated, Description generated
  */
-function _seo_meta_find_data($keyword_sources,$description)
+function _seo_meta_find_data($keyword_sources,$description='')
 {
 	// These characters are considered to be word-characters
 	require_code('textfiles');

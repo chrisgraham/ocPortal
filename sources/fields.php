@@ -89,8 +89,8 @@ function manage_custom_fields_donext_link($content_type)
 	{
 		require_lang('fields');
 
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$ob=get_content_object($content_type);
 		$info=$ob->info();
 
 		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues')))
@@ -116,8 +116,8 @@ function has_tied_catalogue($content_type)
 {
 	if (addon_installed('catalogues'))
 	{
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$ob=get_content_object($content_type);
 		$info=$ob->info();
 		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
 		{

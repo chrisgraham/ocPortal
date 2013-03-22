@@ -91,18 +91,6 @@ class Hook_content_meta_aware_wiki_post
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
-	 *
-	 * @param  ID_TEXT	The content ID
-	 */
-	function delete($content_id)
-	{
-		// TODO: This will be moved into OcCLE filesystem hook at some point, #218 on tracker
-		require_code('wiki');
-		wiki_delete_post(intval($content_id));
-	}
-
-	/**
 	 * Standard modular run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content

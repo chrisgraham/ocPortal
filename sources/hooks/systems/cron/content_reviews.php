@@ -55,8 +55,8 @@ class Hook_cron_content_reviews
 			// Dispatch notification
 			if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')))
 				continue; // Weird :S
-			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
-			$object=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
+			require_code('content');
+			$object=get_content_object($content_type);
 			if (is_null($object)) continue; // Weird :S
 			$info=$object->info();
 			$auto_action_str=do_lang('CONTENT_REVIEW_AUTO_ACTION_'.$auto_action);
@@ -87,7 +87,15 @@ class Hook_cron_content_reviews
 					break;
 
 				case 'delete':
-					$object->delete($content_id);
+					require_code('content_fs');
+					$object_js=get_content_occlefs_object($content_type);
+					if (!is_null($object_js))
+					{
+						if ($info['occle_filesystem__is_folder'])
+							$object_js->_folder_delete($object_js->_folder_convert_id_to_filename($content_type,$content_id));
+						else
+							$object_js->_file_delete($object_js->_file_convert_id_to_filename($content_type,$content_id));
+					}
 					break;
 
 				case 'leave':

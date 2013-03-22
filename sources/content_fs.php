@@ -21,45 +21,53 @@
 /**
  * Standard code module initialisation function.
  */
-function init__downloads()
+function init__content_fs()
 {
 	require_code('urls2');
+	require_code('occle');
+}
+
+/**
+ * Get the OccLE-fs object for a content type.
+ *
+ * @param  ID_TEXT	The content type
+ * @return ?object	The object (NULL: could not get one)
+ */
+function get_content_occlefs_object($content_type)
+{
+	require_code('content');
+	$object=get_content_object($content_type);
+	if (is_null($object)) return NULL;
+	$info=$object->info();
+	$fs_hook=$object->occle_filesystem_hook;
+	if (is_null($fs_hook)) return NULL;
+
+	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($content_type));
+	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($content_type),true);
+	if (is_null($fs_object)) return NULL;
+	return $fs_object;
 }
 
 class content_fs_base
 {
 	var $folder_content_type=NULL;
-	var $_folder_object=NULL;
-	var $_file_object=NULL;
-
-	/**
-	 * Get the folder content info for this OccleFS content hook.
-	 *
-	 * @return object		The object
-	 */
-	function _get_folder_info()
-	{
-		if (is_null($this->$_folder_object))
-		{
-			require_code('hooks/systems/content_meta_aware/'.$this->folder_content_type);
-			$this->$_folder_object=object_factory('Hook_content_meta_aware_'.$this->folder_content_type);
-		}
-		return $this->$_folder_object->info();
-	}
+	var $file_content_type=NULL;
+	var $_cma_object=array();
 
 	/**
 	 * Get the file content info for this OccleFS content hook.
 	 *
+	 * @param  ID_TEXT	The content type
 	 * @return object		The object
 	 */
-	function _get_file_info()
+	function _get_cma_info($content_type)
 	{
-		if (is_null($_file_object))
+		if (!array_key_exists($content_type,$this->_cma_object))
 		{
-			require_code('hooks/systems/content_meta_aware/'.$this->file_content_type);
-			$_file_object=object_factory('Hook_content_meta_aware_'.$this->file_content_type);
+			require_code('content');
+			$this->_cma_object[$content_type]=get_content_object($content_type);
 		}
-		return $_file_object->info();
+		return $this->_cma_object[$content_type]->info();
 	}
 
 	/**
@@ -111,6 +119,32 @@ class content_fs_base
 	}
 
 	/**
+	 * Find a default property, defaulting to the average of what is there already, or the given default if really necessary.
+	 *
+	 * @param  array		The properties
+	 * @param  ID_TEXT	The property
+	 * @param  ID_TEXT	The table to average within
+	 * @param  integer	The last-resort default
+	 * @param  ?ID_TEXT	The database property (NULL: same as $property)
+	 * @return integer	The value
+	 */
+	function _default_property_int_modeavg($properties,$property,$table,$default,$db_property=NULL)
+	{
+		if (is_null($db_property)) $db_property=$property;
+
+		if (array_key_exists($property,$properties))
+		{
+			return intval($properties[$property]);
+		}
+
+		$db=$GLOBALS[(substr($table,0,2)=='f_')?'FORUM_DB':'SITE_DB'];
+		$val=$db->query_value_if_there('SELECT '.$db_property.',count('.$db_property.') AS qty FROM '.get_table_prefix().$table.' GROUP BY '.$db_property.' ORDER BY qty DESC',false,true); // We need the mode here, not the mean
+		if (!is_null($val)) return $val;
+
+		return $default;
+	}
+
+	/**
 	 * Find a default property, defaulting to blank.
 	 *
 	 * @param  ID_TEXT	The category value (blank: root)
@@ -119,6 +153,146 @@ class content_fs_base
 	function _integer_category($category)
 	{
 		return ($category=='')?NULL:intval($category);
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ID_TEXT	The filename
+	 */
+	function _file_convert_id_to_filename($content_type,$content_id)
+	{
+		return $content_id.'.xml';
+	}
+
+	/**
+	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ?ID_TEXT	The content type (NULL: assumption of only one folder content type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+	 * @return array		A pair: The content type, the content ID
+	 */
+	function _file_convert_filename_to_id($filename,$content_type=NULL)
+	{
+		if (is_null($content_type)) $content_type=$this->folder_content_type;
+
+		$content_id=basename($filename,'.xml'); // Remove file extension from filename
+		return array($content_type,$content_id);
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ID_TEXT	The filename
+	 */
+	function _folder_convert_id_to_filename($content_type,$content_id)
+	{
+		if ($content_id=='') return '<blank>';
+		return $content_id;
+	}
+
+	/**
+	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ?ID_TEXT	The content type (NULL: assumption of only one folder content type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+	 * @return array		A pair: The content type, the content ID
+	 */
+	function _folder_convert_filename_to_id($filename,$content_type=NULL)
+	{
+		if (is_null($content_type)) $content_type=$this->folder_content_type;
+
+		if ($filename=='<blank>') $filename='';
+		$content_id=basename($filename); // Get filename component from path
+		return array($content_type,$content_id);
+	}
+
+	/**
+	 * Interpret the input of a file, into a way we can understand it to add. Hooks may override this with special import code.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 */
+	function _file_magic_filter($filename,$path,$properties)
+	{
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the content title, and leave properties alone
+	}
+
+	function set_properties_via_cloning($id,$from_id)
+	{
+		// TODO
+	}
+
+	function set_properties_via_import($id,$file_path)
+	{
+		// TODO
+	}
+
+	function set_property($id,$key,$val)
+	{
+		// TODO
+	}
+
+	function set_content_access($id,$groups)
+	{
+		// TODO
+	}
+
+	function set_content_privileges_from_preset($id,$group_presets,$assume_full_group_coverage=true)
+	{
+		// TODO
+	}
+
+	function set_content_privileges($id,$group_settings,$assume_full_group_coverage=true)
+	{
+		// TODO
+	}
+
+	function get_content_privileges($id)
+	{
+		// TODO
+	}
+
+	function set_content_privileges_from_preset__member($id,$member_preset)
+	{
+		// TODO
+	}
+
+	function set_content_privileges__member($id,$privilege,$setting)
+	{
+		// TODO
+	}
+
+	function get_content_privileges__member($id)
+	{
+		// TODO
+	}
+
+	/**
+	 * Whether the filesystem hook is active.
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function _is_active()
+	{
+		return true;
+	}
+
+	/**
+	 * Find whether a kind of content handled by this hook (folder or file) can be under a particular kind of folder.
+	 *
+	 * @param  ID_TEXT		Folder content type
+	 * @param  ID_TEXT		Content type (may be file or folder)
+	 * @return boolean		Whether it can
+	 */
+	function _has_parent_child_relationship($above,$under)
+	{
+		return true;
 	}
 
 	/**
@@ -132,54 +306,109 @@ class content_fs_base
 	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
-		if (!is_null($this->folder_content_type))
-		{
-			$folder_info=_get_folder_info();
-		}
-		$file_info=_get_file_info();
+		if (!$this->_is_active()) return false;
+
+		$listing=array();
+
+		$folder_types=is_array($this->folder_content_type)?$this->folder_content_type:(is_null($this->folder_content_type)?array():array($this->folder_content_type));
+		$file_types=is_array($this->file_content_type)?$this->file_content_type:(is_null($this->file_content_type)?array():array($this->file_content_type));
 
 		// Find where we're at
+		$cat_id=mixed();
+		$cat_content_type=mixed();
 		if (count($meta_dir)!=0)
 		{
-			if (is_null($this->folder_content_type)) return false;
+			if (is_null($this->folder_content_type)) return false; // Should not be possible
 
-			$_cat_id=find_id_via_url_moniker($this->folder_content_type,implode('/',$meta_dir));
+			list($cat_content_type,$_cat_id)=$this->_file_convert_filename_to_id(implode('/',$meta_dir));
 			$cat_id=($folder_info['id_field_numeric']?intval($_cat_id):$_cat_id)
 		} else
 		{
 			if (!is_null($this->folder_content_type))
 			{
 				$cat_id=($folder_info['id_field_numeric']?NULL:'');
+				$cat_content_type=is_array($this->folder_content_type)?$this->folder_content_type[0]:$this->folder_content_type;
 			}
 		}
 
 		// Find folders
-		if (!is_null($this->folder_content_type))
+		foreach ($folder_types as $content_type)
 		{
-			$child_folders=$folder_info['connection']->query_select($folder_info['table'],array($folder_info['id_field']),array($folder_info['parent_category_field']=>$cat_id),'ORDER BY '.$folder_info['id_field'],10000/*Reasonable limit*/);
-		} else
-		{
-			$child_folders=array();
+			if (!_has_parent_child_relationship($cat_content_type,$content_type)) continue;
+
+			$folder_info=_get_cma_info($content_type);
+			$select=array($folder_info['id_field']);
+			if (!is_null($folder_info['add_time_field'])) $select[]=$folder_info['add_time_field'];
+			if (!is_null($folder_info['edit_time_field'])) $select[]=$folder_info['edit_time_field'];
+			$child_folders=$folder_info['connection']->query_select($folder_info['table'],$select,array($folder_info['parent_category_field']=>$cat_id),'ORDER BY '.$folder_info['id_field'],10000/*Reasonable limit*/);
+			foreach ($child_folders as $folder)
+			{
+				$file=$this->_folder_convert_id_to_filename($content_type,$folder[$folder_info['id_field']]);
+
+				$filetime=mixed();
+				if (!is_null($folder_info['edit_time_field']))
+				{
+					$filetime=$folder[$folder_info['edit_time_field']];
+				}
+				if (is_null($filetime))
+				{
+					if (!is_null($folder_info['add_time_field']))
+					{
+						$filetime=$folder[$folder_info['add_time_field']];
+					}
+				}
+
+				$listing[]=array(
+					$file,
+					OCCLEFS_DIR,
+					NULL/*don't calculate a filesize*/,
+					$filetime,
+				);
+			}
 		}
 
 		// Find files
-		$where=array();
-		if (!is_null($this->folder_content_type))
+		foreach ($file_types as $content_type)
 		{
-			$where[$file_info['category_field']]=$cat_id;
-		}
-		$files=$file_info['connection']->query_select($file_info['table'],array($file_info['id_field']),$where,'ORDER BY '.$file_info['id_field'],10000/*Reasonable limit*/);
+			if (!_has_parent_child_relationship($cat_content_type,$content_type)) continue;
 
-		// Return
-		$listing=array();
-		foreach ($child_folders as $folder)
-		{
-			$listing[]=$folder[$folder_info['id_field']];
+			$file_info=_get_cma_info($content_type);
+			$where=array();
+			if (!is_null($this->folder_content_type))
+			{
+				$where[$file_info['category_field']]=$cat_id;
+			}
+			$select=array($file_info['id_field']);
+			if (!is_null($file_info['add_time_field'])) $select[]=$file_info['add_time_field'];
+			if (!is_null($file_info['edit_time_field'])) $select[]=$file_info['edit_time_field'];
+			$files=$file_info['connection']->query_select($file_info['table'],$select,$where,'ORDER BY '.$file_info['id_field'],10000/*Reasonable limit*/);
+			foreach ($files as $file)
+			{
+				$file=$this->_file_convert_id_to_filename($content_type,$file[$file_info['id_field']]);
+
+				$filetime=mixed();
+				if (!is_null($file_info['edit_time_field']))
+				{
+					$filetime=$file[$file_info['edit_time_field']];
+				}
+				if (is_null($filetime))
+				{
+					if (!is_null($file_info['add_time_field']))
+					{
+						$filetime=$file[$file_info['add_time_field']];
+					}
+				}
+
+				$listing[]=array(
+					$file,
+					OCCLEFS_FILE,
+					NULL/*don't calculate a filesize*/,
+					$filetime,
+				);
+			}
 		}
-		foreach ($files as $file)
-		{
-			$listing[]=$file[$file_info['id_field']];
-		}
+
+		return $listing;
 	}
 
 	/**
@@ -194,7 +423,7 @@ class content_fs_base
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
 		if (is_null($folder_content_type)) return false;
-
+_folder_add($title,$path,$properties)
 		// TODO
 	}
 
@@ -210,7 +439,7 @@ class content_fs_base
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
 		if (is_null($folder_content_type)) return false;
-
+_folder_delete($path)
 		// TODO
 	}
 
@@ -225,6 +454,7 @@ class content_fs_base
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
+_file_delete($path)
 		// TODO
 	}
 
@@ -239,6 +469,7 @@ class content_fs_base
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
+// TODO: We'll be given $properties, need to convert to XML
 		// TODO
 	}
 
@@ -254,6 +485,9 @@ class content_fs_base
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
 	{
+// TODO: What if XML supplied? Need to parse into $properties
+// TODO: Will check if there's something existing in the listing matching the exact name, if not will add (and the filename will actually change due to a new ID being assinged), if so will save into that
+_file_add($filename,$path,$properties)
 		// TODO
 	}
 }

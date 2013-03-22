@@ -1743,8 +1743,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 * @param  LONG_TEXT			The description of the gallery
 	 * @param  LONG_TEXT			Hidden notes associated with the gallery
 	 * @param  ID_TEXT			The parent gallery (blank: no parent)
-	 * @param  BINARY				Whether images may be put in this gallery
-	 * @param  BINARY				Whether videos may be put in this gallery
+	 * @param  ?BINARY			Whether images may be put in this gallery (NULL: work out statistically)
+	 * @param  ?BINARY			Whether videos may be put in this gallery (NULL: work out statistically)
 	 * @param  BINARY				Whether the gallery serves as a container for automatically created member galleries
 	 * @param  ?BINARY			Whether the gallery uses the flow mode interface (NULL: pick statistically based on current usage of other galleries)
 	 * @param  ?URLPATH			The representative image of the gallery (NULL: none)
@@ -1756,9 +1756,12 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($name='',$fullname='',$description='',$notes='',$parent_id='',$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=NULL,$rep_image=NULL,$watermark_top_left=NULL,$watermark_top_right=NULL,$watermark_bottom_left=NULL,$watermark_bottom_right=NULL,$allow_rating=NULL,$allow_comments=NULL)
+	function get_form_fields($name='',$fullname='',$description='',$notes='',$parent_id='',$accept_images=NULL,$accept_videos=NULL,$is_member_synched=0,$flow_mode_interface=NULL,$rep_image=NULL,$watermark_top_left=NULL,$watermark_top_right=NULL,$watermark_bottom_left=NULL,$watermark_bottom_right=NULL,$allow_rating=NULL,$allow_comments=NULL)
 	{
 		list($allow_rating,$allow_comments,)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,1);
+
+		$accept_images=take_param_int_modeavg($accept_images,'accept_images','galleries',1);
+		$accept_videos=take_param_int_modeavg($accept_videos,'accept_videos','galleries',1);
 
 		inform_non_canonical_parameter('cat');
 		inform_non_canonical_parameter('validated');

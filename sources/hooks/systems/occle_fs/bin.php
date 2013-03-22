@@ -42,8 +42,12 @@ class Hook_occle_fs_bin
 			{
 				if ($file[0]!='.')
 				{
-					if (is_dir($path.'/'.$file)) $listing[$file]=array();
-					else $listing[]=$file;
+					$listing[]=array(
+						$file,
+						is_dir($path.'/'.$file)?OCCLEFS_DIR:OCCLEFS_FILE,
+						is_dir($path.'/'.$file)?NULL:filesize($path.'/'.$file),
+						filemtime($path.'/'.$file),
+					);
 				}
 			}
 			return $listing;

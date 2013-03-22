@@ -247,9 +247,11 @@ function _save_available_quiz_answers($id,$text,$type)
  * @param  integer		The number of points awarded for completing/passing the quiz/test
  * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
  * @param  ?TIME			The add time (NULL: now)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID
  */
-function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL)
+function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -278,7 +280,13 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 	_save_available_quiz_answers($id,$text,$type);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('quiz',strval($id),array($name,$start_text),$start_text);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('quiz',strval($id),array($name,$start_text),$start_text);
+	} else
+	{
+		seo_meta_set_for_explicit('quiz',strval($id),$meta_keywords,$meta_description);
+	}
 
 	log_it('ADD_QUIZ',strval($id),$name);
 

@@ -83,8 +83,8 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 		if ($hook != $content_type) continue;
 
 		// Otherwise load and instantiate the hook
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook));
-		$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($hook),true);
+		require_code('content');
+		$ob=get_content_object($hook);
 		if (is_null($ob)) continue;		// Bail out if the hook fails
 
 		// Grab information about the hook
@@ -1143,8 +1143,8 @@ function workflow_update_handler()
 		if ($hook != $content_details[0]['source_type']) continue;
 
 		// Otherwise load and instantiate the hook
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook));
-		$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($hook),true);
+		require_code('content');
+		$ob=get_content_object($hook);
 		if (is_null($ob)) continue;		// Bail out if the hook fails
 
 		// Grab information about the hook

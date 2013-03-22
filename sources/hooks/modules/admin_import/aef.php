@@ -197,7 +197,7 @@ class Hook_aef
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['mem_gr_name']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['mem_gr_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$PROBED_FORUM_CONFIG['av_width'],$PROBED_FORUM_CONFIG['av_height'],30000,$PROBED_FORUM_CONFIG['usersiglen']);
+				$id_new=ocf_make_group($row['mem_gr_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,$PROBED_FORUM_CONFIG['av_width'],$PROBED_FORUM_CONFIG['av_height'],NULL,$PROBED_FORUM_CONFIG['usersiglen']);
 			}
 
 			// privileges

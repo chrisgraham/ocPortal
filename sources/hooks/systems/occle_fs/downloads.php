@@ -26,47 +26,109 @@ class Hook_occle_fs_downloads extends content_fs_base
 	var $file_content_type='download';
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties()
+	{
+		return array(
+			'description',
+			'notes',
+			'rep_image',
+			'add_date',
+			'meta_keywords',
+			'meta_description',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category=='') return false; // Can't create more than one root
+
 		require_code('downloads2');
 
 		$parent_id=$this->_integer_category($category);
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
 		$rep_image=$this->_default_property_str($properties,'rep_image');
-		$add_time=$this->_default_property_int_null($properties,'add_time');
-		$id=add_download_category($title,$parent_id,$description,$notes,$rep_image,NULL,$add_time);
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+		$id=add_download_category($title,$parent_id,$description,$notes,$rep_image,NULL,$add_time,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
 		require_code('downloads2');
 		delete_download_category(intval($content_id));
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'url',
+			'description',
+			'author',
+			'additional_details',
+			'out_mode_id',
+			'validated',
+			'allow_rating',
+			'allow_comments',
+			'allow_trackbacks',
+			'notes',
+			'original_filename',
+			'file_size',
+			'cost',
+			'submitter_gets_points',
+			'licence',
+			'add_date',
+			'num_downloads',
+			'views',
+			'submitter',
+			'edit_date',
+			'meta_keywords',
+			'meta_description',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+
 		require_code('downloads2');
 
 		$category_id=$this->_integer_category($category);
@@ -75,10 +137,11 @@ class Hook_occle_fs_downloads extends content_fs_base
 		$author=$this->_default_property_str($properties,'author');
 		$additional_details=$this->_default_property_str($properties,'additional_details');
 		$out_mode_id=$this->_default_property_int_null($properties,'out_mode_id');
-		$validated=$this->_default_property_int($properties,'validated');
-		$allow_rating=$this->_default_property_int($properties,'allow_rating');
-		$allow_comments=$this->_default_property_int($properties,'allow_comments');
-		$allow_trackbacks=$this->_default_property_int($properties,'allow_trackbacks');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','download_downloads',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','download_downloads',1);
+		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','download_downloads',1);
 		$notes=$this->_default_property_str($properties,'notes');
 		$original_filename=$this->_default_property_str($properties,'original_filename');
 		if ($original_filename=='') $original_filename=$title;
@@ -95,17 +158,21 @@ class Hook_occle_fs_downloads extends content_fs_base
 		$views=$this->_default_property_int($properties,'views');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
-		$id=add_download($category_id,$title,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date);
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+		$id=add_download($category_id,$title,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('downloads2');
 		delete_download(intval($content_id));
 	}

@@ -87,8 +87,8 @@ class Module_awards
 			if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($myrow['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($myrow['a_content_type']).'.php')))
 				continue;
 
-			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($myrow['a_content_type']));
-			$object=object_factory('Hook_content_meta_aware_'.$myrow['a_content_type']);
+			require_code('content');
+			$object=get_content_object($myrow['a_content_type']);
 			$info=$object->info();
 			if (!is_null($info))
 			{
@@ -126,8 +126,8 @@ class Module_awards
 
 		foreach ($award_types as $award_type_row)
 		{
-			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']),true);
-			$object=object_factory('Hook_content_meta_aware_'.$award_type_row['a_content_type']);
+			require_code('content');
+			$object=get_content_object($award_type_row['a_content_type']);
 			$info=$object->info();
 			if (is_null($info)) continue;
 
@@ -189,8 +189,8 @@ class Module_awards
 		$_award_type_row=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$_award_type_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$award_type_row=$_award_type_row[0];
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']),true);
-		$object=object_factory('Hook_content_meta_aware_'.$award_type_row['a_content_type']);
+		require_code('content');
+		$object=get_content_object($award_type_row['a_content_type']);
 		$info=$object->info();
 		if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 

@@ -76,7 +76,6 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/systems/config_default/points_COMCODE_PAGE_ADD.php',
 			'sources/hooks/systems/config_default/store_revisions.php',
 			'sources/hooks/systems/addon_registry/core_comcode_pages.php',
-			'COMCODE_PAGE_EXPORT_SCREEN.tpl',
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl',
 			'COMCODE_PAGE_BOX.tpl',
 			'sources/hooks/modules/search/comcode_pages.php',
@@ -104,7 +103,6 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_previews()
 	{
 		return array(
-			'COMCODE_PAGE_EXPORT_SCREEN.tpl'=>'comcode_page_export_screen',
 			'COMCODE_PAGE_SCREEN.tpl'=>'comcode_page_screen',
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl'=>'comcode_page_edit_actions',
 			'COMCODE_PAGE_BOX.tpl'=>'comcode_page_preview'
@@ -125,24 +123,6 @@ class Hook_addon_registry_core_comcode_pages
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS', array(
 				'EDIT_URL'=>placeholder_url(),
 				'CLONE_URL'=>placeholder_url()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__comcode_page_export_screen()
-	{
-		require_lang('zones');
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_EXPORT_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'EXPORT'=>lorem_chunk()
 			)), NULL, '', true)
 		);
 	}

@@ -151,8 +151,8 @@ function find_lang_content_names($ids)
 					$cma_hooks=find_all_hooks('systems','content_meta_aware');
 					foreach (array_keys($cma_hooks) as $hook)
 					{
-						require_code('hooks/systems/content_meta_aware/'.$hook);
-						$ob=object_factory('Hook_content_meta_aware_'.$hook);
+						require_code('content');
+						$ob=get_content_object($hook);
 						$info=$ob->info();
 						if ($info['table']==$field['m_table'])
 						{

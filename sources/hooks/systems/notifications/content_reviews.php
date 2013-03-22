@@ -41,8 +41,8 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
 		$_hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($_hooks) as $content_type)
 		{
-			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
-			$object=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
+			require_code('content');
+			$object=get_content_object($content_type);
 			if (is_null($object)) continue;
 			$info=$object->info();
 			if (is_null($info)) continue;

@@ -122,8 +122,8 @@ function js_compile($j,$js_cache_path,$minify=true)
 		$cma_hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($cma_hooks) as $content_type)
 		{
-			require_code('hooks/systems/content_meta_aware/'.$content_type);
-			$content_type_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+			require_code('content');
+			$content_type_ob=get_content_object($content_type);
 			$info=$content_type_ob->info();
 			if (!is_null($info['view_pagelink_pattern']))
 			{

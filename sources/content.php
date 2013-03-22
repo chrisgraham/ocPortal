@@ -34,6 +34,18 @@ Notes about hook info...
 */
 
 /**
+ * Get the CMA hook object for a content type.
+ *
+ * @param  ID_TEXT	The content type
+ * @return ?object	The object (NULL: could not get one)
+ */
+function get_content_object($content_type)
+{
+	require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
+	return object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
+}
+
+/**
  * Find a different content type code from the one had. In future we intend to change everything to be content_type internally.
  *
  * @param  ID_TEXT		Content type type we know
@@ -58,9 +70,9 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 	{
 		if ((($type_has=='content_type') && ($content_type==$type_id)) || ($type_has!='content_type'))
 		{
-			require_code('hooks/systems/content_meta_aware/'.$content_type);
-			$cms_ob=object_factory('Hook_content_meta_aware_'.$content_type);
-			$cma_info=$cms_ob->info();
+			require_code('content');
+			$cma_ob=get_content_object($content_type);
+			$cma_info=$cma_ob->info();
 			$cma_info['content_type']=$content_type;
 			if ((isset($cma_info[$type_has])) && (isset($cma_info[$type_wanted])) && (($cma_info[$type_has]==$type_id) || ($cma_info[$type_has]==preg_replace('#__.*$#','',$type_id))))
 			{
@@ -83,8 +95,8 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
  */
 function content_get_details($content_type,$content_id)
 {
-	require_code('hooks/systems/content_meta_aware/'.$content_type);
-	$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+	require_code('content');
+	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
 
 	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];

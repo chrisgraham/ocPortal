@@ -206,8 +206,8 @@ class Module_admin_awards extends standard_crud_module
 			{
 				if ($hook==$row['a_content_type'])
 				{
-					require_code('hooks/systems/content_meta_aware/'.$hook);
-					$hook_object=object_factory('Hook_content_meta_aware_'.$hook,true);
+					require_code('content');
+					$hook_object=get_content_object($hook);
 					if (is_null($hook_object)) continue;
 					$hook_info=$hook_object->info();
 					if (!is_null($hook_info))
@@ -250,8 +250,8 @@ class Module_admin_awards extends standard_crud_module
 		$hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/systems/content_meta_aware/'.$hook);
-			$hook_object=object_factory('Hook_content_meta_aware_'.$hook,true);
+			require_code('content');
+			$hook_object=get_content_object($hook);
 			if (is_null($hook_object)) continue;
 			$hook_info=$hook_object->info();
 			if (!is_null($hook_info))

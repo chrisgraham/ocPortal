@@ -127,8 +127,8 @@ class Block_main_multi_content
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$content_type),'','red_alert');
 
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type),true);
-		$object=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$object=get_content_object($content_type);
 		$info=$object->info($zone,($filter_b=='')?NULL:$filter_b);
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 

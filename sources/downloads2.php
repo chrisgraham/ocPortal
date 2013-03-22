@@ -237,9 +237,11 @@ function dload_script()
  * @param  URLPATH		The representative image for the category (blank: none)
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
  * @param  ?TIME			Add time (NULL: now)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the newly added download category
  */
-function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL,$add_time=NULL)
+function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL,$add_time=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($add_time)) $add_time=time();
 
@@ -250,7 +252,13 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 	log_it('ADD_DOWNLOAD_CATEGORY',strval($id),$category);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('downloads_category',strval($id),array($category,$description),$description);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('downloads_category',strval($id),array($category,$description),$description);
+	} else
+	{
+		seo_meta_set_for_explicit('downloads_category',strval($id),$meta_keywords,$meta_description);
+	}
 
 	if (!is_null($parent_id))
 	{
@@ -660,9 +668,11 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
  * @param  ?MEMBER			The submitter (NULL: current user)
  * @param  ?TIME				The edit date (NULL: never)
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK			The ID of the newly added download
  */
-function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL)
+function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($add_date)) $add_date=time();
 	if (is_null($submitter)) $submitter=get_member();
@@ -686,7 +696,13 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('downloads_download',strval($id),array($name,$description,$additional_details),$description);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('downloads_download',strval($id),array($name,$description,$additional_details),$description);
+	} else
+	{
+		seo_meta_set_for_explicit('downloads_download',strval($id),$meta_keywords,$meta_description);
+	}
 
 	// Make its gallery
 	if ((addon_installed('galleries')) && (!running_script('stress_test_loader')))

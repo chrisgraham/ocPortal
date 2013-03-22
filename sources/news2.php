@@ -134,9 +134,11 @@ function delete_news_category($id)
  * @param  ?TIME				The edit date (NULL: never)
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @param  URLPATH			URL to the image for the news entry (blank: use cat image)
+ * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK			The ID of the news just added
  */
-function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$news_article='',$main_news_category=NULL,$news_category=NULL,$time=NULL,$submitter=NULL,$views=0,$edit_date=NULL,$id=NULL,$image='')
+function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$news_article='',$main_news_category=NULL,$news_category=NULL,$time=NULL,$submitter=NULL,$views=0,$edit_date=NULL,$id=NULL,$image='',$meta_keywords='',$meta_description='')
 {
 	if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 	if (is_null($news_category)) $news_category=array();
@@ -243,7 +245,13 @@ END;
 	}
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('news',strval($id),array($title,($news=='')?$news_article:$news/*,$news_article*/),($news=='')?$news_article:$news); // News article could be used, but it's probably better to go for the summary only to avoid crap
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('news',strval($id),array($title,($news=='')?$news_article:$news/*,$news_article*/),($news=='')?$news_article:$news); // News article could be used, but it's probably better to go for the summary only to avoid crap
+	} else
+	{
+		seo_meta_set_for_explicit('news',strval($id),$meta_keywords,$meta_description);
+	}
 
 	if ($validated==1)
 	{

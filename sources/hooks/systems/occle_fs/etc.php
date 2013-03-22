@@ -36,9 +36,18 @@ class Hook_occle_fs_etc
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 		load_options();
 
-		$ret=array_keys($CONFIG_OPTIONS_CACHE);
+		$listing=array();
+		foreach (array_keys($CONFIG_OPTIONS_CACHE) as $option)
+		{
+			$listing[]=array(
+				$option,
+				OCCLEFS_FILE,
+				NULL/*don't calculate a filesize*/,
+				NULL/*don't specify a modification time*/,
+			);
+		}
 
-		return $ret;
+		return $listing;
 	}
 
 	/**

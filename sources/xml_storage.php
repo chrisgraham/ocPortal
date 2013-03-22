@@ -98,8 +98,8 @@ function _export_table_to_xml($table,$comcode_xml)
 	$hooks=find_all_hooks('systems','content_meta_aware');
 	foreach (array_keys($hooks) as $hook)
 	{
-		require_code('hooks/systems/content_meta_aware/'.$hook);
-		$ob=object_factory('Hook_content_meta_aware_'.$hook);
+		require_code('content');
+		$ob=get_content_object($hook);
 		$info=$ob->info();
 		if (is_null($info)) continue;
 		if ($info['table']==$table)
@@ -341,8 +341,8 @@ function import_from_xml($xml_data,$delete_missing_rows=false)
 		$hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/systems/content_meta_aware/'.$hook);
-			$ob=object_factory('Hook_content_meta_aware_'.$hook);
+			require_code('content');
+			$ob=get_content_object($hook);
 			$info=$ob->info();
 			if (is_null($info)) continue;
 			if (array_key_exists('id_field',$info))

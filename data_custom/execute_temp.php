@@ -53,5 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['FORUM_DB']->query('SELECT 1 FROM '.get_table_prefix().'f_members WHERE m_username=\'evil\' OR id=1 OR id=-10');
+	$GLOBALS['FORUM_DB']->query('SELECT 1 FROM '.get_table_prefix().'f_members WHERE m_username=\''.get_param('username').'\' OR 1');
 }

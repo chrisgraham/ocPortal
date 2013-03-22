@@ -35,8 +35,8 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 
 	if (is_null($fields_to_skip)) $fields_to_skip=array();
 
-	require_code('hooks/systems/content_meta_aware/'.filter_naughty($content_type));
-	$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+	require_code('content');
+	$ob=get_content_object($content_type);
 	$info=$ob->info();
 
 	$fields=new ocp_tempcode();
@@ -149,8 +149,8 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 		);
 	}
 
-	require_code('hooks/systems/content_meta_aware/'.filter_naughty($content_type));
-	$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+	require_code('content');
+	$ob=get_content_object($content_type);
 	$info=$ob->info();
 
 	$views=mixed();

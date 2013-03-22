@@ -139,6 +139,8 @@ function get_file_extension($name)
  */
 function is_suexec_like()
 {
+	if (running_script('webdav')) return true; // Has to assume so, as cannot intercede
+
 	return (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'),'posix_getuid')===false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid()==@fileowner(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))))
 	|| (is_writable_wrap(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))));
 }
@@ -2348,8 +2350,8 @@ function propagate_ocselect_pagelink()
  */
 function make_fractionable_editable($content_type,$id,$title)
 {
-	require_code('hooks/systems/content_meta_aware/'.filter_naughty($content_type));
-	$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+	require_code('content');
+	$ob=get_content_object($content_type);
 	$info=$ob->info();
 
 	$parameters=array(

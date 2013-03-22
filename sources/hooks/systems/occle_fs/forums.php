@@ -26,17 +26,120 @@ class Hook_occle_fs_forums extends content_fs_base
 	var $file_content_type='post';
 
 	/**
+	 * Whether the filesystem hook is active.
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function _is_active()
+	{
+		return (get_forum_type()=='ocf');
+	}
+
+	/**
+	 * Find whether a kind of content handled by this hook (folder or file) can be under a particular kind of folder.
+	 *
+	 * @param  ID_TEXT		Folder content type
+	 * @param  ID_TEXT		Content type (may be file or folder)
+	 * @return boolean		Whether it can
+	 */
+	function _has_parent_child_relationship($above,$under)
+	{
+		switch ($above)
+		{
+			case 'forum':
+				return ($under=='forum') || ($under=='topic');
+			case 'topic':
+				return ($under=='post');
+		}
+		return false;
+	}
+
+	/**
+	 * Standard modular introspection function.
+	 *
+	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties($category)
+	{
+		if (substr($category,0,6)=='FORUM-')
+		{
+			return array(
+				'description',
+				'forum_grouping_id',
+				'position',
+				'post_count_increment',
+				'order_sub_alpha',
+				'intro_question',
+				'intro_answer',
+				'redirection',
+				'order',
+				'is_threaded',
+			);
+		}
+
+		return array(
+			'title',
+			'emoticon',
+			'validated',
+			'open',
+			'pinned',
+			'sunk',
+			'cascading',
+			'pt_from',
+			'pt_to',
+			'num_views',
+			'description_link',
+			'poll',
+		);
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ID_TEXT	The filename
+	 */
+	function _folder_convert_id_to_filename($content_type,$content_id)
+	{
+		if ($content_type=='forum')
+			return 'FORUM-'.parent::_folder_convert_id_to_filename($content_type,$content_id,'forum');
+
+		return parent::_folder_convert_id_to_filename($content_type,$content_id);
+	}
+
+	/**
+	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @return array		A pair: The content type, the content ID
+	 */
+	function _folder_convert_filename_to_id($filename)
+	{
+		if (substr($filename,0,6)=='FORUM-')
+			return parent::_folder_convert_filename_to_id(substr($filename,6),'forum');
+
+		return parent::_folder_convert_filename_to_id($filename,'topic');
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
-		if (TODO)
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+
+		if ($category_content_type=='forum')
 		{
+			if ($category_content_type!='forum') return false;
+			if ($category=='') return false; // Can't create more than one root
+
 			require_code('ocf_forums_action');
 
 			$description=$this->_default_property_str($properties,'description');
@@ -54,6 +157,9 @@ class Hook_occle_fs_forums extends content_fs_base
 			$id=ocf_make_forum($title,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
+			if ($category_content_type!='forum') return false;
+			if ($category=='') return false;
+
 			require_code('ocf_topics_action');
 
 			$forum_id=$this->_integer_category($category);
@@ -69,6 +175,23 @@ class Hook_occle_fs_forums extends content_fs_base
 			$num_views=$this->_default_property_str($properties,'num_views');
 			$description_link=$this->_default_property_str($properties,'description_link');
 			$id=ocf_make_topic($forum_id,$title,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
+
+			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
+			{
+				require_code('ocf_polls_action');
+
+				$poll_data=unserialize($properties['poll']);
+
+				$question=$poll_data['question'];
+				$is_private=$poll_data['is_private'];
+				$is_open=$poll_data['is_open'];
+				$minimum_selections=$poll_data['minimum_selections'];
+				$maximum_selections=$poll_data['maximum_selections'];
+				$requires_reply=$poll_data['requires_reply'];
+				$answers=$poll_data['answers']; // A list of pairs of the potential voteable answers and the number of votes.
+
+				ocf_make_poll($id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,false);
+			}
 		}
 
 		return strval($id);
@@ -77,11 +200,13 @@ class Hook_occle_fs_forums extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
-		if (TODO)
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
+		if ($content_type=='forum')
 		{
 			require_code('ocf_forums_action2');
 			ocf_delete_forum(intval($content_id));
@@ -93,25 +218,57 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'post',
+			'skip_sig',
+			'validated',
+			'is_emphasised',
+			'poster_name_if_guest',
+			'ip_address',
+			'add_date',
+			'poster',
+			'intended_solely_for',
+			'last_edit_time',
+			'last_edit_by',
+			'sunk',
+			'anonymous',
+			'parent_id',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+		if ($category_content_type!='topic') return false;
+
 		require_code('ocf_posts_action');
 
 		$topic_id=$this->_integer_category($category);
-		$real_title=$this->_default_property_str($properties,'title');
+		$post=$this->_default_property_str($properties,'post');
 		$skip_sig=$this->_default_property_int($properties,'skip_sig');
-		$validated=$this->_default_property_int($properties,'validated');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
 		$is_emphasised=$this->_default_property_int($properties,'is_emphasised');
 		$poster_name_if_guest=$this->_default_property_str($properties,'poster_name_if_guest');
 		$ip_address=$this->_default_property_str_null($properties,'ip_address');
-		$time=$this->_default_property_int_null($properties,'time');
+		$time=$this->_default_property_int_null($properties,'add_date');
 		$poster=$this->_default_property_int_null($properties,'poster');
 		$intended_solely_for=$this->_default_property_int_null($properties,'intended_solely_for');
 		$last_edit_time=$this->_default_property_int_null($properties,'last_edit_time');
@@ -119,17 +276,19 @@ class Hook_occle_fs_forums extends content_fs_base
 		$sunk=$this->_default_property_int($properties,'sunk');
 		$anonymous=$this->_default_property_int($properties,'anonymous');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
-		$id=ocf_make_post($topic_id,$real_title,$title,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,$sunk,NULL,$anonymous,true,NULL,false,$parent_id);
+		$id=ocf_make_post($topic_id,$title,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,$sunk,NULL,$anonymous,true,NULL,false,$parent_id);
 		return strval($id);
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('ocf_posts_action2');
 		ocf_delete_post(intval($content_id));
 	}

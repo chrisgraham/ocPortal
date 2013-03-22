@@ -74,8 +74,8 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 	$info=array();
 	if (!is_null($content_type))
 	{
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$ob=get_content_object($content_type);
 		$info=$ob->info();
 
 		$table=$info['table'];
@@ -124,8 +124,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 
 		// Custom fields
 		require_code('content');
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$ob2=object_factory('Hook_content_meta_aware_'.$content_type);
+		$ob2=get_content_object($content_type);
 		$info2=$ob2->info();
 		if ((isset($info2['supports_custom_fields'])) && ($info2['supports_custom_fields']))
 		{
@@ -747,8 +746,8 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 	$conv_func='_default_conv_func';
 	if ($content_type!='')
 	{
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$ob=get_content_object($content_type);
 		$info=$ob->info();
 		$info['content_type']=$content_type; // We'll need this later, so add it in
 

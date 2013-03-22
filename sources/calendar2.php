@@ -56,9 +56,11 @@
  * @param  ?TIME				The add time (NULL: now)
  * @param  ?TIME				The edit time (NULL: never)
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL)
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -110,7 +112,13 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_content'=>insert_lang_comcode_attachments(3,$content,'calendar',strval($id))),array('id'=>$id),'',1);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('event',strval($id),array($title,$content),$content);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('event',strval($id),array($title,$content),$content);
+	} else
+	{
+		seo_meta_set_for_explicit('event',strval($id),$meta_keywords,$meta_description);
+	}
 
 	decache('side_calendar');
 

@@ -89,16 +89,13 @@ class Block_main_content
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id),'','red_alert');
 
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true),true);
-		$object=object_factory('Hook_content_meta_aware_'.$type_id);
+		require_code('content');
+		$object=get_content_object($type_id);
 		$info=$object->info();
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 		if (((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric'])) && (!is_null($content_id)) && (!is_numeric($content_id)))
 		{
-			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true),true);
-			$object_cm=object_factory('Hook_content_meta_aware_'.$type_id);
-			$info_cm=$object_cm->info();
-			list(,$resource_page,$resource_type)=explode(':',$info_cm['view_pagelink_pattern']);
+			list(,$resource_page,$resource_type)=explode(':',$info['view_pagelink_pattern']);
 			$content_id=$info['connection']->query_select_value_if_there('url_id_monikers','m_resource_id',array('m_resource_page'=>$resource_page,'m_resource_type'=>$resource_type,'m_moniker'=>$content_id));
 			if (is_null($content_id)) return new ocp_tempcode();
 		}

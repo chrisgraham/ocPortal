@@ -197,7 +197,7 @@ class Hook_phpbb2
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$PROBED_FORUM_CONFIG['avatar_max_width'],$PROBED_FORUM_CONFIG['avatar_max_height'],30000,$PROBED_FORUM_CONFIG['max_sig_chars']);
+				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,NULL,NULL,NULL,NULL,$PROBED_FORUM_CONFIG['avatar_max_width'],$PROBED_FORUM_CONFIG['avatar_max_height'],NULL,$PROBED_FORUM_CONFIG['max_sig_chars']);
 			}
 
 			// privileges

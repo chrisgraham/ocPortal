@@ -31,24 +31,35 @@ class Hook_occle_fs_root
 	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
-		$path=$this->_customise_directory($meta_dir);
+		$override_path=$this->_customise_directory($meta_dir);
+		$nonoverride_path=$this->_customise_directory($meta_dir,false);
 
 		$listing=array();
-		if (is_dir($path))
+		$ok=false;
+		foreach (array($override_path,$nonoverride_path) as $path)
 		{
-			$dh=opendir($path);
-			while (($file=readdir($dh))!==false)
+			if (is_dir($path))
 			{
-				if ($file[0]!='.')
+				$dh=opendir($path);
+				while (($file=readdir($dh))!==false)
 				{
-					if (is_dir($path.$file)) $listing[$file]=array();
-					else $listing[]=$file;
+					if (($file!='.') && ($file!='..') && ($file!='.git') && ((strpos($file,'_custom')===false) || (!file_exists($path.str_replace('_custom','',$file)))))
+					{
+						$listing[]=array(
+							$file,
+							is_dir($path.$file)?OCCLEFS_DIR:OCCLEFS_FILE,
+							is_dir($path.$file)?NULL:filesize($path.$file),
+							filemtime($path.$file),
+						);
+					}
 				}
+				$ok=true;
 			}
-			return $listing;
 		}
+		if ($ok)
+			return $listing;
 
-		return false; //Directory doesn't exist
+		return false; // Directory doesn't exist
 	}
 
 	/**
@@ -94,7 +105,7 @@ class Hook_occle_fs_root
 			require_code('files');
 			deldir_contents($path.$dir_name);
 			$ret=@rmdir($path.$dir_name) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path.$dir_name)));
-			sync_file($path.'/'.$dir_name);
+			sync_file($path.$dir_name);
 			return true;
 		}
 		else return false; //Directory doesn't exist
@@ -136,6 +147,8 @@ class Hook_occle_fs_root
 	{
 		$file_name=filter_naughty($file_name);
 		$path=$this->_customise_directory($meta_dir);
+		if (!file_exists($path.$file_name))
+			$path=$this->_customise_directory($meta_dir,false);
 
 		if ((is_dir($path)) && (file_exists($path.$file_name)) && (is_readable($path.$file_name)))
 		{
@@ -176,21 +189,33 @@ class Hook_occle_fs_root
 	 * Customise a directory path, adding _custom to appropriate entries.
 	 *
 	 * @param  array				Path to customise
+	 * @param  boolean			Whether to rewrite to be the alternative override directory
 	 * @return string				Customised path
 	 */
-	function _customise_directory($directory)
+	function _customise_directory($directory,$change_to_override=true)
 	{
 		$dir_replacements=array('sources','comcode','html','minimodules','modules','data','lang','text','images','templates');
-		$dir_stoppers=array('data','data_custom');
 
 		$path=get_custom_file_base().'/';
 		$previous_dir_section='';
 		foreach ($directory as $dir_section)
 		{
-			if ((in_array($dir_section,$dir_replacements)) && (!in_array($previous_dir_section,$dir_stoppers))) $dir_section.='_custom';
+			if ($change_to_override)
+			{
+				if (in_array($dir_section,$dir_replacements)) $dir_section.='_custom';
+			}
+
 			$path.=filter_naughty($dir_section).'/';
 			$previous_dir_section=$dir_section;
 		}
+
+		if (!file_exists($path))
+		{
+			$ret=@mkdir($path,0777,true) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',$path));
+			fix_permissions($path,0777);
+			sync_file($path);
+		}
+
 		return $path;
 	}
 

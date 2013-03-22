@@ -57,8 +57,8 @@ function get_details_behind_feedback_code($content_type,$content_id)
 	$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
 	if ($content_type!='')
 	{
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$cma_ob=get_content_object($content_type);
 		$info=$cma_ob->info();
 		list($content_title,$submitter_id,$cma_info,,$content_url,$content_url_email_safe)=content_get_details($content_type,$content_id);
 		return array($content_title,$submitter_id,$content_url,$content_url_email_safe,$cma_info);
@@ -88,8 +88,8 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 	$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
 	if ($content_type!='')
 	{
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$content_type_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$content_type_ob=get_content_object($content_type);
 		$info=$content_type_ob->info();
 		if (isset($info['category_field']))
 		{
@@ -559,8 +559,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 				$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
 				if ($content_type!='')
 				{
-					require_code('hooks/systems/content_meta_aware/'.$content_type);
-					$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+					require_code('content');
+					$cma_ob=get_content_object($content_type);
 					$cma_content_row=content_get_row($content_id,$cma_ob->info());
 					if (!is_null($cma_content_row))
 					{

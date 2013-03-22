@@ -42,7 +42,13 @@ class Hook_occle_fs_database
 			foreach ($tables as $table)
 			{
 				$table_name=$table['m_table'];
-				$listing[]=$table_name;
+
+				$listing[]=array(
+					$table_name,
+					OCCLEFS_DIR,
+					NULL/*don't calculate a filesize*/,
+					NULL/*don't specify a modification time*/,
+				);
 			}
 		}
 		elseif (count($meta_dir)==1)
@@ -75,7 +81,12 @@ class Hook_occle_fs_database
 						$x.=$key.':'.$this->escape_name(is_string($row[$key])?$row[$key]:strval($row[$key]));
 					}
 				}
-				$listing[]=$x;
+				$listing[]=array(
+					$x,
+					OCCLEFS_DIR,
+					NULL/*don't calculate a filesize*/,
+					NULL/*don't specify a modification time*/,
+				);
 			}
 		}
 		elseif (count($meta_dir)==2)
@@ -86,7 +97,15 @@ class Hook_occle_fs_database
 			$row=$GLOBALS['SITE_DB']->query_select($meta_dir[0],array('*'),$where,'',1,NULL,false,array());
 			if (!array_key_exists(0,$row)) return false;
 			$row=$row[0];
-			foreach ($row as $field_name=>$field_value) $listing[]=$field_name;
+			foreach ($row as $field_name=>$field_value)
+			{
+				$listing[]=array(
+					$field_name,
+					OCCLEFS_FILE,
+					NULL/*don't calculate a filesize*/,
+					NULL/*don't specify a modification time*/,
+				);
+			}
 		}
 		else return false; // Directory doesn't exist
 

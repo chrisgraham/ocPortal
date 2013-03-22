@@ -308,7 +308,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
  * @param  ?array				A list of usergroups (NULL: default/current usergroups).
  * @param  SHORT_TEXT		The e-mail address.
- * @param  BINARY				Whether posts are previewed before they are made.
+ * @param  ?BINARY				Whether posts are previewed before they are made (NULL: calculate statistically).
  * @param  ?integer			Day of date of birth (NULL: not known).
  * @param  ?integer			Month of date of birth (NULL: not known).
  * @param  ?integer			Year of date of birth (NULL: not known).
@@ -325,19 +325,19 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  SHORT_TEXT		The username.
  * @param  BINARY				Whether the member is permanently banned.
  * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
- * @param  BINARY				Whether the member likes to view zones without menus, when a choice is available.
+ * @param  ?BINARY			Whether the member likes to view zones without menus, when a choice is available (NULL: calculate statistically).
  * @param  BINARY				Whether the member username will be highlighted.
  * @param  SHORT_TEXT		Usergroups that may PT the member.
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
  * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
  * @return array				A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=NULL,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
+	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
+	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 	if (is_null($auto_monitor_contrib_content))
-	{
 		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
-	}
 
 	$hidden=new ocp_tempcode();
 

@@ -274,7 +274,7 @@ class Hook_phpbb3
 			else $id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$row['group_avatar_width'],$row['group_avatar_height'],30000,$row['group_sig_chars']);
+				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,NULL,NULL,NULL,NULL,$row['group_avatar_width'],$row['group_avatar_height'],NULL,$row['group_sig_chars']);
 			}
 
 			$permissions=$db->query('SELECT * FROM '.$table_prefix.'acl_groups WHERE group_id='.strval($row['group_id']));

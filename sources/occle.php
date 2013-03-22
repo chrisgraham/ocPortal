@@ -25,6 +25,9 @@ function init__occle()
 {
 	require_lang('occle');
 	require_code('users_active_actions');
+
+	define('OCCLEFS_FILE',0);
+	define('OCCLEFS_DIR',1);
 }
 
 /**
@@ -148,33 +151,33 @@ class virtual_bash
 	{
 		if (!defined('MODE_NORMAL'))
 		{
-			define('MODE_NORMAL',0); //Not in quotes
-			define('MODE_QUOTES',1); //In some quotes
+			define('MODE_NORMAL',0); // Not in quotes
+			define('MODE_QUOTES',1); // In some quotes
 
-			define('STREAM_IDENTIFIER',0); //The stream identifier (optional): e.g. 3&2
-			define('ASSIGNMENT',1); //The stream assignment: e.g. >>
-			define('REDIRECT_IDENTIFIER',2); //The stream identifier: myfile
+			define('STREAM_IDENTIFIER',0); // The stream identifier (optional): e.g. 3&2
+			define('ASSIGNMENT',1); // The stream assignment: e.g. >>
+			define('REDIRECT_IDENTIFIER',2); // The stream identifier: myfile
 
-			define('REDIRECT_OVERWRITE',0); //Overwrite redirect (>)
-			define('REDIRECT_APPEND',1); //Append redirect (>>)
-			define('REDIRECT_INPUT',2); //Input redirect (<)
-			define('REDIRECT_PIPE',3); //Pipe (|)
+			define('REDIRECT_OVERWRITE',0); // Overwrite redirect (>)
+			define('REDIRECT_APPEND',1); // Append redirect (>>)
+			define('REDIRECT_INPUT',2); // Input redirect (<)
+			define('REDIRECT_PIPE',3); // Pipe (|)
 
-			define('STREAM_STDOUT',2); //STDOUT (text-only) stream
-			define('STREAM_STDHTML',1); //STDHTML (XHTML) stream
-			define('STREAM_STDCOMMAND',0); //STDCOMMAND (Javascript) stream
-			define('STREAM_STDERR',3); //STDERR (text-only error) stream
+			define('STREAM_STDOUT',2); // STDOUT (text-only) stream
+			define('STREAM_STDHTML',1); // STDHTML (XHTML) stream
+			define('STREAM_STDCOMMAND',0); // STDCOMMAND (Javascript) stream
+			define('STREAM_STDERR',3); // STDERR (text-only error) stream
 
-			define('SECTION_COMMAND',0); //The command section: e.g. echo
-			define('SECTION_OPTIONS',1); //The options section: e.g. -r
-			define('SECTION_PARAMETERS',2); //The parameters section: e.g. "hello world!"
-			define('SECTION_EXTRAS',3); //The extras section (redirects): e.g. >>2
+			define('SECTION_COMMAND',0); // The command section: e.g. echo
+			define('SECTION_OPTIONS',1); // The options section: e.g. -r
+			define('SECTION_PARAMETERS',2); // The parameters section: e.g. "hello world!"
+			define('SECTION_EXTRAS',3); // The extras section (redirects): e.g. >>2
 
-			define('COMMAND_NATIVE',0); //Either a lone command or a script
-			define('COMMAND_LONE',1); //A lone command
-			define('COMMAND_SCRIPT',2); //A script
-			define('COMMAND_PHP',3); //A PHP command
-			define('COMMAND_SQL',4); //An SQL query
+			define('COMMAND_NATIVE',0); // Either a lone command or a script
+			define('COMMAND_LONE',1); // A lone command
+			define('COMMAND_SCRIPT',2); // A script
+			define('COMMAND_PHP',3); // A PHP command
+			define('COMMAND_SQL',4); // An SQL query
 		}
 
 		$this->current_input=$inputted_command;
@@ -190,7 +193,7 @@ class virtual_bash
 
 		$this->parse_input();
 
-		//Remember not to return anything. Output should be collected using appropriate member functions
+		// Remember not to return anything. Output should be collected using appropriate member functions
 	}
 
 	/**
@@ -271,16 +274,16 @@ class virtual_bash
 
 		if (($this->output[STREAM_STDCOMMAND]=='') && ($this->output[STREAM_STDHTML]=='') && ($this->output[STREAM_STDOUT]==''))
 		{
-			//Exit with an error
+			// Exit with an error
 			if ($this->output[STREAM_STDERR]!='')
-				$this->output[STREAM_STDERR]=do_lang('PROBLEM_ACCESSING_RESPONSE')."\n".$this->output[STREAM_STDERR]; //Ugh...got to work with language strings designed for Javascript
+				$this->output[STREAM_STDERR]=do_lang('PROBLEM_ACCESSING_RESPONSE')."\n".$this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for Javascript
 			else
 				$this->output[STREAM_STDERR]=do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
 
 			if ($blank_ok) return new ocp_tempcode();
 		}
 		elseif ($this->output[STREAM_STDERR]!='')
-			$this->output[STREAM_STDERR]=do_lang('ERROR_NON_TERMINAL')."\n".$this->output[STREAM_STDERR]; //And again :-(
+			$this->output[STREAM_STDERR]=do_lang('ERROR_NON_TERMINAL')."\n".$this->output[STREAM_STDERR]; // And again :-(
 
 		$notifications=get_queued_messages(false);
 
@@ -309,10 +312,10 @@ class virtual_bash
 			return;
 		}
 
-		//Extract the command (whatever type of command it may be)
+		// Extract the command (whatever type of command it may be)
 		if ($this->current_input[$this->parse_runtime['parse_position']]==':')
 		{
-			//It's PHP code
+			// It's PHP code
 			if (strrpos($this->current_input,';')===false)
 				$this->current_input.=';';
 			$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position']+1);
@@ -322,7 +325,7 @@ class virtual_bash
 		}
 		elseif ($this->current_input[$this->parse_runtime['parse_position']]=='@')
 		{
-			//It's an SQL query
+			// It's an SQL query
 			$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position']+1);
 
 			$this->parse_runtime['parse_position']=strlen($this->current_input);
@@ -330,18 +333,18 @@ class virtual_bash
 		}
 		else
 		{
-			//It's a normal command or a script...just fetch up to the next space: a command *should not* have spaces
+			// It's a normal command or a script...just fetch up to the next space: a command *should not* have spaces
 			$next_space=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
 			if ($next_space!==false)
 			{
-				$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); //Fetch up to the next space
-				$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_COMMAND])+1; //We're assuming there's a space after the command
+				$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Fetch up to the next space
+				$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_COMMAND])+1; // We're assuming there's a space after the command
 			}
 			else
 			{
-				$this->parsed_input[SECTION_COMMAND]=$this->current_input; //Fetch the entire input
-				$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_COMMAND]); //This really is pointless
+				$this->parsed_input[SECTION_COMMAND]=$this->current_input; // Fetch the entire input
+				$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_COMMAND]); // This really is pointless
 			}
 			if (substr($this->parsed_input[SECTION_COMMAND],0,5)=='/bin/')
 			{
@@ -355,7 +358,7 @@ class virtual_bash
 			$this->parse_runtime['occle_command']=COMMAND_NATIVE;
 		}
 
-		//Parameter replacement
+		// Parameter replacement
 		$this->parsed_input[SECTION_COMMAND]=strtr($this->parsed_input[SECTION_COMMAND],$this->input_parameters);
 	}
 
@@ -364,7 +367,7 @@ class virtual_bash
 	 */
 	function _extract_options()
 	{
-		//Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
+		// Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
 		if (!defined('OUT_OPTION'))
 		{
 			define('OUT_OPTION',-1);
@@ -383,20 +386,20 @@ class virtual_bash
 			switch($option_mode)
 			{
 				case OUT_OPTION:
-					//Options parsing hasn't started yet; the next character should be a dash ('-')
-					if ($next_char!='-') break 2; //This is *not* an option!
+					// Options parsing hasn't started yet; the next character should be a dash ('-')
+					if ($next_char!='-') break 2; // This is *not* an option!
 					$option_mode=IN_OPTION;
 					$this->parse_runtime['parse_position']++;
 
 					break;
 				case IN_OPTION:
-					//Get the name of the option, and add it to the options array
+					// Get the name of the option, and add it to the options array
 					$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 					$equals_pos=strpos($this->current_input,'=',$this->parse_runtime['parse_position']);
 
 					if (($space_pos!==false) && ($equals_pos!==false))
 					{
-						//Get the option name, using string functions (deciding where to cut the option name out, based upon whether the next equals is before the next space)
+						// Get the option name, using string functions (deciding where to cut the option name out, based upon whether the next equals is before the next space)
 						if ($equals_pos<$space_pos)
 						{
 							$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']);
@@ -404,7 +407,7 @@ class virtual_bash
 						else
 						{
 							$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']);
-							$current_option=strtr($current_option,$this->input_parameters); //Parameter replacement
+							$current_option=strtr($current_option,$this->input_parameters); // Parameter replacement
 
 							$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
 							$option_mode=OUT_OPTION;
@@ -415,25 +418,25 @@ class virtual_bash
 					}
 					elseif ($space_pos!==false)
 					{
-						$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']); //Just take it up to the space
-						$current_option=strtr($current_option,$this->input_parameters); //Parameter replacement
+						$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']); // Just take it up to the space
+						$current_option=strtr($current_option,$this->input_parameters); // Parameter replacement
 
 						$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
 						$option_mode=OUT_OPTION;
-						$this->parse_runtime['parse_position']+=strlen($current_option)+1; //Because there won't be an equals
+						$this->parse_runtime['parse_position']+=strlen($current_option)+1; // Because there won't be an equals
 
 						break;
 					}
 					elseif ($equals_pos!==false)
 					{
-						$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']); //Just take it up to the equals
+						$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']); // Just take it up to the equals
 					}
 					else
 					{
-						$current_option=substr($this->current_input,$this->parse_runtime['parse_position']); //Just assume there's nothing else there, and grab the lot
+						$current_option=substr($this->current_input,$this->parse_runtime['parse_position']); // Just assume there's nothing else there, and grab the lot
 					}
 
-					//Parameter replacement
+					// Parameter replacement
 					$current_option=strtr($current_option,$this->input_parameters);
 
 					$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
@@ -443,81 +446,81 @@ class virtual_bash
 
 					break;
 				case IN_OPTION_SYNTAX:
-					//Look for that elusive '='
-					if ($next_char!='=') break 2; //PANIC!!
+					// Look for that elusive '='
+					if ($next_char!='=') break 2; // PANIC!!
 					$option_mode=IN_OPTION_VALUE;
 					$this->parse_runtime['parse_position']++;
 
 					break;
 				case IN_OPTION_VALUE:
-					//Get the value, if applicable
+					// Get the value, if applicable
 					if ($next_char=='"')
 					{
-						//Quotes!
+						// Quotes!
 						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 						{
-							//We are entering a quote system
+							// We are entering a quote system
 							$this->parse_runtime['current_mode']=MODE_QUOTES;
 							$this->parse_runtime['parse_position']++;
 						}
 						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && (!$this->parse_runtime['escape_used']))
 						{
-							//We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
+							// We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
 							$this->parse_runtime['current_mode']=MODE_NORMAL;
-							$this->parse_runtime['parse_position']+=2; //Assuming there is only '" ' between here and the next option
+							$this->parse_runtime['parse_position']+=2; // Assuming there is only '" ' between here and the next option
 							$option_mode=OUT_OPTION;
 						}
 						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && ($this->parse_runtime['escape_used']))
 						{
-							//We are adding an escaped quote to the current option value
+							// We are adding an escaped quote to the current option value
 							$this->parsed_input[SECTION_OPTIONS][$current_option].=$next_char;
 							$this->parse_runtime['parse_position']++;
 							$this->parse_runtime['escape_used']=false;
 						}
-						else break 2; //PANIC!!
+						else break 2; // PANIC!!
 					}
 					elseif ($next_char=='\\')
 					{
-						//An escape character (currently only backslash ('\')) has been used
-						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_OPTIONS][$current_option].='\\'; //Add the backslash to the option value, as it has been escaped
-						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; //If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
+						// An escape character (currently only backslash ('\')) has been used
+						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_OPTIONS][$current_option].='\\'; // Add the backslash to the option value, as it has been escaped
+						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
 						$this->parse_runtime['parse_position']++;
 					}
 					else
 					{
 						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 						{
-							//Normal mode; business as usual (quotes have not been used, so we can just strip out the option value using string functions)
+							// Normal mode; business as usual (quotes have not been used, so we can just strip out the option value using string functions)
 							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
 							if ($space_pos!==false)
 							{
-								$this->parsed_input[SECTION_OPTIONS][$current_option]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); //Get the value; up to the next space
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_OPTIONS][$current_option])+1; //Add the length of the option value, and one for the assumed space between here and the next option
+								$this->parsed_input[SECTION_OPTIONS][$current_option]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_OPTIONS][$current_option])+1; // Add the length of the option value, and one for the assumed space between here and the next option
 							}
 							else
 							{
-								$this->parsed_input[SECTION_OPTIONS][$current_option]=substr($this->current_input,$this->parse_runtime['parse_position']); //Just take until the end; there doesn't seem to be anything else
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_OPTIONS][$current_option]); //Pretty pointless
+								$this->parsed_input[SECTION_OPTIONS][$current_option]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_OPTIONS][$current_option]); // Pretty pointless
 							}
 
 							$option_mode=OUT_OPTION;
 						}
 						elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
 						{
-							//We are adding the current letter to the quote system
+							// We are adding the current letter to the quote system
 							$this->parsed_input[SECTION_OPTIONS][$current_option].=$next_char;
 							$this->parse_runtime['parse_position']++;
 						}
-						else break 2; //PANIC!!
+						else break 2; // PANIC!!
 					}
 
-					//Parameter replacement
+					// Parameter replacement
 					$this->parsed_input[SECTION_OPTIONS][$current_option]=strtr($this->parsed_input[SECTION_OPTIONS][$current_option],$this->input_parameters);
 
 					break;
 				default:
-					break 2; //PANIC!!
+					break 2; // PANIC!!
 			}
 		}
 	}
@@ -527,7 +530,7 @@ class virtual_bash
 	 */
 	function _extract_parameters()
 	{
-		//Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
+		// Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
 		if (!defined('OUT_PARAMETER'))
 		{
 			define('OUT_PARAMETER',-1);
@@ -544,71 +547,71 @@ class virtual_bash
 			switch($parameter_mode)
 			{
 				case OUT_PARAMETER:
-					//Parameter parsing hasn't started yet; the next character should be a quote ('"'), or any other character apart from a space, really
+					// Parameter parsing hasn't started yet; the next character should be a quote ('"'), or any other character apart from a space, really
 					$parameter_mode=IN_PARAMETER;
 
 					break;
 				case IN_PARAMETER:
-					//Get the value, if applicable
+					// Get the value, if applicable
 					if ($next_char=='"')
 					{
-						//Quotes!
+						// Quotes!
 						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 						{
-							//We are entering a quote system
+							// We are entering a quote system
 							$this->parse_runtime['current_mode']=MODE_QUOTES;
 							$this->parsed_input[SECTION_PARAMETERS][$current_parameter]='';
 							$this->parse_runtime['parse_position']++;
 						}
 						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && (!$this->parse_runtime['escape_used']))
 						{
-							//We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
+							// We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
 							$this->parse_runtime['current_mode']=MODE_NORMAL;
-							$this->parse_runtime['parse_position']+=2; //Assuming there is only '" ' between here and the next parameter
+							$this->parse_runtime['parse_position']+=2; // Assuming there is only '" ' between here and the next parameter
 							$parameter_mode=OUT_PARAMETER;
 							$current_parameter++;
 						}
 						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && ($this->parse_runtime['escape_used']))
 						{
-							//We are adding an escaped quote to the current parameter value
+							// We are adding an escaped quote to the current parameter value
 							$this->parsed_input[SECTION_PARAMETERS][$current_parameter].=$next_char;
 							$this->parse_runtime['parse_position']++;
 							$this->parse_runtime['escape_used']=false;
 						}
-						else break 2; //PANIC!!
+						else break 2; // PANIC!!
 					}
 					elseif ($next_char=='\\')
 					{
-						//An escape character (currently only backslash ('\')) has been used
-						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_PARAMETERS][$current_parameter].='\\'; //Add the backslash to the parameter value, as it has been escaped
-						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; //If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
+						// An escape character (currently only backslash ('\')) has been used
+						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_PARAMETERS][$current_parameter].='\\'; // Add the backslash to the parameter value, as it has been escaped
+						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
 						$this->parse_runtime['parse_position']++;
 					}
 					elseif ((($next_char=='>') || ($next_char=='<') || ($next_char=='1') || ($next_char=='2') || ($next_char=='3') || ($next_char=='4') || ($next_char=='|')) && ($this->current_input[$this->parse_runtime['parse_position']-1]==' ') && (!$this->parse_runtime['escape_used']))
 					{
-						//A character that is probably (hopefully) the precursor to some form of redirection, and is the first character in a block (i.e. it has a space in front of it)
+						// A character that is probably (hopefully) the precursor to some form of redirection, and is the first character in a block (i.e. it has a space in front of it)
 						if ($this->_check_is_redirection())
 						{
-							//This is indeed the precursor to some form of redirection
+							// This is indeed the precursor to some form of redirection
 							break 2;
 						}
 						else
 						{
-							//This is not part of redirection, assume it's just a normal character
+							// This is not part of redirection, assume it's just a normal character
 							if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 							{
-								//Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
+								// Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
 								$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
 								if ($space_pos!==false)
 								{
-									$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); //Get the value; up to the next space
-									$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; //Add the length of the parameter value, and one for the assumed space between here and the next parameter
+									$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+									$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; // Add the length of the parameter value, and one for the assumed space between here and the next parameter
 								}
 								else
 								{
-									$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position']); //Just take until the end; there doesn't seem to be anything else
-									$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); //Pretty pointless
+									$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+									$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); // Pretty pointless
 								}
 
 								$parameter_mode=OUT_PARAMETER;
@@ -616,29 +619,29 @@ class virtual_bash
 							}
 							elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
 							{
-								//We are adding the current letter to the quote system
+								// We are adding the current letter to the quote system
 								$this->parsed_input[SECTION_PARAMETERS][$current_parameter].=$next_char;
 								$this->parse_runtime['parse_position']++;
 							}
-							else break 2; //PANIC!!
+							else break 2; // PANIC!!
 						}
 					}
 					else
 					{
 						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 						{
-							//Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
+							// Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
 							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
 							if ($space_pos!==false)
 							{
-								$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); //Get the value; up to the next space
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; //Add the length of the parameter value, and one for the assumed space between here and the next parameter
+								$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; // Add the length of the parameter value, and one for the assumed space between here and the next parameter
 							}
 							else
 							{
-								$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position']); //Just take until the end; there doesn't seem to be anything else
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); //Pretty pointless
+								$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); // Pretty pointless
 							}
 
 							$parameter_mode=OUT_PARAMETER;
@@ -646,21 +649,21 @@ class virtual_bash
 						}
 						elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
 						{
-							//We are adding the current letter to the quote system
+							// We are adding the current letter to the quote system
 							$this->parsed_input[SECTION_PARAMETERS][$current_parameter].=$next_char;
 							$this->parse_runtime['parse_position']++;
 						}
-						else break 2; //PANIC!!
+						else break 2; // PANIC!!
 
 						$this->parse_runtime['escape_used']=false;
 					}
 
-					//Parameter replacement
+					// Parameter replacement
 					if (isset($this->parsed_input[SECTION_PARAMETERS][$current_parameter-1])) $this->parsed_input[SECTION_PARAMETERS][$current_parameter-1]=strtr($this->parsed_input[SECTION_PARAMETERS][$current_parameter-1],$this->input_parameters);
 
 					break;
 				default:
-					break 2; //PANIC!!
+					break 2; // PANIC!!
 			}
 		}
 	}
@@ -670,7 +673,7 @@ class virtual_bash
 	 */
 	function _extract_extras()
 	{
-		//Add the extra instructions to the extras array
+		// Add the extra instructions to the extras array
 		if (!defined('OUT_EXTRA'))
 		{
 			define('OUT_EXTRA',-1);
@@ -689,20 +692,20 @@ class virtual_bash
 			switch($extra_mode)
 			{
 				case OUT_EXTRA:
-					//Extra parsing hasn't started yet; the next character should be a stream identifier, or assignment operator
+					// Extra parsing hasn't started yet; the next character should be a stream identifier, or assignment operator
 					if (($next_char!='>') && ($next_char!='<') && ($next_char!='1') && ($next_char!='2') && ($next_char!='3') && ($next_char!='4') && ($next_char!='|')) break 2;
 					$extra_mode=IN_EXTRA_SYNTAX_STREAM;
 
 					break;
 				case IN_EXTRA_SYNTAX_STREAM:
-					//Fetch the stream identifiers, if they're present. If no stream identifier is present, default to stdout
+					// Fetch the stream identifiers, if they're present. If no stream identifier is present, default to stdout
 					if ($next_char=='1') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDOUT;
 					elseif ($next_char=='2') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDHTML;
 					elseif ($next_char=='3') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDCOMMAND;
 					elseif ($next_char=='4') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDERR;
 					elseif ($next_char!='&')
 					{
-						//If we have anything other than an ampersand ('&'), continue to the ASSIGNMENT stage
+						// If we have anything other than an ampersand ('&'), continue to the ASSIGNMENT stage
 						$extra_mode=IN_EXTRA_SYNTAX_ASSIGNMENT;
 
 						break;
@@ -712,34 +715,34 @@ class virtual_bash
 
 					break;
 				case IN_EXTRA_SYNTAX_ASSIGNMENT:
-					//Fetch the assignment operator
+					// Fetch the assignment operator
 					if ($next_char=='>')
 					{
 						if ($this->current_input[$this->parse_runtime['parse_position']+1]=='>')
 						{
-							//Append ('>>')
+							// Append ('>>')
 							$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_APPEND;
 							$this->parse_runtime['parse_position']++;
 						}
 						else
 						{
-							//Overwrite ('>')
+							// Overwrite ('>')
 							$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_OVERWRITE;
 						}
 					}
 					elseif ($next_char=='<')
 					{
-						//Input ('<')
+						// Input ('<')
 						$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_INPUT;
 					}
 					elseif ($next_char=='|')
 					{
-						//Pipe ('|')
+						// Pipe ('|')
 						$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_PIPE;
 					}
 					else
 					{
-						//If we have anything other than a greater-than ('>') or a less-than ('<'), continue to the REDIRECT_IDENTIFIER stage
+						// If we have anything other than a greater-than ('>') or a less-than ('<'), continue to the REDIRECT_IDENTIFIER stage
 						$extra_mode=IN_EXTRA_VALUE;
 					}
 
@@ -747,56 +750,56 @@ class virtual_bash
 
 					break;	
 				case IN_EXTRA_VALUE:
-					//Get the value, if applicable
+					// Get the value, if applicable
 					if ($next_char=='"')
 					{
-						//Quotes!
+						// Quotes!
 						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 						{
-							//We are entering a quote system
+							// We are entering a quote system
 							$this->parse_runtime['current_mode']=MODE_QUOTES;
 							$this->parse_runtime['parse_position']++;
 						}
 						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && (!$this->parse_runtime['escape_used']))
 						{
-							//We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
+							// We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
 							$this->parse_runtime['current_mode']=MODE_NORMAL;
-							$this->parse_runtime['parse_position']+=2; //Assuming there is only '" ' between here and the next extra
+							$this->parse_runtime['parse_position']+=2; // Assuming there is only '" ' between here and the next extra
 							$extra_mode=OUT_EXTRA;
 							$current_extra++;
 						}
 						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && ($this->parse_runtime['escape_used']))
 						{
-							//We are adding an escaped quote to the current extra value
+							// We are adding an escaped quote to the current extra value
 							$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].=$next_char;
 							$this->parse_runtime['parse_position']++;
 							$this->parse_runtime['escape_used']=false;
 						}
-						else break 2; //PANIC!!
+						else break 2; // PANIC!!
 					}
 					elseif ($next_char=='\\')
 					{
-						//An escape character (currently only backslash ('\')) has been used
-						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].='\\'; //Add the backslash to the extra value, as it has been escaped
-						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; //If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
+						// An escape character (currently only backslash ('\')) has been used
+						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].='\\'; // Add the backslash to the extra value, as it has been escaped
+						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
 						$this->parse_runtime['parse_position']++;
 					}
 					else
 					{
 						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
 						{
-							//Normal mode; business as usual (quotes have not been used, so we can just strip out the extra value using string functions)
+							// Normal mode; business as usual (quotes have not been used, so we can just strip out the extra value using string functions)
 							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
 							if ($space_pos!==false)
 							{
-								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); //Get the value; up to the next space
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])+1; //Add the length of the extra value, and one for the assumed space between here and the next extra
+								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])+1; // Add the length of the extra value, and one for the assumed space between here and the next extra
 							}
 							else
 							{
-								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position']); //Just take until the end; there doesn't seem to be anything else
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]); //Pretty pointless
+								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]); // Pretty pointless
 							}
 
 							$extra_mode=OUT_EXTRA;
@@ -804,17 +807,17 @@ class virtual_bash
 						}
 						elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
 						{
-							//We are adding the current letter to the quote system
+							// We are adding the current letter to the quote system
 							if (!isset($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])) $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]='';
 							$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].=$next_char;
 							$this->parse_runtime['parse_position']++;
 						}
-						else break 2; //PANIC!!
+						else break 2; // PANIC!!
 					}
 
 					break;
 				default:
-					break 2; //PANIC!!
+					break 2; // PANIC!!
 			}
 		}
 	}
@@ -826,14 +829,14 @@ class virtual_bash
 	 */
 	function _check_is_redirection()
 	{
-		//Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
+		// Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
 		$start_pos=$this->parse_runtime['parse_position'];
 		$end_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 		if ($end_pos===false) return false;
 
 		$block=substr($this->current_input,$start_pos,$end_pos-$start_pos);
 
-		if (($block=='<') || ($block=='>') || ($block=='>>') || ($block=='|')) return true; //These are all simple redirect instructions that are easy to check
+		if (($block=='<') || ($block=='>') || ($block=='>>') || ($block=='|')) return true; // These are all simple redirect instructions that are easy to check
 		if (preg_match('#[1-4](&[1-4])*>(>)?#',$block)===1) return true;
 		return false;
 	}
@@ -873,7 +876,7 @@ class virtual_bash
 
 		$this->fs=object_factory('virtual_fs');
 
-		//Start parsing with the command
+		// Start parsing with the command
 		$this->_extract_command();
 		if (trim($this->parsed_input[SECTION_COMMAND])=='')
 		{
@@ -886,14 +889,14 @@ class virtual_bash
 
 		if ($this->parse_runtime['occle_command']==COMMAND_NATIVE)
 		{
-			//Options (it's an OcCLE command; not a PHP command)
+			// Options (it's an OcCLE command; not a PHP command)
 			$this->_extract_options();
 			$this->_extract_parameters();
 		}
-		//Extras
+		// Extras
 		$this->_extract_extras();
 
-		//Pre-processing: follow any extras provided
+		// Pre-processing: follow any extras provided
 		$i=0;
 		foreach ($this->parsed_input[SECTION_EXTRAS] as $extra)
 		{
@@ -916,10 +919,10 @@ class virtual_bash
 
 				foreach ($this->parsed_input[SECTION_PARAMETERS] as $param_no=>$parameter)
 				{
-					//Do we have any "{".$i."}" parameters?
+					// Do we have any "{".$i."}" parameters?
 					if ($parameter=='{'.strval($i).'}')
 					{
-						//NOTE: Might want to change this somehow so that other streams can be put through
+						// NOTE: Might want to change this somehow so that other streams can be put through
 						$this->parsed_input[SECTION_PARAMETERS][$param_no]=$pertinant_output;
 						$replacements++;
 					}
@@ -927,8 +930,8 @@ class virtual_bash
 
 				if ($replacements==0)
 				{
-					//Just tag the input onto the end of the parameters array
-					//NOTE: See above
+					// Just tag the input onto the end of the parameters array
+					// NOTE: See above
 					$this->parsed_input[SECTION_PARAMETERS][]=$pertinant_output;
 				}
 
@@ -936,10 +939,10 @@ class virtual_bash
 			}
 		}
 
-		//Handle the command: load up the relevant hook
+		// Handle the command: load up the relevant hook
 		if ($this->parse_runtime['occle_command']==COMMAND_NATIVE)
 		{
-			//See if it's a lone command first
+			// See if it's a lone command first
 			$hooks=find_all_hooks('systems','occle_commands');
 			$hook_return=NULL;
 			foreach (array_keys($hooks) as $hook)
@@ -964,13 +967,13 @@ class virtual_bash
 			}
 			else
 			{
-				//It's not a lone command; see if it's a script - check first in the main script dir
-				if (file_exists(get_custom_file_base().'/data/modules/admin_occle/'.filter_naughty_harsh($this->parsed_input[SECTION_COMMAND],true))) $script_file=get_custom_file_base().'/data/modules/admin_occle/'.filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); //It's in the main script dir
-				else $script_file=$this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND])); //Exhaustive search
+				// It's not a lone command; see if it's a script - check first in the main script dir
+				if (file_exists(get_custom_file_base().'/data/modules/admin_occle/'.filter_naughty_harsh($this->parsed_input[SECTION_COMMAND],true))) $script_file=get_custom_file_base().'/data/modules/admin_occle/'.filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); // It's in the main script dir
+				else $script_file=$this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND])); // Exhaustive search
 
 				if (($script_file!==false) && (is_readable($script_file)))
 				{
-					//It *is* a script, so let's run it :)
+					// It *is* a script, so let's run it :)
 					$this->parse_runtime['occle_command']=COMMAND_SCRIPT;
 					$script_contents=unixify_line_format(file_get_contents($script_file));
 					$script_lines=explode("\n",$script_contents);
@@ -987,7 +990,7 @@ class virtual_bash
 				}
 				else
 				{
-					//Give up: it's not a command
+					// Give up: it's not a command
 					$this->output[STREAM_STDCOMMAND]='';
 					$this->output[STREAM_STDHTML]='';
 					$this->output[STREAM_STDOUT]='';
@@ -998,12 +1001,12 @@ class virtual_bash
 		}
 		elseif ($this->parse_runtime['occle_command']==COMMAND_PHP)
 		{
-			//NOTE: This is done in a separate function to limit variable interaction (due to the PHP memory implemented)
+			// NOTE: This is done in a separate function to limit variable interaction (due to the PHP memory implemented)
 			$this->_handle_php_command();
 		}
 		elseif ($this->parse_runtime['occle_command']==COMMAND_SQL)
 		{
-			//SQL command
+			// SQL command
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
@@ -1027,7 +1030,7 @@ class virtual_bash
 			}
 		}
 
-		//Post-processing: follow any extras provided
+		// Post-processing: follow any extras provided
 		$old_output=$this->output;
 
 		foreach ($this->parsed_input[SECTION_EXTRAS] as $extra)
@@ -1095,7 +1098,7 @@ class virtual_bash
 	 */
 	function _combine_streams($stream1,$stream2)
 	{
-		//Combine two streams, taking account of arrays, tempcode and other stuff
+		// Combine two streams, taking account of arrays, tempcode and other stuff
 		$stream_identifiers=array(STREAM_STDCOMMAND,STREAM_STDHTML,STREAM_STDOUT,STREAM_STDERR);
 
 		foreach ($stream_identifiers as $identifier)
@@ -1139,6 +1142,8 @@ class virtual_bash
 			}
 		}
 
+		// *Insert ghostbusters reference about crossing the streams*
+
 		return $stream1;
 	}
 
@@ -1150,7 +1155,7 @@ class virtual_bash
 	 */
 	function _array_to_html($array)
 	{
-		//Convert an array to an HTML format
+		// Convert an array to an HTML format
 		$output=new ocp_tempcode();
 		$key=mixed();
 		foreach ($array as $key=>$value)
@@ -1170,7 +1175,7 @@ class virtual_bash
 	 */
 	function _array_to_text($array,$indentation=0)
 	{
-		//Convert an array to a text format
+		// Convert an array to a text format
 		$output=$this->_do_indentation($indentation).'array(';
 		foreach ($array as $key=>$value)
 		{
@@ -1189,7 +1194,7 @@ class virtual_bash
 	 */
 	function _do_indentation($indentation)
 	{
-		//Return some tabs
+		// Return some tabs
 		$output='';
 		for ($i=0;$i<$indentation;$i++) $output.="\t";
 		return $output;
@@ -1200,7 +1205,7 @@ class virtual_bash
 	 */
 	function _handle_php_command()
 	{
-		//NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
+		// NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
 		if (get_file_base()==get_custom_file_base())
 		{
 			if (array_key_exists('occle_state',$_COOKIE))
@@ -1283,7 +1288,7 @@ class virtual_bash
 		}
 		else
 		{
-			//Fake the PHP evaluation, because it's prohibited by a shared install
+			// Fake the PHP evaluation, because it's prohibited by a shared install
 			$this->output[STREAM_STDERR]=do_lang('SHARED_INSTALL_PROHIBIT');
 			$occle_eval_output=true;
 		}
@@ -1340,39 +1345,46 @@ class virtual_fs
 	 */
 	function virtual_fs()
 	{
-		//Initialise a new virtual filesystem; setup the vfs array, and fetch the pwd from a cookie
+		// Initialise a new virtual filesystem; setup the vfs array, and fetch the pwd from a cookie
 
-		/*The pwd is stored in a flat array, each value holds the key for each level in the $this->virtual_fs array that is in the pwd:
+		/*
+		The pwd is stored in a flat array, each value holds the key for each level in the $this->virtual_fs array that is in the pwd:
 			$this->pwd=array('blah2','foo3','bar');
 
+		The virtual filesystem is a nested directory structure, where terminals mapping to strings represent OccLE-fs hooks
 			$this->virtual_fs=array(
-				'blah',
+				'blah'=>array(),
 			***	'blah2'=>array(
-					'foo',
-					'foo2',
+					'foo'=>array(),
+					'foo2'=>array(),
 			***		'foo3'=>array(
-			***PWD***		'bar'=>MEMBER_LIST,
-						'bar2'
+			***PWD***			'bar'=>'members', // 'members' hook is tied into 'bar', rather than an explicit array
+						'bar2'=>array(),
 					),
-					'foo4'
+					'foo4'=>array(),
 				),
-				'blah3'
+				'blah3'=>array(),
 			);
 		*/
 
-		//Feel free to rearrange this array as you see fit; it's easily moddable
-		/*$this->virtual_fs=array(
-			'database'=>'database', //View of the database; level 1: tables, level 2: rows (identified by ID)
-			'root'=>'root', //View of the root fs of the ocPortal installation
-			'members'=>'members', //List of all the members
-			'bin'=>'bin', //Scripts directory
-			'etc'=>'etc', //List of config options
-			'raw'=>'raw', //List of files in /sources (NOT sources_custom)
-			'home'=>'home' //Member's home directory in the filedump
-		);*/
-		$hooks=find_all_hooks('systems','occle_fs');
+		// Build up the filesystem structure
+		$occlefs_hooks=find_all_hooks('systems','occle_fs');
 		$this->virtual_fs=array();
-		foreach (array_keys($hooks) as $hook)
+		$this->virtual_fs['var']=array();
+		$cma_hooks=find_all_hooks('systems','content_meta_aware')+find_all_hooks('systems','resource_meta_aware');
+		require_code('content');
+		foreach (array_keys($cma_hooks) as $hook) // Find 'var' hooks, for content
+		{
+			$cma_ob=get_content_object();
+			$cma_info=$cma_ob->info();
+			$occle_fs_hook=$cma_info['occle_filesystem_hook'];
+			if (!is_null($occle_fs_hook))
+			{
+				unset($occlefs_hooks[$occle_fs_hook]); // It's under 'var', don't put elsewhere
+				$this->virtual_fs['var'][$occle_fs_hook]=$occle_fs_hook;
+			}
+		}
+		foreach (array_keys($occlefs_hooks) as $hook) // Other filesystems go directly under the root (not 'root', which is different)
 		{
 			$this->virtual_fs[$hook]=$hook;
 		}
@@ -1389,7 +1401,7 @@ class virtual_fs
 	 */
 	function _start_pwd()
 	{
-		//Fetch the pwd from a cookie, or generate a new one
+		// Fetch the pwd from a cookie, or generate a new one
 		if (array_key_exists('occle_dir',$_COOKIE))
 		{
 			if (get_magic_quotes_gpc()) $_COOKIE['occle_dir']=stripslashes($_COOKIE['occle_dir']);
@@ -1426,7 +1438,7 @@ class virtual_fs
 				$before=$this->_get_current_dir_contents($dir,true);
 				foreach ($before as $entry)
 				{
-					$_ret=$this->_get_current_dir_contents(array_merge(explode('/',$entry),array($end_bit)),$full_paths);
+					$_ret=$this->_get_current_dir_contents(array_merge(explode('/',$entry[0]),array($end_bit)),$full_paths);
 					if ($_ret!==false)
 						$ret=array_merge($ret,$_ret);
 				}
@@ -1434,12 +1446,13 @@ class virtual_fs
 			{
 				$before=$this->_get_current_dir_contents($dir,$full_paths);
 
-				foreach ($before as $i=>$entry)
+				foreach ($before as $entry)
 				{
-					if (is_array($entry)) $entry=$i;
-
-					if (simulated_wildcard_match($entry,$end_bit,true))
-						$ret[]=preg_replace('#^.*/#','',$entry);
+					if (simulated_wildcard_match($entry[0],$end_bit,true))
+					{
+						$entry[0]=preg_replace('#^.*/#','',$entry[0]);
+						$ret[]=$entry;
+					}
 				}
 			}
 			return $ret;
@@ -1452,7 +1465,7 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			$current_dir=$object->listing($meta_dir,$meta_root_node,array(),$this);
@@ -1461,7 +1474,7 @@ class virtual_fs
 			{
 				foreach ($current_dir as $i=>$d)
 				{
-					$current_dir[$i]=implode('/',$dir).'/'.$d;
+					$current_dir[$i][0]=implode('/',$dir).'/'.$d[0];
 				}
 			}
 		}
@@ -1476,7 +1489,7 @@ class virtual_fs
 	 */
 	function _pwd_to_array($pwd)
 	{
-		//Convert a string-form pwd to an array-form pwd, and sanitise it
+		// Convert a string-form pwd to an array-form pwd, and sanitise it
 		$absolute=($pwd[0]=='/');
 		$_pwd=explode('/',$pwd);
 		if ($absolute) $target_directory=array();
@@ -1493,7 +1506,7 @@ class virtual_fs
 	 */
 	function _merge_pwds($pwd1,$pwd2)
 	{
-		//Merge two array-form pwds, assuming the former is absolute and the latter isn't
+		// Merge two array-form pwds, assuming the former is absolute and the latter isn't
 		$target_directory=$pwd1;
 		foreach ($pwd2 as $section)
 		{
@@ -1526,7 +1539,7 @@ class virtual_fs
 	 */
 	function _get_filename($filename)
 	{
-		//Make sure no directories are included with the filename
+		// Make sure no directories are included with the filename
 		$parts=explode('/',$filename);
 		return $parts[count($parts)-1];	
 	}
@@ -1540,17 +1553,21 @@ class virtual_fs
 	function _is_dir($dir=NULL)
 	{
 		if (is_null($dir)) $dir=$this->pwd;
-		if (is_array($this->_get_current_dir_contents($dir))) return true;
 
-		$vfs=$this->virtual_fs;
+		$filename=array_pop($dir);
 
-		foreach ($dir as $current_section)
+		$contents=$this->_get_current_dir_contents($dir); // Look at contents of parent directory
+		if ($contents===false) return false;
+
+		foreach ($contents as $entry)
 		{
-			if ((is_array($vfs)) && (array_key_exists($current_section,$vfs))) $vfs=$vfs[$current_section];
-			else return false;
+			if ($entry[0]==$filename)
+			{
+				return $entry[1]==OCCLEFS_DIR;
+			}
 		}
 
-		return true;
+		return false;
 	}
 
 	/**
@@ -1561,23 +1578,24 @@ class virtual_fs
 	 */
 	function _is_file($dir)
 	{
-		$filename=$dir[count($dir)-1];
-		array_pop($dir);
+		$filename=array_pop($dir);
 
-		$contents=$this->_get_current_dir_contents($dir);
+		$contents=$this->_get_current_dir_contents($dir); // Look at contents of parent directory
 		if ($contents===false) return false;
-		elseif ((is_array($contents)) && (@in_array($filename,$contents)))
+
+		foreach ($contents as $entry)
 		{
-			$test=$this->_is_dir(array_merge($dir,array($filename)));
-			if ($test) return false;
-			return true;
+			if ($entry[0]==$filename)
+			{
+				return $entry[1]==OCCLEFS_FILE;
+			}
 		}
 
 		return false;
 	}
 
 	/**
-	 * Get details of the current meta directory.
+	 * Get details of the current meta directory. Mostly returns by reference.
 	 *
 	 * @param  array				Meta directory
 	 * @param  string				Meta root node
@@ -1587,31 +1605,57 @@ class virtual_fs
 	 */
 	function _discern_meta_dir(&$meta_dir,&$meta_root_node,&$meta_root_node_type,$dir=NULL)
 	{
-		//Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
-		$current_dir=$this->virtual_fs;
+		// Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
+		$current_dir=$this->virtual_fs; // Start at the root
 		if (is_null($dir)) $dir=$this->pwd;
 		$meta_dir=$dir;
 		$meta_root_node=NULL;
 		$meta_root_node_type=NULL;
 
-		foreach ($dir as $section_no=>$section)
+		foreach ($dir as $section_no=>$section) // For each component in our path
 		{
-			unset($meta_dir[$section_no]);
-			if ((array_key_exists($section,$current_dir)) && (is_array($current_dir[$section]))) $current_dir=$current_dir[$section];
-			elseif (array_key_exists($section,$current_dir))
+			unset($meta_dir[$section_no]); // Okay so we're still not under the meta-dir, so actually this $section_no is not a part of the meta-dir
+			if ((array_key_exists($section,$current_dir)) && (is_array($current_dir[$section]))) // Hard-coded known directory, so we can scan it
+			{
+				$current_dir=$current_dir[$section]; // We will continue on through more possible hard-coded directories, or to find a deeper meta-dir
+			}
+			elseif (array_key_exists($section,$current_dir)) // Known directory, and we've not got to a meta-dir yet -- must therefore be the meta-dir
 			{
 				$meta_root_node=$section;
 				$meta_root_node_type=$current_dir[$section];
 				$current_dir=array();
-				break;
+				break; // We've found the meta-dir we're under, so we can stop going through now
 			} else
 			{
-				return false;
+				return false; // Cannot find the directory
 			}
 		}
 
-		$meta_dir=array_values($meta_dir); //Sort out the keys
+		$meta_dir=array_values($meta_dir); // Everything left over needs re-indexing
 		return $current_dir;
+	}
+
+	/**
+	 * Convert a directory contents structure into a template parameter structure.
+	 *
+	 * @param  array				Structure
+	 * @return array				Template parameter structure
+	 */
+	function prepare_dir_contents_for_listing($entries)
+	{
+		$out=array();
+		require_code('files');
+		foreach ($entries as $entry)
+		{
+			$out[]=array(
+				'FILENAME'=>$entry[0],
+				'FILESIZE'=>is_null($entry[2])?'':clean_file_size($entry[2]),
+				'_FILESIZE'=>is_null($entry[2])?'':strval($entry[2]),
+				'MTIME'=>is_null($entry[3])?'':get_timezoned_date($entry[3]),
+				'_MTIME'=>is_null($entry[3])?'':strval($entry[3]),
+			);
+		}
+		return $out;
 	}
 
 	/**
@@ -1622,7 +1666,7 @@ class virtual_fs
 	 */
 	function print_working_directory($array_form=false)
 	{
-		//Return the current working directory
+		// Return the current working directory
 		if ($array_form) return $this->pwd;
 		else
 		{
@@ -1638,28 +1682,28 @@ class virtual_fs
 	 */
 	function listing($dir=NULL)
 	{
-		//Return an array list of all the directories and files in the pwd
+		// Return an array list of all the directories and files in the pwd
 		$current_dir_contents=$this->_get_current_dir_contents($dir);
 		if ($current_dir_contents===false) return array(array(),array());
 
 		$directories=array();
 		$files=array();
 
-		foreach ($current_dir_contents as $key=>$value)
+		foreach ($current_dir_contents as $entry)
 		{
-			if ((is_array($value)) || (is_string($key)))
+			if ($entry[1]==OCCLEFS_DIR)
 			{
-				//Directory
-				$directories[]=$key;
+				// Directory
+				$directories[]=$entry;
 			}
-			else
+			elseif ($entry[1]==OCCLEFS_FILE)
 			{
-				//File
-				$files[]=$value;
+				// File
+				$files[]=$entry;
 			}
 		}
 
-		//Sort them nicely and neatly ;-)
+		// Sort them nicely and neatly ;-)
 		asort($directories);
 		asort($files);
 
@@ -1679,7 +1723,7 @@ class virtual_fs
 	 */
 	function search($pattern,$regexp=false,$recursive=false,$files=true,$directories=false,$dir=NULL)
 	{
-		//Search!
+		// Search!
 		$current_dir_contents=$this->listing($dir);
 		$dir_string=$this->_pwd_to_string($dir);
 		$output_directories=array();
@@ -1693,17 +1737,17 @@ class virtual_fs
 			}
 		}
 
-		foreach ($current_dir_contents[0] as $directory)
+		foreach ($current_dir_contents[0/*directories*/] as $directory)
 		{
 			if ($directories)
 			{
-				if (($regexp) && (preg_match($pattern,$directory))) $output_directories[]=$dir_string.$directory.'/';
-				elseif ((!$regexp) && ($pattern==$directory)) $output_directories[]=$dir_string.$directory.'/';
+				if (($regexp) && (preg_match($pattern,$directory[0]))) $output_directories[]=$dir_string.$directory[0].'/';
+				elseif ((!$regexp) && ($pattern==$directory[0])) $output_directories[]=$dir_string.$directory[0].'/';
 			}
 			if ($recursive)
 			{
 				$temp_dir=$dir;
-				$temp_dir[]=$directory;
+				$temp_dir[]=$directory[0];
 				$temp=$this->search($pattern,$regexp,$recursive,$files,$directories,$temp_dir);
 				$output_directories=array_merge($output_directories,$temp[0]);
 				$output_files=array_merge($output_files,$temp[1]);
@@ -1712,14 +1756,14 @@ class virtual_fs
 
 		if ($files)
 		{
-			foreach ($current_dir_contents[1] as $file)
+			foreach ($current_dir_contents[1/*files*/] as $file)
 			{
-				if (($regexp) && (preg_match($pattern,$file))) $output_files[]=$dir_string.$file;
-				elseif ((!$regexp) && ($pattern==$file)) $output_files[]=$dir_string.$file;
+				if (($regexp) && (preg_match($pattern,$file[0]))) $output_files[]=$dir_string.$file[0];
+				elseif ((!$regexp) && ($pattern==$file[0])) $output_files[]=$dir_string.$file[0];
 			}
 		}
 
-		//Sort them nicely and neatly ;-)
+		// Sort them nicely and neatly ;-)
 		asort($output_directories);
 		asort($output_files);
 
@@ -1734,7 +1778,7 @@ class virtual_fs
 	 */
 	function change_directory($target_directory)
 	{
-		//Change the current directory
+		// Change the current directory
 		if ($this->_is_dir($target_directory))
 		{
 			$this->pwd=$target_directory;
@@ -1761,7 +1805,7 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->make_directory($meta_dir,$meta_root_node,$directory_name,$this);
@@ -1785,17 +1829,28 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			$listing=$object->listing($meta_dir,$meta_root_node,$directory,$this);
 
-			foreach ($listing as $key=>$value)
+			// Remove contents
+			foreach ($listing as $value)
 			{
-				if (!is_array($value)) $object->remove_file(array_merge($meta_dir,array($directory_name)),$meta_root_node,$value,$this);
-				else $this->remove_directory(array_merge($directory,array($key)));
+				switch ($value[1])
+				{
+					case OCCLEFS_FILE:
+						$object->remove_file(array_merge($meta_dir,array($directory_name)),$meta_root_node,$value,$this);
+						break;
+					case OCCLEFS_DIR:
+						$this->remove_directory(array_merge($directory,array($value))); // Recurse
+						break;
+				}
 			}
+
 			array_pop($meta_dir);
+
+			// Remove directory itself
 			return $object->remove_directory($meta_dir,$meta_root_node,$directory_name,$this);
 		}
 		else return false;
@@ -1819,21 +1874,21 @@ class virtual_fs
 
 		if (!$this->make_directory($_destination)) return false;
 
-		foreach ($directory_contents as $key=>$value)
+		foreach ($directory_contents as $entry)
 		{
-			$_to_copy=$to_copy;
+			$_to_copy_path=$to_copy;
 			$_destination=$destination;
 			$_destination[]=$dir_name;
 
-			if (is_array($value))
+			if ($entry[1]==OCCLEFS_DIR)
 			{
-				$_to_copy[]=$key;
-				$success=($success)?$this->copy_directory($_to_copy,$_destination):false;
+				$_to_copy_path[]=$entry[0];
+				$success=($success)?$this->copy_directory($_to_copy_path,$_destination):false;
 			}
-			else
+			elseif ($entry[1]==OCCLEFS_FILE)
 			{
-				$_to_copy[]=$value;
-				$success=($success)?$this->copy_file($_to_copy,$_destination):false;
+				$_to_copy_path[]=$entry[0];
+				$success=($success)?$this->copy_file($_to_copy_path,$_destination):false;
 			}
 		}
 
@@ -1898,7 +1953,7 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->remove_file($meta_dir,$meta_root_node,$filename,$this);
@@ -1922,7 +1977,7 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->read_file($meta_dir,$meta_root_node,$filename,$this);
@@ -1947,7 +2002,7 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			return $object->write_file($meta_dir,$meta_root_node,$filename,$contents,$this)!==false;
@@ -1972,7 +2027,7 @@ class virtual_fs
 
 		if (!is_null($meta_root_node))
 		{
-			//We're underneath a meta root node (a directory which is generated dynamically)
+			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
 			$old_contents=$object->read_file($meta_dir,$meta_root_node,$filename,$this);

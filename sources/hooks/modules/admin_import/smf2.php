@@ -29,7 +29,7 @@ function init__hooks__modules__admin_import__smf2()
 	global $STRICT_FILE;
 	$STRICT_FILE=false; // Disable this for a quicker import that is quite liable to go wrong if you don't have the files in the right place
 
-	global $ADDITIONAL_DATA; //Added by Duck to fix issue with trying to set user group values in config section before groups have been imported.
+	global $ADDITIONAL_DATA;
 	$ADDITIONAL_DATA=array();
 }
 
@@ -127,7 +127,7 @@ class Hook_smf2
 		$config_remapping['staff_address']=$webmaster_email;
 		$config_remapping['site_name']=$mbname;
 		$board_url=$boardurl;
-		global $ADDITIONAL_DATA; // Edited by Duck
+		global $ADDITIONAL_DATA;
 
 		foreach ($rows as $row)
 		{
@@ -206,19 +206,19 @@ class Hook_smf2
 
 			if (isset($row['variable'])&&$row['variable']=='attachmentNumPerPostLimit')
 			{
-				$ADDITIONAL_DATA['maxattachments']=(integer)$row['value']; // Edited by Duck
+				$ADDITIONAL_DATA['maxattachments']=(integer)$row['value'];
 				continue;
 			}
 
 			if (isset($row['variable'])&&$row['variable']=='avatar_max_width_upload')
 			{
-				$ADDITIONAL_DATA['avatar_max_width']=(integer)$row['value']; // Edited by Duck
+				$ADDITIONAL_DATA['avatar_max_width']=(integer)$row['value'];
 				continue;
 			}
 
 			if (isset($row['variable'])&&$row['variable']=='avatar_max_height_upload')
 			{
-				$ADDITIONAL_DATA['avatar_max_height']=(integer)$row['value']; // Edited by Duck
+				$ADDITIONAL_DATA['avatar_max_height']=(integer)$row['value'];
 				continue;
 			}
 
@@ -267,9 +267,9 @@ class Hook_smf2
 	{
 		global $ADDITIONAL_DATA;
 
-		$avatar_max_width=!empty($ADDITIONAL_DATA['avatar_max_width'])?$ADDITIONAL_DATA['avatar_max_width']:100; //added by Duck
-		$avatar_max_height=!empty($ADDITIONAL_DATA['avatar_max_height'])?$ADDITIONAL_DATA['avatar_max_height']:100; //added by Duck
-		$max_attachments_upload=!empty($ADDITIONAL_DATA['maxattachments'])?$ADDITIONAL_DATA['maxattachments']:10; //added by Duck
+		$avatar_max_width=!empty($ADDITIONAL_DATA['avatar_max_width'])?$ADDITIONAL_DATA['avatar_max_width']:100;
+		$avatar_max_height=!empty($ADDITIONAL_DATA['avatar_max_height'])?$ADDITIONAL_DATA['avatar_max_height']:100;
+		$max_attachments_upload=!empty($ADDITIONAL_DATA['maxattachments'])?$ADDITIONAL_DATA['maxattachments']:10;
 
 		$group_leaders=array();
 		$grps=$db->query('SELECT * FROM '.$table_prefix.'group_moderators ORDER BY id_group');
@@ -281,7 +281,7 @@ class Hook_smf2
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'membergroups ORDER BY id_group');
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('group',strval($row['id_group']))) continue; //Edited by Duck
+			if (import_check_if_imported('group',strval($row['id_group']))) continue;
 
 			$leader=array_key_exists($row['id_group'],$group_leaders)? $group_leaders[$row['id_group']]:NULL;
 			if ($row['group_name']=='Administrator')
@@ -301,7 +301,7 @@ class Hook_smf2
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$group_name),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($group_name,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$leader,5,0,5,$max_attachments_upload,$avatar_max_width,$avatar_max_height,30000); //Edited by Duck
+				$id_new=ocf_make_group($group_name,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$leader,NULL,NULL,NULL,$max_attachments_upload,$avatar_max_width,$avatar_max_height,NULL);
 			}
 
 			// privileges

@@ -265,9 +265,11 @@ function wiki_delete_post($post_id,$member=NULL)
  * @param  ?MEMBER		The member doing the action (NULL: current member)
  * @param  ?TIME			The add time (NULL: now)
  * @param  integer		The number of views so far
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The page ID
  */
-function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_time=NULL,$views=0)
+function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_time=NULL,$views=0,$meta_keywords='',$meta_description='')
 {
 	if (is_null($member)) $member=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -291,7 +293,13 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_ADD_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('wiki_page',strval($id),array($title,$description),$description);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('wiki_page',strval($id),array($title,$description),$description);
+	} else
+	{
+		seo_meta_set_for_explicit('wiki_page',strval($id),$meta_keywords,$meta_description);
+	}
 
 	if (post_param_integer('send_notification',NULL)!==0)
 	{

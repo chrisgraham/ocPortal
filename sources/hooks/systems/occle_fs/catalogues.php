@@ -26,29 +26,135 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	var $file_content_type='catalogue_entry';
 
 	/**
+	 * Find whether a kind of content handled by this hook (folder or file) can be under a particular kind of folder.
+	 *
+	 * @param  ID_TEXT		Folder content type
+	 * @param  ID_TEXT		Content type (may be file or folder)
+	 * @return boolean		Whether it can
+	 */
+	function _has_parent_child_relationship($above,$under)
+	{
+		switch ($above)
+		{
+			case 'catalogue':
+				return ($under=='catalogue_category');
+			case 'catalogue_category':
+				return ($under=='catalogue_category') || ($under=='catalogue_entry');
+		}
+		return false;
+	}
+
+	/**
+	 * Standard modular introspection function.
+	 *
+	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties($category)
+	{
+		if (substr($category,0,10)!='CATALOGUE-')
+		{
+			return array(
+				'description',
+				'notes',
+				'rep_image',
+				'move_days_lower',
+				'move_days_higher',
+				'move_target',
+				'add_date',
+				'meta_keywords',
+				'meta_description',
+			);
+		}
+
+		return array(
+			'description',
+			'display_type',
+			'is_tree',
+			'notes',
+			'submit_points',
+			'ecommerce',
+			'send_view_reports',
+			'default_review_freq',
+			'add_date',
+			'fields',
+		);
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ID_TEXT	The filename
+	 */
+	function _folder_convert_id_to_filename($content_type,$content_id)
+	{
+		if ($content_type=='catalogue')
+			return 'CATALOGUE-'.parent::_folder_convert_id_to_filename($content_type,$content_id);
+
+		return parent::_folder_convert_id_to_filename($content_type,$content_id,'catalogue_category');
+	}
+
+	/**
+	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @return array		A pair: The content type, the content ID
+	 */
+	function _folder_convert_filename_to_id($filename)
+	{
+		if (substr($filename,0,10)=='CATALOGUE-')
+			return parent::_folder_convert_filename_to_id(substr($filename,10),'catalogue');
+
+		return parent::_folder_convert_filename_to_id($filename,'catalogue_category');
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+
 		require_code('catalogues2');
 
-		if (TODO)
+		$depth=substr_count($path,'/');
+
+		if ($depth!=0)
 		{
-			$catalogue_name=TODO;
+			if ($category_content_type=='catalogue') return false; // Can't create a catalogue under a catalogue
+			if ($category=='') return false; // Can't create more than one root
+
+			if ($depth==1)
+			{
+				$parent_id=mixed();
+				$catalogue_name=$category;
+			} else
+			{
+				$parent_id=$this->_integer_category($category);
+				$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$parent_id));
+				$is_tree=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_is_tree',array('id'=>$parent_id));
+				if ($is_tree==0) return false;
+			}
+
 			$description=$this->_default_property_str($properties,'description');
 			$notes=$this->_default_property_str($properties,'notes');
-			$parent_id=$this->_integer_category($category);
 			$rep_image=$this->_default_property_str($properties,'rep_image');
 			$move_days_lower=$this->_default_property_int_null($properties,'move_days_lower');
 			$move_days_higher=$this->_default_property_int_null($properties,'move_days_higher');
 			$move_target=$this->_default_property_int_null($properties,'move_target');
 			$add_date=$this->_default_property_int_null($properties,'add_date');
-			$id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date);
+			$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+			$meta_description=$this->_default_property_str($properties,'meta_description');
+
+			$id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,NULL,$meta_keywords,$meta_description);
+
 			return strval($id);
 		} else
 		{
@@ -60,9 +166,35 @@ class Hook_occle_fs_catalogues extends content_fs_base
 			$ecommerce=$this->_default_property_int($properties,'ecommerce');
 			$send_view_reports=$this->_default_property_int($properties,'send_view_reports');
 			$default_review_freq=$this->_default_property_int_null($properties,'default_review_freq');
-			$add_time=$this->_default_property_int_null($properties,'add_time');
+			$add_time=$this->_default_property_int_null($properties,'add_date');
 			$name=$this->_create_name_from_title($title);
+
 			actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+
+			if ((array_key_exists('fields',$properties)) && ($properties['fields']!=''))
+			{
+				$fields_data=unserialize($properties['fields']);
+				foreach ($fields_data as $field_data)
+				{
+					$field_title=$field_data['field_title'];
+					$description=$field_data['description'];
+					$type=$field_data['type'];
+					$order=$field_data['order'];
+					$defines_order=$field_data['defines_order'];
+					$visible=$field_data['visible'];
+					$searchable=$field_data['searchable'];
+					$default=$field_data['default'];
+					$required=$field_data['required'];
+					$put_in_category=$field_data['put_in_category'];
+					$put_in_search=$field_data['put_in_search'];
+
+					actual_add_catalogue_field($name,$field_title,$description,$type,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category,$put_in_search);
+				}
+			} else
+			{
+				actual_add_catalogue_field($name,do_lang('TITLE'),'','short_text',0,1,1,1,'',1,1,1);
+			}
+
 			return $name;
 		}
 
@@ -72,13 +204,15 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
 		require_code('catalogues2');
 
-		if (TODO)
+		if ($content_type=='catalogue')
 		{
 			delete_catalogue($content_id);
 		} else
@@ -88,56 +222,106 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties($category)
+	{
+		$props=array(
+			'validated',
+			'notes',
+			'allow_rating',
+			'allow_comments',
+			'allow_trackbacks',
+			'add_date',
+			'submitter',
+			'edit_date',
+			'views',
+			'meta_keywords',
+			'meta_description',
+		);
+
+		$category_id=$this->_integer_category($category);
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
+		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		foreach ($_fields as $i=>$field_bits)
+		{
+			if ($i!=0)
+			{
+				$field_id=$field_bits['id'];
+				$props[]='field_'.strval($i);
+			}
+		}
+
+		return $props;
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+		if ($category_content_type=='catalogue') return false;
+
 		require_code('catalogues2');
 
 		$category_id=$this->_integer_category($category);
 
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
-		$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name),'ORDER BY cf_order'));
+		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 		$map=array();
-		$i=0;
-		foreach ($_fields as $field_id=>$field_type)
+		foreach ($_fields as $i=>$field_bits)
 		{
+			$field_id=$field_bits['id'];
+
 			if ($i==0)
 			{
 				$map[$field_id]=$title;
 			} else
 			{
-				// TODO
+				$value=$this->_default_property_str($properties,'field_'.strval($i));
+				if (is_null($value)) $value=$field_bits['cf_default'];
+				$map[$field_id]=$value;
 			}
-			$i++;
 		}
 
-		$validated=$this->_default_property_int($properties,'validated');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
 		$notes=$this->_default_property_str($properties,'notes');
-		$allow_rating=$this->_default_property_int($properties,'allow_rating');
-		$allow_comments=$this->_default_property_int($properties,'allow_comments');
-		$allow_trackbacks=$this->_default_property_int($properties,'allow_trackbacks');
-		$time=$this->_default_property_int_null($properties,'time');
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','catalogue_entries',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','catalogue_entries',1);
+		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','catalogue_entries',1);
+		$time=$this->_default_property_int_null($properties,'add_date');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$views=$this->_default_property_int($properties,'views');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views);
+		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('catalogues2');
 		delete_catalogue_entry(intval($content_id));
 	}

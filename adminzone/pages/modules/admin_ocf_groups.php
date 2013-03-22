@@ -130,16 +130,16 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 * @param  URLPATH		The usergroup rank image
 	 * @param  ?GROUP			The target for promotion from this usergroup (NULL: no promotion prospects)
 	 * @param  ?integer		The point threshold upon which promotion occurs (NULL: no promotion prospects)
-	 * @param  integer		The number of seconds between submission flood controls
-	 * @param  integer		The number of seconds between access flood controls
-	 * @param  integer		The number of gift points members of this usergroup get when they start
-	 * @param  integer		The number of gift points members of this usergroup get per-day
-	 * @param  integer		The number of megabytes members can upload per day
-	 * @param  integer		The maximum number of attachments members of this usergroup may have per post
-	 * @param  integer		The maximum avatar width members of this usergroup may have
-	 * @param  integer		The maximum avatar height members of this usergroup may have
-	 * @param  integer		The maximum post length members of this usergroup may have
-	 * @param  integer		The maximum signature length members of this usergroup may have
+	 * @param  ?integer		The number of seconds between submission flood controls (NULL: average for existing usergroups)
+	 * @param  ?integer		The number of seconds between access flood controls (NULL: average for existing usergroups)
+	 * @param  ?integer		The number of gift points members of this usergroup get when they start (NULL: average for existing usergroups)
+	 * @param  ?integer		The number of gift points members of this usergroup get per-day (NULL: average for existing usergroups)
+	 * @param  ?integer		The number of megabytes members can upload per day (NULL: average for existing usergroups)
+	 * @param  ?integer		The maximum number of attachments members of this usergroup may have per post (NULL: average for existing usergroups)
+	 * @param  ?integer		The maximum avatar width members of this usergroup may have (NULL: average for existing usergroups)
+	 * @param  ?integer		The maximum avatar height members of this usergroup may have (NULL: average for existing usergroups)
+	 * @param  ?integer		The maximum post length members of this usergroup may have (NULL: average for existing usergroups)
+	 * @param  ?integer		The maximum signature length members of this usergroup may have (NULL: average for existing usergroups)
 	 * @param  BINARY			Whether to lock out unverified IP addresses until e-mail confirmation
 	 * @param  BINARY			Whether the usergroup is presented for joining at joining (implies anyone may be in the usergroup, but only choosable at joining)
 	 * @param  BINARY			Whether the name and membership of the usergroup is hidden
@@ -149,12 +149,23 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 * @param  BINARY			Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$is_default=0,$is_super_admin=0,$is_super_moderator=0,$group_leader='',$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$flood_control_submit_secs=0,$flood_control_access_secs=0,$gift_points_base=25,$gift_points_per_day=1,$max_daily_upload_mb=5,$max_attachments_per_post=20,$max_avatar_width=80,$max_avatar_height=80,$max_post_length_comcode=40000,$max_sig_length_comcode=1000,$enquire_on_new_ips=0,$is_presented_at_install=0,$group_is_hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
+	function get_form_fields($id=NULL,$name='',$is_default=0,$is_super_admin=0,$is_super_moderator=0,$group_leader='',$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$gift_points_base=NULL,$gift_points_per_day=1,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$group_is_hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
 	{
 		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 		{
 			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
 		}
+
+		$flood_control_submit_secs=take_param_int_modeavg($flood_control_submit_secs,'g_flood_control_submit_secs','f_groups',0);
+		$flood_control_access_secs=take_param_int_modeavg($flood_control_access_secs,'g_flood_control_access_secs','f_groups',0);
+		$max_daily_upload_mb=take_param_int_modeavg($max_daily_upload_mb,'g_max_daily_upload_mb','f_groups',70);
+		$max_attachments_per_post=take_param_int_modeavg($max_attachments_per_post,'g_max_attachments_per_post','f_groups',50);
+		$max_avatar_width=take_param_int_modeavg($max_avatar_width,'g_max_avatar_width','f_groups',100);
+		$max_avatar_height=take_param_int_modeavg($max_avatar_height,'g_max_avatar_height','f_groups',100);
+		$max_post_length_comcode=take_param_int_modeavg($max_post_length_comcode,'g_max_post_length_comcode','f_groups',30000);
+		$max_sig_length_comcode=take_param_int_modeavg($max_sig_length_comcode,'g_max_sig_length_comcode','f_groups',700);
+		$gift_points_base=take_param_int_modeavg($gift_points_base,'g_gift_points_base','f_groups',25);
+		$gift_points_per_day=take_param_int_modeavg($gift_points_per_day,'g_gift_points_per_day','f_groups',1);
 
 		if (is_null($group_leader)) $group_leader='';
 

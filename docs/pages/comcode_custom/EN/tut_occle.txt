@@ -53,12 +53,15 @@ Each of the default meta-filesystems is mapped to a subdirectory of the OcCLE me
 
 The default meta-filesystems are as follows, and are all mapped as subdirectories of the root directory:
  - [tt]bin[/tt]: A place to store all your OcCLE scripts
- - [tt]database[/tt]: Access to the raw SQL database
+ - [tt]database[/tt]: Access to the raw SQL database; level 1: tables, level 2: rows (identified by ID)
  - [tt]etc[/tt]: Access to ocPortal configuration options
  - [tt]home[/tt]: Access to the filedump
  - [tt]members[/tt]: A listing of every member registered on the system, with their preferences and usergroups
  - [tt]raw[/tt]: A raw listing of the actual ocPortal installation directory
- - [tt]root[/tt]: A listing of the ocPortal installation directory, taking source code overrides into account
+ - [tt]root[/tt]: A listing of the ocPortal installation directory, taking source code overrides into account (automatically overriding)
+ - [tt]var[/tt]: Structured website content, separated by content type on level 1, with category structure as further folders (generally-speaking), and entries as files
+
+The [tt]var[/tt] filesystem is perhaps the most interesting because if Webdav is installed, you can use this to import/export/copy content into and between websites using your normal desktop file manager. This is extremely useful.
 
 [title="2"]Scripts[/title]
 

@@ -79,8 +79,8 @@ class Block_main_awards
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$award_type_row['a_content_type']),'','red_alert');
 
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']));
-		$object=object_factory('Hook_content_meta_aware_'.$award_type_row['a_content_type']);
+		require_code('content');
+		$object=get_content_object($award_type_row['a_content_type']);
 		$info=$object->info();
 		if (is_null($info)) return do_lang_tempcode('IMPOSSIBLE_TYPE_USED');
 

@@ -1087,8 +1087,8 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 		$id=mixed();
 		if ($content_type!='')
 		{
-			require_code('hooks/systems/content_meta_aware/'.$content_type);
-			$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+			require_code('content');
+			$cma_ob=get_content_object($content_type);
 			$cma_info=$cma_ob->info();
 			$id_field=$cma_info['id_field'];
 			if (!is_array($id_field))

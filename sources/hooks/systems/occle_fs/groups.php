@@ -26,15 +26,64 @@ class Hook_occle_fs_groups extends content_fs_base
 	var $file_content_type='member';
 
 	/**
+	 * Whether the filesystem hook is active.
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function _is_active()
+	{
+		return (get_forum_type()=='ocf');
+	}
+
+	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties()
+	{
+		return array(
+			'is_default',
+			'is_super_admin',
+			'is_super_moderator',
+			'title',
+			'rank_image',
+			'promotion_target',
+			'promotion_threshold',
+			'group_leader',
+			'flood_control_submit_secs',
+			'flood_control_access_secs',
+			'max_daily_upload_mb',
+			'max_attachments_per_post',
+			'max_avatar_width',
+			'max_avatar_height',
+			'max_post_length_comcode',
+			'max_sig_length_comcode',
+			'gift_points_base',
+			'gift_points_per_day',
+			'enquire_on_new_ips',
+			'is_presented_at_install',
+			'hidden',
+			'order',
+			'rank_image_pri_only',
+			'open_membership',
+			'is_private_club',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category!='') return false; // Only one depth allowed for this content type
+
 		require_code('ocf_groups_action');
 
 		$is_default=$this->_default_property_int($properties,'is_default');
@@ -45,22 +94,16 @@ class Hook_occle_fs_groups extends content_fs_base
 		$promotion_target=$this->_default_property_int_null($properties,'promotion_target');
 		$promotion_threshold=$this->_default_property_int_null($properties,'promotion_threshold');
 		$group_leader=$this->_default_property_int_null($properties,'group_leader');
-		$flood_control_submit_secs=$this->_default_property_int($properties,'flood_control_submit_secs');
-		$flood_control_access_secs=$this->_default_property_int($properties,'flood_control_access_secs');
-		$max_daily_upload_mb=$this->_default_property_int_null($properties,'max_daily_upload_mb');
-		if (is_null($max_daily_upload_mb)) $max_daily_upload_mb=70;
-		$max_attachments_per_post=$this->_default_property_int_null($properties,'max_attachments_per_post');
-		if (is_null($max_attachments_per_post)) $max_attachments_per_post=50;
-		$max_avatar_width=$this->_default_property_int_null($properties,'max_avatar_width');
-		if (is_null($max_avatar_width)) $max_avatar_width=100;
-		$max_avatar_height=$this->_default_property_int_null($properties,'max_avatar_height');
-		if (is_null($max_avatar_height)) $max_avatar_height=100;
-		$max_post_length_comcode=$this->_default_property_int_null($properties,'max_post_length_comcode');
-		if (is_null($max_post_length_comcode)) $max_post_length_comcode=30000;
-		$max_sig_length_comcode=$this->_default_property_int_null($properties,'max_sig_length_comcode');
-		if (is_null($max_sig_length_comcode)) $max_sig_length_comcode=7000;
-		$gift_points_base=$this->_default_property_int($properties,'gift_points_base');
-		$gift_points_per_day=$this->_default_property_int($properties,'gift_points_per_day');
+		$flood_control_submit_secs=$this->_default_property_int_modeavg($properties,'flood_control_submit_secs','f_groups',0,'g_flood_control_submit_secs');
+		$flood_control_access_secs=$this->_default_property_int_modeavg($properties,'flood_control_access_secs','f_groups',0,'g_flood_control_access_secs');
+		$max_daily_upload_mb=$this->_default_property_int_modeavg($properties,'max_daily_upload_mb','f_groups',70,'g_max_daily_upload_mb');
+		$max_attachments_per_post=$this->_default_property_int_modeavg($properties,'max_attachments_per_post','f_groups',50,'g_max_attachments_per_post');
+		$max_avatar_width=$this->_default_property_int_modeavg($properties,'max_avatar_width','f_groups',100,'g_max_avatar_width');
+		$max_avatar_height=$this->_default_property_int_modeavg($properties,'max_avatar_height','f_groups',100,'g_max_avatar_height');
+		$max_post_length_comcode=$this->_default_property_int_modeavg($properties,'max_post_length_comcode','f_groups',30000,'g_max_post_length_comcode');
+		$max_sig_length_comcode=$this->_default_property_int_modeavg($properties,'max_sig_length_comcode','f_groups',700,'g_max_sig_length_comcode');
+		$gift_points_base=$this->_default_property_int_modeavg($properties,'gift_points_base','f_groups',25,'g_gift_points_base');
+		$gift_points_per_day=$this->_default_property_int_modeavg($properties,'gift_points_per_day','f_groups',1,'g_gift_points_per_day');
 		$enquire_on_new_ips=$this->_default_property_int($properties,'enquire_on_new_ips');
 		$is_presented_at_install=$this->_default_property_int($properties,'is_presented_at_install');
 		$hidden=$this->_default_property_int($properties,'hidden');
@@ -76,24 +119,83 @@ class Hook_occle_fs_groups extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
 		require_code('ocf_groups_action2');
 		ocf_delete_group(intval($content_id));
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		$props=array(
+			'password',
+			'email_address',
+			'groups',
+			'dob_day',
+			'dob_month',
+			'dob_year',
+			'timezone',
+			'primary_group',
+			'validated',
+			'join_time',
+			'last_visit_time',
+			'theme',
+			'avatar_url',
+			'signature',
+			'is_perm_banned',
+			'preview_posts',
+			'reveal_age',
+			'title',
+			'photo_url',
+			'photo_thumb_url',
+			'views_signatures',
+			'auto_monitor_contrib_content',
+			'language',
+			'allow_emails',
+			'allow_emails_from_staff',
+			'ip_address',
+			'validated_email_confirm_code',
+			'password_compatibility_scheme',
+			'salt',
+			'zone_wide',
+			'last_submit_time',
+			'highlighted_name',
+			'pt_allow',
+			'pt_rules_text',
+		);
+		require_code('ocf_members');
+		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
+		foreach ($custom_fields as $i=>$custom_field)
+		{
+			$props[]='field_'.strval($i);
+		}
+		return $props;
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+
 		require_code('ocf_members_action');
 
 		$password=$this->_default_property_str($properties,'password');
@@ -105,48 +207,61 @@ class Hook_occle_fs_groups extends content_fs_base
 		$dob_day=$this->_default_property_int_null($properties,'dob_day');
 		$dob_month=$this->_default_property_int_null($properties,'dob_month');
 		$dob_year=$this->_default_property_int_null($properties,'dob_year');
-		$custom_fields=array(); // TODO
 		$timezone=$this->_default_property_str_null($properties,'timezone');
 		$primary_group=$this->_default_property_int_null($properties,'primary_group');
-		$validated=$this->_default_property_int($properties,'validated');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
 		$join_time=$this->_default_property_int_null($properties,'join_time');
 		$last_visit_time=$this->_default_property_int_null($properties,'last_visit_time');
 		$theme=$this->_default_property_str($properties,'theme');
 		$avatar_url=$this->_default_property_str($properties,'avatar_url');
 		$signature=$this->_default_property_str($properties,'signature');
 		$is_perm_banned=$this->_default_property_int($properties,'is_perm_banned');
-		$preview_posts=$this->_default_property_int($properties,'preview_posts');
-		$reveal_age=$this->_default_property_int($properties,'reveal_age');
+		$preview_posts=$this->_default_property_int_modeavg($properties,'preview_posts','f_members',0,'m_preview_posts');
+		$reveal_age=$this->_default_property_int_modeavg($properties,'reveal_age','f_members',0,'m_reveal_age');
 		$real_title=$this->_default_property_str($properties,'title');
 		$photo_url=$this->_default_property_str($properties,'photo_url');
 		$photo_thumb_url=$this->_default_property_str($properties,'photo_thumb_url');
 		$views_signatures=$this->_default_property_int($properties,'views_signatures');
-		$auto_monitor_contrib_content=$this->_default_property_int($properties,'auto_monitor_contrib_content');
+		$auto_monitor_contrib_content=$this->_default_property_int_null($properties,'auto_monitor_contrib_content');
+		if (is_null($auto_monitor_contrib_content)) $auto_monitor_contrib_content=intval(get_option('auto_notifications'));
 		$language=$this->_default_property_str_null($properties,'language');
-		$allow_emails=$this->_default_property_int_null($properties,'allow_emails');
-		if (is_null($allow_emails)) $allow_emails=1;
-		$allow_emails_from_staff=$this->_default_property_int_null($properties,'allow_emails_from_staff');
-		if (is_null($allow_emails_from_staff)) $allow_emails_from_staff=1;
+		$allow_emails=$this->_default_property_int_modeavg($properties,'allow_emails','f_members',1,'m_allow_emails');
+		$allow_emails_from_staff=$this->_default_property_int_modeavg($properties,'allow_emails_from_staff','f_members',1,'m_allow_emails_from_staff');
 		$ip_address=$this->_default_property_str_null($properties,'ip_address');
 		$validated_email_confirm_code=$this->_default_property_str($properties,'validated_email_confirm_code');
 		$password_compatibility_scheme=$this->_default_property_str_null($properties,'password_compatibility_scheme');
 		$salt=$this->_default_property_str($properties,'salt');
-		$zone_wide=$this->_default_property_int($properties,'zone_wide');
+		$zone_wide=$this->_default_property_int_modeavg($properties,'zone_wide','f_members',1,'m_zone_wide');
 		$last_submit_time=$this->_default_property_int_null($properties,'last_submit_time');
 		$highlighted_name=$this->_default_property_int($properties,'highlighted_name');
 		$pt_allow=$this->_default_property_str($properties,'pt_allow');
 		$pt_rules_text=$this->_default_property_str($properties,'pt_rules_text');
-		$id=ocf_make_member($title,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$real_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text);
+
+		require_code('ocf_members');
+		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
+		$actual_custom_fields=array();
+		foreach ($custom_fields as $i=>$custom_field)
+		{
+			$value=$this->_default_property_str_null($properties,'field_'.strval($i));
+			if (is_null($value)) $value=$custom_field['cf_default'];
+			$actual_custom_fields[$custom_field['id']]=$value;
+		}
+
+		$id=ocf_make_member($title,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$real_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text);
+
 		return strval($id);
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('ocf_members_action2');
 		ocf_delete_member(intval($content_id));
 	}

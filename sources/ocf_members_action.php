@@ -38,7 +38,7 @@
  * @param  ?URLPATH			The URL to the member's avatar (blank: none) (NULL: choose one automatically).
  * @param  LONG_TEXT			The member's signature (blank: none).
  * @param  BINARY				Whether the member is permanently banned.
- * @param  BINARY				Whether posts are previewed before they are made.
+ * @param  BINARY				Whether posts are previewed before they are made (NULL: calculate statistically).
  * @param  BINARY				Whether the member's age may be shown.
  * @param  SHORT_TEXT		The member's title (blank: get from primary).
  * @param  URLPATH			The URL to the member's photo (blank: none).
@@ -53,7 +53,7 @@
  * @param  boolean			Whether to check details for correctness.
  * @param  ?ID_TEXT			The compatibility scheme that the password operates in (blank: none) (NULL: none [meaning normal ocPortal salted style] or plain, depending on whether passwords are encrypted).
  * @param  SHORT_TEXT		The password salt (blank: password compatibility scheme does not use a salt / auto-generate).
- * @param  BINARY				Whether the member likes to view zones without menus, when a choice is available.
+ * @param  BINARY				Whether the member likes to view zones without menus, when a choice is available (NULL: calculate statistically).
  * @param  ?TIME				The time the member last made a submission (NULL: set to now).
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @param  BINARY				Whether the member username will be highlighted.
@@ -61,12 +61,12 @@
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
+function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=NULL,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
 {
+	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
+	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 	if (is_null($auto_monitor_contrib_content))
-	{
 		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
-	}
 
 	if (is_null($password_compatibility_scheme))
 	{

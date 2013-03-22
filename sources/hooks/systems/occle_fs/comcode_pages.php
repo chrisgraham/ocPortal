@@ -26,25 +26,167 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	var $file_content_type='comcode_page';
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties()
+	{
+		return array(
+			'title',
+			'default_page',
+			'header_text',
+			'theme',
+			'wide',
+			'require_session',
+			'displayed_in_menu',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _file_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
-		// TODO
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category!='') return false; // Only one depth allowed for this content type
+
+		require_code('zones2');
+
+		$real_title=$this->_default_property_str($properties,'title');
+		$default_page=$this->_default_property_str($properties,'default_page');
+		if ($default_page=='') $default_page='start';
+		$header_text=$this->_default_property_str($properties,'header_text');
+		$theme=$this->_default_property_str($properties,'theme');
+		$wide=$this->_default_property_int($properties,'wide');
+		$require_session=$this->_default_property_int($properties,'require_session');
+		$displayed_in_menu=$this->_default_property_int($properties,'displayed_in_menu');
+
+		$zone=$this->_create_name_from_title($title);
+
+		actual_add_zone($zone,$real_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu);
+
+		return $zone;
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
+		actual_delete_zone($content_id);
+	}
+
+	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'lang',
+			'parent_page',
+			'validated',
+			'edit_date',
+			'add_date',
+			'show_as_edit',
+			'submitter',
+			'contents',
+			'meta_keywords',
+			'meta_description',
+		);
+	}
+
+	/**
+	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 */
+	function _file_add($filename,$path,$properties)
+	{
+		if ($path=='') return false;
+
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		$zone=$category;
+
+		$file=$this->_create_name_from_title($title);
+
+		$lang=$this->_default_property_str($properties,'lang');
+		if ($lang=='') $lang=get_site_default_lang();
+		$parent_page=_create_name_from_title($this->_default_property_str($properties,'parent_page'));
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		if (is_null($add_time)) $add_time=time();
+		$show_as_edit=$this->_default_property_int($properties,'show_as_edit');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		if (is_null($submitter)) $submitter=get_member();
+		$contents=$this->_default_property_str($properties,'contents');
+
+		require_code('seo2');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+		if (($meta_keywords=='') && ($meta_description==''))
+		{
+			seo_meta_set_for_implicit('comcode_page',$file,array($contents),$contents);
+		} else
+		{
+			seo_meta_set_for_explicit('comcode_page',$file,$meta_keywords,$meta_description);
+		}
+
+		$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+			'the_zone'=>$zone,
+			'the_page'=>$file,
+			'p_parent_page'=>$parent_page,
+			'p_validated'=>$validated,
+			'p_edit_date'=>$edit_time,
+			'p_add_date'=>$add_time,
+			'p_submitter'=>$submitter,
+			'p_show_as_edit'=>$show_as_edit
+		));
+
+		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($file).'.txt');
+		$myfile=@fopen($fullpath,'wt');
+		if ($myfile===false) intelligent_write_error($fullpath);
+		if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		fclose($myfile);
+		sync_file($fullpath);
+		fix_permissions($fullpath);
+
+		seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,$meta_keywords,$meta_description);
+
+		persistent_cache_delete(array('PAGE_INFO'));
+		decache('main_comcode_page_children');
+		decache('main_sitemap');
+
+		log_it('COMCODE_PAGE_EDIT',$file,$zone);
+	}
+
+	/**
+	 * Standard modular delete function for content hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT	The filename
+	 */
+	function _file_delete($filename)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('zones3');
 		list($zone,$page)=explode(':',$content_id,2);
 		delete_ocp_page($zone,$page);

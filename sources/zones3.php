@@ -190,7 +190,8 @@ function actual_delete_zone($zone)
 
 	actual_delete_zone_lite($zone);
 
-	if (file_exists(get_custom_file_base().'/'.filter_naughty($zone))) afm_delete_directory(filter_naughty($zone),true);
+	if (file_exists(get_custom_file_base().'/'.filter_naughty($zone)))
+		afm_delete_directory(filter_naughty($zone),true);
 }
 
 /**

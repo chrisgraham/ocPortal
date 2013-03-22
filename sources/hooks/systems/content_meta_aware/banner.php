@@ -87,18 +87,6 @@ class Hook_content_meta_aware_banner
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
-	 *
-	 * @param  ID_TEXT	The content ID
-	 */
-	function delete($content_id)
-	{
-		// TODO: This will be moved into OcCLE filesystem hook at some point, #218 on tracker
-		require_code('banners2');
-		delete_banner($content_id);
-	}
-
-	/**
 	 * Standard modular run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content

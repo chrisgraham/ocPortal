@@ -25,7 +25,7 @@ class Hook_occle_command_find
 	 *
 	 * @param  array	The options with which the command was called
 	 * @param  array	The parameters with which the command was called
-	 * @param  object  A reference to the OcCLE filesystem object
+	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
 	function run($options,$parameters,&$occle_fs)
@@ -50,7 +50,17 @@ class Hook_occle_command_find
 
 			$listing=$occle_fs->search($parameters[0],((array_key_exists('p',$options)) || (array_key_exists('preg',$options))),((array_key_exists('r',$options)) || (array_key_exists('recursive',$options))),$files,$directories,$parameters[1]);
 
-			return array('',do_template('OCCLE_LS',array('_GUID'=>'50336439839279d3d8620d6f2124512a','DIRECTORY'=>$occle_fs->_pwd_to_string($parameters[1]),'DIRECTORIES'=>$listing[0],'FILES'=>$listing[1])),'','');
+			return array(
+				'',
+				do_template('OCCLE_LS',array(
+					'_GUID'=>'50336439839279d3d8620d6f2124512a',
+					'DIRECTORY'=>$occle_fs->_pwd_to_string($parameters[1]),
+					'DIRECTORIES'=>$occle_fs->prepare_dir_contents_for_listing($listing[0]),
+					'FILES'=>$occle_fs->prepare_dir_contents_for_listing($listing[1]),
+				)),
+				'',
+				''
+			);
 		}
 	}
 

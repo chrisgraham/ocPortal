@@ -44,8 +44,12 @@ class Hook_occle_fs_home
 			{
 				if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS))
 				{
-					if (is_dir($path.'/'.$file)) $listing[$file]=array();
-					else $listing[]=$file;
+					$listing[]=array(
+						$file,
+						is_dir($path.'/'.$file)?OCCLEFS_DIR:OCCLEFS_FILE,
+						is_dir($path.'/'.$file)?NULL:filesize($path.'/'.$file),
+						filemtime($path.'/'.$file),
+					);
 				}
 			}
 			return $listing;

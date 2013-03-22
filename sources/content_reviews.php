@@ -70,8 +70,8 @@ function content_review_get_fields($content_type,$content_id=NULL,$catalogue_nam
 			$display_review_status=0;
 		}
 
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty($content_type));
-		$content_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		require_code('content');
+		$content_ob=get_content_object($content_type);
 		$content_info=$content_ob->info();
 
 		// Allow specification of time in days OR months OR years OR not at all

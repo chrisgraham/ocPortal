@@ -294,8 +294,8 @@ class Hook_mybb
 			$avatar_max_height=intval($avatar_dimensions[1]);
 		} else
 		{
-			$avatar_max_width=100;
-			$avatar_max_height=100;
+			$avatar_max_width=mixed();
+			$avatar_max_height=mixed();
 		}
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'usergroups ORDER BY gid');
@@ -309,7 +309,7 @@ class Hook_mybb
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);
+				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,$avatar_max_width,$avatar_max_height,NULL);
 			}
 
 			// privileges

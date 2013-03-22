@@ -60,8 +60,8 @@ function give_award($award_id,$content_id,$time=NULL)
 	$award_title=get_translated_text($awards[0]['a_title']);
 	log_it('GIVE_AWARD',strval($award_id),$award_title);
 
-	require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($awards[0]['a_content_type']));
-	$object=object_factory('Hook_content_meta_aware_'.$awards[0]['a_content_type']);
+	require_code('content');
+	$object=get_content_object($awards[0]['a_content_type']);
 	$info=$object->info();
 	if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	if ((array_key_exists('submitter_field',$info)) && (!is_null($info['submitter_field'])))

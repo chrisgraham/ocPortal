@@ -388,9 +388,11 @@ function _get_mov_details_do_atom_list($file,$atom_size=NULL)
  * @param  ?TIME			The time of editing (NULL: never)
  * @param  integer		The number of views
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the new entry
  */
-function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL)
+function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
@@ -403,7 +405,13 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	log_it('ADD_IMAGE',strval($id),$title);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('image',strval($id),array($description),$description);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('image',strval($id),array($description),$description);
+	} else
+	{
+		seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
+	}
 
 	if ($validated==1)
 	{
@@ -418,7 +426,6 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	decache('side_galleries');
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
-
 	decache('main_image_fader');
 
 	return $id;
@@ -713,9 +720,11 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
  * @param  ?TIME			The time of editing (NULL: never)
  * @param  integer		The number of views
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the new entry
  */
-function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL)
+function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
@@ -741,7 +750,13 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	}
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('video',strval($id),array($description),$description);
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('video',strval($id),array($description),$description);
+	} else
+	{
+		seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
+	}
 
 	decache('side_galleries');
 	decache('main_personal_galleries_list');

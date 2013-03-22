@@ -25,24 +25,46 @@ class Hook_occle_fs_chat extends content_fs_base
 	var $file_content_type='chat';
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'welcome_message',
+			'room_owner',
+			'allow',
+			'allow_groups',
+			'disallow',
+			'disallow_groups',
+			'room_lang',
+			'is_im',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
 		require_code('chat2');
 
-		$welcome=$this->_default_property_str($properties,'welcome');
+		$welcome=$this->_default_property_str($properties,'welcome_message');
 		$room_owner=$this->_default_property_int_null($properties,'room_owner');
-		$allow2=$this->_default_property_str($properties,'allow2');
-		$allow2_groups=$this->_default_property_str($properties,'allow2_groups');
-		$disallow2=$this->_default_property_str($properties,'disallow2');
-		$disallow2_groups=$this->_default_property_str($properties,'disallow2_groups');
-		$roomlang=$this->_default_property_str($properties,'roomlang');
+		$allow2=$this->_default_property_str($properties,'allow');
+		$allow2_groups=$this->_default_property_str($properties,'allow_groups');
+		$disallow2=$this->_default_property_str($properties,'disallow');
+		$disallow2_groups=$this->_default_property_str($properties,'disallow_groups');
+		$roomlang=$this->_default_property_str($properties,'room_lang');
 		if ($roomlang=='') $roomlang=get_site_default_lang();
 		$is_im=$this->_default_property_int($properties,'is_im');
 
@@ -53,10 +75,12 @@ class Hook_occle_fs_chat extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('chat2');
 		delete_chatroom(intval($content_id));
 	}

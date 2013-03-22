@@ -26,15 +26,34 @@ class Hook_occle_fs_banners extends content_fs_base
 	var $file_content_type='banner';
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties()
+	{
+		return array(
+			'is_textual',
+			'image_width',
+			'image_height',
+			'max_file_size',
+			'comcode_inline',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category!='') return false; // Only one depth allowed for this content type
+
 		require_code('banners2');
 
 		$is_textual=$this->_default_property_int($properties,'is_textual');
@@ -53,23 +72,59 @@ class Hook_occle_fs_banners extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
 		require_code('banners2');
 		delete_banner_type($content_id);
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'imgurl',
+			'title_text',
+			'direct_code',
+			'campaignremaining',
+			'site_url',
+			'importancemodulus',
+			'notes',
+			'the_type',
+			'expiry_date',
+			'submitter',
+			'validated',
+			'time',
+			'hits_from',
+			'hits_to',
+			'views_from',
+			'views_to',
+			'edit_date',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		if ($path=='') return false;
+
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
 		require_code('banners2');
 
 		$name=$this->_create_name_from_title($title);
@@ -83,7 +138,8 @@ class Hook_occle_fs_banners extends content_fs_base
 		$the_type=$this->_default_property_int($properties,'the_type');
 		$expiry_date=$this->_default_property_int_null($properties,'expiry_date');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
-		$validated=$this->_default_property_int($properties,'validated');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
 		$b_type=$category;
 		$time=$this->_default_property_int_null($properties,'time');
 		$hits_from=$this->_default_property_int($properties,'hits_from');
@@ -98,10 +154,12 @@ class Hook_occle_fs_banners extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('banners2');
 		delete_banner($content_id);
 	}

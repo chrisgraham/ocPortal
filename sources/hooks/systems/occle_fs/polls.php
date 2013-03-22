@@ -25,27 +25,71 @@ class Hook_occle_fs_polls extends content_fs_base
 	var $file_content_type='poll';
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'answer1',
+			'answer2',
+			'answer3',
+			'answer4',
+			'answer5',
+			'answer6',
+			'answer7',
+			'answer8',
+			'answer9',
+			'a10',
+			'current',
+			'allow_rating',
+			'allow_comments',
+			'allow_trackbacks',
+			'notes',
+			'add_date',
+			'submitter',
+			'use_time',
+			'votes1',
+			'votes2',
+			'votes3',
+			'votes4',
+			'votes5',
+			'votes6',
+			'votes7',
+			'votes8',
+			'votes9',
+			'votes10',
+			'views',
+			'edit_date',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
 		require_code('polls2');
 
-		$a1=$this->_default_property_str($properties,'a1');
-		$a2=$this->_default_property_str($properties,'a2');
-		$a3=$this->_default_property_str($properties,'a3');
-		$a4=$this->_default_property_str($properties,'a4');
-		$a5=$this->_default_property_str($properties,'a5');
-		$a6=$this->_default_property_str($properties,'a6');
-		$a7=$this->_default_property_str($properties,'a7');
-		$a8=$this->_default_property_str($properties,'a8');
-		$a9=$this->_default_property_str($properties,'a9');
-		$a10=$this->_default_property_str($properties,'a10');
+		$a1=$this->_default_property_str($properties,'answer1');
+		$a2=$this->_default_property_str($properties,'answer2');
+		$a3=$this->_default_property_str($properties,'answer3');
+		$a4=$this->_default_property_str($properties,'answer4');
+		$a5=$this->_default_property_str($properties,'answer5');
+		$a6=$this->_default_property_str($properties,'answer6');
+		$a7=$this->_default_property_str($properties,'answer7');
+		$a8=$this->_default_property_str($properties,'answer8');
+		$a9=$this->_default_property_str($properties,'answer9');
+		$a10=$this->_default_property_str($properties,'answer10');
 		$num_options=10;
 		if ($a10=='') $num_options=9;
 		if ($a9=='') $num_options=8;
@@ -57,23 +101,23 @@ class Hook_occle_fs_polls extends content_fs_base
 		if ($a3=='') $num_options=2;
 		if ($a2=='') $num_options=1;
 		$current=$this->_default_property_int($properties,'current');
-		$allow_rating=$this->_default_property_int($properties,'allow_rating');
-		$allow_comments=$this->_default_property_int($properties,'allow_comments');
-		$allow_trackbacks=$this->_default_property_int($properties,'allow_trackbacks');
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','poll',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','poll',1);
+		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','poll',1);
 		$notes=$this->_default_property_str($properties,'notes');
-		$time=$this->_default_property_int_null($properties,'time');
+		$time=$this->_default_property_int_null($properties,'add_date');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$use_time=$this->_default_property_int_null($properties,'use_time');
-		$v1=$this->_default_property_int($properties,'v1');
-		$v2=$this->_default_property_int($properties,'v2');
-		$v3=$this->_default_property_int($properties,'v3');
-		$v4=$this->_default_property_int($properties,'v4');
-		$v5=$this->_default_property_int($properties,'v5');
-		$v6=$this->_default_property_int($properties,'v6');
-		$v7=$this->_default_property_int($properties,'v7');
-		$v8=$this->_default_property_int($properties,'v8');
-		$v9=$this->_default_property_int($properties,'v9');
-		$v10=$this->_default_property_int($properties,'v10');
+		$v1=$this->_default_property_int($properties,'votes1');
+		$v2=$this->_default_property_int($properties,'votes2');
+		$v3=$this->_default_property_int($properties,'votes3');
+		$v4=$this->_default_property_int($properties,'votes4');
+		$v5=$this->_default_property_int($properties,'votes5');
+		$v6=$this->_default_property_int($properties,'votes6');
+		$v7=$this->_default_property_int($properties,'votes7');
+		$v8=$this->_default_property_int($properties,'votes8');
+		$v9=$this->_default_property_int($properties,'votes9');
+		$v10=$this->_default_property_int($properties,'votes10');
 		$views=$this->_default_property_int($properties,'views');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$id=add_poll($title,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time,$submitter,$use_time,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10,$views,$edit_date);
@@ -83,10 +127,12 @@ class Hook_occle_fs_polls extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('polls2');
 		delete_poll(intval($content_id));
 	}

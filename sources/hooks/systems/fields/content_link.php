@@ -144,8 +144,8 @@ class Hook_fields_content_link
 		}
 
 		// Simple list selection
-		require_code('hooks/systems/content_meta_aware/'.filter_naughty($type));
-		$ob=object_factory('Hook_content_meta_aware_'.$type);
+		require_code('content');
+		$ob=get_content_object($type);
 		$info=$ob->info();
 		$db=$GLOBALS[(substr($type,0,4)=='ocf_')?'FORUM_DB':'SITE_DB'];
 		$select=array();

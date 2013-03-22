@@ -40,10 +40,14 @@ class Hook_occle_fs_raw
 			$dh=opendir($path);
 			while (($file=readdir($dh))!==false)
 			{
-				if ($file[0]!='.')
+				if (($file!='.') && ($file!='..') && ($file!='.git'))
 				{
-					if (is_dir($path.'/'.$file)) $listing[$file]=array();
-					else $listing[]=$file;
+					$listing[]=array(
+						$file,
+						is_dir($path.'/'.$file)?OCCLEFS_DIR:OCCLEFS_FILE,
+						is_dir($path.'/'.$file)?NULL:filesize($path.'/'.$file),
+						filemtime($path.'/'.$file),
+					);
 				}
 			}
 			return $listing;

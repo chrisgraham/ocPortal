@@ -662,8 +662,8 @@ function process_url_monikers()
 			$ob_info=NULL;
 			foreach (array_keys($hooks) as $hook)
 			{
-				require_code('hooks/systems/content_meta_aware/'.filter_naughty($hook));
-				$ob=object_factory('Hook_content_meta_aware_'.$hook,true);
+				require_code('content');
+				$ob=get_content_object($hook);
 				if ($ob===NULL) continue;
 				$ob_info=$ob->info();
 				$ob_info['view_pagelink_pattern']=preg_replace('#:[^:]*$#',':_WILD',$ob_info['view_pagelink_pattern']);

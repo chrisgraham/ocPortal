@@ -30,16 +30,16 @@
  * @param  ?GROUP			The that members of this usergroup get promoted to at point threshold (NULL: no promotion prospects).
  * @param  ?integer		The point threshold for promotion (NULL: no promotion prospects).
  * @param  ?MEMBER		The leader of this usergroup (NULL: none).
- * @param  integer		The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A.
- * @param  integer		The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A.
- * @param  integer		The number of megabytes that members of this usergroup may attach per day (group 'best of' applies).
- * @param  integer		The number of attachments that members of this usergroup may attach to something (group 'best of' applies).
- * @param  integer		The maximum avatar width that members of this usergroup may have (group 'best of' applies).
- * @param  integer		The maximum avatar height that members of this usergroup may have (group 'best of' applies).
- * @param  integer		The maximum post length that members of this usergroup may make (group 'best of' applies).
- * @param  integer		The maximum signature length that members of this usergroup may make (group 'best of' applies).
- * @param  integer		The number of gift points that members of this usergroup start with (group 'best of' applies).
- * @param  integer		The number of gift points that members of this usergroup get per day (group 'best of' applies).
+ * @param  ?integer		The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
+ * @param  ?integer		The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
+ * @param  ?integer		The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The maximum avatar width that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The maximum avatar height that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The maximum post length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The maximum signature length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The number of gift points that members of this usergroup start with (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer		The number of gift points that members of this usergroup get per day (group 'best of' applies). (NULL: average for existing usergroups)
  * @param  BINARY			Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies).
  * @param  BINARY			Whether the usergroup is presented for joining at joining (implies anyone may be in the, but only choosable at joining)
  * @param  BINARY			Whether the name and membership of the is hidden
@@ -49,8 +49,19 @@
  * @param  BINARY			Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
  * @return AUTO_LINK		The ID of the new.
  */
-function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=0,$flood_control_access_secs=0,$max_daily_upload_mb=70,$max_attachments_per_post=50,$max_avatar_width=100,$max_avatar_height=100,$max_post_length_comcode=30000,$max_sig_length_comcode=700,$gift_points_base=25,$gift_points_per_day=1,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
+function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$gift_points_base=NULL,$gift_points_per_day=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
 {
+	$flood_control_submit_secs=take_param_int_modeavg($flood_control_submit_secs,'g_flood_control_submit_secs','f_groups',0);
+	$flood_control_access_secs=take_param_int_modeavg($flood_control_access_secs,'g_flood_control_access_secs','f_groups',0);
+	$max_daily_upload_mb=take_param_int_modeavg($max_daily_upload_mb,'g_max_daily_upload_mb','f_groups',70);
+	$max_attachments_per_post=take_param_int_modeavg($max_attachments_per_post,'g_max_attachments_per_post','f_groups',50);
+	$max_avatar_width=take_param_int_modeavg($max_avatar_width,'g_max_avatar_width','f_groups',100);
+	$max_avatar_height=take_param_int_modeavg($max_avatar_height,'g_max_avatar_height','f_groups',100);
+	$max_post_length_comcode=take_param_int_modeavg($max_post_length_comcode,'g_max_post_length_comcode','f_groups',30000);
+	$max_sig_length_comcode=take_param_int_modeavg($max_sig_length_comcode,'g_max_sig_length_comcode','f_groups',700);
+	$gift_points_base=take_param_int_modeavg($gift_points_base,'g_gift_points_base','f_groups',25);
+	$gift_points_per_day=take_param_int_modeavg($gift_points_per_day,'g_gift_points_per_day','f_groups',1);
+
 	if (!running_script('stress_test_loader'))
 	{
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');

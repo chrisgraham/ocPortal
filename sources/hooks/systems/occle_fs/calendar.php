@@ -26,15 +26,31 @@ class Hook_occle_fs_event extends content_fs_base
 	var $file_content_type='event';
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties()
+	{
+		return array(
+			'logo',
+			'external_feed',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category!='') return false; // Only one depth allowed for this content type
+
 		require_code('calendar2');
 
 		$logo=$this->_default_property_str($properties,'logo');
@@ -46,24 +62,73 @@ class Hook_occle_fs_event extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
 		require_code('calendar2');
 		delete_event_type(intval($content_id));
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'recurrence',
+			'recurrences',
+			'seg_recurrences',
+			'content',
+			'priority',
+			'is_public',
+			'start_year',
+			'start_month',
+			'start_day',
+			'start_monthly_spec_type',
+			'start_hour',
+			'start_minute',
+			'end_year',
+			'end_month',
+			'end_day',
+			'end_monthly_spec_type',
+			'end_hour',
+			'end_minute',
+			'timezone',
+			'do_timezone_conv',
+			'validated',
+			'allow_rating',
+			'allow_comments',
+			'allow_trackbacks',
+			'notes',
+			'submitter',
+			'views',
+			'add_date',
+			'edit_date',
+			'meta_keywords',
+			'meta_description',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+
 		require_code('calendar2');
 
 		$type=$this->_integer_category($category);
@@ -94,26 +159,31 @@ class Hook_occle_fs_event extends content_fs_base
 		$end_minute=$this->_default_property_int_null($properties,'end_minute');
 		$timezone=$this->_default_property_str_null($properties,'timezone');
 		$do_timezone_conv=$this->_default_property_int($properties,'do_timezone_conv');
-		$validated=$this->_default_property_int($properties,'validated');
-		$allow_rating=$this->_default_property_int($properties,'allow_rating');
-		$allow_comments=$this->_default_property_int($properties,'allow_comments');
-		$allow_trackbacks=$this->_default_property_int($properties,'allow_trackbacks');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','calendar_events',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','calendar_events',1);
+		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','calendar_events',1);
 		$notes=$this->_default_property_str($properties,'notes');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$views=$this->_default_property_int($properties,'views');
-		$add_time=$this->_default_property_int_null($properties,'add_time');
-		$edit_time=$this->_default_property_int_null($properties,'edit_time');
-		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time);
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
 		require_code('calendar2');
 		delete_calendar_event(intval($content_id));
 	}

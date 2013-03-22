@@ -45,6 +45,26 @@ function init__form_templates()
 }
 
 /**
+ * Find a default property, defaulting to the average of what is there already, or the given default if really necessary.
+ *
+ * @param  integer	The current setting (NULL: we have to work it out); if non-null, the function will immediately return
+ * @param  ID_TEXT	The property
+ * @param  ID_TEXT	The table to average within
+ * @param  integer	The last-resort default
+ * @return integer	The value
+ */
+function take_param_int_modeavg($setting,$db_property,$table,$default)
+{
+	if (!is_null($setting)) return $setting;
+
+	$db=$GLOBALS[(substr($table,0,2)=='f_')?'FORUM_DB':'SITE_DB'];
+	$val=$db->query_value_if_there('SELECT '.$db_property.',count('.$db_property.') AS qty FROM '.get_table_prefix().$table.' GROUP BY '.$db_property.' ORDER BY qty DESC',false,true); // We need the mode here, not the mean
+	if (!is_null($val)) return $val;
+
+	return $default;
+}
+
+/**
  * Attach the WYSIWYG editor.
  */
 function attach_wysiwyg()

@@ -26,25 +26,52 @@ class Hook_occle_fs_galleries extends content_fs_base
 	var $file_content_type=array('image','video');
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_folder_properties()
+	{
+		return array(
+			'description',
+			'notes',
+			'accept_images',
+			'accept_videos',
+			'is_member_synched',
+			'flow_mode_interface',
+			'rep_image',
+			'watermark_top_left',
+			'watermark_top_right',
+			'watermark_bottom_left',
+			'watermark_bottom_right',
+			'allow_rating',
+			'allow_comments',
+			'add_date',
+			'owner',
+		);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error)
 	 */
-	function _folder_add($title,$category,$properties)
+	function _folder_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category=='') return false; // Can't create more than one root
+
 		require_code('galleries2');
 
 		$name=$this->_create_name_from_title($title);
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
 		$parent_id=$category;
-		$accept_images=$this->_default_property_int_null($properties,'accept_images');
-		if (is_null($accept_images)) $accept_images=1;
-		$accept_videos=$this->_default_property_int_null($properties,'accept_videos');
-		if (is_null($accept_videos)) $accept_videos=1;
+		$accept_images=$this->_default_property_int_modeavg($properties,'accept_images','galleries',1);
+		$accept_videos=$this->_default_property_int_modeavg($properties,'accept_videos','galleries',1);
 		$is_member_synched=$this->_default_property_int($properties,'is_member_synched');
 		$flow_mode_interface=$this->_default_property_int($properties,'flow_mode_interface');
 		$rep_image=$this->_default_property_str($properties,'rep_image');
@@ -52,10 +79,10 @@ class Hook_occle_fs_galleries extends content_fs_base
 		$watermark_top_right=$this->_default_property_str($properties,'watermark_top_right');
 		$watermark_bottom_left=$this->_default_property_str($properties,'watermark_bottom_left');
 		$watermark_bottom_right=$this->_default_property_str($properties,'watermark_bottom_right');
-		$allow_rating=$this->_default_property_int($properties,'allow_rating');
-		$allow_comments=$this->_default_property_int($properties,'allow_comments');
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','galleries',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
 		$add_date=$this->_default_property_int_null($properties,'add_date');
-		$g_owner=$this->_default_property_int_null($properties,'g_owner');
+		$g_owner=$this->_default_property_int_null($properties,'owner');
 		add_gallery($name,$title,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$allow_rating,$allow_comments,false,$add_date,$g_owner);
 		return $name;
 	}
@@ -63,51 +90,130 @@ class Hook_occle_fs_galleries extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _folder_delete($content_id)
+	function _folder_delete($filename)
 	{
+		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+
 		require_code('galleries2');
 		delete_gallery($content_id);
 	}
 
 	/**
+	 * Standard modular introspection function.
+	 *
+	 * @return array			The properties available for the content type
+	 */
+	function _enumerate_file_properties()
+	{
+		return array(
+			'description',
+			'url',
+			'thumb_url',
+			'validated',
+			'allow_rating',
+			'allow_comments',
+			'allow_trackbacks',
+			'notes',
+			'submitter',
+			'add_date',
+			'edit_date',
+			'views',
+			'meta_keywords',
+			'meta_description',
+			'video_length',
+			'video_width',
+			'video_height',
+		);
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ID_TEXT	The filename
+	 */
+	function _file_convert_id_to_filename($content_type,$content_id)
+	{
+		if ($content_type=='video')
+			return 'VIDEO-'.parent::_file_convert_id_to_filename($content_type,$content_id,'video');
+
+		return parent::_file_convert_id_to_filename($content_type,$content_id);
+	}
+
+	/**
+	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @return array		A pair: The content type, the content ID
+	 */
+	function _file_convert_filename_to_id($filename)
+	{
+		if (substr($filename,0,6)=='VIDEO-')
+			return parent::_file_convert_filename_to_id(substr($filename,6),'video');
+
+		return parent::_file_convert_filename_to_id($filename,'image');
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
 	 *
-	 * @param  SHORT_TEXT	Content title
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ID_TEXT		The content ID
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($title,$category,$properties)
+	function _file_add($filename,$path,$properties)
 	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+
 		require_code('galleries2');
 
-		$cat=$category;
+		$name=$this->_create_name_from_title($title);
 		$description=$this->_default_property_str($properties,'description');
 		$url=$this->_default_property_str($properties,'url');
 		$thumb_url=$this->_default_property_str($properties,'thumb_url');
-		$validated=$this->_default_property_int($properties,'validated');
-		$allow_rating=$this->_default_property_int($properties,'allow_rating');
-		$allow_comments=$this->_default_property_int($properties,'allow_comments');
-		$allow_trackbacks=$this->_default_property_int($properties,'allow_trackbacks');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
 		$notes=$this->_default_property_str($properties,'notes');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$add_date=$this->_default_property_int_null($properties,'add_date');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$views=$this->_default_property_int($properties,'views');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		if (TODO)
+		require_code('images');
+		if ((is_image($url)) && ((!array_key_exists('video_length',$properties)) || ($properties['video_length']=='')))
 		{
-			$id=add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$add_date,$edit_date,$views);
+			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','images',1);
+			$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','images',1);
+			$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','images',1);
+
+			$accept_images=$GLOBALS['SITE_DB']->query_select_value('galleries','accept_images',array('name'=>$category));
+			if ($accept_images==0) return false;
+
+			$id=add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		} else
 		{
+			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','videos',1);
+			$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','videos',1);
+			$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','videos',1);
+
+			$accept_videos=$GLOBALS['SITE_DB']->query_select_value('galleries','accept_videos',array('name'=>$category));
+			if ($accept_videos==0) return false;
+
 			$video_length=$this->_default_property_int($properties,'video_length');
 			$video_width=$this->_default_property_int_null($properties,'video_width');
 			if (is_null($video_width)) $video_width=720;
 			$video_height=$this->_default_property_int_null($properties,'video_height');
 			if (is_null($video_height)) $video_height=576;
-			$id=add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter,$add_date,$edit_date,$views);
+			$id=add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		}
 
 		return strval($id);
@@ -116,13 +222,15 @@ class Hook_occle_fs_galleries extends content_fs_base
 	/**
 	 * Standard modular delete function for content hooks. Deletes the content.
 	 *
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The filename
 	 */
-	function _file_delete($content_id)
+	function _file_delete($filename)
 	{
-		require_code('galleries2');
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		if (TODO)
+		require_code('galleries2');
+		require_code('images');
+		if ($content_type=='image')
 		{
 			delete_image(intval($content_id));
 		} else
