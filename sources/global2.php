@@ -1403,7 +1403,7 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 		if ($name!='password')
 		{
 			require_code('word_filter');
-			$a=check_word_filter($a,$name);
+			if ($a!==$default) $a=check_word_filter($a,$name);
 		}
 	}
 	if ($a!==NULL) $a=unixify_line_format($a,NULL,$html);
