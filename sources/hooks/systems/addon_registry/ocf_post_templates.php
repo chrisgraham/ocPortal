@@ -74,6 +74,8 @@ class Hook_addon_registry_ocf_post_templates
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/post_template.php',
+			'sources/hooks/systems/occle_fs/post_templates.php',
 			'sources/hooks/systems/addon_registry/ocf_post_templates.php',
 			'OCF_POST_TEMPLATE_SELECT.tpl',
 			'adminzone/pages/modules/admin_ocf_post_templates.php',

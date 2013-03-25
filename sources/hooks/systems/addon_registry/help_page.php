@@ -73,7 +73,6 @@ class Hook_addon_registry_help_page
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/help_page.php',
 			'site/pages/comcode/EN/help.txt',
 		);

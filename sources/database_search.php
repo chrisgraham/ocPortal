@@ -1090,11 +1090,7 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 			require_code('content');
 			$cma_ob=get_content_object($content_type);
 			$cma_info=$cma_ob->info();
-			$id_field=$cma_info['id_field'];
-			if (!is_array($id_field))
-			{
-				$id=is_integer($result['data'][$id_field])?strval($result['data'][$id_field]):$result['data'][$id_field];
-			}
+			$id=extract_content_str_id_from_data($result['data'],$cma_info);
 		}
 
 		if (($i>=$start) && ($i<$start+$max))

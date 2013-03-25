@@ -73,7 +73,6 @@ class Hook_addon_registry_ocf_clubs
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/notifications/ocf_club.php',
 			'sources/hooks/systems/addon_registry/ocf_clubs.php',
 			'sources/hooks/modules/search/ocf_clubs.php',

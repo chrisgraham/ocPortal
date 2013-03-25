@@ -73,7 +73,6 @@ class Hook_addon_registry_collaboration_zone
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/collaboration_zone.php',
 			'sources/hooks/modules/admin_themewizard/collaboration_zone.php',
 			'themes/default/images/EN/logo/collaboration-logo.png',

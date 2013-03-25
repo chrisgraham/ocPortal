@@ -73,7 +73,6 @@ class Hook_addon_registry_core_graphic_text
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/core_graphic_text.php',
 			'data/fonts/.htaccess',
 			'data/fonts/Aerial.ttf',

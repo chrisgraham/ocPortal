@@ -50,7 +50,7 @@ class Hook_rss_comments
 			$permissions_field=$info['permissions_type_code'];
 			if (!is_null($permissions_field))
 			{
-				$cat=$GLOBALS['SITE_DB']->query_select_value_if_there($info['table'],$info['parent_category_field'],array($info['id_field']=>$parts[1]));
+				$cat=$GLOBALS['SITE_DB']->query_select_value_if_there($info['table'],$info['parent_category_field'],get_content_where_for_str_id($parts[1],$info));
 				if (is_null($cat)) return NULL;
 				if (!has_category_access(get_member(),$permissions_field,$cat)) return NULL;
 			}

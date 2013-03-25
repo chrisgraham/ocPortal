@@ -74,7 +74,6 @@ class Hook_addon_registry_actionlog
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/notifications/actionlog.php',
 			'sources/hooks/systems/realtime_rain/actionlog.php',
 			'sources/hooks/systems/addon_registry/actionlog.php',

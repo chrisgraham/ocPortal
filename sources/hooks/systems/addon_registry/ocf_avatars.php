@@ -73,7 +73,6 @@ class Hook_addon_registry_ocf_avatars
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/ocf_avatars.php',
 			'themes/default/images/ocf_default_avatars/default_set/airplane.png',
 			'themes/default/images/ocf_default_avatars/default_set/bird.png',

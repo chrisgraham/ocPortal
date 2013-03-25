@@ -72,6 +72,7 @@ class Hook_addon_registry_ocf_cpfs
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/cpf.php',
 			'adminzone/pages/modules/admin_ocf_customprofilefields.php',
 			'OCF_CPF_STATS_LINE.tpl',
 			'OCF_CPF_STATS_SCREEN.tpl',
@@ -81,6 +82,7 @@ class Hook_addon_registry_ocf_cpfs
 			'lang/EN/ocf_privacy.ini',
 			'sources/hooks/systems/profiles_tabs_edit/privacy.php',
 			'sources/hooks/systems/addon_registry/ocf_cpfs.php'
+			'sources/hooks/systems/occle_fs/cpfs.php',
 		);
 	}
 

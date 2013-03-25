@@ -25,7 +25,7 @@
  */
 function find_all_xml_tables()
 {
-	$skip=array('group_category_access','group_privileges','seo_meta','sessions','ip_country','f_moderator_logs','download_logging','url_title_cache','cached_comcode_pages','stats','import_id_remap','import_parts_done','import_session','cache','cache_on','blocks','modules','addons','addon_dependencies','db_meta','db_meta_indices','adminlogs','autosave','translate','translate_history');
+	$skip=array('comcode_pages'/*complex IDs, and uses filesystem*/,'group_category_access','group_privileges','seo_meta','sessions','ip_country','f_moderator_logs','download_logging','url_title_cache','cached_comcode_pages','stats','import_id_remap','import_parts_done','import_session','cache','cache_on','blocks','modules','addons','addon_dependencies','db_meta','db_meta_indices','adminlogs','autosave','translate','translate_history');
 	$all_tables=$GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
 	$tables=array();
 	foreach ($all_tables as $table)
@@ -96,18 +96,18 @@ function _export_table_to_xml($table,$comcode_xml)
 	$id_field=mixed();
 	$parent_field=mixed();
 	$hooks=find_all_hooks('systems','content_meta_aware');
+	require_code('content');
 	foreach (array_keys($hooks) as $hook)
 	{
-		require_code('content');
 		$ob=get_content_object($hook);
 		$info=$ob->info();
 		if (is_null($info)) continue;
 		if ($info['table']==$table)
 		{
-			$seo_type_code=array_key_exists('seo_type_code',$info)?$info['seo_type_code']:NULL;
-			$permissions_type_code=array_key_exists('permissions_type_code',$info)?$info['permissions_type_code']:NULL;
-			$id_field=array_key_exists('id_field',$info)?$info['id_field']:'id';
-			if ((array_key_exists('is_category',$info)) && ((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric'])) && (array_key_exists('parent_category_field',$info)) && ($info['is_category']))
+			$seo_type_code=$info['seo_type_code'];
+			$permissions_type_code=$info['permissions_type_code'];
+			$id_field=is_array($info['id_field'])?$info['id_field'][0]:$info['id_field'];
+			if (($info['id_field_numeric']) && ($info['is_category']))
 			{
 				$parent_field=$info['parent_category_field'];
 			}
@@ -324,6 +324,8 @@ function import_from_xml($xml_data,$delete_missing_rows=false)
 
 	$insert_ids=array();
 
+	require_code('content');
+
 	list($root_tag,$root_attributes,,$this_children)=$parsed->gleamed;
 	if ($root_tag=='ocportal')
 	{
@@ -345,10 +347,7 @@ function import_from_xml($xml_data,$delete_missing_rows=false)
 			$ob=get_content_object($hook);
 			$info=$ob->info();
 			if (is_null($info)) continue;
-			if (array_key_exists('id_field',$info))
-			{
-				$all_id_fields[$info['table']]=$info['id_field'];
-			}
+			$all_id_fields[$info['table']]=is_array($info['id_field'])?$info['id_field'][0]:$info['id_field'];
 		}
 
 		// Table rows

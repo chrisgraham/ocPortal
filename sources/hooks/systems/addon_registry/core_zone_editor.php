@@ -72,6 +72,7 @@ class Hook_addon_registry_core_zone_editor
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/zone.php',
 			'zone_editor.css',
 			'sources/hooks/systems/snippets/exists_zone.php',
 			'sources/hooks/systems/addon_registry/core_zone_editor.php',

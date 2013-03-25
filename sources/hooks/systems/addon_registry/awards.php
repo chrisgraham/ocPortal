@@ -76,6 +76,7 @@ class Hook_addon_registry_awards
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/awards.php',
+			'sources/hooks/systems/resource_meta_aware/award_type.php',
 			'AWARDED_CONTENT.tpl',
 			'BLOCK_MAIN_AWARDS.tpl',
 			'adminzone/pages/modules/admin_awards.php',
@@ -91,6 +92,7 @@ class Hook_addon_registry_awards
 			'themes/default/images/awarded.png',
 			'sources/hooks/modules/admin_import_types/awards.php',
 			'sources/hooks/systems/block_ui_renderers/awards.php',
+			'sources/hooks/systems/occle_fs/award_types.php',
 		);
 	}
 

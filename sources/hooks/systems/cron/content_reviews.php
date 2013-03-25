@@ -82,7 +82,7 @@ class Hook_cron_content_reviews
 				case 'unvalidate':
 					if (!is_null($info['validated_field']))
 					{
-						$info['connection']->query_update($info['table'],array($info['validated_field']=>0),array($info['id_field']=>$info['id_field_numeric']?intval($content_id):$content_id),'',1);
+						$info['connection']->query_update($info['table'],array($info['validated_field']=>0),get_content_where_for_str_id($content_id,$info),'',1);
 					}
 					break;
 

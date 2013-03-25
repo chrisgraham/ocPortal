@@ -72,6 +72,8 @@ class Hook_addon_registry_tickets
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/ticket_type.php',
+			'sources/hooks/systems/occle_fs/ticket_types.php',
 			'sources/hooks/systems/config_default/ticket_forum_name.php',
 			'sources/hooks/systems/config_default/ticket_member_forums.php',
 			'sources/hooks/systems/config_default/ticket_text.php',

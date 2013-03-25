@@ -157,7 +157,7 @@ class Hook_fields_content_link_multi
 		$info=$ob->info();
 		$db=$GLOBALS[(substr($type,0,4)=='ocf_')?'FORUM_DB':'SITE_DB'];
 		$select=array();
-		$select[]=$info['id_field'];
+		append_content_select_for_id($select,$info);
 		if ($type=='comcode_page') $select[]='the_zone';
 		if (!is_null($info['title_field'])) $select[]=$info['title_field'];
 		$rows=$db->query_select($info['table'],$select,NULL,is_null($info['add_time_field'])?'':('ORDER BY '.$info['add_time_field'].' DESC'),2000/*reasonable limit*/);
@@ -165,8 +165,7 @@ class Hook_fields_content_link_multi
 		$_list=array();
 		foreach ($rows as $row)
 		{
-			$id=$info['id_field_numeric']?strval($row[$info['id_field']]):$row[$info['id_field']];
-			if ($type=='comcode_page') $id=$row['the_zone'].':'.$id;
+			$id=extract_content_str_id_from_data($row,$info);
 			if (is_null($info['title_field']))
 			{
 				$text=$id;

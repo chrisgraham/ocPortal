@@ -159,34 +159,43 @@ class Block_main_content
 				$query='FROM '.get_table_prefix().$info['table'].' g';
 				if (!is_null($category_field_access))
 				{
-					if ($category_type_access==='!')
+					if ($category_type_access==='<zone>')
 					{
-						$query.=' LEFT JOIN '.get_table_prefix().'group_page_access a ON (g.'.$category_field_filter.'=a.page_name AND g.'.$category_field_access.'=a.zone_name AND ('.$groups.'))';
-						$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access a2 ON (g.'.$category_field_access.'=a2.zone_name)';
+						$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access a ON (r.'.$category_field_access.'=a.zone_name)';
+						$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access ma ON (r.'.$category_field_access.'=ma.zone_name)';
+					}
+					elseif ($category_type_access==='<page>')
+					{
+						$query.=' LEFT JOIN '.get_table_prefix().'group_page_access a ON (r.'.$category_field_filter.'=a.page_name AND r.'.$category_field_access.'=a.zone_name AND ('.$groups.'))';
+						$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access a2 ON (r.'.$category_field_access.'=a2.zone_name)';
+						$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access ma2 ON (r.'.$category_field_access.'=ma2.zone_name)';
 					} else
 					{
-						$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a ON ('.db_string_equal_to('a.module_the_name',$category_type_access).' AND g.'.$category_field_access.'=a.category_name)';
+						$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a ON ('.db_string_equal_to('a.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=a.category_name)';
+						$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma ON ('.db_string_equal_to('ma.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma.category_name)';
 					}
 				}
-				if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='!'))
+				if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>') && ($info['category_type']!=='<zone>'))
 				{
-					$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a2 ON ('.db_string_equal_to('a.module_the_name',$category_type_filter).' AND g.'.$category_field_filter.'=a2.category_name)';
+					$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a2 ON ('.db_string_equal_to('a.module_the_name',$category_type_filter).' AND r.'.$category_field_filter.'=a2.category_name)';
+					$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma2 ON ('.db_string_equal_to('ma2.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma2.category_name)';
 				}
 				if (!is_null($category_field_access))
 				{
 					if ($where!='') $where.=' AND ';
-					if ($info['category_type']==='!')
+					if ($info['category_type']==='<page>')
 					{
 						$where.='(a.group_id IS NULL) AND ('.str_replace('a.','a2.',$groups).') AND (a2.group_id IS NOT NULL)';
+						// NB: too complex to handle member-specific page permissions in this
 					} else
 					{
-						$where.='('.$groups.') AND (a.group_id IS NOT NULL)';
+						$where.='(('.$groups.') AND (a.group_id IS NOT NULL) OR (ma.active_until>'.strval(time()).' AND ma.member_id='.strval(get_member()).'))';
 					}
 				}
-				if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='!'))
+				if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
 				{
 					if ($where!='') $where.=' AND ';
-					$where.='('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL)';
+					$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR (ma2.active_until>'.strval(time()).' AND ma2.member_id='.strval(get_member()).'))';
 				}
 				if (array_key_exists('where',$info))
 				{
@@ -207,7 +216,7 @@ class Block_main_content
 			{
 				$x1=$this->build_filter($filter,$info,$category_field_access,is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string']);
 				$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:NULL;
-				if (!is_null($parent_spec__table_name))
+				if ((!is_null($parent_spec__table_name)) && ($parent_spec__table_name!=$info['table']))
 				{
 					$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=g.'.$info['id_field'];
 				}
@@ -243,46 +252,22 @@ class Block_main_content
 			$rows=$info['connection']->query('SELECT * '.$query,1,mt_rand(0,$cnt-1),false,false,$lang_fields);
 			$award_content_row=$rows[0];
 
-			if (is_array($info['id_field']))
-			{
-				$content_id='';
-				foreach ($info['id_field'] as $f)
-				{
-					$x=$award_content_row[$f];
-					if (!is_string($x)) $x=strval($x);
-
-					if ($content_id!='') $content_id.=':';
-					$content_id.=$x;
-				}
-			} else
-			{
-				$content_id=$award_content_row['g.'.$info['id_field']];
-				if (!is_string($content_id)) $content_id=strval($content_id);
-			}
+			// Get content ID
+			$content_id=extract_content_str_id_from_data($award_content_row,$info);
 		}
 
 		// Select mode
 		else
 		{
-			$wherea=array();
-			if (is_array($info['id_field']))
+			if ($type_id=='comcode_page') // FUDGEFUDGE
 			{
+				// Try and force a parse of the page, so it's in the system
 				$bits=explode(':',$content_id);
+				$result=request_page(array_key_exists(1,$bits)?$bits[1]:get_comcode_zone($bits[0]),false,$bits[0],'comcode_custom',true);
+				if ($result===NULL || $result->is_empty()) return new ocp_tempcode();
+			}
 
-				// FUDGE
-				if ($type_id=='comcode_page')
-				{
-					// Try and force a parse of the page, so it's in the system
-					$result=request_page(array_key_exists(1,$bits)?$bits[1]:get_comcode_zone($bits[0]),false,$bits[0],'comcode_custom',true);
-					if ($result===NULL || $result->is_empty()) return new ocp_tempcode();
-				}
-
-				$wherea=array();
-				foreach ($bits as $i=>$bit)
-				{
-					$wherea['g.'.$info['id_field'][$i]]=$info['id_field_numeric']?intval($bit):$bit;
-				}
-			} else $wherea['g.'.$info['id_field']]=$info['id_field_numeric']?intval($content_id):$content_id;
+			$wherea=get_content_where_for_str_id($content_id,$info,'g');
 
 			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1,NULL,false,$lang_fields);
 			if (!array_key_exists(0,$rows))

@@ -73,7 +73,6 @@ class Hook_addon_registry_linux_helper_scripts
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/linux_helper_scripts.php',
 			'decache.sh',
 			'fixperms.sh',

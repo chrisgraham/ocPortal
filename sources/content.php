@@ -21,20 +21,21 @@
 /*
 
 Notes about hook info...
- - id_field may be array
- - category_field may be array
+ - id_field may be array (which means that ":" works as a delimiter) (if so, the first one is the main ID, while the second one is assumed to be a qualifier)
+  - unless, parent_spec__table_name!=table, where we require a single id_field, knowing it is a join field in all tables
+ - category_field may be array of two (if so, the second one is assumed the main category, while the first is assumed to be for supplemental permission checking)
  - category_field may be NULL
  - category_type may be array
- - category_type may be '!'
+ - category_type may be '<page>' or '<zone>' (meaning "use page/zone permissions instead")
  - category_type may be NULL
  - category_type may be missing
- - add_url may contain '!'
+ - add_url may contain '!' (meaning "parent category ID goes here")
  - submitter_field may be a field:regexp
 
 */
 
 /**
- * Get the CMA hook object for a content type.
+ * Get the CMA hook object for a content type. Also works for resource types (i.e. if it's a resource, although not actually considered content technically).
  *
  * @param  ID_TEXT	The content type
  * @return ?object	The object (NULL: could not get one)
@@ -42,7 +43,13 @@ Notes about hook info...
 function get_content_object($content_type)
 {
 	require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
-	return object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
+	$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
+	if (is_null($ob)) // Maybe it's a resource type (more limited functionality).
+	{
+		require_code('hooks/systems/resource_meta_aware/'.filter_naughty_harsh($content_type));
+		$ob=object_factory('Hook_resource_meta_aware_'.filter_naughty_harsh($content_type),true);
+	}
+	return $ob;
 }
 
 /**
@@ -210,24 +217,62 @@ function content_get_row($content_id,$cma_info)
 	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
 
 	$id_field_numeric=array_key_exists('id_field_numeric',$cma_info)?$cma_info['id_field_numeric']:true;
-	if (is_array($cma_info['id_field']))
-	{
-		$bits=explode(':',$content_id);
-		$where=array();
-		foreach ($bits as $i=>$bit)
-		{
-			$where[$cma_info['id_field'][$i]]=$id_field_numeric?intval($bit):$bit;
-		}
-	} else
-	{
-		if ($id_field_numeric)
-		{
-			$where=array($cma_info['id_field']=>intval($content_id));
-		} else
-		{
-			$where=array($cma_info['id_field']=>$content_id);
-		}
-	}
+	$where=get_content_where_for_str_id($content_id,$cma_info);
 	$_content=$db->query_select($cma_info['table'].' r',array('r.*'),$where,'',1);
 	return array_key_exists(0,$_content)?$_content[0]:NULL;
+}
+
+/**
+ * Get the string content ID for some data.
+ *
+ * @param  array				The data row
+ * @param  array				The info array for the content type
+ * @return ID_TEXT			The ID
+ */
+function extract_content_str_id_from_data($data,$cma_info)
+{
+	$id_field=$cma_info['id_field'];
+	$id='';
+	foreach (is_array($id_field)?$id_field:array($id_field) as $id_field_part)
+	{
+		if ($id!='') $id.=':';
+		$id.=(is_integer($data[$id_field_part])?strval($data[$id_field_part]):$data[$id_field_part]);
+	}
+	return $id;
+}
+
+/**
+ * Given the string content ID get a mapping we could use as a WHERE map.
+ *
+ * @param  ID_TEXT			The ID
+ * @param  array				The info array for the content type
+ * @param  ?string			The table alias (NULL: none)
+ * @return array				The mapping
+ */
+function get_content_where_for_str_id($str_id,$cma_info,$table_alias=NULL)
+{
+	$where=array();
+	$id_field=$cma_info['id_field'];
+	$id_parts=explode(':',$str_id);
+	foreach (is_array($id_field)?$id_field:array($id_field) as $id_field_part)
+	{
+		$val=array_key_exists($i,$id_parts)?$id_parts[$i]:'';
+		$where[(is_null($table_alias)?'':($table_alias.'.')).$id_field_part]=$cma_info['id_is_numeric']?intval($val):$val;
+	}
+	return $where;
+}
+
+/**
+ * Given the string content ID get a mapping we could use as a WHERE map.
+ *
+ * @param  array				The ID
+ * @param  array				The info array for the content type
+ * @param  ?string			The table alias (NULL: none)
+ */
+function append_content_select_for_id(&$select,$cma_info,$table_alias=NULL)
+{
+	foreach (is_array($cma_info['id_field'])?$cma_info['id_field']:array($cma_info['id_field']) as $id_field_part)
+	{
+		$select[]=(is_null($table_alias)?'':($table_alias.'.')).$id_field_part;
+	}
 }

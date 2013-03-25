@@ -73,7 +73,6 @@ class Hook_addon_registry_core_database_drivers
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/core_database_drivers.php',
 			'sources/database/shared/.htaccess',
 			'sources/database/shared/index.html',

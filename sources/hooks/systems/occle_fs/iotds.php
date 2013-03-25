@@ -32,27 +32,27 @@ class Hook_occle_fs_iotds extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'url',
-			'caption',
-			'thumb_url',
-			'current',
-			'allow_rating',
-			'allow_comments',
-			'allow_trackbacks',
-			'notes',
-			'add_date',
-			'submitter',
-			'used',
-			'use_time',
-			'views',
-			'edit_date',
+			'url'=>'URLPATH',
+			'caption'=>'LONG_TRANS',
+			'thumb_url'=>'URLPATH',
+			'current'=>'BINARY',
+			'allow_rating'=>'BINARY',
+			'allow_comments'=>'SHORT_INTEGER',
+			'allow_trackbacks'=>'BINARY',
+			'notes'=>'LONG_TEXT',
+			'used'=>'BINARY',
+			'use_time'=>'?TIME',
+			'views'=>'INTEGER',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -60,7 +60,7 @@ class Hook_occle_fs_iotds extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('iotds2');
 
@@ -78,7 +78,7 @@ class Hook_occle_fs_iotds extends content_fs_base
 		$use_time=$this->_default_property_int_null($properties,'use_time');
 		$views=$this->_default_property_int($properties,'views');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
-		$id=add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time,$submitter,$used,$use_time,$views,$edit_date);
+		$id=add_iotd($url,$label,$caption,$thumb_url,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time,$submitter,$used,$use_time,$views,$edit_date);
 		return strval($id);
 	}
 

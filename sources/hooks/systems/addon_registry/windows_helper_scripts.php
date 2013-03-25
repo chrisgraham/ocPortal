@@ -73,7 +73,6 @@ class Hook_addon_registry_windows_helper_scripts
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/windows_helper_scripts.php',
 			'fixperms.bat',
 		);

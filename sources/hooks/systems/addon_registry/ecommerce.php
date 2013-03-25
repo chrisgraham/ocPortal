@@ -72,6 +72,8 @@ class Hook_addon_registry_ecommerce
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/usergroup_subscription.php',
+			'sources/hooks/systems/occle_fs/usergroup_subscriptions.php',
 			'sources/hooks/systems/config_default/callback_password.php',
 			'sources/hooks/systems/config_default/currency.php',
 			'sources/hooks/systems/config_default/ecommerce_test_mode.php',

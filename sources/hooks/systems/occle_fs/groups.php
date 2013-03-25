@@ -43,38 +43,38 @@ class Hook_occle_fs_groups extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'is_default',
-			'is_super_admin',
-			'is_super_moderator',
-			'title',
-			'rank_image',
-			'promotion_target',
-			'promotion_threshold',
-			'group_leader',
-			'flood_control_submit_secs',
-			'flood_control_access_secs',
-			'max_daily_upload_mb',
-			'max_attachments_per_post',
-			'max_avatar_width',
-			'max_avatar_height',
-			'max_post_length_comcode',
-			'max_sig_length_comcode',
-			'gift_points_base',
-			'gift_points_per_day',
-			'enquire_on_new_ips',
-			'is_presented_at_install',
-			'hidden',
-			'order',
-			'rank_image_pri_only',
-			'open_membership',
-			'is_private_club',
+			'is_default'=>'BINARY',
+			'is_super_admin'=>'BINARY',
+			'is_super_moderator'=>'BINARY',
+			'rank_title'=>'SHORT_TRANS',
+			'rank_image'=>'URLPATH',
+			'promotion_target'=>'?group',
+			'promotion_threshold'=>'?INTEGER',
+			'group_leader'=>'?member',
+			'flood_control_submit_secs'=>'INTEGER',
+			'flood_control_access_secs'=>'INTEGER',
+			'max_daily_upload_mb'=>'INTEGER',
+			'max_attachments_per_post'=>'INTEGER',
+			'max_avatar_width'=>'INTEGER',
+			'max_avatar_height'=>'INTEGER',
+			'max_post_length_comcode'=>'INTEGER',
+			'max_sig_length_comcode'=>'INTEGER',
+			'gift_points_base'=>'INTEGER',
+			'gift_points_per_day'=>'INTEGER',
+			'enquire_on_new_ips'=>'BINARY',
+			'is_presented_at_install'=>'BINARY',
+			'hidden'=>'BINARY',
+			'order'=>'INTEGER',
+			'rank_image_pri_only'=>'BINARY',
+			'open_membership'=>'BINARY',
+			'is_private_club'=>'BINARY',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -84,12 +84,14 @@ class Hook_occle_fs_groups extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this content type
 
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
 		require_code('ocf_groups_action');
 
 		$is_default=$this->_default_property_int($properties,'is_default');
 		$is_super_admin=$this->_default_property_int($properties,'is_super_admin');
 		$is_super_moderator=$this->_default_property_int($properties,'is_super_moderator');
-		$real_title=$this->_default_property_str($properties,'title');
+		$rank_title=$this->_default_property_str($properties,'rank_title');
 		$rank_image=$this->_default_property_str($properties,'rank_image');
 		$promotion_target=$this->_default_property_int_null($properties,'promotion_target');
 		$promotion_threshold=$this->_default_property_int_null($properties,'promotion_threshold');
@@ -112,7 +114,7 @@ class Hook_occle_fs_groups extends content_fs_base
 		$rank_image_pri_only=$this->_default_property_int($properties,'rank_image_pri_only');
 		$open_membership=$this->_default_property_int($properties,'open_membership');
 		$is_private_club=$this->_default_property_int($properties,'is_private_club');
-		$id=ocf_make_group($title,$is_default,$is_super_admin,$is_super_moderator,$real_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+		$id=ocf_make_group($label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
 		return strval($id);
 	}
 
@@ -137,54 +139,80 @@ class Hook_occle_fs_groups extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		$props=array(
-			'password',
-			'email_address',
-			'groups',
-			'dob_day',
-			'dob_month',
-			'dob_year',
-			'timezone',
-			'primary_group',
-			'validated',
-			'join_time',
-			'last_visit_time',
-			'theme',
-			'avatar_url',
-			'signature',
-			'is_perm_banned',
-			'preview_posts',
-			'reveal_age',
-			'title',
-			'photo_url',
-			'photo_thumb_url',
-			'views_signatures',
-			'auto_monitor_contrib_content',
-			'language',
-			'allow_emails',
-			'allow_emails_from_staff',
-			'ip_address',
-			'validated_email_confirm_code',
-			'password_compatibility_scheme',
-			'salt',
-			'zone_wide',
-			'last_submit_time',
-			'highlighted_name',
-			'pt_allow',
-			'pt_rules_text',
+			'password_hashed'=>'SHORT_TEXT',
+			'salt'=>'SHORT_TEXT',
+			'password_compatibility_scheme'=>'ID_TEXT',
+			'email_address'=>'SHORT_TEXT',
+			'groups'=>'LONG_TEXT',
+			'dob_day'=>'?SHORT_INTEGER',
+			'dob_month'=>'?SHORT_INTEGER',
+			'dob_year'=>'?SHORT_INTEGER',
+			'timezone'=>'ID_TEXT',
+			'primary_group'=>'group',
+			'validated'=>'BINARY',
+			'join_time'=>'TIME',
+			'last_visit_time'=>'TIME',
+			'theme'=>'ID_TEXT',
+			'avatar_url'=>'URLPATH',
+			'signature'=>'LONG_TRANS',
+			'is_perm_banned'=>'BINARY',
+			'preview_posts'=>'BINARY',
+			'reveal_age'=>'BINARY',
+			'user_title'=>'SHORT_TEXT',
+			'photo_url'=>'URLPATH',
+			'photo_thumb_url'=>'URLPATH',
+			'views_signatures'=>'BINARY',
+			'auto_monitor_contrib_content'=>'BINARY',
+			'language'=>'LANGUAGE_NAME',
+			'allow_emails'=>'BINARY',
+			'allow_emails_from_staff'=>'BINARY',
+			'ip_address'=>'IP',
+			'validated_email_confirm_code'=>'SHORT_TEXT',
+			'zone_wide'=>'BINARY',
+			'last_submit_time'=>'TIME',
+			'highlighted_name'=>'BINARY',
+			'pt_allow'=>'SHORT_TEXT',
+			'pt_rules_text'=>'LONG_TRANS',
 		);
 		require_code('ocf_members');
 		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
 		foreach ($custom_fields as $i=>$custom_field)
 		{
-			$props[]='field_'.strval($i);
+			$cf_name=get_translated_text($custom_field['cf_name']);
+			$fixed_id=fix_id($cf_name);
+			if (!array_key_exists($fixed_id,$props))
+			{
+				$key=$fixed_id;
+			} else
+			{
+				$key='field_'.strval($custom_field['id']);
+			}
+
+			require_code('fields');
+			$ob=get_fields_hook($custom_field['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>NULL,'cf_type'=>$custom_field['cf_type'],'cf_default'=>''));
+			$_type='SHORT_TEXT';
+			switch ($storage_type)
+			{
+				case 'short_trans':
+					$_type='SHORT_TRANS';
+					break;
+				case 'long_trans':
+					$_type='LONG_TRANS';
+					break;
+				case 'long':
+					$_type='LONG_TEXT';
+					break;
+			}
+			$props[$key]=$_type;
 		}
 		return $props;
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -192,13 +220,13 @@ class Hook_occle_fs_groups extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
 
 		require_code('ocf_members_action');
 
-		$password=$this->_default_property_str($properties,'password');
+		$password_hashed=$this->_default_property_str($properties,'password_hashed');
 		$email_address=$this->_default_property_str($properties,'email_address');
 		$groups=array();
 		$groups[]=$this->_integer_category($category);
@@ -219,7 +247,7 @@ class Hook_occle_fs_groups extends content_fs_base
 		$is_perm_banned=$this->_default_property_int($properties,'is_perm_banned');
 		$preview_posts=$this->_default_property_int_modeavg($properties,'preview_posts','f_members',0,'m_preview_posts');
 		$reveal_age=$this->_default_property_int_modeavg($properties,'reveal_age','f_members',0,'m_reveal_age');
-		$real_title=$this->_default_property_str($properties,'title');
+		$user_title=$this->_default_property_str($properties,'user_title');
 		$photo_url=$this->_default_property_str($properties,'photo_url');
 		$photo_thumb_url=$this->_default_property_str($properties,'photo_thumb_url');
 		$views_signatures=$this->_default_property_int($properties,'views_signatures');
@@ -241,14 +269,25 @@ class Hook_occle_fs_groups extends content_fs_base
 		require_code('ocf_members');
 		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
 		$actual_custom_fields=array();
+		$props_already=array();
 		foreach ($custom_fields as $i=>$custom_field)
 		{
-			$value=$this->_default_property_str_null($properties,'field_'.strval($i));
+			$cf_name=get_translated_text($custom_field['cf_name']);
+			$fixed_id=fix_id($cf_name);
+			if (!array_key_exists($fixed_id,$props_already))
+			{
+				$key=$fixed_id;
+			} else
+			{
+				$key='field_'.strval($custom_field['id']);
+			}
+			$props_already[$key]=true;
+			$value=$this->_default_property_str_null($properties,$key);
 			if (is_null($value)) $value=$custom_field['cf_default'];
 			$actual_custom_fields[$custom_field['id']]=$value;
 		}
 
-		$id=ocf_make_member($title,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$real_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text);
+		$id=ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text);
 
 		return strval($id);
 	}

@@ -73,7 +73,6 @@ class Hook_addon_registry_phpinfo
 	function get_file_list()
 	{
 		return array(
-
 			'phpinfo.css',
 			'sources/hooks/systems/do_next_menus/phpinfo.php',
 			'sources/hooks/systems/addon_registry/phpinfo.php',

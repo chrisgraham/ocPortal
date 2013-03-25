@@ -65,32 +65,31 @@ class Hook_occle_fs_forums extends content_fs_base
 		if (substr($category,0,6)=='FORUM-')
 		{
 			return array(
-				'description',
-				'forum_grouping_id',
-				'position',
-				'post_count_increment',
-				'order_sub_alpha',
-				'intro_question',
-				'intro_answer',
-				'redirection',
-				'order',
-				'is_threaded',
+				'description'=>'LONG_TRANS',
+				'forum_grouping_id'=>'forum_grouping',
+				'position'=>'INTEGER',
+				'post_count_increment'=>'BINARY',
+				'order_sub_alpha'=>'BINARY',
+				'intro_question'=>'LONG_TRANS',
+				'intro_answer'=>'LONG_TRANS',
+				'redirection'=>'SHORT_TEXT|forum',
+				'order'=>'ID_TEXT',
+				'is_threaded'=>'BINARY',
 			);
 		}
 
 		return array(
-			'title',
-			'emoticon',
-			'validated',
-			'open',
-			'pinned',
-			'sunk',
-			'cascading',
-			'pt_from',
-			'pt_to',
-			'num_views',
-			'description_link',
-			'poll',
+			'emoticon'=>'SHORT_TEXT',
+			'validated'=>'BINARY',
+			'open'=>'BINARY',
+			'pinned'=>'BINARY',
+			'sunk'=>'BINARY',
+			'cascading'=>'BINARY',
+			'pt_from'=>'?member',
+			'pt_to'=>'?member',
+			'num_views'=>'INTEGER',
+			'description_link'=>'SHORT_TEXT',
+			'poll'=>'LONG_TRANS',
 		);
 	}
 
@@ -124,9 +123,9 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -134,6 +133,8 @@ class Hook_occle_fs_forums extends content_fs_base
 	function _folder_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
 		if ($category_content_type=='forum')
 		{
@@ -143,7 +144,7 @@ class Hook_occle_fs_forums extends content_fs_base
 			require_code('ocf_forums_action');
 
 			$description=$this->_default_property_str($properties,'description');
-			$forum_grouping_id=$this->_default_property_str($properties,'forum_grouping_id');
+			$forum_grouping_id=/*if grouping resource type was not here we could cheat with $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');*/$this->_default_property_str($properties,'forum_grouping_id');
 			$access_mapping=array();
 			$parent_forum=$this->_integer_category($category);
 			$position=$this->_default_property_str($properties,'position');
@@ -154,7 +155,7 @@ class Hook_occle_fs_forums extends content_fs_base
 			$redirection=$this->_default_property_str($properties,'redirection');
 			$order=$this->_default_property_str($properties,'order');
 			$is_threaded=$this->_default_property_str($properties,'is_threaded');
-			$id=ocf_make_forum($title,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
+			$id=ocf_make_forum($label,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
 			if ($category_content_type!='forum') return false;
@@ -163,7 +164,6 @@ class Hook_occle_fs_forums extends content_fs_base
 			require_code('ocf_topics_action');
 
 			$forum_id=$this->_integer_category($category);
-			$title=$this->_default_property_str($properties,'title');
 			$emoticon=$this->_default_property_str($properties,'emoticon');
 			$validated=$this->_default_property_str($properties,'validated');
 			$open=$this->_default_property_str($properties,'open');
@@ -174,7 +174,7 @@ class Hook_occle_fs_forums extends content_fs_base
 			$pt_to=$this->_default_property_str($properties,'pt_to');
 			$num_views=$this->_default_property_str($properties,'num_views');
 			$description_link=$this->_default_property_str($properties,'description_link');
-			$id=ocf_make_topic($forum_id,$title,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
+			$id=ocf_make_topic($forum_id,$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
 
 			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
 			{
@@ -225,27 +225,27 @@ class Hook_occle_fs_forums extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'post',
-			'skip_sig',
-			'validated',
-			'is_emphasised',
-			'poster_name_if_guest',
-			'ip_address',
-			'add_date',
-			'poster',
-			'intended_solely_for',
-			'last_edit_time',
-			'last_edit_by',
-			'sunk',
-			'anonymous',
-			'parent_id',
+			'post'=>'LONG_TRANS',
+			'skip_sig'=>'BINARY',
+			'validated'=>'BINARY',
+			'is_emphasised'=>'BINARY',
+			'poster_name_if_guest'=>'ID_TEXT',
+			'ip_address'=>'IP',
+			'intended_solely_for'=>'?member',
+			'sunk'=>'BINARY',
+			'anonymous'=>'BINARY',
+			'parent_id'=>'?post',
+			'poster'=>'member',
+			'last_edit_by'=>'?member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -253,7 +253,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
 		if ($category_content_type!='topic') return false;
@@ -271,12 +271,12 @@ class Hook_occle_fs_forums extends content_fs_base
 		$time=$this->_default_property_int_null($properties,'add_date');
 		$poster=$this->_default_property_int_null($properties,'poster');
 		$intended_solely_for=$this->_default_property_int_null($properties,'intended_solely_for');
-		$last_edit_time=$this->_default_property_int_null($properties,'last_edit_time');
+		$last_edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$last_edit_by=$this->_default_property_int_null($properties,'last_edit_by');
 		$sunk=$this->_default_property_int($properties,'sunk');
 		$anonymous=$this->_default_property_int($properties,'anonymous');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
-		$id=ocf_make_post($topic_id,$title,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,$sunk,NULL,$anonymous,true,NULL,false,$parent_id);
+		$id=ocf_make_post($topic_id,$label,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,$sunk,NULL,$anonymous,true,NULL,false,$parent_id);
 		return strval($id);
 	}
 

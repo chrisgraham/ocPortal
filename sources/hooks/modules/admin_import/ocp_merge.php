@@ -118,6 +118,7 @@ class Hook_ocp_merge
 			'ocf_welcome_emails'=>array('ocf_members'),
 			'bookmarks'=>array('ocf_members'),
 			'quizzes'=>array('ocf_members'),
+			'aggregate_type_instances'=>array(),
 		);
 
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
@@ -2429,6 +2430,34 @@ class Hook_ocp_merge
 
 			ocf_make_warning($member_id,$row['w_explanation'],$by,$row['w_time'],array_key_exists('w_is_warning',$row)?$row['w_is_warning']:1,$silence_from_topic,$silence_from_forum,array_key_exists('w_probation',$row)?$row['w_probation']:0,array_key_exists('w_banned_ip',$row)?$row['w_banned_ip']:'',array_key_exists('w_charged_points',$row)?$row['w_charged_points']:0,array_key_exists('w_banned_member',$row)?$row['w_banned_member']:0,$changed_usergroup_from);
 		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_aggregate_type_instances($db,$table_prefix,$file_base)
+	{
+		require_code('aggregate_types');
+
+		$start=0;
+		do
+		{
+			$rows=$db->query_select('aggregate_type_instances',array('*'),NULL,'',100,$start);
+			foreach ($rows as $row)
+			{
+				if (import_check_if_imported('aggregate_type_instance',strval($row['id']))) continue;
+
+				add_aggregate_type_instance($row['aggregate_label'],$row['aggregate_type'],$row['other_properties'],$row['add_time'],$row['edit_time'],false);
+
+				import_id_remap_put('aggregate_type_instance',strval($row['id']),$id_new);
+			}
+			$start+=100;
+		}
+		while (count($instances)!=0);
 	}
 
 }

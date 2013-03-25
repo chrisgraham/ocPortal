@@ -73,7 +73,6 @@ class Hook_addon_registry_pointstore
 	function get_file_list()
 	{
 		return array(
-
 			'themes/default/images/menu_items/community_navigation/pointstore.png',
 			'sources/hooks/systems/notifications/pointstore_request_custom.php',
 			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',

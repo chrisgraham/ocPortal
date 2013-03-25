@@ -73,7 +73,6 @@ class Hook_addon_registry_rootkit_detector
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/rootkit_detector.php',
 			'rootkit_detection.php',
 		);

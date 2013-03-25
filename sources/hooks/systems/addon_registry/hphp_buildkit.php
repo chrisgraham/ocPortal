@@ -73,7 +73,6 @@ class Hook_addon_registry_hphp_buildkit
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/hphp_buildkit.php',
 			'hphp.sh',
 			'hphp_debug.sh',

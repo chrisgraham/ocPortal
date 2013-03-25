@@ -73,7 +73,6 @@ class Hook_addon_registry_guestbook
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/guestbook.php',
 			'site/pages/comcode/EN/guestbook.txt',
 		);

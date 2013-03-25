@@ -33,16 +33,16 @@ class Hook_occle_fs_news extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'rep_image',
-			'notes',
-			'owner',
+			'rep_image'=>'URLPATH',
+			'notes'=>'LONG_TEXT',
+			'owner'=>'member',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -52,12 +52,14 @@ class Hook_occle_fs_news extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this content type
 
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
 		require_code('news2');
 
 		$img=$this->_default_property_str($properties,'rep_image');
 		$notes=$this->_default_property_str($properties,'notes');
 		$owner=$this->_default_property_int_null($properties,'owner');
-		$id=add_news_category($title,$img,$notes,$owner);
+		$id=add_news_category($label,$img,$notes,$owner);
 		return strval($id);
 	}
 
@@ -82,28 +84,28 @@ class Hook_occle_fs_news extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'news',
-			'author',
-			'validated',
-			'allow_rating',
-			'allow_comments',
-			'allow_trackbacks',
-			'notes',
-			'news_article',
-			'add_date',
-			'submitter',
-			'views',
-			'edit_date',
-			'image',
-			'meta_keywords',
-			'meta_description',
+			'news_summary'=>'LONG_TRANS',
+			'news_article'=>'LONG_TRANS',
+			'author'=>'author',
+			'validated'=>'BINARY',
+			'allow_rating'=>'BINARY',
+			'allow_comments'=>'SHORT_INTEGER',
+			'allow_trackbacks'=>'BINARY',
+			'notes'=>'LONG_TEXT',
+			'views'=>'INTEGER',
+			'image'=>'URLPATH',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -111,13 +113,13 @@ class Hook_occle_fs_news extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
 
 		require_code('news2');
 
-		$news=$this->_default_property_str($properties,'news');
+		$news=$this->_default_property_str($properties,'news_summary');
 		$author=$this->_default_property_str($properties,'author');
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
@@ -139,7 +141,7 @@ class Hook_occle_fs_news extends content_fs_base
 		$image=$this->_default_property_str($properties,'image');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,$submitter,$views,$edit_date,NULL,$image,$meta_keywords,$meta_description);
+		$id=add_news($label,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,$submitter,$views,$edit_date,NULL,$image,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 

@@ -115,15 +115,15 @@ function ocf_display_spacer_post($linked_type,$linked_id)
 	$new_post=mixed();
 
 	require_code('content');
-	$linked_type=convert_ocportal_type_codes('feedback_type_code',$linked_type,'award_hook');
+	$linked_type=convert_ocportal_type_codes('feedback_type_code',$linked_type,'content_type');
 	if ($linked_type!='')
 	{
 		require_code('content');
-		$award_ob=get_content_object($linked_type);
-		$award_info=$award_ob->info();
-		$linked_rows=$GLOBALS['SITE_DB']->query_select($award_info['table'],array('*'),array($award_info['id_field']=>$award_info['id_field_numeric']?intval($linked_id):$linked_id),'',1);
+		$cma_ob=get_content_object($linked_type);
+		$cma_info=$cma_ob->info();
+		$linked_rows=$GLOBALS['SITE_DB']->query_select($cma_info['table'],array('*'),get_content_where_for_str_id($linked_id,$cma_info),'',1);
 		if (array_key_exists(0,$linked_rows))
-			$new_post=$award_ob->run($linked_rows[0],'_SEARCH',true,true);
+			$new_post=$cma_ob->run($linked_rows[0],'_SEARCH',true,true);
 		$new_description=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
 	}
 

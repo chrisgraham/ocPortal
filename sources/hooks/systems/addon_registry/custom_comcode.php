@@ -75,6 +75,7 @@ class Hook_addon_registry_custom_comcode
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/custom_comcode_tag.php',
 			'sources/hooks/systems/snippets/exists_tag.php',
 			'sources/hooks/systems/preview/custom_comcode.php',
 			'sources/hooks/systems/meta/comcode_page.php',
@@ -96,6 +97,7 @@ class Hook_addon_registry_custom_comcode
 			'themes/default/images/bigicons/custom-comcode.png',
 			'sources/hooks/systems/comcode/.htaccess',
 			'sources/hooks/systems/comcode/index.html'
+			'sources/hooks/systems/occle_fs/custom_comcode_tags.php',
 		);
 	}
 

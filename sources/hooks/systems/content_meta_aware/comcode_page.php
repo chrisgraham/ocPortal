@@ -36,14 +36,14 @@ class Hook_content_meta_aware_comcode_page
 
 			'connection'=>$GLOBALS['SITE_DB'],
 			'table'=>'comcode_pages',
-			'id_field'=>'the_page',
+			'id_field'=>array('the_page','the_zone'),
 			'id_field_numeric'=>false,
 			'parent_category_field'=>'the_zone',
 			'parent_category_meta_aware_type'=>NULL,
 			'is_category'=>false,
 			'is_entry'=>true,
 			'category_field'=>array('the_zone','the_page'), // For category permissions
-			'category_type'=>'!', // For category permissions
+			'category_type'=>'<page>', // For category permissions ("<page>" means use page permissions)
 			'category_is_string'=>true,
 
 			'title_field'=>NULL,

@@ -33,15 +33,15 @@ class Hook_occle_fs_event extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'logo',
-			'external_feed',
+			'logo'=>'URLPATH',
+			'external_feed'=>'URLPATH',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -51,11 +51,13 @@ class Hook_occle_fs_event extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this content type
 
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
 		require_code('calendar2');
 
 		$logo=$this->_default_property_str($properties,'logo');
 		$external_feed=$this->_default_property_str($properties,'external_feed');
-		$id=add_event_type($title,$logo,$external_feed);
+		$id=add_event_type($label,$logo,$external_feed);
 		return strval($id);
 	}
 
@@ -80,44 +82,44 @@ class Hook_occle_fs_event extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'recurrence',
-			'recurrences',
-			'seg_recurrences',
-			'content',
-			'priority',
-			'is_public',
-			'start_year',
-			'start_month',
-			'start_day',
-			'start_monthly_spec_type',
-			'start_hour',
-			'start_minute',
-			'end_year',
-			'end_month',
-			'end_day',
-			'end_monthly_spec_type',
-			'end_hour',
-			'end_minute',
-			'timezone',
-			'do_timezone_conv',
-			'validated',
-			'allow_rating',
-			'allow_comments',
-			'allow_trackbacks',
-			'notes',
-			'submitter',
-			'views',
-			'add_date',
-			'edit_date',
-			'meta_keywords',
-			'meta_description',
+			'description'=>'LONG_TRANS',
+			'start_year'=>'SHORT_INTEGER',
+			'start_month'=>'SHORT_INTEGER',
+			'start_day'=>'SHORT_INTEGER',
+			'start_monthly_spec_type'=>'ID_TEXT',
+			'start_hour'=>'?SHORT_INTEGER',
+			'start_minute'=>'?SHORT_INTEGER',
+			'end_year'=>'?SHORT_INTEGER',
+			'end_month'=>'?SHORT_INTEGER',
+			'end_day'=>'?SHORT_INTEGER',
+			'end_monthly_spec_type'=>'ID_TEXT',
+			'end_hour'=>'?SHORT_INTEGER',
+			'end_minute'=>'?SHORT_INTEGER',
+			'timezone'=>'ID_TEXT',
+			'do_timezone_conv'=>'BINARY',
+			'recurrence'=>'SHORT_TEXT',
+			'recurrences'=>'?INTEGER',
+			'seg_recurrences'=>'BINARY',
+			'priority'=>'SHORT_INTEGER',
+			'is_public'=>'BINARY',
+			'validated'=>'BINARY',
+			'allow_rating'=>'BINARY',
+			'allow_comments'=>'SHORT_INTEGER',
+			'allow_trackbacks'=>'BINARY',
+			'notes'=>'LONG_TEXT',
+			'views'=>'INTEGER',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -125,7 +127,7 @@ class Hook_occle_fs_event extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
 
@@ -135,7 +137,7 @@ class Hook_occle_fs_event extends content_fs_base
 		$recurrence=$this->_default_property_str($properties,'recurrence');
 		$recurrences=$this->_default_property_int_null($properties,'recurrences');
 		$seg_recurrences=$this->_default_property_int($properties,'seg_recurrences');
-		$content=$this->_default_property_str($properties,'content');
+		$content=$this->_default_property_str($properties,'description');
 		$priority=$this->_default_property_int_null($properties,'priority');
 		if ($priority===NULL) $priority=3;
 		$is_public=$this->_default_property_int_null($properties,'is_public');
@@ -171,7 +173,7 @@ class Hook_occle_fs_event extends content_fs_base
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time,NULL,$meta_keywords,$meta_description);
+		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$label,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 

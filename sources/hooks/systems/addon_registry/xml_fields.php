@@ -73,7 +73,6 @@ class Hook_addon_registry_xml_fields
 	function get_file_list()
 	{
 		return array(
-
 			'data_custom/fields.xml',
 			'sources/hooks/systems/addon_registry/xml_fields.php',
 		);

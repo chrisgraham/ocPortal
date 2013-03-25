@@ -55,29 +55,29 @@ class Hook_occle_fs_catalogues extends content_fs_base
 		if (substr($category,0,10)!='CATALOGUE-')
 		{
 			return array(
-				'description',
-				'notes',
-				'rep_image',
-				'move_days_lower',
-				'move_days_higher',
-				'move_target',
-				'add_date',
-				'meta_keywords',
-				'meta_description',
+				'description'=>'LONG_TRANS',
+				'notes'=>'LONG_TEXT',
+				'rep_image'=>'URLPATH',
+				'move_days_lower'=>'?INTEGER',
+				'move_days_higher'=>'?INTEGER',
+				'move_target'=>'?catalogue_category',
+				'meta_keywords'=>'LONG_TRANS',
+				'meta_description'=>'LONG_TRANS',
+				'add_date'=>'TIME',
 			);
 		}
 
 		return array(
-			'description',
-			'display_type',
-			'is_tree',
-			'notes',
-			'submit_points',
-			'ecommerce',
-			'send_view_reports',
-			'default_review_freq',
-			'add_date',
-			'fields',
+			'description'=>'LONG_TRANS',
+			'display_type'=>'SHORT_INTEGER',
+			'is_tree'=>'BINARY',
+			'notes'=>'LONG_TEXT',
+			'submit_points'=>'INTEGER',
+			'ecommerce'=>'BINARY',
+			'send_view_reports'=>'BINARY',
+			'default_review_freq'=>'?INTEGER',
+			'fields'=>'LONG_TRANS',
+			'add_date'=>'TIME',
 		);
 	}
 
@@ -111,9 +111,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -121,6 +121,8 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	function _folder_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
 		require_code('catalogues2');
 
@@ -153,7 +155,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 			$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 			$meta_description=$this->_default_property_str($properties,'meta_description');
 
-			$id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,NULL,$meta_keywords,$meta_description);
+			$id=actual_add_catalogue_category($catalogue_name,$label,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,NULL,$meta_keywords,$meta_description);
 
 			return strval($id);
 		} else
@@ -167,9 +169,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 			$send_view_reports=$this->_default_property_int($properties,'send_view_reports');
 			$default_review_freq=$this->_default_property_int_null($properties,'default_review_freq');
 			$add_time=$this->_default_property_int_null($properties,'add_date');
-			$name=$this->_create_name_from_title($title);
+			$name=$this->_create_name_from_label($label);
 
-			actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+			actual_add_catalogue($name,$label,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
 
 			if ((array_key_exists('fields',$properties)) && ($properties['fields']!=''))
 			{
@@ -229,39 +231,66 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 */
 	function _enumerate_file_properties($category)
 	{
-		$props=array(
-			'validated',
-			'notes',
-			'allow_rating',
-			'allow_comments',
-			'allow_trackbacks',
-			'add_date',
-			'submitter',
-			'edit_date',
-			'views',
-			'meta_keywords',
-			'meta_description',
-		);
+		$props=array();
 
 		$category_id=$this->_integer_category($category);
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
-		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default','cf_name'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 		foreach ($_fields as $i=>$field_bits)
 		{
 			if ($i!=0)
 			{
-				$field_id=$field_bits['id'];
-				$props[]='field_'.strval($i);
+				$cf_name=get_translated_text($field_bits['cf_name']);
+				$fixed_id=fix_id($cf_name);
+				if (!array_key_exists($fixed_id,$props))
+				{
+					$key=$fixed_id;
+				} else
+				{
+					$key='field_'.strval($field_bits['id']);
+				}
+
+				require_code('fields');
+				$ob=get_fields_hook($field_bits['cf_type']);
+				list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>NULL,'cf_type'=>$field_bits['cf_type'],'cf_default'=>''));
+				$_type='SHORT_TEXT';
+				switch ($storage_type)
+				{
+					case 'short_trans':
+						$_type='SHORT_TRANS';
+						break;
+					case 'long_trans':
+						$_type='LONG_TRANS';
+						break;
+					case 'long':
+						$_type='LONG_TEXT';
+						break;
+				}
+				$props[$key]=$_type;
 			}
 		}
+
+		$props+=array(
+			'validated'=>'BINARY',
+			'notes'=>'LONG_TEXT',
+			'allow_rating'=>'BINARY',
+			'allow_comments'=>'SHORT_INTEGER',
+			'allow_trackbacks'=>'BINARY',
+			'views'=>'INTEGER',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
+		);
 
 		return $props;
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -269,7 +298,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
 		if ($category_content_type=='catalogue') return false;
@@ -279,18 +308,30 @@ class Hook_occle_fs_catalogues extends content_fs_base
 		$category_id=$this->_integer_category($category);
 
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
-		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default','cf_name'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 		$map=array();
+		$props_already=array();
 		foreach ($_fields as $i=>$field_bits)
 		{
 			$field_id=$field_bits['id'];
 
 			if ($i==0)
 			{
-				$map[$field_id]=$title;
+				$map[$field_id]=$label;
 			} else
 			{
-				$value=$this->_default_property_str($properties,'field_'.strval($i));
+				$cf_name=get_translated_text($field_bits['cf_name']);
+				$fixed_id=fix_id($cf_name);
+				if (!array_key_exists($fixed_id,$props_already))
+				{
+					$key=$fixed_id;
+				} else
+				{
+					$key='field_'.strval($field_bits['id']);
+				}
+				$props_already[$key]=true;
+
+				$value=$this->_default_property_str($properties,$key);
 				if (is_null($value)) $value=$field_bits['cf_default'];
 				$map[$field_id]=$value;
 			}

@@ -73,7 +73,6 @@ class Hook_addon_registry_apache_config_files
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/apache_config_files.php',
 			'plain.htaccess',
 			'recommended.htaccess',

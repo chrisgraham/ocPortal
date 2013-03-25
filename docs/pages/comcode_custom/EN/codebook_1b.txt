@@ -600,7 +600,7 @@ Add the following code snippets to enable your feedback system (roughly, this co
 In the [tt]install[/tt] function for your module, in the table creation...
 [code="PHP"]
 'allow_rating'=>'BINARY',
-'allow_comments'=>'BINARY',
+'allow_comments'=>'SHORT_INTEGER',
 'allow_trackbacks'=>'BINARY',
 'notes'=>'LONG_TEXT',
 [/code]

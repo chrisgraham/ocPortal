@@ -74,7 +74,6 @@ class Hook_addon_registry_syndication
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/syndication.php',
 			'ATOM_ENTRY.tpl',
 			'ATOM_WRAPPER.tpl',

@@ -439,11 +439,13 @@ function autogenerate_new_url_moniker($ob_info,$url_parts)
 {
 	$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-	$select=array($ob_info['id_field']);
+	require_code('content');
+	$select=array();
+	append_content_select_for_id($select,$ob_info);
 	if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 	if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
 	$db=((substr($ob_info['table'],0,2)!='f_') || (get_forum_type()=='none'))?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
-	$_moniker_src=$db->query_select($ob_info['table'],$select,array($ob_info['id_field']=>$ob_info['id_field_numeric']?intval($url_parts['id']):$url_parts['id']));
+	$_moniker_src=$db->query_select($ob_info['table'],$select,get_content_where_for_str_id($url_parts['id'],$ob_info));
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 	if (!array_key_exists(0,$_moniker_src)) return NULL; // been deleted?
 
@@ -618,7 +620,9 @@ function _give_moniker_scope($page,$type,$id,$main)
 		// Lookup DB record so we can discern the category
 		$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$select=array($ob_info['id_field']);
+		require_code('content');
+		$select=array();
+		append_content_select_for_id($select,$ob_info);
 		if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 		if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
 		$id_flat=mixed();
@@ -629,7 +633,7 @@ function _give_moniker_scope($page,$type,$id,$main)
 		{
 			$id_flat=$id;
 		}
-		$_moniker_src=$GLOBALS['SITE_DB']->query_select($ob_info['table'],$select,array($ob_info['id_field']=>$id_flat));
+		$_moniker_src=$GLOBALS['SITE_DB']->query_select($ob_info['table'],$select,get_content_where_for_str_id($id_flat,$ob_info));
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 		if (!array_key_exists(0,$_moniker_src)) return $moniker; // been deleted?
 

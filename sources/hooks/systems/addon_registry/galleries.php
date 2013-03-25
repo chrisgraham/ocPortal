@@ -73,7 +73,6 @@ class Hook_addon_registry_galleries
 	function get_file_list()
 	{
 		return array(
-
 			'data/zencoder_receive.php',
 			'sources/hooks/systems/notifications/gallery_entry.php',
 			'sources/hooks/systems/fields/video.php',

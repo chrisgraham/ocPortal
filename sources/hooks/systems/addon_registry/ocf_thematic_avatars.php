@@ -73,7 +73,6 @@ class Hook_addon_registry_ocf_thematic_avatars
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/ocf_thematic_avatars.php',
 			'themes/default/images/ocf_default_avatars/default_set/thematic/animals.png',
 			'themes/default/images/ocf_default_avatars/default_set/thematic/books.png',

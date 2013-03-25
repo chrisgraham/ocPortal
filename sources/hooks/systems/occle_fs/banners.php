@@ -33,18 +33,18 @@ class Hook_occle_fs_banners extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'is_textual',
-			'image_width',
-			'image_height',
-			'max_file_size',
-			'comcode_inline',
+			'is_textual'=>'BINARY',
+			'image_width'=>'INTEGER',
+			'image_height'=>'INTEGER',
+			'max_file_size'=>'INTEGER',
+			'comcode_inline'=>'BINARY',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -53,6 +53,8 @@ class Hook_occle_fs_banners extends content_fs_base
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this content type
+
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
 		require_code('banners2');
 
@@ -64,7 +66,7 @@ class Hook_occle_fs_banners extends content_fs_base
 		$max_file_size=$this->_default_property_int_null($properties,'max_file_size');
 		if ($max_file_size===NULL) $max_file_size=100*1024;
 		$comcode_inline=$this->_default_property_int($properties,'comcode_inline');
-		$name=$this->_create_name_from_title($title);
+		$name=$this->_create_name_from_label($label);
 		add_banner_type($name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
 		return $name;
 	}
@@ -90,30 +92,30 @@ class Hook_occle_fs_banners extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'imgurl',
-			'title_text',
-			'direct_code',
-			'campaignremaining',
-			'site_url',
-			'importancemodulus',
-			'notes',
-			'the_type',
-			'expiry_date',
-			'submitter',
-			'validated',
-			'time',
-			'hits_from',
-			'hits_to',
-			'views_from',
-			'views_to',
-			'edit_date',
+			'image_url'=>'URLPATH',
+			'title_text'=>'SHORT_TRANS',
+			'direct_code'=>'LONG_TEXT',
+			'campaignremaining'=>'INTEGER',
+			'site_url'=>'URLPATH',
+			'importancemodulus'=>'INTEGER',
+			'notes'=>'LONG_TEXT',
+			'the_type'=>'SHORT_INTEGER',
+			'expiry_date'=>'?TIME',
+			'validated'=>'BINARY',
+			'hits_from'=>'INTEGER',
+			'hits_to'=>'INTEGER',
+			'views_from'=>'INTEGER',
+			'views_to'=>'INTEGER',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -123,12 +125,12 @@ class Hook_occle_fs_banners extends content_fs_base
 		if ($path=='') return false;
 
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('banners2');
 
-		$name=$this->_create_name_from_title($title);
-		$imgurl=$this->_default_property_str($properties,'imgurl');
+		$name=$this->_create_name_from_label($label);
+		$imgurl=$this->_default_property_str($properties,'image_url');
 		$title_text=$this->_default_property_str($properties,'title_text');
 		$direct_code=$this->_default_property_str($properties,'direct_code');
 		$campaignremaining=$this->_default_property_int_null($properties,'campaignremaining');
@@ -141,13 +143,13 @@ class Hook_occle_fs_banners extends content_fs_base
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
 		$b_type=$category;
-		$time=$this->_default_property_int_null($properties,'time');
+		$time=$this->_default_property_int_null($properties,'add_date');
 		$hits_from=$this->_default_property_int($properties,'hits_from');
 		$hits_to=$this->_default_property_int($properties,'hits_to');
 		$views_from=$this->_default_property_int($properties,'views_from');
 		$views_to=$this->_default_property_int($properties,'views_to');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
-		add_banner($name,$imgurl,$title_text,$title,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$time,$hits_from,$hits_to,$views_from,$views_to,$edit_date);
+		add_banner($name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$time,$hits_from,$hits_to,$views_from,$views_to,$edit_date);
 		return $name;
 	}
 

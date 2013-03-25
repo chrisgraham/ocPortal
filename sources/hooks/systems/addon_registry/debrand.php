@@ -73,7 +73,6 @@ class Hook_addon_registry_debrand
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/debrand.php',
 			'adminzone/pages/modules/admin_debrand.php',
 			'themes/default/images/pagepics/debrand.png',

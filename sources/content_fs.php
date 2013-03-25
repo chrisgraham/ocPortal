@@ -212,15 +212,27 @@ class content_fs_base
 	}
 
 	/**
+	 * Interpret the input of a folder, into a way we can understand it to add. Hooks may override this with special import code.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			A pair: the content label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 */
+	function _folder_magic_filter($filename,$path,$properties)
+	{
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the content label, and leave properties alone
+	}
+
+	/**
 	 * Interpret the input of a file, into a way we can understand it to add. Hooks may override this with special import code.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  array			A pair: the content label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 */
 	function _file_magic_filter($filename,$path,$properties)
 	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the content title, and leave properties alone
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the content label, and leave properties alone
 	}
 
 	function set_properties_via_cloning($id,$from_id)
@@ -337,13 +349,26 @@ class content_fs_base
 			if (!_has_parent_child_relationship($cat_content_type,$content_type)) continue;
 
 			$folder_info=_get_cma_info($content_type);
-			$select=array($folder_info['id_field']);
-			if (!is_null($folder_info['add_time_field'])) $select[]=$folder_info['add_time_field'];
-			if (!is_null($folder_info['edit_time_field'])) $select[]=$folder_info['edit_time_field'];
-			$child_folders=$folder_info['connection']->query_select($folder_info['table'],$select,array($folder_info['parent_category_field']=>$cat_id),'ORDER BY '.$folder_info['id_field'],10000/*Reasonable limit*/);
+			$select=array('main.'.$folder_info['parent_spec__field_name']);
+			$table=$folder_info['parent_spec__table_name'].' main';
+			if ($folder_info['parent_spec__table_name']!=$folder_info['table'])
+			{
+				$table.=' JOIN '.$folder_info['table'].' cats ON cats.'.$folder_info['id_field'].'=main.'.$folder_info['parent_spec__table_name'];
+				if (!is_null($folder_info['add_time_field'])) $select[]='cats.'.$folder_info['add_time_field'];
+				if (!is_null($folder_info['edit_time_field'])) $select[]='cats.'.$folder_info['edit_time_field'];
+			} else
+			{
+				if (!is_null($folder_info['add_time_field'])) $select[]=$folder_info['add_time_field'];
+				if (!is_null($folder_info['edit_time_field'])) $select[]=$folder_info['edit_time_field'];
+			}
+			$extra='';
+			if ((is_string($folder_info['id_field'])) && (can_arbitrary_groupby()))
+				$extra.='GROUP BY '.$folder_info['id_field'].' '; // In case it's not a real category table, just an implied one by self-categorisation of entries
+			$extra.='ORDER BY main.'.$folder_info['parent_spec__field_name'];
+			$child_folders=$folder_info['connection']->query_select($table,$select,array('main.'.$folder_info['parent_category_field']=>$cat_id),$extra,10000/*Reasonable limit*/);
 			foreach ($child_folders as $folder)
 			{
-				$file=$this->_folder_convert_id_to_filename($content_type,$folder[$folder_info['id_field']]);
+				$file=$this->_folder_convert_id_to_filename($content_type,$folder[$folder_info['parent_spec__field_name']]);
 
 				$filetime=mixed();
 				if (!is_null($folder_info['edit_time_field']))
@@ -376,15 +401,17 @@ class content_fs_base
 			$where=array();
 			if (!is_null($this->folder_content_type))
 			{
-				$where[$file_info['category_field']]=$cat_id;
+				$where[is_array($file_info['category_field'])?$file_info['category_field'][0]:$file_info['category_field']]=$cat_id;
 			}
-			$select=array($file_info['id_field']);
+			$select=array();
+			append_content_select_for_id($select,$file_info);
 			if (!is_null($file_info['add_time_field'])) $select[]=$file_info['add_time_field'];
 			if (!is_null($file_info['edit_time_field'])) $select[]=$file_info['edit_time_field'];
-			$files=$file_info['connection']->query_select($file_info['table'],$select,$where,'ORDER BY '.$file_info['id_field'],10000/*Reasonable limit*/);
+			$files=$file_info['connection']->query_select($file_info['table'],$select,$where,10000/*Reasonable limit*/);
 			foreach ($files as $file)
 			{
-				$file=$this->_file_convert_id_to_filename($content_type,$file[$file_info['id_field']]);
+				$str_id=extract_content_str_id_from_data($file,$file_info);
+				$file=$this->_file_convert_id_to_filename($content_type,$str_id);
 
 				$filetime=mixed();
 				if (!is_null($file_info['edit_time_field']))
@@ -423,7 +450,7 @@ class content_fs_base
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
 		if (is_null($folder_content_type)) return false;
-_folder_add($title,$path,$properties)
+_folder_add($label,$path,$properties)
 		// TODO
 	}
 

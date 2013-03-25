@@ -73,7 +73,6 @@ class Hook_addon_registry_code_editor
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/code_editor.php',
 			'code_editor.php',
 			'exports/file_backups/index.html',

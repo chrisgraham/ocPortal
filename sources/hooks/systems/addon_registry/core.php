@@ -72,6 +72,7 @@ class Hook_addon_registry_core
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/resource_meta_aware/index.html',
 			'sources/block_add.php',
 			'BLOCK_MAIN_CONTENT.tpl',
 			'BLOCK_MAIN_MULTI_CONTENT.tpl',

@@ -74,7 +74,6 @@ class Hook_addon_registry_core_upgrader
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/core_upgrader.php',
 			'upgrader.php',
 			'sources/upgrade.php',

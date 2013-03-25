@@ -73,7 +73,6 @@ class Hook_addon_registry_breadcrumbs
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/breadcrumbs.php',
 			'data_custom/breadcrumbs.xml',
 			'sources/breadcrumbs.php',

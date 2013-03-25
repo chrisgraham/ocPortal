@@ -73,7 +73,9 @@ class Hook_addon_registry_core_menus
 	function get_file_list()
 	{
 		return array(
-
+			'sources/hooks/systems/resource_meta_aware/menu.php',
+			'sources/hooks/systems/resource_meta_aware/menu_item.php',
+			'sources/hooks/systems/occle_fs/menus.php',
 			'menu_editor.css',
 			'themes/default/images/menu_items/management_navigation/cms.png',
 			'themes/default/images/menu_items/management_navigation/docs.png',

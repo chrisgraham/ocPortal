@@ -73,7 +73,6 @@ class Hook_addon_registry_ocf_contactmember
 	function get_file_list()
 	{
 		return array(
-
 			'site/pages/modules/contactmember.php',
 			'sources/hooks/systems/addon_registry/ocf_contactmember.php',
 		);

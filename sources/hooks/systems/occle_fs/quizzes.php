@@ -32,32 +32,32 @@ class Hook_occle_fs_quizzes extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'timeout',
-			'start_text',
-			'end_text',
-			'end_text_fail',
-			'notes',
-			'percentage',
-			'open_time',
-			'close_time',
-			'num_winners',
-			'redo_time',
-			'type',
-			'validated',
-			'text',
-			'submitter',
-			'points_for_passing',
-			'tied_newsletter',
-			'add_date',
-			'meta_keywords',
-			'meta_description',
+			'timeout'=>'?TIME',
+			'start_text'=>'LONG_TRANS',
+			'end_text'=>'LONG_TRANS',
+			'end_text_fail'=>'LONG_TRANS',
+			'notes'=>'LONG_TEXT',
+			'percentage'=>'INTEGER',
+			'open_time'=>'TIME',
+			'close_time'=>'?TIME',
+			'num_winners'=>'INTEGER',
+			'redo_time'=>'?INTEGER',
+			'type'=>'ID_TEXT',
+			'validated'=>'BINARY',
+			'text'=>'LONG_TRANS',
+			'submitter'=>'member',
+			'points_for_passing'=>'INTEGER',
+			//'tied_newsletter'=>'?newsletter',
+			'add_date'=>'?TIME',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -65,7 +65,7 @@ class Hook_occle_fs_quizzes extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('quiz2');
 
@@ -86,11 +86,11 @@ class Hook_occle_fs_quizzes extends content_fs_base
 		$text=$this->_default_property_str($properties,'text');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$points_for_passing=$this->_default_property_int($properties,'points_for_passing');
-		$tied_newsletter=$this->_default_property_int_null($properties,'tied_newsletter');
+		$tied_newsletter=NULL;//$this->_default_property_int_null($properties,'tied_newsletter');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_quiz($title,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter,$points_for_passing,$tied_newsletter,$add_time,$meta_keywords,$meta_description);
+		$id=add_quiz($label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter,$points_for_passing,$tied_newsletter,$add_time,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 

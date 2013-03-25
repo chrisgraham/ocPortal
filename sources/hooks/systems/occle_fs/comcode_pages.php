@@ -33,20 +33,20 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'title',
-			'default_page',
-			'header_text',
-			'theme',
-			'wide',
-			'require_session',
-			'displayed_in_menu',
+			'human_title'=>'SHORT_TRANS',
+			'default_page'=>'ID_TEXT',
+			'header_text'=>'SHORT_TRANS',
+			'theme'=>'ID_TEXT',
+			'wide'=>'BINARY',
+			'require_session'=>'BINARY',
+			'displayed_in_menu'=>'BINARY',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -56,9 +56,12 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this content type
 
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
 		require_code('zones2');
 
-		$real_title=$this->_default_property_str($properties,'title');
+		$human_title=$this->_default_property_str($properties,'human_title');
+		if ($human_title=='') $human_title=$label;
 		$default_page=$this->_default_property_str($properties,'default_page');
 		if ($default_page=='') $default_page='start';
 		$header_text=$this->_default_property_str($properties,'header_text');
@@ -67,9 +70,9 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		$require_session=$this->_default_property_int($properties,'require_session');
 		$displayed_in_menu=$this->_default_property_int($properties,'displayed_in_menu');
 
-		$zone=$this->_create_name_from_title($title);
+		$zone=$this->_create_name_from_label($label);
 
-		actual_add_zone($zone,$real_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu);
+		actual_add_zone($zone,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu);
 
 		return $zone;
 	}
@@ -94,23 +97,23 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'lang',
-			'parent_page',
-			'validated',
-			'edit_date',
-			'add_date',
-			'show_as_edit',
-			'submitter',
-			'contents',
-			'meta_keywords',
-			'meta_description',
+			'text'=>'LONG_TRANS',
+			'lang'=>'LANGUAGE_NAME',
+			'parent_page'=>'comcode_page',
+			'validated'=>'BINARY',
+			'show_as_edit'=>'BINARY',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -120,15 +123,15 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		if ($path=='') return false;
 
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		$zone=$category;
 
-		$file=$this->_create_name_from_title($title);
+		$file=$this->_create_name_from_label($label);
 
 		$lang=$this->_default_property_str($properties,'lang');
 		if ($lang=='') $lang=get_site_default_lang();
-		$parent_page=_create_name_from_title($this->_default_property_str($properties,'parent_page'));
+		$parent_page=_create_name_from_label($this->_default_property_str($properties,'parent_page'));
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
@@ -137,14 +140,14 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		$show_as_edit=$this->_default_property_int($properties,'show_as_edit');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		if (is_null($submitter)) $submitter=get_member();
-		$contents=$this->_default_property_str($properties,'contents');
+		$text=$this->_default_property_str($properties,'text');
 
 		require_code('seo2');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 		if (($meta_keywords=='') && ($meta_description==''))
 		{
-			seo_meta_set_for_implicit('comcode_page',$file,array($contents),$contents);
+			seo_meta_set_for_implicit('comcode_page',$file,array($text),$text);
 		} else
 		{
 			seo_meta_set_for_explicit('comcode_page',$file,$meta_keywords,$meta_description);
@@ -164,7 +167,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($file).'.txt');
 		$myfile=@fopen($fullpath,'wt');
 		if ($myfile===false) intelligent_write_error($fullpath);
-		if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,$text)<strlen($text)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		fclose($myfile);
 		sync_file($fullpath);
 		fix_permissions($fullpath);

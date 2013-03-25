@@ -182,35 +182,43 @@ class Block_main_multi_content
 
 			if (!is_null($category_field_access))
 			{
-				if ($category_type_access==='!')
+				if ($category_type_access==='<zone>')
+				{
+					$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access a ON (r.'.$category_field_access.'=a.zone_name)';
+					$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access ma ON (r.'.$category_field_access.'=ma.zone_name)';
+				}
+				elseif ($category_type_access==='<page>')
 				{
 					$query.=' LEFT JOIN '.get_table_prefix().'group_page_access a ON (r.'.$category_field_filter.'=a.page_name AND r.'.$category_field_access.'=a.zone_name AND ('.$groups.'))';
 					$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access a2 ON (r.'.$category_field_access.'=a2.zone_name)';
+					$query.=' LEFT JOIN '.get_table_prefix().'group_zone_access ma2 ON (r.'.$category_field_access.'=ma2.zone_name)';
 				} else
 				{
 					$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a ON ('.db_string_equal_to('a.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=a.category_name)';
 					$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma ON ('.db_string_equal_to('ma.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma.category_name)';
 				}
 			}
-			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='!'))
+			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>') && ($info['category_type']!=='<zone>'))
 			{
 				$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a2 ON ('.db_string_equal_to('a.module_the_name',$category_type_filter).' AND r.'.$category_field_filter.'=a2.category_name)';
+				$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma2 ON ('.db_string_equal_to('ma2.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma2.category_name)';
 			}
 			if (!is_null($category_field_access))
 			{
 				if ($where!='') $where.=' AND ';
-				if ($info['category_type']==='!')
+				if ($info['category_type']==='<page>')
 				{
 					$where.='(a.group_id IS NULL) AND ('.str_replace('a.','a2.',$groups).') AND (a2.group_id IS NOT NULL)';
+					// NB: too complex to handle member-specific page permissions in this
 				} else
 				{
 					$where.='(('.$groups.') AND (a.group_id IS NOT NULL) OR (ma.active_until>'.strval(time()).' AND ma.member_id='.strval(get_member()).'))';
 				}
 			}
-			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='!'))
+			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL)';
+				$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR (ma2.active_until>'.strval(time()).' AND ma2.member_id='.strval(get_member()).'))';
 			}
 			if (array_key_exists('where',$info))
 			{
@@ -231,7 +239,7 @@ class Block_main_multi_content
 		{
 			$x1=$this->build_filter($filter,$info,'r.'.$category_field_filter);
 			$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
-			if (!is_null($parent_spec__table_name))
+			if ((!is_null($parent_spec__table_name)) && ($parent_spec__table_name!=$info['table']))
 			{
 				$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=r.'.$info['id_field'];
 			}
@@ -248,7 +256,6 @@ class Block_main_multi_content
 		}
 
 		if (is_array($info['id_field'])) $lifetime=NULL; // Cannot join on this
-
 		if (!is_null($lifetime))
 		{
 			$block_cache_id=md5(serialize($map));
@@ -310,6 +317,8 @@ class Block_main_multi_content
 			$lang_fields[$i]='r.'.$lang_field;
 		}
 
+		$first_id_field=is_array($info['id_field'])?$info['id_field'][0]:$info['id_field'];
+
 		// Find what kind of query to run and run it
 		if ($filter!='-1')
 		{
@@ -317,7 +326,7 @@ class Block_main_multi_content
 			{
 				case 'random':
 				case 'fixed_random ASC':
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$info['id_field'].' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start,false,false,$lang_fields);
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$first_id_field.' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start,false,false,$lang_fields);
 					break;
 				case 'recent':
 					if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
@@ -325,14 +334,14 @@ class Block_main_multi_content
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,$start,false,false,$lang_fields);
 						break;
 					}
-					$sort=$info['id_field'];
+					$sort=$first_id_field;
 				case 'views':
 					if ((array_key_exists('views_field',$info)) && (!is_null($info['views_field'])))
 					{
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,$start,false,false,$lang_fields);
 						break;
 					}
-					$sort=$info['id_field'];
+					$sort=$first_id_field;
 				case 'average_rating':
 				case 'average_rating ASC':
 				case 'average_rating DESC':
@@ -340,11 +349,11 @@ class Block_main_multi_content
 					{
 						if ($sort=='average_rating')  $sort.=' DESC';
 
-						$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS average_rating';
+						$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$first_id_field.') AS average_rating';
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort,$max,$start,false,false,$lang_fields);
 						break;
 					}
-					$sort=$info['id_field'];
+					$sort=$first_id_field;
 				case 'compound_rating':
 				case 'compound_rating ASC':
 				case 'compound_rating DESC':
@@ -352,11 +361,11 @@ class Block_main_multi_content
 					{
 						if ($sort=='compound_rating')  $sort.=' DESC';
 
-						$select_rating=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS compound_rating';
+						$select_rating=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$first_id_field.') AS compound_rating';
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort,$max,$start,false,false,$lang_fields);
 						break;
 					}
-					$sort=$info['id_field'];
+					$sort=$first_id_field;
 				default: // Some manual order
 					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$sort,$max,$start,false,false,$lang_fields);
 					break;
@@ -372,7 +381,7 @@ class Block_main_multi_content
 						}
 					} else
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,$start,false,false,$lang_fields);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$first_id_field.' ASC',$max,$start,false,false,$lang_fields);
 					}
 					break;
 			}
@@ -446,18 +455,20 @@ class Block_main_multi_content
 				{
 					if (array_key_exists($t_count,$pinned_order)) // Pinned ones go first, so order # for them is in sequence with main loop order
 					{
-						if (!in_array($pinned_order[$t_count][$info['id_field']],$used_ids))
+						$str_id=extract_content_str_id_from_data($pinned_order[$t_count],$info);
+						if (!in_array($str_id,$used_ids))
 						{
 							$rows[]=$pinned_order[$t_count];
-							$used_ids[]=$pinned_order[$t_count][$info['id_field']];
+							$used_ids[]=$str_id;
 						}
 					} else
 					{
 						$temp_row=$old_rows[$t_count-count($pinned_order)];
-						if (!in_array($temp_row[$info['id_field']],$used_ids))
+						$str_id=extract_content_str_id_from_data($temp_row,$info);
+						if (!in_array($str_id,$used_ids))
 						{
 							$rows[]=$temp_row;
-							$used_ids[]=$temp_row[$info['id_field']];
+							$used_ids[]=$str_id;
 						}
 					}
 				}
@@ -508,24 +519,10 @@ class Block_main_multi_content
 			if (count($done_already)==$max) break;
 
 			// Get content ID
-			if (is_array($info['id_field']))
-			{
-				$content_id='';
-				foreach ($info['id_field'] as $f)
-				{
-					if ($content_id!='') $content_id.=':';
-					$x=$row[$f];
-					if (!is_string($x)) $x=strval($x);
-					$content_id.=$x;
-				}
-			} else
-			{
-				$content_id=$row[$info['id_field']];
-				if (!is_string($content_id)) $content_id=strval($content_id);
-			}
+			$content_id=extract_content_str_id_from_data($row,$info);
 
+			// De-dupe
 			if (array_key_exists($content_id,$done_already)) continue;
-
 			$done_already[$content_id]=1;
 
 			// Lifetime managing

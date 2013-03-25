@@ -73,7 +73,6 @@ class Hook_addon_registry_welcome_emails
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/welcome_emails.php',
 			'adminzone/pages/modules/admin_ocf_welcome_emails.php',
 			'lang/EN/ocf_welcome_emails.ini',

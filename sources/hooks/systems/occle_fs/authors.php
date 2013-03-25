@@ -32,19 +32,19 @@ class Hook_occle_fs_authors extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'url',
-			'member_id',
-			'description',
-			'skills',
-			'meta_keywords',
-			'meta_description',
+			'url'=>'URLPATH',
+			'member_id'=>'member',
+			'description'=>'LONG_TRANS',
+			'skills'=>'LONG_TRANS',
+			'meta_keywords'=>'LONG_TEXT',
+			'meta_description'=>'LONG_TEXT',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -52,7 +52,7 @@ class Hook_occle_fs_authors extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('authors');
 
@@ -63,9 +63,9 @@ class Hook_occle_fs_authors extends content_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		add_author($title,$url,$member_id,$description,$skills,$meta_keywords,$meta_description);
+		add_author($label,$url,$member_id,$description,$skills,$meta_keywords,$meta_description);
 
-		return $title;
+		return $label;
 	}
 
 	/**

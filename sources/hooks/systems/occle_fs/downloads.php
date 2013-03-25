@@ -33,19 +33,19 @@ class Hook_occle_fs_downloads extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'description',
-			'notes',
-			'rep_image',
-			'add_date',
-			'meta_keywords',
-			'meta_description',
+			'description'=>'LONG_TRANS',
+			'notes'=>'LONG_TEXT',
+			'rep_image'=>'URLPATH',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
+			'add_date'=>'TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error)
@@ -64,7 +64,7 @@ class Hook_occle_fs_downloads extends content_fs_base
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_download_category($title,$parent_id,$description,$notes,$rep_image,NULL,$add_time,$meta_keywords,$meta_description);
+		$id=add_download_category($label,$parent_id,$description,$notes,$rep_image,NULL,$add_time,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
@@ -89,35 +89,35 @@ class Hook_occle_fs_downloads extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'url',
-			'description',
-			'author',
-			'additional_details',
-			'out_mode_id',
-			'validated',
-			'allow_rating',
-			'allow_comments',
-			'allow_trackbacks',
-			'notes',
-			'original_filename',
-			'file_size',
-			'cost',
-			'submitter_gets_points',
-			'licence',
-			'add_date',
-			'num_downloads',
-			'views',
-			'submitter',
-			'edit_date',
-			'meta_keywords',
-			'meta_description',
+			'url'=>'URLPATH',
+			'description'=>'LONG_TRANS',
+			'author'=>'author',
+			'additional_details'=>'LONG_TRANS',
+			'out_mode_id'=>'?download',
+			'validated'=>'BINARY',
+			'allow_rating'=>'BINARY',
+			'allow_comments'=>'SHORT_INTEGER',
+			'allow_trackbacks'=>'BINARY',
+			'notes'=>'LONG_TEXT',
+			'original_filename'=>'SHORT_TEXT',
+			'file_size'=>'INTEGER',
+			'cost'=>'INTEGER',
+			'submitter_gets_points'=>'BINARY',
+			'licence'=>'download_licence',
+			'num_downloads'=>'INTEGER',
+			'views'=>'INTEGER',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
+			'submitter'=>'member',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given title and properties.
+	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content title
+	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
@@ -125,7 +125,7 @@ class Hook_occle_fs_downloads extends content_fs_base
 	function _file_add($filename,$path,$properties)
 	{
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$title)=$this->_file_magic_filter($filename,$path,$properties);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
 
@@ -144,7 +144,7 @@ class Hook_occle_fs_downloads extends content_fs_base
 		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','download_downloads',1);
 		$notes=$this->_default_property_str($properties,'notes');
 		$original_filename=$this->_default_property_str($properties,'original_filename');
-		if ($original_filename=='') $original_filename=$title;
+		if ($original_filename=='') $original_filename=$label;
 		$file_size=$this->_default_property_int($properties,'file_size');
 		if (($file_size==0) && ($url!='') && (url_is_local($url)) && (file_exists(get_custom_file_base().'/'.rawurldecode($url))))
 		{
@@ -160,7 +160,7 @@ class Hook_occle_fs_downloads extends content_fs_base
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_download($category_id,$title,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date,NULL,$meta_keywords,$meta_description);
+		$id=add_download($category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
