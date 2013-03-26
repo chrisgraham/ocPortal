@@ -34,8 +34,8 @@
 
 		{+START,IF,{$MOBILE}}
 			<ul class="horizontal_meta_details associated_details" role="contentinfo">
-				<li><span class="field_name">{!COUNT_POSTS}:</span> {NUM_POSTS*}</li>
-				<li><span class="field_name">{!COUNT_VIEWS}:</span> {NUM_VIEWS*}</li>
+				<li><span class="field_name">{!COUNT_POSTS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_POSTS*}}</li>
+				<li><span class="field_name">{!COUNT_VIEWS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_VIEWS*}}</li>
 			</ul>
 			</p>
 		{+END}
@@ -47,10 +47,10 @@
 
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<td class="ocf_forum_topic_row_num_posts ocf_column4">
-			{NUM_POSTS*}
+			{$PREG_REPLACE,\,\d\d\d$,k,{NUM_POSTS*}}
 		</td>
 		<td class="ocf_forum_topic_row_num_views ocf_column5">
-			{NUM_VIEWS*}
+			{$PREG_REPLACE,\,\d\d\d$,k,{NUM_VIEWS*}}
 		</td>
 	{+END}
 

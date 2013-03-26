@@ -31,17 +31,17 @@
 
 		{+START,IF,{$MOBILE}}
 			<ul class="horizontal_meta_details associated_details" role="contentinfo">
-				<li><span class="field_name">{!COUNT_TOPICS}:</span> {$PREG_REPLACE,([^<>/\s\w]),\1 ,{NUM_TOPICS*}}</li>
-				<li><span class="field_name">{!COUNT_POSTS}:</span> {$PREG_REPLACE,([^<>/\s\w]),\1 ,{NUM_POSTS*}}</li>
+				<li><span class="field_name">{!COUNT_TOPICS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_TOPICS*}}</li>
+				<li><span class="field_name">{!COUNT_POSTS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_POSTS*}}</li>
 			</ul>
 		{+END}
 	</td>
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<td class="ocf_forum_num_topics ocf_column4">
-			{$PREG_REPLACE,([^<>/\s\w]),\1 ,{NUM_TOPICS*}}
+			{$PREG_REPLACE,\,\d\d\d$,k,{NUM_TOPICS*}}
 		</td>
 		<td class="ocf_forum_num_posts ocf_column5">
-			{$PREG_REPLACE,([^<>/\s\w]),\1 ,{NUM_POSTS*}}
+			{$PREG_REPLACE,\,\d\d\d$,k,{NUM_POSTS*}}
 		</td>
 	{+END}
 	<td class="ocf_forum_latest ocf_column6">
