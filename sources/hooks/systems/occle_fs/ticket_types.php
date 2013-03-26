@@ -15,14 +15,14 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		tickets
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_ticket_types extends content_fs_base
 {
-	var $file_content_type='TODO';
+	var $file_content_type='ticket_type';
 
 	/**
 	 * Standard modular introspection function.
@@ -32,8 +32,8 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'guest_emails_mandatory'=>'BINARY',
+			'search_faq'=>'BINARY'
 		);
 	}
 
@@ -50,12 +50,12 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('tickets2');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
+		$guest_emails_mandatory=$this->_default_property_int($properties,'guest_emails_mandatory');
+		$search_faq=$this->_default_property_int($properties,'search_faq');
 
-		$id=add_TODO($label,TODO);
+		$id=add_ticket_type($label,$guest_emails_mandatory,$search_faq);
 		return strval($id);
 	}
 
@@ -68,7 +68,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('tickets2');
+		delete_ticket_type(intval($content_id));
 	}
 }

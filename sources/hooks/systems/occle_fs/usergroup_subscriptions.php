@@ -15,14 +15,24 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		ecommerce
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_usergroup_subscriptions extends content_fs_base
 {
-	var $file_content_type='TODO';
+	var $file_content_type='usergroup_subscription';
+
+	/**
+	 * Whether the filesystem hook is active.
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function _is_active()
+	{
+		return (get_forum_type()=='ocf');
+	}
 
 	/**
 	 * Standard modular introspection function.
@@ -32,8 +42,16 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'description'=>'LONG_TRANS',
+			'cost'=>'SHORT_TEXT',
+			'length'=>'INTEGER',
+			'length_units'=>'SHORT_TEXT',
+			'group_id'=>'GROUP',
+			'enabled'=>'BINARY',
+			'mail_start'=>'LONG_TRANS',
+			'mail_end'=>'LONG_TRANS',
+			'mail_uhoh'=>'LONG_TRANS',
+			'uses_primary'=>'BINARY',
 		);
 	}
 
@@ -50,12 +68,20 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('ecommerce2');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
+		$description=$this->_default_property_str($properties,'description');
+		$cost=$this->_default_property_int($properties,'cost');
+		$length=$this->_default_property_int($properties,'length');
+		$length_units=$this->_default_property_str($properties,'length_units');
+		$group_id=$this->_default_property_int($properties,'group_id');
+		$uses_primary=$this->_default_property_int($properties,'uses_primary');
+		$enabled=$this->_default_property_int($properties,'enabled');
+		$mail_start=$this->_default_property_str($properties,'mail_start');
+		$mail_end=$this->_default_property_str($properties,'mail_end');
+		$mail_uhoh=$this->_default_property_str($properties,'mail_uhoh');
 
-		$id=add_TODO($label,TODO);
+		$id=add_usergroup_subscription($label,$description,$cost,$length,$length_units,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh);
 		return strval($id);
 	}
 
@@ -68,7 +94,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('ecommerce2');
+		delete_usergroup_subscription(intval($content_id));
 	}
 }

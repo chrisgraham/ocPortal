@@ -73,6 +73,7 @@ class Hook_addon_registry_core_notifications
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/core_notifications.php',
+			'sources/hooks/systems/occle_fs_extended_config/notification_lockdown.php',
 			'sources/notifications.php',
 			'sources/notifications2.php',
 			'lang/EN/notifications.ini',

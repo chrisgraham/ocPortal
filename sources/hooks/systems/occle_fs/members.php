@@ -273,7 +273,7 @@ class Hook_occle_fs_members
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
 	 * @param  array		A reference to the OcCLE filesystem object
-	 * @return ~string		The file contents (false: failure)
+	 * @return ~string	The file contents (false: failure)
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{

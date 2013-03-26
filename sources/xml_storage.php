@@ -193,19 +193,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 		$value='';
 		if ((strpos($field['m_type'],'TRANS')!==false) || (($table=='config') && ($name=='config_value') && ($row[$name]!='') && (strpos($row['the_type'],'trans')!==false))) // Translation layer integration.
 		{
-			$translate_rows=$GLOBALS['SITE_DB']->query_select('translate',array('*'),array('id'=>$row[$name]));
-			foreach ($translate_rows as $t)
-			{
-				if (($comcode_xml) && ($t['text_parsed']!='') && ($t['text_original']!=''))
-				{
-					$value=chr(10)._tab(comcode_text__to__comcode_xml($t['text_original'])).chr(10);
-				} else
-				{
-					$value=xmlentities($t['text_original']);
-				}
-
-				$inner.=_tab('<'.$name.' language="'.xmlentities($t['language']).'" importance_level="'.xmlentities(strval($t['importance_level'])).'" source_user="'.xmlentities(strval($t['source_user'])).'">'.$value.'</'.$name.'>').chr(10);
-			}
+			$inner.=get_translated_text_xml($row[$name],$name);
 
 			if (strpos($field['m_type'],'*')!==false) // Special case if lang string forms key. We need to put in an extra attribute so we can bind an existing lang string code if it exists
 			{
@@ -520,7 +508,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 	}
 
 	// Collate lang string data
-	foreach ($table[3] as $__) // remaining attributes
+	foreach ($table[3] as $__) // remaining attributes (encoded as child nodes)
 	{
 		if (!is_array($__)) continue;
 
@@ -544,7 +532,22 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 				$data[$row_tag]=$existing_data[$row_tag];
 			} else // Insert in lang layer
 			{
-				$data[$row_tag]=$GLOBALS['SITE_DB']->query_insert('translate',array('source_user'=>array_key_exists('source_user',$row_attributes)?intval($row_attributes['source_user']):get_member(),'broken'=>0,'importance_level'=>array_key_exists('importance_level',$row_attributes)?intval($row_attributes['importance_level']):2,'text_original'=>$row_value,'text_parsed'=>'','language'=>array_key_exists('language',$row_attributes)?$row_attributes['language']:get_site_default_lang()),true);
+				$insert_map=array(
+					'source_user'=>array_key_exists('source_user',$row_attributes)?intval($row_attributes['source_user']):get_member(),
+					'broken'=>0,
+					'importance_level'=>array_key_exists('importance_level',$row_attributes)?intval($row_attributes['importance_level']):2,
+					'text_original'=>$row_value,
+					'text_parsed'=>'',
+					'language'=>array_key_exists('language',$row_attributes)?$row_attributes['language']:get_site_default_lang(),
+				);
+				if (array_key_exists($row_tag,$data))
+				{
+					$insert_map['id']=$data[$row_tag];
+					$GLOBALS['SITE_DB']->query_insert('translate',$insert_map);
+				} else
+				{
+					$data[$row_tag]=$GLOBALS['SITE_DB']->query_insert('translate',$insert_map,true);
+				}
 			}
 		}
 	}
@@ -627,6 +630,80 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 	}
 
 	return $ops;
+}
+
+/**
+ * Get the XML for transferring a language string.
+ *
+ * @param  AUTO_LINK		Language ID
+ * @param  ID_TEXT		The element name
+ * @return string			XML (no root tag)
+ */
+function get_translated_text_xml($id,$name)
+{
+	$inner='';
+	$translate_rows=$GLOBALS['SITE_DB']->query_select('translate',array('*'),array('id'=>$id));
+	foreach ($translate_rows as $t)
+	{
+		if (($comcode_xml) && ($t['text_parsed']!='') && ($t['text_original']!=''))
+		{
+			$value=chr(10)._tab(comcode_text__to__comcode_xml($t['text_original'])).chr(10);
+		} else
+		{
+			$value=xmlentities($t['text_original']);
+		}
+
+		$inner.=_tab('<'.$name.' language="'.xmlentities($t['language']).'" importance_level="'.xmlentities(strval($t['importance_level'])).'" source_user="'.xmlentities(strval($t['source_user'])).'">'.$value.'</'.$name.'>').chr(10);
+	}
+	return $inner;
+}
+
+/**
+ * Parse some text for language string values, and insert.
+ *
+ * @param  string			XML (with root tag)
+ * @return AUTO_LINK		Language ID
+ */
+function insert_lang_xml($xml_data)
+{
+	$parsed=new ocp_simple_xml_reader($xml_data);
+	if (!is_null($parsed->error)) warn_exit($parsed->error);
+
+	list($root_tag,$root_attributes,,$this_children)=$parsed->gleamed;
+
+	$id=mixed();
+
+	// Collate lang string data
+	foreach ($this_children as $table)
+	{
+		foreach ($table[3] as $__)
+		{
+			if (!is_array($__)) continue;
+
+			list($row_tag,$row_attributes,$row_value,$row_children)=$__;
+
+			if ((count($row_children)!=0) && (trim($row_value)==''))	$row_value=$parsed->pull_together($row_children);
+
+			$insert_map=array(
+				'source_user'=>array_key_exists('source_user',$row_attributes)?intval($row_attributes['source_user']):get_member(),
+				'broken'=>0,
+				'importance_level'=>array_key_exists('importance_level',$row_attributes)?intval($row_attributes['importance_level']):2,
+				'text_original'=>$row_value,
+				'text_parsed'=>'',
+				'language'=>array_key_exists('language',$row_attributes)?$row_attributes['language']:get_site_default_lang(),
+			);
+			if (!is_null($id))
+			{
+				$insert_map['id']=$data[$row_tag];
+				$GLOBALS['SITE_DB']->query_insert('translate',$insert_map);
+			} else
+			{
+				$id=$GLOBALS['SITE_DB']->query_insert('translate',$insert_map,true);
+			}
+		}
+	}
+
+	return $id;
 }
 
 /**

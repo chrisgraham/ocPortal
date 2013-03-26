@@ -15,14 +15,14 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		custom_comcode
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 {
-	var $file_content_type='TODO';
+	var $file_content_type='custom_comcode_tag';
 
 	/**
 	 * Standard modular introspection function.
@@ -32,8 +32,15 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'title'=>'SHORT_TRANS',
+			'description'=>'SHORT_TRANS',
+			'replace'=>'LONG_TEXT',
+			'example'=>'LONG_TEXT',
+			'parameters'=>'SHORT_TEXT',
+			'enabled'=>'BINARY',
+			'dangerous_tag'=>'BINARY',
+			'block_tag'=>'BINARY',
+			'textual_tag'=>'BINARY'
 		);
 	}
 
@@ -50,12 +57,29 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		$tag=$this->_create_name_from_label($label);
+		$title=$this->_default_property_str($properties,'title');
+		$description=$this->_default_property_str($properties,'description');
+		$replace=$this->_default_property_str($properties,'replace');
+		$example=$this->_default_property_str($properties,'example');
+		$parameters=$this->_default_property_str($properties,'parameters');
+		$enabled=$this->_default_property_int($properties,'enabled');
+		$dangerous_tag=$this->_default_property_int($properties,'dangerous_tag');
+		$block_tag=$this->_default_property_int($properties,'block_tag');
+		$textual_tag=$this->_default_property_int($properties,'textual_tag');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
-
-		$id=add_TODO($label,TODO);
+		$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+			'tag_tag'=>$tag,
+			'tag_title'=>insert_lang($title,3),
+			'tag_description'=>insert_lang($description,3),
+			'tag_replace'=>$replace,
+			'tag_example'=>$example,
+			'tag_parameters'=>$parameters,
+			'tag_enabled'=>$enabled,
+			'tag_dangerous_tag'=>$dangerous_tag,
+			'tag_block_tag'=>$block_tag,
+			'tag_textual_tag'=>$textual_tag
+		));
 		return strval($id);
 	}
 
@@ -68,7 +92,8 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		$GLOBALS['SITE_DB']->query_delete('custom_comcode',array(
+			'tag_tag'=>$content_id,
+		));
 	}
 }

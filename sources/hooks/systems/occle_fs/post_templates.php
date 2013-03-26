@@ -15,14 +15,24 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		ocf_post_templates
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_post_templates extends content_fs_base
 {
-	var $file_content_type='TODO';
+	var $file_content_type='post_template';
+
+	/**
+	 * Whether the filesystem hook is active.
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function _is_active()
+	{
+		return (get_forum_type()=='ocf');
+	}
 
 	/**
 	 * Standard modular introspection function.
@@ -32,8 +42,9 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'text'=>'LONG_TEXT',
+			'forum_multi_code'=>'SHORT_TEXT',
+			'use_default_forums'=>'BINARY'
 		);
 	}
 
@@ -50,12 +61,13 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('ocf_general_action');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
+		$text=$this->_default_property_str($properties,'text');
+		$forum_multi_code=$this->_default_property_str($properties,'forum_multi_code');
+		$use_default_forums=$this->_default_property_int($properties,'use_default_forums');
 
-		$id=add_TODO($label,TODO);
+		$id=ocf_make_post_template($label,$text,$forum_multi_code,$use_default_forums);
 		return strval($id);
 	}
 
@@ -68,7 +80,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('ocf_general_action2');
+		ocf_delete_post_template(intval($content_id));
 	}
 }

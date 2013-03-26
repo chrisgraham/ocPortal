@@ -72,6 +72,7 @@ class Hook_addon_registry_occle
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/occle_fs_extended_config/index.html',
 			'sources/hooks/systems/config_default/bottom_show_occle_button.php',
 			'sources/hooks/systems/config_default/occle_chat_announce.php',
 			'themes/default/images/pagepics/occle.png',

@@ -217,4 +217,25 @@ function delete_menu_item($id)
 	log_it('DELETE_MENU_ITEM',strval($id),$caption);
 }
 
+/**
+ * Delete a menu.
+ *
+ * @param  ID_TEXT	The ID of the menu.
+ */
+function delete_menu($menu_id)
+{
+	// Get language codes currently used
+	$old_menu_bits=list_to_map('id',$GLOBALS['SITE_DB']->query_select('menu_items',array('id','i_caption','i_caption_long'),array('i_menu'=>$menu_id)));
+
+	// Erase old stuff
+	foreach ($old_menu_bits as $menu_item_id=>$lang_code)
+	{
+		$GLOBALS['SITE_DB']->query_delete('menu_items',array('id'=>$menu_item_id));
+		delete_lang($lang_code['i_caption']);
+		delete_lang($lang_code['i_caption_long']);
+	}
+
+	decache('side_stored_menu');
+	persistent_cache_delete(array('MENU',$menu_id));
+}
 

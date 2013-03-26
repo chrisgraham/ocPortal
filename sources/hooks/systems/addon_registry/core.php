@@ -73,6 +73,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			'sources/hooks/systems/resource_meta_aware/index.html',
+			'sources/hooks/systems/occle_fs_extended_config/privilege.php',
 			'sources/block_add.php',
 			'BLOCK_MAIN_CONTENT.tpl',
 			'BLOCK_MAIN_MULTI_CONTENT.tpl',

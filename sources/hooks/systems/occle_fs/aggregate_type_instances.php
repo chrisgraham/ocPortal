@@ -15,14 +15,14 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		aggregate_types
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 {
-	var $file_content_type='TODO';
+	var $file_content_type='aggregate_type_instance';
 
 	/**
 	 * Standard modular introspection function.
@@ -32,8 +32,10 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'aggregate_type'=>'ID_TEXT',
+			'other_properties'=>'LONG_TEXT',
+			'add_date'=>'TIME',
+			'edit_date'=>'?TIME',
 		);
 	}
 
@@ -50,12 +52,15 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('aggregate_types');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
+		$aggregate_type=$this->_default_property_str($properties,'aggregate_type');
+		$_other_properties=$this->_default_property_str($properties,'other_properties');
+		$other_properties=($_other_properties=='')?array():unserialize($_other_properties);
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 
-		$id=add_TODO($label,TODO);
+		$id=add_aggregate_type_instance($label,$aggregate_type,$other_properties,$add_time,$edit_time);
 		return strval($id);
 	}
 
@@ -68,7 +73,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('aggregate_types');
+		delete_aggregate_type_instance(intval($content_id));
 	}
 }

@@ -15,14 +15,14 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		downloads
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_download_licences extends content_fs_base
 {
-	var $file_content_type='TODO';
+	var $file_content_type='download_licence';
 
 	/**
 	 * Standard modular introspection function.
@@ -32,8 +32,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'text'=>'LONG_TEXT'
 		);
 	}
 
@@ -50,12 +49,11 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('downloads2');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
+		$text=$this->_default_property_str($properties,'text');
 
-		$id=add_TODO($label,TODO);
+		$id=add_download_licence($label,$text);
 		return strval($id);
 	}
 
@@ -68,7 +66,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('downloads2');
+		delete_download_licence(intval($content_id));
 	}
 }

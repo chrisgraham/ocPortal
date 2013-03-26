@@ -76,6 +76,7 @@ class Hook_addon_registry_redirects_editor
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/redirects_editor.php',
+			'sources/hooks/systems/occle_fs_extended_config/redirect.php',
 			'REDIRECTE_TABLE_SCREEN.tpl',
 			'REDIRECTE_TABLE_REDIRECT.tpl',
 			'adminzone/pages/modules/admin_redirects.php',

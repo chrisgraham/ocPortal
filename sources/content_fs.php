@@ -48,6 +48,36 @@ function get_content_occlefs_object($content_type)
 	return $fs_object;
 }
 
+/**
+ * Convert a local ID to something portable.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The content ID
+ * @return array		Portable ID details
+ */
+function remap_content_id_as_portable($content_type,$content_id)
+{
+	return array(
+		'guid'=>TODO,
+		'label'=>TODO,
+		'id'=>$content_id
+	);
+}
+
+/**
+ * Convert a portable ID to something local.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  array		Portable ID details
+ * @return ID_TEXT	The content ID
+ */
+function remap_portable_as_content_id($content_type,$portable)
+{
+	// TODO
+	$content_id=$portable['id'];
+	return $content_id;
+}
+
 class content_fs_base
 {
 	var $folder_content_type=NULL;

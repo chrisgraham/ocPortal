@@ -15,15 +15,15 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		TODO
+ * @package		core_menus
  */
 
 require_code('content_fs');
 
-class Hook_occle_fs_TODO extends content_fs_base
+class Hook_occle_fs_menus extends content_fs_base
 {
-	var $folder_content_type='TODO';
-	var $file_content_type='TODO';
+	var $folder_content_type='menu';
+	var $file_content_type='menu_item';
 
 	/**
 	 * Standard modular introspection function.
@@ -33,8 +33,6 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
 		);
 	}
 
@@ -53,11 +51,23 @@ class Hook_occle_fs_TODO extends content_fs_base
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('menus2');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		$id=add_TODO($label,TODO);
-		return strval($id);
+		$menu=$this->_create_name_from_label($label);
+
+		$order=db_get_first_id();
+		$parent=NULL;
+		$caption=do_lang('FRONT_PAGE');
+		$url='_SELF:start';
+		$check_permissions=1;
+		$page_only='';
+		$expanded=1;
+		$new_window=0;
+		$caption_long='';
+		$theme_image_code='';
+
+		add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
+		return $menu;
 	}
 
 	/**
@@ -69,8 +79,8 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('menus2');
+		delete_menu($content_id);
 	}
 
 	/**
@@ -81,8 +91,15 @@ class Hook_occle_fs_TODO extends content_fs_base
 	function _enumerate_file_properties()
 	{
 		return array(
-			'TODO'=>'TODO',
-			...
+			'order'=>'INTEGER',
+			'parent'=>'?menu_item',
+			'caption_long'=>'SHORT_TRANS',
+			'url'=>'SHORT_TEXT',
+			'check_permissions'=>'BINARY',
+			'expanded'=>'BINARY',
+			'new_window'=>'BINARY',
+			'page_only'=>'ID_TEXT',
+			'theme_img_code'=>'ID_TEXT',
 		);
 	}
 
@@ -99,12 +116,19 @@ class Hook_occle_fs_TODO extends content_fs_base
 		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		require_code('TODO');
+		require_code('menus2');
 
-		$TODO=$this->_default_property_str($properties,'TODO');
-		...
+		$order=$this->_default_property_int($properties,'order');
+		$parent=$this->_default_property_int_null($properties,'parent');
+		$url=$this->_default_property_str($properties,'url');
+		$check_permissions=$this->_default_property_int($properties,'check_permissions');
+		$page_only=$this->_default_property_str($properties,'page_only');
+		$expanded=$this->_default_property_int($properties,'expanded');
+		$new_window=$this->_default_property_int($properties,'new_window');
+		$caption_long=$this->_default_property_str($properties,'caption_long');
+		$theme_image_code=$this->_default_property_str($properties,'theme_image_code');
 
-		$id=add_TODO($label,TODO);
+		$id=add_menu_item($category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
 		return strval($id);
 	}
 
@@ -117,7 +141,7 @@ class Hook_occle_fs_TODO extends content_fs_base
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('TODO');
-		delete_TODO(intval($content_id));
+		require_code('menus2');
+		delete_menu_item(intval($content_id));
 	}
 }
