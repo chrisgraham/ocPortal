@@ -35,8 +35,8 @@ function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 /**
  * Edit a ticket type, keeping the integer ID the same.
  *
- * @param  integer			The old ticket type
- * @param  ?SHORT_TEXT		The new ticket type (NULL: do not change)
+ * @param  AUTO_LINK			The ticket type
+ * @param  ?SHORT_TEXT		The new ticket type text (NULL: do not change)
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
  */
@@ -53,7 +53,7 @@ function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandat
 /**
  * Delete a ticket type.
  *
- * @param  integer		The ticket type
+ * @param  AUTO_LINK			The ticket type
  */
 function delete_ticket_type($ticket_type)
 {

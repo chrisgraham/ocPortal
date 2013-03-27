@@ -36,25 +36,34 @@ class Hook_occle_fs_etc
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 		load_options();
 
+		$query='SELECT param_a,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('the_type','CONFIGURATION').' GROUP BY param_a';
+		$modification_times=list_to_map('param_a','date_and_time',$GLOBALS['SITE_DB']->query($query));
+
 		$listing=array();
 		foreach (array_keys($CONFIG_OPTIONS_CACHE) as $option)
 		{
+			$modification_time=array_key_exists($option,$modification_times)?$modification_times[$option]:NULL;
+
 			$listing[]=array(
 				$option,
 				OCCLEFS_FILE,
-				NULL/*don't calculate a filesize*/,
-				NULL/*don't specify a modification time*/,
+				strlen(get_option($option)),
+				$modification_time,
 			);
 		}
 
 		$hooks=find_all_hooks('systems','occle_fs_extended_config');
 		foreach (array_keys($hooks) as $hook)
 		{
+			require_code('hooks/systems/occle_fs_extended_config/',filter_naughty($hook));
+			$ob=object_factory('Hook_occle_fs_extended_config__'.$hook);
+			$modification_time=$ob->_get_edit_date();
+
 			$listing[]=array(
 				'_'.$hook.'s',
 				OCCLEFS_FILE,
 				NULL/*don't calculate a filesize*/,
-				NULL/*don't specify a modification time*/,
+				$modification_time,
 			);
 		}
 

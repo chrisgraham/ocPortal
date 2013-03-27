@@ -72,6 +72,18 @@ class Hook_occle_fs_groups extends content_fs_base
 	}
 
 	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_folder_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',strval($row['id'])).' AND  ('.db_string_equal_to('the_type','ADD_GROUP').' OR '.db_string_equal_to('the_type','EDIT_GROUP').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
@@ -207,6 +219,20 @@ class Hook_occle_fs_groups extends content_fs_base
 			$props[$key]=$_type;
 		}
 		return $props;
+	}
+
+	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_file_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',strval($row['id'])).' AND  ('.db_string_equal_to('the_type','EDIT_EDIT_MEMBER_PROFILE').')';
+		$time=$GLOBALS['SITE_DB']->query_value_if_there($query);
+		//if (is_null($time)) $time=$row['m_join_time'];	This will be picked up naturally
+		return $time;
 	}
 
 	/**

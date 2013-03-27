@@ -81,6 +81,8 @@ function site_tree_script()
 
 			if ($type=='root')
 			{
+				log_it('PRIVILEGES');
+
 				// Insertion
 				foreach ($groups as $group=>$group_name) // For all usergroups
 				{
@@ -104,6 +106,8 @@ function site_tree_script()
 			}
 			elseif ($type=='zone')
 			{
+				log_it('ZONE_ACCESS');
+
 				$zone=$matches[1];
 
 				// Insertion
@@ -124,6 +128,9 @@ function site_tree_script()
 			}
 			elseif ($type=='page')
 			{
+				$changed_view_access=false;
+				$changed_privileges=false;
+
 				// Insertion
 				foreach ($groups as $group=>$group_name) // For all usergroups
 				{
@@ -136,6 +143,8 @@ function site_tree_script()
 							$GLOBALS['SITE_DB']->query_delete('group_page_access',array('zone_name'=>$zone,'page_name'=>$page,'group_id'=>$group));
 							if ($view==0) // Pages have access by row non-presence, for good reason
 								$GLOBALS['SITE_DB']->query_insert('group_page_access',array('zone_name'=>$zone,'page_name'=>$page,'group_id'=>$group));
+
+							$changed_view_access=true;
 						}
 
 						// Privileges
@@ -149,10 +158,15 @@ function site_tree_script()
 								{
 									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$override,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>$privilege_page,'the_value'=>$val));
 								}
+
+								$changed_privileges=true;
 							}
 						}
 					}
 				}
+				
+				if ($changed_view_access) log_it('PAGE_ACCESS');
+				if ($changed_privileges) log_it('PRIVILEGES');
 			}
 			elseif ($type=='cat')
 			{

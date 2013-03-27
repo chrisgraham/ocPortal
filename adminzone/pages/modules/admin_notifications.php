@@ -210,6 +210,8 @@ class Module_admin_notifications
 				}
 			}
 
+			log_it('NOTIFICATIONS_LOCKDOWN');
+
 			attach_message(do_lang_tempcode('SUCCESS'));
 		}
 

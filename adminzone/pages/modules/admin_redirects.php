@@ -255,6 +255,8 @@ class Module_admin_redirects
 		require_code('view_modes');
 		erase_block_cache();
 
+		log_it('SET_REDIRECTS');
+
 		// Personal notes
 		if (!is_null(post_param('notes',NULL)))
 		{

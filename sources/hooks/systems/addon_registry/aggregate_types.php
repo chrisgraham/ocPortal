@@ -59,7 +59,7 @@ class Hook_addon_registry_aggregate_types
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
+			'requires'=>array('occle','import'),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
 			'previously_in_addon'=>array(),

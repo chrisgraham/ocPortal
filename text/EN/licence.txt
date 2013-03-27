@@ -129,6 +129,7 @@ This product includes:
   - Javascript library (JAVASCRIPT_MORE) (LGPL licence, ocProducts modifications also therefore are also licenced under the LGPL)
   - FirePHP (BSD-like licence)
   - SoundManager (BSD-like licence)
+  - SabreDAV (BSD-like licence)
   - jsmin (MIT licence)
   - cssmin (MIT licence)
   - SWF-upload (MIT licence)

@@ -58,7 +58,7 @@ class Hook_addon_registry_occle
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
+			'requires'=>array('import'),
 			'recommends'=>array(),
 			'conflicts_with'=>array()
 		);

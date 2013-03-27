@@ -37,6 +37,18 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_folder_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',$row['i_menu']).' AND  ('.db_string_equal_to('the_type','ADD_MENU').' OR '.db_string_equal_to('the_type','EDIT_MENU').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
@@ -67,6 +79,9 @@ class Hook_occle_fs_menus extends content_fs_base
 		$theme_image_code='';
 
 		add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
+
+		log_it('ADD_MENU',$menu);
+
 		return $menu;
 	}
 
@@ -101,6 +116,18 @@ class Hook_occle_fs_menus extends content_fs_base
 			'page_only'=>'ID_TEXT',
 			'theme_img_code'=>'ID_TEXT',
 		);
+	}
+
+	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_file_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',strval($row['id'])).' AND  ('.db_string_equal_to('the_type','ADD_MENU_ITEM').' OR '.db_string_equal_to('the_type','EDIT_MENU_ITEM').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
 	}
 
 	/**

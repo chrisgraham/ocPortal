@@ -6,13 +6,13 @@ We designed OcCLE to supplement the features of the Admin Zone, rather than to r
  - PHP code
  - SQL database queries
  - OcCLE-code scripts
- - OcCLE-code commands, which you can use to fully interact with the OcCLE meta-filesystem
+ - OcCLE-code commands, which you can use to fully interact with the ocPortal Repository
 
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Commands[/title]
 
-Although the system is very flexible, there are many commands to use, designed for interaction with the meta-filesystem and other systems designed specifically for OcCLE. Since UNIX is the grandfather of almost all of the operating systems where command-line use is most prevalent -- and administrators comfortable with command-lines will probably be UNIX experts -- many of the commands mirror their UNIX counterparts.
+Although the system is very flexible, there are many commands to use, designed for interaction with the ocPortal Repository and other systems designed specifically for OcCLE. Since UNIX is the grandfather of almost all of the operating systems where command-line use is most prevalent -- and administrators comfortable with command-lines will probably be UNIX experts -- many of the commands mirror their UNIX counterparts.
 
 The basic format for a command is as follows:
 [code]command_name -o -long_option -o2=value -long_option2="value 2" parameter1 "parameter 2" parameter3[/code]
@@ -43,25 +43,13 @@ OcCLE will attempt to store variables and included files between command request
 
 SQL queries can also be executed by OcCLE, simply by prefixing the query to be executed with an 'at' symbol ("@"). As with PHP commands, the query results will be outputted in an appropriate manner.
 
-[title="2"]Meta-filesystems[/title]
+[title="2"]The filesystem[/title]
 
-One of the main features of OcCLE is the fact that various facets of ocPortal can be manipulated through meta-filesystems. There are several included by default, but it is quite simple to write more as hooks if you know how to program. There are several different meta-filesystems for accessing the real file structure of the ocPortal installation, one for manipulating members (if you have OCF installed), one for manipulating the database, and a couple of others.
+One of the main features of OcCLE is the fact that various facets of ocPortal can be manipulated through a virtual filesystem, known as the ocPortal Repository (aka OcCLE-fs). There are many different kinds of directory tied into the filesystem and it is quite simple to write more as hooks if you know how to program.
 
-To use these meta-filesystems, simply navigate around using the standard UNIX filesystem commands ([tt]cd[/tt], [tt]pwd[/tt], [tt]ls[/tt], etc.), and modify files in a similar fashion to change the appropriate behind-the-scenes value.
+To use the repository, simply navigate around using the standard UNIX filesystem commands ([tt]cd[/tt], [tt]pwd[/tt], [tt]ls[/tt], etc.), and modify files in a similar fashion to change the appropriate behind-the-scenes value.
 
-Each of the default meta-filesystems is mapped to a subdirectory of the OcCLE meta-root directory, with obvious mappings sometimes inspired by UNIX. These mappings are stored in an array in [tt]sources/occle.php[/tt], and if you know how to program you can easily change and customise the mappings to personalise your OcCLE installation.
-
-The default meta-filesystems are as follows, and are all mapped as subdirectories of the root directory:
- - [tt]bin[/tt]: A place to store all your OcCLE scripts
- - [tt]database[/tt]: Access to the raw SQL database; level 1: tables, level 2: rows (identified by ID)
- - [tt]etc[/tt]: Access to ocPortal configuration options
- - [tt]home[/tt]: Access to the filedump
- - [tt]members[/tt]: A listing of every member registered on the system, with their preferences and usergroups
- - [tt]raw[/tt]: A raw listing of the actual ocPortal installation directory
- - [tt]root[/tt]: A listing of the ocPortal installation directory, taking source code overrides into account (automatically overriding)
- - [tt]var[/tt]: Structured website content, separated by content type on level 1, with category structure as further folders (generally-speaking), and entries as files
-
-The [tt]var[/tt] filesystem is perhaps the most interesting because if Webdav is installed, you can use this to import/export/copy content into and between websites using your normal desktop file manager. This is extremely useful.
+To learn more about the filesystem, which is also used by other parts of ocPortal, see [page="_SEARCH:tut_repository"]the repository tutorial[/page].
 
 [title="2"]Scripts[/title]
 
@@ -84,3 +72,4 @@ OcCLEchat is designed to allow website administrators to communicate with each o
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
+ - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]

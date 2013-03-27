@@ -401,15 +401,22 @@ class content_fs_base
 				$file=$this->_folder_convert_id_to_filename($content_type,$folder[$folder_info['parent_spec__field_name']]);
 
 				$filetime=mixed();
-				if (!is_null($folder_info['edit_time_field']))
+				if (method_exists($this,'_get_folder_edit_date'))
 				{
-					$filetime=$folder[$folder_info['edit_time_field']];
+					$filetime=$this->_get_folder_edit_date($folder,end($meta_dir));
 				}
 				if (is_null($filetime))
 				{
-					if (!is_null($folder_info['add_time_field']))
+					if (!is_null($folder_info['edit_time_field']))
 					{
-						$filetime=$folder[$folder_info['add_time_field']];
+						$filetime=$folder[$folder_info['edit_time_field']];
+					}
+					if (is_null($filetime))
+					{
+						if (!is_null($folder_info['add_time_field']))
+						{
+							$filetime=$folder[$folder_info['add_time_field']];
+						}
 					}
 				}
 
@@ -444,15 +451,22 @@ class content_fs_base
 				$file=$this->_file_convert_id_to_filename($content_type,$str_id);
 
 				$filetime=mixed();
-				if (!is_null($file_info['edit_time_field']))
+				if (method_exists($this,'_get_file_edit_date'))
 				{
-					$filetime=$file[$file_info['edit_time_field']];
+					$filetime=$this->_get_file_edit_date($file,end($meta_dir));
 				}
 				if (is_null($filetime))
 				{
-					if (!is_null($file_info['add_time_field']))
+					if (!is_null($file_info['edit_time_field']))
 					{
-						$filetime=$file[$file_info['add_time_field']];
+						$filetime=$file[$file_info['edit_time_field']];
+					}
+					if (is_null($filetime))
+					{
+						if (!is_null($file_info['add_time_field']))
+						{
+							$filetime=$file[$file_info['add_time_field']];
+						}
 					}
 				}
 

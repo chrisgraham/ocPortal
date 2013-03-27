@@ -40,14 +40,18 @@ class Hook_occle_fs_members
 			$cnt=$GLOBALS['SITE_DB']->query_select_value('f_members','COUNT(*)');
 			if ($cnt>1000) return false; // Too much to process
 
-			$users=$GLOBALS['SITE_DB']->query_select('f_members',array('m_username','m_join_time'));
+			$users=$GLOBALS['SITE_DB']->query_select('f_members',array('id','m_username','m_join_time'));
 			foreach ($users as $user)
 			{
+				$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',strval($user['id'])).' AND  ('.db_string_equal_to('the_type','EDIT_EDIT_MEMBER_PROFILE').')';
+				$modification_time=$GLOBALS['SITE_DB']->query_value_if_there($query);
+				if (is_null($modification_time)) $modification_time=$user['m_join_time'];
+
 				$listing[]=array(
 					$user['m_username'],
 					OCCLEFS_DIR,
 					NULL/*don't calculate a filesize*/,
-					$user['m_join_time'],
+					$modification_time,
 				);
 			}
 		}

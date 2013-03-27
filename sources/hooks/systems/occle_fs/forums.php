@@ -94,6 +94,24 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_folder_edit_date($row,$category)
+	{
+		if (substr($category,0,6)=='FORUM-')
+		{
+			$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',strval($row['id'])).' AND  ('.db_string_equal_to('the_type','ADD_FORUM').' OR '.db_string_equal_to('the_type','EDIT_FORUM').')';
+			return $GLOBALS['SITE_DB']->query_value_if_there($query);
+		}
+
+		return NULL; // Will be picked up naturally from t_cache_first_time/t_cache_last_time
+	}
+
+	/**
 	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The content type

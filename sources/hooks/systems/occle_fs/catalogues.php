@@ -82,6 +82,18 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_folder_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',$row['c_name']).' AND  ('.db_string_equal_to('the_type','ADD_CATALOGUE').' OR '.db_string_equal_to('the_type','EDIT_CATALOGUE').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
+	}
+
+	/**
 	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The content type
@@ -285,6 +297,18 @@ class Hook_occle_fs_catalogues extends content_fs_base
 		);
 
 		return $props;
+	}
+
+	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_file_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',strval($row['id'])).' AND  ('.db_string_equal_to('the_type','ADD_CATALOGUE_CATEGORY').' OR '.db_string_equal_to('the_type','EDIT_CATALOGUE_CATEGORY').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
 	}
 
 	/**

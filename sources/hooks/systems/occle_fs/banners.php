@@ -42,6 +42,18 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_folder_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',$row['id']).' AND  ('.db_string_equal_to('the_type','ADD_BANNER_TYPE').' OR '.db_string_equal_to('the_type','EDIT_BANNER_TYPE').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
+	}
+
+	/**
 	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
@@ -110,6 +122,18 @@ class Hook_occle_fs_banners extends content_fs_base
 			'add_date'=>'TIME',
 			'edit_date'=>'?TIME',
 		);
+	}
+
+	/**
+	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 *
+	 * @param  array			Content row (not full, but does contain the ID)
+	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
+	 */
+	function _get_file_edit_date($row)
+	{
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',$row['name']).' AND  ('.db_string_equal_to('the_type','ADD_BANNER').' OR '.db_string_equal_to('the_type','EDIT_BANNER').')';
+		return $GLOBALS['SITE_DB']->query_value_if_there($query);
 	}
 
 	/**

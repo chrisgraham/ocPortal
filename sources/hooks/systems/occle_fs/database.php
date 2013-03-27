@@ -43,11 +43,18 @@ class Hook_occle_fs_database
 			{
 				$table_name=$table['m_table'];
 
+				$modification_time=mixed();
+				if (substr(get_db_type(),0,5)=='mysql')
+				{
+					$_modification_time=$GLOBALS['SITE_DB']->query_value('SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA=\''.db_escape_string(get_db_site()).'\' AND TABLE_NAME=\''.db_escape_string(get_table_prefix().$table_name).'\'');
+					$modification_time=strtotime($_modification_time);
+				}
+
 				$listing[]=array(
 					$table_name,
 					OCCLEFS_DIR,
 					NULL/*don't calculate a filesize*/,
-					NULL/*don't specify a modification time*/,
+					$modification_time,
 				);
 			}
 		}

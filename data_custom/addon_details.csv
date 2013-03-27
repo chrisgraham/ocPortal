@@ -291,3 +291,4 @@ pagination_protection,Development,Chris Graham,Licensed on the same terms as ocP
 calendar_from_6am,Graphical,Chris Graham,Common Public Attribution License,"Only display the calendar week and day views starting from 6am, unless there were events added during the night.","Calendar",,,
 psds,Graphical,Allen Ellis,Licensed on the same terms as ocPortal,These are the source PSD files for graphics that contain English text.,,,,
 user_sync,Development,Vivek Dinesh,Licensed on the same terms as ocPortal,"Sync user data between ocportal and a remote database.",PHP5,,,
+webdav,Development,Chris Graham,BSD-like licence,"Access your website repository as a folder on your computer. See the [page=""docs:tut_repository""]Repository Tutorial[/page] for more information.","PHP5.3, OcCLE",,,SabreDAV developers,

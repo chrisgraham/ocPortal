@@ -542,6 +542,8 @@ class Module_admin_permissions
 
 		decache('main_sitemap');
 
+		log_it('PAGE_MATCH_KEY_ACCESS');
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:keys',do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
@@ -666,6 +668,8 @@ class Module_admin_permissions
 		require_code('view_modes');
 		erase_block_cache();
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+
+		log_it('PAGE_ACCESS');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
@@ -987,6 +991,8 @@ class Module_admin_permissions
 		require_code('view_modes');
 		erase_block_cache();
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+
+		log_it('PRIVILEGES');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'privileges','id'=>$next_section),'_SELF');

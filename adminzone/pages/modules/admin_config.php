@@ -1018,6 +1018,8 @@ class Module_admin_config
 		fix_permissions(get_custom_file_base().'/data_custom/fields.xml');
 		sync_file(get_custom_file_base().'/data_custom/fields.xml');
 
+		log_it('FIELD_FILTERS');
+
 		return inform_screen($title,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -1059,6 +1061,8 @@ class Module_admin_config
 		fclose($myfile);
 		fix_permissions(get_custom_file_base().'/data_custom/breadcrumbs.xml');
 		sync_file(get_custom_file_base().'/data_custom/breadcrumbs.xml');
+
+		log_it('BREADCRUMB_OVERRIDES');
 
 		return inform_screen($title,do_lang_tempcode('SUCCESS'));
 	}
