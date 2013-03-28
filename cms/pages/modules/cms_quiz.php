@@ -301,23 +301,7 @@ class Module_cms_quiz extends standard_crud_module
 		}
 		$myrow=$myrows[0];
 
-		$text='';
-		$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
-		foreach ($question_rows as $q)
-		{
-			$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY q_order');
-			$text.=get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'').chr(10);
-			foreach ($answer_rows as $a)
-			{
-				$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'').chr(10);
-				$explanation=get_translated_text($a['q_explanation']);
-				if ($explanation!='')
-				{
-					$text.=':'.$explanation.chr(10);
-				}
-			}
-			$text.=chr(10);
-		}
+		$text=load_quiz_questions_to_string($id);
 
 		return $this->get_form_fields($myrow['id'],get_translated_text($myrow['q_name']),$myrow['q_timeout'],get_translated_text($myrow['q_start_text']),get_translated_text($myrow['q_end_text']),get_translated_text($myrow['q_end_text_fail']),$myrow['q_notes'],$myrow['q_percentage'],$myrow['q_open_time'],$myrow['q_close_time'],$myrow['q_num_winners'],$myrow['q_redo_time'],$myrow['q_type'],$myrow['q_validated'],$text,$myrow['q_points_for_passing'],$myrow['q_tied_newsletter']);
 	}

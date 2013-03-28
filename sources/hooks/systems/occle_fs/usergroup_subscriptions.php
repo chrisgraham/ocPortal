@@ -56,7 +56,7 @@ class Hook_occle_fs_usergroup_subscriptions extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -68,7 +68,7 @@ class Hook_occle_fs_usergroup_subscriptions extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -98,9 +98,71 @@ class Hook_occle_fs_usergroup_subscriptions extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['s_title'],
+			'description'=>$row['s_description'],
+			'cost'=>$row['s_cost'],
+			'length'=>$row['s_length'],
+			'length_units'=>$row['s_length_units'],
+			'group_id'=>$row['s_group_id'],
+			'enabled'=>$row['s_enabled'],
+			'mail_start'=>$row['s_mail_start'],
+			'mail_end'=>$row['s_mail_end'],
+			'mail_uhoh'=>$row['s_mail_uhoh'],
+			'uses_primary'=>$row['s_uses_primary'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ecommerce2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$description=$this->_default_property_str($properties,'description');
+		$cost=$this->_default_property_int($properties,'cost');
+		$length=$this->_default_property_int($properties,'length');
+		$length_units=$this->_default_property_str($properties,'length_units');
+		$group_id=$this->_default_property_int($properties,'group_id');
+		$uses_primary=$this->_default_property_int($properties,'uses_primary');
+		$enabled=$this->_default_property_int($properties,'enabled');
+		$mail_start=$this->_default_property_str($properties,'mail_start');
+		$mail_end=$this->_default_property_str($properties,'mail_end');
+		$mail_uhoh=$this->_default_property_str($properties,'mail_uhoh');
+
+		edit_usergroup_subscription(intval($content_id),$label,$description,$cost,$length,$length_units,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -108,5 +170,7 @@ class Hook_occle_fs_usergroup_subscriptions extends content_fs_base
 
 		require_code('ecommerce2');
 		delete_usergroup_subscription(intval($content_id));
+
+		return true;
 	}
 }

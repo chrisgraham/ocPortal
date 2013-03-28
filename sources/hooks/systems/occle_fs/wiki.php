@@ -36,7 +36,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 			'description'=>'LONG_TRANS',
 			'notes'=>'LONG_TEXT',
 			'hide_posts'=>'BINARY',
-			'member'=>'member',
+			'submitter'=>'member',
 			'views'=>'INTEGER',
 			'meta_keywords'=>'LONG_TRANS',
 			'meta_description'=>'LONG_TRANS',
@@ -46,7 +46,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -64,7 +64,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
 		$hide_posts=$this->_default_property_int($properties,'hide_posts');
-		$member=$this->_default_property_int_null($properties,'member');
+		$member=$this->_default_property_int_null($properties,'submitter');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$views=$this->_default_property_int($properties,'views');
@@ -81,9 +81,69 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['title'],
+			'description'=>$row['description'],
+			'notes'=>$row['notes'],
+			'hide_posts'=>$row['hide_posts'],
+			'submitter'=>$row['submitter'],
+			'views'=>$row['views'],
+			'meta_keywords'=>$this->get_meta_keywords('wiki_page',strval($row['id'])),
+			'meta_description'=>$this->get_meta_description('wiki_page',strval($row['id'])),
+			'add_date'=>$row['add_date'],
+			'edit_date'=>$row['edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('wiki');
+
+		$label=$this->_default_property_str($properties,'label');
+		$description=$this->_default_property_str($properties,'description');
+		$notes=$this->_default_property_str($properties,'notes');
+		$hide_posts=$this->_default_property_int($properties,'hide_posts');
+		$member=$this->_default_property_int_null($properties,'member');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$views=$this->_default_property_int($properties,'views');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+
+		wiki_edit_page(intval($content_id),$label,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member,$edit_date,$add_time,$views,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -91,6 +151,8 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 
 		require_code('wiki');
 		wiki_delete_page(intval($content_id));
+
+		return true;
 	}
 
 	/**
@@ -111,7 +173,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -140,9 +202,65 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['the_message'],
+			'validated'=>$row['validated'],
+			'send_notification'=>$row['send_notification'],
+			'views'=>$row['views'],
+			'poster'=>$row['poster'],
+			'add_date'=>$row['date_and_time'],
+			'edit_date'=>$row['edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('wiki');
+
+		$label=$this->_default_property_str($properties,'label');
+		$page_id=$this->_integer_category($category);
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$member=$this->_default_property_int_null($properties,'poster');
+		$send_notification=$this->_default_property_int($properties,'send_notification');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$views=$this->_default_property_int($properties,'views');
+
+		wiki_edit_post(intval($content_id),$label,$validated,$member,$page_id,$edit_time,$add_time,$views,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -150,5 +268,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 
 		require_code('wiki');
 		wiki_delete_post(intval($content_id));
+
+		return true;
 	}
 }

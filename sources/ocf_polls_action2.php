@@ -32,7 +32,7 @@
  * @param  LONG_TEXT		The reason for editing the poll.
  * @return AUTO_LINK		The ID of the topic the poll is on.
  */
-function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$reason)
+function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$reason='')
 {
 	require_code('ocf_polls');
 
@@ -89,11 +89,11 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 /**
  * Delete a forum poll.
  *
- * @param  AUTO_LINK The ID of the poll we're deleting.
- * @param  LONG_TEXT The reason for deleting the poll.
- * @return AUTO_LINK The ID of the topic the poll is on.
+ * @param  AUTO_LINK 	The ID of the poll we're deleting.
+ * @param  LONG_TEXT 	The reason for deleting the poll.
+ * @return AUTO_LINK		The ID of the topic the poll is on.
  */
-function ocf_delete_poll($poll_id,$reason)
+function ocf_delete_poll($poll_id,$reason='')
 {
 	require_code('ocf_polls');
 
@@ -119,10 +119,10 @@ function ocf_delete_poll($poll_id,$reason)
 /**
  * Place a vote on a specified poll.
  *
- * @param  AUTO_LINK The ID of the poll we're voting in.
- * @param  array 		A list of poll answers that are being voted for.
- * @param  ?MEMBER	The member that's voting (NULL: current member).
- * @param  ?array		The row of the topic the poll is for (NULL: get it from the DB).
+ * @param  AUTO_LINK 	The ID of the poll we're voting in.
+ * @param  array 			A list of poll answers that are being voted for.
+ * @param  ?MEMBER		The member that's voting (NULL: current member).
+ * @param  ?array			The row of the topic the poll is for (NULL: get it from the DB).
  */
 function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 {

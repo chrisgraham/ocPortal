@@ -44,12 +44,12 @@ class Hook_occle_fs_post_templates extends content_fs_base
 		return array(
 			'text'=>'LONG_TEXT',
 			'forum_multi_code'=>'SHORT_TEXT',
-			'use_default_forums'=>'BINARY'
+			'use_default_forums'=>'BINARY',
 		);
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -61,7 +61,7 @@ class Hook_occle_fs_post_templates extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -84,9 +84,57 @@ class Hook_occle_fs_post_templates extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_post_templates',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['t_title'],
+			'text'=>$row['t_text'],
+			'forum_multi_code'=>$row['t_forum_multi_code'],
+			'use_default_forums'=>$row['use_default_forums'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ocf_general_action2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$text=$this->_default_property_str($properties,'text');
+		$forum_multi_code=$this->_default_property_str($properties,'forum_multi_code');
+		$use_default_forums=$this->_default_property_int($properties,'use_default_forums');
+
+		ocf_edit_post_template(intval($content_id),$label,$text,$forum_multi_code,$use_default_forums);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -94,5 +142,7 @@ class Hook_occle_fs_post_templates extends content_fs_base
 
 		require_code('ocf_general_action2');
 		ocf_delete_post_template(intval($content_id));
+
+		return true;
 	}
 }

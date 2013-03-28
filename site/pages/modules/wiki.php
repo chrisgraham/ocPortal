@@ -1113,7 +1113,7 @@ class Module_wiki
 				require_code('content2');
 				$meta_data=actual_meta_data_get_fields('wiki_post',strval($post_id));
 
-				wiki_edit_post($post_id,$message,$validated,$meta_data['submitter'],$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],true);
+				wiki_edit_post($post_id,$message,$validated,$meta_data['submitter'],NULL,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],true);
 			}
 		}
 

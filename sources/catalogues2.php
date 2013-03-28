@@ -394,8 +394,8 @@ function actual_delete_catalogue($name)
  *
  * @param  AUTO_LINK		The ID of the field
  * @param  ID_TEXT		The name of the catalogue
- * @param  SHORT_TEXT	The name of the field
- * @param  LONG_TEXT		Description for the field
+ * @param  ?SHORT_TEXT	The name of the field (NULL: do not change)
+ * @param  ?LONG_TEXT	Description for the field (NULL: do not change)
  * @param  integer		The field order (the field order determines what order the fields are displayed within an entry)
  * @param  BINARY			Whether the field defines entry ordering
  * @param  BINARY			Whether the field is visible when an entry is viewed
@@ -417,8 +417,20 @@ function actual_edit_catalogue_field($id,$c_name,$name,$description,$order,$defi
 	$_name=$myrow['cf_name'];
 	$_description=$myrow['cf_description'];
 
-	$map=array('c_name'=>$c_name,'cf_name'=>lang_remap($_name,$name),'cf_description'=>lang_remap($_description,$description),'cf_order'=>$order,'cf_defines_order'=>$defines_order,'cf_visible'=>$visible,'cf_searchable'=>$searchable,'cf_default'=>$default,'cf_required'=>$required,'cf_put_in_category'=>$put_in_category,'cf_put_in_search'=>$put_in_search);
+	$map=array(
+		'c_name'=>$c_name,
+		'cf_order'=>$order,
+		'cf_defines_order'=>$defines_order,
+		'cf_visible'=>$visible,
+		'cf_searchable'=>$searchable,
+		'cf_default'=>$default,
+		'cf_required'=>$required,
+		'cf_put_in_category'=>$put_in_category,
+		'cf_put_in_search'=>$put_in_search,
+	);
 	if (!is_null($type)) $map['cf_type']=$type;
+	if (!is_null($name)) $map['cf_name']=lang_remap($_name,$name);
+	if (!is_null($description)) $map['cf_description']=lang_remap($_description,$description);
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',$map,array('id'=>$id),'',1);
 }
@@ -614,8 +626,9 @@ function calculate_category_child_count_cache($cat_id,$recursive_updates=true)
  * @param  integer		The number of days before expiry (higher limit)
  * @param  ?AUTO_LINK	The expiry category (NULL: do not expire)
  * @param  ?TIME			Add time (NULL: do not change)
+ * @param  ?ID_TEXT		The catalogue name (NULL: do not change)
  */
-function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time=NULL)
+function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time=NULL,$c_name=NULL)
 {
 	$under_category_id=$parent_id;
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
@@ -646,6 +659,13 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 
 	if (!is_null($add_time))
 		$update_map['cc_add_date']=$add_time;
+
+	if (!is_null($c_name)) // Moving to a different catalogue
+	{
+		$update_map['c_name']=$c_name;
+		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('c_name'=>$c_name),array('cc_id'=>$id));
+		$GLOBALS['SITE_DB']->query_update('catalogue_catalogues c JOIN catalogue_cat_treecache t ON c.id=t.cc_id',array('c_name'=>$c_name),array('cc_ancester_id'=>$id));
+	}
 
 	$old_parent_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_parent_id',array('id'=>$id));
 

@@ -55,7 +55,7 @@ class Hook_occle_fs_quizzes extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -67,7 +67,7 @@ class Hook_occle_fs_quizzes extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -107,9 +107,94 @@ class Hook_occle_fs_quizzes extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		require_code('quiz2');
+		$text=load_quiz_questions_to_string(intval($content_id));
+
+		return array(
+			'label'=>$row['q_name'],
+			'timeout'=>$row['q_timeout'],
+			'start_text'=>$row['q_start_text'],
+			'end_text'=>$row['q_end_text'],
+			'end_text_fail'=>$row['q_end_text_fail'],
+			'notes'=>$row['q_notes'],
+			'percentage'=>$row['q_percentage'],
+			'open_time'=>$row['q_open_time'],
+			'close_time'=>$row['q_close_time'],
+			'num_winners'=>$row['q_num_winners'],
+			'redo_time'=>$row['q_redo_time'],
+			'type'=>$row['q_type'],
+			'validated'=>$row['q_validated'],
+			'text'=>$text,
+			'submitter'=>$row['q_submitter'],
+			'points_for_passing'=>$row['q_points_for_passing'],
+			//'tied_newsletter'=>$row['q_tied_newsletter'],
+			'add_date'=>$row['q_add_date'],
+			'meta_keywords'=>$this->get_meta_keywords('quiz',strval($row['id'])),
+			'meta_description'=>$this->get_meta_description('quiz',strval($row['id'])),
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('quiz2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$timeout=$this->_default_property_int($properties,'timeout');
+		$start_text=$this->_default_property_str($properties,'start_text');
+		$end_text=$this->_default_property_str($properties,'end_text');
+		$end_text_fail=$this->_default_property_str($properties,'end_text_fail');
+		$notes=$this->_default_property_str($properties,'notes');
+		$percentage=$this->_default_property_int($properties,'percentage');
+		$open_time=$this->_default_property_int_null($properties,'open_time');
+		$close_time=$this->_default_property_int_null($properties,'close_time');
+		$num_winners=$this->_default_property_int($properties,'num_winners');
+		$redo_time=$this->_default_property_int($properties,'redo_time');
+		$type=$this->_default_property_str($properties,'type');
+		if ($type=='') $type='SURVEY';
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$text=$this->_default_property_str($properties,'text');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		$points_for_passing=$this->_default_property_int($properties,'points_for_passing');
+		$tied_newsletter=NULL;//$this->_default_property_int_null($properties,'tied_newsletter');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+
+		edit_quiz(intval($content_id),$label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing,$tied_newsletter,$add_time,$submitter,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -117,5 +202,7 @@ class Hook_occle_fs_quizzes extends content_fs_base
 
 		require_code('quiz2');
 		delete_quiz(intval($content_id));
+
+		return true;
 	}
 }

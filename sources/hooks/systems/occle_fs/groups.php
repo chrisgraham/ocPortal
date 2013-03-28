@@ -72,7 +72,7 @@ class Hook_occle_fs_groups extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -84,22 +84,14 @@ class Hook_occle_fs_groups extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Convert properties to variables for adding/editing members.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error)
+	 * @return array			Properties
 	 */
-	function _folder_add($filename,$path,$properties)
+	function __folder_read_in_properties($path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		if ($category!='') return false; // Only one depth allowed for this content type
-
-		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
-
-		require_code('ocf_groups_action');
-
 		$is_default=$this->_default_property_int($properties,'is_default');
 		$is_super_admin=$this->_default_property_int($properties,'is_super_admin');
 		$is_super_moderator=$this->_default_property_int($properties,'is_super_moderator');
@@ -126,14 +118,105 @@ class Hook_occle_fs_groups extends content_fs_base
 		$rank_image_pri_only=$this->_default_property_int($properties,'rank_image_pri_only');
 		$open_membership=$this->_default_property_int($properties,'open_membership');
 		$is_private_club=$this->_default_property_int($properties,'is_private_club');
+
+		return array($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+	}
+
+	/**
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return ~ID_TEXT		The content ID (false: error)
+	 */
+	function _folder_add($filename,$path,$properties)
+	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		if ($category!='') return false; // Only one depth allowed for this content type
+
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
+		require_code('ocf_groups_action');
+
+		list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)=$this->__folder_read_in_properties($path,$properties);
+
 		$id=ocf_make_group($label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
 		return strval($id);
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['g_name'],
+			'is_default'=>$row['g_is_default'],
+			'is_super_admin'=>$row['g_is_super_admin'],
+			'is_super_moderator'=>$row['g_is_super_moderator'],
+			'rank_title'=>$row['g_rank_title'],
+			'rank_image'=>$row['g_rank_image'],
+			'promotion_target'=>$row['g_promotion_target'],
+			'promotion_threshold'=>$row['g_promotion_threshold'],
+			'group_leader'=>$row['g_group_leader'],
+			'flood_control_submit_secs'=>$row['g_flood_control_submit_secs'],
+			'flood_control_access_secs'=>$row['g_flood_control_access_secs'],
+			'max_daily_upload_mb'=>$row['g_max_daily_upload_mb'],
+			'max_attachments_per_post'=>$row['g_max_attachments_per_post'],
+			'max_avatar_width'=>$row['g_max_avatar_width'],
+			'max_avatar_height'=>$row['g_max_avatar_height'],
+			'max_post_length_comcode'=>$row['g_max_post_length_comcode'],
+			'max_sig_length_comcode'=>$row['g_max_sig_length_comcode'],
+			'gift_points_base'=>$row['g_gift_points_base'],
+			'gift_points_per_day'=>$row['g_gift_points_per_day'],
+			'enquire_on_new_ips'=>$row['g_enquire_on_new_ips'],
+			'is_presented_at_install'=>$row['g_is_presented_at_install'],
+			'hidden'=>$row['g_hidden'],
+			'order'=>$row['g_order'],
+			'rank_image_pri_only'=>$row['g_rank_image_pri_only'],
+			'open_membership'=>$row['g_open_membership'],
+			'is_private_club'=>$row['g_is_private_club'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ocf_groups_action2');
+
+		$label=$this->_default_property_str($properties,'label');
+		list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)=$this->__folder_read_in_properties($path,$properties);
+
+		ocf_edit_group(intval($content_id),$label,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -141,6 +224,8 @@ class Hook_occle_fs_groups extends content_fs_base
 
 		require_code('ocf_groups_action2');
 		ocf_delete_group(intval($content_id));
+
+		return true;
 	}
 
 	/**
@@ -222,7 +307,7 @@ class Hook_occle_fs_groups extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -236,28 +321,29 @@ class Hook_occle_fs_groups extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Convert properties to variables for adding/editing members.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return array			Properties
 	 */
-	function _file_add($filename,$path,$properties)
+	function __file_read_in_properties($path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
-		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
-
-		if ($category=='') return false;
-
-		require_code('ocf_members_action');
-
 		$password_hashed=$this->_default_property_str($properties,'password_hashed');
 		$email_address=$this->_default_property_str($properties,'email_address');
 		$groups=array();
 		$groups[]=$this->_integer_category($category);
 		if ((isset($properties['groups'])) && ($properties['groups']!=''))
-			$groups=array_merge($groups,array_map('intval',explode(',',$properties['groups'])));
+		{
+			$_groups=@unserialize($properties['groups']);
+			if ($_groups!==false)
+			{
+				foreach ($_groups as $group)
+				{
+					$groups[]=intval($this->resolve_resource_dependency($group));
+				}
+			}
+		}
 		$dob_day=$this->_default_property_int_null($properties,'dob_day');
 		$dob_month=$this->_default_property_int_null($properties,'dob_month');
 		$dob_year=$this->_default_property_int_null($properties,'dob_year');
@@ -313,15 +399,138 @@ class Hook_occle_fs_groups extends content_fs_base
 			$actual_custom_fields[$custom_field['id']]=$value;
 		}
 
+		return array($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text);
+	}
+
+	/**
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 */
+	function _file_add($filename,$path,$properties)
+	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+
+		require_code('ocf_members_action');
+
+		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text)=$this->__file_read_in_properties($path,$properties);
+
 		$id=ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text);
 
 		return strval($id);
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		$groups=array();
+		$_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_group_id'),array('gm_member_id'=>intval($content_id)));
+		foreach ($_groups as $_group)
+		{
+			$groups[]=$this->get_resource_dependency('group',strval($_group['gm_group_id']));
+		}
+
+		$ret=array(
+			'label'=>$row['m_username'],
+			'password_hashed'=>$row['m_password_hashed'],
+			'salt'=>$row['m_salt'],
+			'password_compatibility_scheme'=>$row['m_password_compatibility_scheme'],
+			'email_address'=>$row['m_email_address'],
+			'groups'=>serialize($groups),
+			'dob_day'=>$row['m_dob_day'],
+			'dob_month'=>$row['m_dob_month'],
+			'dob_year'=>$row['m_dob_year'],
+			'timezone'=>$row['m_timezone'],
+			'primary_group'=>$row['m_primary_group'],
+			'validated'=>$row['m_validated'],
+			'join_time'=>$row['m_join_time'],
+			'last_visit_time'=>$row['m_last_visit_time'],
+			'theme'=>$row['m_theme'],
+			'avatar_url'=>$row['m_avatar_url'],
+			'signature'=>$row['m_signature'],
+			'is_perm_banned'=>$row['m_is_perm_banned'],
+			'preview_posts'=>$row['m_preview_posts'],
+			'reveal_age'=>$row['m_reveal_age'],
+			'user_title'=>$row['m_title'],
+			'photo_url'=>$row['m_photo_url'],
+			'photo_thumb_url'=>$row['m_photo_thumb_url'],
+			'views_signatures'=>$row['m_views_signatures'],
+			'auto_monitor_contrib_content'=>$row['m_auto_monitor_contrib_content'],
+			'language'=>$row['m_language'],
+			'allow_emails'=>$row['m_allow_emails'],
+			'allow_emails_from_staff'=>$row['m_allow_emails_from_staff'],
+			'ip_address'=>$row['m_ip_address'],
+			'validated_email_confirm_code'=>$row['m_validated_email_confirm_code'],
+			'zone_wide'=>$row['m_zone_wide'],
+			'last_submit_time'=>$row['m_last_submit_time'],
+			'highlighted_name'=>$row['m_highlighted_name'],
+			'pt_allow'=>$row['m_pt_allow'],
+			'pt_rules_text'=>$row['m_pt_rules_text'],
+		);
+
+		require_code('ocf_members');
+		$cpfs=ocf_get_all_custom_fields_match_member(intval($content_id));
+		foreach ($cpfs as $cf_name=>$cpf)
+		{
+			$fixed_id=fix_id($cf_name);
+			if (!array_key_exists($fixed_id,$props))
+			{
+				$key=$fixed_id;
+			} else
+			{
+				$key='field_'.strval($cpf['FIELD_ID']);
+			}
+			$ret[$key]=$cpf['RAW'];
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ocf_members_action2');
+
+		$label=$this->_default_property_str($properties,'label');
+		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text)=$this->__file_read_in_properties($path,$properties);
+
+		ocf_edit_member(intval($content_id),$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$label,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -329,5 +538,7 @@ class Hook_occle_fs_groups extends content_fs_base
 
 		require_code('ocf_members_action2');
 		ocf_delete_member(intval($content_id));
+
+		return true;
 	}
 }

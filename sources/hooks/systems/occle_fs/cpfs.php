@@ -65,7 +65,7 @@ class Hook_occle_fs_cpfs extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -77,7 +77,7 @@ class Hook_occle_fs_cpfs extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -115,9 +115,88 @@ class Hook_occle_fs_cpfs extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		$ret=array(
+			'label'=>$row['cf_name'],
+			'description'=>$row['cf_description'],
+			'locked'=>$row['cf_locked'],
+			'default'=>$row['cf_default'],
+			'public_view'=>$row['cf_public_view'],
+			'owner_view'=>$row['cf_owner_view'],
+			'owner_set'=>$row['cf_owner_set'],
+			'type'=>$row['cf_type'],
+			'required'=>$row['cf_required'],
+			'show_in_posts'=>$row['cf_show_in_posts'],
+			'show_in_post_previews'=>$row['cf_show_in_post_previews'],
+			'order'=>$row['cf_order'],
+			'only_group'=>$row['cf_only_group'],
+			'show_on_join_form'=>$row['cf_show_on_join_form'],
+		);
+		require_code('encryption');
+		if (is_encryption_enabled())
+		{
+			$ret['encryption']=$row['cf_encryption'];
+		}
+		return $ret;
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ocf_members_action2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$description=$this->_default_property_str($properties,'description');
+		$locked=$this->_default_property_int($properties,'locked');
+		$default=$this->_default_property_int($properties,'default');
+		$public_view=$this->_default_property_int($properties,'public_view');
+		$owner_view=$this->_default_property_int($properties,'owner_view');
+		$owner_set=$this->_default_property_int($properties,'owner_set');
+		require_code('encryption');
+		if (is_encryption_enabled())
+			$encrypted=$this->_default_property_int($properties,'encrypted');
+		else
+			$encrypted=0;
+		$type=$this->_default_property_str($properties,'type');
+		$required=$this->_default_property_int($properties,'required');
+		$show_in_posts=$this->_default_property_int($properties,'show_in_posts');
+		$show_in_post_previews=$this->_default_property_int($properties,'show_in_post_previews');
+		$order=$this->_default_property_int($properties,'order');
+		$only_group=$this->_default_property_str($properties,'only_group');
+		$show_on_join_form=$this->_default_property_int($properties,'show_on_join_form');
+
+		ocf_edit_custom_field(intval($content_id),$label,$description,$default,$public_view,$owner_view,$owner_set,$encrypted,$required,$show_in_posts,$show_in_post_previews,$order,$only_group,$type,$show_on_join_form);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -125,5 +204,7 @@ class Hook_occle_fs_cpfs extends content_fs_base
 
 		require_code('ocf_members_action2');
 		ocf_delete_custom_field(intval($content_id));
+
+		return true;
 	}
 }

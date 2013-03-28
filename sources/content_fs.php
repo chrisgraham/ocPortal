@@ -18,6 +18,11 @@
  * @package		core
  */
 
+/*
+ When we refer to 'content' here, we really should be using the word 'resource'.
+ However, as most content is resource, we'll play a bit fast&loose to make things clearer.
+ */
+
 /**
  * Standard code module initialisation function.
  */
@@ -335,6 +340,64 @@ class content_fs_base
 	function _has_parent_child_relationship($above,$under)
 	{
 		return true;
+	}
+
+	/**
+	 * Load up details for a resource dependency.
+	 *
+	 * @param  ID_TEXT		Resource type
+	 * @param  ID_TEXT		Resource ID
+	 * @return array			Details for the dependency
+	 */
+	function get_resource_dependency($resource_type,$resource_id)
+	{
+		// TODO
+	}
+
+	/**
+	 * Load up details for a resource dependency.
+	 *
+	 * @param  array			Details for the dependency
+	 * @return ID_TEXT		Resource ID
+	 */
+	function resolve_resource_dependency($details)
+	{
+		// TODO
+	}
+
+	/**
+	 * Find all translated strings for a language ID.
+	 *
+	 * @param  AUTO_LINK		Language ID
+	 * @return array			Details
+	 */
+	function get_translated_text($lang_id)
+	{
+		// TODO
+	}
+
+	/**
+	 * Find meta keywords.
+	 *
+	 * @param  ID_TEXT		SEO type
+	 * @param  ID_TEXT		ID
+	 * @return string			Meta keywords
+	 */
+	function get_meta_keywords($seo_type,$id)
+	{
+		// TODO
+	}
+
+	/**
+	 * Find a meta description.
+	 *
+	 * @param  ID_TEXT		SEO type
+	 * @param  ID_TEXT		ID
+	 * @return string			Meta description
+	 */
+	function get_meta_description($seo_type,$id)
+	{
+		// TODO
 	}
 
 	/**

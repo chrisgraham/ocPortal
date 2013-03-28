@@ -272,17 +272,17 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 /**
  * Edit the given download category with the new details given
  *
+ * @param  AUTO_LINK		The ID of the category being edited
  * @param  SHORT_TEXT	The name of the download category
  * @param  AUTO_LINK		The parent download category
  * @param  LONG_TEXT		A description
- * @param  AUTO_LINK		The ID of the category being edited
  * @param  LONG_TEXT		Hidden notes pertaining to this download category
  * @param  URLPATH		The representative image for the category (blank: none)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit)
  * @param  ?TIME			Add time (NULL: do not change)
  */
-function edit_download_category($category,$parent_id,$description,$category_id,$notes,$rep_image,$meta_keywords,$meta_description,$add_time=NULL)
+function edit_download_category($category_id,$category,$parent_id,$description,$notes,$rep_image,$meta_keywords,$meta_description,$add_time=NULL)
 {
 	$under_category_id=$parent_id;
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))

@@ -50,7 +50,7 @@ class Hook_occle_fs_iotds extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -83,9 +83,79 @@ class Hook_occle_fs_iotds extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['i_title'],
+			'url'=>$row['url'],
+			'caption'=>$row['caption'],
+			'thumb_url'=>$row['thumb_url'],
+			'current'=>$row['is_current'],
+			'allow_rating'=>$row['allow_rating'],
+			'allow_comments'=>$row['allow_comments'],
+			'allow_trackbacks'=>$row['allow_trackbacks'],
+			'notes'=>$row['notes'],
+			'used'=>$row['used'],
+			'use_time'=>$row['use_time'],
+			'views'=>$row['views'],
+			'submitter'=>$row['submitter'],
+			'add_date'=>$row['add_date'],
+			'edit_date'=>$row['edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('iotds2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$url=$this->_default_property_str($properties,'url');
+		$caption=$this->_default_property_str($properties,'caption');
+		$thumb_url=$this->_default_property_str($properties,'thumb_url');
+		$current=$this->_default_property_int($properties,'current');
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','iotd',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','iotd',1);
+		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','iotd',1);
+		$notes=$this->_default_property_str($properties,'notes');
+		$time=$this->_default_property_int_null($properties,'add_date');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		$used=$this->_default_property_int($properties,'used');
+		$use_time=$this->_default_property_int_null($properties,'use_time');
+		$views=$this->_default_property_int($properties,'views');
+		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+
+		edit_iotd(intval($content_id),$label,$caption,$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time,$add_time,$views,$submitter,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -93,5 +163,7 @@ class Hook_occle_fs_iotds extends content_fs_base
 
 		require_code('iotds2');
 		delete_iotd(intval($content_id));
+
+		return true;
 	}
 }

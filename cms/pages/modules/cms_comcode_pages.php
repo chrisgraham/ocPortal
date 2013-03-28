@@ -876,86 +876,46 @@ class Module_cms_comcode_pages
 
 		set_helper_panel_pic('pagepics/comcode_page_edit');
 
+		// Load up settings from the environments
 		$file=filter_naughty(post_param('file'));
 		$lang=filter_naughty(post_param('lang'));
 		$zone=filter_naughty(post_param('zone'));
-
 		if (addon_installed('page_management'))
 		{
 			$new_file=filter_naughty(has_actual_page_access(get_member(),'admin_sitetree')?post_param('title',$file):$file);
 		} else $new_file=filter_naughty($file);
 		if ($file=='') $file=$new_file;
-
-		require_code('type_validation');
-		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
-
-		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
-
-		$renaming_page=($new_file!=$file);
-
-		require_code('zones2');
-		check_page_name($zone,$new_file);
-
-		if ($renaming_page)
-		{
-			if (!is_alphanumeric($new_file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
-
-			$langs=find_all_langs(true);
-			$rename_map=array();
-			$afm_needed=false; // Actually will stay false as we don't allow renaming original-pages at the moment
-			foreach (array_keys($langs) as $lang)
-			{
-				$path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/comcode_custom/'.$lang.'/'.$file.'.txt',true);
-				if (file_exists(get_file_base().'/'.$path))
-				{
-					$new_path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/comcode_custom/'.$lang.'/'.$new_file.'.txt',true);
-					if (file_exists($new_path)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone.':'.$new_file)));
-					$rename_map[$path]=$new_path;
-				}
-				if (file_exists(get_file_base().'/'.str_replace('/comcode_custom/','/comcode/',$path)))
-				{
-					$completion_text=do_lang_tempcode('ORIGINAL_PAGE_NO_RENAME');
-				}
-			}
-
-			if ($afm_needed)
-			{
-				require_code('abstract_file_manager');
-				force_have_afm_details();
-			}
-		}
-
 		$validated=post_param_integer('validated',0);
+		if (!addon_installed('unvalidated')) $validated=1;
 		require_code('antispam');
 		inject_action_spamcheck();
 		if (!has_privilege(get_member(),'bypass_validation_highrange_content')) $validated=0;
 		$parent_page=post_param('parent_page','');
 		$show_as_edit=post_param_integer('show_as_edit',0);
-
+		$text_raw=post_param('post');
 		$meta_data=actual_meta_data_get_fields('comcode_page',$zone.':'.$file);
 
+		// Handle attachments
+		require_code('attachments2');
+		if ($new_file!=$file)
+		{
+			$GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_id'=>$new_file),array('r_referer_id'=>$file,'r_referer_type'=>'comcode_page'));
+		}
+		$_text=do_comcode_attachments($text_raw,'comcode_page',$zone.':'.$new_file);
+		$text=$_text['comcode'];
+
+		// Some general CRUD maintenance that we don't do within the save_comcode_page function
 		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
-		check_edit_permission('high',$resource_owner);
 		if (is_null($resource_owner)) // Add
 		{
 			check_submit_permission('high');
 
 			require_code('submit');
 			give_submit_points('COMCODE_PAGE_ADD');
-
-			if (!addon_installed('unvalidated')) $validated=1;
-			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
-				'the_zone'=>$zone,
-				'the_page'=>$file,
-				'p_parent_page'=>$parent_page,
-				'p_validated'=>$validated,
-				'p_edit_date'=>$meta_data['edit_time'],
-				'p_add_date'=>$meta_data['add_time'],
-				'p_submitter'=>$meta_data['submitter'],
-				'p_show_as_edit'=>0
-			));
 		} else // Edit
 		{
+			check_edit_permission('high',$resource_owner);
+
 			if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
 
 			require_code('submit');
@@ -964,146 +924,32 @@ class Module_cms_comcode_pages
 			{
 				send_content_validated_notification('comcode_page',$zone.':'.$file);
 			}
-
-			if (!addon_installed('unvalidated')) $validated=1;
-			$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
-				'p_parent_page'=>$parent_page,
-				'p_validated'=>$validated,
-				'p_edit_date'=>$meta_data['edit_time'],
-				'p_add_date'=>$meta_data['add_time'],
-				'p_submitter'=>$meta_data['submitter'],
-				'p_show_as_edit'=>$show_as_edit
-			),array('the_zone'=>$zone,'the_page'=>$file),'',1);
 		}
-
-		if ($validated==0)
+		require_code('permissions2');
+		set_page_permissions_from_environment($zone,$file);
+		require_code('autosave');
+		clear_ocp_autosave();
+		if (addon_installed('awards'))
 		{
-			require_code('submit');
-			$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$zone.':'.$new_file),'_SELF',NULL,false,false,true);
-			if (addon_installed('unvalidated'))
-				send_validation_request('COMCODE_PAGE_EDIT','comcode_pages',true,$zone.':'.$new_file,$edit_url);
+			require_code('awards');
+			handle_award_setting('comcode_page',$zone.':'.$new_file);
 		}
-
-		$new=post_param('post');
-
-		require_code('attachments2');
-		$_new=do_comcode_attachments($new,'comcode_page',$zone.':'.$file);
-		$new=$_new['comcode'];
-		if ((!file_exists($fullpath)) || ($new!=file_get_contents($fullpath)))
-		{
-			$myfile=@fopen($fullpath,'wt');
-			if ($myfile===false) intelligent_write_error($fullpath);
-			final_attachments_from_preview($zone.':'.$file);
-			if (fwrite($myfile,$new)<strlen($new)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-			fclose($myfile);
-			sync_file($fullpath);
-
-			$file_changed=true;
-		} else
-		{
-			$file_changed=false;
-		}
-		require_code('seo2');
-		$new_keywords=post_param('meta_keywords','');
-		$new_description=post_param('meta_description','');
-		if (($new_keywords=='') && ($new_description==''))
-		{
-			seo_meta_set_for_implicit('comcode_page',$zone.':'.$file,array($new),$new);
-		} else
-		{
-			seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,$new_keywords,$new_description);
-		}
-
 		if (addon_installed('content_reviews'))
 		{
 			require_code('content_reviews');
 			content_review_set('comcode_page',$zone.':'.$new_file,$zone.':'.$file);
 		}
 
-		$completion_text=($validated==0)?do_lang_tempcode('SUBMIT_UNVALIDATED'):do_lang_tempcode('SUCCESS');
+		// Main save function
+		require_code('zones3');
+		save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page,$meta_data['add_time'],$meta_data['edit_time'],$show_as_edit,$meta_data['submitter'],$file);
 
-		// Update cache  NO WE CAN'T - THEY'RE MULTI-THEME NOW
-	/*	$string_index=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
-		if (!is_null($string_index))
-		{
-			lang_remap_comcode($string_index,$new);
-		} else
-		{
-			$string_index=insert_lang_comcode($new,1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
-			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$file,'string_index'=>$string_index));
-		}*/
-
-		require_code('permissions2');
-		set_page_permissions_from_environment($zone,$file);
-
-		$caches=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),array('the_zone'=>$zone,'the_page'=>$file));
-		$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$file));
-		foreach ($caches as $cache)
-		{
-			delete_lang($cache['string_index']);
-		}
-		persistent_cache_empty();
-		persistent_cache_delete(array('PAGE_INFO'));
-		decache('main_comcode_page_children');
-
-		fix_permissions($fullpath);
-
-		if ((file_exists($fullpath)) && (get_option('store_revisions')=='1') && ($file_changed))
-		{
-			$time=time();
-			@copy($fullpath,$fullpath.'.'.strval($time)) OR intelligent_write_error($fullpath.'.'.strval($time));
-			fix_permissions($fullpath.'.'.strval($time));
-			sync_file($fullpath.'.'.strval($time));
-		}
-
-		log_it('COMCODE_PAGE_EDIT',$file,$zone);
-		require_code('autosave');
-		clear_ocp_autosave();
-
-		if ($renaming_page)
-		{
-			$GLOBALS['SITE_DB']->query_delete('comcode_pages',array('the_zone'=>$zone,'the_page'=>$new_file),'',1);
-			$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
-				'the_page'=>$new_file,
-			),array('the_zone'=>$zone,'the_page'=>$file),'',1);
-
-			foreach ($rename_map as $path=>$new_path)
-			{
-				if ($afm_needed)
-				{
-					afm_move($path,$new_path);
-				} else
-				{
-					rename(get_custom_file_base().'/'.$path,get_custom_file_base().'/'.$new_path);
-				}
-			}
-
-			if (addon_installed('awards'))
-			{
-				$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'comcode_page'));
-				foreach ($types as $type)
-				{
-					$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$new_file),array('content_id'=>$file,'a_type_id'=>$type['id']));
-				}
-			}
-
-			$file=$new_file;
-		}
-
+		// Deleting?
 		if (post_param_integer('delete',0)==1)
 		{
+			check_delete_permission('high',$resource_owner);
 			unlink(get_custom_file_base().'/'.$path);
 		}
-
-		if (addon_installed('awards'))
-		{
-			require_code('awards');
-			handle_award_setting('comcode_page',$zone.':'.$file);
-		}
-
-		decache('main_sitemap');
-
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		// Look for bad title semantics
 		$_new['html']=$_new['tempcode']->evaluate();
@@ -1120,7 +966,16 @@ class Module_cms_comcode_pages
 			}
 		}
 
-		// Show it worked / Refresh
+		// Messaging to user
+		if ($validated==0)
+		{
+			require_code('submit');
+			$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$zone.':'.$new_file),'_SELF',NULL,false,false,true);
+			if (addon_installed('unvalidated'))
+				send_validation_request('COMCODE_PAGE_EDIT','comcode_pages',true,$zone.':'.$new_file,$edit_url);
+		}
+		$completion_text=($validated==0)?do_lang_tempcode('SUBMIT_UNVALIDATED'):do_lang_tempcode('SUCCESS');
+		breadcrumb_set_self(do_lang_tempcode('DONE'));
 		$url=post_param('redirect','');
 		if ($url!='')
 		{

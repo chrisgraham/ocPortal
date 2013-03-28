@@ -40,7 +40,7 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -52,7 +52,7 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -76,9 +76,57 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['nc_title'],
+			'rep_image'=>$row['nc_img'],
+			'notes'=>$row['notes'],
+			'owner'=>$row['nc_owner'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('news2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$img=$this->_default_property_str($properties,'rep_image');
+		$notes=$this->_default_property_str($properties,'notes');
+		$owner=$this->_default_property_int_null($properties,'owner');
+
+		edit_news_category(intval($content_id),$label,$img,$notes,$owner);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -86,6 +134,8 @@ class Hook_occle_fs_news extends content_fs_base
 
 		require_code('news2');
 		delete_news_category(intval($content_id));
+
+		return true;
 	}
 
 	/**
@@ -115,7 +165,7 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -127,7 +177,7 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -143,7 +193,7 @@ class Hook_occle_fs_news extends content_fs_base
 
 		require_code('news2');
 
-		$news=$this->_default_property_str($properties,'news_summary');
+		$news=$this->_default_property_str($properties,'summary');
 		$author=$this->_default_property_str($properties,'author');
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
@@ -151,7 +201,7 @@ class Hook_occle_fs_news extends content_fs_base
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','news',1);
 		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','news',1);
 		$notes=$this->_default_property_str($properties,'notes');
-		$news_article=$this->_default_property_str($properties,'news_article');
+		$news_article=$this->_default_property_str($properties,'article');
 		$main_news_category=$this->_integer_category($category);
 		$news_category=array();
 		if ((array_key_exists('categories',$properties)) && ($properties['categories']!=''))
@@ -170,9 +220,88 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['title'],
+			'summary'=>$row['summary'],
+			'article'=>$row['article'],
+			'author'=>$row['author'],
+			'validated'=>$row['validated'],
+			'allow_rating'=>$row['allow_rating'],
+			'allow_comments'=>$row['allow_comments'],
+			'allow_trackbacks'=>$row['allow_trackbacks'],
+			'notes'=>$row['notes'],
+			'views'=>$row['views'],
+			'image'=>$row['image'],
+			'meta_keywords'=>$this->get_meta_keywords('news',strval($row['id'])),
+			'meta_description'=>$this->get_meta_description('news',strval($row['id'])),
+			'submitter'=>$row['submitter'],
+			'add_date'=>$row['date_and_time'],
+			'edit_date'=>$row['edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('news2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$news=$this->_default_property_str($properties,'summary');
+		$author=$this->_default_property_str($properties,'author');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','news',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','news',1);
+		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','news',1);
+		$notes=$this->_default_property_str($properties,'notes');
+		$news_article=$this->_default_property_str($properties,'article');
+		$main_news_category=$this->_integer_category($category);
+		$news_category=array();
+		if ((array_key_exists('categories',$properties)) && ($properties['categories']!=''))
+		{
+			$news_category=array_map('intval',explode(',',$properties['categories']));
+		}
+		$time=$this->_default_property_int_null($properties,'add_date');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		$views=$this->_default_property_int($properties,'views');
+		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$image=$this->_default_property_str($properties,'image');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+
+		edit_news(intval($content_id),$label,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$add_time,$edit_time,$views,$submitter,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -180,5 +309,7 @@ class Hook_occle_fs_news extends content_fs_base
 
 		require_code('news2');
 		delete_news(intval($content_id));
+
+		return true;
 	}
 }

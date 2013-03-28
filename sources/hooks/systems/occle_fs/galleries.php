@@ -33,6 +33,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 	function _enumerate_folder_properties()
 	{
 		return array(
+			'title'=>'SHORT_TRANS',
 			'description'=>'LONG_TRANS',
 			'notes'=>'LONG_TEXT',
 			'accept_images'=>'BINARY',
@@ -52,7 +53,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -64,7 +65,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -81,6 +82,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 		require_code('galleries2');
 
 		$name=$this->_create_name_from_label($label);
+		$title=$this->_default_property_str($properties,'title');
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
 		$parent_id=$category;
@@ -97,14 +99,90 @@ class Hook_occle_fs_galleries extends content_fs_base
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
 		$add_date=$this->_default_property_int_null($properties,'add_date');
 		$g_owner=$this->_default_property_int_null($properties,'owner');
-		add_gallery($name,$label,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$allow_rating,$allow_comments,false,$add_date,$g_owner);
+		add_gallery($name,$title,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$allow_rating,$allow_comments,false,$add_date,$g_owner);
 		return $name;
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$content_id),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['TODO'],
+			'title'=>'SHORT_TRANS',
+			'description'=>'LONG_TRANS',
+			'notes'=>'LONG_TEXT',
+			'accept_images'=>'BINARY',
+			'accept_videos'=>'BINARY',
+			'is_member_synched'=>'BINARY',
+			'flow_mode_interface'=>'BINARY',
+			'rep_image'=>'URLPATH',
+			'watermark_top_left'=>'URLPATH',
+			'watermark_top_right'=>'URLPATH',
+			'watermark_bottom_left'=>'URLPATH',
+			'watermark_bottom_right'=>'URLPATH',
+			'allow_rating'=>'BINARY',
+			'allow_comments'=>'SHORT_INTEGER',
+			'add_date'=>'TIME',
+			'owner'=>'member',
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('galleries2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$name=$this->_create_name_from_label($label);
+		$title=$this->_default_property_str($properties,'title');
+		$description=$this->_default_property_str($properties,'description');
+		$notes=$this->_default_property_str($properties,'notes');
+		$parent_id=$category;
+		$accept_images=$this->_default_property_int_modeavg($properties,'accept_images','galleries',1);
+		$accept_videos=$this->_default_property_int_modeavg($properties,'accept_videos','galleries',1);
+		$is_member_synched=$this->_default_property_int($properties,'is_member_synched');
+		$flow_mode_interface=$this->_default_property_int($properties,'flow_mode_interface');
+		$rep_image=$this->_default_property_str($properties,'rep_image');
+		$watermark_top_left=$this->_default_property_str($properties,'watermark_top_left');
+		$watermark_top_right=$this->_default_property_str($properties,'watermark_top_right');
+		$watermark_bottom_left=$this->_default_property_str($properties,'watermark_bottom_left');
+		$watermark_bottom_right=$this->_default_property_str($properties,'watermark_bottom_right');
+		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','galleries',1);
+		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
+		$add_date=$this->_default_property_int_null($properties,'add_date');
+		$g_owner=$this->_default_property_int_null($properties,'owner');
+
+		edit_gallery($content_id,$name,$title,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$meta_keywords,$meta_description,$allow_rating,$allow_comments,$g_owner,$add_time,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -112,6 +190,8 @@ class Hook_occle_fs_galleries extends content_fs_base
 
 		require_code('galleries2');
 		delete_gallery($content_id);
+
+		return true;
 	}
 
 	/**
@@ -172,7 +252,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -188,7 +268,6 @@ class Hook_occle_fs_galleries extends content_fs_base
 
 		require_code('galleries2');
 
-		$name=$this->_create_name_from_label($label);
 		$description=$this->_default_property_str($properties,'description');
 		$url=$this->_default_property_str($properties,'url');
 		$thumb_url=$this->_default_property_str($properties,'thumb_url');
@@ -227,6 +306,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 			if (is_null($video_width)) $video_width=720;
 			$video_height=$this->_default_property_int_null($properties,'video_height');
 			if (is_null($video_height)) $video_height=576;
+
 			$id=add_video($label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		}
 
@@ -234,9 +314,117 @@ class Hook_occle_fs_galleries extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select($content_type.'s',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		$ret=array(
+			'label'=>$row['title'],
+			'description'=>$row['description'],
+			'url'=>$row['url'],
+			'thumb_url'=>$row['thumb_url'],
+			'validated'=>$row['validated'],
+			'allow_rating'=>$row['allow_rating'],
+			'allow_comments'=>$row['allow_comments'],
+			'allow_trackbacks'=>$row['allow_trackbacks'],
+			'notes'=>$row['notes'],
+			'meta_keywords'=>$this->get_meta_keywords($content_type,strval($row['id'])),
+			'meta_description'=>$this->get_meta_description($content_type,strval($row['id'])),
+			'submitter'=>$row['submitter'],
+			'add_date'=>$row['add_date'],
+			'edit_date'=>$row['edit_date'],
+		);
+		if ($content_type=='video')
+		{
+			$ret+=array(
+				'views'=>$row['video_views'],
+				'video_length'=>$row['video_length'],
+				'video_width'=>$row['video_width'],
+				'video_height'=>$row['video_height'],
+			);
+		} else
+		{
+			$ret+=array(
+				'views'=>$row['image_views'],
+			);
+		}
+		return $ret;
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('galleries2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$description=$this->_default_property_str($properties,'description');
+		$url=$this->_default_property_str($properties,'url');
+		$thumb_url=$this->_default_property_str($properties,'thumb_url');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$notes=$this->_default_property_str($properties,'notes');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		$add_date=$this->_default_property_int_null($properties,'add_date');
+		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$views=$this->_default_property_int($properties,'views');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+
+		if ($content_type=='image')
+		{
+			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','images',1);
+			$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','images',1);
+			$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','images',1);
+
+			$accept_images=$GLOBALS['SITE_DB']->query_select_value('galleries','accept_images',array('name'=>$category));
+			if ($accept_images==0) return false;
+
+			edit_image(intval($content_id),$label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+		} else
+		{
+			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','videos',1);
+			$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','videos',1);
+			$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','videos',1);
+
+			$accept_videos=$GLOBALS['SITE_DB']->query_select_value('galleries','accept_videos',array('name'=>$category));
+			if ($accept_videos==0) return false;
+
+			$video_length=$this->_default_property_int($properties,'video_length');
+			$video_width=$this->_default_property_int_null($properties,'video_width');
+			if (is_null($video_width)) $video_width=720;
+			$video_height=$this->_default_property_int_null($properties,'video_height');
+			if (is_null($video_height)) $video_height=576;
+
+			edit_video(intval($content_id),$label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -251,5 +439,7 @@ class Hook_occle_fs_galleries extends content_fs_base
 		{
 			delete_video(intval($content_id));
 		}
+
+		return true;
 	}
 }

@@ -19,6 +19,34 @@
  */
 
 /**
+ * Load the questions for a quiz into a single string.
+ *
+ * @param  AUTO_LINK		The quiz ID
+ * @return string			The text string
+ */
+function load_quiz_questions_to_string($id)
+{
+	$text='';
+	$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
+	foreach ($question_rows as $q)
+	{
+		$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY q_order');
+		$text.=get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'').chr(10);
+		foreach ($answer_rows as $a)
+		{
+			$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'').chr(10);
+			$explanation=get_translated_text($a['q_explanation']);
+			if ($explanation!='')
+			{
+				$text.=':'.$explanation.chr(10);
+			}
+		}
+		$text.=chr(10);
+	}
+	return $text;
+}
+
+/**
  * Add the answers for a quiz.
  *
  * @param  AUTO_LINK		The quiz ID

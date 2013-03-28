@@ -42,7 +42,7 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -54,7 +54,7 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -84,9 +84,65 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('*'),array('id'=>$content_id),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['id'],
+			'is_textual'=>$row['t_is_textual'],
+			'image_width'=>$row['t_image_width'],
+			'image_height'=>$row['t_image_height'],
+			'max_file_size'=>$row['t_max_file_size'],
+			'comcode_inline'=>$row['t_comcode_inline'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('banners2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$is_textual=$this->_default_property_int($properties,'is_textual');
+		$image_width=$this->_default_property_int_null($properties,'image_width');
+		if ($image_width===NULL) $image_width=300;
+		$image_height=$this->_default_property_int_null($properties,'image_height');
+		if ($image_height===NULL) $image_height=250;
+		$max_file_size=$this->_default_property_int_null($properties,'max_file_size');
+		if ($max_file_size===NULL) $max_file_size=100*1024;
+		$comcode_inline=$this->_default_property_int($properties,'comcode_inline');
+		$name=$this->_create_name_from_label($label);
+
+		edit_banner_type($content_id,$name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -94,6 +150,8 @@ class Hook_occle_fs_banners extends content_fs_base
 
 		require_code('banners2');
 		delete_banner_type($content_id);
+
+		return true;
 	}
 
 	/**
@@ -125,7 +183,7 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -137,7 +195,7 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -178,9 +236,88 @@ class Hook_occle_fs_banners extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),array('name'=>$content_id),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['name'],
+			'image_url'=>$row['img_url'],
+			'title_text'=>$row['title_text'],
+			'direct_code'=>$row['direct_code'],
+			'campaignremaining'=>$row['campaignremaining'],
+			'site_url'=>$row['site_url'],
+			'importancemodulus'=>$row['importancemodulus'],
+			'notes'=>$row['notes'],
+			'the_type'=>$row['the_type'],
+			'expiry_date'=>$row['expiry_date'],
+			'validated'=>$row['validated'],
+			'hits_from'=>$row['hits_from'],
+			'hits_to'=>$row['hits_to'],
+			'views_from'=>$row['views_from'],
+			'views_to'=>$row['views_to'],
+			'submitter'=>$row['submitter'],
+			'add_date'=>$row['add_date'],
+			'edit_date'=>$row['edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('banners2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$name=$this->_create_name_from_label($label);
+		$imgurl=$this->_default_property_str($properties,'image_url');
+		$title_text=$this->_default_property_str($properties,'title_text');
+		$direct_code=$this->_default_property_str($properties,'direct_code');
+		$campaignremaining=$this->_default_property_int_null($properties,'campaignremaining');
+		$site_url=$this->_default_property_str($properties,'site_url');
+		$importancemodulus=$this->_default_property_int_null($properties,'importancemodulus');
+		$notes=$this->_default_property_str($properties,'notes');
+		$the_type=$this->_default_property_int($properties,'the_type');
+		$expiry_date=$this->_default_property_int_null($properties,'expiry_date');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$b_type=$category;
+		$time=$this->_default_property_int_null($properties,'add_date');
+		$hits_from=$this->_default_property_int($properties,'hits_from');
+		$hits_to=$this->_default_property_int($properties,'hits_to');
+		$views_from=$this->_default_property_int($properties,'views_from');
+		$views_to=$this->_default_property_int($properties,'views_to');
+		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+
+		edit_banner($content_id,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_date,$add_time,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -188,5 +325,7 @@ class Hook_occle_fs_banners extends content_fs_base
 
 		require_code('banners2');
 		delete_banner($content_id);
+
+		return true;
 	}
 }

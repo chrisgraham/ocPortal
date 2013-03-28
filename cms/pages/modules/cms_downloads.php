@@ -1073,7 +1073,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('download_category',strval($category_id));
 
-		edit_download_category($category,$parent_id,$description,$category_id,$notes,$rep_image,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['add_time']);
+		edit_download_category($category_id,$category,$parent_id,$description,$notes,$rep_image,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['add_time']);
 		if (!fractional_edit())
 		{
 			$this->set_permissions(strval($category_id));

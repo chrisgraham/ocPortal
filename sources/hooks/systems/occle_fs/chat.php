@@ -44,7 +44,7 @@ class Hook_occle_fs_chat extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -56,7 +56,7 @@ class Hook_occle_fs_chat extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -85,9 +85,68 @@ class Hook_occle_fs_chat extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['room_name'],
+			'welcome_message'=>$row['welcome_message'],
+			'room_owner'=>$row['room_owner'],
+			'allow'=>$row['allow_list'],
+			'allow_groups'=>$row['allow_list_groups'],
+			'disallow'=>$row['disallow_list'],
+			'disallow_groups'=>$row['disallow_list_groups'],
+			'room_lang'=>$row['room_lang'],
+			'is_im'=>$row['is_im'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('chat2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$welcome=$this->_default_property_str($properties,'welcome_message');
+		$room_owner=$this->_default_property_int_null($properties,'room_owner');
+		$allow2=$this->_default_property_str($properties,'allow');
+		$allow2_groups=$this->_default_property_str($properties,'allow_groups');
+		$disallow2=$this->_default_property_str($properties,'disallow');
+		$disallow2_groups=$this->_default_property_str($properties,'disallow_groups');
+		$roomlang=$this->_default_property_str($properties,'room_lang');
+		if ($roomlang=='') $roomlang=get_site_default_lang();
+		$is_im=$this->_default_property_int($properties,'is_im');
+
+		edit_chatroom(intval($content_id),$welcome,$label,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -95,5 +154,7 @@ class Hook_occle_fs_chat extends content_fs_base
 
 		require_code('chat2');
 		delete_chatroom(intval($content_id));
+
+		return true;
 	}
 }

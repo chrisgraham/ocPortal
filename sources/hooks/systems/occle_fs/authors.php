@@ -42,7 +42,7 @@ class Hook_occle_fs_authors extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -54,7 +54,7 @@ class Hook_occle_fs_authors extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -81,9 +81,65 @@ class Hook_occle_fs_authors extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author'=>$content_id),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['author'],
+			'url'=>$row['url'],
+			'member_id'=>$row['member_id'],
+			'description'=>$row['description'],
+			'skills'=>$row['skills'],
+			'meta_keywords'=>$this->get_meta_keywords('authors',$row['author']),
+			'meta_description'=>$this->get_meta_description('authors',$row['author']),
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('authors');
+
+		$label=$this->_default_property_str($properties,'label');
+		$url=$this->_default_property_str($properties,'url');
+		$member_id=$this->_default_property_int_null($properties,'member_id');
+		$description=$this->_default_property_str($properties,'description');
+		$skills=$this->_default_property_str($properties,'skills');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+
+		// Author editing works via re-adding
+		if ($label!=$content_id) delete_author($content_id); // Delete old one if we renamed
+		add_author($label,$url,$member_id,$description,$skills,$meta_keywords,$meta_description);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -91,5 +147,7 @@ class Hook_occle_fs_authors extends content_fs_base
 
 		require_code('authors');
 		delete_author($content_id);
+
+		return true;
 	}
 }

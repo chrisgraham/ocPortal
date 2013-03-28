@@ -33,12 +33,12 @@ class Hook_occle_fs_ticket_types extends content_fs_base
 	{
 		return array(
 			'guest_emails_mandatory'=>'BINARY',
-			'search_faq'=>'BINARY'
+			'search_faq'=>'BINARY',
 		);
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -50,7 +50,7 @@ class Hook_occle_fs_ticket_types extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -72,9 +72,55 @@ class Hook_occle_fs_ticket_types extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['ticket_type'],
+			'guest_emails_mandatory'=>$row['guest_emails_mandatory'],
+			'search_faq'=>$row['search_faq'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('tickets2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$guest_emails_mandatory=$this->_default_property_int($properties,'guest_emails_mandatory');
+		$search_faq=$this->_default_property_int($properties,'search_faq');
+
+		edit_ticket_type(intval($content_id),$label,$guest_emails_mandatory,$search_faq);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -82,5 +128,7 @@ class Hook_occle_fs_ticket_types extends content_fs_base
 
 		require_code('tickets2');
 		delete_ticket_type(intval($content_id));
+
+		return true;
 	}
 }

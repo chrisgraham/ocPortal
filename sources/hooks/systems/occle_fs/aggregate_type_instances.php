@@ -40,7 +40,7 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -65,9 +65,58 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['aggregate_label'],
+			'aggregate_type'=>$row['aggregate_type'],
+			'other_properties'=>$row['other_properties'],
+			'add_date'=>$row['add_date'],
+			'edit_date'=>$row['edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('aggregate_types');
+
+		$label=$this->_default_property_str($properties,'label');
+		$aggregate_type=$this->_default_property_str($properties,'aggregate_type');
+		$_other_properties=$this->_default_property_str($properties,'other_properties');
+		$other_properties=($_other_properties=='')?array():unserialize($_other_properties);
+
+		edit_aggregate_type_instance(intval($content_id),$label,$aggregate_type,$other_properties);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -75,5 +124,7 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 
 		require_code('aggregate_types');
 		delete_aggregate_type_instance(intval($content_id));
+
+		return true;
 	}
 }

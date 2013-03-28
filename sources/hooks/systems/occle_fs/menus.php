@@ -37,7 +37,7 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -49,7 +49,7 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -86,9 +86,39 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		return array(
+			'label'=>$content_id,
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		return false;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -96,6 +126,8 @@ class Hook_occle_fs_menus extends content_fs_base
 
 		require_code('menus2');
 		delete_menu($content_id);
+
+		return true;
 	}
 
 	/**
@@ -119,7 +151,7 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -131,7 +163,7 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -160,9 +192,69 @@ class Hook_occle_fs_menus extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['i_caption'],
+			'order'=>$row['i_order'],
+			'parent'=>$row['i_parent'],
+			'caption_long'=>$row['i_caption_long'],
+			'url'=>$row['i_url'],
+			'check_permissions'=>$row['i_check_permissions'],
+			'expanded'=>$row['i_expanded'],
+			'new_window'=>$row['i_new_window'],
+			'page_only'=>$row['i_page_only'],
+			'theme_img_code'=>$row['i_theme_img_code'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('menus2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$order=$this->_default_property_int($properties,'order');
+		$parent=$this->_default_property_int_null($properties,'parent');
+		$url=$this->_default_property_str($properties,'url');
+		$check_permissions=$this->_default_property_int($properties,'check_permissions');
+		$page_only=$this->_default_property_str($properties,'page_only');
+		$expanded=$this->_default_property_int($properties,'expanded');
+		$new_window=$this->_default_property_int($properties,'new_window');
+		$caption_long=$this->_default_property_str($properties,'caption_long');
+		$theme_image_code=$this->_default_property_str($properties,'theme_image_code');
+
+		edit_menu_item(intval($content_id),$category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -170,5 +262,7 @@ class Hook_occle_fs_menus extends content_fs_base
 
 		require_code('menus2');
 		delete_menu_item(intval($content_id));
+
+		return true;
 	}
 }

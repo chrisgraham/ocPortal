@@ -22,7 +22,7 @@ class Hook_occle_fs_extended_config__notification_lockdown
 {
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */

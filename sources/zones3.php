@@ -338,6 +338,139 @@ function get_zone_chooser($inline=false,$no_go=NULL,$reorder=NULL)
 }
 
 /**
+ * Save a Comcode page.
+ *
+ * @param  ID_TEXT			The zone
+ * @param  ID_TEXT			The page
+ * @param  LANGUAGE_NAME	The language
+ * @param  ID_TEXT			The page text
+ * @param  BINARY				The validated status
+ * @param  ID_TEXT			The page parent
+ * @param  ?TIME				Add time (NULL: now)
+ * @param  ?TIME				Edit time (NULL: not edited)
+ * @param  BINARY				Whether to show as edited
+ * @param  ?MEMBER			The submitter (NULL: current member)
+ * @param  ?ID_TEXT			The old page name (NULL: not being renamed)
+ */
+function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=NULL,$add_time=NULL,$edit_time=NULL,$show_as_edit=0,$submitter=NULL,$file=NULL)
+{
+	if (is_null($submitter)) $submitter=get_member();
+	if (is_null($add_time)) $add_time=time();
+	if (is_null($file)) $file=$new_file; // Not renamed
+
+	// Check page name
+	require_code('type_validation');
+	if (!is_alphanumeric($new_file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+	require_code('zones2');
+	check_page_name($zone,$new_file);
+
+	// Handle if the page was renamed - move stuff over
+	$renaming_page=($new_file!=$file);
+	if ($renaming_page)
+	{
+		$langs=find_all_langs(true);
+		$rename_map=array();
+		foreach (array_keys($langs) as $lang)
+		{
+			$old_path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/comcode_custom/'.$lang.'/'.$file.'.txt',true);
+			if (file_exists(get_file_base().'/'.$old_path))
+			{
+				$new_path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/comcode_custom/'.$lang.'/'.$new_file.'.txt',true);
+				if (file_exists($new_path)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone.':'.$new_file)));
+				$rename_map[$old_path]=$new_path;
+			}
+			if (file_exists(get_file_base().'/'.str_replace('/comcode_custom/','/comcode/',$old_path)))
+			{
+				attach_message(do_lang_tempcode('ORIGINAL_PAGE_NO_RENAME'),'warn');
+			}
+		}
+
+		foreach ($rename_map as $path=>$new_path)
+		{
+			rename(get_custom_file_base().'/'.$path,get_custom_file_base().'/'.$new_path);
+		}
+
+		if (addon_installed('awards'))
+		{
+			$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'comcode_page'));
+			foreach ($types as $type)
+			{
+				$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$new_file),array('content_id'=>$file,'a_type_id'=>$type['id']));
+			}
+		}
+	}
+
+	// Set meta-data
+	require_code('seo2');
+	$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+	$meta_description=$this->_default_property_str($properties,'meta_description');
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('comcode_page',$new_file,array($text),$text);
+	} else
+	{
+		seo_meta_set_for_explicit('comcode_page',$new_file,$meta_keywords,$meta_description);
+	}
+
+	// Store in DB
+	$GLOBALS['SITE_DB']->query_delete('comcode_pages',array(
+		'the_zone'=>$zone,
+		'the_page'=>$file,
+	));
+	$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+		'the_zone'=>$zone,
+		'the_page'=>$new_file,
+		'p_parent_page'=>$parent_page,
+		'p_validated'=>$validated,
+		'p_edit_date'=>$edit_time,
+		'p_add_date'=>$add_time,
+		'p_submitter'=>$submitter,
+		'p_show_as_edit'=>$show_as_edit
+	));
+
+	// Store page on disk
+	$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($new_file).'.txt');
+	if ((!file_exists($fullpath)) || ($new!=file_get_contents($fullpath)))
+	{
+		$myfile=@fopen($fullpath,'wt');
+		if ($myfile===false) intelligent_write_error($fullpath);
+		if (fwrite($myfile,$text)<strlen($text)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		fclose($myfile);
+		sync_file($fullpath);
+		fix_permissions($fullpath);
+
+		$file_changed=true;
+	} else
+	{
+		$file_changed=false;
+	}
+
+	// Save backup
+	if ((file_exists($fullpath)) && (get_option('store_revisions')=='1') && ($file_changed))
+	{
+		$time=time();
+		@copy($fullpath,$fullpath.'.'.strval($time)) OR intelligent_write_error($fullpath.'.'.strval($time));
+		fix_permissions($fullpath.'.'.strval($time));
+		sync_file($fullpath.'.'.strval($time));
+	}
+
+	// Empty caching
+	persistent_cache_empty();
+	//persistent_cache_delete(array('PAGE_INFO'));
+	decache('main_comcode_page_children');
+	decache('main_sitemap');
+	$caches=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),array('the_zone'=>$zone,'the_page'=>$file));
+	$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$file));
+	foreach ($caches as $cache)
+	{
+		delete_lang($cache['string_index']);
+	}
+
+	// Log
+	log_it('COMCODE_PAGE_EDIT',$new_file,$zone);
+}
+
+/**
  * Delete an ocPortal page.
  *
  * @param  ID_TEXT		The zone

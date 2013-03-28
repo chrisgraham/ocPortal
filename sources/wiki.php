@@ -171,12 +171,13 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
  * @param  string			The new post
  * @param  BINARY			Whether the post will be validated
  * @param  ?MEMBER		The member doing the action (NULL: current member)
+ * @param  ?AUTO_LINK	The page ID (NULL: do not change)
  * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME			Add time (NULL: do not change)
  * @param  ?integer		Number of views (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function wiki_edit_post($id,$message,$validated,$member=NULL,$edit_time=NULL,$add_time=NULL,$views=NULL,$null_is_literal=false)
+function wiki_edit_post($id,$message,$validated,$member=NULL,$page_id=NULL,$edit_time=NULL,$add_time=NULL,$views=NULL,$null_is_literal=false)
 {
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
@@ -204,6 +205,9 @@ function wiki_edit_post($id,$message,$validated,$member=NULL,$edit_time=NULL,$ad
 		'validated'=>$validated,
 		'the_message'=>update_lang_comcode_attachments($_message,$message,'wiki_post',strval($id),NULL,true,$original_poster),
 	);
+
+	if (!is_null($page_id))
+		$update_map['page_id']=$page_id;
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))

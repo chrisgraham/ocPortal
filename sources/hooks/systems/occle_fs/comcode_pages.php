@@ -44,7 +44,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -56,7 +56,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -90,15 +90,79 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$content_id),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['zone_name'],
+			'human_title'=>$row['zone_title'],
+			'default_page'=>$row['zone_default_page'],
+			'header_text'=>$row['zone_header_text'],
+			'theme'=>$row['zone_theme'],
+			'wide'=>$row['zone_wide'],
+			'require_session'=>$row['zone_require_session'],
+			'displayed_in_menu'=>$row['zone_displayed_in_menu'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('zones3');
+
+		$label=$this->_default_property_str($properties,'label');
+		$human_title=$this->_default_property_str($properties,'human_title');
+		if ($human_title=='') $human_title=$label;
+		$default_page=$this->_default_property_str($properties,'default_page');
+		if ($default_page=='') $default_page='start';
+		$header_text=$this->_default_property_str($properties,'header_text');
+		$theme=$this->_default_property_str($properties,'theme');
+		$wide=$this->_default_property_int($properties,'wide');
+		$require_session=$this->_default_property_int($properties,'require_session');
+		$displayed_in_menu=$this->_default_property_int($properties,'displayed_in_menu');
+
+		$zone=$this->_create_name_from_label($label);
+
+		actual_edit_zone($content_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
 		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
 
+		require_code('zones2');
+
 		actual_delete_zone($content_id);
+
+		return true;
 	}
 
 	/**
@@ -110,7 +174,6 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	{
 		return array(
 			'text'=>'LONG_TRANS',
-			'lang'=>'LANGUAGE_NAME',
 			'parent_page'=>'comcode_page',
 			'validated'=>'BINARY',
 			'show_as_edit'=>'BINARY',
@@ -123,7 +186,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -135,7 +198,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -153,8 +216,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 
 		$file=$this->_create_name_from_label($label);
 
-		$lang=$this->_default_property_str($properties,'lang');
-		if ($lang=='') $lang=get_site_default_lang();
+		$lang=get_site_default_lang();
 		$parent_page=_create_name_from_label($this->_default_property_str($properties,'parent_page'));
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
@@ -166,49 +228,94 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		if (is_null($submitter)) $submitter=get_member();
 		$text=$this->_default_property_str($properties,'text');
 
-		require_code('seo2');
-		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
-		$meta_description=$this->_default_property_str($properties,'meta_description');
-		if (($meta_keywords=='') && ($meta_description==''))
-		{
-			seo_meta_set_for_implicit('comcode_page',$file,array($text),$text);
-		} else
-		{
-			seo_meta_set_for_explicit('comcode_page',$file,$meta_keywords,$meta_description);
-		}
+		require_code('zones3');
+		save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter);
 
-		$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
-			'the_zone'=>$zone,
-			'the_page'=>$file,
-			'p_parent_page'=>$parent_page,
-			'p_validated'=>$validated,
-			'p_edit_date'=>$edit_time,
-			'p_add_date'=>$add_time,
-			'p_submitter'=>$submitter,
-			'p_show_as_edit'=>$show_as_edit
-		));
-
-		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($file).'.txt');
-		$myfile=@fopen($fullpath,'wt');
-		if ($myfile===false) intelligent_write_error($fullpath);
-		if (fwrite($myfile,$text)<strlen($text)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		fclose($myfile);
-		sync_file($fullpath);
-		fix_permissions($fullpath);
-
-		seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,$meta_keywords,$meta_description);
-
-		persistent_cache_delete(array('PAGE_INFO'));
-		decache('main_comcode_page_children');
-		decache('main_sitemap');
-
-		log_it('COMCODE_PAGE_EDIT',$file,$zone);
+		return $zone.':'.$file;
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		list($zone,$page)=explode(':',$content_id,2);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$page),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		$text=array();
+		require_code('site');
+		foreach (array_keys(find_all_langs()) as $lang)
+		{
+			$result=_request_page($row['the_page'],$row['the_zone'],'comcode_custom',$lang,true);
+			list(,,,$_lang,$path)=$result;
+			if ($lang==$_lang)
+				$text[$lang]=file_get_contents($path);
+		}
+
+		return array(
+			'label'=>$row['the_zone'].':'.$row['the_page'],
+			'text'=>$text,
+			'parent_page'=>$row['p_parent_page'],
+			'validated'=>$row['p_validated'],
+			'show_as_edit'=>$row['p_show_as_edit'],
+			'meta_keywords'=>$this->get_meta_keywords('comcode_page',$row['the_zone'].':'.$row['the_page']),
+			'meta_description'=>$this->get_meta_description('comcode_page',$row['the_zone'].':'.$row['the_page']),
+			'submitter'=>$row['p_submitter'],
+			'add_date'=>$row['p_add_date'],
+			'edit_date'=>$row['p_edit_date'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$zone=$category;
+
+		$label=$this->_default_property_str($properties,'label');
+		$file=$this->_create_name_from_label($label);
+
+		$lang=get_site_default_lang();
+		$parent_page=_create_name_from_label($this->_default_property_str($properties,'parent_page'));
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		if (is_null($add_time)) $add_time=time();
+		$show_as_edit=$this->_default_property_int($properties,'show_as_edit');
+		$submitter=$this->_default_property_int_null($properties,'submitter');
+		if (is_null($submitter)) $submitter=get_member();
+		$text=$this->_default_property_str($properties,'text');
+
+		require_code('zones3');
+		save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$content_id);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -217,5 +324,7 @@ class Hook_occle_fs_comcode_pages extends content_fs_base
 		require_code('zones3');
 		list($zone,$page)=explode(':',$content_id,2);
 		delete_ocp_page($zone,$page);
+
+		return true;
 	}
 }

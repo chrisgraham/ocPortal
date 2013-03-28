@@ -87,14 +87,14 @@ class Hook_occle_fs_forums extends content_fs_base
 			'cascading'=>'BINARY',
 			'pt_from'=>'?member',
 			'pt_to'=>'?member',
-			'num_views'=>'INTEGER',
+			'views'=>'INTEGER',
 			'description_link'=>'SHORT_TEXT',
 			'poll'=>'LONG_TRANS',
 		);
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
@@ -141,7 +141,55 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Convert properties to variables for adding/editing forums.
+	 *
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return array			Properties
+	 */
+	function __folder_read_in_properties_forum($path,$properties)
+	{
+		$description=$this->_default_property_str($properties,'description');
+		$forum_grouping_id=/*if grouping resource type was not here we could cheat with $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');*/$this->_default_property_str($properties,'forum_grouping_id');
+		$access_mapping=array();
+		$parent_forum=$this->_integer_category($category);
+		$position=$this->_default_property_str($properties,'position');
+		$post_count_increment=$this->_default_property_str($properties,'post_count_increment');
+		$order_sub_alpha=$this->_default_property_str($properties,'order_sub_alpha');
+		$intro_question=$this->_default_property_str($properties,'intro_question');
+		$intro_answer=$this->_default_property_str($properties,'intro_answer');
+		$redirection=$this->_default_property_str($properties,'redirection');
+		$order=$this->_default_property_str($properties,'order');
+		$is_threaded=$this->_default_property_str($properties,'is_threaded');
+
+		return array($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
+	}
+
+	/**
+	 * Convert properties to variables for adding/editing topics.
+	 *
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return array			Properties
+	 */
+	function __folder_read_in_properties_topic($path,$properties)
+	{
+		$emoticon=$this->_default_property_str($properties,'emoticon');
+		$validated=$this->_default_property_str($properties,'validated');
+		$open=$this->_default_property_str($properties,'open');
+		$pinned=$this->_default_property_str($properties,'pinned');
+		$sunk=$this->_default_property_str($properties,'sunk');
+		$cascading=$this->_default_property_str($properties,'cascading');
+		$pt_from=$this->_default_property_str($properties,'pt_from');
+		$pt_to=$this->_default_property_str($properties,'pt_to');
+		$num_views=$this->_default_property_str($properties,'views');
+		$description_link=$this->_default_property_str($properties,'description_link');
+
+		return array($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link);
+	}
+
+	/**
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -161,18 +209,8 @@ class Hook_occle_fs_forums extends content_fs_base
 
 			require_code('ocf_forums_action');
 
-			$description=$this->_default_property_str($properties,'description');
-			$forum_grouping_id=/*if grouping resource type was not here we could cheat with $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');*/$this->_default_property_str($properties,'forum_grouping_id');
-			$access_mapping=array();
-			$parent_forum=$this->_integer_category($category);
-			$position=$this->_default_property_str($properties,'position');
-			$post_count_increment=$this->_default_property_str($properties,'post_count_increment');
-			$order_sub_alpha=$this->_default_property_str($properties,'order_sub_alpha');
-			$intro_question=$this->_default_property_str($properties,'intro_question');
-			$intro_answer=$this->_default_property_str($properties,'intro_answer');
-			$redirection=$this->_default_property_str($properties,'redirection');
-			$order=$this->_default_property_str($properties,'order');
-			$is_threaded=$this->_default_property_str($properties,'is_threaded');
+			list($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
+
 			$id=ocf_make_forum($label,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
@@ -182,16 +220,9 @@ class Hook_occle_fs_forums extends content_fs_base
 			require_code('ocf_topics_action');
 
 			$forum_id=$this->_integer_category($category);
-			$emoticon=$this->_default_property_str($properties,'emoticon');
-			$validated=$this->_default_property_str($properties,'validated');
-			$open=$this->_default_property_str($properties,'open');
-			$pinned=$this->_default_property_str($properties,'pinned');
-			$sunk=$this->_default_property_str($properties,'sunk');
-			$cascading=$this->_default_property_str($properties,'cascading');
-			$pt_from=$this->_default_property_str($properties,'pt_from');
-			$pt_to=$this->_default_property_str($properties,'pt_to');
-			$num_views=$this->_default_property_str($properties,'num_views');
-			$description_link=$this->_default_property_str($properties,'description_link');
+
+			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
+
 			$id=ocf_make_topic($forum_id,$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
 
 			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
@@ -216,9 +247,127 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _folder_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		if (substr($category,0,6)=='FORUM-')
+		{
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id'=>intval($content_id)),'',1);
+			if (!array_key_exists(0,$rows)) return false;
+			$row=$rows[0];
+
+			return array(
+				'label'=>$row['f_name'],
+				'description'=>$row['f_description'],
+				'forum_grouping_id'=>$row['f_forum_grouping_id'],
+				'position'=>$row['f_position'],
+				'post_count_increment'=>$row['f_post_count_increment'],
+				'order_sub_alpha'=>$row['f_order_sub_alpha'],
+				'intro_question'=>$row['f_intro_question'],
+				'intro_answer'=>$row['f_intro_answer'],
+				'redirection'=>$row['f_redirection'],
+				'order'=>$row['f_order'],
+				'is_threaded'=>$row['f_is_threaded'],
+			);
+		}
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['t_description'],
+			'emoticon'=>$row['t_emoticon'],
+			'validated'=>$row['t_validated'],
+			'open'=>$row['t_open'],
+			'pinned'=>$row['t_pinned'],
+			'sunk'=>$row['t_sunk'],
+			'cascading'=>$row['t_cascading'],
+			'pt_from'=>$row['t_pt_from'],
+			'pt_to'=>$row['t_pt_to'],
+			'views'=>$row['t_num_views'],
+			'description_link'=>$row['t_description_link'],
+			'poll'=>$row['t_poll'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _folder_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		if ($content_type=='forum')
+		{
+			require_code('ocf_forums_action2');
+
+			$label=$this->_default_property_str($properties,'label');
+			list($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
+
+			ocf_edit_forum(intval($content_id),$label,$description,$forum_grouping_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
+		} else
+		{
+			require_code('ocf_topics_action2');
+
+			$label=$this->_default_property_str($properties,'label');
+			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
+
+			ocf_edit_topic(intval($content_id),$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$reason,$title,$description_link,false,$views,true);
+
+			$poll_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_poll_id',array('id'=>intval($content_id)));
+
+			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
+			{
+				$poll_data=unserialize($properties['poll']);
+
+				$question=$poll_data['question'];
+				$is_private=$poll_data['is_private'];
+				$is_open=$poll_data['is_open'];
+				$minimum_selections=$poll_data['minimum_selections'];
+				$maximum_selections=$poll_data['maximum_selections'];
+				$requires_reply=$poll_data['requires_reply'];
+				$answers=$poll_data['answers']; // A list of pairs of the potential voteable answers and the number of votes.
+
+				if (is_null($poll_id))
+				{
+					require_code('ocf_polls_action');
+					ocf_make_poll($id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,false);
+				} else
+				{
+					require_code('ocf_polls_action2');
+					ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers);
+				}
+			} else
+			{
+				if (!is_null($poll_id))
+				{
+					require_code('ocf_polls_action2');
+					ocf_delete_poll($poll_id);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _folder_delete($filename)
 	{
@@ -233,6 +382,8 @@ class Hook_occle_fs_forums extends content_fs_base
 			require_code('ocf_topics_action2');
 			ocf_delete_topic(intval($content_id));
 		}
+
+		return true;
 	}
 
 	/**
@@ -261,7 +412,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -299,15 +450,89 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['p_title'],
+			'post'=>$row['p_post'],
+			'skip_sig'=>$row['p_skip_sig'],
+			'validated'=>$row['p_validated'],
+			'is_emphasised'=>$row['p_is_emphasised'],
+			'poster_name_if_guest'=>$row['p_poster_name_if_guest'],
+			'ip_address'=>$row['p_ip_address'],
+			'intended_solely_for'=>$row['p_intended_solely_for'],
+			'sunk'=>$row['p_sunk'],
+			'anonymous'=>$row['p_anonymous'],
+			'parent_id'=>$row['p_parent_id'],
+			'poster'=>$row['p_poster'],
+			'last_edit_by'=>$row['p_last_edit_by'],
+			'add_date'=>$row['p_time'],
+			'edit_date'=>$row['p_last_edit_time'],
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ocf_posts_action3');
+
+		$label=$this->_default_property_str($properties,'label');
+		$topic_id=$this->_integer_category($category);
+		$post=$this->_default_property_str($properties,'post');
+		$skip_sig=$this->_default_property_int($properties,'skip_sig');
+		$validated=$this->_default_property_int_null($properties,'validated');
+		if (is_null($validated)) $validated=1;
+		$is_emphasised=$this->_default_property_int($properties,'is_emphasised');
+		$poster_name_if_guest=$this->_default_property_str($properties,'poster_name_if_guest');
+		$ip_address=$this->_default_property_str_null($properties,'ip_address');
+		$time=$this->_default_property_int_null($properties,'add_date');
+		$poster=$this->_default_property_int_null($properties,'poster');
+		$intended_solely_for=$this->_default_property_int_null($properties,'intended_solely_for');
+		$last_edit_time=$this->_default_property_int_null($properties,'edit_date');
+		$last_edit_by=$this->_default_property_int_null($properties,'last_edit_by');
+		$sunk=$this->_default_property_int($properties,'sunk');
+		$anonymous=$this->_default_property_int($properties,'anonymous');
+		$parent_id=$this->_default_property_int_null($properties,'parent_id');
+
+		ocf_edit_post(intval($content_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,false,$edit_time,$add_time,$submitter,true);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
 		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
 
-		require_code('ocf_posts_action2');
+		require_code('ocf_posts_action3');
 		ocf_delete_post(intval($content_id));
+
+		return true;
 	}
 }

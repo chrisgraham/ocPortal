@@ -53,7 +53,7 @@ class Hook_occle_fs_multi_moderations extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -65,7 +65,7 @@ class Hook_occle_fs_multi_moderations extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -92,9 +92,65 @@ class Hook_occle_fs_multi_moderations extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['mm_name'],
+			'post_text'=>$row['mm_post_text'],
+			'move_to'=>$row['mm_move_to'],
+			'pin_state'=>$row['mm_pin_state'],
+			'sink_state'=>$row['mm_sink_state'],
+			'open_state'=>$row['mm_open_state'],
+			'forum_multi_code'=>$row['mm_forum_multi_code'],
+			'title_suffix'=>$row['mm_title_suffix']
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		require_code('ocf_moderation_action2');
+
+		$label=$this->_default_property_str($properties,'label');
+		$post_text=$this->_default_property_str($properties,'post_text');
+		$move_to=$this->_default_property_int($properties,'move_to');
+		$pin_state=$this->_default_property_int($properties,'pin_state');
+		$sink_state=$this->_default_property_int($properties,'sink_state');
+		$open_state=$this->_default_property_int($properties,'open_state');
+		$forum_multi_code=$this->_default_property_str($properties,'forum_multi_code');
+		$title_suffix=$this->_default_property_str($properties,'title_suffix');
+
+		ocf_edit_multi_moderation(intval($content_id),$label,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code,$title_suffix);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -102,5 +158,7 @@ class Hook_occle_fs_multi_moderations extends content_fs_base
 
 		require_code('ocf_moderation_action2');
 		ocf_delete_multi_moderation(intval($content_id));
+
+		return true;
 	}
 }

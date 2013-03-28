@@ -45,7 +45,7 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for content hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Content row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -57,7 +57,7 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for content hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Content label
 	 * @param  string			The path (blank: root / not applicable)
@@ -92,13 +92,91 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 			'tag_block_tag'=>$block_tag,
 			'tag_textual_tag'=>$textual_tag
 		));
+
+		log_it('ADD_CUSTOM_COMCODE_TAG',$tag);
+
 		return strval($id);
 	}
 
 	/**
-	 * Standard modular delete function for content hooks. Deletes the content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
 	 *
-	 * @param  ID_TEXT	The filename
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the content (false: error)
+	 */
+	function _file_load($filename,$path)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('*'),array('tag_tag'=>$content_id),'',1);
+		if (!array_key_exists(0,$rows)) return false;
+		$row=$rows[0];
+
+		return array(
+			'label'=>$row['tag_tag'],
+			'title'=>$row['tag_title'],
+			'description'=>$row['tag_description'],
+			'replace'=>$row['tag_replace'],
+			'example'=>$row['tag_example'],
+			'parameters'=>$row['tag_parameters'],
+			'enabled'=>$row['tag_enabled'],
+			'dangerous_tag'=>$row['tag_dangerous_tag'],
+			'block_tag'=>$row['tag_block_tag'],
+			'textual_tag'=>$row['tag_textual_tag']
+		);
+	}
+
+	/**
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function _file_edit($filename,$path,$properties)
+	{
+		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+
+		$label=$this->_default_property_str($properties,'label');
+		$tag=$this->_create_name_from_label($label);
+		$title=$this->_default_property_str($properties,'title');
+		$description=$this->_default_property_str($properties,'description');
+		$replace=$this->_default_property_str($properties,'replace');
+		$example=$this->_default_property_str($properties,'example');
+		$parameters=$this->_default_property_str($properties,'parameters');
+		$enabled=$this->_default_property_int($properties,'enabled');
+		$dangerous_tag=$this->_default_property_int($properties,'dangerous_tag');
+		$block_tag=$this->_default_property_int($properties,'block_tag');
+		$textual_tag=$this->_default_property_int($properties,'textual_tag');
+
+		$_title=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_title',array('tag_tag'=>$content_id));
+		$_description=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_description',array('tag_tag'=>$content_id));
+
+		$GLOBALS['SITE_DB']->query_update('custom_comcode',array(
+			'tag_tag'=>$tag,
+			'tag_title'=>lang_remap($_title,$title),
+			'tag_description'=>lang_remap_comcode($_description,$description),
+			'tag_replace'=>$replace,
+			'tag_example'=>$example,
+			'tag_parameters'=>$parameters,
+			'tag_enabled'=>$enabled,
+			'tag_dangerous_tag'=>$dangerous_tag,
+			'tag_block_tag'=>$block_tag,
+			'tag_textual_tag'=>$textual_tag
+		),array('tag_name'=>$content_id),'',1);
+
+		log_it('EDIT_CUSTOM_COMCODE_TAG',$tag);
+
+		return true;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 *
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
 	 */
 	function _file_delete($filename)
 	{
@@ -106,6 +184,10 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 
 		$GLOBALS['SITE_DB']->query_delete('custom_comcode',array(
 			'tag_tag'=>$content_id,
-		));
+		),'',1);
+
+		log_it('DELETE_CUSTOM_COMCODE_TAG',$content_id);
+
+		return true;
 	}
 }
