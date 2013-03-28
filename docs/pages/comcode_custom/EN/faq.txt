@@ -85,6 +85,9 @@ We feel Linux is more suited for PHP purposes than Windows. ocPortal will work f
 [b]Do you recommend any web hosts / provide your own hosting?[/b]
 At this time, no. Read about ocPortal's minimum requirements in our [page="_SEARCH:tut_web_hosting"]hosting tutorial[/page]. ocPortal is designed to run well on almost all web hosts.
 
+[b]So I don't need a programmer?[/b]
+If you're not trying to do something very basic, like a standard blog or forum, you almost certainly will need a budget for programming and you'll fail if you don't. ocPortal lowers costs but it absolutely cannot eliminate them -- every project is different -- and every power user tends to think what they are doing is simpler than it is. As a very rough guide, expect 10% of your needs to require bespoke programming by a skilled developer(s), or higher if you're making a new kind of web application. This is on top of the costs of setting up the system just how you need it, and of design. If you cannot afford a programmer on a non-trivial project, you frankly should not expect to be able to complete it until you can.
+
 [b]Does ocPortal support (some forum vendor and version)?[/b]
 Compatible forum software is listed in the [page="_SEARCH:tut_web_hosting"]web hosting requirements tutorial[/page], and any issues are listed in the [page="_SEARCH:tut_nuances"]nuances of forum integration tutorial[/page].
 
