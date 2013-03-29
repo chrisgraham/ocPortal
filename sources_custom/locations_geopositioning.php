@@ -16,6 +16,8 @@ function fix_geoposition($lstring,$category_id)
 {
 	$type='yahoo';
 
+	$lstring=preg_replace('#, (Africa|Americas|Asia|Europe|Oceania)$#','',$lstring); // Confuses Bing
+
 	// Web service to get remaining latitude/longitude
 	if ($type=='bing')
 	{
@@ -85,12 +87,10 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 	$maxLat=rad2deg($maxLat);
 	$minLon=rad2deg($minLon);
 	$maxLon=rad2deg($maxLon);
-	$radLat=rad2deg($radLat);
-	$radLon=rad2deg($radLon);
 
 	$where='(l_latitude>='.float_to_raw_string($minLat,10).' AND l_latitude<='.float_to_raw_string($maxLat,10).') AND (l_longitude>='.float_to_raw_string($minLon,10).' '.
 				($meridian180WithinDistance?'OR':'AND').' l_longitude<='.float_to_raw_string($maxLon,10).') AND '.
-				'acos(sin('.float_to_raw_string($radLat,10).')*sin(l_latitude)+cos('.float_to_raw_string($radLat,10).')*cos(l_latitude)*cos(l_longitude-'.float_to_raw_string($radLon,10).'))<='.float_to_raw_string($error_tolerance,10);
+				'acos(sin('.float_to_raw_string($radLat,10).')*sin(radians(l_latitude))+cos('.float_to_raw_string($radLat,10).')*cos(radians(l_latitude))*cos(radians(l_longitude)-'.float_to_raw_string($radLon,10).'))<='.float_to_raw_string($error_tolerance,10);
 
 	// ==== ^^^
 

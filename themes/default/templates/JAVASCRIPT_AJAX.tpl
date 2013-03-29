@@ -317,7 +317,8 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 		var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
 		if (typeof raw_ajax_grow_spot[0]!='undefined' && append) loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 		var loading_wrapper_inner=document.createElement('div');
-		if (abstract_get_computed_style(loading_wrapper,'position')!='relative')
+		var position_type=abstract_get_computed_style(loading_wrapper,'position');
+		if ((position_type!='relative') && (position_type!='absolute'))
 		{
 			if (append)
 			{
@@ -325,6 +326,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 			} else
 			{
 				loading_wrapper.style.position='relative';
+				loading_wrapper.style.overflow='hidden'; // Stops margin collapsing weirdness
 			}
 		}
 		var loading_image=document.createElement('img');

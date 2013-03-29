@@ -3599,6 +3599,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 .comcode_concept_inline, a.comcode_concept_inline, a.comcode_concept_inline:visited, a.comcode_concept_inline:hover {
 	border-bottom: 1px dashed {$GET,divider_line};
 	display: inline-block;
+	margin-bottom: 0.3em; /* To make sure bottom border can't be flush with something */
 }
 
 .comcode_concepts {

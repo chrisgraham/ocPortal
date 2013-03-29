@@ -600,11 +600,16 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 			}
 
 			// Set privileges
-			if ($priv_reset)
+			if (($priv_reset) && ((count($group_presets)!=0) || (count($member_presets)!=0) || (count($group_privileges)!=0) || (count($member_privileges)!=0)))
 				$object_fs->reset_content_privileges($filename);
-			$object_fs->set_content_privileges_from_preset($filename,$group_presets);
-			$object_fs->set_content_privileges_from_preset__members($filename,$member_presets);
-			$object_fs->set_content_privileges($filename,$group_privileges);
+			if (count($group_presets)!=0)
+				$object_fs->set_content_privileges_from_preset($filename,$group_presets);
+			if (count($member_presets)!=0)
+				$object_fs->set_content_privileges_from_preset__members($filename,$member_presets);
+			if (count($group_privileges)!=0)
+				$object_fs->set_content_privileges($filename,$group_privileges);
+			if (count($member_privileges)!=0)
+				$object_fs->set_content_privileges__members($filename,$member_privileges);
 
 			// Set access
 			$group_access=array();
@@ -646,8 +651,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 					}
 				}
 			}
-			$object_fs->set_content_access($filename,$group_access);
-			$object_fs->set_content_access__members($filename,$member_access);
+			if (count($group_access)!=0)
+				$object_fs->set_content_access($filename,$group_access);
+			if (count($member_access)!=0)
+				$object_fs->set_content_access__members($filename,$member_access);
 		}
 	}
 }

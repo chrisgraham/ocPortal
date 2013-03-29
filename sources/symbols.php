@@ -2373,7 +2373,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'FLOAT_FORMAT':
 				if (isset($param[0]))
 				{
-					$value=float_format(floatval($param[0]));
+					$value=float_format(floatval($param[0]),isset($param[1])?intval($param[1]):2);
 				}
 				break;
 
