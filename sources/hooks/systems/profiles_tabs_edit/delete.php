@@ -64,7 +64,22 @@ class Hook_Profiles_Tabs_Edit_delete
 		// UI fields
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 
-		$text=do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==get_member())?'_SUICIDAL':''),$username);
+		$text=paragraph(do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==$member_id_viewing)?'_SUICIDAL':''),$username));
+
+		if ($member_id_of!=$member_id_viewing)
+		{
+			$merge_url=build_url(array('page'=>'admin_ocf_merge_members','from'=>$username,'to'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())),get_module_zone('admin_ocf_merge_members'));
+			$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_MERGE',escape_html($merge_url->evaluate()))));
+
+			if (has_specific_permission($member_id_of,'comcode_dangerous'))
+				$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_ADMIN',escape_html($merge_url->evaluate()))));
+
+			if (addon_installed('search'))
+			{
+				$search_url=build_url(array('page'=>'search','type'=>'results','author'=>$username),get_module_zone('search'));
+				$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_SEARCH',escape_html($search_url->evaluate()))));
+			}
+		}
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
