@@ -88,13 +88,20 @@ class Hook_cron_content_reviews
 
 				case 'delete':
 					require_code('content_fs');
-					$object_js=get_content_occlefs_object($content_type);
-					if (!is_null($object_js))
+					$object_fs=get_content_occlefs_object($content_type);
+					if (!is_null($object_fs))
 					{
 						if ($info['occle_filesystem__is_folder'])
-							$object_js->_folder_delete($object_js->_folder_convert_id_to_filename($content_type,$content_id));
-						else
-							$object_js->_file_delete($object_js->_file_convert_id_to_filename($content_type,$content_id));
+						{
+							$filename=$object_fs->folder_convert_id_to_filename($content_type,$content_id);
+							if (!is_null($filename))
+								$object_fs->folder_delete($filename);
+						} else
+						{
+							$filename=$object_fs->file_convert_id_to_filename($content_type,$content_id);
+							if (!is_null($filename))
+								$object_fs->file_delete($filename);
+						}
 					}
 					break;
 
@@ -106,5 +113,4 @@ class Hook_cron_content_reviews
 	}
 
 }
-
 

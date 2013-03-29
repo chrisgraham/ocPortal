@@ -60,9 +60,9 @@ class Hook_occle_fs_award_types extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($filename,$path,$properties)
+	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('awards2');
@@ -86,7 +86,7 @@ class Hook_occle_fs_award_types extends content_fs_base
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id'=>intval($content_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -110,9 +110,9 @@ class Hook_occle_fs_award_types extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return boolean		Success status
 	 */
-	function _file_edit($filename,$path,$properties)
+	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('awards2');
 
@@ -134,9 +134,9 @@ class Hook_occle_fs_award_types extends content_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
-	function _file_delete($filename)
+	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('awards2');
 		delete_award_type(intval($content_id));

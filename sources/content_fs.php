@@ -190,16 +190,30 @@ class content_fs_base
 		return ($category=='')?NULL:intval($category);
 	}
 
-	/**
-	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The content type
-	 * @param  ID_TEXT	The content ID
-	 * @return ID_TEXT	The filename
-	 */
-	function _file_convert_id_to_filename($content_type,$content_id)
+	function is_folder_type($content_type)
 	{
-		return $content_id.'.xml';
+		$folder_types=is_array($this->folder_content_type)?$this->folder_content_type:(is_null($this->folder_content_type)?array():array($this->folder_content_type));
+		return in_array($content_type,$folder_types);
+	}
+
+	function is_file_type($content_type)
+	{
+		$file_types=is_array($this->file_content_type)?$this->file_content_type:(is_null($this->file_content_type)?array():array($this->file_content_type));
+		return in_array($content_type,$file_types);
+	}
+
+	function convert_label_to_filename($label,$subpath,$content_type,$must_already_exist=false)
+	{
+		// TODO
+	}
+
+	function convert_filename_to_id($filename,$content_type)
+	{
+		if ($this->is_file_type($content_type))
+			return $this->file_convert_filename_to_id($filename,$content_type);
+		if ($this->is_folder_type($content_type))
+			return $this->folder_convert_filename_to_id($filename,$content_type);
+		return NULL;
 	}
 
 	/**
@@ -207,9 +221,9 @@ class content_fs_base
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
 	 * @param  ?ID_TEXT	The content type (NULL: assumption of only one folder content type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
-	 * @return array		A pair: The content type, the content ID
+	 * @return ?array		A pair: The content type, the content ID (NULL: could not find)
 	 */
-	function _file_convert_filename_to_id($filename,$content_type=NULL)
+	function file_convert_filename_to_id($filename,$content_type=NULL)
 	{
 		if (is_null($content_type)) $content_type=$this->folder_content_type;
 
@@ -218,32 +232,53 @@ class content_fs_base
 	}
 
 	/**
-	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The content type
-	 * @param  ID_TEXT	The content ID
-	 * @return ID_TEXT	The filename
-	 */
-	function _folder_convert_id_to_filename($content_type,$content_id)
-	{
-		if ($content_id=='') return '<blank>';
-		return $content_id;
-	}
-
-	/**
 	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
 	 * @param  ?ID_TEXT	The content type (NULL: assumption of only one folder content type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
 	 * @return array		A pair: The content type, the content ID
 	 */
-	function _folder_convert_filename_to_id($filename,$content_type=NULL)
+	function folder_convert_filename_to_id($filename,$content_type=NULL)
 	{
 		if (is_null($content_type)) $content_type=$this->folder_content_type;
 
 		if ($filename=='<blank>') $filename='';
 		$content_id=basename($filename); // Get filename component from path
 		return array($content_type,$content_id);
+	}
+
+	function convert_id_to_filename($filename,$content_type)
+	{
+		if ($this->is_file_type($content_type))
+			return $this->file_convert_id_to_filename($filename,$content_type);
+		if ($this->is_folder_type($content_type))
+			return $this->folder_convert_id_to_filename($filename,$content_type);
+		return NULL;
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ID_TEXT	The filename
+	 */
+	function file_convert_id_to_filename($content_type,$content_id)
+	{
+		return $content_id.'.xml';
+	}
+
+	/**
+	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The content ID
+	 * @return ?ID_TEXT	The filename (NULL: could not find)
+	 */
+	function folder_convert_id_to_filename($content_type,$content_id)
+	{
+		if ($content_id=='') return '<blank>';
+		return $content_id;
 	}
 
 	/**
@@ -270,52 +305,57 @@ class content_fs_base
 		return array($filename,$properties); // Default implementation is simply to assume the filename is the content label, and leave properties alone
 	}
 
-	function set_properties_via_cloning($id,$from_id)
+	function file_load($filename,$path)
+	{
+		// TODO call _file_load, but do post-processing
+	}
+
+	function folder_load($filename,$path)
+	{
+		// TODO call _folder_load, but do post-processing
+	}
+
+	function set_content_access($filename,$groups)
 	{
 		// TODO
 	}
 
-	function set_properties_via_import($id,$file_path)
+	function get_content_access($filename)
 	{
 		// TODO
 	}
 
-	function set_property($id,$key,$val)
+	function reset_content_privileges($filename)
 	{
 		// TODO
 	}
 
-	function set_content_access($id,$groups)
+	function set_content_privileges_from_preset($filename,$group_presets)
 	{
 		// TODO
 	}
 
-	function set_content_privileges_from_preset($id,$group_presets,$assume_full_group_coverage=true)
+	function set_content_privileges($filename,$group_settings)
 	{
 		// TODO
 	}
 
-	function set_content_privileges($id,$group_settings,$assume_full_group_coverage=true)
+	function get_content_privileges($filename)
 	{
 		// TODO
 	}
 
-	function get_content_privileges($id)
+	function set_content_privileges_from_preset__members($filename,$member_presets)
 	{
 		// TODO
 	}
 
-	function set_content_privileges_from_preset__member($id,$member_preset)
+	function set_content_privileges__members($filename,$privilege,$setting)
 	{
 		// TODO
 	}
 
-	function set_content_privileges__member($id,$privilege,$setting)
-	{
-		// TODO
-	}
-
-	function get_content_privileges__member($id)
+	function get_content_privileges__members($filename)
 	{
 		// TODO
 	}
@@ -425,7 +465,7 @@ class content_fs_base
 		{
 			if (is_null($this->folder_content_type)) return false; // Should not be possible
 
-			list($cat_content_type,$_cat_id)=$this->_file_convert_filename_to_id(implode('/',$meta_dir));
+			list($cat_content_type,$_cat_id)=$this->file_convert_filename_to_id(implode('/',$meta_dir));
 			$cat_id=($folder_info['id_field_numeric']?intval($_cat_id):$_cat_id)
 		} else
 		{
@@ -461,7 +501,7 @@ class content_fs_base
 			$child_folders=$folder_info['connection']->query_select($table,$select,array('main.'.$folder_info['parent_category_field']=>$cat_id),$extra,10000/*Reasonable limit*/);
 			foreach ($child_folders as $folder)
 			{
-				$file=$this->_folder_convert_id_to_filename($content_type,$folder[$folder_info['parent_spec__field_name']]);
+				$file=$this->folder_convert_id_to_filename($content_type,$folder[$folder_info['parent_spec__field_name']]);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_folder_edit_date'))
@@ -511,7 +551,7 @@ class content_fs_base
 			foreach ($files as $file)
 			{
 				$str_id=extract_content_str_id_from_data($file,$file_info);
-				$file=$this->_file_convert_id_to_filename($content_type,$str_id);
+				$file=$this->file_convert_id_to_filename($content_type,$str_id);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_file_edit_date'))
@@ -573,7 +613,7 @@ _folder_add($label,$path,$properties)
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
 		if (is_null($folder_content_type)) return false;
-_folder_delete($path)
+folder_delete($path)
 		// TODO
 	}
 
@@ -588,7 +628,7 @@ _folder_delete($path)
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
-_file_delete($path)
+file_delete($path)
 		// TODO
 	}
 

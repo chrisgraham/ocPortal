@@ -114,12 +114,12 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * @param  ID_TEXT	The filename, or filepath
 	 * @return array		A pair: The content type, the content ID
 	 */
-	function _folder_convert_filename_to_id($filename)
+	function folder_convert_filename_to_id($filename)
 	{
 		if (substr($filename,0,10)=='CATALOGUE-')
-			return parent::_folder_convert_filename_to_id(substr($filename,10),'catalogue');
+			return parent::folder_convert_filename_to_id(substr($filename,10),'catalogue');
 
-		return parent::_folder_convert_filename_to_id($filename,'catalogue_category');
+		return parent::folder_convert_filename_to_id($filename,'catalogue_category');
 	}
 
 	/**
@@ -189,7 +189,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 */
 	function _folder_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -259,7 +259,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 */
 	function _folder_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		if (substr($category,0,10)!='CATALOGUE-')
 		{
@@ -327,9 +327,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return boolean		Success status
 	 */
-	function _folder_edit($filename,$path,$properties)
+	function folder_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 
@@ -401,9 +401,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
-	function _folder_delete($filename)
+	function folder_delete($filename)
 	{
-		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 
@@ -561,9 +561,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($filename,$path,$properties)
+	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
@@ -586,7 +586,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($content_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -647,9 +647,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return boolean		Success status
 	 */
-	function _file_edit($filename,$path,$properties)
+	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 
@@ -667,9 +667,9 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
-	function _file_delete($filename)
+	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 		delete_catalogue_entry(intval($content_id));

@@ -23,15 +23,15 @@
  *
  * @param  SHORT_TEXT		Label for new instance
  * @param  ID_TEXT			What the instance is of
- * @param  array				Additional properties
+ * @param  array				Additional parameters
  * @param  ?TIME				Add time (NULL: now)
  * @param  ?TIME				Edit time (NULL: not edited yet)
  * @param  boolean			Whether to activate it
  * @return AUTO_LINK			ID of the new instance
  */
-function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_properties,$add_time=NULL,$edit_time=NULL,$sync=true)
+function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_parameters,$add_time=NULL,$edit_time=NULL,$sync=true)
 {
-	$other_properties=serialize($_other_properties);
+	$other_parameters=serialize($_other_parameters);
 
 	// Error if label is a duplicate
 	$aggregate_label=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','aggregate_label',array('id'=>$id));
@@ -43,7 +43,7 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pr
 	$id=$GLOBALS['SITE_DB']->query_insert('aggregate_type_instances',array(
 		'aggregate_label'=>$aggregate_label,
 		'aggregate_type'=>$aggregate_type,
-		'other_properties'=>$other_properties,
+		'other_parameters'=>$other_parameters,
 		'add_time'=>$add_time,
 		'edit_time'=>$edit_time,
 	),true);
@@ -62,16 +62,16 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pr
  * @param  AUTO_LINK			The ID
  * @param  SHORT_TEXT		Label for instance
  * @param  ID_TEXT			What the instance is of
- * @param  array				Additional properties
+ * @param  array				Additional parameters
  */
-function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_other_properties)
+function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_other_parameters)
 {
-	$other_properties=serialize($_other_properties);
+	$other_parameters=serialize($_other_parameters);
 
 	$GLOBALS['SITE_DB']->query_update('aggregate_type_instances',array(
 		'aggregate_label'=>$aggregate_label,
 		'aggregate_type'=>$aggregate_type,
-		'other_properties'=>$other_properties,
+		'other_parameters'=>$other_parameters,
 		'edit_time'=>time(),
 	),array('id'=>$id),'',1);
 
@@ -84,32 +84,295 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
  * Delete an aggregate type instance.
  *
  * @param  AUTO_LINK			The ID
+ * @param  boolean			Whether to delete all associated content
  */
-function delete_aggregate_type_instance($id)
+function delete_aggregate_type_instance($id,$delete_matches=false)
 {
 	$aggregate_label=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','aggregate_label',array('id'=>$id));
 	if (is_null($aggregate_label)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+	$aggregate_type=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','aggregate_type',array('id'=>$id));
 
 	$GLOBALS['SITE_DB']->query_delete('aggregate_type_instances',array('id'=>$id),'',1);
 
-	// TODO: Delete all instance stuff? Or document that we won't.
+	// Delete all instance stuff of requested
+	if ($delete_matches)
+	{
+		// Load details of aggregate type
+		$types=parse_aggregate_xml();
+		if (array_key_exists($aggregate_type,$types))
+		{
+			$type=$types[$aggregate_type];
+
+			// Process the resources
+			require_code('content_fs');
+			foreach ($type['resources'] as $resource)
+			{
+				// Can we bind to an existing resource? (using subpath and label)
+				$object_fs=get_content_occlefs_object($resource['type']);
+				$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
+
+				// If bound, delete resource
+				if (!is_null($filename))
+				{
+					if ($object_fs->is_folder_type($resource['type']))
+					{
+						$object_fs->folder_delete($filename,$resource['subpath']);
+					} else
+					{
+						$object_fs->file_delete($filename,$resource['subpath']);
+					}
+				}
+			}
+		}
+	}
 
 	log_it('DELETE_AGGREGATE_TYPE_INSTANCE',$aggregate_label);
 }
 
 /**
- * Re-sync all aggregate type instances.
+ * Find the parameters an aggregate type needs for instances.
+ *
+ * @param  ID_TEXT			Aggregate type to find parameters for
+ * @return array				The aggregate type parameters
  */
-function resync_all_aggregate_type_instances()
+function find_aggregate_type_parameters($aggregate_type)
 {
+	$parameters=array('label');
+
+	$types=parse_aggregate_xml();
+	if (array_key_exists($aggregate_type,$types))
+	{
+		foreach ($types[$aggregate_type]['resources'] as $resource)
+		{
+			_find_parameters_in($resource['label'],$parameters);
+			foreach ($resource['properties'] as $property)
+			{
+				_find_parameters_in($property['value'],$parameters);
+			}
+		}
+	}
+
+	return array_unique($parameters);
+}
+
+/**
+ * Scan some aggregate type XML text for referenced parameters.
+ *
+ * @param  string				Text
+ * @param  array				Reference to our parameter list
+ */
+function _find_parameters_in($src_text,$parameters)
+{
+	$matches=array();
+	$cnt=preg_match_all('#\{(\w+)[^\}]+\}#',$src_text,$matches);
+	for ($i=0;$i<$cnt;$i++)
+	{
+		$parameters[]=strtolower($matches[1][$i]);
+	}
+}
+
+/**
+ * Load the aggregate XML types structure.
+ *
+ * @param  boolean			Whether errors should be displayed
+ * @return array				The aggregate types
+ */
+function parse_aggregate_xml($display_errors=false)
+{
+	require_code('xml_storage');
+
+	$xml=file_get_contents(get_custom_file_base().'/data_custom/aggregate_types.xml');
+	if (trim($xml)=='') return array();
+	$xml=new ocp_simple_xml_reader($xml);
+
+	static $aggregate_types=array();
+	if ($aggregate_types!=array()) return $aggregate_types;
+
+	$parse_errors=array();
+
+	list($root_tag,$root_attributes,,$this_children)=$parsed->gleamed;
+	if ($root_tag=='aggregatetypes')
+	{
+		foreach ($this_children as $_child)
+		{
+			list($row_tag,$row_attributes,$row_value,$row_children)=$_child;
+
+			if ($row_tag=='aggregatetype')
+			{
+				if (!array_key_exists('name',$row_attributes))
+				{
+					$parse_errors[]='Missing aggregateType.name';
+					continue;
+				}
+				if (array_key_exists($aggregate_type,$aggregate_types))
+				{
+					$parse_errors[]='Duplicate aggregateType.name';
+				}
+
+				$aggregate_type=$row_attributes['name'];
+				$resync=(!array_key_exists('resync',$row_attributes)) || ($row_attributes['resync']=='true');
+
+				$aggregate_type_resources=array();
+				foreach ($row_children as $__child)
+				{
+					list($at_row_tag,$at_row_attributes,$at_row_value,$at_row_children)=$__child;
+
+					if ($at_row_tag=='resource')
+					{
+						if (!array_key_exists('type',$at_row_attributes))
+						{
+							$parse_errors[]='Missing resource.type';
+							continue;
+						}
+
+						$resource_type=$at_row_attributes['type'];
+						$resource_subpath='';
+						$resource_label=mixed();
+						$resource_template_subpath='';
+						$resource_template_label=mixed();
+						$resource_properties=array();
+						$resource_access=array();
+						$resource_privilege_presets=mixed();
+						$resource_privileges=array();
+						$resource_resync=(!array_key_exists('resync',$at_row_attributes)) || ($at_row_attributes['resync']=='true');
+
+						foreach ($row_children as $___child)
+						{
+							list($rs_row_tag,$rs_row_attributes,$rs_row_value,$rs_row_children)=$___child;
+
+							switch ($rs_row_tag)
+							{
+								case 'property':
+									if (!array_key_exists('key',$rs_row_attributes))
+									{
+										$parse_errors[]='Missing property.key';
+										continue 2;
+									}
+
+									$resource_properties[$rs_row_attributes['key']]=array(
+										'value'=>$at_row_value,
+										'resync'=>(!array_key_exists('resync',$rs_row_attributes)) || ($rs_row_attributes['resync']=='true'),
+									);
+									break;
+
+								case 'access':
+									if ((!array_key_exists('usergroup',$rs_row_attributes)) && (!array_key_exists('member',$rs_row_attributes)))
+									{
+										$parse_errors[]='Missing access.usergroup/access.member';
+										continue 2;
+									}
+									if (!array_key_exists('value',$rs_row_attributes))
+									{
+										$parse_errors[]='Missing access.value';
+										continue 2;
+									}
+
+									$resource_access[]=array(
+										'key'=>$rs_row_attributes['key'],
+										'value'=>$rs_row_attributes['value'],
+										'usergroup'=>$rs_row_attributes['usergroup'],
+										'resync'=>(!array_key_exists('resync',$rs_row_attributes)) || ($rs_row_attributes['resync']=='true'),
+									);
+									break;
+
+								case 'privilege':
+									if ((!array_key_exists('usergroup',$rs_row_attributes)) && (!array_key_exists('member',$rs_row_attributes)))
+									{
+										$parse_errors[]='Missing privilege.usergroup/privilege.member';
+										continue 2;
+									}
+
+									if (array_key_exists('preset',$rs_row_attributes))
+									{
+										$resource_privilege_presets[]=array(
+											'value'=>$rs_row_attributes['preset'],
+											'usergroup'=>array_key_exists('usergroup',$rs_row_attributes)?$rs_row_attributes['usergroup']:NULL,
+											'member'=>array_key_exists('member',$rs_row_attributes)?$rs_row_attributes['member']:NULL,
+											'resync'=>(!array_key_exists('resync',$rs_row_attributes)) || ($rs_row_attributes['resync']=='true'),
+										);
+									} else
+									{
+										if (!array_key_exists('name',$rs_row_attributes))
+										{
+											$parse_errors[]='Missing privilege.name';
+											continue 2;
+										}
+										if (!array_key_exists('value',$rs_row_attributes))
+										{
+											$parse_errors[]='Missing privilege.value';
+											continue 2;
+										}
+
+										$resource_privileges[]=array(
+											'name'=>$rs_row_attributes['name'],
+											'value'=>$rs_row_attributes['value'],
+											'usergroup'=>array_key_exists('usergroup',$rs_row_attributes)?$rs_row_attributes['usergroup']:NULL,
+											'member'=>array_key_exists('member',$rs_row_attributes)?$rs_row_attributes['member']:NULL,
+											'resync'=>(!array_key_exists('resync',$rs_row_attributes)) || ($rs_row_attributes['resync']=='true'),
+										);
+									}
+									break;
+
+								default:
+									$parse_errors[]='Unknown: '.$at_row_tag;
+									continue 2;
+							}
+						}
+
+						$aggregate_type_resources[]=array(
+							'type'=>$resource_type,
+							'subpath'=>$resource_subpath,
+							'label'=>$resource_label,
+							'template_subpath'=>$resource_template_subpath,
+							'template_label'=>$resource_template_label,
+							'properties'=>$resource_properties,
+							'access'=>$resource_access,
+							'presets'=>$resource_privilege_presets,
+							'privileges'=>$resource_privileges,
+							'resync'=>$resouce_resync,
+						);
+					}
+				}
+
+				$aggregate_types[$aggregate_type]=array(
+					'resources'=>$aggregate_type_resources,
+					'resync'=>$resync,
+				);
+			}
+		}
+	}
+
+	if ($display_errors)
+	{
+		foreach ($parse_errors as $error)
+		{
+			attach_message(escape_html($error),'warn');
+		}
+	}
+
+	ksort($aggregate_types);
+
+	return $aggregate_types;
+}
+
+/**
+ * Re-sync all aggregate type instances.
+ *
+ * @param  ?ID_TEXT			Restrict to this aggregate type (NULL: no restriction)
+ */
+function resync_all_aggregate_type_instances($type=NULL)
+{
+	$where=mixed();
+	if (!is_null($type)) $where['aggregate_type']=$type;
+
 	$start=0;
 	do
 	{
-		$instances=$GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('*'),NULL,'',100,$start);
+		$instances=$GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('*'),$where,'',100,$start);
 		foreach ($instances as $instance)
 		{
-			$other_properties=unserialize($instance['other_properties']);
-			sync_aggregate_type_instance($instance['id'],$instance['aggregate_label'],$instance['aggregate_type'],$other_properties);
+			$other_parameters=unserialize($instance['other_parameters']);
+			sync_aggregate_type_instance($instance['id'],$instance['aggregate_label'],$instance['aggregate_type'],$other_parameters);
 		}
 		$start+=100;
 	}
@@ -122,9 +385,270 @@ function resync_all_aggregate_type_instances()
  * @param  AUTO_LINK			The ID
  * @param  ?SHORT_TEXT		Label for instance (NULL: lookup)
  * @param  ?ID_TEXT			What the instance is of (NULL: lookup)
- * @param  ?array				Additional properties (NULL: lookup)
+ * @param  ?array				Additional parameters (NULL: lookup)
  */
-function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=NULL,$other_properties=NULL)
+function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=NULL,$other_parameters=NULL)
 {
-	// TODO
+	require_lang('aggregate_types');
+
+	// Load details from DB if required
+	if ((is_null($aggregate_label)) || (is_null($aggregate_type)) || (is_null($other_parameters)))
+	{
+		$instance_rows=$GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('*'),array('id'=>$id),'',1);
+		if (!array_key_exists(0,$instance_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$instance_row=$instance_rows[0];
+		$aggregate_label=$instance_row['aggregate_label'];
+		$aggregate_type=$instance_row['aggregate_type'];
+		$other_parameters=unserialize($instance_row['other_parameters']);
+	}
+
+	// Load details of aggregate type
+	$types=parse_aggregate_xml();
+	if (!array_key_exists($aggregate_type,$types))
+	{
+		warn_exit(do_lang_tempcode('MISSING_AGGREGATE_TYPE',escape_html($aggregate_type)));
+	}
+	$type=$types[$aggregate_type];
+
+	// Make sure we have values for all the parameters- default ones we don't have to blank
+	$parameters=$other_parameters;
+	$parameters['label']=$aggregate_label;
+	$parameters_needed=find_aggregate_type_parameters($aggregate_type);
+	foreach ($parameters_needed as $parameter)
+	{
+		if (!array_key_exists($parameter,$parameters)) $parameters[$parameter]='';
+	}
+
+	// Process the resources
+	require_code('content_fs');
+	foreach ($type['resources'] as $resource)
+	{
+		// Can we bind to an existing resource? (using subpath and label)
+		$is_new=false;
+		$object_fs=get_content_occlefs_object($resource['type']);
+		$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
+
+		// If not bound, create resource
+		if (is_null($filename)) $is_new=true;
+
+		if (($type['resync']) && ($resource['resync'])) || ($is_new))
+		{
+			$properties=array();
+			$properties['label']=$resource['label'];
+
+			// Copy from template (using template_subpath and template_label), if new
+			if ($is_new)
+			{
+				if (!is_null($resource['template_label']))
+				{
+					$template_filename=$object_fs->convert_label_to_filename($resource['template_label'],$resource['template_subpath'],$resource['type'],true);
+					if (is_null($template_filename))
+						warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE_TEMPLATE',escape_html($resource['type']),escape_html($resource['template_label']),escape_html($resource['template_subpath'])));
+
+					if ($object_fs->is_folder_type($resource['type']))
+					{
+						$properties+=$object_fs->folder_load($template_filename,$resource['template_subpath']);
+					} else
+					{
+						$properties+=$object_fs->file_load($template_filename,$resource['template_subpath']);
+					}
+				}
+			} else // Load from current, if not new
+			{
+				if ($object_fs->is_folder_type($resource['type']))
+				{
+					$properties+=$object_fs->folder_load($filename,$resource['subpath']);
+				} else
+				{
+					$properties+=$object_fs->file_load($filename,$resource['subpath']);
+				}
+			}
+
+			// Set properties
+			foreach ($resource['properties'] as $property_key=>$property)
+			{
+				if (($property['resync']) || ($is_new))
+				{
+					$properties[$property_key]=$property['value'];
+				}
+			}
+
+			// Add/Edit
+			if ($is_new)
+			{
+				if ($object_fs->is_folder_type($resource['type']))
+				{
+					$object_fs->folder_add($resource['label'],$resource['subpath'],$properties);
+				} else
+				{
+					$object_fs->file_add($resource['label'],$resource['subpath'],$properties);
+				}
+				$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
+			} else
+			{
+				if ($object_fs->is_folder_type($resource['type']))
+				{
+					$object_fs->folder_edit($filename,$resource['subpath'],$properties);
+				} else
+				{
+					$object_fs->file_edit($filename,$resource['subpath'],$properties);
+				}
+			}
+
+			$priv_reset=true;
+			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true,true,NULL,NULL,false);
+
+			// Load privilege presets
+			$group_presets=array();
+			$member_presets=array();
+			foreach ($resource['presets'] as $preset)
+			{
+				if (($preset['resync']) || ($is_new))
+				{
+					$preset_value=0;
+					switch ($preset['value'])
+					{
+						case 'read':
+							$preset_value=0;
+							break;
+						case 'submit':
+							$preset_value=1;
+							break;
+						case 'unvetted':
+							$preset_value=2;
+							break;
+						case 'moderate':
+							$preset_value=3;
+							break;
+						default:
+							warn_exit(do_lang_tempcode('UNKNOWN_PRIVILEGE_PRESET',escape_html($preset['value'])));
+					}
+
+					if (!is_null($preset['member']))
+					{
+						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->resolve_resource_dependency(array('label'=>$preset['member'],'resource_type'=>'member'));
+						if (is_null($member_id))
+						{
+							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($preset['member'])));
+						} else
+						{
+							$member_presets[$member_id]=$preset_value;
+						}
+					}
+					if (!is_null($preset['usergroup']))
+					{
+						if ($preset['usergroup']==='*')
+						{
+							foreach (array_keys($usergroups) as $group_id)
+							{
+								$group_presets[$group_id]=$preset_value;
+							}
+						} else
+						{
+							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->resolve_resource_dependency(array('label'=>$preset['usergroup'],'resource_type'=>'group'));
+							if (is_null($group_id))
+							{
+								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($preset['usergroup'])));
+							} else
+							{
+								$group_presets[$group_id]=$preset_value;
+							}
+						}
+					}
+				} else $priv_reset=false;
+			}
+
+			// Load privileges
+			$group_privileges=array();
+			$member_privileges=array();
+			foreach ($resource['privileges'] as $privilege)
+			{
+				if (($privilege['resync']) || ($is_new))
+				{
+					if (!is_null($privilege['member']))
+					{
+						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->resolve_resource_dependency(array('label'=>$privilege['member'],'resource_type'=>'member'));
+						if (is_null($member_id))
+						{
+							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($privilege['member'])));
+						} else
+						{
+							$member_privileges[$group_id]=array($privilege['name'],$privilege['value']);
+						}
+					}
+					if (!is_null($privilege['usergroup']))
+					{
+						if ($privilege['usergroup']==='*')
+						{
+							foreach (array_keys($usergroups) as $group_id)
+							{
+								$group_privileges[$group_id]=array($privilege['name'],$privilege['value']);
+							}
+						} else
+						{
+							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->resolve_resource_dependency(array('label'=>$privilege['usergroup'],'resource_type'=>'group'));
+							if (is_null($group_id))
+							{
+								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($privilege['usergroup'])));
+							} else
+							{
+								$group_privileges[$group_id]=array($privilege['name'],$privilege['value']);
+							}
+						}
+					}
+				} else $priv_reset=false;
+			}
+
+			// Set privileges
+			if ($priv_reset)
+				$object_fs->reset_content_privileges($filename);
+			$object_fs->set_content_privileges_from_preset($filename,$group_presets);
+			$object_fs->set_content_privileges_from_preset__members($filename,$member_presets);
+			$object_fs->set_content_privileges($filename,$group_privileges);
+
+			// Set access
+			$group_access=array();
+			$member_access=array();
+			foreach ($access['access'] as $access)
+			{
+				if (($property['resync']) || ($is_new))
+				{
+					if (!is_null($access['member']))
+					{
+						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->resolve_resource_dependency(array('label'=>$access['member'],'resource_type'=>'member'));
+						if (is_null($member_id))
+						{
+							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($access['member'])));
+						} else
+						{
+							$member_access[$group_id]=array($access['key'],$access['value']);
+						}
+					}
+					if (!is_null($access['usergroup']))
+					{
+						if ($access['usergroup']==='*')
+						{
+							foreach (array_keys($usergroups) as $group_id)
+							{
+								$group_access[$group_id]=array($access['key'],$access['value']);
+							}
+						} else
+						{
+							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->resolve_resource_dependency(array('label'=>$access['usergroup'],'resource_type'=>'group'));
+							if (is_null($group_id))
+							{
+								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($access['usergroup'])));
+							} else
+							{
+								$group_access[$group_id]=array($access['key'],$access['value']);
+							}
+						}
+					}
+				}
+			}
+			$object_fs->set_content_access($filename,$group_access);
+			$object_fs->set_content_access__members($filename,$member_access);
+		}
+	}
 }
+

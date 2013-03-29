@@ -84,6 +84,7 @@ class Hook_addon_registry_aggregate_types
 			'sources/hooks/modules/admin_import_types/aggregate_types.php',
 			'sources/hooks/systems/do_next_menus/aggregate_types.php',
 			'themes/default/images/bigicons/aggregate_types.png',
+			'themes/default/images/bigicons/sync.png',
 		);
 	}
 

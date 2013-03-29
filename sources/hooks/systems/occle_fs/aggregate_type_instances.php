@@ -33,7 +33,7 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	{
 		return array(
 			'aggregate_type'=>'ID_TEXT',
-			'other_properties'=>'LONG_TEXT',
+			'other_parameters'=>'LONG_TEXT',
 			'add_date'=>'TIME',
 			'edit_date'=>'?TIME',
 		);
@@ -47,20 +47,20 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($filename,$path,$properties)
+	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('aggregate_types');
 
 		$aggregate_type=$this->_default_property_str($properties,'aggregate_type');
-		$_other_properties=$this->_default_property_str($properties,'other_properties');
-		$other_properties=($_other_properties=='')?array():unserialize($_other_properties);
+		$_other_parameters=$this->_default_property_str($properties,'other_parameters');
+		$other_parameters=($_other_parameters=='')?array():unserialize($_other_parameters);
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 
-		$id=add_aggregate_type_instance($label,$aggregate_type,$other_properties,$add_time,$edit_time);
+		$id=add_aggregate_type_instance($label,$aggregate_type,$other_parameters,$add_time,$edit_time);
 		return strval($id);
 	}
 
@@ -73,7 +73,7 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('*'),array('id'=>intval($content_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -82,7 +82,7 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 		return array(
 			'label'=>$row['aggregate_label'],
 			'aggregate_type'=>$row['aggregate_type'],
-			'other_properties'=>$row['other_properties'],
+			'other_parameters'=>$row['other_parameters'],
 			'add_date'=>$row['add_date'],
 			'edit_date'=>$row['edit_date'],
 		);
@@ -96,18 +96,18 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return boolean		Success status
 	 */
-	function _file_edit($filename,$path,$properties)
+	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('aggregate_types');
 
 		$label=$this->_default_property_str($properties,'label');
 		$aggregate_type=$this->_default_property_str($properties,'aggregate_type');
-		$_other_properties=$this->_default_property_str($properties,'other_properties');
-		$other_properties=($_other_properties=='')?array():unserialize($_other_properties);
+		$_other_parameters=$this->_default_property_str($properties,'other_parameters');
+		$other_parameters=($_other_parameters=='')?array():unserialize($_other_parameters);
 
-		edit_aggregate_type_instance(intval($content_id),$label,$aggregate_type,$other_properties);
+		edit_aggregate_type_instance(intval($content_id),$label,$aggregate_type,$other_parameters);
 
 		return true;
 	}
@@ -118,9 +118,9 @@ class Hook_occle_fs_aggregate_type_instances extends content_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
-	function _file_delete($filename)
+	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('aggregate_types');
 		delete_aggregate_type_instance(intval($content_id));

@@ -60,7 +60,7 @@ class Hook_occle_fs_event extends content_fs_base
 	 */
 	function _folder_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this content type
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
@@ -82,7 +82,7 @@ class Hook_occle_fs_event extends content_fs_base
 	 */
 	function _folder_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('*'),array('id'=>intval($content_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -103,9 +103,9 @@ class Hook_occle_fs_event extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return boolean		Success status
 	 */
-	function _folder_edit($filename,$path,$properties)
+	function folder_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('calendar2');
 
@@ -124,9 +124,9 @@ class Hook_occle_fs_event extends content_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
-	function _folder_delete($filename)
+	function folder_delete($filename)
 	{
-		list($content_type,$content_id)=$this->_folder_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('calendar2');
 		delete_event_type(intval($content_id));
@@ -196,9 +196,9 @@ class Hook_occle_fs_event extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
 	 */
-	function _file_add($filename,$path,$properties)
+	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
@@ -258,7 +258,7 @@ class Hook_occle_fs_event extends content_fs_base
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id'=>intval($content_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -308,10 +308,10 @@ class Hook_occle_fs_event extends content_fs_base
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return boolean		Success status
 	 */
-	function _file_edit($filename,$path,$properties)
+	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->_folder_convert_filename_to_id($path);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 
 		require_code('calendar2');
 
@@ -368,9 +368,9 @@ class Hook_occle_fs_event extends content_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
-	function _file_delete($filename)
+	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->_file_convert_filename_to_id($filename);
+		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('calendar2');
 		delete_calendar_event(intval($content_id));

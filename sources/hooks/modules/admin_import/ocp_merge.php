@@ -2451,7 +2451,7 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('aggregate_type_instance',strval($row['id']))) continue;
 
-				add_aggregate_type_instance($row['aggregate_label'],$row['aggregate_type'],$row['other_properties'],$row['add_time'],$row['edit_time'],false);
+				add_aggregate_type_instance($row['aggregate_label'],$row['aggregate_type'],$row['other_parameters'],$row['add_time'],$row['edit_time'],false);
 
 				import_id_remap_put('aggregate_type_instance',strval($row['id']),$id_new);
 			}

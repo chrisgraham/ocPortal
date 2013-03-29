@@ -18,11 +18,18 @@
  * @package		aggregate_types
  */
 
+require_code('crud_module');
+
 /**
  * Module page class.
  */
 class Module_admin_aggregate_types extends standard_crud_module
 {
+	var $lang_type='AGGREGATE_TYPE_INSTANCE';
+	var $select_name='LABEL';
+	var $menu_label='AGGREGATE_TYPES';
+	var $orderer='aggregate_label';
+	var $title_is_multi_lang=false;
 
 	/**
 	 * Standard modular info function.
@@ -61,7 +68,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			'id'=>'*AUTO',
 			'aggregate_label'=>'SHORT_TEXT',
 			'aggregate_type'=>'ID_TEXT',
-			'other_properties'=>'LONG_TEXT',
+			'other_parameters'=>'LONG_TEXT',
 			'add_time'=>'TIME',
 			'edit_time'=>'TIME',
 		));
@@ -75,7 +82,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return parent::get_entry_points()+array('xml'=>'TODO');
+		return parent::get_entry_points()+array('xml'=>'EDIT_AGGREGATE_TYPES','sync'=>'SYNCHRONISE_AGGREGATE_TYPES');
 	}
 
 	/**
@@ -85,31 +92,183 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function run_start()
 	{
+		set_helper_panel_tutorial('tut_aggregate_types');
+		set_helper_panel_text(comcode_lang_string('DOC_AGGREGATE_TYPES'));
+
+		require_code('aggregate_types');
+
+		$type=get_param('type','misc');
+
+		if ($type=='xml') return $this->xml();
+		if ($type=='_xml') return $this->_xml();
+		if ($type=='sync') return $this->sync();
+		if ($type=='_sync') return $this->_sync();
+
 		return new ocp_tempcode();
+	}
+
+	/**
+	 * The do-next manager for before setup management.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function misc()
+	{
+		require_code('templates_donext');
+		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
+					array(
+						/*	 type							  page	 params													 zone	  */
+						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
+						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPE_INSTANCE')),
+						array('xml',array('_SELF',array('type'=>'xml'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPES')),
+						array('sync',array('_SELF',array('type'=>'sync'),'_SELF'),do_lang('SYNCHRONISE_AGGREGATE_TYPES')),
+					),
+					do_lang('AGGREGATE_TYPES')
+		);
 	}
 
 	/**
 	 * Get tempcode for a forum grouping template adding/editing form.
 	 *
-	 * @param  SHORT_TEXT	The title (name) of the forum grouping
-	 * @param  LONG_TEXT		The description for the forum grouping
-	 * @param  BINARY			Whether the forum grouping is expanded by default when shown in the forum view
-	 * @return tempcode		The input fields
+	 * @param  ID_TEXT		The aggregate type (blank: ask first)
+	 * @param  SHORT_TEXT	The label for the instance
+	 * @param  ?array			Other parameters (NULL: no values known yet)
+	 * @return array			A triple: fields, hidden-fields, delete-fields
 	 */
-	function get_form_fields($title='',$description='',$expanded_by_default=1)
+	function get_form_fields($aggregate_type='',$aggregate_label='',$other_parameters=NULL)
 	{
-		TODO;
+		$aggregate_type=get_param('aggregate_type',$aggregate_type);
+
+		if ($aggregate_type=='')
+		{
+			$title=get_screen_title('ADD_AGGREGATE_TYPE_INSTANCE');
+			require_code('form_templates');
+			$fields=new ocp_tempcode();
+			$list=new ocp_tempcode();
+			$types=parse_aggregate_xml();
+			foreach (array_keys($types) as $type)
+			{
+				$list->attach(form_input_list_entry($type,false,titleify($type)));
+			}
+			$fields->attach(form_input_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,true,true));
+			$submit_name=do_lang_tempcode('PROCEED');
+			$url=get_self_url();
+			$middle=do_template('FORM_SCREEN',array('TITLE'=>$title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
+			$echo=globalise($middle,NULL,'',true);
+			$echo->evaluate_echo();
+			exit();
+		}
+
+		if (is_null($other_parameters)) $other_parameters=array();
+
+		$fields=new ocp_tempcode();
+		$hidden=new ocp_tempcode();
+
+		$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),$name,$default,true));
+
+		$parameters=find_aggregate_type_parameters();
+		foreach ($parameters as $parameter)
+		{
+			if ($parameter!='label')
+			{
+				$default=array_key_exists($parameter,$other_parameters))?$other_parameters[$parameter]:'';
+				$fields->attach(form_input_line(titleify($parameter),'',$parameter,$default,false));
+			}
+		}
+
+		$hidden->attach(form_input_hidden('aggregate_type',$aggregate_type));
+
+		$delete_fields=new ocp_tempcode();
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+		{
+			$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE_AGGREGATE_MATCHES'),do_lang_tempcode('DESCRIPTION_DELETE_AGGREGATE_MATCHES'),'delete_matches',false));
+		}
+
+		return array($fields,$hidden);
+	}
+
+	/**
+	 * Standard crud_module table function.
+	 *
+	 * @param  array			Details to go to build_url for link to the next screen.
+	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+	 */
+	function nice_get_choose_table($url_map)
+	{
+		require_code('templates_results_table');
+
+		$current_ordering=get_param('sort','aggregate_label ASC',true);
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
+		$sortables=array(
+			'aggregate_label'=>do_lang_tempcode('TITLE'),
+			'aggregate_type'=>do_lang_tempcode('TYPE'),
+			'add_time'=>do_lang_tempcode('DATE'),
+		);
+		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
+			log_hack_attack_and_exit('ORDERBY_HACK');
+		inform_non_canonical_parameter('sort');
+
+		$header_row=results_field_title(array(
+			do_lang_tempcode('LABEL'),
+			do_lang_tempcode('TYPE'),
+			do_lang_tempcode('TIME'),
+			do_lang_tempcode('ACTIONS'),
+		),$sortables,'sort',$sortable.' '.$sort_order);
+
+		$fields=new ocp_tempcode();
+
+		require_code('form_templates');
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
+		foreach ($rows as $row)
+		{
+			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
+
+			$fields->attach(results_entry(array($row['aggregate_label'],$row['aggregate_type'],get_timezoned_date($row['add_time']),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+		}
+
+		$search_url=NULL;
+		$archive_url=NULL;
+
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: fields, hidden-fields
+	 * @return array			A triple: fields, hidden-fields, delete-fields
 	 */
 	function fill_in_edit_form($_id)
 	{
-		TODO;
+		$id=intval($_id);
+
+		$m=$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'),array('id'=>$id),'',1);
+		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$r=$m[0];
+
+		return $this->get_form_fields($r['aggregate_type'],$r['aggregate_label'],unserialize($r['other_parameters']));
+	}
+
+	/**
+	 * Read in parameters for adding/editing.
+	 *
+	 * @return array			Parameters
+	 */
+	function _read_in_parameters()
+	{
+		$aggregate_label=post_param('aggregate_label');
+		$aggregate_type=post_param('aggregate_type');
+		$other_parameters=array();
+		$parameters=find_aggregate_type_parameters();
+		foreach ($parameters as $parameter)
+		{
+			if ($parameter!='label')
+			{
+				$other_parameters[$parameter]=post_param($parameter,'');
+			}
+		}
+		return array($aggregate_label,$aggregate_type,$other_parameters);
 	}
 
 	/**
@@ -119,7 +278,9 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
-		TODO;
+		list($aggregate_label,$aggregate_type,$other_parameters)=>$this->_read_in_parameters();
+		$id=add_aggregate_type_instance($aggregate_label,$aggregate_type,$other_parameters);
+		return strval($id);
 	}
 
 	/**
@@ -129,7 +290,8 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		TODO;
+		list($aggregate_label,$aggregate_type,$other_parameters)=>$this->_read_in_parameters();
+		edit_aggregate_type_instance(intval($id),$aggregate_label,$aggregate_type,$other_parameters);
 	}
 
 	/**
@@ -139,7 +301,12 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function delete_actualisation($id)
 	{
-		TODO;
+		$delete_matches=false;
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())
+		{
+			$delete_matches=(post_param_integer('delete_matches',0)==1);
+		}
+		delete_aggregate_type_instance(intval($id),$delete_matches);
 	}
 
 	/**
@@ -149,10 +316,9 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function xml()
 	{
-		set_helper_panel_tutorial('tut_repository');
-		set_helper_panel_text(comcode_lang_string('DOC_TODO'));
+		$title=get_screen_title('EDIT_AGGREGATE_TYPES');
 
-		$title=get_screen_title('TODO');
+		parse_aggregate_xml(true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml'),'_SELF');
 
@@ -170,7 +336,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function _xml()
 	{
-		$title=get_screen_title('TODO');
+		$title=get_screen_title('EDIT_AGGREGATE_TYPES');
 
 		$myfile=@fopen(get_custom_file_base().'/data_custom/aggregate_types.xml','wt');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/aggregate_types.xml');
@@ -180,9 +346,66 @@ class Module_admin_aggregate_types extends standard_crud_module
 		fix_permissions(get_custom_file_base().'/data_custom/aggregate_types.xml');
 		sync_file(get_custom_file_base().'/data_custom/aggregate_types.xml');
 
+		log_it('EDIT_AGGREGATE_TYPES');
+
+		parse_aggregate_xml(true);
+
 		return inform_screen($title,do_lang_tempcode('SUCCESS'));
 	}
 
-}
+	/**
+	 * The UI to start a synchronisation of aggregate content type instances.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function sync()
+	{
+		$title=get_screen_title('SYNCHRONISE_AGGREGATE_TYPES');
 
+		require_code('form_templates');
+
+		$fields=new ocp_tempcode();
+
+		$list=new ocp_tempcode();
+		$types=parse_aggregate_xml();
+		foreach (array_keys($types) as $type)
+		{
+			$list->attach(form_input_list_entry($type,false,titleify($type)));
+		}
+		$fields->attach(form_input_multi_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type[]',$list,NULL,15,true));
+
+		$submit_name=do_lang_tempcode('PROCEED');
+
+		$url=build_url(array('page'=>'_SELF','type'=>'_sync'),'_SELF');
+
+		return do_template('FORM_SCREEN',array(
+			'TITLE'=>$title,
+			'SKIP_VALIDATION'=>true,
+			'HIDDEN'=>'',
+			'GET'=>true,
+			'URL'=>$url,
+			'FIELDS'=>$fields,
+			'TEXT'=>do_lang_tempcode('SELECT_AGGREGATE_TYPES_FOR_SYNC'),
+			'SUBMIT_NAME'=>$submit_name,
+		));
+	}
+
+	/**
+	 * The actualiser to start a synchronisation of aggregate content type instances.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function _sync()
+	{
+		$title=get_screen_title('SYNCHRONISE_AGGREGATE_TYPES');
+
+		$types=$_POST['aggregate_type'];
+		foreach ($types as $type)
+		{
+			resync_all_aggregate_type_instances($type);
+		}
+
+		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+	}
+}
 
