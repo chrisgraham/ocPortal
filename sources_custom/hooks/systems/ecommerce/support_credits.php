@@ -27,21 +27,13 @@ function handle_support_credits($_key,$details,$product)
 	$row=$GLOBALS['SITE_DB']->query_select('credit_purchases',array('member_id','num_credits'),array('purchase_validated'=>0,'purchase_id'=>intval($_key)),'',1);
 	if (count ($row) != 1) return;
 	$member_id=$row[0]['member_id'];
-	$num_credits=$row[0]['num_credits'];
 	if (is_null($member_id)) return;
+	$num_credits=$row[0]['num_credits'];
 
-	require_code('ocf_members');
-	$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
-	$cpf_id=NULL;
-	foreach ($cpfs as $cpf)
-	{
-		if ($cpf['trans_name']=='ocp_support_credits')
-		{
-			$cpf_id=$cpf['id'];
-			break;
-		}
-	}
-	if (is_null($cpf_id)) return;
+
+	require_code('mantis');
+	$cpf_id = strval(get_credits_profile_field_id());
+	if(!is_null($cpf_id)) return;
 
 	// Increment the number of credits this customer has
 	require_code('ocf_members_action2');
@@ -50,6 +42,7 @@ function handle_support_credits($_key,$details,$product)
 
 	// Update the row in the credit_purchases table
 	$GLOBALS['SITE_DB']->query_update('credit_purchases',array('purchase_validated'=>1),array('purchase_id'=>intval($_key)));
+
 }
 
 /**
@@ -67,20 +60,20 @@ class Hook_support_credits
 		if (get_forum_type()!='ocf') return array();
 		require_lang('customers');
 		$products=array(
-			'1CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,1*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDIT')),			/* £5.50, by default */
-			'2CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,2*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','2')),	/* approx. £17, 0.5 hours on budget */
-			'3CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,3*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','3')),	/* approx. £17, 0.5 hours on budget */
-			'4CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,4*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','4')),	/* approx. £17, 0.5 hours on budget */
-			'5CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,5*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','5')),		/* approx. £30 */
-			'6CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,6*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','6')),		/* approx. £30 */
-			'9CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,9*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','9')),	/* approx. £50, 1.5 hours on budget */
-			'20CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,20*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','20')),	/* approx. £100 */
-			'25CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,25*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','25')),	/* approx. £140 */
-			'35CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,35*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','35')),	/* approx. £200 */
-			'50CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,50*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','50')),	/* approx. £300 */
-			'90CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,90*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','90')),	/* approx. £500 */
-			'180CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,180*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','180')),	/* approx. £1000 */
-			'550CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,550*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','550')),	/* approx. £3000 */
+			'1_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,1*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDIT')),			/* £5.50, by default */
+			'2_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,2*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','2')),	/* approx. £17, 0.5 hours on budget */
+			'3_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,3*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','3')),	/* approx. £17, 0.5 hours on budget */
+			'4_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,4*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','4')),	/* approx. £17, 0.5 hours on budget */
+			'5_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,5*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','5')),		/* approx. £30 */
+			'6_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,6*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','6')),		/* approx. £30 */
+			'9_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,9*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','9')),	/* approx. £50, 1.5 hours on budget */
+			'20_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,20*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','20')),	/* approx. £100 */
+			'25_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,25*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','25')),	/* approx. £140 */
+			'35_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,35*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','35')),	/* approx. £200 */
+			'50_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,50*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','50')),	/* approx. £300 */
+			'90_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,90*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','90')),	/* approx. £500 */
+			'180_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,180*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','180')),	/* approx. £1000 */
+			'550_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,550*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','550')),	/* approx. £3000 */
 		);
 
 		return $products;
@@ -134,7 +127,9 @@ class Hook_support_credits
 	 */
 	function set_needed_fields($product)
 	{
-		$num_credits=substr($product,0,-7);
+		$product_array=explode('_',$product,2);
+		$num_credits = intaval($product_array[0]);
+		if($num_credits == 0) return;
 		$manual=0;
 		$member_id=get_member();
 
