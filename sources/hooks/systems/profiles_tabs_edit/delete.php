@@ -83,7 +83,7 @@ class Hook_Profiles_Tabs_Edit_delete
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+		$fields->attach(form_input_tick(do_lang_tempcode(($member_id_of!=$member_id_viewing)?'DELETE_WITHOUT_MERGING':'DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
 		$javascript='';
 
