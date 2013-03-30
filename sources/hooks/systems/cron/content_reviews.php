@@ -87,18 +87,18 @@ class Hook_cron_content_reviews
 					break;
 
 				case 'delete':
-					require_code('content_fs');
-					$object_fs=get_content_occlefs_object($content_type);
+					require_code('resource_fs');
+					$object_fs=get_resource_occlefs_object($content_type);
 					if (!is_null($object_fs))
 					{
 						if ($info['occle_filesystem__is_folder'])
 						{
-							$filename=$object_fs->folder_convert_id_to_filename($content_type,$content_id);
+							$filename=$object_fs->folder_convert_id_to_filename($resource_type,$resource_id);
 							if (!is_null($filename))
 								$object_fs->folder_delete($filename);
 						} else
 						{
-							$filename=$object_fs->file_convert_id_to_filename($content_type,$content_id);
+							$filename=$object_fs->file_convert_id_to_filename($resource_type,$resource_id);
 							if (!is_null($filename))
 								$object_fs->file_delete($filename);
 						}

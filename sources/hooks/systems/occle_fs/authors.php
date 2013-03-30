@@ -18,16 +18,16 @@
  * @package		authors
  */
 
-require_code('content_fs');
+require_code('resource_fs');
 
-class Hook_occle_fs_authors extends content_fs_base
+class Hook_occle_fs_authors extends resource_fs_base
 {
-	var $file_content_type='author';
+	var $file_resource_type='author';
 
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_file_properties()
 	{
@@ -44,7 +44,7 @@ class Hook_occle_fs_authors extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
 	function _get_file_edit_date($row)
@@ -54,16 +54,16 @@ class Hook_occle_fs_authors extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('authors');
@@ -81,17 +81,17 @@ class Hook_occle_fs_authors extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author'=>$content_id),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author'=>$resource_id),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -107,7 +107,7 @@ class Hook_occle_fs_authors extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -116,7 +116,7 @@ class Hook_occle_fs_authors extends content_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('authors');
 
@@ -129,24 +129,24 @@ class Hook_occle_fs_authors extends content_fs_base
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
 		// Author editing works via re-adding
-		if ($label!=$content_id) delete_author($content_id); // Delete old one if we renamed
+		if ($label!=$resource_id) delete_author($resource_id); // Delete old one if we renamed
 		add_author($label,$url,$member_id,$description,$skills,$meta_keywords,$meta_description);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('authors');
-		delete_author($content_id);
+		delete_author($resource_id);
 
 		return true;
 	}

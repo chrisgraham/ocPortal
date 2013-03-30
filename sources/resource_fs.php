@@ -19,36 +19,40 @@
  */
 
 /*
- When we refer to 'content' here, we really should be using the word 'resource'.
- However, as most content is resource, we'll play a bit fast&loose to make things clearer.
- */
+Resource-FS serves the 'var' parts of OcCLE-fs. It binds OcCLE-fs to a property/XML-based content model.
+
+A programmer can also directly talk to Resource-FS to do abstracted CRUD operations on just about any kind of ocPortal resource.
+i.e. Perform generalised operations on resource types without needing to know their individual APIs.
+
+The user knows all of OcCLE-fs as "The ocPortal Repository".
+*/
 
 /**
  * Standard code module initialisation function.
  */
-function init__content_fs()
+function init__resource_fs()
 {
 	require_code('urls2');
 	require_code('occle');
 }
 
 /**
- * Get the OccLE-fs object for a content type.
+ * Get the OccLE-fs object for a resource type.
  *
- * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The resource type
  * @return ?object	The object (NULL: could not get one)
  */
-function get_content_occlefs_object($content_type)
+function get_resource_occlefs_object($resource_type)
 {
 	require_code('content');
-	$object=get_content_object($content_type);
+	$object=get_resource_object($resource_type);
 	if (is_null($object)) return NULL;
 	$info=$object->info();
 	$fs_hook=$object->occle_filesystem_hook;
 	if (is_null($fs_hook)) return NULL;
 
-	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($content_type));
-	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($content_type),true);
+	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($resource_type));
+	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($resource_type),true);
 	if (is_null($fs_object)) return NULL;
 	return $fs_object;
 }
@@ -56,53 +60,53 @@ function get_content_occlefs_object($content_type)
 /**
  * Convert a local ID to something portable.
  *
- * @param  ID_TEXT	The content type
- * @param  ID_TEXT	The content ID
+ * @param  ID_TEXT	The resource type
+ * @param  ID_TEXT	The resource ID
  * @return array		Portable ID details
  */
-function remap_content_id_as_portable($content_type,$content_id)
+function remap_resource_id_as_portable($resource_type,$resource_id)
 {
 	return array(
 		'guid'=>TODO,
 		'label'=>TODO,
-		'id'=>$content_id
+		'id'=>$resource_id
 	);
 }
 
 /**
  * Convert a portable ID to something local.
  *
- * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The resource type
  * @param  array		Portable ID details
- * @return ID_TEXT	The content ID
+ * @return ID_TEXT	The resource ID
  */
-function remap_portable_as_content_id($content_type,$portable)
+function remap_portable_as_resource_id($resource_type,$portable)
 {
 	// TODO
-	$content_id=$portable['id'];
-	return $content_id;
+	$resource_id=$portable['id'];
+	return $resource_id;
 }
 
-class content_fs_base
+class resource_fs_base
 {
-	var $folder_content_type=NULL;
-	var $file_content_type=NULL;
+	var $folder_resource_type=NULL;
+	var $file_resource_type=NULL;
 	var $_cma_object=array();
 
 	/**
-	 * Get the file content info for this OccleFS content hook.
+	 * Get the file resource info for this OccleFS resource hook.
 	 *
-	 * @param  ID_TEXT	The content type
+	 * @param  ID_TEXT	The resource type
 	 * @return object		The object
 	 */
-	function _get_cma_info($content_type)
+	function _get_cma_info($resource_type)
 	{
-		if (!array_key_exists($content_type,$this->_cma_object))
+		if (!array_key_exists($resource_type,$this->_cma_object))
 		{
 			require_code('content');
-			$this->_cma_object[$content_type]=get_content_object($content_type);
+			$this->_cma_object[$resource_type]=get_resource_object($resource_type);
 		}
-		return $this->_cma_object[$content_type]->info();
+		return $this->_cma_object[$resource_type]->info();
 	}
 
 	/**
@@ -190,119 +194,119 @@ class content_fs_base
 		return ($category=='')?NULL:intval($category);
 	}
 
-	function is_folder_type($content_type)
+	function is_folder_type($resource_type)
 	{
-		$folder_types=is_array($this->folder_content_type)?$this->folder_content_type:(is_null($this->folder_content_type)?array():array($this->folder_content_type));
-		return in_array($content_type,$folder_types);
+		$folder_types=is_array($this->folder_resource_type)?$this->folder_resource_type:(is_null($this->folder_resource_type)?array():array($this->folder_resource_type));
+		return in_array($resource_type,$folder_types);
 	}
 
-	function is_file_type($content_type)
+	function is_file_type($resource_type)
 	{
-		$file_types=is_array($this->file_content_type)?$this->file_content_type:(is_null($this->file_content_type)?array():array($this->file_content_type));
-		return in_array($content_type,$file_types);
+		$file_types=is_array($this->file_resource_type)?$this->file_resource_type:(is_null($this->file_resource_type)?array():array($this->file_resource_type));
+		return in_array($resource_type,$file_types);
 	}
 
-	function convert_label_to_filename($label,$subpath,$content_type,$must_already_exist=false)
+	function convert_label_to_filename($label,$subpath,$resource_type,$must_already_exist=false)
 	{
 		// TODO
 	}
 
-	function convert_filename_to_id($filename,$content_type)
+	function convert_filename_to_id($filename,$resource_type)
 	{
-		if ($this->is_file_type($content_type))
-			return $this->file_convert_filename_to_id($filename,$content_type);
-		if ($this->is_folder_type($content_type))
-			return $this->folder_convert_filename_to_id($filename,$content_type);
+		if ($this->is_file_type($resource_type))
+			return $this->file_convert_filename_to_id($filename,$resource_type);
+		if ($this->is_folder_type($resource_type))
+			return $this->folder_convert_filename_to_id($filename,$resource_type);
 		return NULL;
 	}
 
 	/**
-	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
-	 * @param  ?ID_TEXT	The content type (NULL: assumption of only one folder content type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
-	 * @return ?array		A pair: The content type, the content ID (NULL: could not find)
+	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+	 * @return ?array		A pair: The resource type, the resource ID (NULL: could not find)
 	 */
-	function file_convert_filename_to_id($filename,$content_type=NULL)
+	function file_convert_filename_to_id($filename,$resource_type=NULL)
 	{
-		if (is_null($content_type)) $content_type=$this->folder_content_type;
+		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
 
-		$content_id=basename($filename,'.xml'); // Remove file extension from filename
-		return array($content_type,$content_id);
+		$resource_id=basename($filename,'.xml'); // Remove file extension from filename
+		return array($resource_type,$resource_id);
 	}
 
 	/**
-	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
-	 * @param  ?ID_TEXT	The content type (NULL: assumption of only one folder content type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
-	 * @return array		A pair: The content type, the content ID
+	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+	 * @return array		A pair: The resource type, the resource ID
 	 */
-	function folder_convert_filename_to_id($filename,$content_type=NULL)
+	function folder_convert_filename_to_id($filename,$resource_type=NULL)
 	{
-		if (is_null($content_type)) $content_type=$this->folder_content_type;
+		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
 
 		if ($filename=='<blank>') $filename='';
-		$content_id=basename($filename); // Get filename component from path
-		return array($content_type,$content_id);
+		$resource_id=basename($filename); // Get filename component from path
+		return array($resource_type,$resource_id);
 	}
 
-	function convert_id_to_filename($filename,$content_type)
+	function convert_id_to_filename($filename,$resource_type)
 	{
-		if ($this->is_file_type($content_type))
-			return $this->file_convert_id_to_filename($filename,$content_type);
-		if ($this->is_folder_type($content_type))
-			return $this->folder_convert_id_to_filename($filename,$content_type);
+		if ($this->is_file_type($resource_type))
+			return $this->file_convert_id_to_filename($filename,$resource_type);
+		if ($this->is_folder_type($resource_type))
+			return $this->folder_convert_id_to_filename($filename,$resource_type);
 		return NULL;
 	}
 
 	/**
-	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
 	 *
-	 * @param  ID_TEXT	The content type
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
 	 * @return ID_TEXT	The filename
 	 */
-	function file_convert_id_to_filename($content_type,$content_id)
+	function file_convert_id_to_filename($resource_type,$resource_id)
 	{
-		return $content_id.'.xml';
+		return $resource_id.'.xml';
 	}
 
 	/**
-	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
 	 *
-	 * @param  ID_TEXT	The content type
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
 	 * @return ?ID_TEXT	The filename (NULL: could not find)
 	 */
-	function folder_convert_id_to_filename($content_type,$content_id)
+	function folder_convert_id_to_filename($resource_type,$resource_id)
 	{
-		if ($content_id=='') return '<blank>';
-		return $content_id;
+		if ($resource_id=='') return '<blank>';
+		return $resource_id;
 	}
 
 	/**
 	 * Interpret the input of a folder, into a way we can understand it to add. Hooks may override this with special import code.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			A pair: the content label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 */
 	function _folder_magic_filter($filename,$path,$properties)
 	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the content label, and leave properties alone
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
 	}
 
 	/**
 	 * Interpret the input of a file, into a way we can understand it to add. Hooks may override this with special import code.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			A pair: the content label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 */
 	function _file_magic_filter($filename,$path,$properties)
 	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the content label, and leave properties alone
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
 	}
 
 	function file_load($filename,$path)
@@ -315,47 +319,47 @@ class content_fs_base
 		// TODO call _folder_load, but do post-processing
 	}
 
-	function set_content_access($filename,$groups)
+	function set_resource_access($filename,$groups)
 	{
 		// TODO
 	}
 
-	function get_content_access($filename)
+	function get_resource_access($filename)
 	{
 		// TODO
 	}
 
-	function reset_content_privileges($filename)
+	function reset_resource_privileges($filename)
 	{
 		// TODO
 	}
 
-	function set_content_privileges_from_preset($filename,$group_presets)
+	function set_resource_privileges_from_preset($filename,$group_presets)
 	{
 		// TODO
 	}
 
-	function set_content_privileges($filename,$group_settings)
+	function set_resource_privileges($filename,$group_settings)
 	{
 		// TODO
 	}
 
-	function get_content_privileges($filename)
+	function get_resource_privileges($filename)
 	{
 		// TODO
 	}
 
-	function set_content_privileges_from_preset__members($filename,$member_presets)
+	function set_resource_privileges_from_preset__members($filename,$member_presets)
 	{
 		// TODO
 	}
 
-	function set_content_privileges__members($filename,$privilege,$setting)
+	function set_resource_privileges__members($filename,$privilege,$setting)
 	{
 		// TODO
 	}
 
-	function get_content_privileges__members($filename)
+	function get_resource_privileges__members($filename)
 	{
 		// TODO
 	}
@@ -371,10 +375,10 @@ class content_fs_base
 	}
 
 	/**
-	 * Find whether a kind of content handled by this hook (folder or file) can be under a particular kind of folder.
+	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ID_TEXT		Folder content type
-	 * @param  ID_TEXT		Content type (may be file or folder)
+	 * @param  ID_TEXT		Folder resource type
+	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return boolean		Whether it can
 	 */
 	function _has_parent_child_relationship($above,$under)
@@ -455,33 +459,33 @@ class content_fs_base
 
 		$listing=array();
 
-		$folder_types=is_array($this->folder_content_type)?$this->folder_content_type:(is_null($this->folder_content_type)?array():array($this->folder_content_type));
-		$file_types=is_array($this->file_content_type)?$this->file_content_type:(is_null($this->file_content_type)?array():array($this->file_content_type));
+		$folder_types=is_array($this->folder_resource_type)?$this->folder_resource_type:(is_null($this->folder_resource_type)?array():array($this->folder_resource_type));
+		$file_types=is_array($this->file_resource_type)?$this->file_resource_type:(is_null($this->file_resource_type)?array():array($this->file_resource_type));
 
 		// Find where we're at
 		$cat_id=mixed();
-		$cat_content_type=mixed();
+		$cat_resource_type=mixed();
 		if (count($meta_dir)!=0)
 		{
-			if (is_null($this->folder_content_type)) return false; // Should not be possible
+			if (is_null($this->folder_resource_type)) return false; // Should not be possible
 
-			list($cat_content_type,$_cat_id)=$this->file_convert_filename_to_id(implode('/',$meta_dir));
+			list($cat_resource_type,$_cat_id)=$this->file_convert_filename_to_id(implode('/',$meta_dir));
 			$cat_id=($folder_info['id_field_numeric']?intval($_cat_id):$_cat_id)
 		} else
 		{
-			if (!is_null($this->folder_content_type))
+			if (!is_null($this->folder_resource_type))
 			{
 				$cat_id=($folder_info['id_field_numeric']?NULL:'');
-				$cat_content_type=is_array($this->folder_content_type)?$this->folder_content_type[0]:$this->folder_content_type;
+				$cat_resource_type=is_array($this->folder_resource_type)?$this->folder_resource_type[0]:$this->folder_resource_type;
 			}
 		}
 
 		// Find folders
-		foreach ($folder_types as $content_type)
+		foreach ($folder_types as $resource_type)
 		{
-			if (!_has_parent_child_relationship($cat_content_type,$content_type)) continue;
+			if (!_has_parent_child_relationship($cat_resource_type,$resource_type)) continue;
 
-			$folder_info=_get_cma_info($content_type);
+			$folder_info=_get_cma_info($resource_type);
 			$select=array('main.'.$folder_info['parent_spec__field_name']);
 			$table=$folder_info['parent_spec__table_name'].' main';
 			if ($folder_info['parent_spec__table_name']!=$folder_info['table'])
@@ -501,7 +505,7 @@ class content_fs_base
 			$child_folders=$folder_info['connection']->query_select($table,$select,array('main.'.$folder_info['parent_category_field']=>$cat_id),$extra,10000/*Reasonable limit*/);
 			foreach ($child_folders as $folder)
 			{
-				$file=$this->folder_convert_id_to_filename($content_type,$folder[$folder_info['parent_spec__field_name']]);
+				$file=$this->folder_convert_id_to_filename($resource_type,$folder[$folder_info['parent_spec__field_name']]);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_folder_edit_date'))
@@ -533,13 +537,13 @@ class content_fs_base
 		}
 
 		// Find files
-		foreach ($file_types as $content_type)
+		foreach ($file_types as $resource_type)
 		{
-			if (!_has_parent_child_relationship($cat_content_type,$content_type)) continue;
+			if (!_has_parent_child_relationship($cat_resource_type,$resource_type)) continue;
 
-			$file_info=_get_cma_info($content_type);
+			$file_info=_get_cma_info($resource_type);
 			$where=array();
-			if (!is_null($this->folder_content_type))
+			if (!is_null($this->folder_resource_type))
 			{
 				$where[is_array($file_info['category_field'])?$file_info['category_field'][0]:$file_info['category_field']]=$cat_id;
 			}
@@ -551,7 +555,7 @@ class content_fs_base
 			foreach ($files as $file)
 			{
 				$str_id=extract_content_str_id_from_data($file,$file_info);
-				$file=$this->file_convert_id_to_filename($content_type,$str_id);
+				$file=$this->file_convert_id_to_filename($resource_type,$str_id);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_file_edit_date'))
@@ -596,7 +600,7 @@ class content_fs_base
 	 */
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
-		if (is_null($folder_content_type)) return false;
+		if (is_null($folder_resource_type)) return false;
 _folder_add($label,$path,$properties)
 		// TODO
 	}
@@ -612,7 +616,7 @@ _folder_add($label,$path,$properties)
 	 */
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
-		if (is_null($folder_content_type)) return false;
+		if (is_null($folder_resource_type)) return false;
 folder_delete($path)
 		// TODO
 	}

@@ -18,16 +18,16 @@
  * @package		custom_comcode
  */
 
-require_code('content_fs');
+require_code('resource_fs');
 
-class Hook_occle_fs_custom_comcode_tags extends content_fs_base
+class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 {
-	var $file_content_type='custom_comcode_tag';
+	var $file_resource_type='custom_comcode_tag';
 
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_file_properties()
 	{
@@ -47,7 +47,7 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
 	function _get_file_edit_date($row)
@@ -57,16 +57,16 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		$tag=$this->_create_name_from_label($label);
@@ -99,17 +99,17 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('*'),array('tag_tag'=>$content_id),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('*'),array('tag_tag'=>$resource_id),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -128,7 +128,7 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -137,7 +137,7 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		$label=$this->_default_property_str($properties,'label');
 		$tag=$this->_create_name_from_label($label);
@@ -151,8 +151,8 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 		$block_tag=$this->_default_property_int($properties,'block_tag');
 		$textual_tag=$this->_default_property_int($properties,'textual_tag');
 
-		$_title=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_title',array('tag_tag'=>$content_id));
-		$_description=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_description',array('tag_tag'=>$content_id));
+		$_title=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_title',array('tag_tag'=>$resource_id));
+		$_description=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_description',array('tag_tag'=>$resource_id));
 
 		$GLOBALS['SITE_DB']->query_update('custom_comcode',array(
 			'tag_tag'=>$tag,
@@ -165,7 +165,7 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 			'tag_dangerous_tag'=>$dangerous_tag,
 			'tag_block_tag'=>$block_tag,
 			'tag_textual_tag'=>$textual_tag
-		),array('tag_name'=>$content_id),'',1);
+		),array('tag_name'=>$resource_id),'',1);
 
 		log_it('EDIT_CUSTOM_COMCODE_TAG',$tag);
 
@@ -173,20 +173,20 @@ class Hook_occle_fs_custom_comcode_tags extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		$GLOBALS['SITE_DB']->query_delete('custom_comcode',array(
-			'tag_tag'=>$content_id,
+			'tag_tag'=>$resource_id,
 		),'',1);
 
-		log_it('DELETE_CUSTOM_COMCODE_TAG',$content_id);
+		log_it('DELETE_CUSTOM_COMCODE_TAG',$resource_id);
 
 		return true;
 	}

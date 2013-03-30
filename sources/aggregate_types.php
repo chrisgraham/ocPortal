@@ -84,7 +84,7 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
  * Delete an aggregate type instance.
  *
  * @param  AUTO_LINK			The ID
- * @param  boolean			Whether to delete all associated content
+ * @param  boolean			Whether to delete all associated resources
  */
 function delete_aggregate_type_instance($id,$delete_matches=false)
 {
@@ -104,11 +104,11 @@ function delete_aggregate_type_instance($id,$delete_matches=false)
 			$type=$types[$aggregate_type];
 
 			// Process the resources
-			require_code('content_fs');
+			require_code('resource_fs');
 			foreach ($type['resources'] as $resource)
 			{
 				// Can we bind to an existing resource? (using subpath and label)
-				$object_fs=get_content_occlefs_object($resource['type']);
+				$object_fs=get_resource_occlefs_object($resource['type']);
 				$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
 
 				// If bound, delete resource
@@ -420,12 +420,12 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 	}
 
 	// Process the resources
-	require_code('content_fs');
+	require_code('resource_fs');
 	foreach ($type['resources'] as $resource)
 	{
 		// Can we bind to an existing resource? (using subpath and label)
 		$is_new=false;
-		$object_fs=get_content_occlefs_object($resource['type']);
+		$object_fs=get_resource_occlefs_object($resource['type']);
 		$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
 
 		// If not bound, create resource
@@ -601,15 +601,15 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 
 			// Set privileges
 			if (($priv_reset) && ((count($group_presets)!=0) || (count($member_presets)!=0) || (count($group_privileges)!=0) || (count($member_privileges)!=0)))
-				$object_fs->reset_content_privileges($filename);
+				$object_fs->reset_resource_privileges($filename);
 			if (count($group_presets)!=0)
-				$object_fs->set_content_privileges_from_preset($filename,$group_presets);
+				$object_fs->set_resource_privileges_from_preset($filename,$group_presets);
 			if (count($member_presets)!=0)
-				$object_fs->set_content_privileges_from_preset__members($filename,$member_presets);
+				$object_fs->set_resource_privileges_from_preset__members($filename,$member_presets);
 			if (count($group_privileges)!=0)
-				$object_fs->set_content_privileges($filename,$group_privileges);
+				$object_fs->set_resource_privileges($filename,$group_privileges);
 			if (count($member_privileges)!=0)
-				$object_fs->set_content_privileges__members($filename,$member_privileges);
+				$object_fs->set_resource_privileges__members($filename,$member_privileges);
 
 			// Set access
 			$group_access=array();
@@ -652,9 +652,9 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 				}
 			}
 			if (count($group_access)!=0)
-				$object_fs->set_content_access($filename,$group_access);
+				$object_fs->set_resource_access($filename,$group_access);
 			if (count($member_access)!=0)
-				$object_fs->set_content_access__members($filename,$member_access);
+				$object_fs->set_resource_access__members($filename,$member_access);
 		}
 	}
 }

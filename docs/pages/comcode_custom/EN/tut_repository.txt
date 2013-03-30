@@ -107,6 +107,10 @@ You may see some files quoted with a file size of zero. This happens in situatio
 
 You may also see a file modification time of 1970. This happens when no file modification time is known.
 
+[title="2"]Known omissions[/title]
+
+ - If you add content via the repository, no syndication will be performed for it. E.g. if you add a news article, it won't be syndicated to Facebook if you've configured such syndication. This is normal within ocPortal, as syndication is an automated assistant built into the CMS modules, not the underlying framework. You can always syndicate things manually if required.
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_occle"]OcCLE[/page]

@@ -18,18 +18,18 @@
  * @package		catalogues
  */
 
-require_code('content_fs');
+require_code('resource_fs');
 
-class Hook_occle_fs_catalogues extends content_fs_base
+class Hook_occle_fs_catalogues extends resource_fs_base
 {
-	var $folder_content_type=array('catalogue','catalogue_category');
-	var $file_content_type='catalogue_entry';
+	var $folder_resource_type=array('catalogue','catalogue_category');
+	var $file_resource_type='catalogue_entry';
 
 	/**
-	 * Find whether a kind of content handled by this hook (folder or file) can be under a particular kind of folder.
+	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ID_TEXT		Folder content type
-	 * @param  ID_TEXT		Content type (may be file or folder)
+	 * @param  ID_TEXT		Folder resource type
+	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return boolean		Whether it can
 	 */
 	function _has_parent_child_relationship($above,$under)
@@ -48,7 +48,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * Standard modular introspection function.
 	 *
 	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_folder_properties($category)
 	{
@@ -84,7 +84,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
 	function _get_folder_edit_date($row)
@@ -94,25 +94,25 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
 	 *
-	 * @param  ID_TEXT	The content type
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
 	 * @return ID_TEXT	The filename
 	 */
-	function _folder_convert_id_to_filename($content_type,$content_id)
+	function _folder_convert_id_to_filename($resource_type,$resource_id)
 	{
-		if ($content_type=='catalogue')
-			return 'CATALOGUE-'.parent::_folder_convert_id_to_filename($content_type,$content_id);
+		if ($resource_type=='catalogue')
+			return 'CATALOGUE-'.parent::_folder_convert_id_to_filename($resource_type,$resource_id);
 
-		return parent::_folder_convert_id_to_filename($content_type,$content_id,'catalogue_category');
+		return parent::_folder_convert_id_to_filename($resource_type,$resource_id,'catalogue_category');
 	}
 
 	/**
-	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
-	 * @return array		A pair: The content type, the content ID
+	 * @return array		A pair: The resource type, the resource ID
 	 */
 	function folder_convert_filename_to_id($filename)
 	{
@@ -180,16 +180,16 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error)
+	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
 	function _folder_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -199,7 +199,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 
 		if ($depth!=0)
 		{
-			if ($category_content_type=='catalogue') return false; // Can't create a catalogue under a catalogue
+			if ($category_resource_type=='catalogue') return false; // Can't create a catalogue under a catalogue
 			if ($category=='') return false; // Can't create more than one root
 
 			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$this->__folder_read_in_properties_category($path,$properties);
@@ -251,19 +251,19 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _folder_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		if (substr($category,0,10)!='CATALOGUE-')
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>intval($content_id)),'',1);
+			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>intval($resource_id)),'',1);
 			if (!array_key_exists(0,$rows)) return false;
 			$row=$rows[0];
 
@@ -281,12 +281,12 @@ class Hook_occle_fs_catalogues extends content_fs_base
 			);
 		}
 
-		$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$content_id),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$resource_id),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
 		$fields=array();
-		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>$content_id),'ORDER BY cf_order');
+		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>$resource_id),'ORDER BY cf_order');
 		foreach ($_fields as $_field)
 		{
 			$fields[]=array(
@@ -320,7 +320,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -329,16 +329,16 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 
-		if ($content_type=='catalogue')
+		if ($resource_type=='catalogue')
 		{
 			$label=$this->_default_property_str($properties,'label');
 			list($name,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time)=$this->__folder_read_in_properties_catalogue($path,$properties);
 
-			actual_edit_catalogue($content_id,$label,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+			actual_edit_catalogue($resource_id,$label,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
 
 			// How to handle the fields
 			if ((array_key_exists('fields',$properties)) && ($properties['fields']!=''))
@@ -389,30 +389,30 @@ class Hook_occle_fs_catalogues extends content_fs_base
 			$label=$this->_default_property_str($properties,'label');
 			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$this->__folder_read_in_properties_category($path,$properties);
 
-			actual_edit_catalogue_category(intval($content_id),$label,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time,$catalogue_name);
+			actual_edit_catalogue_category(intval($resource_id),$label,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time,$catalogue_name);
 		}
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function folder_delete($filename)
 	{
-		list($content_type,$content_id)=$this->folder_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 
-		if ($content_type=='catalogue')
+		if ($resource_type=='catalogue')
 		{
-			delete_catalogue($content_id);
+			delete_catalogue($resource_id);
 		} else
 		{
-			delete_catalogue_category(intval($content_id));
+			delete_catalogue_category(intval($resource_id));
 		}
 
 		return true;
@@ -422,7 +422,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 * Standard modular introspection function.
 	 *
 	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_file_properties($category)
 	{
@@ -485,7 +485,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
 	function _get_file_edit_date($row)
@@ -554,20 +554,20 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
-		if ($category_content_type=='catalogue') return false;
+		if ($category_resource_type=='catalogue') return false;
 
 		require_code('catalogues2');
 
@@ -578,17 +578,17 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -607,7 +607,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 		);
 
 		require_code('catalogues');
-		$special_fields=get_catalogue_entry_field_values($row['c_name'],intval($content_id));
+		$special_fields=get_catalogue_entry_field_values($row['c_name'],intval($resource_id));
 
 		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
@@ -640,7 +640,7 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -649,30 +649,30 @@ class Hook_occle_fs_catalogues extends content_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 
 		$label=$this->_default_property_str($properties,'label');
 		list($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,$meta_keywords,$meta_description)=__file_read_in_properties($path,$properties,$category,$label);
 
-		actual_edit_catalogue_entry(intval($content_id),$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+		actual_edit_catalogue_entry(intval($resource_id),$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
-		delete_catalogue_entry(intval($content_id));
+		delete_catalogue_entry(intval($resource_id));
 
 		return true;
 	}
