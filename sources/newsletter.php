@@ -60,7 +60,7 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
 				$url=$_url->evaluate();
 				$message=do_lang('NEWSLETTER_SIGNUP_TEXT',comcode_escape($url),comcode_escape($password),array($forename,$surname,$email,get_site_name()),$lang);
 				require_code('mail');
-				mail_wrap(do_lang('NEWSLETTER_SIGNUP',NULL,NULL,NULL,$lang),$message,array($email));
+				mail_wrap(do_lang('NEWSLETTER_SIGNUP',NULL,NULL,NULL,$lang),$message,array($email),NULL,'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 			}
 		} else
 		{

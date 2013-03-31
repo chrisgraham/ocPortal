@@ -265,7 +265,7 @@ class JabberAuth {
 	{
 		$this->mysock=@mysql_pconnect($this->dbhost, $this->dbuser, $this->dbpass);
 		@mysql_select_db($this->dbbase, $this->mysock);
-		$this->logg("MySQL :: ". (is_resource($this->mysock) ? "Connect�" : "D�connect�"));
+		$this->logg("MySQL :: ". (is_resource($this->mysock) ? "Connected" : "Failed to Connect"));
 	}
 
 	function logg($message) // pretty simple
