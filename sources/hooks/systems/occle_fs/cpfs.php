@@ -86,7 +86,6 @@ class Hook_occle_fs_cpfs extends content_fs_base
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('ocf_members_action');
@@ -164,6 +163,7 @@ class Hook_occle_fs_cpfs extends content_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('ocf_members_action2');
 

@@ -2452,6 +2452,62 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'FIND_URL_MONIKER_VIA_ID':
+				if (isset($param[1]))
+				{
+					$value=find_id_moniker($param[0],$param[1]);
+					if ($value===NULL) $value='';
+				}
+				break;
+
+			case 'FIND_GUID_VIA_ID':
+				if (isset($param[1]))
+				{
+					require_code('resource_fs');
+					$value=find_guid_via_id($param[0],$param[1]);
+				}
+				break;
+
+			case 'FIND_OCCLEFS_FILENAME_VIA_ID':
+				if (isset($param[1]))
+				{
+					require_code('resource_fs');
+					$value=find_occlefs_filename_via_id($param[0],$param[1]);
+				}
+				break;
+
+			case 'FIND_LABEL_VIA_ID':
+				if (isset($param[1]))
+				{
+					require_code('resource_fs');
+					$value=find_label_via_id($param[0],$param[1]);
+				}
+				break;
+
+			case 'FIND_ID_VIA_LABEL':
+				if (isset($param[1]))
+				{
+					require_code('resource_fs');
+					$value=find_id_via_label($param[0],$param[1]);
+				}
+				break;
+
+			case 'FIND_ID_VIA_GUID':
+				if (isset($param[0]))
+				{
+					require_code('resource_fs');
+					$value=find_id_via_guid($param[0]);
+				}
+				break;
+
+			case 'FIND_ID_VIA_OCCLEFS_FILENAME':
+				if (isset($param[1]))
+				{
+					require_code('resource_fs');
+					$value=find_id_via_occlefs_filename($param[0],$param[1]);
+				}
+				break;
+
 			case 'REVIEW_STATUS':
 				if (isset($param[1]))
 				{

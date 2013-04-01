@@ -313,6 +313,17 @@ class Module_admin_version
 		{
 			add_privilege('SUBMISSION','edit_meta_fields');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
+
+			$GLOBALS['SITE_DB']->create_table('alternative_ids',array(
+				'content_type'=>'*ID_TEXT',
+				'content_id'=>'*ID_TEXT',
+				'content_moniker'=>'ID_TEXT',
+				'content_label'=>'SHORT_TEXT',
+				'content_guid'=>'ID_TEXT',
+			));
+			$GLOBALS['SITE_DB']->create_index('alternative_ids','content_guid',array('content_guid'));
+			$GLOBALS['SITE_DB']->create_index('alternative_ids','content_label',array('content_label','content_type'));
+			$GLOBALS['SITE_DB']->create_index('alternative_ids','content_moniker',array('content_moniker','content_type'));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

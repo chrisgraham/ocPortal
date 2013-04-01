@@ -1026,7 +1026,35 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FIND_ID_VIA_URL_MONIKER,<content-type>,<url-moniker>}</td>
-		<td>Finds the ID for a given content type's URL moniker; this is useful within the Aggregate Content Types addon, for finding IDs tied to a content path</td>
+		<td>Finds the ID for a given content type's URL moniker</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_URL_MONIKER_VIA_ID,<content-type>,<content-id>}</td>
+		<td>Finds the URL moniker for an item of content's type/ID</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_GUID_VIA_ID,<resource-type>,<resource-id>}</td>
+		<td>Find the resource GUID from the resource ID</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_OCCLEFS_FILENAME_VIA_ID,<resource-type>,<resource-id>}</td>
+		<td>Find the OcCLE-fs (repository) filename from the resource ID</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_LABEL_VIA_ID,<resource-type>,<resource-id>}</td>
+		<td>Find the resource label from the resource ID</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_ID_VIA_LABEL,<resource-type>,<label>}</td>
+		<td>Find the resource ID from the resource label</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_ID_VIA_GUID,<guid>}</td>
+		<td>Find the resource ID from the resource GUID</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$FIND_ID_VIA_OCCLEFS_FILENAME,<resource-type>,<filename>}</td>
+		<td>Find the resource ID from the OcCLE-fs (repository) filename</td>
 	</tr>
 </tbody></table>
 [/html]
