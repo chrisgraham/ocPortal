@@ -518,10 +518,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				if ($direction=='DESC') $keywords_query.=' DESC';
 			}
 
-			if ($group_by_ok)
+			/*if ($group_by_ok) 	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
 			{
 				$_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
-			}
+			}*/
 
 			$db->dedupe_mode=true;
 			$t_keyword_search_rows_count=$db->query_value_null_ok_full($_count_query_keywords_search);
@@ -616,6 +616,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			}
 		}
 
+		$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
+		if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+
 		// Work out main query
 		global $SITE_INFO;
 		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
@@ -657,6 +660,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$query.=' ORDER BY '.$order;
 				if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
 			}
+			$query.=($group_by_ok?' GROUP BY r.id':'');
 			$query.=' LIMIT '.strval($max+$start);
 			$query.=')';
 		}
@@ -706,11 +710,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_main_search='SELECT ('.$_query.')';
 		}
 
-		$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
-		if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
-
-		$query.=($group_by_ok?' GROUP BY r.id':'');
-
 		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 		{
 			$query.=' ORDER BY '.$order;
@@ -728,10 +727,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			exit($query);
 		}
 
-		if ($group_by_ok)
+		/*if ($group_by_ok)	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
 		{
 			$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
-		}
+		}*/
 
 		$db->dedupe_mode=true;
 		$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
