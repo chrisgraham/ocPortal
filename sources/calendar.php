@@ -132,42 +132,55 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	$day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 	$dif=utctime_to_usertime($period_start)-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$day_of_month,$start_year));
 	$start_day_of_month=$day_of_month;
+	if ($recurrence!='monthly') // Defensiveness (this should be automatic)
+	{
+		$start_monthly_spec_type='day_of_month';
+		$end_monthly_spec_type='day_of_month';
+	}
 	switch ($recurrence) // If a long way out of range, accelerate forward before steadedly looping forward till we might find a match (doesn't jump fully forward, due to possibility of timezones complicating things)
 	{
 		case 'daily':
 			$dif_day=1;
-			if ($dif>60*60*24*10)
+			if (($dif>60*60*24*10) && ($mask_len==0))
 			{
-				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)));
+				$zoom=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)));
+				$start_day+=$zoom;
+				if (!is_null($end_day)) $end_day+=$zoom;
 			}
 			break;
 		case 'weekly':
 			$dif_day=7;
-			if ($dif>60*60*24*70)
+			if (($dif>60*60*24*70) && ($mask_len==0))
 			{
-				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)))-70;
+				$zoom=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)))-70;
+				$start_day+=$zoom;
+				if (!is_null($end_day)) $end_day+=$zoom;
 			}
 			break;
 		case 'monthly':
 			$dif_month=1;
-			if ($dif>60*60*24*31*10)
+			if (($dif>60*60*24*31*10) && ($mask_len==0))
 			{
-				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*28.0)))-10;
+				$zoom=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*28.0)))-10;
+				$start_month+=$zoom;
+				if (!is_null($end_month)) $end_month+=$zoom;
 				$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 			}
 			break;
 		case 'yearly':
 			$dif_year=1;
-			if ($dif>60*60*24*365*10)
+			if (($dif>60*60*24*365*10) && ($mask_len==0))
 			{
-				$start_year+=$dif_year*intval(floor(floatval($dif)/(60.0*60.0*24.0*365.0)))-1;
+				$zoom=$dif_year*intval(floor(floatval($dif)/(60.0*60.0*24.0*365.0)))-1;
+				$start_year+=$zoom;
+				if (!is_null($end_year)) $end_year+=$zoom;
 			}
 			break;
 	}
 	$_b=mixed();
 	$b=mixed();
 
-	$no_end=false;
+	$all_day=false;
 
 	do
 	{
@@ -189,10 +202,16 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		);
 		if ((is_null($start_hour)) && (is_null($end_year) || is_null($end_month) || is_null($end_day))) // All day event with no end date, should be same as start date
 		{
-			$end_day=$start_day_of_month;
+			if ($start_monthly_spec_type=='day_of_month')
+			{
+				$end_day=$start_day;
+			} else
+			{
+				$end_day=$start_day_of_month;
+			}
 			$end_month=$start_month;
 			$end_year=$start_year;
-			$no_end=true;
+			$all_day=true;
 
 			// Should not be needed, but normalise possible database error
 			$start_minute=NULL;
@@ -255,14 +274,6 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			}
 		}
 
-		// Let it reset
-		if ($no_end)
-		{
-			$end_day=NULL;
-			$end_month=NULL;
-			$end_year=NULL;
-		}
-
 		// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
 		$start_hour-=intval(date('H',tz_time(mktime(0,0,0,$start_month,$start_day,$start_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day-$dif_day,$start_year-$dif_year),$timezone)));
 		$start_minute-=intval(date('i',tz_time(mktime(0,0,0,$start_month,$start_day,$start_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day-$dif_day,$start_year-$dif_year),$timezone)));
@@ -270,6 +281,18 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		{
 			$end_hour-=intval(date('H',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
 			$end_minute-=intval(date('i',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
+		}
+
+		// Let it reset
+		if ($all_day)
+		{
+			$start_hour=NULL;
+			$start_minute=NULL;
+			$end_hour=NULL;
+			$end_minute=NULL;
+			$end_day=NULL;
+			$end_month=NULL;
+			$end_year=NULL;
 		}
 
 		if ($i==300) break; // Let's be reasonable
