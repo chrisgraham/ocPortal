@@ -87,7 +87,7 @@
 /* Flow-mode only */
 
 .flowmode_thumb {
-	display: inline-block;
+	display: inline;
 	{+START,IF,{$MOBILE}}
 		margin: 0.5em;
 	{+END}
