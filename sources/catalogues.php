@@ -1683,7 +1683,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	if (is_null($title_to_use_2))
 	{
 		$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_ENTRY',make_fractionable_editable('catalogue_entry',$id,$map['FIELD_0']));
-		$title_to_use_2=do_lang('DEFAULT__CATALOGUE_ENTRY',$map['FIELD_0']->evaluate());
+		$title_to_use_2=do_lang('DEFAULT__CATALOGUE_ENTRY',is_object($map['FIELD_0'])?$map['FIELD_0']->evaluate():$map['FIELD_0']);
 		$len=strlen(trim(strip_tags($title_to_use_2)));
 		if (($len>20) || ($len<3)) // We revert to raw ID if it appeared the rendered one was not strippable back from HTML to text; raw ID is possibly cryptic unfortunately
 			$title_to_use_2=do_lang('DEFAULT__CATALOGUE_ENTRY',$map['FIELD_0_PLAIN']);
