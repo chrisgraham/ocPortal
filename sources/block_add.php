@@ -67,6 +67,7 @@ function block_helper_script()
 				if (!defined('HIPHOP_PHP'))
 				{
 					$addon_files=eval($matches[1]);
+					if ($addon_files===false) $addon_files=array(); // Some kind of PHP error
 				} else
 				{
 					require_code('hooks/systems/addon_registry/'.$addon_name);

@@ -44,6 +44,9 @@ function ocf_edit_forum_grouping($forum_grouping_id,$title,$description,$expande
 	}
 
 	log_it('EDIT_FORUM_GROUPING',strval($forum_grouping_id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('forum_grouping',strval($forum_grouping_id));
 }
 
 /**
@@ -58,7 +61,11 @@ function ocf_delete_forum_grouping($forum_grouping_id,$target_forum_grouping_id)
 	if (is_null($title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_forum_grouping_id'=>$target_forum_grouping_id),array('f_forum_grouping_id'=>$forum_grouping_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_groupings',array('id'=>$forum_grouping_id),'',1);
+
 	log_it('DELETE_FORUM_GROUPING',strval($forum_grouping_id),$title);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('forum_grouping',strval($forum_grouping_id));
 }
 
 /**
@@ -143,6 +150,9 @@ function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_par
 	}
 
 	log_it('EDIT_FORUM',strval($forum_id),$name);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('forum',strval($forum_id));
 }
 
 /**
@@ -186,6 +196,9 @@ function ocf_delete_forum($forum_id,$target_forum_id,$delete_topics=0)
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_ip',array('i_forum_id'=>$forum_id));
 
 	log_it('DELETE_FORUM',strval($forum_id),$name);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('forum',strval($forum_id));
 }
 
 /**

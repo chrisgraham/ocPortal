@@ -47,6 +47,9 @@ function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sin
 	),array('id'=>$id),'',1);
 
 	log_it('EDIT_MULTI_MODERATION',strval($id),$name);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('multi_moderation',strval($id));
 }
 
 /**
@@ -62,6 +65,9 @@ function ocf_delete_multi_moderation($id)
 	delete_lang($_name,$GLOBALS['FORUM_DB']);
 
 	log_it('DELETE_MULTI_MODERATION',strval($id),$name);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('multi_moderation',strval($id));
 }
 
 /**

@@ -2465,6 +2465,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('resource_fs');
 					$value=find_guid_via_id($param[0],$param[1]);
+					if ($value===NULL) $value='';
 				}
 				break;
 
@@ -2473,6 +2474,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('resource_fs');
 					$value=find_occlefs_filename_via_id($param[0],$param[1]);
+					if ($value===NULL) $value='';
 				}
 				break;
 
@@ -2481,6 +2483,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('resource_fs');
 					$value=find_label_via_id($param[0],$param[1]);
+					if ($value===NULL) $value='';
 				}
 				break;
 
@@ -2489,6 +2492,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('resource_fs');
 					$value=find_id_via_label($param[0],$param[1]);
+					if ($value===NULL) $value='';
 				}
 				break;
 
@@ -2497,6 +2501,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('resource_fs');
 					$value=find_id_via_guid($param[0]);
+					if ($value===NULL) $value='';
 				}
 				break;
 
@@ -2505,6 +2510,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('resource_fs');
 					$value=find_id_via_occlefs_filename($param[0],$param[1]);
+					if ($value===NULL) $value='';
 				}
 				break;
 

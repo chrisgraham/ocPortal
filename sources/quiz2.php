@@ -318,6 +318,9 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 
 	log_it('ADD_QUIZ',strval($id),$name);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('quiz',strval($id));
+
 	return $id;
 }
 
@@ -404,6 +407,9 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 	seo_meta_set_for_explicit('quiz',strval($id),$meta_keywords,$meta_description);
 
 	log_it('EDIT_QUIZ',strval($id),$name);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('quiz',strval($id));
 }
 
 /**
@@ -448,5 +454,8 @@ function delete_quiz($id)
 	$GLOBALS['SITE_DB']->query_delete('quiz_entries',array('q_quiz'=>$id));
 
 	log_it('DELETE_QUIZ',strval($id),$name);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('quiz',strval($id));
 }
 

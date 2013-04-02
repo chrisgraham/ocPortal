@@ -18,17 +18,17 @@
  * @package		news
  */
 
-require_code('content_fs');
+require_code('resource_fs');
 
-class Hook_occle_fs_news extends content_fs_base
+class Hook_occle_fs_news extends resource_fs_base
 {
-	var $folder_content_type='news_category';
-	var $file_content_type='news';
+	var $folder_resource_type='news_category';
+	var $file_resource_type='news';
 
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_folder_properties()
 	{
@@ -42,7 +42,7 @@ class Hook_occle_fs_news extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
 	function _get_folder_edit_date($row)
@@ -52,17 +52,17 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error)
+	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
 	function _folder_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
-		if ($category!='') return false; // Only one depth allowed for this content type
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+		if ($category!='') return false; // Only one depth allowed for this resource type
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -76,17 +76,17 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _folder_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -99,7 +99,7 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -108,7 +108,7 @@ class Hook_occle_fs_news extends content_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('news2');
 
@@ -117,23 +117,23 @@ class Hook_occle_fs_news extends content_fs_base
 		$notes=$this->_default_property_str($properties,'notes');
 		$owner=$this->_default_property_int_null($properties,'owner');
 
-		edit_news_category(intval($content_id),$label,$img,$notes,$owner);
+		edit_news_category(intval($resource_id),$label,$img,$notes,$owner);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function folder_delete($filename)
 	{
-		list($content_type,$content_id)=$this->folder_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('news2');
-		delete_news_category(intval($content_id));
+		delete_news_category(intval($resource_id));
 
 		return true;
 	}
@@ -141,7 +141,7 @@ class Hook_occle_fs_news extends content_fs_base
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_file_properties()
 	{
@@ -167,7 +167,7 @@ class Hook_occle_fs_news extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
 	function _get_file_edit_date($row)
@@ -177,16 +177,16 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
@@ -220,17 +220,17 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -255,7 +255,7 @@ class Hook_occle_fs_news extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -264,7 +264,7 @@ class Hook_occle_fs_news extends content_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
@@ -294,23 +294,23 @@ class Hook_occle_fs_news extends content_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		edit_news(intval($content_id),$label,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$add_time,$edit_time,$views,$submitter,true);
+		edit_news(intval($resource_id),$label,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$add_time,$edit_time,$views,$submitter,true);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('news2');
-		delete_news(intval($content_id));
+		delete_news(intval($resource_id));
 
 		return true;
 	}

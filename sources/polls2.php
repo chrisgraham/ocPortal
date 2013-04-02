@@ -96,6 +96,9 @@ function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a
 
 	log_it('ADD_POLL',strval($id),$question);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('poll',strval($id));
+
 	return $id;
 }
 
@@ -132,6 +135,9 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	log_it('EDIT_POLL',strval($id),$question);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('poll',strval($id));
 
 	persistent_cache_delete('POLL');
 
@@ -197,7 +203,6 @@ function delete_poll($id)
 	persistent_cache_delete('POLL');
 
 	$question=get_translated_text($rows[0]['question']);
-	log_it('DELETE_POLL',strval($id),$question);
 
 	delete_lang($rows[0]['question']);
 	for ($i=1;$i<=10;$i++)
@@ -209,6 +214,11 @@ function delete_poll($id)
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls','trackback_for_id'=>$id));
 
 	$GLOBALS['SITE_DB']->query_delete('poll',array('id'=>$id),'',1);
+
+	log_it('DELETE_POLL',strval($id),$question);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('poll',strval($id));
 }
 
 /**

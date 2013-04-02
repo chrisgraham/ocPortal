@@ -136,6 +136,9 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 
 	log_it('ADD_GROUP',strval($group_id),$name);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('group',strval($group_id));
+
 	if ($is_private_club==1)
 	{
 		require_code('notifications');

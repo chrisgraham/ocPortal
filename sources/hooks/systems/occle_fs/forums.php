@@ -18,12 +18,12 @@
  * @package		ocf_forum
  */
 
-require_code('content_fs');
+require_code('resource_fs');
 
-class Hook_occle_fs_forums extends content_fs_base
+class Hook_occle_fs_forums extends resource_fs_base
 {
-	var $folder_content_type=array('forum','topic');
-	var $file_content_type='post';
+	var $folder_resource_type=array('forum','topic');
+	var $file_resource_type='post';
 
 	/**
 	 * Whether the filesystem hook is active.
@@ -32,14 +32,14 @@ class Hook_occle_fs_forums extends content_fs_base
 	 */
 	function _is_active()
 	{
-		return (get_forum_type()=='ocf');
+		return (get_forum_type()=='ocf') && (!is_ocf_satellite_site());
 	}
 
 	/**
-	 * Find whether a kind of content handled by this hook (folder or file) can be under a particular kind of folder.
+	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ID_TEXT		Folder content type
-	 * @param  ID_TEXT		Content type (may be file or folder)
+	 * @param  ID_TEXT		Folder resource type
+	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return boolean		Whether it can
 	 */
 	function _has_parent_child_relationship($above,$under)
@@ -58,7 +58,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	 * Standard modular introspection function.
 	 *
 	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_folder_properties($category)
 	{
@@ -96,7 +96,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	/**
 	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
 	 *
-	 * @param  array			Content row (not full, but does contain the ID)
+	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
@@ -112,25 +112,25 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Get the filename for a content ID. Note that filenames are unique across all folders in a filesystem.
+	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
 	 *
-	 * @param  ID_TEXT	The content type
-	 * @param  ID_TEXT	The content ID
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
 	 * @return ID_TEXT	The filename
 	 */
-	function _folder_convert_id_to_filename($content_type,$content_id)
+	function _folder_convert_id_to_filename($resource_type,$resource_id)
 	{
-		if ($content_type=='forum')
-			return 'FORUM-'.parent::_folder_convert_id_to_filename($content_type,$content_id,'forum');
+		if ($resource_type=='forum')
+			return 'FORUM-'.parent::_folder_convert_id_to_filename($resource_type,$resource_id,'forum');
 
-		return parent::_folder_convert_id_to_filename($content_type,$content_id);
+		return parent::_folder_convert_id_to_filename($resource_type,$resource_id);
 	}
 
 	/**
-	 * Get the content ID for a filename. Note that filenames are unique across all folders in a filesystem.
+	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
-	 * @return array		A pair: The content type, the content ID
+	 * @return array		A pair: The resource type, the resource ID
 	 */
 	function folder_convert_filename_to_id($filename)
 	{
@@ -189,22 +189,22 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error)
+	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
 	function _folder_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
-		if ($category_content_type=='forum')
+		if ($category_resource_type=='forum')
 		{
-			if ($category_content_type!='forum') return false;
+			if ($category_resource_type!='forum') return false;
 			if ($category=='') return false; // Can't create more than one root
 
 			require_code('ocf_forums_action');
@@ -214,7 +214,7 @@ class Hook_occle_fs_forums extends content_fs_base
 			$id=ocf_make_forum($label,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
-			if ($category_content_type!='forum') return false;
+			if ($category_resource_type!='forum') return false;
 			if ($category=='') return false;
 
 			require_code('ocf_topics_action');
@@ -247,19 +247,19 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _folder_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		if (substr($category,0,6)=='FORUM-')
 		{
-			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id'=>intval($content_id)),'',1);
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id'=>intval($resource_id)),'',1);
 			if (!array_key_exists(0,$rows)) return false;
 			$row=$rows[0];
 
@@ -278,7 +278,7 @@ class Hook_occle_fs_forums extends content_fs_base
 			);
 		}
 
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -299,7 +299,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -308,16 +308,16 @@ class Hook_occle_fs_forums extends content_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		if ($content_type=='forum')
+		if ($resource_type=='forum')
 		{
 			require_code('ocf_forums_action2');
 
 			$label=$this->_default_property_str($properties,'label');
 			list($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
 
-			ocf_edit_forum(intval($content_id),$label,$description,$forum_grouping_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
+			ocf_edit_forum(intval($resource_id),$label,$description,$forum_grouping_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
 			require_code('ocf_topics_action2');
@@ -325,9 +325,9 @@ class Hook_occle_fs_forums extends content_fs_base
 			$label=$this->_default_property_str($properties,'label');
 			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
-			ocf_edit_topic(intval($content_id),$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$reason,$title,$description_link,false,$views,true);
+			ocf_edit_topic(intval($resource_id),$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$reason,$title,$description_link,false,$views,true);
 
-			$poll_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_poll_id',array('id'=>intval($content_id)));
+			$poll_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_poll_id',array('id'=>intval($resource_id)));
 
 			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
 			{
@@ -364,23 +364,23 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function folder_delete($filename)
 	{
-		list($content_type,$content_id)=$this->folder_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
-		if ($content_type=='forum')
+		if ($resource_type=='forum')
 		{
 			require_code('ocf_forums_action2');
-			ocf_delete_forum(intval($content_id));
+			ocf_delete_forum(intval($resource_id));
 		} else
 		{
 			require_code('ocf_topics_action2');
-			ocf_delete_topic(intval($content_id));
+			ocf_delete_topic(intval($resource_id));
 		}
 
 		return true;
@@ -389,7 +389,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_file_properties()
 	{
@@ -412,20 +412,20 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
-		if ($category_content_type!='topic') return false;
+		if ($category_resource_type!='topic') return false;
 
 		require_code('ocf_posts_action');
 
@@ -450,17 +450,17 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -484,7 +484,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -493,7 +493,7 @@ class Hook_occle_fs_forums extends content_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
@@ -517,23 +517,23 @@ class Hook_occle_fs_forums extends content_fs_base
 		$anonymous=$this->_default_property_int($properties,'anonymous');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
 
-		ocf_edit_post(intval($content_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,false,$edit_time,$add_time,$submitter,true);
+		ocf_edit_post(intval($resource_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,false,$edit_time,$add_time,$submitter,true);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('ocf_posts_action3');
-		ocf_delete_post(intval($content_id));
+		ocf_delete_post(intval($resource_id));
 
 		return true;
 	}

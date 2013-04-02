@@ -554,19 +554,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
  */
 function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 {
-	$moniker_src=strip_comcode($moniker_src);
-
-	$moniker=str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),$moniker_src);
-	$moniker=strtolower(preg_replace('#[^A-Za-z\d\_\-]#','-',$moniker));
-	if (strlen($moniker)>MAX_MONIKER_LENGTH)
-	{
-		$pos=strrpos(substr($moniker,0,MAX_MONIKER_LENGTH),'-');
-		if (($pos===false) || ($pos<12)) $pos=MAX_MONIKER_LENGTH;
-		$moniker=substr($moniker,0,$pos);
-	}
-	$moniker=preg_replace('#\-+#','-',$moniker);
-	$moniker=rtrim($moniker,'-');
-	if ($moniker=='') $moniker='untitled';
+	$moniker=_generate_moniker($moniker_src);
 
 	// Check it does not already exist
 	$moniker_origin=$moniker;
@@ -588,6 +576,31 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 		}
 	}
 	while (!is_null($test));
+
+	return $moniker;
+}
+
+/**
+ * Generate a moniker from an arbitrary raw string. Does not perform uniqueness checks.
+ *
+ * @param  string			Raw string.
+ * @return ID_TEXT		Moniker.
+ */
+function _generate_moniker($moniker_src)
+{
+	$moniker_src=strip_comcode($moniker_src);
+
+	$moniker=str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),$moniker_src);
+	$moniker=strtolower(preg_replace('#[^A-Za-z\d\_\-]#','-',$moniker));
+	if (strlen($moniker)>MAX_MONIKER_LENGTH)
+	{
+		$pos=strrpos(substr($moniker,0,MAX_MONIKER_LENGTH),'-');
+		if (($pos===false) || ($pos<12)) $pos=MAX_MONIKER_LENGTH;
+		$moniker=substr($moniker,0,$pos);
+	}
+	$moniker=preg_replace('#\-+#','-',$moniker);
+	$moniker=rtrim($moniker,'-');
+	if ($moniker=='') $moniker='untitled';
 
 	return $moniker;
 }

@@ -56,6 +56,9 @@ function add_usergroup_subscription($title,$description,$cost,$length,$length_un
 
 	log_it('ADD_USERGROUP_SUBSCRIPTION',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('usergroup_subscription',strval($id));
+
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 
 	return $id;
@@ -131,6 +134,9 @@ function edit_usergroup_subscription($id,$title,$description,$cost,$length,$leng
 
 	log_it('EDIT_USERGROUP_SUBSCRIPTION',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('usergroup_subscription',strval($id));
+
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 }
 
@@ -197,6 +203,9 @@ function delete_usergroup_subscription($id,$uhoh_mail)
 	delete_lang($_mail_uhoh,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
 
 	log_it('DELETE_USERGROUP_SUBSCRIPTION',strval($id),$title);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('usergroup_subscription',strval($id));
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 }

@@ -36,6 +36,9 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 
 	log_it('ADD_NEWS_CATEGORY',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('news_category',strval($id));
+
 	decache('side_news_categories');
 
 	return $id;
@@ -60,6 +63,9 @@ function edit_news_category($id,$title,$img,$notes,$owner)
 	suggest_new_idmoniker_for('news','misc',strval($id),$title);
 
 	log_it('EDIT_NEWS_CATEGORY',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('news_category',strval($id));
 
 	if (is_null($title)) $title=get_translated_text($myrow['nc_title']);
 	if (is_null($img)) $img=$myrow['nc_img'];
@@ -97,8 +103,6 @@ function delete_news_category($id)
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));
 	}
 
-	log_it('DELETE_NEWS_CATEGORY',strval($id),get_translated_text($myrow['nc_title']));
-
 	delete_lang($myrow['nc_title']);
 
 	$GLOBALS['SITE_DB']->query_update('news',array('news_category'=>$min),array('news_category'=>$id));
@@ -112,6 +116,11 @@ function delete_news_category($id)
 	tidy_theme_img_code(NULL,$myrow['nc_img'],'news_categories','nc_img');
 
 	decache('side_news_categories');
+
+	log_it('DELETE_NEWS_CATEGORY',strval($id),get_translated_text($myrow['nc_title']));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('news_category',strval($id));
 }
 
 /**
@@ -201,6 +210,9 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$id),'',1);
 
 	log_it('ADD_NEWS',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('news',strval($id));
 
 	if (function_exists('xmlrpc_encode'))
 	{
@@ -366,6 +378,9 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	log_it('EDIT_NEWS',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('news',strval($id));
+
 	$GLOBALS['SITE_DB']->query_update('news',$update_map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true);
@@ -439,7 +454,6 @@ function delete_news($id)
 	$news_article=$rows[0]['news_article'];
 
 	$_title=get_translated_text($title);
-	log_it('DELETE_NEWS',strval($id),$_title);
 
 	require_code('files2');
 	delete_upload('uploads/grepimages','news','news_image','id',$id);
@@ -463,6 +477,11 @@ function delete_news($id)
 	decache('side_news');
 	decache('side_news_archive');
 	decache('bottom_news');
+
+	log_it('DELETE_NEWS',strval($id),$_title);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('news',strval($id));
 }
 
 /**

@@ -43,7 +43,7 @@ class Hook_occle_fs_extended_config__privilege
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
-		require_code('content_fs');
+		require_code('resource_fs');
 
 		$tables=array(
 			'group_privileges'=>array('category_name'=>''),

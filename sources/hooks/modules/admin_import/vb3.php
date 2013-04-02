@@ -1135,6 +1135,8 @@ class Hook_vb3
 	 */
 	function import_custom_comcode($db,$table_prefix,$file_base)
 	{
+		require_code('custom_comcode');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'bbcode');
 		foreach ($rows as $row)
 		{
@@ -1148,18 +1150,18 @@ class Hook_vb3
 				continue;
 			}
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
-				'tag_tag'=>$row['bbcodetag'],
-				'tag_title'=>insert_lang($row['title'],3),
-				'tag_description'=>insert_lang($row['bbcodeexplanation'],3),
-				'tag_replace'=>$row['bbcodereplacement'],
-				'tag_example'=>$row['bbcodeexample'],
-				'tag_parameters'=>'',
-				'tag_enabled'=>1,
-				'tag_dangerous_tag'=>0,
-				'tag_block_tag'=>0,
-				'tag_textual_tag'=>1
-			));
+			$tag=$row['bbcodetag'];
+			$title=$row['title'];
+			$description=$row['bbcodeexplanation'];
+			$replace=$row['bbcodereplacement'];
+			$example=$row['bbcodeexample'];
+			$parameters='';
+			$enabled=1;
+			$dangerous_tag=0;
+			$block_tag=0;
+			$textual_tag=1;
+
+			add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
 
 			import_id_remap_put('custom_comcode',strval($row['bbcodeid']),1);
 		}

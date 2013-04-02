@@ -290,6 +290,9 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	decache('main_topsites');
 
 	log_it('ADD_BANNER',$name,$caption);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('banner',$name);
 }
 
 /**
@@ -369,6 +372,9 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		$update_map['add_date']=$add_time;
 
 	$GLOBALS['SITE_DB']->query_update('banners',$update_map,array('name'=>$old_name),'',1);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('banner',$name);
 }
 
 /**
@@ -384,8 +390,6 @@ function delete_banner($name)
 		warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
 
-	log_it('DELETE_BANNER',$name,get_translated_text($caption));
-
 	delete_lang($caption);
 
 	require_code('files2');
@@ -394,8 +398,12 @@ function delete_banner($name)
 	decache('main_banner_wave');
 	decache('main_topsites');
 
-	// Delete from database
 	$GLOBALS['SITE_DB']->query_delete('banners',array('name'=>$name),'',1);
+
+	log_it('DELETE_BANNER',$name,get_translated_text($caption));
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('banner',$name);
 }
 
 /**
@@ -423,6 +431,9 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 	));
 
 	log_it('ADD_BANNER_TYPE',$id);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('banner_type',$id);
 }
 
 /**
@@ -455,6 +466,9 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 	),array('id'=>$old_id),'',1);
 
 	log_it('EDIT_BANNER_TYPE',$old_id,$id);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('banner_type',$id);
 }
 
 /**
@@ -469,6 +483,9 @@ function delete_banner_type($id)
 	$GLOBALS['SITE_DB']->query_delete('banner_types',array('id'=>$id),'',1);
 
 	log_it('DELETE_BANNER_TYPE',$id);
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('banner_type',$id);
 }
 
 

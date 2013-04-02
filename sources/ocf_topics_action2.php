@@ -108,6 +108,9 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	require_code('ocf_general_action2');
 	ocf_mod_log_it('EDIT_TOPIC',strval($topic_id),$name,$reason);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('topic',strval($topic_id));
+
 	if (!is_null($forum_id))
 	{
 		require_code('ocf_posts_action');
@@ -255,6 +258,9 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 		decache('side_ocf_private_topics');
 		decache('_new_pp');
 	}
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('topic',strval($topic_id));
 
 	return $forum_id;
 }

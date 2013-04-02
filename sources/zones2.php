@@ -159,11 +159,15 @@ END;
 	if ($menu_item_count<40)
 		add_menu_item_simple('zone_menu',NULL,($zone=='forum')?do_lang('SECTION_SOCIAL'):$title,$zone.':',0,1);
 
-	log_it('ADD_ZONE',$zone);
 	persistent_cache_delete('ALL_ZONES');
 
 	decache('main_sitemap');
 	decache('side_stored_menu');
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('zone',$zone);
+
+	log_it('ADD_ZONE',$zone);
 }
 
 /**

@@ -18,17 +18,17 @@
  * @package		wiki
  */
 
-require_code('content_fs');
+require_code('resource_fs');
 
-class Hook_occle_fs_wiki_page extends content_fs_base
+class Hook_occle_fs_wiki_page extends resource_fs_base
 {
-	var $folder_content_type='wiki_page';
-	var $file_content_type='wiki_post';
+	var $folder_resource_type='wiki_page';
+	var $file_resource_type='wiki_post';
 
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_folder_properties()
 	{
@@ -46,16 +46,16 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error)
+	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
 	function _folder_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -81,17 +81,17 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _folder_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -110,7 +110,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -119,7 +119,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('wiki');
 
@@ -134,23 +134,23 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		wiki_edit_page(intval($content_id),$label,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member,$edit_date,$add_time,$views,true);
+		wiki_edit_page(intval($resource_id),$label,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member,$edit_date,$add_time,$views,true);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function folder_delete($filename)
 	{
-		list($content_type,$content_id)=$this->folder_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('wiki');
-		wiki_delete_page(intval($content_id));
+		wiki_delete_page(intval($resource_id));
 
 		return true;
 	}
@@ -158,7 +158,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	/**
 	 * Standard modular introspection function.
 	 *
-	 * @return array			The properties available for the content type
+	 * @return array			The properties available for the resource type
 	 */
 	function _enumerate_file_properties()
 	{
@@ -173,16 +173,16 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some content with the given label and properties.
+	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Content label
+	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The content ID (false: error, could not create via these properties / here)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
@@ -202,17 +202,17 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some content.
+	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
-	 * @return ~array			Details of the content (false: error)
+	 * @return ~array			Details of the resource (false: error)
 	 */
 	function _file_load($filename,$path)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>intval($content_id)),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
@@ -228,7 +228,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the content to the given properties.
+	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -237,7 +237,7 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
@@ -253,23 +253,23 @@ class Hook_occle_fs_wiki_page extends content_fs_base
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$views=$this->_default_property_int($properties,'views');
 
-		wiki_edit_post(intval($content_id),$label,$validated,$member,$page_id,$edit_time,$add_time,$views,true);
+		wiki_edit_post(intval($resource_id),$label,$validated,$member,$page_id,$edit_time,$add_time,$views,true);
 
 		return true;
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the content.
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
 	 */
 	function file_delete($filename)
 	{
-		list($content_type,$content_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('wiki');
-		wiki_delete_post(intval($content_id));
+		wiki_delete_post(intval($resource_id));
 
 		return true;
 	}

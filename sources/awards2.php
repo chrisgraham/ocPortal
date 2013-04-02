@@ -32,7 +32,12 @@
 function add_award_type($title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
 	$id=$GLOBALS['SITE_DB']->query_insert('award_types',array('a_title'=>insert_lang_comcode($title,2),'a_description'=>insert_lang($description,2),'a_points'=>$points,'a_content_type'=>filter_naughty_harsh($content_type),'a_hide_awardee'=>$hide_awardee,'a_update_time_hours'=>$update_time_hours),true);
+
 	log_it('ADD_AWARD_TYPE',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('award_type',strval($id));
+
 	return $id;
 }
 
@@ -53,7 +58,11 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
 	if (is_null($_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_description=$GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_update('award_types',array('a_title'=>lang_remap_comcode($_title,$title),'a_description'=>lang_remap($_description,$description),'a_points'=>$points,'a_content_type'=>filter_naughty_harsh($content_type),'a_hide_awardee'=>$hide_awardee,'a_update_time_hours'=>$update_time_hours),array('id'=>$id));
+
 	log_it('EDIT_AWARD_TYPE',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('award_type',strval($id));
 }
 
 /**
@@ -71,5 +80,8 @@ function delete_award_type($id)
 	$GLOBALS['SITE_DB']->query_delete('award_archive',array('a_type_id'=>$id),'',1);
 	delete_lang($_title);
 	delete_lang($_description);
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('award_type',strval($id));
 }
 

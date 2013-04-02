@@ -924,6 +924,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 	unset($GLOBALS['TIMEZONE_MEMBER_CACHE'][$member_id]);
 	unset($GLOBALS['USER_NAME_CACHE'][$member_id]);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('member',strval($member_id));
 }
 
 /**
@@ -990,6 +993,9 @@ function ocf_delete_member($member_id)
 	}
 
 	log_it('DELETE_MEMBER',strval($member_id),$username);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('member',strval($member_id));
 }
 
 /**
@@ -1090,6 +1096,9 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 
 	log_it('EDIT_CUSTOM_PROFILE_FIELD',strval($id),$name);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('cpf',strval($id));
+
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
 }
 
@@ -1107,8 +1116,6 @@ function ocf_delete_custom_field($id)
 	$_name=$info[0]['cf_name'];
 	$_description=$info[0]['cf_description'];
 
-	log_it('DELETE_CUSTOM_PROFILE_FIELD',strval($id),get_translated_text($_name,$GLOBALS['FORUM_DB']));
-
 	require_code('database_action');
 	delete_lang($_name,$GLOBALS['FORUM_DB']);
 	delete_lang($_description,$GLOBALS['FORUM_DB']);
@@ -1120,6 +1127,11 @@ function ocf_delete_custom_field($id)
 
 	global $TABLE_LANG_FIELDS;
 	unset($TABLE_LANG_FIELDS['f_member_custom_fields']);
+
+	log_it('DELETE_CUSTOM_PROFILE_FIELD',strval($id),get_translated_text($_name,$GLOBALS['FORUM_DB']));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('TODO',strval($id));
 }
 
 /**

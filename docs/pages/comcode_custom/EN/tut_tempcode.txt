@@ -1038,7 +1038,7 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FIND_OCCLEFS_FILENAME_VIA_ID,<resource-type>,<resource-id>}</td>
-		<td>Find the OcCLE-fs (repository) filename from the resource ID</td>
+		<td>Find the OcCLE-fs (repository) filename from the resource ID. There is an optional third parameter, which may be set to 1 if you want the resource sub-path to also be included. Sub-paths are relative to the repository-fs path for the resource-type.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FIND_LABEL_VIA_ID,<resource-type>,<resource-id>}</td>
@@ -1050,7 +1050,7 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FIND_ID_VIA_GUID,<guid>}</td>
-		<td>Find the resource ID from the resource GUID</td>
+		<td>Find the resource ID from the resource GUID. It is assumed you as the programmer already know the resource-type.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FIND_ID_VIA_OCCLEFS_FILENAME,<resource-type>,<filename>}</td>

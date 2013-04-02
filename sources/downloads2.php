@@ -251,6 +251,9 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 
 	log_it('ADD_DOWNLOAD_CATEGORY',strval($id),$category);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('download_category',strval($id));
+
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
 	{
@@ -310,10 +313,13 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
 		$update_map['add_date']=$add_time;
 	$GLOBALS['SITE_DB']->query_update('download_categories',$update_map,array('id'=>$category_id),'',1);
 
-	log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
-
 	require_code('seo2');
 	seo_meta_set_for_explicit('downloads_category',strval($category_id),$meta_keywords,$meta_description);
+
+	log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('download_category',strval($id));
 }
 
 /**
@@ -334,8 +340,6 @@ function delete_download_category($category_id)
 	require_code('files2');
 	delete_upload('uploads/grepimages','download_categories','rep_image','id',$category_id);
 
-	log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
-
 	$GLOBALS['SITE_DB']->query_delete('download_categories',array('id'=>$category_id),'',1);
 	$GLOBALS['SITE_DB']->query_update('download_downloads',array('category_id'=>$rows[0]['parent_id']),array('category_id'=>$category_id));
 	$GLOBALS['SITE_DB']->query_update('download_categories',array('parent_id'=>$rows[0]['parent_id']),array('parent_id'=>$category_id));
@@ -348,6 +352,11 @@ function delete_download_category($category_id)
 
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
+
+	log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('download_category',strval($category_id));
 }
 
 /**
@@ -734,6 +743,9 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('download',strval($id));
+
 	return $id;
 }
 
@@ -890,6 +902,9 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 
 	log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('download',strval($id));
+
 	if (addon_installed('galleries'))
 	{
 		// Change its gallery
@@ -917,7 +932,6 @@ function delete_download($id,$leave=false)
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
-	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 	delete_lang($myrow['name']);
 	delete_lang($myrow['description']);
 	delete_lang($myrow['additional_details']);
@@ -948,6 +962,11 @@ function delete_download($id,$leave=false)
 		if (!is_null($test))
 			delete_gallery($name);
 	}
+
+	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('download',strval($id));
 }
 
 /**
@@ -962,6 +981,10 @@ function add_download_licence($title,$text)
 	$id=$GLOBALS['SITE_DB']->query_insert('download_licences',array('l_title'=>$title,'l_text'=>$text),true);
 
 	log_it('ADD_DOWNLOAD_LICENCE',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('download_licence',strval($id));
+
 	return $id;
 }
 
@@ -975,7 +998,11 @@ function add_download_licence($title,$text)
 function edit_download_licence($id,$title,$text)
 {
 	$GLOBALS['SITE_DB']->query_update('download_licences',array('l_title'=>$title,'l_text'=>$text),array('id'=>$id),'',1);
+
 	log_it('EDIT_DOWNLOAD_LICENCE',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('download_licence',strval($id));
 }
 
 /**
@@ -990,9 +1017,13 @@ function delete_download_licence($id)
 	$myrow=$myrows[0];
 
 	$GLOBALS['SITE_DB']->query_delete('download_licences',array('id'=>$id),'',1);
-	log_it('DELETE_DOWNLOAD_LICENCE',strval($id),$myrow['l_title']);
 
 	$GLOBALS['SITE_DB']->query_update('download_downloads',array('download_licence'=>NULL),array('download_licence'=>$id));
+
+	log_it('DELETE_DOWNLOAD_LICENCE',strval($id),$myrow['l_title']);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('download_licence',strval($id));
 }
 
 /**

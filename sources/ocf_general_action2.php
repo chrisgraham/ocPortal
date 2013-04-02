@@ -37,6 +37,9 @@ function ocf_edit_post_template($id,$title,$text,$forum_multi_code,$use_default_
 	),array('id'=>$id),'',1);
 
 	log_it('EDIT_POST_TEMPLATE',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('post_template',strval($id));
 }
 
 /**
@@ -47,7 +50,11 @@ function ocf_edit_post_template($id,$title,$text,$forum_multi_code,$use_default_
 function ocf_delete_post_template($id)
 {
 	$GLOBALS['FORUM_DB']->query_delete('f_post_templates',array('id'=>$id),'',1);
+
 	log_it('DELETE_POST_TEMPLATE',strval($id));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('post_template',strval($id));
 }
 
 /**

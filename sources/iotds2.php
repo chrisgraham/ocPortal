@@ -47,6 +47,9 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 
 	log_it('ADD_IOTD',strval($id),$caption);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('iotd',strval($id));
+
 	return $id;
 }
 
@@ -103,12 +106,15 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	require_code('urls2');
 	suggest_new_idmoniker_for('iotds','view',strval($id),$title);
 
-	log_it('EDIT_IOTD',strval($id),get_translated_text($_caption));
-
 	decache('main_iotd');
 
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'videos',strval($id),build_url(array('page'=>'iotds','type'=>'view','id'=>$id),get_module_zone('iotds'),NULL,false,false,true),$title,get_value('comment_forum__iotds'));
+
+	log_it('EDIT_IOTD',strval($id),get_translated_text($_caption));
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('iotd',strval($id));
 }
 
 /**
@@ -120,8 +126,6 @@ function delete_iotd($id)
 {
 	$caption=$GLOBALS['SITE_DB']->query_select_value('iotd','caption',array('id'=>$id));
 	$title=$GLOBALS['SITE_DB']->query_select_value('iotd','i_title',array('id'=>$id));
-
-	log_it('DELETE_IOTD',strval($id),get_translated_text($caption));
 
 	delete_lang($caption);
 	delete_lang($title);
@@ -136,6 +140,11 @@ function delete_iotd($id)
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'iotds','trackback_for_id'=>$id));
 
 	decache('main_iotd');
+
+	log_it('DELETE_IOTD',strval($id),get_translated_text($caption));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('iotd',strval($id));
 }
 
 /**

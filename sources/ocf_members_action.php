@@ -304,6 +304,9 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		if (function_exists('decache')) decache('side_stats');
 	}
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('member',strval($member_id));
+
 	return $member_id;
 }
 
@@ -479,6 +482,9 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	}
 
 	log_it('ADD_CUSTOM_PROFILE_FIELD',strval($id),$name);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('cpf',strval($id));
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
 	return $id;

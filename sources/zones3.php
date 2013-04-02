@@ -111,6 +111,9 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 	persistent_cache_delete('ALL_ZONES');
 
 	log_it('EDIT_ZONE',$zone);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('zone',$zone);
 }
 
 /**
@@ -218,7 +221,6 @@ function actual_delete_zone_lite($zone)
 	}
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
-	log_it('DELETE_ZONE',$zone);
 	decache('side_stored_menu');
 	decache('main_sitemap');
 	persistent_cache_delete(array('ZONE',$zone));
@@ -227,6 +229,11 @@ function actual_delete_zone_lite($zone)
 	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE;
 	$ALL_ZONES_CACHE=NULL;
 	$ALL_ZONES_TITLED_CACHE=NULL;
+
+	log_it('DELETE_ZONE',$zone);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('zone',$zone);
 }
 
 /**
@@ -468,6 +475,9 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 
 	// Log
 	log_it('COMCODE_PAGE_EDIT',$new_file,$zone);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('comcode_page',$zone.':'.$new_file);
 }
 
 /**

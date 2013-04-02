@@ -115,7 +115,9 @@ Third Party Materials
 
 This product includes:
  - Images from CorelDRAW9(R) which are protected by the copyright laws of the US, Canada and elsewhere (used under commercial license to ocProducts staff).
- - Images partially derived from other sources, used under licence (some used under commercial license to ocProducts staff).
+ - Images partially derived from other sources, used under licence (some used under commercial license to ocProducts staff). Including:
+  - sync.png icon, by David Vignoni
+  - aggregate_types.png icon, by Everaldo Coelho
  - Some public domain backgrounds from http://www.repeatxy.com/
  - Bitstream fonts (BSD-like licence)
  - Sound effects from Asterisk (Copyright Allison Smith, Creative Commons Attribution License)
@@ -143,6 +145,7 @@ This product includes:
   - m-zip (Francesco M. Munafo', liberal custom license)
   - microtime_diff implementation (from php.net comment by Peter Kehl, Creative Commons Attribution License)
   - utf8tohtml implementation (from php.net comment by silverbeat, Creative Commons Attribution License)
+  - GUID implementation (from php.net comment by Andrew Moore, Creative Commons Attribution License)
   - Javascript base-64 code (http://www.webtoolkit.info/, liberal custom licence)
   - JW-Player (used under commercial license)
 Some of our ocPortal packages remove or replace those elements used under non-free commercial licenses.

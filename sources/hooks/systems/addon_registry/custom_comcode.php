@@ -76,6 +76,7 @@ class Hook_addon_registry_custom_comcode
 	{
 		return array(
 			'sources/hooks/systems/resource_meta_aware/custom_comcode_tag.php',
+			'sources/custom_comcode.php',
 			'sources/hooks/systems/snippets/exists_tag.php',
 			'sources/hooks/systems/preview/custom_comcode.php',
 			'sources/hooks/systems/meta/comcode_page.php',

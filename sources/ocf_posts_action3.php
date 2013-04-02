@@ -178,6 +178,9 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 
 	if (!is_null($forum_id)) ocf_decache_ocp_blocks($forum_id);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('post',strval($post_id));
+
 	return $topic_id; // We may want this
 }
 
@@ -286,6 +289,12 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	{
 		decache('side_ocf_private_topics');
 		decache('_new_pp');
+	}
+
+	require_code('resource_fs');
+	foreach ($posts as $post)
+	{
+		expunge_resourcefs_moniker('post',strval($post));
 	}
 
 	return $ret;

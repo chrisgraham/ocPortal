@@ -110,6 +110,9 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	tidy_theme_img_code($rank_image,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
 
 	log_it('EDIT_GROUP',strval($group_id),$name);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('group',strval($group_id));
 }
 
 /**
@@ -152,6 +155,9 @@ function ocf_delete_group($group_id,$target_group=NULL)
 	tidy_theme_img_code(NULL,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
 
 	log_it('DELETE_GROUP',strval($group_id),$name);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('group',strval($group_id));
 }
 
 /**

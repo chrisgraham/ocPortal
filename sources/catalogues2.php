@@ -193,6 +193,9 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 
 	log_it('ADD_CATALOGUE',$name);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('catalogue',$name);
+
 	return $category;
 }
 
@@ -334,6 +337,9 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 	decache('main_cc_embed');
 
 	log_it('EDIT_CATALOGUE',$name);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('catalogue',$name);
 }
 
 /**
@@ -387,6 +393,9 @@ function actual_delete_catalogue($name)
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'catalogues_catalogue','category_name'=>$name));
 
 	log_it('DELETE_CATALOGUE',$name);
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('catalogue',$name);
 }
 
 /**
@@ -502,6 +511,9 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 		require_code('notifications2');
 		copy_notifications_to_new_child('catalogue_entry',strval($parent_id),strval($id));
 	}
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('catalogue_category',strval($id));
 
 	return $id;
 }
@@ -684,6 +696,9 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 	}
 
 	log_it('EDIT_CATALOGUE_CATEGORY',strval($id),$title);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('catalogue_category',strval($id));
 }
 
 /**
@@ -748,8 +763,6 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	require_code('seo2');
 	seo_meta_erase_storage('catalogue_category',strval($id));
 
-	log_it('DELETE_CATALOGUE_CATEGORY',strval($id),get_translated_text($myrow['cc_title']));
-
 	// Delete lang
 	delete_lang($myrow['cc_title']);
 	delete_lang($myrow['cc_description']);
@@ -762,6 +775,11 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'catalogues_category','category_name'=>strval($id)));
 
 	calculate_category_child_count_cache($old_parent_id);
+
+	log_it('DELETE_CATALOGUE_CATEGORY',strval($id),get_translated_text($myrow['cc_title']));
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('catalogue_category',strval($id));
 }
 
 /**
@@ -894,6 +912,9 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		}
 
 		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
+
+		require_code('resource_fs');
+		generate_resourcefs_moniker('catalogue_entry',strval($id));
 	}
 
 	decache('main_cc_embed');
@@ -1030,6 +1051,9 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	{
 		log_it('EDIT_CATALOGUE_ENTRY',strval($id),$title);
 
+		require_code('resource_fs');
+		generate_resourcefs_moniker('catalogue_entry',strval($id));
+
 		if ($just_validated)
 		{
 			require_lang('catalogues');
@@ -1116,6 +1140,9 @@ function actual_delete_catalogue_entry($id)
 
 	if ($catalogue_name[0]!='_')
 		log_it('DELETE_CATALOGUE_ENTRY',strval($id),$title);
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('catalogue_entry',strval($id));
 }
 
 

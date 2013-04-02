@@ -1184,6 +1184,8 @@ class Hook_mybb
 	 */
 	function import_custom_comcode($db,$table_prefix,$file_base)
 	{
+		require_code('custom_comcode');
+
 		$rows=$db->query_select('mycode');
 		foreach ($rows as $row)
 		{
@@ -1207,18 +1209,18 @@ class Hook_mybb
 				continue;
 			}
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
-				'tag_tag'=>$custom_tag,
-				'tag_title'=>insert_lang($title,3),
-				'tag_description'=>insert_lang($description,3),
-				'tag_replace'=>$tag_replace,
-				'tag_example'=>'',
-				'tag_parameters'=>'',
-				'tag_enabled'=>$tag_enabled,
-				'tag_dangerous_tag'=>0,
-				'tag_block_tag'=>0,
-				'tag_textual_tag'=>1
-			));
+			$tag=$custom_tag;
+			$title=$title;
+			$description=$description;
+			$replace=$tag_replace;
+			$example='';
+			$parameters='';
+			$enabled=$tag_enabled;
+			$dangerous_tag=0;
+			$block_tag=0;
+			$textual_tag=1;
+
+			add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
 
 			import_id_remap_put('custom_comcode',strval($row['cid']),1);
 		}

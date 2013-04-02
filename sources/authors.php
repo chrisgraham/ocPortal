@@ -159,6 +159,9 @@ function add_author($author,$url,$member_id,$description,$skills,$meta_keywords=
 	}
 
 	$GLOBALS['SITE_DB']->query_insert('authors',array('author'=>$author,'url'=>$url,'member_id'=>$member_id,'description'=>insert_lang_comcode($description,3),'skills'=>insert_lang_comcode($skills,3)));
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('author',$author);
 }
 
 /**
@@ -177,6 +180,9 @@ function delete_author($author)
 	} else warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	log_it('DELETE_AUTHOR',$author);
+	
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('author',$author);
 }
 
 /**

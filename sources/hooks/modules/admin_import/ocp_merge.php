@@ -1198,6 +1198,8 @@ class Hook_ocp_merge
 	 */
 	function import_custom_comcode($db,$table_prefix,$file_base)
 	{
+		require_code('custom_comcode');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'custom_comcode',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -1205,18 +1207,18 @@ class Hook_ocp_merge
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$row['tag_tag']));
 			if (!is_null($test)) continue;
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
-				'tag_tag'=>$row['tag_tag'],
-				'tag_title'=>insert_lang($this->get_lang_string($db,$row['tag_title']),3),
-				'tag_description'=>insert_lang($this->get_lang_string($db,$row['tag_description']),3),
-				'tag_replace'=>$row['tag_replace'],
-				'tag_example'=>$row['tag_example'],
-				'tag_parameters'=>$row['tag_parameters'],
-				'tag_enabled'=>$row['tag_enabled'],
-				'tag_dangerous_tag'=>$row['tag_dangerous_tag'],
-				'tag_block_tag'=>$row['tag_block_tag'],
-				'tag_textual_tag'=>$row['tag_textual_tag']
-			));
+			$tag=$row['tag_tag'];
+			$title=$this->get_lang_string($db,$row['tag_title']);
+			$description=$this->get_lang_string($db,$row['tag_description']);
+			$replace=$row['tag_replace'];
+			$example=$row['tag_example'];
+			$parameters=$row['tag_parameters'];
+			$enabled=$row['tag_enabled'];
+			$dangerous_tag=$row['tag_dangerous_tag'];
+			$block_tag=$row['tag_block_tag'];
+			$textual_tag=$row['tag_textual_tag'];
+
+			add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
 		}
 	}
 

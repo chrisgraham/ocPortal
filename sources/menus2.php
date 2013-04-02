@@ -161,6 +161,9 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 
 	log_it('ADD_MENU_ITEM',strval($id),$caption);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('menu_item',strval($id));
+
 	return $id;
 }
 
@@ -199,6 +202,9 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
 	),array('id'=>$id),'',1);
 
 	log_it('EDIT_MENU_ITEM',strval($id),$caption);
+
+	require_code('resource_fs');
+	generate_resourcefs_moniker('menu_item',strval($id));
 }
 
 /**
@@ -214,7 +220,11 @@ function delete_menu_item($id)
 	$caption=get_translated_text($_caption);
 	delete_lang($_caption);
 	delete_lang($_caption_long);
+
 	log_it('DELETE_MENU_ITEM',strval($id),$caption);
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('menu_item',strval($id));
 }
 
 /**
@@ -237,5 +247,8 @@ function delete_menu($menu_id)
 
 	decache('side_stored_menu');
 	persistent_cache_delete(array('MENU',$menu_id));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('menu',$menu_id);
 }
 

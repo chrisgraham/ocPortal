@@ -38,6 +38,9 @@ function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_foru
 
 	log_it('ADD_POST_TEMPLATE',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('post_template',strval($id));
+
 	return $id;
 }
 

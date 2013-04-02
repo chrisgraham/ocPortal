@@ -111,6 +111,8 @@ class Module_admin_custom_comcode extends standard_crud_module
 	 */
 	function run_start($type)
 	{
+		require_code('custom_comcode');
+
 		set_helper_panel_pic('pagepics/customcomcode');
 		set_helper_panel_tutorial('tut_adv_comcode');
 
@@ -270,25 +272,17 @@ class Module_admin_custom_comcode extends standard_crud_module
 	function add_actualisation()
 	{
 		$tag=post_param('tag');
+		$title=post_param('title');
+		$description=post_param('description');
+		$replace=post_param('replace');
+		$example=post_param('example');
+		$parameters=post_param('parameters');
+		$enabled=post_param_integer('enabled',0);
+		$dangerous_tag=post_param_integer('dangerous_tag',0);
+		$block_tag=post_param_integer('block_tag',0);
+		$textual_tag=post_param_integer('textual_tag',0);
 
-		global $VALID_COMCODE_TAGS;
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
-		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
-
-		$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
-			'tag_tag'=>$tag,
-			'tag_title'=>insert_lang(post_param('title'),3),
-			'tag_description'=>insert_lang(post_param('description'),3),
-			'tag_replace'=>post_param('replace'),
-			'tag_example'=>post_param('example'),
-			'tag_parameters'=>post_param('parameters'),
-			'tag_enabled'=>post_param_integer('enabled',0),
-			'tag_dangerous_tag'=>post_param_integer('dangerous_tag',0),
-			'tag_block_tag'=>post_param_integer('block_tag',0),
-			'tag_textual_tag'=>post_param_integer('textual_tag',0)
-		));
-
-		log_it('ADD_'.$this->lang_type,$tag);
+		add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
 
 		return $tag;
 	}
@@ -301,33 +295,19 @@ class Module_admin_custom_comcode extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		$tag=post_param('tag');
+		$title=post_param('title');
+		$description=post_param('description');
+		$replace=post_param('replace');
+		$example=post_param('example');
+		$parameters=post_param('parameters');
+		$enabled=post_param_integer('enabled',0);
+		$dangerous_tag=post_param_integer('dangerous_tag',0);
+		$block_tag=post_param_integer('block_tag',0);
+		$textual_tag=post_param_integer('textual_tag',0);
 
-		global $VALID_COMCODE_TAGS;
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
-		if ($id==$tag) $test=NULL;
-		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
-
-		$old=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag'=>$id),'',1);
-		if (!array_key_exists(0,$old)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$_title=$old[0]['tag_title'];
-		$_description=$old[0]['tag_description'];
-
-		$GLOBALS['SITE_DB']->query_update('custom_comcode',array(
-			'tag_tag'=>$tag,
-			'tag_title'=>lang_remap($_title,post_param('title')),
-			'tag_description'=>lang_remap($_description,post_param('description')),
-			'tag_replace'=>post_param('replace'),
-			'tag_example'=>post_param('example'),
-			'tag_parameters'=>post_param('parameters'),
-			'tag_enabled'=>post_param_integer('enabled',0),
-			'tag_dangerous_tag'=>post_param_integer('dangerous_tag',0),
-			'tag_block_tag'=>post_param_integer('block_tag',0),
-			'tag_textual_tag'=>post_param_integer('textual_tag',0)
-		),array('tag_tag'=>$id),'',1);
+		edit_custom_comcode_tag($id,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
 
 		$this->new_id=$tag;
-
-		log_it('EDIT_'.$this->lang_type,$id);
 	}
 
 	/**
@@ -337,16 +317,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 	 */
 	function delete_actualisation($id)
 	{
-		$old=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag'=>$id),'',1);
-		if (!array_key_exists(0,$old)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$_title=$old[0]['tag_title'];
-		$_description=$old[0]['tag_description'];
-
-		$GLOBALS['SITE_DB']->query_delete('custom_comcode',array('tag_tag'=>$id),'',1);
-		log_it('DELETE_'.$this->lang_type,$id);
-
-		delete_lang($_title);
-		delete_lang($_description);
+		delete_custom_comcode_tag($id);
 	}
 }
 

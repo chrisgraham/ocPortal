@@ -2643,3 +2643,35 @@ function convert_bad_entities($data,$charset='ISO-8859-1')
 
 	return strtr($data,$table);
 }
+
+/**
+ * Generate a GUID.
+ *
+ * @return ID_TEXT		A GUID
+ */
+function generate_guid()
+{
+	// Calculate hash value
+	$hash=md5(uniqid(''));
+
+	// Based on a comment in the PHP manual
+	return sprintf('%08s-%04s-%04x-%04x-%12s',
+		// 32 bits for "time_low"
+		substr($hash, 0, 8),
+
+		// 16 bits for "time_mid"
+		substr($hash, 8, 4),
+
+		// 16 bits for "time_hi_and_version",
+		// four most significant bits holds version number 5
+		(hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
+
+		// 16 bits, 8 bits for "clk_seq_hi_res",
+		// 8 bits for "clk_seq_low",
+		// two most significant bits holds zero and one for variant DCE1.1
+		(hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+
+		// 48 bits for "node"
+		substr($hash, 20, 12)
+	);
+}

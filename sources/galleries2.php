@@ -404,6 +404,9 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 
 	log_it('ADD_IMAGE',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('image',strval($id));
+
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
 	{
@@ -514,6 +517,9 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	log_it('EDIT_IMAGE',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('image',strval($id));
+
 	require_code('seo2');
 	seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
 
@@ -538,7 +544,6 @@ function delete_image($id,$delete_full=true)
 	$description=$rows[0]['description'];
 	$cat=$rows[0]['cat'];
 
-	log_it('DELETE_IMAGE',strval($id),get_translated_text($title));
 	delete_lang($description);
 	delete_lang($title);
 
@@ -562,6 +567,11 @@ function delete_image($id,$delete_full=true)
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 	decache('main_image_fader');
+
+	log_it('DELETE_IMAGE',strval($id),get_translated_text($title));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('image',strval($id));
 }
 
 /**
@@ -739,6 +749,9 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 
 	log_it('ADD_VIDEO',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('video',strval($id));
+
 	if ($validated==1)
 	{
 		require_lang('galleries');
@@ -867,6 +880,9 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	log_it('EDIT_VIDEO',strval($id),$title);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('video',strval($id));
+
 	require_code('seo2');
 	seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
 
@@ -900,7 +916,6 @@ function delete_video($id,$delete_full=true)
 	$description=$rows[0]['description'];
 	$cat=$rows[0]['cat'];
 
-	log_it('DELETE_VIDEO',strval($id),get_translated_text($title));
 	delete_lang($title);
 	delete_lang($description);
 
@@ -931,6 +946,11 @@ function delete_video($id,$delete_full=true)
 			sync_video_syndication($id,false,false);
 		}
 	}
+
+	log_it('DELETE_VIDEO',strval($id),get_translated_text($title));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('video',strval($id));
 }
 
 /**
@@ -1075,6 +1095,9 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 
 	log_it('ADD_GALLERY',$name,$fullname);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('gallery',$name);
+
 	if ($parent_id!='')
 	{
 		require_code('notifications2');
@@ -1209,6 +1232,9 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 
 	log_it('EDIT_GALLERY',$name,$fullname);
 
+	require_code('resource_fs');
+	generate_resourcefs_moniker('gallery',$name);
+
 	$GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name'=>$name),array('module_the_name'=>'galleries','category_name'=>$old_name));
 
 	decache('side_galleries');
@@ -1236,8 +1262,6 @@ function delete_gallery($name)
 	delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$name);
-
-	log_it('DELETE_GALLERY',$name,get_translated_text($rows[0]['fullname']));
 
 	delete_lang($rows[0]['fullname']);
 	delete_lang($rows[0]['description']);
@@ -1278,6 +1302,11 @@ function delete_gallery($name)
 
 	decache('side_galleries');
 	decache('main_personal_galleries_list');
+
+	log_it('DELETE_GALLERY',$name,get_translated_text($rows[0]['fullname']));
+
+	require_code('resource_fs');
+	expunge_resourcefs_moniker('gallery',$name);
 }
 
 /**
