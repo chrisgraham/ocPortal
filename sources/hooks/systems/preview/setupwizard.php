@@ -18,7 +18,7 @@
  * @package		setupwizard
  */
 
-class Hook_Preview_setup_wizard
+class Hook_Preview_setupwizard
 {
 
 	/**

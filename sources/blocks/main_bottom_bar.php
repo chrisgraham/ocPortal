@@ -135,7 +135,7 @@ class Block_main_bottom_bar
 			'NUM_POSTS'=>integer_format($stats['num_posts']),
 			'BIRTHDAYS'=>$birthdays,
 			'USERS_ONLINE'=>$users_online,
-			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'onlinemembers')?build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')):new ocp_tempcode(),
+			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'online_members')?build_url(array('page'=>'online_members'),get_module_zone('online_members')):new ocp_tempcode(),
 			'GROUPS'=>$groups
 		));
 	}

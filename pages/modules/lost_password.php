@@ -21,7 +21,7 @@
 /**
  * Module page class.
  */
-class Module_lostpassword
+class Module_lost_password
 {
 
 	/**
@@ -149,9 +149,9 @@ class Module_lostpassword
 
 		// Send confirm mail
 		$zone=get_module_zone('join');
-		$_url=build_url(array('page'=>'lostpassword','type'=>'step3','code'=>$code,'member'=>$member_id),$zone,NULL,false,false,true);
+		$_url=build_url(array('page'=>'lost_password','type'=>'step3','code'=>$code,'member'=>$member_id),$zone,NULL,false,false,true);
 		$url=$_url->evaluate();
-		$_url_simple=build_url(array('page'=>'lostpassword','type'=>'step3','code'=>NULL,'username'=>NULL,'member'=>NULL),$zone,NULL,false,false,true);
+		$_url_simple=build_url(array('page'=>'lost_password','type'=>'step3','code'=>NULL,'username'=>NULL,'member'=>NULL),$zone,NULL,false,false,true);
 		$url_simple=$_url_simple->evaluate();
 		$message=do_lang('RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($url),$url_simple,strval($member_id),strval($code)),get_lang($member_id));
 		require_code('mail');

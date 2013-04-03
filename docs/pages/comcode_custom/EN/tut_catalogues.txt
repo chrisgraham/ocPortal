@@ -134,7 +134,7 @@ If we wanted to jazz a 'classifieds' catalogue up a bit, we might change it to s
 	This advert was posted by
 	<a href="{$PAGE_LINK,_SEARCH:members:view:{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>.<br />
 	You might want to
-	<a href="{$PAGE_LINK,_SEARCH:contactmember:misc:{SUBMITTER}}">email {$USERNAME*,{SUBMITTER}}</a>
+	<a href="{$PAGE_LINK,_SEARCH:contact_member:misc:{SUBMITTER}}">email {$USERNAME*,{SUBMITTER}}</a>
 	to query more about {FIELD_0*}.
 </p>
 {+END}

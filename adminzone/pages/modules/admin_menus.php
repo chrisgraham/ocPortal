@@ -67,7 +67,7 @@ class Module_admin_menus
 			 footer menu
 			 donate/hosting/advertise linked to by banners
 			 side_personal_stats/side_search/main_newsletter_signup/main_leaderboard/main_poll/main_iotd/main_news/side_news_categories/side_calendar blocks
-			 implicit links to authors/awards/member-actions/onlinemembers
+			 implicit links to authors/awards/member-actions/online_members
 
 			(not all links defined here, various modules also install them)
 		*/
@@ -93,7 +93,7 @@ class Module_admin_menus
 
 		// member_features
 		add_menu_item_simple('member_features',NULL,'_JOIN','_SEARCH:join:type=misc',0,1);
-		add_menu_item_simple('member_features',NULL,'RESET_PASSWORD','_SEARCH:lostpassword:type=misc');
+		add_menu_item_simple('member_features',NULL,'RESET_PASSWORD','_SEARCH:lost_password:type=misc');
 
 		// collab_website
 		add_menu_item_simple('collab_website',NULL,'FRONT_PAGE','collaboration:');

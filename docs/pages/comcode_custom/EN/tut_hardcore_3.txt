@@ -282,7 +282,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
          'NUM_POSTS'=>number_format($stats['num_posts']),
          'BIRTHDAYS'=>$birthdays,
          'USERS_ONLINE'=>$users_online,
-         'USERS_ONLINE_URL'=>build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')),
+         'USERS_ONLINE_URL'=>build_url(array('page'=>'online_members'),get_module_zone('online_members')),
          'GROUPS'=>$groups
       ));
    } else $foot=new ocp_tempcode();

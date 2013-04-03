@@ -212,7 +212,7 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 		{
 			global $MEMBER_CACHED;
 			$MEMBER_CACHED=db_get_first_id();
-			$reset_url=build_url(array('page'=>'lostpassword','email_address'=>$email_address),get_module_zone('lostpassword'));
+			$reset_url=build_url(array('page'=>'lost_password','email_address'=>$email_address),get_module_zone('lost_password'));
 			warn_exit(do_lang_tempcode('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name()),escape_html($reset_url->evaluate())));
 		}
 	}

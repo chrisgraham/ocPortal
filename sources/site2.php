@@ -188,7 +188,7 @@ function assign_refresh($url,$multiplier)
  */
 function closed_site()
 {
-	if ((get_page_name()!='login') && (get_page_name()!='join') && (get_page_name()!='lostpassword'))
+	if ((get_page_name()!='login') && (get_page_name()!='join') && (get_page_name()!='lost_password'))
 	{
 		@ob_end_clean();
 

@@ -25,7 +25,7 @@
 "_SEARCH:invoices:type=misc","agt_business"
 "_SELF:invoices:type=misc","agt_business"
 "_SEARCH:join:type=misc","add_user"
-"_SEARCH:lostpassword:type=misc","password"
+"_SEARCH:lost_password:type=misc","password"
 "_SEARCH:members:type=misc","community_navigation/members"
 "_SEARCH:members:type=view","community_navigation/members"
 "_SEARCH:members:type=view:id={$MEMBER_OVERRIDE}","community_navigation/members"

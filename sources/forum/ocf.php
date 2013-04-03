@@ -598,7 +598,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function _online_members_url()
 	{
-		$_url=build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers'));
+		$_url=build_url(array('page'=>'online_members'),get_module_zone('online_members'));
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;

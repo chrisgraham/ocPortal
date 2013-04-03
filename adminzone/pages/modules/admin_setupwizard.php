@@ -114,7 +114,7 @@ class Module_admin_setupwizard
 			}
 		}
 
-		$_done_once=get_value('setup_wizard_completed');
+		$_done_once=get_value('setupwizard_completed');
 		$done_once=!is_null($_done_once);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'));
@@ -934,7 +934,7 @@ class Module_admin_setupwizard
 		}
 
 		// We're done
-		set_value('setup_wizard_completed','1');
+		set_value('setupwizard_completed','1');
 
 		// Clear some cacheing
 		require_code('view_modes');

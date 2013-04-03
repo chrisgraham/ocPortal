@@ -15,13 +15,13 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		ocf_contactmember
+ * @package		ocf_contact_member
  */
 
 /**
  * Module page class.
  */
-class Module_contactmember
+class Module_contact_member
 {
 
 	/**

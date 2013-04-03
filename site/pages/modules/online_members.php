@@ -21,7 +21,7 @@
 /**
  * Module page class.
  */
-class Module_onlinemembers
+class Module_online_members
 {
 
 	/**

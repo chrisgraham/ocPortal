@@ -1476,6 +1476,15 @@ function version_specific()
 		}
 		if ($version_database<10.0)
 		{
+			$modules_renamed=array(
+				'cedi'=>'wiki',
+				'contactmember'=>'contact_member',
+			);
+			foreach ($modules_renamed as $from=>$to)
+			{
+				$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>$to),array('module_the_name'=>$from),'',1);
+			}
+
 			$GLOBALS['SITE_DB']->alter_table_field('msp','specific_permission','ID_TEXT','privilege');
 			$GLOBALS['SITE_DB']->alter_table_field('gsp','specific_permission','ID_TEXT','privilege');
 			$GLOBALS['SITE_DB']->alter_table_field('pstore_permissions','p_specific_permission','ID_TEXT','p_privilege');

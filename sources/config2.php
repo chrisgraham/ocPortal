@@ -120,7 +120,7 @@ function _get_default_option($option,$type,$name)
 			}
 			$option['config_value_translated']=eval($option['eval'].';');
 			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
-			if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+			if ((get_value('setupwizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 			{
 				require_code('config2');
 				set_option($name,$option['config_value_translated']);
@@ -147,7 +147,7 @@ function _get_default_option($option,$type,$name)
 		if ((function_exists('do_lang')) || (strpos($option['eval'],'lang')===false)) // Something in set_option may need do_lang
 		{
 			$option['config_value']=eval($option['eval'].';');
-			if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+			if ((get_value('setupwizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 			{
 				require_code('config2');
 				set_option($name,$option['config_value']);

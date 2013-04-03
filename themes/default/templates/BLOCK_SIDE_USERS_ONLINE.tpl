@@ -11,9 +11,9 @@
 		<div>{BIRTHDAYS}</div>
 	{+END}
 
-	{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,onlinemembers},{$OCF}}}
+	{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,online_members},{$OCF}}}
 		<ul class="horizontal_links associated_links_block_group">
-			<li><a href="{$PAGE_LINK*,_SEARCH:onlinemembers}" title="{!USERS_ONLINE}">{!DETAILS}</a></li>
+			<li><a href="{$PAGE_LINK*,_SEARCH:online_members}" title="{!USERS_ONLINE}">{!DETAILS}</a></li>
 		</ul>
 	{+END}
 </div></section>

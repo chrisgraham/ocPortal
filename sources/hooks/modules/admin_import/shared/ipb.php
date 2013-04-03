@@ -138,7 +138,7 @@ class Hook_ipb_base
 			if ($row['g_use_search']==0) $denies[]=array('search',get_module_zone('search'));
 			list($_contact_member,)=explode(':',$row['g_email_limit']);
 			$contact_member=intval($_contact_member);
-			if ($contact_member==0) $denies[]=array('contactmember',get_module_zone('contactmember'));
+			if ($contact_member==0) $denies[]=array('contact_member',get_module_zone('contact_member'));
 			foreach ($denies as $deny)
 			{
 				list($page,$zone)=$deny;

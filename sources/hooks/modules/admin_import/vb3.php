@@ -254,7 +254,7 @@ class Hook_vb3
 			// Page permissions
 			$denies=array();
 			if (($row['forumpermissions']&4)==0) $denies[]=array('search',get_module_zone('search'));
-			if (($row['forumpermissions']&8)==0) $denies[]=array('contactmember',get_module_zone('contactmember'));
+			if (($row['forumpermissions']&8)==0) $denies[]=array('contact_member',get_module_zone('contact_member'));
 			if (($row['genericpermissions']&1)==0) $denies[]=array('members',get_module_zone('members'));
 			foreach ($denies as $deny)
 			{
