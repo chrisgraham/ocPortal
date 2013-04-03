@@ -233,9 +233,13 @@ class Module_chat
 	 */
 	function get_entry_points()
 	{
-		$ret=array('misc'=>'CHAT_LOBBY','private'=>'CREATE_PRIVATE_ROOM','blocking_interface'=>'MEMBER_BLOCKING');
+		$ret=array('misc'=>'CHAT_LOBBY');
 		if (!is_guest())
+		{
 			$ret['set_effects']='CHAT_SET_EFFECTS';
+			$ret['private']='CREATE_PRIVATE_ROOM';
+			$ret['blocking_interface']='MEMBER_BLOCKING';
+		}
 		return $ret;
 	}
 

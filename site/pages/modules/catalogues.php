@@ -496,7 +496,7 @@ class Module_catalogues
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'CATALOGUES');
+		if (is_guest()) return array(); // Guest (sitemap) won't want a catalogue list - too low level
 	}
 
 	/**
