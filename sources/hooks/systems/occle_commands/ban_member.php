@@ -25,7 +25,7 @@ class Hook_occle_command_ban_member
 	 *
 	 * @param  array	The options with which the command was called
 	 * @param  array	The parameters with which the command was called
-	 * @param  array	A reference to the OcCLE filesystem object
+	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return ~array  Array of stdcommand, stdhtml, stdout, and stderr responses (false: error)
 	 */
 	function run($options,$parameters,&$occle_fs)

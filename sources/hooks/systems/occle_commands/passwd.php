@@ -25,8 +25,8 @@ class Hook_occle_command_passwd
 	 *
 	 * @param  array	The options with which the command was called
 	 * @param  array	The parameters with which the command was called
-	 * @param  array	A reference to the OcCLE filesystem object
-	 * @return ~array  Array of stdcommand, stdhtml, stdout, and stderr responses (false: error)
+	 * @param  object	A reference to the OcCLE filesystem object
+	 * @return ~array Array of stdcommand, stdhtml, stdout, and stderr responses (false: error)
 	 */
 	function run($options,$parameters,&$occle_fs)
 	{

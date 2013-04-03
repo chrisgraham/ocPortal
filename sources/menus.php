@@ -488,7 +488,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	if ((is_string($branch['caption'])) && (strpos($branch['caption'],'[')!==false))
 	{
 		$caption=comcode_to_tempcode($branch['caption'],$source_member,$as_admin);
-	} else $caption=$branch['caption'];
+	} else $caption=convert_guids_to_ids($branch['caption']);
 
 	if ((!is_null($branch['only_on_page'])) && ($branch['only_on_page']!=''))
 	{

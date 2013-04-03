@@ -16,10 +16,10 @@ Specifically, the following use-cases are served by the repository:
  - [b]Configuration management[/b] -- track what options have been changed, and transfer them between sites
  - [b]Backups[/b] -- copy portions of the repository to another location for backup; for example, if you are about to make major changes to the catalogue structure, take a backup of the catalogues
  - [b]Revision control[/b] (advanced) -- hook up git to the repository directory, either locally, on your server, or both, to backup content as it is modified
- - Creating an abstract [b]content API[/b] (for programmers) -- by having a content model that is abstract (i.e. it's a single model that can be used for manipulating any kind of content/resource), programmers can come up with some clever functionality; Aggregate Content Types is an example of ocPortal functionality that is built on top of the repository
+ - Creating an abstract [b]resource API[/b] (for programmers) -- by having a resource model that is abstract (i.e. it's a single model that can be used for manipulating any kind of content/resource), programmers can come up with some clever functionality; Aggregate Content Types is an example of ocPortal functionality that is built on top of the repository
 
 And the following work-in-progress use-cases:
- - Making content [b]import and export[/b] very easy -- we are able to code up import/export support into the repository by coding in additional views of the same data; for example, we would be able to allow automatic import of images into galleries via just copying in JPEG files
+ - Making content/resource [b]import and export[/b] very easy -- we are able to code up import/export support into the repository by coding in additional views of the same data; for example, we would be able to allow automatic import of images into galleries via just copying in JPEG files
 See the [url="tracker"]http://ocportal.com/tracker/[/url] for where we'd like to take this functionality.
 
 [contents]decimal,lower-alpha[/contents]
@@ -38,9 +38,9 @@ The default meta-filesystems are as follows, and are all mounted as subdirectori
  - [tt]members[/tt]: A listing of every member registered on the system, with their account/profile settings and usergroups
  - [tt]raw[/tt]: A raw listing of the actual ocPortal installation directory
  - [tt]root[/tt]: A listing of the ocPortal installation directory, taking source code overrides into account (featuring automatically overriding when files are edited)
- - [tt]var[/tt]: Structured website content, separated by content type on level 1, with category structure as further folders (generally-speaking), and entries as files
+ - [tt]var[/tt]: Structured website resources/content, separated by resource type on level 1, with category structure as further folders (generally-speaking), and entries as files
 
-The [tt]var[/tt] meta-filesystem is perhaps the most interesting because if Webdav is installed, you can use this to import/export/copy content into and between websites using your normal desktop file manager. This is extremely useful. In actuality, [tt]var[/tt] is not actually a meta-filesystem in it's own right, each directory underneath it is actually implemented as a separate meta-filesystem.
+The [tt]var[/tt] meta-filesystem is perhaps the most interesting because if Webdav is installed, you can use this to import/export/copy resources/content into and between websites using your normal desktop file manager. This is extremely useful. In actuality, [tt]var[/tt] is not actually a meta-filesystem in it's own right, each directory underneath it is actually implemented as a separate meta-filesystem.
 
 [title="2"]WebDAV[/title]
 
@@ -52,6 +52,8 @@ Be aware that some operating systems do not support WebDAV very well. The SabreD
 
 [title="2"]The [tt]var[/tt] meta-filesystems[/title]
 
+Everything under [tt]var[/tt] is known as Resource-fs, as it is built on a special API within ocPortal.
+
 Each meta-filesystem under [tt]var[/tt] is structured using filenames and (sometimes) folders. There is an assumption that everything under one of these meta-filesystems is of a particular set of resource types.
 
 The filenames are not based upon ID numbers usually used for addressing in ocPortal, and relationships between them are not either. There are two reasons for this:
@@ -60,44 +62,58 @@ The filenames are not based upon ID numbers usually used for addressing in ocPor
 
 Every file or folder in a filesystem is an ocPortal "resource". In most cases, every file or folder is a content item. Things like multi-moderations or post-templates are resources, but not content, which is why we hold the distinction.
 
-[title="3"]Addressing, in detail[/title]
+[title="3"]Addressing[/title]
 
 Each resource has a number of addressing methods:
- - content-type and content-ID combination
+ - resource-type and resource-ID combination
  - label
  - moniker
  - filename
  - GUID
 
-Within normal ocPortal code, content is addressed by the content-type and content-ID combination. For example, [tt]download[/tt] and [tt]4[/tt]. Sometimes the content-type is not needed, when the code involved implicitly knows what content-type it is working with (e.g. if you're working within the [tt]downloads[/tt] module, it clearly knows IDs refer to downloads).
-The content-types are defined by the PHP files in the [tt]sources/hooks/systems/content_meta_aware[/tt] directory.
-The repository internally has a sense of content-type and content-ID combination for looking up data, but all communication actually works via one of the other methods. This is so that we can transfer data between different sites without having the sequential ID numbers failing to match up correctly.
+Within normal ocPortal code, resources are addressed by the resource-type and resource-ID combination. For example, [tt]download[/tt] and [tt]4[/tt]. Sometimes the resource-type is not needed, when the code involved implicitly knows what resource-type it is working with (e.g. if you're working within the [tt]downloads[/tt] module, it clearly knows IDs refer to downloads).
+The resource/content-types are defined by the PHP files in the [tt]sources/hooks/systems/resource_meta_aware[/tt] and [tt]sources/hooks/systems/content_meta_aware[/tt] directories.
+The repository internally has a sense of resource-type and resource-ID combination for looking up data, but all communication actually works via one of the other methods. This is so that we can transfer data between different sites without having the sequential ID numbers failing to match up correctly.
 
 Each kind of resource has a label, and the meaning of this differs from resource to resource. Generally though, it is the human-readable title of it.
-The repository has an internal API for adding and referencing content by title, which is used by some ocPortal code.
+The repository has an internal API for adding and referencing resources by title, which is used by some ocPortal code.
 However, the title is too free-form to be used for file names, so we actually convert it automatically into a 'moniker'. This is similar to ocPortal's 'URL monikers' system, but actually the repository uses its own set of monikers. A moniker is guaranteed to be generated as unique across the whole filesystem, while of course a label may not be (we could imagine two entries in a category with the same title for example).
 Once we have a moniker, this essentially then is combined with the file extension (if applicable -- not for folders), to form the filename. Usually the file extension is [tt].xml[/tt], as the meta-filesystems use XML for encoding data. Because monikers are unique, filenames are actually unique and we know we will never get conflicting names.
 
-Because entries are usually represented as files within folders (categories), we can therefore think of content as being identified via a full file path, which is essentially a combination of monikers and slashes ([tt]/[/tt] on Mac/Linux, [tt]\[/tt] on Windows).
+Because entries are usually represented as files within folders (categories), we can therefore think of resources as being identified via a full file path, which is essentially a combination of monikers and slashes ([tt]/[/tt] on Mac/Linux, [tt]\[/tt] on Windows).
 Obviously an entry's category is the same as the folder it is within, so the filesystem automatically carries many data relationships this way.
 
 For the remaining cases where we have relationships between resources that are not carried by directory structure, we encode it using multiple addressing schemes stored within the [tt].xml[/tt] files, in precedence order:
 1) GUID
-2) filename
-3) label
+2) label and subpath
 GUIDs are long codes, with dashes in, designed to be globally unique. This ensures that when they are generated on different sites, they won't conflict. Each resource is assigned a GUID, and when that resource is copied between sites, the GUID is preserved -- which allows us to match things up, even though ID numbers will not match up.
-If we copy something from one site to another, and can't get a GUID match, we try and get a filename match. This would automatically match members on different sites by having the same username, for example.
+If we copy something from one site to another, and can't get a GUID match, we try and get a label match. This would automatically match members on different sites by having the same username, for example.
 If we still cannot get a match, the label is used to create a new resource, and we'll associate with that. Any resource in the filesystems can be created by label alone, and the other fields are set as default as a result.
 
 ocPortal maintains a database table that ties all the different addressing schemes together.
 
-[title="2"]Use care[/title]
+[title="3"]Comcode[/title]
+
+It is very common to write Comcode that uses IDs directly. For example, blocks often require IDs as parameters.
+
+This presents a problem because the automatic GUID-based resolution (described under the above "Addressing" section) would not work. You'd in all likelihood get failed matches if you copied your Comcode from one site to another.
+
+You may write GUIDs instead of IDs because ocPortal will substitute them for IDs prior to the main parsing of your Comcode. It will also do this for menu captions.
+
+This works well, but of course you have to make the effort to consciously do it, as the block/Comcode assistants will continue to put in ID numbers.
+There are OcCLE commands to help you with this. For example:
+[tt]find_guid_via_id download_category 6[/tt]
+would give you the GUID for download category #6.
+
+This is a little laborious, but if you are at the technical skill level where you are copying content between multiple sites, hopefully you will also be able to be comfortable using OcCLE and manually coding your Comcode. These are core ocPortal skills at this proficiency level.
+
+[title="2"]Use care when copying[/title]
 
 It would be a mistake to just try and backup everything in the repository, and think you can copy it all back to a site to restore it. You should have full regular database backups for your first go-to backup technique.
 
 In most cases you should work just under [tt]var[/tt] for this kind of thing, and you should think in terms of copying over folders and files that you know about, not everything at once. This will greatly reduce the chance of you unexpected behaviours. The system is complex and doing a lot of magic underneath the hood to make things match up -- don't take it too much for granted.
 
-Of particular note is that there may be overlap with different parts of the repository. In particular, stuff under [tt]database[/tt] will overlap with stuff under [tt]var[/tt]. Never think about copying stuff from directly under [tt]database[/tt] from one site to another as it has no sense for how to port associated content over and almost certainly will lead to corruption.
+Of particular note is that there may be overlap with different parts of the repository. In particular, stuff under [tt]database[/tt] will overlap with stuff under [tt]var[/tt]. Never think about copying stuff from directly under [tt]database[/tt] from one site to another as it has no sense for how to port associated resources over and almost certainly will lead to corruption.
 
 Don't do things like run [tt]rsync[/tt] or git over the repository as a whole -- although you may have good results if you carefully focus such things on specific parts of the repository.
 
@@ -109,7 +125,15 @@ You may also see a file modification time of 1970. This happens when no file mod
 
 [title="2"]Known omissions[/title]
 
+These are the current known omissions for the repository:
  - If you add content via the repository, no syndication will be performed for it. E.g. if you add a news article, it won't be syndicated to Facebook if you've configured such syndication. This is normal within ocPortal, as syndication is an automated assistant built into the CMS modules, not the underlying framework. You can always syndicate things manually if required.
+
+[concepts
+ 1_key="Repository"        1_value="The user-friendly feature name for the way of accessing ocPortal data as folders/files"
+ 2_key="OcCLE-fs"          2_value="The technical name for the repository implementation"
+ 3_key="Meta-filesystem"   3_value="One of the hooks in the filesystem that implements a particular subfolder of the overall folder structure"
+ 4_key="Resource-fs"       4_value="The name for the ocPortal system that both serves the 'var' meta-filesystem and also provides a resource-agnostic API within ocPortal"
+]Concepts[/concepts]
 
 [title="2"]See also[/title]
 

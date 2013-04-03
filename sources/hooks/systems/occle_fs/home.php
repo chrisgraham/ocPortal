@@ -26,7 +26,7 @@ class Hook_occle_fs_home
 	 * @param  array		The current meta-directory path
 	 * @param  string	The root node of the current meta-directory
 	 * @param  array		The current directory listing
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~array 	The final directory listing (false: failure)
 	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
@@ -89,7 +89,7 @@ class Hook_occle_fs_home
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The directory name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
@@ -115,7 +115,7 @@ class Hook_occle_fs_home
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
@@ -139,7 +139,7 @@ class Hook_occle_fs_home
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~string	The file contents (false: failure)
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
@@ -162,7 +162,7 @@ class Hook_occle_fs_home
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
 	 * @param  string		The new file contents
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)

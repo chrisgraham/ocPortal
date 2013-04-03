@@ -38,7 +38,7 @@ class Hook_occle_fs_extended_config__match_key_message
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~string	The file contents (false: failure)
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
@@ -62,7 +62,7 @@ class Hook_occle_fs_extended_config__match_key_message
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
 	 * @param  string		The new file contents
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)

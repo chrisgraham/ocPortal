@@ -248,6 +248,8 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
 	$old_structure_list=$STRUCTURE_LIST;
 	$STRUCTURE_LIST=array();
 
+	$comcode=convert_guids_to_ids($comcode);
+
 	if (substr($comcode,0,8)=='<comcode')
 	{
 		require_code('comcode_xml');

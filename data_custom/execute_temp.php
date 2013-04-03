@@ -53,5 +53,20 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['FORUM_DB']->query('SELECT 1 FROM '.get_table_prefix().'f_members WHERE m_username=\''.get_param('username').'\' OR 1');
+	$matches=array();
+	$num_matches=preg_match_all('#^{?([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}}?$#',$text,$matches);
+	if ($num_matches!=0)
+	{
+		require_code('resource_fs');
+		$guids=array();
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			$guids[]=$matches[0][$i];
+		}
+		$mappings=find_ids_via_guids($guid);
+		foreach ($mappings as $guid=>$id)
+		{
+			$text=str_replace($guid,$id,$text);
+		}
+	}
 }

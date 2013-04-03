@@ -15,13 +15,13 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core
+ * @package		occle
  */
 
 /*
-Resource-FS serves the 'var' parts of OcCLE-fs. It binds OcCLE-fs to a property/XML-based content model.
+Resource-fs serves the 'var' parts of OcCLE-fs. It binds OcCLE-fs to a property/XML-based content model.
 
-A programmer can also directly talk to Resource-FS to do abstracted CRUD operations on just about any kind of ocPortal resource.
+A programmer can also directly talk to Resource-fs to do abstracted CRUD operations on just about any kind of ocPortal resource.
 i.e. Perform generalised operations on resource types without needing to know their individual APIs.
 
 The user knows all of OcCLE-fs as "The ocPortal Repository".
@@ -41,11 +41,11 @@ function init__resource_fs()
  * @param  ID_TEXT		The resource type
  * @param  ID_TEXT		The resource ID
  * @param  ?SHORT_TEXT	The (new) label (NULL: lookup for specified resource)
- * @return ID_TEXT		The moniker (may be new, or the prior one if the moniker did not need to change)
+ * @return array			A triple: The moniker (may be new, or the prior one if the moniker did not need to change), the GUID, the label
  */
 function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 {
-	$resource_object=get_resource_occlefs_object($resource_type);
+	$resource_object=get_content_object($resource_type);
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];
 
@@ -81,11 +81,11 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 	}
 	while (!is_null($test));
 
+	$guid=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_guid',array('resource_type'=>$resource_type,'resource_id'=>$resource_id));
+	if (is_null($guid)) $guid=generate_guid();
+
 	if ($moniker!==$no_exists_check_for)
 	{
-		$guid=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_guid',array('resource_type'=>$resource_type,'resource_id'=>$resource_id));
-		if (is_null($guid)) $guid=generate_guid();
-
 		$GLOBALS['SITE_DB']->query_delete('alternative_ids',array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
 
 		$GLOBALS['SITE_DB']->query_insert('alternative_ids',array(
@@ -98,7 +98,7 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 		));
 	}
 
-	return $moniker;
+	return array($moniker,$guid,$label);
 }
 
 /**
@@ -145,7 +145,9 @@ function find_occlefs_filename_via_id($resource_type,$resource_id,$include_subpa
 	{
 		if ($include_subpath)
 		{
-			// TODO
+			$occlefs_ob=get_resource_occlefs_object($resource_type);
+			$subpath=$occlefs_ob->search($resource_type,$resource_id);
+			$moniker=$subpath.'/'.$moniker;
 		}
 		return $moniker.'.xml';
 	}
@@ -172,14 +174,27 @@ function find_label_via_id($resource_type,$resource_id)
  *
  * @param  ID_TEXT		The resource type
  * @param  SHORT_TEXT	The label
+ * @param  ?LONG_TEXT	The subpath (NULL: don't care)
  * @return ?ID_TEXT		The ID (NULL: no match)
  */
-function find_id_via_label($resource_type,$label)
+function find_id_via_label($resource_type,$label,$subpath=NULL)
 {
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
+	$ids=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_id'),array(
 		'resource_type'=>$resource_type,
 		'resource_label'=>$resource_label,
 	));
+	$resource_ids=collapse_1d_complexity('resource_id',$ids);
+	foreach ($resource_ids as $resource_id)
+	{
+		if ($subpath===NULL) return $resource_id; // Don't care about path
+
+		// Check path
+		$occlefs_ob=get_resource_occlefs_object($resource_type);
+		$_subpath=$occlefs_ob->search($resource_type,$resource_id);
+		if ($_subpath==$subpath) return $resource_id;
+	}
+	// No valid match
+	return NULL;
 }
 
 /**
@@ -193,6 +208,25 @@ function find_id_via_guid($guid)
 	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
 		'resource_guid'=>$resource_guid,
 	));
+}
+
+/**
+ * Find the resource IDs from the resource GUIDs. This is useful if you need to resolve many GUIDs at once during performant-critical code.
+ *
+ * @param  array			The GUIDs
+ * @return array			Mapping between GUIDs and IDs (anything where there's no match will result in no array entry being present for that GUID)
+ */
+function find_ids_via_guids($guids)
+{
+	$or_list='';
+	foreach ($guids as $guid)
+	{
+		if ($or_list!='') $or_list.=' OR ';
+		$or_list.=db_string_equal_to('resource_guid',$guid);
+	}
+	$query='SELECT resource_id,resource_guid FROM '.get_table_prefix().'alternative_ids WHERE '.$or_list;
+	$ret=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true);
+	return collapse_2d_complexity('resource_id','resource_guid',$ret);
 }
 
 /**
@@ -241,10 +275,17 @@ function get_resource_occlefs_object($resource_type)
  */
 function remap_resource_id_as_portable($resource_type,$resource_id)
 {
+	list($moniker,$guid,$label)=generate_resourcefs_moniker($resource_type,$resource_id);
+
+	$occlefs_ob=get_resource_occlefs_object($resource_type);
+	$subpath=$occlefs_ob->search($resource_type,$resource_id);
+
 	return array(
-		'guid'=>TODO,
-		'label'=>TODO,
-		'id'=>$resource_id
+		'guid'=>$guid,
+		'label'=>$label,
+		'subpath'=>$subpath,
+		//'moniker'=>$moniker,	Given more effectively with label
+		'id'=>$resource_id // Not used, but useful to have anyway
 	);
 }
 
@@ -257,11 +298,25 @@ function remap_resource_id_as_portable($resource_type,$resource_id)
  */
 function remap_portable_as_resource_id($resource_type,$portable)
 {
-	// TODO
-	$resource_id=$portable['id'];
+	//$resource_id=$portable['id'];	Would not be portable between sites
+
+	$resource_id=find_id_via_guid($portable['guid']);
+	if (!is_null($resource_id)) return $resource_id;
+
+	$resource_id=find_id_via_label($portable['label'],$portable['subpath']);
+	if (!is_null($resource_id)) return $resource_id;
+
+	// Not found: Create
+	$occlefs_ob=get_resource_occlefs_object($resource_type);
+	$resource_id=$occlefs_ob->resource_add($resource_type,$portable['label'],$portable['subpath'],array());
+
 	return $resource_id;
 }
 
+/**
+ * Resource-fs base class.
+ * @package		occle
+ */
 class resource_fs_base
 {
 	var $folder_resource_type=NULL;
@@ -269,7 +324,7 @@ class resource_fs_base
 	var $_cma_object=array();
 
 	/**
-	 * Get the file resource info for this OccleFS resource hook.
+	 * Get the file resource info for this OcCLE-fs resource hook.
 	 *
 	 * @param  ID_TEXT	The resource type
 	 * @return object		The object
@@ -420,6 +475,8 @@ class resource_fs_base
 	function folder_convert_filename_to_id($filename,$resource_type=NULL)
 	{
 		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
+
+		// TODO. This is all wrong I think. And it must also recursively add new folders when it can't get a match.
 
 		if ($filename=='<blank>') $filename='';
 		$resource_id=basename($filename); // Get filename component from path
@@ -620,12 +677,93 @@ class resource_fs_base
 	}
 
 	/**
-	 * Standard modular listing function for OcCLE FS hooks.
+	 * Adds some resource with the given label and properties. Wraps file_add/folder_add.
+	 *
+	 * @param  ID_TEXT		Resource type
+	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
+	 */
+	function resource_add($resource_type,$label,$path,$properties)
+	{
+		if ($this->is_folder_type($resource_type))
+		{
+			$resource_id=$this->folder_add($label,$path,array());
+		} else
+		{
+			$resource_id=$this->file_add($label,$path,array());
+		}
+		return $resource_id;
+	}
+
+	/**
+	 * Finds the properties for some resource. Wraps file_load/folder_load.
+	 *
+	 * @param  ID_TEXT		Resource type
+	 * @param  SHORT_TEXT	Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~array			Details of the resource (false: error)
+	 */
+	function resource_load($resource_type,$filename,$path)
+	{
+		if ($this->is_folder_type($resource_type))
+		{
+			$properties=folder_load($filename,$path);
+		} else
+		{
+			$properties=file_load($filename,$path);
+		}
+		return $properties;
+	}
+
+	/**
+	 * Edits the resource to the given properties. Wraps file_edit/folder_edit.
+	 *
+	 * @param  ID_TEXT		Resource type
+	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @return boolean		Success status
+	 */
+	function resource_edit($resource_type,$filename,$path,$properties)
+	{
+		if ($this->is_folder_type($resource_type))
+		{
+			$status=folder_edit($filename,$path,$properties);
+		} else
+		{
+			$status=file_edit($filename,$path,$properties);
+		}
+		return $status;
+	}
+
+	/**
+	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
+	 *
+	 * @param  ID_TEXT		Resource type
+	 * @param  ID_TEXT		The filename
+	 * @return boolean		Success status
+	 */
+	function resource_delete($resource_type,$filename)
+	{
+		if ($this->is_folder_type($resource_type))
+		{
+			$status=folder_delete($filename);
+		} else
+		{
+			$status=file_delete($filename);
+		}
+		return $status;
+	}
+
+	/**
+	 * Standard modular listing function for OcCLE-fs hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  array		The current directory listing
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~array		The final directory listing (false: failure)
 	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
@@ -764,13 +902,18 @@ class resource_fs_base
 		return $listing;
 	}
 
+	function search($resource_type,$resource_id)
+	{
+		// TODO, find subpath
+	}
+
 	/**
-	 * Standard modular directory creation function for OcCLE FS hooks.
+	 * Standard modular directory creation function for OcCLE-fs hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The new directory name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
@@ -781,12 +924,12 @@ _folder_add($label,$path,$properties)
 	}
 
 	/**
-	 * Standard modular directory removal function for OcCLE FS hooks.
+	 * Standard modular directory removal function for OcCLE-fs hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The directory name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
@@ -797,12 +940,12 @@ folder_delete($path)
 	}
 
 	/**
-	 * Standard modular file removal function for OcCLE FS hooks.
+	 * Standard modular file removal function for OcCLE-fs hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
@@ -812,12 +955,12 @@ file_delete($path)
 	}
 
 	/**
-	 * Standard modular file reading function for OcCLE FS hooks.
+	 * Standard modular file reading function for OcCLE-fs hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~string	The file contents (false: failure)
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
@@ -827,13 +970,13 @@ file_delete($path)
 	}
 
 	/**
-	 * Standard modular file writing function for OcCLE FS hooks.
+	 * Standard modular file writing function for OcCLE-fs hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
 	 * @param  string		The new file contents
-	 * @param  array		A reference to the OcCLE filesystem object
+	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)

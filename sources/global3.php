@@ -2675,3 +2675,30 @@ function generate_guid()
 		substr($hash, 20, 12)
 	);
 }
+
+/**
+ * Convert GUIDs to IDs in some text.
+ *
+ * @param  string			Input text
+ * @return string			Output text
+ */
+function convert_guids_to_ids($text)
+{
+	$matches=array();
+	$num_matches=preg_match_all('#^{?([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}}?$#',$text,$matches);
+	if ($num_matches!=0)
+	{
+		require_code('resource_fs');
+		$guids=array();
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			$guids[]=$matches[0][$i];
+		}
+		$mappings=find_ids_via_guids($guid);
+		foreach ($mappings as $guid=>$id)
+		{
+			$text=str_replace($guid,$id,$text);
+		}
+	}
+	return $text;
+}

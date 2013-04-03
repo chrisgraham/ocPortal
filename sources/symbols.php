@@ -2491,7 +2491,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					require_code('resource_fs');
-					$value=find_id_via_label($param[0],$param[1]);
+					$value=find_id_via_label($param[0],$param[1],array_key_exists(2,$param)?$param[2]:NULL);
 					if ($value===NULL) $value='';
 				}
 				break;

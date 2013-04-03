@@ -80,6 +80,7 @@ class Hook_addon_registry_occle
 			'sources/hooks/systems/occle_notifications/.htaccess',
 			'sources/hooks/systems/addon_registry/occle.php',
 			'sources/hooks/systems/occle_commands/antispam_check.php',
+			'sources/resource_fs.php',
 			'data/modules/admin_occle/.htaccess',
 			'OCCLE_HELP.tpl',
 			'OCCLE_LS.tpl',

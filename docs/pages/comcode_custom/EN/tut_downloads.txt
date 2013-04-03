@@ -50,6 +50,10 @@ This link will take the user to the Home download category, from which they can 
 
 We understand how important it is for users to be able to navigate fast around a website, so we have also created a 'view the whole download tree' feature that they may use to jump straight to the category of their choosing; this is not linked in by default, but can be placed on menus by browsing for it in the menu editor's entry-point tree. The data for the tree is downloaded in a very compressed format, making it fast to load.
 
+[title="2"]Download licences[/title]
+
+You may, optionally, add multiple licences to your site, and specify which licence any download uses. This is useful for sites that have copyrighted downloads, or if some kind of agreement must be agreed to before downloading.
+
 [title="2"]Searching inside downloads[/title]
 
 User's may use the unified ocPortal searching system to find downloads that match their interests. i.e. downloads may be searched from the search module, or the search block.
@@ -65,6 +69,7 @@ In addition, the search module is able to search within the actual downloadable 
 [concepts
  1_key="Download"          1_value="An entry in the download system, bound to a local file or a URL"
  2_key="Do-next manager"   2_value="A standard ocPortal interface shown after managing content"
+ 3_key="Download licence"  3_value="The licence a download is said to be provided under"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

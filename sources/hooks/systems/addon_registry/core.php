@@ -190,7 +190,6 @@ class Hook_addon_registry_core
 			'sources/firephp.php',
 			'sources/content.php',
 			'sources/content2.php',
-			'sources/resource_fs.php',
 			'lang/EN/meta_data.ini',
 			'adminzone/find_permissions.php',
 			'JAVASCRIPT_SOUND.tpl',
