@@ -1,3 +1,3 @@
-[block=":rules,cms:cms_comcode_pages,site:rules" caption="[title]{$SITE_NAME} Rules[/title]"]main_only_if_match[/block]
+[title]{$SITE_NAME} Rules[/title]
 
-[center][b](Remember: this is a default {$BRAND_NAME} page and should probably be edited as needed.)[/b][/center]
+[include="_SEARCH"]_rules[/include]

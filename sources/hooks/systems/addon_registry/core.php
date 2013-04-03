@@ -632,6 +632,7 @@ class Hook_addon_registry_core
 			'pages/comcode/EN/panel_left.txt',
 			'pages/comcode/EN/panel_right.txt',
 			'pages/comcode/EN/privacy.txt',
+			'pages/comcode/EN/_rules.txt',
 			'pages/comcode/EN/rules.txt',
 			'pages/comcode/EN/sitemap.txt',
 			'pages/comcode/EN/start.txt',

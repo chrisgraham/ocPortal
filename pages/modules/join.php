@@ -88,7 +88,7 @@ class Module_join
 		$title=get_screen_title('_JOIN');
 
 		// Show rules
-		$rules=request_page('rules',true,get_comcode_zone('rules'),NULL,true);
+		$rules=request_page('_rules',true,get_comcode_zone('rules'),NULL,true);
 		$map=array('page'=>'_SELF','type'=>'step2');
 		$email_address=trim(get_param('email_address',''));
 		if ($email_address!='') $map['email_address']=$email_address;

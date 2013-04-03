@@ -76,8 +76,8 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
    </tr>
    <tr>
       <td>Welcome</td>
-      <td>rules</td>
-      <td>Site rules, also shown when joining the forum.</td>
+      <td>_rules</td>
+      <td>Site rules, also shown when joining the website.</td>
    </tr>
    <tr>
       <td>Welcome</td>

@@ -28,7 +28,7 @@ function rules_script()
 	if (is_null($id))
 	{
 		require_code('site');
-		$output=request_page('rules',true);
+		$output=request_page('_rules',true);
 		$title=do_lang_tempcode('RULES');
 	} else
 	{
