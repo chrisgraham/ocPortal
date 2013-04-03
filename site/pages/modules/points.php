@@ -156,7 +156,7 @@ class Module_points
 	 */
 	function get_entry_points()
 	{
-		return array('member'=>'POINTS','browser'=>'BROWSE_POINT_PROFILES','misc'=>'MEMBER_POINT_FIND');
+		return (get_forum_type()=='ocf')?array():array('member'=>'POINTS','browser'=>'BROWSE_POINT_PROFILES','misc'=>'MEMBER_POINT_FIND');
 	}
 
 	/**

@@ -404,6 +404,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		for ($i=0;$i<$num_entries;$i++)
 		{
 			if (!array_key_exists($i,$entries)) break;
+			if (!array_key_exists('map',$entries[$i])) continue;
 
 			$entry=$entries[$i];
 			$extra_map[$i]['ADD_TO_CART']=build_url(array('page'=>'shopping','type'=>'add_item','product_id'=>$entry['id'],'hook'=>'catalogue_items'),get_module_zone('shopping'));
@@ -417,6 +418,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			for ($i=0;$i<$num_entries;$i++)
 			{
 				if (!array_key_exists($i,$entries)) break;
+				if (!array_key_exists('map',$entries[$i])) continue;
 
 				$entry=$entries[$i];
 
@@ -429,6 +431,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			for ($i=0;$i<$num_entries;$i++)
 			{
 				if (!array_key_exists($i,$entries)) break;
+				if (!array_key_exists('map',$entries[$i])) continue;
 
 				$entry=$entries[$i];
 
@@ -442,6 +445,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			for ($i=0;$i<$num_entries;$i++)
 			{
 				if (!array_key_exists($i,$entries)) break;
+				if (!array_key_exists('map',$entries[$i])) continue;
+
 				$entry=$entries[$i];
 				if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($filter)) || (is_array($filter)) && (in_array($entry['id'],$filter))))
 				{
