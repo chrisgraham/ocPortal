@@ -68,7 +68,7 @@ class Hook_content_meta_aware_banner_type
 
 			'feedback_type_code'=>NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+			'permissions_type_code'=>'banners', // NULL if has no permissions
 
 			'search_hook'=>NULL,
 

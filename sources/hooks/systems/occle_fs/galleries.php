@@ -112,7 +112,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$resource_id),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -149,7 +149,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('galleries2');
 

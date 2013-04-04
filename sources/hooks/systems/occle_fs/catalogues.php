@@ -30,18 +30,36 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 *
 	 * @param  ID_TEXT		Folder resource type
 	 * @param  ID_TEXT		Resource type (may be file or folder)
-	 * @return boolean		Whether it can
+	 * @return ?array			A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
 	 */
 	function _has_parent_child_relationship($above,$under)
 	{
 		switch ($above)
 		{
 			case 'catalogue':
-				return ($under=='catalogue_category');
+				if ($under=='catalogue_category')
+				{
+					$folder_info=$this->_get_cma_info($under);
+					return array(
+						'cat_field'=>'c_name',
+						'linker_table'=>'catalogue_categories',
+						'id_field'=>'id'
+					);
+				}
+				break;
 			case 'catalogue_category':
-				return ($under=='catalogue_category') || ($under=='catalogue_entry');
+				if ($under=='catalogue_category') || ($under=='catalogue_entry')
+				{
+					$folder_info=$this->_get_cma_info($under);
+					return array(
+						'cat_field'=>$folder_info['parent_spec__parent_name'],
+						'linker_table'=>$folder_info['parent_spec__table_name'],
+						'id_field'=>$folder_info['parent_spec__field_name']
+					);
+				}
+				break;
 		}
-		return false;
+		return NULL;
 	}
 
 	/**
@@ -259,7 +277,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		if (substr($category,0,10)!='CATALOGUE-')
 		{
@@ -292,8 +310,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		foreach ($_fields as $_field)
 		{
 			$fields[]=array(
-				'field_title'=>$this->_get_translated_text($_field['cf_name']),
-				'description'=>$this->_get_translated_text($_field['cf_description']),
+				'field_title'=>$this->_get_translated_text($_field['cf_name'],$GLOBALS['SITE_DB']),
+				'description'=>$this->_get_translated_text($_field['cf_description'],$GLOBALS['SITE_DB']),
 				'type'=>$_field['cf_type'],
 				'order'=>$_field['cf_order'],
 				'defines_order'=>$_field['cf_defines_order'],
@@ -331,7 +349,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
 

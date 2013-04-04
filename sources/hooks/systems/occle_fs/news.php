@@ -84,7 +84,7 @@ class Hook_occle_fs_news extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;

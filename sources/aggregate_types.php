@@ -552,7 +552,8 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($privilege['member'])));
 						} else
 						{
-							$member_privileges[]=array($member_id,$privilege['name'],$privilege['value']);
+							if (!array_key_exists($member_id,$member_privileges)) $member_privileges[$member_id]=array();
+							$member_privileges[$member_id][$privilege['name']]=$privilege['value'];
 						}
 					}
 					if (!is_null($privilege['usergroup']))
@@ -562,7 +563,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 							foreach (array_keys($usergroups) as $group_id)
 							{
 								if (!array_key_exists($group_id,$group_privileges)) $group_privileges[$group_id]=array();
-								$group_privileges[$group_id][]=array($privilege['name'],$privilege['value']);
+								$group_privileges[$group_id][$privilege['name']]=$privilege['value'];
 							}
 						} else
 						{
@@ -573,7 +574,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 							} else
 							{
 								if (!array_key_exists($group_id,$group_privileges)) $group_privileges[$group_id]=array();
-								$group_privileges[$group_id][]=array($privilege['name'],$privilege['value']);
+								$group_privileges[$group_id][$privilege['name']]=$privilege['value'];
 							}
 						}
 					}
@@ -607,7 +608,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($access['member'])));
 						} else
 						{
-							$member_access[]=array($member_id,$access['key'],$access['value']);
+							$member_access[$member_id]=$access['value'];
 						}
 					}
 					if (!is_null($access['usergroup']))
@@ -616,8 +617,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 						{
 							foreach (array_keys($usergroups) as $group_id)
 							{
-								if (!array_key_exists($group_id,$group_access)) $group_access[$group_id]=array();
-								$group_access[$group_id][]=array($access['key'],$access['value']);
+								$group_access[$group_id]=$access['value'];
 							}
 						} else
 						{
@@ -627,8 +627,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($access['usergroup'])));
 							} else
 							{
-								if (!array_key_exists($group_id,$group_access)) $group_access[$group_id]=array();
-								$group_access[$group_id][]=array($access['key'],$access['value']);
+								$group_access[$group_id]=$access['value'];
 							}
 						}
 					}

@@ -212,13 +212,13 @@ class Block_main_multi_content
 					// NB: too complex to handle member-specific page permissions in this
 				} else
 				{
-					$where.='(('.$groups.') AND (a.group_id IS NOT NULL) OR (ma.active_until>'.strval(time()).' AND ma.member_id='.strval(get_member()).'))';
+					$where.='(('.$groups.') AND (a.group_id IS NOT NULL) OR ((ma.active_until IS NULL OR ma.active_until>'.strval(time()).') AND ma.member_id='.strval(get_member()).'))';
 				}
 			}
 			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR (ma2.active_until>'.strval(time()).' AND ma2.member_id='.strval(get_member()).'))';
+				$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR ((ma2.active_until IS NULL OR ma2.active_until>'.strval(time()).') AND ma2.member_id='.strval(get_member()).'))';
 			}
 			if (array_key_exists('where',$info))
 			{

@@ -97,7 +97,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		return array(
 			'label'=>$resource_id,

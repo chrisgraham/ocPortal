@@ -307,6 +307,16 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
 			$GLOBALS['SITE_DB']->alter_table_field('cache','langs_required','LONG_TEXT','dependencies');
 			$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_manually_chosen','BINARY');
+
+			$GLOBALS['SITE_DB']->change_primary_key('member_privileges',array('member_id','privilege','the_page','module_the_name','category_name'));
+			$GLOBALS['SITE_DB']->change_primary_key('member_zone_access',array('member_id','zone_name'));
+			$GLOBALS['SITE_DB']->change_primary_key('member_page_access',array('member_id','page_name','zone_name'));
+			$GLOBALS['SITE_DB']->change_primary_key('member_category_access',array('member_id','module_the_name','category_name'));
+
+			$GLOBALS['SITE_DB']->alter_table_field('member_privileges','active_until','?TIME');
+			$GLOBALS['SITE_DB']->alter_table_field('member_zone_access','active_until','?TIME');
+			$GLOBALS['SITE_DB']->alter_table_field('member_page_access','active_until','?TIME');
+			$GLOBALS['SITE_DB']->alter_table_field('member_category_access','active_until','?TIME');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<17))
@@ -425,39 +435,39 @@ class Module_admin_version
 			));
 
 			$GLOBALS['SITE_DB']->create_table('member_privileges',array(
-				'active_until'=>'*TIME',
 				'member_id'=>'*INTEGER',
 				'privilege'=>'*ID_TEXT',
 				'the_page'=>'*ID_TEXT',
 				'module_the_name'=>'*ID_TEXT',
 				'category_name'=>'*ID_TEXT',
-				'the_value'=>'BINARY'
+				'the_value'=>'BINARY',
+				'active_until'=>'?TIME',
 			));
 			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_name',array('privilege','the_page','module_the_name','category_name'));
 			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_member',array('member_id'));
 
 			$GLOBALS['SITE_DB']->create_table('member_zone_access',array(
-				'active_until'=>'*TIME',
 				'zone_name'=>'*ID_TEXT',
-				'member_id'=>'*MEMBER'
+				'member_id'=>'*MEMBER',
+				'active_until'=>'?TIME',
 			));
 			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzazone_name',array('zone_name'));
 			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzamember_id',array('member_id'));
 
 			$GLOBALS['SITE_DB']->create_table('member_page_access',array(
-				'active_until'=>'*TIME',
 				'page_name'=>'*ID_TEXT',
 				'zone_name'=>'*ID_TEXT',
-				'member_id'=>'*MEMBER'
+				'member_id'=>'*MEMBER',
+				'active_until'=>'?TIME',
 			));
 			$GLOBALS['SITE_DB']->create_index('member_page_access','mzaname',array('page_name','zone_name'));
 			$GLOBALS['SITE_DB']->create_index('member_page_access','mzamember_id',array('member_id'));
 
 			$GLOBALS['SITE_DB']->create_table('member_category_access',array(
-				'active_until'=>'*TIME',
 				'module_the_name'=>'*ID_TEXT',
 				'category_name'=>'*ID_TEXT',
-				'member_id'=>'*MEMBER'
+				'member_id'=>'*MEMBER',
+				'active_until'=>'?TIME',
 			));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcaname',array('module_the_name','category_name'));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcamember_id',array('member_id'));

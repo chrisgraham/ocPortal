@@ -781,7 +781,7 @@ function set_download_gallery_permissions($id,$submitter=NULL)
 	$GLOBALS['SITE_DB']->query_delete('member_privileges',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
 	foreach (array('submit_midrange_content') as $privilege)
 	{
-		$GLOBALS['SITE_DB']->query_insert('member_privileges',array('active_until'=>2147483647/*FUDGEFUDGE*/,'member_id'=>$submitter,'privilege'=>$privilege,'the_page'=>'','module_the_name'=>'galleries','category_name'=>'download_'.strval($id),'the_value'=>'1'));
+		$GLOBALS['SITE_DB']->query_insert('member_privileges',array('active_until'=>NULL,'member_id'=>$submitter,'privilege'=>$privilege,'the_page'=>'','module_the_name'=>'galleries','category_name'=>'download_'.strval($id),'the_value'=>'1'));
 	}
 }
 

@@ -123,6 +123,8 @@ You may see some files quoted with a file size of zero. This happens in situatio
 
 You may also see a file modification time of 1970. This happens when no file modification time is known.
 
+If you manually specify the name of a folder or a file, you may find it changes when the directory refreshes. This is because it will be treated as a new label, and the moniker (and thus filename) will then be generated from that. For example, spaces would be stripped.
+
 [title="2"]Known omissions[/title]
 
 These are the current known omissions for the repository:
