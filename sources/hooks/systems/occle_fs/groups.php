@@ -72,7 +72,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -123,14 +123,14 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
+	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
-	function _folder_add($filename,$path,$properties)
+	function folder_add($filename,$path,$properties)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		if ($category!='') return false; // Only one depth allowed for this resource type
@@ -146,13 +146,13 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
+	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @return ~array			Details of the resource (false: error)
 	 */
-	function _folder_load($filename,$path)
+	function folder_load($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
@@ -191,7 +191,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
+	 * Standard modular edit function for resource-fs hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -213,7 +213,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
+	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
@@ -306,7 +306,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -339,7 +339,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 			{
 				foreach ($_groups as $group)
 				{
-					$groups[]=intval($this->resolve_resource_dependency($group));
+					$groups[]=intval($this->remap_portable_as_resource_id('group',$group));
 				}
 			}
 		}
@@ -401,7 +401,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
+	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
@@ -425,13 +425,13 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
+	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @return ~array			Details of the resource (false: error)
 	 */
-	function _file_load($filename,$path)
+	function file_load($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
@@ -443,7 +443,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_group_id'),array('gm_member_id'=>intval($resource_id)));
 		foreach ($_groups as $_group)
 		{
-			$groups[]=$this->get_resource_dependency('group',strval($_group['gm_group_id']));
+			$groups[]=$this->remap_resource_id_as_portable('group',strval($_group['gm_group_id']));
 		}
 
 		$ret=array(
@@ -502,7 +502,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
+	 * Standard modular edit function for resource-fs hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -526,7 +526,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
+	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status

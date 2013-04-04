@@ -82,7 +82,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -180,14 +180,14 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
+	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
-	function _folder_add($filename,$path,$properties)
+	function folder_add($filename,$path,$properties)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 
@@ -251,13 +251,13 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
+	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @return ~array			Details of the resource (false: error)
 	 */
-	function _folder_load($filename,$path)
+	function folder_load($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
@@ -267,6 +267,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 			if (!array_key_exists(0,$rows)) return false;
 			$row=$rows[0];
 
+			list($meta_keywords,$meta_description)=seo_meta_get_for('catalogue_category',strval($row['id']));
+
 			return array(
 				'label'=>$row['cc_title'],
 				'description'=>$row['cc_description'],
@@ -275,8 +277,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				'move_days_lower'=>$row['cc_move_days_lower'],
 				'move_days_higher'=>$row['cc_move_days_higher'],
 				'move_target'=>$row['cc_move_target'],
-				'meta_keywords'=>$this->get_meta_keywords('catalogue_category',strval($row['id'])),
-				'meta_description'=>$this->get_meta_description('catalogue_category',strval($row['id'])),
+				'meta_keywords'=>$meta_keywords,
+				'meta_description'=>$meta_description,
 				'add_date'=>$row['cc_add_date'],
 			);
 		}
@@ -290,8 +292,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		foreach ($_fields as $_field)
 		{
 			$fields[]=array(
-				'field_title'=>$this->get_translated_text($_field['cf_name']),
-				'description'=>$this->get_translated_text($_field['cf_description']),
+				'field_title'=>$this->_get_translated_text($_field['cf_name']),
+				'description'=>$this->_get_translated_text($_field['cf_description']),
 				'type'=>$_field['cf_type'],
 				'order'=>$_field['cf_order'],
 				'defines_order'=>$_field['cf_defines_order'],
@@ -320,7 +322,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
+	 * Standard modular edit function for resource-fs hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -396,7 +398,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
+	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status
@@ -483,7 +485,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for OcCLE-fs resource hooks. Defined when getting an edit date is not easy.
+	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -554,7 +556,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular add function for OcCLE-fs resource hooks. Adds some resource with the given label and properties.
+	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
 	 * @param  SHORT_TEXT	Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
@@ -578,19 +580,21 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular load function for OcCLE-fs resource hooks. Finds the properties for some resource.
+	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @return ~array			Details of the resource (false: error)
 	 */
-	function _file_load($filename,$path)
+	function file_load($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
+
+		list($meta_keywords,$meta_description)=seo_meta_get_for('catalogue_entry',strval($row['id']));
 
 		$ret=array(
 			'validated'=>$row['ce_validated'],
@@ -599,8 +603,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 			'allow_comments'=>$row['ce_allow_comments'],
 			'allow_trackbacks'=>$row['ce_allow_trackbacks'],
 			'views'=>$row['ce_views'],
-			'meta_keywords'=>$this->get_meta_keywords('catalogue_entry',strval($row['id'])),
-			'meta_description'=>$this->get_meta_description('catalogue_entry',strval($row['id'])),
+			'meta_keywords'=>$meta_keywords,
+			'meta_description'=>$meta_description,
 			'submitter'=>$row['ce_submitter'],
 			'add_date'=>$row['ce_add_date'],
 			'edit_date'=>$row['ce_edit_date'],
@@ -640,7 +644,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for OcCLE-fs resource hooks. Edits the resource to the given properties.
+	 * Standard modular edit function for resource-fs hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -664,7 +668,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
+	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @return boolean		Success status

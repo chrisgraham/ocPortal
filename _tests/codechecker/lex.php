@@ -330,7 +330,7 @@ function lex($text=NULL)
 						} else
 						{
 							// Is it a perfect match?
-							if ((strlen($token_so_far)==strlen($token_value)) && ((!in_array($token_so_far{0},$PCONTINUATIONS)) || (!in_array($TEXT[$i],$PCONTINUATIONS))))
+							if ((strlen($token_so_far)==strlen($token_value)) && ((!in_array($token_so_far[0],$PCONTINUATIONS)) || (!in_array($TEXT[$i],$PCONTINUATIONS))))
 							{
 								$applicable_tokens[]=$token_name;
 								unset($maybe_applicable_tokens[$token_name]);
@@ -466,7 +466,7 @@ function lex($text=NULL)
 					{
 						if (strpos($token_found,'.')!==false) $tokens[]=array('float_literal',floatval($token_found),$i);
 						elseif (strpos($token_found,'x')!==false) $tokens[]=array('integer_literal',intval($token_found,16),$i);
-						elseif ($token_found{0}=='0') $tokens[]=array('integer_literal',intval($token_found,8),$i);
+						elseif ($token_found[0]=='0') $tokens[]=array('integer_literal',intval($token_found,8),$i);
 						else $tokens[]=array('integer_literal',intval($token_found),$i);
 					} else
 					{
@@ -521,8 +521,8 @@ function lex($text=NULL)
 					break;
 				}
 				$i-=strlen($heredoc_symbol)+1;
-				if (!isset($char{0})) break 2;
-				$char=$char{0};
+				if (!isset($char[0])) break 2;
+				$char=$char[0];
 
 				// Escape flag based filtering
 				$actual_char=$char;
@@ -694,8 +694,8 @@ function lex($text=NULL)
 				}
 
 				$i-=1;
-				if (!isset($char{0})) break 2;
-				$char=$char{0};
+				if (!isset($char[0])) break 2;
+				$char=$char[0];
 
 				// Normal case
 				$special_token_value.=$char;

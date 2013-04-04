@@ -120,13 +120,7 @@ function delete_aggregate_type_instance($id,$delete_matches=false)
 				// If bound, delete resource
 				if (!is_null($filename))
 				{
-					if ($object_fs->is_folder_type($resource['type']))
-					{
-						$object_fs->folder_delete($filename,$resource['subpath']);
-					} else
-					{
-						$object_fs->file_delete($filename,$resource['subpath']);
-					}
+					$object_fs->resource_delete($resource['type'],$filename,$resource['subpath']);
 				}
 			}
 		}
@@ -454,23 +448,11 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 					if (is_null($template_filename))
 						warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE_TEMPLATE',escape_html($resource['type']),escape_html($resource['template_label']),escape_html($resource['template_subpath'])));
 
-					if ($object_fs->is_folder_type($resource['type']))
-					{
-						$properties+=$object_fs->folder_load($template_filename,$resource['template_subpath']);
-					} else
-					{
-						$properties+=$object_fs->file_load($template_filename,$resource['template_subpath']);
-					}
+					$properties+=$object_fs->resource_load($resource['type'],$template_filename,$resource['template_subpath']);
 				}
 			} else // Load from current, if not new
 			{
-				if ($object_fs->is_folder_type($resource['type']))
-				{
-					$properties+=$object_fs->folder_load($filename,$resource['subpath']);
-				} else
-				{
-					$properties+=$object_fs->file_load($filename,$resource['subpath']);
-				}
+				$properties+=$object_fs->resource_load($resource['type'],$filename,$resource['subpath']);
 			}
 
 			// Set properties
@@ -485,23 +467,11 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 			// Add/Edit
 			if ($is_new)
 			{
-				if ($object_fs->is_folder_type($resource['type']))
-				{
-					$object_fs->folder_add($resource['label'],$resource['subpath'],$properties);
-				} else
-				{
-					$object_fs->file_add($resource['label'],$resource['subpath'],$properties);
-				}
+				$object_fs->resource_add($resource['type'],$resource['label'],$resource['subpath'],$properties);
 				$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
 			} else
 			{
-				if ($object_fs->is_folder_type($resource['type']))
-				{
-					$object_fs->folder_edit($filename,$resource['subpath'],$properties);
-				} else
-				{
-					$object_fs->file_edit($filename,$resource['subpath'],$properties);
-				}
+				$object_fs->resource_edit($resource['type'],$filename,$resource['subpath'],$properties);
 			}
 
 			$priv_reset=true;
@@ -535,7 +505,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 
 					if (!is_null($preset['member']))
 					{
-						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->resolve_resource_dependency(array('label'=>$preset['member'],'resource_type'=>'member'));
+						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->remap_portable_as_resource_id('member',array('label'=>$preset['member']));
 						if (is_null($member_id))
 						{
 							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($preset['member'])));
@@ -554,7 +524,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 							}
 						} else
 						{
-							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->resolve_resource_dependency(array('label'=>$preset['usergroup'],'resource_type'=>'group'));
+							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->remap_portable_as_resource_id('group',array('label'=>$preset['usergroup']));
 							if (is_null($group_id))
 							{
 								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($preset['usergroup'])));
@@ -576,13 +546,13 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 				{
 					if (!is_null($privilege['member']))
 					{
-						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->resolve_resource_dependency(array('label'=>$privilege['member'],'resource_type'=>'member'));
+						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->remap_portable_as_resource_id('member',array('label'=>$privilege['member']));
 						if (is_null($member_id))
 						{
 							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($privilege['member'])));
 						} else
 						{
-							$member_privileges[$group_id]=array($privilege['name'],$privilege['value']);
+							$member_privileges[]=array($member_id,$privilege['name'],$privilege['value']);
 						}
 					}
 					if (!is_null($privilege['usergroup']))
@@ -591,17 +561,19 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 						{
 							foreach (array_keys($usergroups) as $group_id)
 							{
-								$group_privileges[$group_id]=array($privilege['name'],$privilege['value']);
+								if (!array_key_exists($group_id,$group_privileges)) $group_privileges[$group_id]=array();
+								$group_privileges[$group_id][]=array($privilege['name'],$privilege['value']);
 							}
 						} else
 						{
-							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->resolve_resource_dependency(array('label'=>$privilege['usergroup'],'resource_type'=>'group'));
+							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->remap_portable_as_resource_id('group',array('label'=>$privilege['usergroup']));
 							if (is_null($group_id))
 							{
 								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($privilege['usergroup'])));
 							} else
 							{
-								$group_privileges[$group_id]=array($privilege['name'],$privilege['value']);
+								if (!array_key_exists($group_id,$group_privileges)) $group_privileges[$group_id]=array();
+								$group_privileges[$group_id][]=array($privilege['name'],$privilege['value']);
 							}
 						}
 					}
@@ -629,13 +601,13 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 				{
 					if (!is_null($access['member']))
 					{
-						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->resolve_resource_dependency(array('label'=>$access['member'],'resource_type'=>'member'));
+						$member_id=is_numeric($member_id)?intval($member_id):$object_fs->remap_portable_as_resource_id('member',array('label'=>$access['member']));
 						if (is_null($member_id))
 						{
 							warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($access['member'])));
 						} else
 						{
-							$member_access[$group_id]=array($access['key'],$access['value']);
+							$member_access[]=array($member_id,$access['key'],$access['value']);
 						}
 					}
 					if (!is_null($access['usergroup']))
@@ -644,17 +616,19 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 						{
 							foreach (array_keys($usergroups) as $group_id)
 							{
-								$group_access[$group_id]=array($access['key'],$access['value']);
+								if (!array_key_exists($group_id,$group_access)) $group_access[$group_id]=array();
+								$group_access[$group_id][]=array($access['key'],$access['value']);
 							}
 						} else
 						{
-							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->resolve_resource_dependency(array('label'=>$access['usergroup'],'resource_type'=>'group'));
+							$group_id=is_numeric($group_id)?intval($group_id):$object_fs->remap_portable_as_resource_id('group',array('label'=>$access['usergroup']));
 							if (is_null($group_id))
 							{
 								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($access['usergroup'])));
 							} else
 							{
-								$group_access[$group_id]=array($access['key'],$access['value']);
+								if (!array_key_exists($group_id,$group_access)) $group_access[$group_id]=array();
+								$group_access[$group_id][]=array($access['key'],$access['value']);
 							}
 						}
 					}

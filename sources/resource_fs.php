@@ -36,6 +36,33 @@ function init__resource_fs()
 }
 
 /**
+ * Get the OccLE-fs object for a resource type.
+ *
+ * @param  ID_TEXT	The resource type
+ * @return ?object	The object (NULL: could not get one)
+ */
+function get_resource_occlefs_object($resource_type)
+{
+	require_code('content');
+	$object=get_content_object($resource_type);
+	if (is_null($object)) return NULL;
+	$info=$object->info();
+	$fs_hook=$object->occle_filesystem_hook;
+	if (is_null($fs_hook)) return NULL;
+
+	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($resource_type));
+	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($resource_type),true);
+	if (is_null($fs_object)) return NULL;
+	return $fs_object;
+}
+
+/*
+ADDRESSING SPACE POPULATION AND LOOKUP CAN HAPPEN OUTSIDE RESOURCE-FS OBJECTS;
+THIS INCLUDES FILENAME STUFF, ALTHOUGH DELEGATED INTERNALLY TO THE RESOURCE-FS OBJECT WHICH HANDLES THE ACTUAL NAMING RULES;
+ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch via get_resource_occlefs_object)
+*/
+
+/**
  * Generate, and save, a resource-fs moniker.
  *
  * @param  ID_TEXT		The resource type
@@ -55,6 +82,7 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 	{
 		require_code('content');
 		list($label)=content_get_details($resource_type,$resource_id);
+		if (is_null($label)) return array(NULL,NULL);
 	}
 
 	require_code('urls2');
@@ -121,10 +149,8 @@ function expunge_resourcefs_moniker($resource_type,$resource_id)
  */
 function find_guid_via_id($resource_type,$resource_id)
 {
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_guid',array(
-		'resource_type'=>$resource_type,
-		'resource_id'=>$resource_id,
-	));
+	list(,$guid)=generate_resourcefs_moniker($resource_type,$resource_id);
+	return $guid;
 }
 
 /**
@@ -137,21 +163,30 @@ function find_guid_via_id($resource_type,$resource_id)
  */
 function find_occlefs_filename_via_id($resource_type,$resource_id,$include_subpath=false)
 {
-	$moniker=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_moniker',array(
-		'resource_type'=>$resource_type,
-		'resource_id'=>$resource_id,
-	));
-	if (!is_null($moniker))
+	$resourcefs_ob=get_resource_occlefs_object($resource_type);
+	$filename=$resourcefs_ob->convert_id_to_filename($resource_type,$resource_id);
+	if (!is_null($filename))
 	{
 		if ($include_subpath)
 		{
-			$occlefs_ob=get_resource_occlefs_object($resource_type);
-			$subpath=$occlefs_ob->search($resource_type,$resource_id);
-			$moniker=$subpath.'/'.$moniker;
+			$subpath=$resourcefs_ob->search($resource_type,$resource_id);
+			$filename=$subpath.'/'.$filename;
 		}
-		return $moniker.'.xml';
 	}
-	return NULL;
+	return $filename;
+}
+
+/**
+ * Find the resource moniker from the resource ID.
+ *
+ * @param  ID_TEXT		The resource type
+ * @param  ID_TEXT		The resource ID
+ * @return ?ID_TEXT		The moniker (NULL: no match)
+ */
+function find_moniker_via_id($resource_type,$resource_id)
+{
+	list($moniker)=generate_resourcefs_moniker($resource_type,$resource_id);
+	return $moniker;
 }
 
 /**
@@ -163,9 +198,22 @@ function find_occlefs_filename_via_id($resource_type,$resource_id,$include_subpa
  */
 function find_label_via_id($resource_type,$resource_id)
 {
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_label',array(
+	list(,,$label)=generate_resourcefs_moniker($resource_type,$resource_id);
+	return $label;
+}
+
+/**
+ * Find the resource ID from the resource moniker.
+ *
+ * @param  ID_TEXT		The resource type
+ * @param  ID_TEXT		The moniker
+ * @return ?ID_TEXT		The ID (NULL: no match)
+ */
+function find_id_via_moniker($resource_type,$resource_moniker)
+{
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
 		'resource_type'=>$resource_type,
-		'resource_id'=>$resource_id,
+		'resource_moniker'=>$resource_moniker,
 	));
 }
 
@@ -174,7 +222,7 @@ function find_label_via_id($resource_type,$resource_id)
  *
  * @param  ID_TEXT		The resource type
  * @param  SHORT_TEXT	The label
- * @param  ?LONG_TEXT	The subpath (NULL: don't care)
+ * @param  ?string		The subpath (NULL: don't care)
  * @return ?ID_TEXT		The ID (NULL: no match)
  */
 function find_id_via_label($resource_type,$label,$subpath=NULL)
@@ -238,78 +286,10 @@ function find_ids_via_guids($guids)
  */
 function find_id_via_occlefs_filename($resource_type,$filename)
 {
-	$resource_filename=preg_replace('#^.*/#','',$resource_filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
-		'resource_type'=>$resource_type,
-		'resource_moniker'=>basename($resource_filename,'.xml'),
-	));
-}
-
-/**
- * Get the OccLE-fs object for a resource type.
- *
- * @param  ID_TEXT	The resource type
- * @return ?object	The object (NULL: could not get one)
- */
-function get_resource_occlefs_object($resource_type)
-{
-	require_code('content');
-	$object=get_content_object($resource_type);
-	if (is_null($object)) return NULL;
-	$info=$object->info();
-	$fs_hook=$object->occle_filesystem_hook;
-	if (is_null($fs_hook)) return NULL;
-
-	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($resource_type));
-	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($resource_type),true);
-	if (is_null($fs_object)) return NULL;
-	return $fs_object;
-}
-
-/**
- * Convert a local ID to something portable.
- *
- * @param  ID_TEXT	The resource type
- * @param  ID_TEXT	The resource ID
- * @return array		Portable ID details
- */
-function remap_resource_id_as_portable($resource_type,$resource_id)
-{
-	list($moniker,$guid,$label)=generate_resourcefs_moniker($resource_type,$resource_id);
-
-	$occlefs_ob=get_resource_occlefs_object($resource_type);
-	$subpath=$occlefs_ob->search($resource_type,$resource_id);
-
-	return array(
-		'guid'=>$guid,
-		'label'=>$label,
-		'subpath'=>$subpath,
-		//'moniker'=>$moniker,	Given more effectively with label
-		'id'=>$resource_id // Not used, but useful to have anyway
-	);
-}
-
-/**
- * Convert a portable ID to something local.
- *
- * @param  ID_TEXT	The resource type
- * @param  array		Portable ID details
- * @return ID_TEXT	The resource ID
- */
-function remap_portable_as_resource_id($resource_type,$portable)
-{
-	//$resource_id=$portable['id'];	Would not be portable between sites
-
-	$resource_id=find_id_via_guid($portable['guid']);
-	if (!is_null($resource_id)) return $resource_id;
-
-	$resource_id=find_id_via_label($portable['label'],$portable['subpath']);
-	if (!is_null($resource_id)) return $resource_id;
-
-	// Not found: Create
-	$occlefs_ob=get_resource_occlefs_object($resource_type);
-	$resource_id=$occlefs_ob->resource_add($resource_type,$portable['label'],$portable['subpath'],array());
-
+	$resourcefs_ob=get_resource_occlefs_object($resource_type);
+	$test=$resourcefs_ob->convert_filename_to_id($filename,$resource_type);
+	if (is_null($test)) return NULL;
+	list(,$resource_id)=$test;
 	return $resource_id;
 }
 
@@ -319,6 +299,10 @@ function remap_portable_as_resource_id($resource_type,$portable)
  */
 class resource_fs_base
 {
+	/*
+	FINDING INFORMATION ABOUT HOOK STRUCTURE
+	*/
+
 	var $folder_resource_type=NULL;
 	var $file_resource_type=NULL;
 	var $_cma_object=array();
@@ -338,6 +322,211 @@ class resource_fs_base
 		}
 		return $this->_cma_object[$resource_type]->info();
 	}
+
+	/**
+	 * Find whether a resource type is of a folder-type.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @return boolean	Whether it is
+	 */
+	function is_folder_type($resource_type)
+	{
+		$folder_types=is_array($this->folder_resource_type)?$this->folder_resource_type:(is_null($this->folder_resource_type)?array():array($this->folder_resource_type));
+		return in_array($resource_type,$folder_types);
+	}
+
+	/**
+	 * Find whether a resource type is of a file-type.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @return boolean	Whether it is
+	 */
+	function is_file_type($resource_type)
+	{
+		$file_types=is_array($this->file_resource_type)?$this->file_resource_type:(is_null($this->file_resource_type)?array():array($this->file_resource_type));
+		return in_array($resource_type,$file_types);
+	}
+
+	/*
+	HOOKS MAY OVERRIDE THESE AS REQUIRED, TO ENCODE IMPLEMENTATION COMPLEXITIES
+	*/
+
+	/**
+	 * Whether the filesystem hook is active.
+	 *
+	 * @return boolean		Whether it is
+	 */
+	function _is_active()
+	{
+		return true;
+	}
+
+	/**
+	 * Whether the filesystem hook can handle a particular file type.
+	 *
+	 * @param  string			The file type (no file extension)
+	 * @return array			List of our resource types that can
+	 */
+	function can_accept_filetype($filetype)
+	{
+		if ($filetype!='xml') return array();
+
+		$ret=array();
+		$ret=array_merge($ret,is_array($this->folder_resource_type)?$this->folder_resource_type:array($this->folder_resource_type));
+		$ret=array_merge($ret,is_array($this->file_resource_type)?$this->file_resource_type:array($this->file_resource_type));
+		return $ret;
+	}
+
+	/**
+	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
+	 *
+	 * @param  ID_TEXT		Folder resource type
+	 * @param  ID_TEXT		Resource type (may be file or folder)
+	 * @return boolean		Whether it can
+	 */
+	function _has_parent_child_relationship($above,$under)
+	{
+		return true;
+	}
+
+	/**
+	 * Load function for resource-fs (for files). Finds the data for some resource from a resource-fs file.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~string		Resource data (false: error)
+	 */
+	function file_load__flat($filename,$path)
+	{
+		return $this->file_load_xml($filename,$path); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
+	}
+
+	/**
+	 * Load function for resource-fs (for folders). Finds the data for some resource from a resource-fs folder.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~string		Resource data (false: error)
+	 */
+	function folder_load__flat($filename,$path)
+	{
+		return $this->folder_load_xml($filename,$path); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
+	}
+
+	/**
+	 * Save function for resource-fs (for files). Parses the data for some resource to a resource-fs file.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			Resource data
+	 * @return boolean		Success status
+	 */
+	function file_save__flat($filename,$path,$data)
+	{
+		return $this->file_save_xml($filename,$path,$data); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
+	}
+
+	/**
+	 * Save function for resource-fs (for folders). Parses the data for some resource to a resource-fs folder.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			Resource data
+	 * @return boolean		Success status
+	 */
+	function folder_save__flat($filename,$path,$data)
+	{
+		return $this->folder_save_xml($filename,$path,$data); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
+	}
+
+	/**
+	 * Interpret the input of a file, into a way we can understand it to add. Hooks may override this with special import code.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 */
+	function _file_magic_filter($filename,$path,$properties)
+	{
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
+	}
+
+	/**
+	 * Interpret the input of a folder, into a way we can understand it to add. Hooks may override this with special import code.
+	 *
+	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 */
+	function _folder_magic_filter($filename,$path,$properties)
+	{
+		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
+	}
+
+	/**
+	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
+	 * @return ID_TEXT	The filename
+	 */
+	function file_convert_id_to_filename($resource_type,$resource_id)
+	{
+		$moniker=find_moniker_via_id($resource_type,$resource_id);
+		return $moniker.'.xml';
+	}
+
+	/**
+	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
+	 * @return ?ID_TEXT	The filename (NULL: could not find)
+	 */
+	function folder_convert_id_to_filename($resource_type,$resource_id)
+	{
+		return find_moniker_via_id($resource_type,$resource_id);
+	}
+
+	/**
+	 * Get the resource ID for a filename (of file). Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+	 * @return ?array		A pair: The resource type, the resource ID (NULL: could not find)
+	 */
+	function file_convert_filename_to_id($filename,$resource_type=NULL)
+	{
+		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
+
+		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
+
+		$moniker=basename($filename,'.xml'); // Remove file extension from filename
+		$resource_id=find_id_via_moniker($resource_type,$moniker);
+		return array($resource_type,$resource_id);
+	}
+
+	/**
+	 * Get the resource ID for a filename (of folder). Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+	 * @return array		A pair: The resource type, the resource ID
+	 */
+	function folder_convert_filename_to_id($filename,$resource_type=NULL)
+	{
+		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
+
+		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
+
+		$moniker=basename($filename); // Get filename component from path
+		$resource_id=find_id_via_moniker($resource_type,$moniker);
+		return array($resource_type,$resource_id);
+	}
+
+	/*
+	JUGGLING PROPERTIES
+	*/
 
 	/**
 	 * Find a default property, defaulting to blank.
@@ -364,7 +553,7 @@ class resource_fs_base
 	}
 
 	/**
-	 * Find a default property, defaulting to blank.
+	 * Find an integer default property, defaulting to NULL.
 	 *
 	 * @param  array		The properties
 	 * @param  ID_TEXT	The property
@@ -373,6 +562,17 @@ class resource_fs_base
 	function _default_property_int($properties,$property)
 	{
 		return array_key_exists($property,$properties)?intval($properties[$property]):0;
+	}
+
+	/**
+	 * Convert a category to an integer, defaulting to NULL if it is blank.
+	 *
+	 * @param  ID_TEXT	The category value (blank: root)
+	 * @return ?integer	The category (NULL: root)
+	 */
+	function _integer_category($category)
+	{
+		return ($category=='')?NULL:intval($category);
 	}
 
 	/**
@@ -413,34 +613,102 @@ class resource_fs_base
 		return $default;
 	}
 
+	/*
+	ABSTRACT/AGNOSTIC RESOURCE-FS API FOR INTERNAL OCPORTAL USE
+	*/
+
 	/**
-	 * Find a default property, defaulting to blank.
+	 * Find the subpath to a resource.
 	 *
-	 * @param  ID_TEXT	The category value (blank: root)
-	 * @return ?integer	The category (NULL: root)
+	 * @param  ID_TEXT		The resource type
+	 * @param  ID_TEXT		The resource ID
+	 * @return string			The subpath
 	 */
-	function _integer_category($category)
+	function search($resource_type,$resource_id)
 	{
-		return ($category=='')?NULL:intval($category);
+		// TODO, find subpath
 	}
 
-	function is_folder_type($resource_type)
-	{
-		$folder_types=is_array($this->folder_resource_type)?$this->folder_resource_type:(is_null($this->folder_resource_type)?array():array($this->folder_resource_type));
-		return in_array($resource_type,$folder_types);
-	}
-
-	function is_file_type($resource_type)
-	{
-		$file_types=is_array($this->file_resource_type)?$this->file_resource_type:(is_null($this->file_resource_type)?array():array($this->file_resource_type));
-		return in_array($resource_type,$file_types);
-	}
-
+	/**
+	 * Convert a label to a filename, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
+	 *
+	 * @param  SHORT_TEXT	Resource label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  boolean		Whether the content must already exist
+	 * @param  ?ID_TEXT		The filename (NULL: not found)
+	 */
 	function convert_label_to_filename($label,$subpath,$resource_type,$must_already_exist=false)
 	{
-		// TODO
+		$resource_id=$this->convert_label_to_id($label,$subpath,$resource_type,$must_already_exist);
+		if (is_null($resource_id)) return NULL;
+		return find_occlefs_filename_via_id($resource_type,$resource_id);
 	}
 
+	/**
+	 * Convert a label to an ID, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
+	 *
+	 * @param  SHORT_TEXT	Resource label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  boolean		Whether the content must already exist
+	 * @param  ?ID_TEXT		The ID (NULL: not found)
+	 */
+	function convert_label_to_id($label,$subpath,$resource_type,$must_already_exist=false)
+	{
+		$resource_id=find_id_via_label($resource_type,$label,$subpath);
+		if (is_null($resource_id))
+		{
+			if (!$must_already_exist)
+			{
+				// Not found, create...
+				$occlefs_ob=get_resource_occlefs_object($resource_type);
+
+				// Create subpath
+				if ($subpath!='')
+				{
+					$subpath_bits=explode('/',$subpath);
+					$subpath_above='';
+					foreach ($subpath_bits as $subpath_bit)
+					{
+						$subpath_id=$this->folder_convert_filename_to_id($subpath_bit);
+						if (is_null($subpath_id)) // Missing, create folder
+						{
+							$this->folder_add($subpath_bit,$subpath_above,array());
+						}
+						if ($subpath_above!='') $subpath_above.='/';
+						$subpath_above.=$subpath_bit;
+					}
+				}
+
+				// Create main resource
+				$resource_id=$occlefs_ob->resource_add($resource_type,$label,$subpath,array());
+			}
+		}
+		return $resource_id;
+	}
+
+	/**
+	 * Get the filename for a resource ID (of file or folder). Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
+	 * @return ?ID_TEXT	The filename (NULL: not found)
+	 */
+	function convert_id_to_filename($resource_type,$resource_id)
+	{
+		if ($this->is_file_type($resource_type))
+			return $this->file_convert_id_to_filename($resource_id,$resource_type);
+		if ($this->is_folder_type($resource_type))
+			return $this->folder_convert_id_to_filename($resource_id,$resource_type);
+		return NULL;
+	}
+
+	/**
+	 * Get the resource ID for a filename (of file or folder). Note that filenames are unique across all folders in a filesystem.
+	 *
+	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ID_TEXT	The resource type
+	 * @return ?array		A pair: The resource type, the resource ID (NULL: could not find)
+	 */
 	function convert_filename_to_id($filename,$resource_type)
 	{
 		if ($this->is_file_type($resource_type))
@@ -448,232 +716,6 @@ class resource_fs_base
 		if ($this->is_folder_type($resource_type))
 			return $this->folder_convert_filename_to_id($filename,$resource_type);
 		return NULL;
-	}
-
-	/**
-	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The filename, or filepath
-	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
-	 * @return ?array		A pair: The resource type, the resource ID (NULL: could not find)
-	 */
-	function file_convert_filename_to_id($filename,$resource_type=NULL)
-	{
-		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
-
-		$resource_id=basename($filename,'.xml'); // Remove file extension from filename
-		return array($resource_type,$resource_id);
-	}
-
-	/**
-	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The filename, or filepath
-	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
-	 * @return array		A pair: The resource type, the resource ID
-	 */
-	function folder_convert_filename_to_id($filename,$resource_type=NULL)
-	{
-		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
-
-		// TODO. This is all wrong I think. And it must also recursively add new folders when it can't get a match.
-
-		if ($filename=='<blank>') $filename='';
-		$resource_id=basename($filename); // Get filename component from path
-		return array($resource_type,$resource_id);
-	}
-
-	function convert_id_to_filename($filename,$resource_type)
-	{
-		if ($this->is_file_type($resource_type))
-			return $this->file_convert_id_to_filename($filename,$resource_type);
-		if ($this->is_folder_type($resource_type))
-			return $this->folder_convert_id_to_filename($filename,$resource_type);
-		return NULL;
-	}
-
-	/**
-	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The resource type
-	 * @param  ID_TEXT	The resource ID
-	 * @return ID_TEXT	The filename
-	 */
-	function file_convert_id_to_filename($resource_type,$resource_id)
-	{
-		return $resource_id.'.xml';
-	}
-
-	/**
-	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The resource type
-	 * @param  ID_TEXT	The resource ID
-	 * @return ?ID_TEXT	The filename (NULL: could not find)
-	 */
-	function folder_convert_id_to_filename($resource_type,$resource_id)
-	{
-		if ($resource_id=='') return '<blank>';
-		return $resource_id;
-	}
-
-	/**
-	 * Interpret the input of a folder, into a way we can understand it to add. Hooks may override this with special import code.
-	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 */
-	function _folder_magic_filter($filename,$path,$properties)
-	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
-	}
-
-	/**
-	 * Interpret the input of a file, into a way we can understand it to add. Hooks may override this with special import code.
-	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 */
-	function _file_magic_filter($filename,$path,$properties)
-	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
-	}
-
-	function file_load($filename,$path)
-	{
-		// TODO call _file_load, but do post-processing
-	}
-
-	function folder_load($filename,$path)
-	{
-		// TODO call _folder_load, but do post-processing
-	}
-
-	function set_resource_access($filename,$groups)
-	{
-		// TODO
-	}
-
-	function get_resource_access($filename)
-	{
-		// TODO
-	}
-
-	function reset_resource_privileges($filename)
-	{
-		// TODO
-	}
-
-	function set_resource_privileges_from_preset($filename,$group_presets)
-	{
-		// TODO
-	}
-
-	function set_resource_privileges($filename,$group_settings)
-	{
-		// TODO
-	}
-
-	function get_resource_privileges($filename)
-	{
-		// TODO
-	}
-
-	function set_resource_privileges_from_preset__members($filename,$member_presets)
-	{
-		// TODO
-	}
-
-	function set_resource_privileges__members($filename,$privilege,$setting)
-	{
-		// TODO
-	}
-
-	function get_resource_privileges__members($filename)
-	{
-		// TODO
-	}
-
-	/**
-	 * Whether the filesystem hook is active.
-	 *
-	 * @return boolean		Whether it is
-	 */
-	function _is_active()
-	{
-		return true;
-	}
-
-	/**
-	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
-	 *
-	 * @param  ID_TEXT		Folder resource type
-	 * @param  ID_TEXT		Resource type (may be file or folder)
-	 * @return boolean		Whether it can
-	 */
-	function _has_parent_child_relationship($above,$under)
-	{
-		return true;
-	}
-
-	/**
-	 * Load up details for a resource dependency.
-	 *
-	 * @param  ID_TEXT		Resource type
-	 * @param  ID_TEXT		Resource ID
-	 * @return array			Details for the dependency
-	 */
-	function get_resource_dependency($resource_type,$resource_id)
-	{
-		// TODO
-	}
-
-	/**
-	 * Load up details for a resource dependency.
-	 *
-	 * @param  array			Details for the dependency
-	 * @return ID_TEXT		Resource ID
-	 */
-	function resolve_resource_dependency($details)
-	{
-		// TODO
-	}
-
-	/**
-	 * Find all translated strings for a language ID.
-	 *
-	 * @param  AUTO_LINK		Language ID
-	 * @return array			Details
-	 */
-	function get_translated_text($lang_id)
-	{
-		// TODO
-	}
-
-	/**
-	 * Find meta keywords.
-	 *
-	 * @param  ID_TEXT		SEO type
-	 * @param  ID_TEXT		ID
-	 * @return string			Meta keywords
-	 */
-	function get_meta_keywords($seo_type,$id)
-	{
-		// TODO
-	}
-
-	/**
-	 * Find a meta description.
-	 *
-	 * @param  ID_TEXT		SEO type
-	 * @param  ID_TEXT		ID
-	 * @return string			Meta description
-	 */
-	function get_meta_description($seo_type,$id)
-	{
-		// TODO
 	}
 
 	/**
@@ -739,7 +781,7 @@ class resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for OcCLE-fs resource hooks. Deletes the resource.
+	 * Deletes the resource. Wraps file_delete/folder_delete.
 	 *
 	 * @param  ID_TEXT		Resource type
 	 * @param  ID_TEXT		The filename
@@ -756,6 +798,233 @@ class resource_fs_base
 		}
 		return $status;
 	}
+
+	/**
+	 * Set resource view access on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @param  array			A mapping from group ID to view access
+	 */
+	function set_resource_access($filename,$groups)
+	{
+		// TODO
+	}
+
+	/**
+	 * Get resource view access on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @return array			A mapping from group ID to view access
+	 */
+	function get_resource_access($filename)
+	{
+		// TODO
+		return array();
+	}
+
+	/**
+	 * Reset resource privileges on the resource for all usergroups.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 */
+	function reset_resource_privileges($filename)
+	{
+		// TODO
+	}
+
+	/**
+	 * Set resource privileges from a preset on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @param  array			A mapping from group ID to preset value. Preset values are 0 (read only) to 3 (moderation)
+	 */
+	function set_resource_privileges_from_preset($filename,$group_presets)
+	{
+		// TODO
+	}
+
+	/**
+	 * Set resource privileges on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @param  array			A map between group ID and lists of pairs: privilege, setting
+	 */
+	function set_resource_privileges($filename,$group_settings)
+	{
+		// TODO
+	}
+
+	/**
+	 * Get the resource privileges for the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @return array			A map between group ID and lists of pairs: privilege, setting
+	 */
+	function get_resource_privileges($filename)
+	{
+		// TODO
+		return array();
+	}
+
+	/**
+	 * Set resource privileges from a preset so that a member has custom privileges on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @param  array			A mapping from member ID to preset value. Preset values are 0 (read only) to 3 (moderation)
+	 */
+	function set_resource_privileges_from_preset__members($filename,$member_presets)
+	{
+		// TODO
+	}
+
+	/**
+	 * Set a resource privilege so that a member has a custom privilege on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @param  ID_TEXT		The privilege
+	 * @param  ID_TEXT		The value
+	 * @set 0 1 
+	 */
+	function set_resource_privileges__members($filename,$privilege,$setting)
+	{
+		// TODO
+	}
+
+	/**
+	 * Get the resource privileges for all members that have custom privileges on the resource.
+	 *
+	 * @param  ID_TEXT		Resource filename (assumed to be of a folder type)
+	 * @return array			A list of triples: member ID, privilege, setting
+	 */
+	function get_resource_privileges__members($filename)
+	{
+		// TODO
+		return array();
+	}
+
+	/*
+	HELPERS FOR THE ADDRESSING PORTABILITY
+	*/
+
+	/**
+	 * Convert a local ID to something portable.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @param  ID_TEXT	The resource ID
+	 * @return array		Portable ID details
+	 */
+	function remap_resource_id_as_portable($resource_type,$resource_id)
+	{
+		list($moniker,$guid,$label)=generate_resourcefs_moniker($resource_type,$resource_id);
+
+		$subpath=$this->search($resource_type,$resource_id);
+
+		return array(
+			'guid'=>$guid,
+			'label'=>$label,
+			'subpath'=>$subpath,
+			//'moniker'=>$moniker,	Given more effectively with label
+			'id'=>$resource_id // Not used, but useful to have anyway for debugging/manual-reflection
+		);
+	}
+
+	/**
+	 * Convert a portable ID to something local.
+	 *
+	 * @param  ID_TEXT	The resource type
+	 * @param  array		Portable ID details
+	 * @return ID_TEXT	The resource ID
+	 */
+	function remap_portable_as_resource_id($resource_type,$portable)
+	{
+		//$resource_id=$portable['id'];	Would not be portable between sites
+
+		// Ideally, find via GUID
+		$resource_id=array_key_exists('guid',$portable)?find_id_via_guid($portable['guid']):NULL;
+		if (!is_null($resource_id)) return $resource_id;
+
+		// Otherwise, use the label
+		$resource_id=convert_label_to_id($portable['label'],$portable['subpath'],$resource_type);
+
+		return $resource_id;
+	}
+
+	/**
+	 * Find all translated strings for a language ID. This is used as an intermediate step in creating multi-language serialisations.
+	 *
+	 * @param  AUTO_LINK		Language ID
+	 * @return array			Details
+	 */
+	function _get_translated_text($lang_id)
+	{
+		// TODO
+	}
+
+	/*
+	XML FILE HANDLING: OUR DEFAULT PROPERTY LIST SERIALISATION/DESERIALISATION
+	*/
+
+	/**
+	 * Load function for resource-fs (for files). Finds the data for some resource from a resource-fs XML file.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~string		Resource data (false: error)
+	 */
+	function file_load_xml($filename,$path)
+	{
+		$properties=$this->file_load($filename,$path);
+		if ($properties===false) return false;
+		return serialize($properties); // TODO: Should be XML serialisation
+	}
+
+	/**
+	 * Load function for resource-fs (for folders). Finds the data for some resource from a resource-fs XML folder.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @return ~string		Resource data (false: error)
+	 */
+	function folder_load_xml($filename,$path)
+	{
+		$properties=$this->folder_load($filename,$path);
+		if ($properties===false) return false;
+		return serialize($properties); // TODO: Should be XML serialisation
+	}
+
+	/**
+	 * Save function for resource-fs (for files). Parses the data for some resource to a resource-fs XML file.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			Resource data
+	 * @return boolean		Success status
+	 */
+	function file_save_xml($filename,$path,$data)
+	{
+		$properties=@unserialize($data); // TODO: Should be XML parsing
+		if ($properties===false) return false;
+		return $this->file_save($filename,$path,$properties);
+	}
+
+	/**
+	 * Save function for resource-fs (for folders). Parses the data for some resource to a resource-fs XML folder.
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			Resource data
+	 * @return boolean		Success status
+	 */
+	function folder_save_xml($filename,$path,$data)
+	{
+		$properties=@unserialize($data); // TODO: Should be XML parsing
+		if ($properties===false) return false;
+		return $this->folder_save($filename,$path,$properties);
+	}
+
+	/*
+	OCCLE-FS BINDING
+	*/
 
 	/**
 	 * Standard modular listing function for OcCLE-fs hooks.
@@ -902,11 +1171,6 @@ class resource_fs_base
 		return $listing;
 	}
 
-	function search($resource_type,$resource_id)
-	{
-		// TODO, find subpath
-	}
-
 	/**
 	 * Standard modular directory creation function for OcCLE-fs hooks.
 	 *
@@ -919,7 +1183,6 @@ class resource_fs_base
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
 		if (is_null($folder_resource_type)) return false;
-_folder_add($label,$path,$properties)
 		// TODO
 	}
 
@@ -935,7 +1198,6 @@ _folder_add($label,$path,$properties)
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
 		if (is_null($folder_resource_type)) return false;
-folder_delete($path)
 		// TODO
 	}
 
@@ -950,7 +1212,6 @@ folder_delete($path)
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
-file_delete($path)
 		// TODO
 	}
 
@@ -965,7 +1226,6 @@ file_delete($path)
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
-// TODO: We'll be given $properties, need to convert to XML
 		// TODO
 	}
 
@@ -981,9 +1241,6 @@ file_delete($path)
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
 	{
-// TODO: What if XML supplied? Need to parse into $properties
-// TODO: Will check if there's something existing in the listing matching the exact name, if not will add (and the filename will actually change due to a new ID being assinged), if so will save into that
-_file_add($filename,$path,$properties)
 		// TODO
 	}
 }
