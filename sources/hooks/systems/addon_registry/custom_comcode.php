@@ -97,7 +97,7 @@ class Hook_addon_registry_custom_comcode
 			'sources/hooks/blocks/main_custom_gfx/rollover_button.php',
 			'themes/default/images/bigicons/custom-comcode.png',
 			'sources/hooks/systems/comcode/.htaccess',
-			'sources/hooks/systems/comcode/index.html'
+			'sources/hooks/systems/comcode/index.html',
 			'sources/hooks/systems/occle_fs/custom_comcode_tags.php',
 		);
 	}

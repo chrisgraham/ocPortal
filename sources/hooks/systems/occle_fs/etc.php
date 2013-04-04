@@ -37,7 +37,7 @@ class Hook_occle_fs_etc
 		load_options();
 
 		$query='SELECT param_a,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('the_type','CONFIGURATION').' GROUP BY param_a';
-		$modification_times=list_to_map('param_a','date_and_time',$GLOBALS['SITE_DB']->query($query));
+		$modification_times=collapse_2d_complexity('param_a','date_and_time',$GLOBALS['SITE_DB']->query($query));
 
 		$listing=array();
 		foreach (array_keys($CONFIG_OPTIONS_CACHE) as $option)
@@ -55,7 +55,7 @@ class Hook_occle_fs_etc
 		$hooks=find_all_hooks('systems','occle_fs_extended_config');
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/systems/occle_fs_extended_config/',filter_naughty($hook));
+			require_code('hooks/systems/occle_fs_extended_config/'.filter_naughty($hook));
 			$ob=object_factory('Hook_occle_fs_extended_config__'.$hook);
 			$modification_time=$ob->_get_edit_date();
 
@@ -137,7 +137,7 @@ class Hook_occle_fs_etc
 		$extended_config_filename=preg_replace('#^\_(.*)s$#','${1}',$file_name);
 		if (array_key_exists($extended_config_filename,$hooks))
 		{
-			require_code('hooks/systems/occle_fs_extended_config/',filter_naughty($extended_config_filename));
+			require_code('hooks/systems/occle_fs_extended_config/'.filter_naughty($extended_config_filename));
 			$ob=object_factory('Hook_occle_fs_extended_config__'.$extended_config_filename);
 			return $ob->read_file($meta_dir,$meta_root_node,$file_name,$occle_fs);
 		}
@@ -167,7 +167,7 @@ class Hook_occle_fs_etc
 		$extended_config_filename=preg_replace('#^\_(.*)s$#','${1}',$file_name);
 		if (array_key_exists($extended_config_filename,$hooks))
 		{
-			require_code('hooks/systems/occle_fs_extended_config/',filter_naughty($extended_config_filename));
+			require_code('hooks/systems/occle_fs_extended_config/'.filter_naughty($extended_config_filename));
 			$ob=object_factory('Hook_occle_fs_extended_config__'.$extended_config_filename);
 			return $ob->write_file($meta_dir,$meta_root_node,$file_name,$contents,$occle_fs);
 		}

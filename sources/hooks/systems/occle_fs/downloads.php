@@ -67,6 +67,8 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		if ($category=='') return false; // Can't create more than one root
 
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
 		require_code('downloads2');
 
 		$parent_id=$this->_integer_category($category);
@@ -118,6 +120,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('downloads2');
@@ -140,9 +143,10 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -177,6 +181,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 			'licence'=>'download_licence',
 			'num_downloads'=>'INTEGER',
 			'views'=>'INTEGER',
+			'default_pic'=>'INTEGER',
 			'meta_keywords'=>'LONG_TRANS',
 			'meta_description'=>'LONG_TRANS',
 			'submitter'=>'member',
@@ -243,7 +248,9 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_download($category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date,NULL,$meta_keywords,$meta_description);
+		$default_pic=$this->_default_property_int($properties,'default_pic');
+		if ($default_pic==0) $default_pic=1;
+		$id=add_download($category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date,NULL,$meta_keywords,$meta_description,$default_pic);
 		return strval($id);
 	}
 
@@ -330,13 +337,15 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		$cost=$this->_default_property_int($properties,'cost');
 		$submitter_gets_points=$this->_default_property_int($properties,'submitter_gets_points');
 		$licence=$this->_default_property_int_null($properties,'licence');
-		$add_date=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$num_downloads=$this->_default_property_int($properties,'num_downloads');
 		$views=$this->_default_property_int($properties,'views');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
-		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
+		$default_pic=$this->_default_property_int($properties,'default_pic');
+		if ($default_pic==0) $default_pic=1;
 
 		edit_download(intval($resource_id),$category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
 
@@ -347,9 +356,10 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

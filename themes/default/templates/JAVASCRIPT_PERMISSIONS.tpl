@@ -111,7 +111,7 @@ function copy_permission_presets(name,value,just_track)
 	var made_change=false;
 
 	var usual_suspects=['bypass_validation_xrange_content','edit_xrange_content','edit_own_xrange_content','delete_xrange_content','delete_own_xrange_content','submit_xrange_content'];
-	var access=[2,3,2,3,2,1]; // The minimum access level that turns on each of the above permissions
+	var access=[2,3,2,3,2,1]; // The minimum access level that turns on each of the above permissions   NB: Also defined in resource_fs.php, so keep that in-sync
 
 	var holder=document.getElementById(name+'_privilege_container');
 	var elements=holder.getElementsByTagName('select');

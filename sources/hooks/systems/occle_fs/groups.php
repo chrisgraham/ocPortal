@@ -207,7 +207,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$label=$this->_default_property_str($properties,'label');
 		list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)=$this->__folder_read_in_properties($path,$properties);
 
-		ocf_edit_group(intval($resource_id),$label,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+		ocf_edit_group(intval($resource_id),$label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
 
 		return true;
 	}
@@ -216,9 +216,10 @@ class Hook_occle_fs_groups extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -269,6 +270,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 			'highlighted_name'=>'BINARY',
 			'pt_allow'=>'SHORT_TEXT',
 			'pt_rules_text'=>'LONG_TRANS',
+			'on_probation_until'=>'?TIME',
 		);
 		require_code('ocf_members');
 		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
@@ -328,6 +330,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	 */
 	function __file_read_in_properties($path,$properties)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		$password_hashed=$this->_default_property_str($properties,'password_hashed');
 		$email_address=$this->_default_property_str($properties,'email_address');
 		$groups=array();
@@ -375,6 +378,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$highlighted_name=$this->_default_property_int($properties,'highlighted_name');
 		$pt_allow=$this->_default_property_str($properties,'pt_allow');
 		$pt_rules_text=$this->_default_property_str($properties,'pt_rules_text');
+		$on_probation_until=$this->_default_property_int_null($properties,'on_probation_until');
 
 		require_code('ocf_members');
 		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
@@ -397,7 +401,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 			$actual_custom_fields[$custom_field['id']]=$value;
 		}
 
-		return array($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text);
+		return array($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 	}
 
 	/**
@@ -417,9 +421,9 @@ class Hook_occle_fs_groups extends resource_fs_base
 
 		require_code('ocf_members_action');
 
-		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text)=$this->__file_read_in_properties($path,$properties);
+		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until)=$this->__file_read_in_properties($path,$properties);
 
-		$id=ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$category,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text);
+		$id=ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$category,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
 		return strval($id);
 	}
@@ -488,7 +492,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		foreach ($cpfs as $cf_name=>$cpf)
 		{
 			$fixed_id=fix_id($cf_name);
-			if (!array_key_exists($fixed_id,$props))
+			if (!array_key_exists($fixed_id,$ret))
 			{
 				$key=$fixed_id;
 			} else
@@ -518,9 +522,9 @@ class Hook_occle_fs_groups extends resource_fs_base
 		require_code('ocf_members_action2');
 
 		$label=$this->_default_property_str($properties,'label');
-		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text)=$this->__file_read_in_properties($path,$properties);
+		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until)=$this->__file_read_in_properties($path,$properties);
 
-		ocf_edit_member(intval($resource_id),$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$category,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$label,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+		ocf_edit_member(intval($resource_id),$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$category,$actual_custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$label,$password_hashed,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
 
 		return true;
 	}
@@ -529,9 +533,10 @@ class Hook_occle_fs_groups extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

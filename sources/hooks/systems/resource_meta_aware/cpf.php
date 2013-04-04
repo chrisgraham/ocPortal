@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_cpf
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_customprofilefields:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access('admin_ocf_customprofilefields'))?(get_module_zone('admin_ocf_customprofilefields').':admin_ocf_customprofilefields:ad'):NULL,
+			'add_url'=>(has_actual_page_access(get_member(),'admin_ocf_customprofilefields'))?(get_module_zone('admin_ocf_customprofilefields').':admin_ocf_customprofilefields:ad'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

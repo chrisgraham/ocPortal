@@ -126,9 +126,10 @@ class Hook_occle_fs_news extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -288,10 +289,10 @@ class Hook_occle_fs_news extends resource_fs_base
 		{
 			$news_category=array_map('intval',explode(',',$properties['categories']));
 		}
-		$time=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$views=$this->_default_property_int($properties,'views');
-		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$image=$this->_default_property_str($properties,'image');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
@@ -305,9 +306,10 @@ class Hook_occle_fs_news extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

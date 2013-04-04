@@ -192,7 +192,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
  * @param  LONG_TEXT		The reason for this action.
  * @return boolean		Whether the topic was deleted, due to all posts in said topic being deleted.
  */
-function ocf_delete_posts_topic($topic_id,$posts,$reason)
+function ocf_delete_posts_topic($topic_id,$posts,$reason='')
 {
 	// Info about source
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$topic_id),'',1);

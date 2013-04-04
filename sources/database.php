@@ -1346,7 +1346,7 @@ class database_driver
 	 * Find if a table is locked for more than 5 seconds. Only works with MySQL.
 	 *
 	 * @param  ID_TEXT		The table name
-	 * @param  boolean		Whether the table is locked
+	 * @return boolean		Whether the table is locked
 	 */
 	function table_is_locked($tbl)
 	{

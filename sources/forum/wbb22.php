@@ -190,7 +190,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 	 */
 	function _get_moderator_groups()
 	{
-		return collapse_1d_complexity('groupid',$this->connection->query('groups',array('groupid'),array('securitylevel'=>3));
+		return collapse_1d_complexity('groupid',$this->connection->query('groups',array('groupid'),array('securitylevel'=>3)));
 	}
 
 	/**

@@ -146,7 +146,7 @@ function edit_usergroup_subscription($id,$title,$description,$cost,$length,$leng
  * @param  AUTO_LINK		The ID
  * @param  LONG_TEXT		The cancellation mail to send out
  */
-function delete_usergroup_subscription($id,$uhoh_mail)
+function delete_usergroup_subscription($id,$uhoh_mail='')
 {
 	$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;

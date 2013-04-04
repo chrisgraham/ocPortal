@@ -81,7 +81,7 @@ class Hook_addon_registry_ocf_cpfs
 			'OCF_CPF_PERMISSIONS_TAB.tpl',
 			'lang/EN/ocf_privacy.ini',
 			'sources/hooks/systems/profiles_tabs_edit/privacy.php',
-			'sources/hooks/systems/addon_registry/ocf_cpfs.php'
+			'sources/hooks/systems/addon_registry/ocf_cpfs.php',
 			'sources/hooks/systems/occle_fs/cpfs.php',
 		);
 	}

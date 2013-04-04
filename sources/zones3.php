@@ -352,14 +352,17 @@ function get_zone_chooser($inline=false,$no_go=NULL,$reorder=NULL)
  * @param  LANGUAGE_NAME	The language
  * @param  ID_TEXT			The page text
  * @param  BINARY				The validated status
- * @param  ID_TEXT			The page parent
+ * @param  ?ID_TEXT			The page parent (NULL: none)
  * @param  ?TIME				Add time (NULL: now)
  * @param  ?TIME				Edit time (NULL: not edited)
  * @param  BINARY				Whether to show as edited
  * @param  ?MEMBER			The submitter (NULL: current member)
  * @param  ?ID_TEXT			The old page name (NULL: not being renamed)
+ * @param  SHORT_TEXT		Meta keywords for this resource (blank: implicit)
+ * @param  LONG_TEXT			Meta description for this resource (blank: implicit)
+ * @return PATH				The save path
  */
-function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=NULL,$add_time=NULL,$edit_time=NULL,$show_as_edit=0,$submitter=NULL,$file=NULL)
+function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=NULL,$add_time=NULL,$edit_time=NULL,$show_as_edit=0,$submitter=NULL,$file=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -409,8 +412,6 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 
 	// Set meta-data
 	require_code('seo2');
-	$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
-	$meta_description=$this->_default_property_str($properties,'meta_description');
 	if (($meta_keywords=='') && ($meta_description==''))
 	{
 		seo_meta_set_for_implicit('comcode_page',$new_file,array($text),$text);
@@ -437,7 +438,7 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 
 	// Store page on disk
 	$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($new_file).'.txt');
-	if ((!file_exists($fullpath)) || ($new!=file_get_contents($fullpath)))
+	if ((!file_exists($fullpath)) || ($text!=file_get_contents($fullpath)))
 	{
 		$myfile=@fopen($fullpath,'wt');
 		if ($myfile===false) intelligent_write_error($fullpath);
@@ -478,6 +479,8 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 
 	require_code('resource_fs');
 	generate_resourcefs_moniker('comcode_page',$zone.':'.$new_file);
+
+	return $path;
 }
 
 /**

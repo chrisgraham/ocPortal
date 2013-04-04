@@ -1029,7 +1029,7 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 		<td>Finds the ID for a given content type's URL moniker</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$FIND_URL_MONIKER_VIA_ID,<content-type>,<content-id>}</td>
+		<td>{$FIND_URL_MONIKER_VIA_ID,<page>,<type>,<id>}</td>
 		<td>Finds the URL moniker for an item of content's type/ID</td>
 	</tr>
 	<tr style="background: #DDFFDD">

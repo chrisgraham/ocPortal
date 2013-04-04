@@ -49,6 +49,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			'allow_comments'=>'SHORT_INTEGER',
 			'add_date'=>'TIME',
 			'owner'=>'member',
+			'meta_keywords'=>'LONG_TRANS',
+			'meta_description'=>'LONG_TRANS',
 		);
 	}
 
@@ -99,7 +101,9 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
 		$add_date=$this->_default_property_int_null($properties,'add_date');
 		$g_owner=$this->_default_property_int_null($properties,'owner');
-		add_gallery($name,$title,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$allow_rating,$allow_comments,false,$add_date,$g_owner);
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+		add_gallery($name,$title,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$allow_rating,$allow_comments,false,$add_date,$g_owner,$meta_keywords,$meta_description);
 		return $name;
 	}
 
@@ -117,6 +121,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$resource_id),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
+
+		list($meta_keywords,$meta_description)=seo_meta_get_for($resource_type,strval($row['id']));
 
 		return array(
 			'label'=>$row['name'],
@@ -136,6 +142,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			'allow_comments'=>$row['allow_comments'],
 			'add_date'=>$row['add_date'],
 			'owner'=>$row['g_owner'],
+			'meta_keywords'=>$meta_keywords,
+			'meta_description'=>$meta_description,
 		);
 	}
 
@@ -149,6 +157,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('galleries2');
@@ -170,8 +179,10 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		$watermark_bottom_right=$this->_default_property_str($properties,'watermark_bottom_right');
 		$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','galleries',1);
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
-		$add_date=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$g_owner=$this->_default_property_int_null($properties,'owner');
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
 
 		edit_gallery($resource_id,$name,$title,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$meta_keywords,$meta_description,$allow_rating,$allow_comments,$g_owner,$add_time,true);
 
@@ -182,9 +193,10 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -291,7 +303,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			$accept_images=$GLOBALS['SITE_DB']->query_select_value('galleries','accept_images',array('name'=>$category));
 			if ($accept_images==0) return false;
 
-			$id=add_image($label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
+			$id=add_image($label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		} else
 		{
 			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','videos',1);
@@ -307,7 +319,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			$video_height=$this->_default_property_int_null($properties,'video_height');
 			if (is_null($video_height)) $video_height=576;
 
-			$id=add_video($label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
+			$id=add_video($label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter,$add_date,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		}
 
 		return strval($id);
@@ -387,8 +399,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		if (is_null($validated)) $validated=1;
 		$notes=$this->_default_property_str($properties,'notes');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
-		$add_date=$this->_default_property_int_null($properties,'add_date');
-		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$views=$this->_default_property_int($properties,'views');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
@@ -402,7 +414,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			$accept_images=$GLOBALS['SITE_DB']->query_select_value('galleries','accept_images',array('name'=>$category));
 			if ($accept_images==0) return false;
 
-			edit_image(intval($resource_id),$label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+			edit_image(intval($resource_id),$label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
 		} else
 		{
 			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','videos',1);
@@ -418,7 +430,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			$video_height=$this->_default_property_int_null($properties,'video_height');
 			if (is_null($video_height)) $video_height=576;
 
-			edit_video(intval($resource_id),$label,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+			edit_video(intval($resource_id),$label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
 		}
 
 		return true;
@@ -428,9 +440,10 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

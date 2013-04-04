@@ -172,8 +172,8 @@ function _get_quoted_substrings($string,$recurse=false)
 /**
  * Blank out substrings within a query, which makes it easier to analyse (no need to consider escapings).
  *
- * @param  string			The query
- * @return array			List of substrings
+ * @param  string			Input string
+ * @return string			Simplified substring
  */
 function _trim_quoted_substrings($string)
 {

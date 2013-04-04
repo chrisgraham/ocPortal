@@ -193,7 +193,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 		$value='';
 		if ((strpos($field['m_type'],'TRANS')!==false) || (($table=='config') && ($name=='config_value') && ($row[$name]!='') && (strpos($row['the_type'],'trans')!==false))) // Translation layer integration.
 		{
-			$inner.=get_translated_text_xml($row[$name],$name);
+			$inner.=get_translated_text_xml($row[$name],$name,$GLOBALS['SITE_DB'],$comcode_xml);
 
 			if (strpos($field['m_type'],'*')!==false) // Special case if lang string forms key. We need to put in an extra attribute so we can bind an existing lang string code if it exists
 			{
@@ -637,12 +637,14 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
  *
  * @param  AUTO_LINK		Language ID
  * @param  ID_TEXT		The element name
+ * @param  object			Database connection
+ * @param  boolean		Whether to use Comcode XML
  * @return string			XML (no root tag)
  */
-function get_translated_text_xml($id,$name)
+function get_translated_text_xml($id,$name,$db,$comcode_xml=false)
 {
 	$inner='';
-	$translate_rows=$GLOBALS['SITE_DB']->query_select('translate',array('*'),array('id'=>$id));
+	$translate_rows=$db->query_select('translate',array('*'),array('id'=>$id));
 	foreach ($translate_rows as $t)
 	{
 		if (($comcode_xml) && ($t['text_parsed']!='') && ($t['text_original']!=''))
@@ -694,7 +696,7 @@ function insert_lang_xml($xml_data)
 			);
 			if (!is_null($id))
 			{
-				$insert_map['id']=$data[$row_tag];
+				$insert_map['id']=$id;
 				$GLOBALS['SITE_DB']->query_insert('translate',$insert_map);
 			} else
 			{

@@ -254,7 +254,7 @@ function get_content_where_for_str_id($str_id,$cma_info,$table_alias=NULL)
 	$where=array();
 	$id_field=$cma_info['id_field'];
 	$id_parts=explode(':',$str_id);
-	foreach (is_array($id_field)?$id_field:array($id_field) as $id_field_part)
+	foreach (is_array($id_field)?$id_field:array($id_field) as $i=>$id_field_part)
 	{
 		$val=array_key_exists($i,$id_parts)?$id_parts[$i]:'';
 		$where[(is_null($table_alias)?'':($table_alias.'.')).$id_field_part]=$cma_info['id_is_numeric']?intval($val):$val;

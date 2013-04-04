@@ -43,18 +43,21 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					return array(
 						'cat_field'=>'c_name',
 						'linker_table'=>'catalogue_categories',
-						'id_field'=>'id'
+						'id_field'=>'id',
+						'cat_field_numeric'=>false,
 					);
 				}
 				break;
 			case 'catalogue_category':
-				if ($under=='catalogue_category') || ($under=='catalogue_entry')
+				if (($under=='catalogue_category') || ($under=='catalogue_entry'))
 				{
-					$folder_info=$this->_get_cma_info($under);
+					$sub_info=$this->_get_cma_info($under);
+					$folder_info=$this->_get_cma_info($above);
 					return array(
-						'cat_field'=>$folder_info['parent_spec__parent_name'],
-						'linker_table'=>$folder_info['parent_spec__table_name'],
-						'id_field'=>$folder_info['parent_spec__field_name']
+						'cat_field'=>$sub_info['parent_spec__parent_name'],
+						'linker_table'=>$sub_info['parent_spec__table_name'],
+						'id_field'=>$sub_info['parent_spec__field_name'],
+						'cat_field_numeric'=>$folder_info['id_field_numeric'],
 					);
 				}
 				break;
@@ -158,9 +161,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		$send_view_reports=$this->_default_property_int($properties,'send_view_reports');
 		$default_review_freq=$this->_default_property_int_null($properties,'default_review_freq');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
-		$name=$this->_create_name_from_label($label);
 
-		return array($name,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+		return array($description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
 	}
 
 	/**
@@ -168,11 +170,13 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 *
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return array			Properties
+	 * @return ~array			Properties (false: error)
 	 */
 	function __folder_read_in_properties_category($path,$properties)
 	{
-		if ($depth==1)
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+
+		if ($category=='')
 		{
 			$parent_id=mixed();
 			$catalogue_name=$category;
@@ -220,14 +224,18 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 			if ($category_resource_type=='catalogue') return false; // Can't create a catalogue under a catalogue
 			if ($category=='') return false; // Can't create more than one root
 
-			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$this->__folder_read_in_properties_category($path,$properties);
+			$_properties=$this->__folder_read_in_properties_category($path,$properties);
+			if ($_properties===false) return false;
+			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$_properties;
 
 			$id=actual_add_catalogue_category($catalogue_name,$label,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,NULL,$meta_keywords,$meta_description);
 
 			return strval($id);
 		} else
 		{
-			list($name,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time)=$this->__folder_read_in_properties_catalogue($path,$properties);
+			list($description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time)=$this->__folder_read_in_properties_catalogue($path,$properties);
+
+			$name=$this->_create_name_from_label($label);
 
 			actual_add_catalogue($name,$label,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
 
@@ -277,6 +285,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		if (substr($category,0,10)!='CATALOGUE-')
@@ -356,9 +366,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		if ($resource_type=='catalogue')
 		{
 			$label=$this->_default_property_str($properties,'label');
-			list($name,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time)=$this->__folder_read_in_properties_catalogue($path,$properties);
+			list($description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time)=$this->__folder_read_in_properties_catalogue($path,$properties);
 
-			actual_edit_catalogue($resource_id,$label,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+			$name=$this->_create_name_from_label($label);
+
+			actual_edit_catalogue($resource_id,$name,$label,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
 
 			// How to handle the fields
 			if ((array_key_exists('fields',$properties)) && ($properties['fields']!=''))
@@ -407,7 +419,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		} else
 		{
 			$label=$this->_default_property_str($properties,'label');
-			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$this->__folder_read_in_properties_category($path,$properties);
+
+			$_properties=$this->__folder_read_in_properties_category($path,$properties);
+			if ($_properties===false) return false;
+			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$_properties;
 
 			actual_edit_catalogue_category(intval($resource_id),$label,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time,$catalogue_name);
 		}
@@ -419,9 +434,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -429,10 +445,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 		if ($resource_type=='catalogue')
 		{
-			delete_catalogue($resource_id);
+			actual_delete_catalogue($resource_id);
 		} else
 		{
-			delete_catalogue_category(intval($resource_id));
+			actual_delete_catalogue_category(intval($resource_id));
 		}
 
 		return true;
@@ -591,7 +607,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 		require_code('catalogues2');
 
-		list($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,$meta_keywords,$meta_description)=__file_read_in_properties($path,$properties,$category,$label);
+		list($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,$meta_keywords,$meta_description)=$this->__file_read_in_properties($path,$properties,$category,$label);
 
 		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,NULL,$meta_keywords,$meta_description);
 		return strval($id);
@@ -678,9 +694,9 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		require_code('catalogues2');
 
 		$label=$this->_default_property_str($properties,'label');
-		list($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,$meta_keywords,$meta_description)=__file_read_in_properties($path,$properties,$category,$label);
+		list($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time,$submitter,$edit_date,$views,$meta_keywords,$meta_description)=$this->__file_read_in_properties($path,$properties,$category,$label);
 
-		actual_edit_catalogue_entry(intval($resource_id),$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+		actual_edit_catalogue_entry(intval($resource_id),$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description,$edit_date,$time,$views,$submitter,true);
 
 		return true;
 	}
@@ -689,14 +705,15 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
 		require_code('catalogues2');
-		delete_catalogue_entry(intval($resource_id));
+		actual_delete_catalogue_entry(intval($resource_id));
 
 		return true;
 	}

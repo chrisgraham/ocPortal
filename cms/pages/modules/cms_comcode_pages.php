@@ -942,7 +942,7 @@ class Module_cms_comcode_pages
 
 		// Main save function
 		require_code('zones3');
-		save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page,$meta_data['add_time'],$meta_data['edit_time'],$show_as_edit,$meta_data['submitter'],$file);
+		$path=save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page,$meta_data['add_time'],$meta_data['edit_time'],$show_as_edit,$meta_data['submitter'],$file);
 
 		// Deleting?
 		if (post_param_integer('delete',0)==1)
@@ -952,15 +952,15 @@ class Module_cms_comcode_pages
 		}
 
 		// Look for bad title semantics
-		$_new['html']=$_new['tempcode']->evaluate();
-		if ((substr($file,0,1)!='_') && (substr($file,0,6)!='panel_') && (trim($_new['html'])!=''))
+		$_text['html']=$_text['tempcode']->evaluate();
+		if ((substr($file,0,1)!='_') && (substr($file,0,6)!='panel_') && (trim($_text['html'])!=''))
 		{
-			if ((strpos($_new['html'],'<h1')===false) && (strpos($_new['comcode'],'[title]')===false) && (strpos($_new['comcode'],'[title="1"]')===false))
+			if ((strpos($_text['html'],'<h1')===false) && (strpos($_text['comcode'],'[title]')===false) && (strpos($_text['comcode'],'[title="1"]')===false))
 			{
 				attach_message(do_lang_tempcode('NO_LEVEL_1_HEADERS'),'notice');
 			}
 			$matches=array();
-			if ((strpos($_new['html'],'<h2')===false) && (preg_match_all('#\n\[(b|font|size)\][^\.]+\[/(b|font|size)\]\n#',$_new['comcode'],$matches)>=2))
+			if ((strpos($_text['html'],'<h2')===false) && (preg_match_all('#\n\[(b|font|size)\][^\.]+\[/(b|font|size)\]\n#',$_text['comcode'],$matches)>=2))
 			{
 				attach_message(do_lang_tempcode('NO_LEVEL_2_HEADERS'),'inform');
 			}

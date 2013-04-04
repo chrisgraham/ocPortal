@@ -214,7 +214,7 @@ class Hook_occle_fs_polls extends resource_fs_base
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','poll',1);
 		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','poll',1);
 		$notes=$this->_default_property_str($properties,'notes');
-		$time=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$use_time=$this->_default_property_int_null($properties,'use_time');
 		$v1=$this->_default_property_int($properties,'votes1');
@@ -228,7 +228,7 @@ class Hook_occle_fs_polls extends resource_fs_base
 		$v9=$this->_default_property_int($properties,'votes9');
 		$v10=$this->_default_property_int($properties,'votes10');
 		$views=$this->_default_property_int($properties,'views');
-		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 
 		edit_poll(intval($resource_id),$label,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time,$add_time,$views,$submitter,true);
 
@@ -239,9 +239,10 @@ class Hook_occle_fs_polls extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

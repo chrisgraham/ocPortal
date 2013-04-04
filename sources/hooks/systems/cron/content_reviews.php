@@ -91,7 +91,7 @@ class Hook_cron_content_reviews
 					$object_fs=get_resource_occlefs_object($content_type);
 					if (!is_null($object_fs))
 					{
-						$filename=$object_fs->convert_id_to_filename($resource_type,$resource_id);
+						$filename=$object_fs->convert_id_to_filename($content_type,$content_id);
 						if (!is_null($filename))
 							$object_fs->resource_delete($content_type,$filename);
 					}

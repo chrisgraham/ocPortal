@@ -164,14 +164,14 @@ class Module_admin_aggregate_types extends standard_crud_module
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),$name,$default,true));
+		$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),'aggregate_label',$aggregate_label,true));
 
-		$parameters=find_aggregate_type_parameters();
+		$parameters=find_aggregate_type_parameters($aggregate_type);
 		foreach ($parameters as $parameter)
 		{
 			if ($parameter!='label')
 			{
-				$default=array_key_exists($parameter,$other_parameters))?$other_parameters[$parameter]:'';
+				$default=array_key_exists($parameter,$other_parameters)?$other_parameters[$parameter]:'';
 				$fields->attach(form_input_line(titleify($parameter),'',$parameter,$default,false));
 			}
 		}
@@ -260,7 +260,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 		$aggregate_label=post_param('aggregate_label');
 		$aggregate_type=post_param('aggregate_type');
 		$other_parameters=array();
-		$parameters=find_aggregate_type_parameters();
+		$parameters=find_aggregate_type_parameters($aggregate_type);
 		foreach ($parameters as $parameter)
 		{
 			if ($parameter!='label')
@@ -278,7 +278,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
-		list($aggregate_label,$aggregate_type,$other_parameters)=>$this->_read_in_parameters();
+		list($aggregate_label,$aggregate_type,$other_parameters)=$this->_read_in_parameters();
 		$id=add_aggregate_type_instance($aggregate_label,$aggregate_type,$other_parameters);
 		return strval($id);
 	}
@@ -290,7 +290,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		list($aggregate_label,$aggregate_type,$other_parameters)=>$this->_read_in_parameters();
+		list($aggregate_label,$aggregate_type,$other_parameters)=$this->_read_in_parameters();
 		edit_aggregate_type_instance(intval($id),$aggregate_label,$aggregate_type,$other_parameters);
 	}
 
@@ -302,7 +302,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	function delete_actualisation($id)
 	{
 		$delete_matches=false;
-		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
 		{
 			$delete_matches=(post_param_integer('delete_matches',0)==1);
 		}

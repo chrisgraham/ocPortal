@@ -208,7 +208,6 @@ class Hook_addon_registry_chat
 			'BLOCK_MAIN_FRIENDS_LIST.tpl'=>'ocf_member_profile_friends',
 			'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends',
 			'CHAT_FRIENDS_LIST_SCREEN.tpl'=>'chat_friends_list_screen',
-			'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends',
 			'CHAT_FRIENDS'=>'chat_lobby_screen',
 			'BLOCK_SIDE_FRIENDS'=>'block_side_friends',
 		);
@@ -422,7 +421,7 @@ class Hook_addon_registry_chat
 			);
 		}
 
-		$friends=do_lorem_template('CHAT_FRIENDS', array(
+		$friends_tpl=do_lorem_template('CHAT_FRIENDS', array(
 			'FRIENDS_ONLINE'=>$friends,
 			'FRIENDS_OFFLINE'=>$friends,
 			'FRIENDS'=>$friends,
@@ -433,7 +432,7 @@ class Hook_addon_registry_chat
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_FRIENDS', array(
-				'FRIENDS'=>$friends,
+				'FRIENDS'=>$friends_tpl,
 			)), NULL, '', true)
 		);
 	}
@@ -512,7 +511,7 @@ class Hook_addon_registry_chat
 			);
 		}
 
-		$friends=do_lorem_template('CHAT_FRIENDS', array(
+		$friends_tpl=do_lorem_template('CHAT_FRIENDS', array(
 			'FRIENDS_ONLINE'=>$friends,
 			'FRIENDS_OFFLINE'=>$friends,
 			'FRIENDS'=>$friends,
@@ -530,7 +529,7 @@ class Hook_addon_registry_chat
 				'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,
 				'IM_AREA_TEMPLATE'=>$im_area_template,
 				'CAN_IM'=>true,
-				'FRIENDS'=>$friends,
+				'FRIENDS'=>$friends_tpl,
 				'URL_ADD_FRIEND'=>placeholder_url(),
 				'URL_REMOVE_FRIENDS'=>placeholder_url(),
 				'ROOMS'=>$fields,

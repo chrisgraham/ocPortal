@@ -4176,7 +4176,8 @@ psds
 
 user_sync
 ----------
- - sources/hooks/systems/cron/user_sync.php
+ - sources_custom/hooks/systems/cron/user_sync.php
+ - sources_custom/hooks/systems/upon_query/user_sync.php
 
 webdav
 ------

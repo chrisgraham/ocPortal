@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_ticket_type
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_tickets:_edit:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access('admin_tickets'))?(get_module_zone('admin_tickets').':admin_tickets:add'):NULL,
+			'add_url'=>(has_actual_page_access(get_member(),'admin_tickets'))?(get_module_zone('admin_tickets').':admin_tickets:add'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

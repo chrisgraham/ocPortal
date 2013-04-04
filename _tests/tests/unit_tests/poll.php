@@ -38,7 +38,7 @@ class poll_test_set extends ocp_test_case
 	{
 		vote_in_poll($this->poll_id,2);
 
-		$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$this->poll_id),'',1);
+		$poll_details=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$this->poll_id),'',1);
 		$this->assertTrue(array_key_exists(0,$poll_details));
 
 		$this->assertTrue($poll_details[0]['votes2']==1);

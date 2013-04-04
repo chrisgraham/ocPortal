@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_download_licence
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:cms_downloads:_ev:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access('cms_downloads'))?(get_module_zone('cms_downloads').':cms_downloads:av'):NULL,
+			'add_url'=>(has_actual_page_access(get_member(),'cms_downloads'))?(get_module_zone('cms_downloads').':cms_downloads:av'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

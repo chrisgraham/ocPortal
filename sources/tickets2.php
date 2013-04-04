@@ -24,15 +24,19 @@
  * @param  SHORT_TEXT		The ticket type
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
+ * @return AUTO_LINK			The ticket type ID
  */
 function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 {
-	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang($ticket_type,1),'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'cache_lead_time'=>NULL));
+	$ticket_type_lang=insert_lang($ticket_type,1);
+	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>$ticket_type_lang,'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'cache_lead_time'=>NULL));
 
 	log_it('ADD_TICKET_TYPE',$ticket_type);
 
 	require_code('resource_fs');
 	generate_resourcefs_moniker('ticket_type',strval($ticket_type));
+
+	return $ticket_type_lang;
 }
 
 /**

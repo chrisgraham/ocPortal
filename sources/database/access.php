@@ -343,7 +343,7 @@ class Database_Static_access
 		{
 			if (is_null($start)) $max+=$start;
 
-			if (strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
+			if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ')) // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
 			{
 				$query='SELECT TOP '.strval(intval($max)).substr($query,6);
 			}

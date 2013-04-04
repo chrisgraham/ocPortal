@@ -142,9 +142,10 @@ class Hook_occle_fs_banners extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -303,14 +304,14 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
 		$b_type=$category;
-		$time=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$hits_from=$this->_default_property_int($properties,'hits_from');
 		$hits_to=$this->_default_property_int($properties,'hits_to');
 		$views_from=$this->_default_property_int($properties,'views_from');
 		$views_to=$this->_default_property_int($properties,'views_to');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 
-		edit_banner($resource_id,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_date,$add_time,true);
+		edit_banner($resource_id,$name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_date,$add_time,true);
 
 		return true;
 	}
@@ -319,9 +320,10 @@ class Hook_occle_fs_banners extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

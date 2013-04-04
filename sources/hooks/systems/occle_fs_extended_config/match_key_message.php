@@ -49,7 +49,7 @@ class Hook_occle_fs_extended_config__match_key_message
 		$rows2=array();
 		foreach ($rows as $row)
 		{
-			$row2=array('message'=>'<lang>'.get_translated_text_xml($row['k_message']).'</lang>','match_key'=>$row['k_match_key']);
+			$row2=array('message'=>'<lang>'.get_translated_text_xml($row['k_message'],'message',$GLOBALS['SITE_DB']).'</lang>','match_key'=>$row['k_match_key']);
 			$rows2[]=$row2;
 		}
 		return serialize($rows2);

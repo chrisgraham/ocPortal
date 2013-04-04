@@ -1068,8 +1068,10 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
  * @param  boolean		Whether to skip the check for whether the gallery exists (useful for importers)
  * @param  ?TIME			The add time (NULL: now)
  * @param  ?MEMBER		The gallery owner (NULL: nobody)
+ * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  */
-function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL)
+function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($add_date)) $add_date=time();
 
@@ -1106,6 +1108,15 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('gallery',$name,array($fullname,$description),$description);
+
+	require_code('seo2');
+	if (($meta_keywords=='') && ($meta_description==''))
+	{
+		seo_meta_set_for_implicit('gallery',$name,array($description),$description);
+	} else
+	{
+		seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
+	}
 
 	if (function_exists('decache'))
 	{

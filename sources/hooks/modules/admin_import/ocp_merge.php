@@ -1037,7 +1037,7 @@ class Hook_ocp_merge
 			$category_id=import_id_remap_get('download_category',strval($row['category_id']),true);
 			if (is_null($category_id)) $category_id=db_get_first_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_download($category_id,$this->get_lang_string($db,$row['name']),$row['url'],$this->get_lang_string($db,$row['description']),$row['author'],$this->get_lang_string($db,array_key_exists('additional_details',$row)?$row['additional_details']:$row['comments']),NULL,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['original_filename'],$row['file_size'],$row['download_cost'],$row['download_submitter_gets_points'],array_key_exists('download_licence',$row)?$row['download_licence']:NULL,$row['add_date'],$row['num_downloads'],$row['download_views'],$submitter,$row['edit_date'],$id);
+			$id_new=add_download($category_id,$this->get_lang_string($db,$row['name']),$row['url'],$this->get_lang_string($db,$row['description']),$row['author'],$this->get_lang_string($db,array_key_exists('additional_details',$row)?$row['additional_details']:$row['comments']),NULL,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['original_filename'],$row['file_size'],$row['download_cost'],$row['download_submitter_gets_points'],array_key_exists('download_licence',$row)?$row['download_licence']:NULL,$row['add_date'],$row['num_downloads'],$row['download_views'],$submitter,$row['edit_date'],$id,'','',$row['default_pic']);
 
 			import_id_remap_put('download',strval($row['id']),$id_new);
 		}
@@ -1921,7 +1921,7 @@ class Hook_ocp_merge
 				$timezone=$row['m_timezone_offset'];
 				if (is_integer($timezone)) $timezone=strval($timezone);
 				if (!isset($row['m_auto_monitor_contrib_content'])) $row['m_auto_monitor_contrib_content']=$row['m_track_contributed_topics'];
-				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_monitor_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:0,array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'');
+				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_monitor_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:0,array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'',$row['m_on_probation_until']);
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'f_member_custom_fields WHERE mf_member_id='.strval($row['id']),1);
 				if (array_key_exists(0,$rows2))
 				{
@@ -2453,13 +2453,13 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('aggregate_type_instance',strval($row['id']))) continue;
 
-				add_aggregate_type_instance($row['aggregate_label'],$row['aggregate_type'],$row['other_parameters'],$row['add_time'],$row['edit_time'],false);
+				$id_new=add_aggregate_type_instance($row['aggregate_label'],$row['aggregate_type'],$row['other_parameters'],$row['add_time'],$row['edit_time'],false);
 
 				import_id_remap_put('aggregate_type_instance',strval($row['id']),$id_new);
 			}
 			$start+=100;
 		}
-		while (count($instances)!=0);
+		while (count($rows)!=0);
 	}
 
 }

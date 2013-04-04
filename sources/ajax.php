@@ -535,7 +535,7 @@ function snippet_script()
 
 	if (strpos($out,chr(10))!==false) // Is HTML
 	{
-		if ((!function_exists('simplexml_load_string')) || (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false)) // Optimisation-- check first via optimised native PHP function if possible
+		if ((!function_exists('simplexml_load_string')) || ((function_exists('simplexml_load_string')) && (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false))) // Optimisation-- check first via optimised native PHP function if possible
 		{
 			require_code('xhtml');
 			$out=xhtmlise_html($out,true,true);

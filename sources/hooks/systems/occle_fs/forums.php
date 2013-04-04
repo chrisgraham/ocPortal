@@ -47,13 +47,15 @@ class Hook_occle_fs_forums extends resource_fs_base
 		switch ($above)
 		{
 			case 'forum':
-				if ($under=='forum') || ($under=='topic')
+				if (($under=='forum') || ($under=='topic'))
 				{
-					$folder_info=$this->_get_cma_info($under);
+					$sub_info=$this->_get_cma_info($under);
+					$folder_info=$this->_get_cma_info($above);
 					return array(
-						'cat_field'=>$folder_info['parent_spec__parent_name'],
-						'linker_table'=>$folder_info['parent_spec__table_name'],
-						'id_field'=>$folder_info['parent_spec__field_name']
+						'cat_field'=>$sub_info['parent_spec__parent_name'],
+						'linker_table'=>$sub_info['parent_spec__table_name'],
+						'id_field'=>$sub_info['parent_spec__field_name'],
+						'cat_field_numeric'=>$folder_info['id_field_numeric'],
 					);
 				}
 				break;
@@ -63,7 +65,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 					return array(
 						'cat_field'=>'p_forum_id',
 						'linker_table'=>'f_posts',
-						'id_field'=>'id'
+						'id_field'=>'id',
+						'cat_field_numeric'=>true,
 					);
 				}
 				break;
@@ -169,7 +172,6 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$description=$this->_default_property_str($properties,'description');
 		$forum_grouping_id=/*if grouping resource type was not here we could cheat with $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');*/$this->_default_property_str($properties,'forum_grouping_id');
 		$access_mapping=array();
-		$parent_forum=$this->_integer_category($category);
 		$position=$this->_default_property_str($properties,'position');
 		$post_count_increment=$this->_default_property_str($properties,'post_count_increment');
 		$order_sub_alpha=$this->_default_property_str($properties,'order_sub_alpha');
@@ -179,7 +181,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$order=$this->_default_property_str($properties,'order');
 		$is_threaded=$this->_default_property_str($properties,'is_threaded');
 
-		return array($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
+		return array($description,$forum_grouping_id,$access_mapping,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 	}
 
 	/**
@@ -226,7 +228,9 @@ class Hook_occle_fs_forums extends resource_fs_base
 
 			require_code('ocf_forums_action');
 
-			list($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
+			list($description,$forum_grouping_id,$access_mapping,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
+
+			$parent_forum=$this->_integer_category($category);
 
 			$id=ocf_make_forum($label,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
@@ -272,6 +276,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		if (substr($category,0,6)=='FORUM-')
@@ -325,6 +331,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		if ($resource_type=='forum')
@@ -332,9 +340,11 @@ class Hook_occle_fs_forums extends resource_fs_base
 			require_code('ocf_forums_action2');
 
 			$label=$this->_default_property_str($properties,'label');
-			list($description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
+			list($description,$forum_grouping_id,$access_mapping,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded)=$this->__folder_read_in_properties_forum($path,$properties);
 
-			ocf_edit_forum(intval($resource_id),$label,$description,$forum_grouping_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
+			$parent_forum=$this->_integer_category($category);
+
+			ocf_edit_forum(intval($resource_id),$label,$description,$forum_grouping_id,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
 			require_code('ocf_topics_action2');
@@ -342,7 +352,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 			$label=$this->_default_property_str($properties,'label');
 			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
-			ocf_edit_topic(intval($resource_id),$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$reason,$title,$description_link,false,$views,true);
+			ocf_edit_topic(intval($resource_id),$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,'',NULL,$description_link,false,$num_views,true);
 
 			$poll_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_poll_id',array('id'=>intval($resource_id)));
 
@@ -361,7 +371,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 				if (is_null($poll_id))
 				{
 					require_code('ocf_polls_action');
-					ocf_make_poll($id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,false);
+					ocf_make_poll(intval($resource_id),$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,false);
 				} else
 				{
 					require_code('ocf_polls_action2');
@@ -384,9 +394,10 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -525,16 +536,16 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$is_emphasised=$this->_default_property_int($properties,'is_emphasised');
 		$poster_name_if_guest=$this->_default_property_str($properties,'poster_name_if_guest');
 		$ip_address=$this->_default_property_str_null($properties,'ip_address');
-		$time=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$poster=$this->_default_property_int_null($properties,'poster');
 		$intended_solely_for=$this->_default_property_int_null($properties,'intended_solely_for');
-		$last_edit_time=$this->_default_property_int_null($properties,'edit_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$last_edit_by=$this->_default_property_int_null($properties,'last_edit_by');
 		$sunk=$this->_default_property_int($properties,'sunk');
 		$anonymous=$this->_default_property_int($properties,'anonymous');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
 
-		ocf_edit_post(intval($resource_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,false,$edit_time,$add_time,$submitter,true);
+		ocf_edit_post(intval($resource_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,true,false,'',false,$edit_time,$add_time,$poster,true);
 
 		return true;
 	}
@@ -543,14 +554,18 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+
+		$topic_id=$this->_integer_category($category);
 
 		require_code('ocf_posts_action3');
-		ocf_delete_post(intval($resource_id));
+		ocf_delete_posts_topic($topic_id,array(intval($resource_id)));
 
 		return true;
 	}

@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_award_type
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_awards:ad:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access('admin_awards'))?(get_module_zone('admin_awards').':admin_awards:ad'):NULL,
+			'add_url'=>(has_actual_page_access(get_member(),'admin_awards'))?(get_module_zone('admin_awards').':admin_awards:ad'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

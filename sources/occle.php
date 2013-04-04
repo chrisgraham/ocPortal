@@ -1375,7 +1375,7 @@ class virtual_fs
 		require_code('content');
 		foreach (array_keys($cma_hooks) as $hook) // Find 'var' hooks, for content
 		{
-			$cma_ob=get_content_object();
+			$cma_ob=get_content_object($hook);
 			$cma_info=$cma_ob->info();
 			$occle_fs_hook=$cma_info['occle_filesystem_hook'];
 			if (!is_null($occle_fs_hook))

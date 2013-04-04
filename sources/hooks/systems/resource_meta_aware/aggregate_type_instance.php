@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_aggregate_type_instance
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_aggregate_types:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access('admin_aggregate_types'))?(get_module_zone('admin_aggregate_types').':admin_aggregate_types:ad'):NULL,
+			'add_url'=>(has_actual_page_access(get_member(),'admin_aggregate_types'))?(get_module_zone('admin_aggregate_types').':admin_aggregate_types:ad'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

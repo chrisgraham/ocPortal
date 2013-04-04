@@ -61,6 +61,7 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 
 		require_code('wiki');
 
+		$parent_id=$this->_integer_category($category);
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
 		$hide_posts=$this->_default_property_int($properties,'hide_posts');
@@ -71,11 +72,11 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 		$id=wiki_add_page($label,$description,$notes,$hide_posts,$member,$add_time,$views,$meta_keywords,$meta_description,$edit_date);
-		$the_order=$GLOBALS['SITE_DB']->query_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
 
+		$the_order=$GLOBALS['SITE_DB']->query_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
 		if (is_null($the_order)) $the_order=-1;
 		$the_order++;
-		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'label'=>$label));
+		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
 
 		return strval($id);
 	}
@@ -121,10 +122,12 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('wiki');
 
+		$parent_id=$this->_integer_category($category);
 		$label=$this->_default_property_str($properties,'label');
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
@@ -136,7 +139,15 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		wiki_edit_page(intval($resource_id),$label,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member,$edit_date,$add_time,$views,true);
+		$id=intval($resource_id);
+		wiki_edit_page($id,$label,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member,$edit_date,$add_time,$views,true);
+
+		// Move
+		$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id));
+		$the_order=$GLOBALS['SITE_DB']->query_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
+		if (is_null($the_order)) $the_order=-1;
+		$the_order++;
+		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
 
 		return true;
 	}
@@ -145,9 +156,10 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function folder_delete($filename)
+	function folder_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
@@ -252,7 +264,7 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 		$member=$this->_default_property_int_null($properties,'poster');
 		$send_notification=$this->_default_property_int($properties,'send_notification');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
-		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$views=$this->_default_property_int($properties,'views');
 
 		wiki_edit_post(intval($resource_id),$label,$validated,$member,$page_id,$edit_time,$add_time,$views,true);
@@ -264,9 +276,10 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

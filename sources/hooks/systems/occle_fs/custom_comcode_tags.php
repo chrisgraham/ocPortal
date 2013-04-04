@@ -82,7 +82,7 @@ class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 		require_code('custom_comcode');
 		add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
 
-		return strval($id);
+		return $tag;
 	}
 
 	/**
@@ -151,9 +151,10 @@ class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

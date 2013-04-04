@@ -25,7 +25,7 @@ class news_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('news2');
 
-		$this->news_id=add_news('Today','hiiiiiiiiiii','rolly',1,1,1,1,'','test article',5,NULL,'1262671781',NULL,0,NULL,NULL,'');
+		$this->news_id=add_news('Today','hiiiiiiiiiii','rolly',1,1,1,1,'','test article',5,NULL,1262671781,NULL,0,NULL,NULL,'');
 		// Test the forum was actually created
 		$this->assertTrue('Today'==get_translated_text($GLOBALS['SITE_DB']->query_select_value('news','title ',array('id'=>$this->news_id))));
 	}

@@ -152,7 +152,7 @@ class Module_admin_content_reviews
 				$fields=form_input_list(do_lang_tempcode('CONTENT'),'',$edit_identifier,$content,NULL,true);
 
 				// Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
- 				$content=do_template('FORM',array('SKIP_REQUIRED'=>true,'GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+				$content=do_template('FORM',array('SKIP_REQUIRED'=>true,'GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 
 				$out->attach(do_template('UNVALIDATED_SECTION',array('TITLE'=>do_lang_tempcode($info['content_type_label']),'CONTENT'=>$content)));
 			}

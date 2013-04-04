@@ -139,12 +139,12 @@ class Hook_occle_fs_iotds extends resource_fs_base
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','iotd',1);
 		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','iotd',1);
 		$notes=$this->_default_property_str($properties,'notes');
-		$time=$this->_default_property_int_null($properties,'add_date');
+		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$used=$this->_default_property_int($properties,'used');
 		$use_time=$this->_default_property_int_null($properties,'use_time');
 		$views=$this->_default_property_int($properties,'views');
-		$edit_date=$this->_default_property_int_null($properties,'edit_date');
+		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 
 		edit_iotd(intval($resource_id),$label,$caption,$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time,$add_time,$views,$submitter,true);
 
@@ -155,9 +155,10 @@ class Hook_occle_fs_iotds extends resource_fs_base
 	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function file_delete($filename)
+	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 

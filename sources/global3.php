@@ -2694,7 +2694,7 @@ function convert_guids_to_ids($text)
 		{
 			$guids[]=$matches[0][$i];
 		}
-		$mappings=find_ids_via_guids($guid);
+		$mappings=find_ids_via_guids($guids);
 		foreach ($mappings as $guid=>$id)
 		{
 			$text=str_replace($guid,$id,$text);

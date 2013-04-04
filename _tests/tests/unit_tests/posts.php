@@ -48,7 +48,7 @@ class posts_test_set extends ocp_test_case
 		$this->establish_admin_session();
 
 		// Test the forum edits
-		ocf_edit_post($this->post_id,1,'take care','the post editing',0,0,NULL,1,0,'Nothing');
+		ocf_edit_post($this->post_id,1,'take care','the post editing',0,0,NULL,true,false,'Nothing');
 
 		// Test the forum was actually created
 		$this->assertTrue('take care'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title ',array('id'=>$this->post_id)));

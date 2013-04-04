@@ -58,9 +58,9 @@ class Hook_occle_fs_extended_config__privilege
 			foreach ($rows as $i=>$row)
 			{
 				if (array_key_exists('member_id',$row))
-					$rows[$i]['member_id']=remap_content_id_as_portable('member',strval($row['member_id']));
+					$rows[$i]['member_id']=$this->remap_content_id_as_portable('member',strval($row['member_id']));
 				if (array_key_exists('group_id',$row))
-					$rows[$i]['group_id']=remap_content_id_as_portable('group',strval($row['group_id']));
+					$rows[$i]['group_id']=$this->remap_content_id_as_portable('group',strval($row['group_id']));
 			}
 			$all[$table]=$rows;
 		}
@@ -88,9 +88,9 @@ class Hook_occle_fs_extended_config__privilege
 			foreach ($rows as $row)
 			{
 				if (array_key_exists('member_id',$row))
-					$row['member_id']=remap_portable_as_content_id('member',$row['member_id']);
+					$row['member_id']=$this->remap_portable_as_content_id('member',$row['member_id']);
 				if (array_key_exists('group_id',$row))
-					$row['group_id']=remap_portable_as_content_id('group',$row['group_id']);
+					$row['group_id']=$this->remap_portable_as_content_id('group',$row['group_id']);
 
 				$GLOBALS['SITE_DB']->query_insert($table,$row);
 			}

@@ -61,7 +61,7 @@ class missing_block_params_test_set extends ocp_test_case
 		}
 
 		$dh=opendir(get_file_base().'/lang/EN');
-		while ($f=readdir($dh))
+		while (($f=readdir($dh))!==false)
 		{
 			if (substr($f,-4)=='.ini')
 			{

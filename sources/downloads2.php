@@ -319,7 +319,7 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
 	log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
 
 	require_code('resource_fs');
-	generate_resourcefs_moniker('download_category',strval($id));
+	generate_resourcefs_moniker('download_category',strval($category_id));
 }
 
 /**
@@ -677,11 +677,12 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
  * @param  ?MEMBER			The submitter (NULL: current user)
  * @param  ?TIME				The edit date (NULL: never)
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
- * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  SHORT_TEXT		Meta keywords for this resource (blank: implicit)
+ * @param  LONG_TEXT			Meta description for this resource (blank: implicit)
+ * @param  integer			The ordered number of the gallery image to use as the download representative image
  * @return AUTO_LINK			The ID of the newly added download
  */
-function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL,$meta_keywords='',$meta_description='')
+function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL,$meta_keywords='',$meta_description='',$default_pic=1)
 {
 	if (is_null($add_date)) $add_date=time();
 	if (is_null($submitter)) $submitter=get_member();
@@ -700,7 +701,33 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 	$data_mash=($url=='')?'':create_data_mash($url,NULL,get_file_extension($original_filename));
 	if (function_exists('set_time_limit')) @set_time_limit($met);
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'rep_image'=>'','edit_date'=>$edit_date,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'original_filename'=>$original_filename,'download_views'=>$views,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'default_pic'=>1,'num_downloads'=>$num_downloads,'out_mode_id'=>$out_mode_id,'category_id'=>$category_id,'name'=>insert_lang($name,2),'url'=>$url,'description'=>insert_lang_comcode($description,3),'author'=>$author,'additional_details'=>insert_lang_comcode($additional_details,3),'validated'=>$validated,'add_date'=>$add_date,'file_size'=>$file_size);
+	$map=array(
+		'download_data_mash'=>$data_mash,
+		'download_licence'=>$licence,
+		'rep_image'=>'',
+		'edit_date'=>$edit_date,
+		'download_submitter_gets_points'=>$submitter_gets_points,
+		'download_cost'=>$cost,
+		'original_filename'=>$original_filename,
+		'download_views'=>$views,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'default_pic'=>$default_pic,
+		'num_downloads'=>$num_downloads,
+		'out_mode_id'=>$out_mode_id,
+		'category_id'=>$category_id,
+		'name'=>insert_lang($name,2),
+		'url'=>$url,
+		'description'=>insert_lang_comcode($description,3),
+		'author'=>$author,
+		'additional_details'=>insert_lang_comcode($additional_details,3),
+		'validated'=>$validated,
+		'add_date'=>$add_date,
+		'file_size'=>$file_size,
+	);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
 
