@@ -113,10 +113,14 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 	}
 	if (!$skip_size_check)
 	{
-		if ($key_size>=($primary_key?DB_MAX_PRIMARY_KEY_SIZE:DB_MAX_KEY_SIZE)) fatal_exit('Key too long at '.integer_format($key_size).' bytes ['.$id_name.']'); // 252 for firebird
-		if ($total_size>=DB_MAX_ROW_SIZE) fatal_exit('Fieldset (row) too long at '.integer_format($total_size).' bytes ['.$id_name.']');
-		if ($key_size_unicode>=DB_MAX_KEY_SIZE_UNICODE) fatal_exit('Unicode version of key too long at '.integer_format($key_size_unicode).' bytes ['.$id_name.']'); // 252 for firebird
-		if ($total_size_unicode>=DB_MAX_ROW_SIZE_UNICODE) fatal_exit('Unicode version of fieldset (row) too long at '.integer_format($total_size_unicode).' bytes ['.$id_name.']');
+		if ($key_size>=($primary_key?DB_MAX_PRIMARY_KEY_SIZE:DB_MAX_KEY_SIZE))
+			fatal_exit('Key too long at '.integer_format($key_size).' bytes ['.$id_name.']'); // 252 for firebird
+		if ($total_size>=DB_MAX_ROW_SIZE)
+			fatal_exit('Fieldset (row) too long at '.integer_format($total_size).' bytes ['.$id_name.']');
+		if ($key_size_unicode>=DB_MAX_KEY_SIZE_UNICODE)
+			fatal_exit('Unicode version of key too long at '.integer_format($key_size_unicode).' bytes ['.$id_name.']'); // 252 for firebird
+		if ($total_size_unicode>=DB_MAX_ROW_SIZE_UNICODE)
+			fatal_exit('Unicode version of fieldset (row) too long at '.integer_format($total_size_unicode).' bytes ['.$id_name.']');
 	}
 }
 

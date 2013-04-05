@@ -72,6 +72,7 @@ ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch via get_re
  */
 function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 {
+	require_code('content');
 	$resource_object=get_content_object($resource_type);
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];

@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_zone
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_zones:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access(get_member(),'admin_zones'))?(get_module_zone('admin_zones').':admin_zones:ad'):NULL,
+			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_zones'))?(get_module_zone('admin_zones').':admin_zones:ad'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

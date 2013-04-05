@@ -36,8 +36,11 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 
 	log_it('ADD_NEWS_CATEGORY',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('news_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('news_category',strval($id));
+	}
 
 	decache('side_news_categories');
 
@@ -64,8 +67,11 @@ function edit_news_category($id,$title,$img,$notes,$owner)
 
 	log_it('EDIT_NEWS_CATEGORY',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('news_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('news_category',strval($id));
+	}
 
 	if (is_null($title)) $title=get_translated_text($myrow['nc_title']);
 	if (is_null($img)) $img=$myrow['nc_img'];
@@ -119,8 +125,11 @@ function delete_news_category($id)
 
 	log_it('DELETE_NEWS_CATEGORY',strval($id),get_translated_text($myrow['nc_title']));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('news_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('news_category',strval($id));
+	}
 }
 
 /**
@@ -211,8 +220,11 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 
 	log_it('ADD_NEWS',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('news',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('news',strval($id));
+	}
 
 	if (function_exists('xmlrpc_encode'))
 	{
@@ -378,8 +390,11 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	log_it('EDIT_NEWS',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('news',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('news',strval($id));
+	}
 
 	$GLOBALS['SITE_DB']->query_update('news',$update_map,array('id'=>$id),'',1);
 
@@ -480,8 +495,11 @@ function delete_news($id)
 
 	log_it('DELETE_NEWS',strval($id),$_title);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('news',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('news',strval($id));
+	}
 }
 
 /**

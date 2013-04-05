@@ -404,8 +404,11 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 
 	log_it('ADD_IMAGE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('image',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('image',strval($id));
+	}
 
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
@@ -517,8 +520,11 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	log_it('EDIT_IMAGE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('image',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('image',strval($id));
+	}
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
@@ -570,8 +576,11 @@ function delete_image($id,$delete_full=true)
 
 	log_it('DELETE_IMAGE',strval($id),get_translated_text($title));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('image',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('image',strval($id));
+	}
 }
 
 /**
@@ -749,8 +758,11 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 
 	log_it('ADD_VIDEO',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('video',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('video',strval($id));
+	}
 
 	if ($validated==1)
 	{
@@ -880,8 +892,11 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	log_it('EDIT_VIDEO',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('video',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('video',strval($id));
+	}
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
@@ -949,8 +964,11 @@ function delete_video($id,$delete_full=true)
 
 	log_it('DELETE_VIDEO',strval($id),get_translated_text($title));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('video',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('video',strval($id));
+	}
 }
 
 /**
@@ -1097,8 +1115,11 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 
 	log_it('ADD_GALLERY',$name,$fullname);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('gallery',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('gallery',$name);
+	}
 
 	if ($parent_id!='')
 	{
@@ -1243,8 +1264,11 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 
 	log_it('EDIT_GALLERY',$name,$fullname);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('gallery',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('gallery',$name);
+	}
 
 	$GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name'=>$name),array('module_the_name'=>'galleries','category_name'=>$old_name));
 
@@ -1316,8 +1340,11 @@ function delete_gallery($name)
 
 	log_it('DELETE_GALLERY',$name,get_translated_text($rows[0]['fullname']));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('gallery',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('gallery',$name);
+	}
 }
 
 /**

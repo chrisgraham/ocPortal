@@ -58,7 +58,7 @@ class Hook_addon_registry_content_reviews
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('unvalidated'),
+			'requires'=>array('unvalidated','occle'),
 			'recommends'=>array(),
 			'conflicts_with'=>array()
 		);

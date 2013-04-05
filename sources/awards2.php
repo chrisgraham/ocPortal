@@ -35,8 +35,11 @@ function add_award_type($title,$description,$points,$content_type,$hide_awardee,
 
 	log_it('ADD_AWARD_TYPE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('award_type',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('award_type',strval($id));
+	}
 
 	return $id;
 }
@@ -61,8 +64,11 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
 
 	log_it('EDIT_AWARD_TYPE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('award_type',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('award_type',strval($id));
+	}
 }
 
 /**
@@ -81,7 +87,10 @@ function delete_award_type($id)
 	delete_lang($_title);
 	delete_lang($_description);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('award_type',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('award_type',strval($id));
+	}
 }
 

@@ -291,8 +291,11 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 
 	log_it('ADD_BANNER',$name,$caption);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('banner',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('banner',$name);
+	}
 }
 
 /**
@@ -373,8 +376,11 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 
 	$GLOBALS['SITE_DB']->query_update('banners',$update_map,array('name'=>$old_name),'',1);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('banner',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('banner',$name);
+	}
 }
 
 /**
@@ -402,8 +408,11 @@ function delete_banner($name)
 
 	log_it('DELETE_BANNER',$name,get_translated_text($caption));
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('banner',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('banner',$name);
+	}
 }
 
 /**
@@ -432,8 +441,11 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 
 	log_it('ADD_BANNER_TYPE',$id);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('banner_type',$id);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('banner_type',$id);
+	}
 }
 
 /**
@@ -467,8 +479,11 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 
 	log_it('EDIT_BANNER_TYPE',$old_id,$id);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('banner_type',$id);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('banner_type',$id);
+	}
 }
 
 /**
@@ -484,8 +499,11 @@ function delete_banner_type($id)
 
 	log_it('DELETE_BANNER_TYPE',$id);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('banner_type',$id);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('banner_type',$id);
+	}
 }
 
 

@@ -174,8 +174,11 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('wiki_post',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('wiki_post',strval($id));
+	}
 
 	return $id;
 }
@@ -248,8 +251,11 @@ function wiki_edit_post($id,$message,$validated,$member=NULL,$page_id=NULL,$edit
 		}
 	}
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('wiki_post',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('wiki_post',strval($id));
+	}
 }
 
 /**
@@ -278,8 +284,11 @@ function wiki_delete_post($post_id,$member=NULL)
 	// Stat
 	update_stat('num_wiki_posts',-1);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('wiki_post',strval($post_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('wiki_post',strval($post_id));
+	}
 }
 
 /**
@@ -344,8 +353,11 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 		dispatch_wiki_page_notification($id,'ADD');
 	}
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('wiki_page',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('wiki_page',strval($id));
+	}
 
 	return $id;
 }
@@ -406,8 +418,11 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 		dispatch_wiki_page_notification($id,'EDIT');
 	}
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('wiki_page',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('wiki_page',strval($id));
+	}
 }
 
 /**
@@ -442,8 +457,11 @@ function wiki_delete_page($id)
 	$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('wiki_changes',array('the_page'=>$id));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('wiki_page',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('wiki_page',strval($id));
+	}
 }
 
 /**

@@ -193,8 +193,11 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 
 	log_it('ADD_CATALOGUE',$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('catalogue',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('catalogue',$name);
+	}
 
 	return $category;
 }
@@ -341,8 +344,11 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 
 	log_it('EDIT_CATALOGUE',$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('catalogue',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('catalogue',$name);
+	}
 }
 
 /**
@@ -400,8 +406,11 @@ function actual_delete_catalogue($name)
 
 	log_it('DELETE_CATALOGUE',$name);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('catalogue',$name);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('catalogue',$name);
+	}
 }
 
 /**
@@ -518,8 +527,11 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 		copy_notifications_to_new_child('catalogue_entry',strval($parent_id),strval($id));
 	}
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('catalogue_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('catalogue_category',strval($id));
+	}
 
 	return $id;
 }
@@ -703,8 +715,11 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 
 	log_it('EDIT_CATALOGUE_CATEGORY',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('catalogue_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('catalogue_category',strval($id));
+	}
 }
 
 /**
@@ -784,8 +799,11 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 
 	log_it('DELETE_CATALOGUE_CATEGORY',strval($id),get_translated_text($myrow['cc_title']));
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('catalogue_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('catalogue_category',strval($id));
+	}
 }
 
 /**
@@ -919,8 +937,11 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
 
-		require_code('resource_fs');
-		generate_resourcefs_moniker('catalogue_entry',strval($id));
+		if ((addon_installed('occle')) && (!running_script('install')))
+		{
+			require_code('resource_fs');
+			generate_resourcefs_moniker('catalogue_entry',strval($id));
+		}
 	}
 
 	decache('main_cc_embed');
@@ -1057,8 +1078,11 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	{
 		log_it('EDIT_CATALOGUE_ENTRY',strval($id),$title);
 
-		require_code('resource_fs');
-		generate_resourcefs_moniker('catalogue_entry',strval($id));
+		if ((addon_installed('occle')) && (!running_script('install')))
+		{
+			require_code('resource_fs');
+			generate_resourcefs_moniker('catalogue_entry',strval($id));
+		}
 
 		if ($just_validated)
 		{
@@ -1147,8 +1171,11 @@ function actual_delete_catalogue_entry($id)
 	if ($catalogue_name[0]!='_')
 		log_it('DELETE_CATALOGUE_ENTRY',strval($id),$title);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('catalogue_entry',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('catalogue_entry',strval($id));
+	}
 }
 
 

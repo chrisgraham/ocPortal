@@ -42,9 +42,12 @@ Notes about hook info...
  */
 function get_content_object($content_type)
 {
-	require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type));
-	$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
-	if (is_null($ob)) // Maybe it's a resource type (more limited functionality).
+	$path='hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type);
+	if ((file_exists(get_file_base().'/sources/'.$path.'.php')) || (file_exists(get_file_base().'/sources_custom/'.$path.'.php')))
+	{
+		require_code($path);
+		$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($content_type),true);
+	} else // Okay, maybe it's a resource type (more limited functionality).
 	{
 		require_code('hooks/systems/resource_meta_aware/'.filter_naughty_harsh($content_type));
 		$ob=object_factory('Hook_resource_meta_aware_'.filter_naughty_harsh($content_type),true);
@@ -257,7 +260,7 @@ function get_content_where_for_str_id($str_id,$cma_info,$table_alias=NULL)
 	foreach (is_array($id_field)?$id_field:array($id_field) as $i=>$id_field_part)
 	{
 		$val=array_key_exists($i,$id_parts)?$id_parts[$i]:'';
-		$where[(is_null($table_alias)?'':($table_alias.'.')).$id_field_part]=$cma_info['id_is_numeric']?intval($val):$val;
+		$where[(is_null($table_alias)?'':($table_alias.'.')).$id_field_part]=$cma_info['id_field_numeric']?intval($val):$val;
 	}
 	return $where;
 }

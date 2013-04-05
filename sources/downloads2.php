@@ -251,8 +251,11 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 
 	log_it('ADD_DOWNLOAD_CATEGORY',strval($id),$category);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('download_category',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('download_category',strval($id));
+	}
 
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
@@ -318,8 +321,11 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
 
 	log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('download_category',strval($category_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('download_category',strval($category_id));
+	}
 }
 
 /**
@@ -355,8 +361,11 @@ function delete_download_category($category_id)
 
 	log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('download_category',strval($category_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('download_category',strval($category_id));
+	}
 }
 
 /**
@@ -770,8 +779,11 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('download',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('download',strval($id));
+	}
 
 	return $id;
 }
@@ -929,8 +941,11 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 
 	log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('download',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('download',strval($id));
+	}
 
 	if (addon_installed('galleries'))
 	{
@@ -992,8 +1007,11 @@ function delete_download($id,$leave=false)
 
 	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('download',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('download',strval($id));
+	}
 }
 
 /**
@@ -1009,8 +1027,11 @@ function add_download_licence($title,$text)
 
 	log_it('ADD_DOWNLOAD_LICENCE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('download_licence',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('download_licence',strval($id));
+	}
 
 	return $id;
 }
@@ -1028,8 +1049,11 @@ function edit_download_licence($id,$title,$text)
 
 	log_it('EDIT_DOWNLOAD_LICENCE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('download_licence',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('download_licence',strval($id));
+	}
 }
 
 /**
@@ -1049,8 +1073,11 @@ function delete_download_licence($id)
 
 	log_it('DELETE_DOWNLOAD_LICENCE',strval($id),$myrow['l_title']);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('download_licence',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('download_licence',strval($id));
+	}
 }
 
 /**

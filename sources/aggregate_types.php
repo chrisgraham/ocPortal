@@ -53,8 +53,11 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pa
 
 	log_it('ADD_AGGREGATE_TYPE_INSTANCE',strval($id),$aggregate_label);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('aggregate_type_instance',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('aggregate_type_instance',strval($id));
+	}
 
 	return $id;
 }
@@ -82,8 +85,11 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
 
 	log_it('EDIT_AGGREGATE_TYPE_INSTANCE',strval($id),$aggregate_label);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('aggregate_type_instance',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('aggregate_type_instance',strval($id));
+	}
 }
 
 /**
@@ -128,8 +134,11 @@ function delete_aggregate_type_instance($id,$delete_matches=false)
 
 	log_it('DELETE_AGGREGATE_TYPE_INSTANCE',strval($id),$aggregate_label);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('aggregate_type_instance',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('aggregate_type_instance',strval($id));
+	}
 }
 
 /**

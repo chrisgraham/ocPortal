@@ -134,8 +134,11 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 
 	log_it('ADD_CALENDAR_EVENT',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('event',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('event',strval($id));
+	}
 
 	return $id;
 }
@@ -265,8 +268,11 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 
 	log_it('EDIT_CALENDAR_EVENT',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('event',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('event',strval($id));
+	}
 }
 
 /**
@@ -301,8 +307,11 @@ function delete_calendar_event($id)
 
 	log_it('DELETE_CALENDAR_EVENT',strval($id),$e_title);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('event',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('event',strval($id));
+	}
 }
 
 /**
@@ -323,8 +332,11 @@ function add_event_type($title,$logo,$external_feed='')
 
 	log_it('ADD_EVENT_TYPE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('calendar_type',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('calendar_type',strval($id));
+	}
 
 	return $id;
 }
@@ -355,8 +367,11 @@ function edit_event_type($id,$title,$logo,$external_feed)
 	require_code('themes2');
 	tidy_theme_img_code($logo,$myrow['t_logo'],'calendar_types','t_logo');
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('calendar_type',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('calendar_type',strval($id));
+	}
 
 	log_it('EDIT_EVENT_TYPE',strval($id),$title);
 }
@@ -388,8 +403,11 @@ function delete_event_type($id)
 
 	log_it('DELETE_EVENT_TYPE',strval($id),get_translated_text($myrow['t_title']));
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('calendar_type',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('calendar_type',strval($id));
+	}
 }
 
 

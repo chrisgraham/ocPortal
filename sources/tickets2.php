@@ -33,8 +33,11 @@ function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 
 	log_it('ADD_TICKET_TYPE',$ticket_type);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('ticket_type',strval($ticket_type));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('ticket_type',strval($ticket_type));
+	}
 
 	return $ticket_type_lang;
 }
@@ -56,8 +59,11 @@ function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandat
 
 	log_it('EDIT_TICKET_TYPE',strval($old_ticket_type),$new_ticket_type);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('ticket_type',strval($old_ticket_type));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('ticket_type',strval($old_ticket_type));
+	}
 }
 
 /**
@@ -77,8 +83,11 @@ function delete_ticket_type($ticket_type)
 
 	log_it('DELETE_TICKET_TYPE',strval($ticket_type),$_ticket_type);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('ticket_type',strval($ticket_type));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('ticket_type',strval($ticket_type));
+	}
 }
 
 /**

@@ -52,7 +52,7 @@ class Hook_resource_meta_aware_menu
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_menus:_edit:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_actual_page_access(get_member(),'admin_menus'))?(get_module_zone('admin_menus').':admin_menus:edit'):NULL,
+			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_menus'))?(get_module_zone('admin_menus').':admin_menus:edit'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,

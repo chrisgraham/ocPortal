@@ -113,8 +113,11 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 
 	$topic_id=$GLOBALS['FORUM_DB']->query_insert('f_topics',$map,true);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('topic',strval($topic_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('topic',strval($topic_id));
+	}
 
 	return $topic_id;
 }

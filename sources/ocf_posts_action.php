@@ -363,8 +363,11 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		}
 	}
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('post',strval($post_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('post',strval($post_id));
+	}
 
 	return $post_id;
 }

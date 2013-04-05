@@ -48,8 +48,11 @@ function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sin
 
 	log_it('EDIT_MULTI_MODERATION',strval($id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('multi_moderation',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('multi_moderation',strval($id));
+	}
 }
 
 /**
@@ -66,8 +69,11 @@ function ocf_delete_multi_moderation($id)
 
 	log_it('DELETE_MULTI_MODERATION',strval($id),$name);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('multi_moderation',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('multi_moderation',strval($id));
+	}
 }
 
 /**

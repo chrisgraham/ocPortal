@@ -299,8 +299,11 @@ function add_chatroom($welcome,$roomname,$room_owner,$allow2,$allow2_groups,$dis
 
 	log_it('ADD_CHATROOM',strval($id),$roomname);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('chat',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('chat',strval($id));
+	}
 
 	decache('side_shoutbox');
 
@@ -333,8 +336,11 @@ function edit_chatroom($id,$welcome,$roomname,$room_owner,$allow2,$allow2_groups
 
 	log_it('EDIT_CHATROOM',strval($id),$roomname);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('chat',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('chat',strval($id));
+	}
 }
 
 /**
@@ -358,8 +364,11 @@ function delete_chatroom($id)
 	if ($rows[0]['is_im']==0)
 		log_it('DELETE_ROOM',strval($id),$rows[0]['room_name']);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('chat',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('chat',strval($id));
+	}
 }
 
 /**

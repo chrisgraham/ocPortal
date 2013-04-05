@@ -164,8 +164,11 @@ END;
 	decache('main_sitemap');
 	decache('side_stored_menu');
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('zone',$zone);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('zone',$zone);
+	}
 
 	log_it('ADD_ZONE',$zone);
 }

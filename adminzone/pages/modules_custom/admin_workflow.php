@@ -110,7 +110,7 @@ class Module_admin_workflow extends standard_crud_module
 			'workflow_content_id'=>'INTEGER',		// The ID of this content in the workflow_content table
 			'workflow_approval_name'=>'SHORT_TRANS',		// The name of the ID field in the source table
 			'status_code'=>'SHORT_INTEGER',		// A code indicating the status
-			'approved_by'=>'USER'		// Remember who set this status, if the need arises to investigate this later
+			'approved_by'=>'MEMBER'		// Remember who set this status, if the need arises to investigate this later
 		));
 
 	}

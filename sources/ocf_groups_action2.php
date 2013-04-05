@@ -111,8 +111,11 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 
 	log_it('EDIT_GROUP',strval($group_id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('group',strval($group_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('group',strval($group_id));
+	}
 }
 
 /**
@@ -156,8 +159,11 @@ function ocf_delete_group($group_id,$target_group=NULL)
 
 	log_it('DELETE_GROUP',strval($group_id),$name);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('group',strval($group_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('group',strval($group_id));
+	}
 }
 
 /**

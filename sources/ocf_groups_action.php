@@ -51,6 +51,7 @@
  */
 function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$gift_points_base=NULL,$gift_points_per_day=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
 {
+	require_code('form_templates');
 	$flood_control_submit_secs=take_param_int_modeavg($flood_control_submit_secs,'g_flood_control_submit_secs','f_groups',0);
 	$flood_control_access_secs=take_param_int_modeavg($flood_control_access_secs,'g_flood_control_access_secs','f_groups',0);
 	$max_daily_upload_mb=take_param_int_modeavg($max_daily_upload_mb,'g_max_daily_upload_mb','f_groups',70);
@@ -136,8 +137,11 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 
 	log_it('ADD_GROUP',strval($group_id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('group',strval($group_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('group',strval($group_id));
+	}
 
 	if ($is_private_club==1)
 	{

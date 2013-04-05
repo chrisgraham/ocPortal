@@ -638,15 +638,7 @@ function _give_moniker_scope($page,$type,$id,$main)
 		append_content_select_for_id($select,$ob_info);
 		if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 		if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
-		$id_flat=mixed();
-		if ($ob_info['id_field_numeric'])
-		{
-			$id_flat=intval($id);
-		} else
-		{
-			$id_flat=$id;
-		}
-		$_moniker_src=$GLOBALS['SITE_DB']->query_select($ob_info['table'],$select,get_content_where_for_str_id($id_flat,$ob_info));
+		$_moniker_src=$GLOBALS['SITE_DB']->query_select($ob_info['table'],$select,get_content_where_for_str_id($id,$ob_info));
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 		if (!array_key_exists(0,$_moniker_src)) return $moniker; // been deleted?
 

@@ -258,7 +258,7 @@ function is_page_https($zone,$page)
 	static $off=NULL;
 	if ($off===NULL)
 	{
-		$off=(!addon_installed('ssl')) || (in_safe_mode());
+		$off=(!addon_installed('ssl')) || (in_safe_mode()) || (!function_exists('persistent_cache_get'));
 	}
 	if ($off) return false;
 
@@ -268,7 +268,7 @@ function is_page_https($zone,$page)
 	}
 
 	global $HTTPS_PAGES_CACHE;
-	if ($HTTPS_PAGES_CACHE===NULL)
+	if (($HTTPS_PAGES_CACHE===NULL) && (function_exists('persistent_cache_get')))
 		$HTTPS_PAGES_CACHE=persistent_cache_get('HTTPS_PAGES_CACHE');
 	if ($HTTPS_PAGES_CACHE===NULL)
 	{
@@ -279,7 +279,8 @@ function is_page_https($zone,$page)
 			return false;
 		}
 		$HTTPS_PAGES_CACHE=collapse_1d_complexity('https_page_name',$results);
-		persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
+		if (function_exists('persistent_cache_set'))
+			persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
 	}
 	return in_array($zone.':'.$page,$HTTPS_PAGES_CACHE);
 }

@@ -96,8 +96,11 @@ function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a
 
 	log_it('ADD_POLL',strval($id),$question);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('poll',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('poll',strval($id));
+	}
 
 	return $id;
 }
@@ -136,8 +139,11 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 
 	log_it('EDIT_POLL',strval($id),$question);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('poll',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('poll',strval($id));
+	}
 
 	persistent_cache_delete('POLL');
 
@@ -217,8 +223,11 @@ function delete_poll($id)
 
 	log_it('DELETE_POLL',strval($id),$question);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('poll',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('poll',strval($id));
+	}
 }
 
 /**

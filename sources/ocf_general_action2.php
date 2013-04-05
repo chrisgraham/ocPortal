@@ -38,8 +38,11 @@ function ocf_edit_post_template($id,$title,$text,$forum_multi_code,$use_default_
 
 	log_it('EDIT_POST_TEMPLATE',strval($id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('post_template',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('post_template',strval($id));
+	}
 }
 
 /**
@@ -53,8 +56,11 @@ function ocf_delete_post_template($id)
 
 	log_it('DELETE_POST_TEMPLATE',strval($id));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('post_template',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('post_template',strval($id));
+	}
 }
 
 /**

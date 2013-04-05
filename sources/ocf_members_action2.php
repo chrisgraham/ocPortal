@@ -334,6 +334,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  */
 function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=NULL,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
+	require_code('form_templates');
 	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
 	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 	if (is_null($auto_monitor_contrib_content))
@@ -925,8 +926,11 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	unset($GLOBALS['TIMEZONE_MEMBER_CACHE'][$member_id]);
 	unset($GLOBALS['USER_NAME_CACHE'][$member_id]);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('member',strval($member_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('member',strval($member_id));
+	}
 }
 
 /**
@@ -994,8 +998,11 @@ function ocf_delete_member($member_id)
 
 	log_it('DELETE_MEMBER',strval($member_id),$username);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('member',strval($member_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('member',strval($member_id));
+	}
 }
 
 /**
@@ -1096,8 +1103,11 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 
 	log_it('EDIT_CUSTOM_PROFILE_FIELD',strval($id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('cpf',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('cpf',strval($id));
+	}
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
 }
@@ -1130,8 +1140,11 @@ function ocf_delete_custom_field($id)
 
 	log_it('DELETE_CUSTOM_PROFILE_FIELD',strval($id),get_translated_text($_name,$GLOBALS['FORUM_DB']));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('TODO',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('TODO',strval($id));
+	}
 }
 
 /**

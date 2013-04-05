@@ -112,8 +112,11 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 
 	log_it('EDIT_ZONE',$zone);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('zone',$zone);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('zone',$zone);
+	}
 }
 
 /**
@@ -232,8 +235,11 @@ function actual_delete_zone_lite($zone)
 
 	log_it('DELETE_ZONE',$zone);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('zone',$zone);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('zone',$zone);
+	}
 }
 
 /**
@@ -477,10 +483,13 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	// Log
 	log_it('COMCODE_PAGE_EDIT',$new_file,$zone);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('comcode_page',$zone.':'.$new_file);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('comcode_page',$zone.':'.$new_file);
+	}
 
-	return $path;
+	return $fullpath;
 }
 
 /**

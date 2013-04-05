@@ -2653,6 +2653,7 @@ function is_ocf_satellite_site()
 {
 	if (get_forum_type()!='ocf') return false;
 	return (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write);
+}
 
 /**
  * Generate a GUID.

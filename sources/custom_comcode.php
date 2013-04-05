@@ -53,8 +53,11 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
 
 	log_it('ADD_CUSTOM_COMCODE_TAG',$tag);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('custom_comcode_tag',$tag);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('custom_comcode_tag',$tag);
+	}
 }
 
 /**
@@ -99,8 +102,11 @@ function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$exa
 
 	log_it('EDIT_CUSTOM_COMCODE_TAG',$tag,$old_tag);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('custom_comcode_tag',$tag);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('custom_comcode_tag',$tag);
+	}
 }
 
 /**
@@ -123,6 +129,9 @@ function delete_custom_comcode_tag($tag)
 
 	log_it('DELETE_CUSTOM_COMCODE_TAG',$tag);
 	
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('custom_comcode_tag',$tag);
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('custom_comcode_tag',$tag);
+	}
 }

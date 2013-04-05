@@ -47,8 +47,11 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 
 	log_it('ADD_IOTD',strval($id),$caption);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('iotd',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('iotd',strval($id));
+	}
 
 	return $id;
 }
@@ -113,8 +116,11 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 
 	log_it('EDIT_IOTD',strval($id),get_translated_text($_caption));
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('iotd',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('iotd',strval($id));
+	}
 }
 
 /**
@@ -143,8 +149,11 @@ function delete_iotd($id)
 
 	log_it('DELETE_IOTD',strval($id),get_translated_text($caption));
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('iotd',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('iotd',strval($id));
+	}
 }
 
 /**

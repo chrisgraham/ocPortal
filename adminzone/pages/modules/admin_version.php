@@ -80,6 +80,7 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('notifications_enabled');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_tin');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_consumed');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('alternative_ids');
 		delete_privilege('reuse_others_attachments');
 		delete_privilege('use_sms');
 		delete_privilege('sms_higher_limit');
@@ -333,10 +334,10 @@ class Module_admin_version
 				'resource_resourcefs_hook'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_guid',array('resource_guid'));
-			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_label',array('resource_label','resource_type'));
+			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_label',array('resource_label'/*,'resource_type'key would be too long*/));
 			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_moniker',array('resource_moniker','resource_type'));
-			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_label_uniqueness',array('resource_label','resource_resourcefs_hook'));
-			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_moniker_uniqueness',array('resource_moniker','resource_resourcefs_hook'));
+			//$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_label_uniqueness',array('resource_label','resource_resourcefs_hook'));key would be too long
+			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_moniker_uniq',array('resource_moniker','resource_resourcefs_hook'));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

@@ -318,8 +318,11 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 
 	log_it('ADD_QUIZ',strval($id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('quiz',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('quiz',strval($id));
+	}
 
 	return $id;
 }
@@ -408,8 +411,11 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 
 	log_it('EDIT_QUIZ',strval($id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('quiz',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('quiz',strval($id));
+	}
 }
 
 /**
@@ -455,7 +461,10 @@ function delete_quiz($id)
 
 	log_it('DELETE_QUIZ',strval($id),$name);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('quiz',strval($id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('quiz',strval($id));
+	}
 }
 

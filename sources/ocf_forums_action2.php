@@ -45,8 +45,11 @@ function ocf_edit_forum_grouping($forum_grouping_id,$title,$description,$expande
 
 	log_it('EDIT_FORUM_GROUPING',strval($forum_grouping_id),$title);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('forum_grouping',strval($forum_grouping_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('forum_grouping',strval($forum_grouping_id));
+	}
 }
 
 /**
@@ -68,8 +71,11 @@ function ocf_delete_forum_grouping($forum_grouping_id,$target_forum_grouping_id=
 
 	log_it('DELETE_FORUM_GROUPING',strval($forum_grouping_id),$title);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('forum_grouping',strval($forum_grouping_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('forum_grouping',strval($forum_grouping_id));
+	}
 }
 
 /**
@@ -155,8 +161,11 @@ function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_par
 
 	log_it('EDIT_FORUM',strval($forum_id),$name);
 
-	require_code('resource_fs');
-	generate_resourcefs_moniker('forum',strval($forum_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		generate_resourcefs_moniker('forum',strval($forum_id));
+	}
 }
 
 /**
@@ -204,8 +213,11 @@ function ocf_delete_forum($forum_id,$target_forum_id=NULL,$delete_topics=0)
 
 	log_it('DELETE_FORUM',strval($forum_id),$name);
 
-	require_code('resource_fs');
-	expunge_resourcefs_moniker('forum',strval($forum_id));
+	if ((addon_installed('occle')) && (!running_script('install')))
+	{
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('forum',strval($forum_id));
+	}
 }
 
 /**

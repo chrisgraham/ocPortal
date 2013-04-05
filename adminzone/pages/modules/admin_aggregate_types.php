@@ -53,7 +53,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('aggregate_types');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('aggregate_type_instances');
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			'add_time'=>'TIME',
 			'edit_time'=>'TIME',
 		));
-		$GLOBALS['SITE_DB']->create_index('aggregate_type_instances','aggregate_lookup',array('aggregate_label','aggregate_type'));
+		$GLOBALS['SITE_DB']->create_index('aggregate_type_instances','aggregate_lookup',array('aggregate_label'/*,'aggregate_type' key would be too long*/));
 	}
 
 	/**

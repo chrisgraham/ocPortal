@@ -547,7 +547,7 @@ header h1 {
 }
 .hero_section .hero_button a {
 	text-decoration: none;
-	padding: 0.5em;
+	padding: 0.5em !important;
 	background-image: none !important;
 	margin-bottom: 1em;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
