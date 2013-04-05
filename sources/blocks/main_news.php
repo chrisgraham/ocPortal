@@ -252,14 +252,19 @@ class Block_main_news
 				}
 				if ((!array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE)) || (!array_key_exists('nc_title',$NEWS_CATS_CACHE[$myrow['news_category']])))
 					$myrow['news_category']=db_get_first_id();
-				$img=($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']);
-				if (is_null($img)) $img='';
+
+				$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
 				if ($myrow['news_image']!='')
 				{
-					$img=$myrow['news_image'];
-					if (url_is_local($img)) $img=get_base_url().'/'.$img;
+					$img_raw=$myrow['news_image'];
+					if (url_is_local($img_raw)) $img_raw=get_base_url().'/'.$img_raw;
+					$img=do_image_thumb($img_raw,$category,false);
+				} else
+				{
+					$img_raw=($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']);
+					if (is_null($img_raw)) $img_raw='';
+					$img=$img_raw;
 				}
-				$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
 
 				// SEO
 				$seo_bits=(get_value('no_tags')==='1')?array('',''):seo_meta_get_for('news',strval($id));
@@ -274,6 +279,7 @@ class Block_main_news
 					'SUBMITTER'=>strval($myrow['submitter']),
 					'CATEGORY'=>$category,
 					'IMG'=>$img,
+					'_IMG'=>$img_raw,
 					'DATE'=>$date,
 					'DATE_RAW'=>strval($myrow['date_and_time']),
 					'NEWS_TITLE'=>$news_title,

@@ -157,6 +157,7 @@ class Block_main_forum_news
 				'EWS_TITLE_PLAIN'=>$news_title,
 				'CATEGORY'=>'',
 				'IMG'=>'',
+				'_IMG'=>'',
 				'AUTHOR'=>$author,
 				'AUTHOR_URL'=>$author_url,
 				'NEWS'=>$news,

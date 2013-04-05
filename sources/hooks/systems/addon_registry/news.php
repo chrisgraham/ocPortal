@@ -256,6 +256,7 @@ class Hook_addon_registry_news
 				'AUTHOR_URL'=>placeholder_url(),
 				'CATEGORY'=>lorem_phrase(),
 				'IMG'=>placeholder_image_url(),
+				'_IMG'=>placeholder_image_url(),
 				'AUTHOR'=>lorem_phrase(),
 				'_AUTHOR'=>lorem_phrase(),
 				'SUBMITTER'=>placeholder_id(),

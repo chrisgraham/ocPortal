@@ -49,14 +49,19 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 	if ((!array_key_exists($row['news_category'],$NEWS_CATS_CACHE)) || (!array_key_exists('nc_title',$NEWS_CATS_CACHE[$row['news_category']])))
 		$row['news_category']=db_get_first_id();
 	$news_cat_row=$NEWS_CATS_CACHE[$row['news_category']];
-	$img=find_theme_image($news_cat_row['nc_img']);
-	if (is_null($img)) $img='';
+
+	$category=get_translated_text($news_cat_row['nc_title']);
 	if ($row['news_image']!='')
 	{
-		$img=$row['news_image'];
-		if (url_is_local($img)) $img=get_base_url().'/'.$img;
+		$img_raw=$row['news_image'];
+		if (url_is_local($img_raw)) $img_raw=get_base_url().'/'.$img_raw;
+		$img=do_image_thumb($img_raw,$category,false);
+	} else
+	{
+		$img_raw=find_theme_image($news_cat_row['nc_img']);
+		if (is_null($img_raw)) $img_raw='';
+		$img=$img_raw;
 	}
-	$category=get_translated_text($news_cat_row['nc_title']);
 
 	$news=get_translated_tempcode($row['news']);
 	if ($news->is_empty())
@@ -80,6 +85,7 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 		'AUTHOR_URL'=>$author_url,
 		'CATEGORY'=>$category,
 		'IMG'=>$img,
+		'_IMG'=>$img_raw,
 		'NEWS'=>$news,
 		'ID'=>strval($row['id']),
 		'SUBMITTER'=>strval($row['submitter']),

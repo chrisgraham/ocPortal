@@ -16,7 +16,7 @@
 	{+START,IF,{$AND,{$NOT,{BLOG}},{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 		<div class="newscat_img newscat_img_author">
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{CATEGORY}}
-				<img src="{IMG*}" title="{!CATEGORY}: {CATEGORY*}" alt="{!CATEGORY}: {CATEGORY*}" />
+				{IMG}
 			{+END}{+END}
 		</div>
 	{+END}

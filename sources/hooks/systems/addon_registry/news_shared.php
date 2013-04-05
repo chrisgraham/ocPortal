@@ -109,6 +109,7 @@ class Hook_addon_registry_news_shared
 				'TAGS'=>'',
 				'CATEGORY'=>lorem_phrase(),
 				'IMG'=>placeholder_image_url(),
+				'_IMG'=>placeholder_image_url(),
 				'AUTHOR'=>lorem_phrase(),
 				'_AUTHOR'=>lorem_phrase(),
 				'SUBMITTER'=>placeholder_id(),

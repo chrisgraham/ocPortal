@@ -219,6 +219,7 @@ class Hook_addon_registry_forum_blocks
 				'NEWS_TITLE'=>lorem_word(),
 				'CATEGORY'=>'',
 				'IMG'=>'',
+				'_IMG'=>'',
 				'AUTHOR'=>lorem_word(),
 				'AUTHOR_URL'=>placeholder_url(),
 				'NEWS'=>lorem_paragraph(),
