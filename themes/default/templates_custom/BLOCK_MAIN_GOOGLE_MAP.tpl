@@ -93,7 +93,7 @@
 					var content=entry_content.replace(/<colgroup>(.|\n)*<\/colgroup>/,'').replace(/&nbsp;/g,' ');
 					if (content != "")
 					{
-						infoWindow.setContent('<div class="global_middle_faux">'+content+'<\/div>');
+						infoWindow.setContent('<div class="global_middle_faux float_surrounder">'+content+'<\/div>');
 						infoWindow.open(data_map, argMarker);
 					}
 				};
