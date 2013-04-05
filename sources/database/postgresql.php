@@ -329,7 +329,7 @@ class Database_Static_postgresql
 	 */
 	function db_query($query,$db,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false)
 	{
-		if (strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ')
+		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT '))
 		{
 			if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval(intval($max)).' OFFSET '.strval(intval($start));
 			elseif (!is_null($max)) $query.=' LIMIT '.strval(intval($max));
