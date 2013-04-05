@@ -169,7 +169,7 @@ ocPortal defines the following field types:
  - AUTO_LINK, a foreign key link referencing an AUTO field. It does not specify what table this field is in, but the code itself will know how to use it. It's usually obvious from the name chosen for the field (e.g. a field named 'category_id' in the 'news' table obviously is referencing the key of the 'news_categories' table).
  - INTEGER, an integer
  - UINTEGER, an integer, greater than zero
- - TINY_INTEGER, a integer
+ - SHORT_INTEGER, a integer
  - REAL, a float
  - BINARY, 0 or 1 (i.e. a representation for a Boolean)
  - MEMBER, a link to a member

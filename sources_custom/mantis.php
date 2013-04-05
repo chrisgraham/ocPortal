@@ -15,7 +15,7 @@
 
 function init__mantis()
 {
-	define('LEAD_DEVELOPER_MEMBER_ID',6);
+	define('LEAD_DEVELOPER_MEMBER_ID',2);
 }
 
 function create_tracker_issue($version,$tracker_title,$tracker_message,$tracker_additional)
@@ -187,7 +187,7 @@ function create_tracker_post($tracker_id,$tracker_comment_message)
 		if (!is_null($to_name))
 		{
 			$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($m['user_id']);
-	
+
 			require_code('mail');
 			mail_wrap('Tracker issue updated','A tracker issue you are monitoring has been updated ('.get_base_url().'/tracker/view.php?id='.strval($tracker_id).').',array($to_email),$to_name);
 		}
@@ -225,4 +225,20 @@ function create_tracker_post($tracker_id,$tracker_comment_message)
 function close_tracker_issue($tracker_id)
 {
 	$GLOBALS['SITE_DB']->query_update('mantis_bug_table',array('resolution'=>20,'status'=>80),array('id'=>$tracker_id));
+}
+
+function get_credits_profile_field_id($field_name='ocp_support_credits')
+{
+	if(preg_match("/\W/", $field_name)) log_hack_attack_and_exit('HACK_ATTACK');
+	$fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL);
+	$field_id=NULL;
+	foreach ($fields as $field)
+	{
+		if ($field['trans_name']==$field_name)
+		{
+			$field_id=$field['id'];
+			break;
+		}
+	}
+	return $field_id;
 }

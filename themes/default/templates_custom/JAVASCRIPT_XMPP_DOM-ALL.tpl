@@ -7352,32 +7352,32 @@ function xmlEscapeXMLToHTML(xmlData) {
 
 	var str = xmlData;
 
-	//replace < with �
+	//replace < with &lt;
 	gt = -1;
 	while (str.indexOf("<", gt + 1) > -1) {
 		var gt = str.indexOf("<", gt + 1);
 		var newStr = str.substr(0, gt);
-		newStr += "�";
+		newStr += "&lt;";
 		newStr = newStr + str.substr(gt + 1, str.length);
 		str = newStr;
 	}
 
-	//replace > with �
+	//replace > with &gt;
 	gt = -1;
 	while (str.indexOf(">", gt + 1) > -1) {
 		var gt = str.indexOf(">", gt + 1);
 		var newStr = str.substr(0, gt);
-		newStr += "�";
+		newStr += "&gt;";
 		newStr = newStr + str.substr(gt + 1, str.length);
 		str = newStr;
 	}
 
-	//replace & with �
+	//replace & with &amp;
 	gt = -1;
 	while (str.indexOf("&", gt + 1) > -1) {
 		var gt = str.indexOf("&", gt + 1);
 		var newStr = str.substr(0, gt);
-		newStr += "�";
+		newStr += "&amp;";
 		newStr = newStr + str.substr(gt + 1, str.length);
 		str = newStr;
 	}

@@ -648,6 +648,7 @@ class Module_calendar
 		foreach ($happenings as $happening)
 		{
 			list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
+
 			$date=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
 			if (is_numeric($e_id))
 			{

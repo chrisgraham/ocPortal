@@ -13,38 +13,101 @@
  * @package		ocportalcom_support_credits
  */
 
+$start=get_param_integer('start',0);
+$max=get_param_integer('max',50);
+if($start == $max) $max = $start += 50;
+$csv=get_param_integer('csv',0)==1;
+if ($csv)
+{
+	require_code('files2');
+	if (function_exists('set_time_limit')) @set_time_limit(0);
+	$start=0; $max=10000;
+}
 require_code('ocf_members');
-$fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL);
+require_code('mantis');
 
-$field_id=NULL;
-foreach ($fields as $field)
-{
-	if ($field['trans_name']=='ocp_support_credits')
-	{
-		$field_id=$field['id'];
-		break;
+$field_id = strval(get_credits_profile_field_id());
+if(!is_null($field_id)){
+	require_lang('ocf');
+	require_lang('customers');
+	require_lang('stats');
+
+	$title = do_lang_tempcode('UNSPENT_SUPPORT_CREDITS');
+	$uname = do_lang_tempcode('USERNAME');
+	$ucredits = do_lang_tempcode('CREDITS');
+	$ujoin = do_lang_tempcode('JOIN_DATE');
+	$ulast = do_lang_tempcode('LAST_VISIT_TIME');
+
+	$sortables=array('username'=>$uname,'credits'=>$ucredits,'join_date'=>$ujoin,'last_visit'=>$ulast);
+	$test=explode(' ',get_param('sort','username DESC'),2);
+	if (count($test)==1) $test[1]='DESC';
+	list($sortable,$sort_order)=$test;
+	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
+	log_hack_attack_and_exit('ORDERBY_HACK');
+	global $NON_CANONICAL_PARAMS;
+	$NON_CANONICAL_PARAMS[]='sort';
+	$orderby = 'CAST(field_'.$field_id.' AS UNSIGNED)';
+	switch ($sortable) {
+		case 'username':
+			$orderby = 'm_username';
+			break;
+		case 'join_date':
+			$orderby = 'm_join_time';
+			break;
+		case 'last_visit':
+			$orderby = 'm_last_visit_time';
+			break;
+		case 'credits':
+		default:
+			$orderby = 'CAST(field_'.$field_id.' AS UNSIGNED)';
+			break;
 	}
+
+	require_code('templates_results_table');
+	$fields_title=results_field_title(array($uname,$ucredits,$ujoin,$ulast),$sortables,'sort',$sortable.' '.$sort_order, true);
+	$fields_values=new ocp_tempcode();
+
+	$members=$GLOBALS['FORUM_DB']->query('SELECT a.m_username AS m_username, a.m_join_time AS m_join_time, a.m_last_visit_time AS m_last_visit_time, b.mf_member_id AS mf_member_id, CAST(field_'.$field_id.' AS UNSIGNED) AS field_'.$field_id.' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields b JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members a ON a.id = b.mf_member_id WHERE '.db_string_not_equal_to('field_'.$field_id,'').' AND CAST(field_'.$field_id.' AS UNSIGNED)>0 ORDER BY '.$orderby.' '.$sort_order.' LIMIT '.$start.', '.$max);
+	if (count($members)<1) return warn_screen($title,do_lang_tempcode('NO_RESULTS_SORRY'));
+	$total=0;
+	$i = 0;
+	foreach ($members as $member)
+	{
+		$credits=$member['field_'.$field_id];
+		$member_id = intval($member['mf_member_id']);
+		$member_name = $member['m_username'];
+		$member_join_date = get_timezoned_date($member['m_join_time']);
+		$member_visit_date = get_timezoned_date($member['m_last_visit_time']);
+
+		if($csv)
+		{
+			$csv_data = array();
+			$sname = do_lang('USERNAME');
+			$scredits = do_lang('CREDITS');
+			$sjoin = do_lang('JOIN_DATE');
+			$slast = do_lang('LAST_VISIT_TIME');
+			$csv_data[] = array(
+				$sname=>$member_name,
+				$scredits=>$credits,
+				$sjoin=>$member_join_date,
+				$slast=>$member_visit_date
+			);
+		}
+
+		$member_linked = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id);
+		$fields_values->attach(results_entry(array($member_linked,integer_format($credits),$member_join_date,$member_visit_date)));
+		$total+=$credits;
+		$i++;
+	}
+	if ($csv) make_csv($csv_data,'unspent_credits.csv');
+	$msg = do_lang_tempcode('TOTAL_UNSPENT_SUPPORT_CREDITS', strval($total));
+	$list=results_table(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'),$start,'start',$max,'max',$i,$fields_title,$fields_values,$sortables,$sortable,$sort_order,'sort',$msg);
+
+	breadcrumb_add_segment(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'));
+	$tpl=do_template('SUPPORT_CREDITS_OUTSTANDING_SCREEN',array('TITLE'=>$title,'DATA'=>$list));
+	$tpl->evaluate_echo();
 }
-
-echo '<h1>Unspent credits</h1>';
-
-echo '<div class="wide_table_wrap"><table class="solidborder wide_table"><thead><tr><th>Username</th><th>Credits</th><th>Join date</th></tr></thead><tbody>';
-
-$members=$GLOBALS['FORUM_DB']->query('SELECT mf_member_id,CAST(field_'.strval($field_id).' AS UNSIGNED) AS field_'.strval($field_id).' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields WHERE '.db_string_not_equal_to('field_'.strval($field_id),'').' AND CAST(field_'.strval($field_id).' AS UNSIGNED)>0 ORDER BY CAST(field_'.strval($field_id).' AS UNSIGNED) DESC');
-$total=0;
-foreach ($members as $member)
+else
 {
-	$credits=$member['field_'.strval($field_id)];
-	
-	echo '<tr>';
-	echo '<td>'.static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member['mf_member_id'])).'</td>';
-	echo '<td>'.number_format($credits).'</td>';
-	echo '<td>'.get_timezoned_date($GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member['mf_member_id'])).'</td>';
-	echo '</tr>';
-	
-	$total+=$credits;
+return warn_exit($title,do_lang_tempcode('INVALID_FIELD_ID'));
 }
-
-echo '<tfoot><tr><td></td><td style="font-weight: bold">'.number_format($total).'</td><td></td></tr></tfoot>';
-
-echo '</tbody></table>';

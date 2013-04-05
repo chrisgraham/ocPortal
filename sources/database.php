@@ -922,7 +922,7 @@ class database_driver
 
 		if ($DEV_MODE)
 		{
-			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
+			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (is_ocf_satellite_site()) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
 			{
 				fatal_exit('Using OCF queries on the wrong driver');
 			}

@@ -16,13 +16,13 @@
 			overviewMapControlOptions:
 			{
 				opened: true
-			},
+			}
 		});
 
 		{+START,IF_EMPTY,{LATITUDE}}
 			if (google.loader.ClientLocation)
 			{
-				map.setCenter(new google.maps.LatLng(google.loader.ClientLocation.latitude, google.loader.ClientLocation.longitude), 15);
+				map.setCenter(new google.maps.LatLng(google.loader.ClientLocation.latitude,google.loader.ClientLocation.longitude),15);
 			} else
 			{
 				if (typeof navigator.geolocation!='undefined')
@@ -38,12 +38,12 @@
 			}
 		{+END}
 
-		var infoWindow=new google.maps.InfoWindow();
+		var info_window=new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}
-		google.maps.event.addListener(map, 'click', function ()
+		google.maps.event.addListener(map,'click',function ()
 		{
-			infoWindow.close();
+			info_window.close();
 		});
 
 		{DATA}
@@ -52,11 +52,11 @@
 		var markers=[];
 		for (var i=0; i < data.length; i++)
 		{
-			add_data_point(data[i],bounds,markers,infoWindow,map);
+			add_data_point(data[i],bounds,markers,info_window,map);
 		}
 
 		{+START,IF,{$EQ,{CLUSTER},1}}
-			var markerCluster=new MarkerClusterer(map, markers);
+			var markerCluster=new MarkerClusterer(map,markers);
 		{+END}
 
 		{$,Fit the map around the markers, but only if we want the map centered.}
@@ -76,7 +76,7 @@
 							var initialLocation=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 							map.setCenter(initialLocation);
 
-							add_data_point(['{$USERNAME;}',position.coords.latitude,position.coords.longitude,''],bounds,markers,infoWindow,map);
+							add_data_point(['{$USERNAME;}',position.coords.latitude,position.coords.longitude,''],bounds,markers,info_window,map);
 						});
 					}
 					catch (e) {};
@@ -85,33 +85,33 @@
 		{+END}
 
 		{$,Sample code to grab clicked positions
-			var lastPoint;
-			google.maps.event.addListener(map, "mousemove", function(point) \{
-				lastPoint=point.latLng;
+			var last_point;
+			google.maps.event.addListener(map,'mousemove',function(point) \{
+				last_point=point.latLng;
 			\});
-			google.maps.event.addListener(map, "click", function() \{
-				console.log(lastPoint.lat() + ', ' + lastPoint.lng());
+			google.maps.event.addListener(map,'click',function() \{
+				console.log(last_point.lat()+', '+last_point.lng());
 			\});
 		}
 	}
 
-	function add_data_point(data_point,bounds,markers,infoWindow,map)
+	function add_data_point(data_point,bounds,markers,info_window,map)
 	{
-		var latLng=new google.maps.LatLng(data_point[1], data_point[2]);
-		bounds.extend(latLng);
+		var lat_lng=new google.maps.LatLng(data_point[1],data_point[2]);
+		bounds.extend(lat_lng);
 
-		var markerOptions={
-			position: latLng,
-			title: '{USERNAME_PREFIX}' + data_point[0]
+		var marker_options={
+			position: lat_lng,
+			title: '{USERNAME_PREFIX}'+data_point[0]
 		};
 
-		{$, Reenable if you have put appropriate images in place
-			var usergroupIcon=new GIcon(G_DEFAULT_ICON);
-			usergroupIcon.image="{$BASE_URL#}/themes/default/images_custom/map_icons/usergroup_" + data_point[3] + ".png";
-			markerOptions.icon=usergroupIcon;
+		{$,Reenable if you have put appropriate images in place
+			var usergroup_icon=new GIcon(G_DEFAULT_ICON);
+			usergroup_icon.image='{$BASE_URL;}/themes/default/images_custom/map_icons/usergroup_'+data_point[3]+'.png';
+			marker_options.icon=usergroup_icon;
 		}
 
-		var marker=new google.maps.Marker(markerOptions);
+		var marker=new google.maps.Marker(marker_options);
 
 		{+START,IF,{$EQ,{CLUSTER},1}}
 			markers.push(marker);
@@ -120,27 +120,27 @@
 			marker.setMap(map);
 		{+END}
 
-		google.maps.event.addListener(marker, 'click', (function (argMarker, argMember)
+		google.maps.event.addListener(marker,'click',(function (arg_marker,arg_member)
 		{
-			return function ()
+			return function()
 			{
 				{$,Dynamically load a specific members details only when their marker is clicked.}
-				var reply=do_ajax_request("{$BASE_URL}/data_custom/get_member_tooltip.php?member=" + argMember+keep_stub());
+				var reply=do_ajax_request('{$BASE_URL;}/data_custom/get_member_tooltip.php?member='+arg_member+keep_stub());
 				var content=reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
-				if (content != "")
+				if (content!='')
 				{
-					infoWindow.setContent(content);
-					infoWindow.open(map, argMarker);
+					info_window.setContent('<div class="global_middle_faux">'+content+'<\/div>');
+					info_window.open(map,arg_marker);
 				}
 			};
-		})(marker, data_point[0])); {$,These are the args passed to the dynamic function above.}
+		})(marker,data_point[0])); {$,These are the args passed to the dynamic function above.}
 	}
 
-	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
+	google.load('maps','3',{callback: google_map_users_initialize,other_params:'sensor=true'{+START,IF_NON_EMPTY,{REGION}},region:'{REGION}'{+END}});
 //]]></script>
 
 <section class="box box___block_main_google_map_users"><div class="box_inner">
 	<h3>{TITLE*}</h3>
 
-	<div id="map_canvas" style="width:{WIDTH}; height:{HEIGHT}"></div>
+	<div id="map_canvas" style="width: {WIDTH}; height: {HEIGHT}"></div>
 </div></section>

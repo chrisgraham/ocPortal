@@ -439,7 +439,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		} else
 		{
 			$sending_message.='Content-Transfer-Encoding: 8bit'.$line_term.$line_term;
-			$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($message_plain)).$line_term,998,$line_term);
+			$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($message_plain)).$line_term,988,$line_term,true);
 		}
 	}
 
@@ -474,7 +474,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	} else
 	{
 		$sending_message.='Content-Transfer-Encoding: 8bit'.$line_term.$line_term; // Requires RFC 1652
-		$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($html_evaluated)).$line_term,998,$line_term);
+		$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($html_evaluated)).$line_term,988,$line_term,true);
 	}
 	foreach ($CID_IMG_ATTACHMENT as $id=>$img)
 	{

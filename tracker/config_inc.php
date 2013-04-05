@@ -93,7 +93,7 @@ $ocp_sc_site_url = $SITE_INFO['base_url'];
 $ocp_sc_site_name = 'ocPortal.com';
 $g_default_home_page = 'my_view_page.php';	# Set to name of page to go to after login
 $g_logo_url = $ocp_sc_site_url.'/';
-$ocp_sc_profile_url = $ocp_sc_site_url.'/personalzone/editprofile.htm';
+$ocp_sc_profile_url = $ocp_sc_site_url.'/site/members/view.htm';
 $ocp_sc_commercial_support_url = $ocp_sc_site_url.'/site/commercial_support.htm';
 $ocp_sc_community_doc_url = $ocp_sc_site_url.'/site/s/1/39.htm';
 $ocp_sc_join_url = $ocp_sc_site_url.'/join.htm';
@@ -108,6 +108,11 @@ $ocp_sc_main_currency = 'GBP';
 $ocp_sc_main_currency_symbol = '&pound';
 $ocp_sc_alternate_currencies = array('USD', 'CAD', 'EUR');
 $ocp_sc_custom_profile_field = 'ocp_support_credits';
+
+$ocp_updater_groups=array();
+$ocp_developer_groups=array(22);
+$ocp_manager_groups=array();
+$ocp_admin_groups=array(2,3);
 
 $g_enable_sponsorship = ON;
 $g_sponsorship_currency = $ocp_sc_main_currency.' '.$ocp_sc_main_currency_symbol;

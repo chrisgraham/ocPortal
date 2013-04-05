@@ -291,7 +291,7 @@ function page_not_found($codename,$zone)
  * @param  ?array			Row from database (holds submitter etc) (NULL: no row, originated first from disk)
  * @param  array			New row for database, used if necessary (holds submitter etc)
  * @param  boolean		Whether the page is being included from another
- * @return array			A triple: The page, Title to use, New Comcode page row
+ * @return array			A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
  */
 function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included=false)
 {
@@ -411,7 +411,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 
 	$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 
-	return array($_text2,$title_to_use,$comcode_page_row);
+	return array($_text2,$title_to_use,$comcode_page_row,$result);
 }
 
 /**
@@ -440,7 +440,7 @@ function apply_comcode_page_substitutions(&$result)
  * @param  PATH			The file base to load from
  * @param  array			New row for database, used if nesessary (holds submitter etc)
  * @param  boolean		Whether the page is being included from another
- * @return array			A tuple: The page, New Comcode page row, Title
+ * @return array			A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
  */
 function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included=false)
 {
@@ -461,14 +461,14 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 
 	$_comcode_page_row=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$codename),'',1);
 
-	$result=file_get_contents($file_base.'/'.$string);
-	apply_comcode_page_substitutions($result);
+	$comcode=file_get_contents($file_base.'/'.$string);
+	apply_comcode_page_substitutions($comcode);
 
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	require_code('attachments2');
-	$_new=do_comcode_attachments($result,'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
+	$_new=do_comcode_attachments($comcode,'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
 	$html=$_new['tempcode'];
 	$LAX_COMCODE=$temp;
 	$title_to_use=is_null($COMCODE_PARSE_TITLE)?NULL:clean_html_title($COMCODE_PARSE_TITLE);
@@ -489,7 +489,7 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 		}
 	}
 
-	return array($html,$comcode_page_row,$title_to_use);
+	return array($html,$comcode_page_row,$title_to_use,$comcode);
 }
 
 /**

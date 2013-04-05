@@ -511,10 +511,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				if ($direction=='DESC') $keywords_query.=' DESC';
 			}
 
-			if ($group_by_ok)
+			/*if ($group_by_ok) 	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
 			{
 				$_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
-			}
+			}*/
 
 			$db->dedupe_mode=true;
 			$t_keyword_search_rows_count=$db->query_value_if_there($_count_query_keywords_search);
@@ -609,6 +609,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			}
 		}
 
+		$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
+		if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+
 		// Work out main query
 		$query='(';
 		foreach ($where_alternative_matches as $parts) // We UNION them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
@@ -635,6 +638,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$query.=' ORDER BY '.$order;
 			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
 		}
+		$query.=($group_by_ok?' GROUP BY r.id':'');
 		$query.=' LIMIT '.strval($max+$start);
 		$query.=')';
 		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
@@ -673,11 +677,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_main_search='SELECT ('.$_query.')';
 		}
 
-		$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
-		if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
-
-		$query.=($group_by_ok?' GROUP BY r.id':'');
-
 		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 		{
 			$query.=' ORDER BY '.$order;
@@ -695,10 +694,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			exit($query);
 		}
 
-		if ($group_by_ok)
+		/*if ($group_by_ok)	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
 		{
 			$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
-		}
+		}*/
 
 		$db->dedupe_mode=true;
 		$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search);

@@ -1481,6 +1481,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 					if ($title_to_use===NULL) $title_to_use=$codename;
 				}
 				$html=$db_set;
+				$raw_comcode=get_translated_text($comcode_page[0]['string_index']);
 			} else
 			{
 				$comcode_page=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_page'=>$codename,'the_zone'=>$zone),'',1);
@@ -1488,19 +1489,19 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 				require_code('site2');
 				$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
-				list($html,$title_to_use,$comcode_page_row)=_load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included);
+				list($html,$title_to_use,$comcode_page_row,$raw_comcode)=_load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included);
 			}
 
-			persistent_cache_set(array('COMCODE_PAGE',$codename,$zone,$theme,user_lang()),array($html,$title_to_use,$comcode_page_row));
+			persistent_cache_set(array('COMCODE_PAGE',$codename,$zone,$theme,user_lang()),array($html,$title_to_use,$comcode_page_row,$raw_comcode));
 		} else
 		{
-			list($html,$title_to_use,$comcode_page_row)=$pcache;
+			list($html,$title_to_use,$comcode_page_row,$raw_comcode)=$pcache;
 		}
 	} else
 	{
 		require_code('site2');
 		$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
-		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
+		list($html,$comcode_page_row,$title_to_use,$raw_comcode)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
 	}
 	$filtered_title_to_use=mixed();
 	if ((!$is_panel) && (!$being_included))
@@ -1516,6 +1517,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	if (($html->is_empty_shell()) && ($being_included)) return $html;
 
+	$add_child_url=new ocp_tempcode();
 	if ((has_actual_page_access(get_member(),'cms_comcode_pages',NULL,NULL,(($comcode_page_row['p_submitter']==get_member()) && (!is_guest()))?'edit_own_highrange_content':'edit_highrange_content')))
 	{
 		$redirect=get_self_url(true,false,array('redirect'=>NULL,'redirected'=>NULL));
@@ -1526,11 +1528,13 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		{
 			$edit_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename,/*'lang'=>user_lang(),*/'redirect'=>$redirect),get_module_zone('cms_comcode_pages'));
 		}
-		$add_child_url=(get_option('is_on_comcode_page_children')=='1')?build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','parent_page'=>$codename,'page_link'=>$zone.':'/*Don't make too many assumptions about user flow ,'lang'=>user_lang()*//*,'redirect'=>$redirect*/),get_module_zone('cms_comcode_pages')):new ocp_tempcode();
+		if (strpos($raw_comcode,'main_comcode_page_children')!==false)
+		{
+			$add_child_url=(get_option('is_on_comcode_page_children')=='1')?build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','parent_page'=>$codename,'page_link'=>$zone.':'/*Don't make too many assumptions about user flow ,'lang'=>user_lang()*//*,'redirect'=>$redirect*/),get_module_zone('cms_comcode_pages')):new ocp_tempcode();
+		}
 	} else
 	{
 		$edit_url=new ocp_tempcode();
-		$add_child_url=new ocp_tempcode();
 	}
 
 	$warning_details=new ocp_tempcode();

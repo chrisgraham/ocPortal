@@ -76,10 +76,12 @@ function initialise_carousel(id)
 	carousel_ns.parentNode.removeChild(carousel_ns);
 	main.appendChild(carousel_ns);
 	carousel.style.display='block';
+
 	add_event_listener_abstract(window,'real_load',function() {
 		var h=find_height(main)+'px';
 		get_elements_by_class_name(carousel,'move_left')[0].style.height=h;
 		get_elements_by_class_name(carousel,'move_right')[0].style.height=h;
+
 		_create_faders(main);
 		_update_faders(main);
 	} );
@@ -138,8 +140,10 @@ function _update_faders(main)
 	var left=imgs[imgs.length-2];
 	var right=imgs[imgs.length-1];
 
-	left.style.visibility=(main.scrollLeft==0)?'hidden':'visible';
-	right.style.visibility=(main.scrollLeft+find_width(main)>=main.scrollWidth-1)?'hidden':'visible';
+	if (left.style.position=='absolute') // Check it really is a fader (stops bugs in other areas making bigger weirdness)
+		left.style.visibility=(main.scrollLeft==0)?'hidden':'visible';
+	if (right.style.position=='absolute') // Ditto
+		right.style.visibility=(main.scrollLeft+find_width(main)>=main.scrollWidth-1)?'hidden':'visible';
 }
 
 function flip_page(to,pass_id,sections)

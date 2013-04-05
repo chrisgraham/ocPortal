@@ -437,7 +437,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				$wrapped_subject=do_lang('NOTIFICATION_EMAIL_SUBJECT_WRAP',$subject,comcode_escape(get_site_name()));
 				$wrapped_message=do_lang('NOTIFICATION_EMAIL_MESSAGE_WRAP',$message_to_send,comcode_escape(get_site_name()));
 
-				mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,$from_email,$from_name,$priority,NULL,$no_cc,($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false);
+				mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,$from_email,$from_name,$priority,NULL,$no_cc,($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false,false,'MAIL',$priority<3);
 
 				$needs_manual_cc=false;
 				$no_cc=true; // Don't CC again

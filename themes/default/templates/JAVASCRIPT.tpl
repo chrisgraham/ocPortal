@@ -128,6 +128,18 @@ function script_load_stuff()
 		} );
 	}
 
+	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
+	// it doesn't display errors.
+	window["__flash__removeCallback"] = function (instance, name) {
+		try {
+			if (instance) {
+				instance[name] = null;
+			}
+		} catch (flashEx) {
+
+		}
+	};
+
 	if (typeof window.script_load_stuff_b!='undefined') window.script_load_stuff_b(); // This is designed to allow you to easily define additional initialisation code in JAVASCRIPT_CUSTOM_GLOBALS.tpl
 
 	page_loaded=true;
@@ -1413,7 +1425,7 @@ function get_mouse_x(event,win)
 		if ((typeof event.pageX!='undefined') && (event.pageX))
 		{
 			return event.pageX;
-		} else if ((typeof event.clientX!='undefined')&& (event.clientX))
+		} else if ((typeof event.clientX!='undefined') && (event.clientX))
 		{
 			return event.clientX+get_window_scroll_x(win)
 		}
@@ -1744,8 +1756,8 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	}
 
 	// Add in move/leave events if needed
-	if (!ac.onmouseout) ac.onmouseout=function(event) { win.deactivate_tooltip(ac,event); };
-	if (!ac.onmousemove) ac.onmousemove=function(event) { win.reposition_tooltip(ac,event,false,false,null,false,win); };
+	if (!ac.onmouseout) ac.onmouseout=function(event) { if (!event) var event=window.event; win.deactivate_tooltip(ac,event); };
+	if (!ac.onmousemove) ac.onmousemove=function(event) { if (!event) var event=window.event; win.reposition_tooltip(ac,event,false,false,null,false,win); };
 
 	if (typeof tooltip=='function') tooltip=tooltip();
 	if (tooltip=='') return;
@@ -2072,7 +2084,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 {
 	if (element)
 	{
-		if ((element==window) && ((the_event=='load') && (page_fully_loaded)) || ((the_event=='real_load') && (page_loaded)))
+		if ((element==window) && ((the_event=='load') && ((page_fully_loaded) || (document.readyState=='complete'))) || ((the_event=='real_load') && (document.readyState=='complete')))
 		{
 			window.setTimeout(func,0);
 			return true;
@@ -2096,8 +2108,8 @@ function add_event_listener_abstract(element,the_event,func,capture)
 			/* W3C */
 			if (the_event=='load') // Try and be smarter
 			{
-				element.addEventListener('DOMContentLoaded',function() { page_loaded=true; window.ranD=true; window.setTimeout(func,0); },capture);
-				return element.addEventListener(the_event,function() { page_loaded=true; if (!window.ranD) window.setTimeout(func,0); },capture);
+				element.addEventListener('DOMContentLoaded',function() { page_loaded=true; window.has_DOMContentLoaded=true; window.setTimeout(func,0); },capture);
+				return element.addEventListener(the_event,function() { page_loaded=true; if (!window.has_DOMContentLoaded) window.setTimeout(func,0); },capture);
 			}
 			if (the_event=='real_load')
 			{
