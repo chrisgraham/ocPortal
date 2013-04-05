@@ -44,8 +44,7 @@
 	{!USERS_IN_ROOM} <span id="chat_members_update" class="vertical_alignment"><img aria-busy="true" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" /> <span>{!LOADING}</span></span>
 </p>
 
-<script type="text/javascript">
-// <![CDATA[
+<script type="text/javascript">// <![CDATA[
 function on_login_completed_room()
 {
 	var messages=document.getElementById('messages_window');
@@ -79,8 +78,7 @@ function on_login_completed_room()
 add_event_listener_abstract(window,'load',function () {
 	xmpp_connect("{$REPLACE*, ,.,{$USERNAME}}","{PASSWORD_HASH*}",on_login_completed_room);
 } );
-// ]]>
-</script>
+// ]]></script>
 
 {+START,IF_NON_EMPTY,{LINKS}}
 	<p class="lonely_label">{!ACTIONS}:</p>

@@ -41,9 +41,16 @@
 	<div style="display: {$JS_ON,none,block}" id="chat_comcode_panel">
 		{BUTTONS}
 
-		<p>
-			<span class="associated_link"<a href="{COMCODE_HELP*}" title="{!COMCODE_HELP=}: {!LINK_NEW_WINDOW}" target="_blank">{!COMCODE_HELP=}</a> | <a href="{CHATCODE_HELP*}" title="{!CHATCODE_HELP=}: {!LINK_NEW_WINDOW}" target="_blank">{!CHATCODE_HELP=}</a></span>
-		</p>
+		{+START,IF_NON_EMPTY,{COMCODE_HELP}{CHATCODE_HELP}}
+			<ul class="horizontal_links horiz_field_sep associated_links_block_group">
+				{+START,IF_NON_EMPTY,{COMCODE_HELP}}
+					<li><a href="{COMCODE_HELP*}" title="{!COMCODE_HELP=}: {!LINK_NEW_WINDOW}" target="_blank">{!COMCODE_HELP=}</a></li>
+				{+END}
+				{+START,IF_NON_EMPTY,{CHATCODE_HELP}}
+					<li><a href="{CHATCODE_HELP*}" title="{!CHATCODE_HELP=}: {!LINK_NEW_WINDOW}" target="_blank">{!CHATCODE_HELP=}</a></li>
+				{+END}
+			</ul>
+		{+END}
 
 		<form title="{!SOUND_EFFECTS}" action="{OPTIONS_URL*}" method="post" class="inline">
 			<div>

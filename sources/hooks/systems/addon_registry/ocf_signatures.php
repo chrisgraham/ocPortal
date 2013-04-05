@@ -171,7 +171,6 @@ class Hook_addon_registry_ocf_signatures
 			'EMOTICON_CHOOSER'=>'',
 			'SUBMIT_NAME'=>lorem_word(),
 			'HIDDEN_FIELDS'=>new ocp_tempcode(),
-			'COMCODE_HELP'=>placeholder_url(),
 			'URL'=>placeholder_url(),
 			'POST'=>lorem_sentence(),
 			'DEFAULT_PARSED'=>lorem_sentence(),

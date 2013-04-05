@@ -121,7 +121,7 @@ class Hook_fields_posting_field
 		$hidden_fields=new ocp_tempcode();
 		$hidden_fields->attach($attach_size_field);
 
-		$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
+		$help_zone=get_comcode_zone('userguide_comcode',false);
 
 		$emoticon_chooser=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser('field_'.strval($field['id']));
 
@@ -154,9 +154,8 @@ class Hook_fields_posting_field
 			'COMCODE_EDITOR'=>$comcode_editor,
 			'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,
 			'CLASS'=>$class,
-			'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),
+			'COMCODE_URL'=>is_null($help_zone)?new ocp_tempcode():build_url(array('page'=>'userguide_comcode'),$help_zone),
 			'EMOTICON_CHOOSER'=>$emoticon_chooser,
-			'COMCODE_HELP'=>$comcode_help,
 			'POST'=>$actual_value,
 			'DEFAULT_PARSED'=>$default_parsed,
 			'ATTACHMENTS'=>$attachments,

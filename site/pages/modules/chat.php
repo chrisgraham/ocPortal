@@ -530,12 +530,15 @@ class Module_chat
 		}
 		check_chatroom_access($room_check[0]);
 
+		$help_zone=get_comcode_zone('userguide_comcode',false);
+		$comcode_help=is_null($help_zone)?new ocp_tempcode():build_url(array('page'=>'userguide_comcode'),$help_zone);
+		$help_zone=get_comcode_zone('userguide_chatcode',false);
+		$chatcode_help=is_null($help_zone)?new ocp_tempcode():build_url(array('page'=>'userguide_chatcode'),$help_zone);
+
 		$posting_name=do_lang_tempcode('SEND_MESSAGE');
 		$keep=symbol_tempcode('KEEP');
 		$posting_url=find_script('messages').'?mode=2&room_id='.strval($room_id).$keep->evaluate();
 		$messages_link=find_script('messages').'?room_id='.strval($room_id).'&zone='.get_zone_name().$keep->evaluate();
-		$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode'));
-		$chatcode_help=build_url(array('page'=>'userguide_chatcode'),get_comcode_zone('userguide_chatcode'));
 		$buttons=new ocp_tempcode();
 		$_buttons=array(
 			'url',
@@ -578,30 +581,30 @@ class Module_chat
 
 		$title=get_screen_title('ROOM');
 
+		$mod_link=new ocp_tempcode();
 		if (has_actual_page_access(get_member(),'cms_chat',NULL,array('chat',strval($room_id)),array('edit_lowrange_content',($room_check[0]['room_owner']==get_member())?'moderate_my_private_rooms':NULL)))
 		{
-			$link=build_url(array('page'=>'cms_chat','type'=>'room','id'=>$room_id),get_module_zone('cms_chat'));
-			$mod_link=hyperlink($link,do_lang_tempcode('CHAT_MOD_PANEL'),true);
+			$mod_url=build_url(array('page'=>'cms_chat','type'=>'room','id'=>$room_id),get_module_zone('cms_chat'));
+			$mod_link=hyperlink($mod_url,do_lang_tempcode('CHAT_MOD_PANEL'),true);
 		}
-		else $mod_link=new ocp_tempcode();
 
+		$admin_link=new ocp_tempcode();
 		if (has_actual_page_access(get_member(),'admin_chat'))
 		{
 			// The user is staff, so let him have the admin link
-			$link=build_url(array('page'=>'admin_chat','type'=>'_ed','id'=>$room_id),'adminzone');
-			$adminlink=hyperlink($link,do_lang_tempcode('EDIT_CHATROOM'),true);
+			$admin_url=build_url(array('page'=>'admin_chat','type'=>'_ed','id'=>$room_id),'adminzone');
+			$admin_link=hyperlink($admin_url,do_lang_tempcode('EDIT_CHATROOM'),true);
 		}
-		else $adminlink=new ocp_tempcode();
 
-		$link=build_url(array('page'=>'_SELF','type'=>'room','id'=>$room_id),'_SELF');
-		$refreshlink=hyperlink($link,do_lang_tempcode('CHAT_REFRESH'));
+		$refresh_url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$room_id),'_SELF');
+		$refresh_link=hyperlink($refresh_url,do_lang_tempcode('CHAT_REFRESH'));
 
-		$link=build_url(array('page'=>'_SELF','type'=>'download_logs'),'_SELF');
-		$downloadlink=hyperlink(build_url(array('page'=>'_SELF','type'=>'download_logs','id'=>$room_id),'_SELF'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS'),true);
+		$download_url=build_url(array('page'=>'_SELF','type'=>'download_logs','id'=>$room_id),'_SELF');
+		$download_link=hyperlink($download_url,do_lang_tempcode('CHAT_DOWNLOAD_LOGS'),true);
 
 		$seteffects_link=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 
-		$links=array($adminlink,$mod_link,$refreshlink,$downloadlink,$seteffects_link);
+		$links=array($admin_link,$mod_link,$refresh_link,$download_link,$seteffects_link);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 

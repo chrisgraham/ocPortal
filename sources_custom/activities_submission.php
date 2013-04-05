@@ -108,8 +108,15 @@ function activities_ajax_submit_handler()
 
 			if (strlen(strip_tags($map['STATUS']))<strlen($map['STATUS']))
 			{
-				$cc_guide=build_url(array('page'=>'userguide_comcode'),'site');
-				$response.='<success>0</success><feedback><![CDATA[No HTML allowed. See <a href="'.$cc_guide->evaluate().'">Comcode Help</a> for info on the alternative.]]></feedback>';
+				$help_zone=get_comcode_zone('userguide_comcode',false);
+				if (is_null($help_zone))
+				{
+					$response.='<success>0</success><feedback><![CDATA[No HTML allowed. Use Comcode.]]></feedback>';
+				} else
+				{
+					$cc_guide=build_url(array('page'=>'userguide_comcode'),$help_zone);
+					$response.='<success>0</success><feedback><![CDATA[No HTML allowed. See <a href="'.escape_html($cc_guide->evaluate()).'">Comcode Help</a> for info on the alternative.]]></feedback>';
+				}
 			}
 			else
 			{

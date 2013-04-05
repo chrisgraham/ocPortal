@@ -518,7 +518,6 @@ class Hook_addon_registry_core_rich_media
 				'EMOTICON_CHOOSER'=>lorem_phrase(),
 				'SUBMIT_NAME'=>lorem_word(),
 				'HIDDEN_FIELDS'=>'',
-				'COMCODE_HELP'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'POST'=>lorem_phrase(),
 				'DEFAULT_PARSED'=>lorem_phrase(),

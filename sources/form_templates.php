@@ -205,7 +205,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 
 	$continue_url=get_self_url();
 
-	$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
+	$help_zone=get_comcode_zone('userguide_comcode',false);
 
 	$emoticon_chooser=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 
@@ -234,13 +234,12 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 		'COMCODE_EDITOR'=>$comcode_editor,
 		'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,
 		'CLASS'=>$class,
-		'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),
+		'COMCODE_URL'=>is_null($help_zone)?new ocp_tempcode():build_url(array('page'=>'userguide_comcode'),$help_zone),
 		'EXTRA'=>$extra,
 		'POST_COMMENT'=>$post_comment,
 		'EMOTICON_CHOOSER'=>$emoticon_chooser,
 		'SUBMIT_NAME'=>$submit_name,
 		'HIDDEN_FIELDS'=>$hidden_fields,
-		'COMCODE_HELP'=>$comcode_help,
 		'URL'=>$post_url,
 		'POST'=>$post,
 		'DEFAULT_PARSED'=>$default_parsed,
@@ -870,7 +869,8 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
-	$_comcode=do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false))));
+	$help_zone=get_comcode_zone('userguide_comcode',false);
+	$_comcode=is_null($help_zone)?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),$help_zone)));
 
 	return do_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
 		'_GUID'=>'b8231827be2f4a00e12fcd8986119588',
@@ -1788,7 +1788,8 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
 		}
 	}
 
-	$_comcode=$comcode?do_template('COMCODE_MESSAGE',array('_GUID'=>'7668b8365e34b2484be7c2c271f82e79','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)))):new ocp_tempcode();
+	$help_zone=get_comcode_zone('userguide_comcode',false);
+	$_comcode=((is_null($help_zone)) || (!$comcode))?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID'=>'7668b8365e34b2484be7c2c271f82e79','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),$help_zone)));
 
 	global $DOING_ALTERNATE_FIELDS_SET;
 	if ($DOING_ALTERNATE_FIELDS_SET!==NULL)
