@@ -38,7 +38,7 @@
 						</td>
 						<td>
 							<label for="price_{ID*}" class="accessibility_hidden">{!PRICE}</label>
-							<input maxlength="10" name="price_{ID*}" id="price_{ID*}" value="{PRICE_PRICE*}" class="input_float" type="number" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9',190])) return false; return null;" />
+							<input maxlength="10" name="price_{ID*}" id="price_{ID*}" value="{PRICE_PRICE*}" class="input_float" step="0.01" type="number" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9',190])) return false; return null;" />
 						</td>
 					</tr>
 				{+END}

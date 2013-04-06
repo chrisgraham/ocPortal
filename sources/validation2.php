@@ -700,7 +700,7 @@ function init__validation2()
 		'html.manifest'=>'.+',
 		'input.height'=>$enforce_inumber,
 		'input.width'=>$enforce_inumber,
-		'input.step'=>'(-?[0-9]+(\.[0-9]+)?)',
+		'input.step'=>'any|(-?[0-9]+(\.[0-9]+)?)',
 		'input.required'=>'(required)',
 		'input.placeholder'=>'.+',
 		'input.pattern'=>'.+',
