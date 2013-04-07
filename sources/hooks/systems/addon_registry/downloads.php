@@ -278,6 +278,7 @@ class Hook_addon_registry_downloads
 				'BREADCRUMBS'=>placeholder_breadcrumbs(),
 				'IMGCODE'=>'',
 				'GIVE_CONTEXT'=>false,
+				'MAY_DOWNLOAD'=>true,
 			);
 			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -348,6 +349,7 @@ class Hook_addon_registry_downloads
 					'BREADCRUMBS'=>placeholder_breadcrumbs(),
 					'IMGCODE'=>'',
 					'GIVE_CONTEXT'=>false,
+					'MAY_DOWNLOAD'=>true,
 				);
 				$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -431,6 +433,7 @@ class Hook_addon_registry_downloads
 				'TRACKBACK_DETAILS'=>lorem_sentence_html(),
 				'RATING_DETAILS'=>lorem_sentence_html(),
 				'COMMENT_DETAILS'=>lorem_sentence_html(),
+				'MAY_DOWNLOAD'=>true,
 				'NUM_IMAGES'=>'3'
 			)), NULL, '', true)
 		);

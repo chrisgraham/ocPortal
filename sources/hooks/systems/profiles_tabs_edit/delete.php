@@ -71,7 +71,7 @@ class Hook_Profiles_Tabs_Edit_delete
 			$merge_url=build_url(array('page'=>'admin_ocf_merge_members','from'=>$username,'to'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())),get_module_zone('admin_ocf_merge_members'));
 			$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_MERGE',escape_html($merge_url->evaluate()))));
 
-			if (has_specific_permission($member_id_of,'comcode_dangerous'))
+			if (has_privilege($member_id_of,'comcode_dangerous'))
 				$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_ADMIN',escape_html($merge_url->evaluate()))));
 
 			if (addon_installed('search'))

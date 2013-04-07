@@ -197,6 +197,8 @@ class Module_downloads
 			$GLOBALS['SITE_DB']->alter_table_field('download_downloads','comments','LONG_TRANS','additional_details');
 
 			$GLOBALS['SITE_DB']->alter_table_field('download_logging','the_user','*MEMBER','member_id');
+
+			add_privilege('_SECTION_DOWNLOADS','download',true);
 		}
 	}
 
@@ -760,6 +762,8 @@ class Module_downloads
 		$breadcrumbs=download_breadcrumbs($myrow['category_id'],$root,false,get_zone_name());
 		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$title_to_use->evaluate().'</span>'));
 
+		$may_download=has_privilege(get_member(),'download','downloads',array(strval($myrow['category_id'])));
+
 		// Meta data
 		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_date']),
@@ -806,6 +810,7 @@ class Module_downloads
 			'TRACKBACK_DETAILS'=>$trackback_details,
 			'RATING_DETAILS'=>$rating_details,
 			'COMMENT_DETAILS'=>$comment_details,
+			'MAY_DOWNLOAD'=>$may_download,
 		));
 	}
 

@@ -127,6 +127,8 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		}
 	}
 
+	$may_download=has_privilege(get_member(),'download','downloads',array(strval($row['category_id'])));
+
 	// Final template
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
 	return do_template('DOWNLOAD_BOX',array(
@@ -155,6 +157,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		'LICENCE'=>is_null($licence)?NULL:strval($licence),
 		'LICENCE_TITLE'=>$licence_title,
 		'LICENCE_HYPERLINK'=>$licence_hyperlink,
+		'MAY_DOWNLOAD'=>$may_download,
 	));
 }
 
