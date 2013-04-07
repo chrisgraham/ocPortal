@@ -11,7 +11,7 @@
 
 {+START,IF_NON_EMPTY,{SUBCATEGORIES}}
 	<div class="box box___download_category_screen"><div class="box_inner">
-		<h2>{!SUBCATEGORIES_HERE}</h2>
+		<h2>{$?,{$EQ,{ID},1},{!CATEGORIES},{!SUBCATEGORIES_HERE}}</h2>
 
 		{SUBCATEGORIES}
 	</div></div>
@@ -31,6 +31,18 @@
 		{!NO_ENTRIES}
 	</p>
 {+END}
+
+{+START,IF_NON_EMPTY,{SUBCATEGORIES}}{+START,IF,{$EQ,{ID},1}}
+	<hr class="spaced_rule" />
+
+	<div class="boxless_space">
+		{+START,BOX}{$BLOCK,block=main_multi_content,param=download,filter={ID}*,no_links=1,efficient=0,give_context=0,include_breadcrumbs=1,render_if_empty=1,max=10,mode=recent,title={!RECENT,10,{!SECTION_DOWNLOADS}}}{+END}
+
+		{+START,IF,{$CONFIG_OPTION,is_on_rating}}
+			{+START,BOX}{$BLOCK,block=main_multi_content,param=download,filter={ID}*,no_links=1,efficient=0,give_context=0,include_breadcrumbs=1,render_if_empty=1,max=10,mode=top,title={!TOP,10,{!SECTION_DOWNLOADS}}}{+END}
+		{+END}
+	</div>
+{+END}{+END}
 
 {+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 

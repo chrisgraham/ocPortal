@@ -494,7 +494,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 		}
 		elseif ((preg_match('#^(.+)\*$#',$token,$matches)!=0) && ($parent_spec__parent_name!==NULL)) // e.g. '3*'
 		{
-			if (($parent_spec__table_name=='catalogue_categories') && (db_has_subqueries($db->connection_read))) // Special case (optimisation) for catalogues
+			if (($parent_spec__table_name=='catalogue_categories') && (strpos($field_name,'c_name')===false) && ($parent_field_name=='cc_id') && (db_has_subqueries($db->connection_read))) // Special case (optimisation) for catalogues
 			{
 				/*static $counter=0;
 				$out_join.=' JOIN '.$db->get_table_prefix().'catalogue_cat_treecache t'.strval($counter).' ON t'.strval($counter).'.cc_id='.$parent_field_name.' AND t'.strval($counter).'.cc_ancestor_id='.strval(intval($matches[1]));
