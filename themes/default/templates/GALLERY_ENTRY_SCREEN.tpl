@@ -1,3 +1,4 @@
+
 <div class="gallery_entry_screen" id="gallery_entry_screen" itemscope="itemscope" itemtype="http://schema.org/{+START,IF_PASSED,VIDEO}Video{+END}{+START,IF_NON_PASSED,VIDEO}Image{+END}Object">
 	{TITLE}
 
@@ -7,99 +8,120 @@
 
 	{NAV}
 
+	{+START,SET,boxes}
+		<div class="gallery_entry_details right">
+			<div class="box box___gallery_entry_screen"><div class="box_inner" role="contentinfo">
+				<h2>{!DETAILS}</h2>
+
+				<table class="map_table results_table">
+					{+START,IF,{$NOT,{$MOBILE}}}
+						<colgroup>
+							<col class="gallery_entry_field_name_column" />
+							<col class="gallery_entry_field_value_column" />
+						</colgroup>
+					{+END}
+
+					<tbody>
+						<tr>
+							<th class="de_th meta_data_title">{!ADDED}</th>
+							<td>
+								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{ADD_DATE*}</time>
+							</td>
+						</tr>
+
+						<tr>
+							<th class="de_th meta_data_title">{!BY}</th>
+							<td>
+								<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}</a>
+
+								{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+							</td>
+						</tr>
+
+						{+START,IF_NON_EMPTY,{EDIT_DATE}}
+							<tr>
+								<th class="de_th meta_data_title">{!EDITED}</th>
+								<td>{EDIT_DATE*}</td>
+							</tr>
+						{+END}
+
+						{+START,IF,{$INLINE_STATS}}
+							<tr>
+								<th class="de_th meta_data_title">{!COUNT_VIEWS}</th>
+								<td>{VIEWS*}</td>
+							</tr>
+						{+END}
+
+						<tr>
+							<td colspan="2">
+								{$REVIEW_STATUS,{MEDIA_TYPE},{ID}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				{+START,IF,{$ADDON_INSTALLED,recommend}}{+START,IF,{$NOT,{$VALUE_OPTION,disable_ecards}}}
+					{+START,IF_NON_PASSED,VIDEO}
+						<p class="associated_link vertical_alignment"><img src="{$IMG*,filetypes/email_link}" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></p>
+					{+END}
+				{+END}{+END}
+			</div></div>
+		</div>
+
+		{+START,IF_NON_EMPTY,{MEMBER_DETAILS}}{+START,IF_PASSED,MEMBER_ID}
+			<div class="right">
+				<div class="box box___gallery_entry_screen"><div class="box_inner">
+					<h2>{GALLERY_TITLE*}</h2>
+
+					{MEMBER_DETAILS}
+				</div></div>
+			</div>
+		{+END}{+END}
+
+		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
+			<div class="trackbacks right">
+				{TRACKBACK_DETAILS}
+			</div>
+		{+END}
+		{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+			<div class="ratings right">
+				{RATING_DETAILS}
+			</div>
+		{+END}
+	{+END}
+
 	<div class="media_box">
 		{+START,IF_NON_PASSED,VIDEO}
 			<img class="scale_down" alt="{!IMAGE}" src="{URL*}" itemprop="contentURL" />
 		{+END}
 		{+START,IF_PASSED,VIDEO}
-			{VIDEO}
+			{+START,IF,{$GT,{$META_DATA,video:width},500}}
+				{VIDEO}
+			{+END}
+
+			{$,If the video is not large, we will put the boxes right alongside it}
+			{+START,IF,{$NOT,{$GT,{$META_DATA,video:width},500}}}
+				<div class="float_surrounder">
+					<div class="lined_up_boxes">
+						{$GET,boxes}
+					</div>
+
+					<div class="left">
+						{VIDEO}
+					</div>
+				</div>
+			{+END}
 
 			<!-- <p><a href="{URL*}">{!TO_DOWNLOAD_VIDEO}</a></p> -->
 		{+END}
 	</div>
 
 	{+START,IF,{$NOT,{SLIDESHOW}}}
-		<div class="float_surrounder lined_up_boxes">
-			<div class="gallery_entry_details right">
-				<div class="box box___gallery_entry_screen"><div class="box_inner" role="contentinfo">
-					<h2>{!DETAILS}</h2>
-
-					<table class="map_table results_table">
-						{+START,IF,{$NOT,{$MOBILE}}}
-							<colgroup>
-								<col class="gallery_entry_field_name_column" />
-								<col class="gallery_entry_field_value_column" />
-							</colgroup>
-						{+END}
-
-						<tbody>
-							<tr>
-								<th class="de_th meta_data_title">{!ADDED}</th>
-								<td>
-									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{ADD_DATE*}</time>
-								</td>
-							</tr>
-
-							<tr>
-								<th class="de_th meta_data_title">{!BY}</th>
-								<td>
-									<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}</a>
-
-									{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
-								</td>
-							</tr>
-
-							{+START,IF_NON_EMPTY,{EDIT_DATE}}
-								<tr>
-									<th class="de_th meta_data_title">{!EDITED}</th>
-									<td>{EDIT_DATE*}</td>
-								</tr>
-							{+END}
-
-							{+START,IF,{$INLINE_STATS}}
-								<tr>
-									<th class="de_th meta_data_title">{!COUNT_VIEWS}</th>
-									<td>{VIEWS*}</td>
-								</tr>
-							{+END}
-
-							<tr>
-								<td colspan="2">
-									{$REVIEW_STATUS,{MEDIA_TYPE},{ID}}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					{+START,IF,{$ADDON_INSTALLED,recommend}}{+START,IF,{$NOT,{$VALUE_OPTION,disable_ecards}}}
-						{+START,IF_NON_PASSED,VIDEO}
-							<p class="associated_link vertical_alignment"><img src="{$IMG*,filetypes/email_link}" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></p>
-						{+END}
-					{+END}{+END}
-				</div></div>
+		{+START,IF,{$OR,{$NEQ,{MEDIA_TYPE},video},{$GT,{$META_DATA,video:width},500}}}
+			<div class="float_surrounder lined_up_boxes">
+				{$GET,boxes}
 			</div>
-
-			{+START,IF_NON_EMPTY,{MEMBER_DETAILS}}{+START,IF_PASSED,MEMBER_ID}
-				<div class="right">
-					<div class="box box___gallery_entry_screen"><div class="box_inner">
-						<h2>{GALLERY_TITLE*}</h2>
-
-						{MEMBER_DETAILS}
-					</div></div>
-				</div>
-			{+END}{+END}
-
-			{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
-				<div class="trackbacks right">
-					{TRACKBACK_DETAILS}
-				</div>
-			{+END}
-			{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-				<div class="ratings right">
-					{RATING_DETAILS}
-				</div>
-			{+END}
-		</div>
+		{+END}
 
 		{+START,IF_NON_PASSED,VIDEO}
 			{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,image,{ID}}}

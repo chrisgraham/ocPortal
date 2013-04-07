@@ -22,12 +22,12 @@
 			},
 		});
 
-		var infoWindow=new google.maps.InfoWindow();
+		var info_window=new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}
 		google.maps.event.addListener(data_map,'click',function ()
 		{
-			infoWindow.close();
+			info_window.close();
 		});
 
 		var data=[
@@ -38,7 +38,7 @@
 		];
 
 		{$,Show markers}
-		var latLng,markerOptions,marker;
+		var latLng,marker_options,marker;
 		var bound_length=0;
 		{+START,IF,{$EQ,{CLUSTER},1}}
 		var markers=[];
@@ -65,22 +65,22 @@
 				bound_length++;
 			}
 
-			markerOptions={
+			marker_options={
 				position: latLng,
 				title: data[i][0]
 			};
 
 			{$,Reenable if you have put appropriate images in place
 				var categoryIcon="{$BASE_URL#}/themes/default/images_custom/map_icons/catalogue_category_"+data[i][3]+".png";
-				markerOptions.icon=categoryIcon;
+				marker_options.icon=categoryIcon;
 			}
 			if (data[i][6]==1)
 			{
 				var starIcon="{$BASE_URL#}/themes/default/images_custom/star-3.png";
-				markerOptions.icon=starIcon;
+				marker_options.icon=starIcon;
 			}
 
-			marker=new google.maps.Marker(markerOptions);
+			marker=new google.maps.Marker(marker_options);
 
 			{+START,IF,{$EQ,{CLUSTER},1}}
 				markers.push(marker);
@@ -89,7 +89,7 @@
 				marker.setMap(data_map);
 			{+END}
 
-			google.maps.event.addListener(marker,'click',(function (argMarker,entry_title,entry_id,entry_content)
+			google.maps.event.addListener(marker,'click',(function (arg_marker,entry_title,entry_id,entry_content)
 			{
 				return function ()
 				{
@@ -97,8 +97,8 @@
 					var content=entry_content.replace(/<colgroup>(.|\n)*<\/colgroup>/,'').replace(/&nbsp;/g,' ');
 					if (content != "")
 					{
-						infoWindow.setContent('<div class="global_middle_faux">'+content+'<\/div>');
-						infoWindow.open(data_map,argMarker);
+						info_window.setContent('<div class="global_middle_faux float_surrounder">'+content+'<\/div>');
+						info_window.open(data_map,arg_marker);
 					}
 				};
 			})(marker,data[i][0],data[i][4],data[i][5])); {$,These are the args passed to the dynamic function above.}

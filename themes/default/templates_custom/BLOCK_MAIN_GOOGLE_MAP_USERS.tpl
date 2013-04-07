@@ -129,7 +129,7 @@
 				var content=reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
 				if (content!='')
 				{
-					info_window.setContent('<div class="global_middle_faux">'+content+'<\/div>');
+					info_window.setContent('<div class="global_middle_faux float_surrounder">'+content+'<\/div>');
 					info_window.open(map,arg_marker);
 				}
 			};
