@@ -226,7 +226,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 			width: width,
 			height: height,
 			scrollbars: scrollbars,
-			href: url.replace(/^http:/,window.location.protocol)
+			href: url.replace(/^https?:/,window.location.protocol)
 		};
 		myFrame.cancel_button=(unadorned!==true)?cancel_text:null;
 		if (target) myFrame.target=target;
