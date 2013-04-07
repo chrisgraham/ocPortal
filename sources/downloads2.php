@@ -62,6 +62,10 @@ function dload_script()
 	if (!has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
 		access_denied('CATEGORY_ACCESS');
 
+	$may_download=has_specific_permission(get_member(),'download','downloads',array(strval($myrow['category_id'])));
+	if (!$may_download)
+		access_denied('PRIVILEGE','download');
+
 	// Cost?
 	$got_before=$GLOBALS['SITE_DB']->query_value_null_ok('download_logging','the_user',array('the_user'=>get_member(),'id'=>$id));
 	if (addon_installed('points'))

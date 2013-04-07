@@ -120,9 +120,11 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		}
 	}
 
+	$may_download=has_specific_permission(get_member(),'download','downloads',array(strval($row['category_id'])));
+
 	// Final template
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
-	return do_template('DOWNLOAD_BOX',array('_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08','TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>array_key_exists('id',$row)?strval($row['id']):'','RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>is_string($row['name'])?$row['name']:get_translated_text($row['name']),'BREADCRUMBS'=>$breadcrumbs,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
+	return do_template('DOWNLOAD_BOX',array('_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08','TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>array_key_exists('id',$row)?strval($row['id']):'','RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>is_string($row['name'])?$row['name']:get_translated_text($row['name']),'BREADCRUMBS'=>$breadcrumbs,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink,'MAY_DOWNLOAD'=>$may_download));
 }
 
 /**

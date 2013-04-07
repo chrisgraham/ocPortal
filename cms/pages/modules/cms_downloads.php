@@ -58,7 +58,7 @@ class Module_cms_downloads extends standard_aed_module
 	function get_sp_overrides()
 	{
 		require_lang('downloads');
-		return array('mass_import'=>0,'submit_cat_midrange_content'=>array(0,'ADD_DOWNLOAD_CATEGORY'),'edit_cat_midrange_content'=>array(0,'EDIT_DOWNLOAD_CATEGORY'),'delete_cat_midrange_content'=>array(0,'DELETE_DOWNLOAD_CATEGORY'),'submit_midrange_content'=>array(1,'ADD_DOWNLOAD'),'bypass_validation_midrange_content'=>array(1,'BYPASS_DOWNLOAD_VALIDATION'),'edit_own_midrange_content'=>array(1,'EDIT_OWN_DOWNLOAD'),'edit_midrange_content'=>array(1,'EDIT_DOWNLOAD'),'delete_own_midrange_content'=>array(1,'DELETE_OWN_DOWNLOAD'),'delete_midrange_content'=>array(1,'DELETE_DOWNLOAD'));
+		return array('download'=>1,'mass_import'=>0,'submit_cat_midrange_content'=>array(0,'ADD_DOWNLOAD_CATEGORY'),'edit_cat_midrange_content'=>array(0,'EDIT_DOWNLOAD_CATEGORY'),'delete_cat_midrange_content'=>array(0,'DELETE_DOWNLOAD_CATEGORY'),'submit_midrange_content'=>array(1,'ADD_DOWNLOAD'),'bypass_validation_midrange_content'=>array(1,'BYPASS_DOWNLOAD_VALIDATION'),'edit_own_midrange_content'=>array(1,'EDIT_OWN_DOWNLOAD'),'edit_midrange_content'=>array(1,'EDIT_DOWNLOAD'),'delete_own_midrange_content'=>array(1,'DELETE_OWN_DOWNLOAD'),'delete_midrange_content'=>array(1,'DELETE_DOWNLOAD'));
 	}
 
 	/**

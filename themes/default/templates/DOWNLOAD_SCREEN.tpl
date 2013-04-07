@@ -29,7 +29,12 @@
 					<div class="box_inner">
 					{+END}
 						<div class="download_now" itemprop="significantLinks">
-							<p class="download_link associated_link suggested_link"><a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
+							{+START,IF,{MAY_DOWNLOAD}}
+								<p class="download_link associated_link suggested_link"><a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
+							{+END}
+							{+START,IF,{$NOT,{MAY_DOWNLOAD}}}
+								<p>{!NO_DOWNLOAD_ACCESS}</p>
+							{+END}
 							<p class="download_filesize">({FILE_SIZE*})</p>
 						</div>
 					</div>
