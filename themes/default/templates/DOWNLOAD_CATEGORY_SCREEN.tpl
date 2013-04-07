@@ -11,7 +11,7 @@
 
 {+START,IF_NON_EMPTY,{SUBCATEGORIES}}
 	<div class="box box___download_category_screen"><div class="box_inner compacted_subbox_stream">
-		<h2>{!SUBCATEGORIES_HERE}</h2>
+		<h2>{$?,{$EQ,{ID},1},{!CATEGORIES},{!SUBCATEGORIES_HERE}}</h2>
 
 		<div>
 			{SUBCATEGORIES}
@@ -54,3 +54,15 @@
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}
+
+{+START,IF_NON_EMPTY,{SUBCATEGORIES}}{+START,IF,{$EQ,{ID},1}}
+	<hr class="spaced_rule" />
+
+	<div class="boxless_space">
+		{+START,BOX}{$BLOCK,block=main_multi_content,param=download,filter={ID}*,no_links=1,efficient=0,give_context=0,include_breadcrumbs=1,render_if_empty=1,max=10,mode=recent,title={!RECENT,10,{!SECTION_DOWNLOADS}}}{+END}
+
+		{+START,IF,{$CONFIG_OPTION,is_on_rating}}
+			{+START,BOX}{$BLOCK,block=main_multi_content,param=download,filter={ID}*,no_links=1,efficient=0,give_context=0,include_breadcrumbs=1,render_if_empty=1,max=10,mode=top,title={!TOP,10,{!SECTION_DOWNLOADS}}}{+END}
+		{+END}
+	</div>
+{+END}{+END}

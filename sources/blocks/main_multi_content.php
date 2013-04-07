@@ -114,6 +114,7 @@ class Block_main_multi_content
 		if ($sort=='rating') $sort='average_rating'; // LEGACY
 		$filter=array_key_exists('filter',$map)?$map['filter']:'';
 		$filter_b=array_key_exists('filter_b',$map)?$map['filter_b']:'';
+		if ($filter_b=='*') return new ocp_tempcode(); // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
 		$zone=array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
 		$efficient=(array_key_exists('efficient',$map)?$map['efficient']:'1')=='1';
@@ -630,14 +631,14 @@ class Block_main_multi_content
 	function build_filter($filter,$info,$category_field_filter)
 	{
 		$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
-		$parent_field_name=array_key_exists('parent_category_field',$info)?$info['parent_category_field']:NULL;
+		$parent_field_name=$category_field_filter;//array_key_exists('parent_field_name',$info)?$info['parent_field_name']:NULL;
 		if (is_null($parent_field_name)) $parent_spec__table_name=NULL;
 		$parent_spec__parent_name=array_key_exists('parent_spec__parent_name',$info)?$info['parent_spec__parent_name']:NULL;
 		$parent_spec__field_name=array_key_exists('parent_spec__field_name',$info)?$info['parent_spec__field_name']:NULL;
 		$id_field_numeric=((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric']));
-		$category_is_string=((array_key_exists('category_is_string',$info)) && ($info['category_is_string']));
+		$category_is_string=((array_key_exists('category_is_string',$info)) && (is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string']));
 		require_code('ocfiltering');
-		return ocfilter_to_sqlfragment($filter,$category_field_filter,$parent_spec__table_name,$parent_spec__parent_name,'r.'.$parent_field_name,$parent_spec__field_name,$id_field_numeric,!$category_is_string);
+		return ocfilter_to_sqlfragment($filter,$info['id_field'],$parent_spec__table_name,$parent_spec__parent_name,'r.'.$parent_field_name,$parent_spec__field_name,$id_field_numeric,!$category_is_string);
 	}
 }
 

@@ -121,6 +121,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/modules/admin_import_types/galleries.php',
 			'sources/hooks/systems/symbols/GALLERY_VIDEO_FOR_URL.php',
 			'sources/hooks/systems/profiles_tabs/galleries.php',
+			'GALLERY_POPULAR.tpl',
 			'GALLERY_ENTRY_WRAP.tpl',
 			'BLOCK_MAIN_GALLERY_EMBED.tpl',
 			'GALLERY_BOX.tpl',
@@ -220,6 +221,7 @@ class Hook_addon_registry_galleries
 		return array(
 				'BLOCK_MAIN_IMAGE_FADER.tpl'=>'block_main_image_fader',
 				'GALLERY_IMPORT_SCREEN.tpl'=>'administrative__gallery_import_screen',
+				'GALLERY_POPULAR.tpl'=>'gallery_popular',
 				'GALLERY_IMAGE.tpl'=>'gallery_image',
 				'GALLERY_ENTRY_WRAP.tpl'=>'gallery_regular_mode_screen',
 				'GALLERY_VIDEO.tpl'=>'gallery_regular_mode_screen',
@@ -559,6 +561,25 @@ class Hook_addon_registry_galleries
 					'TITLE'=>lorem_title(),
 					'FORM2'=>placeholder_form(),
 					'FORM'=>$form,
+				)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__gallery_popular()
+	{
+		return array(
+			lorem_globalise(
+				do_lorem_template('GALLERY_POPULAR',array(
+					'CHILDREN'=>lorem_sentence_html(),
+					'CAT'=>'root',
 				)
 			),NULL,'',true),
 		);

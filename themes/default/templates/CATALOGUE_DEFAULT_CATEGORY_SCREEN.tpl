@@ -51,3 +51,16 @@
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}
+
+{$,Display top/recent entries. By default it is only shown on the A-Z screen, which has a blank ID}
+{+START,IF_NON_EMPTY,{SUBCATEGORIES}}{+START,IF,{$EQ,{ID},}}
+	<hr class="spaced_rule" />
+
+	<div class="boxless_space">
+		{+START,BOX}{$BLOCK,block=main_multi_content,param=catalogue_entry,filter={$?,{$IS_NON_EMPTY,{ID}},{ID}*},no_links=1,efficient=0,give_context=0,include_breadcrumbs=1,render_if_empty=1,max=10,mode=recent,title={!RECENT,10,{!ENTRIES}}}{+END}
+
+		{+START,IF,{$CONFIG_OPTION,is_on_rating}}
+			{+START,BOX}{$BLOCK,block=main_multi_content,param=catalogue_entry,filter={$?,{$IS_NON_EMPTY,{ID}},{ID}*},no_links=1,efficient=0,give_context=0,include_breadcrumbs=1,render_if_empty=1,max=10,mode=top,title={!TOP,10,{!ENTRIES}}}{+END}
+		{+END}
+	</div>
+{+END}{+END}

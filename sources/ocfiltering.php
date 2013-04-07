@@ -503,7 +503,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 		}
 		elseif ((preg_match('#^(.+)(\*|>)$#',$token,$matches)!=0) && ($parent_spec__parent_name!==NULL)) // e.g. '3*'
 		{
-			if (($parent_spec__table_name=='catalogue_categories') && ($matches[2]!='>') && (db_has_subqueries($db->connection_read))) // Special case (optimisation) for catalogues
+			if (($parent_spec__table_name=='catalogue_categories') && (strpos($field_name,'c_name')===false) && ($parent_field_name=='cc_id') && ($matches[2]!='>') && (db_has_subqueries($db->connection_read))) // Special case (optimisation) for catalogues
 			{
 				// MySQL should be smart enough to not enumerate the 'IN' clause here, which would be bad - instead it can jump into the embedded WHERE clause on each test iteration
 				$this_details=$db->query_select('catalogue_categories',array('cc_parent_id','c_name'),array('id'=>intval($matches[1])),'',1);

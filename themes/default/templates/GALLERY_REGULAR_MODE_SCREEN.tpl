@@ -12,7 +12,7 @@
 
 	{+START,IF_NON_EMPTY,{CHILDREN}}
 		<div class="box box___gallery_regular_mode_screen"><div class="box_inner compacted_subbox_stream">
-			<h2>{!SUBCATEGORIES_HERE}</h2>
+			<h2>{$?,{$EQ,{CAT},root},{!CATEGORIES},{!SUBCATEGORIES_HERE}}</h2>
 
 			<div>
 				{CHILDREN}
@@ -85,4 +85,7 @@
 	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}
+
+	{$,Uncomment the below if you want the root gallery to show recent and top content, then customise the GALLERY_POPULAR.tpl template to control specifics}
+	{$,\{+START,INCLUDE,GALLERY_POPULAR\}\{+END\}}
 </div>
