@@ -41,7 +41,7 @@ function open_link_as_overlay(ob,width,height,target)
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="{$IMG*,loading}" /></p><p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
+		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></p><p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
 
 		// Show overlay
 		var my_lightbox={
@@ -842,7 +842,7 @@ function ModalWindow()
 				} else
 				{
 					button=this.element('img',{
-						'src': '{$IMG;,button_lightbox_close}',
+						'src': '{$IMG;,button_lightbox_close}'.replace(/^http:/,window.location.protocol),
 						'alt': this.cancel_button,
 						'class': 'overlay_close_button'
 					});

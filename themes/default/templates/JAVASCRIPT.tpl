@@ -301,7 +301,7 @@ function staff_unload_action()
 	div.style.position='fixed';
 	div.style.zIndex=10000;
 	div.style.textAlign='center';
-	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
+	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
 
@@ -1293,7 +1293,7 @@ function illustrate_frame_load(pf,frame)
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
+			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
 		} else
 		{
 			body[0].className='website_body';
@@ -1307,7 +1307,7 @@ function illustrate_frame_load(pf,frame)
 
 			if (de.getElementsByTagName('style').length==0) /* The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice */
 				set_inner_html(head_element,head);
-			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div>');
+			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div>');
 		}
 		var the_frame=window.frames[frame];
 		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache
@@ -2704,7 +2704,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 					set_inner_html(_replace_spot,'');
 					var loading_image=document.createElement('img');
 					loading_image.className='ajax_loading';
-					loading_image.src='{$IMG;,loading}';
+					loading_image.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
 					loading_image.style.height='12px';
 					_replace_spot.appendChild(loading_image);
 

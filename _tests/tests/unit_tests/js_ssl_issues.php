@@ -1,0 +1,50 @@
+<?php /*
+
+ ocPortal
+ Copyright (c) ocProducts, 2004-2013
+
+ See text/EN/licence.txt for full licencing information.
+
+*/
+
+/**
+ * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright	ocProducts Ltd
+ * @package		unit_testing
+ */
+
+/**
+ * ocPortal test case class (unit testing).
+ */
+class js_ssl_issues_test_set extends ocp_test_case
+{
+	function setUp()
+	{
+		parent::setUp();
+	}
+
+	function testSSLIssues()
+	{
+		$templates=array();
+		$path=get_file_base().'/themes/default/templates';
+		$dh=opendir($path);
+		while (($f=readdir($dh))!==false)
+		{
+			if ((strtolower(substr($f,-4))=='.tpl') && (substr($f,0,10)=='JAVASCRIPT'))
+			{
+				$file=file_get_contents($path.'/'.$f);
+
+				$num_matches=preg_match_all('#\{\$IMG[;\*]+,(\w+)\}(?!.*protocol.*$)(.*)$#m',$file,$matches);
+				for ($i=0;$i<$num_matches;$i++)
+				{
+					$this->assertTrue(false,$f.'/'.$matches[1][$i].' not prepared for SSL');
+				}
+			}
+		}
+	}
+
+	function tearDown()
+	{
+		parent::tearDown();
+	}
+}

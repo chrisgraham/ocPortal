@@ -331,7 +331,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 		}
 		var loading_image=document.createElement('img');
 		loading_image.className='ajax_loading ajax_loading_block';
-		loading_image.src='{$IMG;,loading}';
+		loading_image.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
 		loading_image.style.position='absolute';
 		loading_image.style.zIndex='1000';
 		loading_image.style.left=(find_width(target_div)/2-10)+'px';

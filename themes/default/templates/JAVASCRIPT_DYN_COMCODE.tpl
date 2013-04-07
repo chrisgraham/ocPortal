@@ -20,10 +20,10 @@ function accordion(e)
 function big_tabs_init()
 {
 	/* Precache images */
-	new Image().src='{$IMG;,big_tabs_controller_button}';
-	new Image().src='{$IMG;,big_tabs_controller_button_active}';
-	new Image().src='{$IMG;,big_tabs_controller_button_top_active}';
-	new Image().src='{$IMG;,big_tabs_controller_button_top}';
+	new Image().src='{$IMG;,big_tabs_controller_button}'.replace(/^http:/,window.location.protocol);
+	new Image().src='{$IMG;,big_tabs_controller_button_active}'.replace(/^http:/,window.location.protocol);
+	new Image().src='{$IMG;,big_tabs_controller_button_top_active}'.replace(/^http:/,window.location.protocol);
+	new Image().src='{$IMG;,big_tabs_controller_button_top}'.replace(/^http:/,window.location.protocol);
 }
 
 function countdown(id,direction,tailing)
