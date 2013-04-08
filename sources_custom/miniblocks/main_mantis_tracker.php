@@ -46,7 +46,7 @@ $db=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_
 $where='duplicate_id=0';
 $where.=' AND view_state=10';
 if (isset($map['completed'])) $where.=' AND '.(($map['completed']=='0')?'a.status<=50':'a.status=80');
-if (isset($map['voted'])) $where.=' AND ('.(($map['voted']=='1')?/*'a.reporter_id='.strval(get_member()).' OR '.*/'EXISTS':'NOT EXISTS').' (SELECT * FROM mantis_bug_monitor_table p WHERE user_id='.strval(get_member()).' AND p.bug_id=a.id))';
+if (isset($map['voted'])) $where.=' AND ('.(($map['voted']=='1')?/*disabled as messy if someone's reported lots 'a.reporter_id='.strval(get_member()).' OR '.*/'EXISTS':'NOT EXISTS').' (SELECT * FROM mantis_bug_monitor_table p WHERE user_id='.strval(get_member()).' AND p.bug_id=a.id))';
 if (isset($map['project'])) $where.=' AND a.project_id='.strval(intval($map['project']));
 
 $order='id';
@@ -106,10 +106,10 @@ if (count($issues)==0)
 		$money_raised=$issue['money_raised'];
 		$suggested_by=$issue['reporter_id'];
 		$add_date=$issue['date_submitted'];
-		$vote_url='http://ocportal.com/tracker/bug_monitor_add.php?bug_id='.strval($issue['id']);
-		$unvote_url='http://ocportal.com/tracker/bug_monitor_delete.php?bug_id='.strval($issue['id']);
+		$vote_url=get_base_url().'/tracker/bug_monitor_add.php?bug_id='.strval($issue['id']);
+		$unvote_url=get_base_url().'/tracker/bug_monitor_delete.php?bug_id='.strval($issue['id']);
 		$voted=!is_null($db->query_value_null_ok('mantis_bug_monitor_table','user_id',array('user_id'=>get_member(),'bug_id'=>$issue['id'])));
-		$full_url='http://ocportal.com/tracker/view.php?id='.strval($issue['id']);
+		$full_url=get_base_url().'/tracker/view.php?id='.strval($issue['id']);
 		$num_comments=$issue['num_comments'];
 
 		$_cost=is_null($cost)?'unknown':(static_evaluate_tempcode(comcode_to_tempcode('[currency="GBP"]'.float_to_raw_string($cost).'[/currency]')));
