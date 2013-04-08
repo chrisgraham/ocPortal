@@ -24,6 +24,21 @@ class Hook_sw_banners
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
+	 * @return array		Current settings.
+	 */
+	function get_current_settings()
+	{
+		$settings=array();
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'donate'));
+		$settings['have_default_banners_donation']=is_null($test)?'0':'1';
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'advertise_here'));
+		$settings['have_default_banners_advertising']=is_null($test)?'0':'1';
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
@@ -31,12 +46,15 @@ class Hook_sw_banners
 	{
 		if (!addon_installed('banners')) return new ocp_tempcode();
 
+		$current_settings=$this->get_current_settings();
+		$field_defaults+=$current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
+
 		require_lang('banners');
 		$fields=new ocp_tempcode();
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'donate'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'),'have_default_banners_donation',array_key_exists('have_default_banners_donation',$field_defaults)?($field_defaults['have_default_banners_donation']=='1'):false));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'advertise_here'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_ADVERTISING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_ADVERTISING'),'have_default_banners_advertising',array_key_exists('have_default_banners_advertising',$field_defaults)?($field_defaults['have_default_banners_advertising']=='1'):false));
+		if ($current_settings['have_default_banners_donation']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'),'have_default_banners_donation',$field_defaults['have_default_banners_donation']=='1'));
+		if ($current_settings['have_default_banners_advertising']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_ADVERTISING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_ADVERTISING'),'have_default_banners_advertising',$field_defaults['have_default_banners_advertising']=='1'));
 		return $fields;
 	}
 

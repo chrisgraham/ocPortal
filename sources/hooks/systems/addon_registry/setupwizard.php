@@ -94,7 +94,9 @@ class Hook_addon_registry_setupwizard
 			'themes/default/images/pagepics/configwizard.png',
 			'sources/hooks/modules/admin_setupwizard/.htaccess',
 			'sources/hooks/modules/admin_setupwizard/index.html',
-			'sources/hooks/systems/do_next_menus/setupwizard.php'
+			'sources/hooks/systems/do_next_menus/setupwizard.php',
+			'sources/hooks/modules/admin_setupwizard/core.php',
+			'sources/hooks/modules/admin_setupwizard_installprofiles/minimalistic.php',
 		);
 	}
 

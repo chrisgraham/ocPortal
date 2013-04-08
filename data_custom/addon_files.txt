@@ -4110,6 +4110,11 @@ twitter_feed_integration_block
  - themes/default/images_custom/twitter_feed/retweet_hover.png
  - themes/default/images_custom/twitter_feed/retweet_on.png
 
+installprofile_generator
+------------------------
+ - sources_custom/hooks/systems/do_next_menus/installprofile_generator.php
+ - adminzone/pages/minimodules_custom/installprofile_generator.php
+
 calendar_from_6am
 -----------------
 

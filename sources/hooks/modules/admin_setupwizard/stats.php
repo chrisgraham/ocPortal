@@ -24,6 +24,18 @@ class Hook_sw_stats
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
+	 * @return array		Current settings.
+	 */
+	function get_current_settings()
+	{
+		$settings=array();
+		$settings['stats_store_time']=get_option('stats_store_time');
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
@@ -31,7 +43,9 @@ class Hook_sw_stats
 	{
 		if (!addon_installed('stats')) return new ocp_tempcode();
 
-		$stats_store_time=get_option('stats_store_time');
+		$field_defaults+=$this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP
+
+		$stats_store_time=$field_defaults['stats_store_time'];
 
 		require_lang('stats');
 		$fields=new ocp_tempcode();

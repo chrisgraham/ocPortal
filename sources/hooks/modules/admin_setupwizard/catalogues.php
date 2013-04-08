@@ -24,6 +24,29 @@ class Hook_sw_catalogues
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
+	 * @return array		Current settings.
+	 */
+	function get_current_settings()
+	{
+		$settings=array();
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'hosted'));
+		$settings['have_default_catalogues_hosted']=is_null($test)?'0':'1';
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'projects'));
+		$settings['have_default_catalogues_projects']=is_null($test)?'0':'1';
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'faqs'));
+		$settings['have_default_catalogues_faqs']=is_null($test)?'0':'1';
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'links'));
+		$settings['have_default_catalogues_links']=is_null($test)?'0':'1';
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'modifications'));
+		$settings['have_default_catalogues_modifications']=is_null($test)?'0':'1';
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'contacts'));
+		$settings['have_default_catalogues_contacts']=is_null($test)?'0':'1';
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
@@ -31,20 +54,23 @@ class Hook_sw_catalogues
 	{
 		if (!addon_installed('catalogues')) return new ocp_tempcode();
 
+		$current_settings=$this->get_current_settings();
+		$field_defaults+=$current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
+
 		require_lang('catalogues');
 		$fields=new ocp_tempcode();
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'hosted'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_HOSTING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_HOSTING'),'have_default_catalogues_hosting',array_key_exists('have_default_catalogues_hosting',$field_defaults)?($field_defaults['have_default_catalogues_hosting']=='1'):false));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'projects'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_PROJECTS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_PROJECTS'),'have_default_catalogues_projects',array_key_exists('have_default_catalogues_projects',$field_defaults)?($field_defaults['have_default_catalogues_projects']=='1'):false));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'faqs'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_FAQS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_FAQS'),'have_default_catalogues_faqs',array_key_exists('have_default_catalogues_faqs',$field_defaults)?($field_defaults['have_default_catalogues_faqs']=='1'):true));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'links'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_LINKS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_LINKS'),'have_default_catalogues_links',array_key_exists('have_default_catalogues_links',$field_defaults)?($field_defaults['have_default_catalogues_links']=='1'):true));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'modifications'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_MODIFICATIONS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_MODIFICATIONS'),'have_default_catalogues_modifications',array_key_exists('have_default_catalogues_modifications',$field_defaults)?($field_defaults['have_default_catalogues_modifications']=='1'):false));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'contacts'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_CONTACTS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_CONTACTS'),'have_default_catalogues_contacts',array_key_exists('have_default_catalogues_contacts',$field_defaults)?($field_defaults['have_default_catalogues_contacts']=='1'):true));
+		if ($current_settings['have_default_catalogues_hosted']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_HOSTING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_HOSTING'),'have_default_catalogues_hosting',$field_defaults['have_default_catalogues_hosting']=='1'));
+		if ($current_settings['have_default_catalogues_projects']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_PROJECTS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_PROJECTS'),'have_default_catalogues_projects',$field_defaults['have_default_catalogues_projects']=='1'));
+		if ($current_settings['have_default_catalogues_faqs']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_FAQS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_FAQS'),'have_default_catalogues_faqs',$field_defaults['have_default_catalogues_faqs']=='1'));
+		if ($current_settings['have_default_catalogues_links']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_LINKS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_LINKS'),'have_default_catalogues_links',$field_defaults['have_default_catalogues_links']=='1'));
+		if ($current_settings['have_default_catalogues_modifications']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_MODIFICATIONS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_MODIFICATIONS'),'have_default_catalogues_modifications',$field_defaults['have_default_catalogues_modifications']=='1'));
+		if ($current_settings['have_default_catalogues_contacts']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_CONTACTS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_CONTACTS'),'have_default_catalogues_contacts',$field_defaults['have_default_catalogues_contacts']=='1'));
 		return $fields;
 	}
 

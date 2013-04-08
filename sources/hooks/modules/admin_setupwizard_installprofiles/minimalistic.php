@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		galleries
+ * @package		setupwizard
  */
 
-class Hook_admin_setupwizard_installprofiles_portfolio
+class Hook_admin_setupwizard_installprofiles_minimalistic
 {
 
 	/**
@@ -28,22 +28,46 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 	 */
 	function info()
 	{
-		require_lang('galleries');
 		return array(
-			'title'=>do_lang('PORTFOLIO'),
+			'title'=>do_lang('MINIMALISTIC_SITE'),
 		);
 	}
 
 	/**
 	 * Get a list of addons that are kept with this installation profile (added to the list of addons always kept)
 	 *
-	 * @return array			Pair: List of addons in the profile, Separated list of ones to show under advanced
+	 * @return array			Triple: List of addons in the profile, Separated list of ones to show under advanced, Ones we really are shunning
 	 */
 	function get_addon_list()
 	{
 		return array(
-			array('galleries','random_quotes','polls','news'),
-			array());
+			array(
+			),
+			array(
+			),
+			array(
+				'banners',
+				'ecommerce',
+				'ocf_avatars',
+				'ocf_cartoon_avatars',
+				'ocf_member_avatars',
+				'ocf_thematic_avatars',
+				'wordfilter',
+				'awards',
+				'counting_blocks',
+				'help_page',
+				'language_block',
+				'printer_friendly_block',
+				'search',
+				'stats',
+				'stats_block',
+				'syndication',
+				'syndication_blocks',
+				'themewizard',
+				'weather', // TODO: Remove for v10
+				'users_online_block',
+			),
+		);
 	}
 
 	/**
@@ -67,10 +91,13 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 			'keep_news_categories'=>'0',
 			'keep_blogs'=>'0',
 			'have_default_rank_set'=>'0',
-			'show_content_tagging'=>'1',
-			'show_content_tagging_inline'=>'1',
-			'show_screen_actions'=>'1',
-			'rules'=>'balanced',
+			'have_default_cpf_set'=>'0',
+			'have_default_full_emoticon_set'=>'0',
+			'show_content_tagging'=>'0',
+			'show_content_tagging_inline'=>'0',
+			'show_screen_actions'=>'0',
+			'have_default_wordfilter'=>'0',
+			'rules'=>'corporate',
 		);
 	}
 
@@ -81,20 +108,20 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 	 */
 	function default_blocks()
 	{
+		// Usually these won't be here (except side_personal_stats), because the addons won't have been installed -- but if they were, we do want to represent those block-driven addons
 		return array(
 			'YES'=>array(
-				'main_recent_galleries',
-				'main_top_galleries',
-				'main_quotes',
+				'main_news',
 			),
 			'YES_CELL'=>array(
 			),
 			'PANEL_LEFT'=>array(
-				'side_root_galleries',
-				'main_image_fader',
-				'side_news',
+				'side_personal_stats',
+				'main_newsletter_signup',
 			),
 			'PANEL_RIGHT'=>array(
+				'main_search',
+				'main_poll',
 			),
 		);
 	}

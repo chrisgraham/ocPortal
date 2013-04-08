@@ -47,7 +47,7 @@ class Hook_addon_registry_authors
 	 */
 	function get_description()
 	{
-		return 'Certain kinds of content can have authors instead of submitters (e.g. "ocProducts"). The authors may be independently described and searched under.';
+		return 'Certain kinds of content can have authors instead of submitters (e.g. \'ocProducts\'). The authors may be independently described and searched under.';
 	}
 
 	/**

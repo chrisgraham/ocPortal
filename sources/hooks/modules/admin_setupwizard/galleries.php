@@ -24,6 +24,19 @@ class Hook_sw_galleries
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
+	 * @return array		Current settings.
+	 */
+	function get_current_settings()
+	{
+		$settings=array();
+		$test=$GLOBALS['SITE_DB']->query_value('gsp','COUNT(*)',array('specific_permission'=>'have_personal_category','the_page'=>'cms_galleries'));
+		$settings['keep_personal_galleries']=($test==0)?'0':'1';
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
@@ -31,8 +44,10 @@ class Hook_sw_galleries
 	{
 		if (!addon_installed('galleries')) return new ocp_tempcode();
 
+		$field_defaults+=$this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP
+
 		require_lang('galleries');
-		return form_input_tick(do_lang_tempcode('KEEP_PERSONAL_GALLERIES'),do_lang_tempcode('DESCRIPTION_KEEP_PERSONAL_GALLERIES'),'keep_personal_galleries',array_key_exists('keep_personal_galleries',$field_defaults)?($field_defaults['keep_personal_galleries']=='1'):false);
+		return form_input_tick(do_lang_tempcode('KEEP_PERSONAL_GALLERIES'),do_lang_tempcode('DESCRIPTION_KEEP_PERSONAL_GALLERIES'),'keep_personal_galleries',$field_defaults['keep_personal_galleries']=='1');
 	}
 
 	/**

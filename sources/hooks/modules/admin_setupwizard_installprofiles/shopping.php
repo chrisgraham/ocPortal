@@ -65,6 +65,7 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			'have_default_catalogues_contacts'=>'0',
 			'keep_personal_galleries'=>'0',
 			'keep_news_categories'=>'0',
+			'keep_blogs'=>'0',
 			'have_default_rank_set'=>'0',
 			'show_content_tagging'=>'1',
 			'show_content_tagging_inline'=>'1',

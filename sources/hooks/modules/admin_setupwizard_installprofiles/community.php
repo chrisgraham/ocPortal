@@ -41,7 +41,7 @@ class Hook_admin_setupwizard_installprofiles_community
 	function get_addon_list()
 	{
 		return array(
-			array('ocf_forum','points','pointstore','ocf_thematic_avatars','ocf_cartoon_avatars','calendar','chat','iotds','polls','users_online_block','forum_blocks','polls','newsletter'),
+			array('facebook_support'/*this will be downloaded as it is not bundled*/,'ocf_forum','points','pointstore','ocf_thematic_avatars','ocf_cartoon_avatars','calendar','chat','iotds','polls','users_online_block','forum_blocks','polls','newsletter'),
 			array());
 	}
 

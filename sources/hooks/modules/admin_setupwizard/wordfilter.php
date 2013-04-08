@@ -24,13 +24,30 @@ class Hook_sw_wordfilter
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
+	 * @return array		Current settings.
+	 */
+	function get_current_settings()
+	{
+		$settings=array();
+		$settings['have_default_wordfilter']=($GLOBALS['SITE_DB']->query_value('wordfilter','COUNT(*)')==0)?'0':'1';
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
+	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
-	function get_fields()
+	function get_fields($field_defaults)
 	{
+		$current_settings=$this->get_current_settings();
+		$field_defaults+=$current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
+
 		require_lang('wordfilter');
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_tick(do_lang_tempcode('KEEP_WORD_FILTER'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_WORDFILTER'),'have_default_wordfilter',true));
+		if ($current_settings['have_default_wordfilter']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('KEEP_WORD_FILTER'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_WORDFILTER'),'have_default_wordfilter',$field_defaults['have_default_wordfilter']=='1'));
 		return $fields;
 	}
 
