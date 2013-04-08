@@ -166,7 +166,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		if (addon_installed('newsletter'))
 		{
 			require_lang('newsletter');
-			if (get_value('welcome_nw_choice')==='1')
+			if (get_option('welcome_nw_choice')=='1')
 			{
 				$newsletters=new ocp_tempcode();
 				$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
@@ -279,7 +279,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$subject=post_param('subject');
 		$text=post_param('text');
 		$send_time=post_param_integer('send_time');
-		if (get_value('welcome_nw_choice')==='1')
+		if (get_option('welcome_nw_choice')=='1')
 		{
 			$newsletter=post_param_integer('newsletter',NULL);
 		} else
@@ -301,7 +301,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$subject=post_param('subject');
 		$text=post_param('text');
 		$send_time=post_param_integer('send_time');
-		if (get_value('welcome_nw_choice')==='1')
+		if (get_option('welcome_nw_choice')=='1')
 		{
 			$newsletter=post_param_integer('newsletter',NULL);
 		} else

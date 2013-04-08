@@ -988,7 +988,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_download_category',array(),true,strval($parent_id)));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		if (get_value('disable_staff_notes')!=='1')
+		if (get_option('enable_staff_notes')=='1')
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');

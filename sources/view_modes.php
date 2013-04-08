@@ -250,7 +250,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			if ($value_found!='')
 			{
 				$description=make_string_tempcode(escape_html($value_found));
-				if ((get_value('google_translate_api_key')===NULL) || (user_lang()==get_site_default_lang()))
+				if ((get_option('google_translate_api_key')==NULL) || (user_lang()==get_site_default_lang()))
 				{
 					$actions=new ocp_tempcode();
 				} else
@@ -294,7 +294,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			$description=array_key_exists($key,$descriptions)?make_string_tempcode($descriptions[$key]):new ocp_tempcode();
 			if (!is_null($value_found))
 			{
-				if ((get_value('google_translate_api_key')===NULL) || (user_lang()==get_site_default_lang()))
+				if ((get_option('google_translate_api_key')==NULL) || (user_lang()==get_site_default_lang()))
 				{
 					$actions=new ocp_tempcode();
 				} else

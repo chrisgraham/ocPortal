@@ -59,7 +59,7 @@ class Hook_content_meta_aware_member
 			'add_url'=>'',
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('members')).':members',
 
-			'support_url_monikers'=>(get_value('username_profile_links')!=='1'),
+			'support_url_monikers'=>(get_option('username_profile_links')=='0'),
 
 			'views_field'=>NULL,
 			'submitter_field'=>'id',

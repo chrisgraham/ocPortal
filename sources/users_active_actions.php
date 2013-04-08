@@ -218,7 +218,7 @@ function delete_session($session)
 
 	global $SESSION_CACHE;
 	unset($SESSION_CACHE[$session]);
-	if (get_value('session_prudence')!=='1')
+	if (get_option('session_prudence')=='0')
 	{
 		persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}

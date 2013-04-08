@@ -873,7 +873,7 @@ class Module_galleries
 		$where=db_string_equal_to('cat',$cat);
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-		$_max_entries=get_value('flow_mode_max');
+		$_max_entries=get_option('flow_mode_max');
 		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
 		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,$max_entries,NULL,false,true);
 		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,$max_entries,NULL,false,true);

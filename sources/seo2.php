@@ -54,7 +54,7 @@ function seo_get_fields($type,$id=NULL)
 	}
 
 	$fields=new ocp_tempcode();
-	if ((get_value('disable_seo')!=='1') && ((get_value('disable_seo')!=='2'/*2 means have it only on edit*/) || (!is_null($id))))
+	if ((get_option('enable_seo_fields')!='no') && ((get_option('enable_seo_fields')!='only_on_edit') || (!is_null($id))))
 	{
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
 			'_GUID'=>'545aefd48d73cf01bdec7226dc6d93fb',
@@ -228,7 +228,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 		return '';
 	}
 
-	if (get_value('no_auto_meta')==='1') return '';
+	if (get_option('no_auto_meta')=='1') return '';
 
 	if (get_option('automatic_meta_extraction')=='0') return '';
 

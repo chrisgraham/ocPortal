@@ -107,7 +107,7 @@ class GTranslate{
 		$out='';
 		foreach ($text as $t)
 		{
-			$key=get_value('google_translate_api_key');
+			$key=get_option('google_translate_api_key');
 			$post_params=array(
 				'v'=>'1.0',
 				'userip'=>get_ip_address(),

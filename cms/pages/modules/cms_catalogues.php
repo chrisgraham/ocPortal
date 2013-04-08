@@ -1449,7 +1449,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		$hidden->attach(form_input_hidden('catalogue_name',$catalogue_name));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		if (get_value('disable_staff_notes')!=='1')
+		if (get_option('enable_staff_notes')=='1')
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		handle_max_file_size($hidden,'image');
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
@@ -1788,7 +1788,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d7f7e0da078bdfaab0b3387d200d57a4','SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
 
-			if (get_value('disable_staff_notes')!=='1')
+			if (get_option('enable_staff_notes')=='1')
 				$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 			if (addon_installed('points'))
 			{

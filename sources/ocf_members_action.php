@@ -65,7 +65,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 {
 	if (is_null($auto_monitor_contrib_content))
 	{
-		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
+		$auto_monitor_contrib_content=(get_option('allow_auto_notifications')=='0')?0:1;
 	}
 
 	if (is_null($password_compatibility_scheme))

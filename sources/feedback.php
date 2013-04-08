@@ -352,7 +352,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 		// Work out possible errors that mighr prevent rating being allowed
 		$error=new ocp_tempcode();
 		$rate_url=new ocp_tempcode();
-		if ((get_value('allow_own_rate')!=='1') && ($submitter===get_member()) && (!is_guest()))
+		if ((get_option('allow_own_rate')=='0') && ($submitter===get_member()) && (!is_guest()))
 		{
 			$error=do_lang_tempcode('RATE_DENIED_OWN');
 		}
@@ -415,7 +415,7 @@ function already_rated($rating_for_types,$content_id)
 	}
 	$query='SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id);
 	$query.=' AND (';
-	if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_value('poll_no_member_ip_restrict')!=='1'))
+	if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_option('poll_member_ip_restrict')=='1'))
 	{
 		$query.='rating_ip=\''.get_ip_address().'\'';
 	} else
@@ -516,7 +516,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 	list($_content_title,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
 	if (is_null($content_title)) $content_title=$_content_title;
-	if ((get_value('allow_own_rate')!=='1') && ($member_id===$submitter) && (!is_guest($member_id))) return;
+	if ((get_option('allow_own_rate')=='0') && ($member_id===$submitter) && (!is_guest($member_id))) return;
 
 	if (!is_null($rating))
 	{

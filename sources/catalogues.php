@@ -1330,7 +1330,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	}
 	$where=array('cc_id'=>$category_id);
 	if (!is_null($submitter)) $where['ce_submitter']=$submitter;
-	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',1000/*reasonable limit*/);
+	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',300/*reasonable limit*/);
 	if (get_page_name()=='cms_catalogues')
 	{
 		if (count($erows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');

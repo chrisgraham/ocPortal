@@ -158,7 +158,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		$post['poster_highlighted_name']=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_highlighted_name');
 
 		// Signature
-		if ((($GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_views_signatures')==1) || (get_value('disable_views_sigs_option')==='1')) && ($_postdetails['p_skip_sig']==0) && (addon_installed('ocf_signatures')))
+		if ((($GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_views_signatures')==1) || (get_option('enable_views_sigs_option')=='0')) && ($_postdetails['p_skip_sig']==0) && (addon_installed('ocf_signatures')))
 		{
 			global $SIGNATURES_CACHE;
 			if (array_key_exists($_postdetails['p_poster'],$SIGNATURES_CACHE))
@@ -654,11 +654,11 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=get_member()) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
 	{
-		$whisper_type=(get_value('no_inline_pp_advertise')==='1')?'new_pt':'whisper';
+		$whisper_type=(get_option('inline_pp_advertise')=='0')?'new_pt':'whisper';
 		$action_url=build_url(array('page'=>'topics','type'=>$whisper_type,'id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id'],'intended_solely_for'=>$_postdetails['poster']),get_module_zone('topics'));
 		$_title=do_lang_tempcode('WHISPER');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_value('no_inline_pp_advertise')==='1')?'send_message':'whisper','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_option('inline_pp_advertise')=='0')?'send_message':'whisper','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	if ((array_key_exists('may_report_posts',$topic_info)) && (addon_installed('ocf_reported_posts')) && (is_null(get_bot_type())))
 	{

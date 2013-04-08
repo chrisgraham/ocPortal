@@ -242,11 +242,11 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	// Work out what moderator actions can be performed (also includes marking read/unread)
 	$moderator_actions='';
-	if (($type=='pt') && ($of_member_id==get_member()) && (get_value('disable_pt_filtering')!=='1'))
+	if (($type=='pt') && ($of_member_id==get_member()) && (get_option('enable_pt_filtering')=='1'))
 	{
 		$moderator_actions.='<option value="categorise_pts">'.do_lang('CATEGORISE_PTS').'</option>';
 	}
-	if (get_value('disable_mark_forum_read')!=='1')
+	if (get_option('enable_mark_forum_read')=='1')
 	{
 		$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';
 		$moderator_actions.='<option value="mark_topics_unread">'.do_lang('MARK_UNREAD').'</option>';
@@ -300,7 +300,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	$button_array=array();
 	if ((!is_guest()) && ($type!='pt'))
 	{
-		if (get_value('disable_mark_forum_read')!=='1')
+		if (get_option('enable_mark_forum_read')=='1')
 		{
 			$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
 			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'mark_read');
@@ -378,7 +378,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	// Filters
 	$filters=new ocp_tempcode();
-	if (get_value('disable_pt_filtering')!=='1')
+	if (get_option('enable_pt_filtering')=='1')
 	{
 		if ($type=='pt')
 		{
@@ -707,12 +707,12 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 	// Find our subforums first
 	$order=$forum_info[0]['f_order_sub_alpha']?'f_name':'f_position';
-	$_max_forum_detail=get_value('max_forum_detail');
+	$_max_forum_detail=get_option('max_forum_detail');
 	$max_forum_detail=is_null($_max_forum_detail)?100:intval($_max_forum_detail);
 	$huge_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>$max_forum_detail;
 	if ($huge_forums)
 	{
-		$_max_forum_inspect=get_value('max_forum_inspect');
+		$_max_forum_inspect=get_option('max_forum_inspect');
 		$max_forum_inspect=is_null($_max_forum_inspect)?300:intval($_max_forum_inspect);
 
 		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$order,$max_forum_inspect,NULL,false,false,array('f_description','f_intro_question'));
@@ -857,7 +857,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	$order2='t_cache_last_time DESC';
 	if ($order=='first_post') $order2='t_cache_first_time DESC';
 	elseif ($order=='title') $order2='t_cache_first_title ASC';
-	if (get_value('disable_sunk')!=='1')
+	if (get_option('enable_sunk')=='1')
 		$order2='t_sunk ASC,'.$order2;
 	if (is_guest())
 	{

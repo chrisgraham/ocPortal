@@ -128,7 +128,7 @@ class Module_members
 		{
 			$sortables['m_last_visit_time']=do_lang_tempcode('LAST_VISIT_TIME');
 		}
-		$default_sort_order=get_value('md_default_sort_order');
+		$default_sort_order=get_option('md_default_sort_order');
 		if (is_null($default_sort_order))
 		{
 			$default_sort_order=(get_option('use_lastondate')=='1')?'m_last_visit_time DESC':'m_join_time DESC';  // sort by lastondate unless it is not enabled

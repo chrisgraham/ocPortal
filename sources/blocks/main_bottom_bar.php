@@ -84,7 +84,7 @@ class Block_main_bottom_bar
 				$groups_seen[$pgid]=1;
 				$col=get_group_colour($pgid);
 				$usergroup=ocf_get_group_name($pgid);
-				if (get_value('disable_user_online_groups')==='1')
+				if (get_option('enable_user_online_groups')=='0')
 				{
 					$usergroup=NULL;
 					$col=NULL;

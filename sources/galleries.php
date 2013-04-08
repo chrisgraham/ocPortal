@@ -792,7 +792,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 
 	if ($PT_PAIR_CACHE_G[$category_id]['parent_id']==$category_id) fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN',escape_html($category_id)));
 
-	if ((get_value('personal_under_members')==='1') && (get_forum_type()=='ocf'))
+	if ((get_option('personal_under_members')=='1') && (get_forum_type()=='ocf'))
 	{
 		$owner=get_member_id_from_gallery_name($category_id,NULL,true);
 		if (!is_null($owner))

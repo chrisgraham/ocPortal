@@ -43,14 +43,14 @@ class Hook_cron_ocf_welcome_emails
 		{
 			$send_seconds_after_joining=$mail['w_send_time']*60*60;
 
-			$newsletter_style=((get_value('welcome_nw_choice')==='1') && (!is_null($mail['w_newsletter']))) || ((get_value('welcome_nw_choice')!=='1') && (($mail['w_newsletter']==1) || (get_forum_type()!='ocf')));
+			$newsletter_style=((get_option('welcome_nw_choice')=='1') && (!is_null($mail['w_newsletter']))) || ((get_option('welcome_nw_choice')=='0') && (($mail['w_newsletter']==1) || (get_forum_type()!='ocf')));
 			if ($newsletter_style)
 			{
 				if (addon_installed('newsletter'))
 				{
 					// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
 					$where=' WHERE join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND join_time<='.strval($time_now-$send_seconds_after_joining).' AND (the_level=3 OR the_level=4)';
-					if (get_value('welcome_nw_choice')==='1')
+					if (get_option('welcome_nw_choice')=='1')
 					{
 						$where.=' AND newsletter_id='.strval($mail['w_newsletter']);
 					}

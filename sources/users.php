@@ -54,7 +54,7 @@ function init__users()
 	$DOING_USERS_INIT=true;
 
 	// Load all sessions into memory, if possible
-	if (get_value('session_prudence')!=='1')
+	if (get_option('session_prudence')=='0')
 	{
 		$SESSION_CACHE=persistent_cache_get('SESSION_CACHE');
 	} else
@@ -64,7 +64,7 @@ function init__users()
 	global $IN_MINIKERNEL_VERSION;
 	if ((!is_array($SESSION_CACHE)) && ($IN_MINIKERNEL_VERSION==0))
 	{
-		if (get_value('session_prudence')!=='1')
+		if (get_option('session_prudence')=='0')
 		{
 			$where='';
 		} else
@@ -82,7 +82,7 @@ function init__users()
 		{
 			$SESSION_CACHE=list_to_map('the_session',$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions'.$where));
 		}
-		if (get_value('session_prudence')!=='1')
+		if (get_option('session_prudence')=='0')
 		{
 			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
@@ -222,7 +222,7 @@ function get_member($quick_only=false)
 			{
 				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_screen_title now
 				$SESSION_CACHE[$session]['last_activity']=time();
-				if (get_value('session_prudence')!=='1')
+				if (get_option('session_prudence')=='0')
 				{
 					persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 				}
@@ -459,7 +459,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 	}
 	if ($dirty_session_cache)
 	{
-		if (get_value('session_prudence')!=='1')
+		if (get_option('session_prudence')=='0')
 		{
 			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
@@ -582,7 +582,7 @@ function get_online_members($longer_time,$filter,&$count)
 {
 	$users_online_time_seconds=$longer_time?(60*60*intval(get_option('session_expiry_time'))):(60*intval(get_option('users_online_time')));
 
-	if (get_value('session_prudence')==='1')
+	if (get_option('session_prudence')=='1')
 	{
 		// If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
 		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds));

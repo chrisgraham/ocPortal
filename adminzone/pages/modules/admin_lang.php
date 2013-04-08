@@ -730,7 +730,7 @@ msgstr ""
 			}
 			if ($_current=='') $_current=str_replace('\n',chr(10),$old);
 
-			if (($google!='') && (get_value('google_translate_api_key')!==NULL))
+			if (($google!='') && (get_option('google_translate_api_key')!=NULL))
 			{
 				$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'9e9a68cb2c1a1e23a901b84c9af2280b','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>$lang,'NAME'=>'trans_'.$name,'OLD'=>$_current));
 			}
@@ -741,7 +741,7 @@ msgstr ""
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_code','lang_file'=>$lang_file,'lang'=>$lang),'_SELF');
 
-		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'GOOGLE'=>(get_value('google_translate_api_key')!==NULL)?$google:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
+		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'GOOGLE'=>(get_option('google_translate_api_key')!=NULL)?$google:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
 	}
 
 	/**

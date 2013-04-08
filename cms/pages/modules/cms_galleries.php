@@ -925,7 +925,7 @@ class Module_cms_galleries extends standard_crud_module
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
 		$do_watermark=($this->has_at_least_one_watermark($cat)) && (get_option('is_on_gd')=='1');
-		$do_rep_image=((get_value('no_gallery_rep_image')!=='1') && (($cat=='') || (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat)))));
+		$do_rep_image=((get_option('gallery_rep_image')=='1') && (($cat=='') || (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat)))));
 		if (($do_watermark) || ($do_rep_image))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'971e7db21c3b9d2c8cfbd6a910711514','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
@@ -939,7 +939,7 @@ class Module_cms_galleries extends standard_crud_module
 			}
 		}
 
-		if (get_value('no_gallery_feedback_fields')!=='1')
+		if (get_option('gallery_feedback_fields')=='1')
 		{
 			require_code('feedback2');
 			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
@@ -1004,7 +1004,7 @@ class Module_cms_galleries extends standard_crud_module
 		$validated=$myrow['validated'];
 
 		$delete_fields=mixed();
-		if (get_value('cleanup_files')!=='1')
+		if (get_option('cleanup_files')=='0')
 		{
 			if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
 			{
@@ -1175,7 +1175,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$this->donext_type=post_param('cat');
 
-		delete_image($id,($delete_status=='2') || (get_value('cleanup_files')==='1'));
+		delete_image($id,($delete_status=='2') || (get_option('cleanup_files')=='1'));
 	}
 
 	/**
@@ -1430,7 +1430,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$fields->attach($validated_field);
 		}
 
-		if (get_value('no_gallery_feedback_fields')!=='1')
+		if (get_option('gallery_feedback_fields')=='1')
 		{
 			require_code('feedback2');
 			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
@@ -1496,7 +1496,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$validated=$myrow['validated'];
 
 		$delete_fields=mixed();
-		if (get_value('cleanup_files')!=='1')
+		if (get_option('cleanup_files')=='0')
 		{
 			if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat)))
 			{
@@ -1683,7 +1683,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$this->donext_type=post_param('cat');
 
-		delete_video($id,($delete_status=='2') || (get_value('cleanup_files')==='1'));
+		delete_video($id,($delete_status=='2') || (get_option('cleanup_files')=='1'));
 	}
 
 	/**
@@ -1782,7 +1782,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'fullname',$fullname,true));
 		if ($name!='root')
 		{
-			if (get_value('no_manual_gallery_codename')!=='1')
+			if (get_option('manual_gallery_codename')=='1')
 			{
 				$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
 			} else
@@ -1794,7 +1794,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		if ($parent_id=='') $parent_id=get_param('cat','');
 		if ($name!='root')
 		{
-			if ((get_value('no_manual_gallery_parent')!=='1') || ($parent_id==''))
+			if ((get_option('manual_gallery_parent')=='1') || ($parent_id==''))
 			{
 				$parent_gallery_title='';
 				if ($parent_id!='')
@@ -1811,7 +1811,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 				$hidden->attach(form_input_hidden('parent_id',$parent_id));
 			}
 		}
-		if ((get_value('no_manual_gallery_media_types')!=='1') || ($accept_images==0) || ($accept_videos==0))
+		if ((get_option('manual_gallery_media_types')=='1') || ($accept_images==0) || ($accept_videos==0))
 		{
 			$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
 		} else
@@ -1819,19 +1819,19 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(form_input_hidden('accept_images','1'));
 			$hidden->attach(form_input_hidden('accept_videos','1'));
 		}
-		if (get_value('gallery_flow_is')==='1')
+		if (get_option('gallery_flow_is')=='1')
 		{
 			$hidden->attach(form_input_hidden('flow_mode_interface','1'));
 		}
-		elseif (get_value('gallery_flow_is')==='0')
+		elseif (get_option('gallery_flow_is')=='0')
 		{
 			$hidden->attach(form_input_hidden('flow_mode_interface','0'));
 		} else
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
 		}
-		$request_rep_image=(get_value('no_gallery_rep_image')!=='1') || ($rep_image!='');
-		$request_member_synced=(get_value('no_gallery_member_synced')!=='1') || ($is_member_synched==1) || ($name=='root');
+		$request_rep_image=(get_option('gallery_rep_image')=='1') || ($rep_image!='');
+		$request_member_synced=(get_option('gallery_member_synced')=='1') || ($is_member_synched==1) || ($name=='root');
 		if ($request_rep_image || $request_member_synced)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'94d1f77eb9fdca010cb9d1eac5d19b9b','SECTION_HIDDEN'=>($rep_image=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
@@ -1845,7 +1845,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 			}
 		}
 
-		if (get_value('no_gallery_watermarks')!=='1')
+		if (get_option('gallery_watermarks')=='1')
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'555320228b5a1ff1effb8a1bf9c15d8e','SECTION_HIDDEN'=>is_null($watermark_top_left) && is_null($watermark_top_right) && is_null($watermark_bottom_left) && is_null($watermark_bottom_right),'TITLE'=>do_lang_tempcode('WATERMARKING'))));
 			$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_LEFT')),'watermark_top_left',false,$watermark_top_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
@@ -1855,7 +1855,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		}
 		handle_max_file_size($hidden,'image');
 
-		if (get_value('no_gallery_feedback_fields')!=='1')
+		if (get_option('gallery_feedback_fields')=='1')
 		{
 			require_code('feedback2');
 			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,NULL,false,$notes,$allow_comments==2,true));
@@ -1866,7 +1866,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		}
 
 		// Permissions
-		if (get_value('no_gallery_permissions')!=='1')
+		if (get_option('gallery_permissions')=='1')
 		{
 			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 		} else

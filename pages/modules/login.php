@@ -265,7 +265,7 @@ class Module_login
 		if ($SESSION_CACHE[get_session_id()]['member_id']==get_member()) // A little security
 		{
 			$SESSION_CACHE[get_session_id()]['session_confirmed']=0;
-			if (get_value('session_prudence')!=='1')
+			if (get_option('session_prudence')=='0')
 			{
 				persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}
@@ -302,7 +302,7 @@ class Module_login
 		if ($SESSION_CACHE[get_session_id()]['member_id']==get_member()) // A little security
 		{
 			$SESSION_CACHE[get_session_id()]['session_invisible']=$visible?1:0;
-			if (get_value('session_prudence')!=='1')
+			if (get_option('session_prudence')=='0')
 			{
 				persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}

@@ -886,7 +886,7 @@ function in_memory_search_match($filter,$title,$post=NULL)
  */
 function is_under_radar($test)
 {
-	if (get_value('disable_boolean_search')==='1') return false;
+	if (get_option('enable_boolean_search')=='0') return false;
 
 	static $min_word_length=NULL;
 	if (is_null($min_word_length))

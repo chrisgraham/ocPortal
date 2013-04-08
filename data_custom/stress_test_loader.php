@@ -48,7 +48,7 @@ function do_work()
 
 	require_code('config2');
 	set_option('post_history_days','0'); // Needed for a little sanity in recent post retrieval
-	set_value('disable_sunk','1');
+	set_option('enable_sunk','0');
 
 
 	// members (remember to test the username autocompleter, and birthdays)

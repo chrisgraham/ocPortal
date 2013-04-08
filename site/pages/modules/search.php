@@ -583,7 +583,7 @@ class Module_search
 		$content=get_param('content','',true);
 
 		$boolean_search=get_param_integer('boolean_search',0)==1;
-		if (get_value('disable_boolean_search')==='1')
+		if (get_option('enable_boolean_search')=='0')
 		{
 			$boolean_search=false;
 			if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()))
