@@ -266,7 +266,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		require_code('ocf_groups_action2');
 		ocf_add_member_to_group(get_member(),$id);
 
-		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'groups'))
+		if (has_actual_page_access(get_modal_user(),'groups'))
 		{
 			require_code('activities');
 			syndicate_described_activity('ocf:ACTIVITY_ADD_CLUB',$name,'','','_SEARCH:groups:view:'.strval($id),'','','ocf_clubs');

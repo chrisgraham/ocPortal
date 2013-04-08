@@ -23,14 +23,6 @@
 </div>
 
 <div class="activities_line">
-	{+START,SET,commented_out}
-		{+START,IF_PASSED,USERNAME}
-			<div class="activity_name left">
-				<a href="{MEMBER_URL*}">{USERNAME*}</a>
-			</div>
-		{+END}
-	{+END}
-
 	<div class="activity_time right">
 		{$MAKE_RELATIVE_DATE*,{DATETIME},1} {!AGO}
 	</div>
@@ -38,6 +30,12 @@
 	<div class="activities_content">
 		{$,The main message}
 		{+START,IF,{$EQ,{LANG_STRING},RAW_DUMP}}
+			{+START,IF_PASSED,USERNAME}
+				<div class="activity_name left">
+					<a href="{MEMBER_URL*}">{USERNAME*}</a>
+				</div>
+			{+END}
+
 			{MESSAGE}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}

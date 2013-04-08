@@ -119,7 +119,7 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 
 	if (!$anonymous)
 	{
-		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'points'))
+		if (has_actual_page_access(get_modal_user(),'points'))
 		{
 			require_code('activities');
 			syndicate_described_activity(((is_null($recipient_id)) || (is_guest($recipient_id)))?'points:_ACTIVITY_GIVE_POINTS':'points:ACTIVITY_GIVE_POINTS',$reason,integer_format($amount),'','_SEARCH:points:member:'.strval($recipient_id),'','','points',1,NULL,false,$recipient_id);

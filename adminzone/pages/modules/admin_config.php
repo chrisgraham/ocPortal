@@ -77,7 +77,7 @@ class Module_admin_config
 										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
 										'filetype_icons','infinite_scrolling',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
-										'cdn','enable_https',
+										'cdn','enable_https','modal_user',
 										);
 
 		foreach ($config_options as $option)
@@ -180,6 +180,7 @@ class Module_admin_config
 				if (get_option('htm_short_urls')=='1') $url_scheme='HTM';
 			}
 			add_config_option('URL_SCHEME','url_scheme','list','return \''.$url_scheme.'\';','SITE','GENERAL',0,'RAW|PG|HTM|SIMPLE');
+			add_config_option('MODAL_USER','modal_user','username','return \'\';','FEATURE','GENERAL');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
@@ -688,6 +689,9 @@ class Module_admin_config
 					{
 						$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
 					}
+					break;
+				case 'username':
+					$out.=static_evaluate_tempcode(form_input_username($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,false));
 					break;
 				case 'list':
 					$list='';

@@ -599,7 +599,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		if ($validated==1)
 		{
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name))))
+			if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
 			{
 				require_code('activities');
 				$map_copy=$map;
@@ -643,7 +643,7 @@ class Module_cms_catalogues extends standard_crud_module
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$map=$this->get_set_field_map($catalogue_name,$id);
 
-		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name))))
+		if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$id));
 

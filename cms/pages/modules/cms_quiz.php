@@ -328,7 +328,7 @@ class Module_cms_quiz extends standard_crud_module
 
 		if ($validated==1)
 		{
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
+			if (has_actual_page_access(get_modal_user(),'quiz'))
 			{
 				require_code('activities');
 				syndicate_described_activity('quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
@@ -364,7 +364,7 @@ class Module_cms_quiz extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('quizzes','q_submitter',array('id'=>$id));
 
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
+			if (has_actual_page_access(get_modal_user(),'quiz'))
 			{
 				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$submitter);

@@ -701,7 +701,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		if ($validated==1)
 		{
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
+			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
 			{
 				require_code('activities');
 				syndicate_described_activity('downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads');
@@ -766,7 +766,7 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
 
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
+			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
 			{
 				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,$submitter);

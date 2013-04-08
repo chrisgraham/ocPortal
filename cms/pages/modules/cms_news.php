@@ -448,7 +448,7 @@ class Module_cms_news extends standard_crud_module
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
+			if (has_actual_page_access(get_modal_user(),'news'))
 			{
 				require_code('activities');
 				syndicate_described_activity($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
@@ -558,7 +558,7 @@ class Module_cms_news extends standard_crud_module
 			$activity_title=($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS');
 			$activity_title_validate=($is_blog?'news:ACTIVITY_VALIDATE_NEWS_BLOG':'news:ACTIVITY_VALIDATE_NEWS');
 
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
+			if (has_actual_page_access(get_modal_user(),'news'))
 			{
 				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);

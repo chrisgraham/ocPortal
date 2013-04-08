@@ -228,7 +228,7 @@ function permission_exists($name)
  * @param  ID_TEXT		The language code to the human name of the config option
  * @param  ID_TEXT		The codename for the config option
  * @param  ID_TEXT		The type of the config option
- * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup colour special
+ * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup colour special username
  * @param  SHORT_TEXT	The PHP code to execute to get the default value for this option. Be careful not to make a get_option loop.
  * @param  ID_TEXT		The language code for the option category to store the option in
  * @param  ID_TEXT		The language code for the option group to store the option in

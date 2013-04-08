@@ -495,7 +495,7 @@ class Module_filedump
 
 			log_it('FILEDUMP_UPLOAD',$file,$place);
 
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),get_page_name(),get_zone_name()))
+			if (has_actual_page_access(get_modal_user(),get_page_name(),get_zone_name()))
 			{
 				require_code('activities');
 				syndicate_described_activity('filedump:ACTIVITY_FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');

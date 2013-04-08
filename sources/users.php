@@ -685,3 +685,20 @@ function member_blocked($member_id,$member_blocker=NULL)
 	}
 	return (in_array($member_id,$MEMBERS_BLOCKED_CACHE));
 }
+
+/**
+ * Find a user to test access against, if we're planning on making presence of something public.
+ *
+ * @return MEMBER				The modal member
+ */
+function get_modal_user()
+{
+	$modal_user=get_option('modal_user');
+	if ($modal_user!='')
+	{
+		if ($modal_user=='<self>') return get_member();
+		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($modal_user);
+		if (!is_null($member_id)) return $member_id;
+	}
+	return $GLOBALS['FORUM_DRIVER']->get_guest_id();
+}

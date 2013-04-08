@@ -510,7 +510,7 @@ class Module_cms_galleries extends standard_crud_module
 						$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);
 						store_exif('video',strval($id),$exif);
 
-						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+						if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 						{
 							require_code('activities');
 							syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
@@ -536,7 +536,7 @@ class Module_cms_galleries extends standard_crud_module
 						$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
 						store_exif('image',strval($id),$exif);
 
-						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+						if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 						{
 							require_code('activities');
 							syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
@@ -689,7 +689,7 @@ class Module_cms_galleries extends standard_crud_module
 				$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height);
 				store_exif('video',strval($id),$exif);
 
-				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+				if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 				{
 					require_code('activities');
 					syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
@@ -723,7 +723,7 @@ class Module_cms_galleries extends standard_crud_module
 				$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
 				store_exif('image',strval($id),$exif);
 
-				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+				if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 				{
 					require_code('activities');
 					syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
@@ -1069,7 +1069,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		if ($validated==1)
 		{
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				require_code('activities');
 				syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
@@ -1142,7 +1142,7 @@ class Module_cms_galleries extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('images','submitter',array('id'=>$id));
 
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_IMAGE':'galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries',1,$submitter);
@@ -1566,7 +1566,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if ($validated==1)
 		{
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				require_code('activities');
 				syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
@@ -1655,7 +1655,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('videos','submitter',array('id'=>$id));
 
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_VIDEO':'galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries',1,$submitter);

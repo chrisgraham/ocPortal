@@ -325,7 +325,7 @@ class Module_cms_polls extends standard_crud_module
 
 		if ($current==1)
 		{
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
+			if (has_actual_page_access(get_modal_user(),'polls'))
 			{
 				require_code('activities');
 				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
@@ -390,7 +390,7 @@ class Module_cms_polls extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('poll','submitter',array('id'=>$id));
 
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
+			if (has_actual_page_access(get_modal_user(),'polls'))
 			{
 				require_code('activities');
 				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls',1,$submitter);

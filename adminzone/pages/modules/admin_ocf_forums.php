@@ -523,7 +523,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if (addon_installed('content_reviews'))
 			content_review_set('forum',$id);
 
-		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',$id)))
+		if ((has_actual_page_access(get_modal_user(),'forumview')) && (has_category_access(get_modal_user(),'forums',$id)))
 		{
 			require_code('activities');
 			syndicate_described_activity('ocf:ACTIVITY_ADD_FORUM',$name,'','','_SEARCH:forumview:misc:'.$id,'','','ocf_forum');

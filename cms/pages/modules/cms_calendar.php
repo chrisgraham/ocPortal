@@ -781,7 +781,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		if ($validated==1)
 		{
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
+			if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($type))))
 			{
 				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,true);
 				$from=cal_utctime_to_usertime($_from,$timezone,false);
@@ -920,7 +920,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('calendar_events','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
+			if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($type))))
 			{
 				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,true);
 				$from=cal_utctime_to_usertime($_from,$timezone,false);

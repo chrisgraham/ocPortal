@@ -245,7 +245,7 @@ function set_poll($id)
 
 	log_it('CHOOSE_POLL',strval($id),get_translated_text($question));
 
-	if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
+	if (has_actual_page_access(get_modal_user(),'polls'))
 	{
 		require_code('activities');
 		syndicate_described_activity('polls:ACTIVITY_CHOOSE_POLL',get_translated_text($question),'','','_SEARCH:polls:view:'.strval($id),'','','polls');
