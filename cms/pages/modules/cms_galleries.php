@@ -1038,7 +1038,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$id=add_image($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
 				syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
@@ -1470,7 +1470,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 
 		$id=add_video($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
 				syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
