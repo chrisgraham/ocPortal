@@ -51,6 +51,9 @@ if (isset($map['project'])) $where.=' AND a.project_id='.strval(intval($map['pro
 
 $order='id';
 
+require_once(get_file_base().'/tracker/config_inc.php');
+$ocp_hours_field = $db->query_value_null_ok_full('SELECT id FROM mantis_custom_field_table WHERE name=\'Time estimation (hours)\'');
+
 if (isset($map['sort']))
 {
 	list($sort,$direction)=explode(' ',$map['sort'],2);
@@ -67,13 +70,25 @@ if (isset($map['sort']))
 			$order='hours '.$direction;
 			$where.=' AND '.db_string_not_equal_to('c.value','');
 			break;
+		case 'sponsorship_progress':
+			$where.=' AND (SELECT SUM(amount) FROM mantis_sponsorship_table z WHERE z.bug_id=a.id)<>0';
+			//$order='money_raised/currency_needed '.$direction;
+			$order='(SELECT SUM(amount) FROM mantis_sponsorship_table z WHERE z.bug_id=a.id)/CAST(c.value AS DECIMAL)*'.strval($ocp_sc_credits_per_hour).'*'.strval($ocp_sc_price_per_credit).' '.$direction;
+			break;
 	}
 }
 
-$max_rows=$db->query_value_null_ok_full('SELECT COUNT(*) FROM mantis_bug_table a JOIN mantis_bug_text_table b ON b.id=a.bug_text_id JOIN mantis_custom_field_string_table c ON c.bug_id=a.id AND field_id=3 WHERE '.$where);
-$query='SELECT a.*,b.description,(SELECT COUNT(*) FROM mantis_bugnote_table x WHERE x.bug_id=a.id) AS num_comments,(SELECT COUNT(*) FROM mantis_bug_monitor_table y WHERE y.bug_id=a.id) AS num_votes,(SELECT SUM(amount) FROM mantis_sponsorship_table z WHERE z.bug_id=a.id) AS money_raised,CAST(c.value AS DECIMAL) as hours,d.name AS category FROM mantis_bug_table a JOIN mantis_bug_text_table b ON b.id=a.id JOIN mantis_custom_field_string_table c ON c.bug_id=a.id AND field_id=3 JOIN mantis_category_table d ON d.id=a.category_id WHERE '.$where.' ORDER BY '.$order;
+$select='a.*,b.description,d.name AS category';
+$select.=',(SELECT COUNT(*) FROM mantis_bugnote_table x WHERE x.bug_id=a.id) AS num_comments';
+$select.=',(SELECT COUNT(*) FROM mantis_bug_monitor_table y WHERE y.bug_id=a.id) AS num_votes';
+$select.=',(SELECT SUM(amount) FROM mantis_sponsorship_table z WHERE z.bug_id=a.id) AS money_raised';
+$select.=',CAST(c.value AS DECIMAL) as hours';
+$select.=',CAST(c.value AS DECIMAL)*'.strval($ocp_sc_credits_per_hour).'*'.strval($ocp_sc_price_per_credit).' AS currency_needed';
+$table='mantis_bug_table a JOIN mantis_bug_text_table b ON b.id=a.id JOIN mantis_custom_field_string_table c ON c.bug_id=a.id AND field_id='.$ocp_hours_field.' JOIN mantis_category_table d ON d.id=a.category_id';
+$query='SELECT '.$select.' FROM '.$table.' WHERE '.$where.' ORDER BY '.$order;
 
 $issues=$db->query($query,$max,$start);
+$max_rows=count($db->query($query));
 
 if (count($issues)==0)
 {
@@ -81,13 +96,13 @@ if (count($issues)==0)
 } else
 {
 	echo '<div style="font-size: 0.9em">';
-	
+
 	foreach ($issues as $issue)
 	{
 		$title=$issue['category'].': '.$issue['summary'];
 		$description=$issue['description'];
 		$votes=intval($issue['num_votes']);
-		$cost=($issue['hours']==0 || is_null($issue['hours']))?NULL:($issue['hours']*5.5*6);
+		$cost=($issue['hours']==0 || is_null($issue['hours']))?NULL:($issue['hours']*$ocp_sc_price_per_credit*$ocp_sc_credits_per_hour);
 		$money_raised=$issue['money_raised'];
 		$suggested_by=$issue['reporter_id'];
 		$add_date=$issue['date_submitted'];
@@ -100,7 +115,7 @@ if (count($issues)==0)
 		$_cost=is_null($cost)?'unknown':(static_evaluate_tempcode(comcode_to_tempcode('[currency="GBP"]'.float_to_raw_string($cost).'[/currency]')));
 		$_money_raised=static_evaluate_tempcode(comcode_to_tempcode('[currency="GBP"]'.float_to_raw_string($money_raised).'[/currency]'));
 		$_hours=is_null($cost)?'unknown':(escape_html(number_format($issue['hours'])).' hours');
-		$_credits=is_null($cost)?'unknown':(escape_html(number_format($issue['hours']*6)).' credits');
+		$_credits=is_null($cost)?'unknown':(escape_html(number_format($issue['hours']*$ocp_sc_credits_per_hour)).' credits');
 		$_percentage=is_null($cost)?'unknown':(escape_html(float_format(100.0*$money_raised/$cost,0)).'%');
 
 		$out='';
@@ -135,9 +150,9 @@ if (count($issues)==0)
 			<div style="margin-left: 150px">
 				<p style="min-height: 7.5em">'.xhtml_substr(nl2br(escape_html($description)),0,310,false,true).'</p>
 
-				<p style="float: right; margin-bottom: 0" class="associated_details" style="color: #777">Suggested by '.static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($suggested_by)).' on '.escape_html(get_timezoned_date($add_date,false)).'</p>
+				<p style="float: right; margin-bottom: 0" class="associated_details" style="font-size: 0.9em; color: #777">Suggested by '.static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($suggested_by)).' on '.escape_html(get_timezoned_date($add_date,false)).'</p>
 
-				<p class="associated_link_to_small" style="float: left; margin-bottom: 0">&raquo; <a href="'.escape_html($full_url).'">Full details and sponsorship</a> ('.escape_html(number_format($num_comments)).' '.(($num_comments!=1)?'comments':'comment').')</p>
+				<p class="associated_link_to_small" style="font-size: 0.9em; float: left; margin-bottom: 0">&raquo; <a href="'.escape_html($full_url).'">Full details and sponsorship</a> ('.escape_html(number_format($num_comments)).' '.(($num_comments!=1)?'comments':'comment').')</p>
 			</div>
 		';
 
