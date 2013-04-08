@@ -21,6 +21,103 @@
  */
 
 /**
+ * Find the non-bundled addons available on ocPortal.com.
+ *
+ * @return array		Map of addon ID to addon title
+ */
+function find_remote_addons()
+{
+	static $addons=array();
+	if ($addons!==array()) return $addons; // Caching
+	$stub=(get_param_integer('localhost',0)==1)?get_base_url():'http://ocportal.com';
+	$v='Version '.float_to_raw_string(ocp_version_number(),1);
+	$url=$stub.'/data/ajax_tree.php?hook=choose_download&id='.rawurlencode($v).'&file_type=tar&full_depth=1';
+	require_code('files');
+	$contents=http_download_file($url);
+	$matches=array();
+	$num_matches=preg_match_all('#<entry id="(\d+)".* title="([^"]+)"#Us',$contents,$matches);
+	for ($i=0;$i<$num_matches;$i++)
+	{
+		$id=intval($matches[1][$i]);
+		$title=html_entity_decode($matches[2][$i],ENT_QUOTES);
+		if ((!array_key_exists($title,$addons)) || ($addons[$title]>$id)) // We want the one with the lowest ID, as that will be the official one (uploaded via automated process, then maintained since then)
+			$addons[$title]=$id;
+	}
+	return $addons;
+}
+
+/**
+ * Find the icon for an addon.
+ *
+ * @param  ID_TEXT	Addon name
+ * @param  boolean	Whether to use a default icon
+ * @param  ?PATH		Path to tar file (NULL: don't look inside a TAR / it's installed already)
+ * @return string		Theme image URL (may be a "data:" URL rather than a normal URLPATH)
+ */
+function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
+{
+	$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon_name).'.php';
+	if (!is_file($path))
+	{
+		$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon_name).'.php';
+	}
+
+	$addon_files=array();
+	if (is_file($path))
+	{
+		$hook_file=file_get_contents($path);
+		$matches=array();
+		if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
+		{
+			if (!defined('HIPHOP_PHP'))
+			{
+				$addon_files=eval($matches[1]);
+			} else
+			{
+				require_code('hooks/systems/addon_registry/'.$addon_name);
+				$hook_ob=object_factory('Hook_addon_registry_'.$addon_name);
+				$addon_files=$hook_ob->get_file_list();
+			}
+		}
+	} else
+	{
+		if (!is_null($tar_path))
+		{
+			require_code('tar');
+			$tar_file=tar_open($tar_path,'rb');
+			$directory=tar_get_directory($tar_file,true);
+			if (!is_null($directory))
+			{
+				foreach ($directory as $d)
+				{
+					$file=$d['path'];
+					if (preg_match('#^themes/default/(images|images_custom)/bigicons/.*\.(png|jpg|jpeg|gif)$#',$file)!=0)
+					{
+						require_code('mime_types');
+						$data=tar_get_file($tar_file,$file);
+						return 'data:'.get_mime_type(get_file_extension($file)).';base64,'.base64_encode($data['data']);
+					}
+				}
+			}
+		} else
+		{
+			$addon_files=array_unique(collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'),array('addon_name'=>$addon_name))));
+		}
+	}
+
+	foreach ($addon_files as $file)
+	{
+		if (preg_match('#^themes/default/(images|images_custom)/bigicons/.*\.(png|jpg|jpeg|gif)$#',$file)!=0)
+		{
+			return find_theme_image('bigicons/'.basename($file,'.png'));
+		}
+	}
+
+	// Default, as not found
+	return $pick_default?find_theme_image('bigicons/addons'):NULL;
+}
+
+/**
  * Find updated addons via checking the ocPortal.com web service.
  *
  * @return array		List of addons updated
@@ -217,9 +314,10 @@ function find_addon_effective_mtime($addon_name)
 /**
  * Find all the available addons (addons in imports/addons that are not necessarily installed).
  *
+ * @param  boolean	Whether to include addons that are installed already
  * @return array		List of maps describing the available addons
  */
-function find_available_addons()
+function find_available_addons($installed_too=true)
 {
 	require_code('files');
 
@@ -246,6 +344,8 @@ function find_available_addons()
 	{
 		$file=$_file[0];
 
+		if ((!$installed_too) && (addon_installed(basename($file,'.tar'),true))) continue;
+
 		$full=get_custom_file_base().'/imports/addons/'.$file;
 		require_code('tar');
 		$tar=tar_open($full,'rb');
@@ -263,6 +363,9 @@ function find_available_addons()
 				$info['files'].=$file_row['path'].chr(10);
 			}
 			$info['mtime']=$mtime;
+			$info['tar_path']=$full;
+			$info['addon_name']=basename($file,'.tar');
+			$info['addon_description']=str_replace('\n',"\n",$info['description']);
 
 			$addons_available_for_installation[$file]=$info;
 		}

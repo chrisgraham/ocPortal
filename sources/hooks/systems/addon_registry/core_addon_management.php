@@ -89,6 +89,7 @@ class Hook_addon_registry_core_addon_management
 			'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl',
 			'MODULE_SCREEN.tpl',
 			'MODULE_SCREEN_MODULE.tpl',
+			'ADDON_NAME.tpl',
 			'adminzone/pages/modules/admin_addons.php',
 			'exports/index.html',
 			'sources/addons.php',
@@ -116,8 +117,9 @@ class Hook_addon_registry_core_addon_management
 	function tpl_previews()
 	{
 		return array(
-			'ADDON_SCREEN_ADDON.tpl'=>'administrative__addon_screen',
 			'ADDON_SCREEN.tpl'=>'administrative__addon_screen',
+			'ADDON_SCREEN_ADDON.tpl'=>'administrative__addon_screen',
+			'ADDON_NAME'=>'administrative__addon_screen',
 			'ADDON_MULTI_CONFIRM_SCREEN.tpl'=>'administrative__addon_multi_confirm_screen',
 			'ADDON_INSTALL_CONFIRM_SCREEN.tpl'=>'administrative__addon_install_confirm_screen',
 			'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl'=>'administrative__addon_uninstall_confirm_screen',
@@ -153,12 +155,16 @@ class Hook_addon_registry_core_addon_management
 				'URL'=>placeholder_url()
 			));
 			$status=do_lang_tempcode('STATUS_NOT_INSTALLED');
+
+			$pretty_name=do_lorem_template('ADDON_NAME',array('IMAGE_URL'=>placeholder_image_url(),'NAME'=>lorem_word()));
+
 			$add_ons->attach(do_lorem_template('ADDON_SCREEN_ADDON', array(
 				'DESCRIPTION'=>lorem_paragraph_html(),
 				'FILE_LIST'=>lorem_paragraph_html(),
 				'COLOUR'=>'orange',
 				'STATUS'=>$status,
 				'NAME'=>$value,
+				'PRETTY_NAME'=>$pretty_name,
 				'FILENAME'=>lorem_word(),
 				'AUTHOR'=>lorem_word(),
 				'ORGANISATION'=>lorem_word(),

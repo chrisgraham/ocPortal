@@ -551,7 +551,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		if ($found[0]==PRODUCT_SUBSCRIPTION)
 		{
 			require_code('notifications');
-			$member_id=$GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
+			$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
 			if (!is_null($member_id))
 			{
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);

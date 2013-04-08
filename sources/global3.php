@@ -2295,7 +2295,20 @@ function titleify($boring)
 	$ret=str_replace('Ocportal','ocPortal',$ret);
 	$ret=str_replace('Ocselect','ocSelect',$ret);
 	$ret=str_replace('Ocfilter','ocFilter',$ret);
-	$ret=str_replace('Occle','ocCLE',$ret);
+	$ret=str_replace('Ocf','OCF',$ret);
+	$ret=str_replace('Occle','OcCLE',$ret);
+	$ret=str_replace('Msn','M.S.N.',$ret);
+	$ret=str_replace('Ecommerce','eCommerce',$ret);
+	$ret=str_replace('Iotds','IOTDs',$ret);
+	$ret=str_replace('Ldap','LDAP',$ret);
+	$ret=str_replace('Cedi','Wiki+',$ret);
+	$ret=str_replace('Sms','SMS',$ret);
+	$ret=str_replace('Ssl','SSL',$ret);
+	$ret=str_replace('Xml','XML',$ret);
+	$ret=str_replace('Captcha','CAPTCHA',$ret);
+	$ret=str_replace('Hphp','HPHP',$ret);
+	$ret=str_replace('Phpinfo','PHP-Info',$ret);
+	$ret=str_replace('Cpfs','CPFs',$ret);
 	if (substr($ret,0,3)=='Oc ') $ret='oc'.str_replace(' ','',substr($ret,3));
 	return $ret;
 }
@@ -2652,7 +2665,7 @@ function convert_bad_entities($data,$charset='ISO-8859-1')
 function is_ocf_satellite_site()
 {
 	if (get_forum_type()!='ocf') return false;
-	return (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write);
+	return (isset($GLOBALS['FORUM_DB'])) && ((get_db_site()!=get_db_forums()) || (get_db_site_host()!=get_db_forums_host()) || (get_db_site_user()!=get_db_forums_user()));
 }
 
 /**

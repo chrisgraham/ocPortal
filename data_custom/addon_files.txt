@@ -4159,6 +4159,11 @@ pagination_protection
 ---------------------
  - sources_custom/hooks/systems/startup/param_restrict.php
 
+installprofile_generator
+------------------------
+ - sources_custom/hooks/systems/do_next_menus/installprofile_generator.php
+ - adminzone/pages/minimodules_custom/installprofile_generator.php
+
 calendar_from_6am
 -----------------
  - themes/default/templates_custom/CALENDAR_DAY.tpl

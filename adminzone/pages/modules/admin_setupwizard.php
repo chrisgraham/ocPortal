@@ -233,17 +233,35 @@ class Module_admin_setupwizard
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
+		require_code('addons');
+		require_lang('addons');
+
+		$addons_installed=list_to_map('addon_name',find_installed_addons());
+		$addons_not_installed=list_to_map('addon_name',find_available_addons(false));
 
 		$fields='';
-		$fields_hidden='';
+		$fields_advanced='';
 		$hidden=static_evaluate_tempcode(build_keep_post_fields());
 
 		$installprofile=post_param('installprofile','');
+		$addon_list_override_to_off_by_default=array();
 		if ($installprofile!='')
 		{
 			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
 			$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile);
-			list($addon_list_on_by_default,$addon_list_advanced_on_by_default)=$object->get_addon_list();
+			$profile_addons=$object->get_addon_list();
+			list($addon_list_on_by_default,$addon_list_advanced_on_by_default)=$profile_addons;
+			if (array_key_exists(2,$profile_addons))
+				$addon_list_override_to_off_by_default=$profile_addons[2];
+		} else
+		{
+			$addon_list_on_by_default=NULL;
+			$addon_list_advanced_on_by_default=array();
+		}
+
+		// These are on by default regardless of install profile. It's useful, because we don't want install profiles to have to be too prescriptive, and we want old ones to keep working well even if new addons have been introduced.
+		if (!is_null($addon_list_on_by_default))
+		{
 			$addon_list_on_by_default=array_merge($addon_list_on_by_default,array(
 				'banners',
 				'ecommerce',
@@ -253,10 +271,6 @@ class Module_admin_setupwizard
 				'ocf_thematic_avatars',
 				'wordfilter',
 			));
-		} else
-		{
-			$addon_list_on_by_default=NULL;
-			$addon_list_advanced_on_by_default=array();
 		}
 		$addon_list_advanced_on_by_default=array_merge($addon_list_advanced_on_by_default,array(
 			'actionlog',
@@ -274,7 +288,6 @@ class Module_admin_setupwizard
 			'occle',
 			'ocf_cpfs',
 			'page_management',
-			'printer_friendly_block',
 			'redirects_editor',
 			'search',
 			'securitylogging',
@@ -295,9 +308,19 @@ class Module_admin_setupwizard
 			'windows_helper_scripts',
 			'weather',
 			'users_online_block',
+			'plupload', // this will be downloaded as it is not bundled, for licencing reasons
+			'getid3', // this will be downloaded as it is not bundled, for licencing reasons
 		));
+		// ... unless the install profile really is shunning them
+		foreach ($addon_list_override_to_off_by_default as $_to_find)
+		{
+			$_found=array_search($_to_find,$addon_list_on_by_default);
+			unset($addon_list_on_by_default[$_found]);
+			$_found=array_search($_to_find,$addon_list_advanced_on_by_default);
+			unset($addon_list_advanced_on_by_default[$_found]);
+		}
 
-		$addon_list_advanced_off_by_default=array(
+		$addon_list_advanced_off_by_default=array( // Hint that these must go under advanced (as they default as visible). Note that presence of an addon in an 'on' list gives it precedence.
 			'installer',
 			'textbased_persistent_cacheing',
 			'rootkit_detector',
@@ -307,35 +330,75 @@ class Module_admin_setupwizard
 			'bookmarks',
 			'devguide',
 			'supermember_directory',
+			'sms',
+			'printer_friendly_block',
+			'oc_data_map', // this will be downloaded as it is not bundled
+			'oc_user_map', // this will be downloaded as it is not bundled
+			'facebook_support', // this will be downloaded as it is not bundled
+			'twitter_support', // this will be downloaded as it is not bundled
 		);
 
-		require_lang('addons');
-		require_code('addons');
-		$addons_installed=find_installed_addons();
-		foreach ($addons_installed as $row)
+		// Do we need to download any from ocPortal.com?
+		$GLOBALS['DEV_MODE']=false;
+		foreach (array_merge(is_null($addon_list_on_by_default)?array():$addon_list_on_by_default,$addon_list_advanced_on_by_default,$addon_list_advanced_off_by_default) as $mentioned_addon)
 		{
-			if ((substr($row['addon_name'],0,5)!='core_') && (substr($row['addon_name'],-7)!='_shared') && ($row['addon_name']!='setupwizard') && (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$row['addon_name'].'.php')))
+			if ((!array_key_exists($mentioned_addon,$addons_installed)) && (!array_key_exists($mentioned_addon,$addons_not_installed)))
 			{
-				$is_hidden_on_by_default=in_array($row['addon_name'],$addon_list_advanced_on_by_default);
-				$is_hidden_off_by_default=in_array($row['addon_name'],$addon_list_advanced_off_by_default);
-				$install_by_default=(is_null($addon_list_on_by_default) || in_array($row['addon_name'],$addon_list_on_by_default) || $is_hidden_on_by_default) && (!$is_hidden_off_by_default);
-				if ((substr($row['addon_description'],-1)!='.') && ($row['addon_description']!='')) $row['addon_description'].='.';
-				$field=form_input_tick($row['addon_name'],$row['addon_description'],'addon_'.$row['addon_name'],$install_by_default);
-				if ((!$is_hidden_on_by_default) && (!$is_hidden_off_by_default))
+				$remote_addons=find_remote_addons();
+				$_mentioned_addon=titleify($mentioned_addon);
+				if (array_key_exists($_mentioned_addon,$remote_addons))
 				{
-					$fields.=$field->evaluate();
+					$id=$remote_addons[$_mentioned_addon];
+					require_code('uploads');
+					$_POST['url']='http://ocportal.com/site/dload.php?id='.strval($id);
+					get_url('url','file','imports/addons',0,0,false,'','',true); // Download it
+				}
+			}
+		}
+		$addons_not_installed=list_to_map('addon_name',find_available_addons(false)); // Re-search for these, as more may have been downloaded above
+
+		$all_addons=$addons_installed+$addons_not_installed;
+		global $M_SORT_KEY; // TOOD: Fix for v10
+		$M_SORT_KEY='name';
+		foreach ($all_addons as $addon_name=>$row)
+		{
+			if (!isset($all_addons[$addon_name]['name']))
+				$all_addons[$addon_name]['name']=titleify($addon_name);
+		}
+		uasort($all_addons,'multi_sort');
+		foreach ($all_addons as $addon_name=>$row)
+		{
+			if ((substr($addon_name,0,5)!='core_') && (substr($addon_name,-7)!='_shared') && ($addon_name!='setupwizard'))
+			{
+				$is_advanced_on_by_default=in_array($addon_name,$addon_list_advanced_on_by_default);
+				$is_advanced_off_by_default=in_array($addon_name,$addon_list_advanced_off_by_default);
+				$install_by_default=((in_array($addon_name,$addon_list_on_by_default)) || ($is_advanced_on_by_default) || ((is_null($addon_list_on_by_default)) && (!$is_advanced_off_by_default)));
+
+				$addon_description=$row['addon_description'];
+				if ((substr($addon_description,-1)!='.') && ($addon_description!='')) $addon_description.='.';
+				$_addon_description=protect_from_escaping(symbol_truncator(array(static_evaluate_tempcode(comcode_to_tempcode($addon_description)),'250','1','1'),'left'));
+
+				$addon_icon=find_addon_icon($addon_name,false,array_key_exists('tar_path',$row)?$row['tar_path']:NULL);
+				$addon_name_pretty=protect_from_escaping(do_template('ADDON_NAME',array('IMAGE_URL'=>$addon_icon,'NAME'=>$row['name'])));
+
+				$field=form_input_tick($addon_name_pretty,$_addon_description,'addon_'.$addon_name,$install_by_default);
+
+				$advanced=($is_advanced_on_by_default) || ($is_advanced_off_by_default);
+				if ($advanced)
+				{
+					$fields_advanced.=$field->evaluate();
 				} else
 				{
-					$fields_hidden.=$field->evaluate();
+					$fields.=$field->evaluate();
 				}
 			} else
 			{
-				$hidden.=static_evaluate_tempcode(form_input_hidden('addon_'.$row['addon_name'],'1'));
+				$hidden.=static_evaluate_tempcode(form_input_hidden('addon_'.$addon_name,'1'));
 			}
 		}
 
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00948cc876d0ecb8b511800eabd8cae2','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields.=$fields_hidden;
+		$fields.=$fields_advanced;
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
 
@@ -393,15 +456,13 @@ class Module_admin_setupwizard
 				}
 			}
 		}
-
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('SHOW_CONTENT_TAGGING'),do_lang_tempcode('CONFIG_OPTION_show_content_tagging'),'show_content_tagging',array_key_exists('show_content_tagging',$field_defaults)?($field_defaults['show_content_tagging']=='1'):(get_option('show_content_tagging')=='1')));
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('SHOW_CONTENT_TAGGING_INLINE'),do_lang_tempcode('CONFIG_OPTION_show_content_tagging_inline'),'show_content_tagging_inline',array_key_exists('show_content_tagging_inline',$field_defaults)?($field_defaults['show_content_tagging_inline']=='1'):(get_option('show_content_tagging_inline')=='1')));
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('SHOW_SCREEN_ACTIONS'),do_lang_tempcode('CONFIG_OPTION_show_screen_actions'),'show_screen_actions',array_key_exists('show_screen_actions',$field_defaults)?($field_defaults['show_screen_actions']=='1'):(get_option('show_screen_actions')=='1')));
-
-		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'63300e2146d6104e147db94d2c19a65d','TITLE'=>do_lang_tempcode('STRUCTURE'),'HELP'=>do_lang_tempcode('SETUP_WIZARD_5x_DESCRIBE'))));
-
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('COLLAPSE_USER_ZONES'),do_lang_tempcode('CONFIG_OPTION_collapse_user_zones'),'collapse_user_zones',array_key_exists('collapse_user_zones',$field_defaults)?($field_defaults['collapse_user_zones']=='1'):(get_option('collapse_user_zones')=='1')));
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('GUEST_ZONE_ACCESS'),do_lang_tempcode('DESCRIPTION_GUEST_ZONE_ACCESS'),'guest_zone_access',array_key_exists('guest_zone_access',$field_defaults)?($field_defaults['guest_zone_access']=='1'):true));
+		require_code('hooks/modules/admin_setupwizard/core'); // Core one is not named after an addon (so won't run above) and also explicitly goes last
+		$hook=object_factory('Hook_sw_core',true);
+		if (method_exists($hook,'get_fields'))
+		{
+			$hook_fields=$hook->get_fields($field_defaults);
+			$fields.=static_evaluate_tempcode($hook_fields);
+		}
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
 
@@ -794,7 +855,16 @@ class Module_admin_setupwizard
 					$uninstalling[]=$addon_row['addon_name'];
 				}
 			}
-			if (!file_exists(get_file_base().'/.svn')) // Only uninstall if we're not working from a SVN repository
+			$addons_not_installed=find_available_addons(false);
+			$installing=array();
+			foreach ($addons_not_installed as $addon_row)
+			{
+				if (post_param_integer('addon_'.$addon_row['name'],0)==1)
+				{
+					$installing[]=$addon_row['name'];
+				}
+			}
+			if (!file_exists(get_file_base().'/.git')) // Only uninstall if we're not working from a git repository
 			{
 				foreach ($addons_installed as $addon_row)
 				{
@@ -810,7 +880,7 @@ class Module_admin_setupwizard
 							if (in_array($d,$dependencies)) unset($dependencies[array_search($d,$dependencies)]);
 						}
 
-						if (count($dependencies)==0)
+						if (count($dependencies)==0) // If nothing left installed depending on this
 						{
 							// Archive it off to exports/addons
 							$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
@@ -818,6 +888,23 @@ class Module_admin_setupwizard
 
 							uninstall_addon($addon_row['addon_name']);
 						}
+					}
+				}
+			}
+			foreach ($addons_not_installed as $addon_file=>$addon_row)
+			{
+				if (post_param_integer('addon_'.$addon_row['name'],0)==1)
+				{
+					// Check dependencies
+					$dependencies=explode(',',$addon_row['dependencies']);
+					foreach ($uninstalling as $d)
+					{
+						if ((addon_installed($d,true)) || (in_array($d,$installing))) unset($dependencies[array_search($d,$dependencies)]);
+					}
+
+					if (count($dependencies)==0) // If all dependencies installed / will be installed
+					{
+						install_addon($addon_file);
 					}
 				}
 			}
@@ -829,7 +916,7 @@ class Module_admin_setupwizard
 			$hooks=find_all_hooks('modules','admin_setupwizard');
 			foreach (array_keys($hooks) as $hook)
 			{
-				if (post_param_integer('addon_'.$hook,0)==1)
+				if ((post_param_integer('addon_'.$hook,0)==1) || ($hook=='core'))
 				{
 					$path=get_file_base().'/sources_custom/modules/systems/admin_setupwizard/'.filter_naughty_harsh($hook).'.php';
 					if (!file_exists($path))
@@ -838,25 +925,9 @@ class Module_admin_setupwizard
 					if (is_array($_hook_bits[0])) call_user_func_array($_hook_bits[0][0],$_hook_bits[0][1]); else @eval($_hook_bits[0]);
 				}
 			}
-			set_option('show_content_tagging',post_param('show_content_tagging','0'));
-			set_option('show_content_tagging_inline',post_param('show_content_tagging_inline','0'));
-			set_option('show_screen_actions',post_param('show_screen_actions','0'));
 		}
 
-		// Zone structure
 		$collapse_zones=post_param_integer('collapse_user_zones',0)==1;
-		if (post_param_integer('skip_5',0)==0)
-		{
-			require_code('config2');
-			set_option('collapse_user_zones',strval($collapse_zones));
-
-			if (post_param_integer('guest_zone_access',0)==1)
-			{
-				$guest_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($GLOBALS['FORUM_DRIVER']->get_guest_id());
-				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('group_zone_access','zone_name',array('zone_name'=>'site','group_id'=>$guest_groups[0]));
-				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'site','group_id'=>$guest_groups[0]));
-			}
-		}
 
 		// Rules
 		if (post_param_integer('skip_7',0)==0)

@@ -57,7 +57,7 @@ class Hook_choose_download
 		$shun=array_key_exists('shun',$options)?$options['shun']:NULL;
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
 		$tar_filter=array_key_exists('tar_filter',$options)?($options['original_filename']):false;
-		$tree=get_downloads_tree($only_owned,is_null($id)?NULL:intval($id),NULL,NULL,$shun,is_null($id)?0:1,false,$editable_filter,$tar_filter);
+		$tree=get_downloads_tree($only_owned,is_null($id)?NULL:intval($id),NULL,NULL,$shun,(get_param_integer('full_depth',0)==1)?NULL:(is_null($id)?0:1),false,$editable_filter,$tar_filter);
 		if (!has_actual_page_access(NULL,'downloads')) $tree=array();
 
 		$file_type=get_param('file_type','');
@@ -66,7 +66,7 @@ class Hook_choose_download
 		foreach ($tree as $t)
 		{
 			$_id=$t['id'];
-			if ($id===strval($_id)) // Possible when we look under as a root
+			if (($id===strval($_id)) || (get_param_integer('full_depth',0)==1)) // Possible when we look under as a root
 			{
 				asort($t['entries']);
 

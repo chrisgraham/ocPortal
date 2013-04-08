@@ -479,12 +479,14 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NUL
  * @param  PATH			The relative path to where we wish to add the file to the archive (including filename)
  * @param  string			The data of the file to add
  * @param  integer		The file mode (permissions)
- * @param  TIME			The modification time we wish for our file
+ * @param  ?TIME			The modification time we wish for our file (NULL: now)
  * @param  boolean		Whether the $data variable is actually a full file path
  * @param  boolean		Whether to return on errors
  */
-function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path=false,$return_on_errors=false)
+function tar_add_file(&$resource,$target_path,$data,$_mode=0644,$_mtime=NULL,$data_is_path=false,$return_on_errors=false)
 {
+	if (is_null($_mtime)) $_mtime=time();
+
 	if (!array_key_exists('directory',$resource)) tar_get_directory($resource);
 
 	if (substr($target_path,0,1)=='/') $target_path=substr($target_path,1);

@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2013
+ Copyright (c) ocProducts, 2004-2012
 
  See text/EN/licence.txt for full licencing information.
 
@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		shopping
+ * @package		setupwizard
  */
 
-class Hook_admin_setupwizard_installprofiles_shopping
+class Hook_admin_setupwizard_installprofiles_minimalistic
 {
 
 	/**
@@ -28,22 +28,45 @@ class Hook_admin_setupwizard_installprofiles_shopping
 	 */
 	function info()
 	{
-		require_lang('shopping');
 		return array(
-			'title'=>do_lang('ONLINE_STORE'),
+			'title'=>do_lang('MINIMALISTIC_SITE'),
 		);
 	}
 
 	/**
 	 * Get a list of addons that are kept with this installation profile (added to the list of addons always kept)
 	 *
-	 * @return array			Pair: List of addons in the profile, Separated list of ones to show under advanced
+	 * @return array			Triple: List of addons in the profile, Separated list of ones to show under advanced, Ones we really are shunning
 	 */
 	function get_addon_list()
 	{
 		return array(
-			array('ecommerce','shopping','ssl','quizzes','random_quotes','recommend','polls','tickets','news','newsletter'),
-			array());
+			array(
+			),
+			array(
+			),
+			array(
+				'banners',
+				'ecommerce',
+				'ocf_avatars',
+				'ocf_cartoon_avatars',
+				'ocf_member_avatars',
+				'ocf_thematic_avatars',
+				'wordfilter',
+				'awards',
+				'counting_blocks',
+				'help_page',
+				'language_block',
+				'printer_friendly_block',
+				'search',
+				'stats',
+				'stats_block',
+				'syndication',
+				'syndication_blocks',
+				'themewizard',
+				'users_online_block',
+			),
+		);
 	}
 
 	/**
@@ -67,9 +90,12 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			'keep_news_categories'=>'0',
 			'keep_blogs'=>'0',
 			'have_default_rank_set'=>'0',
-			'show_content_tagging'=>'1',
-			'show_content_tagging_inline'=>'1',
-			'show_screen_actions'=>'1',
+			'have_default_cpf_set'=>'0',
+			'have_default_full_emoticon_set'=>'0',
+			'show_content_tagging'=>'0',
+			'show_content_tagging_inline'=>'0',
+			'show_screen_actions'=>'0',
+			'have_default_wordfilter'=>'0',
 			'rules'=>'corporate',
 		);
 	}
@@ -81,20 +107,20 @@ class Hook_admin_setupwizard_installprofiles_shopping
 	 */
 	function default_blocks()
 	{
+		// Usually these won't be here (except side_personal_stats), because the addons won't have been installed -- but if they were, we do want to represent those block-driven addons
 		return array(
 			'YES'=>array(
-				'main_greeting',
 				'main_news',
-				'main_quotes',
 			),
 			'YES_CELL'=>array(
 			),
 			'PANEL_LEFT'=>array(
 				'side_personal_stats',
-				'main_search',
 				'main_newsletter_signup',
 			),
 			'PANEL_RIGHT'=>array(
+				'main_search',
+				'main_poll',
 			),
 		);
 	}

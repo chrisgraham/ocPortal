@@ -73,7 +73,7 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 		$id=wiki_add_page($label,$description,$notes,$hide_posts,$member,$add_time,$views,$meta_keywords,$meta_description,$edit_date);
 
-		$the_order=$GLOBALS['SITE_DB']->query_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
+		$the_order=$GLOBALS['SITE_DB']->query_select_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
 		if (is_null($the_order)) $the_order=-1;
 		$the_order++;
 		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
@@ -144,7 +144,7 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 
 		// Move
 		$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id));
-		$the_order=$GLOBALS['SITE_DB']->query_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
+		$the_order=$GLOBALS['SITE_DB']->query_select_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
 		if (is_null($the_order)) $the_order=-1;
 		$the_order++;
 		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));

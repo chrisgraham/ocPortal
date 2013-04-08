@@ -24,6 +24,33 @@ class Hook_sw_news
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
+	 * @return array		Current settings.
+	 */
+	function get_current_settings()
+	{
+		$settings=array();
+
+		$keep_news_categories=false;
+		$news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('id'),array('nc_owner'=>NULL));
+		foreach ($news_cats as $news_cat)
+		{
+			if (($news_cat['id']>db_get_first_id()) && ($news_cat['id']<db_get_first_id()+7))
+			{
+				$keep_news_categories=true;
+				break;
+			}
+		}
+		$settings['keep_news_categories']=$keep_news_categories?'1':'0';
+
+		$test=$GLOBALS['SITE_DB']->query_select_value('gsp','COUNT(*)',array('specific_permission'=>'have_personal_category','the_page'=>'cms_news'));
+		$settings['keep_blogs']=($test==0)?'0':'1';
+
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
@@ -31,20 +58,16 @@ class Hook_sw_news
 	{
 		if (!addon_installed('news')) return new ocp_tempcode();
 
+		$current_settings=$this->get_current_settings();
+		$field_defaults+=$current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
+
 		require_lang('news');
 		$fields=new ocp_tempcode();
 
-		$fields->attach(form_input_tick(do_lang_tempcode('KEEP_BLOGS'),do_lang_tempcode('DESCRIPTION_KEEP_BLOGS'),'keep_blogs',false));
+		$fields->attach(form_input_tick(do_lang_tempcode('KEEP_BLOGS'),do_lang_tempcode('DESCRIPTION_KEEP_BLOGS'),'keep_blogs',$field_defaults['keep_blogs']=='1'));
 
-		$news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('id'),array('nc_owner'=>NULL));
-		foreach ($news_cats as $news_cat)
-		{
-			if (($news_cat['id']>db_get_first_id()) && ($news_cat['id']<db_get_first_id()+7))
-			{
-				$fields->attach(form_input_tick(do_lang_tempcode('EXTENDED_NEWS_CATEGORIES_SET'),do_lang_tempcode('DESCRIPTION_KEEP_DEFAULT_NEWS_CATEGORIES'),'keep_news_categories',array_key_exists('keep_news_categories',$field_defaults)?($field_defaults['keep_news_categories']=='1'):false));
-				break;
-			}
-		}
+		if ($current_settings['keep_news_categories']=='1')
+			$fields->attach(form_input_tick(do_lang_tempcode('EXTENDED_NEWS_CATEGORIES_SET'),do_lang_tempcode('DESCRIPTION_KEEP_DEFAULT_NEWS_CATEGORIES'),'keep_news_categories',$field_defaults['keep_news_categories']=='1'));
 
 		return $fields;
 	}

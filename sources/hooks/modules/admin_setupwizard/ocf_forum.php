@@ -24,15 +24,11 @@ class Hook_sw_ocf_forum
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
-	 * @param  array		Default values for the fields, from the install-profile.
-	 * @return tempcode	An input field.
+	 * @return array		Current settings.
 	 */
-	function get_fields($field_defaults)
+	function get_current_settings()
 	{
-		if (get_forum_type()!='ocf') return new ocp_tempcode();
-
-		require_lang('ocf');
-		$fields=new ocp_tempcode();
+		$settings=array();
 
 		$dbs_back=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -40,26 +36,60 @@ class Hook_sw_ocf_forum
 		if (!is_ocf_satellite_site())
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_groups','id',array('id'=>db_get_first_id()+7));
-			if (!is_null($test))
-				$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_RANK_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_RANK_SET'),'have_default_rank_set',array_key_exists('have_default_rank_set',$field_defaults)?($field_defaults['have_default_rank_set']=='1'):false));
+			$settings['have_default_rank_set']=is_null($test)?'0':'1';
 
 			$test=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'f_emoticons WHERE e_code<>\':P\' AND e_code<>\';)\' AND e_code<>\':)\' AND e_code<>\':)\' AND e_code<>\':\\\'(\'');
-			if (count($test)!=0)
-				$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_FULL_EMOTICON_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_FULL_EMOTICON_SET'),'have_default_full_emoticon_set',array_key_exists('have_default_full_emoticon_set',$field_defaults)?($field_defaults['have_default_full_emoticon_set']=='1'):true));
+			$settings['have_default_full_emoticon_set']=(count($test)!=0)?'1':'0';
 
+			$have_default_cpf_set=false;
 			$fields_l=array('im_aim','im_msn','im_jabber','im_yahoo','im_skype','interests','location','occupation','sn_google','sn_facebook','sn_twitter');
 			foreach ($fields_l as $field)
 			{
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
 				if (!is_null($test))
 				{
-					$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CPF_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CPF_SET'),'have_default_cpf_set',array_key_exists('have_default_cpf_set',$field_defaults)?($field_defaults['have_default_cpf_set']=='1'):false));
+					$have_default_cpf_set=true;
 					break;
 				}
 			}
+			$settings['have_default_cpf_set']=$have_default_cpf_set?'1':'0';
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
+
+		return $settings;
+	}
+
+	/**
+	 * Standard modular run function for features in the setup wizard.
+	 *
+	 * @param  array		Default values for the fields, from the install-profile.
+	 * @return tempcode	An input field.
+	 */
+	function get_fields($field_defaults)
+	{
+		if (get_forum_type()!='ocf') return new ocp_tempcode();
+
+		$current_settings=$this->get_current_settings();
+		$field_defaults+=$current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
+
+		require_lang('ocf');
+		$fields=new ocp_tempcode();
+
+		if (!is_ocf_satellite_site())
+		{
+			if ($current_settings['have_default_rank_set']=='1')
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_RANK_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_RANK_SET'),'have_default_rank_set',$field_defaults['have_default_rank_set']=='1'));
+			}
+
+			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_FULL_EMOTICON_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_FULL_EMOTICON_SET'),'have_default_full_emoticon_set',$field_defaults['have_default_full_emoticon_set']=='1'));
+
+			if ($current_settings['have_default_cpf_set']=='1')
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CPF_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CPF_SET'),'have_default_cpf_set',$field_defaults['have_default_cpf_set']=='1'));
+			}
+		}
 
 		return $fields;
 	}
