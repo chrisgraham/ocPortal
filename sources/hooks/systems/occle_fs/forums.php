@@ -138,22 +138,26 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * @param  ID_TEXT	The resource ID
 	 * @return ID_TEXT	The filename
 	 */
-	function _folder_convert_id_to_filename($resource_type,$resource_id)
+	function folder_convert_id_to_filename($resource_type,$resource_id)
 	{
 		if ($resource_type=='forum')
-			return 'FORUM-'.parent::_folder_convert_id_to_filename($resource_type,$resource_id,'forum');
+			return 'FORUM-'.parent::folder_convert_id_to_filename('forum',$resource_id);
 
-		return parent::_folder_convert_id_to_filename($resource_type,$resource_id);
+		return parent::folder_convert_id_to_filename('topic',$resource_id);
 	}
 
 	/**
 	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
 	 * @return array		A pair: The resource type, the resource ID
 	 */
-	function folder_convert_filename_to_id($filename)
+	function folder_convert_filename_to_id($filename,$resource_type=NULL)
 	{
+		if (!is_null($resource_type))
+			return parent::folder_convert_filename_to_id($filename,$resource_type);
+
 		if (substr($filename,0,6)=='FORUM-')
 			return parent::folder_convert_filename_to_id(substr($filename,6),'forum');
 
@@ -170,16 +174,16 @@ class Hook_occle_fs_forums extends resource_fs_base
 	function __folder_read_in_properties_forum($path,$properties)
 	{
 		$description=$this->_default_property_str($properties,'description');
-		$forum_grouping_id=/*if grouping resource type was not here we could cheat with $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');*/$this->_default_property_str($properties,'forum_grouping_id');
+		$forum_grouping_id=$this->_default_property_int($properties,'forum_grouping_id');
 		$access_mapping=array();
-		$position=$this->_default_property_str($properties,'position');
-		$post_count_increment=$this->_default_property_str($properties,'post_count_increment');
-		$order_sub_alpha=$this->_default_property_str($properties,'order_sub_alpha');
+		$position=$this->_default_property_int($properties,'position');
+		$post_count_increment=$this->_default_property_int($properties,'post_count_increment');
+		$order_sub_alpha=$this->_default_property_int($properties,'order_sub_alpha');
 		$intro_question=$this->_default_property_str($properties,'intro_question');
 		$intro_answer=$this->_default_property_str($properties,'intro_answer');
 		$redirection=$this->_default_property_str($properties,'redirection');
 		$order=$this->_default_property_str($properties,'order');
-		$is_threaded=$this->_default_property_str($properties,'is_threaded');
+		$is_threaded=$this->_default_property_int($properties,'is_threaded');
 
 		return array($description,$forum_grouping_id,$access_mapping,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 	}
@@ -194,14 +198,14 @@ class Hook_occle_fs_forums extends resource_fs_base
 	function __folder_read_in_properties_topic($path,$properties)
 	{
 		$emoticon=$this->_default_property_str($properties,'emoticon');
-		$validated=$this->_default_property_str($properties,'validated');
-		$open=$this->_default_property_str($properties,'open');
-		$pinned=$this->_default_property_str($properties,'pinned');
-		$sunk=$this->_default_property_str($properties,'sunk');
-		$cascading=$this->_default_property_str($properties,'cascading');
-		$pt_from=$this->_default_property_str($properties,'pt_from');
-		$pt_to=$this->_default_property_str($properties,'pt_to');
-		$num_views=$this->_default_property_str($properties,'views');
+		$validated=$this->_default_property_int($properties,'validated');
+		$open=$this->_default_property_int($properties,'open');
+		$pinned=$this->_default_property_int($properties,'pinned');
+		$sunk=$this->_default_property_int($properties,'sunk');
+		$cascading=$this->_default_property_int($properties,'cascading');
+		$pt_from=$this->_default_property_int($properties,'pt_from');
+		$pt_to=$this->_default_property_int($properties,'pt_to');
+		$num_views=$this->_default_property_int($properties,'views');
 		$description_link=$this->_default_property_str($properties,'description_link');
 
 		return array($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link);
@@ -217,14 +221,14 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function folder_add($filename,$path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
-		if ($category_resource_type=='forum')
+		if (($path=='') || (substr($filename,0,6)=='FORUM-'))
 		{
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
+
 			if ($category_resource_type!='forum') return false;
-			if ($category=='') return false; // Can't create more than one root
+			if ($category=='') $category=strval(db_get_first_id());/*return false;*/ // Can't create more than one root
 
 			require_code('ocf_forums_action');
 
@@ -235,6 +239,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 			$id=ocf_make_forum($label,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
+
 			if ($category_resource_type!='forum') return false;
 			if ($category=='') return false;
 
@@ -245,6 +251,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
 			$id=ocf_make_topic($forum_id,$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
+			$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_title'=>$label),array('id'=>$id),'',1);
 
 			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
 			{
@@ -276,12 +283,11 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-
-		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
-
-		if (substr($category,0,6)=='FORUM-')
+		if (substr($filename,0,6)=='FORUM-')
 		{
+			list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename,'forum');
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
+
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id'=>intval($resource_id)),'',1);
 			if (!array_key_exists(0,$rows)) return false;
 			$row=$rows[0];
@@ -301,15 +307,42 @@ class Hook_occle_fs_forums extends resource_fs_base
 			);
 		}
 
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename,'topic');
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
+
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
+
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>intval($row['t_poll_id'])),'',1);
+		if (array_key_exists(0,$rows))
+		{
+			$answers=$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('pa_answer','pa_cache_num_votes'),array('pa_poll_id'=>$row['t_poll_id']));
+			$_answers=array();
+			foreach ($answers as $a)
+			{
+				$_answers[]=array($a['pa_answer'],$a['pa_cache_num_votes']);
+			}
+			$poll_data=array(
+				'question'=>$rows[0]['po_question'],
+				'is_private'=>$rows[0]['po_is_private'],
+				'is_open'=>$rows[0]['po_is_open'],
+				'minimum_selections'=>$rows[0]['po_minimum_selections'],
+				'maximum_selections'=>$rows[0]['po_maximum_selections'],
+				'requires_reply'=>$rows[0]['po_requires_reply'],
+				'answers'=>$_answers,
+			);
+			$_poll_data=serialize($poll_data);
+		} else
+		{
+			$_poll_data='';
+		}
 
 		return array(
 			'label'=>$row['t_description'],
 			'emoticon'=>$row['t_emoticon'],
 			'validated'=>$row['t_validated'],
-			'open'=>$row['t_open'],
+			'open'=>$row['t_is_open'],
 			'pinned'=>$row['t_pinned'],
 			'sunk'=>$row['t_sunk'],
 			'cascading'=>$row['t_cascading'],
@@ -317,7 +350,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 			'pt_to'=>$row['t_pt_to'],
 			'views'=>$row['t_num_views'],
 			'description_link'=>$row['t_description_link'],
-			'poll'=>$row['t_poll'],
+			'poll'=>$_poll_data,
 		);
 	}
 
@@ -331,12 +364,11 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-
-		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
-
-		if ($resource_type=='forum')
+		if (substr($filename,0,6)=='FORUM-')
 		{
+			list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename,'forum');
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
+
 			require_code('ocf_forums_action2');
 
 			$label=$this->_default_property_str($properties,'label');
@@ -347,7 +379,12 @@ class Hook_occle_fs_forums extends resource_fs_base
 			ocf_edit_forum(intval($resource_id),$label,$description,$forum_grouping_id,$parent_forum,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);
 		} else
 		{
+			list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename,'topic');
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
+
 			require_code('ocf_topics_action2');
+
+			if ($category=='') return false;
 
 			$label=$this->_default_property_str($properties,'label');
 			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
@@ -429,8 +466,6 @@ class Hook_occle_fs_forums extends resource_fs_base
 			'poster_name_if_guest'=>'ID_TEXT',
 			'ip_address'=>'IP',
 			'intended_solely_for'=>'?member',
-			'sunk'=>'BINARY',
-			'anonymous'=>'BINARY',
 			'parent_id'=>'?post',
 			'poster'=>'member',
 			'last_edit_by'=>'?member',
@@ -449,7 +484,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'topic');
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
@@ -470,10 +505,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$intended_solely_for=$this->_default_property_int_null($properties,'intended_solely_for');
 		$last_edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$last_edit_by=$this->_default_property_int_null($properties,'last_edit_by');
-		$sunk=$this->_default_property_int($properties,'sunk');
-		$anonymous=$this->_default_property_int($properties,'anonymous');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
-		$id=ocf_make_post($topic_id,$label,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,$sunk,NULL,$anonymous,true,NULL,false,$parent_id);
+		$id=ocf_make_post($topic_id,$label,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,0,NULL,0,true,NULL,false,$parent_id);
 		return strval($id);
 	}
 
@@ -501,8 +534,6 @@ class Hook_occle_fs_forums extends resource_fs_base
 			'poster_name_if_guest'=>$row['p_poster_name_if_guest'],
 			'ip_address'=>$row['p_ip_address'],
 			'intended_solely_for'=>$row['p_intended_solely_for'],
-			'sunk'=>$row['p_sunk'],
-			'anonymous'=>$row['p_anonymous'],
 			'parent_id'=>$row['p_parent_id'],
 			'poster'=>$row['p_poster'],
 			'last_edit_by'=>$row['p_last_edit_by'],
@@ -522,8 +553,10 @@ class Hook_occle_fs_forums extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'topic');
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+@exit('!'.$category);
+		if ($category=='') return false;
 
 		require_code('ocf_posts_action3');
 
@@ -541,11 +574,9 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$intended_solely_for=$this->_default_property_int_null($properties,'intended_solely_for');
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$last_edit_by=$this->_default_property_int_null($properties,'last_edit_by');
-		$sunk=$this->_default_property_int($properties,'sunk');
-		$anonymous=$this->_default_property_int($properties,'anonymous');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
 
-		ocf_edit_post(intval($resource_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,true,false,'',false,$edit_time,$add_time,$poster,true);
+		ocf_edit_post(intval($resource_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,true,false,'',false,$edit_time,$add_time,$poster,true,false);
 
 		return true;
 	}
@@ -560,7 +591,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	function file_delete($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'topic');
 
 		$topic_id=$this->_integer_category($category);
 

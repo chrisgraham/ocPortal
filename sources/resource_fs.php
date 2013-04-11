@@ -47,11 +47,11 @@ function get_resource_occlefs_object($resource_type)
 	$object=get_content_object($resource_type);
 	if (is_null($object)) return NULL;
 	$info=$object->info();
-	$fs_hook=$object->occle_filesystem_hook;
+	$fs_hook=$info['occle_filesystem_hook'];
 	if (is_null($fs_hook)) return NULL;
 
-	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($resource_type));
-	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($resource_type),true);
+	require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($fs_hook));
+	$fs_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($fs_hook),true);
 	if (is_null($fs_object)) return NULL;
 	return $fs_object;
 }
@@ -77,10 +77,10 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];
 
-	$lookup=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_id','resource_guid'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
+	$lookup=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_moniker','resource_guid'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
 	if (array_key_exists(0,$lookup))
 	{
-		$no_exists_check_for=$lookup[0]['resource_id'];
+		$no_exists_check_for=$lookup[0]['resource_moniker'];
 		$guid=$lookup[0]['resource_guid'];
 	} else
 	{
@@ -402,7 +402,7 @@ class resource_fs_base
 	function _has_parent_child_relationship($above,$under)
 	{
 		$sub_info=$this->_get_cma_info($under);
-		if (is_null($sub_info['parent_spec__parent_name'])) return NULL;
+		if ((!array_key_exists('parent_spec__parent_name',$sub_info)) || (is_null($sub_info['parent_spec__parent_name']))) return NULL;
 		$folder_info=$this->_get_cma_info($above);
 		return array(
 			'cat_field'=>$sub_info['parent_spec__parent_name'],
@@ -489,7 +489,10 @@ class resource_fs_base
 	 */
 	function _file_magic_filter($filename,$path,$properties)
 	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
+		$label=basename($filename,'.xml'); // Default implementation is simply to assume the stub of the filename (or may be a raw label already, with no file type) is the resource label
+		if (array_key_exists('label',$properties))
+			$label=$properties['label']; // ...unless the label was explicitly given
+		return array($properties,$label); // Leave properties alone
 	}
 
 	/**
@@ -502,7 +505,7 @@ class resource_fs_base
 	 */
 	function _folder_magic_filter($filename,$path,$properties)
 	{
-		return array($filename,$properties); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
+		return array($properties,$filename); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
 	}
 
 	/**
@@ -559,9 +562,8 @@ class resource_fs_base
 	{
 		if (is_null($resource_type)) $resource_type=$this->folder_resource_type;
 
-		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
+		$moniker=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
 
-		$moniker=basename($filename); // Get filename component from path
 		$resource_id=find_id_via_moniker($resource_type,$moniker);
 		return array($resource_type,$resource_id);
 	}
@@ -609,11 +611,12 @@ class resource_fs_base
 	/**
 	 * Convert a category to an integer, defaulting to NULL if it is blank.
 	 *
-	 * @param  ID_TEXT	The category value (blank: root)
+	 * @param  ?ID_TEXT	The category value (blank: root) (NULL: root)
 	 * @return ?integer	The category (NULL: root)
 	 */
 	function _integer_category($category)
 	{
+		if (is_null($category)) return NULL;
 		return ($category=='')?NULL:intval($category);
 	}
 
@@ -653,6 +656,21 @@ class resource_fs_base
 		if (!is_null($val)) return $val;
 
 		return $default;
+	}
+
+	/**
+	 * Turn a label into a name.
+	 *
+	 * @param  SHORT_TEXT	The label
+	 * @return ID_TEXT		The name
+	 */
+	function _create_name_from_label($label)
+	{
+		$name=strtolower($label);
+		$name=preg_replace('#[^\w\d\.\-]#','_',$name);
+		$name=preg_replace('#\_+\$#','',$name);
+		if ($name=='') $name=uniqid('');
+		return $name;
 	}
 
 	/*
@@ -786,9 +804,9 @@ class resource_fs_base
 	function convert_id_to_filename($resource_type,$resource_id)
 	{
 		if ($this->is_file_type($resource_type))
-			return $this->file_convert_id_to_filename($resource_id,$resource_type);
+			return $this->file_convert_id_to_filename($resource_type,$resource_id);
 		if ($this->is_folder_type($resource_type))
-			return $this->folder_convert_id_to_filename($resource_id,$resource_type);
+			return $this->folder_convert_id_to_filename($resource_type,$resource_id);
 		return NULL;
 	}
 
@@ -1409,7 +1427,8 @@ class resource_fs_base
 		if (!is_null($resource_id)) return $resource_id;
 
 		// Otherwise, use the label
-		$resource_id=$this->convert_label_to_id($portable['label'],$portable['subpath'],$resource_type);
+		$subpath=array_key_exists('subpath',$portable)?$portable['subpath']:'';
+		$resource_id=$this->convert_label_to_id($portable['label'],$subpath,$resource_type);
 
 		return $resource_id;
 	}

@@ -27,16 +27,30 @@
  * @param  ?TIME				Add time (NULL: now)
  * @param  ?TIME				Edit time (NULL: not edited yet)
  * @param  boolean			Whether to activate it
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
  * @return AUTO_LINK			ID of the new instance
  */
-function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_parameters,$add_time=NULL,$edit_time=NULL,$sync=true)
+function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_parameters,$add_time=NULL,$edit_time=NULL,$sync=true,$uniqify=false)
 {
+	// Check aggregate type
+	$types=parse_aggregate_xml();
+	if (!array_key_exists($aggregate_type,$types))
+		warn_exit(do_lang_tempcode('MISSING_AGGREGATE_TYPE',escape_html($aggregate_type)));
+
 	$other_parameters=serialize($_other_parameters);
 
 	// Error if label is a duplicate
-	$aggregate_label=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','aggregate_label',array('aggregate_type'=>$aggregate_type,'aggregate_label'=>$aggregate_label));
-	if (!is_null($aggregate_label))
-		warn_exit(do_lang_tempcode('DUPLICATE_AGGREGATE_INSTANCE',escape_html($aggregate_label)));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','id',array('aggregate_type'=>$aggregate_type,'aggregate_label'=>$aggregate_label));
+	if (!is_null($test))
+	{
+		if ($uniqify)
+		{
+			$aggregate_label.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('DUPLICATE_AGGREGATE_INSTANCE',escape_html($aggregate_label)));
+		}
+	}
 
 	if (is_null($add_time)) $add_time=time();
 
@@ -69,10 +83,29 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pa
  * @param  SHORT_TEXT		Label for instance
  * @param  ID_TEXT			What the instance is of
  * @param  array				Additional parameters
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
  */
-function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_other_parameters)
+function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_other_parameters,$uniqify=false)
 {
+	// Check aggregate type
+	$types=parse_aggregate_xml();
+	if (!array_key_exists($aggregate_type,$types))
+		warn_exit(do_lang_tempcode('MISSING_AGGREGATE_TYPE',escape_html($aggregate_type)));
+
 	$other_parameters=serialize($_other_parameters);
+
+	// Error if label is a duplicate
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','id',array('aggregate_type'=>$aggregate_type,'aggregate_label'=>$aggregate_label));
+	if ((!is_null($test)) && ($test!=$id))
+	{
+		if ($uniqify)
+		{
+			$aggregate_label.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('DUPLICATE_AGGREGATE_INSTANCE',escape_html($aggregate_label)));
+		}
+	}
 
 	$GLOBALS['SITE_DB']->query_update('aggregate_type_instances',array(
 		'aggregate_label'=>$aggregate_label,
@@ -207,6 +240,7 @@ function parse_aggregate_xml($display_errors=false)
 	{
 		foreach ($this_children as $_child)
 		{
+			if (!is_array($_child)) continue;
 			list($row_tag,$row_attributes,$row_value,$row_children)=$_child;
 
 			if ($row_tag=='aggregatetype')
@@ -229,10 +263,16 @@ function parse_aggregate_xml($display_errors=false)
 				$aggregate_type_resources=array();
 				foreach ($row_children as $__child)
 				{
+					if (!is_array($__child)) continue;
 					list($at_row_tag,$at_row_attributes,$at_row_value,$at_row_children)=$__child;
 
 					if ($at_row_tag=='resource')
 					{
+						if (!array_key_exists('label',$at_row_attributes))
+						{
+							$parse_errors[]='Missing resource.label';
+							continue;
+						}
 						if (!array_key_exists('type',$at_row_attributes))
 						{
 							$parse_errors[]='Missing resource.type';
@@ -240,18 +280,19 @@ function parse_aggregate_xml($display_errors=false)
 						}
 
 						$resource_type=$at_row_attributes['type'];
-						$resource_subpath='';
-						$resource_label=mixed();
-						$resource_template_subpath='';
-						$resource_template_label=mixed();
+						$resource_subpath=array_key_exists('subpath',$at_row_attributes)?$at_row_attributes['subpath']:'';
+						$resource_label=$at_row_attributes['type'];
+						$resource_template_subpath=array_key_exists('template_subpath',$at_row_attributes)?$at_row_attributes['template_subpath']:'';
+						$resource_template_label=array_key_exists('template_label',$at_row_attributes)?$at_row_attributes['template_label']:mixed();
 						$resource_properties=array();
 						$resource_access=array();
-						$resource_privilege_presets=mixed();
+						$resource_privilege_presets=array();
 						$resource_privileges=array();
 						$resource_resync=(!array_key_exists('resync',$at_row_attributes)) || ($at_row_attributes['resync']=='true');
 
 						foreach ($row_children as $___child)
 						{
+							if (!is_array($___child)) continue;
 							list($rs_row_tag,$rs_row_attributes,$rs_row_value,$rs_row_children)=$___child;
 
 							switch ($rs_row_tag)
@@ -440,6 +481,8 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 		// Can we bind to an existing resource? (using subpath and label)
 		$is_new=false;
 		$object_fs=get_resource_occlefs_object($resource['type']);
+		if (is_null($object_fs))
+			warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE',escape_html($resource['type'])));
 		$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
 
 		// If not bound, create resource

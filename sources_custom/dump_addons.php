@@ -122,7 +122,15 @@ function find_addon_category_download_category($category_name,$parent_id=NULL)
 	$id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$parent_id,'t.text_original'=>$category_name));
 	if (is_null($id))
 	{
-		$cat_id=add_download_category($category_name,$parent_id,'','','');
+		$description='';
+		switch ($category_name)
+		{
+			case 'Themes':
+				$description='These are themes that have been released for this version of ocPortal. Themes that have been released for earlier versions would need upgrading -- you may wish to browse through them also, and contact the author if you\'d like them upgraded.';
+				break;
+		}
+
+		$cat_id=add_download_category($category_name,$parent_id,$description,'','');
 		$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 		foreach (array_keys($all_groups) as $_group_id)
 		{

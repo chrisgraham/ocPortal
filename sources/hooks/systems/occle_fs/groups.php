@@ -141,7 +141,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 
 		list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)=$this->__folder_read_in_properties($path,$properties);
 
-		$id=ocf_make_group($label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+		$id=ocf_make_group($label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,true);
 		return strval($id);
 	}
 
@@ -165,7 +165,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 			'is_default'=>$row['g_is_default'],
 			'is_super_admin'=>$row['g_is_super_admin'],
 			'is_super_moderator'=>$row['g_is_super_moderator'],
-			'rank_title'=>$row['g_rank_title'],
+			'rank_title'=>$row['g_title'],
 			'rank_image'=>$row['g_rank_image'],
 			'promotion_target'=>$row['g_promotion_target'],
 			'promotion_threshold'=>$row['g_promotion_threshold'],
@@ -207,7 +207,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$label=$this->_default_property_str($properties,'label');
 		list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)=$this->__folder_read_in_properties($path,$properties);
 
-		ocf_edit_group(intval($resource_id),$label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+		ocf_edit_group(intval($resource_id),$label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,true);
 
 		return true;
 	}
@@ -334,7 +334,8 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$password_hashed=$this->_default_property_str($properties,'password_hashed');
 		$email_address=$this->_default_property_str($properties,'email_address');
 		$groups=array();
-		$groups[]=$this->_integer_category($category);
+		$primary_group_id=$this->_integer_category($category);
+		$groups[]=$primary_group_id;
 		if ((isset($properties['groups'])) && ($properties['groups']!=''))
 		{
 			$_groups=@unserialize($properties['groups']);
@@ -365,7 +366,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$photo_thumb_url=$this->_default_property_str($properties,'photo_thumb_url');
 		$views_signatures=$this->_default_property_int($properties,'views_signatures');
 		$auto_monitor_contrib_content=$this->_default_property_int_null($properties,'auto_monitor_contrib_content');
-		if (is_null($auto_monitor_contrib_content)) $auto_monitor_contrib_content=intval(get_option('auto_notifications'));
+		if (is_null($auto_monitor_contrib_content)) $auto_monitor_contrib_content=@intval(get_option('auto_notifications',true));
 		$language=$this->_default_property_str_null($properties,'language');
 		$allow_emails=$this->_default_property_int_modeavg($properties,'allow_emails','f_members',1,'m_allow_emails');
 		$allow_emails_from_staff=$this->_default_property_int_modeavg($properties,'allow_emails_from_staff','f_members',1,'m_allow_emails_from_staff');
@@ -452,15 +453,15 @@ class Hook_occle_fs_groups extends resource_fs_base
 
 		$ret=array(
 			'label'=>$row['m_username'],
-			'password_hashed'=>$row['m_password_hashed'],
-			'salt'=>$row['m_salt'],
-			'password_compatibility_scheme'=>$row['m_password_compatibility_scheme'],
+			'password_hashed'=>$row['m_pass_hash_salted'],
+			'salt'=>$row['m_pass_salt'],
+			'password_compatibility_scheme'=>$row['m_password_compat_scheme'],
 			'email_address'=>$row['m_email_address'],
 			'groups'=>serialize($groups),
 			'dob_day'=>$row['m_dob_day'],
 			'dob_month'=>$row['m_dob_month'],
 			'dob_year'=>$row['m_dob_year'],
-			'timezone'=>$row['m_timezone'],
+			'timezone'=>$row['m_timezone_offset'],
 			'validated'=>$row['m_validated'],
 			'join_time'=>$row['m_join_time'],
 			'last_visit_time'=>$row['m_last_visit_time'],
@@ -516,8 +517,10 @@ class Hook_occle_fs_groups extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
 
 		require_code('ocf_members_action2');
 

@@ -204,7 +204,7 @@ class SimpleTest {
      */
     static function &_getRegistry() {
         static $registry = false;
-        if (! $registry) {
+        if ($registry===false) {
             $registry = SimpleTest::_getDefaults();
         }
         return $registry;

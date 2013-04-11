@@ -88,9 +88,10 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
  * @param  ?TIME			Add time (NULL: do not change)
  * @param  ?MEMBER		Submitter (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  boolean		Whether to run checks
  * @return AUTO_LINK		The ID of the topic (whilst this could be known without calling this function, as we've gone to effort and grabbed it from the DB, it might turn out useful for something).
  */
-function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,$check_perms=true,$edit_time=NULL,$add_time=NULL,$submitter=NULL,$null_is_literal=false)
+function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,$check_perms=true,$edit_time=NULL,$add_time=NULL,$submitter=NULL,$null_is_literal=false,$run_checks=true)
 {
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
@@ -107,7 +108,8 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 
 	require_code('ocf_posts_action');
 	require_code('ocf_posts');
-	ocf_check_post($post);
+	if ($run_checks)
+		ocf_check_post($post);
 
 	if ($check_perms)
 		if (!ocf_may_edit_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
@@ -125,7 +127,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	// Save in history
 	$GLOBALS['FORUM_DB']->query_insert('f_post_history',array(
 		'h_create_date_and_time'=>$post_info[0]['p_time'],
-		'h_action_date_and_time'=>$edit_time,
+		'h_action_date_and_time'=>is_null($edit_time)?time():$edit_time,
 		'h_owner_member_id'=>$post_owner,
 		'h_alterer_member_id'=>get_member(),
 		'h_post_id'=>$post_id,

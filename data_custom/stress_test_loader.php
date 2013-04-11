@@ -402,8 +402,9 @@ function do_work()
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('catalogues','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$catalogue_name=uniqid('');
-		$root_id=actual_add_catalogue($catalogue_name,random_line(),random_text(),mt_rand(0,3),1,'',30);
+		actual_add_catalogue($catalogue_name,random_line(),random_text(),mt_rand(0,3),1,'',30);
 	}
+	$root_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>$catalogue_name));
 	// catalogue categories under a subcategory (remember to test all catalogue views: atoz, index, and root cat)
 	$catalogue_name='products';
 	$subcat_id=actual_add_catalogue_category($catalogue_name,random_line(),random_text(),'',$root_id);

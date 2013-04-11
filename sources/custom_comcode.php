@@ -31,12 +31,23 @@
  * @param  BINARY			Whether the tag is disabled.
  * @param  BINARY			Whether the tag is a block tag.
  * @param  BINARY			Whether the tag is a textual tag.
+ * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT		The tag name
  */
-function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag)
+function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
 {
 	global $VALID_COMCODE_TAGS;
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
-	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
+	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test)))
+	{
+		if ($uniqify)
+		{
+			$tag.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
+		}
+	}
 
 	$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
 		'tag_tag'=>$tag,
@@ -58,6 +69,8 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
 		require_code('resource_fs');
 		generate_resourcefs_moniker('custom_comcode_tag',$tag);
 	}
+
+	return $tag;
 }
 
 /**
@@ -74,13 +87,24 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
  * @param  BINARY			Whether the tag is disabled.
  * @param  BINARY			Whether the tag is a block tag.
  * @param  BINARY			Whether the tag is a textual tag.
+ * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT		The tag name
  */
-function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag)
+function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
 {
 	global $VALID_COMCODE_TAGS;
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 	if ($old_tag==$tag) $test=NULL;
-	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
+	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test)))
+	{
+		if ($uniqify)
+		{
+			$tag.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
+		}
+	}
 
 	$old=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag'=>$old_tag),'',1);
 	if (!array_key_exists(0,$old)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -107,6 +131,8 @@ function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$exa
 		require_code('resource_fs');
 		generate_resourcefs_moniker('custom_comcode_tag',$tag);
 	}
+
+	return $tag;
 }
 
 /**

@@ -12,13 +12,11 @@ As a super-member, you are a member of an exclusive group and you have been give
 
 Some of the services we may offer ([b]DEFAULT. PLEASE EDIT AS REQUIRED[/b]):
  - Access to a file storage service, with remote linking enabled
- - High-quality, reliable, Web-hosting for projects
  - Forum hosting (usually as a sub-forum of our main forums - which brings a lot of interest to your project)
  - News posting/coverage, of your projects
  - File hosting, in our public download database
  - An active community on our forums, with public and super-member-only forums
  - Advertising for projects in our banner exchange, and our project database
- - Advertising of modifications in our modification database
  - A personal author profile, so you can give information about yourself along with your file releases
  - A points system on the forums, so you can be awarded for your work. You can use your gained points to 'purchase' banner hits, emails and text-banner promotion
  - Advertisement of your works as images of the day

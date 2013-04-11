@@ -108,13 +108,13 @@ class Module_calendar
 				'e_recurrence'=>'ID_TEXT', // [none, daily, weekly, monthly, yearly, xth_dotw_of_monthly] X [fractional-occurrence]. e.g. "daily yyyyynn" for weekdays
 				'e_recurrences'=>'?SHORT_INTEGER', // NULL means none/infinite
 				'e_seg_recurrences'=>'BINARY',
-				'e_start_year'=>'SHORT_INTEGER',
+				'e_start_year'=>'INTEGER',
 				'e_start_month'=>'SHORT_INTEGER',
 				'e_start_day'=>'SHORT_INTEGER',
 				'e_start_monthly_spec_type'=>'ID_TEXT', // day_of_month|day_of_month_backwards|dow_of_month|dow_of_month_backwards
 				'e_start_hour'=>'?SHORT_INTEGER',
 				'e_start_minute'=>'?SHORT_INTEGER',
-				'e_end_year'=>'?SHORT_INTEGER',
+				'e_end_year'=>'?INTEGER',
 				'e_end_month'=>'?SHORT_INTEGER',
 				'e_end_day'=>'?SHORT_INTEGER',
 				'e_end_monthly_spec_type'=>'ID_TEXT', // day_of_month|day_of_month_backwards|dow_of_month|dow_of_month_backwards

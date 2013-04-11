@@ -69,6 +69,13 @@ class Module_leader_board
 		$start=get_param_integer('lb_start',0);
 		$max=get_param_integer('lb_max',52);
 
+		// Ensure the leaderboard is getting calculated...
+		$cutoff=time()-60*60*24*7;
+		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'leader_board WHERE date_and_time>'.strval($cutoff));
+		if ($test==0) do_block('main_leader_board',array());
+
+		// Continue on to displaying the leaderboard...
+
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
 		if (count($weeks)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 

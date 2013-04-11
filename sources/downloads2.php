@@ -926,7 +926,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
 	if (!is_null($views))
-		$update_map['views']=$views;
+		$update_map['download_views']=$views;
 	if (!is_null($submitter))
 		$update_map['submitter']=$submitter;
 

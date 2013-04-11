@@ -47,9 +47,10 @@
  * @param  BINARY			Whether the rank image will not be shown for secondary membership
  * @param  BINARY			Whether members may join this usergroup without requiring any special permission
  * @param  BINARY			Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
+ * @param  boolean		Whether to force the title as unique, if there's a conflict
  * @return AUTO_LINK		The ID of the new.
  */
-function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$gift_points_base=NULL,$gift_points_per_day=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
+function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$gift_points_base=NULL,$gift_points_per_day=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0,$uniqify=false)
 {
 	require_code('form_templates');
 	$flood_control_submit_secs=take_param_int_modeavg($flood_control_submit_secs,'g_flood_control_submit_secs','f_groups',0);
@@ -66,7 +67,16 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 	if (!running_script('stress_test_loader'))
 	{
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$name.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+			}
+		}
 	}
 
 	if (is_null($is_super_admin)) $is_super_admin=0;

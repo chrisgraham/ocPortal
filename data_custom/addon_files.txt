@@ -4056,6 +4056,7 @@ testing_platform
  - _tests/tests/unit_tests/installsql.php
  - _tests/tests/unit_tests/override_issues.php
  - _tests/tests/unit_tests/js_ssl_issues.php
+ - _tests/tests/unit_tests/resource_fs.php
 
 weather
 -------
@@ -4088,7 +4089,6 @@ tester
 
 promotion_stats
 ---------------
-
  - line_count.sh
 
 youtube_channel_integration_block

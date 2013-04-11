@@ -22,7 +22,7 @@ Here is an example of the definition of two aggregate content types: Course, and
 [code="XML"]
 <aggregateTypes>
     <aggregateType name="Course">
-        <resource type="usergroup" label="{LABEL*}" template_label="Newbie" />
+        <resource type="group" label="{LABEL*}" template_label="Newbie" />
         <resource type="catalogue_category" subpath="courses" label="{LABEL*}" template_label="_course">
             <property key="description">{DESCRIPTION*}</property>
             <access usergroup="{LABEL*}" value="1" />

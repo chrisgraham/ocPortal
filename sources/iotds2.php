@@ -100,7 +100,7 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
 	if (!is_null($views))
-		$update_map['views']=$views;
+		$update_map['iotd_views']=$views;
 	if (!is_null($submitter))
 		$update_map['submitter']=$submitter;
 

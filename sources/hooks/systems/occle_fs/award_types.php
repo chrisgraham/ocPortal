@@ -95,7 +95,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 			'label'=>$row['a_title'],
 			'description'=>$row['a_description'],
 			'points'=>$row['a_points'],
-			'resource_type'=>$row['a_resource_type'],
+			'resource_type'=>$row['a_content_type'],
 			'hide_awardee'=>$row['a_hide_awardee'],
 			'update_time_hours'=>$row['a_update_time_hours'],
 		);

@@ -47,6 +47,9 @@ class Hook_orphaned_lang_strings
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
+		disable_php_memory_limit();
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+
 		// When a lang string isn't there
 		$missing_lang_strings=array();
 		// When a lang string isn't used

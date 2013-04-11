@@ -84,7 +84,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		$zone=$this->_create_name_from_label($label);
 
-		actual_add_zone($zone,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu);
+		$zone=actual_add_zone($zone,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,true);
 
 		return $zone;
 	}
@@ -143,7 +143,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		$zone=$this->_create_name_from_label($label);
 
-		actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone);
+		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone,true);
 
 		return true;
 	}
@@ -229,8 +229,12 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		if (is_null($submitter)) $submitter=get_member();
 		$text=$this->_default_property_str($properties,'text');
 
+		$test=_request_page($file,$zone,NULL,NULL,true);
+		if ($test!==false) $file.='_'.uniqid(''); // Uniqify
+
 		require_code('zones3');
-		save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter);
+		$full_path=save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,true);
+		$file=basename($full_path,'.txt');
 
 		return $zone.':'.$file;
 	}
@@ -245,8 +249,10 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 	function file_load($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 
-		list($zone,$page)=explode(':',$resource_id,2);
+		$zone=$category;
+		$page=$resource_id;
 
 		$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$page),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -257,9 +263,9 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		foreach (array_keys(find_all_langs()) as $lang)
 		{
 			$result=_request_page($row['the_page'],$row['the_zone'],'comcode_custom',$lang,true);
-			list(,,,$_lang,$path)=$result;
+			list(,,,$_lang,$full_path)=$result;
 			if ($lang==$_lang)
-				$text[$lang]=file_get_contents($path);
+				$text[$lang]=file_get_contents($full_path);
 		}
 
 		list($meta_keywords,$meta_description)=seo_meta_get_for('comcode_page',$row['the_zone'].':'.$row['the_page']);
@@ -288,7 +294,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$old_file)=$this->file_convert_filename_to_id($filename);
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
@@ -312,8 +318,15 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
+		if ($file!=$old_file)
+		{
+			$test=_request_page($file,$zone,NULL,NULL,true);
+			if ($test!==false) $file.='_'.uniqid(''); // Uniqify
+		}
+
 		require_code('zones3');
-		save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$resource_id,$meta_keywords,$meta_description);
+		$full_path=save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$old_file,$meta_keywords,$meta_description,true);
+		$file=basename($full_path,'.txt');
 
 		return true;
 	}

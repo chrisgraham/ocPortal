@@ -47,7 +47,7 @@ class Hook_resource_meta_aware_download_licence
 			'category_is_string'=>true,
 
 			'title_field'=>'l_title',
-			'title_field_dereference'=>true,
+			'title_field_dereference'=>false,
 
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:cms_downloads:_ev:_WILD',

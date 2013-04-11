@@ -154,9 +154,10 @@ function catalogue_file_script()
  * @set    never daily weekly monthly quarterly
  * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
  * @param  ?TIME				The add time (NULL: now)
- * @return ?AUTO_LINK		The ID of the first new catalogues root category (NULL: no root, as it's not a tree catalogue)
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT			The name
  */
-function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never',$default_review_freq=NULL,$add_time=NULL)
+function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never',$default_review_freq=NULL,$add_time=NULL,$uniqify=false)
 {
 	if (is_null($add_time)) $add_time=time();
 
@@ -165,7 +166,16 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 
 	// Check doesn't already exist
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>$name));
-	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+	if (!is_null($test))
+	{
+		if ($uniqify)
+		{
+			$name.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		}
+	}
 
 	// Create
 	if (!is_integer($description)) $description=insert_lang_comcode($description,2);
@@ -199,7 +209,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 		generate_resourcefs_moniker('catalogue',$name);
 	}
 
-	return $category;
+	return $name;
 }
 
 /**
@@ -284,14 +294,25 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
  * @set    never daily weekly monthly quarterly
  * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
  * @param  ?TIME				Add time (NULL: do not change)
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT			The name
  */
-function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time=NULL)
+function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time=NULL,$uniqify=false)
 {
 	if ($old_name!=$name)
 	{
 		// Check doesn't already exist
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>$name));
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$name.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+			}
+		}
 
 		require_code('type_validation');
 		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
@@ -349,6 +370,8 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		require_code('resource_fs');
 		generate_resourcefs_moniker('catalogue',$name);
 	}
+
+	return $name;
 }
 
 /**
@@ -694,7 +717,12 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 	{
 		$update_map['c_name']=$c_name;
 		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('c_name'=>$c_name),array('cc_id'=>$id));
-		$GLOBALS['SITE_DB']->query_update('catalogue_catalogues c JOIN catalogue_cat_treecache t ON c.id=t.cc_id',array('c_name'=>$c_name),array('cc_ancester_id'=>$id));
+		$sub_ids=$GLOBALS['SITE_DB']->query_select('catalogue_cat_treecache',array('cc_id'),array('cc_ancestor_id'=>$id));
+		foreach ($sub_ids as $_sub_id)
+		{
+			$sub_id=$_sub_id['cc_id'];
+			$GLOBALS['SITE_DB']->query_update('catalogue_categories',array('c_name'=>$c_name),array('id'=>$sub_id),'',1);
+		}
 	}
 
 	$old_parent_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_parent_id',array('id'=>$id));

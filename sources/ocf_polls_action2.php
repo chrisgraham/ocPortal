@@ -51,7 +51,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 		'po_is_open'=>$is_open,
 		'po_minimum_selections'=>$minimum_selections,
 		'po_maximum_selections'=>$maximum_selections,
-		'po_requires_reply'=>$requires_reply
+		'po_requires_reply'=>$requires_reply,
 	),array('id'=>$poll_id),'',1);
 
 	$current_answers=$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('*'),array('pa_poll_id'=>$poll_id));
@@ -61,7 +61,9 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 		if ($i<$total_after)
 		{
 			$new_answer=$answers[$i];
-			$GLOBALS['FORUM_DB']->query_update('f_poll_answers',array('pa_answer'=>$new_answer),array('id'=>$current_answer['id']),'',1);
+			$update=array('pa_answer'=>is_array($new_answer)?$new_answer[0]:$new_answer);
+			if (is_array(1,$new_answer)) $update['pa_cache_num_votes']=$new_answer[1];
+			$GLOBALS['FORUM_DB']->query_update('f_poll_answers',$update,array('id'=>$current_answer['id']),'',1);
 		} else
 		{
 			$GLOBALS['FORUM_DB']->query_delete('f_poll_answers',array('id'=>$current_answer['id']),'',1);
@@ -74,8 +76,8 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 		$new_answer=$answers[$i];
 		$GLOBALS['FORUM_DB']->query_insert('f_poll_answers',array(
 			'pa_poll_id'=>$poll_id,
-			'pa_answer'=>$new_answer,
-			'pa_cache_num_votes'=>0
+			'pa_answer'=>is_array($new_answer)?$new_answer[0]:$new_answer,
+			'pa_cache_num_votes'=>is_array($new_answer)?$new_answer[1]:0,
 		));
 	}
 

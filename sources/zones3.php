@@ -53,8 +53,10 @@ function erase_comcode_page_cache()
  * @param  BINARY			Whether the zone requires a session for pages to be used
  * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
  * @param  ID_TEXT		The new name of the zone
+ * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT		The name
  */
-function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone)
+function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,$uniqify=false)
 {
 	if ($zone!=$new_zone)
 	{
@@ -65,7 +67,16 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 
 		// Check doesn't already exist
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$new_zone));
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($new_zone)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$new_zone.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($new_zone)));
+			}
+		}
 
 		require_code('abstract_file_manager');
 		force_have_afm_details();
@@ -117,6 +128,8 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		require_code('resource_fs');
 		generate_resourcefs_moniker('zone',$zone);
 	}
+
+	return $zone;
 }
 
 /**
@@ -392,7 +405,10 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 			if (file_exists(get_file_base().'/'.$old_path))
 			{
 				$new_path=zone_black_magic_filterer(filter_naughty($zone).(($zone!='')?'/':'').'pages/comcode_custom/'.$lang.'/'.$new_file.'.txt',true);
-				if (file_exists($new_path)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone.':'.$new_file)));
+				if (file_exists($new_path))
+				{
+					warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone.':'.$new_file)));
+				}
 				$rename_map[$old_path]=$new_path;
 			}
 			if (file_exists(get_file_base().'/'.str_replace('/comcode_custom/','/comcode/',$old_path)))
@@ -427,9 +443,13 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	}
 
 	// Store in DB
-	$GLOBALS['SITE_DB']->query_delete('comcode_pages',array(
+	$GLOBALS['SITE_DB']->query_delete('comcode_pages',array( // To support rename
 		'the_zone'=>$zone,
 		'the_page'=>$file,
+	));
+	$GLOBALS['SITE_DB']->query_delete('comcode_pages',array( // To stop conflicts
+		'the_zone'=>$zone,
+		'the_page'=>$new_file,
 	));
 	$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
 		'the_zone'=>$zone,

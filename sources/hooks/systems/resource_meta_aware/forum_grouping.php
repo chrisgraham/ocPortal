@@ -47,7 +47,7 @@ class Hook_resource_meta_aware_forum_grouping
 			'category_is_string'=>true,
 
 			'title_field'=>'c_title',
-			'title_field_dereference'=>true,
+			'title_field_dereference'=>false,
 
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_forum_groupings:_ed:_WILD',

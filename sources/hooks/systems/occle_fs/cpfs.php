@@ -102,6 +102,7 @@ class Hook_occle_fs_cpfs extends resource_fs_base
 		else
 			$encrypted=0;
 		$type=$this->_default_property_str($properties,'type');
+		if ($type=='') $type='short_text';
 		$required=$this->_default_property_int($properties,'required');
 		$show_in_posts=$this->_default_property_int($properties,'show_in_posts');
 		$show_in_post_previews=$this->_default_property_int($properties,'show_in_post_previews');
@@ -180,6 +181,7 @@ class Hook_occle_fs_cpfs extends resource_fs_base
 		else
 			$encrypted=0;
 		$type=$this->_default_property_str($properties,'type');
+		if ($type=='') $type='short_text';
 		$required=$this->_default_property_int($properties,'required');
 		$show_in_posts=$this->_default_property_int($properties,'show_in_posts');
 		$show_in_post_previews=$this->_default_property_int($properties,'show_in_post_previews');

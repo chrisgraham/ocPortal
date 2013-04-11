@@ -251,8 +251,10 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
  * @param  integer			The number of return views from this banners site
  * @param  integer			The number of banner views to this banners site
  * @param  ?TIME				The banner edit date  (NULL: never)
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT			The name
  */
-function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated=0,$b_type='',$time=NULL,$hits_from=0,$hits_to=0,$views_from=0,$views_to=0,$edit_date=NULL)
+function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated=0,$b_type='',$time=NULL,$hits_from=0,$hits_to=0,$views_from=0,$views_to=0,$edit_date=NULL,$uniqify=false)
 {
 	if (!is_numeric($importancemodulus)) $importancemodulus=3;
 	if (!is_numeric($campaignremaining)) $campaignremaining=NULL;
@@ -260,7 +262,16 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	if (is_null($submitter)) $submitter=get_member();
 
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$name));
-	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+	if (!is_null($test))
+	{
+		if ($uniqify)
+		{
+			$name.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		}
+	}
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$GLOBALS['SITE_DB']->query_insert('banners',array(
@@ -296,6 +307,8 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 		require_code('resource_fs');
 		generate_resourcefs_moniker('banner',$name);
 	}
+
+	return $name;
 }
 
 /**
@@ -322,13 +335,24 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
  * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME				Add time (NULL: do not change)
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT			The name
  */
-function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_time=NULL,$add_time=NULL,$null_is_literal=false)
+function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_time=NULL,$add_time=NULL,$null_is_literal=false,$uniqify=false)
 {
 	if ($old_name!=$name)
 	{
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$name));
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$name.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+			}
+		}
 	}
 
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
@@ -381,6 +405,8 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		require_code('resource_fs');
 		generate_resourcefs_moniker('banner',$name);
 	}
+
+	return $name;
 }
 
 /**
@@ -424,11 +450,22 @@ function delete_banner($name)
  * @param  integer			The image height (ignored for textual banners)
  * @param  integer			The maximum file size for the banners (this is a string length for textual banners)
  * @param  BINARY				Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT			The name
  */
-function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline)
+function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,$uniqify=false)
 {
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banner_types','id',array('id'=>$id));
-	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',$id));
+	if (!is_null($test))
+	{
+		if ($uniqify)
+		{
+			$id.='_'.uniqid('');
+		} else
+		{
+			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));
+		}
+	}
 
 	$GLOBALS['SITE_DB']->query_insert('banner_types',array(
 		'id'=>$id,
@@ -446,6 +483,8 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 		require_code('resource_fs');
 		generate_resourcefs_moniker('banner_type',$id);
 	}
+
+	return $id;
 }
 
 /**
@@ -458,13 +497,24 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
  * @param  integer			The image height (ignored for textual banners)
  * @param  integer			The maximum file size for the banners (this is a string length for textual banners)
  * @param  BINARY				Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
+ * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT			The name
  */
-function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline)
+function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,$uniqify=false)
 {
 	if ($old_id!=$id)
 	{
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banner_types','id',array('id'=>$id));
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',strval($id)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$id.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));
+			}
+		}
 		$GLOBALS['SITE_DB']->query_update('banners',array('b_type'=>$id),array('b_type'=>$old_id));
 	}
 
@@ -484,6 +534,8 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 		require_code('resource_fs');
 		generate_resourcefs_moniker('banner_type',$id);
 	}
+
+	return $id;
 }
 
 /**

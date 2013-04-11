@@ -20,7 +20,7 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_wiki_page extends resource_fs_base
+class Hook_occle_fs_wiki extends resource_fs_base
 {
 	var $folder_resource_type='wiki_page';
 	var $file_resource_type='wiki_post';
@@ -76,7 +76,8 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 		$the_order=$GLOBALS['SITE_DB']->query_select_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
 		if (is_null($the_order)) $the_order=-1;
 		$the_order++;
-		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
+		if (!is_null($parent_id))
+			$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
 
 		return strval($id);
 	}
@@ -104,7 +105,7 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 			'notes'=>$row['notes'],
 			'hide_posts'=>$row['hide_posts'],
 			'submitter'=>$row['submitter'],
-			'views'=>$row['views'],
+			'views'=>$row['wiki_views'],
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,
 			'add_date'=>$row['add_date'],
@@ -147,7 +148,8 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 		$the_order=$GLOBALS['SITE_DB']->query_select_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
 		if (is_null($the_order)) $the_order=-1;
 		$the_order++;
-		$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
+		if (!is_null($parent_id))
+			$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
 
 		return true;
 	}
@@ -234,7 +236,7 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 			'label'=>$row['the_message'],
 			'validated'=>$row['validated'],
 			'send_notification'=>$row['send_notification'],
-			'views'=>$row['views'],
+			'views'=>$row['wiki_views'],
 			'poster'=>$row['poster'],
 			'add_date'=>$row['date_and_time'],
 			'edit_date'=>$row['edit_date'],
@@ -252,8 +254,10 @@ class Hook_occle_fs_wiki_page extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
 
 		require_code('wiki');
 

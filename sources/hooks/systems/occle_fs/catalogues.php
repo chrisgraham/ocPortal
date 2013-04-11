@@ -121,22 +121,26 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * @param  ID_TEXT	The resource ID
 	 * @return ID_TEXT	The filename
 	 */
-	function _folder_convert_id_to_filename($resource_type,$resource_id)
+	function folder_convert_id_to_filename($resource_type,$resource_id)
 	{
 		if ($resource_type=='catalogue')
-			return 'CATALOGUE-'.parent::_folder_convert_id_to_filename($resource_type,$resource_id);
+			return 'CATALOGUE-'.parent::folder_convert_id_to_filename('catalogue',$resource_id);
 
-		return parent::_folder_convert_id_to_filename($resource_type,$resource_id,'catalogue_category');
+		return parent::folder_convert_id_to_filename('catalogue_category',$resource_id);
 	}
 
 	/**
 	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
 	 *
 	 * @param  ID_TEXT	The filename, or filepath
+	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
 	 * @return array		A pair: The resource type, the resource ID
 	 */
-	function folder_convert_filename_to_id($filename)
+	function folder_convert_filename_to_id($filename,$resource_type=NULL)
 	{
+		if (!is_null($resource_type))
+			return parent::folder_convert_filename_to_id($filename,$resource_type);
+
 		if (substr($filename,0,10)=='CATALOGUE-')
 			return parent::folder_convert_filename_to_id(substr($filename,10),'catalogue');
 
@@ -174,14 +178,16 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function __folder_read_in_properties_category($path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-
-		if ($category=='')
+		if (strpos($path,'/')===false)
 		{
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue');
+
 			$parent_id=mixed();
 			$catalogue_name=$category;
 		} else
 		{
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue_category');
+
 			$parent_id=$this->_integer_category($category);
 			$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$parent_id));
 			$is_tree=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_is_tree',array('id'=>$parent_id));
@@ -191,8 +197,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');
 		$rep_image=$this->_default_property_str($properties,'rep_image');
-		$move_days_lower=$this->_default_property_int_null($properties,'move_days_lower');
-		$move_days_higher=$this->_default_property_int_null($properties,'move_days_higher');
+		$move_days_lower=$this->_default_property_int($properties,'move_days_lower');
+		$move_days_higher=$this->_default_property_int($properties,'move_days_higher');
 		$move_target=$this->_default_property_int_null($properties,'move_target');
 		$add_date=$this->_default_property_int_null($properties,'add_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
@@ -211,19 +217,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function folder_add($filename,$path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
 		require_code('catalogues2');
 
-		$depth=substr_count($path,'/');
-
-		if ($depth!=0)
+		if ($path!='')
 		{
-			if ($category_resource_type=='catalogue') return false; // Can't create a catalogue under a catalogue
-			if ($category=='') return false; // Can't create more than one root
-
 			$_properties=$this->__folder_read_in_properties_category($path,$properties);
 			if ($_properties===false) return false;
 			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$_properties;
@@ -237,7 +236,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 			$name=$this->_create_name_from_label($label);
 
-			actual_add_catalogue($name,$label,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+			$name=actual_add_catalogue($name,$label,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time,true);
 
 			if ((array_key_exists('fields',$properties)) && ($properties['fields']!=''))
 			{
@@ -285,12 +284,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function folder_load($filename,$path)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
-		if (substr($category,0,10)!='CATALOGUE-')
+		if ($path!='')
 		{
+			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue_category');
+
 			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>intval($resource_id)),'',1);
 			if (!array_key_exists(0,$rows)) return false;
 			$row=$rows[0];
@@ -310,6 +309,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				'add_date'=>$row['cc_add_date'],
 			);
 		}
+
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$resource_id),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -370,7 +371,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 			$name=$this->_create_name_from_label($label);
 
-			actual_edit_catalogue($resource_id,$name,$label,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time);
+			$name=actual_edit_catalogue($resource_id,$name,$label,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time,true);
 
 			// How to handle the fields
 			if ((array_key_exists('fields',$properties)) && ($properties['fields']!=''))
@@ -599,7 +600,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function file_add($filename,$path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue_category');
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
 		if ($category=='') return false;
@@ -688,8 +689,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue_category');
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
+		if ($category_resource_type=='catalogue') return false;
 
 		require_code('catalogues2');
 

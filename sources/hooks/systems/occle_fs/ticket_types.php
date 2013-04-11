@@ -81,7 +81,7 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'),array('id'=>intval($resource_id)),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'),array('ticket_type'=>intval($resource_id)),'',1);
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 

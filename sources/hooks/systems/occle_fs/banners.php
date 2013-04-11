@@ -79,7 +79,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		if ($max_file_size===NULL) $max_file_size=100*1024;
 		$comcode_inline=$this->_default_property_int($properties,'comcode_inline');
 		$name=$this->_create_name_from_label($label);
-		add_banner_type($name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
+		$name=add_banner_type($name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,true);
 		return $name;
 	}
 
@@ -133,7 +133,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$comcode_inline=$this->_default_property_int($properties,'comcode_inline');
 		$name=$this->_create_name_from_label($label);
 
-		edit_banner_type($resource_id,$name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
+		$name=edit_banner_type($resource_id,$name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,true);
 
 		return true;
 	}
@@ -216,7 +216,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$imgurl=$this->_default_property_str($properties,'image_url');
 		$title_text=$this->_default_property_str($properties,'title_text');
 		$direct_code=$this->_default_property_str($properties,'direct_code');
-		$campaignremaining=$this->_default_property_int_null($properties,'campaignremaining');
+		$campaignremaining=$this->_default_property_int($properties,'campaignremaining');
 		$site_url=$this->_default_property_str($properties,'site_url');
 		$importancemodulus=$this->_default_property_int_null($properties,'importancemodulus');
 		$notes=$this->_default_property_str($properties,'notes');
@@ -232,7 +232,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$views_from=$this->_default_property_int($properties,'views_from');
 		$views_to=$this->_default_property_int($properties,'views_to');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
-		add_banner($name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$time,$hits_from,$hits_to,$views_from,$views_to,$edit_date);
+		$name=add_banner($name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$time,$hits_from,$hits_to,$views_from,$views_to,$edit_date,true);
 		return $name;
 	}
 
@@ -254,11 +254,11 @@ class Hook_occle_fs_banners extends resource_fs_base
 		return array(
 			'label'=>$row['name'],
 			'image_url'=>$row['img_url'],
-			'title_text'=>$row['title_text'],
-			'direct_code'=>$row['direct_code'],
-			'campaignremaining'=>$row['campaignremaining'],
+			'title_text'=>$row['b_title_text'],
+			'direct_code'=>$row['b_direct_code'],
+			'campaignremaining'=>$row['campaign_remaining'],
 			'site_url'=>$row['site_url'],
-			'importancemodulus'=>$row['importancemodulus'],
+			'importancemodulus'=>$row['importance_modulus'],
 			'notes'=>$row['notes'],
 			'the_type'=>$row['the_type'],
 			'expiry_date'=>$row['expiry_date'],
@@ -284,7 +284,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('banners2');
@@ -294,9 +294,9 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$imgurl=$this->_default_property_str($properties,'image_url');
 		$title_text=$this->_default_property_str($properties,'title_text');
 		$direct_code=$this->_default_property_str($properties,'direct_code');
-		$campaignremaining=$this->_default_property_int_null($properties,'campaignremaining');
+		$campaignremaining=$this->_default_property_int($properties,'campaignremaining');
 		$site_url=$this->_default_property_str($properties,'site_url');
-		$importancemodulus=$this->_default_property_int_null($properties,'importancemodulus');
+		$importancemodulus=$this->_default_property_int($properties,'importancemodulus');
 		$notes=$this->_default_property_str($properties,'notes');
 		$the_type=$this->_default_property_int($properties,'the_type');
 		$expiry_date=$this->_default_property_int_null($properties,'expiry_date');
@@ -311,7 +311,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$views_to=$this->_default_property_int($properties,'views_to');
 		$edit_date=$this->_default_property_int_null($properties,'edit_date');
 
-		edit_banner($resource_id,$name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_date,$add_time,true);
+		$name=edit_banner($resource_id,$name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_date,$add_time,true,true);
 
 		return true;
 	}

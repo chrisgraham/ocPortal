@@ -271,41 +271,9 @@ class Module_catalogues
 			add_menu_item_simple('collab_features',$projects,'VIEW','_SEARCH:catalogues:type=index:id=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 
-			// Modifications
-			actual_add_catalogue('modifications',lang_code_to_default_content('DEFAULT_CATALOGUE_MODIFICATIONS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_MODIFICATIONS_DESCRIPTION',true,3),C_DT_TITLELIST,0,'',60);
-			$fields=array(
-				array('NAME','DESCRIPTION_NAME','short_trans',1,1),
-				array('IMAGE','DESCRIPTION_MODIFICATION_IMAGE_URL','picture',0,0),
-				array('STATUS','DESCRIPTION_MODIFICATION_STATUS','short_trans',0,1),
-				array('URL','DESCRIPTION_URL','url',0,0),
-				array('DESCRIPTION','DESCRIPTION_DESCRIPTION','long_trans',0,1),
-				array('AUTHOR','DESCRIPTION_AUTHOR','short_text',0,1)
-			);
-			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('modifications',lang_code_to_default_content($field[0],false,3),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
-			foreach (array_keys($groups) as $group_id)
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'modifications','group_id'=>$group_id));
-			add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_MODIFICATIONS_TITLE','_SEARCH:catalogues:type=index:id=modifications');
-
-			// Hosted-sites
-			actual_add_catalogue('hosted',lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
-			$fields=array(
-				array('NAME','DESCRIPTION_NAME','short_trans',1,1),
-				array('URL','DESCRIPTION_URL','url',0,0),
-				array('DESCRIPTION','DESCRIPTION_DESCRIPTION','long_trans',0,0)
-			);
-			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('hosted',lang_code_to_default_content($field[0],false,2),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
-			$cat_id=actual_add_catalogue_category('hosted',lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),'',NULL,'');
-			foreach (array_keys($groups) as $group_id)
-			{
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'hosted','group_id'=>$group_id));
-			}
-			add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_HOSTED_TITLE','_SEARCH:catalogues:type=index:id=hosted');
-
 			// Links
-			$links_category=actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
+			actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
+			$links_category=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>'links'));
 			$fields=array(
 				// Name, Description, Type, Defines order, Required, Put in category
 				array('TITLE','DESCRIPTION_TITLE','short_trans',1,1,1),
@@ -360,7 +328,8 @@ class Module_catalogues
 			actual_add_catalogue_category('contacts',lang_code_to_default_content('CONTACTS',false,2),'','',NULL,'');
 			add_menu_item_simple('main_content',NULL,'CONTACTS','_SEARCH:catalogues:type=index:id=contacts');
 
-			$cat_id=actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
+			actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
+			$cat_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>'products'));
 
 			$fields=array(
 				//		Name							 Description			Type			  Defines order  Required  Visible  Searchable

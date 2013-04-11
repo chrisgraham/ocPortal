@@ -30,8 +30,6 @@ class Hook_admin_import_types_catalogues
 	{
 		return array(
 			'catalogue_links'=>'DEFAULT_CATALOGUE_LINKS_TITLE',
-			'catalogue_modifications'=>'DEFAULT_CATALOGUE_MODIFICATIONS_TITLE',
-			'catalogue_hosted'=>'DEFAULT_CATALOGUE_HOSTED_TITLE',
 			'catalogue_projects'=>'DEFAULT_CATALOGUE_PROJECTS_TITLE',
 			'catalogue_faqs'=>'DEFAULT_CATALOGUE_FAQS_TITLE',
 			'catalogues'=>'CATALOGUES',

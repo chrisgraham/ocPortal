@@ -20,7 +20,7 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_event extends resource_fs_base
+class Hook_occle_fs_calendar extends resource_fs_base
 {
 	var $folder_resource_type='calendar_type';
 	var $file_resource_type='event';
@@ -144,13 +144,13 @@ class Hook_occle_fs_event extends resource_fs_base
 	{
 		return array(
 			'description'=>'LONG_TRANS',
-			'start_year'=>'SHORT_INTEGER',
+			'start_year'=>'INTEGER',
 			'start_month'=>'SHORT_INTEGER',
 			'start_day'=>'SHORT_INTEGER',
 			'start_monthly_spec_type'=>'ID_TEXT',
 			'start_hour'=>'?SHORT_INTEGER',
 			'start_minute'=>'?SHORT_INTEGER',
-			'end_year'=>'?SHORT_INTEGER',
+			'end_year'=>'?INTEGER',
 			'end_month'=>'?SHORT_INTEGER',
 			'end_day'=>'?SHORT_INTEGER',
 			'end_monthly_spec_type'=>'ID_TEXT',
@@ -232,7 +232,7 @@ class Hook_occle_fs_event extends resource_fs_base
 		if ($end_monthly_spec_type=='') $end_monthly_spec_type='day_of_month';
 		$end_hour=$this->_default_property_int_null($properties,'end_hour');
 		$end_minute=$this->_default_property_int_null($properties,'end_minute');
-		$timezone=$this->_default_property_str_null($properties,'timezone');
+		$timezone=$this->_default_property_str($properties,'timezone');
 		$do_timezone_conv=$this->_default_property_int($properties,'do_timezone_conv');
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
@@ -246,6 +246,7 @@ class Hook_occle_fs_event extends resource_fs_base
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
+
 		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$label,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
@@ -269,7 +270,7 @@ class Hook_occle_fs_event extends resource_fs_base
 
 		return array(
 			'label'=>$row['e_title'],
-			'description'=>$row['e_description'],
+			'description'=>$row['e_content'],
 			'start_year'=>$row['e_start_year'],
 			'start_month'=>$row['e_start_month'],
 			'start_day'=>$row['e_start_day'],
@@ -289,11 +290,11 @@ class Hook_occle_fs_event extends resource_fs_base
 			'seg_recurrences'=>$row['e_seg_recurrences'],
 			'priority'=>$row['e_priority'],
 			'is_public'=>$row['e_is_public'],
-			'validated'=>$row['e_validated'],
-			'allow_rating'=>$row['e_allow_rating'],
-			'allow_comments'=>$row['e_allow_comments'],
-			'allow_trackbacks'=>$row['e_allow_trackbacks'],
-			'notes'=>$row['e_notes'],
+			'validated'=>$row['validated'],
+			'allow_rating'=>$row['allow_rating'],
+			'allow_comments'=>$row['allow_comments'],
+			'allow_trackbacks'=>$row['allow_trackbacks'],
+			'notes'=>$row['notes'],
 			'views'=>$row['e_views'],
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,
@@ -316,6 +317,8 @@ class Hook_occle_fs_event extends resource_fs_base
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
 
 		require_code('calendar2');
 
@@ -346,7 +349,7 @@ class Hook_occle_fs_event extends resource_fs_base
 		if ($end_monthly_spec_type=='') $end_monthly_spec_type='day_of_month';
 		$end_hour=$this->_default_property_int_null($properties,'end_hour');
 		$end_minute=$this->_default_property_int_null($properties,'end_minute');
-		$timezone=$this->_default_property_str_null($properties,'timezone');
+		$timezone=$this->_default_property_str($properties,'timezone');
 		$do_timezone_conv=$this->_default_property_int($properties,'do_timezone_conv');
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;

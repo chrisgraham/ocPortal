@@ -1957,7 +1957,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('catalogue',NULL);
 
-		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$meta_data['add_time']);
+		actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$meta_data['add_time']);
+		$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>$name));
 
 		$this->set_permissions($name);
 		if (!is_null($category_id)) $GLOBALS['MODULE_CMS_CATALOGUES']->cat_crud_module->set_permissions(strval($category_id));

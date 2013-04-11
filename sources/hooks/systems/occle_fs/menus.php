@@ -66,6 +66,8 @@ class Hook_occle_fs_menus extends resource_fs_base
 		require_code('menus2');
 
 		$menu=$this->_create_name_from_label($label);
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_menu',array('i_menu'=>$menu));
+		if (!is_null($test)) $menu.='_'.uniqid(''); // uniqify
 
 		$order=db_get_first_id();
 		$parent=NULL;
@@ -117,6 +119,13 @@ class Hook_occle_fs_menus extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
+		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
+
+		$menu=$this->_create_name_from_label($label);
+
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_menu',array('i_menu'=>$menu));
+		if (!is_null($test)) return true;
+
 		return false;
 	}
 
@@ -238,7 +247,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('menus2');

@@ -46,8 +46,8 @@ class Hook_resource_meta_aware_custom_comcode_tag
 			'category_type'=>NULL, // For category permissions
 			'category_is_string'=>true,
 
-			'title_field'=>'tag_title',
-			'title_field_dereference'=>true,
+			'title_field'=>'tag_tag',
+			'title_field_dereference'=>false,
 
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_custom_comcode:_ed:_WILD',

@@ -83,7 +83,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	if (!is_null($sunk)) $update['t_sunk']=$sunk;
 	if (!is_null($cascading)) $update['t_cascading']=$cascading;
 	if (!is_null($open)) $update['t_is_open']=$open;
-	if (!is_null($views)) $update['t_views']=$views;
+	if (!is_null($views)) $update['t_num_views']=$views;
 
 	if ((!is_null($title)) && ($title!=''))
 	{

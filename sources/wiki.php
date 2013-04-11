@@ -232,13 +232,13 @@ function wiki_edit_post($id,$message,$validated,$member=NULL,$page_id=NULL,$edit
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
 	if (!is_null($views))
-		$update_map['views']=$views;
+		$update_map['wiki_views']=$views;
 	if (!is_null($member))
 		$update_map['submitter']=$member;
 
 	$GLOBALS['SITE_DB']->query_update('wiki_posts',$update_map,array('id'=>$id),'',1);
 
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'member_id'=>is_null($member)?get_member():$member,'date_and_time'=>time()));
 
 	if (post_param_integer('send_notification',NULL)!==0)
 	{
@@ -402,7 +402,7 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
 	if (!is_null($views))
-		$update_map['views']=$views;
+		$update_map['wiki_views']=$views;
 	if (!is_null($member))
 		$update_map['submitter']=$member;
 

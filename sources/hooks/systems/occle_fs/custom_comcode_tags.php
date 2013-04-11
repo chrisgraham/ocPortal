@@ -80,7 +80,7 @@ class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 		$textual_tag=$this->_default_property_int($properties,'textual_tag');
 
 		require_code('custom_comcode');
-		add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
+		$tag=add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,true);
 
 		return $tag;
 	}
@@ -142,7 +142,7 @@ class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 		$_title=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_title',array('tag_tag'=>$resource_id));
 		$_description=$GLOBALS['SITE_DB']->query_select_value('custom_comcode','tag_description',array('tag_tag'=>$resource_id));
 
-		edit_custom_comcode_tag($resource_id,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
+		$tag=edit_custom_comcode_tag($resource_id,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,true);
 
 		return true;
 	}

@@ -87,6 +87,7 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 		$notes=$this->_default_property_str($properties,'notes');
 		$percentage=$this->_default_property_int($properties,'percentage');
 		$open_time=$this->_default_property_int_null($properties,'open_time');
+		if (is_null($open_time)) $open_time=time();
 		$close_time=$this->_default_property_int_null($properties,'close_time');
 		$num_winners=$this->_default_property_int($properties,'num_winners');
 		$redo_time=$this->_default_property_int($properties,'redo_time');
@@ -172,6 +173,7 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 		$notes=$this->_default_property_str($properties,'notes');
 		$percentage=$this->_default_property_int($properties,'percentage');
 		$open_time=$this->_default_property_int_null($properties,'open_time');
+		if (is_null($open_time)) $open_time=time();
 		$close_time=$this->_default_property_int_null($properties,'close_time');
 		$num_winners=$this->_default_property_int($properties,'num_winners');
 		$redo_time=$this->_default_property_int($properties,'redo_time');

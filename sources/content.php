@@ -201,9 +201,14 @@ function content_get_details($content_type,$content_id)
 		$submitter_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	}
 
-	list($zone,$url_bits,$hash)=page_link_decode(str_replace('_WILD',$content_id,$cma_info['view_pagelink_pattern']));
-	$content_url=build_url($url_bits,$zone,NULL,false,false,false,$hash);
-	$content_url_email_safe=build_url($url_bits,$zone,NULL,false,false,true,$hash);
+	$content_url=mixed();
+	$content_url_email_safe=mixed();
+	if (!is_null($cma_info['view_pagelink_pattern']))
+	{
+		list($zone,$url_bits,$hash)=page_link_decode(str_replace('_WILD',$content_id,$cma_info['view_pagelink_pattern']));
+		$content_url=build_url($url_bits,$zone,NULL,false,false,false,$hash);
+		$content_url_email_safe=build_url($url_bits,$zone,NULL,false,false,true,$hash);
+	}
 
 	return array($content_title,$submitter_id,$cma_info,$content_row,$content_url,$content_url_email_safe);
 }

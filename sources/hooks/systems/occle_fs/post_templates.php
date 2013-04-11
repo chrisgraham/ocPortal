@@ -101,7 +101,7 @@ class Hook_occle_fs_post_templates extends resource_fs_base
 			'label'=>$row['t_title'],
 			'text'=>$row['t_text'],
 			'forum_multi_code'=>$row['t_forum_multi_code'],
-			'use_default_forums'=>$row['use_default_forums'],
+			'use_default_forums'=>$row['t_use_default_forums'],
 		);
 	}
 

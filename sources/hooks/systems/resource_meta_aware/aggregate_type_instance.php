@@ -46,7 +46,7 @@ class Hook_resource_meta_aware_aggregate_type_instance
 			'category_type'=>NULL, // For category permissions
 			'category_is_string'=>true,
 
-			'title_field'=>'aggregate_name',
+			'title_field'=>'aggregate_label',
 			'title_field_dereference'=>false,
 
 			'view_pagelink_pattern'=>NULL,

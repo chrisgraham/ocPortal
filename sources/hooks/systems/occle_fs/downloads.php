@@ -65,7 +65,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	function folder_add($filename,$path,$properties)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-		if ($category=='') return false; // Can't create more than one root
+		if ($category=='') $category=strval(db_get_first_id());/*return false;*/ // Can't create more than one root
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -240,7 +240,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		}
 		$cost=$this->_default_property_int($properties,'cost');
 		$submitter_gets_points=$this->_default_property_int($properties,'submitter_gets_points');
-		$licence=$this->_default_property_int_null($properties,'licence');
+		$licence=$this->_default_property_int_null($properties,'licence'); // TODO
 		$add_date=$this->_default_property_int_null($properties,'add_date');
 		$num_downloads=$this->_default_property_int($properties,'num_downloads');
 		$views=$this->_default_property_int($properties,'views');
@@ -285,11 +285,11 @@ class Hook_occle_fs_downloads extends resource_fs_base
 			'notes'=>$row['notes'],
 			'original_filename'=>$row['original_filename'],
 			'file_size'=>$row['file_size'],
-			'cost'=>$row['cost'],
-			'submitter_gets_points'=>$row['submitter_gets_points'],
-			'licence'=>$row['licence'],
+			'cost'=>$row['download_cost'],
+			'submitter_gets_points'=>$row['download_submitter_gets_points'],
+			'licence'=>$row['download_licence'],
 			'num_downloads'=>$row['num_downloads'],
-			'views'=>$row['views'],
+			'views'=>$row['download_views'],
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,
 			'submitter'=>$row['submitter'],
@@ -309,7 +309,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
 		require_code('downloads2');
@@ -336,7 +336,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		}
 		$cost=$this->_default_property_int($properties,'cost');
 		$submitter_gets_points=$this->_default_property_int($properties,'submitter_gets_points');
-		$licence=$this->_default_property_int_null($properties,'licence');
+		$licence=$this->_default_property_int_null($properties,'licence'); // TODO
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$num_downloads=$this->_default_property_int($properties,'num_downloads');
 		$views=$this->_default_property_int($properties,'views');

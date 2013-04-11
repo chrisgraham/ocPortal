@@ -70,7 +70,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			'aggregate_type'=>'ID_TEXT',
 			'other_parameters'=>'LONG_TEXT',
 			'add_time'=>'TIME',
-			'edit_time'=>'TIME',
+			'edit_time'=>'?TIME',
 		));
 		$GLOBALS['SITE_DB']->create_index('aggregate_type_instances','aggregate_lookup',array('aggregate_label'/*,'aggregate_type' key would be too long*/));
 	}
@@ -164,7 +164,13 @@ class Module_admin_aggregate_types extends standard_crud_module
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),'aggregate_label',$aggregate_label,true));
+		if ($aggregate_type=='')
+		{
+			$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),'aggregate_label',$aggregate_label,true));
+		} else
+		{
+			$hidden->attach(form_input_hidden('aggregate_label',$aggregate_label));
+		}
 
 		$parameters=find_aggregate_type_parameters($aggregate_type);
 		foreach ($parameters as $parameter)

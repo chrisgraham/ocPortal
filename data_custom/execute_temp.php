@@ -53,20 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$matches=array();
-	$num_matches=preg_match_all('#^{?([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}}?$#',$text,$matches);
-	if ($num_matches!=0)
-	{
-		require_code('resource_fs');
-		$guids=array();
-		for ($i=0;$i<$num_matches;$i++)
-		{
-			$guids[]=$matches[0][$i];
-		}
-		$mappings=find_ids_via_guids($guid);
-		foreach ($mappings as $guid=>$id)
-		{
-			$text=str_replace($guid,$id,$text);
-		}
-	}
+	require_code('resource_fs');
+	generate_resourcefs_moniker('aggregate_type_instance',strval(134));
 }

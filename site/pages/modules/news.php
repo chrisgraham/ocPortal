@@ -123,7 +123,7 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_table('news_rss_cloud',array(
 				'id'=>'*AUTO',
 				'rem_procedure'=>'ID_TEXT',
-				'rem_port'=>'SHORT_INTEGER',
+				'rem_port'=>'INTEGER',
 				'rem_path'=>'SHORT_TEXT',
 				'rem_protocol'=>'ID_TEXT',
 				'rem_ip'=>'IP',

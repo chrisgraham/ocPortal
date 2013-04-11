@@ -29,16 +29,12 @@ class Hook_sw_catalogues
 	function get_current_settings()
 	{
 		$settings=array();
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'hosted'));
-		$settings['have_default_catalogues_hosted']=is_null($test)?'0':'1';
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'projects'));
 		$settings['have_default_catalogues_projects']=is_null($test)?'0':'1';
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'faqs'));
 		$settings['have_default_catalogues_faqs']=is_null($test)?'0':'1';
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'links'));
 		$settings['have_default_catalogues_links']=is_null($test)?'0':'1';
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'modifications'));
-		$settings['have_default_catalogues_modifications']=is_null($test)?'0':'1';
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'contacts'));
 		$settings['have_default_catalogues_contacts']=is_null($test)?'0':'1';
 		return $settings;
@@ -59,16 +55,12 @@ class Hook_sw_catalogues
 
 		require_lang('catalogues');
 		$fields=new ocp_tempcode();
-		if ($current_settings['have_default_catalogues_hosted']=='1')
-			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_HOSTING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_HOSTING'),'have_default_catalogues_hosting',$field_defaults['have_default_catalogues_hosting']=='1'));
 		if ($current_settings['have_default_catalogues_projects']=='1')
 			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_PROJECTS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_PROJECTS'),'have_default_catalogues_projects',$field_defaults['have_default_catalogues_projects']=='1'));
 		if ($current_settings['have_default_catalogues_faqs']=='1')
 			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_FAQS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_FAQS'),'have_default_catalogues_faqs',$field_defaults['have_default_catalogues_faqs']=='1'));
 		if ($current_settings['have_default_catalogues_links']=='1')
 			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_LINKS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_LINKS'),'have_default_catalogues_links',$field_defaults['have_default_catalogues_links']=='1'));
-		if ($current_settings['have_default_catalogues_modifications']=='1')
-			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_MODIFICATIONS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_MODIFICATIONS'),'have_default_catalogues_modifications',$field_defaults['have_default_catalogues_modifications']=='1'));
 		if ($current_settings['have_default_catalogues_contacts']=='1')
 			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CATALOGUES_CONTACTS'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CATALOGUES_CONTACTS'),'have_default_catalogues_contacts',$field_defaults['have_default_catalogues_contacts']=='1'));
 		return $fields;
@@ -81,16 +73,6 @@ class Hook_sw_catalogues
 	{
 		if (!addon_installed('catalogues')) return;
 
-		if (post_param_integer('have_default_catalogues_hosting',0)==0)
-		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'hosted'));
-			if (!is_null($test))
-			{
-				require_code('catalogues2');
-				actual_delete_catalogue('hosted');
-				delete_menu_item_simple('_SEARCH:catalogues:type=index:id=hosted');
-			}
-		}
 		if (post_param_integer('have_default_catalogues_projects',0)==0)
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'projects'));
@@ -123,16 +105,6 @@ class Hook_sw_catalogues
 				require_code('catalogues2');
 				actual_delete_catalogue('links');
 				delete_menu_item_simple('_SEARCH:catalogues:type=index:id=links');
-			}
-		}
-		if (post_param_integer('have_default_catalogues_modifications',0)==0)
-		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'modifications'));
-			if (!is_null($test))
-			{
-				require_code('catalogues2');
-				actual_delete_catalogue('modifications');
-				delete_menu_item_simple('_SEARCH:catalogues:type=index:id=modifications');
 			}
 		}
 		if (post_param_integer('have_default_catalogues_contacts',0)==0)

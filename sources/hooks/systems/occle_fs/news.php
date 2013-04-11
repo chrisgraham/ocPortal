@@ -108,7 +108,7 @@ class Hook_occle_fs_news extends resource_fs_base
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
-		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
 		require_code('news2');
 
@@ -239,16 +239,16 @@ class Hook_occle_fs_news extends resource_fs_base
 
 		return array(
 			'label'=>$row['title'],
-			'summary'=>$row['summary'],
-			'article'=>$row['article'],
+			'summary'=>$row['news'],
+			'article'=>$row['news_article'],
 			'author'=>$row['author'],
 			'validated'=>$row['validated'],
 			'allow_rating'=>$row['allow_rating'],
 			'allow_comments'=>$row['allow_comments'],
 			'allow_trackbacks'=>$row['allow_trackbacks'],
 			'notes'=>$row['notes'],
-			'views'=>$row['views'],
-			'image'=>$row['image'],
+			'views'=>$row['news_views'],
+			'image'=>$row['news_image'],
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,
 			'submitter'=>$row['submitter'],
@@ -268,8 +268,10 @@ class Hook_occle_fs_news extends resource_fs_base
 	function file_edit($filename,$path,$properties)
 	{
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
-		list($category_content_type,$category)=$this->folder_convert_filename_to_id($path);
+		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if ($category=='') return false;
 
 		require_code('news2');
 

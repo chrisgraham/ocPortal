@@ -1088,8 +1088,10 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
  * @param  ?MEMBER		The gallery owner (NULL: nobody)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT		The name
  */
-function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL,$meta_keywords='',$meta_description='')
+function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL,$meta_keywords='',$meta_description='',$uniqify=false)
 {
 	if (is_null($add_date)) $add_date=time();
 
@@ -1099,7 +1101,16 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 	if (!$skip_exists_check)
 	{
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$name));
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$name.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+			}
+		}
 	}
 
 	$GLOBALS['SITE_DB']->query_insert('galleries',
@@ -1144,6 +1155,8 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 		decache('side_galleries');
 		decache('main_personal_galleries_list');
 	}
+
+	return $name;
 }
 
 /**
@@ -1171,8 +1184,10 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
  * @param  ?MEMBER		The gallery owner (NULL: nobody)
  * @param  ?TIME			The add time (NULL: now)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT		The name
  */
-function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL,$add_time=NULL,$null_is_literal=false)
+function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL,$add_time=NULL,$null_is_literal=false,$uniqify=false)
 {
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','misc',$name,$fullname);
@@ -1194,7 +1209,16 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$name));
-		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+		if (!is_null($test))
+		{
+			if ($uniqify)
+			{
+				$name.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+			}
+		}
 
 		seo_meta_erase_storage('gallery',$old_name);
 		$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$name),array('cat'=>$old_name));
@@ -1277,6 +1301,8 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),$fullname,get_value('comment_forum__galleries'));
+
+	return $name;
 }
 
 /**

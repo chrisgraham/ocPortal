@@ -54,12 +54,13 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
 		require_code('aggregate_types');
 
 		$aggregate_type=$this->_default_property_str($properties,'aggregate_type');
+		if ($aggregate_type=='') $aggregate_type='example';
 		$_other_parameters=$this->_default_property_str($properties,'other_parameters');
 		$other_parameters=($_other_parameters=='')?array():unserialize($_other_parameters);
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 
-		$id=add_aggregate_type_instance($label,$aggregate_type,$other_parameters,$add_time,$edit_time);
+		$id=add_aggregate_type_instance($label,$aggregate_type,$other_parameters,$add_time,$edit_time,true,true);
 		return strval($id);
 	}
 
@@ -82,8 +83,8 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
 			'label'=>$row['aggregate_label'],
 			'aggregate_type'=>$row['aggregate_type'],
 			'other_parameters'=>$row['other_parameters'],
-			'add_date'=>$row['add_date'],
-			'edit_date'=>$row['edit_date'],
+			'add_date'=>$row['add_time'],
+			'edit_date'=>$row['edit_time'],
 		);
 	}
 
@@ -104,10 +105,11 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
 
 		$label=$this->_default_property_str($properties,'label');
 		$aggregate_type=$this->_default_property_str($properties,'aggregate_type');
+		if ($aggregate_type=='') $aggregate_type='example';
 		$_other_parameters=$this->_default_property_str($properties,'other_parameters');
 		$other_parameters=($_other_parameters=='')?array():unserialize($_other_parameters);
 
-		edit_aggregate_type_instance(intval($resource_id),$label,$aggregate_type,$other_parameters);
+		edit_aggregate_type_instance(intval($resource_id),$label,$aggregate_type,$other_parameters,true);
 
 		return true;
 	}

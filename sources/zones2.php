@@ -95,8 +95,10 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
  * @param  BINARY			Whether the zone is wide
  * @param  BINARY			Whether the zone requires a session for pages to be used
  * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
+ * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT		The name
  */
-function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$displayed_in_menu=1)
+function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$displayed_in_menu=1,$uniqify=false)
 {
 	require_code('type_validation');
 	if (!is_alphanumeric($zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
@@ -109,7 +111,13 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 	{
 		if (file_exists(get_file_base().'/'.$zone)) // Ok it's here completely, so we can't create
 		{
-			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone)));
+			if ($uniqify)
+			{
+				$zone.='_'.uniqid('');
+			} else
+			{
+				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone)));
+			}
 		} else // In DB, not on disk, so we'll just delete DB record
 		{
 			persistent_cache_delete(array('ZONE',$zone));
@@ -120,6 +128,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 	if (!file_exists(get_file_base().'/'.$zone))
 	{
 		// Create structure
+		require_code('abstract_file_manager');
 		afm_make_directory($zone.'/pages/minimodules_custom',true,true);
 		afm_make_directory($zone.'/pages/minimodules',false,true);
 		afm_make_directory($zone.'/pages/modules_custom',true,true);
@@ -171,6 +180,8 @@ END;
 	}
 
 	log_it('ADD_ZONE',$zone);
+
+	return $zone;
 }
 
 /**
