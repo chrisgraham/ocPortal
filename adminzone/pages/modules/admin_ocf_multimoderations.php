@@ -168,34 +168,43 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 		foreach ($rows as $row)
 		{
 			$pin_state=do_lang_tempcode('NA_EM');
-			switch ($row['mm_pin_state'])
+			if (!is_null($row['mm_pin_state']))
 			{
-				case 0:
-					$pin_state=do_lang_tempcode('UNPIN_TOPIC');
-					break;
-				case 1:
-					$pin_state=do_lang_tempcode('PIN_TOPIC');
-					break;
+				switch ($row['mm_pin_state'])
+				{
+					case 0:
+						$pin_state=do_lang_tempcode('UNPIN_TOPIC');
+						break;
+					case 1:
+						$pin_state=do_lang_tempcode('PIN_TOPIC');
+						break;
+				}
 			}
 			$open_state=do_lang_tempcode('NA_EM');
-			switch ($row['mm_open_state'])
+			if (!is_null($row['mm_open_state']))
 			{
-				case 0:
-					$open_state=do_lang_tempcode('CLOSE_TOPIC');
-					break;
-				case 1:
-					$open_state=do_lang_tempcode('OPEN_TOPIC');
-					break;
+				switch ($row['mm_open_state'])
+				{
+					case 0:
+						$open_state=do_lang_tempcode('CLOSE_TOPIC');
+						break;
+					case 1:
+						$open_state=do_lang_tempcode('OPEN_TOPIC');
+						break;
+				}
 			}
 			$sink_state=do_lang_tempcode('NA_EM');
-			switch ($row['mm_sink_state'])
+			if (!is_null($row['mm_sink_state']))
 			{
-				case 0:
-					$sink_state=do_lang_tempcode('SINK_TOPIC');
-					break;
-				case 1:
-					$sink_state=do_lang_tempcode('UNSINK_TOPIC');
-					break;
+				switch ($row['mm_sink_state'])
+				{
+					case 0:
+						$sink_state=do_lang_tempcode('SINK_TOPIC');
+						break;
+					case 1:
+						$sink_state=do_lang_tempcode('UNSINK_TOPIC');
+						break;
+				}
 			}
 
 			$destination=is_null($row['mm_move_to'])?NULL:$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$row['mm_move_to']));
