@@ -98,13 +98,17 @@ function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true,$guid=
  */
 function get_week_number_for($timestamp,$no_year=false)
 {
+	$ssw=(get_option('ssw')=='1');
+
 	$format=$no_year?'W':'o-W';
-	$w=intval(date('w',$timestamp));
-	if (get_option('ssw')=='0')
+	if (!$ssw)
 	{
-		return date($format,$timestamp);
+		$ret=date($format,$timestamp);
+	} else // For SSW: week starts one day earlier (inconsistent with other PHP date stuff!), so we actually push 6 days of the week back onto the previous one (where the Sunday is)
+	{
+		$ret=date($format,$timestamp-60*60*24*6);
 	}
-	return date($format,$timestamp-60*60*24); // For SSW: week starts one day earlier, so first day of week actually pushes back onto end of previous one
+	return $ret;
 }
 
 /**
@@ -116,14 +120,18 @@ function get_week_number_for($timestamp,$no_year=false)
  */
 function date_from_week_of_year($year,$week)
 {
+	$ssw=(get_option('ssw')=='1');
+
 	$basis=strval($year).'-'.str_pad(strval($week),2,'0',STR_PAD_LEFT);
-	$time=mktime(0,0,0,1,1,$year);
-	for ($i=($week==52)?300/*conditional to stop it finding week as previous year overlap week of same number*/:0;$i<366;$i++)
+	$time=mktime(12,0,0,1,1,$year);
+	for ($i=($week==52)?350/*conditional to stop it finding week as previous year overlap week of same number*/:-7;$i<366;$i++)
 	{
 		$new_time=$time+60*60*24*$i;
-		if (((date('w',$new_time)=='1') && (get_option('ssw')=='0')) || ((date('w',$new_time)=='0') && (get_option('ssw')=='1')))
+		$w=intval(date('w',$new_time));
+		if ((($ssw) && ($w==0)) || ((!$ssw) && ($w==1)))
 		{
 			$test=get_week_number_for($new_time);
+
 			if ($test==$basis)
 			{
 				$exploded=explode('-',date('m-d-Y',$new_time));

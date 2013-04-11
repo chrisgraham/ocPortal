@@ -53,6 +53,13 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('resource_fs');
-	generate_resourcefs_moniker('aggregate_type_instance',strval(134));
+	set_option('ssw','1');
+
+	$time=mktime(12,0,0,4,14,2013);
+	@print(date('o-W',$time));
+	require_code('calendar');
+	@print(' xxx '.get_week_number_for($time));
+	@var_dump(date_from_week_of_year(2013,15));
+	exit();
+	//@print(date('o-W',mktime(1,1,1,12,31,2012)));
 }
