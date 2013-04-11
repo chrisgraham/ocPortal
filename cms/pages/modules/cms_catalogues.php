@@ -573,7 +573,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map);
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
 			{

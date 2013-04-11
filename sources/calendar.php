@@ -123,23 +123,39 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	{
 		case 'daily':
 			$dif_day=1;
-			if ($dif>60*60*24*10)
-				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)));
+			if (($dif>60*60*24*10) && ($mask_len==0))
+			{
+				$zoom=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)));
+				$start_day+=$zoom;
+				if (!is_null($end_day)) $end_day+=$zoom;
+			}
 			break;
 		case 'weekly':
 			$dif_day=7;
-			if ($dif>60*60*24*70)
-				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)))-70;
+			if (($dif>60*60*24*70) && ($mask_len==0))
+			{
+				$zoom=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)))-70;
+				$start_day+=$zoom;
+				if (!is_null($end_day)) $end_day+=$zoom;
+			}
 			break;
 		case 'monthly':
 			$dif_month=1;
-			if ($dif>60*60*24*31*10)
-				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*31.0)))-10;
+			if (($dif>60*60*24*31*10) && ($mask_len==0))
+			{
+				$zoom=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*31.0)))-10;
+				$start_month+=$zoom;
+				if (!is_null($end_day)) $end_day+=$zoom;
+			}
 			break;
 		case 'yearly':
 			$dif_year=1;
-			if ($dif>60*60*24*365*10)
-				$start_year+=$dif_year*intval(floor(floatval($dif)/(60.0*60.0*24.0*365.0)))-1;
+			if (($dif>60*60*24*365*10) && ($mask_len==0))
+			{
+				$zoom=$dif_year*intval(floor(floatval($dif)/(60.0*60.0*24.0*365.0)))-1;
+				$start_year+=$zoom;
+				if (!is_null($end_day)) $end_day+=$zoom;
+			}
 			break;
 	}
 

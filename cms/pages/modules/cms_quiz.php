@@ -330,7 +330,7 @@ class Module_cms_quiz extends standard_aed_module
 		$name=post_param('name');
 		$id=add_quiz($name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter);
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
 				syndicate_described_activity('quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
