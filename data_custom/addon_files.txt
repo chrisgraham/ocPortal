@@ -3721,9 +3721,11 @@ ocportalcom_support_credits
  - themes/default/images_custom/tracker/popular.png
  - themes/default/images_custom/tracker/recent.gif
  - themes/default/images_custom/tracker/tutorials.png
+ - themes/default/images_custom/tracker/sponsored.gif
  - data_custom/tracker.php
  - sources_custom/hooks/systems/symbols/MANTIS_TOTAL.php
  - sources_custom/hooks/systems/symbols/MANTIS_WEEK_ACTIVITY.php
+ - sources_custom/hooks/systems/symbols/MANTIS_SPONSOR_WEEK_ACTIVITY.php
  - sources_custom/mantis.php
  - sources_custom/miniblocks/main_mantis_tracker.php
 

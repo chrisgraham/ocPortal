@@ -397,7 +397,7 @@ class Module_cms_blogs extends standard_crud_module
 		$main_news_category=$GLOBALS['SITE_DB']->query_select_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			$is_blog=true;
 

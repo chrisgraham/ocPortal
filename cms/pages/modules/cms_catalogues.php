@@ -597,7 +597,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_data['add_time'],$meta_data['submitter'],NULL,$meta_data['views']);
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
 			{

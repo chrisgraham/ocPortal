@@ -444,7 +444,7 @@ class Module_cms_news extends standard_crud_module
 		$main_news_category=$GLOBALS['SITE_DB']->query_select_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 

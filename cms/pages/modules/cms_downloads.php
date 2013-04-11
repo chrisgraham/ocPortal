@@ -699,7 +699,7 @@ class Module_cms_downloads extends standard_crud_module
 			$this->do_next_description=do_lang_tempcode('DOWNLOAD_ADDED',escape_html($add_image_url->evaluate()));
 		}
 
-		if ($validated==1)
+		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
 			{
