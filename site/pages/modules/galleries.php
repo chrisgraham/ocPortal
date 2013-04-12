@@ -580,9 +580,9 @@ class Module_galleries
 		{
 			$order='name ASC';
 		}
-		$rows_children=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$cat),'ORDER BY '.$order,200/*reasonable limit*/);
+		$rows_children=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$cat),'ORDER BY '.$order,intval(get_option('subgallery_link_limit'))/*reasonable limit*/);
 		$children=new ocp_tempcode();
-		if (count($rows_children)==200) $rows_children=array(); // Lots of personal galleries. Will need to be reached via member profiles
+		if (count($rows_children)==intval(get_option('subgallery_link_limit'))) $rows_children=array(); // Lots of personal galleries. Will need to be reached via member profiles
 		foreach ($rows_children as $child)
 		{
 			if (substr($child['name'],0,9)=='download_') continue;
@@ -873,7 +873,7 @@ class Module_galleries
 		$where=db_string_equal_to('cat',$cat);
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-		$_max_entries=get_option('flow_mode_max');
+		$_max_entries=get_option('gallery_entries_flow_per_page');
 		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
 		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,$max_entries,NULL,false,true);
 		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,$max_entries,NULL,false,true);
@@ -1028,9 +1028,9 @@ class Module_galleries
 		$days=get_param('days','');
 		$image_select=get_param('select','*');
 		$video_select=get_param('video_select','*');
-		$sort=get_param('sort','add_date DESC');
+		$sort=get_param('sort','add_date '.strval(get_option('galleries_default_sort_order')));
 		$ocselect=either_param('active_filter','');
-		$entries=do_block('main_gallery_embed',array('param'=>$filter,'zone'=>'_SELF','sort'=>$sort,'days'=>$days,'max'=>'30','pagination'=>'1','select'=>$image_select,'video_select'=>$video_select,'ocselect'=>$ocselect,'block_id'=>'module'));
+		$entries=do_block('main_gallery_embed',array('param'=>$filter,'zone'=>'_SELF','sort'=>$sort,'days'=>$days,'max'=>strval(get_option('gallery_entries_regular_per_page')),'pagination'=>'1','select'=>$image_select,'video_select'=>$video_select,'ocselect'=>$ocselect,'block_id'=>'module'));
 		inform_non_canonical_parameter('sort');
 		inform_non_canonical_parameter('select');
 		inform_non_canonical_parameter('video_select');
@@ -1598,7 +1598,7 @@ class Module_galleries
 		inform_non_canonical_parameter('select');
 		inform_non_canonical_parameter('video_select');
 
-		$sort=get_param('sort','add_date DESC');
+		$sort=get_param('sort','add_date '.strval(get_option('galleries_default_sort_order')));
 		if ($sort=='random ASC') $sort='add_date ASC';
 		if (($sort!='fixed_random ASC') && ($sort!='average_rating DESC') && ($sort!='average_rating ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC') && ($sort!='title DESC') && ($sort!='title ASC'))
 			log_hack_attack_and_exit('ORDERBY_HACK');

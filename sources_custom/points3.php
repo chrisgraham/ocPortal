@@ -76,8 +76,8 @@ function points_profile($member_id_of,$member_id_viewing)
 	$chargelog_details=new ocp_tempcode();
 	if (has_privilege($member_id_viewing,'view_charge_log'))
 	{
-		$start=get_param_integer('charges_start',0);
-		$max=get_param_integer('charges_max',10);
+		$start=get_param_integer('charge_start',0);
+		$max=get_param_integer('charge_max',intval(get_option('point_logs_per_page')));
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
 		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
@@ -111,7 +111,7 @@ function points_profile($member_id_of,$member_id_viewing)
 
 			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
 		}
-		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'charges_start',$max,'charges_max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort');
+		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'charge_start',$max,'charge_max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort');
 	}
 
 	// Show giving form

@@ -223,7 +223,7 @@ class Module_groups
 		list($sortable,$sort_order)=array('foo','ASC');
 		//-Staff
 		$start=get_param_integer('staff_start',0);
-		$max=get_param_integer('staff_max',50);
+		$max=get_param_integer('staff_max',intval(get_option('important_groups_per_page')));
 		$max_rows=count($_staff);
 		$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS')),$sortables);
 		$staff=new ocp_tempcode();
@@ -248,7 +248,7 @@ class Module_groups
 		foreach ($_ranks as $g_id=>$_rank)
 		{
 			$start=get_param_integer('rank_start_'.strval($g_id),0);
-			$max=get_param_integer('rank_max_'.strval($g_id),50);
+			$max=get_param_integer('rank_max_'.strval($g_id),intval(get_option('important_groups_per_page')));
 			$max_rows=count($_rank);
 			$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS'),do_lang_tempcode('PROMOTION_THRESHOLD')),$sortables);
 			$rank=new ocp_tempcode();
@@ -277,7 +277,7 @@ class Module_groups
 		}
 		//-Others
 		$start=get_param_integer('others_start',0);
-		$max=get_param_integer('others_max',20);
+		$max=get_param_integer('others_max',intval(get_option('normal_groups_per_page')));
 		$map=has_privilege(get_member(),'see_hidden_groups')?array('g_is_private_club'=>1):array('g_is_private_club'=>1,'g_hidden'=>0);
 		$max_rows=count($_others);
 		if ($start>count($_others)) $_others=array();
@@ -376,7 +376,7 @@ class Module_groups
 
 		// Primary members
 		$start=get_param_integer('p_start',0);
-		$max=get_param_integer('p_max',50);
+		$max=get_param_integer('p_max',intval(get_option('important_groups_per_page')));
 		$_primary_members=ocf_get_group_members_raw($id,true,true,false,false,$max,$start);
 		if (count($_primary_members)>0)
 		{

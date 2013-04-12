@@ -541,11 +541,11 @@ function wiki_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 				$where.='p.id<>'.strval($seen);
 			}
 
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,true);
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/,NULL,false,true);
 		} else
 		{
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/);
-			if (count($orphans)<50)
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
+			if (count($orphans)<intval(get_option('general_safety_listing_limit')))
 			{
 				sort_maps_by($orphans,'text_original');
 			}
@@ -583,7 +583,7 @@ function _wiki_show_tree(&$wiki_seen,$select,$id,$breadcrumbs,$title,$use_compou
 
 	$sub_breadcrumbs=($breadcrumbs=='')?($title.' > '):($breadcrumbs.$title.' > ');
 
-	$rows=$GLOBALS['SITE_DB']->query_select('wiki_children',array('*'),array('parent_id'=>$id),'ORDER BY title',300/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('wiki_children',array('*'),array('parent_id'=>$id),'ORDER BY title',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
 	$compound_list=strval($id).',';
 	$_below=new ocp_tempcode();
 	foreach ($rows as $i=>$myrow)
@@ -653,7 +653,7 @@ function get_wiki_page_tree(&$wiki_seen,$page_id=NULL,$breadcrumbs=NULL,$title=N
 	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$page_id));
 
 	// Children of this category
-	$rows=$GLOBALS['SITE_DB']->query_select('wiki_children',array('*'),array('parent_id'=>$page_id),'ORDER BY title',300/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('wiki_children',array('*'),array('parent_id'=>$page_id),'ORDER BY title',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
 	$children[0]['child_count']=count($rows);
 	$breadcrumbs.=' > ';
 	if ($levels!==0)

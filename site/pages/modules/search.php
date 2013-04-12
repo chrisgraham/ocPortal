@@ -636,7 +636,7 @@ class Module_search
 		}
 
 		$start=get_param_integer('search_start',0);
-		$default_max=10;
+		$default_max=intval(get_option('search_results_per_page'));
 		if ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0'))
 		{
 			if (intval(preg_replace('#M$#','',ini_get('memory_limit')))<20) $default_max=5;

@@ -252,13 +252,13 @@ function nice_get_news($it,$only_owned=NULL,$editable_filter=false,$only_in_blog
 	$where=is_null($only_owned)?'1':'submitter='.strval($only_owned);
 	if ($only_in_blog)
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT n.* FROM '.get_table_prefix().'news n JOIN '.get_table_prefix().'news_categories c ON c.id=n.news_category AND '.$where.' AND nc_owner IS NOT NULL ORDER BY date_and_time DESC',300/*reasonable limit*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT n.* FROM '.get_table_prefix().'news n JOIN '.get_table_prefix().'news_categories c ON c.id=n.news_category AND '.$where.' AND nc_owner IS NOT NULL ORDER BY date_and_time DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
 	} else
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news WHERE '.$where.' ORDER BY date_and_time DESC',300/*reasonable limit*/,NULL,false,true);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news WHERE '.$where.' ORDER BY date_and_time DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/,NULL,false,true);
 	}
 
-	if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
+	if (count($rows)==intval(get_option('general_safety_listing_limit'))) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))),'warn');
 
 	$out=new ocp_tempcode();
 	foreach ($rows as $myrow)

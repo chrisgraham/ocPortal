@@ -195,7 +195,7 @@ class Module_awards
 		if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		$start=get_param_integer('award_start',0);
-		$max=get_param_integer('award_max',20);
+		$max=get_param_integer('award_max',intval(get_option('awarded_items_per_page')));
 		$title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
 		$description=paragraph(get_translated_tempcode($award_type_row['a_description']),'grdgdfghdfgodfs');
 

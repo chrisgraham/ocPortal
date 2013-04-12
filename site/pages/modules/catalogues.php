@@ -1139,7 +1139,7 @@ class Module_catalogues
 		}
 
 		// Get category contents
-		$subcategories=do_block('main_multi_content',array('param'=>'catalogue_category','filter'=>strval($id).'>','efficient'=>'0','zone'=>'_SELF','sort'=>'title','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','render_if_empty'=>'0'));
+		$subcategories=do_block('main_multi_content',array('param'=>'catalogue_category','filter'=>strval($id).'>','efficient'=>'0','zone'=>'_SELF','sort'=>'title','max'=>strval(get_option('catalogue_subcats_per_page')),'no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','render_if_empty'=>'0'));
 		if (get_option('catalogues_subcat_narrowin')=='1')
 		{
 			$filter=strval($id).'*';
@@ -1148,7 +1148,7 @@ class Module_catalogues
 			$filter=strval($id);
 		}
 		$ocselect=either_param('active_filter','');
-		$entries=do_block('main_cc_embed',array('param'=>$filter,'zone'=>'_SELF','max'=>'30','pagination'=>'1','sorting'=>'1','ocselect'=>$ocselect,'block_id'=>'module'));
+		$entries=do_block('main_cc_embed',array('param'=>$filter,'zone'=>'_SELF','max'=>strval(get_option('catalogue_entries_per_page')),'pagination'=>'1','sorting'=>'1','ocselect'=>$ocselect,'block_id'=>'module'));
 
 		// Render
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array(

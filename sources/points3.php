@@ -79,7 +79,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	if (has_privilege($member_id_viewing,'view_charge_log'))
 	{
 		$start=get_param_integer('charge_start',0);
-		$max=get_param_integer('charge_max',10);
+		$max=get_param_integer('charge_max',intval(get_option('point_logs_per_page')));
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
 		$test=explode(' ',get_param('charge_sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
@@ -195,7 +195,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 	$where=array('gift_'.$type=>$member_id_of);
 	if ($type=='from') $where['anonymous']=0;
 	$start=get_param_integer('gift_start_'.$type,0);
-	$max=get_param_integer('gift_max_'.$type,10);
+	$max=get_param_integer('gift_max_'.$type,intval(get_option('point_logs_per_page')));
 	$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
 	$test=explode(' ',get_param('gift_sort_'.$type,'date_and_time DESC'));
 	if (count($test)==1) $test[1]='DESC';
