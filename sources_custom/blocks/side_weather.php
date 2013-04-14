@@ -102,9 +102,9 @@ class Block_side_weather
 
 				if (preg_match('#^\-?\d+(\.\d+)?,\-?\d+(\.\d+)?$#',$loc_code)!=0)
 				{
-					$result=http_download_file('http://where.yahooapis.com/geocode?flags=J&gflags=R&location='.urlencode($loc_code));
+					$result=http_download_file('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.placefinder%20where%20text%3D%22'.urlencode($loc_code).'&format=json&diagnostics=true&callback=cbfunc');
 
-					if (preg_match('#"woeid":"(\d+)"#',$result,$matches)!=0)
+					if (preg_match('#"woeid":\s*"(\d+)"#',$result,$matches)!=0)
 					{
 						$loc_code=$matches[1];
 					} else return new ocp_tempcode();

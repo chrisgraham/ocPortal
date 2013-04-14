@@ -53,6 +53,7 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 	$category=get_translated_text($news_cat_row['nc_title']);
 	if ($row['news_image']!='')
 	{
+		require_code('images');
 		$img_raw=$row['news_image'];
 		if (url_is_local($img_raw)) $img_raw=get_base_url().'/'.$img_raw;
 		$img=do_image_thumb($img_raw,$category,false);

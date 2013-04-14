@@ -258,6 +258,7 @@ class Block_main_news
 				{
 					$img_raw=$myrow['news_image'];
 					if (url_is_local($img_raw)) $img_raw=get_base_url().'/'.$img_raw;
+					require_code('images');
 					$img=do_image_thumb($img_raw,$category,false);
 				} else
 				{
