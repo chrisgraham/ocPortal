@@ -131,9 +131,9 @@ function get_exif_image_caption($path,$filename)
 
 	$file_pointer=fopen($path,'rb');
 
-	if (($comments=='') && ($file_pointer!==false)) //Attempt XMP
+	if (($comments=='') && ($file_pointer!==false)) // Attempt XMP
 	{
-		$file_cap100=fread($file_pointer,102400); //Read first 100k
+		$file_cap100=fread($file_pointer,102400); // Read first 100k
 
 		$x_start=strpos($file_cap100,'<x:xmpmeta');
 		$x_end=strpos($file_cap100,'</x:xmpmeta');
@@ -146,18 +146,18 @@ function get_exif_image_caption($path,$filename)
 		{
 			$get_result=array();
 
-			preg_match('/<photoshop:Headline>(.*)<\/photoshop:Headline>/',$file_cap,$get_result); //Headline
+			preg_match('/<photoshop:Headline>(.*)<\/photoshop:Headline>/',$file_cap,$get_result); // Headline
 			if (array_key_exists(1,$get_result))
 				$comments=$get_result[1];
 			else
 			{
-				preg_match('/<dc:title[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:title>/',$file_cap,$get_result); //Title
+				preg_match('/<dc:title[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:title>/',$file_cap,$get_result); // Title
 				if (array_key_exists(1,$get_result))
 				{
 					$comments=$get_result[1];
 				} else
 				{
-					preg_match('/<dc:description[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:description>/',$file_cap,$get_result); //Description
+					preg_match('/<dc:description[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:description>/',$file_cap,$get_result); // Description
 					if (array_key_exists(1,$get_result))
 						$comments=$get_result[1];
 				}
@@ -166,7 +166,7 @@ function get_exif_image_caption($path,$filename)
 
 		fclose($file_pointer);
 	}
-	if ($comments=='') //If XMP fails, attempt EXIF
+	if ($comments=='') // If XMP fails, attempt EXIF
 	{
 		$meta_data=@exif_read_data($path);
 
@@ -189,7 +189,7 @@ function get_exif_image_caption($path,$filename)
 			}
 		}
 	}
-	if ($comments=='') //IF XMP and EXIF fail, attempt IPTC binary
+	if ($comments=='') // IF XMP and EXIF fail, attempt IPTC binary
 	{
 		if ((function_exists('iptcparse')) && (function_exists('getimagesize')))
 		{
@@ -201,17 +201,17 @@ function get_exif_image_caption($path,$filename)
 
 				if (is_array($meta_data2))
 				{
-					if (array_key_exists('2#105',$meta_data2)) //Headline 256 bytes
+					if (array_key_exists('2#105',$meta_data2)) // Headline 256 bytes
 					{
 						if (array_key_exists(0,$meta_data2['2#105']))
 							$comments=$meta_data2['2#105'][0];
 					}
-					elseif (array_key_exists('2#121',$meta_data2)) //Local-Caption 256 bytes
+					elseif (array_key_exists('2#121',$meta_data2)) // Local-Caption 256 bytes
 					{
 						if (array_key_exists(0,$meta_data2['2#121']))
 							$comments=$meta_data2['2#121'][0];
 					}
-					elseif (array_key_exists('2#120',$meta_data2)) //Caption-Abstract (AKA description) 2000 bytes
+					elseif (array_key_exists('2#120',$meta_data2)) // Caption-Abstract (AKA description) 2000 bytes
 					{
 						if (array_key_exists(0,$meta_data2['2#120']))
 							$comments=$meta_data2['2#120'][0];

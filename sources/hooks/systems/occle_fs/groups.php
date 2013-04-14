@@ -26,6 +26,52 @@ class Hook_occle_fs_groups extends resource_fs_base
 	var $file_resource_type='member';
 
 	/**
+	 * Standard modular function for seeing how many resources are. Useful for determining whether to do a full rebuild.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @return integer		How many resources there are
+	 */
+	function get_resources_count($resource_type)
+	{
+		switch ($resource_type)
+		{
+			case 'member':
+				return $GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');
+
+			case 'group':
+				return $GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
+		}
+		return 0;
+	}
+
+	/**
+	 * Standard modular function for searching for a resource by label.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @param  LONG_TEXT		The resource label
+	 * @return array			A list of resource IDs
+	 */
+	function find_resource($resource_type,$label)
+	{
+		switch ($resource_type)
+		{
+			case 'member':
+				$ret=$GLOBALS['FORUM_DB']->query_select('f_members',array('m_username'),array('m_username'=>$label));
+				return collapse_1d_complexity('m_username',$ret);
+
+			case 'group':
+				$_ret=$GLOBALS['FORUM_DB']->query_select('f_groups a JOIN '.get_table_prefix().'translate t ON t.id=a.g_name',array('a.id'),array('text_original'=>$label));
+				$ret=array();
+				foreach ($_ret as $r)
+				{
+					$ret[]=strval($r['id']);
+				}
+				return $ret;
+		}
+		return array();
+	}
+
+	/**
 	 * Whether the filesystem hook is active.
 	 *
 	 * @return boolean		Whether it is
@@ -125,7 +171,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	/**
 	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The resource ID (false: error)
@@ -343,7 +389,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 			{
 				foreach ($_groups as $group)
 				{
-					$groups[]=intval($this->remap_portable_as_resource_id('group',$group));
+					$groups[]=intval(remap_portable_as_resource_id('group',$group));
 				}
 			}
 		}
@@ -408,7 +454,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 	/**
 	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
@@ -448,7 +494,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_group_id'),array('gm_member_id'=>intval($resource_id)));
 		foreach ($_groups as $_group)
 		{
-			$groups[]=$this->remap_resource_id_as_portable('group',strval($_group['gm_group_id']));
+			$groups[]=remap_resource_id_as_portable('group',strval($_group['gm_group_id']));
 		}
 
 		$ret=array(

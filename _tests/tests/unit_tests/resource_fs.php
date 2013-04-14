@@ -95,7 +95,7 @@ class resource_fs_test_set extends ocp_test_case
 					$path='test_a/test_b';
 				}
 			}
-			$result=$ob->file_add('test_content.xml',$path,array());
+			$result=$ob->file_add('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path,array());
 			destrictify();
 			$this->assertTrue($result!==false,'Failed to file_add '.$occlefs_hook);
 
@@ -115,7 +115,7 @@ class resource_fs_test_set extends ocp_test_case
 				$this->assertTrue($result!==false,'Failed to folder_load '.$occlefs_hook);
 			}
 
-			$result=$ob->file_load('test_content.xml',$path);
+			$result=$ob->file_load('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path);
 			$this->assertTrue($result!==false,'Failed to file_load '.$occlefs_hook);
 		}
 	}
@@ -132,7 +132,7 @@ class resource_fs_test_set extends ocp_test_case
 				$this->assertTrue($result!==false,'Failed to folder_edit '.$occlefs_hook);
 			}
 
-			$result=$ob->file_edit('test_content.xml',$path,array('label'=>'test_content'));
+			$result=$ob->file_edit('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path,array('label'=>'test_content'));
 			$this->assertTrue($result!==false,'Failed to file_edit '.$occlefs_hook);
 		}
 	}
@@ -149,7 +149,7 @@ class resource_fs_test_set extends ocp_test_case
 				$this->assertTrue($result!==false,'Failed to folder_delete '.$occlefs_hook);
 			}
 
-			$result=$ob->file_delete('test_content.xml',$path);
+			$result=$ob->file_delete('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path);
 			$this->assertTrue($result!==false,'Failed to file_delete '.$occlefs_hook);
 		}
 	}

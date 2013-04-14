@@ -1354,11 +1354,11 @@ class virtual_fs
 		The virtual filesystem is a nested directory structure, where terminals mapping to strings represent OccLE-fs hooks
 			$this->virtual_fs=array(
 				'blah'=>array(),
-			***	'blah2'=>array(
+		***	'blah2'=>array(
 					'foo'=>array(),
 					'foo2'=>array(),
-			***		'foo3'=>array(
-			***PWD***			'bar'=>'members', // 'members' hook is tied into 'bar', rather than an explicit array
+		***		'foo3'=>array(
+		***			'bar'=>'members', // 'members' hook is tied into 'bar', rather than an explicit array
 						'bar2'=>array(),
 					),
 					'foo4'=>array(),
@@ -1370,9 +1370,9 @@ class virtual_fs
 		// Build up the filesystem structure
 		$occlefs_hooks=find_all_hooks('systems','occle_fs');
 		$this->virtual_fs=array();
-		$this->virtual_fs['var']=array();
 		$cma_hooks=find_all_hooks('systems','content_meta_aware')+find_all_hooks('systems','resource_meta_aware');
 		require_code('content');
+		$var=array();
 		foreach (array_keys($cma_hooks) as $hook) // Find 'var' hooks, for content
 		{
 			$cma_ob=get_content_object($hook);
@@ -1381,13 +1381,14 @@ class virtual_fs
 			if (!is_null($occle_fs_hook))
 			{
 				unset($occlefs_hooks[$occle_fs_hook]); // It's under 'var', don't put elsewhere
-				$this->virtual_fs['var'][$occle_fs_hook]=$occle_fs_hook;
+				$var[$occle_fs_hook]=array();
 			}
 		}
 		foreach (array_keys($occlefs_hooks) as $hook) // Other filesystems go directly under the root (not 'root', which is different)
 		{
 			$this->virtual_fs[$hook]=$hook;
 		}
+		$this->virtual_fs['var']=$var;
 
 		$this->pwd=$this->_start_pwd();
 		$this->current_meta=NULL;
@@ -1554,6 +1555,7 @@ class virtual_fs
 	{
 		if (is_null($dir)) $dir=$this->pwd;
 
+		if (count($dir)==0) return true;
 		$filename=array_pop($dir);
 
 		$contents=$this->_get_current_dir_contents($dir); // Look at contents of parent directory
@@ -1595,44 +1597,70 @@ class virtual_fs
 	}
 
 	/**
-	 * Get details of the current meta directory. Mostly returns by reference.
+	 * Get details of the current meta directory.
 	 *
-	 * @param  array				Meta directory
-	 * @param  string				Meta root node
-	 * @param  string				Meta root node type
+	 * @param  array				Meta directory result: returned by reference
+	 * @param  string				Meta root node result: returned by reference
+	 * @param  string				Meta root node type result: returned by reference
 	 * @param  ?array				Directory (NULL: current directory is used)
-	 * @return ~array				Current directory (false: error)
+	 * @return ~array				Current directory contents (false: error)
 	 */
-	function _discern_meta_dir(&$meta_dir,&$meta_root_node,&$meta_root_node_type,$dir=NULL)
+	function _discern_meta_dir(&$meta_dir,&$meta_root_node,&$meta_root_node_type,$target_dir=NULL)
 	{
 		// Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
-		$current_dir=$this->virtual_fs; // Start at the root
-		if (is_null($dir)) $dir=$this->pwd;
-		$meta_dir=$dir;
+		$inspected_dir=$this->_convert_meta_dir_to_detailed_dir($this->virtual_fs); // Start at the root
+		if (is_null($target_dir)) $target_dir=$this->pwd;
+		$meta_dir=$target_dir;
 		$meta_root_node=NULL;
 		$meta_root_node_type=NULL;
 
-		foreach ($dir as $section_no=>$section) // For each component in our path
+		foreach ($target_dir as $section_no=>$section) // For each component in our path
 		{
 			unset($meta_dir[$section_no]); // Okay so we're still not under the meta-dir, so actually this $section_no is not a part of the meta-dir
-			if ((array_key_exists($section,$current_dir)) && (is_array($current_dir[$section]))) // Hard-coded known directory, so we can scan it
-			{
-				$current_dir=$current_dir[$section]; // We will continue on through more possible hard-coded directories, or to find a deeper meta-dir
-			}
-			elseif (array_key_exists($section,$current_dir)) // Known directory, and we've not got to a meta-dir yet -- must therefore be the meta-dir
-			{
-				$meta_root_node=$section;
-				$meta_root_node_type=$current_dir[$section];
-				$current_dir=array();
-				break; // We've found the meta-dir we're under, so we can stop going through now
-			} else
+
+			if (!array_key_exists($section,$inspected_dir))
 			{
 				return false; // Cannot find the directory
+			}
+
+			if (is_array($inspected_dir[$section][4])) // Hard-coded known directory, so we can scan it
+			{
+				$inspected_dir=$this->_convert_meta_dir_to_detailed_dir($inspected_dir[$section][4]); // We will continue on through more possible hard-coded directories, or to find a deeper meta-dir
+			} else // Known directory, and we've not got to a meta-dir yet -- must therefore be the meta-dir
+			{
+				$meta_root_node=$section;
+				$meta_root_node_type=$inspected_dir[$section][4];
+				$inspected_dir=array();
+				break; // We've found the meta-dir we're under, so we can stop going through now
 			}
 		}
 
 		$meta_dir=array_values($meta_dir); // Everything left over needs re-indexing
-		return $current_dir;
+
+		return $inspected_dir;
+	}
+
+	/**
+	 * Fill out a hardcoded meta-dir to use our more detailed internal format.
+	 *
+	 * @param  array				Simple list of directories under here
+	 * @return array				Full detailed directory contents
+	 */
+	function _convert_meta_dir_to_detailed_dir($_inspected_dir)
+	{
+		$inspected_dir=array();
+		foreach ($_inspected_dir as $dir_name=>$contents)
+		{
+			$inspected_dir[$dir_name/*only here for hard-coded dirs*/]=array(
+				$dir_name,
+				OCCLEFS_DIR,
+				NULL,
+				NULL,
+				$contents, // This is only here for hard-coded dirs; it will either be a string (i.e. hook name) or an array (more hard-coded depth to go)
+			);
+		}
+
+		return $inspected_dir;
 	}
 
 	/**

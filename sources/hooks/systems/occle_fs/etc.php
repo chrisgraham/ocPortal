@@ -42,16 +42,20 @@ class Hook_occle_fs_etc
 		$listing=array();
 		foreach (array_keys($CONFIG_OPTIONS_CACHE) as $option)
 		{
+			$value=get_option($option);
+			if (is_null($value)) continue;
+
 			$modification_time=array_key_exists($option,$modification_times)?$modification_times[$option]:NULL;
 
 			$listing[]=array(
 				$option,
 				OCCLEFS_FILE,
-				strlen(get_option($option)),
+				strlen($value),
 				$modification_time,
 			);
 		}
 
+		require_code('resource_fs');
 		$hooks=find_all_hooks('systems','occle_fs_extended_config');
 		foreach (array_keys($hooks) as $hook)
 		{
@@ -60,7 +64,7 @@ class Hook_occle_fs_etc
 			$modification_time=$ob->_get_edit_date();
 
 			$listing[]=array(
-				'_'.$hook.'s',
+				'_'.$hook.'s'.'.'.RESOURCEFS_DEFAULT_EXTENSION,
 				OCCLEFS_FILE,
 				NULL/*don't calculate a filesize*/,
 				$modification_time,
@@ -112,7 +116,7 @@ class Hook_occle_fs_etc
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 
 		$hooks=find_all_hooks('systems','occle_fs_extended_config');
-		$extended_config_filename=preg_replace('#^\_(.*)s$#','${1}',$file_name);
+		$extended_config_filename=preg_replace('#^\_(.*)s'.preg_quote('.'.RESOURCEFS_DEFAULT_EXTENSION,'#').'$#','${1}',$file_name);
 		if (array_key_exists($extended_config_filename,$hooks)) return false;
 
 		delete_config_option($file_name);
@@ -134,7 +138,7 @@ class Hook_occle_fs_etc
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 
 		$hooks=find_all_hooks('systems','occle_fs_extended_config');
-		$extended_config_filename=preg_replace('#^\_(.*)s$#','${1}',$file_name);
+		$extended_config_filename=preg_replace('#^\_(.*)s'.preg_quote('.'.RESOURCEFS_DEFAULT_EXTENSION,'#').'$#','${1}',$file_name);
 		if (array_key_exists($extended_config_filename,$hooks))
 		{
 			require_code('hooks/systems/occle_fs_extended_config/'.filter_naughty($extended_config_filename));
@@ -164,7 +168,7 @@ class Hook_occle_fs_etc
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 
 		$hooks=find_all_hooks('systems','occle_fs_extended_config');
-		$extended_config_filename=preg_replace('#^\_(.*)s$#','${1}',$file_name);
+		$extended_config_filename=preg_replace('#^\_(.*)s'.preg_quote('.'.RESOURCEFS_DEFAULT_EXTENSION,'#').'$#','${1}',$file_name);
 		if (array_key_exists($extended_config_filename,$hooks))
 		{
 			require_code('hooks/systems/occle_fs_extended_config/'.filter_naughty($extended_config_filename));

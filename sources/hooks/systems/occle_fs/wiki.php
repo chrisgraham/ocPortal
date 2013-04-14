@@ -26,6 +26,57 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	var $file_resource_type='wiki_post';
 
 	/**
+	 * Standard modular function for seeing how many resources are. Useful for determining whether to do a full rebuild.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @return integer		How many resources there are
+	 */
+	function get_resources_count($resource_type)
+	{
+		switch ($resource_type)
+		{
+			case 'wiki_post':
+				return $GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)');
+
+			case 'wiki_page':
+				return $GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)');
+		}
+		return 0;
+	}
+
+	/**
+	 * Standard modular function for searching for a resource by label.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @param  LONG_TEXT		The resource label
+	 * @return array			A list of resource IDs
+	 */
+	function find_resource($resource_type,$label)
+	{
+		switch ($resource_type)
+		{
+			case 'wiki_post':
+				$_ret=$GLOBALS['SITE_DB']->query_select('wiki_posts a JOIN '.get_table_prefix().'translate t ON t.id=a.the_message',array('a.id'),array('text_original'=>$label));
+				$ret=array();
+				foreach ($_ret as $r)
+				{
+					$ret[]=strval($r['id']);
+				}
+				return $ret;
+
+			case 'wiki_page':
+				$_ret=$GLOBALS['SITE_DB']->query_select('wiki_pages a JOIN '.get_table_prefix().'translate t ON t.id=a.title',array('a.id'),array('text_original'=>$label));
+				$ret=array();
+				foreach ($_ret as $r)
+				{
+					$ret[]=strval($r['id']);
+				}
+				return $ret;
+		}
+		return array();
+	}
+
+	/**
 	 * Standard modular introspection function.
 	 *
 	 * @return array			The properties available for the resource type
@@ -48,7 +99,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	/**
 	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The resource ID (false: error)
@@ -191,7 +242,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	/**
 	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)

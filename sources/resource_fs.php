@@ -33,6 +33,8 @@ The user knows all of OcCLE-fs as "The ocPortal Repository".
 function init__resource_fs()
 {
 	require_code('occle');
+
+	define('RESOURCEFS_DEFAULT_EXTENSION','ocp');
 }
 
 /**
@@ -67,11 +69,13 @@ ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch via get_re
  *
  * @param  ID_TEXT		The resource type
  * @param  ID_TEXT		The resource ID
- * @param  ?SHORT_TEXT	The (new) label (NULL: lookup for specified resource)
+ * @param  ?LONG_TEXT	The (new) label (NULL: lookup for specified resource)
  * @return array			A triple: The moniker (may be new, or the prior one if the moniker did not need to change), the GUID, the label
  */
 function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 {
+	if (!is_null($label)) $label=substr($label,0,255);
+
 	require_code('content');
 	$resource_object=get_content_object($resource_type);
 	$resource_info=$resource_object->info();
@@ -233,12 +237,14 @@ function find_id_via_moniker($resource_type,$resource_moniker)
  * Find the resource ID from the resource label.
  *
  * @param  ID_TEXT		The resource type
- * @param  SHORT_TEXT	The label
+ * @param  LONG_TEXT		The label
  * @param  ?string		The subpath (NULL: don't care)
  * @return ?ID_TEXT		The ID (NULL: no match)
  */
 function find_id_via_label($resource_type,$resource_label,$subpath=NULL)
 {
+	$resource_label=substr($resource_label,0,255);
+
 	$ids=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_id'),array(
 		'resource_type'=>$resource_type,
 		'resource_label'=>$resource_label,
@@ -303,6 +309,52 @@ function find_id_via_occlefs_filename($resource_type,$filename)
 	$test=$resourcefs_ob->convert_filename_to_id($filename,$resource_type);
 	if (is_null($test)) return NULL;
 	list(,$resource_id)=$test;
+	return $resource_id;
+}
+
+/**
+ * Convert a local ID to something portable.
+ *
+ * @param  ID_TEXT	The resource type
+ * @param  ID_TEXT	The resource ID
+ * @return array		Portable ID details
+ */
+function remap_resource_id_as_portable($resource_type,$resource_id)
+{
+	list($moniker,$guid,$label)=generate_resourcefs_moniker($resource_type,$resource_id);
+
+	$resourcefs_ob=get_resource_occlefs_object($resource_type);
+	$subpath=$resourcefs_ob->search($resource_type,$resource_id,true);
+	if (is_null($subpath)) $subpath='';
+
+	return array(
+		'guid'=>$guid,
+		'label'=>$label,
+		'subpath'=>$subpath,
+		//'moniker'=>$moniker,	Given more effectively with label
+		'id'=>$resource_id // Not used, but useful to have anyway for debugging/manual-reflection
+	);
+}
+
+/**
+ * Convert a portable ID to something local.
+ *
+ * @param  ID_TEXT	The resource type
+ * @param  array		Portable ID details
+ * @return ID_TEXT	The resource ID
+ */
+function remap_portable_as_resource_id($resource_type,$portable)
+{
+	//$resource_id=$portable['id'];	Would not be portable between sites
+
+	// Ideally, find via GUID
+	$resource_id=array_key_exists('guid',$portable)?find_id_via_guid($portable['guid']):NULL;
+	if (!is_null($resource_id)) return $resource_id;
+
+	// Otherwise, use the label
+	$subpath=array_key_exists('subpath',$portable)?$portable['subpath']:'';
+	$resource_id=$this->convert_label_to_id($portable['label'],$subpath,$resource_type);
+
 	return $resource_id;
 }
 
@@ -382,7 +434,7 @@ class resource_fs_base
 	 */
 	function can_accept_filetype($filetype)
 	{
-		if ($filetype!='xml') return array();
+		if ($filetype!=RESOURCEFS_DEFAULT_EXTENSION) return array();
 
 		$ret=array();
 		if (!is_null($this->folder_resource_type))
@@ -482,14 +534,14 @@ class resource_fs_base
 	/**
 	 * Reinterpret the input of a file, into a way we can understand it to add/edit. Hooks may override this with special import code.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties
 	 * @return array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 */
 	function _file_magic_filter($filename,$path,$properties)
 	{
-		$label=basename($filename,'.xml'); // Default implementation is simply to assume the stub of the filename (or may be a raw label already, with no file type) is the resource label
+		$label=basename($filename,'.'.RESOURCEFS_DEFAULT_EXTENSION); // Default implementation is simply to assume the stub of the filename (or may be a raw label already, with no file type) is the resource label
 		if (array_key_exists('label',$properties))
 			$label=$properties['label']; // ...unless the label was explicitly given
 		return array($properties,$label); // Leave properties alone
@@ -498,7 +550,7 @@ class resource_fs_base
 	/**
 	 * Reinterpret the input of a folder, into a way we can understand it to add/edit. Hooks may override this with special import code.
 	 *
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties
 	 * @return array			A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
@@ -518,7 +570,7 @@ class resource_fs_base
 	function file_convert_id_to_filename($resource_type,$resource_id)
 	{
 		$moniker=find_moniker_via_id($resource_type,$resource_id);
-		return $moniker.'.xml';
+		return $moniker.'.'.RESOURCEFS_DEFAULT_EXTENSION;
 	}
 
 	/**
@@ -546,7 +598,7 @@ class resource_fs_base
 
 		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
 
-		$moniker=basename($filename,'.xml'); // Remove file extension from filename
+		$moniker=basename($filename,'.'.RESOURCEFS_DEFAULT_EXTENSION); // Remove file extension from filename
 		$resource_id=find_id_via_moniker($resource_type,$moniker);
 		return array($resource_type,$resource_id);
 	}
@@ -661,7 +713,7 @@ class resource_fs_base
 	/**
 	 * Turn a label into a name.
 	 *
-	 * @param  SHORT_TEXT	The label
+	 * @param  LONG_TEXT		The label
 	 * @return ID_TEXT		The name
 	 */
 	function _create_name_from_label($label)
@@ -670,7 +722,8 @@ class resource_fs_base
 		$name=preg_replace('#[^\w\d\.\-]#','_',$name);
 		$name=preg_replace('#\_+\$#','',$name);
 		if ($name=='') $name=uniqid('');
-		return $name;
+		require_code('urls2');
+		return substr($name,0,MAX_MONIKER_LENGTH);
 	}
 
 	/*
@@ -738,7 +791,7 @@ class resource_fs_base
 	/**
 	 * Convert a label to a filename, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
 	 *
-	 * @param  SHORT_TEXT	Resource label
+	 * @param  LONG_TEXT		Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  ID_TEXT		Resource type
 	 * @param  boolean		Whether the content must already exist
@@ -746,6 +799,7 @@ class resource_fs_base
 	 */
 	function convert_label_to_filename($label,$subpath,$resource_type,$must_already_exist=false)
 	{
+		$label=substr($label,0,255);
 		$resource_id=$this->convert_label_to_id($label,$subpath,$resource_type,$must_already_exist);
 		if (is_null($resource_id)) return NULL;
 		return find_occlefs_filename_via_id($resource_type,$resource_id);
@@ -762,6 +816,8 @@ class resource_fs_base
 	 */
 	function convert_label_to_id($label,$subpath,$resource_type,$must_already_exist=false)
 	{
+		$label=substr($label,0,255);
+
 		$resource_id=find_id_via_label($resource_type,$label,$subpath);
 		if (is_null($resource_id))
 		{
@@ -830,7 +886,7 @@ class resource_fs_base
 	 * Adds some resource with the given label and properties. Wraps file_add/folder_add.
 	 *
 	 * @param  ID_TEXT		Resource type
-	 * @param  SHORT_TEXT	Filename OR Resource label
+	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  ?array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields) (NULL: none)
 	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
@@ -1387,51 +1443,6 @@ class resource_fs_base
 	/*
 	HELPERS FOR THE ADDRESSING PORTABILITY
 	*/
-
-	/**
-	 * Convert a local ID to something portable.
-	 *
-	 * @param  ID_TEXT	The resource type
-	 * @param  ID_TEXT	The resource ID
-	 * @return array		Portable ID details
-	 */
-	function remap_resource_id_as_portable($resource_type,$resource_id)
-	{
-		list($moniker,$guid,$label)=generate_resourcefs_moniker($resource_type,$resource_id);
-
-		$subpath=$this->search($resource_type,$resource_id,true);
-		if (is_null($subpath)) $subpath='';
-
-		return array(
-			'guid'=>$guid,
-			'label'=>$label,
-			'subpath'=>$subpath,
-			//'moniker'=>$moniker,	Given more effectively with label
-			'id'=>$resource_id // Not used, but useful to have anyway for debugging/manual-reflection
-		);
-	}
-
-	/**
-	 * Convert a portable ID to something local.
-	 *
-	 * @param  ID_TEXT	The resource type
-	 * @param  array		Portable ID details
-	 * @return ID_TEXT	The resource ID
-	 */
-	function remap_portable_as_resource_id($resource_type,$portable)
-	{
-		//$resource_id=$portable['id'];	Would not be portable between sites
-
-		// Ideally, find via GUID
-		$resource_id=array_key_exists('guid',$portable)?find_id_via_guid($portable['guid']):NULL;
-		if (!is_null($resource_id)) return $resource_id;
-
-		// Otherwise, use the label
-		$subpath=array_key_exists('subpath',$portable)?$portable['subpath']:'';
-		$resource_id=$this->convert_label_to_id($portable['label'],$subpath,$resource_type);
-
-		return $resource_id;
-	}
 
 	/**
 	 * Find all translated strings for a language ID. This is used as an intermediate step in creating multi-language serialisations.

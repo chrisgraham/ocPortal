@@ -43,7 +43,7 @@ class Hook_occle_fs_extended_config__redirect
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('redirects',array('*'),NULL,'ORDER BY id');
+		$rows=$GLOBALS['SITE_DB']->query_select('redirects',array('*'));
 		return serialize($rows);
 	}
 

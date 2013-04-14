@@ -89,7 +89,20 @@ The tier that a member resides in is based on usergroup permissions with two pri
  - has high limit in member galleries
  - has no limit in member galleries
 
+[title="3"]EXIF[/title]
 
+On gallery import, e.g. when you import from a zip, EXIF data may be gathered.
+
+This process works by matching up custom fields created for images, with the name of EXIF tags:
+http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/EXIF.html
+
+For example, see [tt]GainControl[/tt] is an EXIF field. If there was a custom field named [tt]GainControl[/tt] or [tt]Gain Control[/tt], it should copy the EXIF value into that during a gallery import.
+
+Additionally, the EXIF caption is used for the title. i.e. the caption goes into the standard ocPortal title field, not a custom field.
+
+For non-gallery-import, the user is expected to manually fill in the form.
+
+Javascript developers may also make use of the fact that the uploader will return EXIF details when it finishes. The Javascript programmer has to define a [tt]handle_meta_data_receipt[/tt] function and do something with the data.
 
 [title="2"]See also[/title]
 

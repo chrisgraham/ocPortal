@@ -64,6 +64,11 @@
 	color: {$GET,occle_file_listing};
 }
 
+.occle_ls_associated_details {
+	float: right;
+	margin-left: 2em;
+}
+
 .occle_notification {
 	border: 1px solid {$GET,occle_notification_border};
 	background-color: {$GET,occle_notification_background};

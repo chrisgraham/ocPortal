@@ -2753,7 +2753,7 @@ function click_link(link)
 {
 	var cancelled=false;
 
-	if (link.nodeName.toLowerCase()!='a')
+	if ((link.nodeName.toLowerCase()!='a') && (link.nodeName.toLowerCase()!='input'))
 	{
 		link=link.getElementsByTagName('a')[0];
 	}
