@@ -80,6 +80,26 @@ class resource_fs_test_set extends ocp_test_case
 		}
 	}
 
+	function testCount()
+	{
+		foreach ($this->resourcefs_obs as $occlefs_hook=>$ob)
+		{
+			if (!is_null($ob->folder_resource_type))
+			{
+				foreach (is_array($ob->folder_resource_type)?$ob->folder_resource_type:array($ob->folder_resource_type) as $resource_type)
+				{
+					$this->assertTrue(is_integer($ob->get_resources_count($resource_type)));
+					$this->assertTrue($ob->find_resource($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
+				}
+			}
+			foreach (is_array($ob->file_resource_type)?$ob->file_resource_type:array($ob->file_resource_type) as $resource_type)
+			{
+				$this->assertTrue(is_integer($ob->get_resources_count($resource_type)));
+				$this->assertTrue($ob->find_resource($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
+			}
+		}
+	}
+
 	function testAdd()
 	{
 		foreach ($this->resourcefs_obs as $occlefs_hook=>$ob)
@@ -100,6 +120,29 @@ class resource_fs_test_set extends ocp_test_case
 			$this->assertTrue($result!==false,'Failed to file_add '.$occlefs_hook);
 
 			$this->paths[$occlefs_hook]=$path;
+		}
+	}
+
+	function testSearch()
+	{
+		foreach ($this->resourcefs_obs as $occlefs_hook=>$ob)
+		{
+			if (!is_null($ob->folder_resource_type))
+			{
+				$results=array();
+				foreach (is_array($ob->folder_resource_type)?$ob->folder_resource_type:array($ob->folder_resource_type) as $resource_type)
+				{
+					$results=array_merge($results,$ob->find_resource($resource_type,'test_a'));
+					$results=array_merge($results,$ob->find_resource($resource_type,'test_b'));
+				}
+				$this->assertTrue(count($results)>0);
+			}
+			$results=array();
+			foreach (is_array($ob->file_resource_type)?$ob->file_resource_type:array($ob->file_resource_type) as $resource_type)
+			{
+				$results=array_merge($results,$ob->find_resource($resource_type,'test_content'));
+			}
+			$this->assertTrue(count($results)>0);
 		}
 	}
 

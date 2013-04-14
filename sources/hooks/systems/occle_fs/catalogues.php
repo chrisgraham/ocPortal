@@ -59,7 +59,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'catalogue_entry':
-				$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('MIN(cf_order)','id','cf_type'),array('c_name'=>$resource_id),'GROUP_BY c_name');
+				$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('MIN(cf_order)','id','cf_type'),NULL,'GROUP BY c_name');
 				$ret=array();
 				require_code('fields');
 				foreach ($fields as $field_bits)
@@ -71,7 +71,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 						$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']).' JOIN '.get_table_prefix().'translate t ON t.id=b.cv_value',array('a.id'),array('text_original'=>$label));
 					} else
 					{
-						$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']),array('id'),array('b.cv_value'=>$label));
+						$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']),array('a.id'),array('b.cv_value'=>$label));
 					}
 					foreach ($_ret as $r)
 					{

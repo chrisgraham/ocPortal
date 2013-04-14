@@ -241,9 +241,11 @@ function find_id_via_moniker($resource_type,$resource_moniker)
  * @param  ?string		The subpath (NULL: don't care)
  * @return ?ID_TEXT		The ID (NULL: no match)
  */
-function find_id_via_label($resource_type,$resource_label,$subpath=NULL)
+function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
 {
-	$resource_label=substr($resource_label,0,255);
+	$resource_label=substr($_resource_label,0,255);
+
+	$occlefs_ob=get_resource_occlefs_object($resource_type);
 
 	$ids=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_id'),array(
 		'resource_type'=>$resource_type,
@@ -252,15 +254,22 @@ function find_id_via_label($resource_type,$resource_label,$subpath=NULL)
 	$resource_ids=collapse_1d_complexity('resource_id',$ids);
 	foreach ($resource_ids as $resource_id)
 	{
-		if ($subpath===NULL) return $resource_id; // Don't care about path
-
-		// Check path
-		$occlefs_ob=get_resource_occlefs_object($resource_type);
-		$_subpath=$occlefs_ob->search($resource_type,$resource_id,true);
-		if (!is_null($subpath))
-			if ($_subpath==$subpath) return $resource_id;
+		if (($subpath===NULL) || ($occlefs_ob->search($resource_type,$resource_id,true)==$subpath))
+			return $resource_id;
 	}
-	// No valid match
+
+	// No valid match, do a direct DB search without the benefit of the alternative_ids table
+	$ids=$occlefs_ob->find_resource($resource_type,$_resource_label);
+	foreach ($ids as $resource_id)
+	{
+		if (($subpath===NULL) || ($occlefs_ob->search($resource_type,$resource_id,true)==$subpath))
+		{
+			generate_resourcefs_moniker($resource_type,$resource_id,$_resource_label); // Properly save it
+			return $resource_id;
+		}
+	}
+
+	// Still no valid match
 	return NULL;
 }
 

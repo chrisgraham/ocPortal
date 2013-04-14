@@ -4014,6 +4014,7 @@ testing_platform
  - _tests/tests/unit_tests/css_and_js.php
  - _tests/tests/unit_tests/dev_environment.php
  - _tests/tests/unit_tests/blocks.php
+ - _tests/tests/unit_tests/occle_fs.php
  - _tests/tests/unit_tests/downloads.php
  - _tests/tests/unit_tests/downloads_category.php
  - _tests/tests/unit_tests/ecommerce.php

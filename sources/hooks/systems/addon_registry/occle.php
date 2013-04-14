@@ -178,7 +178,8 @@ class Hook_addon_registry_occle
 			'sources/hooks/systems/occle_notifications/occlechat.php',
 			'sources/hooks/systems/do_next_menus/occle.php',
 			'sources/hooks/systems/snippets/occle.php',
-			'sources/occle.php'
+			'sources/occle.php',
+			'sources/occle_fs.php',
 		);
 	}
 
