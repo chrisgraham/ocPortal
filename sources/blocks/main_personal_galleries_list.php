@@ -64,8 +64,8 @@ class Block_main_personal_galleries_list
 		$galleries=new ocp_tempcode();
 		$query=' FROM '.get_table_prefix().'galleries';
 		$query.=' WHERE name LIKE \''.db_encode_like('member\_'.strval($member_id).'\_%').'\' OR g_owner='.strval($member_id);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT *'.$query,$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$query);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT *'.$query,$max,$start,false,true);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$query,false,true);
 
 		// Render galleries
 		foreach ($rows as $i=>$row)

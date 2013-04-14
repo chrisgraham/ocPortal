@@ -366,6 +366,7 @@ class Module_admin_setupwizard
 				$all_addons[$addon_name]['name']=titleify($addon_name);
 		}
 		uasort($all_addons,'multi_sort');
+		require_code('addons_overview');
 		foreach ($all_addons as $addon_name=>$row)
 		{
 			if ((substr($addon_name,0,5)!='core_') && (substr($addon_name,-7)!='_shared') && ($addon_name!='setupwizard'))

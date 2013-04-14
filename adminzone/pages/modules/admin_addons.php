@@ -162,6 +162,7 @@ class Module_admin_addons
 		}
 
 		// Show installed addons
+		require_code('addons_overview');
 		foreach ($addons_installed as $row)
 		{
 			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'5a65c9aa87291ecfe46f75e9b2949246','GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
