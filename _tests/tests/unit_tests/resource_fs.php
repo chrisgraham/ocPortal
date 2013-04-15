@@ -82,22 +82,52 @@ class resource_fs_test_set extends ocp_test_case
 
 	function testCount()
 	{
+		$occle_fs=new occle_fs();
+
 		foreach ($this->resourcefs_obs as $occlefs_hook=>$ob)
 		{
+			$count=0;
 			if (!is_null($ob->folder_resource_type))
 			{
 				foreach (is_array($ob->folder_resource_type)?$ob->folder_resource_type:array($ob->folder_resource_type) as $resource_type)
 				{
-					$this->assertTrue(is_integer($ob->get_resources_count($resource_type)));
+					$count+=$ob->get_resources_count($resource_type);
 					$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
 				}
 			}
 			foreach (is_array($ob->file_resource_type)?$ob->file_resource_type:array($ob->file_resource_type) as $resource_type)
 			{
-				$this->assertTrue(is_integer($ob->get_resources_count($resource_type)));
+				$count+=$ob->get_resources_count($resource_type);
 				$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
 			}
+
+			$listing=$this->_recursive_listing($ob,array(),array('var',$occlefs_hook),$occle_fs);
+			$this->assertTrue($count=count($listing),'File/folder count mismatch for '.$occlefs_hook);
 		}
+
+		@exit('!'); // TODO
+	}
+
+	function _recursive_listing($ob,$meta_dir,$meta_root_node,$occle_fs)
+	{
+		$listing=$ob->listing($meta_dir,$meta_root_node,$occle_fs);
+		foreach ($listing as $f)
+		{
+			if ($f[1]==OCCLEFS_DIR)
+			{
+				$sub_listing=$this->_recursive_listing($ob,array_merge($meta_dir,$f[0]),$meta_root_node,$occle_fs);
+				foreach ($sub_listing as $s_f)
+				{
+					$suffix='.'.RESOURCEFS_DEFAULT_EXTENSION;
+					if (($s_f[0]!='_folder'.$suffix) && (($s_f[1]==OCCLEFS_DIR) || (substr($s_f[0],-strlen($suffix))==$suffix)))
+					{
+						$s_f[0]=$f[0].'/'.$s_f[0];
+						$listing[]=$s_f;
+					}
+				}
+			}
+		}
+		return $listing;
 	}
 
 	function testAdd()

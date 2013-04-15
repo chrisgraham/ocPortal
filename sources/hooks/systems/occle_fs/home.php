@@ -24,12 +24,11 @@ class Hook_occle_fs_home
 	 * Standard modular listing function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
-	 * @param  string	The root node of the current meta-directory
-	 * @param  array		The current directory listing
+	 * @param  string		The root node of the current meta-directory
 	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~array 	The final directory listing (false: failure)
 	 */
-	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
+	function listing($meta_dir,$meta_root_node,&$occle_fs)
 	{
 		$path=get_custom_file_base().'/uploads/filedump';
 		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);

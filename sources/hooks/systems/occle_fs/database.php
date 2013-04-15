@@ -25,11 +25,10 @@ class Hook_occle_fs_database
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
-	 * @param  array		The current directory listing
 	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~array	 	The final directory listing (false: failure)
 	 */
-	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
+	function listing($meta_dir,$meta_root_node,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 

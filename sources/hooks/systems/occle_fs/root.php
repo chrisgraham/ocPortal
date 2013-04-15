@@ -25,11 +25,10 @@ class Hook_occle_fs_root
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
-	 * @param  array		The current directory listing
 	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return ~array 		The final directory listing (false: failure)
+	 * @return ~array 	The final directory listing (false: failure)
 	 */
-	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
+	function listing($meta_dir,$meta_root_node,&$occle_fs)
 	{
 		$override_path=$this->_customise_directory($meta_dir);
 		$nonoverride_path=$this->_customise_directory($meta_dir,false);

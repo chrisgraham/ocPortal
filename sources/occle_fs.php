@@ -162,7 +162,7 @@ class occle_fs
 			// We're underneath a meta root node (a directory which is generated dynamically)
 			require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($meta_root_node_type));
 			$object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($meta_root_node_type));
-			$current_dir=$object->listing($meta_dir,$meta_root_node,array(),$this);
+			$current_dir=$object->listing($meta_dir,$meta_root_node,$this);
 
 			if ($full_paths)
 			{

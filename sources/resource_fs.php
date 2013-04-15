@@ -464,10 +464,10 @@ class resource_fs_base
 	function _has_parent_child_relationship($above,$under)
 	{
 		$sub_info=$this->_get_cma_info($under);
-		if ((!array_key_exists('parent_spec__parent_name',$sub_info)) || (is_null($sub_info['parent_spec__parent_name']))) return NULL;
+		if ((!array_key_exists('category_field',$sub_info)) || (is_null($sub_info['category_field']))) return NULL;
 		$folder_info=$this->_get_cma_info($above);
 		return array(
-			'cat_field'=>$sub_info['parent_spec__parent_name'],
+			'cat_field'=>$sub_info['category_field'],
 			'linker_table'=>$sub_info['parent_spec__table_name'],
 			'id_field'=>$sub_info['parent_spec__field_name'],
 			'cat_field_numeric'=>$folder_info['id_field_numeric'],
@@ -1544,11 +1544,10 @@ class resource_fs_base
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
-	 * @param  array		The current directory listing
 	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~array		The final directory listing (false: failure)
 	 */
-	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
+	function listing($meta_dir,$meta_root_node,&$occle_fs)
 	{
 		if (!$this->_is_active()) return false;
 
@@ -1584,7 +1583,7 @@ class resource_fs_base
 			if ($relationship['linker_table']!=$folder_info['table'])
 			{
 				$select=array('cats.*');
-				$table.=' JOIN '.$folder_info['table'].' cats ON cats.'.$folder_info['id_field'].'=main.'.$relationship['id_field'];
+				$table.=' JOIN '.$folder_info['connection']->get_table_prefix().$folder_info['table'].' cats ON cats.'.$folder_info['id_field'].'=main.'.$relationship['id_field'];
 				if (!is_null($folder_info['add_time_field'])) $select[]='cats.'.$folder_info['add_time_field'];
 				if (!is_null($folder_info['edit_time_field'])) $select[]='cats.'.$folder_info['edit_time_field'];
 			} else
@@ -1649,7 +1648,7 @@ class resource_fs_base
 			append_content_select_for_id($select,$file_info);
 			if (!is_null($file_info['add_time_field'])) $select[]=$file_info['add_time_field'];
 			if (!is_null($file_info['edit_time_field'])) $select[]=$file_info['edit_time_field'];
-			$files=$file_info['connection']->query_select($file_info['table'],$select,$where,10000/*Reasonable limit*/);
+			$files=$file_info['connection']->query_select($file_info['table'],$select,$where,'',10000/*Reasonable limit*/);
 			foreach ($files as $file)
 			{
 				$str_id=extract_content_str_id_from_data($file,$file_info);
