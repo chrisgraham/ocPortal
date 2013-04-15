@@ -89,13 +89,13 @@ class resource_fs_test_set extends ocp_test_case
 				foreach (is_array($ob->folder_resource_type)?$ob->folder_resource_type:array($ob->folder_resource_type) as $resource_type)
 				{
 					$this->assertTrue(is_integer($ob->get_resources_count($resource_type)));
-					$this->assertTrue($ob->find_resource($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
+					$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
 				}
 			}
 			foreach (is_array($ob->file_resource_type)?$ob->file_resource_type:array($ob->file_resource_type) as $resource_type)
 			{
 				$this->assertTrue(is_integer($ob->get_resources_count($resource_type)));
-				$this->assertTrue($ob->find_resource($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
+				$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
 			}
 		}
 	}
@@ -132,17 +132,17 @@ class resource_fs_test_set extends ocp_test_case
 				$results=array();
 				foreach (is_array($ob->folder_resource_type)?$ob->folder_resource_type:array($ob->folder_resource_type) as $resource_type)
 				{
-					$results=array_merge($results,$ob->find_resource($resource_type,'test_a'));
-					$results=array_merge($results,$ob->find_resource($resource_type,'test_b'));
+					$results=array_merge($results,$ob->find_resource_by_label($resource_type,'test_a'));
+					$results=array_merge($results,$ob->find_resource_by_label($resource_type,'test_b'));
 				}
-				$this->assertTrue(count($results)>0);
+				$this->assertTrue(count($results)>0,'Failed to find_resource_by_label (folder) '.$occlefs_hook);
 			}
 			$results=array();
 			foreach (is_array($ob->file_resource_type)?$ob->file_resource_type:array($ob->file_resource_type) as $resource_type)
 			{
-				$results=array_merge($results,$ob->find_resource($resource_type,'test_content'));
+				$results=array_merge($results,$ob->find_resource_by_label($resource_type,'test_content'));
 			}
-			$this->assertTrue(count($results)>0);
+			$this->assertTrue(count($results)>0,'Failed to find_resource_by_label (file) '.$occlefs_hook);
 		}
 	}
 
@@ -186,14 +186,14 @@ class resource_fs_test_set extends ocp_test_case
 		{
 			$path=$this->paths[$occlefs_hook];
 
+			$result=$ob->file_delete('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path);
+			$this->assertTrue($result!==false,'Failed to file_delete '.$occlefs_hook);
+
 			if ($path!='')
 			{
 				$result=$ob->folder_delete(basename($path),dirname($path));
 				$this->assertTrue($result!==false,'Failed to folder_delete '.$occlefs_hook);
 			}
-
-			$result=$ob->file_delete('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path);
-			$this->assertTrue($result!==false,'Failed to file_delete '.$occlefs_hook);
 		}
 	}
 

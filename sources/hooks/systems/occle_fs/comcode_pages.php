@@ -51,7 +51,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		switch ($resource_type)
 		{
@@ -197,7 +197,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		$zone=$this->_create_name_from_label($label);
 
-		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone,true);
+		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone,true,true);
 
 		return true;
 	}
@@ -215,7 +215,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		require_code('zones2');
 
-		actual_delete_zone($resource_id);
+		actual_delete_zone($resource_id,true,true);
 
 		return true;
 	}
@@ -272,7 +272,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		$file=$this->_create_name_from_label($label);
 
 		$lang=get_site_default_lang();
-		$parent_page=$this->_create_name_from_label($this->_default_property_str($properties,'parent_page'));
+		$_parent_page=$this->_default_property_str($properties,'parent_page');
+		$parent_page=($_parent_page=='')?'':$this->_create_name_from_label($_parent_page);
 		$validated=$this->_default_property_int_null($properties,'validated');
 		if (is_null($validated)) $validated=1;
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');

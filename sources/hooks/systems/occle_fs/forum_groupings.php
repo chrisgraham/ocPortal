@@ -42,7 +42,7 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		$_ret=$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id'),array('c_title'=>$label));
 		$ret=array();

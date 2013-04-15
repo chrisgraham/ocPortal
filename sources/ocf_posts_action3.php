@@ -195,9 +195,10 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
  * @param  AUTO_LINK		The ID of the topic we're deleting posts from.
  * @param  array			A list of posts to delete.
  * @param  LONG_TEXT		The reason for this action.
+ * @param  boolean		Whether to check permissions.
  * @return boolean		Whether the topic was deleted, due to all posts in said topic being deleted.
  */
-function ocf_delete_posts_topic($topic_id,$posts,$reason='')
+function ocf_delete_posts_topic($topic_id,$posts,$reason='',$check_perms=true)
 {
 	// Info about source
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$topic_id),'',1);
@@ -218,7 +219,10 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason='')
 	{
 		if ((is_null($post['p_intended_solely_for'])) && ($post['p_validated']==1)) $num_posts_counted++;
 		$post_owner=$post['p_poster'];
-		if (!ocf_may_delete_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
+		if ($check_perms)
+		{
+			if (!ocf_may_delete_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
+		}
 	}
 
 	// Save in history

@@ -54,7 +54,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		switch ($resource_type)
 		{

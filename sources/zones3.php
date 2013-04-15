@@ -54,9 +54,10 @@ function erase_comcode_page_cache()
  * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
  * @param  ID_TEXT		The new name of the zone
  * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @param  boolean		Whether to skip the AFM because we know it's not needed (or can't be loaded)
  * @return ID_TEXT		The name
  */
-function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,$uniqify=false)
+function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,$uniqify=false,$skip_afm=false)
 {
 	if ($zone!=$new_zone)
 	{
@@ -79,7 +80,8 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		}
 
 		require_code('abstract_file_manager');
-		force_have_afm_details();
+		if (!$skip_afm)
+			force_have_afm_details();
 		afm_move($zone,$new_zone);
 	}
 
@@ -184,27 +186,33 @@ function actual_rename_zone_lite($zone,$new_zone,$dont_bother_with_main_row=fals
  * Delete a zone.
  *
  * @param  ID_TEXT		The name of the zone
+ * @param  boolean		Force, even if it contains pages
+ * @param  boolean		Whether to skip the AFM because we know it's not needed (or can't be loaded)
  */
-function actual_delete_zone($zone)
+function actual_delete_zone($zone,$force=false,$skip_afm=false)
 {
 	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 	require_code('abstract_file_manager');
-	force_have_afm_details();
+	if (!$skip_afm)
+		force_have_afm_details();
 
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-	disable_php_memory_limit();
+	if (!$force)
+	{
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+		disable_php_memory_limit();
 
-	$pages=find_all_pages_wrap($zone,false,false,FIND_ALL_PAGES__ALL);
-	$bad=array();
-	foreach (array_keys($pages) as $page)
-	{
-		if ((substr($page,0,6)!='panel_') && ($page!='start')) $bad[]=$page;
-	}
-	if ($bad!=array())
-	{
-		require_lang('zones');
-		warn_exit(do_lang_tempcode('DELETE_ZONE_ERROR','<kbd>'.implode('</kbd>, <kbd>',$bad).'</kbd>'));
+		$pages=find_all_pages_wrap($zone,false,false,FIND_ALL_PAGES__ALL);
+		$bad=array();
+		foreach (array_keys($pages) as $page)
+		{
+			if ((substr($page,0,6)!='panel_') && ($page!='start')) $bad[]=$page;
+		}
+		if ($bad!=array())
+		{
+			require_lang('zones');
+			warn_exit(do_lang_tempcode('DELETE_ZONE_ERROR','<kbd>'.implode('</kbd>, <kbd>',$bad).'</kbd>'));
+		}
 	}
 
 	actual_delete_zone_lite($zone);

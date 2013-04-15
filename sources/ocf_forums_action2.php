@@ -61,7 +61,7 @@ function ocf_edit_forum_grouping($forum_grouping_id,$title,$description,$expande
 function ocf_delete_forum_grouping($forum_grouping_id,$target_forum_grouping_id=NULL)
 {
 	if (is_null($target_forum_grouping_id))
-		$target_forum_grouping_id=$GLOBALS['FORUM_DB']->query_value('SELECT MIN(id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forum_groupings WHERE id<>'.strval($forum_grouping_id));
+		$target_forum_grouping_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT MIN(id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forum_groupings WHERE id<>'.strval($forum_grouping_id));
 
 	$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','c_title',array('id'=>$forum_grouping_id));
 	if (is_null($title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -178,7 +178,7 @@ function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_par
 function ocf_delete_forum($forum_id,$target_forum_id=NULL,$delete_topics=0)
 {
 	if (is_null($target_forum_id))
-		$target_forum_id=$GLOBALS['FORUM_DB']->query_value('SELECT MIN(id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id<>'.strval($forum_id));
+		$target_forum_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT MIN(id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id<>'.strval($forum_id));
 
 	if ($forum_id==db_get_first_id()) warn_exit(do_lang_tempcode('CANNOT_DELETE_ROOT_FORUM'));
 	require_code('ocf_topics_action');

@@ -46,7 +46,7 @@ class Hook_occle_fs_database
 				$modification_time=mixed();
 				if (substr(get_db_type(),0,5)=='mysql')
 				{
-					$_modification_time=$GLOBALS['SITE_DB']->query_value('SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA=\''.db_escape_string(get_db_site()).'\' AND TABLE_NAME=\''.db_escape_string(get_table_prefix().$table_name).'\'');
+					$_modification_time=$GLOBALS['SITE_DB']->query_value_if_there('SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA=\''.db_escape_string(get_db_site()).'\' AND TABLE_NAME=\''.db_escape_string(get_table_prefix().$table_name).'\'');
 					$modification_time=strtotime($_modification_time);
 				}
 

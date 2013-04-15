@@ -42,7 +42,7 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		$_ret=$GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('id'),array('aggregate_label'=>$label));
 		$ret=array();

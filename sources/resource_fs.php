@@ -71,8 +71,9 @@ ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch via get_re
  * @param  ID_TEXT		The resource ID
  * @param  ?LONG_TEXT	The (new) label (NULL: lookup for specified resource)
  * @return array			A triple: The moniker (may be new, or the prior one if the moniker did not need to change), the GUID, the label
+ * @param  ?ID_TEXT		GUID to forcibly assign (NULL: don't force)
  */
-function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
+function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$new_guid=NULL)
 {
 	if (!is_null($label)) $label=substr($label,0,255);
 
@@ -85,17 +86,17 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 	if (array_key_exists(0,$lookup))
 	{
 		$no_exists_check_for=$lookup[0]['resource_moniker'];
-		$guid=$lookup[0]['resource_guid'];
+		$guid=is_null($new_guid)?$lookup[0]['resource_guid']:$new_guid;
 	} else
 	{
 		$no_exists_check_for=mixed();
-		$guid=generate_guid();
+		$guid=is_null($new_guid)?generate_guid():$new_guid;
 	}
 
 	if (is_null($label))
 	{
 		require_code('content');
-		list($label)=content_get_details($resource_type,$resource_id);
+		list($label)=content_get_details($resource_type,$resource_id,true);
 		if (is_null($label)) return array(NULL,NULL);
 	}
 
@@ -126,7 +127,7 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL)
 	}
 	while (!is_null($test));
 
-	if ($moniker!==$no_exists_check_for)
+	if (($moniker!==$no_exists_check_for) || (!is_null($new_guid)))
 	{
 		$GLOBALS['SITE_DB']->query_delete('alternative_ids',array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
 
@@ -259,7 +260,7 @@ function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
 	}
 
 	// No valid match, do a direct DB search without the benefit of the alternative_ids table
-	$ids=$occlefs_ob->find_resource($resource_type,$_resource_label);
+	$ids=$occlefs_ob->find_resource_by_label($resource_type,$_resource_label);
 	foreach ($ids as $resource_id)
 	{
 		if (($subpath===NULL) || ($occlefs_ob->search($resource_type,$resource_id,true)==$subpath))
@@ -362,7 +363,7 @@ function remap_portable_as_resource_id($resource_type,$portable)
 
 	// Otherwise, use the label
 	$subpath=array_key_exists('subpath',$portable)?$portable['subpath']:'';
-	$resource_id=$this->convert_label_to_id($portable['label'],$subpath,$resource_type);
+	$resource_id=$this->convert_label_to_id($portable['label'],$subpath,$resource_type,false,array_key_exists('guid',$portable)?$portable['guid']:NULL);
 
 	return $resource_id;
 }
@@ -740,18 +741,18 @@ class resource_fs_base
 	*/
 
 	/**
-	 * Find the filename/subpath to a resource.
+	 * Find the foldername/subpath to a resource.
 	 *
 	 * @param  ID_TEXT		The resource type
 	 * @param  ID_TEXT		The resource ID
 	 * @param  boolean		Whether to include the full subpath
-	 * @return ?string		The filename/subpath (NULL: not found)
+	 * @return ?string		The foldername/subpath (NULL: not found)
 	 */
 	function search($resource_type,$resource_id,$full_subpath=false)
 	{
 		// Find resource
 		require_code('content');
-		list(,,$cma_info,$content_row)=content_get_details($resource_type,$resource_id);
+		list(,,$cma_info,$content_row)=content_get_details($resource_type,$resource_id,true);
 		if (is_null($content_row)) return NULL;
 
 		// Okay, exists, but what if no categories for this?
@@ -767,7 +768,7 @@ class resource_fs_base
 			if ($cma_info['table']!=$relationship['linker_table'])
 			{
 				$where=array($relationship['id_field']=>$content_row[$cma_info['id_field']]);
-				$categories=$cma_info['db']->connection->query_select($relationship['linker_table'],array($relationship['cat_field']),$where);
+				$categories=$cma_info['connection']->query_select($relationship['linker_table'],array($relationship['cat_field']),$where);
 			} else
 			{
 				$categories=array($content_row);
@@ -804,12 +805,13 @@ class resource_fs_base
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  ID_TEXT		Resource type
 	 * @param  boolean		Whether the content must already exist
+	 * @param  ?ID_TEXT		GUID to auto-create with (NULL: either not auto-creating, or not specifying the GUID if we are)
 	 * @return ?ID_TEXT		The filename (NULL: not found)
 	 */
-	function convert_label_to_filename($label,$subpath,$resource_type,$must_already_exist=false)
+	function convert_label_to_filename($label,$subpath,$resource_type,$must_already_exist=false,$use_guid_for_new=NULL)
 	{
 		$label=substr($label,0,255);
-		$resource_id=$this->convert_label_to_id($label,$subpath,$resource_type,$must_already_exist);
+		$resource_id=$this->convert_label_to_id($label,$subpath,$resource_type,$must_already_exist,$use_guid_for_new);
 		if (is_null($resource_id)) return NULL;
 		return find_occlefs_filename_via_id($resource_type,$resource_id);
 	}
@@ -821,11 +823,12 @@ class resource_fs_base
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  ID_TEXT		Resource type
 	 * @param  boolean		Whether the content must already exist
+	 * @param  ?ID_TEXT		GUID to auto-create with (NULL: either not auto-creating, or not specifying the GUID if we are)
 	 * @return ?ID_TEXT		The ID (NULL: not found)
 	 */
-	function convert_label_to_id($label,$subpath,$resource_type,$must_already_exist=false)
+	function convert_label_to_id($_label,$subpath,$resource_type,$must_already_exist=false,$use_guid_for_new=NULL)
 	{
-		$label=substr($label,0,255);
+		$label=substr($_label,0,255);
 
 		$resource_id=find_id_via_label($resource_type,$label,$subpath);
 		if (is_null($resource_id))
@@ -833,7 +836,6 @@ class resource_fs_base
 			if (!$must_already_exist)
 			{
 				// Not found, create...
-				$occlefs_ob=get_resource_occlefs_object($resource_type);
 
 				// Create subpath
 				if ($subpath!='')
@@ -853,7 +855,11 @@ class resource_fs_base
 				}
 
 				// Create main resource
-				$resource_id=$occlefs_ob->resource_add($resource_type,$label,$subpath,array());
+				$resource_id=$this->resource_add($resource_type,$_label,$subpath,array());
+				if (!is_null($guid))
+				{
+					generate_resourcefs_moniker($resource_type,$resource_id,$label,$guid);
+				}
 			}
 		}
 		return $resource_id;
@@ -941,16 +947,17 @@ class resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  boolean		Whether we are definitely moving (as opposed to possible having it in multiple positions)
 	 * @return boolean		Success status
 	 */
-	function resource_edit($resource_type,$filename,$path,$properties)
+	function resource_edit($resource_type,$filename,$path,$properties,$explicit_move=false)
 	{
 		if ($this->is_folder_type($resource_type))
 		{
-			$status=$this->folder_edit($filename,$path,$properties);
+			$status=$this->folder_edit($filename,$path,$properties,$explicit_move);
 		} else
 		{
-			$status=$this->file_edit($filename,$path,$properties);
+			$status=$this->file_edit($filename,$path,$properties,$explicit_move);
 		}
 		return $status;
 	}

@@ -51,7 +51,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		switch ($resource_type)
 		{
@@ -170,9 +170,10 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  boolean		Whether we are definitely moving (as opposed to possible having it in multiple positions)
 	 * @return boolean		Success status
 	 */
-	function folder_edit($filename,$path,$properties)
+	function folder_edit($filename,$path,$properties,$explicit_move=false)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
@@ -195,12 +196,25 @@ class Hook_occle_fs_wiki extends resource_fs_base
 		wiki_edit_page($id,$label,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member,$edit_date,$add_time,$views,true);
 
 		// Move
-		$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id));
-		$the_order=$GLOBALS['SITE_DB']->query_select_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
-		if (is_null($the_order)) $the_order=-1;
-		$the_order++;
-		if (!is_null($parent_id))
-			$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
+		$old_path=$this->search($resource_type,$resource_id,false);
+		list(,$old_category)=($old_path=='')?NULL:$this->folder_convert_filename_to_id($old_path);
+		$old_parent_id=$this->_integer_category($old_category);
+		if ($old_parent_id!==$parent_id)
+		{
+			$the_order=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_children','the_order',array('child_id'=>$id,'parent_id'=>$old_parent_id));
+			if ($explicit_move)
+			{
+				$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id,'parent_id'=>$old_parent_id));
+			}
+			if ((is_null($the_order)) || (!$explicit_move)) // Put on end of existing children
+			{
+				$the_order=$GLOBALS['SITE_DB']->query_select_value('wiki_children','MAX(the_order)',array('parent_id'=>$parent_id));
+				if (is_null($the_order)) $the_order=-1;
+				$the_order++;
+			}
+			if (!is_null($parent_id))
+				$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
+		}
 
 		return true;
 	}

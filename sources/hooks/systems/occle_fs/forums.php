@@ -54,7 +54,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		switch ($resource_type)
 		{
@@ -162,6 +162,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		}
 
 		return array(
+			'description'=>'SHORT_TEXT',
 			'emoticon'=>'SHORT_TEXT',
 			'validated'=>'BINARY',
 			'open'=>'BINARY',
@@ -260,6 +261,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function __folder_read_in_properties_topic($path,$properties)
 	{
+		$description=$this->_default_property_str($properties,'description');
 		$emoticon=$this->_default_property_str($properties,'emoticon');
 		$validated=$this->_default_property_int($properties,'validated');
 		$open=$this->_default_property_int($properties,'open');
@@ -271,7 +273,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$num_views=$this->_default_property_int($properties,'views');
 		$description_link=$this->_default_property_str($properties,'description_link');
 
-		return array($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link);
+		return array($description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link);
 	}
 
 	/**
@@ -311,10 +313,11 @@ class Hook_occle_fs_forums extends resource_fs_base
 
 			$forum_id=$this->_integer_category($category);
 
-			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
+			list($description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
-			$id=ocf_make_topic($forum_id,$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
+			$id=ocf_make_topic($forum_id,$description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
 			$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_title'=>$label),array('id'=>$id),'',1);
+			generate_resourcefs_moniker('topic',strval($id));
 
 			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
 			{
@@ -402,7 +405,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 		}
 
 		return array(
-			'label'=>$row['t_description'],
+			'label'=>$row['t_cache_first_title'],
+			'description'=>$row['t_description'],
 			'emoticon'=>$row['t_emoticon'],
 			'validated'=>$row['t_validated'],
 			'open'=>$row['t_is_open'],
@@ -450,9 +454,9 @@ class Hook_occle_fs_forums extends resource_fs_base
 			if ($category=='') return false;
 
 			$label=$this->_default_property_str($properties,'label');
-			list($emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
+			list($description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
-			ocf_edit_topic(intval($resource_id),$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,'',NULL,$description_link,false,$num_views,true);
+			ocf_edit_topic(intval($resource_id),$description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,'',$label,$description_link,false,$num_views,true);
 
 			$poll_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_poll_id',array('id'=>intval($resource_id)));
 
@@ -508,7 +512,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		} else
 		{
 			require_code('ocf_topics_action2');
-			ocf_delete_topic(intval($resource_id));
+			ocf_delete_topic(intval($resource_id),'',NULL,false);
 		}
 
 		return true;
@@ -659,7 +663,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$topic_id=$this->_integer_category($category);
 
 		require_code('ocf_posts_action3');
-		ocf_delete_posts_topic($topic_id,array(intval($resource_id)));
+		ocf_delete_posts_topic($topic_id,array(intval($resource_id)),'',false);
 
 		return true;
 	}

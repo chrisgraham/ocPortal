@@ -128,12 +128,13 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 /**
  * Delete a topic.
  *
- * @param  AUTO_LINK  The ID of the topic to delete.
- * @param  LONG_TEXT  The reason for this action .
- * @param  ?AUTO_LINK Where topic to move posts in this topic to (NULL: delete the posts).
- * @return AUTO_LINK  The forum ID the topic is in (could be found without calling the function, but as we've looked it up, it is worth keeping).
+ * @param  AUTO_LINK		The ID of the topic to delete.
+ * @param  LONG_TEXT		The reason for this action .
+ * @param  ?AUTO_LINK	Where topic to move posts in this topic to (NULL: delete the posts).
+ * @param  boolean		Whether to check permissions.
+ * @return AUTO_LINK		The forum ID the topic is in (could be found without calling the function, but as we've looked it up, it is worth keeping).
  */
-function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
+function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL,$check_perms=true)
 {
 	// Info about source
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title','t_cache_first_member_id','t_poll_id','t_forum_id','t_cache_num_posts','t_validated'),array('id'=>$topic_id));
@@ -144,19 +145,23 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	$num_posts=$info[0]['t_cache_num_posts'];
 	$validated=$info[0]['t_validated'];
 
-	if (
-		(!ocf_may_delete_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) ||
-		(
+	require_code('ocf_topics');
+	if ($check_perms)
+	{
+		if (
+			(!ocf_may_delete_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) ||
 			(
-				((!is_null($info[0]['t_pt_from'])) && ($info[0]['t_pt_from']!=get_member())) &&
-				((!is_null($info[0]['t_pt_to'])) && ($info[0]['t_pt_to']!=get_member()))
-			) &&
-			(!ocf_has_special_pt_access($topic_id)) &&
-			(!has_privilege(get_member(),'view_other_pt')) &&
-			(is_null($forum_id))
+				(
+					((!is_null($info[0]['t_pt_from'])) && ($info[0]['t_pt_from']!=get_member())) &&
+					((!is_null($info[0]['t_pt_to'])) && ($info[0]['t_pt_to']!=get_member()))
+				) &&
+				(!ocf_has_special_pt_access($topic_id)) &&
+				(!has_privilege(get_member(),'view_other_pt')) &&
+				(is_null($forum_id))
+			)
 		)
-	)
-		access_denied('I_ERROR');
+			access_denied('I_ERROR');
+	}
 
 	if (!is_null($post_target_topic_id))
 	{
@@ -209,7 +214,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 		$_postdetails=array();
 		do
 		{
-			$_postdetails=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_post','id'),array('p_topic_id'=>$topic_id),200);
+			$_postdetails=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_post','id'),array('p_topic_id'=>$topic_id),'',200);
 			foreach ($_postdetails as $post)
 			{
 				delete_lang($post['p_post'],$GLOBALS['FORUM_DB']);

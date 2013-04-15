@@ -1143,7 +1143,7 @@ function ocf_delete_custom_field($id)
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		expunge_resourcefs_moniker('TODO',strval($id));
+		expunge_resourcefs_moniker('cpf',strval($id));
 	}
 }
 

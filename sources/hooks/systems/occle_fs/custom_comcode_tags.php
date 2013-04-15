@@ -42,7 +42,7 @@ class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 	 * @param  LONG_TEXT		The resource label
 	 * @return array			A list of resource IDs
 	 */
-	function find_resource($resource_type,$label)
+	function find_resource_by_label($resource_type,$label)
 	{
 		$ret=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_tag'),array('tag_tag'=>$label));
 		return collapse_1d_complexity('tag_tag',$ret);

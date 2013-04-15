@@ -101,9 +101,10 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
  *
  * @param  ID_TEXT		Content type
  * @param  ID_TEXT		Content ID
+ * @param  boolean		Whether to use the content API as resource-fs requires (may be slightly different)
  * @return array			Tuple: title, submitter, content hook info, URL (for use within current browser session), URL (for use in emails / sharing)
  */
-function content_get_details($content_type,$content_id)
+function content_get_details($content_type,$content_id,$resourcefs_style=false)
 {
 	require_code('content');
 	$cma_ob=get_content_object($content_type);
@@ -114,7 +115,7 @@ function content_get_details($content_type,$content_id)
 	$content_row=content_get_row($content_id,$cma_info);
 	if (is_null($content_row))
 	{
-		if (($content_type=='comcode_page') && (strpos($content_id,':')!==false))
+		if (($content_type=='comcode_page') && (strpos($content_id,':')!==false) && (!$resourcefs_style))
 		{
 			list($zone,$page)=explode(':',$content_id,2);
 
@@ -241,7 +242,9 @@ function extract_content_str_id_from_data($data,$cma_info)
 {
 	$id_field=$cma_info['id_field'];
 	$id='';
-	foreach (is_array($id_field)?$id_field:array($id_field) as $id_field_part)
+	$id_field_parts=is_array($id_field)?$id_field:array($id_field);
+	$id_field_parts=array_reverse($id_field_parts);
+	foreach ($id_field_parts as $id_field_part)
 	{
 		if ($id!='') $id.=':';
 		$id.=(is_integer($data[$id_field_part])?strval($data[$id_field_part]):$data[$id_field_part]);
@@ -262,6 +265,7 @@ function get_content_where_for_str_id($str_id,$cma_info,$table_alias=NULL)
 	$where=array();
 	$id_field=$cma_info['id_field'];
 	$id_parts=explode(':',$str_id);
+	$id_parts=array_reverse($id_parts);
 	foreach (is_array($id_field)?$id_field:array($id_field) as $i=>$id_field_part)
 	{
 		$val=array_key_exists($i,$id_parts)?$id_parts[$i]:'';

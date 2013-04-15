@@ -46,8 +46,8 @@ class Hook_content_meta_aware_comcode_page
 			'category_type'=>'<page>', // For category permissions ("<page>" means use page permissions)
 			'category_is_string'=>true,
 
-			'title_field'=>NULL,
-			'title_field_dereference'=>true,
+			'title_field'=>'the_page',
+			'title_field_dereference'=>false,
 
 			'view_pagelink_pattern'=>'_WILD:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_comcode_pages:_ed:_WILD',
