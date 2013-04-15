@@ -59,7 +59,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'post':
-				$_ret=$GLOBALS['FORUM_DB']->query_select('f_posts a JOIN '.get_table_prefix().'translate t ON t.id=a.p_title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['FORUM_DB']->query_select('f_posts',array('id'),array('p_title'=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -68,7 +68,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 				return $ret;
 
 			case 'topic':
-				$_ret=$GLOBALS['FORUM_DB']->query_select('f_topics',array('id'),array('t_description'=>$label));
+				$_ret=$GLOBALS['FORUM_DB']->query_select('f_topics',array('id'),array('t_cache_first_title'=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -77,7 +77,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 				return $ret;
 
 			case 'forum':
-				$_ret=$GLOBALS['FORUM_DB']->query_select('f_forums a JOIN '.get_table_prefix().'translate t ON t.id=a.f_name',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id'),array('f_name'=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -663,7 +663,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$topic_id=$this->_integer_category($category);
 
 		require_code('ocf_posts_action3');
-		ocf_delete_posts_topic($topic_id,array(intval($resource_id)),'',false);
+		ocf_delete_posts_topic($topic_id,array(intval($resource_id)),'',false,false);
 
 		return true;
 	}

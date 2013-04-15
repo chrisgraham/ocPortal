@@ -44,7 +44,7 @@ class Hook_occle_fs_post_templates extends resource_fs_base
 	 */
 	function find_resource_by_label($resource_type,$label)
 	{
-		$_ret=$GLOBALS['FORUM_DB']->query_select('f_post_templates a JOIN '.get_table_prefix().'translate t ON t.id=a.t_title',array('a.id'),array('text_original'=>$label));
+		$_ret=$GLOBALS['FORUM_DB']->query_select('f_post_templates',array('id'),array('t_title'=>$label));
 		$ret=array();
 		foreach ($_ret as $r)
 		{

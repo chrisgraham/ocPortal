@@ -54,5 +54,6 @@ if (!headers_sent())
 function execute_temp()
 {
 	require_code('resource_fs');
-	@print('!'.find_id_via_label('group','Newbie'));
+	$ob=get_resource_occlefs_object('catalogue_entry');
+	@var_dump($ob->find_resource_by_label('catalogue_entry','test_content'));
 }

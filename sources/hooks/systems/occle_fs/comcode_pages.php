@@ -59,12 +59,14 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 				if (strpos($label,':')!==false)
 				{
 					list($zone,$page)=explode(':',$label,2);
-				} else
+					$where=array('the_zone'=>$zone,'the_page'=>$page);
+				} else // comcode_page is the only Resource-FS hook where a codename-based-label going in may not go out. Fortunately a missing ':' fully implies that we can/should do a partial search, as no missing colon will be there for a label that ended up in-direct-use.
 				{
-					$zone='';
 					$page=$label;
+					$where=array('the_page'=>$page);
 				}
-				$_ret=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_zone','the_page'),array('the_zone'=>$zone,'the_page'=>$page));
+
+				$_ret=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_zone','the_page'),$where);
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -269,7 +271,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		$zone=$category;
 
-		$file=$this->_create_name_from_label($label);
+		$page=$this->_create_name_from_label($label);
+		$page=preg_replace('#^.*:#','',$page); // ID also contains zone, so strip that
 
 		$lang=get_site_default_lang();
 		$_parent_page=$this->_default_property_str($properties,'parent_page');
@@ -284,14 +287,14 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		if (is_null($submitter)) $submitter=get_member();
 		$text=$this->_default_property_str($properties,'text');
 
-		$test=_request_page($file,$zone,NULL,NULL,true);
-		if ($test!==false) $file.='_'.uniqid(''); // Uniqify
+		$test=_request_page($page,$zone,NULL,NULL,true);
+		if ($test!==false) $page.='_'.uniqid(''); // Uniqify
 
 		require_code('zones3');
-		$full_path=save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,true);
-		$file=basename($full_path,'.txt');
+		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,true);
+		$page=basename($full_path,'.txt');
 
-		return $zone.':'.$file;
+		return $zone.':'.$page;
 	}
 
 	/**
@@ -308,6 +311,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		$zone=$category;
 		$page=$resource_id;
+		$page=preg_replace('#^.*:#','',$page); // ID also contains zone, so strip that
 
 		$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$page),'',1);
 		if (!array_key_exists(0,$rows)) return false;
@@ -349,14 +353,15 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 	 */
 	function file_edit($filename,$path,$properties)
 	{
-		list($resource_type,$old_file)=$this->file_convert_filename_to_id($filename);
+		list($resource_type,$old_page)=$this->file_convert_filename_to_id($filename);
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
 		$zone=$category;
 
 		$label=$this->_default_property_str($properties,'label');
-		$file=$this->_create_name_from_label($label);
+		$page=$this->_create_name_from_label($label);
+		$page=preg_replace('#^.*:#','',$page); // ID also contains zone, so strip that
 
 		$lang=get_site_default_lang();
 		$parent_page=$this->_create_name_from_label($this->_default_property_str($properties,'parent_page'));
@@ -373,15 +378,15 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		if ($file!=$old_file)
+		if ($page!=$old_page)
 		{
-			$test=_request_page($file,$zone,NULL,NULL,true);
-			if ($test!==false) $file.='_'.uniqid(''); // Uniqify
+			$test=_request_page($page,$zone,NULL,NULL,true);
+			if ($test!==false) $page.='_'.uniqid(''); // Uniqify
 		}
 
 		require_code('zones3');
-		$full_path=save_comcode_page($zone,$file,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$old_file,$meta_keywords,$meta_description,true);
-		$file=basename($full_path,'.txt');
+		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$old_page,$meta_keywords,$meta_description,true);
+		$page=basename($full_path,'.txt');
 
 		return true;
 	}

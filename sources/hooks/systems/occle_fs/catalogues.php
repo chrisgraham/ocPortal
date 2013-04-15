@@ -68,17 +68,19 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>NULL,'cf_type'=>$field_bits['cf_type'],'cf_default'=>''));
 					if (strpos($storage_type,'_trans')!==false)
 					{
-						$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']).' JOIN '.get_table_prefix().'translate t ON t.id=b.cv_value',array('a.id'),array('text_original'=>$label));
+						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']).' JOIN '.get_table_prefix().'translate t ON t.id=b.cv_value';
+						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('text_original'=>$label));
 					} else
 					{
-						$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']),array('a.id'),array('b.cv_value'=>$label));
+						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']);
+						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('b.cv_value'=>$label));
 					}
 					foreach ($_ret as $r)
 					{
 						$ret[]=strval($r['id']);
 					}
 				}
-				return array(); // We can't search by entry label, too complex
+				return $ret;
 
 			case 'catalogue_category':
 				$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_categories a JOIN '.get_table_prefix().'translate t ON t.id=a.cc_title',array('a.id'),array('text_original'=>$label));

@@ -196,9 +196,10 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
  * @param  array			A list of posts to delete.
  * @param  LONG_TEXT		The reason for this action.
  * @param  boolean		Whether to check permissions.
+ * @param  boolean		Whether to do a cleanup: delete the topic if there will be no posts left in it.
  * @return boolean		Whether the topic was deleted, due to all posts in said topic being deleted.
  */
-function ocf_delete_posts_topic($topic_id,$posts,$reason='',$check_perms=true)
+function ocf_delete_posts_topic($topic_id,$posts,$reason='',$check_perms=true,$cleanup=true)
 {
 	// Info about source
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$topic_id),'',1);
@@ -269,7 +270,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason='',$check_perms=true)
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'review_supplement WHERE '.str_replace('id=','r_post_id=',$or_list),NULL,NULL,false,true);
 
 	$test=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_topic_id'=>$topic_id));
-	if ($test==0)
+	if (($test==0) && ($cleanup))
 	{
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
