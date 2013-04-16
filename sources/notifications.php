@@ -727,7 +727,7 @@ class Hook_Notification
 		{
 			$map['l_member_id']=get_member();
 		}
-		$types=$db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map,'ORDER BY id DESC',2000/*reasonable limit*/); // Already monitoring members who may not be friends
+		$types=$db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map,'ORDER BY id DESC',250/*reasonable limit*/); // Already monitoring members who may not be friends
 		foreach ($types as $type)
 		{
 			if ($type['l_code_category']!='')

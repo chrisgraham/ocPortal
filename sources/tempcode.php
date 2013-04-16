@@ -1327,7 +1327,7 @@ class ocp_tempcode
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
-			$this->code_to_preexecute='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (mt_rand(0,100)==1 || !is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
+			$this->code_to_preexecute='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (mt_rand(0,100)==1 || !@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
 			else { eval($result[4]); unset($result); }';
 		}
 
@@ -1647,7 +1647,7 @@ class ocp_tempcode
 			if (!isset($TPL_FUNCS[$bit_0]))
 			{
 				//eval_log($this->code_to_preexecute);
-				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg));
+				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg)); // Fix references to wrong templates_cached directory
 				if (!isset($TPL_FUNCS[$bit_0])) $TPL_FUNCS[$bit_0]=' '; // Fudge to stop error. Actually caused by a race condition and output will be incomplete
 			}
 			if (($TPL_FUNCS[$bit_0][0]!='e'/*for echo*/) && (function_exists($TPL_FUNCS[$bit_0])))

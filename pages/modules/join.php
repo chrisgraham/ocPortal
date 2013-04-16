@@ -85,7 +85,7 @@ class Module_join
 	{
 		if (!is_guest()) warn_exit(do_lang_tempcode('NO_JOIN_LOGGED_IN'));
 
-		$title=get_screen_title('_JOIN');
+		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
 
 		// Show rules
 		$rules=request_page('_rules',true,get_comcode_zone('rules'),NULL,true);
@@ -127,7 +127,7 @@ class Module_join
 	{
 		if (!is_guest()) warn_exit(do_lang_tempcode('NO_JOIN_LOGGED_IN'));
 
-		$title=get_screen_title('_JOIN');
+		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
 
 		if ((get_option('show_first_join_page')=='1') && (post_param_integer('confirm',0)!=1))
 			warn_exit(do_lang_tempcode('DESCRIPTION_I_AGREE_RULES'));
@@ -152,7 +152,28 @@ class Module_join
 	 */
 	function step3()
 	{
-		$title=get_screen_title('_JOIN');
+		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
+
+		// Check e-mail domain, if applicable
+		$email_address=trim(post_param('email_address'));
+		if ($email_address!='')
+		{
+			$valid_email_domains=get_option('valid_email_domains');
+			if ($valid_email_domains!='')
+			{
+				$domains=explode(',',$valid_email_domains);
+				$ok=false;
+				foreach ($domains as $domain)
+				{
+					if (substr($email_address,-strlen('@'.$domain))=='@'.$domain)
+						$ok=true;
+				}
+				if (!$ok)
+				{
+					warn_exit(do_lang_tempcode('_MUST_BE_EMAIL_DOMAIN',escape_html($valid_email_domains)));
+				}
+			}
+		}
 
 		list($message)=ocf_join_actual();
 
@@ -170,7 +191,7 @@ class Module_join
 	 */
 	function step4()
 	{
-		$title=get_screen_title('_JOIN');
+		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));

@@ -67,7 +67,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
 		if (is_null($id)) // On root level add monitored topics too
 		{
-			$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>'ocf_topic','l_member_id'=>get_member()));
+			$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>'ocf_topic','l_member_id'=>get_member()),'ORDER BY id DESC',250/*reasonable limit*/);
 			foreach ($types2 as $type)
 			{
 				if (is_numeric($type['l_code_category']))

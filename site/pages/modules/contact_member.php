@@ -189,7 +189,7 @@ class Module_contact_member
 		{
 			warn_exit(do_lang_tempcode('EXCEEDED_ATTACHMENT_SIZE',integer_format($size)));
 		}
-		mail_wrap(do_lang('EMAIL_MEMBER_SUBJECT',get_site_name(),post_param('subject'),NULL,get_lang($member_id)),post_param('message'),array($email_address),$to_name,$from_email,$from_name,3,$attachments,false,get_member());
+		mail_wrap(do_lang('EMAIL_MEMBER_SUBJECT',get_site_name(),post_param('subject'),NULL,get_lang($member_id)),post_param('message'),array($email_address),$to_name,$from_email,$from_name,3,$attachments,false,get_member(),false,false,false,'MAIL',count($attachments)!=0);
 
 		log_it('EMAIL',strval($member_id),$to_name);
 

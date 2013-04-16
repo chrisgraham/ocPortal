@@ -1960,9 +1960,14 @@
 
 									// Is error status
 									if (httpStatus >= 400) {
+										var message = plupload.translate('HTTP Error.');
+										if (xhr.responseText.length<300)
+										{
+											message+=' '+xhr.responseText;
+										}
 										up.trigger('Error', {
 											code : plupload.HTTP_ERROR,
-											message : plupload.translate('HTTP Error.'),
+											message : message,
 											file : file,
 											status : httpStatus
 										});
@@ -2879,9 +2884,14 @@
 									uploadNextChunk();
 								}
 							} else {
+								var message = plupload.translate('HTTP Error.');
+								if (xhr.responseText.length<300)
+								{
+									message+=' '+xhr.responseText;
+								}
 								up.trigger('Error', {
 									code : plupload.HTTP_ERROR,
-									message : plupload.translate('HTTP Error.'),
+									message : message,
 									file : file,
 									chunk : chunk,
 									chunks : chunks,
@@ -3879,9 +3889,14 @@
 
 									// Is error status
 									if (httpStatus >= 400) {
+										var message = plupload.translate('HTTP Error.');
+										if (xhr.responseText.length<300)
+										{
+											message+=' '+xhr.responseText;
+										}
 										up.trigger('Error', {
 											code : plupload.HTTP_ERROR,
-											message : plupload.translate('HTTP Error.'),
+											message : message,
 											file : file,
 											status : httpStatus
 										});

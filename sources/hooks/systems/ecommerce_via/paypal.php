@@ -191,8 +191,8 @@ class Hook_paypal
 			}
 		}
 
-		$txn_type=str_replace('-','_',post_param('txn_type'));
-		if ($txn_type=='subscr-modify')
+		$txn_type=str_replace('-','_',post_param('txn_type')); // We map certain values of txn_type for subscriptions over to payment_status, as we don't want to have to deal with two variables doing a similar thing
+		if ($txn_type=='subscr_modify')
 		{
 			$payment_status='SModified';
 			$txn_id=post_param('subscr_id').'-m';
@@ -204,7 +204,7 @@ class Hook_paypal
 			if (post_param_integer('recurring')!=1) my_exit(do_lang('IPN_SUB_RECURRING_WRONG'));
 			$txn_id=post_param('subscr_id');
 		}
-		elseif ($txn_type=='subscr_cancel')
+		elseif ($txn_type=='subscr_eot')
 		{
 			$payment_status='SCancelled';
 			$txn_id=post_param('subscr_id').'-c';
