@@ -40,7 +40,10 @@ table.cart_payment_summary .price {
 
 .cart_proceed_button {
 	float: right;
-	padding-right: 2em;
+}
+
+.cart_proceed_button form {
+	padding-left: 2em;
 }
 
 .checkout_text {
