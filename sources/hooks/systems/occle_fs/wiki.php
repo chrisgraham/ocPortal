@@ -107,6 +107,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	function folder_add($filename,$path,$properties)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
+		if ($category=='') $category=strval(db_get_first_id());/*return false;*/ // Can't create more than one root
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 

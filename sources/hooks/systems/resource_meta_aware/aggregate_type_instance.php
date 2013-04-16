@@ -59,9 +59,9 @@ class Hook_resource_meta_aware_aggregate_type_instance
 
 			'views_field'=>NULL,
 			'submitter_field'=>NULL,
-			'add_time_field'=>NULL,
-			'edit_time_field'=>NULL,
-			'date_field'=>NULL,
+			'add_time_field'=>'add_time',
+			'edit_time_field'=>'edit_time',
+			'date_field'=>'add_time',
 			'validated_field'=>NULL,
 
 			'seo_type_code'=>NULL,

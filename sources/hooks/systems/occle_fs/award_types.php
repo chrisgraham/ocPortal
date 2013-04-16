@@ -32,7 +32,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 	 */
 	function get_resources_count($resource_type)
 	{
-		return $GLOBALS['SITE_DB']->query_select_value('aggregate_type_instances','COUNT(*)');
+		return $GLOBALS['SITE_DB']->query_select_value('award_types','COUNT(*)');
 	}
 
 	/**

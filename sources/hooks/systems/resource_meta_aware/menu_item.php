@@ -38,7 +38,7 @@ class Hook_resource_meta_aware_menu_item
 			'table'=>'menu_items',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
+			'parent_category_field'=>'i_menu',
 			'parent_category_meta_aware_type'=>NULL,
 			'is_category'=>false,
 			'is_entry'=>true,

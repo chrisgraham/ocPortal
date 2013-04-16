@@ -109,15 +109,29 @@ class Hook_occle_fs_forums extends resource_fs_base
 	{
 		switch ($above)
 		{
+			case NULL:
 			case 'forum':
+				if (($under=='topic') && ($above===NULL)) return NULL;
+
 				if (($under=='forum') || ($under=='topic'))
 				{
 					$sub_info=$this->_get_cma_info($under);
-					$folder_info=$this->_get_cma_info($above);
+					$folder_info=$this->_get_cma_info('forum');
+					if ($under=='topic')
+					{
+						return array(
+							'cat_field'=>$sub_info['parent_category_field'],
+							'linker_table'=>NULL,
+							'id_field'=>$sub_info['parent_spec__field_name'],
+							'id_field_linker'=>$sub_info['parent_spec__field_name'],
+							'cat_field_numeric'=>$folder_info['id_field_numeric'],
+						);
+					}
 					return array(
-						'cat_field'=>$sub_info['parent_spec__parent_name'],
+						'cat_field'=>$sub_info['parent_category_field'],
 						'linker_table'=>$sub_info['parent_spec__table_name'],
 						'id_field'=>$sub_info['parent_spec__field_name'],
+						'id_field_linker'=>$sub_info['parent_spec__field_name'],
 						'cat_field_numeric'=>$folder_info['id_field_numeric'],
 					);
 				}
@@ -126,9 +140,10 @@ class Hook_occle_fs_forums extends resource_fs_base
 				if ($under=='post')
 				{
 					return array(
-						'cat_field'=>'p_forum_id',
+						'cat_field'=>'p_topic_id',
 						'linker_table'=>'f_posts',
 						'id_field'=>'id',
+						'id_field_linker'=>'id',
 						'cat_field_numeric'=>true,
 					);
 				}
@@ -219,6 +234,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function folder_convert_filename_to_id($filename,$resource_type=NULL)
 	{
+		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
+
 		if (!is_null($resource_type))
 			return parent::folder_convert_filename_to_id($filename,$resource_type);
 

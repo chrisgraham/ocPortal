@@ -109,6 +109,19 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	{
 		switch ($above)
 		{
+			case NULL:
+				if ($under=='catalogue')
+				{
+					$folder_info=$this->_get_cma_info($under);
+					return array(
+						'cat_field'=>NULL,
+						'linker_table'=>NULL,
+						'id_field'=>'c_name',
+						'id_field_linker'=>NULL,
+						'cat_field_numeric'=>false,
+					);
+				}
+				break;
 			case 'catalogue':
 				if ($under=='catalogue_category')
 				{
@@ -117,6 +130,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 						'cat_field'=>'c_name',
 						'linker_table'=>'catalogue_categories',
 						'id_field'=>'id',
+						'id_field_linker'=>'id',
 						'cat_field_numeric'=>false,
 					);
 				}
@@ -127,9 +141,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					$sub_info=$this->_get_cma_info($under);
 					$folder_info=$this->_get_cma_info($above);
 					return array(
-						'cat_field'=>$sub_info['parent_spec__parent_name'],
+						'cat_field'=>$sub_info['parent_category_field'],
 						'linker_table'=>$sub_info['parent_spec__table_name'],
 						'id_field'=>$sub_info['parent_spec__field_name'],
+						'id_field_linker'=>$sub_info['parent_spec__field_name'],
 						'cat_field_numeric'=>$folder_info['id_field_numeric'],
 					);
 				}
@@ -211,6 +226,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function folder_convert_filename_to_id($filename,$resource_type=NULL)
 	{
+		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
+
 		if (!is_null($resource_type))
 			return parent::folder_convert_filename_to_id($filename,$resource_type);
 

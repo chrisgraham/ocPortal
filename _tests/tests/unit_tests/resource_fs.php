@@ -102,10 +102,9 @@ class resource_fs_test_set extends ocp_test_case
 			}
 
 			$listing=$this->_recursive_listing($ob,array(),array('var',$occlefs_hook),$occle_fs);
-			$this->assertTrue($count=count($listing),'File/folder count mismatch for '.$occlefs_hook);
+			$this->assertTrue($count==count($listing),'File/folder count mismatch for '.$occlefs_hook);
+			//if ($count!=count($listing)){@var_dump($listing);@exit('!'.$count.'!'.$occlefs_hook);} Useful for debugging
 		}
-
-		@exit('!'); // TODO
 	}
 
 	function _recursive_listing($ob,$meta_dir,$meta_root_node,$occle_fs)
@@ -115,7 +114,7 @@ class resource_fs_test_set extends ocp_test_case
 		{
 			if ($f[1]==OCCLEFS_DIR)
 			{
-				$sub_listing=$this->_recursive_listing($ob,array_merge($meta_dir,$f[0]),$meta_root_node,$occle_fs);
+				$sub_listing=$this->_recursive_listing($ob,array_merge($meta_dir,array($f[0])),$meta_root_node,$occle_fs);
 				foreach ($sub_listing as $s_f)
 				{
 					$suffix='.'.RESOURCEFS_DEFAULT_EXTENSION;

@@ -40,8 +40,8 @@ class Hook_content_meta_aware_member
 			'table'=>'f_members',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>NULL,
+			'parent_category_field'=>'m_primary_group',
+			'parent_category_meta_aware_type'=>'group',
 			'is_category'=>false,
 			'is_entry'=>true,
 			'category_type'=>NULL, // For category permissions

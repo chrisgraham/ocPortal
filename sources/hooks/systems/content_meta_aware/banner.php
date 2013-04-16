@@ -38,12 +38,12 @@ class Hook_content_meta_aware_banner
 			'table'=>'banners',
 			'id_field'=>'name',
 			'id_field_numeric'=>false,
-			'parent_category_field'=>NULL,
+			'parent_category_field'=>'b_type',
 			'parent_category_meta_aware_type'=>'banner_type',
 			'is_category'=>false,
 			'is_entry'=>true,
 			'category_field'=>'b_type', // For category permissions
-			'category_type'=>NULL, // For category permissions
+			'category_type'=>'banner_type', // For category permissions
 			'category_is_string'=>true,
 
 			'title_field'=>'name',

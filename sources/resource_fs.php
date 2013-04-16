@@ -457,19 +457,52 @@ class resource_fs_base
 	/**
 	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ID_TEXT		Folder resource type
+	 * @param  ?ID_TEXT		Folder resource type (NULL: root level)
 	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return ?array			A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
 	 */
 	function _has_parent_child_relationship($above,$under)
 	{
 		$sub_info=$this->_get_cma_info($under);
-		if ((!array_key_exists('category_field',$sub_info)) || (is_null($sub_info['category_field']))) return NULL;
-		$folder_info=$this->_get_cma_info($above);
+
+		$is_file=$this->is_file_type($under);
+
+		if ($is_file)
+		{
+			// If no folder types, files are top level
+			if ((is_null($this->folder_resource_type)) && (is_null($above)))
+			{
+				return array(
+					'cat_field'=>NULL,
+					'linker_table'=>NULL,
+					'id_field'=>$sub_info['id_field'],
+					'id_field_linker'=>$sub_info['id_field'],
+					'cat_field_numeric'=>NULL,
+				);
+			}
+
+			// If there are folder types, files can not be top level
+			if ((!is_null($this->folder_resource_type)) && (is_null($above)))
+			{
+				return NULL;
+			}
+		}
+
+		// If there is no category for $under, then it can only be top-level
+		if ((!array_key_exists('parent_category_field',$sub_info)) || (is_null($sub_info['parent_category_field'])))
+		{
+			if (!is_null($above))
+			{
+				return NULL;
+			}
+		}
+
+		$folder_info=is_null($above)?$sub_info:$this->_get_cma_info($above);
 		return array(
-			'cat_field'=>$sub_info['category_field'],
-			'linker_table'=>$sub_info['parent_spec__table_name'],
-			'id_field'=>$sub_info['parent_spec__field_name'],
+			'cat_field'=>$sub_info['parent_category_field'],
+			'linker_table'=>$is_file?NULL:$sub_info['parent_spec__table_name'],
+			'id_field'=>$sub_info['id_field'],
+			'id_field_linker'=>$is_file?NULL:$sub_info['parent_spec__field_name'],
 			'cat_field_numeric'=>$folder_info['id_field_numeric'],
 		);
 	}
@@ -1488,7 +1521,7 @@ class resource_fs_base
 	{
 		$properties=$this->file_load($filename,$path);
 		if ($properties===false) return false;
-		return serialize($properties); // TODO: Should be XML serialisation
+		return serialize($properties); // TODO: Should be XML serialisation, #1160 on tracker
 	}
 
 	/**
@@ -1502,7 +1535,7 @@ class resource_fs_base
 	{
 		$properties=$this->folder_load($filename,$path);
 		if ($properties===false) return false;
-		return serialize($properties); // TODO: Should be XML serialisation
+		return serialize($properties); // TODO: Should be XML serialisation, #1160 on tracker
 	}
 
 	/**
@@ -1515,7 +1548,7 @@ class resource_fs_base
 	 */
 	function file_save_xml($filename,$path,$data)
 	{
-		$properties=@unserialize($data); // TODO: Should be XML parsing
+		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
 		return $this->file_save($filename,$path,$properties);
 	}
@@ -1530,7 +1563,7 @@ class resource_fs_base
 	 */
 	function folder_save_xml($filename,$path,$data)
 	{
-		$properties=@unserialize($data); // TODO: Should be XML parsing
+		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
 		return $this->folder_save($filename,$path,$properties);
 	}
@@ -1563,13 +1596,7 @@ class resource_fs_base
 		{
 			if (is_null($this->folder_resource_type)) return false; // Should not be possible
 
-			list($cat_resource_type,$cat_id)=$this->file_convert_filename_to_id(implode('/',$meta_dir));
-		} else
-		{
-			if (!is_null($this->folder_resource_type))
-			{
-				$cat_resource_type=is_array($this->folder_resource_type)?$this->folder_resource_type[0]:$this->folder_resource_type;
-			}
+			list($cat_resource_type,$cat_id)=$this->folder_convert_filename_to_id(implode('/',$meta_dir));
 		}
 
 		// Find folders
@@ -1578,29 +1605,42 @@ class resource_fs_base
 			$relationship=$this->_has_parent_child_relationship($cat_resource_type,$resource_type);
 			if (is_null($relationship)) continue;
 
+			$_cat_id=($relationship['cat_field_numeric']?(($cat_id=='')?NULL:intval($cat_id)):$cat_id);
+
 			$folder_info=$this->_get_cma_info($resource_type);
-			$table=$relationship['linker_table'].' main';
-			if ($relationship['linker_table']!=$folder_info['table'])
+
+			$select=array('main.*');
+			$table=$folder_info['table'].' main';
+			if ((!is_null($relationship['linker_table'])) && ($relationship['linker_table']!=$folder_info['table']))
 			{
-				$select=array('cats.*');
-				$table.=' JOIN '.$folder_info['connection']->get_table_prefix().$folder_info['table'].' cats ON cats.'.$folder_info['id_field'].'=main.'.$relationship['id_field'];
-				if (!is_null($folder_info['add_time_field'])) $select[]='cats.'.$folder_info['add_time_field'];
-				if (!is_null($folder_info['edit_time_field'])) $select[]='cats.'.$folder_info['edit_time_field'];
-			} else
-			{
-				$select=array('main.*');
-				if (!is_null($folder_info['add_time_field'])) $select[]=$folder_info['add_time_field'];
-				if (!is_null($folder_info['edit_time_field'])) $select[]=$folder_info['edit_time_field'];
+				if ((!is_null($_cat_id)) && ($_cat_id!==''))
+				{
+					$table=$folder_info['table'].' main JOIN '.$folder_info['connection']->get_table_prefix().$relationship['linker_table'].' cats ON cats.'.$relationship['id_field_linker'].'=main.'.$relationship['id_field'];
+				}
 			}
+			if (!is_null($folder_info['add_time_field'])) $select[]='main.'.$folder_info['add_time_field'];
+			if (!is_null($folder_info['edit_time_field'])) $select[]='main.'.$folder_info['edit_time_field'];
 			$extra='';
 			if (can_arbitrary_groupby())
 				$extra.='GROUP BY main.'.$relationship['id_field'].' '; // In case it's not a real category table, just an implied one by self-categorisation of entries
 			$extra.='ORDER BY main.'.$relationship['id_field'];
-			$_cat_id=($relationship['id_field_numeric']?(($cat_id=='')?NULL:intval($cat_id)):$cat_id);
-			$child_folders=$folder_info['connection']->query_select($table,$select,array('main.'.$relationship['cat_field']=>$_cat_id),$extra,10000/*Reasonable limit*/);
+			if (is_null($relationship['cat_field']))
+			{
+				$where=array();
+			} else
+			{
+				if (((is_null($_cat_id)) || ($_cat_id==='')) && ($relationship['linker_table']!=$folder_info['table']))
+				{
+					$where=array($relationship['id_field']=>db_get_first_id());
+				} else
+				{
+					$where=array($relationship['cat_field']=>$_cat_id);
+				}
+			}
+			$child_folders=$folder_info['connection']->query_select($table,$select,$where,$extra,10000/*Reasonable limit*/);
 			foreach ($child_folders as $folder)
 			{
-				$file=$this->folder_convert_id_to_filename($resource_type,$folder[$folder_info['id_field']]);
+				$filename=$this->folder_convert_id_to_filename($resource_type,$folder[$folder_info['id_field']]);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_folder_edit_date'))
@@ -1623,7 +1663,7 @@ class resource_fs_base
 				}
 
 				$listing[]=array(
-					$file,
+					$filename,
 					OCCLEFS_DIR,
 					NULL/*don't calculate a filesize*/,
 					$filetime,
@@ -1644,6 +1684,7 @@ class resource_fs_base
 				$_cat_id=($relationship['cat_field_numeric']?(($cat_id=='')?NULL:intval($cat_id)):$cat_id);
 				$where[$relationship['cat_field']]=$_cat_id;
 			}
+
 			$select=array();
 			append_content_select_for_id($select,$file_info);
 			if (!is_null($file_info['add_time_field'])) $select[]=$file_info['add_time_field'];
@@ -1652,7 +1693,7 @@ class resource_fs_base
 			foreach ($files as $file)
 			{
 				$str_id=extract_content_str_id_from_data($file,$file_info);
-				$file=$this->file_convert_id_to_filename($resource_type,$str_id);
+				$filename=$this->file_convert_id_to_filename($resource_type,$str_id);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_file_edit_date'))
@@ -1675,7 +1716,7 @@ class resource_fs_base
 				}
 
 				$listing[]=array(
-					$file,
+					$filename,
 					OCCLEFS_FILE,
 					NULL/*don't calculate a filesize*/,
 					$filetime,
