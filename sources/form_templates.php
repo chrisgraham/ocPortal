@@ -1651,7 +1651,7 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
 	if (($GLOBALS['DEV_MODE']) && (user_lang()==fallback_lang()))
 	{
 		$_description=trim(strip_tags(is_object($description)?$description->evaluate():$description));
-		if (($_description!='') && (substr($_description,-1)!='.') && (substr($_description,-1)!='!') && (substr($_description,-1)!='?') && (substr($_description,-1)!=']') && (substr($_description,-1)!=')') && (!$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']))
+		if (($_description!='') && (substr($_description,-1)!='.') && (substr(is_object($description)?$description->evaluate():$description,-6)!='</kbd>') && (substr($_description,-1)!='!') && (substr($_description,-1)!='?') && (substr($_description,-1)!=']') && (substr($_description,-1)!=')') && (!$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']))
 		{
 			fatal_exit('Description fields should end in full stops ['.$_description.'].');
 		}

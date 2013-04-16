@@ -228,10 +228,12 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	$email_address=trim(post_param('email_address'));
 	if (!is_null($confirm_email_address))
 	{
-		if (trim($confirm_email_address)!=$email_address) warn_exit(make_string_tempcode(escape_html(do_lang('EMAIL_ADDRESS_MISMATCH'))));
+		if (trim($confirm_email_address)!=$email_address)
+			warn_exit(make_string_tempcode(escape_html(do_lang('EMAIL_ADDRESS_MISMATCH'))));
 	}
 	require_code('type_validation');
-	if (!is_valid_email_address($email_address)) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+	if (!is_valid_email_address($email_address))
+		warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 	if ($invites_if_enabled) // code branch also triggers general tracking of referrals
 	{
 		if (get_option('is_on_invites')=='1')
@@ -417,7 +419,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	}
 	elseif ($skip_confirm)
 	{
-		if ($instant_login) // Automatic instant log in
+		if (($instant_login) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) // Automatic instant log in
 		{
 			require_code('users_active_actions');
 			handle_active_login($username);

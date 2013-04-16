@@ -390,7 +390,15 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	// E-mail address
 	if ($email_address=='') $email_address=trim(get_param('email_address',''));
-	$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
+	$email_description=new ocp_tempcode();
+	if ((get_option('valid_email_domains')!='') && ($mini_mode))
+	{ // domain restriction only applies on public join form ($mini_mode)
+		$email_description=do_lang_tempcode('MUST_BE_EMAIL_DOMAIN','<kbd>*.'.preg_replace('#\s*,\s*#','</kbd>, <kbd>*.',escape_html(get_option('valid_email_domains'))).'</kbd>',escape_html(get_option('valid_email_domains')));
+	} else
+	{
+		if (get_option('skip_email_confirm_join')=='0') $email_description=do_lang_tempcode('MUST_BE_REAL_ADDRESS');
+	}
+	$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),$email_description,'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
 	if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
 	{
 		$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));

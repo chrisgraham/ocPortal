@@ -153,6 +153,7 @@ function uninstall_ocf_everytime()
 	delete_config_option('encryption_key');
 	delete_config_option('decryption_key');
 	delete_config_option('intro_forum_id');
+	delete_config_option('valid_email_domains');
 
 	delete_value('ocf_newest_member_id');
 	delete_value('ocf_newest_member_username');
@@ -378,6 +379,10 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('SKIP_EMAIL_CONFIRM_JOIN','skip_email_confirm_join','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2');
 		add_config_option('ALLOW_INTERNATIONAL','allow_international','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+	}
+	if ((is_null($upgrade_from)) || ($upgrade_from<10.0)) // TODO: Tidy up in v10 branch
+	{
+		add_config_option('VALID_EMAIL_DOMAINS','valid_email_domains','line','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 	}
 	if ((is_null($upgrade_from)) || ($upgrade_from<8.0))
 	{
