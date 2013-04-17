@@ -650,7 +650,7 @@ class Module_cms_comcode_pages
 		{
 			require_code('page_templates');
 			$templates=get_templates_list();
-			$template_name=(get_param('page_template','')!='')?get_param('page_template',''):get_param('title');
+			$template_name=(get_param('page_template','')!='')?get_param('page_template',''):$file;
 			if (in_array(strtolower($template_name),$templates))
 			{
 				$contents=get_template_contents($template_name);
