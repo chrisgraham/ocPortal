@@ -37,8 +37,8 @@ class occle_fs_test_set extends ocp_test_case
 		$occlefs_hooks=find_all_hooks('systems','occle_fs');
 		foreach ($occlefs_hooks as $occlefs_hook=>$dir)
 		{
-			$path=get_file_base().'/'.$dir.'/hooks/systems/occle_fs/'.$occlefs_hook.'.php';
-			$contents=file_get_contents($path);
+			$_path=get_file_base().'/'.$dir.'/hooks/systems/occle_fs/'.$occlefs_hook.'.php';
+			$contents=file_get_contents($_path);
 			if (strpos($contents,' extends resource_fs_base')!==false)
 			{
 				$cnt++;

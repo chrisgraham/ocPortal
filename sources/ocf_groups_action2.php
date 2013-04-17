@@ -64,7 +64,7 @@ function ocf_may_control_group($group_id,$member_id)
  * @param  ?BINARY		Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum. (NULL: do not change)
  * @param  boolean		Whether to force the title as unique, if there's a conflict
  */
-function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)
+function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,$uniqify=false)
 {
 	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
 	if ((!is_null($test)) && ($test!=$group_id))

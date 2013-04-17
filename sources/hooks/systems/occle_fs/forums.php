@@ -590,7 +590,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$last_edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$last_edit_by=$this->_default_property_int_null($properties,'last_edit_by');
 		$parent_id=$this->_default_property_int_null($properties,'parent_id');
-		$id=ocf_make_post($topic_id,$label,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,0,NULL,0,true,NULL,false,$parent_id);
+		$id=ocf_make_post($topic_id,$label,$post,$skip_sig,NULL,$validated,$is_emphasised,$poster_name_if_guest,$ip_address,$time,$poster,$intended_solely_for,$last_edit_time,$last_edit_by,false,true,NULL,false,NULL,0,NULL,false,true,NULL,false,$parent_id);
 		return strval($id);
 	}
 

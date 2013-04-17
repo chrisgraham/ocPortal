@@ -198,7 +198,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 
 		// Move
 		$old_path=$this->search($resource_type,$resource_id,false);
-		list(,$old_category)=($old_path=='')?NULL:$this->folder_convert_filename_to_id($old_path);
+		list(,$old_category)=($old_path=='')?array('wiki_page',NULL):$this->folder_convert_filename_to_id($old_path);
 		$old_parent_id=$this->_integer_category($old_category);
 		if ($old_parent_id!==$parent_id)
 		{

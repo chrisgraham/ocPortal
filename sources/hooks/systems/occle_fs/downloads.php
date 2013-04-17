@@ -291,7 +291,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		}
 		$cost=$this->_default_property_int($properties,'cost');
 		$submitter_gets_points=$this->_default_property_int($properties,'submitter_gets_points');
-		$licence=$this->_default_property_int_null($properties,'licence'); // TODO
+		$licence=$this->_default_property_int_null($properties,'licence'); // TODO, #1160 on tracker
 		$add_date=$this->_default_property_int_null($properties,'add_date');
 		$num_downloads=$this->_default_property_int($properties,'num_downloads');
 		$views=$this->_default_property_int($properties,'views');
@@ -389,7 +389,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		}
 		$cost=$this->_default_property_int($properties,'cost');
 		$submitter_gets_points=$this->_default_property_int($properties,'submitter_gets_points');
-		$licence=$this->_default_property_int_null($properties,'licence'); // TODO
+		$licence=$this->_default_property_int_null($properties,'licence'); // TODO, #1160 on tracker
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$num_downloads=$this->_default_property_int($properties,'num_downloads');
 		$views=$this->_default_property_int($properties,'views');

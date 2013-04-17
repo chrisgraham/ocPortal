@@ -47,6 +47,36 @@ class resource_fs_test_set extends ocp_test_case
 		}
 	}
 
+	function testPorting()
+	{
+		// Test exporting something
+		$out=remap_resource_id_as_portable('group','1');
+		$this->assertTrue($out['label']=='Guests');
+		$this->assertTrue($out['subpath']=='');
+		$this->assertTrue($out['id']==db_get_first_id());
+
+		// Test importing to something - binding to something that exists
+		$in=remap_portable_as_resource_id('group',$out);
+		$this->assertTrue(intval($in)==db_get_first_id());
+
+		// Test importing to something - something that does not exist
+		$ob=get_resource_occlefs_object('download');
+		$port=array(
+			'guid'=>'a-b-c-d-e-f',
+			'label'=>'My Test Download',
+			'subpath'=>'Downloads home/Some Deep/Path',
+		);
+		$in=remap_portable_as_resource_id('download',$port);
+		$guid=find_guid_via_id('download',$in);
+		$filename=$ob->convert_id_to_filename('download',$in);
+		$this->assertTrue($guid==$port['guid']); // Tests it imported with the same GUID
+		$subpath=$ob->search('download',$in,true);
+		$this->assertTrue(strpos($subpath,'/')!==false); // Test it imported with a deep path
+
+		// Tidy up, delete it
+		$ob->file_delete($filename,$subpath);
+	}
+
 	function testFullCoverage()
 	{
 		$cma_hooks=find_all_hooks('systems','content_meta_aware')+find_all_hooks('systems','resource_meta_aware');

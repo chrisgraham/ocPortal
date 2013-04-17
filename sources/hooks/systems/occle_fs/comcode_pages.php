@@ -285,11 +285,14 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		if (is_null($submitter)) $submitter=get_member();
 		$text=$this->_default_property_str($properties,'text');
 
+		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
+		$meta_description=$this->_default_property_str($properties,'meta_description');
+
 		$test=_request_page($page,$zone,NULL,NULL,true);
 		if ($test!==false) $page.='_'.uniqid(''); // Uniqify
 
 		require_code('zones3');
-		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,true);
+		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,NULL,$meta_keywords,$meta_description);
 		$page=basename($full_path,'.txt');
 
 		return $zone.':'.$page;
@@ -385,7 +388,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		}
 
 		require_code('zones3');
-		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$old_page,$meta_keywords,$meta_description,true);
+		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$old_page,$meta_keywords,$meta_description);
 		$page=basename($full_path,'.txt');
 
 		return true;

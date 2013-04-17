@@ -122,9 +122,9 @@ class Hook_occle_fs_etc
 		if (array_key_exists($extended_config_filename,$hooks)) return false;
 
 		delete_config_option($file_name);
-		*/
 
 		return true;
+		*/
 	}
 
 	/**

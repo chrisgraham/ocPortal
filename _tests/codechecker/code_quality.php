@@ -1033,7 +1033,7 @@ function check_command($command,$depth,$function_guard='',$nogo_parameters=NULL)
 				{
 					if (!is_null($case[0]))
 					{
-						$passes=ensure_type(array($switch_type),check_expression($case[0],false,false,$function_guard),$c_pos,'Switch type inconsistency');
+						$passes=ensure_type(array($switch_type,'NULL'),check_expression($case[0],false,false,$function_guard),$c_pos,'Switch type inconsistency');
 						if ($passes) infer_expression_type_to_variable_type($switch_type,$case[0]);
 					}
 					check_command($case[1],$depth+1,$function_guard,$nogo_parameters);

@@ -61,7 +61,7 @@ function get_resource_occlefs_object($resource_type)
 /*
 ADDRESSING SPACE POPULATION AND LOOKUP CAN HAPPEN OUTSIDE RESOURCE-FS OBJECTS;
 THIS INCLUDES FILENAME STUFF, ALTHOUGH DELEGATED INTERNALLY TO THE RESOURCE-FS OBJECT WHICH HANDLES THE ACTUAL NAMING RULES;
-ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch via get_resource_occlefs_object)
+ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch that via the get_resource_occlefs_object function)
 */
 
 /**
@@ -113,9 +113,9 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 	{
 		if (!is_null($no_exists_check_for))
 		{
-			if ($moniker==$no_exists_check_for) // This one is okay, we know it is safe
+			if ($moniker==$no_exists_check_for) // This one is okay, we know it is safe, and no need to change it
 			{
-				return array($moniker,$guid,$label);
+				break;
 			}
 		}
 
@@ -248,6 +248,7 @@ function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
 	$resource_label=substr($_resource_label,0,255);
 
 	$occlefs_ob=get_resource_occlefs_object($resource_type);
+	if (is_null($occlefs_ob)) fatal_exit('Cannot load resource-fs object for '.$resource_type);
 
 	$ids=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_id'),array(
 		'resource_type'=>$resource_type,
@@ -363,8 +364,9 @@ function remap_portable_as_resource_id($resource_type,$portable)
 	if (!is_null($resource_id)) return $resource_id;
 
 	// Otherwise, use the label
+	$resourcefs_ob=get_resource_occlefs_object($resource_type);
 	$subpath=array_key_exists('subpath',$portable)?$portable['subpath']:'';
-	$resource_id=$this->convert_label_to_id($portable['label'],$subpath,$resource_type,false,array_key_exists('guid',$portable)?$portable['guid']:NULL);
+	$resource_id=$resourcefs_ob->convert_label_to_id($portable['label'],$subpath,$resource_type,false,array_key_exists('guid',$portable)?$portable['guid']:NULL);
 
 	return $resource_id;
 }
@@ -885,25 +887,38 @@ class resource_fs_base
 				// Create subpath
 				if ($subpath!='')
 				{
+					$folder_resource_type=is_array($this->folder_resource_type)?$this->folder_resource_type[0]:$this->folder_resource_type;
+
 					$subpath_bits=explode('/',$subpath);
 					$subpath_above='';
 					foreach ($subpath_bits as $subpath_bit)
 					{
-						$subpath_id=$this->folder_convert_filename_to_id($subpath_bit);
-						if (is_null($subpath_id)) // Missing, create folder
+						list(,$subpath_id)=$this->folder_convert_filename_to_id($subpath_bit);
+						if (is_null($subpath_id)) // Missing, find via monikerised label
+						{
+							$_subpath_bit=$this->_create_name_from_label($subpath_bit);
+							list(,$subpath_id)=$this->folder_convert_filename_to_id($_subpath_bit);
+						}
+						if (is_null($subpath_id)) // Missing, find via label
+						{
+							$subpath_id=find_id_via_label($folder_resource_type,$subpath_bit,$subpath_above);
+						}
+						if (is_null($subpath_id)) // Still missing, create folder
 						{
 							$this->folder_add($subpath_bit,$subpath_above,array());
 						}
+
 						if ($subpath_above!='') $subpath_above.='/';
-						$subpath_above.=$subpath_bit;
+						$subpath_above.=$this->folder_convert_id_to_filename($folder_resource_type,$subpath_id);
 					}
 				}
 
 				// Create main resource
 				$resource_id=$this->resource_add($resource_type,$_label,$subpath,array());
-				if (!is_null($guid))
+				if ($resource_id===false) return NULL;
+				if (!is_null($use_guid_for_new))
 				{
-					generate_resourcefs_moniker($resource_type,$resource_id,$label,$guid);
+					generate_resourcefs_moniker($resource_type,$resource_id,$label,$use_guid_for_new);
 				}
 			}
 		}
