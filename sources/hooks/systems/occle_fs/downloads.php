@@ -116,7 +116,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	function folder_add($filename,$path,$properties)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-		if ($category=='') $category=strval(db_get_first_id());/*return false;*/ // Can't create more than one root
+		if (is_null($category)) $category=strval(db_get_first_id());/*return false;*/ // Can't create more than one root
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -266,7 +266,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		if ($category=='') return false;
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('downloads2');
 
@@ -362,6 +362,8 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('downloads2');
 

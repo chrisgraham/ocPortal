@@ -267,7 +267,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		if ($category=='') return false;
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('wiki');
 
@@ -323,7 +323,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
 
-		if ($category=='') return false;
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('wiki');
 

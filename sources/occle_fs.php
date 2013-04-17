@@ -74,7 +74,7 @@ class occle_fs
 			if (!is_null($occle_fs_hook))
 			{
 				unset($occlefs_hooks[$occle_fs_hook]); // It's under 'var', don't put elsewhere
-				$var[$occle_fs_hook]=array();
+				$var[$occle_fs_hook]=$occle_fs_hook;
 			}
 		}
 		foreach (array_keys($occlefs_hooks) as $hook) // Other filesystems go directly under the root (not 'root', which is different)
@@ -192,7 +192,7 @@ class occle_fs
 	}
 
 	/**
-	 * Merge an absolute array-form path with a non-absolute array-form path.
+	 * Merge an absolute array-form path with a non-absolute array-form path, with support for "."/".." resolution.
 	 *
 	 * @param  array				Absolute path
 	 * @param  array				Non-absolute path
@@ -352,7 +352,6 @@ class occle_fs
 				$contents, // This is only here for hard-coded dirs; it will either be a string (i.e. hook name) or an array (more hard-coded depth to go)
 			);
 		}
-
 		return $inspected_dir;
 	}
 
@@ -388,8 +387,10 @@ class occle_fs
 	function print_working_directory($array_form=false)
 	{
 		// Return the current working directory
-		if ($array_form) return $this->pwd;
-		else
+		if ($array_form)
+		{
+			return $this->pwd;
+		} else
 		{
 			return $this->_pwd_to_string();
 		}

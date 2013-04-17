@@ -45,6 +45,9 @@ class Hook_content_meta_aware_member
 			'is_category'=>false,
 			'is_entry'=>true,
 			'category_type'=>NULL, // For category permissions
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_field'=>'m_primary_group', // For category permissions
 			'category_is_string'=>false,
 

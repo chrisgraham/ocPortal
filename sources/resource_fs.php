@@ -79,6 +79,7 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 
 	require_code('content');
 	$resource_object=get_content_object($resource_type);
+	if (is_null($resource_type)) fatal_exit('Cannot load content object for '.$resource_type);
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];
 
@@ -700,7 +701,10 @@ class resource_fs_base
 	 */
 	function _default_property_int($properties,$property)
 	{
-		return array_key_exists($property,$properties)?intval($properties[$property]):0;
+		if (!array_key_exists($property,$properties)) return 0;
+		if (is_null($properties[$property])) return 0;
+		if (is_integer($properties[$property])) return $properties[$property];
+		return intval($properties[$property]);
 	}
 
 	/**
@@ -724,7 +728,10 @@ class resource_fs_base
 	 */
 	function _default_property_int_null($properties,$property)
 	{
-		return array_key_exists($property,$properties)?intval($properties[$property]):NULL;
+		if (!array_key_exists($property,$properties)) return NULL;
+		if (is_null($properties[$property])) return NULL;
+		if (is_integer($properties[$property])) return $properties[$property];
+		return intval($properties[$property]);
 	}
 
 	/**
@@ -743,6 +750,7 @@ class resource_fs_base
 
 		if (array_key_exists($property,$properties))
 		{
+			if (is_integer($properties[$property])) return $properties[$property];
 			return intval($properties[$property]);
 		}
 
@@ -792,13 +800,17 @@ class resource_fs_base
 		if (is_null($this->folder_resource_type)) return '';
 
 		// For each folder type, see if we can find a position for this resource
-		foreach (is_array($this->folder_resource_type)?$this->folder_resource_type:array($this->folder_resource_type) as $cat_resource_type)
+		$cat_resource_types=is_array($this->folder_resource_type)?$this->folder_resource_type:array($this->folder_resource_type);
+		$cat_resource_types[]=NULL;
+		foreach ($cat_resource_types as $cat_resource_type)
 		{
 			$relationship=$this->_has_parent_child_relationship($cat_resource_type,$resource_type);
 			if (is_null($relationship)) continue;
 
+			if (is_null($cat_resource_type)) return ''; // Exists in root
+
 			// Do we need to load up a linker table for getting the category?
-			if ($cma_info['table']!=$relationship['linker_table'])
+			if ((!is_null($relationship['linker_table'])) && ($cma_info['table']!=$relationship['linker_table']))
 			{
 				$where=array($relationship['id_field']=>$content_row[$cma_info['id_field']]);
 				$categories=$cma_info['connection']->query_select($relationship['linker_table'],array($relationship['cat_field']),$where);
@@ -1550,7 +1562,12 @@ class resource_fs_base
 	{
 		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
-		return $this->file_save($filename,$path,$properties);
+		$test=$this->file_load($filename,$path);
+		if ($test===false)
+		{
+			return $this->file_add($filename,$path,$properties);
+		}
+		return $this->file_edit($filename,$path,$properties);
 	}
 
 	/**
@@ -1565,7 +1582,12 @@ class resource_fs_base
 	{
 		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
-		return $this->folder_save($filename,$path,$properties);
+		$test=$this->folder_load($filename,$path);
+		if ($test===false)
+		{
+			return $this->folder_add($filename,$path,$properties);
+		}
+		return $this->folder_edit($filename,$path,$properties);
 	}
 
 	/*
@@ -1631,7 +1653,7 @@ class resource_fs_base
 			{
 				if (((is_null($_cat_id)) || ($_cat_id==='')) && ($relationship['linker_table']!=$folder_info['table']))
 				{
-					$where=array($relationship['id_field']=>db_get_first_id());
+					$where=array($relationship['id_field']=>($folder_info['id_field_numeric']?db_get_first_id():'')); // Don't go through the linker table for the root category
 				} else
 				{
 					$where=array($relationship['cat_field']=>$_cat_id);

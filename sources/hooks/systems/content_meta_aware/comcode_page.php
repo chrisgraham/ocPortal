@@ -44,6 +44,9 @@ class Hook_content_meta_aware_comcode_page
 			'is_entry'=>true,
 			'category_field'=>array('the_zone','the_page'), // For category permissions
 			'category_type'=>'<page>', // For category permissions ("<page>" means use page permissions)
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_is_string'=>true,
 
 			'title_field'=>'the_page',

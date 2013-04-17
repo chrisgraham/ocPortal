@@ -44,6 +44,9 @@ class Hook_content_meta_aware_catalogue
 			'is_entry'=>false,
 			'category_field'=>'c_name', // For category permissions
 			'category_type'=>'catalogues_catalogue', // For category permissions
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_is_string'=>true,
 
 			'title_field'=>'c_title',

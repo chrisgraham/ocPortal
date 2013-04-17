@@ -326,7 +326,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
-		if ($category=='') return false;
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('galleries2');
 
@@ -438,6 +438,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('galleries2');
 

@@ -142,9 +142,9 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					$folder_info=$this->_get_cma_info($above);
 					return array(
 						'cat_field'=>$sub_info['parent_category_field'],
-						'linker_table'=>$sub_info['parent_spec__table_name'],
+						'linker_table'=>($under=='catalogue_entry')?NULL:$sub_info['parent_spec__table_name'],
 						'id_field'=>$sub_info['parent_spec__field_name'],
-						'id_field_linker'=>$sub_info['parent_spec__field_name'],
+						'id_field_linker'=>($under=='catalogue_entry')?NULL:$sub_info['parent_spec__field_name'],
 						'cat_field_numeric'=>$folder_info['id_field_numeric'],
 					);
 				}

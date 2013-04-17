@@ -44,6 +44,9 @@ class Hook_content_meta_aware_chat
 			'is_entry'=>false,
 			'category_field'=>NULL, // For category permissions
 			'category_type'=>NULL, // For category permissions
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_is_string'=>false,
 
 			'title_field'=>'room_name',

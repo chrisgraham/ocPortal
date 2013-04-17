@@ -44,6 +44,9 @@ class Hook_content_meta_aware_banner
 			'is_entry'=>true,
 			'category_field'=>'b_type', // For category permissions
 			'category_type'=>'banner_type', // For category permissions
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_is_string'=>true,
 
 			'title_field'=>'name',

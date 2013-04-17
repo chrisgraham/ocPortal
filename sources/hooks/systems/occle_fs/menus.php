@@ -104,8 +104,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 	 */
 	function folder_add($filename,$path,$properties)
 	{
-		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
-		if ($category!='') return false; // Only one depth allowed for this resource type
+		if ($path!='') return false; // Only one depth allowed for this resource type
 
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
@@ -237,6 +236,8 @@ class Hook_occle_fs_menus extends resource_fs_base
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
 
+		if (is_null($category)) return false; // Folder not found
+
 		require_code('menus2');
 
 		$order=$this->_default_property_int($properties,'order');
@@ -295,6 +296,8 @@ class Hook_occle_fs_menus extends resource_fs_base
 		list($resource_type,$resource_id)=$this->file_convert_filename_to_id($filename);
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,)=$this->_file_magic_filter($filename,$path,$properties);
+
+		if (is_null($category)) return false; // Folder not found
 
 		require_code('menus2');
 

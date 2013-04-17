@@ -43,6 +43,9 @@ class Hook_content_meta_aware_news_category
 			'is_category'=>true,
 			'is_entry'=>false,
 			'category_type'=>'news', // For category permissions
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_field'=>NULL, // For category permissions
 			'category_is_string'=>false,
 

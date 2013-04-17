@@ -169,7 +169,7 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
 		{
 			$_content_title=$content_row[$cma_info['title_field']];
 			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
-			if ($content_title=='')
+			if (($content_title=='') && (!$resourcefs_style))
 			{
 				$content_title=do_lang($cma_info['content_type_label']).' (#'.(is_string($content_id)?$content_id:strval($content_id)).')';
 				if ($content_type=='image' || $content_type=='video') // A bit of a fudge, but worth doing
@@ -228,6 +228,7 @@ function content_get_row($content_id,$cma_info)
 	$id_field_numeric=array_key_exists('id_field_numeric',$cma_info)?$cma_info['id_field_numeric']:true;
 	$where=get_content_where_for_str_id($content_id,$cma_info);
 	$_content=$db->query_select($cma_info['table'].' r',array('r.*'),$where,'',1);
+
 	return array_key_exists(0,$_content)?$_content[0]:NULL;
 }
 

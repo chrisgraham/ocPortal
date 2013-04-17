@@ -44,6 +44,9 @@ class Hook_resource_meta_aware_cpf
 			'is_entry'=>true,
 			'category_field'=>NULL, // For category permissions
 			'category_type'=>NULL, // For category permissions
+			'parent_spec__table_name'=>NULL,
+			'parent_spec__parent_name'=>NULL,
+			'parent_spec__field_name'=>NULL,
 			'category_is_string'=>true,
 
 			'title_field'=>'cf_name',
