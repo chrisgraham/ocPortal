@@ -645,6 +645,17 @@ class Module_cms_comcode_pages
 		{
 			$new=false;
 		}
+		
+		if ($new)
+		{
+			require_code('page_templates');
+			$templates=get_templates_list();
+			$template_name=(get_param('page_template','')!='')?get_param('page_template',''):get_param('title');
+			if (in_array(strtolower($template_name),$templates))
+			{
+				$contents=get_template_contents($template_name);
+			}
+		}
 
 		// Actualiser URL
 		$map=array('page'=>'_SELF','type'=>'__ed');

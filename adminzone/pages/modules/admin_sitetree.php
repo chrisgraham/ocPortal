@@ -307,6 +307,16 @@ class Module_admin_sitetree
 		$fields->attach(form_input_list(do_lang_tempcode('MENU'),do_lang_tempcode('MENU_TO_ADD_TO'),'menu',$list,NULL,true));
 
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_MENU_TITLE'),'title',titleify(post_param('name')),true));
+		
+		$template_list=new ocp_tempcode();
+		$template_list->attach(form_input_list_entry('Default',true));
+		require_code('page_templates');
+		$templates=get_templates_list();
+		foreach ($templates as $template)
+		{
+			$template_list->attach(form_input_list_entry(ucfirst($template),false));
+		}
+		$fields->attach(form_input_list(do_lang_tempcode('PAGE_TEMPLATE'),do_lang_tempcode('PAGE_TEMPLATE_DESCRIPTION'),'page_template',$template_list,NULL,true));
 
 		$post_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','simple_add'=>1),get_module_zone('cms_comcode_pages'));
 
