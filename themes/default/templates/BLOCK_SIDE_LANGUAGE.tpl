@@ -5,7 +5,7 @@
 		{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},keep_lang}
 		<div>
 			<p class="accessibility_hidden"><label for="keep_lang">{!LANGUAGE}</label></p>
-			<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} id="keep_lang" name="keep_lang" class="wide_field">
+			<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} id="keep_lang" name="keep_lang" class="wide_field">
 				{LANGS}
 			</select>
 			{+START,IF,{$NOT,{$JS_ON}}}

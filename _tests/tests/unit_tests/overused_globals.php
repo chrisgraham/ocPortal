@@ -30,7 +30,7 @@ class overused_globals_test_set extends ocp_test_case
 		$files=get_directory_contents(get_file_base(),'',true);
 		foreach ($files as $file)
 		{
-			if ((substr($file,-4)=='.php') && (($file=='install.php') || (!should_ignore_file($file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS))))
+			if ((substr($file,-4)=='.php') && (($file=='install.php') || (!should_ignore_file($file,IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS))))
 			{
 				$done_for_file=array();
 

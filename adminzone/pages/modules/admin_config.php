@@ -267,7 +267,6 @@ class Module_admin_config
 			add_config_option('ENVELOPER_OVERRIDE','enveloper_override','tick','return \'0\';','SITE','EMAIL');
 			add_config_option('BCC','bcc','tick','return \'1\';','SITE','EMAIL');
 			add_config_option('ALLOW_EXT_IMAGES','allow_ext_images','tick','return \'0\';','SITE','EMAIL');
-			add_config_option('HTM_SHORT_URLS','htm_short_urls','tick','return \'0\';','SITE','ADVANCED');
 			add_config_option('IP_STRICT_FOR_SESSIONS','ip_strict_for_sessions','tick','return \'1\';','SECURITY','GENERAL');
 			add_config_option('ENABLE_PREVIEWS','enable_previews','tick','return \'1\';','SITE','PREVIEW');
 			add_config_option('ENABLE_KEYWORD_DENSITY_CHECK','enable_keyword_density_check','tick','return \'0\';','SITE','PREVIEW');

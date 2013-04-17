@@ -145,7 +145,7 @@ class Block_main_content
 			}
 
 			$where='';
-			$query='FROM '.get_table_prefix().$info['table'].' g';
+			$query='FROM '.get_table_prefix().$info['table'].' r';
 			if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!$efficient))
 			{
 				$_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
@@ -156,7 +156,6 @@ class Block_main_content
 					$groups.='a.group_id='.strval($group);
 				}
 
-				$query='FROM '.get_table_prefix().$info['table'].' g';
 				if (!is_null($category_field_access))
 				{
 					if ($category_type_access==='<zone>')
@@ -218,7 +217,7 @@ class Block_main_content
 				$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:NULL;
 				if ((!is_null($parent_spec__table_name)) && ($parent_spec__table_name!=$info['table']))
 				{
-					$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=g.'.$info['id_field'];
+					$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=r.'.$info['id_field'];
 				}
 			}
 			if (($filter_b!='') && (!is_null($category_field_filter)))
@@ -267,9 +266,9 @@ class Block_main_content
 				if ($result===NULL || $result->is_empty()) return new ocp_tempcode();
 			}
 
-			$wherea=get_content_where_for_str_id($content_id,$info,'g');
+			$wherea=get_content_where_for_str_id($content_id,$info,'r');
 
-			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1,NULL,false,$lang_fields);
+			$rows=$info['connection']->query_select($info['table'].' r',array('r.*'),$wherea,'',1,NULL,false,$lang_fields);
 			if (!array_key_exists(0,$rows))
 			{
 				if ((array_key_exists('render_if_empty',$map)) && ($map['render_if_empty']=='0')) return new ocp_tempcode();

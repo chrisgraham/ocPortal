@@ -119,7 +119,7 @@ class Hook_addon_registry_core_addon_management
 		return array(
 			'ADDON_SCREEN.tpl'=>'administrative__addon_screen',
 			'ADDON_SCREEN_ADDON.tpl'=>'administrative__addon_screen',
-			'ADDON_NAME'=>'administrative__addon_screen',
+			'ADDON_NAME.tpl'=>'administrative__addon_screen',
 			'ADDON_MULTI_CONFIRM_SCREEN.tpl'=>'administrative__addon_multi_confirm_screen',
 			'ADDON_INSTALL_CONFIRM_SCREEN.tpl'=>'administrative__addon_install_confirm_screen',
 			'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl'=>'administrative__addon_uninstall_confirm_screen',

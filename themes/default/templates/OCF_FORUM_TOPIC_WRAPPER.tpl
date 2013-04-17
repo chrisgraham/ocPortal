@@ -94,7 +94,7 @@
 
 					<div class="inline">
 						<label for="forum_max">{!PER_PAGE}:
-						<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} name="forum_max" id="forum_max">
+						<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} name="forum_max" id="forum_max">
 							<option value="10"{$?,{$EQ,{MAX},10}, selected="selected",}>10</option>
 							<option value="20"{$?,{$EQ,{MAX},20}, selected="selected",}>20</option>
 							<option value="30"{$?,{$EQ,{MAX},30}, selected="selected",}>30</option>
@@ -116,7 +116,7 @@
 
 					<div class="inline">
 						<label for="order">{!ORDER}:
-						<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} name="order" id="order">
+						<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} name="order" id="order">
 							<option value="last_post"{$?,{$EQ,{ORDER},last_post}, selected="selected",}>{!FORUM_ORDER_BY_LAST_POST}</option>
 							<option value="first_post"{$?,{$EQ,{ORDER},first_post}, selected="selected",}>{!FORUM_ORDER_BY_FIRST_POST}</option>
 							<option value="title"{$?,{$EQ,{ORDER},title}, selected="selected",}>{!FORUM_ORDER_BY_TITLE}</option>

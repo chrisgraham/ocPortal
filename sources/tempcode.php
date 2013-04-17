@@ -706,7 +706,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			if ($GLOBALS['RECORD_TEMPLATES_USED'])
 			{
 				$param=$bit[3];
-				$GLOBALS['$RECORDED_TEMPLATES_USED'][]=$param[0]->evaluate();
+				$GLOBALS['$RECORDED_TEMPLATES_USED'][]=(is_object($param[0])?$param[0]->evaluate():$param[0]);
 			}
 			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 			{

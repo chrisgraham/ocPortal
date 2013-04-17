@@ -76,7 +76,7 @@ class Hook_occle_fs_custom_comcode_tags extends resource_fs_base
 	 */
 	function _get_file_edit_date($row)
 	{
-		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',$row['tag_name']).' AND  ('.db_string_equal_to('the_type','ADD_CUSTOM_COMCODE_TAG').' OR '.db_string_equal_to('the_type','EDIT_CUSTOM_COMCODE_TAG').')';
+		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('param_a',$row['tag_tag']).' AND  ('.db_string_equal_to('the_type','ADD_CUSTOM_COMCODE_TAG').' OR '.db_string_equal_to('the_type','EDIT_CUSTOM_COMCODE_TAG').')';
 		return $GLOBALS['SITE_DB']->query_value_if_there($query);
 	}
 

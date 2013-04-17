@@ -72,6 +72,8 @@ class Hook_addon_registry_core
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/occle_fs_extended_config/.htaccess',
+			'sources/hooks/systems/resource_meta_aware/.htaccess',
 			'sources/hooks/systems/resource_meta_aware/index.html',
 			'sources/hooks/systems/occle_fs_extended_config/privilege.php',
 			'sources/block_add.php',

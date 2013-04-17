@@ -255,7 +255,7 @@ class Module_admin_setupwizard
 				$addon_list_override_to_off_by_default=$profile_addons[2];
 		} else
 		{
-			$addon_list_on_by_default=NULL;
+			$addon_list_on_by_default=mixed();
 			$addon_list_advanced_on_by_default=array();
 		}
 

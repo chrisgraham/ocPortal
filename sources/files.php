@@ -335,6 +335,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			// These two too, although in git we don't change these as builds will not rebuild them
 			'breadcrumbs.xml'=>'data_custom',
 			'fields.xml'=>'data_custom',
+			'aggregate_types.xml'=>'data_custom',
 		);
 	}
 
@@ -380,7 +381,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0) // Ignore all override directories, for both users and addons
 	{
-		if (($dir=='data_custom') && (in_array($filename,array('breadcrumbs.xml','fields.xml','errorlog.php','execute_temp.php','functions.dat'))))
+		if (($dir=='data_custom') && (in_array($filename,array('aggregate_types.xml','breadcrumbs.xml','fields.xml','errorlog.php','execute_temp.php','functions.dat'))))
 		{
 			// These are allowed, as they are volatile yet bundled. Use IGNORE_BUNDLED_VOLATILE if you don't want them.
 		} else

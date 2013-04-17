@@ -272,7 +272,7 @@ class Hook_addon_registry_core_feedback_features
 			'EMAIL_OPTIONAL'=>lorem_word_html(),
 			'GET_TITLE'=>true,
 			'EM'=>placeholder_emoticon_chooser(),
-			'DISPLAY'=>lorem_phrase(),
+			'DISPLAY'=>'block',
 			'COMMENT_URL'=>placeholder_url(),
 			'SUBMIT_NAME'=>lorem_word(),
 			'TITLE'=>lorem_word(),

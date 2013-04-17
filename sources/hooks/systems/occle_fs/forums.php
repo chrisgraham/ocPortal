@@ -101,15 +101,16 @@ class Hook_occle_fs_forums extends resource_fs_base
 	/**
 	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ID_TEXT		Folder resource type
+	 * @param  ?ID_TEXT		Folder resource type (NULL: root)
 	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return ?array			A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
 	 */
 	function _has_parent_child_relationship($above,$under)
 	{
+		if (is_null($above)) $above='';
 		switch ($above)
 		{
-			case NULL:
+			case '':
 			case 'forum':
 				if (($under=='topic') && ($above===NULL)) return NULL;
 
@@ -177,7 +178,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		}
 
 		return array(
-			'description'=>'SHORT_TEXT',
+			//'description'=>'SHORT_TEXT',
 			'emoticon'=>'SHORT_TEXT',
 			'validated'=>'BINARY',
 			'open'=>'BINARY',
@@ -236,11 +237,15 @@ class Hook_occle_fs_forums extends resource_fs_base
 	{
 		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
 
-		if (!is_null($resource_type))
-			return parent::folder_convert_filename_to_id($filename,$resource_type);
-
-		if (substr($filename,0,6)=='FORUM-')
+		if (substr($filename,0,6)=='FORUM-') // Must be defined first, to ensure prefix stripped
+		{
 			return parent::folder_convert_filename_to_id(substr($filename,6),'forum');
+		}
+
+		if (!is_null($resource_type))
+		{
+			return parent::folder_convert_filename_to_id($filename,$resource_type);
+		}
 
 		return parent::folder_convert_filename_to_id($filename,'topic');
 	}
@@ -255,7 +260,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 	function __folder_read_in_properties_forum($path,$properties)
 	{
 		$description=$this->_default_property_str($properties,'description');
-		$forum_grouping_id=$this->_default_property_int($properties,'forum_grouping_id');
+		$forum_grouping_id=$this->_default_property_int_null($properties,'forum_grouping_id');
+		if (is_null($forum_grouping_id)) $forum_grouping_id=$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');
 		$access_mapping=array();
 		$position=$this->_default_property_int($properties,'position');
 		$post_count_increment=$this->_default_property_int($properties,'post_count_increment');
@@ -278,7 +284,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 */
 	function __folder_read_in_properties_topic($path,$properties)
 	{
-		$description=$this->_default_property_str($properties,'description');
+		//$description=$this->_default_property_str($properties,'description');
 		$emoticon=$this->_default_property_str($properties,'emoticon');
 		$validated=$this->_default_property_int($properties,'validated');
 		$open=$this->_default_property_int($properties,'open');
@@ -290,7 +296,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$num_views=$this->_default_property_int($properties,'views');
 		$description_link=$this->_default_property_str($properties,'description_link');
 
-		return array($description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link);
+		return array(/*$description,*/$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link);
 	}
 
 	/**
@@ -330,12 +336,11 @@ class Hook_occle_fs_forums extends resource_fs_base
 
 			$forum_id=$this->_integer_category($category);
 
-			list($description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
+			list(/*$description,*/$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
-			$id=ocf_make_topic($forum_id,$description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
-			$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_title'=>$label),array('id'=>$id),'',1);
+			$id=ocf_make_topic($forum_id,/*$description*/$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,false,$num_views,NULL,$description_link);
+			//$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_title'=>$label),array('id'=>$id),'',1);
 			generate_resourcefs_moniker('topic',strval($id));
-
 			if ((array_key_exists('poll',$properties)) && ($properties['poll']!=''))
 			{
 				require_code('ocf_polls_action');
@@ -422,8 +427,8 @@ class Hook_occle_fs_forums extends resource_fs_base
 		}
 
 		return array(
-			'label'=>$row['t_cache_first_title'],
-			'description'=>$row['t_description'],
+			'label'=>$row[/*'t_cache_first_title'*/'t_description'],
+			/*'description'=>$row['t_description'],*/
 			'emoticon'=>$row['t_emoticon'],
 			'validated'=>$row['t_validated'],
 			'open'=>$row['t_is_open'],
@@ -471,9 +476,9 @@ class Hook_occle_fs_forums extends resource_fs_base
 			if ($category=='') return false;
 
 			$label=$this->_default_property_str($properties,'label');
-			list($description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
+			list(/*$description,*/$emoticon,$validated,$open,$pinned,$sunk,$cascading,$pt_from,$pt_to,$num_views,$description_link)=$this->__folder_read_in_properties_topic($path,$properties);
 
-			ocf_edit_topic(intval($resource_id),$description,$emoticon,$validated,$open,$pinned,$sunk,$cascading,'',$label,$description_link,false,$num_views,true);
+			ocf_edit_topic(intval($resource_id),/*$description*/$label,$emoticon,$validated,$open,$pinned,$sunk,$cascading,'',/*$label*/NULL,$description_link,false,$num_views,true);
 
 			$poll_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_poll_id',array('id'=>intval($resource_id)));
 
@@ -525,7 +530,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 		if ($resource_type=='forum')
 		{
 			require_code('ocf_forums_action2');
-			ocf_delete_forum(intval($resource_id));
+			ocf_delete_forum(intval($resource_id),NULL,1);
 		} else
 		{
 			require_code('ocf_topics_action2');

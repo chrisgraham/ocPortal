@@ -62,7 +62,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 		{
 			$new_answer=$answers[$i];
 			$update=array('pa_answer'=>is_array($new_answer)?$new_answer[0]:$new_answer);
-			if (is_array(1,$new_answer)) $update['pa_cache_num_votes']=$new_answer[1];
+			if (is_array($new_answer)) $update['pa_cache_num_votes']=$new_answer[1];
 			$GLOBALS['FORUM_DB']->query_update('f_poll_answers',$update,array('id'=>$current_answer['id']),'',1);
 		} else
 		{

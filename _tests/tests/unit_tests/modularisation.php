@@ -74,7 +74,7 @@ class modularisation_test_set extends ocp_test_case
 				{
 					if ($file==$path)
 					{
-						if (substr($file,-4)=='.php')
+						if ((substr($file,-4)=='.php') && ($file!='data_custom/errorlog.php'))
 						{
 							$data=file_get_contents(get_file_base().'/'.$file);
 							$matches=array();

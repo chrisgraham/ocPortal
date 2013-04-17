@@ -222,24 +222,7 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__download_category_screen()
 	{
-		$out=new ocp_tempcode();
-		foreach (placeholder_array() as $id=>$subcats)
-		{
-			$out->attach(do_lorem_template('CATEGORY_ENTRY', array(
-				'ID'=>"$id",
-				'NAME_FIELD'=>'category',
-				'AJAX_EDIT_URL'=>placeholder_url(),
-				'URL'=>placeholder_url(),
-				'REP_IMAGE'=>placeholder_image(),
-				'CHILDREN'=>lorem_word(),
-				'NAME'=>lorem_phrase(),
-				'NAME_PLAIN'=>lorem_word_2()
-			)));
-		}
-
-		$subcategories=do_lorem_template('CATEGORY_LIST', array(
-			'CONTENT'=>$out
-		));
+		$subcategories=lorem_paragraph_html();
 
 		$downloads=new ocp_tempcode();
 		$download_items=array(

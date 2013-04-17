@@ -157,18 +157,25 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
 		return array(NULL,NULL,NULL,NULL,NULL,NULL);
 	}
 
-	if (is_null($cma_info['title_field']))
+	$title_field=$cma_info['title_field'];
+	$title_field_dereference=$cma_info['title_field_dereference'];
+	if (($resourcefs_style) && (array_key_exists('title_field__resource_fs',$cma_info)))
+	{
+		$title_field=$cma_info['title_field__resource_fs'];
+		$title_field_dereference=$cma_info['title_field_dereference__resource_fs'];
+	}
+	if (is_null($title_field))
 	{
 		$content_title=do_lang($cma_info['content_type_label']);
 	} else
 	{
-		if (strpos($cma_info['title_field'],'CALL:')!==false)
+		if (strpos($title_field,'CALL:')!==false)
 		{
-			$content_title=call_user_func(trim(substr($cma_info['title_field'],5)),array('id'=>$content_id));
+			$content_title=call_user_func(trim(substr($title_field,5)),array('id'=>$content_id));
 		} else
 		{
-			$_content_title=$content_row[$cma_info['title_field']];
-			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
+			$_content_title=$content_row[$title_field];
+			$content_title=$title_field_dereference?get_translated_text($_content_title,$db):$_content_title;
 			if (($content_title=='') && (!$resourcefs_style))
 			{
 				$content_title=do_lang($cma_info['content_type_label']).' (#'.(is_string($content_id)?$content_id:strval($content_id)).')';

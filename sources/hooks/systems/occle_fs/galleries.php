@@ -212,8 +212,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		require_code('galleries2');
 
 		$label=$this->_default_property_str($properties,'label');
-		$name=$this->_default_property_str($properties,'name');
-		if ($name=='')
+		$name=$this->_default_property_str_null($properties,'name');
+		if ($name===NULL)
 			$name=$this->_create_name_from_label($label);
 		$description=$this->_default_property_str($properties,'description');
 		$notes=$this->_default_property_str($properties,'notes');

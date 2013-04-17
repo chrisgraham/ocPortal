@@ -27,6 +27,7 @@ class html_safe_lang_test_set extends ocp_test_case
 	function testHtmlSafeLang()
 	{
 		require_code('files');
+		require_code('files');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -68,7 +69,7 @@ class html_safe_lang_test_set extends ocp_test_case
 		);
 		foreach ($forms as $php)
 		{
-			$this->do_dir(get_file_base(),$php,'php');
+			$this->do_dir(get_file_base(),'',$php,'php');
 		}
 		$LANGUAGE_LITERAL=$LANGUAGE_CURRENT;
 
@@ -81,10 +82,10 @@ class html_safe_lang_test_set extends ocp_test_case
 		);
 		foreach ($forms as $php)
 		{
-			$this->do_dir(get_file_base(),$php,'php');
+			$this->do_dir(get_file_base(),'',$php,'php');
 		}
 		$tpl='#\{!(\w+?)(\}|,)#ims';
-		$this->do_dir(get_file_base().'/themes/default/templates',$tpl,'tpl');
+		$this->do_dir(get_file_base().'/themes/default/templates','',$tpl,'tpl');
 		$LANGUAGE_HTML=$LANGUAGE_CURRENT;
 
 		//echo '<h2>Apparent conflicts between usage as HTML and plain text&hellip;</h2>';
@@ -124,14 +125,14 @@ class html_safe_lang_test_set extends ocp_test_case
 		//if ($cnt==0) echo '<p><em>None</em></p>';
 	}
 
-	function do_dir($dir,$exp,$ext)
+	function do_dir($dir,$dir_stub,$exp,$ext)
 	{
 		global $FILE2;
 		if (($dh=opendir($dir))!==false)
 		{
 			while (($file=readdir($dh))!==false)
 			{
-				if ($file[0]!='.')
+				if (($file[0]!='.') && (!should_ignore_file((($dir_stub=='')?'':($dir_stub.'/')).$file,IGNORE_BUNDLED_VOLATILE | IGNORE_CUSTOM_DIR_CONTENTS)))
 				{
 					if (is_file($dir.'/'.$file))
 					{
@@ -143,7 +144,7 @@ class html_safe_lang_test_set extends ocp_test_case
 						}
 					} elseif (is_dir($dir.'/'.$file))
 					{
-						$this->do_dir($dir.'/'.$file,$exp,$ext);
+						$this->do_dir($dir.'/'.$file,(($dir_stub=='')?'':($dir_stub.'/')).$file,$exp,$ext);
 					}
 				}
 			}

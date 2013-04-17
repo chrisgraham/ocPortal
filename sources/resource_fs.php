@@ -119,14 +119,16 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 			}
 		}
 
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array('resource_resourcefs_hook'=>$resourcefs_hook,'resource_moniker'=>$moniker));
-		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
+		$where=array('resource_resourcefs_hook'=>$resourcefs_hook,'resource_moniker'=>$moniker);
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',$where);
+		$ok=(is_null($test)) && ($moniker!='_folder'/*reserved*/);
+		if (!$ok) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;
 			$moniker=$moniker_origin.'_'.strval($next_num);
 		}
 	}
-	while (!is_null($test));
+	while (!$ok);
 
 	if (($moniker!==$no_exists_check_for) || (!is_null($new_guid)))
 	{
@@ -229,10 +231,11 @@ function find_label_via_id($resource_type,$resource_id)
  */
 function find_id_via_moniker($resource_type,$resource_moniker)
 {
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
+	$where=array(
 		'resource_type'=>$resource_type,
 		'resource_moniker'=>$resource_moniker,
-	));
+	);
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',$where);
 }
 
 /**
@@ -460,7 +463,7 @@ class resource_fs_base
 	/**
 	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ?ID_TEXT		Folder resource type (NULL: root level)
+	 * @param  ?ID_TEXT		Folder resource type (NULL: root)
 	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return ?array			A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
 	 */
@@ -488,6 +491,18 @@ class resource_fs_base
 			if ((!is_null($this->folder_resource_type)) && (is_null($above)))
 			{
 				return NULL;
+			}
+		}
+
+		if (array_key_exists('parent_category_field__resource_fs',$sub_info))
+		{
+			$sub_info['parent_category_field']=$sub_info['parent_category_field__resource_fs'];
+		}
+		if (!$is_file)
+		{
+			if ((is_null($sub_info['parent_category_field'])) && (!is_null($sub_info['parent_spec__field_name']))) // Some fiddling, as we are smart enough to detect need for linker table
+			{
+				$sub_info['parent_category_field']=$sub_info['parent_spec__parent_name'];
 			}
 		}
 
@@ -532,7 +547,11 @@ class resource_fs_base
 	 */
 	function folder_load__flat($filename,$path)
 	{
-		if (!$this->can_accept_filetype(get_file_extension($filename))) return false;
+		$ext=get_file_extension($filename);
+		if ($ext!='')
+		{
+			if (!$this->can_accept_filetype($ext)) return false;
+		}
 		return $this->folder_load_xml($filename,$path); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
 	}
 
@@ -573,7 +592,11 @@ class resource_fs_base
 	 */
 	function folder_save__flat($filename,$path,$data)
 	{
-		if (!$this->can_accept_filetype(get_file_extension($filename))) return false;
+		$ext=get_file_extension($filename);
+		if ($ext!='')
+		{
+			if (!$this->can_accept_filetype($ext)) return false;
+		}
 		return $this->folder_save_xml($filename,$path,$data); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
 	}
 
@@ -679,7 +702,9 @@ class resource_fs_base
 	 */
 	function _default_property_str($properties,$property)
 	{
-		return array_key_exists($property,$properties)?$properties[$property]:'';
+		$ret=array_key_exists($property,$properties)?$properties[$property]:'';
+		if (is_integer($ret)) $ret=get_translated_text($ret);
+		return $ret;
 	}
 
 	/**
@@ -691,7 +716,9 @@ class resource_fs_base
 	 */
 	function _default_property_str_null($properties,$property)
 	{
-		return array_key_exists($property,$properties)?$properties[$property]:NULL;
+		$ret=array_key_exists($property,$properties)?$properties[$property]:NULL;
+		if (is_integer($ret)) $ret=get_translated_text($ret);
+		return $ret;
 	}
 
 	/**
@@ -774,7 +801,7 @@ class resource_fs_base
 		$name=strtolower($label);
 		$name=preg_replace('#[^\w\d\.\-]#','_',$name);
 		$name=preg_replace('#\_+\$#','',$name);
-		if ($name=='') $name=uniqid('');
+		if ($name=='') $name='unnamed';
 		require_code('urls2');
 		return substr($name,0,MAX_MONIKER_LENGTH);
 	}
@@ -814,7 +841,7 @@ class resource_fs_base
 			// Do we need to load up a linker table for getting the category?
 			if ((!is_null($relationship['linker_table'])) && ($cma_info['table']!=$relationship['linker_table']))
 			{
-				$where=array($relationship['id_field']=>$content_row[$cma_info['id_field']]);
+				$where=array($relationship['id_field_linker']=>$content_row[$cma_info['id_field']]);
 				$categories=$cma_info['connection']->query_select($relationship['linker_table'],array($relationship['cat_field']),$where);
 			} else
 			{
@@ -1577,12 +1604,12 @@ class resource_fs_base
 	{
 		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
-		$test=$this->file_load($filename,$path);
-		if ($test===false)
+		$existing=$this->file_load($filename,$path);
+		if ($existing===false)
 		{
 			return $this->file_add($filename,$path,$properties);
 		}
-		return $this->file_edit($filename,$path,$properties);
+		return $this->file_edit($filename,$path,$properties+$existing);
 	}
 
 	/**
@@ -1597,12 +1624,12 @@ class resource_fs_base
 	{
 		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
-		$test=$this->folder_load($filename,$path);
-		if ($test===false)
+		$existing=$this->folder_load($filename,$path);
+		if ($existing===false)
 		{
 			return $this->folder_add($filename,$path,$properties);
 		}
-		return $this->folder_edit($filename,$path,$properties);
+		return $this->folder_edit($filename,$path,$properties+$existing);
 	}
 
 	/*
@@ -1657,6 +1684,7 @@ class resource_fs_base
 			}
 			if (!is_null($folder_info['add_time_field'])) $select[]='main.'.$folder_info['add_time_field'];
 			if (!is_null($folder_info['edit_time_field'])) $select[]='main.'.$folder_info['edit_time_field'];
+			if (!is_array($folder_info['id_field'])) $select[]='main.'.$folder_info['id_field'];
 			$extra='';
 			if (can_arbitrary_groupby())
 				$extra.='GROUP BY main.'.$relationship['id_field'].' '; // In case it's not a real category table, just an implied one by self-categorisation of entries
@@ -1726,6 +1754,7 @@ class resource_fs_base
 			append_content_select_for_id($select,$file_info);
 			if (!is_null($file_info['add_time_field'])) $select[]=$file_info['add_time_field'];
 			if (!is_null($file_info['edit_time_field'])) $select[]=$file_info['edit_time_field'];
+			if (!is_array($file_info['id_field'])) $select[]=$file_info['id_field'];
 			$files=$file_info['connection']->query_select($file_info['table'],$select,$where,'',10000/*Reasonable limit*/);
 			foreach ($files as $file)
 			{
@@ -1759,6 +1788,41 @@ class resource_fs_base
 					$filetime,
 				);
 			}
+		}
+
+		if ($cat_id!='') // File for editing the folder's own properties
+		{
+			list($cat_resource_type,$cat_id)=$this->folder_convert_filename_to_id(implode('/',$meta_dir));
+			require_code('content');
+			$folder_info=$this->_get_cma_info($cat_resource_type);
+			$folder=content_get_row($cat_id,$folder_info);
+
+			$filetime=mixed();
+			if (method_exists($this,'_get_file_edit_date'))
+			{
+				$filetime=$this->_get_folder_edit_date($folder,end($meta_dir));
+			}
+			if (is_null($filetime))
+			{
+				if (!is_null($folder_info['edit_time_field']))
+				{
+					$filetime=$folder[$folder_info['edit_time_field']];
+				}
+				if (is_null($filetime))
+				{
+					if (!is_null($folder_info['add_time_field']))
+					{
+						$filetime=$folder[$folder_info['add_time_field']];
+					}
+				}
+			}
+
+			$listing[]=array(
+				'_folder.'.RESOURCEFS_DEFAULT_EXTENSION,
+				OCCLEFS_FILE,
+				NULL/*don't calculate a filesize*/,
+				$filetime,
+			);
 		}
 
 		return $listing;
@@ -1805,6 +1869,10 @@ class resource_fs_base
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
+		if ($file_name=='_folder.'.RESOURCEFS_DEFAULT_EXTENSION)
+		{
+			return $this->folder_load__flat(array_shift($meta_dir),implode('/',$meta_dir));
+		}
 		return $this->file_load__flat($file_name,implode('/',$meta_dir));
 	}
 
@@ -1820,6 +1888,10 @@ class resource_fs_base
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
 	{
+		if ($file_name=='_folder.'.RESOURCEFS_DEFAULT_EXTENSION)
+		{
+			return $this->folder_save__flat(array_shift($meta_dir),implode('/',$meta_dir),$contents);
+		}
 		return $this->file_save__flat($file_name,implode('/',$meta_dir),$contents);
 	}
 

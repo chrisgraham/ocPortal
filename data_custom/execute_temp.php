@@ -53,7 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('resource_fs');
-	$ob=get_resource_occlefs_object('catalogue_entry');
-	@var_dump($ob->find_resource_by_label('catalogue_entry','test_content'));
+	css_enforce('global','default',false);
 }

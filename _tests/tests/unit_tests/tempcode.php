@@ -60,7 +60,7 @@ class tempcode_test_set extends ocp_test_case
 -->
 <h2>Environmental variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>$MOBILE</td>
 		<td>0</td>
@@ -73,7 +73,7 @@ class tempcode_test_set extends ocp_test_case
 
 <h2>Computational variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>$CYCLE,my_cycle,1,2</td>
 		<td>1</td>
@@ -112,7 +112,7 @@ class tempcode_test_set extends ocp_test_case
 	</tr>
 	<tr>
 		<td>$OBFUSCATE,chris@example.com (check HTML source to see if it is obfuscated)</td>
-		<td>&#99;&#x68;&#114;&#x69;&#115;&#x40;&#111;&#x63;&#112;&#x6f;&#114;&#x74;&#97;&#x6c;&#46;&#x63;&#111;&#x6d;</td>
+		<td>&#99;&#x68;&#114;&#x69;&#115;&#x40;&#101;&#x78;&#97;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#x6f;&#109;</td>
 	</tr>
 	<tr>
 		<td>$FIX_ID,3+2</td>
@@ -126,7 +126,7 @@ class tempcode_test_set extends ocp_test_case
 
 <h2>Array variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>+COUNT,SIMPLE_ARRAY</td>
 		<td>3</td>
@@ -143,7 +143,7 @@ class tempcode_test_set extends ocp_test_case
 
 <h2>String variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>$WCASE,I am a Mushroom</td>
 		<td>I Am A Mushroom</td>
@@ -196,7 +196,7 @@ class tempcode_test_set extends ocp_test_case
 
 <h2>Arithmetical variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>$MULT,2,3</td>
 		<td>6</td>
@@ -241,7 +241,7 @@ class tempcode_test_set extends ocp_test_case
 
 <h2>Logical variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>$NOT,1</td>
 		<td>0</td>
@@ -298,7 +298,7 @@ class tempcode_test_set extends ocp_test_case
 
 <h2>Variable variables</h2>
 
-<table summary="Table with headers in left column and values or settings in right column"><tbody>
+<table class="map_table"><tbody>
 	<tr>
 		<td>$ISSET,test</td>
 		<td>0</td>

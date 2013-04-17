@@ -2,7 +2,7 @@
 {$REQUIRE_JAVASCRIPT,javascript_ajax}
 
 <div class="box ocf_notification"><div class="box_inner">
-	<p onclick="return toggleable_tray(this.parentNode,false);" class="ocf_notification_intro_line">
+	<p onclick="/*Access-note: code has other activation*/ return toggleable_tray(this.parentNode,false);" class="ocf_notification_intro_line">
 		<a class="toggleable_tray_button" href="#" onclick="return false;"><img alt="{!EXPAND}: {TYPE*}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 
 		{!ocf:NEW_PT_NOTIFICATION_DETAILS,<span class="ocf_notification_type">{TYPE*}</span>,<span class="ocf_notification_type_title">{U_TITLE*}</span>,<span class="ocf_notification_by">{$?,{$IS_EMPTY,{PROFILE_URL}},{BY*},<a href="{PROFILE_URL*}">{BY*}</a>}</span>,<span class="ocf_notification_time">{TIME*}</span>}

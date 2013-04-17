@@ -1760,6 +1760,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,1);
 
+		require_code('form_templates');
+
 		$accept_images=take_param_int_modeavg($accept_images,'accept_images','galleries',1);
 		$accept_videos=take_param_int_modeavg($accept_videos,'accept_videos','galleries',1);
 
@@ -1781,7 +1783,6 @@ class Module_cms_galleries_cat extends standard_crud_module
 		}
 
 		$fields=new ocp_tempcode();
-		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'fullname',$fullname,true));
 		if ($name!='root')
 		{

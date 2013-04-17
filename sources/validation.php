@@ -1275,7 +1275,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 		$self_close=true; // Will be flagged later
 	}
 
-	if (((isset($attributes['class'])) && ($attributes['class']=='xhtml_validator_off')) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml')===false)))
+	if (((isset($attributes['class'])) && (strpos($attributes['class'],'xhtml_validator_off')!==false)) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml')===false)))
 	{
 		$XHTML_VALIDATOR_OFF=0;
 	}

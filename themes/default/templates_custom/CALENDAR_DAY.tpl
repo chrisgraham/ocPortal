@@ -1,7 +1,9 @@
 {$SET,rowspan_detected,0}
 
-<table class="map_table calendar_day_table autosized_table">
-	<tbody>
-		{HOURS}
-	</tbody>
-</table>
+{+START,IF_NON_EMPTY,{$TRIM,{HOURS}}}
+	<table class="map_table calendar_day_table autosized_table">
+		<tbody>
+			{HOURS}
+		</tbody>
+	</table>
+{+END}

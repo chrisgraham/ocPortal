@@ -356,7 +356,7 @@ class Hook_addon_registry_ocf_forum
 			'STARTER_TITLE'=>lorem_phrase(),
 			'BUTTONS'=>'',
 			'TOPIC_WRAPPER'=>'',
-			'CATEGORIES'=>'',
+			'FORUM_GROUPINGS'=>'',
 			'ID'=>placeholder_id(),
 			'DESCRIPTION'=>lorem_phrase()
 		));
@@ -962,7 +962,7 @@ class Hook_addon_registry_ocf_forum
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$marker=do_lorem_template('OCF_TOPIC_MARKER', array(
-				'ID'=>placeholder_id()
+				'ID'=>placeholder_id().strval($k)
 			));
 
 			$topic_row_links=do_lorem_template('OCF_TOPIC_ROW_LINK', array(
@@ -1025,8 +1025,8 @@ class Hook_addon_registry_ocf_forum
 		}
 
 
-		//categories
-		$categories=new ocp_tempcode();
+		//forum groupings
+		$forum_groupings=new ocp_tempcode();
 		foreach (placeholder_array(1) as $k=>$v)
 		{
 			$forums=new ocp_tempcode();
@@ -1068,10 +1068,10 @@ class Hook_addon_registry_ocf_forum
 					$forums->attach(do_lorem_template('OCF_PINNED_DIVIDER', array()));
 			}
 
-			$categories->attach(do_lorem_template('OCF_FORUM_GROUPING', array(
+			$forum_groupings->attach(do_lorem_template('OCF_FORUM_GROUPING', array(
 				'GROUPING_ID'=>placeholder_random(),
 				'EXPAND_TYPE'=>'expand',
-				'DISPLAY'=>'',
+				'DISPLAY'=>'block',
 				'GROUPING_TITLE'=>lorem_phrase(),
 				'GROUPING_DESCRIPTION'=>lorem_phrase(),
 				'FORUMS'=>$forums
@@ -1105,9 +1105,9 @@ class Hook_addon_registry_ocf_forum
 			'STARTER_TITLE'=>lorem_phrase(),
 			'BUTTONS'=>$buttons,
 			'TOPIC_WRAPPER'=>$topic_wrapper,
-			'CATEGORIES'=>$categories,
+			'FORUM_GROUPINGS'=>$forum_groupings,
 			'ID'=>placeholder_id(),
-			'DESCRIPTION'=>lorem_phrase()
+			'DESCRIPTION'=>lorem_phrase(),
 		));
 
 		$screen=do_lorem_template('OCF_FORUM_SCREEN', array(
@@ -1269,7 +1269,7 @@ class Hook_addon_registry_ocf_forum
 			foreach (placeholder_array() as $k=>$v)
 			{
 				$marker=do_lorem_template('OCF_TOPIC_MARKER', array(
-					'ID'=>placeholder_id()
+					'ID'=>placeholder_id().strval($k)
 				));
 
 				$topic_row_links=do_lorem_template('OCF_TOPIC_ROW_LINK', array(
@@ -1447,7 +1447,7 @@ class Hook_addon_registry_ocf_forum
 				'COMMENT_TEXT'=>'',
 				'EM'=>placeholder_emoticon_chooser(),
 				'EXPAND_TYPE'=>'expand',
-				'DISPLAY'=>'',
+				'DISPLAY'=>'block',
 				'MORE_URL'=>placeholder_url(),
 				'FIRST_POST_URL'=>placeholder_url(),
 				'COMMENT_URL'=>placeholder_url(),

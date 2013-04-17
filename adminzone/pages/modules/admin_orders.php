@@ -126,7 +126,7 @@ class Module_admin_orders
 
 		if ($filter=='undispatched')
 		{
-			$cond	.=' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_payment_received');
+			$cond.=' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_payment_received');
 			$title=get_screen_title('UNDISPATCHED_ORDER_LIST');
 		}
 
@@ -135,7 +135,7 @@ class Module_admin_orders
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-			$cond	.=' AND (t1.id LIKE \''.db_encode_like(str_replace('#','',$search).'%').'\' OR t2.m_username LIKE \''.db_encode_like(str_replace('#','',$search).'%').'\')';
+			$cond.=' AND (t1.id LIKE \''.db_encode_like(str_replace('#','',$search).'%').'\' OR t2.m_username LIKE \''.db_encode_like(str_replace('#','',$search).'%').'\')';
 			$extra_join=' JOIN '.get_table_prefix().'f_members t2 ON t2.id=t1.c_member';
 		}
 
@@ -183,11 +183,11 @@ class Module_admin_orders
 
 		global $NO_DB_SCOPE_CHECK;
 		$NO_DB_SCOPE_CHECK=true;
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id'.$cond);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond);
 
 		$pagination=pagination(do_lang_tempcode('ORDERS'),$start,'start',$max,'max',$max_rows,true);
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id'.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start,false,true);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start,false,true);
 
 		$order_entries=new ocp_tempcode();
 

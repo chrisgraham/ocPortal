@@ -117,7 +117,6 @@ class Hook_addon_registry_iotds
 	{
 		return array(
 			'IOTD_ADMIN_CHOOSE_SCREEN.tpl'=>'administrative__iotd_admin_choose_screen',
-			'IOTD_ADMIN_CHOOSE_SCREEN_IOTD.tpl'=>'administrative__iotd_admin_choose_screen',
 			'BLOCK_MAIN_IOTD.tpl'=>'block_main_iotd',
 			'IOTD_BOX.tpl'=>'iotd_view_screen_iotd',
 			'IOTD_ENTRY_SCREEN.tpl'=>'iotd_view_screen'
@@ -202,7 +201,7 @@ class Hook_addon_registry_iotds
 	function tpl_preview__iotd_view_screen_iotd()
 	{
 		$content=new ocp_tempcode();
-		$content->attach(do_lorem_template('IOTD', array(
+		$content->attach(do_lorem_template('IOTD_BOX', array(
 			'SUBMITTER'=>placeholder_id(),
 			'ID'=>placeholder_id(),
 			'VIEWS'=>placeholder_number(),

@@ -72,6 +72,12 @@ class Hook_addon_registry_occle
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/occle_commands/find_guid_via_id.php',
+			'sources/hooks/systems/occle_commands/find_id_via_guid.php',
+			'sources/hooks/systems/occle_commands/find_id_via_label.php',
+			'sources/hooks/systems/occle_commands/find_id_via_occlefs_filename.php',
+			'sources/hooks/systems/occle_commands/find_label_via_id.php',
+			'sources/hooks/systems/occle_commands/find_occlefs_filename_via_id.php',
 			'sources/hooks/systems/occle_fs_extended_config/index.html',
 			'sources/hooks/systems/config_default/bottom_show_occle_button.php',
 			'sources/hooks/systems/config_default/occle_chat_announce.php',

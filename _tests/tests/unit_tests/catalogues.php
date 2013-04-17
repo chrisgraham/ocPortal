@@ -28,6 +28,7 @@ class catalogues_test_set extends ocp_test_case
 
 		$this->establish_admin_session();
 
+		require_code('content_reviews');
 		require_code('permissions2');
 		// Creating cms catalogues object
 		require_code('cms/pages/modules/cms_catalogues.php');

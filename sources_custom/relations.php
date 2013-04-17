@@ -280,6 +280,7 @@ function get_relation_map()
 		'pstore_permissions.p_category'=>'anything.id',
 		'sales.purcase_type'=>'prices.name',
 		'sessions.zone_name'=>'zones.zone_name',
+		'f_multi_moderations.mm_move_to'=>'f_forums.id',
 		'f_member_cpf_perms.field_id'=>'f_custom_fields.id',
 		'f_forums.f_forum_grouping_id'=>'f_forum_groupings.id',
 		'f_forums.f_parent_forum'=>'f_forums.id',

@@ -156,6 +156,8 @@ class Module_admin_ocf_groups extends standard_crud_module
 			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
 		}
 
+		require_code('form_templates');
+
 		$flood_control_submit_secs=take_param_int_modeavg($flood_control_submit_secs,'g_flood_control_submit_secs','f_groups',0);
 		$flood_control_access_secs=take_param_int_modeavg($flood_control_access_secs,'g_flood_control_access_secs','f_groups',0);
 		$max_daily_upload_mb=take_param_int_modeavg($max_daily_upload_mb,'g_max_daily_upload_mb','f_groups',70);
@@ -172,7 +174,6 @@ class Module_admin_ocf_groups extends standard_crud_module
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_USERGROUP_TITLE'),'name',$name,true));
 
 		if ((addon_installed('ocf_clubs')) && (!is_null($id)))

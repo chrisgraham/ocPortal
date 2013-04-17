@@ -103,7 +103,7 @@ class template_previews_test_set extends ocp_test_case
 				if ($list_2[1]==$function)
 				{
 					// Ignore templates designed for indirect inclusion
-					if ($temp_name_2=='GLOBAL_HELPER_PANEL' || $temp_name_2=='GLOBAL_mobile' || $temp_name_2=='HTML_HEAD' || $temp_name_2=='MEMBER_TOOLTIP' || $temp_name_2=='FORM_STANDARD_END' || $temp_name_2=='MEMBER_BAR_SEARCH' || $temp_name_2=='MENU_LINK_PROPERTIES')
+					if ($temp_name_2=='GLOBAL_HELPER_PANEL' || $temp_name_2=='GLOBAL_HTML_WRAP_mobile' || $temp_name_2=='HTML_HEAD' || $temp_name_2=='MEMBER_TOOLTIP' || $temp_name_2=='FORM_STANDARD_END' || $temp_name_2=='MEMBER_BAR_SEARCH' || $temp_name_2=='MENU_LINK_PROPERTIES')
 						continue;
 
 					$this->assertTrue(in_array($temp_name_2,$RECORDED_TEMPLATES_USED),$template_2.' not used in preview as claimed in '.$hook.'/'.$function);
@@ -140,11 +140,12 @@ class template_previews_test_set extends ocp_test_case
 
 	function testRepeatConsistency()
 	{
-		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$LOADED_TPL_CACHE;
+		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$LOADED_TPL_CACHE,$BLOCKS_CACHE,$PANELS_CACHE;
 		$NON_CACHEABLE_SYMBOLS=array('CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1);
 
 		global $HAS_KEEP_IN_URL_CACHE;
 		$_GET['wide']='1';
+		$_GET['keep_no_minify']='1'; // Disables resource merging, which messes with results
 		$HAS_KEEP_IN_URL_CACHE=NULL;
 
 		$lists=find_all_previews__by_screen();
@@ -158,16 +159,22 @@ class template_previews_test_set extends ocp_test_case
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
 			init__lorem();
-			restore_output_state();
+			push_output_state();
 			$LOADED_TPL_CACHE=array();
+			$BLOCKS_CACHE=array();
+			$PANELS_CACHE=array();
 			$out1=render_screen_preview($template,$hook,$function);
 			$_out1=$out1->evaluate();
-			init__lorem();
 			restore_output_state();
+			init__lorem();
+			push_output_state();
 			$LOADED_TPL_CACHE=array();
+			$BLOCKS_CACHE=array();
+			$PANELS_CACHE=array();
 			$out2=render_screen_preview($template,$hook,$function);
 			$_out2=$out2->evaluate();
-			$different=$_out1!=$_out2;
+			restore_output_state();
+			$different=($_out1!=$_out2);
 			$this->assertFalse($different,'Screen preview not same each time, '.$function);
 
 			if (!$different)

@@ -524,7 +524,8 @@ class Hook_addon_registry_core_rich_media
 				'CONTINUE_URL'=>placeholder_url(),
 				'ATTACHMENTS'=>$attachments,
 				'SPECIALISATION'=>placeholder_fields(),
-				'SPECIALISATION2'=>placeholder_fields()
+				'SPECIALISATION2'=>placeholder_fields(),
+				'REQUIRED'=>true,
 			)), NULL, '', true)
 		);
 	}

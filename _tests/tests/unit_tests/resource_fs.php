@@ -13,6 +13,10 @@
  * @package		unit_testing
  */
 
+/*
+These tests test all var hooks. Some general Resource-FS tests are in the occle_fs test set.
+*/
+
 /**
  * ocPortal test case class (unit testing).
  */
@@ -47,66 +51,28 @@ class resource_fs_test_set extends ocp_test_case
 		}
 	}
 
-	function testPorting()
+	function testAdd()
 	{
-		// Test exporting something
-		$out=remap_resource_id_as_portable('group','1');
-		$this->assertTrue($out['label']=='Guests');
-		$this->assertTrue($out['subpath']=='');
-		$this->assertTrue($out['id']==db_get_first_id());
-
-		// Test importing to something - binding to something that exists
-		$in=remap_portable_as_resource_id('group',$out);
-		$this->assertTrue(intval($in)==db_get_first_id());
-
-		// Test importing to something - something that does not exist
-		$ob=get_resource_occlefs_object('download');
-		$port=array(
-			'guid'=>'a-b-c-d-e-f',
-			'label'=>'My Test Download',
-			'subpath'=>'Downloads home/Some Deep/Path',
-		);
-		$in=remap_portable_as_resource_id('download',$port);
-		$guid=find_guid_via_id('download',$in);
-		$filename=$ob->convert_id_to_filename('download',$in);
-		$this->assertTrue($guid==$port['guid']); // Tests it imported with the same GUID
-		$subpath=$ob->search('download',$in,true);
-		$this->assertTrue(strpos($subpath,'/')!==false); // Test it imported with a deep path
-
-		// Tidy up, delete it
-		$ob->file_delete($filename,$subpath);
-	}
-
-	function testFullCoverage()
-	{
-		$cma_hooks=find_all_hooks('systems','content_meta_aware')+find_all_hooks('systems','resource_meta_aware');
-		$occlefs_hooks=find_all_hooks('systems','occle_fs');
-
-		$referenced_in_cma=array();
-
-		foreach (array_keys($cma_hooks) as $cma_hook)
+		foreach ($this->resourcefs_obs as $occlefs_hook=>$ob)
 		{
-			$ob=get_content_object($cma_hook);
-			$info=$ob->info();
-			if (!is_null($info))
+			$path='';
+			if (!is_null($ob->folder_resource_type))
 			{
-				$fs_hook=$info['occle_filesystem_hook'];
-				if (!is_null($fs_hook))
+				$result=$ob->folder_add('test_a',$path,array());
+				$this->assertTrue($result!==false,'Failed to folder_add '.$occlefs_hook);
+				$folder_resource_type_1=is_array($ob->folder_resource_type)?$ob->folder_resource_type[0]:$ob->folder_resource_type;
+				$path=$ob->folder_convert_id_to_filename($folder_resource_type_1,$result);
+				$result=$ob->folder_add('test_b',$path,array());
+				if ($result!==false)
 				{
-					$this->assertTrue(array_key_exists($fs_hook,$occlefs_hooks),'OcCLE-FS hook with broke Resource-FS reference: '.$fs_hook);
-					$referenced_in_cma[$fs_hook]=true;
+					$folder_resource_type_2=is_array($ob->folder_resource_type)?$ob->folder_resource_type[1]:$ob->folder_resource_type;
+					$path.='/'.$ob->folder_convert_id_to_filename($folder_resource_type_2,$result);
 				}
 			}
-		}
-
-		foreach ($occlefs_hooks as $occlefs_hook=>$dir)
-		{
-			$path=get_file_base().'/'.$dir.'/hooks/systems/occle_fs/'.$occlefs_hook.'.php';
-			$contents=file_get_contents($path);
-			if (strpos($contents,' extends resource_fs_base')!==false)
-			{
-				$this->assertTrue(array_key_exists($occlefs_hook,$referenced_in_cma),'Resource-FS hook not referenced: '.$occlefs_hook);
-			}
+			$result=$ob->file_add('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path,array());
+			destrictify();
+			$this->assertTrue($result!==false,'Failed to file_add '.$occlefs_hook);
+			$this->paths[$occlefs_hook]=$path;
 		}
 	}
 
@@ -157,29 +123,6 @@ class resource_fs_test_set extends ocp_test_case
 			}
 		}
 		return $listing;
-	}
-
-	function testAdd()
-	{
-		foreach ($this->resourcefs_obs as $occlefs_hook=>$ob)
-		{
-			$path='';
-			if (!is_null($ob->folder_resource_type))
-			{
-				$result=$ob->folder_add('test_a',$path,array());
-				$this->assertTrue($result!==false,'Failed to folder_add '.$occlefs_hook);
-				$path='test_a';
-				if ($ob->folder_add('test_b',$path,array())!==false)
-				{
-					$path='test_a/test_b';
-				}
-			}
-			$result=$ob->file_add('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path,array());
-			destrictify();
-			$this->assertTrue($result!==false,'Failed to file_add '.$occlefs_hook);
-
-			$this->paths[$occlefs_hook]=$path;
-		}
 	}
 
 	function testSearch()
@@ -259,8 +202,18 @@ class resource_fs_test_set extends ocp_test_case
 
 			if ($path!='')
 			{
-				$result=$ob->folder_edit(basename($path),dirname($path),array('label'=>basename($path)));
+				$result=$ob->folder_load(basename($path),(strpos($path,'/')===false)?'':dirname($path));
+				$result=$ob->folder_edit(basename($path),(strpos($path,'/')===false)?'':dirname($path),$result);
 				$this->assertTrue($result!==false,'Failed to folder_edit '.$occlefs_hook);
+
+				if (strpos($path,'/')!==false)
+				{
+					$_path=dirname($path);
+					$result=$ob->folder_load(basename($_path),(strpos($_path,'/')===false)?'':dirname($_path));
+
+					$result=$ob->folder_edit(basename($_path),(strpos($_path,'/')===false)?'':dirname($_path),$result);
+					$this->assertTrue($result!==false,'Failed to folder_edit '.$occlefs_hook);
+				}
 			}
 
 			$result=$ob->file_edit('test_content.'.RESOURCEFS_DEFAULT_EXTENSION,$path,array('label'=>'test_content'));
@@ -279,8 +232,15 @@ class resource_fs_test_set extends ocp_test_case
 
 			if ($path!='')
 			{
-				$result=$ob->folder_delete(basename($path),dirname($path));
+				$result=$ob->folder_delete(basename($path),(strpos($path,'/')===false)?'':dirname($path));
 				$this->assertTrue($result!==false,'Failed to folder_delete '.$occlefs_hook);
+
+				if (strpos($path,'/')!==false)
+				{
+					$_path=dirname($path);
+					$result=$ob->folder_delete(basename($_path),(strpos($_path,'/')===false)?'':dirname($_path));
+					$this->assertTrue($result!==false,'Failed to folder_delete '.$occlefs_hook);
+				}
 			}
 		}
 	}

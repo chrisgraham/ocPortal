@@ -596,8 +596,6 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
  */
 function require_all_lang($lang=NULL,$only_if_for_lang=false)
 {
-	$GLOBALS['SITE_INFO']['disable_smart_decaching']='1'; // We'll temporarily set this to stop hundreds of disk checks happening
-
 	if (is_null($lang))
 	{
 		global $REQUIRED_ALL_LANG;

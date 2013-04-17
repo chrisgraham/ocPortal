@@ -145,7 +145,7 @@ class Hook_fields_posting_field
 
 		$ret=do_template('POSTING_FIELD',array(
 			'_GUID'=>'b6c65227a28e0650154393033e005f67',
-			'REQUIRED'=>$field['cf_required']==1,
+			'REQUIRED'=>($field['cf_required']==1),
 			'DESCRIPTION'=>$_cf_description,
 			'HIDDEN_FIELDS'=>$hidden_fields,
 			'PRETTY_NAME'=>$_cf_name,

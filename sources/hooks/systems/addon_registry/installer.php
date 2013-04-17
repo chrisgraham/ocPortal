@@ -275,21 +275,21 @@ class Hook_addon_registry_installer
 				$version=do_lang('VERSION_NUM', $_key);
 				$versions->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION', array(
 					'IS_DEFAULT'=>false,
-					'CLASS'=>'',
+					'CLASS'=>$forum,
 					'NAME'=>$forum,
 					'VERSION'=>$version,
 					'EXTRA'=>''
 				)));
 				$simple_forums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION', array(
 					'IS_DEFAULT'=>false,
-					'CLASS'=>'',
+					'CLASS'=>$forum,
 					'NAME'=>$forum,
 					'VERSION'=>$version,
 					'EXTRA'=>''
 				)));
 			}
 			$tforums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE', array(
-				'CLASS'=>'',
+				'CLASS'=>'f'.strval($key),
 				'REC'=>'',
 				'TEXT'=>lorem_phrase(),
 				'VERSIONS'=>$versions,

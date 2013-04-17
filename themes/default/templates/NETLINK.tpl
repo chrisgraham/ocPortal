@@ -2,7 +2,7 @@
 	<div>
 		<div class="constrain_field">
 			<p class="accessibility_hidden"><label for="netlink_url">{!JUMP}</label></p>
-			<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} id="netlink_url" name="url" class="wide_field">
+			<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} id="netlink_url" name="url" class="wide_field">
 				{CONTENT}
 			</select>
 		</div>

@@ -1,10 +1,10 @@
 <div class="float_surrounder">
-	<form class="right" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}" method="get">
+	<form title="{!FILTER}" class="right" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}" method="get">
 		{$HIDDENS_FOR_GET_FORM,{$SELF_URL},seconds_back}
 
 		<p>
-			<label class="accessibility_hidden">{!FILTER}</label>
-			<select name="seconds_back" id="seconds_back" onchange="this.form.submit();">
+			<label for="seconds_back" class="accessibility_hidden">{!FILTER}</label>
+			<select name="seconds_back" id="seconds_back" onchange="/*guarded*/this.form.submit();">
 				<option value="">{!POSTS_SINCE_LAST_VISIT}</option>
 				{+START,LOOP,5\,10\,30}
 					<option{+START,IF,{$EQ,{$_GET,seconds_back},{$MULT*,60,{_loop_var}}}} selected="selected"{+END} value="{$MULT*,60,{_loop_var}}">{!POSTS_SINCE_MINUTES,{$NUMBER_FORMAT*,{_loop_var}}}</option>

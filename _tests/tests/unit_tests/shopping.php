@@ -48,8 +48,9 @@ class shopping_test_set extends ocp_test_case
 		$this->shopping_cart=new Module_shopping();
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		actual_add_catalogue('storetesting'.strval(get_member()),insert_lang(do_lang('DEFAULT_CATALOGUE_PRODUCTS_TITLE'),2),'',0,1,'',0,1);
-		$this->category_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name'=>'storetesting'));
+		$c_name='storetesting'.strval(get_member());
+		actual_add_catalogue($c_name,insert_lang(do_lang('DEFAULT_CATALOGUE_PRODUCTS_TITLE'),2),'',0,1,'',0,1);
+		$this->category_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name'=>$c_name));
 
 		$fields=array(
 			//		Name							 Description			Type			  Defines order  Required  Visible  Searchable

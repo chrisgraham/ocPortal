@@ -50,7 +50,9 @@ class Hook_resource_meta_aware_zone
 			'category_is_string'=>true,
 
 			'title_field'=>'zone_title',
+			'title_field__resource_fs'=>'zone_name',
 			'title_field_dereference'=>true,
+			'title_field_dereference__resource_fs'=>false,
 
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>'_SEARCH:admin_zones:_ed:_WILD',

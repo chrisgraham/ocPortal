@@ -24,6 +24,8 @@ class downloads_test_set extends ocp_test_case
 	{
 		parent::setUp();
 
+		$GLOBALS['NO_QUERY_LIMIT']=true;
+
 		require_code('downloads');
 		require_code('downloads2');
 

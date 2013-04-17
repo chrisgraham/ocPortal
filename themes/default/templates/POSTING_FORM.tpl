@@ -30,7 +30,7 @@
 								<a class="toggleable_tray_button" onclick="toggle_subordinate_fields(this.getElementsByTagName('img')[0]); return false;" href="#"><img alt="{!CONTRACT}: {!OTHER_DETAILS}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
 							{+END}
 
-							<h2{+START,IF,{$JS_ON}} class="toggleable_tray_button" onclick="toggle_subordinate_fields(this.parentNode.getElementsByTagName('img')[0]); return false;"{+END}>{!OTHER_DETAILS}</h2>
+							<span class="faux_h2{+START,IF,{$JS_ON}} toggleable_tray_button{+END}"{+START,IF,{$JS_ON}} onclick="/*Access-note: code has other activation*/ toggle_subordinate_fields(this.parentNode.getElementsByTagName('img')[0]); return false;"{+END}>{!OTHER_DETAILS}</span>
 						</th>
 					</tr>
 				{+END}

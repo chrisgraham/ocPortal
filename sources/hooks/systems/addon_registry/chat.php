@@ -207,9 +207,8 @@ class Hook_addon_registry_chat
 			'CHAT_SET_EFFECTS_SCREEN.tpl'=>'chat_set_effects_screen',
 			'BLOCK_MAIN_FRIENDS_LIST.tpl'=>'ocf_member_profile_friends',
 			'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends',
-			'CHAT_FRIENDS_LIST_SCREEN.tpl'=>'chat_friends_list_screen',
-			'CHAT_FRIENDS'=>'chat_lobby_screen',
-			'BLOCK_SIDE_FRIENDS'=>'block_side_friends',
+			'CHAT_FRIENDS.tpl'=>'chat_lobby_screen',
+			'BLOCK_SIDE_FRIENDS.tpl'=>'block_side_friends',
 		);
 	}
 

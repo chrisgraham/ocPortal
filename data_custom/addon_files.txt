@@ -2653,6 +2653,7 @@ ocportalcom_support_credits
  - sources_custom/points.php
  - sources_custom/points3.php
  - tracker/.gitignore
+ - tracker/TrackerTables.sql
  - tracker/account_delete.php
  - tracker/account_manage_columns_page.php
  - tracker/account_page.php

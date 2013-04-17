@@ -782,7 +782,7 @@ class Hook_addon_registry_galleries
 					'TITLE'=>lorem_title(),
 					'MEMBER_DETAILS'=>lorem_phrase(),
 					'DESCRIPTION'=>lorem_paragraph_html(),
-					'CHILDREN'=>placeholder_list_item(),
+					'CHILDREN'=>lorem_paragraph_html(),
 					'CURRENT_ENTRY'=>$video,
 					'ENTRIES'=>$entries,
 					'EDIT_URL'=>placeholder_url(),
@@ -973,7 +973,7 @@ class Hook_addon_registry_galleries
 					'EDIT_URL'=>placeholder_url(),
 					'THUMB_URL'=>placeholder_image_url(),
 					'NAV'=>$nav,
-					'COMMENTS'=>lorem_phrase(),
+					'DESCRIPTION'=>lorem_phrase(),
 					'VIDEO'=>$video,
 					'WARNING_DETAILS'=>'',
 				)

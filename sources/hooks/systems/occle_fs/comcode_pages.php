@@ -195,7 +195,6 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		$wide=$this->_default_property_int($properties,'wide');
 		$require_session=$this->_default_property_int($properties,'require_session');
 		$displayed_in_menu=$this->_default_property_int($properties,'displayed_in_menu');
-
 		$zone=$this->_create_name_from_label($label);
 
 		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone,true,true);

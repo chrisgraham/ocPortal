@@ -82,7 +82,7 @@ class Hook_addon_registry_calendar
 			'sources/hooks/systems/realtime_rain/calendar.php',
 			'sources/hooks/systems/content_meta_aware/event.php',
 			'sources/hooks/systems/content_meta_aware/calendar_type.php',
-			'sources/hooks/systems/occle_fs/calendars.php',
+			'sources/hooks/systems/occle_fs/calendar.php',
 			'sources/hooks/systems/meta/events.php',
 			'sources/hooks/blocks/side_stats/stats_calendar.php',
 			'sources/hooks/systems/preview/calendar_type.php',
@@ -409,7 +409,7 @@ class Hook_addon_registry_calendar
 		{
 			case 'day':
 				$hours=new ocp_tempcode();
-				for ($i=0; $i < 24; $i++)
+				for ($i=0;$i<24;$i++)
 				{
 					$_streams=new ocp_tempcode();
 					foreach (placeholder_array(2) as $k=>$v)

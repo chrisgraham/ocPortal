@@ -118,7 +118,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$max_file_size=$this->_default_property_int_null($properties,'max_file_size');
 		if ($max_file_size===NULL) $max_file_size=100*1024;
 		$comcode_inline=$this->_default_property_int($properties,'comcode_inline');
-		$name=$this->_create_name_from_label($label);
+		$name=($label=='')?''/*blank names allowed*/:$this->_create_name_from_label($label);
 		$name=add_banner_type($name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,true);
 		return $name;
 	}
@@ -171,7 +171,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$max_file_size=$this->_default_property_int_null($properties,'max_file_size');
 		if ($max_file_size===NULL) $max_file_size=100*1024;
 		$comcode_inline=$this->_default_property_int($properties,'comcode_inline');
-		$name=$this->_create_name_from_label($label);
+		$name=($label=='')?''/*blank names allowed*/:$this->_create_name_from_label($label);
 
 		$name=edit_banner_type($resource_id,$name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,true);
 

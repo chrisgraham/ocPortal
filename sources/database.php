@@ -1087,7 +1087,7 @@ class database_driver
 
 				foreach ($ret as $row)
 				{
-					$entry=$row[$field];
+					$entry=$row[preg_replace('#^.*\.#','',$field)];
 
 					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
 						$this->text_lookup_original_cache[$entry]=$row[$original];

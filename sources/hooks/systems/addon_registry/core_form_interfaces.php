@@ -390,7 +390,6 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			'FORM_SCREEN_INPUT_COMBO.tpl'=>'form_screen_2',
-			'FORM_STANDARD_SIZING.tpl'=>'form_screen_2',
 			'FORM_SCREEN.tpl'=>'form_screen_2',
 			'FORM_SCREEN_FIELD_SPACER.tpl'=>'form_screen_1',
 			'FORM_STANDARD_END.tpl'=>'form_screen_1',
@@ -1581,7 +1580,8 @@ class Hook_addon_registry_core_form_interfaces
 				'CONTINUE_URL'=>placeholder_url(),
 				'ATTACHMENTS'=>lorem_phrase(),
 				'SPECIALISATION'=>placeholder_fields(),
-				'SPECIALISATION2'=>placeholder_fields()
+				'SPECIALISATION2'=>placeholder_fields(),
+				'REQUIRED'=>true,
 			)), NULL, '', true)
 		);
 	}

@@ -643,7 +643,6 @@ function _give_moniker_scope($page,$type,$id,$main)
 		if (!array_key_exists(0,$_moniker_src)) return $moniker; // been deleted?
 
 		// Discern the path (will effectively recurse, due to find_id_moniker call)
-		$view_category_pagelink_pattern=explode(':',$ob_info['view_category_pagelink_pattern']);
 		$parent=$_moniker_src[0][$ob_info['parent_category_field']];
 		if (is_integer($parent)) $parent=strval($parent);
 		if ((is_null($parent)) || ($parent==='root') || ($parent==='') || ($parent==strval(db_get_first_id())))
@@ -651,6 +650,7 @@ function _give_moniker_scope($page,$type,$id,$main)
 			$tree=NULL;
 		} else
 		{
+			$view_category_pagelink_pattern=explode(':',$ob_info['view_category_pagelink_pattern']);
 			$tree=find_id_moniker(array('page'=>$view_category_pagelink_pattern[1],'type'=>$view_category_pagelink_pattern[2],'id'=>$parent));
 		}
 

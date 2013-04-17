@@ -1882,7 +1882,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .alphabetical_jumper.pagination a, .alphabetical_jumper.pagination a:hover {
-	padding: 3px 5.8px !important;
+	padding: 0.5em 1em !important;
 }
 
 .results_continue, .results_page_num {

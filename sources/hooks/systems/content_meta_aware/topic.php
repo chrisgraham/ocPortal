@@ -53,6 +53,10 @@ class Hook_content_meta_aware_topic
 
 			'title_field'=>'t_cache_first_title',
 			'title_field_dereference'=>false,
+			/*'title_field__resource_fs'=>'t_cache_first_title',
+			'title_field_dereference__resource_fs'=>false,*/
+			'title_field__resource_fs'=>'t_description',
+			'title_field_dereference__resource_fs'=>false,
 
 			'view_pagelink_pattern'=>'_SEARCH:topicview:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_topic:_WILD',

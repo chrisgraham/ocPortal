@@ -73,7 +73,6 @@ class Hook_addon_registry_match_key_permissions
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/resource_meta_aware/match_key_message.php',
 			'sources/hooks/systems/occle_fs_extended_config/match_key_message.php',
 			'sources/hooks/systems/addon_registry/match_key_permissions.php',
 			'themes/default/images/bigicons/matchkeysecurity.png',

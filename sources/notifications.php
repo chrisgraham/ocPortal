@@ -215,7 +215,8 @@ class Notification_dispatcher
 		$ob=_get_notification_ob_for_code($this->notification_code);
 		if (is_null($ob))
 		{
-			fatal_exit('Missing notification code: '.$this->notification_code);
+			if (strpos($this->notification_code,'__')===false)
+				fatal_exit('Missing notification code: '.$this->notification_code);
 			return;
 		}
 

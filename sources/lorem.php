@@ -701,10 +701,10 @@ function placeholder_pagination()
 		'FIRST' => $first,
 		'LAST' => $last,
 		'PAGES_LIST' => $pages_list,
-		'START' => strval(placeholder_number()),
-		'MAX' => strval(placeholder_number()),
-		'MAX_ROWS' => strval(placeholder_number()),
-		'NUM_PAGES' => strval(placeholder_number()),
+		'START' => placeholder_number(),
+		'MAX' => placeholder_number(),
+		'MAX_ROWS' => placeholder_number(),
+		'NUM_PAGES' => placeholder_number(),
 	));
 }
 

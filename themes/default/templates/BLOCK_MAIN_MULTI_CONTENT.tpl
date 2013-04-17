@@ -55,7 +55,7 @@
 					<h2>{TITLE*}</h2>
 				{+END}
 
-				<div class="float_surrounder cguid_{_GUID*} raw_ajax_grow_spot">
+				<div class="float_surrounder cguid_{$FIX_ID*,{_GUID}} raw_ajax_grow_spot">
 					{+START,LOOP,CONTENT}
 						{_loop_var}
 					{+END}

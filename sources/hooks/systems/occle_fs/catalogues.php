@@ -101,15 +101,16 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	/**
 	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
 	 *
-	 * @param  ID_TEXT		Folder resource type
+	 * @param  ?ID_TEXT		Folder resource type (NULL: root)
 	 * @param  ID_TEXT		Resource type (may be file or folder)
 	 * @return ?array			A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
 	 */
 	function _has_parent_child_relationship($above,$under)
 	{
+		if (is_null($above)) $above='';
 		switch ($above)
 		{
-			case NULL:
+			case '':
 				if ($under=='catalogue')
 				{
 					$folder_info=$this->_get_cma_info($under);
@@ -228,11 +229,15 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	{
 		$filename=preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
 
-		if (!is_null($resource_type))
-			return parent::folder_convert_filename_to_id($filename,$resource_type);
-
-		if (substr($filename,0,10)=='CATALOGUE-')
+		if (substr($filename,0,10)=='CATALOGUE-') // Must be defined first, to ensure prefix stripped
+		{
 			return parent::folder_convert_filename_to_id(substr($filename,10),'catalogue');
+		}
+
+		if (!is_null($resource_type))
+		{
+			return parent::folder_convert_filename_to_id($filename,$resource_type);
+		}
 
 		return parent::folder_convert_filename_to_id($filename,'catalogue_category');
 	}
@@ -407,7 +412,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		$row=$rows[0];
 
 		$fields=array();
-		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>$resource_id),'ORDER BY cf_order');
+		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$resource_id),'ORDER BY cf_order');
 		foreach ($_fields as $_field)
 		{
 			$fields[]=array(
@@ -489,9 +494,15 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 						$id=$_fields[$i]['id'];
 
 						foreach ($_field_title as $lang=>$val)
+						{
+							delete_lang($_fields[$i]['cf_name']);
 							insert_lang($val,2,NULL,false,$_fields[$i]['cf_name'],$lang);
+						}
 						foreach ($_description as $lang=>$val)
+						{
+							delete_lang($_fields[$i]['cf_description']);
 							insert_lang($val,2,NULL,false,$_fields[$i]['cf_description'],$lang);
+						}
 
 						actual_edit_catalogue_field($id,$name,NULL,NULL,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category,$put_in_search,$type);
 					} else

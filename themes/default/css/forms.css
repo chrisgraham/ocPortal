@@ -98,7 +98,7 @@ Curved borders would be cool, but it does not work well with the carefully defin
 */
 
 .form_table_field_name {
-	{$BETA_CSS_PROPERTY,word-break: break-word;}
+	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: right;
 	{+END}

@@ -177,7 +177,8 @@ class Hook_addon_registry_ocf_signatures
 			'CONTINUE_URL'=>placeholder_url(),
 			'ATTACHMENTS'=>lorem_phrase(),
 			'SPECIALISATION'=>new ocp_tempcode(),
-			'SPECIALISATION2'=>new ocp_tempcode()
+			'SPECIALISATION2'=>new ocp_tempcode(),
+			'REQUIRED'=>true,
 		));
 
 		return array(

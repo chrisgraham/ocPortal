@@ -332,7 +332,8 @@ class Hook_addon_registry_wiki
 			'CONTINUE_URL'=>placeholder_url(),
 			'ATTACHMENTS'=>lorem_phrase(),
 			'SPECIALISATION'=>placeholder_fields(),
-			'SPECIALISATION2'=>''
+			'SPECIALISATION2'=>'',
+			'REQUIRED'=>true,
 		));
 
 		return array(

@@ -82,7 +82,7 @@
 							{+START,LOOP,REVIEW_RATING_CRITERIA}
 								<tr>
 									<th class="de_th">
-										<label for="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}">{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}</label>
+										{+START,IF,{$NOT,{$JS_ON}}}<label class="accessibility_hidden" for="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}">{+END}{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}{+START,IF,{$NOT,{$JS_ON}}}</label>{+END}
 									</th>
 
 									<td>
