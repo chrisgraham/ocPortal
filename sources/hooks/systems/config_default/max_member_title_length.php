@@ -32,7 +32,7 @@ class Hook_config_default_max_member_title_length
 			'human_name'=>'MAX_MEMBER_TITLE_LENGTH',
 			'the_type'=>'integer',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_max_member_title_length',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

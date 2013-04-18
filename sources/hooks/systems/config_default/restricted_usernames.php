@@ -32,7 +32,7 @@ class Hook_config_default_restricted_usernames
 			'human_name'=>'RESTRICTED_USERNAMES',
 			'the_type'=>'line',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_restricted_usernames',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

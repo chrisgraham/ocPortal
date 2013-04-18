@@ -32,7 +32,7 @@ class Hook_config_default_default_preview_guests
 			'human_name'=>'DEFAULT_PREVIEW_GUESTS',
 			'the_type'=>'tick',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_default_preview_guests',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

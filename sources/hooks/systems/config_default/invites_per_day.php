@@ -32,7 +32,7 @@ class Hook_config_default_invites_per_day
 			'human_name'=>'INVITES_PER_DAY',
 			'the_type'=>'float',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_invites_per_day',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

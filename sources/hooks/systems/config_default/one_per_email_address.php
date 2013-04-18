@@ -32,7 +32,7 @@ class Hook_config_default_one_per_email_address
 			'human_name'=>'ONE_PER_EMAIL_ADDRESS',
 			'the_type'=>'tick',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_one_per_email_address',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

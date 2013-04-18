@@ -32,7 +32,7 @@ class Hook_config_default_is_on_invites
 			'human_name'=>'INVITES_ENABLED',
 			'the_type'=>'tick',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_is_on_invites',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

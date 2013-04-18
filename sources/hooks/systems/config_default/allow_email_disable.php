@@ -32,7 +32,7 @@ class Hook_config_default_allow_email_disable
 			'human_name'=>'ALLOW_EMAIL_DISABLE',
 			'the_type'=>'tick',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_allow_email_disable',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

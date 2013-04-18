@@ -32,7 +32,7 @@ class Hook_config_default_is_on_timezone_detection
 			'human_name'=>'IS_ON_TIMEZONE_DETECTION',
 			'the_type'=>'tick',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_is_on_timezone_detection',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

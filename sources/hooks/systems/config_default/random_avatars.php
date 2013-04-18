@@ -32,7 +32,7 @@ class Hook_config_default_random_avatars
 			'human_name'=>'ASSIGN_RANDOM_AVATARS',
 			'the_type'=>'tick',
 			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'section'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_random_avatars',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
