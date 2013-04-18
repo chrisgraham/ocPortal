@@ -3300,6 +3300,7 @@ ul.nl, .nl ul {
 }
 
 .menu_type__top img, .menu_type__dropdown .toplevel_link img {
+	max-width: 17px;
 	margin-top: -2px;
 }
 

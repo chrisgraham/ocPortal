@@ -35,7 +35,7 @@
 
 		{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
 			{+START,IF_EMPTY,{$FB_CONNECT_UID}}
-				<div class="fb-login-button" data-scope="email,user_birthday"></div>
+				<div style="margin-top: 0.4em; text-align: center"><div class="fb-login-button" data-scope="email,user_birthday"></div></div>
 			{+END}
 		{+END}
 	</div></section>

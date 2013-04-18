@@ -114,9 +114,13 @@ class Hook_fields_list
 		$_list=new ocp_tempcode();
 		if (($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value)))
 			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+		$is_locations=((addon_installed('shopping')) && ($_cf_name==do_lang('shopping:SHIPPING_ADDRESS_COUNTRY')) && (is_file(get_file_base().'/sources_custom/locations.php')));
+		if ($is_locations) require_code('locations');
 		foreach ($list as $l)
 		{
-			$_list->attach(form_input_list_entry($l,$l==$actual_value));
+			$l_nice=$l;
+			if (($is_locations) && (strlen($l)==2)) $l_nice=find_country_name_from_iso($l);
+			$_list->attach(form_input_list_entry($l,$l==$actual_value,$l_nice));
 		}
 		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);
 	}
