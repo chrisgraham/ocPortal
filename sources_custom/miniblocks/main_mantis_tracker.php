@@ -109,10 +109,10 @@ if (count($issues)==0)
 		$money_raised=$issue['money_raised'];
 		$suggested_by=$issue['reporter_id'];
 		$add_date=$issue['date_submitted'];
-		$vote_url=$SITE_INFO['base_url'].'/tracker/bug_monitor_add.php?bug_id='.strval($issue['id']);
-		$unvote_url=$SITE_INFO['base_url'].'/tracker/bug_monitor_delete.php?bug_id='.strval($issue['id']);
+		$vote_url=get_base_url().'/tracker/bug_monitor_add.php?bug_id='.strval($issue['id']);
+		$unvote_url=get_base_url().'/tracker/bug_monitor_delete.php?bug_id='.strval($issue['id']);
 		$voted=!is_null($db->query_value_null_ok('mantis_bug_monitor_table','user_id',array('user_id'=>get_member(),'bug_id'=>$issue['id'])));
-		$full_url=$SITE_INFO['base_url'].'/tracker/view.php?id='.strval($issue['id']);
+		$full_url=get_base_url().'/tracker/view.php?id='.strval($issue['id']);
 		$num_comments=$issue['num_comments'];
 
 		$_cost=is_null($cost)?do_lang('FEATURES_UNKNOWN_lc'):(static_evaluate_tempcode(comcode_to_tempcode('[currency="'.$s_currency.'"]'.float_to_raw_string($cost).'[/currency]')));
