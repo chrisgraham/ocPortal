@@ -12,7 +12,7 @@
  * @copyright	ocProducts Ltd
  * @package		ocportalcom
  */
-$ocp_hours_field = $db->query_value_null_ok_full('SELECT id FROM mantis_custom_field_table WHERE name=\'Time estimation (hours)\'');
+$ocp_hours_field = $GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM mantis_custom_field_table WHERE name=\'Time estimation (hours)\'');
 require_lang('customers');
 $title_tracker=do_lang('TRACKER');
 $s_currency = is_null($result = get_option('currency',true))? 'USD': strval($result);
@@ -142,7 +142,7 @@ if (count($issues)==0)
 		}
 
 		$out.='<p style="font-size: 0.8em">'.do_lang('FEATURES_Raised_percent_of',$_percentage,$_credits);
-		
+
 		if (!is_null($cost))
 		$out.='
 					<br />
