@@ -1054,7 +1054,7 @@ function handle_has_checked_recently($id_code)
  */
 function make_seed()
 {
-	list($usec,$sec)=explode(' ', microtime(false));
+	list($usec,$sec)=explode(' ',microtime(false));
 	$u=produce_salt();
 	return intval(floatval($sec)*floatval($usec))+ord(substr($u,0,1))+(ord(substr($u,1,2))<<8);
 }

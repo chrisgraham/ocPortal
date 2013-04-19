@@ -495,7 +495,7 @@ function ModalWindow()
 				}
 			};
 
-			this.addEvent( this.box, 'click', function(e) { try { _this.topWindow.cancel_bubbling(e); } catch (e) {}; } );
+			this.addEvent( this.box.childNodes[0], 'click', function(e) { try { _this.topWindow.cancel_bubbling(e); } catch (e) {}; } );
 
 			switch(this.type) {
 				case 'iframe':

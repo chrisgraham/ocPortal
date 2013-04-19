@@ -502,7 +502,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	}
 
 	// Subscription: Made active
-	elseif ($found[0]==PRODUCT_SUBSCRIPTION)
+	elseif (($payment_status=='Completed') && ($found[0]==PRODUCT_SUBSCRIPTION))
 	{
 		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_auto_fund_source'=>$source,'s_auto_fund_key'=>$txn_id,'s_state'=>'active'),array('id'=>intval($purchase_id)),'',1);
 	}

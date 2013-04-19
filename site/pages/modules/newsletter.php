@@ -276,8 +276,8 @@ class Module_newsletter
 		$fields->attach(form_input_line(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('DESCRIPTION_SUBSCRIBE_ADDRESS'),'email',$their_email,true));
 		$fields->attach(form_input_line(do_lang_tempcode('FORENAME'),'','forename',$forename,false));
 		$fields->attach(form_input_line(do_lang_tempcode('SURNAME'),'','surname',$surname,false));
-		$fields->attach(form_input_password(do_lang_tempcode('YOUR_PASSWORD'),do_lang_tempcode('DESCRIPTION_MAINTENANCE_PASSWORD'),'password',true));
-		$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',true));
+		$fields->attach(form_input_password(do_lang_tempcode('YOUR_PASSWORD'),do_lang_tempcode('DESCRIPTION_MAINTENANCE_PASSWORD'),'password',false));
+		$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',false));
 		if (count(find_all_langs())!=1)
 			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','lang',nice_get_langs(user_lang())));
 		$level=get_param_integer('level',NULL);
@@ -339,12 +339,13 @@ class Module_newsletter
 
 		// Add
 		$email=trim(post_param('email'));
-		$password=trim(post_param('password'));
+		$password=trim(post_param('password',''));
 		$forename=trim(post_param('forename'));
 		$surname=trim(post_param('surname'));
-		if ($password!=trim(post_param('password_confirm'))) warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));
+		if ($password!=trim(post_param('password_confirm','')))
+			warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));
 		$lang=post_param('lang',user_lang());
-		if ((!is_valid_email_address($email)) || ($password==''))
+		if (!is_valid_email_address($email))
 		{
 			return warn_screen($title,do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 		}
@@ -354,6 +355,8 @@ class Module_newsletter
 
 		if (is_null($old_confirm)) // New
 		{
+			if ($password=='') $password=get_rand_password();
+
 			$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
 			$found_level=false;
 			foreach ($newsletters as $newsletter)
@@ -373,14 +376,16 @@ class Module_newsletter
 			$code_confirm=mt_rand(1,32000);
 			$salt=produce_salt();
 			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang,'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt)));
-			$this->send_confirmation($email,$code_confirm,NULL,$forename,$surname);
+			$this->_send_confirmation($email,$code_confirm,NULL,$forename,$surname);
 			$message=do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email));
 		}
 		elseif ($old_confirm!=0) // Reconfirm
 		{
-			$this->send_confirmation($email,$old_confirm,NULL,$forename,$surname);
+			$this->_send_confirmation($email,$old_confirm,NULL,$forename,$surname);
 			return inform_screen($title,do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email)));
 		}
+
+		// Okay, existing...
 
 		// Change/make settings
 		$old_password=$GLOBALS['SITE_DB']->query_value('newsletter','the_password',array('email'=>$email));
@@ -481,7 +486,7 @@ class Module_newsletter
 	 * @param  string				Subscribers forename
 	 * @param  string				Subscribers surname
 	 */
-	function send_confirmation($email,$code_confirm,$password,$forename,$surname)
+	function _send_confirmation($email,$code_confirm,$password,$forename,$surname)
 	{
 		if (is_null($password)) $password=do_lang('NEWSLETTER_PASSWORD_ENCRYPTED');
 

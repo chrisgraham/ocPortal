@@ -4,7 +4,7 @@
 	{+END}
 {+END}
 
-<div{+START,IF_NON_EMPTY,{AVATAR_URL}} class="ocf_member_box_avatar"{+END}>
+<div{+START,IF_NON_EMPTY,{AVATAR_URL}} class="ocf_member_box_avatar_touching"{+END}>
 	<table class="tooltip_fields autosized_table" summary="{!MAP_TABLE}">
 		<tbody>
 			<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{POSTER}}">{$USERNAME*,{POSTER}}</a></td></tr>
