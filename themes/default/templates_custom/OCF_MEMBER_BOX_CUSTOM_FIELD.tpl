@@ -1,7 +1,7 @@
 {+START,IF,{$NOT,{$GET,fancy_screen}}}
 	<tr>
 		<th class="de_th">{$REPLACE,/, / ,{NAME*}}:</th>
-		<td>{VALUE*}</td>
+		<td>{VALUE}</td>
 	</tr>
 {+END}
 

@@ -645,7 +645,7 @@ hr.ocf_sig_barrier {
 
 .ocf_member_column_c {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 25em;
+		width: 25.3em; /* The extra 0.3em needed for iPad */
 	{+END}
 }
 
@@ -1215,6 +1215,9 @@ ul.ocf_profile_friends li .associated_details {
 .ocf_member_box_avatar {
 	float: left;
 	margin-right: 1em;
+}
+
+.tooltip .ocf_member_box_avatar_touching {
 	max-width: 245px; /* Based on tooltip size */
 }
 
