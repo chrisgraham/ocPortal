@@ -97,12 +97,17 @@ class Module_admin_customers
 
 		/* CPFs */
 		require_code('ocf_members_action');
-		ocf_make_custom_field('ocp_support_credits',1,'','',0,0,0,0,'integer');
+		ocf_make_custom_field('ocp_support_credits',1,'','',0,1,0,0,'integer');
 		ocf_make_custom_field('ocp_ftp_host',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_path',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_username',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_password',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
-		ocf_make_custom_field('ocp_profession',1,'',do_lang('CUSTOMER_PROFESSION_CPF_LIST'),0,1,1,0,'list',1);
+		ocf_make_custom_field('ocp_profession',1,'',do_lang('CUSTOMER_PROFESSION_CPF_LIST'),0,1,1,0,'list');
+		require_code('ocf_members_action2');
+		require_code('mantis');
+		$cur_id = NULL;
+		$cur_id = get_credits_profile_field_id('ocp_currency');
+		if(!is_null($cur_id )) ocf_edit_custom_field(strval($cur_id),'ocp_currency','','',0,1,0,0,0,0,0,'10','','list',0);
 
 		add_config_option('SUPPORT_CREDIT_VALUE','support_credit_value','float','return \'5.5\';','FEATURE','SECTION_CUSTOMERS');
 		add_config_option('SUPPORT_PRIORITY_BUDGET_MINUTES','support_budget_priority','float','return \'10\';','FEATURE','SECTION_CUSTOMERS');
