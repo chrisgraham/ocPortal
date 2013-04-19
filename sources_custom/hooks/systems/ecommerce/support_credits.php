@@ -33,7 +33,7 @@ function handle_support_credits($_key,$details,$product)
 
 	require_code('mantis');
 	$cpf_id = strval(get_credits_profile_field_id());
-	if(!is_null($cpf_id)) return;
+	if(is_null($cpf_id)) return;
 
 	// Increment the number of credits this customer has
 	require_code('ocf_members_action2');
@@ -128,7 +128,7 @@ class Hook_support_credits
 	function set_needed_fields($product)
 	{
 		$product_array=explode('_',$product,2);
-		$num_credits = intaval($product_array[0]);
+		$num_credits = intval($product_array[0]);
 		if($num_credits == 0) return;
 		$manual=0;
 		$member_id=get_member();

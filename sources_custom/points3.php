@@ -25,6 +25,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	require_code('points');
 	require_css('points');
 	require_lang('points');
+	require_lang('customers');
 
 	require_javascript('javascript_validation');
 

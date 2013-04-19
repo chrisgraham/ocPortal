@@ -705,16 +705,12 @@ class Module_admin_customers
 
 		if (!is_null($member_id))
 		{
-			require_code('ocf_members');
-			$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
-			$cpf_id=NULL;
-			foreach ($cpfs as $cpf)
-			{
-				if ($cpf['trans_name']=='ocp_support_credits')
-				{
-					$cpf_id=$cpf['id'];
-					break;
-				}
+			$cpf_id = NULL;
+			$cpf_id = get_credits_profile_field_id();
+			if (is_null($cpf_id)){
+				$msg_tpl = warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+				$msg_tpl->evaluate_echo();
+				return;
 			}
 			$num_credits=0;
 			if (!is_null($cpf_id))
@@ -742,17 +738,12 @@ class Module_admin_customers
 		$username=post_param('member_username');
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 		$amount=post_param_integer('amount');
-
-		require_code('ocf_members');
-		$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
-		$cpf_id=NULL;
-		foreach ($cpfs as $cpf)
-		{
-			if ($cpf['trans_name']=='ocp_support_credits')
-			{
-				$cpf_id=$cpf['id'];
-				break;
-			}
+		$cpf_id = NULL;
+		$cpf_id = get_credits_profile_field_id();
+		if (is_null($cpf_id)){
+			$msg_tpl = warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+			$msg_tpl->evaluate_echo();
+			return;
 		}
 
 		// Increment the number of credits this customer has
