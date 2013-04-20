@@ -273,7 +273,7 @@ class rss
 
 		if ((($this->type=='RSS') && ($name=='ITEM')) || (($this->type=='ATOM') && (($name=='HTTP://PURL.ORG/ATOM/NS#:ENTRY') || ($name=='HTTP://WWW.W3.ORG/2005/ATOM:ENTRY'))))
 		{
-			$this->gleamed_items[]=array();
+			$this->gleamed_items[]=array('_extra'=>array());
 			if (($this->type=='RSS') && ($name=='ITEM'))
 			{
 				if (array_key_exists('ABOUT',$attributes)) // rdf namespace, but we don't realistically need to check this
@@ -390,6 +390,7 @@ class rss
 								break;
 						}
 						break;
+
 					case 'ITEM':
 						$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
 						switch ($last_tag)
@@ -407,6 +408,23 @@ class rss
 								if (array_key_exists(1,$a)) $current_item['clean_add_date']=$a[1];
 								break;
 							case 'HTTP://PURL.ORG/RSS/1.0/MODULES/CONTENT/:ENCODED':
+								$current_item['news_article']=$data;
+								if ((preg_match('#[<>]#',$current_item['news_article'])==0) && (preg_match('#[<>]#',html_entity_decode($current_item['news_article'],ENT_QUOTES))!=0)) // Double escaped HTML
+									$current_item['news_article']=@html_entity_decode($current_item['news_article'],ENT_QUOTES);
+								elseif ((preg_match('#&(?!amp;)#',$current_item['news_article'])==0) && (preg_match('#&#',html_entity_decode($current_item['news_article'],ENT_QUOTES))!=0)) // Double escaped HTML
+									$current_item['news_article']=@html_entity_decode($current_item['news_article'],ENT_QUOTES);
+								if (preg_match('#^http://ocportal.com/#',$this->feed_url)==0)
+								{
+									require_code('xhtml');
+									$current_item['news_article']=xhtmlise_html($current_item['news_article']);
+								}
+								break;	
+							// slash namespace
+							case 'HTTP://PURL.ORG/RSS/1.0/modules/slash:SECTION':
+								$current_item['category']=$data;
+								break;
+							// wp namespace
+							case 'HTTP://WORDPRESS.ORG/EXPORT/1.2/EXCERPT/:ENCODED':
 								$current_item['news']=$data;
 								if ((preg_match('#[<>]#',$current_item['news'])==0) && (preg_match('#[<>]#',html_entity_decode($current_item['news'],ENT_QUOTES))!=0)) // Double escaped HTML
 									$current_item['news']=@html_entity_decode($current_item['news'],ENT_QUOTES);
@@ -418,9 +436,8 @@ class rss
 									$current_item['news']=xhtmlise_html($current_item['news']);
 								}
 								break;	
-							// slash namespace
-							case 'HTTP://PURL.ORG/RSS/1.0/modules/slash:SECTION':
-								$current_item['category']=$data;
+							case 'HTTP://WORDPRESS.ORG/EXPORT/1.2/:COMMENT':
+								$current_item['comments'][]=array();
 								break;
 
 							case 'TITLE':
@@ -468,7 +485,14 @@ class rss
 								if ($current_item['author_email']==get_option('staff_address')) unset($current_item['author_email']);
 								break;
 							case 'CATEGORY':
-								$current_item['category']=$data;
+								if (array_key_exists('category',$current_item))
+								{
+									if (!array_key_exists('extra_categories',$current_item)) $current_item['extra_categories']=array();
+									$current_item['extra_categories'][]=$data;
+								} else
+								{
+									$current_item['category']=$data;
+								}
 								break;
 							case 'SOURCE':
 								$current_item['author']=$data;
@@ -480,13 +504,25 @@ class rss
 								if ((!array_key_exists('ISPERMALINK',$attributes)) || ($attributes['ISPERMALINK']=='true'))
 									$current_item['guid']=$data;
 								break;
+
+							default:
+								$current_item['extra'][$last_tag]=$data;
 						}
+						break;
+
+					case 'HTTP://WORDPRESS.ORG/EXPORT/1.2/:COMMENT':
+						$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
+
+						if (!array_key_exists('comments',$current_item))
+							$current_item['comments']=array(array());
+
+						$current_item['comments'][count($current_item['comments'])-1][preg_replace('#^HTTP://WORDPRESS.ORG/EXPORT/1.2/:#','',$last_tag)]=$data;
 						break;
 				}
 				break;
 
 			case 'ATOM':
-	//			if (array_peek($this->namespace_stack)=='ATOM')
+				//if (array_peek($this->namespace_stack)=='ATOM')
 				{
 					if (array_key_exists('TYPE',$attributes)) $type=str_replace('text/','',$attributes['TYPE']); else $type='plain';
 					if (array_key_exists('MODE',$attributes)) $mode=$attributes['MODE']; else $mode='xml';
@@ -536,6 +572,8 @@ class rss
 									}
 									break;
 							}
+							break;
+
 						case $prefix.'FEED':
 							switch ($last_tag)
 							{
@@ -573,6 +611,7 @@ class rss
 									break;
 							}
 							break;
+
 						case $prefix.'ENTRY':
 							$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
 							switch ($last_tag)
@@ -643,6 +682,9 @@ class rss
 										$current_item['rep_image']=$attributes['URL'];
 									}
 									break;
+
+								default:
+									$current_item['extra'][$last_tag]=$data;
 							}
 							break;
 					}

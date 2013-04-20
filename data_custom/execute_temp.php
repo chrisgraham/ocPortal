@@ -55,16 +55,11 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['FORUM_DB']->create_index('f_topics','unread_forums',array('t_forum_id','t_cache_last_time'));
-	$GLOBALS['SITE_DB']->create_index('seo_meta','ftjoin_dmeta_keywords',array('meta_keywords'));
-	$GLOBALS['SITE_DB']->create_index('seo_meta','ftjoin_dmeta_description',array('meta_description'));
-	$GLOBALS['SITE_DB']->create_index('images','ftjoin_dtitle',array('title'));
-	$GLOBALS['SITE_DB']->create_index('videos','ftjoin_dtitle',array('title'));
-	$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
+	require_code('news2');
+	$out=import_foreign_news_html('Kimberley has started another super design, a cat by Peter Underhill holding flowers, what her progress as she works on this lovely design.
 
-	$fields=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields WHERE cf_type LIKE \'%trans%\' OR cf_type LIKE \'%posting_field%\'');
-	foreach ($fields as $field)
-	{
-		$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($field['id']),array('field_'.strval($field['id'])),'mf_member_id');
-	}
+[caption id="attachment_973" align="aligncenter" width="300"]<a href="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update1.jpg"><img class="size-full wp-image-973" title="update1" src="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update1.jpg" alt="" width="300" height="225" /></a> Update 1[/caption]
+
+[caption id="attachment_974" align="aligncenter" width="300"]<a href="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update2.jpg"><img class="size-full wp-image-974" title="update2" src="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update2.jpg" alt="" width="300" height="225" /></a> Update 2[/caption]');
+	@exit($out);
 }

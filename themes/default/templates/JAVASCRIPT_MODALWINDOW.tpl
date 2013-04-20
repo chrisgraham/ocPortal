@@ -42,7 +42,10 @@ function open_link_as_overlay(ob,width,height,target)
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="{$IMG*,loading}" /></p><p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
+		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="{$IMG*,loading}" /></p>';
+		var has_full_button=(typeof a.childNodes[0]=='undefined') || (a.href!==a.childNodes[0].src);
+		if (has_full_button)
+			lightbox_code+='<p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
 
 		// Show overlay
 		var myLightbox={
@@ -71,7 +74,7 @@ function open_link_as_overlay(ob,width,height,target)
 				{
 					// Might need to rescale using some maths, if natural size is too big
 					var max_width=modal.topWindow.get_window_width()-20;
-					var max_height=modal.topWindow.get_window_height()-180;
+					var max_height=modal.topWindow.get_window_height()-(has_full_button?180:60);
 					if (width>max_width)
 					{
 						width=max_width;
@@ -360,7 +363,8 @@ function ModalWindow()
 			if (width>dim.pageWidth) width=dim.pageWidth-30;
 
 			var boxWidth=((width) ? (width + 8) : (dim.pageWidth / 4))  + 'px';
-			var extra_box_height=(this.type=='iframe' ) ? 160 : 120;
+			var extra_box_height=(this.type=='iframe') ? 160 : ((this.type=='lightbox')?26:120);
+
 			if (this.cancel_button === null) extra_box_height=0;
 			var boxHeight=(typeof height=='string' || height === null || this.type=='iframe') ? 'auto' : (height + extra_box_height) + 'px' ;
 

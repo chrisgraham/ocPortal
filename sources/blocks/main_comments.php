@@ -121,7 +121,7 @@ class Block_main_comments
 
 		$invisible_if_no_comments=((array_key_exists('invisible_if_no_comments',$map)) && ($map['invisible_if_no_comments']=='1'));
 		$reverse=((array_key_exists('reverse',$map)) && ($map['reverse']=='1'));
-		$allow_reviews=((!array_key_exists('reviews',$map)) || ($map['reviews']=='1'));
+		$allow_reviews=((array_key_exists('reviews',$map)) && ($map['reviews']=='1'));
 
 		$out->attach(get_comments('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,get_page_name()=='guestbook',$reverse,NULL,$allow_reviews));
 		return $out;

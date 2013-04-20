@@ -3667,6 +3667,29 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	white-space: nowrap;
 	display: inline-block;
 }
+/* Wordpress compatibility */
+.attachment.wp-caption {
+	white-space: normal;
+}
+.alignleft {
+	float: left;
+	margin-right: 0.5em;
+}
+.alignright {
+	float: right;
+	margin-left: 0.5em;
+}
+.aligncenter {
+	display: block;
+	margin: 1em auto;
+}
+.alignnone {
+	display: block;
+	margin: 1em;
+}
+.alignleft, .alignright, .aligncenter, .alignnone, .alignnone {
+	border: 2px solid {$GET,pale_border};
+}
 
 .attachment figcaption {
 	border: 1px solid {$GET,standard_border};

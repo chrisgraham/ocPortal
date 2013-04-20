@@ -487,7 +487,9 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	require_code('obfuscate');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="mailto:(?-U) ?(?U)([^"]+)"([^>]*)>(.*)</a>$#siU','[email="${2}"]${4}[/email]');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="'.str_replace('#','\#',str_replace('&','\\&',mailto_obfuscated())).'([^"]+)"([^>]*)>(.*)</a>$#siU','[email="${4}"]${2}[/email]');
+	$array_html_preg_replace[]=array('#^<a ([^>]*)href="([^"]+)"([^>]*) rel="([^"]*)" target="([^"]*)"([^>]*)>(.*)</a>$#siU','[url="${2}" rel="${4}" target="${5}"]${7}[/url]');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="([^"]+)"([^>]*) target="([^"]*)"([^>]*)>(.*)</a>$#siU','[url="${2}" target="${4}"]${6}[/url]');
+	$array_html_preg_replace[]=array('#^<a ([^>]*)href="([^"]+)"([^>]*) rel="([^"]*)"([^>]*)>(.*)</a>$#siU','[url="${2}" rel="${4}"]${6}[/url]');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="([^"]+)"([^>]*)>(.*)</a>$#siU','[url="${2}"]${4}[/url]');
 	$semihtml=array_html_preg_replace('a',$array_html_preg_replace,$semihtml);
 	$array_html_preg_replace=array();

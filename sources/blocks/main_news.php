@@ -81,8 +81,6 @@ class Block_main_news
 			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 		}
 
-		$days=intval($days);
-
 		$days_full=floatval($days)*$multiplier;
 		$days_outline=floatval($days)-$days_full;
 
@@ -116,13 +114,13 @@ class Block_main_news
 
 		if ($historic=='')
 		{
-			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=p.id'.$join.' WHERE '.$q_filter.' AND validated=1 AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
+			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=p.id'.$join.' WHERE '.$q_filter.' AND validated=1 AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',30/*reasonable limit*/);
 			if (!array_key_exists(0,$rows)) // Nothing recent, so we work to get at least something
 			{
 				$rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND validated=1'.(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_full);
 				$rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND validated=1'.(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_archive,$fallback_full);
 			}
-			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND validated=1 AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
+			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND validated=1 AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',30/*reasonable limit*/);
 		} else
 		{
 			if (function_exists('set_time_limit')) @set_time_limit(0);

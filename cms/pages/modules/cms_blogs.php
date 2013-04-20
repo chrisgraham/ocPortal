@@ -566,54 +566,42 @@ class Module_cms_blogs extends standard_aed_module
 		check_specific_permission('mass_import',NULL,NULL,'cms_news');
 
 		$lang=post_param('lang',user_lang());
-		$title=get_screen_title('IMPORT_WP_DB');
-		$submit_name=	do_lang_tempcode('IMPORT_WP_DB');
+		$title=get_screen_title('IMPORT_WORDPRESS');
+		$submit_name=do_lang_tempcode('IMPORT_WORDPRESS');
 
 		require_code('form_templates');
 
-		//------------------------------------------------
-		// Build up form
-		$fields_xml=new ocp_tempcode();		
+		/* RSS method */
 
-		$set_name='rss';
-		$required=true;
-		$set_title=do_lang_tempcode('FILE');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file_novalidate',false,NULL,NULL,true,'xml'));
-
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','xml_url','',false));
-
-		$fields_xml->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_WP_XML'),$field_set,$required));
+		require_code('news2');
+		$fields=import_rss_fields();
 
 		$hidden=form_input_hidden('lang',$lang);
 
 		$xml_post_url=build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'xml'),'_SELF');
 
-		$xml_upload_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
+		$xml_upload_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
 
-		//--------------------------------------------
-		$fields=new ocp_tempcode();	
+		/* Database method */
+
+		$fields=new ocp_tempcode();
 
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_HOST_NAME'),do_lang_tempcode('DESCRIPTION_WORDPRESS_HOST_NAME'),'wp_host','localhost',false));
-
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_DB_NAME'),do_lang_tempcode('DESCRIPTION_WORDPRESS_DB_NAME'),'wp_db','wordpress',false));
-
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_TABLE_PREFIX'),do_lang_tempcode('DESCRIPTION_WORDPRESS_TABLE_PREFIX'),'wp_table_prefix','wp',false));
-
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_DB_USERNAME'),do_lang_tempcode('DESCRIPTION_WORDPRESS_DB_USERNAME'),'wp_db_user','root',false));
-
 		$fields->attach(form_input_password(do_lang_tempcode('WORDPRESS_DB_PASSWORD'),do_lang_tempcode('DESCRIPTION_WORDPRESS_DB_PASSWORD'),'wp_db_password',false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ADVANCED_OPTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_WORDPRESS_USERS'),do_lang_tempcode('DESCRIPTION_IMPORT_WORDPRESS_USER'),'wp_import_wordpress_users',true));
-
 		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_BLOG_COMMENTS'),do_lang_tempcode('DESCRIPTION_IMPORT_BLOG_COMMENTS'),'wp_import_blog_comments',true));
-
-		$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'wp_auto_validate',true));
-
-		$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'wp_add_to_own',false));
+		if (addon_installed('unvalidated'))
+			$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'wp_auto_validate',true));
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'wp_add_to_own',false));
+		if (has_specific_permission(get_member(),'draw_to_server'))
+			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'wp_download_images',true));
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));
@@ -623,13 +611,15 @@ class Module_cms_blogs extends standard_aed_module
 
 		$db_post_url=build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'db'),'_SELF');
 
-		$db_import_form=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$db_post_url,'JAVASCRIPT'=>$javascript));
+		$db_import_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$db_post_url,'JAVASCRIPT'=>$javascript));
 
-		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('TITLE'=>get_screen_title('DB_IMPORT_FORM'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
+		/* Render */
+
+		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('TITLE'=>get_screen_title('IMPORT_WORDPRESS'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
 	}
 
 	/**
-	 * The actualiser to import wordpress blog
+	 * The actualiser to import a wordpress blog
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -637,90 +627,17 @@ class Module_cms_blogs extends standard_aed_module
 	{
 		check_specific_permission('mass_import',NULL,NULL,'cms_news');
 
-		$title=get_screen_title('IMPORT_WP_DB');
+		$title=get_screen_title('IMPORT_WORDPRESS');
 
-		require_code('rss');
-		require_code('news');
 		require_code('news2');
 
-		$GLOBALS['LAX_COMCODE']=true;
-
-		require_code('uploads');
-		is_swf_upload(true);
-
-		$is_validated=post_param_integer('wp_auto_validate',0);
-		$to_own_account=post_param_integer('wp_add_to_own',0);		
-
-		//Wordpress post xml file importing method
-		if((get_param('method')=='xml'))
-		{				
-			$rss_url=post_param('xml_url',NULL);
-
-			if (array_key_exists('file_novalidate',$_FILES))
-			{
-				if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
-				{	
-					$rss_url=$_FILES['file_novalidate']['tmp_name'];
-				} else warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
-			} else warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
-
-			$rss=new rss($rss_url,true);
-
-			if (!is_null($rss->error))
-			{
-				warn_exit($rss->error);
-			}
-
-			$cat_id=NULL;
-
-			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-
-			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-
-			$extra_post_data=array();
-
-			foreach ($rss->gleamed_items as $item)
-			{
-				if(!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
-
-				$extra_post_data[]=$item;
-
-				foreach ($NEWS_CATS as $_cat=>$news_cat)
-				{				
-					if (get_translated_text($news_cat['nc_title'])==$item['category'])
-					{
-						$cat_id=$_cat;
-					}				
-				}
-				//Check for existing owner categories, if not create blog category for creator
-				if($to_own_account==0)
-				{
-					$creator=$item['author'];
-					$submitter_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($creator);
-				}
-				else
-					$submitter_id=get_member();
-
-				//if(is_null($submitter_id))	continue;	//Skip importing posts of nonexisting users
-
-				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
-
-				if(is_null($cat_id))
-				{
-					$cat_id=add_news_category($item['category'],'newscats/general','',NULL);
-					$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-					$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-				}
-
-				// Add news
-				add_news($item['title'],html_to_comcode($item['news']),NULL,$is_validated,1,1,1,'',array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'',$owner_category_id,array($cat_id),NULL,$submitter_id,0,time(),NULL,'');
-			}
-
-			if(url_is_local($rss_url)) // Means it is a temp file
-			@unlink($rss_url);
+		// Wordpress posts, XML file importing method
+		if ((get_param('method')=='xml'))
+		{
+			import_rss();
 		}
-		elseif(get_param('method')=='db')	//Importing directly from wordpress db
-		{	
+		elseif (get_param('method')=='db')	// Importing directly from wordpress DB
+		{
 			import_wordpress_db();
 		}
 

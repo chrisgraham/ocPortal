@@ -194,6 +194,7 @@ class Module_admin
 			array('cache','decache','cleanup'),
 			array('ssl','https'),
 			array('seed','theme wizard'),
+			array('block','widget'), // Joomla uses 'module', but we don't want to synonym this as it means something else in ocPortal
 		);
 	}
 

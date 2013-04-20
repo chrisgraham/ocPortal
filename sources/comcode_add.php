@@ -56,7 +56,7 @@ function _get_details_comcode_tags()
 		'concept'=>array('param'),
 		'staff_note'=>array(),
 		'menu'=>array('param','type'),
-		'surround'=>array('param'),
+		'surround'=>array('param','style'),
 		'php'=>array('scroll','numbers'),
 		'codebox'=>array('param','numbers'),
 		'sql'=>array('scroll','numbers'),
@@ -89,7 +89,7 @@ function _get_details_comcode_tags()
 		'exp_thumb'=>array('float'),
 		'exp_ref'=>array('param'),
 		'thumb'=>array('align','param','caption','float'),
-		'url'=>array('param','title','target'),
+		'url'=>array('param','title','target','rel'),
 		'email'=>array('param','title','subject','body'),
 		'reference'=>array('type','param'),
 		'page'=>array('param'),
@@ -298,7 +298,19 @@ function comcode_helper_script()
 		require_code('comcode_text');
 		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),$actual_tag);
 
-		$default_embed=array_key_exists('',$defaults)?('[semihtml]'.$defaults[''].'[/semihtml]'):get_param('default','');
+		if (array_key_exists('',$defaults))
+		{
+			if (html_to_comcode($defaults[''])==$defaults[''])
+			{
+				$default_embed=$defaults['']; // Simple case, don't confuse user with semihtml gibberish
+			} else
+			{
+				$default_embed='[semihtml]'.$defaults[''].'[/semihtml]';
+			}
+		} else
+		{
+			$default_embed=get_param('default','');
+		}
 
 		$embed_required=true;
 		if ($tag=='contents') $embed_required=false;

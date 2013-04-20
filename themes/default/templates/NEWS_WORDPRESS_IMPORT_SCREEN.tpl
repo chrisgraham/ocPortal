@@ -1,6 +1,6 @@
 {TITLE}
 
-<h2>{!IMPORT_FROM_XML}</h2>
+<h2>{!XML_UPLOAD_METHOD}</h2>
 
 {XML_UPLOAD_FORM}
 

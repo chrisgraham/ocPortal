@@ -130,10 +130,10 @@ function script_load_stuff()
 
 	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
 	// it doesn't display errors.
-	window["__flash__removeCallback"] = function (instance, name) {
+	window["__flash__removeCallback"]=function (instance, name) {
 		try {
 			if (instance) {
-				instance[name] = null;
+				instance[name]=null;
 			}
 		} catch (flashEx) {
 
@@ -2310,8 +2310,18 @@ function entities_to_unicode(din)
 /* load the HTML as XHTML */
 function inner_html_load(xml_string) {
 	var xml;
-	if (typeof DOMParser!='undefined') xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
-	else {
+	if (typeof DOMParser!='undefined')
+	{
+		xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
+
+		if ((typeof xml.documentElement!='undefined') && (typeof xml.documentElement.childNodes[0]!='undefined') && (xml.documentElement.childNodes[0].nodeName=='parsererror')) // HTML method then
+		{
+			xml=document.implementation.createHTMLDocument('');
+			var doc_elt=xml.documentElement;
+			doc_elt.innerHTML=xml_string;
+		}
+	} else
+	{
 		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
 		for (var i=0;i<ieDOM.length && !xml;i++) {
 			try { xml=new ActiveXObject(ieDOM[i]);xml.loadXML(xml_string); }
