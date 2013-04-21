@@ -274,7 +274,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				this.make_element_look_selected(document.getElementById(this.name+'tsel_c_'+node.getAttribute('id')),selected);
 				if (selected)
 				{
-					element.value=node.getAttribute('id'); // Copy in proper ID for what is selected, not relying on what we currently have as accurate
+					element.value=(this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id')); // Copy in proper ID for what is selected, not relying on what we currently have as accurate
 					element.selected_title=node.getAttribute('title');
 					if (element.value=='') element.selected_title='';
 					if (element.onchange) element.onchange();
