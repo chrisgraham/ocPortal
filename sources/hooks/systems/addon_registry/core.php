@@ -390,6 +390,8 @@ class Hook_addon_registry_core
 			'lang_custom/index.html',
 			'sitetree_editor.css',
 			'global.css',
+			'font_sizer.css',
+			'themes/default/templates/FONT_SIZER.tpl',
 			'themes/default/css/index.html',
 			'no_cache.css',
 			'data/editarea/reg_syntax/index.html',
@@ -904,6 +906,7 @@ class Hook_addon_registry_core
 			'EMAILLOG_SCREEN.tpl'=>'email_log_screen',
 			'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
 			'BLOCK_MAIN_CONTENT_FILTERING.tpl'=>'block_main_content_filtering',
+			'FONT_SIZER.tpl'=>'font_sizer',
 		);
 	}
 
@@ -1634,6 +1637,21 @@ class Hook_addon_registry_core
 						'C'=>''
 					)
 				)
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__font_sizer()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('FONT_SIZER', array(
 			)), NULL, '', true)
 		);
 	}

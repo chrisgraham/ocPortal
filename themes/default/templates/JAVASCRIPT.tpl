@@ -128,6 +128,13 @@ function script_load_stuff()
 		} );
 	}
 
+	/* Font size */
+	var font_size=read_cookie('font_size');
+	if (font_size!='')
+	{
+		set_font_size(font_size);
+	}
+
 	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
 	// it doesn't display errors.
 	window["__flash__removeCallback"]=function (instance, name) {
@@ -152,6 +159,13 @@ function script_load_stuff()
 	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof window.script_load_stuff_staff!='undefined')) script_load_stuff_staff();
 }
 
+function set_font_size(size)
+{
+	document.body.style.fontSize=size+'px';
+	set_cookie('font_size',size,120);
+}
+// TODO: Load from cookie
+
 function new_html__initialise(element)
 {
 	switch (element.nodeName.toLowerCase())
@@ -174,6 +188,7 @@ function new_html__initialise(element)
 						return false;
 					} }(element);
 					element.title=element.title.replace('{!LINK_NEW_WINDOW;}','');
+					if (element.title==' ') element.title='';
 				}
 			{+END}
 

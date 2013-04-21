@@ -574,7 +574,7 @@ class Module_cms_blogs extends standard_aed_module
 		/* RSS method */
 
 		require_code('news2');
-		$fields=import_rss_fields();
+		$fields=import_rss_fields(true);
 
 		$hidden=form_input_hidden('lang',$lang);
 
@@ -602,6 +602,8 @@ class Module_cms_blogs extends standard_aed_module
 			$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'wp_add_to_own',false));
 		if (has_specific_permission(get_member(),'draw_to_server'))
 			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'wp_download_images',true));
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_TO_BLOG'),do_lang_tempcode('DESCRIPTION_IMPORT_TO_BLOG'),'wp_import_to_blog',true));
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));

@@ -86,8 +86,15 @@ class Module_vforums
 	function new_posts()
 	{
 		$title=do_lang('POSTS_SINCE_LAST_VISIT');
-		if (!array_key_exists('last_visit',$_COOKIE)) warn_exit(do_lang_tempcode('NO_LAST_VISIT'));
-		$condition='t_cache_last_time>'.strval((integer)$_COOKIE['last_visit']);
+		if (!array_key_exists('last_visit',$_COOKIE))
+		{
+			attach_message(do_lang_tempcode('NO_LAST_VISIT'),'notice');
+			$time=time()-24*60*60;
+		} else
+		{
+			$time=(integer)$_COOKIE['last_visit'];
+		}
+		$condition='t_cache_last_time>'.strval($time);
 
 		$order2='t_cache_last_time DESC';
 
@@ -230,7 +237,7 @@ class Module_vforums
 		}
 
 		$_buttons=new ocp_tempcode();
-		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
+		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
 		$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
 
 		breadcrumb_add_segment($breadcrumbs);

@@ -55,28 +55,30 @@
 
 {TOPIC_WRAPPER}
 
-{$GET,BUTTONS}
+{+START,IF,{$NOT,{$WIDE_HIGH}}}
+	{$GET,BUTTONS}
 
-{+START,IF_PASSED,ID}
-	<div class="non_accessibility_redundancy">
-		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
-			<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
-			{BREADCRUMBS}
-		</nav>
-	</div>
-{+END}
+	{+START,IF_PASSED,ID}
+		<div class="non_accessibility_redundancy">
+			<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
+				<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
+				{BREADCRUMBS}
+			</nav>
+		</div>
+	{+END}
 
-{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
-{+START,IF_PASSED,ID}
-	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forums}}
-		{+START,INCLUDE,STAFF_ACTIONS}
-			1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:ad:parent_forum={ID}}
-			1_TITLE={!ADD_FORUM}
-			1_REL=add
-			2_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:_ed:{ID}}
-			2_TITLE={!EDIT_FORUM}
-			2_ACCESSKEY=q
-			2_REL=edit
+	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
+	{+START,IF_PASSED,ID}
+		{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forums}}
+			{+START,INCLUDE,STAFF_ACTIONS}
+				1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:ad:parent_forum={ID}}
+				1_TITLE={!ADD_FORUM}
+				1_REL=add
+				2_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:_ed:{ID}}
+				2_TITLE={!EDIT_FORUM}
+				2_ACCESSKEY=q
+				2_REL=edit
+			{+END}
 		{+END}
 	{+END}
 {+END}

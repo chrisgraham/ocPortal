@@ -1535,10 +1535,10 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_groups');
 
 		// Set last visit time session cookie if it doesn't exist
-		if ((!array_key_exists('last_visit',$_COOKIE)) && ($GLOBALS['FORUM_DRIVER']->get_guest_id()!=$id))
+		$lvt=$this->get_member_row_field($id,'m_last_visit_time');
+		if (((!array_key_exists('last_visit',$_COOKIE)) || ($lvt<time()-60*60*12)) && ($GLOBALS['FORUM_DRIVER']->get_guest_id()!=$id))
 		{
 			require_code('users_active_actions');
-			$lvt=$this->get_member_row_field($id,'m_last_visit_time');
 			ocp_setcookie('last_visit',is_null($lvt)?strval(time()):strval($lvt),true);
 			$new_visit=true;
 		} else

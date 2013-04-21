@@ -1320,7 +1320,16 @@ class database_driver
 		$tries=0;
 		do
 		{
-			$locks=$GLOBALS['SITE_DB']->query('SHOW OPEN TABLES FROM '.get_db_site().' WHERE `Table`=\''.get_table_prefix().$tbl.'\' AND In_use>=1');
+			if (substr($tbl,0,2)!='f_')
+			{
+				$db_name=get_db_site();
+				$db=$GLOBALS['SITE_DB'];
+			} else
+			{
+				$db_name=get_db_forums();
+				$db=$GLOBALS['FORUM_DB'];
+			}
+			$locks=$db->query('SHOW OPEN TABLES FROM '.$db_name.' WHERE `Table`=\''.$db->get_table_prefix().$tbl.'\' AND In_use>=1');
 			$locked=count($locks)>=1;
 			$tries++;
 			if ($locked)

@@ -45,9 +45,9 @@
 				{$,<p class="ocf_member_column_title">{!VIEW}:</p>}
 				<ul role="navigation" class="actions_list">
 					<li><a href="{PRIVATE_TOPIC_URL*}">{!PRIVATE_TOPICS}{+START,IF_NON_EMPTY,{PT_EXTRA}} <span class="ocf_member_column_pts">{PT_EXTRA}</span>{+END}</a></li>
-					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE_LAST_VISIT}</a></li>
-					<li><a href="{UNREAD_TOPICS_URL*}">{!TOPICS_UNREAD}</a></li>
-					<li><a href="{RECENTLY_READ_URL*}">{!RECENTLY_READ}</a></li>
+					<li><a onclick="return open_link_as_overlay(this);" href="{NEW_POSTS_URL*}">{!POSTS_SINCE_LAST_VISIT}</a></li>
+					<li><a onclick="return open_link_as_overlay(this);" href="{UNREAD_TOPICS_URL*}">{!TOPICS_UNREAD}</a></li>
+					<li><a onclick="return open_link_as_overlay(this);" href="{RECENTLY_READ_URL*}">{!RECENTLY_READ}</a></li>
 					<li><a href="{INLINE_PERSONAL_POSTS_URL*}">{!INLINE_PERSONAL_POSTS}</a></li>
 				</ul>
 			</nav>

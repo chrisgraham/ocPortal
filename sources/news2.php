@@ -25,9 +25,10 @@ RSS IMPORT (works very well with Wordpress and Blogger, which use RSS as an inte
 /**
  * Get UI fields for starting news import.
  *
+ * @param  boolean	Whether to import to blogs, by default
  * @return tempcode	UI fields
  */
-function import_rss_fields()
+function import_rss_fields($import_to_blog)
 {
 	$fields=new ocp_tempcode();
 
@@ -50,6 +51,8 @@ function import_rss_fields()
 		$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'add_to_own',false));
 	if (has_specific_permission(get_member(),'draw_to_server'))
 		$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'download_images',true));
+	if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_TO_BLOG'),do_lang_tempcode('DESCRIPTION_IMPORT_TO_BLOG'),'import_to_blog',true));
 
 	return $fields;
 }
@@ -74,6 +77,8 @@ function import_rss()
 	$to_own_account=post_param_integer('add_to_own',0);
 	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=0;
 	$import_blog_comments=post_param_integer('import_blog_comments',0);
+	$import_to_blog=post_param_integer('import_to_blog',0);
+	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $import_to_blog=0;
 
 	$rss_url=post_param('rss_feed_url',NULL);
 	require_code('uploads');
@@ -176,35 +181,39 @@ function import_rss()
 		if ($is_news)
 		{
 			// Work out categories
-			$cat_id=mixed();
-			$extra_categories=array();
+			$owner_category_id=mixed();
+			$cat_ids=array();
 			foreach ($cats_to_process as $j=>$cat)
 			{
-				if ($cat=='Uncategorized') continue;	// Skip blank category creation
+				if ($cat=='Uncategorized') continue; // Skip blank category creation
 
-				$_cat_id=mixed();
+				$cat_id=mixed();
 				foreach ($NEWS_CATS as $_cat=>$news_cat)
 				{				
 					if (get_translated_text($news_cat['nc_title'])==$cat)
 					{
-						$_cat_id=$_cat;					
+						$cat_id=$_cat;					
 					}
 				}
-				if (is_null($_cat_id))
+				if (is_null($cat_id)) // Could not find existing category, create new
 				{
-					$_cat_id=add_news_category($cat,'newscats/general','',NULL);
+					$cat_id=add_news_category($cat,'newscats/general','',NULL);
 					// Need to reload now
 					$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 					$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 				}
 
-				if ($j==0)
+				if (($j==0) && ($import_to_blog==1))
 				{
-					$cat_id=$_cat_id; // Primary
+					$owner_category_id=$cat_id; // Primary
 				} else
 				{
-					$extra_categories[]=$_cat_id; // Secondary
+					$cat_ids[]=$cat_id; // Secondary
 				}
+			}
+			if (is_null($owner_category_id))
+			{
+				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
 			}
 
 			// Work out rep-image
@@ -249,8 +258,8 @@ function import_rss()
 				$allow_trackbacks,
 				'',
 				$news_article,
-				$cat_id,
-				$extra_categories,
+				$owner_category_id,
+				$cat_ids,
 				$add_date,
 				$submitter_id,
 				0,
@@ -509,6 +518,8 @@ function import_wordpress_db()
 	$to_own_account=post_param_integer('wp_add_to_own',0);
 	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=0;
 	$import_blog_comments=post_param_integer('wp_import_blog_comments',0);
+	$import_to_blog=post_param_integer('wp_import_to_blog',0);
+	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $import_to_blog=0;
 
 	if (get_forum_type()=='ocf')
 	{
@@ -575,31 +586,45 @@ function import_wordpress_db()
 
 				if ($post['post_type']=='post') // News
 				{
+					// Work out categories
+					$owner_category_id=mixed();
+					$cat_ids=array();
 					if (array_key_exists('category',$post))
 					{
-						$cat_id=array();
-						foreach ($post['category'] as $cat_code=>$category)
+						$i=0;
+						foreach ($post['category'] as $category)
 						{
-							$cat_code=NULL;
 							if ($category=='Uncategorized') continue;	// Skip blank category creation
+
+							$cat_id=mixed();
 							foreach ($NEWS_CATS as $id=>$existing_cat)
 							{
 								if (get_translated_text($existing_cat['nc_title'])==$category)
 								{
-									$cat_code=$id;
+									$cat_id=$id;
 								}
 							}
-							if (is_null($cat_code))	// Cound not find existing category, create new
+							if (is_null($cat_id)) // Could not find existing category, create new
 							{
-								$cat_code=add_news_category($category,'newscats/community',$category);
+								$cat_id=add_news_category($category,'newscats/community',$category);
+								// Need to reload now
 								$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'));
 								$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 							}
-							$cat_id=array_merge($cat_id,array($cat_code));
+							if (($i==0) && ($import_to_blog==1))
+							{
+								$owner_category_id=$cat_id; // Primary
+							} else
+							{
+								$cat_ids[]=$cat_id; // Secondary
+							}
+							$i++;
 						}
 					}
-
-					$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
+					if (is_null($owner_category_id))
+					{
+						$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
+					}
 
 					// Content
 					$news='';
@@ -621,7 +646,7 @@ function import_wordpress_db()
 						'',
 						$news_article,
 						$owner_category_id,
-						$cat_id,
+						$cat_ids,
 						strtotime($post['post_date_gmt']),
 						$submitter_id,
 						0,
@@ -949,10 +974,13 @@ function _news_import_grab_images_and_fix_links($download_images,&$data,$importe
 	$matches=array();
 	if ($download_images)
 	{
-		$num_matches=preg_match_all('#<img[^<>]*\ssrc=["\']([^\'"]*://[^\'"]*)["\']#i',$data,$matches);
+		$num_matches=preg_match_all('#<img[^<>]*\ssrc=["\']([^\'"]*)["\']#i',$data,$matches); // If there's an <a> to the same URL, this will be replaced too
 		for ($i=0;$i<$num_matches;$i++)
 			_news_import_grab_image($data,$matches[1][$i]);
-		$num_matches=preg_match_all('#<a[^<>]*\s*href=["\']([^\'"]*://[^\'"]*)["\']\s*imageanchor=["\']1["\']#i',$data,$matches);
+		$num_matches=preg_match_all('#<a[^<>]*\s*href=["\']([^\'"]*)["\']\s*imageanchor=["\']1["\']#i',$data,$matches);
+		for ($i=0;$i<$num_matches;$i++)
+			_news_import_grab_image($data,$matches[1][$i]);
+		$num_matches=preg_match_all('#<a rel="lightbox" href=["\']([^\'"]*)["\']#i',$data,$matches);
 		for ($i=0;$i<$num_matches;$i++)
 			_news_import_grab_image($data,$matches[1][$i]);
 	}
@@ -986,6 +1014,11 @@ function _news_import_grab_images_and_fix_links($download_images,&$data,$importe
  */
 function _news_import_grab_image(&$data,$url)
 {
+	$url=qualify_url($url,get_base_url());
+	if (substr($url,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/') return;
+	require_code('images');
+	if (!is_image($url)) return;
+
 	$stem='uploads/attachments/'.basename(urldecode($url));
 	$target_path=get_custom_file_base().'/'.$stem;
 	$target_url=get_custom_base_url().'/uploads/attachments/'.basename($url);
@@ -1001,5 +1034,10 @@ function _news_import_grab_image(&$data,$url)
 	$result=http_download_file($url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
 	fclose($target_handle);
 	if (!is_null($result))
-		$data=str_replace($url,$target_url,$data);
+	{
+		$data=str_replace('"'.$url.'"',$target_url,$data);
+		$data=str_replace('"'.preg_replace('#^http://.*/#U','/',$url).'"',$target_url,$data);
+		$data=str_replace('\''.$url.'\'',$target_url,$data);
+		$data=str_replace('\''.preg_replace('#^http://.*/#U','/',$url).'\'',$target_url,$data);
+	}
 }

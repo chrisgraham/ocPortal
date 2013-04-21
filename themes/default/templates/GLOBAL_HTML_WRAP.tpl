@@ -223,8 +223,10 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					{+END}{+END}
 
 					<div class="global_copyright">
-						{$,Uncomment to show user's time {$DATE} {$TIME}}
+						{$,Uncomment to show user"s time {$DATE} {$TIME}}
 						{$COPYRIGHT`}
+
+						{+START,INCLUDE,FONT_SIZER}{+END}
 					</div>
 
 					<nav class="global_minilinks" role="navigation">

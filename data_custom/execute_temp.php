@@ -55,24 +55,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords'),array('meta_for_type'=>'news'));
-	foreach ($rows as $row)
-	{
-		delete_lang($row['meta_keywords']);
-	}
-	$GLOBALS['SITE_DB']->query_delete('seo_meta',array('meta_for_type'=>'news'));
-
-	$rows=$GLOBALS['SITE_DB']->query_select('news',array('id'));
-	foreach ($rows as $row)
-	{
-		$keywords=get_translated_text($GLOBALS['SITE_DB']->query_value('news e JOIN '.get_table_prefix().'news_categories c ON c.id=e.news_category','nc_title',array('e.id'=>$row['id'])));
-		$cats=$GLOBALS['SITE_DB']->query_select('news_category_entries e JOIN '.get_table_prefix().'news_categories c ON c.id=e.news_entry_category',array('nc_title'),array('news_entry'=>$row['id']));
-		foreach ($cats as $cat)
-		{
-			$keywords.=','.get_translated_text($cat['nc_title']);
-		}
-
-		require_code('seo2');
-		seo_meta_set_for_explicit('news',strval($row['id']),$keywords,'');
-	}
+	set_value('http_faux_loopback','^http://192.168.1.100/');
+	http_download_file('http://192.168.1.100/PoweredByMacOSX.gif');
 }

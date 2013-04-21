@@ -598,7 +598,7 @@ class Module_cms_news extends standard_aed_module
 		require_code('form_templates');
 
 		require_code('news2');
-		$fields=import_rss_fields();
+		$fields=import_rss_fields(false);
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));
