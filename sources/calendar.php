@@ -418,7 +418,9 @@ function date_range($from,$to,$do_time=true)
 {
 	if (($to-$from>60*60*24) || (!$do_time))
 	{
-		$_length=do_lang('DAYS',integer_format(intval(ceil(($to-$from)/(60*60*24.0)))));
+		$days=($to-$from)/(60*60*24.0);
+		if ($days-intval($days)<0.1) $days=floor($days); // If it's only 0.1 above a day, we will actually round down. It's useful for stopping confusion around DST changes in particular.
+		$_length=do_lang('DAYS',integer_format(intval(ceil($days))));
 		if (!$do_time) return $_length;
 		$date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
 		$date2=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$to));

@@ -33,7 +33,7 @@ class Hook_stats_galleries
 		require_lang('galleries');
 
 		$bits=new ocp_tempcode();
-		if (get_option('galleries_show_stats_count_galleries',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('GALLERIES'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)')))));
+		if (get_option('galleries_show_stats_count_galleries',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('GALLERIES'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download_%').'\'')))));
 		if (get_option('galleries_show_stats_count_images',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('IMAGES'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')))));
 		if (get_option('galleries_show_stats_count_videos',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('VIDEOS'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')))));
 		if ($bits->is_empty()) return new ocp_tempcode();

@@ -79,6 +79,41 @@ RSS feeds can be displayed by placing the [tt]main_rss[/tt] block. This block is
 
 You may wish to use an 'Announcements' forum to make your news. If you wish to do this, use the [tt]main_forum_news[/tt] block instead of the [tt]main_news[/tt] block, and add news by posting in the forum you chose for your forum news (this choice is made by a parameter to the block).
 
+[title="2"]Import from blogging systems[/title]
+
+You can import from any system that can export RSS files. We have extended support for the extra data that Wordpress and Blogger put into their exported RSS files.
+
+[title="3"]Wordpress import[/title]
+
+You can import from Wordpress XML exports (RSS files), or direct from the database.
+The database method is more thorough, but the XML files will work well enough for most users and are easier to experiment with in advance on a test site.
+
+Note that we can not import:
+ - [i]for posts and pages...[/i]
+  - custom fields \[the postmeta table] (importing to news would probably be a bad idea for such content anyway -- it would be better to import to catalogues rather than continue Wordpress's shoe-horned custom-field implementation, although we don't currently have any code to do this -- unless you can get Wordpress's data into a CSV file)
+  - full taxonomy for categories (description, and hierarchy, and groups)
+  - child order (ocP doesn't have it, child pages are shown alphabetically, or page linking is done manually)
+  - pinned (you should manually re-assign awards to stuff, and set up award layout via Comcode page layout or templating)
+ - [i]for comments...[/i]
+  - comment custom fields \[the commentmeta table] (we can't -- ocP doesn't have custom fields for comments)
+  - comment karma (ocPortal points work differently)
+ - [i]for users...[/i]
+  - user display names
+  - user URLs
+  - cpfs \[the usermeta table]
+  - [i]This support could be added, but most Wordpress sites don't make much use of the user database, and those that do may use a secondary user database[/i]
+ - links
+ - the main menu
+ - choice and layout of widgets
+ - short-codes (except for 'caption' which is the main one)
+ - [i]anything relating solely to particular Wordpress addons[/i], e.g. Buddypress
+
+We load everything into memory at once, which isn't ideal, but simplifies the code a lot. It's safe because import is a one-off event and a blog wouldn't normally use gigabytes of data.
+
+Passworded pages are changed to pages with no access permissions. Passworded post content is made admin-only.
+
+Categories and Tags are both imported from the same set of terms. You may wish to rationalise this manually after import is finished, probably by deleting some secondary categories that you don't really want.
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_adv_news"]Advanced News[/page]

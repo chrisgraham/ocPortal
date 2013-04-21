@@ -22,14 +22,6 @@
 RSS IMPORT (works very well with Wordpress and Blogger, which use RSS as an interchange)
 */
 
-/*
-Note, we are not importing:
- - custom fields keywords/description (importing to news would probably be a bad idea for such content anyway)
- - pinned (manually re-assign awards to stuff, and set up award layout via templating)
-
-Passworded pages are changed to pages with no access permissions. Passworded post content is made admin-only.
-*/
-
 /**
  * Get UI fields for starting news import.
  *
@@ -73,6 +65,7 @@ function import_rss()
 	$GLOBALS['LAX_COMCODE']=true;
 
 	disable_php_memory_limit();
+	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$is_validated=post_param_integer('auto_validate',0);
 	if (!addon_installed('unvalidated')) $is_validated=1;
@@ -125,7 +118,7 @@ function import_rss()
 
 		// Post name
 		$post_name=$item['title'];
-		if (isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_NAME']))
+		if ((isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_NAME'])) && ($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_NAME']!=''))
 		{
 			$post_name=$item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_NAME'];
 		}
@@ -135,6 +128,8 @@ function import_rss()
 		if ($add_date===false) $add_date=time(); // We've seen this situation in an error email, it's if the add date won't parse by PHP
 		$edit_date=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
 		if ($edit_date===false) $edit_date=NULL;
+		if ($add_date>time()) $add_date=time();
+		if ($add_date<0) $add_date=time();
 
 		// Validation status
 		$validated=$is_validated;
@@ -171,14 +166,16 @@ function import_rss()
 			$password=$item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_PASSWORD'];
 		}
 
+		// Categories
+		if (!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
+		$cats_to_process=array($item['category']);
+		if (array_key_exists('extra_categories',$item))
+			$cats_to_process=array_merge($cats_to_process,$item['extra_categories']);
+
 		// Now import, whatever this is
 		if ($is_news)
 		{
 			// Work out categories
-			if (!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
-			$cats_to_process=array($item['category']);
-			if (array_key_exists('extra_categories',$item))
-				$cats_to_process=array_merge($cats_to_process,$item['extra_categories']);
 			$cat_id=mixed();
 			$extra_categories=array();
 			foreach ($cats_to_process as $j=>$cat)
@@ -261,6 +258,8 @@ function import_rss()
 				NULL,
 				$rep_image
 			);
+			require_code('seo2');
+			seo_meta_set_for_explicit('news',strval($id),implode(',',$cats_to_process),$news);
 
 			// Track import IDs
 			$rss->gleamed_items[$i]['import_id']=$id;
@@ -321,6 +320,10 @@ function import_rss()
 			fclose($myfile);
 			sync_file($fullpath);
 
+			// Meta
+			require_code('seo2');
+			seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,implode(',',$cats_to_process),'');
+
 			// Track import IDs etc
 			$parent_page=mixed();
 			if (isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_PARENT']))
@@ -374,7 +377,7 @@ function import_rss()
 					$comment_content=import_foreign_news_html($comment['COMMENT_CONTENT']);
 					$comment_author=array_key_exists('COMMENT_AUTHOR',$comment)?$comment['COMMENT_AUTHOR']:do_lang('GUEST');
 					$comment_parent=array_key_exists('COMMENT_PARENT',$comment)?$comment['COMMENT_PARENT']:'';
-					$comment_date_gmt=array_key_exists('COMMENT_DATE_GMT',$comment)?$comment['COMMENT_DATE_GMT']:time();
+					$comment_date_gmt=array_key_exists('COMMENT_DATE_GMT',$comment)?$comment['COMMENT_DATE_GMT']:date('D/m/Y H:i:s',time());
 					$author_ip=array_key_exists('COMMENT_AUTHOR_IP',$comment)?$comment['COMMENT_AUTHOR_IP']:get_ip_address();
 					$comment_approved=array_key_exists('COMMENT_APPROVED',$comment)?$comment['COMMENT_APPROVED']:'1';
 					$comment_id=array_key_exists('COMMENT_ID',$comment)?$comment['COMMENT_ID']:'';
@@ -383,13 +386,17 @@ function import_rss()
 					$comment_author_url=array_key_exists('COMMENT_AUTHOR_URL',$comment)?$comment['COMMENT_AUTHOR_URL']:TODO;
 					$comment_author_email=array_key_exists('COMMENT_AUTHOR_EMAIL',$comment)?$comment['COMMENT_AUTHOR_EMAIL']:TODO;
 
+					$comment_add_date=strtotime($comment_date_gmt);
+					if ($comment_add_date>time()) $comment_add_date=time();
+					if ($comment_add_date<0) $comment_add_date=time();
+
 					if (($comment_type=='trackback') || ($comment_type=='pingback'))
 					{
 						$GLOBALS['SITE_DB']->query_insert('trackbacks',array(
 							'trackback_for_type'=>$trackback_for_type,
 							'trackback_for_id'=>strval($trackback_id),
 							'trackback_ip'=>$author_ip,
-							'trackback_time'=>strtotime($comment_date_gmt),
+							'trackback_time'=>$comment_add_date,
 							'trackback_url'=>$comment_author_url,
 							'trackback_title'=>'',
 							'trackback_excerpt'=>$comment_content,
@@ -424,7 +431,7 @@ function import_rss()
 						$content_title,
 						do_lang('COMMENT'),
 						$content_url->evaluate(),
-						strtotime($comment_date_gmt),
+						$comment_add_date,
 						$author_ip,
 						intval($comment_approved),
 						1,
@@ -484,32 +491,13 @@ function import_rss()
 DIRECT WORDPRESS DATABASE IMPORT (imports more than RSS import can)
 */
 
-/*
-Note, we are not importing:
- - custom fields keywords/description (importing to news would probably be a bad idea for such content anyway)
- - full taxonomy
- - comment custom fields (we can't - ocP doesn't have it)
- - comment karma (ocPortal works differently)
- - user display names
- - user URLs
- - cpfs
- - links (do it manually, ocP works very differently here, and this is quite an obscure feature)
- - child order (ocP doesn't have it)
- - pinned (manually re-assign awards to stuff, and set up award layout via templating)
- - the main menu
- - choice of widgets
-
-We also load everything into memory at once, which isn't ideal, but simplifies the code a lot. It's okay because this is a one-off event and a blog can't use a huge amount of data.
-
-Passworded pages are changed to pages with no access permissions. Passworded post content is made admin-only.
-*/
-
 /**
  * Import wordpress DB
  */
 function import_wordpress_db()
 {
 	disable_php_memory_limit();
+	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$GLOBALS['LAX_COMCODE']=true;
 
@@ -641,6 +629,11 @@ function import_wordpress_db()
 						NULL,
 						''
 					);
+					if (array_key_exists('category',$post))
+					{
+						require_code('seo2');
+						seo_meta_set_for_explicit('news',strval($id),implode(',',$post['category']),$news);
+					}
 
 					// Needed for adding comments/trackbacks
 					$comment_identifier='news_'.strval($id);
@@ -703,6 +696,13 @@ function import_wordpress_db()
 					if (fwrite($myfile,$_content)<strlen($_content)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 					fclose($myfile);
 					sync_file($fullpath);
+
+					// Meta
+					if (array_key_exists('category',$post))
+					{
+						require_code('seo2');
+						seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,implode(',',$post['category']),'');
+					}
 
 					// Track import IDs etc
 					$parent_page=$post['post_parent'];
@@ -876,7 +876,7 @@ function _get_wordpress_db_data()
 			$data[$user_id]['POSTS'][$post_id]=$post;
 
 			// Get categories
-			$categories=$db->query('SELECT t1.slug,t1.name FROM '.$db_table_prefix.'_terms t1 JOIN '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_term_relationships t2 ON t1.term_id=t2.term_taxonomy_id WHERE t2.object_id='.strval($post_id));
+			$categories=$db->query('SELECT t1.slug,t1.name FROM '.$db_table_prefix.'_terms t1 JOIN '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_term_taxonomy t2 ON t1.term_id=t2.term_id JOIN '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_term_relationships t3 ON t2.term_taxonomy_id=t3.term_taxonomy_id WHERE t3.object_id='.strval($post_id).' ORDER BY t3.term_order');
 			foreach ($categories as $category)
 			{
 				$data[$user_id]['POSTS'][$post_id]['category'][$category['slug']]=$category['name'];

@@ -55,11 +55,24 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('news2');
-	$out=import_foreign_news_html('Kimberley has started another super design, a cat by Peter Underhill holding flowers, what her progress as she works on this lovely design.
+	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords'),array('meta_for_type'=>'news'));
+	foreach ($rows as $row)
+	{
+		delete_lang($row['meta_keywords']);
+	}
+	$GLOBALS['SITE_DB']->query_delete('seo_meta',array('meta_for_type'=>'news'));
 
-[caption id="attachment_973" align="aligncenter" width="300"]<a href="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update1.jpg"><img class="size-full wp-image-973" title="update1" src="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update1.jpg" alt="" width="300" height="225" /></a> Update 1[/caption]
+	$rows=$GLOBALS['SITE_DB']->query_select('news',array('id'));
+	foreach ($rows as $row)
+	{
+		$keywords=get_translated_text($GLOBALS['SITE_DB']->query_value('news e JOIN '.get_table_prefix().'news_categories c ON c.id=e.news_category','nc_title',array('e.id'=>$row['id'])));
+		$cats=$GLOBALS['SITE_DB']->query_select('news_category_entries e JOIN '.get_table_prefix().'news_categories c ON c.id=e.news_entry_category',array('nc_title'),array('news_entry'=>$row['id']));
+		foreach ($cats as $cat)
+		{
+			$keywords.=','.get_translated_text($cat['nc_title']);
+		}
 
-[caption id="attachment_974" align="aligncenter" width="300"]<a href="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update2.jpg"><img class="size-full wp-image-974" title="update2" src="http://www.chatterboxstitchers.co.uk/wp-content/uploads/2012/11/update2.jpg" alt="" width="300" height="225" /></a> Update 2[/caption]');
-	@exit($out);
+		require_code('seo2');
+		seo_meta_set_for_explicit('news',strval($row['id']),$keywords,'');
+	}
 }

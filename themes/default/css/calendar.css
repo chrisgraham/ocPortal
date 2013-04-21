@@ -60,8 +60,9 @@ abbr.dtstart, abbr.dtend {
 }
 
 .calendar_year_month_day {
-	width: 14%;
+	width: {$DIV_FLOAT,100,7}%;
 	height: 2.5em;
+	border: 1px solid {$GET,standard_border};
 }
 
 .calendar_year_month_day div {

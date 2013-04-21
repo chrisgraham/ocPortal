@@ -69,6 +69,12 @@ class Block_main_comcode_page_children
 		$children=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','the_zone'),$qmap);
 		foreach ($children as $i=>$child)
 		{
+			if (($child['the_page']==$page) && ($child['the_zone']==$zone))
+			{
+				unset($children[$i]);
+				continue; // Be safe
+			}
+
 			$_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
 			if (!is_null($_title))
 			{

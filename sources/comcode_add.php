@@ -852,7 +852,7 @@ function _get_preview_environment_comcode($tag)
 			}
 		}
 	}
-	if($comcode=='')
+	if ($comcode=='')
 		$comcode='['.$actual_tag.$bparameters.']'.$tag_contents.'[/'.$actual_tag.']';
 
 	return array($comcode,$bparameters);

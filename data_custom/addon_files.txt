@@ -4119,3 +4119,8 @@ calendar_from_6am
  - themes/default/templates_custom/CALENDAR_DAY_HOUR.tpl
  - themes/default/templates_custom/CALENDAR_WEEK.tpl
  - themes/default/templates_custom/CALENDAR_WEEK_HOUR.tpl
+
+wordpress_style_page_children
+-----------------------------
+
+ - themes/default/templates_custom/BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl

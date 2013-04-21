@@ -455,6 +455,7 @@ header h1 {
 
 	.global_navigation {
 		margin-top: 99px !important;
+		text-align: center !important;
 	}
 	*/
 {+END}
@@ -1754,6 +1755,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 .tooltip img {
 	max-width: 100%;
+	max-height: 200px;
 }
 .tooltip .shunted_button {
 	display: none;
