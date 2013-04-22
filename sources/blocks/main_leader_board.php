@@ -114,6 +114,14 @@ class Block_main_leader_board
 		$out=new ocp_tempcode();
 		$i=0;
 
+		// Are there any rank images going to display?
+		$or_list='1=1';
+		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
+		$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
+		foreach (array_merge($admin_groups,$moderator_groups) as $group_id)
+			$or_list.=' AND id<>'.strval($group_id);
+		$has_rank_images=(get_forum_type()=='ocf') && ($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE '.$or_list.' AND '.db_string_not_equal_to('g_rank_image',''))!=0);
+
 		foreach ($rows as $member=>$points)
 		{
 			if ($i==$limit) break;
@@ -128,7 +136,15 @@ class Block_main_leader_board
 
 			if ($i==0) set_value('site_bestmember',$name);
 
-			$out->attach(do_template('POINTS_LEADERBOARD_ROW',array('_GUID'=>'68caa55091aade84bc7ca760e6655a45','ID'=>strval($member),'POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'POINTS'=>integer_format($points),'NAME'=>$name)));
+			$out->attach(do_template('POINTS_LEADERBOARD_ROW',array(
+				'_GUID'=>'68caa55091aade84bc7ca760e6655a45',
+				'ID'=>strval($member),
+				'POINTS_URL'=>$points_url,
+				'PROFILE_URL'=>$profile_url,
+				'POINTS'=>integer_format($points),
+				'NAME'=>$name,
+				'HAS_RANK_IMAGES'=>$has_rank_images,
+			)));
 
 			$i++;
 		}

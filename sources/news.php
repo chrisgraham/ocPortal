@@ -107,8 +107,24 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
+	$old_title=get_translated_text($myrow['nc_title']);
+
 	require_code('urls2');
 	suggest_new_idmoniker_for('news','misc',strval($id),$title);
+
+	// Sync meta keywords, if we have auto-sync for these
+	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	{
+		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
+		$affected_news=$GLOBALS['SITE_DB']->query($sql);
+		foreach ($affected_news as $af_row)
+		{
+			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',$af_row['text_original']));
+			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
+			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
+			lang_remap($af_row['meta_keywords'],$new_meta);
+		}
+	}
 
 	log_it('EDIT_NEWS_CATEGORY',strval($id),$title);
 
@@ -145,9 +161,25 @@ function delete_news_category($id)
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));
 	}
 
-	log_it('DELETE_NEWS_CATEGORY',strval($id),get_translated_text($myrow['nc_title']));
+	$old_title=get_translated_text($myrow['nc_title']);
+
+	log_it('DELETE_NEWS_CATEGORY',strval($id),$old_title);
 
 	delete_lang($myrow['nc_title']);
+
+	// Sync meta keywords, if we have auto-sync for these
+	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	{
+		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
+		$affected_news=$GLOBALS['SITE_DB']->query($sql);
+		foreach ($affected_news as $af_row)
+		{
+			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#','',$af_row['text_original']));
+			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
+			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
+			lang_remap($af_row['meta_keywords'],$new_meta);
+		}
+	}
 
 	$GLOBALS['SITE_DB']->query_update('news',array('news_category'=>$min),array('news_category'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('news_categories',array('id'=>$id),'',1);
@@ -184,10 +216,10 @@ function delete_news_category($id)
  * @param  URLPATH			URL to the image for the news entry (blank: use cat image)
  * @return AUTO_LINK			The ID of the news just added
  */
-function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$news_article='',$main_news_category=NULL,$news_category=NULL,$time=NULL,$submitter=NULL,$views=0,$edit_date=NULL,$id=NULL,$image='')
+function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$news_article='',$main_news_category=NULL,$news_categories=NULL,$time=NULL,$submitter=NULL,$views=0,$edit_date=NULL,$id=NULL,$image='')
 {
 	if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-	if (is_null($news_category)) $news_category=array();
+	if (is_null($news_categories)) $news_categories=array();
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 	$already_created_personal_category=false;
@@ -212,17 +244,19 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($main_news_category_id),'group_id'=>$group_id));
 		}
+	} else
+	{
+		$main_news_category_id=$main_news_category;
 	}
-	else $main_news_category_id=$main_news_category;
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array('news_image'=>$image,'edit_date'=>$edit_date,'news_category'=>$main_news_category_id,'news_views'=>$views,'news_article'=>0,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'validated'=>$validated,'date_and_time'=>$time,'title'=>insert_lang_comcode($title,1),'news'=>insert_lang_comcode($news,1),'author'=>$author);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news',$map,true);
 
-	if (!is_null($news_category))
+	if (!is_null($news_categories))
 	{
-		foreach ($news_category as $value)
+		foreach ($news_categories as $i=>$value)
 		{
 			if ((is_null($value)) && (!$already_created_personal_category))
 			{
@@ -239,6 +273,8 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 			if (is_null($news_category_id)) continue; // Double selected
 
 			$GLOBALS['SITE_DB']->query_insert('news_category_entries',array('news_entry'=>$id,'news_entry_category'=>$news_category_id));
+
+			$news_categories[$i]=$news_category_id;
 		}
 	}
 
@@ -291,7 +327,20 @@ END;
 	}
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('news',strval($id),array($title,($news=='')?$news_article:$news/*,$news_article*/),($news=='')?$news_article:$news); // News article could be used, but it's probably better to go for the summary only to avoid crap
+	$meta_description=($news=='')?$news_article:$news;
+	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	{
+		$meta_keywords='';
+		foreach (array_unique(array_merge(is_null($news_categories)?array():$news_categories,array($main_news_category_id))) as $news_category_id)
+		{
+			if ($meta_keywords!='') $meta_keywords.=',';
+			$meta_keywords.=get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title',array('id'=>$news_category_id)));
+		}
+		seo_meta_set_for_explicit('news',strval($id),$meta_keywords,$meta_description);
+	} else
+	{
+		seo_meta_set_for_implicit('news',strval($id),array($title,$meta_description/*,$news_article*/),$meta_description); // News article could be used, but it's probably better to go for the summary only to avoid crap
+	}
 
 	if ($validated==1)
 	{
@@ -337,7 +386,7 @@ END;
  * @param  ?URLPATH			URL to the image for the news entry (blank: use cat image) (NULL: don't delete existing)
  * @param  ?TIME				Recorded add time (NULL: leave alone)
  */
-function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$time=NULL)
+function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_categories,$meta_keywords,$meta_description,$image,$time=NULL)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter'),array('id'=>$id),'',1);
 	$_title=$rows[0]['title'];
@@ -371,17 +420,17 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		delete_upload('uploads/grepimages','news','news_image','id',$id,$image);
 	}
 
-	/*$news_categories=$news_category[0];
-	foreach ($news_category as $key=>$value)
+	/*$news_categories=$news_categories[0];
+	foreach ($news_categories as $key=>$value)
 	{
 		if($key>0) $news_categories.=','.$value;
 	}*/
 
-	if (!is_null($news_category))
+	if (!is_null($news_categories))
 	{
 		$GLOBALS['SITE_DB']->query_delete('news_category_entries',array('news_entry'=>$id));
 
-		foreach ($news_category as $value)
+		foreach ($news_categories as $value)
 		{
 			$GLOBALS['SITE_DB']->query_insert('news_category_entries',array('news_entry'=>$id,'news_entry_category'=>$value));
 		}
@@ -399,6 +448,16 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	}
 
 	require_code('seo2');
+	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	{
+		$meta_description=($news=='')?$news_article:$news;
+		$meta_keywords='';
+		foreach (array_unique(array_merge(is_null($news_categories)?array():$news_categories,array($main_news_category))) as $news_category_id)
+		{
+			if ($meta_keywords!='') $meta_keywords.=',';
+			$meta_keywords.=get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title',array('id'=>$news_category_id)));
+		}
+	}
 	seo_meta_set_for_explicit('news',strval($id),$meta_keywords,$meta_description);
 
 	decache('main_news');

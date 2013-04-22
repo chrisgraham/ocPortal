@@ -161,7 +161,8 @@ class Hook_addon_registry_points
 				'POINTS_URL'=>placeholder_url(),
 				'PROFILE_URL'=>placeholder_url(),
 				'POINTS'=>placeholder_number(),
-				'NAME'=>lorem_phrase()
+				'NAME'=>lorem_phrase(),
+				'HAS_RANK_IMAGES'=>true,
 			)));
 		}
 

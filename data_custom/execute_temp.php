@@ -55,6 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	set_value('http_faux_loopback','^http://192.168.1.100/');
-	http_download_file('http://192.168.1.100/PoweredByMacOSX.gif');
+	set_value('disable_seo','1');
 }
