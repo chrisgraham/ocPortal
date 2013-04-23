@@ -121,8 +121,6 @@ class Hook_addon_registry_banners
 			'sources/hooks/systems/occle_fs/banners.php',
 			'data/images/advertise_here.png',
 			'data/images/donate.png',
-			'site/pages/comcode/EN/advertise.txt',
-			'site/pages/comcode/EN/donate.txt',
 			'sources/hooks/systems/block_ui_renderers/banners.php',
 		);
 	}

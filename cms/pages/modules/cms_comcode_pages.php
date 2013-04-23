@@ -651,6 +651,21 @@ class Module_cms_comcode_pages
 			require_code('page_templates');
 			$templates=get_templates_list();
 			$template_name=(get_param('page_template','')!='')?get_param('page_template',''):$file;
+			if (get_param('page_template','')!='')
+			{
+				$template_name=get_param('page_template','');
+			} else
+			{
+				$template_name=$file;
+				foreach ($templates as $template)
+				{
+					if (preg_replace('/[^a-zA-Z0-9]/','',strtolower($template))==preg_replace('/[^a-zA-Z0-9]/','',strtolower($file)))
+					{
+						$template_name=$template;
+						break;
+					}
+				}
+			}
 			if (in_array(strtolower($template_name),$templates))
 			{
 				$contents=get_template_contents($template_name);

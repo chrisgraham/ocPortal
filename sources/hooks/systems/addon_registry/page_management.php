@@ -86,7 +86,22 @@ class Hook_addon_registry_page_management
 			'themes/default/images/pagepics/move.png',
 			'themes/default/images/pagepics/deletepage.png',
 			'themes/default/images/pagepics/addpagewizard.png',
-			'themes/default/images/under_construction_animated.gif'
+			'themes/default/images/under_construction_animated.gif',
+			'sources/page_templates.php',
+			'data_custom/modules/pagewizard/help.txt',
+			'data_custom/modules/pagewizard/about.txt',
+			'data_custom/modules/pagewizard/advertise.txt',
+			'data_custom/modules/pagewizard/article.txt',
+			'data_custom/modules/pagewizard/competitor_comparison.txt',
+			'data_custom/modules/pagewizard/contact.txt',
+			'data_custom/modules/pagewizard/donate.txt',
+			'data_custom/modules/pagewizard/guestbook.txt',
+			'data_custom/modules/pagewizard/long_copy.txt',
+			'data_custom/modules/pagewizard/press_release.txt',
+			'data_custom/modules/pagewizard/pricing.txt',
+			'data_custom/modules/pagewizard/short_copy.txt',
+			'data_custom/modules/pagewizard/two_column_layout.txt',
+			'data_custom/modules/pagewizard/web_radio.txt'
 		);
 	}
 
