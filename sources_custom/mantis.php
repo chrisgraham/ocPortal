@@ -202,8 +202,40 @@ function close_tracker_issue($tracker_id)
 	$GLOBALS['SITE_DB']->query('UPDATE mantis_bug_table SET resolution=20,status=80 WHERE id='.strval($tracker_id));
 }
 
+function get_user_currency()
+{
+	require_code('users');
+	$return_default = false;
+	$safe_currency = 'USD';
+	$member_id =  is_guest($the_id = intval(get_member()))? NULL : $the_id;
+	if(!is_null($member_id)){
+		$cpf_id = get_credits_profile_field_id('ocp_currency');
+		if (!is_null($cpf_id))
+		{
+			require_code('ocf_members_action2');
+			$_fields=ocf_get_custom_field_mappings($member_id);
+			$the_currency = !is_null($result = strval($_fields['field_'.strval($cpf_id)]))? $result : NULL;
+			$return_default = is_null($the_currency)? true: false;
+				if($return_default === false){
+					if(!(preg_match("/[a-zA-Z]/", $the_currency)) || (strlen($the_currency) > 3)) log_hack_attack_and_exit('HACK_ATTACK');
+				}
+		}
+		else
+		{
+			$return_default = true;
+		}
+
+	}
+	else
+	{
+		$return_default = true;
+	}
+	return $the_return = $return_default === true? is_null($result = get_option('currency',true))? $safe_currency: strval($result): $the_currency;
+}
+
 function get_credits_profile_field_id($field_name='ocp_support_credits')
 {
+	require_code('ocf_members');
 	if(preg_match("/\W/", $field_name)) log_hack_attack_and_exit('HACK_ATTACK');
 	$fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL);
 	$field_id=NULL;

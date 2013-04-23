@@ -1,66 +1,66 @@
-<label for="product">Buy</label>
+<label for="product">{LABEL_BUY}</label>
 <select name="product" id="product" onchange="update_product_info_display();">
 	{+START,LOOP,CREDIT_KINDS}
-		<option {+START,IF,{$EQ,{NUM_CREDITS},50}}selected="selected" {+END}value="{NUM_CREDITS*}CREDITS">{$NUMBER_FORMAT*,{NUM_CREDITS}} credits</option>
+		<option {+START,IF,{$EQ,{NUM_CREDITS},50}}selected="selected" {+END}value="{NUM_CREDITS*}_CREDITS">{$NUMBER_FORMAT*,{NUM_CREDITS}} credits</option>
 	{+END}
 </select>
 
 {+START,LOOP,CREDIT_KINDS}
-	<div class="creditsinfo" id="info_{NUM_CREDITS*}CREDITS">
-		<p><strong>{$NUMBER_FORMAT*,{NUM_CREDITS}}</strong> credits currently cost {$COMCODE,[currency="GBP" bracket="1"]{PRICE}[/currency]} &dagger;&dagger; and are good for:</p>
+	<div class="creditsinfo" id="info_{NUM_CREDITS*}_CREDITS">
+		<p>{!BLOCK_CREDITS_EXP_INNER_MSG,{$NUMBER_FORMAT*,{NUM_CREDITS}},{$COMCODE,[currency="{S_CURRENCY}" bracket="1"]{PRICE}[/currency]}}</p>
 
 		<div class="wide_table_wrap"><table summary="" class="wide_table">
 			<tr>
 				<th>
-					Priority level
+					{TH_PRIORITY}
 				</th>
 				<th>
-					Number of minutes
+					{TH_MINUTES}
 				</th>
 			</tr>
 	
 			<tr>
 				<td>
-					Budget priority
+					{L_B}
 				</td>
 				<td>
-					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},10}}</strong> minutes
-				</td>
-			</tr>
-	
-			<tr>
-				<td>
-					Normal priority
-				</td>
-				<td>
-					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},8}}</strong> minutes
+					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{B_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
 	
 			<tr>
 				<td>
-					Day priority
+					{L_N}
 				</td>
 				<td>
-					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},7}}</strong> minutes
-				</td>
-			</tr>
-	
-			<tr>
-				<td>
-					High priority
-				</td>
-				<td>
-					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},5}}</strong> minutes
+					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{N_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
 	
 			<tr>
 				<td>
-					Emergencies
+					{L_D}
 				</td>
 				<td>
-					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},3}}</strong> minutes
+					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{D_MINUTES}}}</strong> {MINUTES}
+				</td>
+			</tr>
+	
+			<tr>
+				<td>
+					{L_H}
+				</td>
+				<td>
+					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{H_MINUTES}}}</strong> {MINUTES}
+				</td>
+			</tr>
+	
+			<tr>
+				<td>
+					{L_E}
+				</td>
+				<td>
+					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{E_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
 		</table></div>

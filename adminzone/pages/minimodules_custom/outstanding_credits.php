@@ -25,14 +25,15 @@ if ($csv)
 }
 require_code('ocf_members');
 require_code('mantis');
+require_lang('customers');
+$title = do_lang_tempcode('UNSPENT_SUPPORT_CREDITS');
 
-$field_id = strval(get_credits_profile_field_id());
+$field_id = get_credits_profile_field_id();
 if(!is_null($field_id)){
+	$field_id = strval($field_id);
 	require_lang('ocf');
-	require_lang('customers');
 	require_lang('stats');
 
-	$title = do_lang_tempcode('UNSPENT_SUPPORT_CREDITS');
 	$uname = do_lang_tempcode('USERNAME');
 	$ucredits = do_lang_tempcode('CREDITS');
 	$ujoin = do_lang_tempcode('JOIN_DATE');
@@ -68,7 +69,11 @@ if(!is_null($field_id)){
 	$fields_values=new ocp_tempcode();
 
 	$members=$GLOBALS['FORUM_DB']->query('SELECT a.m_username AS m_username, a.m_join_time AS m_join_time, a.m_last_visit_time AS m_last_visit_time, b.mf_member_id AS mf_member_id, CAST(field_'.$field_id.' AS UNSIGNED) AS field_'.$field_id.' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields b JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members a ON a.id = b.mf_member_id WHERE '.db_string_not_equal_to('field_'.$field_id,'').' AND CAST(field_'.$field_id.' AS UNSIGNED)>0 ORDER BY '.$orderby.' '.$sort_order.' LIMIT '.$start.', '.$max);
-	if (count($members)<1) return warn_screen($title,do_lang_tempcode('NO_RESULTS_SORRY'));
+	if (count($members)<1){
+	$msg_tpl = warn_screen($title,do_lang_tempcode('NO_RESULTS_SORRY')); 
+	$msg_tpl->evaluate_echo();
+	return ;
+	}
 	$total=0;
 	$i = 0;
 	foreach ($members as $member)
@@ -106,8 +111,8 @@ if(!is_null($field_id)){
 	breadcrumb_add_segment(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'));
 	$tpl=do_template('SUPPORT_CREDITS_OUTSTANDING_SCREEN',array('TITLE'=>$title,'DATA'=>$list));
 	$tpl->evaluate_echo();
-}
-else
-{
-return warn_exit($title,do_lang_tempcode('INVALID_FIELD_ID'));
+} else {
+$msg_tpl = warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+$msg_tpl->evaluate_echo();
+return;
 }

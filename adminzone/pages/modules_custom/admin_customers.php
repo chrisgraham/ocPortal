@@ -97,12 +97,20 @@ class Module_admin_customers
 
 		/* CPFs */
 		require_code('ocf_members_action');
-		ocf_make_custom_field('ocp_support_credits',1,'','',0,0,0,0,'integer');
+		require_code('ocf_members_action2');
+		require_code('mantis');
+		$cur_id = NULL;
+		$cur_id = get_credits_profile_field_id('ocp_currency');
+		if(!is_null($cur_id ))
+		{
+			$GLOBALS['SITE_DB']->query('UPDATE '.$SITE_INFO['ocf_table_prefix'].'f_custom_fields SET cf_owner_view=1, cf_owner_set=1 WHERE id='.strval($cur_id));
+		}
+		ocf_make_custom_field('ocp_support_credits',1,'','',0,1,0,0,'integer');
 		ocf_make_custom_field('ocp_ftp_host',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_path',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_username',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_password',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
-		ocf_make_custom_field('ocp_profession',1,'',do_lang('CUSTOMER_PROFESSION_CPF_LIST'),0,1,1,0,'list',1);
+		ocf_make_custom_field('ocp_profession',1,'',do_lang('CUSTOMER_PROFESSION_CPF_LIST'),0,1,1,0,'list');
 
 		add_config_option('SUPPORT_CREDIT_VALUE','support_credit_value','float','return \'5.5\';','FEATURE','SECTION_CUSTOMERS');
 		add_config_option('SUPPORT_PRIORITY_BUDGET_MINUTES','support_budget_priority','float','return \'10\';','FEATURE','SECTION_CUSTOMERS');
@@ -705,16 +713,12 @@ class Module_admin_customers
 
 		if (!is_null($member_id))
 		{
-			require_code('ocf_members');
-			$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
-			$cpf_id=NULL;
-			foreach ($cpfs as $cpf)
-			{
-				if ($cpf['trans_name']=='ocp_support_credits')
-				{
-					$cpf_id=$cpf['id'];
-					break;
-				}
+			$cpf_id = NULL;
+			$cpf_id = get_credits_profile_field_id();
+			if (is_null($cpf_id)){
+				$msg_tpl = warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+				$msg_tpl->evaluate_echo();
+				return;
 			}
 			$num_credits=0;
 			if (!is_null($cpf_id))
@@ -742,17 +746,12 @@ class Module_admin_customers
 		$username=post_param('member_username');
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 		$amount=post_param_integer('amount');
-
-		require_code('ocf_members');
-		$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
-		$cpf_id=NULL;
-		foreach ($cpfs as $cpf)
-		{
-			if ($cpf['trans_name']=='ocp_support_credits')
-			{
-				$cpf_id=$cpf['id'];
-				break;
-			}
+		$cpf_id = NULL;
+		$cpf_id = get_credits_profile_field_id();
+		if (is_null($cpf_id)){
+			$msg_tpl = warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+			$msg_tpl->evaluate_echo();
+			return;
 		}
 
 		// Increment the number of credits this customer has
