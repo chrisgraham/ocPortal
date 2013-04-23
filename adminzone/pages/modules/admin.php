@@ -161,7 +161,7 @@ class Module_admin
 			array('thread','topic'),
 			array('karma','point'),
 			array('subscribe','track','notification','alert','monitor','watch'),
-			array('bbcode','wikicode','comcode'),
+			array('bbcode','wikicode','comcode','shortcode'),
 			array('html','xhtml'),
 			array('addon','add-on','mod','hack','extension','plugin'),
 			array('cedi','wiki','seedy'),

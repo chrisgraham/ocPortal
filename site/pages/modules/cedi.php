@@ -477,7 +477,7 @@ class Module_cedi
 			$my_child_posts_string=do_lang_tempcode('POST_PLU',integer_format($my_child_posts));
 			$my_child_children_string=do_lang_tempcode('CHILD_PLU',integer_format($my_child_children));
 			if ((!($my_child_posts>0)) && (!($my_child_children>0))) $sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
-			if (($my_child_posts>0) && ($my_child_children>0))
+			if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description)!=''))
 			{
 				$sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array(
 					'_GUID'=>'90e9f1647fdad0cacccecca3cbf12888',
@@ -486,8 +486,6 @@ class Module_cedi
 					'BODY_CONTENT'=>(trim($child_description)!='')?strval(strlen($child_description)):NULL,
 				));
 			}
-			if ((!($my_child_posts>0)) && ($my_child_children>0)) $sup=$my_child_children_string;
-			if ((!($my_child_children>0)) && ($my_child_posts>0)) $sup=$my_child_posts_string;
 
 			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain.'/'.strval($child_id)),'_SELF');
 			$children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
