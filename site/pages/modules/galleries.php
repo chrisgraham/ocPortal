@@ -1465,9 +1465,7 @@ class Module_galleries
 			$combined=array();
 			foreach ($rows_images as $row_image) $combined[]=array($row_image,'image',$row_image[$_sort]);
 			foreach ($rows_videos as $row_video) $combined[]=array($row_video,'video',$row_video[$_sort]);
-			sort_maps_by($combined,2);
-			if ($_dir=='DESC')
-				$combined=array_reverse($combined);
+			sort_maps_by($combined,($_dir=='DESC')?'!2':'2');
 
 			// Find current position in navigation set, and neighbour positions
 			foreach ($combined as $position=>$c)

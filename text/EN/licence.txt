@@ -145,6 +145,7 @@ This product includes:
   - m-zip (Francesco M. Munafo', liberal custom license)
   - microtime_diff implementation (from php.net comment by Peter Kehl, Creative Commons Attribution License)
   - utf8tohtml implementation (from php.net comment by silverbeat, Creative Commons Attribution License)
+  - mergesort implementation (from php.net comment by sreid, Creative Commons Attribution License)
   - GUID implementation (from php.net comment by Andrew Moore, Creative Commons Attribution License)
   - Javascript base-64 code (http://www.webtoolkit.info/, liberal custom licence)
   - JW-Player (used under commercial license)
