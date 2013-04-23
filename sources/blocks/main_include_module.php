@@ -53,6 +53,7 @@ class Block_main_include_module
 		$onlyifpermissions=array_key_exists('onlyifpermissions',$map)?intval($map['onlyifpermissions']):1;
 		$leave_page_and_zone=array_key_exists('leave_page_and_zone',$map)?($map['leave_page_and_zone']=='1'):false;
 		$merge_parameters=array_key_exists('merge_parameters',$map)?($map['merge_parameters']=='1'):false;
+		$use_breadcrumbs=array_key_exists('use_breadcrumbs',$map)?($map['use_breadcrumbs']=='1'):false;
 		list($zone,$attributes,)=page_link_decode($param);
 		if (!array_key_exists('page',$attributes)) return new ocp_tempcode();
 		if ($zone=='_SEARCH') $zone=get_page_zone($attributes['page'],false);
@@ -107,22 +108,30 @@ class Block_main_include_module
 		$temp_current_breadcrumb_set_parents=$GLOBALS['BREADCRUMB_SET_PARENTS'];
 		$temp_current_breadcrumb_set_self=$GLOBALS['BREADCRUMB_SET_SELF'];
 		$GLOBALS['SEO_TITLE']='DO_NOT_REPLACE';
+		process_monikers($attributes['page']);
 		$out=request_page($attributes['page'],false,$zone,NULL,true);
-		$ret=make_string_tempcode($out->evaluate());
+		if (is_null($out)) $out=new ocp_tempcode();
+		$_out=$out->evaluate();
 		$GLOBALS['DISPLAYED_TITLE']=$temp_displayed_title;
 		$GLOBALS['SEO_TITLE']=$temp_seo_title;
-		$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=$temp_current_breadcrumb_extra_segments;
-		$GLOBALS['BREADCRUMBS']=$temp_current_breadcrumbs;
-		$GLOBALS['BREADCRUMB_SET_PARENTS']=$temp_current_breadcrumb_set_parents;
-		$GLOBALS['BREADCRUMB_SET_SELF']=$temp_current_breadcrumb_set_self;
+		if (!$use_breadcrumbs)
+		{
+			$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=$temp_current_breadcrumb_extra_segments;
+			$GLOBALS['BREADCRUMBS']=$temp_current_breadcrumbs;
+			$GLOBALS['BREADCRUMB_SET_PARENTS']=$temp_current_breadcrumb_set_parents;
+			$GLOBALS['BREADCRUMB_SET_SELF']=$temp_current_breadcrumb_set_self;
+		}
 		$GLOBALS['PAGE_NAME_CACHE']=$current_page;
 		$GLOBALS['ZONE']=$current_zone;
+		$url_from=static_evaluate_tempcode(build_url(array('page'=>$attributes['page']),$zone,NULL,false,false,true));
+		$url_to=static_evaluate_tempcode(build_url(array('page'=>get_page_name()),get_zone_name(),NULL,false,false,true));
+		$_out=str_replace(str_replace('.htm','',$url_from),str_replace('.htm','',$url_to),$_out);
 		$_GET=$temp_get;
-		if (is_null($out)) $out=new ocp_tempcode();
 		if ($striptitle==1)
 		{
 			$SKIP_TITLING=$temp;
 		}
+		$ret=make_string_tempcode($_out);
 
 		return $ret;
 	}

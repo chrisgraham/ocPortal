@@ -833,21 +833,24 @@ class Module_catalogues
 		list($entry_buildup,$sorting,$entries,$max_rows)=get_catalogue_category_entry_buildup($id,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,NULL,$root,NULL,true,NULL,either_param('active_filter',''));
 
 		// Build up subcategories
-		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('cc_parent_id'=>$id),'',600);
+		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('cc_parent_id'=>$id),'ORDER BY cc_add_date ASC',600);
 		if (count($rows_subcategories)==300) $rows_subcategories=array(); // Performance issue, manual browsing will be needed
 		foreach ($rows_subcategories as $i=>$subcategory) // Dereference language
 		{
 			$rows_subcategories[$i]['cc_title']=get_translated_text($subcategory['cc_title']);
 		}
-		for ($i=0;$i<count($rows_subcategories);$i++) // Sort
+		if (get_value('cc_sort_date__'.$catalogue_name)!=='1')
 		{
-			for ($j=$i+1;$j<count($rows_subcategories);$j++)
+			for ($i=0;$i<count($rows_subcategories);$i++) // Sort
 			{
-				if ($rows_subcategories[$i]['cc_title']>$rows_subcategories[$j]['cc_title'])
+				for ($j=$i+1;$j<count($rows_subcategories);$j++)
 				{
-					$temp=$rows_subcategories[$j];
-					$rows_subcategories[$j]=$rows_subcategories[$i];
-					$rows_subcategories[$i]=$temp;
+					if ($rows_subcategories[$i]['cc_title']>$rows_subcategories[$j]['cc_title'])
+					{
+						$temp=$rows_subcategories[$j];
+						$rows_subcategories[$j]=$rows_subcategories[$i];
+						$rows_subcategories[$i]=$temp;
+					}
 				}
 			}
 		}

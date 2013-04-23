@@ -55,7 +55,7 @@ class Hook_themewizard_compute_equation
 			$answer=execute_css_colour_expression($parsed_equation,$colours[0]);
 			if (is_null($answer)) return array('','','','?');
 
-			return array('','<span style="padding: 0.5em 0.8em; display: inline-block; background: white"><span style="border: 1px solid black; width: 2em; height: 1em; display: inline-block; background: #'.$answer.'"></span></span>','#'.$answer,'');
+			return array('','<span style="padding: 0.5em 0.8em; display: inline-block; background: white"><span style="border: 1px solid black; width: 2em; height: 1em; display: inline-block; background: #'.escape_html($answer).'"></span></span>','#'.$answer,'');
 		}
 	}
 

@@ -16,6 +16,9 @@ function script_load_stuff()
 
 	if (window==window.top && !window.opener || window.name=='') window.name='_site_opener';
 
+	/* Are we dealing with a touch device? */
+	if (typeof window.TouchEvent!='undefined') document.body.className+=' touch_enabled';
+
 	/* Dynamic images need preloading */
 	var preloader=new Image();
 	var images=[];
@@ -161,8 +164,15 @@ function script_load_stuff()
 
 function set_font_size(size)
 {
+	var old_size=read_cookie('font_size');
+	var old_sizer=document.getElementById('font_size_'+old_size);
+	if (old_sizer) old_sizer.className=old_sizer.className.replace(' selected','');
+
 	document.body.style.fontSize=size+'px';
 	set_cookie('font_size',size,120);
+
+	var new_sizer=document.getElementById('font_size_'+size);
+	if (new_sizer) new_sizer.className+=' selected';
 }
 // TODO: Load from cookie
 

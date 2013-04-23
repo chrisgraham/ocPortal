@@ -166,7 +166,7 @@
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
 }
-.chat_message>div:hover {
+.chat_message>div:hover, body.touch_enabled .chat_message>div {
 	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 .chat_operator_staff a, .chat_operator_staff a:visited, .chat_operator_staff a:hover {

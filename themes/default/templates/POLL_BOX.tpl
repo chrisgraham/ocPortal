@@ -20,7 +20,7 @@
 		{+START,IF_NON_EMPTY,{FULL_URL}}<li><a target="_top" href="{FULL_URL*}" title="{!VIEW}: {!POLL} #{PID*}">{!VIEW}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview}}}{+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} <span class="comment_count">{$COMMENT_COUNT,polls,{PID}}</span>{+END}{+END}{+END}</li>
 		<li><a rel="archives" target="_top" href="{ARCHIVE_URL*}" title="{!VIEW_ARCHIVE}: {!POLLS}">{!VIEW_ARCHIVE}</a></li>
 		{+START,IF_NON_EMPTY,{RESULT_URL}}<li><form title="{!POLL_RESULTS}" target="_self" class="inline" action="{VOTE_URL*}" method="post"><input onclick="var form=this.form; window.fauxmodal_confirm('{!VOTE_FORFEIGHT}'\,function(answer) \{ if (answer) form.submit(); \}); return false;" class="button_hyperlink" type="submit" value="{!POLL_RESULTS}" /></form></li>{+END}
-		{+START,IF_NON_EMPTY,{SUBMIT_URL}}<li><a rel="add" target="_top" href="{SUBMIT_URL*}">{!ADD_POLL}</a></li>{+END}
+		{+START,IF_NON_EMPTY,{SUBMIT_URL}}<li><a rel="add" target="_top" href="{SUBMIT_URL*}">{!ADD}</a></li>{+END}
 	</ul>
 </div></section>
 

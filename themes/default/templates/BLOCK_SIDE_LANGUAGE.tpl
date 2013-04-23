@@ -9,7 +9,7 @@
 				{LANGS}
 			</select>
 			{+START,IF,{$NOT,{$JS_ON}}}
-				<p>
+				<p class="constrain_field">
 					<input onclick="disable_button_just_clicked(this);" type="submit" value="{!PROCEED}" class="wide_button" />
 				</p>
 			{+END}

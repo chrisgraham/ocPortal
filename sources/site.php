@@ -508,18 +508,18 @@ function breadcrumb_set_self($title)
 }
 
 /**
- * This is it - the start of rendering of a website page.
- * Take in all inputs, sends them to the correct functions to process, gathers up all the outputs, sticks them together and echoes them.
+ * More SEO redirection (monikers)
+ * Does this URL arrangement support monikers?
+ *
+ * @param  ID_TEXT		The page name to do it for
  */
-function do_site()
+function process_monikers($page_name)
 {
-	// More SEO redirection (monikers)
-	// Does this URL arrangement support monikers?
 	$url_id=get_param('id',NULL,true);
 	if (($url_id!==NULL) && ((url_monikers_enabled())/* && (!is_numeric(str_replace(',','',$url_id)))*/))
 	{
 		$type=get_param('type','misc');
-		$looking_for='_SEARCH:'.get_page_name().':'.$type.':_WILD';
+		$looking_for='_SEARCH:'.$page_name.':'.$type.':_WILD';
 		$hooks=find_all_hooks('systems','content_meta_aware');
 		$ob_info=NULL;
 		foreach (array_keys($hooks) as $hook)
@@ -534,7 +534,7 @@ function do_site()
 			{
 				if (is_numeric($url_id)) // Lookup and redirect to moniker
 				{
-					$correct_moniker=find_id_moniker(array('page'=>get_page_name(),'type'=>get_param('type','misc'),'id'=>$url_id));
+					$correct_moniker=find_id_moniker(array('page'=>$page_name,'type'=>get_param('type','misc'),'id'=>$url_id));
 					if (($correct_moniker!==NULL) && ($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
 					{
 						header('HTTP/1.0 301 Moved Permanently');
@@ -548,10 +548,10 @@ function do_site()
 					// See if it is deprecated
 					if (strpos(get_db_type(),'mysql')!==false)
 					{
-						$monikers=$GLOBALS['SITE_DB']->query_select('url_id_monikers USE INDEX (uim_moniker)',array('m_resource_id','m_deprecated'),array('m_resource_page'=>get_page_name(),'m_resource_type'=>get_param('type','misc'),'m_moniker'=>$url_id));
+						$monikers=$GLOBALS['SITE_DB']->query_select('url_id_monikers USE INDEX (uim_moniker)',array('m_resource_id','m_deprecated'),array('m_resource_page'=>$page_name,'m_resource_type'=>get_param('type','misc'),'m_moniker'=>$url_id));
 					} else
 					{
-						$monikers=$GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_resource_id','m_deprecated'),array('m_resource_page'=>get_page_name(),'m_resource_type'=>get_param('type','misc'),'m_moniker'=>$url_id));
+						$monikers=$GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_resource_id','m_deprecated'),array('m_resource_page'=>$page_name,'m_resource_type'=>get_param('type','misc'),'m_moniker'=>$url_id));
 					}
 					if (!array_key_exists(0,$monikers)) // hmm, deleted?
 					{
@@ -560,7 +560,7 @@ function do_site()
 					$deprecated=$monikers[0]['m_deprecated']==1;
 					if (($deprecated) && (count($_POST)==0))
 					{
-						$correct_moniker=find_id_moniker(array('page'=>get_page_name(),'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']));
+						$correct_moniker=find_id_moniker(array('page'=>$page_name,'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']));
 						header('HTTP/1.0 301 Moved Permanently');
 						$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
 						$new_url=$_new_url->evaluate();
@@ -575,6 +575,15 @@ function do_site()
 			}
 		}
 	}
+}
+
+/**
+ * This is it - the start of rendering of a website page.
+ * Take in all inputs, sends them to the correct functions to process, gathers up all the outputs, sticks them together and echoes them.
+ */
+function do_site()
+{
+	process_monikers(get_page_name());
 
 	// Any messages to output?
 	if (get_param_integer('redirected',0)==1)

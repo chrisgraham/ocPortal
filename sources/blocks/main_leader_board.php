@@ -127,7 +127,10 @@ class Block_main_leader_board
 			if ($i==$limit) break;
 
 			if (is_guest($member)) continue; // Should not happen, but some forum drivers might suck ;)
-			if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($member))) continue;
+			if (count($rows)>=$limit) // We don't allow staff, if there are enough to show without
+			{
+				if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($member))) continue;
+			}
 
 			$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
@@ -168,7 +171,10 @@ class Block_main_leader_board
 		foreach ($all_members as $member)
 		{
 			$id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
-			if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($id))) continue;
+			if (count($all_members)>=$limit) // We don't allow staff, if there are enough to show without
+			{
+				if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($id))) continue;
+			}
 			$points[$id]=total_points($id);
 		}
 

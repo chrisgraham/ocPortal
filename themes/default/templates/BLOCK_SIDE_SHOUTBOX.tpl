@@ -9,7 +9,7 @@
 			<p class="constrain_field"><input autocomplete="off" value="" type="text" onfocus="if (this.value=='{!MESSAGE;}') this.value='';" id="shoutbox_message" name="shoutbox_message" alt="{!MESSAGE}" class="wide_field" /></p>
 		</div>
 
-		<p class="proceed_button">
+		<p class="constrain_field">
 			<input type="submit" value="{!SEND_MESSAGE}" class="wide_button" />
 		</p>
 	</form>
