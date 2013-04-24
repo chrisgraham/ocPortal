@@ -231,7 +231,7 @@ class Module_vforums
 		}
 
 		$_buttons=new ocp_tempcode();
-		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
+		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
 		$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
 
 		breadcrumb_add_segment($tree);

@@ -81,8 +81,6 @@ class Block_main_news
 			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 		}
 
-		$days=intval($days);
-
 		$days_full=floatval($days)*$multiplier;
 		$days_outline=floatval($days)-$days_full;
 

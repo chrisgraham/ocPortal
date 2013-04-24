@@ -100,12 +100,20 @@ class Block_side_tag_cloud
 			{
 				$keyword=trim($keyword);
 				if ($keyword=='') continue;
+				if (strlen(is_numeric($keyword)?strval(intval($keyword)):$keyword)<4) continue; // Won't be indexed, plus will uglify the tag list
 				if (!array_key_exists($keyword,$tags)) $tags[$keyword]=0;
 				$tags[$keyword]++;
 			}
 		}
 		arsort($tags);
-		$tags=array_slice($tags,0,$max_tags);
+		$_tags=$tags;
+		$tags=array();
+		foreach ($_tags as $tag=>$count)
+		{
+			if (!is_string($tag)) $tag=strval($tag);
+			$tags[$tag]=$count;
+			if (count($tags)==$max_tags) break;
+		}
 		ksort($tags);
 
 		if (count($tags)==0) return new ocp_tempcode();
@@ -123,6 +131,8 @@ class Block_side_tag_cloud
 		$tpl_tags=array();
 		foreach ($tags as $tag=>$count)
 		{
+			if (!is_string($tag)) $tag=strval($tag);
+
 			if ($smallest_num==$largest_num)
 			{
 				$em=1.0;

@@ -122,6 +122,8 @@ function handle_classifieds_advert($purchase_id,$details,$product)
 	{
 		$time+=$days*60*60*24;
 		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_validated'=>1,'ce_last_moved'=>$time),array('id'=>intval($purchase_id)),'',1);
+		decache('main_cc_embed');
+		decache('main_recent_cc_entries');
 		require_code('catalogues2');
 		$cc_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','cc_id',array('id'=>intval($purchase_id)));
 		calculate_category_child_count_cache($cc_id);

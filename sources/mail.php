@@ -39,7 +39,7 @@ function init__mail()
 function _mail_img_rep_callback($matches)
 {
 	global $CID_IMG_ATTACHMENT;
-	$cid=uniqid('').'@'.get_domain();
+	$cid=uniqid('').'@'.str_replace(' ','_',get_domain());
 	$CID_IMG_ATTACHMENT[$cid]=$matches[2];
 	return '<img '.$matches[1].'src="cid:'.$cid.'"';
 }

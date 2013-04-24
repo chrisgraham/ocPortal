@@ -39,6 +39,8 @@ function site_tree_script()
 
 	if (function_exists('set_time_limit')) @set_time_limit(30);
 
+	disable_php_memory_limit(); // Needed for loading large amount of permissions (potentially)
+
 	// ======
 	// Saving
 	// ======

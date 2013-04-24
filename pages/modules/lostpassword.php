@@ -175,7 +175,7 @@ class Module_lostpassword
 			$submit_name=do_lang_tempcode('PROCEED');
 			return do_template('FORM_SCREEN',array('_GUID'=>'6e4db5c6f3c75faa999251339533d22a','TITLE'=>$title,'GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','URL'=>get_self_url(false,false,NULL,false,true),'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('MISSING_CONFIRM_CODE'),'SUBMIT_NAME'=>$submit_name));
 		}
-		$username=post_param('username',NULL);
+		$username=get_param('username',NULL);
 		if (!is_null($username))
 		{
 			$username=trim($username);
