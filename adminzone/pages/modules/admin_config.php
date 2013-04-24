@@ -113,7 +113,7 @@ class Module_admin_config
 			add_config_option('PASSWORD','smtp_sockets_password','line','return \'\';','SITE','SMTP',1);
 			add_config_option('EMAIL_ADDRESS','smtp_from_address','line','return \'\';','SITE','SMTP',1);
 
-			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return \'1\';','SECURITY','GENERAL');
+			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','GENERAL');
 			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
 
 			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','SITE','ADVANCED',1);
@@ -263,8 +263,8 @@ class Module_admin_config
 			add_config_option('JS_OVERLAYS','js_overlays','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 			add_config_option('TREE_LISTS','tree_lists','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 
-			add_config_option('CSS_CAPTCHA','css_captcha','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
-			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
+			add_config_option('CSS_CAPTCHA','css_captcha','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SECURITY_IMAGE');
+			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SECURITY_IMAGE');
 
 			add_config_option('ENABLE_AUTOBAN','autoban','tick','return \'1\';','SECURITY','GENERAL');
 

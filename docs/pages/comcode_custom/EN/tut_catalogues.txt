@@ -18,6 +18,13 @@ Catalogues are initially defined by the fields in them. 'Categories' are then ma
 
 [contents]decimal,lower-alpha[/contents]
 
+[title="2"]A warning[/title]
+
+In some way we give you enough rope to hang yourself with via catalogues. In most cases, if you're not creating a pretty simple set of records, you'll want a programmer to properly implement an efficient database structure with the appropriate user interface and data rules. For a more detailed discussion, see this blog post:
+http://ocportal.com/site/news/view/chris_grahams_blog/delivering-innovation.htm
+
+There are loads of features within the catalogue system, and there are more we could add to give yet further power that could be sponsored. Just proceed with caution.
+
 [title="2"]Fields[/title]
 
 A catalogue consists of a number of fields.

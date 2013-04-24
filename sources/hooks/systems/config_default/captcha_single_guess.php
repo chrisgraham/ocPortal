@@ -48,7 +48,7 @@ class Hook_config_default_captcha_single_guess
 	 */
 	function get_default()
 	{
-		return '1';
+		return addon_installed('captcha')?'1':NULL;
 	}
 
 }
