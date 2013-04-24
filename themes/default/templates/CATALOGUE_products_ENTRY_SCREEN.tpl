@@ -49,9 +49,9 @@
 						</tbody>
 					</table>
 				</div>
-
-				{CART_BUTTONS}
 			{+END}
+
+			{CART_BUTTONS}
 		</div>
 	</div></div>
 

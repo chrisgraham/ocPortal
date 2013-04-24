@@ -33,8 +33,8 @@
 			<nav class="ocf_guest_column ocf_member_column_d" role="navigation">
 				{$,<p class="ocf_member_column_title">{!VIEW}:</p>}
 				<ul role="navigation" class="actions_list">
-					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE}</a></li>
-					<li><a href="{UNANSWERED_TOPICS_URL*}">{!UNANSWERED_TOPICS}</a></li>
+					<li><a onclick="return open_link_as_overlay(this);" href="{NEW_POSTS_URL*}">{!POSTS_SINCE}</a></li>
+					<li><a onclick="return open_link_as_overlay(this);" href="{UNANSWERED_TOPICS_URL*}">{!UNANSWERED_TOPICS}</a></li>
 				</ul>
 			</nav>
 		</div>

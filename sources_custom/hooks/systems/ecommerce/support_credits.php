@@ -23,23 +23,22 @@
 function handle_support_credits($_key,$details,$product)
 {
 	$row=$GLOBALS['SITE_DB']->query_select('credit_purchases',array('member_id','num_credits'),array('purchase_validated'=>0,'purchase_id'=>intval($_key)),'',1);
-	if (count ($row) != 1) return;
+	if (count($row)!=1) return;
 	$member_id=$row[0]['member_id'];
 	if (is_null($member_id)) return;
 	$num_credits=$row[0]['num_credits'];
 
 	require_code('mantis');
-	$cpf_id = strval(get_credits_profile_field_id());
-	if (!is_null($cpf_id)) return;
+	$cpf_id=get_credits_profile_field_id();
+	if (is_null($cpf_id)) return;
 
 	// Increment the number of credits this customer has
 	require_code('ocf_members_action2');
 	$fields=ocf_get_custom_field_mappings($member_id);
-	ocf_set_custom_field($member_id,$cpf_id,intval($fields['field_'.$cpf_id])+intval($num_credits));
+	ocf_set_custom_field($member_id,$cpf_id,intval($fields['field_'.strval($cpf_id)])+intval($num_credits));
 
 	// Update the row in the credit_purchases table
 	$GLOBALS['SITE_DB']->query_update('credit_purchases',array('purchase_validated'=>1),array('purchase_id'=>intval($_key)));
-
 }
 
 /**
@@ -125,7 +124,7 @@ class Hook_support_credits
 	function set_needed_fields($product)
 	{
 		$product_array=explode('_',$product,2);
-		$num_credits = intaval($product_array[0]);
+		$num_credits = intval($product_array[0]);
 		if($num_credits == 0) return;
 		$manual=0;
 		$member_id=get_member();

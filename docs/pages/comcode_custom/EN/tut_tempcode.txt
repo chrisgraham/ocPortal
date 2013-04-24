@@ -1359,6 +1359,10 @@ You can store and retrieve values in Tempcode variables. These work across templ
 		<td>Set a Tempcode variable to a value (give it the name of a variable, and a value, returns nothing). Bear in mind that the ocPortal Tempcode-preprocessor will likely cause your code to run once in every code branch before it outputs (meaning even code inside IF directives that never are true will still pre-process), and once again as it outputs. So always reinitialise your variables in your template to make sure they are not dirty from the pre-processing stage. This behaviour may seem strange, but it is necessary for performance, comprehensive caching, and reasons of ocPortal needing conditionless output foresight.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$SET_NOPREEVAL,test,1}</td>
+		<td>As above, but with no pre-processing.</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$GET,test}</td>
 		<td>Get the value of a Tempcode variable (give it the name of a variable, returns the value)</td>
 	</tr>

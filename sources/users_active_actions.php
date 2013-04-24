@@ -202,6 +202,13 @@ function handle_active_logout()
 	{
 		delete_session($session);
 	}
+
+	// Update last-visited cookie
+	if (get_forum_type()=='ocf')
+	{
+		require_code('users_active_actions');
+		ocp_setcookie('last_visit',strval(time()),true);
+	}
 }
 
 /**

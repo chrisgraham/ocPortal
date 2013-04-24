@@ -146,7 +146,7 @@ class Module_admin
 			array('thread','topic'),
 			array('karma','point'),
 			array('subscribe','track','notification','alert','monitor','watch'),
-			array('bbcode','wikicode','comcode'),
+			array('bbcode','wikicode','comcode','shortcode'),
 			array('html','xhtml'),
 			array('addon','add-on','mod','hack','extension','plugin','app'),
 			array('name','title'),
@@ -178,6 +178,7 @@ class Module_admin
 			array('cache','decache','cleanup'),
 			array('ssl','https'),
 			array('seed','theme wizard'),
+			array('block','widget'), // Joomla uses 'module', but we don't want to synonym this as it means something else in ocPortal
 		);
 	}
 

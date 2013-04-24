@@ -52,6 +52,7 @@ class Block_main_include_module
 		$only_if_permissions=array_key_exists('only_if_permissions',$map)?intval($map['only_if_permissions']):1;
 		$leave_page_and_zone=array_key_exists('leave_page_and_zone',$map)?($map['leave_page_and_zone']=='1'):false;
 		$merge_parameters=array_key_exists('merge_parameters',$map)?($map['merge_parameters']=='1'):false;
+		$use_breadcrumbs=array_key_exists('use_breadcrumbs',$map)?($map['use_breadcrumbs']=='1'):false;
 
 		// Find out what we're virtualising
 		$param=array_key_exists('param',$map)?$map['param']:'';
@@ -84,9 +85,10 @@ class Block_main_include_module
 		push_output_state();
 
 		// Do it!
+		process_url_monikers($attributes['page']);
 		$ret=request_page($attributes['page'],false,$zone,NULL,true);
 		$ret->handle_symbol_preprocessing();
-		$ret=make_string_tempcode($ret->evaluate()); // So things are evaluated in the right context
+		$_out=$ret->evaluate(); // So things are evaluated in the right context
 
 		// Get things back to prior state
 		set_execution_context(
@@ -102,6 +104,13 @@ class Block_main_include_module
 			$SKIP_TITLING=$prior_skip_titling;
 		}
 
+		// More replacing, if _SELF wasn't used within the module
+		$url_from=static_evaluate_tempcode(build_url(array('page'=>$attributes['page']),$zone,NULL,false,false,true));
+		$url_to=static_evaluate_tempcode(build_url(array('page'=>get_page_name()),get_zone_name(),NULL,false,false,true));
+		$_out=str_replace(str_replace('.htm','',$url_from),str_replace('.htm','',$url_to),$_out);
+
+		// Done
+		$ret=make_string_tempcode($_out);
 		return $ret;
 	}
 

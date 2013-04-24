@@ -614,23 +614,10 @@ class Module_cms_news extends standard_crud_module
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_news','old_type'=>get_param('type','')),'_SELF');
 		$submit_name=do_lang_tempcode('IMPORT_NEWS');
 
-		// Build up form
-		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
-		$set_name='rss_file';
-		$required=true;
-		$set_title=do_lang_tempcode('FILE');
-		$field_set=alternate_fields_set__start($set_name);
-
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file_novalidate',false,NULL,NULL,true,'rss,xml,atom'));
-
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','rss_feed_url','',false));
-
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_RSS_FEED'),$field_set,$required));
-
-		$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'auto_validate',true));
-		$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'download_images',true));
+		require_code('news2');
+		$fields=import_rss_fields(false);
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));
@@ -650,202 +637,14 @@ class Module_cms_news extends standard_crud_module
 
 		$title=get_screen_title('IMPORT_NEWS');
 
-		require_code('rss');
-		require_code('news');
-		require_code('files');
+		require_code('news2');
 
-		$GLOBALS['LAX_COMCODE']=true;
-
-		disable_php_memory_limit();
-
-		$rss_url=post_param('rss_feed_url',NULL);
-
-		require_code('uploads');
-		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
-		{
-			$rss_url=$_FILES['file_novalidate']['tmp_name'];
-		}
-
-		if (is_null($rss_url))
-			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
-
-		$is_validated=post_param_integer('auto_validate',0);
-		$download_images=post_param_integer('download_images',0);
-
-		$rss=new rss($rss_url,true);
-
-		if (!is_null($rss->error))
-		{
-			warn_exit($rss->error);
-		}
-
-		$submitter=get_member();
-
-		$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-
-		$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
-
-		$extra_post_data=array();
-
-		foreach ($rss->gleamed_items as $i=>$item)
-		{
-			if (!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
-
-			$extra_post_data[]=$item;
-
-			$cats_to_process=array($item['category']);
-			if (array_key_exists('extra_categories',$item))
-				$cats_to_process=array_merge($cats_to_process,$item['extra_categories']);
-			$cat_id=mixed();
-			$extra_categories=array();
-			foreach ($cats_to_process as $j=>$cat)
-			{
-				$_cat_id=mixed();
-				foreach ($NEWS_CATS_CACHE as $_cat=>$news_cat)
-				{				
-					if (get_translated_text($news_cat['nc_title'])==$cat)
-					{
-						$_cat_id=$_cat;					
-					}
-				}
-				if (is_null($_cat_id))
-				{
-					$_cat_id=add_news_category($cat,'newscats/general','',NULL);
-					// Need to reload now
-					$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-					$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
-				}
-
-				if ($j==0)
-				{
-					$cat_id=$_cat_id;
-				} else
-				{
-					$extra_categories[]=$_cat_id;
-				}
-			}
-
-			$rep_image='';
-			if (array_key_exists('rep_image',$item))
-			{
-				$rep_image=$item['rep_image'];
-				if ($download_images==1)
-				{
-					$stem='uploads/grepimages/'.basename(urldecode($rep_image));
-					$target_path=get_custom_file_base().'/'.$stem;
-					$rep_image='uploads/grepimages/'.basename($rep_image);
-					while (file_exists($target_path))
-					{
-						$uniqid=uniqid('');
-						$stem='uploads/grepimages/'.$uniqid.'_'.basename(urldecode($rep_image));
-						$target_path=get_custom_file_base().'/'.$stem;
-						$rep_image='uploads/grepimages/'.$uniqid.'_'.basename($rep_image);
-					}
-					$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
-					$result=http_download_file($item['rep_image'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
-					fclose($target_handle);
-				}
-			}
-
-			// Add news
-			$ts=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
-			if ($ts===false) $ts=time(); // Seen in error email, it's if the add date won't parse by PHP
-			$edit_date=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
-			if ($edit_date===false) $edit_date=NULL;
-
-			$news=array_key_exists('news',$item)?html_to_comcode($item['news']):'';
-			$news_article=array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'';
-
-			$news_id=add_news($item['title'],$news,array_key_exists('author',$item)?$item['author']:$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$is_validated,1,1,1,'',$news_article,$cat_id,$extra_categories,$ts,$submitter,0,$edit_date,NULL,$rep_image);
-			$rss->gleamed_items[$i]['import_id']=$news_id;
-			$rss->gleamed_items[$i]['import__news']=$news;
-			$rss->gleamed_items[$i]['import__news_article']=$news_article;
-		}
-
-		foreach ($rss->gleamed_items as $i=>$item)
-		{
-			$news=$item['import__news'];
-			$news_article=$item['import__news_article'];
-			$this->_grab_images_and_fix_links($download_images==1,$news,$rss->gleamed_items);
-			$this->_grab_images_and_fix_links($download_images==1,$news_article,$rss->gleamed_items);
-			lang_remap_comcode($GLOBALS['SITE_DB']->query_select_value('news','news',array('id'=>$item['import_id'])),$news);
-			lang_remap_comcode($GLOBALS['SITE_DB']->query_select_value('news','news_article',array('id'=>$item['import_id'])),$news_article);
-		}
+		import_rss();
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_NEWS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
-		if (url_is_local($rss_url)) // Means it is a temp file
-			@unlink($rss_url);
-
 		return inform_screen($title,do_lang_tempcode('IMPORT_NEWS_DONE'));
-	}
-
-	/**
-	 * Download remote images in some HTML and replace with local references under uploads/website_specific AND fix any links to other articles being imported to make them local links.
-	 *
-	 * @param  boolean		Whether to download images to local
-	 * @param  string			HTML (passed by reference)
-	 * @param  array			Other RSS items (used to fix links)
-	 */
-	function _grab_images_and_fix_links($download_images,&$data,$rss_items)
-	{
-		$matches=array();
-		if ($download_images)
-		{
-			$num_matches=preg_match_all('#<img[^<>]*\ssrc=["\']([^\'"]*://[^\'"]*)["\']#i',$data,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-				$this->_grab_image($data,$matches[1][$i]);
-			$num_matches=preg_match_all('#<a[^<>]*\s*href=["\']([^\'"]*://[^\'"]*)["\']\s*imageanchor=["\']1["\']#i',$data,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-				$this->_grab_image($data,$matches[1][$i]);
-			$data=str_replace('imageanchor="1"','rel="lightbox"',$data);
-		}
-
-		foreach ($rss_items as $item)
-		{
-			if (array_key_exists('full_url',$item))
-			{
-				$num_matches=preg_match_all('#<a\s*([^<>]*)href="'.preg_quote(escape_html($item['full_url']),'#').'"([^<>]*)>(.*)</a>#isU',$data,$matches);
-				for ($i=0;$i<$num_matches;$i++)
-				{
-					if (($matches[1][$i]=='') && ($matches[2][$i]=='') && (strpos($data,'[html]')===false))
-					{
-						$data=str_replace($matches[0][$i],'[page="_SEARCH:news:view:'.strval($item['import_id']).'"]'.$matches[3][$i].'[/page]',$data);
-					} else
-					{
-						$new_url=build_url(array('page'=>'news','type'=>'view','id'=>$item['import_id']),get_module_zone('news'),NULL,false,false,true);
-						$data=str_replace($matches[0][$i],'<a '.$matches[1][$i].'href="'.escape_html($new_url->evaluate()).'"'.$matches[2][$i].'>'.$matches[3][$i].'</a>',$data);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Download a specific remote image and sub in the new URL.
-	 *
-	 * @param  string			HTML (passed by reference)
-	 * @param  URLPATH		URL
-	 */
-	function _grab_image(&$data,$url)
-	{
-		$stem='uploads/attachments/'.basename(urldecode($url));
-		$target_path=get_custom_file_base().'/'.$stem;
-		$target_url=get_custom_base_url().'/uploads/attachments/'.basename($url);
-		while (file_exists($target_path))
-		{
-			$uniqid=uniqid('');
-			$stem='uploads/attachments/'.$uniqid.'_'.basename(urldecode($url));
-			$target_path=get_custom_file_base().'/'.$stem;
-			$target_url=get_custom_base_url().'/uploads/attachments/'.$uniqid.'_'.basename($url);
-		}
-
-		$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
-		$result=http_download_file($url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
-		fclose($target_handle);
-		if (!is_null($result))
-			$data=str_replace($url,$target_url,$data);
 	}
 }
 

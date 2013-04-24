@@ -76,10 +76,10 @@ function set_attachment(field_name,number,filename)
 		var url='{$FIND_SCRIPT;,comcode_helper}';
 		url+='?field_name='+field_name;
 		url+='&type=step2';
-		url+='&tag=attachment';
+		url+='&tag='+(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
 		url+='&default_thumb=1';
-		url+='&default_type='+(is_archive?'download':'island');
+		url+='&default_type='+(is_archive?'download':(is_image?'inline':'island'));
 		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path

@@ -131,8 +131,8 @@ class Module_admin_config
 			add_config_option('JS_OVERLAYS','js_overlays','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 			add_config_option('TREE_LISTS','tree_lists','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 
-			add_config_option('CSS_CAPTCHA','css_captcha','tick','return \'1\';','SECURITY','CAPTCHA');
-			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return \'1\';','SECURITY','CAPTCHA');
+			add_config_option('CSS_CAPTCHA','css_captcha','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','CAPTCHA');
+			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','CAPTCHA');
 
 			add_config_option('ENABLE_AUTOBAN','autoban','tick','return \'1\';','SECURITY','GENERAL');
 
@@ -204,7 +204,7 @@ class Module_admin_config
 			add_config_option('PASSWORD','smtp_sockets_password','line','return \'\';','SITE','SMTP',1);
 			add_config_option('EMAIL_ADDRESS','smtp_from_address','line','return \'\';','SITE','SMTP',1);
 
-			add_config_option('USE_CAPTCHAS','use_captchas','tick','return \'1\';','SECURITY','GENERAL');
+			add_config_option('USE_CAPTCHAS','use_captchas','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','GENERAL');
 
 			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('DETECT_LANG_BROWSER','detect_lang_browser','tick','return \'0\';','SITE','ADVANCED');

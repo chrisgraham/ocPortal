@@ -2,6 +2,7 @@
 	var post=window.parent.document.getElementById('post');
 
 	// Replace Comcode
+	var old_comcode=top.get_textbox(post);
 	top.set_textbox(post,'{NEW_POST_VALUE;^/}','{NEW_POST_VALUE_HTML;^/}');
 
 	// Remove attachment uploads
@@ -15,7 +16,7 @@
 			{
 				if ((inputs[i].value!='-1') && (inputs[i].value!=''))
 				{
-					if (!done_one) window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
+					if (!done_one) window.fauxmodal_alert((old_comcode.indexOf('attachment_safe')==-1)?'{!javascript:ATTACHMENT_SAVED;^}':'{!javascript:_ATTACHMENT_SAVED;^}');
 					done_one=true;
 				}
 

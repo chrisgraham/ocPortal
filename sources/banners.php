@@ -229,20 +229,33 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		}
 
 		// Are we allowed to show default banners?
-		$counter=0;
 		$show_defaults=true;
-		while (array_key_exists($counter,$rows))
+		foreach ($rows as $counter=>$myrow)
 		{
-			$myrow=$rows[$counter];
-
 			if ($myrow['the_type']==BANNER_CAMPAIGN) $show_defaults=false;
-			$counter++;
+		}
+
+		// Remove ones already shown on this page-view
+		static $shown_already=array();
+		if (!running_script('banner'))
+		{
+			if (count($shown_already)<count($rows))
+			{
+				foreach ($rows as $counter=>$myrow)
+				{
+					if (array_key_exists($myrow['name'],$shown_already))
+					{
+						unset($rows[$counter]);
+					}
+				}
+			}
 		}
 
 		// Count the total of all importance_modulus entries
 		$tally=0;
 		$counter=0;
 		$bound=array();
+		shuffle($rows); // Should not be needed, but mt_rand seems to not be very good when running from the website. Also does a re-index, which we require.
 		while (array_key_exists($counter,$rows))
 		{
 			$myrow=$rows[$counter];
@@ -275,6 +288,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		}
 
 		$name=$rows[$i]['name'];
+		$shown_already[$name]=1;
 
 		// Update the counts (ones done per-view)
 		if ((get_db_type()!='xml') && (get_value('no_banner_count_updates')!=='1'))

@@ -358,14 +358,12 @@ class Module_admin_setupwizard
 		$addons_not_installed=list_to_map('addon_name',find_available_addons(false)); // Re-search for these, as more may have been downloaded above
 
 		$all_addons=$addons_installed+$addons_not_installed;
-		global $M_SORT_KEY; // TOOD: Fix for v10
-		$M_SORT_KEY='name';
 		foreach ($all_addons as $addon_name=>$row)
 		{
 			if (!isset($all_addons[$addon_name]['name']))
 				$all_addons[$addon_name]['name']=titleify($addon_name);
 		}
-		uasort($all_addons,'multi_sort');
+		sort_maps_by($all_addons,'name');
 		require_code('addons_overview');
 		foreach ($all_addons as $addon_name=>$row)
 		{

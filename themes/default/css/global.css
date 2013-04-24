@@ -124,6 +124,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 
 /* Special colour for box titles */
 {$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
+{$THEME_WIZARD_COLOR,#cccccc,box_title_text_hover,80% WB + 20% BW}
 {$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
 
 /* Special colour for code/quote boxes */
@@ -274,9 +275,14 @@ th, .fake_th {
 th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
 }
-thead>tr>th {
+thead>tr>th, .boxless_space .box thead>tr>th {
 	background-color: {$GET,box_title_background};
+	color: {$GET,box_title_text};
 	background-repeat: repeat-x;
+}
+.box thead>tr>th {
+	background: {$GET,point_of_interest_background};
+	color: {$GET,area_key_text};
 }
 /* .de_th makes a th look like a td, yet allows us to use correct markup */
 td, th.de_th {
@@ -466,6 +472,7 @@ header h1 {
 
 	.global_navigation {
 		margin-top: 99px !important;
+		text-align: center !important;
 	}
 	*/
 {+END}
@@ -1209,7 +1216,7 @@ th.meta_data_title {
 .img_thumb { /* Membership of this class is used as a tag to turn on the thumbnail blend effect */
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 }
-.img_thumb:hover {
+.img_thumb:hover, body.touch_enabled img_thumb {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
 }
@@ -1295,7 +1302,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	text-decoration: none !important;
 }
 .box_inner>h1 a:hover, .box_inner>h2 a:hover, .box_inner>h3 a:hover, .box_inner>h4 a:hover, .box_inner>h5 a:hover, .box_inner>h6 a:hover, .toggleable_tray_title a:hover {
-	color: inherit;
+	color: {$GET,box_title_text_hover};
 }
 
 /* If we want a box to stand out less, give it 'pale_box' */
@@ -1380,6 +1387,9 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	padding-left: 0;
 	font-size: 1.1em;
 } /* This rule is not applied to boxes under the top level box in the preview (#standalone_html_wrap) as those should show verbatim */
+.box .box .box_inner>h1 a, .box .box .box_inner>h2 a, .box .box .box_inner>h3 a, .box .box .box_inner>h4 a, .box .box .box_inner>h5 a, .box .box .box_inner>h6 a, .box .box .toggleable_tray_title a, #standalone_html_wrap .box .box .box .box_inner>h2 a, #standalone_html_wrap .box .box .box .box_inner>h3 a {
+	color: {$GET,a.hover};
+}
 
 /* Expanding and contracting, mostly for boxes but not necessarily always */
 
@@ -1768,6 +1778,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 .tooltip img {
 	max-width: 100%;
+	max-height: 200px;
 }
 .tooltip .shunted_button {
 	display: none;
@@ -1799,6 +1810,8 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	border-right: 1px solid {$GET,dark_border};
 	font-weight: bold !important;
 	padding-right: 1em;
+}
+.tooltip .tooltip_fields th {
 	white-space: nowrap;
 }
 .tooltip_fields td {
@@ -2056,7 +2069,8 @@ div.wysiwyg_toolbar_color_finder {
 .fractional_edit {
 	outline: 1px dashed {$GET,point_of_interest_border};
 }
-.fractional_edit_nonover {
+.fractional_edit, .fractional_edit_nonover {
+	display: inline-block;
 }
 
 .loading_box {
@@ -2269,7 +2283,7 @@ div.wysiwyg_toolbar_color_finder {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
-.post_buttons:hover a {
+.post_buttons:hover a, body.touch_enabled .post_buttons a {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
@@ -2561,7 +2575,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	padding-right: 5px;
 	background-origin: content-box;
 }
-.staff_actions:hover {
+.staff_actions:hover, body.touch_enabled .staff_actions {
 	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 .staff_actions .box_inner {
@@ -2699,6 +2713,7 @@ ul.associated_link>li {
 
 .associated_links_block_group>li{
 	margin: 0.5em 0 !important;
+	white-space: nowrap;
 }
 .buttons_group, .associated_links_block_group {
 	text-align: center;
@@ -2807,6 +2822,8 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 .wide_field, .wide_button {
 	width: 100%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	margin-left: 0 !important;
+	margin-right: 0 !important;
 }
 
 input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
@@ -2824,6 +2841,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	background-image: url('{$IMG_INLINE;,gradient}');
 	text-shadow: 1px 1px 1px {$GET,dark_shadow};
 	margin: 0 2px;
+	-webkit-appearance: none;
 }
 .button_micro {
 	background-image: none !important; /* Too loud for such a small space */
@@ -2876,7 +2894,8 @@ button.wide_button:disabled, button.button_micro:disabled, button.button_page:di
 	display: inline-block;
 }
 
-.button_page:hover, .button_pageitem:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img {
+.button_page:hover, .button_pageitem:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img,
+body.touch_enabled .button_page, body.touch_enabled .button_pageitem, body.touch_enabled .button_micro, body.touch_enabled .wide_button, body.touch_enabled .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
 
@@ -3052,6 +3071,8 @@ a.tab, a.tab:visited, a.tab:hover {
 
 .tab:hover {
 	text-decoration: underline !important;
+}
+.tab:hover, body.touch_enabled .tab {
 	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 
@@ -3344,6 +3365,7 @@ ul.nl, .nl ul {
 }
 
 .menu_type__top img, .menu_type__dropdown .toplevel_link img {
+	max-width: 17px;
 	margin-top: -2px;
 }
 
@@ -3708,6 +3730,30 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	white-space: nowrap;
 	display: inline-block;
 }
+/* Wordpress compatibility */
+.attachment.wp-caption {
+	white-space: normal;
+}
+.alignleft {
+	float: left;
+	margin-right: 0.5em;
+}
+.alignright {
+	float: right;
+	margin-left: 0.5em;
+}
+.aligncenter {
+	display: block;
+	margin: 1em auto;
+}
+.alignnone {
+	display: block;
+	margin: 1em;
+}
+/* Make inline images look a little nicer, including with Wordpress imports (but native too) */
+.alignleft, .alignright, .aligncenter, .alignnone, .alignnone, a[rel="lightbox"] img.attachment_img {
+	border: 2px solid {$GET,pale_border};
+}
 
 .attachment figcaption {
 	border: 1px solid {$GET,standard_border};
@@ -3877,7 +3923,7 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 .adminzone_search #search_button {
 	{$BETA_CSS_PROPERTY,opacity: 0.6;} display: inline-block;/*Needed for IE8*/
 }
-.adminzone_search #search_button:hover {
+.adminzone_search #search_button:hover, body.touch_enabled .adminzone_search #search_button {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 

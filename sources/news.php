@@ -280,4 +280,3 @@ function nice_get_news($it,$only_owned=NULL,$editable_filter=false,$only_in_blog
 
 	return $out;
 }
-

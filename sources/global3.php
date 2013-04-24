@@ -325,8 +325,9 @@ function push_output_state($just_tempcode=false,$true_blank=false)
  *
  * @param  boolean				Whether to only restore the Tempcode execution part of the state.
  * @param  boolean				Whether to merge the current output state in.
+ * @param  boolean				Whether to keep breadcrumbs.
  */
-function restore_output_state($just_tempcode=false,$merge_current=false)
+function restore_output_state($just_tempcode=false,$merge_current=false,$keep_breadcrumbs=false)
 {
 	global $OUTPUT_STATE_STACK;
 
@@ -340,13 +341,16 @@ function restore_output_state($just_tempcode=false,$merge_current=false)
 		{
 			if ((!$just_tempcode) || ($var=='CYCLES') || ($var=='TEMPCODE_SETGET'))
 			{
-				if (($merge_current) && (is_array($val)))
+				if ((!$keep_breadcrumbs) || (strpos($var,'BREADCRUMB')!==false))
 				{
-					if ($GLOBALS[$var]===NULL) $GLOBALS[$var]=array();
-					$GLOBALS[$var]+=$val;
-				} else
-				{
-					$GLOBALS[$var]=$val;
+					if (($merge_current) && (is_array($val)))
+					{
+						if ($GLOBALS[$var]===NULL) $GLOBALS[$var]=array();
+						$GLOBALS[$var]+=$val;
+					} else
+					{
+						$GLOBALS[$var]=$val;
+					}
 				}
 			}
 		}
@@ -876,15 +880,18 @@ function mergesort(&$array,$cmp_function='strcmp')
 
 	// Merge the two sorted arrays into a single sorted array
 	$array=array();
-	$ptr1=$ptr2=0;
+	$ptr1=0;
+	$ptr2=0;
 	while ($ptr1<count($array1) && $ptr2<count($array2))
 	{
 		if (call_user_func($cmp_function,$array1[$ptr1],$array2[$ptr2])<1)
 		{
-			$array[]=$array1[$ptr1++];
+			$array[]=$array1[$ptr1];
+			$ptr1++;
 		} else
 		{
-			$array[]=$array2[$ptr2++];
+			$array[]=$array2[$ptr2];
+			$ptr2++;
 		}
 	}
 

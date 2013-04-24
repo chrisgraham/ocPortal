@@ -92,7 +92,6 @@ class Block_main_news
 		}
 
 		// Work out how many days to show
-		$days=intval($days);
 		$days_full=floatval($days)*$multiplier;
 		$days_outline=floatval($days)-$days_full;
 
@@ -142,13 +141,13 @@ class Block_main_news
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':''),false,true);
 		if ($historic=='')
 		{
-			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',min($fallback_full+$fallback_archive,100)/*reasonable limit*/,NULL,false,false,array('title','news','news_article'));
+			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',min($fallback_full+$fallback_archive,30)/*reasonable limit*/,NULL,false,false,array('title','news','news_article'));
 			if (!array_key_exists(0,$rows)) // Nothing recent, so we work to get at least something
 			{
 				$rows=($fallback_full==0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',$fallback_full,$start,false,true,array('title','news','news_article'));
 				$rows2=($fallback_archive==0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',$fallback_archive,$fallback_full+$start,false,true,array('title','news','news_article'));
 			}
-			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',max($fallback_full+$fallback_archive,100)/*reasonable limit*/,NULL,false,false,array('title','news','news_article'));
+			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',max($fallback_full+$fallback_archive,30)/*reasonable limit*/,NULL,false,false,array('title','news','news_article'));
 		} else
 		{
 			if (function_exists('set_time_limit')) @set_time_limit(0);

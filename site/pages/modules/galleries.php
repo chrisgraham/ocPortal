@@ -203,10 +203,10 @@ class Module_galleries
 			add_config_option('DEFAULT_VIDEO_WIDTH','default_video_width','integer','return \'320\';','FEATURE','GALLERIES');
 			add_config_option('DEFAULT_VIDEO_HEIGHT','default_video_height','integer','return \'240\';','FEATURE','GALLERIES');
 			add_config_option('MAXIMUM_IMAGE_SIZE','maximum_image_size','integer','return \'1024\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_IMAGE_LIMIT_LOW','max_personal_gallery_images_low','integer','return \'5\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_IMAGE_LIMIT_HIGH','max_personal_gallery_images_high','integer','return \'10\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_VIDEO_LIMIT_LOW','max_personal_gallery_videos_low','integer','return \'2\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_VIDEO_LIMIT_HIGH','max_personal_gallery_videos_high','integer','return \'5\';','FEATURE','GALLERIES');
+			add_config_option('GALLERY_IMAGE_LIMIT_LOW','max_personal_gallery_images_low','integer','return \'50\';','FEATURE','GALLERIES');
+			add_config_option('GALLERY_IMAGE_LIMIT_HIGH','max_personal_gallery_images_high','integer','return \'100\';','FEATURE','GALLERIES');
+			add_config_option('GALLERY_VIDEO_LIMIT_LOW','max_personal_gallery_videos_low','integer','return \'20\';','FEATURE','GALLERIES');
+			add_config_option('GALLERY_VIDEO_LIMIT_HIGH','max_personal_gallery_videos_high','integer','return \'50\';','FEATURE','GALLERIES');
 			add_config_option('GALLERIES','galleries_show_stats_count_galleries','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('IMAGES','galleries_show_stats_count_images','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('VIDEOS','galleries_show_stats_count_videos','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');

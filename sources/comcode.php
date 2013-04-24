@@ -75,17 +75,18 @@ function comcode_escape($in)
 /**
  * Convert (X)HTML into Comcode
  *
- * @param  LONG_TEXT		The HTML to converted
+ * @param  LONG_TEXT		The HTML to be converted
+ * @param  boolean		Whether to force full conversion regardless of settings
  * @return LONG_TEXT		The equivalent Comcode
  */
-function html_to_comcode($html)
+function html_to_comcode($html,$force=true)
 {
-	// First we allow this to be semi-html
+	// First we don't allow this to be semi-html
 	$html=str_replace('[','&#091;',$html);
 
 	require_code('comcode_from_html');
 
-	return semihtml_to_comcode($html,true);
+	return semihtml_to_comcode($html,$force);
 }
 
 /**

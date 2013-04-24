@@ -769,12 +769,15 @@ class Module_catalogues
 		// Read in categories
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
-		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('c_name'=>$catalogue_name));
+		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cc_add_date');
 		foreach ($rows_subcategories as $i=>$subcategory) // Dereference language
 		{
 			$rows_subcategories[$i]['cc_title_lookup']=get_translated_text($subcategory['cc_title']);
 		}
-		sort_maps_by($rows_subcategories,'cc_title_lookup');
+		if (get_value('cc_sort_date__'.$catalogue_name)!=='1')
+		{
+			sort_maps_by($rows_subcategories,'cc_title_lookup');
+		}
 
 		// Render categories
 		// Not done via main_multi_content block due to need for custom query
@@ -1108,7 +1111,14 @@ class Module_catalogues
 		}
 
 		// Get category contents
-		$subcategories=do_block('main_multi_content',array('param'=>'catalogue_category','filter'=>strval($id).'>','efficient'=>'0','zone'=>'_SELF','sort'=>'title','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','render_if_empty'=>'0'));
+		if (get_value('cc_sort_date__'.$catalogue_name)!=='1')
+		{
+			$cc_sort='recent ASC';
+		} else
+		{
+			$cc_sort='title';
+		}
+		$subcategories=do_block('main_multi_content',array('param'=>'catalogue_category','filter'=>strval($id).'>','efficient'=>'0','zone'=>'_SELF','sort'=>$cc_sort,'max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','render_if_empty'=>'0'));
 		if (get_option('catalogues_subcat_narrowin')=='1')
 		{
 			$filter=strval($id).'*';

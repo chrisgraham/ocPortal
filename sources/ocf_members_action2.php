@@ -631,8 +631,8 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 	$_custom_fields=ocf_get_all_custom_fields_match(
 		$groups,
 		($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_privilege(get_member(),'view_any_profile_field')))?NULL:1, // public view
-		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
-		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
+		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()) || (has_privilege(get_member(),'view_any_profile_field')))?NULL:1, // owner view
+		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()) || (has_privilege(get_member(),'view_any_profile_field')))?NULL:1, // owner set
 		NULL,
 		NULL,
 		NULL,

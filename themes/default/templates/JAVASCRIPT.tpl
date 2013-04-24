@@ -16,6 +16,9 @@ function script_load_stuff()
 
 	if (window==window.top && !window.opener || window.name=='') window.name='_site_opener';
 
+	/* Are we dealing with a touch device? */
+	if (typeof window.TouchEvent!='undefined') document.body.className+=' touch_enabled';
+
 	/* Dynamic images need preloading */
 	var preloader=new Image();
 	var images=[];
@@ -128,12 +131,19 @@ function script_load_stuff()
 		} );
 	}
 
+	/* Font size */
+	var font_size=read_cookie('font_size');
+	if (font_size!='')
+	{
+		set_font_size(font_size);
+	}
+
 	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
 	// it doesn't display errors.
-	window["__flash__removeCallback"] = function (instance, name) {
+	window["__flash__removeCallback"]=function (instance, name) {
 		try {
 			if (instance) {
-				instance[name] = null;
+				instance[name]=null;
 			}
 		} catch (flashEx) {
 
@@ -151,6 +161,20 @@ function script_load_stuff()
 
 	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof window.script_load_stuff_staff!='undefined')) script_load_stuff_staff();
 }
+
+function set_font_size(size)
+{
+	var old_size=read_cookie('font_size');
+	var old_sizer=document.getElementById('font_size_'+old_size);
+	if (old_sizer) old_sizer.className=old_sizer.className.replace(' selected','');
+
+	document.body.style.fontSize=size+'px';
+	set_cookie('font_size',size,120);
+
+	var new_sizer=document.getElementById('font_size_'+size);
+	if (new_sizer) new_sizer.className+=' selected';
+}
+// TODO: Load from cookie
 
 function new_html__initialise(element)
 {
@@ -174,6 +198,7 @@ function new_html__initialise(element)
 						return false;
 					} }(element);
 					element.title=element.title.replace('{!LINK_NEW_WINDOW;}','');
+					if (element.title==' ') element.title='';
 				}
 			{+END}
 
@@ -2350,9 +2375,19 @@ function entities_to_unicode(din)
 /* load the HTML as XHTML */
 function inner_html_load(xml_string) {
 	var xml;
-	if (typeof DOMParser!='undefined') xml=(new DOMParser()).parseFromString(xml_string,'application/xml');
-	else {
-		var ieDOM=['MSXML2.DOMDocument','MSXML.DOMDocument','Microsoft.XMLDOM'];
+	if (typeof DOMParser!='undefined')
+	{
+		xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
+
+		if ((typeof xml.documentElement!='undefined') && (typeof xml.documentElement.childNodes[0]!='undefined') && (xml.documentElement.childNodes[0].nodeName=='parsererror')) // HTML method then
+		{
+			xml=document.implementation.createHTMLDocument('');
+			var doc_elt=xml.documentElement;
+			doc_elt.innerHTML=xml_string;
+		}
+	} else
+	{
+		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
 		for (var i=0;i<ieDOM.length && !xml;i++) {
 			try { xml=new ActiveXObject(ieDOM[i]);xml.loadXML(xml_string); }
 			catch(e) {}

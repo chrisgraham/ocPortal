@@ -41,7 +41,7 @@ class Hook_choose_forum
 		$tree=ocf_get_forum_tree_secure(NULL,is_null($id)?NULL:intval($id),false,NULL,'',NULL,NULL,$compound_list,1,true);
 		$out='';
 
-		if (!has_actual_page_access(NULL,'forumview')) $tree=array();
+		if (!has_actual_page_access(NULL,'forumview')) $tree=$compound_list?array(array(),''):array();
 
 		$categories=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
 

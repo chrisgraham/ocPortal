@@ -73,6 +73,7 @@ class Block_side_news_categories
 				$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'news p'.$join.' WHERE validated=1 AND (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') ORDER BY date_and_time DESC');
 				if ($count>0)
 				{
+					$category['_nc_title']=get_translated_text($category['nc_title']);
 					$categories2[]=$category;
 				}
 			}
@@ -87,10 +88,11 @@ class Block_side_news_categories
 				}
 			}
 		}
+		sort_maps_by($categories2,'_nc_title');
 		foreach ($categories2 as $category)
 		{
 			$url=build_url(array('page'=>'news','type'=>'misc','id'=>$category['id']),get_module_zone('news'));
-			$name=get_translated_text($category['nc_title']);
+			$name=$category['_nc_title'];
 			$content->attach(do_template('BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY',array('_GUID'=>'fee49cac370ec00fc59d2e9c66b6255a','URL'=>$url,'NAME'=>$name,'COUNT'=>integer_format($count))));
 		}
 		return do_template('BLOCK_SIDE_NEWS_CATEGORIES',array('_GUID'=>'b47a0047247096373e5aa626348c4ebb','CONTENT'=>$content,'PRE'=>'','POST'=>''));

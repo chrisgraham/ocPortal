@@ -38,6 +38,8 @@ function site_tree_script()
 
 	if (function_exists('set_time_limit')) @set_time_limit(30);
 
+	disable_php_memory_limit(); // Needed for loading large amount of permissions (potentially)
+
 	// ======
 	// Saving
 	// ======
@@ -233,17 +235,19 @@ function site_tree_script()
 	require_lang('permissions');
 	require_lang('zones');
 	$page_link=get_param('id',NULL,true);
-	$_privilege_access=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'));
-	$privilege_access=array();
-	foreach ($_privilege_access as $a)
-	{
-		if (!isset($privilege_access[$a['group_id']])) $privilege_access[$a['group_id']]=array();
-		$privilege_access[$a['group_id']][]=$a;
-	}
 
 	if ((!is_null($page_link)) && ($page_link!='') && ((strpos($page_link,':')===false) || (strpos($page_link,':')===strlen($page_link)-1))) // Expanding a zone
 	{
 		if (strpos($page_link,':')===strlen($page_link)-1) $page_link=substr($page_link,0,strlen($page_link)-1);
+
+		if ($permissions_needed)
+		{
+			$_privilege_access=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>''));
+			$privilege_access=organise_loaded_privileges($_privilege_access,$groups);
+		} else
+		{
+			$privilege_access=array();
+		}
 
 		// Pages in the zone
 		$zone=$page_link;
@@ -338,7 +342,7 @@ function site_tree_script()
 							$override_value=-1;
 							foreach ($privilege_access[$group] as $test)
 							{
-								if (($test['privilege']==$overridable) && ($test['the_page']==$privilege_page))
+								if (($test['privilege']==$overridable) && ($test['the_page']==$privilege_page) && ($test['category_name']==''))
 									$override_value=$test['the_value'];
 							}
 							if ($override_value!=-1) $privilege_perms.='group_privileges_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
@@ -479,6 +483,9 @@ function site_tree_script()
 					$privilege_perms='';
 					if (!is_null($module_the_name))
 					{
+						$_privilege_access=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>$module_the_name,'category_name'=>$category_name));
+						$privilege_access=organise_loaded_privileges($_privilege_access,$groups);
+
 						foreach ($groups as $group=>$group_name)
 						{
 							if (!in_array($group,$admin_groups))
@@ -531,6 +538,9 @@ function site_tree_script()
 		// Start of tree
 		if ($permissions_needed)
 		{
+			$_privilege_access=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>'','the_page'=>''));
+			$privilege_access=organise_loaded_privileges($_privilege_access,$groups);
+
 			$view_perms='';
 			foreach ($groups as $group=>$group_name)
 			{
@@ -620,4 +630,24 @@ function site_tree_script()
 	echo '</result></request>';
 }
 
+/**
+ * Organise loaded privileges into a more searchable structure.
+ *
+ * @param  array			Privilege database rows
+ * @param  array			Map of usergroups
+ * @return array			Structure
+ */
+function organise_loaded_privileges($_privilege_access,$groups)
+{
+	$privilege_access=array();
+	foreach (array_keys($groups) as $group_id)
+	{
+		$privilege_access[$group_id]=array();
+	}
+	foreach ($_privilege_access as $a)
+	{
+		$privilege_access[$a['group_id']][]=$a;
+	}
+	return $privilege_access;
+}
 

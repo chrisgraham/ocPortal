@@ -32,13 +32,13 @@ function find_activities($viewer_id,$mode,$member_ids)
 		if (!$is_guest) //If not a guest, get all blocks
 		{
 			//Grabbing who you're blocked-by
-			$blocked_by=$GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocker'), array('member_blocked'=>$viewer_id));
+			$blocked_by=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocker'),array('member_blocked'=>$viewer_id));
 
 			if (count($blocked_by)>0)
 			{
 				if (count($blocked_by)>1)
 				{
-					collapse_1d_complexity('member_blocker', $blocked_by);
+					collapse_1d_complexity('member_blocker',$blocked_by);
 					$blocked_by=implode(',',$blocked_by);
 				}
 				else
@@ -51,13 +51,13 @@ function find_activities($viewer_id,$mode,$member_ids)
 				$blocked_by='';
 
 			//Grabbing who you've blocked
-			$blocking=$GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocked'), array('member_blocker'=>$viewer_id));
+			$blocking=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$viewer_id));
 
 			if (count($blocking)>0)
 			{
 				if (count($blocking)>1)
 				{
-					collapse_1d_complexity('member_blocked', $blocking);
+					$blocking=collapse_1d_complexity('member_blocked',$blocking);
 					$blocking=implode(',',$blocking);
 				}
 				else
@@ -161,7 +161,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 					$lm_ids=substr($lm_ids, 1);
 
-					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
+					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),NULL,' WHERE (member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 					{
@@ -186,7 +186,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				}
 				elseif (count($like_mutual)>0) //Has one mutual friend
 				{
-					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
+					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),NULL,' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 					{
@@ -212,7 +212,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				else //Has no mutual friends
 				{
 					if (!$is_guest)
-						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).$extra_not);
+						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),NULL,' WHERE (member_likes='.strval($viewer_id).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one person
 					{
@@ -245,7 +245,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				if (strlen($blocked_by)>0)
 					$friends_check_where='('.$friends_check_where.' AND member_likes NOT IN ('.$blocked_by.'))';
 
-				$view_private=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_likes'), NULL, ' WHERE '.$friends_check_where.';');
+				$view_private=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_likes'),NULL,' WHERE '.$friends_check_where.';');
 				$view_private[]=array('member_likes'=>$viewer_id);
 			}
 

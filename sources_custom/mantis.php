@@ -227,9 +227,45 @@ function close_tracker_issue($tracker_id)
 	$GLOBALS['SITE_DB']->query_update('mantis_bug_table',array('resolution'=>20,'status'=>80),array('id'=>$tracker_id));
 }
 
+function get_user_currency()
+{
+	require_code('users');
+	$return_default=false;
+	$safe_currency='USD';
+	$the_id=intval(get_member());
+	$member_id=is_guest($the_id)?mixed():$the_id;
+	if (!is_null($member_id))
+	{
+		$cpf_id=get_credits_profile_field_id('ocp_currency');
+		if (!is_null($cpf_id))
+		{
+			require_code('ocf_members_action2');
+			$_fields=ocf_get_custom_field_mappings($member_id);
+			$result=strval($_fields['field_'.strval($cpf_id)]);
+			$user_currency=!is_null($result)?$result:NULL;
+			$return_default=is_null($user_currency);
+			if ($return_default===false)
+			{
+				if (preg_match('/^[a-zA-Z]$/',$user_currency)==0)
+					log_hack_attack_and_exit('HACK_ATTACK');
+			}
+		} else
+		{
+			$return_default=true;
+		}
+	} else
+	{
+		$return_default=true;
+	}
+	$_system_currency=get_option('currency',true);
+	$system_currency=is_null($_system_currency)?$safe_currency:$_system_currency;
+	return $return_default?$system_currency:$user_currency;
+}
+
 function get_credits_profile_field_id($field_name='ocp_support_credits')
 {
-	if(preg_match("/\W/", $field_name)) log_hack_attack_and_exit('HACK_ATTACK');
+	require_code('ocf_members');
+	if (preg_match('/\W/',$field_name)) log_hack_attack_and_exit('HACK_ATTACK');
 	$fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL);
 	$field_id=NULL;
 	foreach ($fields as $field)

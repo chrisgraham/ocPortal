@@ -467,7 +467,7 @@ class Module_wiki
 			if ($or_list!='') $or_list.=' OR ';
 			$or_list.='id='.strval($myrow['child_id']);
 		}
-		$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts FROM '.get_table_prefix().'wiki_pages WHERE '.$or_list,NULL,NULL,false,true));
+		$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts,description FROM '.get_table_prefix().'seedy_pages WHERE '.$or_list,NULL,NULL,false,true));
 		foreach ($dbchildren as $myrow)
 		{
 			$child_id=$myrow['child_id'];
@@ -475,6 +475,7 @@ class Module_wiki
 			$subpage=$_subpage[$myrow['child_id']];
 			$_child_title=$subpage['title'];
 			$child_title=get_translated_text($_child_title);
+			$child_description=get_translated_text($subpage['description']);
 
 			$my_child_posts=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$child_id));
 			$my_child_children=$GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id'=>$child_id));
@@ -482,9 +483,15 @@ class Module_wiki
 			$my_child_posts_string=do_lang_tempcode('POST_PLU',integer_format($my_child_posts));
 			$my_child_children_string=do_lang_tempcode('CHILD_PLU',integer_format($my_child_children));
 			if ((!($my_child_posts>0)) && (!($my_child_children>0))) $sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
-			if (($my_child_posts>0) && ($my_child_children>0)) $sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array('_GUID'=>'90e9f1647fdad0cacccecca3cbf12888','MY_CHILD_POSTS'=>integer_format($my_child_posts),'MY_CHILD_CHILDREN'=>integer_format($my_child_children)));
-			if ((!($my_child_posts>0)) && ($my_child_children>0)) $sup=$my_child_children_string;
-			if ((!($my_child_children>0)) && ($my_child_posts>0)) $sup=$my_child_posts_string;
+			if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description)!=''))
+			{
+				$sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array(
+					'_GUID'=>'90e9f1647fdad0cacccecca3cbf12888',
+					'MY_CHILD_POSTS'=>integer_format($my_child_posts),
+					'MY_CHILD_CHILDREN'=>integer_format($my_child_children),
+					'BODY_CONTENT'=>(trim($child_description)!='')?strval(strlen($child_description)):NULL,
+				));
+			}
 
 			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain.'/'.strval($child_id)),'_SELF');
 			$children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));

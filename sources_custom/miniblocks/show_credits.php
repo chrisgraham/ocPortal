@@ -13,25 +13,27 @@
  * @package		ocportalcom_support_credits
  */
 
+require_lang('customers');
+$whats_this=new ocp_tempcode();
+$guest_msg=new ocp_tempcode();
+$welcome_msg=new ocp_tempcode();
+$tickets_open_msg=new ocp_tempcode();
+$no_credits_link=new ocp_tempcode();
+$credits_message=new ocp_tempcode();
+if (get_page_name()!='commercial_support')
+{
+	$commercial_support_url=build_url(array('page'=>'commercial_support'),'site');
+	if (is_object($commercial_support_url)) $commercial_support_url=$commercial_support_url->evaluate();
+	$whats_this=do_lang_tempcode('SHOW_CREDITS_Whats_this',$commercial_support_url);
+}
+
 if (is_guest())
 {
 	$login_url=build_url(array('page'=>'login','redirect'=>get_self_url(true,true)),'');
 	if (is_object($login_url)) $login_url=$login_url->evaluate();
 	$join_url=build_url(array('page'=>'join','redirect'=>get_self_url(true,true)),'');
 	if (is_object($join_url)) $join_url=$join_url->evaluate();
-	echo '<div class="gold_bar">';
-	if (get_page_name()!='commercial_support')
-	{
-		$commercial_support_url=build_url(array('page'=>'commercial_support'),'site');
-		if (is_object($commercial_support_url)) $commercial_support_url=$commercial_support_url->evaluate();
-		echo '
-			<div class="gb_help"><a href="'.escape_html($commercial_support_url).'">What\'s this?</a></div>
-		';
-	}
-	echo '<div class="gb_not_logged_in">You are not currently logged in.<span class="gb_not_logged_in_note"> To use tickets please <a href="'.escape_html($login_url).'">login</a>/<a href="'.escape_html($join_url).'">join</a> (login for free &ldquo;Contact us&rdquo; tickets optional)</span>.</div>';
-	echo '</div>';
-	
-	return;
+	$guest_msg=do_lang_tempcode('SHOW_CREDITS_NOT_LOGGED_IN_MESSAGE',$login_url,$join_url);
 }
 
 $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
@@ -56,26 +58,21 @@ foreach ($topic_filters as $topic_filter)
 $tickets_open=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT '.$query,false,true);
 
 $username_link=hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url(get_member()),escape_html($username));
+$username_link=$username_link->evaluate();
 $logout_url=build_url(array('page'=>'login','type'=>'logout','redirect'=>get_self_url(true,true)),'');
 if (is_object($logout_url)) $logout_url=$logout_url->evaluate();
-echo '
-<div class="gold_bar">
-	<div class="gb_welcome">Welcome, '.$username_link->evaluate().' <span class="associated_details">(<a href="'.escape_html($logout_url).'">logout</a>)</span>.</div>
-';
-if (get_page_name()!='commercial_support' || $credits_available==0)
+$welcome_msg=do_lang_tempcode('SHOW_CREDITS_WELCOME_MESSAGE',$username_link,$logout_url);
+if ($credits_available==0)
 {
-	$commercial_support_url=build_url(array('page'=>'commercial_support'),'site');
-	if (is_object($commercial_support_url)) $commercial_support_url=$commercial_support_url->evaluate();
-	echo '<div class="gb_help">';
-	echo '<a href="'.escape_html($commercial_support_url).'">What\'s this?</a>';
-	if ($credits_available==0) echo ' and <a href="'.static_evaluate_tempcode(build_url(array('page'=>'news','type'=>'view','id'=>275),'site')).'">why is it likely a problem?</a>';
-	echo '</div>';
+	$no_credits_link=do_lang_tempcode('SHOW_CREDITS_No_credits_link');
+	$credits_message=do_lang_tempcode('SHOW_CREDITS_No_credits');
+} 
+else
+{
+	$credits_message=do_lang_tempcode('SHOW_CREDITS_Some_credits',$credits_available);
 }
 $tickets_url=build_url(array('page'=>'tickets','type'=>'misc'),get_module_zone('tickets'));
 if (is_object($tickets_url)) $tickets_url=$tickets_url->evaluate();
-echo '<div class="gb_credits_available">You have ';
-if ($credits_available==0) echo '<span style="color: red">';
-echo '<strong>'.escape_html(number_format($credits_available)).'</strong> credits available';
-if ($credits_available==0) echo '</span>';
-echo ', and <strong>'.escape_html(number_format($tickets_open)).'</strong> <a href="'.escape_html($tickets_url).'">tickets open</a>.</div>';
-echo '</div>';
+$tickets_open_msg=do_lang_tempcode('SHOW_CREDITS_Tickets_open',number_format($tickets_open),$tickets_url);
+$tpl=do_template('SHOW_CREDITS_BAR',array('GUEST_MSG'=>$guest_msg,'WHATS_THIS'=>$whats_this,'WHATS_THIS_LINK'=>$no_credits_link,'WELCOME_MSG'=>$welcome_msg,'CREDITS_AVAILABLE'=>$credits_message));
+$tpl->evaluate_echo();

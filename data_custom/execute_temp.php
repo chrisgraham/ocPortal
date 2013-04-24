@@ -53,5 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	css_enforce('global','default',false);
 }

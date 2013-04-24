@@ -803,16 +803,23 @@ class standard_crud_module
 		{
 			$orderer=$select_field;
 		}
-		$table=is_null($this->table)?$this->module_type:$this->table;
+		$table=(is_null($this->table)?$this->module_type:$this->table).' r';
 		$db=((substr($table,0,2)=='f_') && (!$force_site_db) && (get_forum_type()!='none'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+		if (($this->title_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
+		{
+			$table.=' LEFT JOIN '.$db->get_table_prefix().'translate t ON t.id=r.'.preg_replace('# (ASC|DESC)$#','',$orderer).' AND '.db_string_equal_to('language',user_lang());
+			$orderer='t.text_original';
+		}
 		if ($force_site_db)
 		{
 			$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		}
-		$max_rows=$db->query_select_value($table.' r '.$join,'COUNT(*)',$where,'ORDER BY '.$orderer);
+		$max_rows=$db->query_select_value($table.$join,'COUNT(*)',$where,'ORDER BY '.$orderer);
 		if ($max_rows==0) return array(array(),0);
-		$rows=$db->query_select($table.' r '.$join,array('r.*'),$where,'ORDER BY '.$orderer,get_param_integer('max',20),get_param_integer('start',0));
+		$start=get_param_integer('start',0);
+		$max=get_param_integer('max',20);
+		$rows=$db->query_select($table.$join,array('r.*'),$where,'ORDER BY '.$orderer,$max,$start);
 		if ($force_site_db)
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
@@ -826,11 +833,6 @@ class standard_crud_module
 			if ($readable=='') $readable=do_lang('_DEFAULT');
 			$row['_readable']=$readable;
 			$_entries[$key]=$row;
-		}
-		if (($this->title_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
-		{
-			sort_maps_by($_entries,'_readable');
-			if (substr($orderer,-5)==' DESC') $_entries=array_reverse($_entries);
 		}
 
 		if ((!is_null($orderer)) && (!is_null($where)))

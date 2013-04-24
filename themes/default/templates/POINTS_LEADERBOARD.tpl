@@ -10,7 +10,7 @@
 	</table></div>
 
 	<ul class="horizontal_links associated_links_block_group">
-		<li><a rel="archives" href="{URL*}" title="{!MORE}: {!POINT_LEADERBOARD}">{!MORE}</a></li>
+		<li><a rel="archives" href="{URL*}" title="{!MORE}: {!POINT_LEADERBOARD}">{!ARCHIVES}</a></li>
 	</ul>
 </div></section>
 

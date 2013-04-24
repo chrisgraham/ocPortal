@@ -191,7 +191,7 @@ class Module_lost_password
 				'SUBMIT_NAME'=>$submit_name,
 			));
 		}
-		$username=post_param('username',NULL);
+		$username=get_param('username',NULL);
 		if (!is_null($username))
 		{
 			$username=trim($username);

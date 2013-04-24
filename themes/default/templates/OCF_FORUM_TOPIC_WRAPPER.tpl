@@ -70,64 +70,62 @@
 	</div>
 {+END}
 
-{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
-	{+START,IF,{$NOT,{$MOBILE}}}
-		<div class="box ocf_topic_actions"><div class="box_inner">
-			<span class="field_name">
-				<label for="fma_type">{!TOPIC_ACTIONS}: </label>
-			</span>
-			<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline">
-				{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
-
-				<div class="inline">
-					<select class="dropdown_actions" name="type" id="fma_type">
-						<option value="misc">-</option>
-						{MODERATOR_ACTIONS}
-					</select>
-					<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
-				</div>
-			</form>
-
-			{+START,IF,{MAY_CHANGE_MAX}}
-				<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
-					{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},forum_max}
+{+START,IF,{$NOT,{$WIDE_HIGH}}}
+	{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
+		{+START,IF,{$NOT,{$MOBILE}}}
+			<div class="box ocf_topic_actions"><div class="box_inner">
+				<span class="field_name">
+					<label for="fma_type">{!TOPIC_ACTIONS}: </label>
+				</span>
+				<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline">
+					{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
 
 					<div class="inline">
-						<label for="forum_max">{!PER_PAGE}:
-						<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} name="forum_max" id="forum_max">
-							<option value="10"{$?,{$EQ,{MAX},10}, selected="selected",}>10</option>
-							<option value="20"{$?,{$EQ,{MAX},20}, selected="selected",}>20</option>
-							<option value="30"{$?,{$EQ,{MAX},30}, selected="selected",}>30</option>
-							<option value="50"{$?,{$EQ,{MAX},50}, selected="selected",}>50</option>
-							<option value="100"{$?,{$EQ,{MAX},100}, selected="selected",}>100</option>
-							<option value="300"{$?,{$EQ,{MAX},300}, selected="selected",}>300</option>
+						<select class="dropdown_actions" name="type" id="fma_type">
+							<option value="misc">-</option>
+							{MODERATOR_ACTIONS}
 						</select>
-						</label>
-						{+START,IF,{$NOT,{$JS_ON}}}
-							<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!CHANGE}" />
-						{+END}
+						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
 					</div>
 				</form>
-			{+END}
 
-			{+START,IF_NON_EMPTY,{ORDER}}
-				<form title="{!ORDER}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
-					{$HIDDENS_FOR_GET_FORM,{$SELF_URL},order}
+				{+START,IF,{MAY_CHANGE_MAX}}
+					<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
+						{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},forum_max}
 
-					<div class="inline">
-						<label for="order">{!ORDER}:
-						<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} name="order" id="order">
-							<option value="last_post"{$?,{$EQ,{ORDER},last_post}, selected="selected",}>{!FORUM_ORDER_BY_LAST_POST}</option>
-							<option value="first_post"{$?,{$EQ,{ORDER},first_post}, selected="selected",}>{!FORUM_ORDER_BY_FIRST_POST}</option>
-							<option value="title"{$?,{$EQ,{ORDER},title}, selected="selected",}>{!FORUM_ORDER_BY_TITLE}</option>
-						</select>
-						</label>
-						{+START,IF,{$NOT,{$JS_ON}}}
-							<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SORT}" />
-						{+END}
-					</div>
-				</form>
-			{+END}
-		</div></div>
+						<div class="inline">
+							<label for="forum_max">{!PER_PAGE}:
+							<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} name="forum_max" id="forum_max">
+								<option value="10"{$?,{$EQ,{MAX},10}, selected="selected",}>10</option>
+								<option value="20"{$?,{$EQ,{MAX},20}, selected="selected",}>20</option>
+								<option value="30"{$?,{$EQ,{MAX},30}, selected="selected",}>30</option>
+								<option value="50"{$?,{$EQ,{MAX},50}, selected="selected",}>50</option>
+								<option value="100"{$?,{$EQ,{MAX},100}, selected="selected",}>100</option>
+								<option value="300"{$?,{$EQ,{MAX},300}, selected="selected",}>300</option>
+							</select>
+							<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
+						</div>
+					</form>
+
+					{+START,IF,{MAY_CHANGE_MAX}}
+						<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
+							{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},max}
+
+						<div class="inline">
+							<label for="order">{!ORDER}:
+							<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} name="order" id="order">
+								<option value="last_post"{$?,{$EQ,{ORDER},last_post}, selected="selected",}>{!FORUM_ORDER_BY_LAST_POST}</option>
+								<option value="first_post"{$?,{$EQ,{ORDER},first_post}, selected="selected",}>{!FORUM_ORDER_BY_FIRST_POST}</option>
+								<option value="title"{$?,{$EQ,{ORDER},title}, selected="selected",}>{!FORUM_ORDER_BY_TITLE}</option>
+							</select>
+							</label>
+							{+START,IF,{$NOT,{$JS_ON}}}
+								<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SORT}" />
+							{+END}
+						</div>
+					</form>
+				{+END}
+			</div></div>
+		{+END}
 	{+END}
 {+END}

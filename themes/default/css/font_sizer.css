@@ -1,0 +1,29 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.font_sizers {
+	margin-left: 1.5em;
+	margin-top: -0.75em;
+	margin-right: -0.8em;
+	float: right;
+	border: 1px solid {$GET,dark_border};
+	padding: 0.2em 0.4em;
+}
+.font_sizers span {
+	cursor: pointer;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
+}
+.font_sizers span:hover, .font_sizers span.selected {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
+}
+.font_sizer_small {
+	font-size: 13px;
+}
+.font_sizer_medium {
+	font-size: 14px;
+}
+.font_sizer_large {
+	font-size: 17px;
+}

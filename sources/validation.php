@@ -386,7 +386,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 	{
 		//echo $T_POS.'-'.$POS.' ('.$stack_size.')<br />';
 
-		if ((is_array($token)) && (count($token)!=0)) // Some kind of error in our token
+		while ((is_array($token)) && (count($token)!=0)) // Some kind of error in our token
 		{
 			if (is_null($XHTML_VALIDATOR_OFF))
 			{

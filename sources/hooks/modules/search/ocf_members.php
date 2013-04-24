@@ -45,7 +45,7 @@ class Hook_search_ocf_members
 		if (has_privilege(get_member(),'view_profiles'))
 		{
 			require_code('ocf_members');
-			$rows=ocf_get_all_custom_fields_match(NULL,1,1);
+			$rows=ocf_get_all_custom_fields_match(NULL,has_privilege(get_member(),'view_any_profile_field')?NULL:1,has_privilege(get_member(),'view_any_profile_field')?NULL:1);
 			foreach ($rows as $row)
 			{
 				$extra_sort_fields['field_'.strval($row['id'])]=$row['trans_name'];
@@ -70,7 +70,7 @@ class Hook_search_ocf_members
 		$fields=array();
 		if (has_privilege(get_member(),'view_profiles'))
 		{
-			$rows=ocf_get_all_custom_fields_match(NULL,1,1);
+			$rows=ocf_get_all_custom_fields_match(NULL,has_privilege(get_member(),'view_any_profile_field')?NULL:1,has_privilege(get_member(),'view_any_profile_field')?NULL:1);
 			require_code('fields');
 			foreach ($rows as $row)
 			{
@@ -188,7 +188,7 @@ class Hook_search_ocf_members
 		}
 		$raw_fields=array('m_username');
 		$trans_fields=array();
-		$rows=ocf_get_all_custom_fields_match(NULL,1,1);
+		$rows=ocf_get_all_custom_fields_match(NULL,has_privilege(get_member(),'view_any_profile_field')?NULL:1,has_privilege(get_member(),'view_any_profile_field')?NULL:1);
 		$table='';
 		require_code('fields');
 		foreach ($rows as $i=>$row)

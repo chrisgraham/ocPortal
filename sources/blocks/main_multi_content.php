@@ -330,9 +330,11 @@ class Block_main_multi_content
 					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$first_id_field.' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start,false,true,$lang_fields);
 					break;
 				case 'recent':
+				case 'recent ASC':
+				case 'recent DESC':
 					if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,$start,false,true,$lang_fields);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].(($sort!='recent asc')?' DESC':' ASC'),$max,$start,false,true,$lang_fields);
 						break;
 					}
 					$sort=$first_id_field;

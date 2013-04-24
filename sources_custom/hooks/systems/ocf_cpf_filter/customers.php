@@ -32,6 +32,7 @@ class Hook_ocf_cpf_filter_customers
 		$cpf['ftp_password']=1;
 		$cpf['profession']=1;
 		$cpf['support_credits']=1;
+		$cpf['currency']=1;
 		return $cpf;
 	}
 

@@ -887,7 +887,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 
 			$class=(array_key_exists('param',$attributes) && ($attributes['param']!=''))?$attributes['param']:'float_surrounder';
-			$temp_tpl=do_template('COMCODE_SURROUND',array('_GUID'=>'e8e69fa17eebd5312e3ad5788e3a1343','CLASS'=>$class,'CONTENT'=>$embed));
+			$style=array_key_exists('style',$attributes)?$attributes['style']:NULL;
+			if (!$comcode_dangerous) $style=NULL;
+			$temp_tpl=do_template('COMCODE_SURROUND',array('_GUID'=>'e8e69fa17eebd5312e3ad5788e3a1343','STYLE'=>$style,'CLASS'=>$class,'CONTENT'=>$embed));
 			break;
 		case 'i':
 			if ($semiparse_mode)
@@ -1880,6 +1882,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (!array_key_exists('target',$attributes)) $attributes['target']=$local?'_top':'_blank';
 			if ($attributes['target']=='blank') $attributes['target']='_blank';
 			$rel=(($as_admin) || has_privilege($source_member,'search_engine_links'))?'':'nofollow';
+			if (array_key_exists('rel',$attributes)) $rel=trim($rel.' '.$attributes['rel']);
 			if ($attributes['target']=='_blank')
 			{
 				$title=do_lang_tempcode('LINK_NEW_WINDOW');

@@ -59,6 +59,7 @@ class Module_recommend
 	{
 		delete_config_option('points_RECOMMEND_SITE');
 		delete_menu_item_simple('_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
+		delete_menu_item_simple('_SEARCH:recommend');
 	}
 
 	/**
@@ -84,7 +85,7 @@ class Module_recommend
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
+			add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend'); // We could append ":from={$SELF_URL&,0,0,0,from=<null>}" to page-link, but we probably don't want context-sensitivity
 		}
 	}
 

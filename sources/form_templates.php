@@ -547,9 +547,10 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?ID_TEXT		Page type to show (NULL: all)
+ * @param  boolean		Whether to also get the title for the page
  * @return tempcode		The input field
  */
-function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL)
+function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL,$get_title_too=false)
 {
 	if (!has_js())
 	{
@@ -563,7 +564,7 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
 	require_javascript('javascript_more');
 
 	// Display
-	$input=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD'=>true,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type));
+	$input=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type));
 
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }

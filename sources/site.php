@@ -612,15 +612,16 @@ function set_short_title($title)
 
 /**
  * Process URL monikers, changing 'id' GET param to be correct.
+ *
+ * @param  ID_TEXT		The page name to do it for
  */
-function process_url_monikers()
+function process_url_monikers($page)
 {
 	static $done=false;
 	if ($done) return;
 	$done=true;
 
 	$zone=get_zone_name();
-	$page=get_page_name();
 	$type=get_param('type',NULL,true);
 	$url_id=get_param('id',NULL,true);
 
@@ -722,7 +723,7 @@ function process_url_monikers()
  */
 function do_site()
 {
-	process_url_monikers();
+	process_url_monikers(get_page_name());
 
 	// Any messages to output?
 	if (get_param_integer('redirected',0)==1)

@@ -641,6 +641,14 @@ class Module_cms_comcode_pages
 			{
 				$contents.=chr(10).chr(10).'[block]main_comcode_page_children[/block]';
 			}
+
+			// Pre-process default pages with Tempcode, to make easier to understand
+			if ((strpos($restore_from,'/comcode/')!==false) && (($file=='start') || ($file=='panel_left') || ($file=='panel_right')))
+			{
+				require_code('tempcode_compiler');
+				$contents=template_to_tempcode($contents);
+				$contents=$contents->evaluate();
+			}
 		} else
 		{
 			$new=false;

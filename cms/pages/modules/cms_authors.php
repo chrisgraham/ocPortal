@@ -132,8 +132,7 @@ class Module_cms_authors
 			$skills=get_translated_text($myrow['skills']);
 			$handle=$myrow['member_id'];
 			$may_delete=true;
-		}
-		else
+		} else
 		{
 			$description='';
 			if (get_forum_type()=='ocf')

@@ -648,6 +648,34 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 
 	if ((strpos($url,'/')!==false) && (strrpos($url,'/')<7)) $url.='/';
 
+	// Should we cheat?
+	$faux=get_value('http_faux_loopback');
+	if ((!is_null($faux)) && ($faux!=''))
+	{
+		if (substr($faux,0,1)!='#') $faux='#'.$faux.'#';
+		if (preg_match($faux,$url)!=0)
+		{
+			$parsed=parse_url($url);
+			$parsed_base_url=parse_url(get_custom_base_url());
+			$file_base=get_custom_file_base();
+			$file_base=preg_replace('#'.preg_quote(urldecode($parsed_base_url['path'])).'$#','',$file_base);
+			$file_path=$file_base.urldecode($parsed['path']);
+			if ($trigger_error)
+			{
+				$contents=file_get_contents($file_path);
+			} else
+			{
+				$contents=@file_get_contents($file_path);
+			}
+			if (!is_null($write_to_file))
+			{
+				fwrite($write_to_file,$contents);
+				return '';
+			}
+			return $contents;
+		}
+	}
+
 	global $DOWNLOAD_LEVEL;
 	$DOWNLOAD_LEVEL++;
 	global $HTTP_DOWNLOAD_MIME_TYPE;

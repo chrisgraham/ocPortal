@@ -128,6 +128,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'SET_NOPREEVAL':
 			case 'SET':
 				if (isset($param[1]))
 				{
@@ -866,7 +867,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							$value=trim($value);
 						} else
 						{
-							$value=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>\s*)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>\s*)+$#','#(&nbsp;)+$#'),array('','','','','',''),$value);
+							$value=ocp_trim($param[0]);
 						}
 					}
 				}
@@ -3124,12 +3125,12 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 		{
 			case 'left':
 				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$amount-3,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$amount-3)));
-				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br />'; // so the "..." does not go right after the sentence terminator
-				$truncated=($temp==$html)?$temp:str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),(rtrim($temp).'&hellip;'));
+				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br class="ellipsis_break" />'; // so the "..." does not go right after the sentence terminator
+				$truncated=($temp==$html)?$temp:str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),(ocp_trim($temp,true).'&hellip;'));
 				break;
 			case 'expand':
 				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$amount-3,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$amount-3)));
-				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br />'; // so the "..." does not go right after the sentence terminator
+				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br class="ellipsis_break" />'; // so the "..." does not go right after the sentence terminator
 				$_truncated=do_template('COMCODE_HIDE',array('_GUID'=>'3ead7fdb5b510930f54310e3c32147c2','TEXT'=>protect_from_escaping($temp),'CONTENT'=>protect_from_escaping($html)));
 				$truncated=$_truncated->evaluate();
 				break;
@@ -3138,7 +3139,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 				break;
 			case 'spread':
 				$pos=intval(floor(floatval($amount)/2.0))-1;
-				$truncated=str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),rtrim((($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$pos,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$pos))).'&hellip;'.ltrim(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,-$pos-1):escape_html(ocp_mb_substr($not_html,-$pos-1)))));
+				$truncated=str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),ocp_trim((($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$pos,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$pos))).'&hellip;'.ltrim(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,-$pos-1):escape_html(ocp_mb_substr($not_html,-$pos-1))),true));
 				break;
 		}
 
@@ -3169,7 +3170,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 }
 
 /**
- * String to tack onto URL to keep 'keep_' parameters
+ * String to tack onto URL to keep 'keep_' parameters.
  *
  * @param  array			Parameters passed to the symbol (0=whether this starts off the query string, 1=force session append even if it's also available a session cookie e.g. when put into download manager)
  * @return string			The result.
@@ -3198,4 +3199,21 @@ function keep_symbol($param)
 	return $value;
 }
 
+/**
+ * Trim some text, supporting removing HTML white-space also.
+ *
+ * @param  string			Input text.
+ * @param  boolean		Whether to keep doing it, while it changes (if complex mixtures are on the end).
+ * @return string			The result text.
+ */
+function ocp_trim($text,$try_hard=false)
+{
+	do
+	{
+		$before=$text;
+		$text=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>\s*)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>\s*)+$#','#(&nbsp;)+$#'),array('','','','','',''),$text);
+	}
+	while (($try_hard) && ($before!=$text));
+	return $text;
+}
 
