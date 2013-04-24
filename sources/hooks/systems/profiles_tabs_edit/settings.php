@@ -73,7 +73,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id_of), // groups
 				(($member_id_of!=$member_id_viewing) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL, // public view
 				(($member_id_of==$member_id_viewing) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL, // owner view
-				(($member_id_of==$member_id_viewing) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL, // owner set
+				(($member_id_of==$member_id_viewing) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL // owner set
 			);
 			$actual_custom_fields=ocf_read_in_custom_fields($custom_fields,$member_id_of);
 
