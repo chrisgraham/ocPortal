@@ -95,26 +95,6 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
       <td>This provides a feedback form, linked from the footer.</td>
    </tr>
    <tr>
-      <td>Welcome</td>
-      <td>donate</td>
-      <td>This is linked to by a default banner, advertising web hosting. You may wish to delete the default banner and remove access to this page.</td>
-   </tr>
-   <tr>
-      <td>Welcome</td>
-      <td>advertise</td>
-      <td>This is linked to by a default banner, advertising web hosting. You may wish to delete the default banner and remove access to this page.</td>
-   </tr>
-   <tr>
-      <td>Site</td>
-      <td>guestbook</td>
-      <td>This provides a simple guest-book, and is unlinked by default.</td>
-   </tr>
-   <tr>
-      <td>Site</td>
-      <td>help</td>
-      <td>Help for your site. Contains default information on points, etc.</td>
-   </tr>
-   <tr>
       <td>Collaboration Zone</td>
       <td>about</td>
       <td>This describes the Collaboration Zone. I recommend that you don't edit this yet.</td>
