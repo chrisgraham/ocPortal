@@ -49,9 +49,10 @@ class Block_main_content_filtering
 	{
 		$links=array_key_exists('links',$map)?$map['links']:'';
 		$labels=$this->interpret_pairs_from_string(array_key_exists('labels',$map)?$map['labels']:'');
-		$types=$this->interpret_pairs_from_string(array_key_exists('types',$map)?$map['types']:'');
+		$_types=array_key_exists('types',$map)?$map['types']:'';
+		$types=$this->interpret_pairs_from_string($_types);
 
-		if ((strpos($types,'linklist')!==false) || ($links!='')) // Needs to be able to take overrides from environment if we have merge links
+		if ((strpos($_types,'linklist')!==false) || ($links!='')) // Needs to be able to take overrides from environment if we have merge links
 		{
 			$filter=either_param('active_filter',array_key_exists('param',$map)?$map['param']:'');
 		} else

@@ -26,11 +26,12 @@ class Hook_cron_notifications_digests
 	 */
 	function run()
 	{
+		require_code('notifications');
 		foreach (array(
 			A_DAILY_EMAIL_DIGEST=>60*60*24,
 			A_WEEKLY_EMAIL_DIGEST=>60*60*24*7,
 			A_MONTHLY_EMAIL_DIGEST=>60*60*24*31
-		) as $timespan=>$frequency)
+		) as $frequency=>$timespan)
 		{
 			$start=0;
 			do
@@ -46,18 +47,23 @@ class Hook_cron_notifications_digests
 					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
 					$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
 
-					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message'),array(
+					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message','d_date_and_time'),array(
 						'd_to_member_id'=>$to_member_id,
 						'd_frequency'=>$frequency,
 					),'ORDER BY d_date_and_time');
+					$GLOBALS['SITE_DB']->query_delete('digestives_tin',array(
+						'd_to_member_id'=>$to_member_id,
+						'd_frequency'=>$frequency,
+					));
 
-					$message='';
+					$_message='';
 					foreach ($messages as $message)
 					{
-						$message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
+						if ($_message!='') $_message.=chr(10);
+						$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
 					}
 					$wrapped_subject=do_lang('DIGEST_EMAIL_SUBJECT_'.strval($frequency),comcode_escape(get_site_name()));
-					$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$message,comcode_escape(get_site_name()));
+					$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$_message,comcode_escape(get_site_name()));
 
 					require_code('mail');
 					mail_wrap($wrapped_subject,$wrapped_message,$to_email,$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
