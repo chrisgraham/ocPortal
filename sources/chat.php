@@ -108,7 +108,7 @@ function messages_script()
 		$people=get_param('people');
 		if ($people=='') exit();
 
-		$room=mixed();
+		$room=array();
 		$may_recycle=(get_param_integer('may_recycle',0)==1);
 		if ($may_recycle)
 		{
@@ -135,9 +135,9 @@ function messages_script()
 		} else
 		{
 			// Resend invite (this is a self-invite)
-			$room['room_name']=$GLOBALS['FORUM_DRIVER']->get_username(intval($people));
-			$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
-			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="">'.strval($room['id']).'</chat_invite>'.chr(10);
+			$room[0]['room_name']=$GLOBALS['FORUM_DRIVER']->get_username(intval($people));
+			$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room[0]['id']));
+			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room[0]['room_name']).'" avatar_url="">'.strval($room[0]['id']).'</chat_invite>'.chr(10);
 		}
 
 		// Send response of new messages, so we get instant result

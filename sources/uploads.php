@@ -97,6 +97,21 @@ function is_swf_upload($fake_prepopulation=false)
 		}
 	}
 
+	if ($swfupload)
+	{
+		// Filter out vestigial files (been reported as an issue)
+		foreach (array_keys($_FILES) as $attach_name)
+		{
+			if ((array_key_exists($attach_name,$_FILES)) && (array_key_exists('error',$_FILES[$attach_name])))
+			{
+				if ($_FILES[$attach_name]['error']==3)
+				{
+					unset($_FILES[$attach_name]);
+				}
+			}
+		}
+	}
+
 	return $swfupload;
 }
 
