@@ -59,7 +59,7 @@ class Hook_addon_registry_realtime_rain
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
+			'requires'=>array('stats'),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
 		);
