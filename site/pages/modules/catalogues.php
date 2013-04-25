@@ -810,6 +810,7 @@ class Module_catalogues
 			'title'=>get_translated_text($catalogue['c_title']),
 			'identifier'=>'_SEARCH:catalogues:index:'.$catalogue_name,
 			'description'=>$description_2,
+			//'category'=>???,
 		));
 
 		// Render
@@ -1083,6 +1084,7 @@ class Module_catalogues
 			'title'=>$_title,
 			'identifier'=>'_SEARCH:catalogues:category:'.strval($id),
 			'description'=>get_translated_text($category['cc_description']),
+			//'category'=>???,
 		));
 		$rep_image_str=$category['rep_image'];
 		if ($rep_image_str!='')

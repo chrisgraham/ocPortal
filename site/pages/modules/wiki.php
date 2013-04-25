@@ -580,6 +580,7 @@ class Module_wiki
 			'description'=>get_translated_text($page['description']),
 			'numposts'=>strval($num_posts),
 			'image'=>find_theme_image('bigicons/wiki'),
+			//'category'=>???,
 		));
 
 		breadcrumb_add_segment($breadcrumbs);

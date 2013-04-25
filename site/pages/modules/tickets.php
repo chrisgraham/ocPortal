@@ -472,6 +472,7 @@ class Module_tickets
 					'identifier'=>'_SEARCH:tickets:ticket:'.$id,
 					'description'=>'',
 					'image'=>find_theme_image('bigicons/tickets'),
+					//'category'=>???,
 				));
 
 				// "Staff only reply" tickbox

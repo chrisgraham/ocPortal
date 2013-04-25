@@ -117,16 +117,19 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 	$page='_SELF';
 	if (($root_if_posted) && (count($_POST)!=0)) $page='';
 	$params=array('page'=>$page);
+	$skip=array();
 	foreach ($extra_params as $key=>$val)
 	{
 		if ($val===NULL)
 		{
-			unset($params[$key]);
+			$skip[$key]=NULL;
+		} else
+		{
+			$params[$key]=$val;
 		}
-		$params[$key]=$val;
 	}
 
-	$url=build_url($params,'_SELF',NULL,true,$avoid_remap);
+	$url=build_url($params,'_SELF',$skip,true,$avoid_remap);
 	if ($evaluate)
 	{
 		$ret=$url->evaluate();

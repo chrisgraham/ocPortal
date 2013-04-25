@@ -637,6 +637,7 @@ class Module_galleries
 			'title'=>$fullname,
 			'identifier'=>'_SEARCH:galleries:misc:'.$cat,
 			'description'=>get_translated_text($myrow['description']),
+			//'category'=>???,
 		));
 		if ($rep_image!='')
 		{
@@ -1193,6 +1194,7 @@ class Module_galleries
 			'identifier'=>'_SEARCH:galleries:image:'.strval($id),
 			'description'=>get_translated_text($myrow['description']),
 			'image'=>$url,
+			//'category'=>???,
 		));
 
 		return do_template('GALLERY_ENTRY_SCREEN',array(
@@ -1367,6 +1369,7 @@ class Module_galleries
 			'video:height'=>strval($myrow['video_height']),
 			'video:width'=>strval($myrow['video_width']),
 			'video:type'=>$mime_type,
+			//'category'=>???,
 		));
 
 		return do_template('GALLERY_ENTRY_SCREEN',array(

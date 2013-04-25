@@ -1607,6 +1607,7 @@ class Module_calendar
 			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
 			'description'=>get_translated_text($event['e_content']),
 			'image'=>find_theme_image('bigicons/calendar'),
+			//'category'=>???,
 		));
 
 		// Render

@@ -1739,6 +1739,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 		'title'=>$title_to_use_2,
 		'identifier'=>'_SEARCH:catalogues:entry:'.strval($id),
 		'description'=>'',
+		//'category'=>???,
 	));
 
 	return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_SCREEN',$map,NULL,false,'CATALOGUE_DEFAULT_ENTRY_SCREEN');

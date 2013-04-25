@@ -655,6 +655,7 @@ class Module_news
 			'identifier'=>'_SEARCH:news:view:'.strval($id),
 			'image'=>$img,
 			'description'=>strip_comcode(get_translated_text($myrow['news'])),
+			'category'=>$category,
 		));
 
 		// Render

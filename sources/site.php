@@ -1562,6 +1562,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			'title'=>$title_to_use,
 			'identifier'=>$zone.':'.$codename,
 			'description'=>'',
+			//'category'=>???,
 		));
 	}
 

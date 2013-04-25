@@ -155,7 +155,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 
-	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it
+	set_session_id($new_session,is_guest($member));
 
 	// New sessions=Login points
 	if ((!is_null($member)) && (!is_guest($member)) && (addon_installed('points')) && (addon_installed('stats')))
@@ -206,7 +206,7 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
 	$_COOKIE[get_session_cookie()]=strval($id); // So we remember for this page view
 
 	// If we really have to, store in URL
-	if (((!has_cookies()) || (!$test)) && (is_null(get_bot_type())))
+	if (((!has_cookies()) || (!$test)) && (!$guest_session/*restorable with no special auth*/) && (is_null(get_bot_type())))
 	{
 		$_GET['keep_session']=strval($id);
 	}

@@ -17,3 +17,4 @@ mantraagent=LookSmart
 wisenutbot=Looksmart
 paros=Paros
 sqworm=Aol.com
+baidu=Baidu

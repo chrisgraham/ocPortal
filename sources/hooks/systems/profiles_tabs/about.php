@@ -337,7 +337,7 @@ class Hook_Profiles_Tabs_about
 			'creator'=>$username,
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
-			'type'=>'Member',
+			'type'=>'Profile',
 			'title'=>'',
 			'identifier'=>'_SEARCH:members:view:'.strval($member_id_of),
 			'description'=>'',

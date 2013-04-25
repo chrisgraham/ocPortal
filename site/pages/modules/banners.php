@@ -402,6 +402,7 @@ class Module_banners
 			'identifier'=>'_SEARCH:banners:view:'.$source,
 			'description'=>'',
 			'image'=>$myrow['img_url'],
+			//'category'=>$type,
 		));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));

@@ -346,6 +346,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 							}
 							break;
 
+						case 'raw_keywords':
+							if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
+							$keywords_array=$SEO_KEYWORDS;
+							$value=implode(',',array_unique($keywords_array));
+							break;
+
 						case 'keywords':
 							if (isset($param[2]))
 							{

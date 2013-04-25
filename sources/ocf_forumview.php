@@ -909,6 +909,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		'identifier'=>'_SEARCH:forumview:misc:'.strval($forum_id),
 		'description'=>$description_text,
 		'image'=>find_theme_image('bigicons/forums'),
+		//'category'=>???,
 	));
 
 	// Is there a question/answer situation?

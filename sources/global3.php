@@ -2050,6 +2050,7 @@ function get_bot_type()
 				'wisenutbot'=>'Looksmart',
 				'paros'=>'Paros',
 				'sqworm'=>'Aol.com',
+				'baidu'=>'Baidu',
 			);
 		}
 	}

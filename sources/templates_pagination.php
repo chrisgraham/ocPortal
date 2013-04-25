@@ -47,6 +47,13 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 	inform_non_canonical_parameter($max_name);
 	inform_non_canonical_parameter($start_name);
 
+	if (get_page_name()=='members')
+	{
+		// Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this
+		if (($start>$max*5) && (is_guest()) && (!is_null(get_bot_type())))
+			access_denied('NOT_AS_GUEST');
+	}
+
 	$post_array=array();
 	if ($keep_post)
 	{

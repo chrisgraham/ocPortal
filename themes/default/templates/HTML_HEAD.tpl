@@ -72,6 +72,17 @@
 {+START,IF_NON_EMPTY,{$META_DATA,description}}<meta property="og:description" content="{$META_DATA*,description}"/>{+END}
 {+START,IF_NON_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$META_DATA*,image}"/>{+END}{+START,IF_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$IMG*,logo/trimmed_logo}"/>{+END}
 {+START,IF_NON_EMPTY,{$META_DATA,video}}<meta property="og:video" content="{$META_DATA*,video}" /><meta property="og:video:height" content="{$META_DATA*,video:height}" /><meta property="og:video:width" content="{$META_DATA*,video:width}" /><meta property="og:video:type" content="{$META_DATA*,video:type}" />{+END}
+<meta property="og:locale" content="{$REPLACE,-,_,{!locale}}" />
+{+START,IF,{$EQ,{$META_DATA,type},Article}}
+	{+START,IF_NON_EMPTY,{$META_DATA,created}}<meta name="article:published_time" content="{$META_DATA*,created}" />{+END}
+	{+START,IF_NON_EMPTY,{$META_DATA,modified}}<meta name="article:modified_time" content="{$META_DATA*,modified}" />{+END}
+	{+START,IF_NON_EMPTY,{$META_DATA,category}}<meta name="article:section" content="{$META_DATA*,category}" />{+END}
+	{+START,IF_NON_EMPTY,{$META_DATA,raw_keywords}}<meta name="article:tag" content="{$META_DATA*,raw_keywords}" />{+END}
+	{+START,IF_NON_EMPTY,{$META_DATA,creator}}<meta name="article:author" content="{$META_DATA*,creator}" />{+END}
+{+END}
+{+START,IF,{$EQ,{$META_DATA,type},Profile}}
+	{+START,IF_NON_EMPTY,{$META_DATA,creator}}<meta name="profile:username" content="{$META_DATA*,creator}" />{+END}
+{+END}
 
 {$,Define the Microformats we support}
 {+START,COMMENT,Commented out by default to save bandwidth}
