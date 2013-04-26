@@ -277,7 +277,11 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	// Work out the zone
 	$slash_pos=strpos($parsed_url['path'],'/',1);
 	$zone=($slash_pos!==false)?substr($parsed_url['path'],1,$slash_pos-1):'';
-	if (!in_array($zone,find_all_zones())) return '';
+	if (!in_array($zone,find_all_zones()))
+	{
+		$zone='';
+		$slash_pos=false;
+	}
 	$parsed_url['path']=($slash_pos===false)?substr($parsed_url['path'],1):substr($parsed_url['path'],$slash_pos+1); // everything AFTER the zone
 	$attributes=array();
 	$attributes['page']=''; // hopefully will get overwritten with a real one
