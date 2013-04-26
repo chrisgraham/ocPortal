@@ -563,7 +563,7 @@ class Module_galleries
 
 		$description=get_translated_tempcode($myrow['description']);
 
-		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
+		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))) && (can_submit_to_gallery($cat)))
 		{
 			$submit_cat=($myrow['is_member_synched']==1)?('member_'.strval(get_member()).'_'.$cat):$cat;
 			$submit_image_url=($myrow['accept_images']==0)?new ocp_tempcode():build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$submit_cat),get_module_zone('cms_galleries'));
