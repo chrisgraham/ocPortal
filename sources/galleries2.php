@@ -464,7 +464,7 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','image',strval($id),($title=='')?$description:$title);
+	suggest_new_idmoniker_for('galleries','image',strval($id),'',($title=='')?$description:$title);
 
 	$_description=$GLOBALS['SITE_DB']->query_select_value('images','description',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('images','title',array('id'=>$id));
@@ -830,7 +830,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','video',strval($id),($title=='')?$description:$title);
+	suggest_new_idmoniker_for('galleries','video',strval($id),'',($title=='')?$description:$title);
 
 	$_title=$GLOBALS['SITE_DB']->query_select_value('videos','title',array('id'=>$id));
 	$_description=$GLOBALS['SITE_DB']->query_select_value('videos','description',array('id'=>$id));
@@ -1190,7 +1190,7 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL,$add_time=NULL,$null_is_literal=false,$uniqify=false)
 {
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','misc',$name,$fullname);
+	suggest_new_idmoniker_for('galleries','misc',$name,'',$name);
 
 	$under_category_id=$parent_id;
 	while (($under_category_id!='') && ($under_category_id!=STRING_MAGIC_NULL))

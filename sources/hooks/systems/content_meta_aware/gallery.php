@@ -59,7 +59,7 @@ class Hook_content_meta_aware_gallery
 			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries').':cms_galleries:ac:parent_id=!'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('galleries')).':galleries',
 
-			'support_url_monikers'=>false,
+			'support_url_monikers'=>true,
 
 			'views_field'=>NULL,
 			'submitter_field'=>NULL,

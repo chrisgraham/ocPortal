@@ -69,7 +69,7 @@ function edit_news_category($id,$title,$img,$notes,$owner)
 	$old_title=get_translated_text($myrow['nc_title']);
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('news','misc',strval($id),$title);
+	suggest_new_idmoniker_for('news','misc',strval($id),'',$title);
 
 	// Sync meta keywords, if we have auto-sync for these
 	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
@@ -387,7 +387,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	require_code('urls2');
 
-	suggest_new_idmoniker_for('news','view',strval($id),$title);
+	suggest_new_idmoniker_for('news','view',strval($id),'',$title);
 
 	require_code('attachments2');
 	require_code('attachments3');

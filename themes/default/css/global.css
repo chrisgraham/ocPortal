@@ -3255,6 +3255,9 @@ ul.nl, .nl ul {
 	margin: 0;
 	position: relative;
 }
+.box___block_side_stored_menu_embossed>.box_inner .inline_wip_message {
+	margin: 0.5em;
+}
 .box___block_side_stored_menu_embossed .edit_menu_link_inline {
 	position: absolute;
 	right: 0;

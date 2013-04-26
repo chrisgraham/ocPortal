@@ -385,7 +385,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 
 	$ret=symbol_tempcode('PAGE_LINK',$arr);
 	global $SITE_INFO;
-	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1') && (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/))
+	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1') && (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && (strpos($id,'/')!==false))
 	{
 		$ret=make_string_tempcode($ret->evaluate());
 	}
@@ -486,7 +486,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	if ($URL_MONIKERS_ENABLED_CACHE===NULL) $URL_MONIKERS_ENABLED_CACHE=url_monikers_enabled();
 	if ($URL_MONIKERS_ENABLED_CACHE)
 	{
-		$test=find_id_moniker($vars);
+		$test=find_id_moniker($vars,$zone_name);
 		if ($test!==NULL)
 		{
 			if (substr($test,0,1)=='/') // relative to zone root
@@ -497,7 +497,13 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 				if (isset($parts[2])) $vars['id']=$parts[2]; else unset($vars['id']);
 			} else // relative to content module
 			{
-				$vars['id']=$test;
+				if (array_key_exists('id',$vars))
+				{
+					$vars['id']=$test;
+				} else
+				{
+					$vars['page']=$test;
+				}
 			}
 		}
 	}
@@ -963,7 +969,7 @@ function load_moniker_hooks()
 		$hooks=find_all_hooks('systems','content_meta_aware');
 		foreach ($hooks as $hook=>$sources_dir)
 		{
-			if ($hook=='banner' || $hook=='banner_type' || $hook=='catalogue' || $hook=='comcode_page' || $hook=='gallery' || $hook=='post') continue; // FUDGEFUDGE: Optimisation, not ideal!
+			if ($hook=='banner' || $hook=='banner_type' || $hook=='catalogue' || $hook=='post') continue; // FUDGEFUDGE: Optimisation, not ideal!
 
 			$info_function=extract_module_functions(get_file_base().'/'.$sources_dir.'/hooks/systems/content_meta_aware/'.$hook.'.php',array('info'),NULL,false,'Hook_content_meta_aware_'.$hook);
 			if ($info_function[0]!==NULL)
@@ -987,32 +993,56 @@ function load_moniker_hooks()
  * Find the textual moniker for a typical ocPortal URL path. This will be called from inside build_url, based on details learned from a moniker hook (only if a hook exists to hint how to make the requested link SEO friendly).
  *
  * @param  array			The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
+ * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
  * @return ?string		The moniker ID (NULL: could not find)
  */
-function find_id_moniker($url_parts)
+function find_id_moniker($url_parts,$zone)
 {
-	if (!isset($url_parts['id'])) return NULL;
-	if (!isset($url_parts['type'])) $url_parts['type']='misc';
-	if ($url_parts['type']===NULL) $url_parts['type']='misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
 	if (!isset($url_parts['page'])) return NULL;
-	if ($url_parts['id']===NULL) $url_parts['id']=/*get_param('id',*/strval(db_get_first_id())/*)*/;
-	if (!is_numeric($url_parts['id'])) return NULL;
 
 	// Does this URL arrangement support monikers?
 	global $CONTENT_OBS;
 	load_moniker_hooks();
-	$looking_for='_SEARCH:'.$url_parts['page'].':'.$url_parts['type'].':_WILD';
-	$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
+	if (!array_key_exists('id',$url_parts))
+	{
+		$url_parts['type']='';
+		$url_parts['id']=$zone;
 
+		$effective_id=$url_parts['page'];
+
+		$looking_for='_WILD:_WILD';
+	} else
+	{
+		if (!isset($url_parts['type'])) $url_parts['type']='misc';
+		if ($url_parts['type']===NULL) $url_parts['type']='misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+
+		if (array_key_exists('id',$url_parts))
+		{
+			if ($url_parts['id']===NULL) $url_parts['id']=strval(db_get_first_id());
+		}
+
+		$effective_id=$url_parts['id'];
+
+		$looking_for='_SEARCH:'.$url_parts['page'].':'.$url_parts['type'].':_WILD';
+	}
+	$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 	if ($ob_info===NULL) return NULL;
+
+	if ($ob_info['id_field_numeric'])
+	{
+		if (!is_numeric($effective_id)) return NULL;
+	} else
+	{
+		if (strpos($effective_id,'/')!==false) return NULL;
+	}
 
 	if ($ob_info['support_url_monikers'])
 	{
 	   // Has to find existing if already there
 		global $LOADED_MONIKERS_CACHE;
-		if (isset($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
+		if (isset($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id]))
 		{
-			if (is_bool($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']])) // Ok, none pre-loaded yet, so we preload all and replace the boolean values with actual results
+			if (is_bool($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id])) // Ok, none pre-loaded yet, so we preload all and replace the boolean values with actual results
 			{
 				$or_list='';
 				foreach ($LOADED_MONIKERS_CACHE as $page=>$types)
@@ -1040,20 +1070,26 @@ function find_id_moniker($url_parts)
 					$LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
 				}
 			}
-			$test=$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']];
+			$test=$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id];
 		} else
 		{
 			$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_deprecated'=>0,'m_resource_page'=>$url_parts['page'],'m_resource_type'=>$url_parts['type'],'m_resource_id'=>is_integer($url_parts['id'])?strval($url_parts['id']):$url_parts['id']));
+			$where=array(
+				'm_deprecated'=>0,
+				'm_resource_page'=>$url_parts['page'],
+				'm_resource_type'=>$url_parts['type'],
+				'm_resource_id'=>is_integer($effective_id)?strval($effective_id):$effective_id,
+			);
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',$where);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
-			$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]=$test;
+			$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id]=$test;
 		}
 		if (is_string($test)) return $test;
 
 		// Otherwise try to generate a new one
 		require_code('urls2');
-		return autogenerate_new_url_moniker($ob_info,$url_parts);
+		return autogenerate_new_url_moniker($ob_info,$url_parts,$zone);
 	}
 
 	return NULL;

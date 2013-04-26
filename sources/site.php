@@ -637,7 +637,8 @@ function process_url_monikers($page)
 			if ($url_id!==NULL) $url_moniker.='/'.$url_id;
 
 			// ... and query it
-			$test=$GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_resource_page','m_resource_type','m_resource_id'),array('m_moniker'=>'/'.$url_moniker),'',1);
+			$sql='SELECT m_resource_page,m_resource_type,m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_moniker','/'.$url_moniker).' OR '.db_string_equal_to('m_moniker',$url_moniker).' AND '.db_string_equal_to('m_resource_type','').' AND '.db_string_equal_to('m_resource_id',$zone);
+			$test=$GLOBALS['SITE_DB']->query($sql,1);
 			if (array_key_exists(0,$test))
 			{
 				if (_request_page($test[0]['m_resource_page'],$zone)!==false) // ... if operable within the zone we're in
@@ -645,9 +646,15 @@ function process_url_monikers($page)
 					// Bind to correct new values
 					global $PAGE_NAME_CACHE;
 					$PAGE_NAME_CACHE=NULL;
-					$_GET['page']=$test[0]['m_resource_page'];
-					$_GET['type']=$test[0]['m_resource_type'];
-					$_GET['id']=$test[0]['m_resource_id'];
+					if ($test[0]['m_resource_type']=='')
+					{
+						$_GET['page']=$test[0]['m_resource_page'];
+					} else
+					{
+						$_GET['page']=$test[0]['m_resource_page'];
+						$_GET['type']=$test[0]['m_resource_type'];
+						$_GET['id']=$test[0]['m_resource_id'];
+					}
 					return;
 				}
 			}
@@ -655,7 +662,7 @@ function process_url_monikers($page)
 
 		// Yet more SEO redirection (monikers)
 		// Does this URL arrangement support monikers?
-		if ($url_id!==NULL)
+		if ($url_id!==NULL) // NB: Comcode page monikers would have been handled in the code above
 		{
 			$type=get_param('type','misc');
 			$looking_for='_SEARCH:'.$page.':'.$type.':_WILD';
@@ -673,7 +680,7 @@ function process_url_monikers($page)
 				{
 					if (is_numeric($url_id)) // Lookup and redirect to moniker
 					{
-						$correct_moniker=find_id_moniker(array('page'=>$page,'type'=>get_param('type','misc'),'id'=>$url_id));
+						$correct_moniker=find_id_moniker(array('page'=>$page,'type'=>get_param('type','misc'),'id'=>$url_id),$zone);
 						if (($correct_moniker!==NULL) && ($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
 						{
 							header('HTTP/1.0 301 Moved Permanently');
@@ -699,7 +706,7 @@ function process_url_monikers($page)
 						$deprecated=$monikers[0]['m_deprecated']==1;
 						if (($deprecated) && (count($_POST)==0))
 						{
-							$correct_moniker=find_id_moniker(array('page'=>$page,'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']));
+							$correct_moniker=find_id_moniker(array('page'=>$page,'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']),$zone);
 							header('HTTP/1.0 301 Moved Permanently');
 							$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
 							$new_url=$_new_url->evaluate();
@@ -707,7 +714,15 @@ function process_url_monikers($page)
 							exit();
 						} else // Map back 'id'
 						{
-							$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
+							if ($monikers[0]['m_resource_type']=='')
+							{
+								$_GET['page']=$monikers[0]['m_resource_id'];
+							} else
+							{
+								$_GET['page']=$monikers[0]['m_resource_page'];
+								$_GET['type']=$monikers[0]['m_resource_type'];
+								$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
+							}
 						}
 					}
 					return;

@@ -404,7 +404,7 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		_save_available_quiz_answers($id,$text,$type);
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('quiz','do',strval($id),$name);
+	suggest_new_idmoniker_for('quiz','do',strval($id),'',$name);
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('quiz',strval($id),$meta_keywords,$meta_description);

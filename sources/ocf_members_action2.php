@@ -774,7 +774,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			ocf_check_name_valid($username,$member_id,$password);
 
 			require_code('urls2');
-			suggest_new_idmoniker_for('members','view',strval($member_id),$username);
+			suggest_new_idmoniker_for('members','view',strval($member_id),'',$username);
 		}
 	}
 

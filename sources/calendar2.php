@@ -193,7 +193,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 	$myrow=$myrows[0];
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('calendar','view',strval($id),$title);
+	suggest_new_idmoniker_for('calendar','view',strval($id),'',$title);
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('event',strval($id),$meta_keywords,$meta_description);
@@ -356,7 +356,7 @@ function edit_event_type($id,$title,$logo,$external_feed)
 	$myrow=$myrows[0];
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('calendar','misc',strval($id),$title);
+	suggest_new_idmoniker_for('calendar','misc',strval($id),'',$title);
 
 	$GLOBALS['SITE_DB']->query_update('calendar_types',array(
 		't_title'=>lang_remap($myrow['t_title'],$title),

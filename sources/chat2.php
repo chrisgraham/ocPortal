@@ -332,7 +332,7 @@ function edit_chatroom($id,$welcome,$roomname,$room_owner,$allow2,$allow2_groups
 	decache('side_shoutbox');
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('chat','room',strval($id),$roomname);
+	suggest_new_idmoniker_for('chat','room',strval($id),'',$roomname);
 
 	log_it('EDIT_CHATROOM',strval($id),$roomname);
 

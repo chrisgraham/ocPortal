@@ -170,7 +170,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	if ((array_key_exists(0,$info)) && ($info[0]['t_cache_first_post_id']==$post_id) && ($info[0]['t_cache_first_title']!=$title))
 	{
 		require_code('urls2');
-		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$title);
+		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),'',$title);
 
 		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_title'=>$title),array('id'=>$topic_id),'',1);
 	}

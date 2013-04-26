@@ -86,10 +86,22 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 		$url_moniker=mixed();
 		if (!is_null($content_id))
 		{
-			list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
-			$url_moniker=find_id_moniker($attributes+array('id'=>$content_id));
+			if ($content_type=='comcode_page')
+			{
+				list($zone,$_content_id)=explode(':',$content_id);
+				$attributes=array();
+				$url_moniker=find_id_moniker(array('page'=>$_content_id)+$attributes,$zone);
+			} else
+			{
+				$_content_id=$content_id;
+				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+				$url_moniker=find_id_moniker(array('id'=>$_content_id)+$attributes,$zone);
+			}
+
 			if (is_null($url_moniker)) $url_moniker='';
-			$manually_chosen=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_manually_chosen'=>1,'m_resource_page'=>$attributes['page'],'m_resource_type'=>$attributes['type'],'m_resource_id'=>$content_id)));
+
+			$moniker_where=array('m_manually_chosen'=>1,'m_resource_page'=>($content_type=='comcode_page')?$_content_id:$attributes['page'],'m_resource_type'=>isset($attributes['type'])?$attributes['type']:'','m_resource_id'=>$_content_id);
+			$manually_chosen=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',$moniker_where));
 		} else
 		{
 			$url_moniker='';
@@ -244,9 +256,17 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 
 			if (!is_null($url_moniker))
 			{
-				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
-				$page=$attributes['page'];
-				$type=$attributes['type'];
+				if ($content_type=='comcode_page')
+				{
+					list($zone,$page)=explode(':',$content_id);
+					$type='';
+					$_content_id=$zone;
+				} else
+				{
+					list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+					$page=$attributes['page'];
+					$type=$attributes['type'];
+				}
 
 				$ok=true;
 
@@ -329,13 +349,20 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					$GLOBALS['SITE_DB']->query_delete('url_id_monikers',array(	// It's possible we're re-activating/replacing a deprecated one
 						'm_resource_page'=>$page,
 						'm_resource_type'=>$type,
-						'm_resource_id'=>$content_id,
+						'm_resource_id'=>$_content_id,
 						'm_moniker'=>$url_moniker,
 					),'',1);
+					$GLOBALS['SITE_DB']->query_update('url_id_monikers',array( // Deprecate old monikers
+						'm_deprecated'=>1,
+					),array(
+						'm_resource_page'=>$page,
+						'm_resource_type'=>$type,
+						'm_resource_id'=>$_content_id,
+					));
 					$GLOBALS['SITE_DB']->query_insert('url_id_monikers',array(
 						'm_resource_page'=>$page,
 						'm_resource_type'=>$type,
-						'm_resource_id'=>$content_id,
+						'm_resource_id'=>$_content_id,
 						'm_moniker'=>$url_moniker,
 						'm_deprecated'=>0,
 						'm_manually_chosen'=>1,

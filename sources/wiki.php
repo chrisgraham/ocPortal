@@ -480,9 +480,19 @@ function get_param_wiki_chain($parameter_name,$default_value=NULL)
 		$chain=wiki_derive_chain($id);
 	} else
 	{
+		require_code('urls2');
+
 		$chain=$value;
 		$parts=explode('/',$chain);
-		$id=intval($parts[count($parts)-1]);
+		$part=$parts[count($parts)-1];
+		if (is_numeric($part))
+		{
+			$id=intval($part);
+		} else
+		{
+			$url_moniker_where=array('m_resource_page'=>'wiki','m_moniker'=>$part);
+			$id=intval($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','m_resource_id',$url_moniker_where));
+		}
 	}
 	return array($id,$chain);
 }
@@ -508,11 +518,23 @@ function wiki_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 
 		if ($rebuild_chain!='') $rebuild_chain.='/';
 		$rebuild_chain.=$token;
-		$id=($this_link_virtual_root && ($next_token===false))?$token:$rebuild_chain;
-		$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($id==strval(db_get_first_id()))?NULL:$id)+(($this_link_virtual_root&&($next_token===false))?array('keep_wiki_root'=>$id):array()),get_module_zone('wiki'));
-		if ($next_token!==false) // If not the last token (i.e. current page)
+
+		$link_id=($this_link_virtual_root && ($next_token===false))?$token:$rebuild_chain;
+
+		if (is_numeric($token))
 		{
-			$title=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>intval($token)));
+			$id=intval($token);
+		} else
+		{
+			$url_moniker_where=array('m_resource_page'=>'wiki','m_moniker'=>$token);
+			$id=intval($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','m_resource_id',$url_moniker_where));
+		}
+
+		$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$link_id)+(($this_link_virtual_root&&($next_token===false))?array('keep_wiki_root'=>$id):array()),get_module_zone('wiki'));
+
+		if ($next_token!==false) // If not the last token (i.e. not the current page)
+		{
+			$title=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>$id));
 			if (is_null($title)) continue;
 			$token_title=get_translated_text($title);
 			$content=($links)?hyperlink($url,escape_html($token_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$token_title),NULL,NULL,'up'):make_string_tempcode(escape_html($token_title));
@@ -533,7 +555,7 @@ function wiki_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			}
 			if (is_null($current_title))
 			{
-				$_current_title=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>intval($token)));
+				$_current_title=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>$id));
 				$current_title=is_null($_current_title)?do_lang('MISSING_RESOURCE'):get_translated_text($_current_title);
 			}
 			if ($final_link)
@@ -560,22 +582,44 @@ function wiki_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
  */
 function wiki_derive_chain($id,$root=NULL)
 {
-	static $parents=array();
+	static $parent_details=array();
 
 	if (is_null($root))
 		$root=get_param_integer('keep_wiki_root',db_get_first_id());
 
-	$temp_id=$id;
-	$chain=strval($id);
+	require_code('urls2');
+
+	$page_id=$id;
+	$chain='';
 	$seen_before=array();
-	while ($temp_id>$root)
+	while ($page_id>$root)
 	{
-		$temp_id=array_key_exists($temp_id,$parents)?$parents[$temp_id]:$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_children','parent_id',array('child_id'=>$temp_id));
-		$parents[$temp_id]=$temp_id;
-		if (array_key_exists($temp_id,$seen_before)) break;
-		$seen_before[$temp_id]=1;
-		if (is_null($temp_id)) break; // Orphaned, so we can't find a chain
-		$chain=($chain!='')?strval($temp_id).'/'.$chain:strval($temp_id);
+		$seen_before[$page_id]=1;
+
+		if (!array_key_exists($page_id,$parent_details))
+		{
+			$parent_rows=$GLOBALS['SITE_DB']->query_select('wiki_children',array('parent_id','title'),array('child_id'=>$page_id),'',1);
+			$new_page_id=mixed();
+			if (!array_key_exists(0,$parent_rows))
+			{
+				break; // Orphaned, so we can't find a chain
+			}
+			$parent_details[$page_id]=array($parent_rows[0]['parent_id'],$parent_rows[0]['title']);
+		}
+
+		if ($chain!='') $chain='/'.$chain;
+		if (get_option('url_monikers_enabled')=='1')
+		{
+			$moniker_src=$parent_details[$page_id][1];
+			$page_moniker=suggest_new_idmoniker_for('wiki','misc',strval($page_id),'',$moniker_src);
+		} else
+		{
+			$page_moniker=strval($page_id);
+		}
+		$chain=$page_moniker.$chain;
+
+		$page_id=$parent_details[$page_id][0]; // For next time
+		if (array_key_exists($page_id,$seen_before)) break; // Stop loops
 	}
 	return $chain;
 }

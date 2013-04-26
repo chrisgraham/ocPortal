@@ -71,7 +71,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	if (!is_null($title))
 	{
 		require_code('urls2');
-		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$title);
+		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),'',$title);
 	}
 
 	if (!is_null($description)) $update['t_description']=$description;
@@ -435,7 +435,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 			$topic_id=$_topic['id'];
 			$topic_title=$_topic['t_cache_first_title'];
 
-			suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$topic_title);
+			suggest_new_idmoniker_for('topicview','misc',strval($topic_id),'',$topic_title);
 
 			// Now lets inform people tracking the topic that it has moved
 			$subject=do_lang('TOPIC_MOVE_MAIL_SUBJECT',get_site_name(),$topic_title);

@@ -234,8 +234,8 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 					$display='none';
 					$expand_type='expand';
 				}
-				$forum_grouping_description=$forum_grouping['description'];
-				$forum_groupings->attach(do_template('OCF_FORUM_GROUPING',array('_GUID'=>'fc9bae42c680ea0162287e2ed3917bbe','GROUPING_ID'=>strval($best),'EXPAND_TYPE'=>$expand_type,'DISPLAY'=>$display,'GROUPING_TITLE'=>$forum_grouping['title'],'GROUPING_DESCRIPTION'=>$forum_grouping_description,'FORUMS'=>$forums)));
+				$forum_grouping_description=array_key_exists('description',$forum_grouping)?$forum_grouping['description']:''; // If not set, is missing from DB
+				$forum_groupings->attach(do_template('OCF_FORUM_GROUPING',array('_GUID'=>'fc9bae42c680ea0162287e2ed3917bbe','GROUPING_ID'=>strval($best),'EXPAND_TYPE'=>$expand_type,'DISPLAY'=>$display,'GROUPING_TITLE'=>array_key_exists('title',$forum_grouping)?$forum_grouping['title']:'','GROUPING_DESCRIPTION'=>$forum_grouping_description,'FORUMS'=>$forums)));
 			}
 		}
 	}

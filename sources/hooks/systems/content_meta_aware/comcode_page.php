@@ -58,7 +58,7 @@ class Hook_content_meta_aware_comcode_page
 			'add_url'=>(has_submit_permission('high',get_member(),get_ip_address(),'cms_comcode_pages'))?(get_module_zone('cms_comcode_pages').':cms_comcode_pages:ed'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_page_zone('sitemap')).':sitemap',
 
-			'support_url_monikers'=>false,
+			'support_url_monikers'=>true,
 
 			'views_field'=>NULL,
 			'submitter_field'=>'p_submitter',

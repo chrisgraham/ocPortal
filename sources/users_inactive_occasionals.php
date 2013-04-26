@@ -267,6 +267,29 @@ function try_su_login($member)
 			}
 		}
 		$GLOBALS['IS_ACTUALLY_ADMIN']=true;
+
+		if ((get_forum_type()=='ocf') && (get_param_integer('keep_su_online',0)==1))
+		{
+			$new_session_row=array(
+				'the_session'=>mt_rand(0,mt_getrandmax()-1),
+				'last_activity'=>time(),
+				'member_id'=>$member,
+				'ip'=>get_ip_address(3),
+				'session_confirmed'=>0,
+				'session_invisible'=>0,
+				'cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username($member),
+				'the_title'=>'',
+				'the_zone'=>get_zone_name(),
+				'the_page'=>substr(get_page_name(),0,80),
+				'the_type'=>substr(get_param('type','',true),0,80),
+				'the_id'=>substr(either_param('id',''),0,80),
+			);
+			$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row);
+			global $FLOOD_CONTROL_ONCE;
+			$FLOOD_CONTROL_ONCE=false;
+			$GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
+			$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>1),array('the_session'=>get_session_id()),'',1);
+		}
 	}
 
 	return $member;

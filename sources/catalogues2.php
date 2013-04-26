@@ -730,7 +730,7 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 	$GLOBALS['SITE_DB']->query_update('catalogue_categories',$update_map,array('id'=>$id),'',1);
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('catalogues','category',strval($id),$title);
+	suggest_new_idmoniker_for('catalogues','category',strval($id),'',$title);
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('catalogue_category',strval($id),$meta_keywords,$meta_description);
@@ -1087,7 +1087,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	}
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('catalogues','entry',strval($id),strip_comcode($title));
+	suggest_new_idmoniker_for('catalogues','entry',strval($id),'',strip_comcode($title));
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);

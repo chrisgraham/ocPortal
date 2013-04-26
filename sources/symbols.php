@@ -2474,7 +2474,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'FIND_URL_MONIKER_VIA_ID':
 				if (isset($param[1]))
 				{
-					$value=find_id_moniker(array('page'=>$param[0],'type'=>$param[1],'id'=>$param[1]));
+					$value=find_id_moniker(array('page'=>$param[0],'type'=>$param[1],'id'=>$param[1]),array_key_exists(2,$param)?$param[2]:'');
 					if ($value===NULL) $value='';
 				}
 				break;

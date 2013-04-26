@@ -433,10 +433,13 @@ function _page_path_to_pagelink($page)
  *
  * @param  array			The hooks info profile.
  * @param  array			The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
+ * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
  * @return ?string		The moniker ID (NULL: error generating it somehow, can not do it)
  */
-function autogenerate_new_url_moniker($ob_info,$url_parts)
+function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
 {
+	$effective_id=($url_parts['type']=='')?$url_parts['page']:$url_parts['id'];
+
 	$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 	require_code('content');
@@ -445,25 +448,34 @@ function autogenerate_new_url_moniker($ob_info,$url_parts)
 	if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 	if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
 	$db=((substr($ob_info['table'],0,2)!='f_') || (get_forum_type()=='none'))?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
-	$_moniker_src=$db->query_select($ob_info['table'],$select,get_content_where_for_str_id($url_parts['id'],$ob_info));
+	$where=get_content_where_for_str_id($effective_id,$ob_info);
+	$_moniker_src=$db->query_select($ob_info['table'],$select,$where);
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 	if (!array_key_exists(0,$_moniker_src)) return NULL; // been deleted?
 
-	if (substr($ob_info['title_field'],0,5)=='CALL:')
+	if ($ob_info['id_field_numeric'])
 	{
-		$moniker_src=call_user_func(trim(substr($ob_info['title_field'],5)),$url_parts);
-	} else
-	{
-		if ($ob_info['title_field_dereference'])
+		if (substr($ob_info['title_field'],0,5)=='CALL:')
 		{
-			$moniker_src=get_translated_text($_moniker_src[0][$ob_info['title_field']]);
+			$moniker_src=call_user_func(trim(substr($ob_info['title_field'],5)),$url_parts);
 		} else
 		{
-			$moniker_src=$_moniker_src[0][$ob_info['title_field']];
+			if ($ob_info['title_field_dereference'])
+			{
+				$moniker_src=get_translated_text($_moniker_src[0][$ob_info['title_field']]);
+			} else
+			{
+				$moniker_src=$_moniker_src[0][$ob_info['title_field']];
+			}
 		}
+	} else
+	{
+		$moniker_src=$effective_id;
 	}
+
 	if ($moniker_src=='') $moniker_src='untitled';
-	return suggest_new_idmoniker_for($url_parts['page'],$url_parts['type'],$url_parts['id'],$moniker_src,true);
+
+	return suggest_new_idmoniker_for($url_parts['page'],isset($url_parts['type'])?$url_parts['type']:'',$url_parts['id'],$zone,$moniker_src,true);
 }
 
 /**
@@ -472,11 +484,12 @@ function autogenerate_new_url_moniker($ob_info,$url_parts)
  * @param  ID_TEXT		Page name.
  * @param  ID_TEXT		Screen type code.
  * @param  ID_TEXT		Resource ID.
+ * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
  * @param  string			String from which a moniker will be chosen (may not be blank).
  * @param  boolean		Whether we are sure this is a new moniker (makes things more efficient, saves a query).
  * @return string			The chosen moniker.
  */
-function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
+function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=false)
 {
 	if (!$is_new)
 	{
@@ -489,7 +502,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 		{
 			// See if it is same as current
 			$moniker=_choose_moniker($page,$type,$id,$moniker_src,$old);
-			$moniker=_give_moniker_scope($page,$type,$id,$moniker);
+			$moniker=_give_moniker_scope($page,$type,$id,$zone,$moniker);
 			if ($moniker==$old)
 			{
 				return $old; // hmm, ok it can stay actually
@@ -520,7 +533,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 	} else
 	{
 		$moniker=_choose_moniker($page,$type,$id,$moniker_src);
-		$moniker=_give_moniker_scope($page,$type,$id,$moniker);
+		$moniker=_give_moniker_scope($page,$type,$id,$zone,$moniker);
 	}
 
 	// Insert
@@ -611,16 +624,23 @@ function _generate_moniker($moniker_src)
  * @param  ID_TEXT		Page name.
  * @param  ID_TEXT		Screen type code.
  * @param  ID_TEXT		Resource ID.
+ * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
  * @param  string			Pathless moniker.
  * @return string			The fully qualified moniker.
  */
-function _give_moniker_scope($page,$type,$id,$main)
+function _give_moniker_scope($page,$type,$id,$zone,$main)
 {
 	// Does this URL arrangement support monikers?
 	global $CONTENT_OBS;
 	load_moniker_hooks();
 	$found=false;
-	$looking_for='_SEARCH:'.$page.':'.$type.':_WILD';
+	if ($type=='')
+	{
+		$looking_for='_WILD:_WILD';
+	} else
+	{
+		$looking_for='_SEARCH:'.$page.':'.$type.':_WILD';
+	}
 
 	$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 
@@ -630,6 +650,9 @@ function _give_moniker_scope($page,$type,$id,$main)
 
 	if (!is_null($ob_info['parent_category_field']))
 	{
+		if ($ob_info['parent_category_field']=='the_zone')
+			$ob_info['parent_category_field']='p_parent_page'; // Special exception for Comcode page monikers
+
 		// Lookup DB record so we can discern the category
 		$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -638,7 +661,7 @@ function _give_moniker_scope($page,$type,$id,$main)
 		append_content_select_for_id($select,$ob_info);
 		if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 		if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
-		$_moniker_src=$GLOBALS['SITE_DB']->query_select($ob_info['table'],$select,get_content_where_for_str_id($id,$ob_info));
+		$_moniker_src=$GLOBALS['SITE_DB']->query_select($ob_info['table'],$select,get_content_where_for_str_id(($type=='')?$page:$id,$ob_info));
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 		if (!array_key_exists(0,$_moniker_src)) return $moniker; // been deleted?
 
@@ -651,7 +674,13 @@ function _give_moniker_scope($page,$type,$id,$main)
 		} else
 		{
 			$view_category_pagelink_pattern=explode(':',$ob_info['view_category_pagelink_pattern']);
-			$tree=find_id_moniker(array('page'=>$view_category_pagelink_pattern[1],'type'=>$view_category_pagelink_pattern[2],'id'=>$parent));
+			if ($type=='')
+			{
+				$tree=find_id_moniker(array('page'=>$parent),$zone);
+			} else
+			{
+				$tree=find_id_moniker(array('page'=>$view_category_pagelink_pattern[1],'type'=>$view_category_pagelink_pattern[2],'id'=>$parent),$zone);
+			}
 		}
 
 		// Okay, so our full tree path is as follows

@@ -302,7 +302,7 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
 	}
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('downloads','misc',strval($category_id),$category);
+	suggest_new_idmoniker_for('downloads','misc',strval($category_id),'',$category);
 
 	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('category','description'),array('id'=>$category_id),'',1);
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -863,7 +863,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('downloads','view',strval($id),$name);
+	suggest_new_idmoniker_for('downloads','view',strval($id),'',$name);
 
 	if (($file_size==0) || (url_is_local($url)))
 	{

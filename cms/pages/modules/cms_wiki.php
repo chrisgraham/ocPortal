@@ -532,7 +532,11 @@ class Module_cms_wiki
 					} else
 					{
 						if (get_translated_text($title_id)!=$title)
+						{
+							require_code('urls2');
+							suggest_new_idmoniker_for('wiki','misc',strval($child_id),'',$title);
 							$GLOBALS['SITE_DB']->query_update('wiki_pages',array('title'=>lang_remap($title_id,$title)),array('id'=>$child_id),'',1);
+						}
 					}
 				}
 				else // New

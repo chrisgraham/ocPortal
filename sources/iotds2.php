@@ -107,7 +107,7 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	$GLOBALS['SITE_DB']->query_update('iotd',$update_map,array('id'=>$id),'',1);
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('iotds','view',strval($id),$title);
+	suggest_new_idmoniker_for('iotds','view',strval($id),'',$title);
 
 	decache('main_iotd');
 

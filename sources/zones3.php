@@ -401,6 +401,9 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	require_code('zones2');
 	check_page_name($zone,$new_file);
 
+	require_code('urls2');
+	suggest_new_idmoniker_for($new_file,'',$zone,$zone,$new_file);
+
 	// Handle if the page was renamed - move stuff over
 	$renaming_page=($new_file!=$file);
 	if ($renaming_page)

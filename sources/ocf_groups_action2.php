@@ -114,7 +114,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	$GLOBALS['FORUM_DB']->query_update('f_groups',$map,array('id'=>$group_id),'',1);
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('groups','view',strval($group_id),$name);
+	suggest_new_idmoniker_for('groups','view',strval($group_id),'',$name);
 
 	require_code('themes2');
 	tidy_theme_img_code($rank_image,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
