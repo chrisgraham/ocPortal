@@ -216,11 +216,32 @@ class Module_admin_actionlog
 			// Possible filter (called up by URL)
 			$where='1=1';
 			if ($filter_to_type!='')
-				$where.=' AND '.db_string_equal_to('l_the_type',$filter_to_type);
+			{
+				$where.=' AND (1=2';
+				foreach (explode(',',$filter_to_type) as $_filter_to_type)
+					$where.=' OR '.db_string_equal_to('l_the_type',$_filter_to_type);
+				$where.=')';
+			}
 			if ($filter_param_a!='')
-				$where.=' AND l_param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
+			{
+				if (is_numeric($filter_param_a))
+				{
+					$where.=' AND '.db_string_equal_to('l_param_a',$filter_param_a);
+				} else
+				{
+					$where.=' AND l_param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
+				}
+			}
 			if ($filter_param_b!='')
-				$where.=' AND l_param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
+			{
+				if (is_numeric($filter_param_b))
+				{
+					$where.=' AND '.db_string_equal_to('l_param_b',$filter_param_b);
+				} else
+				{
+					$where.=' AND l_param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
+				}
+			}
 			if ($id!=-1) $where.=' AND l_by='.strval($id);
 
 			// Fetch
@@ -233,11 +254,32 @@ class Module_admin_actionlog
 			// Possible filter (called up by URL)
 			$where='1=1';
 			if ($filter_to_type!='')
-				$where.=' AND '.db_string_equal_to('the_type',$filter_to_type);
+			{
+				$where.=' AND (1=2';
+				foreach (explode(',',$filter_to_type) as $_filter_to_type)
+					$where.=' OR '.db_string_equal_to('the_type',$_filter_to_type);
+				$where.=')';
+			}
 			if ($filter_param_a!='')
-				$where.=' AND param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
+			{
+				if (is_numeric($filter_param_a))
+				{
+					$where.=' AND '.db_string_equal_to('param_a',$filter_param_a);
+				} else
+				{
+					$where.=' AND param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
+				}
+			}
 			if ($filter_param_b!='')
-				$where.=' AND param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
+			{
+				if (is_numeric($filter_param_b))
+				{
+					$where.=' AND '.db_string_equal_to('param_b',$filter_param_b);
+				} else
+				{
+					$where.=' AND param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
+				}
+			}
 			if ($id!=-1) $where.=' AND the_user='.strval($id);
 
 			// Fetch
