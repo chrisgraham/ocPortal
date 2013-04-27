@@ -30,9 +30,11 @@ class Hook_checklist_translations
 	{
 		if (!multi_lang()) return array();
 
+		if (substr(get_db_type(),0,5)!='mysql') return array(); // Only tested on MySQL
+
 		$langs=find_all_langs();
 		$num_langs=count($langs);
-		$cnt=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT id) FROM ocp_translate WHERE id IN (SELECT id FROM ocp_translate WHERE broken=0 AND importance_level<=3 GROUP BY id HAVING COUNT(*)<'.strval($num_langs).')');
+		$cnt=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM (SELECT id FROM '.get_table_prefix().'translate WHERE broken=0 AND importance_level<=3 GROUP BY id HAVING COUNT(*)<'.strval($num_langs).') t');
 
 		if ($cnt>0)
 		{

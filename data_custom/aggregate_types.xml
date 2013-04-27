@@ -1,9 +1,9 @@
 <aggregateTypes>
-    <aggregateType name="example">
-        <resource type="group" label="{LABEL*}" template_label="Newbie" />
-        <resource type="poll" label="Thoughts on {LABEL*}?">
-            <property key="answer1">Good</property>
-            <property key="answer2">Bad</property>
-        </resource>
-    </aggregateType>
+	<aggregateType name="example">
+		<resource type="group" label="{LABEL*}" template_label="Newbie" />
+		<resource type="poll" label="Thoughts on {LABEL*}?">
+			<property key="answer1">{POSITIVE_RESPONSE*}</property>
+			<property key="answer2">{NEGATIVE_RESPONSE*}</property>
+		</resource>
+	</aggregateType>
 </aggregateTypes>

@@ -953,7 +953,6 @@ class database_driver
 			}
 			if ($DEV_MODE)
 			{
-
 				$QUERY_COUNT=0;
 				fatal_exit(do_lang_tempcode('TOO_MANY_QUERIES'));
 			}
@@ -1051,7 +1050,7 @@ class database_driver
 		if ($QUERY_LOG)
 		{
 			$after=microtime(false);
-			$text=(!is_null($max))?$query.' ('.strval($start).'-'.strval($start+$max).')':$query;
+			$text=(!is_null($max))?($query.' ('.(is_null($start)?'0':strval($start)).'-'.strval((is_null($start)?0:$start)+$max).')'):$query;
 			$out=array('time'=>microtime_diff($after,$before),'text'=>$text);
 			$QUERY_LIST[]=$out;
 		}

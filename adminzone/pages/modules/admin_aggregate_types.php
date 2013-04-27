@@ -30,6 +30,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	var $menu_label='AGGREGATE_TYPES';
 	var $orderer='aggregate_label';
 	var $title_is_multi_lang=false;
+	var $table='aggregate_type_instances';
 
 	/**
 	 * Standard modular info function.
@@ -88,16 +89,17 @@ class Module_admin_aggregate_types extends standard_crud_module
 	/**
 	 * Standard crud_module run_start.
 	 *
+	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
-	function run_start()
+	function run_start($type)
 	{
 		set_helper_panel_tutorial('tut_aggregate_types');
 		set_helper_panel_text(comcode_lang_string('DOC_AGGREGATE_TYPES'));
 
 		require_code('aggregate_types');
 
-		$type=get_param('type','misc');
+		if ($type=='misc') return $this->misc();
 
 		if ($type=='xml') return $this->xml();
 		if ($type=='_xml') return $this->_xml();
@@ -115,7 +117,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_screen_title('AGGREGATE_TYPES'),comcode_lang_string('DOC_AGGREGATE_TYPES'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
@@ -164,21 +166,23 @@ class Module_admin_aggregate_types extends standard_crud_module
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		if ($aggregate_type=='')
-		{
+		//if ($aggregate_label=='')
+		//{
 			$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),'aggregate_label',$aggregate_label,true));
-		} else
-		{
-			$hidden->attach(form_input_hidden('aggregate_label',$aggregate_label));
-		}
+		//} else
+		//{
+		//	$hidden->attach(form_input_hidden('aggregate_label',$aggregate_label));
+		//}
 
 		$parameters=find_aggregate_type_parameters($aggregate_type);
 		foreach ($parameters as $parameter)
 		{
 			if ($parameter!='label')
 			{
+				$required=true;
+
 				$default=array_key_exists($parameter,$other_parameters)?$other_parameters[$parameter]:'';
-				$fields->attach(form_input_line(titleify($parameter),'',$parameter,$default,false));
+				$fields->attach(form_input_line(titleify($parameter),'',$parameter,$default,$required));
 			}
 		}
 
@@ -190,7 +194,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE_AGGREGATE_MATCHES'),do_lang_tempcode('DESCRIPTION_DELETE_AGGREGATE_MATCHES'),'delete_matches',false));
 		}
 
-		return array($fields,$hidden);
+		return array($fields,$hidden,$delete_fields);
 	}
 
 	/**
@@ -249,7 +253,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$m=$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'),array('id'=>$id),'',1);
+		$m=$GLOBALS['FORUM_DB']->query_select('aggregate_type_instances',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
@@ -378,7 +382,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 		{
 			$list->attach(form_input_list_entry($type,false,titleify($type)));
 		}
-		$fields->attach(form_input_multi_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type[]',$list,NULL,15,true));
+		$fields->attach(form_input_multi_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,15,true));
 
 		$submit_name=do_lang_tempcode('PROCEED');
 
@@ -388,7 +392,6 @@ class Module_admin_aggregate_types extends standard_crud_module
 			'TITLE'=>$title,
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
-			'GET'=>true,
 			'URL'=>$url,
 			'FIELDS'=>$fields,
 			'TEXT'=>do_lang_tempcode('SELECT_AGGREGATE_TYPES_FOR_SYNC'),

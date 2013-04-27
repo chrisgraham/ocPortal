@@ -38,14 +38,3 @@ For help, see the [url="{$BRAND_BASE_URL}/docs"]docs[/url]. Add content/categori
 Know someone who needs a website? [page=":recommend:misc:ocp=1"]Recommend ocPortal[/page] and they'll be sent a link to your own site too.
 | [block]main_staff_links[/block]
 |}
-
-[overlay="ask_help" x="100" y="100" width="400" height="350" timein="100000"][title="2"]A message from the ocPortal developers[/title]
-
-You're using [pulse max="5B87B2" min="222277" param="120"]ocPortal[/pulse] -- the world's most sophisticated free Content Management System.
-
-Please take this opportunity to see [url="ways you can help"]{$BRAND_BASE_URL}/site/helping_out.htm[/url] advance our effort to bring the best-quality integrated web technology to Open Source.
-
-We're an ambitious lot. We plan to change how the whole world approaches web-site development. And, we need your help -- please consider giving some time to the project which has delivered so much for you for free. Our plans require big commitments from the world-class core team, so please help us keep our momentum sustainable.
-
-[box][shocker left_1="Countless" right_1="features" left_2="Over 100" right_2="tutorials" left_3="Over 1,000" right_3="template files" left_4="Over 1,000" right_4="PHP files" left_5="Over 240,000" right_5="lines of code" left_6="Over 100" right_6="pages of developer documentation" left_7="100's" right_7="of 105 hour work weeks for the developers"]6000[/shocker][/box]
-[/overlay]

@@ -238,7 +238,11 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	$check_redirects=(get_value('no_priority_redirects')!=='1');
 
 	global $REDIRECT_CACHE;
-	if ($check_redirects && $REDIRECT_CACHE===NULL) load_redirect_cache();
+	if ($check_redirects && $REDIRECT_CACHE===NULL)
+	{
+		require_code('site');
+		load_redirect_cache();
+	}
 	$first_zones=array((substr($module_name,0,6)=='admin_')?'adminzone':$zone);
 	if ($zone!='') $first_zones[]='';
 	if (($zone!='site') && (get_option('collapse_user_zones')!='1')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';

@@ -1591,7 +1591,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'RAND':
 				if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['RAND'])) // Normal operation
 				{
-					$GLOBALS['NO_EVAL_CACHE']=true;
+					if ((array_key_exists(0,$param)) && ($param[0]=='1')) $GLOBALS['NO_EVAL_CACHE']=true;
 					$value=strval(mt_rand(0,32000));
 				} else // Been told to behave statically
 				{
@@ -1604,7 +1604,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['SET_RAND'])) // Normal operation
 					{
-						$GLOBALS['NO_EVAL_CACHE']=true;
+						if ((array_key_exists(0,$param)) && ($param[0]=='1')) $GLOBALS['NO_EVAL_CACHE']=true;
 						$value=$param[mt_rand(0,count($param)-1)];
 					} else // Been told to behave statically
 					{

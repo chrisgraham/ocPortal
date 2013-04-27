@@ -1005,10 +1005,12 @@ function find_id_moniker($url_parts,$zone)
 	load_moniker_hooks();
 	if (!array_key_exists('id',$url_parts))
 	{
+		$effective_id=$url_parts['page'];
+
+		if (!is_file(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/EN/'.$effective_id.'.txt')) return NULL;
+
 		$url_parts['type']='';
 		$url_parts['id']=$zone;
-
-		$effective_id=$url_parts['page'];
 
 		$looking_for='_WILD:_WILD';
 	} else
@@ -1085,11 +1087,14 @@ function find_id_moniker($url_parts,$zone)
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 			$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id]=$test;
 		}
-		if (is_string($test)) return $test;
+		if (is_string($test)) return ($test=='')?NULL:$test;
 
 		// Otherwise try to generate a new one
 		require_code('urls2');
-		return autogenerate_new_url_moniker($ob_info,$url_parts,$zone);
+		$test=autogenerate_new_url_moniker($ob_info,$url_parts,$zone);
+		if ($test===NULL) $test='';
+		$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id]=$test;
+		return ($test=='')?NULL:$test;
 	}
 
 	return NULL;

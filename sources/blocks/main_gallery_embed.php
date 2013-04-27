@@ -261,7 +261,7 @@ class Block_main_gallery_embed
 		{
 			if ((!isset($map['render_if_empty'])) || ($map['render_if_empty']=='0'))
 			{
-				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
+				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))) && (can_submit_to_gallery($cat)))
 				{
 					$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
 				} else $submit_url=new ocp_tempcode();

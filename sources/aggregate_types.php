@@ -206,7 +206,7 @@ function find_aggregate_type_parameters($aggregate_type)
  * @param  string				Text
  * @param  array				Reference to our parameter list
  */
-function _find_parameters_in($src_text,$parameters)
+function _find_parameters_in($src_text,&$parameters)
 {
 	$matches=array();
 	$cnt=preg_match_all('#\{(\w+)[^\}]+\}#',$src_text,$matches);
@@ -224,16 +224,20 @@ function _find_parameters_in($src_text,$parameters)
  */
 function parse_aggregate_xml($display_errors=false)
 {
+	static $_aggregate_types=array();
+	if ($_aggregate_types!=array()) return $_aggregate_types;
+
 	require_code('xml_storage');
 
 	$xml=file_get_contents(get_custom_file_base().'/data_custom/aggregate_types.xml');
 	if (trim($xml)=='') return array();
+
+	require_code('tempcode_compiler');
+
 	$parsed=new ocp_simple_xml_reader($xml);
 
-	static $aggregate_types=array();
-	if ($aggregate_types!=array()) return $aggregate_types;
-
 	$parse_errors=array();
+	$aggregate_types=array();
 
 	list($root_tag,$root_attributes,,$this_children)=$parsed->gleamed;
 	if ($root_tag=='aggregatetypes')
@@ -268,11 +272,6 @@ function parse_aggregate_xml($display_errors=false)
 
 					if ($at_row_tag=='resource')
 					{
-						if (!array_key_exists('label',$at_row_attributes))
-						{
-							$parse_errors[]='Missing resource.label';
-							continue;
-						}
 						if (!array_key_exists('type',$at_row_attributes))
 						{
 							$parse_errors[]='Missing resource.type';
@@ -281,7 +280,7 @@ function parse_aggregate_xml($display_errors=false)
 
 						$resource_type=$at_row_attributes['type'];
 						$resource_subpath=array_key_exists('subpath',$at_row_attributes)?$at_row_attributes['subpath']:'';
-						$resource_label=$at_row_attributes['type'];
+						$resource_label=array_key_exists('label',$at_row_attributes)?$at_row_attributes['label']:NULL;
 						$resource_template_subpath=array_key_exists('template_subpath',$at_row_attributes)?$at_row_attributes['template_subpath']:'';
 						$resource_template_label=array_key_exists('template_label',$at_row_attributes)?$at_row_attributes['template_label']:mixed();
 						$resource_properties=array();
@@ -290,7 +289,7 @@ function parse_aggregate_xml($display_errors=false)
 						$resource_privileges=array();
 						$resource_resync=(!array_key_exists('resync',$at_row_attributes)) || ($at_row_attributes['resync']=='true');
 
-						foreach ($row_children as $___child)
+						foreach ($at_row_children as $___child)
 						{
 							if (!is_array($___child)) continue;
 							list($rs_row_tag,$rs_row_attributes,$rs_row_value,$rs_row_children)=$___child;
@@ -305,7 +304,7 @@ function parse_aggregate_xml($display_errors=false)
 									}
 
 									$resource_properties[$rs_row_attributes['key']]=array(
-										'value'=>$at_row_value,
+										'value'=>$rs_row_value,
 										'resync'=>(!array_key_exists('resync',$rs_row_attributes)) || ($rs_row_attributes['resync']=='true'),
 									);
 									break;
@@ -407,6 +406,7 @@ function parse_aggregate_xml($display_errors=false)
 
 	ksort($aggregate_types);
 
+	$_aggregate_types=$aggregate_types;
 	return $aggregate_types;
 }
 
@@ -465,13 +465,17 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 	}
 	$type=$types[$aggregate_type];
 
-	// Make sure we have values for all the parameters- default ones we don't have to blank
-	$parameters=$other_parameters;
-	$parameters['label']=$aggregate_label;
+	// Make sure we have values for all the parameters- default ones we don't have to blank -- and make it all Tempcode ready
+	$parameters=array();
+	foreach ($other_parameters as $key=>$val)
+	{
+		$parameters[strtoupper($key)]=$val;
+	}
+	$parameters['LABEL']=$aggregate_label;
 	$parameters_needed=find_aggregate_type_parameters($aggregate_type);
 	foreach ($parameters_needed as $parameter)
 	{
-		if (!array_key_exists($parameter,$parameters)) $parameters[$parameter]='';
+		if (!array_key_exists(strtoupper($parameter),$parameters)) $parameters[strtoupper($parameter)]='';
 	}
 
 	// Process the resources
@@ -484,6 +488,14 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 		if (is_null($object_fs))
 			warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE',escape_html($resource['type'])));
 		$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
+
+		if (!array_key_exists('label',$resource)) $resource['label']=$aggregate_label;
+		$tempcode=template_to_tempcode($resource['label']);
+		$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+		$resource['label']=$tempcode->evaluate();
+		$tempcode=template_to_tempcode($resource['subpath']);
+		$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+		$resource['subpath']=$tempcode->evaluate();
 
 		// If not bound, create resource
 		if (is_null($filename)) $is_new=true;
@@ -498,6 +510,13 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 			{
 				if (!is_null($resource['template_label']))
 				{
+					$tempcode=template_to_tempcode($resource['template_label']);
+					$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+					$resource['template_label']=$tempcode->evaluate();
+					$tempcode=template_to_tempcode($resource['template_subpath']);
+					$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+					$resource['template_subpath']=$tempcode->evaluate();
+
 					$template_filename=$object_fs->convert_label_to_filename($resource['template_label'],$resource['template_subpath'],$resource['type'],true);
 					if (is_null($template_filename))
 						warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE_TEMPLATE',escape_html($resource['type']),escape_html($resource['template_label']),escape_html($resource['template_subpath'])));
@@ -514,6 +533,9 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 			{
 				if (($property['resync']) || ($is_new))
 				{
+					$tempcode=template_to_tempcode($property['value']);
+					$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+					$property['value']=$tempcode->evaluate();
 					$properties[$property_key]=$property['value'];
 				}
 			}

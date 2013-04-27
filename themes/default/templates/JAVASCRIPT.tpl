@@ -2384,6 +2384,7 @@ function inner_html_load(xml_string) {
 			xml=document.implementation.createHTMLDocument('');
 			var doc_elt=xml.documentElement;
 			doc_elt.innerHTML=xml_string;
+			xml=xml.getElementsByTagName('root')[0];
 		}
 	} else
 	{
@@ -2661,7 +2662,7 @@ function set_inner_html(element,tHTML,append,force_dom)
 			'to_run': [],
 			'to_load': []
 		};
-		inner_html_copy.call(window,element,xml_doc.documentElement,1,script_tag_dependencies);
+		inner_html_copy.call(window,element,(typeof xml_doc.documentElement=='undefined')?xml_doc:xml_doc.documentElement,1,script_tag_dependencies);
 	}
 }
 

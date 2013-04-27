@@ -738,7 +738,11 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
  */
 function can_submit_to_gallery($name)
 {
-	if (substr($name,0,7)!='member_') return (-2);
+	if (substr($name,0,7)!='member_')
+	{
+		if ($name=='root') return (-2);
+		return can_submit_to_gallery($GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name'=>$name)));
+	}
 
 	$parts=explode('_',$name);
 	if (intval($parts[1])==get_member()) return intval($parts[1]);
