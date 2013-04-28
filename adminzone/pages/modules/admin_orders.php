@@ -217,7 +217,7 @@ class Module_admin_orders
 
 			$actions	=	do_template('ADMIN_ORDER_ACTIONS',array('ORDER_TITLE'=>$order_title,'ORDR_ACT_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
 
-			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),'_SELF');
+			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
 
 			$member		=	hyperlink($url,$submitted_by,false,false,do_lang('INDEX'));
 

@@ -75,15 +75,18 @@ class Hook_cart_orders
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		$where=(db_string_equal_to('order_status','ORDER_STATUS_awaiting_payment').' OR '.db_string_equal_to('order_status','ORDER_STATUS_payment_received'));
 		if (!is_null($search))
 		{
+			$where='1=1';
 			if (!$search_titles_not_ids)
 			{
 				$l=do_lang('CART_ORDER','',NULL,NULL,$site_lang?get_site_default_lang():user_lang());
 				if (substr($search,0,strlen($l))!=$l) return array();
 				$where.=' AND id='.strval(intval(substr($search,strlen($l))));
 			}
+		} else
+		{
+			$where=('('.db_string_equal_to('order_status','ORDER_STATUS_awaiting_payment').' OR '.db_string_equal_to('order_status','ORDER_STATUS_payment_received').')');
 		}
 
 		if (is_null($search))
