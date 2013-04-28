@@ -207,29 +207,24 @@ class Module_admin_orders
 				$order_det_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_det['p_id']),get_module_zone('catalogues'));			
 			}
 
-			$submitted_by=$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
-
 			$order_status=do_lang($row['order_status']);
 
 			$ordr_act_submit=build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$row['id']),'_SELF');	
 
 			$actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'19ad8393aa5dba3f2f768818f22d8837','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
 
-			$url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),'_SELF');
-
-			$member=hyperlink($url,$submitted_by,false,false,do_lang('INDEX'));
+			$submitted_by=$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
+			$member_url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
+			$member=hyperlink($member_url,$submitted_by,false,false,do_lang('INDEX'));
 
 			$view_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
 			$order_date=hyperlink($view_url,get_timezoned_date($row['add_date'],true,false,true,true));
 
-			$transaction_details_link=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
-
 			if ($row['transaction_id']!='')
 			{	
-				$transaction_details_link=build_url(array('page'=>'admin_ecommerce','type'=>'logs','product'=>$order_title,'id'=>$row['id']),get_module_zone('admin_ecommerce'));
-
-				$transaction_id=hyperlink($transaction_details_link,strval($row['transaction_id']));
+				$transaction_details_url=build_url(array('page'=>'admin_ecommerce','type'=>'logs','product'=>$order_title,'id'=>$row['id']),get_module_zone('admin_ecommerce'));
+				$transaction_id=hyperlink($transaction_details_url,$row['transaction_id']);
 			} else
 			{
 				$transaction_id=do_lang_tempcode('INCOMPLETED_TRANCACTION');
@@ -239,7 +234,7 @@ class Module_admin_orders
 				array(
 					escape_html($order_title),
 					ecommerce_get_currency_symbol().escape_html(strval($row['tot_price'])),
-					escape_html(float_format($row['tax'],2)),
+					escape_html(is_null($row['tax'])?'':float_format($row['tax'],2)),
 					$order_date,
 					$member,
 					$transaction_id,
@@ -249,9 +244,9 @@ class Module_admin_orders
 			);
 		}
 
-		$width=mixed();//array('110','70','80','200','120','180','180','200');
+		$widths=mixed();//array('110','70','80','200','120','180','180','200');
 
-		$results_table=results_table(do_lang_tempcode('ORDERS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$order_entries,$sortables,$sortable,$sort_order,'sort',NULL,$width,'cart');
+		$results_table=results_table(do_lang_tempcode('ORDERS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$order_entries,$sortables,$sortable,$sort_order,'sort',NULL,$widths);
 
 		if (is_null($order_entries)) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -338,10 +333,9 @@ class Module_admin_orders
 
 		$data=$rows[0];
 
-		$results_table=results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL,'cart');
+		$results_table=results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL);
 
 		$ordered_by_member_id=$data['c_member'];
-
 		$ordered_by_username=$GLOBALS['FORUM_DRIVER']->get_username($data['c_member']);
 
 		$self_url=get_self_url(true,true);

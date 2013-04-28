@@ -232,7 +232,7 @@ class Module_admin_ecommerce extends standard_aed_module
 			if (!is_null($member_id))
 			{
 				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id);
-			} else $member_link=do_lang_tempcode('NA_EM');
+			} else $member_link=do_lang_tempcode('UNKNOWN_EM');
 
 			$fields->attach(results_entry(array(escape_html($myrow['id']),escape_html($myrow['purchase_id']),escape_html($myrow['linked']),escape_html($date),escape_html($myrow['amount']),escape_html($myrow['t_currency']),escape_html($myrow['item']),$status,escape_html($myrow['reason']),escape_html($myrow['pending_reason']),escape_html($myrow['t_memo']),$member_link)));
 		}
