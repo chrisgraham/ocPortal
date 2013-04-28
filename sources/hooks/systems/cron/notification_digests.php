@@ -66,7 +66,7 @@ class Hook_cron_notifications_digests
 					$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$_message,comcode_escape(get_site_name()));
 
 					require_code('mail');
-					mail_wrap($wrapped_subject,$wrapped_message,$to_email,$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
+					mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
 				}
 
 				$start+=100;

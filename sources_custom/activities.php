@@ -38,7 +38,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 			{
 				if (count($blocked_by)>1)
 				{
-					collapse_1d_complexity('member_blocker',$blocked_by);
+					$blocked_by=collapse_1d_complexity('member_blocker',$blocked_by);
 					$blocked_by=implode(',',$blocked_by);
 				}
 				else
