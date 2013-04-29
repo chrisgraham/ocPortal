@@ -2838,7 +2838,8 @@ function handle_comments_posting_form_submit(button,event)
 	if (typeof form.old_action!='undefined') form.setAttribute('action',form.old_action);
 	if (form.onsubmit.call(form,event))
 	{
-		disable_button_just_clicked(document.getElementById('submit_button'));
+		var submit_button=document.getElementById('submit_button');
+		if (submit_button) disable_button_just_clicked(submit_button);
 		form.submit();
 	}
 }
@@ -2909,7 +2910,8 @@ function replace_comments_form_with_ajax(options,hash,comments_form_id,comments_
 				return true;
 			}
 
-			disable_button_just_clicked(document.getElementById('submit_button'));
+			var submit_button=document.getElementById('submit_button');
+			if (submit_button) disable_button_just_clicked(submit_button);
 
 			// Note what posts are shown now
 			var known_posts=get_elements_by_class_name(comments_wrapper,'post');

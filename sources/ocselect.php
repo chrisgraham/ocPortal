@@ -817,6 +817,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 		{
 			if (in_array($filter_key,$disallowed_fields)) continue;
 
+			$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
 			$bits=call_user_func_array($conv_func,array($db,$info,&$context,&$extra_join,&$extra_select,&$filter_key,$filter_val,$db_fields,$table_join_code)); // call_user_func_array has to be used for reference passing, bizarrely
 			if (is_null($bits))
 			{
@@ -826,8 +827,6 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 				continue;
 			}
 			list($filter_key,$field_type,$filter_val)=$bits;
-
-			$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
 
 			if ($is_join)
 			{

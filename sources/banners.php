@@ -281,7 +281,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		}
 
 		// Choose which banner to show from the results
-		$rand=mt_rand(0,$tally);
+		$rand=mt_rand(1,$tally);
 		for ($i=0;$i<$counter;$i++)
 		{
 			if ($rand<=$bound[$i]) break;

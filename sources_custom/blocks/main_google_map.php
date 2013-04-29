@@ -67,7 +67,7 @@ class Block_main_google_map
 		$latitude_key=$map['latfield'];
 		$catalogue_name=$map['catalogue'];
 		$star_entry=array_key_exists('star_entry',$map)?$map['star_entry']:'';
-		$max_results=((array_key_exists('max_results',$map)) && ($map['max_results']!=''))?intval($map['max_results']):1000;
+		$max_results=((array_key_exists('max_results',$map)) && ($map['max_results']!=''))?intval($map['max_results']):300;
 		$icon=array_key_exists('icon',$map)?$map['icon']:'';
 		if (!array_key_exists('filter',$map)) $map['filter']='';
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
