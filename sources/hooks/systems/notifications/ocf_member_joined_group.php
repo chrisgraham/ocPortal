@@ -92,8 +92,8 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 	 */
 	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
 	{
-		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-		$members=$this->_all_members_who_have_enabled_with_page_access($members,'groups',$notification_code,$category,$to_member_ids,$start,$max);
+		list($members,$maybe_more)=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+		list($members,$maybe_more)=$this->_all_members_who_have_enabled_with_page_access($members,'groups',$notification_code,$category,$to_member_ids,$start,$max);
 
 		if (is_numeric($category)) // Also merge in people monitoring forum
 		{
@@ -111,6 +111,6 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 			}
 		}
 
-		return $members;
+		return array($members,$maybe_more);
 	}
 }
