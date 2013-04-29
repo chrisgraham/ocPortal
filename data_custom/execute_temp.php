@@ -55,5 +55,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	set_value('disable_seo','1');
+	require_code('files');
+	set_option('site_closed','0');
+	@print(http_download_file('http://192.168.1.100/git/index.php?page=feedback'));
+//	set_value('http_faux_loopback','^'.preg_quote(get_base_url(),'#').'.*\.(php|jpg|jpeg|png|gif|htm|html|ico|txt|css|js|cur|tar|gz|mp3|mp4|m4v|mpg|mpeg|pdf|svg|swf|ttf|woff|wav|zip|xsd|xsl|xml|webm)\??');
 }

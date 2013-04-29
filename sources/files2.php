@@ -159,9 +159,10 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 /**
  * Find path to the PHP executable.
  *
+ * @param  boolean		Whether we need a CGI interpreter
  * @return PATH			Path to PHP
  */
-function find_php_path()
+function find_php_path($cgi=false)
 {
 	$search_dirs=array(
 		'/bin',
@@ -182,12 +183,14 @@ function find_php_path()
 	);
 	$filenames=array(
 		'php.dSYM',
-		'php-cli',
-		'php5-cli',
-		'php6-cli',
 		'php',
 		'php5',
 		'php6',
+		'php-cli.dSYM',
+		'php-cli',
+		'php5-cli',
+		'php6-cli',
+		'php-cgi.dSYM',
 		'php-cgi',
 		'php5-cgi',
 		'php6-cgi',
@@ -196,12 +199,15 @@ function find_php_path()
 	{
 		foreach ($filenames as $file)
 		{
-			if (@file_exists($dir.'/'.$file)) break 2;
+			if ((!$cgi) || (strpos($file,'cgi')!==false))
+			{
+				if (@file_exists($dir.'/'.$file)) break 2;
+			}
 		}
 	}
 	if (!@file_exists($dir.'/'.$file))
 	{
-		$php_path='php';
+		$php_path=$cgi?'php-cgi':'php';
 	} else
 	{
 		$php_path=$dir.'/'.$file;
@@ -519,45 +525,13 @@ function check_shared_space_usage($extra)
  */
 function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
 {
-	$url=str_replace(' ','%20',$url);
-
-	// Prevent DOS loop attack
-	if (ocp_srv('HTTP_USER_AGENT')==$ua) $ua='ocP-recurse';
-	if (ocp_srv('HTTP_USER_AGENT')=='ocP-recurse') return NULL;
-
+	// Normalise the URL
 	require_code('urls');
+	$url=str_replace(' ','%20',$url);
 	if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
-
 	if ((strpos($url,'/')!==false) && (strrpos($url,'/')<7)) $url.='/';
 
-	// Should we cheat?
-	$faux=get_value('http_faux_loopback');
-	if ((!is_null($faux)) && ($faux!=''))
-	{
-		if (substr($faux,0,1)!='#') $faux='#'.$faux.'#';
-		if (preg_match($faux,$url)!=0)
-		{
-			$parsed=parse_url($url);
-			$parsed_base_url=parse_url(get_custom_base_url());
-			$file_base=get_custom_file_base();
-			$file_base=preg_replace('#'.preg_quote(urldecode($parsed_base_url['path'])).'$#','',$file_base);
-			$file_path=$file_base.urldecode($parsed['path']);
-			if ($trigger_error)
-			{
-				$contents=file_get_contents($file_path);
-			} else
-			{
-				$contents=@file_get_contents($file_path);
-			}
-			if (!is_null($write_to_file))
-			{
-				fwrite($write_to_file,$contents);
-				return '';
-			}
-			return $contents;
-		}
-	}
-
+	// Initialisation
 	global $DOWNLOAD_LEVEL;
 	$DOWNLOAD_LEVEL++;
 	global $HTTP_DOWNLOAD_MIME_TYPE;
@@ -579,8 +553,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	global $HTTP_FILENAME;
 	$HTTP_FILENAME=NULL;
 
-	if ($DOWNLOAD_LEVEL==8) return '';//critical_error('FILE_DOS',$url); // Prevent possible DOS attack
+	// Prevent DOS loop attack
+	if (ocp_srv('HTTP_USER_AGENT')==$ua) $ua='ocP-recurse';
+	if (ocp_srv('HTTP_USER_AGENT')=='ocP-recurse') return NULL;
+	if ($DOWNLOAD_LEVEL==8) return '';//critical_error('FILE_DOS',$url);
 
+	// Work out what we'll be doing
 	$url_parts=@parse_url($url);
 	if ($url_parts===false)
 	{
@@ -592,6 +570,63 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		return NULL;
 	}
 	if (!array_key_exists('scheme',$url_parts)) $url_parts['scheme']='http';
+
+	// File-system/shell_exec method, for local calls
+	$faux=get_value('http_faux_loopback');
+	if ((!is_null($faux)) && ($faux!='') && (is_null($post_params)) && (is_null($files))) // NB: Does not support cookies, accept headers, referers
+	{
+		if (substr($faux,0,1)!='#') $faux='#'.$faux.'#i';
+		if (preg_match($faux,$url)!=0)
+		{
+			$parsed=parse_url($url);
+			$parsed_base_url=parse_url(get_custom_base_url());
+			$file_base=get_custom_file_base();
+			$file_base=preg_replace('#'.preg_quote(urldecode($parsed_base_url['path'])).'$#','',$file_base);
+			$file_path=$file_base.urldecode($parsed['path']);
+
+			if (substr($file_path,-4)=='.php')
+			{
+				$cmd='DOCUMENT_ROOT='.escapeshellarg(dirname(get_file_base())).' PATH_TRANSLATED='.escapeshellarg($file_path).' SCRIPT_NAME='.escapeshellarg($file_path).' HTTP_USER_AGENT='.escapeshellarg($ua).' QUERY_STRING='.escapeshellarg($parsed['query']).' HTTP_HOST='.escapeshellarg($parsed['host']).' '.escapeshellcmd(find_php_path(true)).' '.escapeshellarg($file_path);
+				$contents=shell_exec($cmd);
+				$split_pos=strpos($contents,"\r\n\r\n");
+				if ($split_pos!==false)
+				{
+					$headers=explode("\r\n",substr($contents,0,$split_pos));
+					foreach ($headers as $line)
+					{
+						_read_in_headers($line);
+					}
+					$contents=substr($contents,$split_pos+4);
+				}
+			} else
+			{
+				if ($trigger_error)
+				{
+					$contents=file_get_contents($file_path);
+				} else
+				{
+					$contents=@file_get_contents($file_path);
+				}
+
+				require_code('mime_types');
+				$HTTP_DOWNLOAD_MIME_TYPE=get_mime_type(get_file_extension($file_path));
+				$HTTP_DOWNLOAD_SIZE=filesize($file_path);
+				$HTTP_DOWNLOAD_MTIME=filemtime($file_path);
+				$HTTP_MESSAGE='200';
+				$HTTP_FILENAME=NULL;
+			}
+
+			if (!is_null($byte_limit)) $contents=substr($contents,0,$byte_limit);
+
+			if (!is_null($write_to_file))
+			{
+				fwrite($write_to_file,$contents);
+				return '';
+			}
+			$DOWNLOAD_LEVEL--;
+			return $contents;
+		}
+	}
 
 	$use_curl=(($url_parts['scheme']!='http') && (function_exists('curl_version'))) || ((function_exists('get_value')) && (get_value('prefer_curl')==='1'));
 
@@ -646,7 +681,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		}
 	}
 
-	if ($use_curl) // We'll have to try to use CURL
+	// CURL method
+	if ($use_curl)
 	{
 		if (!is_null($files))
 		{
@@ -657,7 +693,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			}
 		}
 
-		// CURL
 		if (function_exists('curl_version'))
 		if (function_exists('curl_init'))
 		if (function_exists('curl_setopt'))
@@ -787,6 +822,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		return NULL;
 	}
 
+	// Direct sockets method
 	$errno=0;
 	$errstr='';
 	if ($url_parts['scheme']=='http')
@@ -984,38 +1020,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					{
 						$chunked=true;
 					}
-					if (preg_match("#Content-Disposition: [^\r\n]*filename=\"([^;\r\n]*)\"\r\n#i",$line,$matches)!=0)
-					{
-						$HTTP_FILENAME=$matches[1];
-					}
-					if (preg_match("#^Set-Cookie: ([^\r\n=]*)=([^\r\n]*)\r\n#i",$line,$matches)!=0)
-					{
-						$HTTP_NEW_COOKIES[trim(rawurldecode($matches[1]))]=trim($matches[2]);
-					}
-					if (preg_match("#^Content-Length: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
-					{
-						$HTTP_DOWNLOAD_SIZE=intval($matches[1]);
-					}
-					if (preg_match("#^Last-Modified: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
-					{
-						$HTTP_DOWNLOAD_MTIME=strtotime($matches[1]);
-					}
-					if (preg_match("#^Content-Type: ([^;\r\n]*)(;[^\r\n]*)?\r\n#i",$line,$matches)!=0)
-					{
-						$HTTP_DOWNLOAD_MIME_TYPE=$matches[1];
-						if (array_key_exists(2,$matches))
-						{
-							$_ct_more=explode(';',str_replace(' ','',trim($matches[2])));
-							foreach ($_ct_more as $ct_more)
-							{
-								$ct_bits=explode('=',$ct_more,2);
-								if ((count($ct_bits)==2) && (strtolower($ct_bits[0])=='charset'))
-								{
-									$HTTP_CHARSET=trim($ct_bits[1]);
-								}
-							}
-						}
-					}
+					_read_in_headers($line);
 					if (preg_match("#^Refresh: (\d*);(.*)\r\n#i",$line,$matches)!=0)
 					{
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=basename($matches[1]);
@@ -1187,5 +1192,48 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$DOWNLOAD_LEVEL--;
 		$HTTP_MESSAGE='could not connect to host ('.$errstr.')';
 		return NULL;
+	}
+}
+
+/**
+ * Read in any HTTP headers from an HTTP line, that we probe for.
+ *
+ * @param  string			The line
+ */
+function _read_in_headers($line)
+{
+	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
+
+	if (preg_match("#Content-Disposition: [^\r\n]*filename=\"([^;\r\n]*)\"\r\n#i",$line,$matches)!=0)
+	{
+		$HTTP_FILENAME=$matches[1];
+	}
+	if (preg_match("#^Set-Cookie: ([^\r\n=]*)=([^\r\n]*)\r\n#i",$line,$matches)!=0)
+	{
+		$HTTP_NEW_COOKIES[trim(rawurldecode($matches[1]))]=trim($matches[2]);
+	}
+	if (preg_match("#^Content-Length: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
+	{
+		$HTTP_DOWNLOAD_SIZE=intval($matches[1]);
+	}
+	if (preg_match("#^Last-Modified: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
+	{
+		$HTTP_DOWNLOAD_MTIME=strtotime($matches[1]);
+	}
+	if (preg_match("#^Content-Type: ([^;\r\n]*)(;[^\r\n]*)?\r\n#i",$line,$matches)!=0)
+	{
+		$HTTP_DOWNLOAD_MIME_TYPE=$matches[1];
+		if (array_key_exists(2,$matches))
+		{
+			$_ct_more=explode(';',str_replace(' ','',trim($matches[2])));
+			foreach ($_ct_more as $ct_more)
+			{
+				$ct_bits=explode('=',$ct_more,2);
+				if ((count($ct_bits)==2) && (strtolower($ct_bits[0])=='charset'))
+				{
+					$HTTP_CHARSET=trim($ct_bits[1]);
+				}
+			}
+		}
 	}
 }
