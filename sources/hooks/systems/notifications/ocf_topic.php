@@ -61,7 +61,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
 			if (!$done_in_url)
 			{
-				if ('forum:'.strval($p['id'])==$notification_category) $done_in_url=true;
+				if ('forum:'.$p['id']==$notification_category) $done_in_url=true;
 			}
 		}
 
@@ -194,7 +194,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 	{
 		if ((!is_numeric($category)) && (!is_null($category))) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // We should never be accessing as forum:<id>, that is used only behind the scenes
 
-		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+		list($members,$maybe_more)=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 
 		if (is_numeric($category)) // This is a topic. Also merge in people monitoring forum
 		{
@@ -202,11 +202,11 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			if (!array_key_exists(0,$forum_details)) return array(array(),false); // Topic deleted already?
 			$forum_id=$forum_details[0]['t_forum_id'];
 
-			if (!is_null($forum_id))
+			if (!is_null($forum_id)) // Forum
 			{
-				$members2=$this->_all_members_who_have_enabled($notification_code,'forum:'.strval($forum_id),$to_member_ids,$start,$max);
-				$members=array_merge($members,$members2);
-			} else
+				list($members2,$maybe_more2)=$this->_all_members_who_have_enabled($notification_code,'forum:'.strval($forum_id),$to_member_ids,$start,$max);
+				$members+=$members2;
+			} else // Private topic, scan for participation against those already monitoring, for retroactive security (maybe someone lost access)
 			{
 				require_code('ocf_topics');
 				$members_new=$members;
@@ -224,8 +224,8 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
 		if (!is_null($forum_id))
 		{
-			$members=$this->_all_members_who_have_enabled_with_zone_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
-			$members=$this->_all_members_who_have_enabled_with_category_access($members,'forums',$notification_code,strval($forum_id),$to_member_ids,$start,$max);
+			list($members,$maybe_more)=$this->_all_members_who_have_enabled_with_zone_access(array($members,$maybe_more),'forum',$notification_code,$category,$to_member_ids,$start,$max);
+			list($members,$maybe_more)=$this->_all_members_who_have_enabled_with_category_access(array($members,$maybe_more),'forums',$notification_code,strval($forum_id),$to_member_ids,$start,$max);
 		} // We know PTs have been pre-filtered before notification is sent out, to limit them
 
 		// Filter members who has more than one unread posts in that topic
@@ -260,6 +260,6 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			$members[0]=$members_new;
 		}
 	
-		return $members;
+		return array($members,$maybe_more);
 	}
 }

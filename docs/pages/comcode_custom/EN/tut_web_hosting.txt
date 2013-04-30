@@ -25,7 +25,7 @@ ocPortal requires:
  - A web server that runs mySQL (*), version 4.1 or higher. mySQL is the database software (software which allows creation of a number of separate databases) which ocPortal uses to store the majority of its data. Often web hosts will quote a number of databases that web-hosting comes with: ocPortal only requires a single mySQL database to function. At least 5MB of database storage space is required, which should be available on any reputable webhost
  - A web server running IIS (the Microsoft web server), Apache (the common Linux web server), or LiteSpeed. It is very unlikely you will find a web-host that provides something else. Other servers might work but are not supported
  - That the web server is not overloaded with too many users, or has very poor performance
- - That the web server does not have a Firewall that stops outgoing connections or internal connections to itself
+ - That the web server does not have a Firewall that stops outgoing connections or internal connections to itself (sometimes referred to 'HTTP loopback')
  - Connectivity to a mail server (SMTP) so that outgoing email can be sent out to the staff email address or the addresses of individual members
 (*) Other database software may work, but is not supported
 

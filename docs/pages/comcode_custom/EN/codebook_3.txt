@@ -298,7 +298,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_block_timeout[/tt] -- set this to '1' if blocks should never timeout (stops stuttered performance if a site is not used regularly)
  - [tt]disable_sitemap_for__*[/tt] -- disable sitemap generation for a particular page (e.g. if there's too much data in it and the server can't cope, and the data isn't so important anyway)
  - [tt]no_tech_login_messages[/tt] -- set to '1' if you don't want technical explanations attaching when a user is forced to login
- - [tt]http_faux_loopback[/tt] -- a regular expression of URLs that may be accessed via direct filesystem reading rather than HTTP loopback. Be very careful with this, as it could seriously harm security. It can improve performance however. Some poor web hosts may also require it (we've only seen one though).
+ - [tt]http_faux_loopback[/tt] -- a regular expression of URLs that may be accessed via direct filesystem reading rather than HTTP loopback. Be very careful with this, as it could seriously harm security. It can improve performance however. Some poor web hosts may also require it (we've only seen one though). It does support PHP scripts, which are given special treatment, via passing through the [tt]php-cgi[/tt] interpreter (file uploads and POST requests not supported). Set via a command such as: [code]:set_value('http_faux_loopback','^'.preg_quote(get_base_url(),'#').'.*\.(php|jpg|jpeg|png|gif|htm|html|ico|txt|css|js|cur|tar|gz|mp3|mp4|m4v|mpg|mpeg|pdf|svg|swf|ttf|woff|wav|zip|xsd|xsl|xml|webm)\??');[/code]
  - [tt]cc_sort_date__<catalogue-name>[/tt] -- set this to '1' if you want catalogue category children to be sorted by date rather than title.
 
 [title="3"]Hidden 'keep' parameters[/title]

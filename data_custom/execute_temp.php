@@ -53,11 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	//$GLOBALS['SITE_DB']->query_delete('url_id_monikers');
-	require_code('content');
-	require_code('urls2');
-	$ob=get_content_object('comcode_page');
-	$ob_info=$ob->info();
-	$url_parts=array('page'=>'test_content');
-	@var_dump(find_id_moniker(/*$ob_info,*/$url_parts,''));
 }

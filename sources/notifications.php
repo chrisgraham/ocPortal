@@ -122,6 +122,8 @@ function _get_notification_ob_for_code($notification_code)
  */
 function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='')
 {
+	if ($subject=='') $subject='<'.$notification_code.' -- '.(is_null($code_category)?'':$code_category).'>';
+
 	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
 	if (get_param_integer('keep_debug_notifications',0)==1)
 	{
