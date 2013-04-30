@@ -1,23 +1,26 @@
-<div class="wide_table_wrap"><table summary="{!POLL}" class="autosized_table wide_table ocf_topic_poll">
-	<tbody>
-		<tr>
-			<td colspan="2" class="table_heading_cell">
-				<h3>{QUESTION*}</h3>
-			</td>
-		</tr>
-		{ANSWERS}
+{$REQUIRE_JAVASCRIPT,javascript_ocf_forum}
+
+<div class="ocf_topic_poll_form">
+	<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION},question,_SEARCH:topics:type=_edit_poll:id={ID}}{QUESTION*}{+END}</h3>
+
+	<div class="wide_table_wrap">
+		<table summary="{!POLL}" class="autosized_table ocf_topic_poll wide_table">
+			<tbody>
+				{ANSWERS}
+			</tbody>
+		</table>
+
 		{+START,IF_NON_EMPTY,{BUTTON}}
-			<tr>
-				<td colspan="2" class="ocf_poll_button">
-					{BUTTON}
-				</td>
-			</tr>
+			<div class="ocf_poll_button">
+				{BUTTON}
+			</div>
 		{+END}
-		<tr>
-			<td colspan="2" class="ocf_topic_poll_results ocf_column6">
+
+		{+START,IF_NON_EMPTY,{PRIVATE}{NUM_CHOICES}}
+			<div class="ocf_poll_meta ocf_column6">
 				{PRIVATE}
 				{NUM_CHOICES}
-			</td>
-		</tr>
-	</tbody>
-</table></div>
+			</div>
+		{+END}
+	</div>
+</div>

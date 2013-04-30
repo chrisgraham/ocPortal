@@ -262,21 +262,24 @@
 	text-align: center;
 }
 
-.ocf_topic_poll {
+.ocf_topic_poll_form {
 	margin-bottom: 2em;
 }
 
-.ocf_topic_poll h3 {
+.ocf_topic_poll_form h3 {
 	text-align: center;
+}
+
+.ocf_topic_poll {
+	border-collapse: collapse;
 }
 
 .ocf_topic_poll, .ocf_topic_poll th {
 	text-align: right;
 }
 
-.ocf_topic_poll, .ocf_topic_poll th, .ocf_topic_poll td {
+.ocf_topic_poll th, .ocf_topic_poll td {
 	border: 1px dotted {$GET,standard_border};
-	border-collapse: collapse;
 }
 
 .ocf_topic_poll_radio, .ocf_topic_poll_result {
