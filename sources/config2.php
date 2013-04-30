@@ -122,8 +122,7 @@ function _get_default_option($option,$type,$name)
 			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
 			if ((get_value('setupwizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 			{
-				require_code('config2');
-				set_option($name,$option['config_value_translated']);
+				set_option($name,$option['config_value_translated'],$option['the_type']);
 			}
 		}
 		if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();

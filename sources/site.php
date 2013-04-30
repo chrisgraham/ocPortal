@@ -617,10 +617,6 @@ function set_short_title($title)
  */
 function process_url_monikers($page)
 {
-	static $done=false;
-	if ($done) return;
-	$done=true;
-
 	$zone=get_zone_name();
 	$type=get_param('type',NULL,true);
 	$url_id=get_param('id',NULL,true);
