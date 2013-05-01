@@ -4189,6 +4189,8 @@ user_sync
 ----------
  - sources_custom/hooks/systems/cron/user_sync.php
  - sources_custom/hooks/systems/upon_query/user_sync.php
+ - sources_custom/user_sync.php
+ - sources_custom/user_sync__customise.php.example
 
 webdav
 ------

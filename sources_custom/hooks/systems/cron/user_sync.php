@@ -26,156 +26,22 @@ class Hook_cron_user_sync
 	 */
 	function run()
 	{
-		$_last_time=get_long_value('last_cron_user_sync');
-		$last_time=is_null($_last_time)?mixed():intval($_last_time);
-		if (!is_null($last_time))
-		{
-			if ((time()-$last_time)<60*60*24) return;
-		}
-		
 		if (get_value('user_sync_enabled')==='1')
 		{
-			require_code('ocf_members');
-			require_code('ocf_members_action');
-			require_code('ocf_members_action2');
-			
-			$db_host='hostname';
-			$db_name='dbname';
-			$db_user='username';
-			$db_password='password';
-			$db_table='tablename';
-			
-			$username_fields=array('sur_name','first_name','last_name'); //Fields that forms the username
-			$default_password='password';
-			
-			$field_remap=array(
-				'password'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'email_address'=>array(
-					'email',
-					array(),
-					''
-				),
-				'groups'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'dob_day'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'dob_month'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'dob_year'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'timezone'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'primary_group'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'language'=>array(
-					NULL,
-					array(),
-					''
-				),
-				'city'=>array(
-					'city',
-					array(),
-					''
-				),
-				'country'=>array(
-					'country',
-					array(),
-					''
-				)
-			);
-			
-			$dbh = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_password);
-			$sth=$dbh->prepare('SELECT * FROM '.$db_table);
-			$sth->execute();
-			$users=$sth->fetchAll(PDO::FETCH_ASSOC);
-			$non_cpf=array('password','email_address','groups','dob_day','dob_month','dob_year','timezone','primary_group','language');
-			
-			foreach ($users as $user)
+			$_last_time=get_long_value('last_cron_user_sync');
+			$last_time=is_null($_last_time)?mixed():intval($_last_time);
+			if (!is_null($last_time))
 			{
-				$username='';
-				foreach ($username_fields as $username_field)
-				{
-					$username.=$user[$username_field].' ';
-				}
-				$username=trim($username);
-				ocf_check_name_valid($username,NULL,NULL,true);
-				
-				$user_data=array();
-				$user_cpf_data=array();
-				
-				foreach ($field_remap as $key=>$value)
-				{
-					$user_data[$key]=$this->handle_field_remap($value,$user,$dbh);
-				}
-				
-				$user_data['password']=($user_data['password']===NULL)?$default_password:$user_data['password'];
-				
-				if ($GLOBALS['FORUM_DRIVER']->get_member_from_username($username)===NULL)
-				{
-					$memberid=ocf_make_member($username,$user_data['password'],$user_data['email_address'],$user_data['groups'],$user_data['dob_day'],$user_data['dob_month'],$user_data['dob_year'],array(),$user_data['timezone'],$user_data['primary_group']);
-				} else
-				{
-					$memberid=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-				}
-				foreach ($user_data as $key=>$value)
-				{
-					if (in_array($key,$non_cpf)) continue;
-					
-					$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
-					$cpf_id=mixed();
-					foreach ($cpfs as $cpf)
-					{
-						if ($cpf['trans_name']==('ocp_'.$key))
-						{
-							$cpf_id=$cpf['id'];
-							break;
-						}
-					}
-					if ($cpf_id!==NULL) ocf_set_custom_field($memberid,$cpf_id,$value);
-				}
+				if ((time()-$last_time)<60*60*24) return;
 			}
-		}
-		set_long_value('last_cron_user_sync',strval(time()));
-	}
-	
-	function handle_field_remap($field_data,$remote_data,$db)
-	{
-		if ($field_data[0]===NULL) return NULL;
-		if (!isset($remote_data[$field_data[0]])) return NULL;
-		$data=$remote_data[$field_data[0]];
-		if ($field_data[2]!='')
-		{
-			
-		}
-		if (count($field_data[1])>0)
-		{
-			$data=isset($field_data[1][$data])?$field_data[1][$data]:$data;
-		}
-		return $data;
-	}
 
+			require_code('user_sync');
+			$time=time();
+			user_sync__inbound($last_time);
+
+			set_long_value('last_cron_user_sync',strval($time));
+		}
+	}
 }
 
 

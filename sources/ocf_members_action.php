@@ -62,7 +62,7 @@
  * @param  ?TIME				When the member is on probation until (NULL: not on probation)
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=NULL,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=0,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=NULL,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	require_code('form_templates');
 
