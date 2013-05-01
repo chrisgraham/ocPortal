@@ -53,4 +53,18 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('aggregate_types');
+
+	$GLOBALS['SITE_DB']->query_delete('alternative_ids',array('resource_type'=>'group'));
+	$GLOBALS['SITE_DB']->query_delete('alternative_ids',array('resource_type'=>'poll'));
+	$GLOBALS['SITE_DB']->query_delete('alternative_ids',array('resource_type'=>'download_category'));
+	$GLOBALS['SITE_DB']->query_delete('aggregate_type_instances');
+	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE id>10');
+	$GLOBALS['SITE_DB']->query_delete('poll');
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'download_categories WHERE id>1');
+	add_aggregate_type_instance('Testy','example',array('positive_response'=>'Yes','negative_response'=>'No'));
+
+	//edit_aggregate_type_instance(1,'Testy3','example',array('positive_response'=>'Yes','negative_response'=>'No'));
+
+	@var_dump($GLOBALS['FORUM_DRIVER']->get_usergroup_list());
 }

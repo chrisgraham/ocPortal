@@ -110,7 +110,7 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
 	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
 
-	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
+	$db=$cma_info['connection'];
 
 	$content_row=content_get_row($content_id,$cma_info);
 	if (is_null($content_row))
@@ -230,7 +230,7 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
  */
 function content_get_row($content_id,$cma_info)
 {
-	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
+	$db=$cma_info['connection'];
 
 	$id_field_numeric=array_key_exists('id_field_numeric',$cma_info)?$cma_info['id_field_numeric']:true;
 	$where=get_content_where_for_str_id($content_id,$cma_info);

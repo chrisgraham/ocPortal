@@ -63,7 +63,9 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pa
 	),true);
 
 	if ($sync)
-		sync_aggregate_type_instance($id);
+	{
+		sync_aggregate_type_instance($id,$aggregate_label,$aggregate_label,$aggregate_type,$_other_parameters,$_other_parameters);
+	}
 
 	log_it('ADD_AGGREGATE_TYPE_INSTANCE',strval($id),$aggregate_label);
 
@@ -94,6 +96,9 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
 
 	$other_parameters=serialize($_other_parameters);
 
+	$old_aggregate_label=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','aggregate_label',array('id'=>$id));
+	$old_parameters=unserialize($GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','other_parameters',array('id'=>$id)));
+
 	// Error if label is a duplicate
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','id',array('aggregate_type'=>$aggregate_type,'aggregate_label'=>$aggregate_label));
 	if ((!is_null($test)) && ($test!=$id))
@@ -114,7 +119,7 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
 		'edit_time'=>time(),
 	),array('id'=>$id),'',1);
 
-	sync_aggregate_type_instance($id);
+	sync_aggregate_type_instance($id,$aggregate_label,$old_aggregate_label,$aggregate_type,$_other_parameters,$old_parameters);
 
 	log_it('EDIT_AGGREGATE_TYPE_INSTANCE',strval($id),$aggregate_label);
 
@@ -137,7 +142,12 @@ function delete_aggregate_type_instance($id,$delete_matches=false)
 	if (is_null($aggregate_label)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$aggregate_type=$GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','aggregate_type',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_delete('aggregate_type_instances',array('id'=>$id),'',1);
+	$other_parameters=unserialize($GLOBALS['SITE_DB']->query_select_value_if_there('aggregate_type_instances','other_parameters',array('id'=>$id)));
+	foreach ($other_parameters as $key=>$val)
+	{
+		unset($other_parameters[$key]);
+		$other_parameters[strtoupper($key)]=$val;
+	}
 
 	// Delete all instance stuff of requested
 	if ($delete_matches)
@@ -152,6 +162,11 @@ function delete_aggregate_type_instance($id,$delete_matches=false)
 			require_code('resource_fs');
 			foreach ($type['resources'] as $resource)
 			{
+				$tempcode=template_to_tempcode($resource['label']);
+				$parameters=$other_parameters+array('LABEL'=>$aggregate_label);
+				$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+				$resource['label']=$tempcode->evaluate();
+
 				// Can we bind to an existing resource? (using subpath and label)
 				$object_fs=get_resource_occlefs_object($resource['type']);
 				$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
@@ -164,6 +179,8 @@ function delete_aggregate_type_instance($id,$delete_matches=false)
 			}
 		}
 	}
+
+	$GLOBALS['SITE_DB']->query_delete('aggregate_type_instances',array('id'=>$id),'',1);
 
 	log_it('DELETE_AGGREGATE_TYPE_INSTANCE',strval($id),$aggregate_label);
 
@@ -322,9 +339,9 @@ function parse_aggregate_xml($display_errors=false)
 									}
 
 									$resource_access[]=array(
-										'key'=>$rs_row_attributes['key'],
 										'value'=>$rs_row_attributes['value'],
 										'usergroup'=>$rs_row_attributes['usergroup'],
+										'member'=>array_key_exists('member',$rs_row_attributes)?$rs_row_attributes['member']:NULL,
 										'resync'=>(!array_key_exists('resync',$rs_row_attributes)) || ($rs_row_attributes['resync']=='true'),
 									);
 									break;
@@ -427,7 +444,7 @@ function resync_all_aggregate_type_instances($type=NULL)
 		foreach ($instances as $instance)
 		{
 			$other_parameters=unserialize($instance['other_parameters']);
-			sync_aggregate_type_instance($instance['id'],$instance['aggregate_label'],$instance['aggregate_type'],$other_parameters);
+			sync_aggregate_type_instance($instance['id'],$instance['aggregate_label'],$instance['aggregate_label'],$instance['aggregate_type'],$other_parameters,$other_parameters);
 		}
 		$start+=100;
 	}
@@ -439,10 +456,12 @@ function resync_all_aggregate_type_instances($type=NULL)
  *
  * @param  AUTO_LINK			The ID
  * @param  ?SHORT_TEXT		Label for instance (NULL: lookup)
+ * @param  ?SHORT_TEXT		Old label for instance (NULL: lookup)
  * @param  ?ID_TEXT			What the instance is of (NULL: lookup)
  * @param  ?array				Additional parameters (NULL: lookup)
+ * @param  ?array				Old additional parameters (NULL: lookup)
  */
-function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=NULL,$other_parameters=NULL)
+function sync_aggregate_type_instance($id,$aggregate_label=NULL,$old_aggregate_label=NULL,$aggregate_type=NULL,$other_parameters=NULL,$old_parameters=NULL)
 {
 	require_lang('aggregate_types');
 
@@ -456,6 +475,8 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 		$aggregate_type=$instance_row['aggregate_type'];
 		$other_parameters=unserialize($instance_row['other_parameters']);
 	}
+	if (is_null($old_aggregate_label)) $old_aggregate_label=$aggregate_label;
+	if (is_null($old_parameters)) $old_parameters=$other_parameters;
 
 	// Load details of aggregate type
 	$types=parse_aggregate_xml();
@@ -477,25 +498,43 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 	{
 		if (!array_key_exists(strtoupper($parameter),$parameters)) $parameters[strtoupper($parameter)]='';
 	}
+	foreach ($old_parameters as $key=>$val)
+	{
+		unset($old_parameters[$key]);
+		$old_parameters[strtoupper($key)]=$val;
+	}
 
 	// Process the resources
 	require_code('resource_fs');
 	foreach ($type['resources'] as $resource)
 	{
+		if (!array_key_exists('label',$resource))
+		{
+			$old_resource_label=$old_aggregate_label;
+
+			$resource['label']=$aggregate_label;
+		} else
+		{
+			$tempcode=template_to_tempcode($resource['label']);
+			$old_parameter_binding=$old_parameters+array('LABEL'=>$old_aggregate_label)+$parameters;
+			$tempcode=$tempcode->bind($old_parameter_binding,'aggregate_types.xml');
+			$old_resource_label=$tempcode->evaluate();
+
+			$tempcode=template_to_tempcode($resource['label']);
+			$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+			$resource['label']=$tempcode->evaluate();
+		}
+
+		$tempcode=template_to_tempcode($resource['subpath']);
+		$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+		$resource['subpath']=$tempcode->evaluate();
+
 		// Can we bind to an existing resource? (using subpath and label)
 		$is_new=false;
 		$object_fs=get_resource_occlefs_object($resource['type']);
 		if (is_null($object_fs))
 			warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE',escape_html($resource['type'])));
-		$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
-
-		if (!array_key_exists('label',$resource)) $resource['label']=$aggregate_label;
-		$tempcode=template_to_tempcode($resource['label']);
-		$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
-		$resource['label']=$tempcode->evaluate();
-		$tempcode=template_to_tempcode($resource['subpath']);
-		$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
-		$resource['subpath']=$tempcode->evaluate();
+		$filename=$object_fs->convert_label_to_filename($old_resource_label,$resource['subpath'],$resource['type'],true);
 
 		// If not bound, create resource
 		if (is_null($filename)) $is_new=true;
@@ -505,27 +544,32 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 			$properties=array();
 			$properties['label']=$resource['label'];
 
-			// Copy from template (using template_subpath and template_label), if new
-			if ($is_new)
+			if (!$is_new) // Load from current, if not new
 			{
-				if (!is_null($resource['template_label']))
+				$existing_properties=$object_fs->resource_load($resource['type'],$filename,$resource['subpath']);
+				if ($existing_properties===false)
 				{
-					$tempcode=template_to_tempcode($resource['template_label']);
-					$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
-					$resource['template_label']=$tempcode->evaluate();
-					$tempcode=template_to_tempcode($resource['template_subpath']);
-					$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
-					$resource['template_subpath']=$tempcode->evaluate();
-
-					$template_filename=$object_fs->convert_label_to_filename($resource['template_label'],$resource['template_subpath'],$resource['type'],true);
-					if (is_null($template_filename))
-						warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE_TEMPLATE',escape_html($resource['type']),escape_html($resource['template_label']),escape_html($resource['template_subpath'])));
-
-					$properties+=$object_fs->resource_load($resource['type'],$template_filename,$resource['template_subpath']);
+					$is_new=true; // Load error
+				} else
+				{
+					$properties+=$existing_properties;
 				}
-			} else // Load from current, if not new
+			}
+			if (($is_new) && (!is_null($resource['template_label']))) // Copy from template (using template_subpath and template_label), if new
 			{
-				$properties+=$object_fs->resource_load($resource['type'],$filename,$resource['subpath']);
+				$tempcode=template_to_tempcode($resource['template_label']);
+				$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+				$resource['template_label']=$tempcode->evaluate();
+				$tempcode=template_to_tempcode($resource['template_subpath']);
+				$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+				$resource['template_subpath']=$tempcode->evaluate();
+
+				$template_filename=$object_fs->convert_label_to_filename($resource['template_label'],$resource['template_subpath'],$resource['type'],true);
+				if (is_null($template_filename))
+					warn_exit(do_lang_tempcode('MISSING_CONTENT_TYPE_TEMPLATE',escape_html($resource['type']),escape_html($resource['template_label']),escape_html($resource['template_subpath'])));
+
+				$template_properties=$object_fs->resource_load($resource['type'],$template_filename,$resource['template_subpath']);
+				$properties+=$template_properties;
 			}
 
 			// Set properties
@@ -543,8 +587,8 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 			// Add/Edit
 			if ($is_new)
 			{
-				$object_fs->resource_add($resource['type'],$resource['label'],$resource['subpath'],$properties);
-				$filename=$object_fs->convert_label_to_filename($resource['label'],$resource['subpath'],$resource['type'],true);
+				$resource_id=$object_fs->resource_add($resource['type'],$resource['label'],$resource['subpath'],$properties);
+				$filename=$object_fs->convert_id_to_filename($resource['type'],$resource_id);
 			} else
 			{
 				$object_fs->resource_edit($resource['type'],$filename,$resource['subpath'],$properties);
@@ -581,6 +625,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 
 					if (!is_null($preset['member']))
 					{
+						$tempcode=template_to_tempcode($preset['member']);
+						$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+						$preset['member']=$tempcode->evaluate();
+
 						$member_id=is_numeric($preset['member'])?intval($preset['member']):remap_portable_as_resource_id('member',array('label'=>$preset['member']));
 						if (is_null($member_id))
 						{
@@ -592,6 +640,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 					}
 					if (!is_null($preset['usergroup']))
 					{
+						$tempcode=template_to_tempcode($preset['usergroup']);
+						$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+						$preset['usergroup']=$tempcode->evaluate();
+
 						if ($preset['usergroup']==='*')
 						{
 							foreach (array_keys($usergroups) as $group_id)
@@ -622,6 +674,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 				{
 					if (!is_null($privilege['member']))
 					{
+						$tempcode=template_to_tempcode($privilege['member']);
+						$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+						$privilege['member']=$tempcode->evaluate();
+
 						$member_id=is_numeric($privilege['member'])?intval($privilege['member']):remap_portable_as_resource_id('member',array('label'=>$privilege['member']));
 						if (is_null($member_id))
 						{
@@ -634,6 +690,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 					}
 					if (!is_null($privilege['usergroup']))
 					{
+						$tempcode=template_to_tempcode($privilege['usergroup']);
+						$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+						$privilege['usergroup']=$tempcode->evaluate();
+
 						if ($privilege['usergroup']==='*')
 						{
 							foreach (array_keys($usergroups) as $group_id)
@@ -678,6 +738,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 				{
 					if (!is_null($access['member']))
 					{
+						$tempcode=template_to_tempcode($access['member']);
+						$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+						$access['member']=$tempcode->evaluate();
+
 						$member_id=is_numeric($access['member'])?intval($access['member']):remap_portable_as_resource_id('member',array('label'=>$access['member']));
 						if (is_null($member_id))
 						{
@@ -689,6 +753,10 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 					}
 					if (!is_null($access['usergroup']))
 					{
+						$tempcode=template_to_tempcode($access['usergroup']);
+						$tempcode=$tempcode->bind($parameters,'aggregate_types.xml');
+						$access['usergroup']=$tempcode->evaluate();
+
 						if ($access['usergroup']==='*')
 						{
 							foreach (array_keys($usergroups) as $group_id)
@@ -698,6 +766,7 @@ function sync_aggregate_type_instance($id,$aggregate_label=NULL,$aggregate_type=
 						} else
 						{
 							$group_id=is_numeric($access['usergroup'])?intval($access['usergroup']):remap_portable_as_resource_id('group',array('label'=>$access['usergroup']));
+
 							if (is_null($group_id))
 							{
 								warn_exit(do_lang_tempcode('_GROUP_NO_EXIST',escape_html($access['usergroup'])));

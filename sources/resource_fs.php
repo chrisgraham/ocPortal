@@ -35,6 +35,8 @@ function init__resource_fs()
 	require_code('occle');
 
 	define('RESOURCEFS_DEFAULT_EXTENSION','ocp');
+
+	$GLOBALS['NO_QUERY_LIMIT']=true;
 }
 
 /**
@@ -83,11 +85,13 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];
 
-	$lookup=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_moniker','resource_guid'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
+	$lookup=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_moniker','resource_guid','resource_label'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
 	if (array_key_exists(0,$lookup))
 	{
 		$no_exists_check_for=$lookup[0]['resource_moniker'];
 		$guid=is_null($new_guid)?$lookup[0]['resource_guid']:$new_guid;
+
+		if (is_null($new_guid)) return array($no_exists_check_for,$guid,$lookup[0]['resource_label']);
 	} else
 	{
 		$no_exists_check_for=mixed();
@@ -852,7 +856,7 @@ class resource_fs_base
 			{
 				// Find category
 				$_category_id=$category[$relationship['cat_field']];
-				$category_id=is_integer($_category_id)?$_category_id:(is_null($_category_id)?'':strval($_category_id));
+				$category_id=is_string($_category_id)?$_category_id:(is_null($_category_id)?'':strval($_category_id));
 
 				// Convert category to path
 				$subpath=$this->folder_convert_id_to_filename($cat_resource_type,$category_id);
@@ -999,10 +1003,10 @@ class resource_fs_base
 
 		if ($this->is_folder_type($resource_type))
 		{
-			$resource_id=$this->folder_add($label,$path,array());
+			$resource_id=$this->folder_add($label,$path,$properties);
 		} else
 		{
-			$resource_id=$this->file_add($label,$path,array());
+			$resource_id=$this->file_add($label,$path,$properties);
 		}
 		return $resource_id;
 	}
@@ -1054,16 +1058,17 @@ class resource_fs_base
 	 *
 	 * @param  ID_TEXT		Resource type
 	 * @param  ID_TEXT		The filename
+	 * @param  string			The path (blank: root / not applicable)
 	 * @return boolean		Success status
 	 */
-	function resource_delete($resource_type,$filename)
+	function resource_delete($resource_type,$filename,$path)
 	{
 		if ($this->is_folder_type($resource_type))
 		{
-			$status=$this->folder_delete($filename);
+			$status=$this->folder_delete($filename,$path);
 		} else
 		{
-			$status=$this->file_delete($filename);
+			$status=$this->file_delete($filename,$path);
 		}
 		return $status;
 	}
@@ -1138,7 +1143,7 @@ class resource_fs_base
 		{
 			if (in_array($group_id,$admin_groups)) continue;
 
-			if ($value=='1')
+			if (($value=='1') || ($value=='true'))
 			{
 				switch ($resource_type)
 				{
@@ -1240,7 +1245,7 @@ class resource_fs_base
 		// Insert
 		foreach ($members as $member_id=>$value)
 		{
-			if ($value=='1')
+			if (($value=='1') || ($value=='true'))
 			{
 				switch ($resource_type)
 				{
@@ -1328,6 +1333,7 @@ class resource_fs_base
 		$module=$cma_info['permissions_type_code'];
 
 		$page=$cma_info['cms_page'];
+		require_code('zones2');
 		$_overridables=extract_module_functions_page(get_module_zone($page),$page,array('get_privilege_overrides'));
 		if (is_null($_overridables[0]))
 		{
@@ -1348,7 +1354,7 @@ class resource_fs_base
 				if (preg_match('#'.$privilege.'#',$override)!=0)
 				{
 					$min_level=$access[$i];
-					$privileges_scheme[$privilege]=$min_level;
+					$privileges_scheme[$override]=$min_level;
 				}
 			}
 		}
@@ -1397,12 +1403,6 @@ class resource_fs_base
 
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 
-		// Cleanup
-		foreach (array_keys($group_settings) as $group_id)
-		{
-			$cma_info['connection']->query_delete('group_privileges',array('module_the_name'=>$module,'category_name'=>$category,'group_id'=>$group_id,'the_page'=>''));
-		}
-
 		// Insert
 		foreach ($group_settings as $group_id=>$value)
 		{
@@ -1411,7 +1411,10 @@ class resource_fs_base
 			foreach ($value as $privilege=>$setting)
 			{
 				if ($setting!='')
+				{
+					$cma_info['connection']->query_delete('group_privileges',array('module_the_name'=>$module,'category_name'=>$category,'group_id'=>$group_id,'privilege'=>$privilege,'the_page'=>''));
 					$cma_info['connection']->query_insert('group_privileges',array('module_the_name'=>$module,'category_name'=>$category,'group_id'=>$group_id,'privilege'=>$privilege,'the_page'=>'','the_value'=>intval($setting)),false,true); // Race/corruption condition
+				}
 			}
 		}
 	}
@@ -1431,6 +1434,7 @@ class resource_fs_base
 		$module=$cma_info['permissions_type_code'];
 
 		$page=$cma_info['cms_page'];
+		require_code('zones2');
 		$_overridables=extract_module_functions_page(get_module_zone($page),$page,array('get_privilege_overrides'));
 		if (is_null($_overridables[0]))
 		{
@@ -1491,7 +1495,7 @@ class resource_fs_base
 				$member_settings[$member_id][$privilege]=$setting;
 			}
 		}
-		$this->set_resource_privileges__member($filename,$member_settings);
+		$this->set_resource_privileges__members($filename,$member_settings);
 	}
 
 	/**
@@ -1514,6 +1518,7 @@ class resource_fs_base
 			{
 				if ($setting!='')
 				{
+					$cma_info['connection']->query_delete('member_privileges',array('module_the_name'=>$module,'category_name'=>$category,'member_id'=>$member_id,'privilege'=>$privilege,'the_page'=>''));
 					$cma_info['connection']->query_insert('member_privileges',array('module_the_name'=>$module,'category_name'=>$category,'member_id'=>$member_id,'privilege'=>$privilege,'the_page'=>'','the_value'=>intval($setting),'active_until'=>NULL),false,true); // Race/corruption condition
 				}
 			}

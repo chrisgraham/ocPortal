@@ -32,6 +32,10 @@ class Module_admin_aggregate_types extends standard_crud_module
 	var $title_is_multi_lang=false;
 	var $table='aggregate_type_instances';
 
+	var $add_one_label=NULL;
+	var $edit_this_label=NULL;
+	var $edit_one_label=NULL;
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -98,6 +102,10 @@ class Module_admin_aggregate_types extends standard_crud_module
 		set_helper_panel_text(comcode_lang_string('DOC_AGGREGATE_TYPES'));
 
 		require_code('aggregate_types');
+
+		$this->add_one_label=do_lang_tempcode('ADD_AGGREGATE_TYPE_INSTANCE');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_AGGREGATE_TYPE_INSTANCE');
+		$this->edit_one_label=do_lang_tempcode('EDIT_AGGREGATE_TYPE_INSTANCE');
 
 		if ($type=='misc') return $this->misc();
 
@@ -166,13 +174,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		//if ($aggregate_label=='')
-		//{
-			$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),'aggregate_label',$aggregate_label,true));
-		//} else
-		//{
-		//	$hidden->attach(form_input_hidden('aggregate_label',$aggregate_label));
-		//}
+		$fields->attach(form_input_line(do_lang_tempcode('LABEL'),do_lang_tempcode('DESCRIPTION_LABEL'),'aggregate_label',$aggregate_label,true));
 
 		$parameters=find_aggregate_type_parameters($aggregate_type);
 		foreach ($parameters as $parameter)

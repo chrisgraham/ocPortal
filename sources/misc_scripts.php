@@ -234,11 +234,11 @@ function cron_bridge_script($caller)
  */
 function iframe_script()
 {
-	process_url_monikers();
-
 	$zone=get_param('zone');
 	$page=get_param('page');
 	$ajax=(get_param_integer('ajax',0)==1);
+
+	process_url_monikers($page);
 
 	// AJAX prep
 	if ($ajax) prepare_for_known_ajax_response();
