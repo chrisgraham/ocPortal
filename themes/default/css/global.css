@@ -1589,6 +1589,7 @@ ul.horizontal_links.horiz_field_sep {
 
 .table_cell_nowrap {
 	white-space: nowrap;
+	display: inline-block;
 }
 
 .autosized_table {

@@ -199,13 +199,13 @@ class Module_cms_comcode_pages
 		foreach ($zones as $zone)
 		{
 			$_out=array();
-			$_out=array_merge($_out,find_all_pages($zone,'comcode/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
-			$_out=array_merge($_out,find_all_pages($zone,'comcode_custom/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
 			if ($lang!=get_site_default_lang())
 			{
-				$_out=array_merge($_out,find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
-				$_out=array_merge($_out,find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
+				$_out+=find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
+				$_out+=find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
 			}
+			$_out+=find_all_pages($zone,'comcode_custom/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
+			$_out+=find_all_pages($zone,'comcode/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
 
 			foreach ($_out as $page=>$subdir)
 			{
@@ -318,7 +318,7 @@ class Module_cms_comcode_pages
 		$map=array('page'=>'_SELF','type'=>'_ed','lang'=>$lang);
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+		breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGES'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'comcode_pages'),get_module_zone('search'));
 		$sitemap_zone=get_page_zone('sitemap',false);
@@ -435,6 +435,7 @@ class Module_cms_comcode_pages
 		foreach ($filesarray as $pagelink=>$path_bits)
 		{
 			list($zone,$page)=explode(':',$pagelink,2);
+			if (!is_string($page)) $page=strval($page);
 
 			$edit_link=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$pagelink,'lang'=>$lang),'_SELF');
 
@@ -449,7 +450,7 @@ class Module_cms_comcode_pages
 				$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
 				if ((!array_key_exists(0,$rows)) && ($number_pages_parsed_for_titles<15))
 				{
-					$result=request_page($page,false,$zone,'comcode_custom_pure',true);
+					$result=request_page($page,false,$zone,'comcode_custom',true);
 					$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
 					$number_pages_parsed_for_titles++;
 				}
