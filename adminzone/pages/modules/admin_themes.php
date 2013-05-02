@@ -244,12 +244,27 @@ class Module_admin_themes
 
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_THEMES');
 
+		$_themes=find_all_themes(true);
+
+		// Look through zones
 		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),NULL,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
+		$free_choices=0;
+		$zone_list_free_choices=new ocp_tempcode();
+		foreach ($zones as $zone)
+		{
+			if (!array_key_exists($zone['zone_theme'],$_themes))
+			{
+				if (!$zone_list_free_choices->is_empty())
+					$zone_list_free_choices->attach(do_lang_tempcode('LIST_SEP'));
+				$zone_list_free_choices->attach($zone['zone_name']);
+
+				$free_choices++;
+			}
+		}
 
 		require_css('do_next');
 
 		// Show all themes
-		$_themes=find_all_themes(true);
 		$site_default_theme=$GLOBALS['FORUM_DRIVER']->_get_theme(true);
 		$themes=new ocp_tempcode();
 		$theme_default_reason=do_lang_tempcode('DEFAULT_THEME_BY_DEFAULT');
@@ -274,7 +289,13 @@ class Module_admin_themes
 			$zone_list=new ocp_tempcode();
 			if ($theme==$site_default_theme)
 			{
-				$zone_list->attach(do_lang_tempcode('THEME_DEFAULT_FOR_SITE'));
+				if ((count($zones)<10) && (!is_ocf_satellite_site()) && ($free_choices==0))
+				{
+					$zone_list->attach($zone_list_free_choices); // Actually will do nothing, as $free_choices==0
+				} else
+				{
+					$zone_list->attach(do_lang_tempcode('THEME_DEFAULT_FOR_SITE'));
+				}
 
 				// Why is this the site-default theme?
 				if ($theme==preg_replace('#[^\w\-\.\d]#','_',get_site_name()))
@@ -314,7 +335,12 @@ class Module_admin_themes
 		$zones=find_all_zones(false,true);
 		require_lang('zones');
 
-		return do_template('THEME_MANAGE_SCREEN',array('_GUID'=>'1dc277f18562976f6a23facec56a98e8','TITLE'=>$title,'THEMES'=>$themes,'THEME_DEFAULT_REASON'=>$theme_default_reason,'ZONES'=>$zones));
+		if ((count($zones)<10) && (!is_ocf_satellite_site()) && ($free_choices==0))
+		{
+			$theme_default_reason=''; // We don't need to know the reason really; don't over-complicate simple sites
+		}
+
+		return do_template('THEME_MANAGE_SCREEN',array('_GUID'=>'1dc277f18562976f6a23facec56a98e8','TITLE'=>$title,'THEMES'=>$themes,'THEME_DEFAULT_REASON'=>$theme_default_reason,'ZONES'=>$zones,'HAS_FREE_CHOICES'=>$free_choices!=0));
 	}
 
 	/**
