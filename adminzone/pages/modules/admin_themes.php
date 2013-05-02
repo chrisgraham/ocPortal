@@ -1070,15 +1070,17 @@ class Module_admin_themes
 					{
 						$filesarray[$file]=$subdir.'/'.$file;
 					}
-				}
-				else
+				} else
 				{
 					//$current=$subdir.'/'.$file;
-					if ((substr($file,0,strlen($find_for)+1)==$find_for.'.') && (substr($file,-9)!='.editfrom'))
+					if (((substr($file,0,strlen($find_for)+1)==$find_for.'.') || ($file==$find_for)) && (substr($file,-9)!='.editfrom'))
 					//if (substr($current,0,strlen($find_for)+1)==$find_for.'.')
 					{
 						$temp=explode('.',$file,3);
-						if (is_numeric($temp[2])) $filesarray[$file]=intval($temp[2]);
+						if (array_key_exists(2,$temp))
+						{
+							if (is_numeric($temp[2])) $filesarray[$file]=intval($temp[2]);
+						}
 					}
 				}
 			}
@@ -1316,7 +1318,7 @@ class Module_admin_themes
 			}
 
 			// Revision history
-			$filesarray=$this->get_template_files_array($theme,basename($file),true);
+			$filesarray=$this->get_template_files_array($theme,basename($file));
 			rsort($filesarray);
 			$j=0;
 			$revision_history=new ocp_tempcode();
@@ -1371,7 +1373,7 @@ class Module_admin_themes
 				require_code('diff');
 				if (function_exists('diff_simple'))
 				{
-					$rendered_diff=diff_simple(get_custom_file_base().'/themes/'.$file,$last_path);
+					$rendered_diff=diff_simple(get_file_base().'/themes/'.$orig_version,$last_path);
 					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'7ba03fe98a20330fc64ad742d2fb74fa','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>'0','RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
 					$j++;
 				}
