@@ -66,10 +66,7 @@ function captcha_script()
 	if ($mode=='audio')
 	{
 		header('Content-Type: audio/x-wav');
-		/*if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="securityvoice.wav"');
-		else
-			header('Content-Disposition: attachment; filename="securityvoice.wav"');*/
+		//header('Content-Disposition: attachment; filename="securityvoice.wav"');
 		$data='';
 		for ($i=0;$i<strlen($code_needed);$i++)
 		{

@@ -63,11 +63,7 @@ if ((get_param_integer('do__headers',1)==1) && (get_param_integer('dir',0)==0))
 	@ob_end_clean();
 	@ob_end_clean();
 
-	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
-	else
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+	header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 }
 
 global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;

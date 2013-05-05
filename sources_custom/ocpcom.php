@@ -548,10 +548,7 @@ function do_backup_script()
 
 	// Send header
 	header('Content-Type: application/octet-stream');
-	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		header('Content-Disposition: filename="backup-'.date('Y-m-d').'.zip"');
-	else
-		header('Content-Disposition: attachment; filename="backup-'.date('Y-m-d').'.zip"');
+	header('Content-Disposition: attachment; filename="backup-'.date('Y-m-d').'.zip"');
 	header('Content-Transfer-Encoding: binary');
 	header('Accept-Ranges: bytes');
 

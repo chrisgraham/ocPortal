@@ -118,10 +118,7 @@ function attachments_script()
 	header('Content-Type: '.$mime_type.'; authoritative=true;');
 	//if ($mime_type=='application/octet-stream') Not sure about this at time of writing
 	{
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		{
-			header('Content-Disposition: filename="'.$original_filename.'"');
-		}/* elseif (substr($original_filename,-4)=='.pdf')
+		/* if (substr($original_filename,-4)=='.pdf')
 		{
 			header('Content-Disposition: attachment; filename="'.$original_filename.'"');
 		} */else

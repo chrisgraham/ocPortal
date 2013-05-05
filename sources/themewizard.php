@@ -383,10 +383,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	if ($raw)
 	{
 		header('Content-type: image/png');
-		/*if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="-logo.png"');
-		else
-			header('Content-Disposition: attachment; filename="-logo.png"');*/
+		//header('Content-Disposition: attachment; filename="-logo.png"');
 		imagepng($img);
 		imagedestroy($img);
 		exit();

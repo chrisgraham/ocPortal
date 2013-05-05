@@ -52,10 +52,7 @@ function download_gallery_script()
 
 	// Send header
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		header('Content-Disposition: filename="gallery-'.$cat.'.zip"');
-	else
-		header('Content-Disposition: attachment; filename="gallery-'.$cat.'.zip"');
+	header('Content-Disposition: attachment; filename="gallery-'.$cat.'.zip"');
 
 	disable_php_memory_limit();
 

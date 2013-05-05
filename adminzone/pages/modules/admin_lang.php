@@ -426,10 +426,7 @@ class Module_admin_lang
 
 		// Send header
 		header('Content-Type: application/octet-stream'.'; authoritative=true;');
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="ocportal-'.$lang.'.tar"');
-		else
-			header('Content-Disposition: attachment; filename="ocportal-'.$lang.'.tar"');
+		header('Content-Disposition: attachment; filename="ocportal-'.$lang.'.tar"');
 
 		require_code('tar');
 		require_code('lang_compile');
