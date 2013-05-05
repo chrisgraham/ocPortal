@@ -18,10 +18,7 @@ $filename='ocportal-erd.sql';
 if (!isset($_GET['testing']))
 {
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
-	else
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+	header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 } else
 {
 	header('Content-type: text/plain');

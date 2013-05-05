@@ -146,10 +146,7 @@ function dload_script()
 		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
 	} else
 	{
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
-		else
-			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
 	}
 	header('Accept-Ranges: bytes');
 

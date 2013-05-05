@@ -69,13 +69,10 @@ function catalogue_file_script()
 	{
 		require_code('mime_types');
 		header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');
-		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
 	} else
 	{
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
-		else
-			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
 	}
 	header('Accept-Ranges: bytes');
 

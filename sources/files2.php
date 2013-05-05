@@ -226,10 +226,7 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 	if ($headers)
 	{
 		header('Content-type: text/csv');
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
-		else
-			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 	}
 
 	$out='';

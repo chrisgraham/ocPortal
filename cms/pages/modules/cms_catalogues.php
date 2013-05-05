@@ -1248,10 +1248,7 @@ class Module_cms_catalogues extends standard_crud_module
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		header('Content-type: text/csv');
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-			header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
-		else
-			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 
 		@ini_set('ocproducts.xss_detect','0');
 

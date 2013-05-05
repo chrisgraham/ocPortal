@@ -4,19 +4,21 @@ function make_tooltip_func(op)
 {
 	return function(event) {
 		if (typeof event=='undefined') var event=window.event;
-		if (!window.tpl_descrips[op])
+		if (typeof window.tpl_descrips[op]=='undefined')
 		{
-			var get_descrip=function() {
-				var loaded_result=do_ajax_request(window.url+'?theme='+window.encodeURIComponent(window.current_theme)+'&id='+window.encodeURIComponent(op)+keep_stub());
-				if (!loaded_result) return '';
-				window.tpl_descrips[op]=loaded_result.responseText;
-				return '<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>';
+			var get_descrip=function(callback) {
+				do_ajax_request(window.url+'?theme='+window.encodeURIComponent(window.current_theme)+'&id='+window.encodeURIComponent(op)+keep_stub(),function(loaded_result) {
+					if (!loaded_result) return '';
+					window.tpl_descrips[op]=loaded_result.responseText;
+					callback('<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>');
+				});
 			};
 		} else
 		{
-			var get_descrip=function() { return '<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>'; };
+			var get_descrip=function(callback) { callback('<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>'); };
 		}
-		if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,get_descrip,'20%',null,'130px');
+		if (typeof window.activate_tooltip!='undefined')
+			get_descrip(function(text) { activate_tooltip(this,event,text,'20%',null,'130px'); });
 	}
 }
 

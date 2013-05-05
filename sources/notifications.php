@@ -458,24 +458,34 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 	{
 		if ((($setting & A_DAILY_EMAIL_DIGEST) !=0) || (($setting & A_WEEKLY_EMAIL_DIGEST) !=0) || (($setting & A_MONTHLY_EMAIL_DIGEST) !=0))
 		{
-			$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
-				'd_subject'=>$subject,
-				'd_message'=>$message,
-				'd_from_member_id'=>$from_member_id,
-				'd_to_member_id'=>$to_member_id,
-				'd_priority'=>$priority,
-				'd_no_cc'=>$no_cc?1:0,
-				'd_date_and_time'=>time(),
-				'd_notification_code'=>$notification_code,
-				'd_code_category'=>is_null($code_category)?'':$code_category,
-				'd_frequency'=>$setting,
-			));
+			foreach (array(
+				A_DAILY_EMAIL_DIGEST,
+				A_WEEKLY_EMAIL_DIGEST,
+				A_MONTHLY_EMAIL_DIGEST
+			) as $frequency)
+			{
+				if (($setting & $frequency) !=0)
+				{
+					$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
+						'd_subject'=>$subject,
+						'd_message'=>$message,
+						'd_from_member_id'=>$from_member_id,
+						'd_to_member_id'=>$to_member_id,
+						'd_priority'=>$priority,
+						'd_no_cc'=>$no_cc?1:0,
+						'd_date_and_time'=>time(),
+						'd_notification_code'=>$notification_code,
+						'd_code_category'=>is_null($code_category)?'':$code_category,
+						'd_frequency'=>$frequency,
+					));
 
-			$GLOBALS['SITE_DB']->query_insert('digestives_consumed',array(
-				'c_member_id'=>$to_member_id,
-				'c_frequency'=>$setting,
-				'c_time'=>time(),
-			),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
+					$GLOBALS['SITE_DB']->query_insert('digestives_consumed',array(
+						'c_member_id'=>$to_member_id,
+						'c_frequency'=>$frequency,
+						'c_time'=>time(),
+					),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
+				}
+			}
 
 			$needs_manual_cc=false;
 		}

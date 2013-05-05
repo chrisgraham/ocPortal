@@ -189,7 +189,8 @@ class Hook_addon_registry_core_themeing
 				'TITLE'=>lorem_title(),
 				'THEMES'=>$themes,
 				'THEME_DEFAULT_REASON'=>lorem_phrase(),
-				'ZONES'=>$zones
+				'ZONES'=>$zones,
+				'HAS_FREE_CHOICES'=>true,
 			)), NULL, '', true)
 		);
 	}

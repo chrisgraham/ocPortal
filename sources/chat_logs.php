@@ -88,10 +88,7 @@ function chat_logs_script()
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
 	if ((strpos($room_name,chr(10))!==false) || (strpos($room_name,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		header('Content-Disposition: filename="'.$filename.'"');
-	else
-		header('Content-Disposition: attachment; filename="'.$filename.'"');
+	header('Content-Disposition: attachment; filename="'.$filename.'"');
 
 	$message_contents=do_template('BASIC_HTML_WRAP',array('_GUID'=>'ff052ede2357f894a219c27a3ec75642','TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT'=>$message_contents));
 
