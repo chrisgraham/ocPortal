@@ -324,7 +324,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 			$id=actual_add_catalogue_category($catalogue_name,$label,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,NULL,$meta_keywords,$meta_description);
 
-			$this->_custom_fields_save('catalogue_category',strval($id),$properties)
+			$this->_custom_fields_save('catalogue_category',strval($id),$properties);
 
 			return strval($id);
 		} else // Catalogue
@@ -529,9 +529,9 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 			if ($_properties===false) return false;
 			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$_properties;
 
-			actual_edit_catalogue_category(intval($resource_id),$label,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time,$catalogue_name);
+			actual_edit_catalogue_category(intval($resource_id),$label,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$catalogue_name);
 
-			$this->_custom_fields_save('catalogue_category',$resource_id,$properties)
+			$this->_custom_fields_save('catalogue_category',$resource_id,$properties);
 		}
 
 		return true;

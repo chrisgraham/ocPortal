@@ -637,7 +637,7 @@ class resource_fs_base
 	 */
 	function file_load__flat($filename,$path)
 	{
-		if (!$this->can_accept_filetype(get_file_extension($filename))) return false;
+		if (array()==$this->can_accept_filetype(get_file_extension($filename))) return false;
 		return $this->file_load_xml($filename,$path); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
 	}
 
@@ -653,7 +653,7 @@ class resource_fs_base
 		$ext=get_file_extension($filename);
 		if ($ext!='')
 		{
-			if (!$this->can_accept_filetype($ext)) return false;
+			if (array()==$this->can_accept_filetype($ext)) return false;
 		}
 		return $this->folder_load_xml($filename,$path); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
 	}
@@ -681,7 +681,7 @@ class resource_fs_base
 		}
 		if (substr($filename,0,1)=='.') return false;
 
-		if (!$this->can_accept_filetype(get_file_extension($filename))) return false;
+		if (array()==$this->can_accept_filetype(get_file_extension($filename))) return false;
 		return $this->file_save_xml($filename,$path,$data); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
 	}
 
@@ -698,7 +698,7 @@ class resource_fs_base
 		$ext=get_file_extension($filename);
 		if ($ext!='')
 		{
-			if (!$this->can_accept_filetype($ext)) return false;
+			if (array()==$this->can_accept_filetype($ext)) return false;
 		}
 		return $this->folder_save_xml($filename,$path,$data); // By default, only defer to the inbuilt ocPortal XML implementation (hooks may override this with support for other kinds of interchange file formats)
 	}
@@ -1798,11 +1798,11 @@ class resource_fs_base
 		static $cache=array();
 		if (array_key_exists($type,$cache)) return $cache[$type];
 
+		require_code('fields');
 		if (!has_tied_catalogue($type)) return array();
 
 		$props=array();
 
-		require_code('fields');
 		$fields=get_catalogue_fields('_'.$type);
 		foreach ($fields as $field_bits)
 		{
@@ -1855,6 +1855,7 @@ class resource_fs_base
 	 */
 	function _custom_fields_load($type,$id)
 	{
+		require_code('fields');
 		if (!has_tied_catalogue($type)) return array();
 
 		$properties=array();
@@ -1870,7 +1871,6 @@ class resource_fs_base
 			$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_'.$type),'ORDER BY cf_order');
 		}
 
-		require_code('fields');
 		$prop_names=array_keys($this->_custom_fields_enumerate_properties($type));
 		foreach ($special_fields as $i=>$field)
 		{
@@ -1894,6 +1894,7 @@ class resource_fs_base
 	 */
 	function _custom_fields_save($type,$id,$properties)
 	{
+		require_code('fields');
 		if (!has_tied_catalogue($type)) return;
 
 		$existing=get_bound_content_entry($type,$id);
@@ -2004,7 +2005,8 @@ class resource_fs_base
 			$child_folders=$folder_info['connection']->query_select($table,$select,$where,$extra,10000/*Reasonable limit*/);
 			foreach ($child_folders as $folder)
 			{
-				$filename=$this->folder_convert_id_to_filename($resource_type,$folder[$folder_info['id_field']]);
+				$str_id=extract_content_str_id_from_data($folder,$folder_info);
+				$filename=$this->folder_convert_id_to_filename($resource_type,$str_id);
 
 				$filetime=mixed();
 				if (method_exists($this,'_get_folder_edit_date'))
@@ -2170,7 +2172,7 @@ class resource_fs_base
 	{
 		if ($file_name=='_folder.'.RESOURCEFS_DEFAULT_EXTENSION)
 		{
-			return $this->folder_load__flat(array_shift($meta_dir),implode('/',$meta_dir));
+			return $this->folder_load__flat(array_pop($meta_dir),implode('/',$meta_dir));
 		}
 		return $this->file_load__flat($file_name,implode('/',$meta_dir));
 	}
@@ -2189,7 +2191,7 @@ class resource_fs_base
 	{
 		if ($file_name=='_folder.'.RESOURCEFS_DEFAULT_EXTENSION)
 		{
-			return $this->folder_save__flat(array_shift($meta_dir),implode('/',$meta_dir),$contents);
+			return $this->folder_save__flat(array_pop($meta_dir),implode('/',$meta_dir),$contents);
 		}
 		return $this->file_save__flat($file_name,implode('/',$meta_dir),$contents);
 	}

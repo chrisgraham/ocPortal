@@ -53,4 +53,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('occle_fs');
+	$o=new occle_fs();
+	$result=$o->write_file(array('var','catalogues','CATALOGUE-contacts','contacts_2','_folder.ocp'),'a:11:{s:5:"label";i:239;s:11:"description";i:240;s:5:"notes";s:0:"";s:9:"rep_image";s:0:"";s:15:"move_days_lower";i:30;s:16:"move_days_higher";i:60;s:11:"move_target";N;s:13:"meta_keywords";s:0:"";s:16:"meta_description";s:0:"";s:8:"add_date";i:1366205096;s:23:"custom__Course_space_ID";s:1:"x";}');
+	@exit(gettype($result));
 }
