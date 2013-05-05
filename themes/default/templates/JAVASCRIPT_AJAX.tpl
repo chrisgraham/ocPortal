@@ -146,7 +146,7 @@ function internalise_infinite_scrolling(url_stem,wrapper)
 	var scroll_y=get_window_scroll_y();
 
 	// Scroll down -- load
-	if ((scroll_y+window_height>wrapper_bottom-window_height/2) && (scroll_y+window_height<page_height-30)) // If within window_height/2 pixels of load area and not within 30 pixels of window bottom (so you can press End key)
+	if ((scroll_y+window_height>wrapper_bottom-window_height*2) && (scroll_y+window_height<page_height-30)) // If within window_height*2 pixels of load area and not within 30 pixels of window bottom (so you can press End key)
 	{
 		return internalise_infinite_scrolling_go(url_stem,wrapper,more_links);
 	}

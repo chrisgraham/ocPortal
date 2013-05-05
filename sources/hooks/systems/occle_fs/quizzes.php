@@ -139,7 +139,7 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
-	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
 	 * @return ~array			Details of the resource (false: error)
 	 */
 	function file_load($filename,$path)

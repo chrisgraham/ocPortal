@@ -162,7 +162,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 */
 	function _enumerate_folder_properties($category)
 	{
-		if (substr($category,0,10)!='CATALOGUE-')
+		if (substr($category,0,10)!='CATALOGUE-') // Category
 		{
 			return array(
 				'description'=>'LONG_TRANS',
@@ -174,10 +174,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				'meta_keywords'=>'LONG_TRANS',
 				'meta_description'=>'LONG_TRANS',
 				'add_date'=>'TIME',
-			);
+			)+$this->_custom_fields_enumerate_properties('catalogue_category');
 		}
 
-		return array(
+		return array( // Catalogue
 			'description'=>'LONG_TRANS',
 			'display_type'=>'SHORT_INTEGER',
 			'is_tree'=>'BINARY',
@@ -316,7 +316,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 		require_code('catalogues2');
 
-		if ($path!='')
+		if ($path!='') // Category
 		{
 			$_properties=$this->__folder_read_in_properties_category($path,$properties);
 			if ($_properties===false) return false;
@@ -324,8 +324,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 			$id=actual_add_catalogue_category($catalogue_name,$label,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,NULL,$meta_keywords,$meta_description);
 
+			$this->_custom_fields_save('catalogue_category',strval($id),$properties)
+
 			return strval($id);
-		} else
+		} else // Catalogue
 		{
 			list($description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time)=$this->__folder_read_in_properties_catalogue($path,$properties);
 
@@ -374,14 +376,14 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
-	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
 	 * @return ~array			Details of the resource (false: error)
 	 */
 	function folder_load($filename,$path)
 	{
 		list($resource_type,$resource_id)=$this->folder_convert_filename_to_id($filename);
 
-		if ($path!='')
+		if ($path!='') // Category
 		{
 			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue_category');
 
@@ -402,9 +404,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				'meta_keywords'=>$meta_keywords,
 				'meta_description'=>$meta_description,
 				'add_date'=>$row['cc_add_date'],
-			);
+			)+$this->_custom_fields_load('catalogue_category',strval($row['id']));
 		}
 
+		// Catalogue
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'catalogue');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$resource_id),'',1);
@@ -527,6 +530,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 			list($catalogue_name,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_date,$meta_keywords,$meta_description)=$_properties;
 
 			actual_edit_catalogue_category(intval($resource_id),$label,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time,$catalogue_name);
+
+			$this->_custom_fields_save('catalogue_category',$resource_id,$properties)
 		}
 
 		return true;
@@ -569,9 +574,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		$category_id=$this->_integer_category($category);
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default','cf_name'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		$unique_key_num=$this->_find_unique_key_num($_fields);
 		foreach ($_fields as $i=>$field_bits)
 		{
-			if ($i!=0)
+			if ($i!=$unique_key_num)
 			{
 				$cf_name=get_translated_text($field_bits['cf_name']);
 				$fixed_id=fix_id($cf_name);
@@ -597,6 +603,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 						break;
 					case 'long':
 						$_type='LONG_TEXT';
+						break;
+					case 'integer':
+						$_type='INTEGER';
+						break;
+					case 'float':
+						$_type='REAL';
 						break;
 				}
 				$props[$key]=$_type;
@@ -633,6 +645,21 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	}
 
 	/**
+	 * Find the best unique key index for the catalogue.
+	 *
+	 * @param  array			The catalogue fields
+	 * @return integer		The key index
+	 */
+	function _find_unique_key_num($fields)
+	{
+		foreach ($fields as $i=>$f)
+		{
+			if ($f['cf_type']=='codename') return $i;
+		}
+		return 0;
+	}
+
+	/**
 	 * Convert properties to variables for adding/editing catalogue entries.
 	 *
 	 * @param  string			The path (blank: root / not applicable)
@@ -647,13 +674,14 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 		$_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type','cf_default','cf_name'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		$unique_key_num=$this->_find_unique_key_num($_fields);
 		$map=array();
 		$props_already=array();
 		foreach ($_fields as $i=>$field_bits)
 		{
 			$field_id=$field_bits['id'];
 
-			if ($i==0)
+			if ($i==$unique_key_num)
 			{
 				$map[$field_id]=$label;
 			} else
@@ -719,7 +747,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
-	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
 	 * @return ~array			Details of the resource (false: error)
 	 */
 	function file_load($filename,$path)
@@ -747,17 +775,18 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		);
 
 		require_code('catalogues');
-		$special_fields=get_catalogue_entry_field_values($row['c_name'],intval($resource_id));
+		$fields=get_catalogue_entry_field_values($row['c_name'],intval($resource_id));
 
 		require_code('fields');
-		foreach ($special_fields as $field_num=>$field)
+		$unique_key_num=$this->_find_unique_key_num($fields);
+		foreach ($fields as $field_num=>$field)
 		{
 			$ob=get_fields_hook($field['cf_type']);
 			$val=$field['cf_default'];
 			if (array_key_exists('effective_value_pure',$field)) $val=$field['effective_value_pure'];
 			elseif (array_key_exists('effective_value',$field)) $val=$field['effective_value'];
 
-			if ($field_num==0)
+			if ($field_num==$unique_key_num)
 			{
 				$ret['label']=$val;
 			} else

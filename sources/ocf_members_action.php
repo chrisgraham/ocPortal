@@ -372,6 +372,12 @@ function get_cpf_storage_for($type)
 		case 'long':
 			$_type='LONG_TEXT';
 			break;
+		case 'integer':
+			$_type='INTEGER';
+			break;
+		case 'float':
+			$_type='REAL';
+			break;
 	}
 
 	$index=true;

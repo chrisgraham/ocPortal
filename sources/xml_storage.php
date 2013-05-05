@@ -598,11 +598,11 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 				case 'long_trans':
 					$_type='?LONG_TRANS';
 					break;
-				case 'tick':
-					$_type='BINARY';
-					break;
 				case 'integer':
 					$_type='?INTEGER';
+					break;
+				case 'float':
+					$_type='?REAL';
 					break;
 				default:
 					$index=true;

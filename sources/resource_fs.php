@@ -37,6 +37,44 @@ function init__resource_fs()
 	define('RESOURCEFS_DEFAULT_EXTENSION','ocp');
 
 	$GLOBALS['NO_QUERY_LIMIT']=true;
+
+	global $RESOURCEFS_LOGGER;
+	$RESOURCEFS_LOGGER=NULL;
+}
+
+/**
+ * Disengage logging.
+ */
+function resourcefs_logging__start()
+{
+	global $RESOURCEFS_LOGGER;
+	$RESOURCEFS_LOGGER=fopen(get_custom_file_base().'/data_custom/resourcefs.log','wt');
+}
+
+/**
+ * Log a message.
+ *
+ * @param  string		The message
+ * @param  ID_TEXT	The template to use
+ * @set    inform notice warn
+ */
+function resourcefs_logging($message,$type='warn')
+{
+	global $RESOURCEFS_LOGGER;
+	if (!is_null($RESOURCEFS_LOGGER))
+	{
+		fwrite($RESOURCEFS_LOGGER,$type.': '.$message."\n");
+	}
+}
+
+/**
+ * Disengage logging.
+ */
+function resourcefs_logging__end()
+{
+	global $RESOURCEFS_LOGGER;
+	fclose($RESOURCEFS_LOGGER);
+	$RESOURCEFS_LOGGER=NULL;
 }
 
 /**
@@ -247,7 +285,7 @@ function find_id_via_moniker($resource_type,$resource_moniker)
  *
  * @param  ID_TEXT		The resource type
  * @param  LONG_TEXT		The label
- * @param  ?string		The subpath (NULL: don't care)
+ * @param  ?string		The subpath (NULL: don't care). It may end in "/*" if you want to look for a match under a certain directory
  * @return ?ID_TEXT		The ID (NULL: no match)
  */
 function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
@@ -264,23 +302,48 @@ function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
 	$resource_ids=collapse_1d_complexity('resource_id',$ids);
 	foreach ($resource_ids as $resource_id)
 	{
-		if (($subpath===NULL) || ($occlefs_ob->search($resource_type,$resource_id,true)==$subpath))
-			return $resource_id;
+		if (_check_id_match($occlefs_ob,$resource_type,$_resource_label,$subpath)) return $resource_id;
 	}
 
 	// No valid match, do a direct DB search without the benefit of the alternative_ids table
 	$ids=$occlefs_ob->find_resource_by_label($resource_type,$_resource_label);
 	foreach ($ids as $resource_id)
 	{
-		if (($subpath===NULL) || ($occlefs_ob->search($resource_type,$resource_id,true)==$subpath))
-		{
-			generate_resourcefs_moniker($resource_type,$resource_id,$_resource_label); // Properly save it
-			return $resource_id;
-		}
+		if (_check_id_match($occlefs_ob,$resource_type,$_resource_label,$subpath)) return $resource_id;
 	}
 
 	// Still no valid match
 	return NULL;
+}
+
+/**
+ * Find if a resource matches search parameters.
+ *
+ * @param  object			OcCLE-fs/Resource-fs object
+ * @param  ID_TEXT		The resource type
+ * @param  ID_TEXT		The resource ID
+ * @param  ?string		The subpath (NULL: don't care). It may end in "/*" if you want to look for a match under a certain directory
+ * @return boolean		Whether it matches
+ */
+function _check_id_match($occlefs_ob,$occlefs_ob,$resource_type,$resource_id,$subpath)
+{
+	if ($subpath===NULL)
+	{
+		return true;
+	} else
+	{
+		$this_subpath=$occlefs_ob->search($resource_type,$resource_id,true);
+		if (substr($subpath,-2)=='/*')
+		{
+			if (substr($this_subpath.'/',0,strlen($subpath)-1)==substr($subpath,0,strlen($subpath)-1))
+				return true;
+		} else
+		{
+			if ($this_subpath==$subpath)
+				return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -880,7 +943,7 @@ class resource_fs_base
 	 * Convert a label to a filename, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
 	 *
 	 * @param  LONG_TEXT		Resource label
-	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			The path (blank: root / not applicable). It may end in "/*" if you want to look for a match under a certain directory
 	 * @param  ID_TEXT		Resource type
 	 * @param  boolean		Whether the content must already exist
 	 * @param  ?ID_TEXT		GUID to auto-create with (NULL: either not auto-creating, or not specifying the GUID if we are)
@@ -898,7 +961,7 @@ class resource_fs_base
 	 * Convert a label to an ID, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
 	 *
 	 * @param  SHORT_TEXT	Resource label
-	 * @param  string			The path (blank: root / not applicable)
+	 * @param  string			The path (blank: root / not applicable). It may end in "/*" if you want to look for a match under a certain directory
 	 * @param  ID_TEXT		Resource type
 	 * @param  boolean		Whether the content must already exist
 	 * @param  ?ID_TEXT		GUID to auto-create with (NULL: either not auto-creating, or not specifying the GUID if we are)
@@ -914,10 +977,13 @@ class resource_fs_base
 			if (!$must_already_exist)
 			{
 				// Not found, create...
+				resourcefs_logging('Auto-creating an unmatched '.$resource_type.' label reference, "'.$_label.'", under "'.$subpath.'"','notice');
 
 				// Create subpath
 				if ($subpath!='')
 				{
+					if (substr($subpath,-2)=='/*') $subpath=substr($subpath,0,strlen($subpath)-2);
+
 					$folder_resource_type=is_array($this->folder_resource_type)?$this->folder_resource_type[0]:$this->folder_resource_type;
 
 					$subpath_bits=explode('/',$subpath);
@@ -1609,7 +1675,29 @@ class resource_fs_base
 	{
 		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
-		$existing=$this->file_load($filename,$path);
+		return $this->file_save($filename,$path,$properties);
+	}
+
+	/**
+	 * Save function for resource-fs (for files).
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path to save at (blank: root / not applicable)
+	 * @param  array			Properties
+	 * @param  ?ID_TEXT		Whether to look for existing records using $filename as a label and this resource type (NULL: $filename is a strict file name)
+	 * @param  ?ID_TEXT		Search path (NULL: the same as the path saving at)
+	 * @return boolean		Success status
+	 */
+	function file_save($filename,$path,$properties,$search_label_as=NULL,$search_path=NULL)
+	{
+		if (is_null($search_path)) $search_path=$path;
+
+		if ($search_label_as!==NULL)
+		{
+			$filename=$this->convert_label_to_filename($filename,$search_path,$search_label_as,true);
+		}
+
+		$existing=$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
 			return $this->file_add($filename,$path,$properties);
@@ -1629,12 +1717,182 @@ class resource_fs_base
 	{
 		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
-		$existing=$this->folder_load($filename,$path);
+		return $this->folder_save($filename,$path,$properties);
+	}
+
+	/**
+	 * Save function for resource-fs (for folders).
+	 *
+	 * @param  ID_TEXT		Filename
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties
+	 * @param  ?ID_TEXT		Whether to look for existing records using $filename as a label and this resource type (NULL: $filename is a strict file name)
+	 * @param  ?ID_TEXT		Search path (NULL: the same as the path saving at)
+	 * @return boolean		Success status
+	 */
+	function folder_save($filename,$path,$properties,$search_label_as=NULL,$search_path=NULL)
+	{
+		if (is_null($search_path)) $search_path=$path;
+
+		if ($search_label_as!==NULL)
+		{
+			$filename=$this->convert_label_to_filename($filename,$path,$search_label_as,true);
+		}
+
+		$existing=$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
 			return $this->folder_add($filename,$path,$properties);
 		}
 		return $this->folder_edit($filename,$path,$properties+$existing);
+	}
+
+	/*
+	CUSTOM FIELDS BINDING
+	*/
+
+	/**
+	 * Find details of custom properties.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @return array			Details of properties
+	 */
+	function _custom_fields_enumerate_properties($type)
+	{
+		static $cache=array();
+		if (array_key_exists($type,$cache)) return $cache[$type];
+
+		if (!has_tied_catalogue($type)) return array();
+
+		$props=array();
+
+		require_code('fields');
+		$fields=get_catalogue_fields('_'.$type);
+		foreach ($fields as $field_bits)
+		{
+			$cf_name=get_translated_text($field_bits['cf_name']);
+			$fixed_id='custom__'.fix_id($cf_name);
+			if (!array_key_exists($fixed_id,$props))
+			{
+				$key=$fixed_id;
+			} else
+			{
+				$key='custom__field_'.strval($field_bits['id']);
+			}
+
+			require_code('fields');
+			$ob=get_fields_hook($field_bits['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>NULL,'cf_type'=>$field_bits['cf_type'],'cf_default'=>''));
+			$_type='SHORT_TEXT';
+			switch ($storage_type)
+			{
+				case 'short_trans':
+					$_type='SHORT_TRANS';
+					break;
+				case 'long_trans':
+					$_type='LONG_TRANS';
+					break;
+				case 'long':
+					$_type='LONG_TEXT';
+					break;
+				case 'integer':
+					$_type='INTEGER';
+					break;
+				case 'float':
+					$_type='REAL';
+					break;
+			}
+			$props[$key]=$_type;
+		}
+
+		$cache[$type]=$props;
+
+		return $props;
+	}
+
+	/**
+	 * Load custom properties.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @param  ID_TEXT		The content ID
+	 * @return array			Loaded properties
+	 */
+	function _custom_fields_load($type,$id)
+	{
+		if (!has_tied_catalogue($type)) return array();
+
+		$properties=array();
+
+		require_code('catalogues');
+
+		$catalogue_entry_id=get_bound_content_entry($type,$id);
+		if (!is_null($catalogue_entry_id))
+		{
+			$special_fields=get_catalogue_entry_field_values('_'.$type,$catalogue_entry_id);
+		} else
+		{
+			$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_'.$type),'ORDER BY cf_order');
+		}
+
+		require_code('fields');
+		$prop_names=array_keys($this->_custom_fields_enumerate_properties($type));
+		foreach ($special_fields as $i=>$field)
+		{
+			$default=$field['cf_default'];
+			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
+			elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
+
+			$prop_name=$prop_names[$i];
+			$properties[$prop_name]=$default;
+		}
+
+		return $properties;
+	}
+
+	/**
+	 * Save custom properties.
+	 *
+	 * @param  ID_TEXT		The resource type
+	 * @param  ID_TEXT		The content ID
+	 * @param  array			Properties to save
+	 */
+	function _custom_fields_save($type,$id,$properties)
+	{
+		if (!has_tied_catalogue($type)) return;
+
+		$existing=get_bound_content_entry($type,$id);
+
+		require_code('catalogues');
+
+		// Get field values
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_'.$type),'ORDER BY cf_order');
+		$map=array();
+		require_code('fields');
+		$prop_names=array_keys($this->_custom_fields_enumerate_properties($type));
+		foreach ($fields as $i=>$field)
+		{
+			$prop_name=$prop_names[$i];
+			if (!array_key_exists($prop_name,$properties)) $properties[$prop_name]='';
+			$map[$field['id']]=$properties[$prop_name];
+		}
+
+		$first_cat=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>'_'.$type));
+
+		require_code('catalogues2');
+
+		if (!is_null($existing))
+		{
+			actual_edit_catalogue_entry($existing,$first_cat,1,'',0,0,0,$map);
+		} else
+		{
+			$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+
+			$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+				'catalogue_entry_id'=>$catalogue_entry_id,
+				'content_type'=>$type,
+				'content_id'=>$id,
+			));
+		}
 	}
 
 	/*
