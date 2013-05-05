@@ -1,6 +1,6 @@
 ; Similar to stuff defined in sources/files.php, but defined in terms of what we want never to be in git
 test_a
-/sources_custom/user_sync.php
+/sources_custom/user_sync__customise.php
 /www.pid
 /.htaccess
 .DS_Store
