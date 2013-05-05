@@ -302,7 +302,7 @@ function add_chatroom($welcome,$roomname,$room_owner,$allow2,$allow2_groups,$dis
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('chat',strval($id));
+		generate_resourcefs_moniker('chat',strval($id),NULL,NULL,true);
 	}
 
 	decache('side_shoutbox');

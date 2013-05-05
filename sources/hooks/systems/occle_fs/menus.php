@@ -130,7 +130,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 		if ((addon_installed('occle')) && (!running_script('install')))
 		{
 			require_code('resource_fs');
-			generate_resourcefs_moniker('menu',$menu);
+			generate_resourcefs_moniker('menu',$menu,NULL,NULL,true);
 		}
 
 		log_it('ADD_MENU',$menu);

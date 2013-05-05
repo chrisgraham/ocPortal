@@ -310,7 +310,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('member',strval($member_id));
+		generate_resourcefs_moniker('member',strval($member_id),NULL,NULL,true);
 	}
 
 	return $member_id;
@@ -498,7 +498,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('cpf',strval($id));
+		generate_resourcefs_moniker('cpf',strval($id),NULL,NULL,true);
 	}
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;

@@ -50,7 +50,7 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('iotd',strval($id));
+		generate_resourcefs_moniker('iotd',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

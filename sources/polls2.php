@@ -99,7 +99,7 @@ function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('poll',strval($id));
+		generate_resourcefs_moniker('poll',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

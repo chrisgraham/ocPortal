@@ -176,7 +176,7 @@ END;
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('zone',$zone);
+		generate_resourcefs_moniker('zone',$zone,NULL,NULL,true);
 	}
 
 	log_it('ADD_ZONE',$zone);

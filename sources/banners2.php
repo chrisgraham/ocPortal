@@ -305,7 +305,7 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('banner',$name);
+		generate_resourcefs_moniker('banner',$name,NULL,NULL,true);
 	}
 
 	return $name;

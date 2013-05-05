@@ -43,7 +43,7 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('news_category',strval($id));
+		generate_resourcefs_moniker('news_category',strval($id),NULL,NULL,true);
 	}
 
 	decache('side_news_categories');
@@ -264,7 +264,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('news',strval($id));
+		generate_resourcefs_moniker('news',strval($id),NULL,NULL,true);
 	}
 
 	if (function_exists('xmlrpc_encode'))

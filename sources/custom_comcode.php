@@ -67,7 +67,7 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('custom_comcode_tag',$tag);
+		generate_resourcefs_moniker('custom_comcode_tag',$tag,NULL,NULL,true);
 	}
 
 	return $tag;

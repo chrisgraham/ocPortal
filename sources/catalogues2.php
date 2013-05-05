@@ -206,7 +206,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('catalogue',$name);
+		generate_resourcefs_moniker('catalogue',$name,NULL,NULL,true);
 	}
 
 	return $name;
@@ -553,7 +553,7 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('catalogue_category',strval($id));
+		generate_resourcefs_moniker('catalogue_category',strval($id),NULL,NULL,true);
 	}
 
 	return $id;
@@ -968,7 +968,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		if ((addon_installed('occle')) && (!running_script('install')))
 		{
 			require_code('resource_fs');
-			generate_resourcefs_moniker('catalogue_entry',strval($id));
+			generate_resourcefs_moniker('catalogue_entry',strval($id),NULL,NULL,true);
 		}
 	}
 

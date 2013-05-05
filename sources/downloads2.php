@@ -258,7 +258,7 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('download_category',strval($id));
+		generate_resourcefs_moniker('download_category',strval($id),NULL,NULL,true);
 	}
 
 	require_code('seo2');
@@ -786,7 +786,7 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('download',strval($id));
+		generate_resourcefs_moniker('download',strval($id),NULL,NULL,true);
 	}
 
 	return $id;
@@ -1034,7 +1034,7 @@ function add_download_licence($title,$text)
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('download_licence',strval($id));
+		generate_resourcefs_moniker('download_licence',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

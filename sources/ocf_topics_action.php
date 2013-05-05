@@ -116,7 +116,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('topic',strval($topic_id));
+		generate_resourcefs_moniker('topic',strval($topic_id),NULL,NULL,true);
 	}
 
 	return $topic_id;

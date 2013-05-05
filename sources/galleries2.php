@@ -407,7 +407,7 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('image',strval($id));
+		generate_resourcefs_moniker('image',strval($id),NULL,NULL,true);
 	}
 
 	require_code('seo2');
@@ -761,7 +761,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('video',strval($id));
+		generate_resourcefs_moniker('video',strval($id),NULL,NULL,true);
 	}
 
 	if ($validated==1)
@@ -1129,7 +1129,7 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('gallery',$name);
+		generate_resourcefs_moniker('gallery',$name,NULL,NULL,true);
 	}
 
 	if ($parent_id!='')

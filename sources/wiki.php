@@ -177,7 +177,7 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('wiki_post',strval($id));
+		generate_resourcefs_moniker('wiki_post',strval($id),NULL,NULL,true);
 	}
 
 	return $id;
@@ -356,7 +356,7 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('wiki_page',strval($id));
+		generate_resourcefs_moniker('wiki_page',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

@@ -49,7 +49,7 @@ function ocf_make_multi_moderation($name,$post_text,$move_to,$pin_state,$sink_st
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('multi_moderation',strval($id));
+		generate_resourcefs_moniker('multi_moderation',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

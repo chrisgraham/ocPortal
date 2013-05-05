@@ -36,7 +36,7 @@ function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('ticket_type',strval($ticket_type_lang));
+		generate_resourcefs_moniker('ticket_type',strval($ticket_type_lang),NULL,NULL,true);
 	}
 
 	return $ticket_type_lang;

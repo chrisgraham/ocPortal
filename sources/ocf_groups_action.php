@@ -151,7 +151,7 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('group',strval($group_id));
+		generate_resourcefs_moniker('group',strval($group_id),NULL,NULL,true);
 	}
 
 	if ($is_private_club==1)

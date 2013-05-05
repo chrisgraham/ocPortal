@@ -164,7 +164,7 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('menu_item',strval($id));
+		generate_resourcefs_moniker('menu_item',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

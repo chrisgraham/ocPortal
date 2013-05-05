@@ -28,6 +28,12 @@ function _decache($cached_for,$identifier=NULL)
 {
 	// NB: If we use persistent cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistent cache and others don't. Or maybe some nodes do and others don't.
 
+	static $done_already=array();
+	if ($identifier===NULL)
+	{
+		if (array_key_exists($cached_for,$done_already)) return;
+	}
+
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
 		persistent_cache_delete(array('CACHE',$cached_for));
@@ -64,6 +70,11 @@ function _decache($cached_for,$identifier=NULL)
 		$where.=')';
 	}
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where,NULL,NULL,false,true);
+
+	if ($identifier===NULL)
+	{
+		$done_already[$cached_for]=true;
+	}
 }
 
 /**

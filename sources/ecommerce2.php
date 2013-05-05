@@ -59,7 +59,7 @@ function add_usergroup_subscription($title,$description,$cost,$length,$length_un
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('usergroup_subscription',strval($id));
+		generate_resourcefs_moniker('usergroup_subscription',strval($id),NULL,NULL,true);
 	}
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;

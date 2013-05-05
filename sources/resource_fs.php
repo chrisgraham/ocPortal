@@ -112,10 +112,17 @@ ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch that via t
  * @param  ?LONG_TEXT	The (new) label (NULL: lookup for specified resource)
  * @return array			A triple: The moniker (may be new, or the prior one if the moniker did not need to change), the GUID, the label
  * @param  ?ID_TEXT		GUID to forcibly assign (NULL: don't force)
+ * @param  boolean		If we know this is new, i.e. has no existing moniker
  */
-function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$new_guid=NULL)
+function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$new_guid=NULL,$definitely_new=false)
 {
 	if (!is_null($label)) $label=substr($label,0,255);
+
+	static $cache=array();
+	if (is_null($new_guid))
+	{
+		if (isset($cache[$resource_type][$resource_id])) return $cache[$resource_type][$resource_id];
+	}
 
 	require_code('content');
 	$resource_object=get_content_object($resource_type);
@@ -123,13 +130,18 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];
 
-	$lookup=$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_moniker','resource_guid','resource_label'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
+	$lookup=$definitely_new?array():$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_moniker','resource_guid','resource_label'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
 	if (array_key_exists(0,$lookup))
 	{
 		$no_exists_check_for=$lookup[0]['resource_moniker'];
 		$guid=is_null($new_guid)?$lookup[0]['resource_guid']:$new_guid;
 
-		if (is_null($new_guid)) return array($no_exists_check_for,$guid,$lookup[0]['resource_label']);
+		if (is_null($new_guid))
+		{
+			$ret=array($no_exists_check_for,$guid,$lookup[0]['resource_label']);
+			$cache[$resource_type][$resource_id]=$ret;
+			return $ret;
+		}
 	} else
 	{
 		$no_exists_check_for=mixed();
@@ -186,7 +198,9 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 		));
 	}
 
-	return array($moniker,$guid,$label);
+	$ret=array($moniker,$guid,$label);
+	$cache[$resource_type][$resource_id]=$ret;
+	return $ret;
 }
 
 /**
@@ -273,11 +287,17 @@ function find_label_via_id($resource_type,$resource_id)
  */
 function find_id_via_moniker($resource_type,$resource_moniker)
 {
+	static $cache=array();
+	if (isset($cache[$resource_type][$resource_moniker])) return $cache[$resource_type][$resource_moniker];
+
 	$where=array(
 		'resource_type'=>$resource_type,
 		'resource_moniker'=>$resource_moniker,
 	);
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',$where);
+	$ret=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',$where);
+
+	$cache[$resource_type][$resource_moniker]=$ret;
+	return $ret;
 }
 
 /**
@@ -292,6 +312,9 @@ function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
 {
 	$resource_label=substr($_resource_label,0,255);
 
+	static $cache=array();
+	if (isset($cache[$resource_type][$resource_label][$subpath])) return $cache[$resource_type][$resource_label][$subpath];
+
 	$occlefs_ob=get_resource_occlefs_object($resource_type);
 	if (is_null($occlefs_ob)) fatal_exit('Cannot load resource-fs object for '.$resource_type);
 
@@ -302,14 +325,22 @@ function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
 	$resource_ids=collapse_1d_complexity('resource_id',$ids);
 	foreach ($resource_ids as $resource_id)
 	{
-		if (_check_id_match($occlefs_ob,$resource_type,$_resource_label,$subpath)) return $resource_id;
+		if (_check_id_match($occlefs_ob,$resource_type,$resource_id,$subpath))
+		{
+			$cache[$resource_type][$resource_label][$subpath]=$resource_id;
+			return $resource_id;
+		}
 	}
 
 	// No valid match, do a direct DB search without the benefit of the alternative_ids table
 	$ids=$occlefs_ob->find_resource_by_label($resource_type,$_resource_label);
 	foreach ($ids as $resource_id)
 	{
-		if (_check_id_match($occlefs_ob,$resource_type,$_resource_label,$subpath)) return $resource_id;
+		if (_check_id_match($occlefs_ob,$resource_type,$resource_id,$subpath))
+		{
+			$cache[$resource_type][$resource_label][$subpath]=$resource_id;
+			return $resource_id;
+		}
 	}
 
 	// Still no valid match
@@ -325,7 +356,7 @@ function find_id_via_label($resource_type,$_resource_label,$subpath=NULL)
  * @param  ?string		The subpath (NULL: don't care). It may end in "/*" if you want to look for a match under a certain directory
  * @return boolean		Whether it matches
  */
-function _check_id_match($occlefs_ob,$occlefs_ob,$resource_type,$resource_id,$subpath)
+function _check_id_match($occlefs_ob,$resource_type,$resource_id,$subpath)
 {
 	if ($subpath===NULL)
 	{
@@ -354,9 +385,14 @@ function _check_id_match($occlefs_ob,$occlefs_ob,$resource_type,$resource_id,$su
  */
 function find_id_via_guid($resource_guid)
 {
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
+	static $cache=array();
+	if (isset($cache[$resource_guid])) return $cache[$resource_guid];
+
+	$ret=$GLOBALS['SITE_DB']->query_select_value_if_there('alternative_ids','resource_id',array(
 		'resource_guid'=>$resource_guid,
 	));
+	$cache[$resource_guid]=$ret;
+	return $ret;
 }
 
 /**

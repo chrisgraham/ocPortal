@@ -38,7 +38,7 @@ function add_award_type($title,$description,$points,$content_type,$hide_awardee,
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('award_type',strval($id));
+		generate_resourcefs_moniker('award_type',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

@@ -321,7 +321,7 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('quiz',strval($id));
+		generate_resourcefs_moniker('quiz',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

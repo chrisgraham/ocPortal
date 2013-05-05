@@ -163,7 +163,7 @@ function add_author($author,$url,$member_id,$description,$skills,$meta_keywords=
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('author',$author);
+		generate_resourcefs_moniker('author',$author,NULL,NULL,true);
 	}
 }
 

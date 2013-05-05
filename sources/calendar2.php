@@ -137,7 +137,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('event',strval($id));
+		generate_resourcefs_moniker('event',strval($id),NULL,NULL,true);
 	}
 
 	return $id;
@@ -335,7 +335,7 @@ function add_event_type($title,$logo,$external_feed='')
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('calendar_type',strval($id));
+		generate_resourcefs_moniker('calendar_type',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

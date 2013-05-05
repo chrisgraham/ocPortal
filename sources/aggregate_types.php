@@ -72,7 +72,7 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pa
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('aggregate_type_instance',strval($id));
+		generate_resourcefs_moniker('aggregate_type_instance',strval($id),NULL,NULL,true);
 	}
 
 	return $id;

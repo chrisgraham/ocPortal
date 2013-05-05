@@ -221,7 +221,7 @@ function _get_user_sync_env__groups($field_name,$remote_data,$dbh,$member_id)
 				case '': // blank means "In progress"
 					$is_student=true;
 					$secondary_groups[]=trim($enrolment['course_name'],' -'); // Shared usergroup
-					$secondary_groups[]=$GLOBALS['FORUM_DB']->query_select_value('f_groups c JOIN catalogue_entry_linkage l ON c.id=l.content_id JOIN '.get_table_prefix().'catalogue_efv_short x ON x.ce_id=l.catalogue_entry_id','c.id',array('x.cv_value'=>$row['kp_college_course_id'],'x.cf_id'=>find_custom_field_id('group','Course ID'),'l.content_type'=>'_group')); // Specific usergroup
+					$secondary_groups[]=$GLOBALS['FORUM_DB']->query_select_value('f_groups c JOIN catalogue_entry_linkage l ON c.id=l.content_id JOIN '.get_table_prefix().'catalogue_efv_short x ON x.ce_id=l.catalogue_entry_id','c.id',array('x.cv_value'=>$enrolment['kp_college_course_id'],'x.cf_id'=>find_custom_field_id('group','Course ID'),'l.content_type'=>'_group')); // Specific usergroup
 					break;
 
 				case 'Completed':
@@ -712,7 +712,7 @@ function get_catalogue_root_filename($resourcefs,$catalogue_name)
 	static $cache=array();
 	if (isset($cache[$catalogue_name])) return $cache[$catalogue_name];
 	$root_category_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('cc_parent_id'=>NULL,'c_name'=>$catalogue_name));
-	$ret=$resourcefs=>convert_id_to_filename('catalogue_category',strval($root_category_id));
+	$ret=$resourcefs->convert_id_to_filename('catalogue_category',strval($root_category_id));
 	$cache[$catalogue_name]=$ret;
 	return $ret;
 }

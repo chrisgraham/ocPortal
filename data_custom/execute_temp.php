@@ -53,5 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	set_value('user_sync_enabled','1');
 }
