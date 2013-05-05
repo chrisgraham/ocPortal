@@ -474,7 +474,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		return $out;
 	}
 
-	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE,$SITE_INFO;
+	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE,$ZONE_DEFAULT_PAGES_CACHE,$SITE_INFO;
 
 	$using_default_params=(!$force_all) && ($start==0) && ($max==50);
 	if ($using_default_params)
@@ -509,6 +509,8 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 			$zones[]=$zone['zone_name'];
 			$zones_titled[$zone['zone_name']]=array($zone['zone_name'],$zone['zone_title'],array_key_exists('zone_displayed_in_menu',$zone)?$zone['zone_displayed_in_menu']:1,$zone['zone_default_page'],$zone);
 		}
+
+		$ZONE_DEFAULT_PAGES_CACHE[$zone['zone_name']]=$zone['zone_default_page'];
 	}
 
 	if ($using_default_params)

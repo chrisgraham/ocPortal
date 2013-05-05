@@ -188,8 +188,11 @@ function generate_notifications($member_id)
 			)));
 		}
 
-		require_code('caches2');
-		put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));
+		if (get_option('is_on_block_cache')=='1')
+		{
+			require_code('caches2');
+			put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));
+		}
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 	}

@@ -1496,7 +1496,7 @@ function get_community_billboard_message()
 		$_community_billboard=persistent_cache_get('COMMUNITY_BILLBOARD');
 		if ($_community_billboard===NULL)
 		{
-			$community_billboard=$GLOBALS['SITE_DB']->query_value_if_there('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
+			$community_billboard=$GLOBALS['SITE_DB']->query_value_if_there('SELECT the_message FROM '.get_table_prefix().'community_billboard WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
 			if ($community_billboard===NULL)
 			{
 				persistent_cache_set('COMMUNITY_BILLBOARD',false);

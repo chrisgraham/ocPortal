@@ -453,7 +453,7 @@ function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
 	if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
 	$db=((substr($ob_info['table'],0,2)!='f_') || (get_forum_type()=='none'))?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
 	$where=get_content_where_for_str_id($effective_id,$ob_info);
-	$_moniker_src=$db->query_select($ob_info['table'],$select,$where);
+	$_moniker_src=$db->query_select($ob_info['table'],$select,$where); // NB: For Comcode pages visited, this won't return anything -- it will become more performant when the page actually loads, so the moniker won't need redoing each time
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 	if (!array_key_exists(0,$_moniker_src)) return NULL; // been deleted?
 
@@ -585,7 +585,16 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 			if ($moniker==preg_replace('#^.*/#','',$no_exists_check_for)) return $moniker; // This one is okay, we know it is safe
 		}
 
-		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
+		$usql='SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page);
+		if ($type=='')
+		{
+			$usql.=' AND '.db_string_equal_to('m_resource_id',$id);
+		} else
+		{
+			$usql.=' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id);
+		}
+		$usql.=' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')';
+		$test=$GLOBALS['SITE_DB']->query_value_if_there($usql);
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;

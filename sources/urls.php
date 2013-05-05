@@ -1005,11 +1005,10 @@ function find_id_moniker($url_parts,$zone)
 	load_moniker_hooks();
 	if (!array_key_exists('id',$url_parts))
 	{
-		$effective_id=$url_parts['page'];
-
-		if (!is_file(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/EN/'.$effective_id.'.txt')) return NULL;
+		if (!is_file(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/EN/'.$url_parts['page'].'.txt')) return NULL;
 
 		$url_parts['type']='';
+		$effective_id=$zone;
 		$url_parts['id']=$zone;
 
 		$looking_for='_WILD:_WILD';

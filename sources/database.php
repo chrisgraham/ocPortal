@@ -848,6 +848,7 @@ class database_driver
 					$field_prefix='main.';
 
 					$select_inv=array_flip($select);
+
 					foreach ($lang_fields_provisional as $lang_field)
 					{
 						if ((isset($select_inv[$field_prefix.$lang_field])) || (isset($select_inv[$field_prefix.'*'])))
