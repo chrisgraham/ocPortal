@@ -53,7 +53,7 @@ function get_user_sync_env()
 		),
 		*/
 
-		'password'=>array(
+		'pass_hash_salted'=>array(
 		),
 		'email_address'=>array(
 		),
@@ -65,7 +65,7 @@ function get_user_sync_env()
 		),
 		'dob_year'=>array(
 		),
-		'timezone'=>array(
+		'timezone_offset'=>array(
 		),
 		'primary_group'=>array(
 		),

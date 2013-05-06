@@ -106,29 +106,36 @@ if (!function_exists('critical_error'))
 				$traces='';
 				foreach ($stage as $key=>$value)
 				{
-					if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_array($value) && (strlen(serialize($value))>500)))
+					try
 					{
-						$_value=gettype($value);
-					} else
-					{
-						if (strpos($error,'Allowed memory')!==false) // Actually we don't call this code path any more, as stack trace is useless (comes from the catch_fatal_errors function)
+						if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_array($value) && (strlen(serialize($value))>500)))
 						{
 							$_value=gettype($value);
-							switch ($_value)
-							{
-								case 'integer':
-									$_value=strval($value);
-									break;
-								case 'string':
-									$_value=$value;
-									break;
-							}
 						} else
 						{
-							@ob_start();
-							var_export($value);
-							$_value=ob_get_clean();
+							if (strpos($error,'Allowed memory')!==false) // Actually we don't call this code path any more, as stack trace is useless (comes from the catch_fatal_errors function)
+							{
+								$_value=gettype($value);
+								switch ($_value)
+								{
+									case 'integer':
+										$_value=strval($value);
+										break;
+									case 'string':
+										$_value=$value;
+										break;
+								}
+							} else
+							{
+								@ob_start();
+								var_export($value);
+								$_value=ob_get_clean();
+							}
 						}
+					}
+					catch (Exception $e) // Can happen for SimpleXMLElement
+					{
+						$_value='...';
 					}
 
 					global $SITE_INFO;

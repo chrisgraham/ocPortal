@@ -22,8 +22,10 @@
 INBOUND
 */
 
-function user_sync__inbound($since)
+function user_sync__inbound($since=NULL)
 {
+	if (function_exists('set_time_limit')) @set_time_limit(0);
+
 	require_code('ocf_members');
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
@@ -63,7 +65,8 @@ function user_sync__inbound($since)
 
 	// Connect to the database
 	if (!class_exists('PDO')) warn_exit('PDO must be installed.');
-	$dbh=new PDO($db_type.':host='.$db_host.';dbname='.$db_name,$db_user,$db_password);
+	$connect_string=$db_type.':host='.$db_host.';dbname='.$db_name;
+	$dbh=new PDO($connect_string,$db_user,$db_password);
 	$dbh->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
 
 	// Customised start code
@@ -113,7 +116,7 @@ function user_sync__inbound($since)
 		$dob_day=$user_data['dob_day'];
 		$dob_month=$user_data['dob_month'];
 		$dob_year=$user_data['dob_year'];
-		$timezone=$user_data['timezone'];
+		$timezone=$user_data['timezone_offset'];
 		$primary_group=$user_data['primary_group'];
 		$validated=$user_data['validated'];
 		$is_perm_banned=$user_data['is_perm_banned'];
@@ -128,9 +131,9 @@ function user_sync__inbound($since)
 		// Import to standard member record
 		if ($member_id===NULL)
 		{
-			$user_data['password']=($user_data['password']===NULL)?$default_password:$user_data['password'];
-			$password=is_null($user_data['password'])?get_rand_password():$user_data['password'];
-			$password_compatibility_scheme=$temporary_password?'temporary':(is_null($user_data['password'])?'plain'/*so we can find it from the DB*/:NULL);
+			$user_data['pass_hash_salted']=($user_data['pass_hash_salted']===NULL)?$default_password:$user_data['pass_hash_salted'];
+			$password=is_null($user_data['pass_hash_salted'])?get_rand_password():$user_data['pass_hash_salted'];
+			$password_compatibility_scheme=$temporary_password?'temporary':(is_null($user_data['pass_hash_salted'])?'plain'/*so we can find it from the DB*/:NULL);
 
 			$custom_fields=array();
 
@@ -159,7 +162,7 @@ function user_sync__inbound($since)
 		} else
 		{
 			$password=NULL; // Passwords will not be re-synched
-			$custom_fields=NULL;
+			$custom_fields=array();
 			$last_visit_time=NULL;
 			$theme=NULL;
 			$avatar_url=NULL;
@@ -263,6 +266,7 @@ function user_sync_handle_field_remap($field_name,$remap_scheme,$remote_data,$db
 
 		case 'callback': // Callback
 			$data=call_user_func($remap_scheme[1],$field_name,$remote_data,$dbh,$member_id);
+			if (!is_array($data)) $data=array($data);
 			break;
 
 		default: // ???
@@ -335,7 +339,7 @@ function user_sync_get_field_default($field_name)
 {
 	switch ($field_name)
 	{
-		case 'password':
+		case 'pass_hash_salted':
 			return NULL;
 		case 'email_address':
 			return '';
@@ -347,7 +351,7 @@ function user_sync_get_field_default($field_name)
 			return NULL;
 		case 'dob_year':
 			return NULL;
-		case 'timezone':
+		case 'timezone_offset':
 			return '';
 		case 'primary_group':
 			return get_first_default_group();
@@ -519,7 +523,7 @@ function user_sync__outbound($member_id)
 UTILITY FUNCTIONS
 */
 
-function user_import_find_native_fields()
+function user_sync_find_native_fields()
 {
 	$native_fields=array();
 	$db_meta=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_name'),array('m_table'=>'f_members'));

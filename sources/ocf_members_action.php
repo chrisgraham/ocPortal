@@ -176,9 +176,6 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 			{
 				access_denied('I_ERROR');
 			}
-		} else
-		{
-			$custom_fields[$field_id]='';
 		}
 	}
 
@@ -260,32 +257,42 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	{
 		if (!array_key_exists($field_num,$all_fields_types)) continue; // Trying to set a field we're not allowed to (doesn't apply to our group)
 
-		$ob=get_fields_hook($all_fields_types[$field_num]);
-		list(,,$storage_type)=$ob->get_field_value_row_bits($all_fields[$field_num]);
-
-		if (strpos($storage_type,'_trans')!==false)
-		{
-			$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
-		}
 		$row['field_'.strval($field_num)]=$value;
 	}
 
 	// Set custom field row
-	$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
+	$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type','cf_default'));
 	foreach ($all_fields_regardless as $field)
 	{
-		if (!array_key_exists('field_'.strval($field['id']),$row))
-		{
-			$ob=get_fields_hook($field['cf_type']);
-			list(,,$storage_type)=$ob->get_field_value_row_bits($field);
+		$ob=get_fields_hook($field['cf_type']);
+		list(,,$storage_type)=$ob->get_field_value_row_bits($field);
 
-			$value='';
-			if (strpos($storage_type,'_trans')!==false)
-			{
-				$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
-			}
-			$row['field_'.strval($field['id'])]=$value;
+		if (array_key_exists('field_'.strval($field['id']),$row))
+		{
+			$value=$row['field_'.strval($field['id'])];
+		} else
+		{
+			$value=$field['cf_default'];
 		}
+
+		if (is_string($value)) // Should not normally be needed, but the grabbing from cf_default further up is not converted yet
+		{
+			switch ($storage_type)
+			{
+				case 'short_trans':
+				case 'long_trans':
+					$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
+					break;
+				case 'integer':
+					$value=intval($value);
+					break;
+				case 'float':
+					$value=floatval($value);
+					break;
+			}
+		}
+
+		$row['field_'.strval($field['id'])]=$value;
 	}
 	$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
 

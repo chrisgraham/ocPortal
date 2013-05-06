@@ -216,12 +216,16 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 *
 	 * @param  ID_TEXT	The resource type
 	 * @param  ID_TEXT	The resource ID
-	 * @return ID_TEXT	The filename
+	 * @return ?ID_TEXT	The filename (NULL: could not find)
 	 */
 	function folder_convert_id_to_filename($resource_type,$resource_id)
 	{
 		if ($resource_type=='forum')
-			return 'FORUM-'.parent::folder_convert_id_to_filename('forum',$resource_id);
+		{
+			$f=parent::folder_convert_id_to_filename('forum',$resource_id);
+			if (is_null($f)) return NULL;
+			return 'FORUM-'.$f;
+		}
 
 		return parent::folder_convert_id_to_filename('topic',$resource_id);
 	}

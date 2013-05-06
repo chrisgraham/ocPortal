@@ -950,6 +950,8 @@ function page_path_to_pagelink($page)
  */
 function load_moniker_hooks()
 {
+	if (running_script('install')) return;
+
 	global $CONTENT_OBS;
 	if ($CONTENT_OBS===NULL)
 	{

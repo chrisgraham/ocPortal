@@ -208,12 +208,16 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 *
 	 * @param  ID_TEXT	The resource type
 	 * @param  ID_TEXT	The resource ID
-	 * @return ID_TEXT	The filename
+	 * @return ?ID_TEXT	The filename (NULL: could not find)
 	 */
 	function folder_convert_id_to_filename($resource_type,$resource_id)
 	{
 		if ($resource_type=='catalogue')
-			return 'CATALOGUE-'.parent::folder_convert_id_to_filename('catalogue',$resource_id);
+		{
+			$f=parent::folder_convert_id_to_filename('catalogue',$resource_id);
+			if (is_null($f)) return NULL;
+			return 'CATALOGUE-'.$f;
+		}
 
 		return parent::folder_convert_id_to_filename('catalogue_category',$resource_id);
 	}
@@ -285,7 +289,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 			$parent_id=$this->_integer_category($category);
 			$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$parent_id));
-			$is_tree=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_is_tree',array('id'=>$parent_id));
+			$is_tree=$GLOBALS['SITE_DB']->query_select_value('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
 			if ($is_tree==0) return false;
 		}
 
@@ -763,9 +767,9 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 		$ret=array(
 			'validated'=>$row['ce_validated'],
 			'notes'=>$row['notes'],
-			'allow_rating'=>$row['ce_allow_rating'],
-			'allow_comments'=>$row['ce_allow_comments'],
-			'allow_trackbacks'=>$row['ce_allow_trackbacks'],
+			'allow_rating'=>$row['allow_rating'],
+			'allow_comments'=>$row['allow_comments'],
+			'allow_trackbacks'=>$row['allow_trackbacks'],
 			'views'=>$row['ce_views'],
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,

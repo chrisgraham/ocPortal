@@ -737,11 +737,12 @@ class resource_fs_base
 	 *
 	 * @param  ID_TEXT	The resource type
 	 * @param  ID_TEXT	The resource ID
-	 * @return ID_TEXT	The filename
+	 * @return ?ID_TEXT	The filename (NULL: could not find)
 	 */
 	function file_convert_id_to_filename($resource_type,$resource_id)
 	{
 		$moniker=find_moniker_via_id($resource_type,$resource_id);
+		if (is_null($moniker)) return NULL;
 		return $moniker.'.'.RESOURCEFS_DEFAULT_EXTENSION;
 	}
 
@@ -1020,12 +1021,18 @@ class resource_fs_base
 				{
 					if (substr($subpath,-2)=='/*') $subpath=substr($subpath,0,strlen($subpath)-2);
 
-					$folder_resource_type=is_array($this->folder_resource_type)?$this->folder_resource_type[0]:$this->folder_resource_type;
-
 					$subpath_bits=explode('/',$subpath);
 					$subpath_above='';
-					foreach ($subpath_bits as $subpath_bit)
+					foreach ($subpath_bits as $i=>$subpath_bit)
 					{
+						if (is_array($this->folder_resource_type))
+						{
+							$folder_resource_type=$this->folder_resource_type[array_key_exists($i,$this->folder_resource_type)?$i:(count($this->folder_resource_type)-1)];
+						} else
+						{
+							$folder_resource_type=$this->folder_resource_type;
+						}
+
 						list(,$subpath_id)=$this->folder_convert_filename_to_id($subpath_bit);
 						if (is_null($subpath_id)) // Missing, find via monikerised label
 						{
@@ -1038,7 +1045,7 @@ class resource_fs_base
 						}
 						if (is_null($subpath_id)) // Still missing, create folder
 						{
-							$this->folder_add($subpath_bit,$subpath_above,array());
+							$subpath_id=$this->folder_add($subpath_bit,$subpath_above,array());
 						}
 
 						if ($subpath_above!='') $subpath_above.='/';
@@ -1728,15 +1735,16 @@ class resource_fs_base
 	{
 		if (is_null($search_path)) $search_path=$path;
 
+		$label=$filename;
 		if ($search_label_as!==NULL)
 		{
-			$filename=$this->convert_label_to_filename($filename,$search_path,$search_label_as,true);
+			$filename=$this->convert_label_to_filename($label,$search_path,$search_label_as,true);
 		}
 
-		$existing=$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
+		$existing=($filename===NULL)?false:$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
-			return $this->file_add($filename,$path,$properties);
+			return $this->file_add($label,$path,$properties);
 		}
 		return $this->file_edit($filename,$path,$properties+$existing);
 	}
@@ -1770,15 +1778,16 @@ class resource_fs_base
 	{
 		if (is_null($search_path)) $search_path=$path;
 
+		$label=$filename;
 		if ($search_label_as!==NULL)
 		{
-			$filename=$this->convert_label_to_filename($filename,$path,$search_label_as,true);
+			$filename=$this->convert_label_to_filename($label,$search_path,$search_label_as,true);
 		}
 
-		$existing=$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
+		$existing=($filename===NULL)?false:$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
-			return $this->folder_add($filename,$path,$properties);
+			return $this->folder_add($label,$path,$properties);
 		}
 		return $this->folder_edit($filename,$path,$properties+$existing);
 	}
