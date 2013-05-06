@@ -1209,7 +1209,7 @@ class forum_driver_ocf extends forum_driver_base
 			if (is_null($for_member)) $for_member=get_member();
 			$where=' WHERE g_is_private_club=0';
 			if (is_null($force_find)) $force_find=array();
-			$force_find+=$this->_get_members_groups($for_member);
+			$force_find=array_merge($force_find,$this->_get_members_groups($for_member));
 			foreach ($force_find as $gid)
 			{
 				$where.=' OR g.id='.strval($gid);

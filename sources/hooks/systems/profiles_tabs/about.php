@@ -154,6 +154,7 @@ class Hook_Profiles_Tabs_about
 		require_lang('menus');
 		$sections=array('contact'=>do_lang_tempcode('CONTACT'),'profile'=>do_lang_tempcode('EDIT_PROFILE'),'views'=>do_lang_tempcode('ACCOUNT'),'usage'=>do_lang_tempcode('USAGE'),'content'=>do_lang_tempcode('CONTENT'));
 		$actions=array();
+
 		sort_maps_by($modules,1);
 		foreach ($sections as $section_code=>$section_title)
 		{

@@ -710,15 +710,7 @@ function process_url_monikers($page)
 							exit();
 						} else // Map back 'id'
 						{
-							if ($monikers[0]['m_resource_type']=='')
-							{
-								$_GET['page']=$monikers[0]['m_resource_id'];
-							} else
-							{
-								$_GET['page']=$monikers[0]['m_resource_page'];
-								$_GET['type']=$monikers[0]['m_resource_type'];
-								$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
-							}
+							$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
 						}
 					}
 					return;

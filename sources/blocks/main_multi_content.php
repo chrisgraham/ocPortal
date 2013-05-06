@@ -638,7 +638,7 @@ class Block_main_multi_content
 		$parent_spec__parent_name=array_key_exists('parent_spec__parent_name',$info)?$info['parent_spec__parent_name']:NULL;
 		$parent_spec__field_name=array_key_exists('parent_spec__field_name',$info)?$info['parent_spec__field_name']:NULL;
 		$id_field_numeric=((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric']));
-		$category_is_string=((array_key_exists('category_is_string',$info)) && (is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string']));
+		$category_is_string=((array_key_exists('category_is_string',$info)) && (is_array($info['category_is_string'])?$info['category_is_string'][1]:$info['category_is_string']));
 		require_code('ocfiltering');
 		return ocfilter_to_sqlfragment($filter,$info['id_field'],$parent_spec__table_name,$parent_spec__parent_name,'r.'.$parent_field_name,$parent_spec__field_name,$id_field_numeric,!$category_is_string);
 	}

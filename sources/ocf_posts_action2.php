@@ -231,7 +231,11 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 			:
 			('t_cache_num_posts='.strval($GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','COUNT(*)',array('p_topic_id'=>$topic_id,'p_intended_solely_for'=>NULL))))
 		).
-		' WHERE id='.strval($topic_id)
+		' WHERE id='.strval($topic_id),
+		NULL,
+		NULL,
+		false,
+		true
 	);
 }
 

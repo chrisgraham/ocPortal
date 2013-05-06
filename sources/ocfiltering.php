@@ -105,7 +105,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 
 	if ($first) // We want base of subtree to be included
 	{
-		$under[]=$look_under;
+		$under[]=$numeric_ids?intval($look_under):$look_under;
 	}
 
 	if (is_null($parent_name)) return $under;
@@ -144,7 +144,6 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 			}
 		}
 	}
-
 	return $under;
 }
 
@@ -319,7 +318,7 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 				if (!is_null($field_name)) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
 				else $ids_and_parents=_ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db);
 			}
-			$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,$matches[2]=='>',$matches[2]=='>');
+			$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,false,$matches[2]!='>');
 
 			foreach ($subtree as $subtree_i)
 			{
@@ -516,7 +515,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				}
 			} else
 			{
-				$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,true,$matches[2]!='>');
+				$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,false,$matches[2]!='>');
 				foreach ($subtree as $ii)
 				{
 					if ($out_or!='') $out_or.=' OR ';

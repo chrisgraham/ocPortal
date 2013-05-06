@@ -149,9 +149,21 @@ class Module_groups
 	{
 		$title=get_screen_title('USERGROUPS');
 
-		$map=has_privilege(get_member(),'see_hidden_groups')?array('g_is_private_club'=>0):array('g_is_private_club'=>0,'g_hidden'=>0);
-		$groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),$map,'ORDER BY g_order,id');
 		$staff_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
+
+		$sql='SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE ';
+		if (!has_privilege(get_member(),'see_hidden_groups'))
+			$sql.='g_hidden=0 AND ';
+		$sql.='(g_promotion_target IS NOT NULL';
+		if (db_has_subqueries($GLOBALS['FORUM_DB']))
+			$sql.=' OR EXISTS(SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups h WHERE h.g_promotion_target=g.id)';
+		foreach ($staff_groups as $g_id)
+		{
+			$sql.=' OR g.id='.strval($g_id);
+		}
+		$sql.=')';
+		$sql.=' ORDER BY g_order,id';
+		$groups=$GLOBALS['FORUM_DB']->query($sql);
 
 		foreach ($groups as $g_id=>$row)
 		{
@@ -171,7 +183,6 @@ class Module_groups
 				$_staff[$group['id']]=$group;
 			} else
 			{
-				$_others[$group['id']]=$group;
 				if (!is_null($group['g_promotion_target']))
 				{
 					// Are we at the start of a usergroup?
@@ -208,19 +219,12 @@ class Module_groups
 				}
 			}
 		}
-		// Cleanup so no usergroups in rank lines are in $others
-		foreach ($_ranks as $r)
-		{
-			foreach (array_keys($r) as $g_id)
-			{
-				unset($_others[$g_id]);
-			}
-		}
 
 		// Generate usergroup result browsers
 		require_code('templates_results_table');
 		$sortables=array();
 		list($sortable,$sort_order)=array('foo','ASC');
+
 		//-Staff
 		$start=get_param_integer('staff_start',0);
 		$max=get_param_integer('staff_max',50);
@@ -243,6 +247,7 @@ class Module_groups
 			$i++;
 		}
 		$staff=results_table(do_lang_tempcode('STAFF'),$start,'staff_start',$max,'staff_max',$max_rows,$fields_title,$staff,$sortables,$sortable,$sort_order,'staff_sort',NULL,array('200'));
+
 		//-Ranks
 		$ranks=array();
 		foreach ($_ranks as $g_id=>$_rank)
@@ -275,17 +280,27 @@ class Module_groups
 			$rank=results_table(do_lang_tempcode('RANK_SETS'),$start,'rank_start_'.strval($g_id),$max,'rank_max_'.strval($g_id),$max_rows,$fields_title,$rank,$sortables,$sortable,$sort_order,'rank_sort_'.strval($g_id),NULL,array('200'));
 			$ranks[]=$rank;
 		}
+
 		//-Others
 		$start=get_param_integer('others_start',0);
 		$max=get_param_integer('others_max',20);
-		$map=has_privilege(get_member(),'see_hidden_groups')?array('g_is_private_club'=>1):array('g_is_private_club'=>1,'g_hidden'=>0);
-		$max_rows=count($_others);
-		if ($start>count($_others)) $_others=array();
-		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.*','text_original'),$map,'ORDER BY g_order,g.id',$max,max(0,$start-$max_rows)));
-		$max_rows+=$GLOBALS['FORUM_DB']->query_select_value('f_groups g','COUNT(*)',$map);
+		$sql='SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE ';
+		if (!has_privilege(get_member(),'see_hidden_groups'))
+			$sql.='g_hidden=0 AND ';
+		$sql.='(g_promotion_target IS NULL';
+		if (db_has_subqueries($GLOBALS['FORUM_DB']))
+			$sql.=' AND NOT EXISTS(SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups h WHERE h.g_promotion_target=g.id)';
+		foreach ($staff_groups as $g_id)
+		{
+			$sql.=' AND g.id<>'.strval($g_id);
+		}
+		$sql.=' AND g.id<>'.strval(db_get_first_id());
+		$sql.=')';
+		$sql.=' ORDER BY g_order,id';
+		$_others=$GLOBALS['FORUM_DB']->query($sql,$max,$start);
+		$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there(str_replace('SELECT * ','SELECT COUNT(*) ',$sql));
 		$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS')),$sortables);
 		$others=new ocp_tempcode();
-		$i=0;
 		foreach ($_others as $row)
 		{
 			$row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
@@ -295,7 +310,8 @@ class Module_groups
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 			$others->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members))));
 		}
-		$others=results_table(do_lang_tempcode('OTHER_USERGROUPS'),$start,'others_start',$max,'others_max',$max_rows,$fields_title,$others,$sortables,$sortable,$sort_order,'others_sort',NULL,array('200'));
+		if (!$others->is_empty())
+			$others=results_table(do_lang_tempcode('OTHER_USERGROUPS'),$start,'others_start',$max,'others_max',$max_rows,$fields_title,$others,$sortables,$sortable,$sort_order,'others_sort',NULL,array('200'));
 
 		$tpl=do_template('OCF_GROUP_DIRECTORY_SCREEN',array('_GUID'=>'39aebd8fcb618c2ae45e867d0c96a4cf','TITLE'=>$title,'STAFF'=>$staff,'OTHERS'=>$others,'RANKS'=>$ranks));
 

@@ -1007,7 +1007,8 @@ function find_id_moniker($url_parts,$zone)
 	load_moniker_hooks();
 	if (!array_key_exists('id',$url_parts))
 	{
-		if (!is_file(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/EN/'.$url_parts['page'].'.txt')) return NULL;
+		if (is_file(get_custom_file_base().'/'.$zone.'/pages/modules/'.$url_parts['page'].'.php')) // Wasteful of resources
+			return NULL;
 
 		$url_parts['type']='';
 		$effective_id=$zone;

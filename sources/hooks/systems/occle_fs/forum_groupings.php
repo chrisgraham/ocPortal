@@ -103,7 +103,8 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
 		require_code('ocf_forums_action');
 
 		$description=$this->_default_property_str($properties,'description');
-		$expanded_by_default=$this->_default_property_int($properties,'expanded_by_default');
+		$expanded_by_default=$this->_default_property_int_null($properties,'expanded_by_default');
+		if (is_null($expanded_by_default)) $expanded_by_default=1;
 
 		$id=ocf_make_forum_grouping($label,$description,$expanded_by_default);
 		return strval($id);
@@ -148,7 +149,8 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
 
 		$label=$this->_default_property_str($properties,'label');
 		$description=$this->_default_property_str($properties,'description');
-		$expanded_by_default=$this->_default_property_int($properties,'expanded_by_default');
+		$expanded_by_default=$this->_default_property_int_null($properties,'expanded_by_default');
+		if (is_null($expanded_by_default)) $expanded_by_default=1;
 
 		ocf_edit_forum_grouping(intval($resource_id),$label,$description,$expanded_by_default);
 

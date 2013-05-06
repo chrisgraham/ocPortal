@@ -66,17 +66,23 @@ function execute_temp()
 
 	require_code('user_sync__customise');
 	global $DO_COLLEGES,$DO_COURSES,$DO_LECTURES,$DO_ENROLMENTS,$DO_SCHEDULES,$DO_LECTURES,$DO_CLEANUP,$DO_USER_SYNC;
-	$DO_COLLEGES=false;
-	$DO_COURSES=false;
-	$DO_LECTURES=false;
-	$DO_ENROLMENTS=false;
+	$DO_COLLEGES=true;
+	$DO_COURSES=true;
+	$DO_LECTURES=true;
+	$DO_ENROLMENTS=true;
 	$DO_SCHEDULES=true;
-	$DO_CLEANUP=false;
-	$DO_USER_SYNC=false;
+	$DO_CLEANUP=true;
+	$DO_USER_SYNC=true;
 
 	require_code('user_sync');
 	global $USER_SYNC_IMPORT_LIMIT;
-	$USER_SYNC_IMPORT_LIMIT=1;
+	$USER_SYNC_IMPORT_LIMIT=50;
 
 	user_sync__inbound();
+
+	if ($USER_SYNC_IMPORT_LIMIT===NULL)
+	{
+		set_value('user_sync_enabled','1');
+		set_long_value('last_cron_user_sync',strval(time()));
+	}
 }

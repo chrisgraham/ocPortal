@@ -267,13 +267,16 @@ class Hook_occle_fs_forums extends resource_fs_base
 		$forum_grouping_id=$this->_default_property_int_null($properties,'forum_grouping_id');
 		if (is_null($forum_grouping_id)) $forum_grouping_id=$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');
 		$access_mapping=array();
-		$position=$this->_default_property_int($properties,'position');
-		$post_count_increment=$this->_default_property_int($properties,'post_count_increment');
+		$position=$this->_default_property_int_null($properties,'position');
+		if (is_null($position)) $position=1;
+		$post_count_increment=$this->_default_property_int_null($properties,'post_count_increment');
+		if (is_null($post_count_increment)) $post_count_increment=1;
 		$order_sub_alpha=$this->_default_property_int($properties,'order_sub_alpha');
 		$intro_question=$this->_default_property_str($properties,'intro_question');
 		$intro_answer=$this->_default_property_str($properties,'intro_answer');
 		$redirection=$this->_default_property_str($properties,'redirection');
 		$order=$this->_default_property_str($properties,'order');
+		if ($order=='') $order='last_post';
 		$is_threaded=$this->_default_property_int($properties,'is_threaded');
 
 		return array($description,$forum_grouping_id,$access_mapping,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection,$order,$is_threaded);

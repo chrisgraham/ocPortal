@@ -872,7 +872,7 @@ function mergesort(&$array,$cmp_function='strcmp')
 	mergesort($array2,$cmp_function);
 
 	// If all of $array1 is <= all of $array2, just append them.
-	if (call_user_func($cmp_function,end($array1),$array2[0])<1)
+	if (call_user_func($cmp_function,end($array1),reset($array2))<1)
 	{
 		$array=array_merge($array1,$array2);
 		return;
@@ -880,24 +880,44 @@ function mergesort(&$array,$cmp_function='strcmp')
 
 	// Merge the two sorted arrays into a single sorted array
 	$array=array();
+	reset($array1);
+	reset($array2);
 	$ptr1=0;
 	$ptr2=0;
-	while ($ptr1<count($array1) && $ptr2<count($array2))
+	$cnt1=count($array1);
+	$cnt2=count($array2);
+	while (($ptr1<$cnt1) && ($ptr2<$cnt2))
 	{
-		if (call_user_func($cmp_function,$array1[$ptr1],$array2[$ptr2])<1)
+		if (call_user_func($cmp_function,current($array1),current($array2))<1)
 		{
-			$array[]=$array1[$ptr1];
+			$next=current($array1);
+			$array[]=$next;
 			$ptr1++;
+			next($array1);
 		} else
 		{
-			$array[]=$array2[$ptr2];
+			$next=current($array2);
+			$array[]=$next;
 			$ptr2++;
+			next($array2);
 		}
 	}
 
 	// Merge the remainder
-	while ($ptr1<count($array1)) $array[]=$array1[$ptr1++];
-	while ($ptr2<count($array2)) $array[]=$array2[$ptr2++];
+	while ($ptr1<count($array1))
+	{
+		$next=current($array1);
+		$array[]=$next;
+		$ptr1++;
+		next($array1);
+	}
+	while ($ptr2<count($array2))
+	{
+		$next=current($array2);
+		$array[]=$next;
+		$ptr2++;
+		next($array2);
+	}
 }
 
 /**

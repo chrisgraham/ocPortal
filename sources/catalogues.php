@@ -196,7 +196,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'ENTRY_DETAILS'=>$entry_details,
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_catalogues:type=__edit_catalogue:id='.strval($row['id']),
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_catalogues:type=__edit_catalogue:id='.$row['c_name'],
 	));
 }
 

@@ -273,6 +273,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		} else
 		{
 			$value=$field['cf_default'];
+			if (strpos($value,'|')!==false) $value=preg_replace('#\|.*$#','',$value);
 		}
 
 		if (is_string($value)) // Should not normally be needed, but the grabbing from cf_default further up is not converted yet

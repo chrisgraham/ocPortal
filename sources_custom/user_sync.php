@@ -82,6 +82,9 @@ function user_sync__inbound($since=NULL)
 	$dbh=new PDO($connect_string,$db_user,$db_password);
 	$dbh->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
 
+	if (strtolower(get_charset())=='utf-8')
+		$dbh->exec('set names utf8');
+
 	// Customised start code
 	get_user_sync__begin($dbh,$since);
 
@@ -93,7 +96,7 @@ function user_sync__inbound($since=NULL)
 		// Run query to gather remote data
 		$sql='SELECT * FROM '.$db_table;
 		if ((!is_null($time_field)) && (!is_null($since)))
-			$sql.=' WHERE '.$time_field.'>=\''.date('Y-m-d H:i:s',$since).'\'';
+			$sql.=' WHERE '.$db_field_delim.$time_field.$db_field_delim.'>=\''.date('Y-m-d H:i:s',$since).'\'';
 		$sth=$dbh->query($sql);
 
 		$i=0;

@@ -57,7 +57,7 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 			{
 				$c=$ob->get_member_list_count();
 				if (!is_null($c))
-					$a+=count($c);
+					$a+=$c;
 			}
 		}
 	}
@@ -71,7 +71,24 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 		$c=count($members);
 	} else $c=0;
 
-	return $a+$b+$c;
+	// Now for probation
+	$d=0;
+	if ($include_secondaries)
+	{
+		global $PROBATION_GROUP_CACHE;
+		if (is_null($PROBATION_GROUP_CACHE))
+		{
+			$probation_group=get_option('probation_usergroup');
+			$PROBATION_GROUP_CACHE=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
+			if (is_null($PROBATION_GROUP_CACHE)) $PROBATION_GROUP_CACHE=false;
+		}
+		if ($PROBATION_GROUP_CACHE===$group_id)
+		{
+			$d=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_on_probation_until>'.strval(time()));
+		}
+	}
+
+	return $a+$b+$c+$d;
 }
 
 /**
@@ -142,6 +159,27 @@ function ocf_get_group_members_raw($group_id,$include_primaries=true,$non_valida
 	if (!is_null($LDAP_CONNECTION))
 	{
 		ocf_get_group_members_raw_ldap($members,$group_id,$include_primaries,$non_validated,$include_secondaries);
+	}
+
+	// Now for probation
+	if ($include_secondaries)
+	{
+		global $PROBATION_GROUP_CACHE;
+		if (is_null($PROBATION_GROUP_CACHE))
+		{
+			$probation_group=get_option('probation_usergroup');
+			$PROBATION_GROUP_CACHE=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
+			if (is_null($PROBATION_GROUP_CACHE)) $PROBATION_GROUP_CACHE=false;
+		}
+		if ($PROBATION_GROUP_CACHE===$group_id)
+		{
+			$d=$GLOBALS['FORUM_DB']->query('SELECT id,m_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_on_probation_until>'.strval(time()),$max);
+			foreach ($d as $member_row)
+			{
+				$member_id=$member_row['id'];
+				$members[]=$non_validated?array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>$member_row['m_username']):$member_id;
+			}
+		}
 	}
 
 	return $members;

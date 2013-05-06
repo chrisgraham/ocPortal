@@ -107,9 +107,8 @@
 						</div>
 					</form>
 
-					{+START,IF,{MAY_CHANGE_MAX}}
-						<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
-							{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},max}
+					<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
+						{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},max}
 
 						<div class="inline">
 							<label for="order">{!ORDER}:
