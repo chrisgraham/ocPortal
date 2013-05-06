@@ -1,0 +1,11 @@
+[title="1"]Contact[/title]
+
+[title="3"]Address[/title]
+The British Museum
+18 Great Russell St
+London Borough of Camden
+WC1B, UK
+
+[title="3"]Map[/title]
+
+[block title="The British Museum" zoom="17" center="1" latitude="51.518938" longitude="-0.126311"]main_google_map[/block]

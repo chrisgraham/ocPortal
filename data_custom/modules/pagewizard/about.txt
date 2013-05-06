@@ -1,0 +1,27 @@
+[title="1"]About[/title]
+
+ocPortal is a free and open source content management system (CMS) written in PHP and based on a MySQL backend database. The software has been developed by British software developer Chris Graham since 2004, with contributions from programmers Chris Warburton, Paul Duffy and Philip Withnall, and designers Allen Ellis and Robert Goacher.
+
+[title="2"]Mission[/title]
+Bringing a way that empowers the masses to create better websites on saner budgets.
+
+[title="2"]History[/title]
+ocPortal was originally released in February 2004 and the current version is Version 9.
+ - January 2009
+  - Included in the Opensource CMS Demo program.
+ - June 2009
+  - Included in the Killerstartup's “Web App Tools” list.
+ - September 2009
+  - Added to the CMS reports top 30 web applications from a list of 1,700.
+ - December 2009
+  - ocProducts moved to new offices in Sheffield.
+ - June 2012
+  - Included in Webhosting Search's list of the best web tools.
+
+[title="2"]Key Staff[/title]
+ - [email="Chris Graham"]chris@ocproducts.com[/email]
+ - Chris Warburton
+ - Paul Duffy
+ - Philip Withnall
+ - Allen Ellis
+ - Robert Goacher

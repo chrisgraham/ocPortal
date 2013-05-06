@@ -1,0 +1,7 @@
+[title="1"]Web Radio[/title]
+
+Listen to you favorite online radio channel.
+
+
+<a id="onlineRadioLink" href="http://radiotuna.com/alternative-rock-radio">alternative rock radio</a>
+<script type="text/javascript" src="http://radiotuna.com/OnlineRadioPlayer/EmbedRadio?playerParams=%7B%22styleSelection0%22%3A131%2C%22styleSelection1%22%3A256%2C%22styleSelection2%22%3A96%2C%22textColor%22%3A0%2C%22backgroundColor%22%3A15592941%2C%22buttonColor%22%3A8427007%2C%22glowColor%22%3A8427007%2C%22playerSize%22%3A240%2C%22playerType%22%3A%22style%22%7D&width=240&height=292"></script>
