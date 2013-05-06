@@ -202,7 +202,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -236,7 +236,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 
 		$name=edit_gallery($resource_id,$name,$label,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$meta_keywords,$meta_description,$allow_rating,$allow_comments,$g_owner,$add_time,true,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -291,12 +291,12 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 * @param  ID_TEXT	The resource ID
 	 * @return ID_TEXT	The filename
 	 */
-	function _file_convert_id_to_filename($resource_type,$resource_id)
+	function file_convert_id_to_filename($resource_type,$resource_id)
 	{
 		if ($resource_type=='video')
-			return 'VIDEO-'.parent::_file_convert_id_to_filename($resource_type,$resource_id,'video');
+			return 'VIDEO-'.parent::file_convert_id_to_filename($resource_type,$resource_id,'video');
 
-		return parent::_file_convert_id_to_filename($resource_type,$resource_id);
+		return parent::file_convert_id_to_filename($resource_type,$resource_id);
 	}
 
 	/**
@@ -319,9 +319,10 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  ?ID_TEXT		Resource type to try to force (NULL: do not force)
 	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
-	function file_add($filename,$path,$properties)
+	function file_add($filename,$path,$properties,$force_type=NULL)
 	{
 		list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path);
 		list($properties,$label)=$this->_file_magic_filter($filename,$path,$properties);
@@ -344,7 +345,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
 		require_code('images');
-		if (((is_image($url)) || ($url=='')) && ((!array_key_exists('video_length',$properties)) || ($properties['video_length']=='')))
+		if ((((is_image($url)) || ($url=='')) && ((!array_key_exists('video_length',$properties)) || ($properties['video_length']=='')) || ($force_type==='image')) && ($force_type!=='video'))
 		{
 			$allow_rating=$this->_default_property_int_modeavg($properties,'allow_rating','images',1);
 			$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','images',1);
@@ -431,7 +432,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -485,7 +486,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 			edit_video(intval($resource_id),$label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
 		}
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

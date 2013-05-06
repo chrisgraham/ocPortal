@@ -309,13 +309,14 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+	 * @param  ?ID_TEXT		Resource type to try to force (NULL: do not force)
 	 * @return ~ID_TEXT		The resource ID (false: error)
 	 */
-	function folder_add($filename,$path,$properties)
+	function folder_add($filename,$path,$properties,$force_type=NULL)
 	{
 		list($properties,$label)=$this->_folder_magic_filter($filename,$path,$properties);
 
-		if (($path=='') || (substr($filename,0,6)=='FORUM-'))
+		if ((($path=='') || (substr($filename,0,6)=='FORUM-') || ($force_type==='forum')) && ($force_type!=='topic'))
 		{
 			list($category_resource_type,$category)=$this->folder_convert_filename_to_id($path,'forum');
 
@@ -453,7 +454,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -517,7 +518,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 			}
 		}
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -641,7 +642,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -671,7 +672,7 @@ class Hook_occle_fs_forums extends resource_fs_base
 
 		ocf_edit_post(intval($resource_id),$validated,$label,$post,$skip_sig,$is_emphasised,$intended_solely_for,true,false,'',false,$edit_time,$add_time,$poster,true,false);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

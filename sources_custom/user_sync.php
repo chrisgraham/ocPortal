@@ -18,12 +18,23 @@
  * @package		user_sync
  */
 
+function user_sync()
+{
+	global $USER_SYNC_IMPORT_LIMIT;
+	$USER_SYNC_IMPORT_LIMIT=NULL;
+
+	global $DO_USER_SYNC;
+	$DO_USER_SYNC=true;
+}
+
 /*
 INBOUND
 */
 
 function user_sync__inbound($since=NULL)
 {
+	global $USER_SYNC_IMPORT_LIMIT,$DO_USER_SYNC;
+
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	require_code('ocf_members');
@@ -39,7 +50,9 @@ function user_sync__inbound($since=NULL)
 	global $NOTIFICATIONS_ON;
 	$NOTIFICATIONS_ON=false;
 
-	resourcefs_logging__start();
+	@ignore_user_abort(false);
+
+	resourcefs_logging__start('inform');
 
 	// Load import scheme
 	require_code('user_sync__customise');
@@ -72,165 +85,173 @@ function user_sync__inbound($since=NULL)
 	// Customised start code
 	get_user_sync__begin($dbh,$since);
 
-	// Work out what fields there are
-	$native_fields=user_sync_find_native_fields();
-
-	// Run query to gather remote data
-	$sql='SELECT * FROM '.$db_table;
-	if ((!is_null($time_field)) && (!is_null($since)))
-		$sql.=' WHERE '.$time_field.'>=\''.date('Y-m-d H:i:s',$since).'\'';
-	$sth=$dbh->query($sql);
-
-	// Handle each user
-	while (($user=$sth->fetch(PDO::FETCH_ASSOC))!==false)
+	if ($DO_USER_SYNC)
 	{
-		// Work out username
-		$username='';
-		foreach ($username_fields as $i=>$username_field)
+		// Work out what fields there are
+		$native_fields=user_sync_find_native_fields();
+
+		// Run query to gather remote data
+		$sql='SELECT * FROM '.$db_table;
+		if ((!is_null($time_field)) && (!is_null($since)))
+			$sql.=' WHERE '.$time_field.'>=\''.date('Y-m-d H:i:s',$since).'\'';
+		$sth=$dbh->query($sql);
+
+		$i=0;
+
+		// Handle each user
+		while (($user=$sth->fetch(PDO::FETCH_ASSOC))!==false)
 		{
-			if ($i!=0) $username.=' ';
-			$username.=is_integer($user[$username_field])?strval($user[$username_field]):$user[$username_field];
-		}
-		//ocf_check_name_valid($username,NULL,NULL,true); // Not really needed
-		if ($username=='')
-		{
-			resourcefs_logging('Blank username cannot be imported.','warn');
-			continue;
-		}
-
-		// Bind to existing?
-		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-
-		// Work out other data
-		$user_data=array();
-		foreach ($native_fields as $key)
-		{
-			$user_data[$key]=user_sync_handle_field_remap($key,NULL,$user,$dbh,$member_id);
-		}
-		foreach ($field_remap as $key=>$remap_scheme)
-		{
-			$user_data[$key]=user_sync_handle_field_remap($key,$remap_scheme,$user,$dbh,$member_id);
-		}
-		$email_address=$user_data['email_address'];
-		$groups=$user_data['groups'];
-		$dob_day=$user_data['dob_day'];
-		$dob_month=$user_data['dob_month'];
-		$dob_year=$user_data['dob_year'];
-		$timezone=$user_data['timezone_offset'];
-		$primary_group=$user_data['primary_group'];
-		$validated=$user_data['validated'];
-		$is_perm_banned=$user_data['is_perm_banned'];
-		$reveal_age=$user_data['reveal_age'];
-		$photo_url=$user_data['photo_url'];
-		$language=$user_data['language'];
-		$allow_emails=$user_data['allow_emails'];
-		$allow_emails_from_staff=$user_data['allow_emails_from_staff'];
-		$on_probation_until=$user_data['on_probation_until'];
-		$join_time=$user_data['join_time'];
-
-		// Import to standard member record
-		if ($member_id===NULL)
-		{
-			$user_data['pass_hash_salted']=($user_data['pass_hash_salted']===NULL)?$default_password:$user_data['pass_hash_salted'];
-			$password=is_null($user_data['pass_hash_salted'])?get_rand_password():$user_data['pass_hash_salted'];
-			$password_compatibility_scheme=$temporary_password?'temporary':(is_null($user_data['pass_hash_salted'])?'plain'/*so we can find it from the DB*/:NULL);
-
-			$custom_fields=array();
-
-			// These ones are very ocPortal-centric and hence won't be synched specially
-			$last_visit_time=NULL;
-			$theme='';
-			$avatar_url=NULL;
-			$signature='';
-			$preview_posts=NULL;
-			$title='';
-			$photo_thumb_url='';
-			$views_signatures=1;
-			$auto_monitor_contrib_content=NULL;
-			$ip_address=NULL;
-			$validated_email_confirm_code='';
-			$salt='';
-			$zone_wide=NULL;
-			$last_submit_time=NULL;
-			$highlighted_name=0;
-			$pt_allow='*';
-			$pt_rules_text='';
-
-			$check_correctness=false;
-
-			$member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$check_correctness,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
-		} else
-		{
-			$password=NULL; // Passwords will not be re-synched
-			$custom_fields=array();
-			$last_visit_time=NULL;
-			$theme=NULL;
-			$avatar_url=NULL;
-			$signature=NULL;
-			$preview_posts=NULL;
-			$title=NULL;
-			$photo_thumb_url=NULL;
-			$views_signatures=NULL;
-			$auto_monitor_contrib_content=NULL;
-			$ip_address=NULL;
-			$validated_email_confirm_code=NULL;
-			$check_correctness=NULL;
-			$password_compatibility_scheme=NULL;
-			$salt=NULL;
-			$zone_wide=NULL;
-			$last_submit_time=NULL;
-			$highlighted_name=NULL;
-			$pt_allow=NULL;
-			$pt_rules_text=NULL;
-
-			$skip_checks=true;
-
-			ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,$skip_checks);
-		}
-
-		// Handle CPFs
-		foreach ($user_data as $key=>$value)
-		{
-			if (in_array($key,$native_fields)) continue;
-
-			// Try and find a match
-			$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
-			$cpf_id=mixed();
-			if (is_numeric($key))
+			// Work out username
+			$username='';
+			foreach ($username_fields as $j=>$username_field)
 			{
-				$cpf_id=intval($key);
+				if ($j!=0) $username.=' ';
+				$username.=is_integer($user[$username_field])?strval($user[$username_field]):$user[$username_field];
 			}
-			if (is_null($cpf_id))
+			//ocf_check_name_valid($username,NULL,NULL,true); // Not really needed
+			if ($username=='')
 			{
-				foreach ($cpfs as $cpf)
+				resourcefs_logging('Blank username cannot be imported.','warn');
+				continue;
+			}
+
+			if (($USER_SYNC_IMPORT_LIMIT!==NULL) && ($i>=$USER_SYNC_IMPORT_LIMIT)) continue;
+
+			// Bind to existing?
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+
+			// Work out other data
+			$user_data=array();
+			foreach ($native_fields as $key)
+			{
+				$user_data[$key]=user_sync_handle_field_remap($key,NULL,$user,$dbh,$member_id);
+			}
+			foreach ($field_remap as $key=>$remap_scheme)
+			{
+				$user_data[$key]=user_sync_handle_field_remap($key,$remap_scheme,$user,$dbh,$member_id);
+			}
+			$email_address=$user_data['email_address'];
+			$groups=$user_data['groups'];
+			$dob_day=$user_data['dob_day'];
+			$dob_month=$user_data['dob_month'];
+			$dob_year=$user_data['dob_year'];
+			$timezone=$user_data['timezone_offset'];
+			$primary_group=$user_data['primary_group'];
+			$validated=$user_data['validated'];
+			$is_perm_banned=$user_data['is_perm_banned'];
+			$reveal_age=$user_data['reveal_age'];
+			$photo_url=$user_data['photo_url'];
+			$language=$user_data['language'];
+			$allow_emails=$user_data['allow_emails'];
+			$allow_emails_from_staff=$user_data['allow_emails_from_staff'];
+			$on_probation_until=$user_data['on_probation_until'];
+			$join_time=$user_data['join_time'];
+
+			// Collate CPFs
+			$cpf_values=array();
+			foreach ($user_data as $key=>$value)
+			{
+				if (in_array($key,$native_fields)) continue;
+
+				// Try and find a match
+				$cpfs=ocf_get_all_custom_fields_match();
+				$cpf_id=mixed();
+				if (is_numeric($key))
 				{
-					if ($cpf['trans_name']==$key)
+					$cpf_id=intval($key);
+				}
+				if (is_null($cpf_id))
+				{
+					foreach ($cpfs as $cpf)
 					{
-						$cpf_id=$cpf['id'];
-						break;
+						if ($cpf['trans_name']==$key)
+						{
+							$cpf_id=$cpf['id'];
+							break;
+						}
 					}
 				}
-			}
-			if (is_null($cpf_id))
-			{
-				foreach ($cpfs as $cpf)
+				if (is_null($cpf_id))
 				{
-					if ($cpf['trans_name']=='ocp_'.$key)
+					foreach ($cpfs as $cpf)
 					{
-						$cpf_id=$cpf['id'];
-						break;
+						if ($cpf['trans_name']=='ocp_'.$key)
+						{
+							$cpf_id=$cpf['id'];
+							break;
+						}
 					}
+				}
+
+				// Set it
+				if ($cpf_id!==NULL)
+				{
+					$cpf_value=is_string($value)?$value:strval($value);
+					$cpf_values[$cpf_id]=$cpf_value;
+				} else
+				{
+					resourcefs_logging('Could not bind '.$key.' to CPF.','warn');
 				}
 			}
 
-			// Set it
-			if ($cpf_id!==NULL)
+			// Import to standard member record
+			if ($member_id===NULL)
 			{
-				ocf_set_custom_field($member_id,$cpf_id,is_string($value)?$value:strval($value));
+				$user_data['pass_hash_salted']=($user_data['pass_hash_salted']===NULL)?$default_password:$user_data['pass_hash_salted'];
+				$password=is_null($user_data['pass_hash_salted'])?get_rand_password():$user_data['pass_hash_salted'];
+				$password_compatibility_scheme=$temporary_password?'temporary':(is_null($user_data['pass_hash_salted'])?'plain'/*so we can find it from the DB*/:NULL);
+
+				// These ones are very ocPortal-centric and hence won't be synched specially
+				$last_visit_time=NULL;
+				$theme='';
+				$avatar_url=NULL;
+				$signature='';
+				$preview_posts=NULL;
+				$title='';
+				$photo_thumb_url='';
+				$views_signatures=1;
+				$auto_monitor_contrib_content=NULL;
+				$ip_address=NULL;
+				$validated_email_confirm_code='';
+				$salt='';
+				$zone_wide=NULL;
+				$last_submit_time=NULL;
+				$highlighted_name=0;
+				$pt_allow='*';
+				$pt_rules_text='';
+
+				$check_correctness=false;
+
+				$member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$cpf_values,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$check_correctness,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 			} else
 			{
-				resourcefs_logging('Could not bind to CPF.','warn');
+				$password=NULL; // Passwords will not be re-synched
+				$last_visit_time=NULL;
+				$theme=NULL;
+				$avatar_url=NULL;
+				$signature=NULL;
+				$preview_posts=NULL;
+				$title=NULL;
+				$photo_thumb_url=NULL;
+				$views_signatures=NULL;
+				$auto_monitor_contrib_content=NULL;
+				$ip_address=NULL;
+				$validated_email_confirm_code=NULL;
+				$check_correctness=NULL;
+				$password_compatibility_scheme=NULL;
+				$salt=NULL;
+				$zone_wide=NULL;
+				$last_submit_time=NULL;
+				$highlighted_name=NULL;
+				$pt_allow=NULL;
+				$pt_rules_text=NULL;
+
+				$skip_checks=true;
+
+				ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$cpf_values,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,$skip_checks);
 			}
+
+			$i++;
 		}
 	}
 
@@ -256,12 +277,13 @@ function user_sync_handle_field_remap($field_name,$remap_scheme,$remote_data,$db
 
 		case 'field': // Direct field lookup
 			if (!array_key_exists(1,$remap_scheme)) $remap_scheme[1]=$field_name; // Identity map, by default
-			if (!isset($remote_data[$remap_scheme[1]])) // Not found!
+			if (!array_key_exists($remap_scheme[1],$remote_data)) // Not found!
 			{
-				resourcefs_logging('Requested to import missing remote field.','warn');
+				resourcefs_logging('Requested to import missing remote field, '.$remap_scheme[1].'.','warn');
 				return user_sync_get_field_default($field_name);
 			}
-			$data=array($remote_data[$remap_scheme[1]]);
+			$remote_value=$remote_data[$remap_scheme[1]];
+			$data=array($remote_value);
 			break;
 
 		case 'callback': // Callback
@@ -332,6 +354,16 @@ function user_sync_handle_field_remap($field_name,$remap_scheme,$remote_data,$db
 				return 1;
 			return 0;
 	}
+	if (!is_string($data[0]))
+	{
+		if (is_null($data[0]))
+		{
+			$data[0]='';
+		} else
+		{
+			$data[0]=strval($data[0]);
+		}
+	}
 	return $data[0]; // Default, string
 }
 
@@ -343,8 +375,6 @@ function user_sync_get_field_default($field_name)
 			return NULL;
 		case 'email_address':
 			return '';
-		case 'groups':
-			return array();
 		case 'dob_day':
 			return NULL;
 		case 'dob_month':
@@ -373,8 +403,11 @@ function user_sync_get_field_default($field_name)
 			return NULL;
 		case 'join_time':
 			return NULL;
+
+		case 'groups':
+			return array();
 	}
-	resourcefs_logging('Requested to import unknown field.','warn');
+	resourcefs_logging('Requested to import unknown field. '.$field_name.'.','warn');
 	return NULL; // Should not get here
 }
 
@@ -525,7 +558,7 @@ UTILITY FUNCTIONS
 
 function user_sync_find_native_fields()
 {
-	$native_fields=array();
+	/*$native_fields=array();		Actually we don't support importing them all, as our code has to choose defaults
 	$db_meta=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_name'),array('m_table'=>'f_members'));
 	foreach ($db_meta as $_db_meta)
 	{
@@ -534,5 +567,27 @@ function user_sync_find_native_fields()
 			$native_fields[]=substr($_db_meta['m_name'],2);
 		}
 	}
-	return $native_fields;
+	return $native_fields;*/
+
+	return array(
+		'pass_hash_salted',
+		'email_address',
+		'groups',
+		'dob_day',
+		'dob_month',
+		'dob_year',
+		'timezone_offset',
+		'primary_group',
+		'validated',
+		'is_perm_banned',
+		'reveal_age',
+		'photo_url',
+		'language',
+		'allow_emails',
+		'allow_emails_from_staff',
+		'on_probation_until',
+		'join_time',
+
+		'groups',
+	);
 }

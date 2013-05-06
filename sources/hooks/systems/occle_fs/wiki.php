@@ -172,7 +172,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @param  boolean		Whether we are definitely moving (as opposed to possible having it in multiple positions)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties,$explicit_move=false)
 	{
@@ -217,7 +217,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 				$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$id,'the_order'=>$the_order,'title'=>$label));
 		}
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -315,7 +315,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -339,7 +339,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 
 		wiki_edit_post(intval($resource_id),$label,$validated,$member,$page_id,$edit_time,$add_time,$views,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

@@ -160,7 +160,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -171,7 +171,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_menu',array('i_menu'=>$menu));
 		if (!is_null($test)) return true;
 
-		return false;
+		return $resource_id;
 	}
 
 	/**
@@ -289,7 +289,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -314,7 +314,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 
 		edit_menu_item(intval($resource_id),$category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

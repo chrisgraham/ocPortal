@@ -38,17 +38,23 @@ function init__resource_fs()
 
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	global $RESOURCEFS_LOGGER;
+	global $RESOURCEFS_LOGGER,$RESOURCEFS_LOGGER_LEVEL;
 	$RESOURCEFS_LOGGER=NULL;
+	$RESOURCEFS_LOGGER_LEVEL='notice';
 }
 
 /**
  * Disengage logging.
+ *
+ * @param  string		The minimum logging level
+ * @set inform notice warn
  */
-function resourcefs_logging__start()
+function resourcefs_logging__start($level='notice')
 {
-	global $RESOURCEFS_LOGGER;
-	$RESOURCEFS_LOGGER=fopen(get_custom_file_base().'/data_custom/resourcefs.log','wt');
+	global $RESOURCEFS_LOGGER,$RESOURCEFS_LOGGER_LEVEL;
+	if ($RESOURCEFS_LOGGER!==NULL) fclose($RESOURCEFS_LOGGER);
+	$RESOURCEFS_LOGGER=fopen(get_custom_file_base().'/data_custom/resourcefs.log','at');
+	$RESOURCEFS_LOGGER_LEVEL=$level;
 }
 
 /**
@@ -60,10 +66,14 @@ function resourcefs_logging__start()
  */
 function resourcefs_logging($message,$type='warn')
 {
-	global $RESOURCEFS_LOGGER;
+	global $RESOURCEFS_LOGGER,$RESOURCEFS_LOGGER_LEVEL;
 	if (!is_null($RESOURCEFS_LOGGER))
 	{
-		fwrite($RESOURCEFS_LOGGER,$type.': '.$message."\n");
+		if (($type=='inform') && ($RESOURCEFS_LOGGER_LEVEL!='inform')) return;
+		if (($type=='notice') && ($RESOURCEFS_LOGGER_LEVEL!='inform') && ($RESOURCEFS_LOGGER_LEVEL!='notice')) return;
+		if (($type=='warn') && ($RESOURCEFS_LOGGER_LEVEL!='inform') && ($RESOURCEFS_LOGGER_LEVEL!='notice') && ($RESOURCEFS_LOGGER_LEVEL!='warn')) return;
+
+		fwrite($RESOURCEFS_LOGGER,date('d/m/Y H:i:s').': '.$type.': '.$message."\n");
 	}
 }
 
@@ -73,8 +83,10 @@ function resourcefs_logging($message,$type='warn')
 function resourcefs_logging__end()
 {
 	global $RESOURCEFS_LOGGER;
-	fclose($RESOURCEFS_LOGGER);
+	if ($RESOURCEFS_LOGGER!==NULL) fclose($RESOURCEFS_LOGGER);
 	$RESOURCEFS_LOGGER=NULL;
+	sync_file(get_custom_file_base().'/data_custom/resourcefs.log');
+	fix_permissions(get_custom_file_base().'/data_custom/resourcefs.log');
 }
 
 /**
@@ -664,7 +676,7 @@ class resource_fs_base
 	 * @param  ID_TEXT		Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  string			Resource data
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_save__flat($filename,$path,$data)
 	{
@@ -691,7 +703,7 @@ class resource_fs_base
 	 * @param  ID_TEXT		Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  string			Resource data
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_save__flat($filename,$path,$data)
 	{
@@ -910,6 +922,46 @@ class resource_fs_base
 		return substr($name,0,MAX_MONIKER_LENGTH);
 	}
 
+	/**
+	 * Helper function: detect if a resource did not save all the properties it was given.
+	 *
+	 * @param  ?ID_TEXT		The resource type (NULL: unknown)
+	 * @param  ~ID_TEXT		The resource ID (false: was not added/edited)
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties
+	 * @return ?string		The foldername/subpath (NULL: not found)
+	 */
+	function _log_if_save_matchup($resource_type,$resource_id,$path,$properties)
+	{
+		if ($resource_type===NULL) return; // Too difficult to check, don't bother; only expert coding would lead to this scenario anyway
+		if ($resource_id===false) return;
+
+		global $RESOURCEFS_LOGGER;
+		if ($RESOURCEFS_LOGGER===NULL) return; // Too much unnecessarily work if the logger is not on
+
+		$found_filename=$this->convert_id_to_filename($resource_type,$resource_id);
+		$found_path=$this->search($resource_type,$resource_id,true);
+		if ($found_path!==$path)
+		{
+			resourcefs_logging('Path mismatch for what was saved (actual '.$found_path.' vs intended '.$path.')','warn');
+		}
+
+		$actual_properties=$this->resource_load($resource_type,$found_filename,$found_path);
+		foreach (array_keys($properties) as $p)
+		{
+			if (array_key_exists($p,$actual_properties))
+			{
+				if (@strval($actual_properties[$p])!=@strval($properties[$p]))
+				{
+					resourcefs_logging('Property ('.$p.') value mismatch for '.$found_filename.' (actual '.@strval($actual_properties[$p]).' vs intended '.@strval($properties[$p]).').','warn');
+				}
+			} else
+			{
+				resourcefs_logging('Property ('.$p.') not applicable for '.$found_filename.'.','warn');
+			}
+		}
+	}
+
 	/*
 	ABSTRACT/AGNOSTIC RESOURCE-FS API FOR INTERNAL OCPORTAL USE
 	*/
@@ -934,6 +986,7 @@ class resource_fs_base
 
 		// For each folder type, see if we can find a position for this resource
 		$cat_resource_types=is_array($this->folder_resource_type)?$this->folder_resource_type:array($this->folder_resource_type);
+		$cat_resource_types=array_reverse($cat_resource_types); // Need to look from deepest outward, i.e. maximum specificity first
 		$cat_resource_types[]=NULL;
 		foreach ($cat_resource_types as $cat_resource_type)
 		{
@@ -1098,6 +1151,30 @@ class resource_fs_base
 	}
 
 	/**
+	 * Save function for resource-fs. Parses the data for some resource to a resource-fs XML file. Wraps file_save/folder_save.
+	 *
+	 * @param  ID_TEXT		Filename OR Resource label
+	 * @param  string			The path (blank: root / not applicable)
+	 * @param  array			Properties
+	 * @param  ?ID_TEXT		Whether to look for existing records using $filename as a label and this resource type (NULL: $filename is a strict file name)
+	 * @param  ?ID_TEXT		Search path (NULL: the same as the path saving at)
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
+	 */
+	function resource_save($resource_type,$label,$path,$properties=NULL,$search_label_as=NULL,$search_path=NULL)
+	{
+		if (is_null($properties)) $properties=array();
+
+		if ($this->is_folder_type($resource_type))
+		{
+			$resource_id=$this->folder_save($label,$path,$properties,$search_label_as,$search_path);
+		} else
+		{
+			$resource_id=$this->file_save($label,$path,$properties,$search_label_as,$search_path);
+		}
+		return $resource_id;
+	}
+
+	/**
 	 * Adds some resource with the given label and properties. Wraps file_add/folder_add.
 	 *
 	 * @param  ID_TEXT		Resource type
@@ -1112,10 +1189,12 @@ class resource_fs_base
 
 		if ($this->is_folder_type($resource_type))
 		{
-			$resource_id=$this->folder_add($label,$path,$properties);
+			$resource_id=$this->folder_add($label,$path,$properties,$resource_type);
+			$this->_log_if_save_matchup($resource_type,$resource_id,$path,$properties);
 		} else
 		{
-			$resource_id=$this->file_add($label,$path,$properties);
+			$resource_id=$this->file_add($label,$path,$properties,$resource_type);
+			$this->_log_if_save_matchup($resource_type,$resource_id,$path,$properties);
 		}
 		return $resource_id;
 	}
@@ -1148,18 +1227,20 @@ class resource_fs_base
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
 	 * @param  boolean		Whether we are definitely moving (as opposed to possible having it in multiple positions)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function resource_edit($resource_type,$filename,$path,$properties,$explicit_move=false)
 	{
 		if ($this->is_folder_type($resource_type))
 		{
-			$status=$this->folder_edit($filename,$path,$properties,$explicit_move);
+			$resource_id=$this->folder_edit($filename,$path,$properties,$explicit_move);
+			$this->_log_if_save_matchup($resource_type,$resource_id,$path,$properties);
 		} else
 		{
-			$status=$this->file_edit($filename,$path,$properties,$explicit_move);
+			$resource_id=$this->file_edit($filename,$path,$properties,$explicit_move);
+			$this->_log_if_save_matchup($resource_type,$resource_id,$path,$properties);
 		}
-		return $status;
+		return $resource_id;
 	}
 
 	/**
@@ -1712,7 +1793,7 @@ class resource_fs_base
 	 * @param  ID_TEXT		Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  string			Resource data
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_save_xml($filename,$path,$data)
 	{
@@ -1729,7 +1810,7 @@ class resource_fs_base
 	 * @param  array			Properties
 	 * @param  ?ID_TEXT		Whether to look for existing records using $filename as a label and this resource type (NULL: $filename is a strict file name)
 	 * @param  ?ID_TEXT		Search path (NULL: the same as the path saving at)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_save($filename,$path,$properties,$search_label_as=NULL,$search_path=NULL)
 	{
@@ -1744,9 +1825,13 @@ class resource_fs_base
 		$existing=($filename===NULL)?false:$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
-			return $this->file_add($label,$path,$properties);
+			$resource_id=$this->file_add($label,$path,$properties,$search_label_as);
+			$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
+			return $resource_id;
 		}
-		return $this->file_edit($filename,$path,$properties+$existing);
+		$resource_id=$this->file_edit($filename,$path,$properties+$existing);
+		$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
+		return $resource_id;
 	}
 
 	/**
@@ -1755,7 +1840,7 @@ class resource_fs_base
 	 * @param  ID_TEXT		Filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  string			Resource data
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_save_xml($filename,$path,$data)
 	{
@@ -1772,7 +1857,7 @@ class resource_fs_base
 	 * @param  array			Properties
 	 * @param  ?ID_TEXT		Whether to look for existing records using $filename as a label and this resource type (NULL: $filename is a strict file name)
 	 * @param  ?ID_TEXT		Search path (NULL: the same as the path saving at)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_save($filename,$path,$properties,$search_label_as=NULL,$search_path=NULL)
 	{
@@ -1787,9 +1872,13 @@ class resource_fs_base
 		$existing=($filename===NULL)?false:$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
-			return $this->folder_add($label,$path,$properties);
+			$resource_id=$this->folder_add($label,$path,$properties,$search_label_as);
+			$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
+			return $resource_id;
 		}
-		return $this->folder_edit($filename,$path,$properties+$existing);
+		$resource_id=$this->folder_edit($filename,$path,$properties+$existing);
+		$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
+		return $resource_id;
 	}
 
 	/*
@@ -2200,9 +2289,9 @@ class resource_fs_base
 	{
 		if ($file_name=='_folder.'.RESOURCEFS_DEFAULT_EXTENSION)
 		{
-			return $this->folder_save__flat(array_pop($meta_dir),implode('/',$meta_dir),$contents);
+			return $this->folder_save__flat(array_pop($meta_dir),implode('/',$meta_dir),$contents)!==false;
 		}
-		return $this->file_save__flat($file_name,implode('/',$meta_dir),$contents);
+		return $this->file_save__flat($file_name,implode('/',$meta_dir),$contents)!==false;
 	}
 
 	/**

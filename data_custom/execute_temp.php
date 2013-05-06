@@ -57,11 +57,26 @@ function execute_temp()
 	{
 		require_code('resource_fs');
 		$resourcefs=get_resource_occlefs_object('catalogue_entry');
-		$college_id=$resourcefs->convert_label_to_id('43418','CATALOGUE-fm-colleges/*','catalogue_entry',false);
-		@print($college_id);
+		$id=find_id_via_label('catalogue_category','United Kingdom','CATALOGUE-fm-colleges/fm-colleges-home');
+		@var_dump($id);
 		exit();
 	}
 
+	file_put_contents(get_custom_file_base().'/data_custom/resourcefs.log','');
+
+	require_code('user_sync__customise');
+	global $DO_COLLEGES,$DO_COURSES,$DO_LECTURES,$DO_ENROLMENTS,$DO_SCHEDULES,$DO_LECTURES,$DO_CLEANUP,$DO_USER_SYNC;
+	$DO_COLLEGES=false;
+	$DO_COURSES=false;
+	$DO_LECTURES=false;
+	$DO_ENROLMENTS=false;
+	$DO_SCHEDULES=true;
+	$DO_CLEANUP=false;
+	$DO_USER_SYNC=false;
+
 	require_code('user_sync');
+	global $USER_SYNC_IMPORT_LIMIT;
+	$USER_SYNC_IMPORT_LIMIT=1;
+
 	user_sync__inbound();
 }

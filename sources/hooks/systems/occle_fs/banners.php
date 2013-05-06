@@ -154,7 +154,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -175,7 +175,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 
 		$name=edit_banner_type($resource_id,$name,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -319,7 +319,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -355,7 +355,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 
 		$name=edit_banner($resource_id,$name,$imgurl,$title_text,$label,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_date,$add_time,true,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

@@ -127,7 +127,7 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -142,7 +142,7 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
 
 		edit_ticket_type(intval($resource_id),$label,$guest_emails_mandatory,$search_faq);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

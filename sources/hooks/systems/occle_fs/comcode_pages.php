@@ -177,7 +177,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -199,7 +199,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
 		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone,true,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -349,7 +349,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -390,7 +390,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,$old_page,$meta_keywords,$meta_description);
 		$page=basename($full_path,'.txt');
 
-		return true;
+		return $zone.':'.$page;
 	}
 
 	/**

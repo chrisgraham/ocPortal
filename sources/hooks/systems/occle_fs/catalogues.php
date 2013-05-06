@@ -458,7 +458,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -538,7 +538,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 			$this->_custom_fields_save('catalogue_category',$resource_id,$properties);
 		}
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -818,7 +818,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -836,7 +836,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 
 		actual_edit_catalogue_entry(intval($resource_id),$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description,$edit_date,$time,$views,$submitter,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

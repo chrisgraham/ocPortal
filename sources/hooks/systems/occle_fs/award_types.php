@@ -136,7 +136,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -154,7 +154,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 
 		edit_award_type(intval($resource_id),$label,$description,$points,$resource_type,$hide_awardee,$update_time_hours);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

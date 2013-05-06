@@ -146,7 +146,7 @@ class Hook_occle_fs_chat extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -168,7 +168,7 @@ class Hook_occle_fs_chat extends resource_fs_base
 
 		edit_chatroom(intval($resource_id),$welcome,$label,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

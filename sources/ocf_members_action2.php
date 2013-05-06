@@ -1159,12 +1159,12 @@ function ocf_delete_custom_field($id)
 /**
  * Set a custom profile field for a member.
  *
- * @param  MEMBER		The member.
- * @param  AUTO_LINK The field being set.
- * @param  mixed 		The value of the field. For a trans-type field, this can be either a lang-ID to be copied (from forum DB), or an actual string.
- * @param  ?ID_TEXT 	The field type (NULL: look it up).
- * @param  boolean 	Whether to defer the change, by returning a result change rather than doing it right away.
- * @return ?array		Mapping change (NULL: none / can't defer).
+ * @param  MEMBER			The member.
+ * @param  AUTO_LINK 	The field being set.
+ * @param  mixed 			The value of the field. For a trans-type field, this can be either a lang-ID to be copied (from forum DB), or an actual string.
+ * @param  ?ID_TEXT 		The field type (NULL: look it up).
+ * @param  boolean 		Whether to defer the change, by returning a result change rather than doing it right away.
+ * @return ?array			Mapping change (NULL: none / can't defer).
  */
 function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 {
@@ -1223,6 +1223,23 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		}
 	} else
 	{
+		if (is_string($value)) // Should not normally be needed, but add some safety in our API
+		{
+			switch ($storage_type)
+			{
+				case 'short_trans':
+				case 'long_trans':
+					$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
+					break;
+				case 'integer':
+					$value=intval($value);
+					break;
+				case 'float':
+					$value=floatval($value);
+					break;
+			}
+		}
+
 		$change=array('field_'.strval(intval($field))=>$value);
 		if (!$defer)
 			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$change,array('mf_member_id'=>$member_id),'',1);

@@ -185,7 +185,7 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -220,7 +220,7 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 
 		edit_quiz(intval($resource_id),$label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing,$tied_newsletter,$add_time,$submitter,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

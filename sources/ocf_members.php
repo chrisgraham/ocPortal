@@ -111,7 +111,7 @@ function ocf_is_httpauth_member($member_id)
  * @param  ?boolean	That are to go on the join form (NULL: don't care).
  * @return array		A list of rows of such fields.
  */
-function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
+function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
 {
 	global $CUSTOM_FIELD_CACHE;
 	$x=serialize(array($public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start));
@@ -346,15 +346,25 @@ function ocf_get_custom_field_mappings($member_id)
 			foreach ($all_fields_regardless as $field)
 			{
 				$ob=get_fields_hook($field['cf_type']);
-				list(,$default,$storage_type)=$ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
+				list(,$value,$storage_type)=$ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
 
-				if (strpos($storage_type,'_trans')!==false)
+				if (is_string($value)) // Should not normally be needed, but the grabbing from cf_default further up is not converted yet
 				{
-					$row['field_'.strval($field['id'])]=intval($default);
-				} else
-				{
-					$row['field_'.strval($field['id'])]=$default;
+					switch ($storage_type)
+					{
+						case 'short_trans':
+						case 'long_trans':
+							// ^^ treat as integer, as defaults to an insert_lang
+						case 'integer':
+							$value=intval($value);
+							break;
+						case 'float':
+							$value=floatval($value);
+							break;
+					}
 				}
+
+				$row['field_'.strval($field['id'])]=$value;
 			}
 			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
 			$query=array($row);

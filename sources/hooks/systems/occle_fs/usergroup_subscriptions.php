@@ -161,7 +161,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -184,7 +184,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 
 		edit_usergroup_subscription(intval($resource_id),$label,$description,$cost,$length,$length_units,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**

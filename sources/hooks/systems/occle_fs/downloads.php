@@ -167,7 +167,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function folder_edit($filename,$path,$properties)
 	{
@@ -187,7 +187,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 
 		edit_download_category(intval($resource_id),$label,$parent_id,$description,$notes,$rep_image,$meta_keywords,$meta_description,$add_time);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
@@ -355,7 +355,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return boolean		Success status
+	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
 	 */
 	function file_edit($filename,$path,$properties)
 	{
@@ -402,7 +402,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 
 		edit_download(intval($resource_id),$category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
 
-		return true;
+		return $resource_id;
 	}
 
 	/**
