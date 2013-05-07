@@ -1631,6 +1631,7 @@ ocportal_tutorials
  - data_custom/images/docs/banners_add.png
  - data_custom/images/docs/banners_config.png
  - data_custom/images/docs/banners_view.png
+ - data_custom/images/docs/intl_phpmyadmin_settings.png
  - data_custom/images/docs/calendar_add_event.png
  - data_custom/images/docs/calendar_event_types.png
  - data_custom/images/docs/calendar_interests.png

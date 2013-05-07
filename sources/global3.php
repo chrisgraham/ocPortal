@@ -890,31 +890,55 @@ function mergesort(&$array,$cmp_function='strcmp')
 	{
 		if (call_user_func($cmp_function,current($array1),current($array2))<1)
 		{
-			$next=current($array1);
-			$array[key($array1)]=$next;
+			$key=key($array1);
+			if (is_integer($key))
+			{
+				$array[]=current($array1);
+			} else
+			{
+				$array[$key]=current($array1);
+			}
 			$ptr1++;
 			next($array1);
 		} else
 		{
-			$next=current($array2);
-			$array[key($array2)]=$next;
+			$key=key($array2);
+			if (is_integer($key))
+			{
+				$array[]=current($array2);
+			} else
+			{
+				$array[$key]=current($array2);
+			}
 			$ptr2++;
 			next($array2);
 		}
 	}
 
 	// Merge the remainder
-	while ($ptr1<count($array1))
+	while ($ptr1<$cnt1)
 	{
-		$next=current($array1);
-		$array[key($array1)]=$next;
+		$key=key($array1);
+		if (is_integer($key))
+		{
+			$array[]=current($array1);
+		} else
+		{
+			$array[$key]=current($array1);
+		}
 		$ptr1++;
 		next($array1);
 	}
-	while ($ptr2<count($array2))
+	while ($ptr2<$cnt2)
 	{
-		$next=current($array2);
-		$array[key($array2)]=$next;
+		$key=key($array2);
+		if (is_integer($key))
+		{
+			$array[]=current($array2);
+		} else
+		{
+			$array[$key]=current($array2);
+		}
 		$ptr2++;
 		next($array2);
 	}

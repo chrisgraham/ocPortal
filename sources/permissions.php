@@ -289,7 +289,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 
 	if (count($denied_groups)==count($groups2))
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND (member_id='.strval($member).' AND (active_until IS NULL OR active_until>'.strval(time()).'))');
+		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND (member_id='.strval($member).' AND (active_until IS NULL OR active_until>'.strval(time()).'))',false,true);
 		if (!is_null($test))
 		{
 			$result=true;

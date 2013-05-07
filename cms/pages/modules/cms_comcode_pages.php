@@ -638,7 +638,7 @@ class Module_cms_comcode_pages
 				$new=true;
 			}
 
-			if (($new) && (get_option('is_on_comcode_page_children')=='1') && (has_specific_permission(get_member(),'comcode_dangerous')))
+			if (($new) && (get_option('is_on_comcode_page_children')=='1') && (has_privilege(get_member(),'comcode_dangerous')))
 			{
 				$contents.=chr(10).chr(10).'[block]main_comcode_page_children[/block]';
 			}

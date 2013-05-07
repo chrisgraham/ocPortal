@@ -57,7 +57,8 @@ function load_html_page($string,$file_base=NULL)
 					$zone='';
 				}
 				$possible_zone=str_replace('/','_',dirname($old_link));
-				if (($possible_zone!='') && ($possible_zone!=get_zone_name()) && (file_exists(get_file_base().'/'.$possible_zone)))
+				if ($possible_zone=='.') $possible_zone='';
+				if (($possible_zone!='') && ($possible_zone!=get_zone_name()) && (file_exists(get_file_base().'/'.$possible_zone.'/index.php')))
 				{
 					$zone=$possible_zone;
 				}
@@ -78,11 +79,13 @@ function load_html_page($string,$file_base=NULL)
 					{
 						if (is_file(get_custom_file_base().'/'.dirname($string).'/'.urldecode($old_link))) // HTML pages dir
 						{
-							$new_link=get_base_url().'/'.dirname($string).'/'.$old_link;
+							$dirname=dirname($string);
+							if ($dirname=='.') $dirname='';
+							$new_link=get_base_url().'/'.(($dirname=='')?'':($dirname.'/')).$old_link;
 						}
 						elseif (is_file(get_custom_file_base().'/'.get_zone_name().'/'.urldecode($old_link))) // Zone dir
 						{
-							$new_link=get_base_url().'/'.get_zone_name().'/'.$old_link;
+							$new_link=get_base_url().'/'.((get_zone_name()=='')?'':(get_zone_name().'/')).$old_link;
 						}
 						elseif (is_file(get_custom_file_base().'/'.urldecode($old_link))) // Root dir
 						{
