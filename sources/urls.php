@@ -297,7 +297,7 @@ function is_page_https($zone,$page)
 function can_try_mod_rewrite($avoid_remap=false)
 {
 	if (!function_exists('get_option')) return false;
-	$url_scheme=get_option('url_scheme',false);
+	$url_scheme=get_option('url_scheme',true);
 	return (($url_scheme!==NULL) && ($url_scheme!=='RAW') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite']=='0')) && (!$avoid_remap) && ((get_value('ionic_on','0')=='1') || (ocp_srv('SERVER_SOFTWARE')=='') || (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS7/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,5)=='IIS8/') || (substr(ocp_srv('SERVER_SOFTWARE'),0,10)=='LiteSpeed'))); // If we don't have the option on or are not using apache, return
 }
 

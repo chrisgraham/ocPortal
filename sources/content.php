@@ -171,7 +171,7 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
 	{
 		if (strpos($title_field,'CALL:')!==false)
 		{
-			$content_title=call_user_func(trim(substr($title_field,5)),array('id'=>$content_id));
+			$content_title=call_user_func(trim(substr($title_field,5)),array('id'=>$content_id),$resourcefs_style);
 		} else
 		{
 			$_content_title=$content_row[$title_field];

@@ -1,7 +1,3 @@
 <p>{!DESCRIPTION_TOPICS_POSTED_IN,{$USERNAME*,{MEMBER_ID}}}</p>
 
 {TOPICS}
-
-{+START,IF_EMPTY,{TOPICS}}
-	<p class="nothing_here">{!NO_ENTRIES}</p>
-{+END}

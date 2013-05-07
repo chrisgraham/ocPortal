@@ -959,10 +959,11 @@ class Module_catalogues
 		require_code('images');
 
 		// Find ID
-		$id=get_param_integer('id',-1);
-		if ($id==-1)
+		$id=get_param_integer('id',NULL);
+		if ($id===NULL)
 		{
 			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
+			if (is_null($id)) warn_exit(do_lang_tempcode('NO_CATEGORIES'));
 		}
 		set_feed_url('?mode=catalogues&filter='.strval($id));
 

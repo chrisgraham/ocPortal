@@ -174,6 +174,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 		'OPTIONS'=>$serialized_options,
 		'HASH'=>$hash,
 		'PAGE_NAME'=>$page_name,
+		'IS_THREADED'=>true,
 	)));
 
 	return array($rating_details,$comment_details,$trackback_details);
@@ -211,6 +212,7 @@ function post_comment_script()
 		'OPTIONS'=>$options,
 		'HASH'=>$hash,
 		'PAGE_NAME'=>$page_name,
+		'IS_THREADED'=>true,
 	)));
 
 	// And output as text

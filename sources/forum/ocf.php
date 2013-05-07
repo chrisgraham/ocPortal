@@ -1217,7 +1217,7 @@ class forum_driver_ocf extends forum_driver_base
 		}
 		if (!function_exists('require_lang')) require_code('lang');
 		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id'.$where.$sup;
-		$rows=$this->connection->query($query);
+		$rows=$this->connection->query($query,NULL,NULL,false,true);
 		if ($hide_hidden)
 		{
 			require_lang('ocf');

@@ -428,8 +428,11 @@ function actual_delete_catalogue($name)
 	
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('catalogue',$name);
+		if ($old_name!=$name) // We want special stability in catalogue addressing
+		{
+			require_code('resource_fs');
+			expunge_resourcefs_moniker('catalogue',$name);
+		}
 	}
 }
 

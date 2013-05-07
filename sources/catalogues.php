@@ -181,7 +181,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$_title=get_translated_text($row['c_title']);
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('CATALOGUE'),$_title):$_title;
 
-	$summary=get_translated_text($row['c_description']);
+	$summary=get_translated_tempcode($row['c_description']);
 
 	$num_children=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));

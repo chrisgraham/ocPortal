@@ -117,14 +117,33 @@ class Hook_content_meta_aware_catalogue_entry
 /**
  * Generate a catalogue entry URL moniker.
  *
- * @param  array	The URL parts to generate the moniker from.
- * @return string The generated moniker.
+ * @param  array		The URL parts to generate the moniker from.
+ * @param  boolean	Whether to get the field title using resource-fs style.
+ * @return string 	The generated moniker.
  */
-function generate_catalogue_entry_moniker($url_parts)
+function generate_catalogue_entry_moniker($url_parts,$resourcefs_style=false)
 {
+	$catalogue_name=mixed();
+	$fields=mixed();
+
+	$unique_key_num=0;
+	if ($resourcefs_style)
+	{
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>intval($url_parts['id'])));
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		foreach ($fields as $i=>$f)
+		{
+			if ($f['cf_type']=='codename')
+			{
+				$unique_key_num=$i;
+				break;
+			}
+		}
+	}
+
 	require_code('catalogues');
-	$fields=get_catalogue_entry_field_values(NULL,intval($url_parts['id']),array(0),NULL);
-	$field=array_shift($fields);
+	$fields=get_catalogue_entry_field_values($catalogue_name,intval($url_parts['id']),array($unique_key_num),$fields);
+	$field=$fields[$unique_key_num];
 	if (is_null($field)) return uniqid('');
 	$value=array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['effective_value'];
 	return strip_comcode($value);

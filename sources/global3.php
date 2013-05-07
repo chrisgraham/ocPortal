@@ -891,13 +891,13 @@ function mergesort(&$array,$cmp_function='strcmp')
 		if (call_user_func($cmp_function,current($array1),current($array2))<1)
 		{
 			$next=current($array1);
-			$array[]=$next;
+			$array[key($array1)]=$next;
 			$ptr1++;
 			next($array1);
 		} else
 		{
 			$next=current($array2);
-			$array[]=$next;
+			$array[key($array2)]=$next;
 			$ptr2++;
 			next($array2);
 		}
@@ -907,14 +907,14 @@ function mergesort(&$array,$cmp_function='strcmp')
 	while ($ptr1<count($array1))
 	{
 		$next=current($array1);
-		$array[]=$next;
+		$array[key($array1)]=$next;
 		$ptr1++;
 		next($array1);
 	}
 	while ($ptr2<count($array2))
 	{
 		$next=current($array2);
-		$array[]=$next;
+		$array[key($array2)]=$next;
 		$ptr2++;
 		next($array2);
 	}

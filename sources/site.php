@@ -69,8 +69,8 @@ function init__site()
 	{
 		$ruri=ocp_srv('REQUEST_URI');
 
-		$url_scheme=get_option('url_scheme');
-		if (($url_scheme=='PG') || ($url_scheme=='HTM'))
+		$url_scheme=get_option('url_scheme',true);
+		if (($url_scheme==='PG') || ($url_scheme==='HTM'))
 		{
 			if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
 			{

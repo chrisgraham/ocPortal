@@ -1087,6 +1087,15 @@ class resource_fs_base
 						}
 
 						list(,$subpath_id)=$this->folder_convert_filename_to_id($subpath_bit);
+						if (is_null($subpath_id)) // Missing, find via moniker that doesn't match a label due to prefixing
+						{
+							if (preg_match('#^[A-Z]+-#',$subpath_bit)!=0)
+							{
+								$_subpath_bit=preg_replace('#^[A-Z]+-#','',$subpath_bit);
+								$detected_resource_type=strtolower(preg_replace('#-.*$#','',$subpath_bit));
+								$subpath_id=find_id_via_label($detected_resource_type,$_subpath_bit,$subpath_above);
+							}
+						}
 						if (is_null($subpath_id)) // Missing, find via monikerised label
 						{
 							$_subpath_bit=$this->_create_name_from_label($subpath_bit);

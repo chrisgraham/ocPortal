@@ -322,10 +322,7 @@ class Module_admin_version
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<17))
 		{
-			add_privilege('SUBMISSION','edit_meta_fields');
-			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
-
-			$GLOBALS['SITE_DB']->create_table('alternative_ids',array(
+			$GLOBALS['SITE_DB']->create_table('alternative_ids',array( // Needs to be first, as install_create_custom_field needs it
 				'resource_type'=>'*ID_TEXT',
 				'resource_id'=>'*ID_TEXT',
 				'resource_moniker'=>'ID_TEXT',
@@ -338,6 +335,9 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_moniker',array('resource_moniker','resource_type'));
 			//$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_label_uniqueness',array('resource_label','resource_resourcefs_hook'));key would be too long
 			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_moniker_uniq',array('resource_moniker','resource_resourcefs_hook'));
+
+			add_privilege('SUBMISSION','edit_meta_fields');
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
