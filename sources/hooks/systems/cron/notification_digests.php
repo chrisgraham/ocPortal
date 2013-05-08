@@ -18,7 +18,7 @@
  * @package		core_notifications
  */
 
-class Hook_cron_notifications_digests
+class Hook_cron_notification_digests
 {
 
 	/**
@@ -62,11 +62,20 @@ class Hook_cron_notifications_digests
 						if ($_message!='') $_message.=chr(10);
 						$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
 					}
-					$wrapped_subject=do_lang('DIGEST_EMAIL_SUBJECT_'.strval($frequency),comcode_escape(get_site_name()));
-					$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$_message,comcode_escape(get_site_name()));
+					if ($_message!='')
+					{
+						$wrapped_subject=do_lang('DIGEST_EMAIL_SUBJECT_'.strval($frequency),comcode_escape(get_site_name()));
+						$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$_message,comcode_escape(get_site_name()));
 
-					require_code('mail');
-					mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
+						require_code('mail');
+						mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
+						$GLOBALS['SITE_DB']->query_update('digestives_consumed',array(
+						  'c_time'=>time(),
+						),array(
+						  'c_member_id'=>$to_member_id,
+						  'c_frequency'=>$frequency,
+						),'',1);
+					}
 				}
 
 				$start+=100;

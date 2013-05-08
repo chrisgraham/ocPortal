@@ -57,7 +57,7 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 			{
 				$c=$ob->get_member_list_count();
 				if (!is_null($c))
-					$a+=count($c);
+					$a+=$c;
 			}
 		}
 	}

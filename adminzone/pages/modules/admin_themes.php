@@ -1331,7 +1331,7 @@ class Module_admin_themes
 				require_code('diff');
 				if (function_exists('diff_simple'))
 				{
-					$rendered_diff=diff_simple(get_custom_file_base().'/themes/'.$file,$last_path);
+					$rendered_diff=diff_simple(get_file_base().'/themes/'.$orig_version,$last_path);
 					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'7ba03fe98a20330fc64ad742d2fb74fa','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>'0','RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
 					$j++;
 				}

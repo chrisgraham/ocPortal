@@ -435,6 +435,7 @@ class Module_cms_comcode_pages
 		foreach ($filesarray as $pagelink=>$path_bits)
 		{
 			list($zone,$page)=explode(':',$pagelink,2);
+			if (!is_string($page)) $page=strval($page);
 
 			$edit_link=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$pagelink,'lang'=>$lang),'_SELF');
 
@@ -449,7 +450,7 @@ class Module_cms_comcode_pages
 				$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
 				if ((!array_key_exists(0,$rows)) && ($number_pages_parsed_for_titles<15))
 				{
-					$result=request_page($page,false,$zone,'comcode_custom_pure',true);
+					$result=request_page($page,false,$zone,'comcode_custom',true);
 					$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
 					$number_pages_parsed_for_titles++;
 				}
