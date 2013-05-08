@@ -59,20 +59,40 @@ function catalogue_file_script()
 	if (!file_exists($_full)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$size=filesize($_full);
 
-	$original_filename=filter_naughty(get_param('original_filename',false,true));
+	$original_filename=get_param('original_filename',NULL,true);
+
+	// Security check; doesn't work for very old attachments (pre-v8)
+	$ev='uploads/catalogues/'.$file;
+	if ($original_filename!==NULL) $ev.='::'.$original_filename;
+	$entry_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','ce_id',array('cv_value'=>$ev));
+	if (!is_null($entry_id))
+	{
+		$c_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry_id));
+		$cc_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$entry_id));
+		if (!has_category_access(get_member(),'catalogues_catalogue',$c_name)) access_denied('CATALOGUE_ACCESS');
+		if (!has_category_access(get_member(),'catalogues_category',strval($cc_id))) access_denied('CATEGORY_ACCESS');
+	}
 
 	// Send header
-	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
-		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if (get_option('immediate_downloads',true)==='1')
+	if ($original_filename!==NULL)
 	{
-		require_code('mime_types');
-		header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');
-		header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		$original_filename=filter_naughty($original_filename);
+
+		if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
+			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+		if (get_option('immediate_downloads',true)==='1')
+		{
+			require_code('mime_types');
+			header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');
+			header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		} else
+		{
+			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		}
 	} else
 	{
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		header('Content-Disposition: attachment');
 	}
 	header('Accept-Ranges: bytes');
 

@@ -105,7 +105,16 @@ class Hook_fields_picture
 			'image'=>$img_url,
 		);
 
-		return do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
+		if (url_is_local($ev))
+		{
+			$keep=symbol_tempcode('KEEP');
+			$download_url=find_script('catalogue_file').'?file='.urlencode(basename($img_url)).$keep->evaluate();
+		} else
+		{
+			$download_url=$img_url;
+		}
+
+		return do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$download_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
 	}
 
 	// ======================
