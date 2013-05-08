@@ -68,9 +68,12 @@ function catalogue_file_script()
 	if (!is_null($entry_id))
 	{
 		$c_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry_id));
-		$cc_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$entry_id));
-		if (!has_category_access(get_member(),'catalogues_catalogue',$c_name)) access_denied('CATALOGUE_ACCESS');
-		if (!has_category_access(get_member(),'catalogues_category',strval($cc_id))) access_denied('CATEGORY_ACCESS');
+		if (substr($c_name,0,1)!='_')
+		{
+			$cc_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$entry_id));
+			if (!has_category_access(get_member(),'catalogues_catalogue',$c_name)) access_denied('CATALOGUE_ACCESS');
+			if (!has_category_access(get_member(),'catalogues_category',strval($cc_id))) access_denied('CATEGORY_ACCESS');
+		}
 	}
 
 	// Send header
