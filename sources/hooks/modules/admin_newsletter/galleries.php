@@ -55,8 +55,7 @@ class Hook_whats_news_galleries
 		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
 		if ($count<500)
 		{
-			$_galleries=$GLOBALS['SITE_DB']->query('SELECT name,fullname FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'',300);
-			if (count($_galleries)==300) return array();
+			$_galleries=$GLOBALS['SITE_DB']->query('SELECT name,fullname FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
 			foreach ($_galleries as $i=>$_gallery)
 			{
 				$_galleries[$i]['text_original']=get_translated_text($_gallery['fullname']);
