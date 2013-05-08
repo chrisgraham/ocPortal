@@ -93,18 +93,18 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
 	{
 		list($members,$maybe_more)=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-		list($members,$maybe_more)=$this->_all_members_who_have_enabled_with_page_access($members,'groups',$notification_code,$category,$to_member_ids,$start,$max);
+		list($members,$maybe_more)=$this->_all_members_who_have_enabled_with_page_access(array($members,$maybe_more),'groups',$notification_code,$category,$to_member_ids,$start,$max);
 
-		if (is_numeric($category)) // Also merge in people monitoring forum
+		if (is_numeric($category)) // Filter if the group is hidden
 		{
 			$hidden=$GLOBALS['FORUM_DB']->query_value('f_groups','g_hidden',array('id'=>intval($category)));
 
 			if ($hidden==1)
 			{
-				$members_new=$members;
+				$members_new=array();
 				foreach ($members as $member_id=>$setting)
 				{
-					if (!has_specific_permission($member_id,'see_hidden_groups'))
+					if (has_specific_permission($member_id,'see_hidden_groups'))
 						$members_new[$member_id]=$setting;
 				}
 				$members=$members_new;
