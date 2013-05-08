@@ -227,7 +227,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 				// Category itself
 				if ((!array_key_exists('expanded_by_default',$forum_grouping)) || ($forum_grouping['expanded_by_default']==1))
 				{
-					$display='table';
+					$display='block';
 					$expand_type='contract';
 				} else
 				{

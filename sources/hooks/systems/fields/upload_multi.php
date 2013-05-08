@@ -71,9 +71,15 @@ class Hook_fields_upload_multi
 	 *
 	 * @param  array			The field details
 	 * @param  mixed			The raw value
+	 * @param  integer		Position in fieldset
+	 * @param  ?array			List of fields the output is being limited to (NULL: N/A)
+	 * @param  ?ID_TEXT		The table we store in (NULL: N/A)
+	 * @param  ?AUTO_LINK	The ID of the row in the table (NULL: N/A)
+	 * @param  ?ID_TEXT		Name of the ID field in the table (NULL: N/A)
+	 * @param  ?ID_TEXT		Name of the URL field in the table (NULL: N/A)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev)
+	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL)
 	{
 		if (is_object($ev)) return $ev;
 
@@ -84,33 +90,22 @@ class Hook_fields_upload_multi
 		foreach ($evs as $ev)
 		{
 			$original_filename=basename($ev);
-			$download_url=(url_is_local($ev)?(get_custom_base_url().'/'):'').$ev;
-			if (strpos($ev,'::')!==false)
+			if (url_is_local($ev))
 			{
-				list($ev,$original_filename)=explode('::',$ev);
 				$keep=symbol_tempcode('KEEP');
-				$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($ev)).$keep->evaluate();
+				if (strpos($ev,'::')!==false)
+				{
+					list($file,$original_filename)=explode('::',$ev);
+					$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($file)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+				} else
+				{
+					$download_url=find_script('catalogue_file').'?file='.urlencode(basename($ev)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+				}
+			} else
+			{
+				$download_url=(url_is_local($ev)?(get_custom_base_url().'/'):'').$ev;
 			}
 
-			$extension=get_file_extension($ev);
-			require_code('mime_types');
-			$mime_type=get_mime_type($extension);
-			if (((strpos($mime_type,'video')!==false) || (strpos($mime_type,'audio')!==false)) && (addon_installed('galleries')))
-			{
-				// Video/Audio HTML
-				switch ($mime_type)
-				{
-					case 'video/quicktime':
-						$tpl='GALLERY_VIDEO_QT';
-						break;
-					case 'audio/x-pn-realaudio':
-						$tpl='GALLERY_VIDEO_RM';
-						break;
-					default:
-						$tpl='GALLERY_VIDEO_GENERAL';
-				}
-				$ret->attach(do_template($tpl,array('URL'=>url_is_local($ev)?(get_custom_base_url().'/'.$ev):$ev,'WIDTH'=>get_option('default_video_width'),'HEIGHT'=>get_option('default_video_height'),'MIME_TYPE'=>$mime_type)));
-			}
 			$ret->attach(paragraph(hyperlink($download_url,$original_filename,true,true)));
 		}
 		return $ret;

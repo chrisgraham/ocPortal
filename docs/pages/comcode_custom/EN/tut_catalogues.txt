@@ -222,9 +222,14 @@ The ocPortal search module provides special support for searching catalogues by 
 
 You can import CSV files into catalogues. Be aware this adds entries only, it doesn't try and do any merging with what is already there.
 
+[title="2"]Custom fields for other content types[/title]
 
+Most content types in ocPortal allow you to choose custom fields for them. This is actually powered by catalogues -- catalogue entries are automatically associated with other content entries, in order to extend them.
 
+[title="3"]Upload security[/title]
 
+Note that upload security (for file, picture, and video fields) is not perfect for custom fields. The security is checked when accessing a file field if it is a catalogue entry, but there is no mechanism to check the permissions of the content for which custom fields are attached.
+A similar caveat holds true for custom profile fields, which share the same field types.
 
 [concepts
  1_key="Catalogue"   1_value="A custom database stored within your database: define your own records, and manipulate and view them as a part of your website"

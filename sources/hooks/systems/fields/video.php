@@ -95,18 +95,29 @@ class Hook_fields_video
 
 		$thumb_url=create_video_thumb($ev);
 
-		if (substr($ev,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/') $ev=substr($ev,strlen(get_custom_base_url().'/'));
-		if (url_is_local($ev))
+		$stripped_ev=$ev;
+		if (substr($stripped_ev,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/')
+			$stripped_ev=substr($stripped_ev,strlen(get_custom_base_url().'/'));
+		if (!url_is_local($stripped_ev))
 		{
-			$width=600;
-			$height=400;
+			$width=intval(get_option('default_video_width'));
+			$height=intval(get_option('default_video_height'));
 			$length=0;
 		} else
 		{
-			list($width,$height,$length)=get_video_details(get_custom_file_base().'/'.rawurldecode($ev),basename($ev));
+			list($width,$height,$length)=get_video_details(get_custom_file_base().'/'.rawurldecode($stripped_ev),basename($stripped_ev));
 		}
 
-		return show_gallery_media($ev,$thumb_url,$width,$height,$length);
+		if (url_is_local($ev))
+		{
+			$keep=symbol_tempcode('KEEP');
+			$download_url=find_script('catalogue_file').'?file='.urlencode(basename($ev)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+		} else
+		{
+			$download_url=$ev;
+		}
+
+		return show_gallery_media($download_url,$thumb_url,$width,$height,$length);
 	}
 
 	// ======================

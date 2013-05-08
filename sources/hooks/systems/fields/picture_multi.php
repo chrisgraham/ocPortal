@@ -73,9 +73,13 @@ class Hook_fields_picture_multi
 	 * @param  mixed			The raw value
 	 * @param  integer		Position in fieldset
 	 * @param  ?array			List of fields the output is being limited to (NULL: N/A)
+	 * @param  ?ID_TEXT		The table we store in (NULL: N/A)
+	 * @param  ?AUTO_LINK	The ID of the row in the table (NULL: N/A)
+	 * @param  ?ID_TEXT		Name of the ID field in the table (NULL: N/A)
+	 * @param  ?ID_TEXT		Name of the URL field in the table (NULL: N/A)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev,$i,$only_fields)
+	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL)
 	{
 		if (is_object($ev)) return $ev;
 
@@ -112,7 +116,16 @@ class Hook_fields_picture_multi
 				);
 			}
 
-			$ret->attach(do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE'));
+			if (url_is_local($ev))
+			{
+				$keep=symbol_tempcode('KEEP');
+				$download_url=find_script('catalogue_file').'?file='.urlencode(basename($img_url)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+			} else
+			{
+				$download_url=$img_url;
+			}
+
+			$ret->attach(do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$download_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE'));
 		}
 		return $ret;
 	}

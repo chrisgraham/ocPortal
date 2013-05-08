@@ -59,20 +59,48 @@ function catalogue_file_script()
 	if (!file_exists($_full)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$size=filesize($_full);
 
-	$original_filename=filter_naughty(get_param('original_filename',false,true));
+	$original_filename=get_param('original_filename',NULL,true);
+
+	// Security check; doesn't work for very old attachments (pre-v8)
+	$table=get_param('table');
+	$id=get_param_integer('id');
+	$id_field=get_param('id_field');
+	$url_field=get_param('url_field');
+	$ev='uploads/catalogues/'.$file;
+	if ($original_filename!==NULL) $ev.='::'.$original_filename;
+	$ev_check=$GLOBALS['SITE_DB']->query_select_value($table,$url_field,array($id_field=>$id)); // Has to return a result, will give a fatal error if not -- i.e. it implicitly checks the schema variables given
+	if (!in_array($ev,explode(chr(10),$ev_check))) access_denied('I_ERROR'); // ID mismatch for the file requested, to give a security error
+	if ($table=='catalogue_efv_short') // Now check the match, if we support checking on it
+	{
+		$c_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$id));
+		if (substr($c_name,0,1)!='_') // Doesn't work on custom fields (this is documented)
+		{
+			$cc_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','cc_id',array('id'=>$id));
+			if (!has_category_access(get_member(),'catalogues_catalogue',$c_name)) access_denied('CATALOGUE_ACCESS');
+			if (!has_category_access(get_member(),'catalogues_category',strval($cc_id))) access_denied('CATEGORY_ACCESS');
+		}
+	}
 
 	// Send header
-	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
-		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if (get_option('immediate_downloads',true)==='1')
+	if ($original_filename!==NULL)
 	{
-		require_code('mime_types');
-		header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');
-		header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		$original_filename=filter_naughty($original_filename);
+
+		if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
+			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+		if (get_option('immediate_downloads',true)==='1')
+		{
+			require_code('mime_types');
+			header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');
+			header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		} else
+		{
+			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		}
 	} else
 	{
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+		header('Content-Disposition: attachment');
 	}
 	header('Accept-Ranges: bytes');
 
@@ -364,8 +392,11 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('catalogue',$name);
+		if ($old_name!=$name) // We want special stability in catalogue addressing
+		{
+			require_code('resource_fs');
+			generate_resourcefs_moniker('catalogue',$name);
+		}
 	}
 
 	return $name;
@@ -428,11 +459,8 @@ function actual_delete_catalogue($name)
 	
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
-		if ($old_name!=$name) // We want special stability in catalogue addressing
-		{
-			require_code('resource_fs');
-			expunge_resourcefs_moniker('catalogue',$name);
-		}
+		require_code('resource_fs');
+		expunge_resourcefs_moniker('catalogue',$name);
 	}
 }
 
