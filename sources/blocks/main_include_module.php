@@ -85,7 +85,7 @@ class Block_main_include_module
 		push_output_state();
 
 		// Do it!
-		process_url_monikers($attributes['page']);
+		process_url_monikers($attributes['page'],false);
 		$ret=request_page($attributes['page'],false,$zone,NULL,true);
 		$ret->handle_symbol_preprocessing();
 		$_out=$ret->evaluate(); // So things are evaluated in the right context

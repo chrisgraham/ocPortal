@@ -48,9 +48,10 @@
  * @param  BINARY			Whether members may join this usergroup without requiring any special permission
  * @param  BINARY			Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
  * @param  boolean		Whether to force the title as unique, if there's a conflict
+ * @param  boolean		Whether permissions should be auto-copied
  * @return AUTO_LINK		The ID of the new.
  */
-function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$gift_points_base=NULL,$gift_points_per_day=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0,$uniqify=false)
+function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=NULL,$flood_control_access_secs=NULL,$max_daily_upload_mb=NULL,$max_attachments_per_post=NULL,$max_avatar_width=NULL,$max_avatar_height=NULL,$max_post_length_comcode=NULL,$max_sig_length_comcode=NULL,$gift_points_base=NULL,$gift_points_per_day=NULL,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0,$uniqify=false,$comes_with_permissions=true)
 {
 	require_code('form_templates');
 
@@ -121,7 +122,7 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 		'g_is_private_club'=>$is_private_club,
 	),true);
 
-	if (($group_id>db_get_first_id()+8) && ($is_private_club==0))
+	if (($group_id>db_get_first_id()+8) && ($is_private_club==0) && ($comes_with_permissions))
 	{
 		// Copy permissions from members
 		require_code('ocf_groups');

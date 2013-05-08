@@ -614,8 +614,9 @@ function set_short_title($title)
  * Process URL monikers, changing 'id' GET param to be correct.
  *
  * @param  ID_TEXT		The page name to do it for
+ * @param  boolean		Do a redirect if we're not on the canonical URL
  */
-function process_url_monikers($page)
+function process_url_monikers($page,$redirect_if_non_canonical=true)
 {
 	$zone=get_zone_name();
 	$type=get_param('type',NULL,true);
@@ -623,7 +624,7 @@ function process_url_monikers($page)
 
 	if (url_monikers_enabled())
 	{
-		// More SEO redirection (monikers relative to the zone)
+		// Monikers relative to the zone
 		if (_request_page($page,$zone)===false)
 		{
 			// Reassemble source URL moniker from incorrectly-derived URL components
@@ -658,7 +659,7 @@ function process_url_monikers($page)
 
 		// Yet more SEO redirection (monikers)
 		// Does this URL arrangement support monikers?
-		if ($url_id!==NULL) // NB: Comcode page monikers would have been handled in the code above
+		if ($url_id!==NULL && $redirect_if_non_canonical) // NB: Comcode page monikers would have been handled in the code above
 		{
 			$type=get_param('type','misc');
 			$looking_for='_SEARCH:'.$page.':'.$type.':_WILD';
