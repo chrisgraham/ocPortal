@@ -62,7 +62,7 @@
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$personal_notes='',$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
+function ocf_make_member($username,$password,$email_address,$secondary_groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$personal_notes='',$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
 {
 	if (is_null($auto_monitor_contrib_content))
 	{
@@ -141,8 +141,15 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	if (is_null($primary_group))
 	{
 		$primary_group=get_first_default_group(); // This is members
+	}
+	if (is_null($secondary_groups))
+	{
 		$secondary_groups=ocf_get_all_default_groups();
-	} else $secondary_groups=ocf_get_all_default_groups();
+	}
+	foreach ($secondary_groups as $_g_id=>$g_id)
+	{
+		if ($g_id==$primary_group) unset($secondary_groups[$_g_id]);
+	}
 	if (is_null($ip_address)) $ip_address=get_ip_address();
 
 	if (($password_compatibility_scheme=='') && (get_value('no_password_hashing')==='1'))
@@ -161,8 +168,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	}
 
 	// Supplement custom field values given with defaults, and check constraints
-	if (is_null($groups)) $groups=ocf_get_all_default_groups(true);
-	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match($groups));
+	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match($secondary_groups));
 	require_code('fields');
 	foreach ($all_fields as $field)
 	{
