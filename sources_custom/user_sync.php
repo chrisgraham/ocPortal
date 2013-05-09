@@ -102,6 +102,7 @@ function user_sync__inbound($since=NULL)
 		$i=0;
 
 		// Handle each user
+		$time_start=time();
 		while (($user=$sth->fetch(PDO::FETCH_ASSOC))!==false)
 		{
 			// Work out username
@@ -252,10 +253,29 @@ function user_sync__inbound($since=NULL)
 				$skip_checks=true;
 
 				ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$cpf_values,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,$skip_checks);
+
+				require_code('ocf_groups_action2');
+				$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
+				foreach ($groups as $group_id)
+				{
+					if (!in_array($group_id,$members_groups))
+					{
+						ocf_add_member_to_group($member_id,$group_id);
+					}
+				}
+				foreach ($members_groups as $group_id)
+				{
+					if (!in_array($group_id,$groups))
+					{
+						ocf_member_leave_group($group_id,$member_id);
+					}
+				}
 			}
 
 			$i++;
 		}
+		$time_end=time();
+		resourcefs_logging('Imported '.strval($i).' members in '.strval($time_end-$time_start).' seconds','notice');
 	}
 
 	// Customised end code
@@ -328,7 +348,7 @@ function user_sync_handle_field_remap($field_name,$remap_scheme,$remote_data,$db
 					} else // By name
 					{
 						$resourcefs_ob=get_resource_occlefs_object('group');
-						$data[$i]=$resourcefs_ob->convert_label_to_id($_data,'','group'); // Will be created if it doesn't already exist
+						$data[$i]=intval($resourcefs_ob->convert_label_to_id($_data,'','group')); // Will be created if it doesn't already exist
 					}
 				}
 			}

@@ -248,7 +248,9 @@ function try_su_login($member)
 	{
 		$su=$GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
 
-		if (is_null($su))
+		if (!is_null($su)) $member=$su; elseif (is_numeric($ks)) $member=intval($ks); else $member=NULL;
+
+		if (is_null($member))
 		{
 			require_code('site');
 			attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($ks)),'warn');
@@ -257,8 +259,6 @@ function try_su_login($member)
 
 		if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin($su)) || ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)))
 		{
-			if (!is_null($su)) $member=$su; elseif (is_numeric($ks)) $member=intval($ks);
-
 			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
 			{
 				global $USER_THEME_CACHE;

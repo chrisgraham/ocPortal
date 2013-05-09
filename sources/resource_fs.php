@@ -41,6 +41,9 @@ function init__resource_fs()
 	global $RESOURCEFS_LOGGER,$RESOURCEFS_LOGGER_LEVEL;
 	$RESOURCEFS_LOGGER=NULL;
 	$RESOURCEFS_LOGGER_LEVEL='notice';
+
+	global $RESOURCEFS_ADD_ONLY;
+	$RESOURCEFS_ADD_ONLY=false;
 }
 
 /**
@@ -73,7 +76,9 @@ function resourcefs_logging($message,$type='warn')
 		if (($type=='notice') && ($RESOURCEFS_LOGGER_LEVEL!='inform') && ($RESOURCEFS_LOGGER_LEVEL!='notice')) return;
 		if (($type=='warn') && ($RESOURCEFS_LOGGER_LEVEL!='inform') && ($RESOURCEFS_LOGGER_LEVEL!='notice') && ($RESOURCEFS_LOGGER_LEVEL!='warn')) return;
 
-		fwrite($RESOURCEFS_LOGGER,date('d/m/Y H:i:s').': '.$type.': '.$message."\n");
+		$message=date('d/m/Y H:i:s').': '.$type.': '.$message."\n";
+		fwrite($RESOURCEFS_LOGGER,$message);
+		if (running_script('execute_temp')) print($message);
 	}
 }
 
@@ -951,9 +956,9 @@ class resource_fs_base
 		{
 			if (array_key_exists($p,$actual_properties))
 			{
-				if (@strval($actual_properties[$p])!=@strval($properties[$p]))
+				if (str_replace(do_lang('NA'),'',@strval($actual_properties[$p]))!=str_replace(do_lang('NA'),'',@strval($properties[$p])))
 				{
-					resourcefs_logging('Property ('.$p.') value mismatch for '.$found_filename.' (actual '.@strval($actual_properties[$p]).' vs intended '.@strval($properties[$p]).').','warn');
+					resourcefs_logging('Property ('.$p.') value mismatch for '.$found_filename.' (actual '.str_replace(do_lang('NA'),'',@strval($actual_properties[$p])).' vs intended '.str_replace(do_lang('NA'),'',@strval($properties[$p])).').','warn');
 				}
 			} else
 			{
@@ -1831,6 +1836,12 @@ class resource_fs_base
 			$filename=$this->convert_label_to_filename($label,$search_path,$search_label_as,true);
 		}
 
+		if (($GLOBALS['RESOURCEFS_ADD_ONLY']) && ($filename!==NULL))
+		{
+			$resource_id=$this->file_convert_filename_to_id($filename);
+			if ($resource_id!==NULL) return $resource_id;
+		}
+
 		$existing=($filename===NULL)?false:$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
@@ -1838,6 +1849,7 @@ class resource_fs_base
 			$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
 			return $resource_id;
 		}
+
 		$resource_id=$this->file_edit($filename,$path,$properties+$existing);
 		$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
 		return $resource_id;
@@ -1878,6 +1890,12 @@ class resource_fs_base
 			$filename=$this->convert_label_to_filename($label,$search_path,$search_label_as,true);
 		}
 
+		if (($GLOBALS['RESOURCEFS_ADD_ONLY']) && ($filename!==NULL))
+		{
+			$resource_id=$this->folder_convert_filename_to_id($filename);
+			if ($resource_id!==NULL) return $resource_id;
+		}
+
 		$existing=($filename===NULL)?false:$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
@@ -1885,6 +1903,7 @@ class resource_fs_base
 			$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
 			return $resource_id;
 		}
+
 		$resource_id=$this->folder_edit($filename,$path,$properties+$existing);
 		$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
 		return $resource_id;

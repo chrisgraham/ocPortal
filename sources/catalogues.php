@@ -628,7 +628,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 	$num_entries=mixed();
 
 	$cf_type=is_numeric($order_by)?$fields[intval($order_by)]['cf_type']:'';
-	$can_do_db_sorting=($order_by!='distance') && ($cf_type!='date') && ($cf_type!='just_date') && ($cf_type!='just_time');
+	$can_do_db_sorting=($order_by!='distance');
 
 	require_code('hooks/systems/content_meta_aware/catalogue_entry');
 	$cma_ob=object_factory('Hook_content_meta_aware_catalogue_entry');
@@ -685,6 +685,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 	if (is_null($num_entries))
 		$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause,false,true);
 
+	$in_db_sorting=$do_sorting && $can_do_db_sorting; // This defines whether $virtual_order_by can actually be used in SQL (if not, we have to sort manually)
 	if ($num_entries>300) // Needed to stop huge slow down, so reduce to sorting by ID
 	{
 		$in_db_sorting=true;
@@ -692,7 +693,6 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 	}
 
 	$sql='SELECT r.*'.implode('',$extra_select).' FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause;
-	$in_db_sorting=$do_sorting && $can_do_db_sorting; // This defines whether $virtual_order_by can actually be used in SQL (if not, we have to sort manually)
 	if ($in_db_sorting && $do_sorting) $sql.=' ORDER BY '.$virtual_order_by.' '.$direction;
 
 	if ($max>0)
@@ -1180,7 +1180,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 
 	// Pre-caching of whole entry
 	static $catalogue_entry_cache=array();
-	if (!isset($catalogue_entry_cache[$entry_id][$field_id]))
+	if ((!isset($catalogue_entry_cache[$entry_id][$field_id])) || ($GLOBALS['NO_QUERY_LIMIT']/*Implies resource-fs import*/))
 	{
 		if (!isset($catalogue_entry_cache[$entry_id])) $catalogue_entry_cache[$entry_id]=array();
 		$query='';

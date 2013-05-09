@@ -24,7 +24,7 @@
  * @param  SHORT_TEXT		The username.
  * @param  SHORT_TEXT		The password.
  * @param  SHORT_TEXT		The e-mail address.
- * @param  ?array				A list of usergroups (NULL: default/current usergroups).
+ * @param  ?array				A list of secondary usergroups (NULL: default/current usergroups).
  * @param  ?integer			Day of date of birth (NULL: unknown).
  * @param  ?integer			Month of date of birth (NULL: unknown).
  * @param  ?integer			Year of date of birth (NULL: unknown).
@@ -62,7 +62,7 @@
  * @param  ?TIME				When the member is on probation until (NULL: not on probation)
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=0,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=NULL,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_make_member($username,$password,$email_address,$secondary_groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=0,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=NULL,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	require_code('form_templates');
 
@@ -142,8 +142,15 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	if (is_null($primary_group))
 	{
 		$primary_group=get_first_default_group(); // This is members
+	}
+	if (is_null($secondary_groups))
+	{
 		$secondary_groups=ocf_get_all_default_groups();
-	} else $secondary_groups=ocf_get_all_default_groups();
+	}
+	foreach ($secondary_groups as $_g_id=>$g_id)
+	{
+		if ($g_id==$primary_group) unset($secondary_groups[$_g_id]);
+	}
 	if (is_null($ip_address)) $ip_address=get_ip_address();
 
 	if ((($password_compatibility_scheme=='') || ($password_compatibility_scheme=='temporary')) && (get_value('no_password_hashing')==='1'))
@@ -163,8 +170,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	}
 
 	// Supplement custom field values given with defaults, and check constraints
-	if (is_null($groups)) $groups=ocf_get_all_default_groups(true);
-	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match($groups));
+	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match(array_merge(array($primary_group),$secondary_groups)));
 	require_code('fields');
 	foreach ($all_fields as $field)
 	{
