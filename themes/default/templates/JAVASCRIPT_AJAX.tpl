@@ -101,12 +101,14 @@ function internalise_infinite_scrolling(url_stem,wrapper)
 	}
 	for (var _i=0;_i<_pagination.length;_i++)
 	{
+		var pagination=_pagination[_i];
 		if (found_new_links!=null) // Cleanup old pagination
 		{
 			if (_i!=found_new_links)
 			{
 				var _more_links=pagination.getElementsByTagName('a');
-				for (var i=0;i<_more_links.length;i++)
+				var num_links=_more_links.length;
+				for (var i=num_links-1;i>=0;i--)
 				{
 					_more_links[i].parentNode.removeChild(_more_links[i]);
 				}
