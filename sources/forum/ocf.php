@@ -981,7 +981,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (($pattern=='') || ($pattern=='%')) $like='';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$like.'id<>'.strval($this->get_guest_id()).' ORDER BY m_last_submit_time DESC',$limit);
 
-		sort_maps_by($rows,'username');
+		sort_maps_by($rows,'m_username');
 
 		return $rows;
 	}
