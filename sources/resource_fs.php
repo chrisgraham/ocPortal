@@ -904,11 +904,20 @@ class resource_fs_base
 			return intval($properties[$property]);
 		}
 
+		static $cache=array();
+		if (isset($cache[$property][$table][$default][$db_property]))
+		{
+			return $cache[$property][$table][$default][$db_property];
+		}
+
 		$db=$GLOBALS[(substr($table,0,2)=='f_')?'FORUM_DB':'SITE_DB'];
 		$val=$db->query_value_if_there('SELECT '.$db_property.',count('.$db_property.') AS qty FROM '.get_table_prefix().$table.' GROUP BY '.$db_property.' ORDER BY qty DESC',false,true); // We need the mode here, not the mean
-		if (!is_null($val)) return $val;
+		$ret=$default;
+		if (!is_null($val)) $ret=$val;
 
-		return $default;
+		$cache[$property][$table][$default][$db_property]=$ret;
+
+		return $ret;
 	}
 
 	/**
@@ -934,7 +943,6 @@ class resource_fs_base
 	 * @param  ~ID_TEXT		The resource ID (false: was not added/edited)
 	 * @param  string			The path (blank: root / not applicable)
 	 * @param  array			Properties
-	 * @return ?string		The foldername/subpath (NULL: not found)
 	 */
 	function _log_if_save_matchup($resource_type,$resource_id,$path,$properties)
 	{
@@ -944,11 +952,20 @@ class resource_fs_base
 		global $RESOURCEFS_LOGGER;
 		if ($RESOURCEFS_LOGGER===NULL) return; // Too much unnecessarily work if the logger is not on
 
+		$ok=true;
+
+		static $similar_ok_before=array();
+		if ((isset($similar_ok_before[$resource_type][$path])) && ($similar_ok_before[$resource_type][$path]>10))
+		{
+			return;
+		}
+
 		$found_filename=$this->convert_id_to_filename($resource_type,$resource_id);
 		$found_path=$this->search($resource_type,$resource_id,true);
 		if ($found_path!==$path)
 		{
 			resourcefs_logging('Path mismatch for what was saved (actual '.$found_path.' vs intended '.$path.')','warn');
+			$ok=false;
 		}
 
 		$actual_properties=$this->resource_load($resource_type,$found_filename,$found_path);
@@ -959,11 +976,19 @@ class resource_fs_base
 				if (str_replace(do_lang('NA'),'',@strval($actual_properties[$p]))!=str_replace(do_lang('NA'),'',@strval($properties[$p])))
 				{
 					resourcefs_logging('Property ('.$p.') value mismatch for '.$found_filename.' (actual '.str_replace(do_lang('NA'),'',@strval($actual_properties[$p])).' vs intended '.str_replace(do_lang('NA'),'',@strval($properties[$p])).').','warn');
+					$ok=false;
 				}
 			} else
 			{
 				resourcefs_logging('Property ('.$p.') not applicable for '.$found_filename.'.','warn');
+				$ok=false;
 			}
+		}
+
+		if ($ok)
+		{
+			if (!isset($similar_ok_before[$resource_type][$path])) $similar_ok_before[$resource_type][$path]=0;
+			$similar_ok_before[$resource_type][$path]++;
 		}
 	}
 

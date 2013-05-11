@@ -495,6 +495,8 @@ function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
  */
 function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=false)
 {
+ 	if (get_option('url_monikers_enabled')=='0') return '';
+
 	if (!$is_new)
 	{
 		$manually_chosen=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_manually_chosen'=>1,'m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id));

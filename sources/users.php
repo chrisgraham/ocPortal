@@ -338,7 +338,7 @@ function get_member($quick_only=false)
  */
 function enforce_temporary_passwords($member)
 {
-	if ((get_forum_type()=='ocf') && ($member!=db_get_first_id()) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
+	if ((get_forum_type()=='ocf') && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
 	{
 		decache('side_users_online');
 

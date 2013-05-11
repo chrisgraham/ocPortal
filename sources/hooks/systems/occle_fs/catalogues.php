@@ -69,11 +69,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					if (strpos($storage_type,'_trans')!==false)
 					{
 						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']).' JOIN '.get_table_prefix().'translate t ON t.id=b.cv_value';
-						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('text_original'=>$label));
+						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('text_original'=>$label),'',1000/*reasonable search limit*/);
 					} else
 					{
 						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']);
-						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('b.cv_value'=>$label));
+						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('b.cv_value'=>$label),'',1000/*reasonable search limit*/);
 					}
 					foreach ($_ret as $r)
 					{
@@ -92,7 +92,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				return $ret;
 
 			case 'catalogue':
-				$ret=$GLOBALS['SITE_DB']->query_select('catalogues a JOIN '.get_table_prefix().'translate t ON t.id=a.c_title',array('c_name'),array('text_original'=>$label));
+				$ret=$GLOBALS['SITE_DB']->query('SELECT c_name FROM '.get_table_prefix().'catalogues a JOIN '.get_table_prefix().'translate t ON t.id=a.c_title WHERE '.db_string_equal_to('text_original',$label).' OR '.db_string_equal_to('c_name',$label));
 				return collapse_1d_complexity('c_name',$ret);
 		}
 		return array();

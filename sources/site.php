@@ -625,7 +625,8 @@ function process_url_monikers($page,$redirect_if_non_canonical=true)
 	if (url_monikers_enabled())
 	{
 		// Monikers relative to the zone
-		if (_request_page($page,$zone)===false)
+		$page_place=_request_page($page,$zone);
+		if (($page_place===false) || ((substr($page_place[0],0,7)=='COMCODE') && ($type!==NULL/*looking deeper than a normal Comcode page*/)))
 		{
 			// Reassemble source URL moniker from incorrectly-derived URL components
 			$url_moniker='';
