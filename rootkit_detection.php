@@ -43,7 +43,7 @@ if ($type=='')
 	echo <<<END
 		<p>Be warned that this is a tool for experts, who wish to take active extra measures to make sure their website is not hacked against their knowledge. This is the most ominous security problem for many, because it means that their own website could be spreading customer information or compromised software downloads. When we say this script is for experts, we mean it - this script is strictly separated from any other ocPortal file and thus stands alone without access to our quality and standards frameworks.</p>
 		<p>This detector will provide you with a portion of text that identifies the state of the most critical areas of ocPortal. You can then take the text, and save it in a file on your computer. You then run this tool again at a later date and use a tool such as <a href="http://winmerge.sourceforge.net/">WinMerge</a> to compare the results - seeing what has changed.</p>
-		<p>This tool will not find out if areas of your site have been vandaliased, because there is way too much information to scan and present for that to be viable. Instead, it focuses on compromised file systems, ocPortal permissions, and database-stored PHP/OcCLE-Code. It only checks staff settings on the local OCF, not on any other foreign forum.</p>
+		<p>This tool will not find out if areas of your site have been vandalised, because there is way too much information to scan and present for that to be viable. Instead, it focuses on compromised file systems, ocPortal permissions, and database-stored PHP/OcCLE-Code. It only checks staff settings on the local OCF, not on any other foreign forum.</p>
 		<p>It is important that you upload a new copy of this script before you run it, in case this script itself has been compromised.</p>
 		<p>This script may take some time to run, as it computes hashes over a large number of files. It requires PHP 4.2.0 or higher, as well as the 'mysql' module for usage on a mySQL database. If a different database is being used, then custom changes will be required to this script.</p>
 		<p>This script cannot extract database access details from your config file because the config file itself (which is an executable file for ocPortal) may have been configured to give out fake details to this script. Therefore you will need to enter them here, and the config file will only be used for accessing the ocPortal password (which will be extracted using a non-executive method).</p>
@@ -52,7 +52,7 @@ if ($type=='')
 			<p>ocPortal master password: <input type="password" name="password" /></p>
 			<p>Database host: <input type="text" name="db_host" value="localhost" /></p>
 			<p>Database name: <input type="text" name="db_name" value="ocf" /></p>
-			<p>Database table prefix: <input type="text" name="db_prefix" value="ocp4_" /></p>
+			<p>Database table prefix: <input type="text" name="db_prefix" value="ocp_" /></p>
 			<p>Database username: <input type="text" name="db_user" value="root" /></p>
 			<p>Database password: <input type="password" name="db_pass" /></p>
 
@@ -99,12 +99,15 @@ END;
 
 	// Check database
 	$prefix=$_POST['db_prefix'];
-	$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e LEFT JOIN '.$prefix.'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);
-	if ($r!==false)
+	if (file_exists($FILE_BASE.'/sources/hooks/systems/addon_registry/calendar_events.php'))
 	{
-		while (($row=mysql_fetch_assoc($r))!==false)
+		$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e LEFT JOIN '.$prefix.'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);
+		if ($r!==false)
 		{
-			$results.="Cronjob: {$row['id']}=".md5($row['text_original'])."\n";
+			while (($row=mysql_fetch_assoc($r))!==false)
+			{
+				$results.="Cronjob: {$row['id']}=".md5($row['text_original'])."\n";
+			}
 		}
 	}
 	$r=mysql_query('SELECT * FROM '.$prefix.'config WHERE config_value IS NULL ORDER BY the_name',$db);
@@ -237,7 +240,7 @@ echo <<<END
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 		/*]]>*/</style>
 	</head>
-	<body class="website_body"><div class="global_middle">
+	<body class="website_body" style="margin: 1em"><div class="global_middle">
 		<h1 class="screen_title">ocPortal rootkit detector</h1>
 		<form title="Proceed" action="rootkit_detection.php?type=go" method="post">
 END;
