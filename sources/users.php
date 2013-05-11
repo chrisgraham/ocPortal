@@ -157,7 +157,7 @@ function get_member($quick_only=false)
 
 	// If lots of aging sessions, clean out
 	reset($SESSION_CACHE);
-	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-intval(60.0*60.0*max(1.0,floatval(get_option('session_expiry_time'))))))
+	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))))
 		delete_expired_sessions_or_recover();
 
 	// Try via backdoor that someone with full server access can place
@@ -203,7 +203,7 @@ function get_member($quick_only=false)
 		$allow_unbound_guest=true; // Note: Guest sessions are not IP bound
 		$member_row=NULL;
 
-		if (($SESSION_CACHE!==NULL) && (array_key_exists($session,$SESSION_CACHE)) && ($SESSION_CACHE[$session]!==NULL) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-intval(60.0*60.0*max(1.0,floatval(get_option('session_expiry_time'))))))
+		if (($SESSION_CACHE!==NULL) && (array_key_exists($session,$SESSION_CACHE)) && ($SESSION_CACHE[$session]!==NULL) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))))
 			$member_row=$SESSION_CACHE[$session];
 		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['the_user']))))
 		{
@@ -220,8 +220,6 @@ function get_member($quick_only=false)
 			}
 			global $SESSION_CONFIRMED;
 			$SESSION_CONFIRMED=$member_row['session_confirmed'];
-
-			if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
 
 			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
 			{
@@ -317,7 +315,12 @@ function get_member($quick_only=false)
 	// We call this to ensure any HTTP-auth specific code has a chance to run
 	is_httpauth_login();
 
-	if ($member!==NULL) enforce_temporary_passwords($member);
+	if ($member!==NULL)
+	{
+		enforce_temporary_passwords($member);
+
+		if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
+	}
 
 	return $member;
 }
@@ -463,7 +466,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 
 	// Delete expired sessions
 	if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-intval(60.0*60.0*max(1.0,floatval(get_option('session_expiry_time'))))));
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))));
 	$new_session=NULL;
 	$dirty_session_cache=false;
 	global $SESSION_CACHE;
@@ -472,7 +475,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 		if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
 
 		// Delete expiry from cache
-		if ($row['last_activity']<time()-intval(60.0*60.0*max(1.0,floatval(get_option('session_expiry_time')))))
+		if ($row['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time')))))
 		{
 			$dirty_session_cache=true;
 			unset($SESSION_CACHE[$_session]);
@@ -482,7 +485,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 		// Get back to prior session if there was one
 		if ($member!==NULL)
 		{
-			if (($row['the_user']==$member) && (((get_option('ip_strict_for_sessions')=='0') && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip']==$ip)) && ($row['last_activity']>time()-intval(60.0*60.0*max(1.0,floatval(get_option('session_expiry_time'))))))
+			if (($row['the_user']==$member) && (((get_option('ip_strict_for_sessions')=='0') && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip']==$ip)) && ($row['last_activity']>time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))))
 			{
 				$new_session=$_session;
 			}

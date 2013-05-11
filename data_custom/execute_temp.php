@@ -58,7 +58,7 @@ function execute_temp()
 	set_value('no_password_cookies','1');
 	set_value('password_change_days','90');
 	set_value('password_expiry_days','180');
-	set_value('minimum_password_strength','5');
+	set_value('minimum_password_strength','4');
 	set_value('hack_ban_threshold','5');
 	set_value('brute_force_login_minutes','120');
 	set_value('brute_force_threshold','6');

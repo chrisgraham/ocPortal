@@ -33,7 +33,7 @@ function password_rules_ensure_table_exists()
 			'p_salt'=>'SHORT_TEXT',
 			'p_time'=>'TIME',
 		));
-		$GLOBALS['SITE_DB']->create_index('f_password_history','p_member_id',array('p_member_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_password_history','p_member_id',array('p_member_id'));
 
 		// Initialise with current data (we'll assume m_last_submit_time represents last password change, which is not true - but ok enough for early initialisation, and will scatter things quite nicely to break in the new rules gradually)
 		if (function_exists('set_time_limit')) @set_time_limit(0);
@@ -180,7 +180,7 @@ function bump_password_change_date($member_id,$password,$password_salted,$salt,$
 	// Ensure does not re-use previous password
 	if (!$skip_checks)
 	{
-		$past_passwords=$GLOBALS['SITE_DB']->query_select('f_password_history',array('*'),array('p_member_id'=>$member_id),'ORDER BY p_time DESC',1000/*reasonable limit*/);
+		$past_passwords=$GLOBALS['FORUM_DB']->query_select('f_password_history',array('*'),array('p_member_id'=>$member_id),'ORDER BY p_time DESC',1000/*reasonable limit*/);
 		foreach ($past_passwords as $past_password)
 		{
 			if (md5($past_password['p_salt'].md5($password))==$past_password['p_hash_salted'])

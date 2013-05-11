@@ -730,6 +730,25 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 
 	$update=array();
 
+	if (!$skip_checks)
+	{
+		$old_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
+
+		if ((!is_null($email_address)) && (($email_address!='') || (($old_email_address!='') && (!has_specific_permission(get_member(),'member_maintenance')))) && (!is_valid_email_address($email_address)))
+			warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS',escape_html($email_address)));
+	}
+
+	if (!is_null($username))
+	{
+		if (!$skip_checks)
+		{
+			ocf_check_name_valid($username,$member_id,$password);
+
+			require_code('urls2');
+			suggest_new_idmoniker_for('members','view',strval($member_id),$username);
+		}
+	}
+
 	if (!is_null($password))
 	{
 		if ((is_null($password_compatibility_scheme)) && (get_value('no_password_hashing')==='1'))
@@ -760,25 +779,6 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 				require_code('password_rules');
 				bump_password_change_date($member_id,$password,$update['m_pass_hash_salted'],$salt,$skip_checks);
 			}
-		}
-	}
-
-	if (!$skip_checks)
-	{
-		$old_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
-
-		if ((!is_null($email_address)) && (($email_address!='') || (($old_email_address!='') && (!has_specific_permission(get_member(),'member_maintenance')))) && (!is_valid_email_address($email_address)))
-			warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS',escape_html($email_address)));
-	}
-
-	if (!is_null($username))
-	{
-		if (!$skip_checks)
-		{
-			ocf_check_name_valid($username,$member_id,$password);
-
-			require_code('urls2');
-			suggest_new_idmoniker_for('members','view',strval($member_id),$username);
 		}
 	}
 
@@ -1264,7 +1264,8 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 		if (!is_null($password))
 		{
 			require_code('password_rules');
-			check_password_complexity($username,$password,$return_errors);
+			$test=check_password_complexity($username,$password,$return_errors);
+			if (!is_null($test)) return $test;
 		}
 	}
 

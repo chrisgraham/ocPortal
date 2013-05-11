@@ -1615,8 +1615,11 @@ class forum_driver_ocf extends forum_driver_base
 				$change_map=array('m_last_visit_time'=>time());
 				if (get_ip_address()!=$old_ip) $change_map['m_ip_address']=get_ip_address();
 
-				if (get_db_type()!='xml')
-					$this->connection->query_update('f_members',$change_map+$extra,array('id'=>$id),'',1,NULL,false,true);
+				if (get_page_name()!='lostpassword')
+				{
+					if (get_db_type()!='xml')
+						$this->connection->query_update('f_members',$change_map+$extra,array('id'=>$id),'',1,NULL,false,true);
+				}
 			}
 		}
 	}
