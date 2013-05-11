@@ -728,6 +728,41 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 {
 	require_code('type_validation');
 
+	$update=array();
+
+	if (!is_null($password))
+	{
+		if ((is_null($password_compatibility_scheme)) && (get_value('no_password_hashing')==='1'))
+		{
+			$password_compatibility_scheme='plain';
+			$update['m_password_change_code']='';
+			$salt='';
+		}
+
+		if ((!is_null($salt)) || (!is_null($password_compatibility_scheme)))
+		{
+			if (!is_null($salt)) $update['m_pass_salt']=$salt;
+			if (!is_null($password_compatibility_scheme)) $update['m_password_compat_scheme']=$password_compatibility_scheme;
+			$update['m_pass_hash_salted']=$password;
+		} else
+		{
+			$update['m_password_change_code']='';
+			$salt=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
+			$update['m_pass_hash_salted']=md5($salt.md5($password));
+			$update['m_password_compat_scheme']='';
+		}
+
+		$password_change_days=get_value('password_change_days');
+		if (intval($password_change_days)>0)
+		{
+			if ($password_compatibility_scheme=='')
+			{
+				require_code('password_rules');
+				bump_password_change_date($member_id,$password,$update['m_pass_hash_salted'],$salt,$skip_checks);
+			}
+		}
+	}
+
 	if (!$skip_checks)
 	{
 		$old_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
@@ -784,7 +819,6 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	$_pt_rules_text=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pt_rules_text');
 	$_signature=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_signature');
 
-	$update=array();
 	if (!is_null($theme)) $update['m_theme']=$theme;
 	if (!is_null($preview_posts)) $update['m_preview_posts']=$preview_posts;
 	if (!is_null($dob_day)) $update['m_dob_day']=($dob_day==-1)?NULL:$dob_day;
@@ -829,26 +863,6 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	}
 	if (!is_null($password))
 	{
-		if ((is_null($password_compatibility_scheme)) && (get_value('no_password_hashing')==='1'))
-		{
-			$password_compatibility_scheme='plain';
-			$update['m_password_change_code']='';
-			$salt='';
-		}
-
-		if ((!is_null($salt)) || (!is_null($password_compatibility_scheme)))
-		{
-			if (!is_null($salt)) $update['m_pass_salt']=$salt;
-			if (!is_null($password_compatibility_scheme)) $update['m_password_compat_scheme']=$password_compatibility_scheme;
-			$update['m_pass_hash_salted']=$password;
-		} else
-		{
-			$update['m_password_change_code']='';
-			$salt=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
-			$update['m_pass_hash_salted']=md5($salt.md5($password));
-			$update['m_password_compat_scheme']='';
-		}
-
 		if (!$skip_checks)
 		{
 			$part_b='';
@@ -1249,20 +1263,8 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 		}
 		if (!is_null($password))
 		{
-			$_maximum_password_length=get_option('maximum_password_length',true);
-			if (is_null($_maximum_password_length)) $maximum_password_length=1000; else $maximum_password_length=intval($_maximum_password_length);
-			if (ocp_mb_strlen($password)>$maximum_password_length)
-			{
-				if ($return_errors) return do_lang_tempcode('PASSWORD_TOO_LONG',integer_format($maximum_password_length));
-				warn_exit(do_lang_tempcode('PASSWORD_TOO_LONG',integer_format($maximum_password_length)));
-			}
-			$_minimum_password_length=get_option('minimum_password_length',true);
-			if (is_null($_minimum_password_length)) $minimum_password_length=1; else $minimum_password_length=intval($_minimum_password_length);
-			if (ocp_mb_strlen($password)<$minimum_password_length)
-			{
-				if ($return_errors) return do_lang_tempcode('PASSWORD_TOO_SHORT',integer_format($minimum_password_length));
-				warn_exit(do_lang_tempcode('PASSWORD_TOO_SHORT',integer_format($minimum_password_length)));
-			}
+			require_code('password_rules');
+			check_password_complexity($username,$password,$return_errors);
 		}
 	}
 

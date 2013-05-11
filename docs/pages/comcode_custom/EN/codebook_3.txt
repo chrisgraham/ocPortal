@@ -137,6 +137,14 @@ The values you might want to manually change are:
  - [tt]mails_per_send[/tt] -- set this to the number of e-mails to send out in each e-mail send batch (default is 60).
  - [tt]primary_paypal_email[/tt] -- set this to your primary PayPal email address, if you have set up PayPal to work against a secondary PayPal address instead. Without it ocPortal will fail to validate payments, causing all eCommerce to fail.
  - [tt]simplify_wysiwyg_by_permissions[/tt] -- set this to '1' if you want to show a simpler WYSIWYG editor to members with limited Comcode permissions.
+ - [tt]password_change_days[/tt] -- the number if days until you have to change your password.
+ - [tt]password_expiry_days[/tt] -- the number if days of not logging in after which you have to reset your password by email (usually set longer than password_expiry_days).
+ - [tt]no_password_cookies[/tt] -- set this to '1' to disable password cookies, to force users to re-login upon session expiry.
+ - [tt]minimum_password_strength[/tt] -- the minimum password strength for new passwords (1 to 9, as 10 is max strength).
+ - [tt]hack_ban_threshold[/tt] -- the number of detected hack-attempts before automatic banning happens (default: 5). Note that not all detected attempts are real; in rare cases there may be a bug, or very commonly it may be a poorly written bot.
+ - [tt]brute_force_login_minutes[/tt] -- the number of minutes through which failed logins will be counted.
+ - [tt]brute_force_threshold[/tt] -- the number of failed logins, to generate a hack-attack notice.
+ - [tt]brute_force_instant_ban[/tt] -- set this to '1' if the brute-force password detection should result in an instant ban.
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)

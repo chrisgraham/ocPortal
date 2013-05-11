@@ -57,25 +57,27 @@
 					</table>
 				{+END}
 
-				<div class="login_page_options">
-					<p>
-						<label for="remember">
-						  <input id="remember" type="checkbox" value="1" name="remember" {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) { t.checked=false; } }); }" {+END}/>
-						  <span class="field_name">{!REMEMBER_ME}</span>
-						</label>
-						<span class="associated_details">{!REMEMBER_ME_TEXT}</span>
-					</p>
-
-					{+START,IF,{$CONFIG_OPTION,is_on_invisibility}}
+				{+START,IF,{$NOT,{$VALUE_OPTION,no_password_cookies}}}
+					<div class="login_page_options">
 						<p>
-							<label for="login_invisible">
-								<input id="login_invisible" type="checkbox" value="1" name="login_invisible" />
-								<span class="field_name">{!INVISIBLE}</span>
+							<label for="remember">
+							  <input id="remember" type="checkbox" value="1" name="remember" {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) { t.checked=false; } }); }" {+END}/>
+							  <span class="field_name">{!REMEMBER_ME}</span>
 							</label>
-							<span class="associated_details">{!INVISIBLE_TEXT}</span>
+							<span class="associated_details">{!REMEMBER_ME_TEXT}</span>
 						</p>
-					{+END}
-				</div>
+
+						{+START,IF,{$CONFIG_OPTION,is_on_invisibility}}
+							<p>
+								<label for="login_invisible">
+									<input id="login_invisible" type="checkbox" value="1" name="login_invisible" />
+									<span class="field_name">{!INVISIBLE}</span>
+								</label>
+								<span class="associated_details">{!INVISIBLE_TEXT}</span>
+							</p>
+						{+END}
+					</div>
+				{+END}
 			</div>
 
 			<p class="proceed_button">

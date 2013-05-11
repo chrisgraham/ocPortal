@@ -55,8 +55,15 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('files');
-	set_option('site_closed','0');
-	@print(http_download_file('http://192.168.1.100/git/index.php?page=feedback'));
-//	set_value('http_faux_loopback','^'.preg_quote(get_base_url(),'#').'.*\.(php|jpg|jpeg|png|gif|htm|html|ico|txt|css|js|cur|tar|gz|mp3|mp4|m4v|mpg|mpeg|pdf|svg|swf|ttf|woff|wav|zip|xsd|xsl|xml|webm)\??');
+	set_value('no_password_cookies','1');
+	set_value('password_change_days','90');
+	set_value('password_expiry_days','180');
+	set_value('minimum_password_strength','5');
+	set_value('hack_ban_threshold','5');
+	set_value('brute_force_login_minutes','120');
+	set_value('brute_force_threshold','6');
+	set_value('brute_force_instant_ban','1');
+	set_option('session_expiry_time','0.25');
+	set_option('minimum_password_length','6');
+	set_option('autoban','1');
 }

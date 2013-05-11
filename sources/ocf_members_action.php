@@ -312,6 +312,16 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		if (function_exists('decache')) decache('side_stats');
 	}
 
+	$password_change_days=get_value('password_change_days');
+	if (intval($password_change_days)>0)
+	{
+		if ($password_compatibility_scheme=='')
+		{
+			require_code('password_rules');
+			bump_password_change_date($member_id,$password,$password_salted,$salt);
+		}
+	}
+
 	return $member_id;
 }
 
