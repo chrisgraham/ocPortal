@@ -452,7 +452,20 @@ class Module_cms_catalogues extends standard_aed_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
-		return array($fields,$hidden);
+		$fields2=new ocp_tempcode();
+		if ((!is_null($id)) && (is_ecommerce_catalogue($catalogue_name)) && (!$this->may_delete_this(strval($id))))
+		{
+			$_submitter=$this->get_submitter($id);
+			$submitter=$_submitter[0];
+			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->permission_page_name)?get_page_name():$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
+			if ($delete_permission)
+			{
+				$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'),'SECTION_HIDDEN'=>true)));
+				$fields2->attach(form_input_tick(do_lang_tempcode('shopping:SHOPPING_FORCE_DELETE'),do_lang_tempcode('shopping:DESCRIPTION_SHOPPING_FORCE_DELETE'),'force_delete',false));
+			}
+		}
+
+		return array($fields,$hidden,NULL,NULL,false,NULL,$fields2);
 	}
 
 	/**
@@ -628,6 +641,34 @@ class Module_cms_catalogues extends standard_aed_module
 		}
 
 		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
+
+		// Purge support
+		if (post_param_integer('force_delete',0)==1)
+		{
+			$_submitter=$this->get_submitter($id);
+			$submitter=$_submitter[0];
+			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->permission_page_name)?get_page_name():$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
+			if ($delete_permission)
+			{
+				$start=0;
+				do
+				{
+					$details=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('order_id','p_price'),array('p_id'=>$id),'',1000,$start);
+					foreach ($details as $d)
+					{
+						$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'shopping_order SET tot_price=tot_price-'.float_to_raw_string($d['p_price']).' WHERE id='.strval($d['order_id']).' AND '.db_string_equal_to('order_status','ORDER_STATUS_awaiting_payment'));
+						$GLOBALS['SITE_DB']->query_delete('shopping_order',array('id'=>$d['order_id'],'tot_price'=>0.0),'',1);
+					}
+					$start+=1000;
+				}
+				while (count($details)!=0);
+				$GLOBALS['SITE_DB']->query_delete('shopping_order_details',array('p_id'=>$id));
+				$GLOBALS['SITE_DB']->query_delete('shopping_cart',array('product_id'=>$id));
+				$this->delete_actualisation($_id);
+			}
+
+			unset($_GET['redirect']);
+		}
 
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
