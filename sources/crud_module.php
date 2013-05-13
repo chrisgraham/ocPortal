@@ -769,7 +769,11 @@ class standard_crud_module
 //		if ($this->redirect_type=='!')
 		{
 			$url=get_param('redirect',NULL);
-			if (!is_null($url)) return redirect_screen($title,$url,$description);
+			if (!is_null($url))
+			{
+				$url=str_replace('__ID__',$id,$url);
+				return redirect_screen($title,$url,$description);
+			}
 		}
 
 		breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:a'.$this->type_code,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));

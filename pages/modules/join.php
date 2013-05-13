@@ -154,6 +154,9 @@ class Module_join
 	{
 		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
 
+		if ((get_option('show_first_join_page')=='1') && (post_param_integer('confirm',0)!=1))
+			warn_exit(do_lang_tempcode('DESCRIPTION_I_AGREE_RULES'));
+
 		// Check e-mail domain, if applicable
 		$email_address=trim(post_param('email_address'));
 		if ($email_address!='')

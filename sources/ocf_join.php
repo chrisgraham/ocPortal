@@ -120,12 +120,17 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 		form.old_submit=form.onsubmit;
 		form.onsubmit=function()
 			{
-				if ((form.elements['email_address_confirm']) && (form.elements['email_address_confirm'].value!=form.elements['email_address'].value))
+				if ((typeof form.elements['confirm']!='undefined') && (form.elements['confirm'].type=='checkbox') && (!form.elements['confirm'].checked))
+				{
+					window.fauxmodal_alert('".php_addslashes(do_lang('DESCRIPTION_I_AGREE_RULES'))."');
+					return false;
+				}
+				if ((typeof form.elements['email_address_confirm']!='undefined') && (form.elements['email_address_confirm'].value!=form.elements['email_address'].value))
 				{
 					window.fauxmodal_alert('".php_addslashes(do_lang('EMAIL_ADDRESS_MISMATCH'))."');
 					return false;
 				}
-				if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['password'].value))
+				if ((typeof form.elements['password_confirm']!='undefined') && (form.elements['password_confirm'].value!=form.elements['password'].value))
 				{
 					window.fauxmodal_alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
 					return false;
