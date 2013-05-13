@@ -18,6 +18,37 @@
  * @package		core
  */
 
+$cli=(php_sapi_name()=='cli' && empty($_SERVER['REMOTE_ADDR']));
+if (($cli) && (strpos($_SERVER['argv'][0],'critical_errors.php')!==false) && (is_dir('critical_errors')))
+{
+	// Critical error monitoring mode
+	if (function_exists('set_time_limit')) @set_time_limit(0);
+	require_once('_config.php');
+	global $SITE_INFO;
+	$email_to=isset($SITE_INFO['email_to'])?$SITE_INFO['email_to']:('webmaster@'.$SITE_INFO['domain']);
+	echo 'Monitoring for logged critical errors; we will email '.$email_to.' if we find anything.'."\n";
+	$last_run=time();
+	while (true)
+	{
+		$dh=opendir('critical_errors');
+		while (($f=readdir($dh))!==false)
+		{
+			if (substr($f,-4)=='.log')
+			{
+				if (filemtime('critical_errors/'.$f)>=$last_run)
+				{
+					echo 'Found and emailing error '.$f."\n";
+					mail($email_to,'Critical error logged','Critical error logged -- see critical_errors/'.$f.' on the server.');
+					continue; // Enough, don't send more than once per 10 seconds
+				}
+			}
+		}
+		closedir($dh);
+		$last_run=time();
+		sleep(10);
+	}
+}
+
 if (!function_exists('critical_error'))
 {
 	/**
@@ -30,6 +61,9 @@ if (!function_exists('critical_error'))
 	function critical_error($code,$relay=NULL,$exit=true)
 	{
 		error_reporting(0);
+
+		@ob_end_clean();
+		ob_start();
 
 		if (!headers_sent())
 		{
@@ -191,6 +225,37 @@ END;
 		echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>'.chr(10).'<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\''.htmlentities($edit_url).'\';">edit the installation options</a> (the <kbd>_config.php</kbd> file).</p>'.chr(10).'<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>'.chr(10).'<hr />'.chr(10).'<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>'.chr(10);
 		echo '</div></body>'.chr(10).'</html>';
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+
+		$contents=ob_get_contents();
+		$dir=get_custom_file_base().'/critical_errors';
+		if (is_dir($dir))
+		{
+			$code=uniqid('');
+			file_put_contents($dir.'/'.$code.'.log',$contents);
+			ob_end_clean();
+
+			@header('HTTP/1.0 500 Internal Server Error');
+			global $RELATIVE_PATH,$SITE_INFO;
+			if (isset($SITE_INFO['base_url']))
+			{
+				$back_path=$SITE_INFO['base_url'];
+			} else
+			{
+				$back_path=preg_replace('#[^/]+#','..',$RELATIVE_PATH);
+			}
+			if (is_file(get_custom_file_base().'/_critical_error.html'))
+			{
+				$url=(($back_path=='')?'':($back_path.'/')).'_critical_error.html?error_code='.urlencode($code);
+			} else
+			{
+				$url=(($back_path=='')?'':($back_path.'/')).'index.php?page=_critical_error&error_code='.urlencode($code);
+			}
+			echo '<meta http-equiv="refresh" content="0;url='.htmlentities($url).'" />';
+		} else
+		{
+			ob_end_flush();
+		}
+
 		if ($exit) exit();
 	}
 }
