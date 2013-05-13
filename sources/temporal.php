@@ -255,6 +255,8 @@ function my_strftime($format,$timestamp=NULL)
 {
 	if (is_null($timestamp)) $timestamp=time();
 
+	if (strpos(strtolower(PHP_OS),'win')!==false)
+		$format=str_replace('%e','%#d',$format);
 	$ret=strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
 	if ($ret===false) $ret='';
 	return $ret;
