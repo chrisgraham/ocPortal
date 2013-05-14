@@ -1730,6 +1730,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 
 	$text_only=(get_param_integer('keep_textonly',0)==1);
 	$minify=(get_param_integer('keep_no_minify',0)==0);
+	if ($seed!='') $minify=false;
 	$https=((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
 	$mobile=is_mobile();
 
