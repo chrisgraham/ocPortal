@@ -168,7 +168,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	}
 
 	// Supplement custom field values given with defaults, and check constraints
-	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match($secondary_groups));
+	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match(array_merge(array($primary_group),$secondary_groups)));
 	require_code('fields');
 	foreach ($all_fields as $field)
 	{
