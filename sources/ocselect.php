@@ -865,6 +865,25 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 					{
 						if ($alt!='') $alt.=' OR ';
 						$alt.=$filter_key.$filter_op.$filter_val;
+					} else
+					{
+						if ($alt!='') $alt.=' OR ';
+
+						switch ($filter_op)
+						{
+							case '<':
+								$alt.='STRCMP(REPLACE('.$filter_key.',\'-\',\'\'),REPLACE(\''.db_escape_string($filter_val).'\',\'-\',\'\'))<0';
+								break;
+							case '>':
+								$alt.='STRCMP(REPLACE('.$filter_key.',\'-\',\'\'),REPLACE(\''.db_escape_string($filter_val).'\',\'-\',\'\'))>0';
+								break;
+							case '<=':
+								$alt.='STRCMP(REPLACE('.$filter_key.',\'-\',\'\'),REPLACE(\''.db_escape_string($filter_val).'\',\'-\',\'\'))<=0';
+								break;
+							case '>=':
+								$alt.='STRCMP(REPLACE('.$filter_key.',\'-\',\'\'),REPLACE(\''.db_escape_string($filter_val).'\',\'-\',\'\'))>=0';
+								break;
+						}
 					}
 					break;
 

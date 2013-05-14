@@ -316,7 +316,7 @@ END;
 		foreach (array_unique(array_merge(is_null($news_categories)?array():$news_categories,array($main_news_category_id))) as $news_category_id)
 		{
 			if ($meta_keywords!='') $meta_keywords.=',';
-			$meta_keywords.=get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title',array('id'=>$news_category_id)));
+			$meta_keywords.=get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id'=>$news_category_id)));
 		}
 	}
 	if (($meta_keywords=='') && ($meta_description==''))
@@ -464,7 +464,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		foreach (array_unique(array_merge(is_null($news_categories)?array():$news_categories,array($main_news_category))) as $news_category_id)
 		{
 			if ($meta_keywords!='') $meta_keywords.=',';
-			$meta_keywords.=get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title',array('id'=>$news_category_id)));
+			$meta_keywords.=get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id'=>$news_category_id)));
 		}
 	}
 	seo_meta_set_for_explicit('news',strval($id),$meta_keywords,$meta_description);

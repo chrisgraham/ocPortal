@@ -251,10 +251,10 @@ class Module_vforums
 			$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,t.text_parsed AS _trans_post,'.(is_guest()?'NULL as l_time':'l_time').$query,$max,$start));
 			if ((can_arbitrary_groupby()) && (!is_null($initial_table)))
 			{
-				$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT top.id) '.$_query);
+				$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT top.id) '.$_query);
 			} else
 			{
-				$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
+				$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 			}
 		}
 		$hot_topic_definition=intval(get_option('hot_topic_definition'));

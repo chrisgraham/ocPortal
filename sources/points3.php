@@ -74,9 +74,9 @@ function points_profile($member_id_of,$member_id_viewing)
 	$to=points_get_transactions('to',$member_id_of,$member_id_viewing);
 	$from=points_get_transactions('from',$member_id_of,$member_id_viewing);
 
-	// If we're staff, we can show the charge log too
+	// If we're staff, or the member, we can show the charge log too
 	$chargelog_details=new ocp_tempcode();
-	if (has_privilege($member_id_viewing,'view_charge_log'))
+	if ((has_privilege($member_id_viewing,'view_charge_log')) || ($member_id_viewing==$member_id_of))
 	{
 		$start=get_param_integer('charge_start',0);
 		$max=get_param_integer('charge_max',10);

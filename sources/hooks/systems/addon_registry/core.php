@@ -407,7 +407,7 @@ class Hook_addon_registry_core
 			'sitetree_editor.css',
 			'global.css',
 			'font_sizer.css',
-			'themes/default/templates/FONT_SIZER.tpl',
+			'FONT_SIZER.tpl',
 			'themes/default/css/index.html',
 			'no_cache.css',
 			'data/editarea/reg_syntax/index.html',

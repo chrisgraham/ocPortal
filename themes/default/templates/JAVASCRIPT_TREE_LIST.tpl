@@ -253,6 +253,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			a.childNodes[0].onfocus=function() { this.parentNode.style.outline='1px dotted'; };
 			a.childNodes[0].onblur=function() { this.parentNode.style.outline=''; };
 			a.childNodes[0].onclick=a.handle_selection;
+			a.onclick=a.handle_selection; // Needed by Firefox, the radio button's onclick will not be called if shift/ctrl held
 			a.childNodes[0].object=this;
 			a.object=this;
 			a.onmousedown=function(event) { // To disable selection of text when holding shift or control
@@ -314,6 +315,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			a.childNodes[0].onfocus=function() { this.parentNode.style.outline='1px dotted'; };
 			a.childNodes[0].onblur=function() { this.parentNode.style.outline=''; };
 			a.childNodes[0].onclick=a.handle_selection;
+			a.onclick=a.handle_selection; // Needed by Firefox, the radio button's onclick will not be called if shift/ctrl held
 			a.childNodes[0].object=this;
 			a.object=this;
 			a.onmousedown=function(event) { // To disable selection of text when holding shift or control
@@ -537,11 +539,12 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	if (element.disabled) return;
 	var i;
 	var selected_start=(element.value=='')?[]:element.value.split(',');
+
+	cancel_bubbling(event);
+	if (typeof event.preventDefault!='undefined') event.preventDefault();
+
 	if ((!assume_ctrl) && (event.shiftKey) && (this.object.multi_selection))
 	{
-		cancel_bubbling(event);
-		if (typeof event.preventDefault!='undefined') event.preventDefault();
-
 		// We're holding down shift so we need to force selection of everything bounded between our last click spot and here
 		var all_a=document.getElementById('tree_list__root_tree_list').getElementsByTagName('label');
 		var pos_last=-1;

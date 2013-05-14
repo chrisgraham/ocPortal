@@ -12,7 +12,7 @@
  * @copyright	ocProducts Ltd
  * @package		ocportalcom
  */
-$ocp_hours_field=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM mantis_custom_field_table WHERE name=\'Time estimation (hours)\'');
+$ocp_hours_field=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM mantis_custom_field_table WHERE name=\'Time estimation (hours)\'');
 require_lang('customers');
 $title_tracker=do_lang('TRACKER');
 $result=get_option('currency',true);

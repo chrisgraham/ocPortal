@@ -282,7 +282,7 @@ class Module_admin_themes
 
 		if ((count($zones)<10) && (!is_ocf_satellite_site()) && ($free_choices==0))
 		{
-			$theme_default_reason=''; // We don't need to know the reason really; don't over-complicate simple sites
+			$theme_default_reason=new ocp_tempcode(); // We don't need to know the reason really; don't over-complicate simple sites
 		}
 
 		return do_template('THEME_MANAGE_SCREEN',array('_GUID'=>'1dc277f18562976f6a23facec56a98e8','TITLE'=>$title,'THEMES'=>$themes,'THEME_DEFAULT_REASON'=>$theme_default_reason,'ZONES'=>$zones,'HAS_FREE_CHOICES'=>$free_choices!=0));

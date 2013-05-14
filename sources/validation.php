@@ -304,7 +304,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 {
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
-	disable_php_memory_limit();
+	if (function_exists('disable_php_memory_limit')) disable_php_memory_limit();
 
 	global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$UNDER_XMLNS;
 	if (function_exists('mixed')) $XHTML_VALIDATOR_OFF=mixed();

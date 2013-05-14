@@ -117,7 +117,7 @@ class Hook_cart_orders
 	 */
 	function member_for($purchase_id)
 	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','c_member',array('id'=>intval($purchase_id)));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','c_member',array('id'=>intval($purchase_id)));
 	}
 
 	/**

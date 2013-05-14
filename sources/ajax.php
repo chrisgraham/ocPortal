@@ -18,6 +18,8 @@
  * @package		core
  */
 
+/*EXTRA FUNCTIONS: simplexml_load_string*/
+
 /**
  * AJAX script for checking if a new username is valid.
  */
@@ -32,7 +34,9 @@ function username_check_script()
 	require_lang('ocf');
 
 	$username=trim(get_param('username',false,true));
-	$error=ocf_check_name_valid($username,NULL,trim(post_param('password',NULL)),true);
+	$password=either_param('password',NULL);
+	if (!is_null($password)) $password=trim($password);
+	$error=ocf_check_name_valid($username,NULL,$password,true);
 	if (!is_null($error)) $error->evaluate_echo();
 }
 
@@ -538,7 +542,7 @@ function snippet_script()
 		if ((!function_exists('simplexml_load_string')) || ((function_exists('simplexml_load_string')) && (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false))) // Optimisation-- check first via optimised native PHP function if possible
 		{
 			require_code('xhtml');
-			$out=xhtmlise_html($out,true,true);
+			$out=xhtmlise_html($out,true);
 		}
 	}
 

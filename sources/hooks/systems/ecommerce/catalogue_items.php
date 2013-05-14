@@ -663,7 +663,7 @@ class Hook_catalogue_items
 
 		if (array_key_exists('FIELD_3',$map))
 		{
-			$out_of_stock=($map['FIELD_3']=='0');
+			$out_of_stock=($map['FIELD_3']->evaluate()=='0');
 		} else
 		{
 			$out_of_stock=false;

@@ -72,19 +72,19 @@ function catalogue_file_script()
 
 	// Security check; doesn't work for very old attachments (pre-v8)
 	$table=get_param('table');
-	$id=get_param_integer('id');
+	$entry_id=get_param_integer('id');
 	$id_field=get_param('id_field');
 	$url_field=get_param('url_field');
 	$ev='uploads/catalogues/'.$file;
 	if ($original_filename!==NULL) $ev.='::'.$original_filename;
-	$ev_check=$GLOBALS['SITE_DB']->query_select_value($table,$url_field,array($id_field=>$id)); // Has to return a result, will give a fatal error if not -- i.e. it implicitly checks the schema variables given
+	$ev_check=$GLOBALS['SITE_DB']->query_select_value($table,$url_field,array($id_field=>$entry_id)); // Has to return a result, will give a fatal error if not -- i.e. it implicitly checks the schema variables given
 	if (!in_array($ev,explode(chr(10),$ev_check))) access_denied('I_ERROR'); // ID mismatch for the file requested, to give a security error
 	if ($table=='catalogue_efv_short') // Now check the match, if we support checking on it
 	{
-		$c_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$id));
+		$c_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$entry_id));
 		if (substr($c_name,0,1)!='_') // Doesn't work on custom fields (this is documented)
 		{
-			$cc_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','cc_id',array('id'=>$id));
+			$cc_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','cc_id',array('id'=>$entry_id));
 			if (!has_category_access(get_member(),'catalogues_catalogue',$c_name)) access_denied('CATALOGUE_ACCESS');
 			if (!has_category_access(get_member(),'catalogues_category',strval($cc_id))) access_denied('CATEGORY_ACCESS');
 		}
