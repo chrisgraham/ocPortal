@@ -12,6 +12,8 @@
 
 */
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -581,7 +583,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$file_base=preg_replace('#'.preg_quote(urldecode($parsed_base_url['path'])).'$#','',$file_base);
 			$file_path=$file_base.urldecode($parsed['path']);
 
-			if (substr($file_path,-4)=='.php')
+			if ((substr($file_path,-4)=='.php') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 			{
 				$cmd='DOCUMENT_ROOT='.escapeshellarg(dirname(get_file_base())).' PATH_TRANSLATED='.escapeshellarg($file_path).' SCRIPT_NAME='.escapeshellarg($file_path).' HTTP_USER_AGENT='.escapeshellarg($ua).' QUERY_STRING='.escapeshellarg($parsed['query']).' HTTP_HOST='.escapeshellarg($parsed['host']).' '.escapeshellcmd(find_php_path(true)).' '.escapeshellarg($file_path);
 				$contents=shell_exec($cmd);
@@ -1201,6 +1203,7 @@ function _read_in_headers($line)
 {
 	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
 
+	$matches=array();
 	if (preg_match("#Content-Disposition: [^\r\n]*filename=\"([^;\r\n]*)\"\r\n#i",$line,$matches)!=0)
 	{
 		$HTTP_FILENAME=$matches[1];

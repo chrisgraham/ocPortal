@@ -3746,6 +3746,7 @@ ocportalcom_support_credits
  - sources_custom/hooks/systems/symbols/MANTIS_SPONSOR_WEEK_ACTIVITY.php
  - sources_custom/mantis.php
  - sources_custom/miniblocks/main_mantis_tracker.php
+ - tracker/TrackerTables.sql
 
 ocportalcom
 -----------

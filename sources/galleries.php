@@ -616,7 +616,7 @@ function can_submit_to_gallery($name)
 	if (substr($name,0,7)!='member_')
 	{
 		if ($name=='root') return (-2);
-		return can_submit_to_gallery($GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name'=>$name)));
+		return can_submit_to_gallery($GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>$name)));
 	}
 
 	$parts=explode('_',$name);

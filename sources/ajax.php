@@ -18,6 +18,8 @@
  * @package		core
  */
 
+/*EXTRA FUNCTIONS: simplexml_load_string*/
+
 /**
  * AJAX script for checking if a new username is valid.
  */
@@ -544,7 +546,7 @@ function snippet_script()
 		if ((!function_exists('simplexml_load_string')) || (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false)) // Optimisation-- check first via optimised native PHP function if possible
 		{
 			require_code('xhtml');
-			$out=xhtmlise_html($out,true,true);
+			$out=xhtmlise_html($out,true);
 		}
 	}
 

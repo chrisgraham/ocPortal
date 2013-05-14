@@ -35,7 +35,7 @@ class Block_main_include_module
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','striptitle','onlyifpermissions','leave_page_and_zone','merge_parameters');
+		$info['parameters']=array('param','striptitle','onlyifpermissions','leave_page_and_zone','merge_parameters','use_breadcrumbs');
 		return $info;
 	}
 

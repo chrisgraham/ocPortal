@@ -121,7 +121,7 @@ function attachments_script()
 		/* if (substr($original_filename,-4)=='.pdf')
 		{
 			header('Content-Disposition: attachment; filename="'.$original_filename.'"');
-		} */else
+		} else*/
 		{
 			header('Content-Disposition: inline; filename="'.$original_filename.'"');
 		}
