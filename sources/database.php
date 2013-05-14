@@ -1329,7 +1329,7 @@ class database_driver
 				$db_name=get_db_forums();
 				$db=$GLOBALS['FORUM_DB'];
 			}
-			$locks=$db->query('SHOW OPEN TABLES FROM '.$db_name.' WHERE `Table`=\''.$db->get_table_prefix().$tbl.'\' AND In_use>=1');
+			$locks=$db->query('SHOW OPEN TABLES FROM `'.$db_name.'` WHERE `Table`=\''.$db->get_table_prefix().$tbl.'\' AND In_use>=1');
 			$locked=count($locks)>=1;
 			$tries++;
 			if ($locked)
