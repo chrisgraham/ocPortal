@@ -1951,7 +1951,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		{
 			require_code('menus2');
 			$menu_name='main_content';
-			if (!is_null($GLOBALS['SITE_DB']->query_value('menu_items','i_menu',array('i_menu'=>'site')))) $menu_name='site';
+			if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('menu_items','i_menu',array('i_menu'=>'site')))) $menu_name='site';
 			if ($is_tree==1)
 			{
 				add_menu_item_simple($menu_name,NULL,$title,'_SEARCH:catalogues:type=category:catalogue_name='.$name);
