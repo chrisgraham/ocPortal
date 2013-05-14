@@ -428,13 +428,15 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 function parse_ocselect($filter)
 {
 	$parsed=array();
-	foreach (preg_split('#(,|\n)#',$filter) as $bit)
+	$filters=explode((strpos($filter,"\n")!==false)?"\n":',',$filter);
+	foreach ($filters as $bit)
 	{
 		if ($bit!='')
 		{
 			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|=|==|~=|~|@|\#)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
 			if (count($parts)==3)
 			{
+				$parts[0]=ltrim($parts[0]);
 				$is_join=false;
 				if ((substr($parts[0],0,1)=='{') && (substr($parts[2],-1)=='}'))
 				{
