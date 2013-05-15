@@ -571,7 +571,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	if (!array_key_exists('scheme',$url_parts)) $url_parts['scheme']='http';
 
 	// File-system/shell_exec method, for local calls
-	$faux=get_value('http_faux_loopback');
+	$faux=function_exists('get_value')?get_value('http_faux_loopback'):NULL;
 	if ((!is_null($faux)) && ($faux!='') && (is_null($post_params)) && (is_null($files))) // NB: Does not support cookies, accept headers, referers
 	{
 		if (substr($faux,0,1)!='#') $faux='#'.$faux.'#i';
