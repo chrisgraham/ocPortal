@@ -2429,6 +2429,7 @@ function convert_bad_entities($data,$charset='ISO-8859-1')
 	unset($table['&amp;']);
 	unset($table['&gt;']);
 	unset($table['&lt;']);
+	unset($table['&quot;']);
 
 	return strtr($data,$table);
 }
