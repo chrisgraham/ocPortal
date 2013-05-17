@@ -8,6 +8,16 @@ It is important to remember that if you are transferring files such as themes be
 
 [contents]decimal,lower-alpha[/contents]
 
+[title="2"]Microsoft Web Platform[/title]
+
+This tutorial is primarily about how to install an Apache set up on Windows. However, we actually have a Microsoft Web Platform installer for ocPortal. If you download the Microsoft Web Platform, you'll find ocPortal is in there.
+
+This should work well, however we aren't able to regularly test it as it is very different from our normal development environment and workflow. Microsoft test the integration each time we publish an update.
+
+If you'd like to use Microsoft Web Platform, proceed to the [url="Web Platform website"]http://www.microsoft.com/web/downloads/platform.aspx[/url].
+
+One small note -- if you are developing locally, then choose to use WebMatrix to push a local site live, make sure you adjust the base URL setting in your info.php file to reflect your live URL.
+
 [title="2"]Web server[/title]
 
 The first thing you will need is a web server. Depending on your version of Windows, you may have the Windows web server available to you (Internet Information Server, or the cut down Personal Web Server).

@@ -164,7 +164,9 @@ class breadcrumb_substitution_loader
 					$attributes[$key]=/*Actually let's allow regexps so we can do binding str_replace('~','\~',preg_quote(*/$val/*))*/;
 				}
 				$_source_url=build_url($attributes,$zone,NULL,false,false,true,$hash);
-				$source_url=urldecode(urldecode($_source_url->evaluate())); // urldecode because we don't want our regexp syntax mangled. Highly unlikely our sub's are going to really use special characters as parts of the URL
+				$source_url=$_source_url->evaluate();
+				$source_url=str_replace('\\','/',$source_url); // Should not be needed, but can happen on misconfiguration and cause an error
+				$source_url=urldecode(urldecode($source_url)); // urldecode because we don't want our regexp syntax mangled. Highly unlikely our sub's are going to really use special characters as parts of the URL
 				if ((strpos($source_url,'.htm')===false) && (strpos($source_url,'.php')===false))
 					$source_url.='(?:/index\.php)?';
 				$source_url1= // this is kinda like preg_quote, but allows some regexp stuff through because we want to support some of it, without making it hard to write out URLs
@@ -202,15 +204,17 @@ class breadcrumb_substitution_loader
 				foreach (array_reverse($this->links) as $link)
 				{
 					list($zone,$attributes,$hash)=page_link_decode($link[0]);
-					$target_url=build_url($attributes,$zone,NULL,false,false,false,$hash);
+					$_target_url=build_url($attributes,$zone,NULL,false,false,false,$hash);
 					$_link_title=($link[1]===NULL)?do_lang('UNKNOWN'):$link[1];
 					$link_title=(preg_match('#\{\!|\{\?|\{\$|\[#',$_link_title)==0)?$_link_title:static_evaluate_tempcode(comcode_to_tempcode($_link_title));
-					if ($target_url->evaluate()=='')
+					$_target_url=$_target_url->evaluate();
+					$target_url=str_replace('\\','/',$target_url); // Should not be needed, but can happen on misconfiguration and cause an error
+					if ($target_url=='')
 					{
 						$to.=$link_title.$this->breadcrumb_tpl;
 					} else
 					{
-						$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($target_url->evaluate()).'">'.$link_title.'</a>'.$this->breadcrumb_tpl;
+						$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($target_url).'">'.$link_title.'</a>'.$this->breadcrumb_tpl;
 					}
 				}
 				$_target_url=$from_non_link?'${3}':'${1}';
