@@ -102,27 +102,20 @@ function _symbol_thumbnail($param)
 
 		if ($exp_dimensions[0]=='') $exp_dimensions[0]='-1';
 
-		if (isset($param[2]) && $param[2] != '') // Where we are saving to
-		{
-			$thumb_save_dir=$param[2];
-			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
-			if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
-		} else
-		{
-			$thumb_save_dir=dirname(rawurldecode(preg_replace('#'.preg_quote(get_custom_base_url().'/','#').'#','',$orig_url)));
-		}
-		$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
-		$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
-		$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);
-
-		// We put a branch in here to preserve the old behaviour when
-		// called without the last 2 options
 		$algorithm='box';
 		if (isset($param[5]) && in_array(trim($param[5]),array('width','height','crop','pad','pad_horiz_crop_horiz','pad_vert_crop_vert')))
 			$algorithm=trim($param[5]);
 
-		// This branch does the new behaviour described above
-
+		if (isset($param[2]) && $param[2] != '') // Where we are saving to
+		{
+			$thumb_save_dir=$param[2];
+			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
+		} else
+		{
+			$thumb_save_dir=dirname(rawurldecode(preg_replace('#'.preg_quote(get_custom_base_url().'/','#').'#','',$orig_url)));
+		}
+		if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
+		$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
 		$file_prefix='/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.$algorithm;
 		if (isset($param[6])) $file_prefix.='__'.trim($param[6]);
 		if (isset($param[7])) $file_prefix.='__'.trim(str_replace('#','',$param[7]));

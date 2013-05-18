@@ -47,7 +47,7 @@ class Block_main_cc_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param($block_id.\'_order\',\'\'),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',/*legacy*/array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
+		$info['cache_on']='(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',get_param($block_id.\'_order\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\'),array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',/*legacy*/array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*2;
 		return $info;
 	}
@@ -62,8 +62,6 @@ class Block_main_cc_embed
 	{
 		$category_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
-		$sort=array_key_exists('sort',$map)?$map['sort']:'';
-		if ($sort=='') $sort=mixed();
 		$do_sorting=((array_key_exists('sorting',$map)?$map['sorting']:'0')=='1');
 
 		require_lang('catalogues');
@@ -95,6 +93,8 @@ class Block_main_cc_embed
 
 		$block_id=get_block_id($map);
 
+		$sort=get_param($block_id.'_order',array_key_exists('sort',$map)?$map['sort']:'');
+		if ($sort=='') $sort=mixed();
 		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');

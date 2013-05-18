@@ -686,7 +686,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 		$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause,false,true);
 
 	$in_db_sorting=$do_sorting && $can_do_db_sorting; // This defines whether $virtual_order_by can actually be used in SQL (if not, we have to sort manually)
-	if ($num_entries>300) // Needed to stop huge slow down, so reduce to sorting by ID
+	if (($num_entries>300) && (!$in_db_sorting)) // Needed to stop huge slow down, so reduce to sorting by ID
 	{
 		$in_db_sorting=true;
 		$virtual_order_by='r.id';
