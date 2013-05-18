@@ -440,9 +440,9 @@ END;
 		if (version_compare($x,'4.1.0','<'))
 			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('MYSQL_TOO_OLD'))));
 	}
-	elseif (function_exists('mysql_get_client_version'))
+	elseif (function_exists('mysql_get_client_info'))
 	{
-		if (version_compare(mysql_get_client_version(),'4.1.0','<'))
+		if (version_compare(mysql_get_client_info(),'4.1.0','<'))
 			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('MYSQL_TOO_OLD'))));
 	}
 
