@@ -503,7 +503,7 @@ class Module_cms_blogs extends standard_aed_module
 			$activity_title=($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS');
 			$activity_title_validate=($is_blog?'news:ACTIVITY_VALIDATE_NEWS_BLOG':'news:ACTIVITY_VALIDATE_NEWS');
 
-			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news')) // NB: no category permission check, as syndication choice was explicit, and news categorisation is a bit more complex
 				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);
 		}
 
