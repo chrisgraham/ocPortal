@@ -196,6 +196,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 
 			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>$facebook_uid),array('id'=>$current_logged_in_member),'',1);
 			require_code('site');
+			require_lang('facebook');
 			attach_message(do_lang_tempcode('FACEBOOK_ACCOUNT_CONNECTED',escape_html(get_site_name()),escape_html($GLOBALS['FORUM_DRIVER']->get_username($current_logged_in_member)),array(escape_html($username))),'inform');
 			return $current_logged_in_member;
 		}

@@ -391,7 +391,7 @@ abstract class BaseFacebook
    * @return string the signed request, if available, or null otherwise.
    */
   public function getSignedRequest() {
-    if (!$this->signedRequest) {
+    if ($this->signedRequest===NULL) {
       if (isset($_REQUEST['signed_request'])) {
         $this->signedRequest = $this->parseSignedRequest(
           $_REQUEST['signed_request']);
@@ -631,7 +631,7 @@ abstract class BaseFacebook
    */
   protected function establishCSRFTokenState() {
     if ($this->state === null) {
-      $this->state = md5(uniqid(mt_rand(), true));
+      $this->state = md5(uniqid(strval(mt_rand()), true));
       $this->setPersistentData('state', $this->state);
     }
   }
@@ -783,7 +783,7 @@ abstract class BaseFacebook
    * @return string The response text
    */
   protected function makeRequest($url, $params, $ch=null) {
-    if (!$ch) {
+    if ($ch===NULL) {
       $ch = curl_init();
     }
 
