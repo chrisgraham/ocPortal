@@ -62,6 +62,7 @@ function set_attachment(field_name,number,filename,multi)
 		{
 			filepath=document.getElementById('file'+number).value;
 		}
+
 		var is_archive=true,is_image=true;
 		if (filepath!='')
 		{
@@ -96,7 +97,7 @@ function set_attachment(field_name,number,filename,multi)
 				{
 					if (ret)
 					{
-						// Add fields to separate it out
+						// Add in additional Comcode buttons for the other files selected at the same time
 						if (multi)
 						{
 							var split_filename=document.getElementById('txtFileName_file'+window.num_attachments).value.split(/:/);
