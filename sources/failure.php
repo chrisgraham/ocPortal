@@ -1109,6 +1109,8 @@ function _access_denied($class,$param,$force_login)
 	require_code('site');
 	log_stats('/access_denied',0);
 
+	if (($GLOBALS['IS_ACTUALLY_ADMIN']) && (get_param_integer('keep_fatalistic',0)==1)) fatal_exit($message);
+
 	if (((is_guest()) && ($GLOBALS['NON_PAGE_SCRIPT']==0)) || ($force_login))
 	{
 		@ob_end_clean();
@@ -1128,7 +1130,6 @@ function _access_denied($class,$param,$force_login)
 		exit();
 	}
 
-	//if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) fatal_exit($message);
 	warn_exit($message);
 }
 

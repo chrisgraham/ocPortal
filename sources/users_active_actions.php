@@ -28,12 +28,27 @@ function restricted_manually_enabled_backdoor()
 	global $IS_A_COOKIE_LOGIN;
 	$IS_A_COOKIE_LOGIN=true;
 
+	require_code('users_inactive_occasionals');
+
 	$ks=get_param('keep_su',NULL);
 	if (!is_null($ks))
 	{
 		$GLOBALS['IS_ACTUALLY_ADMIN']=true;
+		$GLOBALS['SESSION_CONFIRMED']=1;
 		$su=$GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
-		if (!is_null($su)) return $su; elseif (is_numeric($ks)) return intval($ks);
+
+		if (!is_null($su))
+		{
+			$ret=$su;
+			create_session($ret,1);
+			return $ret;
+		}
+		elseif (is_numeric($ks))
+		{
+			$ret=intval($ks);
+			create_session($ret,1);
+			return $ret;
+		}
 	}
 
 	$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
@@ -46,7 +61,6 @@ function restricted_manually_enabled_backdoor()
 		$ret=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;
 	}
 
-	require_code('users_inactive_occasionals');
 	create_session($ret,1);
 
 	return $ret;
