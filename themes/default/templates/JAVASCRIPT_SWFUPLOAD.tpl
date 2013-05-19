@@ -1301,13 +1301,13 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
 	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
 
-	if (page_type=='attachment')
+	if (page_type.indexOf('attachment')!=-1)
 	{
 		var current_num=name.replace('file', '');
 		set_attachment(posting_field_name,current_num,file_name);
 		document.getElementById(name).onchange=null;
 	}
-	if (page_type=='upload_multi')
+	if (page_type.indexOf('_multi')!=-1)
 	{
 		document.getElementById(name).onchange=null;
 
@@ -1332,7 +1332,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 			var br=document.createElement('br');
 			txtFileName.parentNode.parentNode.parentNode.appendChild(br);
 			txtFileName.parentNode.parentNode.parentNode.appendChild(nextField);
-			replaceFileInput('upload_multi',nextField.name,null,posting_field_name);
+			replaceFileInput(page_type,nextField.name,null,posting_field_name);
 		}
 	}
 }

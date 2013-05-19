@@ -34,8 +34,10 @@ function attachment_present(post_value,number)
 	return !(post_value.indexOf('[attachment]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="1"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="1"]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="0"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="0"]new_'+number+'[/attachment_safe]')==-1);
 }
 
-function set_attachment(field_name,number,filename)
+function set_attachment(field_name,number,filename,multi)
 {
+	if (typeof multi=='undefined') var multi=false;
+
 	if (typeof window.is_comcode_xml=='undefined') return;
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.num_attachments=='undefined') return;
@@ -60,7 +62,6 @@ function set_attachment(field_name,number,filename)
 		{
 			filepath=document.getElementById('file'+number).value;
 		}
-
 		var is_archive=true,is_image=true;
 		if (filepath!='')
 		{
@@ -83,6 +84,7 @@ function set_attachment(field_name,number,filename)
 		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path
+		url+='&multi='+(multi?'1':'0');
 		if (wysiwyg) url+='&in_wysiwyg=1';
 		url+=keep_stub();
 		window.setTimeout(function() {
@@ -94,6 +96,17 @@ function set_attachment(field_name,number,filename)
 				{
 					if (ret)
 					{
+						// Add fields to separate it out
+						if (multi)
+						{
+							var split_filename=document.getElementById('txtFileName_file'+window.num_attachments).value.split(/:/);
+							for (var i=1;i<split_filename.length;i++)
+							{
+								window.num_attachments++;
+								window.insert_comcode_tag(']new_'+number+'[',']new_'+window.num_attachments+'[');
+							}
+						}
+
 						// Add field for next one
 						var add_another_field=(number==window.num_attachments) && (window.num_attachments<window.max_attachments); // Needs running late, in case something happened inbetween
 						if (add_another_field)

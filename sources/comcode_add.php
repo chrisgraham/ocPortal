@@ -425,6 +425,8 @@ function comcode_helper_script()
 						$parameter_name=do_lang('COMCODE_TAG_'.$tag.'_NAME_OF_PARAM_'.$param,NULL,NULL,NULL,NULL,false);
 						if (is_null($parameter_name)) $parameter_name=titleify($param);
 
+						if (($tag=='attachment') && (get_param_integer('multi',0)==1) && (($param=='description') || ($param=='filename') || ($param=='thumb_url'))) continue; // Don't show fields that can't apply across multiple attachments
+
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
@@ -614,6 +616,7 @@ function comcode_helper_script()
 		}
 
 		$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
+		if (($tag=='attachment') && (get_param_integer('multi',0)==1)) $text=do_lang_tempcode('ATTACHMENT_MULTI');
 		$hidden->attach(form_input_hidden('tag',$tag));
 		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>$preview,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 	}

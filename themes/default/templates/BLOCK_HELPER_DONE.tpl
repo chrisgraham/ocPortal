@@ -69,7 +69,17 @@
 				message='{!ADDED_COMCODE_ONLY;}';
 			}
 
-			target_window.insert_textbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
+			target_window.insert_comcode_tag=function(rep_from,rep_to) { // We define as a temporary global method so we can clone out the tag if needed (e.g. for multiple attachment selections)
+				if (typeof rep_from!='undefined')
+				{
+					comcode_semihtml=comcode_semihtml.replace(rep_from,rep_to);
+					comcode=comcode.replace(rep_from,rep_to);
+				}
+
+				target_window.insert_textbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
+			};
+			target_window.insert_comcode_tag();
+
 			window.fauxmodal_alert(
 				message,
 				function() {

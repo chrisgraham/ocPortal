@@ -1101,7 +1101,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 					$attributes['type']=post_param('attachmenttype'.$_id,array_key_exists('type',$attributes)?$attributes['type']:'auto');
 					if (substr($attributes['type'],-8)=='_extract') $attributes['type']=substr($attributes['type'],0,strlen($attributes['type'])-8);
-
 					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true,true,true);
 					if ($urls[0]=='') return new ocp_tempcode();//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
 					is_swf_upload(true);

@@ -5291,15 +5291,22 @@ function doSubmit(e,ob,recurse) {
 	return false;
 }
 
-function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
+function dispatch_for_page_type(page_type,name,file_name,posting_field_name,num_files)
 {
 	if (!posting_field_name) posting_field_name='post';
 
-	if (page_type=='attachment')
+	if (page_type.indexOf('attachment')!=-1)
 	{
-		var current_num=name.replace('file', '');
-		set_attachment(posting_field_name,current_num,file_name);
-		document.getElementById(name).onchange=null;
+		var multi=((page_type.indexOf('_multi')!=-1) && (num_files>1));
+
+		var element=document.getElementById(name);
+		if (typeof element.determined_attachment_properties=='undefined')
+		{
+			var current_num=name.replace('file', '');
+			set_attachment(posting_field_name,current_num,file_name,multi);
+			element.onchange=null;
+			if (multi) element.determined_attachment_properties=true;
+		}
 	}
 }
 
@@ -5356,9 +5363,9 @@ function fileDialogComplete(ob,files) {
 		if (txtFileName.value!='') txtFileName.value+=':';
 		txtFileName.value+=file.name.replace(/:/g,',');
 		name=ob.settings.txtName;
-		dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name);
+		dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name,files.length);
 
-		if (ob.page_type!='upload_multi') break;
+		if (ob.settings.page_type.indexOf('_multi')==-1) break;
 	}
 
 	window.setTimeout(function() {
@@ -5442,7 +5449,7 @@ function uploadError(ob,error) {
 
 function queueChanged(ob)
 {
-	if ((ob.settings.page_type!='upload_multi') && (ob.files.length>1))
+	if ((ob.settings.page_type.indexOf('_multi')==-1) && (ob.files.length>1))
 		ob.splice(0,ob.files.length-1);
 }
 
@@ -5707,6 +5714,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		required: rep.className.indexOf('required')!=-1,
 		posting_field_name: posting_field_name,
 		progress_target : "fsUploadProgress_"+name,
+		multi_selection: (page_type.indexOf('_multi')!=-1),
 
 		// General settings
 		runtimes : 'html5,silverlight,flash,gears,browserplus',
@@ -5791,7 +5799,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				document.getElementById('txtFileName_'+name).value=decodedData['upload_name'];
 				document.getElementById(name).value='1';
 				if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
-				dispatch_for_page_type(page_type,name,decodedData['upload_name'],posting_field_name);
+				dispatch_for_page_type(page_type,name,decodedData['upload_name'],posting_field_name,1);
 				fireFakeChangeFor(name,'1');
 			}
 		}

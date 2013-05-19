@@ -83,12 +83,14 @@ function is_swf_upload($fake_prepopulation=false)
 							$swfupload=true;
 							if ($fake_prepopulation)
 							{
-								$_FILES[preg_replace('#(\_)?1$#','${1}'.strval($i+1),substr($key,10))]=array(
+								$new_key=preg_replace('#(\_)?1$#','${1}'.strval($i+1),substr($key,10));
+								$_FILES[$new_key]=array(
 									'type'=>'swfupload',
 									'name'=>$incoming_uploads_row[0]['i_orig_filename'],
 									'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],
 									'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'])
 								);
+								$_POST['hidFileID_'.$new_key]=strval($incoming_uploads_id);
 							}
 						}
 					}
@@ -161,7 +163,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				$path='uploads/incoming/'.filter_naughty($row_id_file_value);
 				if (file_exists(get_custom_file_base().'/'.$path))
 				{
-					$_FILES[$_attach_name]=array('type'=>'swfupload', 'name'=>post_param(str_replace('hidFileID','hidFileName',$row_id_file)), 'tmp_name'=>get_custom_file_base().'/'.$path, 'size'=>filesize(get_custom_file_base().'/'.$path));
+					$_FILES[$_attach_name]=array('type'=>'swfupload','name'=>post_param(str_replace('hidFileID','hidFileName',$row_id_file)),'tmp_name'=>get_custom_file_base().'/'.$path,'size'=>filesize(get_custom_file_base().'/'.$path));
 					if ($i==0)
 					{
 						$swf_uploaded=true;
@@ -179,7 +181,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				{
 					if (file_exists(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']))
 					{
-						$_FILES[$_attach_name]=array('type'=>'swfupload', 'name'=>$incoming_uploads_row[0]['i_orig_filename'], 'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'], 'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']));
+						$_FILES[$_attach_name]=array('type'=>'swfupload','name'=>$incoming_uploads_row[0]['i_orig_filename'],'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']));
 						if ($i==0)
 						{
 							$swf_uploaded=true;
