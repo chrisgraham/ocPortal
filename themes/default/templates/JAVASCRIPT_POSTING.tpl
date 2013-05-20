@@ -106,6 +106,7 @@ function set_attachment(field_name,number,filename,multi)
 								window.num_attachments++;
 								window.insert_comcode_tag(']new_'+number+'[',']new_'+window.num_attachments+'[');
 							}
+							number=''+(window.parseInt(number)+split_filename.length-1);
 						}
 
 						// Add field for next one
