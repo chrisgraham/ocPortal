@@ -324,7 +324,7 @@ function read_addon_info($name)
 		$addon_row['addon_dependencies_on_this']=find_addon_dependencies_on($name);
 	} else
 	{
-		if (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php'))
+		if (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php'))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
