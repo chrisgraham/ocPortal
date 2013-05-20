@@ -243,7 +243,7 @@ function my_strftime($format,$timestamp=NULL)
 {
 	if ($timestamp===NULL) $timestamp=time();
 
-	if (strpos(strtolower(PHP_OS),'win')!==false)
+	if (strpos(strtolower(PHP_OS),'win')===0)
 		$format=str_replace('%e','%#d',$format);
 	$ret=strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
 	if ($ret===false) $ret='';
