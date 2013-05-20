@@ -32,6 +32,8 @@ function get_exif_data($path,$filename=NULL)
 
 	if (is_null($filename)) $filename=rawurldecode(basename($path));
 
+	if (!function_exists('exif_read_data')) return array(); // EXIF extension not installed
+
 	$meta_data=@exif_read_data($path,'ANY_TAG');
 
 	if ($meta_data!==false)
