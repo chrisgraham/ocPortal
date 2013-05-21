@@ -43,7 +43,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -56,6 +56,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		$GLOBALS['SITE_DB']->drop_table_if_exists('f_welcome_emails');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('f_usergroup_members');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
 
@@ -79,6 +80,21 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 				'w_send_time'=>'INTEGER',
 				'w_newsletter'=>'BINARY'
 			));
+		}
+		
+		if ((is_null($upgrade_from)) || ($upgrade_from<4))
+		{
+			$GLOBALS['SITE_DB']->create_table ('f_usergroup_members',array(
+				'id'=>'*AUTO',
+				'user_id'=>'INTEGER',
+				'usergroup_id'=>'INTEGER',
+				'join_time'=>'INTEGER'
+			));
+		}
+		
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+                {
+			$GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_usergroup','INTEGER',0);
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;

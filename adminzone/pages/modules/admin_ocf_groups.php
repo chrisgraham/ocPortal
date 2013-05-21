@@ -303,6 +303,16 @@ class Module_admin_ocf_groups extends standard_crud_module
 				$permissions_from_groups->attach(form_input_list_entry(strval($group['id']),false,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('DEFAULT_PERMISSIONS_FROM'),do_lang_tempcode(is_null($id)?'DESCRIPTION_DEFAULT_PERMISSIONS_FROM_NEW':'DESCRIPTION_DEFAULT_PERMISSIONS_FROM'),'absorb',$permissions_from_groups));
+		
+		if (addon_installed('welcome_emails'))
+		{
+			require_lang('ocf_welcome_emails');
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('WELCOME_EMAIL'))));
+			$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME_REFERENCE'),'w_name',NULL,true));
+			$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_SUBJECT'),'w_subject',NULL,true));
+			$fields->attach(form_input_huge_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_TEXT'),'w_text','',true));
+			$fields->attach(form_input_integer(do_lang_tempcode('SEND_TIME'),do_lang_tempcode('DESCRIPTION_SEND_TIME'),'w_send_time',0,true));
+		}
 
 		$this->appended_actions_already=true;
 
@@ -620,6 +630,11 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('group',strval($id));
+			
+		if (addon_installed('welcome_emails'))
+		{
+			$GLOBALS['SITE_DB']->query_insert('f_welcome_emails',array('w_name'=>post_param('w_name'),'w_newsletter'=>0,'w_subject'=>insert_lang(post_param('w_subject'),2),'w_text'=>insert_lang(post_param('w_text'),2),'w_send_time'=>post_param('w_send_time'),'w_usergroup'=>$id),true);
+		}
 
 		return strval($id);
 	}

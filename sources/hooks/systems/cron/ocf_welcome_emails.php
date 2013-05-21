@@ -43,28 +43,37 @@ class Hook_cron_ocf_welcome_emails
 		{
 			$send_seconds_after_joining=$mail['w_send_time']*60*60;
 
-			$newsletter_style=((get_value('welcome_nw_choice')==='1') && (!is_null($mail['w_newsletter']))) || ((get_value('welcome_nw_choice')!=='1') && (($mail['w_newsletter']==1) || (get_forum_type()!='ocf')));
-			if ($newsletter_style)
+			$newsletter_style=0;
+			if ($mail['w_usergroup']==0)
 			{
-				if (addon_installed('newsletter'))
+				$newsletter_style=((get_value('welcome_nw_choice')==='1') && (!is_null($mail['w_newsletter']))) || ((get_value('welcome_nw_choice')!=='1') && (($mail['w_newsletter']==1) || (get_forum_type()!='ocf')));
+				if ($newsletter_style)
 				{
-					// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
-					$where=' WHERE join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND join_time<='.strval($time_now-$send_seconds_after_joining).' AND (the_level=3 OR the_level=4)';
-					if (get_value('welcome_nw_choice')==='1')
+					if (addon_installed('newsletter'))
 					{
-						$where.=' AND newsletter_id='.strval($mail['w_newsletter']);
+						// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
+						$where=' WHERE join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND join_time<='.strval($time_now-$send_seconds_after_joining).' AND (the_level=3 OR the_level=4)';
+						if (get_value('welcome_nw_choice')==='1')
+						{
+							$where.=' AND newsletter_id='.strval($mail['w_newsletter']);
+						}
+						$members=$GLOBALS['SITE_DB']->query('SELECT s.email AS m_email_address,the_password,n_forename,n_surname,n.id,join_time AS m_join_time FROM '.get_table_prefix().'newsletter_subscribe s JOIN '.get_table_prefix().'newsletter n ON n.email=s.email '.$where.' GROUP BY s.email');
+					} else
+					{
+						$members=array();
 					}
-					$members=$GLOBALS['SITE_DB']->query('SELECT s.email AS m_email_address,the_password,n_forename,n_surname,n.id,join_time AS m_join_time FROM '.get_table_prefix().'newsletter_subscribe s JOIN '.get_table_prefix().'newsletter n ON n.email=s.email '.$where.' GROUP BY s.email');
 				} else
 				{
-					$members=array();
+					// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
+					$where=' WHERE m_join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND m_join_time<='.strval($time_now-$send_seconds_after_joining);
+					if (get_option('allow_email_from_staff_disable')=='1') $where.=' AND m_allow_emails=1';
+					$query='SELECT m_email_address,m_username,id,m_join_time FROM '.get_table_prefix().'f_members'.$where;
+					$members=$GLOBALS['FORUM_DB']->query($query);
 				}
 			} else
 			{
-				// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
-				$where=' WHERE m_join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND m_join_time<='.strval($time_now-$send_seconds_after_joining);
-				if (get_option('allow_email_from_staff_disable')=='1') $where.=' AND m_allow_emails=1';
-				$query='SELECT m_email_address,m_username,id,m_join_time FROM '.get_table_prefix().'f_members'.$where;
+				$where=' WHERE join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND join_time<='.strval($time_now-$send_seconds_after_joining).' AND um.usergroup_id='.$mail['w_usergroup'];
+				$query='SELECT m.id as id, m.m_email_address as m_email_address, m.m_username as m_username, um.join_time FROM '.get_table_prefix().'f_usergroup_members as um JOIN '.get_table_prefix().'f_members as m ON m.id=um.user_id '.$where;
 				$members=$GLOBALS['FORUM_DB']->query($query);
 			}
 			//var_dump($members);exit();
