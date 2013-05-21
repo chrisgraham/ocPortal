@@ -66,4 +66,6 @@ function execute_temp()
 	set_option('session_expiry_time','0.25');
 	set_option('minimum_password_length','6');
 	set_option('autoban','1');
+	set_value('password_reset_process','temporary_password');
+	set_value('password_reset_process','temporary_password');
 }

@@ -31,7 +31,8 @@ function username_check_script()
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
 	require_lang('ocf');
-	$username=trim(get_param('username',false,true));
+	$username=get_param('username',NULL,true);
+	if (!is_null($username)) $username=trim($username);
 	$password=either_param('password',NULL);
 	if (!is_null($password)) $password=trim($password);
 	$error=ocf_check_name_valid($username,NULL,$password,true);

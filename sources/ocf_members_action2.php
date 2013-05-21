@@ -383,8 +383,16 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	{
 		if ((is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
 		{
-			$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),do_lang_tempcode('DESCRIPTION_PASSWORD'.(!is_null($member_id)?'_EDIT':'')),is_null($member_id)?'password':'edit_password',$mini_mode));
-			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode));
+			$temporary_password=(!is_null($member_id)) && ($member_id==get_member() && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='temporary'));
+			if ($temporary_password)
+			{
+				$password_field_description=do_lang_tempcode('DESCRIPTION_PASSWORD_TEMPORARY');
+			} else
+			{
+				$password_field_description=do_lang_tempcode('DESCRIPTION_PASSWORD'.(!is_null($member_id)?'_EDIT':''));
+			}
+			$fields->attach(form_input_password(do_lang_tempcode(is_null($member_id)?'PASSWORD':'NEW_PASSWORD'),$password_field_description,is_null($member_id)?'password':'edit_password',$mini_mode || $temporary_password));
+			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode || $temporary_password));
 		}
 	}
 
@@ -1194,7 +1202,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 /**
  * Check a username is valid for adding, and possibly also the password.
  *
- * @param  SHORT_TEXT	The username (may get altered).
+ * @param  ?SHORT_TEXT	The username (may get altered) (NULL: nothing to check).
  * @param  ?MEMBER		The member (NULL: member not actually added yet; this ID is only given for the duplication check, to make sure it doesn't think we are duplicating with ourself).
  * @param  ?SHORT_TEXT	The password (NULL: nothing to check).
  * @param  boolean		Whether to return errors instead of dieing on them.
@@ -1214,52 +1222,64 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	if ($striped_username!='') warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));*/
 
 	// Check it doesn't already exist
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
-	if ((!is_null($test)) && ($test!=$member_id))
+	if (!is_null($username))
 	{
-		if (get_option('signup_fullname')=='0')
+		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
+		if ((!is_null($test)) && ($test!=$member_id))
 		{
-			if ($return_errors) return do_lang_tempcode('USERNAME_ALREADY_EXISTS');
-			warn_exit(do_lang_tempcode('USERNAME_ALREADY_EXISTS'));
-		} else // Adjust username as required
-		{
-			$username=get_username_from_human_name($username);
+			if (get_option('signup_fullname')=='0')
+			{
+				if ($return_errors) return do_lang_tempcode('USERNAME_ALREADY_EXISTS');
+				warn_exit(do_lang_tempcode('USERNAME_ALREADY_EXISTS'));
+			} else // Adjust username as required
+			{
+				$username=get_username_from_human_name($username);
+			}
 		}
-	}
-	$username_changed=is_null($test);
-
-	// Check for disallowed symbols in username
-	$disallowed_characters=array(/*'<','>','&','"',"'",'$',','*/);
-	foreach ($disallowed_characters as $disallowed_character)
+		$username_changed=is_null($test);
+	} else
 	{
-		if ((strpos($username,$disallowed_character)!==false) && ($username_changed))
+		$username_changed=false;
+	}
+
+	if (!is_null($username))
+	{
+		// Check for disallowed symbols in username
+		$disallowed_characters=array(/*'<','>','&','"',"'",'$',','*/);
+		foreach ($disallowed_characters as $disallowed_character)
+		{
+			if ((strpos($username,$disallowed_character)!==false) && ($username_changed))
+			{
+				if ($return_errors) return do_lang_tempcode('USERNAME_BAD_SYMBOLS');
+				warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));
+			}
+		}
+		if ((strpos($username,'@')!==false) && (strpos($username,'.')!==false) && ($username_changed))
 		{
 			if ($return_errors) return do_lang_tempcode('USERNAME_BAD_SYMBOLS');
 			warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));
 		}
 	}
-	if ((strpos($username,'@')!==false) && (strpos($username,'.')!==false) && ($username_changed))
-	{
-		if ($return_errors) return do_lang_tempcode('USERNAME_BAD_SYMBOLS');
-		warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));
-	}
 
 	// Check lengths
 	if (get_page_name()!='admin_ocf_join')
 	{
-		$_maximum_username_length=get_option('maximum_username_length',true);
-		if (is_null($_maximum_username_length)) $maximum_username_length=15; else $maximum_username_length=intval($_maximum_username_length);
-		if ((ocp_mb_strlen($username)>$maximum_username_length) && ($username_changed))
+		if (!is_null($username))
 		{
-			if ($return_errors) return do_lang_tempcode('USERNAME_TOO_LONG',integer_format($maximum_username_length));
-			warn_exit(do_lang_tempcode('USERNAME_TOO_LONG',integer_format($maximum_username_length)));
-		}
-		$_minimum_username_length=get_option('minimum_username_length',true);
-		if (is_null($_minimum_username_length)) $minimum_username_length=1; else $minimum_username_length=intval($_minimum_username_length);
-		if ((ocp_mb_strlen($username)<$minimum_username_length) && ($username_changed))
-		{
-			if ($return_errors) return do_lang_tempcode('USERNAME_TOO_SHORT',integer_format($minimum_username_length));
-			warn_exit(do_lang_tempcode('USERNAME_TOO_SHORT',integer_format($minimum_username_length)));
+			$_maximum_username_length=get_option('maximum_username_length',true);
+			if (is_null($_maximum_username_length)) $maximum_username_length=15; else $maximum_username_length=intval($_maximum_username_length);
+			if ((ocp_mb_strlen($username)>$maximum_username_length) && ($username_changed))
+			{
+				if ($return_errors) return do_lang_tempcode('USERNAME_TOO_LONG',integer_format($maximum_username_length));
+				warn_exit(do_lang_tempcode('USERNAME_TOO_LONG',integer_format($maximum_username_length)));
+			}
+			$_minimum_username_length=get_option('minimum_username_length',true);
+			if (is_null($_minimum_username_length)) $minimum_username_length=1; else $minimum_username_length=intval($_minimum_username_length);
+			if ((ocp_mb_strlen($username)<$minimum_username_length) && ($username_changed))
+			{
+				if ($return_errors) return do_lang_tempcode('USERNAME_TOO_SHORT',integer_format($minimum_username_length));
+				warn_exit(do_lang_tempcode('USERNAME_TOO_SHORT',integer_format($minimum_username_length)));
+			}
 		}
 		if (!is_null($password))
 		{
@@ -1270,20 +1290,26 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	}
 
 	// Check for whitespace
-	if (get_option('signup_fullname')=='0')
+	if (!is_null($username))
 	{
-		$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
-		if (($prohibit_username_whitespace==='1') && (preg_match('#\s#',$username)!=0) && ($username_changed))
+		if (get_option('signup_fullname')=='0')
+		{
+			$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
+			if (($prohibit_username_whitespace==='1') && (preg_match('#\s#',$username)!=0) && ($username_changed))
+			{
+				if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');
+				warn_exit(do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE'));
+			}
+		}
+	}
+	if (!is_null($password))
+	{
+		$prohibit_password_whitespace=get_option('prohibit_password_whitespace',true);
+		if (($prohibit_password_whitespace==='1') && (preg_match('#\s#',$password)!=0) && ($username_changed))
 		{
 			if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');
 			warn_exit(do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE'));
 		}
-	}
-	$prohibit_password_whitespace=get_option('prohibit_password_whitespace',true);
-	if (($prohibit_password_whitespace==='1') && (preg_match('#\s#',$password)!=0) && ($username_changed))
-	{
-		if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');
-		warn_exit(do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE'));
 	}
 
 	// Check against restricted usernames

@@ -1415,6 +1415,7 @@ class forum_driver_ocf extends forum_driver_base
 			switch ($password_compatibility_scheme)
 			{
 				case '': // ocPortal style salted MD5 algorithm
+				case 'temporary': // as above, but forced temporary password
 					if ($cookie_login)
 					{
 						if ($password_hashed!=$row['m_pass_hash_salted'])
@@ -1614,6 +1615,7 @@ class forum_driver_ocf extends forum_driver_base
 
 				$change_map=array('m_last_visit_time'=>time());
 				if (get_ip_address()!=$old_ip) $change_map['m_ip_address']=get_ip_address();
+				$change_map['m_password_change_code']=''; // Security, to stop resetting password when account actively in use (stops people planting reset bombs then grabbing the details much later)
 
 				if (get_page_name()!='lostpassword')
 				{

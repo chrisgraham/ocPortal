@@ -332,7 +332,7 @@ function get_member($quick_only=false)
  */
 function enforce_temporary_passwords($member)
 {
-	if ((get_forum_type()=='ocf') && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_page_name()!='lostpassword') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
+	if ((get_forum_type()=='ocf') && (running_script('index')) && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_page_name()!='lostpassword') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
 	{
 		$force_change_message=mixed();
 		$redirect_url=mixed();

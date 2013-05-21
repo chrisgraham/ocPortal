@@ -158,7 +158,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		$salt='';
 	}
 
-	if (($salt=='') && ($password_compatibility_scheme==''))
+	if (($salt=='') && (($password_compatibility_scheme=='') || ($password_compatibility_scheme=='temporary')))
 	{
 		$salt=produce_salt();
 		$password_salted=md5($salt.md5($password));
