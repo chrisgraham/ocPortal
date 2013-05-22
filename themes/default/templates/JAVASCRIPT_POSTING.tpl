@@ -104,6 +104,7 @@ function set_attachment(field_name,number,filename,multi)
 							for (var i=1;i<split_filename.length;i++)
 							{
 								window.num_attachments++;
+								insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped
 								window.insert_comcode_tag(']new_'+number+'[',']new_'+window.num_attachments+'[');
 							}
 							number=''+(window.parseInt(number)+split_filename.length-1);
