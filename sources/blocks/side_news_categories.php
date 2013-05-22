@@ -84,6 +84,7 @@ class Block_side_news_categories
 			{
 				if (has_category_access(get_member(),'news',strval($category['id'])))
 				{
+					$category['_nc_title']=get_translated_text($category['nc_title']);
 					$categories2[]=$category;
 				}
 			}
