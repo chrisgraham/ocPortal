@@ -623,7 +623,7 @@ function placeholder_pagination()
 	$selectors=new ocp_tempcode();
 	foreach (placeholder_array() as $k => $v)
 	{
-		$selectors->attach(do_lorem_template('PAGINATION_PER_PAGE_OPTION', array(
+		$selectors->attach(do_lorem_template('PAGINATION_PER_SCREEN_OPTION', array(
 			'SELECTED' => true,
 			'VALUE' => strval($k),
 			'NAME' => $v

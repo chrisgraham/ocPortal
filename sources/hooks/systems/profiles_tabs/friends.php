@@ -53,8 +53,9 @@ class Hook_Profiles_Tabs_friends
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		// Friends
-		$friends_a=array();
-		$friends_b=array();
+		$friends_mutual=array();
+		$friends_nonmutual=array();
+		$friends_forward=array();
 		$add_friend_url=new ocp_tempcode();
 		$remove_friend_url=new ocp_tempcode();
 		$all_friends_link=new ocp_tempcode();
@@ -102,13 +103,17 @@ class Hook_Profiles_Tabs_friends
 					$mutual_label=do_lang('MUTUAL_FRIEND');
 					$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==$member_id_viewing || $member_id_of==$member_id_viewing)?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
 					if ($box->is_empty()) continue;
-					$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
+					$friend_map=array('APPEARS_TWICE'=>$appears_twice,'USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
 					if ($appears_twice) // Mutual friendship
 					{
-						$friends_a[]=$friend_map;
+						$friends_mutual[]=$friend_map;
 					} else // One-way friendship
 					{
-						$friends_b[]=$friend_map;
+						$friends_nonmutual[]=$friend_map;
+					}
+					if (($member_id_of==$row['member_likes']) || ($appears_twice))
+					{
+						$friends_forward[]=$friend_map;
 					}
 				}
 
@@ -117,7 +122,7 @@ class Hook_Profiles_Tabs_friends
 			if (count($rows)==100) $all_friends_link=build_url(array('page'=>'chat','type'=>'friends_list','id'=>$member_id_of),get_module_zone('chat'));
 		}
 
-		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('MEMBER_ID'=>strval($member_id_of),'FRIENDS_A'=>$friends_a,'FRIENDS_B'=>$friends_b,'ALL_FRIENDS_URL'=>$all_friends_link,'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
+		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('MEMBER_ID'=>strval($member_id_of),'FRIENDS_MUTUAL'=>$friends_mutual,'FRIENDS_NONMUTUAL'=>$friends_nonmutual,'FRIENDS_FORWARD'=>$friends_forward,'ALL_FRIENDS_URL'=>$all_friends_link,'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
 
 		return array($title,$content,$order);
 	}

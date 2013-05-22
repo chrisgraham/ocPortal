@@ -1,21 +1,16 @@
-{+START,IF_NON_EMPTY,{FRIENDS_A}{FRIENDS_B}}
+{+START,IF_NON_EMPTY,{FRIENDS_FORWARD}}
 	<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
 	<ul class="ocf_profile_friends actions_list">
-		{+START,LOOP,FRIENDS_A}
+		{+START,LOOP,FRIENDS_FORWARD}
 			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');">
-				<a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span>
-			</li>
-		{+END}
-		{+START,LOOP,FRIENDS_B}
-			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');">#
 				<a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span>
 			</li>
 		{+END}
 	</ul>
 {+END}
 
-{+START,IF_EMPTY,{FRIENDS_A}{FRIENDS_B}}
+{+START,IF_EMPTY,{FRIENDS_FORWARD}}
 	<p class="nothing_here">
 		{!NO_ENTRIES}
 	</p>

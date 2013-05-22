@@ -36,7 +36,8 @@ class Hook_symbol_USER_FB_CONNECT
 			{
 				$facebook_connect=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 				$facebook_connect->setAccessToken($token);
-				$value=strval($facebook_connect->getUser());
+				$user=$facebook_connect->getUser();
+				$value=is_null($user)?'':strval($user);
 				if ($value=='0') $value='';
 			}
 			catch (Exception $e)

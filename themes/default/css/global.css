@@ -1430,6 +1430,16 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
+.fp_col_block .pagination {
+	float: none;
+}
+.fp_col_block .pagination_per_page {
+	display: none;
+}
+.fp_col_block form + span {
+	margin-left: 0;
+}
+
 .fp_col_block .box {
 	margin-bottom: 0; /* margin-top from boxes below will work instead. This is needed as the "overflow: hidden" stops margin collapsing between the block contents and outside it */
 }

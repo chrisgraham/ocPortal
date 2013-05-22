@@ -1222,6 +1222,7 @@ ul.ocf_profile_friends li .associated_details {
 
 .tooltip .ocf_member_box_avatar_touching {
 	max-width: 245px; /* Based on tooltip size */
+	float: left; /* Forces it on same line as avatar, rather than wrapping */
 }
 
 .ocf_isolated_post_meta_column {
