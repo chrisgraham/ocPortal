@@ -1514,11 +1514,12 @@ class Module_calendar
 		{
 			if ($event['e_end_monthly_spec_type']!='day_of_month')
 			{
+				$concrete_start_day=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 				$event['e_end_monthly_spec_type']='day_of_month';
-				$dif_days=get_days_between($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
+				$dif_days=get_days_between($event['e_start_year'],$event['e_start_month'],$concrete_start_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
 				$event['e_end_year']=$event['e_start_year'];
 				$event['e_end_month']=$event['e_start_month'];
-				$event['e_end_day']=$event['e_start_day']+$dif_days;
+				$event['e_end_day']=$concrete_start_day+$dif_days;
 			}
 
 			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
