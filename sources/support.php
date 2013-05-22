@@ -516,6 +516,10 @@ function multi_sort($a,$b)
 		do
 		{
 			$key=array_shift($keys);
+
+			$backwards=($key[0]=='!');
+			if ($backwards) $key=substr($key,1);
+
 			$av=$a[$key];
 			$bv=$b[$key];
 
@@ -523,7 +527,7 @@ function multi_sort($a,$b)
 			if (is_object($av)) $av=$av->evaluate();
 			if (is_object($bv)) $bv=$bv->evaluate();
 
-			if ($key[0]=='!') // Flip around
+			if ($backwards) // Flip around
 			{
 				$key=substr($key,1);
 				$ret=-strnatcasecmp($av,$bv);

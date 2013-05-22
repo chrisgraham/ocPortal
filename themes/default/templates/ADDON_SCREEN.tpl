@@ -5,6 +5,15 @@
 {+START,IF_NON_EMPTY,{ADDONS}}
 	<h2>{!ADDONS}</h2>
 
+	{+START,IF_NON_EMPTY,{UPDATED_ADDONS}}
+		{$,Link repeated here and below because it is important}
+		<ul role="navigation" class="actions_list spaced_list">
+			<li>
+				<a href="{$PAGE_LINK*,_SELF:_SELF:type=addon_import:to_import={UPDATED_ADDONS}}"><strong>{!IMPORT_UPDATED_ADDONS}</strong></a>
+			</li>
+		</ul>
+	{+END}
+
 	{+START,IF,{$JS_ON}}
 		<div class="float_surrounder">
 			<p class="right associated_link">
@@ -58,7 +67,7 @@
 <ul role="navigation" class="actions_list spaced_list">
 	{+START,IF_NON_EMPTY,{UPDATED_ADDONS}}
 		<li>
-			<a href="{$PAGE_LINK*,_SELF:_SELF:type=addon_import:to_import={UPDATED_ADDONS}}"><strong>{!IMPORT_UPDATED_ADDONS}</strong></a>
+			<a href="{$PAGE_LINK*,_SELF:_SELF:type=addon_import:to_import={UPDATED_ADDONS}}">{!IMPORT_UPDATED_ADDONS}</a>
 		</li>
 	{+END}
 	<li>

@@ -855,7 +855,13 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	// Check incompatibilities, and show general warning
 	// NB: It's theoretically possible that there may be incompatibilities between two addons installing together, and we can't detect this (only incompatibilities for what is already installed). However it's very unlikely as multi-install is only really going to happen with official addons which have no such problems.
 	$warnings=new ocp_tempcode();
-	if ($info['author']!='Core Team') $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'dd66b2c540908de60753a1ced73b8ac0','WARNING'=>do_lang_tempcode('ADDON_WARNING_GENERAL'))));
+	if ($info['author']!='Core Team')
+	{
+		static $done_non_core_warn=false;
+		if (!$done_non_core_warn)
+			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'dd66b2c540908de60753a1ced73b8ac0','WARNING'=>do_lang_tempcode('ADDON_WARNING_GENERAL'))));
+		$done_non_core_warn=true;
+	}
 	$incompatibilities=collapse_1d_complexity('addon_name',$GLOBALS['SITE_DB']->query_select('addons_dependencies',array('addon_name'),array('addon_name_dependant_upon'=>$addon,'addon_name_incompatibility'=>1)));
 	$_incompatibilities=new ocp_tempcode();
 	foreach ($incompatibilities as $in)
@@ -955,7 +961,7 @@ function has_feature($dependency)
 	if (($dependency=='javascript') && (has_js())) return true;
 	if (($dependency=='cron') && (cron_installed())) return true;
 	if (($dependency=='ocf') && (get_forum_type()=='ocf')) return true;
-	if (($dependency=='gd') && (get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) return true;
+	if ((strtolower($dependency)=='gd') && (get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) return true;
 	if ($dependency=='adobeflash') return true;
 	if (substr($dependency,0,3)=='php')
 	{

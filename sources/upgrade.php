@@ -945,10 +945,14 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 			closedir($dh);
 		}
 	}
+	$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat'));
+	if ($master_data===false) $master_data=array();
 	$hook_keys=array_keys($hooks);
 	$hook_files=array();
 	foreach ($hook_keys as $hook)
 	{
+		if (!isset($master_data['sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php'])) continue; // Old addon
+
 		$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
 		if (!file_exists($path))
 		{
@@ -957,8 +961,6 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		$hook_files[$hook]=file_get_contents($path);
 	}
 	unset($hook_keys);
-	$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat'));
-	if ($master_data===false) $master_data=array();
 
 	// Moved module handling
 	if ($basic)
@@ -1342,12 +1344,22 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 				}
 			}
 		}
+		$dir_files=array();
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
+			$dir_files[]=$file;
+		}
+		sort($dir_files);
+		foreach ($dir_files as $file)
+		{
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_USER_CUSTOMISE | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
 
 			$is_dir=@is_dir($dir.$file);
 			if (!is_readable($dir.$file)) continue;
+
+			if ($rela=='lang_cached/') continue;
+			if ($rela=='uploads/') continue;
+			if ($rela=='data_custom/modules/') continue;
 
 			if ($is_dir)
 			{
