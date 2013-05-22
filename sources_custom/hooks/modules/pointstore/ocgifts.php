@@ -33,8 +33,6 @@ class Hook_pointstore_ocgifts
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		//if (get_option('is_on_'.$class.'_buy')=='0') return array();
-
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class),'_SELF');
 		return array(do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url)));
 	}
@@ -70,7 +68,7 @@ class Hook_pointstore_ocgifts
 		$rows=$GLOBALS['SITE_DB']->query_select('ocgifts g',array('*','(SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_gifts m WHERE m.gift_id=g.id) AS popularity'),$map,'ORDER BY popularity DESC',$max,$start);
 		$username=get_param('username','');
 		$gifts=array();
-		foreach($rows as $gift)
+		foreach ($rows as $gift)
 		{
 			$gift_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocgifts','gift'=>$gift['id'],'username'=>$username),'_SEARCH');
 
@@ -133,61 +131,64 @@ class Hook_pointstore_ocgifts
 
 		$title=get_screen_title('OCGIFTS_TITLE');
 
+		$from_member=get_member();
+
 		$gift_id=get_param_integer('gift');
-		$member_id=get_member();
 		$to_member=post_param('username','');
 		$gift_message=post_param('gift_message','');
+		$anonymous=post_param_integer('anonymous',0);
 
-		$member_row=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_username'=>$to_member),'',1);
-		if(isset($member_row[0]['id']) && $member_row[0]['id']>0)
+		$member_rows=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_username'=>$to_member),'',1);
+		if (array_key_exists(0,$member_rows))
 		{
-			$to_member_id=$member_row[0]['id'];		
-			$anonymous=post_param_integer('anonymous',0);
+			$member_row=$member_rows[0];
+			$to_member_id=$member_row['id'];		
 
-			$gift_row=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift_id) );
-
-			if(isset($gift_row[0]['id']) && $gift_row[0]['id']>0)
+			$gift_rows=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift_id) );
+			if (array_key_exists(0,$gift_rows))
 			{
-				//check available points and charge
-				$available_points=available_points($member_id);
+				$gift_row=$gift_rows[0];
 
-
-				if($gift_row[0]['price']>$available_points) warn_exit(do_lang_tempcode('CANT_AFFORD'));
+				// Check available points and charge
+				$available_points=available_points($from_member);
+				if ($gift_row['price']>$available_points) warn_exit(do_lang_tempcode('CANT_AFFORD'));
 				require_code('points2');
+				charge_member($from_member,$gift_row['price'],do_lang('GIFT_PURCHASING'));
 
-				//get gift points
-				charge_member($member_id,$gift_row[0]['price'],do_lang('GIFT_PURCHASING') . ' - ' .strval($gift_row[0]['price']).' point(-s).');
+				// Gather some details
+				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_user_id'=>$to_member_id,'from_user_id'=>$from_member,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'topic_id'=>NULL,'gift_message'=>$gift_message),true);
+				$gift_name=$gift_row['name'];
+				$gift_image_url=get_base_url().'/'.$gift_row['image'];
 
-				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_user_id'=>$to_member_id,'from_user_id'=>$member_id,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'topic_id'=>NULL,'gift_message'=>$gift_message),true);
-			}
-
-			if (isset($gift_row[0]['id']) && $gift_row[0]['id']>0)
-			{
+				// Send notification
 				require_code('notifications');
-
+				$subject=do_lang('GOT_GIFT',NULL,NULL,NULL,get_lang($to_member_id));
 				if ($anonymous==0)
 				{
-					$subject=do_lang('GOT_GIFT');
-					$message='[html]'.do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']).'[/html].'."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$sender_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($from_member);
+					$sender_username=$GLOBALS['FORUM_DRIVER']->get_username($from_member);
+					$private_topic_url=$GLOBALS['FORUM_DRIVER']->member_pm_url($from_member);
+
+					$message=do_lang('GIFT_EXPLANATION_MAIL',comcode_escape($sender_username),comcode_escape($gift_name),array($sender_url,$gift_image_url,$gift_message,$private_topic_url),get_lang($to_member_id));
 
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id));
-				}
-				else
+				} else
 				{
-					$subject=do_lang('GOT_GIFT',NULL,NULL,NULL,get_lang($to_member_id));
-					$message='[html]'.do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id)).'[/html].'."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$message=do_lang('GIFT_EXPLANATION_ANONYMOUS_MAIL',comcode_escape($gift_name),$gift_image_url,$gift_message,get_lang($to_member_id));
 
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id),A_FROM_SYSTEM_UNPRIVILEGED);
 				}
+			} else
+			{
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			}
 		} else
 		{
 			warn_exit(do_lang_tempcode('NO_MEMBER_SELECTED'));
 		}
 
-		// Show message
+		// Show message / done
 		$result=do_lang_tempcode('GIFT_CONGRATULATIONS');
-
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,$result);
 	}

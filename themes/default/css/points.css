@@ -139,10 +139,6 @@ table.points_summary_table .answer {
 
 /* Point store */
 
-.pointstore_item {
-	margin: 1em;
-}
-
 .pointstore_item_tag {
 	font-style: italic;
 }

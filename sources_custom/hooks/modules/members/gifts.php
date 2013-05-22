@@ -45,28 +45,28 @@ class Hook_members_gifts
 		if (is_null($rows)) return array();
 
 		$gifts=array();
-
 		foreach ($rows as $gift)
 		{
-			$gift_info=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']),'',1);
-			if (!array_key_exists(0,$gift_info)) continue;
+			$gift_rows=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']),'',1);
 
-			if (strlen($gift_info[0]['name'])>0)
+			if (array_key_exists(0,$gift_rows))
 			{
+				$gift_row=$gift_rows[0];
+
 				if ($gift['is_anonymous']==0)
 				{
 					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);
-					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_user_id']);
-					$gift_explanation=do_lang('GIFT_EXPLANATION1',$sender_name,$gift_info[0]['name'],$sender_link);
+					$sender_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_user_id']);
+					$gift_explanation=do_lang_tempcode('GIFT_EXPLANATION',$sender_name,escape_html($gift_row['name']),$sender_url);
 				} else
 				{
-					$gift_explanation=do_lang('GIFT_EXPLANATION2',$gift_info[0]['name']);
+					$gift_explanation=do_lang_tempcode('GIFT_EXPLANATION_ANONYMOUS',escape_html($gift_row['name']));
 				}
 
 				$image_url='';
-				if (is_file(get_file_base().'/'.urldecode($gift_info[0]['image'])))
+				if (is_file(get_file_base().'/'.urldecode($gift_row['image'])))
 				{
-					$image_url=get_base_url().'/'.$gift_info[0]['image'];
+					$image_url=get_base_url().'/'.$gift_row['image'];
 				}
 
 				$gifts[]=array(
@@ -77,6 +77,7 @@ class Hook_members_gifts
 		}
 
 		$gifts_block=do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP',array('_GUID'=>'fd4b5344b3b16cdf129e49bae903cbb2','GIFTS'=>$gifts));
+		$gifts_block->handle_symbol_preprocessing();
 		return array($gifts_block);
 	}
 }

@@ -590,7 +590,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function _member_pm_url($id)
 	{
-		$_url=build_url(array('page'=>'topics','type'=>'new_pt','id'=>$id),get_module_zone('topics'));
+		$_url=build_url(array('page'=>'topics','type'=>'new_pt','id'=>$id),get_module_zone('topics'),NULL,false,false,true);
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;
