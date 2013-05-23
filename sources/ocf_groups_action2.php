@@ -213,6 +213,14 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 		'gm_member_id'=>$member_id,
 		'gm_validated'=>$validated
 	));
+	if ($validated==1)
+	{
+		$GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+			'member_id'=>$member_id,
+			'usergroup_id'=>$group_id,
+			'join_time'=>time()
+		));
+	}
 
 	if ($validated==0)
 	{
@@ -253,8 +261,8 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
 	
-	$GLOBALS['FORUM_DB']->query_delete('f_usergroup_members',array(
-		'user_id'=>$member_id,
+	$GLOBALS['FORUM_DB']->query_delete('f_group_join_log',array(
+		'member_id'=>$member_id,
 		'usergroup_id'=>$group_id,
 	));
 }
@@ -289,12 +297,15 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 		$mail=do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url->evaluate()));
 		dispatch_notification('ocf_member_joined_group',strval($id),$subject,$mail);
 	}
-	
-	$GLOBALS['FORUM_DB']->query_insert('f_usergroup_members',array(
-		'user_id'=>$member_id,
-		'usergroup_id'=>$id,
-		'join_time'=>time()
-	));
+
+	if ($validated==1)
+	{
+		$GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+			'member_id'=>$member_id,
+			'usergroup_id'=>$id,
+			'join_time'=>time()
+		));
+	}
 }
 
 /**
@@ -321,6 +332,12 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
 			'gm_group_id'=>$group_id,
 			'gm_member_id'=>$prospective_member_id,
 			'gm_validated'=>1
+		));
+
+		$GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+			'member_id'=>$prospective_member_id,
+			'usergroup_id'=>$group_id,
+			'join_time'=>time()
 		));
 
 		$mail=do_lang('GROUP_ACCEPTED_MAIL',get_site_name(),$name,NULL,get_lang($prospective_member_id));

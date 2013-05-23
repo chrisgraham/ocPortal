@@ -289,7 +289,8 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	}
 	$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
 
-	// Any secondary work
+	// Any secondary work...
+
 	foreach ($secondary_groups as $g)
 	{
 		if ($g!=$primary_group)
@@ -301,6 +302,12 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 			));
 		}
 	}
+
+	$GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+		'member_id'=>$member_id,
+		'usergroup_id'=>$primary_group,
+		'join_time'=>time()
+	));
 
 	if ($check_correctness)
 	{

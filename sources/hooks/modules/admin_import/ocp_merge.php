@@ -270,7 +270,7 @@ class Hook_ocp_merge
 		{
 			if (import_check_if_imported('welcome_email',$row['w_name'])) continue;
 
-			ocf_make_welcome_email($row['w_name'],$this->get_lang_string($db,$row['w_subject']),$this->get_lang_string($db,$row['w_text']),$row['w_send_time']);
+			ocf_make_welcome_email($row['w_name'],$this->get_lang_string($db,$row['w_subject']),$this->get_lang_string($db,$row['w_text']),$row['w_send_time'],array_key_exists('w_usergroup',$row)?$row['w_usergroup']:NULL,array_key_exists('w_usergroup_type',$row)?$row['w_usergroup_type']:'');
 
 			import_id_remap_put('welcome_email',$row['w_name'],0);
 		}

@@ -53,5 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	css_enforce('global','default',false);
+		$GLOBALS['SITE_DB']->alter_table_field('f_welcome_emails','w_usergroup','?AUTO_LINK');
 }
