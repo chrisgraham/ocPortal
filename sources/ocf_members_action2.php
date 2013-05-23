@@ -913,7 +913,19 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	{
 		$update['m_highlighted_name']=$highlighted_name;
 	}
-	if (!is_null($primary_group)) $update['m_primary_group']=$primary_group;
+	if (!is_null($primary_group))
+	{
+		$update['m_primary_group']=$primary_group;
+
+		if ($primary_group!=$old_primary_group)
+		{
+			$GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+				'member_id'=>$member_id,
+				'usergroup_id'=>$primary_group,
+				'join_time'=>time()
+			));
+		}
+	}
 
 	$old_validated=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_validated');
 

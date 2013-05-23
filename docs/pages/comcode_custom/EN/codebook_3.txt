@@ -209,8 +209,6 @@ The values you might want to manually change are:
   - [tt]captcha_single_guess[/tt] -- whether the CAPTCHA may only be guessed once before being reset (increases security, increases user annoyance)
  - newsletters
   - [tt]force_html_only[/tt] -- set this to '1' if newsletters should be sent in HTML, without a Comcode-based text version
-  - [tt]welcome_nw_choice[/tt] -- set this to a newsletter ID# if welcome emails should go out to new newsletter subscribers rather than new members
- - downloads
   - [tt]no_dload_search_index[/tt] -- set this to '1' if download contents should not be indexed for the search module
  - core
   - [tt]disable_animations[/tt] -- set this to '1' if you do not want animations in the UI.

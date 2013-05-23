@@ -53,36 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	if (@$_GET['test']=='2')
-	{
-		require_code('resource_fs');
-		$resourcefs=get_resource_occlefs_object('catalogue_entry');
-		$id=find_id_via_label('catalogue_category','United Kingdom','CATALOGUE-fm-colleges/fm-colleges-home');
-		@var_dump($id);
-		exit();
-	}
-
-	file_put_contents(get_custom_file_base().'/data_custom/resourcefs.log','');
-
-	require_code('user_sync__customise');
-	global $DO_COLLEGES,$DO_COURSES,$DO_LECTURES,$DO_ENROLMENTS,$DO_SCHEDULES,$DO_LECTURES,$DO_CLEANUP,$DO_USER_SYNC;
-	$DO_COLLEGES=true;
-	$DO_COURSES=true;
-	$DO_LECTURES=true;
-	$DO_ENROLMENTS=true;
-	$DO_SCHEDULES=true;
-	$DO_CLEANUP=true;
-	$DO_USER_SYNC=true;
-
-	require_code('user_sync');
-	global $USER_SYNC_IMPORT_LIMIT;
-	$USER_SYNC_IMPORT_LIMIT=50;
-
-	user_sync__inbound();
-
-	if ($USER_SYNC_IMPORT_LIMIT===NULL)
-	{
-		set_value('user_sync_enabled','1');
-		set_long_value('last_cron_user_sync',strval(time()));
-	}
 }

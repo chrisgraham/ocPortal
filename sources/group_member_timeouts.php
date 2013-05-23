@@ -49,6 +49,12 @@ function bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for
 			{
 				$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_update('f_members',array('m_primary_group'=>$group_id),array('id'=>$member_id),'',1);
 				$GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED=array();
+
+				$GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+					'member_id'=>$member_id,
+					'usergroup_id'=>$group_id,
+					'join_time'=>time()
+				));
 			} else
 			{
 				ocf_add_member_to_group($member_id,$group_id);

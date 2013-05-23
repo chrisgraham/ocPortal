@@ -43,7 +43,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -56,6 +56,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		$GLOBALS['SITE_DB']->drop_table_if_exists('f_welcome_emails');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('f_group_join_log');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
 
@@ -77,8 +78,17 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 				'w_subject'=>'SHORT_TRANS',
 				'w_text'=>'LONG_TRANS',
 				'w_send_time'=>'INTEGER',
-				'w_newsletter'=>'BINARY'
+				'w_newsletter'=>'?AUTO_LINK',
+				'w_usergroup'=>'?AUTO_LINK',
+				'w_usergroup_type'=>'ID_TEXT',
 			));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_usergroup','?AUTO_LINK',NULL);
+			$GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_usergroup_type','ID_TEXT','');
+			$GLOBALS['SITE_DB']->alter_table_field('f_welcome_emails','w_newsletter','?AUTO_LINK');
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
@@ -118,6 +128,25 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 
 		ocf_require_all_forum_stuff();
 
+		if (get_forum_type()=='ocf')
+		{
+			$this->javascript='
+				var newsletter_field=document.getElementById(\'newsletter\');
+				var usergroup_field=newsletter_field.form.elements[\'usergroup\'];
+				var update_newsletter_settings=function() {
+					var has_newsletter=(newsletter_field.selectedIndex!=0);
+					var has_usergroup=(usergroup_field.selectedIndex!=0);
+					newsletter_field.form.elements[\'usergroup\'].disabled=has_newsletter;
+					newsletter_field.form.elements[\'usergroup_type\'][0].disabled=has_newsletter || !has_usergroup;
+					newsletter_field.form.elements[\'usergroup_type\'][1].disabled=has_newsletter || !has_usergroup;
+					newsletter_field.form.elements[\'usergroup_type\'][2].disabled=has_newsletter || !has_usergroup;
+				}
+				newsletter_field.onchange=update_newsletter_settings;
+				usergroup_field.onchange=update_newsletter_settings;
+				update_newsletter_settings();
+			';
+		}
+
 		$this->add_one_label=do_lang_tempcode('ADD_WELCOME_EMAIL');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_WELCOME_EMAIL');
 		$this->edit_one_label=do_lang_tempcode('EDIT_WELCOME_EMAIL');
@@ -154,38 +183,52 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 * @param  LONG_TEXT		The message body of the Welcome E-mail
 	 * @param  integer		The number of hours before sending the e-mail
 	 * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
+	 * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
+	 * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
+	 * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
+	 * @set primary secondary 
 	 * @return tempcode		The input fields
 	 */
-	function get_form_fields($name='',$subject='',$text='',$send_time=0,$newsletter=0)
+	function get_form_fields($name='',$subject='',$text='',$send_time=0,$newsletter=NULL,$usergroup=NULL,$usergroup_type='')
 	{
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME_REFERENCE'),'name',$name,true));
 		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_SUBJECT'),'subject',$subject,true));
 		$fields->attach(form_input_huge_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_TEXT'),'text',$text,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('SEND_TIME'),do_lang_tempcode('DESCRIPTION_SEND_TIME'),'send_time',$send_time,true));
+
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+			'SECTION_HIDDEN'=>false,
+			'TITLE'=>do_lang_tempcode('SCOPE'),
+		)));
+
 		if (addon_installed('newsletter'))
 		{
 			require_lang('newsletter');
-			if (get_value('welcome_nw_choice')==='1')
+			$newsletters=new ocp_tempcode();
+			$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+			if (get_forum_type()=='ocf')
 			{
-				$newsletters=new ocp_tempcode();
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
-				if (get_forum_type()=='ocf')
-				{
-					$newsletters->attach(form_input_list_entry('',is_null($newsletter),do_lang_tempcode('NEWSLETTER_OCF')));
-				}
-				foreach ($rows as $_newsletter)
-					$newsletters->attach(form_input_list_entry(strval($_newsletter['id']),$_newsletter['id']===$newsletter,get_translated_text($_newsletter['title'])));
-				if (!$newsletters->is_empty())
-					$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','newsletter',$newsletters,NULL,false,false));
-			} else
-			{
-				if (get_forum_type()=='ocf') // If you are not using OCF, it is IMPLIED you will have to be sending to newsletter people, hence no choice
-				{
-					require_lang('newsletter');
-					$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_INSTEAD'),'newsletter',$newsletter==1));
-				}
+				$newsletters->attach(form_input_list_entry('',is_null($newsletter),do_lang_tempcode('WELCOME_EMAIL_MEMBERS')));
 			}
+			foreach ($rows as $_newsletter)
+				$newsletters->attach(form_input_list_entry(strval($_newsletter['id']),$_newsletter['id']===$newsletter,get_translated_text($_newsletter['title'])));
+			if (!$newsletters->is_empty())
+				$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_NEWSLETTER'),'newsletter',$newsletters,NULL,false,false));
+		}
+		if (get_forum_type()=='ocf')
+		{
+			require_code('ocf_groups');
+			$usergroups=new ocp_tempcode();
+			$usergroups->attach(form_input_list_entry('',$usergroup===NULL,do_lang_tempcode('NA_EM')));
+			$usergroups->attach(ocf_nice_get_usergroups($usergroup));
+			$fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP',escape_html(get_site_name())),'usergroup',$usergroups,NULL,false,false));
+
+			$radios=new ocp_tempcode();
+			$radios->attach(form_input_radio_entry('usergroup_type','',true,do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_BOTH')));
+			$radios->attach(form_input_radio_entry('usergroup_type','primary',false,do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_PRIMARY')));
+			$radios->attach(form_input_radio_entry('usergroup_type','secondary',false,do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_SECONDARY')));
+			$fields->attach(form_input_radio(do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP_TYPE'),'usergroup_type',$radios,false));
 		}
 
 		return $fields;
@@ -263,7 +306,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields($r['w_name'],get_translated_text($r['w_subject']),get_translated_text($r['w_text']),$r['w_send_time'],$r['w_newsletter']);
+		$fields=$this->get_form_fields($r['w_name'],get_translated_text($r['w_subject']),get_translated_text($r['w_text']),$r['w_send_time'],$r['w_newsletter'],$r['w_usergroup'],$r['w_usergroup_type']);
 
 		return $fields;
 	}
@@ -279,14 +322,10 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$subject=post_param('subject');
 		$text=post_param('text');
 		$send_time=post_param_integer('send_time');
-		if (get_value('welcome_nw_choice')==='1')
-		{
-			$newsletter=post_param_integer('newsletter',NULL);
-		} else
-		{
-			$newsletter=post_param_integer('newsletter',0);
-		}
-		$id=ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter);
+		$newsletter=post_param_integer('newsletter',NULL);
+		$usergroup=post_param_integer('usergroup',NULL);
+		$usergroup_type=post_param('usergroup_type','');
+		$id=ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter,$usergroup,$usergroup_type);
 		return strval($id);
 	}
 
@@ -301,14 +340,10 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$subject=post_param('subject');
 		$text=post_param('text');
 		$send_time=post_param_integer('send_time');
-		if (get_value('welcome_nw_choice')==='1')
-		{
-			$newsletter=post_param_integer('newsletter',NULL);
-		} else
-		{
-			$newsletter=post_param_integer('newsletter',0);
-		}
-		ocf_edit_welcome_email(intval($id),$name,$subject,$text,$send_time,$newsletter);
+		$newsletter=post_param_integer('newsletter',NULL);
+		$usergroup=post_param_integer('usergroup',NULL);
+		$usergroup_type=post_param('usergroup_type','');
+		ocf_edit_welcome_email(intval($id),$name,$subject,$text,$send_time,$newsletter,$usergroup,$usergroup_type);
 	}
 
 	/**

@@ -124,12 +124,29 @@ function ocf_delete_emoticon($code)
  * @param  LONG_TEXT		The message body of the Welcome E-mail
  * @param  integer		The number of hours before sending the e-mail
  * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
+ * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
+ * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
+ * @set primary secondary 
  */
-function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter)
+function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter,$usergroup,$usergroup_type)
 {
 	$_subject=$GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_subject',array('id'=>$id));
 	$_text=$GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_text',array('id'=>$id));
-	$GLOBALS['SITE_DB']->query_update('f_welcome_emails',array('w_name'=>$name,'w_newsletter'=>$newsletter,'w_subject'=>lang_remap($_subject,$subject),'w_text'=>lang_remap($_text,$text),'w_send_time'=>$send_time),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update(
+		'f_welcome_emails',
+		array(
+			'w_name'=>$name,
+			'w_newsletter'=>$newsletter,
+			'w_subject'=>lang_remap($_subject,$subject),
+			'w_text'=>lang_remap($_text,$text),
+			'w_send_time'=>$send_time,
+			'w_usergroup'=>$usergroup,
+			'w_usergroup_type'=>$usergroup_type,
+		),
+		array('id'=>$id),
+		'',
+		1
+	);
 	log_it('EDIT_WELCOME_EMAIL',strval($id),get_translated_text($_subject));
 }
 

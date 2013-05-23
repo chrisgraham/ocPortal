@@ -81,11 +81,26 @@ function ocf_make_emoticon($code,$theme_img_code,$relevance_level=1,$use_topics=
  * @param  LONG_TEXT		The message body of the Welcome E-mail
  * @param  integer		The number of hours before sending the e-mail
  * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
+ * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
+ * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
+ * @set primary secondary 
  * @return AUTO_LINK		The ID
  */
-function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=0)
+function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=0,$usergroup=NULL,$usergroup_type='')
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('f_welcome_emails',array('w_name'=>$name,'w_newsletter'=>$newsletter,'w_subject'=>insert_lang($subject,2),'w_text'=>insert_lang($text,2),'w_send_time'=>$send_time),true);
+	$id=$GLOBALS['SITE_DB']->query_insert(
+		'f_welcome_emails',
+		array(
+			'w_name'=>$name,
+			'w_newsletter'=>$newsletter,
+			'w_subject'=>insert_lang($subject,2),
+			'w_text'=>insert_lang($text,2),
+			'w_send_time'=>$send_time,
+			'w_usergroup'=>$usergroup,
+			'w_usergroup_type'=>$usergroup_type,
+		),
+		true
+	);
 	log_it('ADD_WELCOME_EMAIL',strval($id),$subject);
 	return $id;
 }

@@ -333,6 +333,18 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('IS_ON_SHOW_ONLINE','is_on_show_online','tick','return \'1\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('USE_JOINDATE','use_joindate','tick','return \'1\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('USE_LASTONDATE','use_lastondate','tick','return \'0\';','SECTION_FORUMS','MEMBERS');
+
+		$GLOBALS['SITE_DB']->create_table('f_group_join_log',array(
+			'id'=>'*AUTO',
+			'member_id'=>'MEMBER',
+			'usergroup_id'=>'?AUTO_LINK',
+			'join_time'=>'TIME'
+		));
+		$GLOBALS['SITE_DB']->create_index('f_group_join_log','member_id',array('member_id'));
+		$GLOBALS['SITE_DB']->create_index('f_group_join_log','usergroup_id',array('usergroup_id'));
+		$GLOBALS['SITE_DB']->create_index('f_group_join_log','join_time',array('join_time'));
+
+		$GLOBALS['FORUM_DB']->create_index('f_members','last_visit_time',array('m_dob_month','m_dob_day','m_last_visit_time'));
 	}
 
 	// If we have the forum installed to this db already, leave
@@ -910,11 +922,6 @@ function install_ocf($upgrade_from=NULL)
 		{
 			add_privilege('SECTION_FORUMS',$permission,false,($permission=='view_other_pt'));
 		}
-	}
-
-	if ((is_null($upgrade_from)) || ($upgrade_from<10.0))
-	{
-		$GLOBALS['FORUM_DB']->create_index('f_members','last_visit_time',array('m_dob_month','m_dob_day','m_last_visit_time'));
 	}
 }
 

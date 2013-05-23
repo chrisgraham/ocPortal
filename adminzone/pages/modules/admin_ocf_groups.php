@@ -303,7 +303,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 				$permissions_from_groups->attach(form_input_list_entry(strval($group['id']),false,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('DEFAULT_PERMISSIONS_FROM'),do_lang_tempcode(is_null($id)?'DESCRIPTION_DEFAULT_PERMISSIONS_FROM_NEW':'DESCRIPTION_DEFAULT_PERMISSIONS_FROM'),'absorb',$permissions_from_groups));
-
+		
 		$this->appended_actions_already=true;
 
 		return array($fields,$hidden);
@@ -620,7 +620,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('group',strval($id));
-
+			
 		return strval($id);
 	}
 
