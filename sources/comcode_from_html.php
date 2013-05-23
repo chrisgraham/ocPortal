@@ -69,6 +69,8 @@ function _img_tag_fixup_raw($matches)
 	/*$referer=post_param('http_referer',ocp_srv('HTTP_REFERER'));*/ // CKEditor allows us to specify the base, so we know get_base_url() is right
 	$caller_url=/*looks_like_url($referer)?preg_replace('#/[^/]*$#','',$referer):*/get_base_url();
 
+	$matches[2]=html_entity_decode($matches[2],ENT_QUOTES,get_charset());
+
 	if ((strpos($matches[2],'{$FIND_SCRIPT')===false) && (strpos($matches[2],'{$IMG')===false))
 		$new_url=qualify_url($matches[2],$caller_url);
 	else $new_url=$matches[2];
