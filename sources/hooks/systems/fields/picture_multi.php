@@ -177,32 +177,33 @@ class Hook_fields_picture_multi
 			require_code('uploads');
 			is_swf_upload(true);
 
-			$i=1;
-			do
+			if ($editing)
 			{
-				$tmp_name='field_'.strval($id).strval($i);
-				$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
-				$_value=$temp[0];
-
-				if (($editing) && ($_value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
+				foreach ($_old_value as $i=>$_value)
 				{
-					if (array_key_exists($i,$_old_value))
-					{
-						if ($value!='') $value.=chr(10);
-						$value.=$_old_value[$i];
-					}
-				} else
-				{
-					if ((!is_null($old_value)) && ($old_value!='') && (($_value!='') || (post_param_integer('custom_'.strval($field['id']).'_value_unlink',0)==1)))
+					$unlink=(post_param_integer('field_'.strval($id).'_'.strval($i+1).'_unlink',0)==1);
+					if ($unlink)
 					{
 						@unlink(get_custom_file_base().'/'.rawurldecode($old_value));
 						sync_file(rawurldecode($old_value));
-					}
-					if ($_value!='')
+					} else
 					{
 						if ($value!='') $value.=chr(10);
 						$value.=$_value;
 					}
+				}
+			}
+
+			$i=1;
+			do
+			{
+				$tmp_name='field_'.strval($id).'_'.strval($i);
+				$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
+				$_value=$temp[0];
+				if ($_value!='')
+				{
+					if ($value!='') $value.=chr(10);
+					$value.=$_value;
 				}
 
 				$i++;

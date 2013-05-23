@@ -1109,8 +1109,9 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 		$is_image=is_image($default[0]);
 		$existing_url=$default[0];
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
-	}
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('_GUID'=>'e8712ede08591604738762ac03852ac1','TABINDEX'=>strval($tabindex),'FILTER'=>$filter,'REQUIRED'=>$_required,'SWFUPLOAD'=>$swfupload,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));
+		$edit=$default;
+	} else $edit=array();
+	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('_GUID'=>'e8712ede08591604738762ac03852ac1','TABINDEX'=>strval($tabindex),'EDIT'=>$edit,'FILTER'=>$filter,'REQUIRED'=>$_required,'SWFUPLOAD'=>$swfupload,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));
 	return _form_input('',$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 

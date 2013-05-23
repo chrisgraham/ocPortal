@@ -1524,6 +1524,7 @@ ocportal_tutorials
  - docs/pages/comcode_custom/EN/tut_programming.txt
  - docs/pages/comcode_custom/EN/tut_quizzes.txt
  - docs/pages/comcode_custom/EN/tut_releasing_themes.txt
+ - docs/pages/comcode_custom/EN/tut_repository.txt
  - docs/pages/comcode_custom/EN/tut_search.txt
  - docs/pages/comcode_custom/EN/tut_security.txt
  - docs/pages/comcode_custom/EN/tut_seo.txt
@@ -2123,13 +2124,6 @@ addon_publish
 release_compile
 ---------------
  - data_custom/make_db_meta_file.php
-
-aviary
-------
- - sources_custom/incoming_uploads.php
- - sources_custom/uploads.php
- - themes/default/templates_custom/JAVASCRIPT_SWFUPLOAD.tpl
- - data_custom/aviary_install.php
 
 direct_video_link_posting
 -------------------------

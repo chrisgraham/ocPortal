@@ -853,7 +853,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 				$use_ev=$ev;
 			} else
 			{
-				$use_ev=$ob->render_field_value($field,$ev,$i,$only_fields,'catalogue_efv_short',$entry['id'],'id','cv_short');
+				list($raw_type,,$type)=$ob->get_field_value_row_bits($field);
+				$use_ev=$ob->render_field_value($field,$ev,$i,$only_fields,'catalogue_efv_'.$type,$entry['id'],'ce_id','cv_value');
 			}
 
 			// Special case for access to raw thumbnail

@@ -1315,8 +1315,8 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 		var nameStub=name.substring(0,mid+1);
 		var thisNum=name.substring(mid+1,name.length)-0;
 		var nextNum=thisNum+1;
-		var txtFileName=document.getElementById('txtFileName_multi_1');
-		var nextField=document.getElementById('txtFileName_multi_'+nextNum);
+		var txtFileName=document.getElementById('txtFileName_'+nameStub+'1');
+		var nextField=document.getElementById('txtFileName_'+nameStub+nextNum);
 		var name=nameStub+nextNum;
 		var thisId=name;
 
@@ -1325,12 +1325,10 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 			nextNum=thisNum+1;
 			var nextField=document.createElement('input');
 			nextField.className='input_upload';
-			nextField.setAttribute('id','multi_'+nextNum);
+			nextField.setAttribute('id',nameStub+nextNum);
 			nextField.onchange=window._ensure_next_field_upload;
 			nextField.setAttribute('type','file');
 			nextField.name=nameStub+nextNum;
-			var br=document.createElement('br');
-			txtFileName.parentNode.parentNode.parentNode.appendChild(br);
 			txtFileName.parentNode.parentNode.parentNode.appendChild(nextField);
 			replaceFileInput('upload_multi',nextField.name,null,posting_field_name);
 		}
@@ -1621,27 +1619,33 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	hidFileID.value='-1';
 	maindiv.appendChild(hidFileID);
 
-	var disable_link=document.createElement('a');
-	set_inner_html(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
-	disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
-	disable_link.className='associated_details';
-	disable_link.target='_blank';
-	disable_link.onclick=function(e) {
-		if ((window.handle_form_saving) && document.getElementById(posting_field_name)) handle_form_saving(e,document.getElementById(posting_field_name),true);
+	// Link for the simpler uploader
+	if (get_inner_html(maindiv.parentNode).indexOf('keep_no_swfupload=1')==-1)
+	{
+		var disable_link=document.createElement('a');
+		set_inner_html(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
+		disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
+		disable_link.className='associated_details';
+		disable_link.target='_blank';
+		disable_link.onclick=function(e) {
+			if ((window.handle_form_saving) && document.getElementById(posting_field_name)) handle_form_saving(e,document.getElementById(posting_field_name),true);
 
-		window.fauxmodal_confirm(
-			'{!DISABLE_SWFUPLOAD_CONFIRM;}',
-			function(proceeding)
-			{
-				if (proceeding)
-					click_link(disable_link);
-			},
-			'{!Q_SURE;}'
-		);
+			window.fauxmodal_confirm(
+				'{!DISABLE_SWFUPLOAD_CONFIRM;}',
+				function(proceeding)
+				{
+					if (proceeding)
+						click_link(disable_link);
+				},
+				'{!Q_SURE;}'
+			);
 
-		return false;
+			return false;
+		}
+		disable_link.style.display='block';
+		disable_link.style.margin='1em 0';
+		maindiv.appendChild(disable_link);
 	}
-	maindiv.appendChild(disable_link);
 
 	// Replace old upload field with text field that holds a "1" indicating upload has happened (and telling ocP to check the hidFileID value for more details)
 	rep.style.display='none';
@@ -1813,6 +1817,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			button_width: 66,
 			button_height: 20,
 			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+			button_action : SWFUpload.BUTTON_ACTION.SELECT_FILE,
 
 			// Flash Settings
 			flash_url : '{$BASE_URL_NOHTTP;}'+'/data/swfupload/swfupload.swf',

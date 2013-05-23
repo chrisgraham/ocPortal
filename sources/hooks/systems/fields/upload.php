@@ -154,7 +154,7 @@ class Hook_fields_upload
 			$value=$temp[0];
 			if ($value!='')
 			{
-				$value=$value.'::'.$temp[2];
+				$value.='::'.$temp[2];
 			}
 			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
 				return STRING_MAGIC_NULL;

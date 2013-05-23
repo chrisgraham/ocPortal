@@ -1,4 +1,4 @@
-<span class="vertical_alignment">
+<div class="vertical_alignment">
 	<input tabindex="{TABINDEX*}" class="input_upload{REQUIRED*}" type="file" id="{NAME*}" name="{NAME*}" />
 	{+START,IF,{EDIT}}
 		<input type="checkbox" id="i_{NAME*}_unlink" name="{NAME*}_unlink" value="1" />
@@ -13,7 +13,7 @@
 	{+END}
 
 	{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_{NAME*}" onclick="var x=document.getElementById('{NAME*;}'); x.value=''; if (typeof x.fakeonchange!='undefined' &amp;&amp; x.fakeonchange) x.fakeonchange(event); return false;" title="{!CLEAR}{+START,IF_PASSED,PRETTY_NAME}: {PRETTY_NAME*}{+END}">{!CLEAR}</button>{+END}
-</span>
+</div>
 
 {+START,IF,{$CONFIG_OPTION,java_upload}}
 	{+START,IF,{$NOT,{$GET,included_java_upload}}}

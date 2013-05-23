@@ -73,7 +73,7 @@ function is_swf_upload($fake_prepopulation=false)
 				}
 			} else // By incoming upload ID
 			{
-				foreach (array_map('intval',explode(':',$value)) as $i=>$incoming_uploads_id)
+				foreach (array_map('intval',explode(':',$value)) as $i=>$incoming_uploads_id) // Some uploaders may delimite with ":" within a single POST field (plupload); others may give multiple POST fields (swfupload, native)
 				{
 					$incoming_uploads_row=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'incoming_uploads WHERE (i_submitter='.strval(get_member()).' OR i_submitter='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).') AND id='.strval($incoming_uploads_id),1);
 					if (array_key_exists(0,$incoming_uploads_row))
@@ -83,12 +83,14 @@ function is_swf_upload($fake_prepopulation=false)
 							$swfupload=true;
 							if ($fake_prepopulation)
 							{
-								$_FILES[preg_replace('#(\_)?1$#','${1}'.strval($i+1),substr($key,10))]=array(
+								$new_key=preg_replace('#\_1$#','_'.strval($i+1),substr($key,10));
+								$_FILES[$new_key]=array(
 									'type'=>'swfupload',
 									'name'=>$incoming_uploads_row[0]['i_orig_filename'],
 									'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],
 									'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'])
 								);
+								$_POST['hidFileID_'.$new_key]=strval($incoming_uploads_id);
 							}
 						}
 					}
