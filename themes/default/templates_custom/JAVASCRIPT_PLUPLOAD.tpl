@@ -5324,7 +5324,7 @@ function fireFakeChangeFor(name,value)
 	var ob=rep.swfob;
 	if (typeof ob.settings=='undefined') return;
 
-	if (ob.settings.immediate_submit{+START,IF,{$VALUE_OPTION,aviary}} || true{+END})
+	if (ob.settings.immediate_submit)
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
@@ -5403,9 +5403,6 @@ function uploadSuccess(ob,file,data) {
 	if (id.value!='') id.value+=':';
 	id.value += decodedData['upload_id'];
 
-	{+START,IF,{$VALUE_OPTION,aviary}}
-		if (id.value.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
-	{+END}
 	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
 	if ((typeof ob.submitting!='undefined') && (ob.submitting))
@@ -5477,10 +5474,6 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 	if (!filter) filter='{$CONFIG_OPTION#,valid_types}';
 	filter+=','+filter.toUpperCase();
-
-	{+START,IF,{$VALUE_OPTION,aviary}}
-		if (typeof window.done_aviary=='undefined') do_aviary();
-	{+END}
 
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
@@ -5820,7 +5813,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	newClearBtn.className='button_micro clear_button';
 	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
-	newClearBtn.alt='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD;^} {+END}{!CLEAR;^}';
+	newClearBtn.alt='{!CLEAR;^}';
 	newClearBtn.value='{!CLEAR;^}';
 	subdiv.appendChild(newClearBtn);
 
@@ -6004,87 +5997,6 @@ FileProgress.prototype.disappear = function () {
 		this.fileProgressWrapper.style.display = "none";
 	}
 };
-
-{+START,IF,{$VALUE_OPTION,aviary}}
-/* Add in Aviary to image URLs */
-
-function do_aviary()
-{
-	{+START,IF,{$NOT,{$DEV_MODE}}}
-		if (running_locally()) return;
-	{+END}
-
-	var fields=document.getElementsByTagName('input');
-	for (var i=0;i<fields.length;i++)
-	{
-		var url=fields[i].value;
-		var filename=url.replace(/^.*\//,'');
-		implement_aviary(url,filename,fields[i],true);
-	}
-	window.done_aviary=true;
-}
-
-function running_locally()
-{
-	return (('{$DOMAIN;}'=='localhost') || ('{$DOMAIN;}'=='127.0.0.1') || ('{$DOMAIN;}'.substr(0,4)=='192.') || ('{$DOMAIN;}'.substr(0,3)=='10.') || ('{$DOMAIN;}'.indexOf('.')==-1));
-}
-
-function implement_aviary(url,filename,field,recalculate_url_on_click)
-{
-	if (filename.substr(-4).match(/\.(jpg|jpeg|png|gif)$/i))
-	{
-		var old_link=document.getElementById('edit_for_'+field.id);
-		if (old_link) old_link.parentNode.removeChild(old_link);
-
-		var url_raw=url;
-		if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
-		{+START,IF,{$DEV_MODE}}
-			if (running_locally()) url='{$BRAND_BASE_URL;}/themes/ocproducts/images//newlogo-top.gif';
-		{+END}
-		{+START,IF,{$NOT,{$DEV_MODE}}}
-			if (running_locally()) return;
-		{+END}
-
-		var edit_link=document.createElement('a');
-		set_inner_html(edit_link,'({!EDIT;})');
-		edit_link.className='associated_details';
-		edit_link.id='edit_for_'+field.id;
-		edit_link.target='_blank';
-		edit_link.title='{!LINK_NEW_WINDOW;}';
-		edit_link.onmousedown=function() {
-			if (recalculate_url_on_click)
-			{
-				url=field.value;
-				url_raw=url;
-				if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
-				{+START,IF,{$DEV_MODE}}
-					if (running_locally()) url='{$BRAND_BASE_URL;}/themes/ocproducts/images//newlogo-top.gif';
-				{+END}
-				{+START,IF,{$NOT,{$DEV_MODE}}}
-					if (running_locally()) return;
-				{+END}
-				filename=url.replace(/^.*\//,'');
-			}
-
-			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash=dfdsfdsfsd4&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
-		};
-		edit_link.onclick=function()
-		{
-			window.fauxmodal_confirm(
-				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.',
-				function(result)
-				{
-					if (result) click_link(edit_link);
-				}
-			);
-			return false;
-		};
-		edit_link.onmousedown();
-		//field.parentNode.appendChild(document.createElement('br'));
-		field.parentNode.appendChild(edit_link);
-	}
-}
-{+END}
 
 
 /* HTML5 UPLOAD */
