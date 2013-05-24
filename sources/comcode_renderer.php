@@ -1092,6 +1092,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				if (substr($id,0,4)=='new_')
 				{
+					disable_php_memory_limit(); // In case needs lots of RAM for thumbnail generation
+
 					$_id=substr($id,4);
 					if (!is_numeric($_id))
 					{

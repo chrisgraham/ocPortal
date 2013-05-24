@@ -229,17 +229,19 @@ function do_form_submit(form,event)
 	return true;
 }
 
-function disable_buttons_just_clicked(inputs)
+function disable_buttons_just_clicked(inputs,permanent)
 {
+	if (typeof permanent=='undefined') var permanent=false;
+
 	for (var i=0;i<inputs.length;i++)
 	{
 		if ((inputs[i].nodeName.toLowerCase()=='button') || (inputs[i].type=='image') || (inputs[i].type=='submit') || (inputs[i].type=='button'))
 		{
-			if (inputs[i].getAttribute('accesskey')=='u') /* Identifies submit button */
+			if ((inputs[i].getAttribute('accesskey')=='u' /* Identifies submit button */) || (inputs[i].getAttribute('accesskey')=='p' /* Identifies preview button */))
 			{
 				if ((!inputs[i].disabled) && (!inputs[i].under_timer)) /* We do not want to interfere with other code potentially operating */
 				{
-					disable_button_just_clicked(inputs[i]);
+					disable_button_just_clicked(inputs[i],permanent);
 				}
 			}
 		}
@@ -271,8 +273,14 @@ function do_form_preview(form,preview_url,has_separate_preview)
 	var pf=document.getElementById('preview_iframe');
 
 	/* Do our loading-animation */
-	window.setInterval(window.trigger_resize,500);  /* In case its running in an iframe itself */
-	animate_frame_load(pf,'preview_iframe',50);
+	if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements))
+	{
+		window.setInterval(window.trigger_resize,500);  /* In case its running in an iframe itself */
+		animate_frame_load(pf,'preview_iframe',50);
+	}
+
+	disable_buttons_just_clicked(document.getElementsByTagName('input'));
+	disable_buttons_just_clicked(document.getElementsByTagName('button'));
 
 	/* input.value not readable on most modern web browsers, and this code is not maintained
 	var inputs=form.elements,input;

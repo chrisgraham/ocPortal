@@ -5226,6 +5226,8 @@ function plUploadLoaded(ob) {
 
 // Called by the submit button to start the upload
 function doSubmit(e,ob,recurse) {
+	if (typeof recurse=='undefined') var recurse=false;
+
 	window.just_checking_requirements=true;
 
 	ob.submitting=true;
@@ -5267,7 +5269,9 @@ function doSubmit(e,ob,recurse) {
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
 	if (txtID.value == '-1')
 	{
-		btnSubmit.disabled = true;
+		disable_buttons_just_clicked(document.getElementsByTagName('input'),true);
+		disable_buttons_just_clicked(document.getElementsByTagName('button'),true);
+
 		ob.start();
 		smooth_scroll(find_pos_y(txtFileName,true));
 	} else
@@ -5352,6 +5356,8 @@ function fireFakeChangeFor(name,value)
 function fileDialogComplete(ob,files) {
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
 
+	set_inner_html(document.getElementById(ob.settings.progress_target),''); // Remove old progress indicators
+
 	var name,file;
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 	var id = document.getElementById(ob.settings.txtFileDbID);
@@ -5363,13 +5369,16 @@ function fileDialogComplete(ob,files) {
 		if (txtFileName.value!='') txtFileName.value+=':';
 		txtFileName.value+=file.name.replace(/:/g,',');
 		name=ob.settings.txtName;
-		dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name,files.length);
+		window.setTimeout(function() { // In a timeout as file.has_error may not have been set yet
+			if ((typeof file.has_error=='undefined') || (!file.has_error))
+				dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name,files.length);
+		} ,0);
 
 		if (ob.settings.page_type.indexOf('_multi')==-1) break;
 	}
 
 	window.setTimeout(function() {
-		fireFakeChangeFor(name,'1');
+		fireFakeChangeFor(name,'1'); // Will trigger start
 	},0 );
 }
 
@@ -5378,8 +5387,11 @@ function uploadProgress(ob,file) {
 	if (percent == 100) return;
 
 	var progress = new FileProgress(file, ob.settings.progress_target);
-	progress.setProgress(percent);
-	progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+	if (!progress.completed) // In case it reflects progress after completion, which can happen
+	{
+		progress.setProgress(percent);
+		progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+	}
 }
 
 function uploadSuccess(ob,file,data) {
@@ -5388,7 +5400,23 @@ function uploadSuccess(ob,file,data) {
 	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
 
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
-	btnSubmit.disabled = false;
+
+	var all_done=true;
+	var form=document.getElementById(ob.settings.txtName).form;
+	for (var i=0;i<form.elements.length;i++)
+	{
+		if ((typeof form.elements[i].swfob!='undefined') && (form.elements[i].swfob.total.percent<100) && (form.elements[i].swfob.total.size!=0))
+			all_done=false;
+	}
+	if (all_done)
+	{
+		for (var i=0;i<form.elements.length;i++)
+			if ((form.elements[i].type=='submit') || (form.elements[i].type=='button') || (form.elements[i].type=='image') || (form.elements[i].nodeName.toLowerCase()=='button'))
+			{
+				form.elements[i].disabled=false;
+				form.elements[i].style.cursor='default';
+			}
+	}
 
 	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
 	if (clearBtn) clearBtn.style.display='inline';
@@ -5409,12 +5437,16 @@ function uploadSuccess(ob,file,data) {
 	{+END}
 	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
-	if ((typeof ob.submitting!='undefined') && (ob.submitting))
+	if ((typeof ob.submitting!='undefined') && (ob.submitting) && (all_done))
 	{
 		window.form_submitting=btnSubmit.form; // For IE
 		if (typeof ob.originalClickHandler!='undefined')
 		{
-			ob.originalClickHandler(null,ob,btnSubmit.form);
+			if (ob.originalClickHandler(null,ob,btnSubmit.form,true))
+			{
+				btnSubmit.form.submit();
+				return true;
+			}
 		} else
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return;
@@ -5426,6 +5458,8 @@ function uploadSuccess(ob,file,data) {
 function uploadError(ob,error) {
 	var file=error.file?error.file:ob.files[ob.files.length-1];
 	if (typeof file=='undefined') file=null;
+
+	file.has_error=true;
 
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setError();
@@ -5533,8 +5567,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		filenameField.setAttribute('id','txtFileName_'+name);
 		filenameField.setAttribute('type','text');
 		filenameField.value='';
-		filenameField.className='top_vertical_alignment button_micro';
 		filenameField.name='txtFileName_'+name;
+		filenameField.className='upload_response_field';
 		filenameField.disabled=true;
 		subdiv.appendChild(filenameField);
 	}
@@ -5652,7 +5686,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var uploadButton=document.createElement('input');
 		uploadButton.type='button';
 		uploadButton.value='{!BROWSE;}';
-		uploadButton.className='top_vertical_alignment button_micro';
+		uploadButton.className='upload_button button_micro';
 		uploadButton.id='uploadButton_'+name;
 		uploadButton.onclick=function() { return false; };
 		subdiv.appendChild(uploadButton,rep);
@@ -5814,10 +5848,9 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	newClearBtn.id='fsClear_'+name;
 	//newClearBtn.type='image';
 	newClearBtn.type='button';
-	newClearBtn.className='button_micro';
+	newClearBtn.className='button_micro clear_button';
 	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
-	newClearBtn.style.verticalAlign='top';
 	newClearBtn.alt='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD;^} {+END}{!CLEAR;^}';
 	newClearBtn.value='{!CLEAR;^}';
 	subdiv.appendChild(newClearBtn);
@@ -5849,7 +5882,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 // targetID is the HTML element id attribute that the FileProgress HTML structure will be added to.
 // Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
 function FileProgress(file, targetID) {
-	this.fileProgressID = 'progress_'+(file && typeof file.id=='undefined')?('not_inited_'+targetID):file.id;
+	this.fileProgressID = 'progress_'+((!file || typeof file.id=='undefined')?('not_inited_'+targetID):file.id);
 
 	this.opacity = 100;
 	this.height = 0;
@@ -5889,11 +5922,15 @@ function FileProgress(file, targetID) {
 		this.fileProgressWrapper.appendChild(this.fileProgressElement);
 
 		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+
+		this.fileProgressElement.completed = false;
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
 		if (file && typeof file.name!='undefined')
 			set_inner_html(this.fileProgressElement.childNodes[1],file.name);
 	}
+
+	this.completed = this.fileProgressElement.completed;
 
 	this.height = this.fileProgressWrapper.offsetHeight;
 
@@ -5908,11 +5945,8 @@ FileProgress.prototype.setComplete = function () {
 	this.fileProgressElement.className = "progressContainer blue";
 	this.fileProgressElement.childNodes[3].className = "progressBarComplete";
 	this.fileProgressElement.childNodes[3].style.width = "";
-
-	var oSelf = this;
-	setTimeout(function () {
-		oSelf.disappear();
-	}, 10000);
+	this.completed = true;
+	this.fileProgressElement.completed = this.completed;
 };
 FileProgress.prototype.setError = function () {
 	this.appear();
@@ -6228,14 +6262,18 @@ function html5_upload(event,field_name,files)
 		hidfileid.name='hidFileID_file'+window.extraAttachmentBase;
 		hidfileid.id=hidfileid.name;
 		hidfileid.value='-1';
+
+		/* HTML field to show selected file */
 		document.getElementById('container_for_'+field_name).appendChild(hidfileid);
 		var hidfilename=document.createElement('input');
 		hidfilename.type='hidden';
 		hidfilename.name='txtFileName_file'+window.extraAttachmentBase;
 		hidfilename.id=hidfilename.name;
 		hidfilename.value=file.name;
+		hidfilename.className='upload_response_field';
 		document.getElementById('container_for_'+field_name).appendChild(hidfilename);
 
+		/* Progress bar */
 		var progress = new FileProgress(fileUpload.fileProgress, 'container_for_'+field_name);
 		progress.setProgress(0);
 		progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
