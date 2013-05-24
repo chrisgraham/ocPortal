@@ -5411,11 +5411,13 @@ function uploadSuccess(ob,file,data) {
 	if (all_done)
 	{
 		for (var i=0;i<form.elements.length;i++)
+		{
 			if ((form.elements[i].type=='submit') || (form.elements[i].type=='button') || (form.elements[i].type=='image') || (form.elements[i].nodeName.toLowerCase()=='button'))
 			{
 				form.elements[i].disabled=false;
 				form.elements[i].style.cursor='default';
 			}
+		}
 	}
 
 	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
