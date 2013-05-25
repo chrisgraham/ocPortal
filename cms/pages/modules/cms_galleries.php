@@ -192,7 +192,7 @@ class Module_cms_galleries extends standard_aed_module
 		$member_id=get_param_integer('id',-1);
 		if ($member_id==-1)
 		{
-			$condition='only_conventional_galleries';
+			$condition=mixed();
 			$member_id=NULL;
 		}
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_gimp'),'_SELF',NULL,false,true);
@@ -200,7 +200,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$fields=new ocp_tempcode();
 
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,''));
+		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,''));
 
 		$submit_name=do_lang_tempcode('GALLERY_IMPORT');
 

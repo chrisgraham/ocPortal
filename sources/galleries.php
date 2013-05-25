@@ -351,6 +351,20 @@ function only_conventional_galleries($cat)
 }
 
 /**
+ * See whether a gallery accepts some media (designed as a filter).
+ *
+ * @param  ID_TEXT		The gallery name
+ * @return boolean		Whether the gallery accepts some media
+ */
+function only_galleries_accepting_media($cat)
+{
+	$_gallery_info=$GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos'),array('name'=>$cat),'',1);
+	if (!array_key_exists(0,$_gallery_info)) return false;
+	$gallery_info=$_gallery_info[0];
+	return ($gallery_info['accept_images']==1 || $gallery_info['accept_videos']==1);
+}
+
+/**
  * See whether the GET parameter 'id' is of a gallery that is a member gallery of the given member gallery container, or just a normal gallery.
  *
  * @param  ID_TEXT		The gallery name
