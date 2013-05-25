@@ -498,11 +498,13 @@ class forum_driver_ocf extends forum_driver_base
 	 * Get a URL to the specified member's home (control panel).
 	 *
 	 * @param  MEMBER			The member id
+	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
 	 * @return URLPATH		The URL to the members home
 	 */
-	function member_home_url($id)
+	function member_home_url($id,$tempcode_okay=false)
 	{
 		$_url=build_url(array('page'=>'members','type'=>'view','id'=>$id),get_module_zone('members'),NULL,false,false,false,'tab__edit');
+		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;
@@ -536,20 +538,6 @@ class forum_driver_ocf extends forum_driver_base
 	}
 
 	/**
-	 * Get a URL to the specified member's profile, from the username.
-	 *
-	 * @param  SHORT_TEXT	The username
-	 * @return URLPATH		The URL to the member profile
-	 */
-	function member_profile_url_name($name)
-	{
-		$_url=build_url(array('page'=>'members','type'=>'view','id'=>$this->get_member_from_username($name)));
-		$url=$_url->evaluate();
-		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
-		return $url;
-	}
-
-	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
 	 * @return URLPATH		The URL to the registration page
@@ -572,11 +560,13 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get a URL to the members-online page.
 	 *
+	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_members_url()
+	function _online_members_url($tempcode_okay=false)
 	{
 		$_url=build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers'));
+		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;
@@ -586,11 +576,13 @@ class forum_driver_ocf extends forum_driver_base
 	 * Get a URL to send a private/personal message to the given member.
 	 *
 	 * @param  MEMBER			The member id
+	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
-	function _member_pm_url($id)
+	function _member_pm_url($id,$tempcode_okay=false)
 	{
 		$_url=build_url(array('page'=>'topics','type'=>'new_pt','id'=>$id),get_module_zone('topics'),NULL,false,false,true);
+		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;

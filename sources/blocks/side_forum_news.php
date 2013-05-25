@@ -104,7 +104,7 @@ class Block_side_forum_news
 				$forum_ids[$forum_id]=$forum_name;
 				if (is_null($archive_url))
 				{
-					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id); // First forum will count as archive
+					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id,true); // First forum will count as archive
 					if (get_forum_type()=='ocf')
 					{
 						$submit_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$forum_id),get_module_zone('topics'));
@@ -131,7 +131,7 @@ class Block_side_forum_news
 
 				foreach ($topics as $topic)
 				{
-					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name);
+					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name,true);
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key],false);
 	//				$username=$topic['lastusername'];

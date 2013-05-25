@@ -47,7 +47,7 @@ class Hook_checklist_reported_posts
 			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID'=>'f578142633c6f3d37776e82a869deb91'));
 		}
 
-		$url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id);
+		$url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id,true);
 
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'9ee69e250c997730a3670ed77d681e5f','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('REPORTED_POSTS_FORUM'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
 		return array(array($tpl,NULL,$outstanding,NULL));

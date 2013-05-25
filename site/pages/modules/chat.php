@@ -479,7 +479,7 @@ class Module_chat
 			$post_url_add_friend=new ocp_tempcode();
 			$post_url_remove_friends=new ocp_tempcode();
 		}
-		$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
+		$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url(true);
 		$can_im=has_specific_permission(get_member(),'start_im');
 		$friends=array();
 		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);

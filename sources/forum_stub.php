@@ -116,12 +116,14 @@ class forum_driver_base
 	/**
 	 * Get a URL to a forum 'user online' list.
 	 *
+	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL
 	 */
-	function online_members_url()
+	function online_members_url($tempcode_okay=false)
 	{
-		$url=$this->_online_members_url();
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
+		$url=$this->_online_members_url($tempcode_okay);
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
+			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
 
@@ -129,12 +131,14 @@ class forum_driver_base
 	 * Get a URL to send a forum member a PM.
 	 *
 	 * @param  MEMBER			The forum member
+	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL
 	 */
-	function member_pm_url($id)
+	function member_pm_url($id,$tempcode_okay=false)
 	{
-		$url=$this->_member_pm_url($id);
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
+		$url=$this->_member_pm_url($id,$tempcode_okay);
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
+			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
 

@@ -804,7 +804,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	if (($post!='') && ($forum_tie) && (!$no_success_message))
 	{
 		require_code('site2');
-		assign_refresh($GLOBALS['FORUM_DRIVER']->topic_url($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$content_type.'_'.$content_id),$forum),0.0);
+		assign_refresh($GLOBALS['FORUM_DRIVER']->topic_url($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$content_type.'_'.$content_id),$forum,true),0.0);
 	}
 
 	if (($post!='') && (!$no_success_message)) attach_message(do_lang_tempcode('SUCCESS'));

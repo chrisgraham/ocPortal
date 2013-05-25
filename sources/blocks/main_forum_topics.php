@@ -167,7 +167,7 @@ class Block_main_forum_topics
 					if (array_key_exists($topic['id'],$seen)) continue;
 					$seen[$topic['id']]=1;
 
-					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name);
+					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name,true);
 					$topic_url_unread=mixed();
 					if (get_forum_type()=='ocf')
 					{

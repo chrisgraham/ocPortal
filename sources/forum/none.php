@@ -386,25 +386,6 @@ class forum_driver_none extends forum_driver_base
 	}
 
 	/**
-	 * Get a URL to the specified member's profile, from the username.
-	 *
-	 * @param  SHORT_TEXT	The username
-	 * @return URLPATH		The URL to the member profile
-	 */
-	function member_profile_url_name($name)
-	{
-		if (!addon_installed('authors')) return get_base_url();
-
-		if ((addon_installed('staff')) || (!addon_installed('authors')))
-		{
-			$url=build_url(array('page'=>'staff','id'=>$name),get_module_zone('staff'));
-			return $url->evaluate();
-		}
-		$url=build_url(array('page'=>'authors','id'=>$name),get_module_zone('authors'),NULL,false,false,true);
-		return $url->evaluate();
-	}
-
-	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
 	 * @return URLPATH		The URL to the registration page

@@ -104,7 +104,7 @@ class Block_bottom_forum_news
 
 				foreach ($topics as $topic)
 				{
-					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name);
+					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name,true);
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key],false);
 	//				$username=$topic['lastusername'];

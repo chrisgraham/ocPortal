@@ -103,7 +103,7 @@ class Block_main_forum_news
 				$forum_ids[$forum_id]=$forum_name;
 				if (is_null($archive_url))
 				{
-					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id); // First forum will count as archive
+					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id,true); // First forum will count as archive
 					if (get_forum_type()=='ocf')
 					{
 						$submit_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$forum_id),get_module_zone('topics'));
@@ -148,7 +148,7 @@ class Block_main_forum_news
 			$news_title=$myrow['title'];
 			$news=is_object($myrow['firstpost'])?$myrow['firstpost']:make_string_tempcode(xhtmlise_html($myrow['firstpost']));
 			if (is_null($news)) $news='';
-			$full_url=$GLOBALS['FORUM_DRIVER']->topic_url($id,'');
+			$full_url=$GLOBALS['FORUM_DRIVER']->topic_url($id,'',true);
 			$news_text->attach(do_template('NEWS_BOX',array('_GUID'=>'2edf18daf5510495fd588cad062aec4e','TRUNCATE'=>false,'BLOG'=>false,'FIRSTTIME'=>strval($myrow['firsttime']),'LASTTIME'=>strval($myrow['lasttime']),'CLOSED'=>strval($myrow['closed']),'FIRSTUSERNAME'=>$myrow['firstusername'],'LASTUSERNAME'=>$myrow['lastusername'],'FIRSTMEMBERID'=>strval($myrow['firstmemberid']),'LASTMEMBERID'=>strval($myrow['lastmemberid']),'ID'=>strval($id),'FULL_URL'=>$full_url,'SUBMITTER'=>strval($myrow['firstmemberid']),'DATE'=>$date,'DATE_RAW'=>strval($myrow[$date_key]),'NEWS_TITLE'=>$news_title,'CATEGORY'=>'','IMG'=>'','AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news)));
 
 			$i++;

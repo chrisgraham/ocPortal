@@ -145,7 +145,7 @@ class Module_supermembers
 				$author_url=build_url(array('page'=>'authors','type'=>'misc','id'=>$name),get_module_zone('authors'));
 			} else $author_url=new ocp_tempcode();
 			$points_url=addon_installed('points')?build_url(array('page'=>'points','type'=>'member','id'=>$id),get_module_zone('points')):new ocp_tempcode();
-			$pm_url=$GLOBALS['FORUM_DRIVER']->member_pm_url($id);
+			$pm_url=$GLOBALS['FORUM_DRIVER']->member_pm_url($id,true);
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 
 			// Template
