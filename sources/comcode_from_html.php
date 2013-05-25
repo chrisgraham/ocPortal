@@ -292,13 +292,10 @@ function semihtml_to_comcode($semihtml,$force=false)
 	$semihtml=str_replace('<!-- >','',$semihtml);
 	$semihtml=preg_replace('#<span id="cke_bm_[^"]+" style="display: none;\s*">&nbsp;</span>#','',$semihtml);
 
-	require_code('xhtml');
-	$semihtml=xhtmlise_html($semihtml,true); // Needed so we can parse it right
-
 	$semihtml=preg_replace('#(\[[\w\_]+)&nbsp;#','${1} ',$semihtml);
 
 	$matches=array();
-	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((substr_count($semihtml,'://')<=preg_match_all('#(href|src)="[^"]*://[^"]*"#',$semihtml,$matches)) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
+	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((substr_count($semihtml,'://')<=preg_match_all('#(codebase="[^"]*://[^"]*"|data="[^"]*://[^"]*"|action="[^"]*://[^"]*"|href="[^"]*://[^"]*"|src="[^"]*://[^"]*"|url\([^\)]*://[^\)]*\))#',$semihtml,$matches)) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
 		$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU','_img_tag_fixup_raw',$semihtml); // Resolve relative URLs
 		$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*)>#siU','_img_tag_fixup_raw',$semihtml); // Resolve relative URLs
@@ -326,6 +323,9 @@ function semihtml_to_comcode($semihtml,$force=false)
 		$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#Us','[title]${1}[/title]',$semihtml);
 		return $semihtml;
 	}
+
+	require_code('xhtml');
+	$semihtml=xhtmlise_html($semihtml,true); // Needed so we can parse it right
 
 	// Safety from if these are typed in (could cause problems)
 	$semihtml=str_replace('[html'.($force?']':''),$force?'':'[ html',$semihtml);

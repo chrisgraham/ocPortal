@@ -201,6 +201,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 	// Our state
 	$status=CCP_NO_MANS_LAND;
 	$lax=$GLOBALS['LAX_COMCODE']; // if we don't want to produce errors for technically invalid Comcode
+	if ((!$lax) && (substr($comcode,0,10)=='[semihtml]')) $lax=true;
 	$tag_stack=array();
 	$pos=0;
 	$line_starting=true;
@@ -631,12 +632,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											$p_portion=substr($comcode,$pos+$p_len,$p_end-($pos+$p_len));
 											require_code('tempcode_compiler');
 											$ret=template_to_tempcode(substr($comcode,$pos-1,$p_len+1).'{DIRECTIVE_EMBEDMENT}'.substr($comcode,$p_end,6));
-											$attaches_before=count($COMCODE_ATTACHMENTS[$pass_id]);
 											$ret->singular_bind('DIRECTIVE_EMBEDMENT',comcode_text_to_tempcode($p_portion,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-											for ($attach_inspect=$attaches_before;$attach_inspect<count($COMCODE_ATTACHMENTS[$pass_id]);$attach_inspect++)
-											{
-												$COMCODE_ATTACHMENTS[$pass_id][$attach_inspect]['marker']+=$pos+$p_len;
-											}
 											$pos=$p_end+6;
 										}
 										elseif ($comcode[$pos]=='!')
@@ -913,12 +909,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													{
 														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array('_GUID'=>'90be72fcbb6b9d8a312da0bee5b86cb3','WIDTH'=>array_key_exists($to_float,$ratios)?$ratios[$to_float]:'','FLOAT'=>$i_dir_1,'PADDING'=>($to_float==1)?'':'-left','PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2.0)/2.0),2))));
 													}
-													$attaches_before=count($COMCODE_ATTACHMENTS[$pass_id]);
 													$tag_output->attach(comcode_text_to_tempcode(isset($cells[$to_float])?rtrim($cells[$to_float]):'',$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-													for ($attach_inspect=$attaches_before;$attach_inspect<count($COMCODE_ATTACHMENTS[$pass_id]);$attach_inspect++)
-													{
-														$COMCODE_ATTACHMENTS[$pass_id][$attach_inspect]['marker']+=strpos($comcode,$cells[$to_float],$pos);
-													}
 													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
 													// Do non-floated ones
 													$cell_i=0;
@@ -935,12 +926,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 																{
 																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array('_GUID'=>'0f15f9d5554635ed7ac154c9dc5c72b8','WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'','FLOAT'=>$i_dir_1,'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'','PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2))));
 																}
-																$attaches_before=count($COMCODE_ATTACHMENTS[$pass_id]);
 																$tag_output->attach(comcode_text_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-																for ($attach_inspect=$attaches_before;$attach_inspect<count($COMCODE_ATTACHMENTS[$pass_id]);$attach_inspect++)
-																{
-																	$COMCODE_ATTACHMENTS[$pass_id][$attach_inspect]['marker']+=strpos($comcode,$cell,$pos);
-																}
 																$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
 															}
 															$cell_i++;
@@ -992,12 +978,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 															$c_type=(strpos($cell,'!')!==false)?'th':'td';
 														} else
 														{
-															$attaches_before=count($COMCODE_ATTACHMENTS[$pass_id]);
 															$_mid=comcode_text_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
-															for ($attach_inspect=$attaches_before;$attach_inspect<count($COMCODE_ATTACHMENTS[$pass_id]);$attach_inspect++)
-															{
-																$COMCODE_ATTACHMENTS[$pass_id][$attach_inspect]['marker']+=strpos($comcode,$cell,$pos);
-															}
 															$tag_output->attach(do_template('COMCODE_REAL_TABLE_CELL',array('_GUID'=>'6640df8b503f65e3d36f595b0acf7600','WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'','C_TYPE'=>$c_type,'MID'=>$_mid,'PADDING'=>($cell_i==0)?'':'-left','PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(5.0/(floatval(count($cells)-2)/2.0),2))));
 															$cell_i++;
 														}
