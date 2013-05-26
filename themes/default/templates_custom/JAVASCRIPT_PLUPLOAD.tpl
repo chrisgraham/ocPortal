@@ -5357,8 +5357,6 @@ function fileDialogComplete(ob,files) {
 		txtFileName.value+=file.name.replace(/:/g,',');
 		name=ob.settings.txtName;
 		dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name);
-
-		if (ob.page_type!='upload_multi') break;
 	}
 
 	window.setTimeout(function() {
@@ -5442,8 +5440,13 @@ function uploadError(ob,error) {
 
 function queueChanged(ob)
 {
-	if ((ob.settings.page_type!='upload_multi') && (ob.files.length>1))
-		ob.splice(0,ob.files.length-1);
+	if (ob.settings.page_type!='upload_multi') // In case widget has multi selection even though we disabled it
+	{
+		for (var i=1;i<ob.files.length;i++)
+		{
+			ob.removeFile(ob.files[i]);
+		}
+	}
 }
 
 function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
@@ -5707,6 +5710,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		required: rep.className.indexOf('required')!=-1,
 		posting_field_name: posting_field_name,
 		progress_target : "fsUploadProgress_"+name,
+		multi_selection: (page_type=='upload_multi'),
 
 		// General settings
 		runtimes : 'html5,silverlight,flash,gears,browserplus',

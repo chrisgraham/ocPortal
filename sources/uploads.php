@@ -83,12 +83,14 @@ function is_swf_upload($fake_prepopulation=false)
 							$swfupload=true;
 							if ($fake_prepopulation)
 							{
-								$_FILES[preg_replace('#(\_)?1$#','${1}'.strval($i+1),substr($key,10))]=array(
+								$new_key=preg_replace('#(\_)?1$#','${1}'.strval($i+1),substr($key,10));
+								$_FILES[$new_key]=array(
 									'type'=>'swfupload',
 									'name'=>$incoming_uploads_row[0]['i_orig_filename'],
 									'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],
 									'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'])
 								);
+								$_POST['hidFileID_'.$new_key]=strval($incoming_uploads_id);
 							}
 						}
 					}
