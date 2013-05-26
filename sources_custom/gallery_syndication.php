@@ -33,7 +33,7 @@ function init__gallery_syndication()
 		add_config_option('VIDEO_SYNC_TRANSCODING','video_sync_transcoding','special','return \''.addslashes(do_lang('SYND_LOCAL',NULL,NULL,NULL,fallback_lang())).'\';','FEATURE','GALLERY_SYNDICATION');
 	}
 
-	restrictify();
+	if (function_exists('restrictify')) restrictify();
 }
 
 function sync_video_syndication($local_id=NULL,$new_upload=false,$reupload=false,$consider_deferring=false)
