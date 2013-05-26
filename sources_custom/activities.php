@@ -299,7 +299,6 @@ function render_activity($row,$use_inside_ocp=true)
 	{
 		$label[$i]=comcode_to_tempcode($row['a_label_'.strval($i)],$guest_id,false,NULL);
 		$link[$i]=($row['a_pagelink_'.strval($i)]=='')?new ocp_tempcode():pagelink_to_tempcode($row['a_pagelink_'.strval($i)],!$use_inside_ocp);
-
 		if (($row['a_pagelink_'.strval($i)]!='') && (strpos($test,'{'.strval($i+3).'}')===false))
 		{
 			$label[$i]=hyperlink($link[$i],$label[$i]->evaluate());
@@ -309,9 +308,9 @@ function render_activity($row,$use_inside_ocp=true)
 	// Render primary language string
 	$extra_lang_string_params=array(
 		$label[3],
-		escape_html($link[1]->evaluate()),
-		escape_html($link[2]->evaluate()),
-		escape_html($link[3]->evaluate())
+		symbol_tempcode('ESCAPE',array($link[1])),
+		symbol_tempcode('ESCAPE',array($link[2])),
+		symbol_tempcode('ESCAPE',array($link[3]))
 	);
 	if (!is_null($row['a_also_involving']))
 	{
@@ -319,10 +318,10 @@ function render_activity($row,$use_inside_ocp=true)
 		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['a_also_involving'],false,$use_inside_ocp);
 		$hyperlink=hyperlink($url,$_username,false,true);
 
-		$extra_lang_string_params[]=static_evaluate_tempcode($hyperlink);
+		$extra_lang_string_params[]=$hyperlink;
 	} else
 	{
-		$extra_lang_string_params[]=do_lang('GUEST');
+		$extra_lang_string_params[]=do_lang_tempcode('GUEST');
 	}
 	$message->attach(do_lang_tempcode($row['a_language_string_code'],
 		$label[1],

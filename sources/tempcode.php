@@ -170,7 +170,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 	else $_name=$name;
 
 	$myfunc='do_runtime_'.uniqid('',true)/*fast_uniqid()*/;
-	$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
+	$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
 
 	$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
 	if ($type==TC_LANGUAGE_REFERENCE) $ret->pure_lang=true;
