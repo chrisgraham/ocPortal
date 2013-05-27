@@ -364,6 +364,7 @@ class Module_cms_galleries extends standard_aed_module
 			}
 		}
 
+		$i=time();
 		foreach ($_FILES as $attach_name=>$__file)
 		{
 			$tmp_name=$__file['tmp_name'];
@@ -382,8 +383,24 @@ class Module_cms_galleries extends standard_aed_module
 					$myfile=zip_open($tmp_name);
 					if (!is_integer($myfile))
 					{
+						$directory=array();
 						while (false!==($entry=zip_read($myfile)))
 						{
+							// Strip off our slash to gimp right
+							$_file=zip_entry_name($entry);
+							$slash=strrpos($_file,'/');
+							if ($slash===false) $slash=strrpos($_file,"\\");
+							if ($slash!==false) $_file=substr($_file,$slash+1);
+
+							$directory[]=array('path'=>$_file,'resource'=>$entry);
+						}
+						$this->_sort_media($directory);
+
+						foreach ($directory as $d)
+						{
+							$entry=$d['resource'];
+							$_file=$d['path'];
+
 							// Load in file
 							zip_entry_open($myfile,$entry);
 							$tmp_name_2=ocp_tempnam('bi');
@@ -400,13 +417,11 @@ class Module_cms_galleries extends standard_aed_module
 							while (($more!==false) && ($more!=''));
 							fclose($myfile2);
 
-							// Strip off our slash to gimp right
-							$_file=zip_entry_name($entry);
-							$slash=strrpos($_file,'/');
-							if ($slash===false) $slash=strrpos($_file,"\\");
-							if ($slash!==false) $_file=substr($_file,$slash+1);
-
-							if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$tmp_name_2,$cat);
+							if ((is_image($_file)) || (is_video($_file)))
+							{
+								$this->store_from_archive($_file,$tmp_name_2,$cat,$i);
+								$i++;
+							}
 
 							zip_entry_close($entry);
 						}
@@ -424,25 +439,7 @@ class Module_cms_galleries extends standard_aed_module
 					if ($myfile!==false)
 					{
 						$directory=tar_get_directory($myfile);
-
-						// See if there is a numbering system to sort by
-						$all_are=NULL;
-						foreach ($directory as $entry)
-						{
-							$this_are=strtolower(preg_replace('#\d#','',$entry['path']));
-							if (is_null($all_are)) $all_are=$this_are;
-							if ($all_are!=$this_are)
-							{
-								$all_are=NULL;
-								break;
-							}
-						}
-						if (!is_null($all_are))
-						{
-							global $M_SORT_KEY;
-							$M_SORT_KEY='path';
-							usort($directory,'multi_sort');
-						}
+						$this->_sort_media($directory);
 
 						foreach ($directory as $entry)
 						{
@@ -457,7 +454,11 @@ class Module_cms_galleries extends standard_aed_module
 							if ($slash===false) $slash=strrpos($_file,"\\");
 							if ($slash!==false) $_file=substr($_file,$slash+1);
 
-							if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$tmp_name_2,$cat);
+							if ((is_image($_file)) || (is_video($_file)))
+							{
+								$this->store_from_archive($_file,$tmp_name_2,$cat,$i);
+								$i++;
+							}
 							unset($_in);
 						}
 
@@ -477,7 +478,8 @@ class Module_cms_galleries extends standard_aed_module
 							$test=@copy($tmp_name,$tmp_name_2); // We could rename, but it would hurt integrity of refreshes
 						}
 
-						$this->store_from_archive($file,$tmp_name_2,$cat);
+						$this->store_from_archive($file,$tmp_name_2,$cat,$i);
+						$i++;
 					} else
 					{
 						attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'),'warn');
@@ -496,6 +498,35 @@ class Module_cms_galleries extends standard_aed_module
 		}
 
 		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
+	}
+
+	/**
+	 * Sort a directory of gallery media being imported.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function _sort_media(&$directory)
+	{
+		// See if there is a numbering system to sort by
+		$all_are=NULL;
+		foreach ($directory as $entry)
+		{
+			$this_are=strtolower(preg_replace('#\d#','',$entry['path']));
+			if (is_null($all_are)) $all_are=$this_are;
+			if ($all_are!=$this_are)
+			{
+				$all_are=NULL;
+				break;
+			}
+		}
+		if (!is_null($all_are))
+		{
+			global $M_SORT_KEY;
+			$M_SORT_KEY='path';
+			usort($directory,'multi_sort');
+		}
+
+		$directory=array_reverse($directory);
 	}
 
 	/**
@@ -579,8 +610,9 @@ class Module_cms_galleries extends standard_aed_module
 	 * @param  string		The filename
 	 * @param  PATH		Path to data file (will be copied from)
 	 * @param  ID_TEXT	The gallery to add to
+	 * @param  ?TIME		Timestamp to use (NULL: now)
 	 */
-	function store_from_archive($file,&$in,$cat)
+	function store_from_archive($file,&$in,$cat,$time=NULL)
 	{
 		// Find where to store on server
 		//  Hunt with sensible names until we don't get a conflict
@@ -612,7 +644,7 @@ class Module_cms_galleries extends standard_aed_module
 		$thumb_url='uploads/galleries_thumbs'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.rawurlencode($_file_thumb);
 
 		// Add to database
-		$this->simple_add($aurl,$thumb_url,$_file,$cat);
+		$this->simple_add($aurl,$thumb_url,$_file,$cat,$time);
 	}
 
 	/**
@@ -690,10 +722,13 @@ class Module_cms_galleries extends standard_aed_module
 	 * @param  URLPATH	The thumb URL to the file
 	 * @param  string		The filename
 	 * @param  ID_TEXT	The gallery to add to
+	 * @param  ?TIME		Timestamp to use (NULL: now)
 	 */
-	function simple_add($url,$thumb_url,$file,$cat)
+	function simple_add($url,$thumb_url,$file,$cat,$time=NULL)
 	{
 		require_code('exif');
+
+		if (is_null($time)) $time=time();
 
 		if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
 		if (is_video($url))
@@ -706,7 +741,7 @@ class Module_cms_galleries extends standard_aed_module
 				if (is_null($height)) $height=100;
 				if (is_null($length)) $length=0;
 				$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
-				$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height);
+				$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height,NULL,$time);
 				store_exif('video',strval($id),$exif);
 
 				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
@@ -737,7 +772,7 @@ class Module_cms_galleries extends standard_aed_module
 					}
 				}
 
-				$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
+				$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),NULL,$time);
 				store_exif('image',strval($id),$exif);
 
 				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
