@@ -40,9 +40,9 @@ function sync_video_syndication($local_id=NULL,$new_upload=false,$reupload=false
 {
 	$orphaned_handling=intval(get_option('gallery_sync_orphaned_handling'));
 
+	$num_local_videos=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');
 	if (is_null($local_id)) // If being asked to do a full sync
 	{
-		$num_local_videos=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');
 		if ($num_local_videos>1000)
 		{
 			return; // Too much, we won't do complex two-way syncs
@@ -51,7 +51,7 @@ function sync_video_syndication($local_id=NULL,$new_upload=false,$reupload=false
 
 	$local_videos=get_local_videos($local_id);
 
-	if (($consider_deferring) && (cron_installed()) && (!is_null($local_id)) && (count($local_videos)==1))
+	if ((($consider_deferring) || ($num_local_videos>1000)) && (cron_installed()) && (!is_null($local_id)) && (count($local_videos)==1))
 	{
 		foreach ($local_videos as $local_video)
 		{
@@ -69,7 +69,7 @@ function sync_video_syndication($local_id=NULL,$new_upload=false,$reupload=false
 				't_output_filename'=>'',
 			),false,true);
 		}
-		return;
+		if ($consider_deferring) return;
 	}
 
 	$hooks=find_all_hooks('modules','video_syndication');

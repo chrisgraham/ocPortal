@@ -254,7 +254,7 @@ class video_syndication_vimeo
 			require_lang('gallery_syndication_vimeo');
 			$error_msg=do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
 			require_code('failure');
-			relay_error_notification($error_msg);
+			relay_error_notification($error_msg->evaluate());
 			attach_message($error_msg,'warn');
 			return NULL;
 		}
@@ -330,7 +330,7 @@ class video_syndication_vimeo
 				require_lang('gallery_syndication_vimeo');
 				$error_msg=do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
 				require_code('failure');
-				relay_error_notification($error_msg);
+				relay_error_notification($error_msg->evaluate());
 				attach_message($error_msg,'warn');
 			}
 		}
@@ -348,7 +348,7 @@ class video_syndication_vimeo
 			require_lang('gallery_syndication_vimeo');
 			$error_msg=do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
 			require_code('failure');
-			relay_error_notification($error_msg);
+			relay_error_notification($error_msg->evaluate());
 			attach_message($error_msg,'warn');
 			return false;
 		}
@@ -366,7 +366,7 @@ class video_syndication_vimeo
 			require_lang('gallery_syndication_vimeo');
 			$error_msg=do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
 			require_code('failure');
-			relay_error_notification($error_msg);
+			relay_error_notification($error_msg->evaluate());
 			attach_message($error_msg,'warn');
 			return false;
 		}
@@ -384,7 +384,7 @@ class video_syndication_vimeo
 			require_lang('gallery_syndication_vimeo');
 			$error_msg=do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
 			require_code('failure');
-			relay_error_notification($error_msg);
+			relay_error_notification($error_msg->evaluate());
 			attach_message($error_msg,'warn');
 			return false;
 		}
