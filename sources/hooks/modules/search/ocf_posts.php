@@ -179,7 +179,7 @@ class Hook_search_ocf_posts
 		{
 			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
 		}
-		$url=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id'],true),$row['t_cache_first_title']);
+		$url=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id'],'',true),$row['t_cache_first_title']);
 		$title=do_lang_tempcode('FORUM_POST_SEARCH_RESULT',escape_html(strval($row['id'])),$poster,array(escape_html($date),$url));
 
 		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'84ac17a5855ceed1c47c5d3ef6cf4f3d','TITLE'=>$title,'SUMMARY'=>$tpl));
