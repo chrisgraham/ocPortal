@@ -107,7 +107,14 @@ class video_syndication_vimeo
 				$query_params['video_id']=preg_replace('#^vimeo_#','',$transcoding_id);
 				$api_method='vimeo.videos.getInfo';
 
-				$p=$this->_vimeo_ob->call($api_method,$query_params);
+				try
+				{
+					$p=$this->_vimeo_ob->call($api_method,$query_params);
+				}
+				catch (VimeoAPIException $e)
+				{
+					$p=false;
+				}
 				if ($p===false) break;
 
 				$detected_video=$this->_process_remote_video($p->video[0]);
