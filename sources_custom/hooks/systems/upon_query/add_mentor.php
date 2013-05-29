@@ -22,11 +22,6 @@ class upon_query_add_mentor
 		{
 			load_user_stuff();
 			if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
-			global $FORCE_INVISIBLE_GUEST,$MEMBER_CACHED, $SESSION_CACHE;
-			$FORCE_INVISIBLE_GUEST=false;
-			$MEMBER_CACHED=NULL;
-
-			if(!isset($SESSION_CACHE) || !is_array($SESSION_CACHE)) $SESSION_CACHE=array();
 
 			$mentor_usergroup=get_option('mentor_usergroup',true);
 			if (is_null($mentor_usergroup)) return;
@@ -42,18 +37,16 @@ class upon_query_add_mentor
 
 			require_lang('ocbestbuddy');
 
-			$mentor_usergroup_id=0; //0 ?
-
+			$mentor_usergroup_id=mixed();
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			foreach($groups as $group_id=>$group)
+			foreach ($groups as $group_id=>$group)
 			{
-				if($group==$mentor_usergroup) $mentor_usergroup_id=$group_id;
+				if ($group==$mentor_usergroup) $mentor_usergroup_id=$group_id;
 			}
+			if ($mentor_usergroup_id===NULL) return;
 
-			$random_mentor=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (g.gm_member_id=m.id AND gm_validated=1) WHERE gm_group_id='.strval($mentor_usergroup_id).' OR m_primary_group='.strval($mentor_usergroup_id).' ORDER BY RAND( ) LIMIT 1',NULL, NULL,true);
-
-			$mentor_id=(isset($random_mentor[0]['id']) && !is_null($random_mentor[0]['id']))?$random_mentor[0]['id']:0;
-			if ($mentor_id==0) return;
+			$mentor_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (g.gm_member_id=m.id AND gm_validated=1) WHERE gm_group_id='.strval($mentor_usergroup_id).' OR m_primary_group='.strval($mentor_usergroup_id).' ORDER BY RAND( ) LIMIT 1',NULL, NULL,true);
+			if ($mentor_id===NULL) return;
 			$member_id=$ret;
 			$time=time();
 

@@ -441,7 +441,7 @@ class Module_wiki
 		if (!has_category_access(get_member(),'wiki_page',strval($page['id']))) access_denied('CATEGORY_ACCESS');
 
 		// Views
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
 			$page['wiki_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('wiki_pages'))

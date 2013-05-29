@@ -237,7 +237,7 @@ class Module_iotds
 		);
 
 		// Views
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
 			$myrow['iotd_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('iotd'))

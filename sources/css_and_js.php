@@ -317,7 +317,7 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
  */
 function js_minify($js)
 {
-	if (strpos($js,'no minify')!==false) return $js;
+	if (strpos($js,'no minify')!==false) return str_replace('/*no minify*/','',$js);
 
 	require_code('jsmin');
 

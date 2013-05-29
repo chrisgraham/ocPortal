@@ -595,7 +595,7 @@ class Module_galleries
 		}
 
 		// Views
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
 			$myrow['gallery_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('galleries'))
@@ -1131,7 +1131,7 @@ class Module_galleries
 		seo_meta_load_for('image',strval($id));
 
 		// Views
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
 			$myrow['image_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('images'))
@@ -1293,7 +1293,7 @@ class Module_galleries
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
 		// Views
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
 			$myrow['video_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('videos'))

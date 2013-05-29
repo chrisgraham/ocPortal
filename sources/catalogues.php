@@ -796,7 +796,7 @@ function catalogue_entries_manual_sort($fields,&$entries,$order_by,$direction)
  * @param  ID_TEXT		The template set we are rendering this category using
  * @param  ?AUTO_LINK	The virtual root for display of this category (NULL: none)
  * @param  ?array			The database rows for the fields for this catalogue (NULL: find them)
- * @param  ?array			A list of fields that we are limiting ourselves to (NULL: get ALL fields)
+ * @param  ?array			A list of fields (sequence numbers) that we are limiting ourselves to (NULL: get ALL fields)
  * @param  boolean		Whether to grab the feedback details
  * @param  boolean		Whether to grab the breadcrumbs details
  * @param  ?integer		Field index to order by (NULL: none)
@@ -829,8 +829,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$map['FIELDS_GRID']=new ocp_tempcode();
 	$map['FIELDS_TABULAR']=new ocp_tempcode();
 	$map['fields']=$fields;
-	$fields_1d=array();
-	$fields_2d=array();
+	//$fields_1d=array();
+	//$fields_2d=array();
 
 	// Loop over all fields
 	foreach ($fields as $i=>$field)
@@ -871,57 +871,76 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 				$map['_FIELD_'.strval($field['id']).'_THUMB']=$map['FIELD_'.strval($i).'_THUMB'];
 			}
 
-			// Different ways of accessing the main field value, and pure version of it
-			$map['FIELD_'.strval($i)]=$use_ev;
-			$map['_FIELD_'.strval($field['id'])]=$use_ev;
-			$map['FIELD_'.strval($i).'_PLAIN']=$ev;
-			$map['_FIELD_'.strval($field['id']).'_PLAIN']=$ev;
-			if (isset($field['effective_value_pure']))
-			{
-				$map['FIELD_'.strval($i).'_PURE']=$field['effective_value_pure'];
-				$map['_FIELD_'.strval($field['id']).'_PURE']=$field['effective_value_pure'];
-			}
-			$field_name=get_translated_text($field['cf_name']);
-			$map['FIELDNAME_'.strval($i)]=$field_name;
-			$fields_2d[]=array('NAME'=>$field_name,'VALUE'=>$use_ev);
-			$field_type=$field['cf_type'];
-			$map['FIELDTYPE_'.strval($i)]=$field_type;
-
 			// If the field should be shown, show it
 			if (($view_type=='PAGE') || (($field['cf_put_in_category']==1) && ($view_type=='CATEGORY')) || (($field['cf_put_in_search']==1) && ($view_type=='SEARCH')))
 			{
-				$use_ev_enhanced=$use_ev;
+				// Different ways of accessing the main field value, and pure version of it
+				$map['FIELD_'.strval($i)]=$use_ev;
+				$map['_FIELD_'.strval($field['id'])]=&$map['FIELD_'.strval($i)];
+				if ($use_ev===$ev)
+				{
+					$map['FIELD_'.strval($i).'_PLAIN']=&$map['FIELD_'.strval($i)];
+				} else
+				{
+					$map['FIELD_'.strval($i).'_PLAIN']=$ev;
+				}
+				$map['_FIELD_'.strval($field['id']).'_PLAIN']=&$map['FIELD_'.strval($i).'_PLAIN'];
+				if (isset($field['effective_value_pure']))
+				{
+					if ($ev===$field['effective_value_pure'])
+					{
+						$map['FIELD_'.strval($i).'_PURE']=&$map['FIELD_'.strval($i).'_PLAIN'];
+					} else
+					{
+						$map['FIELD_'.strval($i).'_PURE']=$field['effective_value_pure'];
+					}
+					$map['_FIELD_'.strval($field['id']).'_PURE']=&$map['FIELD_'.strval($i).'_PURE'];
+				}
+				$field_name=get_translated_text($field['cf_name']);
+				//$map['FIELDNAME_'.strval($i)]=$field_name;
+				//$fields_2d[]=array('NAME'=>$field_name,'VALUE'=>$use_ev);
+				$field_type=$field['cf_type'];
+				//$map['FIELDTYPE_'.strval($i)]=$field_type;
 
 				if (($field['cf_visible']==1) || ($i==0))
 				{
 					if ((get_value('no_catalogue_field_assembly')!=='1') || (!$feedback_details/*no feedback details implies wants all field data*/))
 					{
-						$f=array('ENTRYID'=>strval($id),'CATALOGUE'=>$catalogue_name,'TYPE'=>$field['cf_type'],'FIELD'=>$field_name,'FIELDID'=>strval($i),'_FIELDID'=>strval($field['id']),'FIELDTYPE'=>$field_type,'VALUE_PLAIN'=>$ev,'VALUE'=>$use_ev_enhanced);
-						if ((get_value('no_catalogue_field_assembly_fieldmaps')!=='1') || (!$feedback_details/*no feedback details implies wants all field data*/))
+						$f=array('ENTRYID'=>strval($id),'CATALOGUE'=>$catalogue_name,'TYPE'=>$field['cf_type'],'FIELD'=>$field_name,'FIELDID'=>strval($i),'_FIELDID'=>strval($field['id']),'FIELDTYPE'=>$field_type,'VALUE_PLAIN'=>$ev,'VALUE'=>$use_ev);
+						if (get_value('no_catalogue_field_assembly_fieldmaps__'.$catalogue['c_name'])!=='1')
 						{
-							$_field=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
-							$map['FIELDS']->attach($_field);
+							if ((get_value('no_catalogue_field_assembly_fieldmaps')!=='1') || (!$feedback_details/*no feedback details implies wants all field data [as is a category view]*/))
+							{
+								$_field=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
+								$map['FIELDS']->attach($_field);
+							}
 						}
-						if (get_value('no_catalogue_field_assembly_grid')!=='1')
+						if (get_value('no_catalogue_field_assembly_grid__'.$catalogue['c_name'])!=='1')
 						{
-							$_field=do_template('CATALOGUE_'.$tpl_set.'_GRID_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_GRID_ENTRY_FIELD');
-							$map['FIELDS_GRID']->attach($_field);
+							if (get_value('no_catalogue_field_assembly_grid')!=='1')
+							{
+								$_field=do_template('CATALOGUE_'.$tpl_set.'_GRID_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_GRID_ENTRY_FIELD');
+								$map['FIELDS_GRID']->attach($_field);
+							}
 						}
-						if (get_value('no_catalogue_field_assembly_tabular')!=='1')
+						if (get_value('no_catalogue_field_assembly_tabular__'.$catalogue['c_name'])!=='1')
 						{
-							$_field=do_template('CATALOGUE_'.$tpl_set.'_TABULAR_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD');
-							$map['FIELDS_TABULAR']->attach($_field);
+							if (get_value('no_catalogue_field_assembly_tabular')!=='1')
+							{
+								$_field=do_template('CATALOGUE_'.$tpl_set.'_TABULAR_ENTRY_FIELD',$f,NULL,false,'CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD');
+								$map['FIELDS_TABULAR']->attach($_field);
+							}
 						}
 					}
 				}
 			} else $all_visible=false;
 
-			$fields_1d[]=$field;
+			//$fields_1d[]=$field;
 		}
 		if (!(($field['cf_visible']==1) || ($i==0) || ($order_by===$i))) $all_visible=false;
 	}
-	$map['FIELDS_1D']=$fields_1d;
-	$map['FIELDS_2D']=$fields_2d;
+	//$map['FIELDS_1D']=$fields_1d;
+	//$map['FIELDS_2D']=$fields_2d;
 
 	// Admin functions
 	if ((has_actual_page_access(NULL,'cms_catalogues',NULL,NULL)) && (has_edit_permission('mid',get_member(),$entry['ce_submitter'],'cms_catalogues',array('catalogues_catalogue',$catalogue_name)+((get_value('disable_cat_cat_perms')!=='1')?array('catalogues_category',$entry['cc_id']):array()))))
@@ -1650,7 +1669,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
 	$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$tpl_set,$root,NULL,NULL,true,true);
 
-	if (get_db_type()!='xml')
+	if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 	{
 		$entry['ce_views']++;
 		if (!$GLOBALS['SITE_DB']->table_is_locked('catalogue_entries'))

@@ -408,6 +408,10 @@ function already_rated($rating_for_types,$content_id)
 	if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test',0)==1))
 		return false;
 
+	static $cache=array();
+	$cache_key=serialize(array($rating_for_types,$content_id));
+	if (isset($cache[$cache_key])) return $cache[$cache_key];
+
 	$more=(!is_guest())?' OR rating_member='.strval(get_member()):'';
 	$for_types='';
 	foreach ($rating_for_types as $rating_for_type)
@@ -427,7 +431,9 @@ function already_rated($rating_for_types,$content_id)
 	$query.=$more.')';
 	$has_rated=$GLOBALS['SITE_DB']->query_value_if_there($query,false,true);
 
-	return ($has_rated>=count($rating_for_types));
+	$ret=($has_rated>=count($rating_for_types));
+	$cache[$cache_key]=$ret;
+	return $ret;
 }
 
 /**

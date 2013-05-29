@@ -43,6 +43,7 @@ function init__facebook_connect()
 	if (is_null($appsecret)) return;
 	$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 
+	require_javascript('javascript_facebook');
 	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
 }
 

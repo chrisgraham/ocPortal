@@ -1321,18 +1321,12 @@ class Module_cms_catalogues extends standard_crud_module
 				if (is_null($entry_row)) $entry_row=array();
 				if (isset($entry_row[0])) $entry_row=$entry_row[0];
 
-				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'PAGE','DEFAULT',NULL);
+				$details=get_catalogue_entry_field_values($catalogue_name,$entry_row);
 
 				$better_results=array();
-				foreach ($details as $key=>$val)
+				foreach ($details as $i=>$val)
 				{
-					if (substr($key,0,10)=='FIELDNAME_')
-					{
-						$value=$details['FIELD_'.substr($key,10).'_PLAIN'];
-						if (is_object($value))
-							$value=$value->evaluate();
-						$better_results[$val]=$value;
-					}
+					$better_results[get_translated_text($fields[$i]['cf_name'])]=$val['effective_value_pure'];
 				}
 
 				if (!isset($category_names[$entry_row['cc_id']]))

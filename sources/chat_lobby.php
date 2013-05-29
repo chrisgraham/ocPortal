@@ -67,7 +67,6 @@ function show_im_contacts($member_id=NULL,$simpler=false,$max=15)
 	$friends_online=array();
 	$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>$member_id),'ORDER BY date_and_time',300);
 	$friend_active=get_chatters_in_room(NULL);
-	global $SESSION_CACHE;
 	$users_online_time_seconds=CHAT_ACTIVITY_PRUNE;
 	foreach ($friend_rows as $friend)
 	{

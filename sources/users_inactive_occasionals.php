@@ -89,9 +89,7 @@ function _enforce_sessioned_url($url)
  */
 function create_session($member,$session_confirmed=0,$invisible=false)
 {
-	global $SESSION_CACHE;
-
-	global $MEMBER_CACHED;
+	global $SESSION_CACHE,$MEMBER_CACHED;
 	$MEMBER_CACHED=$member;
 
 	if (($invisible) && (get_option('is_on_invisibility')=='0')) $invisible=false;

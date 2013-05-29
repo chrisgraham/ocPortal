@@ -228,10 +228,13 @@ if ($type=='go')
 				{
 					if (filemtime(get_file_base().'/'.$file)>$cutoff_point)
 					{
-						if (($probe_dir=='') || (@file_get_contents($probe_dir.'/'.$file)!==file_get_contents(get_file_base().'/'.$file)))
+						$old=@file_get_contents($probe_dir.'/'.$file);
+						if ($old===false) $old='';
+						$new=file_get_contents(get_file_base().'/'.$file);
+						if (($probe_dir=='') || ($old!==$new))
 						{
 							$new_filename=$file;
-							if ((preg_match('#^(lang)\_custom/#',$file)!=0) && (($probe_dir=='') || (file_exists($probe_dir.'/'.$file))))
+							if (((preg_match('#^(lang)\_custom/#',$file)!=0) || (strpos($old,'CUSTOMISED FOR PROJECT')===false)) && (($probe_dir=='') || ($old!='')))
 								$new_filename.='.quarantine';
 							if (!isset($done[$new_filename]))
 							{

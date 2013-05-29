@@ -50,7 +50,7 @@
 
 		{$,Show markers}
 		var markers=[];
-		for (var i=0; i < data.length; i++)
+		for (var i=0;i<data.length;i++)
 		{
 			add_data_point(data[i],bounds,markers,info_window,map);
 		}

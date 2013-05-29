@@ -59,8 +59,6 @@ function restricted_manually_enabled_backdoor()
  */
 function handle_active_login($username)
 {
-	global $SESSION_CACHE;
-
 	$result=array();
 
 	$member_cookie_name=get_member_cookie();

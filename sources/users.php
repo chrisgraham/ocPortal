@@ -430,9 +430,12 @@ function delete_expired_sessions_or_recover($member=NULL)
 
 	$ip=get_ip_address(3);
 
-	// Delete expired sessions
-	if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
+	// Delete expired sessions; it's important we do this routinely, not randomly, as the session table is loaded up and can get large -- unless we aren't tracking online users, in which case the table is never loaded up
+	if ((get_value('disable_user_online_counting')!=='1') || (get_value('session_prudence')!=='1') || (mt_rand(0,1000)==123))
+	{
+		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
+	}
 
 	// Look through sessions
 	$new_session=NULL;

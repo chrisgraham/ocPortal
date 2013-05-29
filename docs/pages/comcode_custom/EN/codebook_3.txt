@@ -232,7 +232,7 @@ The values you might want to manually change are:
   - [tt]use_true_from[/tt] -- set this to '1' if you want ocPortal to send emails 'from' the user that triggered the message, rather than the website. Usually it is set to 'from' the server to avoid problems with spam filters and uses the true sender address as the 'reply from' address. It is not recommended you turn this on, although it does aid usability if you know the recipient is not using SPF in their spam filter.
   - [tt]disable_feedback[/tt] -- set this to '1' to disable the feedback features (comments, ratings, etc)
   - [tt]no_auto_meta[/tt] -- set this to '1' if you don't want SEO keywords/description to be auto-generated from content
-  - [tt]session_prudence[/tt] -- set this to '1' if new guests from the same IP address as an existing session should be reinitiated with that session, and that sessions should not be saved to the persistent cache. This is useful to improve performance slightly if the site is under very high load from non-cookie-supporting bots yet doesn't have eCommerce features that rely on tight session reliability
+  - [tt]session_prudence[/tt] -- set this to '1' if you experience too many simultaneous sessions to reasonable enumerate (e.g. if you get thousands of unique guests within a matter of minutes)
   - [tt]allow_own_rate[/tt] -- set this to '1' if members should be allowed to rate their own content
  - *
   - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order
@@ -298,6 +298,11 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_tech_login_messages[/tt] -- set to '1' if you don't want technical explanations attaching when a user is forced to login
  - [tt]http_faux_loopback[/tt] -- a regular expression of URLs that may be accessed via direct filesystem reading rather than HTTP loopback. Be very careful with this, as it could seriously harm security. It can improve performance however. Some poor web hosts may also require it (we've only seen one though). It does support PHP scripts, which are given special treatment, via passing through the [tt]php-cgi[/tt] interpreter (file uploads and POST requests not supported). Set via a command such as: [code]:set_value('http_faux_loopback','^'.preg_quote(get_base_url(),'#').'.*\.(php|jpg|jpeg|png|gif|htm|html|ico|txt|css|js|cur|tar|gz|mp3|mp4|m4v|mpg|mpeg|pdf|svg|swf|ttf|woff|wav|zip|xsd|xsl|xml|webm)\??');[/code]
  - [tt]cc_sort_date__<catalogue-name>[/tt] -- set this to '1' if you want catalogue category children to be sorted by date rather than title.
+ - [tt]no_view_counts[/tt] -- set this to '1' if you don't want view counts to be maintained (reduces database writes). You will probably want to disable the normal "Reveal usage figures" option too, to hide all the zero counts.
+ - [tt]avoid_normal_topic_history[/tt] -- set this to '1' if you don't want topic-read history to be maintained for things other than private topics.
+ - [tt]no_member_tracking[/tt] -- set this to '1' if you want to disable the member tracking feature where it's supported (it shows who is viewing a forum topic, for example)
+ - [tt]min_lastvisit_frequency[/tt] -- set this to the number of seconds waited between the last-visit time being updated (performance tweak, minimises database writes)
+ - [tt]no_flood_control[/tt] -- set this to '1' if you will not have flood control
 
 [title="3"]Hidden 'keep' parameters[/title]
 

@@ -49,8 +49,11 @@ class Hook_block
 		}
 
 		// Cleanup
-		if (!$GLOBALS['SITE_DB']->table_is_locked('temp_block_permissions'))
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'temp_block_permissions WHERE p_time<'.strval(60*60*intval(get_option('session_expiry_time'))));
+		if (mt_rand(0,1000)==123)
+		{
+			if (!$GLOBALS['SITE_DB']->table_is_locked('temp_block_permissions'))
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'temp_block_permissions WHERE p_time<'.strval(60*60*intval(get_option('session_expiry_time'))));
+		}
 
 		// We need to minimise the dependency stuff that comes out, we don't need any default values
 		push_output_state(false,true);

@@ -1367,7 +1367,6 @@ class forum_driver_ocf extends forum_driver_base
 		$last=$this->get_member_row_field($id,$restrict_setting);
 		if ($last>time()) $last=time()-$restrict_answer; // Weird clock problem
 		$wait_time=$restrict_answer-time()+$last;
-
 		if (($wait_time>0) && (addon_installed('stats')))
 		{
 			require_code('site');
@@ -1411,7 +1410,9 @@ class forum_driver_ocf extends forum_driver_base
 				$dif*=$num_guests;
 			} else $restrict_answer=0;
 		}
-		if (($submitting) || ((count($_POST)==0) && ($dif>$wait_time)))
+		$_min_lastvisit_frequency=get_value('min_lastvisit_frequency');
+		if (is_null($_min_lastvisit_frequency)) $min_lastvisit_frequency=0; else $min_lastvisit_frequency=intval($_min_lastvisit_frequency);
+		if (($submitting) || ((count($_POST)==0) && ($dif>$wait_time/*don't want a flood control message to itself bump the last-visit time*/) && ($dif>$min_lastvisit_frequency)))
 		{
 			if (($restrict_answer!=0) || ($dif>180) || ($new_visit))
 			{
@@ -1421,7 +1422,10 @@ class forum_driver_ocf extends forum_driver_base
 				if (get_ip_address()!=$old_ip) $change_map['m_ip_address']=get_ip_address();
 
 				if (get_db_type()!='xml')
-					$this->connection->query_update('f_members',$change_map+$extra,array('id'=>$id),'',1,NULL,false,true);
+				{
+					if (!$GLOBALS['SITE_DB']->table_is_locked('f_members'))
+						$this->connection->query_update('f_members',$change_map+$extra,array('id'=>$id),'',1,NULL,false,true);
+				}
 			}
 		}
 	}

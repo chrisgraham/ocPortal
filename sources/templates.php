@@ -107,7 +107,36 @@ function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_onlin
 	if (function_exists('get_session_id'))
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
-			$GLOBALS['SITE_DB']->query_update('sessions',array('the_title'=>is_null($user_online_title)?substr($_title->evaluate(),0,255):$user_online_title->evaluate(),'the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'last_activity'=>time(),'the_id'=>substr(get_param('id','',true),0,80)),array('the_session'=>get_session_id()),'',1,NULL,false,true);
+		{
+			$change_map=array(
+				'last_activity'=>time(),
+			);
+			if (get_value('no_member_tracking')==='1')
+			{
+				$change_map+=array(
+					'the_title'=>'',
+					'the_zone'=>'',
+					'the_page'=>'',
+					'the_type'=>'',
+					'the_id'=>'',
+				);
+			} else
+			{
+				$change_map+=array(
+					'the_title'=>is_null($user_online_title)?substr($_title->evaluate(),0,255):$user_online_title->evaluate(),
+					'the_zone'=>get_zone_name(),
+					'the_page'=>substr(get_page_name(),0,80),
+					'the_type'=>substr(get_param('type','',true),0,80),
+					'the_id'=>substr(get_param('id','',true),0,80),
+				);
+			}
+			$session_id=get_session_id();
+			global $SESSION_CACHE;
+			if ((get_value('disable_user_online_counting')!=='1') || (get_value('session_prudence')!=='1') || (!isset($SESSION_CACHE[$session_id])) || ($SESSION_CACHE[$session_id]['last_activity']<time()-60*60*5))
+			{
+				$GLOBALS['SITE_DB']->query_update('sessions',$change_map,array('the_session'=>$session_id),'',1,NULL,false,true);
+			}
+		}
 	}
 
 	global $DISPLAYED_TITLE;

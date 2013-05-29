@@ -800,8 +800,12 @@ function float_format($val,$frac_digits=2)
  */
 function integer_format($val)
 {
-	$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
-	if ($locale['thousands_sep']=='') $locale['thousands_sep']=',';
+	static $locale=NULL;
+	if ($locale===NULL)
+	{
+		$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
+		if ($locale['thousands_sep']=='') $locale['thousands_sep']=',';
+	}
 	return number_format($val,0,$locale['decimal_point'],$locale['thousands_sep']);
 }
 
@@ -1614,6 +1618,8 @@ function remove_duplicate_rows($rows,$id_field='id')
  */
 function member_tracking_update()
 {
+	if (get_value('no_member_tracking')==='1') return;
+
 	global $ZONE;
 	$page=get_param('page',$ZONE['zone_default_page']);
 	$type=get_param('type','/');
@@ -1641,10 +1647,12 @@ function member_tracking_update()
  * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
  * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
  * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-ids to rows about them (NULL: Too many)
+ * @return ?array			A map of member-ids to rows about them (NULL: Too many / disabled)
  */
 function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 {
+	if (get_value('no_member_tracking')==='1') return NULL;
+
 	// Update the member tracking
 	member_tracking_update();
 
@@ -1683,16 +1691,7 @@ function is_invisible()
 {
 	global $SESSION_CACHE;
 	$s=get_session_id();
-	foreach ($SESSION_CACHE as $row)
-	{
-		if (!array_key_exists('member_id',$row)) continue; // Workaround to HipHop PHP weird bug
-
-		if (($row['the_session']==$s) && ($row['session_invisible']==1))
-		{
-			return true;
-		}
-	}
-	return false;
+	return ((isset($SESSION_CACHE[$s])) && ($SESSION_CACHE[$s]['session_invisible']==1));
 }
 
 /**

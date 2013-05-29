@@ -275,6 +275,7 @@ class Hook_addon_registry_core
 			'sources/activities.php',
 			'sources/crypt.php',
 			'JOIN_OR_LOGIN.tpl',
+			'JS_BLOCK.tpl',
 			'JAVASCRIPT.tpl',
 			'JAVASCRIPT_AJAX.tpl',
 			'JAVASCRIPT_NEED.tpl',
@@ -888,8 +889,11 @@ class Hook_addon_registry_core
 			'LOGIN_SCREEN.tpl'=>'login_screen',
 			'LOGIN_REDIRECT_SCREEN.tpl'=>'login_redirect_screen',
 			'FORUMS_EMBED.tpl'=>'forums_embed',
+			'JS_BLOCK.tpl'=>'js_block',
 			'JAVASCRIPT_NEED_INLINE.tpl'=>'javascript_need_inline',
 			'CSS_NEED_INLINE.tpl'=>'css_need_inline',
+			'JAVASCRIPT_NEED.tpl'=>'javascript_need',
+			'CSS_NEED.tpl'=>'css_need',
 			'FATAL_SCREEN.tpl'=>'administrative__fatal_screen',
 			'STACK_TRACE_LINE.tpl'=>'administrative__stack_trace_hyper_wrap',
 			'STACK_TRACE_WRAP.tpl'=>'administrative__stack_trace_hyper_wrap',
@@ -897,8 +901,6 @@ class Hook_addon_registry_core
 			'INLINE_WIP_MESSAGE.tpl'=>'inline_wip_message',
 			'MISSING_SCREEN.tpl'=>'missing_screen',
 			'PARAM_INFO.tpl'=>'param_info',
-			'JAVASCRIPT_NEED.tpl'=>'javascript_need',
-			'CSS_NEED.tpl'=>'css_need',
 			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LINK.tpl'=>'block_side_personal_stats',
@@ -1125,6 +1127,22 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('FORUMS_EMBED', array(
 				'FORUMS'=>placeholder_url()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__js_block()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('JS_BLOCK', array(
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}

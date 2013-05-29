@@ -7,6 +7,10 @@
 
 */
 
+/*
+CUSTOMISED FOR PROJECT: DO NOT OVERWRITE WITH A NEWER ADDON VERSION
+*/
+
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -45,33 +49,33 @@ class Block_main_google_map
 		require_lang('google_map');
 
 		// Set up config/defaults
-		if (!array_key_exists('title',$map)) $map['title']='';
-		if (!array_key_exists('region',$map)) $map['region']='';
-		if (!array_key_exists('latitude',$map)) $map['latitude']='0';
-		if (!array_key_exists('longitude',$map)) $map['longitude']='0';
-		$mapwidth=array_key_exists('width',$map)?$map['width']:'100%';
-		$mapheight=array_key_exists('height',$map)?$map['height']:'300px';
-		$api_key=array_key_exists('api_key',$map)?$map['api_key']:'';
-		$set_zoom=array_key_exists('zoom',$map)?$map['zoom']:'3';
-		$set_center=array_key_exists('center',$map)?$map['center']:'0';
-		$set_show_links=array_key_exists('show_links',$map)?$map['show_links']:'1';
-		$cluster=array_key_exists('cluster',$map)?$map['cluster']:'0';
-		if (!array_key_exists('catalogue',$map)) $map['catalogue']='';
-		if (!array_key_exists('longfield',$map)) $map['longfield']='Longitude';
-		if (!array_key_exists('latfield',$map)) $map['latfield']='Latitude';
-		$min_latitude=array_key_exists('min_latitude',$map)?$map['min_latitude']:'';
-		$max_latitude=array_key_exists('max_latitude',$map)?$map['max_latitude']:'';
-		$min_longitude=array_key_exists('min_longitude',$map)?$map['min_longitude']:'';
-		$max_longitude=array_key_exists('max_longitude',$map)?$map['max_longitude']:'';
+		if (!isset($map['title'])) $map['title']='';
+		if (!isset($map['region'])) $map['region']='';
+		if (!isset($map['latitude'])) $map['latitude']='0';
+		if (!isset($map['longitude'])) $map['longitude']='0';
+		$mapwidth=isset($map['width'])?$map['width']:'100%';
+		$mapheight=isset($map['height'])?$map['height']:'300px';
+		$api_key=isset($map['api_key'])?$map['api_key']:'';
+		$set_zoom=isset($map['zoom'])?$map['zoom']:'3';
+		$set_center=isset($map['center'])?$map['center']:'0';
+		$set_show_links=isset($map['show_links'])?$map['show_links']:'1';
+		$cluster=isset($map['cluster'])?$map['cluster']:'0';
+		if (!isset($map['catalogue'])) $map['catalogue']='';
+		if (!isset($map['longfield'])) $map['longfield']='Longitude';
+		if (!isset($map['latfield'])) $map['latfield']='Latitude';
+		$min_latitude=isset($map['min_latitude'])?$map['min_latitude']:'';
+		$max_latitude=isset($map['max_latitude'])?$map['max_latitude']:'';
+		$min_longitude=isset($map['min_longitude'])?$map['min_longitude']:'';
+		$max_longitude=isset($map['max_longitude'])?$map['max_longitude']:'';
 		$longitude_key=$map['longfield'];
 		$latitude_key=$map['latfield'];
 		$catalogue_name=$map['catalogue'];
-		$star_entry=array_key_exists('star_entry',$map)?$map['star_entry']:'';
-		$max_results=((array_key_exists('max_results',$map)) && ($map['max_results']!=''))?intval($map['max_results']):300;
-		$icon=array_key_exists('icon',$map)?$map['icon']:'';
-		if (!array_key_exists('filter',$map)) $map['filter']='';
-		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
-		$guid=array_key_exists('guid',$map)?$map['guid']:'';
+		$star_entry=isset($map['star_entry'])?$map['star_entry']:'';
+		$max_results=((isset($map['max_results'])) && ($map['max_results']!=''))?intval($map['max_results']):300;
+		$icon=isset($map['icon'])?$map['icon']:'';
+		if (!isset($map['filter'])) $map['filter']='';
+		$ocselect=isset($map['ocselect'])?$map['ocselect']:'';
+		$guid=isset($map['guid'])?$map['guid']:'';
 
 		$data=array();
 
@@ -87,7 +91,7 @@ class Block_main_google_map
 			$catalogue_row=$catalogue_rows[0];
 		}
 
-		$hooks_to_use=explode('|',array_key_exists('extra_sources',$map)?$map['extra_sources']:'');
+		$hooks_to_use=explode('|',isset($map['extra_sources'])?$map['extra_sources']:'');
 		$hooks=find_all_hooks('blocks','main_google_map');
 		$entries_to_load=array();
 		foreach (array_keys($hooks) as $hook)
@@ -157,46 +161,55 @@ class Block_main_google_map
 				//return paragraph(do_lang_tempcode('NO_ENTRIES'),'','nothing_here');
 			}
 
+			// Find long/lat fields
+			global $CAT_FIELDS_CACHE;
+			if (isset($CAT_FIELDS_CACHE[$catalogue_name]))
+			{
+				$fields=$CAT_FIELDS_CACHE[$catalogue_name];
+			} else
+			{
+				$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+			}
+			$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
+			$_latitude_key=0;
+			$_longitude_key=0;
+			foreach ($fields as $field)
+			{
+				if (get_translated_text($field['cf_name'])==$latitude_key)
+					$_latitude_key='_FIELD_'.strval($field['id']);
+				if (get_translated_text($field['cf_name'])==$longitude_key)
+					$_longitude_key='_FIELD_'.strval($field['id']);
+			}
+
+			$has_guid=(isset($map['guid']) && $map['guid']!='');
+			$star_entry_int=intval($star_entry);
+
 			// Make marker data Javascript-friendly
 			foreach ($entries_to_show as $i=>$entry_row)
 			{
-				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL);
+				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL/*,$only_fields*/);
 
-				$two_d_list=$details['FIELDS_2D'];
-
-				$longitude=NULL;
-				$latitude=NULL;
-				$entry_title='';
-				foreach ($two_d_list as $index=>$l)
-				{
-					if ($l['NAME']==$longitude_key) $longitude=$l['VALUE'];
-					if ($l['NAME']==$latitude_key) $latitude=$l['VALUE'];
-					if ($index==0) $entry_title=$l['VALUE'];
-				}
-				if (is_object($longitude)) $longitude=$longitude->evaluate();
+				$latitude=$details[$_latitude_key];
+				$longitude=$details[$_longitude_key];
 				if (is_object($latitude)) $latitude=$latitude->evaluate();
-				if (is_object($entry_title)) $entry_title=$entry_title->evaluate();
+				if (is_object($longitude)) $longitude=$longitude->evaluate();
 
-				if ((is_numeric($longitude)) && (is_numeric($latitude)))
+				if ((is_numeric($latitude)) && (is_numeric($longitude)))
 				{
-					$details['LONGITUDE']=float_to_raw_string(floatval($longitude),10);
-					$details['LATITUDE']=float_to_raw_string(floatval($latitude),10);
+					$details['LATITUDE']=$latitude;
+					$details['LONGITUDE']=$longitude;
 
+					$entry_title=$details['FIELD_0'];
+					if (is_object($entry_title)) $entry_title=$entry_title->evaluate();
 					$details['ENTRY_TITLE']=$entry_title;
-					if (isset($map['guid']) && $map['guid']!='') $details['_GUID']=$map['guid'];
+
+					if ($has_guid) $details['_GUID']=$map['guid'];
 
 					$entry_content=do_template('CATALOGUE_googlemap_FIELDMAP_ENTRY_WRAP',$details+array('GIVE_CONTEXT'=>false),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 					$details['ENTRY_CONTENT']=$entry_content;
 
-					$details['STAR']='0';
-					if ($star_entry!='')
-					{
-						if (($entry_row['id']==intval($star_entry)))
-							$details['STAR']='1';
-					}
-
+					$details['STAR']=(($entry_row['id']==$star_entry_int))?'1':'0';
 					$details['CC_ID']=strval($entry_row['cc_id']);
-
 					$details['ICON']='';
 
 					$data[]=$details;

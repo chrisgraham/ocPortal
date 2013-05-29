@@ -1586,7 +1586,7 @@ class Module_calendar
 		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));
 
 		// Views
-		if (get_db_type()!='xml')
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
 			$event['e_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('calendar_events'))

@@ -1355,16 +1355,25 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in tempcode.php
 					{
-						$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
-						foreach ($param as $key=>$val)
+						$param_2=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
+						foreach ($param_2 as $key=>$val)
 						{
-							$param[$key]=str_replace('\,',',',$val);
+							$param_2[$key]=str_replace('\,',',',$val);
 						}
+					} else
+					{
+						$param_2=$param;
 					}
 
-					global $BLOCKS_CACHE;
-					if (isset($BLOCKS_CACHE[serialize($param)])) // Will always be set
-						$value=$BLOCKS_CACHE[serialize($param)]->evaluate();
+					if (in_array('defer=1',$param_2))
+					{
+						$value=static_evaluate_tempcode(do_template('JS_BLOCK',array('BLOCK_PARAMS'=>implode(',',$param_2))));
+					} else
+					{
+						global $BLOCKS_CACHE;
+						if (isset($BLOCKS_CACHE[serialize($param_2)])) // Will always be set
+							$value=$BLOCKS_CACHE[serialize($param_2)]->evaluate();
+					}
 				}
 				break;
 

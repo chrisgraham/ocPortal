@@ -759,48 +759,54 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
-			global $BLOCKS_CACHE;
-			if (isset($BLOCKS_CACHE[serialize($param)]))
+			if (in_array('defer=1',$param))
 			{
-				$REQUEST_BLOCK_NEST_LEVEL--;
-				return;
-			}
-
-			$block_parms=array();
-			foreach ($param as $_param)
+				// Nothing has to be done here
+			} else
 			{
-				$block_parts=explode('=',$_param,2);
-				if (!isset($block_parts[1]))
+				global $BLOCKS_CACHE;
+				if (isset($BLOCKS_CACHE[serialize($param)]))
 				{
-					$BLOCKS_CACHE[serialize($param)]=make_string_tempcode(do_lang('INTERNAL_ERROR').' (bad block parameter: '.escape_html($_param).')');
+					$REQUEST_BLOCK_NEST_LEVEL--;
 					return;
 				}
-				list($key,$val)=$block_parts;
-				$block_parms[$key]=$val;
-			}
 
-			if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading']=='1'))
-			{
-				$before=memory_get_usage();
-			}
-			$b_value=do_block($block_parms['block'],$block_parms);
-			if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading']=='1'))
-			{
-				require_code('files');
-				@ob_end_flush();
-				@ob_end_flush();
-				@ob_end_flush();
-				print('<!-- block: '.htmlentities($block_parms['block']).' ('.clean_file_size(memory_get_usage()-$before).' bytes used, now at '.integer_format(memory_get_usage()).') -->'."\n");
-				flush();
-			}
+				$block_parms=array();
+				foreach ($param as $_param)
+				{
+					$block_parts=explode('=',$_param,2);
+					if (!isset($block_parts[1]))
+					{
+						$BLOCKS_CACHE[serialize($param)]=make_string_tempcode(do_lang('INTERNAL_ERROR').' (bad block parameter: '.escape_html($_param).')');
+						return;
+					}
+					list($key,$val)=$block_parts;
+					$block_parms[$key]=$val;
+				}
 
-			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
-			{
-				$children[]=array(':block: '.$block_parms['block'],array(array($b_value->codename,isset($b_value->children)?$b_value->children:array(),isset($b_value->fresh)?$b_value->fresh:false)),true);
-			}
-			$b_value->handle_symbol_preprocessing();
+				if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading']=='1'))
+				{
+					$before=memory_get_usage();
+				}
+				$b_value=do_block($block_parms['block'],$block_parms);
+				if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading']=='1'))
+				{
+					require_code('files');
+					@ob_end_flush();
+					@ob_end_flush();
+					@ob_end_flush();
+					print('<!-- block: '.htmlentities($block_parms['block']).' ('.clean_file_size(memory_get_usage()-$before).' bytes used, now at '.integer_format(memory_get_usage()).') -->'."\n");
+					flush();
+				}
 
-			$BLOCKS_CACHE[serialize($param)]=$b_value;
+				if ($GLOBALS['RECORD_TEMPLATES_TREE'])
+				{
+					$children[]=array(':block: '.$block_parms['block'],array(array($b_value->codename,isset($b_value->children)?$b_value->children:array(),isset($b_value->fresh)?$b_value->fresh:false)),true);
+				}
+				$b_value->handle_symbol_preprocessing();
+
+				$BLOCKS_CACHE[serialize($param)]=$b_value;
+			}
 
 			$REQUEST_BLOCK_NEST_LEVEL--;
 

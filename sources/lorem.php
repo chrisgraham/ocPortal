@@ -886,6 +886,7 @@ function render_screen_preview($template,$hook,$function)
 function get_text_templates()
 {
 	$text_templates=array(
+		'JS_BLOCK',
 		'CSS_NEED',
 		'CSS_NEED_FULL',
 		'CSS_NEED_INLINE',

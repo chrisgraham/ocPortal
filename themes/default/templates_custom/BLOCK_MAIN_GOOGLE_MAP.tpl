@@ -56,7 +56,7 @@
 			{+END}
 		{+END}
 		var bound_by_contents=(bound_length==0);
-		for (var i=0; i < data.length; i++)
+		for (var i=0;i<data.length;i++)
 		{
 			latLng=new google.maps.LatLng(data[i][1],data[i][2]);
 			if (bound_by_contents)
