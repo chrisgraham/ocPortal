@@ -106,8 +106,17 @@ class Block_main_include_module
 
 		// More replacing, if _SELF wasn't used within the module
 		$url_from=static_evaluate_tempcode(build_url(array('page'=>$attributes['page']),$zone,NULL,false,false,true));
+		if (substr($url_from,-4)=='.htm') $url_from=substr($url_from,0,strlen($url_from)-4);
 		$url_to=static_evaluate_tempcode(build_url(array('page'=>get_page_name()),get_zone_name(),NULL,false,false,true));
-		$_out=str_replace(str_replace('.htm','',$url_from),str_replace('.htm','',$url_to),$_out);
+		if (substr($url_to,-4)=='.htm') $url_to=substr($url_to,0,strlen($url_to)-4);
+		$_out=str_replace($url_from,$url_to,$_out);
+		if ($use_breadcrumbs)
+		{
+			if ($GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']!==NULL)
+			{
+				$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=make_string_tempcode(str_replace($url_from,$url_to,$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']->evaluate()));
+			}
+		}
 
 		// Done
 		$ret=make_string_tempcode($_out);
