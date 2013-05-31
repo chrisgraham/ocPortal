@@ -147,8 +147,8 @@ function dload_script()
 	header('Accept-Ranges: bytes');
 
 	// Caching
-	header("Pragma: private");
-	header("Cache-Control: private");
+	header('Pragma: private');
+	header('Cache-Control: private');
 	header('Expires: '.gmdate('D, d M Y H:i:s',time()+60*60*24*365).' GMT');
 	$time=is_null($myrow['edit_date'])?$myrow['add_date']:$myrow['edit_date'];
 	$time=max($time,filemtime($_full));
