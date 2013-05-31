@@ -57,6 +57,7 @@ function load_html_page($string,$file_base=NULL)
 					$zone='';
 				}
 				$possible_zone=str_replace('/','_',dirname($old_link));
+				if ($possible_zone=='.') $possible_zone='';
 				if (($possible_zone!='') && ($possible_zone!=get_zone_name()) && (file_exists(get_file_base().'/'.$possible_zone)))
 				{
 					$zone=$possible_zone;

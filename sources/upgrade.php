@@ -1125,6 +1125,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		foreach ($files_determined_to_upload as $file)
 		{
 			$dirname=dirname($file);
+			if ($dirname=='.') $dirname='';
 			$directories_to_make[$dirname]=1;
 		}
 		foreach (array_keys($directories_to_make) as $directory)
@@ -1133,7 +1134,9 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		}
 		foreach ($files_determined_to_upload as $file)
 		{
-			$unix_out.='cp "$OCP_EXTRACTED_AT/'.escapeshellcmd($file).'" "'.escapeshellcmd(dirname($file)).'"/;'."\n";
+			$dirname=dirname($file);
+			if ($dirname=='.') $dirname='';
+			$unix_out.='cp "$OCP_EXTRACTED_AT/'.escapeshellcmd($file).'" "'.escapeshellcmd($dirname).'"/;'."\n";
 		}
 		require_lang('upgrade');
 		$ret_str.=do_lang('SH_COMMAND',nl2br(escape_html($unix_out)));
