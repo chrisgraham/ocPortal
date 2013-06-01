@@ -1395,6 +1395,7 @@ class forum_driver_ocf extends forum_driver_base
 		} else
 		{
 			$restrict_answer=0;
+			$wait_time=0;
 		}
 
 		$seconds_since_last_visit=time()-$this->get_member_row_field($id,'m_last_visit_time');

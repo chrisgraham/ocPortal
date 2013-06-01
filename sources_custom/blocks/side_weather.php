@@ -102,7 +102,8 @@ class Block_side_weather
 
 				if (preg_match('#^\-?\d+(\.\d+)?,\-?\d+(\.\d+)?$#',$loc_code)!=0)
 				{
-					$result=http_download_file('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.placefinder%20where%20text%3D%22'.urlencode($loc_code).'&format=json&diagnostics=true&callback=cbfunc');
+					$url='http://query.yahooapis.com/v1/public/yql?q='.urlencode('select * from geo.placefinder where text="'.$loc_code.'"').'&format=json&diagnostics=true&callback=cbfunc';
+					$result=http_download_file($url);
 
 					if (preg_match('#"woeid":\s*"(\d+)"#',$result,$matches)!=0)
 					{
