@@ -517,7 +517,7 @@ END;
 				fclose($myfile);
 			} else // Via FTP
 			{
-				$path2=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
+				$path2=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
 				if ($path2===false)
 					$path2=tempnam(get_custom_file_base().'/safe_mode_temp/','ocpce');
 
@@ -587,7 +587,7 @@ END;
 					}
 				} else // Via FTP
 				{
-					$path2=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
+					$path2=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
 					if ($path2===false)
 						$path2=tempnam(get_custom_file_base().'/safe_mode_temp/','ocpce');
 
