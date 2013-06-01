@@ -79,7 +79,7 @@ class Hook_fields_theme_image
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default='default';
 		}

@@ -100,7 +100,7 @@ function get_server_timezone()
 function get_site_timezone()
 {
 	$_timezone_site=get_value('timezone');
-	if (is_null($_timezone_site))
+	if ($_timezone_site===NULL)
 	{
 		$timezone_site=get_server_timezone();
 	} else
@@ -124,7 +124,7 @@ function get_users_timezone($member=NULL)
 	if (isset($TIMEZONE_MEMBER_CACHE[$member])) return $TIMEZONE_MEMBER_CACHE[$member];
 
 	$timezone=get_param('keep_timezone',NULL);
-	if (!is_null($timezone))
+	if ($timezone!==NULL)
 	{
 		$TIMEZONE_MEMBER_CACHE[$member]=$timezone;
 		return $timezone;
@@ -147,7 +147,7 @@ function get_users_timezone($member=NULL)
 		$client_time=ocp_admirecookie('client_time');
 		$client_time_ref=ocp_admirecookie('client_time_ref');
 
-		if ((!is_null($client_time)) && (!is_null($client_time_ref))) // If the client-end has set a time cookie (only available on 2ND request) then we can auto-work-out the timezone
+		if (($client_time!==NULL) && ($client_time_ref!==NULL)) // If the client-end has set a time cookie (only available on 2ND request) then we can auto-work-out the timezone
 		{
 			$client_time=preg_replace('# ([A-Z]{3})([\+\-]\d+)?( \([\w\s]+\))?( \d{4})?$#','${4}',$client_time);
 			$timezone_dif=(floatval(strtotime($client_time))-(floatval($client_time_ref)))/60.0/60.0;
@@ -178,7 +178,7 @@ function get_users_timezone($member=NULL)
 function convert_timezone_offset_to_formal_timezone($offset)
 {
 	$time_now=time();
-	$expected=time()+intval(60*60*$offset);
+	$expected=$time_now+intval(60*60*$offset);
 
 	$zones=get_timezone_list();
 	foreach (array_keys($zones) as $zone)
@@ -207,7 +207,7 @@ function convert_timezone_offset_to_formal_timezone($offset)
  */
 function utctime_to_usertime($timestamp=NULL,$member=NULL)
 {
-	if (is_null($timestamp)) $timestamp=time();
+	if ($timestamp===NULL) $timestamp=time();
 
 	$timezone=get_users_timezone($member);
 
@@ -224,7 +224,7 @@ function utctime_to_usertime($timestamp=NULL,$member=NULL)
  */
 function usertime_to_utctime($timestamp=NULL,$member=NULL)
 {
-	if (is_null($timestamp)) $timestamp=time();
+	if ($timestamp===NULL) $timestamp=time();
 
 	$timezone=get_users_timezone($member);
 
@@ -263,7 +263,7 @@ function my_strftime($format,$timestamp=NULL)
  */
 function get_timezoned_date($timestamp,$include_time=true,$verbose=false,$utc_time=false,$avoid_contextual_dates=false,$member=NULL)
 {
-	if (is_null($member)) $member=get_member();
+	if ($member===NULL) $member=get_member();
 
 	// Work out timezone
 	$usered_timestamp=$utc_time?$timestamp:utctime_to_usertime($timestamp,$member);
@@ -345,7 +345,7 @@ function locale_filter($ret)
  */
 function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NULL,$utc_time=false)
 {
-	if (is_null($member)) $member=get_member();
+	if ($member===NULL) $member=get_member();
 
 	if (get_option('use_contextual_dates')=='0') $avoid_contextual_dates=true;
 
@@ -380,7 +380,10 @@ function tz_time($time,$zone)
 {
 	if ($zone=='') $zone=get_server_timezone();
 	date_default_timezone_set($zone);
-	$ret=$time+intval(60.0*60.0*floatval(date('O',$time))/100.0);
+	static $zone_offsets=array();
+	if (!isset($zone_offsets[$zone]))
+		$zone_offsets[$zone]=intval(60.0*60.0*floatval(date('O',$time))/100.0);
+	$ret=$time+$zone_offsets[$zone];
 	date_default_timezone_set('UTC');
 	return $ret;
 }

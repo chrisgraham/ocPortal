@@ -62,7 +62,7 @@ class Hook_fields_integer
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default='0';
 		}
@@ -79,7 +79,8 @@ class Hook_fields_integer
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		return escape_html(preg_replace('#^0*#','',$ev));
+		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($ev);
+		return $ev;
 	}
 
 	// ======================

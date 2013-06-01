@@ -784,7 +784,7 @@ class ocp_tempcode
 	{
 		foreach ($this->bits as $bit)
 		{
-			if (($bit[1]==TC_DIRECTIVE) || ($bit[1]==TC_SYMBOL))
+			if ((($bit[1]==TC_DIRECTIVE) && ($bit[2]!='NO_PREPROCESSING')) || ($bit[1]==TC_SYMBOL))
 			{
 				if (isset($bit[3]))
 				{

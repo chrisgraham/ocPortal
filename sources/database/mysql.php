@@ -250,15 +250,16 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 		}
 
-		$sub=substr(ltrim($query),0,7);
-		if (($results!==true) && (($sub=='SELECT ') || ($sub=='select ') || (strtoupper(substr($query,0,8))=='(SELECT ') || (strtoupper(substr(ltrim($query),0,8))=='EXPLAIN ') || (strtoupper(substr(ltrim($query),0,9))=='DESCRIBE ') || (strtoupper(substr(ltrim($query),0,5))=='SHOW ')) && ($results!==false))
+		$query=ltrim($query);
+		$sub=substr($query,0,4);
+		if (($results!==true) && (($sub=='(SEL') || ($sub=='SELE') || ($sub=='sele') || ($sub=='EXPL') || ($sub=='DESC') || ($sub=='SHOW')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}
 
 		if ($get_insert_id)
 		{
-			if (strtoupper(substr($query,0,7))=='UPDATE ') return mysql_affected_rows($db);
+			if (($sub=='UPDA') || ($sub=='upda')) return mysql_affected_rows($db);
 			$ins=mysql_insert_id($db);
 			if ($ins===0)
 			{

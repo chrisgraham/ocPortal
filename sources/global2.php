@@ -1026,7 +1026,7 @@ function get_site_name()
 function in_safe_mode()
 {
 	global $SITE_INFO;
-	if ((isset($SITE_INFO['safe_mode'])) && ($SITE_INFO['safe_mode']=='1')) return true; // Useful for testing HPHP support
+	if (isset($SITE_INFO['safe_mode'])) return ($SITE_INFO['safe_mode']=='1'); // Useful for testing HPHP support
 
 	global $CHECKING_SAFEMODE;
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
@@ -1353,7 +1353,10 @@ function __param($array,$name,$default,$integer=false,$posted=false)
 
 	$val=$array[$name];
 	if (is_array($val)) $val=implode(',',$val);
-	if (get_magic_quotes_gpc()) $val=stripslashes($val);
+
+	static $mq=NULL;
+	if ($mq===NULL) $mq=get_magic_quotes_gpc();
+	if ($mq) $val=stripslashes($val);
 
 	if (($posted) && (count($_POST)!=0) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
 	{
@@ -1418,11 +1421,14 @@ function post_param_integer($name,$default=false)
 {
 	$ret=__param($_POST,$name,($default===false)?$default:(($default===NULL)?'':strval($default)),true,true);
 	if (($default===NULL) && ($ret==='')) return NULL;
-	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
-		require_code('failure');
-		$ret=_param_invalid($name,$ret,true);
+		$ret=trim($ret);
+		if (!is_numeric($ret))
+		{
+			require_code('failure');
+			$ret=_param_invalid($name,$ret,true);
+		}
 	}
 	if ($ret=='0') return 0;
 	if ($ret=='1') return 1;
@@ -1452,21 +1458,24 @@ function get_param_integer($name,$default=false,$not_string_ok=false)
 	$m_default=($default===false)?false:(isset($default)?(($default==0)?'0':strval($default)):'');
 	$ret=__param($_GET,$name,$m_default,true); // do not set $ret to mixed(), breaks bootstrapping
 	if ((!isset($default)) && ($ret==='')) return NULL;
-	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
-		if (substr($ret,-1)=='/') $ret=substr($ret,0,strlen($ret)-1);
-		if (!is_numeric($ret)) // Bizarre situation (bug in IIS?)
+		$ret=trim($ret);
+		if (!is_numeric($ret))
 		{
-			$matches=array();
-			if (preg_match('#^(\d+)\#[\w]*$#',$ret,$matches)!=0)
+			if (substr($ret,-1)=='/') $ret=substr($ret,0,strlen($ret)-1);
+			if (!is_numeric($ret)) // Bizarre situation (bug in IIS?)
 			{
-				$ret=$matches[1];
-			} else
-			{
-				if ($not_string_ok) return $default;
-				require_code('failure');
-				$ret=_param_invalid($name,$ret,false);
+				$matches=array();
+				if (preg_match('#^(\d+)\#[\w]*$#',$ret,$matches)!=0)
+				{
+					$ret=$matches[1];
+				} else
+				{
+					if ($not_string_ok) return $default;
+					require_code('failure');
+					$ret=_param_invalid($name,$ret,false);
+				}
 			}
 		}
 	}
@@ -1551,12 +1560,13 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
-		$found=find_template_place(strtoupper($j),'',$theme,'.tpl','templates');
+		$_j=strtoupper($j);
+		$found=find_template_place($_j,'',$theme,'.tpl','templates');
 		if ($found===NULL) return '';
 		$theme=$found[0];
-		$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
+		$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].$_j.'.tpl';
 		if (!is_file($fullpath))
-			$fullpath=get_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
+			$fullpath=get_file_base().'/themes/'.$theme.$found[1].$_j.'.tpl';
 		$globals_custom=str_replace('default/templates/JAVASCRIPT.tpl',filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()).'/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl',$fullpath);
 	}
 
@@ -1590,10 +1600,13 @@ function javascript_tempcode($position=NULL)
 	$grouping_codename=_handle_web_resource_merging('.js',$JAVASCRIPTS,$minify,$https,$mobile);
 
 	// Fix order, so our main Javascript runs first
-	$arr_backup=$JAVASCRIPTS;
-	$JAVASCRIPTS=array();
-	$JAVASCRIPTS[($grouping_codename=='')?'javascript':$grouping_codename]=($grouping_codename=='')?1:0;
-	$JAVASCRIPTS+=$arr_backup;
+	if (isset($JAVASCRIPTS['javascript']))
+	{
+		$arr_backup=$JAVASCRIPTS;
+		$JAVASCRIPTS=array();
+		$JAVASCRIPTS[($grouping_codename=='')?'javascript':$grouping_codename]=($grouping_codename=='')?1:0;
+		$JAVASCRIPTS+=$arr_backup;
+	}
 
 	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_button_realtime_rain'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1); // These are all framework ones that add niceities
 	foreach ($JAVASCRIPTS as $j=>$do_enforce)
@@ -1862,7 +1875,7 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 		}
 
 		$_value=explode('::',$value);
-		$resources=explode(',',$_value[0]);
+		$resources=($_value[0]=='' || $_value[0]=='javascript_')?array():explode(',',$_value[0]);
 		$hash=$_value[1];
 
 		// Regenerate hash if we support smart decaching, it might have changed and hence we need to do recompiling with a new hash OR this may be the first time ("???" is placeholder)
@@ -1967,7 +1980,9 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 
 				unset($arr[$resource]); // Don't load up if unit already individually requested
 			}
-			$arr[$grouping_codename]=0; // Add in merge one to load instead
+
+			if ($resources!==array())
+				$arr[$grouping_codename]=0; // Add in merge one to load instead
 
 			return $grouping_codename;
 		}

@@ -73,7 +73,7 @@ class Hook_fields_tick_multi
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		/*if (!is_null($required))
+		/*if ($required!==NULL)
 		{
 			Nothing special for this hook
 		}*/
@@ -97,7 +97,7 @@ class Hook_fields_tick_multi
 			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded[$option]));
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all,'FIELD_ID'=>strval($field['id'])),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('_GUID'=>'x28e21cdbc38a3037d083f619bb31dae','ALL'=>$all,'FIELD_ID'=>strval($field['id'])),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
 	}
 
 	// ======================

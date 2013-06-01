@@ -70,7 +70,7 @@ class Hook_fields_tick
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default='0';
 		}

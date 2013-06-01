@@ -83,12 +83,11 @@ class Block_main_google_map
 		$catalogue_row=mixed();
 		if ($catalogue_name!='')
 		{
-			$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-			if (!array_key_exists(0,$catalogue_rows))
+			$catalogue_row=load_catalogue_row($catalogue_name,true);
+			if ($catalogue_row===NULL)
 			{
 				return paragraph('Could not find the catalogue named "'.escape_html($catalogue_name).'".','','nothing_here');
 			}
-			$catalogue_row=$catalogue_rows[0];
 		}
 
 		$hooks_to_use=explode('|',isset($map['extra_sources'])?$map['extra_sources']:'');
@@ -141,13 +140,10 @@ class Block_main_google_map
 				$where.=$extra_where;
 			}
 			$where.=')';
-			if (count($entries_to_load)!=0)
+			foreach ($entries_to_load as $entry_id=>$allow)
 			{
-				foreach ($entries_to_load as $entry_id=>$allow)
-				{
-					if ($allow)
-						$where.=' OR r.id='.strval($entry_id);
-				}
+				if ($allow)
+					$where.=' OR r.id='.strval($entry_id);
 			}
 
 			// Finishing data query
@@ -155,7 +151,14 @@ class Block_main_google_map
 
 			// Get results
 			$entries_to_show=array();
-			$entries_to_show=array_merge($entries_to_show,$GLOBALS['SITE_DB']->query($query.' ORDER BY ce_add_date DESC',$max_results));
+			if (($map['filter']=='/') && ($entries_to_load==array()))
+			{
+				$ce_entries=array();
+			} else
+			{
+				$ce_entries=$GLOBALS['SITE_DB']->query($query.' ORDER BY ce_add_date DESC',$max_results);
+			}
+			$entries_to_show=array_merge($entries_to_show,$ce_entries);
 			if ((count($entries_to_show)==0) && (($min_latitude=='') || ($max_latitude=='') || ($min_longitude=='') || ($max_longitude==''))) // If there's nothing to show and no given bounds
 			{
 				//return paragraph(do_lang_tempcode('NO_ENTRIES'),'','nothing_here');

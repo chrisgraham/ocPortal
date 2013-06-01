@@ -230,13 +230,19 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
  */
 function content_get_row($content_id,$cma_info)
 {
+	static $cache=array();
+	$cache_key=$cma_info['table'].'.'.$content_id;
+	if (isset($cache[$cache_key])) return $cache[$cache_key];
+
 	$db=$cma_info['connection'];
 
 	$id_field_numeric=array_key_exists('id_field_numeric',$cma_info)?$cma_info['id_field_numeric']:true;
 	$where=get_content_where_for_str_id($content_id,$cma_info);
 	$_content=$db->query_select($cma_info['table'].' r',array('r.*'),$where,'',1);
 
-	return array_key_exists(0,$_content)?$_content[0]:NULL;
+	$ret=array_key_exists(0,$_content)?$_content[0]:NULL;
+	$cache[$cache_key]=$ret;
+	return $ret;
 }
 
 /**

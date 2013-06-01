@@ -85,7 +85,7 @@ class Block_main_multi_content
 	 */
 	function run($map)
 	{
-		if (array_key_exists('param',$map))
+		if (isset($map['param']))
 		{
 			$content_type=$map['param'];
 		} else
@@ -102,28 +102,28 @@ class Block_main_multi_content
 
 		$block_id=get_block_id($map);
 
-		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
-		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
-		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
-		$attach_to_url_filter=((array_key_exists('attach_to_url_filter',$map)?$map['attach_to_url_filter']:'0')=='1');
-		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_'.$content_type.'_root',NULL);
+		$max=get_param_integer($block_id.'_max',isset($map['max'])?intval($map['max']):30);
+		$start=get_param_integer($block_id.'_start',isset($map['start'])?intval($map['start']):0);
+		$do_pagination=((isset($map['pagination'])?$map['pagination']:'0')=='1');
+		$attach_to_url_filter=((isset($map['attach_to_url_filter'])?$map['attach_to_url_filter']:'0')=='1');
+		$root=((isset($map['root'])) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_'.$content_type.'_root',NULL);
 
-		$guid=array_key_exists('guid',$map)?$map['guid']:'';
-		$sort=array_key_exists('sort',$map)?$map['sort']:'recent'; // recent|top|views|random|title or some manually typed sort order
+		$guid=isset($map['guid'])?$map['guid']:'';
+		$sort=isset($map['sort'])?$map['sort']:'recent'; // recent|top|views|random|title or some manually typed sort order
 		if ($sort=='all') $sort='title'; // LEGACY
 		if ($sort=='rating') $sort='average_rating'; // LEGACY
-		$filter=array_key_exists('filter',$map)?$map['filter']:'';
-		$filter_b=array_key_exists('filter_b',$map)?$map['filter_b']:'';
+		$filter=isset($map['filter'])?$map['filter']:'';
+		$filter_b=isset($map['filter_b'])?$map['filter_b']:'';
 		if ($filter_b=='*') return new ocp_tempcode(); // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution
-		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
-		$zone=array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
-		$efficient=(array_key_exists('efficient',$map)?$map['efficient']:'1')=='1';
-		$title=array_key_exists('title',$map)?$map['title']:'';
-		$days=((array_key_exists('days',$map)) && ($map['days']!=''))?intval($map['days']):NULL;
-		$lifetime=((array_key_exists('lifetime',$map)) && ($map['lifetime']!=''))?intval($map['lifetime']):NULL;
-		$pinned=((array_key_exists('pinned',$map)) && ($map['pinned']!=''))?explode(',',$map['pinned']):array();
-		$give_context=(array_key_exists('give_context',$map)?$map['give_context']:'0')=='1';
-		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
+		$ocselect=isset($map['ocselect'])?$map['ocselect']:'';
+		$zone=isset($map['zone'])?$map['zone']:'_SEARCH';
+		$efficient=(isset($map['efficient'])?$map['efficient']:'1')=='1';
+		$title=isset($map['title'])?$map['title']:'';
+		$days=((isset($map['days'])) && ($map['days']!=''))?intval($map['days']):NULL;
+		$lifetime=((isset($map['lifetime'])) && ($map['lifetime']!=''))?intval($map['lifetime']):NULL;
+		$pinned=((isset($map['pinned'])) && ($map['pinned']!=''))?explode(',',$map['pinned']):array();
+		$give_context=(isset($map['give_context'])?$map['give_context']:'0')=='1';
+		$include_breadcrumbs=(isset($map['include_breadcrumbs'])?$map['include_breadcrumbs']:'0')=='1';
 
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$content_type),'','red_alert');
@@ -131,10 +131,10 @@ class Block_main_multi_content
 		require_code('content');
 		$object=get_content_object($content_type);
 		$info=$object->info($zone,($filter_b=='')?NULL:$filter_b);
-		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
+		if ($info===NULL) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 
 		$submit_url=$info['add_url'];
-		if (!is_null($submit_url))
+		if ($submit_url!==NULL)
 		{
 			list($submit_url_zone,$submit_url_map,$submit_url_hash)=page_link_decode($submit_url);
 			$submit_url=static_evaluate_tempcode(build_url($submit_url_map,$submit_url_zone,NULL,false,false,false,$submit_url_hash));
@@ -181,7 +181,7 @@ class Block_main_multi_content
 				$groups.='a.group_id='.strval($group);
 			}
 
-			if (!is_null($category_field_access))
+			if ($category_field_access!==NULL)
 			{
 				if ($category_type_access==='<zone>')
 				{
@@ -199,12 +199,12 @@ class Block_main_multi_content
 					$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma ON ('.db_string_equal_to('ma.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma.category_name)';
 				}
 			}
-			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>') && ($info['category_type']!=='<zone>'))
+			if (($category_field_filter!==NULL) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>') && ($info['category_type']!=='<zone>'))
 			{
 				$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a2 ON ('.db_string_equal_to('a.module_the_name',$category_type_filter).' AND r.'.$category_field_filter.'=a2.category_name)';
 				$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma2 ON ('.db_string_equal_to('ma2.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma2.category_name)';
 			}
-			if (!is_null($category_field_access))
+			if ($category_field_access!==NULL)
 			{
 				if ($where!='') $where.=' AND ';
 				if ($info['category_type']==='<page>')
@@ -216,7 +216,7 @@ class Block_main_multi_content
 					$where.='(('.$groups.') AND (a.group_id IS NOT NULL) OR ((ma.active_until IS NULL OR ma.active_until>'.strval(time()).') AND ma.member_id='.strval(get_member()).'))';
 				}
 			}
-			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
+			if (($category_field_filter!==NULL) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
 			{
 				if ($where!='') $where.=' AND ';
 				$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR ((ma2.active_until IS NULL OR ma2.active_until>'.strval(time()).') AND ma2.member_id='.strval(get_member()).'))';
@@ -236,28 +236,28 @@ class Block_main_multi_content
 
 		$x1='';
 		$x2='';
-		if (($filter!='') && (!is_null($category_field_filter)))
+		if (($filter!='') && ($category_field_filter!==NULL))
 		{
 			$x1=$this->build_filter($filter,$info,$category_field_filter);
 			$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
-			if ((!is_null($parent_spec__table_name)) && ($parent_spec__table_name!=$info['table']))
+			if (($parent_spec__table_name!==NULL) && ($parent_spec__table_name!=$info['table']))
 			{
 				$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().$parent_spec__table_name.' parent ON parent.'.$info['parent_spec__field_name'].'=r.'.$info['id_field'];
 			}
 		}
-		if (($filter_b!='') && (!is_null($category_field_access)))
+		if (($filter_b!='') && ($category_field_access!==NULL))
 		{
 			$x2=$this->build_filter($filter_b,$info,$category_field_access);
 		}
 
-		if (!is_null($days))
+		if ($days!==NULL)
 		{
 			if ($where!='') $where.=' AND ';
 			$where.=$info['date_field'].'>='.strval(time()-60*60*24*$days);
 		}
 
 		if (is_array($info['id_field'])) $lifetime=NULL; // Cannot join on this
-		if (!is_null($lifetime))
+		if ($lifetime!==NULL)
 		{
 			$block_cache_id=md5(serialize($map));
 			$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().'feature_lifetime_monitor m ON m.content_id=r.'.$info['id_field'].' AND '.db_string_equal_to('m.block_cache_id',$block_cache_id);
@@ -308,7 +308,7 @@ class Block_main_multi_content
 			if ($x2!='') $query.=' AND ('.$x2.')';
 		}
 
-		if ((($sort=='average_rating') || ($sort=='compound_rating')) && (array_key_exists('feedback_type_code',$info)) && (is_null($info['feedback_type_code'])))
+		if ((($sort=='average_rating') || ($sort=='compound_rating')) && (array_key_exists('feedback_type_code',$info)) && ($info['feedback_type_code']===NULL))
 			$sort='title';
 
 		global $TABLE_LANG_FIELDS_CACHE;
@@ -332,14 +332,14 @@ class Block_main_multi_content
 				case 'recent':
 				case 'recent ASC':
 				case 'recent DESC':
-					if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
+					if ((array_key_exists('date_field',$info)) && ($info['date_field']!==NULL))
 					{
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].(($sort!='recent asc')?' DESC':' ASC'),$max,$start,false,true,$lang_fields);
 						break;
 					}
 					$sort=$first_id_field;
 				case 'views':
-					if ((array_key_exists('views_field',$info)) && (!is_null($info['views_field'])))
+					if ((array_key_exists('views_field',$info)) && ($info['views_field']!==NULL))
 					{
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,$start,false,true,$lang_fields);
 						break;
@@ -348,7 +348,7 @@ class Block_main_multi_content
 				case 'average_rating':
 				case 'average_rating ASC':
 				case 'average_rating DESC':
-					if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
+					if ((array_key_exists('feedback_type_code',$info)) && ($info['feedback_type_code']!==NULL))
 					{
 						if ($sort=='average_rating')  $sort.=' DESC';
 
@@ -360,7 +360,7 @@ class Block_main_multi_content
 				case 'compound_rating':
 				case 'compound_rating ASC':
 				case 'compound_rating DESC':
-					if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
+					if ((array_key_exists('feedback_type_code',$info)) && ($info['feedback_type_code']!==NULL))
 					{
 						if ($sort=='compound_rating')  $sort.=' DESC';
 
@@ -437,7 +437,7 @@ class Block_main_multi_content
 
 				$award_content_row=content_get_row($awarded_content_id,$info);
 
-				if ((!is_null($award_content_row)) && ((!addon_installed('unvalidated')) || (!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
+				if (($award_content_row!==NULL) && ((!addon_installed('unvalidated')) || (!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
 				{
 					$pinned_order[]=$award_content_row;
 				}
@@ -499,14 +499,14 @@ class Block_main_multi_content
 		}
 
 		// Sort out run periods
-		if (!is_null($lifetime))
+		if ($lifetime!==NULL)
 		{
 			$lifetime_monitor=list_to_map('content_id',$GLOBALS['SITE_DB']->query_select('feature_lifetime_monitor',array('content_id','run_period','last_update'),array('block_cache_id'=>$block_cache_id,'running_now'=>1)));
 		}
 
 		// Move towards render...
 
-		if (!is_null($info['archive_url']))
+		if ($info['archive_url']!==NULL)
 		{
 			list($archive_url_zone,$archive_url_map,$archive_url_hash)=page_link_decode($info['archive_url']);
 			$archive_url=build_url($archive_url_map,$archive_url_zone,NULL,false,false,false,$archive_url_hash);
@@ -529,7 +529,7 @@ class Block_main_multi_content
 			$done_already[$content_id]=1;
 
 			// Lifetime managing
-			if (!is_null($lifetime))
+			if ($lifetime!==NULL)
 			{
 				if (!array_key_exists($content_id,$lifetime_monitor))
 				{
@@ -567,7 +567,7 @@ class Block_main_multi_content
 		}
 
 		// Sort out run periods of stuff gone
-		if (!is_null($lifetime))
+		if ($lifetime!==NULL)
 		{
 			foreach (array_keys($lifetime_monitor) as $content_id) // Any remaining have not been pulled up
 			{
@@ -581,7 +581,7 @@ class Block_main_multi_content
 			}
 		}
 
-		if ((array_key_exists('no_links',$map)) && ($map['no_links']=='1'))
+		if ((isset($map['no_links'])) && ($map['no_links']=='1'))
 		{
 			$submit_url=new ocp_tempcode();
 			$archive_url=new ocp_tempcode();
@@ -634,7 +634,7 @@ class Block_main_multi_content
 	{
 		$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
 		$parent_field_name=$category_field_filter;//array_key_exists('parent_field_name',$info)?$info['parent_field_name']:NULL;
-		if (is_null($parent_field_name)) $parent_spec__table_name=NULL;
+		if ($parent_field_name===NULL) $parent_spec__table_name=NULL;
 		$parent_spec__parent_name=array_key_exists('parent_spec__parent_name',$info)?$info['parent_spec__parent_name']:NULL;
 		$parent_spec__field_name=array_key_exists('parent_spec__field_name',$info)?$info['parent_spec__field_name']:NULL;
 		$id_field_numeric=((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric']));

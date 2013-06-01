@@ -62,7 +62,7 @@ class Hook_fields_date
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default=date('Y-m-d H:i:s',utctime_to_usertime());
 		}

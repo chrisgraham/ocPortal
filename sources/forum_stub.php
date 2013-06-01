@@ -261,10 +261,14 @@ class forum_driver_base
 	 */
 	function is_super_admin($id)
 	{
-		if (is_guest($id)) return false;
-
 		global $IS_SUPER_ADMIN_CACHE;
 		if (isset($IS_SUPER_ADMIN_CACHE[$id])) return $IS_SUPER_ADMIN_CACHE[$id];
+
+		if (is_guest($id))
+		{
+			$IS_SUPER_ADMIN_CACHE[$id]=false;
+			return false;
+		}
 
 		$ret=$this->_is_super_admin($id);
 		$IS_SUPER_ADMIN_CACHE[$id]=$ret;

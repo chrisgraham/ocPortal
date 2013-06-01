@@ -105,11 +105,13 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 	if ($extra_params===NULL) $extra_params=array();
 	if ($posted_too)
 	{
+		static $mq=NULL;
+		if ($mq===NULL) $mq=get_magic_quotes_gpc();
 		$post_array=array();
 		foreach ($_POST as $key=>$val)
 		{
 			if (is_array($val)) continue;
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if ($mq) $val=stripslashes($val);
 			$post_array[$key]=$val;
 		}
 		$extra_params=array_merge($post_array,$extra_params);
@@ -618,6 +620,9 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 	static $url_scheme=NULL;
 	if ($url_scheme===NULL) $url_scheme=get_option('url_scheme');
 
+	static $htm_urls=NULL;
+	if ($htm_urls===NULL) $htm_urls=(get_option('htm_short_urls')=='1');
+
 	// Find mapping
 	foreach ($URL_REMAPPINGS as $_remapping)
 	{
@@ -666,14 +671,29 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 			}
 
 			$extra_vars=array();
-			foreach (array_keys($remapping) as $key)
+			foreach ($remapping as $key=>$_)
 			{
 				if (!isset($vars[$key])) continue;
 
 				$val=$vars[$key];
 				unset($vars[$key]);
 
-				$makeup=str_replace(strtoupper($key),ocp_url_encode_mini($val,true),$makeup);
+				switch ($key)
+				{
+					case 'page':
+						$key='PAGE';
+						break;
+					case 'type':
+						$key='TYPE';
+						break;
+					case 'id':
+						$key='ID';
+						break;
+					default:
+						$key=strtoupper($key);
+						break;
+				}
+				$makeup=str_replace($key,ocp_url_encode_mini($val,true),$makeup);
 			}
 			if (!$require_full_coverage)
 			{
@@ -1004,7 +1024,7 @@ function find_id_moniker($url_parts,$zone)
 
 	// Does this URL arrangement support monikers?
 	global $CONTENT_OBS;
-	load_moniker_hooks();
+	if ($CONTENT_OBS===NULL) load_moniker_hooks();
 	if (!array_key_exists('id',$url_parts))
 	{
 		if (is_file(get_custom_file_base().'/'.$zone.'/pages/modules/'.$url_parts['page'].'.php')) // Wasteful of resources
@@ -1131,7 +1151,7 @@ function set_execution_context($new_get,$new_zone='_SEARCH',$new_current_script=
 
 	global $RELATIVE_PATH,$ZONE;
 	$RELATIVE_PATH=($new_zone=='_SEARCH')?get_page_zone(get_param('page')):$new_zone;
-	$ZONE=NULL; // So zone details will have to reload
+	if ($new_zone!=$old_zone) $ZONE=NULL; // So zone details will have to reload
 
 	global $PAGE_NAME_CACHE;
 	$PAGE_NAME_CACHE=NULL;

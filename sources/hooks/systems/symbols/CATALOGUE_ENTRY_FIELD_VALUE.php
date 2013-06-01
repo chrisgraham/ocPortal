@@ -30,43 +30,37 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 	function run($param)
 	{
 		$value='';
-		if (array_key_exists(1,$param))
+		if ((isset($param[1])) && ($param[0]!=''))
 		{
 			$map=NULL;
 
 			$entry_id=intval($param[0]);
 			$field_id=intval($param[1]); // nth field in catalogue
 
-			static $cache=array();
-			if (isset($cache[$entry_id]))
+			global $CATALOGUE_MAPPER_SYMBOL_CACHE;
+			if (!isset($CATALOGUE_MAPPER_SYMBOL_CACHE)) $CATALOGUE_MAPPER_SYMBOL_CACHE=array();
+			if (isset($CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id]))
 			{
-				$map=$cache[$entry_id];
+				$map=$CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id];
 			} else
 			{
 				require_code('catalogues');
 				$entry=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entry_id),'',1);
-				if (array_key_exists(0,$entry))
+				if (isset($entry[0]))
 				{
 					$catalogue_name=$entry[0]['c_name'];
-					static $catalogues_cache=array();
-					if (!isset($catalogues_cache[$catalogue_name]))
+					$catalogue=load_catalogue_row($catalogue_name,true);
+					if ($catalogue!==NULL)
 					{
-						$catalogue=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-						if (array_key_exists(0,$catalogue))
-						{
-							$catalogues_cache[$catalogue_name]=$catalogue[0];
-						}
-					}
-					if (isset($catalogues_cache[$catalogue_name]))
-					{
-						$map=get_catalogue_entry_map($entry[0],$catalogues_cache[$catalogue_name],'PAGE','DEFAULT',NULL,NULL/*Actually we'll load all so we can cache all,array($field_id)*/);
+						$tpl_set=$catalogue_name;
+						$map=get_catalogue_entry_map($entry[0],array('c_display_type'=>C_DT_FIELDMAPS)+$catalogue,'PAGE',$tpl_set,NULL,NULL/*Actually we'll load all so we can cache all,array($field_id)*/);
+
+						$CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id]=$map;
 					}
 				}
-
-				$cache[$entry_id]=$map;
 			}
 
-			if (!is_null($map))
+			if ($map!==NULL)
 			{
 				if (isset($map['FIELD_'.strval($field_id)]))
 					$value=$map['FIELD_'.strval($field_id)];

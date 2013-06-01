@@ -79,16 +79,9 @@ function _find_all_langs($even_empty_langs=false)
 {
 	require_code('files');
 
-	$_dir=opendir(get_file_base().'/lang/');
+	// NB: This code is heavily optimised
+
 	$_langs=array();
-	while (false!==($file=readdir($_dir)))
-	{
-		if (($file[0]!='.') && /*(!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS)) && */(strlen($file)<=5))
-		{
-			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
-		}
-	}
-	closedir($_dir);
 	if (!in_safe_mode())
 	{
 		$_dir=@opendir(get_custom_file_base().'/lang_custom/');
@@ -96,7 +89,7 @@ function _find_all_langs($even_empty_langs=false)
 		{
 			while (false!==($file=readdir($_dir)))
 			{
-				if (($file[0]!='.') && /*(!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS)) && */(strlen($file)<=5))
+				if ((!isset($file[5])) && ($file[0]!='.') && (($file=='EN') || (!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS))))
 				{
 					if (is_dir(get_custom_file_base().'/lang_custom/'.$file))
 					{
@@ -125,7 +118,7 @@ function _find_all_langs($even_empty_langs=false)
 			$_dir=opendir(get_file_base().'/lang_custom/');
 			while (false!==($file=readdir($_dir)))
 			{
-				if ((!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file)<=5))
+				if ((!isset($file[5])) && ($file[0]!='.') && (($file=='EN') || (!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS))))
 				{
 					if ($even_empty_langs)
 					{
@@ -147,6 +140,15 @@ function _find_all_langs($even_empty_langs=false)
 			closedir($_dir);
 		}
 	}	
+	$_dir=opendir(get_file_base().'/lang/');
+	while (false!==($file=readdir($_dir)))
+	{
+		if ((!isset($_langs[$file])) && ($file[0]!='.') && (!isset($file[5])) && (($file=='EN') || (!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS))))
+		{
+			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
+		}
+	}
+	closedir($_dir);
 
 	return $_langs;
 }

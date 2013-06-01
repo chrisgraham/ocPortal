@@ -30,22 +30,38 @@ class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 	function run($param)
 	{
 		$value='';
-		if (array_key_exists(0,$param))
+		if (isset($param[0]))
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($param[0])),'',1);
-			if (array_key_exists(0,$rows))
+			$entry_id=intval($param[0]);
+
+			global $CATALOGUE_MAPPER_SYMBOL_CACHE;
+			if (!isset($CATALOGUE_MAPPER_SYMBOL_CACHE)) $CATALOGUE_MAPPER_SYMBOL_CACHE=array();
+			if (isset($CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id]))
 			{
-				require_code('catalogues');
-				$catalogue_name=$rows[0]['c_name'];
-				$tpl_set=$catalogue_name;
-				$display=get_catalogue_entry_map($rows[0],array('c_name'=>$catalogue_name,'c_display_type'=>C_DT_FIELDMAPS),'PAGE',$tpl_set,NULL);
-				if ((array_key_exists(1,$param)) && ($param[1]=='1'))
+				$map=$CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id];
+			} else
+			{
+				$entry=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entry_id),'',1);
+				if (isset($entry[0]))
 				{
-					$value=$display['FIELDS']->evaluate();
-				} else
-				{
-					$_value=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('GIVE_CONTEXT'=>false,'ENTRY_SCREEN'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
-					$value=$_value->evaluate();
+					require_code('catalogues');
+					$catalogue_name=$entry[0]['c_name'];
+					$catalogue=load_catalogue_row($catalogue_name,true);
+					if ($catalogue!==NULL)
+					{
+						$tpl_set=$catalogue_name;
+						$map=get_catalogue_entry_map($entry[0],array('c_display_type'=>C_DT_FIELDMAPS)+$catalogue,'PAGE',$tpl_set,NULL);
+						if ((array_key_exists(1,$param)) && ($param[1]=='1'))
+						{
+							$value=$map['FIELDS']->evaluate();
+						} else
+						{
+							$_value=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$map+array('GIVE_CONTEXT'=>false,'ENTRY_SCREEN'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+							$value=$_value->evaluate();
+						}
+
+						$CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id]=$map;
+					}
 				}
 			}
 		}

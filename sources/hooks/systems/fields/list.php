@@ -75,7 +75,7 @@ class Hook_fields_list
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default=preg_replace('#\|.*#','',$default);
 		}

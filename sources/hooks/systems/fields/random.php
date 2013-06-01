@@ -78,8 +78,8 @@ class Hook_fields_random
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-
-		return escape_html($ev);
+		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($ev);
+		return $ev;
 	}
 
 	// ======================

@@ -618,88 +618,103 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 	{
 		require_code('hooks/systems/video_embed/'.$ve_hook);
 		$ve_ob=object_factory('Hook_video_embed_'.$ve_hook);
-		$thumbnail=$ve_ob->get_video_thumbnail($src_url);
-		if (!is_null($thumbnail)) return $thumbnail;
+		$ret=$ve_ob->get_video_thumbnail($src_url);
+		if (!is_null($ret))
+		{
+			if (is_null($expected_output_path))
+			{
+				$filename='thumb_'.md5(uniqid('')).'.png';
+				$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
+			}
+			require_code('files');
+			$_expected_output_path=fopen($expected_output_path,'wb');
+			http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
+			fclose($_expected_output_path);
+
+			return $ret;
+		}
 	}
 
 	// Ok, gonna try hard using what FFMPEG techniques we can...
 
-	if (substr($src_url,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/') $src_url=substr($src_url,strlen(get_custom_base_url().'/'));
-	if (!url_is_local($src_url)) return '';
-
-	$src_file=get_custom_file_base().'/'.rawurldecode($src_url);
-	$src_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$src_file);
-
-	if (class_exists('ffmpeg_movie'))
+	if (substr($src_url,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/')
+		$src_url=substr($src_url,strlen(get_custom_base_url().'/'));
+	if (url_is_local($src_url))
 	{
-		$filename='thumb_'.md5(uniqid('')).'1.jpg';
-		if (is_null($expected_output_path))
-			$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
-		if (file_exists($expected_output_path))
-			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+		$src_file=get_custom_file_base().'/'.rawurldecode($src_url);
+		$src_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$src_file);
 
-		$movie=@(new ffmpeg_movie($src_file,false));
-		if ($movie!==false)
+		if (class_exists('ffmpeg_movie'))
 		{
-			if ($movie->getFrameCount()==0) return '';
-
-			$frame=$movie->getFrame(min($movie->getFrameCount(),25));
-			$gd_img=$frame->toGDImage();
-
-			@imagejpeg($gd_img,$expected_output_path);
-
+			$filename='thumb_'.md5(uniqid('')).'1.jpg';
+			if (is_null($expected_output_path))
+				$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
 			if (file_exists($expected_output_path))
+				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+
+			$movie=@(new ffmpeg_movie($src_file,false));
+			if ($movie!==false)
+			{
+				if ($movie->getFrameCount()==0) return '';
+
+				$frame=$movie->getFrame(min($movie->getFrameCount(),25));
+				$gd_img=$frame->toGDImage();
+
+				@imagejpeg($gd_img,$expected_output_path);
+
+				if (file_exists($expected_output_path))
+				{
+					require_code('images');
+					if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+						convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
+
+					return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+				}
+			}
+		}
+
+		$ffmpeg_path=get_option('ffmpeg_path');
+
+		if (($ffmpeg_path!='') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
+		{
+			$filename='thumb_'.md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)))).'%d.jpg';
+			$dest_file=get_custom_file_base().'/uploads/galleries/'.$filename;
+			if (is_null($expected_output_path))
+				$expected_output_path=str_replace('%d','1',$dest_file);
+
+			if ((file_exists($dest_file)) && (is_null(post_param_integer('thumbnail_auto_position',NULL))))
+				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+			@unlink($dest_file); // So "if (@filesize($expected_output_path)) break;" will definitely fail if error
+
+			$dest_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$dest_file);
+
+			$at=display_seconds_period(post_param_integer('thumbnail_auto_position',1));
+			if (strlen($at)==5) $at='00:'.$at;
+
+			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.@escapeshellarg($src_file).' -an -ss '.$at.' -r 1 -vframes 1 -y '.@escapeshellarg($dest_file);
+
+			$shell_commands=array($shell_command,$shell_command.' -map 0.0:0.0',$shell_command.' -map 0.1:0.0');
+			foreach ($shell_commands as $shell_command)
+			{
+				shell_exec($shell_command);
+				if (@filesize($expected_output_path)) break;
+			}
+
+			if (file_exists(str_replace('%d','1',$dest_file)))
 			{
 				require_code('images');
 				if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
-					convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
+				{
+					convert_image(str_replace('%d','1',$dest_file),$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
+				} else
+				{
+					copy(str_replace('%d','1',$dest_file),$expected_output_path);
+					fix_permissions($expected_output_path);
+					sync_file($expected_output_path);
+				}
 
 				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
 			}
-		}
-	}
-
-	$ffmpeg_path=get_option('ffmpeg_path');
-
-	if (($ffmpeg_path!='') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
-	{
-		$filename='thumb_'.md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)))).'%d.jpg';
-		$dest_file=get_custom_file_base().'/uploads/galleries/'.$filename;
-		if (is_null($expected_output_path))
-			$expected_output_path=str_replace('%d','1',$dest_file);
-
-		if ((file_exists($dest_file)) && (is_null(post_param_integer('thumbnail_auto_position',NULL))))
-			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
-		@unlink($dest_file); // So "if (@filesize($expected_output_path)) break;" will definitely fail if error
-
-		$dest_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$dest_file);
-
-		$at=display_seconds_period(post_param_integer('thumbnail_auto_position',1));
-		if (strlen($at)==5) $at='00:'.$at;
-
-		$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.@escapeshellarg($src_file).' -an -ss '.$at.' -r 1 -vframes 1 -y '.@escapeshellarg($dest_file);
-
-		$shell_commands=array($shell_command,$shell_command.' -map 0.0:0.0',$shell_command.' -map 0.1:0.0');
-		foreach ($shell_commands as $shell_command)
-		{
-			shell_exec($shell_command);
-			if (@filesize($expected_output_path)) break;
-		}
-
-		if (file_exists(str_replace('%d','1',$dest_file)))
-		{
-			require_code('images');
-			if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
-			{
-				convert_image(str_replace('%d','1',$dest_file),$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
-			} else
-			{
-				copy(str_replace('%d','1',$dest_file),$expected_output_path);
-				fix_permissions($expected_output_path);
-				sync_file($expected_output_path);
-			}
-
-			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
 		}
 	}
 

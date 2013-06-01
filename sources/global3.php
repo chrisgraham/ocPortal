@@ -546,7 +546,7 @@ function ocp_mb_strlen($in)
  */
 function ocp_mb_substr($in,$from,$amount=NULL,$force=false)
 {
-	if (is_null($amount)) $amount=ocp_mb_strlen($in)-$from;
+	if ($amount===NULL) $amount=ocp_mb_strlen($in)-$from;
 
 	if ((!$force) && (strtolower(get_charset())!='utf-8')) return substr($in,$from,$amount);
 
@@ -743,7 +743,7 @@ function addon_installed($addon,$non_bundled_too=false)
 	if ((!$answer) && ($non_bundled_too))
 	{
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('addons','addon_name',array('addon_name'=>$addon));
-		if (!is_null($test)) $answer=true;
+		if ($test!==NULL) $answer=true;
 	}
 	$ADDON_INSTALLED_CACHE[$addon]=$answer;
 	if (function_exists('persistent_cache_set')) persistent_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
@@ -1049,7 +1049,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 		global $ATTACHED_MESSAGES;
 		$global=do_template('STANDALONE_HTML_WRAP',array(
 			'_GUID'=>'fe818a6fb0870f0b211e8e52adb23f26',
-			'TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
+			'TITLE'=>($GLOBALS['DISPLAYED_TITLE']===NULL)?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
 			'FRAME'=>running_script('iframe'),
 			'TARGET'=>'_self',
 			'CONTENT'=>$middle,
@@ -1071,7 +1071,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 		$global=make_xhtml_strict($global);
 	}
 
-	if ((!$include_header_and_footer) && (!is_null($old)))
+	if ((!$include_header_and_footer) && ($old!==NULL))
 	{
 		$_GET['wide_high']=$old;
 	}
@@ -1471,7 +1471,7 @@ function cron_installed()
 	if ($GLOBALS['DEV_MODE']) return true;
 
 	$last_cron=get_value('last_cron');
-	if (is_null($last_cron)) return false;
+	if ($last_cron===NULL) return false;
 	return intval($last_cron)>(time()-60*60*5);
 }
 
@@ -1834,7 +1834,7 @@ function browser_matches($code)
 	switch ($code)
 	{
 		case 'bot':
-			$BROWSER_MATCHES_CACHE[$code]=!is_null(get_bot_type());
+			$BROWSER_MATCHES_CACHE[$code]=(get_bot_type()!==NULL);
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'android':
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'android')!==false;
@@ -2528,7 +2528,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 
 	// Check exclusions first
 	$_exclusions=get_option('spam_check_exclusions',true);
-	if (!is_null($_exclusions))
+	if ($_exclusions!==NULL)
 	{
 		$exclusions=explode(',',$_exclusions);
 		foreach ($exclusions as $exclusion)
@@ -2550,17 +2550,17 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	} else
 	{
 		$ip_bans=persistent_cache_get('IP_BANS');
-		if (is_null($ip_bans))
+		if ($ip_bans===NULL)
 		{
 			$ip_bans=$GLOBALS['SITE_DB']->query_select('banned_ip',array('*'),NULL,'',NULL,NULL,true);
-			if (is_null($ip_bans))
+			if ($ip_bans===NULL)
 				$ip_bans=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('*'),NULL,'',NULL,NULL,true);
-			if (!is_null($ip_bans))
+			if ($ip_bans!==NULL)
 			{
 				persistent_cache_set('IP_BANS',$ip_bans);
 			}
 		}
-		if (is_null($ip_bans)) critical_error('DATABASE_FAIL');
+		if ($ip_bans===NULL) critical_error('DATABASE_FAIL');
 	}
 
 	$ip4=(strpos($ip,'.')!==false);
@@ -2583,7 +2583,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 
 		if ((($ip4) && (compare_ip_address_ip4($ban['ip'],$ip_parts))) || ((!$ip4) && (compare_ip_address_ip6($ban['ip'],$ip_parts))))
 		{
-			if (is_null($self_ip))
+			if ($self_ip===NULL)
 			{
 				$self_host=ocp_srv('HTTP_HOST');
 				if (($self_host=='') || (preg_match('#^localhost[\.\:$]#',$self_host)!=0))

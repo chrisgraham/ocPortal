@@ -365,7 +365,7 @@ function not_like_spacer_posts($field)
  */
 function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false,$sort='date')
 {
-	if (is_null($topic_id))
+	if ($topic_id===NULL)
 	{
 		$count=0;
 		return (-2);
@@ -376,7 +376,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$is_threaded=$this_ref->topic_is_threaded($topic_id);
 
 	$extra_where='';
-	if (!is_null($post_ids))
+	if ($post_ids!==NULL)
 	{
 		if (count($post_ids)==0)
 		{
@@ -397,7 +397,9 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 		$where.=not_like_spacer_posts('t.text_original');
 	$where.=$extra_where;
 	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval(get_member()).'))';
-	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
+	static $index=NULL;
+	if ($index===NULL)
+		$index=(strpos(get_db_type(),'mysql')!==false && ($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))!==NULL))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
 	if (db_has_subqueries($this_ref->connection->connection_read))
@@ -430,7 +432,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$out=array();
 	foreach ($rows as $myrow)
 	{
-		if ((is_null($myrow['p_intended_solely_for'])) || (($myrow['p_poster']==get_member()) && (!is_guest($myrow['p_poster']))) || ($myrow['p_intended_solely_for']==get_member()) || (($myrow['p_intended_solely_for']==$this_ref->get_guest_id()) && ($this_ref->is_staff(get_member()))))
+		if (($myrow['p_intended_solely_for']===NULL) || (($myrow['p_poster']==get_member()) && (!is_guest($myrow['p_poster']))) || ($myrow['p_intended_solely_for']==get_member()) || (($myrow['p_intended_solely_for']==$this_ref->get_guest_id()) && ($this_ref->is_staff(get_member()))))
 		{
 			$temp=$myrow; // Takes all OCF properties
 
@@ -440,7 +442,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 			{
 				$temp['title']=$myrow['p_title'];
 				$message=new ocp_tempcode();
-				if ((get_page_name()=='search') || (is_null($myrow['text_parsed'])) || ($myrow['text_parsed']=='') || ($myrow['p_post']==0))
+				if ((get_page_name()=='search') || ($myrow['text_parsed']===NULL) || ($myrow['text_parsed']=='') || ($myrow['p_post']==0))
 				{
 					$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
 				} else

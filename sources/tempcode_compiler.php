@@ -75,12 +75,12 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
-	$compilable_symbols=array('"ADDON_INSTALLED"','"BASE_URL"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"',/*bad if theme image missing'"IMG"',*/'"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
+	$compilable_symbols=array('"ADDON_INSTALLED"'=>0,'"BASE_URL"'=>0,'"COPYRIGHT"'=>0,'"SITE_NAME"'=>0,'"BRAND_BASE_URL"'=>0,'"BRAND_NAME"'=>0,'"IMG_WIDTH"'=>0,'"IMG_HEIGHT"'=>0,/*bad if theme image missing'"IMG"'=>0,*/'"LANG"'=>0,'"THEME"'=>0,'"VALUE_OPTION"'=>0,'"CONFIG_OPTION"'=>0);
 	global $SITE_INFO;
 	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1'))
 	{
-		$compilable_symbols[]='"PAGE_LINK"';
-		$compilable_symbols[]='"FIND_SCRIPT"';
+		$compilable_symbols['"PAGE_LINK"']=0;
+		$compilable_symbols['"FIND_SCRIPT"']=0;
 	}
 
 	require_code('lang');
@@ -94,6 +94,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	$current_level_params=array();
 	$preprocessable_bits=array();
 	$num_preprocessable_bits=0;
+	$preprocessable_bits_stack=array();
 	for ($i=0;$i<$count;$i++)
 	{
 		$next_token=$bits[$i];
@@ -111,13 +112,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				$stack[]=array($current_level_mode,$current_level_data,$current_level_params,NULL,NULL,NULL,count($preprocessable_bits));
 				++$i;
 				$next_token=isset($bits[$i])?$bits[$i]:NULL;
-				if (is_null($next_token))
+				if ($next_token===NULL)
 				{
 					if ($tolerate_errors) continue;
 					warn_exit(do_lang_tempcode('ABRUPTED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
 				}
 				$current_level_data=array();
-				switch (substr($next_token,0,1))
+				switch (isset($next_token[0])?$next_token[0]:'')
 				{
 					case '$':
 						$current_level_mode=PARSE_SYMBOL;
@@ -139,7 +140,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				$current_level_params=array();
 				break;
 			case '}':
-				if ((count($stack)==0) || ($current_level_mode==PARSE_DIRECTIVE_INNER))
+				if (($stack==array()) || ($current_level_mode==PARSE_DIRECTIVE_INNER))
 				{
 					$literal=php_addslashes($next_token);
 
@@ -163,7 +164,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				$past_level_data=$current_level_data;
 				$past_level_params=$current_level_params;
 				$past_level_mode=$current_level_mode;
-				if (count($stack)==0)
+				if ($stack==array())
 				{
 					if (!$tolerate_errors)
 					{
@@ -175,18 +176,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				}
 
 				// Handle the level we just closed
-				if (function_exists('str_split'))
-				{
-					$_escaped=str_split(preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param)); // :? is so that the ":" in lang strings does not get considered an escape
-				} else
-				{
-					$temp=preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param);
-					$_escaped=array();
-					for ($j=0;$j<strlen($temp);$j++)
-					{
-						$_escaped[]=$temp[$j];
-					}
-				}
+				$_escaped=str_split(preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param)); // :? is so that the ":" in lang strings does not get considered an escape
 				$escaped=array();
 				foreach ($_escaped as $e)
 				{
@@ -247,7 +237,9 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					$_opener_params.=implode('.',$param);
 				}
 
-				$first_param=str_replace(array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@'),array('','','','','','','','','','','','','','',''),$_first_param);
+				$escaping_symbols_from=array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@');
+				$escaping_symbols_to=array('','','','','','','','','','','','','','','');
+				$first_param=str_replace($escaping_symbols_from,$escaping_symbols_to,$_first_param);
 				switch ($past_level_mode)
 				{
 					case PARSE_SYMBOL:
@@ -323,7 +315,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						if ($first_param!='""') // If not a comment
 						{
 							$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
-							if ((in_array($first_param,$compilable_symbols)) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
+							if ((isset($compilable_symbols[$first_param])) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
 							{
 								$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
 							}
@@ -332,10 +324,10 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						break;
 					case PARSE_LANGUAGE_REFERENCE:
 						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
-						if (($_opener_params=='') && (count($escaped)==0)) // Optimise it out for simple case?
+						if (($_opener_params=='') && ($escaped==array())) // Optimise it out for simple case?
 						{
 							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang,false);
-							if (!is_null($looked_up))
+							if ($looked_up!==NULL)
 							{
 								if (apply_tempcode_escaping($escaped,$looked_up)==$looked_up)
 									$new_line='"'.php_addslashes($looked_up).'"';
@@ -347,7 +339,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$parameter=str_replace('"','',str_replace("'",'',$first_param));
 						$parameter=preg_replace('#[^\w\_\d]#','',$parameter); // security to stop PHP injection
 						$temp='output_tempcode_parameter( isset ($bound_'.php_addslashes($parameter).')?$bound_'.php_addslashes($parameter).':NULL,"'.php_addslashes($parameter).'","'.php_addslashes($template_name).'")';
-						if (count($escaped)==0)
+						if ($escaped==array())
 						{
 							$current_level_data[]=$temp;
 						} else
@@ -387,6 +379,10 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$current_level_data=array();
 						$current_level_params=array();
 						$current_level_mode=PARSE_DIRECTIVE_INNER;
+						if ($opener_params==array(array('"NO_PREPROCESSING"')))
+						{
+							array_push($preprocessable_bits_stack,$preprocessable_bits);
+						}
 					} elseif ($eval=='END') // END
 					{
 						// Test that the top stack does represent a started directive, and close directive level
@@ -394,7 +390,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						if ($past_level_data==array()) $past_level_data=array('""');
 						$past_level_params=$current_level_params;
 						$past_level_mode=$current_level_mode;
-						if (count($stack)==0)
+						if ($stack==array())
 						{
 							if ($tolerate_errors) continue;
 							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
@@ -421,7 +417,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$directive_params='';
 						$first_directive_param='""';
 						if ($directive_opener_params[1]==array()) $directive_opener_params[1]=array('""');
-						for ($j=2;$j<count($directive_opener_params);$j++)
+						$count_directive_opener_params=count($directive_opener_params);
+						for ($j=2;$j<$count_directive_opener_params;$j++)
 						{
 							if ($directive_opener_params[$j]==array()) $directive_opener_params[$j]=array('""');
 
@@ -448,6 +445,11 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						switch ($directive_name)
 						{
 							case 'COMMENT':
+								break;
+							case 'NO_PREPROCESSING':
+								$current_level_data[]=implode('.',$past_level_data);
+								$preprocessable_bits=array_pop($preprocessable_bits_stack);
+								$num_preprocessable_bits=count($preprocessable_bits);
 								break;
 							case 'IF':
 								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("1"\)\).""$#',$first_directive_param)!=0)
@@ -486,13 +488,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break;
 							case 'INCLUDE':
 								global $FILE_ARRAY;
-								if ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='') && (count($directive_opener_params)==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
+								if ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='') && ($count_directive_opener_params==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
 								{
 									$eval=@eval('return '.$first_directive_param.';');
 									if (!is_string($eval)) $eval='';
 									$found=find_template_place($eval,'',$theme,'.tpl','templates');
 									$_theme=$found[0];
-									if (!is_null($found[1]))
+									if ($found[1]!==NULL)
 									{
 										$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
 										if (!is_file($fullpath))
@@ -555,7 +557,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	}
 	if ((!array_key_exists('LAX_COMCODE',$GLOBALS)) || (!$GLOBALS['LAX_COMCODE']))
 	{
-		if (count($stack)!=0)
+		if ($stack!=array())
 		{
 			if (!$tolerate_errors)
 				warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
@@ -695,11 +697,14 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
  */
 function build_closure_function($myfunc,$parts)
 {
+	static $chr_10=NULL;
+	if ($chr_10===NULL) $chr_10=chr(10);
+
 	if ($parts==array()) $parts=array('""');
 	$code='';
 	foreach ($parts as $i=>$part)
 	{
-		if ($i!=0) $code.=','.chr(10)."\t";
+		if ($i!=0) $code.=','.$chr_10."\t";
 		$code.=$part;
 	}
 

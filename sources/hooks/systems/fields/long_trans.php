@@ -63,7 +63,7 @@ class Hook_fields_long_trans
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL,$db=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default='default';
 			$default=strval(insert_lang_comcode($default,3,$db));

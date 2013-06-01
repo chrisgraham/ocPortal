@@ -79,7 +79,8 @@ class Hook_fields_auto_increment
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		return escape_html(preg_replace('#^0*#','',$ev));
+		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($ev);
+		return $ev;
 	}
 
 	// ======================

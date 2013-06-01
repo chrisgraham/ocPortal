@@ -174,7 +174,13 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 		$_name=php_addslashes_twice($name);
 	else $_name=$name;
 
-	$myfunc='do_runtime_'.uniqid('',true)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
+	static $generator_base=NULL;
+	static $generator_num=0;
+	if ($generator_base===NULL)
+		$generator_base=uniqid('',true);
+	$generator_num++;
+
+	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 	$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
 
 	$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
@@ -350,7 +356,13 @@ function closure_loop($param,$args,$main_function)
  */
 function make_string_tempcode($string)
 {
-	$myfunc='string_attach_'.uniqid('',true)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
+	static $generator_base=NULL;
+	static $generator_num=0;
+	if ($generator_base===NULL)
+		$generator_base=uniqid('',true);
+	$generator_num++;
+
+	$myfunc='string_attach_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 	$code_to_preexecute="\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($string)."\\\";\";\n";
 	$seq_parts=array(array($myfunc,array(),TC_KNOWN,'',''));
 	return new ocp_tempcode(array($code_to_preexecute,$seq_parts));
@@ -365,6 +377,11 @@ function make_string_tempcode($string)
  */
 function apply_tempcode_escaping($escaped,&$value)
 {
+	static $chr10=NULL;
+	if ($chr10===NULL) $chr10=chr(10);
+	static $chr13=NULL;
+	if ($chr13===NULL) $chr13=chr(13);
+
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
 	foreach ($escaped as $escape)
 	{
@@ -372,8 +389,8 @@ function apply_tempcode_escaping($escaped,&$value)
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
 		elseif ($escape==DQ_ESCAPED) $value=str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
-		elseif ($escape==NL_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'',$value));
-		elseif ($escape==NL2_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'\n',$value));
+		elseif ($escape==NL_ESCAPED) $value=str_replace(array(chr(13),chr(10)),array('',''),$value);
+		elseif ($escape==NL2_ESCAPED) $value=str_replace(array(chr(13),chr(10)),array('','\n'),$value);
 		elseif ($escape==CC_ESCAPED) $value=str_replace('[','\\[',str_replace('\\','\\\\',$value));
 		elseif ($escape==UL_ESCAPED) $value=ocp_url_encode($value);
 		elseif ($escape==UL2_ESCAPED) $value=rawurlencode($value);
@@ -397,6 +414,11 @@ function apply_tempcode_escaping($escaped,&$value)
  */
 function apply_tempcode_escaping_inline($escaped,$value)
 {
+	static $chr10=NULL;
+	if ($chr10===NULL) $chr10=chr(10);
+	static $chr13=NULL;
+	if ($chr13===NULL) $chr13=chr(13);
+
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
 	foreach ($escaped as $escape)
 	{
@@ -406,8 +428,8 @@ function apply_tempcode_escaping_inline($escaped,$value)
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
 		elseif ($escape==DQ_ESCAPED) $value=str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
-		elseif ($escape==NL_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'',$value));
-		elseif ($escape==NL2_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'\n',$value));
+		elseif ($escape==NL_ESCAPED) $value=str_replace(array(chr(13),chr(10)),array('',''),$value);
+		elseif ($escape==NL2_ESCAPED) $value=str_replace(array(chr(13),chr(10)),array('','\n'),$value);
 		elseif ($escape==CC_ESCAPED) $value=str_replace('[','\\[',str_replace('\\','\\\\',$value));
 		elseif ($escape==UL_ESCAPED) $value=ocp_url_encode($value);
 		elseif ($escape==UL2_ESCAPED) $value=rawurlencode($value);
@@ -750,11 +772,7 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in symbols.php
 			{
-				$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
-				foreach ($param as $key=>$val)
-				{
-					$param[$key]=str_replace('\,',',',$val);
-				}
+				$param=block_params_str_to_arr($param[0],true);
 			}
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
@@ -1167,7 +1185,13 @@ class ocp_tempcode
 				}
 			}
 
-			$myfunc='string_attach_'.uniqid('',true)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
+			static $generator_base=NULL;
+			static $generator_num=0;
+			if ($generator_base===NULL)
+				$generator_base=uniqid('',true);
+			$generator_num++;
+
+			$myfunc='string_attach_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
 			$this->code_to_preexecute.=$funcdef;
 			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');

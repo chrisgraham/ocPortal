@@ -42,31 +42,6 @@ function block_params_to_block_signature($map)
 }
 
 /**
- * Convert a parameter set from a string (for templates) to an array (for PHP code).
- *
- * @param  string			The parameters / acceptable parameter pattern, as template safe parameter
- * @return array			The parameters / acceptable parameter pattern
- */
-function block_params_str_to_arr($_map)
-{
-	$map=array();
-	$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$_map);
-	foreach ($param as $x)
-	{
-		$result=explode('=',$x,2);
-		if (isset($result[1]))
-		{
-			list($a,$b)=$result;
-			$map[$a]=str_replace('\,',',',$b);
-		}
-	}
-
-	ksort($map);
-
-	return $map;
-}
-
-/**
  * Check whether some block parameters are acceptable.
  *
  * @param  array			The acceptable parameter pattern

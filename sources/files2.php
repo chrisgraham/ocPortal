@@ -1090,6 +1090,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 								fclose($put);
 								if (!$put_no_delete) @unlink($put_path);
 							}
+							if (!is_null($text))
+							{
+								if (!is_null($write_to_file))
+								{
+									fwrite($write_to_file,$text);
+									$text='';
+								}
+							}
 							return $text;
 						}
 					}
@@ -1101,7 +1109,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					fclose($put);
 					if (!$put_no_delete) @unlink($put_path);
 				}
-				return substr($line,$pos);
+				$text=substr($line,$pos);
+				if (!is_null($write_to_file))
+				{
+					fwrite($write_to_file,$text);
+					$text='';
+				}
+				return $text;
 			}
 		}
 

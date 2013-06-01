@@ -740,9 +740,7 @@ class Module_catalogues
 		// Read in catalogue details
 		$catalogue_name=get_param('id');
 		set_feed_url('?mode=catalogues&filter='.$catalogue_name);
-		$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-		if (!array_key_exists(0,$catalogue_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$catalogue=$catalogue_rows[0];
+		$catalogue=load_catalogue_row($catalogue_name);
 
 		// Description
 		$description=get_translated_tempcode($catalogue['c_description']);
@@ -861,9 +859,7 @@ class Module_catalogues
 
 		$category_name=get_translated_text($category);
 
-		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$catalogue=$catalogues[0];
+		$catalogue=load_catalogue_row($catalogue_name);
 
 		$tpl_set=$catalogue_name;
 
@@ -992,9 +988,7 @@ class Module_catalogues
 		$_title=get_translated_text($category['cc_title']);
 
 		// Is eCommerce?
-		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
-		$catalogue=$catalogues[0];
+		$catalogue=load_catalogue_row($catalogue_name);
 		if (is_ecommerce_catalogue($catalogue_name,$catalogue))
 		{
 			$is_ecommerce=true;

@@ -58,7 +58,7 @@ class Hook_fields_float
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
 		unset($field);
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default='0';
 		}
@@ -85,7 +85,8 @@ class Hook_fields_float
 		}
 
 		if (is_object($ev)) return $ev;
-		return escape_html($ev);
+		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($ev);
+		return $ev;
 	}
 
 	// ======================

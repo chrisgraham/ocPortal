@@ -29,7 +29,7 @@ function read_ocselect_parameter_from_env($field_name,$field_type=NULL)
 {
 	$env=$_POST+$_GET;
 
-	if (is_null($field_type))
+	if ($field_type===NULL)
 	{
 		$field_type='line';
 		if (!array_key_exists('filter_'.$field_name,$env))
@@ -47,7 +47,7 @@ function read_ocselect_parameter_from_env($field_name,$field_type=NULL)
 	if (($field_type=='date') || ($field_type=='time'))
 	{
 		$_default_value=get_input_date('filter_'.$field_name,true);
-		$default_value=is_null($_default_value)?'':strval($_default_value);
+		$default_value=($_default_value===NULL)?'':strval($_default_value);
 	} elseif ($field_type=='multilist')
 	{
 		$default_value=array_key_exists('filter_'.$field_name,$env)?implode(',',$env['filter_'.$field_name]):'';
@@ -72,7 +72,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 	$table=mixed();
 	$db=$GLOBALS['SITE_DB'];
 	$info=array();
-	if (!is_null($content_type))
+	if ($content_type!==NULL)
 	{
 		require_code('content');
 		$ob=get_content_object($content_type);
@@ -85,8 +85,8 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 		}
 	}
 
-	if (is_null($labels)) $labels=array();
-	if (is_null($types)) $types=array();
+	if ($labels===NULL) $labels=array();
+	if ($types===NULL) $types=array();
 
 	$fields_needed=array();
 
@@ -226,7 +226,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 				{
 					// Work out what list values there are
 					$extra=array();
-					if (!is_null($table))
+					if ($table!==NULL)
 					{
 						if (($field_name!='meta_keywords') && ($field_name!='meta_description') && ($field_name!='compound_rating') && ($field_name!='average_rating'))
 						{
@@ -684,7 +684,7 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 				if ((!is_numeric($filter_val)) && ($filter_val!=''))
 				{
 					$_filter_val=$GLOBALS['FORUM_DRIVER']->get_member_from_username($filter_val);
-					$filter_val=is_null($_filter_val)?'':strval($_filter_val);
+					$filter_val=($_filter_val===NULL)?'':strval($_filter_val);
 				}
 				$filter_key=$table_join_code_here.'.'.$inner_filter_key;
 				break;
@@ -741,7 +741,7 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_code='r')
 {
 	// Nothing to do?
-	if ((is_null($filters)) || ($filters==array())) return array(array(),array(),'');
+	if (($filters===NULL) || ($filters==array())) return array(array(),array(),'');
 
 	// Get the conversion function. The conversion function takes field names and works out how that results in SQL
 	$info=array();
@@ -777,7 +777,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 		$disallowed_fields=array_merge($disallowed_fields,$info['ocselect_protected_fields']);
 	}
 	$configured_protected_fields=get_value('ocselect_protected_fields');
-	if ((!is_null($configured_protected_fields)) && ($configured_protected_fields!=''))
+	if (($configured_protected_fields!==NULL) && ($configured_protected_fields!=''))
 	{
 		$disallowed_fields=array_merge($disallowed_fields,explode(',',$configured_protected_fields));
 	}
@@ -787,7 +787,15 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 	if (isset($info['table']))
 	{
 		$table=$info['table'];
-		$db_fields=collapse_2d_complexity('m_name','m_type',$db->query_select('db_meta',array('m_name','m_type'),array('m_table'=>$table)));
+		static $db_fields_for_table=array();
+		if (isset($db_fields_for_table[$table]))
+		{
+			$db_fields=$db_fields_for_table[$table];
+		} else
+		{
+			$db_fields=collapse_2d_complexity('m_name','m_type',$db->query_select('db_meta',array('m_name','m_type'),array('m_table'=>$table)));
+			$db_fields_for_table[$table]=$db_fields;
+		}
 	}
 
 	foreach ($filters as $filter_i=>$filter)
@@ -821,7 +829,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 
 			$filter_key=preg_replace('#[^\w\s\|\.]#','',$filter_key); // So can safely come from environment
 			$bits=call_user_func_array($conv_func,array($db,$info,&$context,&$extra_join,&$extra_select,&$filter_key,$filter_val,$db_fields,$table_join_code)); // call_user_func_array has to be used for reference passing, bizarrely
-			if (is_null($bits))
+			if ($bits===NULL)
 			{
 				require_lang('ocselect');
 				attach_message(do_lang_tempcode('OCSELECT_UNKNOWN_FIELD',escape_html($filter_key)),'warn');

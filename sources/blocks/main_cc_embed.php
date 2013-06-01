@@ -88,8 +88,7 @@ class Block_main_cc_embed
 
 		// Pick up details about catalogue
 		$catalogue_name=$category['c_name'];
-		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-		$catalogue=$catalogues[0];
+		$catalogue=load_catalogue_row($catalogue_name);
 
 		$block_id=get_block_id($map);
 

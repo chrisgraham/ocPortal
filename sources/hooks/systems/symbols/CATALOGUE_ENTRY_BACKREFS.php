@@ -30,11 +30,15 @@ class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 	function run($param)
 	{
 		$value='';
-		if (array_key_exists(0,$param))
+		if (isset($param[0]))
 		{
-			$limit=array_key_exists(1,$param)?intval($param[1]):NULL;
-			$resolve=array_key_exists(2,$param)?$param[2]:''; // Content-type to associate back to, and fetch the ID for
-			$rating_type=array_key_exists(3,$param)?$param[3]:''; // If non empty, it will get the highest rated first
+			$limit=isset($param[1])?intval($param[1]):NULL;
+			$resolve=isset($param[2])?$param[2]:''; // Content-type to associate back to, and fetch the ID for
+			$rating_type=isset($param[3])?$param[3]:''; // If non empty, it will get the highest rated first
+
+			static $cache=array();
+			$cache_key=serialize($param);
+			if (isset($cache[$cache_key])) return $cache[$cache_key];
 
 			$done=0;
 			$table='catalogue_fields f JOIN '.get_table_prefix().'catalogue_efv_short s ON f.id=s.cf_id AND '.db_string_equal_to('cf_type','reference').' OR cf_type LIKE \''.db_encode_like('ck_%').'\'';
@@ -64,8 +68,10 @@ class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 				}
 				$done++;
 
-				if ((!is_null($limit)) && ($done==$limit)) break;
+				if (($limit!==NULL) && ($done==$limit)) break;
 			}
+
+			$cache[$cache_key]=$value;
 		}
 		return $value;
 	}

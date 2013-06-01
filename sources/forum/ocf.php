@@ -1333,17 +1333,11 @@ class forum_driver_ocf extends forum_driver_base
 		if ($FLOOD_CONTROL_ONCE) return;
 		$FLOOD_CONTROL_ONCE=true;
 
-		// Don't do flood control in every situation
-		if (get_page_name()=='join') return; // Not when joining (too early to be annoying!)
-		if ((!running_script('index')) && (!running_script('iframe'))) return; // Not when probably running some AJAX script
-
-		require_code('ocf_groups');
-
 		// Set last visit time session cookie if it doesn't exist
-		$lvt=$this->get_member_row_field($id,'m_last_visit_time');
-		if (((!array_key_exists('last_visit',$_COOKIE)) || ($lvt<time()-60*60*12)) && ($GLOBALS['FORUM_DRIVER']->get_guest_id()!=$id))
+		if ((!isset($_COOKIE['last_visit'])) && ($GLOBALS['FORUM_DRIVER']->get_guest_id()!=$id))
 		{
 			require_code('users_active_actions');
+			$lvt=$this->get_member_row_field($id,'m_last_visit_time');
 			ocp_setcookie('last_visit',is_null($lvt)?strval(time()):strval($lvt),true);
 			$new_visit=true;
 		} else
@@ -1353,78 +1347,94 @@ class forum_driver_ocf extends forum_driver_base
 
 		// Do some flood control
 		$submitting=((count($_POST)>0) && (get_param('type',NULL)!=='ed') && (get_param('type',NULL)!=='ec') && (!running_script('preview')));
-		$captcha=post_param('captcha','');
-		if ($captcha!='') // Don't consider a CAPTCHA submitting, it'll drive people nuts to get flood control right after a CAPTCHA
+		if (get_value('no_flood_control')!=='1')
 		{
-			require_code('captcha');
-			if (check_captcha($captcha,false)) $submitting=false;
-		}
-		$restrict=$submitting?'flood_control_submit_secs':'flood_control_access_secs';
-		$restrict_setting=$submitting?'m_last_submit_time':'m_last_visit_time';
-		$restrict_answer=ocf_get_best_group_property($this->get_members_groups($id),$restrict);
-		if ((!$submitting) && (array_key_exists('redirect',$_GET))) $restrict_answer=0;
-		if ($restrict_answer<0) $restrict_answer=0;
-		$last=$this->get_member_row_field($id,$restrict_setting);
-		if ($last>time()) $last=time()-$restrict_answer; // Weird clock problem
-		$wait_time=$restrict_answer-time()+$last;
-		if (($wait_time>0) && (addon_installed('stats')))
-		{
-			require_code('site');
-			log_stats('/flood',0);
-
-			$time_threshold=30;
-			$count_threshold=50;
-			$query='SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.strval(time()-$time_threshold).' AND date_and_time<'.strval(time()).' AND '.db_string_equal_to('ip',get_ip_address());
-			$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
-			if (($count>=$count_threshold) && (addon_installed('securitylogging')))
+			$restrict=$submitting?'flood_control_submit_secs':'flood_control_access_secs';
+			$restrict_setting=$submitting?'m_last_submit_time':'m_last_visit_time';
+			require_code('ocf_groups');
+			$restrict_answer=ocf_get_best_group_property($this->get_members_groups($id),$restrict);
+			if ((!$submitting) && (array_key_exists('redirect',$_GET))) $restrict_answer=0;
+			if ($restrict_answer<0) $restrict_answer=0;
+			$last=$this->get_member_row_field($id,$restrict_setting);
+			if ($last>time()) $last=time()-$restrict_answer; // Weird clock problem
+			$wait_time=$restrict_answer-time()+$last;
+			if (($wait_time>0) && (addon_installed('stats')))
 			{
-				$ip=get_ip_address();
-				require_code('failure');
-				add_ip_ban($ip,do_lang('SPAM_REPORT_SITE_FLOODING'));
-				require_code('notifications');
-				dispatch_notification('auto_ban',NULL,do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
-				syndicate_spammer_report($ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_SITE_FLOODING'));
-			}
-			if (!function_exists('require_lang')) require_code('lang');
-			if (!function_exists('do_lang_tempcode')) require_code('tempcode');
-			require_lang('ocf');
-
-			warn_exit(do_lang_tempcode('FLOOD_CONTROL_RESTRICT',integer_format($wait_time)));
-		}
-		$extra=$submitting?array('m_last_submit_time'=>time()):array();
-
-		$dif=time()-$this->get_member_row_field($id,'m_last_visit_time');
-		if ($dif<0) $dif=0; // can happen if system clock changes
-		if (is_guest($id)) // bit of a hack, so that guests don't trip each others limits. Works out statistically.
-		{
-			if (get_value('session_prudence')!=='1')
-			{
-				global $SESSION_CACHE;
-				$num_guests=0;
-				foreach ($SESSION_CACHE as $c)
+				// Don't do flood control in every situation
+				if (get_page_name()=='join') return; // Not when joining (too early to be annoying!)
+				if ((!running_script('index')) && (!running_script('iframe'))) return; // Not when probably running some AJAX script
+				$captcha=post_param('captcha','');
+				if ($captcha!='') // Don't consider a CAPTCHA submitting, it'll drive people nuts to get flood control right after a CAPTCHA
 				{
-					if (!array_key_exists('member_id',$c)) continue; // Workaround to HipHop PHP weird bug
-
-					if (($c['last_activity']>time()-60*4) && (is_guest($c['member_id']))) $num_guests++;
+					require_code('captcha');
+					if (check_captcha($captcha,false)) return;
 				}
-				$dif*=$num_guests;
-			} else $restrict_answer=0;
-		}
-		$_min_lastvisit_frequency=get_value('min_lastvisit_frequency');
-		if (is_null($_min_lastvisit_frequency)) $min_lastvisit_frequency=0; else $min_lastvisit_frequency=intval($_min_lastvisit_frequency);
-		if (($submitting) || ((count($_POST)==0) && ($dif>$wait_time/*don't want a flood control message to itself bump the last-visit time*/) && ($dif>$min_lastvisit_frequency)))
+
+				require_code('site');
+				log_stats('/flood',0);
+
+				$time_threshold=30;
+				$count_threshold=50;
+				$query='SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.strval(time()-$time_threshold).' AND date_and_time<'.strval(time()).' AND '.db_string_equal_to('ip',get_ip_address());
+				$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
+				if (($count>=$count_threshold) && (addon_installed('securitylogging')))
+				{
+					$ip=get_ip_address();
+					require_code('failure');
+					add_ip_ban($ip,do_lang('SPAM_REPORT_SITE_FLOODING'));
+					require_code('notifications');
+					dispatch_notification('auto_ban',NULL,do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
+					syndicate_spammer_report($ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_SITE_FLOODING'));
+				}
+				if (!function_exists('require_lang')) require_code('lang');
+				if (!function_exists('do_lang_tempcode')) require_code('tempcode');
+				require_lang('ocf');
+
+				warn_exit(do_lang_tempcode('FLOOD_CONTROL_RESTRICT',integer_format($wait_time)));
+			}
+		} else
 		{
-			if (($restrict_answer!=0) || ($dif>180) || ($new_visit))
+			$restrict_answer=0;
+		}
+
+		$seconds_since_last_visit=time()-$this->get_member_row_field($id,'m_last_visit_time');
+		if ($seconds_since_last_visit<0) $seconds_since_last_visit=0; // can happen if system clock changes
+		if ($restrict_answer!=0)
+		{
+			if (is_guest($id)) // bit of a hack, so that guests don't trip each others limits. Works out statistically.
+			{
+				if (get_value('session_prudence')!=='1')
+				{
+					global $SESSION_CACHE;
+					$num_guests=0;
+					foreach ($SESSION_CACHE as $c)
+					{
+						if (!array_key_exists('member_id',$c)) continue; // Workaround to HipHop PHP weird bug
+
+						if (($c['last_activity']>time()-60*4) && (is_guest($c['member_id']))) $num_guests++;
+					}
+					$seconds_since_last_visit*=$num_guests;
+				} else $restrict_answer=0;
+			}
+		}
+		if (($restrict_answer!=0) || ($seconds_since_last_visit>180) || ($new_visit))
+		{
+			$_min_lastvisit_frequency=get_value('min_lastvisit_frequency');
+			$min_lastvisit_frequency=is_null($_min_lastvisit_frequency)?0:intval($_min_lastvisit_frequency);
+			if (($submitting) || ((!$submitting) && ($seconds_since_last_visit>$wait_time/*don't want a flood control message to itself bump the last-visit time*/) && ($seconds_since_last_visit>$min_lastvisit_frequency)))
 			{
 				$old_ip=$this->get_member_row_field($id,'m_ip_address');
 
 				$change_map=array('m_last_visit_time'=>time());
-				if (get_ip_address()!=$old_ip) $change_map['m_ip_address']=get_ip_address();
+				if (get_ip_address()!=$old_ip)
+					$change_map['m_ip_address']=get_ip_address();
+				if ($submitting)
+					$change_map['m_last_submit_time']=time();
 
 				if (get_db_type()!='xml')
 				{
 					if (!$GLOBALS['SITE_DB']->table_is_locked('f_members'))
-						$this->connection->query_update('f_members',$change_map+$extra,array('id'=>$id),'',1,NULL,false,true);
+						$this->connection->query_update('f_members',$change_map,array('id'=>$id),'',1,NULL,false,true);
 				}
 			}
 		}

@@ -67,7 +67,7 @@ class Hook_fields_member_multi
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default=strval($GLOBALS['FORUM_DRIVER']->get_guest_id());
 		}

@@ -686,7 +686,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	$DO_NOT_CACHE_THIS=false;
 
-	if (is_null($map)) $map=array();
+	if ($map===NULL) $map=array();
 
 	$map['block']=$codename;
 
@@ -786,7 +786,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	// NB: If we've got this far cache="2" is ignored. But later on (for normal expiries, different contexts, etc) cache_on will be known so not an issue.
 
 	// We will need to load the actual file
-	if (is_null($object)) $object=do_block_hunt_file($codename,$map);
+	if ($object===NULL) $object=do_block_hunt_file($codename,$map);
 	if (is_object($object))
 	{
 		$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
@@ -842,10 +842,48 @@ function block_params_arr_to_str($map)
 	foreach ($map as $key=>$val)
 	{
 		if ($_map!='') $_map.=',';
-		$_map.=$key.'='.str_replace(',','\,',$val);
+		if ((is_integer($key)) && (strpos($val,'=')!==false)) // {$BLOCK} style, i.e. a list not a map
+		{
+			$_map.=str_replace(',','\,',$val);
+		} else
+		{
+			$_map.=$key.'='.str_replace(',','\,',$val);
+		}
 	}
 
 	return $_map;
+}
+
+/**
+ * Convert a parameter set from a string (for templates) to an array (for PHP code).
+ *
+ * @param  string			The parameters / acceptable parameter pattern, as template safe parameter
+ * @param  boolean		Whether to leave in block symbol style (i.e. like {$BLOCK} would take, a list not a map)
+ * @return array			The parameters / acceptable parameter pattern
+ */
+function block_params_str_to_arr($_map,$block_symbol_style=false)
+{
+	$map=array();
+	$param=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$_map);
+	foreach ($param as $x)
+	{
+		if ($block_symbol_style)
+		{
+			$map[]=$x;
+		} else
+		{
+			$result=explode('=',$x,2);
+			if (isset($result[1]))
+			{
+				list($a,$b)=$result;
+				$map[$a]=str_replace('\,',',',$b);
+			}
+		}
+	}
+
+	ksort($map);
+
+	return $map;
 }
 
 /**
@@ -929,7 +967,7 @@ function do_block_hunt_file($codename,$map=NULL)
 				$BLOCKS_AT_CACHE[$codename]='sources/miniblocks';
 				if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 			}
-		} elseif ((is_null($map)) || (!isset($map['failsafe'])) || ($map['failsafe']!='1'))
+		} elseif (($map===NULL) || (!isset($map['failsafe'])) || ($map['failsafe']!='1'))
 		{
 			$temp=do_template('WARNING_BOX',array('_GUID'=>'09f1bd6e117693a85fb69bfb52ea1799','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename))));
 			return $temp->evaluate();

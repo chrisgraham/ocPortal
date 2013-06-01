@@ -101,16 +101,16 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 {
 	$under=array();
 
-	if (is_null($table_name)) return $under;
+	if ($table_name===NULL) return $under;
 
 	if ($first) // We want base of subtree to be included
 	{
 		$under[]=$numeric_ids?intval($look_under):$look_under;
 	}
 
-	if (is_null($parent_name)) return $under;
+	if ($parent_name===NULL) return $under;
 
-	if (!is_null(get_value('lots_of_data_in_'.$table_name)))
+	if (get_value('lots_of_data_in_'.$table_name)!==NULL)
 	{
 		if ($numeric_ids)
 		{
@@ -127,7 +127,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 		}
 	} else
 	{
-		if (is_null($cached_mappings))
+		if ($cached_mappings===NULL)
 		{
 			$cached_mappings=$db->query_select($table_name,array($field_name,$parent_name),NULL,'',1000/*reasonable limit*/);
 		}
@@ -135,7 +135,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 		$cached_mappings_copy=$cached_mappings; // Works around weird PHP bug in some versions (due to recursing over reference parameter)
 		foreach ($cached_mappings_copy as $child)
 		{
-			if ((!is_null($child[$parent_name])) && ((($numeric_ids) && ($child[$parent_name]==intval($look_under))) || ((!$numeric_ids) && ($child[$parent_name]==$look_under))))
+			if (($child[$parent_name]!==NULL) && ((($numeric_ids) && ($child[$parent_name]==intval($look_under))) || ((!$numeric_ids) && ($child[$parent_name]==$look_under))))
 			{
 				$under[]=$child[$field_name];
 
@@ -158,14 +158,14 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
  */
 function _ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db)
 {
-	if (is_null($parent_field_name)) return array();
+	if ($parent_field_name===NULL) return array();
 
-	$rows=$db->query_select($table_name,is_null($parent_field_name)?array($field_name):array($field_name,$parent_field_name));
+	$rows=$db->query_select($table_name,($parent_field_name===NULL)?array($field_name):array($field_name,$parent_field_name));
 	$ret=array();
 
 	foreach ($rows as $row)
 	{
-		$ret[$row[$field_name]]=is_null($parent_field_name)?'':$row[$parent_field_name];
+		$ret[$row[$field_name]]=($parent_field_name===NULL)?'':$row[$parent_field_name];
 	}
 	return $ret;
 }
@@ -210,16 +210,16 @@ function _ocfilter_to_generic_callback($table_name,$field_name,$parent_field_nam
  */
 function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$ids_and_parents_callback,$parent_spec__table_name,$parent_spec__parent_name,$parent_field_name,$parent_spec__field_name,$numeric_record_set_ids,$numeric_category_set_ids,$db)
 {
-	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
+	if ($db===NULL) $db=$GLOBALS['SITE_DB'];
 
 	if ($filter=='') return array();
 
-	if (!is_null($parent_spec__table_name))
+	if ($parent_spec__table_name!==NULL)
 	{
-		if ((is_null($parent_field_name)) || (is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		if (($parent_field_name===NULL) || ($parent_spec__field_name===NULL)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	} else
 	{
-		if ((!is_null($parent_spec__parent_name)) || (!is_null($parent_field_name)) || (!is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		if (($parent_spec__parent_name!==NULL) || ($parent_field_name!==NULL) || ($parent_spec__field_name!==NULL)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
 
 	$out_accept=array();
@@ -227,9 +227,9 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 
 	$cached_mappings=mixed();
 
-	if ((is_null($ids_and_parents)) && (is_null($ids_and_parents_callback)))
+	if (($ids_and_parents===NULL) && ($ids_and_parents_callback===NULL))
 	{
-		$has_no_parents=is_null($parent_field_name);
+		$has_no_parents=($parent_field_name===NULL);
 		$ids_and_parents_callback=array('_ocfilter_to_generic_callback',array($table_name,$field_name,$parent_field_name,$has_no_parents));
 	}
 
@@ -261,9 +261,9 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 
 		if ($token=='*') // '*'
 		{
-			if (is_null($ids_and_parents))
+			if ($ids_and_parents===NULL)
 			{
-				if (!is_null($field_name)) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
+				if ($field_name!==NULL) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
 				else $ids_and_parents=_ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db);
 			}
 			foreach (array_keys($ids_and_parents) as $id)
@@ -291,9 +291,9 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 		}
 		elseif (($numeric_record_set_ids) && (preg_match('#^(\d+)\+$#',$token,$matches)!=0)) // e.g. '3+'
 		{
-			if (is_null($ids_and_parents))
+			if ($ids_and_parents===NULL)
 			{
-				if (!is_null($field_name)) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
+				if ($field_name!==NULL) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
 				else $ids_and_parents=_ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db);
 			}
 			foreach (array_keys($ids_and_parents) as $id)
@@ -313,9 +313,9 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 		}
 		elseif (preg_match('#^(.+)(\*|>)$#',$token,$matches)!=0) // e.g. '3*'
 		{
-			if (is_null($ids_and_parents))
+			if ($ids_and_parents===NULL)
 			{
-				if (!is_null($field_name)) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
+				if ($field_name!==NULL) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
 				else $ids_and_parents=_ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db);
 			}
 			$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings,$matches[2]!='>',$matches[2]!='>');
@@ -341,9 +341,9 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 		}
 		elseif (preg_match('#^(.+)\~$#',$token,$matches)!=0) // e.g. '3~'
 		{
-			if (is_null($ids_and_parents))
+			if ($ids_and_parents===NULL)
 			{
-				if (!is_null($field_name)) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
+				if ($field_name!==NULL) $ids_and_parents=call_user_func_array($ids_and_parents_callback[0],array_merge($ids_and_parents_callback[1],array($db)));
 				else $ids_and_parents=_ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db);
 			}
 			$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings);
@@ -452,15 +452,16 @@ function ocfilter_to_idlist_using_callback($filter,$ids_and_parents_callback,$pa
  */
 function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NULL,$parent_spec__parent_name=NULL,$parent_field_name=NULL,$parent_spec__field_name=NULL,$numeric_record_set_ids=true,$numeric_category_set_ids=true,$db=NULL)
 {
-	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
+	if ($db===NULL) $db=$GLOBALS['SITE_DB'];
 
 	if ($filter=='') return '1=2';
 	if ($filter=='*') return '1=1';
 	if ($filter==strval(db_get_first_id()).'*') return '1=1';
 
-	if (is_null($parent_spec__table_name))
+	if ($parent_spec__table_name===NULL)
 	{
-		if ((!is_null($parent_spec__parent_name)) || (!is_null($parent_field_name)) || (!is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		if (($parent_spec__parent_name!==NULL) || ($parent_field_name!==NULL) || ($parent_spec__field_name!==NULL))
+			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
 
 	$out_or='';
@@ -506,7 +507,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			{
 				// MySQL should be smart enough to not enumerate the 'IN' clause here, which would be bad - instead it can jump into the embedded WHERE clause on each test iteration
 				$this_details=$db->query_select('catalogue_categories',array('cc_parent_id','c_name'),array('id'=>intval($matches[1])),'',1);
-				if (is_null($this_details[0]['cc_parent_id']))
+				if ($this_details[0]['cc_parent_id']===NULL)
 				{
 					$out_or.=db_string_equal_to('c_name',$this_details[0]['c_name']);
 				} else

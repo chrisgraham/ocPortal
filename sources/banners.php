@@ -109,17 +109,17 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 	require_lang('banners');
 
 	// If this is being called for a click through
-	if (is_null($type)) $type=get_param('type','');
+	if ($type===NULL) $type=get_param('type','');
 
 	if ($type=='click')
 	{
 		// Input parameters
-		if (is_null($source)) $source=get_param('source','');
-		if (is_null($dest)) $dest=get_param('dest','');
+		if ($source===NULL) $source=get_param('source','');
+		if ($dest===NULL) $dest=get_param('dest','');
 
 		// Has the banner been clicked before?
 		$test=$GLOBALS['SITE_DB']->query_select_value('banner_clicks','MAX(c_date_and_time)',array('c_ip_address'=>get_ip_address(),'c_banner_id'=>$dest));
-		$unique=(is_null($test)) || ($test<time()-60*60*24);
+		$unique=($test===NULL) || ($test<time()-60*60*24);
 
 		// Find the information about the dest
 		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('site_url','hits_to','campaign_remaining'),array('name'=>$dest));
@@ -141,7 +141,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 					$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET hits_to=(hits_to+1) WHERE '.db_string_equal_to('name',$dest),1);
 			}
 			$campaignremaining=$myrow['campaign_remaining'];
-			if (!is_null($campaignremaining))
+			if ($campaignremaining!==NULL)
 			{
 				if (get_db_type()!='xml')
 				{
@@ -160,7 +160,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 			if (get_db_type()!='xml')
 				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET hits_from=(hits_from+1) WHERE '.db_string_equal_to('name',$source),1);
 			$campaignremaining=$myrow['campaign_remaining'];
-			if (!is_null($campaignremaining))
+			if ($campaignremaining!==NULL)
 			{
 				if (get_db_type()!='xml')
 				{
@@ -188,14 +188,14 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 	// Being called to display a banner
 	else
 	{
-		if (is_null($dest)) $dest=get_param('dest','');
-		if (is_null($b_type)) $b_type=get_param('b_type','');
+		if ($dest===NULL) $dest=get_param('dest','');
+		if ($b_type===NULL) $b_type=get_param('b_type','');
 
 		// A community banner then...
 		// ==========================
 
 		// Input parameters (clicks-in from source site)
-		if (is_null($source)) $source=get_param('source','');
+		if ($source===NULL) $source=get_param('source','');
 
 		// To allow overriding to specify a specific banner
 		if ($dest!='')
@@ -208,7 +208,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 
 		// Run Query
 		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true,true,array('caption'));
-		if (is_null($rows)) $rows=array(); // Error, but tolerate it as it could be on each page load
+		if ($rows===NULL) $rows=array(); // Error, but tolerate it as it could be on each page load
 
 		// Filter out what we don't have permission for
 		if (get_option('use_banner_permissions',true)==='1')
@@ -216,7 +216,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 			load_user_stuff();
 			require_code('permissions');
 			$groups=_get_where_clause_groups(get_member());
-			if (!is_null($groups))
+			if ($groups!==NULL)
 			{
 				$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')',NULL,NULL,false,true));
 				$new_rows=array();

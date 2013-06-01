@@ -65,25 +65,19 @@ function evaluate_conventional_variable($lang,$escaped,$type,$name,$param)
  */
 function ecv($lang,$escaped,$type,$name,$param)
 {
-	global $TEMPCODE_SETGET,$CYCLES,$PREPROCESSABLE_SYMBOLS,$DISPLAYED_TITLE;
+	global $TEMPCODE_SETGET,$CYCLES,$PREPROCESSABLE_SYMBOLS,$DISPLAYED_TITLE,$XSS_DETECT,$NON_CACHEABLE_SYMBOLS,$SYMBOL_CACHE;
 
 	if ($type==TC_SYMBOL)
 	{
-		$escaped_codes=$name.(($escaped==array())?'':serialize($escaped));
-
 		$cacheable=(($param==array()) && (!isset($GLOBALS['NON_CACHEABLE_SYMBOLS'][$name])));
 		if ($cacheable)
 		{
-			global $SYMBOL_CACHE;
+			$escaped_codes=$name.(($escaped==array())?'':serialize($escaped));
 			if (isset($SYMBOL_CACHE[$escaped_codes])) return $SYMBOL_CACHE[$escaped_codes];
 		}
 
 		$value='';
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-		$temp_array=array();
-		if ((isset($PREPROCESSABLE_SYMBOLS[$name])) && ($name!='PAGE_LINK'))
-			handle_symbol_preprocessing(array($escaped,$type,$name,$param),$temp_array); // Late preprocessing. Should not be needed in case of full screen output (as this was properly preprocessed), but is in other cases
+		if ($XSS_DETECT) ocp_mark_as_escaped($value);
 
 		switch ($name) // Order by how common (performance)
 		{
@@ -406,7 +400,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if ($q) break;
 					}
 					$value=$q?$param[1]:(isset($param[2])?$param[2]:'');
-					if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+					if ($XSS_DETECT) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -566,7 +560,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'COMMA_LIST_FROM_BREADCRUMBS':
 				if (array_key_exists(0,$param))
 				{
-					$separator=do_template('BREADCRUMB_SEPARATOR');
+					$separator=do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'y28e21cdbc38a3037d083f619bb311ae',));
 					$value='='.str_replace($separator->evaluate(),',=',str_replace(',','&#44;',$param[0]));
 					if ((!array_key_exists(1,$param)) || ($param[1]=='0')) $value=strip_tags($value);
 					else $value=strip_tags($value,'<a>');
@@ -665,6 +659,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'LOAD_PANEL':
+				$temp_array=array();
+				handle_symbol_preprocessing(array($escaped,$type,$name,$param),$temp_array); // Late preprocessing. Should not be needed in case of full screen output (as this was properly preprocessed), but is in other cases
+
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -1313,6 +1310,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'LOAD_PAGE':
+				$temp_array=array();
+				handle_symbol_preprocessing(array($escaped,$type,$name,$param),$temp_array); // Late preprocessing. Should not be needed in case of full screen output (as this was properly preprocessed), but is in other cases
+
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -1350,16 +1350,15 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'BLOCK':
 				if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['SET_RAND'])) // Normal operation
 				{
+					$temp_array=array();
+					handle_symbol_preprocessing(array($escaped,$type,$name,$param),$temp_array); // Late preprocessing. Should not be needed in case of full screen output (as this was properly preprocessed), but is in other cases
+
 					foreach ($param as $i=>$p)
 						if (is_object($p)) $param[$i]=$p->evaluate();
 
 					if ((count($param)==1) && (strpos($param[0],',')!==false)) // NB: This code is also in tempcode.php
 					{
-						$param_2=preg_split('#((?<!\\\\)|(?<=\\\\\\\\)|(?<=^)),#',$param[0]);
-						foreach ($param_2 as $key=>$val)
-						{
-							$param_2[$key]=str_replace('\,',',',$val);
-						}
+						$param_2=block_params_str_to_arr($param[0],true);
 					} else
 					{
 						$param_2=$param;
@@ -1367,7 +1366,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					if (in_array('defer=1',$param_2))
 					{
-						$value=static_evaluate_tempcode(do_template('JS_BLOCK',array('BLOCK_PARAMS'=>implode(',',$param_2))));
+						$value=static_evaluate_tempcode(do_template('JS_BLOCK',array('BLOCK_PARAMS'=>block_params_arr_to_str($param_2))));
 					} else
 					{
 						global $BLOCKS_CACHE;
@@ -1536,12 +1535,18 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'CSS_TEMPCODE':
+				$temp_array=array();
+				handle_symbol_preprocessing(array($escaped,$type,$name,$param),$temp_array); // Late preprocessing. Should not be needed in case of full screen output (as this was properly preprocessed), but is in other cases
+
 				$_value=css_tempcode();
 				$value=$_value->evaluate();
 				break;
 
 			case 'JS_TEMPCODE':
-				$_value=javascript_tempcode(isset($param[0])?$param[0]:NULL);
+				$temp_array=array();
+				handle_symbol_preprocessing(array($escaped,$type,$name,$param),$temp_array); // Late preprocessing. Should not be needed in case of full screen output (as this was properly preprocessed), but is in other cases
+
+				$_value=javascript_tempcode(((isset($param[0])) && ($param[0])!='')?$param[0]:NULL);
 				$value=$_value->evaluate();
 				break;
 
@@ -1732,7 +1737,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'ENTITY_DECODE':
 				if (isset($param[0]))
 				{
-					$value=@html_entity_decode($param[0],ENT_QUOTES,get_charset());
+					static $charset=NULL;
+					if ($charset===NULL) $charset=get_charset();
+					$value=@html_entity_decode($param[0],ENT_QUOTES,$charset);
 				}
 				break;
 
@@ -2242,7 +2249,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$value=fix_id($param[0]);
 					}
-					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+					if (($XSS_DETECT) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -2338,10 +2345,18 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'COMMENT_COUNT':
 				if (isset($param[1]))
 				{
+					static $cache_comment_count=array();
+					$cache_key=$param[0].'_'.$param[1];
+					if (isset($cache_comment_count[$cache_key]))
+					{
+						$value=$cache_comment_count[$cache_key];
+						break;
+					}
+
 					if (get_option('is_on_comments')=='1')
 					{
 						$count=0;
-						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$param[0].'_'.$param[1]),$count,0,0,false);
+						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$cache_key),$count,0,0,false);
 						$_value=do_lang_tempcode('_COMMENTS',integer_format(0));
 						if (is_array($_comments)) $_value=do_lang_tempcode('_COMMENTS',escape_html(integer_format($count)));
 						$value=$_value->evaluate();
@@ -2349,6 +2364,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$value=do_lang('VIEW');
 					}
+					$cache_comment_count[$cache_key]=$value;
 				}
 				break;
 
@@ -2438,6 +2454,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'RATING':
 				if (isset($param[1]))
 				{
+					static $cache_rating=array();
+					$cache_key=serialize($param);
+					if (isset($cache_rating[$cache_key]))
+					{
+						$value=$cache_rating[$cache_key];
+						break;
+					}
+
 					require_code('feedback');
 					$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
 					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
@@ -2448,15 +2472,27 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=do_template('RATING_INLINE_STATIC',$rating);
 					}
 					if (is_object($value)) $value=$value->evaluate();
+
+					$cache_rating[$cache_key]=$value;
 				}
 				break;
 
 			case 'NUM_RATINGS':
 				if (isset($param[1]))
 				{
+					static $cache_num_ratings=array();
+					$cache_key=serialize($param);
+					if (isset($cache_num_ratings[$cache_key]))
+					{
+						$value=$cache_num_ratings[$cache_key];
+						break;
+					}
+
 					require_code('feedback');
 					$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
 					$value=$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['NUM_RATINGS'];
+
+					$cache_num_ratings[$cache_key]=$value;
 				}
 				break;
 
@@ -2634,7 +2670,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 	if ($type==TC_DIRECTIVE)
 	{
 		$value='';
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+		if ($XSS_DETECT) ocp_mark_as_escaped($value);
 
 		// In our param we should have a map of bubbled template parameters (under 'vars') and our numbered directive parameters
 
@@ -2672,6 +2708,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'FRACTIONAL_EDITABLE':
+				require_javascript('javascript_fractional_edit');
+
 				foreach (array_keys($param) as $key)
 				{
 					if (!is_numeric($key)) unset($param[$key]);
@@ -2802,6 +2840,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$top_links=isset($param[7])?$param[6]->evaluate():'';
 				$tmp=put_in_standard_box(array_pop($param),$title,$box_type,$width,$options,$meta,$links,$top_links);
 				$value=$tmp->evaluate();
+				break;
+
+			case 'NO_PREPROCESSING':
+				$value=$param[0]->evaluate();
 				break;
 
 			case 'IF_NON_EMPTY':
@@ -3083,7 +3125,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 		}
 
 		$value='';
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+		if ($XSS_DETECT) ocp_mark_as_escaped($value);
 		return $value;
 	}
 	if ($escaped!=array() && $escaped!=array(ENTITY_ESCAPED)) apply_tempcode_escaping(array_diff($escaped,array(ENTITY_ESCAPED)),$ret); // Escape but without ENTITY_ESCAPED because we don't do that on lang strings

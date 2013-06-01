@@ -135,7 +135,7 @@ function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_v
 		if (!is_null($public_view)) $where.=' AND cf_public_view='.strval($public_view);
 		if (!is_null($owner_view)) $where.=' AND cf_owner_view='.strval($owner_view);
 		if (!is_null($owner_set)) $where.=' AND cf_owner_set='.strval($owner_set);
-		if (!is_null($required)) $where.=' AND cf_required='.strval($required);
+		if ($required!==NULL) $where.=' AND cf_required='.strval($required);
 		if (!is_null($show_in_posts)) $where.=' AND cf_show_in_posts='.strval($show_in_posts);
 		if (!is_null($show_in_post_previews)) $where.=' AND cf_show_in_post_previews='.strval($show_in_post_previews);
 		if ($special_start==1) $where.=' AND tx.text_original LIKE \''.db_encode_like('ocp_%').'\'';

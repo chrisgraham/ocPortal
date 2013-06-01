@@ -585,19 +585,21 @@ function get_ocp_cpf($cpf,$member=NULL)
  */
 function get_online_members($longer_time,$filter,&$count)
 {
+	if (get_value('no_member_tracking')==='1') return array();
+
 	$users_online_time_seconds=$longer_time?(60*60*intval(get_option('session_expiry_time'))):(60*intval(get_option('users_online_time')));
+	$cutoff=time()-$users_online_time_seconds;
 
 	if (get_value('session_prudence')==='1')
 	{
 		// If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
-		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds));
+		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff)); // Written in by reference
 		if (!is_null($filter))
-			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND member_id='.strval($filter),1);
+			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff).' AND member_id='.strval($filter),1);
 		return NULL;
 	}
 
 	$members=array();
-	$cutoff=time()-$users_online_time_seconds;
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	global $SESSION_CACHE;
 	$members_online=0;
@@ -615,7 +617,7 @@ function get_online_members($longer_time,$filter,&$count)
 				if ($members_online==200) // This is silly, don't display any
 				{
 					if (!is_null($filter)) // Unless we are filtering
-						return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND member_id='.strval($filter),1);
+						return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff).' AND member_id='.strval($filter),1);
 					return NULL;
 				}
 			} elseif (!member_blocked(get_member(),$row['member_id']))

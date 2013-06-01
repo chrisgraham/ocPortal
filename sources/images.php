@@ -90,8 +90,6 @@ function _symbol_thumbnail($param)
 	// only_make_smaller: Whether to avoid growing small images to fit (smaller images are better for the Web). One of 0 (false) or 1 (true)
 	if (($param[0]!=''))
 	{
-		if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return $param[0];
-
 		$only_make_smaller=isset($param[8])?($param[8]=='1'):false;
 		$orig_url=$param[0]; // Source for thumbnail generation
 		if (url_is_local($orig_url)) $orig_url=get_custom_base_url().'/'.$orig_url;
@@ -126,6 +124,8 @@ function _symbol_thumbnail($param)
 		// made one with these options
 		if ((!is_file($save_path)) && (!is_file($save_path.'.png')))
 		{
+			if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return $param[0];
+
 			// Branch based on the type of thumbnail we're making
 			if ($algorithm=='box')
 			{
@@ -277,10 +277,10 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 		$js_tooltip=true;
 	}
 
-	$box_size=((is_null($width)) && (is_null($height)));
+	$box_size=(($width===NULL) && ($height===NULL));
 
-	if (is_null($width)) $width=intval(get_option('thumb_width'));
-	if (is_null($height)) $height=intval(get_option('thumb_width'));
+	if ($width===NULL) $width=intval(get_option('thumb_width'));
+	if ($height===NULL) $height=intval(get_option('thumb_width'));
 
 	if (!$is_thumbnail_already)
 	{	
@@ -316,7 +316,7 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
  *
  * @param  URLPATH		The full URL to the image which will-be/is thumbnailed
  * @param  URLPATH		The URL to the thumbnail (blank: no thumbnail yet)
- * @param  ID_TEXT		The directory, relative to the ocPortal install, where the thumbnails are stored. MINUS "_thumbs"
+ * @param  ID_TEXT		The directory, relative to the ocPortal install's uploads directory, where the thumbnails are stored. MINUS "_thumbs"
  * @param  ID_TEXT		The name of the table that is storing what we are doing the thumbnail for
  * @param  AUTO_LINK		The ID of the table record that is storing what we are doing the thumbnail for
  * @param  ID_TEXT		The name of the table field where thumbnails are saved
@@ -326,7 +326,7 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
  */
 function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_field_name='thumb_url',$thumb_width=NULL,$only_make_smaller=false)
 {
-	if (is_null($thumb_width)) $thumb_width=intval(get_option('thumb_width'));
+	if ($thumb_width===NULL) $thumb_width=intval(get_option('thumb_width'));
 
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ($full_url==''))
 	{

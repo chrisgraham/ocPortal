@@ -204,6 +204,7 @@ class Block_main_news
 		if (($filter_and!='*') && ($filter_and!='')) $prop_url['filter_and']=$filter_and;
 		if ($blogs!=-1) $prop_url['blog']=$blogs;
 		$allow_comments_shared=(get_option('is_on_comments')=='1') && (!has_no_forum());
+		$base_url=get_base_url();
 
 		// Render loop
 		$news_text=new ocp_tempcode();
@@ -266,7 +267,7 @@ class Block_main_news
 				if ($myrow['news_image']!='')
 				{
 					$img_raw=$myrow['news_image'];
-					if (url_is_local($img_raw)) $img_raw=get_base_url().'/'.$img_raw;
+					if (url_is_local($img_raw)) $img_raw=$base_url.'/'.$img_raw;
 					require_code('images');
 					$img=do_image_thumb($img_raw,$category,false);
 				} else

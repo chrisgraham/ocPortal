@@ -367,11 +367,14 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			$error=do_lang_tempcode('NORATE');
 		} else
 		{
-			$rate_url=get_self_url();
+			static $self_url=NULL;
+			if ($self_url===NULL) $self_url=get_self_url();
+			$rate_url=$self_url;
 		}
 
 		// Templating
 		$tpl_params=array(
+			'_GUID'=>'x28e21cdbc38a3037d083f619bb311af',
 			'CONTENT_URL'=>$content_url,
 			'CONTENT_TITLE'=>$content_title,
 			'ERROR'=>$error,
@@ -405,7 +408,9 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
  */
 function already_rated($rating_for_types,$content_id)
 {
-	if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test',0)==1))
+	static $not=NULL;
+	if ($not===NULL) $not=($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test',0)==1);
+	if ($not)
 		return false;
 
 	static $cache=array();
@@ -421,14 +426,18 @@ function already_rated($rating_for_types,$content_id)
 	}
 	$query='SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id);
 	$query.=' AND (';
-	if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_value('poll_no_member_ip_restrict')!=='1'))
+	static $ip_restrict=NULL;
+	if ($ip_restrict===NULL)
 	{
-		$query.='rating_ip=\''.get_ip_address().'\'';
-	} else
-	{
-		$query.='1=0';
+		if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_value('poll_no_member_ip_restrict')!=='1'))
+		{
+			$ip_restrict=db_string_equal_to('rating_ip',get_ip_address());
+		} else
+		{
+			$ip_restrict='1=0';
+		}
 	}
-	$query.=$more.')';
+	$query.=$ip_restrict.$more.')';
 	$has_rated=$GLOBALS['SITE_DB']->query_value_if_there($query,false,true);
 
 	$ret=($has_rated>=count($rating_for_types));
