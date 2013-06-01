@@ -139,7 +139,7 @@ class Module_cms_blogs extends standard_aed_module
 
 		require_code('form_templates');
 		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned),false,'JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category AND nc_owner IS NOT NULL');
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned),false,' JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category AND nc_owner IS NOT NULL');
 		if (count($rows)==0) return NULL;
 		foreach ($rows as $row)
 		{
