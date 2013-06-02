@@ -36,7 +36,7 @@
 		{+END}
 		window.activities_feed_max={MAX%};
 		if (jQuery('#activities_feed').length!=0) {
-			window.setInterval(s_update_get_data,30000); // Refreshes feed every 30 seconds
+			window.setInterval(s_update_get_data,{REFRESH_TIME}*1000);
 		}
 	{+END}
 //]]></script>

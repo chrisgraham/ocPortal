@@ -23,6 +23,7 @@ function s_update_blur(event)
 	if (jQuery(this).val().trim()=='')
 	{
 		jQuery(this).val('{!activities:TYPE_HERE;}');
+		this.className=this.className.replace(' field_input_filled',' field_input_non_filled');
 	}
 	jQuery(this).addClass('fade_input');
 }
@@ -109,6 +110,7 @@ function s_update_retrieve(data,tStat)
 				update_box.fadeIn(1200);
 				as.parent().height(as.parent().height());
 				as.val('{!activities:TYPE_HERE;}');
+				as[0].className=as[0].className.replace(' field_input_filled',' field_input_non_filled');
 				as.fadeIn(1200,function() { as.parent().height(''); });
 			}); });
 		}

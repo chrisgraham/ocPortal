@@ -20,18 +20,18 @@ TODO: PHP doc comments
 
 function find_activities($viewer_id,$mode,$member_ids)
 {
-	$proceed_selection=true; //There are some cases in which even glancing at the database is a waste of precious time.
+	$proceed_selection=true; // There are some cases in which even glancing at the database is a waste of precious time.
 
-	$is_guest=false; //Can't be doing with overcomplicated SQL breakages. Weed it out.
+	$is_guest=false; // Can't be doing with overcomplicated SQL breakages. Weed it out.
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	if ($guest_id==$viewer_id)
 		$is_guest=true;
 
 	if (addon_installed('chat'))
 	{
-		if (!$is_guest) //If not a guest, get all blocks
+		if (!$is_guest) // If not a guest, get all blocks
 		{
-			//Grabbing who you're blocked-by
+			// Grabbing who you're blocked-by
 			$blocked_by=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocker'),array('member_blocked'=>$viewer_id));
 
 			if (count($blocked_by)>0)
@@ -50,7 +50,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 			else
 				$blocked_by='';
 
-			//Grabbing who you've blocked
+			// Grabbing who you've blocked
 			$blocking=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$viewer_id));
 
 			if (count($blocking)>0)
@@ -63,7 +63,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				else
 				{
 					$blocking=current($blocking);
-					$blocking=$blocking['member_blocked']; //If it's pointing to anything other than the only possible item, PHP needs fixing.
+					$blocking=$blocking['member_blocked']; // If it's pointing to anything other than the only possible item, PHP needs fixing.
 				}
 			}
 			else
@@ -78,7 +78,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 	switch ($mode)
 	{
-		case 'some_members': //This is used to view one's own activity (eg. on a profile)
+		case 'some_members': // This is used to view one's own activity (eg. on a profile)
 			$whereville='';
 			foreach ($member_ids as $member_id)
 			{
@@ -101,10 +101,10 @@ function find_activities($viewer_id,$mode,$member_ids)
 				// to care.
 				if (($member_id!=$viewer_id) && addon_installed('chat'))
 				{
-					$view_private=NULL;        //Set to default denial level and only bother asking for perms if not a guest.
+					$view_private=NULL;        // Set to default denial level and only bother asking for perms if not a guest.
 					if ((!$is_guest))
 					{
-						if (strlen($blocked_by)>0) //On the basis that you've sought this view out, your blocking them doesn't hide their messages.
+						if (strlen($blocked_by)>0) // On the basis that you've sought this view out, your blocking them doesn't hide their messages.
 							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).' AND member_likes NOT IN('.$blocked_by.'))';
 						else
 							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
@@ -112,7 +112,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 						$view_private=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_likes FROM '.get_table_prefix().'chat_buddies WHERE '.$friends_check_where);
 					}
 
-					if (is_null($view_private)) //If not friended by this person, the view is filtered.
+					if (is_null($view_private)) // If not friended by this person, the view is filtered.
 						$_whereville='('.$_whereville.' AND a_is_public=1)';
 				}
 
@@ -122,19 +122,19 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 		case 'friends':
 			// "friends" only makes sense if the chat addon is installed
-			if (addon_installed('chat') && !$is_guest) //If not a guest, get all reciprocal friendships.
+			if (addon_installed('chat') && !$is_guest) // If not a guest, get all reciprocal friendships.
 			{
 				$like_outgoing=array();
-				//Working on the principle that you only want to see people you like on this, only those you like and have not blocked will be selected
-				//Exclusions will be based on whether they like and have not blocked you.
+				// Working on the principle that you only want to see people you like on this, only those you like and have not blocked will be selected
+				// Exclusions will be based on whether they like and have not blocked you.
 
-				//Select mutual likes you haven't blocked.
+				// Select mutual likes you haven't blocked.
 				$tables_and_joins ='chat_buddies a JOIN '.get_table_prefix().'chat_buddies b';
 				$tables_and_joins.=' ON (a.member_liked=b.member_likes AND a.member_likes=b.member_liked AND a.member_likes=';
 				$tables_and_joins.=strval($viewer_id);
 
 				$extra_not='';
-				if (strlen($blocking)>0) //Also setting who gets discarded from outgoing like selection
+				if (strlen($blocking)>0) // Also setting who gets discarded from outgoing like selection
 				{
 					$tables_and_joins.=' AND a.member_liked NOT IN('.$blocking.')';
 					$extra_not.=' AND member_liked NOT IN('.$blocking.')';
@@ -150,7 +150,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 				$like_mutual=$GLOBALS['SITE_DB']->query_select($tables_and_joins, array('a.member_liked AS liked'));
 
-				if (count($like_mutual)>1) //More than one mutual friend
+				if (count($like_mutual)>1) // More than one mutual friend
 				{
 					$lm_ids='';
 
@@ -163,7 +163,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),NULL,' WHERE (member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
 
-					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
+					if (count($like_outgoing)>1) // Likes more than one non-mutual friend
 					{
 						$lo_ids='';
 						foreach ($like_outgoing as $l_o)
@@ -175,20 +175,20 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 						$whereville='(a_member_id IN('.$lm_ids.') OR (a_member_id IN('.$lo_ids.') AND a_is_public=1))';
 					}
-					elseif (count($like_outgoing)>0) //Likes one non-mutual friend
+					elseif (count($like_outgoing)>0) // Likes one non-mutual friend
 					{
 						$whereville='(a_member_id IN('.$lm_ids.') OR (a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
 					}
-					else //Only has mutual friends
+					else // Only has mutual friends
 					{
 						$whereville='a_member_id IN('.$lm_ids.')';
 					}
 				}
-				elseif (count($like_mutual)>0) //Has one mutual friend
+				elseif (count($like_mutual)>0) // Has one mutual friend
 				{
 					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),NULL,' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
 
-					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
+					if (count($like_outgoing)>1) // Likes more than one non-mutual friend
 					{
 						$lo_ids='';
 						foreach ($like_outgoing as $l_o)
@@ -200,21 +200,21 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 						$whereville='(a_member_id='.strval($like_mutual[0]['liked']).' OR (a_member_id IN('.$lo_ids.') AND a_is_public=1))';
 					}
-					elseif (count($like_outgoing)>0) //Likes one non-mutual friend
+					elseif (count($like_outgoing)>0) // Likes one non-mutual friend
 					{
 						$whereville='(a_member_id='.strval($like_mutual[0]['liked']).' OR (a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
 					}
 					else
 					{
-						$whereville='a_member_id='.strval($like_mutual[0]['liked']); //Has one mutual friend and no others
+						$whereville='a_member_id='.strval($like_mutual[0]['liked']); // Has one mutual friend and no others
 					}
 				}
-				else //Has no mutual friends
+				else // Has no mutual friends
 				{
 					if (!$is_guest)
 						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),NULL,' WHERE (member_likes='.strval($viewer_id).$extra_not);
 
-					if (count($like_outgoing)>1) //Likes more than one person
+					if (count($like_outgoing)>1) // Likes more than one person
 					{
 						$lo_ids='';
 						foreach ($like_outgoing as $l_o)
@@ -226,9 +226,9 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 						$whereville='(a_member_id IN('.$lo_ids.') AND a_is_public=1)';
 					}
-					elseif (count($like_outgoing)>0) //Likes one person
+					elseif (count($like_outgoing)>0) // Likes one person
 						$whereville='(a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1)';
-					else //Has no friends, the case with _all_ new members.
+					else // Has no friends, the case with _all_ new members.
 						$proceed_selection=false;
 				}
 			}
@@ -236,7 +236,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				$proceed_selection=false;
 			break;
 
-		case 'all': //Frontpage, 100% permissions dependent.
+		case 'all': // Frontpage, 100% permissions dependent.
 		default:
 			$view_private=array();
 			if (addon_installed('chat') && !$is_guest)
