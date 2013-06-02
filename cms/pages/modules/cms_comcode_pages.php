@@ -59,7 +59,52 @@ class Module_cms_comcode_pages
 	 */
 	function get_sp_overrides()
 	{
-		return array('submit_highrange_content'=>array(0,'COMCODE_PAGE_ADD'),'edit_highrange_content'=>array(0,'COMCODE_PAGE_EDIT'),'edit_own_highrange_content'=>array(0,'COMCODE_PAGE_OWN_EDIT'));
+		return array('submit_highrange_content'=>array(1,'COMCODE_PAGE_ADD'),'edit_highrange_content'=>array(1,'COMCODE_PAGE_EDIT'),'edit_own_highrange_content'=>array(1,'COMCODE_PAGE_OWN_EDIT'),'bypass_validation_highrange_content'=>array(1,'BYPASS_COMCODE_PAGE_VALIDATION'));
+	}
+
+	/**
+	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
+	 *
+	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
+	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
+	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
+	 * @param  boolean	Whether to avoid returning categories.
+	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
+	 */
+	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
+	{
+		if (!$require_permission_support) return NULL;
+
+		$permission_page='cms_comcode_pages';
+
+		$category_data_count=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');
+		if ($category_data_count>2000) $dont_care_about_categories=true;
+
+		$tree=array();
+
+		$zones=find_all_zones(false,true);
+		foreach ($zones as $_zone)
+		{
+			list($zone,$zone_title)=$_zone;
+
+			$pagelink='cms:cms_comcode_pages:'.$zone; // A cheat
+			$tree[]=array($pagelink,'zone_page',$zone,$zone_title,array());
+		}
+
+		return array($tree,$permission_page);
+	}
+
+	/**
+	 * Convert a page link to a category ID and category permission module type.
+	 *
+	 * @param  string	The page link
+	 * @return array	The pair
+	 */
+	function extract_page_link_permissions($page_link)
+	{
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*):(.*)$#',$page_link,$matches);
+		return array($matches[3],'zone_page');
 	}
 
 	/**
@@ -212,7 +257,7 @@ class Module_cms_comcode_pages
 				if (is_integer($page)) $page=strval($page);
 
 				$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
-				if (!has_edit_permission('high',get_member(),$resource_owner,'cms_comcode_pages'))
+				if (!has_edit_comcode_page_permission($zone,$page))
 					continue;
 
 				$out[$zone.':'.$page]=array($zone.'/pages/'.$subdir.'/'.$page,NULL);
@@ -296,11 +341,8 @@ class Module_cms_comcode_pages
 
 		require_code('form_templates');
 
-		$add_new_permission=has_specific_permission(get_member(),'submit_highrange_content');
-		if ((!$add_new_permission) && (!has_specific_permission(get_member(),'edit_highrange_content')) && (!has_specific_permission(get_member(),'edit_own_highrange_content')))
-			check_edit_permission('high',NULL);
-
 		$fields=new ocp_tempcode();
+		$add_new_permission=has_add_comcode_page_permission();
 		if ($add_new_permission)
 		{
 			$fields->attach(form_input_line(do_lang_tempcode('NEW'),do_lang_tempcode('DESCRIPTION_NEW_COMCODE_PAGE'),'page_link_2','',true));
@@ -401,8 +443,38 @@ class Module_cms_comcode_pages
 				$group_by='GROUP BY c.the_zone,c.the_page';
 
 			$where_map='('.db_string_equal_to('language',$lang).' OR language IS NULL)';
-			if (!has_specific_permission(get_member(),'edit_highrange_content'))
-				$where_map.=' AND submitter='.strval(get_member());
+			if (!has_some_edit_comcode_page_permission(COMCODE_EDIT_ANY))
+			{
+				if (!has_some_edit_comcode_page_permission(COMCODE_EDIT_OWN)) // Nothing global, so go per-zone
+				{
+					$zone_editability=get_comcode_page_editability_per_zone();
+					if (count($zone_editability)!=0)
+					{
+						$where_map.=' AND (';
+						foreach ($zone_editability as $zi=>$zone_editability_pair)
+						{
+							if ($zi!=0) $where_map.=' OR ';
+							if (($zone_editability_pair[1] & COMCODE_EDIT_ANY) == 0)
+							{
+								$where_map.='('.db_string_equal_to('the_zone',$zone_editability_pair[0]).' AND submitter='.strval(get_member()).')';
+							} else
+							{
+								$where_map.=db_string_equal_to('the_zone',$zone_editability_pair[0]);
+							}
+						}
+						$where_map.=')';
+					} else
+					{
+						access_denied('ADD_OR_EDIT_COMCODE_PAGES'); // Nothing at all
+					}
+				} else
+				{
+					$where_map.=' AND submitter='.strval(get_member());
+				}
+			} else
+			{
+				// No additional filter; NB: this does assume no negative overrides are in place; if they are, an error will be shown when clicking through
+			}
 			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
 			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start);
 			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
@@ -436,6 +508,8 @@ class Module_cms_comcode_pages
 		{
 			list($zone,$page)=explode(':',$pagelink,2);
 			if (!is_string($page)) $page=strval($page);
+
+			if (!has_actual_page_access(get_member(),$page,$zone)) continue;
 
 			$edit_link=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$pagelink,'lang'=>$lang),'_SELF');
 
@@ -600,9 +674,15 @@ class Module_cms_comcode_pages
 		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
-		check_edit_permission('high',$resource_owner);
-		if (is_null($resource_owner))
-			check_submit_permission('high');
+		if (is_null($resource_owner)) // Add
+		{
+			if (!has_add_comcode_page_permission($zone))
+				access_denied('ADD_COMCODE_PAGE');
+		} else // Edit
+		{
+			if (!has_edit_comcode_page_permission($zone,$file,$resource_owner))
+				access_denied('EDIT_COMCODE_PAGE');
+		}
 
 		$restore_from=$this->find_comcode_page($lang,$file,$zone);
 
@@ -619,8 +699,6 @@ class Module_cms_comcode_pages
 
 		$title=get_screen_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
 		if (!$simple_add && ($file!='')) breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
-
-		if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
 
 		// Default file contents
 		$contents=post_param('new','');
@@ -800,9 +878,11 @@ class Module_cms_comcode_pages
 		if (!$simple_add) // We don't want to imply the 'validated' has an effect on the menu addition for the add new page wizard, so we don't show validation for that wizard at all
 		{
 			if (!$validated) $validated=(get_param_integer('validated',0)==1);
-			if (has_specific_permission(get_member(),'bypass_validation_highrange_content'))
+			if (has_bypass_validation_comcode_page_permission($zone))
+			{
 				if (addon_installed('unvalidated'))
 					$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated));
+			}
 
 			if (!$new)
 			{
@@ -928,12 +1008,11 @@ class Module_cms_comcode_pages
 
 		$validated=post_param_integer('validated',0);
 		inject_action_spamcheck();
-		if (!has_specific_permission(get_member(),'bypass_validation_highrange_content')) $validated=0;
+		if (!has_bypass_validation_comcode_page_permission($zone)) $validated=0;
 		$parent_page=post_param('parent_page','');
 		$show_as_edit=post_param_integer('show_as_edit',0);
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
-		check_edit_permission('high',$resource_owner);
 		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission
 		{
 			$_owner=post_param('owner',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
@@ -942,7 +1021,8 @@ class Module_cms_comcode_pages
 		} else $owner=get_member();
 		if (is_null($resource_owner)) // Add
 		{
-			check_submit_permission('high');
+			if (!has_add_comcode_page_permission($zone))
+				access_denied('ADD_COMCODE_PAGE');
 
 			require_code('submit');
 			give_submit_points('COMCODE_PAGE_ADD');
@@ -960,7 +1040,8 @@ class Module_cms_comcode_pages
 			));
 		} else // Edit
 		{
-			if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
+			if (!has_edit_comcode_page_permission($zone,$file,$resource_owner))
+				access_denied('EDIT_COMCODE_PAGE');
 
 			require_code('submit');
 			$just_validated=(!content_validated('comcode_page',$zone.':'.$file)) && ($validated==1);

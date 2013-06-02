@@ -30,7 +30,7 @@
 			{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
 				<p class="quick_self_edit_link associated_link">
 					<img class="comcode_supported_icon" title="{!_COMCODE}" alt="{!_COMCODE}" src="{$IMG*,comcode}" />
-					<a href="{EDIT_URL*}" title="{!EDIT_ZONE_EDITOR}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})">{!EDIT_ZONE_EDITOR}</a>
+					<a href="{EDIT_URL*}" title="{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})">{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}</a>
 				</p>
 			{+END}
 

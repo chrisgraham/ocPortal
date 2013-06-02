@@ -262,6 +262,8 @@ function update_permission_box(setting)
 		var matrix=document.getElementById('enter_the_matrix').getElementsByTagName('table')[0];
 		var num_sp_total=0;
 		var is_cms=null;
+		var rows=matrix.getElementsByTagName('tr');
+		var done_header=false;
 		for (i=0;i<values.length;i++) // For all items that we are loading permissions for (we usually just do it for one, but sometimes we load whole sets if we are batch setting permissions)
 		{
 			node=window.site_tree.getElementByIdHack(values[i]);
@@ -303,7 +305,7 @@ function update_permission_box(setting)
 					for (k=0;k<tds.length;k++) cells.push(tds[k]);
 					for (k=0;k<cells.length;k++)
 					{
-						if ((cells[k].className.match(/(^|\s)sp\_header($|\s)/)) || (cells[k].className.match(/(^|\s)sp\_cell($|\s)/)))
+						if ((cells[k].className.match(/(^|\s)sp\_header($|\s)/)) || (cells[k].className.match(/(^|\s)sp\_footer($|\s)/)) || (cells[k].className.match(/(^|\s)sp\_cell($|\s)/)))
 						{
 							cells[k].parentNode.removeChild(cells[k]);
 						}
@@ -314,24 +316,28 @@ function update_permission_box(setting)
 			if ((node.getAttribute('serverid').indexOf(':cms_')!=-1) && (is_cms!==false)) is_cms=true; else is_cms=false;
 
 			// Set view access
-			var done_group=false;
 			for (j=0;j<node.attributes.length;j++)
 			{
 				if (node.attributes[j].name.substr(0,7)=='g_view_')
 				{
 					group=node.attributes[j].name.substr(7);
 					element=document.getElementById('access_'+group);
-					{+START,IF,{$OCF}}
-						element.disabled=(node.getAttribute('serverid')==':') && (!done_group);
-					{+END}
-					element.style.display=((values.length==1) && (node.getAttribute('serverid')=='_root'))?'none':'inline';
 					if (!element.checked)
 					{
 						element.checked=(node.attributes[j].value=='true');
 					}
 					element=document.getElementById('access_'+group);
-					element.style.disabled=((values.length==1) && (node.getAttribute('serverid')=='_root'));
-					done_group=true;
+				}
+			}
+			var form=document.getElementById('permissions_form');
+			var no_view_settings=(node.getAttribute('serverid')=='_root') || (node.getAttribute('serverid').substr(0,22)=='cms:cms_comcode_pages:');
+			for (j=0;j<form.elements.length;j++)
+			{
+				element=form.elements[j];
+				if (element.id.substr(0,7)=='access_')
+				{
+					element.parentNode.style.display=((values.length==1) && (no_view_settings))?'none':'inline';
+					element.disabled=((values.length==1) && (no_view_settings));
 				}
 			}
 
@@ -348,34 +354,45 @@ function update_permission_box(setting)
 				{
 					sp=name.substr(3);
 					sp_title=value;
-					for (k=0;k<known_groups.length;k++)
+					done_header=false;
+					for (k=0;k<rows.length;k++)
 					{
-						group=known_groups[k];
+						if (rows[k].id.substr(0,7)!='access_') continue;
+
+						group=rows[k].id.substring(7,rows[k].id.indexOf('_sp_container'));
 
 						element=document.getElementById('access_'+group+'_sp_'+sp);
 						if (!element) // We haven't added it yet for one of the resources we're doing permissions for
 						{
-							if (k==0)
+							if (!done_header)
 							{
-								row=matrix.getElementsByTagName('tr')[0];
+								row=rows[0];
 								new_cell=row.insertBefore(document.createElement('th'),row.cells[row.cells.length-1]);
 								new_cell.className='sp_header';
 								set_inner_html(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+window.column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
 
+								rows[rows.length-1].appendChild(document.createElement('td')).className='form_table_field_input sp_footer'; // Footer cell
+
 								num_sp_total++;
+
+								done_header=true;
 							}
 
 							// Manually build up cell
 							row=document.getElementById('access_'+group+'_sp_container');
 							new_cell=row.insertBefore(document.createElement('td'),row.cells[row.cells.length-1]);
 							new_cell.className='form_table_field_input sp_cell';
-							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!permissions:OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!permissions:NO_COMPACT;^}</option><option value="1">{!permissions:YES_COMPACT;^}</option></select>');
+							if (document.getElementById('access_'+group).name!='_ignore')
+							{
+								set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!permissions:OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!permissions:NO_COMPACT;^}</option><option value="1">{!permissions:YES_COMPACT;^}</option></select>');
 
-							element=document.getElementById('access_'+group+'_sp_'+sp);
+								element=document.getElementById('access_'+group+'_sp_'+sp);
 
-							setup_sp_override_selector('access_'+group,'-1',sp,sp_title,false);
+								setup_sp_override_selector('access_'+group,'-1',sp,sp_title,false);
+							}
 						}
-						element.options[0].disabled=((values.length==1) && (node.getAttribute('serverid')=='_root'));
+						if (element)
+							element.options[0].disabled=((values.length==1) && (node.getAttribute('serverid')=='_root'));
 					}
 					known_sps.push(sp);
 					num_sp++;

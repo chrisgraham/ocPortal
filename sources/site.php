@@ -1323,8 +1323,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	if (($html->is_definitely_empty()) && ($being_included)) return $html;
 
-	$add_child_url=new ocp_tempcode();
-	if ((has_actual_page_access(get_member(),'cms_comcode_pages',NULL,NULL,(($comcode_page_row['p_submitter']==get_member()) && (!is_guest()))?'edit_own_highrange_content':'edit_highrange_content')))
+	if (has_edit_comcode_page_permission($zone,$codename,$comcode_page_row['p_submitter']))
 	{
 		$redirect=get_self_url(true,false,array('redirect'=>NULL,'redirected'=>NULL));
 		if ((($codename=='panel_left') || ($codename=='panel_right')) && (has_js()) && (has_actual_page_access(get_member(),'admin_zones')))
@@ -1334,13 +1333,17 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		{
 			$edit_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename,/*'lang'=>user_lang(),*/'redirect'=>$redirect),get_module_zone('cms_comcode_pages'));
 		}
+	} else
+	{
+		$edit_url=new ocp_tempcode();
+	}
+	$add_child_url=new ocp_tempcode();
+	if (has_add_comcode_page_permission($zone))
+	{
 		if (strpos($raw_comcode,'main_comcode_page_children')!==false)
 		{
 			$add_child_url=(get_option('is_on_comcode_page_children')=='1')?build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','parent_page'=>$codename,'page_link'=>$zone.':'/*,'lang'=>user_lang()*//*,'redirect'=>$redirect*/),get_module_zone('cms_comcode_pages')):new ocp_tempcode();
 		}
-	} else
-	{
-		$edit_url=new ocp_tempcode();
 	}
 
 	$warning_details=new ocp_tempcode();

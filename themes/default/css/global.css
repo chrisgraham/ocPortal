@@ -272,7 +272,7 @@ th, .fake_th {
 th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
 }
-thead>tr>th, .boxless_space .box thead>tr>th {
+thead>tr>th, .boxless_space .box thead>tr>th, .pte_set_box .box thead>tr>th {
 	background-color: {$GET,box_title_background};
 	color: {$GET,box_title_text};
 	background-repeat: repeat-x;

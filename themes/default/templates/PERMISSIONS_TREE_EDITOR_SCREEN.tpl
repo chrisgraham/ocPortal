@@ -66,7 +66,7 @@
 			{!PERMISSION_INHERITANCE_HOVER}
 		</p>
 
-		<form title="{!PRIMARY_PAGE_FORM}" method="post" action="index.php">
+		<form id="permissions_form" title="{!PRIMARY_PAGE_FORM}" method="post" action="index.php">
 			<div class="float_surrounder">
 				<div style="display: none" id="selection_form_fields">
 					{EDITOR}

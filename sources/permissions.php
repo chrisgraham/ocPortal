@@ -51,6 +51,10 @@ function init__permissions()
 
 	global $SPAM_REMOVE_VALIDATION;
 	$SPAM_REMOVE_VALIDATION=false;
+
+	define('COMCODE_EDIT_NONE',0x0);
+	define('COMCODE_EDIT_OWN',0x1);
+	define('COMCODE_EDIT_ANY',0x2);
 }
 
 /**
@@ -105,7 +109,7 @@ function access_denied($class,$param='',$force_login=false)
 }
 
 /**
- * Find if a member's has access to a specified zone
+ * Find if a member has access to a specified zone
  *
  * @param  MEMBER			The member being checked whether to have the access
  * @param  ID_TEXT		The ID code for the zone being checked
@@ -160,7 +164,7 @@ function has_zone_access($member,$zone)
 }
 
 /**
- * Find if a member's has access to a specified page. Zone permissions are taken into account for wherever the page is found at. Also support for category access and privileges. No support for entry-point checks, which are only carried out as an extension of page permissions when actually at a page.
+ * Find if a member has access to a specified page. Zone permissions are taken into account for wherever the page is found at. Also support for category access and privileges. No support for entry-point checks, which are only carried out as an extension of page permissions when actually at a page.
  *
  * @param  ?MEMBER		The member being checked whether to have the access (NULL: current member)
  * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
@@ -225,7 +229,7 @@ function load_up_all_self_page_permissions($member)
 }
 
 /**
- * Find if a member's has access to a specified page, in a specific zone. Note that page access does not imply zone access; you have access a page, but not the zone, so still couldn't see it.
+ * Find if a member has access to a specified page, in a specific zone. Note that page access does not imply zone access; you have access a page, but not the zone, so still couldn't see it.
  *
  * @param  MEMBER			The member being checked whether to have the access
  * @param  ID_TEXT		The ID code for the page being checked
@@ -379,7 +383,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 }
 
 /**
- * Find if a member's has access to a specified category
+ * Find if a member has access to a specified category
  *
  * @param  MEMBER			The member being checked whether to have the access
  * @param  ID_TEXT		The ID code for the module being checked for category access
@@ -546,7 +550,7 @@ function has_some_cat_specific_permission($member,$permission,$page,$permission_
  * @param  MEMBER			The member being checked whether to have the permission
  * @param  ID_TEXT		The ID code for the permission being checked for
  * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?mixed			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...), or a string of the cat type if you will accept overrides in any matching cat (NULL: N/A)
  * @return boolean		Whether the member has the permission
  */
 function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
@@ -571,24 +575,40 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		if ($cats!==NULL)
 		{
 			$okay=false;
-			for ($i=0;$i<intval(floor((float)count($cats)/2.0));$i++)
+			if (is_array($cats)) // Specific overrides for cats allowed
 			{
-				if (is_null($cats[$i*2])) continue;
-				if (isset($PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
+				for ($i=0;$i<intval(floor((float)count($cats)/2.0));$i++)
 				{
-					$result=$PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
-					if (!$result)
+					if (is_null($cats[$i*2])) continue;
+					if (isset($PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
 					{
-						handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
-						return $result;
+						$result=$PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
+						if (!$result) // Negative overrides take precedence over positive ones; got to be careful of that!
+						{
+							handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():(is_array($cats)?$cats:array($cats))),$result);
+							return $result;
+						}
+						$okay=true;
 					}
-					$okay=true;
+				}
+			} else // Any overrides for cats allowed
+			{
+				if (isset($PRIVILEGE_CACHE[$member][$permission]['']))
+				{
+					foreach ($PRIVILEGE_CACHE[$member][$permission][''] as $result)
+					{
+						if ($result)
+						{
+							$okay=true;
+							break;
+						}
+					}
 				}
 			}
 			if ($okay)
 			{
 				$result=$okay;
-				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():(is_array($cats)?$cats:array($cats))),$result);
 				return $result;
 			}
 		}
@@ -597,14 +617,14 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 			if (isset($PRIVILEGE_CACHE[$member][$permission][$page]['']['']))
 			{
 				$result=$PRIVILEGE_CACHE[$member][$permission][$page]['']['']==1;
-				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():(is_array($cats)?$cats:array($cats))),$result);
 				return $result;
 			}
 		}
 		if (isset($PRIVILEGE_CACHE[$member][$permission]['']['']['']))
 		{
 			$result=$PRIVILEGE_CACHE[$member][$permission]['']['']['']==1;
-			handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+			handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():(is_array($cats)?$cats:array($cats))),$result);
 			return $result;
 		}
 		$result=false;
@@ -612,6 +632,8 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),($cats===NULL)?array():$cats),$result);
 		return $result;
 	}
+
+	// Nothing loaded yet, load, then re-call ourself...
 
 	global $SITE_INFO;
 	$where='';
@@ -638,16 +660,13 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 			$PRIVILEGE_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
 	}
 
-	// Note: due to the way the "detect at override level" code works, the "best of" permission system does not hold with inconsistant overriding against all usergroups
-
 	$result=has_specific_permission($member,$permission,$page,$cats);
-	handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
-	if ($member!=get_member()) unset($PRIVILEGE_CACHE[$member]);
+	if ($member!=get_member()) unset($PRIVILEGE_CACHE[$member]); // Don't waste memory
 	return $result;
 }
 
 /**
- * Check to see if a member's has permission to submit an item. If it doesn't, an error message is outputted.
+ * Check to see if a member has permission to submit an item. If it doesn't, an error message is outputted.
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set	 low mid high cat_low cat_mid cat_high
@@ -663,7 +682,7 @@ function check_submit_permission($range,$cats=NULL,$page=NULL)
 }
 
 /**
- * Find if a member's has permission to submit
+ * Find if a member has permission to submit
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
@@ -698,7 +717,7 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 }
 
 /**
- * Check to see if a member's has permission to edit an item. If it doesn't, an error message is outputted.
+ * Check to see if a member has permission to edit an item. If it doesn't, an error message is outputted.
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
@@ -719,7 +738,7 @@ function check_some_edit_permission($range,$cats=NULL,$page=NULL)
 }
 
 /**
- * Check to see if a member's has permission to edit an item. If it doesn't, an error message is outputted.
+ * Check to see if a member has permission to edit an item. If it doesn't, an error message is outputted.
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
@@ -736,7 +755,7 @@ function check_edit_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 }
 
 /**
- * Find if a member's has permission to edit
+ * Find if a member has permission to edit
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
@@ -755,7 +774,7 @@ function has_edit_permission($range,$member,$resource_owner,$page,$cats=NULL)
 }
 
 /**
- * Check if a member's has permission to delete a specific resource. If it doesn't, an error message is outputted.
+ * Check if a member has permission to delete a specific resource. If it doesn't, an error message is outputted.
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
@@ -772,7 +791,7 @@ function check_delete_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 }
 
 /**
- * Check to see if a member's has permission to delete a specific resource
+ * Check to see if a member has permission to delete a specific resource
  *
  * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
@@ -790,4 +809,138 @@ function has_delete_permission($range,$member,$resource_owner,$page,$cats=NULL)
 	return false;
 }
 
+/**
+ * Check to see if a member has add permission for Comcode pages
+ *
+ * @param  ?ID_TEXT		The zone of Comcode pages we need it in (NULL: ANY zone, we are doing a vague check if the user could possibly)
+ * @param  ?MEMBER		The member being checked for access (NULL: current member)
+ * @return boolean		If the permission is there
+ */
+function has_add_comcode_page_permission($zone=NULL,$member=NULL)
+{
+	if (is_null($member)) $member=get_member();
 
+	if (!is_null($zone))
+	{
+		if (!has_zone_access($member,$zone)) return false;
+	}
+	if (!has_actual_page_access($member,'cms_comcode_pages')) return false;
+
+	$cats=mixed();
+	$cats='zone_page';
+	if (!is_null($zone)) $cats=array('zone_page',$zone);
+	return has_specific_permission($member,'submit_highrange_content','cms_comcode_pages',$cats);
+}
+
+/**
+ * Check to see if a member has bypass-validation permission for Comcode pages
+ *
+ * @param  ?ID_TEXT		The zone of Comcode pages we need it in (NULL: ANY zone, we are doing a vague check if the user could possibly)
+ * @param  ?MEMBER		The member being checked for access (NULL: current member)
+ * @return boolean		If the permission is there
+ */
+function has_bypass_validation_comcode_page_permission($zone=NULL,$member=NULL)
+{
+	if (is_null($member)) $member=get_member();
+
+	if (!is_null($zone))
+	{
+		if (!has_zone_access($member,$zone)) return false;
+	}
+	if (!has_actual_page_access($member,'cms_comcode_pages')) return false;
+
+	$cats=mixed();
+	$cats='zone_page';
+	if (!is_null($zone)) $cats=array('zone_page',$zone);
+	return has_specific_permission($member,'bypass_validation_highrange_content','cms_comcode_pages',$cats);
+}
+
+/**
+ * Check to see if a member has permission to edit a Comcode page
+ *
+ * @param  integer		A bitmask of COMCODE_EDIT_* constants, identifying what kind of editing permission we are looking for
+ * @param  ?MEMBER		The member being checked for access (NULL: current member)
+ * @param  ?ID_TEXT		Zone to check for (NULL: check against global privileges, ignoring all per-zone overrides). Note how this is different to how a NULL zone works for checking add/bypass-validation permissions because if we get a false we have the get_comcode_page_editability_per_zone function to get more specific details, while for adding we either want a very specific or very vague answer.
+ * @return boolean		If the permission is there
+ */
+function has_some_edit_comcode_page_permission($scope,$zone=NULL,$member=NULL)
+{
+	if (is_null($member)) $member=get_member();
+
+	if (!is_null($zone))
+	{
+		if (!has_zone_access($member,$zone)) return false;
+	}
+	if (!has_actual_page_access($member,'cms_comcode_pages')) return false;
+
+	$cats=mixed();
+	if (!is_null($zone)) $cats=array('zone_page',$zone);
+
+	if (($scope & COMCODE_EDIT_ANY) != 0)
+	{
+		if (has_specific_permission($member,'edit_highrange_content','cms_comcode_pages',$cats)) return true;
+	}
+
+	if (($scope & COMCODE_EDIT_OWN) != 0)
+	{
+		if (has_specific_permission($member,'edit_own_highrange_content','cms_comcode_pages',$cats)) return true;
+	}
+
+	return false;
+}
+
+/**
+ * Find what zones a member may edit Comcode pages in.
+ *
+ * @param  ?MEMBER		The member being checked for access (NULL: current member)
+ * @return array			A list of pairs: The zone name, and a bitmask of COMCODE_EDIT_* constants identifying the level of editing permission present
+ */
+function get_comcode_page_editability_per_zone($member=NULL)
+{
+	$zones=array();
+
+	$_zones=find_all_zones();
+	foreach ($_zones as $zone)
+	{
+		$mask=COMCODE_EDIT_NONE;
+
+		if (has_some_edit_comcode_page_permission(COMCODE_EDIT_ANY,$zone,$member))
+			$mask=$mask | COMCODE_EDIT_ANY;
+
+		elseif (has_some_edit_comcode_page_permission(COMCODE_EDIT_OWN,$zone,$member))
+			$mask=$mask | COMCODE_EDIT_OWN;
+
+		if ($mask!=COMCODE_EDIT_NONE)
+			$zones[]=array($zone,$mask);
+	}
+
+	return $zones;
+}
+
+/**
+ * Check to see if a member has permission to edit a specific Comcode page
+ *
+ * @param  ID_TEXT		The zone of the page
+ * @param  ID_TEXT		The name of the page
+ * @param  ?MEMBER		Owner of the page (NULL: look it up)
+ * @param  ?MEMBER		The member being checked for access (NULL: current member)
+ * @return boolean		If the permission is there
+ */
+function has_edit_comcode_page_permission($zone,$page,$owner=NULL,$member=NULL)
+{
+	if (is_null($member)) $member=get_member();
+
+	if (is_null($owner))
+		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
+
+	if (!has_actual_page_access($member,$page,$zone)) return false;
+	if (!has_actual_page_access($member,'cms_comcode_pages')) return false;
+
+	$is_owner=(($owner==$member) && (!is_guest($member)));
+	$privilege=$is_owner?'edit_own_highrange_content':'edit_highrange_content';
+
+	$cats=mixed();
+	if (!is_null($zone)) $cats=array('zone_page',$zone);
+
+	return has_specific_permission($member,$privilege,'cms_comcode_pages',$cats);
+}
