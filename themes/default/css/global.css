@@ -1414,8 +1414,15 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	float: {!en_right};
 	padding: 0 5px !important;
 }
+.ttb_left_spaced, .ttb_left_spaced div {
+	margin-top: 0.3em;
+}
 .toggleable_tray_button.ttb_left img {
 	float: {!en_left};
+	padding-{!en_left}: 0 !important;
+}
+.toggleable_tray_button.ttb_light {
+	font-weight: normal;
 }
 
 .toggleable_tray {

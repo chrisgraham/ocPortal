@@ -480,6 +480,8 @@ function get_param_wiki_chain($parameter_name,$default_value=NULL)
 		$chain=wiki_derive_chain($id);
 	} else
 	{
+		if ($value=='') return array(db_get_first_id(),'');
+
 		require_code('urls2');
 
 		$chain=$value;

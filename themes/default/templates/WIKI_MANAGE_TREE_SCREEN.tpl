@@ -7,7 +7,20 @@
 
 <h2>{!HELP}</h2>
 
-{!WIKI_MANAGE_TREE_TEXT}
+{+START,SET,advanced_help}
+	<div class="ttb_left_spaced">
+		<div>
+			<a class="toggleable_tray_button ttb_left" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ADVANCED}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button ttb_light" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!WIKI_MANAGE_TREE_TEXT_ADVANCED_LABEL}</a>:
+		</div>
+
+		<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
+			{!WIKI_MANAGE_TREE_TEXT_ADVANCED}
+		</div>
+	</div>
+{+END}
+
+{!WIKI_MANAGE_TREE_TEXT,{$GET,advanced_help}}
 
 <h2>{!SETTINGS}</h2>
 
