@@ -813,7 +813,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$out.="Accept: ".rawurlencode($accept)."\r\n";
 		} else
 		{
-			$out.="Accept: */*(\r\n"; // There's a mod_security rule that checks for this
+			$out.="Accept: */*\r\n"; // There's a mod_security rule that checks for this
 		}
 		if (!is_null($accept_charset))
 		{

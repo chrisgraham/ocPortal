@@ -281,8 +281,11 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (selected)
 				{
 					element.value=node.getAttribute('id'); // Copy in proper ID for what is selected, not relying on what we currently have as accurate
-					element.selected_title=node.getAttribute('title');
-					if (element.value=='') element.selected_title='';
+					if (element.value!='')
+					{
+						if (element.selected_title!='') element.selected_title+=',';
+						element.selected_title+=node.getAttribute('title');
+					}
 					if (element.onchange) element.onchange();
 					if (typeof element.fakeonchange!='undefined' && element.fakeonchange) element.fakeonchange();
 				}
@@ -628,7 +631,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 		}
 
 		element.value=selected_end.join(',');
-		element.selected_title=xml_node.getAttribute('title');
+		element.selected_title=(selected_end.length==1)?xml_node.getAttribute('title'):element.value;
 		element.selected_editlink=xml_node.getAttribute('edit');
 		if (element.value=='') element.selected_title='';
 		if (element.onchange) element.onchange();

@@ -444,7 +444,7 @@ $PAGE_START_TIME=microtime(false);
 global $IN_MINIKERNEL_VERSION;
 $IN_MINIKERNEL_VERSION=0;
 
-if (ini_get('register_globals')=='1') // Unregister globals
+if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('register_globals')))=='1') // Unregister globals
 {
 	foreach ($_GET as $key=>$_)
 		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_GET[$key])) $GLOBALS[$key]=NULL;

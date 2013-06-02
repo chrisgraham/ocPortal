@@ -61,7 +61,7 @@
 						<td class="dottedborder_barrier" colspan="2">
 							<div class="accessibility_hidden"><label for="search_content">{!SEARCH_FOR}</label></div>
 							<div class="constrain_field">
-								<input onkeyup="update_ajax_search_list(this,event);" class="wide_field" type="text" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
+								<input onkeyup="update_ajax_search_list(this,event);" onkeypress="if (enter_pressed(event)) this.form.submit();" class="wide_field" type="text" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
 							</div>
 							{$SHIFT_DECODE,search_options_message}
 						</td>
@@ -160,7 +160,7 @@
 
 				{$,<div class="search_option">
 					<label for="search_content">{!SEARCH_FOR}</label>
-					<input onkeyup="update_ajax_search_list(this,event);" class="wide_field" type="text" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
+					<input onkeyup="update_ajax_search_list(this,event);" onkeypress="if (enter_pressed(event)) this.form.submit();" class="wide_field" type="text" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
 				</div>}
 				<input type="hidden" name="content" value="" />
 
