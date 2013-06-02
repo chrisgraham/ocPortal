@@ -2212,10 +2212,10 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .post .post_avatar {
-	float: right;
-	margin: 1em 0 0 2em;
-	width: 60px;
-	height: 60px;
+	float: left;
+	margin: 0.5em 1em 0.5em 0;
+	width: 50px;
+	height: 50px;
 }
 
 .post .post_subline {
