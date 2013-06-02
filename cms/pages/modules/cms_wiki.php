@@ -151,7 +151,10 @@ class Module_cms_wiki
 		$fields2->attach(meta_data_get_fields('wiki_page',is_null($id)?NULL:strval($id)));
 
 		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
 			$fields2->attach(content_review_get_fields('wiki_page',is_null($id)?NULL:strval($id)));
+		}
 
 		require_code('permissions2');
 		$fields2->attach(get_category_permissions_for_environment('wiki_page',strval($page_id),'cms_wiki',NULL,($page_id==-1)));
@@ -219,7 +222,10 @@ class Module_cms_wiki
 		}
 
 		if (addon_installed('content_reviews'))
+		{
+			require_code('content_reviews');
 			content_review_set('wiki_page',strval($id));
+		}
 
 		require_code('autosave');
 		clear_ocp_autosave();
@@ -416,7 +422,10 @@ class Module_cms_wiki
 			}
 
 			if (addon_installed('content_reviews'))
+			{
+				require_code('content_reviews');
 				content_review_set('wiki_page',strval($id));
+			}
 
 			require_code('autosave');
 			clear_ocp_autosave();
@@ -441,9 +450,14 @@ class Module_cms_wiki
 	 */
 	function edit_tree()
 	{
-		$title=get_screen_title('WIKI_EDIT_TREE');
-
 		list($id,$chain)=get_param_wiki_chain('id');
+
+		$pages=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>$id),'',1);
+		if (!array_key_exists(0,$pages)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$page=$pages[0];
+
+		$page_title=get_translated_text($page['title']);
+		$title=get_screen_title('_WIKI_EDIT_TREE',true,array(escape_html($page_title)));
 
 		check_privilege('wiki_manage_tree',array('wiki_page',$id));
 
@@ -479,7 +493,7 @@ class Module_cms_wiki
 		$fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'),new ocp_tempcode(),'children',$children,false,NULL,true));
 		$form=do_template('FORM',array('_GUID'=>'b908438ccfc9be6166cf7c5c81d5de8b','FIELDS'=>$fields,'URL'=>$post_url,'HIDDEN'=>'','TEXT'=>'','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 
-		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
+		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PAGE_TITLE'=>$page_title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
 	}
 
 	/**

@@ -20,7 +20,7 @@
 	</div>
 {+END}
 
-{!WIKI_MANAGE_TREE_TEXT,{$GET,advanced_help}}
+{!WIKI_MANAGE_TREE_TEXT,{$GET,advanced_help},{PAGE_TITLE*}}
 
 <h2>{!SETTINGS}</h2>
 

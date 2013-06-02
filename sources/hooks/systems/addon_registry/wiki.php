@@ -157,6 +157,7 @@ class Hook_addon_registry_wiki
 	{
 		return array(
 			lorem_globalise(do_lorem_template('WIKI_MANAGE_TREE_SCREEN', array(
+				'PAGE_TITLE'=>lorem_phrase(),
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'TREE'=>lorem_phrase(),

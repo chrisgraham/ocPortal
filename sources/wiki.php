@@ -473,6 +473,7 @@ function wiki_delete_page($id)
  */
 function get_param_wiki_chain($parameter_name,$default_value=NULL)
 {
+	if (is_null($default_value)) $default_value=strval(db_get_first_id());
 	$value=get_param($parameter_name,$default_value,true);
 	if (is_numeric($value)) // If you head to a page directly, e.g. via [[example]], should auto-derive breadcrumbs
 	{
@@ -480,8 +481,6 @@ function get_param_wiki_chain($parameter_name,$default_value=NULL)
 		$chain=wiki_derive_chain($id);
 	} else
 	{
-		if ($value=='') return array(db_get_first_id(),'');
-
 		require_code('urls2');
 
 		$chain=$value;
@@ -623,6 +622,7 @@ function wiki_derive_chain($id,$root=NULL)
 		$page_id=$parent_details[$page_id][0]; // For next time
 		if (array_key_exists($page_id,$seen_before)) break; // Stop loops
 	}
+	if ($chain=='') $chain=strval($page_id);
 	return $chain;
 }
 
@@ -651,7 +651,7 @@ function wiki_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 	{
 		if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read))
 		{
-			$wiki_seen=array();
+			$wiki_seen=array(db_get_first_id());
 			get_wiki_page_tree($wiki_seen,is_null($id)?NULL:intval($id)); // To build up $wiki_seen
 			$where='';
 			foreach ($wiki_seen as $seen)
@@ -663,7 +663,7 @@ function wiki_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,true);
 		} else
 		{
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/);
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/);
 			if (count($orphans)<50)
 			{
 				sort_maps_by($orphans,'text_original');
