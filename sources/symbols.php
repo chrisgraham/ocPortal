@@ -1024,7 +1024,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'NO_SAFE_MODE':
-				$value=(ini_get('safe_mode')=='1')?'0':'1';
+				$value=(str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1')?'0':'1';
 				break;
 
 			case 'FORCE_PREVIEWS':

@@ -125,7 +125,7 @@ function get_afm_form()
 	$submit_name=do_lang_tempcode('PROCEED');
 	$hidden=build_keep_post_fields();
 	$hidden->attach(form_input_hidden('got_ftp_details','1'));
-	if (ini_get('safe_mode')=='1')
+	if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1')
 	{
 		$hidden->attach(form_input_hidden('uses_ftp','1'));
 	}
