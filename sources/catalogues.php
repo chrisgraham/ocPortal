@@ -1253,7 +1253,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;
 	} else
 	{
-		if (!isset($catalogue_entry_cache[$entry_id][$field_id])) return NULL;
+		if (!isset($catalogue_entry_cache[$entry_id][$field_id])) return '';
 		$value=$catalogue_entry_cache[$entry_id][$field_id];
 	}
 

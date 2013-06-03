@@ -40,7 +40,7 @@ class Hook_symbol_USER_FB_CONNECT
 				$temp_cookie=$_COOKIE;
 				$fb_user=$facebook_connect->getUser();
 				$_COOKIE=$temp_cookie;
-				$value=is_null($user)?'':strval($fb_user);
+				$value=is_null($fb_user)?'':strval($fb_user);
 				if ($value=='0') $value='';
 			}
 			catch (Exception $e)

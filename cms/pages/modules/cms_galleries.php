@@ -371,7 +371,7 @@ class Module_cms_galleries extends standard_crud_module
 						}
 						$this->_sort_media($directory);
 
-						foreach ($directory as $d)
+						foreach ($directory as $i=>$d)
 						{
 							$entry=$d['resource'];
 							$_file=$d['path'];
@@ -501,6 +501,7 @@ class Module_cms_galleries extends standard_crud_module
 		}
 
 		$directory=array_reverse($directory);
+		return $directory;
 	}
 
 	/**

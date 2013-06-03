@@ -1868,6 +1868,7 @@ class resource_fs_base
 			if ($resource_id!==NULL) return $resource_id;
 		}
 
+		$existing=mixed();
 		$existing=($filename===NULL)?false:$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
@@ -1922,6 +1923,7 @@ class resource_fs_base
 			if ($resource_id!==NULL) return $resource_id;
 		}
 
+		$existing=mixed();
 		$existing=($filename===NULL)?false:$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{

@@ -136,7 +136,7 @@ class Block_main_friends_list
 					{
 						$friends_nonmutual[]=$friend_map;
 					}
-					if (($member_id_of==$row['member_likes']) || ($appears_twice))
+					if (($member_id==$row['member_likes']) || ($appears_twice))
 					{
 						$friends_forward[]=$friend_map;
 					}

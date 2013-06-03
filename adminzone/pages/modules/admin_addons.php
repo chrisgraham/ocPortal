@@ -222,7 +222,7 @@ class Module_admin_addons
 			}
 		}
 
-		sort_maps_by($orphans,'!COLOUR,NAME');
+		sort_maps_by($_tpl_addons,'!COLOUR,NAME');
 
 		$tpl_addons=new ocp_tempcode();
 		foreach ($_tpl_addons as $t)

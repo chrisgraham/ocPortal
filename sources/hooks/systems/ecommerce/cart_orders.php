@@ -95,7 +95,7 @@ class Hook_cart_orders
 		$start=0;
 		do
 		{
-			$orders=$GLOBALS['SITE_DB']->query('SELECT id,tot_price FROM '.get_table_prefix().'shopping_order WHERE '.$where,500);
+			$orders=$GLOBALS['SITE_DB']->query('SELECT id,tot_price FROM '.get_table_prefix().'shopping_order WHERE '.$where,500,NULL,false,true);
 
 			foreach($orders as $order)
 			{			

@@ -24,6 +24,8 @@ class occle_fs_test_set extends ocp_test_case
 
 		require_code('occle_fs');
 
+		disable_php_memory_limit();
+
 		parent::setUp();
 	}
 

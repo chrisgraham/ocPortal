@@ -388,6 +388,9 @@ function get_relation_map()
 		'temp_block_permissions.p_session_id'=>'sessions.id',
 		'credit_purchases.member_id'=>'f_members.id',
 		'video_transcoding.t_local_id'=>'videos.id',
+		'f_welcome_emails.w_newsletter'=>'newsletters.id',
+		'f_welcome_emails.w_usergroup'=>'f_groups.id',
+		'f_usergroup_join_log.usergroup_id'=>'f_groups.id',
 	);
 
 	return $relation_map;

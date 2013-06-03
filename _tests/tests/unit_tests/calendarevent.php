@@ -119,7 +119,7 @@ class calendarevent_test_set extends ocp_test_case
 
 	function testApiDayOfWeek()
 	{
-		$days=$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+		$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
 
 		// The dates (2012/1/1, 2012/1/8, and 2012/1/9) found from looking at an actual calendar
 
@@ -172,7 +172,7 @@ class calendarevent_test_set extends ocp_test_case
 	{
 		// The time window for a long running event is cut correctly
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -189,11 +189,11 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2,10,2010);
 		$period_end=mktime(23,59,0,2,10,2010);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==1);
-		foreach ($recurrences as $recurrence)
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==1);
+		foreach ($_recurrences as $_recurrence)
 		{
-			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$recurrence;
+			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$_recurrence;
 			$this->assertTrue($window_start==$period_start);
 			$this->assertTrue($window_end==$period_end);
 		}
@@ -203,7 +203,7 @@ class calendarevent_test_set extends ocp_test_case
 	{
 		// Recurrences work for simple monthly recurrences
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -220,11 +220,11 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2+3,10,2009);
 		$period_end=mktime(23,59,0,2+3,10,2009);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==1);
-		foreach ($recurrences as $recurrence)
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==1);
+		foreach ($_recurrences as $_recurrence)
 		{
-			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$recurrence;
+			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$_recurrence;
 			$this->assertTrue($start_untimezoned==$period_start);
 			$this->assertTrue($end_untimezoned==$period_start); // Intentional, as we set this event to have same end date as start date as period start
 		}
@@ -234,7 +234,7 @@ class calendarevent_test_set extends ocp_test_case
 	{
 		// Recurrences work for simple yearly recurrences
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -251,11 +251,11 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2,10,2009+3);
 		$period_end=mktime(23,59,0,2,10,2009+3);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==1);
-		foreach ($recurrences as $recurrence)
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==1);
+		foreach ($_recurrences as $_recurrence)
 		{
-			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$recurrence;
+			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$_recurrence;
 			$this->assertTrue($start_untimezoned==$period_start);
 			$this->assertTrue($end_untimezoned==$period_start); // Intentional, as we set this event to have same end date as start date as period start
 		}
@@ -265,7 +265,7 @@ class calendarevent_test_set extends ocp_test_case
 	{
 		// Recurrences work for simple weekly recurrences
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -282,11 +282,11 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2,10+7*3,2009);
 		$period_end=mktime(23,59,0,2,10+7*3,2009);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==1);
-		foreach ($recurrences as $recurrence)
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==1);
+		foreach ($_recurrences as $_recurrence)
 		{
-			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$recurrence;
+			list($window_start,$window_end,$start,$end,$start_untimezoned,$end_untimezoned)=$_recurrence;
 			$this->assertTrue($start_untimezoned==$period_start);
 			$this->assertTrue($end_untimezoned==$period_start); // Intentional, as we set this event to have same end date as start date as period start
 		}
@@ -296,7 +296,7 @@ class calendarevent_test_set extends ocp_test_case
 	{
 		// Only have exact number of recurrences specified
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -313,15 +313,15 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=2;
 		$period_start=mktime(0,0,0,2-5,10,2009);
 		$period_end=mktime(23,59,0,2+5,10,2009);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==2);
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==2);
 	}
 
 	function testRecurrenceNthDayOfWeek()
 	{
 		// Recurrence by reference to the nth day of week within a month works
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=1; // 1st Tuesday
@@ -338,17 +338,17 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2,1,2009);
 		$period_end=mktime(23,59,0,2,31,2009);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(date('D',$recurrences[0][2])=='Tue');
-		$this->assertTrue(date('D',$recurrences[1][2])=='Tue');
-		$this->assertTrue($recurrences[1][2]>$recurrences[0][2]);
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(date('D',$_recurrences[0][2])=='Tue');
+		$this->assertTrue(date('D',$_recurrences[1][2])=='Tue');
+		$this->assertTrue($_recurrences[1][2]>$_recurrences[0][2]);
 	}
 
 	function testRecurrenceFastForward()
 	{
 		// Jumping forward 10 years for a monthly occurring event, it still displays with the expected date
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -365,18 +365,18 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2,10,2009+10);
 		$period_end=mktime(23,59,0,2,10,2009+10);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==1);
-		$this->assertTrue(intval(date('m',$recurrences[0][2]))==$start_month);
-		$this->assertTrue(intval(date('d',$recurrences[0][2]))==$start_day);
-		$this->assertTrue(intval(date('Y',$recurrences[0][2]))==2009+10);
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==1);
+		$this->assertTrue(intval(date('m',$_recurrences[0][2]))==$start_month);
+		$this->assertTrue(intval(date('d',$_recurrences[0][2]))==$start_day);
+		$this->assertTrue(intval(date('Y',$_recurrences[0][2]))==2009+10);
 	}
 
 	function testRecurrenceMasks()
 	{
 		// Test recurrence masks work
 		$timezone='UTC';
-		$do_timezone_conv=false;
+		$do_timezone_conv=0;
 		$start_year=2009;
 		$start_month=2;
 		$start_day=10;
@@ -393,10 +393,10 @@ class calendarevent_test_set extends ocp_test_case
 		$recurrences=NULL;
 		$period_start=mktime(0,0,0,2,9,2009);
 		$period_end=mktime(23,59,0,5,11,2009);
-		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
-		$this->assertTrue(count($recurrences)==2);
-		$this->assertTrue(intval(date('m',$recurrences[0][2]))==$start_month);
-		$this->assertTrue(intval(date('m',$recurrences[1][2]))==$start_month+3);
+		$_recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(count($_recurrences)==2);
+		$this->assertTrue(intval(date('m',$_recurrences[0][2]))==$start_month);
+		$this->assertTrue(intval(date('m',$_recurrences[1][2]))==$start_month+3);
 	}
 
 	function testAddCalendarEvent()

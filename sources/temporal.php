@@ -379,12 +379,14 @@ function get_input_date($stub,$get_also=false)
 function tz_time($time,$zone)
 {
 	if ($zone=='') $zone=get_server_timezone();
-	date_default_timezone_set($zone);
 	static $zone_offsets=array();
-	if (!isset($zone_offsets[$zone]))
+	//if (!isset($zone_offsets[$zone]))	Actually, cannot do this, as $time is not constant
+	{
+		date_default_timezone_set($zone);
 		$zone_offsets[$zone]=intval(60.0*60.0*floatval(date('O',$time))/100.0);
+		date_default_timezone_set('UTC');
+	}
 	$ret=$time+$zone_offsets[$zone];
-	date_default_timezone_set('UTC');
 	return $ret;
 }
 

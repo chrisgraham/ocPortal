@@ -134,6 +134,8 @@ class Hook_pointstore_ocgifts
 
 		$title=get_screen_title('OCGIFTS_TITLE');
 
+		$member_id=get_member();
+
 		$from_member=get_member();
 
 		$gift_id=get_param_integer('gift');
@@ -159,9 +161,6 @@ class Hook_pointstore_ocgifts
 				if ($gift_row['price']>$available_points) warn_exit(do_lang_tempcode('CANT_AFFORD'));
 				require_code('points2');
 				charge_member($from_member,$gift_row['price'],do_lang('GIFT_PURCHASING'));
-
-				// Get gift points
-				charge_member($member_id,$gift_row['price'],do_lang('GIFT_PURCHASING').' - '.strval($gift_row['price']).' point(-s).');
 
 				// Add row
 				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_member_id'=>$to_member_id,'from_member_id'=>$member_id,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'gift_message'=>$gift_message),true);

@@ -31,6 +31,11 @@ function init__gallery_syndication()
 		add_config_option('GALLERY_SYNC_OCFILTER','gallery_sync_ocfilter','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
 		add_config_option('GALLERY_SYNC_ORPHANED_HANDLING','gallery_sync_orphaned_handling','list','return \'2\';','FEATURE','GALLERY_SYNDICATION',0,'1|2|3');
 		add_config_option('VIDEO_SYNC_TRANSCODING','video_sync_transcoding','special','return \''.addslashes(do_lang('SYND_LOCAL',NULL,NULL,NULL,fallback_lang())).'\';','FEATURE','GALLERY_SYNDICATION');
+		/*
+		delete_config_option('gallery_sync_ocfilter');
+		delete_config_option('gallery_sync_orphaned_handling');
+		delete_config_option('video_sync_transcoding');
+		*/
 	}
 
 	if (function_exists('restrictify')) restrictify();

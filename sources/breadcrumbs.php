@@ -205,7 +205,7 @@ class breadcrumb_substitution_loader
 					$_target_url=build_url($attributes,$zone,NULL,false,false,false,$hash);
 					$_link_title=($link[1]===NULL)?do_lang('UNKNOWN'):$link[1];
 					$link_title=(preg_match('#\{\!|\{\?|\{\$|\[#',$_link_title)==0)?$_link_title:static_evaluate_tempcode(comcode_to_tempcode($_link_title));
-					$_target_url=$_target_url->evaluate();
+					$target_url=$_target_url->evaluate();
 					$target_url=str_replace('\\','/',$target_url); // Should not be needed, but can happen on misconfiguration and cause an error
 					if ($target_url=='')
 					{
@@ -215,7 +215,7 @@ class breadcrumb_substitution_loader
 						$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($target_url).'">'.$link_title.'</a>'.$this->breadcrumb_tpl;
 					}
 				}
-				$_target_url=$from_non_link?'${3}':'${1}';
+				$target_url=$from_non_link?'${3}':'${1}';
 				$existing_label=$from_non_link?'${5}':'${3}';
 				$_link_title=($this->substitution_current_label===NULL)?$existing_label:$this->substitution_current_label;
 				$link_title=(preg_match('#(\{\!)|(\{\?)|(\{\$)|(\[)#',$_link_title)==0)?$_link_title:static_evaluate_tempcode(comcode_to_tempcode($_link_title));
@@ -224,7 +224,7 @@ class breadcrumb_substitution_loader
 					$to.='${1}'.$link_title.'${7}';
 				} else
 				{
-					$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($_target_url).'">${2}'.$link_title.'${4}</a>';
+					$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($target_url).'">${2}'.$link_title.'${4}</a>';
 				}
 				$this->substitutions[$from]=$to;
 				break;

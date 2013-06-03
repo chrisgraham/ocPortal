@@ -708,8 +708,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$split_pos=strpos($contents,"\r\n\r\n");
 				if ($split_pos!==false)
 				{
-					$headers=explode("\r\n",substr($contents,0,$split_pos));
-					foreach ($headers as $line)
+					$_headers=explode("\r\n",substr($contents,0,$split_pos));
+					foreach ($_headers as $line)
 					{
 						_read_in_headers($line);
 					}
@@ -1082,7 +1082,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if (($matches[1]!=$url) && (preg_match('#^3\d\d$#',$HTTP_MESSAGE)!=0))
 						{
 							$bak=$HTTP_FILENAME;
-							$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
+							$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
 							if ($put!==NULL)
