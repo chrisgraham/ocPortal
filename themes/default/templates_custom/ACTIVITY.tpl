@@ -38,10 +38,20 @@
 	<div class="activities_content">
 		{$,The main message}
 		{+START,IF,{$EQ,{LANG_STRING},RAW_DUMP}}
-			{BITS}
+			{+START,IF,{$EQ,{MODE},all}}
+				{!ACTIVITY_SAYS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{BITS}}
+			{+END}
+			{+START,IF,{$NEQ,{MODE},all}}
+				{BITS}
+			{+END}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
-			{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{BITS},0,1}}{$SUBSTR,{BITS},1}}
+			{+START,IF,{$EQ,{MODE},all}}
+				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{BITS},0,1}}{$SUBSTR,{BITS},1}}
+			{+END}
+			{+START,IF,{$NEQ,{MODE},all}}
+				{BITS}
+			{+END}
 		{+END}
 	</div>
 </div>

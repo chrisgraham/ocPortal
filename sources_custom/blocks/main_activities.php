@@ -117,7 +117,7 @@ class Block_main_activities
 			$title=do_lang_tempcode('ACTIVITIES_TITLE');
 
 		// See if we're displaying for a specific member
-		if (array_key_exists('member',$map))
+		if ((array_key_exists('member',$map)) && ($map['member']!=''))
 		{
 			$member_ids=array_map('intval',explode(',',$map['member']));
 		} else
