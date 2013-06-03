@@ -396,7 +396,7 @@ class Module_cms_galleries extends standard_aed_module
 						}
 						$this->_sort_media($directory);
 
-						foreach ($directory as $d)
+						foreach ($directory as $i=>$d)
 						{
 							$entry=$d['resource'];
 							$_file=$d['path'];
@@ -503,7 +503,8 @@ class Module_cms_galleries extends standard_aed_module
 	/**
 	 * Sort a directory of gallery media being imported.
 	 *
-	 * @return tempcode		The UI
+	 * @param  array		The unsorted media
+	 * @return array		The sorted media
 	 */
 	function _sort_media(&$directory)
 	{

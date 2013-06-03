@@ -499,7 +499,7 @@ class forum_driver_ocf extends forum_driver_base
 	 *
 	 * @param  MEMBER			The member id
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
-	 * @return URLPATH		The URL to the members home
+	 * @return mixed			The URL to the members home
 	 */
 	function member_home_url($id,$tempcode_okay=false)
 	{
@@ -561,7 +561,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * Get a URL to the members-online page.
 	 *
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
-	 * @return URLPATH		The URL to the members-online page
+	 * @return mixed			The URL to the members-online page
 	 */
 	function _online_members_url($tempcode_okay=false)
 	{
@@ -577,7 +577,7 @@ class forum_driver_ocf extends forum_driver_base
 	 *
 	 * @param  MEMBER			The member id
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
-	 * @return URLPATH		The URL to the private/personal message page
+	 * @return mixed			The URL to the private/personal message page
 	 */
 	function _member_pm_url($id,$tempcode_okay=false)
 	{
