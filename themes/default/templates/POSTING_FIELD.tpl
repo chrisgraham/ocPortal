@@ -17,6 +17,9 @@
 			<div class="associated_details">{DESCRIPTION}</div>
 		{+END}
 
+		<input type="hidden" name="comcode__{NAME*}" value="1" />
+		{HIDDEN_FIELDS}
+
 		<div class="comcode_supported posting_form_main_comcode_button">
 			{+START,IF,{$OR,{$AND,{$IN_STR,{CLASS},wysiwyg},{$JS_ON}},{$AND,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages},{$SHOW_DOCS}}}}
 				<ul class="horizontal_links horiz_field_sep associated_links_block_group">
@@ -126,9 +129,7 @@
 		<td class="form_table_huge_field"{+START,IF,{$NOT,{$MOBILE}}} colspan="2"{+END}>
 			{ATTACHMENTS}
 
-			<input type="hidden" name="comcode__{NAME*}" value="1" />
 			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
-			{HIDDEN_FIELDS}
 
 			<script type="text/javascript">// <![CDATA[
 				initialise_dragdrop_upload('container_for_{NAME*;}','{NAME*;}');
