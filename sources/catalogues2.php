@@ -400,6 +400,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 
 	// Update field references
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'ck_'.$name),array('cf_type'=>'ck_'.$old_name));
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'cx_'.$name),array('cf_type'=>'cx_'.$old_name));
 
 	decache('main_cc_embed');
 
@@ -469,6 +470,7 @@ function actual_delete_catalogue($name)
 
 	// Update field references
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'at_catalogue_entry'),array('cf_type'=>'ck_'.$name));
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'ax_catalogue_entry'),array('cf_type'=>'cx_'.$name));
 
 	log_it('DELETE_CATALOGUE',$name);
 	
