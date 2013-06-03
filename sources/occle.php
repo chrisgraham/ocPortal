@@ -576,7 +576,7 @@ class virtual_bash
 						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; //If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
 						$this->parse_runtime['parse_position']++;
 					}
-					elseif ((($next_char=='>') || ($next_char=='<') || ($next_char=='1') || ($next_char=='2') || ($next_char=='3') || ($next_char=='4') || ($next_char=='|')) && ($this->current_input[$this->parse_runtime['parse_position']-1]==' ') && (!$this->parse_runtime['escape_used']))
+					elseif ((($next_char=='>') || ($next_char=='<') || ($next_char=='1') || ($next_char=='2') || ($next_char=='3') || ($next_char=='4') || ($next_char=='|')) && ($this->current_input[$this->parse_runtime['parse_position']-1]==' ') && (!$this->parse_runtime['escape_used']) && ($this->parse_runtime['current_mode']!=MODE_QUOTES))
 					{
 						//A character that is probably (hopefully) the precursor to some form of redirection, and is the first character in a block (i.e. it has a space in front of it)
 						if ($this->_check_is_redirection())
@@ -605,12 +605,6 @@ class virtual_bash
 
 								$parameter_mode=OUT_PARAMETER;
 								$current_parameter++;
-							}
-							elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
-							{
-								//We are adding the current letter to the quote system
-								$this->parsed_input[SECTION_PARAMETERS][$current_parameter].=$next_char;
-								$this->parse_runtime['parse_position']++;
 							}
 							else break 2; //PANIC!!
 						}
