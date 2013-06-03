@@ -100,7 +100,7 @@ function get_afm_form()
 	$submit_name=do_lang_tempcode('PROCEED');
 	$hidden=build_keep_post_fields();
 	$hidden->attach(form_input_hidden('got_ftp_details','1'));
-	if (ini_get('safe_mode')=='1')
+	if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1')
 	{
 		$hidden->attach(form_input_hidden('uses_ftp','1'));
 	}
@@ -189,7 +189,7 @@ function get_afm_form_fields()
 	}
 
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'671ec3d1ffd376766450b36d718f1c60','TITLE'=>do_lang_tempcode('SETTINGS'))));
-	if (ini_get('safe_mode')!='1')
+	if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))!='1')
 	{
 		$fields->attach(form_input_tick(do_lang_tempcode('NEED_FTP'),do_lang_tempcode('DESCRIPTION_NEED_FTP'),'uses_ftp',$uses_ftp));
 	}

@@ -109,7 +109,7 @@ function _intelligent_write_error_inline($path)
  */
 function _ocp_tempnam($prefix)
 {
-	$problem_saving=((ini_get('safe_mode')=='1') || (get_value('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
+	$problem_saving=((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || (get_value('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
 	$local_path=get_custom_file_base().'/safe_mode_temp/';
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;
@@ -689,7 +689,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	if (!array_key_exists('scheme',$url_parts)) $url_parts['scheme']='http';
 
 	// File-system/shell_exec method, for local calls
-	$faux=get_value('http_faux_loopback');
+	$faux=function_exists('get_value')?get_value('http_faux_loopback'):NULL;
 	if ((!is_null($faux)) && ($faux!='') && (is_null($post_params)) && (is_null($files))) // NB: Does not support cookies, accept headers, referers
 	{
 		if (substr($faux,0,1)!='#') $faux='#'.$faux.'#i';
@@ -1152,7 +1152,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$headers.='Accept: '.rawurlencode($accept)."\r\n";
 	} else
 	{
-		$headers.="Accept: */*(\r\n"; // There's a mod_security rule that checks for this
+		$headers.="Accept: */*\r\n"; // There's a mod_security rule that checks for this
 	}
 	if (!is_null($accept_charset))
 	{

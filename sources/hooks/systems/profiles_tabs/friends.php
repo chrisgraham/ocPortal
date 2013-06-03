@@ -75,4 +75,3 @@ class Hook_Profiles_Tabs_friends
 
 }
 
-

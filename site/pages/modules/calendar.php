@@ -1348,19 +1348,18 @@ class Module_calendar
 	{
 		$id=get_param_integer('id');
 		$filter=$this->get_filter();
-		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 
-		// Load up
+		// Read row
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON t.id=e.e_type',array('*'),array('e.id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$event=$rows[0];
-		if ($event['e_is_public']==0) enforce_personal_access($event['e_submitter'],'view_personal_events');
 
-		// Security
+		// Check permissions
 		check_privilege('view_calendar');
+		if ($event['e_is_public']==0) enforce_personal_access($event['e_submitter'],'view_personal_events');
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
 		// Validation
@@ -1373,7 +1372,7 @@ class Module_calendar
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
 		}
 
-		// Titling
+		// Title and meta data
 		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');
@@ -1383,10 +1382,27 @@ class Module_calendar
 		$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',make_fractionable_editable('event',$id,$_title));
 		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
-
-		// All subscriptions (reminders)
+		seo_meta_load_for('event',strval($id),$title_to_use_2);
 		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode($event['e_content']);
 		$type=get_translated_text($event['t_title']);
+		$priority=$event['e_priority'];
+		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));
+		$is_public=($event['e_is_public']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
+		$GLOBALS['META_DATA']+=array(
+			'created'=>date('Y-m-d',$event['e_add_date']),
+			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
+			'publisher'=>'', // blank means same as creator
+			'modified'=>is_null($event['e_edit_date'])?'':date('Y-m-d',$event['e_edit_date']),
+			'type'=>'Calendar event',
+			'title'=>get_translated_text($event['e_title']),
+			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
+			'description'=>get_translated_text($event['e_content']),
+			'image'=>find_theme_image('bigicons/calendar'),
+			//'category'=>???,
+		);
+		$GLOBALS['FEED_URL']=find_script('backend').'?mode=calendar&filter='.urlencode(implode(',',$this->get_and_filter()));
+
+		// Personal subscriptions (reminders)
 		$subscribed=new ocp_tempcode();
 		if ((has_privilege(get_member(),'view_event_subscriptions')) && (cron_installed()))
 		{
@@ -1404,37 +1420,6 @@ class Module_calendar
 				}
 			}
 		}
-
-		// Initial date working out
-		$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
-		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$start_day_of_month,$event['e_start_year']);
-		$_first_date=cal_utctime_to_usertime(
-			$__first_date,
-			$event['e_timezone'],
-			$event['e_do_timezone_conv']==1
-		);
-		$first_date=date('Y-m-d',$_first_date);
-		$date=get_param('date',$first_date); // It's year 10,000 compliant when it comes to year display ;).
-		$back_type=get_param('back','day');
-		$map=array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>$back_type,'id'=>$date));
-		if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
-		$back_url=build_url($map,'_SELF');
-
-		// Feedback
-		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
-			'events',
-			strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),
-			$event['allow_rating'],
-			$event['allow_comments'],
-			$event['allow_trackbacks'],
-			((get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))?1:0,
-			$event['e_submitter'],
-			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
-			$_title,
-			get_value('comment_forum__calendar')
-		);
-
-		// Personal subscriptions (reminders)
 		$_subscriptions=new ocp_tempcode();
 		if ((is_guest()) || (!cron_installed()))
 		{
@@ -1451,7 +1436,31 @@ class Module_calendar
 			$subscribe_url=build_url(array('page'=>'_SELF','type'=>'subscribe_event','id'=>$id),'_SELF');
 		}
 
-		// Management links
+		// Back URL / breadcrumbs
+		list(,$_first_date)=find_event_start_timestamp($event); // Will be first recurrence as we have not called adjust_event_dates_for_a_recurrence yet
+		$first_date=date('Y-m-d',$_first_date);
+		$date=get_param('date',$first_date); // It's year 10,000 compliant when it comes to year display ;).
+		$back_type=get_param('back','day');
+		$map=array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>$back_type,'id'=>$date));
+		if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
+		$back_url=build_url($map,'_SELF');
+		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
+
+		// Feedback
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			'events',
+			strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),
+			$event['allow_rating'],
+			$event['allow_comments'],
+			$event['allow_trackbacks'],
+			((get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))?1:0,
+			$event['e_submitter'],
+			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
+			$_title,
+			get_value('comment_forum__calendar')
+		);
+
+		// Edit URL
 		if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_edit_permission(($event['e_is_public']==0)?'low':'mid',get_member(),$event['e_submitter'],'cms_calendar',array('calendar',$event['e_type']))))
 		{
 			$edit_url=build_url(array('page'=>'cms_calendar','type'=>'_ed','id'=>$id),get_module_zone('cms_calendar'));
@@ -1460,7 +1469,9 @@ class Module_calendar
 			$edit_url=new ocp_tempcode();
 		}
 
-		// SEO
+		// Book keeping
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='back';
 		if ($event['e_seg_recurrences']==0)
 		{
 			inform_non_canonical_parameter('day');
@@ -1469,69 +1480,13 @@ class Module_calendar
 		inform_non_canonical_parameter('back');
 		seo_meta_load_for('event',strval($id),$title_to_use_2);
 
-		// Work out dates
+		// Work out all our various dates
 		$day=get_param('day','');
 		if ($day!='')
 		{
-			$explode=explode('-',$day);
-			if (count($explode)==3)
-			{
-				$orig_start_year=$event['e_start_year'];
-				$orig_start_month=$event['e_start_month'];
-				$orig_start_day=$event['e_start_day'];
-
-				$event['e_start_year']=intval($explode[0]);
-				$event['e_start_month']=intval($explode[1]);
-				$event['e_start_day']=intval($explode[2]);
-				$start_day_of_month=$event['e_start_day'];
-				$event['e_start_monthly_spec_type']='day_of_month';
-
-				// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
-				if (!is_null($event['e_start_hour']))
-				{
-					$event['e_start_hour']-=intval(date('H',tz_time(mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'])))-intval(date('H',tz_time(mktime(0,0,0,$orig_start_month,$orig_start_day,$orig_start_year),$event['e_timezone'])));
-					$event['e_start_minute']-=intval(date('i',tz_time(mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'])))-intval(date('i',tz_time(mktime(0,0,0,$orig_start_month,$orig_start_day,$orig_start_year),$event['e_timezone'])));
-				}
-
-				if (is_null($event['e_start_hour'])) // All day event
-				{
-					if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
-					{
-						$event['e_end_day']=$orig_start_day;
-						$event['e_end_month']=$orig_start_month;
-						$event['e_end_year']=$orig_start_year;
-					}
-				}
-				if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
-				{
-					$orig_end_year=$event['e_end_year'];
-					$orig_end_month=$event['e_end_month'];
-					$orig_end_day=$event['e_end_day'];
-
-					if ($event['e_start_monthly_spec_type']!='day_of_month')
-					{
-						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);		Actually we can't do this, we need to work relative
-						$event['e_end_day']=$event['e_start_day']+get_days_between($orig_start_year,$orig_start_month,$orig_start_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
-						$event['e_end_month']=$event['e_start_month'];
-						$event['e_end_year']=$event['e_start_year'];
-						$event['e_end_monthly_spec_type']='day_of_month';
-					}
-
-					$event['e_end_day']+=intval($explode[2])-$orig_start_day;
-					$event['e_end_month']+=intval($explode[1])-$orig_start_month;
-					$event['e_end_year']+=intval($explode[0])-$orig_start_year;
-
-					// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
-					if (!is_null($event['e_end_hour']))
-					{
-						$event['e_end_hour']-=intval(date('H',tz_time(mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'])))-intval(date('H',tz_time(mktime(0,0,0,$orig_end_month,$orig_end_day,$orig_end_year),$event['e_timezone'])));
-						$event['e_end_minute']-=intval(date('i',tz_time(mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'])))-intval(date('i',tz_time(mktime(0,0,0,$orig_end_month,$orig_end_day,$orig_end_year),$event['e_timezone'])));
-					}
-				}
-			}
+			$event=adjust_event_dates_for_a_recurrence($day,$event);
 		}
-		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
-		$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+		list($time_raw,$from)=find_event_start_timestamp($event);
 		if ($day!='')
 		{
 			if (date('Y-m-d',$from)!=$day) // Possibly the day given in URL is invalid due to a day shift across timezones, adjust if required and recalculate
@@ -1539,32 +1494,23 @@ class Module_calendar
 				$day_dif=$event['e_start_day']-intval(date('d',$from));
 				$event['e_start_day']+=$day_dif;
 				$event['e_end_day']+=$day_dif;
-				$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
-				$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+				list($time_raw,$from)=find_event_start_timestamp($event);
 			}
 		}
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
-		if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
+		if ((!is_null($event['e_end_year'])) && (!is_null($event['e_end_month'])) && (!is_null($event['e_end_day'])))
 		{
-			if ($event['e_end_monthly_spec_type']!='day_of_month')
-			{
-				$event['e_end_monthly_spec_type']='day_of_month';
-				$dif_days=get_days_between($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
-				$event['e_end_year']=$event['e_start_year'];
-				$event['e_end_month']=$event['e_start_month'];
-				$event['e_end_day']=$event['e_start_day']+$dif_days;
-			}
+			list($to_raw,$to)=find_event_end_timestamp($event);
 
-			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
-			$to=cal_utctime_to_usertime($to_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),$to));
-			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
+			$human_readable_time_range=date_range($from,$to,!is_null($event['e_start_hour']));
 		} else
 		{
 			$to_raw=NULL;
-			$time2=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
 			$to=NULL;
+
 			$to_day_formatted=NULL;
+			$human_readable_time_range=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
 		}
 
 		// Recurrences
@@ -1580,11 +1526,6 @@ class Module_calendar
 			}
 		} elseif ($day=='') $day=$first_date;
 
-		// Other settings
-		$priority=$event['e_priority'];
-		$is_public=($event['e_is_public']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));
-
 		// Views
 		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
@@ -1593,24 +1534,7 @@ class Module_calendar
 				$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
-		// Breadcrumbs
-		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
-
-		// Meta data
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$event['e_add_date']),
-			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>is_null($event['e_edit_date'])?'':date('Y-m-d',$event['e_edit_date']),
-			'type'=>'Calendar event',
-			'title'=>get_translated_text($event['e_title']),
-			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
-			'description'=>get_translated_text($event['e_content']),
-			'image'=>find_theme_image('bigicons/calendar'),
-			//'category'=>???,
-		));
-
-		// Render
+		// Output
 		$map=array(
 			'TITLE'=>$title,
 			'_TITLE'=>get_translated_text($event['e_title']),
@@ -1630,7 +1554,7 @@ class Module_calendar
 			'PRIORITY'=>strval($priority),
 			'PRIORITY_LANG'=>$priority_lang,
 			'TYPE'=>$type,
-			'TIME'=>$time2,
+			'TIME'=>$human_readable_time_range,
 			'TIME_RAW'=>strval($time_raw),
 			'TIME_VCAL'=>date('Ymd',$time_raw)."T".date('His',$time_raw),
 			'TO_TIME_VCAL'=>is_null($to_raw)?NULL:(date('Ymd',$to_raw)."T".date('His',$to_raw)),
@@ -1710,14 +1634,11 @@ class Module_calendar
 
 		if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($event['e_type']))))
 		{
-			$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
-			$_from=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
-			$from=cal_utctime_to_usertime($_from,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			list(,$from)=find_event_start_timestamp($event);
 			$to=mixed();
 			if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 			{
-				$_to=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
-				$to=cal_utctime_to_usertime($_to,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+				list(,$to)=find_event_end_timestamp($event);
 			}
 
 			require_code('activities');

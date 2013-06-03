@@ -57,7 +57,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{TWITTER_ERROR}}
-	{+START,IF,{IS_STAFF}}
+	{+START,IF,{$IS_STAFF}}
 		<div class="xhtml_validator_off">
 			<b>Twitter Name:</b> <a href='http://www.twitter.com/{USER_SCREEN_NAME}' target='_blank'>{USER_SCREEN_NAME}</a> <br>
 			<b>Error:</b> {TWITTER_ERROR} <br>

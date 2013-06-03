@@ -151,8 +151,8 @@ function dload_script()
 	header('Accept-Ranges: bytes');
 
 	// Caching
-	header("Pragma: private");
-	header("Cache-Control: private");
+	header('Pragma: private');
+	header('Cache-Control: private');
 	header('Expires: '.gmdate('D, d M Y H:i:s',time()+60*60*24*365).' GMT');
 	$time=is_null($myrow['edit_date'])?$myrow['add_date']:$myrow['edit_date'];
 	$time=max($time,filemtime($_full));
@@ -853,7 +853,7 @@ function set_download_gallery_permissions($id,$submitter=NULL)
  * @param  ?TIME				Add time (NULL: do not change)
  * @param  ?integer			Number of views (NULL: do not change)
  * @param  ?MEMBER			Submitter (NULL: do not change)
- * @param  integer			The number of downloads that this download has had
+ * @param  ?integer			The number of downloads that this download has had (NULL: do not change)
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$num_downloads=NULL,$null_is_literal=false)

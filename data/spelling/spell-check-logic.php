@@ -153,11 +153,11 @@ function aspell_init()
 	$force_shell=false;
 	if ((!function_exists('pspell_check')) || ($force_shell))
 	{
-		if (ini_get('safe_mode')=='1') exit('Spell Checker does not work with safe mode systems that do not have direct pspell support into PHP');
+		if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') exit('Spell Checker does not work with safe mode systems that do not have direct pspell support into PHP');
 		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) exit('Spell Checker does not work on systems with shell_exec disabled that do not have direct pspell support into PHP');
 
 		// Our temporary spell check file
-		$temptext=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?sl_get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
+		$temptext=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?sl_get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
 		if ($temptext===false)
 			$temptext=tempnam(sl_get_custom_file_base().'/safe_mode_temp/','spell_');
 

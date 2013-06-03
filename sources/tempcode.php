@@ -181,7 +181,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 	$generator_num++;
 
 	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
-	$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
+	$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
 
 	$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
 	if ($type==TC_LANGUAGE_REFERENCE) $ret->pure_lang=true;

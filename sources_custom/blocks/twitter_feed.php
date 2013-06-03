@@ -86,7 +86,7 @@ class Block_twitter_feed
 		if ( (get_option('twitterfeed_use_twitter_support_config',true)=='1') && $api_key == '' && $api_secret == '' ) {
 			$api_key=get_option('twitter_api_key');
 			$api_secret=get_option('twitter_api_secret');
-			}
+		}
 		$twitter_name=array_key_exists('screen_name',$map)?$map['screen_name']:'coolweens';
 		$twitter_title=array_key_exists('title',$map)?$map['title']:'';
 		$twitter_tempmain=array_key_exists('template_main',$map)?$map['template_main']:'';
@@ -149,6 +149,11 @@ class Block_twitter_feed
 		{
 			$twitter_error = $e->getMessage();
 			return do_template("$twitter_templatemain",array('TWITTER_ERROR'=>$twitter_error,'CONTENT'=>$content,'STYLE'=>strval($twitter_style),'TWITTER_LOGO_IMG_CODE'=>$twitter_logo_img_code,'USER_SCREEN_NAME'=>$twitter_name));
+		}
+
+		if (count($twitter_statuses)==0)
+		{
+			return do_template('BLOCK_NO_ENTRIES',array('TITLE'=>'Twitter Profile Details','MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>'','SUBMIT_URL'=>''));
 		}
 		
 		// Generate variables and pass them to Style template for each status (status=tweet)
@@ -227,11 +232,64 @@ class Block_twitter_feed
 				}
 			  
 
-			$content->attach(do_template("$twitter_templatestyle",array('TWEET_TIME_AGO'=>$time_ago,'TWITTER_LOGO_IMG_CODE'=>$twitter_logo_img_code,'FOLLOW_BUTTON_SIZE'=>strval($twitter_followbuttonsize),'SHOW_PROFILE_IMAGE'=>strval($twitter_showprofileimage),'STYLE'=>strval($twitter_style),'REPLY_URL'=>$reply_url,'USER_PAGE_URL'=>$user_page_url,'RETWEET_URL'=>$retweet_url,'FOLLOW_BUTTON_NORMAL'=>$follow_button_normal,'FOLLOW_BUTTON_LARGE'=>$follow_button_large,'FAVORITE_URL'=>$favorite_url,'TWEET_CREATED_AT'=>$status['created_at'],'TWEET_ID'=>$status['id'],'TWEET_RETWEET_COUNT'=>strval($status['retweet_count']),'TWEET_FAVORITED'=>strval($status['favorited']),'TWEET_RETWEETED'=>strval($status['retweeted']),'TWEET_TEXT'=>$tweet_text,'USER_NAME'=>$status['user']['name'],'USER_SCREEN_NAME'=>$status['user']['screen_name'],'USER_LOCATION'=>$status['user']['location'],'USER_URL'=>$status['user']['url'],'USER_DESCRIPTION'=>$twitter_userdescription,'USER_FOLLOWERS_COUNT'=>strval($status['user']['followers_count']),'USER_FOLLOWING_COUNT'=>strval($status['user']['friends_count']),'USER_CREATED_AT'=>$status['user']['created_at'],'USER_FAVOURITES_COUNT'=>strval($status['user']['favourites_count']),'USER_STATUS_COUNT'=>strval($status['user']['statuses_count']),'USER_VERIFIED'=>$status['user']['verified'],'USER_PROFILE_IMG_URL'=>$status['user']['profile_image_url'] )));
+				$content->attach(do_template("$twitter_templatestyle",array(
+					'TWEET_TIME_AGO'=>$time_ago,
+					'TWITTER_LOGO_IMG_CODE'=>$twitter_logo_img_code,
+					'FOLLOW_BUTTON_SIZE'=>strval($twitter_followbuttonsize),
+					'SHOW_PROFILE_IMAGE'=>strval($twitter_showprofileimage),
+					'STYLE'=>strval($twitter_style),
+					'REPLY_URL'=>$reply_url,
+					'USER_PAGE_URL'=>$user_page_url,
+					'RETWEET_URL'=>$retweet_url,
+					'FOLLOW_BUTTON_NORMAL'=>$follow_button_normal,
+					'FOLLOW_BUTTON_LARGE'=>$follow_button_large,
+					'FAVORITE_URL'=>$favorite_url,
+					'TWEET_CREATED_AT'=>$status['created_at'],
+					'TWEET_ID'=>$status['id'],
+					'TWEET_RETWEET_COUNT'=>strval($status['retweet_count']),
+					'TWEET_FAVORITED'=>strval($status['favorited']),
+					'TWEET_RETWEETED'=>strval($status['retweeted']),
+					'TWEET_TEXT'=>$tweet_text,
+					'USER_NAME'=>$status['user']['name'],
+					'USER_SCREEN_NAME'=>$status['user']['screen_name'],
+					'USER_LOCATION'=>$status['user']['location'],
+					'USER_URL'=>$status['user']['url'],
+					'USER_DESCRIPTION'=>$twitter_userdescription,
+					'USER_FOLLOWERS_COUNT'=>strval($status['user']['followers_count']),
+					'USER_FOLLOWING_COUNT'=>strval($status['user']['friends_count']),
+					'USER_CREATED_AT'=>$status['user']['created_at'],
+					'USER_FAVOURITES_COUNT'=>strval($status['user']['favourites_count']),
+					'USER_STATUS_COUNT'=>strval($status['user']['statuses_count']),
+					'USER_VERIFIED'=>$status['user']['verified'],
+					'USER_PROFILE_IMG_URL'=>$status['user']['profile_image_url']
+				)));
 			}
 		
 		// Pass all the Styled statuses to the main template container
-		return do_template("$twitter_templatemain",array('TWITTER_ERROR'=>$twitter_error,'TWITTER_TITLE'=>$twitter_title,'CONTENT'=>$content,'TWITTER_LOGO_IMG_CODE'=>$twitter_logo_img_code,'FOLLOW_BUTTON_SIZE'=>strval($twitter_followbuttonsize),'SHOW_PROFILE_IMAGE'=>strval($twitter_showprofileimage),'STYLE'=>strval($twitter_style),'USER_PAGE_URL'=>$user_page_url,'FOLLOW_BUTTON_NORMAL'=>$follow_button_normal,'FOLLOW_BUTTON_LARGE'=>$follow_button_large,'USER_NAME'=>$status['user']['name'],'USER_SCREEN_NAME'=>$status['user']['screen_name'],'USER_LOCATION'=>$status['user']['location'],'USER_URL'=>$status['user']['url'],'USER_DESCRIPTION'=>$twitter_userdescription,'USER_FOLLOWERS_COUNT'=>strval($status['user']['followers_count']),'USER_FOLLOWING_COUNT'=>strval($status['user']['friends_count']),'USER_CREATED_AT'=>$status['user']['created_at'],'USER_FAVOURITES_COUNT'=>strval($status['user']['favourites_count']),'USER_STATUS_COUNT'=>strval($status['user']['statuses_count']),'USER_VERIFIED'=>$status['user']['verified'],'USER_PROFILE_IMG_URL'=>$status['user']['profile_image_url']));
+		return do_template("$twitter_templatemain",array(
+			'TWITTER_ERROR'=>$twitter_error,
+			'TWITTER_TITLE'=>$twitter_title,
+			'CONTENT'=>$content,
+			'TWITTER_LOGO_IMG_CODE'=>$twitter_logo_img_code,
+			'FOLLOW_BUTTON_SIZE'=>strval($twitter_followbuttonsize),
+			'SHOW_PROFILE_IMAGE'=>strval($twitter_showprofileimage),
+			'STYLE'=>strval($twitter_style),
+			'USER_PAGE_URL'=>$user_page_url,
+			'FOLLOW_BUTTON_NORMAL'=>$follow_button_normal,
+			'FOLLOW_BUTTON_LARGE'=>$follow_button_large,
+			'USER_NAME'=>$status['user']['name'],
+			'USER_SCREEN_NAME'=>$status['user']['screen_name'],
+			'USER_LOCATION'=>$status['user']['location'],
+			'USER_URL'=>$status['user']['url'],
+			'USER_DESCRIPTION'=>$twitter_userdescription,
+			'USER_FOLLOWERS_COUNT'=>strval($status['user']['followers_count']),
+			'USER_FOLLOWING_COUNT'=>strval($status['user']['friends_count']),
+			'USER_CREATED_AT'=>$status['user']['created_at'],
+			'USER_FAVOURITES_COUNT'=>strval($status['user']['favourites_count']),
+			'USER_STATUS_COUNT'=>strval($status['user']['statuses_count']),
+			'USER_VERIFIED'=>$status['user']['verified'],
+			'USER_PROFILE_IMG_URL'=>$status['user']['profile_image_url'],
+		));
 	}
 }
 

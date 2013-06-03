@@ -265,6 +265,8 @@ function ocf_may_whisper($target,$member_id=NULL)
 		return true;
 	}
 
+	if ($target==$member_id) return true;
+
 	if (has_privilege($member_id,'pt_anyone')) return true;
 	$pt_allow=$GLOBALS['OCF_DRIVER']->get_member_row_field($target,'m_pt_allow');
 	if ($pt_allow=='*') return true;

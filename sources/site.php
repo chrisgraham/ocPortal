@@ -394,7 +394,6 @@ function breadcrumbs()
 			$segment_substitutions=array_merge($segment_substitutions,load_breadcrumb_substitutions($out->evaluate(),$data));
 		}
 	}
-
 	if (count($segment_substitutions)!=0)
 	{
 		$_out=$out->evaluate();

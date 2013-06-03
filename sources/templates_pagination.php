@@ -78,7 +78,7 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 	{
 		if ($selector_value>$max_rows) $selector_value=$max_rows;
 		$selected=($max==$selector_value);
-		$selectors->attach(do_template('PAGINATION_PER_PAGE_OPTION',array('_GUID'=>'1a0583bab42257c60289459ce1ac1e05','SELECTED'=>$selected,'VALUE'=>strval($selector_value),'NAME'=>integer_format($selector_value))));
+		$selectors->attach(do_template('PAGINATION_PER_SCREEN_OPTION',array('_GUID'=>'1a0583bab42257c60289459ce1ac1e05','SELECTED'=>$selected,'VALUE'=>strval($selector_value),'NAME'=>integer_format($selector_value))));
 
 		if ($selector_value==$max_rows) break;
 	}

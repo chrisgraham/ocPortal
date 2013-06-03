@@ -12,6 +12,10 @@
 	font-style: italic;
 }
 
+.addon_actions {
+	white-space: nowrap;
+}
+
 .addon_actions * {
 	vertical-align: middle;
 }

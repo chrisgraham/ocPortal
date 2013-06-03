@@ -1199,6 +1199,7 @@ table.ocf_profile_statistics th {
 	float: right;
 	margin-left: 0.5em;
 	max-width: 245px; /* Based on tooltip size */
+	float: left; /* Forces it on same line as avatar, rather than wrapping */
 }
 
 .ocf_isolated_post_meta_column {

@@ -181,9 +181,9 @@ plupload,New Features,Chris Graham,GPL,"Replaces swfupload with plupload, which 
 pointstore_to_main,New Features,Chris Graham,Licensed on the same terms as ocPortal,Allows pointstore custom products to be bought inside the main eCommerce store (i.e. for real money). This is one way to allow people to sell downloads through ocPortal.,,,,
 referrals,New Features,Chris Graham,Licensed on the same terms as ocPortal,"Allows people to specify who referred them when they join your site or other configurable triggers in the system, and defines award levels people can reach. Note that tracking of referrals and award of point is a default part of ocPortal, but referrals are only picked up if made via the recommend module and the new member uses the same address they were recommended to. This addon will allow referrals to be specified explicitly via the URL or typed in manually.
 
-1) Edit the following settings in text_custom/signup_refer_levels.txt (there is an editing link for this on the setup menu)
+1) Edit the settings in text_custom/referrals.txt (there is an editing link for this on the setup menu)
 
-2) Edit the messages in the signup_refer.ini language file as required.
+2) Edit the messages in the referrals.ini language file as required.
 
 3) Probably set up a page on your site explaining the awards you give.
 ",,,Icon by Titan Creations,
@@ -293,3 +293,15 @@ psds,Graphical,Allen Ellis,Licensed on the same terms as ocPortal,These are the 
 user_sync,Development,Vivek Dinesh,Licensed on the same terms as ocPortal,"Sync user data between ocportal and a remote database.",PHP5,,,
 webdav,Development,Chris Graham,BSD-like licence,"Access your website repository as a folder on your computer. See the [page=""docs:tut_repository""]Repository Tutorial[/page] for more information.","PHP5.3, OcCLE",,,SabreDAV developers,
 wordpress_style_page_children,Graphical,Chris Graham,Licensed on the same terms as ocPortal,"Make links to child pages look more like Wordpress, including a thumbnail for each child page".
+directory_protect,Admin Utilities,Chris Graham,Licensed on the same terms as ocPortal,"Protect the files in a directory by routing requests through an ocPortal script. ocPortal will search for the page containing the linked content and only grant access if the current user has access to that page. Developers could customise the code to apply different permission rules.
+
+You will need to add a new rule into your .htaccess file to control the routing. Assuming all the files were under a 'videos' directory:
+RewriteRule ^(videos/.*)$ data_custom/directory_protect.php\?file=$1 [L,QSA]
+
+Put the rule above this part of the ocPortal default:
+# Anything that would point to a real file should actually be allowed to do so
+RewriteCond %{DOCUMENT_ROOT}/git/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/git/$1 -l [OR]
+RewriteCond %{DOCUMENT_ROOT}/git/$1 -d
+RewriteRule (.*) - [L]
+",,,,

@@ -11,7 +11,7 @@
 		{+END}
 	</h3>
 
-	<div class="toggleable_tray" id="c_{GROUPING_ID*}"{+START,IF,{$NEQ,{DISPLAY},table}} style="{$JS_ON,display: {DISPLAY*},}"{+END}>
+	<div class="toggleable_tray" id="c_{GROUPING_ID*}"{+START,IF,{$NEQ,{DISPLAY},block}} style="{$JS_ON,display: {DISPLAY*},}"{+END}>
 		<div class="wide_table_wrap">
 			<table class="columned_table wide_table ocf_forum_grouping" itemprop="significantLinks">
 				{+START,IF,{$NOT,{$MOBILE}}}

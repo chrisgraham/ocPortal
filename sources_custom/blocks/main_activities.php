@@ -31,7 +31,7 @@ class Block_main_activities
 		$info['version']=1;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
-		$info['parameters']=array('max','start','param','member','mode','grow');
+		$info['parameters']=array('max','start','param','member','mode','grow','refresh_time');
 		return $info;
 	}
 
@@ -88,7 +88,7 @@ class Block_main_activities
 	/*function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:do_lang(\'ACTIVITIES_TITLE\'),array_key_exists(\'mode\',$map)?$map[\'mode\']:\'all\',get_member())';
+		$info['cache_on']='array(array_key_exists(\'grow\',$map)?($map['grow']==\'1\'):true,array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'refresh_time\',$map)?intval($map[\'refresh_time\']):30,array_key_exists(\'param\',$map)?$map[\'param\']:do_lang(\'ACTIVITIES_TITLE\'),array_key_exists(\'mode\',$map)?$map[\'mode\']:\'all\',get_member())';
 		$info['ttl']=3;
 		return $info;
 	}*/
@@ -107,19 +107,16 @@ class Block_main_activities
 		require_javascript('javascript_jquery');
 		require_javascript('javascript_base64');
 
-		if (array_key_exists('param',$map))
-			$title=$map['param'];
-		else
-			$title=do_lang_tempcode('ACTIVITIES_TITLE');
+		$refresh_time=array_key_exists('refresh_time',$map)?intval($map['refresh_time']):30;
+		$grow=array_key_exists('grow',$map)?($map['grow']=='1'):true;
 
 		// See if we're displaying for a specific member
 		if (array_key_exists('member',$map))
 		{
 			$member_ids=array_map('intval',explode(',',$map['member']));
-		}
-		else
+		} else
 		{
-			// No specific user. Use ourselves.
+			// No specific member. Use ourselves.
 			$member_ids=array(get_member());
 		}
 
@@ -127,15 +124,13 @@ class Block_main_activities
 		require_code('activities');
 		require_code('addons_overview');
 
-		$mode=(array_key_exists('mode',$map))?$map['mode']:'all';
+		$mode=array_key_exists('mode',$map)?$map['mode']:'all';
 
-		$viewer_id=get_member(); //We'll need this later anyway.
+		$viewing_member=get_member();
 
-		$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		list($proceed_selection,$whereville)=find_activities($viewing_member,$mode,$member_ids);
 
-		list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_ids);
-
-		$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
+		$can_remove_others=has_zone_access($viewing_member,'adminzone');
 
 		$content=array();
 
@@ -144,7 +139,7 @@ class Block_main_activities
 		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):10);
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 
-		if ($proceed_selection===true)
+		if ($proceed_selection)
 		{
 			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'activities WHERE '.$whereville,false,true);
 
@@ -168,7 +163,7 @@ class Block_main_activities
 					'MEMBER_URL'=>$member_url,
 					'DATETIME'=>strval($datetime),
 					'LIID'=>strval($row['id']),
-					'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others),
+					'ALLOW_REMOVE'=>(($row['a_member_id']==$viewing_member) || $can_remove_others),
 				);
 			}
 		} else
@@ -176,7 +171,6 @@ class Block_main_activities
 			$pagination=new ocp_tempcode();
 		}
 
-		// No entries
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'_GUID'=>'b4de219116e1b8107553ee588717e2c9',
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
@@ -184,8 +178,9 @@ class Block_main_activities
 			'MODE'=>$mode,
 			'MEMBER_IDS'=>implode(',',$member_ids),
 			'CONTENT'=>$content,
-			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
+			'GROW'=>$grow,
 			'PAGINATION'=>$pagination,
+			'REFRESH_TIME'=>strval($refresh_time),
 
 			'START'=>strval($start),
 			'MAX'=>strval($max),

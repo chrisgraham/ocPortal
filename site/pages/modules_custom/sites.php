@@ -359,7 +359,7 @@ class Module_sites
 		$array=array('install.php'=>get_file_base().'/uploads/downloads/install.php','data.ocp'=>get_file_base().'/uploads/downloads/data.ocp');
 		foreach ($array as $filename=>$tmp_file)
 //		$zip=zip_open($t);
-//		$tmp_file=tempnam((((ini_get('safe_mode')=='1') || ((ini_get('open_basedir')!='') && (strpos(ini_get('open_basedir'),'/tmp')===false)))?get_custom_file_base().'/uploads/attachments/':'/tmp/'),'hosting_copy');
+//		$tmp_file=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((ini_get('open_basedir')!='') && (strpos(ini_get('open_basedir'),'/tmp')===false)))?get_custom_file_base().'/uploads/attachments/':'/tmp/'),'hosting_copy');
 //		while (($zip_entry=zip_read($zip))!==false)
 		{
 //			$_temp_file=fopen($tmp_file,'wb');

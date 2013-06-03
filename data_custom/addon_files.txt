@@ -50,6 +50,7 @@ oc_gift_giver
  - themes/default/templates_custom/POINTSTORE_OCGIFTS.tpl
  - themes/default/templates_custom/POINTSTORE_OCGIFTS_GIFTS.tpl
  - themes/default/templates_custom/OCF_MEMBER_SCREEN_GIFTS_WRAP.tpl
+ - themes/default/css/gifts.css
  - uploads/ocgifts_addon/index.html
  - uploads/ocgifts_addon/2a kiss.jpg
  - uploads/ocgifts_addon/2Football_(soccer).gif
@@ -2192,6 +2193,10 @@ activity_feed
 under18s
 --------
  - sources_custom/hooks/systems/ocf_implicit_usergroups/under18s.php
+
+directory_protect
+-----------------
+ - data_custom/directory_protect.php
 
 reported_content
 ----------------

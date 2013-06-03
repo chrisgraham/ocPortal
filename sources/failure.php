@@ -1182,6 +1182,8 @@ function _access_denied($class,$param,$force_login)
 	require_code('site');
 	log_stats('/access_denied',0);
 
+	if (($GLOBALS['IS_ACTUALLY_ADMIN']) && (get_param_integer('keep_fatalistic',0)==1)) fatal_exit($message);
+
 	if (((is_guest()) && (running_script('index'))) || ($force_login)) // Show login screen if appropriate
 	{
 		@ob_end_clean();

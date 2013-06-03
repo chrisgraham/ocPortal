@@ -448,7 +448,7 @@ class Module_cms_news extends standard_crud_module
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
-			if (has_actual_page_access(get_modal_user(),'news'))
+			if (has_actual_page_access(get_modal_user(),'news')) // NB: no category permission check, as syndication choice was explicit, and news categorisation is a bit more complex
 			{
 				require_code('activities');
 				syndicate_described_activity($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);

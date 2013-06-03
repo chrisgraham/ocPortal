@@ -222,12 +222,12 @@ class Module_admin_addons
 			}
 		}
 
-		ksort($_tpl_addons);
+		sort_maps_by($orphans,'!COLOUR,NAME');
 
 		$tpl_addons=new ocp_tempcode();
 		foreach ($_tpl_addons as $t)
 		{
-			$tpl_addons->attach($t);
+			$tpl_addons->attach(do_template('ADDON_SCREEN_ADDON',$t));
 		}
 
 		$multi_action=build_url(array('page'=>'_SELF','type'=>'multi_action'),'_SELF');
@@ -334,16 +334,20 @@ class Module_admin_addons
 		$installing=array();
 		$uninstalling=array();
 
+		$hidden=new ocp_tempcode();
+
 		foreach ($_POST+$_GET as $key=>$passed)
 		{
 			if (substr($key,0,8)=='install_')
 			{
 				$installing[]=$passed;
+				$hidden->attach(form_input_hidden($key,$passed));
 			}
 
 			if (substr($key,0,10)=='uninstall_')
 			{
 				$uninstalling[]=$passed;
+				$hidden->attach(form_input_hidden($key,$passed));
 			}
 		}
 
@@ -368,7 +372,7 @@ class Module_admin_addons
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS'))));
 
-		return do_template('ADDON_MULTI_CONFIRM_SCREEN',array('_GUID'=>'bd6b7e012825bb0c873a76a9f4b19cf1','TITLE'=>$title,'HIDDEN'=>build_keep_post_fields(),'URL'=>$url,'INSTALL_FILES'=>$install_files,'UNINSTALL_FILES'=>$uninstall_files,'WARNINGS'=>$warnings));
+		return do_template('ADDON_MULTI_CONFIRM_SCREEN',array('_GUID'=>'bd6b7e012825bb0c873a76a9f4b19cf1','TITLE'=>$title,'HIDDEN'=>$hidden,'URL'=>$url,'INSTALL_FILES'=>$install_files,'UNINSTALL_FILES'=>$uninstall_files,'WARNINGS'=>$warnings));
 	}
 
 	/**

@@ -1371,6 +1371,7 @@ class database_driver
 				$db=$GLOBALS['FORUM_DB'];
 			}
 			$locks=$db->query('SHOW OPEN TABLES FROM '.$db_name.' WHERE `Table`=\''.db_escape_string($db->get_table_prefix().$tbl).'\' AND In_use>=1');
+			if (is_null($locks)) return false; // MySQL version older than 5.0 (e.g. 4.1.x)
 			$locked=count($locks)>=1;
 			$tries++;
 			if ($locked)

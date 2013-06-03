@@ -1192,9 +1192,10 @@ class resource_fs_base
 	/**
 	 * Save function for resource-fs. Parses the data for some resource to a resource-fs XML file. Wraps file_save/folder_save.
 	 *
+	 * @param  ID_TEXT		The resource type
 	 * @param  ID_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties
+	 * @param  ?array			Properties (NULL: none)
 	 * @param  ?ID_TEXT		Whether to look for existing records using $filename as a label and this resource type (NULL: $filename is a strict file name)
 	 * @param  ?ID_TEXT		Search path (NULL: the same as the path saving at)
 	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)

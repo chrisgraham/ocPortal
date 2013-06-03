@@ -36,6 +36,7 @@ class Hook_choose_gallery
 
 		$must_accept_images=array_key_exists('must_accept_images',$options)?$options['must_accept_images']:false;
 		$must_accept_videos=array_key_exists('must_accept_videos',$options)?$options['must_accept_videos']:false;
+		$must_accept_something=array_key_exists('must_accept_something',$options)?$options['must_accept_something']:false;
 		$filter=array_key_exists('filter',$options)?$options['filter']:NULL;
 		$purity=array_key_exists('purity',$options)?$options['purity']:false;
 		$member_id=array_key_exists('member_id',$options)?$options['member_id']:NULL;
@@ -70,7 +71,11 @@ class Hook_choose_gallery
 			$title=$t['title'];
 			if (is_object($title)) $title=@html_entity_decode(strip_tags($title->evaluate()),ENT_QUOTES,get_charset());
 			$has_children=($t['child_count']!=0);
-			$selectable=(($addable_filter!==true) || $t['addable']) && ((($t['accept_videos']==1) && ($t['is_member_synched']==0)) || (!$must_accept_videos)) && ((($t['accept_images']==1) && ($t['is_member_synched']==0)) || (!$must_accept_images));
+			$selectable=
+				(($addable_filter!==true) || ($t['addable'])) && 
+				(((($t['accept_images']==1) || ($t['accept_videos']==1)) && ($t['is_member_synched']==0)) || (!$must_accept_something)) && 
+				((($t['accept_videos']==1) && ($t['is_member_synched']==0)) || (!$must_accept_videos)) && 
+				((($t['accept_images']==1) && ($t['is_member_synched']==0)) || (!$must_accept_images));
 
 			$tag='category'; // category
 			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';

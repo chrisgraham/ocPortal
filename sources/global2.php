@@ -31,7 +31,7 @@ function init__global2()
 
 	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX,$KNOWN_UTF8;
 
-	if (ini_get('output_buffering')=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
+	if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('output_buffering')))=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 	// Fixup some inconsistencies in parameterisation on different PHP platforms
 	if (array_key_exists('HTTP_X_REWRITE_URL',$_SERVER))

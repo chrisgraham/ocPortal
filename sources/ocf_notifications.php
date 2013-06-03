@@ -159,7 +159,7 @@ function generate_notifications($member_id)
 			}
 			$time_raw=$unread_pp['p_time'];
 			$time=get_timezoned_date($unread_pp['p_time']);
-			$topic=$GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],NULL);
+			$topic_url=$GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],NULL,true);
 			$post=get_translated_tempcode($unread_pp['p_post'],$GLOBALS['FORUM_DB']);
 			$description=$unread_pp['t_description'];
 			if ($description!='') $description=' ('.$description.')';
@@ -177,7 +177,7 @@ function generate_notifications($member_id)
 				'IGNORE_URL'=>$ignore_url,
 				'IGNORE_URL_2'=>$ignore_url_2,
 				'REPLY_URL'=>$reply_url,
-				'TOPIC_URL'=>$topic,
+				'TOPIC_URL'=>$topic_url,
 				'POST'=>$post,
 				'DESCRIPTION'=>$description,
 				'TIME'=>$time,

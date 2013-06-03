@@ -103,7 +103,7 @@ class Block_main_forum_news
 				$forum_ids[$forum_id]=$forum_name;
 				if (is_null($archive_url))
 				{
-					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id); // First forum will count as archive
+					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id,true); // First forum will count as archive
 					if (get_forum_type()=='ocf')
 					{
 						$submit_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$forum_id),get_module_zone('topics'));
@@ -135,7 +135,7 @@ class Block_main_forum_news
 			$news_title=$myrow['title'];
 			$news=is_object($myrow['firstpost'])?$myrow['firstpost']:make_string_tempcode(xhtmlise_html($myrow['firstpost']));
 			if (is_null($news)) $news='';
-			$full_url=$GLOBALS['FORUM_DRIVER']->topic_url($id,'');
+			$full_url=$GLOBALS['FORUM_DRIVER']->topic_url($id,'',true);
 			$news_text->attach(do_template('NEWS_BOX',array(
 				'_GUID'=>'12fa98717a768ccbe28884bdbae0313b',
 				'GIVE_CONTEXT'=>false,

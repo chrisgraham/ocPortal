@@ -47,7 +47,7 @@ function init__catalogues()
  *
  * @param  ID_TEXT		The catalogue name
  * @param  boolean		Whether to return NULL if we can't find it (as opposed to a fatal error)
- * @param  ?array			Catalogue row (NULL: could not find it, and $fail_ok was set to true)
+ * @return ?array			Catalogue row (NULL: could not find it, and $fail_ok was set to true)
  */
 function load_catalogue_row($catalogue_name,$fail_ok=false)
 {

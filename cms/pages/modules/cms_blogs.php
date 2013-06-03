@@ -139,7 +139,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		require_code('form_templates');
 		$only_owned=has_privilege(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned),false,'JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category AND nc_owner IS NOT NULL');
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned),false,' JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category AND nc_owner IS NOT NULL');
 		if (count($rows)==0) return NULL;
 		foreach ($rows as $row)
 		{
@@ -506,7 +506,7 @@ class Module_cms_blogs extends standard_crud_module
 			$activity_title=($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS');
 			$activity_title_validate=($is_blog?'news:ACTIVITY_VALIDATE_NEWS_BLOG':'news:ACTIVITY_VALIDATE_NEWS');
 
-			if (has_actual_page_access(get_modal_user(),'news'))
+			if (has_actual_page_access(get_modal_user(),'news')) // NB: no category permission check, as syndication choice was explicit, and news categorisation is a bit more complex
 			{
 				require_code('activities');
 				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);

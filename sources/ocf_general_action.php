@@ -83,10 +83,10 @@ function ocf_make_emoticon($code,$theme_img_code,$relevance_level=1,$use_topics=
  * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
  * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
  * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
- * @set primary secondary 
+ * @set primary secondary ""
  * @return AUTO_LINK		The ID
  */
-function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=0,$usergroup=NULL,$usergroup_type='')
+function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=NULL,$usergroup=NULL,$usergroup_type='')
 {
 	$id=$GLOBALS['SITE_DB']->query_insert(
 		'f_welcome_emails',

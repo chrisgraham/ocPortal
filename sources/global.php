@@ -398,7 +398,7 @@ global $PAGE_START_TIME;
 $PAGE_START_TIME=microtime(false);
 
 // Unregister globals (sanitisation)
-if (ini_get('register_globals')=='1')
+if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('register_globals')))=='1')
 {
 	foreach (array('_GET','_POST','_COOKIE','_ENV','_SERVER','_SESSION') as $superglobal)
 	{

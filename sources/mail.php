@@ -687,7 +687,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			}
 			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
 			$php_errormsg=mixed();
-			if (ini_get('safe_mode')=='1')
+			if ((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ($additional==''))
 			{
 				$worked=mail($to_line,$tightened_subject,$sending_message,$headers);
 			} else

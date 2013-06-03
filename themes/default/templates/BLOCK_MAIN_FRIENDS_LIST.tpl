@@ -13,9 +13,9 @@
 
 		<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
-		{+START,IF_NON_EMPTY,{FRIENDS}}
+		{+START,IF_NON_EMPTY,{FRIENDS_FORWARD}}
 			<div class="ocf_profile_friends raw_ajax_grow_spot">
-				{+START,LOOP,FRIENDS}
+				{+START,LOOP,FRIENDS_FORWARD}
 					<div class="box"><div class="box_inner">
 						{BOX}
 					</div></div>
@@ -28,7 +28,7 @@
 				</div>
 			{+END}
 		{+END}
-		{+START,IF_EMPTY,{FRIENDS}}
+		{+START,IF_EMPTY,{FRIENDS_FORWARD}}
 			<p class="nothing_here">{!NO_ENTRIES}</p>
 		{+END}
 
@@ -42,7 +42,7 @@
 {+END}
 
 {+START,IF,{$EQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
-	{+START,LOOP,FRIENDS}
+	{+START,LOOP,FRIENDS_FORWARD}
 		<div class="box"><div class="box_inner">
 			{BOX}
 		</div></div>

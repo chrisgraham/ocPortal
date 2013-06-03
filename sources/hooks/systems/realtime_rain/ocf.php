@@ -91,7 +91,7 @@ class Hook_realtime_rain_ocf
 						'TIMESTAMP'=>strval($timestamp),
 						'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
 						'TICKER_TEXT'=>$ticker_text,
-						'URL'=>$GLOBALS['FORUM_DRIVER']->post_url($row['id'],$row['p_cache_forum_id']),
+						'URL'=>$GLOBALS['FORUM_DRIVER']->post_url($row['id'],$row['p_cache_forum_id'],true),
 						'IS_POSITIVE'=>false,
 						'IS_NEGATIVE'=>false,
 

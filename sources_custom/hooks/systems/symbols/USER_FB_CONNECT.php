@@ -27,6 +27,7 @@ class Hook_symbol_USER_FB_CONNECT
 			// Okay, look to see if they have set up syndication permissions instead, which is the other way around: stores authorisation, but not Facebook ID...
 
 			$token=get_long_value('facebook_oauth_token__'.strval($member_id));
+			if (($token===NULL) || ($token=='')) return '';
 
 			$appid=get_option('facebook_appid',true);
 			if (is_null($appid)) return '';
@@ -36,8 +37,10 @@ class Hook_symbol_USER_FB_CONNECT
 			{
 				$facebook_connect=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 				$facebook_connect->setAccessToken($token);
+				$temp_cookie=$_COOKIE;
 				$fb_user=$facebook_connect->getUser();
-				$value=is_null($fb_user)?'':strval($fb_user);
+				$_COOKIE=$temp_cookie;
+				$value=is_null($user)?'':strval($fb_user);
 				if ($value=='0') $value='';
 			}
 			catch (Exception $e)

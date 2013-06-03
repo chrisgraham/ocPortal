@@ -144,6 +144,7 @@ class Hook_html_site
 		foreach ($content_files as $file)
 		{
 			$zone=str_replace('/','_',dirname($file));
+			if ($zone=='.') $zone='';
 			if (!in_array($zone,$current_zones))
 				$new_zones[]=$zone;
 		}

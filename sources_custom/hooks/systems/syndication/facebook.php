@@ -12,7 +12,7 @@ class Hook_Syndication_facebook
 		$appapikey=get_option('facebook_appid',true);
 		if (is_null($appapikey)) return false;
 		$appsecret=get_option('facebook_secret_code');
-		if(($appapikey=='') || ($appsecret=='')) return false;
+		if (($appapikey=='') || ($appsecret=='')) return false;
 
 		return true;
 	}
@@ -63,15 +63,18 @@ class Hook_Syndication_facebook
 			}
 		}
 
-		if (strpos($access_token,'|')===false) // Not if application access token, which will happen on a refresh (as user token will not confirm twice)
+		if ((strpos($access_token,'|')===false) || (is_null($member_id))) // If for users, not if application access token, which will happen on a refresh (as user token will not confirm twice)
 		{
 			$save_to='facebook_oauth_token';
 			if (!is_null($member_id)) $save_to.='__'.strval($member_id);
 			set_long_value($save_to,$access_token);
 		}
 
-		header('Location: '.str_replace('&syndicate_start__facebook=1','',str_replace('oauth_in_progress=1&','oauth_in_progress=0&',$oauth_url->evaluate())));
-		exit();
+		if (get_page_name()!='facebook_oauth') // Take member back to page that implicitly shows their results
+		{
+			header('Location: '.str_replace('&syndicate_start__facebook=1','',str_replace('oauth_in_progress=1&','oauth_in_progress=0&',$oauth_url->evaluate())));
+			exit();
+		}
 
 		return true;
 	}

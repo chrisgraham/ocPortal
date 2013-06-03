@@ -361,17 +361,6 @@ class forum_driver_wowbb extends forum_driver_base
 	}
 
 	/**
-	 * Get a URL to the specified member's profile, from the username.
-	 *
-	 * @param  SHORT_TEXT	The username
-	 * @return URLPATH		The URL to the member profile
-	 */
-	function member_profile_url_name($name)
-	{
-		return get_forum_base_url().'/view_user.php?id='.$this->get_member_from_username($name);
-	}
-
-	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
 	 * @return URLPATH		The URL to the registration page

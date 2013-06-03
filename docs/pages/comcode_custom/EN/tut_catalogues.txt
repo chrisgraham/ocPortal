@@ -65,8 +65,10 @@ You may also specify which fields may be used to search the catalogue (searching
 
 [exp_thumb="A non-tree catalogue uses an index" float="right"]catalogues_view_index[/exp_thumb]
 There are two options to set how a catalogue may display:
- - 'Own pages' -- this allows you to make it so that catalogue categories show only skeleton information on entries, encouraging users to view the entry screen for full details; typically this will be used when entries have many fields.
+ - 'Display type' -- you can display entries in categories as lists, "field-maps" or in a table (full customisation is possible via templating).
  - 'Is tree' -- a tree catalogue has a full hierarchical category tree, much like the download system does; a non-tree catalogue just shows the categories from a single catalogue index.
+
+Note that if you set all fields of your catalogue to "Display in category-views" and disable comments and ratings and trackbacks, there will be no links to the entry view screen. This is due to there being little purpose in this screen because everything already displays on categories.
 
 [surround]
 [exp_thumb="A catalogue with 'own pages' enabled" float="left"]catalogues_own_pages[/exp_thumb]

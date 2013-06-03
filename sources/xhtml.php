@@ -75,9 +75,15 @@ function xhtmlise_html($html,$definitely_want=false,$snippet=false)
 	$new.=fix_entities($INBETWEEN_TEXT);
 	while ($token!==NULL)
 	{
-		if ((is_array($token)) && (isset($token[0]))) // Some kind of error in our token
+		while (is_array($token)) // Some kind of error in our token
 		{
-			$token=$token[0];
+			if ($token[0]!==NULL)
+			{
+				$token=$token[0]; // We can at least discern something
+			} else
+			{
+				$token=_get_next_tag(); // No, we need to just move on
+			}
 		}
 
 		$basis_token=_get_tag_basis($token);

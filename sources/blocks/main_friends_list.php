@@ -86,7 +86,9 @@ class Block_main_friends_list
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$query);
 
-		$friends=array();
+		$friends_mutual=array();
+		$friends_nonmutual=array();
+		$friends_forward=array();
 		foreach ($rows as $i=>$row)
 		{
 			$f_id=($row['member_liked']==$member_id)?$row['member_likes']:$row['member_liked'];
@@ -118,13 +120,26 @@ class Block_main_friends_list
 				$box=render_member_box($f_id,true,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL,false,'friends_list');
 				if (!$box->is_empty_shell())
 				{
-					$friends[]=array(
+					$friend_map=array(
+						'APPEARS_TWICE'=>$appears_twice,
 						'USERGROUP'=>$friend_usergroup,
 						'USERNAME'=>$friend_username,
 						'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),
 						'F_ID'=>strval($f_id),
 						'BOX'=>$box,
 					);
+
+					if ($appears_twice) // Mutual friendship
+					{
+						$friends_mutual[]=$friend_map;
+					} else
+					{
+						$friends_nonmutual[]=$friend_map;
+					}
+					if (($member_id_of==$row['member_likes']) || ($appears_twice))
+					{
+						$friends_forward[]=$friend_map;
+					}
 				}
 			}
 		}
@@ -137,7 +152,9 @@ class Block_main_friends_list
 		return do_template('BLOCK_MAIN_FRIENDS_LIST',array(
 			'_GUID'=>'70b11d3c01ff551be42a0472d27dd207',
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-			'FRIENDS'=>$friends,
+			'FRIENDS_MUTUAL'=>$friends_mutual,
+			'FRIENDS_NONMUTUAL'=>$friends_nonmutual,
+			'FRIENDS_FORWARD'=>$friends_forward,
 			'PAGINATION'=>$pagination,
 			'MEMBER_ID'=>strval($member_id),
 

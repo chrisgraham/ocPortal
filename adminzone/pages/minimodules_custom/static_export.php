@@ -132,6 +132,7 @@ $done_non_spec=array();
 foreach ($directory as $entry) // Rewrite non-specific pages to 'misc' files
 {
 	$dir_name=preg_replace('#^[A-Z][A-Z]/#','',dirname($entry['path']));
+	if ($dir_name=='.') $dir_name='';
 	if (isset($done_non_spec[$dir_name])) continue;
 	$done_non_spec[$dir_name]=1;
 	if (($dir_name!='') && (basename($entry['path'])=='misc.htm'))

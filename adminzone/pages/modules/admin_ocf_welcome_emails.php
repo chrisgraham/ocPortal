@@ -183,10 +183,9 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 * @param  LONG_TEXT		The message body of the Welcome E-mail
 	 * @param  integer		The number of hours before sending the e-mail
 	 * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
-	 * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
 	 * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
 	 * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
-	 * @set primary secondary 
+	 * @set primary secondary ""
 	 * @return tempcode		The input fields
 	 */
 	function get_form_fields($name='',$subject='',$text='',$send_time=0,$newsletter=NULL,$usergroup=NULL,$usergroup_type='')

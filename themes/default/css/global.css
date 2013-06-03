@@ -275,7 +275,7 @@ th, .fake_th {
 th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
 }
-thead>tr>th, .boxless_space .box thead>tr>th {
+thead>tr>th, .boxless_space .box thead>tr>th, .pte_set_box .box thead>tr>th {
 	background-color: {$GET,box_title_background};
 	color: {$GET,box_title_text};
 	background-repeat: repeat-x;
@@ -1451,6 +1451,16 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
+.fp_col_block .pagination {
+	float: none;
+}
+.fp_col_block .pagination_per_page {
+	display: none;
+}
+.fp_col_block form + span {
+	margin-left: 0;
+}
+
 .fp_col_block .box {
 	margin-bottom: 0; /* margin-top from boxes below will work instead. This is needed as the "overflow: hidden" stops margin collapsing between the block contents and outside it */
 }
@@ -2238,10 +2248,10 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .post .post_avatar {
-	float: right;
-	margin: 1em 0 0 2em;
-	width: 60px;
-	height: 60px;
+	float: left;
+	margin: 0.5em 1em 0.5em 0;
+	width: 50px;
+	height: 50px;
 }
 
 .post .post_subline {

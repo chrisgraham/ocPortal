@@ -2351,7 +2351,7 @@ END;
 				{
 					if (!$stuff->is_empty()) $stuff->attach(do_lang_tempcode('LIST_SEP'));
 
-					$url=$GLOBALS['FORUM_DRIVER']->post_url($post['id'],$post['p_topic_id']);
+					$url=$GLOBALS['FORUM_DRIVER']->post_url($post['id'],'',true);
 
 					if ($post['p_title']!='')
 					{
@@ -3692,7 +3692,7 @@ END;
 		if (!is_null($topic_id))
 		{
 			$title=get_screen_title('REDIRECTING');
-			$url=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id);
+			$url=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id,'',true);
 			require_code('site2');
 			assign_refresh($url,0.0);
 			return do_template('REDIRECT_SCREEN',array('_GUID'=>'f457a6d28fd6e494662e5b82e80e9fa2','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING_TO_BIRTHDAY_TOPIC')));

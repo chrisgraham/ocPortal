@@ -113,8 +113,8 @@ function attachments_script()
 	header('Accept-Ranges: bytes');
 
 	// Caching
-	header("Pragma: private");
-	header("Cache-Control: private");
+	header('Pragma: private');
+	header('Cache-Control: private');
 	header('Expires: '.gmdate('D, d M Y H:i:s',time()+60*60*24*365).' GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s',$myrow['a_add_time']).' GMT');
 

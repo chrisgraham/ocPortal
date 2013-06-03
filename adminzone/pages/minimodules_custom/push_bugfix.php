@@ -291,7 +291,7 @@ echo <<<END
 
 		<div>
 			<label for="git_commit_id">{$git_status_3}{$git_status_2}</label>
-			<input name="git_commit_id" id="git_commit_id" type="text" value="" {$git_status} />
+			<input onchange="document.getElementById('fixed_files').required=(this.value=='');" name="git_commit_id" id="git_commit_id" type="text" value="" {$git_status} />
 		</div>
 	</fieldset>
 END;

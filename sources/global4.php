@@ -381,6 +381,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 		decache('main_staff_checklist');
 		decache('main_awards');
 		decache('main_multi_content');
+		decache('side_stored_menu'); // Due to the content counts in the CMS/Admin Zones
 	}
 
 	if ((get_page_name()!='admin_themewizard') && (get_page_name()!='admin_import'))

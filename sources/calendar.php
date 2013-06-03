@@ -253,6 +253,42 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 
 	$all_day=false;
 
+	if ($end_monthly_spec_type!='day_of_month')
+	{
+		$dif_days=get_days_between($initial_start_month,$initial_start_day,$initial_start_year,$initial_end_month,$initial_end_day,$initial_end_year);
+	}
+
+	if ((is_null($start_hour)) && (is_null($end_year) || is_null($end_month) || is_null($end_day))) // All day event with no end date, should be same as start date.
+	{
+		if ($start_monthly_spec_type=='day_of_month')
+		{
+			$end_day=$start_day;
+		} else
+		{
+			$end_day=$start_day_of_month;
+		}
+		$end_month=$start_month;
+		$end_year=$start_year;
+		$all_day=true;
+
+		// Should not be needed, but normalise possible database error
+		$start_minute=NULL;
+		$start_hour=NULL;
+		$end_minute=NULL;
+		$end_hour=NULL;
+	}
+
+	if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day)) // Must define end date relative to start date; we will calculate $end_monthly_spec_type. This code is re-run at the end of the loop, as we need to re-sync each time
+	{
+		if ($end_monthly_spec_type!='day_of_month')
+		{
+			// Work out using deltas
+			$end_day=$start_day_of_month+$dif_days;
+			$end_month=$start_month;
+			$end_year=$start_year;
+		}
+	}
+
 	do
 	{
 		/*
@@ -271,36 +307,6 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$timezone,
 			$do_timezone_conv==1
 		);
-		if ((is_null($start_hour)) && (is_null($end_year) || is_null($end_month) || is_null($end_day))) // All day event with no end date, should be same as start date
-		{
-			if ($start_monthly_spec_type=='day_of_month')
-			{
-				$end_day=$start_day;
-			} else
-			{
-				$end_day=$start_day_of_month;
-			}
-			$end_month=$start_month;
-			$end_year=$start_year;
-			$all_day=true;
-
-			// Should not be needed, but normalise possible database error
-			$start_minute=NULL;
-			$start_hour=NULL;
-			$end_minute=NULL;
-			$end_hour=NULL;
-		} else
-		{
-			// Work out using deltas
-			if ($end_monthly_spec_type!='day_of_month')
-			{
-				$dif_days=get_days_between($initial_start_month,$initial_start_day,$initial_start_year,$initial_end_month,$initial_end_day,$initial_end_year);
-
-				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1)+$dif_days;
-				$end_month=$start_month;
-				$end_year=$start_year;
-			}
-		}
 		if (is_null($end_year) || is_null($end_month) || is_null($end_day))
 		{
 			$_b=NULL;
@@ -323,31 +329,38 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		}
 		$i++;
 
+		// Bump start date forward
 		$start_year+=$dif_year;
 		$start_month+=$dif_month;
 		if ($start_monthly_spec_type=='day_of_month')
 		{
 			$start_day+=$dif_day;
+			//$start_day_of_month=$start_day;	Is static actually
 		} else
 		{
 			$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		}
+		// Bump end date forward - or reset it relative to the start date
 		if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 		{
-			$end_year+=$dif_year;
-			$end_month+=$dif_month;
 			if ($end_monthly_spec_type=='day_of_month')
 			{
+				// Bump forward simply
+				$end_year+=$dif_year;
+				$end_month+=$dif_month;
 				$end_day+=$dif_day;
 			} else
 			{
-				//$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,$timezone,$do_timezone_conv==1);		Can't work right, or you can get negative time periods. We will just do it as deltas, which is a different method entirely.
+				// Work out using deltas
+				$end_day=$start_day_of_month+$dif_days;
+				$end_month=$start_month;
+				$end_year=$start_year;
 			}
 		}
 
 		// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
-		$start_hour-=intval(date('H',tz_time(mktime(0,0,0,$start_month,$start_day,$start_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day-$dif_day,$start_year-$dif_year),$timezone)));
-		$start_minute-=intval(date('i',tz_time(mktime(0,0,0,$start_month,$start_day,$start_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day-$dif_day,$start_year-$dif_year),$timezone)));
+		$start_hour-=intval(date('H',tz_time(mktime(0,0,0,$start_month,$start_day_of_month,$start_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day_of_month-$dif_day,$start_year-$dif_year),$timezone)));
+		$start_minute-=intval(date('i',tz_time(mktime(0,0,0,$start_month,$start_day_of_month,$start_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day_of_month-$dif_day,$start_year-$dif_year),$timezone)));
 		if (!is_null($end_hour))
 		{
 			$end_hour-=intval(date('H',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
@@ -862,7 +875,7 @@ function find_timezone_end_minute_in_utc($timezone,$year,$month,$day,$monthly_sp
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer			Hour (NULL: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  ?integer			Minute (NULL: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  boolean			Whether the time should be converted to the viewer's own timezone instead.
+ * @param  boolean			Whether the time should be converted to the $timezone instead instead of UTC.
  * @return TIME				Timestamp
  */
 function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$monthly_spec_type,$hour,$minute,$show_in_users_timezone)
@@ -1141,7 +1154,7 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$
  *
  * @param  integer		The concrete year
  * @param  integer		The concrete month
- * @param  integer		The encoded day of month
+ * @param  integer		The concrete day of month
  * @param  ID_TEXT		In-month specification type
  * @return integer		Concrete day
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
@@ -1212,6 +1225,7 @@ function monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_s
 			$nth=locale_filter(date('jS',mktime(0,0,0,$month,$day,$year))); // Bit of a hack. Uses the date locales nth stuff, even when it's not actually a day-of-month here.
 		}
 		$dow=locale_filter(date('l',$timestamp));
+
 		$month_name=locale_filter(date('M',$timestamp));
 
 		$text=do_lang_tempcode('CALENDAR_MONTHLY_RECURRENCE_CONCRETE_'.$monthly_spec_type,$nth,$dow,$month_name);
@@ -1221,4 +1235,185 @@ function monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_s
 	}
 
 	return form_input_radio(do_lang_tempcode('MONTHLY_SPEC_TYPE'),do_lang_tempcode('DESCRIPTION_MONTHLY_SPEC_TYPE'),'monthly_spec_type',$radios,true);
+}
+
+/**
+ * Adjust an event row to match a recurrence on a specific day.
+ *
+ * @param  string			A day (Y-m-d)
+ * @param  array			The event row
+ * @return array			Adjusted event row
+ */
+function adjust_event_dates_for_a_recurrence($day,$event)
+{
+	$explode=explode('-',$day);
+	if (count($explode)==3)
+	{
+		$recurrence_start_day=intval($explode[2]);
+		$recurrence_start_month=intval($explode[1]);
+		$recurrence_start_year=intval($explode[0]);
+
+		$orig_start_day=$event['e_start_day'];
+		$orig_start_month=$event['e_start_month'];
+		$orig_start_year=$event['e_start_year'];
+		$orig_concrete_start_day=start_find_concrete_day_of_month_wrap($event);
+
+		$has_end_date=(!is_null($event['e_end_year'])) && (!is_null($event['e_end_month'])) && (!is_null($event['e_end_day']));
+
+		if ($has_end_date)
+		{
+			$orig_end_day=$event['e_end_day'];
+			$orig_end_month=$event['e_end_month'];
+			$orig_end_year=$event['e_end_year'];
+
+			$event=resolve_complex_event_end_date($event); // Lock down the end date to be a regular calendar one, so we know our calculations on it can be simple. It must be defined relative to the start date of the first recurrence
+		}
+
+		// Set the start date to this recurrence
+		$event['e_start_day']=$recurrence_start_day;
+		$event['e_start_month']=$recurrence_start_month;
+		$event['e_start_year']=$recurrence_start_year;
+		$event['e_start_monthly_spec_type']='day_of_month';
+
+		if (!is_null($event['e_start_hour']))
+		{
+			list($dif_hours,$dif_minutes)=dst_boundary_difference_for_recurrence($orig_start_year,$orig_start_month,$orig_start_day,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_timezone']);
+			$event['e_start_hour']+=$dif_hours;
+			$event['e_start_minute']+=$dif_minutes;
+		}
+
+		if ($has_end_date)
+		{
+			$event['e_end_day']+=$recurrence_start_day-$orig_concrete_start_day;
+			$event['e_end_month']+=$recurrence_start_month-$orig_start_month;
+			$event['e_end_year']+=$recurrence_start_year-$orig_start_year;
+
+			// Fix to be a proper calendar date (removes out of range values by carrying over)
+			$event_end_time=mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
+			$event['e_end_day']=intval(date('d',$event_end_time));
+			$event['e_end_month']=intval(date('m',$event_end_time));
+			$event['e_end_year']=intval(date('Y',$event_end_time));
+
+			if (!is_null($event['e_end_hour']))
+			{
+				list($dif_hours,$dif_minutes)=dst_boundary_difference_for_recurrence($orig_end_year,$orig_end_month,$orig_end_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_timezone']);
+				$event['e_end_hour']+=$dif_hours;
+				$event['e_end_minute']+=$dif_minutes;
+			}
+		}
+	}
+
+	return $event;
+}
+
+/**
+ * An event moved from 'a' to 'b' may have an hour/minute shift due to a DST.
+ *
+ * @param  integer		'A' year
+ * @param  integer		'A' month
+ * @param  integer		'A' day
+ * @param  integer		'B' year
+ * @param  integer		'B' month
+ * @param  integer		'B' day
+ * @param  ID_TEXT		The timezone
+ * @return array			A pair: shift in hours, shift in minutes
+ */
+function dst_boundary_difference_for_recurrence($a_year,$a_month,$a_day,$b_year,$b_month,$b_day,$timezone)
+{
+	$dif_hours=intval(date('H',tz_time(mktime(0,0,0,$a_month,$a_day,$a_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$b_month,$b_day,$b_year),$timezone)));
+	$dif_minutes=intval(date('i',tz_time(mktime(0,0,0,$a_month,$a_day,$a_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$b_month,$b_day,$b_year),$timezone)));
+	return array($dif_hours,$dif_minutes);
+}
+
+/**
+ * An event may have a complex end date (e.g. 4th Friday).
+ * We want to fix it to a calendar day for the recurrence (which we assume is already fixed into the event row).
+ * We also want to define it (trick it) to be stated in the same month of the start date, even if that means the days will exceed the number of days in a month.
+ * This will allow us to do shifts around in calendar-space.
+ *
+ * @param  array			Event row
+ * @return array			Event row
+ */
+function resolve_complex_event_end_date($event)
+{
+	if ((!is_null($event['e_end_year'])) && (!is_null($event['e_end_month'])) && (!is_null($event['e_end_day'])))
+	{
+		if ($event['e_end_monthly_spec_type']!='day_of_month')
+		{
+			$concrete_start_day=start_find_concrete_day_of_month_wrap($event);
+			$concrete_end_day=end_find_concrete_day_of_month_wrap($event);
+			$dif_days=get_days_between($event['e_start_month'],$concrete_start_day,$event['e_start_year'],$event['e_end_month'],$concrete_end_day,$event['e_end_year']);
+
+			$event['e_end_monthly_spec_type']='day_of_month';
+			$event['e_end_day']=$concrete_start_day+$dif_days;
+			$event['e_end_month']=$event['e_start_month'];
+			$event['e_end_year']=$event['e_start_year'];
+		}
+	}
+
+	return $event;
+}
+
+/**
+ * Find the timestamp of an event's start.
+ *
+ * @param  array			Event row
+ * @return array			A pair: timestamp, timestamp considering the viewing users timezone
+ */
+function find_event_start_timestamp($event)
+{
+	$time=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
+
+	$shifted=cal_utctime_to_usertime(
+		$time,
+		$event['e_timezone'],
+		$event['e_do_timezone_conv']==1
+	);
+
+	return array($time,$shifted);
+}
+
+/**
+ * Find the timestamp of an event's end.
+ *
+ * @param  array			Event row
+ * @return array			A pair: timestamp, timestamp considering the viewing users timezone
+ */
+function find_event_end_timestamp($event)
+{
+	$time=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
+
+	$shifted=cal_utctime_to_usertime(
+		$time,
+		$event['e_timezone'],
+		$event['e_do_timezone_conv']==1
+	);
+
+	return array($time,$shifted);
+}
+
+/**
+ * Find the concrete start day of a month for an event row.
+ *
+ * @param  array			Event row
+ * @return integer		Concrete day
+ */
+function start_find_concrete_day_of_month_wrap($event)
+{
+	$start_hour=is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'];
+	$start_minute=is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'];
+	return find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$start_hour,$start_minute,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+}
+
+/**
+ * Find the concrete end day of a month for an event row.
+ *
+ * @param  array			Event row
+ * @return integer		Concrete day
+ */
+function end_find_concrete_day_of_month_wrap($event)
+{
+	$end_hour=is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'];
+	$end_minute=is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'];
+	return find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$end_hour,$end_minute,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 }

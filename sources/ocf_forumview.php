@@ -326,7 +326,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	if ($type=='pt')
 	{
 		//There has been debate in the past whether to have a link from PTs to the forum or not! Currently using the Social menu is considered canon - templating could add a button in though.
-		//$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
+		//$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
 		//$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('ROOT_FORUM'),'url'=>$archive_url,'img'=>'forum');
 	}
 	if (array_key_exists('may_post_topic',$details))

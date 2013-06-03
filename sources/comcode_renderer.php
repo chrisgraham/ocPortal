@@ -739,21 +739,21 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$post_id=intval($embed->evaluate());
 			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
-			$temp_tpl=do_template('COMCODE_SNAPBACK',array('_GUID'=>'af7b6920e58027256d536a8cdb8a164a','URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum),'TITLE'=>$s_title));
+			$temp_tpl=do_template('COMCODE_SNAPBACK',array('_GUID'=>'af7b6920e58027256d536a8cdb8a164a','URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),'TITLE'=>$s_title));
 			break;
 		case 'post':
 			require_lang('ocf');
 			$post_id=intval($embed->evaluate());
 			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
-			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum),$s_title));
+			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),$s_title));
 			break;
 		case 'topic':
 			require_lang('ocf');
 			$topic_id=intval($embed->evaluate());
 			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_TOPIC_NUMBERED',integer_format($topic_id)):make_string_tempcode($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
-			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,$forum),$s_title));
+			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,$forum,true),$s_title));
 			break;
 		case 'staff_note':
 			$temp_tpl=new ocp_tempcode();
