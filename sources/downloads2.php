@@ -853,9 +853,10 @@ function set_download_gallery_permissions($id,$submitter=NULL)
  * @param  ?TIME				Add time (NULL: do not change)
  * @param  ?integer			Number of views (NULL: do not change)
  * @param  ?MEMBER			Submitter (NULL: do not change)
+ * @param  integer			The number of downloads that this download has had
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$num_downloads=NULL,$null_is_literal=false)
 {
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
@@ -926,6 +927,8 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		$update_map['download_views']=$views;
 	if (!is_null($submitter))
 		$update_map['submitter']=$submitter;
+	if (!is_null($num_downloads))
+		$update_map['num_downloads']=$num_downloads;
 
 	$GLOBALS['SITE_DB']->query_update('download_downloads',$update_map,array('id'=>$id),'',1);
 

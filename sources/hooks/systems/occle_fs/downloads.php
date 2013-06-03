@@ -400,7 +400,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		$default_pic=$this->_default_property_int($properties,'default_pic');
 		if ($default_pic==0) $default_pic=1;
 
-		edit_download(intval($resource_id),$category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+		edit_download(intval($resource_id),$category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,$num_downloads,true);
 
 		return $resource_id;
 	}

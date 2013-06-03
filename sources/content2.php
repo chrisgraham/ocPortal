@@ -388,7 +388,7 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
  * @param  ID_TEXT		The parameter name
  * @param  mixed			The default if it was not set
  */
-function actual_meta_data_get_fields__special($meta_data,$key,$default)
+function actual_meta_data_get_fields__special(&$meta_data,$key,$default)
 {
 	$meta_data[$key]=$default;
 	if (has_privilege(get_member(),'edit_meta_fields'))
