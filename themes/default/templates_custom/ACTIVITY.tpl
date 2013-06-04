@@ -27,19 +27,31 @@
 		{$MAKE_RELATIVE_DATE*,{DATETIME},1} {!AGO}
 	</div>
 
+	{+START,SET,commented_out}
+		{+START,IF_PASSED,USERNAME}
+			<div class="activity_name left">
+				<a href="{MEMBER_URL*}">{USERNAME*}</a>
+			</div>
+		{+END}
+	{+END}
+
 	<div class="activities_content">
 		{$,The main message}
 		{+START,IF,{$EQ,{LANG_STRING},RAW_DUMP}}
-			{+START,IF_PASSED,USERNAME}
-				<div class="activity_name left">
-					<a href="{MEMBER_URL*}">{USERNAME*}</a>
-				</div>
+			{+START,IF,{$EQ,{MODE},all}}
+				{!ACTIVITY_SAYS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{MESSAGE}}
 			{+END}
-
-			{MESSAGE}
+			{+START,IF,{$NEQ,{MODE},all}}
+				{MESSAGE}
+			{+END}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
-			{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{MESSAGE},0,1}}{$SUBSTR,{MESSAGE},1}}
+			{+START,IF,{$EQ,{MODE},all}}
+				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{MESSAGE},0,1}}{$SUBSTR,{MESSAGE},1}}
+			{+END}
+			{+START,IF,{$NEQ,{MODE},all}}
+				{MESSAGE}
+			{+END}
 		{+END}
 	</div>
 </div>

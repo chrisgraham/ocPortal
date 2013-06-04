@@ -242,9 +242,10 @@ function _get_timezone_list()
  *
  * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
  * @param  boolean		Whether to allow over get parameters also
+ * @param  boolean		Whether to do timezone conversion
  * @return ?TIME			The timestamp of the date (NULL: no input date was chosen)
  */
-function _get_input_date($stub,$get_also=false)
+function _get_input_date($stub,$get_also=false,$do_timezone_conversion=true)
 {
 	$timezone=post_param('timezone',get_users_timezone());
 	if ($get_also)
@@ -289,10 +290,13 @@ function _get_input_date($stub,$get_also=false)
 	}
 
 	$time=mktime($hour,$minute,0,$month,$day,$year);
-	if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
+	if ($do_timezone_conversion)
 	{
-		$amount_forward=tz_time($time,$timezone)-$time;
-		$time=$time-$amount_forward;
+		if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
+		{
+			$amount_forward=tz_time($time,$timezone)-$time;
+			$time=$time-$amount_forward;
+		}
 	}
 
 	return $time;

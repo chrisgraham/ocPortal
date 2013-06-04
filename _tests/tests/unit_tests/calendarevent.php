@@ -344,6 +344,68 @@ class calendarevent_test_set extends ocp_test_case
 		$this->assertTrue($_recurrences[1][2]>$_recurrences[0][2]);
 	}
 
+	function testRecurrenceNthDayOfWeekTimezones()
+	{
+		/*
+		This is a really complex case. The dates are stored relative to the timezone. The times are not - they are UTC.
+		Times must be UTC for consistency with other code. Dates must be in the timezone due to non-regularity.
+
+		We will have a test event in America/New_York from 7:45pm until 9:45pm, which will result in an end time SEEMINGLY before it starts, due to the above strange rule.
+		*/
+
+		$timezone='America/New_York';
+		$do_timezone_conv=0;
+		$start_year=2013;
+		$start_month=6;
+		$start_day=0; // 1st Monday
+		$start_monthly_spec_type='dow_of_month';
+		$start_hour=23;
+		$start_minute=45;
+		$end_year=2013;
+		$end_month=6;
+		$end_day=0; // 1st Monday (date is next day in UTC, but we [have to] store in native timezone for DOW)
+		$end_monthly_spec_type='dow_of_month';
+		$end_hour=1;
+		$end_minute=45;
+		$recurrence='monthly';
+		$recurrences=NULL;
+		$period_start=mktime(0,0,0,5,1,2013);
+		$period_end=mktime(23,59,0,7,31,2013);
+		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(date('D',$recurrences[0][2])=='Mon');
+		$this->assertTrue(date('D',$recurrences[0][3])=='Mon');
+		$this->assertTrue(date('D',$recurrences[1][2])=='Mon');
+		$this->assertTrue(date('D',$recurrences[1][3])=='Mon');
+		$this->assertTrue($recurrences[0][3]>$recurrences[0][2]);
+	}
+
+	function testDayGap()
+	{
+		// For some dow start and dow end time, that naively seems non-consecutive/negative, ensure it does actually compute with the consistent and expected day gap
+
+		$timezone='UTC';
+		$do_timezone_conv=0;
+		$start_year=2013;
+		$start_month=6;
+		$start_day=5; // 1st Saturday (=1st June 2013)
+		$start_monthly_spec_type='dow_of_month';
+		$start_hour=2;
+		$start_minute=0;
+		$end_year=2013;
+		$end_month=6;
+		$end_day=0; // 1st Monday (=3rd June 2013)
+		$end_monthly_spec_type='dow_of_month';
+		$end_hour=2;
+		$end_minute=0;
+		$recurrence='monthly';
+		$recurrences=NULL;
+		$period_start=mktime(0,0,0,5,1,2013);
+		$period_end=mktime(23,59,0,7,31,2013);
+		$recurrences=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+		$this->assertTrue(($recurrences[0][3]-$recurrences[0][2])==60*60*24*2); // 2 days in initial month, where both still dow-defined
+		$this->assertTrue(($recurrences[1][3]-$recurrences[1][2])==60*60*24*2); // 2 days in second month, due to extrapolated consistent gap (starts on dow, ends after gap)
+	}
+
 	function testRecurrenceFastForward()
 	{
 		// Jumping forward 10 years for a monthly occurring event, it still displays with the expected date

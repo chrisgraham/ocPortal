@@ -111,7 +111,7 @@ class Block_main_activities
 		$grow=array_key_exists('grow',$map)?($map['grow']=='1'):true;
 
 		// See if we're displaying for a specific member
-		if (array_key_exists('member',$map))
+		if ((array_key_exists('member',$map)) && ($map['member']!=''))
 		{
 			$member_ids=array_map('intval',explode(',',$map['member']));
 		} else

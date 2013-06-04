@@ -526,6 +526,7 @@ class Module_cms_calendar extends standard_crud_module
 		$timezone=post_param('timezone',STRING_MAGIC_NULL);
 		$do_timezone_conv=post_param_integer('do_timezone_conv',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
+		$start_monthly_spec_type=post_param('start_monthly_spec_type',post_param('monthly_spec_type','day_of_month')); // We actually don't suppose separate spec-types for the ends and starts in the UI
 		$start=get_input_date('start');
 		if (is_null($start))
 		{
@@ -537,9 +538,17 @@ class Module_cms_calendar extends standard_crud_module
 			$start_monthly_spec_type=STRING_MAGIC_NULL;
 		} else
 		{
-			$start_year=intval(date('Y',$start));
-			$start_month=intval(date('m',$start));
-			$start_day=intval(date('d',$start));
+			if (strpos($start_monthly_spec_type,'dow')===false)
+			{
+				$start_year=intval(date('Y',$start));
+				$start_month=intval(date('m',$start));
+				$start_day=intval(date('d',$start));
+			} else // Has to be encoded in timezone, no conversion
+			{
+				$start_year=post_param_integer('start_year');
+				$start_month=post_param_integer('start_month');
+				$start_day=post_param_integer('start_day');
+			}
 			if (post_param_integer('all_day_event',0)==1)
 			{
 				$start_hour=NULL;
@@ -549,7 +558,6 @@ class Module_cms_calendar extends standard_crud_module
 				$start_hour=intval(date('H',$start));
 				$start_minute=intval(date('i',$start));
 			}
-			$start_monthly_spec_type=post_param('start_monthly_spec_type',post_param('monthly_spec_type','day_of_month')); // We actually don't suppose separate spec-types for the ends and starts in the UI
 			if ($start_monthly_spec_type!='day_of_month')
 			{
 				$start_day=find_abstract_day(post_param_integer('start_year'),post_param_integer('start_month'),post_param_integer('start_day'),$start_monthly_spec_type);
@@ -565,12 +573,21 @@ class Module_cms_calendar extends standard_crud_module
 			$end_monthly_spec_type=STRING_MAGIC_NULL;
 		} else
 		{
+			$end_monthly_spec_type=post_param('end_monthly_spec_type',$start_monthly_spec_type);
 			$end=get_input_date('end');
 			if (!is_null($end))
 			{
-				$end_year=intval(date('Y',$end));
-				$end_month=intval(date('m',$end));
-				$end_day=intval(date('d',$end));
+				if (strpos($end_monthly_spec_type,'dow')===false)
+				{
+					$end_year=intval(date('Y',$end));
+					$end_month=intval(date('m',$end));
+					$end_day=intval(date('d',$end));
+				} else // Has to be encoded in timezone, no conversion
+				{
+					$end_year=post_param_integer('end_year');
+					$end_month=post_param_integer('end_month');
+					$end_day=post_param_integer('end_day');
+				}
 				if (post_param_integer('all_day_event',0)==1)
 				{
 					$end_hour=NULL;
@@ -581,7 +598,6 @@ class Module_cms_calendar extends standard_crud_module
 					$end_minute=intval(date('i',$end));
 				}
 
-				$end_monthly_spec_type=post_param('end_monthly_spec_type',$start_monthly_spec_type);
 				if ($end_monthly_spec_type!='day_of_month')
 				{
 					$end_day=find_abstract_day(post_param_integer('end_year'),post_param_integer('end_month'),post_param_integer('end_day'),$end_monthly_spec_type);
