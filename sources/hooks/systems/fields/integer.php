@@ -79,7 +79,7 @@ class Hook_fields_integer
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($ev);
+		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($ev))) ocp_mark_as_escaped($ev);
 		return $ev;
 	}
 
