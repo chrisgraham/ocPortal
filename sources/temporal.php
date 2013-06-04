@@ -373,12 +373,13 @@ function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NUL
  *
  * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
  * @param  boolean		Whether to allow over get parameters also
+ * @param  boolean		Whether to do timezone conversion
  * @return ?TIME			The timestamp of the date (NULL: no input date was chosen)
  */
-function get_input_date($stub,$get_also=false)
+function get_input_date($stub,$get_also=false,$do_timezone_conversion=true)
 {
 	require_code('temporal2');
-	return _get_input_date($stub,$get_also);
+	return _get_input_date($stub,$get_also,$do_timezone_conversion);
 }
 
 /**
