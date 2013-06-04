@@ -280,16 +280,20 @@ class Module_admin_addons
 		$installing=array();
 		$uninstalling=array();
 
+		$hidden=new ocp_tempcode();
+
 		foreach ($_POST as $key=>$passed)
 		{
 			if (substr($key,0,8)=='install_')
 			{
 				$installing[]=$passed;
+				$hidden->attach(form_input_hidden($key,$passed));
 			}
 
 			if (substr($key,0,10)=='uninstall_')
 			{
 				$uninstalling[]=$passed;
+				$hidden->attach(form_input_hidden($key,$passed));
 			}
 		}
 
@@ -314,7 +318,7 @@ class Module_admin_addons
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS'))));
 
-		return do_template('ADDON_MULTI_CONFIRM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>build_keep_post_fields(),'URL'=>$url,'INSTALL_FILES'=>$install_files,'UNINSTALL_FILES'=>$uninstall_files,'WARNINGS'=>$warnings));
+		return do_template('ADDON_MULTI_CONFIRM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>$hidden,'URL'=>$url,'INSTALL_FILES'=>$install_files,'UNINSTALL_FILES'=>$uninstall_files,'WARNINGS'=>$warnings));
 	}
 
 	/**
