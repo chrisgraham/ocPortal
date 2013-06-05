@@ -7,11 +7,12 @@ function assign_referral_awards($referee,$trigger)
 	$referee_username=$GLOBALS['FORUM_DRIVER']->get_username($referee);
 	$referee_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referee);
 	if ($referee_email=='') return; // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
+	$one_trigger_already=!is_null($GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_taken'=>1,'i_email_address'=>$referee_email),'ORDER BY i_time'));
 
 	require_lang('referrals');
 	require_code('notifications');
 
-	$referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_taken'=>0,'i_email_address'=>$referee_email),'ORDER BY i_time');
+	$referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_email_address'=>$referee_email),'ORDER BY i_time');
 	if (is_null($referrer)) // Was not actually a referral, member joined site on own accord
 	{
 		if ((isset($ini_file['global']['notify_if_join_but_no_referral'])) && ($ini_file['global']['notify_if_join_but_no_referral']=='1'))
@@ -52,7 +53,7 @@ function assign_referral_awards($referee,$trigger)
 				$ini_file_section_name,
 				$ini_file_section,
 
-				$referee,$referee_username,$referee_email,
+				$referee,$referee_username,$referee_email,$one_trigger_already,
 				$referrer,$referrer_username,$referrer_email,
 
 				$num_total_qualified_by_referrer,$num_total_by_referrer
@@ -68,7 +69,7 @@ function _assign_referral_awards(
 	$scheme_name,
 	$scheme,
 
-	$referee,$referee_username,$referee_email,
+	$referee,$referee_username,$referee_email,$one_trigger_already,
 	$referrer,$referrer_username,$referrer_email,
 
 	$num_total_qualified_by_referrer,$num_total_by_referrer
@@ -86,68 +87,108 @@ function _assign_referral_awards(
 	$qualified_trigger=(isset($scheme['referral_trigger__'.$trigger])) && ($scheme['referral_trigger__'.$trigger]=='1');
 	if ($qualified_trigger) // Valid referral
 	{
-		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$referee_email),'',1);
-		$num_total_qualified_by_referrer++;
-		$num_total_by_referrer++;
+		$one_trigger_per_referee=(!isset($scheme['one_trigger_per_referee'])) || ($scheme['one_trigger_per_referee']=='1');
 
-		// Tell staff (referrer just completed a level)
-		if (array_key_exists('level_'.strval($num_total_qualified_by_referrer),$scheme))
+		if ((!$one_trigger_per_referee) || (!$one_trigger_already)) 
 		{
-			$level_description=$scheme['level_'.strval($num_total_qualified_by_referrer)];
-			if (($referrer_is_qualified) || ($notify_staff_if_non_qualified))
+			$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$referee_email),'',1);
+			$num_total_qualified_by_referrer++;
+			$num_total_by_referrer++;
+
+			// Tell staff (referrer just completed a level)
+			if (array_key_exists('level_'.strval($num_total_qualified_by_referrer),$scheme))
 			{
-				$subject_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_SUBJECT':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_SUBJECT';
-				if (do_lang($subject_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
-					$subject_lang_string.='__'.$scheme_name;
-				$subject=do_lang(
-					$subject_lang_string,
-					$level_description,
-					$referrer_username,
-					array(
+				$level_description=$scheme['level_'.strval($num_total_qualified_by_referrer)];
+				if (($referrer_is_qualified) || ($notify_staff_if_non_qualified))
+				{
+					$subject_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_SUBJECT':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_SUBJECT';
+					if (do_lang($subject_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
+						$subject_lang_string.='__'.$scheme_name;
+					$subject=do_lang(
+						$subject_lang_string,
+						$level_description,
+						$referrer_username,
+						array(
+							$referee_username,
+							$scheme_title
+						)
+					);
+					$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_BODY';
+					if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
+						$body_lang_string.='__'.$scheme_name;
+					$body=do_lang(
+						$body_lang_string,
+						comcode_escape($level_description),
+						comcode_escape($referrer_username),
+						array(
+							comcode_escape(integer_format($num_total_qualified_by_referrer)),
+							comcode_escape($referee_username),
+							$report_url,
+							comcode_escape(integer_format($num_total_by_referrer)),
+							comcode_escape($scheme_title)
+						)
+					);
+					dispatch_notification(
+						'referral_staff',
+						NULL,
+						$subject,
+						$body,
+						NULL,
+						A_FROM_SYSTEM_PRIVILEGED
+					);
+				}
+			} else // Tell staff (referrer is between levels / no level hit yet)
+			{
+				if (($referrer_is_qualified) || ($notify_staff_if_non_qualified))
+				{
+					$subject_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_SUBJECT':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_SUBJECT';
+					if (do_lang($subject_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
+						$subject_lang_string.='__'.$scheme_name;
+					$subject=do_lang(
+						$subject_lang_string,
+						$referrer_username,
 						$referee_username,
-						$scheme_title
-					)
-				);
-				$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_BODY';
-				if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
-					$body_lang_string.='__'.$scheme_name;
-				$body=do_lang(
-					$body_lang_string,
-					comcode_escape($level_description),
-					comcode_escape($referrer_username),
-					array(
+						array(
+							$scheme_title
+						)
+					);
+					$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_BODY';
+					if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
+						$body_lang_string.='__'.$scheme_name;
+					$body=do_lang(
+						$body_lang_string,
+						comcode_escape($referrer_username),
 						comcode_escape(integer_format($num_total_qualified_by_referrer)),
-						comcode_escape($referee_username),
-						$report_url,
-						comcode_escape(integer_format($num_total_by_referrer)),
-						comcode_escape($scheme_title)
-					)
-				);
-				dispatch_notification(
-					'referral_staff',
-					NULL,
-					$subject,
-					$body,
-					NULL,
-					A_FROM_SYSTEM_PRIVILEGED
-				);
+						array(
+							comcode_escape($referee_username),
+							$report_url,
+							comcode_escape(integer_format($num_total_by_referrer)),
+							comcode_escape($scheme_title)
+						)
+					);
+					dispatch_notification(
+						'referral_staff',
+						NULL,
+						$subject,
+						$body,
+						NULL,
+						$referrer
+					);
+				}
 			}
-		} else // Tell staff (referrer is between levels / no level hit yet)
-		{
-			if (($referrer_is_qualified) || ($notify_staff_if_non_qualified))
+
+			// Tell referrer they got a referrer, but don't mention any awards explicitly regardless if achieved yet (because the staff will do this when they're ready with the award)
+			if (($referrer_is_qualified) || ($notify_if_non_qualified))
 			{
-				$subject_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_SUBJECT':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_SUBJECT';
+				$subject_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_SUBJECT':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_SUBJECT';
 				if (do_lang($subject_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
 					$subject_lang_string.='__'.$scheme_name;
 				$subject=do_lang(
 					$subject_lang_string,
-					$referrer_username,
 					$referee_username,
-					array(
-						$scheme_title
-					)
+					$scheme_title
 				);
-				$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_BODY';
+				$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_BODY';
 				if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
 					$body_lang_string.='__'.$scheme_name;
 				$body=do_lang(
@@ -156,54 +197,19 @@ function _assign_referral_awards(
 					comcode_escape(integer_format($num_total_qualified_by_referrer)),
 					array(
 						comcode_escape($referee_username),
-						$report_url,
 						comcode_escape(integer_format($num_total_by_referrer)),
 						comcode_escape($scheme_title)
 					)
 				);
 				dispatch_notification(
-					'referral_staff',
+					'referral',
 					NULL,
 					$subject,
 					$body,
-					NULL,
-					$referrer
+					array($referrer),
+					A_FROM_SYSTEM_PRIVILEGED
 				);
 			}
-		}
-
-		// Tell referrer they got a referrer, but don't mention any awards explicitly regardless if achieved yet (because the staff will do this when they're ready with the award)
-		if (($referrer_is_qualified) || ($notify_if_non_qualified))
-		{
-			$subject_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_SUBJECT':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_SUBJECT';
-			if (do_lang($subject_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
-				$subject_lang_string.='__'.$scheme_name;
-			$subject=do_lang(
-				$subject_lang_string,
-				$referee_username,
-				$scheme_title
-			);
-			$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_BODY';
-			if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
-				$body_lang_string.='__'.$scheme_name;
-			$body=do_lang(
-				$body_lang_string,
-				comcode_escape($referrer_username),
-				comcode_escape(integer_format($num_total_qualified_by_referrer)),
-				array(
-					comcode_escape($referee_username),
-					comcode_escape(integer_format($num_total_by_referrer)),
-					comcode_escape($scheme_title)
-				)
-			);
-			dispatch_notification(
-				'referral',
-				NULL,
-				$subject,
-				$body,
-				array($referrer),
-				A_FROM_SYSTEM_PRIVILEGED
-			);
 		}
 	} else
 	{
@@ -288,7 +294,7 @@ function _assign_referral_awards(
 		require_code('hooks/systems/referrals/'.$hook);
 		$ob=object_factory('Hook_referrals_'.$hook,true);
 		if ($ob!==NULL)
-			$ob->fire_referral($trigger,$referrer,$referrer_is_qualified,$referee,$qualified_trigger,$num_total_qualified_by_referrer,$num_total_by_referrer);
+			$ob->fire_referral($trigger,$referrer,$referrer_is_qualified,$referee,$qualified_trigger,$num_total_qualified_by_referrer,$num_total_by_referrer,$one_trigger_already);
 	}
 
 	return $qualified_trigger;

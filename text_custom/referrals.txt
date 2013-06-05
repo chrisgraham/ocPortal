@@ -58,6 +58,9 @@ referral_trigger__misc_purchase=0
 ; or some specific item number (e.g. product #4)
 referral_trigger__purchase_4=1
 
+; Whether to restrict a particular referee to only being able to provide on referral, no matter how many qualifying actions they make
+one_trigger_per_referee=1
+
 ;; ----------------------
 ;; REFERRER QUALIFICATION
 ;; ----------------------
