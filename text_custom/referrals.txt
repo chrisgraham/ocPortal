@@ -65,6 +65,9 @@ referral_trigger__purchase_4=1
 ; If a referrer is not themselves qualified to be in the referral system, no notifications will be sent out as their referrals come in.
 ; If they later become a qualified referrer, the referrals count retroactively from the point of the next referral happening.
 
+; Can be 'AND' or 'OR'. If 'AND' then all rules must pass
+referrer_qualification_logic=OR
+
 ; add settings like this to define what usergroup IDs qualify a referrer. Below we have configured everyone in the default rank set to qualify.
 referrer_qualified_for__primary_group_4=1
 referrer_qualified_for__primary_group_5=1

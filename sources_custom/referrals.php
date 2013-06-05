@@ -306,15 +306,28 @@ function referrer_is_qualified($scheme,$member_id)
 
 	$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
 
+	$positive=0;
+	$negative=0;
+
 	foreach ($groups as $group_id)
 	{
 		if ((isset($scheme['referrer_qualified_for__group_'.strval($group_id)])) && ($scheme['referrer_qualified_for__group_'.strval($group_id)]=='1'))
-			return true;
-
-		if ($group_id==$primary_group)
 		{
-			if ((isset($scheme['referrer_qualified_for__primary_group_'.strval($group_id)])) && ($scheme['referrer_qualified_for__primary_group_'.strval($group_id)]=='1'))
-				return true;
+			$positive++;
+		} else
+		{
+			$negative++;
+		}
+
+		if ((isset($scheme['referrer_qualified_for__primary_group_'.strval($group_id)])) && ($scheme['referrer_qualified_for__primary_group_'.strval($group_id)]=='1'))
+		{
+			if ($group_id==$primary_group)
+			{
+				$positive++;
+			} else
+			{
+				$negative++;
+			}
 		}
 	}
 
@@ -323,7 +336,12 @@ function referrer_is_qualified($scheme,$member_id)
 		if ((isset($scheme['referrer_qualified_for__misc_purchase'])) && ($scheme['referrer_qualified_for__misc_purchase']=='1'))
 		{
 			if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'shopping_order WHERE c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched')))))
-				return true;
+			{
+				$positive++;
+			} else
+			{
+				$negative++;
+			}
 		}
 
 		foreach (array_keys($scheme) as $key)
@@ -333,11 +351,26 @@ function referrer_is_qualified($scheme,$member_id)
 			if (preg_match('#^referrer\_qualified\_for\_\_purchase\_(\d+)$#',$key,$matches)!=0)
 			{
 				if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT o.id FROM '.get_table_prefix().'shopping_order o JOIN '.get_table_prefix().'shopping_order_details d ON o.id=d.order_id WHERE p_id='.strval(intval($matches[1])).' AND c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched')))))
-					return true;
+				{
+					$positive++;
+				} else
+				{
+					$negative++;
+				}
 			}
 		}
 	}
 
+	$referrer_qualification_logic=isset($scheme['referrer_qualification_logic'])?$scheme['referrer_qualification_logic']:'OR';
+	if ($referrer_qualification_logic=='OR')
+	{
+		return ($positive>0);
+	} else
+	{
+		return ($negative==0);
+	}
+
+	// Should not get here
 	return false;
 }
 
