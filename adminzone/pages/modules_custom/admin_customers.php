@@ -710,6 +710,7 @@ class Module_admin_customers
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','member_username',$username,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('CREDIT_AMOUNT'),do_lang_tempcode('CREDIT_AMOUNT_DESCRIPTION'),'amount',get_param_integer('amount',3),true));
+		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_OVERDRAFT'),do_lang_tempcode('DESCRIPTION_ALLOW_OVERDRAFT'),'allow_overdraft',true));
 
 		if (!is_null($member_id))
 		{
@@ -758,9 +759,12 @@ class Module_admin_customers
 		require_code('ocf_members_action2');
 		$fields=ocf_get_custom_field_mappings($member_id);
 
-		// NB: Nothing to stop them going into overdraft
+		// Work out new total credits
 		$new_amount=$fields['field_'.strval($cpf_id)]-$amount;
-		if ($new_amount<0) $new_amount=0;
+		if (post_param_integer('allow_overdraft',0)==0)
+		{
+			if ($new_amount<0) $new_amount=0;
+		}
 
 		ocf_set_custom_field($member_id,$cpf_id,$new_amount);
 
