@@ -416,7 +416,7 @@ function referrer_report_script($ret=false)
 		$start
 	);
 	$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().$table.' WHERE '.$where);
-	if (count($referrals)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
+	if (count($referrals)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 	foreach ($referrals as $ref)
 	{
 		$data_row=array();
@@ -432,7 +432,13 @@ function referrer_report_script($ret=false)
 				$data_row[do_lang('TYPE_REFERRER')]=is_null($ref['referrer_id'])?'':strval($ref['referrer_id']);
 			}
 			$data_row[do_lang('TYPE_REFERRER').' ('.do_lang('EMAIL_ADDRESS').')']=$ref['referrer_email'];
-			$data_row[do_lang('QUALIFIED_REFERRER',$scheme_name)]=do_lang(referrer_is_qualified($scheme,$ref['referrer_id'])?'YES':'NO');
+			if (is_null($ref['referrer_id']))
+			{
+				$data_row[do_lang('QUALIFIED_REFERRER',$scheme_name)]=do_lang('NA');
+			} else
+			{
+				$data_row[do_lang('QUALIFIED_REFERRER',$scheme_name)]=do_lang(referrer_is_qualified($scheme,$ref['referrer_id'])?'YES':'NO');
+			}
 		}
 
 		$deleted=false;
