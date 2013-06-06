@@ -387,7 +387,7 @@ class Block_main_news
 			$rss_url=new ocp_tempcode();
 		}
 
-		if (($i==0) && ($j==0))
+		if ((count($rows)==0) && (count($rows2)==0))
 		{
 			if ((!isset($map['render_if_empty'])) || ($map['render_if_empty']=='0'))
 			{
