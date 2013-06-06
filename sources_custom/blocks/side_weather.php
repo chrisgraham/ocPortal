@@ -35,7 +35,7 @@ class Block_side_weather
 		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','unit');
+		$info['parameters']=array('param','unit','max_days');
 		return $info;
 	}
 
@@ -70,7 +70,7 @@ class Block_side_weather
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(cron_installed()?NULL:$GLOBALS[\'FORUM_DRIVER\']->is_staff(get_member()),(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='array(isset($map[\'max_days\'])?intval($map[\'max_days\']):2,cron_installed()?NULL:$GLOBALS[\'FORUM_DRIVER\']->is_staff(get_member()),(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -85,6 +85,8 @@ class Block_side_weather
 	{
 		require_code('rss');
 		require_lang('weather');
+
+		$max_days=isset($map['max_days'])?intval($map['max_days']):2;
 
 		if (array_key_exists('param',$map))
 			$loc_code=$map['param']; // need to pass loc id ex :INXX0087
@@ -195,8 +197,10 @@ class Block_side_weather
 		$full_link=$item['full_url'];
 		$prepared_date=$item['add_date'];
 		$dates=array();
-		foreach ($item['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:FORECAST'] as $forecast)
+		foreach ($item['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:FORECAST'] as $i=>$forecast)
 		{
+			if ($i==$max_days) break;
+
 			$dates[]=array(
 				'DATE'=>strtotime($forecast['DATE']),
 				'DAY'=>$forecast['DAY'],
