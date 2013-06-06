@@ -325,11 +325,13 @@ function push_output_state($just_tempcode=false,$true_blank=false)
  *
  * @param  boolean				Whether to only restore the Tempcode execution part of the state.
  * @param  boolean				Whether to merge the current output state in.
- * @param  boolean				Whether to keep breadcrumbs.
+ * @param  ?array					Settings to keep / merge if possible (NULL: none).
  */
-function restore_output_state($just_tempcode=false,$merge_current=false,$keep_breadcrumbs=false)
+function restore_output_state($just_tempcode=false,$merge_current=false,$keep=NULL)
 {
 	global $OUTPUT_STATE_STACK;
+
+	if ($keep===NULL) $keep=array();
 
 	$old_state=array_pop($OUTPUT_STATE_STACK);
 	if ($old_state===NULL)
@@ -341,13 +343,20 @@ function restore_output_state($just_tempcode=false,$merge_current=false,$keep_br
 		{
 			if ((!$just_tempcode) || ($var=='CYCLES') || ($var=='TEMPCODE_SETGET'))
 			{
-				if ((!$keep_breadcrumbs) || (strpos($var,'BREADCRUMB')!==false))
+				$merge_array=(($merge_current) && (is_array($val)) && (in_array($var,array('META_DATA','JAVASCRIPTS','CSSS','TEMPCODE_SETGET','CYCLES'))));
+				$merge_tempcode=(($merge_current) && (is_object($val)) && (in_array($var,array('EXTRA_HEAD','EXTRA_FOOT','JAVASCRIPT'))));
+				$mergeable=$merge_array || $merge_tempcode;
+				if ((!in_array($var,$keep)) || ($mergeable))
 				{
-					if (($merge_current) && (is_array($val)))
+					if ($merge_array)
 					{
 						if ($GLOBALS[$var]===NULL) $GLOBALS[$var]=array();
-						$GLOBALS[$var]+=$val;
-					} else
+						$GLOBALS[$var]=array_merge($val,$GLOBALS[$var]);
+					} elseif ($merge_tempcode)
+					{
+						if ($GLOBALS[$var]===NULL) $GLOBALS[$var]=new ocp_tempcode();
+						$GLOBALS[$var]->attach($val);
+					} elseif (!$merge_current || $GLOBALS[$var]===NULL || $GLOBALS[$var]==='')
 					{
 						$GLOBALS[$var]=$val;
 					}

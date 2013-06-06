@@ -35,7 +35,7 @@ class Block_main_include_module
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','strip_title','only_if_permissions','leave_page_and_zone','merge_parameters','use_breadcrumbs');
+		$info['parameters']=array('param','strip_title','only_if_permissions','leave_page_and_zone','merge_parameters','use_http_status','use_meta_data','use_attached_messages','use_breadcrumbs','use_refreshes','use_helper_panel');
 		return $info;
 	}
 
@@ -52,7 +52,13 @@ class Block_main_include_module
 		$only_if_permissions=array_key_exists('only_if_permissions',$map)?intval($map['only_if_permissions']):1;
 		$leave_page_and_zone=array_key_exists('leave_page_and_zone',$map)?($map['leave_page_and_zone']=='1'):false;
 		$merge_parameters=array_key_exists('merge_parameters',$map)?($map['merge_parameters']=='1'):false;
+
+		$use_http_status=array_key_exists('use_http_status',$map)?($map['use_http_status']=='1'):false;
+		$use_meta_data=array_key_exists('use_meta_data',$map)?($map['use_meta_data']=='1'):false;
+		$use_attached_messages=array_key_exists('use_attached_messages',$map)?($map['use_attached_messages']=='1'):false;
 		$use_breadcrumbs=array_key_exists('use_breadcrumbs',$map)?($map['use_breadcrumbs']=='1'):false;
+		$use_refreshes=array_key_exists('use_refreshes',$map)?($map['use_refreshes']=='1'):false;
+		$use_helper_panel=array_key_exists('use_helper_panel',$map)?($map['use_helper_panel']=='1'):false;
 
 		// Find out what we're virtualising
 		$param=array_key_exists('param',$map)?$map['param']:'';
@@ -97,7 +103,64 @@ class Block_main_include_module
 			$old_current_script,
 			false
 		);
-		restore_output_state();
+		$keep=array(
+			'EXTRA_HEAD',
+			'EXTRA_FOOT',
+			'JAVASCRIPT',
+			'JAVASCRIPTS',
+			'CSSS',
+		);
+		if ($use_http_status)
+		{
+			$keep+=array(
+				'HTTP_STATUS_CODE',
+			);
+		}
+		if ($use_meta_data)
+		{
+			$keep+=array(
+				'META_DATA',
+				'SEO_KEYWORDS',
+				'SEO_DESCRIPTION',
+				'DISPLAYED_TITLE',
+				'FEED_URL',
+				'FEED_URL_2',
+			);
+		}
+		if ($use_attached_messages)
+		{
+			$keep+=array(
+				'ATTACHED_MESSAGES',
+				'ATTACHED_MESSAGES_RAW',
+			);
+		}
+		if ($use_breadcrumbs)
+		{
+			$keep+=array(
+				'BREADCRUMBS',
+				'BREADCRUMB_SET_PARENTS',
+				'BREADCRUMB_EXTRA_SEGMENTS',
+				'BREADCRUMB_SET_SELF',
+			);
+		}
+		if ($use_refreshes)
+		{
+			$keep+=array(
+				'REFRESH_URL',
+				'FORCE_META_REFRESH',
+				'QUICK_REDIRECT',
+			);
+		}
+		if ($use_helper_panel)
+		{
+			$keep+=array(
+				'HELPER_PANEL_TEXT',
+				'HELPER_PANEL_HTML',
+				'HELPER_PANEL_PIC',
+				'HELPER_PANEL_TUTORIAL',
+			);
+		}
+		restore_output_state(false,true,$keep);
 		$IS_VIRTUALISED_REQUEST=false;
 		if ($strip_title==1)
 		{
@@ -105,16 +168,19 @@ class Block_main_include_module
 		}
 
 		// More replacing, if _SELF wasn't used within the module
-		$url_from=static_evaluate_tempcode(build_url(array('page'=>$attributes['page']),$zone,NULL,false,false,true));
-		if (substr($url_from,-4)=='.htm') $url_from=substr($url_from,0,strlen($url_from)-4);
-		$url_to=static_evaluate_tempcode(build_url(array('page'=>get_page_name()),get_zone_name(),NULL,false,false,true));
-		if (substr($url_to,-4)=='.htm') $url_to=substr($url_to,0,strlen($url_to)-4);
-		$_out=str_replace($url_from,$url_to,$_out);
-		if ($use_breadcrumbs)
+		if ($leave_page_and_zone)
 		{
-			if ($GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']!==NULL)
+			$url_from=static_evaluate_tempcode(build_url(array('page'=>$attributes['page']),$zone,NULL,false,false,true));
+			if (substr($url_from,-4)=='.htm') $url_from=substr($url_from,0,strlen($url_from)-4);
+			$url_to=static_evaluate_tempcode(build_url(array('page'=>get_page_name()),get_zone_name(),NULL,false,false,true));
+			if (substr($url_to,-4)=='.htm') $url_to=substr($url_to,0,strlen($url_to)-4);
+			$_out=str_replace($url_from,$url_to,$_out);
+			if ($use_breadcrumbs)
 			{
-				$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=make_string_tempcode(str_replace($url_from,$url_to,$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']->evaluate()));
+				if ($GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']!==NULL)
+				{
+					$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=make_string_tempcode(str_replace($url_from,$url_to,$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']->evaluate()));
+				}
 			}
 		}
 
