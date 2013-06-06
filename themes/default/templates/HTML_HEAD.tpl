@@ -63,14 +63,14 @@
 	{+START,IF_NON_EMPTY,{$META_DATA,identifier}}<meta name="DC.Identifier" content="{$FIND_SCRIPT*,pagelink_redirect}?id={$META_DATA&*,identifier}" />{+END}
 	{+START,IF_NON_EMPTY,{$META_DATA,description}}<meta name="DC.Description" content="{$META_DATA*,description}" />{+END}
 {+END}
-{+START,IF_NON_EMPTY,{$META_DATA,title}}<meta property="og:title" content="{$META_DATA*,title}"/>{+END}
-{+START,IF_NON_EMPTY,{$META_DATA,type}}<meta property="og:type" content="{$REPLACE*, ,_,{$LCASE,{$META_DATA,type}}}"/>{+END}
-<meta property="og:url" content="{$CANONICAL_URL*}"/><meta property="og:site_name" content="{$SITE_NAME*}"/>
+{+START,IF_NON_EMPTY,{$META_DATA,title}}<meta property="og:title" content="{$META_DATA*,title}" />{+END}
+{+START,IF_NON_EMPTY,{$META_DATA,type}}<meta property="og:type" content="{$REPLACE*, ,_,{$LCASE,{$META_DATA,type}}}" />{+END}
+<meta property="og:url" content="{$CANONICAL_URL*}" /><meta property="og:site_name" content="{$SITE_NAME*}" />
 {+START,COMMENT,Commented out by default to save bandwidth}
-	{+START,IF_NON_EMPTY,{$CONFIG_OPTION*,facebook_uid}}<meta property="fb:admins" content="{$CONFIG_OPTION*,facebook_uid}"/>{+END}
+	{+START,IF_NON_EMPTY,{$CONFIG_OPTION*,facebook_uid}}<meta property="fb:admins" content="{$CONFIG_OPTION*,facebook_uid}" />{+END}
 {+END}
-{+START,IF_NON_EMPTY,{$META_DATA,description}}<meta property="og:description" content="{$META_DATA*,description}"/>{+END}
-{+START,IF_NON_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$META_DATA*,image}"/>{+END}{+START,IF_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$IMG*,logo/trimmed_logo}"/>{+END}
+{+START,IF_NON_EMPTY,{$META_DATA,description}}<meta property="og:description" content="{$META_DATA*,description}" />{+END}
+{+START,IF_NON_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$META_DATA*,image}" />{$,NB: You may also want to define a image_src link tag for some social sites}{+END}{+START,IF_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$IMG*,logo/trimmed_logo}" />{+END}
 {+START,IF_NON_EMPTY,{$META_DATA,video}}<meta property="og:video" content="{$META_DATA*,video}" /><meta property="og:video:height" content="{$META_DATA*,video:height}" /><meta property="og:video:width" content="{$META_DATA*,video:width}" /><meta property="og:video:type" content="{$META_DATA*,video:type}" />{+END}
 <meta property="og:locale" content="{$REPLACE,-,_,{!locale}}" />
 {+START,IF,{$EQ,{$META_DATA,type},Article}}
