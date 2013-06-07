@@ -651,7 +651,9 @@ class Module_chat
 
 		require_code('form_templates');
 
+		url_default_parameters__enable();
 		$fields=get_chatroom_fields(NULL,true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
+		url_default_parameters__disable();
 
 		$posting_name=do_lang_tempcode('CREATE_PRIVATE_ROOM');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_private'),'_SELF');
@@ -740,6 +742,8 @@ class Module_chat
 
 		$fields=new ocp_tempcode();
 
+		url_default_parameters__enable();
+
 		$blocked=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>get_member()));
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'85cbdbced505a6621ccbedc2de50c5f9','TITLE'=>do_lang_tempcode('EXISTING_BLOCKS'),'HELP'=>(count($blocked)!=0)?new ocp_tempcode():do_lang_tempcode('NONE_EM'))));
 		foreach ($blocked as $row)
@@ -751,6 +755,8 @@ class Module_chat
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a7e0f8368fd7f9ab09dddff27e649554','TITLE'=>do_lang_tempcode('ADD_BLOCK'))));
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('BLOCK_MEMBER_MANUAL'),'username','',false));
+
+		url_default_parameters__disable();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'blocking_set'),'_SELF');
 
@@ -1016,6 +1022,8 @@ class Module_chat
 	function chat_download_logs()
 	{
 		$title=get_screen_title('CHAT_DOWNLOAD_LOGS');
+
+		inform_non_canonical_parameter('id');
 
 		$chatrooms=chat_get_all_rooms();
 		$select=new ocp_tempcode();

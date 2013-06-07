@@ -573,10 +573,15 @@ class Module_admin_zones
 		$title=get_screen_title('ADD_ZONE');
 
 		require_code('form_templates');
+
+		url_default_parameters__enable();
+
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_NAME'),'zone','',true));
 		list($_fields,$hidden,)=$this->get_form_fields();
 		$fields->attach($_fields);
+
+		url_default_parameters__disable();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add'),'_SELF');
 		$submit_name=do_lang_tempcode('ADD_ZONE');

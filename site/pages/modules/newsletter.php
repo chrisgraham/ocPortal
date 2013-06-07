@@ -216,6 +216,10 @@ class Module_newsletter
 		$post_url=build_url(array('page'=>'_SELF','type'=>'do'),'_SELF');
 		$submit_name=do_lang_tempcode('NEWSLETTER_JOIN');
 
+		require_code('form_templates');
+
+		url_default_parameters__enable();
+
 		if (!is_guest()) $their_email=get_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())); else $their_email=get_param('email','');
 		$forename='';
 		$surname='';
@@ -229,7 +233,6 @@ class Module_newsletter
 
 		// Build up the join form
 		$fields=new ocp_tempcode();
-		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('DESCRIPTION_SUBSCRIBE_ADDRESS'),'email',$their_email,true));
 		$fields->attach(form_input_line(do_lang_tempcode('FORENAME'),'','forename',$forename,false));
 		$fields->attach(form_input_line(do_lang_tempcode('SURNAME'),'','surname',$surname,false));
@@ -260,6 +263,8 @@ class Module_newsletter
 				$fields->attach(form_input_tick(do_lang_tempcode('SUBSCRIBE_TO',make_string_tempcode(escape_html($newsletter_title))),make_string_tempcode(escape_html($newsletter_description)),'level'.strval($newsletter['id']),$level!=0));
 			}
 		}
+
+		url_default_parameters__disable();
 
 		$text->attach(paragraph(do_lang_tempcode('CHANGE_SETTINGS_BY_RESUBSCRIBING')));
 

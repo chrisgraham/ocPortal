@@ -45,6 +45,24 @@ function init__form_templates()
 }
 
 /**
+ * Enable reading in default parameters from the GET environment. This is typically called before 'add' forms.
+ */
+function url_default_parameters__enable()
+{
+	global $URL_DEFAULT_PARAMETERS_ENABLED;
+	$URL_DEFAULT_PARAMETERS_ENABLED=true;
+}
+
+/**
+ * Disable reading in default parameters from the GET environment. This is typically called after 'add' forms.
+ */
+function url_default_parameters__disable()
+{
+	global $URL_DEFAULT_PARAMETERS_ENABLED;
+	$URL_DEFAULT_PARAMETERS_ENABLED=false;
+}
+
+/**
  * Find a default property, defaulting to the average of what is there already, or the given default if really necessary.
  *
  * @param  integer	The current setting (NULL: we have to work it out); if non-null, the function will immediately return

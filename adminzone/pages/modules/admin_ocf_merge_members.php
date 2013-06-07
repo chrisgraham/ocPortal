@@ -89,6 +89,9 @@ class Module_admin_ocf_merge_members
 		$from=get_param('from','',true);
 		$to=get_param('to','',true);
 
+		inform_non_canonical_parameter('from');
+		inform_non_canonical_parameter('to');
+
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),do_lang_tempcode('DESCRIPTION_MEMBER_FROM'),'from',$from,true));
 		$fields->attach(form_input_username(do_lang_tempcode('TO'),do_lang_tempcode('DESCRIPTION_MEMBER_TO'),'to',$to,true));
 

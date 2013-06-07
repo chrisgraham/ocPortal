@@ -127,7 +127,11 @@ class Module_admin_ocf_join
 	{
 		$title=get_screen_title('ADD_MEMBER');
 
+		require_code('form_templates');
+
+		url_default_parameters__enable();
 		list($fields,$hidden)=ocf_get_member_fields(false);
+		url_default_parameters__disable();
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('OPTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('FORCE_TEMPORARY_PASSWORD'),do_lang_tempcode('DESCRIPTION_FORCE_TEMPORARY_PASSWORD'),'temporary_password',false));
@@ -221,7 +225,7 @@ class Module_admin_ocf_join
 		if (addon_installed('galleries'))
 		{
 			require_lang('galleries');
-			$special_links[]=array('galleries',array('cms_galleries',array('type'=>'gimp','id'=>$id),get_module_zone('cms_galleries')),do_lang('ADD_GALLERY'));
+			$special_links[]=array('galleries',array('cms_galleries',array('type'=>'gimp','member_id'=>$id),get_module_zone('cms_galleries')),do_lang('ADD_GALLERY'));
 		}
 
 		require_code('templates_donext');
@@ -367,6 +371,8 @@ class Module_admin_ocf_join
 
 		$hidden=new ocp_tempcode();
 
+		url_default_parameters__enable();
+
 		$_max_posts=get_value('delurk__max_posts');
 		$_max_points=get_value('delurk__max_points');
 		$_max_logged_actions=get_value('delurk__max_logged_actions');
@@ -412,6 +418,8 @@ class Module_admin_ocf_join
 				$groups->attach(form_input_list_entry(strval($row['id']),in_array($row['id'],$usergroups),get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
 		}
 		$fields->attach(form_input_multi_list(do_lang_tempcode('EXCEPT_IN_USERGROUPS'),do_lang_tempcode('DELURK_USERGROUPS_DESCRIPTION'),'usergroups',$groups));
+
+		url_default_parameters__disable();
 
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_delurk'),'_SELF');

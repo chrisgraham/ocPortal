@@ -283,8 +283,11 @@ class Module_filedump
 				$text->attach(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max/1024.0/1024.0)),escape_html(is_null($config_url)?'':$config_url)));
 			}
 			require_code('form_templates');
-			$fields=form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('_DESCRIPTION_UPLOAD'),'file',true);
+			$fields=new ocp_tempcode();
+			url_default_parameters__enable();
+			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('_DESCRIPTION_UPLOAD'),'file',true));
 			$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description','',false));
+			url_default_parameters__disable();
 			$hidden=new ocp_tempcode();
 			$hidden->attach(form_input_hidden('place',$place));
 			handle_max_file_size($hidden);
@@ -296,7 +299,9 @@ class Module_filedump
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'ac'),'_SELF');
 			require_code('form_templates');
+			url_default_parameters__enable();
 			$fields=form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name','',true);
+			url_default_parameters__disable();
 			$hidden=form_input_hidden('place',$place);
 			$submit_name=do_lang_tempcode('FILEDUMP_CREATE_FOLDER');
 			$create_folder_form=do_template('FORM',array('_GUID'=>'043f9b595d3699b7d8cd7f2284cdaf98','TABINDEX'=>strval(get_form_field_tabindex()),'SKIP_REQUIRED'=>true,'SECONDARY_FORM'=>true,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));

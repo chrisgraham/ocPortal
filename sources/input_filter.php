@@ -19,6 +19,15 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__input_filter()
+{
+	global $URL_DEFAULT_PARAMETERS_ENABLED;
+	$URL_DEFAULT_PARAMETERS_ENABLED=false;
+}
+
+/**
  * Check an input field isn't 'evil'.
  *
  * @param  string			The name of the parameter
@@ -91,6 +100,19 @@ function check_posted_field($name,$val)
  */
 function filter_form_field_default($name,$val)
 {
+	// Read in a default parameter from the GET environment, if this feature is enabled.
+	global $URL_DEFAULT_PARAMETERS_ENABLED;
+	if ($URL_DEFAULT_PARAMETERS_ENABLED)
+	{
+		inform_non_canonical_parameter($name);
+
+		$_val=get_param($name,NULL,true);
+		if ($_val!==NULL)
+		{
+			$val=$_val;
+		}
+	}
+
 	global $FIELD_RESTRICTIONS;
 	if ($FIELD_RESTRICTIONS===NULL)
 		$restrictions=load_field_restrictions();

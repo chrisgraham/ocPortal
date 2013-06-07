@@ -307,7 +307,7 @@ class Module_warnings extends standard_crud_module
 	 */
 	function get_form_fields($new=true,$explanation='',$is_warning=0,$member_id=NULL)
 	{
-		if (is_null($member_id)) $member_id=get_param_integer('id',get_member());
+		if (is_null($member_id)) $member_id=get_param_integer('member_id',get_member());
 
 		$hidden=new ocp_tempcode();
 		$fields=new ocp_tempcode();

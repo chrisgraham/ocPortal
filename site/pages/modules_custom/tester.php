@@ -508,8 +508,14 @@ class Module_tester
 
 		check_privilege('add_tests');
 
+		require_code('form_templates');
+
+		url_default_parameters__enable();
+
 		$fields=$this->get_test_section_form_fields();
 		$add_template=do_template('TESTER_TEST_GROUP_NEW',array('_GUID'=>'8a7642944a36d2f9d1ee8c076a516f43','ID'=>'add_-REPLACEME-','FIELDS'=>$this->get_test_form_fields('add_-REPLACEME-')));
+
+		url_default_parameters__disable();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ad'),'_SELF');
 

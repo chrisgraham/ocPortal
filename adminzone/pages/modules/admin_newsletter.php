@@ -339,10 +339,14 @@ class Module_admin_newsletter extends standard_crud_module
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
+		url_default_parameters__enable();
+
 		$fields->attach(form_input_line(do_lang_tempcode('HOST'),new ocp_tempcode(),'server','localhost',true));
 		$fields->attach(form_input_line(do_lang_tempcode('USERNAME'),new ocp_tempcode(),'username','',true));
 		$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),new ocp_tempcode(),'password',true));
 		$fields->attach(form_input_integer(do_lang_tempcode('PORT'),new ocp_tempcode(),'port',143,true));
+
+		url_default_parameters__disable();
 
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=get_self_url();

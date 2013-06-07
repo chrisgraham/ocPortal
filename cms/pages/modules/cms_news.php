@@ -226,20 +226,6 @@ class Module_cms_news extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		inform_non_canonical_parameter('cat');
-		inform_non_canonical_parameter('title');
-		inform_non_canonical_parameter('author');
-		inform_non_canonical_parameter('notes');
-		inform_non_canonical_parameter('validated');
-
-		if ($title=='')
-		{
-			$main_news_category=get_param_integer('cat',$main_news_category);
-			$title=get_param('title',$title);
-			$author=get_param('author',$author);
-			$notes=get_param('notes',$notes);
-		}
-
 		require_lang('menus');
 		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
 		set_helper_panel_pic('');

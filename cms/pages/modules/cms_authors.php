@@ -116,6 +116,10 @@ class Module_cms_authors
 	{
 		inform_non_canonical_parameter('author');
 
+		require_code('form_templates');
+
+		url_default_parameters__enable();
+
 		$author=get_param('author',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if (!has_edit_author_permission(get_member(),$author))
 		{
@@ -172,8 +176,6 @@ class Module_cms_authors
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		require_code('form_templates');
-
 		if (is_null($handle)) $fields->attach(form_input_line(do_lang_tempcode('AUTHOR'),do_lang_tempcode('DESCRIPTION_NAME'),'author',$author,true));
 		$fields->attach(form_input_line(do_lang_tempcode('AUTHOR_URL'),do_lang_tempcode('DESCRIPTION_AUTHOR_URL'),'url',$url,false));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('SKILLS'),do_lang_tempcode('DESCRIPTION_SKILLS'),'skills',$skills,false));
@@ -215,6 +217,8 @@ class Module_cms_authors
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'8a83b3253a6452c90e92699d629b9d03','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
+
+		url_default_parameters__disable();
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
 

@@ -491,7 +491,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			$out['may_move_posts']=1;
 			$out['may_delete_posts']=1;
 			$out['may_validate_posts']=1;
-			$out['may_make_personal']=1;
+			$out['may_make_private']=1;
 			$out['may_change_max']=1;
 		} else
 		{
@@ -696,7 +696,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	{
 		$redir_url=get_self_url(true);
 		$redir_url.='#post_'.strval($_postdetails['id']);
-		$action_url=build_url(array('page'=>'warnings','type'=>'ad','id'=>$_postdetails['poster'],'post_id'=>$_postdetails['id'],'redirect'=>$redir_url),get_module_zone('warnings'));
+		$action_url=build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$_postdetails['poster'],'post_id'=>$_postdetails['id'],'redirect'=>$redir_url),get_module_zone('warnings'));
 		$_title=do_lang_tempcode('WARN_MEMBER');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'punish','TITLE'=>$_title,'URL'=>$action_url)));

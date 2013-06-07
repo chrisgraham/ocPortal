@@ -75,8 +75,8 @@ class Hook_Profiles_Tabs_about
 		if ((has_privilege($member_id_viewing,'warn_members')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$redir_url=get_self_url(true);
-			$modules[]=array('usage',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')));
-			$modules[]=array('usage',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page'=>'warnings','type'=>'history','id'=>$member_id_of),get_module_zone('warnings')));
+			$modules[]=array('usage',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')));
+			$modules[]=array('usage',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page'=>'warnings','type'=>'history','member_id'=>$member_id_of),get_module_zone('warnings')));
 		}
 		if ((has_privilege($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history')))
 			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('usage',do_lang_tempcode('POST_HISTORY'),build_url(array('page'=>'admin_ocf_history','member_id'=>$member_id_of),'adminzone'));

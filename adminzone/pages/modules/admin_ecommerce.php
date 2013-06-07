@@ -272,6 +272,8 @@ class Module_admin_ecommerce extends standard_crud_module
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 
+		url_default_parameters__enable();
+
 		// Choose product
 		$item_name=get_param('item_name',NULL);
 		if (is_null($item_name))
@@ -296,6 +298,8 @@ class Module_admin_ecommerce extends standard_crud_module
 
 			$submit_name=do_lang('CHOOSE');
 
+			url_default_parameters__disable();
+
 			return do_template('FORM_SCREEN',array('_GUID'=>'a2fe914c23e378c493f6e1dad0dc11eb','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
 		}
 
@@ -318,6 +322,8 @@ class Module_admin_ecommerce extends standard_crud_module
 				$extra_hidden->attach(form_input_hidden('got_purchase_key_dependencies','1'));
 				if (is_array($needed_fields))
 					$extra_hidden->attach($needed_fields[0]);
+
+				url_default_parameters__disable();
 
 				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
 			}
@@ -352,6 +358,8 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('item_name',$item_name));
+
+		url_default_parameters__disable();
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'990d955cb14b6681685ec9e1d1448d9d','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
 	}

@@ -532,7 +532,10 @@ class standard_crud_module
 
 		$tie_in_custom_form_fields=$this->has_tied_catalogue();
 
+		url_default_parameters__enable();
+
 		$bits=$this->get_form_fields();
+
 		$fields2=new ocp_tempcode();
 		$posting_form_tabindex=NULL;
 		$extra_tpl_params=array();
@@ -609,6 +612,8 @@ class standard_crud_module
 				}
 			}
 		}
+
+		url_default_parameters__disable();
 
 		if (get_param('type','ad')=='add_catalogue')
 		{

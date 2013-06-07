@@ -84,8 +84,6 @@ class Module_cms_galleries extends standard_crud_module
 
 		$this->alt_crud_module->add_text=new ocp_tempcode();
 
-		inform_non_canonical_parameter('cat');
-
 		$cat=get_param('cat','');
 		if ($cat!='')
 		{
@@ -187,19 +185,26 @@ class Module_cms_galleries extends standard_crud_module
 
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
+		inform_non_canonical_parameter('member_id');
+		inform_non_canonical_parameter('cat');
+
 		$condition='only_member_galleries_of_id';
-		$member_id=get_param_integer('id',-1);
+		$member_id=get_param_integer('member_id',-1);
 		if ($member_id==-1)
 		{
 			$condition=mixed();
 			$member_id=NULL;
 		}
+
+		$cat=get_param('cat','');
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_gimp'),'_SELF',NULL,false,true);
+
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
 
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,''));
+		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,$cat));
 
 		$submit_name=do_lang_tempcode('GALLERY_IMPORT');
 
@@ -1801,7 +1806,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$accept_images=take_param_int_modeavg($accept_images,'accept_images','galleries',1);
 		$accept_videos=take_param_int_modeavg($accept_videos,'accept_videos','galleries',1);
 
-		inform_non_canonical_parameter('cat');
+		inform_non_canonical_parameter('parent_id');
 		inform_non_canonical_parameter('validated');
 
 		$hidden=new ocp_tempcode();
@@ -1831,7 +1836,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 			}
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		if ($parent_id=='') $parent_id=get_param('cat','');
+		if ($parent_id=='') $parent_id=get_param('parent_id','');
 		if ($name!='root')
 		{
 			if ((get_value('no_manual_gallery_parent')!=='1') || ($parent_id==''))

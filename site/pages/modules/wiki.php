@@ -894,6 +894,8 @@ class Module_wiki
 
 		$parsed=NULL;
 
+		if ($mode=='post') url_default_parameters__enable();
+
 		if ($mode=='edit')
 		{
 			$_id=get_param_wiki_chain('id',strval($GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id'=>$post_id))));
@@ -1018,6 +1020,8 @@ class Module_wiki
 		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
 		$posting_form=get_posting_form($submit_name,$message,$post_url,$hidden_fields,new ocp_tempcode(),NULL,'',$specialisation,$parsed,$javascript);
+
+		if ($mode=='post') url_default_parameters__disable();
 
 		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$submit_name->evaluate().'</span>'));
 

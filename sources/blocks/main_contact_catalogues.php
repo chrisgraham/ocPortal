@@ -119,6 +119,8 @@ class Block_main_contact_catalogues
 
 		$hidden=new ocp_tempcode();
 
+		url_default_parameters__enable();
+
 		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
 		{
@@ -177,6 +179,8 @@ class Block_main_contact_catalogues
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c0b9f22ef5767da57a1ff65c06af96a1','TITLE'=>$field_group_title)));
 			$fields->attach($extra_fields);
 		}
+
+		url_default_parameters__disable();
 
 		$hidden->attach(form_input_hidden('subject',$subject));
 

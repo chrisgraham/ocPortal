@@ -1466,13 +1466,8 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		if ($parent_id==-1)
 		{
 			inform_non_canonical_parameter('parent_id');
-			inform_non_canonical_parameter('title');
-			inform_non_canonical_parameter('notes');
 
 			$parent_id=get_param_integer('parent_id',-1);
-
-			$title=get_param('title',$title);
-			$notes=get_param('notes',$notes);
 		}
 
 		$fields=new ocp_tempcode();

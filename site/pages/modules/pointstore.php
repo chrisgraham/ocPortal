@@ -231,7 +231,15 @@ class Module_pointstore
 			$object=object_factory('Hook_pointstore_'.filter_naughty_harsh($hook));
 			$object->init();
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINT_STORE'))));
-			if (method_exists($object,$type)) return call_user_func(array($object,$type));
+			if (method_exists($object,$type))
+			{
+				require_code('form_templates');
+
+				url_default_parameters__enable();
+				$ret=call_user_func(array($object,$type));
+				url_default_parameters__disable();
+				return $ret;
+			}
 		}
 
 		if ($type=='misc') return $this->do_module_gui();

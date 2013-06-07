@@ -93,10 +93,12 @@ class Module_admin_xml_storage
 
 		require_code('form_templates');
 
+		url_default_parameters__enable();
 		$import_url=build_url(array('page'=>'_SELF','type'=>'_import'),'_SELF');
 		$import_fields=new ocp_tempcode();
 		$import_fields->attach(form_input_huge(do_lang_tempcode('XML_DATA'),'','xml','',true));
 		$import_form=do_template('FORM',array('_GUID'=>'82005575f2a31c362d4a1a79d7a0c247','TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$import_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_IMPORT_TEXT'),'FIELDS'=>$import_fields,'SUBMIT_NAME'=>do_lang_tempcode('IMPORT')));
+		url_default_parameters__disable();
 
 		$all_tables=find_all_xml_tables();
 		$export_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');

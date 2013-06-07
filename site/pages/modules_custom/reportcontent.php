@@ -136,6 +136,8 @@ class Module_reportcontent
 
 		$text=paragraph(do_lang_tempcode('DESCRIPTION_REPORT_CONTENT',escape_html($content_title),escape_html(integer_format(intval(get_option('reported_times'))))));
 
+		url_default_parameters__enable();
+
 		$specialisation=new ocp_tempcode();
 		if (!is_guest())
 		{
@@ -165,6 +167,8 @@ class Module_reportcontent
 
 		$post=do_template('REPORTED_CONTENT_FCOMCODE',array('_GUID'=>'cb40aa1900eefcd24a0786b9d980fef6','URL'=>$url,'CONTENT_ID'=>$content_id,'MEMBER'=>$member,'CONTENT_TITLE'=>$content_title,'POSTER'=>$poster));
 		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,NULL,NULL,true,false,true);
+
+		url_default_parameters__disable();
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'92a0a35a7c07edd0d3f8a960710de608','TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}

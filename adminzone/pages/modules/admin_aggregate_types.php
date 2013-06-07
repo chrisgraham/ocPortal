@@ -147,26 +147,29 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function get_form_fields($aggregate_type='',$aggregate_label='',$other_parameters=NULL)
 	{
-		$aggregate_type=get_param('aggregate_type',$aggregate_type);
-
 		if ($aggregate_type=='')
 		{
-			$title=get_screen_title('ADD_AGGREGATE_TYPE_INSTANCE');
-			require_code('form_templates');
-			$fields=new ocp_tempcode();
-			$list=new ocp_tempcode();
-			$types=parse_aggregate_xml();
-			foreach (array_keys($types) as $type)
+			$aggregate_type=get_param('aggregate_type','');
+
+			if ($aggregate_type=='')
 			{
-				$list->attach(form_input_list_entry($type,false,titleify($type)));
+				$title=get_screen_title('ADD_AGGREGATE_TYPE_INSTANCE');
+				require_code('form_templates');
+				$fields=new ocp_tempcode();
+				$list=new ocp_tempcode();
+				$types=parse_aggregate_xml();
+				foreach (array_keys($types) as $type)
+				{
+					$list->attach(form_input_list_entry($type,false,titleify($type)));
+				}
+				$fields->attach(form_input_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,true,true));
+				$submit_name=do_lang_tempcode('PROCEED');
+				$url=get_self_url();
+				$middle=do_template('FORM_SCREEN',array('TITLE'=>$title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
+				$echo=globalise($middle,NULL,'',true);
+				$echo->evaluate_echo();
+				exit();
 			}
-			$fields->attach(form_input_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,true,true));
-			$submit_name=do_lang_tempcode('PROCEED');
-			$url=get_self_url();
-			$middle=do_template('FORM_SCREEN',array('TITLE'=>$title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
-			$echo=globalise($middle,NULL,'',true);
-			$echo->evaluate_echo();
-			exit();
 		}
 
 		if (is_null($other_parameters)) $other_parameters=array();
@@ -376,13 +379,16 @@ class Module_admin_aggregate_types extends standard_crud_module
 
 		require_code('form_templates');
 
+		inform_non_canonical_parameter('type');
+		$_type=get_param('type','');
+
 		$fields=new ocp_tempcode();
 
 		$list=new ocp_tempcode();
 		$types=parse_aggregate_xml();
 		foreach (array_keys($types) as $type)
 		{
-			$list->attach(form_input_list_entry($type,false,titleify($type)));
+			$list->attach(form_input_list_entry($type,$_type==$type,titleify($type)));
 		}
 		$fields->attach(form_input_multi_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,15,true));
 

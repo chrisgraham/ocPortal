@@ -177,6 +177,10 @@ class Module_cms_wiki
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'_add_page','redirect'=>get_param('redirect',NULL)),'_SELF');
 
+		require_code('form_templates');
+
+		url_default_parameters__enable();
+
 		list($fields,$fields2,$hidden)=$this->get_page_fields(NULL,$_title);
 
 		// Awards?
@@ -187,6 +191,8 @@ class Module_cms_wiki
 		}
 
 		$posting_form=get_posting_form(do_lang('WIKI_ADD_PAGE'),'',$add_url,$hidden,$fields,NULL,'',$fields2);
+
+		url_default_parameters__disable();
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'ea72f10d85ed06b618866f21da515180','POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('WIKI_EDIT_PAGE_TEXT'))));
 	}

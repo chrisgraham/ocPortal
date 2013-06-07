@@ -468,20 +468,9 @@ class Module_cms_downloads extends standard_crud_module
 		if ((is_null($id)) && (is_null($category_id)))
 		{
 			inform_non_canonical_parameter('cat');
-			inform_non_canonical_parameter('name');
-			inform_non_canonical_parameter('author');
-			inform_non_canonical_parameter('description');
-			inform_non_canonical_parameter('additional_details');
-			inform_non_canonical_parameter('notes');
 
 			$category_id=get_param_integer('cat',-1);
 			if ($category_id==-1) $category_id=NULL;
-
-			$name=get_param('name',$name);
-			$author=get_param('author',$author);
-			$description=get_param('description',$description);
-			$additional_details=get_param('additional_details',$additional_details);
-			$notes=get_param('notes',$notes);
 		}
 
 		if (is_null($category_id))

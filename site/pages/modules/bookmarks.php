@@ -194,7 +194,12 @@ class Module_bookmarks
 	 */
 	function ad()
 	{
-		return add_bookmark_form(build_url(array('page'=>'_SELF','type'=>'_ad','do_redirect'=>(get_param_integer('no_redirect',0)==0)?'1':'0'),'_SELF'));
+		require_code('form_templates');
+
+		url_default_parameters__enable();
+		$ret=add_bookmark_form(build_url(array('page'=>'_SELF','type'=>'_ad','do_redirect'=>(get_param_integer('no_redirect',0)==0)?'1':'0'),'_SELF'));
+		url_default_parameters__disable();
+		return $ret;
 	}
 
 	/**

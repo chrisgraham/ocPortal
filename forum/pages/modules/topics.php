@@ -132,8 +132,8 @@ class Module_topics
 			'validate_post',
 			'topic_history',
 			'birthday',
-			'make_personal',
-			'_make_personal',
+			'make_private',
+			'_make_private',
 			'pin_topics',
 			'unpin_topics',
 			'sink_topics',
@@ -1324,6 +1324,8 @@ class Module_topics
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('ADD_TOPIC').'</span>'));
 		}
 
+		url_default_parameters__enable();
+
 		$hidden_fields=new ocp_tempcode();
 		$specialisation=new ocp_tempcode();
 
@@ -1485,6 +1487,8 @@ class Module_topics
 		// Render form
 		$posting_form=get_posting_form(do_lang($private_topic?'ADD_PRIVATE_TOPIC':'ADD_TOPIC'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
 
+		url_default_parameters__disable();
+
 		// Work out title to show
 		if (!$private_topic)
 		{
@@ -1572,6 +1576,8 @@ class Module_topics
 
 		inform_non_canonical_parameter('quote');
 		inform_non_canonical_parameter('intended_solely_for');
+
+		url_default_parameters__enable();
 
 		$topic_id=get_param_integer('id');
 		$parent_id=either_param_integer('parent_id',NULL);
@@ -1789,6 +1795,8 @@ class Module_topics
 			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 		}
 
+		url_default_parameters__disable();
+
 		return do_template('POSTING_SCREEN',array('_GUID'=>'ca2eab9a9ffdab267a48eb7be48ccdc0','TEXT'=>$text,'TITLE'=>$title,'POSTING_FORM'=>$posting_form));
 	}
 
@@ -1822,6 +1830,8 @@ class Module_topics
 			$__post=get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']);
 			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('_GUID'=>'e0f65423f3cb7698d5f04431dbe52ddb','POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_TITLE'=>$topic_info[0]['t_cache_first_title'],'POST'=>$__post,'POSTER'=>$poster));
 		} else $post=make_string_tempcode($_postdetails);
+
+		url_default_parameters__enable();
 
 		$hidden_fields=new ocp_tempcode();
 		if (!is_guest())
@@ -1862,6 +1872,8 @@ class Module_topics
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add_reply'),'_SELF');
 
 		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false,true);
+
+		url_default_parameters__disable();
 
 		$title=get_screen_title('REPORT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));
@@ -2506,7 +2518,9 @@ END;
 
 		$fields=new ocp_tempcode();
 
+		url_default_parameters__enable();
 		$fields->attach($this->get_poll_form_fields());
+		url_default_parameters__disable();
 
 		// Find polls we can grab
 		$groups=_get_where_clause_groups(get_member());
@@ -3618,7 +3632,7 @@ END;
 	 *
 	 * @return tempcode		The UI
 	 */
-	function make_personal()
+	function make_private()
 	{
 		$topic_id=get_param_integer('id');
 
@@ -3633,7 +3647,7 @@ END;
 		$title=get_screen_title('MAKE_PERSONAL');
 		$text=do_lang_tempcode('MAKE_PERSONAL_DESCRIPTION');
 		$submit_name=do_lang_tempcode('MAKE_PERSONAL');
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_personal'),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_private'),'_SELF');
 		$fields=new ocp_tempcode();
 		$hidden=form_input_hidden('id',strval($topic_id));
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),'','a',$a,true));
@@ -3656,7 +3670,7 @@ END;
 	 *
 	 * @return tempcode		The UI
 	 */
-	function _make_personal()
+	function _make_private()
 	{
 		$topic_id=post_param_integer('id');
 		$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topic_id));

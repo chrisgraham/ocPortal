@@ -75,7 +75,9 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 		}
 	}
 
+	url_default_parameters__enable();
 	list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups);
+	url_default_parameters__disable();
 	$hidden->attach($_hidden);
 
 	if ($intro_message_if_enabled)

@@ -663,8 +663,8 @@ class Module_topicview
 				$moderator_actions.='<option value="add_poll">'.do_lang('ADD_TOPIC_POLL').'</option>';
 			if ((has_privilege(get_member(),'view_content_history')) && ($GLOBALS['FORUM_DB']->query_select_value('f_post_history','COUNT(*)',array('h_topic_id'=>$id))!=0))
 				$moderator_actions.='<option value="topic_history">'.do_lang('POST_HISTORY').'</option>';
-			if ((array_key_exists('may_make_personal',$topic_info)) && (!is_null($topic_info['forum_id'])))
-				$moderator_actions.='<option value="make_personal">'.do_lang('MAKE_PERSONAL').'</option>';
+			if ((array_key_exists('may_make_private',$topic_info)) && (!is_null($topic_info['forum_id'])))
+				$moderator_actions.='<option value="make_private">'.do_lang('MAKE_PERSONAL').'</option>';
 
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
