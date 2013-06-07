@@ -423,6 +423,113 @@ It's overkill to apply the full range of ocPortal coding standards if you're wri
 
 Bear in mind that some sites need maintenance or have multiple people working on them, so you should bear this in mind when you decide the level of engineered design and code documentation to implement for your custom functionality. It is a trade-off between initial development cost, and long-term time savings.
 
+[title="3"]Providing default parameters to forms[/title]
+
+Many forms in ocPortal accept GET parameters for specifying default field values. This includes most 'add' forms in the system. Generally the GET parameter is exactly the same as the actual field name in the HTML, so it's easy to work it out.
+
+We also have some special cases coded up directly. These are often referenced between different parts of the ocPortal code. The details below are divided by module, then 'type', then parameter name.
+[code]
+topics
+ new_post
+  quote
+  intended_solely_for
+
+warnings
+ ad
+  member_id
+  post_id
+
+admin_aggregate_types
+ ad
+  aggregate_type
+ sync
+  type
+
+admin_ecommerce
+ ad
+  group_id
+ trigger
+  item_name
+
+admin_ocf_forums
+ ad
+  parent_forum
+  forum_grouping_id
+
+admin_ocf_merge_members
+ misc
+  from
+  to
+
+cms_authors
+ _ad
+  author
+
+cms_banners
+ ad
+  b_type
+
+cms_blogs
+ ad
+  cat
+  validated
+
+cms_booking
+ ab
+  bookable_id
+  day
+  month
+  year
+
+cms_catalogues
+ add_entry
+  catalogue_name
+  category_id / category_id_suggest
+  field_*
+  validated
+ add_category
+  catalogue_name
+  parent_id
+ add_catalogue
+  id
+
+cms_calendar
+ ad
+  date
+  e_type
+  validated
+
+cms_downloads
+ ad
+  cat
+  validated
+ ac
+  parent_id
+
+cms_galleries
+ gimp
+  member_id
+  cat
+ ad
+  cat
+  validated
+ av
+  cat
+  validated
+ ac
+  parent_id
+
+cms_news
+ ad
+  cat
+
+cms_quiz
+ ad
+  validated
+[/code]
+
+All default parameters are flagged as 'non-canonical' to search engines, so that the search engine knows that variations in value are not indicative of entirely separate web pages.
+
 [title="3"]Overriding files[/title]
 
 If you change an original ocPortal file for a client project you must save it into the [tt]_custom[/tt] equivalent of it's original directory. E.g. if you change [tt]site/pages/modules/calendar.php[/tt] you need to save into [tt]site/pages/modules_custom/calendar.php[/tt]. Otherwise if the client ever upgrades their website chances are all the customisations you've made would be lost when a newer version of the original file is placed.
