@@ -394,7 +394,7 @@ function tz_time($time,$zone)
 	if ($zone=='') $zone=get_server_timezone();
 	if (function_exists('date_default_timezone_set'))
 	{
-		date_default_timezone_set($zone);
+		@date_default_timezone_set($zone); // @'d because invalid data would otherwise cause a PHP notice
 	} else
 	{
 		@ini_set('date.timezone',$zone);
