@@ -133,15 +133,7 @@ function get_users_timezone($member=NULL)
 	// Get user timezone
 	if ((get_forum_type()=='ocf') && (!is_guest($member)))
 	{
-		$_timezone_member=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_timezone_offset');
-		if (is_integer($_timezone_member))
-		{
-			// Database upgrade needed
-			$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_timezone_offset','SHORT_TEXT');
-		} else // Ah, simple: what member has set
-		{
-			$timezone_member=$_timezone_member;
-		}
+		$timezone_member=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_timezone_offset');
 	} elseif ((function_exists('ocp_admirecookie')) && (get_option('is_on_timezone_detection')=='1') && (get_option('allow_international')=='1'))
 	{
 		$client_time=ocp_admirecookie('client_time');
