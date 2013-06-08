@@ -355,13 +355,39 @@ function load_minimodule_page($string)
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
 
+	return _load_mini_code($string);
+}
+
+/**
+ * Runs the specified mini-module/mini-block (actually, any simply-written PHP code).
+ * The returned/output result is returned, in Tempcode form.
+ *
+ * @param  PATH			The relative path to the code file
+ * @return tempcode		The result of executing the code
+ */
+function _load_mini_code($string)
+{
 	require_code('developer_tools');
 	destrictify();
 
 	ob_start();
-	require_code(filter_naughty($string));
-	$out=new ocp_tempcode();
-	$out->attach(ob_get_contents());
+	$test1=require(get_file_base().'/'.$string);
+	$test2=ob_get_contents();
+	if ($test2=='')
+	{
+		if (is_object($test1))
+		{
+			$out=$test1;
+		} else
+		{
+			$out=new ocp_tempcode();
+			$out->attach(is_string($test1)?$test1:strval($test1));
+		}
+	} else
+	{
+		$out=new ocp_tempcode();
+		$out->attach($test2);
+	}
 	ob_end_clean();
 
 	restrictify();
@@ -928,18 +954,7 @@ function do_block_hunt_file($codename,$map=NULL)
 	{
 		if ((!in_safe_mode()) && (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php')))))
 		{
-			require_code('developer_tools');
-			destrictify();
-			ob_start();
-			if (defined('HIPHOP_PHP'))
-			{
-				require('sources_custom/miniblocks/'.$codename.'.php');
-			} else
-			{
-				require($file_base.'/sources_custom/miniblocks/'.$codename.'.php');
-			}
-			$object=ob_get_clean();
-			restrictify();
+			$object=static_evaluate_tempcode(_load_mini_code('sources_custom/miniblocks/'.$codename.'.php'));
 
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
 			{
@@ -949,18 +964,7 @@ function do_block_hunt_file($codename,$map=NULL)
 		}
 		elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))))
 		{
-			require_code('developer_tools');
-			destrictify();
-			ob_start();
-			if (defined('HIPHOP_PHP'))
-			{
-				require('sources/miniblocks/'.$codename.'.php');
-			} else
-			{
-				require($file_base.'/sources/miniblocks/'.$codename.'.php');
-			}
-			$object=ob_get_clean();
-			restrictify();
+			$object=static_evaluate_tempcode(_load_mini_code('sources/miniblocks/'.$codename.'.php'));
 
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
 			{
