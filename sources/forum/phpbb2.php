@@ -495,7 +495,8 @@ class forum_driver_phpbb2 extends forum_driver_base
 		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
 		$ip_address=$this->_phpbb_ip($ip);
 		$local_ip_address=$this->_phpbb_ip('127.0.0.1');
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$map=array('forum_id'=>$forum_id,'topic_title'=>$content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'topic_poster'=>$member,'topic_time'=>$time,'topic_views'=>0,'topic_replies'=>0,'topic_status'=>0,'topic_vote'=>0,'topic_type'=>0,'topic_first_post_id'=>0,'topic_last_post_id'=>0,'topic_moved_id'=>0);
 			if ($fm) $map=array_merge($map,array('answer_status'=>0,'topic_attachment'=>0,'topic_icon'=>0,'rating_rank_id'=>0,'title_compl_infos'=>NULL,'topic_priority'=>0));
@@ -509,6 +510,9 @@ class forum_driver_phpbb2 extends forum_driver_base
 			$this->connection->query_update('topics',array('topic_first_post_id'=>$post_id),array('topic_id'=>$topic_id),'',1);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval($forum_id),1);
 		}
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
 
 		if ($post=='') return array($topic_id,false);
 

@@ -223,7 +223,7 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 	$pass=md5($password);
 	$salt='';
 	$compat='md5';
-	$db_conn->query_update('f_members',array('m_pass_hash_salted'=>$pass,'m_pass_salt'=>$salt,'m_password_compat_scheme'=>$compat),array('m_username'=>'admin'),'',1);
+	$db_conn->query_update('f_members',array('m_email_address'=>$email_address,'m_pass_hash_salted'=>$pass,'m_pass_salt'=>$salt,'m_password_compat_scheme'=>$compat),array('m_username'=>'admin'),'',1);
 
 	// Create default file structure
 	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/sites/'.filter_naughty($codename);

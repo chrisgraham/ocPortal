@@ -371,7 +371,8 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 
 		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
 
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$topic_id=$this->connection->query_insert('topics',array('moved_to'=>0,'pinned'=>0,'views'=>0,'description'=>$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'title'=>$this->ipb_escape($content_title),'state'=>'open','posts'=>1,'starter_id'=>$member,'start_date'=>$time,'icon_id'=>0,'starter_name'=>$this->ipb_escape($username),'poll_state'=>0,'last_vote'=>0,'forum_id'=>$forum_id,'approved'=>1,'author_mode'=>1),true);
 			$home_link=hyperlink($content_url,escape_html($content_title));
@@ -379,7 +380,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET topics=(topics+1) WHERE id='.strval($forum_id),1);
 			$first_post=true;
 		} else $first_post=false;
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
+
 		if ($post=='') return array($topic_id,false);
+
 		$post_id=$this->connection->query_insert('posts',array('author_id'=>$member,'author_name'=>$this->ipb_escape($username),'ip_address'=>$ip,'post_date'=>$time,'icon_id'=>0,'post'=>$post,'queued'=>0,'topic_id'=>$topic_id,'new_topic'=>1,'post_htmlstate'=>1,'post_title'=>$post_title,'post_key'=>md5(microtime(false))),true);
 		$test=$this->connection->query_select('forums',array('*'),NULL,'',1);
 		if (array_key_exists('newest_title',$test[0]))

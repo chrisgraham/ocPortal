@@ -358,13 +358,17 @@ class forum_driver_vb_shared extends forum_driver_base
 		if (is_null($forum_id)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
 		$username=$this->get_username($member);
 		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$topic_id=$this->connection->query_insert('thread',array('title'=>$content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'lastpost'=>$time,'forumid'=>$forum_id,'open'=>1,'postusername'=>$username,'postuserid'=>$member,'lastposter'=>$username,'dateline'=>$time,'visible'=>1),true);
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$this->connection->query_insert('post',array('threadid'=>$topic_id,'username'=>do_lang('SYSTEM','','','',get_site_default_lang()),'userid'=>0,'title'=>'','dateline'=>$time,'pagetext'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'allowsmilie'=>1,'ipaddress'=>'127.0.0.1','visible'=>1));
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forum SET threadcount=(threadcount+1) WHERE forumid='.strval($forum_id),1);
 		}
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
 
 		if ($post=='') return array($topic_id,false);
 

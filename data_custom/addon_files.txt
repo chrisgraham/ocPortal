@@ -2231,6 +2231,7 @@ referrals
  - data_custom/referrer_report.php
  - lang_custom/EN/referrals.ini
  - sources_custom/ocf_join.php
+ - sources_custom/referrals.php
  - sources_custom/hooks/systems/ecommerce/usergroup.php
  - sources_custom/hooks/systems/ecommerce/cart_orders.php
  - sources_custom/hooks/systems/referrals/index.html

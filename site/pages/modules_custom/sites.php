@@ -412,6 +412,7 @@ class Module_sites
 		$fields->attach(form_input_line(do_lang_tempcode('MO_CODENAME'),do_lang('MO_CODENAME_DESCRIPTION'),'codename','',true));
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('MO_YOUR_EMAIL_ADDRESS'),'email_address',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
 		$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),do_lang_tempcode('MO_PASSWORD'),'password',true));
+		$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','confirm_password',true));
 
 		$text=do_lang_tempcode('MO_ENTER_DETAILS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_myocp'),'_SELF');
@@ -437,6 +438,9 @@ class Module_sites
 		$category=post_param('category','');
 		$show_in_directory=post_param_integer('show_in_directory',0);
 		$password=post_param('password');
+		$confirm_password=post_param('confirm_password');
+
+		if ($password!=$confirm_password) warn_exit(do_lang_tempcode('PASSWORD_MISMATCH'));
 
 		myocp_add_site($codename,$name,$email_address,$password,$description,$category,$show_in_directory);
 

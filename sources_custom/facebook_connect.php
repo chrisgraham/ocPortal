@@ -147,7 +147,8 @@ function handle_facebook_connection_login($current_logged_in_member)
 		{
 			if ($timezone!==NULL)
 			{
-				if (tz_time(time(),$timezone)==tz_time(time(),$member_row[0]['m_timezone_offset'])) $timezone=$member_row[0]['m_timezone_offset']; // If equivalent, don't change
+				if ((!is_numeric($member_row[0]['m_timezone_offset'])) && (tz_time(time(),$timezone)==tz_time(time(),$member_row[0]['m_timezone_offset'])))
+					$timezone=$member_row[0]['m_timezone_offset']; // If equivalent, don't change
 			}
 			//if (($username!=$member_row[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member_row[0]['m_timezone_offset'])) || ($email_address!=$member_row[0]['m_email_address']))		Actually there's lots of things that may have changed so let's just do this always
 			{
