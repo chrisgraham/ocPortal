@@ -472,7 +472,8 @@ class forum_driver_smf2 extends forum_driver_base
 		if (is_null($forum_id)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
 		$username=$this->get_username($member);
 		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$topic_id=$this->connection->query_insert('topics',array('id_board'=>$forum_id,'id_first_msg'=>mt_rand(0,100000),'id_last_msg'=>mt_rand(0,100000),'id_member_started'=>$member,'id_member_updated'=>$member,'num_replies'=>2),true);
 			$home_link=hyperlink($content_url,escape_html($content_title));
@@ -481,6 +482,9 @@ class forum_driver_smf2 extends forum_driver_base
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET num_posts=(num_posts+1), num_topics=(num_topics+1) WHERE id_board='.strval((integer)$forum_id),1);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET id_first_msg='.strval((integer)$post_id).' WHERE id_topic='.strval((integer)$topic_id),1);
 		} else $post_id=$this->connection->query_value('messages','MIN(id_msg)',array('id_topic'=>$topic_id));
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
 
 		if ($post=='') return array($topic_id,false);
 

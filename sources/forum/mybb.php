@@ -501,13 +501,18 @@ class forum_driver_mybb extends forum_driver_base
 		$long_ip_address=$this->_phpbb_ip($ip);
 		$local_ip_address='127.0.0.1'; //$this->_phpbb_ip('127.0.0.1');
 
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$topic_id=$this->connection->query_insert('threads',array('fid'=>$forum_id,'subject'=>$content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'username'=>$username,'uid'=>$member,'lastposter'=>$username,'lastposteruid'=>$member,'visible'=>1,'dateline'=>$time,'lastpost'=>$time),true);
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$this->connection->query_insert('posts',array('fid'=>$forum_id,'tid'=>$topic_id,'username'=>do_lang('SYSTEM','','','',get_site_default_lang()),'uid'=>$member,'message'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'subject'=>'','dateline'=>$time,'visible'=>1,'ipaddress'=>$ip_address,'longipaddress'=>$long_ip_address));
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET posts=(posts+1), threads=(threads+1) WHERE fid='.(string)intval($forum_id),1);
 		}
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
+
 		if ($post=='') return array($topic_id,false);
 
 		$this->connection->query_insert('posts',array('fid'=>$forum_id,'tid'=>$topic_id,'username'=>$username,'uid'=>$member,'message'=>$post,'subject'=>$post_title,'dateline'=>$time,'visible'=>1,'ipaddress'=>$ip_address,'longipaddress'=>$long_ip_address));
