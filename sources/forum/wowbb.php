@@ -476,10 +476,14 @@ class forum_driver_wowbb extends forum_driver_base
 
 		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
 
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$topic_id=$this->connection->query_insert('topics',array('forum_id'=>$forum_id,'topic_name'=>$content_title,'topic_starter_id'=>$member,'poll_id'=>0,'topic_description'=>$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'topic_replies'=>0,'topic_views'=>0,'topic_starter_user_name'=>'','topic_last_post_id'=>0,'topic_date_time'=>$this->_timestamp_to_date($time),'topic_type'=>0,'topic_status'=>0,'topic_redirects_to'=>0,'topic_moved_to'=>0,'topic_selected'=>0),true);
 		}
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
 
 		if ($post=='') return array($topic_id,false);
 

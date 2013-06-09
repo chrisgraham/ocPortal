@@ -500,13 +500,17 @@ class forum_driver_aef extends forum_driver_base
 
 		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
 
-		if (is_null($topic_id))
+		$is_new=is_null($topic_id);
+		if ($is_new)
 		{
 			$map=array('t_bid'=>$forum_id,'topic'=>$content_title,'t_mem_id'=>$member,'n_views'=>0,'n_posts'=>0,'t_status'=>1,'type_image'=>0,'first_post_id'=>0,'last_post_id'=>0,'t_description'=>$topic_identifier_encapsulation_prefix.': #'.$topic_identifier_encapsulation_prefix.': '.$topic_identifier);
 
 			if ($fm) $map=array_merge($map,array('t_status'=>0));
 			$topic_id=$this->connection->query_insert('topics',$map,true);
 		}
+
+		$GLOBALS['LAST_TOPIC_ID']=$topic_id;
+		$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
 
 		if ($post=='') return array($topic_id,false);
 
