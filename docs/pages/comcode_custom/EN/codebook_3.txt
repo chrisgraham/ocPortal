@@ -156,6 +156,7 @@ The values you might want to manually change are:
   - [tt]no_auto_notifications[/tt] -- set this to '1' if new members should not be given a default to be notified for their posted content (all this option does is change whether the automatic notifications default is on or off: the member may still control the automatic notifications setting, or of course manage notifications individually)
   - [tt]no_finish_profile[/tt] -- set this to '1' if members signing in via httpauth/OpenID/Facebook will not be required to immediately complete configured required custom profile fields
   - [tt]username_profile_links[/tt] -- set this to '1' if member profile links should have the username in the URL rather than the member ID number
+  - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order
  - ocf_cpfs
   - [tt]show_empty_cpfs[/tt] -- if you want empty CPFs to be passed through to member profile templates
   - [tt]simplify_privacy_options[/tt] -- set this to '1' if you want the custom profile field privacy options to be simplified/compressed a lot (less multi-dimensional, no usergroup filters).
@@ -191,6 +192,7 @@ The values you might want to manually change are:
   - [tt]no_manual_gallery_parent[/tt] -- set to '1' if gallery parents for new galleries specified by URL should not be changeable
   - [tt]no_manual_gallery_media_types[/tt] -- set to '1' if all media types should be enabled for new galleries
   - [tt]personal_under_members[/tt] -- set this to '1' if personal galleries should be shown underneath members (breadcrumbs)
+  - [tt]flow_mode_max[/tt] -- set this to the maximum number of images/videos to show in flow-mode
  - recommend
   - [tt]disable_csv_recommend[/tt] -- set this to '1' if you don't want the CSV upload option on the recommend-to-a-friend form.
  - search
@@ -234,9 +236,9 @@ The values you might want to manually change are:
   - [tt]no_auto_meta[/tt] -- set this to '1' if you don't want SEO keywords/description to be auto-generated from content
   - [tt]session_prudence[/tt] -- set this to '1' if you experience too many simultaneous sessions to reasonable enumerate (e.g. if you get thousands of unique guests within a matter of minutes)
   - [tt]allow_own_rate[/tt] -- set this to '1' if members should be allowed to rate their own content
+  - [tt]comment_topic_subject[/tt] -- set this to '1' if comment topic posts should have an optional subject line
+  - [tt]default_comment_sort_order[/tt] -- the default sort order for comment topics (newest|oldest|relevance)
  - *
-  - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order
-  - [tt]flow_mode_max[/tt] -- set this to the maximum number of images/videos to show in flow-mode
   - (we need to add many more sort and max options, to accomodate customisability on all the main content browsing screens -- they should be given consistent naming)
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:

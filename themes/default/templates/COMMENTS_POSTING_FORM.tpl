@@ -46,7 +46,15 @@
 							</tr>
 						{+END}
 
-						{+START,IF,{GET_TITLE}}
+						{$SET,GET_TITLE,0}
+						{+START,IF_PASSED_AND_TRUE,GET_TITLE}
+							{$SET,GET_TITLE,1}
+						{+END}
+						{+START,IF_NON_PASSED,GET_TITLE}
+							{$SET,GET_TITLE,{$VALUE_OPTION,comment_topic_subject}}
+						{+END}
+
+						{+START,IF,{$GET,GET_TITLE}}
 							<tr>
 								<th class="de_th">
 									<label for="title">{!POST_TITLE}:</label>
@@ -132,8 +140,15 @@
 
 						<tr>
 							<th class="de_th">
-								<img class="comcode_supported_icon" alt="" src="{$IMG*,comcode}" />
-								<label for="post">{!POST_COMMENT}:</label>
+								{+START,IF,{$NOT,{$GET,GET_TITLE}}}
+									<input type="hidden" name="title" value="" />
+								{+END}
+
+								{$SET,needs_msg_label,{$OR,{$GET,GET_TITLE},{GET_EMAIL},{$AND,{$IS_GUEST},{$OCF}}}}
+								{+START,IF,{$GET,needs_msg_label}}
+									<img class="comcode_supported_icon" alt="" src="{$IMG*,comcode}" />
+									<label for="post">{!POST_COMMENT}:</label>
+								{+END}
 
 								{+START,IF_NON_EMPTY,{FIRST_POST}{COMMENT_TEXT}}
 									<ul class="associated_links_block_group">
@@ -145,6 +160,11 @@
 											<li><a class="non_link" href="{$PAGE_LINK*,:rules}" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$TRUNCATE_LEFT,{COMMENT_TEXT*~;^},1000,0,1}','30%',null,null,false,true);">{!HOVER_MOUSE_IMPORTANT}</a></li>
 										{+END}
 									</ul>
+								{+END}
+
+								{+START,IF,{$NOT,{$GET,needs_msg_label}}}
+									<img class="comcode_supported_icon" alt="" src="{$IMG*,comcode}" />
+									<label class="accessibility_hidden" for="post">{!POST_COMMENT}:</label>
 								{+END}
 
 								{+START,IF,{$NOT,{$MOBILE}}}

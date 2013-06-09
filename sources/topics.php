@@ -277,7 +277,7 @@ class OCP_Topic
 	/**
 	 * Get the sort order.
 	 *
-	 * @param  boolean		Whether to show in reverse date order (affects default search order only)
+	 * @param  ?boolean		Whether to show in reverse date order (affects default search order only) (NULL: read config)
 	 * @return ID_TEXT		Sort order
     * @set relevance rating newest oldest
 	 */
@@ -287,7 +287,14 @@ class OCP_Topic
 
 		if ($sort===NULL)
 		{
-			$default_sort_order=($this->is_threaded && $reverse)?'relevance':($reverse?'newest':'oldest');
+			$_default_sort_order=get_value('default_comment_sort_order');
+			if (($reverse===NULL) && ($_default_sort_order!==NULL))
+			{
+				$default_sort_order=$_default_sort_order;
+			} else
+			{
+				$default_sort_order=($this->is_threaded && $reverse)?'relevance':($reverse?'newest':'oldest');
+			}
 
 			$sort=either_param('comments_sort',$default_sort_order);
 
@@ -303,12 +310,12 @@ class OCP_Topic
 	 * @param  AUTO_LINK		Topic ID
 	 * @param  integer		Maximum to load
 	 * @param  integer		Pagination start if non-threaded
-	 * @param  boolean		Whether to show in reverse date order (affects default search order only)
+	 * @param  ?boolean		Whether to show in reverse date order (affects default search order only) (NULL: read config)
 	 * @param  ?array			List of post IDs to load (NULL: no filter)
 	 * @param  boolean		Whether to allow spacer posts to flow through the renderer
 	 * @return boolean		Success status
 	 */
-	function load_from_topic($topic_id,$num_to_show_limit,$start=0,$reverse=false,$posts=NULL,$load_spacer_posts_too=false)
+	function load_from_topic($topic_id,$num_to_show_limit,$start=0,$reverse=NULL,$posts=NULL,$load_spacer_posts_too=false)
 	{
 		$this->topic_id=$topic_id;
 		$this->reverse=$reverse;
@@ -1038,7 +1045,7 @@ class OCP_Topic
 			'USE_CAPTCHA'=>$use_captcha,
 			'GET_EMAIL'=>false,
 			'EMAIL_OPTIONAL'=>true,
-			'GET_TITLE'=>true,
+			'GET_TITLE'=>NULL, // Depending upon configuration
 			'POST_WARNING'=>$post_warning,
 			'COMMENT_TEXT'=>$comment_text,
 			'EM'=>$em,

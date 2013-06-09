@@ -159,7 +159,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
 		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
 	$rating_details=get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating==1,$submitter);
-	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,true,$submitter,$allow_comments==2);
+	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,NULL,$submitter,$allow_comments==2);
 	$trackback_details=get_trackbacks($page_name,$content_id,$allow_trackbacks==1);
 
 	if (is_object($content_url)) $content_url=$content_url->evaluate();
@@ -204,7 +204,7 @@ function post_comment_script()
 	actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
 
 	// Get new comments state
-	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,true,$submitter,$allow_comments==2);
+	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,NULL,$submitter,$allow_comments==2);
 
 	// AJAX support
 	$comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
@@ -629,13 +629,13 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
  * @param  ?string		The default post to use (NULL: standard courtesy warning)
  * @param  ?mixed			The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
  * @param  boolean		Whether to skip permission checks
- * @param  boolean		Whether to reverse the posts
+ * @param  ?boolean		Whether to show in reverse date order (affects default search order only) (NULL: read config)
  * @param  ?MEMBER		User to highlight the posts of (NULL: none)
  * @param  boolean		Whether to allow ratings along with the comment (like reviews)
  * @param  ?integer		Maximum to load (NULL: default)
  * @return tempcode		The tempcode for the comment topic
  */
-function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=true,$highlight_by_user=NULL,$allow_reviews=false,$num_to_show_limit=NULL)
+function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=NULL,$highlight_by_user=NULL,$allow_reviews=false,$num_to_show_limit=NULL)
 {
 	if (((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ((get_forum_type()!='ocf') || (addon_installed('ocf_forum'))) && (($allow_reviews) || ($allow_comments))) || ($explicit_allow))
 	{
