@@ -327,31 +327,71 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason='',$check_perms=true,$c
  */
 function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=NULL,$delete_if_empty=false,$title=NULL)
 {
-	if (is_null($to_topic_id))
-	{
-		if (is_null($to_forum_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		require_code('ocf_topics_action');
-		$to_topic_id=ocf_make_topic($to_forum_id);
-		if ((!is_null($title)) && (count($posts)!=0))
-		{
-			$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_title'=>$title),array('id'=>$posts[0]),'',1);
-		}
-	}
-
 	// Info about source
 	$from_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$from_topic_id));
 	if (!array_key_exists(0,$from_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$from_forum_id=$from_info[0]['t_forum_id'];
-	$to_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$to_topic_id));
-	if (!array_key_exists(0,$to_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$to_forum_id=$to_info[0]['t_forum_id'];
 
+	// Useful for queries
 	$or_list='';
 	foreach ($posts as $post)
 	{
 		if ($or_list!='') $or_list.=' OR ';
 		$or_list.='id='.strval($post);
 	}
+
+	// Is it a support ticket move?
+	if (addon_installed('tickets'))
+	{
+		require_code('tickets');
+		$is_support_ticket=(is_ticket_forum($from_forum_id)) && (is_ticket_forum($to_forum_id));
+	} else
+	{
+		$is_support_ticket=false;
+	}
+
+	// Create topic, if this is a split
+	if (is_null($to_topic_id))
+	{
+		if (is_null($to_forum_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
+		if ($is_support_ticket)
+		{
+			// For support tickets, we need to make the spacer post
+			require_code('tickets2');
+			$member=get_member();
+			foreach ($posts as $post)
+			{
+				$member=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_poster',array('id'=>$posts[0]));
+				if ($member!=get_member()) break;
+			}
+			$ticket_id=strval($member).'_'.uniqid('');
+			$ticket_type=$GLOBALS['FORUM_DB']->query_select_value('tickets','ticket_type',array('topic_id'=>$from_topic_id));
+			if (is_null($title))
+			{
+				$title=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('id'=>$posts[0]));
+			}
+			$_ticket_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$ticket_id,'redirect'=>NULL),get_module_zone('tickets'),NULL,false,true,true);
+			$ticket_url=$_ticket_url->evaluate();
+			ticket_add_post($member,$ticket_id,$ticket_type,$title,'',$ticket_url);
+			$to_topic_id=$GLOBALS['LAST_TOPIC_ID'];
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_time='.strval(time()).' WHERE '.$or_list,NULL,NULL,false,true);
+		} else
+		{
+			require_code('ocf_topics_action');
+			$to_topic_id=ocf_make_topic($to_forum_id);
+		}
+
+		if ((!is_null($title)) && (count($posts)!=0))
+		{
+			$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_title'=>$title),array('id'=>$posts[0]),'',1);
+		}
+	}
+
+	// Info about destination
+	$to_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$to_topic_id));
+	if (!array_key_exists(0,$to_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+	$to_forum_id=$to_info[0]['t_forum_id'];
 
 	// Check access
 	if (!ocf_may_moderate_forum($from_forum_id)) access_denied('I_ERROR');
@@ -363,9 +403,8 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		if ($post['p_cache_forum_id']!=$from_forum_id) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
 
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to_forum_id).', p_topic_id='.strval($to_topic_id).' WHERE '.$or_list,NULL,NULL,false,true);
-
 	// Update cacheing
+	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to_forum_id).', p_topic_id='.strval($to_topic_id).' WHERE '.$or_list,NULL,NULL,false,true);
 	require_code('ocf_posts_action2');
 	ocf_force_update_topic_cacheing($from_topic_id,-$num_posts_counted,true,true);
 	ocf_force_update_topic_cacheing($to_topic_id,$num_posts_counted,true,true);
@@ -402,6 +441,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		}
 	}
 
+	// Delete if needed
 	$test=$delete_if_empty?$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_topic_id'=>$from_topic_id)):1;
 	if ($test==0)
 	{
@@ -412,9 +452,16 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	} else
 	{
 		// Make informative post
-		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'[/page]';
 		$topic_title=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$to_topic_id));
-		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array('[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]',get_timezoned_date(time())));
+		if ($is_support_ticket)
+		{
+			$to_link='[page="'.get_module_zone('tickets').':tickets:ticket:'.$ticket_id.'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]';
+		} else
+		{
+			$to_link='[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]';
+		}
+		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'[/page]';
+		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array($to_link,get_timezoned_date(time())));
 		ocf_make_post($from_topic_id,'',$lang,0,false,1,1,NULL,NULL,$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_time',array('id'=>$posts[0]))+1,NULL,NULL,NULL,NULL,false);
 
 		require_code('ocf_general_action2');

@@ -43,6 +43,7 @@ class Hook_Profiles_Tabs_warnings
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
+		require_lang('ocf_warnings');
 		$title=do_lang_tempcode('MODULE_TRANS_NAME_warnings');
 
 		$order=80;

@@ -440,7 +440,7 @@ class Module_tickets
 			{
 				if (is_null($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 				if (has_privilege(get_member(),'support_operator'))
-					$staff_details=make_string_tempcode($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,get_option('ticket_forum_name'),true));
+					$staff_details=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id,get_option('ticket_forum_name'),true);
 				else $staff_details=new ocp_tempcode();
 
 				require_code('topics');
