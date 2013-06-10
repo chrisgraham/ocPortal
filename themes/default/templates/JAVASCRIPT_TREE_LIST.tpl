@@ -3,6 +3,7 @@
 window.tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable,use_server_id)
 {
 	if (typeof window.do_ajax_request=='undefined') return;
+	if (typeof use_server_id=='undefined') var use_server_id=false;
 
 	if ((typeof multi_selection=='undefined') || (!multi_selection)) var multi_selection=false;
 
@@ -549,7 +550,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	if ((!assume_ctrl) && (event.shiftKey) && (this.object.multi_selection))
 	{
 		// We're holding down shift so we need to force selection of everything bounded between our last click spot and here
-		var all_a=document.getElementById('tree_list__root_tree_list').getElementsByTagName('label');
+		var all_a=document.getElementById('tree_list__root_'+this.object.name).getElementsByTagName('label');
 		var pos_last=-1;
 		var pos_us=-1;
 		if (this.object.last_clicked==null) this.object.last_clicked=all_a[0];
@@ -571,18 +572,21 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 			if (that_type=='r') that_type='c';
 			if (that_type=='s') that_type='e';
 
-			that_selected_id=(this.object.use_server_id)?all_a[i].getAttribute('serverid'):all_a[i].getAttribute('id').substr(7+this.object.name.length);
-			that_xml_node=this.object.getElementByIdHack(that_selected_id,that_type);
-			if (that_xml_node.getAttribute('selectable')=='true' || this.object.all_nodes_selectable)
+			if (all_a[i].getAttribute('id').substr(5+this.object.name.length,that_type.length)==that_type)
 			{
-				if ((i>=pos_last) && (i<=pos_us))
+				that_selected_id=(this.object.use_server_id)?all_a[i].getAttribute('serverid'):all_a[i].getAttribute('id').substr(7+this.object.name.length);
+				that_xml_node=this.object.getElementByIdHack(that_selected_id,that_type);
+				if ((that_xml_node.getAttribute('selectable')=='true') || (this.object.all_nodes_selectable))
 				{
-					if (!selected_start.inArray(that_selected_id))
-						all_a[i].handle_selection(event,true);
-				} else
-				{
-					if (selected_start.inArray(that_selected_id))
-						all_a[i].handle_selection(event,true);
+					if ((i>=pos_last) && (i<=pos_us))
+					{
+						if (!selected_start.inArray(that_selected_id))
+							all_a[i].handle_selection(event,true);
+					} else
+					{
+						if (selected_start.inArray(that_selected_id))
+							all_a[i].handle_selection(event,true);
+					}
 				}
 			}
 		}
