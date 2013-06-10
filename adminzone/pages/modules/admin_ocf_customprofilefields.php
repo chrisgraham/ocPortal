@@ -252,7 +252,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			$trans=get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB']);
 
 			$used=true;
-			if (substr($trans,0,4)=='ocp_')
+			if ((substr($trans,0,4)=='ocp_') && (get_param_integer('keep_all_cpfs',0)!=1))
 			{
 				// See if it gets filtered
 				if (!array_key_exists(substr($trans,4),$to_keep)) $used=false;

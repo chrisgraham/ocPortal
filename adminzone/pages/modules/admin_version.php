@@ -337,7 +337,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('alternative_ids','resource_moniker_uniq',array('resource_moniker','resource_resourcefs_hook'));
 
 			add_privilege('SUBMISSION','edit_meta_fields');
-			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
+			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','tick');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

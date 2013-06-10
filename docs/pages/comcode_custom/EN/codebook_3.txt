@@ -357,6 +357,7 @@ The 'keep' parameters available are:
  - [tt]keep_wide[/tt] -- remove panels
  - [tt]keep_wide_high[/tt] -- remove panels, as well as the header and footer
  - [tt]keep_rating_test[/tt] -- set this to '1' if you are testing rating and don't want to be locked out for having already rated
+ - [tt]keep_all_cpfs[/tt] -- set this to '1' if you want to edit bundled CPFs that aren't currently marked as editable
 
 The following 'keep' parameters have interface triggers, but are also handy for manual activation:
  - [tt]keep_markers[/tt] -- set this to '1' if you want template start/end markers to be output in the page HTML source when viewed in ocPortal

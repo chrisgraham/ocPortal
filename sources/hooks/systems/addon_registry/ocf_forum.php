@@ -74,6 +74,7 @@ class Hook_addon_registry_ocf_forum
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/ocf_cpf_filter/notifications.php',
 			'sources/hooks/systems/resource_meta_aware/forum_grouping.php',
 			'sources/hooks/systems/occle_fs/forum_groupings.php',
 			'sources/blocks/main_ocf_involved_topics.php',
