@@ -5,7 +5,7 @@
 <div class="ocf_member_box">
 {+END}
 	{+START,IF,{GIVE_CONTEXT}}
-		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID}}}</h3>
+		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID},1}}</h3>
 	{+END}
 
 	{+START,IF,{$NOT,{$MOBILE}}}

@@ -76,7 +76,7 @@
 							var initialLocation=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 							map.setCenter(initialLocation);
 
-							add_data_point(['{$USERNAME;}',position.coords.latitude,position.coords.longitude,''],bounds,markers,info_window,map);
+							add_data_point(['{$USERNAME;,{$MEMBER},1}',position.coords.latitude,position.coords.longitude,''],bounds,markers,info_window,map);
 						});
 					}
 					catch (e) {};

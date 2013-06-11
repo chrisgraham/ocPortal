@@ -41,7 +41,7 @@ class Hook_Preview_ocf_welcome_email
 
 			$to=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 			if ($to=='' ) $to=get_option('staff_address');
-			mail_wrap($subject_line,$message_raw->evaluate(get_site_default_lang()),array($to),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'','',3,NULL,false,get_member(),true);
+			mail_wrap($subject_line,$message_raw->evaluate(get_site_default_lang()),array($to),$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true),'','',3,NULL,false,get_member(),true);
 		}
 		return array($applies,NULL);
 	}

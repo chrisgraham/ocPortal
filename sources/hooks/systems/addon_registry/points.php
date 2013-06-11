@@ -162,7 +162,7 @@ class Hook_addon_registry_points
 				'POINTS_URL'=>placeholder_url(),
 				'PROFILE_URL'=>placeholder_url(),
 				'POINTS'=>placeholder_number(),
-				'NAME'=>lorem_phrase(),
+				'USERNAME'=>lorem_phrase(),
 				'HAS_RANK_IMAGES'=>true,
 			)));
 		}
@@ -196,7 +196,7 @@ class Hook_addon_registry_points
 					'POINTS_URL'=>placeholder_url(),
 					'PROFILE_URL'=>placeholder_url(),
 					'POINTS'=>placeholder_number(),
-					'NAME'=>lorem_phrase()
+					'USERNAME'=>lorem_phrase()
 				)));
 			}
 			$out->attach(do_lorem_template('POINTS_LEADERBOARD_WEEK', array(
@@ -228,7 +228,7 @@ class Hook_addon_registry_points
 			$results->attach(do_lorem_template('POINTS_SEARCH_RESULT', array(
 				'URL'=>placeholder_url(),
 				'ID'=>placeholder_id(),
-				'NAME'=>lorem_word()
+				'USERNAME'=>lorem_word()
 			)));
 		}
 
@@ -273,7 +273,7 @@ class Hook_addon_registry_points
 		$content=do_lorem_template('POINTS_PROFILE', array(
 			'MEMBER'=>lorem_phrase(),
 			'PROFILE_URL'=>placeholder_url(),
-			'NAME'=>lorem_word(),
+			'USERNAME'=>lorem_word(),
 			'POINTS_JOINING'=>placeholder_number(),
 			'POINTS_RATING'=>placeholder_number(),
 			'POINTS_VOTING'=>placeholder_number(),

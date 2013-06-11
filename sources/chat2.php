@@ -85,18 +85,20 @@ function friend_add($likes,$liked,$time=NULL)
 	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','date_and_time',array('member_likes'=>$liked,'member_liked'=>$likes))))
 	{
 		require_code('notifications');
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($liked);
-		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($likes);
-		$subject_line=do_lang('YOURE_MY_FRIEND_SUBJECT',$from_name,get_site_name(),NULL,get_lang($liked));
+		$to_username=$GLOBALS['FORUM_DRIVER']->get_username($liked);
+		$from_username=$GLOBALS['FORUM_DRIVER']->get_username($likes);
+		$to_displayname=$GLOBALS['FORUM_DRIVER']->get_username($liked,true);
+		$from_displayname=$GLOBALS['FORUM_DRIVER']->get_username($likes,true);
+		$subject_line=do_lang('YOURE_MY_FRIEND_SUBJECT',$from_username,get_site_name(),NULL,get_lang($liked));
 		$befriend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
-		$message_raw=do_lang('YOURE_MY_FRIEND_BODY',comcode_escape($to_name),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_name)),get_lang($liked));
+		$message_raw=do_lang('YOURE_MY_FRIEND_BODY',comcode_escape($to_username),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_username),comcode_escape($to_displayname),comcode_escape($from_displayname)),get_lang($liked));
 		dispatch_notification('new_friend',NULL,$subject_line,$message_raw,array($liked),$likes);
 
 		// Log the action
 		log_it('MAKE_FRIEND',strval($likes),strval($liked));
 		require_code('activities');
-		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
-		//syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);	Should only show if the user also does this
+		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_displayname,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
+		//syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_displayname,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);	Should only show if the user also does this
 
 		decache('main_friends_list');
 	}

@@ -122,7 +122,7 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
 			$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
 			if (count($members)!=0)
 			{
-				$submitter_id=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);
+				$submitter_id=$GLOBALS['FORUM_DRIVER']->mrow_id($members[key($members)]);
 			} else
 			{
 				$submitter_id=db_get_first_id()+1; // On OCF and most forums, this is the first admin member

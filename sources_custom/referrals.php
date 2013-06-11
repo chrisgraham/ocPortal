@@ -5,6 +5,7 @@ function assign_referral_awards($referee,$trigger)
 	$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
 
 	$referee_username=$GLOBALS['FORUM_DRIVER']->get_username($referee);
+	$referee_displayname=$GLOBALS['FORUM_DRIVER']->get_username($referee,true);
 	$referee_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referee);
 	if ($referee_email=='') return; // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
 	$one_trigger_already=!is_null($GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_inviter',array('i_taken'=>1,'i_email_address'=>$referee_email),'ORDER BY i_time'));
@@ -22,11 +23,13 @@ function assign_referral_awards($referee,$trigger)
 				NULL,
 				do_lang(
 					'MAIL_REFERRALS__NONREFERRAL__TOSTAFF_SUBJECT',
-					$referee_username
+					$referee_username,
+					$referee_displayname
 				),
 				do_lang(
 					'MAIL_REFERRALS__NONREFERRAL__TOSTAFF_BODY',
-					comcode_escape($referee_username)
+					comcode_escape($referee_username),
+					comcode_escape($referee_displayname)
 				),
 				NULL,
 				A_FROM_SYSTEM_PRIVILEGED
@@ -37,6 +40,7 @@ function assign_referral_awards($referee,$trigger)
 	}
 	$referrer_username=$GLOBALS['FORUM_DRIVER']->get_username($referrer);
 	if (is_null($referrer_username)) return; // Deleted member
+	$referrer_displayname=$GLOBALS['FORUM_DRIVER']->get_username($referrer,true);
 	if (is_guest($referrer)) return;
 	$referrer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referrer);
 
@@ -53,8 +57,8 @@ function assign_referral_awards($referee,$trigger)
 				$ini_file_section_name,
 				$ini_file_section,
 
-				$referee,$referee_username,$referee_email,$one_trigger_already,
-				$referrer,$referrer_username,$referrer_email,
+				$referee,$referee_username,$referee_displayname,$referee_email,$one_trigger_already,
+				$referrer,$referrer_username,$referrer_displayname,$referrer_email,
 
 				$num_total_qualified_by_referrer,$num_total_by_referrer
 			);
@@ -69,8 +73,8 @@ function _assign_referral_awards(
 	$scheme_name,
 	$scheme,
 
-	$referee,$referee_username,$referee_email,$one_trigger_already,
-	$referrer,$referrer_username,$referrer_email,
+	$referee,$referee_username,$referee_displayname,$referee_email,$one_trigger_already,
+	$referrer,$referrer_username,$referrer_displayname,$referrer_email,
 
 	$num_total_qualified_by_referrer,$num_total_by_referrer
 )
@@ -110,7 +114,9 @@ function _assign_referral_awards(
 						$referrer_username,
 						array(
 							$referee_username,
-							$scheme_title
+							$scheme_title,
+							$referee_displayname,
+							$referrer_displayname,
 						)
 					);
 					$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_AWARD_BODY';
@@ -125,7 +131,9 @@ function _assign_referral_awards(
 							comcode_escape($referee_username),
 							$report_url,
 							comcode_escape(integer_format($num_total_by_referrer)),
-							comcode_escape($scheme_title)
+							comcode_escape($scheme_title),
+							comcode_escape($referee_displayname),
+							comcode_escape($referrer_displayname)
 						)
 					);
 					dispatch_notification(
@@ -149,7 +157,9 @@ function _assign_referral_awards(
 						$referrer_username,
 						$referee_username,
 						array(
-							$scheme_title
+							$scheme_title,
+							$referee_displayname,
+							$referrer_displayname
 						)
 					);
 					$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOSTAFF_BODY';
@@ -163,7 +173,9 @@ function _assign_referral_awards(
 							comcode_escape($referee_username),
 							$report_url,
 							comcode_escape(integer_format($num_total_by_referrer)),
-							comcode_escape($scheme_title)
+							comcode_escape($scheme_title),
+							comcode_escape($referee_displayname),
+							comcode_escape($referrer_displayname)
 						)
 					);
 					dispatch_notification(
@@ -186,7 +198,12 @@ function _assign_referral_awards(
 				$subject=do_lang(
 					$subject_lang_string,
 					$referee_username,
-					$scheme_title
+					$scheme_title,
+					array(
+						$referee_displayname,
+						$referrer_username,
+						$referrer_displayname
+					)
 				);
 				$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_QUALIFIEDREFERRAL__TOREFERRER_BODY';
 				if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
@@ -198,7 +215,9 @@ function _assign_referral_awards(
 					array(
 						comcode_escape($referee_username),
 						comcode_escape(integer_format($num_total_by_referrer)),
-						comcode_escape($scheme_title)
+						comcode_escape($scheme_title),
+						comcode_escape($referee_displayname),
+						comcode_escape($referrer_displayname)
 					)
 				);
 				dispatch_notification(
@@ -226,7 +245,9 @@ function _assign_referral_awards(
 					$referrer_username,
 					$referee_username,
 					array(
-						$scheme_title
+						$scheme_title,
+						$referee_displayname,
+						$referrer_displayname
 					)
 				);
 				$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_NONQUALIFIEDREFERRAL__TOSTAFF_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_NONQUALIFIEDREFERRAL__TOSTAFF_BODY';
@@ -240,7 +261,9 @@ function _assign_referral_awards(
 						$report_url,
 						comcode_escape(integer_format($num_total_qualified_by_referrer)),
 						comcode_escape(integer_format($num_total_by_referrer)),
-						comcode_escape($scheme_title)
+						comcode_escape($scheme_title),
+						comcode_escape($referee_displayname),
+						comcode_escape($referrer_displayname)
 					)
 				);
 				dispatch_notification(
@@ -260,7 +283,12 @@ function _assign_referral_awards(
 				$subject=do_lang(
 					$subject_lang_string,
 					$referee_username,
-					$scheme_title
+					$scheme_title,
+					array(
+						$referee_displayname,
+						$referrer_username,
+						$referrer_displayname
+					)
 				);
 				$body_lang_string=$referrer_is_qualified?'MAIL_REFERRALS__QUALIFIEDREFERRER_NONQUALIFIEDREFERRAL__TOREFERRER_BODY':'MAIL_REFERRALS__NONQUALIFIEDREFERRER_NONQUALIFIEDREFERRAL__TOREFERRER_BODY';
 				if (do_lang($body_lang_string.'__'.$scheme_name,NULL,NULL,NULL,NULL,false)!==NULL)
@@ -272,7 +300,9 @@ function _assign_referral_awards(
 					array(
 						comcode_escape(integer_format($num_total_qualified_by_referrer)),
 						comcode_escape(integer_format($num_total_by_referrer)),
-						comcode_escape($scheme_title)
+						comcode_escape($scheme_title),
+						comcode_escape($referee_displayname),
+						comcode_escape($referrer_displayname)
 					)
 				);
 				dispatch_notification(

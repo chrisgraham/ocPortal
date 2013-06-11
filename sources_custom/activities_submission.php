@@ -75,8 +75,9 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 		list($message)=render_activity($row,false);
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($a_member_id);
+		$displayname=$GLOBALS['FORUM_DRIVER']->get_username($a_member_id,true);
 		$subject=do_lang('ACTIVITY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,strip_html($message->evaluate()));
-		$mail=do_lang('ACTIVITY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array('[semihtml]'.$message->evaluate().'[/semihtml]'));
+		$mail=do_lang('ACTIVITY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array('[semihtml]'.$message->evaluate().'[/semihtml]',$displayname));
 		dispatch_notification('activity',strval($a_member_id),$subject,$mail);
 	}
 

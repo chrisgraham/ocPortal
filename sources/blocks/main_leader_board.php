@@ -131,10 +131,10 @@ class Block_main_leader_board
 
 			$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
-			$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
-			if (is_null($name)) continue;
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+			if (is_null($username)) continue;
 
-			if ($i==0) set_value('site_bestmember',$name);
+			if ($i==0) set_value('site_bestmember',$username);
 
 			$out->attach(do_template('POINTS_LEADERBOARD_ROW',array(
 				'_GUID'=>'68caa55091aade84bc7ca760e6655a45',
@@ -142,7 +142,7 @@ class Block_main_leader_board
 				'POINTS_URL'=>$points_url,
 				'PROFILE_URL'=>$profile_url,
 				'POINTS'=>integer_format($points),
-				'NAME'=>$name,
+				'USERNAME'=>$username,
 				'HAS_RANK_IMAGES'=>$has_rank_images,
 			)));
 
@@ -167,7 +167,7 @@ class Block_main_leader_board
 		$points=array();
 		foreach ($all_members as $member)
 		{
-			$id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
+			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($member);
 			if (count($all_members)>=$limit) // We don't allow staff, if there are enough to show without
 			{
 				if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($id))) continue;

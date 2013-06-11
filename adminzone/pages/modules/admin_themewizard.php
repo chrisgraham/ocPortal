@@ -261,7 +261,7 @@ class Module_admin_themewizard
 		fwrite($myfile,'title='.$themename.chr(10));
 		fwrite($myfile,'description='.do_lang('NA').chr(10));
 		fwrite($myfile,'seed='.$seed.chr(10));
-		if (fwrite($myfile,'author='.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'author='.$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true).chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		fclose($myfile);
 		sync_file('themes/'.filter_naughty($themename).'/theme.ini');
 

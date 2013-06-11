@@ -291,10 +291,11 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 	{
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$displayname=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 		$group_name=ocf_get_group_name($id);
 		$subject=do_lang('MJG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,$group_name);
 		$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$id),get_module_zone('groups'),NULL,false,false,true);
-		$mail=do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url->evaluate()));
+		$mail=do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url->evaluate(),comcode_escape($displayname)));
 		dispatch_notification('ocf_member_joined_group',strval($id),$subject,$mail);
 	}
 

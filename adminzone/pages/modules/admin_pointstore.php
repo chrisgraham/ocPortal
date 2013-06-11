@@ -99,8 +99,8 @@ class Module_admin_pointstore
 		}
 		foreach ($rows as $row)
 		{
-			$member=$GLOBALS['FORUM_DRIVER']->get_username($row['memberid']);
-			if (is_null($member)) $member=do_lang('UNKNOWN');
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($row['memberid']);
+			if (is_null($username)) $username=do_lang('UNKNOWN');
 			switch ($row['purchasetype'])
 			{
 				case 'banner':
@@ -123,14 +123,14 @@ class Module_admin_pointstore
 			$date=get_timezoned_date($row['date_and_time']);
 
 			$url=build_url(array('page'=>'_SELF','type'=>'_logs','date_and_time'=>$row['date_and_time'],'memberid'=>$row['memberid']),'_SELF');
-			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'12e3ea365f1a1ed2e7800293f3203283','NAME'=>$member,'URL'=>$url));
+			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'12e3ea365f1a1ed2e7800293f3203283','NAME'=>$username,'URL'=>$url));
 
 			if ($do_other_details)
 			{
-				$out->attach(columned_table_row(array($member,$type,$details_1,$details_2,$date,$actions)));
+				$out->attach(columned_table_row(array($username,$type,$details_1,$details_2,$date,$actions)));
 			} else
 			{
-				$out->attach(columned_table_row(array($member,$type,$details_1,$date,$actions)));
+				$out->attach(columned_table_row(array($username,$type,$details_1,$date,$actions)));
 			}
 		}
 		if ($out->is_empty())

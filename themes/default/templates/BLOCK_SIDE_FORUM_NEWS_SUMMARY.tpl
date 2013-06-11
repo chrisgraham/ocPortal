@@ -4,7 +4,7 @@
 	</p>
 
 	<ul class="horizontal_meta_details tiny_paragraph associated_details" role="contentinfo">
-		<li>{!BY_SIMPLE,{FIRSTUSERNAME*}}</li>
+		<li>{!BY_SIMPLE,{$DISPLAYED_USERNAME*,{FIRSTUSERNAME}}}</li>
 		<li>{!_COMMENTS,{$SUBTRACT,{REPLIES},1}}</li>
 	</ul>
 

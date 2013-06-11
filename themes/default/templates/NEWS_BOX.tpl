@@ -43,8 +43,8 @@
 				{+END}
 
 				{+START,IF,{$IS_EMPTY,{AUTHOR_URL}}}
-					{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER}}}
-						{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>}
+					{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER},1}}
+						{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER},1}</a>}
 						{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 					{+END}
 				{+END}

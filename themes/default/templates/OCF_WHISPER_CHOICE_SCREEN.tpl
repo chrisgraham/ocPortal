@@ -17,7 +17,7 @@
 					{$HIDDENS_FOR_GET_FORM,{URL}}
 
 					<div>
-						<p>{!WHISPER_PT,{USERNAME*}}</p>
+						<p>{!WHISPER_PT,{$DISPLAYED_USERNAME*,{USERNAME}}}</p>
 
 						<input type="hidden" name="type" value="new_pt" />
 
@@ -38,7 +38,7 @@
 				{$HIDDENS_FOR_GET_FORM,{URL}}
 
 				<div>
-					<p>{!WHISPER_PP,{USERNAME*}}</p>
+					<p>{!WHISPER_PP,{$DISPLAYED_USERNAME*,{USERNAME}}}</p>
 
 					<input type="hidden" name="type" value="new_post" />
 

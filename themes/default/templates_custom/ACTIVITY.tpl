@@ -30,7 +30,7 @@
 	{+START,SET,commented_out}
 		{+START,IF_PASSED,USERNAME}
 			<div class="activity_name left">
-				<a href="{MEMBER_URL*}">{USERNAME*}</a>
+				<a href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>
 			</div>
 		{+END}
 	{+END}
@@ -39,7 +39,7 @@
 		{$,The main message}
 		{+START,IF,{$EQ,{LANG_STRING},RAW_DUMP}}
 			{+START,IF,{$EQ,{MODE},all}}
-				{!ACTIVITY_SAYS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{MESSAGE}}
+				{!ACTIVITY_SAYS,<a href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>,{MESSAGE}}
 			{+END}
 			{+START,IF,{$NEQ,{MODE},all}}
 				{MESSAGE}
@@ -47,7 +47,7 @@
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
 			{+START,IF,{$EQ,{MODE},all}}
-				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{MESSAGE},0,1}}{$SUBSTR,{MESSAGE},1}}
+				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>,{$LCASE,{$SUBSTR,{MESSAGE},0,1}}{$SUBSTR,{MESSAGE},1}}
 			{+END}
 			{+START,IF,{$NEQ,{MODE},all}}
 				{MESSAGE}

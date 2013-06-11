@@ -19,7 +19,7 @@
 	<h2>{!POINTS_EARNED}</h2>
 
 	<p>
-		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_URL*}">{NAME*}</a>}
+		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>}
 	</p>
 
 	<table class="columned_table autosized_table points_summary_table">
@@ -85,7 +85,7 @@
 	</table>
 </div>
 
-<p>{!POINTS_IN_ADDITION,{NAME*},{POINTS_GAINED_GIVEN*}}</p>
+<p>{!POINTS_IN_ADDITION,{$DISPLAYED_USERNAME*,{USERNAME}},{POINTS_GAINED_GIVEN*}}</p>
 
 <h2>{!POINTS_RECEIVED}</h2>
 
@@ -108,7 +108,7 @@
 {+START,IF_NON_EMPTY,{FROM}}
 	<h2>{!POINTS_GIFTED}</h2>
 
-	<p>{!_POINTS_GIFTED,{NAME*},{GIFT_POINTS_USED*}}</p>
+	<p>{!_POINTS_GIFTED,{$DISPLAYED_USERNAME*,{USERNAME}},{GIFT_POINTS_USED*}}</p>
 
 	{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 	<div id="{$GET*,wrapper_id}">
@@ -119,7 +119,7 @@
 {+START,IF_NON_EMPTY,{CHARGELOG_DETAILS}}
 	<h2>{!POINTS_SPENT}</h2>
 
-	<p>{!_POINTS_SPENT,{NAME*},{POINTS_USED*}}</p>
+	<p>{!_POINTS_SPENT,{$DISPLAYED_USERNAME*,{USERNAME}},{POINTS_USED*}}</p>
 
 	{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 	<div id="{$GET*,wrapper_id}">

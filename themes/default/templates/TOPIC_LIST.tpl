@@ -5,7 +5,7 @@
 
 	<ul class="topic_list_meta horizontal_meta_details">
 		{+START,IF_NON_EMPTY,{USERNAME}}
-			<li>{!BY_SIMPLE,<a class="topic_list_by" href="{POSTER_URL*}">{USERNAME*}</a>}</li>
+			<li>{!BY_SIMPLE,<a class="topic_list_by" href="{POSTER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>}</li>
 		{+END}
 		<li>{DATE*}</li>
 	</ul>

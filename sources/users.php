@@ -332,6 +332,28 @@ function get_member($quick_only=false)
 }
 
 /**
+ * Get the display name of a username.
+ * If no display name generator is configured, this will be the same as the username.
+ *
+ * @param  ID_TEXT		The username
+ * @return SHORT_TEXT	The display name
+ */
+function get_displayname($username)
+{
+	if ($username==do_lang('UNKNOWN')) return $username;
+	if ($username==do_lang('GUEST')) return $username;
+	if ($username==do_lang('DELETED')) return $username;
+
+	if (method_exists($GLOBALS['FORUM_DRIVER'],'get_displayname'))
+	{
+		$displayname=$GLOBALS['FORUM_DRIVER']->get_displayname($username);
+		return ($displayname===NULL)?$username:$displayname;
+	}
+
+	return $username;
+}
+
+/**
  * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
  *
  * @param  MEMBER			The current member
@@ -556,11 +578,6 @@ function ocp_eatcookie($name)
 function get_ocp_cpf($cpf,$member=NULL)
 {
 	if (is_null($member)) $member=get_member();
-
-	if (($cpf=='fullname') && (get_option('signup_fullname')=='1'))
-	{
-		return preg_replace('# \(\d+\)$#','',$GLOBALS['FORUM_DRIVER']->get_username($member));
-	}
 
 	$values=$GLOBALS['FORUM_DRIVER']->get_custom_fields($member);
 	if (is_null($values)) return '';

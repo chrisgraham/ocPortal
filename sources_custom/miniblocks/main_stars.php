@@ -9,16 +9,17 @@
 
 require_code('ocf_groups');
 require_code('ocf_members');
+require_lang('ocf');
 
 echo '<div class="wide_table_wrap"><table class="wide_table results_table spaced_table autosized_table">';
-echo '<tr><th>Avatar</th><th>Details</th><th>Signature</th></tr>';
+echo '<tr><th>'.do_lang('AVATAR').'</th><th>'.do_lang('DETAILS').'</th><th>'.do_lang('SIGNATURE').'</th></tr>';
 
 $gifts=$GLOBALS['SITE_DB']->query('SELECT gift_to,SUM(amount) as cnt FROM '.get_table_prefix().'gifts g LEFT JOIN '.get_table_prefix().'translate t ON t.id=g.reason WHERE text_original LIKE \''.db_encode_like($map['param']).': %\' AND gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' GROUP BY gift_to ORDER BY cnt DESC',10);
 $count=0;
 foreach ($gifts as $gift)
 {
 	$member_id=$gift['gift_to'];
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 	if (!is_null($username))
 	{
 		$link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id);
@@ -33,7 +34,7 @@ foreach ($gifts as $gift)
 		{
 			$avatar='<img style="max-width: 100%" alt="" src="'.escape_html($avatar_url).'" />';
 		}
-		echo '<tr><td>'.$avatar.'</td><td>Username: <a href="'.escape_html($link).'">'.escape_html($username).'</a><br /><br />Role points: '.integer_format($points).'<br /><br />Rank: '.$rank.'</td><td style="font-size: 0.8em;">'.$signature->evaluate().'</td></td>';
+		echo '<tr><td>'.$avatar.'</td><td>'.do_lang('MEMBER').': <a href="'.escape_html($link).'">'.escape_html($username).'</a><br /><br />Role points: '.integer_format($points).'<br /><br />'.do_lang('RANK').': '.$rank.'</td><td style="font-size: 0.8em;">'.$signature->evaluate().'</td></td>';
 
 		$count++;
 	}

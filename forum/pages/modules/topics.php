@@ -1213,7 +1213,7 @@ class Module_topics
 				if (($from!=get_member()) && ($to!=get_member()) && (!ocf_has_special_pt_access($_postdetails[0]['p_topic_id'])) && (!has_privilege(get_member(),'view_other_pt')))
 					access_denied('I_ERROR');
 			}
-			$post->attach(do_template('OCF_QUOTE_FCOMCODE',array('_GUID'=>'5542508cad43a0cd5798afbb06f9e616','ID'=>strval($quote),'TITLE'=>$_topic[0]['t_cache_first_title'],'POST'=>get_translated_text($_postdetails[0]['p_post'],$GLOBALS['FORUM_DB']),'BY'=>$_postdetails[0]['p_poster_name_if_guest'])));
+			$post->attach(do_template('OCF_QUOTE_FCOMCODE',array('_GUID'=>'5542508cad43a0cd5798afbb06f9e616','ID'=>strval($quote),'TITLE'=>$_topic[0]['t_cache_first_title'],'POST'=>get_translated_text($_postdetails[0]['p_post'],$GLOBALS['FORUM_DB']),'BY'=>$_postdetails[0]['p_poster_name_if_guest'],'BY_ID'=>strval($_postdetails[0]['p_poster']))));
 		}
 
 		return $post;
@@ -1301,6 +1301,8 @@ class Module_topics
 			$forum_id=NULL;
 		}
 
+		$staff_help_url=NULL;
+
 		// Breadcrumbs etc
 		if ($private_topic)
 		{
@@ -1317,8 +1319,6 @@ class Module_topics
 			{
 				if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
 			}
-
-			$staff_help_url=NULL;
 
 			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('ADD_TOPIC').'</span>'));

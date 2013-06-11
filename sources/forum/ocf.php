@@ -124,7 +124,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Find the member id of the forum guest member.
 	 *
-	 * @return MEMBER			The member id of the forum guest member
+	 * @return MEMBER			The member ID of the forum guest member
 	 */
 	function get_guest_id()
 	{
@@ -389,11 +389,11 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Set a custom profile field's value. It should not be called directly.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  string			The field name
 	 * @param  string			The value
 	 */
-	function set_custom_field($member,$field,$amount)
+	function set_custom_field($member,$field,$value)
 	{
 		// Check member exists
 		$username=$this->get_username($member);
@@ -413,17 +413,17 @@ class forum_driver_ocf extends forum_driver_base
 		$field_id=$field_bits[0]['id'];
 		if ($field_type=='integer')
 		{
-			ocf_set_custom_field($member,$field_id,intval($amount));
+			ocf_set_custom_field($member,$field_id,intval($value));
 		} else
 		{
-			ocf_set_custom_field($member,$field_id,$amount);
+			ocf_set_custom_field($member,$field_id,$value);
 		}
 	}
 
 	/**
 	 * Get custom profile fields values for all 'ocp_' prefixed keys.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?array			A map of the custom profile fields, key_suffix=>value (NULL: no fields)
 	 */
 	function get_custom_fields($member)
@@ -444,12 +444,12 @@ class forum_driver_ocf extends forum_driver_base
 	}
 
 	/**
-	 * Get a member profile-row for the member of the given name.
+	 * Get a member row for the member of the given name.
 	 *
 	 * @param  SHORT_TEXT	The member name
 	 * @return ?array			The profile-row (NULL: could not find)
 	 */
-	function pget_row($name)
+	function get_mrow($name)
 	{
 		foreach ($this->MEMBER_ROWS_CACHED as $i=>$row)
 		{
@@ -461,57 +461,57 @@ class forum_driver_ocf extends forum_driver_base
 	}
 
 	/**
-	 * From a member profile-row, get the member's primary usergroup.
+	 * From a member row, get the member's primary usergroup.
 	 *
 	 * @param  array			The profile-row
 	 * @return GROUP			The member's primary usergroup
 	 */
-	function pname_group($r)
+	function mrow_group($r)
 	{
 		require_code('ocf_members');
 		return ocf_get_member_primary_group($r['id']);
 	}
 
 	/**
-	 * From a member profile-row, get the member's member id.
+	 * From a member row, get the member's member id.
 	 *
 	 * @param  array			The profile-row
-	 * @return MEMBER			The member id
+	 * @return MEMBER			The member ID
 	 */
-	function pname_id($r)
+	function mrow_id($r)
 	{
 		return $r['id'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's last visit date.
+	 * From a member row, get the member's last visit date.
 	 *
 	 * @param  array			The profile-row
 	 * @return TIME			The last visit date
 	 */
-	function pnamelast_visit($r)
+	function mrow_lastvisit($r)
 	{
 		return $r['m_last_visit_time'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's name.
+	 * From a member row, get the member's name.
 	 *
 	 * @param  array			The profile-row
 	 * @return string			The member name
 	 */
-	function pname_name($r)
+	function mrow_username($r)
 	{
 		return $r['m_username'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's e-mail address.
+	 * From a member row, get the member's e-mail address.
 	 *
 	 * @param  array			The profile-row
 	 * @return SHORT_TEXT	The member e-mail address
 	 */
-	function pname_email($r)
+	function mrow_email($r)
 	{
 		return $r['m_email_address'];
 	}
@@ -519,7 +519,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get a URL to the specified member's home (control panel).
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
 	 * @return mixed			The URL to the members home
 	 */
@@ -535,7 +535,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get a URL to the specified member's profile.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
 	 * @return mixed			The URL to the member profile
 	 */
@@ -597,7 +597,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL to the private/personal message page
 	 */
@@ -795,7 +795,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
-	 * @param  MEMBER			The member id to decrement
+	 * @param  MEMBER			The member ID to decrement
 	 * @return ?MEMBER		The previous member id (NULL: no previous member)
 	 */
 	function get_previous_member($member)
@@ -809,7 +809,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
 	 *
-	 * @param  MEMBER			The member id to increment
+	 * @param  MEMBER			The member ID to increment
 	 * @return ?MEMBER		The next member id (NULL: no next member)
 	 */
 	function get_next_member($member)
@@ -842,7 +842,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?SHORT_TEXT	The member name (NULL: member deleted)
 	 */
 	function _get_username($member)
@@ -852,9 +852,49 @@ class forum_driver_ocf extends forum_driver_base
 	}
 
 	/**
+	 * Get the display name of a username.
+	 * If no display name generator is configured, this will be the same as the username.
+	 *
+	 * @param  ID_TEXT		The username
+	 * @return SHORT_TEXT	The display name
+	 */
+	function get_displayname($username)
+	{
+		$generator=get_option('display_name_generator');
+		if ($generator!='')
+		{
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+			if (!is_null($member_id))
+			{
+				require_code('ocf_members');
+				$fields=ocf_get_custom_field_mappings($member_id);
+
+				$username=$generator;
+
+				$matches=array();
+				$num_matches=preg_match_all('#\{(\d+)\}#',$generator,$matches);
+				for ($i=0;$i<$num_matches;$i++)
+				{
+					$field_key='field_'.$matches[1][$i];
+					if (isset($fields[$field_key]))
+					{
+						$cpf_value=$fields[$field_key];
+						if (!is_string($cpf_value)) $cpf_value=strval($cpf_value);
+						$username=str_replace($matches[0][$i],$cpf_value,$username);
+					}
+				}
+
+				$username=preg_replace('# +#',' ',trim($username)); // Strip and double (or triple, etc) blanks, and leading/trailing blanks
+			}
+		}
+
+		return $username;
+	}
+
+	/**
 	 * Get the e-mail address for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return SHORT_TEXT	The e-mail address
 	 */
 	function _get_member_email_address($member)
@@ -865,7 +905,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
 	 */
 	function get_member_photo_url($member)
@@ -897,7 +937,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get the avatar URL for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
 	 */
 	function get_member_avatar_url($member)
@@ -940,7 +980,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Find if this member may have e-mails sent to them
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member may have e-mails sent to them
 	 */
 	function get_member_email_allowed($member)
@@ -952,7 +992,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get the timestamp of a member's join date.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return TIME			The timestamp
 	 */
 	function get_member_join_timestamp($member)
@@ -981,7 +1021,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get the given member's post count.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return integer		The post count
 	 */
 	function get_post_count($member)
@@ -992,7 +1032,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get the given member's topic count.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return integer		The topic count
 	 */
 	function get_topic_count($member)
@@ -1003,7 +1043,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Find out if the given member id is banned.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
 	 */
 	function is_banned($member)
@@ -1014,7 +1054,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
 	 */
 	function _is_staff($member)
@@ -1027,7 +1067,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
 	 */
 	function _is_super_admin($member)
@@ -1115,7 +1155,7 @@ class forum_driver_ocf extends forum_driver_base
 	}
 
 	/**
-	 * Get a member id from the given member's username.
+	 * Get a member ID from the given member's username. If there is no match and the input is numeric, it will also try it as a member ID.
 	 *
 	 * @param  SHORT_TEXT	The member name
 	 * @return ?MEMBER		The member id (NULL: not found)
@@ -1127,7 +1167,11 @@ class forum_driver_ocf extends forum_driver_base
 			if ($row['m_username']==$name) return $id;
 		}
 		$row=$this->connection->query_select('f_members',array('*'),array('m_username'=>$name),'',1);
-		if (!array_key_exists(0,$row)) return NULL;
+		if (!array_key_exists(0,$row))
+		{
+			if ((is_numeric($name)) && (!is_null($this->get_username($name)))) return intval($name);
+			return NULL;
+		}
 		$id=$row[0]['id'];
 		$this->MEMBER_ROWS_CACHED[$id]=$row[0];
 		return $id;
@@ -1234,7 +1278,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  boolean		Whether to skip looking at secret usergroups.
 	 * @param  boolean		Whether to take probation into account
 	 * @return array			The array of forum usergroups
@@ -1248,7 +1292,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Create a member login cookie.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  ?SHORT_TEXT	The username (NULL: lookup)
 	 * @param  string			The password
 	 */
@@ -1436,7 +1480,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get a first known IP address of the given member.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return IP				The IP address
 	 */
 	function get_member_ip($id)
@@ -1447,7 +1491,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Gets a whole member row from the database.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?array			The member row (NULL: no such member)
 	 */
 	function get_member_row($member)
@@ -1467,7 +1511,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Gets a named field of a member row from the database.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  string			The field identifier
 	 * @return mixed			The field
 	 */

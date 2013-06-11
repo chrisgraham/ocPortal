@@ -42,7 +42,7 @@ function handle_permission_purchase($purchase_id,$details,$product)
 	{
 		$message_raw=get_translated_text($row['p_mail_body']);
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member,true);
 		mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,NULL,false,NULL,true);
 	}
 }

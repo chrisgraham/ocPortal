@@ -116,9 +116,9 @@ class Module_supermembers
 		$old_group=mixed();
 		foreach ($rows as $r)
 		{
-			$id=$GLOBALS['FORUM_DRIVER']->pname_id($r);
-			$current_group=$GLOBALS['FORUM_DRIVER']->pname_group($r);
-			$name=$GLOBALS['FORUM_DRIVER']->pname_name($r);
+			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($r);
+			$current_group=$GLOBALS['FORUM_DRIVER']->mrow_group($r);
+			$username=$GLOBALS['FORUM_DRIVER']->mrow_username($r);
 
 			if (!array_key_exists($current_group,$all_usergroups)) continue;
 
@@ -133,23 +133,23 @@ class Module_supermembers
 			{
 				// Work out their skills from their author profile
 				$_skills=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','skills',array('member_id'=>$id));
-				if (is_null($_skills)) $_skills=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','skills',array('author'=>$name));
+				if (is_null($_skills)) $_skills=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','skills',array('author'=>$username));
 				$skills=(!is_null($_skills))?get_translated_tempcode($_skills):new ocp_tempcode();
 			} else $skills=new ocp_tempcode();
 
-			$days=intval(round(floatval(time()-$GLOBALS['FORUM_DRIVER']->pnamelast_visit($r))/(60.0*60.0*24.0)));
+			$days=intval(round(floatval(time()-$GLOBALS['FORUM_DRIVER']->mrow_lastvisit($r))/(60.0*60.0*24.0)));
 
 			// URL's to them
 			if (addon_installed('authors'))
 			{
-				$author_url=build_url(array('page'=>'authors','type'=>'misc','id'=>$name),get_module_zone('authors'));
+				$author_url=build_url(array('page'=>'authors','type'=>'misc','id'=>$username),get_module_zone('authors'));
 			} else $author_url=new ocp_tempcode();
 			$points_url=addon_installed('points')?build_url(array('page'=>'points','type'=>'member','id'=>$id),get_module_zone('points')):new ocp_tempcode();
 			$pm_url=$GLOBALS['FORUM_DRIVER']->member_pm_url($id,true);
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 
 			// Template
-			$groups_current->attach(do_template('SUPERMEMBERS_SCREEN_ENTRY',array('_GUID'=>'7fdddfe09a33a36762c281e8993327e3','NAME'=>$name,'DAYS'=>integer_format($days),'PROFILE_URL'=>$profile_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PM_URL'=>$pm_url,'SKILLS'=>$skills)));
+			$groups_current->attach(do_template('SUPERMEMBERS_SCREEN_ENTRY',array('_GUID'=>'7fdddfe09a33a36762c281e8993327e3','USERNAME'=>$username,'DAYS'=>integer_format($days),'PROFILE_URL'=>$profile_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PM_URL'=>$pm_url,'SKILLS'=>$skills)));
 
 			$old_group=$current_group;
 		}

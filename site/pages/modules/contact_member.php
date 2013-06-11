@@ -83,7 +83,7 @@ class Module_contact_member
 	function gui()
 	{
 		$member_id=get_param_integer('id');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 		if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($username)));
@@ -154,7 +154,7 @@ class Module_contact_member
 		$member_id=get_param_integer('id');
 		$email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if (is_null($email_address)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMAIL_MEMBER',escape_html($to_name)))));
 
@@ -165,7 +165,7 @@ class Module_contact_member
 		if (!is_valid_email_address($from_email)) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 		$from_name=post_param('name');
 
-		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
+		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id,true))));
 
 		require_code('mail');
 		$attachments=array();

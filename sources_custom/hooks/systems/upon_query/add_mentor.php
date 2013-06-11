@@ -73,9 +73,10 @@ class upon_query_add_mentor
 
 			log_it('MAKE_FRIEND',strval($mentor_id),strval($member_id));
 
-			$subject=do_lang('MENTOR_PT_TOPIC',$GLOBALS['FORUM_DRIVER']->get_username($mentor_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
+			$subject=do_lang('MENTOR_PT_TOPIC',$GLOBALS['FORUM_DRIVER']->get_username($mentor_id,true),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 			$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$mentor_id,$member_id,false,0,NULL,'');
-			$post_id=ocf_make_post($topic_id,$subject,do_lang('MENTOR_PT_TOPIC_POST',$GLOBALS['FORUM_DRIVER']->get_username($mentor_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_site_name()),0,true,1,0,NULL,NULL,NULL,$mentor_id,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
+			$body=do_lang('MENTOR_PT_TOPIC_POST',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($mentor_id)),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($member_id)),array(comcode_escape(get_site_name()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($mentor_id,true)),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
+			$post_id=ocf_make_post($topic_id,$subject,$body,0,true,1,0,NULL,NULL,NULL,$mentor_id,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 			send_pt_notification($post_id,$subject,$topic_id,$member_id,$mentor_id);
 			send_pt_notification($post_id,$subject,$topic_id,$mentor_id,$member_id);
 		}

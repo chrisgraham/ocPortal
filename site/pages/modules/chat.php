@@ -573,8 +573,8 @@ class Module_chat
 
 		$cs_post_url=build_url(array('page'=>'_SELF','type'=>'options','id'=>$room_id),'_SELF');
 
-		$yourname=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		if (is_guest()) $yourname.='-'.substr(md5(get_ip_address()),0,5);
+		$your_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		if (is_guest()) $your_name.='-'.substr(md5(get_ip_address()),0,5);
 
 		$messages_php=find_script('messages');
 		$debug=(get_param_integer('debug',0)==1)?'block':'none';
@@ -623,7 +623,7 @@ class Module_chat
 			'ROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),
 			'MICRO_BUTTONS'=>$micro_buttons,
 			'BUTTONS'=>$buttons,
-			'YOUR_NAME'=>$yourname,
+			'YOUR_NAME'=>$your_name,
 			'MESSAGES_URL'=>$messages_link,
 			'POSTING_URL'=>$posting_url,
 			'SUBMIT_VALUE'=>$posting_name,
@@ -748,7 +748,7 @@ class Module_chat
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'85cbdbced505a6621ccbedc2de50c5f9','TITLE'=>do_lang_tempcode('EXISTING_BLOCKS'),'HELP'=>(count($blocked)!=0)?new ocp_tempcode():do_lang_tempcode('NONE_EM'))));
 		foreach ($blocked as $row)
 		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_blocked']);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_blocked'],true);
 			if (!is_null($username))
 				$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_THEM',escape_html($username)),do_lang_tempcode('_BLOCK_MEMBER',$username),'block_'.strval($row['member_blocked']),true));
 		}
@@ -817,7 +817,7 @@ class Module_chat
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 			if (strpos(do_lang($action),'{1}')!==false)
 			{
 				$preview=do_lang_tempcode($action,escape_html($param));
@@ -849,7 +849,7 @@ class Module_chat
 		$title=get_screen_title('BLOCK_MEMBER');
 
 		$member_id=either_param_integer('member_id');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
 		if ($GLOBALS['FORUM_DRIVER']->is_staff($member_id)) warn_exit(do_lang_tempcode('NO_BLOCK_STAFF'));
 
@@ -883,7 +883,7 @@ class Module_chat
 		$title=get_screen_title($lang);
 
 		$member_id=either_param_integer('member_id');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
 		$test=$this->handle_repost($lang,$username);
 		if (!is_null($test)) return $test;
@@ -921,7 +921,7 @@ class Module_chat
 				warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 		} else
 		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 		}
 
 		// Can't befriend oneself (yes, this may happen!)
@@ -972,7 +972,7 @@ class Module_chat
 		} else
 		{
 			$members=array($member_id);
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
 			if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
 				warn_exit(do_lang('NOT_CURRENTLY_FRIENDS',escape_html($username)));

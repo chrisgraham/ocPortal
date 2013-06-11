@@ -32,7 +32,7 @@
 						<tr>
 							<th class="de_th meta_data_title">{!BY}</th>
 							<td>
-								<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}</a>
+								<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER},1}</a>
 
 								{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 							</td>

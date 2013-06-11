@@ -2024,7 +2024,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				if (is_numeric($attributes['param']))
 				{
-					$attributes['param']=$GLOBALS['FORUM_DRIVER']->get_username($attributes['param']);
+					$attributes['param']=$GLOBALS['FORUM_DRIVER']->get_username($attributes['param'],true);
 					if (is_null($attributes['param'])) $attributes['param']=do_lang('UNKNOWN');
 				} else
 				{

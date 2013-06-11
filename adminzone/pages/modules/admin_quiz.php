@@ -386,7 +386,7 @@ class Module_admin_quiz
 		foreach ($rows as $myrow)
 		{
 			$date_link=hyperlink(build_url(array('page'=>'_SELF','type'=>'__survey_results','id'=>$myrow['id']),'_SELF'),escape_html(get_timezoned_date($myrow['q_time'])));
-			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['q_member']);
+			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['q_member'],false,'',false);
 
 			$fields->attach(results_entry(array($date_link,$member_link),false));
 		}

@@ -11,7 +11,7 @@
 			<input class="button_micro" type="submit" value="{!FILTER}" />
 		</form>
 
-		<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
+		<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID},1}}</p>
 
 		{+START,IF_NON_EMPTY,{FRIENDS_FORWARD}}
 			<div class="ocf_profile_friends raw_ajax_grow_spot">

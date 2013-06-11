@@ -27,25 +27,25 @@ require_code('forum/shared/ipb');
 class forum_driver_ipb3 extends forum_driver_ipb_shared
 {
 	/**
-	 * From a member profile-row, get the member's name.
+	 * From a member row, get the member's name.
 	 *
 	 * @param  array			The profile-row
 	 * @return string			The member name
 	 */
-	function pname_name($r)
+	function mrow_username($r)
 	{
-		return $this->ipb_unescape($r['members_display_name']);
+		return $this->ipb_unescape($r['name']);
 	}
 
 	/**
-	 * Get a member profile-row for the member of the given name.
+	 * Get a member row for the member of the given name.
 	 *
 	 * @param  SHORT_TEXT	The member name
 	 * @return ?array			The profile-row (NULL: could not find)
 	 */
-	function pget_row($name)
+	function get_mrow($name)
 	{
-		$rows=$this->connection->query_select('members',array('*'),array('members_display_name'=>$this->ipb_escape($name)),'',1);
+		$rows=$this->connection->query_select('members',array('*'),array('name'=>$this->ipb_escape($name)),'',1);
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
@@ -54,33 +54,45 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?SHORT_TEXT	The member name (NULL: member deleted)
 	 */
 	function _get_username($member)
 	{
 		if ($member==$this->get_guest_id()) return do_lang('GUEST');
-		return $this->ipb_unescape($this->get_member_row_field($member,'members_display_name'));
+		return $this->ipb_unescape($this->get_member_row_field($member,'name'));
 	}
 
 	/**
-	 * From a member profile-row, get the member's primary usergroup.
+	 * Get the display name of a username.
+	 * If no display name generator is configured, this will be the same as the username.
+	 *
+	 * @param  ID_TEXT		The username
+	 * @return SHORT_TEXT	The display name
+	 */
+	function get_displayname($username)
+	{
+		return $this->connection->query_select_value_if_there('members','members_display_name',array('name'=>$username));
+	}
+
+	/**
+	 * From a member row, get the member's primary usergroup.
 	 *
 	 * @param  array			The profile-row
 	 * @return GROUP			The member's primary usergroup
 	 */
-	function pname_group($r)
+	function mrow_group($r)
 	{
 		return $r['member_group_id'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's member id.
+	 * From a member row, get the member's member id.
 	 *
 	 * @param  array			The profile-row
-	 * @return MEMBER			The member id
+	 * @return MEMBER			The member ID
 	 */
-	function pname_id($r)
+	function mrow_id($r)
 	{
 		return $r['member_id'];
 	}
@@ -99,7 +111,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
-	 * @param  MEMBER			The member id to decrement
+	 * @param  MEMBER			The member ID to decrement
 	 * @return ?MEMBER		The previous member id (NULL: no previous member)
 	 */
 	function get_previous_member($member)
@@ -112,7 +124,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
 	 *
-	 * @param  MEMBER			The member id to increment
+	 * @param  MEMBER			The member ID to increment
 	 * @return ?MEMBER		The next member id (NULL: no next member)
 	 */
 	function get_next_member($member)
@@ -143,9 +155,9 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 */
 	function get_matching_members($pattern,$limit=NULL)
 	{
-		$query='SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE members_display_name LIKE \''.db_encode_like($pattern).'\' AND member_id<>'.strval($this->get_guest_id()).' ORDER BY last_post DESC';
+		$query='SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE name LIKE \''.db_encode_like($pattern).'\' AND member_id<>'.strval($this->get_guest_id()).' ORDER BY last_post DESC';
 		$rows=$this->connection->query($query,$limit);
-		sort_maps_by($rows,'members_display_name');
+		sort_maps_by($rows,'name');
 		return $rows;
 	}
 
@@ -153,11 +165,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 * Get a member id from the given member's username.
 	 *
 	 * @param  SHORT_TEXT	The member name
-	 * @return MEMBER			The member id
+	 * @return MEMBER			The member ID
 	 */
 	function get_member_from_username($name)
 	{
-		return $this->connection->query_select_value_if_there('members','member_id',array('members_display_name'=>$name));
+		return $this->connection->query_select_value_if_there('members','member_id',array('name'=>$name));
 	}
 
 	/**
@@ -201,23 +213,23 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Set a custom profile fields value. It should not be called directly.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  string			The field name
 	 * @param  string			The value
 	 */
-	function set_custom_field($member,$field,$amount)
+	function set_custom_field($member,$field,$value)
 	{
 		$id=$this->connection->query_select_value_if_there('pfields_data','pf_id',array('pf_title'=>'ocp_'.$field));
 		if (is_null($id)) return;
 		$old=$this->connection->query_select_value_if_there('pfields_content','member_id',array('member_id'=>$member));
 		if (is_null($old)) $this->connection->query_insert('pfields_content',array('member_id'=>$member));
-		$this->connection->query_update('pfields_content',array('field_'.strval($id)=>$amount),array('member_id'=>$member),'',1);
+		$this->connection->query_update('pfields_content',array('field_'.strval($id)=>$value),array('member_id'=>$member),'',1);
 	}
 
 	/**
 	 * Get custom profile fields values for all 'ocp_' prefixed keys.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?array			A map of the custom profile fields, key_suffix=>value (NULL: no fields)
 	 */
 	function get_custom_fields($member)
@@ -288,7 +300,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Get the avatar URL for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
 	 */
 	function get_member_avatar_url($member)
@@ -324,7 +336,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
 	 */
 	function get_member_photo_url($member)
@@ -706,7 +718,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Get a URL to the specified member's home (control panel).
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL to the members home
 	 */
 	function member_home_url($id)
@@ -727,7 +739,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
 	function _member_pm_url($id)
@@ -769,7 +781,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return array			The array of forum usergroups
 	 */
 	function _get_members_groups($member)
@@ -803,7 +815,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
 	 */
 	function _is_staff($member)
@@ -816,7 +828,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
 	 */
 	function _is_super_admin($member)
@@ -829,7 +841,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Create a member login cookie.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  ?SHORT_TEXT	The username (NULL: lookup)
 	 * @param  string			The password
 	 */
@@ -865,7 +877,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Find out if the given member id is banned.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
 	 */
 	function is_banned($member)
@@ -882,7 +894,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
 	 *
 	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  MD5				The md5-hashed password
 	 * @param  string			The raw password
 	 * @param  boolean		Whether this is a cookie login
@@ -899,13 +911,6 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 			if (array_key_exists(0,$rows))
 			{
 				$this->MEMBER_ROWS_CACHED[$rows[0]['member_id']]=$rows[0];
-			} else
-			{
-				$rows=$this->connection->query_select('members',array('*'),array('members_display_name'=>$this->ipb_escape($username)),'',1);
-				if (array_key_exists(0,$rows))
-				{
-					$this->MEMBER_ROWS_CACHED[$rows[0]['member_id']]=$rows[0];
-				}
 			}
 		} else
 		{
@@ -971,7 +976,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Do converge authentication.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  string			The password
 	 * @return boolean		Whether authentication succeeded
 	 */
@@ -987,7 +992,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	/**
 	 * Gets a whole member row from the database.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?array			The member row (NULL: no such member)
 	 */
 	function get_member_row($member)

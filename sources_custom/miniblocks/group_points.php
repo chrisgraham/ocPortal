@@ -10,7 +10,7 @@ if ($_id=='')
 {
 	$id=intval($_id);
 }
-$username=$GLOBALS['FORUM_DRIVER']->get_username($id);
+$username=$GLOBALS['FORUM_DRIVER']->get_username($id,true);
 
 $group_points=get_group_points();
 

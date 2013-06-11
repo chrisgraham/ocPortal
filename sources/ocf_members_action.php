@@ -230,6 +230,9 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	if (!is_null($id)) $map['id']=$id;
 	$member_id=$GLOBALS['FORUM_DB']->query_insert('f_members',$map,true);
 
+	if (get_option('signup_fullname')=='1')
+		$GLOBALS['FORUM_DRIVER']->set_custom_field($id,'fullname',preg_replace('# \(\d+\)$#','',$username));
+
 	if ($check_correctness)
 	{
 		// If it was an invite/recommendation, award the referrer

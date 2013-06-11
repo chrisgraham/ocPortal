@@ -45,9 +45,10 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
 		$breadcrumbs->attach(' &gt; ');
 		$pt_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
+		$pt_displayname=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id,true);
 		if (is_null($pt_username)) $pt_username=do_lang('UNKNOWN');
-		$breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_username)));
-		$details['name']=do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_username));
+		$breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username)));
+		$details['name']=do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username));
 	} else
 	{
 		require_code('site');

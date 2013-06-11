@@ -26,9 +26,9 @@ require_code('templates_interfaces');
 foreach ($gifts as $gift)
 {
 	$amount=$gift['amount'];
-	$from_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['gift_from']);
+	$from_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['gift_from'],true);
 	if (is_null($from_name)) $from_name='(Deleted)';
-	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['gift_to']);
+	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['gift_to'],true);
 	if (is_null($to_name)) $from_name='(Deleted)';
 	$from_url=build_url(array('page'=>'points','type'=>'member','id'=>$gift['gift_from']),get_module_zone('points'));
 	$to_url=build_url(array('page'=>'points','type'=>'member','id'=>$gift['gift_to']),get_module_zone('points'));

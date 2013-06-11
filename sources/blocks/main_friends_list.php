@@ -56,7 +56,7 @@ class Block_main_friends_list
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 		$mutual=((array_key_exists('mutual',$map)?$map['mutual']:'1')=='1');
 
-		$text_id=do_lang_tempcode('FRIENDS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
+		$text_id=do_lang_tempcode('FRIENDS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)));
 
 		$blocked=collapse_1d_complexity('member_blocked',$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$member_id)));
 		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);

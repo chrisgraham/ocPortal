@@ -724,7 +724,7 @@ class Module_admin_addons
 
 		// Default meta data
 		$name='';
-		$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 		$organisation=get_site_name();
 		$description='';
 

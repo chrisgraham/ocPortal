@@ -162,9 +162,11 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	}
 	elseif (!is_null($row['p_intended_solely_for']))
 	{
+		$pp_to_displayname=$GLOBALS['FORUM_DRIVER']->get_username($row['p_intended_solely_for'],true);
+		if (is_null($pp_to_displayname)) $pp_to_displayname=do_lang('UNKNOWN');
 		$pp_to_username=$GLOBALS['FORUM_DRIVER']->get_username($row['p_intended_solely_for']);
 		if (is_null($pp_to_username)) $pp_to_username=do_lang('UNKNOWN');
-		$emphasis=do_lang('PP_TO',$pp_to_username);
+		$emphasis=do_lang('PP_TO',$pp_to_displayname,$pp_to_username);
 	}
 
 	// Feedback

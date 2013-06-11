@@ -396,14 +396,14 @@ function _find_member_statistical_notification_type($to_member_id)
 function _dispatch_notification_to_member($to_member_id,$setting,$notification_code,$code_category,$subject,$message,$from_member_id,$priority,$no_cc)
 {
 	// Fish out some general details of the sender
-	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
+	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id,true);
 	$from_email='';
 	$from_name='';
 	if ((!is_null($from_member_id)) && ($from_member_id>=0))
 	{
 		/*$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);		No; we can't disclose email addresses, so notifications will all be emailed from system
 		if ($from_email=='') $from_email='';
-		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id);*/
+		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id,true);*/
 	}
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
@@ -1122,7 +1122,7 @@ class Hook_Notification__Staff extends Hook_Notification
 			$new_rows=array();
 			foreach ($rows as $row)
 			{
-				if (in_array($GLOBALS['FORUM_DRIVER']->pname_id($row),$to_member_ids))
+				if (in_array($GLOBALS['FORUM_DRIVER']->mrow_id($row),$to_member_ids))
 					$new_rows[]=$row;
 			}
 			$rows=$new_rows;
@@ -1130,10 +1130,10 @@ class Hook_Notification__Staff extends Hook_Notification
 		$new_rows=array();
 		foreach ($rows as $row)
 		{
-			$test=notifications_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->pname_id($row));
+			$test=notifications_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->mrow_id($row));
 
 			if ($test!=A_NA)
-				$new_rows[$GLOBALS['FORUM_DRIVER']->pname_id($row)]=$test;
+				$new_rows[$GLOBALS['FORUM_DRIVER']->mrow_id($row)]=$test;
 		}
 
 		return array($new_rows,$possibly_has_more);

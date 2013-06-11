@@ -160,7 +160,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		}
 		else
 		{
-			$poster_name_if_guest=$GLOBALS['OCF_DRIVER']->get_username($poster);
+			$poster_name_if_guest=$GLOBALS['OCF_DRIVER']->get_username($poster,true);
 			if (is_null($poster_name_if_guest)) $poster_name_if_guest=do_lang('UNKNOWN');
 		}
 	}
@@ -252,7 +252,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			// send_validation_mail is used for other content - but forum is special
 			$subject=do_lang('POST_REQUIRING_VALIDATION_MAIL_SUBJECT',$topic_title,NULL,NULL,get_site_default_lang());
 			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
-			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),$post_text);
+			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),array($post_text,strval($anonymous?db_get_first_id():$poster)));
 			require_code('notifications');
 			dispatch_notification('needs_validation',NULL,$subject,$mail);
 		}
@@ -272,7 +272,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 				{
 					require_code('notifications');
 					$msubject=do_lang('NEW_PERSONAL_POST_SUBJECT',$topic_title,NULL,NULL,get_lang($intended_solely_for));
-					$mmessage=do_lang('NEW_PERSONAL_POST_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($anonymous?db_get_first_id():$poster)),comcode_escape($topic_title),array(comcode_escape($url),$post_comcode),get_lang($intended_solely_for));
+					$mmessage=do_lang('NEW_PERSONAL_POST_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($anonymous?db_get_first_id():$poster,true)),comcode_escape($topic_title),array(comcode_escape($url),$post_comcode,strval($anonymous?db_get_first_id():$poster)),get_lang($intended_solely_for));
 					dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($intended_solely_for),$anonymous?db_get_first_id():$poster);
 				}
 			}

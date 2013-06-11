@@ -725,7 +725,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 				$own_gallery=array();
 				$own_gallery['id']=$this_category_id;
 				if ($title==do_lang('GALLERIES_HOME')) $title=do_lang('GALLERY');
-				$this_title=do_lang('NEW_PERSONAL_GALLERY_OF',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$title);
+				$this_title=do_lang('NEW_PERSONAL_GALLERY_OF',$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true),$title);
 				$own_gallery['breadcrumbs']=$breadcrumbs.$this_title;
 				$own_gallery['video_count']=0;
 				$own_gallery['image_count']=0;
@@ -816,7 +816,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 		if (!is_null($owner))
 		{
 			$below=new ocp_tempcode();
-			foreach (array(array('_SEARCH:members:misc',do_lang_tempcode('MEMBERS')),array('_SEARCH:members:view:'.strval($owner).'#tab__galleries',do_lang_tempcode('ocf:MEMBER_PROFILE',escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner))))) as $i=>$bits)
+			foreach (array(array('_SEARCH:members:misc',do_lang_tempcode('MEMBERS')),array('_SEARCH:members:view:'.strval($owner).'#tab__galleries',do_lang_tempcode('ocf:MEMBER_PROFILE',escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner,true))))) as $i=>$bits)
 			{
 				list($page_link,$title)=$bits;
 				list($zone,$map,$hash)=page_link_decode($page_link);

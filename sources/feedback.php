@@ -571,7 +571,9 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 				// Notification
 				require_code('notifications');
-				$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title);
+				$displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
+				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+				$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($displayname,$username));
 				$rendered='';
 				$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
 				if ($content_type!='')
@@ -584,7 +586,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 						$rendered=preg_replace('#keep_session=\d*#','filtered=1',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
 					}
 				}
-				$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
+				$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered,comcode_escape($displayname),comcode_escape($username)));
 				dispatch_notification('like',NULL,$subject,$mail,array($submitter));
 			}
 
@@ -823,10 +825,10 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
 		// Notification
 		require_code('notifications');
+		$displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($post_title,$username),get_site_default_lang());
-		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),comcode_escape($content_url_flat),comcode_escape($username)),get_site_default_lang());
+		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($post_title,$displayname,$username),get_site_default_lang());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),comcode_escape($content_url_flat),comcode_escape($displayname),strval(get_member()),comcode_escape($username)),get_site_default_lang());
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?

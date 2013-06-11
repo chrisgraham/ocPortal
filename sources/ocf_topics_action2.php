@@ -473,13 +473,17 @@ function ocf_invite_to_pt($member_id,$topic_id)
 		's_topic_id'=>$topic_id,
 	));
 
+	$current_displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 	$current_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+	$displayname=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+
 	$_topic_url=build_url(array('page'=>'topicview','type'=>'view','id'=>$topic_id),get_module_zone('topicview'),NULL,false,false,true);
 	$topic_url=$_topic_url->evaluate();
 	$topic_title=$topic_info[0]['t_cache_first_title'];
 
 	require_code('ocf_posts_action');
-	$post=do_lang('INVITED_TO_PT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$current_username);
+	$post=do_lang('INVITED_TO_PT',$username,$current_displayname,$current_username,$displayname);
 	ocf_make_post($topic_id,'',$post,0,false,1,1,do_lang('SYSTEM'),NULL,NULL,db_get_first_id(),NULL,NULL,NULL,false);
 
 	require_code('notifications');
@@ -508,7 +512,7 @@ function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$
 
 	require_code('notifications');
 	$msubject=do_lang('NEW_PRIVATE_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id));
-	$mmessage=do_lang('NEW_PRIVATE_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_url($topic_id)),$post_comcode),get_lang($to_id));
+	$mmessage=do_lang('NEW_PRIVATE_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id,true)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_url($topic_id)),$post_comcode,strval($from_id)),get_lang($to_id));
 	dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($to_id),$from_id);
 
 	if ($mark_unread)

@@ -239,13 +239,13 @@ class Module_points
 		$results=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$id=$GLOBALS['FORUM_DRIVER']->pname_id($myrow);
+			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($myrow);
 			if (!is_guest($id))
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$id),'_SELF');
-				$name=$GLOBALS['FORUM_DRIVER']->pname_name($myrow);
+				$username=$GLOBALS['FORUM_DRIVER']->mrow_username($myrow);
 
-				$results->attach(do_template('POINTS_SEARCH_RESULT',array('_GUID'=>'df240255b2981dcaee38e126622be388','URL'=>$url,'ID'=>strval($id),'NAME'=>$name)));
+				$results->attach(do_template('POINTS_SEARCH_RESULT',array('_GUID'=>'df240255b2981dcaee38e126622be388','URL'=>$url,'ID'=>strval($id),'USERNAME'=>$username)));
 			}
 		}
 
@@ -264,9 +264,9 @@ class Module_points
 	{
 		if (is_null($member_id_of)) $member_id_of=get_param_integer('id',get_member());
 
-		$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-		if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
-		$title=get_screen_title('_POINTS',true,array(escape_html($name)));
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
+		if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+		$title=get_screen_title('_POINTS',true,array(escape_html($username)));
 
 		if (get_forum_type()=='ocf')
 		{
@@ -294,7 +294,7 @@ class Module_points
 	{
 		$member_id_of=get_param_integer('id');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of))))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true))))));
 
 		$title=get_screen_title('POINTS');
 

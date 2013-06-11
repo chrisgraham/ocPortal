@@ -114,19 +114,19 @@ class Module_staff
 
 		foreach ($rows as $i=>$row_staff)
 		{
-			$name=$GLOBALS['FORUM_DRIVER']->pname_name($row_staff);
-			$rows[$i]['name']=$name;
+			$username=$GLOBALS['FORUM_DRIVER']->mrow_username($row_staff);
+			$rows[$i]['username']=$username;
 		}
 
-		sort_maps_by($rows,'name');
+		sort_maps_by($rows,'username');
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $row_staff)
 		{
-			$id=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
+			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
 			if (!$GLOBALS['FORUM_DRIVER']->is_staff($id)) continue;
-			$name=$row_staff['name'];
-			$url=build_url(array('page'=>'_SELF','id'=>$name,'type'=>'view'),'_SELF');
+			$username=$row_staff['username'];
+			$url=build_url(array('page'=>'_SELF','id'=>$username,'type'=>'view'),'_SELF');
 			$role=get_ocp_cpf('role',$id);
 			if (is_null($role))
 			{
@@ -137,7 +137,7 @@ class Module_staff
 				$description=apply_emoticons($role);
 			}
 
-			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'2650660652a01ce39e6085615436f370','TITLE'=>do_lang_tempcode('STAFF'),'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'2650660652a01ce39e6085615436f370','TITLE'=>do_lang_tempcode('STAFF'),'URL'=>$url,'NAME'=>$username,'DESCRIPTION'=>$description)));
 		}
 
 		$message=get_option('staff_text');
@@ -163,9 +163,9 @@ class Module_staff
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('STAFF_TITLE',escape_html(get_site_name())))));
 
-		$row_staff=$GLOBALS['FORUM_DRIVER']->pget_row($username);
+		$row_staff=$GLOBALS['FORUM_DRIVER']->get_mrow($username);
 		if (is_null($row_staff)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$id=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
+		$id=$GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
 
 		$title=get_screen_title('_STAFF',true,array(escape_html($username)));
 
@@ -186,13 +186,13 @@ class Module_staff
 			require_code('comcode_text');
 			$role=make_string_tempcode(apply_emoticons($_role));
 		}
-		$email_address=obfuscate_email_address($GLOBALS['FORUM_DRIVER']->pname_email($row_staff));
-		$name=$GLOBALS['FORUM_DRIVER']->pname_name($row_staff);
+		$email_address=obfuscate_email_address($GLOBALS['FORUM_DRIVER']->mrow_email($row_staff));
+		$username=$GLOBALS['FORUM_DRIVER']->mrow_username($row_staff);
 		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 
 		$all_link=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
-		return do_template('STAFF_SCREEN',array('_GUID'=>'fd149466f16722fcbcef0fba5685a895','TITLE'=>$title,'REAL_NAME'=>$real_name,'ROLE'=>$role,'ADDRESS'=>$email_address,'NAME'=>$name,'MEMBER_ID'=>strval($id),'PROFILE_URL'=>$profile_url,'ALL_STAFF_URL'=>$all_link));
+		return do_template('STAFF_SCREEN',array('_GUID'=>'fd149466f16722fcbcef0fba5685a895','TITLE'=>$title,'REAL_NAME'=>$real_name,'ROLE'=>$role,'ADDRESS'=>$email_address,'USERNAME'=>$username,'MEMBER_ID'=>strval($id),'PROFILE_URL'=>$profile_url,'ALL_STAFF_URL'=>$all_link));
 	}
 
 }

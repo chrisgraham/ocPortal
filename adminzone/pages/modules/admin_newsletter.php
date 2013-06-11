@@ -1400,7 +1400,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 		$address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 		if ($address=='') $address=get_option('staff_address');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 
 		$message=newsletter_variable_substitution($message,$subject,'','',do_lang('UNKNOWN'),$address,'test','');
 

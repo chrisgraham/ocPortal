@@ -111,7 +111,7 @@ function member_personal_links_and_details($member_id)
 	// Links to usergroups
 	if (get_option('ocp_show_personal_usergroup')=='1')
 	{
-		$group_id=$GLOBALS['FORUM_DRIVER']->pname_group($GLOBALS['FORUM_DRIVER']->get_member_row($member_id));
+		$group_id=$GLOBALS['FORUM_DRIVER']->mrow_group($GLOBALS['FORUM_DRIVER']->get_member_row($member_id));
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 		if (array_key_exists($group_id,$usergroups))
 		{
@@ -131,7 +131,7 @@ function member_personal_links_and_details($member_id)
 	if (get_option('ocp_show_personal_last_visit')=='1')
 	{
 		$row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
-		$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
+		$last_visit=$GLOBALS['FORUM_DRIVER']->mrow_lastvisit($row);
 		$_last_visit=get_timezoned_date($last_visit,false);
 		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
 	}

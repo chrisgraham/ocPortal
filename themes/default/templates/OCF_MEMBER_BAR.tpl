@@ -2,7 +2,7 @@
 	<h2 class="toggleable_tray_title">
 		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!MEMBER}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
 
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');">{!MEMBER_INFORMATION,{$USERNAME*}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</a>
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');">{!MEMBER_INFORMATION,{$USERNAME*,{$MEMBER},1}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</a>
 	</h2>
 
 	<div class="toggleable_tray">
@@ -14,7 +14,7 @@
 			{+END}
 
 			<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_b">
-				<p class="ocf_member_column_title">{!WELCOME_BACK,<a href="{PROFILE_URL*}">{USERNAME*}</a>}</p>
+				<p class="ocf_member_column_title">{!WELCOME_BACK,<a href="{PROFILE_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>}</p>
 				{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 					<form class="inline horiz_field_sep associated_link" title="{!LOGOUT}" method="post" action="{LOGOUT_URL*}"><input class="button_hyperlink" type="submit" value="{!LOGOUT}" /></form>
 				{+END}

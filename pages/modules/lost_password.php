@@ -155,7 +155,7 @@ class Module_lost_password
 		$url_simple=$_url_simple->evaluate();
 		$message=do_lang('RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($url),$url_simple,strval($member_id),strval($code)),get_lang($member_id));
 		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
@@ -225,7 +225,7 @@ class Module_lost_password
 		$login_url=$_login_url->evaluate();
 		$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,get_site_name());
 		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+		mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 
 		if (get_value('no_password_hashing')==='1')
 		{

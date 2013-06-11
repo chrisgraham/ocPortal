@@ -39,12 +39,12 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	}
 
 	/**
-	 * From a member profile-row, get the member's primary usergroup.
+	 * From a member row, get the member's primary usergroup.
 	 *
 	 * @param  array			The profile-row
 	 * @return GROUP			The member's primary usergroup
 	 */
-	function pname_group($r)
+	function mrow_group($r)
 	{
 		return $r['groupid'];
 	}
@@ -71,7 +71,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	/**
 	 * Find out if the given member id is banned.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
 	 */
 	function is_banned($member)
@@ -153,7 +153,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
 	 */
 	function _is_staff($member)
@@ -166,7 +166,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
 	 */
 	function _is_super_admin($member)
@@ -210,7 +210,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return array			The array of forum usergroups
 	 */
 	function _get_members_groups($member)

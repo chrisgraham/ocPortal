@@ -1,4 +1,4 @@
-<h3>{NAME*}</h3>
+<h3>{USERNAME*}</h3>
 
 {FORM}
 

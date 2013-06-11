@@ -119,10 +119,11 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 		$topic_title=$topic_info[0]['t_cache_first_title'];
 	}
 
+	$sender_displayname=$GLOBALS['FORUM_DRIVER']->get_username($sender_member_id,true);
 	$sender_username=$GLOBALS['FORUM_DRIVER']->get_username($sender_member_id);
 
-	$subject=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL_SUBJECT':'POST_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$topic_title);
-	$mail=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL':'POST_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($url),array(comcode_escape($sender_username),$post,$topic_title));
+	$subject=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL_SUBJECT':'POST_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$topic_title,array($sender_displayname,$sender_username));
+	$mail=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL':'POST_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($url),array(comcode_escape($sender_displayname),$post,$topic_title,strval($sender_member_id),comcode_escape($sender_username)));
 
 	$limit_to=is_null($_limit_to)?array():array($_limit_to);
 

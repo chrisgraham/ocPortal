@@ -44,7 +44,7 @@ class Hook_cron_notification_digests
 					require_lang('notifications');
 
 					$to_member_id=$member['d_to_member_id'];
-					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
+					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id,true);
 					$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
 
 					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message','d_date_and_time'),array(

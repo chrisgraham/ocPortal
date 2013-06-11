@@ -62,7 +62,7 @@ function init__programe__respond()
 	/**
 	* standard value when a user predicate hasn't been set. 
 	*/ 
-	define("DEFAULTPREDICATEVALUE", $GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+	define("DEFAULTPREDICATEVALUE", $GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
 
 
 	/**

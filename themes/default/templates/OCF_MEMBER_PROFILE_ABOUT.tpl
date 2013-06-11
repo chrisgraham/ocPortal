@@ -15,7 +15,7 @@
 			{+END}
 		</ul>
 
-		<h2>{!MORE_ACCOUNT_LINKS,{USERNAME*}}</h2>
+		<h2>{!MORE_ACCOUNT_LINKS,{$DISPLAYED_USERNAME*,{USERNAME}}}</h2>
 
 		{+START,IF,{VIEW_PROFILES}}
 			{+START,LOOP,CUSTOM_FIELDS}
@@ -168,7 +168,7 @@
 		{+START,IF,{VIEW_PROFILES}}
 			<h2>{!DETAILS}</h2>
 
-			<meta itemprop="name" content="{USERNAME*}" />
+			<meta itemprop="name" content="{$DISPLAYED_USERNAME*,{USERNAME}}" />
 
 			<div class="wide_table_wrap">
 				<table class="map_table wide_table ocf_profile_details">
@@ -180,6 +180,11 @@
 					{+END}
 
 					<tbody>
+						<tr>
+							<th class="de_th">{!USERNAME}:</th>
+							<td>{USERNAME*}</td>
+						</tr>
+
 						<tr>
 							<th class="de_th">{!ONLINE_NOW}:</th>
 							<td>{ONLINE_NOW*} <span class="associated_details">({$DATE_AND_TIME*,1,0,0,{LAST_VISIT_TIME_RAW}})</span></td>

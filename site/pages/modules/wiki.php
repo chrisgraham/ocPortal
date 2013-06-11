@@ -688,8 +688,6 @@ class Module_wiki
 				$chain=is_null($id)?wiki_derive_chain($myrow['the_page']):$_id;
 				$l=wiki_breadcrumbs($chain,get_translated_text($l),true);
 
-				$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
-				if (is_null($username)) $username=do_lang('UNKNOWN');
 				$_date_and_time=get_timezoned_date($myrow['date_and_time']);
 				$ml=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
 				$action=do_lang($myrow['the_action'],NULL,NULL,NULL,NULL,false);
@@ -700,7 +698,7 @@ class Module_wiki
 		}
 		if ($fields->is_empty()) return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
 
-		$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable.' '.$sort_order);
+		$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('MEMBER'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable.' '.$sort_order);
 		$out=results_table(do_lang_tempcode('WIKI_CHANGELOG'),$start,'changes_start',$max,'changes_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
 		$tpl=do_template('WIKI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$title,'RESULTS'=>$out));

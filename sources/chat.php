@@ -482,7 +482,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($_message['member_id']);
 		if (!is_guest($_message['member_id']))
 		{
-			$user=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($_message['member_id'],true,$_message['username']);
+			$user=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($_message['member_id'],true,$_message['username'],false);
 		} else
 		{
 			if (preg_match('#[:\.]#',$_message['ip_address'])!=0)
@@ -816,7 +816,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 						$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
 						$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 						$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
-						$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
+						$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message,strval($allow)),get_lang($allow));
 
 						require_code('notifications');
 						dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_check[0]['room_owner'],1);
@@ -1047,7 +1047,7 @@ function get_chatters_in_room_tpl($users)
 					$usernames->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'ef5f13f50d242a49474337b8e979c419','FIRST'=>$usernames->is_empty(),'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'USERNAME'=>$username,'COLOUR'=>$colour)));
 				} else
 				{
-					$usernames->attach($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$username));
+					$usernames->attach($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$username,false));
 				}
 			} else
 			{
@@ -1377,6 +1377,11 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 	$quoted_users=explode(',',$pm_user);
 	foreach ($quoted_users as $quoted_user)
 	{
+		if (is_numeric($quoted_user))
+		{
+			$quoted_user=$GLOBALS['FORUM_DRIVER']->get_username(intval($quoted_user));
+		}
+
 		$real_member=(($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user)==get_member()) && (!is_guest($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user))) && (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user)))) || ($username==$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if ($real_member)
 		{

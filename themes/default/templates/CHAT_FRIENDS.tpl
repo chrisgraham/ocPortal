@@ -54,10 +54,10 @@
 						{+END}
 
 						{+START,IF,{CAN_IM}}
-							<a rel="friend" title="{USERNAME*}: {!START_IM}" href="{$PAGE_LINK*,_SEARCH:chat:enter_im={MEMBER_ID}}"{+START,IF,{$CONFIG_OPTION,sitewide_im}} onclick="if (typeof window.start_im=='undefined') return true; return start_im('{MEMBER_ID*}',true{$,{$?,{SIMPLER},true,false}});"{+END}>{USERNAME*}</a>
+							<a rel="friend" title="{$DISPLAYED_USERNAME*,{USERNAME}}: {!START_IM}" href="{$PAGE_LINK*,_SEARCH:chat:enter_im={MEMBER_ID}}"{+START,IF,{$CONFIG_OPTION,sitewide_im}} onclick="if (typeof window.start_im=='undefined') return true; return start_im('{MEMBER_ID*}',true{$,{$?,{SIMPLER},true,false}});"{+END}>{$DISPLAYED_USERNAME*,{USERNAME}}</a>
 						{+END}
 						{+START,IF,{$NOT,{CAN_IM}}}
-							{USERNAME*}
+							{$DISPLAYED_USERNAME*,{USERNAME}}
 						{+END}
 					</td>
 

@@ -1,7 +1,7 @@
 {TITLE}
 
 <p>
-	{!PT_RULES_PAGE_INTRO,{USERNAME*}}
+	{!PT_RULES_PAGE_INTRO,{$DISPLAYED_USERNAME*,{USERNAME}}}
 </p>
 
 <div class="box box___ocf_member_pt_rules_screen"><div class="box_inner">

@@ -78,7 +78,7 @@ class Block_main_greeting
 				$out->attach(paragraph($p,'hhrt4dsgdsgd'));
 			} else
 			{
-				$out->attach(paragraph(do_lang_tempcode('WELCOME_BACK',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),'gfgdf9gjd'));
+				$out->attach(paragraph(do_lang_tempcode('WELCOME_BACK',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member,true)),escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),'gfgdf9gjd'));
 			}
 		}
 

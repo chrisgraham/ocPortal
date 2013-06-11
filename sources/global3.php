@@ -1645,7 +1645,7 @@ function member_tracking_update()
 
 	$GLOBALS['SITE_DB']->query_insert('member_tracking',array(
 		'mt_member_id'=>get_member(),
-		'mt_cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()),
+		'mt_cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true),
 		'mt_time'=>time(),
 		'mt_page'=>$page,
 		'mt_type'=>$type,

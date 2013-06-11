@@ -1,6 +1,6 @@
 <tr>
 	<th>
-		<a href="{PROFILE_URL*}">{NAME*}</a>
+		<a href="{PROFILE_URL*}">{$DISPLAYED_USERNAME*,{NAME}}</a>
 	</th>
 	<td>
 		<a href="{POINTS_URL*}" title="{$TRUNCATE_LEFT*,{POINTS},25,1}: {NAME*}">{$TRUNCATE_LEFT*,{POINTS},25,1}</a>

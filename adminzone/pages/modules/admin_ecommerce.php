@@ -234,7 +234,7 @@ class Module_admin_ecommerce extends standard_crud_module
 			}
 			if (!is_null($member_id))
 			{
-				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id);
+				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,false,'',false);
 			} else $member_link=do_lang_tempcode('UNKNOWN_EM');
 
 			$fields->attach(results_entry(array(escape_html($myrow['id']),escape_html($myrow['purchase_id']),escape_html($myrow['linked']),escape_html($date),escape_html($myrow['amount']),escape_html($myrow['t_currency']),escape_html($myrow['item']),$status,escape_html($myrow['reason']),escape_html($myrow['pending_reason']),escape_html($myrow['t_memo']),$member_link)));
@@ -890,7 +890,7 @@ class Module_admin_ecommerce extends standard_crud_module
 			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
 			$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$subs['s_time']);
 			$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
-			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($subs['s_member_id'],true);
+			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($subs['s_member_id'],true,'',false);
 			$cancel_url=build_url(array('page'=>'_SELF','type'=>'cancel_subscription','subscription_id'=>$subs['id']),'_SELF');
 
 			$data[$product_name][]=array($member_link,$expiry_date,$cancel_url,$subs['id']);
@@ -931,7 +931,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		$product_obj=find_product($subscription[0]['s_type_code']);
 		$products=$product_obj->get_products(true);
 		$product_name=$products[$subscription[0]['s_type_code']][4];
-		$member_name=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
 
 		$title=get_screen_title('CANCEL_MANUAL_SUBSCRIPTION');
 
@@ -944,7 +944,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		}
 
 		// We need to get confirmation via POST, for security/confirmation reasons
-		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRIPTION_CONFIRM',$product_name,$member_name);
+		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRIPTION_CONFIRM',$product_name,$username);
 		$fields=form_input_hidden('id',strval($id));
 		$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
 		$url=build_url($map,'_SELF');

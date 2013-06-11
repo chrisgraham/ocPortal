@@ -36,8 +36,8 @@ function points_profile($member_id_of,$member_id_viewing)
 	}
 
 	// Get info about viewed user
-	$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
+	if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 	$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,false,true);
 
@@ -89,9 +89,9 @@ function points_profile($member_id_of,$member_id_viewing)
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chargelog','COUNT(*)',array('member_id'=>$member_id_of));
 		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('member_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
-		$fromname=get_site_name();
-		$toname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-		if (is_null($toname)) $toname=do_lang('UNKNOWN');
+		$from_name=get_site_name();
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
+		if (is_null($to_name)) $to_name=do_lang('UNKNOWN');
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'sort',$sortable.' '.$sort_order);
 		foreach ($rows as $myrow)
@@ -109,7 +109,7 @@ function points_profile($member_id_of,$member_id_viewing)
 				$reason=get_translated_tempcode($myrow['reason']);
 			}
 
-			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
+			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($from_name),escape_html($to_name),$reason)));
 		}
 		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'charges_start',$max,'charges_max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort');
 	}
@@ -138,7 +138,7 @@ function points_profile($member_id_of,$member_id_viewing)
 
 		'MEMBER'=>strval($member_id_of),
 		'PROFILE_URL'=>$profile_link,
-		'NAME'=>$name,
+		'USERNAME'=>$username,
 
 		'POINTS_JOINING'=>integer_format($points_joining),
 

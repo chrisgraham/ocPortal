@@ -106,7 +106,7 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 		$mime_type=get_mime_type($extension);
 		if (substr($mime_type,0,6)=='audio/')
 		{
-			$info=array(300,20,NULL); // IDEA: make configurable? ('300' and '20' also defined in sources/transcoding.php)
+			$info=array(intval(get_option('video_width_setting')),20,NULL);
 		}
 	}
 
@@ -1445,7 +1445,7 @@ function get_potential_gallery_title($cat)
 		$parent_info=$_parent_info[0];
 
 		// Work out name
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member,true);
 		if (is_null($username)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 		$fullname=get_translated_text($parent_info['fullname']);
 		if ($fullname==do_lang('GALLERIES_HOME')) $fullname=do_lang('GALLERY');

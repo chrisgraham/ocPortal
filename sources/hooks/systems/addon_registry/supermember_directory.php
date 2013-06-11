@@ -111,7 +111,7 @@ class Hook_addon_registry_supermember_directory
 		require_lang('authors');
 		require_lang('points');
 		$groups_current=do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY', array(
-			'NAME'=>lorem_phrase(),
+			'USERNAME'=>lorem_phrase(),
 			'DAYS'=>placeholder_number(),
 			'PROFILE_URL'=>placeholder_url(),
 			'AUTHOR_URL'=>placeholder_url(),

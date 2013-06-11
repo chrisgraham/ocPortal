@@ -246,12 +246,13 @@ class Module_admin_messaging
 		// Save as responsibility taken
 		$forum=get_option('messaging_forum_name');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$username_display=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 		$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
 			$forum,
 			$message_type.'_'.$id,
 			get_member(),
 			'',
-			do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username),
+			do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username,$username_display),
 			'',
 			do_lang('COMMENT')
 		);

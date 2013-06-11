@@ -15,7 +15,7 @@
 	<div class="ocf_topic_post_member_details" role="contentinfo">
 		<div class="ocf_topic_poster_name wiki_poster_name">
 			{+START,IF_NON_EMPTY,{POSTER_URL}}
-				{!SUBMITTED_BY,<a href="{POSTER_URL*}">{POSTER*}</a>}
+				{!SUBMITTED_BY,<a href="{POSTER_URL*}">{$DISPLAYED_USERNAME*,{POSTER}}</a>}
 			{+END}
 			{+START,IF_EMPTY,{POSTER_URL}}
 				{!SUBMITTED_BY,{POSTER*}}

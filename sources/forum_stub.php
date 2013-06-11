@@ -100,13 +100,14 @@ class forum_driver_base
 	 * @param  MEMBER			The forum member
 	 * @param  boolean		Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
 	 * @param  string			The username (blank: look it up)
+	 * @param  boolean		Whether to use the displayname rather than the username (if we have them)
 	 * @return tempcode		The hyperlink
 	 */
-	function member_profile_hyperlink($id,$definitely_profile=false,$_username='')
+	function member_profile_hyperlink($id,$definitely_profile=false,$_username='',$use_displayname=true)
 	{
 		if (is_guest($id))
 			return ($_username=='')?do_lang_tempcode('GUEST'):make_string_tempcode(escape_html($_username));
-		if ($_username=='') $_username=$this->get_username($id);
+		if ($_username=='') $_username=$this->get_username($id,$use_displayname);
 		if (is_null($_username))
 			return do_lang_tempcode('UNKNOWN');
 		$url=$this->member_profile_url($id,$definitely_profile,true);
@@ -173,9 +174,10 @@ class forum_driver_base
 	 * Get a member's username.
 	 *
 	 * @param  MEMBER			The member
+	 * @param  boolean		Whether to use the displayname rather than the username (if we have them)
 	 * @return ?SHORT_TEXT	The username (NULL: deleted member)
 	 */
-	function get_username($id)
+	function get_username($id,$use_displayname=false)
 	{
 		if ($id==$this->get_guest_id())
 		{
@@ -187,11 +189,17 @@ class forum_driver_base
 		}
 
 		global $USER_NAME_CACHE;
-		if (isset($USER_NAME_CACHE[$id])) return $USER_NAME_CACHE[$id];
+		if (isset($USER_NAME_CACHE[$id]))
+		{
+			$ret=$USER_NAME_CACHE[$id];
+			if ($use_displayname) $ret=get_displayname($ret);
+			return $ret;
+		}
 
 		$ret=$this->_get_username($id);
 		if ($ret=='') $ret=NULL; // Odd, but sometimes
 		$USER_NAME_CACHE[$id]=$ret;
+		if ($use_displayname) $ret=get_displayname($ret);
 		return $ret;
 	}
 

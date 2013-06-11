@@ -291,7 +291,7 @@ class Hook_search_ocf_members
 		require_code('ocf_members');
 		if (get_param_integer('option__emails_only',0)==1)
 		{
-			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],false,$row['m_username']);
+			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],false,$row['m_username'],false);
 			$link2=($row['m_email_address']=='')?new ocp_tempcode():hyperlink('mailto: '.$row['m_email_address'],$row['m_email_address'],false,true);
 			return paragraph($link->evaluate().' &lt;'.$link2->evaluate().'&gt;','e3f;l23kf;l320932kl');
 		}

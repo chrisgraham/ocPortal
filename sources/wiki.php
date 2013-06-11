@@ -826,10 +826,11 @@ function dispatch_wiki_post_notification($post_id,$type)
 
 	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('wiki'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
+	$their_displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
-	$subject=do_lang($type.'_WIKI_POST_SUBJECT',$page_name,NULL,NULL,get_site_default_lang());
-	$message_raw=do_lang($type.'_WIKI_POST_BODY',comcode_escape($their_username),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message),get_site_default_lang());
+	$subject=do_lang($type.'_WIKI_POST_SUBJECT',$page_name,$their_displayname,$their_username,get_site_default_lang());
+	$message_raw=do_lang($type.'_WIKI_POST_BODY',comcode_escape($their_displayname),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message,strval(get_member()),comcode_escape($their_username)),get_site_default_lang());
 
 	require_code('notifications');
 	dispatch_notification('wiki',strval($page_id),$subject,$message_raw);
@@ -849,10 +850,11 @@ function dispatch_wiki_page_notification($page_id,$type)
 
 	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('wiki'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
+	$their_displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
-	$subject=do_lang($type.'_WIKI_PAGE_SUBJECT',$page_name,NULL,NULL,get_site_default_lang());
-	$message_raw=do_lang($type.'_WIKI_PAGE_BODY',comcode_escape($their_username),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message),get_site_default_lang());
+	$subject=do_lang($type.'_WIKI_PAGE_SUBJECT',$page_name,$their_displayname,$their_username,get_site_default_lang());
+	$message_raw=do_lang($type.'_WIKI_PAGE_BODY',comcode_escape($their_displayname),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message,comcode_escape($their_username)),get_site_default_lang());
 
 	require_code('notifications');
 	dispatch_notification('wiki',strval($page_id),$subject,$message_raw);

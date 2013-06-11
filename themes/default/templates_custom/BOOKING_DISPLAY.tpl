@@ -46,7 +46,7 @@
 	</tr>
 	<tr>
 		<th>{!CUSTOMER_NAME}</th>
-		<td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{USERNAME*}</a></td>
+		<td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$DISPLAYED_USERNAME*,{USERNAME}}</a></td>
 	</tr>
 	<tr>
 		<th>{!CUSTOMER_EMAIL}</th>

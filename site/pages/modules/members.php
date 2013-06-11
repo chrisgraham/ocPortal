@@ -214,7 +214,7 @@ class Module_members
 		require_code('ocf_members2');
 		foreach ($rows as $row)
 		{
-			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],true,$row['m_username']);
+			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],true,$row['m_username'],false);
 			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],true);
 			if ($row['m_validated']==0) $link->attach(do_lang_tempcode('MEMBER_IS_UNVALIDATED'));
 			if ($row['m_validated_email_confirm_code']!='') $link->attach(do_lang_tempcode('MEMBER_IS_UNCONFIRMED'));

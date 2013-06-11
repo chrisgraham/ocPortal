@@ -92,9 +92,9 @@ class Module_leader_board
 			{
 				$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
-				$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
-				if (is_null($name)) $name=do_lang('UNKNOWN');
-				$week_tpl->attach(do_template('POINTS_LEADERBOARD_ROW',array('_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f','POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'POINTS'=>integer_format($points),'NAME'=>$name,'ID'=>strval($member))));
+				$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+				if (is_null($username)) $username=do_lang('UNKNOWN');
+				$week_tpl->attach(do_template('POINTS_LEADERBOARD_ROW',array('_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f','POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'POINTS'=>integer_format($points),'USERNAME'=>$username,'ID'=>strval($member))));
 			}
 			$nice_week=intval(($week-$first_week)/(7*24*60*60)+1);
 			$out->attach(do_template('POINTS_LEADERBOARD_WEEK',array('_GUID'=>'3a0f71bf20f9098e5711e85cf25f6549','WEEK'=>integer_format($nice_week),'ROWS'=>$week_tpl)));

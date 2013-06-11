@@ -54,7 +54,7 @@ function restricted_manually_enabled_backdoor()
 	$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
 	if (count($members)!=0)
 	{
-		$ret=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);
+		$ret=$GLOBALS['FORUM_DRIVER']->mrow_id($members[key($members)]);
 		$GLOBALS['FORUM_DRIVER']->ocf_flood_control($ret);
 	} else
 	{

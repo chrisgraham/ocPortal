@@ -1182,7 +1182,8 @@ class Hook_addon_registry_ocf_forum
 				'ID'=>placeholder_id(),
 				'TITLE'=>lorem_phrase(),
 				'POST'=>lorem_phrase(),
-				'BY'=>lorem_phrase()
+				'BY'=>lorem_phrase(),
+				'BY_ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}

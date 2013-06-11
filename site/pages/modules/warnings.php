@@ -493,7 +493,7 @@ class Module_warnings extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['w_member_id']);
+			$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['w_member_id'],false,'',false);
 			$by=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['w_by']);
 
 			$map=array(

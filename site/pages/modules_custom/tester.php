@@ -395,7 +395,7 @@ class Module_tester
 		$list=form_input_list_entry('-1',is_null($it),do_lang_tempcode('NA_EM'));
 		foreach ($members as $member=>$details)
 		{
-			$username=$GLOBALS['FORUM_DRIVER']->pname_name($details);
+			$username=$GLOBALS['FORUM_DRIVER']->mrow_username($details);
 			$list->attach(form_input_list_entry(strval($member),$member==$it,$username));
 		}
 

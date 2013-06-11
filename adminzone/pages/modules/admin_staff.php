@@ -135,8 +135,8 @@ class Module_admin_staff
 		require_code('form_templates');
 		foreach ($staff as $row_staff)
 		{
-			$id=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
-			$name=$GLOBALS['FORUM_DRIVER']->pname_name($row_staff);
+			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
+			$username=$GLOBALS['FORUM_DRIVER']->mrow_username($row_staff);
 			$role=get_ocp_cpf('role',$id);
 			$fullname=get_ocp_cpf('fullname',$id);
 
@@ -161,7 +161,7 @@ class Module_admin_staff
 
 			$form=do_template('FORM_GROUP',array('_GUID'=>'0e7d362817a7f3ae190536adf632fe59','HIDDEN'=>form_input_hidden('staff_'.strval($id),strval($id)),'FIELDS'=>$fields));
 
-			$available->attach(do_template('STAFF_EDIT_WRAPPER',array('_GUID'=>'ab0516dba94c20b4d97f68677053b20d','FORM'=>$form,'NAME'=>$name)));
+			$available->attach(do_template('STAFF_EDIT_WRAPPER',array('_GUID'=>'ab0516dba94c20b4d97f68677053b20d','FORM'=>$form,'USERNAME'=>$username)));
 		}
 		if (!$available->is_empty())
 		{

@@ -80,7 +80,7 @@ class Module_online_members
 		{
 			$last_activity=$row['last_activity'];
 			$member=$row['member_id'];
-			$name=$row['cache_username'];
+			//$username=$row['cache_username'];
 			$location=$row['the_title'];
 			if (($location=='') && ($row['the_type']=='rss'))
 			{
@@ -121,7 +121,7 @@ class Module_online_members
 				}
 			}
 
-			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member,false,$name);
+			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member);
 
 			if ($ip!='') // CRON?
 				$rows->attach(do_template('OCF_MEMBER_ONLINE_ROW',array('_GUID'=>'2573786f3bccf9e613b125befb3730e8','IP'=>$ip,'AT_URL'=>$at_url,'LOCATION'=>$location,'MEMBER'=>$link,'TIME'=>integer_format(intval((time()-$last_activity)/60)))));

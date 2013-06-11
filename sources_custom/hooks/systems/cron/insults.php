@@ -73,9 +73,14 @@ class Hook_cron_insults
 			{
 				global $SITE_INFO;
 
-				$insult_pt_topic_post=do_lang('INSULT_EXPLANATION',get_site_name(),$get_insult,$insult_points);
+				$displayname1=$GLOBALS['FORUM_DRIVER']->get_username($selected_member1,true);
+				$displayname2=$GLOBALS['FORUM_DRIVER']->get_username($selected_member2,true);
+				$username1=$GLOBALS['FORUM_DRIVER']->get_username($selected_member1);
+				$username2=$GLOBALS['FORUM_DRIVER']->get_username($selected_member2);
 
-				$subject=do_lang('INSULT_PT_TOPIC',$GLOBALS['FORUM_DRIVER']->get_username($selected_member2),$GLOBALS['FORUM_DRIVER']->get_username($selected_member1));
+				$insult_pt_topic_post=do_lang('INSULT_EXPLANATION',get_site_name(),$get_insult,array($insult_points,$displayname2,$displayname1,$username2,$username1));
+
+				$subject=do_lang('INSULT_PT_TOPIC',$displayname2,$displayname1,array($username2,$username1));
 
 				require_code('ocf_topics_action');
 				$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$selected_member2,$selected_member1,true,0,NULL,'');

@@ -123,7 +123,7 @@ class Module_classifieds
 
 		$member_id=get_param_integer('member_id',get_member());
 
-		$title=get_screen_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
+		$title=get_screen_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)));
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 

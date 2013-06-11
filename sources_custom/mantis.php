@@ -183,7 +183,7 @@ function create_tracker_post($tracker_id,$tracker_comment_message)
 	$monitors=$GLOBALS['SITE_DB']->query('SELECT user_id FROM mantis_bug_monitor_table WHERE bug_id='.strval($tracker_id));
 	foreach ($monitors as $m)
 	{
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($m['user_id']);
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($m['user_id'],true);
 		if (!is_null($to_name))
 		{
 			$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($m['user_id']);

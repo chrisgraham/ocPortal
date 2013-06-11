@@ -109,8 +109,7 @@ class Hook_support_credits
 
 		// Check if we've already been passed a member ID and use it to pre-populate the field
 		$member_id=get_param_integer('member_id',NULL);
-		if (!is_null($member_id)) $username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-		else $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$username=$GLOBALS['FORUM_DRIVER']->get_username(is_null($member_id)?get_member():$member_id);
 
 		return form_input_username(do_lang('USERNAME'),do_lang('USERNAME_CREDITS_FOR'),'member_username',$username,true);
 	}

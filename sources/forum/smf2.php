@@ -80,7 +80,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Find the member id of the forum guest member.
 	 *
-	 * @return MEMBER			The member id of the forum guest member
+	 * @return MEMBER			The member ID of the forum guest member
 	 */
 	function get_guest_id()
 	{
@@ -218,19 +218,19 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Set a custom profile fields value. It should not be called directly.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  string			The field name
 	 * @param  string			The value
 	 */
-	function set_custom_field($member,$field,$amount)
+	function set_custom_field($member,$field,$value)
 	{
-		$this->connection->query_update('members',array('ocp_'.$field=>$amount),array('id_member'=>$member),'',NULL,NULL,false,true);
+		$this->connection->query_update('members',array('ocp_'.$field=>$value),array('id_member'=>$member),'',NULL,NULL,false,true);
 	}
 
 	/**
 	 * Get custom profile fields values for all 'ocp_' prefixed keys.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?array			A map of the custom profile fields, key_suffix=>value (NULL: no fields)
 	 */
 	function get_custom_fields($member)
@@ -245,12 +245,12 @@ class forum_driver_smf2 extends forum_driver_base
 	}
 
 	/**
-	 * Get a member profile-row for the member of the given name.
+	 * Get a member row for the member of the given name.
 	 *
 	 * @param  SHORT_TEXT	The member name
 	 * @return ?array			The profile-row (NULL: could not find)
 	 */
-	function pget_row($name)
+	function get_mrow($name)
 	{
 		$rows=$this->connection->query_select('members',array('*'),array('real_name'=>$name),'',1);
 		if (!array_key_exists(0,$rows)) return NULL;
@@ -258,56 +258,56 @@ class forum_driver_smf2 extends forum_driver_base
 	}
 
 	/**
-	 * From a member profile-row, get the member's primary usergroup.
+	 * From a member row, get the member's primary usergroup.
 	 *
 	 * @param  array			The profile-row
 	 * @return GROUP			The member's primary usergroup
 	 */
-	function pname_group($r)
+	function mrow_group($r)
 	{
 		return $r['id_group'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's member id.
+	 * From a member row, get the member's member id.
 	 *
 	 * @param  array			The profile-row
-	 * @return MEMBER			The member id
+	 * @return MEMBER			The member ID
 	 */
-	function pname_id($r)
+	function mrow_id($r)
 	{
 		return $r['id_member'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's last visit date.
+	 * From a member row, get the member's last visit date.
 	 *
 	 * @param  array			The profile-row
 	 * @return TIME			The last visit date
 	 */
-	function pnamelast_visit($r)
+	function mrow_lastvisit($r)
 	{
 		return $r['last_login'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's name.
+	 * From a member row, get the member's name.
 	 *
 	 * @param  array			The profile-row
 	 * @return string			The member name
 	 */
-	function pname_name($r)
+	function mrow_username($r)
 	{
 		return $r['real_name'];
 	}
 
 	/**
-	 * From a member profile-row, get the member's e-mail address.
+	 * From a member row, get the member's e-mail address.
 	 *
 	 * @param  array			The profile-row
 	 * @return SHORT_TEXT	The member e-mail address
 	 */
-	function pname_email($r)
+	function mrow_email($r)
 	{
 		return $r['email_address'];
 	}
@@ -315,7 +315,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
 	 */
 	function get_member_photo_url($member)
@@ -326,7 +326,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get the avatar URL for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
 	 */
 	function get_member_avatar_url($member)
@@ -350,7 +350,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get a URL to the specified member's home (control panel).
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL to the members home
 	 */
 	function member_home_url($id)
@@ -361,7 +361,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get a URL to the specified member's profile.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL to the member profile
 	 */
 	function _member_profile_url($id)
@@ -392,7 +392,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
 	function _member_pm_url($id)
@@ -661,7 +661,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
-	 * @param  MEMBER			The member id to decrement
+	 * @param  MEMBER			The member ID to decrement
 	 * @return ?MEMBER		The previous member id (NULL: no previous member)
 	 */
 	function get_previous_member($member)
@@ -674,7 +674,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
 	 *
-	 * @param  MEMBER			The member id to increment
+	 * @param  MEMBER			The member ID to increment
 	 * @return ?MEMBER		The next member id (NULL: no next member)
 	 */
 	function get_next_member($member)
@@ -700,7 +700,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?SHORT_TEXT	The member name (NULL: member deleted)
 	 */
 	function _get_username($member)
@@ -710,9 +710,21 @@ class forum_driver_smf2 extends forum_driver_base
 	}
 
 	/**
+	 * Get the display name of a username.
+	 * If no display name generator is configured, this will be the same as the username.
+	 *
+	 * @param  ID_TEXT		The username
+	 * @return SHORT_TEXT	The display name
+	 */
+	function get_displayname($username)
+	{
+		return $this->connection->query_select_value_if_there('members','real_name',array('member_name'=>$username));
+	}
+
+	/**
 	 * Get the e-mail address for the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return SHORT_TEXT	The e-mail address
 	 */
 	function _get_member_email_address($member)
@@ -723,7 +735,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Find if this member may have e-mails sent to them
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member may have e-mails sent to them
 	 */
 	function get_member_email_allowed($member)
@@ -737,7 +749,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get the timestamp of a member's join date.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return TIME			The timestamp
 	 */
 	function get_member_join_timestamp($member)
@@ -762,7 +774,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get the given member's post count.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return integer		The post count
 	 */
 	function get_post_count($member)
@@ -775,7 +787,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get the given member's topic count.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return integer		The topic count
 	 */
 	function get_topic_count($member)
@@ -786,7 +798,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Find out if the given member id is banned.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
 	 */
 	function is_banned($member)
@@ -886,7 +898,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
 	 */
 	function _is_staff($member)
@@ -898,7 +910,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
 	 */
 	function _is_super_admin($member)
@@ -961,7 +973,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 * Get a member id from the given member's username.
 	 *
 	 * @param  SHORT_TEXT	The member name
-	 * @return MEMBER			The member id
+	 * @return MEMBER			The member ID
 	 */
 	function get_member_from_username($name)
 	{
@@ -1002,7 +1014,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return array			The array of forum usergroups
 	 */
 	function _get_members_groups($member)
@@ -1041,7 +1053,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Create a member login cookie.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  ?SHORT_TEXT	The username (NULL: lookup)
 	 * @param  string			The password
 	 */
@@ -1073,7 +1085,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
 	 *
 	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  MD5				The md5-hashed password
 	 * @param  string			The raw password
 	 * @param  boolean		Whether this is a cookie login
@@ -1137,7 +1149,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Get a first known IP address of the given member.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return IP				The IP address
 	 */
 	function get_member_ip($member)
@@ -1148,7 +1160,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Gets a whole member row from the database.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return ?array			The member row (NULL: no such member)
 	 */
 	function get_member_row($member)
@@ -1178,7 +1190,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Gets a named field of a member row from the database.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  string			The field identifier
 	 * @return mixed			The field
 	 */
@@ -1191,7 +1203,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Add a member to a usergroup.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  GROUP			The usergroup ID
 	 */
 	function add_member_to_group($member,$group_id)
@@ -1206,7 +1218,7 @@ class forum_driver_smf2 extends forum_driver_base
 	/**
 	 * Remove a member from a usergroup.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  GROUP			The usergroup ID
 	 */
 	function remove_member_from_group($member,$group_id)

@@ -330,6 +330,8 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 
 	$_temp=explode('_',$ticket_id);
 	$uid=intval($_temp[0]);
+	$displayname=$GLOBALS['FORUM_DRIVER']->get_username($uid,true);
+	if (is_null($displayname)) $displayname=do_lang('UNKNOWN');
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($uid);
 	if (is_null($username)) $username=do_lang('UNKNOWN');
 
@@ -348,7 +350,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
-			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
+			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member(),true)),$post,comcode_escape($ticket_type_text),strval(get_member()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),$their_lang);
 			dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
 		}
 	}
@@ -363,7 +365,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 		}
 
 		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,NULL,get_site_default_lang());
-		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang());
+		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($displayname),$post,comcode_escape($ticket_type_text),strval(get_member()),comcode_escape($username)),get_site_default_lang());
 		dispatch_notification($new_ticket?'ticket_new_staff':'ticket_reply_staff',strval($ticket_type_id),$subject,$message);
 
 		// Tell member that their message was received

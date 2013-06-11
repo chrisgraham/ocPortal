@@ -8,7 +8,7 @@
 
 				<ul>
 					{+START,LOOP,WHOS_READ}
-						<li><a href="{MEMBER_URL*}">{USERNAME*}</a> &ndash; <span class="associated_details">{DATE*}</span></li>
+						<li><a title="{USERNAME*}" href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a> &ndash; <span class="associated_details">{DATE*}</span></li>
 					{+END}
 				</ul>
 			</div></div>

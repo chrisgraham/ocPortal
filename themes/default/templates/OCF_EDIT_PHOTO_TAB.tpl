@@ -9,7 +9,7 @@
 	</div>
 
 	<div class="ocf_avatar_page_text">
-		<p>{!PHOTO_CHANGE,{USERNAME*}}</p>
+		<p>{!PHOTO_CHANGE,{$DISPLAYED_USERNAME*,{USERNAME}}}</p>
 
 		{TEXT}
 

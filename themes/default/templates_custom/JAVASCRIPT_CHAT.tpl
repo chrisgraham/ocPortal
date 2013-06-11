@@ -81,8 +81,6 @@ function chat_post(event,current_room_id,field_name)
 
 	play_chat_sound('message_sent');
 
-	//addChatMessage('{$USERNAME;}',message,null);
-
 	return false;
 }
 

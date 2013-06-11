@@ -233,13 +233,13 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 		} else
 		{
 			if ((((!is_null($cat['nc_owner'])) && (has_privilege(get_member(),'can_submit_to_others_categories'))) || (($cat['nc_owner']==get_member()) && (!is_guest()))) || ($show_all_personal_categories))
-				$categories->attach(form_input_list_entry(strval($cat['n_id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['n_id'],$it)),$cat['nice_title']/*Performance do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner']))*/.' (#'.strval($cat['n_id']).')'));
+				$categories->attach(form_input_list_entry(strval($cat['n_id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['n_id'],$it)),$cat['nice_title']/*Performance do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner'],true))*/.' (#'.strval($cat['n_id']).')'));
 		}
 	}
 
 	if ((!$only_existing) && (has_privilege(get_member(),'have_personal_category','cms_news')) && ($add_cat) && (!is_guest()))
 	{
-		$categories->attach(form_input_list_entry('personal',(!$prefer_not_blog_selected) && in_array(NULL,$it),do_lang_tempcode('MEMBER_CATEGORY',do_lang_tempcode('_NEW',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))))));
+		$categories->attach(form_input_list_entry('personal',(!$prefer_not_blog_selected) && in_array(NULL,$it),do_lang_tempcode('MEMBER_CATEGORY',do_lang_tempcode('_NEW',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member(),true))))));
 	}
 
 	return $categories;

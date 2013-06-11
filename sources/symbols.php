@@ -989,13 +989,22 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'MEMBER_PROFILE_URL':
-				$value=$GLOBALS['FORUM_DRIVER']->member_profile_url(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member(),false,true);
+				$member_id=((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member();
+				$value=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 				if (is_null($value)) $value='';
 				break;
 
 			case 'USERNAME':
-				$value=$GLOBALS['FORUM_DRIVER']->get_username(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member());
+				$member_id=((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member();
+				$value=$GLOBALS['FORUM_DRIVER']->get_username($member_id,(isset($param[1])) && ($param[1]=='1'));
 				if (is_null($value)) $value=do_lang('UNKNOWN');
+				break;
+
+			case 'DISPLAYED_USERNAME':
+				if (isset($param[0]))
+				{
+					$value=get_displayname($param[0]);
+				}
 				break;
 
 			case 'CYCLE':
@@ -1065,13 +1074,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($last_param=='primary')
 					{
 						$member_row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
-						$real_group_list=array($GLOBALS['FORUM_DRIVER']->pname_group($member_row));
+						$real_group_list=array($GLOBALS['FORUM_DRIVER']->mrow_group($member_row));
 					}
 					elseif ($last_param=='secondary')
 					{
 						$real_group_list=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
 						$member_row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
-						$real_group_list=array_diff($real_group_list,array($GLOBALS['FORUM_DRIVER']->pname_group($member_row)));
+						$real_group_list=array_diff($real_group_list,array($GLOBALS['FORUM_DRIVER']->mrow_group($member_row)));
 					} else
 					{
 						$real_group_list=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);

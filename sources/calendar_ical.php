@@ -102,7 +102,7 @@ function output_ical()
 
 				if (!is_guest($event['e_submitter']))
 				{
-					echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($event['e_submitter']));
+					echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter'],true)).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($event['e_submitter']));
 					$addr=$GLOBALS['FORUM_DRIVER']->get_member_email_address($event['e_submitter']);
 					if ($addr!='') echo ":MAILTO:".ical_escape($addr);
 					echo "\n";
@@ -127,7 +127,7 @@ function output_ical()
 						foreach ($_comments as $comment)
 						{
 							if ($comment['title']!='') $comment['message']=$comment['title'].': '.$comment['message'];
-							echo "COMMENT:".ical_escape($comment['message'].' - '.$GLOBALS['FORUM_DRIVER']->get_username($comment['member']).' ('.get_timezoned_date($comment['date']).')')."\n";
+							echo "COMMENT:".ical_escape($comment['message'].' - '.$GLOBALS['FORUM_DRIVER']->get_username($comment['member'],true).' ('.get_timezoned_date($comment['date']).')')."\n";
 						}
 					}
 					$start+=1000;
@@ -242,7 +242,7 @@ function output_ical()
 					if ($attendee['n_member_id']!=get_member())
 					{
 						if (!is_guest($event['n_member_id']))
-							echo "ATTENDEE;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($attendee['n_member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($attendee['n_member_id']));
+							echo "ATTENDEE;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($attendee['n_member_id'],true)).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($attendee['n_member_id']));
 							$addr=$GLOBALS['FORUM_DRIVER']->get_member_email_address($attendee['n_member_id']);
 							if ($addr!='') echo ":MAILTO:".ical_escape($addr);
 							echo "\n";

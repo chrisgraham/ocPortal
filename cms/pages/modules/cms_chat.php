@@ -220,7 +220,7 @@ class Module_cms_chat
 
 			$link_time=hyperlink($url,escape_html(get_timezoned_date($myrow['date_and_time'])));
 
-			$_row=array($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($GLOBALS['FORUM_DRIVER']->get_member_from_username($username),false,$username),escape_html($link_time),$message);
+			$_row=array($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($GLOBALS['FORUM_DRIVER']->get_member_from_username($username),false,'',false),escape_html($link_time),$message);
 			if (has_js())
 			{
 				$deletion_tick=do_template('RESULTS_TABLE_TICK',array('_GUID'=>'40c6bd03e455c98589542b704259351d','ID'=>strval($myrow['id'])));

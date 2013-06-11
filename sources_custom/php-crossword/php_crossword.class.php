@@ -479,7 +479,7 @@ class PHP_Crossword
 			$all_members=$GLOBALS['FORUM_DRIVER']->get_top_posters(100);
 			foreach ($all_members as $member)
 			{
-				$this->word_pool[]=$GLOBALS['FORUM_DRIVER']->pname_name($member);
+				$this->word_pool[]=$GLOBALS['FORUM_DRIVER']->mrow_username($member);
 			}
 
 			// From keywords

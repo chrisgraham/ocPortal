@@ -36,7 +36,7 @@ if (is_guest())
 	$guest_msg=do_lang_tempcode('SHOW_CREDITS_NOT_LOGGED_IN_MESSAGE',$login_url,$join_url);
 }
 
-$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 
 $credits_available=intval(get_ocp_cpf('support_credits'));
 

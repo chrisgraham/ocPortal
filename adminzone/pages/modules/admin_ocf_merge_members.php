@@ -186,7 +186,7 @@ class Module_admin_ocf_merge_members
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('MERGE_MEMBERS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
-		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($to_id);
+		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($to_id,false,'',false);
 		return inform_screen($title,do_lang_tempcode('MERGED_MEMBERS',$username));
 	}
 

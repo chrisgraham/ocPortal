@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th>Avatar</th>
-			<th>Username</th>
+			<th>Member</th>
 			<th>Average post length</th>
 			<th>Number of posts</th>
 		</tr>
@@ -23,7 +23,7 @@
 			if (is_object($link)) $link=$link->evaluate();
 			$_link=escape_html($link);
 			$_avatar=($_avatar_url!='')?('<img alt="Avatar" src="'.$_avatar_url.'" />'):'';
-			$_username=escape_html($GLOBALS['FORUM_DRIVER']->get_username($member));
+			$_username=escape_html($GLOBALS['FORUM_DRIVER']->get_username($member,true));
 			$_av_post_length=escape_html(integer_format(intval($av_post_length)));
 			$_num_posts=escape_html(integer_format($_member['cnt']));
 

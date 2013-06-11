@@ -100,7 +100,7 @@ class Hook_Preview_ocf_post
 		{
 			if (is_numeric($intended_solely_for))
 			{
-				$_intended_solely_for=$GLOBALS['FORUM_DRIVER']->get_username(intval($intended_solely_for));
+				$_intended_solely_for=$GLOBALS['FORUM_DRIVER']->get_username(intval($intended_solely_for),true);
 				if (!is_null($_intended_solely_for)) $intended_solely_for=$_intended_solely_for;
 			}
 			$emphasis=do_lang_tempcode('PP_TO',escape_html($intended_solely_for));

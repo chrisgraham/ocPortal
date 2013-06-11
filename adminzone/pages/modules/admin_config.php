@@ -845,7 +845,7 @@ class Module_admin_config
 			{
 				foreach ($staff as $row_staff)
 				{
-					$member=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
+					$member=$GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
 					if ($GLOBALS['FORUM_DRIVER']->is_staff($member))
 					{
 						$sites=get_ocp_cpf('sites');

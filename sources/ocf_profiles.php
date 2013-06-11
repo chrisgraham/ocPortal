@@ -30,8 +30,11 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 {
 	if (is_null($member_id_viewing)) $member_id_viewing=get_member();
 
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+	if (is_null($username))
+	{
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+		if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+	}
 
 	$tabs=array();
 
@@ -80,8 +83,10 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		$awards=find_awards_for('member',strval($member_id_of));
 	} else $awards=array();
 
+	//$title=get_screen_title('MEMBER_PROFILE',true,array(make_fractionable_editable('member',$member_id_of,$username)),NULL,$awards);
+	$displayname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	$title=get_screen_title('MEMBER_PROFILE',true,array(make_fractionable_editable('member',$member_id_of,$username)),NULL,$awards);
+	$title=get_screen_title('MEMBER_PROFILE',true,array(escape_html($displayname),escape_html($username)),NULL,$awards);
 
 	$_tabs=array();
 	$i=0;

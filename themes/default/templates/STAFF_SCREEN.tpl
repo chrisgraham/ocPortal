@@ -23,7 +23,7 @@
 		{+END}
 		<tr>
 			<th>{!USERNAME}</th>
-			<td><a class="associated_link suggested" href="{PROFILE_URL*}">{NAME*}</a></td>
+			<td><a class="associated_link suggested" href="{PROFILE_URL*}">{USERNAME*}</a></td>
 		</tr>
 		{+START,IF_NON_EMPTY,{ADDRESS}}
 			{+START,IF,{$OCF}}

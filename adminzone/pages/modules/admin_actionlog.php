@@ -303,7 +303,7 @@ class Module_admin_actionlog
 			{
 				$myrow=$rows[$best];
 
-				$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
+				$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id'],false,'',false);
 				$mode=array_key_exists('l_reason',$myrow)?'ocf':'ocp';
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$myrow['id'],'mode'=>$mode),'_SELF');
 				$mode_nice=($mode=='ocp')?'ocPortal':'OCF';
@@ -378,7 +378,7 @@ class Module_admin_actionlog
 		$type_str=do_lang($row['the_type'],$row['param_a'],$row['param_b'],NULL,NULL,false);
 		if (is_null($type_str)) $type_str=$row['the_type'];
 		$fields=array(
-			'USERNAME'=>$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['member_id']),
+			'USERNAME'=>$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['member_id'],false,'',false),
 			'DATE_TIME'=>get_timezoned_date($row['date_and_time']),
 			'TYPE'=>$type_str,
 			'PARAMETER_A'=>is_null($row['param_a'])?'':$row['param_a'],

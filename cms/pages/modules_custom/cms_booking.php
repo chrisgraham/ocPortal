@@ -837,7 +837,7 @@ class Module_cms_booking_bookings extends standard_crud_module
 			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('bookable','title',array('id'=>$row['bookable_id'])));
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,true);
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,true);
-			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id']);
+			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id'],true);
 			$fr[]=number_format($row['quantity']);
 			$fr[]=get_timezoned_date($row['_rows'][0]['booked_at']);
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));

@@ -184,7 +184,7 @@ class Module_cms_authors
 		if (has_privilege(get_member(),'edit_midrange_content','cms_authors'))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b18ab131f72a024039eaa92814f0f4a9','SECTION_HIDDEN'=>!is_null($handle),'TITLE'=>do_lang_tempcode('ADVANCED'))));
-			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_ID'),do_lang_tempcode('DESCRIPTION_MEMBER_ID'),'member_id',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
+			$fields->attach(form_input_username(do_lang_tempcode('MEMBER'),do_lang_tempcode('DESCRIPTION_MEMBER_AUTHOR'),'member_id',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
 		} else
 		{
 			$hidden->attach(form_input_hidden('member_id',strval($handle)));

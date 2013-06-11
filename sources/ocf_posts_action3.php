@@ -118,7 +118,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 		if (($mark_as_unread)/* && (ocf_may_moderate_forum($forum_id))*/)
 		{
-	   	$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_last_time'=>time(),'t_cache_last_post_id'=>$post_id,'t_cache_last_title'=>$title,'t_cache_last_username'=>$GLOBALS['FORUM_DRIVER']->get_username($post_owner),'t_cache_last_member_id'=>$post_owner),array('id'=>$topic_id),'',1);
+	   	$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_last_time'=>time(),'t_cache_last_post_id'=>$post_id,'t_cache_last_title'=>$title,'t_cache_last_username'=>$GLOBALS['FORUM_DRIVER']->get_username($post_owner,true),'t_cache_last_member_id'=>$post_owner),array('id'=>$topic_id),'',1);
 
 			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
 		}
@@ -460,7 +460,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		{
 			$to_link='[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]';
 		}
-		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'[/page]';
+		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member(),true).'[/page]';
 		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array($to_link,get_timezoned_date(time())));
 		ocf_make_post($from_topic_id,'',$lang,0,false,1,1,NULL,NULL,$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_time',array('id'=>$posts[0]))+1,NULL,NULL,NULL,NULL,false);
 

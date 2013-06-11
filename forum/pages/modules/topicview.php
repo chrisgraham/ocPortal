@@ -546,7 +546,7 @@ class Module_topicview
 			{
 				$of_member=($topic_info['pt_from']==get_member())?$topic_info['pt_from']:$topic_info['pt_to'];
 			} else $of_member=get_member();
-			$of_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member);
+			$of_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member,true);
 			if (is_null($of_username)) $of_username=do_lang('UNKNOWN');
 			$private_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>$of_member),get_module_zone('members'),NULL,true,false,false,'tab__pts');
 			$breadcrumbs->attach(hyperlink($private_topic_url,do_lang_tempcode('MEMBER_PROFILE',escape_html($of_username)),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));

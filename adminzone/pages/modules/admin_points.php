@@ -145,7 +145,7 @@ class Module_admin_points
 		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 		foreach ($members as $member)
 		{
-			$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
+			$member_id=$GLOBALS['FORUM_DRIVER']->mrow_id($member);
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 			$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
 
@@ -245,18 +245,18 @@ class Module_admin_points
 				$to=do_lang_tempcode('USER_SYSTEM');
 			} else
 			{
-				$toname=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_to']);
-				$tourl=build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_to']),get_module_zone('points'));
-				$to=is_null($toname)?do_lang_tempcode('UNKNOWN_EM'):hyperlink($tourl,escape_html($toname));
+				$to_name=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_to']);
+				$to_url=build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_to']),get_module_zone('points'));
+				$to=is_null($to_name)?do_lang_tempcode('UNKNOWN_EM'):hyperlink($to_url,escape_html($to_name));
 			}
 			if (is_guest($myrow['gift_from']))
 			{
 				$from=do_lang_tempcode('USER_SYSTEM');
 			} else
 			{
-				$fromname=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_from']);
-				$fromurl=build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points'));
-				$from=is_null($fromname)?do_lang_tempcode('UNKNOWN_EM'):hyperlink($fromurl,escape_html($fromname));
+				$from_name=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_from']);
+				$from_url=build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points'));
+				$from=is_null($from_name)?do_lang_tempcode('UNKNOWN_EM'):hyperlink($from_url,escape_html($from_name));
 			}
 			$deleteurl=build_url(array('page'=>'_SELF','type'=>'reverse','redirect'=>get_self_url(true)),'_SELF');
 			$delete=hyperlink($deleteurl,do_lang_tempcode('REVERSE'),false,false,'',NULL,form_input_hidden('id',strval($myrow['id'])));

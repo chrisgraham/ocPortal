@@ -66,7 +66,7 @@ class Hook_Profiles_Tabs_Edit_title
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('MEMBER_TITLE'),'','member_title',$_title,false,NULL,intval(get_option('max_member_title_length'))));
 
-		$text=do_lang_tempcode('DESCRIPTION_MEMBER_TITLE',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of)));
+		$text=do_lang_tempcode('DESCRIPTION_MEMBER_TITLE',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true)));
 
 		$javascript='';
 

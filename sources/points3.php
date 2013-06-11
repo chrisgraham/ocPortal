@@ -40,8 +40,8 @@ function points_profile($member_id_of,$member_id_viewing)
 	}
 
 	// Get info about viewed user
-	$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+	if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 	$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,false,true);
 
@@ -89,9 +89,9 @@ function points_profile($member_id_of,$member_id_viewing)
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chargelog','COUNT(*)',array('member_id'=>$member_id_of));
 		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('member_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
-		$fromname=get_site_name();
-		$toname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-		if (is_null($toname)) $toname=do_lang('UNKNOWN');
+		$from_name=get_site_name();
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
+		if (is_null($to_name)) $to_name=do_lang('UNKNOWN');
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'charge_sort',$sortable.' '.$sort_order);
 		foreach ($rows as $myrow)
@@ -109,7 +109,7 @@ function points_profile($member_id_of,$member_id_viewing)
 				$reason=get_translated_tempcode($myrow['reason']);
 			}
 
-			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
+			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($from_name),escape_html($to_name),$reason)));
 		}
 		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'charge_start',$max,'charge_max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'charge_sort',NULL,NULL,NULL,8,'fgfdgfdgfdgfdger4gtrhg',false,'tab__points');
 	}
@@ -138,7 +138,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		'_GUID'=>'f91208ef0f9a1e1a8633ce307a778a8d',
 		'MEMBER'=>strval($member_id_of),
 		'PROFILE_URL'=>$profile_link,
-		'NAME'=>$name,
+		'USERNAME'=>$username,
 
 		'POINTS_JOINING'=>integer_format($points_joining),
 
@@ -203,7 +203,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 	$max_rows=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)',$where);
 	$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 	$out=new ocp_tempcode();
-	$viewing_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+	$viewing_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
 	if (is_null($viewing_name)) $viewing_name=do_lang('UNKNOWN');
 	require_code('templates_results_table');
 	$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'gift_sort_'.$type,$sortable.' '.$sort_order);
@@ -212,23 +212,23 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 		if (($myrow['anonymous']==1) && ($type=='from')) continue;
 
 		// Their name
-		$fromname=(is_guest($myrow['gift_from']))?get_site_name():$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_from']);
-		$toname=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_to']);
-		if (is_null($fromname)) $fromname=do_lang('UNKNOWN');
+		$from_name=(is_guest($myrow['gift_from']))?get_site_name():$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_from'],true);
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_to'],true);
+		if (is_null($from_name)) $from_name=do_lang('UNKNOWN');
 		if (($myrow['anonymous']==1) && (!is_guest($myrow['gift_from'])))
 		{
 			if (!has_privilege($member_id_viewing,'trace_anonymous_gifts'))
 			{
-				$_fromname=do_lang_tempcode('ANON');
+				$_from_name=do_lang_tempcode('ANON');
 			} else
 			{
-				$_fromname=hyperlink(build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points')),do_lang_tempcode('ANON'),false,false,escape_html($fromname));
+				$_from_name=hyperlink(build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points')),do_lang_tempcode('ANON'),false,false,escape_html($from_name));
 			}
 		} else
 		{
-			$_fromname=(is_guest($myrow['gift_from']))?make_string_tempcode(escape_html($fromname)):hyperlink(build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points')),escape_html($fromname),false,false,do_lang_tempcode('VIEW_POINTS'));
+			$_from_name=(is_guest($myrow['gift_from']))?make_string_tempcode(escape_html($from_name)):hyperlink(build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points')),escape_html($from_name),false,false,do_lang_tempcode('VIEW_POINTS'));
 		}
-		$_toname=hyperlink(build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_to']),get_module_zone('points')),escape_html($toname),false,false,do_lang_tempcode('VIEW_POINTS'));
+		$_to_name=hyperlink(build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_to']),get_module_zone('points')),escape_html($to_name),false,false,do_lang_tempcode('VIEW_POINTS'));
 
 		$date=get_timezoned_date($myrow['date_and_time']);
 		$amount=$myrow['amount'];
@@ -243,7 +243,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 			$reason=get_translated_tempcode($myrow['reason']);
 		}
 
-		$out->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),$_fromname,$_toname,$reason)));
+		$out->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),$_from_name,$_to_name,$reason)));
 	}
 	$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start_'.$type,$max,'gift_max_'.$type,$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort_'.$type,NULL,NULL,NULL,8,'gfhfghtrhhjghgfhfgf',false,'tab__points');
 

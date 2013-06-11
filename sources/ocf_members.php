@@ -329,7 +329,7 @@ function find_cpf_field_id($title)
  * Returns a list of all field values for user. Doesn't take translation into account. Doesn't take anything permissive into account.
  *
  * @param  MEMBER	The member.
- * @return array	The list.
+ * @return array	The mapping, field_<id> to value.
  */
 function ocf_get_custom_field_mappings($member_id)
 {
@@ -341,6 +341,8 @@ function ocf_get_custom_field_mappings($member_id)
 		$query=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_id),'',1);
 		if (!array_key_exists(0,$query)) // Repair
 		{
+			$value=mixed();
+
 			$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
 			$row=array('mf_member_id'=>$member_id);
 			foreach ($all_fields_regardless as $field)

@@ -282,7 +282,7 @@ function store_transcoding_success($transcoder_id,$new_url=NULL)
 		if ($descript_row['t_height_field']!='') $row[$descript_row['t_height_field']]=intval(get_option('video_height_setting'));
 	} else
 	{
-		if ($descript_row['t_width_field']!='') $row[$descript_row['t_width_field']]=300;
+		if ($descript_row['t_width_field']!='') $row[$descript_row['t_width_field']]=intval(get_option('video_width_setting'));
 		if ($descript_row['t_height_field']!='') $row[$descript_row['t_height_field']]=20;
 	}
 

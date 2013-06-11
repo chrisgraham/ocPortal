@@ -55,9 +55,10 @@ class Hook_members_gifts
 
 				if ($gift['is_anonymous']==0)
 				{
-					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id']);
+					$sender_displayname=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id'],true);
+					$sender_username=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id']);
 					$sender_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_member_id'],true);
-					$gift_explanation=do_lang_tempcode('GIFT_EXPLANATION',escape_html($sender_name),escape_html($gift_row['name']),escape_html($sender_url->evaluate()));
+					$gift_explanation=do_lang_tempcode('GIFT_EXPLANATION',escape_html($sender_displayname),escape_html($gift_row['name']),array(escape_html($sender_url->evaluate()),escape_html($sender_username)));
 				} else
 				{
 					$gift_explanation=do_lang_tempcode('GIFT_EXPLANATION_ANONYMOUS',escape_html($gift_row['name']));

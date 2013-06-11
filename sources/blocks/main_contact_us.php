@@ -80,7 +80,7 @@ class Block_main_contact_us
 			// Handle notifications
 			require_code('notifications');
 			$notification_subject=do_lang('CONTACT_US_NOTIFICATION_SUBJECT',$subject_prefix.$title.$subject_suffix,NULL,NULL,get_site_default_lang());
-			$notification_message=do_lang('CONTACT_US_NOTIFICATION_MESSAGE',comcode_escape(get_site_name()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),array($body_prefix.$post.$body_suffix,comcode_escape($type)),get_site_default_lang());
+			$notification_message=do_lang('CONTACT_US_NOTIFICATION_MESSAGE',comcode_escape(get_site_name()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),array($body_prefix.$post.$body_suffix,comcode_escape($type),strval(get_member())),get_site_default_lang());
 			dispatch_notification('messaging',$type.'_'.$id,$notification_subject,$notification_message,NULL,NULL,3,true,false,NULL,NULL,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
 
 			// Send standard confirmation email to current user

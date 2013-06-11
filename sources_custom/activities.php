@@ -314,7 +314,7 @@ function render_activity($row,$use_inside_ocp=true)
 	);
 	if (!is_null($row['a_also_involving']))
 	{
-		$_username=$GLOBALS['FORUM_DRIVER']->get_username($row['a_also_involving']);
+		$_username=$GLOBALS['FORUM_DRIVER']->get_username($row['a_also_involving'],true);
 		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['a_also_involving'],false,$use_inside_ocp);
 		$hyperlink=hyperlink($url,$_username,false,true);
 

@@ -439,6 +439,7 @@ function send_booking_emails($request)
 	dispatch_notification('booking_customer',NULL,do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),array(get_member()),A_FROM_SYSTEM_PRIVILEGED);
 
 	// Send notice to staff
+	$subject=do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true),get_site_name(),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 	$notice=do_template(
 		'BOOKING_NOTICE_FCOMCODE',
 		array(
@@ -451,7 +452,7 @@ function send_booking_emails($request)
 		),
 		get_site_default_lang()
 	);
-	dispatch_notification('booking_inform_staff',NULL,do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,2);
+	dispatch_notification('booking_inform_staff',NULL,$subject,static_evaluate_tempcode($notice),NULL,NULL,2);
 }
 
 /**

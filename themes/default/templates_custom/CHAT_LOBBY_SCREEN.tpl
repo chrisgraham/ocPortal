@@ -47,7 +47,7 @@ function on_login_completed_lobby()
 	// Add friends
 	var roster=Xmpp4Js.Roster.Roster.getInstanceFor(con);
 	{+START,LOOP,FRIENDS}
-		roster.createEntry( "{$REPLACE*, ,.,{USERNAME}}@{$DOMAIN*}", "{$REPLACE*, ,.,{USERNAME}}", ["{$SITE_NAME*}"] );
+		roster.createEntry( "{$REPLACE*, ,.,{USERNAME}}@{$DOMAIN*}", "{$DISPLAYED_USERNAME*,{USERNAME}}", ["{$SITE_NAME*}"] );
 	{+END}
 }
 

@@ -14,7 +14,7 @@
 	{+START,IF_NON_PASSED_OR_FALSE,NO_PEOPLE_SHOWN}
 		{+START,IF,{LIKES}}{+START,IF_PASSED,LIKED_BY}{+START,IF_NON_EMPTY,{LIKED_BY}}
 			{$SET,done_one_liker,0}
-			{+START,LOOP,LIKED_BY}{+START,IF_NON_EMPTY,{$AVATAR,{MEMBER_ID}}}{+START,IF,{$NOT,{$GET,done_one_liker,0}}}({+END}<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img width="10" height="10" src="{$AVATAR*,{MEMBER_ID}}" title="{!LIKED_BY} {USERNAME*}" alt="{!LIKED_BY} {USERNAME*}" /></a>{$SET,done_one_liker,1}{+END}{+END}{+START,IF,{$GET,done_one_liker,0}}){+END}
+			{+START,LOOP,LIKED_BY}{+START,IF_NON_EMPTY,{$AVATAR,{MEMBER_ID}}}{+START,IF,{$NOT,{$GET,done_one_liker,0}}}({+END}<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img width="10" height="10" src="{$AVATAR*,{MEMBER_ID}}" title="{!LIKED_BY} {$DISPLAYED_USERNAME*,{USERNAME}}" alt="{!LIKED_BY} {$DISPLAYED_USERNAME*,{USERNAME}}" /></a>{$SET,done_one_liker,1}{+END}{+END}{+START,IF,{$GET,done_one_liker,0}}){+END}
 		{+END}{+END}{+END}
 	{+END}
 {+END}

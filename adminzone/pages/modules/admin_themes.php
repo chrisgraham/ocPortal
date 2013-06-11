@@ -302,7 +302,7 @@ class Module_admin_themes
 	 */
 	function get_theme_fields($name='',$title='',$description='',$author=NULL,$mobile_pages='',$supports_wide=1,$use_on_all_zones=false)
 	{
-		if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 
 		require_code('form_templates');
 		require_code('permissions2');

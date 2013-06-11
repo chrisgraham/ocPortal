@@ -4,7 +4,7 @@
 	</p>
 
 	<ul class="tiny_paragraph associated_details horizontal_meta_details" role="contentinfo">
-		<li>{!BY_SIMPLE,{USERNAME*}}</li>
+		<li>{!BY_SIMPLE,{$DISPLAYED_USERNAME*,{USERNAME}}}</li>
 		<li>{!POST_PLU,{NUM_POSTS*}}</li>
 	</ul>
 

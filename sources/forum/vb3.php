@@ -155,12 +155,12 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	}
 
 	/**
-	 * From a member profile-row, get the member's last visit date.
+	 * From a member row, get the member's last visit date.
 	 *
 	 * @param  array			The profile-row
 	 * @return TIME			The last visit date
 	 */
-	function pnamelast_visit($r)
+	function mrow_lastvisit($r)
 	{
 		return $r['lastactivity'];
 	}
@@ -168,7 +168,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	/**
 	 * Find out if the given member id is banned.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
 	 */
 	function is_banned($member)
@@ -186,7 +186,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
 	 */
 	function _is_staff($member)
@@ -199,7 +199,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
 	 */
 	function _is_super_admin($member)
@@ -247,7 +247,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @return array			The array of forum usergroups
 	 */
 	function _get_members_groups($member)
@@ -261,7 +261,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	/**
 	 * Create a member login cookie.
 	 *
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  ?SHORT_TEXT	The username (NULL: lookup)
 	 * @param  string			The password
 	 */
@@ -285,7 +285,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	 * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
 	 *
 	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-	 * @param  MEMBER			The member id
+	 * @param  MEMBER			The member ID
 	 * @param  MD5				The md5-hashed password
 	 * @param  string			The raw password
 	 * @param  boolean		Whether this is a cookie login

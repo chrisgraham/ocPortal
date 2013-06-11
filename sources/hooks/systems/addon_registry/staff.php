@@ -118,7 +118,7 @@ class Hook_addon_registry_staff
 		{
 			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER', array(
 				'FORM'=>placeholder_form(),
-				'NAME'=>lorem_word()
+				'USERNAME'=>lorem_word()
 			)));
 		}
 
@@ -146,7 +146,7 @@ class Hook_addon_registry_staff
 				'REAL_NAME'=>lorem_phrase(),
 				'ROLE'=>lorem_phrase(),
 				'ADDRESS'=>lorem_phrase(),
-				'NAME'=>lorem_word(),
+				'USERNAME'=>lorem_word(),
 				'MEMBER_ID'=>placeholder_id(),
 				'PROFILE_URL'=>placeholder_url(),
 				'ALL_STAFF_URL'=>placeholder_url()

@@ -15,9 +15,9 @@
 					{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 				</li>
 			{+END}
-			{+START,IF_EMPTY,{AUTHOR_URL}}{+START,IF_NON_EMPTY,{$USERNAME,{SUBMITTER}}}
+			{+START,IF_EMPTY,{AUTHOR_URL}}{+START,IF_NON_EMPTY,{$USERNAME,{SUBMITTER},1}}
 				<li>
-					{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}</a>}
+					{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER},1}</a>}
 					{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 				</li>
 			{+END}{+END}

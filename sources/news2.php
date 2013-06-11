@@ -211,7 +211,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		{
 			if (!has_privilege(get_member(),'have_personal_category','cms_news')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-			$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
+			$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter,true)),2);
 
 			$main_news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
 			$already_created_personal_category=true;
@@ -237,7 +237,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		{
 			if ((is_null($value)) && (!$already_created_personal_category))
 			{
-				$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
+				$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter,true)),2);
 				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
 
 				$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);

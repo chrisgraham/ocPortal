@@ -884,14 +884,14 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$outr
 	$from_email=trim(post_param('email',''));
 
 	$to_name=mixed();
-	$from_name=post_param('name',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+	$from_name=post_param('name',$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
 	if (is_null($to_email))
 	{
 		$to=post_param_integer('to_members_email',NULL);
 		if (!is_null($to))
 		{
 			$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to);
-			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to);
+			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to,true);
 		}
 	}
 

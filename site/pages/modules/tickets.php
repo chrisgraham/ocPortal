@@ -312,7 +312,7 @@ class Module_tickets
 					$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
 					$_title=$topic['firsttitle'];
 					$date=get_timezoned_date($topic['lasttime']);
-					$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['lastusername']);
+					$member=isset($topic['lastmemberid'])?$topic['lastmemberid']:$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['lastusername']);
 					if (!is_null($member))
 					{
 						$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
@@ -557,7 +557,7 @@ class Module_tickets
 							$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
 							$_title=$topic['firsttitle'];
 							$date=get_timezoned_date($topic['lasttime']);
-							$ticket_owner_name=$GLOBALS['FORUM_DRIVER']->get_username($ticket_owner);
+							$ticket_owner_name=$GLOBALS['FORUM_DRIVER']->get_username($ticket_owner,true);
 							if (is_null($ticket_owner_name))
 							{
 								$profile_link='';

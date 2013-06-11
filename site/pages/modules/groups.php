@@ -343,7 +343,7 @@ class Module_groups
 		// Leadership
 		if ((!is_null($group['g_group_leader'])) && (!is_null($GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']))))
 		{
-			$leader_name=$GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']);
+			$leader_name=$GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader'],true);
 			if (is_null($leader_name)) $leader_name=do_lang('UNKNOWN');
 			$leader_url=build_url(array('page'=>'members','type'=>'view','id'=>$group['g_group_leader']),get_module_zone('members'));
 			$leader_link=hyperlink($leader_url,$leader_name,false,true);
@@ -577,7 +577,7 @@ class Module_groups
 		$title=get_screen_title('REMOVE_MEMBER_FROM_GROUP');
 
 		$member_id=get_param_integer('member_id');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 
 		$id=post_param_integer('id',NULL);
@@ -639,7 +639,7 @@ class Module_groups
 					$text=do_lang_tempcode('ABOUT_TO_APPLY_STAFF',escape_html($name),escape_html(get_site_name()));
 				} else
 				{
-					$leader_username=$GLOBALS['FORUM_DRIVER']->get_username($_leader);
+					$leader_username=$GLOBALS['FORUM_DRIVER']->get_username($_leader,true);
 					if (is_null($leader_username)) $leader_username=do_lang('UNKNOWN');
 					$leader_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($_leader,false,true);
 					$text=do_lang_tempcode('ABOUT_TO_APPLY_LEADER',escape_html($name),escape_html($leader_username),escape_html($leader_url));

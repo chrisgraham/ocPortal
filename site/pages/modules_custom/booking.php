@@ -531,7 +531,7 @@ class Module_booking
 		send_booking_emails($request);
 
 		// Show success
-		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
+		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member(),true))));
 	}
 
 }

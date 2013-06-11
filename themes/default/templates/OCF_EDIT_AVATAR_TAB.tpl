@@ -3,6 +3,6 @@
 		{AVATAR}
 	</div>
 	<div class="ocf_avatar_page_text">
-		<p>{!AVATAR_CHANGE,{WIDTH*},{HEIGHT*},{USERNAME*}}</p>
+		<p>{!AVATAR_CHANGE,{WIDTH*},{HEIGHT*},{$DISPLAYED_USERNAME*,{USERNAME}}}</p>
 	</div>
 </div>

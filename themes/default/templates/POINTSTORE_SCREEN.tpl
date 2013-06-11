@@ -1,7 +1,7 @@
 {TITLE}
 
 <div class="pointstore_welcome box"><div class="box_inner">
-	<p>{!POINTS_LEFT,{$USERNAME*},{POINTS_LEFT*}}</p>
+	<p>{!POINTS_LEFT,{$USERNAME*,{$MEMBER},1},{POINTS_LEFT*}}</p>
 </div></div>
 
 <p>

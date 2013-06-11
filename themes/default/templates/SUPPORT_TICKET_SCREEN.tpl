@@ -86,7 +86,7 @@
 	{+END}
 </div>
 
-<h2>{!OTHER_TICKETS_BY_MEMBER,{USERNAME*}}</h2>
+<h2>{!OTHER_TICKETS_BY_MEMBER,{$DISPLAYED_USERNAME*,{USERNAME}}}</h2>
 
 {+START,IF_EMPTY,{OTHER_TICKETS}}
 	<p class="nothing_here">{!NONE}</p>

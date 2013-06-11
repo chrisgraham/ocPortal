@@ -142,7 +142,7 @@ class Module_recommend
 
 		$hidden=new ocp_tempcode();
 
-		$name=post_param('name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		$name=post_param('name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
 		$recommender_email_address=post_param('recommender_email_address',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()));
 
 		$fields=new ocp_tempcode();

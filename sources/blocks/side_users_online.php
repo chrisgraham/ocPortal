@@ -104,10 +104,10 @@ class Block_side_users_online
 		foreach ($members as $_member)
 		{
 			$member=$_member['member_id'];
-			$name=$_member['cache_username'];
+			$username=$_member['cache_username'];
 			$ip=$_member['ip'];
 
-			if ((is_guest($member)) || (is_null($name)))
+			if ((is_guest($member)) || (is_null($username)))
 			{
 				if (!array_key_exists($ip,$done_ips))
 				{
@@ -124,7 +124,7 @@ class Block_side_users_online
 					$out->attach(do_template('BLOCK_SIDE_USERS_ONLINE_USER',array(
 						'_GUID'=>'a0b55810fe2f306c2886ec0c4cd8e8fd',
 						'URL'=>$url,
-						'NAME'=>$name,
+						'USERNAME'=>$username,
 						'COLOUR'=>$colour,
 					)));
 					$_members++;

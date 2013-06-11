@@ -54,7 +54,7 @@ class Hook_cron_octhief
 			$points=array();
 			foreach ($all_members as $member)
 			{
-				$id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
+				$id=$GLOBALS['FORUM_DRIVER']->mrow_id($member);
 				$signin_time=$member['m_last_visit_time'];
 				$points[$signin_time]=array('points'=>available_points($id),'id'=>$id);
 			}
@@ -90,13 +90,19 @@ class Hook_cron_octhief
 				{
 					system_gift_transfer(do_lang('THIEF_GAVE_YOU').' '. strval($octhief_points).' point(-s)',$octhief_points,$give_to_member);
 
-					$subject=do_lang('THIEF_PT_TOPIC',strval($octhief_points),$GLOBALS['FORUM_DRIVER']->get_username($member['id']),$GLOBALS['FORUM_DRIVER']->get_username($give_to_member));
+					$thief_displayname=$GLOBALS['FORUM_DRIVER']->get_username($member['id'],true);
+					$target_displayname=$GLOBALS['FORUM_DRIVER']->get_username($give_to_member,true);
+					$thief_username=$GLOBALS['FORUM_DRIVER']->get_username($member['id']);
+					$target_username=$GLOBALS['FORUM_DRIVER']->get_username($give_to_member);
+					$subject=do_lang('THIEF_PT_TOPIC',strval($octhief_points),$thief_displayname,array($target_displayname,$thief_username,$target_username));
+					$body=do_lang('THIEF_PT_TOPIC_POST',strval($octhief_points),$thief_displayname,array($target_displayname,$thief_username,$target_username));
+
 					$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$member['id'],$give_to_member,false,0,NULL,'');
 
-					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
+					$post_id=ocf_make_post($topic_id,$subject,$body,0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$GLOBALS['FORUM_DRIVER']->pname_id($member));
-					send_pt_notification($post_id,$subject,$topic_id,$GLOBALS['FORUM_DRIVER']->pname_id($member),$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$GLOBALS['FORUM_DRIVER']->mrow_id($member));
+					send_pt_notification($post_id,$subject,$topic_id,$GLOBALS['FORUM_DRIVER']->mrow_id($member),$give_to_member);
 				}
 			}
 
@@ -106,7 +112,7 @@ class Hook_cron_octhief
 			$points=array();
 			foreach ($all_members as $member)
 			{
-				$id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
+				$id=$GLOBALS['FORUM_DRIVER']->mrow_id($member);
 				$points[$id]=available_points($id);
 			}
 			arsort($points);

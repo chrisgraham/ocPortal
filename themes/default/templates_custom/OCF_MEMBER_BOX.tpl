@@ -5,7 +5,7 @@
 <div class="ocf_member_box">
 {+END}
 	{+START,IF,{GIVE_CONTEXT}}
-		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID}}}</h3>
+		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID},1}}</h3>
 	{+END}
 
 	{$SET,fancy_screen,{$AND,{$NOT,{$MATCH_KEY_MATCH,site:members:view}},{$OR,{$RUNNING_SCRIPT,iframe},{$MATCH_KEY_MATCH,site:members},{$MATCH_KEY_MATCH,site:search}}}}
@@ -36,7 +36,7 @@
 			<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'&lt;table class=&quot;tooltip_fields autosized_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL*;^}{$GET*;^,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
 
 			<div{+START,IF_NON_EMPTY,{$GET,AVATAR_URL}} class="ocf_member_box_avatar"{+END} style="float: left; width: 95px; word-wrap: break-word; margin-right: 0">
-				<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$TRUNCATE_LEFT,{$USERNAME,{MEMBER_ID}},18,1}</a>
+				<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$TRUNCATE_LEFT,{$USERNAME,{MEMBER_ID},1},18,1}</a>
 				{$SET,main,1}
 				{CUSTOM_FIELDS}
 

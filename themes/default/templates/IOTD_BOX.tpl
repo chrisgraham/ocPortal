@@ -15,7 +15,7 @@
 	{+START,IF_PASSED,USERNAME}{+START,IF_NON_EMPTY,{USERNAME}}
 		<div class="meta_details" role="contentinfo">
 			<ul class="meta_details_list">
-				<li>{!SUBMITTED_BY,<a href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{USERNAME*}</a>}</li>
+				<li>{!SUBMITTED_BY,<a href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>}</li>
 			</ul>
 		</div>
 	{+END}{+END}
