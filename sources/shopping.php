@@ -205,7 +205,7 @@ function purchase_done_staff_mail($order_id)
 {
 	$member_id=$GLOBALS['SITE_DB']->query_value('shopping_order','c_member',array('id'=>$order_id));
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-	$subject=do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),get_site_default_lang());
+	$subject=do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_site_default_lang());
 	$message=do_lang('ORDER_PLACED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($username),array(strval($order_id)),get_site_default_lang());
 	require_code('notifications');
 	dispatch_notification('new_order',NULL,$subject,$message);
