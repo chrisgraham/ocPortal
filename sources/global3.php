@@ -2812,6 +2812,34 @@ function generate_guid()
 }
 
 /**
+ * Fixes bad unicode (utf-8) in the input. Useful when input may be dirty, e.g. from a txt file, or from a potential hacker.
+ * The fix is imperfect, it will actually treat the input as ISO-8859-1 if not valid utf-8, then reconvert. Some limited scrambling is considered better than a stack trace.
+ * This function does nothing if we are not using utf-8.
+ *
+ * @param  string		Input string
+ * @return string		Guaranteed valid utf-8, if we're using it, otherwise the same as the input string
+ */
+function fix_bad_unicode($input)
+{
+	// Fix bad unicode
+	if (get_charset()=='utf-8')
+	{
+		$test_string=$input; // avoid being destructive 
+		$test_string=preg_replace('#[\x09\x0A\x0D\x20-\x7E]#','',$test_string); // ASCII 
+		$test_string=preg_replace('#[\xC2-\xDF][\x80-\xBF]#','',$test_string); // non-overlong 2-byte 
+		$test_string=preg_replace('#\xE0[\xA0-\xBF][\x80-\xBF]#','',$test_string); // excluding overlongs 
+		$test_string=preg_replace('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','',$test_string); // straight 3-byte 
+		$test_string=preg_replace('#\xED[\x80-\x9F][\x80-\xBF]#','',$test_string); // excluding surrogates 
+		$test_string=preg_replace('#\xF0[\x90-\xBF][\x80-\xBF]{2}#','',$test_string); // planes 1-3 
+		$test_string=preg_replace('#[\xF1-\xF3][\x80-\xBF]{3}#','',$test_string); //  planes 4-15 
+		$test_string=preg_replace('#\xF4[\x80-\x8F][\x80-\xBF]{2}#','',$test_string); // plane 16 
+		if ($test_string!='') // All unicode characters stripped, so if anything is remaining it must be some kind of corruption
+			$input=utf8_encode($input);
+	}
+	return $input;
+}
+
+/**
  * Convert GUIDs to IDs in some text.
  *
  * @param  string			Input text
