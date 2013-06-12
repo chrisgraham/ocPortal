@@ -234,7 +234,7 @@ if ($type=='go')
 						if (($probe_dir=='') || ($old!==$new))
 						{
 							$new_filename=$file;
-							if (((preg_match('#^(lang)\_custom/#',$file)!=0) || (strpos($old,'CUSTOMISED FOR PROJECT')===false)) && (($probe_dir=='') || ($old!='')))
+							if (((preg_match('#^(lang)\_custom/#',$file)!=0) || (strpos($old,'CUSTOMISED FOR PROJECT')!==false)) && (($probe_dir=='') || ($old!='')))
 								$new_filename.='.quarantine';
 							if (!isset($done[$new_filename]))
 							{

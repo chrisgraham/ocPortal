@@ -41,8 +41,7 @@ class Hook_occle_command_ban_member
 			require_code('ocf_members_action2');
 			require_lang('ocf');
 
-			if (is_numeric($parameters[0])) $member_id=$parameters[0];
-			else $member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
 
 			if (is_null($member_id)) return array('','','',do_lang('MEMBER_NO_EXIST'));
 

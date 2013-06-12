@@ -338,7 +338,6 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	if (!$skip_confirm)
 	{
 		$zone=get_module_zone('join');
-		if ($zone!='') $zone.='/';
 		$_url=build_url(array('page'=>'join','type'=>'step4','email'=>$email_address,'code'=>$validated_email_confirm_code),$zone,NULL,false,false,true);
 		$url=$_url->evaluate();
 		$_url_simple=build_url(array('page'=>'join','type'=>'step4'),$zone,NULL,false,false,true);

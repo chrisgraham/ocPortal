@@ -2022,14 +2022,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			if ($attributes['param']!='')
 			{
-				if (is_numeric($attributes['param']))
-				{
-					$attributes['param']=$GLOBALS['FORUM_DRIVER']->get_username($attributes['param'],true);
-					if (is_null($attributes['param'])) $attributes['param']=do_lang('UNKNOWN');
-				} else
-				{
-					$attributes['param']=protect_from_escaping(comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
-				}
+				$attributes['param']=protect_from_escaping(comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
 				$temp_tpl->attach(do_template('COMCODE_QUOTE_BY',array('_GUID'=>'18f55a548892ad08b0b50b3b586b5b95','CITE'=>$cite,'CONTENT'=>$embed,'BY'=>$attributes['param'],'SAIDLESS'=>array_key_exists('saidless',$attributes)?$attributes['saidless']:'0')));
 			} else
 			{

@@ -134,7 +134,7 @@ class Hook_fields_member
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 		$value=post_param($tmp_name,strval(INTEGER_MAGIC_NULL));
-		if ((!is_numeric($value)) && ($value!='') && ($value!=strval(INTEGER_MAGIC_NULL)))
+		if (($value!='') && ($value!=strval(INTEGER_MAGIC_NULL)))
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($value);
 			$value=is_null($member_id)?'':strval($member_id);

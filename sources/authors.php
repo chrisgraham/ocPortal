@@ -119,10 +119,6 @@ function authors_script()
 function get_author_id_from_name($author)
 {
 	$handle=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','member_id',array('author'=>$author));
-	if (!is_numeric($handle))
-	{
-		$handle=$GLOBALS['FORUM_DRIVER']->get_member_from_username($author);
-	}
 	return $handle;
 }
 

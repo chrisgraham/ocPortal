@@ -620,9 +620,6 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 	static $url_scheme=NULL;
 	if ($url_scheme===NULL) $url_scheme=get_option('url_scheme');
 
-	static $htm_urls=NULL;
-	if ($htm_urls===NULL) $htm_urls=(get_option('htm_short_urls')=='1');
-
 	// Find mapping
 	foreach ($URL_REMAPPINGS as $_remapping)
 	{

@@ -397,7 +397,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('INVITES_ENABLED','is_on_invites','tick','return \'0\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('INVITES_PER_DAY','invites_per_day','float','return \'1\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('VALID_EMAIL_DOMAINS','valid_email_domains','line','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('DISPLAY_NAME_GENERATOR','display_name_generator','line','return \'\';','SECTION_FORUMS','MEMBERS');
+		add_config_option('DISPLAY_NAME_GENERATOR','display_name_generator','line','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 
 		$GLOBALS['FORUM_DB']->create_table('f_member_cpf_perms',array(
 			'member_id'=>'*MEMBER',

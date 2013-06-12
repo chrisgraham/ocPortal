@@ -1377,11 +1377,6 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 	$quoted_users=explode(',',$pm_user);
 	foreach ($quoted_users as $quoted_user)
 	{
-		if (is_numeric($quoted_user))
-		{
-			$quoted_user=$GLOBALS['FORUM_DRIVER']->get_username(intval($quoted_user));
-		}
-
 		$real_member=(($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user)==get_member()) && (!is_guest($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user))) && (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user)))) || ($username==$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if ($real_member)
 		{

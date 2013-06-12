@@ -1231,6 +1231,12 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	// We have a priority list to find our page
 	if (!in_safe_mode())
 	{
+		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules_custom/'.$codename.'.php',true);
+		if (is_file(get_file_base().'/'.$path))
+			return array('MINIMODULES_CUSTOM',$zone,$codename,$path);
+	}
+	if (!in_safe_mode())
+	{
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/modules_custom/'.$codename.'.php',true);
 		if (is_file(get_file_base().'/'.$path))
 			return array('MODULES_CUSTOM',$zone,$codename,$path);
@@ -1271,12 +1277,6 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html/'.$lang.'/'.$codename.'.htm',true);
 	if (is_file(get_file_base().'/'.$path))
 		return array('HTML',$zone,$codename,$lang,$path);
-	if (!in_safe_mode())
-	{
-		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules_custom/'.$codename.'.php',true);
-		if (is_file(get_file_base().'/'.$path))
-			return array('MINIMODULES_CUSTOM',$zone,$codename,$path);
-	}
 	$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules/'.$codename.'.php',true);
 	if (is_file(get_file_base().'/'.$path))
 		return array('MINIMODULES',$zone,$codename,$path);

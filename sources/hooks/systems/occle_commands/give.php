@@ -39,8 +39,7 @@ class Hook_occle_command_give
 
 			require_code('points2');
 
-			if (is_numeric($parameters[0])) $member_id=$parameters[0];
-			else $member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
 
 			give_points($parameters[1],$member_id,get_member(),$parameters[2],((array_key_exists('a',$options)) || (array_key_exists('anonymous',$options))));
 			return array('','',do_lang('SUCCESS'),'');

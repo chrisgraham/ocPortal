@@ -34,7 +34,6 @@ function grab_new_owner($param_name)
 {
 	$new_owner_raw=either_param($param_name);
 	if ($new_owner_raw=='') return NULL;
-	if (is_numeric($new_owner_raw)) return intval($new_owner_raw);
 	return $GLOBALS['FORUM_DRIVER']->get_member_from_username($param_name);
 }
 

@@ -681,7 +681,7 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 				break;
 			case 'MEMBER':
 				$field_type='integer';
-				if ((!is_numeric($filter_val)) && ($filter_val!=''))
+				if ($filter_val!='')
 				{
 					$_filter_val=$GLOBALS['FORUM_DRIVER']->get_member_from_username($filter_val);
 					$filter_val=($_filter_val===NULL)?'':strval($_filter_val);

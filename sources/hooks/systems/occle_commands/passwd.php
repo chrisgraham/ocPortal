@@ -42,13 +42,11 @@ class Hook_occle_command_passwd
 
 			if (array_key_exists('u',$options))
 			{
-				if (is_numeric($options['u'])) $member_id=$options['u'];
-				else $member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($options['u']);
+				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($options['u']);
 			}
 			elseif (array_key_exists('username',$options))
 			{
-				if (is_numeric($options['username'])) $member_id=$options['username'];
-				else $member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($options['username']);
+				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($options['username']);
 			}
 			else $member_id=get_member();
 
