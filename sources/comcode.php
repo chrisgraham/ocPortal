@@ -146,7 +146,7 @@ function apply_emoticons($text)
  */
 function do_emoticon($imgcode)
 {
-	$tpl=do_template($imgcode[0],array('UNIQID'=>uniqid(''),'SRC'=>$imgcode[1],'EMOTICON'=>$imgcode[2]));
+	$tpl=do_template($imgcode[0],array('UNIQID'=>uniqid('',true),'SRC'=>$imgcode[1],'EMOTICON'=>$imgcode[2]));
 	return $tpl;
 }
 
