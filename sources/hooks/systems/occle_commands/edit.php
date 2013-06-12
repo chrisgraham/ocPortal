@@ -44,7 +44,7 @@ class Hook_occle_command_edit
 
 			return array('',do_template('OCCLE_EDIT',array(
 				'_GUID'=>'8bbf2f9ef545a92b6865c35ed27cd6d4',
-				'UNIQ_ID'=>uniqid(''),
+				'UNIQ_ID'=>uniqid('',true),
 				'FILE'=>$parameters[0],
 				'SUBMIT_URL'=>build_url(array('page'=>'admin_occle','command'=>'write "'.$parameters[0].'" "{0}" < :echo addslashes(get_param(\'edit_content\'));'),get_module_zone('admin_occle')),
 				'FILE_CONTENTS'=>$file_contents,

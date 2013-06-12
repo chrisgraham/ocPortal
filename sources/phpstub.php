@@ -3497,10 +3497,10 @@ function uksort(&$array,$cmp_function)
  * Generate a unique ID.
  *
  * @param  string		Prefix for unique ID.
- * @param  boolean	Whether to add additional "combined LCG" entropy at the end of the return value.
+ * @param  boolean	Whether to add additional "combined LCG" entropy at the end of the return value. Always pass as true, because on some IIS systems the timer resolution will be in seconds.
  * @return string		Unique ID.
  */
-function uniqid($prefix,$lcg=false)
+function uniqid($prefix,$lcg)
 {
 	return '';
 }

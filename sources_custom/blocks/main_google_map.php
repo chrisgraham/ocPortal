@@ -220,7 +220,7 @@ class Block_main_google_map
 			}
 		}
 
-		$uniqid=uniqid('');
+		$uniqid=uniqid('',true);
 		$div_id='div_'.$catalogue_name.'_'.$uniqid;
 
 		return do_template('BLOCK_MAIN_GOOGLE_MAP',array(

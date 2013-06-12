@@ -32,13 +32,13 @@
 				    {+END}
 					<td style='vertical-align: middle'>
 						<table>
-							<tr><td align='right'><b>Title:</b></td><td width='5'>&nbsp;</td><td align='left'><a href='{VIDEO_URL}' target='_blank'>{VIDEO_TITLE}</a></td></tr>
-							<tr><td align='right'><b>Channel:</b></td><td width='5'>&nbsp;</td><td align='left'><a href='{CHANNEL_URL}' target='_blank'>{CHANNEL_NAME}</a></td></tr>
-							<tr><td align='right' nowrap="nowrap"><b>Uploaded:</b></td><td width='5'>&nbsp;</td><td align='left'>{$FROM_TIMESTAMP,%d %B %Y\, %I:%M:%S %p,{$TO_TIMESTAMP,{UPLOAD_DATE}}}</td></tr>
-							<tr><td align='right'><b>Description:</b></td><td width='5'>&nbsp;</td><td align='left'>{$COMCODE,{DESCRIPTION}} </td></tr>
-							<tr><td align='right'><b>Duration:</b></td><td width='5'>&nbsp;</td><td align='left'>{DURATION_NUMERIC} ({DURATION_TEXT})</td></tr>
-							{+START,IF,{$NEQ,{FAVORITE_COUNT},0}}<tr><td align='right'><b>Favorited:</b></td><td width='5'>&nbsp;</td><td align='left'>{FAVORITE_COUNT} person(s) have favorited this video.</td></tr>{+END}
-							{+START,IF,{$NEQ,{RATING_NUM_RATES},0}}<tr><td align='right'><b>Likes/Dislikes:</b></td><td width='5'>&nbsp;</td><td align='left'>{RATING_LIKES}/{RATING_DISLIKES} ({RATING_LIKE_PERCENT}% liked out of {RATING_NUM_RATES} total ratings.) 
+							<tr><td style='text-align: right;'><b>Title:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'><a href='{VIDEO_URL}' target='_blank'>{VIDEO_TITLE}</a></td></tr>
+							<tr><td style='text-align: right;'><b>Channel:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'><a href='{CHANNEL_URL}' target='_blank'>{CHANNEL_NAME}</a></td></tr>
+							<tr><td style='text-align: right;' nowrap="nowrap"><b>Uploaded:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{$FROM_TIMESTAMP,%d %B %Y\, %I:%M:%S %p,{$TO_TIMESTAMP,{UPLOAD_DATE}}}</td></tr>
+							<tr><td style='text-align: right;'><b>Description:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{$COMCODE,{DESCRIPTION}} </td></tr>
+							<tr><td style='text-align: right;'><b>Duration:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{DURATION_NUMERIC} ({DURATION_TEXT})</td></tr>
+							{+START,IF,{$NEQ,{FAVORITE_COUNT},0}}<tr><td style='text-align: right;'><b>Favorited:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{FAVORITE_COUNT} person(s) have favorited this video.</td></tr>{+END}
+							{+START,IF,{$NEQ,{RATING_NUM_RATES},0}}<tr><td style='text-align: right;'><b>Likes/Dislikes:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{RATING_LIKES}/{RATING_DISLIKES} ({RATING_LIKE_PERCENT}% liked out of {RATING_NUM_RATES} total ratings.)<br> 
 								{$SET,i,0}
 								{+START,WHILE,{$GT,{$SUBTRACT,{RATING_NUMERIC},{$GET,i}},0}}
 									<img style="border: 0px none; margin: 0px; padding: 0px; vertical-align: middle; font-size: 11px;" alt="" src="http://gdata.youtube.com/static/images/icn_star_full_11x11.gif" align="top">
@@ -53,7 +53,7 @@
 									{$INC,i}
 								{+END}
 								</td></tr>{+END}
-							<tr><td align='right'><b>Views:</b></td><td width='5'>&nbsp;</td><td align='left'>{VIEWS}</td></tr>
+							<tr><td style='text-align: right;'><b>Views:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{VIEWS}</td></tr>
 						</table>
  					</td>
 				</tr>
@@ -107,13 +107,13 @@
 				     {+END}
 				    {+END}
 						<table>
-							<tr><td align='right'><b>Title:</b></td><td width='5'>&nbsp;</td><td align='left'><a href='{VIDEO_URL}' target='_blank'>{VIDEO_TITLE}</a></td></tr>
-							<tr><td align='right'><b>Channel:</b></td><td width='5'>&nbsp;</td><td align='left'><a href='{CHANNEL_URL}' target='_blank'>{CHANNEL_NAME}</a></td></tr>
-							<tr><td align='right' nowrap="nowrap"><b>Uploaded:</b></td><td width='5'>&nbsp;</td><td align='left'>{$FROM_TIMESTAMP,%d %B %Y\, %I:%M:%S %p,{$TO_TIMESTAMP,{UPLOAD_DATE}}}</td></tr>
-							<tr><td align='right'><b>Description:</b></td><td width='5'>&nbsp;</td><td align='left'>{$COMCODE,{DESCRIPTION}} </td></tr>
-							<tr><td align='right'><b>Duration:</b></td><td width='5'>&nbsp;</td><td align='left'>{DURATION_NUMERIC} ({DURATION_TEXT})</td></tr>
-							{+START,IF,{$NEQ,{FAVORITE_COUNT},0}}<tr><td align='right'><b>Favorited:</b></td><td width='5'>&nbsp;</td><td align='left'>{FAVORITE_COUNT} person(s) have favorited this video.</td></tr>{+END}
-							{+START,IF,{$NEQ,{RATING_NUM_RATES},0}}<tr><td align='right'><b>Likes/Dislikes:</b></td><td width='5'>&nbsp;</td><td align='left'>{RATING_LIKES}/{RATING_DISLIKES} ({RATING_LIKE_PERCENT}% liked out of {RATING_NUM_RATES} total ratings.) 
+							<tr><td style='text-align: right;'><b>Title:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'><a href='{VIDEO_URL}' target='_blank'>{VIDEO_TITLE}</a></td></tr>
+							<tr><td style='text-align: right;'><b>Channel:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'><a href='{CHANNEL_URL}' target='_blank'>{CHANNEL_NAME}</a></td></tr>
+							<tr><td style='text-align: right;' nowrap="nowrap"><b>Uploaded:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{$FROM_TIMESTAMP,%d %B %Y\, %I:%M:%S %p,{$TO_TIMESTAMP,{UPLOAD_DATE}}}</td></tr>
+							<tr><td style='text-align: right;'><b>Description:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{$COMCODE,{DESCRIPTION}} </td></tr>
+							<tr><td style='text-align: right;'><b>Duration:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{DURATION_NUMERIC} ({DURATION_TEXT})</td></tr>
+							{+START,IF,{$NEQ,{FAVORITE_COUNT},0}}<tr><td style='text-align: right;'><b>Favorited:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{FAVORITE_COUNT} person(s) have favorited this video.</td></tr>{+END}
+							{+START,IF,{$NEQ,{RATING_NUM_RATES},0}}<tr><td style='text-align: right;'><b>Likes/Dislikes:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{RATING_LIKES}/{RATING_DISLIKES} ({RATING_LIKE_PERCENT}% liked out of {RATING_NUM_RATES} total ratings.)<br> 
 								{$SET,i,0}
 								{+START,WHILE,{$GT,{$SUBTRACT,{RATING_NUMERIC},{$GET,i}},0}}
 									<img style="border: 0px none; margin: 0px; padding: 0px; vertical-align: middle; font-size: 11px;" alt="" src="http://gdata.youtube.com/static/images/icn_star_full_11x11.gif" align="top">
@@ -128,7 +128,7 @@
 									{$INC,i}
 								{+END}
 								</td></tr>{+END}
-							<tr><td align='right'><b>Views:</b></td><td width='5'>&nbsp;</td><td align='left'>{VIEWS}</td></tr>
+							<tr><td style='text-align: right;'><b>Views:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{VIEWS}</td></tr>
 						</table>
 					</td></tr></table></td>
 				</tr>
@@ -184,6 +184,57 @@
 					</td></tr></table></td>
 				</tr>
 			</table>
+		{+END}
+		
+		{+START,IF,{$EQ,{STYLE},4}}
+		  {+START,IF,{$EQ,{$GET,showplayer},1}}
+		    <div align='{PLAYERALIGN}'> 
+		      <iframe width="{PLAYERWIDTH}" height="{PLAYERHEIGHT}" src="{EMBEDVIDEO}" frameborder="0" allowfullscreen></iframe> 
+		    </div> 
+		    <br>
+		  {+END}
+		    <div align='{PLAYERALIGN}'> 
+			<table border="0" cellpadding="0" cellspacing="4">
+				<tr>
+				    {+START,IF,{$EQ,{$GET,nothumbplayer},1}}
+					<td width='{THUMBWIDTH}' style='vertical-align: middle; text-align: center' nowrap>
+						<a href='{VIDEO_URL}' target='_blank'><img src='{THUMBNAIL}' width='{THUMBWIDTH}' height='{THUMBHEIGHT}' alt='{THUMBALT}'></a>
+						{+START,IF,{$AND,{$EQ,{EMBEDPLAYER_ALLOWED},0},{$EQ,{EMBED_ALLOWED},1}}}
+							<br>Embedding not allowed<br>
+							<a href='{VIDEO_URL}' target='_blank'>View on YouTube</a>
+						{+END}
+					</td>
+					<td width='5'>&nbsp;</td>
+				    {+END}
+					<td style='vertical-align: middle'>
+						<table>
+							<tr><td style='text-align: right;'><b>Title:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'><a href='{VIDEO_URL}' target='_blank'>{VIDEO_TITLE}</a></td></tr>
+							<tr><td style='text-align: right;'><b>Channel:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'><a href='{CHANNEL_URL}' target='_blank'>{CHANNEL_NAME}</a></td></tr>
+							<tr><td style='text-align: right;' nowrap="nowrap"><b>Uploaded:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{$FROM_TIMESTAMP,%d %B %Y\, %I:%M:%S %p,{$TO_TIMESTAMP,{UPLOAD_DATE}}}</td></tr>
+							<tr><td style='text-align: right;'><b>Description:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{$COMCODE,{DESCRIPTION}} </td></tr>
+							<tr><td style='text-align: right;'><b>Duration:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{DURATION_NUMERIC} ({DURATION_TEXT})</td></tr>
+							{+START,IF,{$NEQ,{FAVORITE_COUNT},0}}<tr><td style='text-align: right;'><b>Favorited:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{FAVORITE_COUNT} person(s) have favorited this video.</td></tr>{+END}
+							{+START,IF,{$NEQ,{RATING_NUM_RATES},0}}<tr><td style='text-align: right;'><b>Likes/Dislikes:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{RATING_LIKES}/{RATING_DISLIKES} ({RATING_LIKE_PERCENT}% liked out of {RATING_NUM_RATES} total ratings.)<br> 
+								{$SET,i,0}
+								{+START,WHILE,{$GT,{$SUBTRACT,{RATING_NUMERIC},{$GET,i}},0}}
+									<img style="border: 0px none; margin: 0px; padding: 0px; vertical-align: middle; font-size: 11px;" alt="" src="http://gdata.youtube.com/static/images/icn_star_full_11x11.gif" align="top">
+									{$INC,i}
+								{+END}
+								{+START,IF,{$GT,{$MULT,{$SUBTRACT,{RATING_NUMERIC},{$GET,i}},100000},49999}}
+									<img style="border: 0px none; margin: 0px; padding: 0px; vertical-align: middle; font-size: 11px;" alt="" src="http://gdata.youtube.com/static/images/icn_star_half_11x11.gif" align="top">
+									{$INC,i}
+								{+END}
+								{+START,WHILE,{$LT,{$GET,i},5}}
+									<img style="border: 0px none; margin: 0px; padding: 0px; vertical-align: middle; font-size: 11px;" alt="" src="http://gdata.youtube.com/static/images/icn_star_empty_11x11.gif" align="top">
+									{$INC,i}
+								{+END}
+								</td></tr>{+END}
+							<tr><td style='text-align: right;'><b>Views:</b></td><td width='5'>&nbsp;</td><td style='text-align: left;'>{VIEWS}</td></tr>
+						</table>
+ 					</td>
+				</tr>
+			</table>
+			</div>
 		{+END}
 
 		    <br><hr style='height:1px;' /><br>

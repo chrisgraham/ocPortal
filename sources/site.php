@@ -953,7 +953,7 @@ function do_site()
 		{
 			require_code('notifications');
 			$subject=do_lang('LOW_DISK_SPACE_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
-			$message=do_lang('LOW_DISK_SPACE_MAIL',strval(intval(round($disk_space/1024/1024))),NULL,get_site_default_lang());
+			$message=do_lang('LOW_DISK_SPACE_MAIL',strval(intval(round($disk_space/1024/1024))),NULL,NULL,get_site_default_lang());
 			dispatch_notification('low_disk_space',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}

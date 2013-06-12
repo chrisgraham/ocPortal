@@ -30,7 +30,7 @@ require_code('database_toolkit');
 if ((strpos(ini_get('disallowed_functions'),'shell_exec')===false) && (strpos(get_db_type(),'mysql')!==false))
 {
 	$cmd='mysqldump -h'.get_db_site_host().' -u'.get_db_site_user().' -p'.get_db_site_password().' '.get_db_site().' 2>&1';
-	$filename='dump_'.uniqid('').'.sql';
+	$filename='dump_'.uniqid('',true).'.sql';
 	$target_file=get_custom_file_base().'/'.$filename;
 	$cmd.=' > '.$target_file;
 	$msg=shell_exec($cmd);

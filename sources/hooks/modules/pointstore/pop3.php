@@ -407,7 +407,7 @@ class Hook_pointstore_pop3
 		$encoded_reason=do_lang('TITLE_QUOTA');
 		$message_raw=do_template('POINTSTORE_QUOTA_MAIL',array('_GUID'=>'5a4e0bb5e53e6ccf8e57581c377557f4','ENCODED_REASON'=>$encoded_reason,'QUOTA'=>integer_format($quota),'EMAIL'=>$prefix.$suffix,'QUOTA_URL'=>$quota_url,'PRICE'=>integer_format($_price)));
 		require_code('notifications');
-		dispatch_notification('pointstore_request_quota','quota_'.uniqid(''),do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_quota','quota_'.uniqid('',true),do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_QUOTA_DONE'));

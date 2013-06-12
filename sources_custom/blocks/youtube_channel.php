@@ -113,7 +113,7 @@ class Block_youtube_channel
 		if ($channel_orderby < 1 || $channel_orderby > 3) $channel_orderby = 1;
 		if ($channel_showplayer < 0 || $channel_showplayer > 2) $channel_showplayer = 1;
 		if ($channel_playeralign != 'center' || $channel_playeralign != 'left' || $channel_playeralign != 'right') $channel_playeralign = 'center';
-		if ($channel_style < 1 || $channel_style > 3) $channel_style = 1;
+		//if ($channel_style < 1 || $channel_style > 3) $channel_style = 1;
 		if ($channel_nothumbplayer < 0 || $channel_nothumbplayer > 1) $channel_nothumbplayer = 0;
 
 
@@ -145,26 +145,43 @@ class Block_youtube_channel
 		if (isset($result->feed->entry)) {
 			foreach ($result->feed->entry as $entry) { 
 	 		 // meta information for the video
-			  $title = $entry->title->{'$t'};													//get video title
-			  $description = $entry->{'media$group'}->{'media$description'}->{'$t'}; 			//get video description
-			  $views = $entry->{'yt$statistics'}->viewCount;  									//get video view count
+			  //get video title
+			  if (isset($entry->title->{'$t'})) $title = $entry->title->{'$t'};
+			  else $title = "";
+			  
+			  //get video description
+			  if (isset($entry->{'media$group'}->{'media$description'}->{'$t'})) $description = $entry->{'media$group'}->{'media$description'}->{'$t'};
+			  else $descrition = "";
+
+			  //get video view count
+			  if (isset($entry->{'yt$statistics'}->viewCount)) $views = $entry->{'yt$statistics'}->viewCount;
+			  else $views = strval(0);
+
+			  //get video favorite count
+			  if (isset($entry->{'yt$statistics'}->favoriteCount)) $favoritecount = $entry->{'yt$statistics'}->favoriteCount;
+			  else $favoritecount = strval(0);
+			  
 			  $thumbnails = $entry->{'media$group'}->{'media$thumbnail'}; 						//get video thumbnails
 			  $accesscontrols = $entry->{'yt$accessControl'};									//get video access controls - used to find out if video can be embedded
 			  $vidurl = $entry->{'media$group'}->{'media$player'}; 								//get video youtube page url
 			  $uploaded = $entry->{'media$group'}->{'yt$uploaded'}->{'$t'};						//get video upload date/time
 			  $video_id = $entry->{'media$group'}->{'yt$videoid'}->{'$t'};						//get video id
-			  $favoritecount = $entry->{'yt$statistics'}->favoriteCount;  						//get video favorite count
+
 			  if (isset($entry->{'yt$rating'})) $likes = $entry->{'yt$rating'}->numLikes;		//if video has been liked, get number of likes
 			  else $likes = 0;																	//if video has no likes, node will not be available - manually set it to 0
+			  
 			  if (isset($entry->{'yt$rating'})) $dislikes = $entry->{'yt$rating'}->numDislikes;	//if video has been disliked, get number of dislikes
 			  else $dislikes = 0;																//if video has no dislikes, node will not be available - manually set it to 0
+			  
 			  $ratingstotal = $likes + $dislikes;												//generate total number of likes and dislikes
 			  if ($ratingstotal > 0) $likespercent = round(($likes/$ratingstotal)*100);			//generate percentage of likes
 			  else $likespercent = 0;															//if no likes or dislikes, set percentage of likes to 0
+			  
 			  if (isset($entry->{'gd$rating'})) $rating = $entry->{'gd$rating'}->average;		//if video has likes or dislikes, get the average rating (can be used for half star ratings of 1 to 5 stars)
 			  else $rating = 0;																	//if video has no likes or dislikes, node will not be available - manually set rating is set to 0
 			  if ($rating > 0) $ratingstars = round($rating);									//generate full star rating of 1 to 5 stars (no half stars)
 			  else $ratingstars = 0;															//if no likes or dislikes, set full star rating to 0
+			  
 			  $minutes = 0; $seconds = 0;														//initialize minutes and seconds to 0
 			  $seconds = $entry->{'media$group'}->{'yt$duration'}->seconds;  					//get video duration in seconds
 			  if ($seconds > 1) $duration_text = "$seconds seconds";							//if more than one second, use plural - seconds
@@ -234,14 +251,80 @@ class Block_youtube_channel
 			  if ($temp_nothumbplayer == 0 && $channel_showplayer == 0) $channel_nothumbplayer = '1';
 
 			  //style all of the meta info using the Style template and store it all in the content variable which is passed to the main template 
-			  $content->attach(do_template("$channel_templatestyle",array('EMBED_ALLOWED'=>$channel_embedallowed,'EMBEDPLAYER_ALLOWED'=>$allowembedding,'VIDEO_ID'=>$video_id,'MAX_VIDEOS'=>$channel_maxvideos,'COUNT'=>strval($i),'VIDEO_URL'=>$vidurl->url,'CHANNEL_TITLE'=>$channel_title,'VIDEO_TITLE'=>$title,'RATING_STARS'=>strval($ratingstars),'RATING_LIKE_PERCENT'=>strval($likespercent),'RATING_NUM_RATES'=>strval($ratingstotal),'RATING_DISLIKES'=>strval($dislikes),'RATING_LIKES'=>strval($likes),'RATING_NUMERIC'=>strval($rating),'FAVORITE_COUNT'=>strval($favoritecount),'CHANNEL_URL'=>$channel_url,'CHANNEL_NAME'=>$channel_name,'UPLOAD_DATE'=>$uploaded,'DESCRIPTION'=>$description,'VIEWS'=>$views,'DURATION_TEXT'=>$duration_text,'DURATION_NUMERIC'=>$duration_numeric,'THUMBNAIL'=>$thumb_img->url,'THUMBWIDTH'=>strval($thumb_img->width),'THUMBHEIGHT'=>strval($thumb_img->height),'THUMBALT'=>$thumbalt,'THUMBNAIL_0'=>$thumb_img_0->url,'THUMBWIDTH_0'=>strval($thumb_img_0->width),'THUMBHEIGHT_0'=>strval($thumb_img_0->height),'THUMBALT_0'=>$thumbalt_0,'THUMBNAIL_1'=>$thumb_img_1->url,'THUMBWIDTH_1'=>strval($thumb_img_1->width),'THUMBHEIGHT_1'=>strval($thumb_img_1->height),'THUMBALT_1'=>$thumbalt_1,'THUMBNAIL_2'=>$thumb_img_2->url,'THUMBWIDTH_2'=>strval($thumb_img_2->width),'THUMBHEIGHT_2'=>strval($thumb_img_2->height),'THUMBALT_2'=>$thumbalt_2,'THUMBNAIL_3'=>$thumb_img_3->url,'THUMBWIDTH_3'=>strval($thumb_img_3->width),'THUMBHEIGHT_3'=>strval($thumb_img_3->height),'THUMBALT_3'=>$thumbalt_3,'THUMBNAIL_4'=>$thumb_img_4->url,'THUMBWIDTH_4'=>strval($thumb_img_4->width),'THUMBHEIGHT_4'=>strval($thumb_img_4->height),'THUMBALT_4'=>$thumbalt_4,'THUMBNAIL_5'=>$thumb_img_5->url,'THUMBWIDTH_5'=>strval($thumb_img_5->width),'THUMBHEIGHT_5'=>strval($thumb_img_5->height),'THUMBALT_5'=>$thumbalt_5,'PLAYERALIGN'=>$channel_playeralign,'PLAYERHEIGHT'=>$channel_playerheight,'PLAYERWIDTH'=>$channel_playerwidth,'EMBEDVIDEO'=>$embedvideo,'VIDEO_PLAYER'=>$videoplayer,'SHOWPLAYER'=>$channel_showplayer,'STYLE'=>$channel_style,'NOTHUMBPLAYER'=>$channel_nothumbplayer,'FOR_MORE_LEAD'=>$channel_formorelead,'FOR_MORE_TEXT'=>$channel_formoretext,'FOR_MORE_URL'=>$channel_formoreurl )));
+			  $content->attach(do_template("$channel_templatestyle",array(
+			  	'EMBED_ALLOWED'=>$channel_embedallowed,
+			  	'EMBEDPLAYER_ALLOWED'=>$allowembedding,
+			  	'VIDEO_ID'=>$video_id,
+			  	'MAX_VIDEOS'=>$channel_maxvideos,
+			  	'COUNT'=>strval($i),
+			  	'VIDEO_URL'=>$vidurl->url,
+			  	'CHANNEL_TITLE'=>$channel_title,
+			  	'VIDEO_TITLE'=>$title,
+			  	'RATING_STARS'=>strval($ratingstars),
+			  	'RATING_LIKE_PERCENT'=>strval($likespercent),
+			  	'RATING_NUM_RATES'=>strval($ratingstotal),
+			  	'RATING_DISLIKES'=>strval($dislikes),
+			  	'RATING_LIKES'=>strval($likes),
+			  	'RATING_NUMERIC'=>strval($rating),
+			  	'FAVORITE_COUNT'=>strval($favoritecount),
+			  	'CHANNEL_URL'=>$channel_url,
+			  	'CHANNEL_NAME'=>$channel_name,
+			  	'UPLOAD_DATE'=>$uploaded,
+			  	'DESCRIPTION'=>$description,
+			  	'VIEWS'=>$views,
+			  	'DURATION_TEXT'=>$duration_text,
+			  	'DURATION_NUMERIC'=>$duration_numeric,
+			  	'THUMBNAIL'=>$thumb_img->url,
+			  	'THUMBWIDTH'=>strval($thumb_img->width),
+			  	'THUMBHEIGHT'=>strval($thumb_img->height),
+			  	'THUMBALT'=>$thumbalt,
+			  	'THUMBNAIL_0'=>$thumb_img_0->url,
+			  	'THUMBWIDTH_0'=>strval($thumb_img_0->width),
+			  	'THUMBHEIGHT_0'=>strval($thumb_img_0->height),
+			  	'THUMBALT_0'=>$thumbalt_0,
+			  	'THUMBNAIL_1'=>$thumb_img_1->url,
+			  	'THUMBWIDTH_1'=>strval($thumb_img_1->width),
+			  	'THUMBHEIGHT_1'=>strval($thumb_img_1->height),
+			  	'THUMBALT_1'=>$thumbalt_1,
+			  	'THUMBNAIL_2'=>$thumb_img_2->url,
+			  	'THUMBWIDTH_2'=>strval($thumb_img_2->width),
+			  	'THUMBHEIGHT_2'=>strval($thumb_img_2->height),
+			  	'THUMBALT_2'=>$thumbalt_2,
+			  	'THUMBNAIL_3'=>$thumb_img_3->url,
+			  	'THUMBWIDTH_3'=>strval($thumb_img_3->width),
+			  	'THUMBHEIGHT_3'=>strval($thumb_img_3->height),
+			  	'THUMBALT_3'=>$thumbalt_3,
+			  	'THUMBNAIL_4'=>$thumb_img_4->url,
+			  	'THUMBWIDTH_4'=>strval($thumb_img_4->width),
+			  	'THUMBHEIGHT_4'=>strval($thumb_img_4->height),
+			  	'THUMBALT_4'=>$thumbalt_4,
+			  	'THUMBNAIL_5'=>$thumb_img_5->url,
+			  	'THUMBWIDTH_5'=>strval($thumb_img_5->width),
+			  	'THUMBHEIGHT_5'=>strval($thumb_img_5->height),
+			  	'THUMBALT_5'=>$thumbalt_5,
+			  	'PLAYERALIGN'=>$channel_playeralign,
+			  	'PLAYERHEIGHT'=>$channel_playerheight,
+			  	'PLAYERWIDTH'=>$channel_playerwidth,
+			  	'EMBEDVIDEO'=>$embedvideo,
+			  	'VIDEO_PLAYER'=>$videoplayer,
+			  	'SHOWPLAYER'=>$channel_showplayer,
+			  	'STYLE'=>strval($channel_style),
+			  	'NOTHUMBPLAYER'=>$channel_nothumbplayer,
+			  	'FOR_MORE_LEAD'=>$channel_formorelead,
+			  	'FOR_MORE_TEXT'=>$channel_formoretext,
+			  	'FOR_MORE_URL'=>$channel_formoreurl )));
 			  $i++;
 			} 
 		}
 		else $channel_error = "Channel not found or possibly the YouTube API request limit is exceded!";  //set error if channel request doesn't return a channel result
 
 		//send styled content to the main template
-		return do_template("$channel_templatemain",array('CHANNEL_ERROR'=>$channel_error,'CHANNEL_TITLE'=>$channel_title,'CHANNEL_NAME'=>$channel_name,'CHANNEL_URL'=>$channel_url,'CONTENT'=>$content));
+		return do_template("$channel_templatemain",array(
+			'CHANNEL_ERROR'=>$channel_error,
+			'CHANNEL_TITLE'=>$channel_title,
+			'CHANNEL_NAME'=>$channel_name,
+			'CHANNEL_URL'=>$channel_url,
+			'CONTENT'=>$content));
 	}
 	
 }

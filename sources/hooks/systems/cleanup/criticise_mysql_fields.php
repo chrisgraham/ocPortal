@@ -99,7 +99,7 @@ class Hook_criticise_mysql_fields
 			foreach ($indexes as $name=>$_index)
 			{
 				if ($name=='PRIMARY') continue;
-				if ($name=='') $name=uniqid('');
+				if ($name=='') $name=uniqid('',true);
 				$fulltext=$_index[0]['Index_type']=='FULLTEXT';
 				$fields='';
 				foreach ($_index as $_field)

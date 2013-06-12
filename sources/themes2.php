@@ -247,7 +247,7 @@ function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_ch
 	{
 		$urls=get_url('',$field_file,'themes/default/images_custom',0,OCP_UPLOAD_IMAGE,false);
 
-		$theme_img_code=$type.'/'.uniqid('');
+		$theme_img_code=$type.'/'.uniqid('',true);
 
 		$db->query_insert('theme_images',array('id'=>$theme_img_code,'theme'=>'default','path'=>$urls[0],'lang'=>get_site_default_lang()));
 

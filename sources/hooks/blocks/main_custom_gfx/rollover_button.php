@@ -48,7 +48,7 @@ class Hook_main_custom_gfx_rollover_button
 		$url_2=$block->_do_image($cache_id_2,$map,$img_path_2);
 		if (is_object($url_2)) return $url_2;
 
-		$comb_id='rollover_'.uniqid('');
+		$comb_id='rollover_'.uniqid('',true);
 
 		$ret='<img id="'.php_addslashes($comb_id).'" class="gfx_text_overlay" alt="'.str_replace(chr(10),' ',escape_html($map['data'])).'" src="'.escape_html($url_1).'" />';
 		$ret.='

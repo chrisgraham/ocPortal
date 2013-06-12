@@ -62,7 +62,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 			if (substr(get_mime_type(get_file_extension($url)),0,6)=='audio/')
 				$extension='mp3';
 
-			$transcoded_filename=uniqid('transcoded').'--'.rawurldecode(preg_replace('#\.\w+$#','',basename($url))).'.'.$extension;
+			$transcoded_filename=uniqid('transcoded',true).'--'.rawurldecode(preg_replace('#\.\w+$#','',basename($url))).'.'.$extension;
 			$xml='<'.'?xml version="1.0" encoding="UTF-8"?'.'>
 				<api-request>
 					<api_key>'.xmlentities(get_option('transcoding_zencoder_api_key')).'</api_key>

@@ -355,7 +355,7 @@ function site_tree_script()
 
 				if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $privilege_perms.='inherits_something="1" ';
 				$serverid=$zone.':'.(is_string($page)?$page:strval($page));
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'description="'.xmlentities($description).'" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="true" '.$view_perms.$privilege_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'description="'.xmlentities($description).'" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="true" '.$view_perms.$privilege_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 			} else
 			{
 				$extra='';
@@ -383,7 +383,7 @@ function site_tree_script()
 				global $MODULES_ZONES_CACHE;
 				$not_draggable=((array_key_exists($page,$MODULES_ZONES_CACHE)) || (($zone=='adminzone') && (substr($page,0,6)=='admin_') && (substr($page_type,0,6)=='module')));
 				$serverid=$zone.':'.$page;
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').''.$extra.'type="'.xmlentities($page_type).'" description="'.xmlentities($description).'" draggable="'.($not_draggable?'false':'page').'" droppable="'.(($page_type=='zone')?'page':'false').'" id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').''.$extra.'type="'.xmlentities($page_type).'" description="'.xmlentities($description).'" draggable="'.($not_draggable?'false':'page').'" droppable="'.(($page_type=='zone')?'page':'false').'" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 			}
 			echo '</category>';
 		}
@@ -435,7 +435,7 @@ function site_tree_script()
 			foreach ($entrypoints as $entry_point=>$lang_string)
 			{
 				$serverid=$zone.':'.$page;
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="entry_point" id="'.uniqid('').'" serverid="'.xmlentities($serverid).':type='.$entry_point.'" title="'.xmlentities(do_lang('ENTRY_POINT').': '.do_lang($lang_string)).'" has_children="false" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="entry_point" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).':type='.$entry_point.'" title="'.xmlentities(do_lang('ENTRY_POINT').': '.do_lang($lang_string)).'" has_children="false" selectable="true">';
 				echo '</category>';
 			}
 		}
@@ -522,11 +522,11 @@ function site_tree_script()
 
 					if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $privilege_perms.='inherits_something="1" ';
 					$serverid=$actual_page_link;
-					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="'.$highlight.'" '.$view_perms.$privilege_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.(!is_null($module_the_name)?'true':'false').'">';
+					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="'.$highlight.'" '.$view_perms.$privilege_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.(!is_null($module_the_name)?'true':'false').'">';
 				} else
 				{
 					$serverid=$actual_page_link;
-					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="category" id="'.uniqid('').'" edit="'.xmlentities($actual_edit_link).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
+					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="category" id="'.uniqid('',true).'" edit="'.xmlentities($actual_edit_link).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 				}
 				echo '</category>';
 			}
@@ -568,11 +568,11 @@ function site_tree_script()
 					}
 				}
 			}
-			echo '<category serverid="_root" expanded="true" title="'.do_lang('ROOT').'" has_children="true" selectable="true" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" id="'.uniqid('').'" '.$view_perms.'>';
+			echo '<category serverid="_root" expanded="true" title="'.do_lang('ROOT').'" has_children="true" selectable="true" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" id="'.uniqid('',true).'" '.$view_perms.'>';
 			echo $privilege_perms_opera_hack;
 		} else
 		{
-			echo '<category serverid="_root" expanded="true" title="'.do_lang('ROOT').'" has_children="true" selectable="false" type="root" id="'.uniqid('').'">';
+			echo '<category serverid="_root" expanded="true" title="'.do_lang('ROOT').'" has_children="true" selectable="false" type="root" id="'.uniqid('',true).'">';
 		}
 
 		// Zones
@@ -607,10 +607,10 @@ function site_tree_script()
 						$view_perms.='g_view_'.strval($group).'="'.(in_array(array('zone_name'=>$zone,'group_id'=>$group),$zone_access)?'true':'false').'" ';
 				}
 
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" no_privileges="1" highlighted="true" '.$view_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" no_privileges="1" highlighted="true" '.$view_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
 			} else
 			{
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="zone" droppable="page" id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="zone" droppable="page" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
 			}
 			echo '</category>';
 		}

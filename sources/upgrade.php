@@ -863,7 +863,7 @@ function move_modules()
 				{
 					if (($page=='filedump') && ($zone2=='cms')) continue; // This has moved between versions
 
-					$out.='<li><input type="checkbox" name="'.uniqid('').'" value="move:'.escape_html($_path_a.':'.$_path_b).'" /> '.do_lang('FILE_MOVED','<kbd>'.escape_html($page).'</kbd>','<kbd>'.escape_html($zone2).'</kbd>','<kbd>'.escape_html($zone).'</kbd>').'</li>';
+					$out.='<li><input type="checkbox" name="'.uniqid('',true).'" value="move:'.escape_html($_path_a.':'.$_path_b).'" /> '.do_lang('FILE_MOVED','<kbd>'.escape_html($page).'</kbd>','<kbd>'.escape_html($zone2).'</kbd>','<kbd>'.escape_html($zone).'</kbd>').'</li>';
 					$outr[]=$path_b;
 				}
 			}
@@ -1350,7 +1350,7 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 				if (file_exists(get_file_base().'/'.$x))
 				{
 					$alien.='<li>';
-					if (!$raw) $alien.='<input checked="checked" type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($x).'" /> ';
+					if (!$raw) $alien.='<input checked="checked" type="checkbox" name="'.uniqid('',true).'" value="delete:'.escape_html($x).'" /> ';
 					$alien.='<kbd>'.escape_html($x).'</kbd></li>';
 				}
 			}
@@ -1417,7 +1417,7 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 					if (array_key_exists($rela.$file,$old_files)) $checked='checked="checked" ';
 					$file_html='';
 					$file_html.='<li>';
-					if (!$raw) $file_html.='<input '.$disabled.$checked.'type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($rela.$file).'" /> ';
+					if (!$raw) $file_html.='<input '.$disabled.$checked.'type="checkbox" name="'.uniqid('',true).'" value="delete:'.escape_html($rela.$file).'" /> ';
 					$file_html.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
 					if (array_key_exists($rela.$file,$addon_files))
 					{

@@ -658,7 +658,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$height=strval(array_key_exists('height',$attributes)?intval($attributes['height']):300);
 			$timein=strval(array_key_exists('timein',$attributes)?intval($attributes['timein']):0);
 			$timeout=strval(array_key_exists('timeout',$attributes)?intval($attributes['timeout']):-1);
-			$temp_tpl=do_template('COMCODE_OVERLAY',array('_GUID'=>'dfd0f7a72cc2bf6b613b28f8165a0034','UNIQ_ID'=>'a'.uniqid(''),'EMBED'=>$embed,'ID'=>($attributes['param']!='')?$attributes['param']:('rand'.uniqid('')),'X'=>$x,'Y'=>$y,'WIDTH'=>$width,'HEIGHT'=>$height,'TIMEIN'=>$timein,'TIMEOUT'=>$timeout));
+			$temp_tpl=do_template('COMCODE_OVERLAY',array('_GUID'=>'dfd0f7a72cc2bf6b613b28f8165a0034','UNIQ_ID'=>'a'.uniqid('',true),'EMBED'=>$embed,'ID'=>($attributes['param']!='')?$attributes['param']:('rand'.uniqid('',true)),'X'=>$x,'Y'=>$y,'WIDTH'=>$width,'HEIGHT'=>$height,'TIMEIN'=>$timein,'TIMEOUT'=>$timeout));
 			break;
 		case 'code':
 			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']==1),$in_semihtml,$is_all_semihtml);
@@ -1329,7 +1329,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$_parts->attach(do_template('COMCODE_RANDOM_PART',array('_GUID'=>'5fa49a916304f9caa0ddedeb01531142','NUM'=>strval($num),'VAL'=>$val)));
 			}
 
-			$temp_tpl=do_template('COMCODE_RANDOM',array('_GUID'=>'9b77aaf593b12c763fb0c367fab415b6','UNIQID'=>uniqid(''),'FULL'=>$embed,'MAX'=>strval($max),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_RANDOM',array('_GUID'=>'9b77aaf593b12c763fb0c367fab415b6','UNIQID'=>uniqid('',true),'FULL'=>$embed,'MAX'=>strval($max),'PARTS'=>$_parts));
 			break;
 		case 'jumping':
 			unset($attributes['param']);
@@ -1371,7 +1371,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$width=$attributes['param'];
 			if (!is_numeric($width)) $width='300';
 			$fspeed=array_key_exists('speed',$attributes)?float_to_raw_string(floatval($attributes['speed'])):'1';
-			$temp_tpl=do_template('COMCODE_TICKER',array('_GUID'=>'e48893cda61995261577f0556443c537','UNIQID'=>uniqid(''),'SPEED'=>$fspeed,'WIDTH'=>$width,'TEXT'=>$embed));
+			$temp_tpl=do_template('COMCODE_TICKER',array('_GUID'=>'e48893cda61995261577f0556443c537','UNIQID'=>uniqid('',true),'SPEED'=>$fspeed,'WIDTH'=>$width,'TEXT'=>$embed));
 
 			break;
 		case 'highlight':
@@ -2151,7 +2151,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$STRUCTURE_LIST=array();
 				foreach ($test_data as $t)
 				{
-					$STRUCTURE_LIST[]=array($t,make_string_tempcode(strval($t)),uniqid(''));
+					$STRUCTURE_LIST[]=array($t,make_string_tempcode(strval($t)),uniqid('',true));
 				}
 				$list_types=array();
 			} else
