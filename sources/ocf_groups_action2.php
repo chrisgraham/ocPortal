@@ -71,7 +71,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	{
 		if ($uniqify)
 		{
-			$name.='_'.uniqid('');
+			$name.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));

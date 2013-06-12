@@ -112,7 +112,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 
 		$menu=$this->_create_name_from_label($label);
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_menu',array('i_menu'=>$menu));
-		if (!is_null($test)) $menu.='_'.uniqid(''); // uniqify
+		if (!is_null($test)) $menu.='_'.uniqid('',true); // uniqify
 
 		$order=db_get_first_id();
 		$parent=NULL;

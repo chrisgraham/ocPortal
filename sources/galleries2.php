@@ -623,7 +623,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 		{
 			if (is_null($expected_output_path))
 			{
-				$filename='thumb_'.md5(uniqid('')).'.png';
+				$filename='thumb_'.md5(uniqid('',true)).'.png';
 				$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
 			}
 			require_code('files');
@@ -1120,7 +1120,7 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 		{
 			if ($uniqify)
 			{
-				$name.='_'.uniqid('');
+				$name.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
@@ -1228,7 +1228,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 		{
 			if ($uniqify)
 			{
-				$name.='_'.uniqid('');
+				$name.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));

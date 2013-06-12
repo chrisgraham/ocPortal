@@ -288,7 +288,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
 		$test=_request_page($page,$zone,NULL,NULL,true);
-		if ($test!==false) $page.='_'.uniqid(''); // Uniqify
+		if ($test!==false) $page.='_'.uniqid('',true); // Uniqify
 
 		require_code('zones3');
 		$full_path=save_comcode_page($zone,$page,$lang,$text,$validated,$parent_page,$add_time,$edit_time,$show_as_edit,$submitter,NULL,$meta_keywords,$meta_description);
@@ -383,7 +383,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		if ($page!=$old_page)
 		{
 			$test=_request_page($page,$zone,NULL,NULL,true);
-			if ($test!==false) $page.='_'.uniqid(''); // Uniqify
+			if ($test!==false) $page.='_'.uniqid('',true); // Uniqify
 		}
 
 		require_code('zones3');

@@ -122,7 +122,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 
 			// Store details, so callback knows how to update DB
 			$GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
-				't_id'=>'ocptrans_'.uniqid(''),
+				't_id'=>'ocptrans_'.uniqid('',true),
 				't_local_id'=>$local_id,
 				't_local_id_field'=>$local_id_field,
 				't_error'=>'',

@@ -365,7 +365,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 				$member=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_poster',array('id'=>$posts[0]));
 				if ($member!=get_member()) break;
 			}
-			$ticket_id=strval($member).'_'.uniqid('');
+			$ticket_id=strval($member).'_'.uniqid('',true);
 			$ticket_type=$GLOBALS['FORUM_DB']->query_select_value('tickets','ticket_type',array('topic_id'=>$from_topic_id));
 			if (is_null($title))
 			{

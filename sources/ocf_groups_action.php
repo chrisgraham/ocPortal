@@ -73,7 +73,7 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 		{
 			if ($uniqify)
 			{
-				$name.='_'.uniqid('');
+				$name.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));

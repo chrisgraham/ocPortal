@@ -811,7 +811,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 			}
 
-			$divider=uniqid('');
+			$divider=uniqid('',true);
 			$raw_payload2='';
 			if (($put===NULL) || (count($post_params)!=0) || (count($files)!=1))
 			{

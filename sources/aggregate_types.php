@@ -45,7 +45,7 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pa
 	{
 		if ($uniqify)
 		{
-			$aggregate_label.='_'.uniqid('');
+			$aggregate_label.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('DUPLICATE_AGGREGATE_INSTANCE',escape_html($aggregate_label)));
@@ -105,7 +105,7 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
 	{
 		if ($uniqify)
 		{
-			$aggregate_label.='_'.uniqid('');
+			$aggregate_label.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('DUPLICATE_AGGREGATE_INSTANCE',escape_html($aggregate_label)));

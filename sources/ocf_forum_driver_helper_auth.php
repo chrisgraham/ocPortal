@@ -99,7 +99,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 				exit();
 			} else
 			{
-				$userid=ocf_member_external_linker($username,uniqid(''),'ldap');
+				$userid=ocf_member_external_linker($username,uniqid('',true),'ldap');
 				$row=$this_ref->get_member_row($userid);
 			}
 		}
@@ -232,7 +232,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 					$this_ref->connection->query_delete('f_member_known_login_ips',array('i_member_id'=>$row['id'],'i_ip'=>$ip),'',1);
 				}
 
-				$code=!is_null($test2)?$test2:uniqid('');
+				$code=!is_null($test2)?$test2:uniqid('',true);
 				$this_ref->connection->query_insert('f_member_known_login_ips',array('i_val_code'=>$code,'i_member_id'=>$row['id'],'i_ip'=>$ip));
 				$url=find_script('validateip').'?code='.$code;
 				$url_simple=find_script('validateip');

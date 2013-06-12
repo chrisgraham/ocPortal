@@ -113,7 +113,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 		{
 			if ($uniqify)
 			{
-				$zone.='_'.uniqid('');
+				$zone.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone)));

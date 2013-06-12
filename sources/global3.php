@@ -2787,7 +2787,7 @@ function is_ocf_satellite_site()
 function generate_guid()
 {
 	// Calculate hash value
-	$hash=md5(uniqid(''));
+	$hash=md5(uniqid('',true));
 
 	// Based on a comment in the PHP manual
 	return sprintf('%08s-%04s-%04x-%04x-%12s',

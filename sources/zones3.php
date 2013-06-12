@@ -72,7 +72,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		{
 			if ($uniqify)
 			{
-				$new_zone.='_'.uniqid('');
+				$new_zone.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($new_zone)));

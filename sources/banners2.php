@@ -266,7 +266,7 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	{
 		if ($uniqify)
 		{
-			$name.='_'.uniqid('');
+			$name.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
@@ -347,7 +347,7 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		{
 			if ($uniqify)
 			{
-				$name.='_'.uniqid('');
+				$name.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
@@ -460,7 +460,7 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 	{
 		if ($uniqify)
 		{
-			$id.='_'.uniqid('');
+			$id.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));
@@ -509,7 +509,7 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 		{
 			if ($uniqify)
 			{
-				$id.='_'.uniqid('');
+				$id.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));

@@ -321,15 +321,15 @@ class Module_admin_backup
 		$b_type=post_param('b_type','full');
 		if ($b_type=='full')
 		{
-			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 		}
 		elseif ($b_type=='incremental')
 		{
-			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 		}
 		elseif ($b_type=='sql')
 		{
-			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 		}
 		else exit();
 

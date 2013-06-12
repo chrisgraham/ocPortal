@@ -1342,7 +1342,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_JUMPING',array('_GUID'=>'85e9f83ed134868436a7db7692f56047','UNIQID'=>uniqid(''),'FULL'=>implode(', ',$attributes),'TIME'=>strval($embed),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_JUMPING',array('_GUID'=>'85e9f83ed134868436a7db7692f56047','UNIQID'=>uniqid('',true),'FULL'=>implode(', ',$attributes),'TIME'=>strval($embed),'PARTS'=>$_parts));
 			break;
 		case 'shocker':
 			$_parts=new ocp_tempcode();
@@ -1365,7 +1365,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($max_color,0,1)=='#') $max_color=substr($max_color,1);
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_SHOCKER',array('_GUID'=>'d648de0a5e3b5f84d82d781f4964e04a','UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval(intval($embed)),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_SHOCKER',array('_GUID'=>'d648de0a5e3b5f84d82d781f4964e04a','UNIQID'=>uniqid('',true),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval(intval($embed)),'PARTS'=>$_parts));
 			break;
 		case 'ticker':
 			$width=$attributes['param'];

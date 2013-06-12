@@ -210,7 +210,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	{
 		if ($uniqify)
 		{
-			$name.='_'.uniqid('');
+			$name.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
@@ -347,7 +347,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		{
 			if ($uniqify)
 			{
-				$name.='_'.uniqid('');
+				$name.='_'.uniqid('',true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));

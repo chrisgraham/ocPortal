@@ -42,7 +42,7 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
 	{
 		if ($uniqify)
 		{
-			$tag.='_'.uniqid('');
+			$tag.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
@@ -99,7 +99,7 @@ function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$exa
 	{
 		if ($uniqify)
 		{
-			$tag.='_'.uniqid('');
+			$tag.='_'.uniqid('',true);
 		} else
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));

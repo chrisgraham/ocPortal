@@ -88,13 +88,13 @@ class resource_fs_test_set extends ocp_test_case
 				foreach (is_array($ob->folder_resource_type)?$ob->folder_resource_type:array($ob->folder_resource_type) as $resource_type)
 				{
 					$count+=$ob->get_resources_count($resource_type);
-					$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
+					$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid('',true))==array()); // Search for a unique random ID should find nothing
 				}
 			}
 			foreach (is_array($ob->file_resource_type)?$ob->file_resource_type:array($ob->file_resource_type) as $resource_type)
 			{
 				$count+=$ob->get_resources_count($resource_type);
-				$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid(''))==array()); // Search for a unique random ID should find nothing
+				$this->assertTrue($ob->find_resource_by_label($resource_type,uniqid('',true))==array()); // Search for a unique random ID should find nothing
 			}
 
 			$listing=$this->_recursive_listing($ob,array(),array('var',$occlefs_hook),$occle_fs);
