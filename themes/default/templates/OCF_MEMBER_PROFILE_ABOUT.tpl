@@ -180,10 +180,12 @@
 					{+END}
 
 					<tbody>
-						<tr>
-							<th class="de_th">{!USERNAME}:</th>
-							<td>{USERNAME*}</td>
-						</tr>
+						{+START,IF_NON_EMPTY,{$CONFIG_OPTION,display_name_generator}}
+							<tr>
+								<th class="de_th">{!USERNAME}:</th>
+								<td>{USERNAME*}</td>
+							</tr>
+						{+END}
 
 						<tr>
 							<th class="de_th">{!ONLINE_NOW}:</th>
