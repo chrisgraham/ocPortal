@@ -11,10 +11,10 @@ function incoming_uploads_script()
 		require_code('files');
 		if ((!url_is_local($image_url_sub_for)) || (strpos($image_url_sub_for,'/incoming/')!==false))
 		{
-			$url_to='uploads/website_specific/'.md5(uniqid('')).'.png';
+			$url_to='uploads/website_specific/'.md5(uniqid('',true)).'.png';
 		} else
 		{
-			$url_to=dirname($image_url_sub_for).'/'.md5(uniqid('')).'.png';
+			$url_to=dirname($image_url_sub_for).'/'.md5(uniqid('',true)).'.png';
 		}
 		$write_to_file=fopen($url_to,'wb');
 		http_download_file(either_param('imageurl'),NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$write_to_file);

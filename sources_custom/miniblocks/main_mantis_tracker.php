@@ -27,7 +27,7 @@ if (!running_script('tracker'))
 		$params.=($params=='')?'?':'&';
 		$params.=$key.='='.urlencode($val);
 	}
-	$frame_name='frame_'.uniqid('');
+	$frame_name='frame_'.uniqid('',true);
 	echo '
 		<div style="padding: 1em">
 			<iframe title="'.$title_tracker.'" frameborder="0" name="'.$frame_name.'" id="'.$frame_name.'" marginwidth="0" marginheight="0" class="expandable_iframe" scrolling="no" src="'.find_script('tracker').$params.'">'.$title_tracker.'</iframe>

@@ -1162,7 +1162,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 
 		if (isset($attributes['accesskey']))
 		{
-			$this_href=isset($attributes['href'])?$attributes['href']:uniqid('');
+			$this_href=isset($attributes['href'])?$attributes['href']:uniqid('',true);
 			if ((isset($KEYS_SEEN[$attributes['accesskey']])) && ($KEYS_SEEN[$attributes['accesskey']]!=$this_href)) $errors[]=array('WCAG_ACCESSKEY_UNIQUE');
 			$KEYS_SEEN[$attributes['accesskey']]=$this_href;
 		}

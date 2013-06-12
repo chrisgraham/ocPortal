@@ -28,7 +28,7 @@ require_lang('downloads');
 
 require_lang('javascript_dyn_comcode');
 
-$carousel_id=uniqid('');
+$carousel_id=uniqid('',true);
 
 $content='
 	<div id="carousel_'.$carousel_id.'" class="carousel" style="display: none">

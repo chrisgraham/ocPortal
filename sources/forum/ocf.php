@@ -1351,7 +1351,7 @@ class forum_driver_ocf extends forum_driver_base
 					exit();
 				} else
 				{
-					$userid=ocf_member_external_linker($username,uniqid(''),'ldap');
+					$userid=ocf_member_external_linker($username,uniqid('',true),'ldap');
 					$row=$this->get_member_row($userid);
 				}
 			}
@@ -1483,7 +1483,7 @@ class forum_driver_ocf extends forum_driver_base
 						$this->connection->query_delete('f_member_known_login_ips',array('i_member_id'=>$row['id'],'i_ip'=>$ip),'',1);
 					}
 
-					$code=!is_null($test2)?$test2:uniqid('');
+					$code=!is_null($test2)?$test2:uniqid('',true);
 					$this->connection->query_insert('f_member_known_login_ips',array('i_val_code'=>$code,'i_member_id'=>$row['id'],'i_ip'=>$ip));
 					$url=find_script('validateip').'?code='.$code;
 					$url_simple=find_script('validateip');

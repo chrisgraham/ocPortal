@@ -417,7 +417,7 @@ class Module_tickets
 		} else
 		{
 			$ticket_owner=get_member();
-			$ticket_id=uniqid('');
+			$ticket_id=uniqid('',true);
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SUPPORT_TICKETS'))));

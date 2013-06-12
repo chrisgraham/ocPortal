@@ -228,7 +228,7 @@ function import_rss()
 					$rep_image='uploads/grepimages/'.basename($rep_image);
 					while (file_exists($target_path))
 					{
-						$uniqid=uniqid('');
+						$uniqid=uniqid('',true);
 						$stem='uploads/grepimages/'.$uniqid.'_'.basename(urldecode($rep_image));
 						$target_path=get_custom_file_base().'/'.$stem;
 						$rep_image='uploads/grepimages/'.$uniqid.'_'.basename($rep_image);
@@ -1024,7 +1024,7 @@ function _news_import_grab_image(&$data,$url)
 	$target_url=get_custom_base_url().'/uploads/attachments/'.basename($url);
 	while (file_exists($target_path))
 	{
-		$uniqid=uniqid('');
+		$uniqid=uniqid('',true);
 		$stem='uploads/attachments/'.$uniqid.'_'.basename(urldecode($url));
 		$target_path=get_custom_file_base().'/'.$stem;
 		$target_url=get_custom_base_url().'/uploads/attachments/'.$uniqid.'_'.basename($url);

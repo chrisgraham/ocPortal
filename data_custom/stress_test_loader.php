@@ -60,7 +60,7 @@ function do_work()
 	require_code('notifications');
 	for ($i=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		$member_id=ocf_make_member(uniqid(''),uniqid(''),uniqid('').'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
+		$member_id=ocf_make_member(uniqid('',true),uniqid('',true),uniqid('',true).'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		add_author(random_line(),'',$member_id,random_text(),random_text());
 
 		enable_notifications('ocf_topic','forum:'.strval(db_get_first_id()),$member_id);
@@ -98,7 +98,7 @@ function do_work()
 	require_code('banners2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_banner(uniqid(''),get_logo_url(),random_line(),random_text(),'',100,get_base_url(),3,'',db_get_first_id(),NULL,db_get_first_id()+1,1);
+		add_banner(uniqid('',true),get_logo_url(),random_line(),random_text(),'',100,get_base_url(),3,'',db_get_first_id(),NULL,db_get_first_id()+1,1);
 	}
 	echo 'done banner stuff'.chr(10);
 
@@ -109,7 +109,7 @@ function do_work()
 	require_code('files2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('comcode_pages','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		$file=uniqid('');
+		$file=uniqid('',true);
 		/*$path=get_custom_file_base().'/site/pages/comcode_custom/'.fallback_lang().'/'.$file.'.txt';
 		$myfile=fopen($path,'wt');
 		fwrite($myfile,random_text());
@@ -136,7 +136,7 @@ function do_work()
 	require_code('abstract_file_manager');
 	for ($i=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');$i<min($num_wanted,1000/* lets be somewhat reasonable! */);$i++)
 	{
-		actual_add_zone(uniqid(''),random_line(),'start',random_line(),'default',0,0,0);
+		actual_add_zone(uniqid('',true),random_line(),'start',random_line(),'default',0,0,0);
 	}
 	echo 'done zone stuff'.chr(10);
 
@@ -183,7 +183,7 @@ function do_work()
 	$time=time();
 	for ($i=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		$content_id=add_download(db_get_first_id(),random_line(),get_logo_url(),random_text(),'admin',random_text(),NULL,1,1,1,1,'',uniqid('').'.jpg',100,110,1);
+		$content_id=add_download(db_get_first_id(),random_line(),get_logo_url(),random_text(),'admin',random_text(),NULL,1,1,1,1,'',uniqid('',true).'.jpg',100,110,1);
 		give_award(db_get_first_id(),strval($content_id),$time-$i);
 	}
 	$content_id=db_get_first_id();
@@ -257,11 +257,11 @@ function do_work()
 
 	// galleries under a subcategory
 	require_code('galleries2');
-	$xsubcat_id=uniqid('');
+	$xsubcat_id=uniqid('',true);
 	add_gallery($xsubcat_id,random_line(),random_text(),'','','root');
 	for ($i=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_gallery(uniqid(''),random_line(),random_text(),'','',$xsubcat_id);
+		add_gallery(uniqid('',true),random_line(),random_text(),'','',$xsubcat_id);
 	}
 	// images
 	require_code('galleries2');
@@ -283,7 +283,7 @@ function do_work()
 	require_code('newsletter');
 	for ($i=$GLOBALS['SITE_DB']->query_value('newsletter','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		basic_newsletter_join(uniqid('').'@example.com');
+		basic_newsletter_join(uniqid('',true).'@example.com');
 	}
 	echo 'done newsletter stuff'.chr(10);
 
@@ -300,7 +300,7 @@ function do_work()
 	for ($j=$GLOBALS['SITE_DB']->query_value('poll_votes','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		$cast=mt_rand(1,6);
-		$ip=uniqid('');
+		$ip=uniqid('',true);
 
 		$GLOBALS['SITE_DB']->query_insert('poll_votes',array(
 			'v_poll_id'=>$poll_id,
@@ -359,7 +359,7 @@ function do_work()
 			'user_os'=>'',
 			'the_user'=>db_get_first_id(),
 			'date_and_time'=>time(),
-			'ip'=>uniqid(''),
+			'ip'=>uniqid('',true),
 			'reason'=>'ASCII_ENTITY_URL_HACK',
 			'reason_param_a'=>'',
 			'reason_param_b'=>''
@@ -369,7 +369,7 @@ function do_work()
 	require_code('site');
 	for ($i=$GLOBALS['SITE_DB']->query_value('stats','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		log_stats('/testing'.uniqid(''),mt_rand(100,2000));
+		log_stats('/testing'.uniqid('',true),mt_rand(100,2000));
 	}
 	echo 'done logs stuff'.chr(10);
 
@@ -390,7 +390,7 @@ function do_work()
 	require_code('tickets2');
 	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
 	{
-		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid(''),db_get_first_id(),random_line(),random_text(),'','');
+		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid('',true),db_get_first_id(),random_line(),random_text(),'','');
 	}
 	echo 'done tickets stuff'.chr(10);
 
@@ -401,7 +401,7 @@ function do_work()
 	$root_id=db_get_first_id();
 	for ($i=$GLOBALS['SITE_DB']->query_value('catalogues','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		$catalogue_name=uniqid('');
+		$catalogue_name=uniqid('',true);
 		$root_id=actual_add_catalogue($catalogue_name,random_line(),random_text(),mt_rand(0,3),1,'',30);
 	}
 	// catalogue categories under a subcategory (remember to test all catalogue views: atoz, index, and root cat)
@@ -423,7 +423,7 @@ function do_work()
 	{
 		$map=array(
 			$fields[0]=>random_line(),
-			$fields[1]=>uniqid(''),
+			$fields[1]=>uniqid('',true),
 			$fields[2]=>'1.0',
 			$fields[3]=>'1',
 			$fields[4]=>'0',
@@ -540,5 +540,5 @@ function random_line()
 	if (is_null($word_count)) $word_count=count($words);
 
 	$word=$words[mt_rand(0,$word_count-1)];
-	return md5(uniqid('')).' '.$word.' '.md5(uniqid(''));
+	return md5(uniqid('',true)).' '.$word.' '.md5(uniqid('',true));
 }

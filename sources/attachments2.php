@@ -83,7 +83,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 					{
 						do
 						{
-							$new_filename=uniqid('').'.png';
+							$new_filename=uniqid('',true).'.png';
 							$new_path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
 						}
 						while (file_exists($new_path));

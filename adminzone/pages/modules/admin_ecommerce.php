@@ -364,7 +364,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		$reason_code='';
 		$pending_reason='';
 		$mc_currency=get_option('currency');
-		$txn_id='manual-'.substr(uniqid(''),0,10);
+		$txn_id='manual-'.substr(uniqid('',true),0,10);
 		$parent_txn_id='';
 		/*if ($products[$item_name][0]==PRODUCT_SUBSCRIPTION)
 		{
