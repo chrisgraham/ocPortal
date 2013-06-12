@@ -251,17 +251,17 @@ to cause ocPortal to generate short URLs for links within the website.
 
 You can make it so you have a single ocPortal site that runs across different subdomains. You can also make it so that zones appear to be structured hierarchically.
 
-[i]This is an advanced feature that is not fully supported by ocProducts. It requires server administration access to work (i.e. it's unlikely to work on most shared webhosts). It only works with Short-URLs enabled.[/i]
+[i]This is an advanced feature that is not fully supported by ocProducts. It requires some fairly low level web server configuration to work (i.e. it won't work on many shared webhosts).[/i]
 
 The procedure is as follows:
 
 a) It is strongly recommended, for simplicity and user-friendliness, that you operate ocPortal from the root of your domain name, e.g. having [tt]http://example.com[/tt] as your base URL.
 
 b i) For multiple sub(domain) names, each representing a different zone...
-Set up multiple website profiles in IIS manager (or the Apache configuration file, if you're using Apache). These profiles must all point to the ocPortal installation directory (not the zone you're linking the subdomain to).
+Set up multiple website profiles in IIS manager / virtual hosts in the Apache configuration file. These profiles must all point to the ocPortal installation directory (not the zone you're linking the subdomain to).
 
 b ii) For complex hierarchies:
-Set up virtual directories in IIS manage (or the Apache configuration file, if you're using Apache). These virtual directories must all point to the ocPortal installation directory (not the zone you're linking the subdomain to).
+Set up virtual directories in IIS manager / directory sections in the Apache configuration file. These virtual directories must all point to the ocPortal installation directory (not the zone you're linking the subdomain to).
 
 c) ocPortal is now set up to receive requests on the various domain names / paths that you have configured. Extra information needs adding to the ocPortal [tt]_config.php[/tt], to tell ocPortal how to map these individual source locations, into zone accesses.
 Let's pretend we've added a new subdomain 'forum.mydomain.com' ([i]for the forum zone[/i]), and a new virtual directory under our normal website entry, under 'example/path'; we'll point this to the 'xyz' (i.e. we'll map to a zone unrelated to the subdomain name or virtual directory path). You would add this to [tt]_config.php[/tt]
@@ -271,6 +271,8 @@ Please note it is essential to configure your cookie domain to be encompassing o
 $SITE_INFO['ZONE_MAPPING_forum']=array('forum.mydomain.com','');
 $SITE_INFO['ZONE_MAPPING_xyz']=array('mydomain.com','example/path');
 [/code]
+
+As of ocPortal 10, you can do this setup in the normal zone management interface. It does save to [tt]_config.php[/tt] though.
 
 d) Now ocPortal links point to the proper complex URLs, and the complex URLs are properly recognised as zones.
 

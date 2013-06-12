@@ -55,9 +55,10 @@ function erase_comcode_page_cache()
  * @param  ID_TEXT		The new name of the zone
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @param  boolean		Whether to skip the AFM because we know it's not needed (or can't be loaded)
+ * @param  string			The base URL (blank: natural)
  * @return ID_TEXT		The name
  */
-function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,$uniqify=false,$skip_afm=false)
+function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,$uniqify=false,$skip_afm=false,$base_url='')
 {
 	if ($zone!=$new_zone)
 	{
@@ -122,6 +123,9 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 	decache('main_sitemap');
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
+
+	require_code('zones2');
+	save_zone_base_url($zone,$base_url);
 
 	log_it('EDIT_ZONE',$zone);
 

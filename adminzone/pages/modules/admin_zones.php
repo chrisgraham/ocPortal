@@ -496,6 +496,17 @@ class Module_admin_zones
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b997e901934b59fa72c944e0ce6fc1b0','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'),do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'),'require_session',($require_session==1)));
 
+		$base_url='';
+		if (($zone!==NULL) && ($zone!=''))
+		{
+			global $SITE_INFO;
+			if (isset($SITE_INFO['ZONE_MAPPING_'.$zone]))
+			{
+				$base_url='http://'.$SITE_INFO['ZONE_MAPPING_'.$zone][0].'/'.$SITE_INFO['ZONE_MAPPING_'.$zone][1];
+			}
+		}
+		$fields.=static_evaluate_tempcode(form_input_line(do_lang_tempcode('ZONE_BASE_URL'),do_lang_tempcode('DESCRIPTION_ZONE_BASE_URL'),'base_url',$base_url,false));
+
 		if ((!$in_zone_editor) && (!is_null($zone)) && (addon_installed('zone_logos')))
 		{
 			// Logos
@@ -638,8 +649,9 @@ class Module_admin_zones
 		if ($wide==-1) $wide=NULL;
 		$require_session=post_param_integer('require_session',0);
 		$displayed_in_menu=post_param_integer('displayed_in_menu',0);
+		$base_url=post_param('base_url','');
 
-		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu);
+		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,false,$base_url);
 
 		sync_htaccess_with_zones();
 
@@ -810,10 +822,11 @@ class Module_admin_zones
 			if ($wide==-1) $wide=NULL;
 			$require_session=post_param_integer('require_session',0);
 			$displayed_in_menu=post_param_integer('displayed_in_menu',0);
+			$base_url=post_param('base_url','');
 
 			$new_zone=post_param('new_zone');
 			if ($new_zone!=$zone) check_zone_name($new_zone);
-			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone);
+			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,false,false,$base_url);
 
 			if ($new_zone!='') $this->set_permissions($new_zone);
 

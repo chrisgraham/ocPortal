@@ -96,9 +96,10 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
  * @param  BINARY			Whether the zone requires a session for pages to be used
  * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
  * @param  boolean		Whether to force the name as unique, if there's a conflict
+ * @param  string			The base URL (blank: natural)
  * @return ID_TEXT		The name
  */
-function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$displayed_in_menu=1,$uniqify=false)
+function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$displayed_in_menu=1,$uniqify=false,$base_url='')
 {
 	require_code('type_validation');
 	if (!is_alphanumeric($zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
@@ -179,9 +180,43 @@ END;
 		generate_resourcefs_moniker('zone',$zone,NULL,NULL,true);
 	}
 
+	save_zone_base_url($zone,$base_url);
+
 	log_it('ADD_ZONE',$zone);
 
 	return $zone;
+}
+
+/**
+ * Save a zone base URL.
+ *
+ * @param  ID_TEXT		The zone
+ * @param  string			The base URL (blank: natural)
+ */
+function save_zone_base_url($zone,$base_url)
+{
+	$config_path=get_custom_file_base().'/_config.php';
+	$config_file=file_get_contents($config_path);
+	$config_file_before=$config_file;
+	$config_file=preg_replace('#\n?\$SITE_INFO[\'ZONE_MAPPING_'.preg_quote($zone,'#').'\']=array\(\'[^\']+\',\'[^\']+\'\);\n?#','',$config_file); // Strip any old entry
+	if ($base_url!='') // Add new entry, if appropriate
+	{
+		$parsed=@parse_url($base_url);
+		if ($parsed===false) warn_exit(do_lang_tempcode('INVALID_ZONE_BASE_URL'));
+		$domain=$parsed['host'];
+		$path=$parsed['path'];
+		$config_file.="\n\$SITE_INFO['ZONE_MAPPING_".addslashes($zone)."']=array('".addslashes($domain)."','".addslashes(trim($path,'/'))."');\n";
+	}
+
+	if ($config_file!=$config_file_before)
+	{
+		$out=@fopen($config_path,'wb');
+		if ($out===false) intelligent_write_error($config_path);
+		fwrite($out,$config_file);
+		fclose($out);
+		sync_file($path);
+		fix_permissions($path);
+	}
 }
 
 /**
