@@ -3,10 +3,10 @@
 	{+START,IF,{EDIT}}
 		<input type="checkbox" id="i_{NAME*}_unlink" name="{NAME*}_unlink" value="1" />
 		<label class="upload_field_msg" for="i_{NAME*}_unlink">
-			{+START,IF,{$NOT,{IS_IMAGE}}}
+			{+START,IF,{$NOT,{$AND,{IS_IMAGE},{$IS_NON_EMPTY,{EXISTING_URL}}}}}
 				{!UNLINK_EXISTING_UPLOAD}
 			{+END}
-			{+START,IF,{IS_IMAGE}}
+			{+START,IF,{$AND,{IS_IMAGE},{$IS_NON_EMPTY,{EXISTING_URL}}}}
 				{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL*;^}&quot; title=&quot;&quot; alt=&quot;{!EXISTING;^}&quot; /&gt;}
 			{+END}
 		</label>
