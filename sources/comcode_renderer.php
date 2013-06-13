@@ -1118,7 +1118,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				// Create and document attachment
 				if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
-				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'type'=>'new','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'id'=>intval($attach_id),'marker'=>$marker,'comcode'=>$comcode); // Marker will allow us to search back and replace this with the added id
+				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'type'=>'new','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'initial_id'=>$id,'id'=>intval($attach_id),'comcode'=>$comcode); // Marker will allow us to search back and replace this with the added id
 			}
 
 			// New attachments
@@ -1128,6 +1128,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				if (substr($id,0,4)=='new_')
 				{
+					disable_php_memory_limit(); // In case needs lots of RAM for thumbnail generation
+
 					$_id=substr($id,4);
 					if (!is_numeric($_id))
 					{
@@ -1138,9 +1140,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$attributes['type']=post_param('attachmenttype'.$_id,array_key_exists('type',$attributes)?$attributes['type']:'auto');
 					if (substr($attributes['type'],-8)=='_extract') $attributes['type']=substr($attributes['type'],0,strlen($attributes['type'])-8);
 
+					is_swf_upload(true);
 					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true,true,true);
 					if ($urls[0]=='') return new ocp_tempcode();//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
-					is_swf_upload(true);
 					$_size=$_FILES['file'.$_id]['size'];
 					$original_filename=$_FILES['file'.$_id]['name'];
 					if (get_magic_quotes_gpc()) $original_filename=stripslashes($original_filename);
@@ -1234,7 +1236,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 
 				// Create and document attachment
-				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>time(),'type'=>(substr($id,0,4)=='new_')?'new':'url','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'id'=>intval($attach_id),'marker'=>$marker,'comcode'=>$comcode); // Marker will allow us to search back and replace this with the added id
+				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>time(),'type'=>(substr($id,0,4)=='new_')?'new':'url','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'initial_id'=>$id,'id'=>intval($attach_id),'comcode'=>$comcode); // Marker will allow us to search back and replace this with the added id
 
 			// Existing attachments
 			} else
@@ -1261,7 +1263,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (($already_referenced) || ($as_admin) || (/*Actually we just can't broker security between guest attachments so let's lower security on re-using them so long as they have access (!is_guest($source_member)) && */($source_member===$owner)) || (((has_privilege($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
 				{
 					if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
-					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','id'=>$__id,'attachmenttype'=>$attributes['type'],'marker'=>$marker,'comcode'=>$comcode);
+					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','initial_id'=>$id,'id'=>$__id,'attachmenttype'=>$attributes['type'],'comcode'=>$comcode);
 				} else
 				{
 					require_lang('permissions');

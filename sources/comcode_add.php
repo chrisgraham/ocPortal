@@ -425,6 +425,8 @@ function comcode_helper_script()
 						$parameter_name=do_lang('COMCODE_TAG_'.$tag.'_NAME_OF_PARAM_'.$param,NULL,NULL,NULL,NULL,false);
 						if (is_null($parameter_name)) $parameter_name=titleify($param);
 
+						if (($tag=='attachment') && (get_param_integer('multi',0)==1) && (($param=='description') || ($param=='filename') || ($param=='thumb_url'))) continue; // Don't show fields that can't apply across multiple attachments
+
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
@@ -617,6 +619,8 @@ function comcode_helper_script()
 
 		if (($tag=='attachment') && (strpos($default_embed,'new_')!==false))
 			$text=do_lang_tempcode('COMCODE_ATTACHMENT_WILL_HAVE_MARKER');
+
+		if (($tag=='attachment') && (get_param_integer('multi',0)==1)) $text=do_lang_tempcode('ATTACHMENT_MULTI');
 
 		$hidden->attach(form_input_hidden('tag',$tag));
 

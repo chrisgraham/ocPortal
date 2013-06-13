@@ -43,8 +43,11 @@ function init__uploads()
  */
 function is_swf_upload($fake_prepopulation=false)
 {
+	static $done_fake_prepopulation=false;
+
 	//check whatever is used the swfuploader
 	$swfupload=false;
+	$rolling_offset=0;
 	foreach ($_POST as $key=>$value)
 	{
 		if (!is_string($value)) continue;	
@@ -73,6 +76,7 @@ function is_swf_upload($fake_prepopulation=false)
 				}
 			} else // By incoming upload ID
 			{
+				$rolling_offset=0; // We do assume that if we have multiple multi-file fields in the same space that they are spaced with a large enough gap; so we don't maintain a rolling offset between fields
 				foreach (array_map('intval',explode(':',$value)) as $i=>$incoming_uploads_id) // Some uploaders may delimite with ":" within a single POST field (plupload); others may give multiple POST fields (swfupload, native)
 				{
 					$incoming_uploads_row=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'incoming_uploads WHERE (i_submitter='.strval(get_member()).' OR i_submitter='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).') AND id='.strval($incoming_uploads_id),1);
@@ -83,14 +87,24 @@ function is_swf_upload($fake_prepopulation=false)
 							$swfupload=true;
 							if ($fake_prepopulation)
 							{
-								$new_key=preg_replace('#\_1$#','_'.strval($i+1),substr($key,10));
-								$_FILES[$new_key]=array(
-									'type'=>'swfupload',
-									'name'=>$incoming_uploads_row[0]['i_orig_filename'],
-									'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],
-									'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'])
-								);
-								$_POST['hidFileID_'.$new_key]=strval($incoming_uploads_id);
+								if (!$done_fake_prepopulation)
+								{
+									$new_key=$key;
+									$matches=array();
+									if (preg_match('#^hidFileID\_(.*)(\d+)$#',$key,$matches)!=0)
+									{
+										$new_key=$matches[1].strval(intval($matches[2])+$rolling_offset);
+									}
+									$_FILES[$new_key]=array(
+										'type'=>'swfupload',
+										'name'=>$incoming_uploads_row[0]['i_orig_filename'],
+										'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],
+										'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'])
+									);
+									$_POST['hidFileID_'.$new_key]=strval($incoming_uploads_id);
+
+									$rolling_offset++;
+								}
 							}
 						}
 					}
@@ -113,6 +127,8 @@ function is_swf_upload($fake_prepopulation=false)
 			}
 		}
 	}
+
+	if ($fake_prepopulation) $done_fake_prepopulation=true;
 
 	return $swfupload;
 }
@@ -163,7 +179,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				$path='uploads/incoming/'.filter_naughty($row_id_file_value);
 				if (file_exists(get_custom_file_base().'/'.$path))
 				{
-					$_FILES[$_attach_name]=array('type'=>'swfupload', 'name'=>post_param(str_replace('hidFileID','hidFileName',$row_id_file)), 'tmp_name'=>get_custom_file_base().'/'.$path, 'size'=>filesize(get_custom_file_base().'/'.$path));
+					$_FILES[$_attach_name]=array('type'=>'swfupload','name'=>post_param(str_replace('hidFileID','hidFileName',$row_id_file)),'tmp_name'=>get_custom_file_base().'/'.$path,'size'=>filesize(get_custom_file_base().'/'.$path));
 					if ($i==0)
 					{
 						$swf_uploaded=true;
@@ -181,7 +197,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				{
 					if (file_exists(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']))
 					{
-						$_FILES[$_attach_name]=array('type'=>'swfupload', 'name'=>$incoming_uploads_row[0]['i_orig_filename'], 'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'], 'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']));
+						$_FILES[$_attach_name]=array('type'=>'swfupload','name'=>$incoming_uploads_row[0]['i_orig_filename'],'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']));
 						if ($i==0)
 						{
 							$swf_uploaded=true;

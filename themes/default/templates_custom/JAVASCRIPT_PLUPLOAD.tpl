@@ -5226,6 +5226,8 @@ function plUploadLoaded(ob) {
 
 // Called by the submit button to start the upload
 function doSubmit(e,ob,recurse) {
+	if (typeof recurse=='undefined') var recurse=false;
+
 	window.just_checking_requirements=true;
 
 	ob.submitting=true;
@@ -5267,7 +5269,9 @@ function doSubmit(e,ob,recurse) {
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
 	if (txtID.value == '-1')
 	{
-		btnSubmit.disabled = true;
+		disable_buttons_just_clicked(document.getElementsByTagName('input'),true);
+		disable_buttons_just_clicked(document.getElementsByTagName('button'),true);
+
 		ob.start();
 		smooth_scroll(find_pos_y(txtFileName,true));
 
@@ -5293,15 +5297,22 @@ function doSubmit(e,ob,recurse) {
 	return false;
 }
 
-function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
+function dispatch_for_page_type(page_type,name,file_name,posting_field_name,num_files)
 {
 	if (!posting_field_name) posting_field_name='post';
 
-	if (page_type=='attachment')
+	if (page_type.indexOf('attachment')!=-1)
 	{
-		var current_num=name.replace('file', '');
-		set_attachment(posting_field_name,current_num,file_name);
-		document.getElementById(name).onchange=null;
+		var multi=((page_type.indexOf('_multi')!=-1) && (num_files>1));
+
+		var element=document.getElementById(name);
+		if (typeof element.determined_attachment_properties=='undefined')
+		{
+			var current_num=name.replace('file', '');
+			set_attachment(posting_field_name,current_num,file_name,multi);
+			element.onchange=null;
+			if (multi) element.determined_attachment_properties=true;
+		}
 	}
 }
 
@@ -5361,7 +5372,12 @@ function fileDialogComplete(ob,files) {
 		if (txtFileName.value!='') txtFileName.value+=':';
 		txtFileName.value+=file.name.replace(/:/g,',');
 		name=ob.settings.txtName;
-		dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name);
+		window.setTimeout(function() { // In a timeout as file.has_error may not have been set yet
+			if ((typeof file.has_error=='undefined') || (!file.has_error))
+				dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name,files.length);
+		} ,0);
+
+		if (ob.settings.page_type.indexOf('_multi')==-1) break;
 	}
 
 	window.setTimeout(function() {
@@ -5387,7 +5403,25 @@ function uploadSuccess(ob,file,data) {
 	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
 
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
-	btnSubmit.disabled = false;
+
+	var all_done=true;
+	var form=document.getElementById(ob.settings.txtName).form;
+	for (var i=0;i<form.elements.length;i++)
+	{
+		if ((typeof form.elements[i].swfob!='undefined') && (form.elements[i].swfob.total.percent<100) && (form.elements[i].swfob.total.size!=0))
+			all_done=false;
+	}
+	if (all_done)
+	{
+		for (var i=0;i<form.elements.length;i++)
+		{
+			if ((form.elements[i].type=='submit') || (form.elements[i].type=='button') || (form.elements[i].type=='image') || (form.elements[i].nodeName.toLowerCase()=='button'))
+			{
+				form.elements[i].disabled=false;
+				form.elements[i].style.cursor='default';
+			}
+		}
+	}
 
 	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
 	if (clearBtn) clearBtn.style.display='inline';
@@ -5405,12 +5439,16 @@ function uploadSuccess(ob,file,data) {
 
 	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
-	if ((typeof ob.submitting!='undefined') && (ob.submitting))
+	if ((typeof ob.submitting!='undefined') && (ob.submitting) && (all_done))
 	{
 		window.form_submitting=btnSubmit.form; // For IE
 		if (typeof ob.originalClickHandler!='undefined')
 		{
-			ob.originalClickHandler(null,ob,btnSubmit.form);
+			if (ob.originalClickHandler(null,ob,btnSubmit.form,true))
+			{
+				btnSubmit.form.submit();
+				return true;
+			}
 		} else
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return;
@@ -5422,6 +5460,8 @@ function uploadSuccess(ob,file,data) {
 function uploadError(ob,error) {
 	var file=error.file?error.file:ob.files[ob.files.length-1];
 	if (typeof file=='undefined') file=null;
+
+	file.has_error=true;
 
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setError();
@@ -5445,7 +5485,7 @@ function uploadError(ob,error) {
 
 function queueChanged(ob)
 {
-	if (ob.settings.page_type!='upload_multi') // In case widget has multi selection even though we disabled it
+	if ((ob.settings.page_type.indexOf('_multi')==-1) && (ob.files.length>1)) // In case widget has multi selection even though we disabled it
 	{
 		for (var i=1;i<ob.files.length;i++)
 		{
@@ -5710,7 +5750,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		required: rep.className.indexOf('required')!=-1,
 		posting_field_name: posting_field_name,
 		progress_target : "fsUploadProgress_"+name,
-		multi_selection: (page_type=='upload_multi'),
+		multi_selection: (page_type.indexOf('_multi')!=-1),
 
 		// General settings
 		runtimes : 'html5,silverlight,flash,gears,browserplus',
@@ -5795,7 +5835,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				document.getElementById('txtFileName_'+name).value=decodedData['upload_name'];
 				document.getElementById(name).value='1';
 				if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
-				dispatch_for_page_type(page_type,name,decodedData['upload_name'],posting_field_name);
+				dispatch_for_page_type(page_type,name,decodedData['upload_name'],posting_field_name,1);
 				fireFakeChangeFor(name,'1');
 			}
 		}

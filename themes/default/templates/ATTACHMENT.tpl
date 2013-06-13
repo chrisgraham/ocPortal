@@ -44,7 +44,7 @@
 {+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script type="text/javascript">// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput('attachment','file{I}',null,'{POSTING_FIELD_NAME/;}');
+			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME/;}');
 		} );
 	//]]></script>
 {+END}

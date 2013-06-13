@@ -394,8 +394,10 @@ function check_field_for_blankness(field,event)
 
 	return true;
 }
-function disable_button_just_clicked(input)
+function disable_button_just_clicked(input,permanent)
 {
+	if (typeof permanent=='undefined') var permanent=false;
+
 	if (input.nodeName.toLowerCase()=='form')
 	{
 		for (var i=0;i<input.elements.length;i++)
@@ -411,12 +413,18 @@ function disable_button_just_clicked(input)
 		input.under_timer=true;
 	},20);
 	input.style.cursor='wait';
-	var goback=function() {
-		input.disabled=false;
-		input.under_timer=false;
-		input.style.cursor='default';
-	};
-	window.setTimeout(goback,5000);
+	if (!permanent)
+	{
+		var goback=function() {
+			if (input.under_timer)
+			{
+				input.disabled=false;
+				input.under_timer=false;
+				input.style.cursor='default';
+			}
+		};
+		window.setTimeout(goback,5000);
+	} else input.under_timer=false;
 
 	add_event_listener_abstract(window,'pagehide',goback);
 }

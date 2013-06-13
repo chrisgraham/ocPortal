@@ -34,6 +34,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 {
 	require_lang('comcode');
 
+	if (function_exists('set_time_limit')) @set_time_limit(600); // Thumbnail generation etc can take some time
+
 	global $COMCODE_ATTACHMENTS;
 	unset($COMCODE_ATTACHMENTS[$id]); // In case we have some kind of conflict
 
@@ -367,13 +369,11 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		{
 			$attachment=$COMCODE_ATTACHMENTS[$id][$i];
 
-			$marker_matches=array();
-			preg_match('#(.|\n)*new_(\d+)[\[<]#',substr($original_comcode,0,$attachment['marker']),$marker_matches);
-			$marker_id=array_key_exists(2,$marker_matches)?intval($marker_matches[2]):strval($i+1); // Should always exist, but if not (some weird internal Comcode parsing error -- this stuff is complex) then pick a sensible default
-
 			// If it's a new one, we need to change the comcode to reference the ID we made for it
 			if ($attachment['type']=='new')
 			{
+				$marker_id=intval(substr($attachment['initial_id'],4)); // After 'new_'
+
 				$new_comcode=preg_replace('#(\[(attachment|attachment_safe)[^\]]*\])new_'.strval($marker_id).'(\[/)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
 				$new_comcode=preg_replace('#(<(attachment|attachment_safe)[^>]*>)new_'.strval($marker_id).'(</)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
 

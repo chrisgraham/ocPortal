@@ -69,7 +69,18 @@
 				//message='{!ADDED_COMCODE_ONLY;}';	Kind of states the obvious
 			}
 
-			target_window.insert_textbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
+			target_window.insert_comcode_tag=function(rep_from,rep_to) { // We define as a temporary global method so we can clone out the tag if needed (e.g. for multiple attachment selections)
+				var _comcode_semihtml=comcode_semihtml;
+				var _comcode=comcode;
+				if (typeof rep_from!='undefined')
+				{
+					_comcode_semihtml=_comcode_semihtml.replace(rep_from,rep_to);
+					_comcode=_comcode.replace(rep_from,rep_to);
+				}
+
+				target_window.insert_textbox(element,_comcode,target_window.document.selection?target_window.document.selection:null,true,_comcode_semihtml);
+			};
+			target_window.insert_comcode_tag();
 
 			if (message!='')
 			{
