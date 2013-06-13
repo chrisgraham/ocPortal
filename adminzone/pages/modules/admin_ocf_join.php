@@ -136,6 +136,9 @@ class Module_admin_ocf_join
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('OPTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('FORCE_TEMPORARY_PASSWORD'),do_lang_tempcode('DESCRIPTION_FORCE_TEMPORARY_PASSWORD'),'temporary_password',false));
 
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('OPTIONS'))));
+		$fields->attach(form_input_tick(do_lang_tempcode('FORCE_TEMPORARY_PASSWORD'),do_lang_tempcode('DESCRIPTION_FORCE_TEMPORARY_PASSWORD'),'temporary_password',false));
+
 		$text=do_lang_tempcode('_ENTER_PROFILE_DETAILS');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));

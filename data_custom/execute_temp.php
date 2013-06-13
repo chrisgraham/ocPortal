@@ -53,6 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	//add_config_option('DISPLAY_NAME_GENERATOR','display_name_generator','line','return \'\';','SECTION_FORUMS','MEMBERS');
-	set_option('display_name_generator','{2} {3}');
 }

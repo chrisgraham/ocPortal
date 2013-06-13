@@ -248,6 +248,7 @@ class Hook_Profiles_Tabs_Edit_settings
 
 		$hidden->attach(form_input_hidden('submitting_settings_tab','1'));
 
+		$script=find_script('username_check');
 		$javascript="
 			var form=document.getElementById('email_address').form;
 			form.prior_profile_edit_submit=form.onsubmit;
@@ -260,6 +261,12 @@ class Hook_Profiles_Tabs_Edit_settings
 							window.fauxmodal_alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
 							return false;
 						}
+					}
+					var url='".addslashes($script)."?';
+					if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['edit_password'].value)))
+					{
+						document.getElementById('submit_button').disabled=false;
+						return false;
 					}
 					if (typeof form.prior_profile_edit_submit!='undefined' && form.prior_profile_edit_submit) return form.prior_profile_edit_submit();
 					return true;

@@ -29,7 +29,7 @@ class Hook_password_strength
 	function run()
 	{
 		require_code('password_strength');
-		return make_string_tempcode(strval(test_password(either_param('password'))));
+		return make_string_tempcode(strval(test_password(either_param('password'),either_param('username',''))));
 	}
 
 }

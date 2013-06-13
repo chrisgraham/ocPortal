@@ -11,18 +11,20 @@
 					<input class="wide_field" type="password" value="password" name="password" id="sps_s_password" />
 				</div>
 
-				<div class="login_block_cookies">
-					<div class="float_surrounder">
-						<label for="remember">{!REMEMBER_ME}</label>
-						<input {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) t.checked=false; } ); }" {+END}type="checkbox" value="1" id="remember" name="remember" />
-					</div>
-					{+START,IF,{$CONFIG_OPTION,is_on_invisibility}}
+				{+START,IF,{$NOT,{$VALUE_OPTION,no_password_cookies}}}
+					<div class="login_block_cookies">
 						<div class="float_surrounder">
-							<label for="login_invisible">{!INVISIBLE}</label>
-							<input type="checkbox" value="1" id="login_invisible" name="login_invisible" />
+							<label for="remember">{!REMEMBER_ME}</label>
+							<input {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) t.checked=false; } ); }" {+END}type="checkbox" value="1" id="remember" name="remember" />
 						</div>
-					{+END}
-				</div>
+						{+START,IF,{$CONFIG_OPTION,is_on_invisibility}}
+							<div class="float_surrounder">
+								<label for="login_invisible">{!INVISIBLE}</label>
+								<input type="checkbox" value="1" id="login_invisible" name="login_invisible" />
+							</div>
+						{+END}
+					</div>
+				{+END}
 
 				<p class="constrain_field"><input class="wide_button" type="submit" value="{!_LOGIN}" /></p>
 			</div>

@@ -157,6 +157,15 @@ The values you might want to manually change are:
   - [tt]no_finish_profile[/tt] -- set this to '1' if members signing in via httpauth/OpenID/Facebook will not be required to immediately complete configured required custom profile fields
   - [tt]username_profile_links[/tt] -- set this to '1' if member profile links should have the username in the URL rather than the member ID number
   - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order
+  - [tt]password_change_days[/tt] -- the number if days until you have to change your password.
+  - [tt]password_expiry_days[/tt] -- the number if days of not logging in after which you have to reset your password by email (usually set longer than password_expiry_days).
+  - [tt]no_password_cookies[/tt] -- set this to '1' to disable password cookies, to force users to re-login upon session expiry.
+  - [tt]minimum_password_strength[/tt] -- the minimum password strength for new passwords (1 to 9, as 10 is max strength).
+  - [tt]hack_ban_threshold[/tt] -- the number of detected hack-attempts before automatic banning happens (default: 5). Note that not all detected attempts are real; in rare cases there may be a bug, or very commonly it may be a poorly written bot.
+  - [tt]brute_force_login_minutes[/tt] -- the number of minutes through which failed logins will be counted.
+  - [tt]brute_force_threshold[/tt] -- the number of failed logins, to generate a hack-attack notice.
+  - [tt]brute_force_instant_ban[/tt] -- set this to '1' if the brute-force password detection should result in an instant ban.
+  - [tt]password_reset_process[/tt] -- set this to 'temporary' if password resets should result in a temporary password (i.e. user must immediately choose a new password) rather than an e-mailed password.
  - ocf_cpfs
   - [tt]show_empty_cpfs[/tt] -- if you want empty CPFs to be passed through to member profile templates
   - [tt]simplify_privacy_options[/tt] -- set this to '1' if you want the custom profile field privacy options to be simplified/compressed a lot (less multi-dimensional, no usergroup filters).

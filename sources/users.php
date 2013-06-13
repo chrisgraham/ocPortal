@@ -159,7 +159,7 @@ function get_member($quick_only=false)
 
 	// If lots of aging sessions, clean out
 	reset($SESSION_CACHE);
-	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))))
 		delete_expired_sessions_or_recover();
 
 	// Try via backdoor that someone with full server access can place
@@ -211,7 +211,7 @@ function get_member($quick_only=false)
 			($SESSION_CACHE[$session]!==NULL) && 
 			(array_key_exists('member_id',$SESSION_CACHE[$session])) && 
 			((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['member_id'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['member_id'])))) && 
-			($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time'))))
+			($SESSION_CACHE[$session]['last_activity']>time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time')))))
 		)
 			$member_row=$SESSION_CACHE[$session];
 		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['member_id']))))
@@ -229,8 +229,6 @@ function get_member($quick_only=false)
 			}
 			global $SESSION_CONFIRMED_CACHE;
 			$SESSION_CONFIRMED_CACHE=$member_row['session_confirmed'];
-
-			if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
 
 			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
 			{
@@ -326,7 +324,12 @@ function get_member($quick_only=false)
 	// We call this to ensure any HTTP-auth specific code has a chance to run
 	is_httpauth_login();
 
-	if ($member!==NULL) enforce_temporary_passwords($member);
+	if ($member!==NULL)
+	{
+		enforce_temporary_passwords($member);
+
+		if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
+	}
 
 	return $member;
 }
@@ -360,23 +363,66 @@ function get_displayname($username)
  */
 function enforce_temporary_passwords($member)
 {
-	if ((get_forum_type()=='ocf') && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
+	if ((get_forum_type()=='ocf') && (running_script('index')) && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && (get_page_name()!='lost_password') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
 	{
-		decache('side_users_online');
+		$force_change_message=mixed();
+		$redirect_url=mixed();
 
-		require_code('urls');
-		require_lang('ocf');
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 
-		$screen=redirect_screen(
-			get_screen_title('LOGGED_IN'),
-			build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings'),
-			do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),
-			false,
-			'notice'
-		);
-		$out=globalise($screen,NULL,'',true);
-		$out->evaluate_echo();
-		exit();
+		// Expired?
+		if (intval(get_value('password_expiry_days'))>0)
+		{
+			require_code('password_rules');
+			if (member_password_expired($member))
+			{
+				require_lang('password_rules');
+				$force_change_message=do_lang_tempcode('PASSWORD_EXPIRED',escape_html($username),escape_html(integer_format(intval(get_value('password_expiry_days')))));
+				require_code('urls');
+				$redirect_url=build_url(array('page'=>'lost_password','username'=>$username),'');
+			}
+		}
+
+		// Temporary?
+		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary')
+		{
+			require_lang('ocf');
+			$force_change_message=do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($username));
+			require_code('urls');
+			$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
+		}
+
+		// Too old?
+		elseif (intval(get_value('password_change_days'))>0)
+		{
+			require_code('password_rules');
+			if (member_password_too_old($member))
+			{
+				require_lang('password_rules');
+				$force_change_message=do_lang_tempcode('PASSWORD_TOO_OLD',escape_html($username),escape_html(integer_format(intval(get_value('password_change_days')))));
+				require_code('urls');
+				$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
+			}
+		}
+
+		if ($force_change_message!==NULL)
+		{
+			decache('side_users_online');
+
+			require_code('urls');
+			require_lang('ocf');
+
+			$screen=redirect_screen(
+				get_screen_title('LOGGED_IN'),
+				$redirect_url,
+				$force_change_message,
+				false,
+				'notice'
+			);
+			$out=globalise($screen,NULL,'',true);
+			$out->evaluate_echo();
+			exit();
+		}
 	}
 }
 
@@ -456,7 +502,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 	if ((get_value('disable_user_online_counting')!=='1') || (get_value('session_prudence')!=='1') || (mt_rand(0,1000)==123))
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))));
 	}
 
 	// Look through sessions
@@ -468,7 +514,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 		if (!array_key_exists('member_id',$row)) continue; // Workaround to HipHop PHP weird bug
 
 		// Delete expiry from cache
-		if ($row['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time'))))
+		if ($row['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time')))))
 		{
 			$dirty_session_cache=true;
 			unset($SESSION_CACHE[$_session]);
@@ -478,7 +524,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 		// Get back to prior session if there was one
 		if ($member!==NULL)
 		{
-			if (($row['member_id']==$member) && (((get_option('ip_strict_for_sessions')=='0') && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+			if (($row['member_id']==$member) && (((get_option('ip_strict_for_sessions')=='0') && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip']==$ip)) && ($row['last_activity']>time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))))
 			{
 				$new_session=$_session;
 			}
@@ -604,7 +650,7 @@ function get_online_members($longer_time,$filter,&$count)
 {
 	if (get_value('no_member_tracking')==='1') return array();
 
-	$users_online_time_seconds=$longer_time?(60*60*intval(get_option('session_expiry_time'))):(60*intval(get_option('users_online_time')));
+	$users_online_time_seconds=intval($longer_time?(60.0*60.0*floatval(get_option('session_expiry_time'))):(60.0*floatval(get_option('users_online_time'))));
 	$cutoff=time()-$users_online_time_seconds;
 
 	if (get_value('session_prudence')==='1')

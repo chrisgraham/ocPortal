@@ -193,7 +193,7 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
 	if (($CHECKING_SAFEMODE) && ($id==-1)) return;
 
 	// Save cookie
-	$timeout=$guest_session?(time()+60*60*max(1,intval(get_option('session_expiry_time')))):NULL;
+	$timeout=$guest_session?(time()+intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))):NULL;
 	/*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))		Useful for testing non-cookie support, but annoying if left on
 	{
 		$test=false;

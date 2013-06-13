@@ -1467,11 +1467,15 @@ class forum_driver_ocf extends forum_driver_base
 					$change_map['m_ip_address']=get_ip_address();
 				if ($submitting)
 					$change_map['m_last_submit_time']=time();
+				$change_map['m_password_change_code']=''; // Security, to stop resetting password when account actively in use (stops people planting reset bombs then grabbing the details much later)
 
-				if (get_db_type()!='xml')
+				if (get_page_name()!='lost_password')
 				{
-					if (!$GLOBALS['SITE_DB']->table_is_locked('f_members'))
-						$this->connection->query_update('f_members',$change_map,array('id'=>$id),'',1,NULL,false,true);
+					if (get_db_type()!='xml')
+					{
+						if (!$GLOBALS['SITE_DB']->table_is_locked('f_members'))
+							$this->connection->query_update('f_members',$change_map,array('id'=>$id),'',1,NULL,false,true);
+					}
 				}
 			}
 		}

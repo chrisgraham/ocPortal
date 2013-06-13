@@ -184,8 +184,23 @@ function handle_active_login($username)
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));
-		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'failedlogins WHERE date_and_time>'.strval(time()-60*60*15).' AND '.db_string_equal_to('ip',get_ip_address()));
-		if ($count>30) log_hack_attack_and_exit('BRUTEFORCE_LOGIN_HACK');
+
+		$brute_force_login_minutes=15;
+		$_brute_force_login_minutes=get_value('brute_force_login_minutes');
+		if (!is_null($_brute_force_login_minutes))
+		{
+			$brute_force_login_minutes=intval($_brute_force_login_minutes);
+		}
+
+		$brute_force_threshold=30;
+		$_brute_force_threshold=get_value('brute_force_threshold');
+		if (!is_null($_brute_force_threshold))
+		{
+			$brute_force_threshold=intval($_brute_force_threshold);
+		}
+
+		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'failedlogins WHERE date_and_time>'.strval(time()-60*$brute_force_login_minutes).' AND '.db_string_equal_to('ip',get_ip_address()));
+		if ($count>=$brute_force_threshold) log_hack_attack_and_exit('BRUTEFORCE_LOGIN_HACK',$username,'',false,get_value('brute_force_instant_ban')==='1');
 	}
 }
 

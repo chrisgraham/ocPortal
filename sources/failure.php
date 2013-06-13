@@ -416,8 +416,9 @@ function ip_cidr_check($ip,$cidr)
  * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
  * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
  * @param  boolean		Whether to silently log the hack rather than also exiting
+ * @param  boolean		Whether a ban should be immediate
  */
-function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',$silent=false)
+function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',$silent=false,$instant_ban=false)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
@@ -468,6 +469,11 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		}
 	}
 	$hack_threshold=5;
+	$_hack_threshold=get_value('hack_ban_threshold');
+	if (!is_null($_hack_threshold))
+	{
+		$hack_threshold=intval($_hack_threshold);
+	}
 	if ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (function_exists('get_member')) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) $count=0;
 	$new_row=array(
 		'user_agent'=>fix_bad_unicode(substr(get_browser_string(),0,255)),
@@ -483,7 +489,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		'ip'=>$ip,
 	);
 	$ip_ban_todo=NULL;
-	if (($count>=$hack_threshold) && (get_option('autoban')!='0'))
+	if ((($count>=$hack_threshold) || ($instant_ban)) && (get_option('autoban')!='0'))
 	{
 		// Test we're not banning a good bot
 		$se_ip_lists=array(
