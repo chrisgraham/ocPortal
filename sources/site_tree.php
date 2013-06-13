@@ -78,7 +78,7 @@ function site_tree_script()
 				$zone=$matches[1];
 				$page=$matches[2];
 
-				list($overridables,$privilege_page)=get_module_overridables($zone,$page);
+				list($overridables,$privilege_page)=get_module_overridables($zone,$page,true);
 			}
 
 			if ($type=='root')
@@ -325,7 +325,7 @@ function site_tree_script()
 					$overridables=array();
 				} else
 				{
-					list($overridables,$privilege_page)=get_module_overridables($zone,$page);
+					list($overridables,$privilege_page)=get_module_overridables($zone,$page,true);
 				}
 				$privilege_perms='';
 				foreach ($overridables as $overridable=>$cat_support)

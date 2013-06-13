@@ -226,12 +226,12 @@ function save_zone_base_url($zone,$base_url)
  * @param  ID_TEXT		The page name
  * @return array			A pair: List of overridable privileges, privilege-page
  */
-function get_module_overridables($zone,$page)
+function get_module_overridables($zone,$page,$for_permissions=false)
 {
 	$overridables=array();
 	$privilege_page=$page;
 
-	$_pagelinks=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,false,NULL,true));
+	$_pagelinks=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,$for_permissions,NULL,true));
 	if (!is_null($_pagelinks[0])) // If it's a CMS-supporting module (e.g. downloads)
 	{
 		$pagelinks=is_array($_pagelinks[0])?call_user_func_array($_pagelinks[0][0],$_pagelinks[0][1]):eval($_pagelinks[0]);

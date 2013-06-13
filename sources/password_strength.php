@@ -87,15 +87,9 @@ function test_password($password,$username='')
 	$num_unique_chars=count(array_unique($chars))-1;
 	$strength+=$num_unique_chars*2;
 
-<<<<<<< HEAD
 	// Strength is a number 1-10
 	$strength=$strength > 99 ? 99 : $strength;
-	$strength=intval(floor($strength / 10 + 1));
-=======
-	/*** strength is a number 1-10; ***/
-	$strength=$strength>99?99:$strength;
 	$strength=intval(ceil(floatval($strength)/10.0+1.0));
->>>>>>> password_expiry_rules
 
 	return $strength;
 }

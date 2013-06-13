@@ -273,7 +273,7 @@ function page_not_found($codename,$zone)
 	}
 
 	$title=get_screen_title('ERROR_OCCURRED');
-	$add_access=has_actual_page_access(get_member(),'cms_comcode_pages',NULL,NULL,'submit_highrange_content');
+	$add_access=has_add_comcode_page_permission($zone);
 	$redirect_access=addon_installed('redirects_editor') && has_actual_page_access(get_member(),'admin_redirects');
 	require_lang('zones');
 	$add_url=$add_access?build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename),get_module_zone('cms_comcode_pages')):new ocp_tempcode();
