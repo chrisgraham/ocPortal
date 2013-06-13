@@ -969,7 +969,17 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		require_code('images');
 		$is_image=is_image($default);
 		$existing_url=$default;
-		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
+		if (url_is_local($existing_url))
+		{
+			$htaccess_path=get_custom_file_base().'/'.dirname(rawurldecode($existing_url)).'/.htaccess';
+			if ((is_file($htaccess_path)) && (strpos(file_get_contents($htaccess_path),'deny from all')!==false))
+			{
+				$existing_url='';
+			} else
+			{
+				$existing_url=get_custom_base_url().'/'.$existing_url;
+			}
+		}
 	}
 	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array('_GUID'=>'f493edcc5298bb32fff8635f2d316d21','FILTER'=>$filter,'PRETTY_NAME'=>$pretty_name,'EXISTING_URL'=>$existing_url,'IS_IMAGE'=>$is_image,'SWFUPLOAD'=>$swfupload,'EDIT'=>((!is_null($default)) && (!$required)),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
