@@ -74,8 +74,22 @@ class Hook_addon_registry_linux_helper_scripts
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/linux_helper_scripts.php',
+
+			// The following are sh shell scripts
 			'decache.sh',
 			'fixperms.sh',
+			'db_init.sh',
+			'db_export.sh',
+			'db_import.sh',
+
+			// The following are PHP scripts designed to be callable directly (not all bundled with the main ocPortal)
+			// sources/critical_errors.php (works to monitor for logged critical errors, and email them)
+			// data/occle.php (command line tunnel into OcCLE, VERY useful)
+			// _tests/codechecker/code_quality.php (Code Quality Checker)
+			// _tests/codechecker/phpdoc_parser.php (Code Quality Checker function signature parsing)
+			// data_custom/compile_in_includes.php (Compile ocPortal overrides against originals, for slight performance improvement)
+
+			// Various tools are also built into the Admin Zone menus
 		);
 	}
 
