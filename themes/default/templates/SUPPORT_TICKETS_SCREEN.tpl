@@ -35,10 +35,10 @@
 						</th>
 					{+END}
 					<th>
-						{!LAST_POST_BY}
+						{!BY}
 					</th>
 					<th>
-						{!DATE}
+						{!LAST_POST}
 					</th>
 				</tr>
 			</thead>

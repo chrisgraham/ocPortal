@@ -142,11 +142,14 @@ class Hook_addon_registry_tickets
 				'CLOSED'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
-				'DATE'=>placeholder_date(),
-				'DATE_RAW'=>placeholder_date_raw(),
-				'PROFILE_URL'=>placeholder_url(),
+				'FIRST_DATE'=>placeholder_date(),
+				'FIRST_DATE_RAW'=>placeholder_date_raw(),
+				'FIRST_POSTER_PROFILE_URL'=>placeholder_url(),
+				'FIRST_POSTER'=>lorem_phrase(),
+				'LAST_DATE'=>placeholder_date(),
+				'LAST_DATE_RAW'=>placeholder_date_raw(),
+				'LAST_POSTER_PROFILE_URL'=>placeholder_url(),
 				'LAST_POSTER'=>lorem_phrase(),
-				'UNCLOSED'=>lorem_word()
 			)));
 		}
 

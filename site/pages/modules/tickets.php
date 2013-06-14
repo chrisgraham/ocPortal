@@ -305,28 +305,7 @@ class Module_tickets
 
 				foreach ($tickets as $topic)
 				{
-					if (($topic['closed']) && (has_privilege(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
-
-					$ticket_id=extract_topic_identifier($topic['description']);
-
-					$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
-					$_title=$topic['firsttitle'];
-					$date=get_timezoned_date($topic['lasttime']);
-					$member=isset($topic['lastmemberid'])?$topic['lastmemberid']:$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['lastusername']);
-					if (!is_null($member))
-					{
-						$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
-						$last_poster=$topic['lastusername'];
-					} else
-					{
-						$profile_link='';
-						$last_poster=do_lang('UNKNOWN');
-					}
-					$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
-
-					$params=array('NUM_POSTS'=>integer_format($topic['num']-1),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_URL'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
-
-					$links->attach(do_template('SUPPORT_TICKET_LINK',$params));
+					$links->attach($this->_render_ticket_row($topic));
 				}
 			}
 		} else
@@ -344,6 +323,60 @@ class Module_tickets
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl,30,$tickets);
+	}
+
+	/**
+	 * Render a ticket link row.
+	 *
+	 * @param  array			Ticket details (from forum API)
+	 * @return tempcode		Ticket row
+	 */
+	function _render_ticket_row($topic)
+	{
+		if (($topic['closed']) && (has_privilege(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
+
+		$ticket_id=extract_topic_identifier($topic['description']);
+
+		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
+
+		$_title=$topic['firsttitle'];
+
+		$first_date=get_timezoned_date($topic['firsttime']);
+		$first_poster_id=isset($topic['firstmemberid'])?$topic['firstmemberid']:$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['firstusername']);
+		$first_poster_profile_url='';
+		$first_poster=do_lang('UNKNOWN');
+		if (!is_null($first_poster_id))
+		{
+			$first_poster_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($first_poster_id,false,true);
+			$first_poster=$topic['firstusername'];
+		}
+
+		$last_date=get_timezoned_date($topic['lasttime']);
+		$last_poster_id=isset($topic['lastmemberid'])?$topic['lastmemberid']:$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['lastusername']);
+		$last_poster=do_lang('UNKNOWN');
+		$last_poster_profile_url='';
+		if (!is_null($last_poster_id))
+		{
+			$last_poster_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($last_poster_id,false,true);
+			$last_poster=$topic['lastusername'];
+		}
+
+		return do_template('SUPPORT_TICKET_LINK',array(
+			'NUM_POSTS'=>integer_format($topic['num']-1),
+			'CLOSED'=>strval($topic['closed']),
+			'URL'=>$url,
+			'TITLE'=>$_title,
+			'FIRST_DATE'=>$first_date,
+			'FIRST_DATE_RAW'=>strval($topic['firsttime']),
+			'FIRST_POSTER_PROFILE_URL'=>$first_poster_profile_url,
+			'FIRST_POSTER'=>$first_poster,
+			'FIRST_POSTER_ID'=>strval($first_poster_id),
+			'LAST_DATE'=>$last_date,
+			'LAST_DATE_RAW'=>strval($topic['lasttime']),
+			'LAST_POSTER_PROFILE_URL'=>$last_poster_profile_url,
+			'LAST_POSTER'=>$last_poster,
+			'LAST_POSTER_ID'=>strval($last_poster_id),
+		));
 	}
 
 	/**
@@ -554,23 +587,7 @@ class Module_tickets
 
 						if ($id!=$ticket_id)
 						{
-							$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
-							$_title=$topic['firsttitle'];
-							$date=get_timezoned_date($topic['lasttime']);
-							$ticket_owner_name=$GLOBALS['FORUM_DRIVER']->get_username($ticket_owner,true);
-							if (is_null($ticket_owner_name))
-							{
-								$profile_link='';
-							} else
-							{
-								$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($ticket_owner,false,true);
-							}
-							$last_poster=$topic['lastusername'];
-							$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
-
-							$params=array('NUM_POSTS'=>integer_format($topic['num']-1),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_URL'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
-
-							$other_tickets->attach(do_template('SUPPORT_TICKET_LINK',$params));
+							$other_tickets->attach($this->_render_ticket_row($topic));
 						} else
 						{
 							$our_topic=$topic;
