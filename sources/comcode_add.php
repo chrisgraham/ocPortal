@@ -650,7 +650,8 @@ function comcode_helper_script()
 
 		if (get_option('eager_wysiwyg')=='0')
 		{
-			if (($tag=='attachment') && (post_param_integer('_safe',0)==1)) $tag='attachment_safe';
+			if (($tag=='attachment') && (post_param_integer('_safe',0)==1) && ((!isset($_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0')))
+				$tag='attachment_safe';
 		}
 
 		list($comcode,$bparameters)=_get_preview_environment_comcode($tag);

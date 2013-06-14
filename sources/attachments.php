@@ -350,10 +350,10 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 				if ($attachment['a_height']=='') $attachment['a_height']=strval($_height);
 			}
 		}
-		if (($attachment['a_width']=='') || ($attachment['a_height']==''))
+		if ((($attachment['a_width']=='') || ($attachment['a_height']=='')) && (is_video($attachment['a_original_filename'])))
 		{
-			if ($attachment['a_width']=='') $attachment['a_width']='240';
-			if ($attachment['a_height']=='') $attachment['a_height']='216';
+			if ($attachment['a_width']=='') $attachment['a_width']=get_option('attachment_default_width');
+			if ($attachment['a_height']=='') $attachment['a_height']=get_option('attachment_default_height');
 		}
 	}
 	$attachment['a_align']=array_key_exists('align',$attributes)?$attributes['align']:'left';

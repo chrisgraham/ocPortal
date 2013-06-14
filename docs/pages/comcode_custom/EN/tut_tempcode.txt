@@ -1416,7 +1416,7 @@ You can store and retrieve values in Tempcode variables. These work across templ
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>INCLUDE</td>
-		<td>Include a template in another and pass parameters (this makes a template very much like a function in a conventional programming language). Note that the automated smart-decacheing (for developers manually editing template files) will not work on manually edited included templates because ocPortal's optimiser means that the actual template is "compiled into" the template that calls it and thus not regularly individually checked</td>
+		<td>Include a template in another and pass parameters (this makes a template very much like a function in a conventional programming language). Note that the automated smart-decacheing (for developers manually editing template files) will not work on manually edited included templates because ocPortal's optimiser means that the actual template is "compiled into" the template that calls it and thus not regularly individually checked. If you try to include a template into itself, and don't give any new parameters, ocPortal will include the default version of that template in (if you do give parameters, or are running HipHop-PHP, you'll probably get a fatal error instead)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>WHILE</td>

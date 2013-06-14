@@ -94,6 +94,9 @@ function StrToNum($Str, $Check, $Magic)
 		}
 		$Check += ord($Str[$i]);
 	}
+
+	restrictify();
+
 	return $Check;
 }
 

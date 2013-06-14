@@ -1519,6 +1519,10 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{$BETA_CSS_PROPERTY,box-shadow: 0px 0px 20px {$GET,dark_shadow};}
 }
 
+.box.overlay.lightbox>.box_inner {
+	margin: 0;
+}
+
 /*
 =========================
 ========Spacing==========
@@ -3772,8 +3776,12 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	margin: 1em;
 }
 /* Make inline images look a little nicer, including with Wordpress imports (but native too) */
-.alignleft, .alignright, .aligncenter, .alignnone, .alignnone, a[rel="lightbox"] img.attachment_img {
+.alignleft, .alignright, .aligncenter, .alignnone, .alignnone, a[rel="lightbox"] img.attachment_img, .attachment_img img {
 	border: 2px solid {$GET,pale_border};
+}
+
+a[rel="lightbox"] {
+	display: inline-block; /* Stops "_" showing when we use white-space */
 }
 
 .attachment figcaption {

@@ -78,6 +78,7 @@ class Module_admin_config
 										'filetype_icons','infinite_scrolling',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
 										'cdn','enable_https','modal_user',
+										'attachment_default_width','attachment_default_height',
 										);
 
 		foreach ($config_options as $option)
@@ -181,6 +182,8 @@ class Module_admin_config
 			}
 			add_config_option('URL_SCHEME','url_scheme','list','return \''.$url_scheme.'\';','SITE','GENERAL',0,'RAW|PG|HTM|SIMPLE');
 			add_config_option('MODAL_USER','modal_user','username','return \'\';','FEATURE','GENERAL');
+			add_config_option('ATTACHMENT_DEFAULT_WIDTH','attachment_default_width','integer','return \'240\';','FEATURE','ATTACHMENTS');
+			add_config_option('ATTACHMENT_DEFAULT_HEIGHT','attachment_default_height','integer','return \'216\';','FEATURE','ATTACHMENTS');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))

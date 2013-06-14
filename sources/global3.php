@@ -426,9 +426,10 @@ function set_http_status_code($code)
  * @param  string				File type suffix of template file (e.g. .tpl)
  * @param  string				Subdirectory type to look in
  * @set    templates css
+ * @param  boolean			Whether to only search in the default templates
  * @return ?array				List of parameters needed for the _do_template function to be able to load the template (NULL: could not find the template)
  */
-function find_template_place($codename,$lang,$theme,$suffix,$type)
+function find_template_place($codename,$lang,$theme,$suffix,$type,$non_custom_only=false)
 {
 	global $FILE_ARRAY,$CURRENT_SHARE_USER;
 
@@ -441,25 +442,25 @@ function find_template_place($codename,$lang,$theme,$suffix,$type)
 
 	if (!isset($FILE_ARRAY))
 	{
-		if ((is_file($prefix.$theme.'/'.$type.'_custom/'.$codename.$suffix)) && (!in_safe_mode()))
+		if ((is_file($prefix.$theme.'/'.$type.'_custom/'.$codename.$suffix)) && (!in_safe_mode()) && (!$non_custom_only))
 			$place=array($theme,'/'.$type.'_custom/');
 		elseif (is_file($prefix.$theme.'/'.$type.'/'.$codename.$suffix))
 			$place=array($theme,'/'.$type.'/');
-		elseif (($CURRENT_SHARE_USER!==NULL) && ($theme!='default') && (is_file(get_file_base().'/themes/'.$theme.'/'.$type.'_custom/'.$codename.$suffix)))
+		elseif (($CURRENT_SHARE_USER!==NULL) && ($theme!='default') && (is_file(get_file_base().'/themes/'.$theme.'/'.$type.'_custom/'.$codename.$suffix)) && (!$non_custom_only))
 			$place=array($theme,'/'.$type.'_custom/');
 		elseif (($CURRENT_SHARE_USER!==NULL) && ($theme!='default') && (is_file(get_file_base().'/themes/'.$theme.'/'.$type.'/'.$codename.$suffix)))
 			$place=array($theme,'/'.$type.'/');
-		elseif (($CURRENT_SHARE_USER!==NULL) && (is_file(get_custom_file_base().'/themes/default/'.$type.'_custom/'.$codename.$suffix)))
+		elseif (($CURRENT_SHARE_USER!==NULL) && (is_file(get_custom_file_base().'/themes/default/'.$type.'_custom/'.$codename.$suffix)) && (!$non_custom_only))
 			$place=array('default','/'.$type.'_custom/');
 		elseif (($CURRENT_SHARE_USER!==NULL) && (is_file(get_custom_file_base().'/themes/default/'.$type.'/'.$codename.$suffix)))
 			$place=array('default','/'.$type.'/');
-		elseif ((is_file($prefix_default.'default'.'/'.$type.'_custom/'.$codename.$suffix)) && (!in_safe_mode()))
+		elseif ((is_file($prefix_default.'default'.'/'.$type.'_custom/'.$codename.$suffix)) && (!in_safe_mode()) && (!$non_custom_only))
 			$place=array('default','/'.$type.'_custom/');
 		elseif (is_file($prefix_default.'default'.'/'.$type.'/'.$codename.$suffix))
 			$place=array('default','/'.$type.'/');
 		else $place=NULL;
 
-		if ($place===NULL) // Get desparate, search in themes other than current and default
+		if (($place===NULL) && (!$non_custom_only)) // Get desparate, search in themes other than current and default
 		{
 			$dh=opendir(get_file_base().'/themes');
 			while (($possible_theme=readdir($dh)))

@@ -488,11 +488,11 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break;
 							case 'INCLUDE':
 								global $FILE_ARRAY;
-								if ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='') && ($count_directive_opener_params==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
+								$eval=@eval('return '.$first_directive_param.';');
+								if (!is_string($eval)) $eval='';
+								if (($template_name==$eval) || ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='')) && ($count_directive_opener_params==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
 								{
-									$eval=@eval('return '.$first_directive_param.';');
-									if (!is_string($eval)) $eval='';
-									$found=find_template_place($eval,'',$theme,'.tpl','templates');
+									$found=find_template_place($eval,'',$theme,'.tpl','templates',$template_name==$eval);
 									$_theme=$found[0];
 									if ($found[1]!==NULL)
 									{

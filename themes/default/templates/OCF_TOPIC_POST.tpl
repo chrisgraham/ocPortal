@@ -118,8 +118,10 @@
 			{+START,IF_EMPTY,{EMPHASIS}}{+START,IF_NON_EMPTY,{ID}}
 				<div class="ocf_post_back_to_top">
 					{$,is on/offline}
-					{+START,IF_PASSED,POSTER_ONLINE}
-						<img title="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" alt="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" src="{$IMG*,ocf_general/{$?,{POSTER_ONLINE},ison,isoff}}" />
+					{+START,IF,{$NOT,{$VALUE_OPTION,no_member_tracking}}}
+						{+START,IF_PASSED,POSTER_ONLINE}
+							<img title="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" alt="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" src="{$IMG*,ocf_general/{$?,{POSTER_ONLINE},ison,isoff}}" />
+						{+END}
 					{+END}
 
 					<a href="#"><img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>

@@ -72,8 +72,8 @@ function open_link_as_overlay(ob,width,height,target)
 				var dims_func=function()
 				{
 					// Might need to rescale using some maths, if natural size is too big
-					var max_width=modal.topWindow.get_window_width()-20;
-					var max_height=modal.topWindow.get_window_height()-(has_full_button?180:60);
+					var max_width=modal.top_window.get_window_width()-20;
+					var max_height=modal.top_window.get_window_height()-(has_full_button?180:60);
 					if (width>max_width)
 					{
 						width=max_width;
@@ -553,7 +553,7 @@ function ModalWindow()
 			});
 
 			this.box_wrapper.appendChild(this.element('div',{ // The main overlay
-				'class': 'box overlay',
+				'class': 'box overlay'+((this.type=='lightbox')?' lightbox':''),
 				'role': 'dialog',
 				'styles': {
 					// This will be updated immediately in reset_dimensions
@@ -680,7 +680,7 @@ function ModalWindow()
 							iframe.contentWindow.document.body.style.background='transparent';
 
 							if (iframe.contentWindow.document.body.className.indexOf('overlay')==-1)
-								iframe.contentWindow.document.body.className+=' overlay';
+								iframe.contentWindow.document.body.className+=' overlay lightbox';
 
 							// Allow scrolling, if we want it
 							//iframe.scrolling=(_this.scrollbars===false)?'no':'auto';	Actually, not wanting this now
