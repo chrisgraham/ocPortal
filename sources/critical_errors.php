@@ -129,9 +129,11 @@ if (!function_exists('critical_error'))
 				break;
 		}
 
+		global $SITE_INFO;
+
 		$edit_url='config_editor.php';
 		if (!file_exists($edit_url)) $edit_url='../'.$edit_url;
-		if (isset($GLOBALS['SITE_INFO']['base_url'])) $edit_url=$GLOBALS['SITE_INFO']['base_url'].'/config_editor.php';
+		if (isset($SITE_INFO['base_url'])) $edit_url=$SITE_INFO['base_url'].'/config_editor.php';
 
 		$extra='';
 

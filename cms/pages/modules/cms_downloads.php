@@ -765,7 +765,7 @@ class Module_cms_downloads extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('download',strval($id));
 		actual_meta_data_get_fields__special($meta_data,'num_downloads',INTEGER_MAGIC_NULL);
 
-		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
+		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],$meta_data['num_downloads'],true);
 
 		if ((addon_installed('galleries')) && (!fractional_edit()))
 		{

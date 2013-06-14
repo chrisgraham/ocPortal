@@ -262,10 +262,10 @@ class Module_lost_password
 		if ($temporary_passwords) // Log them in, then invite them to change their password
 		{
 			require_code('users_inactive_occasionals');
-			create_session($member,1);
+			create_session($member_id,1);
 
-			$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+			$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 			return redirect_screen($title,$redirect_url,do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($username)));
 		}
 

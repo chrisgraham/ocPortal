@@ -34,7 +34,7 @@ class Hook_fields_content_link_multi
 		{
 			if ($hook!='catalogue_entry'/*got a better field hook specifically for catalogue entries*/)
 			{
-				// HACKHACK: imperfect content type naming schemes
+				// FUDGE: imperfect content type naming schemes
 				$declared_hook=$hook;
 				if ($hook=='topic') $declared_hook='forum_topic';
 
@@ -108,7 +108,7 @@ class Hook_fields_content_link_multi
 
 		$type=preg_replace('#^choose\_#','',substr($field['cf_type'],3));
 
-		// HACKHACK: imperfect content type naming schemes
+		// FUDGE: imperfect content type naming schemes
 		if ($type=='forum_topic') $type='topic';
 
 		$ret=new ocp_tempcode();

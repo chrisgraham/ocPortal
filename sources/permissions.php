@@ -803,7 +803,7 @@ function has_add_comcode_page_permission($zone=NULL,$member=NULL)
 	$cats=mixed();
 	$cats='zone_page';
 	if (!is_null($zone)) $cats=array('zone_page',$zone);
-	return has_specific_permission($member,'submit_highrange_content','cms_comcode_pages',$cats);
+	return has_privilege($member,'submit_highrange_content','cms_comcode_pages',$cats);
 }
 
 /**
@@ -826,15 +826,15 @@ function has_bypass_validation_comcode_page_permission($zone=NULL,$member=NULL)
 	$cats=mixed();
 	$cats='zone_page';
 	if (!is_null($zone)) $cats=array('zone_page',$zone);
-	return has_specific_permission($member,'bypass_validation_highrange_content','cms_comcode_pages',$cats);
+	return has_privilege($member,'bypass_validation_highrange_content','cms_comcode_pages',$cats);
 }
 
 /**
  * Check to see if a member has permission to edit a Comcode page
  *
  * @param  integer		A bitmask of COMCODE_EDIT_* constants, identifying what kind of editing permission we are looking for
- * @param  ?MEMBER		The member being checked for access (NULL: current member)
  * @param  ?ID_TEXT		Zone to check for (NULL: check against global privileges, ignoring all per-zone overrides). Note how this is different to how a NULL zone works for checking add/bypass-validation permissions because if we get a false we have the get_comcode_page_editability_per_zone function to get more specific details, while for adding we either want a very specific or very vague answer.
+ * @param  ?MEMBER		The member being checked for access (NULL: current member)
  * @return boolean		If the permission is there
  */
 function has_some_edit_comcode_page_permission($scope,$zone=NULL,$member=NULL)
@@ -852,12 +852,12 @@ function has_some_edit_comcode_page_permission($scope,$zone=NULL,$member=NULL)
 
 	if (($scope & COMCODE_EDIT_ANY) != 0)
 	{
-		if (has_specific_permission($member,'edit_highrange_content','cms_comcode_pages',$cats)) return true;
+		if (has_privilege($member,'edit_highrange_content','cms_comcode_pages',$cats)) return true;
 	}
 
 	if (($scope & COMCODE_EDIT_OWN) != 0)
 	{
-		if (has_specific_permission($member,'edit_own_highrange_content','cms_comcode_pages',$cats)) return true;
+		if (has_privilege($member,'edit_own_highrange_content','cms_comcode_pages',$cats)) return true;
 	}
 
 	return false;
@@ -905,7 +905,7 @@ function has_edit_comcode_page_permission($zone,$page,$owner=NULL,$member=NULL)
 	if (is_null($member)) $member=get_member();
 
 	if (is_null($owner))
-		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
+		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
 
 	if (!has_actual_page_access($member,$page,$zone)) return false;
 	if (!has_actual_page_access($member,'cms_comcode_pages')) return false;
@@ -916,5 +916,5 @@ function has_edit_comcode_page_permission($zone,$page,$owner=NULL,$member=NULL)
 	$cats=mixed();
 	if (!is_null($zone)) $cats=array('zone_page',$zone);
 
-	return has_specific_permission($member,$privilege,'cms_comcode_pages',$cats);
+	return has_privilege($member,$privilege,'cms_comcode_pages',$cats);
 }

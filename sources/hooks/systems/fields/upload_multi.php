@@ -127,7 +127,7 @@ class Hook_fields_upload_multi
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		$default=($actual_value=='')?NULL:explode(chr(10),$actual_value);
+		$default=($actual_value=='')?mixed():explode(chr(10),$actual_value);
 		if (!is_null($default))
 		{
 			foreach ($default as $i=>$_actual_value)

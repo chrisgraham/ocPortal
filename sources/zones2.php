@@ -224,6 +224,7 @@ function save_zone_base_url($zone,$base_url)
  *
  * @param  ID_TEXT		The zone it is in
  * @param  ID_TEXT		The page name
+ * @param  boolean		Whether this is for permissions querying
  * @return array			A pair: List of overridable privileges, privilege-page
  */
 function get_module_overridables($zone,$page,$for_permissions=false)

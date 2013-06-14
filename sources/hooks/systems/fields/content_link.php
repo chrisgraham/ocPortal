@@ -34,7 +34,7 @@ class Hook_fields_content_link
 		{
 			if ($hook!='catalogue_entry'/*got a better field hook specifically for catalogue entries*/)
 			{
-				// HACKHACK: imperfect content type naming schemes
+				// FUDGE: imperfect content type naming schemes
 				$declared_hook=$hook;
 				if ($hook=='topic') $declared_hook='forum_topic';
 

@@ -495,7 +495,7 @@ function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
  */
 function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=false)
 {
- 	if (get_option('url_monikers_enabled')=='0') return '';
+	if (get_option('url_monikers_enabled')=='0') return '';
 
 	if (!$is_new)
 	{
