@@ -287,8 +287,8 @@ class OCP_Topic
 
 		if ($sort===NULL)
 		{
-			$_default_sort_order=get_value('default_comment_sort_order');
-			if (($reverse===NULL) && ($_default_sort_order!==NULL))
+			$_default_sort_order=get_option('default_comment_sort_order');
+			if ($reverse===NULL)
 			{
 				$default_sort_order=$_default_sort_order;
 			} else

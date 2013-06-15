@@ -11,7 +11,7 @@
 					<input maxlength="255" class="wide_field" type="password" value="" name="password" id="s_password" />
 				</div>
 
-				{+START,IF,{$NOT,{$VALUE_OPTION,no_password_cookies}}}
+				{+START,IF,{$CONFIG_OPTION,password_cookies}}
 					<div class="login_block_cookies">
 						<div class="float_surrounder">
 							<label for="s_remember">{!REMEMBER_ME}</label>

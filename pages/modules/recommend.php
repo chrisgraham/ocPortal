@@ -163,7 +163,7 @@ class Module_recommend
 			$fields->attach(form_input_email(do_lang_tempcode('FRIEND_EMAIL_ADDRESS'),'','email_address_0',array_key_exists(0,$already)?$already[0]:'',true));
 		} else
 		{
-			if (get_value('disable_csv_recommend')!=='1')
+			if (get_option('enable_csv_recommend')=='1')
 			{
 				$set_name='people';
 				$required=true;
@@ -351,7 +351,7 @@ class Module_recommend
 		$success_read=false;
 
 		//start processing CSV file
-		if ((get_value('disable_csv_recommend')!=='1') && (!is_guest()))
+		if ((get_option('enable_csv_recommend')=='1') && (!is_guest()))
 		{
 			if (array_key_exists('upload',$_FILES)) // NB: We disabled SWFupload for this form so don't need to consider it
 			{

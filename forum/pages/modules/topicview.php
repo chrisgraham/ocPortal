@@ -288,7 +288,7 @@ class Module_topicview
 							'ID'=>$is_spacer_post?'':strval($_postdetails['id']),
 							'TOPIC_FIRST_POST_ID'=>is_null($topic_info['first_post_id'])?'':strval($topic_info['first_post_id']),
 							'TOPIC_FIRST_POSTER'=>is_null($topic_info['first_poster'])?'':strval($topic_info['first_poster']),
-							'POST_ID'=>$is_spacer_post?'':((get_value('seq_post_ids')==='1')?strval($start+$array_id+1):strval($_postdetails['id'])),
+							'POST_ID'=>$is_spacer_post?'':((get_option('seq_post_ids')=='1')?strval($start+$array_id+1):strval($_postdetails['id'])),
 							'URL'=>$post_url,
 							'CLASS'=>$_postdetails['is_emphasised']?'ocf_post_emphasis':(array_key_exists('intended_solely_for',$_postdetails)?'ocf_post_personal':''),
 							'EMPHASIS'=>$emphasis,
@@ -354,7 +354,7 @@ class Module_topicview
 		$button_array=array();
 		if (!is_null($id))
 		{
-			if (get_value('no_threaded_buttons')!=='1')
+			if (get_option('threaded_buttons')=='1')
 			{
 				if ($threaded)
 				{
@@ -370,7 +370,7 @@ class Module_topicview
 			if (!is_guest())
 			{
 				$too_old=$topic_info['last_time']<time()-60*60*24*intval(get_option('post_history_days'));
-				if ((get_value('disable_mark_topic_unread')!=='1') && (!$too_old))
+				if ((get_option('enable_mark_topic_unread')=='1') && (!$too_old))
 				{
 					$map=array('page'=>'topics','type'=>'mark_unread_topic','id'=>$id);
 					$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
@@ -436,7 +436,7 @@ class Module_topicview
 
 			if (!is_null($topic_info['forum_id']))
 			{
-				if (get_value('disable_add_topic_btn_in_topic')!=='1')
+				if (get_option('enable_add_topic_btn_in_topic')=='1')
 				{
 					if (ocf_may_post_topic($topic_info['forum_id'],get_member()))
 					{
@@ -685,7 +685,7 @@ class Module_topicview
 				$marked_post_actions.='<option value="delete_posts">'.do_lang('DELETE_POSTS').'</option>';
 			if ((array_key_exists('may_validate_posts',$topic_info)) && (addon_installed('unvalidated')))
 				$marked_post_actions.='<option value="validate_posts">'.do_lang('VALIDATE_POSTS').'</option>';
-			if (get_value('disable_multi_quote')!=='1')
+			if (get_option('enable_multi_quote')=='1')
 			{
 				if ($may_reply)
 					$marked_post_actions.='<option value="new_post">'.do_lang('QUOTE_POSTS').'</option>';

@@ -138,7 +138,7 @@ class Module_cms_wiki
 		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
 
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'5ae885a9f92415498340c41edfb47501','SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
-		if (get_value('disable_staff_notes')!=='1')
+		if (get_option('enable_staff_notes')=='1')
 			$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 		require_code('fields');

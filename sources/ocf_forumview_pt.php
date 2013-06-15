@@ -66,7 +66,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	$order2='t_cache_last_time DESC';
 	if ($order=='first_post') $order2='t_cache_first_time DESC';
 	elseif ($order=='title') $order2='t_cache_first_title ASC';
-	if (get_value('disable_sunk')!=='1')
+	if (get_option('enable_sunk')=='1')
 		$order2='t_sunk ASC,'.$order2;
 	$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query.$union.' ORDER BY t_pinned DESC,'.$order2,$max,$start,false,true);
 	$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);

@@ -108,7 +108,7 @@ class Module_vforums
 
 		$order2='t_cache_last_time DESC';
 
-		if (get_value('disable_sunk')!=='1')
+		if (get_option('enable_sunk')=='1')
 			$order2='t_sunk ASC,'.$order2;
 
 		$extra_tpl_map=array('FILTERING'=>do_template('OCF_VFORUM_FILTERING',array()));

@@ -149,7 +149,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 
 	if ($big_change) // Only update the persistent cache for non-trivial changes.
 	{
-		if (get_value('session_prudence')!=='1') // With session prudence we don't store all these in persistent cache due to the size of it all. So only re-save if that's not on.
+		if (get_option('session_prudence')=='0') // With session prudence we don't store all these in persistent cache due to the size of it all. So only re-save if that's not on.
 			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 
@@ -311,7 +311,7 @@ function try_httpauth_login()
 	{
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
-		if ((trim(post_param('email_address',''))=='') && (get_value('no_finish_profile')!=='1'))
+		if ((trim(post_param('email_address',''))=='') && (get_option('finish_profile')=='1'))
 		{
 			@ob_end_clean();
 			if (!function_exists('do_header')) require_code('site');

@@ -279,11 +279,11 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,
 	$children[0]['breadcrumbs']=$breadcrumbs;
 
 	// Children of this category
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',300/*reasonable limit*/);
-	if (count($rows)==300) $rows=array();
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
+	if (count($rows)==intval(get_option('general_safety_listing_limit'))) $rows=array();
 	$where=array('category_id'=>$category_id);
 	if (!is_null($submitter)) $where['submitter']=$submitter;
-	$erows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('id','name','submitter','original_filename'),$where,'ORDER BY add_date DESC',300/*reasonable limit*/);
+	$erows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('id','name','submitter','original_filename'),$where,'ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
 	$children[0]['entries']=array();
 	foreach ($erows as $row)
 	{
@@ -407,8 +407,8 @@ function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=N
 	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('category_id'=>$category_id));
 
 	// Children of this category
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',300/*reasonable*/);
-	if (count($rows)==300) $rows=array();
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',intval(get_option('general_safety_listing_limit'))/*reasonable*/);
+	if (count($rows)==intval(get_option('general_safety_listing_limit'))) $rows=array();
 	$children[0]['child_count']=count($rows);
 	$breadcrumbs.=' > ';
 	if ($levels!==0)

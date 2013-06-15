@@ -210,7 +210,7 @@ class Hook_paypal
 			$txn_id=post_param('subscr_id').'-c';
 		}
 
-		$primary_paypal_email=get_value('primary_paypal_email');
+		$primary_paypal_email=get_option('primary_paypal_email');
 
 		if (!is_null($primary_paypal_email))
 		{

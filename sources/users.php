@@ -54,7 +54,7 @@ function init__users()
 	$DOING_USERS_INIT=true;
 
 	// Load all sessions into memory, if possible
-	if (get_value('session_prudence')!=='1')
+	if (get_option('session_prudence')=='0')
 	{
 		$SESSION_CACHE=persistent_cache_get('SESSION_CACHE');
 	} else
@@ -64,7 +64,7 @@ function init__users()
 	global $IN_MINIKERNEL_VERSION;
 	if ((!is_array($SESSION_CACHE)) && ($IN_MINIKERNEL_VERSION==0))
 	{
-		if (get_value('session_prudence')!=='1')
+		if (get_option('session_prudence')=='0')
 		{
 			$where='';
 		} else
@@ -82,7 +82,7 @@ function init__users()
 		{
 			$SESSION_CACHE=list_to_map('the_session',$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions'.$where));
 		}
-		if (get_value('session_prudence')!=='1')
+		if (get_option('session_prudence')=='0')
 		{
 			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
@@ -222,7 +222,7 @@ function get_member($quick_only=false)
 			{
 				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_screen_title now
 				$SESSION_CACHE[$session]['last_activity']=time();
-				if (get_value('session_prudence')!=='1')
+				if (get_option('session_prudence')=='0')
 				{
 					persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 				}
@@ -371,13 +371,13 @@ function enforce_temporary_passwords($member)
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 
 		// Expired?
-		if (intval(get_value('password_expiry_days'))>0)
+		if (intval(get_option('password_expiry_days'))>0)
 		{
 			require_code('password_rules');
 			if (member_password_expired($member))
 			{
 				require_lang('password_rules');
-				$force_change_message=do_lang_tempcode('PASSWORD_EXPIRED',escape_html($username),escape_html(integer_format(intval(get_value('password_expiry_days')))));
+				$force_change_message=do_lang_tempcode('PASSWORD_EXPIRED',escape_html($username),escape_html(integer_format(intval(get_option('password_expiry_days')))));
 				require_code('urls');
 				$redirect_url=build_url(array('page'=>'lost_password','username'=>$username),'');
 			}
@@ -393,13 +393,13 @@ function enforce_temporary_passwords($member)
 		}
 
 		// Too old?
-		elseif (intval(get_value('password_change_days'))>0)
+		elseif (intval(get_option('password_change_days'))>0)
 		{
 			require_code('password_rules');
 			if (member_password_too_old($member))
 			{
 				require_lang('password_rules');
-				$force_change_message=do_lang_tempcode('PASSWORD_TOO_OLD',escape_html($username),escape_html(integer_format(intval(get_value('password_change_days')))));
+				$force_change_message=do_lang_tempcode('PASSWORD_TOO_OLD',escape_html($username),escape_html(integer_format(intval(get_option('password_change_days')))));
 				require_code('urls');
 				$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
 			}
@@ -499,7 +499,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 	$ip=get_ip_address(3);
 
 	// Delete expired sessions; it's important we do this routinely, not randomly, as the session table is loaded up and can get large -- unless we aren't tracking online users, in which case the table is never loaded up
-	if ((get_value('disable_user_online_counting')!=='1') || (get_value('session_prudence')!=='1') || (mt_rand(0,1000)==123))
+	if ((get_value('disable_user_online_counting')!=='1') || (get_option('session_prudence')=='0') || (mt_rand(0,1000)==123))
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions'))
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))));
@@ -532,7 +532,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 	}
 	if ($dirty_session_cache)
 	{
-		if (get_value('session_prudence')!=='1')
+		if (get_option('session_prudence')=='0')
 		{
 			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
@@ -653,7 +653,7 @@ function get_online_members($longer_time,$filter,&$count)
 	$users_online_time_seconds=intval($longer_time?(60.0*60.0*floatval(get_option('session_expiry_time'))):(60.0*floatval(get_option('users_online_time'))));
 	$cutoff=time()-$users_online_time_seconds;
 
-	if (get_value('session_prudence')==='1')
+	if (get_option('session_prudence')=='1')
 	{
 		// If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
 		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff)); // Written in by reference

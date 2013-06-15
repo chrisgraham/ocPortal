@@ -583,7 +583,7 @@ class Module_search
 		$content=get_param('content','',true);
 
 		$boolean_search=get_param_integer('boolean_search',0)==1;
-		if (get_value('disable_boolean_search')==='1')
+		if (get_option('enable_boolean_search')=='0')
 		{
 			$boolean_search=false;
 			if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()))
@@ -636,7 +636,7 @@ class Module_search
 		}
 
 		$start=get_param_integer('search_start',0);
-		$default_max=10;
+		$default_max=intval(get_option('search_results_per_page'));
 		if ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0'))
 		{
 			if (intval(preg_replace('#M$#','',ini_get('memory_limit')))<20) $default_max=5;

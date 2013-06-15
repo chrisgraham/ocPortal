@@ -749,7 +749,7 @@ class Module_cms_news_cat extends standard_crud_module
 			$fields->attach($image_chooser_field);
 		}
 
-		if (get_value('disable_staff_notes')!=='1')
+		if (get_option('enable_staff_notes')=='1')
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b88f1b286b05e18991ad51538812f7b2','SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));

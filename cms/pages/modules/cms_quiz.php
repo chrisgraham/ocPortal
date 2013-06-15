@@ -260,7 +260,7 @@ class Module_cms_quiz extends standard_crud_module
 			if (!$newsletters->is_empty())
 				$fields->attach(form_input_list(do_lang_tempcode('TIED_TO_NEWSLETTER'),do_lang_tempcode('DESCRIPTION_TIED_TO_NEWSLETTER'),'tied_newsletter',$newsletters,NULL,false,false));
 		}
-		if (get_value('disable_staff_notes')!=='1')
+		if (get_option('enable_staff_notes')=='1')
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 		$fields->attach(meta_data_get_fields('quiz',is_null($id)?NULL:strval($id)));

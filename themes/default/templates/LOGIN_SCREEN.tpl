@@ -45,7 +45,7 @@
 					</table>
 				{+END}
 
-				{+START,IF,{$NOT,{$VALUE_OPTION,no_password_cookies}}}
+				{+START,IF,{$CONFIG_OPTION,password_cookies}}
 					<div class="login_page_options">
 						<p>
 							<label for="remember">

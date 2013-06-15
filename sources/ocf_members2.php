@@ -260,7 +260,7 @@ function ocf_may_whisper($target,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (get_value('disable_pt_restrict')==='1')
+	if (get_option('enable_pt_restrict')=='0')
 	{
 		return true;
 	}

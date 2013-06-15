@@ -197,7 +197,7 @@ class Hook_Profiles_Tabs_about
 				$value=float_to_raw_string($value);
 			}
 
-			if ((get_value('show_empty_cpfs')==='1') || (((!is_object($value)) && ($value!='')) || ((is_object($value)) && (!$value->is_empty()))))
+			if ((get_option('show_empty_cpfs')=='1') || (((!is_object($value)) && ($value!='')) || ((is_object($value)) && (!$value->is_empty()))))
 			{
 				$custom_fields[]=array(
 					'NAME'=>$name,

@@ -51,7 +51,7 @@
 							{$SET,GET_TITLE,1}
 						{+END}
 						{+START,IF_NON_PASSED,GET_TITLE}
-							{$SET,GET_TITLE,{$VALUE_OPTION,comment_topic_subject}}
+							{$SET,GET_TITLE,{$CONFIG_OPTION,comment_topic_subject}}
 						{+END}
 
 						{+START,IF,{$GET,GET_TITLE}}

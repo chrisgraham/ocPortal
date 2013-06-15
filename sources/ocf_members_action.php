@@ -69,7 +69,9 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
 	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 	if (is_null($auto_monitor_contrib_content))
-		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
+	{
+		$auto_monitor_contrib_content=(get_option('allow_auto_notifications')=='0')?0:1;
+	}
 
 	if (is_null($password_compatibility_scheme))
 	{
@@ -337,7 +339,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		generate_resourcefs_moniker('member',strval($member_id),NULL,NULL,true);
 	}
 
-	$password_change_days=get_value('password_change_days');
+	$password_change_days=get_option('password_change_days');
 	if (intval($password_change_days)>0)
 	{
 		if ($password_compatibility_scheme=='')

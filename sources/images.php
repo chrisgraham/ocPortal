@@ -863,7 +863,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	}
 	elseif (($ext2=='jpg') || ($ext2=='jpeg'))
 	{
-		$jpeg_quality=get_value('jpeg_quality');
+		$jpeg_quality=get_option('jpeg_quality');
 		if ($jpeg_quality!==NULL)
 		{
 			$test=@imagejpeg($dest,$to,intval($jpeg_quality));

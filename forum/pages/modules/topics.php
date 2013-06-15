@@ -859,12 +859,12 @@ class Module_topics
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'),do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'),'post_text',$post_text,false));
 		$options=array();
-		if (get_value('disable_skip_sig')!=='1')
+		if (get_option('enable_skip_sig')=='1')
 		{
 			if (addon_installed('ocf_signatures'))
 				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 		}
-		if (get_value('disable_post_emphasis')!=='1')
+		if (get_option('enable_post_emphasis')=='1')
 			$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
 		$fields->attach(form_input_various_ticks($options,''));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('OPTIONAL_REASON'),'reason','',false));
@@ -1394,7 +1394,7 @@ class Module_topics
 						);
 			if (addon_installed('unvalidated'))
 				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode('DESCRIPTION_VALIDATED'));
-			if (get_value('disable_sunk')!=='1')
+			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',false,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!$private_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
 		} else
@@ -1407,7 +1407,7 @@ class Module_topics
 		$options=array();
 		if (!is_guest())
 		{
-			if (get_value('disable_skip_sig')!=='1')
+			if (get_option('enable_skip_sig')=='1')
 			{
 				if (addon_installed('ocf_signatures'))
 					$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
@@ -1528,7 +1528,7 @@ class Module_topics
 		require_code('ocf_members2');
 		if (!ocf_may_whisper($member_id)) warn_exit(do_lang_tempcode('NO_PT_FROM_ALLOW'));
 
-		if (get_value('disable_pt_restrict')!=='1')
+		if (get_option('enable_pt_restrict')=='1')
 		{
 			$agreed=get_param_integer('agreed',0);
 			$rules=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pt_rules_text'),$GLOBALS['FORUM_DB']);
@@ -1657,7 +1657,7 @@ class Module_topics
 		$options=array();
 		if (!is_guest())
 		{
-			if (get_value('disable_skip_sig')!=='1')
+			if (get_option('enable_skip_sig')=='1')
 			{
 				if (addon_installed('ocf_signatures'))
 					$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
@@ -1683,7 +1683,7 @@ class Module_topics
 		}
 		if (ocf_may_make_private_topic())
 		{
-			if (($_intended_solely_for!='') || (get_value('no_inline_pp_advertise')!=='1'))
+			if (($_intended_solely_for!='') || (get_option('inline_pp_advertise')=='1'))
 				$specialisation->attach(form_input_username(do_lang_tempcode('WHISPER'),do_lang_tempcode('DESCRIPTION_WHISPER'),'intended_solely_for',$_intended_solely_for,false));
 		}
 
@@ -1751,7 +1751,7 @@ class Module_topics
 
 				$options[]=array(do_lang_tempcode('VALIDATED'),'topic_validated',$topic_info[0]['t_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
 			}
-			if (get_value('disable_sunk')!=='1')
+			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',$topic_info[0]['t_sunk']==1,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!is_null($forum_id)) $options[]=array(do_lang_tempcode('CASCADING'),'cascading',$topic_info[0]['t_cascading']==1,do_lang_tempcode('DESCRIPTION_CASCADING'));
 			$specialisation2->attach(form_input_various_ticks($options,''));
@@ -2975,7 +2975,7 @@ END;
 				}
 				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$topic_info[0]['t_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
 			}
-			if (get_value('disable_sunk')!=='1')
+			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',$topic_info[0]['t_sunk']==1,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!$private_topic) $options[]=array(do_lang_tempcode('CASCADING'),'cascading',$topic_info[0]['t_cascading']==1,do_lang_tempcode('DESCRIPTION_CASCADING'));
 		} else
@@ -3533,12 +3533,12 @@ END;
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'),do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'),'post_text',$post_text,false));
 		$options=array();
-		if (get_value('disable_skip_sig')!=='1')
+		if (get_option('enable_skip_sig')=='1')
 		{
 			if (addon_installed('ocf_signatures'))
 				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 		}
-		if (get_value('disable_post_emphasis')!=='1')
+		if (get_option('enable_post_emphasis')=='1')
 			$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
 		$fields->attach(form_input_various_ticks($options,''));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('OPTIONAL_REASON'),'reason','',false));

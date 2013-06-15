@@ -244,14 +244,14 @@ class Module_cms_blogs extends standard_crud_module
 		}
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'cff27a28d4d01f8e0255ee645ea210b3','SECTION_HIDDEN'=>(is_null($news_category) || (count($news_category)==0)) && $image=='' && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields2->attach(form_input_text_comcode(do_lang_tempcode('BLOG_NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
-		if (get_value('disable_secondary_news')!=='1')
+		if (get_option('enable_secondary_news')=='1')
 		{
 			$fields2->attach(form_input_list(do_lang_tempcode('MAIN_CATEGORY'),do_lang_tempcode('DESCRIPTION_MAIN_CATEGORY'),'main_news_category',$cats1));
 		} else
 		{
 			$fields2->attach(form_input_hidden('main_news_category',is_null($main_news_category)?'personal':strval($main_news_category)));
 		}
-		if (get_value('disable_secondary_news')!=='1')
+		if (get_option('enable_secondary_news')=='1')
 			$fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'),do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'),'news_category',$cats2));
 		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		//handle_max_file_size($hidden,'image'); Attachments will add this

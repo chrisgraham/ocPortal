@@ -174,7 +174,7 @@ ocPortal runs perfectly on Rackspace Cloud Sites hosting (formerly named Mosso C
 
 If you are on a single database but have hundreds of members online at once (or replication you cannot control) then your session pool will be shared between all websites. You should type this into OcCLE:
 [code]
-:set_value('session_prudence','1');
+:set_option('session_prudence','1');
 [/code]
 It will cause ocPortal to not load up all sessions on each page request. This will stop "users online" working, but is important for performance.
 

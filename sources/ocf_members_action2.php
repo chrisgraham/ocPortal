@@ -339,7 +339,9 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
 	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 	if (is_null($auto_monitor_contrib_content))
-		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
+	{
+		$auto_monitor_contrib_content=(get_option('allow_auto_notifications')=='0')?0:1;
+	}
 
 	$hidden=new ocp_tempcode();
 
@@ -505,7 +507,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		{
 			if (get_option('forced_preview_option')=='1')
 				$fields->attach(form_input_tick(do_lang_tempcode('PREVIEW_POSTS'),do_lang_tempcode('DESCRIPTION_PREVIEW_POSTS'),'preview_posts',$preview_posts==1));
-			if (get_value('disable_views_sigs_option')!=='1')
+			if (get_option('enable_views_sigs_option')=='1')
 			{
 				if (addon_installed('ocf_signatures'))
 					$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
@@ -521,7 +523,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				if ($key!=db_get_first_id())
 					$usergroup_list->attach(form_input_list_entry(strval($key),($pt_allow=='*') || count(array_intersect(array(strval($key)),explode(',',$pt_allow)))!=0,$val));
 			}
-			if (get_value('disable_pt_restrict')!=='1')
+			if (get_option('enable_pt_restrict')=='1')
 			{
 				$fields->attach(form_input_multi_list(do_lang_tempcode('PT_ALLOW'),addon_installed('chat')?do_lang_tempcode('PT_ALLOW_DESCRIPTION_CHAT'):do_lang_tempcode('PT_ALLOW_DESCRIPTION'),'pt_allow',$usergroup_list));
 				$fields->attach(form_input_text_comcode(do_lang_tempcode('PT_RULES_TEXT'),do_lang_tempcode('PT_RULES_TEXT_DESCRIPTION'),'pt_rules_text',$pt_rules_text,false));
@@ -596,7 +598,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			}
 			if (addon_installed('unvalidated'))
 				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_MEMBER_VALIDATED'),'validated',$validated==1));
-			if (get_value('disable_highlight_name')!=='1')
+			if (get_option('enable_highlight_name')=='1')
 				$fields->attach(form_input_tick(do_lang_tempcode('HIGHLIGHTED_NAME'),do_lang_tempcode(addon_installed('pointstore')?'DESCRIPTION_HIGHLIGHTED_NAME_P':'DESCRIPTION_HIGHLIGHTED_NAME'),'highlighted_name',$highlighted_name==1));
 			if ((!is_null($member_id)) && ($member_id!=get_member())) // Can't ban someone new, and can't ban yourself
 				$fields->attach(form_input_tick(do_lang_tempcode('_BANNED'),do_lang_tempcode('DESCRIPTION_MEMBER_BANNED'),'is_perm_banned',$is_perm_banned==1));
@@ -802,7 +804,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			$update['m_password_compat_scheme']='';
 		}
 
-		$password_change_days=get_value('password_change_days');
+		$password_change_days=get_option('password_change_days');
 		if (intval($password_change_days)>0)
 		{
 			if ($password_compatibility_scheme=='')

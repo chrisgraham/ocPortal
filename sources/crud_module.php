@@ -213,7 +213,7 @@ class standard_crud_module
 				$this->second_stage_preview=true;
 		}
 
-		if (get_value('no_edit_under')==='1')
+		if (get_option('edit_under')=='0')
 		{
 			$this->special_edit_frontend=true;
 			if (!is_null($this->cat_crud_module))

@@ -541,7 +541,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function _member_profile_url($id,$tempcode_okay=false)
 	{
-		if (get_value('username_profile_links')=='1')
+		if (get_option('username_profile_links')=='1')
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($id);
 			$map=array('page'=>'members','type'=>'view','id'=>is_null($username)?strval($id):$username);
@@ -1440,7 +1440,7 @@ class forum_driver_ocf extends forum_driver_base
 		{
 			if (is_guest($id)) // bit of a hack, so that guests don't trip each others limits. Works out statistically.
 			{
-				if (get_value('session_prudence')!=='1')
+				if (get_option('session_prudence')=='0')
 				{
 					global $SESSION_CACHE;
 					$num_guests=0;

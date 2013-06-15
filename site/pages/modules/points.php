@@ -339,11 +339,11 @@ class Module_points
 					give_points($amount,$member_id_of,$member_id_viewing,$reason,$anonymous==1);
 
 					// Randomised gifts
-					$_gift_reward_chance=get_value('gift_reward_chance');
+					$_gift_reward_chance=get_option('gift_reward_chance');
 					$gift_reward_chance=is_null($_gift_reward_chance)?25:intval($_gift_reward_chance);
 					if (mt_rand(0,100)<$gift_reward_chance)
 					{
-						$_gift_reward_amount=get_value('gift_reward_amount');
+						$_gift_reward_amount=get_option('gift_reward_amount');
 						$gift_reward_amount=is_null($_gift_reward_amount)?25:intval($_gift_reward_amount);
 
 						$message=do_lang_tempcode('PR_LUCKY');

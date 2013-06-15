@@ -468,12 +468,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 			$alt_ip=true;
 		}
 	}
-	$hack_threshold=5;
-	$_hack_threshold=get_value('hack_ban_threshold');
-	if (!is_null($_hack_threshold))
-	{
-		$hack_threshold=intval($_hack_threshold);
-	}
+	$hack_threshold=intval(get_option('hack_ban_threshold'));
 	if ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (function_exists('get_member')) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) $count=0;
 	$new_row=array(
 		'user_agent'=>fix_bad_unicode(substr(get_browser_string(),0,255)),

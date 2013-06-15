@@ -222,7 +222,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 		require_code('ocf_members2');
 		require_code('ocf_members_action');
 		$_custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),NULL,NULL,NULL,1);
-		if ((!$completion_form_submitted) && (count($_custom_fields)!=0) && (get_value('no_finish_profile')!=='1')) // UI
+		if ((!$completion_form_submitted) && (count($_custom_fields)!=0) && (get_option('finish_profile')=='1')) // UI
 		{
 			$middle=ocf_member_external_linker_ask($username,'facebook',$email_address,$dob_day,$dob_month,$dob_year);
 			$tpl=globalise($middle,NULL,'',true);

@@ -85,7 +85,7 @@ function trackback_script()
  */
 function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false,$has_notes=true)
 {
-	if (get_value('disable_feedback')==='1') return new ocp_tempcode();
+	if (get_option('enable_feedback')=='0') return new ocp_tempcode();
 
 	require_code('feedback');
 	require_code('form_templates');
@@ -118,7 +118,7 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 		require_lang('trackbacks');
 		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_ALLOW_TRACKBACKS'),'allow_trackbacks',$allow_trackbacks));
 	}
-	if ((get_value('disable_staff_notes')!=='1') && ($has_notes))
+	if ((get_option('enable_staff_notes')=='1') && ($has_notes))
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 	if (!$fields->is_empty())
@@ -130,7 +130,7 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 		{
 			$section_hidden=$notes=='' && $allow_comments && (is_null($allow_trackbacks) || $allow_trackbacks || (get_option('is_on_trackbacks')=='0')) && $allow_rating;
 		}
-		$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'95864784029fd6d46a8b2ebbca9d81eb','SECTION_HIDDEN'=>$section_hidden,'TITLE'=>do_lang_tempcode((get_value('disable_staff_notes')!=='1')?'FEEDBACK_AND_NOTES':'_FEEDBACK')));
+		$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'95864784029fd6d46a8b2ebbca9d81eb','SECTION_HIDDEN'=>$section_hidden,'TITLE'=>do_lang_tempcode((get_option('enable_staff_notes')=='1')?'FEEDBACK_AND_NOTES':'_FEEDBACK')));
 		$_fields->attach($fields);
 		$fields=$_fields;
 	}

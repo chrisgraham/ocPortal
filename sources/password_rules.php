@@ -68,18 +68,14 @@ function password_rules_ensure_table_exists()
  */
 function member_password_expired($member_id)
 {
-	$password_expiry_days=get_value('password_expiry_days');
-	if (!is_null($password_expiry_days))
-	{
-		$expiry_days=intval($password_expiry_days);
+	$expiry_days=intval(get_option('password_expiry_days'));
 
-		if ($expiry_days>0)
+	if ($expiry_days>0)
+	{
+		$last_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_last_visit_time');
+		if ($last_time<time()-60*60*24*$expiry_days)
 		{
-			$last_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_last_visit_time');
-			if ($last_time<time()-60*60*24*$expiry_days)
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 
@@ -94,22 +90,18 @@ function member_password_expired($member_id)
  */
 function member_password_too_old($member_id)
 {
-	$password_change_days=get_value('password_change_days');
-	if (!is_null($password_change_days))
+	$change_days=intval(get_option('password_change_days'));
+
+	if ($change_days>0)
 	{
-		$change_days=intval($password_change_days);
+		password_rules_ensure_table_exists();
 
-		if ($change_days>0)
+		$last_time=$GLOBALS['FORUM_DB']->query_value('f_password_history','MAX(p_time)',array(
+			'p_member_id'=>$member_id,
+		));
+		if ($last_time<time()-60*60*24*$change_days)
 		{
-			password_rules_ensure_table_exists();
-
-			$last_time=$GLOBALS['FORUM_DB']->query_value('f_password_history','MAX(p_time)',array(
-				'p_member_id'=>$member_id,
-			));
-			if ($last_time<time()-60*60*24*$change_days)
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 
@@ -144,8 +136,8 @@ function check_password_complexity($username,$password,$return_errors=false)
 		warn_exit(do_lang_tempcode('PASSWORD_TOO_SHORT',integer_format($minimum_password_length)));
 	}
 
-	$_minimum_password_strength=get_value('minimum_password_strength');
-	if (!is_null($_minimum_password_strength))
+	$_minimum_password_strength=get_option('minimum_password_strength');
+	if ($_minimum_password_strength!='1')
 	{
 		$minimum_strength=intval($_minimum_password_strength);
 		require_code('password_strength');

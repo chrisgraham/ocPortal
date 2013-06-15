@@ -366,7 +366,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	// Headers
 	$website_email=get_option('website_email');
 	if ($website_email=='') $website_email=$from_email;
-	if (get_value('use_true_from')!=='1')
+	if (get_option('use_true_from')=='0')
 	{
 		$headers='From: "'.$from_name.'" <'.$website_email.'>'.$line_term;
 	} else

@@ -32,7 +32,7 @@ function init__site()
 	// Get ready for breadcrumbs
 	if (function_exists('get_value'))
 	{
-		$bcl=get_value('breadcrumb_crop_length');
+		$bcl=get_option('breadcrumb_crop_length');
 	} else
 	{
 		$bcl=mixed();
@@ -930,7 +930,7 @@ function do_site()
 		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
 
 		// Track very basic details of what sites use ocPortal. You can remove if you like.
-		if ((preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0) && (get_value('no_call_home')!=='1'))
+		if ((preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0) && (get_option('call_home')=='1'))
 		{
 			$timeout_before=@ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout','3');

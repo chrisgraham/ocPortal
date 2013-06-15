@@ -92,7 +92,7 @@ class Module_lost_password
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
-		$temporary_passwords=get_value('password_reset_process')=='temporary_password';
+		$temporary_passwords=(get_option('password_reset_process')=='temporary_password');
 		$text=do_lang_tempcode($temporary_passwords?'_PASSWORD_RESET_TEXT_TEMPORARY':'_PASSWORD_RESET_TEXT');
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF');
@@ -148,7 +148,7 @@ class Module_lost_password
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if ($email=='') warn_exit(do_lang_tempcode('MEMBER_NO_EMAIL_ADDRESS_RESET_TO'));
 
-		$temporary_passwords=get_value('password_reset_process')=='temporary_password';
+		$temporary_passwords=(get_option('password_reset_process')=='temporary_password');
 
 		// Send confirm mail
 		$zone=get_module_zone('join');
@@ -223,7 +223,7 @@ class Module_lost_password
 		require_code('crypt');
 		$new_password=get_rand_password();
 
-		$temporary_passwords=get_value('password_reset_process')=='temporary_password';
+		$temporary_passwords=(get_option('password_reset_process')=='temporary_password');
 
 		if (!$temporary_passwords)
 		{
@@ -249,7 +249,7 @@ class Module_lost_password
 		unset($_GET['code']);
 		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_validated_email_confirm_code'=>'','m_password_compat_scheme'=>$password_compatibility_scheme,'m_password_change_code'=>'','m_pass_hash_salted'=>$new),array('id'=>$member_id),'',1);
 
-		$password_change_days=get_value('password_change_days');
+		$password_change_days=get_option('password_change_days');
 		if (intval($password_change_days)>0)
 		{
 			if ($password_compatibility_scheme=='')

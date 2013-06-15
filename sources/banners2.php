@@ -58,7 +58,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	{
 		$fields->attach(form_input_hidden('b_type',$b_type));
 	}
-	if (get_value('disable_staff_notes')!=='1')
+	if (get_option('enable_staff_notes')=='1')
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 	if (has_privilege(get_member(),'bypass_validation_midrange_content','cms_banners'))

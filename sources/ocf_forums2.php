@@ -159,7 +159,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 	}
 	if ($FORUM_TREE_SECURE_CACHE===true)
 	{
-		$forums=$GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id IS NOT NULL AND '.db_string_equal_to('f_redirection','').' AND '.(is_null($base_forum)?'f_parent_forum IS NULL':('f_parent_forum='.strval($base_forum))).' ORDER BY f_position',200/*reasonable limit*/);
+		$forums=$GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id IS NOT NULL AND '.db_string_equal_to('f_redirection','').' AND '.(is_null($base_forum)?'f_parent_forum IS NULL':('f_parent_forum='.strval($base_forum))).' ORDER BY f_position',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
 	} else
 	{
 		if ((is_null($FORUM_TREE_SECURE_CACHE)) || ($FORUM_TREE_SECURE_CACHE===false))

@@ -109,7 +109,7 @@ function _intelligent_write_error_inline($path)
  */
 function _ocp_tempnam($prefix)
 {
-	$problem_saving=((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || (get_value('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
+	$problem_saving=((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || (get_option('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
 	$local_path=get_custom_file_base().'/safe_mode_temp/';
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;
@@ -539,7 +539,7 @@ function check_extension($name,$skip_server_side_security_check=false,$file_to_d
 function delete_upload($upload_path,$table,$field,$id_field,$id,$new_url=NULL)
 {
 	// Try and delete the file
-	if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) || (get_value('cleanup_files')==='1')) // This isn't really a permission - more a failsafe in case there is a security hole. Staff can cleanup leftover files from the Cleanup module anyway. NB: Also repeated in cms_galleries.php.
+	if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) || (get_option('cleanup_files')=='1')) // This isn't really a permission - more a failsafe in case there is a security hole. Staff can cleanup leftover files from the Cleanup module anyway. NB: Also repeated in cms_galleries.php.
 	{
 		$where=is_array($id_field)?$id_field:array($id_field=>$id);
 		$url=$GLOBALS['SITE_DB']->query_select_value($table,$field,$where);
@@ -1006,14 +1006,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if (!is_null($auth)) curl_setopt($ch,CURLOPT_USERPWD,implode(':',$auth));
 				if (!is_null($referer))
 					curl_setopt($ch,CURLOPT_REFERER,$referer);
-				$proxy=get_value('proxy',NULL,true);
+				$proxy=get_option('proxy');
 				if ($proxy=='') $proxy=NULL;
 				if ((!is_null($proxy)) && ($url_parts['host']!='localhost') && ($url_parts['host']!='127.0.0.1'))
 				{
-					$port=get_value('proxy_port',NULL,true);
+					$port=get_option('proxy_port');
 					if (is_null($port)) $port='8080';
 					curl_setopt($ch, CURLOPT_PROXY,$proxy.':'.$port);
-					$proxy_user=get_value('proxy_user',NULL,true);
+					$proxy_user=get_option('proxy_user');
 					if (!is_null($proxy_user))
 					{
 						$proxy_password=get_value('proxy_password',NULL,true);
@@ -1176,11 +1176,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		{
 			$connect_to='127.0.0.1'; // Localhost can fail due to IP6
 		} elseif (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0) $connect_to=gethostbyname($connect_to); // for DNS cacheing
-		$proxy=function_exists('get_value')?get_value('proxy',NULL,true):NULL;
+		$proxy=function_exists('get_option')?get_option('proxy'):NULL;
 		if ($proxy=='') $proxy=NULL;
 		if ((!is_null($proxy)) && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
 		{
-			$proxy_port=get_value('proxy_port',NULL,true);
+			$proxy_port=get_option('proxy_port');
 			if (is_null($proxy_port)) $proxy_port='8080';
 			$mysock=@fsockopen($proxy,intval($proxy_port),$errno,$errstr,$timeout);
 		} else
@@ -1208,7 +1208,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		{
 			$out='';
 			$out.=$http_verb.' '.str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.1\r\n";
-			$proxy_user=get_value('proxy_user',NULL,true);
+			$proxy_user=get_option('proxy_user');
 			if (!is_null($proxy_user))
 			{
 				$proxy_password=get_value('proxy_password',NULL,true);
@@ -1512,13 +1512,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				'content'=>$raw_payload,
 				'follow_location'=>$no_redirect?0:1,
 			);
-			$proxy=get_value('proxy',NULL,true);
+			$proxy=get_option('proxy');
 			if ($proxy=='') $proxy=NULL;
 			if (!is_null($proxy))
 			{
-				$port=get_value('proxy_port',NULL,true);
+				$port=get_option('proxy_port');
 				if (is_null($port)) $port='8080';
-				$proxy_user=get_value('proxy_user',NULL,true);
+				$proxy_user=get_option('proxy_user');
 				if (!is_null($proxy_user))
 				{
 					$proxy_password=get_value('proxy_password',NULL,true);

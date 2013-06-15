@@ -132,7 +132,7 @@ function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_onlin
 			}
 			$session_id=get_session_id();
 			global $SESSION_CACHE;
-			if ((get_value('disable_user_online_counting')!=='1') || (get_value('session_prudence')!=='1') || (!isset($SESSION_CACHE[$session_id])) || ($SESSION_CACHE[$session_id]['last_activity']<time()-60*60*5))
+			if ((get_value('disable_user_online_counting')!=='1') || (get_option('session_prudence')=='0') || (!isset($SESSION_CACHE[$session_id])) || ($SESSION_CACHE[$session_id]['last_activity']<time()-60*60*5))
 			{
 				$GLOBALS['SITE_DB']->query_update('sessions',$change_map,array('the_session'=>$session_id),'',1,NULL,false,true);
 			}
