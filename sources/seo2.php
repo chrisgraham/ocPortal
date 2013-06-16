@@ -228,7 +228,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 		return '';
 	}
 
-	if (get_option('no_auto_meta')=='1') return '';
+	if (get_option('auto_meta')=='0') return '';
 
 	if (get_option('automatic_meta_extraction')=='0') return '';
 

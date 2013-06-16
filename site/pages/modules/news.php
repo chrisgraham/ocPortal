@@ -36,7 +36,7 @@ class Module_news
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -65,6 +65,9 @@ class Module_news
 		delete_config_option('ping_url');
 		delete_config_option('news_show_stats_count_total_posts');
 		delete_config_option('news_show_stats_count_blogs');
+		delete_config_option('enable_secondary_news');
+		delete_config_option('news_categories_per_page');
+		delete_config_option('news_entries_per_page');
 
 		delete_menu_item_simple('_SEARCH:cms_news:type=ad');
 	}
@@ -155,6 +158,13 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_ititle',array('title'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnews',array('news'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnewsa',array('news_article'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			add_config_option('ENABLE_SECONDARY_NEWS','enable_secondary_news','tick','return \'1\';','FEATURE','NEWS');
+			add_config_option('NEWS_CATEGORIES_PER_PAGE','news_categories_per_page','integer','return \'30\';','FEATURE','NEWS');
+			add_config_option('NEWS_ENTRIES_PER_PAGE','news_entries_per_page','integer','return \'30\';','FEATURE','NEWS');
 		}
 	}
 

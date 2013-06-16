@@ -19,17 +19,6 @@
  */
 
 /**
- * Standard code module initialisation function.
- */
-function init__urls2()
-{
-	$max_moniker_length=mixed();
-	if (function_exists('get_value'))
-		$max_moniker_length=get_option('max_moniker_length');
-	define('MAX_MONIKER_LENGTH',is_null($max_moniker_length)?24:intval($max_moniker_length));
-}
-
-/**
  * Given a URL or page-link, return an absolute URL.
  *
  * @param  string			URL or page-link
@@ -618,12 +607,14 @@ function _generate_moniker($moniker_src)
 {
 	$moniker_src=strip_comcode($moniker_src);
 
+	$max_moniker_length=intval(get_option('max_moniker_length'));
+
 	$moniker=str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),$moniker_src);
 	$moniker=strtolower(preg_replace('#[^A-Za-z\d\_\-]#','-',$moniker));
-	if (strlen($moniker)>MAX_MONIKER_LENGTH)
+	if (strlen($moniker)>$max_moniker_length)
 	{
-		$pos=strrpos(substr($moniker,0,MAX_MONIKER_LENGTH),'-');
-		if (($pos===false) || ($pos<12)) $pos=MAX_MONIKER_LENGTH;
+		$pos=strrpos(substr($moniker,0,$max_moniker_length),'-');
+		if (($pos===false) || ($pos<12)) $pos=$max_moniker_length;
 		$moniker=substr($moniker,0,$pos);
 	}
 	$moniker=preg_replace('#\-+#','-',$moniker);

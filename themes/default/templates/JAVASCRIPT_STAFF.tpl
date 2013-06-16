@@ -3,7 +3,7 @@
 function script_load_stuff_staff()
 {
 	// Navigation loading screen
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
+	{+START,IF,{$CONFIG_OPTION,enable_animations}}
 			if ((window.parent==window) && ((window.location+'').indexOf('js_cache=1')==-1) && (((window.location+'').indexOf('/cms/')!=-1) || ((window.location+'').indexOf('/adminzone/')!=-1)))
 				add_event_listener_abstract(window,'beforeunload',function() { staff_unload_action(); } );
 	{+END}
@@ -324,7 +324,7 @@ function handle_image_mouse_over(event)
 	if (target.src.indexOf('/themes/')==-1) return;
 	if (window.location.href.indexOf('admin_themes')!=-1) return;
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_theme_img_buttons}}}
+	{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}
 		if ((typeof target.mo_link_out!='undefined') && (target.mo_link_out))
 		{
 			window.clearInterval(target.mo_link_out);
@@ -355,7 +355,7 @@ function handle_image_mouse_out(event)
 {
 	var target=event.target || event.srcElement;
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_theme_img_buttons}}}
+	{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}
 		if ((typeof target.mo_link!='undefined') && (target.mo_link))
 		{
 			window.clearTimeout(target.mo_link);

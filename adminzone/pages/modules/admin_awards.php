@@ -48,7 +48,7 @@ class Module_admin_awards extends standard_crud_module
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['update_require_upgrade']=1;
-		$info['version']=3;
+		$info['version']=4;
 		$info['locked']=true;
 		return $info;
 	}
@@ -60,6 +60,8 @@ class Module_admin_awards extends standard_crud_module
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('award_archive');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('award_types');
+
+		delete_config_option('awarded_items_per_page');
 	}
 
 	/**
@@ -100,6 +102,11 @@ class Module_admin_awards extends standard_crud_module
 				'a_hide_awardee'=>1,
 				'a_update_time_hours'=>168
 			));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<4))
+		{
+			add_config_option('AWARDED_ITEMS_PER_PAGE','awarded_items_per_page','integer','return \'20\';','FEATURE','AWARDS');
 		}
 	}
 

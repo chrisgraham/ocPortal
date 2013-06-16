@@ -5,7 +5,7 @@
 {$SET,topic_title,{_TITLE}}
 
 <div class="ocf_topic_{THREADED*}">
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+	{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 		<div class="non_accessibility_redundancy">
 			<div class="float_surrounder">
 				<div class="buttons_group ocf_screen_buttons">
@@ -25,7 +25,7 @@
 	{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,topic,{ID}}}
 	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+	{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 		{+START,IF_NON_EMPTY,{PAGINATION}}
 			<div class="non_accessibility_redundancy">
 				<div class="pagination_spacing float_surrounder">
@@ -170,7 +170,7 @@
 			{SCREEN_BUTTONS}
 		</div>
 
-		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 			<div class="non_accessibility_redundancy float_surrounder"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
 				<p class="breadcrumbs">
 					<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />

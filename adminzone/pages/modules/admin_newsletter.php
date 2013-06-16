@@ -1160,7 +1160,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$html_only=(strpos($existing->evaluate(),'<html')!==false);
 			if (!is_null($defaults)) $html_only=$defaults['np_html_only'];
 		} else $html_only=($_html_only==1);
-		if (get_option('force_html_only')=='1')
+		if (get_option('dual_format_newsletters')=='0')
 			$hidden->attach(form_input_hidden('html_only','1'));
 		else
 			$fields->attach(form_input_tick(do_lang_tempcode('HTML_ONLY'),do_lang_tempcode('DESCRIPTION_HTML_ONLY'),'html_only',$html_only));

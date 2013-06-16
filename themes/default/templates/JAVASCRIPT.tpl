@@ -1113,7 +1113,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 	if (element.nodeName.toLowerCase()=='table') type='table';
 	if (element.nodeName.toLowerCase()=='tr') type='table-row';
 
-	{+START,IF,{$VALUE_OPTION,disable_animations}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}
 		no_animate=true;
 	{+END}
 
@@ -1283,7 +1283,7 @@ function animate_frame_load(pf,frame,leave_gap_top)
 }
 function illustrate_frame_load(pf,frame)
 {
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
+	{+START,IF,{$CONFIG_OPTION,enable_animations}}
 		var head='<style type="text/css">',cssText='';
 		if (!browser_matches('ie8'))
 		{
@@ -1369,7 +1369,7 @@ function illustrate_frame_load(pf,frame)
 /* Smoothly scroll to another position on the page */
 function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 {
-	{+START,IF,{$VALUE_OPTION,disable_animations}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}
 		try
 		{
 			window.scrollTo(0,dest_y);

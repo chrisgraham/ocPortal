@@ -64,6 +64,9 @@ class Module_points
 		delete_config_option('points_show_personal_stats_total_points');
 		delete_config_option('points_show_personal_profile_link');
 		delete_config_option('points_per_currency_unit');
+		delete_config_option('gift_reward_chance');
+		delete_config_option('gift_reward_amount');
+		delete_config_option('point_logs_per_page');
 
 		delete_privilege('give_points_self');
 		delete_privilege('have_negative_gift_points');
@@ -141,6 +144,13 @@ class Module_points
 		{
 			add_config_option('POINTS_IF_LIKED','points_if_liked','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('POINTS_PER_CURRENCY_UNIT','points_per_currency_unit','integer','return addon_installed(\'ecommerce\')?\'100.0\':NULL;','POINTS','ECOMMERCE');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<8))
+		{
+			add_config_option('GIFT_REWARD_CHANCE','gift_reward_chance','integer','return \'\';','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('GIFT_REWARD_AMOUNT','gift_reward_amount','integer','return \'\';','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('POINT_LOGS_PER_PAGE','point_logs_per_page','integer','return \'10\';','POINTS','GENERAL');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

@@ -36,7 +36,7 @@ class Module_search
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -49,7 +49,11 @@ class Module_search
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('searches_saved');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('searches_logged');
+
 		delete_menu_item_simple('_SEARCH:search:type=misc:id=ocf_posts');
+
+		delete_config_option('enable_boolean_search');
+		delete_config_option('search_results_per_page');
 	}
 
 	/**
@@ -85,6 +89,12 @@ class Module_search
 			add_menu_item_simple('forum_features',NULL,'SEARCH','_SEARCH:search:type=misc:id=ocf_posts',0,0,true,do_lang('ZONE_BETWEEN'));
 
 			$GLOBALS['SITE_DB']->create_index('searches_logged','#past_search_ft',array('s_primary'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<5))
+		{
+			add_config_option('ENABLE_BOOLEAN_SEARCH','enable_boolean_search','tick','return \'0\';','FEATURE','SEARCH');
+			add_config_option('SEARCH_RESULTS_PER_PAGE','search_results_per_page','integer','return \'10\';','FEATURE','SEARCH');
 		}
 	}
 

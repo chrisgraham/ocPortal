@@ -49,7 +49,7 @@
 
 {+START,IF_NON_EMPTY,{TOPIC_WRAPPER}}{$,Does not show if no topics as that would double it up}
 	{+START,IF_PASSED,ID}{$,Does not show on PT/virtual-forum view as those are less actiony places}
-		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 			<div class="non_accessibility_redundancy">
 				{$GET,BUTTONS}
 			</div>

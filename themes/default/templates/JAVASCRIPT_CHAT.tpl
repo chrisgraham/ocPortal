@@ -1,14 +1,8 @@
 "use strict";
 
 // Constants
-window.MESSAGE_CHECK_INTERVAL=5000;
-{+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_message_check_interval}}
-	window.MESSAGE_CHECK_INTERVAL={$ROUND%,{$VALUE_OPTION,chat_message_check_interval}};
-{+END}
-window.TRANSITORY_ALERT_TIME=7000;
-{+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_transitory_alert_time}}
-	window.TRANSITORY_ALERT_TIME={$ROUND%,{$VALUE_OPTION,chat_transitory_alert_time}};
-{+END}
+window.MESSAGE_CHECK_INTERVAL={$ROUND%,{$CONFIG_OPTION,chat_message_check_interval}};
+window.TRANSITORY_ALERT_TIME={$ROUND%,{$CONFIG_OPTION,chat_transitory_alert_time}};
 window.LOGS_DOWNLOAD_INTERVAL=3000;
 
 // Tracking variables

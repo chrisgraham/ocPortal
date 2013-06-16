@@ -75,7 +75,7 @@
 					<tr>
 						<th class="form_table_field_name">{!OPTIONS}</th>
 						<td class="form_table_field_input" colspan="2">
-							{+START,IF,{$NOT,{$VALUE_OPTION,enable_boolean_search}}}
+							{+START,IF,{$NOT,{$CONFIG_OPTION,enable_boolean_search}}}
 								{+START,IF,{HAS_FULLTEXT_SEARCH}}
 								<input type="checkbox" id="boolean_search" {+START,IF,{BOOLEAN_SEARCH}}checked="checked" {+END}name="boolean_search" value="1" onclick="document.getElementById('boolean_options').style.display=this.checked?'block':'none'; trigger_resize();" /> <label for="boolean_search">{!BOOLEAN_SEARCH}</label>
 								<div style="display: {$JS_ON,none,block}" class="boolean_options" id="boolean_options">

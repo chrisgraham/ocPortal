@@ -36,7 +36,7 @@ class Module_newsletter
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=9;
+		$info['version']=10;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -57,6 +57,9 @@ class Module_newsletter
 		delete_config_option('newsletter_text');
 		delete_config_option('newsletter_title');
 		delete_config_option('interest_levels');
+		delete_config_option('dual_format_newsletters');
+		delete_config_option('minutes_between_sends');
+		delete_config_option('mails_per_send');
 
 		delete_value('newsletter_whatsnew');
 		delete_value('newsletter_send_time');
@@ -168,6 +171,13 @@ class Module_newsletter
 		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_template','ID_TEXT');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<10))
+		{
+			add_config_option('DUAL_FORMAT_NEWSLETTERS','dual_format_newsletters','tick','return \'0\';','SECTION','NEWSLETTERS');
+			add_config_option('MINUTES_BETWEEN_SENDS','minutes_between_sends','integer','return \'10\';','FEATURE','NEWSLETTER');
+			add_config_option('MAILS_PER_SEND','mails_per_send','integer','return \'60\';','SITE','NEWSLETTER');
 		}
 	}
 

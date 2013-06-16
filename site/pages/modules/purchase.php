@@ -36,7 +36,7 @@ class Module_purchase
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -49,6 +49,7 @@ class Module_purchase
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('transactions');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('trans_expecting');
+
 		delete_config_option('currency');
 		delete_config_option('ecommerce_test_mode');
 		delete_config_option('ipn_test');
@@ -63,6 +64,8 @@ class Module_purchase
 		delete_config_option('pd_email');
 		delete_config_option('pd_number');
 		delete_config_option('callback_password');
+		delete_config_option('primary_paypal_email');
+
 		delete_privilege('access_ecommerce_in_test_mode');
 
 		delete_menu_item_simple('_SELF:purchase:type=misc');
@@ -143,6 +146,11 @@ class Module_purchase
 				't_memo'=>'LONG_TEXT',
 				't_via'=>'ID_TEXT'
 			));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<5))
+		{
+			add_config_option('PRIMARY_PAYPAL_EMAIL','primary_paypal_email','line','return \'\';','FEATURE','ECOMMERCE');
 		}
 	}
 

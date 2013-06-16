@@ -47,39 +47,72 @@ class Module_admin_config
 	 */
 	function uninstall()
 	{
-		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','validation',
-										'gzip_output','forum_in_portal','staff_address','is_on_gd','site_closed','closed',
-										'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
-										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','is_on_trackbacks',
-										'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser',
-										'smtp_sockets_use','smtp_sockets_host','smtp_sockets_port','smtp_sockets_username','smtp_sockets_password',
-										'smtp_from_address','use_captchas','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
-										'validation_xhtml','validation_wcag','validation_css','validation_javascript','validation_ext_files','validation_compat',
-										'is_on_strong_forum_tie','is_on_preview_validation','show_inline_stats',
-										'sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
-										'bottom_show_admin_menu','bottom_show_top_button','bottom_show_feedback_link','bottom_show_privacy_link','bottom_show_rules_link',
-										'bottom_show_sitemap_button','forum_show_personal_stats_posts','forum_show_personal_stats_topics',
-										'ocp_show_personal_sub_links','ocp_show_personal_adminzone_link','ocp_show_conceded_mode_link','ocp_show_su','ocp_show_staff_page_actions','ocf_show_profile_link',
-										'ocp_show_personal_usergroup','ocp_show_personal_last_visit','ocp_show_avatar',
-										'panel_width','panel_width_spaced','debug_mode','main_forum_name','allowed_post_submitters','ssw',
-										'root_zone_login_theme','show_docs','captcha_noise','captcha_on_feedback',
-										'show_post_validation','ip_forwarding','force_meta_refresh','use_contextual_dates','eager_wysiwyg',
-										'website_email','enveloper_override','bcc','allow_ext_images','url_scheme','ip_strict_for_sessions','enable_previews',
-										'enable_keyword_density_check','enable_spell_check','enable_markup_validation','enable_image_fading','users_online_time','auto_submit_sitemap',
-										'user_postsize_errors','automatic_meta_extraction','is_on_emoticon_choosers','no_stats_when_closed',
-										'deeper_admin_breadcrumbs','has_low_memory_limit','is_on_comcode_page_children','global_donext_icons','no_bot_stats',
-										'java_upload','java_ftp_host','java_username','java_password','java_ftp_path','filesystem_caching',
-										'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
-										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
-										'comments_to_show_in_thread','max_thread_depth',
-										'spam_check_level','stopforumspam_api_key','tornevall_api_username','tornevall_api_password','spam_block_lists','spam_cache_time','spam_check_exclusions',
-										'spam_stale_threshold','spam_ban_threshold','spam_block_threshold','spam_approval_threshold',
-										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
-										'filetype_icons','infinite_scrolling',
-										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
-										'cdn','enable_https','modal_user',
-										'attachment_default_width','attachment_default_height',
-										);
+		$config_options=array(
+			'simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','validation',
+			'gzip_output','forum_in_portal','staff_address','is_on_gd','site_closed','closed',
+			'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
+			'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','is_on_trackbacks',
+			'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser',
+			'smtp_sockets_use','smtp_sockets_host','smtp_sockets_port','smtp_sockets_username','smtp_sockets_password',
+			'smtp_from_address','use_captchas','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
+			'validation_xhtml','validation_wcag','validation_css','validation_javascript','validation_ext_files','validation_compat',
+			'is_on_strong_forum_tie','is_on_preview_validation','show_inline_stats',
+			'sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
+			'bottom_show_admin_menu','bottom_show_top_button','bottom_show_feedback_link','bottom_show_privacy_link','bottom_show_rules_link',
+			'bottom_show_sitemap_button','forum_show_personal_stats_posts','forum_show_personal_stats_topics',
+			'ocp_show_personal_sub_links','ocp_show_personal_adminzone_link','ocp_show_conceded_mode_link','ocp_show_su','ocp_show_staff_page_actions','ocf_show_profile_link',
+			'ocp_show_personal_usergroup','ocp_show_personal_last_visit','ocp_show_avatar',
+			'panel_width','panel_width_spaced','debug_mode','main_forum_name','allowed_post_submitters','ssw',
+			'root_zone_login_theme','show_docs','captcha_noise','captcha_on_feedback',
+			'show_post_validation','ip_forwarding','force_meta_refresh','use_contextual_dates','eager_wysiwyg',
+			'website_email','enveloper_override','bcc','allow_ext_images','url_scheme','ip_strict_for_sessions','enable_previews',
+			'enable_keyword_density_check','enable_spell_check','enable_markup_validation','enable_image_fading','users_online_time','auto_submit_sitemap',
+			'user_postsize_errors','automatic_meta_extraction','is_on_emoticon_choosers','no_stats_when_closed',
+			'deeper_admin_breadcrumbs','has_low_memory_limit','is_on_comcode_page_children','global_donext_icons','no_bot_stats',
+			'java_upload','java_ftp_host','java_username','java_password','java_ftp_path','filesystem_caching',
+			'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
+			'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
+			'comments_to_show_in_thread','max_thread_depth',
+			'spam_check_level','stopforumspam_api_key','tornevall_api_username','tornevall_api_password','spam_block_lists','spam_cache_time','spam_check_exclusions',
+			'spam_stale_threshold','spam_ban_threshold','spam_block_threshold','spam_approval_threshold',
+			'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
+			'filetype_icons','infinite_scrolling',
+			'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
+			'cdn','enable_https','modal_user',
+			'attachment_default_width','attachment_default_height',
+			'allow_auto_notifications',
+			'captcha_single_guess',
+			'password_cookies',
+			'hack_ban_threshold',
+			'brute_force_threshold',
+			'brute_force_login_minutes',
+			'brute_force_instant_ban',
+			'comment_topic_subject',
+			'default_comment_sort_order',
+			'simplify_wysiwyg_by_permissions',
+			'max_moniker_length',
+			'google_translate_api_key',
+			'cleanup_files',
+			'edit_under',
+			'use_true_from',
+			'enable_feedback',
+			'auto_meta',
+			'session_prudence',
+			'allow_own_rate',
+			'enable_animations',
+			'breadcrumb_crop_length',
+			'enable_staff_notes',
+			'enable_theme_img_buttons',
+			'call_home',
+			'enable_seo_fields',
+			'force_local_temp_dir',
+			'jpeg_quality',
+			'proxy',
+			'proxy_port',
+			'proxy_user',
+			'proxy_password',
+			'general_safety_listing_limit',
+		);
 
 		foreach ($config_options as $option)
 			delete_config_option($option);
@@ -184,6 +217,38 @@ class Module_admin_config
 			add_config_option('MODAL_USER','modal_user','username','return \'\';','FEATURE','GENERAL');
 			add_config_option('ATTACHMENT_DEFAULT_WIDTH','attachment_default_width','integer','return \'240\';','FEATURE','ATTACHMENTS');
 			add_config_option('ATTACHMENT_DEFAULT_HEIGHT','attachment_default_height','integer','return \'216\';','FEATURE','ATTACHMENTS');
+			add_config_option('ALLOW_AUTO_NOTIFICATIONS','allow_auto_notifications','tick','return \'1\';','FEATURE','NOTIFICATIONS');
+			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SECURITY','CAPTCHA');
+			add_config_option('PASSWORD_COOKIES','password_cookies','tick','return \'1\';','SECURITY','GENERAL');
+			add_config_option('HACK_BAN_THRESHOLD','hack_ban_threshold','integer','return \'5\';','SECURITY','GENERAL');
+			add_config_option('BRUTE_FORCE_THRESHOLD','brute_force_threshold','integer','return \'30\';','SECURITY','BRUTE_FORCE');
+			add_config_option('BRUTE_FORCE_LOGIN_MINUTES','brute_force_login_minutes','integer','return \'15\';','SECURITY','BRUTE_FORCE');
+			add_config_option('BRUTE_FORCE_INSTANT_BAN','brute_force_instant_ban','tick','return \'0\';','SECURITY','BRUTE_FORCE');
+			add_config_option('COMMENT_TOPIC_SUBJECT','comment_topic_subject','tick','return \'0\';','FEATURE','GENERAL');
+			add_config_option('DEFAULT_COMMENT_SORT_ORDER','default_comment_sort_order','list','return \'newest\';','FEATURE','GENERAL','newest|oldest|relevance');
+			add_config_option('SIMPLIFY_WYSIWYG_BY_PERMISSIONS','simplify_wysiwyg_by_permissions','tick','return \'0\';','SITE','_COMCODE');
+			add_config_option('MAX_MONIKER_LENGTH','max_moniker_length','integer','return \'24\';','','');
+			add_config_option('GOOGLE_TRANSLATE_API_KEY','google_translate_api_key','line','return \'\';','SITE','LANGUAGE');
+			add_config_option('CLEANUP_FILES','cleanup_files','tick','return \'0\';','SITE','ADVANCED');
+			add_config_option('EDIT_UNDER','edit_under','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('USE_TRUE_FROM','use_true_from','tick','return \'0\';','SITE','EMAIL');
+			add_config_option('ENABLE_FEEDBACK','enable_feedback','tick','return \'1\';','SITE','FEEDBACK');
+			add_config_option('AUTO_META','auto_meta','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('SESSION_PRUDENCE','session_prudence','tick','return \'0\';','PERFORMANCE','GENERAL');
+			add_config_option('ALLOW_OWN_RATE','allow_own_rate','tick','return \'0\';','SITE','FEEDBACK');
+			add_config_option('ENABLE_ANIMATIONS','enable_animations','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('BREADCRUMB_CROP_LENGTH','breadcrumb_crop_length','integer','return \'\';','SITE','BREADCRUMBS');
+			add_config_option('ENABLE_STAFF_NOTES','enable_staff_notes','tick','return \'0\';','SITE','GENERAL');
+			add_config_option('ENABLE_THEME_IMG_BUTTONS','enable_theme_img_buttons','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('CALL_HOME','call_home','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('ENABLE_SEO_FIELDS','enable_seo_fields','list','return \'yes\';','SITE','GENERAL',0,'yes|no|only_on_edit');
+			add_config_option('FORCE_LOCAL_TEMP_DIR','force_local_temp_dir','tick','return \'0\';','SITE','ADVANCED');
+			add_config_option('JPEG_QUALITY','jpeg_quality','integer','return \'\';','SITE','GENERAL');
+			add_config_option('PROXY','proxy','line','return \'NULL\';','SITE','NETWORKING');
+			add_config_option('PROXY_PORT','proxy_port','integer','return \'NULL\';','SITE','NETWORKING');
+			add_config_option('PROXY_USER','proxy_user','line','return \'NULL\';','SITE','NETWORKING');
+			add_config_option('PROXY_PASSWORD','proxy_password','line','return \'NULL\';','SITE','NETWORKING');
+			add_config_option('GENERAL_SAFETY_LISTING_LIMIT','general_safety_listing_limit','integer','return \'400\';','SITE','GENERAL');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
@@ -701,10 +766,11 @@ class Module_admin_config
 					$values=explode('|',$myrow['c_data']);
 					foreach ($values as $value)
 					{
-						$_option_text=do_lang('CONFIG_OPTION_'.$myrow['the_name'].'_VALUE_'.$value,NULL,NULL,NULL,NULL,false);
+						$_value=str_replace(' ','__',$value);
+						$_option_text=do_lang('CONFIG_OPTION_'.$myrow['the_name'].'_VALUE_'.$_value,NULL,NULL,NULL,NULL,false);
 						if (!is_null($_option_text))
 						{
-							$option_text=do_lang_tempcode('CONFIG_OPTION_'.$myrow['the_name'].'_VALUE_'.$value);
+							$option_text=do_lang_tempcode('CONFIG_OPTION_'.$myrow['the_name'].'_VALUE_'.$_value);
 						} else
 						{
 							$option_text=make_string_tempcode($value);

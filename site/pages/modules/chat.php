@@ -67,6 +67,8 @@ class Module_chat
 		delete_config_option('chat_show_stats_count_messages');
 		delete_config_option('sitewide_im');
 		delete_config_option('group_private_chatrooms');
+		delete_config_option('chat_message_check_interval');
+		delete_config_option('chat_transitory_alert_time');
 
 		delete_privilege('create_private_room');
 		delete_privilege('start_im');
@@ -223,6 +225,12 @@ class Module_chat
 			$GLOBALS['SITE_DB']->rename_table('chat_buddies','chat_friends');
 
 			$GLOBALS['SITE_DB']->alter_table_field('chat_messages','user_id','MEMBER','member_id');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<12))
+		{
+			add_config_option('CHAT_MESSAGE_CHECK_INTERVAL','chat_message_check_interval','integer','return \'5000\';','FEATURE','CHAT');
+			add_config_option('CHAT_TRANSITORY_ALERT_TIME','chat_transitory_alert_time','integer','return \'7000\';','FEATURE','CHAT');
 		}
 	}
 

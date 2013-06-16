@@ -36,7 +36,7 @@ class Module_downloads
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=8;
+		$info['version']=7;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -63,6 +63,10 @@ class Module_downloads
 		delete_config_option('immediate_downloads');
 		delete_config_option('download_gallery_root');
 		delete_config_option('downloads_subcat_narrowin');
+		delete_config_option('dload_search_index');
+		delete_config_option('download_subcats_per_page');
+		delete_config_option('download_entries_per_page');
+		delete_config_option('downloads_default_sort_order');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads'));
 
@@ -190,9 +194,13 @@ class Module_downloads
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_config_option('DOWNLOADS_SUBCAT_NARROWIN','downloads_subcat_narrowin','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
+			add_config_option('DLOAD_SEARCH_INDEX','dload_search_index','tick','return \'1\';','FEATURE','DOWNLOADS');
+			add_config_option('DOWNLOAD_SUBCATS_PER_PAGE','download_subcats_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
+			add_config_option('DOWNLOAD_ENTRIES_PER_PAGE','download_entries_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
+			add_config_option('DOWNLOADS_DEFAULT_SORT_ORDER','downloads_default_sort_order','list','return \'ASC\';','FEATURE','SECTION_DOWNLOADS',0,'ASC|DESC');
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('download_downloads','comments','LONG_TRANS','additional_details');
 
