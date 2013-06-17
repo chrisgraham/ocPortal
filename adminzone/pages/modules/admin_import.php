@@ -160,6 +160,7 @@ class Module_admin_import
 
 		$hooks=new ocp_tempcode();
 		$_hooks=find_all_hooks('modules','admin_import');
+		$__hooks=array();
 		require_code('form_templates');
 		foreach (array_keys($_hooks) as $hook)
 		{
@@ -169,11 +170,16 @@ class Module_admin_import
 				$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 				if (is_null($object)) continue;
 				$info=$object->info();
-				$hooks->attach(form_input_list_entry($hook,false,$info['product']));
+				$__hooks[$hook]=$info['product'];
 			}
 		}
+		uasort($__hooks,'strnatcmp');
+		foreach ($__hooks as $hook=>$hook_title)
+		{
+			$hooks->attach(form_input_list_entry($hook,false,$hook_title));
+		}
 		if ($hooks->is_empty()) warn_exit(do_lang_tempcode('NO_CATEGORIES'));
-		$fields=form_input_list(do_lang_tempcode('IMPORTER'),do_lang_tempcode('DESCRIPTION_IMPORTER'),'importer',$hooks,NULL,true);
+		$fields=form_input_huge_list(do_lang_tempcode('IMPORTER'),do_lang_tempcode('DESCRIPTION_IMPORTER'),'importer',$hooks,NULL,true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session'),'_SELF');
 
