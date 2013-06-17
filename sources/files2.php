@@ -1513,13 +1513,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				'follow_location'=>$no_redirect?0:1,
 			);
 			$proxy=get_option('proxy');
-			if ($proxy=='') $proxy=NULL;
-			if (!is_null($proxy))
+			if ($proxy!='')
 			{
 				$port=get_option('proxy_port');
 				if (is_null($port)) $port='8080';
 				$proxy_user=get_option('proxy_user');
-				if (!is_null($proxy_user))
+				if ($proxy_user!='')
 				{
 					$proxy_password=get_value('proxy_password',NULL,true);
 					$opts['proxy']='tcp://'.$proxy_user.':'.$proxy_password.'@'.$proxy.':'.$port;

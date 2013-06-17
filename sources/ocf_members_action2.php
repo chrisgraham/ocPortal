@@ -909,7 +909,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 				$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_email_address'=>$old_email_address),array('i_email_address'=>$email_address));
 			}
 
-			if (($member_id==get_member()) || (get_value('disable_password_change_mails_for_staff')!=='1'))
+			if (($member_id==get_member()) || (get_value('disable_password_change_notifications_for_staff')!=='1'))
 			{
 				if (get_page_name()!='admin_ocf_join')
 				{

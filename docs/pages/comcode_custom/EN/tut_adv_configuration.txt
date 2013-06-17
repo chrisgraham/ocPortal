@@ -241,12 +241,6 @@ RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,U]
 
 6) If things go wrong, you can disable clean URLs via an emergency shut off option in the [tt]config_editor.php[/tt] script. Make sure you see where it is before proceeding to the next step.
 
-7) In OcCLE, type:
-[code]
-:set_value('ionic_on','1');
-[/code]
-to cause ocPortal to generate short URLs for links within the website.
-
 [title="3"]Domain structuring[/title]
 
 You can make it so you have a single ocPortal site that runs across different subdomains. You can also make it so that zones appear to be structured hierarchically.

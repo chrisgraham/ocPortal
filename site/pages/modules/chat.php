@@ -69,6 +69,7 @@ class Module_chat
 		delete_config_option('group_private_chatrooms');
 		delete_config_option('chat_message_check_interval');
 		delete_config_option('chat_transitory_alert_time');
+		delete_config_option('max_chat_lobby_friends');
 
 		delete_privilege('create_private_room');
 		delete_privilege('start_im');
@@ -231,6 +232,7 @@ class Module_chat
 		{
 			add_config_option('CHAT_MESSAGE_CHECK_INTERVAL','chat_message_check_interval','integer','return \'5000\';','FEATURE','CHAT');
 			add_config_option('CHAT_TRANSITORY_ALERT_TIME','chat_transitory_alert_time','integer','return \'7000\';','FEATURE','CHAT');
+			add_config_option('MAX_CHAT_LOBBY_FRIENDS','max_chat_lobby_friends','integer','return \'15\';','FEATURE','CHAT');
 		}
 	}
 

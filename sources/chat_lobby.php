@@ -50,13 +50,15 @@ function enter_chat_lobby()
  *
  * @param  ?MEMBER		The member ID (NULL: current user).
  * @param  boolean		Whether to show a simpler, more compact, UI.
- * @param  integer		Maximum to show.
+ * @param  ?integer		Maximum to show (NULL: default).
  * @return tempcode		The contact UI.
  */
-function show_im_contacts($member_id=NULL,$simpler=false,$max=15)
+function show_im_contacts($member_id=NULL,$simpler=false,$max=NULL)
 {
 	require_code('chat');
 	require_lang('chat');
+
+	if (is_null($max)) $max=intval(get_option('max_chat_lobby_friends'));
 
 	if (is_null($member_id)) $member_id=get_member();
 

@@ -35,7 +35,7 @@ class Block_main_staff_actions
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=true;
-		$info['parameters']=array();
+		$info['parameters']=array('max');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_staff_actions
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(get_param_integer(\'sa_start\',0),get_param_integer(\'sa_max\',10),get_param(\'sa_sort\',\'date_and_time\'),get_param(\'sort_order\',\'DESC\'))';
+		$info['cache_on']='array(get_param_integer(\'sa_start\',0),array_key_exists(\'max\',$map)?intval($map[\'max\']):get_param_integer(\'sa_max\',10),get_param(\'sa_sort\',\'date_and_time\'),get_param(\'sort_order\',\'DESC\'))';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*5;
 		return $info;
 	}
@@ -99,7 +99,7 @@ class Block_main_staff_actions
 		require_code('actionlog');
 
 		$start=get_param_integer('sa_start',0);
-		$max=get_param_integer('sa_max',10);
+		$max=array_key_exists('max',$map)?intval($map['max']):get_param_integer('sa_max',10);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),/*Not enough space 'ip'=>do_lang_tempcode('IP_ADDRESS'),*/'the_type'=>do_lang_tempcode('ACTION'));
 		$test=explode(' ',get_param('sa_sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';

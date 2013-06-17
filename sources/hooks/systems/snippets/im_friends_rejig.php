@@ -35,7 +35,7 @@ class Hook_im_friends_rejig
 
 		$simpler=(get_param_integer('simpler',0)==1);
 
-		$max=get_param_integer('max',15);
+		$max=get_param_integer('max',intval(get_option('max_chat_lobby_friends')));
 
 		// Do an add action?
 		$add=post_param('add');

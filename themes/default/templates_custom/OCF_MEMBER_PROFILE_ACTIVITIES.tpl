@@ -2,7 +2,7 @@
 	{$BLOCK,block=main_activities_state,member={MEMBER_ID},mode=some_members,param=}
 {+END}
 
-{$BLOCK,block=main_activities,member={MEMBER_ID},mode=some_members,param=}
+{$BLOCK,block=main_activities,member={MEMBER_ID},mode=some_members,param=,max=10,grow=1}
 
 <hr />
 

@@ -485,7 +485,13 @@ class Module_cms_downloads extends standard_crud_module
 		handle_max_file_size($hidden);
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
 		if (!is_null($original_filename)) $fields->attach(form_input_line(do_lang_tempcode('ORIGINAL_FILENAME'),do_lang_tempcode('DESCRIPTION_ORIGINAL_FILENAME'),'original_filename',$original_filename,false));
-		$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_download_category',array(),true,strval(is_null($category_id)?db_get_first_id():$category_id)));
+		if ((get_value('no_confirm_url_spec_cats')!=='1') || (is_null($category_id)))
+		{
+			$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_download_category',array(),true,strval(is_null($category_id)?db_get_first_id():$category_id)));
+		} else
+		{
+			$hidden->attach(form_input_hidden('category_id',strval($category_id)));
+		}
 
 		$set_name='file';
 		$required=true;

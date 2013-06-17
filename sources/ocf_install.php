@@ -157,7 +157,7 @@ function uninstall_ocf()
 	delete_config_option('finish_profile');
 	delete_config_option('username_profile_links');
 	delete_config_option('show_empty_cpfs');
-	delete_config_option('simplify_privacy_options');
+	delete_config_option('complex_privacy_options');
 	delete_config_option('enable_privacy_tab');
 	delete_config_option('seq_post_ids');
 	delete_config_option('threaded_buttons');
@@ -173,7 +173,9 @@ function uninstall_ocf()
 	delete_config_option('enable_pt_restrict');
 	delete_config_option('enable_post_emphasis');
 	delete_config_option('md_default_sort_order');
-	delete_config_option('important_groups_per_page');
+	delete_config_option('primary_members_per_page');
+	delete_config_option('secondary_members_per_page');
+	delete_config_option('important_members_per_page');
 	delete_config_option('normal_groups_per_page');
 	delete_config_option('members_per_page');
 	delete_config_option('max_forum_detail');
@@ -184,6 +186,7 @@ function uninstall_ocf()
 	delete_config_option('password_expiry_days');
 	delete_config_option('minimum_password_strength');
 	delete_config_option('password_reset_process');
+	delete_config_option('private_topics_per_page');
 
 	delete_value('ocf_newest_member_id');
 	delete_value('ocf_newest_member_username');
@@ -369,33 +372,36 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('FINISH_PROFILE','finish_profile','tick','return \'1\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('USERNAME_PROFILE_LINKS','username_profile_links','tick','return \'0\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('SHOW_EMPTY_CPFS','show_empty_cpfs','tick','return \'0\';','SECTION_FORUMS','MEMBERS');
-		add_config_option('SIMPLIFY_PRIVACY_OPTIONS','simplify_privacy_options','tick','return \'0\';','SECTION_FORUMS','PRIVACY');
+		add_config_option('COMPLEX_PRIVACY_OPTIONS','complex_privacy_options','tick','return \'0\';','SECTION_FORUMS','PRIVACY');
 		add_config_option('ENABLE_PRIVACY_TAB','enable_privacy_tab','tick','return \'1\';','SECTION_FORUMS','PRIVACY');
-		add_config_option('SEQ_POST_IDS','seq_post_ids','tick','return \'0\';','SECTION_FORUMS','GENERAL');
-		add_config_option('THREADED_BUTTONS','threaded_buttons','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('ENABLE_MARK_FORUM_READ','enable_mark_forum_read','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('ENABLE_MARK_TOPIC_UNREAD','enable_mark_topic_unread','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('ENABLE_FORUM_DUPE_BUTTONS','enable_forum_dupe_buttons','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('ENABLE_PT_FILTERING','enable_pt_filtering','tick','return \'1\';','SECTION_FORUMS','PRIVATE_TOPICS');
-		add_config_option('INLINE_PP_ADVERTISE','inline_pp_advertise','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('ENABLE_MULTI_QUOTE','enable_multi_quote','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('ENABLE_ADD_TOPIC_BTN_IN_TOPIC','enable_add_topic_btn_in_topic','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('SEQ_POST_IDS','seq_post_ids','tick','return has_no_forum()?NULL:\'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('THREADED_BUTTONS','threaded_buttons','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_MARK_FORUM_READ','enable_mark_forum_read','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_MARK_TOPIC_UNREAD','enable_mark_topic_unread','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_FORUM_DUPE_BUTTONS','enable_forum_dupe_buttons','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_PT_FILTERING','enable_pt_filtering','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','PRIVATE_TOPICS');
+		add_config_option('INLINE_PP_ADVERTISE','inline_pp_advertise','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_MULTI_QUOTE','enable_multi_quote','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_ADD_TOPIC_BTN_IN_TOPIC','enable_add_topic_btn_in_topic','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
 		add_config_option('ENABLE_SKIP_SIG','enable_skip_sig','tick','return \'1\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('ENABLE_VIEWS_SIGS_OPTION','enable_views_sigs_option','tick','return \'1\';','SECTION_FORUMS','MEMBERS');
-		add_config_option('ENABLE_PT_RESTRICT','enable_pt_restrict','tick','return \'1\';','SECTION_FORUMS','PRIVATE_TOPICS');
-		add_config_option('ENABLE_POST_EMPHASIS','enable_post_emphasis','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ENABLE_PT_RESTRICT','enable_pt_restrict','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','PRIVATE_TOPICS');
+		add_config_option('ENABLE_POST_EMPHASIS','enable_post_emphasis','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
 		add_config_option('MD_DEFAULT_SORT_ORDER','md_default_sort_order','list','return \'m_join_time DESC\';','SECTION_FORUMS','MEMBERS',0,'m_username ASC|m_cache_num_posts DESC|m_join_time ASC|m_join_time DESC|m_last_visit_time DESC');
+		add_config_option('PRIMARY_MEMBERS_PER_PAGE','primary_members_per_page','integer','return \'50\';','SECTION_FORUMS','GROUPS');
+		add_config_option('SECONDARY_MEMBERS_PER_PAGE','secondary_members_per_page','integer','return \'50\';','SECTION_FORUMS','GROUPS');
 		add_config_option('IMPORTANT_GROUPS_PER_PAGE','important_groups_per_page','integer','return \'50\';','SECTION_FORUMS','GROUPS');
 		add_config_option('NORMAL_GROUPS_PER_PAGE','normal_groups_per_page','integer','return \'20\';','SECTION_FORUMS','GROUPS');
 		add_config_option('MEMBERS_PER_PAGE','members_per_page','integer','return \'50\';','SECTION_FORUMS','MEMBERS');
-		add_config_option('MAX_FORUM_DETAIL','max_forum_detail','integer','return \'100\';','PERFORMANCE','SECTION_FORUMS');
-		add_config_option('MAX_FORUM_INSPECT','max_forum_inspect','integer','return \'300\';','PERFORMANCE','SECTION_FORUMS');
+		add_config_option('MAX_FORUM_DETAIL','max_forum_detail','integer','return has_no_forum()?NULL:\'100\';','PERFORMANCE','SECTION_FORUMS');
+		add_config_option('MAX_FORUM_INSPECT','max_forum_inspect','integer','return has_no_forum()?NULL:\'300\';','PERFORMANCE','SECTION_FORUMS');
 		add_config_option('ENABLE_USER_ONLINE_GROUPS','enable_user_online_groups','tick','return \'1\';','PERFORMANCE','SECTION_FORUMS');
-		add_config_option('ENABLE_SUNK','enable_sunk','tick','return \'0\';','PERFORMANCE','SECTION_FORUMS');
+		add_config_option('ENABLE_SUNK','enable_sunk','tick','return has_no_forum()?NULL:\'0\';','PERFORMANCE','SECTION_FORUMS');
 		add_config_option('PASSWORD_CHANGE_DAYS','password_change_days','integer','return \'\';','SECURITY','USERNAMES_AND_PASSWORDS');
 		add_config_option('PASSWORD_EXPIRY_DAYS','password_expiry_days','integer','return \'\';','SECURITY','USERNAMES_AND_PASSWORDS');
 		add_config_option('MINIMUM_PASSWORD_STRENGTH','minimum_password_strength','list','return \'1\';','SECURITY','USERNAMES_AND_PASSWORDS','1|2|3|4|5|6|7|8|9|10');
 		add_config_option('PASSWORD_RESET_PROCESS','password_reset_process','list','return \'temporary\';','SECURITY','USERNAMES_AND_PASSWORDS','emailed|temporary');
+		add_config_option('PRIVATE_TOPICS_PER_PAGE','private_topics_per_page','integer','return has_no_forum()?NULL:\'10\';','SECTION_FORUMS','GENERAL');
 
 		$GLOBALS['SITE_DB']->create_table('f_group_join_log',array(
 			'id'=>'*AUTO',

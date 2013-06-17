@@ -928,7 +928,13 @@ class Module_cms_galleries extends standard_crud_module
 			$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 			if ($num_galleries==1) $cat='root'; // Only option!
 		}
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+		if ((get_value('no_confirm_url_spec_cats')!=='1') || ($cat==''))
+		{
+			$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+		} else
+		{
+			$hidden->attach(form_input_hidden('cat',$cat));
+		}
 
 		$set_name='image';
 		$required=true;
@@ -1413,7 +1419,13 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 			if ($num_galleries==1) $cat='root'; // Only option!
 		}
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+		if ((get_value('no_confirm_url_spec_cats')!=='1') || ($cat==''))
+		{
+			$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+		} else
+		{
+			$hidden->attach(form_input_hidden('cat',$cat));
+		}
 
 		$supported=get_allowed_video_file_types();
 

@@ -61,7 +61,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 			{
 				$field_id=intval($_field_id);
 
-				if (get_option('simplify_privacy_options')=='1')
+				if (get_option('complex_privacy_options')=='0')
 				{
 					$_view=post_param('privacy_'.strval($field_id),NULL);
 
@@ -156,7 +156,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 			}
 
 			// Show privacy options for this field
-			if (get_option('simplify_privacy_options')=='1') // Simple style
+			if (get_option('complex_privacy_options')=='0') // Simple style
 			{
 				$privacy_options=new ocp_tempcode();
 				$privacy_options->attach(form_input_list_entry('guests',$view_by_guests,do_lang_tempcode('VISIBLE_TO_GUESTS')));

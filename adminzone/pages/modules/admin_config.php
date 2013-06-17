@@ -67,8 +67,8 @@ class Module_admin_config
 			'show_post_validation','ip_forwarding','force_meta_refresh','use_contextual_dates','eager_wysiwyg',
 			'website_email','enveloper_override','bcc','allow_ext_images','url_scheme','ip_strict_for_sessions','enable_previews',
 			'enable_keyword_density_check','enable_spell_check','enable_markup_validation','enable_image_fading','users_online_time','auto_submit_sitemap',
-			'user_postsize_errors','automatic_meta_extraction','is_on_emoticon_choosers','no_stats_when_closed',
-			'deeper_admin_breadcrumbs','has_low_memory_limit','is_on_comcode_page_children','global_donext_icons','no_bot_stats',
+			'user_postsize_errors','automatic_meta_extraction','is_on_emoticon_choosers','stats_when_closed',
+			'deeper_admin_breadcrumbs','has_low_memory_limit','is_on_comcode_page_children','global_donext_icons','bot_stats',
 			'java_upload','java_ftp_host','java_username','java_password','java_ftp_path','filesystem_caching',
 			'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
 			'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
@@ -78,40 +78,14 @@ class Module_admin_config
 			'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
 			'filetype_icons','infinite_scrolling',
 			'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
-			'cdn','enable_https','modal_user',
-			'attachment_default_width','attachment_default_height',
-			'allow_auto_notifications',
-			'captcha_single_guess',
-			'password_cookies',
-			'hack_ban_threshold',
-			'brute_force_threshold',
-			'brute_force_login_minutes',
-			'brute_force_instant_ban',
-			'comment_topic_subject',
-			'default_comment_sort_order',
-			'simplify_wysiwyg_by_permissions',
-			'max_moniker_length',
-			'google_translate_api_key',
-			'cleanup_files',
-			'edit_under',
-			'use_true_from',
-			'enable_feedback',
-			'auto_meta',
-			'session_prudence',
-			'allow_own_rate',
-			'enable_animations',
-			'breadcrumb_crop_length',
-			'enable_staff_notes',
-			'enable_theme_img_buttons',
-			'call_home',
-			'enable_seo_fields',
-			'force_local_temp_dir',
-			'jpeg_quality',
-			'proxy',
-			'proxy_port',
-			'proxy_user',
-			'proxy_password',
-			'general_safety_listing_limit',
+			'cdn','enable_https','modal_user','attachment_default_width','attachment_default_height',
+			'allow_auto_notifications','captcha_single_guess','password_cookies','hack_ban_threshold',
+			'brute_force_threshold','brute_force_login_minutes','brute_force_instant_ban',
+			'comment_topic_subject','default_comment_sort_order','simplify_wysiwyg_by_permissions','max_moniker_length',
+			'google_translate_api_key','cleanup_files','edit_under','use_true_from','enable_feedback','auto_meta',
+			'session_prudence','allow_own_rate','enable_animations','breadcrumb_crop_length','enable_staff_notes',
+			'enable_theme_img_buttons','call_home','enable_seo_fields','force_local_temp_dir','jpeg_quality',
+			'proxy','proxy_port','proxy_user','proxy_password','general_safety_listing_limit',
 		);
 
 		foreach ($config_options as $option)
@@ -244,15 +218,19 @@ class Module_admin_config
 			add_config_option('ENABLE_SEO_FIELDS','enable_seo_fields','list','return \'yes\';','SITE','GENERAL',0,'yes|no|only_on_edit');
 			add_config_option('FORCE_LOCAL_TEMP_DIR','force_local_temp_dir','tick','return \'0\';','SITE','ADVANCED');
 			add_config_option('JPEG_QUALITY','jpeg_quality','integer','return \'\';','SITE','GENERAL');
-			add_config_option('PROXY','proxy','line','return \'NULL\';','SITE','NETWORKING');
-			add_config_option('PROXY_PORT','proxy_port','integer','return \'NULL\';','SITE','NETWORKING');
-			add_config_option('PROXY_USER','proxy_user','line','return \'NULL\';','SITE','NETWORKING');
-			add_config_option('PROXY_PASSWORD','proxy_password','line','return \'NULL\';','SITE','NETWORKING');
+			add_config_option('PROXY','proxy','line','return \'\';','SITE','NETWORKING');
+			add_config_option('PROXY_PORT','proxy_port','integer','return \'\';','SITE','NETWORKING');
+			add_config_option('PROXY_USER','proxy_user','line','return \'\';','SITE','NETWORKING');
+			add_config_option('PROXY_PASSWORD','proxy_password','line','return \'\';','SITE','NETWORKING');
 			add_config_option('GENERAL_SAFETY_LISTING_LIMIT','general_safety_listing_limit','integer','return \'400\';','SITE','GENERAL');
+			add_config_option('STATS_WHEN_CLOSED','stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))))?'1':'0').'\';','SITE','CLOSED_SITE');
+			add_config_option('BOT_STATS','bot_stats','tick','return \'1\';','SITE','GENERAL');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
 		{
+			delete_config_option('no_bot_stats');
+			delete_config_option('no_stats_when_closed');
 			delete_config_option('htm_short_urls');
 			delete_config_option('mod_rewrite');
 		}
@@ -348,8 +326,6 @@ class Module_admin_config
 			add_config_option('HAS_LOW_MEMORY_LIMIT','has_low_memory_limit','tick','return ((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL);','SITE','ADVANCED');
 			add_config_option('IS_ON_COMCODE_PAGE_CHILDREN','is_on_comcode_page_children','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('GLOBAL_DONEXT_ICONS','global_donext_icons','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
-			add_config_option('NO_BOT_STATS','no_bot_stats','tick','return \'0\';','SITE','GENERAL');
 			add_config_option('FILE_SYSTEM_CACHING','filesystem_caching','tick','return \'0\';','SITE','CACHES');
 			add_config_option('USERS_ONLINE_TIME','users_online_time','integer','return \'5\';','SITE','LOGGING');
 

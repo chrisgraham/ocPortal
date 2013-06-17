@@ -1695,7 +1695,7 @@ function log_stats($string,$pg_time)
 {
 	if (!addon_installed('stats')) return;
 
-	if ((get_option('site_closed')=='1') && (get_option('no_stats_when_closed',true)==='1')) return;
+	if ((get_option('site_closed')=='1') && (get_option('stats_when_closed',true)==='1')) return;
 
 	if ((get_option('super_logging')=='1') || (get_param('track',NULL)!==NULL))
 	{
@@ -1720,7 +1720,7 @@ function log_stats($string,$pg_time)
 	$os=substr(get_os_string(),0,255);
 	if ($os===NULL) $os='';
 
-	if ((get_option('no_bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
+	if ((get_option('bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
 
 	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'member_id'=>$member,'date_and_time'=>$time,'referer'=>$referer,'get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)),false,true);
 	if (mt_rand(0,1000)==1)

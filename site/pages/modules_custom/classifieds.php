@@ -27,7 +27,8 @@ class Module_classifieds
 		$info['organisation']='ocProducts'; 
 		$info['hacked_by']=NULL; 
 		$info['hack_version']=NULL;
-		$info['version']=1;
+		$info['version']=2;
+		$info['update_require_upgrade']=1;
 		$info['locked']=true;
 		return $info;
 	}
@@ -38,6 +39,8 @@ class Module_classifieds
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('classifieds_prices');
+
+		delete_config_option('max_classified_listings_per_screen');
 	}
 
 	/**
@@ -79,6 +82,11 @@ class Module_classifieds
 					'c_price'=>$price,
 				));
 			}
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<2))
+		{
+			add_config_option('MAX_CLASSIFIED_LISTINGS_PER_SCREEN','max_classified_listings_per_screen','integer','return \'30\';','FEATURE','CLASSIFIEDS');
 		}
 	}
 

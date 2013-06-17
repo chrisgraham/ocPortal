@@ -330,6 +330,8 @@ There are many commercial CDN services available that can be configured in via t
 
 [title="2"]Facebook's HipHop PHP (hphp)[/title]
 
+[i]HPHP is not currently supported, as it is fast evolving and often has bugs. Support can be refreshed upon commercial demand. The below was written before the HHVM mode of operation was released.[/i]
+
 Facebook released an alternative implementation of PHP that works as a compiler (compiles to an executable, via C++) instead of an interpreter. It more than doubles performance, and is set to improve further as it is developed.
 This is not suitable for most people for the following reasons:
  - It requires server admin access
@@ -339,19 +341,17 @@ This is not suitable for most people for the following reasons:
  - It requires some advanced skills
 However, it is very suitable for those who need to serve a high capacity and have the skills and staffing to manage all the above.
 
-ocPortal fully supports hphp since version 5.
+ocPortal fully supported hphp since version 5.
 
-The 'roadsend' addon (shipped by default) provides a build script for hphp (we used to use this with the Roadsend PHP compiler, but this is no longer maintained and was always rather complex and buggy).
+The 'hphp_buildkit' addon (bundled by default) provides a build script for hphp.
 To invoke a compile (we are assuming that hphp has been properly installed):
  - Open a shell to the ocPortal directory
- - Type [tt]./hphp.sh[/tt] (this is in the 'roadsend' addon)
+ - Type [tt]./hphp.sh[/tt] (this is in the 'hphp_buildkit' addon)
  - Make sure [tt]data_custom/fields.xml[/tt] is deleted (at the time of writing there is a critical bug in hphp's XML support that any XML parsing will lead to request failure)
 
 In order to support hphp (which imposes some language restrictions) we made some changes to ocPortal, and updated our coding standards. There's no guarantee that any individual non-bundled addon will meet the coding standards however.
 
 We expect Facebook will improve hphp performance will increase over time, as the current 50% performance improvement seems low compared to what could be possible, especially if they can implement better 'type hinting' support (or some other type detection support, such as type database building via gathering at run-time); currently type detection (needed for the significant performance boosts) is very limited. hphp is an Open Source project, so anybody can contribute.
-
-To support short URLs it is necessary to turn on the hidden 'ionic_on' option, which tells ocPortal that short URLs are supported even though Apache is not running. Of course, you also would need to enable the regular configuration options to enable short URLs also.
 
 We have tried in the past to support:
  - Roadsend

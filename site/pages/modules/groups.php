@@ -392,7 +392,7 @@ class Module_groups
 
 		// Primary members
 		$start=get_param_integer('p_start',0);
-		$max=get_param_integer('p_max',intval(get_option('important_groups_per_page')));
+		$max=get_param_integer('p_max',intval(get_option('primary_members_per_page')));
 		$_primary_members=ocf_get_group_members_raw($id,true,true,false,false,$max,$start);
 		if (count($_primary_members)>0)
 		{
@@ -412,7 +412,7 @@ class Module_groups
 
 		// Secondary members
 		$s_start=get_param_integer('s_start',0);
-		$s_max=get_param_integer('s_max',50);
+		$s_max=get_param_integer('s_max',intval(get_option('secondary_members_per_page')));
 		$_secondary_members=ocf_get_group_members_raw($id,false,true,true,ocf_may_control_group($id,get_member()),$s_max,$s_start);
 		$secondary_members=new ocp_tempcode();
 		$prospective_members=new ocp_tempcode();
