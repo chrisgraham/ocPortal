@@ -142,6 +142,7 @@ This product includes:
   - m-zip (Francesco M. Munafo', liberal custom license)
   - microtime_diff implementation (from php.net comment by Peter Kehl, Creative Commons Attribution License)
   - utf8tohtml implementation (from php.net comment by silverbeat, Creative Commons Attribution License)
+  - (adjust_pic_orientation function, from stackoverflow comment)
   - Javascript base-64 code (http://www.webtoolkit.info/, liberal custom licence)
   - JW-Player (used under commercial license)
 Some of our ocPortal packages remove or replace those elements used under non-free commercial licenses.
