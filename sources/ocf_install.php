@@ -384,7 +384,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('ENABLE_VIEWS_SIGS_OPTION','enable_views_sigs_option','tick','return \'1\';','SECTION_FORUMS','MEMBERS');
 		add_config_option('ENABLE_PT_RESTRICT','enable_pt_restrict','tick','return \'1\';','SECTION_FORUMS','PRIVATE_TOPICS');
 		add_config_option('ENABLE_POST_EMPHASIS','enable_post_emphasis','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('MD_DEFAULT_SORT_ORDER','md_default_sort_order','list','return \'ASC\';','SECTION_FORUMS','MEMBERS',0,'ASC|DESC');
+		add_config_option('MD_DEFAULT_SORT_ORDER','md_default_sort_order','list','return \'m_join_time DESC\';','SECTION_FORUMS','MEMBERS',0,'m_username ASC|m_cache_num_posts DESC|m_join_time ASC|m_join_time DESC|m_last_visit_time DESC');
 		add_config_option('IMPORTANT_GROUPS_PER_PAGE','important_groups_per_page','integer','return \'50\';','SECTION_FORUMS','GROUPS');
 		add_config_option('NORMAL_GROUPS_PER_PAGE','normal_groups_per_page','integer','return \'20\';','SECTION_FORUMS','GROUPS');
 		add_config_option('MEMBERS_PER_PAGE','members_per_page','integer','return \'50\';','SECTION_FORUMS','MEMBERS');

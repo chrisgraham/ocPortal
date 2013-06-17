@@ -312,7 +312,7 @@ class Module_galleries
 			add_config_option('PERSONAL_UNDER_MEMBERS','personal_under_members','tick','return \'0\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_ENTRIES_REGULAR_PER_PAGE','gallery_entries_regular_per_page','integer','return \'30\';','FEATURE','GALLERIES');
-			add_config_option('GALLERIES_DEFAULT_SORT_ORDER','galleries_default_sort_order','list','return \'DESC\';','FEATURE','GALLERIES',0,'add_date DESC|add_date ASC|average_rating DESC|average_rating ASC|compound_rating DESC|compound_rating ASC|url DESC|url ASC|fixed_random ASC');
+			add_config_option('GALLERIES_DEFAULT_SORT_ORDER','galleries_default_sort_order','list','return \'add_date DESC\';','FEATURE','GALLERIES',0,'add_date DESC|add_date ASC|average_rating DESC|compound_rating DESC|url DESC|url ASC|fixed_random ASC');
 			add_config_option('SUBGALLERY_LINK_LIMIT','subgallery_link_limit','integer','return \'200\';','FEATURE','GALLERIES');
 		}
 	}

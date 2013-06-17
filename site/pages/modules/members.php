@@ -123,16 +123,13 @@ class Module_members
 
 		$start=get_param_integer('md_start',0);
 		$max=get_param_integer('md_max',intval(get_option('members_per_page')));
-		$sortables=array('m_username'=>do_lang_tempcode('USERNAME'),'m_primary_group'=>do_lang_tempcode('PRIMARY_GROUP'),'m_cache_num_posts'=>do_lang_tempcode('COUNT_POSTS'),'m_join_time'=>do_lang_tempcode('JOIN_DATE'));
-		if (get_option('use_lastondate')=='1')
-		{
-			$sortables['m_last_visit_time']=do_lang_tempcode('LAST_VISIT_TIME');
-		}
+		$sortables=array(
+			'm_username'=>do_lang_tempcode('USERNAME'),
+			'm_cache_num_posts'=>do_lang_tempcode('COUNT_POSTS'),
+			'm_join_time'=>do_lang_tempcode('JOIN_DATE'),
+			'm_last_visit_time'=>do_lang_tempcode('LAST_VISIT_TIME'),
+		);
 		$default_sort_order=get_option('md_default_sort_order');
-		if (is_null($default_sort_order))
-		{
-			$default_sort_order=(get_option('use_lastondate')=='1')?'m_last_visit_time DESC':'m_join_time DESC';  // sort by lastondate unless it is not enabled
-		}
 		$test=explode(' ',get_param('md_sort',$default_sort_order),2);
 		if (count($test)==1) $test[]='ASC';
 		list($sortable,$sort_order)=$test;

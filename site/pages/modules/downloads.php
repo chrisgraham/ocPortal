@@ -197,7 +197,7 @@ class Module_downloads
 			add_config_option('DLOAD_SEARCH_INDEX','dload_search_index','tick','return \'1\';','FEATURE','DOWNLOADS');
 			add_config_option('DOWNLOAD_SUBCATS_PER_PAGE','download_subcats_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
 			add_config_option('DOWNLOAD_ENTRIES_PER_PAGE','download_entries_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
-			add_config_option('DOWNLOADS_DEFAULT_SORT_ORDER','downloads_default_sort_order','list','return \'ASC\';','FEATURE','SECTION_DOWNLOADS',0,'ASC|DESC');
+			add_config_option('DOWNLOADS_DEFAULT_SORT_ORDER','downloads_default_sort_order','list','return \'t.text_original ASC\';','FEATURE','SECTION_DOWNLOADS',0,'t.text_original ASC|file_size ASC|file_size DESC|num_downloads DESC|average_rating DESC|compound_rating DESC|add_date ASC|add_date DESC|fixed_random ASC');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
@@ -364,7 +364,7 @@ class Module_downloads
 		$category_id=get_param_integer('id',db_get_first_id());
 		$root=get_param_integer('keep_download_root',db_get_first_id());
 		$cat_order=get_param('cat_order','t1.text_original ASC');
-		$order=get_param('order','t.text_original '.get_option('downloads_default_sort_order'));
+		$order=get_param('order',get_option('downloads_default_sort_order'));
 
 		// RSS
 		set_feed_url('?mode=downloads&filter='.strval($category_id));
