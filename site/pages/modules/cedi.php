@@ -563,6 +563,13 @@ class Module_cedi
 		);
 
 		breadcrumb_add_segment($breadcrumbs);
+
+		// Re-defined canonical URL
+		global $CANONICAL_URL,$NON_CANONICAL_PARAMS;
+		$non_canonical=array();
+		if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+		$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id));
+
 		return do_template('WIKI_PAGE_SCREEN',array('_GUID'=>'1840d6934be3344c4f93a159fc737a45','TAGS'=>get_loaded_tags('cedi_pages'),'HIDE_POSTS'=>$page['hide_posts']==1,'ID'=>strval($id),'VIEWS'=>integer_format($page['seedy_views']),'STAFF_ACCESS'=>$staff_access,'DESCRIPTION'=>$description,'TITLE'=>$title,'CHILDREN'=>$children,'POSTS'=>$posts,'NUM_POSTS'=>integer_format($num_posts),'MENU'=>$menu));
 	}
 

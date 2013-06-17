@@ -25,7 +25,7 @@
  */
 function init__symbols()
 {
-	global $LOADED_NONREG_LOGO,$LOADED_BLOCKS,$LOADED_PAGES,$LOADED_PANELS,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS;
+	global $LOADED_NONREG_LOGO,$LOADED_BLOCKS,$LOADED_PAGES,$LOADED_PANELS,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS,$CANONICAL_URL;
 	$LOADED_NONREG_LOGO=false;
 	$LOADED_BLOCKS=array();
 	$LOADED_PAGES=array();
@@ -37,6 +37,7 @@ function init__symbols()
 	$HTTP_STATUS_CODE='200';
 	global $META_DATA;
 	$META_DATA=array();
+	$CANONICAL_URL=NULL;
 
 	global $SYMBOL_CACHE,$CYCLES,$TEMPCODE_SETGET,$THEME_IMG_DIMS_CACHE;
 	$SYMBOL_CACHE=array();
@@ -648,10 +649,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'CANONICAL_URL':
-				global $NON_CANONICAL_PARAMS;
-				$non_canonical=array();
-				if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
-				$value=get_self_url(true,false,$non_canonical);
+				global $NON_CANONICAL_PARAMS,$CANONICAL_URL;
+				if ($CANONICAL_URL===NULL)
+				{
+					$non_canonical=array();
+					if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+					$CANONICAL_URL=get_self_url(true,false,$non_canonical);
+				}
+				$value=$CANONICAL_URL;
 				break;
 
 			case 'SHOW_HEADER':
