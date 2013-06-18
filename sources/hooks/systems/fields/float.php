@@ -79,6 +79,9 @@ class Hook_fields_float
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
+
+		$ev=float_format(floatval($ev));
+
 		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($ev))) ocp_mark_as_escaped($ev);
 		return $ev;
 	}

@@ -200,6 +200,12 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 	foreach ($fields_to_show as $i=>$field_to_show)
 	{
 		$member_value=$member_mappings['field_'.strval($field_to_show['id'])];
+		if (!is_string($member_value))
+		{
+			if (is_null($member_value)) $member_value='';
+			elseif (is_float($member_value)) $member_value=float_to_raw_string($member_value);
+			else $member_value=strval($member_value);
+		}
 
 		// Decrypt the value if appropriate
 		if ((array_key_exists('cf_encrypted',$field_to_show)) && ($field_to_show['cf_encrypted']==1))

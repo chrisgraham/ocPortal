@@ -1505,7 +1505,7 @@ function step_5_write_config()
 		$_val=addslashes(trim($val));
 		fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
 	}
-	fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__'.uniqid('',true)."';\n");
+	fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__'.preg_replace('#[^\w\d]#','',uniqid('',true))."';\n");
 	fclose($config_file_handle);
 	require_once(get_file_base().'/'.$config_file);
 
