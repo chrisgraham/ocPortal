@@ -94,7 +94,7 @@ function is_swf_upload($fake_prepopulation=false)
 									if (preg_match('#^hidFileID\_(.*)(\d+)$#',$key,$matches)!=0)
 									{
 										$new_key=$matches[1].strval(intval($matches[2])+$rolling_offset);
-									}
+									} else $new_key=substr($key,10);
 									$_FILES[$new_key]=array(
 										'type'=>'swfupload',
 										'name'=>$incoming_uploads_row[0]['i_orig_filename'],
