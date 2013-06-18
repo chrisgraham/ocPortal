@@ -63,9 +63,9 @@ class Block_main_rss
 		// TODO: This is actually for the 'syndication' addon (#354 on tracker)
 		if (is_null($upgrade_from))
 		{
-			add_config_option('ENABLE_RSS','is_on_rss','tick','return \'1\';','FEATURE','NEWS_AND_RSS');
-			add_config_option('UPDATE_TIME','rss_update_time','integer','return \'60\';','FEATURE','NEWS_AND_RSS');
-			add_config_option('ENABLE_RSS_ADVERTISING','is_rss_advertised','tick','return \'0\';','FEATURE','NEWS_AND_RSS');
+			add_config_option('ENABLE_RSS','is_on_rss','tick','return \'1\';','FEATURE','_FEEDS');
+			add_config_option('UPDATE_TIME','rss_update_time','integer','return \'60\';','FEATURE','_FEEDS');
+			add_config_option('ENABLE_RSS_ADVERTISING','is_rss_advertised','tick','return \'0\';','FEATURE','_FEEDS');
 		}
 	}
 

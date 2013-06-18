@@ -93,7 +93,7 @@ class Module_filedump
 
 			add_config_option('FILEDUMP_COUNT_FILES','filedump_show_stats_count_total_files','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('FILEDUMP_DISK_USAGE','filedump_show_stats_count_total_space','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('FOLDER_CREATE','is_on_folder_create','tick','return \'1\';','SITE','ENVIRONMENT',1);
+			add_config_option('FOLDER_CREATE','is_on_folder_create','tick','return \'1\';','SERVER','GENERAL',1);
 		}
 
 		if (addon_installed('redirects_editor'))

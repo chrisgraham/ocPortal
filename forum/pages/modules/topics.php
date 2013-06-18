@@ -460,7 +460,7 @@ class Module_topics
 		$fields=new ocp_tempcode();
 		$hidden=$this->keep_markers();
 		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'),do_lang_tempcode('DESCRIPTION_POSTS_DESTINATION_FORUM'),'to_forum_id',NULL,'choose_forum',array(),true,strval($topic_info[0]['t_forum_id'])));
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('TOPIC_TITLE_WILL_BE'),'title',$default_title,false));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('TOPIC_TITLE_WILL_BE'),'title',$default_title,false,NULL,120));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE_IF_EMPTY'),do_lang_tempcode('DESCRIPTION_DELETE_IF_EMPTY'),'delete_if_empty',true));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
 
@@ -1338,7 +1338,7 @@ class Module_topics
 		$post_url=build_url($map,'_SELF');
 
 		// Title
-		$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),true,1));
+		$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),true,1,120));
 
 		// Where it goes to
 		if ($private_topic)
@@ -1640,7 +1640,7 @@ class Module_topics
 		// Certain aspects relating to the posting system
 		$specialisation=new ocp_tempcode();
 		if (get_option('is_on_post_titles')=='1')
-			$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),false,1));
+			$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),false,1,120));
 		if (ocf_may_moderate_forum($forum_id,get_member()))
 		{
 			$moderation_options=array(
@@ -2696,7 +2696,7 @@ END;
 		// Certain aspects relating to the posting system
 		$specialisation=new ocp_tempcode();
 		if (((get_option('is_on_post_titles')=='1') || ($post_details[0]['p_title']!='') || ($post_id==$topic_info[0]['t_cache_first_post_id'])))
-			$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',$post_details[0]['p_title']),false,1));
+			$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',$post_details[0]['p_title']),false,1,120));
 		$specialisation->attach(form_input_line(do_lang_tempcode('REASON'),'','reason','',false,2));
 		if (ocf_may_moderate_forum($forum_id,get_member()))
 		{

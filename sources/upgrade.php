@@ -1502,6 +1502,8 @@ function version_specific()
 				$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>$to),array('module_the_name'=>$from),'',1);
 			}
 
+			$GLOBALS['SITE_DB']->alter_table_field('config','the_page','ID_TEXT','c_category');
+			$GLOBALS['SITE_DB']->alter_table_field('config','section','ID_TEXT','c_group');
 			$GLOBALS['SITE_DB']->alter_table_field('msp','specific_permission','ID_TEXT','privilege');
 			$GLOBALS['SITE_DB']->alter_table_field('gsp','specific_permission','ID_TEXT','privilege');
 			$GLOBALS['SITE_DB']->alter_table_field('pstore_permissions','p_specific_permission','ID_TEXT','p_privilege');

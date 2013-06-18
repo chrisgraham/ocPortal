@@ -1868,7 +1868,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 				$hidden->attach(form_input_hidden('parent_id',$parent_id));
 			}
 		}
-		if ((get_option('manual_gallery_media_types')=='1') || ($accept_images==0) || ($accept_videos==0))
+		if ((get_option('manual_gallery_media_types')=='0') || ($accept_images==0) || ($accept_videos==0))
 		{
 			$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
 		} else
@@ -1876,11 +1876,11 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(form_input_hidden('accept_images','1'));
 			$hidden->attach(form_input_hidden('accept_videos','1'));
 		}
-		if (get_option('gallery_flow_is')=='1')
+		if (get_option('gallery_mode_is')=='flow')
 		{
 			$hidden->attach(form_input_hidden('flow_mode_interface','1'));
 		}
-		elseif (get_option('gallery_flow_is')=='0')
+		elseif (get_option('gallery_mode_is')=='regular')
 		{
 			$hidden->attach(form_input_hidden('flow_mode_interface','0'));
 		} else

@@ -148,8 +148,8 @@ class Module_points
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))
 		{
-			add_config_option('GIFT_REWARD_CHANCE','gift_reward_chance','integer','return \'\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('GIFT_REWARD_AMOUNT','gift_reward_amount','integer','return \'\';','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('GIFT_REWARD_CHANCE','gift_reward_chance','integer','return \'\';','POINTS','GIFT_TRANSACTIONS');
+			add_config_option('GIFT_REWARD_AMOUNT','gift_reward_amount','integer','return \'\';','POINTS','GIFT_TRANSACTIONS');
 			add_config_option('POINT_LOGS_PER_PAGE','point_logs_per_page','integer','return \'10\';','POINTS','GENERAL');
 		}
 

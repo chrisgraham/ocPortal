@@ -92,7 +92,7 @@ class Module_recommend
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
 		{
-			add_config_option('ENABLE_CSV_RECOMMEND','enable_csv_recommend','tick','return \'1\';','FEATURE','RECOMMEND');
+			add_config_option('ENABLE_CSV_RECOMMEND','enable_csv_recommend','tick','return \'1\';','FEATURE','RECOMMEND_SITE');
 		}
 	}
 

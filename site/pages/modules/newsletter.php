@@ -175,9 +175,9 @@ class Module_newsletter
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<10))
 		{
-			add_config_option('DUAL_FORMAT_NEWSLETTERS','dual_format_newsletters','tick','return \'0\';','SECTION','NEWSLETTERS');
+			add_config_option('DUAL_FORMAT_NEWSLETTERS','dual_format_newsletters','tick','return \'0\';','FEATURE','NEWSLETTER');
 			add_config_option('MINUTES_BETWEEN_SENDS','minutes_between_sends','integer','return \'10\';','FEATURE','NEWSLETTER');
-			add_config_option('MAILS_PER_SEND','mails_per_send','integer','return \'60\';','SITE','NEWSLETTER');
+			add_config_option('MAILS_PER_SEND','mails_per_send','integer','return \'60\';','FEATURE','NEWSLETTER');
 		}
 	}
 

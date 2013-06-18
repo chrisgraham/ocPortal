@@ -228,8 +228,6 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 		return '';
 	}
 
-	if (get_option('auto_meta')=='0') return '';
-
 	if (get_option('automatic_meta_extraction')=='0') return '';
 
 	list($imp,$description)=_seo_meta_find_data($keyword_sources,$description);

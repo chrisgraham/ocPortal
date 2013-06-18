@@ -132,11 +132,6 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			warn_exit(do_lang_tempcode('TITLE_TOO_LONG'));
 		}
 
-		if (get_option('prevent_shouting')=='1')
-		{
-			if (strtoupper($title)==$title) $title=ucwords($title);
-		}
-
 		if ((is_null($intended_solely_for)) && (!$skip_post_checks))
 		{
 			ocf_check_post($post,$topic_id,$poster);

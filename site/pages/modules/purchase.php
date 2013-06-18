@@ -89,16 +89,21 @@ class Module_purchase
 	{
 		if (is_null($upgrade_from))
 		{
-			add_config_option('PAYMENT_GATEWAY','payment_gateway','line','return \'paypal\';','ECOMMERCE','ECOMMERCE');
-			add_config_option('USE_LOCAL_PAYMENT','use_local_payment','tick','return \'0\';','ECOMMERCE','ECOMMERCE');
-			add_config_option('IPN_PASSWORD','ipn_password','line','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay test account: 'secpay'/'secpay'
-			add_config_option('IPN_DIGEST','ipn_digest','line','return \'\';','ECOMMERCE','ECOMMERCE');
-			add_config_option('VPN_USERNAME','vpn_username','line','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
-			add_config_option('VPN_PASSWORD','vpn_password','line','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay test account: 'secpay'/'secpay'
-			add_config_option('CALLBACK_PASSWORD','callback_password','line','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
-			add_config_option('POSTAL_ADDRESS','pd_address','text','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
-			add_config_option('EMAIL_ADDRESS','pd_email','line','return get_option(\'staff_address\');','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
-			add_config_option('PHONE_NUMBER','pd_number','line','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
+			add_config_option('PAYMENT_GATEWAY','payment_gateway','line','return \'paypal\';','ECOMMERCE','PAYMENT_GATEWAY');
+			add_config_option('USE_LOCAL_PAYMENT','use_local_payment','tick','return \'0\';','ECOMMERCE','GENERAL');
+			add_config_option('IPN_PASSWORD','ipn_password','line','return \'\';','ECOMMERCE','PAYMENT_GATEWAY'); // SecPay test account: 'secpay'/'secpay'
+			add_config_option('IPN_DIGEST','ipn_digest','line','return \'\';','ECOMMERCE','PAYMENT_GATEWAY');
+			add_config_option('VPN_USERNAME','vpn_username','line','return \'\';','ECOMMERCE','PAYMENT_GATEWAY'); // SecPay: not needed
+			add_config_option('VPN_PASSWORD','vpn_password','line','return \'\';','ECOMMERCE','PAYMENT_GATEWAY'); // SecPay test account: 'secpay'/'secpay'
+			add_config_option('CALLBACK_PASSWORD','callback_password','line','return \'\';','ECOMMERCE','PAYMENT_GATEWAY'); // SecPay: not needed
+			add_config_option('POSTAL_ADDRESS','pd_address','text','return \'\';','ECOMMERCE','ADDRESS'); // SecPay: not needed
+			add_config_option('EMAIL_ADDRESS','pd_email','line','return get_option(\'staff_address\');','ECOMMERCE','PAYMENT_GATEWAY'); // SecPay: not needed
+			add_config_option('PHONE_NUMBER','pd_number','line','return \'\';','ECOMMERCE','ADDRESS'); // SecPay: not needed
+			add_config_option('CURRENCY','currency','line','return \'GBP\';','ECOMMERCE','GENERAL');
+			add_config_option('ECOMMERCE_TEST_MODE','ecommerce_test_mode','tick','return \'0\';','ECOMMERCE','PAYMENT_GATEWAY');
+			add_config_option('IPN_ADDRESS_TEST','ipn_test','line','return get_option(\'staff_address\');','ECOMMERCE','PAYMENT_GATEWAY');
+			add_config_option('IPN_ADDRESS','ipn','line','return get_option(\'staff_address\');','ECOMMERCE','PAYMENT_GATEWAY');
+
 			add_privilege('ECOMMERCE','access_ecommerce_in_test_mode',false);
 
 			$GLOBALS['SITE_DB']->create_table('trans_expecting',array(
@@ -127,11 +132,6 @@ class Module_purchase
 			add_menu_item_simple('ecommerce_features',NULL,'INVOICES','_SEARCH:invoices:type=misc');
 			add_menu_item_simple('ecommerce_features',NULL,'MODULE_TRANS_NAME_subscriptions','_SEARCH:subscriptions:type=misc');
 
-			add_config_option('CURRENCY','currency','line','return \'GBP\';','ECOMMERCE','ECOMMERCE');
-			add_config_option('ECOMMERCE_TEST_MODE','ecommerce_test_mode','tick','return \'0\';','ECOMMERCE','ECOMMERCE');
-			add_config_option('IPN_ADDRESS_TEST','ipn_test','line','return get_option(\'staff_address\');','ECOMMERCE','ECOMMERCE');
-			add_config_option('IPN_ADDRESS','ipn','line','return get_option(\'staff_address\');','ECOMMERCE','ECOMMERCE');
-
 			$GLOBALS['SITE_DB']->create_table('transactions',array(
 				'id'=>'*ID_TEXT',
 				'purchase_id'=>'ID_TEXT',
@@ -150,7 +150,7 @@ class Module_purchase
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
 		{
-			add_config_option('PRIMARY_PAYPAL_EMAIL','primary_paypal_email','line','return \'\';','FEATURE','ECOMMERCE');
+			add_config_option('PRIMARY_PAYPAL_EMAIL','primary_paypal_email','line','return \'\';','ECOMMERCE','PAYPAL');
 		}
 	}
 

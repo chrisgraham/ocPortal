@@ -549,8 +549,8 @@ class Module_admin
 			$content[$current_results_type]=new ocp_tempcode();
 			$map=array();
 			if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) $map['shared_hosting_restricted']=0;
-			$all_options=$GLOBALS['SITE_DB']->query_select('config',array('the_name','human_name','the_page','section','explanation','eval'),$map);
-			$all_options[]=array('the_name'=>'timezone','human_name'=>'TIME_ZONE','config_value'=>'','the_type'=>'special','eval'=>'','the_page'=>'SITE','section'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
+			$all_options=$GLOBALS['SITE_DB']->query_select('config',array('the_name','human_name','c_category','c_group','explanation','eval'),$map);
+			$all_options[]=array('the_name'=>'timezone','human_name'=>'TIME_ZONE','config_value'=>'','the_type'=>'special','eval'=>'','c_category'=>'SITE','c_group'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
 			$config_categories=array();
 			$conf_found_count=0;
 			foreach ($all_options as $p)
@@ -585,18 +585,18 @@ class Module_admin
 					{
 						if (!is_null($null_test))
 						{
-							$_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['the_page']),'adminzone');
+							$_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['c_category']),'adminzone');
 							$url=$_url->evaluate();
-							$url.='#group_'.$p['section'];
+							$url.='#group_'.$p['c_group'];
 							if (is_null($t)) $t='';
 							$breadcrumbs=new ocp_tempcode();
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('SETUP')));
 							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'misc'),'adminzone'),do_lang_tempcode('CONFIGURATION')));
 							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['the_page']),'adminzone'),do_lang('CONFIG_CATEGORY_'.$p['the_page'])));
+							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['c_category']),'adminzone'),do_lang('CONFIG_CATEGORY_'.$p['c_category'])));
 							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-							$breadcrumbs->attach(hyperlink($url,do_lang($p['section'])));
+							$breadcrumbs->attach(hyperlink($url,do_lang($p['c_group'])));
 							$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 							$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'f7271912ccbe0358fe263ed61f7ed427','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
 
@@ -608,8 +608,8 @@ class Module_admin
 
 							$conf_found_count++;
 
-							if (!array_key_exists($p['the_page'],$config_categories)) $config_categories[$p['the_page']]=array();
-							$config_categories[$p['the_page']][$p['section']]=1;
+							if (!array_key_exists($p['c_category'],$config_categories)) $config_categories[$p['c_category']]=array();
+							$config_categories[$p['c_category']][$p['c_group']]=1;
 						}
 					}
 				}

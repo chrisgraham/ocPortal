@@ -127,12 +127,6 @@ class Hook_aef
 
 		foreach ($rows as $row)
 		{
-			if (isset($row['name'])&&$row['name']=='disableshoutingtopics')
-			{
-				$config_remapping['prevent_shouting']=$row['regval'];
-				continue;
-			}
-
 			if (isset($row['name'])&&$row['name']=='maxpostsintopics')
 			{
 				$config_remapping['forum_posts_per_page']=$row['regval'];

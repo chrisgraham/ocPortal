@@ -108,6 +108,7 @@ class Module_downloads
 			$lang_key=lang_code_to_default_content('DOWNLOADS_HOME');
 			$id=$GLOBALS['SITE_DB']->query_insert('download_categories',array('rep_image'=>'','parent_id'=>NULL,'add_date'=>time(),'notes'=>'','description'=>insert_lang_comcode('',3),'category'=>$lang_key),true);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads'));
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($id),'group_id'=>$group_id));
 
@@ -168,7 +169,6 @@ class Module_downloads
 			$GLOBALS['SITE_DB']->create_index('download_logging','calculate_bandwidth',array('date_and_time'));
 
 			add_config_option('MAXIMUM_DOWNLOAD','maximum_download','integer','return \'15\';','SITE','CLOSED_SITE');
-			add_config_option('SHOW_DLOAD_TREES','show_dload_trees','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS',1);
 			add_config_option('ADD_DOWNLOAD','points_ADD_DOWNLOAD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('_SECTION_DOWNLOADS','downloads_show_stats_count_total','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('TOTAL_DOWNLOADS_IN_ARCHIVE','downloads_show_stats_count_archive','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
@@ -194,10 +194,12 @@ class Module_downloads
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_config_option('DOWNLOADS_SUBCAT_NARROWIN','downloads_subcat_narrowin','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
-			add_config_option('DLOAD_SEARCH_INDEX','dload_search_index','tick','return \'1\';','FEATURE','DOWNLOADS');
+			add_config_option('DLOAD_SEARCH_INDEX','dload_search_index','tick','return \'1\';','FEATURE','SECTION_DOWNLOADS');
 			add_config_option('DOWNLOAD_SUBCATS_PER_PAGE','download_subcats_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
 			add_config_option('DOWNLOAD_ENTRIES_PER_PAGE','download_entries_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
 			add_config_option('DOWNLOADS_DEFAULT_SORT_ORDER','downloads_default_sort_order','list','return \'t.text_original ASC\';','FEATURE','SECTION_DOWNLOADS',0,'t.text_original ASC|file_size ASC|file_size DESC|num_downloads DESC|average_rating DESC|compound_rating DESC|add_date ASC|add_date DESC|fixed_random ASC');
+
+			add_privilege('_SECTION_DOWNLOADS','download',true);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
@@ -206,7 +208,7 @@ class Module_downloads
 
 			$GLOBALS['SITE_DB']->alter_table_field('download_logging','the_user','*MEMBER','member_id');
 
-			add_privilege('_SECTION_DOWNLOADS','download',true);
+			delete_config_option('show_dload_trees');
 		}
 	}
 

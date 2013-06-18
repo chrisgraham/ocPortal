@@ -57,7 +57,7 @@ class Module_admin_messaging
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		add_config_option('_MESSAGING_FORUM_NAME','messaging_forum_name','forum','return do_lang(\'MESSAGING_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','CONTACT_US_MESSAGING');
+		add_config_option('_MESSAGING_FORUM_NAME','messaging_forum_name','forum','return do_lang(\'MESSAGING_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','ADMIN','CONTACT_US_MESSAGING');
 		if ((get_forum_type()=='ocf') && (!running_script('upgrader')))
 		{
 			$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();

@@ -250,7 +250,6 @@ class Hook_ipb2 extends Hook_ipb_base
 			'smtp_pass'=>'smtp_sockets_password',
 			'home_name'=>'site_name',
 			'reg_auth_type'=>'require_new_member_validation',
-			'etfilter_shout'=>'prevent_shouting',
 	/*		'show_max_msg_list'=>'forum_posts_per_page'  */
 		);
 

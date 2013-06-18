@@ -142,7 +142,6 @@ class Hook_vb3
 			'bbclosedreason'=>'closed',
 			'webmasteremail'=>'staff_address',
 			'hometitle'=>'site_name',
-			'stopshouting'=>'prevent_shouting',
 			'copyrighttext'=>'copyright',
 			'maxposts'=>'forum_posts_per_page',
 			'maxthreads'=>'forum_topics_per_page',

@@ -79,7 +79,7 @@ class Module_galleries
 		delete_config_option('video_height_setting');
 		delete_config_option('galleries_subcat_narrowin');
 		delete_config_option('enable_ecards');
-		delete_config_option('gallery_flow_is');
+		delete_config_option('gallery_mode_is');
 		delete_config_option('gallery_member_synced');
 		delete_config_option('gallery_watermarks');
 		delete_config_option('gallery_permissions');
@@ -215,25 +215,25 @@ class Module_galleries
 
 			add_config_option('ADD_IMAGE','points_ADD_IMAGE','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('ADD_VIDEO','points_ADD_VIDEO','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('DEFAULT_VIDEO_WIDTH','default_video_width','integer','return \'320\';','FEATURE','GALLERIES');
-			add_config_option('DEFAULT_VIDEO_HEIGHT','default_video_height','integer','return \'240\';','FEATURE','GALLERIES');
-			add_config_option('MAXIMUM_IMAGE_SIZE','maximum_image_size','integer','return \'1024\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_IMAGE_LIMIT_LOW','max_personal_gallery_images_low','integer','return \'50\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_IMAGE_LIMIT_HIGH','max_personal_gallery_images_high','integer','return \'100\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_VIDEO_LIMIT_LOW','max_personal_gallery_videos_low','integer','return \'20\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_VIDEO_LIMIT_HIGH','max_personal_gallery_videos_high','integer','return \'50\';','FEATURE','GALLERIES');
+			add_config_option('DEFAULT_VIDEO_WIDTH','default_video_width','integer','return \'320\';','GALLERY','VIDEOS');
+			add_config_option('DEFAULT_VIDEO_HEIGHT','default_video_height','integer','return \'240\';','GALLERY','VIDEOS');
+			add_config_option('MAXIMUM_IMAGE_SIZE','maximum_image_size','integer','return \'1024\';','GALLERY','IMAGES');
+			add_config_option('GALLERY_IMAGE_LIMIT_LOW','max_personal_gallery_images_low','integer','return \'50\';','GALLERY','PERSONAL_GALLERIES');
+			add_config_option('GALLERY_IMAGE_LIMIT_HIGH','max_personal_gallery_images_high','integer','return \'100\';','GALLERY','PERSONAL_GALLERIES');
+			add_config_option('GALLERY_VIDEO_LIMIT_LOW','max_personal_gallery_videos_low','integer','return \'20\';','GALLERY','PERSONAL_GALLERIES');
+			add_config_option('GALLERY_VIDEO_LIMIT_HIGH','max_personal_gallery_videos_high','integer','return \'50\';','GALLERY','PERSONAL_GALLERIES');
 			add_config_option('GALLERIES','galleries_show_stats_count_galleries','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('IMAGES','galleries_show_stats_count_images','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('VIDEOS','galleries_show_stats_count_videos','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('SHOW_EMPTY_GALLERIES','show_empty_galleries','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'0\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return \'12,24,36,64,128\';','FEATURE','GALLERIES');
-			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return \'0\';','FEATURE','GALLERIES');
-			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return ((get_forum_type()==\'ocf\')?\'0\':NULL);','FEATURE','GALLERIES');
-			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','FEATURE','TRANSCODING');
-			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','FEATURE','TRANSCODING');
-			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','FEATURE','TRANSCODING');
-			add_config_option('VIDEO_HEIGHT_SETTING','video_height_setting','integer','return \'480\';','FEATURE','TRANSCODING');
+			add_config_option('SHOW_EMPTY_GALLERIES','show_empty_galleries','tick','return \'1\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'0\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return \'12,24,36,64,128\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return \'0\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return ((get_forum_type()==\'ocf\')?\'0\':NULL);','GALLERY','BROWSING_GALLERIES');
+			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','GALLERY','TRANSCODING');
+			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','GALLERY','TRANSCODING');
+			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','GALLERY','TRANSCODING');
+			add_config_option('VIDEO_HEIGHT_SETTING','video_height_setting','integer','return \'480\';','GALLERY','TRANSCODING');
 
 			// Add root gallery
 			add_gallery('root',do_lang('GALLERIES_HOME'),'','','',1,1,0,1);
@@ -247,10 +247,10 @@ class Module_galleries
 			$old_option=get_option('ffmpeg_path',true);
 			if (is_null($old_option)) $old_option='';
 			delete_config_option('ffmpeg_path');
-			add_config_option('TRANSCODING_ZENCODER_API_KEY','transcoding_zencoder_api_key','line','return \'\';','FEATURE','TRANSCODING');
-			add_config_option('TRANSCODING_ZENCODER_FTP_PATH','transcoding_zencoder_ftp_path','line','return \'\';','FEATURE','TRANSCODING');
-			add_config_option('TRANSCODING_SERVER','transcoding_server','line','return \'\';','FEATURE','TRANSCODING');
-			add_config_option('FFMPEG_PATH','ffmpeg_path','line','return \''.addslashes($old_option).'\';','FEATURE','TRANSCODING');
+			add_config_option('TRANSCODING_ZENCODER_API_KEY','transcoding_zencoder_api_key','line','return \'\';','GALLERY','TRANSCODING');
+			add_config_option('TRANSCODING_ZENCODER_FTP_PATH','transcoding_zencoder_ftp_path','line','return \'\';','GALLERY','TRANSCODING');
+			add_config_option('TRANSCODING_SERVER','transcoding_server','line','return \'\';','GALLERY','TRANSCODING');
+			add_config_option('FFMPEG_PATH','ffmpeg_path','line','return \''.addslashes($old_option).'\';','GALLERY','TRANSCODING');
 
 			$GLOBALS['SITE_DB']->create_table('video_transcoding',array(
 				't_id'=>'*ID_TEXT',
@@ -279,7 +279,7 @@ class Module_galleries
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))
 		{
-			add_config_option('GALLERIES_SUBCAT_NARROWIN','galleries_subcat_narrowin','tick','return \'0\';','FEATURE','GALLERIES');
+			add_config_option('GALLERIES_SUBCAT_NARROWIN','galleries_subcat_narrowin','tick','return \'0\';','GALLERY','BROWSING_GALLERIES');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
@@ -299,21 +299,21 @@ class Module_galleries
 		{
 			$GLOBALS['SITE_DB']->create_index('video_transcoding','t_local_id',array('t_local_id'));
 
-			add_config_option('ENABLE_ECARDS','enable_ecards','tick','return \'0\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_FLOW_IS','gallery_flow_is','tick','return \'0\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_MEMBER_SYNCED','gallery_member_synced','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_WATERMARKS','gallery_watermarks','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_PERMISSIONS','gallery_permissions','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_REP_IMAGE','gallery_rep_image','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_FEEDBACK_FIELDS','gallery_feedback_fields','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('MANUAL_GALLERY_CODENAME','manual_gallery_codename','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('MANUAL_GALLERY_PARENT','manual_gallery_parent','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('MANUAL_GALLERY_MEDIA_TYPES','manual_gallery_media_types','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('PERSONAL_UNDER_MEMBERS','personal_under_members','tick','return \'0\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_ENTRIES_REGULAR_PER_PAGE','gallery_entries_regular_per_page','integer','return \'30\';','FEATURE','GALLERIES');
-			add_config_option('GALLERIES_DEFAULT_SORT_ORDER','galleries_default_sort_order','list','return \'add_date DESC\';','FEATURE','GALLERIES',0,'add_date DESC|add_date ASC|average_rating DESC|compound_rating DESC|url DESC|url ASC|fixed_random ASC');
-			add_config_option('SUBGALLERY_LINK_LIMIT','subgallery_link_limit','integer','return \'200\';','FEATURE','GALLERIES');
+			add_config_option('ENABLE_ECARDS','enable_ecards','tick','return \'0\';','GALLERY','IMAGES');
+			add_config_option('GALLERY_MODE_IS','gallery_mode_is','list','return \'choice\';','GALLERY','GALLERY_FEATURES','choice|flow|regular');
+			add_config_option('GALLERY_MEMBER_SYNCED','gallery_member_synced','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('GALLERY_WATERMARKS','gallery_watermarks','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('GALLERY_PERMISSIONS','gallery_permissions','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('GALLERY_REP_IMAGE','gallery_rep_image','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('GALLERY_FEEDBACK_FIELDS','gallery_feedback_fields','tick','return \'1\';','GALLERY','FEATURES');
+			add_config_option('MANUAL_GALLERY_CODENAME','manual_gallery_codename','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('MANUAL_GALLERY_PARENT','manual_gallery_parent','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('MANUAL_GALLERY_MEDIA_TYPES','manual_gallery_media_types','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('PERSONAL_UNDER_MEMBERS','personal_under_members','tick','return \'0\';','GALLERY','PERSONAL_GALLERIES');
+			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERY_ENTRIES_REGULAR_PER_PAGE','gallery_entries_regular_per_page','integer','return \'30\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERIES_DEFAULT_SORT_ORDER','galleries_default_sort_order','list','return \'add_date DESC\';','GALLERY','BROWSING_GALLERIES',0,'add_date DESC|add_date ASC|average_rating DESC|compound_rating DESC|url DESC|url ASC|fixed_random ASC');
+			add_config_option('SUBGALLERY_LINK_LIMIT','subgallery_link_limit','integer','return \'200\';','GALLERY','BROWSING_GALLERIES');
 		}
 	}
 

@@ -68,7 +68,7 @@ class Block_side_network
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		add_config_option('NETWORK_LINKS','network_links','line','return get_base_url().\'/netlink.php\';','SITE','ENVIRONMENT',1);
+		add_config_option('NETWORK_LINKS','network_links','line','return get_base_url().\'/netlink.php\';','SITE','MULTI_SITE_NETWORKING',1);
 	}
 
 	/**

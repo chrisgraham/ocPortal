@@ -191,7 +191,6 @@ class Hook_ipb1 extends Hook_ipb_base
 		set_option('site_closed',$PROBED_FORUM_CONFIG['board_offline']);
 		set_option('closed',$PROBED_FORUM_CONFIG['offline_msg']);
 		set_option('session_expiry_time',strval(intval(round($PROBED_FORUM_CONFIG['session_expiration']/3600))));
-		set_option('prevent_shouting',strval($PROBED_FORUM_CONFIG['etfilter_shout']));
 
 		// Now some usergroup options
 		list($width,$height)=explode('x',$PROBED_FORUM_CONFIG['avatar_dims']);

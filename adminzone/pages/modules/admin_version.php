@@ -103,7 +103,7 @@ class Module_admin_version
 
 		if (($upgrade_from<10) || (is_null($upgrade_from)))
 		{
-			add_config_option('URL_MONIKERS_ENABLED','url_monikers_enabled','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('URL_MONIKERS_ENABLED','url_monikers_enabled','tick','return \'1\';','SITE','SEO');
 
 			$GLOBALS['SITE_DB']->create_table('url_id_monikers',array(
 				'id'=>'*AUTO',

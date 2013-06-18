@@ -324,7 +324,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	}
 
 	// Add member
-	$skip_confirm=(get_option('skip_email_confirm_join')=='1');
+	$skip_confirm=(get_option('email_confirm_join')=='0');
 	if (!$confirm_if_enabled) $skip_confirm=true;
 	$validated_email_confirm_code=$skip_confirm?'':strval(mt_rand(1,32000));
 	$require_new_member_validation=get_option('require_new_member_validation')=='1';

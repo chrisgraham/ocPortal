@@ -85,7 +85,6 @@ class Hook_addon_registry_downloads
 			'sources/hooks/systems/config_default/immediate_downloads.php',
 			'sources/hooks/systems/config_default/maximum_download.php',
 			'sources/hooks/systems/config_default/points_ADD_DOWNLOAD.php',
-			'sources/hooks/systems/config_default/show_dload_trees.php',
 			'sources/hooks/systems/content_meta_aware/download.php',
 			'sources/hooks/systems/content_meta_aware/download_category.php',
 			'sources/hooks/systems/occle_fs/downloads.php',

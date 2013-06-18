@@ -76,8 +76,8 @@ class Module_admin_occle
 				'c_timestamp'=>'TIME'
 			));
 
-			add_config_option('OCCLE_CHAT_ANNOUNCE','occle_chat_announce','tick','return \'0\';','SITE','ADVANCED');
-			add_config_option('OCCLE_BUTTON','bottom_show_occle_button','tick','return (get_file_base()!=get_custom_file_base())?\'0\':\'1\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('OCCLE_CHAT_ANNOUNCE','occle_chat_announce','tick','return \'0\';','SITE','OCCLE');
+			add_config_option('OCCLE_BUTTON','bottom_show_occle_button','tick','return (get_file_base()!=get_custom_file_base())?\'0\':\'1\';','THEME','BOTTOM_LINKS');
 		}
 	}
 

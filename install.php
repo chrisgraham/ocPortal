@@ -1635,8 +1635,8 @@ function step_5_core()
 		'config_value'=>'LONG_TEXT',
 		'the_type'=>'ID_TEXT',
 		'eval'=>'SHORT_TEXT',
-		'the_page'=>'ID_TEXT', // Now called an 'option category'
-		'section'=>'ID_TEXT', // Now called an 'option group'
+		'c_category'=>'ID_TEXT',
+		'c_group'=>'ID_TEXT',
 		'explanation'=>'ID_TEXT',
 		'shared_hosting_restricted'=>'BINARY',
 		'c_data'=>'SHORT_TEXT'
