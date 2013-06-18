@@ -222,14 +222,14 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 
 		if (strpos($storage_type,'_trans')!==false)
 		{
-			if ((is_null($member_value)) || ($member_value==0))
+			if ((is_null($member_value)) || ($member_value=='0'))
 			{
 				$member_value=''; // This is meant to be '' for blank, not new ocp_tempcode()
 				$member_value_raw='';
 			} else
 			{
-				$member_value_raw=get_translated_text($member_value,$GLOBALS['FORUM_DB']);
-				$member_value=get_translated_tempcode($member_value,$GLOBALS['FORUM_DB']);
+				$member_value_raw=get_translated_text(intval($member_value),$GLOBALS['FORUM_DB']);
+				$member_value=get_translated_tempcode(intval($member_value),$GLOBALS['FORUM_DB']);
 				if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
 			}
 		} else
