@@ -134,7 +134,7 @@ class Block_main_activities
 
 		$viewing_member=get_member();
 
-		list($proceed_selection,$whereville)=find_activities($viewing_member,$mode,$member_ids);
+		list($proceed_selection,$whereville)=get_activity_querying_sql($viewing_member,$mode,$member_ids);
 
 		$can_remove_others=has_zone_access($viewing_member,'adminzone');
 

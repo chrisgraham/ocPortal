@@ -2438,7 +2438,7 @@ function method_exists($object,$method_name)
  * Return current UNIX timestamp with microseconds.
  *
  * @param  boolean	Whether to return a float result. ALWAYS PASS THIS IN AS *FALSE* - FOR COMPATIBILITY WITH OLD VERSIONS OF PHP THAT DO NOT HAVE IT, WHILST PHP 6 DEFAULTS IT TO TRUE.
- * @return string		Micro-time.
+ * @return mixed		Micro-time.
  */
 function microtime($as_float)
 {
@@ -4761,6 +4761,15 @@ function sinh($in)
  * @param  integer	Time in seconds.
  */
 function sleep($sec)
+{
+}
+
+/**
+ * Delay execution for microseconds.
+ *
+ * @param  integer	Time in microseconds.
+ */
+function usleep($sec)
 {
 }
 
