@@ -567,9 +567,6 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		return false;
 	}
 	$source=@imagecreatefromstring($from_file);
-	if ($source!==false) $source=adjust_pic_orientation($source,$exif);
-	if ((!is_null($thumb_options)) || (!$only_make_smaller))
-		unset($from_file);
 	if ($source===false)
 	{
 		if ($exit_on_error) warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($from)));
@@ -577,6 +574,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		attach_message(do_lang_tempcode('CORRUPT_FILE',escape_html($from)),'warn');
 		return false;
 	}
+
+	list($source,$reorientated)=adjust_pic_orientation($source,$exif);
+	if ((!is_null($thumb_options)) || (!$only_make_smaller))
+		unset($from_file);
 
 	// Derive actual width x height, for the given maximum box (maintain aspect ratio)
 	// ===============================================================================
@@ -626,25 +627,28 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			$_width=$sx;
 			$_height=$sy;
 
-			// We can just escape, nothing to do
+			if (!$reorientated)
+			{
+				// We can just escape, nothing to do
 
-			imagedestroy($source);
+				imagedestroy($source);
 
-			if (($using_path) && ($from==$to))
+				if (($using_path) && ($from==$to))
+					return true;
+
+				if ($using_path)
+				{
+					copy($from,$to);
+				} else
+				{
+					$_to=@fopen($to,'wb') OR intelligent_write_error($to);
+					fwrite($_to,$from_file);
+					fclose($_to);
+				}
+				fix_permissions($to);
+				sync_file($to);
 				return true;
-
-			if ($using_path)
-			{
-				copy($from,$to);
-			} else
-			{
-				$_to=@fopen($to,'wb') OR intelligent_write_error($to);
-				fwrite($_to,$from_file);
-				fclose($_to);
 			}
-			fix_permissions($to);
-			sync_file($to);
-			return true;
 		}
 		if ($_width<1) $_width=1;
 		if ($_height<1) $_height=1;
@@ -825,8 +829,8 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$dest=imagecreatetruecolor($width,$height);
 			imagealphablending($dest,false);
-			if ((function_exists('imagecolorallocatealpha')) && ($using_alpha)) $back_col=imagecolorallocatealpha($dest, $red, $green, $blue, 127-intval(floatval($alpha)/2.0));
-			else $back_col=imagecolorallocate($dest, $red, $green, $blue);
+			if ((function_exists('imagecolorallocatealpha')) && ($using_alpha)) $back_col=imagecolorallocatealpha($dest,$red,$green,$blue,127-intval(floatval($alpha)/2.0));
+			else $back_col=imagecolorallocate($dest,$red,$green,$blue);
 			imagefilledrectangle($dest,0,0,$width,$height,$back_col);
 			if (function_exists('imagesavealpha')) imagesavealpha($dest,true);
 		} else
@@ -844,7 +848,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$dest=imagecreate($width,$height);
 
-			$back_col=imagecolorallocate($dest, $red, $green, $blue);
+			$back_col=imagecolorallocate($dest,$red,$green,$blue);
 			imagefill($dest,0,0,$back_col);
 		} else
 		{
@@ -928,7 +932,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
  *
  * @param  resource		GD image resource
  * @param  ~array			EXIF details (false: could not load)
- * @return resource		Adjusted GD image resource
+ * @return array			A pair: Adjusted GD image resource, Whether a change was made
  */
 function adjust_pic_orientation($img,$exif)
 {
@@ -987,12 +991,15 @@ function adjust_pic_orientation($img,$exif)
 
 				if (imagecopyresampled($imgdest,$img,0,0,$src_x,$src_y,$width,$height,$src_width,$src_height))
 				{
-					return $imgdest;
+					imagedestroy($img);
+					$img=$imgdest;
 				}
 			}
+
+			return array($img,true);
 		}
 	}
-	return $img;
+	return array($img,false);
 }
 
 /**
