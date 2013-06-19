@@ -392,15 +392,15 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('PRIVATE_TOPICS_PER_PAGE','private_topics_per_page','integer','return \'10\';','FORUMS','PRIVATE_TOPICS');
 		add_config_option('EMAIL_CONFIRM_JOIN','email_confirm_join','tick',(get_option('skip_email_confirm_join',true)==='1')?'return \'0\';':'return \'1\';','USERS','JOINING');
 
-		$GLOBALS['SITE_DB']->create_table('f_group_join_log',array(
+		$GLOBALS['FORUM_DB']->create_table('f_group_join_log',array(
 			'id'=>'*AUTO',
 			'member_id'=>'MEMBER',
 			'usergroup_id'=>'?AUTO_LINK',
 			'join_time'=>'TIME'
 		));
-		$GLOBALS['SITE_DB']->create_index('f_group_join_log','member_id',array('member_id'));
-		$GLOBALS['SITE_DB']->create_index('f_group_join_log','usergroup_id',array('usergroup_id'));
-		$GLOBALS['SITE_DB']->create_index('f_group_join_log','join_time',array('join_time'));
+		$GLOBALS['FORUM_DB']->create_index('f_group_join_log','member_id',array('member_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_group_join_log','usergroup_id',array('usergroup_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_group_join_log','join_time',array('join_time'));
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{

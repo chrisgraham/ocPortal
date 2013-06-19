@@ -53,6 +53,8 @@ function _get_available_notification_types($member_id_of=NULL)
  */
 function notifications_ui($member_id_of)
 {
+	$GLOBALS['NO_QUERY_LIMIT']=true;
+
 	require_css('notifications');
 	require_code('notifications');
 	require_lang('notifications');
@@ -93,10 +95,19 @@ function notifications_ui($member_id_of)
 				if ($current_setting==A__STATISTICAL) $current_setting=$statistical_notification_type;
 				$allowed_setting=$ob->allowed_settings($notification_code);
 
+				$supports_categories=$ob->supports_categories($notification_code);
+
+				if ($supports_categories)
+				{
+					$if_there_query='SELECT l_setting FROM '.get_table_prefix().'notifications_enabled WHERE l_member_id='.strval($member_id_of).' AND '.db_string_equal_to('l_notification_code',$notification_code).' AND '.db_string_not_equal_to('l_code_category','');
+					$is_there_test=$GLOBALS['SITE_DB']->query($if_there_query);
+				}
+
 				$notification_types=array();
 				foreach ($_notification_types as $possible=>$ntype)
 				{
 					$available=(($possible & $allowed_setting) != 0);
+
 					if ($cnt_post!=0)
 					{
 						$checked=post_param_integer('notification_'.$notification_code.'_'.$ntype,0);
@@ -104,6 +115,17 @@ function notifications_ui($member_id_of)
 					{
 						$checked=(($possible & $current_setting) != 0)?1:0;
 					}
+
+					$type_has_children_set=false;
+					if (($supports_categories) && ($available))
+					{
+						foreach ($is_there_test as $_is)
+						{
+							if (($_is['l_setting'] & $possible) != 0)
+								$type_has_children_set=true;
+						}
+					}
+
 					$notification_types[]=array(
 						'NTYPE'=>$ntype,
 						'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
@@ -111,6 +133,7 @@ function notifications_ui($member_id_of)
 						'RAW'=>strval($possible),
 						'AVAILABLE'=>$available,
 						'SCOPE'=>$notification_code,
+						'TYPE_HAS_CHILDREN_SET'=>$type_has_children_set,
 					);
 				}
 
@@ -125,7 +148,7 @@ function notifications_ui($member_id_of)
 					'NOTIFICATION_CODE'=>$notification_code,
 					'NOTIFICATION_LABEL'=>$notification_details[1],
 					'NOTIFICATION_TYPES'=>$notification_types,
-					'SUPPORTS_CATEGORIES'=>$ob->supports_categories($notification_code),
+					'SUPPORTS_CATEGORIES'=>$supports_categories,
 				);
 			}
 		}

@@ -60,6 +60,8 @@ class Hook_Profiles_Tabs_edit
 		require_lang('ocf');
 		require_css('ocf');
 
+		$GLOBALS['NO_QUERY_LIMIT']=true;
+
 		$order=200;
 
 		$only_tab=get_param('only_subtab',NULL);
