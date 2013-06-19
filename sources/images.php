@@ -508,6 +508,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			return true;
 		}
 		$from_file=@file_get_contents($from);
+		$exif=@exif_read_data($from);
 	} else
 	{
 		$file_path_stub=convert_url_to_path($from);
@@ -522,21 +523,24 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				return true;
 			}
 			$from_file=@file_get_contents($file_path_stub);
+			$exif=@exif_read_data($file_path_stub);
 		} else
 		{
 			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/,false);
 			if (is_null($from_file))
 			{
 				$from_file=false;
+				$exif=false;
 			} else
 			{
+				$myfile=fopen($to,'wb');
+				fwrite($myfile,$from_file);
+				fclose($myfile);
+				fix_permissions($to);
+				sync_file($to);
+				$exif=@exif_read_data($to);
 				if ($ext=='svg') // SVG is pass-through
 				{
-					$myfile=fopen($to,'wb');
-					fwrite($myfile,$from_file);
-					fclose($myfile);
-					fix_permissions($to);
-					sync_file($to);
 					return true;
 				}
 			}
@@ -551,8 +555,6 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		return false;
 	}
 	$source=@imagecreatefromstring($from_file);
-	if ((!is_null($thumb_options)) || (!$only_make_smaller))
-		unset($from_file);
 	if ($source===false)
 	{
 		if ($exit_on_error) warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($from)));
@@ -560,6 +562,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		attach_message(do_lang_tempcode('CORRUPT_FILE',escape_html($from)),'warn');
 		return false;
 	}
+
+	list($source,$reorientated)=adjust_pic_orientation($source,$exif);
+	if ((!is_null($thumb_options)) || (!$only_make_smaller))
+		unset($from_file);
 
 	// Derive actual width x height, for the given maximum box (maintain aspect ratio)
 	// ===============================================================================
@@ -609,25 +615,28 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			$_width=$sx;
 			$_height=$sy;
 
-			// We can just escape, nothing to do
+			if (!$reorientated)
+			{
+				// We can just escape, nothing to do
 
-			imagedestroy($source);
+				imagedestroy($source);
 
-			if (($using_path) && ($from==$to))
+				if (($using_path) && ($from==$to))
+					return true;
+
+				if ($using_path)
+				{
+					copy($from,$to);
+				} else
+				{
+					$_to=@fopen($to,'wb') OR intelligent_write_error($to);
+					fwrite($_to,$from_file);
+					fclose($_to);
+				}
+				fix_permissions($to);
+				sync_file($to);
 				return true;
-
-			if ($using_path)
-			{
-				copy($from,$to);
-			} else
-			{
-				$_to=@fopen($to,'wb') OR intelligent_write_error($to);
-				fwrite($_to,$from_file);
-				fclose($_to);
 			}
-			fix_permissions($to);
-			sync_file($to);
-			return true;
 		}
 		if ($_width<1) $_width=1;
 		if ($_height<1) $_height=1;
@@ -811,8 +820,8 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$dest=imagecreatetruecolor($width,$height);
 			imagealphablending($dest,false);
-			if ((function_exists('imagecolorallocatealpha')) && ($using_alpha)) $back_col=imagecolorallocatealpha($dest, $red, $green, $blue, 127-intval(floatval($alpha)/2.0));
-			else $back_col=imagecolorallocate($dest, $red, $green, $blue);
+			if ((function_exists('imagecolorallocatealpha')) && ($using_alpha)) $back_col=imagecolorallocatealpha($dest,$red,$green,$blue,127-intval(floatval($alpha)/2.0));
+			else $back_col=imagecolorallocate($dest,$red,$green,$blue);
 			imagefilledrectangle($dest,0,0,$width,$height,$back_col);
 			if (function_exists('imagesavealpha')) imagesavealpha($dest,true);
 		} else
@@ -830,7 +839,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$dest=imagecreate($width,$height);
 
-			$back_col=imagecolorallocate($dest, $red, $green, $blue);
+			$back_col=imagecolorallocate($dest,$red,$green,$blue);
 			imagefill($dest,0,0,$back_col);
 		} else
 		{
@@ -904,6 +913,84 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	sync_file($to);
 
 	return true;
+}
+
+/**
+ * Adjust an image to take into account EXIF rotation.
+ *
+ * Based on a comment in:
+ * http://stackoverflow.com/questions/3657023/how-to-detect-shot-angle-of-photo-and-auto-rotate-for-website-display-like-desk
+ *
+ * @param  resource		GD image resource
+ * @param  ~array			EXIF details (false: could not load)
+ * @return array			A pair: Adjusted GD image resource, Whether a change was made
+ */
+function adjust_pic_orientation($img,$exif)
+{
+	if (($exif!==false) && (isset($exif['Orientation'])))
+	{
+		$orientation=$exif['Orientation'];
+		if ($orientation!=1)
+		{
+			$mirror=false;
+			$deg=0;
+
+			switch ($orientation)
+			{
+				case 2:
+					$mirror=true;
+					break;
+				case 3:
+					$deg=180;
+					break;
+				case 4:
+					$deg=180;
+					$mirror=true;
+					break;
+				case 5:
+					$deg=270;
+					$mirror=true;
+					break;
+				case 6:
+					$deg=270;
+					break;
+				case 7:
+					$deg=90;
+					$mirror=true;
+					break;
+				case 8:
+					$deg=90;
+					break;
+			}
+
+			if ($deg!=0)
+			{
+				$img=imagerotate($img,floatval($deg),0);
+			}
+
+			if ($mirror)
+			{
+				$width=imagesx($img);
+				$height=imagesy($img);
+
+				$src_x=$width-1;
+				$src_y=0;
+				$src_width=-$width;
+				$src_height=$height;
+
+				$imgdest=imagecreatetruecolor($width,$height);
+
+				if (imagecopyresampled($imgdest,$img,0,0,$src_x,$src_y,$width,$height,$src_width,$src_height))
+				{
+					imagedestroy($img);
+					$img=$imgdest;
+				}
+			}
+
+			return array($img,true);
+		}
+	}
+	return array($img,false);
 }
 
 /**

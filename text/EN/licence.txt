@@ -147,6 +147,8 @@ This product includes:
   - utf8tohtml implementation (from php.net comment by silverbeat, Creative Commons Attribution License)
   - mergesort implementation (from php.net comment by sreid, Creative Commons Attribution License)
   - GUID implementation (from php.net comment by Andrew Moore, Creative Commons Attribution License)
+  - (adjust_pic_orientation function, from stackoverflow comment)
+>>>>>>> v9
   - Javascript base-64 code (http://www.webtoolkit.info/, liberal custom licence)
   - JW-Player (used under commercial license)
 Some of our ocPortal packages remove or replace those elements used under non-free commercial licenses.

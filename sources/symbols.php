@@ -25,13 +25,14 @@
  */
 function init__symbols()
 {
-	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$SYMBOL_CACHE,$THEME_IMG_DIMS_CACHE;
+	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$SYMBOL_CACHE,$THEME_IMG_DIMS_CACHE,$CANONICAL_URL;
 	$BLOCKS_CACHE=array();
 	$PAGES_CACHE=array();
 	$PANELS_CACHE=array();
 	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1,'SHOW_HEADER'=>1,'SHOW_FOOTER'=>1,'WIDE_HIGH'=>1,'WIDE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
 	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
+	$CANONICAL_URL=NULL;
 	$SYMBOL_CACHE=array();
 	$THEME_IMG_DIMS_CACHE=mixed();
 }
@@ -748,10 +749,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'CANONICAL_URL':
-				global $NON_CANONICAL_PARAMS;
-				$non_canonical=array();
-				if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
-				$value=get_self_url(true,false,$non_canonical);
+				global $NON_CANONICAL_PARAMS,$CANONICAL_URL;
+				if ($CANONICAL_URL===NULL)
+				{
+					$non_canonical=array();
+					if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+					$CANONICAL_URL=get_self_url(true,false,$non_canonical);
+				}
+				$value=$CANONICAL_URL;
 				break;
 
 			case 'SHOW_HEADER':

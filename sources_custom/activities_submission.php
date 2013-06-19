@@ -13,6 +13,22 @@
  * @package		activity_feed
  */
 
+/**
+ * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
+ *
+ * @param  string			Language string code
+ * @param  string			Label 1 (given as a parameter to the language string code)
+ * @param  string			Label 2 (given as a parameter to the language string code)
+ * @param  string			Label 3 (given as a parameter to the language string code)
+ * @param  string			Page link 1
+ * @param  string			Page link 2
+ * @param  string			Page link 3
+ * @param  string			Addon that caused the event
+ * @param  BINARY			Whether this post should be public or friends-only
+ * @param  ?MEMBER		Member being written for (NULL: current member)
+ * @param  boolean		Whether to push this out as a site event if user requested
+ * @param  ?MEMBER		Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
+ */
 function activities_addon_syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL,$sitewide_too=false,$a_also_involving=NULL)
 {
 	require_code('activities');
@@ -84,6 +100,9 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 	return $stored_id;
 }
 
+/**
+ * AJAX script handler for submitting posts.
+ */
 function activities_ajax_submit_handler()
 {
 	prepare_for_known_ajax_response();
@@ -158,6 +177,9 @@ function activities_ajax_submit_handler()
 	echo $response;
 }
 
+/**
+ * AJAX script handler for refreshing the post list.
+ */
 function activities_ajax_update_list_handler()
 {
 	$map=array();
@@ -186,7 +208,7 @@ function activities_ajax_update_list_handler()
 	//Getting the member viewed ids if available, member viewing if not
 	$member_ids=array_map('intval',explode(',',post_param('member_ids',strval($viewer_id))));
 
-	list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_ids);
+	list($proceed_selection,$where_clause)=get_activity_querying_sql($viewer_id,$mode,$member_ids);
 
 	prepare_for_known_ajax_response();
 
@@ -198,7 +220,7 @@ function activities_ajax_update_list_handler()
 
 	if ($proceed_selection===true)
 	{
-		$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE (('.$whereville.') AND id>'.(($last_id=='')?'-1':$last_id).') ORDER BY a_time DESC',intval($map['max']));
+		$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE (('.$where_clause.') AND id>'.(($last_id=='')?'-1':$last_id).') ORDER BY a_time DESC',intval($map['max']));
 
 		if (count($activities)>0)
 		{
@@ -231,7 +253,7 @@ function activities_ajax_update_list_handler()
 				$list_items.='<listitem id="'.strval($row['id']).'"><![CDATA['.base64_encode($list_item->evaluate()).']]></listitem>';
 
 			}
-			$response.='<response><success>1</success><feedlen>'.$map['max'].'</feedlen><content>'.$list_items.'</content><supp>'.escape_html($whereville).'</supp></response>';
+			$response.='<response><success>1</success><feedlen>'.$map['max'].'</feedlen><content>'.$list_items.'</content><supp>'.escape_html($where_clause).'</supp></response>';
 		}
 		else
 		{
@@ -246,6 +268,9 @@ function activities_ajax_update_list_handler()
 	echo $response;
 }
 
+/**
+ * AJAX script handler for removing posts.
+ */
 function activities_ajax_removal_handler()
 {
 	$is_guest=false; // Can't be doing with overcomplicated SQL breakages. Weed it out.
@@ -273,7 +298,7 @@ function activities_ajax_removal_handler()
 			$response.='<success>0</success><err>perms</err>';
 			$response.='<feedback>You do not have permission to remove this status message.</feedback><status_id>'.strval($stat_id).'</status_id>';
 		}
-		else //I suppose we can proceed now.
+		else // I suppose we can proceed now.
 		{
 			$GLOBALS['SITE_DB']->query_delete('activities',array('id'=>$stat_id),'',1);
 
@@ -318,7 +343,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		// Grab our current time in milliseconds
 		$start_time=microtime(true);
 
-		$sleep_multiplier=$timeout/10;
+		$sleep_multiplier=floatval($timeout)/10.0;
 
 		// Start looping
 		do
@@ -328,9 +353,9 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 
 			// If lock is not obtained sleep for 0 <-> $timeout/10 milliseconds,
 			// to avoid collision and CPU load
-			if (!$can_write) usleep(intval(mt_rand(0,intval($sleep_multiplier))*1000)); // *1000 as usleep uses microseconds
+			if (!$can_write) usleep(mt_rand(0,intval($sleep_multiplier)*1000)); // *1000 as usleep uses microseconds
 		}
-		while ((!$can_write) && ((microtime(true)-$start_time)<$timeout));
+		while ((!$can_write) && ((microtime(true)-$start_time)<floatval($timeout)));
 
 		// File was locked so now we can store information
 		if ($can_write)

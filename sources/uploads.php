@@ -697,6 +697,13 @@ function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=
 	fix_permissions($place);
 	sync_file($place);
 
+	// Special code to re-orientate JPEG images if required (browsers cannot do this)
+	if (($enforce_type==OCP_UPLOAD_IMAGE) || (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (substr($place,-4)!='.swf')))
+	{
+		require_code('images');
+		convert_image($place,$place,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);
+	}
+
 	$url=array();
 	$url[0]=$upload_folder.'/'.rawurlencode($_file);
 	$url[1]=$file;

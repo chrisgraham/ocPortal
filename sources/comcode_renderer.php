@@ -1146,6 +1146,14 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$_size=$_FILES['file'.$_id]['size'];
 					$original_filename=$_FILES['file'.$_id]['name'];
 					if (get_magic_quotes_gpc()) $original_filename=stripslashes($original_filename);
+
+					// Special code to re-orientate JPEG images if required (browsers cannot do this)
+					if (($attributes['type']=='inline') || ($attributes['type']=='island'))
+					{
+						require_code('images');
+						$attachment_path=get_custom_file_base().'/'.rawurldecode($urls[0]);
+						convert_image($attachment_path,$attachment_path,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);
+					}
 				}
 				elseif (substr($id,0,4)=='url_')
 				{

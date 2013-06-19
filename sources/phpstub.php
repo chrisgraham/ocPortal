@@ -4722,6 +4722,15 @@ function sleep($sec)
 }
 
 /**
+ * Delay execution for microseconds.
+ *
+ * @param  integer	Time in microseconds.
+ */
+function usleep($sec)
+{
+}
+
+/**
  * Calculate the soundex key of a string.
  *
  * @param  string	Input.
