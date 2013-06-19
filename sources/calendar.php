@@ -524,15 +524,16 @@ function date_range($from,$to,$do_time=true)
 /**
  * Detect calendar matches in a time period, in user-time.
  *
- * @param  MEMBER			The member to detect conflicts for
- * @param  boolean		Whether to restrict only to viewable events for the current member
+ * @param  MEMBER			The member to detect matches for
+ * @param  boolean		Whether to restrict only to viewable events for the current member (rarely pass this as false!)
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: use find_periods_recurrence default)
  * @param  ?TIME			The timestamp that found times must not exceed. In user-time (NULL: use find_periods_recurrence default)
  * @param  ?array			The type filter (NULL: none)
  * @param  boolean		Whether to include RSS/iCal events in the results
+ * @param  ?BINARY		Whether to show private events (1) or public events (0) (NULL: both public and private)
  * @return array			A list of events happening, with time details
  */
-function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter=NULL,$do_rss=true)
+function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter=NULL,$do_rss=true,$private=NULL)
 {
 	if (is_null($period_start)) $period_start=utctime_to_usertime(time());
 	if (is_null($period_end)) $period_end=utctime_to_usertime(time()+60*60*24*360*20);
@@ -543,6 +544,11 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	{
 		if ($where!='') $where.=' AND ';
 		$where.='(e_submitter='.strval($member_id).' OR e_is_public=1)';
+	}
+	if ($private!==NULL)
+	{
+		if ($where!='') $where.=' AND ';
+		$where.='e_is_public='.strval(1-$private);
 	}
 	if (!is_null($filter))
 	{

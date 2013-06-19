@@ -101,7 +101,7 @@ function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_onlin
 	if ($dereference_lang)
 	{
 		$our_help_term=$title;
-		$_title=do_lang_tempcode($title,array_key_exists(0,$params)?$params[0]:NULL,array_key_exists(1,$params)?$params[1]:NULL,array_key_exists(2,$params)?$params[2]:NULL);
+		$_title=do_lang_tempcode($title,array_shift($params),array_shift($params),$params);
 	} else $_title=is_object($title)?$title:make_string_tempcode($title);
 
 	if (function_exists('get_session_id'))

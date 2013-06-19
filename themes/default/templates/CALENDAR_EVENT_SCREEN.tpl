@@ -117,10 +117,12 @@
 						<td>{PRIORITY_LANG*}</td>
 					</tr>
 
-					<tr>
-						<th>{!IS_PUBLIC}</th>
-						<td>{IS_PUBLIC*}</td>
-					</tr>
+					{+START,IF_PASSED,IS_PUBLIC}
+						<tr>
+							<th>{!IS_PUBLIC}</th>
+							<td>{IS_PUBLIC*}</td>
+						</tr>
+					{+END}
 
 					<tr>
 						<th>{!RECURRENCE}</th>
@@ -130,11 +132,13 @@
 					{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,event,{ID}}}
 					{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
 
-					<tr>
-						<td colspan="2">
-							{$REVIEW_STATUS,event,{ID}}
-						</td>
-					</tr>
+					{+START,IF_NON_EMPTY,{$REVIEW_STATUS,event,{ID}}}
+						<tr>
+							<td colspan="2">
+								{$REVIEW_STATUS,event,{ID}}
+							</td>
+						</tr>
+					{+END}
 				</tbody>
 			</table></div>
 		</div>

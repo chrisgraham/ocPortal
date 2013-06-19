@@ -35,7 +35,7 @@ class Block_side_calendar
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','zone','days','title','filter');
+		$info['parameters']=array('param','zone','days','title','filter','private');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_side_calendar
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',utctime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',utctime_to_usertime()))';
+		$info['cache_on']='array(((array_key_exists(\'private\',$map)) && ($map[\'private\']!=\'\'))?intval($map[\'private\']):mixed(),array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',utctime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',utctime_to_usertime()))';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
@@ -71,15 +71,17 @@ class Block_side_calendar
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('calendar');
 
-		$filter_map=array_key_exists('filter',$map)?explode(",",$map['filter']):NULL;
+		$filter_map=array_key_exists('filter',$map)?explode(',',$map['filter']):NULL;
 
-		$filter=$this->get_filter($filter_map);
+		$private=((array_key_exists('private',$map)) && ($map['private']!=''))?intval($map['private']):mixed();
+
+		$filter=$this->get_filter($filter_map,$private);
 
 		$box_title=array_key_exists('title',$map)?$map['title']:do_lang_tempcode('COMING_SOON');
 
 		$calendar_url=build_url($filter+array('page'=>'calendar','type'=>'misc','view'=>'month','id'=>strval($year).'-'.strval($month)),$zone);
 
-		$member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		$member=((array_key_exists('cache',$map)) && ($map['cache']=='0'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 		$type=array_key_exists('param',$map)?$map['param']:'year';
 
@@ -88,7 +90,7 @@ class Block_side_calendar
 			$period_start=mktime(0,0,0,$month,1,$year);
 			$period_end=mktime(23,59,0,$month+1,0,$year);
 
-			$happenings=calendar_matches($member,true,$period_start,$period_end,$filter);
+			$happenings=calendar_matches($member,true,$period_start,$period_end,$filter,true,$private);
 
 			$entries=array();
 			$priorities=array();
@@ -217,7 +219,7 @@ class Block_side_calendar
 		$num_days=array_key_exists('days',$map)?intval($map['days']):30;
 		$period_end=$period_start+60*60*24*$num_days;
 
-		$happenings=calendar_matches($member,true,$period_start-100*60*60*24,$period_end,$filter);
+		$happenings=calendar_matches($member,true,$period_start-100*60*60*24,$period_end,$filter,true,$private);
 
 		$days=array();
 		for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
@@ -291,13 +293,14 @@ class Block_side_calendar
 	 * Gets the type filter, if there is one.
 	 *
 	 * @param  array			What to filter according to block parameters
+	 * @param  ?BINARY		Whether to show private events (1) or public events (0) (NULL: both public and private)
 	 * @return array			The filter
 	 */
-	function get_filter($filter_map)
+	function get_filter($filter_map,$private_events)
 	{	
 		$filter=array();
 
-		if(!is_array($filter_map)) return $filter;
+		if (!is_array($filter_map)) return $filter;
 
 		$some_pos=false;
 
@@ -311,7 +314,15 @@ class Block_side_calendar
 			if ($filter['int_'.strval($t)]==1) $some_pos=true;
 		}
 
-		return $some_pos?$filter:array();
+		if (!$some_pos) $filter=array();
+
+		if ($private_events===NULL) $private_events=get_param_integer('private',NULL);
+		if ($private_events!==NULL)
+		{
+			$filter['private']=$private_events;
+		}
+
+		return $filter;
 	}
 }
 
