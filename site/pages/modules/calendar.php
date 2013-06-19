@@ -444,6 +444,7 @@ class Module_calendar
 
 		$member_id=get_param_integer('member_id',get_member());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+		if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		$view=get_param('view','day');
 		$filter=$this->get_filter();
