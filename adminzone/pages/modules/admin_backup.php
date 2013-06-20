@@ -320,36 +320,36 @@ class Module_admin_backup
 		$b_type=post_param('b_type','full');
 		if ($b_type=='full')
 		{
-			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.tar')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.gz'))
 				)
-				$file='Backup_full_'.uniqid('');*/
+				$file='Backup_full_'.uniqid('',true);*/
 		}
 		elseif ($b_type=='incremental')
 		{
-			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.tar')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.gz'))
 				)
-				$file='Backup_incremental_'.uniqid('');*/
+				$file='Backup_incremental_'.uniqid('',true);*/
 		}
 		elseif ($b_type=='sql')
 		{
-			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.tar')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.gz'))
 				)
-				$file='Backup_database_'.uniqid('');*/
+				$file='Backup_database_'.uniqid('',true);*/
 		}
 		else exit();
 

@@ -539,6 +539,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called as a method
 {
 	if (typeof event=='undefined') var event=window.event;
+	if (typeof assume_ctrl=='undefined') var assume_ctrl=false;
 
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return;
@@ -608,7 +609,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 		{
 			selected_end=[];
 		}
-		if ((selected_start.inArray(selected_id)) && ((selected_start.length==1) || ((event.ctrlKey) || (event.metaKey) || (event.altKey)) || (assume_ctrl)))
+		if ((selected_start.inArray(selected_id)) && (((selected_start.length==1) && (selected_start[0]!=selected_id)) || ((event.ctrlKey) || (event.metaKey) || (event.altKey)) || (assume_ctrl)))
 		{
 			selected_end.arrayDelete(selected_id);
 		} else

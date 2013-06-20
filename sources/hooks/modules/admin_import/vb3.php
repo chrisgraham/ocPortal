@@ -867,7 +867,7 @@ class Hook_vb3
 			elseif (substr($data,0,3)=='GIF') $filetype='gif';
 			elseif (substr($data,1,3)=='PNG') $filetype='png';
 
-			if ($filetype!='') $filename=uniqid('').'.'.$filetype;
+			if ($filetype!='') $filename=uniqid('',true).'.'.$filetype;
 		}
 		//if ((substr($filename,-4,4)=='.gif') && ($thumbnail)) $filename.='.png';
 		if ($filename!='')

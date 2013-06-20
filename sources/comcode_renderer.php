@@ -622,7 +622,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$height=strval(array_key_exists('height',$attributes)?intval($attributes['height']):300);
 			$timein=strval(array_key_exists('timein',$attributes)?intval($attributes['timein']):0);
 			$timeout=strval(array_key_exists('timeout',$attributes)?intval($attributes['timeout']):-1);
-			$temp_tpl=do_template('COMCODE_OVERLAY',array('_GUID'=>'dfd0f7a72cc2bf6b613b28f8165a0034','UNIQ_ID'=>'a'.uniqid(''),'EMBED'=>$embed,'ID'=>($attributes['param']!='')?$attributes['param']:('rand'.uniqid('')),'X'=>$x,'Y'=>$y,'WIDTH'=>$width,'HEIGHT'=>$height,'TIMEIN'=>$timein,'TIMEOUT'=>$timeout));
+			$temp_tpl=do_template('COMCODE_OVERLAY',array('_GUID'=>'dfd0f7a72cc2bf6b613b28f8165a0034','UNIQ_ID'=>'a'.uniqid('',true),'EMBED'=>$embed,'ID'=>($attributes['param']!='')?$attributes['param']:('rand'.uniqid('',true)),'X'=>$x,'Y'=>$y,'WIDTH'=>$width,'HEIGHT'=>$height,'TIMEIN'=>$timein,'TIMEOUT'=>$timeout));
 			break;
 		case 'code':
 			if ($wml)
@@ -861,7 +861,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($max_color,0,1)=='#') $max_color=substr($max_color,1);
 			$speed=($attributes['param']=='')?100:intval($attributes['param']);
 
-			$temp_tpl=do_template('COMCODE_PULSE',array('_GUID'=>'adsd4f9910sfd03f81b61919b74ac24c91','RAND_ID'=>uniqid(''),'CONTENT'=>$embed,'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'SPEED'=>strval($speed)));
+			$temp_tpl=do_template('COMCODE_PULSE',array('_GUID'=>'adsd4f9910sfd03f81b61919b74ac24c91','RAND_ID'=>uniqid('',true),'CONTENT'=>$embed,'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'SPEED'=>strval($speed)));
 			break;
 		case 'del':
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
@@ -1421,7 +1421,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$_parts->attach(do_template('COMCODE_RANDOM_PART',array('_GUID'=>'5fa49a916304f9caa0ddedeb01531142','NUM'=>strval($num),'VAL'=>$val)));
 			}
 
-			$temp_tpl=do_template('COMCODE_RANDOM',array('_GUID'=>'9b77aaf593b12c763fb0c367fab415b6','UNIQID'=>uniqid(''),'FULL'=>$embed,'MAX'=>strval($max),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_RANDOM',array('_GUID'=>'9b77aaf593b12c763fb0c367fab415b6','UNIQID'=>uniqid('',true),'FULL'=>$embed,'MAX'=>strval($max),'PARTS'=>$_parts));
 			break;
 		case 'jumping':
 			unset($attributes['param']);
@@ -1441,7 +1441,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_JUMPING',array('_GUID'=>'85e9f83ed134868436a7db7692f56047','UNIQID'=>uniqid(''),'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_JUMPING',array('_GUID'=>'85e9f83ed134868436a7db7692f56047','UNIQID'=>uniqid('',true),'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
 			break;
 		case 'shocker':
 			if ($wml)
@@ -1471,7 +1471,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($max_color,0,1)=='#') $max_color=substr($max_color,1);
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_SHOCKER',array('UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval(intval($embed)),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_SHOCKER',array('UNIQID'=>uniqid('',true),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval(intval($embed)),'PARTS'=>$_parts));
 			break;
 		case 'ticker':
 			if ($wml)
@@ -1483,7 +1483,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$width=$attributes['param'];
 			if (!is_numeric($width)) $width='300';
 			$fspeed=array_key_exists('speed',$attributes)?float_to_raw_string(floatval($attributes['speed'])):'1';
-			$temp_tpl=do_template('COMCODE_TICKER',array('_GUID'=>'e48893cda61995261577f0556443c537','UNIQID'=>uniqid(''),'SPEED'=>$fspeed,'WIDTH'=>$width,'TEXT'=>$embed));
+			$temp_tpl=do_template('COMCODE_TICKER',array('_GUID'=>'e48893cda61995261577f0556443c537','UNIQID'=>uniqid('',true),'SPEED'=>$fspeed,'WIDTH'=>$width,'TEXT'=>$embed));
 
 			break;
 		case 'highlight':
@@ -2034,7 +2034,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 			}
 			$refresh_time=array_key_exists('refresh_time',$attributes)?strval(intval($attributes['refresh_time'])):'0';
-			$temp_tpl->attach(do_template('COMCODE_IMG',array('_GUID'=>'70166d8dbb0aff064b99c0dd30ed77a8','RAND'=>uniqid(''),'REFRESH_TIME'=>$refresh_time,'ROLLOVER'=>$rollover,'ALIGN'=>$align,'URL'=>$url_full,'TOOLTIP'=>$tooltip,'CAPTION'=>$caption)));
+			$temp_tpl->attach(do_template('COMCODE_IMG',array('_GUID'=>'70166d8dbb0aff064b99c0dd30ed77a8','RAND'=>uniqid('',true),'REFRESH_TIME'=>$refresh_time,'ROLLOVER'=>$rollover,'ALIGN'=>$align,'URL'=>$url_full,'TOOLTIP'=>$tooltip,'CAPTION'=>$caption)));
 
 			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'918162250c80e10212efd9a051545b9b','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
 
@@ -2513,7 +2513,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		{
 			$replace=$REPLACE_TARGETS[$tag]['replace'];
 			$parameters=explode(',',$REPLACE_TARGETS[$tag]['parameters']);
-			$binding=array('CONTENT'=>$embed,'RAND'=>uniqid(''));
+			$binding=array('CONTENT'=>$embed,'RAND'=>uniqid('',true));
 			foreach ($parameters as $parameter)
 			{
 				$parameter=trim($parameter);

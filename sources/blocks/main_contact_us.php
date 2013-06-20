@@ -52,7 +52,7 @@ class Block_main_contact_us
 
 		$type=array_key_exists('param',$map)?$map['param']:do_lang('GENERAL');
 
-		$id=uniqid('');
+		$id=uniqid('',true);
 		$_self_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'));
 		$self_url=$_self_url->evaluate();
 		$self_title=post_param('title',do_lang('CONTACT_US_MESSAGING'));

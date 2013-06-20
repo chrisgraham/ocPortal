@@ -39,7 +39,7 @@ function init__mail()
 function _mail_img_rep_callback($matches)
 {
 	global $CID_IMG_ATTACHMENT;
-	$cid=uniqid('').'@'.str_replace(' ','_',get_domain());
+	$cid=uniqid('',true).'@'.str_replace(' ','_',get_domain());
 	$CID_IMG_ATTACHMENT[$cid]=$matches[2];
 	return '<img '.$matches[1].'src="cid:'.$cid.'"';
 }
@@ -53,7 +53,7 @@ function _mail_img_rep_callback($matches)
 function _mail_css_rep_callback($matches)
 {
 	global $CID_IMG_ATTACHMENT;
-	$cid=uniqid('').'@'.get_domain();
+	$cid=uniqid('',true).'@'.get_domain();
 	if ((basename($matches[1])!='keyboard.png') && (basename($matches[1])!='email_link.png') && (basename($matches[1])!='external_link.png'))
 		$CID_IMG_ATTACHMENT[$cid]=$matches[1];
 	return 'url(\'cid:'.$cid.'\')';
@@ -323,7 +323,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	}
 
 	// We use the boundary to seperate message parts
-	$_boundary=uniqid('ocPortal');
+	$_boundary=uniqid('ocPortal',true);
 	$boundary=$_boundary.'_1';
 	$boundary2=$_boundary.'_2';
 	$boundary3=$_boundary.'_3';

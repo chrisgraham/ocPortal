@@ -291,7 +291,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
 				while (file_exists($place))
 				{
-					$_file=uniqid('').'.'.$ext;
+					$_file=uniqid('',true).'.'.$ext;
 					$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
 				}
 			} else
@@ -626,11 +626,11 @@ function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=
 		$ext=get_file_extension($file);
 		$ext=(($obfuscate==2) && (!is_image($file)))?'dat':get_file_extension($file);
 
-		$_file=uniqid('').'.'.$ext;
+		$_file=uniqid('',true).'.'.$ext;
 		$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
 		while (file_exists($place))
 		{
-			$_file=uniqid('').'.'.$ext;
+			$_file=uniqid('',true).'.'.$ext;
 			$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
 		}
 	}

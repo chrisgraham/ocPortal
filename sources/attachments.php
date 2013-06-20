@@ -276,7 +276,7 @@ function attachment_popup_script()
 	foreach ($rows as $myrow)
 	{
 		$myrow['description']=$myrow['a_description'];
-		$tpl=render_attachment('attachment',array(),$myrow,uniqid(''),get_member(),false,$connection,NULL,get_member());
+		$tpl=render_attachment('attachment',array(),$myrow,uniqid('',true),get_member(),false,$connection,NULL,get_member());
 		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array('_GUID'=>'64356d30905c99325231d3bbee92128c','FIELD_NAME'=>$field_name,'TPL'=>$tpl,'DESCRIPTION'=>$myrow['a_description'],'ID'=>strval($myrow['id']))));
 	}
 

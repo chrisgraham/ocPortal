@@ -981,7 +981,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 		if (is_null($member_id))
 		{
 			require_code('ocf_member_action');
-			$member_id=ocf_make_member($username,uniqid(''),'',array(),NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
+			$member_id=ocf_make_member($username,uniqid('',true),'',array(),NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		}
 
 		$request=get_booking_request_from_form();

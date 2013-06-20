@@ -63,7 +63,7 @@ function incoming_uploads_script()
 		sync_file(get_custom_file_base().'/uploads/incoming');
 	}
 
-	$savename = 'uploads/incoming/'.uniqid('').'.dat';
+	$savename = 'uploads/incoming/'.uniqid('',true).'.dat';
 
 	if (array_key_exists('file',$_FILES)) // nice multi-part upload
 	{

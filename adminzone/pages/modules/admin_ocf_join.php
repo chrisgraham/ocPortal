@@ -1033,7 +1033,7 @@ class Module_admin_ocf_join
 				if ($photo_url!='')
 				{
 					require_code('images');
-					$photo_thumb_url='uploads/ocf_photos_thumbs/'.uniqid('').'.png';
+					$photo_thumb_url='uploads/ocf_photos_thumbs/'.uniqid('',true).'.png';
 					convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false);
 				} else $photo_thumb_url='';
 				$custom_fields=array();

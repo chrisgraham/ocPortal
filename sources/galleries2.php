@@ -569,7 +569,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 
 	if (class_exists('ffmpeg_movie'))
 	{
-		$filename='thumb_'.md5(uniqid('')).'1.jpg';
+		$filename='thumb_'.md5(uniqid('',true)).'1.jpg';
 		if (is_null($expected_output_path))
 			$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
 		if (file_exists($expected_output_path))
@@ -600,7 +600,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 
 	if (($ffmpeg_path!='') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 	{
-		$filename='thumb_'.md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)))).'%d.jpg';
+		$filename='thumb_'.md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)),true)).'%d.jpg';
 		$dest_file=get_custom_file_base().'/uploads/galleries/'.$filename;
 		if (is_null($expected_output_path))
 			$expected_output_path=str_replace('%d','1',$dest_file);

@@ -373,7 +373,7 @@ class Module_admin_themewizard
 
 		// Do it
 		require_code('themes2');
-		$rand=uniqid('');
+		$rand=uniqid('',true);
 		foreach (array($theme,'default') as $logo_save_theme)
 		{
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
@@ -383,7 +383,7 @@ class Module_admin_themewizard
 			actual_edit_theme_image('logo/-logo',$logo_save_theme,user_lang(),'logo/-logo',$path);
 			if (addon_installed('collaboration_zone'))
 				actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,user_lang(),'logo/collaboration-logo',$path);
-			$rand=uniqid('');
+			$rand=uniqid('',true);
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
 			$img=generate_logo(post_param('name'),post_param('title'),false,NULL,'trimmed-logo-template');
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);

@@ -841,7 +841,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					$out.="\r\n".$_postdetails_params."\r\n\r\n";
 				} else
 				{
-					$divider=uniqid('');
+					$divider=uniqid('',true);
 					$out2='';
 					$out.='Content-type: multipart/form-data; boundary="--ocp'.$divider.'"; charset='.get_charset()."\r\n";
 					foreach ($post_params as $key=>$val)
