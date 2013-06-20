@@ -792,6 +792,7 @@ msgstr ""
 		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
 		{
 			$val=post_param($key,NULL);
+			if (($val===NULL) && (!array_key_exists($key,$for_base_lang))) $val=$for_base_lang_2[$key]; // Not in lang, but is in lang_custom, AND not set now - must copy though
 			if (($val!==NULL) && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
 			{
 				if (fwrite($myfile,$key.'='.str_replace(chr(10),'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

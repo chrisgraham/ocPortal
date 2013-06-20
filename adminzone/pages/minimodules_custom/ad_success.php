@@ -26,14 +26,14 @@ $success=array();
 $joining=array();
 $failure=array();
 $users_done=array();
-$advertiser_sessions=$GLOBALS['SITE_DB']->query('SELECT member_id,get,ip,date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.(string)(time()-60*60*24*get_param_integer('days',1)).' AND get LIKE \''.db_encode_like('%<param>from=%').'\'');
+$advertiser_sessions=$GLOBALS['SITE_DB']->query('SELECT member_id,s_get,ip,date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.(string)(time()-60*60*24*get_param_integer('days',1)).' AND get LIKE \''.db_encode_like('%<param>from=%').'\'');
 foreach ($advertiser_sessions as $session)
 {
 	if (array_key_exists($session['member_id'],$users_done)) continue;
 	$users_done[$session['member_id']]=1;
 
 	$matches=array();
-	if (!preg_match('#<param>from=([\w\d]+)</param>#',$session['get'],$matches)) continue;
+	if (!preg_match('#<param>from=([\w\d]+)</param>#',$session['s_get'],$matches)) continue;
 	$from=$matches[1];
 	$user=$session['member_id'];
 

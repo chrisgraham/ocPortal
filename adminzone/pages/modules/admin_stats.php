@@ -37,7 +37,7 @@ class Module_admin_stats
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=8;
+		$info['version']=9;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -75,7 +75,7 @@ class Module_admin_stats
 				'member_id'=>'MEMBER',
 				'date_and_time'=>'TIME',
 				'referer'=>'URLPATH',
-				'get'=>'URLPATH',
+				's_get'=>'URLPATH',
 				'post'=>'LONG_TEXT',
 				'browser'=>'SHORT_TEXT',
 				'milliseconds'=>'INTEGER',
@@ -113,6 +113,11 @@ class Module_admin_stats
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('stats','get','URLPATH','s_get');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('stats','the_user','MEMBER','member_id');
 		}
@@ -817,7 +822,7 @@ class Module_admin_stats
 				{
 					$where=db_string_equal_to('the_page',$page);
 					if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND get LIKE \''.db_encode_like("<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id'])."</param>%").'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end));
+					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND s_get LIKE \''.db_encode_like('<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id']).'</param>%").'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end));
 					$views[do_lang('CATALOGUE_CATEGORY').': '.get_translated_text($cat['cc_title'])]=array($count,$page);
 					$total+=$count;
 				}

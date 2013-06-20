@@ -129,9 +129,9 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 		}
 		$page_converted=str_replace('/',': ',$page_converted);
 
-		if (!is_null($myrow['get']))
+		if (!is_null($myrow['s_get']))
 		{
-			$get=$myrow['get'];
+			$get=$myrow['s_get'];
 			if (strpos($page_converted,':')!==false)
 				$get=str_replace('<param>page='.substr($page_converted,strpos($page_converted,':')+1).'</param>'.chr(10),'',$get);
 			$data=escape_html($get).(($myrow['post']=='')?'':', ').escape_html($myrow['post']);
