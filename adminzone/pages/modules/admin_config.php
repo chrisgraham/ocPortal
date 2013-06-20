@@ -51,7 +51,7 @@ class Module_admin_config
 			'simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','validation',
 			'gzip_output','forum_in_portal','staff_address','is_on_gd','site_closed','closed',
 			'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
-			'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','is_on_trackbacks',
+			'is_on_comments','comments_forum_name','comment_text','thumb_width','is_on_trackbacks',
 			'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser',
 			'smtp_sockets_use','smtp_sockets_host','smtp_sockets_port','smtp_sockets_username','smtp_sockets_password',
 			'smtp_from_address','use_captchas','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
@@ -230,6 +230,7 @@ class Module_admin_config
 			delete_config_option('no_stats_when_closed');
 			delete_config_option('htm_short_urls');
 			delete_config_option('mod_rewrite');
+			delete_config_option('max_image_size');
 		}
 
 		if (is_null($upgrade_from))
@@ -349,7 +350,6 @@ class Module_admin_config
 			add_config_option('COMMENTS_FORUM_NAME','comments_forum_name','forum','return has_no_forum()?NULL:do_lang(\'COMMENT_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','COMMENTS');
 			add_config_option('COMMENT_FORM_TEXT','comment_text','transtext','return has_no_forum()?NULL:static_evaluate_tempcode(do_template(\'COMMENTS_DEFAULT_TEXT\'));','FEATURE','COMMENTS');
 			add_config_option('THUMB_WIDTH','thumb_width','integer','return \'175\';','FEATURE','MEDIA');
-			add_config_option('IMAGES','max_image_size','integer','return \'700\';','FEATURE','UPLOAD');
 		}
 	}
 

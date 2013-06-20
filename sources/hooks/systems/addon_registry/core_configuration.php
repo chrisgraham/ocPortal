@@ -139,7 +139,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/low_space_check.php',
 			'sources/hooks/systems/config_default/main_forum_name.php',
 			'sources/hooks/systems/config_default/max_download_size.php',
-			'sources/hooks/systems/config_default/max_image_size.php',
 			'sources/hooks/systems/config_default/maximum_users.php',
 			'sources/hooks/systems/config_default/bot_stats.php',
 			'sources/hooks/systems/config_default/stats_when_closed.php',

@@ -53,13 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['FORUM_DB']->create_table('f_group_join_log',array(
-		'id'=>'*AUTO',
-		'member_id'=>'MEMBER',
-		'usergroup_id'=>'?AUTO_LINK',
-		'join_time'=>'TIME'
-	));
-	$GLOBALS['FORUM_DB']->create_index('f_group_join_log','member_id',array('member_id'));
-	$GLOBALS['FORUM_DB']->create_index('f_group_join_log','usergroup_id',array('usergroup_id'));
-	$GLOBALS['FORUM_DB']->create_index('f_group_join_log','join_time',array('join_time'));
 }
