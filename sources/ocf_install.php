@@ -356,12 +356,12 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('IS_ON_SHOW_ONLINE','is_on_show_online','tick','return \'1\';','USERS','MEMBERS');
 		add_config_option('USE_JOINDATE','use_joindate','tick','return \'1\';','USERS','MEMBER_DIRECTORY');
 		add_config_option('USE_LASTONDATE','use_lastondate','tick','return \'0\';','USERS','MEMBER_DIRECTORY');
-		add_config_option('ENABLE_HIGHLIGHT_NAME','enable_highlight_name','tick','return \'1\';','USERS','MEMBERS');
+		add_config_option('ENABLE_HIGHLIGHT_NAME','enable_highlight_name','tick','return \'0\';','USERS','MEMBERS');
 		add_config_option('FINISH_PROFILE','finish_profile','tick','return \'1\';','USERS','JOINING');
-		add_config_option('USERNAME_PROFILE_LINKS','username_profile_links','tick','return \'0\';','USERS','MEMBERS');
+		add_config_option('USERNAME_PROFILE_LINKS','username_profile_links','tick','return \'1\';','USERS','MEMBERS');
 		add_config_option('SHOW_EMPTY_CPFS','show_empty_cpfs','tick','return \'0\';','USERS','MEMBERS');
-		add_config_option('COMPLEX_PRIVACY_OPTIONS','complex_privacy_options','tick','return (get_forum_type()!=\'ocf\')?NULL:\'0\';','PRIVACY','MEMBERS');
 		add_config_option('ENABLE_PRIVACY_TAB','enable_privacy_tab','tick','return (get_forum_type()!=\'ocf\')?NULL:\'1\';','PRIVACY','MEMBERS');
+		add_config_option('COMPLEX_PRIVACY_OPTIONS','complex_privacy_options','tick','return (get_forum_type()!=\'ocf\')?NULL:\'0\';','PRIVACY','MEMBERS');
 		add_config_option('SEQ_POST_IDS','seq_post_ids','tick','return \'0\';','FORUMS','FORUM_TOPICS');
 		add_config_option('THREADED_BUTTONS','threaded_buttons','tick','return \'1\';','FORUMS','FORUM_TOPICS');
 		add_config_option('ENABLE_MARK_FORUM_READ','enable_mark_forum_read','tick','return \'1\';','FORUMS','SECTION_FORUMS');

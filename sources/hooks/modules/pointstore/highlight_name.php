@@ -40,6 +40,7 @@ class Hook_pointstore_highlight_name
 
 		if ((get_option('is_on_'.$class.'_buy')=='0') || (get_forum_type()!='ocf')) return array();
 		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_highlighted_name')==1) return array();
+		if (get_option('enable_highlight_name')=='0') return array();
 
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class),'_SELF');
 		return array(do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url)));

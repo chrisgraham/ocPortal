@@ -507,13 +507,15 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		{
 			if (get_option('forced_preview_option')=='1')
 				$fields->attach(form_input_tick(do_lang_tempcode('PREVIEW_POSTS'),do_lang_tempcode('DESCRIPTION_PREVIEW_POSTS'),'preview_posts',$preview_posts==1));
-			if (get_option('enable_views_sigs_option')=='1')
+			if (addon_installed('ocf_signatures'))
 			{
-				if (addon_installed('ocf_signatures'))
+				if (get_option('enable_views_sigs_option')=='1')
+				{
 					$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
-			} else
-			{
-				$hidden->attach(form_input_hidden('views_signatures','1'));
+				} else
+				{
+					$hidden->attach(form_input_hidden('views_signatures','1'));
+				}
 			}
 			//$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));	Now on notifications tab, even though it is technically an account setting
 			$usergroup_list=new ocp_tempcode();

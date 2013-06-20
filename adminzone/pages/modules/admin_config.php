@@ -212,7 +212,7 @@ class Module_admin_config
 			add_config_option('BREADCRUMB_CROP_LENGTH','breadcrumb_crop_length','integer','return \'\';','FEATURE','BREADCRUMBS');
 			add_config_option('ENABLE_STAFF_NOTES','enable_staff_notes','tick','return \'0\';','FEATURE','GENERAL');
 			add_config_option('ENABLE_THEME_IMG_BUTTONS','enable_theme_img_buttons','tick','return \'1\';','THEME','GENERAL');
-			add_config_option('CALL_HOME','call_home','tick','return \'1\';','PRIVACY','GENERAL');
+			add_config_option('CALL_HOME','call_home','tick','return \''.strval(post_param_integer('advertise_on',0)).'\';','PRIVACY','GENERAL');
 			add_config_option('ENABLE_SEO_FIELDS','enable_seo_fields','list','return \'yes\';','SITE','SEO',0,'yes|no|only_on_edit');
 			add_config_option('FORCE_LOCAL_TEMP_DIR','force_local_temp_dir','tick','return \'0\';','SERVER','ADVANCED');
 			add_config_option('JPEG_QUALITY','jpeg_quality','integer','return \'\';','FEATURE','MEDIA');

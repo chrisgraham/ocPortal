@@ -570,9 +570,9 @@ function step_3()
 	global $INSTALL_LANG;
 
 	// Call home, if they asked to
-	$advertise_on=array_key_exists('advertise_on',$_POST)?intval($_POST['advertise_on']):0;
+	$advertise_on=post_param_integer('advertise_on',0);
 	$email=$_POST['email'];
-	if ($email==do_lang('EMAIL_ADDRESS')) $email='';
+	if ($email==do_lang('EMAIL_ADDRESS')) $email=''; // In case was left as the label
 	if (($email!='') || ($advertise_on==1))
 	{
 		$call='/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG;
@@ -959,10 +959,12 @@ function step_4()
 	$url='install.php?step=5';
 	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
+	$hidden=build_keep_post_fields();
 	return do_template('INSTALLER_STEP_4',array(
 		'_GUID'=>'73c3ac0a7108709b74b2e89cae30be12',
 		'URL'=>$url,
 		'JS'=>$js,
+		'HIDDEN'=>$hidden,
 		'MESSAGE'=>$message,
 		'LANG'=>$INSTALL_LANG,
 		'DB_TYPE'=>post_param('db_type'),
@@ -1058,9 +1060,11 @@ function step_5()
 			$url='install.php?step=5';
 			if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
+			$hidden=build_keep_post_fields();
 			return do_template('INSTALLER_STEP_4',array(
 				'_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6',
 				'URL'=>$url,
+				'HIDDEN'=>$hidden,
 				'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE',escape_html(get_tutorial_url('tut_upgrade'))),
 				'LANG'=>$INSTALL_LANG,
 				'DB_TYPE'=>post_param('db_type'),

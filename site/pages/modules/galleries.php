@@ -307,10 +307,10 @@ class Module_galleries
 			add_config_option('GALLERY_REP_IMAGE','gallery_rep_image','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('GALLERY_FEEDBACK_FIELDS','gallery_feedback_fields','tick','return \'1\';','GALLERY','FEATURES');
 			add_config_option('MANUAL_GALLERY_CODENAME','manual_gallery_codename','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
-			add_config_option('MANUAL_GALLERY_PARENT','manual_gallery_parent','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
+			add_config_option('MANUAL_GALLERY_PARENT','manual_gallery_parent','tick','return \'0\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('MANUAL_GALLERY_MEDIA_TYPES','manual_gallery_media_types','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('PERSONAL_UNDER_MEMBERS','personal_under_members','tick','return \'0\';','GALLERY','PERSONAL_GALLERIES');
-			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'100\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('GALLERY_ENTRIES_REGULAR_PER_PAGE','gallery_entries_regular_per_page','integer','return \'30\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('GALLERIES_DEFAULT_SORT_ORDER','galleries_default_sort_order','list','return \'add_date DESC\';','GALLERY','BROWSING_GALLERIES',0,'add_date DESC|add_date ASC|average_rating DESC|compound_rating DESC|url DESC|url ASC|fixed_random ASC');
 			add_config_option('SUBGALLERY_LINK_LIMIT','subgallery_link_limit','integer','return \'200\';','GALLERY','BROWSING_GALLERIES');

@@ -1,4 +1,6 @@
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post" onsubmit="return submit_settings(this);">
+	{HIDDEN}
+
 	<div>
 		<input type="hidden" name="default_lang" value="{LANG*}" />
 		<input name="db_type" type="hidden" value="{DB_TYPE*}" />

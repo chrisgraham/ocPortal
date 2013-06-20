@@ -211,8 +211,7 @@ class Hook_paypal
 		}
 
 		$primary_paypal_email=get_option('primary_paypal_email');
-
-		if (!is_null($primary_paypal_email))
+		if ($primary_paypal_email!='')
 		{
 			if ($receiver_email!=$primary_paypal_email) my_exit(do_lang('IPN_EMAIL_ERROR'));
 		} else

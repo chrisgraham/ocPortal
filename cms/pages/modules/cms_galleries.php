@@ -994,6 +994,7 @@ class Module_cms_galleries extends standard_crud_module
 		{
 			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
 			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
+			$hidden->attach(form_input_hidden('allow_trackbacks',strval($allow_trackbacks)));
 		}
 
 		$fields->attach(meta_data_get_fields('image',is_null($id)?NULL:strval($id)));
@@ -1846,6 +1847,9 @@ class Module_cms_galleries_cat extends standard_crud_module
 			{
 				$hidden->attach(form_input_hidden('name',$name));
 			}
+		} else
+		{
+			$hidden->attach(form_input_hidden('name','root'));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
 		if ($parent_id=='') $parent_id=get_param('parent_id','');
@@ -1868,7 +1872,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 				$hidden->attach(form_input_hidden('parent_id',$parent_id));
 			}
 		}
-		if ((get_option('manual_gallery_media_types')=='0') || ($accept_images==0) || ($accept_videos==0))
+		if ((get_option('manual_gallery_media_types')=='1') || ($accept_images==0) || ($accept_videos==0))
 		{
 			$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
 		} else
@@ -1876,13 +1880,11 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(form_input_hidden('accept_images','1'));
 			$hidden->attach(form_input_hidden('accept_videos','1'));
 		}
-		if (get_option('gallery_mode_is')=='flow')
+		$gallery_mode_is=get_option('gallery_mode_is');
+		if (($name!='') && ($flow_mode_interface!=($gallery_mode_is=='flow')?'1':'0')) $gallery_mode_is=''; // Continue current
+		if ($gallery_mode_is!='')
 		{
-			$hidden->attach(form_input_hidden('flow_mode_interface','1'));
-		}
-		elseif (get_option('gallery_mode_is')=='regular')
-		{
-			$hidden->attach(form_input_hidden('flow_mode_interface','0'));
+			$hidden->attach(form_input_hidden('flow_mode_interface',($gallery_mode_is=='flow')?'1':'0'));
 		} else
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
@@ -1902,7 +1904,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 			}
 		}
 
-		if (get_option('gallery_watermarks')=='1')
+		if ((get_option('gallery_watermarks')=='1') && is_null($watermark_top_left) && is_null($watermark_top_right) && is_null($watermark_bottom_left) && is_null($watermark_bottom_right))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'555320228b5a1ff1effb8a1bf9c15d8e','SECTION_HIDDEN'=>is_null($watermark_top_left) && is_null($watermark_top_right) && is_null($watermark_bottom_left) && is_null($watermark_bottom_right),'TITLE'=>do_lang_tempcode('WATERMARKING'))));
 			$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_LEFT')),'watermark_top_left',false,$watermark_top_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
@@ -1978,8 +1980,9 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
-		$name=post_param('name');
+		$name=post_param('name','');
 		$fullname=post_param('fullname');
+		if ($name=='') $name=preg_replace('#[^\w\d\-]#','',$fullname);
 		$description=post_param('description');
 		$notes=post_param('notes','');
 		$parent_id=post_param('parent_id');
@@ -2015,7 +2018,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		$name=post_param('name',fractional_edit()?$id:'root');
+		$name=post_param('name',fractional_edit()?$id:'');
+		if ($name=='') $name=preg_replace('#[^\w\d\-]#','',$fullname);
 
 		$parent_id=post_param('parent_id',STRING_MAGIC_NULL);
 		$accept_images=post_param_integer('accept_images',fractional_edit()?INTEGER_MAGIC_NULL:0);

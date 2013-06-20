@@ -859,9 +859,9 @@ class Module_topics
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'),do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'),'post_text',$post_text,false));
 		$options=array();
-		if (get_option('enable_skip_sig')=='1')
+		if (addon_installed('ocf_signatures'))
 		{
-			if (addon_installed('ocf_signatures'))
+			if (get_option('enable_skip_sig')=='1')
 				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 		}
 		if (get_option('enable_post_emphasis')=='1')
@@ -1407,9 +1407,9 @@ class Module_topics
 		$options=array();
 		if (!is_guest())
 		{
-			if (get_option('enable_skip_sig')=='1')
+			if (addon_installed('ocf_signatures'))
 			{
-				if (addon_installed('ocf_signatures'))
+				if (get_option('enable_skip_sig')=='1')
 					$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 			}
 			if (get_option('is_on_anonymous_posts')=='1')
@@ -1657,9 +1657,9 @@ class Module_topics
 		$options=array();
 		if (!is_guest())
 		{
-			if (get_option('enable_skip_sig')=='1')
+			if (addon_installed('ocf_signatures'))
 			{
-				if (addon_installed('ocf_signatures'))
+				if (get_option('enable_skip_sig')=='1')
 					$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 			}
 			if (get_option('is_on_anonymous_posts')=='1')
@@ -3533,9 +3533,9 @@ END;
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'),do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'),'post_text',$post_text,false));
 		$options=array();
-		if (get_option('enable_skip_sig')=='1')
+		if (addon_installed('ocf_signatures'))
 		{
-			if (addon_installed('ocf_signatures'))
+			if (get_option('enable_skip_sig')=='1')
 				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 		}
 		if (get_option('enable_post_emphasis')=='1')

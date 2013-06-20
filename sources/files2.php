@@ -745,7 +745,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		}
 	}
 
-	$use_curl=(($url_parts['scheme']!='http') && (function_exists('curl_version'))) || ((function_exists('get_value')) && (get_value('prefer_curl')==='1'));
+	$use_curl=(($url_parts['scheme']!='http') || (get_option('prefer_curl')==='1')) && (function_exists('curl_version'));
 
 	$raw_payload='';
 	$put=mixed();
@@ -1007,17 +1007,16 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if (!is_null($referer))
 					curl_setopt($ch,CURLOPT_REFERER,$referer);
 				$proxy=get_option('proxy');
-				if ($proxy=='') $proxy=NULL;
-				if ((!is_null($proxy)) && ($url_parts['host']!='localhost') && ($url_parts['host']!='127.0.0.1'))
+				if (($proxy!='') && ($url_parts['host']!='localhost') && ($url_parts['host']!='127.0.0.1'))
 				{
 					$port=get_option('proxy_port');
 					if (is_null($port)) $port='8080';
 					curl_setopt($ch, CURLOPT_PROXY,$proxy.':'.$port);
 					$proxy_user=get_option('proxy_user');
-					if (!is_null($proxy_user))
+					if ($proxy_user!='')
 					{
-						$proxy_password=get_value('proxy_password',NULL,true);
-						curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_user.':'.$proxy_password);
+						$proxy_password=get_option('proxy_password');
+						curl_setopt($ch,CURLOPT_PROXYUSERPWD,$proxy_user.':'.$proxy_password);
 					}
 				}
 				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval(($byte_limit==0)?0:($byte_limit-1)));
@@ -1204,14 +1203,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$url2=array_key_exists('path',$url_parts)?$url_parts['path']:'/';
 		if (array_key_exists('query',$url_parts)) $url2.='?'.$url_parts['query'];
 
-		if ((!is_null($proxy)) && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
+		if (($proxy!='') && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
 		{
 			$out='';
 			$out.=$http_verb.' '.str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.1\r\n";
 			$proxy_user=get_option('proxy_user');
-			if (!is_null($proxy_user))
+			if ($proxy_user!='')
 			{
-				$proxy_password=get_value('proxy_password',NULL,true);
+				$proxy_password=get_option('proxy_password');
 				$out.='Proxy-Authorization: Basic '.base64_encode($proxy_user.':'.$proxy_password)."\r\n";
 			}
 		} else
@@ -1520,7 +1519,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$proxy_user=get_option('proxy_user');
 				if ($proxy_user!='')
 				{
-					$proxy_password=get_value('proxy_password',NULL,true);
+					$proxy_password=get_option('proxy_password');
 					$opts['proxy']='tcp://'.$proxy_user.':'.$proxy_password.'@'.$proxy.':'.$port;
 				} else
 				{
