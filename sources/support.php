@@ -2378,11 +2378,13 @@ function check_suhosin_request_size($size)
  * Ensure Suhosin is not going to break a request due to number of request form fields. Call this each time a field is added to the output.
  *
  * @param  integer		How much to increment the counter by
+ * @param  integer		The name length being checked
  */
-function check_suhosin_request_quantity($inc=1)
+function check_suhosin_request_quantity($inc=1,$name_length=0)
 {
-	static $count=0;
+	static $count=0,$name_length_count=0;
 	$count+=$inc;
+	$name_length_count+=$name_length;
 
 	static $failed_already=false;
 	if ($failed_already) return;
@@ -2398,7 +2400,7 @@ function check_suhosin_request_quantity($inc=1)
 
 	foreach (array('suhosin.post.max_totalname_length','suhosin.request.max_totalname_length') as $setting)
 	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count*20/*assuming field name length of 20*/))
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$name_length_count))
 		{
 			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
 			$failed_already=true;
