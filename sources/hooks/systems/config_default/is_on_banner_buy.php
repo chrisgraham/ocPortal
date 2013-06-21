@@ -31,8 +31,8 @@ class Hook_config_default_is_on_banner_buy
 		return array(
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
-			'the_page'=>'POINTSTORE',
-			'section'=>'BANNERS',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'BANNERS',
 			'explanation'=>'CONFIG_OPTION_is_on_banner_buy',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_is_on_banner_buy
 	 */
 	function get_default()
 	{
-		if (!addon_installed('banners')) return NULL;
-		return '1';
+		return (!addon_installed('banners'))?NULL:'1';
 	}
 
 }

@@ -31,8 +31,8 @@ class Hook_config_default_allow_alpha_search
 		return array(
 			'human_name'=>'ALLOW_ALPHA_SEARCH',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'USERS',
+			'c_group'=>'MEMBER_DIRECTORY',
 			'explanation'=>'CONFIG_OPTION_allow_alpha_search',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

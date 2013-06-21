@@ -31,8 +31,8 @@ class Hook_config_default_messaging_forum_name
 		return array(
 			'human_name'=>'_MESSAGING_FORUM_NAME',
 			'the_type'=>'forum',
-			'the_page'=>'FEATURE',
-			'section'=>'CONTACT_US_MESSAGING',
+			'c_category'=>'ADMIN',
+			'c_group'=>'CONTACT_US_MESSAGING',
 			'explanation'=>'CONFIG_OPTION_messaging_forum_name',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

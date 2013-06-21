@@ -30,9 +30,9 @@ class Hook_config_default_session_expiry_time
 	{
 		return array(
 			'human_name'=>'SESSION_EXPIRY_TIME',
-			'the_type'=>'integer',
-			'the_page'=>'SECURITY',
-			'section'=>'GENERAL',
+			'the_type'=>'float',
+			'c_category'=>'SECURITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_session_expiry_time',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_session_expiry_time
 	 */
 	function get_default()
 	{
-		return '5';
+		return '1';
 	}
 
 }

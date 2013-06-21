@@ -31,8 +31,8 @@ class Hook_config_default_site_scope
 		return array(
 			'human_name'=>'SITE_SCOPE',
 			'the_type'=>'transline',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_site_scope',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

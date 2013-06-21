@@ -31,8 +31,8 @@ class Hook_config_default_advanced_admin_cache
 		return array(
 			'human_name'=>'ADVANCED_ADMIN_CACHE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'CACHES',
+			'c_category'=>'PERFORMANCE',
+			'c_group'=>'CACHES',
 			'explanation'=>'CONFIG_OPTION_advanced_admin_cache',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

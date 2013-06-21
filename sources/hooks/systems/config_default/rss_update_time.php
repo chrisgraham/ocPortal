@@ -31,8 +31,8 @@ class Hook_config_default_rss_update_time
 		return array(
 			'human_name'=>'UPDATE_TIME',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWS_AND_RSS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_FEEDS',
 			'explanation'=>'CONFIG_OPTION_rss_update_time',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

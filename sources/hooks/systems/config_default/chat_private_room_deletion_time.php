@@ -31,8 +31,8 @@ class Hook_config_default_chat_private_room_deletion_time
 		return array(
 			'human_name'=>'PRIVATE_ROOM_DELETION_TIME',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_CHAT',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_CHAT',
 			'explanation'=>'CONFIG_OPTION_chat_private_room_deletion_time',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

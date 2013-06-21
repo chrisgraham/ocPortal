@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_forum
  */
 
 class Hook_config_default_is_on_post_titles
@@ -31,13 +31,13 @@ class Hook_config_default_is_on_post_titles
 		return array(
 			'human_name'=>'IS_ON_POST_TITLES',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'FORUMS',
+			'c_group'=>'FORUM_TOPICS',
 			'explanation'=>'CONFIG_OPTION_is_on_post_titles',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_forum',
 		);
 	}
 

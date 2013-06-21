@@ -165,7 +165,8 @@ class Hook_addon_registry_ecommerce
 			'themes/default/images/pagepics/cash_flow.png',
 			'themes/default/images/pagepics/transactions.png',
 			'themes/default/images/pagepics/profit_loss.png',
-			'sources/currency.php'
+			'sources/currency.php',
+			'sources/hooks/systems/config_default/primary_paypal_email.php',
 		);
 	}
 

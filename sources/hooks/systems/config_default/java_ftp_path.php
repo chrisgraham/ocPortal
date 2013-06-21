@@ -31,8 +31,8 @@ class Hook_config_default_java_ftp_path
 		return array(
 			'human_name'=>'JAVA_FTP_PATH',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'JAVA_UPLOAD',
+			'c_category'=>'SERVER',
+			'c_group'=>'JAVA_UPLOAD',
 			'explanation'=>'CONFIG_OPTION_java_ftp_path',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

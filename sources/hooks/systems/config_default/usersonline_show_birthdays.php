@@ -31,8 +31,8 @@ class Hook_config_default_usersonline_show_birthdays
 		return array(
 			'human_name'=>'BIRTHDAYS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'USERS_ONLINE_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'USERS_ONLINE_BLOCK',
 			'explanation'=>'CONFIG_OPTION_usersonline_show_birthdays',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

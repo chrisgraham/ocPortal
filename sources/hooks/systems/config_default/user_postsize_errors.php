@@ -31,8 +31,8 @@ class Hook_config_default_user_postsize_errors
 		return array(
 			'human_name'=>'USER_POSTSIZE_ERRORS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'UPLOAD',
+			'c_category'=>'FEATURE',
+			'c_group'=>'UPLOAD',
 			'explanation'=>'CONFIG_OPTION_user_postsize_errors',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

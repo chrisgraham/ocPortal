@@ -31,8 +31,8 @@ class Hook_config_default_forum_in_portal
 		return array(
 			'human_name'=>'FORUM_IN_PORTAL',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ENVIRONMENT',
+			'c_category'=>'SITE',
+			'c_group'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_forum_in_portal',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_forum_in_portal
 	 */
 	function get_default()
 	{
-		return has_no_forum()?NULL:'0';
+		return ((has_no_forum()) || (get_forum_type()=='ocf'))?NULL:'0';
 	}
 
 }

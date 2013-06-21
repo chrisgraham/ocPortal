@@ -84,7 +84,7 @@ class Hook_addon_registry_msn
 			'themes/default/images/bigicons/multisitenetwork.png',
 			'themes/default/images/pagepics/multisitenetworking.png',
 			'sources/multi_site_networks.php',
-			'sources/blocks/side_network.php'
+			'sources/blocks/side_network.php',
 		);
 	}
 

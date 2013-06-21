@@ -86,7 +86,7 @@ class Hook_addon_registry_core_primary_layout
 			'MAIL.tpl',
 			'MAIL_SUBJECT.tpl',
 			'BREADCRUMB_SEPARATOR.tpl',
-			'CSS_NEED_FULL.tpl'
+			'CSS_NEED_FULL.tpl',
 		);
 	}
 

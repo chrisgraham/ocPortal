@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @package		captcha
  */
 
 class Hook_config_default_captcha_noise
@@ -31,13 +31,13 @@ class Hook_config_default_captcha_noise
 		return array(
 			'human_name'=>'CAPTCHA_NOISE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SECURITY',
+			'c_group'=>'CAPTCHA',
 			'explanation'=>'CONFIG_OPTION_captcha_noise',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_configuration',
+			'addon'=>'captcha',
 		);
 	}
 
@@ -48,7 +48,6 @@ class Hook_config_default_captcha_noise
 	 */
 	function get_default()
 	{
-		if (!addon_installed('captcha')) return NULL;
 		return '1';
 	}
 

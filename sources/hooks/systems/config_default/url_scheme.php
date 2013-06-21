@@ -31,8 +31,8 @@ class Hook_config_default_url_scheme
 		return array(
 			'human_name'=>'URL_SCHEME',
 			'the_type'=>'list',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'SEO',
 			'explanation'=>'CONFIG_OPTION_url_scheme',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'RAW|PG|HTM|SIMPLE',

@@ -31,13 +31,13 @@ class Hook_config_default_tester_forum_name
 		return array(
 			'human_name'=>'TESTER_FORUM_NAME',
 			'the_type'=>'forum',
-			'the_page'=>'FEATURE',
-			'section'=>'TESTER',
+			'c_category'=>'FEATURE',
+			'c_group'=>'TESTER',
 			'explanation'=>'CONFIG_OPTION_tester_forum_name',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'tester',
+			'addon'=>'TODO',
 		);
 	}
 

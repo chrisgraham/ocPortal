@@ -31,8 +31,8 @@ class Hook_config_default_is_on_gambling_buy
 		return array(
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
-			'the_page'=>'POINTSTORE',
-			'section'=>'GAMBLING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'GAMBLING',
 			'explanation'=>'CONFIG_OPTION_is_on_gambling_buy',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

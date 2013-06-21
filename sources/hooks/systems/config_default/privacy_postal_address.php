@@ -31,8 +31,8 @@ class Hook_config_default_privacy_postal_address
 		return array(
 			'human_name'=>'ADDRESS',
 			'the_type'=>'text',
-			'the_page'=>'PRIVACY',
-			'section'=>'GENERAL',
+			'c_category'=>'PRIVACY',
+			'c_group'=>'COPPA',
 			'explanation'=>'CONFIG_OPTION_privacy_postal_address',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

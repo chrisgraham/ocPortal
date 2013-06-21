@@ -31,8 +31,8 @@ class Hook_config_default_gallery_selectors
 		return array(
 			'human_name'=>'GALLERY_SELECTORS',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'BROWSING_GALLERIES',
 			'explanation'=>'CONFIG_OPTION_gallery_selectors',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_gallery_selectors
 	 */
 	function get_default()
 	{
-		return '6,9,18,36';
+		return '12,24,36,64,128';
 	}
 
 }

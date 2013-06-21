@@ -160,7 +160,7 @@ class Hook_addon_registry_calendar
 			'themes/default/images/calendar/priority_na.png',
 			'themes/default/images/calendar/rss.png',
 			'themes/default/images/calendar/system_command.png',
-			'themes/default/images/pagepics/calendar.png'
+			'themes/default/images/pagepics/calendar.png',
 		);
 	}
 

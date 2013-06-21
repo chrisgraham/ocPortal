@@ -31,8 +31,8 @@ class Hook_config_default_ldap_version
 		return array(
 			'human_name'=>'LDAP_VERSION',
 			'the_type'=>'integer',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_version',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_ldap_is_enabled
 		return array(
 			'human_name'=>'LDAP_IS_ENABLED',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_is_enabled',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

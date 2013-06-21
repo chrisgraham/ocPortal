@@ -31,8 +31,8 @@ class Hook_config_default_mail_server
 		return array(
 			'human_name'=>'MAIL_SERVER',
 			'the_type'=>'line',
-			'the_page'=>'POINTSTORE',
-			'section'=>'POP3',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'POP3',
 			'explanation'=>'CONFIG_OPTION_mail_server',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

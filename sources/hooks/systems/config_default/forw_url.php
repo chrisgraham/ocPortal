@@ -31,8 +31,8 @@ class Hook_config_default_forw_url
 		return array(
 			'human_name'=>'FORW_MAINTAIN_URL',
 			'the_type'=>'line',
-			'the_page'=>'POINTSTORE',
-			'section'=>'FORWARDING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'FORWARDING',
 			'explanation'=>'CONFIG_OPTION_forw_url',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

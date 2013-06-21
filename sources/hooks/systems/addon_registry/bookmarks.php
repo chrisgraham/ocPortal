@@ -83,7 +83,7 @@ class Hook_addon_registry_bookmarks
 			'lang/EN/bookmarks.ini',
 			'site/pages/modules/bookmarks.php',
 			'sources/hooks/systems/snippets/bookmarks_menu.php',
-			'bookmarks.css'
+			'bookmarks.css',
 		);
 	}
 

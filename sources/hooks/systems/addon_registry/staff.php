@@ -85,7 +85,7 @@ class Hook_addon_registry_staff
 			'lang/EN/staff.ini',
 			'themes/default/images/pagepics/staff.png',
 			'themes/default/images/bigicons/staff.png',
-			'sources/hooks/systems/ocf_cpf_filter/staff_filter.php'
+			'sources/hooks/systems/ocf_cpf_filter/staff_filter.php',
 		);
 	}
 

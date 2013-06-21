@@ -31,8 +31,8 @@ class Hook_config_default_use_contextual_dates
 		return array(
 			'human_name'=>'USE_CONTEXTUAL_DATES',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SITE',
+			'c_group'=>'INTERNATIONALISATION',
 			'explanation'=>'CONFIG_OPTION_use_contextual_dates',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

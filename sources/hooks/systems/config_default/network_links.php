@@ -31,8 +31,8 @@ class Hook_config_default_network_links
 		return array(
 			'human_name'=>'NETWORK_LINKS',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'ENVIRONMENT',
+			'c_category'=>'SITE',
+			'c_group'=>'MULTI_SITE_NETWORKING',
 			'explanation'=>'CONFIG_OPTION_network_links',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

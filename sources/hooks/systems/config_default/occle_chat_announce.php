@@ -31,8 +31,8 @@ class Hook_config_default_occle_chat_announce
 		return array(
 			'human_name'=>'OCCLE_CHAT_ANNOUNCE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SITE',
+			'c_group'=>'OCCLE',
 			'explanation'=>'CONFIG_OPTION_occle_chat_announce',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

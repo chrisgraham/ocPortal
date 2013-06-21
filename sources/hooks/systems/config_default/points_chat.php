@@ -31,8 +31,8 @@ class Hook_config_default_points_chat
 		return array(
 			'human_name'=>'CHATTING',
 			'the_type'=>'integer',
-			'the_page'=>'POINTS',
-			'section'=>'COUNT_POINTS_GIVEN',
+			'c_category'=>'POINTS',
+			'c_group'=>'COUNT_POINTS_GIVEN',
 			'explanation'=>'CONFIG_OPTION_points_chat',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

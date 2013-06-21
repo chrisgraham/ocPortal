@@ -31,8 +31,8 @@ class Hook_config_default_bottom_show_feedback_link
 		return array(
 			'human_name'=>'FEEDBACK_LINK',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BOTTOM_LINKS',
+			'c_category'=>'THEME',
+			'c_group'=>'BOTTOM_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_feedback_link',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

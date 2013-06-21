@@ -31,8 +31,8 @@ class Hook_config_default_news_show_stats_count_total_posts
 		return array(
 			'human_name'=>'TOTAL_NEWS_ENTRIES',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_news_show_stats_count_total_posts',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -97,7 +97,7 @@ class Hook_addon_registry_core_permission_management
 			'themes/default/images/permlevels/3.png',
 			'themes/default/images/permlevels/index.html',
 			'themes/default/images/permlevels/inherit.png',
-			'themes/default/images/pte_view_help.png'
+			'themes/default/images/pte_view_help.png',
 		);
 	}
 

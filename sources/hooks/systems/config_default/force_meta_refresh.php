@@ -31,8 +31,8 @@ class Hook_config_default_force_meta_refresh
 		return array(
 			'human_name'=>'FORCE_META_REFRESH',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ENVIRONMENT',
+			'c_category'=>'SERVER',
+			'c_group'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_force_meta_refresh',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

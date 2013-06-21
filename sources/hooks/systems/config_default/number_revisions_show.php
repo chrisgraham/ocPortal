@@ -31,8 +31,8 @@ class Hook_config_default_number_revisions_show
 		return array(
 			'human_name'=>'SHOW_REVISIONS',
 			'the_type'=>'integer',
-			'the_page'=>'ADMIN',
-			'section'=>'COMCODE_PAGE_MANAGEMENT',
+			'c_category'=>'ADMIN',
+			'c_group'=>'COMCODE_PAGE_MANAGEMENT',
 			'explanation'=>'CONFIG_OPTION_number_revisions_show',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

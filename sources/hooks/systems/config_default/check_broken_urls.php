@@ -31,13 +31,13 @@ class Hook_config_default_check_broken_urls
 		return array(
 			'human_name'=>'CHECK_BROKEN_URLS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'_COMCODE',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_COMCODE',
 			'explanation'=>'CONFIG_OPTION_check_broken_urls',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

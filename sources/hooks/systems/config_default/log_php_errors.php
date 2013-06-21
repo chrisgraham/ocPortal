@@ -31,8 +31,8 @@ class Hook_config_default_log_php_errors
 		return array(
 			'human_name'=>'LOG_PHP_ERRORS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'LOGGING',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_log_php_errors',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_activity_show_stats_count_users_online_record
 		return array(
 			'human_name'=>'COUNT_ONSITE_RECORD',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_activity_show_stats_count_users_online_record',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_activity_show_stats_count_users_online_record
 	 */
 	function get_default()
 	{
-		return addon_installed('stats_block')?'0':NULL;
+		return '0';
 	}
 
 }

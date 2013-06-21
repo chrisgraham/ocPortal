@@ -31,8 +31,8 @@ class Hook_config_default_likes
 		return array(
 			'human_name'=>'ENABLE_LIKES',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'FEATURE',
+			'c_group'=>'USER_INTERACTION_RATING',
 			'explanation'=>'CONFIG_OPTION_likes',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

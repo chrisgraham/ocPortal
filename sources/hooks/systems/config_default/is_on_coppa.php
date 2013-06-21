@@ -31,8 +31,8 @@ class Hook_config_default_is_on_coppa
 		return array(
 			'human_name'=>'COPPA_ENABLED',
 			'the_type'=>'tick',
-			'the_page'=>'PRIVACY',
-			'section'=>'GENERAL',
+			'c_category'=>'PRIVACY',
+			'c_group'=>'COPPA',
 			'explanation'=>'CONFIG_OPTION_is_on_coppa',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_is_on_coppa
 	 */
 	function get_default()
 	{
-		return '0';
+		return (get_forum_type()!='ocf')?NULL:'0';
 	}
 
 }

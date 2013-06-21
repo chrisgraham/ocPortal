@@ -108,7 +108,8 @@ class Hook_addon_registry_core_themeing
 			'themes/default/images/bigicons/manage_themes.png',
 			'themes/default/images/pagepics/themes.png',
 			'lang/EN/themes.ini',
-			'sources/lorem.php'
+			'sources/lorem.php',
+			'sources/hooks/systems/config_default/enable_theme_img_buttons.php',
 		);
 	}
 

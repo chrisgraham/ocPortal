@@ -31,13 +31,13 @@ class Hook_config_default_google_analytics
 		return array(
 			'human_name'=>'GOOGLE_ANALYTICS',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_google_analytics',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

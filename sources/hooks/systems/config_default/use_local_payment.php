@@ -31,8 +31,8 @@ class Hook_config_default_use_local_payment
 		return array(
 			'human_name'=>'USE_LOCAL_PAYMENT',
 			'the_type'=>'tick',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_use_local_payment',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

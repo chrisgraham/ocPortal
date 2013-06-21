@@ -31,8 +31,8 @@ class Hook_config_default_is_on_invisibility
 		return array(
 			'human_name'=>'IS_ON_INVISIBILITY',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'_LOGIN',
 			'explanation'=>'CONFIG_OPTION_is_on_invisibility',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -131,7 +131,7 @@ class Hook_addon_registry_shopping
 			'RESULTS_TABLE_cart_FIELD.tpl',
 			'ECOM_SHIPPING_ADDRESS.tpl',
 			'ECOM_CART_BUTTON_VIA_PAYPAL.tpl',
-			'ECOM_ITEM_DETAILS.tpl'
+			'ECOM_ITEM_DETAILS.tpl',
 		);
 	}
 

@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @package		core_feedback_features
  */
 
 class Hook_config_default_is_on_rating
@@ -31,13 +31,13 @@ class Hook_config_default_is_on_rating
 		return array(
 			'human_name'=>'RATING',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'USER_INTERACTION',
+			'c_category'=>'FEATURE',
+			'c_group'=>'USER_INTERACTION_RATING',
 			'explanation'=>'CONFIG_OPTION_is_on_rating',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_configuration',
+			'addon'=>'core_feedback_features',
 		);
 	}
 

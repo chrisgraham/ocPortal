@@ -31,8 +31,8 @@ class Hook_config_default_show_first_join_page
 		return array(
 			'human_name'=>'SHOW_FIRST_JOIN_PAGE',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'USERS',
+			'c_group'=>'JOINING',
 			'explanation'=>'CONFIG_OPTION_show_first_join_page',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

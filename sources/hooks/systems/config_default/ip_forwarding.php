@@ -31,8 +31,8 @@ class Hook_config_default_ip_forwarding
 		return array(
 			'human_name'=>'IP_FORWARDING',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ENVIRONMENT',
+			'c_category'=>'SERVER',
+			'c_group'=>'NETWORKING',
 			'explanation'=>'CONFIG_OPTION_ip_forwarding',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

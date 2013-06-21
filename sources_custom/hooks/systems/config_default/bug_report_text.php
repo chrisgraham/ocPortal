@@ -31,13 +31,13 @@ class Hook_config_default_bug_report_text
 		return array(
 			'human_name'=>'BUG_REPORT_TEXT',
 			'the_type'=>'text',
-			'the_page'=>'FEATURE',
-			'section'=>'TESTER',
+			'c_category'=>'FEATURE',
+			'c_group'=>'TESTER',
 			'explanation'=>'CONFIG_OPTION_bug_report_text',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'tester',
+			'addon'=>'TODO',
 		);
 	}
 

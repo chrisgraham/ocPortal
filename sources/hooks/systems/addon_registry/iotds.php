@@ -103,7 +103,7 @@ class Hook_addon_registry_iotds
 			'sources/hooks/systems/preview/iotd.php',
 			'IOTD_ADMIN_CHOOSE_SCREEN.tpl',
 			'uploads/iotds/.htaccess',
-			'uploads/iotds_thumbs/.htaccess'
+			'uploads/iotds_thumbs/.htaccess',
 		);
 	}
 

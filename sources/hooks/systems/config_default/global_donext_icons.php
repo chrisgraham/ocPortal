@@ -31,8 +31,8 @@ class Hook_config_default_global_donext_icons
 		return array(
 			'human_name'=>'GLOBAL_DONEXT_ICONS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'ADMIN',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_global_donext_icons',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

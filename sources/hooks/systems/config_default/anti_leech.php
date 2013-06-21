@@ -31,8 +31,8 @@ class Hook_config_default_anti_leech
 		return array(
 			'human_name'=>'ANTI_LEECH',
 			'the_type'=>'tick',
-			'the_page'=>'SECURITY',
-			'section'=>'GENERAL',
+			'c_category'=>'SECURITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_anti_leech',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

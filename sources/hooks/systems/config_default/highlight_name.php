@@ -31,8 +31,8 @@ class Hook_config_default_highlight_name
 		return array(
 			'human_name'=>'COST_highlight_name',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'NAME_HIGHLIGHTING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'NAME_HIGHLIGHTING',
 			'explanation'=>'CONFIG_OPTION_highlight_name',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_highlight_name
 	 */
 	function get_default()
 	{
-		if (get_forum_type()!='ocf') return NULL;
-		return '2000';
+		return (get_forum_type()!='ocf')?NULL:'2000';
 	}
 
 }

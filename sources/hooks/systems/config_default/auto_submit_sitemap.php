@@ -31,8 +31,8 @@ class Hook_config_default_auto_submit_sitemap
 		return array(
 			'human_name'=>'AUTO_SUBMIT_SITEMAP',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'SEO',
 			'explanation'=>'CONFIG_OPTION_auto_submit_sitemap',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

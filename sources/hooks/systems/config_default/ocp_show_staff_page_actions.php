@@ -31,8 +31,8 @@ class Hook_config_default_ocp_show_staff_page_actions
 		return array(
 			'human_name'=>'PAGE_ACTIONS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'THEME',
+			'c_group'=>'FOOTER_LINKS',
 			'explanation'=>'CONFIG_OPTION_ocp_show_staff_page_actions',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

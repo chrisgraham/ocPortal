@@ -31,8 +31,8 @@ class Hook_config_default_java_username
 		return array(
 			'human_name'=>'JAVA_FTP_USERNAME',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'JAVA_UPLOAD',
+			'c_category'=>'SERVER',
+			'c_group'=>'JAVA_UPLOAD',
 			'explanation'=>'CONFIG_OPTION_java_username',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_copyright
 		return array(
 			'human_name'=>'COPYRIGHT',
 			'the_type'=>'transline',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_copyright',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

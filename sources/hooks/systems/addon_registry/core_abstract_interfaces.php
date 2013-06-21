@@ -152,7 +152,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'sources/templates_pagination.php',
 			'sources/templates_columned_table.php',
 			'sources/templates_map_table.php',
-			'sources/templates_donext.php'
+			'sources/templates_donext.php',
 		);
 	}
 

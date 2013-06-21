@@ -31,8 +31,8 @@ class Hook_config_default_ocp_show_conceded_mode_link
 		return array(
 			'human_name'=>'CONCEDED_MODE_LINK',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'PERSONAL_BLOCK',
 			'explanation'=>'CONFIG_OPTION_ocp_show_conceded_mode_link',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

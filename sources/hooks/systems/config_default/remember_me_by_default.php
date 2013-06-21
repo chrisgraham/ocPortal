@@ -31,13 +31,13 @@ class Hook_config_default_remember_me_by_default
 		return array(
 			'human_name'=>'REMEMBER_ME_BY_DEFAULT',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_LOGIN',
 			'explanation'=>'CONFIG_OPTION_remember_me_by_default',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

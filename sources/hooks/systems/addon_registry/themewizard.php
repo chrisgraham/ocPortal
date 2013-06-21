@@ -91,7 +91,7 @@ class Hook_addon_registry_themewizard
 			'themes/default/images/bigicons/make_logo.png',
 			'themes/default/images/logo_template.png',
 			'themes/default/images/trimmed_logo_template.png',
-			'themes/default/images/pagepics/logowizard.png'
+			'themes/default/images/pagepics/logowizard.png',
 		);
 	}
 

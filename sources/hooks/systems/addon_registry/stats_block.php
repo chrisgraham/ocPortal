@@ -96,7 +96,7 @@ class Hook_addon_registry_stats_block
 			'sources/blocks/side_stats.php',
 			'sources/hooks/blocks/side_stats/stats_forum.php',
 			'sources/hooks/blocks/side_stats/.htaccess',
-			'sources/hooks/blocks/side_stats/index.html'
+			'sources/hooks/blocks/side_stats/index.html',
 		);
 	}
 

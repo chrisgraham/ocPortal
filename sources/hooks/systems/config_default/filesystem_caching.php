@@ -31,8 +31,8 @@ class Hook_config_default_filesystem_caching
 		return array(
 			'human_name'=>'FILE_SYSTEM_CACHING',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'CACHES',
+			'c_category'=>'PERFORMANCE',
+			'c_group'=>'CACHES',
 			'explanation'=>'CONFIG_OPTION_filesystem_caching',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_filesystem_caching
 	 */
 	function get_default()
 	{
-		return (substr(ocp_srv('SERVER_SOFTWARE'),0,10)=='LiteSpeed')?'1':'0';
+		return '0';
 	}
 
 }

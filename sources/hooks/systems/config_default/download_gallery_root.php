@@ -31,8 +31,8 @@ class Hook_config_default_download_gallery_root
 		return array(
 			'human_name'=>'DOWNLOAD_GALLERY_ROOT',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_DOWNLOADS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_DOWNLOADS',
 			'explanation'=>'CONFIG_OPTION_download_gallery_root',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

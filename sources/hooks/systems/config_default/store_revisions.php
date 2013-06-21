@@ -31,8 +31,8 @@ class Hook_config_default_store_revisions
 		return array(
 			'human_name'=>'STORE_REVISIONS',
 			'the_type'=>'tick',
-			'the_page'=>'ADMIN',
-			'section'=>'COMCODE_PAGE_MANAGEMENT',
+			'c_category'=>'ADMIN',
+			'c_group'=>'COMCODE_PAGE_MANAGEMENT',
 			'explanation'=>'CONFIG_OPTION_store_revisions',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

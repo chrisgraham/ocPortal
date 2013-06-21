@@ -31,8 +31,8 @@ class Hook_config_default_maximum_gamble_amount
 		return array(
 			'human_name'=>'MAXIMUM_GAMBLE_AMOUNT',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'GAMBLING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'GAMBLING',
 			'explanation'=>'CONFIG_OPTION_maximum_gamble_amount',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

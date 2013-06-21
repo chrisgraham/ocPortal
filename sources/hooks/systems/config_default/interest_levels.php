@@ -31,8 +31,8 @@ class Hook_config_default_interest_levels
 		return array(
 			'human_name'=>'USE_INTEREST_LEVELS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWSLETTER',
+			'c_category'=>'FEATURE',
+			'c_group'=>'NEWSLETTER',
 			'explanation'=>'CONFIG_OPTION_interest_levels',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

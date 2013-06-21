@@ -105,7 +105,7 @@ class Hook_addon_registry_quizzes
 			'themes/default/images/bigicons/survey_results.png',
 			'themes/default/images/pagepics/survey_results.png',
 			'sources/hooks/systems/preview/quiz.php',
-			'quizzes.css'
+			'quizzes.css',
 		);
 	}
 

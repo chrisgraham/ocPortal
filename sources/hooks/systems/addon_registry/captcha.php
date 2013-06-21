@@ -116,7 +116,12 @@ class Hook_addon_registry_captcha
 			'data/sounds/w.wav',
 			'data/sounds/x.wav',
 			'data/sounds/y.wav',
-			'data/sounds/z.wav'
+			'data/sounds/z.wav',
+			'sources/hooks/systems/config_default/use_captchas.php',
+			'sources/hooks/systems/config_default/captcha_single_guess.php',
+			'sources/hooks/systems/config_default/css_captcha.php',
+			'sources/hooks/systems/config_default/captcha_noise.php',
+			'sources/hooks/systems/config_default/captcha_on_feedback.php',
 		);
 	}
 

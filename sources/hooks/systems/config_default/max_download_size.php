@@ -31,8 +31,8 @@ class Hook_config_default_max_download_size
 		return array(
 			'human_name'=>'MAX_SIZE',
 			'the_type'=>'integer',
-			'the_page'=>'SITE',
-			'section'=>'UPLOAD',
+			'c_category'=>'FEATURE',
+			'c_group'=>'UPLOAD',
 			'explanation'=>'CONFIG_OPTION_max_download_size',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

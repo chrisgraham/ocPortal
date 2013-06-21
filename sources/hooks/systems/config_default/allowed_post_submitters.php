@@ -31,8 +31,8 @@ class Hook_config_default_allowed_post_submitters
 		return array(
 			'human_name'=>'ALLOWED_POST_SUBMITTERS',
 			'the_type'=>'text',
-			'the_page'=>'SECURITY',
-			'section'=>'ADVANCED',
+			'c_category'=>'SECURITY',
+			'c_group'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_allowed_post_submitters',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

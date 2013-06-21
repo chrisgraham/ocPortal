@@ -31,8 +31,8 @@ class Hook_config_default_valid_images
 		return array(
 			'human_name'=>'IMAGE_TYPES',
 			'the_type'=>'line',
-			'the_page'=>'SECURITY',
-			'section'=>'UPLOADED_FILES',
+			'c_category'=>'SECURITY',
+			'c_group'=>'UPLOADED_FILES',
 			'explanation'=>'CONFIG_OPTION_valid_images',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_valid_images
 	 */
 	function get_default()
 	{
-		return 'jpg,jpeg,gif,png';
+		return 'jpg,jpeg,gif,png,ico';
 	}
 
 }

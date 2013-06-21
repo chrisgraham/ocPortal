@@ -31,8 +31,8 @@ class Hook_config_default_ecommerce_test_mode
 		return array(
 			'human_name'=>'ECOMMERCE_TEST_MODE',
 			'the_type'=>'tick',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'PAYMENT_GATEWAY_TESTING_MODE',
 			'explanation'=>'CONFIG_OPTION_ecommerce_test_mode',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_super_logging
 		return array(
 			'human_name'=>'SUPER_LOGGING',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'LOGGING',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_super_logging',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

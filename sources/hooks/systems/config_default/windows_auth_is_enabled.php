@@ -31,8 +31,8 @@ class Hook_config_default_windows_auth_is_enabled
 		return array(
 			'human_name'=>'WINDOWS_AUTHENTICATION',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_windows_auth_is_enabled',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

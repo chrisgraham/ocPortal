@@ -31,13 +31,13 @@ class Hook_config_default_mobile_support
 		return array(
 			'human_name'=>'MOBILE_SUPPORT',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SITE',
+			'c_group'=>'MOBILE_VERSION',
 			'explanation'=>'CONFIG_OPTION_mobile_support',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_mobile_support
 	 */
 	function get_default()
 	{
-		return '0';
+		return '1';
 	}
 
 }

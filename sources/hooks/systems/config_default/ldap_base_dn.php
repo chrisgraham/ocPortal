@@ -31,8 +31,8 @@ class Hook_config_default_ldap_base_dn
 		return array(
 			'human_name'=>'LDAP_BASE_DN',
 			'the_type'=>'line',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_base_dn',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_ldap_base_dn
 	 */
 	function get_default()
 	{
-		return 'dc=192,dc=168,dc=1,dc=98';
+		return 'dc='.str_replace('.',',dc=',ocp_srv('HTTP_HOST'));
 	}
 
 }

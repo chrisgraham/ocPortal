@@ -31,8 +31,8 @@ class Hook_config_default_maximum_password_length
 		return array(
 			'human_name'=>'MAXIMUM_PASSWORD_LENGTH',
 			'the_type'=>'integer',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'USERS',
+			'c_group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_maximum_password_length',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_is_on_forw_buy
 		return array(
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
-			'the_page'=>'POINTSTORE',
-			'section'=>'FORWARDING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'FORWARDING',
 			'explanation'=>'CONFIG_OPTION_is_on_forw_buy',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

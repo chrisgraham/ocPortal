@@ -93,8 +93,6 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/config_default/js_overlays.php',
 			'sources/hooks/systems/config_default/likes.php',
 			'sources/hooks/systems/config_default/tree_lists.php',
-			'sources/hooks/systems/config_default/captcha_single_guess.php',
-			'sources/hooks/systems/config_default/css_captcha.php',
 			'sources/hooks/systems/notifications/low_disk_space.php',
 			'sources/hooks/systems/notifications/hack_attack.php',
 			'sources/hooks/systems/notifications/auto_ban.php',

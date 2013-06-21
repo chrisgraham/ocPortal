@@ -31,8 +31,8 @@ class Hook_config_default_smtp_sockets_username
 		return array(
 			'human_name'=>'USERNAME',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'SMTP',
+			'c_category'=>'SERVER',
+			'c_group'=>'SMTP',
 			'explanation'=>'CONFIG_OPTION_smtp_sockets_username',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

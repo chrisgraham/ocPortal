@@ -31,8 +31,8 @@ class Hook_config_default_banner_setup
 		return array(
 			'human_name'=>'COST_banner_setup',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'BANNERS',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'BANNERS',
 			'explanation'=>'CONFIG_OPTION_banner_setup',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_banner_setup
 	 */
 	function get_default()
 	{
-		if (!addon_installed('banners')) return NULL;
-		return '750';
+		return (!addon_installed('banners'))?NULL:'750';
 	}
 
 }

@@ -31,8 +31,8 @@ class Hook_config_default_simplified_donext
 		return array(
 			'human_name'=>'SIMPLIFIED_DONEXT',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'ADMIN',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_simplified_donext',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

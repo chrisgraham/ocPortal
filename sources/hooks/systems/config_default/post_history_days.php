@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_forum
  */
 
 class Hook_config_default_post_history_days
@@ -31,13 +31,13 @@ class Hook_config_default_post_history_days
 		return array(
 			'human_name'=>'POST_HISTORY_DAYS',
 			'the_type'=>'integer',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'PRIVACY',
+			'c_group'=>'SECTION_FORUMS',
 			'explanation'=>'CONFIG_OPTION_post_history_days',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_forum',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_post_history_days
 	 */
 	function get_default()
 	{
-		return '21';
+		return (get_forum_type()!='ocf')?NULL:'21';
 	}
 
 }

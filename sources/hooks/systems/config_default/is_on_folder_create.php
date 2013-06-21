@@ -31,13 +31,13 @@ class Hook_config_default_is_on_folder_create
 		return array(
 			'human_name'=>'FOLDER_CREATE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ENVIRONMENT',
+			'c_category'=>'SERVER',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_is_on_folder_create',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
 
-			'addon'=>'core_configuration',
+			'addon'=>'filedump',
 		);
 	}
 

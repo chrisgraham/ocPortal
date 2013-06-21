@@ -30,14 +30,14 @@ class Hook_config_default_sms_api_id
 	{
 		return array(
 			'human_name'=>'API_ID',
-			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'SMS',
+			'the_type'=>'line',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SMS',
 			'explanation'=>'CONFIG_OPTION_sms_api_id',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'sms',
 		);
 	}
 

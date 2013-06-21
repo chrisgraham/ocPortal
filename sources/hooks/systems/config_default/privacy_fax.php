@@ -31,8 +31,8 @@ class Hook_config_default_privacy_fax
 		return array(
 			'human_name'=>'FAX_NUMBER',
 			'the_type'=>'line',
-			'the_page'=>'PRIVACY',
-			'section'=>'GENERAL',
+			'c_category'=>'PRIVACY',
+			'c_group'=>'COPPA',
 			'explanation'=>'CONFIG_OPTION_privacy_fax',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_privacy_fax
 	 */
 	function get_default()
 	{
-		return '';
+		return (get_forum_type()!='ocf')?NULL:'';
 	}
 
 }

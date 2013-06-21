@@ -80,7 +80,7 @@ class Hook_addon_registry_ocf_post_templates
 			'OCF_POST_TEMPLATE_SELECT.tpl',
 			'adminzone/pages/modules/admin_ocf_post_templates.php',
 			'themes/default/images/bigicons/posttemplates.png',
-			'themes/default/images/pagepics/posttemplates.png'
+			'themes/default/images/pagepics/posttemplates.png',
 		);
 	}
 

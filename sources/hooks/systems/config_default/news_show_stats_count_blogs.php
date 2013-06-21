@@ -31,8 +31,8 @@ class Hook_config_default_news_show_stats_count_blogs
 		return array(
 			'human_name'=>'BLOGS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_news_show_stats_count_blogs',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

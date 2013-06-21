@@ -31,8 +31,8 @@ class Hook_config_default_is_on_pop3_buy
 		return array(
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
-			'the_page'=>'POINTSTORE',
-			'section'=>'POP3',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'POP3',
 			'explanation'=>'CONFIG_OPTION_is_on_pop3_buy',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

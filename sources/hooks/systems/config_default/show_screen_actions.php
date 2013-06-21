@@ -31,8 +31,8 @@ class Hook_config_default_show_screen_actions
 		return array(
 			'human_name'=>'SHOW_SCREEN_ACTIONS',
 			'the_type'=>'tick',
-			'the_page'=>'THEMES',
-			'section'=>'GENERAL',
+			'c_category'=>'THEME',
+			'c_group'=>'DISPLAY_ELEMENTS',
 			'explanation'=>'CONFIG_OPTION_show_screen_actions',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_show_screen_actions
 	 */
 	function get_default()
 	{
-		return '0';
+		return '1';
 	}
 
 }

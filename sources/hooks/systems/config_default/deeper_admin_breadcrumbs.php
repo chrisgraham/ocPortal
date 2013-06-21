@@ -31,8 +31,8 @@ class Hook_config_default_deeper_admin_breadcrumbs
 		return array(
 			'human_name'=>'DEEPER_ADMIN_BREADCRUMBS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'ADMIN',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_deeper_admin_breadcrumbs',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

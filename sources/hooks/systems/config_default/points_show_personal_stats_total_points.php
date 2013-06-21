@@ -31,8 +31,8 @@ class Hook_config_default_points_show_personal_stats_total_points
 		return array(
 			'human_name'=>'COUNT_POINTS_EVER',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'PERSONAL_BLOCK',
 			'explanation'=>'CONFIG_OPTION_points_show_personal_stats_total_points',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

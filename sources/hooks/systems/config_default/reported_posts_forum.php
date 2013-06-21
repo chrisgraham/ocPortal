@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_reported_posts
  */
 
 class Hook_config_default_reported_posts_forum
@@ -31,13 +31,13 @@ class Hook_config_default_reported_posts_forum
 		return array(
 			'human_name'=>'REPORTED_POSTS_FORUM',
 			'the_type'=>'forum',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'FORUMS',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_reported_posts_forum',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_reported_posts',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_reported_posts_forum
 	 */
 	function get_default()
 	{
-		return (has_no_forum()||(!addon_installed('ocf_reported_posts')))?NULL:do_lang('REPORTED_POSTS_FORUM');
+		return do_lang('ocf:REPORTED_POSTS_FORUM');
 	}
 
 }

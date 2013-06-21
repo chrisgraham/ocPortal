@@ -31,8 +31,8 @@ class Hook_config_default_ocp_show_personal_usergroup
 		return array(
 			'human_name'=>'_USERGROUP',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'PERSONAL_BLOCK',
 			'explanation'=>'CONFIG_OPTION_ocp_show_personal_usergroup',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

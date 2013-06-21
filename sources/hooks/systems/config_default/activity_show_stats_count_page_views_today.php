@@ -31,8 +31,8 @@ class Hook_config_default_activity_show_stats_count_page_views_today
 		return array(
 			'human_name'=>'PAGE_VIEWS_TODAY',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_activity_show_stats_count_page_views_today',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_activity_show_stats_count_page_views_today
 	 */
 	function get_default()
 	{
-		return addon_installed('stats_block')?'0':NULL;
+		return '0';
 	}
 
 }

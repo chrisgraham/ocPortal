@@ -31,8 +31,8 @@ class Hook_config_default_system_community_billboard
 		return array(
 			'human_name'=>'SYSTEM_COMMUNITY_BILLBOARD',
 			'the_type'=>'transline',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'FEATURE',
+			'c_group'=>'COMMUNITY_BILLBOARD',
 			'explanation'=>'CONFIG_OPTION_system_community_billboard',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

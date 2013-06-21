@@ -31,8 +31,8 @@ class Hook_config_default_cdn
 		return array(
 			'human_name'=>'CDN',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'PERFORMANCE',
+			'c_group'=>'FRONT_END_PERFORMANCE',
 			'explanation'=>'CONFIG_OPTION_cdn',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

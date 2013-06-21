@@ -31,8 +31,8 @@ class Hook_config_default_vpn_password
 		return array(
 			'human_name'=>'VPN_PASSWORD',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'PAYMENT_GATEWAY',
 			'explanation'=>'CONFIG_OPTION_vpn_password',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

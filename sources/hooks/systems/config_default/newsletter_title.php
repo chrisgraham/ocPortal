@@ -31,8 +31,8 @@ class Hook_config_default_newsletter_title
 		return array(
 			'human_name'=>'TITLE',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWSLETTER',
+			'c_category'=>'FEATURE',
+			'c_group'=>'NEWSLETTER',
 			'explanation'=>'CONFIG_OPTION_newsletter_title',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_newsletter_title
 	 */
 	function get_default()
 	{
-		return get_option('site_name').' '.do_lang('NEWSLETTER');
+		return get_option('site_name').' '.ocp_mb_strtolower(do_lang('NEWSLETTER'));
 	}
 
 }

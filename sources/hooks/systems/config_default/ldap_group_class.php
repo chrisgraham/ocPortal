@@ -31,8 +31,8 @@ class Hook_config_default_ldap_group_class
 		return array(
 			'human_name'=>'LDAP_GROUP_CLASS',
 			'the_type'=>'line',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_group_class',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_ldap_group_class
 	 */
 	function get_default()
 	{
-		return 'posixGroup';
+		return (get_option('ldap_is_windows')=='1')?'group':'posixGroup';
 	}
 
 }

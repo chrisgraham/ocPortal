@@ -31,8 +31,8 @@ class Hook_config_default_forum_show_stats_count_members_active_today
 		return array(
 			'human_name'=>'MEMBERS_ACTIVE_TODAY',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_forum_show_stats_count_members_active_today',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

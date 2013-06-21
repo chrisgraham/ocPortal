@@ -31,8 +31,8 @@ class Hook_config_default_video_bitrate
 		return array(
 			'human_name'=>'VIDEO_BITRATE',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'TRANSCODING',
+			'c_category'=>'GALLERY',
+			'c_group'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_video_bitrate',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

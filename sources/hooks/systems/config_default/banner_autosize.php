@@ -31,8 +31,8 @@ class Hook_config_default_banner_autosize
 		return array(
 			'human_name'=>'BANNER_AUTOSIZE',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BANNERS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'BANNERS',
 			'explanation'=>'CONFIG_OPTION_banner_autosize',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

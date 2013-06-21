@@ -31,8 +31,8 @@ class Hook_config_default_calendar_show_stats_count_events_this_week
 		return array(
 			'human_name'=>'_EVENTS_THIS_WEEK',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_calendar_show_stats_count_events_this_week',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

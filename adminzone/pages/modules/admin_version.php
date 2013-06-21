@@ -429,6 +429,7 @@ class Module_admin_version
 				'the_value'=>'LONG_TEXT',
 				'date_and_time'=>'TIME',
 			));
+			set_long_value('call_home',strval(post_param_integer('advertise_on',0))); // Relayed from installer
 
 			$GLOBALS['SITE_DB']->create_table('tutorial_links',array(
 				'the_name'=>'*ID_TEXT',

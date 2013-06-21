@@ -93,7 +93,7 @@ class Hook_addon_registry_core_abstract_components
 			'data/change_detection.php',
 			'STAFF_ACTIONS.tpl',
 			'sources/hooks/systems/change_detection/.htaccess',
-			'sources/hooks/systems/change_detection/index.html'
+			'sources/hooks/systems/change_detection/index.html',
 		);
 	}
 

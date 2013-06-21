@@ -31,8 +31,8 @@ class Hook_config_default_maximum_download
 		return array(
 			'human_name'=>'MAXIMUM_DOWNLOAD',
 			'the_type'=>'integer',
-			'the_page'=>'SITE',
-			'section'=>'CLOSED_SITE',
+			'c_category'=>'SITE',
+			'c_group'=>'CLOSED_SITE',
 			'explanation'=>'CONFIG_OPTION_maximum_download',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

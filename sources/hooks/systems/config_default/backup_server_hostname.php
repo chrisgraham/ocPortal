@@ -31,8 +31,8 @@ class Hook_config_default_backup_server_hostname
 		return array(
 			'human_name'=>'BACKUP_SERVER_HOSTNAME',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'BACKUP',
+			'c_category'=>'FEATURE',
+			'c_group'=>'BACKUPS',
 			'explanation'=>'CONFIG_OPTION_backup_server_hostname',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

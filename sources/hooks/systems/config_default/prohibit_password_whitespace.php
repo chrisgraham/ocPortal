@@ -31,8 +31,8 @@ class Hook_config_default_prohibit_password_whitespace
 		return array(
 			'human_name'=>'PROHIBIT_PASSWORD_WHITESPACE',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'USERS',
+			'c_group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_prohibit_password_whitespace',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

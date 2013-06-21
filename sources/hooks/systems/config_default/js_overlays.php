@@ -31,8 +31,8 @@ class Hook_config_default_js_overlays
 		return array(
 			'human_name'=>'JS_OVERLAYS',
 			'the_type'=>'tick',
-			'the_page'=>'ACCESSIBILITY',
-			'section'=>'GENERAL',
+			'c_category'=>'ACCESSIBILITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_js_overlays',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

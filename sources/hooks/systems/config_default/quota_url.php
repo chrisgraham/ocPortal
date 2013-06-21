@@ -31,8 +31,8 @@ class Hook_config_default_quota_url
 		return array(
 			'human_name'=>'QUOTA_MAINTAIN_URL',
 			'the_type'=>'line',
-			'the_page'=>'POINTSTORE',
-			'section'=>'POP3',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'POP3',
 			'explanation'=>'CONFIG_OPTION_quota_url',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

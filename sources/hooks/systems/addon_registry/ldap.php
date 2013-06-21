@@ -95,7 +95,7 @@ class Hook_addon_registry_ldap
 			'sources/ocf_ldap.php',
 			'themes/default/images/bigicons/ldap.png',
 			'themes/default/images/pagepics/ldap.png',
-			'sources/hooks/systems/do_next_menus/ldap.php'
+			'sources/hooks/systems/do_next_menus/ldap.php',
 		);
 	}
 

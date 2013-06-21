@@ -458,7 +458,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('REQUIRE_NEW_MEMBER_VALIDATION','require_new_member_validation','tick','return \'0\';','USERS','JOINING');
 		add_config_option('ENCRYPTION_KEY','encryption_key','line','require_code(\'encryption\'); if (get_forum_type()!=\'ocf\') return NULL; return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
 		add_config_option('DECRYPTION_KEY','decryption_key','line','require_code(\'encryption\'); if (get_forum_type()!=\'ocf\') return NULL; return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
-		add_config_option('IS_ON_POST_TITLES','is_on_post_titles','tick','return \'1\';','FORUMS','FORUM_TOPICS');
+		add_config_option('IS_ON_POST_TITLES','is_on_post_titles','tick','return \'0\';','FORUMS','FORUM_TOPICS');
 		add_config_option('IS_ON_ANONYMOUS_POSTS','is_on_anonymous_posts','tick','return \'1\';','FORUMS','FORUM_TOPICS');
 		add_config_option('IS_ON_TIMEZONE_DETECTION','is_on_timezone_detection','tick','return (get_forum_type()!=\'ocf\')?NULL:\'0\';','SITE','INTERNATIONALISATION');
 		add_config_option('IS_ON_TOPIC_DESCRIPTIONS','is_on_topic_descriptions','tick','return \'1\';','FORUMS','FORUM_TOPICS');

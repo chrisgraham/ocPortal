@@ -31,8 +31,8 @@ class Hook_config_default_automatic_meta_extraction
 		return array(
 			'human_name'=>'AUTOMATIC_META_EXTRACTION',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'SEO',
 			'explanation'=>'CONFIG_OPTION_automatic_meta_extraction',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

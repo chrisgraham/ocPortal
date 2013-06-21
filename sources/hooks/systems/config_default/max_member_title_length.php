@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_member_titles
  */
 
 class Hook_config_default_max_member_title_length
@@ -31,13 +31,13 @@ class Hook_config_default_max_member_title_length
 		return array(
 			'human_name'=>'MAX_MEMBER_TITLE_LENGTH',
 			'the_type'=>'integer',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_max_member_title_length',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_member_titles',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_max_member_title_length
 	 */
 	function get_default()
 	{
-		return addon_installed('ocf_member_titles')?'20':NULL;
+		return '20';
 	}
 
 }

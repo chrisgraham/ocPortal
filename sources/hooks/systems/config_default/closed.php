@@ -31,8 +31,8 @@ class Hook_config_default_closed
 		return array(
 			'human_name'=>'MESSAGE',
 			'the_type'=>'transtext',
-			'the_page'=>'SITE',
-			'section'=>'CLOSED_SITE',
+			'c_category'=>'SITE',
+			'c_group'=>'CLOSED_SITE',
 			'explanation'=>'CONFIG_OPTION_closed',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

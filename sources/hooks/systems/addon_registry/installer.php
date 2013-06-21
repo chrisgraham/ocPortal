@@ -91,7 +91,7 @@ class Hook_addon_registry_installer
 			'INSTALLER_STEP_LOG.tpl',
 			'INSTALLER_STEP_10.tpl',
 			'INSTALLER_WARNING.tpl',
-			'INSTALLER_NOTICE.tpl'
+			'INSTALLER_NOTICE.tpl',
 		);
 	}
 

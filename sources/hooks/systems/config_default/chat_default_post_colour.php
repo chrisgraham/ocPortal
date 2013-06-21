@@ -30,9 +30,9 @@ class Hook_config_default_chat_default_post_colour
 	{
 		return array(
 			'human_name'=>'CHAT_OPTIONS_COLOUR_NAME',
-			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_CHAT',
+			'the_type'=>'colour',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_CHAT',
 			'explanation'=>'CONFIG_OPTION_chat_default_post_colour',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

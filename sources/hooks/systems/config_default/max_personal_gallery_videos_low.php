@@ -31,8 +31,8 @@ class Hook_config_default_max_personal_gallery_videos_low
 		return array(
 			'human_name'=>'GALLERY_VIDEO_LIMIT_LOW',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'PERSONAL_GALLERIES',
 			'explanation'=>'CONFIG_OPTION_max_personal_gallery_videos_low',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_max_personal_gallery_videos_low
 	 */
 	function get_default()
 	{
-		return '2';
+		return '20';
 	}
 
 }

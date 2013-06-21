@@ -31,8 +31,8 @@ class Hook_config_default_initial_quota
 		return array(
 			'human_name'=>'QUOTA',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'POP3',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'POP3',
 			'explanation'=>'CONFIG_OPTION_initial_quota',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

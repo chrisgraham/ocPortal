@@ -31,8 +31,8 @@ class Hook_config_default_one_per_email_address
 		return array(
 			'human_name'=>'ONE_PER_EMAIL_ADDRESS',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'_LOGIN',
 			'explanation'=>'CONFIG_OPTION_one_per_email_address',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

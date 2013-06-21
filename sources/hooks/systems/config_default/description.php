@@ -31,8 +31,8 @@ class Hook_config_default_description
 		return array(
 			'human_name'=>'DESCRIPTION',
 			'the_type'=>'transline',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'SEO',
 			'explanation'=>'CONFIG_OPTION_description',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_description
 	 */
 	function get_default()
 	{
-		return '???';
+		return '';
 	}
 
 }

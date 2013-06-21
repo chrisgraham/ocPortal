@@ -31,8 +31,8 @@ class Hook_config_default_pd_email
 		return array(
 			'human_name'=>'EMAIL_ADDRESS',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'ADDRESS',
 			'explanation'=>'CONFIG_OPTION_pd_email',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

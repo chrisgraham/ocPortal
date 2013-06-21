@@ -31,10 +31,10 @@ class Hook_config_default_backup_time
 		return array(
 			'human_name'=>'BACKUP_REGULARITY',
 			'the_type'=>'integer',
-			'the_page'=>'ADMIN',
-			'section'=>'CHECK_LIST',
+			'c_category'=>'ADMIN',
+			'c_group'=>'CHECK_LIST',
 			'explanation'=>'CONFIG_OPTION_backup_time',
-			'shared_hosting_restricted'=>'0',
+			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
 
 			'addon'=>'backup',

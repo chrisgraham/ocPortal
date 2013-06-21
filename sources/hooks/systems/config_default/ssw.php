@@ -31,8 +31,8 @@ class Hook_config_default_ssw
 		return array(
 			'human_name'=>'SSW',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'INTERNATIONALISATION',
 			'explanation'=>'CONFIG_OPTION_ssw',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

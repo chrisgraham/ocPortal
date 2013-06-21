@@ -31,13 +31,13 @@ class Hook_config_default_sms_high_limit
 		return array(
 			'human_name'=>'SMS_HIGH_LIMIT',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'SMS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SMS',
 			'explanation'=>'CONFIG_OPTION_sms_high_limit',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'sms',
 		);
 	}
 

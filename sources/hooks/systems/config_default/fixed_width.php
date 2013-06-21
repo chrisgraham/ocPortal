@@ -31,8 +31,8 @@ class Hook_config_default_fixed_width
 		return array(
 			'human_name'=>'FIXED_WIDTH',
 			'the_type'=>'tick',
-			'the_page'=>'THEME',
-			'section'=>'GENERAL',
+			'c_category'=>'THEME',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_fixed_width',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

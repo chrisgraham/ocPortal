@@ -31,8 +31,8 @@ class Hook_config_default_ipn_digest
 		return array(
 			'human_name'=>'IPN_DIGEST',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'PAYMENT_GATEWAY',
 			'explanation'=>'CONFIG_OPTION_ipn_digest',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

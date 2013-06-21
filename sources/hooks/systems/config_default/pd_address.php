@@ -31,8 +31,8 @@ class Hook_config_default_pd_address
 		return array(
 			'human_name'=>'POSTAL_ADDRESS',
 			'the_type'=>'text',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'ADDRESS',
 			'explanation'=>'CONFIG_OPTION_pd_address',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

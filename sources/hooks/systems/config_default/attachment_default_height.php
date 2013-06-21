@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		core_rich_media
  */
 
-class Hook_config_default_club_forum_parent_grouping
+class Hook_config_default_attachment_default_height
 {
 
 	/**
@@ -29,15 +29,15 @@ class Hook_config_default_club_forum_parent_grouping
 	function get_details()
 	{
 		return array(
-			'human_name'=>'CLUB_FORUM_PARENT_FORUM_GROUPING',
-			'the_type'=>'category',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_club_forum_parent_category',
+			'human_name'=>'ATTACHMENT_DEFAULT_HEIGHT',
+			'the_type'=>'integer',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_COMCODE',
+			'explanation'=>'CONFIG_OPTION_attachment_default_height',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'core_rich_media',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_club_forum_parent_grouping
 	 */
 	function get_default()
 	{
-		return has_no_forum()?NULL:strval(db_get_first_id());
+		return '216';
 	}
 
 }

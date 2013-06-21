@@ -31,8 +31,8 @@ class Hook_config_default_comment_text
 		return array(
 			'human_name'=>'COMMENT_FORM_TEXT',
 			'the_type'=>'transtext',
-			'the_page'=>'FEATURE',
-			'section'=>'USER_INTERACTION',
+			'c_category'=>'FEATURE',
+			'c_group'=>'USER_INTERACTION_COMMENTING',
 			'explanation'=>'CONFIG_OPTION_comment_text',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

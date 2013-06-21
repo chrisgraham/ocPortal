@@ -31,8 +31,8 @@ class Hook_config_default_stats_store_time
 		return array(
 			'human_name'=>'STORE_TIME',
 			'the_type'=>'integer',
-			'the_page'=>'SITE',
-			'section'=>'LOGGING',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_stats_store_time',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

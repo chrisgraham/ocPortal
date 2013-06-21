@@ -31,8 +31,8 @@ class Hook_config_default_website_email
 		return array(
 			'human_name'=>'WEBSITE_EMAIL',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'EMAIL',
+			'c_category'=>'SITE',
+			'c_group'=>'EMAIL',
 			'explanation'=>'CONFIG_OPTION_website_email',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

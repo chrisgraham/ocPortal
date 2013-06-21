@@ -87,7 +87,7 @@ class Hook_addon_registry_staff_messaging
 			'lang/EN/messaging.ini',
 			'data/form_to_email.php',
 			'sources/blocks/main_contact_simple.php',
-			'sources/blocks/main_contact_us.php'
+			'sources/blocks/main_contact_us.php',
 		);
 	}
 

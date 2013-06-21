@@ -31,8 +31,8 @@ class Hook_config_default_ocp_show_su
 		return array(
 			'human_name'=>'SU',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'THEME',
+			'c_group'=>'FOOTER_LINKS',
 			'explanation'=>'CONFIG_OPTION_ocp_show_su',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

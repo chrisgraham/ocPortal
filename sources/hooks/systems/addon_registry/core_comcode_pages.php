@@ -90,7 +90,9 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/systems/preview/comcode_page.php',
 			'sources/hooks/systems/attachments/comcode_page.php',
 			'sources/hooks/modules/admin_unvalidated/comcode_pages.php',
-			'sources/hooks/modules/admin_newsletter/comcode_pages.php'
+			'sources/hooks/modules/admin_newsletter/comcode_pages.php',
+			'sources/hooks/systems/config_default/comcode_page_default_review_freq.php',
+			'sources/hooks/systems/config_default/is_on_comcode_page_children.php',
 		);
 	}
 

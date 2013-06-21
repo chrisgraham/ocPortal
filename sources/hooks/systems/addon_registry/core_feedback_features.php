@@ -113,7 +113,17 @@ class Hook_addon_registry_core_feedback_features
 			'sources/blocks/main_trackback.php',
 			'sources/blocks/main_rating.php',
 			'COMMENT_AJAX_HANDLER.tpl',
-			'data/post_comment.php'
+			'data/post_comment.php',
+			'sources/hooks/systems/config_default/max_thread_depth.php',
+			'sources/hooks/systems/config_default/comment_topic_subject.php',
+			'sources/hooks/systems/config_default/default_comment_sort_order.php',
+			'sources/hooks/systems/config_default/comments_to_show_in_thread.php',
+			'sources/hooks/systems/config_default/simplify_wysiwyg_by_permissions.php',
+			'sources/hooks/systems/config_default/allow_own_rate.php',
+			'sources/hooks/systems/config_default/enable_feedback.php',
+			'sources/hooks/systems/config_default/is_on_comments.php',
+			'sources/hooks/systems/config_default/is_on_rating.php',
+			'sources/hooks/systems/config_default/is_on_trackbacks.php',
 		);
 	}
 

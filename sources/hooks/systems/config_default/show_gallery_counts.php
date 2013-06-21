@@ -31,8 +31,8 @@ class Hook_config_default_show_gallery_counts
 		return array(
 			'human_name'=>'SHOW_GALLERY_COUNTS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'BROWSING_GALLERIES',
 			'explanation'=>'CONFIG_OPTION_show_gallery_counts',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

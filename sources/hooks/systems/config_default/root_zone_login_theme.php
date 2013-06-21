@@ -31,8 +31,8 @@ class Hook_config_default_root_zone_login_theme
 		return array(
 			'human_name'=>'ROOT_ZONE_LOGIN_THEME',
 			'the_type'=>'tick',
-			'the_page'=>'THEME',
-			'section'=>'GENERAL',
+			'c_category'=>'THEME',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_root_zone_login_theme',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

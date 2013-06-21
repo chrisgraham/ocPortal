@@ -31,8 +31,8 @@ class Hook_config_default_backup_server_port
 		return array(
 			'human_name'=>'BACKUP_SERVER_PORT',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'BACKUP',
+			'c_category'=>'FEATURE',
+			'c_group'=>'BACKUPS',
 			'explanation'=>'CONFIG_OPTION_backup_server_port',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

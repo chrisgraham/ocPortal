@@ -31,8 +31,8 @@ class Hook_config_default_newsletter_text
 		return array(
 			'human_name'=>'PAGE_TEXT',
 			'the_type'=>'transtext',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWSLETTER',
+			'c_category'=>'FEATURE',
+			'c_group'=>'NEWSLETTER',
 			'explanation'=>'CONFIG_OPTION_newsletter_text',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

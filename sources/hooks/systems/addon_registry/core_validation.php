@@ -99,7 +99,14 @@ class Hook_addon_registry_core_validation
 			'sources/js_validator.php',
 			'lang/EN/validation.ini',
 			'sources/validation.php',
-			'sources/validation2.php'
+			'sources/validation2.php',
+			'sources/hooks/systems/config_default/validation.php',
+			'sources/hooks/systems/config_default/validation_compat.php',
+			'sources/hooks/systems/config_default/validation_css.php',
+			'sources/hooks/systems/config_default/validation_ext_files.php',
+			'sources/hooks/systems/config_default/validation_javascript.php',
+			'sources/hooks/systems/config_default/validation_wcag.php',
+			'sources/hooks/systems/config_default/validation_xhtml.php',
 		);
 	}
 

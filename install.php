@@ -1501,7 +1501,7 @@ function step_5_write_config()
 
 	foreach ($_POST as $key=>$val)
 	{
-		if ((($key=='admin_username') && (post_param('forum_type')!='none')) || ($key=='clear_existing_forums_on_install') || ($key=='allow_reports_default') || ($key=='board_path') || ($key=='confirm') || ($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='master_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
+		if ((($key=='admin_username') && (post_param('forum_type')!='none')) || ($key=='clear_existing_forums_on_install') || ($key=='allow_reports_default') || ($key=='board_path') || ($key=='confirm') || ($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='master_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm') || ($key=='advertise_on')) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
 		if ($key=='master_password') $val='!'.md5($val.'ocp');

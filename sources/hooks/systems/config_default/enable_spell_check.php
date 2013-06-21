@@ -31,8 +31,8 @@ class Hook_config_default_enable_spell_check
 		return array(
 			'human_name'=>'ENABLE_SPELL_CHECK',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'PREVIEW',
+			'c_category'=>'FEATURE',
+			'c_group'=>'PREVIEW',
 			'explanation'=>'CONFIG_OPTION_enable_spell_check',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

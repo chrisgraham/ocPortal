@@ -80,7 +80,7 @@ class Hook_addon_registry_jwplayer
 			'ATTACHMENT_FLV.tpl',
 			'COMCODE_FLV.tpl',
 			'GALLERY_VIDEO_FLV.tpl',
-			'JAVASCRIPT_JWPLAYER.tpl'
+			'JAVASCRIPT_JWPLAYER.tpl',
 		);
 	}
 

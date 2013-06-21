@@ -31,8 +31,8 @@ class Hook_config_default_is_on_highlight_name_buy
 		return array(
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
-			'the_page'=>'POINTSTORE',
-			'section'=>'NAME_HIGHLIGHTING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'NAME_HIGHLIGHTING',
 			'explanation'=>'CONFIG_OPTION_is_on_highlight_name_buy',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_is_on_highlight_name_buy
 	 */
 	function get_default()
 	{
-		if (get_forum_type()!='ocf') return NULL;
-		return '1';
+		return (get_forum_type()!='ocf')?NULL:'1';
 	}
 
 }

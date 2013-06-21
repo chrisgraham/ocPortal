@@ -31,8 +31,8 @@ class Hook_config_default_audio_bitrate
 		return array(
 			'human_name'=>'AUDIO_BITRATE',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'TRANSCODING',
+			'c_category'=>'GALLERY',
+			'c_group'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_audio_bitrate',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

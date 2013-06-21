@@ -90,7 +90,8 @@ class Hook_addon_registry_core_language_editing
 			'themes/default/images/pagepics/criticise_language.png',
 			'themes/default/images/pagepics/language.png',
 			'sources/hooks/systems/do_next_menus/language.php',
-			'themes/default/images/tableitem/translate.png'
+			'themes/default/images/tableitem/translate.png',
+			'sources/hooks/systems/config_default/google_translate_api_key.php',
 		);
 	}
 

@@ -31,8 +31,8 @@ class Hook_config_default_shipping_cost_factor
 		return array(
 			'human_name'=>'SHIPPING_COST_FACTOR',
 			'the_type'=>'float',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'SHOPPING',
 			'explanation'=>'CONFIG_OPTION_shipping_cost_factor',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

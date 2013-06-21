@@ -31,8 +31,8 @@ class Hook_config_default_tree_lists
 		return array(
 			'human_name'=>'TREE_LISTS',
 			'the_type'=>'tick',
-			'the_page'=>'ACCESSIBILITY',
-			'section'=>'GENERAL',
+			'c_category'=>'ACCESSIBILITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_tree_lists',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_vpn_username
 		return array(
 			'human_name'=>'VPN_USERNAME',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'PAYMENT_GATEWAY',
 			'explanation'=>'CONFIG_OPTION_vpn_username',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

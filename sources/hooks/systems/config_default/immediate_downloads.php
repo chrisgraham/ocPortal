@@ -31,8 +31,8 @@ class Hook_config_default_immediate_downloads
 		return array(
 			'human_name'=>'IMMEDIATE_DOWNLOADS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_DOWNLOADS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_DOWNLOADS',
 			'explanation'=>'CONFIG_OPTION_immediate_downloads',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

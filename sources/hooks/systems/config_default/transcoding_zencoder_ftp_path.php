@@ -29,10 +29,10 @@ class Hook_config_default_transcoding_zencoder_ftp_path
 	function get_details()
 	{
 		return array(
-			'human_name'=>'FFMPEG_PATH',
+			'human_name'=>'TRANSCODING_ZENCODER_FTP_PATH',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'TRANSCODING',
+			'c_category'=>'GALLERY',
+			'c_group'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_transcoding_zencoder_ftp_path',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_sitewide_im
 		return array(
 			'human_name'=>'SITEWIDE_IM',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_CHAT',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_CHAT',
 			'explanation'=>'CONFIG_OPTION_sitewide_im',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

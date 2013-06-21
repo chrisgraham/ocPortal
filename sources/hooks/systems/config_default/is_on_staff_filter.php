@@ -31,8 +31,8 @@ class Hook_config_default_is_on_staff_filter
 		return array(
 			'human_name'=>'MEMBER_FILTER',
 			'the_type'=>'tick',
-			'the_page'=>'SECURITY',
-			'section'=>'STAFF',
+			'c_category'=>'SECURITY',
+			'c_group'=>'STAFF',
 			'explanation'=>'CONFIG_OPTION_is_on_staff_filter',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

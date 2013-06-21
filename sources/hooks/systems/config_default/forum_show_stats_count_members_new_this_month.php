@@ -31,8 +31,8 @@ class Hook_config_default_forum_show_stats_count_members_new_this_month
 		return array(
 			'human_name'=>'MEMBERS_NEW_THIS_MONTH',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_forum_show_stats_count_members_new_this_month',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

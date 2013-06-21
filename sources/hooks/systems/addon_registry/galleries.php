@@ -207,6 +207,22 @@ class Hook_addon_registry_galleries
 			'JAVASCRIPT_GALLERIES.tpl',
 			'OCF_MEMBER_PROFILE_GALLERIES.tpl',
 			'sources/hooks/systems/block_ui_renderers/galleries.php',
+			'sources/hooks/systems/config_default/galleries_default_sort_order.php',
+			'sources/hooks/systems/config_default/galleries_subcat_narrowin.php',
+			'sources/hooks/systems/config_default/gallery_entries_flow_per_page.php',
+			'sources/hooks/systems/config_default/gallery_entries_regular_per_page.php',
+			'sources/hooks/systems/config_default/gallery_feedback_fields.php',
+			'sources/hooks/systems/config_default/gallery_member_synced.php',
+			'sources/hooks/systems/config_default/gallery_mode_is.php',
+			'sources/hooks/systems/config_default/gallery_permissions.php',
+			'sources/hooks/systems/config_default/gallery_rep_image.php',
+			'sources/hooks/systems/config_default/gallery_watermarks.php',
+			'sources/hooks/systems/config_default/subgallery_link_limit.php',
+			'sources/hooks/systems/config_default/personal_under_members.php',
+			'sources/hooks/systems/config_default/manual_gallery_codename.php',
+			'sources/hooks/systems/config_default/manual_gallery_media_types.php',
+			'sources/hooks/systems/config_default/manual_gallery_parent.php',
+			'sources/hooks/systems/config_default/enable_ecards.php',
 		);
 	}
 

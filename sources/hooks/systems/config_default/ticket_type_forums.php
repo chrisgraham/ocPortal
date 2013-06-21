@@ -31,8 +31,8 @@ class Hook_config_default_ticket_type_forums
 		return array(
 			'human_name'=>'TICKET_TYPE_FORUMS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'SUPPORT_TICKETS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SUPPORT_TICKETS',
 			'explanation'=>'CONFIG_OPTION_ticket_type_forums',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

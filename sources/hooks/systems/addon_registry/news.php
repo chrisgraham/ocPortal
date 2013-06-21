@@ -134,6 +134,9 @@ class Hook_addon_registry_news
 			'sources/hooks/blocks/main_staff_checklist/blog.php',
 			'OCF_MEMBER_PROFILE_BLOG.tpl',
 			'sources/hooks/systems/block_ui_renderers/news.php',
+			'sources/hooks/systems/config_default/news_categories_per_page.php',
+			'sources/hooks/systems/config_default/news_entries_per_page.php',
+			'sources/hooks/systems/config_default/enable_secondary_news.php',
 		);
 	}
 

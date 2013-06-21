@@ -31,8 +31,8 @@ class Hook_config_default_templates_store_revisions
 		return array(
 			'human_name'=>'STORE_REVISIONS',
 			'the_type'=>'tick',
-			'the_page'=>'ADMIN',
-			'section'=>'EDIT_TEMPLATES',
+			'c_category'=>'ADMIN',
+			'c_group'=>'EDIT_TEMPLATES',
 			'explanation'=>'CONFIG_OPTION_templates_store_revisions',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

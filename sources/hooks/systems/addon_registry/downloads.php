@@ -136,6 +136,11 @@ class Hook_addon_registry_downloads
 			'themes/default/images/bigicons/edit_one_licence.png',
 			'site/dload.php',
 			'site/download_licence.php',
+			'sources/hooks/systems/config_default/dload_search_index.php',
+			'sources/hooks/systems/config_default/download_entries_per_page.php',
+			'sources/hooks/systems/config_default/download_subcats_per_page.php',
+			'sources/hooks/systems/config_default/downloads_default_sort_order.php',
+			'sources/hooks/systems/config_default/downloads_subcat_narrowin.php',
 		);
 	}
 

@@ -31,8 +31,8 @@ class Hook_config_default_show_docs
 		return array(
 			'human_name'=>'SHOW_DOCS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'ADMIN',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_show_docs',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

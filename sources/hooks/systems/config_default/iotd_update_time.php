@@ -31,8 +31,8 @@ class Hook_config_default_iotd_update_time
 		return array(
 			'human_name'=>'IOTD_REGULARITY',
 			'the_type'=>'integer',
-			'the_page'=>'ADMIN',
-			'section'=>'CHECK_LIST',
+			'c_category'=>'ADMIN',
+			'c_group'=>'CHECK_LIST',
 			'explanation'=>'CONFIG_OPTION_iotd_update_time',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

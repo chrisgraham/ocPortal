@@ -31,8 +31,8 @@ class Hook_config_default_detect_lang_forum
 		return array(
 			'human_name'=>'DETECT_LANG_FORUM',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SITE',
+			'c_group'=>'INTERNATIONALISATION',
 			'explanation'=>'CONFIG_OPTION_detect_lang_forum',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

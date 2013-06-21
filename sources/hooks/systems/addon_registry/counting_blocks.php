@@ -77,7 +77,7 @@ class Hook_addon_registry_counting_blocks
 			'sources/blocks/main_countdown.php',
 			'counting_blocks.css',
 			'BLOCK_MAIN_COUNTDOWN.tpl',
-			'BLOCK_MAIN_COUNT.tpl'
+			'BLOCK_MAIN_COUNT.tpl',
 		);
 	}
 

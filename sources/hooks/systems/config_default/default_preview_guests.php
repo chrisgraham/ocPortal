@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_forum
  */
 
 class Hook_config_default_default_preview_guests
@@ -31,13 +31,13 @@ class Hook_config_default_default_preview_guests
 		return array(
 			'human_name'=>'DEFAULT_PREVIEW_GUESTS',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'ADVANCED',
+			'c_category'=>'FEATURE',
+			'c_group'=>'PREVIEW',
 			'explanation'=>'CONFIG_OPTION_default_preview_guests',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_forum',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_default_preview_guests
 	 */
 	function get_default()
 	{
-		return '0';
+		return (get_forum_type()!='ocf')?NULL:'0';
 	}
 
 }

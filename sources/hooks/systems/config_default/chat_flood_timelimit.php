@@ -31,8 +31,8 @@ class Hook_config_default_chat_flood_timelimit
 		return array(
 			'human_name'=>'FLOOD_TIMELIMIT',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_CHAT',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_CHAT',
 			'explanation'=>'CONFIG_OPTION_chat_flood_timelimit',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

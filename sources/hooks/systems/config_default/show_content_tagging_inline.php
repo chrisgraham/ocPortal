@@ -31,8 +31,8 @@ class Hook_config_default_show_content_tagging_inline
 		return array(
 			'human_name'=>'SHOW_CONTENT_TAGGING_INLINE',
 			'the_type'=>'tick',
-			'the_page'=>'THEMES',
-			'section'=>'GENERAL',
+			'c_category'=>'THEME',
+			'c_group'=>'DISPLAY_ELEMENTS',
 			'explanation'=>'CONFIG_OPTION_show_content_tagging_inline',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

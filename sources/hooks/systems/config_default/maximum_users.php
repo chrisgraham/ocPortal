@@ -31,8 +31,8 @@ class Hook_config_default_maximum_users
 		return array(
 			'human_name'=>'MAXIMUM_USERS',
 			'the_type'=>'integer',
-			'the_page'=>'SITE',
-			'section'=>'CLOSED_SITE',
+			'c_category'=>'SITE',
+			'c_group'=>'CLOSED_SITE',
 			'explanation'=>'CONFIG_OPTION_maximum_users',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

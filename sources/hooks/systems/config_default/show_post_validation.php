@@ -31,8 +31,8 @@ class Hook_config_default_show_post_validation
 		return array(
 			'human_name'=>'SHOW_POST_VALIDATION',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'ADMIN',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_show_post_validation',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

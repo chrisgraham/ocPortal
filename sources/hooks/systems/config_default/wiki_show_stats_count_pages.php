@@ -31,8 +31,8 @@ class Hook_config_default_wiki_show_stats_count_pages
 		return array(
 			'human_name'=>'WIKI_PAGES',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_wiki_show_stats_count_pages',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

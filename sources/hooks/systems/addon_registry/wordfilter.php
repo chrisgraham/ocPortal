@@ -83,7 +83,7 @@ class Hook_addon_registry_wordfilter
 			'WORDFILTER_SCREEN.tpl',
 			'adminzone/pages/modules/admin_wordfilter.php',
 			'sources/hooks/modules/admin_setupwizard/wordfilter.php',
-			'sources/hooks/modules/admin_import_types/wordfilter.php'
+			'sources/hooks/modules/admin_import_types/wordfilter.php',
 		);
 	}
 

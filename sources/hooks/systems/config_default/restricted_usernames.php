@@ -31,8 +31,8 @@ class Hook_config_default_restricted_usernames
 		return array(
 			'human_name'=>'RESTRICTED_USERNAMES',
 			'the_type'=>'line',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_restricted_usernames',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

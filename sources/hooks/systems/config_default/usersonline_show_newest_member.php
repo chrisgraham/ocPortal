@@ -31,8 +31,8 @@ class Hook_config_default_usersonline_show_newest_member
 		return array(
 			'human_name'=>'SHOW_NEWEST_MEMBER',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'USERS_ONLINE_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'USERS_ONLINE_BLOCK',
 			'explanation'=>'CONFIG_OPTION_usersonline_show_newest_member',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_usersonline_show_newest_member
 	 */
 	function get_default()
 	{
-		return ((has_no_forum()) || (get_forum_type()!='ocf'))?NULL:'0';
+		return ((has_no_forum()) || (get_forum_type()!='ocf'))?NULL:'1';
 	}
 
 }

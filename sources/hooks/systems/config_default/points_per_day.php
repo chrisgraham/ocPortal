@@ -31,8 +31,8 @@ class Hook_config_default_points_per_day
 		return array(
 			'human_name'=>'POINTS_PER_DAY',
 			'the_type'=>'integer',
-			'the_page'=>'POINTS',
-			'section'=>'COUNT_POINTS_GIVEN',
+			'c_category'=>'POINTS',
+			'c_group'=>'COUNT_POINTS_GIVEN',
 			'explanation'=>'CONFIG_OPTION_points_per_day',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

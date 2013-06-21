@@ -31,8 +31,8 @@ class Hook_config_default_is_rss_advertised
 		return array(
 			'human_name'=>'ENABLE_RSS_ADVERTISING',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWS_AND_RSS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_FEEDS',
 			'explanation'=>'CONFIG_OPTION_is_rss_advertised',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

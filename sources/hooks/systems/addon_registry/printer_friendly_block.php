@@ -75,7 +75,7 @@ class Hook_addon_registry_printer_friendly_block
 			'BLOCK_SIDE_PRINTER_FRIENDLY.tpl',
 			'sources/blocks/side_printer_friendly.php',
 			'sources/hooks/systems/addon_registry/printer_friendly_block.php',
-			'sources/hooks/modules/admin_setupwizard/printer_friendly_block.php'
+			'sources/hooks/modules/admin_setupwizard/printer_friendly_block.php',
 		);
 	}
 

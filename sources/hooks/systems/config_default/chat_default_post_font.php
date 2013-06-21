@@ -30,12 +30,12 @@ class Hook_config_default_chat_default_post_font
 	{
 		return array(
 			'human_name'=>'CHAT_OPTIONS_TEXT_NAME',
-			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_CHAT',
+			'the_type'=>'list',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_CHAT',
 			'explanation'=>'CONFIG_OPTION_chat_default_post_font',
 			'shared_hosting_restricted'=>'0',
-			'c_data'=>'',
+			'c_data'=>'Arial|Courier|Georgia|Impact|Times| Trebuchet|Verdana|Tahoma|Geneva|Helvetica',
 
 			'addon'=>'chat',
 		);

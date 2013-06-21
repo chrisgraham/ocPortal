@@ -31,8 +31,8 @@ class Hook_config_default_ldap_hostname
 		return array(
 			'human_name'=>'LDAP_HOSTNAME',
 			'the_type'=>'line',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_hostname',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

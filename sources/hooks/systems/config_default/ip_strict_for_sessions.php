@@ -31,8 +31,8 @@ class Hook_config_default_ip_strict_for_sessions
 		return array(
 			'human_name'=>'IP_STRICT_FOR_SESSIONS',
 			'the_type'=>'tick',
-			'the_page'=>'SECURITY',
-			'section'=>'GENERAL',
+			'c_category'=>'SECURITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_ip_strict_for_sessions',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

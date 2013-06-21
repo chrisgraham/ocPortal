@@ -31,8 +31,8 @@ class Hook_config_default_bottom_show_sitemap_button
 		return array(
 			'human_name'=>'SITEMAP_LINK',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BOTTOM_LINKS',
+			'c_category'=>'THEME',
+			'c_group'=>'BOTTOM_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_sitemap_button',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_low_space_check
 		return array(
 			'human_name'=>'LOW_DISK_SPACE_SUBJECT',
 			'the_type'=>'integer',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SERVER',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_low_space_check',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

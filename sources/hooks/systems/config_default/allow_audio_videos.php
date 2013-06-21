@@ -31,8 +31,8 @@ class Hook_config_default_allow_audio_videos
 		return array(
 			'human_name'=>'ALLOW_AUDIO_VIDEOS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'FEATURE',
+			'c_group'=>'MEDIA',
 			'explanation'=>'CONFIG_OPTION_allow_audio_videos',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

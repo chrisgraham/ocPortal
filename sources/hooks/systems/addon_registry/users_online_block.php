@@ -77,7 +77,7 @@ class Hook_addon_registry_users_online_block
 			'sources/hooks/systems/addon_registry/users_online_block.php',
 			'BLOCK_SIDE_USERS_ONLINE.tpl',
 			'BLOCK_SIDE_USERS_ONLINE_USER.tpl',
-			'sources/blocks/side_users_online.php'
+			'sources/blocks/side_users_online.php',
 		);
 	}
 

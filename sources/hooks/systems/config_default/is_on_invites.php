@@ -31,8 +31,8 @@ class Hook_config_default_is_on_invites
 		return array(
 			'human_name'=>'INVITES_ENABLED',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'JOINING',
 			'explanation'=>'CONFIG_OPTION_is_on_invites',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_ping_url
 		return array(
 			'human_name'=>'PING_URL',
 			'the_type'=>'text',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWS_AND_RSS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'NEWS',
 			'explanation'=>'CONFIG_OPTION_ping_url',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

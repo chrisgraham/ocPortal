@@ -31,8 +31,8 @@ class Hook_config_default_ldap_allow_joining
 		return array(
 			'human_name'=>'LDAP_ALLOW_JOINING',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_allow_joining',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

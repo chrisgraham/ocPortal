@@ -31,8 +31,8 @@ class Hook_config_default_ldap_group_search_qualifier
 		return array(
 			'human_name'=>'LDAP_GROUP_SEARCH_QUALIFIER',
 			'the_type'=>'line',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_group_search_qualifier',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_ldap_group_search_qualifier
 	 */
 	function get_default()
 	{
-		return 'ou=Group';
+		return '';
 	}
 
 }

@@ -31,8 +31,8 @@ class Hook_config_default_keywords
 		return array(
 			'human_name'=>'KEYWORDS',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'SEO',
 			'explanation'=>'CONFIG_OPTION_keywords',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

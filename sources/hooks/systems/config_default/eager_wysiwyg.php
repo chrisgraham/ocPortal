@@ -31,8 +31,8 @@ class Hook_config_default_eager_wysiwyg
 		return array(
 			'human_name'=>'EAGER_WYSIWYG',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_COMCODE',
 			'explanation'=>'CONFIG_OPTION_eager_wysiwyg',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_eager_wysiwyg
 	 */
 	function get_default()
 	{
-		return '1';
+		return '0';
 	}
 
 }

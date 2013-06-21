@@ -31,8 +31,8 @@ class Hook_config_default_cc_address
 		return array(
 			'human_name'=>'CC_ADDRESS',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'EMAIL',
+			'c_category'=>'SITE',
+			'c_group'=>'EMAIL',
 			'explanation'=>'CONFIG_OPTION_cc_address',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

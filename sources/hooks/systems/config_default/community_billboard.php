@@ -31,8 +31,8 @@ class Hook_config_default_community_billboard
 		return array(
 			'human_name'=>'COST_community_billboard',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'COMMUNITY_BILLBOARD_MESSAGE',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'COMMUNITY_BILLBOARD_MESSAGE',
 			'explanation'=>'CONFIG_OPTION_community_billboard',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_community_billboard
 	 */
 	function get_default()
 	{
-		if (!addon_installed('community_billboard')) return NULL;
-		return '700';
+		if (!addon_installed('community_billboard')) return NULL; return '700';
 	}
 
 }

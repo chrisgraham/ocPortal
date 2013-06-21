@@ -31,8 +31,8 @@ class Hook_config_default_has_low_memory_limit
 		return array(
 			'human_name'=>'HAS_LOW_MEMORY_LIMIT',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SERVER',
+			'c_group'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_has_low_memory_limit',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_has_low_memory_limit
 	 */
 	function get_default()
 	{
-		return (ini_get('memory_limit')=='-1' || ini_get('memory_limit')=='0' || ini_get('memory_limit')=='')?'0':NULL;
+		return ((ini_get('memory_limit')=='-1' || ini_get('memory_limit')=='0' || ini_get('memory_limit')=='')?'0':NULL);
 	}
 
 }

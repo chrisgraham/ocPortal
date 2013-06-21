@@ -31,8 +31,8 @@ class Hook_config_default_welcome_message
 		return array(
 			'human_name'=>'WELCOME_MESSAGE',
 			'the_type'=>'transtext',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'GREETING',
 			'explanation'=>'CONFIG_OPTION_welcome_message',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

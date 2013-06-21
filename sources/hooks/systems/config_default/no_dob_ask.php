@@ -31,8 +31,8 @@ class Hook_config_default_no_dob_ask
 		return array(
 			'human_name'=>'NO_DOB_ASK',
 			'the_type'=>'list',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'USERS',
+			'c_group'=>'JOINING',
 			'explanation'=>'CONFIG_OPTION_no_dob_ask',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'0|1|2',

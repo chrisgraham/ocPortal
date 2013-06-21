@@ -74,7 +74,7 @@ class Hook_addon_registry_language_block
 		return array(
 			'sources/hooks/systems/addon_registry/language_block.php',
 			'BLOCK_SIDE_LANGUAGE.tpl',
-			'sources/blocks/side_language.php'
+			'sources/blocks/side_language.php',
 		);
 	}
 

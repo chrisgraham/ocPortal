@@ -31,8 +31,8 @@ class Hook_config_default_topic_pin
 		return array(
 			'human_name'=>'COST_topic_pin',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'TOPIC_PINNING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'TOPIC_PINNING',
 			'explanation'=>'CONFIG_OPTION_topic_pin',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_topic_pin
 	 */
 	function get_default()
 	{
-		if (!addon_installed('ocf_forum')) return NULL;
-		return '180';
+		return (!addon_installed('ocf_forum'))?NULL:'180';
 	}
 
 }

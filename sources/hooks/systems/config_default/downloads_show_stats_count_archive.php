@@ -31,8 +31,8 @@ class Hook_config_default_downloads_show_stats_count_archive
 		return array(
 			'human_name'=>'TOTAL_DOWNLOADS_IN_ARCHIVE',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_downloads_show_stats_count_archive',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

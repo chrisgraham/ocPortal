@@ -31,8 +31,8 @@ class Hook_config_default_unzip_cmd
 		return array(
 			'human_name'=>'UNZIP_CMD',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'ARCHIVES',
+			'c_category'=>'SERVER',
+			'c_group'=>'ARCHIVES',
 			'explanation'=>'CONFIG_OPTION_unzip_cmd',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

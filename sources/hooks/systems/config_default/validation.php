@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @package		core_validation
  */
 
 class Hook_config_default_validation
@@ -31,13 +31,13 @@ class Hook_config_default_validation
 		return array(
 			'human_name'=>'VALIDATION',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'VALIDATION',
+			'c_category'=>'ACCESSIBILITY',
+			'c_group'=>'VALIDATION',
 			'explanation'=>'CONFIG_OPTION_validation',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
 
-			'addon'=>'core_configuration',
+			'addon'=>'core_validation',
 		);
 	}
 

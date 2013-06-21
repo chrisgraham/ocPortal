@@ -31,8 +31,8 @@ class Hook_config_default_ticket_text
 		return array(
 			'human_name'=>'PAGE_TEXT',
 			'the_type'=>'transtext',
-			'the_page'=>'FEATURE',
-			'section'=>'SUPPORT_TICKETS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SUPPORT_TICKETS',
 			'explanation'=>'CONFIG_OPTION_ticket_text',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

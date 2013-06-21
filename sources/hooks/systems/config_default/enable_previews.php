@@ -31,8 +31,8 @@ class Hook_config_default_enable_previews
 		return array(
 			'human_name'=>'ENABLE_PREVIEWS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'PREVIEW',
+			'c_category'=>'FEATURE',
+			'c_group'=>'PREVIEW',
 			'explanation'=>'CONFIG_OPTION_enable_previews',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

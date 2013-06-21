@@ -31,8 +31,8 @@ class Hook_config_default_bottom_show_top_button
 		return array(
 			'human_name'=>'TOP_LINK',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BOTTOM_LINKS',
+			'c_category'=>'THEME',
+			'c_group'=>'BOTTOM_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_top_button',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_bottom_show_top_button
 	 */
 	function get_default()
 	{
-		return '1';
+		return '0';
 	}
 
 }

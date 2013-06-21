@@ -82,7 +82,7 @@ class Hook_addon_registry_core_zone_editor
 			'themes/default/images/bigicons/zone_editor.png',
 			'themes/default/images/bigicons/zones.png',
 			'adminzone/pages/modules/admin_zones.php',
-			'themes/default/images/pagepics/zones.png'
+			'themes/default/images/pagepics/zones.png',
 		);
 	}
 

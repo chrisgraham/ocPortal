@@ -31,8 +31,8 @@ class Hook_config_default_valid_types
 		return array(
 			'human_name'=>'FILE_TYPES',
 			'the_type'=>'line',
-			'the_page'=>'SECURITY',
-			'section'=>'UPLOADED_FILES',
+			'c_category'=>'SECURITY',
+			'c_group'=>'UPLOADED_FILES',
 			'explanation'=>'CONFIG_OPTION_valid_types',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_valid_types
 	 */
 	function get_default()
 	{
-		return 'swf,sql,odg,odp,odt,ods,ps,pdf,doc,ppt,csv,xls,docx,pptx,xlsx,pub,txt,psd,tga,tif,gif,png,ico,bmp,jpg,jpeg,flv,avi,mov,3gp,mpg,mpeg,webm,mp4,asf,wmv,ram,ra,rm,qt,zip,tar,rar,gz,wav,mp3,ogg,torrent,php,css,tpl,ini,eml';
+		return 'swf,sql,odg,odp,odt,ods,pdf,pgp,dot,doc,ppt,csv,xls,docx,pptx,xlsx,pub,txt,log,psd,tga,tif,gif,png,ico,bmp,jpg,jpeg,flv,avi,mov,3gp,mpg,mpeg,mp4,webm,asf,wmv,zip,tar,rar,gz,wav,mp3,ogg,ogv,torrent,php,css,tpl,ini,eml,patch,diff,iso,dmg';
 	}
 
 }

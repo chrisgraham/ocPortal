@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @package		captcha
  */
 
 class Hook_config_default_use_captchas
@@ -31,13 +31,13 @@ class Hook_config_default_use_captchas
 		return array(
 			'human_name'=>'USE_CAPTCHAS',
 			'the_type'=>'tick',
-			'the_page'=>'SECURITY',
-			'section'=>'CAPTCHA',
+			'c_category'=>'SECURITY',
+			'c_group'=>'CAPTCHA',
 			'explanation'=>'CONFIG_OPTION_use_captchas',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_configuration',
+			'addon'=>'captcha',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_use_captchas
 	 */
 	function get_default()
 	{
-		return addon_installed('captcha')?'1':NULL;
+		return '1';
 	}
 
 }

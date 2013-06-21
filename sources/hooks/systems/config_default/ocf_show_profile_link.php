@@ -31,8 +31,8 @@ class Hook_config_default_ocf_show_profile_link
 		return array(
 			'human_name'=>'MY_PROFILE_LINK',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'PERSONAL_BLOCK',
 			'explanation'=>'CONFIG_OPTION_ocf_show_profile_link',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

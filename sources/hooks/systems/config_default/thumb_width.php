@@ -31,8 +31,8 @@ class Hook_config_default_thumb_width
 		return array(
 			'human_name'=>'THUMB_WIDTH',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'IMAGES',
+			'c_category'=>'FEATURE',
+			'c_group'=>'MEDIA',
 			'explanation'=>'CONFIG_OPTION_thumb_width',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_thumb_width
 	 */
 	function get_default()
 	{
-		return '200';
+		return '175';
 	}
 
 }

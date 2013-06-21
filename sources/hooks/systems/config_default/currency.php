@@ -31,8 +31,8 @@ class Hook_config_default_currency
 		return array(
 			'human_name'=>'CURRENCY',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_currency',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

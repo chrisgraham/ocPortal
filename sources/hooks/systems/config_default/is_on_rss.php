@@ -31,8 +31,8 @@ class Hook_config_default_is_on_rss
 		return array(
 			'human_name'=>'ENABLE_RSS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'NEWS_AND_RSS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'_FEEDS',
 			'explanation'=>'CONFIG_OPTION_is_on_rss',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

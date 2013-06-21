@@ -104,7 +104,7 @@ class Hook_addon_registry_polls
 			'sources/hooks/systems/rss/polls.php',
 			'sources/hooks/systems/trackback/polls.php',
 			'sources/polls.php',
-			'sources/blocks/main_poll.php'
+			'sources/blocks/main_poll.php',
 		);
 	}
 

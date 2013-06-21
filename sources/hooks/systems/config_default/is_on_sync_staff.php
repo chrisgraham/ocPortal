@@ -31,8 +31,8 @@ class Hook_config_default_is_on_sync_staff
 		return array(
 			'human_name'=>'SYNCHRONISATION',
 			'the_type'=>'tick',
-			'the_page'=>'SECURITY',
-			'section'=>'STAFF',
+			'c_category'=>'SECURITY',
+			'c_group'=>'STAFF',
 			'explanation'=>'CONFIG_OPTION_is_on_sync_staff',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_is_on_sync_staff
 	 */
 	function get_default()
 	{
-		return '1';
+		return '0';
 	}
 
 }

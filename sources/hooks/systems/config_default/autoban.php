@@ -31,8 +31,8 @@ class Hook_config_default_autoban
 		return array(
 			'human_name'=>'ENABLE_AUTOBAN',
 			'the_type'=>'tick',
-			'the_page'=>'ACCESSIBILITY',
-			'section'=>'GENERAL',
+			'c_category'=>'SECURITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_autoban',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

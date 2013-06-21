@@ -31,8 +31,8 @@ class Hook_config_default_java_upload
 		return array(
 			'human_name'=>'ENABLE_JAVA_UPLOAD',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'JAVA_UPLOAD',
+			'c_category'=>'SERVER',
+			'c_group'=>'JAVA_UPLOAD',
 			'explanation'=>'CONFIG_OPTION_java_upload',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

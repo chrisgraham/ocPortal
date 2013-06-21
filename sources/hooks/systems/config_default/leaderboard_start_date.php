@@ -31,8 +31,8 @@ class Hook_config_default_leaderboard_start_date
 		return array(
 			'human_name'=>'LEADERBOARD_START_DATE',
 			'the_type'=>'date',
-			'the_page'=>'POINTS',
-			'section'=>'POINT_LEADERBOARD',
+			'c_category'=>'POINTS',
+			'c_group'=>'POINT_LEADERBOARD',
 			'explanation'=>'CONFIG_OPTION_leaderboard_start_date',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

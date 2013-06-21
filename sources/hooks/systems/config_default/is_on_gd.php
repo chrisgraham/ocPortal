@@ -31,8 +31,8 @@ class Hook_config_default_is_on_gd
 		return array(
 			'human_name'=>'GD',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ENVIRONMENT',
+			'c_category'=>'SERVER',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_is_on_gd',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

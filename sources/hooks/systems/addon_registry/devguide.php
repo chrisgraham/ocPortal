@@ -87,7 +87,7 @@ class Hook_addon_registry_devguide
 			'lang/EN/phpdoc.ini',
 			'sources/blocks/main_code_documentor.php',
 			'sources/php.php',
-			'sources/phpstub.php'
+			'sources/phpstub.php',
 		);
 	}
 

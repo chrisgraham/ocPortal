@@ -120,7 +120,7 @@ class Hook_addon_registry_wiki
 			'sources/hooks/systems/module_permissions/wiki_page.php',
 			'themes/default/images/EN/page/edit_tree.png',
 			'site/pages/html_custom/EN/wiki_tree_made.htm',
-			'sources/hooks/systems/notifications/wiki.php'
+			'sources/hooks/systems/notifications/wiki.php',
 		);
 	}
 

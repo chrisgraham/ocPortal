@@ -31,8 +31,8 @@ class Hook_config_default_is_on_topic_pin_buy
 		return array(
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
-			'the_page'=>'POINTSTORE',
-			'section'=>'TOPIC_PINNING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'TOPIC_PINNING',
 			'explanation'=>'CONFIG_OPTION_is_on_topic_pin_buy',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,8 +48,7 @@ class Hook_config_default_is_on_topic_pin_buy
 	 */
 	function get_default()
 	{
-		if (!addon_installed('ocf_forum')) return NULL;
-		return '1';
+		return (!addon_installed('ocf_forum'))?NULL:'1';
 	}
 
 }

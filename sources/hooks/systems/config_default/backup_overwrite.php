@@ -31,8 +31,8 @@ class Hook_config_default_backup_overwrite
 		return array(
 			'human_name'=>'BACKUP_OVERWRITE',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BACKUP',
+			'c_category'=>'FEATURE',
+			'c_group'=>'BACKUPS',
 			'explanation'=>'CONFIG_OPTION_backup_overwrite',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

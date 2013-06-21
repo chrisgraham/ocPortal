@@ -98,7 +98,7 @@ class Hook_addon_registry_backup
 			'sources/hooks/systems/cron/backups.php',
 			'sources/hooks/systems/do_next_menus/backup.php',
 			'sources/hooks/systems/snippets/backup_size.php',
-			'exports/backups/.htaccess'
+			'exports/backups/.htaccess',
 		);
 	}
 

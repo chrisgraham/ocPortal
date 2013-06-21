@@ -31,8 +31,8 @@ class Hook_config_default_allow_international
 		return array(
 			'human_name'=>'ALLOW_INTERNATIONAL',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'SITE',
+			'c_group'=>'INTERNATIONALISATION',
 			'explanation'=>'CONFIG_OPTION_allow_international',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_allow_international
 	 */
 	function get_default()
 	{
-		return '1';
+		return (get_forum_type()!='ocf')?NULL:'1';
 	}
 
 }

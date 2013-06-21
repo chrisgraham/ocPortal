@@ -31,8 +31,8 @@ class Hook_config_default_staff_address
 		return array(
 			'human_name'=>'EMAIL',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'EMAIL',
+			'c_category'=>'SITE',
+			'c_group'=>'EMAIL',
 			'explanation'=>'CONFIG_OPTION_staff_address',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

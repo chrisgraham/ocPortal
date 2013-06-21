@@ -31,8 +31,8 @@ class Hook_config_default_chat_show_stats_count_users
 		return array(
 			'human_name'=>'COUNT_CHATTERS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_chat_show_stats_count_users',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

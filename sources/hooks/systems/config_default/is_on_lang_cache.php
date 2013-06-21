@@ -31,8 +31,8 @@ class Hook_config_default_is_on_lang_cache
 		return array(
 			'human_name'=>'LANGUAGE_CACHE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'CACHES',
+			'c_category'=>'PERFORMANCE',
+			'c_group'=>'CACHES',
 			'explanation'=>'CONFIG_OPTION_is_on_lang_cache',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

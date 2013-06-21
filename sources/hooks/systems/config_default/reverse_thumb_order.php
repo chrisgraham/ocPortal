@@ -31,8 +31,8 @@ class Hook_config_default_reverse_thumb_order
 		return array(
 			'human_name'=>'REVERSE_THUMB_ORDER',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'BROWSING_GALLERIES',
 			'explanation'=>'CONFIG_OPTION_reverse_thumb_order',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

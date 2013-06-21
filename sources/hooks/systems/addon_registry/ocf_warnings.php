@@ -79,7 +79,7 @@ class Hook_addon_registry_ocf_warnings
 			'lang/EN/ocf_warnings.ini',
 			'site/warnings.php',
 			'sources/hooks/systems/profiles_tabs/warnings.php',
-			'OCF_MEMBER_PROFILE_WARNINGS.tpl'
+			'OCF_MEMBER_PROFILE_WARNINGS.tpl',
 		);
 	}
 

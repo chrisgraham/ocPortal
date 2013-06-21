@@ -31,8 +31,8 @@ class Hook_config_default_is_on_strong_forum_tie
 		return array(
 			'human_name'=>'STRONG_FORUM_TIE',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'USER_INTERACTION',
+			'c_category'=>'FEATURE',
+			'c_group'=>'USER_INTERACTION_COMMENTING',
 			'explanation'=>'CONFIG_OPTION_is_on_strong_forum_tie',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',

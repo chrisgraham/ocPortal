@@ -31,8 +31,8 @@ class Hook_config_default_forum_show_personal_stats_posts
 		return array(
 			'human_name'=>'COUNT_POSTSCOUNT',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'PERSONAL_BLOCK',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'PERSONAL_BLOCK',
 			'explanation'=>'CONFIG_OPTION_forum_show_personal_stats_posts',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

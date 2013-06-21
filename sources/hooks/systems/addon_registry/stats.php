@@ -118,7 +118,8 @@ class Hook_addon_registry_stats
 			'themes/default/images/pagepics/statistics_google.png',
 			'themes/default/images/pagepics/statistics_pageviews.png',
 			'themes/default/images/pagepics/statistics_referrers.png',
-			'themes/default/images/pagepics/submits.png'
+			'themes/default/images/pagepics/submits.png',
+			'sources/hooks/systems/config_default/bot_stats.php',
 		);
 	}
 

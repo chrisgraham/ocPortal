@@ -98,7 +98,7 @@ class Hook_addon_registry_core_cleanup_tools
 			'sources/hooks/systems/cleanup/orphaned_lang_strings.php',
 			'sources/hooks/systems/cleanup/orphaned_uploads.php',
 			'sources/hooks/systems/cleanup/templates.php',
-			'sources/hooks/systems/cleanup/criticise_mysql_fields.php'
+			'sources/hooks/systems/cleanup/criticise_mysql_fields.php',
 		);
 	}
 

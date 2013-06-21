@@ -31,8 +31,8 @@ class Hook_config_default_site_name
 		return array(
 			'human_name'=>'SITE_NAME',
 			'the_type'=>'line',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_site_name',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

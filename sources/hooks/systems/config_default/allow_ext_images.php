@@ -31,8 +31,8 @@ class Hook_config_default_allow_ext_images
 		return array(
 			'human_name'=>'ALLOW_EXT_IMAGES',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'EMAIL',
+			'c_category'=>'SITE',
+			'c_group'=>'EMAIL',
 			'explanation'=>'CONFIG_OPTION_allow_ext_images',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -31,8 +31,8 @@ class Hook_config_default_site_closed
 		return array(
 			'human_name'=>'CLOSED_SITE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'CLOSED_SITE',
+			'c_category'=>'SITE',
+			'c_group'=>'CLOSED_SITE',
 			'explanation'=>'CONFIG_OPTION_site_closed',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_site_closed
 	 */
 	function get_default()
 	{
-		return '0';
+		if (((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost'))))?'0':'1') return '0'; return '1';
 	}
 
 }

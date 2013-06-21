@@ -31,8 +31,8 @@ class Hook_config_default_wysiwyg
 		return array(
 			'human_name'=>'ENABLE_WYSIWYG',
 			'the_type'=>'tick',
-			'the_page'=>'ACCESSIBILITY',
-			'section'=>'GENERAL',
+			'c_category'=>'ACCESSIBILITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_wysiwyg',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

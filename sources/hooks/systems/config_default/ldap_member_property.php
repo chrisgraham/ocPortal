@@ -31,8 +31,8 @@ class Hook_config_default_ldap_member_property
 		return array(
 			'human_name'=>'LDAP_MEMBER_PROPERTY',
 			'the_type'=>'line',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_member_property',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_ldap_member_property
 	 */
 	function get_default()
 	{
-		return (get_option('ldap_is_windows')=='0')?'uid':'sAMAccountName';
+		return (get_option('ldap_is_windows')=='1')?'sAMAccountName':'cn';
 	}
 
 }

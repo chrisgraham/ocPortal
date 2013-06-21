@@ -31,8 +31,8 @@ class Hook_config_default_ipn_test
 		return array(
 			'human_name'=>'IPN_ADDRESS_TEST',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'PAYMENT_GATEWAY_TESTING_MODE',
 			'explanation'=>'CONFIG_OPTION_ipn_test',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

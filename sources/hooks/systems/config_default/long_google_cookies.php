@@ -31,13 +31,13 @@ class Hook_config_default_long_google_cookies
 		return array(
 			'human_name'=>'LONG_GOOGLE_COOKIES',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_long_google_cookies',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

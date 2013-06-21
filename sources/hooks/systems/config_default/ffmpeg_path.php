@@ -31,8 +31,8 @@ class Hook_config_default_ffmpeg_path
 		return array(
 			'human_name'=>'FFMPEG_PATH',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'TRANSCODING',
+			'c_category'=>'GALLERY',
+			'c_group'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_ffmpeg_path',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

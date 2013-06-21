@@ -29,10 +29,10 @@ class Hook_config_default_transcoding_zencoder_api_key
 	function get_details()
 	{
 		return array(
-			'human_name'=>'FFMPEG_PATH',
+			'human_name'=>'TRANSCODING_ZENCODER_API_KEY',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'TRANSCODING',
+			'c_category'=>'GALLERY',
+			'c_group'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_transcoding_zencoder_api_key',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

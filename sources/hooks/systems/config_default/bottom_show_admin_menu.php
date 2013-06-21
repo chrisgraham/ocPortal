@@ -31,8 +31,8 @@ class Hook_config_default_bottom_show_admin_menu
 		return array(
 			'human_name'=>'ADMIN_MENU',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BOTTOM_LINKS',
+			'c_category'=>'THEME',
+			'c_group'=>'BOTTOM_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_admin_menu',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

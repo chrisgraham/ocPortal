@@ -31,8 +31,8 @@ class Hook_config_default_show_inline_stats
 		return array(
 			'human_name'=>'SHOW_INLINE_STATS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_show_inline_stats',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

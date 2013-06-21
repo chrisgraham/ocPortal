@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_member_avatars
  */
 
 class Hook_config_default_random_avatars
@@ -31,13 +31,13 @@ class Hook_config_default_random_avatars
 		return array(
 			'human_name'=>'ASSIGN_RANDOM_AVATARS',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'JOINING',
 			'explanation'=>'CONFIG_OPTION_random_avatars',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_member_avatars',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_random_avatars
 	 */
 	function get_default()
 	{
-		return addon_installed('ocf_member_avatars')?'1':NULL;
+		return '1';
 	}
 
 }

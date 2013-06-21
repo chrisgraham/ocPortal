@@ -31,8 +31,8 @@ class Hook_config_default_complex_uploader
 		return array(
 			'human_name'=>'COMPLEX_UPLOADER',
 			'the_type'=>'tick',
-			'the_page'=>'ACCESSIBILITY',
-			'section'=>'GENERAL',
+			'c_category'=>'ACCESSIBILITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_complex_uploader',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

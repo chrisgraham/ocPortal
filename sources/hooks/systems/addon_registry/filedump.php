@@ -89,7 +89,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/systems/occle_fs/home.php',
 			'uploads/filedump/.htaccess',
-			'themes/default/images/bigicons/filedump.png'
+			'themes/default/images/bigicons/filedump.png',
 		);
 	}
 

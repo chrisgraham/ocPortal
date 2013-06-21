@@ -31,8 +31,8 @@ class Hook_config_default_gallery_name_order
 		return array(
 			'human_name'=>'GALLERY_NAME_ORDER',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'BROWSING_GALLERIES',
 			'explanation'=>'CONFIG_OPTION_gallery_name_order',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_gallery_name_order
 	 */
 	function get_default()
 	{
-		return '0';
+		return '1';
 	}
 
 }

@@ -86,7 +86,7 @@ class Hook_addon_registry_page_management
 			'themes/default/images/pagepics/move.png',
 			'themes/default/images/pagepics/deletepage.png',
 			'themes/default/images/pagepics/addpagewizard.png',
-			'themes/default/images/under_construction_animated.gif'
+			'themes/default/images/under_construction_animated.gif',
 		);
 	}
 

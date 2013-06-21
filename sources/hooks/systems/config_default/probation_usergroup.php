@@ -31,8 +31,8 @@ class Hook_config_default_probation_usergroup
 		return array(
 			'human_name'=>'PROBATION_USERGROUP',
 			'the_type'=>'usergroup',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'SECURITY',
+			'c_group'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_probation_usergroup',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_probation_usergroup
 	 */
 	function get_default()
 	{
-		return do_lang('PROBATION');
+		return (get_forum_type()!='ocf')?NULL:do_lang('PROBATION');
 	}
 
 }

@@ -31,8 +31,8 @@ class Hook_config_default_filedump_show_stats_count_total_files
 		return array(
 			'human_name'=>'FILEDUMP_COUNT_FILES',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_filedump_show_stats_count_total_files',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

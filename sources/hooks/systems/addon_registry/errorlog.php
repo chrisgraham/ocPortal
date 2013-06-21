@@ -79,7 +79,7 @@ class Hook_addon_registry_errorlog
 			'themes/default/images/pagepics/errorlog.png',
 			'themes/default/images/bigicons/errorlog.png',
 			'adminzone/pages/modules/admin_errorlog.php',
-			'ERRORLOG_SCREEN.tpl'
+			'ERRORLOG_SCREEN.tpl',
 		);
 	}
 

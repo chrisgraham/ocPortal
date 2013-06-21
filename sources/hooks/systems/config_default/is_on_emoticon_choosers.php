@@ -31,8 +31,8 @@ class Hook_config_default_is_on_emoticon_choosers
 		return array(
 			'human_name'=>'IS_ON_EMOTICON_CHOOSERS',
 			'the_type'=>'tick',
-			'the_page'=>'THEME',
-			'section'=>'GENERAL',
+			'c_category'=>'THEME',
+			'c_group'=>'DISPLAY_ELEMENTS',
 			'explanation'=>'CONFIG_OPTION_is_on_emoticon_choosers',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

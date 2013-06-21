@@ -31,8 +31,8 @@ class Hook_config_default_use_banner_permissions
 		return array(
 			'human_name'=>'PERMISSIONS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'BANNERS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'BANNERS',
 			'explanation'=>'CONFIG_OPTION_use_banner_permissions',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

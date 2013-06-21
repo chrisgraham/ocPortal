@@ -31,8 +31,8 @@ class Hook_config_default_allow_email_disable
 		return array(
 			'human_name'=>'ALLOW_EMAIL_DISABLE',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'MEMBERS',
+			'c_category'=>'USERS',
+			'c_group'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_allow_email_disable',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

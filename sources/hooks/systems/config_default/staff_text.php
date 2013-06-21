@@ -31,8 +31,8 @@ class Hook_config_default_staff_text
 		return array(
 			'human_name'=>'PAGE_TEXT',
 			'the_type'=>'transtext',
-			'the_page'=>'SECURITY',
-			'section'=>'STAFF',
+			'c_category'=>'SECURITY',
+			'c_group'=>'STAFF',
 			'explanation'=>'CONFIG_OPTION_staff_text',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

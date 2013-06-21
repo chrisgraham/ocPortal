@@ -31,8 +31,8 @@ class Hook_config_default_allow_email_from_staff_disable
 		return array(
 			'human_name'=>'ALLOW_EMAIL_FROM_STAFF_DISABLE',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'USERS',
+			'c_group'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_allow_email_from_staff_disable',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

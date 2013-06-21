@@ -31,8 +31,8 @@ class Hook_config_default_minimum_gamble_amount
 		return array(
 			'human_name'=>'MINIMUM_GAMBLE_AMOUNT',
 			'the_type'=>'integer',
-			'the_page'=>'POINTSTORE',
-			'section'=>'GAMBLING',
+			'c_category'=>'POINTSTORE',
+			'c_group'=>'GAMBLING',
 			'explanation'=>'CONFIG_OPTION_minimum_gamble_amount',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

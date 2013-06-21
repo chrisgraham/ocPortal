@@ -31,8 +31,8 @@ class Hook_config_default_ldap_none_bind_logins
 		return array(
 			'human_name'=>'LDAP_NONE_BIND_LOGINS',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'LDAP',
+			'c_category'=>'USERS',
+			'c_group'=>'LDAP',
 			'explanation'=>'CONFIG_OPTION_ldap_none_bind_logins',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_ldap_none_bind_logins
 	 */
 	function get_default()
 	{
-		return '1';
+		return '0';
 	}
 
 }

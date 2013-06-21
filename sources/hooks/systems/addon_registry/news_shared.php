@@ -76,7 +76,7 @@ class Hook_addon_registry_news_shared
 			'NEWS_BOX.tpl',
 			'NEWS_BRIEF.tpl',
 			'news.css',
-			'lang/EN/news.ini'
+			'lang/EN/news.ini',
 		);
 	}
 

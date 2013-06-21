@@ -31,8 +31,8 @@ class Hook_config_default_require_new_member_validation
 		return array(
 			'human_name'=>'REQUIRE_NEW_MEMBER_VALIDATION',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
+			'c_category'=>'USERS',
+			'c_group'=>'JOINING',
 			'explanation'=>'CONFIG_OPTION_require_new_member_validation',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

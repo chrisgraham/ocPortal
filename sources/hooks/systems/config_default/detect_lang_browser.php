@@ -31,8 +31,8 @@ class Hook_config_default_detect_lang_browser
 		return array(
 			'human_name'=>'DETECT_LANG_BROWSER',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SITE',
+			'c_group'=>'INTERNATIONALISATION',
 			'explanation'=>'CONFIG_OPTION_detect_lang_browser',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

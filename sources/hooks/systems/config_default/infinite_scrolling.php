@@ -31,13 +31,13 @@ class Hook_config_default_infinite_scrolling
 		return array(
 			'human_name'=>'INFINITE_SCROLLING',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'FEATURE',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_infinite_scrolling',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

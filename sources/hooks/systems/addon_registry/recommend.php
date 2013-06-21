@@ -90,7 +90,8 @@ class Hook_addon_registry_recommend
 			'themes/default/images/recommend/recommend.gif',
 			'sources/blocks/main_screen_actions.php',
 			'screen_actions.css',
-			'BLOCK_MAIN_SCREEN_ACTIONS.tpl'
+			'BLOCK_MAIN_SCREEN_ACTIONS.tpl',
+			'sources/hooks/systems/config_default/enable_csv_recommend.php',
 		);
 	}
 

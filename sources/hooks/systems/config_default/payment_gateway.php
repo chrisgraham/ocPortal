@@ -31,8 +31,8 @@ class Hook_config_default_payment_gateway
 		return array(
 			'human_name'=>'PAYMENT_GATEWAY',
 			'the_type'=>'line',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'PAYMENT_GATEWAY',
 			'explanation'=>'CONFIG_OPTION_payment_gateway',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

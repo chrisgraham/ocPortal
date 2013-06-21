@@ -31,8 +31,8 @@ class Hook_config_default_allow_opting_out_of_tax
 		return array(
 			'human_name'=>'ALLOW_OPTING_OUT_OF_TAX',
 			'the_type'=>'tick',
-			'the_page'=>'ECOMMERCE',
-			'section'=>'ECOMMERCE',
+			'c_category'=>'ECOMMERCE',
+			'c_group'=>'SHOPPING',
 			'explanation'=>'CONFIG_OPTION_allow_opting_out_of_tax',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

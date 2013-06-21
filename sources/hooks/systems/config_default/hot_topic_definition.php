@@ -31,8 +31,8 @@ class Hook_config_default_hot_topic_definition
 		return array(
 			'human_name'=>'HOT_TOPIC_DEFINITION',
 			'the_type'=>'integer',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'FORUMS',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_hot_topic_definition',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_hot_topic_definition
 	 */
 	function get_default()
 	{
-		return has_no_forum()?NULL:'20';
+		return '20';
 	}
 
 }

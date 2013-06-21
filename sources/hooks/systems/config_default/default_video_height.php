@@ -31,8 +31,8 @@ class Hook_config_default_default_video_height
 		return array(
 			'human_name'=>'DEFAULT_VIDEO_HEIGHT',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'VIDEOS',
 			'explanation'=>'CONFIG_OPTION_default_video_height',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

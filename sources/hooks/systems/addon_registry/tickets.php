@@ -104,7 +104,7 @@ class Hook_addon_registry_tickets
 			'themes/default/images/EN/page/add_ticket.png',
 			'sources/hooks/systems/notifications/ticket_reply.php',
 			'sources/hooks/systems/notifications/ticket_new_staff.php',
-			'sources/hooks/systems/notifications/ticket_reply_staff.php'
+			'sources/hooks/systems/notifications/ticket_reply_staff.php',
 		);
 	}
 

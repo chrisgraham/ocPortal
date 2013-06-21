@@ -119,7 +119,12 @@ class Hook_addon_registry_points
 			'sources/hooks/systems/occle_commands/give.php',
 			'site/pages/modules/leader_board.php',
 			'sources/blocks/main_leader_board.php',
-			'lang/EN/leader_board.ini'
+			'lang/EN/leader_board.ini',
+			'sources/hooks/systems/config_default/points_per_currency_unit.php',
+			'sources/hooks/systems/config_default/point_logs_per_page.php',
+			'sources/hooks/systems/config_default/points_if_liked.php',
+			'sources/hooks/systems/config_default/gift_reward_amount.php',
+			'sources/hooks/systems/config_default/gift_reward_chance.php',
 		);
 	}
 

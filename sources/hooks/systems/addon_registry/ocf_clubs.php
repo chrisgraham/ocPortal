@@ -79,6 +79,8 @@ class Hook_addon_registry_ocf_clubs
 			'themes/default/images/bigicons/clubs.png',
 			'themes/default/images/pagepics/clubs.png',
 			'cms/pages/modules/cms_ocf_groups.php',
+			'sources/hooks/systems/config_default/club_forum_parent_forum_grouping.php',
+			'sources/hooks/systems/config_default/club_forum_parent_forum.php',
 		);
 	}
 

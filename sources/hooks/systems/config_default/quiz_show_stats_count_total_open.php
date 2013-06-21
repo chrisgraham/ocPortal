@@ -31,8 +31,8 @@ class Hook_config_default_quiz_show_stats_count_total_open
 		return array(
 			'human_name'=>'QUIZZES',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_quiz_show_stats_count_total_open',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

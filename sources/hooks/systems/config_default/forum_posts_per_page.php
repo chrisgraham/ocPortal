@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_forum
  */
 
 class Hook_config_default_forum_posts_per_page
@@ -31,13 +31,13 @@ class Hook_config_default_forum_posts_per_page
 		return array(
 			'human_name'=>'FORUM_POSTS_PER_PAGE',
 			'the_type'=>'integer',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'FORUMS',
+			'c_group'=>'FORUM_TOPICS',
 			'explanation'=>'CONFIG_OPTION_forum_posts_per_page',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_forum',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_forum_posts_per_page
 	 */
 	function get_default()
 	{
-		return has_no_forum()?NULL:'20';
+		return '20';
 	}
 
 }

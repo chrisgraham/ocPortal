@@ -31,8 +31,8 @@ class Hook_config_default_templates_number_revisions_show
 		return array(
 			'human_name'=>'SHOW_REVISIONS',
 			'the_type'=>'integer',
-			'the_page'=>'ADMIN',
-			'section'=>'EDIT_TEMPLATES',
+			'c_category'=>'ADMIN',
+			'c_group'=>'EDIT_TEMPLATES',
 			'explanation'=>'CONFIG_OPTION_templates_number_revisions_show',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

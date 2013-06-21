@@ -31,8 +31,8 @@ class Hook_config_default_users_online_time
 		return array(
 			'human_name'=>'USERS_ONLINE_TIME',
 			'the_type'=>'integer',
-			'the_page'=>'SITE',
-			'section'=>'LOGGING',
+			'c_category'=>'SITE',
+			'c_group'=>'LOGGING',
 			'explanation'=>'CONFIG_OPTION_users_online_time',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

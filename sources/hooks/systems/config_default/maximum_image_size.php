@@ -31,8 +31,8 @@ class Hook_config_default_maximum_image_size
 		return array(
 			'human_name'=>'MAXIMUM_IMAGE_SIZE',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'c_category'=>'GALLERY',
+			'c_group'=>'IMAGES',
 			'explanation'=>'CONFIG_OPTION_maximum_image_size',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

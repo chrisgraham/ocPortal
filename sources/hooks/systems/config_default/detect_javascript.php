@@ -31,13 +31,13 @@ class Hook_config_default_detect_javascript
 		return array(
 			'human_name'=>'DETECT_JAVASCRIPT',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'SITE',
+			'c_group'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_detect_javascript',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

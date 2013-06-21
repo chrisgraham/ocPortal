@@ -31,8 +31,8 @@ class Hook_config_default_editarea
 		return array(
 			'human_name'=>'EDITAREA',
 			'the_type'=>'tick',
-			'the_page'=>'ACCESSIBILITY',
-			'section'=>'GENERAL',
+			'c_category'=>'ACCESSIBILITY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_editarea',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

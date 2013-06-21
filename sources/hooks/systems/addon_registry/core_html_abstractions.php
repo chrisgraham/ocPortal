@@ -88,7 +88,7 @@ class Hook_addon_registry_core_html_abstractions
 			'STANDALONE_HTML_WRAP.tpl',
 			'HTML_HEAD.tpl',
 			'POOR_XHTML_WRAPPER.tpl',
-			'WITH_WHITESPACE.tpl'
+			'WITH_WHITESPACE.tpl',
 		);
 	}
 

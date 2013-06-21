@@ -31,8 +31,8 @@ class Hook_config_default_video_height_setting
 		return array(
 			'human_name'=>'VIDEO_HEIGHT_SETTING',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE',
-			'section'=>'TRANSCODING',
+			'c_category'=>'GALLERY',
+			'c_group'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_video_height_setting',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

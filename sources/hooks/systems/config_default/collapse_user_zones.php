@@ -31,8 +31,8 @@ class Hook_config_default_collapse_user_zones
 		return array(
 			'human_name'=>'COLLAPSE_USER_ZONES',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'GENERAL',
+			'c_category'=>'SITE',
+			'c_group'=>'STRUCTURE',
 			'explanation'=>'CONFIG_OPTION_collapse_user_zones',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

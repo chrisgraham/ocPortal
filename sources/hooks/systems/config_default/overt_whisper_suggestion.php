@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		ocf_forum
  */
 
 class Hook_config_default_overt_whisper_suggestion
@@ -31,13 +31,13 @@ class Hook_config_default_overt_whisper_suggestion
 		return array(
 			'human_name'=>'OVERT_WHISPER_SUGGESTION',
 			'the_type'=>'tick',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'GENERAL',
+			'c_category'=>'FORUMS',
+			'c_group'=>'WHISPER',
 			'explanation'=>'CONFIG_OPTION_overt_whisper_suggestion',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'ocf_forum',
 		);
 	}
 

@@ -31,8 +31,8 @@ class Hook_config_default_enveloper_override
 		return array(
 			'human_name'=>'ENVELOPER_OVERRIDE',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'EMAIL',
+			'c_category'=>'SITE',
+			'c_group'=>'EMAIL',
 			'explanation'=>'CONFIG_OPTION_enveloper_override',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

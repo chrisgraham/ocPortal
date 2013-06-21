@@ -84,7 +84,7 @@ class Hook_addon_registry_forum_blocks
 			'sources/blocks/main_forum_topics.php',
 			'sources/blocks/side_forum_news.php',
 			'sources/hooks/systems/addon_registry/forum_blocks.php',
-			'sources/hooks/modules/admin_setupwizard/forum_blocks.php'
+			'sources/hooks/modules/admin_setupwizard/forum_blocks.php',
 		);
 	}
 

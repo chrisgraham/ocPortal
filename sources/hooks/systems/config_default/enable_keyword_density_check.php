@@ -31,8 +31,8 @@ class Hook_config_default_enable_keyword_density_check
 		return array(
 			'human_name'=>'ENABLE_KEYWORD_DENSITY_CHECK',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'PREVIEW',
+			'c_category'=>'FEATURE',
+			'c_group'=>'PREVIEW',
 			'explanation'=>'CONFIG_OPTION_enable_keyword_density_check',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

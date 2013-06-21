@@ -31,8 +31,8 @@ class Hook_config_default_galleries_show_stats_count_images
 		return array(
 			'human_name'=>'IMAGES',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_galleries_show_stats_count_images',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

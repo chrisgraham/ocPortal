@@ -80,7 +80,7 @@ class Hook_addon_registry_supermember_directory
 			'SUPERMEMBERS_SCREEN.tpl',
 			'SUPERMEMBERS_SCREEN_ENTRY.tpl',
 			'SUPERMEMBERS_SCREEN_GROUP.tpl',
-			'collaboration/pages/modules/supermembers.php'
+			'collaboration/pages/modules/supermembers.php',
 		);
 	}
 

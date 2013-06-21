@@ -173,6 +173,9 @@ class Hook_addon_registry_chat
 			'sources/blocks/side_shoutbox.php',
 			'OCF_MEMBER_PROFILE_FRIENDS.tpl',
 			'sources/hooks/systems/block_ui_renderers/chat.php',
+			'sources/hooks/systems/config_default/chat_message_check_interval.php',
+			'sources/hooks/systems/config_default/chat_transitory_alert_time.php',
+			'sources/hooks/systems/config_default/max_chat_lobby_friends.php',
 		);
 	}
 

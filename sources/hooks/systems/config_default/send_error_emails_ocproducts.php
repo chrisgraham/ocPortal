@@ -31,8 +31,8 @@ class Hook_config_default_send_error_emails_ocproducts
 		return array(
 			'human_name'=>'SEND_ERROR_EMAILS_OCPRODUCTS',
 			'the_type'=>'tick',
-			'the_page'=>'SITE',
-			'section'=>'ADVANCED',
+			'c_category'=>'PRIVACY',
+			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_send_error_emails_ocproducts',
 			'shared_hosting_restricted'=>'1',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_send_error_emails_ocproducts
 	 */
 	function get_default()
 	{
-		return '1';
+		return 1;
 	}
 
 }

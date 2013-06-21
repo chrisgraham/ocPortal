@@ -31,8 +31,8 @@ class Hook_config_default_forum_show_stats_count_members
 		return array(
 			'human_name'=>'COUNT_MEMBERS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_forum_show_stats_count_members',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_forum_show_stats_count_members
 	 */
 	function get_default()
 	{
-		return addon_installed('stats_block')?'1':NULL;
+		return '1';
 	}
 
 }

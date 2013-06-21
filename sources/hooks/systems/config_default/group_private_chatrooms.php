@@ -31,8 +31,8 @@ class Hook_config_default_group_private_chatrooms
 		return array(
 			'human_name'=>'GROUP_PRIVATE_CHATROOMS',
 			'the_type'=>'tick',
-			'the_page'=>'FEATURE',
-			'section'=>'SECTION_CHAT',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SECTION_CHAT',
 			'explanation'=>'CONFIG_OPTION_group_private_chatrooms',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

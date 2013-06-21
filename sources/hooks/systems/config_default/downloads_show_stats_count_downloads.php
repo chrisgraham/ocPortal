@@ -31,8 +31,8 @@ class Hook_config_default_downloads_show_stats_count_downloads
 		return array(
 			'human_name'=>'_COUNT_DOWNLOADS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_downloads_show_stats_count_downloads',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

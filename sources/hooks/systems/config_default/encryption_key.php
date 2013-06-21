@@ -31,8 +31,8 @@ class Hook_config_default_encryption_key
 		return array(
 			'human_name'=>'ENCRYPTION_KEY',
 			'the_type'=>'line',
-			'the_page'=>'PRIVACY',
-			'section'=>'ADVANCED',
+			'c_category'=>'PRIVACY',
+			'c_group'=>'ADVANCED',
 			'explanation'=>'CONFIG_OPTION_encryption_key',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
@@ -48,7 +48,7 @@ class Hook_config_default_encryption_key
 	 */
 	function get_default()
 	{
-		require_code('encryption');return is_encryption_available()?'':NULL;
+		require_code('encryption'); if (get_forum_type()!='ocf') return NULL; return is_encryption_available()?'':NULL;
 	}
 
 }

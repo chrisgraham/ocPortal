@@ -31,13 +31,13 @@ class Hook_config_default_sms_username
 		return array(
 			'human_name'=>'USERNAME',
 			'the_type'=>'line',
-			'the_page'=>'FEATURE',
-			'section'=>'SMS',
+			'c_category'=>'FEATURE',
+			'c_group'=>'SMS',
 			'explanation'=>'CONFIG_OPTION_sms_username',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'core',
+			'addon'=>'sms',
 		);
 	}
 

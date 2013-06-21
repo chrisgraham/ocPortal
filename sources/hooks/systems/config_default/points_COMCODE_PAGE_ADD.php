@@ -31,8 +31,8 @@ class Hook_config_default_points_COMCODE_PAGE_ADD
 		return array(
 			'human_name'=>'COMCODE_PAGE_ADD',
 			'the_type'=>'integer',
-			'the_page'=>'POINTS',
-			'section'=>'COUNT_POINTS_GIVEN',
+			'c_category'=>'POINTS',
+			'c_group'=>'COUNT_POINTS_GIVEN',
 			'explanation'=>'CONFIG_OPTION_points_COMCODE_PAGE_ADD',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

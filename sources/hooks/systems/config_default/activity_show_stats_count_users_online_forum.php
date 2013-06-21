@@ -31,8 +31,8 @@ class Hook_config_default_activity_show_stats_count_users_online_forum
 		return array(
 			'human_name'=>'COUNT_ONFORUMS',
 			'the_type'=>'tick',
-			'the_page'=>'BLOCKS',
-			'section'=>'STATISTICS',
+			'c_category'=>'BLOCKS',
+			'c_group'=>'STATISTICS',
 			'explanation'=>'CONFIG_OPTION_activity_show_stats_count_users_online_forum',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
