@@ -386,17 +386,9 @@ function filter_invites_for_blocking($people)
  * Prune membership of chat room.
  *
  * @param  AUTO_LINK			Room ID (or -1 if all rooms)
- * @param  ?array				The room row (NULL: read in from DB)
  */
-function chat_room_prune($room_id,$room_row=NULL)
+function chat_room_prune($room_id)
 {
-	if (is_null($room_row))
-	{
-		$_room_row=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id),'',1);
-		if (!array_key_exists(0,$_room_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$room_row=$_room_row[0];
-	}
-
 	// Find who may have gone offline
 	$extra='';
 	$last_active_prune=intval(get_value('last_active_prune'));
@@ -435,6 +427,7 @@ function chat_room_prune($room_id,$room_row=NULL)
 					$left_room_msg=do_lang('LEFT_ROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id']));
 					if ($left_room_msg!='')
 					{
+						require_code('comcode');
 						$_message_parsed=insert_lang_comcode($left_room_msg,4);
 						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$p['room_id'],'user_id'=>$p['member_id'],'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
@@ -495,12 +488,18 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 	{
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id));
 		if (array_key_exists(0,$room_check))
-			chat_room_prune($room_id,$room_check[0]);
+			chat_room_prune($room_id);
 	} elseif ($room_id!=-2)
 	{
 		// Note that *we are still here*
-		$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>($room_id==-1)?NULL:$room_id));
-		$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>($room_id==-1)?NULL:$room_id),'',1);
+		if ($room_id==-1)
+		{
+			$GLOBALS['SITE_DB']->query_update('chat_active',array('date_and_time'=>time()),array('member_id'=>get_member()));
+		} else
+		{
+			$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>$room_id));
+			$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>$room_id),'',1);
+		}
 	}
 
 	if (is_null($room_check))
@@ -1184,6 +1183,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		$_entering_room=get_translated_text($entering_room);
 		if ($_entering_room!='')
 		{
+			require_code('comcode');
 			$_message_parsed=insert_lang_comcode('[private="'.$their_username.'"]'.$_entering_room.'[/private]',4);
 			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
@@ -1195,6 +1195,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		$enter_room_msg=do_lang('ENTERED_THE_ROOM',$their_username);
 		if ($enter_room_msg!='')
 		{
+			require_code('comcode');
 			$_message_parsed=insert_lang_comcode($enter_room_msg,4);
 			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
