@@ -192,7 +192,7 @@ function may_vote_in_poll($poll_id,$member_id,$ip)
 
 	if (!has_privilege($member_id,'vote_in_polls','cms_polls')) return false;
 
-	if ((get_option('poll_member_ip_restrict')=='0') || (is_null($ip)))
+	if ((get_option('vote_member_ip_restrict')=='0') || (is_null($ip)))
 	{
 		if (is_guest($member_id))
 		{

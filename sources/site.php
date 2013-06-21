@@ -30,14 +30,8 @@ function init__site()
 	$REDIRECTED_TO_CACHE=NULL;
 
 	// Get ready for breadcrumbs
-	if (function_exists('get_value'))
-	{
-		$bcl=get_option('breadcrumb_crop_length');
-	} else
-	{
-		$bcl=mixed();
-	}
-	define('BREADCRUMB_CROP_LENGTH',is_null($bcl)?26:intval($bcl));
+	$bcl=get_option('breadcrumb_crop_length');
+	define('BREADCRUMB_CROP_LENGTH',intval($bcl));
 
 	global $NON_CANONICAL_PARAMS;
 	// We only bother listing ones the software itself may inject - otherwise admin responsible for their own curation of canonical settings

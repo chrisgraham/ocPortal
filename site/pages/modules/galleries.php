@@ -226,7 +226,7 @@ class Module_galleries
 			add_config_option('IMAGES','galleries_show_stats_count_images','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('VIDEOS','galleries_show_stats_count_videos','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('SHOW_EMPTY_GALLERIES','show_empty_galleries','tick','return \'1\';','GALLERY','BROWSING_GALLERIES');
-			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'0\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'1\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return \'12,24,36,64,128\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return \'0\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return ((get_forum_type()==\'ocf\')?\'0\':NULL);','GALLERY','BROWSING_GALLERIES');
@@ -300,17 +300,17 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->create_index('video_transcoding','t_local_id',array('t_local_id'));
 
 			add_config_option('ENABLE_ECARDS','enable_ecards','tick','return \'0\';','GALLERY','IMAGES');
-			add_config_option('GALLERY_MODE_IS','gallery_mode_is','list','return \'choice\';','GALLERY','GALLERY_FEATURES','choice|flow|regular');
+			add_config_option('GALLERY_MODE_IS','gallery_mode_is','list','return \'choice\';','GALLERY','GALLERY_FEATURES',0,'choice|flow|regular');
 			add_config_option('GALLERY_MEMBER_SYNCED','gallery_member_synced','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('GALLERY_WATERMARKS','gallery_watermarks','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('GALLERY_PERMISSIONS','gallery_permissions','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('GALLERY_REP_IMAGE','gallery_rep_image','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
-			add_config_option('GALLERY_FEEDBACK_FIELDS','gallery_feedback_fields','tick','return \'1\';','GALLERY','FEATURES');
+			add_config_option('GALLERY_FEEDBACK_FIELDS','gallery_feedback_fields','tick','return \'1\';','GALLERY','MEDIA_FEATURES');
 			add_config_option('MANUAL_GALLERY_CODENAME','manual_gallery_codename','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('MANUAL_GALLERY_PARENT','manual_gallery_parent','tick','return \'0\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('MANUAL_GALLERY_MEDIA_TYPES','manual_gallery_media_types','tick','return \'1\';','GALLERY','GALLERY_FEATURES');
 			add_config_option('PERSONAL_UNDER_MEMBERS','personal_under_members','tick','return \'0\';','GALLERY','PERSONAL_GALLERIES');
-			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'100\';','GALLERY','BROWSING_GALLERIES');
+			add_config_option('GALLERY_ENTRIES_FLOW_PER_PAGE','gallery_entries_flow_per_page','integer','return \'50\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('GALLERY_ENTRIES_REGULAR_PER_PAGE','gallery_entries_regular_per_page','integer','return \'30\';','GALLERY','BROWSING_GALLERIES');
 			add_config_option('GALLERIES_DEFAULT_SORT_ORDER','galleries_default_sort_order','list','return \'add_date DESC\';','GALLERY','BROWSING_GALLERIES',0,'add_date DESC|add_date ASC|average_rating DESC|compound_rating DESC|url DESC|url ASC|fixed_random ASC');
 			add_config_option('SUBGALLERY_LINK_LIMIT','subgallery_link_limit','integer','return \'200\';','GALLERY','BROWSING_GALLERIES');
@@ -905,8 +905,7 @@ class Module_galleries
 		$where=db_string_equal_to('cat',$cat);
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-		$_max_entries=get_option('gallery_entries_flow_per_page');
-		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
+		$max_entries=intval(get_option('gallery_entries_flow_per_page'));
 		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,$max_entries,NULL,false,true);
 		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,$max_entries,NULL,false,true);
 

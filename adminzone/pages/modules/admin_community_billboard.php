@@ -28,7 +28,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	var $lang_type='COMMUNITY_BILLBOARD';
 	var $special_edit_frontend=true;
 	var $redirect_type='ed';
-	var $menu_label='COMMUNITY_BILLBOARD_TEXT';
+	var $menu_label='COMMUNITY_BILLBOARD';
 	var $select_name='MESSAGE';
 	var $table='community_billboard';
 	var $orderer='the_message';
@@ -129,13 +129,13 @@ class Module_admin_community_billboard extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('COMMUNITY_BILLBOARD_TEXT'),comcode_lang_string('DOC_COMMUNITY_BILLBOARD'),
+		return do_next_manager(get_screen_title('COMMUNITY_BILLBOARD'),comcode_lang_string('DOC_COMMUNITY_BILLBOARD'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_COMMUNITY_BILLBOARD')),
 						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_COMMUNITY_BILLBOARD')),
 					),
-					do_lang('COMMUNITY_BILLBOARD_TEXT')
+					do_lang('COMMUNITY_BILLBOARD')
 		);
 	}
 

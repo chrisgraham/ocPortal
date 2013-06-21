@@ -429,7 +429,7 @@ function already_rated($rating_for_types,$content_id)
 	static $ip_restrict=NULL;
 	if ($ip_restrict===NULL)
 	{
-		if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_option('poll_member_ip_restrict')=='1'))
+		if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_option('vote_member_ip_restrict')=='1'))
 		{
 			$ip_restrict=db_string_equal_to('rating_ip',get_ip_address());
 		} else
@@ -777,7 +777,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		{
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum);
 		}
-		else $forum_id=(integer)$forum;
+		else $forum_id=intval($forum);
 
 		if ((get_forum_type()=='ocf') && (!is_null($GLOBALS['LAST_POST_ID'])))
 		{
@@ -898,7 +898,7 @@ function update_spacer_post($allow_comments,$content_type,$content_id,$content_u
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum);
 		if (is_null($forum_id)) return;
 	}
-	else $forum_id=(integer)$forum;
+	else $forum_id=intval($forum);
 
 	$content_title=strip_comcode($content_title);
 

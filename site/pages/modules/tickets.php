@@ -80,8 +80,8 @@ class Module_tickets
 
 		if (is_null($upgrade_from))
 		{
-			add_privilege('SUPPORT_TICKETS','support_operator',false);
-
+			add_config_option('TICKET_FORUM_NAME','ticket_forum_name','forum','require_lang(\'tickets\'); return do_lang(\'TICKET_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','SUPPORT_TICKETS');
+			add_config_option('PAGE_TEXT','ticket_text','transtext','return do_lang(\'NEW_TICKET_WELCOME\');','FEATURE','SUPPORT_TICKETS');
 			add_config_option('TICKET_MEMBER_FORUMS','ticket_member_forums','tick','return \'0\';','FEATURE','SUPPORT_TICKETS');
 			add_config_option('TICKET_TYPE_FORUMS','ticket_type_forums','tick','return \'0\';','FEATURE','SUPPORT_TICKETS');
 
@@ -112,10 +112,8 @@ class Module_tickets
 				}
 			}
 
-			add_config_option('PAGE_TEXT','ticket_text','transtext','return do_lang(\'NEW_TICKET_WELCOME\');','FEATURE','SUPPORT_TICKETS');
-			add_config_option('TICKET_FORUM_NAME','ticket_forum_name','forum','require_lang(\'tickets\'); return do_lang(\'TICKET_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','SUPPORT_TICKETS');
-
 			add_privilege('SUPPORT_TICKETS','view_others_tickets',false);
+			add_privilege('SUPPORT_TICKETS','support_operator',false);
 
 			add_menu_item_simple('main_website',NULL,'SUPPORT_TICKETS','_SEARCH:tickets:type=misc');
 		}

@@ -59,7 +59,7 @@ class Block_side_users_online
 	{
 		if (is_null($upgrade_from))
 		{
-			add_config_option('SHOW_NEWEST_MEMBER','usersonline_show_newest_member','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK');
+			add_config_option('SHOW_NEWEST_MEMBER','usersonline_show_newest_member','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'1\';','BLOCKS','USERS_ONLINE_BLOCK');
 			add_config_option('BIRTHDAYS','usersonline_show_birthdays','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK');
 		}
 	}

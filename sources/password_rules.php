@@ -94,8 +94,6 @@ function member_password_too_old($member_id)
 
 	if ($change_days>0)
 	{
-		password_rules_ensure_table_exists();
-
 		$last_time=$GLOBALS['FORUM_DB']->query_value('f_password_history','MAX(p_time)',array(
 			'p_member_id'=>$member_id,
 		));
@@ -166,8 +164,6 @@ function check_password_complexity($username,$password,$return_errors=false)
 function bump_password_change_date($member_id,$password,$password_salted,$salt,$skip_checks=false,$time=NULL)
 {
 	if (is_null($time)) $time=time();
-
-	password_rules_ensure_table_exists();
 
 	// Ensure does not re-use previous password
 	if (!$skip_checks)

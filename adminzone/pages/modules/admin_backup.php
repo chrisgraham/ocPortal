@@ -85,14 +85,13 @@ class Module_admin_backup
 	{
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			// Have to be careful here, as we had a bug before where we added these options and forgot to properly handle the upgrade. So the version number is down on some upgraded v3 installs even though the options may be there)
-			if (is_null(get_option('backup_time',true))) add_config_option('BACKUP_REGULARITY','backup_time','integer','return \'168\';','ADMIN','CHECK_LIST',1);
-			if (is_null(get_option('backup_server_hostname',true))) add_config_option('BACKUP_SERVER_HOSTNAME','backup_server_hostname','line','return \'\';','FEATURE','BACKUP');
-			if (is_null(get_option('backup_server_port',true))) add_config_option('BACKUP_SERVER_PORT','backup_server_port','integer','return \'21\';','FEATURE','BACKUP');
-			if (is_null(get_option('backup_server_user',true))) add_config_option('BACKUP_SERVER_USER','backup_server_user','line','return \'\';','FEATURE','BACKUP');
-			if (is_null(get_option('backup_server_password',true))) add_config_option('BACKUP_SERVER_PASSWORD','backup_server_password','line','return \'\';','FEATURE','BACKUP');
-			if (is_null(get_option('backup_server_path',true))) add_config_option('BACKUP_SERVER_PATH','backup_server_path','line','return \'\';','FEATURE','BACKUP');
-			if (is_null(get_option('backup_overwrite',true))) add_config_option('BACKUP_OVERWRITE','backup_overwrite','tick','return \'0\';','FEATURE','BACKUP');
+			add_config_option('BACKUP_REGULARITY','backup_time','integer','return \'168\';','ADMIN','CHECK_LIST',1);
+			add_config_option('BACKUP_SERVER_HOSTNAME','backup_server_hostname','line','return \'\';','FEATURE','BACKUPS');
+			add_config_option('BACKUP_SERVER_PORT','backup_server_port','integer','return \'21\';','FEATURE','BACKUPS');
+			add_config_option('BACKUP_SERVER_USER','backup_server_user','line','return \'\';','FEATURE','BACKUPS');
+			add_config_option('BACKUP_SERVER_PASSWORD','backup_server_password','line','return \'\';','FEATURE','BACKUPS');
+			add_config_option('BACKUP_SERVER_PATH','backup_server_path','line','return \'\';','FEATURE','BACKUPS');
+			add_config_option('BACKUP_OVERWRITE','backup_overwrite','tick','return \'0\';','FEATURE','BACKUPS');
 		}
 	}
 

@@ -44,12 +44,8 @@ require_lang('ocbestbuddy');
 destrictify();
 
 //add option and default value
-add_config_option('MENTOR_USERGROUP','mentor_usergroup','usergroup','return do_lang(\'SUPER_MEMBERS\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+delete_config_option('mentor_usergroup');
 
-$GLOBALS['SITE_DB']->create_table('members_mentors',array(
-	'id'=>'*AUTO',
-	'member_id'=>'*INTEGER',
-	'mentor_id'=>'*INTEGER'
-));
+$GLOBALS['SITE_DB']->drop_table_if_exists('members_mentors');
 
 echo 'Uninstalled';

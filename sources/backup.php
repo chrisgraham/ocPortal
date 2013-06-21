@@ -282,7 +282,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 			$copy_user=get_option('backup_server_user');
 			if ($copy_user=='') $copy_user='anonymous';
 			$copy_password=get_option('backup_server_password');
-			if (is_null($copy_password)) $copy_password=get_option('staff_address');
+			if (($copy_password=='') && ($copy_user=='anonymous')) $copy_password=get_option('staff_address');
 			$copy_path=get_option('backup_server_path');
 			if ($copy_path=='') $copy_path=$_file;
 			elseif ((substr($copy_path,-1)=='/') || ($copy_path=='')) $copy_path.=$_file;

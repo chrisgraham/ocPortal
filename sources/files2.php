@@ -745,7 +745,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		}
 	}
 
-	$use_curl=(($url_parts['scheme']!='http') || (get_option('prefer_curl')==='1')) && (function_exists('curl_version'));
+	$use_curl=(($url_parts['scheme']!='http') || ((function_exists('get_value')) && (get_value('prefer_curl')==='1'))) && (function_exists('curl_version'));
 
 	$raw_payload='';
 	$put=mixed();
@@ -1010,8 +1010,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if (($proxy!='') && ($url_parts['host']!='localhost') && ($url_parts['host']!='127.0.0.1'))
 				{
 					$port=get_option('proxy_port');
-					if (is_null($port)) $port='8080';
-					curl_setopt($ch, CURLOPT_PROXY,$proxy.':'.$port);
+					curl_setopt($ch,CURLOPT_PROXY,$proxy.':'.$port);
 					$proxy_user=get_option('proxy_user');
 					if ($proxy_user!='')
 					{
@@ -1180,7 +1179,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if ((!is_null($proxy)) && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
 		{
 			$proxy_port=get_option('proxy_port');
-			if (is_null($proxy_port)) $proxy_port='8080';
 			$mysock=@fsockopen($proxy,intval($proxy_port),$errno,$errstr,$timeout);
 		} else
 		{
@@ -1515,7 +1513,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if ($proxy!='')
 			{
 				$port=get_option('proxy_port');
-				if (is_null($port)) $port='8080';
 				$proxy_user=get_option('proxy_user');
 				if ($proxy_user!='')
 				{

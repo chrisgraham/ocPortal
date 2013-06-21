@@ -170,17 +170,9 @@ It also never hurts to optimise (via [tt]OPTIMIZE TABLE[/tt] or [tt]myisamchk -r
 
 ocPortal runs perfectly on Rackspace Cloud Sites hosting (formerly named Mosso Cloud), which will spread requests across machines automatically, and handle data synching faultlessly (we have been told that behind-the-scenes there is database replication, but it is unnoticeable). You could also run on your own Amazon Cloud Server Instances, but there is probably no reason to -- it's a lot more work and ocPortal is designed to run on commodity machines that require no custom configuration.
 
-[title="2"]Sessions[/title]
-
-If you are on a single database but have hundreds of members online at once (or replication you cannot control) then your session pool will be shared between all websites. You should type this into OcCLE:
-[code]
-:set_option('session_prudence','1');
-[/code]
-It will cause ocPortal to not load up all sessions on each page request. This will stop "users online" working, but is important for performance.
-
 [title="2"]Other optimisations[/title]
 
-There are many other possible [tt]set_value[/tt] commands to tune performance, described in the [page="_SEARCH:codebook_3"]Code Book[/page].
+There are many possible config options, or [tt]set_value[/tt] commands to tune performance described in the [page="_SEARCH:codebook_3"]Code Book[/page].
 
 [title="2"]Ensure configuration is set[/title]
 

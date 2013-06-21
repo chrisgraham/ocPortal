@@ -115,7 +115,7 @@ class GTranslate{
 				'langpair'=>$this->lang_from.'|'.$this->lang_to,
 				'format'=>'html',
 			);
-			if (!is_null($key)) $post_params['key']=$key;
+			if ($key!='') $post_params['key']=$key;
 			$json = http_download_file('http://ajax.googleapis.com/ajax/services/language/translate',NULL,true,false,get_site_name(),$post_params,NULL,NULL,NULL,NULL,NULL,ocp_srv('HTTP_REFERER'));
 			$json = str_replace('\u003c','<',$json);
 			$json = str_replace('\u003d','=',$json);

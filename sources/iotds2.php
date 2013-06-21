@@ -177,8 +177,7 @@ function set_iotd($id)
 	if ((!is_guest($submitter)) && (addon_installed('points')))
 	{
 		require_code('points2');
-		$_points_chosen=get_option('points_CHOOSE_IOTD');
-		if (is_null($_points_chosen)) $points_chosen=35; else $points_chosen=intval($_points_chosen);
+		$points_chosen=intval(get_option('points_CHOOSE_IOTD'));
 		if ($points_chosen!=0)
 			system_gift_transfer(do_lang('IOTD'),$points_chosen,$submitter);
 	}

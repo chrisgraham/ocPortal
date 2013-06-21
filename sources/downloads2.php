@@ -758,7 +758,6 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 		{
 			require_code('galleries2');
 			$download_gallery_root=get_option('download_gallery_root');
-			if (is_null($download_gallery_root)) $download_gallery_root='root';
 			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
 			set_download_gallery_permissions($id,$submitter);
 		}
@@ -800,7 +799,6 @@ function set_download_gallery_permissions($id,$submitter=NULL)
 	if (is_null($submitter)) $submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
 
 	$download_gallery_root=get_option('download_gallery_root');
-	if (is_null($download_gallery_root)) $download_gallery_root='root';
 
 	// Copy through requisite permissions
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
@@ -956,7 +954,6 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		// Change its gallery
 		require_code('galleries2');
 		$download_gallery_root=get_option('download_gallery_root');
-		if (is_null($download_gallery_root)) $download_gallery_root='root';
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>'download_'.strval($id)));
 		if (!is_null($test))
 			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);

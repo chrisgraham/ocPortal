@@ -36,7 +36,7 @@ class Module_polls
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=5;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -56,7 +56,6 @@ class Module_polls
 		delete_config_option('points_ADD_POLL');
 		delete_config_option('points_CHOOSE_POLL');
 		delete_config_option('poll_update_time');
-		delete_config_option('poll_member_ip_restrict');
 
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_voting');
 	}
@@ -160,11 +159,6 @@ class Module_polls
 				}
 			}
 			$GLOBALS['SITE_DB']->delete_table_field('poll','ip');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			add_config_option('POLL_MEMBER_IP_RESTRICT','poll_member_ip_restrict','tick','return \'1\';','FEATURE','POLLS');
 		}
 	}
 

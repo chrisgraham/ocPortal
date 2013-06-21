@@ -28,10 +28,8 @@ class Hook_cron_newsletter_drip_send
 	{
 		if (!addon_installed('newsletter')) return;
 
-		$_minutes_between_sends=get_option('minutes_between_sends');
-		$_mails_per_send=get_option('mails_per_send');
-		$minutes_between_sends=is_null($_minutes_between_sends)?10:intval($_minutes_between_sends);
-		$mails_per_send=is_null($_mails_per_send)?60:intval($_mails_per_send);
+		$minutes_between_sends=intval(get_option('minutes_between_sends'));
+		$mails_per_send=intval(get_option('mails_per_send'));
 
 		$time=time();
 		$last_time=intval(get_value('last_newsletter_drip_send'));

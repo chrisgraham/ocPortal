@@ -34,10 +34,10 @@ function install_oauth_settings_for($service_name,$has_sep_key=false) // This is
 {
 	require_code('database_action');
 
-	add_config_option(strtoupper($service_name).'_CLIENT_ID',$service_name.'_client_id','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
-	add_config_option(strtoupper($service_name).'_CLIENT_SECRET',$service_name.'_client_secret','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
+	add_config_option(strtoupper($service_name).'_CLIENT_ID',$service_name.'_client_id','line','return \'\';','GALLERY','GALLERY_SYNDICATION');
+	add_config_option(strtoupper($service_name).'_CLIENT_SECRET',$service_name.'_client_secret','line','return \'\';','GALLERY','GALLERY_SYNDICATION');
 	if ($has_sep_key)
-		add_config_option(strtoupper($service_name).'_DEVELOPER_KEY',$service_name.'_developer_key','line','return \'\';','FEATURE','GALLERY_SYNDICATION');
+		add_config_option(strtoupper($service_name).'_DEVELOPER_KEY',$service_name.'_developer_key','line','return \'\';','GALLERY','GALLERY_SYNDICATION');
 }
 
 function handle_oauth($service_name,$service_title,$auth_url)
