@@ -19,48 +19,6 @@
  */
 
 /**
- * Create the password rules history table if needed.
- */
-function password_rules_ensure_table_exists()
-{
-	if (!$GLOBALS['FORUM_DB']->table_exists('f_password_history'))
-	{
-		// Create table
-		$GLOBALS['FORUM_DB']->create_table('f_password_history',array(
-			'id'=>'*AUTO',
-			'p_member_id'=>'USER',
-			'p_hash_salted'=>'SHORT_TEXT',
-			'p_salt'=>'SHORT_TEXT',
-			'p_time'=>'TIME',
-		));
-		$GLOBALS['FORUM_DB']->create_index('f_password_history','p_member_id',array('p_member_id'));
-
-		// Initialise with current data (we'll assume m_last_submit_time represents last password change, which is not true - but ok enough for early initialisation, and will scatter things quite nicely to break in the new rules gradually)
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-		$max=500;
-		$start=0;
-		do
-		{
-			$members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_pass_hash_salted','m_pass_salt','m_last_submit_time','m_join_time'),NULL,'',$max,$start);
-			foreach ($members as $member)
-			{
-				if ($member['id']!=$GLOBALS['FORUM_DRIVER']->get_guest_id())
-				{
-					$GLOBALS['FORUM_DB']->query_insert('f_password_history',array(
-						'p_member_id'=>$member['id'],
-						'p_hash_salted'=>$member['m_pass_hash_salted'],
-						'p_salt'=>$member['m_pass_salt'],
-						'p_time'=>is_null($member['m_last_submit_time'])?$member['m_join_time']:$member['m_last_submit_time'],
-					));
-				}
-			}
-			$start+=$max;
-		}
-		while (count($members)>0);
-	}
-}
-
-/**
  * Find if a member's account has expired, due to inactivity.
  *
  * @param  MEMBER			The member this is for

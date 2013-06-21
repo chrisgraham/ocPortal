@@ -236,6 +236,8 @@ function uninstall_ocf()
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_saved_warnings');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_cpf_perms');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_group_join_log');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_password_history');
+
 	$GLOBALS['FORUM_DB']->query_delete('group_privileges',array('module_the_name'=>'forums'));
 }
 
@@ -402,8 +404,14 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_group_join_log','usergroup_id',array('usergroup_id'));
 		$GLOBALS['FORUM_DB']->create_index('f_group_join_log','join_time',array('join_time'));
 
-		require_code('password_rules');
-		password_rules_ensure_table_exists();
+		$GLOBALS['FORUM_DB']->create_table('f_password_history',array(
+			'id'=>'*AUTO',
+			'p_member_id'=>'MEMBER',
+			'p_hash_salted'=>'SHORT_TEXT',
+			'p_salt'=>'SHORT_TEXT',
+			'p_time'=>'TIME',
+		));
+		$GLOBALS['FORUM_DB']->create_index('f_password_history','p_member_id',array('p_member_id'));
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{
@@ -418,6 +426,29 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->delete_table_field('f_members','m_notes');
 		delete_config_option('skip_email_confirm_join');
 		delete_config_option('prevent_shouting');
+
+		// Initialise f_password_history with current data (we'll assume m_last_submit_time represents last password change, which is not true - but ok enough for early initialisation, and will scatter things quite nicely to break in the new rules gradually)
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+		$max=500;
+		$start=0;
+		do
+		{
+			$members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_pass_hash_salted','m_pass_salt','m_last_submit_time','m_join_time'),NULL,'',$max,$start);
+			foreach ($members as $member)
+			{
+				if ($member['id']!=$GLOBALS['FORUM_DRIVER']->get_guest_id())
+				{
+					$GLOBALS['FORUM_DB']->query_insert('f_password_history',array(
+						'p_member_id'=>$member['id'],
+						'p_hash_salted'=>$member['m_pass_hash_salted'],
+						'p_salt'=>$member['m_pass_salt'],
+						'p_time'=>is_null($member['m_last_submit_time'])?$member['m_join_time']:$member['m_last_submit_time'],
+					));
+				}
+			}
+			$start+=$max;
+		}
+		while (count($members)>0);
  	}
 
 	// If we have the forum installed to this db already, leave
