@@ -1851,6 +1851,8 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 	// If not set yet, work out what merge situation would be and save it
 	if ((is_null($value)) || (strpos($value,'::')===false))
 	{
+		$value=mixed();
+
 		$is_guest=is_guest();
 
 		// If is zone front page
