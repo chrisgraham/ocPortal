@@ -1,11 +1,11 @@
 {$SET,player_id,player_{$RAND}}
 
 <div class="xhtml_validator_off">
-	<embed id="{$GET,player_id}" type="application/x-shockwave-flash" width="425" height="350"
+	<embed id="{$GET,player_id}" type="application/x-shockwave-flash" width="560" height="315"
 		src="http://www.youtube.com/v/{URL*}?enablejsapi=1"
 		data="http://www.youtube.com/v/{URL*}?enablejsapi=1"
 		wmode="transparent"
-		allowScriptAccess="always"
+		allowscriptaccess="always" allowfullscreen="true"
 	/>
 </div>
 
