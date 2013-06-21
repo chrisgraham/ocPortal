@@ -43,7 +43,6 @@ require_lang('ocbestbuddy');
 
 destrictify();
 
-//add option and default value
 add_config_option('MENTOR_USERGROUP','mentor_usergroup','usergroup','return do_lang(\'SUPER_MEMBERS\');','USERS','JOINING');
 
 $GLOBALS['SITE_DB']->create_table('members_mentors',array(

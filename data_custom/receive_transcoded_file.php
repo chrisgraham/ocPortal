@@ -44,7 +44,7 @@ function run()
 {
 	$file=basename(rawurldecode($_GET['url']));
 
-	//get old media file data
+	// get old media file data
 	$get_old_file=$GLOBALS['SITE_DB']->query('SELECT url FROM '.get_table_prefix().'videos WHERE url LIKE \'uploads/galleries/'.rawurlencode(basename(basename($file,'.m4v'),'.mp3')).'%\'');
 	$type='galleries';
 	if (!array_key_exists(0,$get_old_file))
@@ -63,7 +63,7 @@ function run()
 	http_download_file($_GET['url'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$file_handle,NULL,NULL,6.0);
 	fclose($file_handle);
 
-	//move the old media file to the archive directory - '/uploads/'.$type.'/archive/'
+	// move the old media file to the archive directory - '/uploads/'.$type.'/archive/'
 	$new_url='uploads/'.$type.'/'.rawurlencode($file);
 	if(isset($get_old_file[0]['url']) && is_string($get_old_file[0]['url']) && $get_old_file[0]['url']!=$new_url && strlen($get_old_file[0]['url'])>0)
 	{
@@ -89,13 +89,7 @@ function run()
 			break;
 	}
 
-	$transcoding_server=get_option('transcoding_server', true);
-	if(is_null($transcoding_server))
-	{
-		//add option and default value
-		add_config_option('TRANSCODING_SERVER','transcoding_server','line','return \'http://localhost/convertor\';','FEATURE','GALLERIES');
-		$transcoding_server=get_option('transcoding_server', true);
-	}
+	$transcoding_server=get_option('transcoding_server');
 
-	file_get_contents($transcoding_server.'/move_to_sent.php?file='.$_GET['url']) ;
+	http_download_file($transcoding_server.'/move_to_sent.php?file='.urlencode($_GET['url']));
 }

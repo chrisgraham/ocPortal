@@ -35,6 +35,6 @@ require_code('database_action');
 require_code('config2');
 require_code('menus2');
 
-add_config_option('ENABLE_GOOGLE_TRANSLATE','enable_google_translate','tick','return "0";','FEATURE','GOOGLE_TRANSLATE');
+add_config_option('ENABLE_GOOGLE_TRANSLATE','enable_google_translate','tick','return \'0\';','SITE','INTERNATIONALISATION');
 
 echo 'Installed';
