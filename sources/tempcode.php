@@ -1331,8 +1331,9 @@ class ocp_tempcode
 		if ((isset($this->code_to_preexecute[800])) && ($GLOBALS['CACHE_TEMPLATES']))
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
-			$this->code_to_preexecute='if (($result=@include(\''.php_addslashes($file).'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.php_addslashes($forced_reload_details[2]).'\',false,\''.(($forced_reload_details[6]=='')?'':php_addslashes($forced_reload_details[6])).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (mt_rand(0,100)==1 || !@is_file(\''.php_addslashes($file).'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
+			$this->code_to_preexecute='if (($result=@include(\''.php_addslashes($file).'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.php_addslashes($forced_reload_details[2]).'\',false,\''.(($forced_reload_details[6]=='')?'':php_addslashes($forced_reload_details[6])).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.php_addslashes($file).'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
 			else { eval($result[5]); unset($result); }';
+			// NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
 		}
 
 		if ($GLOBALS['XSS_DETECT'])
