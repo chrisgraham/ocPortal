@@ -293,6 +293,8 @@ class Block_main_staff_website_monitoring
 					$GLOBALS['SITE_DB']->query_insert('sitewatchlist',array('site_name'=>$site_name,'siteurl'=>fixup_protocolless_urls($link)));
 				}
 			}
+
+			decache('main_staff_website_monitoring');
 		}
 
 		$rows=$GLOBALS['SITE_DB']->query_select('sitewatchlist');

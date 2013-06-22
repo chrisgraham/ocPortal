@@ -181,6 +181,8 @@ class Block_main_staff_links
 					));
 				}
 			}
+
+			decache('main_staff_links');
 		}
 
 		$rows=$GLOBALS['SITE_DB']->query_select('stafflinks',array('*'));
