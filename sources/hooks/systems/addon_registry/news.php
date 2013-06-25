@@ -137,6 +137,8 @@ class Hook_addon_registry_news
 			'sources/hooks/systems/config_default/news_categories_per_page.php',
 			'sources/hooks/systems/config_default/news_entries_per_page.php',
 			'sources/hooks/systems/config_default/enable_secondary_news.php',
+			'BLOCK_MAIN_IMAGE_FADER_NEWS.tpl',
+			'sources/blocks/main_image_fader_news.php',
 		);
 	}
 
@@ -163,6 +165,42 @@ class Hook_addon_registry_news
 			'NEWS_BRIEF.tpl'=>'news_archive_screen',
 			'NEWS_BOX.tpl'=>'block_main_news',
 			'OCF_MEMBER_PROFILE_BLOG.tpl'=>'ocf_member_profile_blog'
+			'BLOCK_MAIN_IMAGE_FADER_NEWS.tpl'=>'block_main_image_fader_news',
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_main_image_fader_news()
+	{
+		require_lang('news');
+
+		$news=array();
+		$news[]=array(
+			'TITLE'=>lorem_phrase(),
+			'IMAGE_URL'=>placeholder_image_url(),
+			'URL'=>placeholder_url(),
+			'BODY'=>lorem_paragraph_html(),
+			'DATE'=>placeholder_time(),
+			'DATE_RAW'=>placeholder_date_raw(),
+			'SUBMITTER'=>placeholder_id(),
+			'AUTHOR'=>lorem_phrase(),
+			'AUTHOR_URL'=>placeholder_url(),
+		);
+
+		$block=do_lorem_template('BLOCK_MAIN_IMAGE_FADER_NEWS', array(
+			'TITLE'=>lorem_phrase(),
+			'ARCHIVE_URL'=>placeholder_url(),
+			'NEWS'=>$news,
+			'MILL'=>'8000',
+		));
+		return array(
+			lorem_globalise($block, NULL, '', true)
 		);
 	}
 

@@ -97,6 +97,32 @@
 	height: 24em;
 }
 
+/* Fader block */
+
+.box___block_main_image_fader_news .box_inner {
+	min-height: 27em;
+	position: relative;
+}
+
+.image_fader_news_pic {
+	float: {!en_right};
+	margin-{!en_left}: 0.5em;
+	text-align: {!en_right};
+}
+
+.image_fader_news_pic img {
+	max-width: 150px;
+}
+
+.image_fader_news_html {
+	margin-right: 190px;
+}
+
+.box___block_main_image_fader_news .pagination {
+	bottom: 0;
+	position: absolute;
+}
+
 /*
 =========================
 =======Print rules=======
