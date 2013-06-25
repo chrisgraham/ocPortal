@@ -2139,6 +2139,20 @@ class Hook_ocp_merge
 					if (is_null($forum_id)) continue;
 				}
 
+				// Comment topic re-mapping
+				$matches=array();
+				if (preg_match('#: \#(\w+)s_(\d+)$#',$row['t_description'],$matches)!=0)
+				{
+					$import_type=$matches[1];
+					if ($import_type=='new') $import_type='news';
+					$c_id=import_id_remap_get($import_type,$matches[2],true);
+					if (!is_null($c_id))
+					{
+						$row['t_description']=str_replace($matches[0],': #'.$matches[1].'s_'.strval($c_id),$row['t_description']);
+					}
+				}
+				// NB: Spacer post not fixed up
+
 				$t_pt_to=$row['t_pt_to'];
 				$t_pt_from=$row['t_pt_from'];
 				if (!is_null($t_pt_to))
@@ -2212,18 +2226,6 @@ class Hook_ocp_merge
 				{
 					$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$topic_id));
 					$TOPIC_FORUM_CACHE[$topic_id]=$forum_id;
-				}
-
-				// Comment topic re-mapping
-				$title=$row['p_title'];
-				$matches=array();
-				if (preg_match('#^(\w+)s_(\d+)$#',$title,$matches)!=0)
-				{
-					$c_id=import_id_remap_get($matches[1],$matches[2],true);
-					if (!is_null($c_id))
-					{
-						$title=$matches[1].'s_'.strval($c_id);
-					}
 				}
 
 				$last_edit_by=$row['p_last_edit_by'];

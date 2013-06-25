@@ -2264,6 +2264,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						elseif ($x2>=count($array)) $x2-=count($array);
 					}
 					$value=array_key_exists($x2,$array)?$array[$x2]:'';
+					if (is_object($value)) $value=$value->evaluate();
 				}
 				break;
 

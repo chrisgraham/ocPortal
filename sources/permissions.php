@@ -393,14 +393,15 @@ function has_category_access($member,$module,$category)
 		handle_permission_check_logging($member,'has_category_access',array($module,$category),$CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category]);
 		return $CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category];
 	}
+
+	$groups=_get_where_clause_groups($member);
+	if ($groups===NULL) return true;
+
 	if (array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR))
 	{
 		handle_permission_check_logging($member,'has_category_access',array($module,$category),false);
 		return false;
 	}
-
-	$groups=_get_where_clause_groups($member);
-	if ($groups===NULL) return true;
 
 	$_category=db_string_equal_to('category_name',$category);
 

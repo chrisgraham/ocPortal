@@ -130,6 +130,7 @@ class Block_main_staff_checklist
 		if((!is_null($newtask)) && (!is_null($recurint)) && (!is_null($recurevery)))
 		{
 			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$newtask,'datetimeadded'=>time(),'recurinterval'=>$recurint,'recurevery'=>$recurevery,'taskisdone'=>NULL));
+			decache('main_staff_checklist');
 		}
 		$custasks=new ocp_tempcode();
 		$rows = $GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
@@ -169,6 +170,7 @@ class Block_main_staff_checklist
 		{
 			set_long_value('note_text_'.$file,$new);
 			log_it('NOTES',$file);
+			decache('main_staff_checklist');
 		}
 		$notes=get_long_value('note_text_'.$file);
 		if (is_null($notes)) $notes='';

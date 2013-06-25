@@ -49,13 +49,13 @@ require_code('database_action');
 require_code('config2');
 require_code('menus2');
 
-add_config_option('OCJESTER_STRING_CHANGES','ocjester_string_changes','text','return "it\'s=its\nits=it\'s";','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_STRING_CHANGES_SHOWN_FOR','ocjester_string_changes_shown_for','line','return \'\';','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_EMOTICON_MAGNET_SHOWN_FOR','ocjester_emoticon_magnet_shown_for','line','return \'\';','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_NAME_CHANGES','ocjester_name_changes','text','return "Angelic\nBaubles\nChristmas\nDasher\nEvergreen\nFestive\nGifted\nHoliday\nIcicles\nJolly\nKingly\nEnlightened\nMerry\nNoel\nOrnamental\nParty\nKingly\nRudolph\nSeasonal\nTinsel\nYuletide\nVisionary\nWiseman\nXmas\nYuletide\nXmas";','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_NAME_CHANGES_SHOWN_FOR','ocjester_name_changes_shown_for','line','return \'\';','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_AVATAR_SWITCH_SHOWN_FOR','ocjester_avatar_switch_shown_for','line','return \'\';','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_LEET_SHOWN_FOR','ocjester_leet_shown_for','line','return \'\';','FEATURE','OCJESTER_TITLE');
-add_config_option('OCJESTER_PIGLATIN_SHOWN_FOR','ocjester_piglatin_shown_for','line','return \'\';','FEATURE','OCJESTER_TITLE');
+delete_config_option('ocjester_string_changes');
+delete_config_option('ocjester_string_changes_shown_for');
+delete_config_option('ocjester_emoticon_magnet_shown_for');
+delete_config_option('ocjester_name_changes');
+delete_config_option('ocjester_name_changes_shown_for');
+delete_config_option('ocjester_avatar_switch_shown_for');
+delete_config_option('ocjester_leet_shown_for');
+delete_config_option('ocjester_piglatin_shown_for');
 
 echo 'Uninstalled';

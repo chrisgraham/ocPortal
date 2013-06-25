@@ -215,8 +215,8 @@ function check_banner($title_text='',$b_type='',$url_param_name='image_url',$fil
  */
 function add_banner($name,$imgurl,$title_text,$caption,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated=0,$b_type='',$time=NULL,$hits_from=0,$hits_to=0,$views_from=0,$views_to=0,$edit_date=NULL)
 {
-	if (!is_numeric($importancemodulus)) $importancemodulus=3;
-	if (!is_numeric($campaignremaining)) $campaignremaining=NULL;
+	if (is_null($campaignremaining)) $campaignremaining=0;
+
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 

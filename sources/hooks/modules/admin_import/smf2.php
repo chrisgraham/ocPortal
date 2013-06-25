@@ -236,7 +236,7 @@ class Hook_smf2
 		{
 			if ($key!='timezone')
 			{
-				set_option($key,$value);
+				set_option($key,is_string($value)?$value:strval($value));
 			} else
 			{
 				set_value('timezone',str_replace('Etc/GMT+','',$value));
@@ -783,7 +783,7 @@ class Hook_smf2
 								{
 									for ($f=$row['ip_low4'];$f<=$row['ip_high4']; $f++)
 									{
-										$ip_to_ban=strval($i.'.'.$j.'.'.$h.'.'.$f);
+										$ip_to_ban=strval($i).'.'.strval($j).'.'.strval($h).'.'.strval($f);
 
 										add_ip_ban($ip_to_ban);
 										import_id_remap_put('ip_ban',$ip_to_ban,0);
@@ -850,7 +850,7 @@ class Hook_smf2
 				continue;
 			}
 
-			$name=$row['name'];
+			$name=html_entity_decode($row['name'],ENT_QUOTES,get_charset());
 
 			$description=html_to_comcode($row['description']);
 
@@ -1084,7 +1084,7 @@ class Hook_smf2
 	 */
 	function _fix_links_callback_topic($m)
 	{
-		return 'index.php?topic='.strval(import_id_remap_get('topic',strval($m[2]),true));
+		return 'index.php?topic='.strval(import_id_remap_get('topic',$m[2],true));
 	}
 
 	/**
@@ -1095,7 +1095,7 @@ class Hook_smf2
 	 */
 	function _fix_links_callback_forum($m)
 	{
-		return 'index.php?board='.strval(import_id_remap_get('forum',strval($m[2]),true));
+		return 'index.php?board='.strval(import_id_remap_get('forum',$m[2],true));
 	}
 
 	/**
@@ -1106,7 +1106,7 @@ class Hook_smf2
 	 */
 	function _fix_links_callback_member($m)
 	{
-		return 'index.php?action=profile;u='.strval(import_id_remap_get('member',strval($m[2]),true));
+		return 'index.php?action=profile;u='.strval(import_id_remap_get('member',$m[2],true));
 	}
 
 	/**
@@ -1290,6 +1290,8 @@ class Hook_smf2
 				$member_id=$row2['id_member'];
 				if ((!is_null($member_id)) && ($member_id!=0))
 				{
+					if (!isset($answers[strval($row2['id_choice'])])) continue; // Safety
+
 					$answer=$answers[strval($row2['id_choice'])];
 
 					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer));

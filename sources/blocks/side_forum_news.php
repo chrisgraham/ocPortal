@@ -115,7 +115,7 @@ class Block_side_forum_news
 		}
 
 		$_title=do_lang_tempcode('NEWS');
-		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
+		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=protect_from_escaping(escape_html($map['title']));
 
 		if (get_forum_type()!='none')
 		{

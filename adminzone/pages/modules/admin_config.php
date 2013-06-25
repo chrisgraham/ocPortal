@@ -113,7 +113,7 @@ class Module_admin_config
 			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','GENERAL');
 			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
 
-			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','SITE','ADVANCED',1);
+			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return \''.strval(post_param_integer('allow_reports_default',0)).'\';','SITE','ADVANCED',1);
 
 			add_config_option('LOW_DISK_SPACE_SUBJECT','low_space_check','integer','return \'20\';','SITE','GENERAL'); // 20MB - very very low even for lame web hosts
 

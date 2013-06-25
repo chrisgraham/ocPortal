@@ -73,7 +73,7 @@ class Block_main_top_downloads
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'download_downloads p WHERE validated=1 AND ('.$sql_filter.') ORDER BY num_downloads DESC',$number);
 
 		$title=do_lang_tempcode('TOP',make_string_tempcode(integer_format($number)),do_lang_tempcode('SECTION_DOWNLOADS'));
-		if ((array_key_exists('title',$map)) && ($map['title']!='')) $title=make_string_tempcode(escape_html($map['title']));
+		if ((array_key_exists('title',$map)) && ($map['title']!='')) $title=protect_from_escaping(escape_html($map['title']));
 
 		$out=new ocp_tempcode();
 		foreach ($rows as $i=>$row)
