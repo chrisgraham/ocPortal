@@ -48,7 +48,7 @@ class Hook_config_default_send_error_emails_ocproducts
 	 */
 	function get_default()
 	{
-		return 1;
+		return '1';
 	}
 
 }

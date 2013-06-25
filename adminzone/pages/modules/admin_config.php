@@ -139,7 +139,7 @@ class Module_admin_config
 			add_config_option('MAX_SIZE','max_download_size','integer','return \'20000\';','FEATURE','UPLOAD');
 			add_config_option('SESSION_EXPIRY_TIME','session_expiry_time','float','return \'1\';','SECURITY','GENERAL');
 			add_config_option('TRACKBACKS','is_on_trackbacks','tick','return \'0\';','FEATURE','USER_INTERACTION');
-			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','PRIVACY','GENERAL',1);
+			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return \''.strval(post_param_integer('allow_reports_default',0)).'\';','PRIVACY','GENERAL',1);
 			add_config_option('LOW_DISK_SPACE_SUBJECT','low_space_check','integer','return \'20\';','SERVER','GENERAL'); // 20MB - very very low even for lame web hosts
 			add_config_option('ALLOW_AUDIO_VIDEOS','allow_audio_videos','tick','return \'1\';','FEATURE','MEDIA');
 			add_config_option('ALLOWED_POST_SUBMITTERS','allowed_post_submitters','text','return \'\';','SECURITY','ADVANCED',1);
