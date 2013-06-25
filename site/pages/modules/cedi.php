@@ -380,7 +380,7 @@ class Module_cedi
 			$pages=$GLOBALS['SITE_DB']->query_select('seedy_pages',array('*'),array('id'=>$id),'',1);
 		}
 		while (!array_key_exists(0,$pages));
-		$redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$id),'_SELF');
+		$redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$id),'_SELF');
 		return redirect_screen(get_screen_title('RANDOM_PAGE'),$redir_url,'');
 	}
 
@@ -568,7 +568,7 @@ class Module_cedi
 		global $CANONICAL_URL,$NON_CANONICAL_PARAMS;
 		$non_canonical=array();
 		if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
-		$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id,'find'=>NULL));
+		$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id,'type'=>'misc','find'=>NULL));
 
 		return do_template('WIKI_PAGE_SCREEN',array('_GUID'=>'1840d6934be3344c4f93a159fc737a45','TAGS'=>get_loaded_tags('cedi_pages'),'HIDE_POSTS'=>$page['hide_posts']==1,'ID'=>strval($id),'VIEWS'=>integer_format($page['seedy_views']),'STAFF_ACCESS'=>$staff_access,'DESCRIPTION'=>$description,'TITLE'=>$title,'CHILDREN'=>$children,'POSTS'=>$posts,'NUM_POSTS'=>integer_format($num_posts),'MENU'=>$menu));
 	}
@@ -708,7 +708,7 @@ class Module_cedi
 	{
 		$title=get_screen_title('MERGE_CEDI_POSTS');
 
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',false,true)==strval(db_get_first_id()))?NULL:get_param('id',false,true)),'_SELF');
+		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>get_param('id',false,true)),'_SELF');
 		$redir_url=$_redir_url->evaluate();
 		$merge_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'type'=>'do','id'=>get_param('id',false,true)),'_SELF',NULL,true);
 
@@ -790,7 +790,7 @@ class Module_cedi
 		if (!has_category_access(get_member(),'seedy_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
 		check_edit_permission('low',$original_poster,array('seedy_page',$true_page_id),'cms_cedi');
 
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',false,true)==strval(db_get_first_id()))?NULL:get_param('id',false,true)),'_SELF');
+		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>get_param('id',false,true)),'_SELF');
 		$redir_url=$_redir_url->evaluate();
 		$move_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'type'=>'_move','id'=>get_param('id',false,true)),'_SELF');
 
@@ -969,7 +969,7 @@ class Module_cedi
 
 		$breadcrumbs=cedi_breadcrumbs($chain,NULL,true,true);
 
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',strval($id),true)==strval(db_get_first_id()))?NULL:get_param('id',strval($id),true)),'_SELF');
+		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>get_param('id',strval($id),true)),'_SELF');
 		$redir_url=$_redir_url->evaluate();
 		$post_url=build_url(array('page'=>'_SELF','id'=>get_param('id',strval(db_get_first_id()),false),'redirect'=>$redir_url,'type'=>'_post'),'_SELF');
 

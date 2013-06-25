@@ -32,7 +32,7 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
  */
 function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 {
-	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']),$zone);
+	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['page_id']),$zone);
 	$url->attach('#post_'.strval($row['id']));
 
 	$breadcrumbs=mixed();
@@ -57,7 +57,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
 {
 	$content=paragraph(get_translated_tempcode($row['description']),'tyrtfjhggfdf');
-	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
+	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['id']),$zone);
 
 	$breadcrumbs=mixed();
 	$title=mixed();
@@ -358,7 +358,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 		if ($rebuild_chain!='') $rebuild_chain.='/';
 		$rebuild_chain.=$token;
 		$id=($this_link_virtual_root && ($next_token===false))?$token:$rebuild_chain;
-		$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($id==strval(db_get_first_id()))?NULL:$id)+(($this_link_virtual_root&&($next_token===false))?array('keep_cedi_root'=>$id):array()),get_module_zone('cedi'));
+		$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$id)+(($this_link_virtual_root&&($next_token===false))?array('keep_cedi_root'=>$id):array()),get_module_zone('cedi'));
 		if ($next_token!==false) // If not the last token (i.e. current page)
 		{
 			$title=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>intval($token)));
@@ -628,7 +628,7 @@ function dispatch_cedi_post_notification($post_id,$type)
 	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($the_message);
 
-	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('cedi'),NULL,false,false,true);
+	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$page_id),get_page_zone('cedi'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
@@ -651,7 +651,7 @@ function dispatch_cedi_page_notification($page_id,$type)
 	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','description',array('id'=>$page_id)));
 
-	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('cedi'),NULL,false,false,true);
+	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$page_id),get_page_zone('cedi'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 

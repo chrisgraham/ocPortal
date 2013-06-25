@@ -279,7 +279,7 @@ class Module_cms_cedi
 		$redir_url=get_param('redirect',NULL);
 		if (is_null($redir_url))
 		{
-			$_redir_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>(get_param('id',false,true)==strval(db_get_first_id()))?NULL:get_param('id',false,true)),get_module_zone('cedi'));
+			$_redir_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>get_param('id',false,true)),get_module_zone('cedi'));
 			$redir_url=$_redir_url->evaluate();
 		}
 		$edit_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'id'=>get_param('id',false,true),'type'=>'_edit_page'),'_SELF');
@@ -432,7 +432,7 @@ class Module_cms_cedi
 		$redir_url=get_param('redirect',NULL);
 		if (is_null($redir_url))
 		{
-			$_redir_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>(get_param('id',false,true)==strval(db_get_first_id()))?NULL:get_param('id',false,true)),get_module_zone('cedi'));
+			$_redir_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>get_param('id',false,true)),get_module_zone('cedi'));
 			$redir_url=$_redir_url->evaluate();
 		}
 		$post_url=build_url(array('page'=>'_SELF','id'=>get_param('id',false,true),'redirect'=>$redir_url,'type'=>'_edit_tree'),'_SELF');
