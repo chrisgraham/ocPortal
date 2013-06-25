@@ -132,6 +132,8 @@ class Module_admin_import
 		require_code('import');
 		load_import_deps();
 
+		set_mass_import_mode();
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
 

@@ -112,11 +112,11 @@ function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_par
 	$old_parent=$forum_info[0]['f_parent_forum'];
 	$old_name=$forum_info[0]['f_name'];
 
-	$under_forum_grouping_id=$new_parent;
-	while ((!is_null($under_forum_grouping_id)) && ($under_forum_grouping_id!=INTEGER_MAGIC_NULL))
+	$under_forum=$new_parent;
+	while ((!is_null($under_forum)) && ($under_forum!=INTEGER_MAGIC_NULL))
 	{
-		if ($forum_id==$under_forum_grouping_id) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
-		$under_forum_grouping_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_parent_forum',array('id'=>$under_forum_grouping_id));
+		if ($forum_id==$under_forum) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
+		$under_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_parent_forum',array('id'=>$under_forum));
 	}
 
 	if (($reset_intro_acceptance) && (trim(get_translated_text($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']))!=trim($intro_question)) && ($intro_question!=STRING_MAGIC_NULL))

@@ -543,7 +543,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return;
 	var i;
-	var selected_start=(element.value=='')?[]:element.value.split(',');
+	var selected_start=(element.value=='')?[]:(this.object.multi_selection?element.value.split(','):[element.value]);
 
 	cancel_bubbling(event);
 	if (typeof event.preventDefault!='undefined') event.preventDefault();

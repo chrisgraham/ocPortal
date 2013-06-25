@@ -808,7 +808,7 @@ footer .horizontal_links {
 	color: {$GET,area_2_link};
 }
 
-footer a:hover {
+footer a:hover, footer .button_hyperlink:hover {
 	color: {$GET,area_2_link_hover};
 }
 
@@ -1215,6 +1215,7 @@ th.meta_data_title {
 
 .img_thumb { /* Membership of this class is used as a tag to turn on the thumbnail blend effect */
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
+	max-width: 100%;
 }
 .img_thumb:hover, body.touch_enabled img_thumb {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;}
@@ -1888,7 +1889,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	{+END}
 	background-color: {$GET,area_background};
 }
-.pagination a:hover, .results_launcher a:hover {
+.pagination a:hover, .results_launcher a:hover, .pagination a.button_depressed {
 	background-color: {$GET,area_hover_3_background} !important;
 }
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -1897,6 +1898,13 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	.results_launcher a,
 	.results_launcher span {
 		margin-{!en_left}: -1px;
+	}
+
+	.pagination a:first-child,
+	.pagination span:first-child,
+	.results_launcher a:first-child,
+	.results_launcher span:first-child {
+		margin-{!en_left}: 0 !important;
 	}
 {+END}
 

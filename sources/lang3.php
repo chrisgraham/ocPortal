@@ -234,7 +234,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
-	if (get_page_name()=='admin_import') $comcode=false; // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
+	if (get_mass_import_mode()) $comcode=false; // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
 
 	if (is_null($lang)) $lang=user_lang();
 	$_text2=NULL;

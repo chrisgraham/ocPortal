@@ -60,6 +60,10 @@
 	margin: 0.2em 0;
 }
 
+.search_option+.left {
+	max-width: 40em;
+}
+
 {+START,IF,{$MOBILE}}
 	.search_option label {
 		float: {!en_left};

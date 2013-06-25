@@ -11,8 +11,7 @@ class upon_query_add_mentor
 {
 	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
-		if (running_script('stress_test_loader')) return;
-		if (get_page_name()=='admin_import') return;
+		if (get_mass_import_mode()) return;
 
 		if (!isset($GLOBALS['FORUM_DB'])) return;
 		if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return;

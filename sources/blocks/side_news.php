@@ -149,7 +149,7 @@ class Block_side_news
 		$news=remove_duplicate_rows($news,'id');
 
 		$_title=do_lang_tempcode(($blogs===1)?'BLOGS_POSTS':'NEWS');
-		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
+		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=protect_from_escaping(escape_html($map['title']));
 
 		foreach ($news as $myrow)
 		{

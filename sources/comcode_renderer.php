@@ -300,7 +300,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	}
 	if (!$check_only)
 	{
-		if (((get_page_name()=='admin_import') || (count($_POST)==0) || (!$posted)) && (!$preparse_mode))
+		if (((get_mass_import_mode()) || (count($_POST)==0) || (!$posted)) && (!$preparse_mode))
 		{
 			$line=substr_count(substr($comcode,0,$pos),chr(10))+1;
 			$out=do_template('COMCODE_CRITICAL_PARSE_ERROR',array('_GUID'=>'29da9dc5c6b9a527cb055b7da35bb6b8','LINE'=>integer_format($line),'MESSAGE'=>$message,'SOURCE'=>$comcode)); // Won't parse, but we can't help it, so we will skip on

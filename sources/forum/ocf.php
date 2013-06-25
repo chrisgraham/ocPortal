@@ -778,13 +778,17 @@ class forum_driver_ocf extends forum_driver_base
 		{
 			require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
 			$ob=object_factory('Hook_implicit_usergroups_'.$hook);
-			if (in_array($ob->get_bound_group_id(),$groups))
+			$group_ids=$ob->get_bound_group_ids();
+			foreach ($group_ids as $group_id)
 			{
-				$c=$ob->get_member_list();
-				if (!is_null($c))
+				if (in_array($group_id,$groups))
 				{
-					foreach ($c as $member_id=>$x)
-						$out[$member_id]=$x;
+					$c=$ob->get_member_list($group_id);
+					if (!is_null($c))
+					{
+						foreach ($c as $member_id=>$x)
+							$out[$member_id]=$x;
+					}
 				}
 			}
 		}

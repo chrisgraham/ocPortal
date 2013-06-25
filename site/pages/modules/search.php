@@ -410,7 +410,7 @@ class Module_search
 				require_javascript('javascript_tree_list');
 				require_javascript('javascript_more');
 				$ajax=true;
-				$under=get_param('search_under','-1',true);
+				$under=get_param('search_under','',true);
 				list($ajax_hook,$ajax_options)=$object->ajax_tree();
 
 				require_code('hooks/systems/ajax_tree/'.$ajax_hook);

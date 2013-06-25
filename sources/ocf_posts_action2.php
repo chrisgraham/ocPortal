@@ -26,7 +26,7 @@
 function ocf_member_handle_promotion($member_id=NULL)
 {
 	if (!addon_installed('points')) return;
-	if (get_page_name()=='admin_import') return;
+	if (get_mass_import_mode()) return;
 
 	if (is_null($member_id)) $member_id=get_member();
 

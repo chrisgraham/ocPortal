@@ -365,7 +365,7 @@ class Block_main_news
 		}
 
 		// Block title
-		$_title=isset($map['title'])?make_string_tempcode(escape_html($map['title'])):do_lang_tempcode(($blogs==1)?'BLOGS_POSTS':'NEWS');
+		$_title=isset($map['title'])?protect_from_escaping(escape_html($map['title'])):do_lang_tempcode(($blogs==1)?'BLOGS_POSTS':'NEWS');
 
 		// Feed URLs
 		$atom_url=new ocp_tempcode();

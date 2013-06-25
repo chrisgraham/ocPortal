@@ -77,7 +77,7 @@ class Module_cms_comcode_pages
 
 		$permission_page='cms_comcode_pages';
 
-		$category_data_count=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');
+		$category_data_count=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
 		if ($category_data_count>2000) $dont_care_about_categories=true;
 
 		$tree=array();

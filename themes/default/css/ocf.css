@@ -643,6 +643,10 @@ hr.ocf_sig_barrier {
 	{+END}
 }
 
+.ocf_member_column_a img {
+	max-width: 100px;
+}
+
 .ocf_member_column_b {
 	border-{!en_left}: 0;
 	{+START,IF,{$NOT,{$MOBILE}}}
@@ -997,6 +1001,7 @@ h2.ocf_post_history_header {
 
 .ocf_member_profile_avatar img {
 	border: 1px solid {$GET,standard_border};
+	max-width: 100px;
 }
 
 .ocf_profile_points {
@@ -1198,6 +1203,10 @@ table.ocf_profile_statistics th {
 .ocf_member_box_avatar {
 	float: right;
 	margin-left: 0.5em;
+	max-width: 100px !important;
+}
+
+.tooltip .ocf_member_box_avatar_touching {
 	max-width: 245px; /* Based on tooltip size */
 	float: left; /* Forces it on same line as avatar, rather than wrapping */
 }

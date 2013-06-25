@@ -61,7 +61,7 @@ class Hook_Preview_block_comcode
 			}
 			if ($value!='')
 			{
-				$bparameters.=' '.$parameter.'="'.addslashes($value).'"';
+				$bparameters.=' '.$parameter.'="'.str_replace('"','\"',$value).'"';
 				$bparameters_xml='<blockParam key="'.escape_html($parameter).'" val="'.escape_html($value).'" />';
 			}
 		}

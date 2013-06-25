@@ -50,11 +50,11 @@ class Hook_ocp_merge
 			'ocf_forum_groupings',
 			'ocf_emoticons',
 			'ocf_forums', // including intros
-			'ocf_topics', // including readlogs
+			'ocf_topics', // including readlogs // including description remapping for comment topics
 			'ocf_multi_moderations',
 			'ocf_polls_and_votes',
 			'ocf_post_templates',
-			'ocf_posts', // including title remapping for comment topics
+			'ocf_posts',
 			'ocf_warnings',
 			'filedump',
 			'images_and_galleries', // including rating, trackbacks, seo
@@ -2061,6 +2061,16 @@ class Hook_ocp_merge
 
 		require_code('ocf_forums_action2');
 
+		$comments_forum=get_option('comments_forum_name');
+		if (!is_integer($comments_forum))
+		{
+			$comments_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum);
+		} else
+		{
+			$comments_forum_id=$comments_forum;
+			$comments_forum=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$comments_forum_id));
+		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forums');
 		foreach ($rows as $row)
 		{
@@ -2072,6 +2082,11 @@ class Hook_ocp_merge
 			if ($row['id']==db_get_first_id())
 			{
 				import_id_remap_put('forum',strval(db_get_first_id()),db_get_first_id());
+				continue;
+			}
+			if ($row['f_name']==$comments_forum)
+			{
+				import_id_remap_put('forum',strval($row['id']),$comments_forum_id);
 				continue;
 			}
 
@@ -2137,6 +2152,20 @@ class Hook_ocp_merge
 					$forum_id=import_id_remap_get('forum',strval($row['t_forum_id']),true);
 					if (is_null($forum_id)) continue;
 				}
+
+				// Comment topic re-mapping
+				$matches=array();
+				if (preg_match('#: \#(\w+)s_(\d+)$#',$row['t_description'],$matches)!=0)
+				{
+					$import_type=$matches[1];
+					if ($import_type=='new') $import_type='news';
+					$c_id=import_id_remap_get($import_type,$matches[2],true);
+					if (!is_null($c_id))
+					{
+						$row['t_description']=str_replace($matches[0],': #'.$matches[1].'s_'.strval($c_id),$row['t_description']);
+					}
+				}
+				// NB: Spacer post not fixed up
 
 				$t_pt_to=$row['t_pt_to'];
 				$t_pt_from=$row['t_pt_from'];
@@ -2211,18 +2240,6 @@ class Hook_ocp_merge
 				{
 					$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topic_id));
 					$TOPIC_FORUM_CACHE[$topic_id]=$forum_id;
-				}
-
-				// Comment topic re-mapping
-				$title=$row['p_title'];
-				$matches=array();
-				if (preg_match('#^(\w+)s_(\d+)$#',$title,$matches)!=0)
-				{
-					$c_id=import_id_remap_get($matches[1],$matches[2],true);
-					if (!is_null($c_id))
-					{
-						$title=$matches[1].'s_'.strval($c_id);
-					}
 				}
 
 				$last_edit_by=$row['p_last_edit_by'];

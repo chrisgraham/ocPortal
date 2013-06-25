@@ -68,7 +68,7 @@ function ocf_make_forum($name,$description,$forum_grouping_id,$access_mapping,$p
 	if ($forum_grouping_id==-1) $forum_grouping_id=NULL;
 	if ($parent_forum==-1) $parent_forum=NULL;
 
-	if (get_page_name()!='admin_import')
+	if (!get_mass_import_mode())
 	{
 		if ((!is_null($forum_grouping_id)) && (function_exists('ocf_ensure_forum_grouping_exists'))) ocf_ensure_forum_grouping_exists($forum_grouping_id);
 		if ((!is_null($parent_forum)) && (function_exists('ocf_ensure_forum_exists'))) ocf_ensure_forum_exists($parent_forum);

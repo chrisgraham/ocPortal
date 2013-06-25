@@ -119,7 +119,7 @@ class Block_main_forum_topics
 			if (is_null($forum_name)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','red_alert');
 		}
 		$_title=do_lang_tempcode('ACTIVE_TOPICS_IN',escape_html($forum_name));
-		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
+		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=protect_from_escaping(escape_html($map['title']));
 
 		// Add topic link
 		if ((count($forum_names)==1) && (get_forum_type()=='ocf') && (!is_null($forum_id)))

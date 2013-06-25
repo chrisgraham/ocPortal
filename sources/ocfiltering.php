@@ -324,7 +324,7 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 			{
 				foreach ($ids_and_parents as $id=>$parent_id)
 				{
-					if (!is_string($parent_id)) $parent_id=strval($parent_id);
+					if (!is_string($parent_id)) $parent_id=is_null($parent_id)?'':strval($parent_id);
 					if (!is_string($subtree_i)) $subtree_i=strval($subtree_i);
 					if ($parent_id==$subtree_i)
 					{

@@ -111,7 +111,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 
 	$update_caching=false;
 	$support_attachments=false;
-	if ((!running_script('stress_test_loader')) && (get_page_name()!='admin_import'))
+	if (!get_mass_import_mode())
 	{
 		$update_caching=true;
 		$support_attachments=true;
@@ -184,7 +184,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title,NULL,false,$no_notify_for__notification_code,$no_notify_for__code_category);
 
 	$is_hidden=false;
-	if ((!running_script('stress_test_loader')) && (get_page_name()!='admin_import'))
+	if (!get_mass_import_mode())
 	{
 		$validated_actual=$this_ref->connection->query_select_value('f_posts','p_validated',array('id'=>$post_id));
 		if ($validated_actual==0)

@@ -170,7 +170,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 				foreach ($view_private as $v_p)
 				{
 					if ($vp!='') $vp.=',';
-					$vp.=$v_p['member_likes'];
+					$vp.=strval($v_p['member_likes']);
 				}
 			}
 

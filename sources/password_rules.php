@@ -52,7 +52,7 @@ function member_password_too_old($member_id)
 
 	if ($change_days>0)
 	{
-		$last_time=$GLOBALS['FORUM_DB']->query_value('f_password_history','MAX(p_time)',array(
+		$last_time=$GLOBALS['FORUM_DB']->query_select_value('f_password_history','MAX(p_time)',array(
 			'p_member_id'=>$member_id,
 		));
 		if ($last_time<time()-60*60*24*$change_days)

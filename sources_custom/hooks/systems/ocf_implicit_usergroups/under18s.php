@@ -16,13 +16,13 @@ class Hook_implicit_usergroups_under18s
 {
 
 	/**
-	 * Standard modular run function for implicit usergroup hooks. Finds the group ID it is bound to.
+	 * Standard modular run function for implicit usergroup hooks. Finds the group IDs it is bound to.
 	 *
-	 * @return GROUP		The ID of the usergroup.
+	 * @return array		A list of usergroup IDs.
 	 */
-	function get_bound_group_id()
+	function get_bound_group_ids()
 	{
-		return 10;
+		return array(10);
 	}
 
 	function _where()
@@ -34,9 +34,10 @@ class Hook_implicit_usergroups_under18s
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
 	 *
+	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
 	 * @return ?array		The list of members as a map between member ID and member row (NULL: unsupported by hook).
 	 */
-	function get_member_list()
+	function get_member_list($group_id)
 	{
 		return list_to_map('id',$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$this->_where()));
 	}
@@ -44,9 +45,10 @@ class Hook_implicit_usergroups_under18s
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
 	 *
+	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
 	 * @return ?array		The list of members (NULL: unsupported by hook).
 	 */
-	function get_member_list_count()
+	function get_member_list_count($group_id)
 	{
 		return $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$this->_where());
 	}
@@ -55,9 +57,10 @@ class Hook_implicit_usergroups_under18s
 	 * Standard modular run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
 	 *
 	 * @param  MEMBER		The member ID.
+	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
 	 * @return boolean	Whether they are.
 	 */
-	function is_member_within($member_id)
+	function is_member_within($member_id,$group_id)
 	{
 		return !is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE ('.$this->_where().') AND id='.strval($member_id)));
 	}

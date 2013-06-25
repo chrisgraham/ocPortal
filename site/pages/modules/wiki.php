@@ -589,7 +589,7 @@ class Module_wiki
 		global $CANONICAL_URL,$NON_CANONICAL_PARAMS;
 		$non_canonical=array();
 		if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
-		$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id));
+		$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id,'find'=>NULL));
 
 		return do_template('WIKI_PAGE_SCREEN',array(
 			'_GUID'=>'1840d6934be3344c4f93a159fc737a45',

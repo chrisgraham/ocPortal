@@ -1807,7 +1807,7 @@ function form_input_na($pretty_name,$tabindex=NULL)
  */
 function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='')
 {
-	check_suhosin_request_quantity(2);
+	check_suhosin_request_quantity(2,($name=='')?20:strlen($name));
 
 	if (($GLOBALS['DEV_MODE']) && (user_lang()==fallback_lang()))
 	{

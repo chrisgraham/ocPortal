@@ -598,7 +598,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 					$member_id=ocf_member_ldapcn_to_ocfid(ldap_unescape($member));
 					if (!is_null($member_id))
 					{
-						if ($non_validated) $members[]=array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>ldap_unescape($member)); else $members[]=$member_id;
+						if ($non_validated) $members[$member_id]=array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>ldap_unescape($member),'implicit'=>false); else $members[$member_id]=$member_id;
 					}
 				}
 				$gid=$entries[0]['gidnumber']; // Picked up for performance reasons
@@ -623,7 +623,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 
 				$member_id=ocf_member_ldapcn_to_ocfid(ldap_unescape($member[member_property()][0]));
 				if (!is_null($member_id))
-				if ($non_validated) $members[]=array('m_username'=>ldap_unescape($member[member_property()][0]),'gm_member_id'=>$member_id,'gm_validated'=>1); else $members[]=$member_id;
+				if ($non_validated) $members[$member_id]=array('m_username'=>ldap_unescape($member[member_property()][0]),'gm_member_id'=>$member_id,'gm_validated'=>1,'implicit'=>false); else $members[$member_id]=$member_id;
 			}
 			ldap_free_result($results);
 		}
@@ -650,8 +650,8 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 						{
 							if ($non_validated)
 							{
-								$members[]=array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>ldap_unescape(ocf_long_cn_to_short_cn($member,member_property())));
-							} else $members[]=$member_id;
+								$members[$member_id]=array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>ldap_unescape(ocf_long_cn_to_short_cn($member,member_property())),'implicit'=>false);
+							} else $members[$member_id]=$member_id;
 						}
 					}
 				}

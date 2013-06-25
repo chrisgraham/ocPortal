@@ -525,6 +525,7 @@ function dispatch_news_notification($id,$title,$main_news_category)
 function delete_news($id)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article'),array('id'=>$id),'',1);
+	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$title=$rows[0]['title'];
 	$news=$rows[0]['news'];
 	$news_article=$rows[0]['news_article'];
@@ -641,6 +642,8 @@ function import_rss()
 	$imported_news=array();
 	$imported_pages=array();
 
+	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+
 	// Preload news categories
 	$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 	$NEWS_CATS=list_to_map('id',$NEWS_CATS);
@@ -740,6 +743,8 @@ function import_rss()
 				if (is_null($cat_id)) // Could not find existing category, create new
 				{
 					$cat_id=add_news_category($cat,'newscats/general','',NULL);
+					foreach (array_keys($groups) as $group_id)
+						$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($cat_id),'group_id'=>$group_id));
 					// Need to reload now
 					$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 					$NEWS_CATS=list_to_map('id',$NEWS_CATS);
@@ -1073,11 +1078,15 @@ function import_wordpress_db()
 
 	$cat_id=array();
 
+	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+
 	$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 	$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 
 	$imported_news=array();
 	$imported_pages=array();
+
+	if (addon_installed('import')) require_code('import');
 
 	foreach ($data as $values)
 	{
@@ -1128,6 +1137,11 @@ function import_wordpress_db()
 
 				if ($post['post_type']=='post') // News
 				{
+					if (addon_installed('import'))
+					{
+						if (import_check_if_imported('news',strval($post_id))) continue;
+					}
+
 					// Work out categories
 					$owner_category_id=mixed();
 					$cat_ids=array();
@@ -1149,6 +1163,8 @@ function import_wordpress_db()
 							if (is_null($cat_id)) // Could not find existing category, create new
 							{
 								$cat_id=add_news_category($category,'newscats/community',$category);
+								foreach (array_keys($groups) as $group_id)
+									$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($cat_id),'group_id'=>$group_id));
 								// Need to reload now
 								$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'));
 								$NEWS_CATS=list_to_map('id',$NEWS_CATS);
@@ -1176,6 +1192,12 @@ function import_wordpress_db()
 						$news_article='[highlight]'.do_lang('POST_ACCESS_IS_RESTRICTED').'[/highlight]'."\n\n".'[if_in_group="Administrators"]'.$news_article.'[/if_in_group]';
 					}
 
+					// Dates
+					$post_time=strtotime($post['post_date_gmt']);
+					if ($post_time===false) $post_time=strtotime($post['post_date']);
+					$edit_time=is_null($post['post_modified_gmt'])?NULL:strtotime($post['post_modified_gmt']);
+					if ($edit_time===false) $edit_time=strtotime($post['post_modified']);
+
 					// Add news
 					$id=add_news(
 						$post['post_title'],
@@ -1189,10 +1211,10 @@ function import_wordpress_db()
 						$news_article,
 						$owner_category_id,
 						$cat_ids,
-						strtotime($post['post_date_gmt']),
+						$post_time,
 						$submitter_id,
 						0,
-						is_null($post['post_modified_gmt'])?NULL:strtotime($post['post_modified_gmt']),
+						$edit_time,
 						NULL,
 						''
 					);
@@ -1201,6 +1223,8 @@ function import_wordpress_db()
 						require_code('seo2');
 						seo_meta_set_for_explicit('news',strval($id),implode(',',$post['category']),$news);
 					}
+
+					if (addon_installed('import')) import_id_remap_put('news',strval($post_id),$id);
 
 					// Needed for adding comments/trackbacks
 					$comment_identifier='news_'.strval($id);
@@ -1216,6 +1240,8 @@ function import_wordpress_db()
 						'import__news'=>$news,
 						'import__news_article'=>$news_article,
 					);
+
+					$topic_identifer='news_'.strval($id);
 				}
 				elseif ($post['post_type']=='page') // Page/articles
 				{
@@ -1230,7 +1256,8 @@ function import_wordpress_db()
 
 					// Content
 					$_content="[title]".comcode_escape($post['post_title'])."[/title]\n\n";
-					$_content.='[surround]'.import_foreign_news_html($post['post_content']).'[/surround]';
+					$imp_con=import_foreign_news_html($post['post_content']);
+					if ($imp_con!='') $_content.='[surround]'.$imp_con.'[/surround]'; else continue; /* Not a real page */
 					$_content.="\n\n[block]main_comcode_page_children[/block]";
 					if ($allow_comments==1)
 					{
@@ -1240,6 +1267,8 @@ function import_wordpress_db()
 					{
 						$_content.="\n\n[block id=\"0\"]main_trackback[/block]";
 					}
+
+					$topic_identifier=$file.'_main';
 
 					// Add to the database
 					$GLOBALS['SITE_DB']->query_delete('comcode_pages',array(
@@ -1350,7 +1379,7 @@ function import_wordpress_db()
 
 							$result=$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
 								$forum,
-								'news_'.strval($id),
+								$topic_identifier,
 								$submitter,
 								'', // Would be post title
 								$comment_content,
@@ -1359,7 +1388,7 @@ function import_wordpress_db()
 								$content_url->evaluate(),
 								strtotime($comment['comment_date_gmt']),
 								$comment['author_ip'],
-								$comment['comment_approved'],
+								($comment['comment_approved']=='1')?1:0/*e.g. "spam"*/,
 								1,
 								false,
 								$comment['comment_author'],
@@ -1424,10 +1453,13 @@ function _get_wordpress_db_data()
 	$db_passwrod=post_param('wp_db_password');
 	$db_table_prefix=post_param('wp_table_prefix');
 
+	if (substr($db_table_prefix,-1)=='_') $db_table_prefix=substr($db_table_prefix,0,strlen($db_table_prefix)-1);
+
 	// Create DB connection
 	$db=new database_driver($db_name,$host_name,$db_user,$db_passwrod,$db_table_prefix);
 
-	$users=$db->query('SELECT * FROM '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_users');
+	$users=$db->query('SELECT * FROM '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_users',NULL,NULL,true);
+	if (is_null($users)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$data=array();
 	foreach ($users as $user)
@@ -1436,10 +1468,11 @@ function _get_wordpress_db_data()
 		$data[$user_id]=$user;
 
 		// Fetch user posts/pages
-		$posts=$db->query('SELECT * FROM '.$db_table_prefix.'_posts WHERE post_author='.strval($user_id).' AND (post_type=\'post\' OR post_type=\'page\')');
+		$posts=$db->query('SELECT * FROM '.$db_table_prefix.'_posts WHERE post_author='.strval($user_id).' AND (post_type=\'post\' OR post_type=\'page\') AND post_status<>\'auto-draft\'');
 		foreach ($posts as $post)
 		{
 			$post_id=$post['ID'];
+			$post['post_id']=$post_id; // Consistency with XML feed
 			$data[$user_id]['POSTS'][$post_id]=$post;
 
 			// Get categories
@@ -1454,6 +1487,7 @@ function _get_wordpress_db_data()
 			foreach ($comments as $comment)
 			{
 				$comment_id=$comment['comment_ID'];
+				$comment['author_ip']=$comment['comment_author_IP']; // Consistency with XML feed
 				$data[$user_id]['POSTS'][$post_id]['COMMENTS'][$comment_id]=$comment;
 			}
 		}

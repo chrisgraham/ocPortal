@@ -125,9 +125,10 @@ class Block_main_staff_checklist
 		$newtask=post_param('newtask',NULL);
 		$recurint=post_param_integer('recur',0);
 		$recurevery=post_param('recurevery',NULL);
-		if((!is_null($newtask)) && (!is_null($recurint)) && (!is_null($recurevery)))
+		if ((!is_null($newtask)) && (!is_null($recurint)) && (!is_null($recurevery)))
 		{
 			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$newtask,'datetimeadded'=>time(),'recurinterval'=>$recurint,'recurevery'=>$recurevery,'taskisdone'=>NULL));
+			decache('main_staff_checklist');
 		}
 		$custasks=new ocp_tempcode();
 		$rows=$GLOBALS['SITE_DB']->query_select('customtasks',array('*'));

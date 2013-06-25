@@ -39,7 +39,7 @@ function init__site()
 	if (function_exists('get_value'))
 	{
 		$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
-		foreach (array_keys($_GET) as $key)
+		foreach (array_keys($_GET)+array('keep_session'/*may be inserted later*/) as $key)
 		{
 			if ((substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
 		}

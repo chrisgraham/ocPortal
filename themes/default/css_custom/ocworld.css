@@ -57,6 +57,10 @@
 	float: {!en_right};
 }
 
+.ocw_avatar img {
+	max-width: 100px;
+}
+
 .ocw_arrow {
 	font-size: 0.7em;
 	letter-spacing: 0;

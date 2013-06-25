@@ -207,8 +207,7 @@ class Notification_dispatcher
 	 */
 	function dispatch()
 	{
-		if (running_script('stress_test_loader')) return;
-		if (get_page_name()=='admin_import') return;
+		if (get_mass_import_mode()) return;
 
 		$subject=$this->subject;
 		$message=$this->message;

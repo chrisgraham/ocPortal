@@ -67,7 +67,7 @@
 								<input maxlength="255" {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" onkeyup="update_ajax_search_list(this,event);" onkeypress="if (enter_pressed(event)) this.form.submit();" class="search_content wide_field" type="search" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
 							</div>
 
-							{+START,IF_NON_EMPTY,{HAS_TEMPLATE_SEARCH}}
+							{+START,IF,{HAS_TEMPLATE_SEARCH}}
 								<p class="associated_details">{!MAY_LEAVE_BLANK_ADVANCED}</p>
 							{+END}
 						</td>

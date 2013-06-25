@@ -151,8 +151,7 @@ function persistent_cache_empty()
  */
 function decache($cached_for,$identifier=NULL)
 {
-	if (running_script('stress_test_loader')) return;
-	if (get_page_name()=='admin_import') return;
+	if (get_mass_import_mode()) return;
 
 	require_code('caches2');
 	_decache($cached_for,$identifier);
