@@ -124,8 +124,7 @@ class Block_main_rss
 		{
 			$GLOBALS['DO_NOT_CACHE_THIS']=true;
 			require_code('failure');
-			if (strpos($url,'twitter')===false) // Twitter is always failing ;).
-				relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED',$url,$error),false,'error_occurred_rss');
+			relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED',$url,$error),false,'error_occurred_rss');
 			if (cron_installed())
 			{
 				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();

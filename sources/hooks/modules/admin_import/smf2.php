@@ -49,6 +49,7 @@ class Hook_smf2
 		$info['prefix']='smf_';
 		$info['import']=array(
 								'config',
+								'banners',
 								'ocf_remove_old_groups',
 								'ocf_groups',
 								'ocf_custom_profile_fields',
@@ -64,10 +65,13 @@ class Hook_smf2
 								'ocf_polls_and_votes',
 								'notifications',
 								'wordfilter',
-								'calendar'
+								'calendar',
+								'news_and_categories'
 							);
 
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
+								'banners'=>array('ocf_members'),
+								'news_and_categories'=>array('ocf_members'),
 								'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields'),
 								'ocf_member_files'=>array('ocf_members'),
 								'ocf_forums'=>array('ocf_categories','ocf_members','ocf_groups'),
@@ -231,7 +235,7 @@ class Hook_smf2
 		{
 			if ($key!='timezone')
 			{
-				set_option($key,$value);
+				set_option($key,is_string($value)?$value:strval($value));
 			} else
 			{
 				set_value('timezone',str_replace('Etc/GMT+','',$value));
@@ -656,9 +660,6 @@ class Hook_smf2
 
 		$avatar_gallery_path=str_replace($boardurl,'',$avatar_gallery_path);
 
-		$host=preg_replace('#\.#','\.',$_SERVER['HTTP_HOST']);
-		$doc_root=$_SERVER['DOCUMENT_ROOT'];
-
 		$forum_dir=preg_replace('#\\\\#','/',$boarddir);
 
 		$avatar_gallery_path=$forum_dir.$avatar_gallery_path;
@@ -786,7 +787,7 @@ class Hook_smf2
 								{
 									for ($f=$row['ip_low4'];$f<=$row['ip_high4']; $f++)
 									{
-										$ip_to_ban=strval($i.'.'.$j.'.'.$h.'.'.$f);
+										$ip_to_ban=strval($i).'.'.strval($j).'.'.strval($h).'.'.strval($f);
 
 										add_ip_ban($ip_to_ban);
 										import_id_remap_put('ip_ban',$ip_to_ban,0);
@@ -852,7 +853,7 @@ class Hook_smf2
 				continue;
 			}
 
-			$name=$row['name'];
+			$name=html_entity_decode($row['name'],ENT_QUOTES,get_charset());
 
 			$description=html_to_comcode($row['description']);
 
@@ -1094,22 +1095,22 @@ class Hook_smf2
 	 * Substitution callback for 'fix_links'.
 	 *
 	 * @param  array				The match
-	 * @return  string			The substitution string
+	 * @return string				The substitution string
 	 */
 	function _fix_links_callback_topic($m)
 	{
-		return 'index.php?topic='.strval(import_id_remap_get('topic',strval($m[2]),true));
+		return 'index.php?topic='.strval(import_id_remap_get('topic',$m[2],true));
 	}
 
 	/**
 	 * Substitution callback for 'fix_links'.
 	 *
 	 * @param  array				The match
-	 * @return  string			The substitution string
+	 * @return string				The substitution string
 	 */
 	function _fix_links_callback_forum($m)
 	{
-		return 'index.php?board='.strval(import_id_remap_get('forum',strval($m[2]),true));
+		return 'index.php?board='.strval(import_id_remap_get('forum',$m[2],true));
 	}
 
 	/**
@@ -1304,6 +1305,8 @@ class Hook_smf2
 				$member_id=$row2['id_member'];
 				if ((!is_null($member_id)) && ($member_id!=0))
 				{
+					if (!isset($answers[strval($row2['id_choice'])])) continue; // Safety
+
 					$answer=$answers[strval($row2['id_choice'])];
 
 					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer));
@@ -1768,6 +1771,169 @@ class Hook_smf2
 
 			import_id_remap_put('event_holiday',strval($row['id_holiday']),$id_new);
 		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_banners($db,$table_prefix,$file_base)
+	{
+		require_code('banners2');
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'ads',NULL,NULL,true);
+		if (is_null($rows)) return; // Some kind of addon? Don't think this is core-SMF
+		foreach ($rows as $row)
+		{
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>$row['NAME']));
+			if (is_null($test))
+			{
+				$submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+				add_banner(fix_id($row['NAME']),'','',$row['NAME'],stripslashes($row['CONTENT']),NULL,'',1,'',1,NULL,$submitter,$row['show_topofpage'],'',time(),0,$row['HITS'],0,$row['HITS'],NULL);
+			}
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_news_and_categories($db,$table_prefix,$file_base)
+	{
+		require_code('news');
+
+		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+
+		$rows=$db->query_select('tp_variables',array('value1 AS title','id'),array('type'=>'category'),'',NULL,NULL,true);
+		if (is_null($rows)) return; // Not TinyPortal
+		foreach ($rows as $row)
+		{
+			if (import_check_if_imported('news_category',strval($row['id']))) continue;
+
+			$id_new=add_news_category($row['title'],'','');
+			foreach (array_keys($groups) as $group_id)
+				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($cat_id),'group_id'=>$group_id));
+
+			import_id_remap_put('news_category',strval($row['id']),$id_new);
+		}
+
+		$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
+
+		require_code('files');
+
+		require($file_base.'/Settings.php');
+
+		$row_start=0;
+		$rows=array();
+		do
+		{
+			$rows=$db->query_select('tp_articles',array('*'),NULL,'',200,$row_start);
+			foreach ($rows as $row)
+			{
+				if (import_check_if_imported('news',strval($row['id']))) continue;
+
+				$news=($row['intro']=='' || $row['useintro']==0)?'':('[html]'.$row['intro'].'[/html]');
+				$subject=$row['subject'];
+				$news_article=$row['body'];
+				if ($row['type']=='html') $news_article='[html]'.$news_article.'[/html]';
+
+				$main_news_category=import_id_remap_get('news_category',$row['category'],true);
+				if (is_null($main_news_category)) $main_news_category=$GLOBALS['SITE_DB']->query_value('news','MIN(id)');
+
+				$validated=$row['approved'];
+				if ($row['off']==1) $validated=0;
+				$allow_rating=1-$row['locked'];
+				$allow_comments=1-$row['locked'];
+				$allow_trackbacks=1;
+				$news_categories=NULL;
+				$time=$row['date'];
+				$views=$row['views'];
+				$edit_date=NULL;
+
+				if ($row['illustration']!='')
+				{
+					$out_filename=find_derivative_filename('uploads/grepimages',basename($row['illustration']));
+					$out_path=get_custom_file_base().'/uploads/grepimages/'.$out_filename;
+					$out_handle=fopen($out_path,'wb');
+					http_download_file($boardurl.'/tp-files/tp-articles/illustrations/'.$row['illustration'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$out_handle);
+					fclose($out_handle);
+					$image='uploads/grepimages/'.urlencode($out_filename);
+				} else
+				{
+					$image='';
+				}
+
+				$submitter=import_id_remap_get('member',$row['author_id'],true);
+				if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+				$author=is_null($row['author'])?$GLOBALS['FORUM_DRIVER']->get_username($submitter):$row['author'];
+
+				$id_new=add_news($subject,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,'',$news_article,$main_news_category,$news_categories,$time,$submitter,$views,$edit_date,NULL,$image);
+
+				$content_url=build_url(array('page'=>'news','type'=>'view','id'=>$id_new),get_page_zone('news'));
+
+				// Comments
+				$comments=$db->query_select('tp_variables',array('value1 AS subject','value2 AS post','value3 AS poster','value4 AS time'),array('type'=>'article_comment','value5'=>$row['id']));
+				foreach ($comments as $comment)
+				{
+					$comment['poster']=import_id_remap_get('member',$comment['poster'],true);
+					if (is_null($comment['poster'])) $comment['poster']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+					$result=$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+						$forum,
+						'news_'.strval($id_new),
+						$comment['poster'],
+						$comment['subject'],
+						'[html]'.$comment['post'].'[/html]',
+						$subject,
+						do_lang('COMMENT'),
+						$content_url->evaluate(),
+						$comment['time'],
+						'',
+						1,
+						1,
+						false,
+						$GLOBALS['FORUM_DRIVER']->get_username($comment['poster']),
+						NULL
+					);
+				}
+
+				// Rating
+				if (!is_null($row['rating']))
+				{
+					$ratings=explode(',',$row['rating']);
+					$voters=explode(',',$row['voters']);
+					foreach ($ratings as $i=>$rating)
+					{
+						if (isset($voters[$i]))
+						{
+							$member_id=import_id_remap_get('member',$voters[$i],true);
+							if (is_null($member_id)) $member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+							$rating_map=array(
+								'rating_for_type'=>'news',
+								'rating_for_id'=>$id_new,
+								'rating_member'=>$member_id,
+								'rating_ip'=>'',
+								'rating_time'=>time(),
+								'rating'=>intval($rating)*2,
+							);
+							$GLOBALS['SITE_DB']->query_insert('rating',$rating_map);
+						}
+					}
+				}
+
+				import_id_remap_put('news',strval($row['id']),$id_new);
+			}
+
+			$row_start+=200;
+		}
+		while (count($rows)>0);
 	}
 
 }

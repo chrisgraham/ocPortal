@@ -408,7 +408,8 @@ class Module_groups
 			{
 				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);
 				$remove_url=build_url(array('page'=>'_SELF','type'=>'remove_from','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
-				$temp=do_template('OCF_VIEW_GROUP_MEMBER'.(ocf_may_control_group($id,get_member())?'_SECONDARY':''),array('REMOVE_URL'=>$remove_url,'NAME'=>$m_username,'URL'=>$url));
+				$may_control=(ocf_may_control_group($id,get_member()) && (!$secondary_member['implicit']));
+				$temp=do_template('OCF_VIEW_GROUP_MEMBER'.($may_control?'_SECONDARY':''),array('REMOVE_URL'=>$remove_url,'NAME'=>$m_username,'URL'=>$url));
 				$secondary_members->attach(results_entry(array($temp)));
 			} elseif (!$add_url->is_empty())
 			{

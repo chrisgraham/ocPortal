@@ -412,7 +412,7 @@ function ModalWindow()
 					'background': 'rgba(0,0,0,0.7)',
 					'zIndex': this.topWindow.overlay_zIndex++,
 					'overflow': 'hidden',
-					'position': 'fixed',
+					'position': (browser_matches('android') || browser_matches('ios'))?'absolute':'fixed',
 					'left': '0',
 					'top': '0',
 					'width': '100%',

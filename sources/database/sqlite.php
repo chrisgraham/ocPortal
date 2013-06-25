@@ -358,7 +358,7 @@ class Database_Static_sqlite
 		{
 			$err=sqlite_last_error($db);
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
-			if ((!running_script('upgrader')) && (get_page_name()!='admin_import'))
+			if ((!running_script('upgrader')) && (get_mass_import_mode()))
 			{
 				if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',NULL,NULL,NULL,NULL,false))) fatal_exit(htmlentities('Query failed: '.$query.' : '.$err));
 

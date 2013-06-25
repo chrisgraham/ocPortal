@@ -77,6 +77,9 @@ function init__support()
 
 	global $ADDON_INSTALLED_CACHE;
 	$ADDON_INSTALLED_CACHE=array();
+
+	global $MASS_IMPORT_HAPPENING;
+	$MASS_IMPORT_HAPPENING=false;
 }
 
 /**
@@ -2449,4 +2452,26 @@ function is_ocf_satellite_site()
 {
 	if (get_forum_type()!='ocf') return false;
 	return (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write);
+}
+
+/**
+ * Set if a mass-import is in progress.
+ *
+ * @param  boolean		If it is
+ */
+function set_mass_import_mode($doing_mass_import=true)
+{
+	global $MASS_IMPORT_HAPPENING;
+	$MASS_IMPORT_HAPPENING=$doing_mass_import;
+}
+
+/**
+ * Find if a mass-import is in progress.
+ *
+ * @return boolean		If it is
+ */
+function get_mass_import_mode()
+{
+	global $MASS_IMPORT_HAPPENING;
+	return $MASS_IMPORT_HAPPENING;
 }

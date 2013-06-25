@@ -382,6 +382,7 @@
 
 .ocf_topic_post_avatar {
 	margin: 0 auto;
+	max-width: 100px;
 }
 
 .ocf_post_main_column {
@@ -637,6 +638,10 @@ hr.ocf_sig_barrier {
 	{+START,IF,{$MOBILE}}
 		float: right;
 	{+END}
+}
+
+.ocf_member_column_a img {
+	max-width: 100px;
 }
 
 .ocf_member_column_b {
@@ -990,6 +995,7 @@ h2.ocf_post_history_header {
 
 .ocf_member_profile_avatar img {
 	border: 1px solid {$GET,standard_border};
+	max-width: 100px;
 }
 
 .ocf_profile_points {
@@ -1218,6 +1224,7 @@ ul.ocf_profile_friends li .associated_details {
 .ocf_member_box_avatar {
 	float: left;
 	margin-right: 1em;
+	max-width: 100px !important;
 }
 
 .tooltip .ocf_member_box_avatar_touching {

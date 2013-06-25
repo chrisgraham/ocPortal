@@ -30,7 +30,7 @@ class Hook_continue_import
 	 */
 	function run($options,$parameters,&$occle_fs)
 	{
-		require_lang('occle');
+		require_lang('import');
 
 		if ((array_key_exists('h',$options)) || (!array_key_exists(0,$parameters)) || (array_key_exists('help',$options))) return array('',do_command_help('continue_import',array('h'),array(true,true)),'','');
 		else
@@ -38,7 +38,8 @@ class Hook_continue_import
 			require_code('import');
 
 			disable_php_memory_limit();
-			set_database_index_maintenance(false);
+			set_database_index_maintenance(true);
+			set_mass_import_mode();
 
 			$where=mixed();
 			if (array_key_exists(1,$parameters))
@@ -52,6 +53,8 @@ class Hook_continue_import
 			{
 				warn_exit(do_lang_tempcode('TOO_MANY_IMPORT_SESSIONS'));
 			}
+
+			set_session_id($session[0]['imp_session']);
 
 			$importer=$session[0]['imp_hook'];
 			$old_base_dir=$session[0]['imp_old_base_dir'];

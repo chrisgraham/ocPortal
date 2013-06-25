@@ -62,7 +62,7 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 	if ($category_id==-1) $category_id=NULL;
 	if ($parent_forum==-1) $parent_forum=NULL;
 
-	if (get_page_name()!='admin_import')
+	if (!get_mass_import_mode())
 	{
 		if ((!is_null($category_id)) && (function_exists('ocf_ensure_category_exists'))) ocf_ensure_category_exists($category_id);
 		if ((!is_null($parent_forum)) && (function_exists('ocf_ensure_forum_exists'))) ocf_ensure_forum_exists($parent_forum);

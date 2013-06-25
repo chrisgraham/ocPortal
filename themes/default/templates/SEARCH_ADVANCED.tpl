@@ -12,7 +12,7 @@
 			{+START,IF,{UNDERNEATH}}
 				<div>
 					<div class="search_option">
-						<label for="search_under">{!SEARCH_UNDERNEATH}</label>:
+						<label for="search_under">{!SEARCH_UNDERNEATH}:</label>
 					</div>
 					<div class="left">
 						{+START,IF,{AJAX}}

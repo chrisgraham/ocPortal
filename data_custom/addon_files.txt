@@ -2206,6 +2206,10 @@ under18s
 --------
  - sources_custom/hooks/systems/ocf_implicit_usergroups/under18s.php
 
+usergroup_field_match
+---------------------
+ - sources_custom/hooks/systems/ocf_implicit_usergroups/usergroup_field_match.php
+
 directory_protect
 -----------------
  - data_custom/directory_protect.php

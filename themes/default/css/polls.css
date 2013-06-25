@@ -26,12 +26,12 @@
 /* Fiddling to make the 'no entries' poll block have a decent and matching height */
 
 .fp_col_block .box___block_main_iotd, /* This is a fudge to make the IOTD balance this height, if IOTD and poll shown at same time. You are likely want to change the blocks referenced here or the sizing, depending on your requirements */
-.box___block_no_entries_image_of_the_day,
+.box___block_no_entries_image_space_of_space_the_space_day,
 .fp_col_block .box___poll_box,
 .fp_col_block .box___block_no_entries_poll {
 	min-height: 335px;
 }
-.box___block_no_entries_image_of_the_day h3,
+.box___block_no_entries_image_space_of_space_the_space_day h3,
 .box___block_no_entries_poll h3 {
 	margin-bottom: 8em;
 }

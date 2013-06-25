@@ -39,7 +39,7 @@
 	margin-right: 1em;
 }
 
-.docked .menu_editor_rh_side {
+.docked #tree_list__root_tree_list {
 	overflow-y: scroll;
 	max-height: 280px;
 }

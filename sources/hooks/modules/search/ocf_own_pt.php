@@ -36,7 +36,7 @@ class Hook_search_ocf_own_pt
 		require_lang('ocf');
 
 		$info=array();
-		$info['lang']=do_lang_tempcode('SEARCH_PRIVATE_TOPICS');
+		$info['lang']=do_lang_tempcode('PRIVATE_TOPICS');
 		$info['default']=false;
 		$info['special_on']=array();
 		$info['special_off']=array('starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));

@@ -50,6 +50,8 @@ function do_work()
 	set_option('post_history_days','0'); // Needed for a little sanity in recent post retrieval
 	set_value('disable_sunk','1');
 
+	set_mass_import_mode();
+
 
 	// members (remember to test the username autocompleter, and birthdays)
 	// authors (remember to check author autocompleter and popup author list)

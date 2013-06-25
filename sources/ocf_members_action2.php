@@ -239,7 +239,8 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
 	{
 		$ob=get_fields_hook($custom_field['cf_type']);
 		$old_value=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval($custom_field['id']),array('mf_member_id'=>$member_id));
-		$actual_custom_fields[$custom_field['id']]=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
+		$new_value=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
+		$actual_custom_fields[$custom_field['id']]=$new_value;
 	}
 	return $actual_custom_fields;
 }
@@ -542,7 +543,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		if ($special_type!='ldap')
 		{
 			$_groups2=new ocp_tempcode();
-			$members_groups=is_null($member_id)?array():$GLOBALS['OCF_DRIVER']->get_members_groups($member_id,false,false);
+			$members_groups=is_null($member_id)?array():ocf_get_members_groups($member_id,false,false,false);
 			foreach ($rows as $group)
 			{
 				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;

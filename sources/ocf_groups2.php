@@ -53,9 +53,9 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 		{
 			require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
 			$ob=object_factory('Hook_implicit_usergroups_'.$hook);
-			if ($ob->get_bound_group_id()==$group_id)
+			if (in_array($group_id,$ob->get_bound_group_ids()))
 			{
-				$c=$ob->get_member_list_count();
+				$c=$ob->get_member_list_count($group_id);
 				if (!is_null($c))
 					$a+=$c;
 			}
@@ -97,7 +97,7 @@ function ocf_get_group_members_raw($group_id,$include_primaries=true,$non_valida
 	{
 		foreach ($_members as $member)
 		{
-			$members[]=$non_validated?$member:$member['gm_member_id'];
+			$members[$member['gm_member_id']]=$non_validated?($member+array('implicit'=>false)):$member['gm_member_id'];
 		}
 	}
 	if ($include_primaries)
@@ -111,7 +111,7 @@ function ocf_get_group_members_raw($group_id,$include_primaries=true,$non_valida
 		$_members2=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username'),$map,'',$max,$start);
 		foreach ($_members2 as $member)
 		{
-			$members[]=$non_validated?array('gm_member_id'=>$member['id'],'gm_validated'=>1,'m_username'=>$member['m_username']):$member['id'];
+			$members[$member['id']]=$non_validated?array('gm_member_id'=>$member['id'],'gm_validated'=>1,'m_username'=>$member['m_username'],'implicit'=>false):$member['id'];
 		}
 	}
 
@@ -123,14 +123,14 @@ function ocf_get_group_members_raw($group_id,$include_primaries=true,$non_valida
 		{
 			require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
 			$ob=object_factory('Hook_implicit_usergroups_'.$hook);
-			if ($ob->get_bound_group_id()==$group_id)
+			if (in_array($group_id,$ob->get_bound_group_ids()))
 			{
-				$c=$ob->get_member_list();
+				$c=$ob->get_member_list($group_id);
 				if (!is_null($c))
 				{
 					foreach ($c as $member_id=>$member_row)
 					{
-						$members[]=$non_validated?array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>$member_row['m_username']):$member_id;
+						$members[$member_id]=$non_validated?array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>$member_row['m_username'],'implicit'=>true):$member_id;
 					}
 				}
 			}
@@ -144,6 +144,6 @@ function ocf_get_group_members_raw($group_id,$include_primaries=true,$non_valida
 		ocf_get_group_members_raw_ldap($members,$group_id,$include_primaries,$non_validated,$include_secondaries);
 	}
 
-	return $members;
+	return array_values($members);
 }
 

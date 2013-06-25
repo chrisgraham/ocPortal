@@ -516,6 +516,7 @@ function dispatch_news_notification($id,$title,$main_news_category)
 function delete_news($id)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article'),array('id'=>$id),'',1);
+	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$title=$rows[0]['title'];
 	$news=$rows[0]['news'];
 	$news_article=$rows[0]['news_article'];

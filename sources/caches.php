@@ -148,8 +148,7 @@ function persistent_cache_empty()
  */
 function decache($cached_for,$identifier=NULL)
 {
-	if (running_script('stress_test_loader')) return;
-	if (get_page_name()=='admin_import') return;
+	if (get_mass_import_mode()) return;
 
 	// NB: If we use persistent cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistent cache and others don't. Or maybe some nodes do and others don't.
 

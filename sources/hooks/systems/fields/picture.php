@@ -80,6 +80,7 @@ class Hook_fields_picture
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
+		if ($ev==STRING_MAGIC_NULL) return ''; // LEGACY: Fix to bad data that got in
 
 		$img_url=$ev;
 		if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
@@ -161,7 +162,7 @@ class Hook_fields_picture
 			$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
 			$value=$temp[0];
 			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
-				return STRING_MAGIC_NULL;
+				return '';
 
 			if ((!is_null($old_value)) && ($old_value!='') && (($value!='') || (post_param_integer('custom_'.strval($field['id']).'_value_unlink',0)==1)))
 			{

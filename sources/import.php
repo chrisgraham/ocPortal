@@ -34,6 +34,8 @@ function load_import_deps()
 {
 	require_all_lang();
 	require_code('config2');
+	require_code('ocf_groups');
+	require_code('ocf_members');
 	require_code('ocf_moderation_action');
 	require_code('ocf_posts_action');
 	require_code('ocf_polls_action');

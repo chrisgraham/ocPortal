@@ -245,9 +245,10 @@ function ocf_get_best_group_property($groups,$property)
  * @param  ?MEMBER	The member to find the usergroups of (NULL: current member).
  * @param  boolean	Whether to skip looking at secret usergroups.
  * @param  boolean	Whether to take probation into account
+ * @param  boolean	Whether to include implicit groups
  * @return array		Reverse list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)).
  */
-function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_probation=true)
+function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_probation=true,$include_implicit=true)
 {
 	if (is_guest($member_id))
 	{
@@ -280,12 +281,19 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 	$groups=array();
 
 	// Now implicit usergroup hooks
-	$hooks=find_all_hooks('systems','ocf_implicit_usergroups');
-	foreach (array_keys($hooks) as $hook)
+	if ($include_implicit)
 	{
-		require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
-		$ob=object_factory('Hook_implicit_usergroups_'.$hook);
-		if ($ob->is_member_within($member_id)) $groups[$ob->get_bound_group_id()]=1;
+		$hooks=find_all_hooks('systems','ocf_implicit_usergroups');
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
+			$ob=object_factory('Hook_implicit_usergroups_'.$hook);
+			$group_ids=$ob->get_bound_group_ids();
+			foreach ($group_ids as $group_id)
+			{
+				if ($ob->is_member_within($member_id,$group_id)) $groups[$group_id]=1;
+			}
+		}
 	}
 
 	require_code('ocf_members');
