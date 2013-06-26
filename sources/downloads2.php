@@ -890,6 +890,8 @@ function delete_download($id,$leave=false)
 	$GLOBALS['SITE_DB']->query_delete('download_logging',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'downloads','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'downloads','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','downloads_'.strval($id));
 
 	$GLOBALS['SITE_DB']->query_update('download_downloads',array('out_mode_id'=>NULL),array('out_mode_id'=>$id),'',1);
 

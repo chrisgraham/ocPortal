@@ -119,12 +119,13 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 /**
  * Delete a topic.
  *
- * @param  AUTO_LINK  The ID of the topic to delete.
- * @param  LONG_TEXT  The reason for this action .
- * @param  ?AUTO_LINK Where topic to move posts in this topic to (NULL: delete the posts).
- * @return AUTO_LINK  The forum ID the topic is in (could be found without calling the function, but as we've looked it up, it is worth keeping).
+ * @param  AUTO_LINK  	The ID of the topic to delete.
+ * @param  LONG_TEXT  	The reason for this action .
+ * @param  ?AUTO_LINK 	Where topic to move posts in this topic to (NULL: delete the posts).
+ * @param  boolean		Whether to check permissions.
+ * @return AUTO_LINK  	The forum ID the topic is in (could be found without calling the function, but as we've looked it up, it is worth keeping).
  */
-function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
+function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL,$check_perms=true)
 {
 	// Info about source
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title','t_cache_first_member_id','t_poll_id','t_forum_id','t_cache_num_posts','t_validated'),array('id'=>$topic_id));
@@ -135,19 +136,23 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	$num_posts=$info[0]['t_cache_num_posts'];
 	$validated=$info[0]['t_validated'];
 
-	if (
-		(!ocf_may_delete_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) ||
-		(
+	if ($check_perms)
+	{
+		require_code('ocf_topics');
+		if (
+			(!ocf_may_delete_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) ||
 			(
-				((!is_null($info[0]['t_pt_from'])) && ($info[0]['t_pt_from']!=get_member())) &&
-				((!is_null($info[0]['t_pt_to'])) && ($info[0]['t_pt_to']!=get_member()))
-			) &&
-			(!ocf_has_special_pt_access($topic_id)) &&
-			(!has_specific_permission(get_member(),'view_other_pt')) &&
-			(is_null($forum_id))
+				(
+					((!is_null($info[0]['t_pt_from'])) && ($info[0]['t_pt_from']!=get_member())) &&
+					((!is_null($info[0]['t_pt_to'])) && ($info[0]['t_pt_to']!=get_member()))
+				) &&
+				(!ocf_has_special_pt_access($topic_id)) &&
+				(!has_specific_permission(get_member(),'view_other_pt')) &&
+				(is_null($forum_id))
+			)
 		)
-	)
-		access_denied('I_ERROR');
+			access_denied('I_ERROR');
+	}
 
 	if (!is_null($post_target_topic_id))
 	{
@@ -215,12 +220,12 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	{
 		require_code('ocf_polls_action');
 		require_code('ocf_polls_action2');
-		ocf_delete_poll($poll_id,'');
+		ocf_delete_poll($poll_id,'',false);
 	}
 	$GLOBALS['FORUM_DB']->query_delete('f_topics',array('id'=>$topic_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
 	require_code('notifications');
-	delete_all_notifications_on('ocf_topics',strval($topic_id));
+	delete_all_notifications_on('ocf_topic',strval($topic_id));
 
 	// Delete the ticket row if it's a ticket
 	if (addon_installed('tickets'))
@@ -262,8 +267,9 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
  * @param  AUTO_LINK		The forum the topics are currently in.
  * @param  AUTO_LINK		The forum the topics are being moved to.
  * @param  ?array 		A list of the topic IDs to move (NULL: move all topics from source forum).
+ * @param  boolean		Whether to check permissions.
  */
-function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
+function ocf_move_topics($from,$to,$topics=NULL,$check_perms=true) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
 {
 	if ($from==$to) return; // That would be nuts, and interfere with our logic
 
@@ -272,8 +278,12 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 
 	$forum_name=ocf_ensure_forum_exists($to);
 
-	if (!ocf_may_moderate_forum($from))
-		access_denied('I_ERROR');
+	if ($check_perms)
+	{
+		require_code('ocf_forums');
+		if (!ocf_may_moderate_forum($from))
+			access_denied('I_ERROR');
+	}
 
 	$topic_count=0;
 

@@ -488,7 +488,7 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
  * @param  AUTO_LINK		The ID of the image
  * @param  boolean		Whether to delete the actual file also
  */
-function delete_image($id,$delete_full)
+function delete_image($id,$delete_full=true)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('images',array('title','comments','cat'),array('id'=>$id));
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -512,6 +512,8 @@ function delete_image($id,$delete_full)
 	$GLOBALS['SITE_DB']->query_delete('images',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'images','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'images','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','images_'.strval($id));
 
 	require_code('seo2');
 	seo_meta_erase_storage('image',strval($id));
@@ -776,7 +778,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
  * @param  AUTO_LINK		The ID of the entry to delete
  * @param  boolean		Whether to delete the actual video file from disk as well as the entry
  */
-function delete_video($id,$delete_full)
+function delete_video($id,$delete_full=true)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','comments','cat'),array('id'=>$id));
 	$title=$rows[0]['title'];
@@ -798,6 +800,8 @@ function delete_video($id,$delete_full)
 	$GLOBALS['SITE_DB']->query_delete('videos',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'videos','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'videos','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','videos_'.strval($id));
 
 	require_code('seo2');
 	seo_meta_erase_storage('video',strval($id));

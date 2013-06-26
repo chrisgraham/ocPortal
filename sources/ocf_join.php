@@ -395,10 +395,11 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 			if ($intro_post!='')
 			{
 				require_code('ocf_topics_action');
+				$initial_validated=1;
 				if ($intro_title=='') $intro_title=do_lang('INTRO_POST_DEFAULT',$username);
-				$topic_id=ocf_make_topic(intval($forum_id));
+				$topic_id=ocf_make_topic(intval($forum_id),'','',$initial_validated,1,0,0,0,NULL,NULL,false);
 				require_code('ocf_posts_action');
-				ocf_make_post($topic_id,$intro_title,$intro_post,0,true,NULL,0,NULL,NULL,NULL,$member_id);
+				ocf_make_post($topic_id,$intro_title,$intro_post,0,true,$initial_validated,0,NULL,NULL,NULL,$member_id,NULL,NULL,NULL,false);
 			}
 		}
 	}

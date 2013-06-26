@@ -532,6 +532,8 @@ function delete_news($id)
 
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'news','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'news','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','news_'.strval($id));
 
 	delete_lang($title);
 	delete_lang($news);

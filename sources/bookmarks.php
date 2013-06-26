@@ -149,10 +149,12 @@ function edit_bookmark($id,$member,$title,$page_link)
  * Delete a bookmark.
  *
  * @param  AUTO_LINK		The ID
- * @param  MEMBER			Member who it belongs to
+ * @param  ?MEMBER		Member who it belongs to (NULL: do not check)
  */
-function delete_bookmark($id,$member)
+function delete_bookmark($id,$member=NULL)
 {
-	$GLOBALS['SITE_DB']->query_delete('bookmarks',array('id'=>$id,'b_owner'=>$member),'',1); // Second select param for needed security
+	$where=array('id'=>$id);
+	if (!is_null($member)) $where['b_owner']=$member; // Second select param for needed security
+	$GLOBALS['SITE_DB']->query_delete('bookmarks',$where,'',1);
 }
 

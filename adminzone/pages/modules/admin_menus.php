@@ -102,6 +102,7 @@ class Module_admin_menus
 		// forum_features
 		add_menu_item_simple('forum_features',NULL,'RULES','_SEARCH:rules');
 		add_menu_item_simple('forum_features',NULL,'MEMBERS','_SEARCH:members:type=misc');
+		add_menu_item_simple('forum_features',NULL,'USERGROUPS','_SEARCH:groups:type=misc');
 
 		// Zones
 		add_menu_item_simple('zone_menu',NULL,'SITE','site'.':',0,1);

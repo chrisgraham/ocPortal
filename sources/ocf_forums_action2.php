@@ -49,11 +49,12 @@ function ocf_edit_category($category_id,$title,$description,$expanded_by_default
 /**
  * Delete a forum category.
  *
- * @param  AUTO_LINK  The ID of the forum category we are editing.
- * @param  AUTO_LINK  The ID of the category that we will move all the contained forum to.
+ * @param  AUTO_LINK		The ID of the forum category we are editing.
+ * @param  ?AUTO_LINK	The ID of the category that we will move all the contained forum to (NULL: first category).
  */
-function ocf_delete_category($category_id,$target_category_id)
+function ocf_delete_category($category_id,$target_category_id=NULL)
 {
+	if (is_null($target_category_id)) $target_category_id=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_categories WHERE id<>'.strval($category_id));
 	$title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','c_title',array('id'=>$category_id));
 	if (is_null($title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_category_id'=>$target_category_id),array('f_category_id'=>$category_id));
@@ -149,17 +150,19 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
  * Delete a forum.
  *
  * @param  AUTO_LINK		The ID of the forum we are deleting.
- * @param  AUTO_LINK		The ID of the forum that topics will be moved to.
+ * @param  ?AUTO_LINK	The ID of the forum that topics will be moved to (NULL: root forum).
  * @param  BINARY			Whether to delete topics instead of moving them to the target forum.
  */
-function ocf_delete_forum($forum_id,$target_forum_id,$delete_topics=0)
+function ocf_delete_forum($forum_id,$target_forum_id=NULL,$delete_topics=0)
 {
+	if (is_null($target_forum_id)) $target_forum_id=db_get_first_id();
+
 	if ($forum_id==db_get_first_id()) warn_exit(do_lang_tempcode('CANNOT_DELETE_ROOT_FORUM'));
 	require_code('ocf_topics_action');
 	require_code('ocf_topics_action2');
 	if ($delete_topics==0)
 	{
-		ocf_move_topics($forum_id,$target_forum_id);
+		ocf_move_topics($forum_id,$target_forum_id,NULL,false);
 	} else
 	{
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('id'),array('t_forum_id'=>$forum_id));

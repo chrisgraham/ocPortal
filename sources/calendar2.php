@@ -259,6 +259,8 @@ function delete_calendar_event($id)
 
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'events','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'events','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','events_'.strval($id));
 
 	delete_lang($myrow['e_title']);
 	require_code('attachments2');

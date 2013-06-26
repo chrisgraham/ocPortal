@@ -90,17 +90,21 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 /**
  * Delete a forum poll.
  *
- * @param  AUTO_LINK The ID of the poll we're deleting.
- * @param  LONG_TEXT The reason for deleting the poll.
- * @return AUTO_LINK The ID of the topic the poll is on.
+ * @param  AUTO_LINK 	The ID of the poll we're deleting.
+ * @param  LONG_TEXT 	The reason for deleting the poll.
+ * @param  boolean		Whether to check permissions.
+ * @return AUTO_LINK 	The ID of the topic the poll is on.
  */
-function ocf_delete_poll($poll_id,$reason)
+function ocf_delete_poll($poll_id,$reason,$check_perms=true)
 {
 	require_code('ocf_polls');
 
 	$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('t_poll_id'=>$poll_id),'',1);
-	if (!ocf_may_delete_poll_by($topic_info[0]['t_forum_id'],$topic_info[0]['t_cache_first_member_id']))
-		access_denied('I_ERROR');
+	if ($check_perms)
+	{
+		if (!ocf_may_delete_poll_by($topic_info[0]['t_forum_id'],$topic_info[0]['t_cache_first_member_id']))
+			access_denied('I_ERROR');
+	}
 	$topic_id=$topic_info[0]['id'];
 
 	$name=$GLOBALS['FORUM_DB']->query_value('f_polls','po_question',array('id'=>$poll_id));
