@@ -325,6 +325,8 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  */
 function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
+	require_code('ocf_field_editability');
+
 	if (is_null($auto_monitor_contrib_content))
 	{
 		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
@@ -347,10 +349,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	{
 		if (ocf_is_ldap_member($member_id)) $special_type='ldap';
 		if (ocf_is_httpauth_member($member_id)) $special_type='httpauth';
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook')
-		{
-			$special_type='remote';
-		}
+		$special_type=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
 	}
 
 	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
@@ -358,7 +357,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$fields=new ocp_tempcode();
 
 	// Human name / Username
-	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')!='facebook'))
+	if (ocf_field_editable('username',$special_type))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
 		{
@@ -380,7 +379,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	}
 
 	// Password
-	if ($special_type=='')
+	if (ocf_field_editable('password',$special_type))
 	{
 		if ((is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
 		{
@@ -390,21 +389,27 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	}
 
 	// E-mail address
-	if ($email_address=='') $email_address=trim(get_param('email_address',''));
-	$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
-	if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
+	if (ocf_field_editable('email',$special_type))
 	{
-		$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
+		if ($email_address=='') $email_address=trim(get_param('email_address',''));
+		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
+		if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
+		{
+			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
+		}
 	}
 
 	// DOB
-	$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
-	if (get_option('no_dob_ask')!='1')
+	if (ocf_field_editable('dob',$special_type))
 	{
-		$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
-		if (addon_installed('ocf_forum'))
+		$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
+		if (get_option('no_dob_ask')!='1')
 		{
-			$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
+			$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
+			if (addon_installed('ocf_forum'))
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
+			}
 		}
 	}
 
@@ -529,7 +534,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
    		}
 
 			// Primary usergroup
-			if ($special_type!='ldap')
+			if (ocf_field_editable('primary_group',$special_type))
 			{
 				if (has_specific_permission(get_member(),'assume_any_member'))
 				{
@@ -540,7 +545,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		}
 
 		// Secondary usergroups
-		if ($special_type!='ldap')
+		if (ocf_field_editable('secondary_groups',$special_type))
 		{
 			$_groups2=new ocp_tempcode();
 			$members_groups=is_null($member_id)?array():ocf_get_members_groups($member_id,false,false,false);

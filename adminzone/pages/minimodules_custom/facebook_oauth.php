@@ -12,11 +12,8 @@ $facebook_appid=get_option('facebook_appid',true);
 
 if (is_null($facebook_appid))
 {
-	require_code('database_action');
-
-	add_config_option('FACEBOOK_APPID','facebook_appid','line','return \'\';','FEATURE','FACEBOOK_SYNDICATION');
-	add_config_option('FACEBOOK_SECRET','facebook_secret_code','line','return \'\';','FEATURE','FACEBOOK_SYNDICATION');
-	add_config_option('FACEBOOK_UID','facebook_uid','line','return \'\';','FEATURE','FACEBOOK_SYNDICATION');
+	require_code('facebook_connect');
+	facebook_install();
 
 	$facebook_appid='';
 }

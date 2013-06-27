@@ -277,6 +277,7 @@ facebook_support
  - sources_custom/facebook/jsonwrapper/JSON/LICENSE
  - facebook_connect.php
  - sources_custom/hooks/modules/members/facebook.php
+ - sources_custom/ocf_field_editability.php
 
 twitter_support
 ---------------

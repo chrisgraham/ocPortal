@@ -331,6 +331,7 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/menu_items/community_navigation/members.png',
 			'themes/default/images/menu_items/community_navigation/rules.png',
 			'themes/default/images/menu_items/community_navigation/unread_topics.png',
+			'sources/ocf_field_editability.php',
 		);
 	}
 

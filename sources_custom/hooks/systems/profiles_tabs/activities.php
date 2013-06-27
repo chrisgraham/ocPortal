@@ -72,6 +72,10 @@ class Hook_Profiles_Tabs_activities
 					elseif (either_param('syndicate_start__'.$hook,NULL)!==NULL)
 					{
 						$url_map=array('page'=>'_SELF','type'=>'view','id'=>$member_id_of,'oauth_in_progress'=>1);
+						foreach (array_keys($_POST) as $key)
+						{
+							$url_map[$key]=post_param($key,'');
+						}
 						$url_map['syndicate_start__'.$hook]=1;
 						$oauth_url=build_url($url_map,'_SELF',NULL,false,false,false,'tab__activities');
 						$ob->auth_set($member_id_of,$oauth_url);
@@ -87,6 +91,7 @@ class Hook_Profiles_Tabs_activities
 					$syndications[$hook]=array(
 						'SYNDICATION_IS_SET'=>$ob->auth_is_set($member_id_of),
 						'SYNDICATION_SERVICE_NAME'=>$ob->get_service_name(),
+						'SYNDICATION_JAVASCRIPT'=>method_exists($ob,'syndication_javascript')?$ob->syndication_javascript():''
 					);
 				}
 			}
