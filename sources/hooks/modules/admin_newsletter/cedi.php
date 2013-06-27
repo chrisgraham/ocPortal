@@ -37,10 +37,12 @@ class Hook_whats_news_cedi
 
 		require_lang('cedi');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'seedy_pages WHERE add_date>'.strval((integer)$cutoff_time).' ORDER BY add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'seedy_pages WHERE add_date>'.strval($cutoff_time).' ORDER BY add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
 			$id=$row['id'];

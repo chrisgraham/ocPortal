@@ -50,12 +50,16 @@ class Hook_whats_news_catalogues
 
 		require_lang('catalogues');
 
+		require_code('fields');
+
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'c_name',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY c_name ASC, ce_add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY c_name ASC, ce_add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
 			$id=$row['id'];
@@ -69,7 +73,7 @@ class Hook_whats_news_catalogues
 			// Work out name
 			$name='';
 			$ob=get_fields_hook($fields[0]['cf_type']);
-			list($raw_type)=$ob->get_field_value_row_bits($_fields[$field_id]);
+			list(,,$raw_type)=$ob->get_field_value_row_bits($fields[0]);
 			switch ($raw_type)
 			{
 				case 'short_trans':

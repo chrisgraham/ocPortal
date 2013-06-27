@@ -36,7 +36,7 @@ class Module_newsletter
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=9;
+		$info['version']=10;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -57,6 +57,7 @@ class Module_newsletter
 		delete_config_option('newsletter_text');
 		delete_config_option('newsletter_title');
 		delete_config_option('interest_levels');
+		delete_config_option('max_newsletter_whatsnew');
 
 		delete_value('newsletter_whatsnew');
 		delete_value('newsletter_send_time');
@@ -211,6 +212,10 @@ class Module_newsletter
 		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_template','ID_TEXT');
+		}
+		if ((!is_null($upgrade_from)) && ($upgrade_from<10))
+		{
+			add_config_option('MAX_NEWSLETTER_WHATSNEW','max_newsletter_whatsnew','integer','return \'300\';','FEATURE','NEWSLETTER');
 		}
 	}
 

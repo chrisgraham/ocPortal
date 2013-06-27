@@ -50,12 +50,14 @@ class Hook_whats_news_calendar
 
 		require_lang('calendar');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'e_type');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval((integer)$cutoff_time).' AND e_is_public=1 AND ('.$or_list.') ORDER BY e_add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval($cutoff_time).' AND e_is_public=1 AND ('.$or_list.') ORDER BY e_add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
 			$id=$row['id'];
