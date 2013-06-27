@@ -552,7 +552,11 @@ msgstr ""
 				'CHOOSE_EDIT_LIST_LANG_FILE',
 				escape_html(get_site_default_lang()),
 				escape_html(lookup_language_full_name(get_site_default_lang())),
-				get_base_url().'/code_editor.php'
+				array(
+					get_base_url().'/code_editor.php',
+					escape_html(user_lang()),
+					escape_html(lookup_language_full_name(user_lang()))
+				)
 			);
 			return $this->choose_lang($title,true,true,$choose_message);
 		}
