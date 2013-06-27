@@ -152,7 +152,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 			$spacer_title=$content_title;
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
-			ocf_make_post($topic_id,$spacer_title,$spacer_post,0,true,1,0,do_lang('SYSTEM'),$ip,$time,db_get_first_id(),NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,false,false,false);
+			ocf_make_post($topic_id,$spacer_title,$spacer_post,0,true,1,0,do_lang('SYSTEM'),$ip,$time,db_get_first_id(),NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,false,false,false,NULL,false);
 			$is_starter=false;
 		}
 
@@ -168,7 +168,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 	ocf_check_post($post,$topic_id,$member_id);
 	$poster_name=$poster_name_if_guest;
 	if ($poster_name=='') $poster_name=$this_ref->get_username($member_id);
-	$post_id=ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,$skip_post_checks,false,false,$parent_id);
+	$post_id=ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,$skip_post_checks,false,false,$parent_id,false);
 	$GLOBALS['LAST_POST_ID']=$post_id;
 
 	if ($is_new)
