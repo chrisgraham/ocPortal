@@ -926,7 +926,13 @@ class Module_admin_newsletter extends standard_aed_module
 						if ((is_null($temp)) || (count($temp)==0)) continue;
 						if (!$temp[0]->is_empty())
 						{
-							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
+								'_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565',
+								'I'=>strval($i+1),
+								'TITLE'=>$temp[1],
+								'CONTENT'=>$temp[0],
+								'THUMBNAIL'=>array_key_exists(2,$temp)?$temp[2]:''
+							));
 							$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
 							$i++;
 						}

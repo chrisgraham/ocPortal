@@ -56,11 +56,12 @@ class Hook_whats_news_news
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'news_category');
 		$or_list_2=ocfilter_to_sqlfragment($filter,'news_entry_category');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM '.get_table_prefix().'news LEFT JOIN '.get_table_prefix().'news_category_entries ON news_entry=id WHERE validated=1 AND date_and_time>'.strval((integer)$cutoff_time).' AND (('.$or_list.') OR ('.$or_list_2.')) ORDER BY date_and_time DESC',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter,news_image FROM '.get_table_prefix().'news LEFT JOIN '.get_table_prefix().'news_category_entries ON news_entry=id WHERE validated=1 AND date_and_time>'.strval((integer)$cutoff_time).' AND (('.$or_list.') OR ('.$or_list_2.')) ORDER BY date_and_time DESC',300);
 		if (count($rows)==300) return array();
 		$rows=remove_duplicate_rows($rows,'id');
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['title'],NULL,$lang);
@@ -70,7 +71,12 @@ class Hook_whats_news_news
 				$description=get_translated_text($row[($in_full==1)?'news':'news_article'],NULL,$lang);
 			}
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4eaf5ec00db1f0b89cef5120c2486521','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$thumbnail=$row['news_image'];
+			if ($thumbnail!='')
+			{
+				if (url_is_local($thumbnail)) $thumbnail=get_custom_base_url().'/'.$thumbnail;
+			} else $thumbnail=mixed();
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4eaf5ec00db1f0b89cef5120c2486521','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'THUMBNAIL'=>$thumbnail,'CONTENT_TYPE'=>'news','CONTENT_ID'=>$id)));
 		}
 
 		return array($new,do_lang('NEWS','','','',$lang));

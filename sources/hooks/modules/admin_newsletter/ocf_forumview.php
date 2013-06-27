@@ -56,11 +56,12 @@ class Hook_whats_news_ocf_forumview
 		{
 			if (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',strval($row['t_forum_id'])))
 			{
+				$id=$row['id'];
 				$_url=build_url(array('page'=>'topicview','type'=>'misc','id'=>$row['id']),get_module_zone('topicview'),NULL,false,false,true);
 				$url=$_url->evaluate();
 				$name=$row['t_cache_first_title'];
 				$member_id=(is_guest($row['t_cache_first_member_id']))?NULL:strval($row['t_cache_first_member_id']);
-				$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'14a328f973ac44eb54aa9b31e5a4ae34','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name)));
+				$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'14a328f973ac44eb54aa9b31e5a4ae34','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'CONTENT_TYPE'=>'topic','CONTENT_ID'=>$id)));
 			}
 		}
 

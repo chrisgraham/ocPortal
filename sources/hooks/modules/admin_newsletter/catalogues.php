@@ -54,23 +54,32 @@ class Hook_whats_news_catalogues
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'c_name',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY ce_add_date DESC',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY c_name ASC, ce_add_date DESC',300);
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
+
 			$c_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$row['cc_id']));
 			if (is_null($c_name)) continue; // Corruption
 			$c_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$c_name));
-			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$c_name),'ORDER BY id',1);
+
+			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$c_name),'ORDER BY cf_order');
+
+			// Work out name
 			$name='';
-			switch ($fields[0]['cf_type'])
+			$ob=get_fields_hook($fields[0]['cf_type']);
+			list($raw_type)=$ob->get_field_value_row_bits($_fields[$field_id]);
+			switch ($raw_type)
 			{
 				case 'short_trans':
-					$_name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_short_trans','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+				case 'long_trans':
+					$_name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_'.$raw_type,'cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
 					$name=get_translated_text($_name,NULL,$lang);
 					break;
-				case 'short_text':
-					$name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+				case 'short':
+				case 'long':
+					$name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_'.$raw_type,'cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
 					break;
 				case 'float':
 					$name=float_to_raw_string($GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
@@ -80,11 +89,28 @@ class Hook_whats_news_catalogues
 					break;
 			}
 
+			// Work out thumbnail
+			$thumbnail=mixed();
+			foreach ($fields as $field)
+			{
+				if ($field['cf_type']=='picture')
+				{
+					$thumbnail=$GLOBALS['SITE_DB']->query_value('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$field['id']));
+					if ($thumbnail!='')
+					{
+						if (url_is_local($thumbnail)) $thumbnail=get_custom_base_url().'/'.$thumbnail;
+					} else $thumbnail=mixed();
+				}
+			}
+
 			$_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['id']),get_module_zone('catalogues'),NULL,false,false,true);
 			$url=$_url->evaluate();
+
 			$catalogue=get_translated_text($c_title,NULL,$lang);
+
 			$member_id=(is_guest($row['ce_submitter']))?NULL:strval($row['ce_submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4ae604e5d0e9cf4d28e7d811dc4558e5','MEMBER_ID'=>$member_id,'URL'=>$url,'CATALOGUE'=>$catalogue,'NAME'=>$name)));
+
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4ae604e5d0e9cf4d28e7d811dc4558e5','MEMBER_ID'=>$member_id,'URL'=>$url,'CATALOGUE'=>$catalogue,'NAME'=>$name,'THUMBNAIL'=>$thumbnail,'CONTENT_TYPE'=>'catalogue_entry','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('CATALOGUE_ENTRIES','','','',$lang));

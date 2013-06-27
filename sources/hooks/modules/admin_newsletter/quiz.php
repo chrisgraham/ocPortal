@@ -43,12 +43,13 @@ class Hook_whats_news_quiz
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['q_name'],NULL,$lang);
 			$description=get_translated_text($row['q_start_text'],NULL,$lang);
 			$member_id=NULL;
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'1a8cad8defc5b92eded5aee376250ae5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'1a8cad8defc5b92eded5aee376250ae5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'quiz','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('QUIZZES','','','',$lang));

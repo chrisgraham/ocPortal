@@ -85,7 +85,7 @@ class Hook_whats_news_comcode_pages
 				{
 					$description=get_translated_text($rows2[$id]['meta_description']);
 				}
-				$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'67f165847dacd54d2965686d561b57ee','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+				$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'67f165847dacd54d2965686d561b57ee','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'comcode_page','CONTENT_ID'=>$zone.':'.$page)));
 			}
 		}
 

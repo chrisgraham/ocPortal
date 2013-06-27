@@ -293,7 +293,10 @@ class Hook_addon_registry_newsletter
 				'MEMBER_ID'=>placeholder_id(),
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
-				'DESCRIPTION'=>lorem_paragraph()
+				'DESCRIPTION'=>lorem_paragraph(),
+				'THUMBNAIL'=>placeholder_image_url(),
+				'CONTENT_TYPE'=>lorem_word(),
+				'CONTENT_ID'=>placeholder_id(),
 			)), NULL, '', true)
 		);
 	}
