@@ -122,7 +122,15 @@ function find_addon_category_download_category($category_name,$parent_id=NULL)
 	$id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$parent_id,'t.text_original'=>$category_name));
 	if (is_null($id))
 	{
-		$cat_id=add_download_category($category_name,$parent_id,'','','');
+		$description='';
+		switch ($category_name)
+		{
+			case 'Themes':
+				$description="Themes provide a new look to ocPortal.\n\nThemes are a kind of addon. You can actually install the themes listed here directly from inside ocPortal.\n\nGo to Admin Zone > Structure > Addons. Follow the \"Import non-bundled addon(s)\" link.";
+				break;
+		}
+
+		$cat_id=add_download_category($category_name,$parent_id,$description,'','');
 		$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 		foreach (array_keys($all_groups) as $_group_id)
 		{
