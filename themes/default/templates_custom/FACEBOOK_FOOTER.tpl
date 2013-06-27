@@ -40,7 +40,7 @@
 									}
 									else if (current_url.indexOf('keep_refreshed_once=1')==-1)
 									{
-										window.alert('Could not login, probably due to restrictive cookie settings.');
+										//window.alert('Could not login, probably due to restrictive cookie settings.');
 										window.location+=((current_url.indexOf('?')==-1)?'?':'&')+'keep_refreshed_once=1';
 									}
 								}
@@ -90,7 +90,7 @@
 									}
 									else if (current_url.indexOf('keep_refreshed_once=1')==-1)
 									{
-										window.alert('Could not login, probably due to restrictive cookie settings.');
+										//window.alert('Could not login, probably due to restrictive cookie settings.');
 										window.location+=((current_url.indexOf('?')==-1)?'?':'&')+'keep_refreshed_once=1';
 									}
 								}
