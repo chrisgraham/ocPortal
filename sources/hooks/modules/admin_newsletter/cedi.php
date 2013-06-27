@@ -43,12 +43,13 @@ class Hook_whats_news_cedi
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['id']),get_module_zone('cedi'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['title'],NULL,$lang);
 			$description=get_translated_text($row['description'],NULL,$lang);
 			$member_id=NULL;
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'29571e3829c6723b2ca946436a6cadb2','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'29571e3829c6723b2ca946436a6cadb2','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'wiki_page','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('CEDI','','','',$lang));

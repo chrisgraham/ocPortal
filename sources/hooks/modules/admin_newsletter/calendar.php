@@ -58,12 +58,13 @@ class Hook_whats_news_calendar
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['e_title'],NULL,$lang);
 			$description=get_translated_text($row['e_content'],NULL,$lang);
 			$member_id=(is_guest($row['e_submitter']))?NULL:strval($row['e_submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'654cafa75ec9f9b8e0e0fb666f28fb37','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'654cafa75ec9f9b8e0e0fb666f28fb37','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'event','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('CALENDAR','','','',$lang));

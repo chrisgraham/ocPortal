@@ -68,6 +68,7 @@ class Hook_whats_news_galleries
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),get_module_zone('galleries'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			if (!array_key_exists($row['cat'],$galleries))
@@ -77,7 +78,12 @@ class Hook_whats_news_galleries
 			$name=$galleries[$row['cat']];
 			$description=get_translated_text($row['comments'],NULL,$lang);
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'dfe5850aa67c0cd00ff7d465248b87a5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$thumbnail=$row['thumb_url'];
+			if ($thumbnail!='')
+			{
+				if (url_is_local($thumbnail)) $thumbnail=get_custom_base_url().'/'.$thumbnail;
+			} else $thumbnail=mixed();
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'dfe5850aa67c0cd00ff7d465248b87a5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'THUMBNAIL'=>$thumbnail,'CONTENT_TYPE'=>'video','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('GALLERIES','','','',$lang));
