@@ -50,6 +50,8 @@ class Hook_whats_news_galleries
 
 		require_lang('galleries');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
 		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
@@ -64,8 +66,8 @@ class Hook_whats_news_galleries
 		} else $galleries=array();
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'cat',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval((integer)$cutoff_time).' AND validated=1 AND ('.$or_list.') ORDER BY add_date DESC',300/*reasonable limit*/);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval($cutoff_time).' AND validated=1 AND ('.$or_list.') ORDER BY add_date DESC',$max/*reasonable limit*/);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
 			$id=$row['id'];
