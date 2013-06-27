@@ -736,7 +736,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'BREADCRUMBS':
-				$value=static_evaluate_tempcode(breadcrumbs());
+				$show_self=(!isset($param[0]) || $param[0]=='1');
+				if (!$show_self) $GLOBALS['BREADCRUMBS']=NULL;
+				$value=static_evaluate_tempcode(breadcrumbs($show_self));
 				break;
 
 			case 'HAS_SU':

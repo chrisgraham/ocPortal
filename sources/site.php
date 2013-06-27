@@ -329,18 +329,20 @@ function get_logo_url($zone_name=NULL)
 /**
  * Get the tempcode for the breadcrumbs.
  *
+ * @param  boolean		Whether to show a self segment
  * @return tempcode		The breadcrumbs
  */
-function breadcrumbs()
+function breadcrumbs($show_self=true)
 {
 	global $BREADCRUMB_SET_PARENTS,$BREADCRUMBS,$BREADCRUMB_EXTRA_SEGMENTS;
 
 	if ($BREADCRUMBS===NULL)
 	{
-		$BREADCRUMBS=breadcrumbs_get_default_stub($BREADCRUMB_EXTRA_SEGMENTS->is_empty());
+		$BREADCRUMBS=breadcrumbs_get_default_stub($BREADCRUMB_EXTRA_SEGMENTS->is_empty() && $show_self);
 	}
 	$out=new ocp_tempcode();
 	$out->attach($BREADCRUMBS);
+	if (!$show_self) $BREADCRUMBS=mixed();
 	if (!$BREADCRUMB_EXTRA_SEGMENTS->is_empty())
 	{
 		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_SEPARATOR'));
@@ -369,7 +371,6 @@ function breadcrumbs()
 		}
 		return make_string_tempcode($_out);
 	}
-
 	return $out;
 }
 
