@@ -50,6 +50,8 @@ class Hook_whats_news_galleries
 
 		require_lang('galleries');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
 		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
@@ -64,10 +66,11 @@ class Hook_whats_news_galleries
 		} else $galleries=array();
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'cat',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval($cutoff_time).' AND validated=1 AND ('.$or_list.') ORDER BY add_date DESC',300/*reasonable limit*/);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval($cutoff_time).' AND validated=1 AND ('.$or_list.') ORDER BY add_date DESC',$max/*reasonable limit*/);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),get_module_zone('galleries'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			if (!array_key_exists($row['cat'],$galleries))
@@ -77,7 +80,12 @@ class Hook_whats_news_galleries
 			$name=$galleries[$row['cat']];
 			$description=get_translated_text($row['description'],NULL,$lang);
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'dfe5850aa67c0cd00ff7d465248b87a5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$thumbnail=$row['thumb_url'];
+			if ($thumbnail!='')
+			{
+				if (url_is_local($thumbnail)) $thumbnail=get_custom_base_url().'/'.$thumbnail;
+			} else $thumbnail=mixed();
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'dfe5850aa67c0cd00ff7d465248b87a5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'THUMBNAIL'=>$thumbnail,'CONTENT_TYPE'=>'video','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('GALLERIES','','','',$lang));

@@ -50,20 +50,35 @@ class Hook_whats_news_downloads
 
 		require_lang('downloads');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'category_id');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads WHERE validated=1 AND add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads WHERE validated=1 AND add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$row['id']),get_module_zone('downloads'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['name'],NULL,$lang);
 			$description=get_translated_text($row['description'],NULL,$lang);
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'bbd85ed54500b9d6df998e3c835b45e9','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$thumb_url=mixed();
+			if (addon_installed('galleries'))
+			{
+				$thumbnail=$GLOBALS['SITE_DB']->query_value_null_ok('images','thumb_url',array('cat'=>'download_'.strval($row['id'])),'ORDER BY add_date ASC');
+				if (!is_null($thumbnail))
+				{
+					if ($thumbnail!='')
+					{
+						if (url_is_local($thumbnail)) $thumbnail=get_custom_base_url().'/'.$thumbnail;
+					} else $thumbnail=mixed();
+				}
+			}
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'bbd85ed54500b9d6df998e3c835b45e9','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'download','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('SECTION_DOWNLOADS','','','',$lang));

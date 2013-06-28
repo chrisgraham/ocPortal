@@ -60,6 +60,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 		require_lang('newsletter');
 		require_code('newsletter');
+		require_css('newsletter');
 
 		$this->cache_level_counts=array();
 
@@ -896,7 +897,7 @@ class Module_admin_newsletter extends standard_crud_module
 			return redirect_screen(do_lang('PERIODIC_REMOVED'),$url,do_lang('PERIODIC_REMOVED_TEXT'));
 		}
 
-		$in_full=(post_param_integer('in_full',0)==1);
+		$in_full=post_param_integer('in_full',0);
 		$chosen_categories=post_param('chosen_categories');
 		$message=$this->generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
 
@@ -944,7 +945,13 @@ class Module_admin_newsletter extends standard_crud_module
 						if ((is_null($temp)) || (count($temp)==0)) continue;
 						if (!$temp[0]->is_empty())
 						{
-							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
+								'_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565',
+								'I'=>strval($i+1),
+								'TITLE'=>$temp[1],
+								'CONTENT'=>$temp[0],
+								'THUMBNAIL'=>array_key_exists(2,$temp)?$temp[2]:''
+							));
 							$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
 							$i++;
 						}

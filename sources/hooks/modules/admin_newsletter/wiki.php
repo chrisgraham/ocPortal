@@ -37,10 +37,12 @@ class Hook_whats_news_wiki
 
 		require_lang('wiki');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'wiki_pages WHERE add_date>'.strval($cutoff_time).' ORDER BY add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'wiki_pages WHERE add_date>'.strval($cutoff_time).' ORDER BY add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
 			$_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>$row['id']),get_module_zone('wiki'),NULL,false,false,true);
@@ -48,7 +50,7 @@ class Hook_whats_news_wiki
 			$name=get_translated_text($row['title'],NULL,$lang);
 			$description=get_translated_text($row['description'],NULL,$lang);
 			$member_id=NULL;
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'29571e3829c6723b2ca946436a6cadb2','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'29571e3829c6723b2ca946436a6cadb2','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'wiki_page','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('WIKI','','','',$lang));

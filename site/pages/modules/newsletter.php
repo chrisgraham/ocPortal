@@ -60,6 +60,7 @@ class Module_newsletter
 		delete_config_option('dual_format_newsletters');
 		delete_config_option('minutes_between_sends');
 		delete_config_option('mails_per_send');
+		delete_config_option('max_newsletter_whatsnew');
 
 		delete_value('newsletter_whatsnew');
 		delete_value('newsletter_send_time');
@@ -178,6 +179,7 @@ class Module_newsletter
 			add_config_option('DUAL_FORMAT_NEWSLETTERS','dual_format_newsletters','tick','return \'0\';','FEATURE','NEWSLETTER');
 			add_config_option('MINUTES_BETWEEN_SENDS','minutes_between_sends','integer','return \'10\';','FEATURE','NEWSLETTER');
 			add_config_option('MAILS_PER_SEND','mails_per_send','integer','return \'60\';','FEATURE','NEWSLETTER');
+			add_config_option('MAX_NEWSLETTER_WHATSNEW','max_newsletter_whatsnew','integer','return \'300\';','FEATURE','NEWSLETTER');
 		}
 	}
 

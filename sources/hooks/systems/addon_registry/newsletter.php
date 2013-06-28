@@ -102,8 +102,10 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/modules/admin_newsletter/.htaccess',
 			'sources/hooks/systems/do_next_menus/newsletter.php',
 			'sources/newsletter.php',
+			'sources/hooks/systems/config_default/max_newsletter_whatsnew.php',
 			'themes/default/images/bigicons/subscribers.png',
 			'sources/hooks/modules/admin_newsletter/index.html',
+			'themes/default/css/newsletter.css',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl',
 			'sources/hooks/systems/config_default/dual_format_newsletters.php',
@@ -297,7 +299,10 @@ class Hook_addon_registry_newsletter
 				'MEMBER_ID'=>placeholder_id(),
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
-				'DESCRIPTION'=>lorem_paragraph()
+				'DESCRIPTION'=>lorem_paragraph(),
+				'THUMBNAIL'=>placeholder_image_url(),
+				'CONTENT_TYPE'=>lorem_word(),
+				'CONTENT_ID'=>placeholder_id(),
 			)), NULL, '', true)
 		);
 	}

@@ -79,7 +79,7 @@ function _indent_callback($matches)
 function _title_callback($matches)
 {
 	$symbol='-';
-	if (strpos($matches[1],'1')!==false) $symbol='=';
+	if (strpos($matches[1],'1')!==false || strpos($matches[1],'2')!==false || $matches[1]=='') $symbol='=';
 	return $matches[2].chr(10).str_repeat($symbol,strlen($matches[2]));
 }
 
@@ -133,8 +133,8 @@ function comcode_to_clean_text($message_plain)
 	{
 		require_code('comcode_from_html');
 		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0],true),$message_plain);
+		$message_plain=preg_replace('#(\[semihtml[^\]]*\]|\[/semihtml\])#Us','',$message_plain);
 	}
-	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 
 	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
 
@@ -146,7 +146,7 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace('#\[abbr="([^"]*)"[^\]]*\].*\[/abbr\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us','_indent_callback',$message_plain);
-	$message_plain=preg_replace_callback('#\[title([^\]])*\](.*)\[/title\]#Us','_title_callback',$message_plain);
+	$message_plain=preg_replace_callback('#\[title([^\]]*)\](.*)\[/title\]#Us','_title_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[box="([^"]*)"[^\]]*\](.*)\[/box\]#Us','_box_callback',$message_plain);
 	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment_safe','contents','block','random');
 	foreach ($tags_to_strip_inards as $s)
@@ -154,6 +154,7 @@ function comcode_to_clean_text($message_plain)
 		$message_plain=preg_replace('#\['.$s.'[^\]]*\].*\[/'.$s.'\]#Us','',$message_plain);
 	}
 	$message_plain=preg_replace('#\[surround="accessibility_hidden"\].*\[/surround\]#Us','',$message_plain);
+	$message_plain=preg_replace('#(\[surround[^\]]*\]|\[/surround\])#Us','',$message_plain);
 	$tags_to_strip=array('surround','ticker','jumping','right','center','left','align','list','concepts','html','semihtml','concept','size','color','font','tt','address','sup','sub','box');
 	foreach ($tags_to_strip as $s)
 	{
@@ -166,6 +167,8 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=preg_replace('#\[list[^\[\]]*\]#','',$message_plain);
 
 	$message_plain=preg_replace('#\{\$,[^\{\}]*\}#','',$message_plain);
+
+	$message_plain=preg_replace('#\n\n+#',chr(10).chr(10),$message_plain);
 
 	return trim($message_plain);
 }

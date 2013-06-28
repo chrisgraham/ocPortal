@@ -50,20 +50,23 @@ class Hook_whats_news_calendar
 
 		require_lang('calendar');
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'e_type');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval($cutoff_time).' AND e_is_public=1 AND ('.$or_list.') ORDER BY e_add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval($cutoff_time).' AND e_is_public=1 AND ('.$or_list.') ORDER BY e_add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['e_title'],NULL,$lang);
 			$description=get_translated_text($row['e_content'],NULL,$lang);
 			$member_id=(is_guest($row['e_submitter']))?NULL:strval($row['e_submitter']);
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'654cafa75ec9f9b8e0e0fb666f28fb37','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'654cafa75ec9f9b8e0e0fb666f28fb37','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'event','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('CALENDAR','','','',$lang));

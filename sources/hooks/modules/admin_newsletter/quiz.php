@@ -37,18 +37,21 @@ class Hook_whats_news_quiz
 
 		unset($filter); // Not used
 
+		$max=intval(get_option('max_newsletter_whatsnew'));
+
 		$new=new ocp_tempcode();
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE q_add_date>'.strval($cutoff_time).' ORDER BY q_add_date DESC',300);
-		if (count($rows)==300) return array();
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE q_add_date>'.strval($cutoff_time).' ORDER BY q_add_date DESC',$max);
+		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['q_name'],NULL,$lang);
 			$description=get_translated_text($row['q_start_text'],NULL,$lang);
 			$member_id=NULL;
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'1a8cad8defc5b92eded5aee376250ae5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
+			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'1a8cad8defc5b92eded5aee376250ae5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'quiz','CONTENT_ID'=>strval($id))));
 		}
 
 		return array($new,do_lang('QUIZZES','','','',$lang));
