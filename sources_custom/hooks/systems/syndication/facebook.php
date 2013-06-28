@@ -120,7 +120,9 @@ class Hook_Syndication_facebook
 			if (!is_null($member_id)) $save_to.='__'.strval($member_id);
 			set_long_value($save_to,$access_token);
 
-			set_long_value('facebook_syndicate_to_page__'.strval($member_id),get_param('facebook_syndicate_to_page','0'));
+			$facebook_syndicate_to_page=get_param('facebook_syndicate_to_page',NULL);
+			if ($facebook_syndicate_to_page!==NULL)
+				set_long_value('facebook_syndicate_to_page__'.strval($member_id),$facebook_syndicate_to_page);
 		}
 
 		if (get_page_name()!='facebook_oauth') // Take member back to page that implicitly shows their results
