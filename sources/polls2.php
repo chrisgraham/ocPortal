@@ -218,6 +218,8 @@ function delete_poll($id)
 
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'polls','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','polls_'.strval($id));
 
 	$GLOBALS['SITE_DB']->query_delete('poll',array('id'=>$id),'',1);
 

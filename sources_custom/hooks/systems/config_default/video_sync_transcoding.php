@@ -37,7 +37,7 @@ class Hook_config_default_video_sync_transcoding
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'gallery_syndication',
 		);
 	}
 

@@ -66,17 +66,38 @@ class Hook_whats_news_catalogues
 			switch ($fields[0]['cf_type'])
 			{
 				case 'short_trans':
-					$_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_short_trans','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
-					$name=get_translated_text($_name,NULL,$lang);
+					$_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short_trans','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					if (is_null($name))
+					{
+						$name=do_lang('UNKNOWN');
+					} else
+					{
+						$name=get_translated_text($_name,NULL,$lang);
+					}
 					break;
 				case 'short_text':
-					$name=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					$name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					if (is_null($name)) $name=do_lang('UNKNOWN');
 					break;
 				case 'float':
-					$name=float_to_raw_string($GLOBALS['SITE_DB']->query_select_value('catalogue_efv_float','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
+					$_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_float','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					if (is_null($name))
+					{
+						$name=do_lang('UNKNOWN');
+					} else
+					{
+						$name=float_to_raw_string($_name);
+					}
 					break;
 				case 'integer':
-					$name=strval($GLOBALS['SITE_DB']->query_select_value('catalogue_efv_integer','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
+					$_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_integer','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					if (is_null($name))
+					{
+						$name=do_lang('UNKNOWN');
+					} else
+					{
+						$name=strval($_name);
+					}
 					break;
 			}
 

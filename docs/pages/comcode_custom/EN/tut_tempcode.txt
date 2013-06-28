@@ -1604,9 +1604,7 @@ If you enter the template editor from the 'Template tree' screen then you will b
  1_key="symbol"           1_value="A special element that may be inserted into "
  2_key="parameter"        2_value="A parameter to a template; only parameters that the code calling the template supports may be used"
  3_key="directive"        3_value="A tool used to surround an area of a template between a START and an END, to apply something to it (such as only using it conditionally)"
- 4_key="Shift Encoding"   4_value="The process of identifying a portion of a template to shift into another"
- 5_key="Shift Decoding"   5_value="The process of taking an identified template portion and placing it in the referencing template"
- 6_key="variable"         6_value="Two uses: 1) Either of a parameter, symbol, directive or language string reference. 2) A named piece of memory used by Tempcode symbols that manipulate variables."
+ 4_key="variable"         4_value="Two uses: 1) Either of a parameter, symbol, directive or language string reference. 2) A named piece of memory used by Tempcode symbols that manipulate variables."
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

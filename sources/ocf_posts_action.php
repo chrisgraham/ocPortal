@@ -100,9 +100,10 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
  * @param  ?boolean		Whether this is for a new Private Topic (NULL: work it out)
  * @param  boolean		Whether to explicitly insert the Comcode with admin privileges
  * @param  ?AUTO_LINK	Parent post ID (NULL: none-threaded/root-of-thread)
+ * @param  boolean		Whether to send out notifications
  * @return AUTO_LINK		The ID of the new post.
  */
-function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false,$parent_id=NULL)
+function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false,$parent_id=NULL,$send_notification=true)
 {
 	if (is_null($poster)) $poster=get_member();
 
@@ -142,10 +143,6 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	if (is_null($time))
 	{
 		$time=time();
-		$send_notification=true;
-	} else
-	{
-		$send_notification=false;
 	}
 	if (is_null($poster_name_if_guest))
 	{
@@ -253,23 +250,20 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		}
 	} else
 	{
-		if ($check_permissions) // Not automated, so we'll have to be doing run-time progressing too
+		if ($send_notification)
 		{
-			if ($send_notification)
+			$post_comcode=get_translated_text($lang_id,$GLOBALS['FORUM_DB']);
+
+			require_code('ocf_posts_action2');
+			ocf_send_topic_notification($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,$post_comcode,$topic_title,$intended_solely_for,$is_pt);
+
+			// Send a notification for the inline PP
+			if (!is_null($intended_solely_for))
 			{
-				$post_comcode=get_translated_text($lang_id,$GLOBALS['FORUM_DB']);
-
-				require_code('ocf_posts_action2');
-				ocf_send_topic_notification($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,$post_comcode,$topic_title,$intended_solely_for,$is_pt);
-
-				// Send a notification for the inline PP
-				if (!is_null($intended_solely_for))
-				{
-					require_code('notifications');
-					$msubject=do_lang('NEW_PERSONAL_POST_SUBJECT',$topic_title,NULL,NULL,get_lang($intended_solely_for));
-					$mmessage=do_lang('NEW_PERSONAL_POST_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($anonymous?db_get_first_id():$poster,true)),comcode_escape($topic_title),array(comcode_escape($url),$post_comcode,strval($anonymous?db_get_first_id():$poster)),get_lang($intended_solely_for));
-					dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($intended_solely_for),$anonymous?db_get_first_id():$poster);
-				}
+				require_code('notifications');
+				$msubject=do_lang('NEW_PERSONAL_POST_SUBJECT',$topic_title,NULL,NULL,get_lang($intended_solely_for));
+				$mmessage=do_lang('NEW_PERSONAL_POST_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($anonymous?db_get_first_id():$poster,true)),comcode_escape($topic_title),array(comcode_escape($url),$post_comcode,strval($anonymous?db_get_first_id():$poster)),get_lang($intended_solely_for));
+				dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($intended_solely_for),$anonymous?db_get_first_id():$poster);
 			}
 		}
 	}

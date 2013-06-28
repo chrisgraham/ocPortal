@@ -229,12 +229,12 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL,$check
 	{
 		require_code('ocf_polls_action');
 		require_code('ocf_polls_action2');
-		ocf_delete_poll($poll_id,'');
+		ocf_delete_poll($poll_id,'',false);
 	}
 	$GLOBALS['FORUM_DB']->query_delete('f_topics',array('id'=>$topic_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
 	require_code('notifications');
-	delete_all_notifications_on('ocf_topics',strval($topic_id));
+	delete_all_notifications_on('ocf_topic',strval($topic_id));
 
 	// Delete the ticket row if it's a ticket
 	if (addon_installed('tickets'))
@@ -282,8 +282,9 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL,$check
  * @param  AUTO_LINK		The forum the topics are currently in.
  * @param  AUTO_LINK		The forum the topics are being moved to.
  * @param  ?array 		A list of the topic IDs to move (NULL: move all topics from source forum).
+ * @param  boolean		Whether to check permissions.
  */
-function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
+function ocf_move_topics($from,$to,$topics=NULL,$check_perms=true) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
 {
 	if ($from==$to) return; // That would be nuts, and interfere with our logic
 
@@ -292,8 +293,12 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 
 	$forum_name=ocf_ensure_forum_exists($to);
 
-	if (!ocf_may_moderate_forum($from))
-		access_denied('I_ERROR');
+	if ($check_perms)
+	{
+		require_code('ocf_forums');
+		if (!ocf_may_moderate_forum($from))
+			access_denied('I_ERROR');
+	}
 
 	$topic_count=0;
 

@@ -37,7 +37,7 @@ class Hook_config_default_bookings_max_ahead_months
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'booking',
 		);
 	}
 

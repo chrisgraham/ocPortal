@@ -340,6 +340,7 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/config_default/use_lastondate.php',
 			'sources/hooks/systems/config_default/username_profile_links.php',
 			'sources/hooks/systems/config_default/valid_email_domains.php',
+			'sources/ocf_field_editability.php',
 		);
 	}
 

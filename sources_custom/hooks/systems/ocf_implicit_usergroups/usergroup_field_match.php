@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2013
 
  See text/EN/licence.txt for full licencing information.
 
@@ -24,6 +24,7 @@ class Hook_implicit_usergroups_usergroup_field_match
 
 		$_groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),array('g_open_membership'=>1));
 		$groups=array();
+		require_code('lang');
 		foreach ($_groups as $g)
 		{
 			$groups[get_translated_text($g['g_name'])]=$g['id'];

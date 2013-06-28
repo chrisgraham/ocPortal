@@ -37,7 +37,7 @@ class Hook_config_default_twitterfeed_use_twitter_support_config
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'twitter_feed_integration_block',
 		);
 	}
 

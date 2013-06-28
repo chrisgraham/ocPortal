@@ -37,7 +37,7 @@ class Hook_config_default_gallery_sync_ocfilter
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'gallery_syndication',
 		);
 	}
 

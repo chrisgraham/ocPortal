@@ -37,7 +37,7 @@ class Hook_config_default_facebook_appid
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'facebook',
 		);
 	}
 

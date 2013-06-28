@@ -137,6 +137,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 function ocf_delete_group($group_id,$target_group=NULL)
 {
 	$orig_target_group=$target_group;
+	require_code('ocf_groups');
 	if (is_null($target_group)) $target_group=get_first_default_group();
 
 	if (($group_id==db_get_first_id()+0) || ($group_id==db_get_first_id()+1) || ($group_id==db_get_first_id()+8))

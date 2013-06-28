@@ -37,7 +37,7 @@ class Hook_config_default_gallery_sync_orphaned_handling
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'1|2|3',
 
-			'addon'=>'TODO',
+			'addon'=>'gallery_syndication',
 		);
 	}
 

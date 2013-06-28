@@ -37,7 +37,7 @@ class Hook_config_default_ocjester_emoticon_magnet_shown_for
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'oc_jester',
 		);
 	}
 

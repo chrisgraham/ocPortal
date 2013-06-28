@@ -239,12 +239,18 @@ class Module_admin_awards extends standard_crud_module
 	 * @param  LONG_TEXT		The description
 	 * @param  integer		How many points are given to the awardee
 	 * @param  ID_TEXT		The content type the award type is for
-	 * @param  BINARY			Whether to not show the awardee when displaying this award
+	 * @param  ?BINARY		Whether to not show the awardee when displaying this award (NULL: statistical default)
 	 * @param  integer		The approximate time in hours between awards (e.g. 168 for a week)
 	 * @return tempcode		The input fields
 	 */
-	function get_form_fields($id=NULL,$title='',$description='',$points=0,$content_type='download',$hide_awardee=0,$update_time_hours=168)
+	function get_form_fields($id=NULL,$title='',$description='',$points=0,$content_type='download',$hide_awardee=NULL,$update_time_hours=168)
 	{
+		if (is_null($hide_awardee))
+		{
+			$val=$GLOBALS['SITE_DB']->query_select_value('award_types','AVG(a_hide_awardee)');
+			$hide_awardee=is_null($val)?1:intval(round($val));
+		}
+
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));

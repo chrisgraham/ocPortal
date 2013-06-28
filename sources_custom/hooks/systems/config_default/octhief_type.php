@@ -37,7 +37,7 @@ class Hook_config_default_octhief_type
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'Members that are inactive, but has lots points|Members that are rich|Members that are random|Members that are in a certain usergroup',
 
-			'addon'=>'TODO',
+			'addon'=>'oc_thief',
 		);
 	}
 

@@ -572,7 +572,17 @@ msgstr ""
 		{
 			$title=get_screen_title('TRANSLATE_CODE');
 			set_helper_panel_text(comcode_lang_string('DOC_FIND_LANG_STRING_TIP'));
-			return $this->choose_lang($title,true,true,do_lang_tempcode('CHOOSE_EDIT_LIST_LANG_FILE'));
+			$choose_message=do_lang_tempcode(
+				'CHOOSE_EDIT_LIST_LANG_FILE',
+				escape_html(get_site_default_lang()),
+				escape_html(lookup_language_full_name(get_site_default_lang())),
+				array(
+					get_base_url().'/code_editor.php',
+					escape_html(user_lang()),
+					escape_html(lookup_language_full_name(user_lang()))
+				)
+			);
+			return $this->choose_lang($title,true,true,$choose_message);
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));

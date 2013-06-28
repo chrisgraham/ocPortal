@@ -565,6 +565,8 @@ function delete_image($id,$delete_full=true)
 	$GLOBALS['SITE_DB']->query_delete('images',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'images','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'images','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','images_'.strval($id));
 
 	require_code('seo2');
 	seo_meta_erase_storage('image',strval($id));
@@ -960,6 +962,8 @@ function delete_video($id,$delete_full=true)
 	$GLOBALS['SITE_DB']->query_delete('videos',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'videos','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'videos','trackback_for_id'=>$id));
+	require_code('notifications');
+	delete_all_notifications_on('comment_posted','videos_'.strval($id));
 
 	require_code('seo2');
 	seo_meta_erase_storage('video',strval($id));

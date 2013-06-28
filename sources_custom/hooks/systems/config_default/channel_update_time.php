@@ -37,7 +37,7 @@ class Hook_config_default_channel_update_time
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'twitter_feed_integration_block',
 		);
 	}
 

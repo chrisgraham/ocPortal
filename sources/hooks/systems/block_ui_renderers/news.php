@@ -33,7 +33,7 @@ class Hook_block_ui_renderers_news
 	 */
 	function render_block_ui($block,$parameter,$has_default,$default,$description)
 	{
-		if (($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
+		if ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
 		{
 			require_code('news');
 			$list=nice_get_news_categories(($default=='')?-1:intval($default));

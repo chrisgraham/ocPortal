@@ -65,6 +65,7 @@ class Module_topicview
 		require_css('ocf');
 
 		inform_non_canonical_parameter('threaded');
+		inform_non_canonical_parameter('post_id');
 
 		$start=get_param_integer('topic_start',0);
 		$default_max=intval(get_option('forum_posts_per_page'));
@@ -135,6 +136,8 @@ class Module_topicview
 				if (is_null($object)) continue;
 				$hook_objects[$hook]=$object;
 			}
+
+			$jump_post_id=get_param_integer('post_id',NULL);
 
 			// Render non-threaded
 			$posts=new ocp_tempcode();
@@ -281,6 +284,9 @@ class Module_topicview
 				{
 					$rating=new ocp_tempcode();
 				}
+
+				if (($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
+					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post']->evaluate()),'200','0','1','0.2'),'left'),ENT_QUOTES,get_charset());
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 							'_GUID'=>'sacd09wekfofpw2f',

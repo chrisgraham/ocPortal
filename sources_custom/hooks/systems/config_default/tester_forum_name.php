@@ -37,7 +37,7 @@ class Hook_config_default_tester_forum_name
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'tester',
 		);
 	}
 

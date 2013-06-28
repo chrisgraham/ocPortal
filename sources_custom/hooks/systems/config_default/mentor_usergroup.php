@@ -37,7 +37,7 @@ class Hook_config_default_mentor_usergroup
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'oc_best_buddy',
 		);
 	}
 

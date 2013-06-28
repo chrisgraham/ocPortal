@@ -37,7 +37,7 @@ class Hook_config_default_max_classified_listings_per_screen
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'classifieds',
 		);
 	}
 

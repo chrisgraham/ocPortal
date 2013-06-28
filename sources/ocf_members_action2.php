@@ -338,6 +338,9 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
 	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
+
+	require_code('ocf_field_editability');
+
 	if (is_null($auto_monitor_contrib_content))
 	{
 		$auto_monitor_contrib_content=(get_option('allow_auto_notifications')=='0')?0:1;
@@ -360,10 +363,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	{
 		if (ocf_is_ldap_member($member_id)) $special_type='ldap';
 		if (ocf_is_httpauth_member($member_id)) $special_type='httpauth';
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook')
-		{
-			$special_type='remote';
-		}
+		$special_type=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
 	}
 
 	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
@@ -371,7 +371,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$fields=new ocp_tempcode();
 
 	// Human name / Username
-	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')!='facebook'))
+	if (ocf_field_editable('username',$special_type))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self')))
 		{
@@ -393,7 +393,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	}
 
 	// Password
-	if ($special_type=='')
+	if (ocf_field_editable('password',$special_type))
 	{
 		if ((is_null($member_id)) || ($member_id==get_member()) || (has_privilege(get_member(),'assume_any_member')))
 		{
@@ -411,29 +411,40 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	}
 
 	// E-mail address
-	if ($email_address=='') $email_address=trim(get_param('email_address',''));
-	$email_description=new ocp_tempcode();
-	if ((get_option('valid_email_domains')!='') && ($mini_mode))
-	{ // domain restriction only applies on public join form ($mini_mode)
-		$email_description=do_lang_tempcode('MUST_BE_EMAIL_DOMAIN','<kbd>*.'.preg_replace('#\s*,\s*#','</kbd>, <kbd>*.',escape_html(get_option('valid_email_domains'))).'</kbd>',escape_html(get_option('valid_email_domains')));
-	} else
+	if (ocf_field_editable('email',$special_type))
 	{
-		if (get_option('email_confirm_join')=='1') $email_description=do_lang_tempcode('MUST_BE_REAL_ADDRESS');
-	}
-	$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),$email_description,'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
-	if ((is_null($member_id)) && ($email_address=='') && (get_option('email_confirm_join')=='1'))
-	{
-		$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
+		if ($email_address=='') $email_address=trim(get_param('email_address',''));
+		$email_description=new ocp_tempcode();
+		if ((get_option('valid_email_domains')!='') && ($mini_mode))
+		{ // domain restriction only applies on public join form ($mini_mode)
+			$email_description=do_lang_tempcode('MUST_BE_EMAIL_DOMAIN','<kbd>*.'.preg_replace('#\s*,\s*#','</kbd>, <kbd>*.',escape_html(get_option('valid_email_domains'))).'</kbd>',escape_html(get_option('valid_email_domains')));
+		} else
+		{
+			if (get_option('email_confirm_join')=='1') $email_description=do_lang_tempcode('MUST_BE_REAL_ADDRESS');
+		}
+		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),$email_description,'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
+		if ((is_null($member_id)) && ($email_address=='') && (get_option('email_confirm_join')=='1'))
+		{
+			if ($email_address=='') $email_address=trim(get_param('email_address',''));
+			$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
+			if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
+			{
+				$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
+			}
+		}
 	}
 
 	// DOB
-	$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
-	if (get_option('no_dob_ask')!='1')
+	if (ocf_field_editable('dob',$special_type))
 	{
-		$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
-		if (addon_installed('ocf_forum'))
+		$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
+		if (get_option('no_dob_ask')!='1')
 		{
-			$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
+			$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
+			if (addon_installed('ocf_forum'))
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
+			}
 		}
 	}
 
@@ -560,7 +571,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
    		}
 
 			// Primary usergroup
-			if ($special_type!='ldap')
+			if (ocf_field_editable('primary_group',$special_type))
 			{
 				if (has_privilege(get_member(),'assume_any_member'))
 				{
@@ -571,7 +582,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		}
 
 		// Secondary usergroups
-		if ($special_type!='ldap')
+		if (ocf_field_editable('secondary_groups',$special_type))
 		{
 			$_groups2=new ocp_tempcode();
 			$members_groups=is_null($member_id)?array():ocf_get_members_groups($member_id,false,false,false);

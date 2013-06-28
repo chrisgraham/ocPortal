@@ -33,7 +33,7 @@ class Hook_block_ui_renderers_catalogues
 	 */
 	function render_block_ui($block,$parameter,$has_default,$default,$description)
 	{
-		if (($parameter=='param') && (in_array($block,array('main_cc_embed'))))
+		if ((($default=='') || (is_numeric($default))) && ($parameter=='param') && (in_array($block,array('main_cc_embed'))))
 		{
 			$num_categories=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)');
 			$num_categories_top=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>NULL));

@@ -102,7 +102,7 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
  * @param  ID_TEXT		Content type
  * @param  ID_TEXT		Content ID
  * @param  boolean		Whether to use the content API as resource-fs requires (may be slightly different)
- * @return array			Tuple: title, submitter, content hook info, URL (for use within current browser session), URL (for use in emails / sharing)
+ * @return array			Tuple: title, submitter, content hook info, the content row, URL (for use within current browser session), URL (for use in emails / sharing)
  */
 function content_get_details($content_type,$content_id,$resourcefs_style=false)
 {

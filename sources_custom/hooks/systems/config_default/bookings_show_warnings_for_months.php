@@ -37,7 +37,7 @@ class Hook_config_default_bookings_show_warnings_for_months
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'booking',
 		);
 	}
 

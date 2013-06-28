@@ -37,7 +37,7 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
 {
 	require_lang('wiki');
 
-	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']);
+	$map=array('page'=>'wiki','type'=>'misc','id'=>$row['page_id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
 	$url=build_url($map,$zone);
 	$url->attach('#post_'.strval($row['id']));
@@ -81,7 +81,7 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
 
 	$content=get_translated_tempcode($row['description']);
 
-	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
+	$map=array('page'=>'wiki','type'=>'misc','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
 	$url=build_url($map,$zone);
 
@@ -531,7 +531,7 @@ function wiki_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			$id=intval($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','m_resource_id',$url_moniker_where));
 		}
 
-		$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$link_id)+(($this_link_virtual_root&&($next_token===false))?array('keep_wiki_root'=>$id):array()),get_module_zone('wiki'));
+		$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>$link_id)+(($this_link_virtual_root&&($next_token===false))?array('keep_wiki_root'=>$id):array()),get_module_zone('wiki'));
 
 		if ($next_token!==false) // If not the last token (i.e. not the current page)
 		{
@@ -824,7 +824,7 @@ function dispatch_wiki_post_notification($post_id,$type)
 	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($the_message);
 
-	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('wiki'),NULL,false,false,true);
+	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>$page_id),get_page_zone('wiki'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
 	$their_displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
@@ -848,7 +848,7 @@ function dispatch_wiki_page_notification($page_id,$type)
 	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages','description',array('id'=>$page_id)));
 
-	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),get_page_zone('wiki'),NULL,false,false,true);
+	$_view_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>$page_id),get_page_zone('wiki'),NULL,false,false,true);
 	$view_url=$_view_url->evaluate();
 	$their_displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());

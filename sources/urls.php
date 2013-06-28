@@ -712,15 +712,19 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 			}
 			if (($extra_vars!=array()) || ($force_index_php))
 			{
-				if ($url_scheme=='PG') $makeup.='/index.php';
-
 				$first=true;
+				$_makeup='';
 				foreach ($extra_vars as $key=>$val) // Add these in explicitly
 				{
 					if ($val===NULL) continue;
 					if ($val===SELF_REDIRECT) $val=get_self_url(true,true);
-					$makeup.=($first?'?':'&').$key.'='.ocp_url_encode($val,true);
+					$_makeup.=($first?'?':'&').$key.'='.ocp_url_encode($val,true);
 					$first=false;
+				}
+				if ($_makeup!='')
+				{
+					if ($url_scheme=='PG') $makeup.='/index.php';
+					$makeup.=$_makeup;
 				}
 			}
 

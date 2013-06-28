@@ -17,6 +17,57 @@ class Hook_Syndication_facebook
 		return true;
 	}
 
+	function syndication_javascript()
+	{
+		require_code('facebook_connect');
+		facebook_install();
+
+		if (get_option('facebook_member_syndicate_to_page')=='0') return '';
+
+		require_lang('facebook');
+
+		return "
+			var fb_button=document.getElementById('syndicate_start__facebook');
+			if (fb_button)
+			{
+				var fb_input;
+				if (typeof fb_button.form.elements['facebook_syndicate_to_page']=='undefined')
+				{
+					fb_input=document.createElement('input');
+					fb_input.type='hidden';
+					fb_input.name='facebook_syndicate_to_page';
+					fb_input.value='0';
+					fb_button.form.appendChild(fb_input);
+				} else
+				{
+					fb_input=fb_button.form.elements['facebook_syndicate_to_page'];
+				}
+				fb_button.onclick=function() {
+					generate_question_ui(
+						'".addslashes(do_lang('HOW_TO_SYNDICATE_DESCRIPTION'))."',
+
+						['".addslashes(do_lang('INPUTSYSTEM_CANCEL'))."','".addslashes(do_lang('FACEBOOK_PAGE'))."','".addslashes(do_lang('FACEBOOK_WALL'))."'],
+
+						'".addslashes(do_lang('HOW_TO_SYNDICATE'))."',
+
+						'".addslashes(do_lang('SYNDICATE_TO_OWN_WALL',get_site_name()))."',
+
+						function(val) {
+							if (val!='".addslashes(do_lang('INPUTSYSTEM_CANCEL'))."')
+							{
+								fb_input.value=(val=='".addslashes(do_lang('FACEBOOK_PAGE'))."')?'1':'0';
+								fb_button.onclick=null;
+								click_link(fb_button);
+							}
+						}
+					);
+
+					return false;
+				};
+			}
+		";
+	}
+
 	function auth_is_set($member_id)
 	{
 		$save_to='facebook_oauth_token';
@@ -68,6 +119,10 @@ class Hook_Syndication_facebook
 			$save_to='facebook_oauth_token';
 			if (!is_null($member_id)) $save_to.='__'.strval($member_id);
 			set_long_value($save_to,$access_token);
+
+			$facebook_syndicate_to_page=get_param('facebook_syndicate_to_page',NULL);
+			if ($facebook_syndicate_to_page!==NULL)
+				set_long_value('facebook_syndicate_to_page__'.strval($member_id),$facebook_syndicate_to_page);
 		}
 
 		if (get_page_name()!='facebook_oauth') // Take member back to page that implicitly shows their results
@@ -90,11 +145,13 @@ class Hook_Syndication_facebook
 	{
 		if (($this->is_available()) && ($this->auth_is_set($member_id)))
 		{
+			$page_syndicate=(get_option('facebook_member_syndicate_to_page')=='1' && get_long_value('facebook_syndicate_to_page__'.strval($member_id))==='1');
 			return $this->_send(
 				get_long_value('facebook_oauth_token__'.strval($member_id)),
 				$row,
-				'me',
-				$member_id
+				$page_syndicate?get_option('facebook_uid'):'me',
+				$member_id,
+				$page_syndicate
 			);
 		}
 		return false;
@@ -118,7 +175,7 @@ class Hook_Syndication_facebook
 		return false;
 	}
 
-	function _send($token,$row,$post_to_uid='me',$member_id=NULL)
+	function _send($token,$row,$post_to_uid='me',$member_id=NULL,$silent_warn=false)
 	{
 		require_lang('facebook');
 		require_code('facebook_connect');
@@ -156,7 +213,8 @@ class Hook_Syndication_facebook
 				$this->auth_set($member_id,get_self_url());
 			}
 
-			attach_message($e->getMessage(),'warn');
+			if (!$silent_warn)
+				attach_message($e->getMessage(),'warn');
 		}
 
 		return true;

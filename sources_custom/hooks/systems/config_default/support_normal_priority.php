@@ -37,7 +37,7 @@ class Hook_config_default_support_normal_priority
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'ocportalcom_support_credits',
 		);
 	}
 

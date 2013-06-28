@@ -235,7 +235,7 @@ class Module_admin_ocf_history
 		require_code('ocf_posts_action2');
 		$owner_username=$GLOBALS['FORUM_DRIVER']->get_username($post['h_owner_member_id']);
 		if (is_null($owner_username)) $owner_username=do_lang('UNKNOWN');
-		ocf_make_post($post['h_topic_id'],'',$post['h_before'],0,false,1,0,$owner_username,NULL,$post['h_create_date_and_time'],$post['h_owner_member_id'],NULL,time(),get_member(),false,true);
+		ocf_make_post($post['h_topic_id'],'',$post['h_before'],0,false,1,0,$owner_username,NULL,$post['h_create_date_and_time'],$post['h_owner_member_id'],NULL,time(),get_member(),false,true,NULL,true,'',0,NULL,false,false,false,false,NULL,false);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));

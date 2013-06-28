@@ -325,7 +325,7 @@ function block_helper_script()
 					$list->attach(nice_get_zones(($default=='')?NULL:$default));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif ((($parameter=='forum') || (($parameter=='param') && (in_array($block,array('main_forum_topics'))))) && (get_forum_type()=='ocf')) // OCF forum list
+				elseif ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ((($parameter=='forum') || (($parameter=='param') && (in_array($block,array('main_forum_topics'))))) && (get_forum_type()=='ocf'))) // OCF forum list
 				{
 					require_code('ocf_forums');
 					require_code('ocf_forums2');

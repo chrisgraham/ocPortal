@@ -126,7 +126,7 @@ function find_addon_category_download_category($category_name,$parent_id=NULL)
 		switch ($category_name)
 		{
 			case 'Themes':
-				$description='These are themes that have been released for this version of ocPortal. Themes that have been released for earlier versions would need upgrading -- you may wish to browse through them also, and contact the author if you\'d like them upgraded.';
+				$description="Themes provide a new look to ocPortal.\n\nThemes are a kind of addon. You can actually install the themes listed here directly from inside ocPortal.\n\nGo to Admin Zone > Structure > Addons. Follow the \"Import non-bundled addon(s)\" link.\n\nThese are themes that have been released for this version of ocPortal. Themes that have been released for earlier versions would need upgrading -- you may wish to browse through them also, and contact the author if you\'d like them upgraded.";
 				break;
 		}
 

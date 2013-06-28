@@ -37,7 +37,7 @@ class Hook_config_default_twitter_api_key
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'twitter_support',
 		);
 	}
 

@@ -37,7 +37,7 @@ class Hook_config_default_enable_google_translate
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'TODO',
+			'addon'=>'google_translate',
 		);
 	}
 

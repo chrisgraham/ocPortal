@@ -47,6 +47,31 @@ function init__facebook_connect()
 	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
 }
 
+function facebook_install()
+{
+	require_code('database_action');
+
+	$facebook_appid=get_option('facebook_appid',true);
+	if (is_null($facebook_appid))
+	{
+		add_config_option('FACEBOOK_APPID','facebook_appid','line','return \'\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_SECRET','facebook_secret_code','line','return \'\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_UID','facebook_uid','line','return \'\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_ALLOW_SIGNUPS','facebook_allow_signups','tick','return \'1\';','USERS','FACEBOOK_SYNDICATION');
+	}
+
+	$facebook_sync_username=get_option('facebook_sync_username',true);
+	if (is_null($facebook_sync_username))
+	{
+		add_config_option('FACEBOOK_SYNC_USERNAME','facebook_sync_username','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_SYNC_DOB','facebook_sync_dob','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_SYNC_EMAIL','facebook_sync_email','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_SYNC_AVATAR','facebook_sync_avatar','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_AUTO_SYNDICATE','facebook_auto_syndicate','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
+		add_config_option('FACEBOOK_MEMBER_SYNDICATE_TO_PAGE','facebook_member_syndicate_to_page','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
+	}
+}
+
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app
 function handle_facebook_connection_login($current_logged_in_member)
 {
@@ -124,6 +149,9 @@ function handle_facebook_connection_login($current_logged_in_member)
 		$dob_year=intval($_dob[2]);
 	}
 
+	// Make sure we are installed/upgraded
+	facebook_install();
+
 	// See if they have logged in before - i.e. have a synched account
 	$member_row=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>$facebook_uid),'ORDER BY id DESC',1);
 	$member_id=array_key_exists(0,$member_row)?$member_row[0]['id']:NULL;
@@ -136,44 +164,68 @@ function handle_facebook_connection_login($current_logged_in_member)
 		$member_id=NULL;
 	}*/
 
-	// If logged in before using Facebook, see if they've changed their name or email or timezone on Facebook -- if so, try and update locally to match
+	if ((!is_null($member_id)) && ($current_logged_in_member!==NULL) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member!=$member_id))
+		return $current_logged_in_member; // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
+
+	// If logged in before using Facebook, do some synching
 	if (!is_null($member_id))
 	{
-		if (($current_logged_in_member!==NULL) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member!=$member_id))
-			return $current_logged_in_member; // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
-
 		$last_visit_time=$member_id[0]['m_last_visit_time'];
-		//if ($last_visit_time>5*60*60)		No need, this is only happening for a new session
+		if ($timezone!==NULL)
 		{
-			if ($timezone!==NULL)
-			{
-				if ((!is_numeric($member_row[0]['m_timezone_offset'])) && (tz_time(time(),$timezone)==tz_time(time(),$member_row[0]['m_timezone_offset'])))
-					$timezone=$member_row[0]['m_timezone_offset']; // If equivalent, don't change
-			}
-			//if (($username!=$member_row[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member_row[0]['m_timezone_offset'])) || ($email_address!=$member_row[0]['m_email_address']))		Actually there's lots of things that may have changed so let's just do this always
-			{
-				$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_photo_url',array('m_username'=>$username));
-				if (!is_null($test)) // Make sure there's no conflict yet the name has changed
-				{
-					$update_map=array('m_username'=>$username,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
-					if ($email_address!='') $update_map['m_email_address']=$email_address;
-					if (($avatar_url!==NULL) && (($test=='') || (strpos($test,'facebook')!==false) || (strpos($test,'fbcdn')!==false)))
-					{
-						if ($timezone!==NULL)
-							$update_map['m_timezone_offset']=$timezone;
-						if (!addon_installed('ocf_avatars')) $update_map['m_avatar_url']=$avatar_url;
-						$update_map['m_photo_url']=$photo_url;
-						$update_map['m_photo_thumb_url']=$photo_thumb_url;
-					}
-					$GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>strval($facebook_uid)),'',1);
+			if ((!is_numeric($member_row[0]['m_timezone_offset'])) && (tz_time(time(),$timezone)==tz_time(time(),$member_row[0]['m_timezone_offset'])))
+				$timezone=$member_row[0]['m_timezone_offset']; // If equivalent, don't change
+		}
 
-					if ($username!=$member_row[0]['m_username'])
-					{
-						require_code('ocf_members_action2');
-						update_member_username_caching($member_id,$username);
-					}
-				}
+		$update_map=array();
+
+		// Username
+		if (get_option('facebook_sync_username')=='1')
+		{
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
+			if (is_null($test)) // Make sure there's no conflict yet the name has changed
+			{
+				$update_map['m_username']=$username;
 			}
+		}
+
+		// DOB
+		if (get_option('facebook_sync_dob')=='1')
+		{
+			$update_map+=array('m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
+		}
+
+		// Email
+		if (get_option('facebook_sync_email')=='1')
+		{
+			if ($email_address!='')
+			{
+				$update_map['m_email_address']=$email_address;
+			}
+		}
+
+		// Avatar/photos
+		if (get_option('facebook_sync_avatar')=='1')
+		{
+			$test=$member_row[0]['m_avatar_url'];
+			if (($avatar_url!==NULL) && (($test=='') || (strpos($test,'facebook')!==false) || (strpos($test,'fbcdn')!==false)))
+			{
+				if ($timezone!==NULL)
+					$update_map['m_timezone_offset']=$timezone;
+				$update_map['m_avatar_url']=$avatar_url;
+				$update_map['m_photo_url']=$photo_url;
+				$update_map['m_photo_thumb_url']=$photo_thumb_url;
+			}
+		}
+
+		// Run update
+		$GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>strval($facebook_uid)),'',1);
+
+		// Caching
+		if ((array_key_exists('m_username',$update_map)) && ($username!=$member_row[0]['m_username']))
+		{
+			require_code('ocf_members_action2');
+			update_member_username_caching($member_id,$username);
 		}
 	}
 
@@ -246,19 +298,24 @@ function handle_facebook_connection_login($current_logged_in_member)
 		}
 	}
 
+	// Finalise the session
 	if (!is_null($member_id))
 	{
 		require_code('users_inactive_occasionals');
 		create_session($member_id,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 	}
 
-	/*
-	Uncomment this if you want Facebook login to also automatically store syndication possibility for the user. ocPortal separates these by default, for privacy/control reasons.
-	if (!is_null($member_id))
+	// Store oAuth for syndication
+	if (get_option('facebook_auto_syndicate')=='1')
 	{
-		set_long_value('facebook_oauth_token__'.strval($member_id),$FACEBOOK_CONNECT->getUserAccessToken());
+		if (!is_null($member_id))
+		{
+			set_long_value('facebook_oauth_token__'.strval($member_id),$FACEBOOK_CONNECT->getUserAccessToken());
+
+			if (get_option('facebook_member_syndicate_to_page')=='1')
+				set_long_value('facebook_syndicate_to_page__'.strval($member_id),'1');
+		}
 	}
-	*/
 
 	return $member_id;
 }
