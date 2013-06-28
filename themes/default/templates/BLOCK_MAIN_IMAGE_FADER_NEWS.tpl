@@ -41,7 +41,7 @@
 		var data=[];
 		{+START,LOOP,NEWS}
 			{+START,SET,layout}
-				<h3><a href="{URL*}">{TITLE*}</a></h3>
+				<h3><a href="{URL*}">{TITLE}</a></h3>
 
 				<div class="meta_details" role="contentinfo">
 					<ul class="meta_details_list">

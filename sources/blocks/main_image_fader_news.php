@@ -35,7 +35,7 @@ class Block_main_image_fader_news
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('title','max','time','param','zone');
+		$info['parameters']=array('title','max','time','param','zone','blogs');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_image_fader_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='array(array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -68,6 +68,7 @@ class Block_main_image_fader_news
 		$mill=array_key_exists('time',$map)?intval($map['time']):8000; // milliseconds between animations
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('news');
 		$max=array_key_exists('max',$map)?intval($map['max']):5;
+		$blogs=array_key_exists('blogs',$map)?intval($map['blogs']):-1;
 
 		$main_title=do_lang_tempcode('NEWS');
 		$_title=array_key_exists('title',$map)?$map['title']:'';
@@ -76,7 +77,22 @@ class Block_main_image_fader_news
 		require_code('ocfiltering');
 		$ocfilter=ocfilter_to_sqlfragment($cat,'id','news','NULL','news_category','id',true,true);
 
-		$all_rows=$GLOBALS['SITE_DB']->query('SELECT id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news WHERE '.$ocfilter.' ORDER BY date_and_time DESC',100/*reasonable amount*/);
+		$q_filter='';
+		if ($blogs===0)
+		{
+			$q_filter.=' AND nc_owner IS NULL';
+		}
+		elseif ($blogs===1)
+		{
+			$q_filter.=' AND (nc_owner IS NOT NULL)';
+		}
+		if ($blogs!=-1)
+		{
+			$join=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON c.id=p.news_category';
+		} else $join='';
+
+		$query='SELECT p.id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news p'.$join.' WHERE '.$ocfilter.$q_filter.' ORDER BY date_and_time DESC';
+		$all_rows=$GLOBALS['SITE_DB']->query($query,100/*reasonable amount*/);
 		$news=array();
 		require_code('images');
 		foreach ($all_rows as $row)
@@ -88,7 +104,7 @@ class Block_main_image_fader_news
 			{
 				$article=get_translated_text($row['news_article']);
 				$matches=array();
-				if (preg_match('#["\'\]](http:[^\'"\[\]]+\.(jpeg|jpeg|gif|png))["\'\[]#i',$article,$matches)!=0)
+				if (preg_match('#["\'\]](http:[^\'"\[\]]+\.(jpeg|jpg|gif|png))["\'\[]#i',$article,$matches)!=0)
 				{
 					$image_url=$matches[1];
 				} else
@@ -98,7 +114,9 @@ class Block_main_image_fader_news
 			}
 			if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 
-			$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id'],'filter'=>($cat=='')?NULL:$cat),$zone);
+			$url_map=array('page'=>'news','type'=>'view','id'=>$row['id'],'filter'=>($cat=='')?NULL:$cat);
+			if ($blogs===1) $url_map['blog']=1;
+			$url=build_url($url_map,$zone);
 
 			$body=get_translated_tempcode($row['news']);
 			if ($body->is_empty()) $body=get_translated_tempcode($row['news_article']);
@@ -127,14 +145,16 @@ class Block_main_image_fader_news
 		if (count($news)==0)
 		{
 			$submit_url=mixed();
-			if ((has_actual_page_access(NULL,'cms_news',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_news',array('news',$cat))))
+			if ((has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),($blogs===1)?'cms_blogs':'cms_news',array('news',$cat))))
 			{
-				$submit_url=build_url(array('page'=>'cms_news','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_news'));
+				$submit_url=build_url(array('page'=>($blogs===1)?'cms_blogs':'cms_news','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone(($blogs===1)?'cms_blogs':'cms_news'));
 			}
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'ba84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('NEWS'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_NEWS'),'SUBMIT_URL'=>$submit_url));
+			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'ba84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>$main_title,'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_NEWS'),'SUBMIT_URL'=>$submit_url));
 		}
 
-		$archive_url=build_url(array('page'=>'news','type'=>'misc','filter'=>($cat=='')?NULL:$cat),$zone);
+		$tmp=array('page'=>'news','type'=>'misc','filter'=>($cat=='')?NULL:$cat);
+		if ($blogs!=-1) $tmp['blog']=$blogs;
+		$archive_url=build_url($tmp,$zone);
 
 		return do_template('BLOCK_MAIN_IMAGE_FADER_NEWS',array(
 			'TITLE'=>$main_title,
