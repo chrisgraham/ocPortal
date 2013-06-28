@@ -465,6 +465,11 @@ function cleanup()
 						continue;
 					}
 
+					if (($function=='ocf_delete_member') && ($GLOBALS['IS_SUPER_ADMIN']->get_member()))
+					{
+						$GLOBALS['SITE_DB']->query_update('comcode_pages',array('p_submitter'=>2),array('p_submitter'=>$row['id']));
+					}
+
 					if (in_array(is_array($id_field)?$row:$row[$id_field],$skip))
 					{
 						unset($rows[$i]);

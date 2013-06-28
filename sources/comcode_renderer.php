@@ -526,6 +526,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		//if (($source_member==get_member()) && (strpos(serialize($_POST),'['.$tag)!==false))
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($source_member);
+			if (is_null($username)) $username=do_lang('UNKNOWN');
 			if ($semiparse_mode) // Can't load through error for this, so just show it as a tag
 			{
 				$params='';

@@ -37,7 +37,7 @@ function find_post_id_url($post_id)
 	$start=intval(floor(floatval($before)/floatval($max)))*$max;
 
 	// Now redirect accordingly
-	$map=array('page'=>'topicview','type'=>NULL,'id'=>$id,'start'=>($start==0)?NULL:$start);
+	$map=array('page'=>'topicview','type'=>NULL,'id'=>$id,'start'=>($start==0)?NULL:$start,'post_id'=>$post_id);
 	foreach ($_GET as $key=>$val)
 		if ((substr($key,0,3)=='kfs') || (in_array($key,array('start','max')))) $map[$key]=$val;
 	$_redirect=build_url($map,'_SELF',NULL,true);
@@ -85,7 +85,7 @@ function find_first_unread_url($id)
 	}
 
 	// Now redirect accordingly
-	$map=array('page'=>'topicview','id'=>$id,'type'=>NULL,'start'=>($start==0)?NULL:$start);
+	$map=array('page'=>'topicview','id'=>$id,'type'=>NULL,'start'=>($start==0)?NULL:$start,'post_id'=>$first_unread_id);
 	foreach ($_GET as $key=>$val)
 		if ((substr($key,0,3)=='kfs') || (in_array($key,array('start','max')))) $map[$key]=$val;
 	$_redirect=build_url($map,'_SELF',NULL,true);

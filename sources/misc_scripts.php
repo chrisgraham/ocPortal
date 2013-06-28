@@ -671,7 +671,7 @@ function block_helper_script()
 					$list->attach(nice_get_zones(($default=='')?NULL:$default));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif ((($parameter=='forum') || (($parameter=='param') && (in_array($block,array('main_forum_topics'))))) && (get_forum_type()=='ocf')) // OCF forum list
+				elseif ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ((($parameter=='forum') || (($parameter=='param') && (in_array($block,array('main_forum_topics'))))) && (get_forum_type()=='ocf'))) // OCF forum list
 				{
 					require_code('ocf_forums');
 					require_code('ocf_forums2');
@@ -679,13 +679,13 @@ function block_helper_script()
 					$list=ocf_get_forum_tree_secure(NULL,NULL,true,explode(',',$default));
 					$fields->attach(form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list));
 				}
-				elseif (($parameter=='param') && (in_array($block,array('side_root_galleries','main_gallery_tease','main_gallery_embed','main_image_fader')))) // gallery list
+				elseif ((($default=='') || (preg_match('#^\w+$#',$default)!=0)) && ($parameter=='param') && (in_array($block,array('side_root_galleries','main_gallery_tease','main_gallery_embed','main_image_fader')))) // gallery list
 				{
 					require_code('galleries');
 					$list=nice_get_gallery_tree($default);
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='param') && (in_array($block,array('main_download_category')))) // download category list
+				elseif ((($default=='') || (is_numeric($default))) && ($parameter=='param') && (in_array($block,array('main_download_category')))) // download category list
 				{
 					require_code('downloads');
 					$list=nice_get_download_category_tree(($default=='')?NULL:intval($default));
@@ -697,7 +697,7 @@ function block_helper_script()
 					$list=nice_get_catalogues($default,false);
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='param') && (in_array($block,array('main_cc_embed')))) // catalogue category
+				elseif ((($default=='') || (is_numeric($default))) && ($parameter=='param') && (in_array($block,array('main_cc_embed')))) // catalogue category
 				{
 					$num_categories=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)');
 					$num_categories_top=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>NULL));
@@ -738,7 +738,7 @@ function block_helper_script()
 						$list->attach(form_input_list_entry(strval($newsletter['id']),$has_default && strval($newsletter['id'])==$default,get_translated_text($newsletter['title'])));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
+				elseif ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
 				{
 					require_code('news');
 					$list=nice_get_news_categories(($default=='')?-1:intval($default));
