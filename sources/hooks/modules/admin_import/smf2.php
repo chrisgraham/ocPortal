@@ -1818,7 +1818,7 @@ class Hook_smf2
 
 			$id_new=add_news_category($row['title'],'','');
 			foreach (array_keys($groups) as $group_id)
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($cat_id),'group_id'=>$group_id));
+				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($id_new),'group_id'=>$group_id));
 
 			import_id_remap_put('news_category',strval($row['id']),$id_new);
 		}
@@ -1827,6 +1827,7 @@ class Hook_smf2
 
 		require_code('files');
 
+		$boardurl='';
 		require($file_base.'/Settings.php');
 
 		$row_start=0;
