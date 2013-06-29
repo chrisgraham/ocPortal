@@ -222,6 +222,7 @@ class Hook_occle_fs_calendar extends resource_fs_base
 			'meta_keywords'=>'LONG_TRANS',
 			'meta_description'=>'LONG_TRANS',
 			'submitter'=>'member',
+			'member_calendar'=>'member',
 			'add_date'=>'TIME',
 			'edit_date'=>'?TIME',
 		);
@@ -290,6 +291,7 @@ class Hook_occle_fs_calendar extends resource_fs_base
 		$allow_comments=$this->_default_property_int_modeavg($properties,'allow_comments','calendar_events',1);
 		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','calendar_events',1);
 		$notes=$this->_default_property_str($properties,'notes');
+		$member_calendar=$this->_default_property_int_null($properties,'member_calendar');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$views=$this->_default_property_int($properties,'views');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
@@ -297,7 +299,7 @@ class Hook_occle_fs_calendar extends resource_fs_base
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$label,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time,NULL,$meta_keywords,$meta_description);
+		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$label,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$views,$add_time,$edit_time,NULL,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
@@ -349,6 +351,7 @@ class Hook_occle_fs_calendar extends resource_fs_base
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,
 			'submitter'=>$row['e_submitter'],
+			'member_calendar'=>$row['e_member_calendar'],
 			'add_date'=>$row['e_add_date'],
 			'edit_date'=>$row['e_edit_date'],
 		);
@@ -408,13 +411,14 @@ class Hook_occle_fs_calendar extends resource_fs_base
 		$allow_trackbacks=$this->_default_property_int_modeavg($properties,'allow_trackbacks','calendar_events',1);
 		$notes=$this->_default_property_str($properties,'notes');
 		$submitter=$this->_default_property_int_null($properties,'submitter');
+		$member_calendar=$this->_default_property_int_null($properties,'member_calendar');
 		$views=$this->_default_property_int($properties,'views');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$edit_time=$this->_default_property_int_null($properties,'edit_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		edit_calendar_event(intval($resource_id),$type,$recurrence,$recurrences,$seg_recurrences,$label,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time,$add_time,$views,$submitter,true);
+		edit_calendar_event(intval($resource_id),$type,$recurrence,$recurrences,$seg_recurrences,$label,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time,$add_time,$views,$submitter,true);
 
 		return $resource_id;
 	}

@@ -82,9 +82,24 @@ class Hook_search_calendar
 		}
 
 		// Calculate our where clause (search)
+		if (!has_privilege(get_member(),'assume_any_member'))
+		{
+			$where_clause.=' AND ';
+			if (is_guest())
+			{
+				$where_clause.='(e_is_public=1)';
+			} else
+			{
+				$where_clause.='(e_is_public=1 OR e_submitter='.strval(get_member()).' OR e_member_calendar='.strval(get_member()).')';
+			}
+		}
 		$where_clause.=' AND ';
-		$where_clause.='(e_is_public=1';
-		if (!is_guest()) $where_clause.=' OR e_submitter='.strval(get_member());
+		$where_clause.='(e_member_calendar IS NULL'; // Not a privacy thing, more of a relevance thing
+		if (!is_guest())
+		{
+			$where_clause.=' OR e_submitter='.strval(get_member());
+			$where_clause.=' OR e_member_calendar='.strval(get_member());
+		}
 		$where_clause.=')';
 		$sq=build_search_submitter_clauses('e_submitter',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;

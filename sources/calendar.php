@@ -540,15 +540,32 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 
 	$matches=array();
 	$where='';
-	if ($restrict)
+	if ($restrict) // privacy permission
 	{
 		if ($where!='') $where.=' AND ';
-		$where.='(e_submitter='.strval($member_id).' OR e_is_public=1)';
+		if (is_guest())
+		{
+			$where.='(e_is_public=1)';
+		} else
+		{
+			$where.='(e_submitter='.strval($member_id).' OR e_member_calendar='.strval($member_id).' OR e_is_public=1)';
+		}
 	}
-	if ($private!==NULL)
+	if ($private!==NULL) // display filter
 	{
-		if ($where!='') $where.=' AND ';
-		$where.='e_is_public='.strval(1-$private);
+		if ($private===1)
+		{
+			if ($where!='') $where.=' AND ';
+			$where.='((e_member_calendar='.strval($member_id).') OR (e_submitter='.strval($member_id).' AND e_member_calendar IS NOT NULL) OR (e_is_public=0))';
+		}
+		elseif ($private===0)
+		{
+			if ($where!='') $where.=' AND ';
+			$where.='(e_member_calendar IS NULL AND e_is_public=1)';
+		} else
+		{
+			// should not get here
+		}
 	}
 	if (!is_null($filter))
 	{
@@ -1035,7 +1052,13 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	if ($restrict)
 	{
 		if ($where!='') $where.=' AND ';
-		$where.='(e_submitter='.strval($member_id).' OR e_is_public=1)';
+		if (is_guest())
+		{
+			$where.='(e_is_public=1)';
+		} else
+		{
+			$where.='(e_submitter='.strval($member_id).' OR e_member_calendar='.strval($member_id).' OR e_is_public=1)';
+		}
 	}
 	if ($where!='') $where.=' AND ';
 	$where.='(validated=1 OR e_is_public=0)';
@@ -1461,4 +1484,56 @@ function end_find_concrete_day_of_month_wrap($event)
 	$end_hour=is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'];
 	$end_minute=is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'];
 	return find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$end_hour,$end_minute,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+}
+
+/**
+ * Find details of when an event happens. Preferably the next recurrence, but if it is in the past, the first.
+ *
+ * @param  ID_TEXT		The timezone for the event (NULL: current user's timezone)
+ * @param  BINARY			Whether the time should be converted to the viewer's own timezone
+ * @param  integer		The year the event starts at. This and the below are in server time
+ * @param  integer		The month the event starts at
+ * @param  integer		The day the event starts at
+ * @param  ID_TEXT		In-month specification type for start date
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+ * @param  integer		The hour the event starts at
+ * @param  integer		The minute the event starts at
+ * @param  ?integer		The year the event ends at (NULL: not a multi day event)
+ * @param  ?integer		The month the event ends at (NULL: not a multi day event)
+ * @param  ?integer		The day the event ends at (NULL: not a multi day event)
+ * @param  ID_TEXT		In-month specification type for end date
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+ * @param  ?integer		The hour the event ends at (NULL: not a multi day event / all day event)
+ * @param  ?integer		The minute the event ends at (NULL: not a multi day event / all day event)
+ * @param  string			The event recurrence
+ * @param  ?integer		The number of recurrences (NULL: none/infinite)
+ * @param  boolean		Whether to forcibly get the first recurrence, not a future one
+ * @return array			A tuple: Written date range, from timestamp, to timestamp
+ */
+function get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$force_first=false)
+{
+	if ($force_first)
+	{
+		$times=array();
+	} else
+	{
+		$times=find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+	}
+	if (array_key_exists(0,$times))
+	{
+		$from=$times[2];
+		$to=$times[3];
+	} else
+	{
+		$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$do_timezone_conv);
+		$from=cal_utctime_to_usertime($_from,$timezone,false);
+		$to=mixed();
+		if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
+		{
+			$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$do_timezone_conv);
+			$to=cal_utctime_to_usertime($_to,$timezone,false);
+		}
+	}
+	$date_range=date_range($from,$to,!is_null($start_hour));
+	return array($date_range,$from,$to);
 }

@@ -43,7 +43,7 @@ class Module_calendar
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=7;
+		$info['version']=8;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -68,6 +68,7 @@ class Module_calendar
 		delete_privilege('edit_owned_events');
 		delete_privilege('view_personal_events');
 		delete_privilege('sense_personal_conflicts');
+		delete_privilege('calendar_add_to_others');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'calendar'));
 
@@ -100,6 +101,7 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->create_table('calendar_events',array(
 				'id'=>'*AUTO',
 				'e_submitter'=>'MEMBER',
+				'e_member_calendar'=>'?MEMBER', // Which member's calendar it shows on; if NULL, it shows globally if e_is_public=1 else it shows both globally (but private) and on e_submitter's calendar
 				'e_views'=>'INTEGER',
 				'e_title'=>'SHORT_TRANS',
 				'e_content'=>'LONG_TRANS',
@@ -222,6 +224,16 @@ class Module_calendar
 		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
 		{
 			add_privilege('CALENDAR','set_reminders',false);
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		{
+			add_privilege('CALENDAR','calendar_add_to_others',true);
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('calendar_events','e_member_calendar','?MEMBER');
 		}
 	}
 
@@ -449,7 +461,7 @@ class Module_calendar
 		$view=get_param('view','day');
 		$filter=$this->get_filter();
 		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
-		if ($member_id!=get_member()) enforce_personal_access($member_id);
+		//if ($member_id!=get_member()) enforce_personal_access($member_id); has particular filtering
 		$back_url=NULL;
 
 		$private=get_param_integer('private',NULL);
@@ -616,13 +628,14 @@ class Module_calendar
 			$event_types_2->attach(do_template('CALENDAR_EVENT_TYPE',array('_GUID'=>'7511d60148835b7f4fea68a246af424e','S'=>'F','INTERESTED'=>$interested,'TYPE'=>get_translated_text($type['t_title']),'TYPE_ID'=>strval($type['id']))));
 		}
 
+		$add_url=new ocp_tempcode();
 		if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar')))
 		{
 			$and_filter=$this->get_and_filter(true);
-			$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>$self_encompassing?NULL:$date,'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
-		} else
-		{
-			$add_url=new ocp_tempcode();
+			if ((has_privilege(get_member(),'calendar_add_to_others')) || (is_null(get_param_integer('member_id',NULL))))
+			{
+				$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>$self_encompassing?NULL:$date,'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
+			}
 		}
 
 		// Allow jumping between views
@@ -690,7 +703,7 @@ class Module_calendar
 		$period_start=mktime(0,0,0,$start_month,$start_day,$start_year);
 
 		$period_end=mktime(0,0,0,$start_month,$start_day+1,$start_year);
-		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -790,11 +803,15 @@ class Module_calendar
 				if ($entry!='')
 				{
 					$timestamp=$period_start+$i*60*60;
+					$add_url=new ocp_tempcode();
 					if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar')))
 					{
 						$and_filter=$this->get_and_filter(true);
-						$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
-					} else $add_url=new ocp_tempcode();
+						if ((has_privilege(get_member(),'calendar_add_to_others')) || (is_null(get_param_integer('member_id',NULL))))
+						{
+							$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
+						}
+					}
 					$_streams->attach(/*XHTMLXHTML*/static_evaluate_tempcode(do_template('CALENDAR_DAY_STREAM_HOUR',array('_GUID'=>'93a8fb53183a4225ec3bf7f2ea07cfc5','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'PRIORITY'=>$priority,'DOWN'=>$down,'ENTRY'=>$entry))));
 				}
 			}
@@ -823,7 +840,7 @@ class Module_calendar
 
 		$period_start=mktime(0,0,0,$start_month,$start_day,$start_year);
 		$period_end=$period_start+60*60*24*7;
-		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -964,11 +981,15 @@ class Module_calendar
 				if ($class!='continuation')
 				{
 					$timestamp=$period_start+($i+24*$j)*60*60;
+					$add_url=new ocp_tempcode();
 					if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar')))
 					{
 						$and_filter=$this->get_and_filter(true);
-						$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
-					} else $add_url=new ocp_tempcode();
+						if ((has_privilege(get_member(),'calendar_add_to_others')) || (is_null(get_param_integer('member_id',NULL))))
+						{
+							$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
+						}
+					}
 					$days->attach(do_template('CALENDAR_WEEK_HOUR_DAY',array('_GUID'=>'e001b4b2ea1995760ef0d4460d93b2e1','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'DOWN'=>strval($down+1),'DAY'=>$day,'HOUR'=>$hour,'CLASS'=>$class,'ENTRIES'=>$entries)));
 				}
 			}
@@ -1063,7 +1084,7 @@ class Module_calendar
 		$_days=intval(round(floatval($period_end-$period_start)/floatval(60*60*24)));
 		if ($_days==0) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -1196,7 +1217,7 @@ class Module_calendar
 		$period_start=mktime(0,0,0,1,1,intval($explode[0]));
 		$period_end=mktime(0,0,0,1,0,intval($explode[0])+1);
 
-		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -1389,7 +1410,7 @@ class Module_calendar
 
 		// Check permissions
 		check_privilege('view_calendar');
-		if ($event['e_is_public']==0) enforce_personal_access($event['e_submitter'],'view_personal_events');
+		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_members_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],'view_personal_events');
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
 		// Validation
@@ -1634,7 +1655,7 @@ class Module_calendar
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$event=$rows[0];
-		if ($event['e_is_public']==0) enforce_personal_access($event['e_submitter'],'view_personal_events');
+		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_members_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],'view_personal_events');
 
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 

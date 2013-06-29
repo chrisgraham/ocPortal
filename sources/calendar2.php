@@ -46,6 +46,7 @@
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
  * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
  * @param  BINARY				Whether the time should be presented in the viewer's own timezone
+ * @param  ?MEMBER			The member's calendar it will be on (NULL: not on a specific member's calendar)
  * @param  BINARY				Whether the event has been validated
  * @param  BINARY				Whether the event may be rated
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
@@ -60,7 +61,7 @@
  * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL,$meta_keywords='',$meta_description='')
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$member_calendar=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -74,6 +75,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array(
 		'e_submitter'=>$submitter,
+		'e_member_calendar'=>$member_calendar,
 		'e_views'=>$views,
 		'e_title'=>insert_lang($title,2),
 		'e_content'=>0,
@@ -125,11 +127,29 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	if ($validated==1)
 	{
 		require_lang('calendar');
+		require_code('calendar');
 		require_code('notifications');
-		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		list($date_range)=get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),$date_range);
 		$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
-		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
+		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate(),comcode_escape($date_range)));
 		dispatch_notification('calendar_event',strval($type),$subject,$mail);
+	}
+
+	if ($member_calendar!==NULL)
+	{
+		if ($submitter!=$member_calendar)
+		{
+			require_lang('calendar');
+			require_code('calendar');
+			require_code('notifications');
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
+			list($date_range)=get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+			$subject=do_lang('MEMBER_CALENDAR_NOTIFICATION_NEW_EVENT_SUBJECT',get_site_name(),strip_comcode($title),array($date_range,$username));
+			$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id,'member_id'=>$member_calendar,'private'=>1),get_module_zone('calendar'),NULL,false,false,true);
+			$mail=do_lang('MEMBER_CALENDAR_NOTIFICATION_NEW_EVENT_BODY',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate(),comcode_escape($date_range),comcode_escape($username)));
+			dispatch_notification('member_calendar_changes',strval($member_calendar),$subject,$mail,array($member_calendar));
+		}
 	}
 
 	log_it('ADD_CALENDAR_EVENT',strval($id),$title);
@@ -172,6 +192,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
  * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
  * @param  BINARY				Whether the time should be presented in the viewer's own timezone
+ * @param  ?MEMBER			The member's calendar it will be on (NULL: not on a specific member's calendar)
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
  * @param  BINARY				Whether the download has been validated
@@ -185,11 +206,12 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  ?MEMBER			Submitter (NULL: do not change)
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
-	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter'),array('id'=>$id),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id'=>$id),'',1);
+	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
 	require_code('urls2');
@@ -210,12 +232,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		send_content_validated_notification('event',strval($id));
 	}
 
-	$update_map=array(
-		'e_title'=>lang_remap($myrow['e_title'],$title),
-		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
-		'e_recurrence'=>$recurrence,
-		'e_recurrences'=>$recurrences,
-		'e_seg_recurrences'=>$seg_recurrences,
+	$scheduling_map=array(
 		'e_start_year'=>$start_year,
 		'e_start_month'=>$start_month,
 		'e_start_day'=>$start_day,
@@ -229,6 +246,18 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'e_end_hour'=>$end_hour,
 		'e_end_minute'=>$end_minute,
 		'e_timezone'=>$timezone,
+	);
+	$rescheduled=false;
+	foreach ($scheduling_map as $key=>$val)
+	{
+		if ($myrow[$key]!=$val) $rescheduled=true;
+	}
+	$update_map=array(
+		'e_title'=>lang_remap($myrow['e_title'],$title),
+		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
+		'e_recurrence'=>$recurrence,
+		'e_recurrences'=>$recurrences,
+		'e_seg_recurrences'=>$seg_recurrences,
 		'e_do_timezone_conv'=>$do_timezone_conv,
 		'e_is_public'=>$is_public,
 		'e_priority'=>$priority,
@@ -237,8 +266,9 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
+		'e_member_calendar'=>$member_calendar,
 		'notes'=>$notes
-	);
+	)+$scheduling_map;
 
 	$update_map['e_edit_date']=$edit_time;
 	if (!is_null($add_time))
@@ -255,10 +285,33 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 	if ($just_validated)
 	{
 		require_lang('calendar');
+		require_code('calendar');
 		require_code('notifications');
-		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
-		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
+		list($date_range)=get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),$date_range);
+		$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
+		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate(),comcode_escape($date_range)));
 		dispatch_notification('calendar_event',strval($type),$subject,$mail);
+	}
+
+	if ($member_calendar!==NULL)
+	{
+		if (!is_null($submitter))
+			$myrow['e_submitter']=$submitter;
+		if ($member_calendar!=$myrow['e_submitter'])
+		{
+			require_lang('calendar');
+			require_code('calendar');
+			require_code('notifications');
+			$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			list($date_range)=get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+			$l_subject=$rescheduled?'MEMBER_CALENDAR_NOTIFICATION_RESCHEDULED_EVENT_SUBJECT':'MEMBER_CALENDAR_NOTIFICATION_EDITED_EVENT_SUBJECT';
+			$subject=do_lang($l_subject,get_site_name(),strip_comcode($title),array($date_range,$username));
+			$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id,'member_id'=>$member_calendar,'private'=>1),get_module_zone('calendar'),NULL,false,false,true);
+			$l_body=$rescheduled?'MEMBER_CALENDAR_NOTIFICATION_RESCHEDULED_EVENT_BODY':'MEMBER_CALENDAR_NOTIFICATION_EDITED_EVENT_BODY';
+			$mail=do_lang($l_body,comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate(),comcode_escape($date_range),comcode_escape($username)));
+			dispatch_notification('member_calendar_changes',strval($member_calendar),$subject,$mail,array((get_member()==$member_calendar)?$myrow['e_submitter']:$member_calendar));
+		}
 	}
 
 	decache('side_calendar');
@@ -282,7 +335,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
  */
 function delete_calendar_event($id)
 {
-	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content'),array('id'=>$id),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id'=>$id),'',1);
 	$myrow=$myrows[0];
 	$e_title=get_translated_text($myrow['e_title']);
 
@@ -306,6 +359,39 @@ function delete_calendar_event($id)
 		delete_lang_comcode_attachments($myrow['e_content'],'e_content',strval($id));
 
 	decache('side_calendar');
+
+	$member_calendar=$myrow['e_member_calendar'];
+	if ($member_calendar!==NULL)
+	{
+		if ($member_calendar!=$myrow['e_submitter'])
+		{
+			$timezone=$myrow['e_timezone'];
+			$do_timezone_conv=$myrow['e_do_timezone_conv'];
+			$start_year=$myrow['e_start_year'];
+			$start_month=$myrow['e_start_month'];
+			$start_day=$myrow['e_start_day'];
+			$start_monthly_spec_type=$myrow['e_start_monthly_spec_type'];
+			$start_hour=$myrow['e_start_hour'];
+			$start_minute=$myrow['e_start_minute'];
+			$end_year=$myrow['e_end_year'];
+			$end_month=$myrow['e_end_month'];
+			$end_day=$myrow['e_end_day'];
+			$end_monthly_spec_type=$myrow['e_end_monthly_spec_type'];
+			$end_hour=$myrow['e_end_hour'];
+			$end_minute=$myrow['e_end_minute'];
+			$recurrence=$myrow['e_recurrence'];
+			$recurrences=$myrow['e_recurrences'];
+
+			require_lang('calendar');
+			require_code('calendar');
+			require_code('notifications');
+			$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			list($date_range)=get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
+			$subject=do_lang('MEMBER_CALENDAR_NOTIFICATION_DELETED_EVENT_SUBJECT',get_site_name(),strip_comcode($e_title),array($date_range,$username));
+			$mail=do_lang('MEMBER_CALENDAR_NOTIFICATION_DELETED_EVENT_BODY',comcode_escape(get_site_name()),comcode_escape($e_title),array(comcode_escape($date_range),comcode_escape($username)));
+			dispatch_notification('member_calendar_changes',strval($member_calendar),$subject,$mail,array((get_member()==$member_calendar)?$myrow['e_submitter']:$member_calendar));
+		}
+	}
 
 	log_it('DELETE_CALENDAR_EVENT',strval($id),$e_title);
 	

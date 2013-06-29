@@ -1282,6 +1282,16 @@ class Hook_ocp_merge
 
 			$submitter=$on_same_msn?$row['e_submitter']:import_id_remap_get('member',strval($row['e_submitter']),true);
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+			if (is_null($row['e_member_calendar']))
+			{
+				$member_calendar=$on_same_msn?$row['e_member_calendar']:import_id_remap_get('member',strval($row['e_member_calendar']),true);
+				if (is_null($member_calendar)) $member_calendar=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			} else
+			{
+				$member_calendar=mixed();
+			}
+
 			$type=import_id_remap_get('event_type',strval($row['e_type']),true);
 			if (is_null($type)) continue;
 
@@ -1291,7 +1301,7 @@ class Hook_ocp_merge
 			if (!array_key_exists('allow_comments',$row)) $row['allow_comments']=1;
 			if (!array_key_exists('allow_trackbacks',$row)) $row['allow_trackbacks']=1;
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],array_key_exists('e_start_monthly_spec_type',$row)?$row['e_start_monthly_spec_type']:'day_of_month',$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],array_key_exists('e_end_monthly_spec_type',$row)?$row['e_end_monthly_spec_type']:'day_of_month',$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
+			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],array_key_exists('e_start_monthly_spec_type',$row)?$row['e_start_monthly_spec_type']:'day_of_month',$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],array_key_exists('e_end_monthly_spec_type',$row)?$row['e_end_monthly_spec_type']:'day_of_month',$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$member_calendar,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
 
 			import_id_remap_put('event',strval($row['id']),$id_new);
 		}
@@ -2251,7 +2261,7 @@ class Hook_ocp_merge
 					if (is_null($intended_solely_for)) $intended_solely_for=-1;
 				}
 				$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-				$id_new=ocf_make_post($topic_id,$title,$this->get_lang_string($db,$row['p_post']),0,false,$row['p_validated'],$row['p_is_emphasised'],$row['p_poster_name_if_guest'],$row['p_ip_address'],$row['p_time'],$member_id,$intended_solely_for,$row['p_last_edit_time'],$last_edit_by,false,false,$forum_id,false,'',0,$id,false,true);
+				$id_new=ocf_make_post($topic_id,$row['p_title'],$this->get_lang_string($db,$row['p_post']),0,false,$row['p_validated'],$row['p_is_emphasised'],$row['p_poster_name_if_guest'],$row['p_ip_address'],$row['p_time'],$member_id,$intended_solely_for,$row['p_last_edit_time'],$last_edit_by,false,false,$forum_id,false,'',0,$id,false,true);
 
 				import_id_remap_put('post',strval($row['id']),$id_new);
 			}

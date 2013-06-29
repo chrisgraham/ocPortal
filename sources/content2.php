@@ -58,7 +58,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 	$submitter_field=in_array('submitter',$fields_to_skip)?NULL:$info['submitter_field'];
 	if (!is_null($submitter_field))
 	{
-		$submitter=is_null($content_row)?get_param_integer('member_id',get_member()):$content_row[$submitter_field];
+		$submitter=is_null($content_row)?get_member():$content_row[$submitter_field];
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
 		if (is_null($username)) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'meta_submitter',$username,!$allow_no_owner));

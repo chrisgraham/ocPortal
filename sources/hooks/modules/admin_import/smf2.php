@@ -1745,7 +1745,7 @@ class Hook_smf2
 				$description.="\n\n".'[attachment]'.strval($attid_new).'[/attachment]';
 			}
 
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$description,3,1,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$description,3,1,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,NULL,1,1,1,1,'',$submitter);
 			if ($att_imported)
 			{
 				$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>'calendar','r_referer_id'=>strval($id_new),'a_id'=>$attid_new));
@@ -1767,7 +1767,7 @@ class Hook_smf2
 			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=array_map('intval',explode('-',date('Y-m-d-h-i',strtotime($row['event_date']))));
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array_map('intval',explode('-',date('Y-m-d-h-i',strtotime($row['event_date']))));
 
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['title'],3,1,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['title'],3,1,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,NULL,1,1,1,1,'',$submitter);
 
 			import_id_remap_put('event_holiday',strval($row['id_holiday']),$id_new);
 		}
@@ -1818,7 +1818,7 @@ class Hook_smf2
 
 			$id_new=add_news_category($row['title'],'','');
 			foreach (array_keys($groups) as $group_id)
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($cat_id),'group_id'=>$group_id));
+				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($id_new),'group_id'=>$group_id));
 
 			import_id_remap_put('news_category',strval($row['id']),$id_new);
 		}
@@ -1827,6 +1827,7 @@ class Hook_smf2
 
 		require_code('files');
 
+		global $boardurl;
 		require($file_base.'/Settings.php');
 
 		$row_start=0;

@@ -46,8 +46,25 @@ function output_ical()
 
 	$filter=get_param_integer('type_filter',NULL);
 	if ($filter===0) $filter=NULL;
-	$where='(e_submitter='.strval(get_member()).' OR e_is_public=1)';
-	if (!is_null($filter)) $where.=' AND e_type='.strval($filter);
+	$where='1=1';
+	if ($where!='') $where.=' AND ';
+	if (!has_privilege(get_member(),'assume_any_member'))
+	{
+		if (is_guest())
+		{
+			$where.='(e_is_public=1)';
+		} else
+		{
+			$where.='(e_submitter='.strval(get_member()).' OR e_member_calendar='.strval(get_member()).' OR e_is_public=1)'; // privacy permission
+		}
+	}
+	if (!is_null($filter))
+	{
+		if ($where!='') $where.=' AND ';
+		$where.='e_type='.strval($filter);
+	}
+	if ($where!='') $where.=' AND ';
+	$where.='(e_member_calendar='.strval(get_member()).' OR e_submitter='.strval(get_member()).' OR e_member_calendar IS NULL)'; // sanity filter
 
 	echo "BEGIN:VCALENDAR\n";
 	echo "VERSION:2.0\n";

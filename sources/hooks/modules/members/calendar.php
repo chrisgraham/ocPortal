@@ -31,7 +31,7 @@ class Hook_members_calendar
 	{
 		if (!addon_installed('calendar')) return array();
 
-		if (!has_privilege(get_member(),'assume_any_member')) return array();
+		//if (!has_privilege(get_member(),'assume_any_member')) return array();	Now will have separate permission filtering
 		if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar'))) return array();
 
 		require_lang('calendar');
