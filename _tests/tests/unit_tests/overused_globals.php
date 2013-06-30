@@ -84,7 +84,7 @@ class overused_globals_test_set extends ocp_test_case
 
 		foreach ($found_globals as $global=>$count)
 		{
-			if ((!isset($sanctified_globals[$global])) && (strpos($global,'_CACHE')===false) && ($global!='FILE_BASE') && ($global!='RELATIVE_PATH') && ($global!='_CREATED_FILES') && ($global!='_MODIFIED_FILES'))
+			if ((!isset($sanctified_globals[$global])) && (strpos($global,'_CACHE')===false) && ($global!='FILE_BASE') && ($global!='LAST_TOPIC_ID') && ($global!='LAST_TOPIC_IS_NEW') && ($global!='RELATIVE_PATH') && ($global!='_CREATED_FILES') && ($global!='_MODIFIED_FILES'))
 				$this->assertTrue($count<=6,'Don\'t over-use global variables ('.$global.', '.integer_format($count).' files using).');
 		}
 	}

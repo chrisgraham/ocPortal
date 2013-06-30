@@ -32,7 +32,7 @@ class auth_test_set extends ocp_test_case
 		$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,apply_forum_driver_md5_variant($password,$username),$password);
 		$member=$login_array['id'];
 		$this->assertTrue(is_null($member));
-		$this->assertTrue(static_evaluate_tempcode($login_array['error'])==do_lang('USER_BAD_PASSWORD'));
+		$this->assertTrue(static_evaluate_tempcode($login_array['error'])==do_lang('MEMBER_BAD_PASSWORD'));
 	}
 
 	function testUnknownUsernameDoesFail()
@@ -51,7 +51,7 @@ class auth_test_set extends ocp_test_case
 
 	function testPrivilegeDoesFail()
 	{
-		$this->assertTrue(!has_specific_permission($GLOBALS['FORUM_DRIVER']->get_guest_id(),'add_highrange_content'));
+		$this->assertTrue(!has_privilege($GLOBALS['FORUM_DRIVER']->get_guest_id(),'add_highrange_content'));
 	}
 
 	function testAdminZoneDoesFail()
@@ -77,7 +77,7 @@ class auth_test_set extends ocp_test_case
 			$new_session_row=array(
 				'the_session'=>$fake_session_id,
 				'last_activity'=>time(),
-				'the_user'=>2,
+				'member_id'=>2,
 				'ip'=>$ip,
 				'session_confirmed'=>1,
 				'session_invisible'=>1,

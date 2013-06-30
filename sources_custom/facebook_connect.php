@@ -70,6 +70,19 @@ function facebook_install()
 		add_config_option('FACEBOOK_AUTO_SYNDICATE','facebook_auto_syndicate','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
 		add_config_option('FACEBOOK_MEMBER_SYNDICATE_TO_PAGE','facebook_member_syndicate_to_page','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
 	}
+
+	/*
+	delete_config_option('facebook_appid');
+	delete_config_option('facebook_secret_code');
+	delete_config_option('facebook_uid');
+	delete_config_option('facebook_allow_signups');
+	delete_config_option('facebook_sync_username');
+	delete_config_option('facebook_sync_dob');
+	delete_config_option('facebook_sync_email');
+	delete_config_option('facebook_sync_avatar');
+	delete_config_option('facebook_auto_syndicate');
+	delete_config_option('facebook_member_syndicate_to_page');
+	*/
 }
 
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app

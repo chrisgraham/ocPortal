@@ -8,10 +8,10 @@
 
 				{+START,IF_PASSED_AND_TRUE,TYPE_HAS_CHILDREN_SET}
 					<script type="text/javascript">// <![CDATA[
-						var e=document.getElementById('notification_{SCOPE;}_{NTYPE;}');
+						var e=document.getElementById('notification_{SCOPE;/}_{NTYPE;/}');
 						if (!e.checked) e.indeterminate=true;
 						e.onchange=function() {
-							var e=document.getElementById('notification_{SCOPE;}_{NTYPE;}');
+							var e=document.getElementById('notification_{SCOPE;/}_{NTYPE;/}');
 							if (!e.checked) e.indeterminate=true; // Put back
 						};
 					//]]></script>

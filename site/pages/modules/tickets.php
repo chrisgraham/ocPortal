@@ -303,6 +303,8 @@ class Module_tickets
 
 				foreach ($tickets as $topic)
 				{
+					if (($topic['closed']) && (has_privilege(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
+
 					$links->attach($this->_render_ticket_row($topic));
 				}
 			}
@@ -331,8 +333,6 @@ class Module_tickets
 	 */
 	function _render_ticket_row($topic)
 	{
-		if (($topic['closed']) && (has_privilege(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
-
 		$ticket_id=extract_topic_identifier($topic['description']);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');

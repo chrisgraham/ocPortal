@@ -48,7 +48,7 @@ class Module_online_members
 	 */
 	function get_entry_points()
 	{
-		return (get_value('session_prudence')==='1')?array():array('!'=>'USERS_ONLINE'); // TODO: update in v10
+		return (get_option('session_prudence')==='1')?array():array('!'=>'USERS_ONLINE');
 	}
 
 	/**

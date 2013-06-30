@@ -15,7 +15,7 @@
 				<li class="accordion_trayitem">
 					{+START,IF,{$JS_ON}}<a class="toggleable_tray_button" href="#" onclick="return accordion(this.parentNode);"><img {+START,IF,{$NOT,{$GET,is_current_year}}}alt="{!EXPAND}: {$STRIP_TAGS,{TITLE}}" title="{!EXPAND}" src="{$IMG*,expand}"{+END}{+START,IF,{$GET,is_current_year}}alt="{!CONTRACT}: {$STRIP_TAGS,{TITLE}}" title="{!CONTRACT}" src="{$IMG*,contract}"{+END} /></a> {+END}
 
-					<span onclick="return accordion(this.parentNode);"><strong>{YEAR}</strong></span>:
+					<span onclick="/*Access-note: code has other activation*/ return accordion(this.parentNode);"><strong>{YEAR}</strong></span>:
 
 					<div class="toggleable_tray accordion_trayitem"{+START,IF,{$NOT,{$GET,is_current_year}}} style="display: {$JS_ON,none,block}" aria-expanded="false"{+END}>
 						<ul class="compact_list associated_details">

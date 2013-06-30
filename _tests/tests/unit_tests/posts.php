@@ -40,7 +40,7 @@ class posts_test_set extends ocp_test_case
 		$this->post_id=ocf_make_post($this->topic_id,'welcome','welcome to the posts',0,false,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,true,true,NULL,true,'',0,NULL,false,false,false);
 
 		// Test the forum was actually created
-		$this->assertTrue('welcome'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title ',array('id'=>$this->post_id)));
+		$this->assertTrue('welcome'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('id'=>$this->post_id)));
 	}
 
 	function testEditPosts()
@@ -51,7 +51,7 @@ class posts_test_set extends ocp_test_case
 		ocf_edit_post($this->post_id,1,'take care','the post editing',0,0,NULL,true,false,'Nothing');
 
 		// Test the forum was actually created
-		$this->assertTrue('take care'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title ',array('id'=>$this->post_id)));
+		$this->assertTrue('take care'==$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('id'=>$this->post_id)));
 	}
 
 	function tearDown()

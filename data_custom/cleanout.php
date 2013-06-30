@@ -487,7 +487,7 @@ function cleanup()
 	if ($aggressive_meta_cleanup)
 	{
 		$GLOBALS['SITE_DB']->query_delete('url_id_monikers');
-		$GLOBALS['SITE_DB']->query_delete('chat_buddies');
+		$GLOBALS['SITE_DB']->query_delete('chat_friends');
 		$GLOBALS['SITE_DB']->query_delete('transactions');
 		$GLOBALS['SITE_DB']->query_delete('trans_expecting');
 		$GLOBALS['SITE_DB']->query_delete('trackbacks');

@@ -933,7 +933,8 @@ class resource_fs_base
 		$name=preg_replace('#\_+\$#','',$name);
 		if ($name=='') $name='unnamed';
 		require_code('urls2');
-		return substr($name,0,MAX_MONIKER_LENGTH);
+		$max_moniker_length=intval(get_option('max_moniker_length'));
+		return substr($name,0,$max_moniker_length);
 	}
 
 	/**

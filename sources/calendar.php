@@ -1525,12 +1525,12 @@ function get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$
 		$to=$times[3];
 	} else
 	{
-		$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$do_timezone_conv);
+		$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$do_timezone_conv==1);
 		$from=cal_utctime_to_usertime($_from,$timezone,false);
 		$to=mixed();
 		if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 		{
-			$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$do_timezone_conv);
+			$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$do_timezone_conv==1);
 			$to=cal_utctime_to_usertime($_to,$timezone,false);
 		}
 	}

@@ -449,7 +449,7 @@ function install_ocf($upgrade_from=NULL)
 			$start+=$max;
 		}
 		while (count($members)>0);
- 	}
+	}
 
 	// If we have the forum installed to this db already, leave
 	if (is_null($upgrade_from))

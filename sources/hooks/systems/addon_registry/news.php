@@ -164,7 +164,7 @@ class Hook_addon_registry_news
 			'NEWS_WORDPRESS_IMPORT_SCREEN.tpl'=>'administrative__news_wordpress_import_screen',
 			'NEWS_BRIEF.tpl'=>'news_archive_screen',
 			'NEWS_BOX.tpl'=>'block_main_news',
-			'OCF_MEMBER_PROFILE_BLOG.tpl'=>'ocf_member_profile_blog'
+			'OCF_MEMBER_PROFILE_BLOG.tpl'=>'ocf_member_profile_blog',
 			'BLOCK_MAIN_IMAGE_FADER_NEWS.tpl'=>'block_main_image_fader_news',
 		);
 	}

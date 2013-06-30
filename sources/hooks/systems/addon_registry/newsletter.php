@@ -111,6 +111,7 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/systems/config_default/dual_format_newsletters.php',
 			'sources/hooks/systems/config_default/mails_per_send.php',
 			'sources/hooks/systems/config_default/minutes_between_sends.php',
+			'themes/default/css/newsletter.css',
 		);
 	}
 

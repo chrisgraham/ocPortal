@@ -50,14 +50,15 @@ blah[/indent]
 [abbr="Cascading Style Sheets"]CSS[/abbr]
 ';
 		$got=strip_comcode($text);
+
 		$expected='
 header 1
---------
+========
 
 under header 1
 
 header 2
---------
+========
 
 under header 2
 
@@ -66,14 +67,11 @@ box title
 
 box contents
 
-
 **test bold**
 
 **test italics**
 
 ***test highlight***
-
-
 
       blah
       blah

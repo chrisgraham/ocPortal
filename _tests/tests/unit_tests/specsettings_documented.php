@@ -59,7 +59,7 @@ class specsettings_documented_test_set extends ocp_test_case
 			{
 				$c=file_get_contents(get_file_base().'/'.$f);
 				$matches=array();
-				$num_matches=preg_match_all('#(\$SITE_INFO|\$GLOBALS\[\'SITE_INFO\'\])\[\'([^\']+)\'\]#',$c,$matches);
+				$num_matches=preg_match_all('#(\$SITE_INFO|\$GLOBALS\[\'SITE_INFO\'\])\[\'([^\'"]+)\'\]#',$c,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{
 					$var=$matches[2][$i];

@@ -50,12 +50,12 @@ class Hook_checklist_news
 
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
-		$config_row=$GLOBALS['SITE_DB']->query_select('config',array('the_page','section'),array('the_name'=>'news_update_time'),'',1);
+		$config_row=$GLOBALS['SITE_DB']->query_select('config',array('c_category','c_group'),array('the_name'=>'news_update_time'),'',1);
 		if (array_key_exists(0,$config_row))
 		{
-			$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$config_row[0]['the_page']),get_module_zone('admin_config'));
+			$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$config_row[0]['c_category']),get_module_zone('admin_config'));
 			$config_url=$_config_url->evaluate();
-			$config_url.='#group_'.$config_row[0]['section'];
+			$config_url.='#group_'.$config_row[0]['c_group'];
 		} else $config_url=NULL;
 
 		$url=build_url(array('page'=>'cms_news','type'=>'ad'),get_module_zone('cms_news'));

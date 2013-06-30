@@ -31,7 +31,7 @@ class warning_test_set extends ocp_test_case
 		$this->warn_id=ocf_make_warning(1,'nothing',NULL,NULL,1,NULL,NULL,0,'',0,0,NULL);
 
 		// Test the forum was actually created
-		$this->assertTrue('nothing'==$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_explanation ',array('id'=>$this->warn_id)));
+		$this->assertTrue('nothing'==$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_explanation',array('id'=>$this->warn_id)));
 	}
 
 	function testEditWarning()
@@ -40,7 +40,7 @@ class warning_test_set extends ocp_test_case
 		ocf_edit_warning($this->warn_id,'something',1);
 
 		// Test the forum was actually created
-		$this->assertTrue('something'==$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_explanation ',array('id'=>$this->warn_id)));
+		$this->assertTrue('something'==$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_explanation',array('id'=>$this->warn_id)));
 	}
 
 	function tearDown()

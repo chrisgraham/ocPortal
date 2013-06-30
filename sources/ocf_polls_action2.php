@@ -96,7 +96,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
  * @param  boolean		Whether to check permissions.
  * @return AUTO_LINK		The ID of the topic the poll is on.
  */
-function ocf_delete_poll($poll_id,$reason,$check_perms=true)
+function ocf_delete_poll($poll_id,$reason='',$check_perms=true)
 {
 	require_code('ocf_polls');
 

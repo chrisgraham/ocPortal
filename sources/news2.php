@@ -72,7 +72,7 @@ function edit_news_category($id,$title,$img,$notes,$owner)
 	suggest_new_idmoniker_for('news','misc',strval($id),'',$title);
 
 	// Sync meta keywords, if we have auto-sync for these
-	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	if (get_option('enable_seo_fields')==='0')
 	{
 		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
 		$affected_news=$GLOBALS['SITE_DB']->query($sql);
@@ -148,7 +148,7 @@ function delete_news_category($id)
 	log_it('DELETE_NEWS_CATEGORY',strval($id),$old_title);
 
 	// Sync meta keywords, if we have auto-sync for these
-	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	if (get_option('enable_seo_fields')==='0')
 	{
 		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
 		$affected_news=$GLOBALS['SITE_DB']->query($sql);
@@ -310,7 +310,7 @@ END;
 	}
 
 	require_code('seo2');
-	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	if (get_option('enable_seo_fields')==='0')
 	{
 		$meta_keywords='';
 		foreach (array_unique(array_merge(is_null($news_categories)?array():$news_categories,array($main_news_category_id))) as $news_category_id)
@@ -457,7 +457,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	}
 
 	require_code('seo2');
-	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
+	if (get_option('enable_seo_fields')==='0')
 	{
 		$meta_description=($news=='')?$news_article:$news;
 		$meta_keywords='';

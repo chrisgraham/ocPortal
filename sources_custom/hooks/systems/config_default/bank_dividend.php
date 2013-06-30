@@ -48,7 +48,7 @@ class Hook_config_default_bank_dividend
 	 */
 	function get_default()
 	{
-		return '40';
+		return '4';
 	}
 
 }

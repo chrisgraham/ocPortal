@@ -32,7 +32,30 @@
 	</p>
 {+END}
 
-{+START,SET,BUTTONS}
+{+START,IF_NON_EMPTY,{TOPIC_WRAPPER}}{$,Does not show if no topics as that would double it up}
+	{+START,IF_PASSED,ID}{$,Does not show on PT/virtual-forum view as those are less actiony places}
+		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
+			<div class="non_accessibility_redundancy">
+				<div class="float_surrounder">
+					<div class="buttons_group ocf_screen_buttons">
+						{+START,IF_PASSED,ID}
+							{+START,INCLUDE,NOTIFICATION_BUTTONS}
+								NOTIFICATIONS_TYPE=ocf_topic
+								NOTIFICATIONS_ID=forum:{ID}
+								NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
+							{+END}
+						{+END}
+						{BUTTONS}
+					</div>
+				</div>
+			</div>
+		{+END}
+	{+END}
+{+END}
+
+{TOPIC_WRAPPER}
+
+{+START,IF,{$NOT,{$WIDE_HIGH}}}
 	<div class="float_surrounder">
 		<div class="buttons_group ocf_screen_buttons">
 			{+START,IF_PASSED,ID}
@@ -45,22 +68,6 @@
 			{BUTTONS}
 		</div>
 	</div>
-{+END}
-
-{+START,IF_NON_EMPTY,{TOPIC_WRAPPER}}{$,Does not show if no topics as that would double it up}
-	{+START,IF_PASSED,ID}{$,Does not show on PT/virtual-forum view as those are less actiony places}
-		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
-			<div class="non_accessibility_redundancy">
-				{$GET,BUTTONS}
-			</div>
-		{+END}
-	{+END}
-{+END}
-
-{TOPIC_WRAPPER}
-
-{+START,IF,{$NOT,{$WIDE_HIGH}}}
-	{$GET,BUTTONS}
 
 	{+START,IF_PASSED,ID}
 		<div class="non_accessibility_redundancy">

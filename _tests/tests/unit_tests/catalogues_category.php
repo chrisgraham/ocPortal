@@ -29,7 +29,7 @@ class catalogues_category_test_set extends ocp_test_case
 
 		$this->cat_id=actual_add_catalogue_category('Testing_category','Test_Cat','Testing_Cat','',1,'',30,60,NULL,NULL,NULL);
 
-		$this->assertTrue('Testing_category'==$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name ',array('id'=>$this->cat_id)));
+		$this->assertTrue('Testing_category'==$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$this->cat_id)));
 	}
 
 	function testEditCatalogue_category()

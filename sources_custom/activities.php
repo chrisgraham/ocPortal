@@ -71,7 +71,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 					$_where_clause.=' AND a_member_id NOT IN ('.$blocking.')';
 				if (addon_installed('chat')) // Limit to stuff from this member's friends about them
 				{
-					$_where_clause.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_buddies WHERE member_likes='.strval($viewer_member).')';
+					$_where_clause.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_friends WHERE member_likes='.strval($viewer_member).')';
 				}
 				$_where_clause.=')';
 				$_where_clause.=')';
@@ -86,7 +86,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 						if ($blocked_by!='')
 							$friends_check_where.=' AND member_likes NOT IN ('.$blocked_by.')';
 
-						$view_private=!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_buddies WHERE '.$friends_check_where));
+						$view_private=!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_friends WHERE '.$friends_check_where));
 					} else
 					{
 						$view_private=false;
@@ -125,7 +125,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 					$_where_clause=' AND member_liked NOT IN ('.$blocking.')';
 				if ($lm_ids!='')
 					$_where_clause.=' AND member_liked NOT IN ('.$lm_ids.')';
-				$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),NULL,' WHERE '.$_where_clause);
+				$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),NULL,' WHERE '.$_where_clause);
 				$lo_ids='';
 				foreach ($like_outgoing as $l_o)
 				{
@@ -165,7 +165,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 				$friends_check_where='member_liked='.strval($viewer_member);
 				if ($blocked_by!='') $friends_check_where.=' AND member_likes NOT IN ('.$blocked_by.')';
 
-				$view_private=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_likes'),NULL,' WHERE '.$friends_check_where.';');
+				$view_private=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_likes'),NULL,' WHERE '.$friends_check_where.';');
 				$view_private[]=array('member_likes'=>$viewer_member);
 				foreach ($view_private as $v_p)
 				{

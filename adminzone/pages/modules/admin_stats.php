@@ -822,8 +822,9 @@ class Module_admin_stats
 				{
 					$where=db_string_equal_to('the_page',$page);
 					if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND s_get LIKE \''.db_encode_like('<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id']).'</param>%").'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end));
-					$views[do_lang('CATALOGUE_CATEGORY').': '.get_translated_text($cat['cc_title'])]=array($count,$page);
+					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND s_get LIKE \''.db_encode_like('<param>page=catalogues</param>\n<param>type=category</param>\n<param>id='.strval($cat['id']).'</param>%').'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end));
+					$cc_cat_written=do_lang('CATALOGUE_CATEGORY').': '.get_translated_text($cat['cc_title']);
+					$views[$cc_cat_written]=array($count,$page);
 					$total+=$count;
 				}
 				continue;

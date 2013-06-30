@@ -905,6 +905,8 @@ function get_text_templates()
 		'TRACKBACK_XML',
 		'POLL_RSS_SUMMARY',
 		'WYSIWYG_SETTINGS',
+		'FONT_SIZER',
+		'GALLERY_POPULAR',
 	);
 	return $text_templates;
 }

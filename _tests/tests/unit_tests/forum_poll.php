@@ -39,7 +39,7 @@ class forum_poll_test_set extends ocp_test_case
 		$this->poll_id=ocf_make_poll($this->topic_id,'Who are you ?',0,0,2,4,0,array('a','b','c'),true);
 
 		// Test the forum was actually created
-		$this->assertTrue('Who are you ?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
+		$this->assertTrue('Who are you ?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question',array('id'=>$this->poll_id)));
 	}
 
 	function testEditPoll()
@@ -48,7 +48,7 @@ class forum_poll_test_set extends ocp_test_case
 		ocf_edit_poll($this->poll_id,'Who am I?',1,1,1,4,1,array(1,2,3),'nothing');
 
 		// Test the forum was actually created
-		$this->assertTrue('Who am I?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
+		$this->assertTrue('Who am I?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question',array('id'=>$this->poll_id)));
 	}
 
 	function tearDown()

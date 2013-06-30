@@ -537,7 +537,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'PARAGRAPH':
 				if (isset($param[0]))
 				{
-					$is_blocky_already=(preg_match('#<(p|div|ul|ol|dl|blockquote|h1|h2|h3|h4|h5|h6|table|iframe)(\s.*)?'.'>#',$param[0])!=0);
+					$is_blocky_already=($param[0]=='') || (preg_match('#<(p|div|ul|ol|dl|blockquote|h1|h2|h3|h4|h5|h6|table|iframe)(\s.*)?'.'>#',$param[0])!=0);
 					$value.=($is_blocky_already?'':'<p>').$param[0].($is_blocky_already?'':'</p>');
 				}
 				break;

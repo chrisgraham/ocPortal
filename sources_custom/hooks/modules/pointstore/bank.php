@@ -64,7 +64,8 @@ class Hook_pointstore_bank
 		if (is_null($_bank_dividend))
 		{
 			// Add option and default value
-			add_config_option('BANK_DIVIDEND','bank_dividend','integer','return \'40\';','POINTSTORE','BANKING');
+			add_config_option('BANK_DIVIDEND','bank_dividend','integer','return \'4\';','POINTSTORE','BANKING');
+			/*delete_config_option('bank_dividend');*/
 			if (!$fresh_install) $GLOBALS['SITE_DB']->alter_table_field('bank','user_id','MEMBER','member_id');
 			// IDEA: Make 30 days a config option too, or even have multiple products?
 			// IDEA: Send email saying bank returned money?

@@ -41,7 +41,7 @@ class user_test_set extends ocp_test_case
 		ocf_edit_member($this->member_id,'testing@test.com',0,25,12,1975,NULL,NULL,array(),'',0,0,0,NULL,1,1,NULL,NULL,NULL,1,NULL,'*','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false);
 
 		// Test the forum was actually created
-		$this->assertTrue('testing@test.com'==$GLOBALS['FORUM_DB']->query_select_value('f_members','m_email_address ',array('id'=>$this->member_id)));
+		$this->assertTrue('testing@test.com'==$GLOBALS['FORUM_DB']->query_select_value('f_members','m_email_address',array('id'=>$this->member_id)));
 	}
 
 	function tearDown()

@@ -15,9 +15,6 @@
 
 function unit_testing_run()
 {
-	@ini_set('ocproducts.xss_detect','0');
-	@ini_set('ocproducts.type_strictness','0');
-
 	global $SCREEN_TEMPLATE_CALLED;
 	$SCREEN_TEMPLATE_CALLED='';
 

@@ -31,8 +31,8 @@ class Hook_config_default_max_newsletter_whatsnew
 		return array(
 			'human_name'=>'MAX_NEWSLETTER_WHATSNEW',
 			'the_type'=>'integer',
-			'the_page'=>'FEATURE', // TODO: Update key in v10
-			'section'=>'NEWSLETTER', // TODO: Update key in v10
+			'c_category'=>'FEATURE',
+			'c_group'=>'NEWSLETTER',
 			'explanation'=>'CONFIG_OPTION_max_newsletter_whatsnew',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

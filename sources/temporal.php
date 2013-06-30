@@ -239,7 +239,7 @@ function my_strftime($format,$timestamp=NULL)
 		$format=str_replace('%e','%#d',$format);
 	$ret=strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
 	if ($ret===false) $ret='';
-	return $ret;
+	return trim($ret); // Needed as %e comes with a leading space
 }
 
 /**

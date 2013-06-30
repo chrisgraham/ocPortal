@@ -80,12 +80,12 @@
 
 			data.push(
 				{
-					html: '{$GET;^,layout}',
-					url: '{URL;^}',
-					image_url: '{IMAGE_URL;}'
+					html: '{$GET;^/,layout}',
+					url: '{URL;^/}',
+					image_url: '{IMAGE_URL;/}'
 				}
 			);
-			new Image().src='{IMAGE_URL;}'; // precache
+			new Image().src='{IMAGE_URL;/}'; // precache
 		{+END}
 
 		{$,Pause function}

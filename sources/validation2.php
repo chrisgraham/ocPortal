@@ -1785,7 +1785,7 @@ function _validate_css_sheet($data)
 				break;
 
 			case CSS_IN_COMMENT:
-				if (($next=='*') && ($i!=$len-2) && ($data[$i+1]=='/'))
+				if (($next=='*') && ($i!=$len-1) && ($data[$i+1]=='/'))
 				{
 					$status=$class_before_comment;
 					++$i;

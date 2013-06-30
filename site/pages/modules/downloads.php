@@ -68,6 +68,8 @@ class Module_downloads
 		delete_config_option('download_entries_per_page');
 		delete_config_option('downloads_default_sort_order');
 
+		delete_privilege('download');
+
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads'));
 
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'downloads'));

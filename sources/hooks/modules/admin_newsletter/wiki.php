@@ -45,6 +45,7 @@ class Hook_whats_news_wiki
 		if (count($rows)==$max) return array();
 		foreach ($rows as $row)
 		{
+			$id=$row['id'];
 			$_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>$row['id']),get_module_zone('wiki'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['title'],NULL,$lang);

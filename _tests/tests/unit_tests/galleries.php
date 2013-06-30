@@ -35,6 +35,7 @@ class galleries_test_set extends ocp_test_case
 		require_code('files2');
 		require_code('autosave');
 		require_code('permissions2');
+		require_code('form_templates');
 
 		$this->access_mapping=array(db_get_first_id()=>4);
 		// Creating cms catalogues object

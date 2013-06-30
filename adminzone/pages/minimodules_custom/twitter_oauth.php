@@ -17,6 +17,10 @@ if (is_null($api_key))
 
 	add_config_option('TWITTER_API_KEY','twitter_api_key','line','return \'\';','FEATURE','TWITTER_SYNDICATION');
 	add_config_option('TWITTER_API_SECRET','twitter_api_secret','line','return \'\';','FEATURE','TWITTER_SYNDICATION');
+	/*
+	delete_config_option('twitter_api_key');
+	delete_config_option('twitter_api_secret');
+	*/
 
 	$api_key='';
 	$api_secret='';
