@@ -17,7 +17,7 @@
 	<thead>
 		<tr>
 			<th></th>
-			{+START,IF_PASSED_AND_TRUE,SHOW_PRIVILEGES}
+			{+START,IF_PASSED,SHOW_PRIVILEGES}
 				<th>
 					{$SET,url,{$BASE_URL}/data/gd_text.php?color={COLOR}&text={$ESCAPE,{!NOTIFICATION_PRIVILEGED},UL_ESCAPED}{$KEEP}}
 					<img src="{$GET*,url}" width="{$IMG_WIDTH*,{$GET,url}}" height="{$IMG_HEIGHT*,{$GET,url}}" title="{!NOTIFICATION_PRIVILEGED}" alt="{!NOTIFICATION_PRIVILEGED}" />
