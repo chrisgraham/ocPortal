@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
 			<col style="width: 140px" />

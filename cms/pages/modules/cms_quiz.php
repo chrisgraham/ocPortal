@@ -37,6 +37,7 @@ class Module_cms_quiz extends standard_aed_module
 	var $menu_label='QUIZZES';
 	var $table='quizzes';
 	var $orderer='q_add_date';
+	var $orderer_is_multi_lang=false;
 
 	var $donext_type=NULL;
 

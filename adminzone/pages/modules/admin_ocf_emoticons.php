@@ -72,7 +72,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		{
 			require_javascript('javascript_ajax');
 			$script=find_script('snippet');
-			$this->javascript.="
+			$this->javascript="
 				var form=document.getElementById('main_form');
 				form.old_submit=form.onsubmit;
 				form.onsubmit=function()

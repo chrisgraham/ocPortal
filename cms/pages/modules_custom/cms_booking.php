@@ -32,6 +32,7 @@ class Module_cms_booking extends standard_aed_module
 	var $user_facing=false;
 	var $menu_label='BOOKINGS';
 	var $orderer='sort_order';
+	var $orderer_is_multi_lang=false;
 	var $title_is_multi_lang=true;
 	var $table='bookable';
 

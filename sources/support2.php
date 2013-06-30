@@ -221,6 +221,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 		$logged++;
 		if ($logged<10) // Be extra sure it's not some kind of import, causing spam
 		{
+			require_all_lang();
 			if (is_null($a)) $a=do_lang('NA');
 			if (is_null($a)) $a=do_lang('NA');
 			require_code('notifications');

@@ -32,6 +32,7 @@ class Module_warnings extends standard_aed_module
 	var $menu_label='MODULE_TRANS_NAME_warnings';
 	var $table='f_warnings';
 	var $orderer='w_time';
+	var $orderer_is_multi_lang=false;
 	var $title_is_multi_lang=true;
 
 	/**

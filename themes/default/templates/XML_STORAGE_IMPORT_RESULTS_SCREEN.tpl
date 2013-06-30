@@ -2,7 +2,7 @@
 
 <p>{!SUCCESS}</p>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder">
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder">
 	<colgroup>
 		<col style="width: 200px" />
 		<col style="width: 50%" />

@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap variable_table"><table summary="{!MAP_TABLE}" class="variable_table solidborder wide_table">
+<div class="wide_table_wrap variable_table"><table summary="{!COLUMNED_TABLE}" class="variable_table solidborder wide_table">
 	<thead>
 		<tr>
 			<th>
