@@ -2237,7 +2237,7 @@ class Hook_ocp_merge
 					if (is_null($intended_solely_for)) $intended_solely_for=-1;
 				}
 				$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-				$id_new=ocf_make_post($topic_id,$title,$this->get_lang_string($db,$row['p_post']),0,false,$row['p_validated'],$row['p_is_emphasised'],$row['p_poster_name_if_guest'],$row['p_ip_address'],$row['p_time'],$member_id,$intended_solely_for,$row['p_last_edit_time'],$last_edit_by,false,false,$forum_id,false,'',0,$id,false,true);
+				$id_new=ocf_make_post($topic_id,$row['p_title'],$this->get_lang_string($db,$row['p_post']),0,false,$row['p_validated'],$row['p_is_emphasised'],$row['p_poster_name_if_guest'],$row['p_ip_address'],$row['p_time'],$member_id,$intended_solely_for,$row['p_last_edit_time'],$last_edit_by,false,false,$forum_id,false,'',0,$id,false,true);
 
 				import_id_remap_put('post',strval($row['id']),$id_new);
 			}
