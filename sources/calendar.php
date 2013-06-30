@@ -1071,7 +1071,7 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	if ($restrict)
 	{
 		if ($where!='') $where.=' AND ';
-		if (is_guest())
+		if (is_guest($auth_member_id))
 		{
 			$where.='(e_is_public=1)';
 		} else
