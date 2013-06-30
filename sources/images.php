@@ -520,7 +520,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			return true;
 		}
 		$from_file=@file_get_contents($from);
-		$exif=@exif_read_data($from);
+		$exif=function_exists('exif_read_data')?@exif_read_data($from):false;
 	} else
 	{
 		$file_path_stub=convert_url_to_path($from);
@@ -535,7 +535,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				return true;
 			}
 			$from_file=@file_get_contents($file_path_stub);
-			$exif=@exif_read_data($file_path_stub);
+			$exif=function_exists('exif_read_data')?@exif_read_data($file_path_stub):false;
 		} else
 		{
 			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/,false);
@@ -550,7 +550,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				fclose($myfile);
 				fix_permissions($to);
 				sync_file($to);
-				$exif=@exif_read_data($to);
+				$exif=function_exists('exif_read_data')?@exif_read_data($to):false;
 				if ($ext=='svg') // SVG is pass-through
 				{
 					return true;
@@ -936,7 +936,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
  */
 function adjust_pic_orientation($img,$exif)
 {
-	if (($exif!==false) && (isset($exif['Orientation'])))
+	if ((function_exists('imagerotate')) && ($exif!==false) && (isset($exif['Orientation'])))
 	{
 		$orientation=$exif['Orientation'];
 		if ($orientation!=1)

@@ -30,6 +30,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 	var $select_name_description='DESCRIPTION_WELCOME_EMAIL_SUBJECT';
 	var $menu_label='WELCOME_EMAILS';
 	var $orderer='w_name';
+	var $title_is_multi_lang=false;
 
 	/**
 	 * Standard modular info function.

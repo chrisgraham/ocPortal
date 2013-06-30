@@ -540,7 +540,6 @@ function get_online_members($longer_time,$filter,&$count)
 			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND the_user='.strval($filter),1);
 		return NULL;
 	}
-
 	$members=array();
 	$cutoff=time()-$users_online_time_seconds;
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();

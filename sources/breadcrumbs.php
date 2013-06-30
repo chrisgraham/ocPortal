@@ -208,7 +208,7 @@ class breadcrumb_substitution_loader
 					$_link_title=($link[1]===NULL)?do_lang('UNKNOWN'):$link[1];
 					$link_title=(preg_match('#\{\!|\{\?|\{\$|\[#',$_link_title)==0)?$_link_title:static_evaluate_tempcode(comcode_to_tempcode($_link_title));
 					$_target_url=$_target_url->evaluate();
-					$target_url=str_replace('\\','/',$target_url); // Should not be needed, but can happen on misconfiguration and cause an error
+					$target_url=str_replace('\\','/',$_target_url); // Should not be needed, but can happen on misconfiguration and cause an error
 					if ($target_url=='')
 					{
 						$to.=$link_title.$this->breadcrumb_tpl;

@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap autosized_table"><table summary="{!MAP_TABLE}" class="autosized_table results_table wide_table">
+<div class="wide_table_wrap autosized_table"><table summary="{!COLUMNED_TABLE}" class="autosized_table results_table wide_table" itemprop="significantLinks">
 	<thead>
 		<tr>
 			<th>

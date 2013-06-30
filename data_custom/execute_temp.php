@@ -55,19 +55,9 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	// Comment topic re-mapping
-	$topics=$GLOBALS['FORUM_DB']->query_select('f_topics',array('id','t_description'),array('t_forum_id'=>13));
-	foreach ($topics as $row)
-	{
-		$matches=array();
-		if (preg_match('#: \#(\w+)s_(\d+)$#',$row['t_description'],$matches)!=0)
-		{
-			$c_id=import_id_remap_get($matches[1],$matches[2],true);
-			if (!is_null($c_id))
-			{
-				$row['t_description']=str_replace($matches[0],': #'.$matches[1].'s_'.strval($c_id),$description);
-				$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_description'=>$row['t_description']),array('id'=>$row['id']),'',1);
-			}
-		}
-	}
+	file_put_contents(get_file_base().'/lang_custom/EN/foo.ini','[strings]'."\n".'foo=bar');
+	require_lang('foo');
+	@unlink(get_file_base().'/lang_custom/EN/foo.ini');
+	@unlink(get_file_base().'/lang_cached/EN/foo.lcd');
+	echo do_lang('MEMBERX');
 }

@@ -587,6 +587,8 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 
 	if (!isset($LANG_LOADED_LANG[$lang])) $LANG_LOADED_LANG[$lang]=array();
 	$LANG_LOADED_LANG[$lang][$codename]=1;
+
+	$REQUIRE_LANG_LOOP--;
 }
 
 /**
@@ -784,7 +786,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				{
 					list($that_codename,$that_lang)=$request;
 					unset($LANG_REQUESTED_LANG[$that_lang][$that_codename]);
-					require_lang($that_codename,$that_lang,NULL,!$require_result);
+					require_lang($that_codename,$that_lang,NULL,true);
 				}
 				$ret=_do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
 				if ($ret===NULL)

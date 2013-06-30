@@ -474,6 +474,8 @@ class Module_admin_permissions
 	 */
 	function interface_keys_access()
 	{
+		require_css('permissions_editor');
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/matchkeysecurity';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
 
@@ -532,7 +534,7 @@ class Module_admin_permissions
 		foreach ($m_rows as $row)
 		{
 			if ($row['k_message']==='') $msg=''; else $msg=get_translated_text($row['k_message']);
-			$rows2->attach(do_template('PERMISSION_KEYS_MESSAGE_ROW',array('KEY'=>$row['k_match_key'],'MSG'=>$msg,'UID'=>strval($row['id']))));
+			$rows2->attach(do_template('PERMISSION_KEYS_MESSAGE_ROW',array('KEY'=>$row['k_match_key'],'MSG'=>$msg,'UID'=>$row['id'])));
 		}
 
 		return do_template('PERMISSION_KEYS_PERMISSIONS_SCREEN',array('_GUID'=>'61a702db2df67adb2702ae6c7081b4ab','TITLE'=>$title,'COLS'=>$cols,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows,'ROWS2'=>$rows2));

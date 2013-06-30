@@ -16,7 +16,7 @@ columns,Graphical,Chris Graham,Creative Commons Attribution 3.0,"Allows wrapping
 You need to add this code into your [tt]HEADER.tpl[/tt]:
 [code]<script type=""text/javascript"" src=""http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js""></script>
 {$CSS_INCLUDE,columns}
-{$JAVASCRIPT_INCLUDE,javascript_columns}[/code]
+{$REQUIRE_JAVASCRIPT,javascript_columns}[/code]
 ",,,Based on the code of Adam Wulf,
 comcode_flip_tag,Graphical,Chris Graham,Based on open code posted without a license,"[code=""Comcode""][flip=""A"" final_color=""FF0000"" speed=""400""]B[/flip][/code]
 The above example creates a flip between text A and text B, taking 400ms. This is designed to use short messages or one word answers. If you want to change any of the standard CSS for this addon you can edit the flip.css file. Note: flip uses jQuery for the flip effect, so this example bundles jQuery and shows how it can be used.",Javascript enabled,,Luca Manno,

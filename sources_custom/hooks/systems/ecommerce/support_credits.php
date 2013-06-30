@@ -59,22 +59,18 @@ class Hook_support_credits
 	{
 		if (get_forum_type()!='ocf') return array();
 		require_lang('customers');
-		$products=array(
-			'1_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,1*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDIT')),			/* £5.50, by default */
-			'2_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,2*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','2')),	/* approx. £17, 0.5 hours on budget */
-			'3_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,3*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','3')),	/* approx. £17, 0.5 hours on budget */
-			'4_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,4*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','4')),	/* approx. £17, 0.5 hours on budget */
-			'5_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,5*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','5')),		/* approx. £30 */
-			'6_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,6*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','6')),		/* approx. £30 */
-			'9_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,9*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','9')),	/* approx. £50, 1.5 hours on budget */
-			'20_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,20*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','20')),	/* approx. £100 */
-			'25_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,25*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','25')),	/* approx. £140 */
-			'35_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,35*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','35')),	/* approx. £200 */
-			'50_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,50*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','50')),	/* approx. £300 */
-			'90_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,90*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','90')),	/* approx. £500 */
-			'180_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,180*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','180')),	/* approx. £1000 */
-			'550_CREDITS'=>array(PRODUCT_PURCHASE_WIZARD,550*floatval(get_option('support_credit_value')),'handle_support_credits',NULL,do_lang('CUSTOMER_SUPPORT_CREDITS','550')),	/* approx. £3000 */
-		);
+		$products=array();
+		$bundles=array(1,2,3,4,5,6,9,20,25,35,50,90,180,550);
+		foreach ($bundles as $bundle)
+		{
+			$products[strval($bundle).'_CREDITS']=array(
+				PRODUCT_PURCHASE_WIZARD,
+				float_to_raw_string($bundle*floatval(get_option('support_credit_value'))),
+				'handle_support_credits',
+				NULL,
+				do_lang('CUSTOMER_SUPPORT_CREDIT')
+			);
+		}
 
 		return $products;
 	}
@@ -165,6 +161,6 @@ class Hook_support_credits
 	 */
 	function is_available($product,$member)
 	{
-		return $member!=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		return ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_NO_GUESTS;
 	}
 }

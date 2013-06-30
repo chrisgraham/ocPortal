@@ -156,7 +156,7 @@ class Module_admin_banners
 			$result=array(escape_html($name),escape_html($type),escape_html($banner_type));
 			if ($has_banner_network)
 				$result=array_merge($result,array(escape_html($hits_from),escape_html($views_from)));
-			$result=array_merge($result,array(escape_html($hits_to),escape_html($views_to),escape_html($click_through),escape_html($importance_modulus),$username,escape_html($date_and_time)));
+			$result=array_merge($result,array(escape_html($hits_to),escape_html($views_to),escape_html($click_through),escape_html(strval($importance_modulus)),$username,escape_html($date_and_time)));
 			if (addon_installed('unvalidated'))
 				$result[]=escape_html($validated);
 

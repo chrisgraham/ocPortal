@@ -401,7 +401,7 @@ function create_scatter_graph($data,$x_label='X Axis',$y_label='Y Axis',$x_units
 		$x=Y_LABEL_WIDTH+Y_AXIS_WIDTH+X_PADDING+$value['t']*$x_scale;
 
 		// Are we too close to the last one?
-		if (($first) || (abs($x-$prev_x)>MIN_X_MARKER_DISTANCE) || (abs($value['value']-$prev_value['value'])>$value['value']/3))
+		if (($first) || (abs($x-$prev_x)>MIN_X_MARKER_DISTANCE) || (abs($value['value']-$prev_value['value'])>intval(round(floatval($value['value'])/3.0))))
 		{
 			$y=PLOT_HEIGHT-$value['value']*$y_scale+PLOT_HEIGHT_BIAS;
 

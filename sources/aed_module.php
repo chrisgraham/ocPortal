@@ -101,6 +101,7 @@ class standard_aed_module
 	var $table_prefix='';
 	var $array_key='id';
 	var $title_is_multi_lang=true;
+	var $orderer_is_multi_lang=NULL;
 	var $orderer=NULL;
 	var $table=NULL; // Actually, this is used by choose_feedback_fields_statistically also
 
@@ -728,6 +729,9 @@ class standard_aed_module
 			}
 		}
 
+		$orderer_is_multi_lang=$this->orderer_is_multi_lang;
+		if (is_null($orderer_is_multi_lang)) $orderer_is_multi_lang=$this->title_is_multi_lang;
+
 		$select_field=!is_null($this->orderer)?$this->orderer:($this->table_prefix.strtolower($this->select_name));
 
 		if (is_null($orderer))
@@ -736,7 +740,7 @@ class standard_aed_module
 		}
 		$table=(is_null($this->table)?$this->module_type:$this->table).' r';
 		$db=((substr($table,0,2)=='f_') && (!$force_site_db) && (get_forum_type()!='none'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
-		if (($this->title_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
+		if (($orderer_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
 		{
 			$table.=' LEFT JOIN '.$db->get_table_prefix().'translate t ON t.id=r.'.preg_replace('# (ASC|DESC)$#','',$orderer).' AND '.db_string_equal_to('language',user_lang());
 			$orderer='t.text_original';
@@ -759,7 +763,7 @@ class standard_aed_module
 		foreach ($rows as $row)
 		{
 			$key=$row[$this->array_key];
-			$readable=$this->title_is_multi_lang?get_translated_text($row[$select_field],$db):$row[$select_field];
+			$readable=$orderer_is_multi_lang?get_translated_text($row[$select_field],$db):$row[$select_field];
 			if (is_integer($readable)) $readable='#'.strval($readable);
 			if ($readable=='') $readable=do_lang('_DEFAULT');
 			$row['_readable']=$readable;

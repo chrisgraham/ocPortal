@@ -284,7 +284,7 @@ class Module_banners
 		$hr=array(
 			do_lang_tempcode('CODENAME'),
 			do_lang_tempcode('_BANNER_TYPE'),
-			do_lang_tempcode('DEPLOYMENT_AGREEMENT'),
+			//do_lang_tempcode('DEPLOYMENT_AGREEMENT'),
 			//do_lang_tempcode('HITS_ALLOCATED'),
 			do_lang_tempcode('IMPORTANCE_MODULUS'),
 			do_lang_tempcode('EXPIRY_DATE'),
@@ -326,7 +326,7 @@ class Module_banners
 			$fr=array(
 				$row['name'],
 				($row['b_type']=='')?do_lang('GENERAL'):$row['b_type'],
-				$deployment_agreement,
+				//$deployment_agreement,
 				//integer_format($row['campaign_remaining']),
 				strval($row['importance_modulus']),
 				is_null($row['expiry_date'])?protect_from_escaping(do_lang_tempcode('NA_EM')):make_string_tempcode(get_timezoned_date($row['expiry_date'])),

@@ -25,7 +25,7 @@ class usergroup_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('ecommerce');
 
-		$this->usr_grp_id=add_usergroup_subscription('test','test','123',12,'2',1,1,1,' ',' ',' ');
+		$this->usr_grp_id=add_usergroup_subscription('test','test','123',12,'y',1,1,1,' ',' ',' ');
 
 		// Test the forum was actually created
 		$this->assertTrue(12==$GLOBALS['FORUM_DB']->query_value('f_usergroup_subs','s_length',array('id'=>$this->usr_grp_id)));

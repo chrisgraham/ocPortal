@@ -52,3 +52,8 @@ function total_points($member)
 
 	return $points;
 }
+
+function get_group_points()
+{
+	return list_to_map('p_group_id',$GLOBALS['SITE_DB']->query_select('group_points',array('*')));
+}
