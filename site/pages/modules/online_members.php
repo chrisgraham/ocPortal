@@ -48,7 +48,7 @@ class Module_online_members
 	 */
 	function get_entry_points()
 	{
-		return array('!'=>'USERS_ONLINE');
+		return (get_value('session_prudence')==='1')?array():array('!'=>'USERS_ONLINE'); // TODO: update in v10
 	}
 
 	/**
@@ -126,6 +126,8 @@ class Module_online_members
 			if ($ip!='') // CRON?
 				$rows->attach(do_template('OCF_MEMBER_ONLINE_ROW',array('_GUID'=>'2573786f3bccf9e613b125befb3730e8','IP'=>$ip,'AT_URL'=>$at_url,'LOCATION'=>$location,'MEMBER'=>$link,'TIME'=>integer_format(intval((time()-$last_activity)/60)))));
 		}
+
+		if ($rows->is_empty()) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		return do_template('OCF_MEMBERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$title,'ROWS'=>$rows));
 	}

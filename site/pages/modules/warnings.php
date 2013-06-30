@@ -32,6 +32,7 @@ class Module_warnings extends standard_crud_module
 	var $menu_label='MODULE_TRANS_NAME_warnings';
 	var $table='f_warnings';
 	var $orderer='w_time';
+	var $orderer_is_multi_lang=false;
 	var $title_is_multi_lang=true;
 
 	/**
@@ -382,7 +383,11 @@ class Module_warnings extends standard_crud_module
 					$fields->attach(form_input_tick(do_lang_tempcode('WHETHER_BANNED_IP'),do_lang_tempcode('DESCRIPTION_WHETHER_BANNED_IP'),'banned_ip',false));
 				}
 
-				if ((get_option('stopforumspam_api_key')!='') || (get_option('tornevall_api_username')!=''))
+				$stopforumspam_api_key=get_option('stopforumspam_api_key');
+				if (is_null($stopforumspam_api_key)) $stopforumspam_api_key='';
+				$tornevall_api_username=get_option('tornevall_api_username');
+				if (is_null($tornevall_api_username)) $tornevall_api_username='';
+				if ($stopforumspam_api_key.$tornevall_api_username!='')
 				{
 					require_lang('submitban');
 					$fields->attach(form_input_tick(do_lang_tempcode('SYNDICATE_TO_STOPFORUMSPAM'),do_lang_tempcode('DESCRIPTION_SYNDICATE_TO_STOPFORUMSPAM'),'stopforumspam',false));

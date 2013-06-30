@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap"><table class="map_table wide_table results_table autosized_table">
+<div class="wide_table_wrap"><table class="columned_table wide_table results_table autosized_table" itemprop="significantLinks">
 	<thead>
 		<tr>
 			<th>{!NAME}</th>
@@ -16,7 +16,7 @@
 		{+START,LOOP,ORDERS}
 			{$SET,cycle,{$CYCLE,results_table_zebra,zebra_0,zebra_1}}
 
-			<tr class="{$GET,cycle} thick_border">
+			<tr class="{$GET,cycle}{+START,IF,{$NEQ,{_loop_key},0}} thick_border{+END}">
 				<td>
 					{+START,IF_NON_EMPTY,{ORDER_DET_URL}}
 						<strong><a href="{ORDER_DET_URL*}">{ORDER_TITLE*}</a></strong>

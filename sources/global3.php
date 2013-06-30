@@ -2716,7 +2716,8 @@ function check_suhosin_request_size($size)
  */
 function check_suhosin_request_quantity($inc=1,$name_length=0)
 {
-	static $count=0,$name_length_count=0;
+	static $count=0;
+	static $name_length_count=0;
 	$count+=$inc;
 	$name_length_count+=$name_length;
 

@@ -661,7 +661,6 @@ function get_online_members($longer_time,$filter,&$count)
 			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff).' AND member_id='.strval($filter),1);
 		return NULL;
 	}
-
 	$members=array();
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	global $SESSION_CACHE;

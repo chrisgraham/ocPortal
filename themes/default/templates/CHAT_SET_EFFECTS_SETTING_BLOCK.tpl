@@ -47,7 +47,7 @@
 					</tr>
 
 					<tr class="field_input">
-						<th id="form_table_field_name__upload_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}" class="form_table_field_named">
+						<th id="form_table_field_name__upload_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}" class="form_table_field_name">
 							<span class="form_field_name field_name">{!ALT_FIELD,{!UPLOAD}}</span>
 						</th>
 

@@ -48,3 +48,27 @@ function total_points($member,$timestamp=NULL)
 
 	return $points;
 }
+
+function get_group_points()
+{
+	$_group_points=$GLOBALS['SITE_DB']->query_select('group_points',array('*'),NULL,'',NULL,NULL,true);
+	if (is_null($_group_points))
+	{
+		$group_points=array();
+
+		install_group_points_stuff();
+	} else
+	{
+		$group_points=list_to_map('p_group_id',$_group_points);
+	}
+	return $group_points;
+}
+
+function install_group_points_stuff()
+{
+	$GLOBALS['SITE_DB']->create_table('group_points',array(
+		'p_group_id'=>'*GROUP',
+		'p_points_one_off'=>'INTEGER',
+		'p_points_per_month'=>'INTEGER',
+	));
+}

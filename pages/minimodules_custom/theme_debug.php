@@ -25,6 +25,7 @@ foreach (array(get_custom_file_base().'/themes/default/images',get_custom_file_b
 // Go through each theme
 require_code('themes2');
 $themes=find_all_themes();
+if (count($themes)==1) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 foreach (array_keys($themes) as $theme)
 {
 	if ($theme!='default')

@@ -123,7 +123,7 @@ This command is usually best placed:
 
 Alternatively, you can load Javascript from a template with a command like:
 [code="HTML"]
-{$JAVASCRIPT_INCLUDE,javascript_more}
+{$REQUIRE_JAVASCRIPT,javascript_more}
 [/code]
 
 You may add new Javascript templates as needed. Just make sure to follow the naming convention.

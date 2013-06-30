@@ -8,7 +8,7 @@
 
 		<div class="wide_table_wrap"><table class="columned_table wide_table results_table privileges">
 			<colgroup>
-				<col class="permission_field_name_column" />
+				<col class="match_key_name_column" />
 				{COLS}
 				<col class="permission_copy_column" />
 			</colgroup>
@@ -33,7 +33,7 @@
 
 		<div class="wide_table_wrap"><table class="columned_table wide_table results_table">
 			<colgroup>
-				<col class="permission_match_key_column" />
+				<col class="match_key_name_column" />
 				<col class="permission_match_key_message_column" />
 			</colgroup>
 

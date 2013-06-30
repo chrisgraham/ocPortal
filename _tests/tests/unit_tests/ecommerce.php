@@ -54,7 +54,7 @@ class ecommerce_test_set extends ocp_test_case
 			'session_id'		=>	get_session_id(),
 			'add_date'		=>	time(),
 			'tot_price'		=>	0.0,
-			'order_status'		=>	'new',
+			'order_status'		=>	'NEW',
 			'notes'			=>	'',
 			'transaction_id'	=>	'ddfsfdsdfsdfs',
 			'purchase_through'	=>	'paypal',

@@ -1827,7 +1827,7 @@ class Hook_smf2
 
 		require_code('files');
 
-		global $boardurl;
+		$boardurl='';
 		require($file_base.'/Settings.php');
 
 		$row_start=0;

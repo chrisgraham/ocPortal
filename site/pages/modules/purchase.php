@@ -270,7 +270,7 @@ class Module_purchase
 			}
 		}
 		if ($list->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
-		$fields=form_input_list(do_lang_tempcode('PRODUCT'),'','product',$list,NULL,true);
+		$fields=form_input_huge_list(do_lang_tempcode('PRODUCT'),'','product',$list,NULL,true);
 
 		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_CHOOSE',array('_GUID'=>'47c22d48313ff50e6323f05a78342eae','FIELDS'=>$fields,'TITLE'=>$title)),$title,$url,true);
 	}

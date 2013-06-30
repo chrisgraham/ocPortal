@@ -27,6 +27,10 @@ Not doing (from CodeLobster Errors):
  - IF and ELSEIF have same conditions (theoretically the prior IF might have changed the state)
 Not doing (from PhpStorm Code Inspector):
  - Many (lots of false positives in here)
+
+Unsupported syntax:
+ static $foo=1,$bar=2;
+  Not documented in PHP manual, so may be unreliable.
 */
 
 @ini_set('memory_limit','-1');

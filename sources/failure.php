@@ -281,7 +281,7 @@ function _generic_exit($text,$template)
 
 	if ($GLOBALS['HTTP_STATUS_CODE']=='200')
 	{
-		if (($text_eval==do_lang('NO_MARKERS_SELECTED')) || ($text_eval==do_lang('NOTHING_SELECTED')))
+		if (($text_eval==do_lang('ocf:NO_MARKERS_SELECTED')) || ($text_eval==do_lang('NOTHING_SELECTED')))
 		{
 			if (!headers_sent())
 			{

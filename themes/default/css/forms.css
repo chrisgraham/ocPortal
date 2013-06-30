@@ -456,13 +456,6 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	width: 3.8em;
 }
 
-.permission_match_key_column {
-	width: 25em;
-}
-.permission_match_key_message_column {
-	width: 100%;
-}
-
 .permissions_matrix_wrap .form_table_field_input, .privileges td {
 	text-align: center;
 	vertical-align: middle;

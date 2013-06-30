@@ -104,7 +104,7 @@ if (!function_exists('_do_lang'))
 					{
 						list($that_codename,$that_lang)=$request;
 						unset($LANG_REQUESTED_LANG[$that_lang][$that_codename]);
-						require_lang($that_codename,$that_lang,NULL,!$require_result);
+						require_lang($that_codename,$that_lang,NULL,true);
 					}
 					$ret=_do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
 					if ($ret===NULL)

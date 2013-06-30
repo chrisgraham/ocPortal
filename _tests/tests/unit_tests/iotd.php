@@ -26,9 +26,9 @@ class iotd_test_set extends ocp_test_case
 
 		require_code('iotds2');
 
-		$this->iotd_id=add_iotd('google.com','welcome','Google','images/google.jpg',0,0,0,0,'Notes ?',NULL,NULL,0,NULL,0,NULL);
+		$this->iotd_id=add_iotd('http://google.com','welcome','Google','images/google.jpg',0,0,0,0,'Notes ?',NULL,NULL,0,NULL,0,NULL);
 
-		$this->assertTrue('google.com'==$GLOBALS['SITE_DB']->query_select_value('iotd','url',array('id'=>$this->iotd_id)));
+		$this->assertTrue('http://google.com'==$GLOBALS['SITE_DB']->query_select_value('iotd','url',array('id'=>$this->iotd_id)));
 	}
 
 	function testEditIotd()

@@ -261,7 +261,7 @@ class Module_admin_points
 			$deleteurl=build_url(array('page'=>'_SELF','type'=>'reverse','redirect'=>get_self_url(true)),'_SELF');
 			$delete=hyperlink($deleteurl,do_lang_tempcode('REVERSE'),false,false,'',NULL,form_input_hidden('id',strval($myrow['id'])));
 
-			$fields->attach(results_entry(array($date,$myrow['amount'],$from,$to,$reason,$delete),true));
+			$fields->attach(results_entry(array($date,integer_format($myrow['amount']),$from,$to,$reason,$delete),true));
 		}
 
 		$results_table=results_table(do_lang_tempcode('GIFT_TRANSACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',paragraph(do_lang_tempcode('GIFT_POINTS_LOG')));
