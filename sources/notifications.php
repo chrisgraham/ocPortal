@@ -431,9 +431,9 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		if ((($setting & A_DAILY_EMAIL_DIGEST) !=0) || (($setting & A_WEEKLY_EMAIL_DIGEST) !=0) || (($setting & A_MONTHLY_EMAIL_DIGEST) !=0))
 		{
 			foreach (array(
-			  A_DAILY_EMAIL_DIGEST,
-			  A_WEEKLY_EMAIL_DIGEST,
-			  A_MONTHLY_EMAIL_DIGEST
+				A_DAILY_EMAIL_DIGEST,
+				A_WEEKLY_EMAIL_DIGEST,
+				A_MONTHLY_EMAIL_DIGEST
 			) as $frequency)
 			{
 				if (($setting & $frequency) !=0)

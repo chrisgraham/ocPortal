@@ -48,8 +48,3 @@ function install_group_points_stuff()
 		'p_points_per_month'=>'INTEGER',
 	));
 }
-
-function get_group_points()
-{
-	return list_to_map('p_group_id',$GLOBALS['SITE_DB']->query_select('group_points',array('*')));
-}

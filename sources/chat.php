@@ -392,7 +392,6 @@ function filter_invites_for_blocking($people)
  * Prune membership of chat room.
  *
  * @param  AUTO_LINK			Room ID (or -1 if all rooms)
- * @param  ?array				The room row (NULL: read in from DB)
  */
 function chat_room_prune($room_id)
 {
