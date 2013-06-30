@@ -435,22 +435,15 @@ class Module_cms_calendar extends standard_crud_module
 		$fields2->attach(form_input_tick(do_lang_tempcode('DO_TIMEZONE_CONV'),do_lang_tempcode('DESCRIPTION_DO_TIMEZONE_CONV'),'do_timezone_conv',$do_timezone_conv==1));
 
 		// Private settings
-		$private=get_param_integer('private',NULL);
-		if ($private===NULL)
+		if (has_privilege(get_member(),'add_public_events'))
 		{
-			if (has_privilege(get_member(),'add_public_events'))
-			{
-				$fields2->attach(form_input_tick(do_lang_tempcode('IS_PUBLIC'),do_lang_tempcode('DESCRIPTION_IS_PUBLIC'),'is_public',$is_public==1));
-			}
-		} else
-		{
-			$hidden->attach(form_input_hidden('is_public',strval(1-$private)));
+			$fields2->attach(form_input_tick(do_lang_tempcode('IS_PUBLIC'),do_lang_tempcode('DESCRIPTION_IS_PUBLIC'),'is_public',$is_public==1));
 		}
 		if (has_privilege(get_member(),'calendar_add_to_others'))
 		{
 			$member_calendar=get_param_integer('member_id',$member_calendar);
 			$_member_calendar=is_null($member_calendar)?'':$GLOBALS['FORUM_DRIVER']->get_username($member_calendar);
-			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_CALENDAR'),do_lang_tempcode('DESCRIPTION_MEMBER_CALENDAR'),'member_calendar',$_member_calendar,false));
+			$fields2->attach(form_input_username(do_lang_tempcode('MEMBER_CALENDAR'),do_lang_tempcode('DESCRIPTION_MEMBER_CALENDAR'),'member_calendar',$_member_calendar,false));
 		}
 
 		// Priority

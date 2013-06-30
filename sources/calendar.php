@@ -489,22 +489,40 @@ function regenerate_event_reminder_jobs($id,$force=false)
  * @param  TIME				From time in user time
  * @param  TIME				To time in user time
  * @param  boolean			Whether time is included in this date range
+ * @param  boolean			Whether to force absolute display
  * @return string				Textual specially-formatted range
  */
-function date_range($from,$to,$do_time=true)
+function date_range($from,$to,$do_time=true,$force_absolute=false)
 {
+	$days=($to-$from)/(60*60*24.0);
 	if (($to-$from>60*60*24) || (!$do_time))
 	{
-		$days=($to-$from)/(60*60*24.0);
 		if ($days-intval($days)<0.1) $days=floor($days); // If it's only 0.1 above a day, we will actually round down. It's useful for stopping confusion around DST changes in particular.
 		$_length=do_lang('DAYS',integer_format(intval(ceil($days))));
-		if (!$do_time) return $_length;
-		$date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
-		$date2=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$to));
 	} else
 	{
-		// Duration between times
 		$_length=display_time_period($to-$from);
+	}
+
+	if (($to-$from>60*60*24) || (!$do_time) || ($force_absolute))
+	{
+		if (!$do_time)
+		{
+			if ($force_absolute) // Absolute, no time (with length)
+			{
+				$date=locale_filter(date(do_lang('calendar_date_verbose'),$from));
+				$date2=locale_filter(date(do_lang('calendar_date_verbose'),$to));
+			} else
+			{
+				return $_length; // No time (with length)
+			}
+		} else // Absolute, time (with length)
+		{
+			$date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
+			$date2=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$to));
+		}
+	} else // Just time (with length)
+	{
 		$pm_a=date('a',$from);
 		$pm_b=date('a',$to);
 		if ($pm_a==$pm_b)
@@ -524,6 +542,7 @@ function date_range($from,$to,$do_time=true)
 /**
  * Detect calendar matches in a time period, in user-time.
  *
+ * @param  MEMBER			The member we are running authentication against
  * @param  MEMBER			The member to detect matches for
  * @param  boolean		Whether to restrict only to viewable events for the current member (rarely pass this as false!)
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: use find_periods_recurrence default)
@@ -533,7 +552,7 @@ function date_range($from,$to,$do_time=true)
  * @param  ?BINARY		Whether to show private events (1) or public events (0) (NULL: both public and private)
  * @return array			A list of events happening, with time details
  */
-function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter=NULL,$do_rss=true,$private=NULL)
+function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$period_end,$filter=NULL,$do_rss=true,$private=NULL)
 {
 	if (is_null($period_start)) $period_start=utctime_to_usertime(time());
 	if (is_null($period_end)) $period_end=utctime_to_usertime(time()+60*60*24*360*20);
@@ -543,12 +562,12 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	if ($restrict) // privacy permission
 	{
 		if ($where!='') $where.=' AND ';
-		if (is_guest())
+		if (is_guest($auth_member_id))
 		{
 			$where.='(e_is_public=1)';
 		} else
 		{
-			$where.='(e_submitter='.strval($member_id).' OR e_member_calendar='.strval($member_id).' OR e_is_public=1)';
+			$where.='(e_submitter='.strval($auth_member_id).' OR e_member_calendar='.strval($auth_member_id).' OR e_is_public=1)';
 		}
 	}
 	if ($private!==NULL) // display filter
@@ -574,7 +593,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 			if ($b==0)
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='e_type<>'.strval(substr($a,4));
+				$where.='e_type<>'.strval(intval(substr($a,4)));
 			}
 		}
 	}
@@ -1508,7 +1527,7 @@ function end_find_concrete_day_of_month_wrap($event)
  * @param  string			The event recurrence
  * @param  ?integer		The number of recurrences (NULL: none/infinite)
  * @param  boolean		Whether to forcibly get the first recurrence, not a future one
- * @return array			A tuple: Written date range, from timestamp, to timestamp
+ * @return array			A tuple: Written date [range], from timestamp, to timestamp
  */
 function get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$force_first=false)
 {
@@ -1521,8 +1540,8 @@ function get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$
 	}
 	if (array_key_exists(0,$times))
 	{
-		$from=$times[2];
-		$to=$times[3];
+		$from=$times[0][2];
+		$to=$times[0][3];
 	} else
 	{
 		$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$do_timezone_conv==1);
@@ -1534,6 +1553,21 @@ function get_calendar_event_first_date($timezone,$do_timezone_conv,$start_year,$
 			$to=cal_utctime_to_usertime($_to,$timezone,false);
 		}
 	}
-	$date_range=date_range($from,$to,!is_null($start_hour));
-	return array($date_range,$from,$to);
+
+	$do_time=!is_null($start_hour);
+	if (is_null($to))
+	{
+		if (!$do_time)
+		{
+			$written_date=locale_filter(date(do_lang('calendar_date_verbose'),$from));
+		} else
+		{
+			$written_date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
+		}
+	} else
+	{
+		$written_date=date_range($from,$to,$do_time,true);
+	}
+
+	return array($written_date,$from,$to);
 }

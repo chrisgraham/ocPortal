@@ -36,7 +36,7 @@ class Hook_realtime_rain_calendar
 		{
 			require_code('calendar');
 
-			$rows=calendar_matches(get_member(),!has_privilege(get_member(),'assume_any_member'),$from,$to); // NOTE: We also show (automatically) any RSS items the user has overlayed onto the calendar
+			$rows=calendar_matches(get_member(),get_member(),!has_privilege(get_member(),'assume_any_member'),$from,$to); // NOTE: We also show (automatically) any RSS items the user has overlayed onto the calendar
 
 			foreach ($rows as $row)
 			{

@@ -51,7 +51,7 @@ class Hook_rss_calendar
 		$period_end=utctime_to_usertime(time()*2-$cutoff);
 		if (is_float($period_end))	$period_end=intval($period_end);
 		require_code('calendar');
-		$rows=calendar_matches(get_member(),!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,NULL,false,get_param_integer('private',NULL));
+		$rows=calendar_matches(get_member(),get_member(),!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,NULL,false,get_param_integer('private',NULL));
 		$rows=array_reverse($rows);
 		foreach ($rows as $i=>$_row)
 		{

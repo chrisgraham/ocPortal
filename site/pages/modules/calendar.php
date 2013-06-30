@@ -690,7 +690,7 @@ class Module_calendar
 	 * @param  string			The day we are viewing
 	 * @param  string			The day (Y-m-d) we are viewing
 	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing as
+	 * @param  MEMBER			The member ID we are viewing the calendar for
 	 * @param  ?array			The type filter (NULL: none)
 	 * @return tempcode		The UI
 	 */
@@ -703,7 +703,7 @@ class Module_calendar
 		$period_start=mktime(0,0,0,$start_month,$start_day,$start_year);
 
 		$period_end=mktime(0,0,0,$start_month,$start_day+1,$start_year);
-		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches(get_member(),$member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -828,7 +828,7 @@ class Module_calendar
 	 * @param  string			The week we are viewing
 	 * @param  string			The day (Y-m-d) we are viewing
 	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing as
+	 * @param  MEMBER			The member ID we are viewing the calendar for
 	 * @param  ?array			The type filter (NULL: none)
 	 * @return tempcode		The UI
 	 */
@@ -840,7 +840,7 @@ class Module_calendar
 
 		$period_start=mktime(0,0,0,$start_month,$start_day,$start_year);
 		$period_end=$period_start+60*60*24*7;
-		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches(get_member(),$member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -1073,7 +1073,7 @@ class Module_calendar
 	 * @param  string			The month we are viewing
 	 * @param  string			The day (Y-m-d) we are viewing
 	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing as
+	 * @param  MEMBER			The member ID we are viewing the calendar for
 	 * @param  ?array			The type filter (NULL: none)
 	 * @return tempcode		The UI
 	 */
@@ -1084,7 +1084,7 @@ class Module_calendar
 		$_days=intval(round(floatval($period_end-$period_start)/floatval(60*60*24)));
 		if ($_days==0) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches(get_member(),$member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
@@ -1208,7 +1208,7 @@ class Module_calendar
 	 * @param  string			The year we are viewing
 	 * @param  string			The day (Y-m-d) we are viewing
 	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing as
+	 * @param  MEMBER			The member ID we are viewing the calendar for
 	 * @param  ?array			The type filter (NULL: none)
 	 * @return tempcode		The UI
 	 */
@@ -1217,7 +1217,7 @@ class Module_calendar
 		$period_start=mktime(0,0,0,1,1,intval($explode[0]));
 		$period_end=mktime(0,0,0,1,0,intval($explode[0])+1);
 
-		$happenings=calendar_matches($member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
+		$happenings=calendar_matches(get_member(),$member_id,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,get_param_integer('private',NULL));
 
 		sort_maps_by($happenings,0);
 
