@@ -43,6 +43,8 @@ function init__ecommerce()
 
 		define('MANUAL_SUBSCRIPTION_EXPIRY_NOTICE',7);
 	}
+
+	require_lang('ecommerce');
 }
 
 /**
@@ -375,7 +377,6 @@ function handle_transaction_script()
 		fclose($myfile);
 	}
 
-	require_lang('ecommerce');
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);

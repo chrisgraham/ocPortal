@@ -78,7 +78,7 @@ class Hook_fields_upload
 	 * @param  ?ID_TEXT		Name of the URL field in the table (NULL: N/A)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL)
+	function render_field_value(&$field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL)
 	{
 		if (is_object($ev)) return $ev;
 
@@ -91,6 +91,9 @@ class Hook_fields_upload
 			if (strpos($ev,'::')!==false)
 			{
 				list($file,$original_filename)=explode('::',$ev);
+
+				$field['effective_value_pure']=$file;
+
 				$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($file)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
 			} else
 			{
