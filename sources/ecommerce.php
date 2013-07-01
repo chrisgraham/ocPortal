@@ -41,6 +41,8 @@ function init__ecommerce()
 		define('ECOMMERCE_PRODUCT_MISSING',6);
 		define('ECOMMERCE_PRODUCT_INTERNAL_ERROR',7);
 	}
+
+	require_lang('ecommerce');
 }
 
 /**
@@ -373,7 +375,6 @@ function handle_transaction_script()
 		fclose($myfile);
 	}
 
-	require_lang('ecommerce');
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);
