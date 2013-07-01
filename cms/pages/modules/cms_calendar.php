@@ -439,9 +439,9 @@ class Module_cms_calendar extends standard_crud_module
 		{
 			$fields2->attach(form_input_tick(do_lang_tempcode('IS_PUBLIC'),do_lang_tempcode('DESCRIPTION_IS_PUBLIC'),'is_public',$is_public==1));
 		}
-		if (has_privilege(get_member(),'calendar_add_to_others'))
+		$member_calendar=get_param_integer('member_id',$member_calendar);
+		if (has_privilege(get_member(),'calendar_add_to_others') || $member_calendar==get_member())
 		{
-			$member_calendar=get_param_integer('member_id',$member_calendar);
 			$_member_calendar=is_null($member_calendar)?'':$GLOBALS['FORUM_DRIVER']->get_username($member_calendar);
 			$fields2->attach(form_input_username(do_lang_tempcode('MEMBER_CALENDAR'),do_lang_tempcode('DESCRIPTION_MEMBER_CALENDAR'),'member_calendar',$_member_calendar,false));
 		}
@@ -520,7 +520,7 @@ class Module_cms_calendar extends standard_crud_module
 			$hidden->attach(form_input_hidden('relay__private',strval($relay__private)));
 		}
 		$relay__member_id=get_param_integer('member_id',NULL);
-		if ($relay__member_id!==NULL)
+		if (($relay__member_id!==NULL) && ($relay__member_id!=get_member()))
 		{
 			if ($relay__member_id!=get_member()) enforce_personal_access($relay__member_id,'calendar_add_to_others');
 			$hidden->attach(form_input_hidden('relay__member_id',strval($relay__member_id)));
@@ -553,9 +553,9 @@ class Module_cms_calendar extends standard_crud_module
 		$timezone=post_param('timezone',STRING_MAGIC_NULL);
 		$do_timezone_conv=post_param_integer('do_timezone_conv',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
-		if (has_privilege(get_member(),'calendar_add_to_others'))
+		$_member_calendar=post_param('member_calendar','');
+		if ((has_privilege(get_member(),'calendar_add_to_others')) || ($_member_calendar==$GLOBALS['FORUM_DRIVER']->get_username(get_member())))
 		{
-			$_member_calendar=post_param('member_calendar','');
 			if ($_member_calendar!='')
 			{
 				$member_calendar=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_member_calendar);
