@@ -522,7 +522,7 @@ class Module_cms_calendar extends standard_crud_module
 		$relay__member_id=get_param_integer('member_id',NULL);
 		if (($relay__member_id!==NULL) && ($relay__member_id!=get_member()))
 		{
-			if ($relay__member_id!=get_member()) enforce_personal_access($relay__member_id,'calendar_add_to_others');
+			if ($relay__member_id!=get_member()) enforce_personal_access($relay__member_id,NULL,'calendar_add_to_others');
 			$hidden->attach(form_input_hidden('relay__member_id',strval($relay__member_id)));
 		}
 

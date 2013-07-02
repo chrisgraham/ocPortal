@@ -1410,7 +1410,7 @@ class Module_calendar
 
 		// Check permissions
 		check_privilege('view_calendar');
-		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_members_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],'view_personal_events');
+		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_member_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],NULL,'view_personal_events');
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
 		// Validation
@@ -1436,7 +1436,7 @@ class Module_calendar
 			$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',make_fractionable_editable('event',$id,$_title));
 		} else
 		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter'],true);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username(/*is_null($event['e_member_calendar'])?$event['e_submitter']:$event['e_member_calendar']*/$event['e_submitter'],true);
 			$title_to_use=do_lang_tempcode('_CALENDAR_EVENT_VCAL',escape_html($username),make_fractionable_editable('event',$id,$_title));
 		}
 		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
@@ -1655,7 +1655,7 @@ class Module_calendar
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$event=$rows[0];
-		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_members_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],'view_personal_events');
+		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_member_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],NULL,'view_personal_events');
 
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
