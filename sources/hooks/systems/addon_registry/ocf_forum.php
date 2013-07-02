@@ -506,7 +506,7 @@ class Hook_addon_registry_ocf_forum
 			'URL'=>placeholder_url()
 		));
 
-		$post=do_lorem_template('OCF_TOPIC_POST', array(
+		$map=array(
 			'ID'=>placeholder_id(),
 			'TOPIC_FIRST_POST_ID'=>placeholder_id(),
 			'TOPIC_FIRST_POSTER'=>lorem_phrase(),
@@ -532,7 +532,8 @@ class Hook_addon_registry_ocf_forum
 			'SIGNATURE'=>lorem_phrase(),
 			'UNVALIDATED'=>lorem_phrase(),
 			'DESCRIPTION'=>lorem_phrase()
-		));
+		);
+		$post=do_lorem_template('OCF_TOPIC_POST', $map);
 
 		return array(
 			lorem_globalise(do_lorem_template('OCF_POST_BOX', array(
@@ -540,7 +541,7 @@ class Hook_addon_registry_ocf_forum
 				'POST'=>$post,
 				'URL'=>placeholder_url(),
 				'BREADCRUMBS'=>lorem_phrase()
-			)), NULL, '', true)
+			)+$map+array('ACTUAL_POST'=>$post)), NULL, '', true)
 		);
 	}
 
@@ -1150,21 +1151,11 @@ class Hook_addon_registry_ocf_forum
 		$posts=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$post=do_lorem_template('OCF_POST_BOX', array(
-				'ID'=>placeholder_id(),
-				'POST'=>placeholder_fields_as_divs(),
-				'MAIN_TITLE'=>lorem_word(),
-				'TITLE'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-				'DATE'=>placeholder_time(),
-				'POSTER'=>lorem_phrase(),
-				'BREADCRUMBS'=>lorem_phrase()
-			));
 			$posts->attach(do_lorem_template('OCF_POSTING_SCREEN_POST', array(
 				'TITLE'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
 				'POSTER'=>lorem_phrase(),
-				'POST'=>$post
+				'POST'=>lorem_paragraph_html()
 			)));
 		}
 

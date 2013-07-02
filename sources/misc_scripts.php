@@ -493,9 +493,13 @@ function block_helper_script()
 			if (is_null($block_use)) $block_use='';
 			$descriptiont=($block_description=='' && $block_use=='')?new ocp_tempcode():do_lang_tempcode('BLOCK_HELPER_1X',$block_description,$block_use);
 
-			$url=find_script('block_helper').'?type=step2&block='.urlencode($block).'&field_name='.get_param('field_name').$keep->evaluate();
+			$url=find_script('block_helper').'?type=step2&block='.urlencode($block).'&field_name='.urlencode(get_param('field_name')).$keep->evaluate();
 			if (get_param('utheme','')!='') $url.='&utheme='.get_param('utheme');
 			$url.='&block_type='.$type_wanted;
+			if (get_param('save_to_id','')!='')
+			{
+				$url.='&save_to_id='.urlencode(get_param('save_to_id'));
+			}
 			$link_caption=do_lang_tempcode('NICE_BLOCK_NAME',escape_html(cleanup_block_name($block)),$block);
 			$usage=array_key_exists($block,$block_usage)?$block_usage[$block]:array();
 
@@ -535,8 +539,16 @@ function block_helper_script()
 		require_code('comcode_text');
 		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),'block');
 
+		$keep=symbol_tempcode('KEEP');
+		$back_url=find_script('block_helper').'?type=step1&field_name='.get_param('field_name').$keep->evaluate();
+		if (get_param('utheme','')!='') $back_url.='&utheme='.get_param('utheme');
+		if (get_param('save_to_id','')!='')
+		{
+			$back_url.='&save_to_id='.urlencode(get_param('save_to_id'));
+		}
+
 		$block=trim(get_param('block'));
-		$title=get_screen_title('_BLOCK_HELPER',true,array(escape_html($block)));
+		$title=get_screen_title('_BLOCK_HELPER',true,array(escape_html($block),escape_html($back_url)));
 		$fields=new ocp_tempcode();
 		$parameters=get_block_parameters($block);
 		$parameters[]='failsafe';
@@ -825,8 +837,7 @@ function block_helper_script()
 				}
 			}
 		}
-		$keep=symbol_tempcode('KEEP');
-		$post_url=find_script('block_helper').'?type=step3&field_name='.get_param('field_name').$keep->evaluate();
+		$post_url=find_script('block_helper').'?type=step3&field_name='.urlencode(get_param('field_name')).$keep->evaluate();
 		if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
 		$post_url.='&block_type='.$type_wanted;
 		if (get_param('save_to_id','')!='')

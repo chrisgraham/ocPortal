@@ -158,8 +158,9 @@ class Hook_Preview_ocf_post
 			$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('LAST_EDIT_DATE_RAW'=>strval(time()),'LAST_EDIT_DATE'=>get_timezoned_date(time(),true),'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'LAST_EDIT_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 		} else $last_edited=new ocp_tempcode();
 
-		$post=do_template('OCF_TOPIC_POST',array('_GUID'=>'354473f96b4f7324d2a9c476ff78f0d7','POST_ID'=>'','TOPIC_FIRST_POST_ID'=>'','TOPIC_FIRST_POSTER'=>strval(get_member()),'POST_TITLE'=>$post_title,'CLASS'=>$class,'EMPHASIS'=>$emphasis,'FIRST_UNREAD'=>'','TOPIC_ID'=>'','ID'=>'','POST_DATE_RAW'=>strval($_post_date),'POST_DATE'=>$post_date,'UNVALIDATED'=>$unvalidated,'URL'=>'','POSTER'=>$poster,'POST_AVATAR'=>$post_avatar,'POSTER_TITLE'=>$poster_title,'RANK_IMAGES'=>$rank_images,'POST'=>$post_html,'LAST_EDITED'=>$last_edited,'SIGNATURE'=>$signature,'BUTTONS'=>'','POSTER_ID'=>strval($post_owner)));
-		$out=do_template('OCF_POST_BOX',array('_GUID'=>'62bbfabfa5c16c2aa6724a0b79839626','POST'=>$post));
+		$map=array('_GUID'=>'354473f96b4f7324d2a9c476ff78f0d7','POST_ID'=>'','TOPIC_FIRST_POST_ID'=>'','TOPIC_FIRST_POSTER'=>strval(get_member()),'POST_TITLE'=>$post_title,'CLASS'=>$class,'EMPHASIS'=>$emphasis,'FIRST_UNREAD'=>'','TOPIC_ID'=>'','ID'=>'','POST_DATE_RAW'=>strval($_post_date),'POST_DATE'=>$post_date,'UNVALIDATED'=>$unvalidated,'URL'=>'','POSTER'=>$poster,'POST_AVATAR'=>$post_avatar,'POSTER_TITLE'=>$poster_title,'RANK_IMAGES'=>$rank_images,'POST'=>$post_html,'LAST_EDITED'=>$last_edited,'SIGNATURE'=>$signature,'BUTTONS'=>'','POSTER_ID'=>strval($post_owner));
+		$post=do_template('OCF_TOPIC_POST',$map);
+		$out=do_template('OCF_POST_BOX',array('_GUID'=>'62bbfabfa5c16c2aa6724a0b79839626','POST'=>$post)+$map+array('ACTUAL_POST'=>$post_html));
 
 		return array($out,$post_comcode);
 	}

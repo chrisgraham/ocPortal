@@ -271,7 +271,7 @@ class Module_forumview
 
 		$title=get_screen_title($ltitle,false,NULL,NULL,$awards);
 
-		return do_template('OCF_FORUM_SCREEN',array('_GUID'=>'9e9fd9110effd8a92b7a839a4fea60c5','TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('OCF_FORUM_SCREEN',array('_GUID'=>'9e9fd9110effd8a92b7a839a4fea60c5','TITLE'=>$title,'CONTENT'=>$content,'ID'=>strval($id)));
 	}
 
 }
