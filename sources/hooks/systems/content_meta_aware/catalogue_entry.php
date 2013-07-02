@@ -90,6 +90,8 @@ class Hook_content_meta_aware_catalogue_entry
 			'rss_hook'=>'catalogues',
 
 			'actionlog_regexp'=>'\w+_CATALOGUE_ENTRY',
+			
+			'supports_privacy'=>true,
 		);
 	}
 

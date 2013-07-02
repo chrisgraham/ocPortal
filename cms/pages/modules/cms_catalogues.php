@@ -480,6 +480,12 @@ class Module_cms_catalogues extends standard_crud_module
 				$fields2->attach(form_input_tick(do_lang_tempcode('shopping:SHOPPING_FORCE_DELETE'),do_lang_tempcode('shopping:DESCRIPTION_SHOPPING_FORCE_DELETE'),'force_delete',false));
 			}
 		}
+		
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			$fields2->attach(get_privacy_form_fields('catalogue_entry',$id));
+		}
 
 		return array($fields,$hidden,NULL,NULL,false,NULL,$fields2,NULL,$field_defaults);
 	}

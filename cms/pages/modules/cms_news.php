@@ -311,6 +311,12 @@ class Module_cms_news extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			$fields2->attach(content_review_get_fields('news',is_null($id)?NULL:strval($id)));
+		
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			$fields2->attach(get_privacy_form_fields('news',$id));
+		}
 
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/,$posting_form_tabindex);
 	}
@@ -471,6 +477,22 @@ class Module_cms_news extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('news',strval($id));
+		
+		if (addon_installed('content_privacy'))
+		{
+			$privacy_level=post_param('privacy_level','');
+			$additional_access=array();
+			foreach ($_POST as $key=>$value)
+			{
+				if (strpos($key,'privacy_friends_list_')===0)
+				{
+					if ($value=='') continue;
+					$additional_access[]=$value;
+				}
+			}
+			require_code('content_privacy2');
+			save_privacy_form_fields(get_member(),'news',$id,$privacy_level,$additional_access);
+		}
 
 		return strval($id);
 	}
@@ -571,6 +593,22 @@ class Module_cms_news extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('news',strval($id));
+		
+		if (addon_installed('content_privacy'))
+		{
+			$privacy_level=post_param('privacy_level','');
+			$additional_access=array();
+			foreach ($_POST as $key=>$value)
+			{
+				if (strpos($key,'privacy_friends_list_')===0)
+				{
+					if ($value=='') continue;
+					$additional_access[]=$value;
+				}
+			}
+			require_code('content_privacy2');
+			update_privacy_form_fields('news',$id,$privacy_level,$additional_access);
+		}
 	}
 
 	/**
@@ -583,6 +621,12 @@ class Module_cms_news extends standard_crud_module
 		$id=intval($_id);
 
 		delete_news($id);
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			delete_privacy_form_fields('news',$id);
+		}
 	}
 
 	/**

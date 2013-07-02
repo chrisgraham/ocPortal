@@ -87,6 +87,8 @@ class Hook_content_meta_aware_news
 			'rss_hook'=>'news',
 
 			'actionlog_regexp'=>'\w+_NEWS',
+
+			'supports_privacy'=>true,
 		);
 	}
 

@@ -87,6 +87,8 @@ class Hook_content_meta_aware_image
 			'rss_hook'=>'galleries',
 
 			'actionlog_regexp'=>'\w+_IMAGE',
+
+			'supports_privacy'=>true,
 		);
 	}
 

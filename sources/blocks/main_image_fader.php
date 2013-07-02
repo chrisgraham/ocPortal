@@ -47,7 +47,7 @@ class Block_main_image_fader
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60;
 		return $info;
 	}
@@ -77,8 +77,25 @@ class Block_main_image_fader
 		$images_full=array();
 		$titles=array();
 		$html=array();
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images WHERE '.$cat_select.' ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos WHERE '.$cat_select.' ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
+		
+		$extra_join_image='';
+		$extra_join_video='';
+		$extra_where_image='';
+		$extra_where_video='';
+		
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','e');
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','e');
+			$extra_join_image.=$privacy_join_image;
+			$extra_join_video.=$privacy_join_video;
+			$extra_where_image.=$privacy_where_image;
+			$extra_where_video.=$privacy_where_video;
+		}
+		
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
 		$all_rows=array();
 		if ($order!='')
 		{

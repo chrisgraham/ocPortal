@@ -570,6 +570,12 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('download',is_null($id)?NULL:strval($id)));
+		
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			$fields->attach(get_privacy_form_fields('download',$id));
+		}
 
 		return array($fields,$hidden);
 	}
@@ -677,7 +683,7 @@ class Module_cms_downloads extends standard_crud_module
 		$meta_data=actual_meta_data_get_fields('download',NULL);
 		actual_meta_data_get_fields__special($meta_data,'num_downloads',0);
 
-		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_data['add_time'],$meta_data['num_downloads'],$meta_data['views'],$meta_data['submitter']);
+		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_data['add_time'],/*$meta_data['num_downloads']*/0,$meta_data['views'],$meta_data['submitter']);
 		if (addon_installed('galleries'))
 		{
 			require_code('permissions2');
@@ -710,6 +716,22 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('download',strval($id));
+
+		if (addon_installed('content_privacy'))
+		{
+			$privacy_level=post_param('privacy_level','');
+			$additional_access=array();
+			foreach ($_POST as $key=>$value)
+			{
+				if (strpos($key,'privacy_friends_list_')===0)
+				{
+					if ($value=='') continue;
+					$additional_access[]=$value;
+				}
+			}
+			require_code('content_privacy2');
+			save_privacy_form_fields(get_member(),'download',$id,$privacy_level,$additional_access);
+		}
 
 		return strval($id);
 	}
@@ -786,6 +808,22 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('download',strval($id));
+		
+		if (addon_installed('content_privacy'))
+		{
+			$privacy_level=post_param('privacy_level','');
+			$additional_access=array();
+			foreach ($_POST as $key=>$value)
+			{
+				if (strpos($key,'privacy_friends_list_')===0)
+				{
+					if ($value=='') continue;
+					$additional_access[]=$value;
+				}
+			}
+			require_code('content_privacy2');
+			update_privacy_form_fields('download',$id,$privacy_level,$additional_access);
+		}
 	}
 
 	/**
@@ -799,6 +837,12 @@ class Module_cms_downloads extends standard_crud_module
 
 		$delete_status=post_param('delete','leave');
 		delete_download($id,!($delete_status=='2'));
+		
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			delete_privacy_form_fields('download',$id);
+		}
 	}
 
 	/**
