@@ -62,6 +62,7 @@ class Block_main_image_fader_news
 	{
 		require_lang('news');
 		require_code('news');
+		require_css('news');
 
 		$cat=array_key_exists('param',$map)?$map['param']:'*';
 		if ($cat=='') $cat='root';
