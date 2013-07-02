@@ -48,11 +48,10 @@ function import_rss_fields($import_to_blog)
 	if (addon_installed('unvalidated'))
 		$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'auto_validate',true));
 	if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-		$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'add_to_own',false));
+		$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'to_own_account',false));
+	$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_TO_BLOG'),do_lang_tempcode('DESCRIPTION_IMPORT_TO_BLOG'),'import_to_blog',true));
 	if (has_specific_permission(get_member(),'draw_to_server'))
 		$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'download_images',true));
-	if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_TO_BLOG'),do_lang_tempcode('DESCRIPTION_IMPORT_TO_BLOG'),'import_to_blog',true));
 
 	return $fields;
 }
@@ -74,11 +73,10 @@ function import_rss()
 	if (!addon_installed('unvalidated')) $is_validated=1;
 	$download_images=post_param_integer('download_images',0);
 	if (!has_specific_permission(get_member(),'draw_to_server')) $download_images=0;
-	$to_own_account=post_param_integer('add_to_own',0);
-	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=0;
+	$to_own_account=post_param_integer('to_own_account',0);
+	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=1;
 	$import_blog_comments=post_param_integer('import_blog_comments',0);
 	$import_to_blog=post_param_integer('import_to_blog',0);
-	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $import_to_blog=0;
 
 	$rss_url=post_param('rss_feed_url',NULL);
 	require_code('uploads');
@@ -207,7 +205,7 @@ function import_rss()
 					$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 				}
 
-				if (($j==0) && ($import_to_blog==1))
+				if (($j==0) && ($import_to_blog==0))
 				{
 					$owner_category_id=$cat_id; // Primary
 				} else
@@ -519,8 +517,8 @@ function import_wordpress_db()
 	if (!addon_installed('unvalidated')) $is_validated=1;
 	$download_images=post_param_integer('wp_download_images',0);
 	if (!has_specific_permission(get_member(),'draw_to_server')) $download_images=0;
-	$to_own_account=post_param_integer('wp_add_to_own',0);
-	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=0;
+	$to_own_account=post_param_integer('wp_to_own_account',0);
+	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=1;
 	$import_blog_comments=post_param_integer('wp_import_blog_comments',0);
 	$import_to_blog=post_param_integer('wp_import_to_blog',0);
 	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $import_to_blog=0;
@@ -626,7 +624,7 @@ function import_wordpress_db()
 								$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'));
 								$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 							}
-							if (($i==0) && ($import_to_blog==1))
+							if (($i==0) && ($import_to_blog==0))
 							{
 								$owner_category_id=$cat_id; // Primary
 							} else
