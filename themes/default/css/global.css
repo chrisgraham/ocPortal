@@ -1852,6 +1852,13 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 /*	max-width: 540px; Looks bad on forumview */
 }
 
+.pagination * {
+	vertical-align: middle;
+}
+.pagination .inline {
+	display: inline-block;
+}
+
 .pagination a,
 .pagination span,
 .results_launcher a,

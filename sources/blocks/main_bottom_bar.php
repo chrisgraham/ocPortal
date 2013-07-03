@@ -62,10 +62,11 @@ class Block_main_bottom_bar
 		$count=0;
 		$members=get_online_members(false,NULL,$count);
 		$groups_seen=array();
+		$num_members=0;
+		$num_guests=0;
 		if (!is_null($members))
 		{
 			//$members=collapse_2d_complexity('the_user','cache_username',$members);
-			$guests=0;
 			foreach ($members as $bits)
 			{
 				$member=$bits['the_user'];
@@ -73,7 +74,7 @@ class Block_main_bottom_bar
 
 				if ($member==$GLOBALS['OCF_DRIVER']->get_guest_id())
 				{
-					$guests++;
+					$num_guests++;
 					continue;
 				}
 				if (is_null($username)) continue;
@@ -92,11 +93,12 @@ class Block_main_bottom_bar
 					$groups_seen=array();
 				}
 				$users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$col,'PROFILE_URL'=>$url,'USERNAME'=>$username,'USERGROUP'=>$usergroup)));
+				$num_members++;
 			}
-			if ($guests!=0)
+			if ($num_guests!=0)
 			{
 				if (!$users_online->is_empty()) $users_online->attach(do_lang_tempcode('LIST_SEP'));
-				$users_online->attach(do_lang_tempcode('NUM_GUESTS',integer_format($guests)));
+				$users_online->attach(do_lang_tempcode('NUM_GUESTS',integer_format($num_guests)));
 			}
 		}
 
@@ -131,7 +133,9 @@ class Block_main_bottom_bar
 			'BIRTHDAYS'=>$birthdays,
 			'USERS_ONLINE'=>$users_online,
 			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'onlinemembers')?build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')):new ocp_tempcode(),
-			'GROUPS'=>$groups
+			'GROUPS'=>$groups,
+			'NUM_GUESTS'=>strval($num_guests),
+			'NUM_MEMBERS'=>strval($num_members),
 		));
 	}
 
