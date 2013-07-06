@@ -55,6 +55,7 @@ function ocf_member_handle_promotion($member_id=NULL)
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_primary_group'=>$_p),array('id'=>$member_id),'',1);
 			} else
 			{
+				$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id,'gm_group_id'=>$_p),'',1);
 				$GLOBALS['FORUM_DB']->query_insert('f_group_members',array('gm_validated'=>1,'gm_member_id'=>$member_id,'gm_group_id'=>$_p),false,true);
 				$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id,'gm_group_id'=>$promotion['id']),'',1); // It's a transition, so remove old membership
 			}

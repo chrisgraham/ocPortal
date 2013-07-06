@@ -143,7 +143,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		}
 
 		// Run Query
-		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true);
+		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true,false,array('caption'));
 		if (is_null($rows)) $rows=array(); // Error, but tolerate it as it could be on each page load
 
 		// Filter out what we don't have permission for

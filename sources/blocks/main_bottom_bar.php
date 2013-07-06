@@ -97,8 +97,11 @@ class Block_main_bottom_bar
 			}
 			if ($num_guests!=0)
 			{
-				if (!$users_online->is_empty()) $users_online->attach(do_lang_tempcode('LIST_SEP'));
-				$users_online->attach(do_lang_tempcode('NUM_GUESTS',integer_format($num_guests)));
+				if (!$users_online->is_empty() && do_lang('NUM_GUESTS')!='')
+				{
+					$users_online->attach(do_lang_tempcode('LIST_SEP'));
+					$users_online->attach(do_lang_tempcode('NUM_GUESTS',integer_format($num_guests)));
+				}
 			}
 		}
 
@@ -134,8 +137,8 @@ class Block_main_bottom_bar
 			'USERS_ONLINE'=>$users_online,
 			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'onlinemembers')?build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')):new ocp_tempcode(),
 			'GROUPS'=>$groups,
-			'NUM_GUESTS'=>strval($num_guests),
-			'NUM_MEMBERS'=>strval($num_members),
+			'_NUM_GUESTS'=>strval($num_guests),
+			'_NUM_MEMBERS'=>strval($num_members),
 		));
 	}
 

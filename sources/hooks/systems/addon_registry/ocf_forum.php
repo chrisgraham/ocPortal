@@ -1035,9 +1035,23 @@ class Hook_addon_registry_ocf_forum
 			'DESCRIPTION'=>lorem_phrase()
 		));
 
+		$members_viewing=new ocp_tempcode();
+		foreach (placeholder_array() as $_k=>$_v)
+		{
+			$members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
+				'PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_word(),
+				'AT'=>lorem_phrase(),
+				'COLOUR'=>lorem_word()
+			)));
+		}
+
 		$screen=do_lorem_template('OCF_FORUM_SCREEN', array(
 			'TITLE'=>lorem_title(),
 			'CONTENT'=>$content,
+			'NUM_GUESTS'=>placeholder_number(),
+			'NUM_MEMBERS'=>placeholder_number(),
+			'MEMBERS_VIEWING'=>$members_viewing,
 		));
 
 		return array(

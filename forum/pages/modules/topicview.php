@@ -267,7 +267,7 @@ class Module_topicview
 				}
 
 				if (($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
-					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post']->evaluate()),'200','0','1','0.2'),'left'),ENT_QUOTES,get_charset());
+					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post']),'200','0','1','0.2'),'left'),ENT_QUOTES,get_charset());
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 							'_GUID'=>'sacd09wekfofpw2f',
@@ -665,37 +665,11 @@ class Module_topicview
 		}
 
 		// Members viewing this topic
-		$members=is_null($id)?array():get_members_viewing('topicview','',strval($id),true);
-		$num_guests=0;
-		$num_members=0;
-		if (is_null($members))
+		if (!is_null($topic_info['forum_id']))
 		{
-			$members_viewing=new ocp_tempcode();
-		} else
-		{
-			$members_viewing=new ocp_tempcode();
-			foreach ($members as $member_id=>$at_details)
-			{
-				$username=$at_details['mt_cache_username'];
-
-				if (is_guest($member_id))
-				{
-					$num_guests++;
-				} else
-				{
-					$num_members++;
-					$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
-					$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
-					if ((has_specific_permission(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==strval($id))))
-					{
-						$map['AT']=escape_html($at_details['the_title']);
-					}
-					$map['COLOUR']=get_group_colour(ocf_get_member_primary_group($member_id));
-					$members_viewing->attach(do_template('OCF_USER_MEMBER',$map));
-				}
-			}
-			if ($members_viewing->is_empty()) $members_viewing=do_lang_tempcode('NONE_EM');
+			member_tracking_update('forumview','',strval($topic_info['forum_id']));
 		}
+		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
 
 		if (!is_null($id))
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang(is_null($topic_info['forum_id'])?'VIEW_PRIVATE_TOPIC':'VIEW_TOPIC').'</span>'));

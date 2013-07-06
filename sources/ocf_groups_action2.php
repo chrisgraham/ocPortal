@@ -247,11 +247,19 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','g_is_presented_at_install',array('id'=>$id));
 	if (is_null($test)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
+	if ($validated==1)
+	{
+		$GLOBALS['FORUM_DB']->query_delete('f_group_members',array(
+			'gm_group_id'=>$id,
+			'gm_member_id'=>$member_id,
+			'gm_validated'=>0
+		),'',1);
+	}
 	$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
 		'gm_group_id'=>$id,
 		'gm_member_id'=>$member_id,
 		'gm_validated'=>$validated
-	),false,true); // Allow failure, if member is already in (handy for importers)
+	),false,true);
 
 	if (ocf_get_group_property($id,'hidden')==0)
 	{
