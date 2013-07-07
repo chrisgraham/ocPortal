@@ -69,6 +69,8 @@ class Hook_search_calendar
 	{
 		require_lang('calendar');
 
+		$table='calendar_events r';
+
 		$remapped_orderer='';
 		switch ($sort)
 		{
@@ -82,16 +84,12 @@ class Hook_search_calendar
 		}
 
 		// Calculate our where clause (search)
-		if (!has_privilege(get_member(),'assume_any_member'))
+		if (addon_installed('content_privacy'))
 		{
-			$where_clause.=' AND ';
-			if (is_guest())
-			{
-				$where_clause.='(e_is_public=1)';
-			} else
-			{
-				$where_clause.='(e_is_public=1 OR e_submitter='.strval(get_member()).' OR e_member_calendar='.strval(get_member()).')';
-			}
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','r',NULL,'r.e_member_calendar='.strval(get_member()));
+			$table.=' '.$privacy_join;
+			$where_clause.=$privacy_where;
 		}
 		$where_clause.=' AND ';
 		$where_clause.='(e_member_calendar IS NULL'; // Not a privacy thing, more of a relevance thing
@@ -117,7 +115,7 @@ class Hook_search_calendar
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'calendar_events r',array('r.e_title','r.e_content'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'calendar','e_type');
+		$rows=get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,array('r.e_title','r.e_content'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'calendar','e_type');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

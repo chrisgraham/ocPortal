@@ -256,7 +256,20 @@ class Hook_ipb_base
 
 			ocf_over_msn();
 
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,'day_of_month',0,0,$end_year,$end_month,$end_day,'day_of_month',NULL,NULL,NULL,1,NULL,1,1,1,1,'',$submitter);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,$start_year,$start_month,$start_day,'day_of_month',0,0,$end_year,$end_month,$end_day,'day_of_month',NULL,NULL,NULL,1,NULL,1,1,1,1,'',$submitter);
+			if ($private_event==1)
+			{
+				if (addon_installed('content_privacy'))
+				{
+					$GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+						'content_type'=>'event',
+						'content_id'=>strval($id_new),
+						'guest_view'=>0,
+						'member_view'=>0,
+						'friend_view'=>0,
+					));
+				}
+			}
 
 			ocf_over_local();
 

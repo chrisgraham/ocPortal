@@ -35,7 +35,7 @@ class Hook_cron_calendar
 		$start=0;
 		do
 		{
-			$jobs=$GLOBALS['SITE_DB']->query('SELECT *,j.id AS id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_jobs j LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e ON e.id=j.j_event_id LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_reminders n ON n.id=j.j_reminder_id WHERE (validated=1 OR e_is_public=0) AND j_time<'.strval(time()),300,$start);
+			$jobs=$GLOBALS['SITE_DB']->query('SELECT *,j.id AS id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_jobs j LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e ON e.id=j.j_event_id LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_reminders n ON n.id=j.j_reminder_id WHERE validated=1 AND j_time<'.strval(time()),300,$start);
 			$or_list='';
 			foreach ($jobs as $job)
 			{

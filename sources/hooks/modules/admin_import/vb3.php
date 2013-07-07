@@ -1018,8 +1018,21 @@ class Hook_vb3
 			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',strtotime($row['dateline'])));
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array(NULL,NULL,NULL,NULL,NULL);
 			ocf_over_msn();
-			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['event'],3,$row['visible'],$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,NULL,1,1,1,1,'',$submitter,0,$row['dateline']);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['event'],3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,NULL,1,NULL,1,1,1,1,'',$submitter,0,$row['dateline']);
 			ocf_over_local();
+			if ($row['visible']==0)
+			{
+				if (addon_installed('content_privacy'))
+				{
+					$GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+						'content_type'=>'event',
+						'content_id'=>strval($id_new),
+						'guest_view'=>0,
+						'member_view'=>0,
+						'friend_view'=>0,
+					));
+				}
+			}
 
 			import_id_remap_put('event',strval($row['eventid']),$id_new);
 		}

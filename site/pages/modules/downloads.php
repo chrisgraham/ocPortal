@@ -614,6 +614,12 @@ class Module_downloads
 	{
 		$id=get_param_integer('id');
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('download',strval($id));
+		}
+
 		$root=get_param_integer('keep_download_root',db_get_first_id(),true);
 
 		// Load from database

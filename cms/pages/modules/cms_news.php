@@ -61,7 +61,7 @@ class Module_cms_news extends standard_crud_module
 	function get_privilege_overrides()
 	{
 		require_lang('news');
-		return array('mass_import'=>0,'have_personal_category'=>0,'submit_cat_highrange_content'=>array(0,'ADD_NEWS_CATEGORY'),'edit_own_cat_highrange_content'=>array(0,'EDIT_OWN_NEWS_CATEGORY'),'edit_cat_highrange_content'=>array(0,'EDIT_NEWS_CATEGORY'),'delete_own_cat_highrange_content'=>array(0,'DELETE_OWN_NEWS_CATEGORY'),'delete_cat_highrange_content'=>array(0,'DELETE_NEWS_CATEGORY'),'submit_highrange_content'=>array(1,'ADD_NEWS'),'bypass_validation_highrange_content'=>array(1,'BYPASS_NEWS_VALIDATION'),'edit_own_highrange_content'=>array(1,'EDIT_OWN_NEWS'),'edit_highrange_content'=>array(1,'EDIT_NEWS'),'delete_own_highrange_content'=>array(1,'DELETE_OWN_NEWS'),'delete_highrange_content'=>array(1,'DELETE_NEWS'));
+		return array('view_private_content'=>0,'mass_import'=>0,'have_personal_category'=>0,'submit_cat_highrange_content'=>array(0,'ADD_NEWS_CATEGORY'),'edit_own_cat_highrange_content'=>array(0,'EDIT_OWN_NEWS_CATEGORY'),'edit_cat_highrange_content'=>array(0,'EDIT_NEWS_CATEGORY'),'delete_own_cat_highrange_content'=>array(0,'DELETE_OWN_NEWS_CATEGORY'),'delete_cat_highrange_content'=>array(0,'DELETE_NEWS_CATEGORY'),'submit_highrange_content'=>array(1,'ADD_NEWS'),'bypass_validation_highrange_content'=>array(1,'BYPASS_NEWS_VALIDATION'),'edit_own_highrange_content'=>array(1,'EDIT_OWN_NEWS'),'edit_highrange_content'=>array(1,'EDIT_NEWS'),'delete_own_highrange_content'=>array(1,'DELETE_OWN_NEWS'),'delete_highrange_content'=>array(1,'DELETE_NEWS'));
 	}
 
 	/**
@@ -472,7 +472,7 @@ class Module_cms_news extends standard_crud_module
 			$start_hour=post_param_integer('schedule_hour');
 			$start_minute=post_param_integer('schedule_minute');
 			require_code('calendar2');
-			$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+			$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 			regenerate_event_reminder_jobs($event_id,true);
 		}
 
@@ -557,7 +557,7 @@ class Module_cms_news extends standard_crud_module
 				$start_day=post_param_integer('schedule_day');
 				$start_hour=post_param_integer('schedule_hour');
 				$start_minute=post_param_integer('schedule_minute');
-				$event_id=add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+				$event_id=add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 				regenerate_event_reminder_jobs($event_id,true);
 			}
 		}

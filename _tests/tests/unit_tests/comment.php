@@ -28,7 +28,7 @@ class comment_test_set extends ocp_test_case
 		require_code('ocf_posts_action');
 		require_code('ocf_forum_driver_helper');
 		require_lang('lang');
-		$this->event_id=add_calendar_event(8,'1',NULL,0,'test_event','',3,1,2010,1,10,'day_of_month',10,15,NULL,NULL,NULL,'day_of_month',NULL,NULL,NULL,1,NULL,1,1,1,1,'',NULL,0,NULL,NULL,NULL);
+		$this->event_id=add_calendar_event(8,'1',NULL,0,'test_event','',3,2010,1,10,'day_of_month',10,15,NULL,NULL,NULL,'day_of_month',NULL,NULL,NULL,1,NULL,1,1,1,1,'',NULL,0,NULL,NULL,NULL);
 		if ('test_event'==get_translated_text($GLOBALS['SITE_DB']->query_select_value('calendar_events','e_title',array('id'=>$this->event_id))))
 		{
 			$lang_id=insert_lang_comcode('test_comment_desc_1',4,$GLOBALS['FORUM_DB']);
@@ -60,7 +60,7 @@ class comment_test_set extends ocp_test_case
 	function testEditComment()
 	{
 		// Test the forum edits
-		edit_calendar_event($this->event_id,8,'',NULL,0,'test_event1','',3,1,2010,1,10,'day_of_month',10,15,2010,1,19,'day_of_month',0,0,get_users_timezone(),1,NULL,'','',1,1,1,1,'');
+		edit_calendar_event($this->event_id,8,'',NULL,0,'test_event1','',3,2010,1,10,'day_of_month',10,15,2010,1,19,'day_of_month',0,0,get_users_timezone(),1,NULL,'','',1,1,1,1,'');
 		// Test the forum was actually created
 		$this->assertTrue('test_event1'==get_translated_text($GLOBALS['FORUM_DB']->query_select_value('calendar_events','e_title',array('id'=>$this->event_id)),$GLOBALS['FORUM_DB']));
 	}

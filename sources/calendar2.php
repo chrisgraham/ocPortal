@@ -29,7 +29,6 @@
  * @param  LONG_TEXT			The full text describing the event
  * @param  integer			The priority
  * @range  1 5
- * @param  BINARY				Whether it is a public event
  * @param  integer			The year the event starts at
  * @param  integer			The month the event starts at
  * @param  integer			The day the event starts at
@@ -61,7 +60,7 @@
  * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$member_calendar=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL,$meta_keywords='',$meta_description='')
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_monthly_spec_type='day_of_month',$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$member_calendar=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_time=NULL,$edit_time=NULL,$id=NULL,$meta_keywords='',$meta_description='')
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -98,7 +97,6 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'e_end_minute'=>$end_minute,
 		'e_timezone'=>$timezone,
 		'e_do_timezone_conv'=>$do_timezone_conv,
-		'e_is_public'=>$is_public,
 		'e_priority'=>$priority,
 		'e_type'=>$type,
 		'validated'=>$validated,
@@ -126,6 +124,15 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 
 	if ($validated==1)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('event',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('calendar');
 		require_code('calendar');
 		require_code('notifications');
@@ -133,7 +140,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),$date_range);
 		$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
 		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate(),comcode_escape($date_range)));
-		dispatch_notification('calendar_event',strval($type),$subject,$mail);
+		dispatch_notification('calendar_event',strval($type),$subject,$mail,$privacy_limits);
 	}
 
 	if ($member_calendar!==NULL)
@@ -175,7 +182,6 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  LONG_TEXT			The full text describing the event
  * @param  integer			The priority
  * @range  1 5
- * @param  BINARY				Whether it is a public event
  * @param  integer			The year the event starts at
  * @param  integer			The month the event starts at
  * @param  integer			The day the event starts at
@@ -206,7 +212,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  ?MEMBER			Submitter (NULL: do not change)
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
 {
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
@@ -259,7 +265,6 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'e_recurrences'=>$recurrences,
 		'e_seg_recurrences'=>$seg_recurrences,
 		'e_do_timezone_conv'=>$do_timezone_conv,
-		'e_is_public'=>$is_public,
 		'e_priority'=>$priority,
 		'e_type'=>$type,
 		'validated'=>$validated,
@@ -284,6 +289,15 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 
 	if ($just_validated)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('event',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('calendar');
 		require_code('calendar');
 		require_code('notifications');
@@ -291,7 +305,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),$date_range);
 		$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
 		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate(),comcode_escape($date_range)));
-		dispatch_notification('calendar_event',strval($type),$subject,$mail);
+		dispatch_notification('calendar_event',strval($type),$subject,$mail,$privacy_limits);
 	}
 
 	if ($member_calendar!==NULL)

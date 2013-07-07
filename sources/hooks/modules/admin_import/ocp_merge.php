@@ -890,6 +890,8 @@ class Hook_ocp_merge
 			if (is_null($main_news_category)) $main_news_category=db_get_first_id();
 			$id_new=add_news($this->get_lang_string($db,$row['title']),$this->get_lang_string($db,$row['news']),$row['author'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$this->get_lang_string($db,$row['news_article']),$main_news_category,$news_category,$row['date_and_time'],$submitter,$row['news_views'],$row['edit_date'],$id,$row['news_image']);
 
+			$this->_import_content_privacy($db,'news',strval($row['id']),strval($new_id));
+
 			import_id_remap_put('news',strval($row['id']),$id_new);
 		}
 	}
@@ -1039,6 +1041,8 @@ class Hook_ocp_merge
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 			$id_new=add_download($category_id,$this->get_lang_string($db,$row['name']),$row['url'],$this->get_lang_string($db,$row['description']),$row['author'],$this->get_lang_string($db,array_key_exists('additional_details',$row)?$row['additional_details']:$row['comments']),NULL,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['original_filename'],$row['file_size'],$row['download_cost'],$row['download_submitter_gets_points'],array_key_exists('download_licence',$row)?$row['download_licence']:NULL,$row['add_date'],$row['num_downloads'],$row['download_views'],$submitter,$row['edit_date'],$id,'','',$row['default_pic']);
 
+			$this->_import_content_privacy($db,'download',strval($row['id']),strval($new_id));
+
 			import_id_remap_put('download',strval($row['id']),$id_new);
 		}
 		foreach ($rows as $row)
@@ -1096,6 +1100,8 @@ class Hook_ocp_merge
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 			$id_new=add_image(array_key_exists('title',$row)?$row['title']:'',$row['cat'],$this->get_lang_string($db,array_key_exists('description',$row)?$row['description']:$row['comments']),$row['url'],$row['thumb_url'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['add_date'],$row['edit_date'],$row['image_views'],$id);
 
+			$this->_import_content_privacy($db,'image',strval($row['id']),strval($new_id));
+
 			import_id_remap_put('image',strval($row['id']),$id_new);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'videos ORDER BY id');
@@ -1107,6 +1113,8 @@ class Hook_ocp_merge
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 			$id_new=add_video(array_key_exists('title',$row)?$row['title']:'',$row['cat'],$this->get_lang_string($db,array_key_exists('description',$row)?$row['description']:$row['comments']),$row['url'],$row['thumb_url'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['video_length'],$row['video_width'],$row['video_height'],$submitter,$row['add_date'],$row['edit_date'],$row['video_views'],$id);
+
+			$this->_import_content_privacy($db,'video',strval($row['id']),strval($new_id));
 
 			import_id_remap_put('video',strval($row['id']),$id_new);
 		}
@@ -1301,7 +1309,9 @@ class Hook_ocp_merge
 			if (!array_key_exists('allow_comments',$row)) $row['allow_comments']=1;
 			if (!array_key_exists('allow_trackbacks',$row)) $row['allow_trackbacks']=1;
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],array_key_exists('e_start_monthly_spec_type',$row)?$row['e_start_monthly_spec_type']:'day_of_month',$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],array_key_exists('e_end_monthly_spec_type',$row)?$row['e_end_monthly_spec_type']:'day_of_month',$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$member_calendar,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
+			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],array_key_exists('e_start_monthly_spec_type',$row)?$row['e_start_monthly_spec_type']:'day_of_month',$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],array_key_exists('e_end_monthly_spec_type',$row)?$row['e_end_monthly_spec_type']:'day_of_month',$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$member_calendar,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
+
+			$this->_import_content_privacy($db,'event',strval($row['id']),strval($new_id));
 
 			import_id_remap_put('event',strval($row['id']),$id_new);
 		}
@@ -1582,6 +1592,8 @@ class Hook_ocp_merge
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 			$id_new=actual_add_catalogue_entry($category_id,$row['ce_validated'],$row['notes'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$map,$row['ce_add_date'],$submitter,$row['ce_edit_date'],$row['ce_views'],$id);
+
+			$this->_import_content_privacy($db,'catalogue_entry',strval($row['id']),strval($new_id));
 
 			import_id_remap_put('catalogue_entry',strval($row['id']),$id_new);
 		}
@@ -2487,6 +2499,40 @@ class Hook_ocp_merge
 			$start+=100;
 		}
 		while (count($rows)!=0);
+	}
+
+	/**
+	 * Import privacy for a particular record.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  ID_TEXT		The old ID
+	 * @param  ID_TEXT		The new ID
+	 */
+	function _import_content_privacy($db,$content_type,$old_id,$new_id)
+	{
+		if (addon_installed('content_privacy'))
+		{
+			$rows=$db->query_select('content_privacy',array('*'),array('content_type'=>$content_type,'content_id'=>$old_id),'',1);
+			foreach ($rows as $row)
+			{
+				$GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+					'content_id'=>$new_id,
+				)+$row);
+			}
+
+			$rows=$db->query_select('content_primary__members',array('*'),array('content_type'=>$content_type,'content_id'=>$old_id));
+			foreach ($rows as $row)
+			{
+				$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+				if (!is_null($member_id))
+				{
+					$GLOBALS['SITE_DB']->query_insert('content_primary__members',array(
+						'content_id'=>$new_id,
+						'member_id'=>$member_id,
+					)+$row);
+				}
+			}
+		}
 	}
 
 }

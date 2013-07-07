@@ -90,6 +90,8 @@ class Module_admin_version
 		delete_privilege('sms_higher_trigger_limit');
 		delete_privilege('assume_any_member');
 		delete_privilege('edit_meta_fields');
+		delete_privilege('view_private_content');
+
 		delete_config_option('url_monikers_enabled');
 	}
 
@@ -349,12 +351,12 @@ class Module_admin_version
 				'member_view'=>'BINARY',
 				'friend_view'=>'BINARY'
 			));
-
 			$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
 				'content_type'=>'*ID_TEXT',
 				'content_id'=>'*ID_TEXT',
 				'member_id'=>'*MEMBER',
 			));
+			add_privilege('SUBMISSION','view_private_content',false,true);
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

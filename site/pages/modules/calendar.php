@@ -66,7 +66,6 @@ class Module_calendar
 		delete_privilege('add_public_events');
 		delete_privilege('edit_viewable_events');
 		delete_privilege('edit_owned_events');
-		delete_privilege('view_personal_events');
 		delete_privilege('sense_personal_conflicts');
 		delete_privilege('calendar_add_to_others');
 
@@ -94,14 +93,13 @@ class Module_calendar
 		{
 			add_privilege('CALENDAR','view_calendar',true);
 			add_privilege('CALENDAR','add_public_events',true);
-			add_privilege('CALENDAR','view_personal_events',false,true);
 			add_privilege('CALENDAR','sense_personal_conflicts',false);
 			add_privilege('CALENDAR','view_event_subscriptions',false);
 
 			$GLOBALS['SITE_DB']->create_table('calendar_events',array(
 				'id'=>'*AUTO',
 				'e_submitter'=>'MEMBER',
-				'e_member_calendar'=>'?MEMBER', // Which member's calendar it shows on; if NULL, it shows globally if e_is_public=1 else it shows both globally (but private) and on e_submitter's calendar
+				'e_member_calendar'=>'?MEMBER', // Which member's calendar it shows on; if NULL, it shows globally
 				'e_views'=>'INTEGER',
 				'e_title'=>'SHORT_TRANS',
 				'e_content'=>'LONG_TRANS',
@@ -124,7 +122,6 @@ class Module_calendar
 				'e_end_minute'=>'?SHORT_INTEGER',
 				'e_timezone'=>'ID_TEXT', // The settings above are stored in GMT, were converted from this timezone, and back to this timezone if e_do_timezone_conv==1
 				'e_do_timezone_conv'=>'BINARY',
-				'e_is_public'=>'BINARY',
 				'e_priority'=>'SHORT_INTEGER', // 1-5, like e-mail
 				'allow_rating'=>'BINARY',
 				'allow_comments'=>'SHORT_INTEGER',
@@ -135,7 +132,6 @@ class Module_calendar
 			));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_views',array('e_views'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','ces',array('e_submitter'));
-			$GLOBALS['SITE_DB']->create_index('calendar_events','publicevents',array('e_is_public'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_type',array('e_type'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','eventat',array('e_start_year','e_start_month','e_start_day','e_start_hour','e_start_minute'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_add_date',array('e_add_date'));
@@ -234,6 +230,21 @@ class Module_calendar
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('calendar_events','e_member_calendar','?MEMBER');
+			if (addon_installed('content_privacy'))
+			{
+				$private_events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('id'),array('e_is_public'=>0));
+				foreach ($private_events as $private_event)
+				{
+					$GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+						'content_type'=>'event',
+						'content_id'=>strval($private_event['id']),
+						'guest_view'=>0,
+						'member_view'=>0,
+						'friend_view'=>0,
+					));
+				}
+			}
+			$GLOBALS['SITE_DB']->delete_table_field('calendar_events','e_is_public');
 		}
 	}
 
@@ -339,7 +350,14 @@ class Module_calendar
 					{
 						if (substr($key,0,4)=='int_') $parent_id=intval(substr($key,4));
 					}
-					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title',array('d.e_title','d.id','t.text_original AS title','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_id)),'',500,$start);
+					$privacy_join='';
+					$privacy_where='';
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						list($privacy_join,$privacy_where)=get_privacy_where_clause('event','d');
+					}
+					$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.e_title,d.id,t.text_original AS title,e_type AS category_id,e_add_date AS add_date,e_edit_date AS edit_date FROM '.get_table_prefix().'calendar_events d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title WHERE e_type='.strval(intval($parent_id)).$privacy_where,500,$start);
 
 					foreach ($entry_data as $row)
 					{
@@ -1410,18 +1428,35 @@ class Module_calendar
 
 		// Check permissions
 		check_privilege('view_calendar');
-		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_member_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],NULL,'view_personal_events');
+		if ($event['e_member_calendar']!==get_member())
+		{
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				check_privacy('event',strval($id));
+			}
+		}
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
 		// Validation
 		$warning_details=new ocp_tempcode();
-		if (($event['validated']==0) && ($event['e_is_public']==1) && (addon_installed('unvalidated')))
+		if (($event['validated']==0) && (addon_installed('unvalidated')))
 		{
 			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
 		}
+
+		// Privacy
+		$_is_public=true;
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			if (!has_privacy_access('event',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id()))
+				$_is_public=false;
+		}
+		$is_public=$_is_public?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 
 		// Title and meta data
 		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
@@ -1446,7 +1481,6 @@ class Module_calendar
 		$type=get_translated_text($event['t_title']);
 		$priority=$event['e_priority'];
 		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));
-		$is_public=(($private!==NULL) && ($event['e_is_public']==1-$private))?NULL:(($event['e_is_public']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'));
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$event['e_add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
@@ -1511,7 +1545,7 @@ class Module_calendar
 			$event['allow_rating'],
 			$event['allow_comments'],
 			$event['allow_trackbacks'],
-			((get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))?1:0,
+			(get_option('is_on_strong_forum_tie')=='0')?1:0,
 			$event['e_submitter'],
 			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
@@ -1519,7 +1553,7 @@ class Module_calendar
 		);
 
 		// Edit URL
-		if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_edit_permission(($event['e_is_public']==0)?'low':'mid',get_member(),$event['e_submitter'],'cms_calendar',array('calendar',$event['e_type']))))
+		if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_edit_permission(($event['e_member_calendar']!==NULL)?'low':'mid',get_member(),$event['e_submitter'],'cms_calendar',array('calendar',$event['e_type']))))
 		{
 			$edit_url=build_url(array('page'=>'cms_calendar','type'=>'_ed','id'=>$id),get_module_zone('cms_calendar'));
 		} else
@@ -1655,7 +1689,14 @@ class Module_calendar
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$event=$rows[0];
-		if ($event['e_is_public']==0 && $event['e_submitter']!=get_member() && $event['e_member_calendar']!=get_member()) enforce_personal_access($event['e_submitter'],NULL,'view_personal_events');
+		if ($event['e_member_calendar']!==get_member())
+		{
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				check_privacy('event',strval($id));
+			}
+		}
 
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
@@ -1690,7 +1731,15 @@ class Module_calendar
 			'n_seconds_before'=>$seconds_before
 		),true);
 
-		if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($event['e_type']))))
+		$privacy_ok=true;
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('event',strval($id));
+			$privacy_ok=has_privacy_access('event',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+		}
+
+		if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($event['e_type']))) && ($privacy_ok))
 		{
 			list(,$from)=find_event_start_timestamp($event);
 			$to=mixed();

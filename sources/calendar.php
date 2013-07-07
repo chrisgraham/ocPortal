@@ -558,16 +558,15 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 	if (is_null($period_end)) $period_end=utctime_to_usertime(time()+60*60*24*360*20);
 
 	$matches=array();
-	$where='';
+	$where='1=1';
+	$privacy_join='';
 	if ($restrict) // privacy permission
 	{
-		if ($where!='') $where.=' AND ';
-		if (is_guest($auth_member_id))
+		if (addon_installed('content_privacy'))
 		{
-			$where.='(e_is_public=1)';
-		} else
-		{
-			$where.='(e_submitter='.strval($auth_member_id).' OR e_member_calendar='.strval($auth_member_id).' OR e_is_public=1)';
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','e',$auth_member_id,'r.e_member_calendar='.strval($auth_member_id));
+			$where.=$privacy_where;
 		}
 	}
 	if ($private!==NULL) // display filter
@@ -575,12 +574,12 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 		if ($private===1)
 		{
 			if ($where!='') $where.=' AND ';
-			$where.='((e_member_calendar='.strval($member_id).') OR (e_submitter='.strval($member_id).' AND e_member_calendar IS NOT NULL) OR (e_is_public=0))';
+			$where.='((e_member_calendar='.strval($member_id).') OR (e_submitter='.strval($member_id).' AND e_member_calendar IS NOT NULL))';
 		}
 		elseif ($private===0)
 		{
 			if ($where!='') $where.=' AND ';
-			$where.='(e_member_calendar IS NULL AND e_is_public=1)';
+			$where.='(e_member_calendar IS NULL)';
 		} else
 		{
 			// should not get here
@@ -598,7 +597,7 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 		}
 	}
 	if ($where!='') $where.=' AND ';
-	$where.='(validated=1 OR e_is_public=0)';
+	$where.='validated=1';
 
 	if ((addon_installed('syndication_blocks')) && ($do_rss))
 	{
@@ -662,10 +661,9 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 					}
 					if ($key!=0)
 					{
-						list($full_url,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
-						$is_public=1;
+						list($full_url,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
 
-						$event=array('e_recurrence'=>$recurrence,'e_content'=>$content,'e_title'=>$title,'e_id'=>$feed_url,'e_priority'=>$priority,'t_logo'=>'calendar/rss','e_recurrences'=>$recurrences,'e_seg_recurrences'=>$seg_recurrences,'e_is_public'=>$is_public,'e_start_year'=>$start_year,'e_start_month'=>$start_month,'e_start_day'=>$start_day,'e_start_hour'=>$start_hour,'e_start_minute'=>$start_minute,'e_end_year'=>$end_year,'e_end_month'=>$end_month,'e_end_day'=>$end_day,'e_end_hour'=>$end_hour,'e_end_minute'=>$end_minute,'e_timezone'=>$timezone,'e_start_monthly_spec_type'=>'day_of_month','e_end_monthly_spec_type'=>'day_of_month');
+						$event=array('e_recurrence'=>$recurrence,'e_content'=>$content,'e_title'=>$title,'e_id'=>$feed_url,'e_priority'=>$priority,'t_logo'=>'calendar/rss','e_recurrences'=>$recurrences,'e_seg_recurrences'=>$seg_recurrences,'e_start_year'=>$start_year,'e_start_month'=>$start_month,'e_start_day'=>$start_day,'e_start_hour'=>$start_hour,'e_start_minute'=>$start_minute,'e_end_year'=>$end_year,'e_end_month'=>$end_month,'e_end_day'=>$end_day,'e_end_hour'=>$end_hour,'e_end_minute'=>$end_minute,'e_timezone'=>$timezone,'e_start_monthly_spec_type'=>'day_of_month','e_end_monthly_spec_type'=>'day_of_month');
 						if (!is_null($event_type)) $event['t_logo']=$_event_types[$event_type]['t_logo'];
 						if (!is_null($type))
 						{
@@ -698,7 +696,7 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 					else $full_url='';
 					if ((array_key_exists('title',$item)) && (array_key_exists('clean_add_date',$item)) && ($full_url!=''))
 					{
-						$event=array('e_recurrence'=>'none','e_content'=>array_key_exists('news',$item)?$item['news']:'','e_title'=>$item['title'],'e_id'=>$full_url,'e_priority'=>'na','t_logo'=>'calendar/rss','e_recurrences'=>1,'e_seg_recurrences'=>'','e_is_public'=>1,'e_timezone'=>get_users_timezone());
+						$event=array('e_recurrence'=>'none','e_content'=>array_key_exists('news',$item)?$item['news']:'','e_title'=>$item['title'],'e_id'=>$full_url,'e_priority'=>'na','t_logo'=>'calendar/rss','e_recurrences'=>1,'e_seg_recurrences'=>'','e_timezone'=>get_users_timezone());
 						if (!is_null($event_type)) $event['t_logo']=$_event_types[$event_type]['t_logo'];
 						if (array_key_exists('category',$item))
 						{
@@ -724,13 +722,13 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).' OR e_start_year>'.date('Y',$period_start).') AND (e_end_month<='.strval(intval(date('m',$period_end))+1).' AND e_end_year='.date('Y',$period_end).' OR e_end_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','').')';
 
 	$where=' WHERE '.$where;
-	$event_count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
+	$event_count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e '.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	if ($event_count>2000)
 	{
 		attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'inform');
 		return array();
 	}
-	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
+	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e '.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	foreach ($events as $event)
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
@@ -761,7 +759,6 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
 {
 	$where=array();
 	if (!is_null($only_owned)) $where['e_submitter']=$only_owned;
-	if (!$edit_viewable_events) $where['e_is_public']=0;
 	if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)')>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 	$events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('id','e_title','e_type'),$where);
 	$list=new ocp_tempcode();
@@ -814,8 +811,15 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
 		if (array_key_exists($id,$found_ids)) continue;
 		$found_ids[$id]=1;
 
+		$protected=false;
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$protected=!has_privacy_access('event',strval($event['id']));
+		}
+
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		$conflict=(($event['e_is_public']==1) || ($event['e_submitter']==get_member()))?make_string_tempcode(escape_html(get_translated_text($event['e_title']))):do_lang_tempcode('PRIVATE_HIDDEN');
+		$conflict=(!$protected)?make_string_tempcode(escape_html(get_translated_text($event['e_title']))):do_lang_tempcode('PRIVATE_HIDDEN');
 		$out->attach(do_template('CALENDAR_EVENT_CONFLICT',array('_GUID'=>'2e209eae2dfe2ee74df61c0f4ffe1651','URL'=>$url,'ID'=>strval($id),'TITLE'=>$conflict)));
 	}
 
@@ -1067,23 +1071,22 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	if (count($our_times)==0) return array();
 
 	$conflicts=array();
+	$table='calendar_events e';
 	$where=is_null($skip_id)?'':('id<>'.strval($skip_id));
 	if ($restrict)
 	{
-		if ($where!='') $where.=' AND ';
-		if (is_guest($auth_member_id))
+		if (addon_installed('content_privacy'))
 		{
-			$where.='(e_is_public=1)';
-		} else
-		{
-			$where.='(e_submitter='.strval($member_id).' OR e_member_calendar='.strval($member_id).' OR e_is_public=1)';
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','e',$member_id,'r.e_member_calendar='.strval($member_id));
+			$table.=' '.$privacy_join;
+			$where.=$privacy_where;
 		}
 	}
 	if ($where!='') $where.=' AND ';
-	$where.='(validated=1 OR e_is_public=0)';
+	$where.='validated=1';
 	$where.=' AND (((e_start_month>='.strval(intval(date('m',$our_times[0][0]))-1).' OR e_start_year>'.date('Y',$our_times[0][0]).') AND (e_end_month<='.strval(intval(date('m',$our_times[0][1]))+1).' OR e_end_year<'.date('Y',$our_times[0][1]).')) OR '.db_string_not_equal_to('e_recurrence','').')';
 	$where=' WHERE '.$where;
-	$table='calendar_events e';
 	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().$table.$where);
 	foreach ($events as $event)
 	{

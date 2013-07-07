@@ -24,17 +24,19 @@
  * @param  ID_TEXT	The content type
  * @param  ID_TEXT	The table alias in the main query
  * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
+ * @param  string		Additional OR clause for letting the user through
  * @return array		A pair: extra JOIN clause, extra WHERE clause
  */
-function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=NULL)
+function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=NULL,$additional_or='')
 {
 	if (is_null($viewing_member_id)) $viewing_member_id=get_member();
-
-	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($viewing_member_id)) return array('','');
 
 	require_code('content');
 	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
+
+	$override_page=$cma_info['cms_page'];
+	if (has_privilege($viewing_member_id,'view_private_content',$override_page)) return array('','');
 
 	if (!$cma_info['supports_privacy']) return array('','');
 
@@ -47,6 +49,7 @@ function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=
 		$where.=' OR priv.friend_view=1 AND EXISTS(SELECT * FROM '.get_table_prefix().'chat_friends f WHERE f.member_liked='.$table_alias.'.'.$cma_info['submitter_field'].' AND f.member_likes='.strval($viewing_member_id).')';
 		$where.=' OR '.$table_alias.'.'.$cma_info['submitter_field'].'='.strval($viewing_member_id);
 		$where.=' OR EXISTS(SELECT * FROM '.get_table_prefix().'content_primary__members pm WHERE pm.member_id='.strval($viewing_member_id).' AND pm.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('pm.content_type',$content_type).')';
+		if ($additional_or!='') $where.=' OR '.$additional_or;
 	}
 	$where.=') ';
 	return array($join,$where);
@@ -67,6 +70,9 @@ function has_privacy_access($content_type,$content_id,$viewing_member_id=NULL)
 	require_code('content');
 	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
+
+	$override_page=$cma_info['cms_page'];
+	if (has_privilege($viewing_member_id,'view_private_content',$override_page)) return true;
 
 	list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'e',$viewing_member_id);
 
