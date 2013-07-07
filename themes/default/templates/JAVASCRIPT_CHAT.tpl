@@ -858,7 +858,7 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	// Add it all in
 	div.appendChild(links);
 	document.body.appendChild(div);
-	
+
 	// Contact ones disappear after a time
 	if (room_id===null)
 	{

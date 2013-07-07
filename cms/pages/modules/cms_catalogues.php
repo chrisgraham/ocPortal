@@ -480,11 +480,11 @@ class Module_cms_catalogues extends standard_crud_module
 				$fields2->attach(form_input_tick(do_lang_tempcode('shopping:SHOPPING_FORCE_DELETE'),do_lang_tempcode('shopping:DESCRIPTION_SHOPPING_FORCE_DELETE'),'force_delete',false));
 			}
 		}
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields2->attach(get_privacy_form_fields('catalogue_entry',$id));
+			$fields2->attach(get_privacy_form_fields('catalogue_entry',strval($id)));
 		}
 
 		return array($fields,$hidden,NULL,NULL,false,NULL,$fields2,NULL,$field_defaults);
@@ -634,6 +634,13 @@ class Module_cms_catalogues extends standard_crud_module
 		if (addon_installed('content_reviews'))
 			content_review_set('catalogue_entry',strval($id));
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
+		}
+
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
 
@@ -721,6 +728,13 @@ class Module_cms_catalogues extends standard_crud_module
 			unset($_GET['redirect']);
 		}
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			update_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
+		}
+
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
 	}
@@ -740,6 +754,12 @@ class Module_cms_catalogues extends standard_crud_module
 		if (is_null($category_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		actual_delete_catalogue_entry($id);
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			delete_privacy_form_fields('catalogue_entry',strval($id));
+		}
 
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 		$this->donext_category_id=$category_id;

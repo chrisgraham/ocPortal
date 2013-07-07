@@ -27,7 +27,7 @@ function get_tutorial_info($tut)
 				"orange",
 				"Chris",
 			); break;
-		
+
 		case 'v_google_map':
 			$result=array(
 				"Embedding a Google map",
@@ -99,7 +99,7 @@ function get_tutorial_info($tut)
 				"orange",
 				"Allen",
 			); break;
-		
+
 		case 'comcode':
 			$result=array(
 				"Comcode and attachments",
@@ -107,7 +107,7 @@ function get_tutorial_info($tut)
 				"Sep 2008",
 				"blue",
 			); break;
-			
+
 		case 'occle':
 			$result=array(
 				"OcCLE's True Potential",
@@ -859,9 +859,9 @@ function get_tutorial_info($tut)
 				"red",
 			); break;
 	}
-	
+
 	if (!isset($result[4])) $result[4]='Chris';
-	
+
 	return $result;
 }
 }
@@ -912,7 +912,7 @@ foreach ($tutorials as $i=>$tut)
 		$img=find_theme_image('tutorial_icons/default');
 	}
 	$_img=escape_html($img);
-	
+
 $a=($i%2==0)?'standardbox_links_panel_right':'standardbox_inner_panel_right';
 $b=($i%2==0)?'standardbox_links_panel':'standardbox_inner_panel';
 $_link=escape_html(is_object($link)?$link->evaluate():$link);
@@ -929,7 +929,7 @@ echo <<<END
 			<img src="{$_img}" alt="" />
 
 			<div class="wt"><h4>{$title}</h4></div>
-			
+
 			<p class="s">{$summary}</p>
 		</div>
 
@@ -947,13 +947,13 @@ echo <<<END
 		<div class="tutorial"><div class="float_surrounder">
 			<div style="float: right; margin-left: 5px">
 				<p class="d">{$_date}</p>
-			
+
 				<a href="{$_link}"{$_javascript}><img src="{$_img}" alt="" /></a>
 			</div>
 
 			<p><strong>{$title}</strong></p>
 			<p class="s">{$summary}</p>
-		
+
 			<p class="r">[ <a title="{$title}" href="{$_link}"{$_javascript}>{$linktitle}</a> ]</p>
 		</div></div>
 END;

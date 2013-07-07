@@ -54,8 +54,19 @@ class Hook_whats_news_downloads
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'category_id');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads WHERE validated=1 AND add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY add_date DESC',300);
+
+		$privacy_join='';
+		$privacy_where='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('download','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
+		}
+
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads r '.$privacy_join.' WHERE validated=1 AND add_date>'.strval($cutoff_time).' AND ('.$or_list.')'.$privacy_where.' ORDER BY add_date DESC',300);
+
 		if (count($rows)==300) return array();
+
 		foreach ($rows as $row)
 		{
 			$_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$row['id']),get_module_zone('downloads'),NULL,false,false,true);

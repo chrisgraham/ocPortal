@@ -42,6 +42,8 @@ class Hook_rss_news
 		$filters_2=ocfilter_to_sqlfragment($_filters,'d.news_entry_category','news_categories',NULL,'d.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$filters='('.$filters_1.' OR '.$filters_2.')';
 
+		$privacy_join='';
+		$privacy_where='';
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');

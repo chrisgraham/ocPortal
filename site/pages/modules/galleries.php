@@ -716,12 +716,12 @@ class Module_galleries
 		$entry_description=new ocp_tempcode();
 		$probe_type=get_param('probe_type','first');
 		$probe_id=get_param_integer('probe_id',0);
-		
+
 		$extra_join_image='';
 		$extra_join_video='';
 		$extra_where_image='';
 		$extra_where_video='';
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
@@ -732,7 +732,7 @@ class Module_galleries
 			$extra_where_image.=$privacy_where_image;
 			$extra_where_video.=$privacy_where_video;
 		}
-		
+
 		if ($probe_type=='first')
 		{
 			$where=db_string_equal_to('cat',$cat);
@@ -896,7 +896,7 @@ class Module_galleries
 		}
 
 		$entries=new ocp_tempcode();
-		
+
 		// Display entries
 		$where=db_string_equal_to('cat',$cat);
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
@@ -1106,7 +1106,7 @@ class Module_galleries
 	function show_image($category_name=NULL,$breadcrumbs=NULL)
 	{
 		$id=get_param_integer('id');
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
@@ -1273,7 +1273,7 @@ class Module_galleries
 	function show_video($category_name=NULL,$breadcrumbs=NULL)
 	{
 		$id=get_param_integer('id');
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
@@ -1482,12 +1482,12 @@ class Module_galleries
 		$where_images=$where.' AND '.$image_select_sql;
 		$video_select_sql=ocfilter_to_sqlfragment($video_select,'r.id');
 		$where_videos=$where.' AND '.$video_select_sql;
-		
+
 		$extra_join_image='';
 		$extra_join_video='';
 		$extra_where_image='';
 		$extra_where_video='';
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');

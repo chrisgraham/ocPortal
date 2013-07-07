@@ -411,7 +411,7 @@ function actual_meta_data_get_fields__special($meta_data,$key,$default)
 					$meta_data[$key]=post_param('meta_'.$key,$default);
 					if ($meta_data[$key]=='') $meta_data[$key]=$default;
 					break;
-	
+
 				case NULL:
 					$meta_data[$key]=post_param_integer('meta_'.$key,NULL);
 					break;

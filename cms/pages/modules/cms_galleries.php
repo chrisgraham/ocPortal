@@ -953,11 +953,11 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('image',is_null($id)?NULL:strval($id)));
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields->attach(get_privacy_form_fields('image',$id));
+			$fields->attach(get_privacy_form_fields('image',strval($id)));
 		}
 
 		return array($fields,$hidden);
@@ -1089,21 +1089,12 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('image',strval($id));
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			$privacy_level=post_param('privacy_level','');
-			$additional_access=array();
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,'privacy_friends_list_')===0)
-				{
-					if ($value=='') continue;
-					$additional_access[]=$value;
-				}
-			}
 			require_code('content_privacy2');
-			save_privacy_form_fields(get_member(),'image',$id,$privacy_level,$additional_access);
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('image',strval($id),$privacy_level,$additional_access);
 		}
 
 		return strval($id);
@@ -1182,21 +1173,12 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('image',strval($id));
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			$privacy_level=post_param('privacy_level','');
-			$additional_access=array();
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,'privacy_friends_list_')===0)
-				{
-					if ($value=='') continue;
-					$additional_access[]=$value;
-				}
-			}
 			require_code('content_privacy2');
-			update_privacy_form_fields('image',$id,$privacy_level,$additional_access);
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			update_privacy_form_fields('image',strval($id),$privacy_level,$additional_access);
 		}
 	}
 
@@ -1218,7 +1200,7 @@ class Module_cms_galleries extends standard_crud_module
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			delete_privacy_form_fields('image',$id);
+			delete_privacy_form_fields('image',strval($id));
 		}
 	}
 
@@ -1488,11 +1470,11 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('video',is_null($id)?NULL:strval($id)));
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields->attach(get_privacy_form_fields('video',$id));
+			$fields->attach(get_privacy_form_fields('video',strval($id)));
 		}
 
 		return array($fields,$hidden);
@@ -1625,21 +1607,12 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('video',strval($id));
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			$privacy_level=post_param('privacy_level','');
-			$additional_access=array();
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,'privacy_friends_list_')===0)
-				{
-					if ($value=='') continue;
-					$additional_access[]=$value;
-				}
-			}
 			require_code('content_privacy2');
-			save_privacy_form_fields(get_member(),'video',$id,$privacy_level,$additional_access);
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('video',strval($id),$privacy_level,$additional_access);
 		}
 
 		return strval($id);
@@ -1734,21 +1707,12 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('video',strval($id));
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			$privacy_level=post_param('privacy_level','');
-			$additional_access=array();
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,'privacy_friends_list_')===0)
-				{
-					if ($value=='') continue;
-					$additional_access[]=$value;
-				}
-			}
 			require_code('content_privacy2');
-			update_privacy_form_fields('video',$id,$privacy_level,$additional_access);
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			update_privacy_form_fields('video',strval($id),$privacy_level,$additional_access);
 		}
 	}
 
@@ -1766,11 +1730,11 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$this->donext_type=post_param('cat');
 
 		delete_video($id,($delete_status=='2') || (get_value('cleanup_files')==='1'));
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			delete_privacy_form_fields('video',$id);
+			delete_privacy_form_fields('video',strval($id));
 		}
 	}
 

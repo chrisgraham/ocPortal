@@ -570,11 +570,11 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('download',is_null($id)?NULL:strval($id)));
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields->attach(get_privacy_form_fields('download',$id));
+			$fields->attach(get_privacy_form_fields('download',strval($id)));
 		}
 
 		return array($fields,$hidden);
@@ -719,18 +719,9 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_privacy'))
 		{
-			$privacy_level=post_param('privacy_level','');
-			$additional_access=array();
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,'privacy_friends_list_')===0)
-				{
-					if ($value=='') continue;
-					$additional_access[]=$value;
-				}
-			}
 			require_code('content_privacy2');
-			save_privacy_form_fields(get_member(),'download',$id,$privacy_level,$additional_access);
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
 		}
 
 		return strval($id);
@@ -808,21 +799,12 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('download',strval($id));
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			$privacy_level=post_param('privacy_level','');
-			$additional_access=array();
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,'privacy_friends_list_')===0)
-				{
-					if ($value=='') continue;
-					$additional_access[]=$value;
-				}
-			}
 			require_code('content_privacy2');
-			update_privacy_form_fields('download',$id,$privacy_level,$additional_access);
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			update_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
 		}
 	}
 
@@ -837,11 +819,11 @@ class Module_cms_downloads extends standard_crud_module
 
 		$delete_status=post_param('delete','leave');
 		delete_download($id,!($delete_status=='2'));
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			delete_privacy_form_fields('download',$id);
+			delete_privacy_form_fields('download',strval($id));
 		}
 	}
 

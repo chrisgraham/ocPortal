@@ -126,12 +126,12 @@ class Block_main_gallery_embed
 				$where_sup.=$extra_where;
 			}
 		}
-		
+
 		$extra_join_image='';
 		$extra_join_video='';
 		$extra_where_image='';
 		$extra_where_video='';
-		
+
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
@@ -142,7 +142,7 @@ class Block_main_gallery_embed
 			$extra_where_image.=$privacy_where_image;
 			$extra_where_video.=$privacy_where_video;
 		}
-		
+
 		// Get rows
 		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.$extra_join_image.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.$extra_where_image,false,true);
 		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.$extra_join_video.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.$extra_where_video,false,true);

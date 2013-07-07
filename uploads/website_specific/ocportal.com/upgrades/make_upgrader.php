@@ -27,7 +27,7 @@ function make_upgrade_get_path($from_version,$to_version)
 
 	if ($from_version=='..') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','from version'));
 	if ($to_version=='..') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','from version'));
-	
+
 	if ($from_version==$to_version)
 	{
 		$err='Put in the version number you are upgrading <strong>from</strong>, not to. Then a specialised upgrade file will be generated for you.';
@@ -70,7 +70,7 @@ function make_upgrade_get_path($from_version,$to_version)
 			unlink($tar_path);
 		}
 	}
-	
+
 	// Stop a race-condition
 	if ((file_exists($old_base_path)) || (file_exists($new_base_path)) || (file_exists($wip_path)))
 	{
@@ -129,12 +129,12 @@ function find_download($version_pretty)
 			break;
 		}
 	}
-	
+
 	if ((is_null($download_row)) && (substr_count($version_pretty,'.')<2))
 	{
 		return find_download($version_pretty.'.0');
 	}
-	
+
 	return $download_row;
 }
 

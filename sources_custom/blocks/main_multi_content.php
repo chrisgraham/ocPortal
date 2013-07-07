@@ -298,16 +298,13 @@ class Block_main_multi_content
 				$query.=' LEFT JOIN '.get_table_prefix().'translate t ON t.id=r.'.$info['title_field'].' AND '.db_string_equal_to('t.language',user_lang());
 			}
 		}
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			if ($content_type=='download')
-			{
-				require_code('content_privacy');
-				list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'r');
-				$query.=$privacy_join;
-				$where.=$privacy_where;
-			}
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'r');
+			$query.=$privacy_join;
+			$where.=$privacy_where;
 		}
 
 		// Put query together
@@ -318,7 +315,7 @@ class Block_main_multi_content
 			if ($x1!='') $query.=' AND ('.$x1.')';
 			if ($x2!='') $query.=' AND ('.$x2.')';
 		}
-		
+
 		//echo $query;exit;
 
 		if ((($sort=='average_rating') || ($sort=='compound_rating')) && (array_key_exists('feedback_type_code',$info)) && ($info['feedback_type_code']===NULL))

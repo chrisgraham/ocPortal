@@ -477,6 +477,12 @@ class Module_news
 	{
 		$id=get_param_integer('id');
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('news',strval($id));
+		}
+
 		$blog=get_param_integer('blog',NULL);
 
 		$filter=get_param('filter','*');

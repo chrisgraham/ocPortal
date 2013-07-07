@@ -465,7 +465,7 @@ function actual_delete_catalogue($name)
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'at_catalogue_entry'),array('cf_type'=>'ck_'.$name));
 
 	log_it('DELETE_CATALOGUE',$name);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
@@ -866,7 +866,7 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	calculate_category_child_count_cache($old_parent_id);
 
 	log_it('DELETE_CATALOGUE_CATEGORY',strval($id),get_translated_text($myrow['cc_title']));
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
@@ -1238,7 +1238,7 @@ function actual_delete_catalogue_entry($id)
 
 	if ($catalogue_name[0]!='_')
 		log_it('DELETE_CATALOGUE_ENTRY',strval($id),$title);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

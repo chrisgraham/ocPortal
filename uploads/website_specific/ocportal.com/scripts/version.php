@@ -133,7 +133,7 @@ $next_upgrade_version=NULL;
 foreach ($possible_next_versions as $pos_version)
 {
 	if ($pos_version==$version_pretty) continue;
-	
+
 	$row=find_version($pos_version);
 	if (!is_null($row))
 	{
@@ -396,7 +396,7 @@ function find_download($version_pretty)
 			break;
 		}
 	}
-	
+
 	return $download_row;
 }
 

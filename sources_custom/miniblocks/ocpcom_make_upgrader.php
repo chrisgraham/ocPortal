@@ -56,9 +56,9 @@ function mu_result($path)
 
 	$base_url=get_base_url();
 	$url=$base_url.'/'.rawurldecode(substr($path,strlen(get_file_base())+1));
-	
+
 	require_code('files');
-	
+
 	echo '<label for="download_path">Upgrade file:</label> <input class="notranslate" size="45" readonly="readonly" type="text" value="'.escape_html($url).'" />, or <a href="'.escape_html($url).'">download upgrade directly</a> ('.escape_html(clean_file_size(filesize($path))).').';
 }
 }

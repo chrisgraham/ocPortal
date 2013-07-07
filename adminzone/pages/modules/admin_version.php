@@ -338,9 +338,8 @@ class Module_admin_version
 
 			add_privilege('SUBMISSION','edit_meta_fields');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','integer');
-			
+
 			$GLOBALS['SITE_DB']->create_table('content_privacy',array(
-				'member_id'=>'*MEMBER',
 				'content_type'=>'*ID_TEXT',
 				'content_id'=>'*ID_TEXT',
 				'guest_view'=>'BINARY',
@@ -348,7 +347,7 @@ class Module_admin_version
 				'friend_view'=>'BINARY',
 				'group_view'=>'SHORT_TEXT'
 			));
-			
+
 			$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
 				'content_type'=>'*ID_TEXT',
 				'content_id'=>'*ID_TEXT',

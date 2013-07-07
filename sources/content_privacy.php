@@ -18,26 +18,33 @@
  * @package		content_privacy
  */
 
-
+/**
+ * Get the SQL extension clauses for implementing privacy.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The table alias in the main query
+ * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
+ * @return array		A pair: extra JOIN clause, extra WHERE clause
+ */
 function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=NULL)
 {
 	if (is_null($viewing_member_id)) $viewing_member_id=get_member();
-	
+
 	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($viewing_member_id)) return array('','');
-	
+
 	require_code('content');
 	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
-	
+
 	if (!$cma_info['supports_privacy']) return array('','');
-	
-	$join=' LEFT JOIN '.get_table_prefix().'content_privacy p ON p.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('p.content_type',$content_type);
-	$where=' AND (p.content_id IS NULL';
-	$where.=' OR p.guest_view=1';
+
+	$join=' LEFT JOIN '.get_table_prefix().'content_privacy priv ON priv.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('priv.content_type',$content_type);
+	$where=' AND (priv.content_id IS NULL';
+	$where.=' OR priv.guest_view=1';
 	if (!is_guest($viewing_member_id))
 	{
-		$where.=' OR p.member_view=1';
-		$where.=' OR p.friend_view=1 AND EXISTS(SELECT * FROM '.get_table_prefix().'chat_friends f WHERE f.member_liked='.$table_alias.'.'.$cma_info['submitter_field'].' AND f.member_likes='.strval($viewing_member_id).')';
+		$where.=' OR priv.member_view=1';
+		$where.=' OR priv.friend_view=1 AND EXISTS(SELECT * FROM '.get_table_prefix().'chat_friends f WHERE f.member_liked='.$table_alias.'.'.$cma_info['submitter_field'].' AND f.member_likes='.strval($viewing_member_id).')';
 		$where.=' OR '.$table_alias.'.'.$cma_info['submitter_field'].'='.strval($viewing_member_id);
 		$where.=' OR EXISTS(SELECT * FROM '.get_table_prefix().'content_primary__members pm WHERE member_id='.strval($viewing_member_id).' AND pm.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('pm.content_type',$content_type).')';
 	}
@@ -45,19 +52,27 @@ function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=
 	return array($join,$where);
 }
 
-
-function check_privacy($content_type,$content_id)
+/**
+ * Check to see if some content may be viewed. Exit with an access denied if not.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The content ID
+ * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
+ */
+function check_privacy($content_type,$content_id,$viewing_member_id=NULL)
 {
-	$viewing_member_id=get_member();
-	
+	if (is_null($viewing_member_id)) $viewing_member_id=get_member();
+
 	require_code('content');
 	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
-	
-	list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'e',$viewing_member_id);
-	
-	$results=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().$cma_info['table'].' e '.$privacy_join.' WHERE '.$privacy_where);
-	
-	if ($results==NULL) warn_exit(do_lang_tempcode('PRIVACY_BREACH'));
-}
 
+	list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'e',$viewing_member_id);
+
+	$results=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().$cma_info['table'].' e '.$privacy_join.' WHERE '.$privacy_where);
+	if (!array_key_exists(0,$results))
+	{
+		require_lang('content_privacy');
+		access_denied('PRIVACY_BREACH');
+	}
+}

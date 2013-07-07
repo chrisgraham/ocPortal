@@ -1600,6 +1600,12 @@ function is_ecommerce_catalogue_entry($entry_id)
  */
 function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter=true)
 {	
+	if (addon_installed('content_privacy'))
+	{
+		require_code('content_privacy');
+		check_privacy('catalogue_entry',strval($id));
+	}
+
 	require_code('feedback');
 
 	if (addon_installed('ecommerce'))

@@ -18,19 +18,27 @@
  * @package		content_privacy
  */
 
-
+/**
+ * Get form fields for setting content privacy.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ?ID_TEXT	The content ID (NULL: adding)
+ * @return tempcode	The form fields
+ */
 function get_privacy_form_fields($content_type,$content_id=NULL)
 {
-	if (is_guest()) return false;
+	if (is_guest()) return new ocp_tempcode();
+	if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) return new ocp_tempcode();
+
 	require_lang('ocf_privacy');
 	require_code('form_templates');
 	$fields=new ocp_tempcode();
 	$privacy_options=new ocp_tempcode();
-	
+
 	if (!is_null($content_id))
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('content_privacy',NULL,array('content_type'=>strval($content_type),'content_id'=>$content_id));
-		if (!count($rows))
+		if (count($rows)==0)
 		{
 			$view_by_guests=true;
 			$view_by_members=true;
@@ -42,15 +50,10 @@ function get_privacy_form_fields($content_type,$content_id=NULL)
 			$view_by_friends=($rows[0]['friend_view']==1);
 		}
 		$rows=$GLOBALS['SITE_DB']->query_select('content_primary__members',NULL,array('content_type'=>strval($content_type),'content_id'=>$content_id));
-		if (!count($rows))
+		$additional_access=array();
+		foreach ($rows as $row)
 		{
-			$additional_access=array();
-		} else
-		{
-			foreach ($rows as $row)
-			{
-				$additional_access[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
-			}
+			$additional_access[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 		}
 	} else
 	{
@@ -59,26 +62,59 @@ function get_privacy_form_fields($content_type,$content_id=NULL)
 		$view_by_friends=true;
 		$additional_access=array();
 	}
-	
+
 	$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PRIVACY_SETTINGS')));
-	
+
 	$privacy_options->attach(form_input_list_entry('guests',$view_by_guests,do_lang_tempcode('VISIBLE_TO_GUESTS')));
 	$privacy_options->attach(form_input_list_entry('members',$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_MEMBERS')));
 	$privacy_options->attach(form_input_list_entry('friends',$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_FRIENDS')));
 	$privacy_options->attach(form_input_list_entry('staff',!$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_STAFF')));
 	$fields->attach(form_input_list(do_lang_tempcode('VISIBLE_TO'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO'),'privacy_level',$privacy_options));
 	$fields->attach(form_input_username_multi(do_lang_tempcode('ADDITIONAL_ACCESS'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_ACCESS'),'privacy_friends_list_',$additional_access,0));
-	
+
 	$_fields->attach($fields);
 	$fields=$_fields;
-	
+
 	return $fields;
 }
 
+/**
+ * Reading privacy settings from the POST environment.
+ *
+ * @return array		A pair: the privacy level, the list of usernames
+ */
+function read_privacy_fields()
+{
+	$privacy_level=post_param('privacy_level','');
 
-function save_privacy_form_fields($member_id,$content_type,$content_id,$privacy_level,$additional_access)
+	$additional_access=array();
+	foreach ($_POST as $key=>$value)
+	{
+		if (strpos($key,'privacy_friends_list_')===0)
+		{
+			if ($value!='')
+				$additional_access[]=$value;
+		}
+	}
+
+	return array($privacy_level,$additional_access);
+}
+
+/**
+ * Actualise form data for setting content privacy (adding).
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ?ID_TEXT	The content ID (NULL: adding)
+ * @param  ID_TEXT	The privacy level
+ * @set members friends staff guests
+ * @param  array		A list of usernames
+ * @return boolean	Whether it saved something
+ */
+function save_privacy_form_fields($content_type,$content_id,$privacy_level,$additional_access)
 {
 	if (is_guest()) return false;
+	if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) return false;
+
 	switch ($privacy_level)
 	{
 		case 'members':
@@ -86,19 +122,19 @@ function save_privacy_form_fields($member_id,$content_type,$content_id,$privacy_
 			$friend_view=0;
 			$guest_view=0;
 			break;
-		
+
 		case 'friends':
 			$member_view=0;
 			$friend_view=1;
 			$guest_view=0;
 			break;
-			
+
 		case 'staff':
 			$member_view=0;
 			$friend_view=0;
 			$guest_view=0;
 			break;
-			
+
 		case 'guests':
 		default:
 			$member_view=0;
@@ -108,7 +144,6 @@ function save_privacy_form_fields($member_id,$content_type,$content_id,$privacy_
 	}
 	$group_view='';
 	$GLOBALS['SITE_DB']->query_insert('content_privacy',array(
-		'member_id'=>$member_id,
 		'content_type'=>$content_type,
 		'content_id'=>$content_id,
 		'guest_view'=>$guest_view,
@@ -116,13 +151,14 @@ function save_privacy_form_fields($member_id,$content_type,$content_id,$privacy_
 		'friend_view'=>$friend_view,
 		'group_view'=>$group_view,
 	));
-	if (count($additional_access))
+
+	if (count($additional_access)!=0)
 	{
 		$invited_members=array();
-		foreach($additional_access as $member)
+		foreach ($additional_access as $member)
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($member);
-			if ($member_id!=NULL)
+			if ($member_id!==NULL)
 			{
 				$GLOBALS['SITE_DB']->query_insert('content_primary__members',array(
 					'member_id'=>$member_id,
@@ -132,8 +168,10 @@ function save_privacy_form_fields($member_id,$content_type,$content_id,$privacy_
 				$invited_members[]=$member_id;
 			}
 		}
-		if (count($invited_members))
+
+		if (count($invited_members)!=0)
 		{
+			require_lang('content_privacy');
 			require_code('notifications');
 			require_code('content');
 			list($content_title,$content_submitter,$cma_info,,,$content_url)=content_get_details($content_type,$content_id);
@@ -145,13 +183,25 @@ function save_privacy_form_fields($member_id,$content_type,$content_id,$privacy_
 			dispatch_notification('invited_content',NULL,$subject,$mail,$invited_members);
 		}
 	}
+
 	return true;
 }
 
-
+/**
+ * Actualise form data for setting content privacy (editing).
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ?ID_TEXT	The content ID (NULL: adding)
+ * @param  ID_TEXT	The privacy level
+ * @set members friends staff guests
+ * @param  array		A list of usernames
+ * @return boolean	Whether it saved something
+ */
 function update_privacy_form_fields($content_type,$content_id,$privacy_level,$additional_access)
 {
 	if (is_guest()) return false;
+	if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) return false;
+
 	switch ($privacy_level)
 	{
 		case 'members':
@@ -159,19 +209,19 @@ function update_privacy_form_fields($content_type,$content_id,$privacy_level,$ad
 			$friend_view=0;
 			$guest_view=0;
 			break;
-		
+
 		case 'friends':
 			$member_view=0;
 			$friend_view=1;
 			$guest_view=0;
 			break;
-			
+
 		case 'staff':
 			$member_view=0;
 			$friend_view=0;
 			$guest_view=0;
 			break;
-			
+
 		case 'guests':
 		default:
 			$member_view=0;
@@ -180,27 +230,24 @@ function update_privacy_form_fields($content_type,$content_id,$privacy_level,$ad
 			break;
 	}
 	$group_view='';
-	$GLOBALS['SITE_DB']->query_update('content_privacy',array('guest_view'=>$guest_view,'member_view'=>$member_view,'friend_view'=>$friend_view,'group_view'=>$group_view),array('content_type'=>$content_type,'content_id'=>$content_id));
-	
+	$GLOBALS['SITE_DB']->query_update('content_privacy',array('guest_view'=>$guest_view,'member_view'=>$member_view,'friend_view'=>$friend_view,'group_view'=>$group_view),array('content_type'=>$content_type,'content_id'=>$content_id),'',1);
+
 	$rows=$GLOBALS['SITE_DB']->query_select('content_primary__members',array('member_id'),array('content_type'=>$content_type,'content_id'=>$content_id));
-	if (count($rows))
+	$currently_invited_members=array();
+	foreach ($rows as $value)
 	{
-		foreach ($rows as $value)
-		{
-			$currently_invited_members[]=$value['member_id'];
-		}
-	} else
-	{
-		$currently_invited_members=array();
+		$currently_invited_members[]=$value['member_id'];
 	}
+
 	$GLOBALS['SITE_DB']->query_delete('content_primary__members',array('content_type'=>$content_type,'content_id'=>$content_id));
-	if (count($additional_access))
+
+	if (count($additional_access)!=0)
 	{
 		$invited_members=array();
-		foreach($additional_access as $member)
+		foreach ($additional_access as $member)
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($member);
-			if ($member_id!=NULL)
+			if ($member_id!==NULL)
 			{
 				$GLOBALS['SITE_DB']->query_insert('content_primary__members',array(
 					'member_id'=>$member_id,
@@ -210,7 +257,8 @@ function update_privacy_form_fields($content_type,$content_id,$privacy_level,$ad
 				if (!in_array($member_id,$currently_invited_members)) $invited_members[]=$member_id;
 			}
 		}
-		if (count($invited_members))
+
+		if (count($invited_members)!=0)
 		{
 			require_code('notifications');
 			require_code('content');
@@ -223,14 +271,23 @@ function update_privacy_form_fields($content_type,$content_id,$privacy_level,$ad
 			dispatch_notification('invited_content',NULL,$subject,$mail,$invited_members);
 		}
 	}
+
 	return true;
 }
 
-
+/**
+ * Delete privacy data.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The content ID
+ * @return boolean	Whether it deleted something
+ */
 function delete_privacy_form_fields($content_type,$content_id)
 {
 	if (is_guest()) return false;
-	$GLOBALS['SITE_DB']->query_delete('content_privacy',array('content_type'=>$content_type,'content_id'=>$content_id));
+
+	$GLOBALS['SITE_DB']->query_delete('content_privacy',array('content_type'=>$content_type,'content_id'=>$content_id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('content_primary__members',array('content_type'=>$content_type,'content_id'=>$content_id));
+
 	return true;
 }

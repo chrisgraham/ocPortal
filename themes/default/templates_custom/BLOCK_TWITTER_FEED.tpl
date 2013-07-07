@@ -47,7 +47,7 @@
 			{CONTENT`}
 		</div>
 	{+END}
-	
+
 	{+START,IF,{$OR,{$EQ,{STYLE},2},{$EQ,{STYLE},3}}}
 		<div class="xhtml_validator_off">
 			{CONTENT`}

@@ -306,7 +306,7 @@ function delete_calendar_event($id)
 	decache('side_calendar');
 
 	log_it('DELETE_CALENDAR_EVENT',strval($id),$e_title);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
@@ -402,7 +402,7 @@ function delete_event_type($id)
 	tidy_theme_img_code(NULL,$myrow['t_logo'],'calendar_types','t_logo');
 
 	log_it('DELETE_EVENT_TYPE',strval($id),get_translated_text($myrow['t_title']));
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

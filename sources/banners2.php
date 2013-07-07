@@ -433,7 +433,7 @@ function delete_banner($name)
 	$GLOBALS['SITE_DB']->query_delete('banners',array('name'=>$name),'',1);
 
 	log_it('DELETE_BANNER',$name,get_translated_text($caption));
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
@@ -550,7 +550,7 @@ function delete_banner_type($id)
 	$GLOBALS['SITE_DB']->query_delete('banner_types',array('id'=>$id),'',1);
 
 	log_it('DELETE_BANNER_TYPE',$id);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

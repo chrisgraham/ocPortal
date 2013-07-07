@@ -54,8 +54,19 @@ class Hook_whats_news_catalogues
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'c_name',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY ce_add_date DESC',300);
+
+		$privacy_join='';
+		$privacy_where='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
+		}
+
+		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries r '.$privacy_join.' WHERE ce_validated=1 AND ce_add_date>'.strval($cutoff_time).' AND ('.$or_list.')'.$privacy_where.' ORDER BY ce_add_date DESC',300);
+
 		if (count($rows)==300) return array();
+
 		foreach ($rows as $row)
 		{
 			$c_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','c_name',array('id'=>$row['cc_id']));

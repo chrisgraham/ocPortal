@@ -363,7 +363,7 @@ function delete_chatroom($id)
 
 	if ($rows[0]['is_im']==0)
 		log_it('DELETE_ROOM',strval($id),$rows[0]['room_name']);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

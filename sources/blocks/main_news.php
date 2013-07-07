@@ -136,17 +136,13 @@ class Block_main_news
 		{
 			$extra_select_sql='';
 		}
-		
+
 		if (addon_installed('content_privacy'))
 		{
-			if (!isset($content_type)) $content_type='news';
-			if ($content_type=='news')
-			{
-				require_code('content_privacy');
-				list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'r');
-				$join.=$privacy_join;
-				$q_filter.=$privacy_where;
-			}
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','r');
+			$join.=$privacy_join;
+			$q_filter.=$privacy_where;
 		}
 
 		// Read in rows
