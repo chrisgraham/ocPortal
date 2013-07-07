@@ -84,15 +84,22 @@ class Hook_Profiles_Tabs_Edit_privacy
 
 				$cpf_permissions=$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id_of, 'field_id'=>$field_id));
 
-				//if there are permissions saved already
+				// if there are permissions saved already
 				if (array_key_exists(0,$cpf_permissions) && $cpf_permissions[0]['field_id']==$field_id)
 				{
 					$GLOBALS['FORUM_DB']->query_update('f_member_cpf_perms',array('guest_view'=>$guests_view,'member_view'=>$members_view,'friend_view'=>$friends_view,'group_view'=>$groups_view),array('member_id'=>$member_id_of, 'field_id'=>$field_id),'',1);
 				} else
 				{
-					//insert the custom permissions the user chose
+					// insert the custom permissions the user chose
 					$GLOBALS['FORUM_DB']->query_insert('f_member_cpf_perms',array('guest_view'=>$guests_view,'member_view'=>$members_view,'friend_view'=>$friends_view,'group_view'=>$groups_view,'member_id'=>$member_id_of, 'field_id'=>$field_id));
 				}
+			}
+
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy2');
+				list($privacy_level,$additional_access)=read_privacy_fields('photo_');
+				save_privacy_form_fields('_photo',strval($member_id_viewing),$privacy_level,$additional_access,false);
 			}
 
 			attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
@@ -183,6 +190,13 @@ class Hook_Profiles_Tabs_Edit_privacy
 
 				$fields->attach(form_input_multi_list(do_lang_tempcode('GROUPS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GROUPS'),'groups_'.strval($cpf_id),$groups));
 			}
+		}
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PHOTO'))));
+			$fields->attach(get_privacy_form_fields('_photo',strval($member_id_of),false,'photo_'));
 		}
 
 		// What is being edited (so we don't need to work it out again in the actualiser)

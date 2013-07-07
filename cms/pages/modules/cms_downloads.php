@@ -574,7 +574,13 @@ class Module_cms_downloads extends standard_crud_module
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields->attach(get_privacy_form_fields('download',strval($id)));
+			if (is_null($id))
+			{
+				$fields->attach(get_privacy_form_fields());
+			} else
+			{
+				$fields->attach(get_privacy_form_fields('download',strval($id)));
+			}
 		}
 
 		return array($fields,$hidden);
@@ -709,8 +715,17 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
 			{
-				require_code('activities');
-				syndicate_described_activity('downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads');
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('download',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					require_code('activities');
+					syndicate_described_activity('downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads');
+				}
 			}
 		}
 
@@ -781,8 +796,17 @@ class Module_cms_downloads extends standard_crud_module
 
 			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
 			{
-				require_code('activities');
-				syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,$submitter);
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('download',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					require_code('activities');
+					syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,$submitter);
+				}
 			}
 		}
 
@@ -804,7 +828,7 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			require_code('content_privacy2');
 			list($privacy_level,$additional_access)=read_privacy_fields();
-			update_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
+			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
 		}
 	}
 

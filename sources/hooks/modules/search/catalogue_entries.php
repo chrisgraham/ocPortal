@@ -210,6 +210,14 @@ class Hook_search_catalogue_entries
 
 		$g_or=_get_where_clause_groups(get_member());
 
+		$privacy_join='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r');
+			$where_clause.=$privacy_where;
+		}
+
 		// Calculate and perform query
 		$catalogue_name=get_param('catalogue_name','');
 		$ranges=array();
@@ -306,6 +314,8 @@ class Hook_search_catalogue_entries
 			$where_clause.=' AND ';
 			$where_clause.=db_string_equal_to('r.c_name',$catalogue_name);
 
+			$table.=' '.$privacy_join;
+
 			if (is_null($title_field)) return array(); // No fields in catalogue -- very odd
 			if ($g_or=='')
 			{
@@ -335,6 +345,8 @@ class Hook_search_catalogue_entries
 
 			$where_clause.=' AND ';
 			$where_clause.='r.c_name NOT LIKE \'\_%\''; // Don't want results drawn from the hidden custom-field catalogues
+
+			$join.=' '.$privacy_join;
 
 			if ($g_or=='')
 			{

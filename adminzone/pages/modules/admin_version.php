@@ -81,6 +81,9 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_tin');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_consumed');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('alternative_ids');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('content_privacy');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
+
 		delete_privilege('reuse_others_attachments');
 		delete_privilege('use_sms');
 		delete_privilege('sms_higher_limit');
@@ -344,8 +347,7 @@ class Module_admin_version
 				'content_id'=>'*ID_TEXT',
 				'guest_view'=>'BINARY',
 				'member_view'=>'BINARY',
-				'friend_view'=>'BINARY',
-				'group_view'=>'SHORT_TEXT'
+				'friend_view'=>'BINARY'
 			));
 
 			$GLOBALS['SITE_DB']->create_table('content_primary__members',array(

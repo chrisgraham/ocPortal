@@ -484,7 +484,13 @@ class Module_cms_catalogues extends standard_crud_module
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields2->attach(get_privacy_form_fields('catalogue_entry',strval($id)));
+			if (is_null($id))
+			{
+				$fields2->attach(get_privacy_form_fields());
+			} else
+			{
+				$fields2->attach(get_privacy_form_fields('catalogue_entry',strval($id)));
+			}
 		}
 
 		return array($fields,$hidden,NULL,NULL,false,NULL,$fields2,NULL,$field_defaults);
@@ -620,14 +626,23 @@ class Module_cms_catalogues extends standard_crud_module
 		{
 			if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
 			{
-				require_code('activities');
-				$map_copy=$map;
-				$title=array_shift($map_copy);
-				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-				$lang_string='catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_ADD';
-				if (is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,true)))
-					$lang_string='catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD';
-				syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('catalogue_entry',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					require_code('activities');
+					$map_copy=$map;
+					$title=array_shift($map_copy);
+					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
+					$lang_string='catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_ADD';
+					if (is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,true)))
+						$lang_string='catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD';
+					syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+				}
 			}
 		}
 
@@ -671,25 +686,34 @@ class Module_cms_catalogues extends standard_crud_module
 
 		if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$id));
-
-			require_code('activities');
-
-			$map_copy=$map;
-			$title=array_shift($map_copy);
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-
-			if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+			$privacy_ok=true;
+			if (addon_installed('content_privacy'))
 			{
-				$lang_string=($submitter!=get_member())?('calendar:ACTIVITY_VALIDATE_CATALOGUE_'.$catalogue_name):('catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_ADD');
-				if (is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,true)))
-					$lang_string=($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CATALOGUE_GENERIC':'catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD';
-				syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
-			} elseif ($validated==1)
+				require_code('content_privacy');
+				$privacy_ok=has_privacy_access('catalogue_entry',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+			}
+			if ($privacy_ok)
 			{
-				$lang_string='catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_EDIT';
-				if (!is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,true)))
+				$submitter=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$id));
+
+				require_code('activities');
+
+				$map_copy=$map;
+				$title=array_shift($map_copy);
+				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
+
+				if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+				{
+					$lang_string=($submitter!=get_member())?('calendar:ACTIVITY_VALIDATE_CATALOGUE_'.$catalogue_name):('catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_ADD');
+					if (is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,true)))
+						$lang_string=($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CATALOGUE_GENERIC':'catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD';
 					syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
+				} elseif ($validated==1)
+				{
+					$lang_string='catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_EDIT';
+					if (!is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,true)))
+						syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
+				}
 			}
 		}
 
@@ -732,7 +756,7 @@ class Module_cms_catalogues extends standard_crud_module
 		{
 			require_code('content_privacy2');
 			list($privacy_level,$additional_access)=read_privacy_fields();
-			update_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
+			save_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
 		}
 
 		$this->donext_category_id=$category_id;

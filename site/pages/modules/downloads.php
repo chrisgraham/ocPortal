@@ -295,7 +295,14 @@ class Module_downloads
 			$start=0;
 			do
 			{
-				$entry_data=$GLOBALS['SITE_DB']->query_select('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.name',array('d.id','t.text_original AS title','category_id','add_date','edit_date'),array('category_id'=>intval($parent_attributes['id'])),'',500,$start);
+				$privacy_join='';
+				$privacy_where='';
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					list($privacy_join,$privacy_where)=get_privacy_where_clause('download','d');
+				}
+				$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.id,t.text_original AS title,category_id,add_date,edit_date FROM '.get_table_prefix().'download_downloads d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.name WHERE category_id='.strval(intval($parent_attributes['id'])).$privacy_where,500,$start);
 
 				foreach ($entry_data as $row)
 				{
@@ -512,9 +519,17 @@ class Module_downloads
 		if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)')>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
+		$privacy_join='';
+		$privacy_where='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('download','p');
+		}
+
 		// Load up all data
 		$cats=array();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.') ORDER BY text_original ASC',NULL,NULL,false,true);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.')'.$privacy_where.' ORDER BY text_original ASC',NULL,NULL,false,true);
 		foreach ($rows as $row)
 		{
 			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['name']);

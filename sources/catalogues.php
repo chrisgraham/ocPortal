@@ -599,6 +599,16 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],$ocselect,'catalogue_entry',$catalogue_name);
 	$where_clause.=$extra_where.' AND '.db_string_equal_to('r.c_name',$catalogue_name);
 
+	$privacy_join='';
+	$privacy_where='';
+	if (addon_installed('content_privacy'))
+	{
+		require_code('content_privacy');
+		list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r');
+	}
+	$extra_join[]=$privacy_join;
+	$where_clause.=$privacy_where;
+
 	// If we're listing what IDs to look at, work out SQL for this
 	if ((is_null($category_id)) && (!is_null($filter)))
 	{

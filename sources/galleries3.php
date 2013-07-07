@@ -56,10 +56,26 @@ function download_gallery_script()
 
 	disable_php_memory_limit();
 
-	$rows=array_merge($GLOBALS['SITE_DB']->query_select('videos',array('url','add_date'),array('cat'=>$cat,'validated'=>1)),$GLOBALS['SITE_DB']->query_select('images',array('url','add_date'),array('cat'=>$cat,'validated'=>1)));
-	$array=array();
-	foreach ($rows as $row)
+	$rows_images=$GLOBALS['SITE_DB']->query_select('images',array('id','url','add_date'),array('cat'=>$cat,'validated'=>1));
+	$rows_videos=$GLOBALS['SITE_DB']->query_select('videos',array('id','url','add_date'),array('cat'=>$cat,'validated'=>1));
+	$rows_combined=array();
+	foreach ($rows_images as $row)
 	{
+		$rows_combined[]=$row+array('content_type'=>'image');
+	}
+	foreach ($rows_videos as $row)
+	{
+		$rows_combined[]=$row+array('content_type'=>'video');
+	}
+	$array=array();
+	foreach ($rows_combined as $row)
+	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			if (!has_privacy_access($row['content_type'],strval($row['id']))) continue;
+		}
+
 		$full_path=NULL;
 		$data=NULL;
 		if ((url_is_local($row['url'])) && (file_exists(get_file_base().'/'.urldecode($row['url']))))

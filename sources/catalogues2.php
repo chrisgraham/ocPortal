@@ -88,6 +88,11 @@ function catalogue_file_script()
 			if (!has_category_access(get_member(),'catalogues_catalogue',$c_name)) access_denied('CATALOGUE_ACCESS');
 			if (!has_category_access(get_member(),'catalogues_category',strval($cc_id))) access_denied('CATEGORY_ACCESS');
 		}
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('catalogue_entry',strval($entry_id));
+		}
 	}
 
 	// Send header
@@ -995,12 +1000,21 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	{
 		if ($validated==1)
 		{
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				$privacy_limits=privacy_limits_for('catalogue_entry',strval($id));
+			} else
+			{
+				$privacy_limits=array();
+			}
+
 			require_lang('catalogues');
 			require_code('notifications');
 			$subject=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),array($catalogue_title));
 			$self_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true);
 			$mail=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(strip_comcode($title)),array(comcode_escape($self_url->evaluate()),comcode_escape($catalogue_title)));
-			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($id),$subject,$mail);
+			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($id),$subject,$mail,$privacy_limits);
 		}
 
 		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
@@ -1154,11 +1168,20 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 
 		if ($just_validated)
 		{
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				$privacy_limits=privacy_limits_for('catalogue_entry',strval($id));
+			} else
+			{
+				$privacy_limits=array();
+			}
+
 			require_lang('catalogues');
 			require_code('notifications');
 			$subject=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),array($catalogue_title));
 			$mail=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(strip_comcode($title)),array(comcode_escape($self_url->evaluate()),comcode_escape($catalogue_title)));
-			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($id),$subject,$mail);
+			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($id),$subject,$mail,$privacy_limits);
 		}
 	}
 

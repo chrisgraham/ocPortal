@@ -363,12 +363,40 @@ class Module_galleries
 		if (is_null($image_data))
 		{
 			$image_data_count=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)');
-			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
+			if ($image_data_count>2000)
+			{
+				$image_data=array();
+			} else
+			{
+				$privacy_join='';
+				$privacy_where='';
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					list($privacy_join,$privacy_where)=get_privacy_where_clause('image','d');
+				}
+				$where='1=1'.$privacy_where;
+				$image_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'images d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
+			}
 		}
 		if (is_null($video_data))
 		{
 			$video_data_count=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');
-			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
+			if ($video_data_count>2000)
+			{
+				$video_data=array();
+			} else
+			{
+				$privacy_join='';
+				$privacy_where='';
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					list($privacy_join,$privacy_where)=get_privacy_where_clause('video','d');
+				}
+				$where='1=1'.$privacy_where;
+				$video_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'videos d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
+			}
 		}
 
 		// Subcategories

@@ -878,7 +878,14 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		if (!addon_installed('ocf_member_photos'))
+		$privacy_ok=true;
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_ok=has_privacy_access('_photo',strval($member));
+		}
+
+		if ((!addon_installed('ocf_member_photos')) || (!has_privilege(get_member(),'view_member_photos')) || (!$privacy_ok))
 		{
 			if (!addon_installed('ocf_member_avatars')) return '';
 			return $this->get_member_avatar_url($member);

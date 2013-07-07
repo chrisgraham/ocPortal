@@ -48,7 +48,7 @@ class Hook_addon_registry_content_privacy
 	 */
 	function get_description()
 	{
-		return 'An addon that allows users to specify privacy level for the contents they add.';
+		return 'Allows users to specify privacy level for their content.';
 	}
 
 	/**

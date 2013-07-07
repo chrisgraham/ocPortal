@@ -61,10 +61,14 @@ function dload_script()
 	// Permission
 	if (!has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
 		access_denied('CATEGORY_ACCESS');
-
 	$may_download=has_privilege(get_member(),'download','downloads',array(strval($myrow['category_id'])));
 	if (!$may_download)
 		access_denied('PRIVILEGE','download');
+	if (addon_installed('content_privacy'))
+	{
+		require_code('content_privacy');
+		check_privacy('download',strval($id));
+	}
 
 	// Cost?
 	$got_before=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','member_id',array('member_id'=>get_member(),'id'=>$id));
@@ -770,12 +774,21 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 
 	if ($validated==1)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('download',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('downloads');
 		require_code('notifications');
 		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
 		$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
 		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('download',strval($category_id),$subject,$mail);
+		dispatch_notification('download',strval($category_id),$subject,$mail,$privacy_limits);
 	}
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
@@ -933,11 +946,20 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 
 	if ($just_validated)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('download',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('downloads');
 		require_code('notifications');
 		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
 		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('download',strval($category_id),$subject,$mail);
+		dispatch_notification('download',strval($category_id),$subject,$mail,$privacy_limits);
 	}
 
 	log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));

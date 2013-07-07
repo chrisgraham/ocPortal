@@ -88,8 +88,17 @@ function give_award($award_id,$content_id,$time=NULL)
 		}
 		if ((has_actual_page_access(get_modal_user(),'awards')) && (has_actual_page_access(get_modal_user(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access(get_modal_user(),$permission_type_code,is_integer($category_id)?strval($category_id):$category_id))))
 		{
-			require_code('activities');
-			syndicate_described_activity(((is_null($member_id)) || (is_guest($member_id)))?'awards:_ACTIVITY_GIVE_AWARD':'awards:ACTIVITY_GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards',1,NULL,false,$member_id);
+			$privacy_ok=true;
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				$privacy_ok=has_privacy_access($awards[0]['a_content_type'],$content_id,$GLOBALS['FORUM_DRIVER']->get_guest_id());
+			}
+			if ($privacy_ok)
+			{
+				require_code('activities');
+				syndicate_described_activity(((is_null($member_id)) || (is_guest($member_id)))?'awards:_ACTIVITY_GIVE_AWARD':'awards:ACTIVITY_GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards',1,NULL,false,$member_id);
+			}
 		}
 	} else $member_id=NULL;
 	if (is_null($member_id)) $member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();

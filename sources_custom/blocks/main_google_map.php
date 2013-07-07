@@ -146,8 +146,17 @@ class Block_main_google_map
 				}
 			}
 
+			// Privacy
+			$privacy_join='';
+			$privacy_where='';
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r');
+			}
+
 			// Finishing data query
-			$query='SELECT r.*'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries r'.$join.' WHERE '.$where;
+			$query='SELECT r.*'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries r'.$join.' '.$privacy_join.' WHERE '.$where.$privacy_where;
 
 			// Get results
 			$entries_to_show=array();
