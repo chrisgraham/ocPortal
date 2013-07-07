@@ -299,6 +299,14 @@ class Block_main_multi_content
 			}
 		}
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'r');
+			$query.=$privacy_join;
+			$where.=$privacy_where;
+		}
+
 		// Put query together
 		if ($where.$x1.$x2!='')
 		{
@@ -644,5 +652,4 @@ class Block_main_multi_content
 		return $sql;
 	}
 }
-
 

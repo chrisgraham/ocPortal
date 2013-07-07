@@ -166,7 +166,7 @@ function site_tree_script()
 						}
 					}
 				}
-				
+
 				if ($changed_view_access) log_it('PAGE_ACCESS');
 				if ($changed_privileges) log_it('PRIVILEGES');
 			}

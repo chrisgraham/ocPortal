@@ -421,12 +421,21 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 
 	if ($validated==1)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('image',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('galleries');
 		require_code('notifications');
 		$subject=do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
 		$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 		$mail=do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
 	}
 
 	decache('side_galleries');
@@ -511,11 +520,20 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	if ($just_validated)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('image',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('galleries');
 		require_code('notifications');
 		$subject=do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
 		$mail=do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
 	}
 
 	log_it('EDIT_IMAGE',strval($id),$title);
@@ -783,12 +801,21 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 
 	if ($validated==1)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('video',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('galleries');
 		require_code('notifications');
 		$subject=do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
 		$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 		$mail=do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
 	}
 
 	require_code('seo2');
@@ -900,11 +927,20 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	if ($just_validated)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_limits=privacy_limits_for('video',strval($id));
+		} else
+		{
+			$privacy_limits=array();
+		}
+
 		require_lang('galleries');
 		require_code('notifications');
 		$subject=do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
 		$mail=do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
 	}
 
 	log_it('EDIT_VIDEO',strval($id),$title);

@@ -259,7 +259,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			}
 			$members[0]=$members_new;
 		}
-	
+
 		return array($members,$maybe_more);
 	}
 }

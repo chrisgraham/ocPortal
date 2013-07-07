@@ -103,14 +103,14 @@ class Block_twitter_feed
 		$twitter_logocolorparam=array_key_exists('twitter_logo_color',$map)?$map['twitter_logo_color']:'1';
 		$twitter_logosizeparam=array_key_exists('twitter_logo_size',$map)?$map['twitter_logo_size']:'2';
 		$twitter_error='';
-		
+
 		// Sanitize the input - be sure some key values are in range
 		if (($twitter_maxstatuses < 1) || ($twitter_maxstatuses > 200)) $twitter_maxstatuses = 10;
 		if (($twitter_showprofileimage < 0) || ($twitter_showprofileimage > 1)) $twitter_showprofileimage = 1;
 		if (($twitter_followbuttonsize < 0) || ($twitter_followbuttonsize > 2)) $twitter_followbuttonsize = 1;
 		if (($twitter_logocolorparam < 1) || ($twitter_logocolorparam > 3)) $twitter_logocolorparam = 1;
 		if (($twitter_logosizeparam < 1) || ($twitter_logosizeparam > 3)) $twitter_logosizeparam = 2;
-		
+
 		// Set twitter logo code
 		if ($twitter_logocolorparam == 2) $twitter_color = "gray";
 		elseif ($twitter_logocolorparam == 3) $twitter_color = "black";
@@ -120,17 +120,17 @@ class Block_twitter_feed
 		else $twitter_size = "16";
 		//twitter_logo_img_code is set with the code needed for the $IMG tempcode
 		$twitter_logo_img_code = "twitter_feed/bird_" . $twitter_color . "_" . $twitter_size;
-		
+
 		// Create template object
 		$content=new ocp_tempcode();
-		
+
 		// Check for Twitter Support addon dependency before we go any further
 		if (!addon_installed('Twitter Support',true)) {
 			$twitter_error='The Twitter Support addon is not installed. The Twitter Feed Integration Block will not work unless the Twitter Support addon is installed. Please download and install the appropriate version of the Twitter Support addon from ocPortal.com.';
 			return do_template("$twitter_templatemain",array('TWITTER_ERROR'=>$twitter_error,'CONTENT'=>$content,'STYLE'=>strval($twitter_style),'TWITTER_LOGO_IMG_CODE'=>$twitter_logo_img_code,'USER_SCREEN_NAME'=>$twitter_name));
-			}
+		}
 
-		
+
 		// Initiate Twitter connection
 		require_code('twitter');
 		$token=get_long_value('twitter_oauth_token');
@@ -155,7 +155,7 @@ class Block_twitter_feed
 		{
 			return do_template('BLOCK_NO_ENTRIES',array('TITLE'=>'Twitter Profile Details','MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>'','SUBMIT_URL'=>''));
 		}
-		
+
 		// Generate variables and pass them to Style template for each status (status=tweet)
 		foreach ($twitter_statuses as $status) {
 			// Process $tweet_text to convert twitter screen names, hashtags, emails and urls into clickable links
@@ -179,7 +179,7 @@ class Block_twitter_feed
 			  $favorite_url="https://twitter.com/intent/favorite?tweet_id=".$status['id'];
 			  $reply_url="https://twitter.com/intent/tweet?in_reply_to=".$status['id'];
 			  $user_page_url="http://www.twitter.com/".$status['user']['screen_name'];
-			
+
 			// Generate follow buttons
 			// must have the following javascript code in the main template for these to fully work:
 			//	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -189,13 +189,13 @@ class Block_twitter_feed
 			// Convert created_at date/time to unix timestamp and 'time ago' string
 				// Get current timestamp
 				$current_timestamp = strtotime("now"); 
-				
+
 				// Get timestamp of created_at string
 				$tweet_timestamp = strtotime($status['created_at']);
-				
+
 				// Get difference
 				$time_ago_timestamp = $current_timestamp - $tweet_timestamp;
-				
+
 				// Calculate different time values
 				$minute = 60;
 				$hour = $minute * 60;
@@ -205,32 +205,31 @@ class Block_twitter_feed
 				if(is_numeric($time_ago_timestamp) && $time_ago_timestamp > 0) {
 					//if less then 3 seconds
 					if($time_ago_timestamp < 3) $time_ago = "right now";
-				
+
 					//if less then minute
 					elseif($time_ago_timestamp < $minute) $time_ago = floor($time_ago_timestamp) . " seconds ago";
-					
+
 					//if less then 2 minutes
 					elseif($time_ago_timestamp < $minute * 2) $time_ago = "about 1 minute ago";
-					
+
 					//if less then hour
 					elseif($time_ago_timestamp < $hour) $time_ago = floor($time_ago_timestamp / $minute) . " minutes ago";
-					
+
 					//if less then 2 hours
 					elseif($time_ago_timestamp < $hour * 2) $time_ago = "about 1 hour ago";
-					
+
 					//if less then day
 					elseif($time_ago_timestamp < $day) $time_ago = floor($time_ago_timestamp / $hour) . " hours ago";
-					
+
 					//if more then day, but less then 2 days
 					elseif($time_ago_timestamp > $day && $time_ago_timestamp < $day * 2) $time_ago = "yesterday";
-					
+
 					//if less then year
 					elseif($time_ago_timestamp < $day * 365) $time_ago = floor($time_ago_timestamp / $day) . " days ago";
-					
+
 					//else more than a year
 					else $time_ago = "over a year ago";
 				}
-			  
 
 				$content->attach(do_template("$twitter_templatestyle",array(
 					'TWEET_TIME_AGO'=>$time_ago,
@@ -264,7 +263,7 @@ class Block_twitter_feed
 					'USER_PROFILE_IMG_URL'=>$status['user']['profile_image_url']
 				)));
 			}
-		
+
 		// Pass all the Styled statuses to the main template container
 		return do_template("$twitter_templatemain",array(
 			'TWITTER_ERROR'=>$twitter_error,

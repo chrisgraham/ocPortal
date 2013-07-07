@@ -267,7 +267,15 @@ class Module_news
 				$start=0;
 				do
 				{
-					$entry_data=$GLOBALS['SITE_DB']->query_select('news d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS title','news_category AS category_id','date_and_time AS add_date','edit_date'),NULL,'',500,$start);
+					$privacy_join='';
+					$privacy_where='';
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						list($privacy_join,$privacy_where)=get_privacy_where_clause('news','d');
+					}
+					$where='1=1'.$privacy_where;
+					$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS title,news_category AS category_id,date_and_time AS add_date,edit_date FROM '.get_table_prefix().'news d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title WHERE '.$where,500,$start);
 
 					foreach ($entry_data as $row)
 					{
@@ -486,6 +494,12 @@ class Module_news
 	function view_news()
 	{
 		$id=get_param_integer('id');
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('news',strval($id));
+		}
 
 		$blog=get_param_integer('blog',NULL);
 

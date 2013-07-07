@@ -81,6 +81,9 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_tin');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_consumed');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('alternative_ids');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('content_privacy');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
+
 		delete_privilege('reuse_others_attachments');
 		delete_privilege('use_sms');
 		delete_privilege('sms_higher_limit');
@@ -338,6 +341,20 @@ class Module_admin_version
 
 			add_privilege('SUBMISSION','edit_meta_fields');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification',20,1,0,1,0,'','tick');
+
+			$GLOBALS['SITE_DB']->create_table('content_privacy',array(
+				'content_type'=>'*ID_TEXT',
+				'content_id'=>'*ID_TEXT',
+				'guest_view'=>'BINARY',
+				'member_view'=>'BINARY',
+				'friend_view'=>'BINARY'
+			));
+
+			$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
+				'content_type'=>'*ID_TEXT',
+				'content_id'=>'*ID_TEXT',
+				'member_id'=>'*MEMBER',
+			));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

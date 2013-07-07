@@ -32,6 +32,12 @@ class Hook_attachments_news
 	{
 		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			if (!has_privacy_access('news',strval($id))) return false;
+		}
+
 		$cat_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news','news_category',array('id'=>$id));
 		if (is_null($cat_id)) return false;
 		return (has_category_access(get_member(),'news',strval($cat_id)));

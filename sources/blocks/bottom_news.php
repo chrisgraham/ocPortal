@@ -47,7 +47,7 @@ class Block_bottom_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):5,array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):5,array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
@@ -94,6 +94,14 @@ class Block_bottom_news
 			$filters_and_1=ocfilter_to_sqlfragment($filter_and,'p.news_category','news_categories',NULL,'p.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 			$filters_and_2=ocfilter_to_sqlfragment($filter_and,'d.news_entry_category','news_categories',NULL,'d.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 			$q_filter.=' AND ('.$filters_and_1.' OR '.$filters_and_2.')';
+		}
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','p');
+			$join.=$privacy_join;
+			$q_filter.=$privacy_where;
 		}
 
 		$news=$GLOBALS['SITE_DB']->query('SELECT p.id,date_and_time,title,news_category FROM '.get_table_prefix().'news p LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=p.id'.$join.' WHERE '.$q_filter.' AND validated=1 ORDER BY date_and_time DESC',$max,NULL,false,true);

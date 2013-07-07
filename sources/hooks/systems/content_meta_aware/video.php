@@ -87,6 +87,8 @@ class Hook_content_meta_aware_video
 			'rss_hook'=>'galleries',
 
 			'actionlog_regexp'=>'\w+_VIDEO',
+
+			'supports_privacy'=>true,
 		);
 	}
 

@@ -48,7 +48,7 @@
 <script type="text/javascript">// <![CDATA[
 	document.getElementById('s_download').style.display='none';
 	document.getElementById('s_transfer').style.display='none';
-	
+
 	function show_s_download()
 	{
 		var e=document.getElementById('s_download');
@@ -65,7 +65,7 @@
 
 		document.getElementById('s_transfer').style.display='none';
 	}
-	
+
 	function show_s_transfer()
 	{
 		var e=document.getElementById('s_transfer');
@@ -76,7 +76,7 @@
 		var e2=document.getElementById('download');
 		setOpacity(e2,1.0);
 		nereidFade(e2,50,50,-3);
-		
+
 		var e3=document.getElementById('instant');
 		setOpacity(e3,1.0);
 

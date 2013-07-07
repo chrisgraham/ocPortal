@@ -86,7 +86,7 @@ function delete_award_type($id)
 	$GLOBALS['SITE_DB']->query_delete('award_archive',array('a_type_id'=>$id),'',1);
 	delete_lang($_title);
 	delete_lang($_description);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

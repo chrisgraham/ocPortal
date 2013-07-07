@@ -23,7 +23,7 @@ function server__public__demo_reset()
 	require_lang('sites');
 
 	set_value('last_demo_set_time',strval(time()));
-	
+
 	require_lang('ocpcom');
 
 	$servers=find_all_servers();
@@ -305,7 +305,7 @@ function nice_get_servers($server)
 function find_all_servers()
 {
 	if (!file_exists(special_myocp_dir().'/servers')) return array('');
-	
+
 	$d=opendir(special_myocp_dir().'/servers');
 	$servers=array();
 	while (($e=readdir($d))!==false)
@@ -477,7 +477,7 @@ function find_dir_size($dir)
 		}
 		closedir($current_dir);
 	}
-	
+
 	return $amount;
 }
 
@@ -600,7 +600,7 @@ function myocp_delete_old_sites()
 	{
 		reset_aliases();
 	}
-	
+
 	// Warning emails
 	require_code('mail');
 	$sites=$GLOBALS['SITE_DB']->query('SELECT s_codename FROM '.get_table_prefix().'sites WHERE s_add_time<'.strval(time()-60*60*24*20).' AND '.db_string_not_equal_to('s_codename','shareddemo').' AND s_sent_expire_message=0');
@@ -611,7 +611,7 @@ function myocp_delete_old_sites()
 		$email_address=$GLOBALS['SITE_DB']->query_select_value_if_there('sites_email','s_email_to',array('s_codename'=>$site['s_codename'],'s_email_from'=>'staff'));
 		if (!is_null($email_address))
 			mail_wrap($subject,$message,array($email_address));
-		
+
 		$GLOBALS['SITE_DB']->query_update('sites',array('s_sent_expire_message'=>1),array('s_codename'=>$site['s_codename']),'',1);
 	}
 }

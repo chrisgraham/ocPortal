@@ -47,7 +47,7 @@ class Block_main_image_fader_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -91,6 +91,14 @@ class Block_main_image_fader_news
 		{
 			$join=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON c.id=p.news_category';
 		} else $join='';
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','r');
+			$join.=$privacy_join;
+			$q_filter.=$privacy_where;
+		}
 
 		$query='SELECT p.id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news p'.$join.' WHERE '.$ocfilter.$q_filter.' ORDER BY date_and_time DESC';
 		$all_rows=$GLOBALS['SITE_DB']->query($query,100/*reasonable amount*/);

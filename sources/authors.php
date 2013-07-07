@@ -179,7 +179,7 @@ function delete_author($author)
 	} else warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	log_it('DELETE_AUTHOR',$author);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

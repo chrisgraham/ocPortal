@@ -43,7 +43,7 @@ if ((array_key_exists(0,$news_rows)) && (has_category_access($GLOBALS['FORUM_DRI
 	$_news_html=get_translated_tempcode($news_rows[0]['news_article']); // To force it to evaluate, so we can know the TAR URL
 	$news_html=$_news_html->evaluate();
 	$news=get_translated_text($news_rows[0]['news_article']);
-	
+
 	$matches=array();
 	preg_match('#"(http://ocportal.com/upgrades/[^"]*.tar)"#',$news_html,$matches);
 	$tar_url=array_key_exists(1,$matches)?$matches[1]:'';
@@ -61,7 +61,7 @@ if ((array_key_exists(0,$news_rows)) && (has_category_access($GLOBALS['FORUM_DRI
 	$news_html=preg_replace('#(\s*<br />)+#','<br />',$news_html);
 	$news_html=str_replace('display: none','display: block',$news_html);
 	$notes=$news_html;
-	
+
 	echo serialize(array($notes,$tar_url,$changes));
 } else
 {

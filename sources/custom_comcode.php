@@ -154,7 +154,7 @@ function delete_custom_comcode_tag($tag)
 	),'',1);
 
 	log_it('DELETE_CUSTOM_COMCODE_TAG',$tag);
-	
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');

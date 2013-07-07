@@ -208,7 +208,7 @@ class Block_youtube_channel
 			  //prepend zero(s) to minutes, if needed, when using numeric time format so we have 2-digit format
 			  if ($minutes < 1) $minutes = '00';
 			  elseif ($minutes > 0 && $minutes < 10) $minutes = "0".$minutes;
-	
+
 			  //prepend zero(s) to seconds, if needed, when using numeric time format so we have 2-digit format
 			  if ($seconds < 1) $seconds = '00';
 			  elseif ($seconds > 0 && $seconds < 10) $seconds = "0".$seconds;
@@ -241,7 +241,7 @@ class Block_youtube_channel
 			  $thumbalt_3 = $thumb_img_3->{'yt$name'};
 			  $thumbalt_4 = $thumb_img_4->{'yt$name'};
 			  $thumbalt_5 = $thumb_img_5->{'yt$name'};
-	
+
 			  //if show player parameter is greater than 0, pass SHOWPLAYER set to 1 to template.
 			  if ($temp_showplayer > 0 && $i <= $temp_showplayer) $channel_showplayer = '1';
 			  else $channel_showplayer = '0';
@@ -326,7 +326,7 @@ class Block_youtube_channel
 			'CHANNEL_URL'=>$channel_url,
 			'CONTENT'=>$content));
 	}
-	
+
 }
 
 /**

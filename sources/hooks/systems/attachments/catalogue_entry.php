@@ -30,9 +30,17 @@ class Hook_attachments_catalogue_entry
 	 */
 	function run($id,$connection)
 	{
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			if (!has_privacy_access('catalogue_entry',strval($id))) return false;
+		}
+
 		$info=$connection->query_select('catalogue_entries',array('c_name','cc_id'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$info)) return false;
+
 		if (!has_category_access(get_member(),'catalogues_catalogue',$info[0]['c_name'])) return false;
+
 		return ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_member(),'catalogues_category',strval($info[0]['cc_id']))));
 	}
 

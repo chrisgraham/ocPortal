@@ -167,14 +167,14 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spt',array('title'));
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spd',array('description'));
 		}
-		
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<10))
 		{
 			$GLOBALS['SITE_DB']->rename_table('seedy_children','wiki_children');
 			$GLOBALS['SITE_DB']->rename_table('seedy_pages','wiki_pages');
 			$GLOBALS['SITE_DB']->rename_table('seedy_changes','wiki_changes');
 			$GLOBALS['SITE_DB']->rename_table('seedy_posts','wiki_posts');
-			
+
 			$GLOBALS['SITE_DB']->alter_table_field('wiki_posts','seedy_views','INTEGER','wiki_views');
 
 			$GLOBALS['SITE_DB']->add_table_field('wiki_pages','edit_date','?TIME');

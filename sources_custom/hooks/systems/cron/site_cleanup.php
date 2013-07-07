@@ -30,7 +30,7 @@ class Hook_cron_site_cleanup
 		if ((is_null($last)) || (intval($last)<time()-60*60*12))
 		{
 			set_value('last_demo_set_time',strval(time()));
-			
+
 			require_lang('ocpcom');
 
 			$servers=find_all_servers();

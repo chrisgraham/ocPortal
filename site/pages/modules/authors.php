@@ -219,11 +219,19 @@ class Module_authors
 			} else
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('author'=>$author,'validated'=>1));
-				require_code('downloads');
 				foreach ($rows as $myrow)
 				{
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						if (!has_privacy_access('download',strval($myrow['id']))) continue;
+					}
+
 					if (has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
+					{
+						require_code('downloads');
 						$downloads_released->attach(render_download_box($myrow,true,true/*breadcrumbs?*/,NULL,NULL,false/*context?*/));
+					}
 				}
 			}
 		}
@@ -244,6 +252,12 @@ class Module_authors
 				$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('author'=>$author,'validated'=>1));
 				foreach ($rows as $i=>$row)
 				{
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						if (!has_privacy_access('news',strval($row['id']))) continue;
+					}
+
 					if (has_category_access(get_member(),'news',strval($row['news_category'])))
 					{
 						require_code('news');

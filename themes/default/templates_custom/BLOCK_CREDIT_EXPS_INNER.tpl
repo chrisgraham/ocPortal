@@ -18,7 +18,7 @@
 					{TH_MINUTES}
 				</th>
 			</tr>
-	
+
 			<tr>
 				<td>
 					{L_B}
@@ -27,7 +27,7 @@
 					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{B_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
-	
+
 			<tr>
 				<td>
 					{L_N}
@@ -36,7 +36,7 @@
 					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{N_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
-	
+
 			<tr>
 				<td>
 					{L_D}
@@ -45,7 +45,7 @@
 					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{D_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
-	
+
 			<tr>
 				<td>
 					{L_H}
@@ -54,7 +54,7 @@
 					<strong>{$NUMBER_FORMAT*,{$MULT,{NUM_CREDITS},{H_MINUTES}}}</strong> {MINUTES}
 				</td>
 			</tr>
-	
+
 			<tr>
 				<td>
 					{L_E}

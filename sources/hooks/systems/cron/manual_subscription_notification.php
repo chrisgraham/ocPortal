@@ -66,7 +66,7 @@ class Hook_cron_manual_subscription_notification
 					{
 						$member_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($sub['s_member_id']);
 						$cancel_url=build_url(array('page'=>'admin_ecommerce','type'=>'cancel_subscription','subscription_id'=>$sub['id']),get_module_zone('admin_ecommerce'),NULL,false,false,true);
-					
+
 						require_code('notifications');
 						$subject=do_lang('MANUAL_SUBSCRIPTION_NOTIFICATION_MAIL_SUBJECT',$member_name,$expiry_date);
 						$mail=do_lang('MANUAL_SUBSCRIPTION_NOTIFICATION_MAIL',escape_html($member_profile_url),escape_html($cancel_url->evaluate()),array(strval(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE),$member_name,$expiry_date));

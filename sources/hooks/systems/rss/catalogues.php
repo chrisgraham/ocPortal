@@ -54,10 +54,20 @@ class Hook_rss_catalogues
 		{
 			$categories[$category['id']]=$category;
 		}
+
+		$privacy_join='';
+		$privacy_where='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','e');
+		}
+
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
-			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
+			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name '.$privacy_join.' WHERE 1=1'.$privacy_where.' GROUP BY c.c_name';
 		$_catalogues=$GLOBALS['SITE_DB']->query($query);
+
 		$catalogues=array();
 		foreach ($_catalogues as $catalogue)
 		{

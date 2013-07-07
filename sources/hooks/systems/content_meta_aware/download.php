@@ -86,6 +86,8 @@ class Hook_content_meta_aware_download
 			'rss_hook'=>'downloads',
 
 			'actionlog_regexp'=>'\w+_DOWNLOAD',
+
+			'supports_privacy'=>true,
 		);
 	}
 

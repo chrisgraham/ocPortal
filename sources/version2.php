@@ -99,7 +99,7 @@ function get_version_dotted__from_anything($any_format)
 	{
 		$pretty=preg_replace('#\.?'.preg_quote($qualifier,'#').'\.?#i','.'.$qualifier,$pretty);
 	}
-	
+
 	// Canonical to not have extra .0's on end. Don't really care about what ocPortal stores as we clean this up in our server's version.php - it is crucial that news post and download names are canonical though so version.php works. NB: Latest recommended versions are done via download name and description labelling.
 	$pretty=preg_replace('#(\.0)+($|\.alpha|\.beta|\.RC)#','',$pretty);
 

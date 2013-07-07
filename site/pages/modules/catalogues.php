@@ -646,7 +646,14 @@ class Module_catalogues
 			$start=0;
 			do
 			{
-				$entry_data=$GLOBALS['SITE_DB']->query_select('catalogue_entries d',array('c_name','id','cc_id AS category_id','ce_add_date AS add_date','ce_edit_date AS edit_date','d.*'),array('cc_id'=>intval($parent_attributes['id'])),'',500,$start);
+				$privacy_join='';
+				$privacy_where='';
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','d');
+				}
+				$entry_data=$GLOBALS['SITE_DB']->query('SELECT c_name,id,cc_id AS category_id,ce_add_date AS add_date,ce_edit_date AS edit_date,d.* FROM '.get_table_prefix().'catalogue_entries d '.$privacy_join.' WHERE cc_id='.strval(intval($parent_attributes['id'])).$privacy_where,500,$start);
 
 				foreach ($entry_data as $row)
 				{
@@ -879,8 +886,16 @@ class Module_catalogues
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$cats=array();
 
+		$privacy_join='';
+		$privacy_where='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','p');
+		}
+
 		// Not done via main_cc_entries block due to complex organisation
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')',NULL,NULL,false,true);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'catalogue_entries p '.$privacy_join.' WHERE ce_validated=1 AND ('.$sql_filter.')'.$privacy_where,NULL,NULL,false,true);
 		foreach ($rows as $row)
 		{
 			$entry_map=get_catalogue_entry_map($row,$catalogue,'CATEGORY','DEFAULT',$root,NULL,array(0),false,false);

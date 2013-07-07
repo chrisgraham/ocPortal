@@ -47,8 +47,15 @@ class Hook_Profiles_Tabs_about
 
 		$order=10;
 
+		$privacy_ok=true;
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			$privacy_ok=has_privacy_access('_photo',strval($member_id_of),strval($member_id_viewing));
+		}
+
 		$photo_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_url');
-		if (($photo_url!='') && (addon_installed('ocf_member_photos')) && (has_privilege($member_id_viewing,'view_member_photos')))
+		if (($photo_url!='') && (addon_installed('ocf_member_photos')) && (has_privilege($member_id_viewing,'view_member_photos')) && ($privacy_ok))
 		{
 			require_code('images');
 			$photo_thumb_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_thumb_url');

@@ -120,8 +120,16 @@ class Hook_search_downloads
 			$where_clause.='validated=1';
 		}
 
+		$privacy_join='';
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('download','r');
+			$where_clause.=$privacy_where;
+		}
+
 		// Calculate and perform query
-		$rows=get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r',array('r.name','r.description','r.additional_details'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
+		$rows=get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r '.$privacy_join,array('r.name','r.description','r.additional_details'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)
