@@ -1389,6 +1389,16 @@ function get_ip_address($amount=4)
 
 	//	return strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)); // Nice little test for if sessions break
 
+	if ((get_value('cloudflare_workaround')==='1') && (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) && (isset($_SERVER['REMOTE_ADDR'])))
+	{
+	   $regexp='^(204\.93\.240\.|204\.93\.177\.|199\.27\.|173\.245\.|103\.21\.|103\.22\.|103\.31\.|141\.101\.|108\.162\.|190\.93\.|188\.114\.|197\.234\.|198\.41\.|162\.)';
+	   if (preg_match('#'.$regexp.'#',$_SERVER['REMOTE_ADDR'])!=0)
+	   {
+	      $_SERVER['REMOTE_ADDR']=$_SERVER['HTTP_X_FORWARDED_FOR'];
+	      unset($_SERVER['HTTP_X_FORWARDED_FOR']);
+	   }
+	}
+
 	/*$fw=ocp_srv('HTTP_X_FORWARDED_FOR');	Presents too many security and maintenance problems. Can easily be faked, or changed.
 	if (ocp_srv('HTTP_CLIENT_IP')!='') $fw=ocp_srv('HTTP_CLIENT_IP');
 	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
@@ -1632,17 +1642,14 @@ function remove_duplicate_rows($rows,$id_field='id')
 
 /**
  * Update the member tracker for the currently viewing user.
+ *
+ * @param  ID_TEXT			The page
+ * @param  ID_TEXT			The type
+ * @param  ID_TEXT			The ID
  */
-function member_tracking_update()
+function member_tracking_update($page,$type,$id)
 {
 	if (get_value('no_member_tracking')==='1') return;
-
-	global $ZONE;
-	$page=get_param('page',$ZONE['zone_default_page']);
-	$type=get_param('type','/');
-	$id=get_param('id','/',true);
-	if ($type=='/') $type='';
-	if ($id=='/') $id='';
 
 	if (!$GLOBALS['SITE_DB']->table_is_locked('member_tracking'))
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval(get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
@@ -1660,9 +1667,9 @@ function member_tracking_update()
 /**
  * Get a map of members viewing the specified ocPortal location.
  *
- * @param  ?ID_TEXT		The page they need to be viewing (NULL: don't care)
- * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
- * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
+ * @param  ?ID_TEXT		The page they need to be viewing (NULL: environment current) (blank: blank't care)
+ * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: environment current) (blank: don't care)
+ * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: environment current) (blank: don't care)
  * @param  boolean		Whether this has to be done over the forum driver (multi site network)
  * @return ?array			A map of member-ids to rows about them (NULL: Too many / disabled)
  */
@@ -1670,15 +1677,15 @@ function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 {
 	if (get_value('no_member_tracking')==='1') return NULL;
 
-	// Update the member tracking
-	member_tracking_update();
-
 	global $ZONE;
 	if ($page===NULL) $page=get_param('page',$ZONE['zone_default_page']);
 	if ($type===NULL) $type=get_param('type','/');
 	if ($id===NULL) $id=get_param('id','/',true);
 	if ($type=='/') $type='';
 	if ($id=='/') $id='';
+
+	// Update the member tracking
+	member_tracking_update($page,$type,$id);
 
 	$map=array();
 	if (($page!==NULL) && ($page!='')) $map['mt_page']=$page;
@@ -2716,8 +2723,7 @@ function check_suhosin_request_size($size)
  */
 function check_suhosin_request_quantity($inc=1,$name_length=0)
 {
-	static $count=0;
-	static $name_length_count=0;
+	static $count=0,$name_length_count=0;
 	$count+=$inc;
 	$name_length_count+=$name_length;
 

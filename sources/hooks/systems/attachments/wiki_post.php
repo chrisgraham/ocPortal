@@ -32,7 +32,7 @@ class Hook_attachments_wiki_post
 	{
 		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
 
-		$cat_id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_posts','page_id',array('id'=>$id));
+		$cat_id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_posts','page_id',array('id'=>intval($id)));
 		if (is_null($cat_id)) return false;
 		return (has_category_access(get_member(),'wiki_page',strval($cat_id)));
 	}

@@ -522,10 +522,12 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 	if (!has_privilege($member_id,'rate',$page_name)) return;
 	$already_rated=already_rated(array($rating_for_type),$content_id);
+	$past_rating=mixed();
 	if (!is_null($rating))
 	{
 		if ($already_rated)
 		{
+			$past_rating=$GLOBALS['SITE_DB']->query_select_value_if_there('rating','rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address()));
 			// Delete, in preparation for re-rating
 			$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address()));
 		}
@@ -544,7 +546,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 	}
 
 	// Top rating / liked
-	if (($rating===10) && ($type==''))
+	if (($rating===10) && ($type=='') && ($past_rating!==$rating))
 	{
 		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
 		{

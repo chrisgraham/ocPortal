@@ -1091,7 +1091,7 @@ class database_driver
 			{
 				list($field,$original,$parsed)=$bits;
 
-				foreach ($ret as $row)
+				foreach ($ret as $i=>$row)
 				{
 					$entry=$row[preg_replace('#^.*\.#','',$field)];
 
@@ -1100,8 +1100,8 @@ class database_driver
 					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
 						$this->text_lookup_cache[$entry]=$row[$parsed];
 
-					unset($row[$original]);
-					unset($row[$parsed]);
+					unset($ret[$i][$original]);
+					unset($ret[$i][$parsed]);
 				}
 			}
 		}
@@ -1354,14 +1354,17 @@ class database_driver
 	 * @param  ID_TEXT		The table name
 	 * @return boolean		Whether the table is locked
 	 */
-	function table_is_locked($tbl)
+	function table_is_locked($table)
 	{
+		if (in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging')))
+			return false; // Actually, we have delayed insert for these so locking is not an issue
+
 		if (substr(get_db_type(),0,5)!='mysql') return false;
 
 		$tries=0;
 		do
 		{
-			if (substr($tbl,0,2)!='f_')
+			if (substr($table,0,2)!='f_')
 			{
 				$db_name=get_db_site();
 				$db=$GLOBALS['SITE_DB'];
@@ -1370,7 +1373,7 @@ class database_driver
 				$db_name=get_db_forums();
 				$db=$GLOBALS['FORUM_DB'];
 			}
-			$locks=$db->query('SHOW OPEN TABLES FROM '.$db_name.' WHERE `Table`=\''.db_escape_string($db->get_table_prefix().$tbl).'\' AND In_use>=1');
+			$locks=$db->query('SHOW OPEN TABLES FROM '.$db_name.' WHERE `Table`=\''.db_escape_string($db->get_table_prefix().$tbl).'\' AND In_use>=1',NULL,NULL,true);
 			if (is_null($locks)) return false; // MySQL version older than 5.0 (e.g. 4.1.x)
 			$locked=count($locks)>=1;
 			$tries++;

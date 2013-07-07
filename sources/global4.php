@@ -19,6 +19,59 @@
  */
 
 /**
+ * Get template-ready details of members viewing the specified ocPortal location.
+ *
+ * @param  ?ID_TEXT		The page they need to be viewing (NULL: don't care)
+ * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
+ * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
+ * @param  boolean		Whether this has to be done over the forum driver (multi site network)
+ * @return ?array			A map of member-ids to rows about them (NULL: Too many)
+ */
+function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
+{
+	$members=is_null($id)?array():get_members_viewing($page,$type,$id,$forum_layer);
+	$num_guests=0;
+	$num_members=0;
+	if (is_null($members))
+	{
+		$members_viewing=new ocp_tempcode();
+	} else
+	{
+		$members_viewing=new ocp_tempcode();
+		if (!isset($members[get_member()]))
+		{
+			$members[get_member()]=array('mt_cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		}
+		foreach ($members as $member_id=>$at_details)
+		{
+			$username=$at_details['mt_cache_username'];
+
+			if (is_guest($member_id))
+			{
+				$num_guests++;
+			} else
+			{
+				$num_members++;
+				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
+				$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
+				if (isset($at_details['the_title']))
+				{
+					if ((has_privilege(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==$id)))
+					{
+						$map['AT']=escape_html($at_details['the_title']);
+					}
+				}
+				$map['COLOUR']=get_group_colour(ocf_get_member_primary_group($member_id));
+				$members_viewing->attach(do_template('OCF_USER_MEMBER',$map));
+			}
+		}
+		if ($members_viewing->is_empty()) $members_viewing=do_lang_tempcode('NONE_EM');
+	}
+
+	return array($num_guests,$num_members,$members_viewing);
+}
+
+/**
  * Take a Tempcode object and run some hackerish code to make it XHTML-strict.
  *
  * @param  object			Tempcode object

@@ -1143,11 +1143,12 @@ class Module_admin_ocf_join
 					{
 						foreach ($groups as $g_id)
 						{
+							$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$linked_id,'gm_group_id'=>$g_id),'',1);
 							$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
 								'gm_group_id'=>$g_id,
 								'gm_member_id'=>$linked_id,
 								'gm_validated'=>1
-							),false,true); // Allow failure, if member is already in (handy for importers)
+							),false,true);
 						}
 					}
 					$num_edited++;

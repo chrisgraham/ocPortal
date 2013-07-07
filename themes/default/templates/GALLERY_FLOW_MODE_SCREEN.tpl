@@ -54,7 +54,7 @@
 		</div></div>
 	{+END}
 
-	{+START,IF_EMPTY,{ENTRIES}{CURRENT_ENTRY}}
+	{+START,IF_EMPTY,{ENTRIES}{CURRENT_ENTRY}{CHILDREN}}
 		<p class="nothing_here">
 			{!NO_ENTRIES}
 		</p>

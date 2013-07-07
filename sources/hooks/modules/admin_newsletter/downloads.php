@@ -80,7 +80,7 @@ class Hook_whats_news_downloads
 			$thumb_url=mixed();
 			if (addon_installed('galleries'))
 			{
-				$thumbnail=$GLOBALS['SITE_DB']->query_value_null_ok('images','thumb_url',array('cat'=>'download_'.strval($row['id'])),'ORDER BY add_date ASC');
+				$thumbnail=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>'download_'.strval($row['id'])),'ORDER BY add_date ASC');
 				if (!is_null($thumbnail))
 				{
 					if ($thumbnail!='')

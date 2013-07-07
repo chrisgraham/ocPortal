@@ -21,7 +21,6 @@ class Hook_implicit_usergroups_usergroup_field_match
 		if ($out!==NULL) return $out;
 
 		$out=array();
-
 		$_groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),array('g_open_membership'=>1));
 		$groups=array();
 		require_code('lang');

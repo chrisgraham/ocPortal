@@ -1841,7 +1841,10 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		} else
 		{
 			$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-			$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
+			$complex_rename=($name=='products');
+			$catalogue_name_field=form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode($complex_rename?'DESCRIPTION_CODENAME_SHOULDNT':'DESCRIPTION_CODENAME'),'name',$name,true);
+			if (!$complex_rename)
+				$fields->attach($catalogue_name_field);
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_CATALOGUE_DESCRIPTION'),'description',$description,false));
 
 			$display_types=new ocp_tempcode();
@@ -1864,6 +1867,9 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			if ($name=='') $fields->attach(form_input_line(do_lang_tempcode('AUTO_FILL'),do_lang_tempcode('DESCRIPTION_AUTO_FILL'),'auto_fill','',false,NULL,10000));
 
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d7f7e0da078bdfaab0b3387d200d57a4','SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
+
+			if ($complex_rename)
+				$fields->attach($catalogue_name_field);
 
 			if (get_option('enable_staff_notes')=='1')
 				$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));

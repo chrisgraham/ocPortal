@@ -607,11 +607,10 @@ class Module_cms_blogs extends standard_crud_module
 		if (addon_installed('unvalidated'))
 			$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'wp_auto_validate',true));
 		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-			$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'wp_add_to_own',false));
+			$fields->attach(form_input_tick(do_lang_tempcode('ADD_TO_OWN_ACCOUNT'),do_lang_tempcode('DESCRIPTION_ADD_TO_OWN_ACCOUNT'),'wp_to_own_account',false));
+		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_TO_BLOG'),do_lang_tempcode('DESCRIPTION_IMPORT_TO_BLOG'),'wp_import_to_blog',true));
 		if (has_privilege(get_member(),'draw_to_server'))
 			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'wp_download_images',true));
-		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-			$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_TO_BLOG'),do_lang_tempcode('DESCRIPTION_IMPORT_TO_BLOG'),'wp_import_to_blog',true));
 
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));

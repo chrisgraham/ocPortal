@@ -175,44 +175,43 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	$rating=display_rating(get_self_url(),$row['p_title'],'post',strval($row['id']),'RATING_INLINE_DYNAMIC',$row['p_poster']);
 
 	// Render
+	$map=array(
+		'_GUID'=>($guid!='')?$guid:'9456f4fe4b8fb1bf34f606fcb2bcc9d3',
+		'ID'=>strval($row['id']),
+		'GIVE_CONTEXT'=>$give_context,
+		'TOPIC_FIRST_POST_ID'=>'',
+		'TOPIC_FIRST_POSTER'=>'',
+		'POST_ID'=>strval($row['id']),
+		'URL'=>$post_url,
+		'CLASS'=>($row['p_is_emphasised']==1)?'ocf_post_emphasis':((!is_null($row['p_intended_solely_for']))?'ocf_post_personal':''),
+		'EMPHASIS'=>$emphasis,
+		'FIRST_UNREAD'=>'',
+		'POSTER_TITLE'=>$poster_title,
+		'POST_TITLE'=>$post_title,
+		'POST_DATE_RAW'=>strval($post_date_raw),
+		'POST_DATE'=>$post_date,
+		'POST'=>$post,
+		'TOPIC_ID'=>is_null($row['p_topic_id'])?'':strval($row['p_topic_id']),
+		'LAST_EDITED_RAW'=>$last_edited_raw,
+		'LAST_EDITED'=>$last_edited,
+		'POSTER_ID'=>strval($poster_id),
+		'POSTER'=>$poster,
+		'POSTER_DETAILS'=>$poster_details,
+		'POST_AVATAR'=>$post_avatar,
+		'RANK_IMAGES'=>$rank_images,
+		'BUTTONS'=>'',
+		'SIGNATURE'=>'',
+		'UNVALIDATED'=>'',
+		'DESCRIPTION'=>'',
+		'PREVIEWING'=>true,
+		'RATING'=>$rating,
+	);
 	$tpl=do_template('OCF_POST_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'9456f4fe4b8fb1bf34f606fcb2bcc9d7',
 		'GIVE_CONTEXT'=>$give_context,
-		'URL'=>$post_url,
-		'ID'=>strval($row['id']),
 		'BREADCRUMBS'=>$breadcrumbs,
-		'POST'=>do_template('OCF_TOPIC_POST',array(
-			'_GUID'=>($guid!='')?$guid:'9456f4fe4b8fb1bf34f606fcb2bcc9d3',
-			'ID'=>strval($row['id']),
-			'GIVE_CONTEXT'=>$give_context,
-			'TOPIC_FIRST_POST_ID'=>'',
-			'TOPIC_FIRST_POSTER'=>'',
-			'POST_ID'=>strval($row['id']),
-			'URL'=>$post_url,
-			'CLASS'=>($row['p_is_emphasised']==1)?'ocf_post_emphasis':((!is_null($row['p_intended_solely_for']))?'ocf_post_personal':''),
-			'EMPHASIS'=>$emphasis,
-			'FIRST_UNREAD'=>'',
-			'POSTER_TITLE'=>$poster_title,
-			'POST_TITLE'=>$post_title,
-			'POST_DATE_RAW'=>strval($post_date_raw),
-			'POST_DATE'=>$post_date,
-			'POST'=>$post,
-			'TOPIC_ID'=>is_null($row['p_topic_id'])?'':strval($row['p_topic_id']),
-			'LAST_EDITED_RAW'=>$last_edited_raw,
-			'LAST_EDITED'=>$last_edited,
-			'POSTER_ID'=>strval($poster_id),
-			'POSTER'=>$poster,
-			'POSTER_DETAILS'=>$poster_details,
-			'POST_AVATAR'=>$post_avatar,
-			'RANK_IMAGES'=>$rank_images,
-			'BUTTONS'=>'',
-			'SIGNATURE'=>'',
-			'UNVALIDATED'=>'',
-			'DESCRIPTION'=>'',
-			'PREVIEWING'=>true,
-			'RATING'=>$rating,
-		))
-	));
+		'POST'=>do_template('OCF_TOPIC_POST',$map)
+	)+$map+array('ACTUAL_POST'=>$post));
 
 	if ($give_context)
 	{

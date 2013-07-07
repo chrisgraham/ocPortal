@@ -370,6 +370,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 		$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id));
 		foreach (array_keys($groups) as $group_id)
 		{
+			$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id,'gm_group_id'=>$group_id),'',1);
 			$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
 				'gm_group_id'=>$group_id,
 				'gm_member_id'=>$member_id,

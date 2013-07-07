@@ -232,11 +232,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_post'=>$lang_id),array('id'=>$post_id),'',1);
 	}
 
-	if (($validated==0) || ($check_permissions))
-	{
-		$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
-		$url=$_url->evaluate();
-	}
+	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
+	$url=$_url->evaluate();
 	if ($validated==0)
 	{
 		if ($check_permissions)

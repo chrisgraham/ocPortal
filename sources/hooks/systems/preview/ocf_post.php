@@ -158,7 +158,7 @@ class Hook_Preview_ocf_post
 			));
 		} else $last_edited=new ocp_tempcode();
 
-		$post=do_template('OCF_TOPIC_POST',array(
+		$map=array(
 			'_GUID'=>'354473f96b4f7324d2a9c476ff78f0d7',
 			'GIVE_CONTEXT'=>false,
 			'POST_ID'=>'',
@@ -183,8 +183,9 @@ class Hook_Preview_ocf_post
 			'SIGNATURE'=>$signature,
 			'BUTTONS'=>'',
 			'POSTER_ID'=>strval($post_owner),
-		));
-		$out=do_template('OCF_POST_BOX',array('_GUID'=>'62bbfabfa5c16c2aa6724a0b79839626','GIVE_CONTEXT'=>false,'POST'=>$post));
+		);
+		$post=do_template('OCF_TOPIC_POST',$map);
+		$out=do_template('OCF_POST_BOX',array('_GUID'=>'62bbfabfa5c16c2aa6724a0b79839626','GIVE_CONTEXT'=>false,'POST'=>$post+$map+array('ACTUAL_POST'=>$post_html));
 
 		return array($out,$post_comcode);
 	}
