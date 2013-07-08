@@ -247,7 +247,7 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
-			if ((!running_script('upgrader')) && (get_mass_import_mode()) && (strpos($err,'Duplicate entry')===false))
+			if ((!running_script('upgrader')) && (!get_mass_import_mode()) && (strpos($err,'Duplicate entry')===false))
 			{
 				if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',NULL,NULL,NULL,NULL,false))) fatal_exit(htmlentities('Query failed: '.$query.' : '.$err));
 				fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
