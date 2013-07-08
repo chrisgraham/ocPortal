@@ -150,7 +150,7 @@ function get_page_warning_details($zone,$codename,$edit_url)
  * @param  mixed			Refresh to this URL (URLPATH or Tempcode URL)
  * @param  float			Take this many times longer than a 'standard ocPortal refresh'
  */
-function assign_refresh($url,$multiplier)
+function assign_refresh($url,$multiplier=0.0)
 {
 	if (is_object($url)) $url=$url->evaluate();
 

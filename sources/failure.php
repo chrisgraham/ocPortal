@@ -1155,7 +1155,28 @@ function _access_denied($class,$param,$force_login)
 	{
 		if (match_key_match($match_key['k_match_key']))
 		{
+			$message_raw=get_translated_text($match_key['k_message']);
 			$message=get_translated_tempcode($match_key['k_message']);
+
+			// Maybe it is actually a redirect
+			if ((strpos($message_raw,chr(10))===false) && (strpos($message_raw,' ')===false))
+			{
+				if (preg_match('#^https?://#',$message_raw)!=0) // Looks like a URL
+				{
+					$url=$message_raw;
+					require_code('site2');
+					assign_refresh($url,0.0);
+					$message=do_lang_tempcode('REDIRECTING');
+				}
+				if (preg_match('#^\w*:\w*#',$message_raw)!=0) // Looks like a page-link
+				{
+					list($zone,$map,$hash)=page_link_decode($message_raw);
+					$url=static_evaluate_tempcode(build_url($map,$zone,array(),false,false,false,$hash));
+					require_code('site2');
+					assign_refresh($url,0.0);
+					$message=do_lang_tempcode('REDIRECTING');
+				}
+			}
 		}
 	}
 	if (is_null($message))

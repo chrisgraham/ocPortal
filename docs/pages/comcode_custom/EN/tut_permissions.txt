@@ -61,6 +61,8 @@ The process is the same for editing the permissions of any type of category.
 [exp_thumb="Here we have removed banner submission for guests. Normally we would restrict based on content visibility level, but that is less fine-grained." float="right"]permissions_match_keys[/exp_thumb]
 {!permissions:DOC_PAGE_MATCH_KEY_ACCESS}
 
+You can also define custom error messages that show when an access-denied screen is shown on a particular match-key. You can also put in URLs and page-links instead of messages, and these will work to trigger a redirect.
+
 [title="2"]Privileges[/title]
 
 [exp_thumb="Choosing a privilege section to edit permissions within" float="right"]permissions_Choose-specific-access[/exp_thumb]

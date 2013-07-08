@@ -40,7 +40,7 @@
 			<thead>
 				<tr>
 					<th>{!MATCH_KEY}</th>
-					<th>{!MESSAGE}</th>
+					<th>{!MATCH_KEY_MESSAGE_FIELD}</th>
 				</tr>
 			</thead>
 
