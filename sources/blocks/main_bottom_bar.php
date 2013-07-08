@@ -141,7 +141,7 @@ class Block_main_bottom_bar
 			'BIRTHDAYS'=>$birthdays,
 			'USERS_ONLINE'=>$users_online,
 			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'online_members')?build_url(array('page'=>'online_members'),get_module_zone('online_members')):new ocp_tempcode(),
-			'GROUPS'=>$groups
+			'GROUPS'=>$groups,
 			'_NUM_GUESTS'=>strval($num_guests),
 			'_NUM_MEMBERS'=>strval($num_members),
 		));

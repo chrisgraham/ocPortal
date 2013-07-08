@@ -117,6 +117,9 @@ function init__global3()
 		'TEMPCODE_SETGET',
 	);
 	_load_blank_output_state();
+
+	global $MASS_IMPORT_HAPPENING;
+	$MASS_IMPORT_HAPPENING=false;
 }
 
 /**
@@ -415,9 +418,6 @@ function set_http_status_code($code)
 				break;
 		}
 	}
-
-	global $MASS_IMPORT_HAPPENING;
-	$MASS_IMPORT_HAPPENING=false;
 }
 
 /**

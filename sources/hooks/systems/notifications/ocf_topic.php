@@ -232,7 +232,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 		if (is_numeric($category))
 		{
 			$members_new=array();
-			foreach ($members[0] as $member_id=>$setting)
+			foreach ($members as $member_id=>$setting)
 			{
 				$fields=$GLOBALS['FORUM_DRIVER']->get_custom_fields($member_id);
 				$smart_topic_notification_enabled=($fields['smart_topic_notification']=='1');
@@ -257,7 +257,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 					$members_new[$member_id]=$setting;
 				}
 			}
-			$members[0]=$members_new;
+			$members=$members_new;
 		}
 
 		return array($members,$maybe_more);
