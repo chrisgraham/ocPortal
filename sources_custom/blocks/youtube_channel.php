@@ -151,7 +151,7 @@ class Block_youtube_channel
 			  
 			  //get video description
 			  if (isset($entry->{'media$group'}->{'media$description'}->{'$t'})) $description = $entry->{'media$group'}->{'media$description'}->{'$t'};
-			  else $descrition = "";
+			  else $description = "";
 
 			  //get video view count
 			  if (isset($entry->{'yt$statistics'}->viewCount)) $views = $entry->{'yt$statistics'}->viewCount;
