@@ -25,34 +25,50 @@
  * @param  ID_TEXT	The table alias in the main query
  * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
  * @param  string		Additional OR clause for letting the user through
- * @return array		A pair: extra JOIN clause, extra WHERE clause
+ * @param  ?MEMBER	Member owning the content (NULL: do dynamically in query via content hook). Usually pass as NULL
+ * @return array		A tuple: extra JOIN clause, extra WHERE clause, table clause (rarely used), direct table WHERE clause (rarely used)
  */
-function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=NULL,$additional_or='')
+function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id=NULL,$additional_or='',$submitter=NULL)
 {
 	if (is_null($viewing_member_id)) $viewing_member_id=get_member();
 
-	require_code('content');
-	$cma_ob=get_content_object($content_type);
-	$cma_info=$cma_ob->info();
+	if ($content_type[0]!='_')
+	{
+		require_code('content');
+		$cma_ob=get_content_object($content_type);
+		$cma_info=$cma_ob->info();
 
-	$override_page=$cma_info['cms_page'];
-	if (has_privilege($viewing_member_id,'view_private_content',$override_page)) return array('','');
+		if ((!isset($cma_info['supports_privacy'])) || (!$cma_info['supports_privacy'])) return array('','','','');
 
-	if (!$cma_info['supports_privacy']) return array('','');
+		$override_page=$cma_info['cms_page'];
+		if (has_privilege($viewing_member_id,'view_private_content',$override_page)) return array('','','','');
 
-	$join=' LEFT JOIN '.get_table_prefix().'content_privacy priv ON priv.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('priv.content_type',$content_type);
-	$where=' AND (priv.content_id IS NULL';
+		$join=' LEFT JOIN '.get_table_prefix().'content_privacy priv ON priv.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('priv.content_type',$content_type);
+	} else
+	{
+		if (has_privilege($viewing_member_id,'view_private_content')) return array('','','','');
+
+		$join='';
+	}
+
+	$where=' AND (';
+	$where.='priv.content_id IS NULL';
 	$where.=' OR priv.guest_view=1';
 	if (!is_guest($viewing_member_id))
 	{
 		$where.=' OR priv.member_view=1';
-		$where.=' OR priv.friend_view=1 AND EXISTS(SELECT * FROM '.get_table_prefix().'chat_friends f WHERE f.member_liked='.$table_alias.'.'.$cma_info['submitter_field'].' AND f.member_likes='.strval($viewing_member_id).')';
-		$where.=' OR '.$table_alias.'.'.$cma_info['submitter_field'].'='.strval($viewing_member_id);
-		$where.=' OR EXISTS(SELECT * FROM '.get_table_prefix().'content_primary__members pm WHERE pm.member_id='.strval($viewing_member_id).' AND pm.content_id='.$table_alias.'.'.$cma_info['id_field'].' AND '.db_string_equal_to('pm.content_type',$content_type).')';
+		$where.=' OR priv.friend_view=1 AND EXISTS(SELECT * FROM '.get_table_prefix().'chat_friends f WHERE f.member_liked='.(is_null($submitter)?($table_alias.'.'.$cma_info['submitter_field']):strval($submitter)).' AND f.member_likes='.strval($viewing_member_id).')';
+		$where.=' OR '.(is_null($submitter)?($table_alias.'.'.$cma_info['submitter_field']):strval($submitter)).'='.strval($viewing_member_id);
+		$where.=' OR EXISTS(SELECT * FROM '.get_table_prefix().'content_primary__members pm WHERE pm.member_id='.strval($viewing_member_id).' AND pm.content_id='.(is_null($submitter)?($table_alias.'.'.$cma_info['id_field']):strval($submitter)).' AND '.db_string_equal_to('pm.content_type',$content_type).')';
 		if ($additional_or!='') $where.=' OR '.$additional_or;
 	}
-	$where.=') ';
-	return array($join,$where);
+	$where.=')';
+
+	$table=get_table_prefix().'content_privacy priv';
+
+	$table_where=db_string_equal_to('priv.content_type',$content_type).$where;
+
+	return array($join,$where,$table,$table_where);
 }
 
 /**
@@ -67,16 +83,41 @@ function has_privacy_access($content_type,$content_id,$viewing_member_id=NULL)
 {
 	if (is_null($viewing_member_id)) $viewing_member_id=get_member();
 
+	if ($content_type[0]=='_') // Special case, not tied to a content row
+	{
+		if (has_privilege($viewing_member_id,'view_private_content')) return true;
+
+		list(,,$privacy_table,$privacy_where)=get_privacy_where_clause($content_type,'e',$viewing_member_id,'',intval($content_id));
+
+		$query='SELECT * FROM '.$privacy_table.' WHERE '.$privacy_where.' AND '.db_string_equal_to('priv.content_id',$content_id);
+		$results=$GLOBALS['SITE_DB']->query($query,1,NULL,false,true);
+
+		if (array_key_exists(0,$results)) return true;
+		if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','content_id',array('content_type'=>$content_type,'content_id'=>$content_id)))) return true; // Maybe there was no privacy row, default to access on
+		return false;
+	}
+
 	require_code('content');
 	$cma_ob=get_content_object($content_type);
 	$cma_info=$cma_ob->info();
+
+	if ((!isset($cma_info['supports_privacy'])) || (!$cma_info['supports_privacy'])) return true;
 
 	$override_page=$cma_info['cms_page'];
 	if (has_privilege($viewing_member_id,'view_private_content',$override_page)) return true;
 
 	list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'e',$viewing_member_id);
 
-	$results=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().$cma_info['table'].' e '.$privacy_join.' WHERE '.$privacy_where);
+	if ($cma_info['id_field_numeric'])
+	{
+		$where='e.'.$cma_info['id_field'].'='.strval(intval($content_id));
+	} else
+	{
+		$where=db_string_equal_to('e.'.$cma_info['id_field'],$content_id);
+	}
+	$query='SELECT * FROM '.get_table_prefix().$cma_info['table'].' e'.$privacy_join.' WHERE '.$where.$privacy_where;
+	$results=$GLOBALS['SITE_DB']->query($query,1);
+
 	return array_key_exists(0,$results);
 }
 

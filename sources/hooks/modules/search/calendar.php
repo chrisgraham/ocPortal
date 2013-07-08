@@ -88,7 +88,7 @@ class Hook_search_calendar
 		{
 			require_code('content_privacy');
 			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','r',NULL,'r.e_member_calendar='.strval(get_member()));
-			$table.=' '.$privacy_join;
+			$table.=$privacy_join;
 			$where_clause.=$privacy_where;
 		}
 		$where_clause.=' AND ';

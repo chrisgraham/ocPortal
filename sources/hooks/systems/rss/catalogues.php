@@ -65,7 +65,7 @@ class Hook_rss_catalogues
 
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
-			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name '.$privacy_join.' WHERE 1=1'.$privacy_where.' GROUP BY c.c_name';
+			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name'.$privacy_join.' WHERE 1=1'.$privacy_where.' GROUP BY c.c_name';
 		$_catalogues=$GLOBALS['SITE_DB']->query($query);
 
 		$catalogues=array();

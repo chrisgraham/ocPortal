@@ -57,7 +57,6 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		$GLOBALS['SITE_DB']->drop_table_if_exists('f_welcome_emails');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('f_group_join_log');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
 

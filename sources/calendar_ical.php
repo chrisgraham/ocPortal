@@ -87,7 +87,7 @@ function output_ical()
 	$start=0;
 	do
 	{
-		$events=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'calendar_events r '.$privacy_join.' WHERE '.$where.' ORDER BY e_add_date DESC',1000,$start);
+		$events=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'calendar_events r'.$privacy_join.' WHERE '.$where.' ORDER BY e_add_date DESC',1000,$start);
 		foreach ($events as $event)
 		{
 			if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;

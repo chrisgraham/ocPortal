@@ -295,9 +295,6 @@ class Module_cms_news extends standard_crud_module
 
 		$fields2->attach(meta_data_get_fields('news',is_null($id)?NULL:strval($id)));
 
-		if (addon_installed('content_reviews'))
-			$fields2->attach(content_review_get_fields('news',is_null($id)?NULL:strval($id)));
-
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
@@ -309,6 +306,9 @@ class Module_cms_news extends standard_crud_module
 				$fields2->attach(get_privacy_form_fields('news',strval($id)));
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			$fields2->attach(content_review_get_fields('news',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/,$posting_form_tabindex);
 	}

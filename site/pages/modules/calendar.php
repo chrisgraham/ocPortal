@@ -357,7 +357,7 @@ class Module_calendar
 						require_code('content_privacy');
 						list($privacy_join,$privacy_where)=get_privacy_where_clause('event','d');
 					}
-					$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.e_title,d.id,t.text_original AS title,e_type AS category_id,e_add_date AS add_date,e_edit_date AS edit_date FROM '.get_table_prefix().'calendar_events d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title WHERE e_type='.strval(intval($parent_id)).$privacy_where,500,$start);
+					$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.e_title,d.id,t.text_original AS title,e_type AS category_id,e_add_date AS add_date,e_edit_date AS edit_date FROM '.get_table_prefix().'calendar_events d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title WHERE e_type='.strval(intval($parent_id)).$privacy_where,500,$start);
 
 					foreach ($entry_data as $row)
 					{

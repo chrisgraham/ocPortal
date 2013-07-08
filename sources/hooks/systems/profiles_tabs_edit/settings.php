@@ -274,11 +274,14 @@ class Hook_Profiles_Tabs_Edit_settings
 							return false;
 						}
 					}
-					var url='".addslashes($script)."?';
-					if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['edit_password'].value)))
+					if (form.elements['edit_password'].value!='')
 					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
+						var url='".addslashes($script)."?';
+						if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['edit_password'].value)))
+						{
+							document.getElementById('submit_button').disabled=false;
+							return false;
+						}
 					}
 					if (typeof form.prior_profile_edit_submit!='undefined' && form.prior_profile_edit_submit) return form.prior_profile_edit_submit();
 					return true;

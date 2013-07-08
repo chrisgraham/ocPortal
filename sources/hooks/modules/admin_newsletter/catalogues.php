@@ -67,7 +67,7 @@ class Hook_whats_news_catalogues
 			list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
 		}
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries r '.$privacy_join.' WHERE ce_validated=1 AND ce_add_date>'.strval($cutoff_time).' AND ('.$or_list.')'.$privacy_where.' ORDER BY ce_add_date DESC',$max);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries r'.$privacy_join.' WHERE ce_validated=1 AND ce_add_date>'.strval($cutoff_time).' AND ('.$or_list.')'.$privacy_where.' ORDER BY ce_add_date DESC',$max);
 
 		if (count($rows)==$max) return array();
 

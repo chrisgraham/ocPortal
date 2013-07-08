@@ -38,7 +38,7 @@ function get_privacy_form_fields($content_type=NULL,$content_id=NULL,$show_heade
 
 	if (!is_null($content_id))
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('content_privacy',NULL,array('content_type'=>strval($content_type),'content_id'=>$content_id));
+		$rows=$GLOBALS['SITE_DB']->query_select('content_privacy',NULL,array('content_type'=>$content_type,'content_id'=>$content_id));
 		if (count($rows)==0)
 		{
 			$view_by_guests=true;
@@ -50,7 +50,7 @@ function get_privacy_form_fields($content_type=NULL,$content_id=NULL,$show_heade
 			$view_by_members=($rows[0]['member_view']==1);
 			$view_by_friends=($rows[0]['friend_view']==1);
 		}
-		$rows=$GLOBALS['SITE_DB']->query_select('content_primary__members',NULL,array('content_type'=>strval($content_type),'content_id'=>$content_id));
+		$rows=$GLOBALS['SITE_DB']->query_select('content_primary__members',NULL,array('content_type'=>$content_type,'content_id'=>$content_id));
 		$additional_access=array();
 		foreach ($rows as $row)
 		{
@@ -76,7 +76,7 @@ function get_privacy_form_fields($content_type=NULL,$content_id=NULL,$show_heade
 	$privacy_options->attach(form_input_list_entry('staff',!$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_STAFF')));
 	$fields->attach(form_input_list(do_lang_tempcode('VISIBLE_TO'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO'),$prefix.'privacy_level',$privacy_options));
 
-	$fields->attach(form_input_username_multi(do_lang_tempcode('ADDITIONAL_ACCESS'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_ACCESS'),$prefix.'privacy_friends_list_',$additional_access,0));
+	$fields->attach(form_input_username_multi(do_lang_tempcode('ADDITIONAL_ACCESS'),do_lang_tempcode($show_header?'DESCRIPTION_ADDITIONAL_ACCESS':'DESCRIPTION_ADDITIONAL_ACCESS_RAW'),$prefix.'privacy_friends_list_',$additional_access,0));
 
 	return $fields;
 }
@@ -195,7 +195,7 @@ function save_privacy_form_fields($content_type,$content_id,$privacy_level,$addi
 			$content_type_label=do_lang($cma_info['content_type_label']);
 
 			$subject=do_lang('NOTIFICATION_SUBJECT_invited_content',comcode_escape($content_submitter_username));
-			$mail=do_lang('NOTIFICATION_BODY_invited_content',comcode_escape($content_submitter_username),comcode_escape($content_type_label),array(comcode_escape($content_title),$content_url->evaluate()));
+			$mail=do_lang('NOTIFICATION_BODY_invited_content',comcode_escape($content_submitter_username),strtolower(comcode_escape($content_type_label)),array(comcode_escape($content_title),$content_url->evaluate(),comcode_escape($content_type_label)));
 			dispatch_notification('invited_content',NULL,$subject,$mail,$invited_members);
 		}
 	}

@@ -1053,9 +1053,6 @@ class Module_cms_galleries extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('image',is_null($id)?NULL:strval($id)));
 
-		if (addon_installed('content_reviews'))
-			$fields->attach(content_review_get_fields('image',is_null($id)?NULL:strval($id)));
-
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
@@ -1067,6 +1064,9 @@ class Module_cms_galleries extends standard_crud_module
 				$fields->attach(get_privacy_form_fields('image',strval($id)));
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('image',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden);
 	}
@@ -1600,9 +1600,6 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('video',is_null($id)?NULL:strval($id)));
 
-		if (addon_installed('content_reviews'))
-			$fields->attach(content_review_get_fields('video',is_null($id)?NULL:strval($id)));
-
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
@@ -1614,6 +1611,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 				$fields->attach(get_privacy_form_fields('video',strval($id)));
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('video',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden);
 	}

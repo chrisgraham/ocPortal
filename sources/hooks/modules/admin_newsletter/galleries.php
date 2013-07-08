@@ -76,7 +76,7 @@ class Hook_whats_news_galleries
 			list($privacy_join,$privacy_where)=get_privacy_where_clause('video','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
 		}
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos r '.$privacy_join.' WHERE add_date>'.strval($cutoff_time).' AND validated=1 AND ('.$or_list.')'.$privacy_where.' ORDER BY add_date DESC',$max/*reasonable limit*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos r'.$privacy_join.' WHERE add_date>'.strval($cutoff_time).' AND validated=1 AND ('.$or_list.')'.$privacy_where.' ORDER BY add_date DESC',$max/*reasonable limit*/);
 
 		if (count($rows)==$max) return array();
 

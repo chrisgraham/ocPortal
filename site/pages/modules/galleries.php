@@ -407,7 +407,7 @@ class Module_galleries
 					list($privacy_join,$privacy_where)=get_privacy_where_clause('image','d');
 				}
 				$where='1=1'.$privacy_where;
-				$image_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'images d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
+				$image_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'images d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
 			}
 		}
 		if (is_null($video_data))
@@ -426,7 +426,7 @@ class Module_galleries
 					list($privacy_join,$privacy_where)=get_privacy_where_clause('video','d');
 				}
 				$where='1=1'.$privacy_where;
-				$video_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'videos d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
+				$video_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'videos d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
 			}
 		}
 
@@ -1712,7 +1712,7 @@ class Module_galleries
 		inform_non_canonical_parameter('select');
 		inform_non_canonical_parameter('video_select');
 
-		$sort=get_param('sort','add_date '.get_option('galleries_default_sort_order'));
+		$sort=get_param('sort',get_option('galleries_default_sort_order'));
 		if ($sort=='random ASC') $sort='add_date ASC';
 		if (($sort!='fixed_random ASC') && ($sort!='average_rating DESC') && ($sort!='average_rating ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC') && ($sort!='title DESC') && ($sort!='title ASC'))
 			log_hack_attack_and_exit('ORDERBY_HACK');

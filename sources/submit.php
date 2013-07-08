@@ -95,7 +95,7 @@ function send_validation_request($type,$table,$non_integer_id,$id,$url,$member_i
 		$where=$good['db_identifier'].'='.$id;
 		if ($non_integer_id)
 			$where=db_string_equal_to($good['db_identifier'],$id);
-		$rows=$db->query('SELECT '.$good['db_identifier'].(array_key_exists('db_title',$good)?(','.$good['db_title']):'').' FROM '.$db->get_table_prefix().$good['db_table'].' WHERE '.$where,100);
+		$rows=$db->query('SELECT '.$good['db_identifier'].(array_key_exists('db_title',$good)?(','.$good['db_title']):'').' FROM '.$db->get_table_prefix().$good['db_table'].' WHERE '.$where,100,NULL,false,true);
 
 		if (array_key_exists('db_title',$good))
 		{

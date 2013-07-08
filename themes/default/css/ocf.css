@@ -682,17 +682,19 @@ hr.ocf_sig_barrier {
 	{$BETA_CSS_PROPERTY,border-radius: 15px !important;}
 }
 
+.ocf_notification .associated_links_block_group {
+	margin-top: 0.5em !important;
+}
+
 .ocf_notification strong {
 	white-space: nowrap;
 }
 
 .ocf_notification_intro_line {
 	font-size: 1.05em;
-	text-shadow: 0px 0px 50px {$GET,slightly_seeded_left_complement_text};
 	cursor: pointer;
 }
 .ocf_notification_type {
-	font-weight: bold;
 }
 .ocf_notification_type_title {
 	font-weight: bold;
@@ -705,7 +707,10 @@ hr.ocf_sig_barrier {
 }
 
 .ocf_notification_post {
-	margin-top: 1.5em;
+	margin: 0.5em 1em 0 1em;
+	padding: 2em;
+	border: 1px solid {$GET,pale_border};
+	background: {$GET,area_background};
 }
 
 .ocf_search_box {

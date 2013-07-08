@@ -1168,7 +1168,7 @@ function _access_denied($class,$param,$force_login)
 					assign_refresh($url,0.0);
 					$message=do_lang_tempcode('REDIRECTING');
 				}
-				if (preg_match('#^\w*:\w*#',$message_raw)!=0) // Looks like a page-link
+				elseif (preg_match('#^\w*:\w*#',$message_raw)!=0) // Looks like a page-link
 				{
 					list($zone,$map,$hash)=page_link_decode($message_raw);
 					$url=static_evaluate_tempcode(build_url($map,$zone,array(),false,false,false,$hash));

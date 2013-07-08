@@ -507,9 +507,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		$fields2->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id)));
 
-		if (addon_installed('content_reviews'))
-			$fields2->attach(content_review_get_fields('event',is_null($id)?NULL:strval($id)));
-
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
@@ -521,6 +518,9 @@ class Module_cms_calendar extends standard_crud_module
 				$fields2->attach(get_privacy_form_fields('event',strval($id)));
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			$fields2->attach(content_review_get_fields('event',is_null($id)?NULL:strval($id)));
 
 		// Relay control parameters
 		$relay__private=get_param_integer('private',NULL);

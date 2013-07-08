@@ -156,7 +156,7 @@ class Block_main_google_map
 			}
 
 			// Finishing data query
-			$query='SELECT r.*'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries r'.$join.' '.$privacy_join.' WHERE '.$where.$privacy_where;
+			$query='SELECT r.*'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries r'.$join.$privacy_join.' WHERE '.$where.$privacy_where;
 
 			// Get results
 			$entries_to_show=array();

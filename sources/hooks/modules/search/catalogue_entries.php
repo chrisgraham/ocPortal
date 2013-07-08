@@ -314,7 +314,7 @@ class Hook_search_catalogue_entries
 			$where_clause.=' AND ';
 			$where_clause.=db_string_equal_to('r.c_name',$catalogue_name);
 
-			$table.=' '.$privacy_join;
+			$table.=$privacy_join;
 
 			if (is_null($title_field)) return array(); // No fields in catalogue -- very odd
 			if ($g_or=='')
@@ -346,7 +346,7 @@ class Hook_search_catalogue_entries
 			$where_clause.=' AND ';
 			$where_clause.='r.c_name NOT LIKE \'\_%\''; // Don't want results drawn from the hidden custom-field catalogues
 
-			$join.=' '.$privacy_join;
+			$join.=$privacy_join;
 
 			if ($g_or=='')
 			{

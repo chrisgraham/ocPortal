@@ -51,7 +51,7 @@ class Hook_Profiles_Tabs_about
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			$privacy_ok=has_privacy_access('_photo',strval($member_id_of),strval($member_id_viewing));
+			$privacy_ok=has_privacy_access('_photo',strval($member_id_of),$member_id_viewing);
 		}
 
 		$photo_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_url');

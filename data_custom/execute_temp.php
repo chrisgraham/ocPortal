@@ -53,4 +53,10 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$GLOBALS['FORUM_DB']->create_table('f_group_join_log',array(
+		'id'=>'*AUTO',
+		'member_id'=>'MEMBER',
+		'usergroup_id'=>'?AUTO_LINK',
+		'join_time'=>'TIME'
+	));
 }

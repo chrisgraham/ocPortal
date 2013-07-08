@@ -62,7 +62,7 @@ class Hook_rss_galleries
 			require_code('content_privacy');
 			list($privacy_join,$privacy_where)=get_privacy_where_clause('video','r');
 		}
-		$rows1=$GLOBALS['SITE_DB']->query('SELECT r.* FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos r '.$privacy_join.' WHERE add_date>'.strval($cutoff).' AND '.$filters.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'').$privacy_where.' ORDER BY add_date DESC',$max);
+		$rows1=$GLOBALS['SITE_DB']->query('SELECT r.* FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos r'.$privacy_join.' WHERE add_date>'.strval($cutoff).' AND '.$filters.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'').$privacy_where.' ORDER BY add_date DESC',$max);
 
 		$privacy_join='';
 		$privacy_where='';
@@ -71,7 +71,7 @@ class Hook_rss_galleries
 			require_code('content_privacy');
 			list($privacy_join,$privacy_where)=get_privacy_where_clause('image','r');
 		}
-		$rows2=$GLOBALS['SITE_DB']->query('SELECT r.* FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'images r '.$privacy_join.' WHERE add_date>'.strval($cutoff).' AND '.$filters.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'').$privacy_where.' ORDER BY add_date DESC',$max);
+		$rows2=$GLOBALS['SITE_DB']->query('SELECT r.* FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'images r'.$privacy_join.' WHERE add_date>'.strval($cutoff).' AND '.$filters.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'').$privacy_where.' ORDER BY add_date DESC',$max);
 
 		$rows=array_merge($rows1,$rows2);
 		foreach ($rows as $row)

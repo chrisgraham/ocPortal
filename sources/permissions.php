@@ -221,7 +221,7 @@ function load_up_all_self_page_permissions($member)
 	$groups=_get_where_clause_groups($member,false);
 	if (is_null($groups)) return;
 	if (array_key_exists($groups,$TOTAL_PP_CACHE)) return;
-	$TOTAL_PP_CACHE[$groups]=$GLOBALS['SITE_DB']->query('SELECT page_name,zone_name,group_id FROM '.get_table_prefix().'group_page_access WHERE '.$groups);
+	$TOTAL_PP_CACHE[$groups]=$GLOBALS['SITE_DB']->query('SELECT page_name,zone_name,group_id FROM '.get_table_prefix().'group_page_access WHERE '.$groups,NULL,NULL,false,true);
 }
 
 /**

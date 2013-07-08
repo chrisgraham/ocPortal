@@ -86,6 +86,8 @@ class Hook_content_meta_aware_event
 			'rss_hook'=>'calendar',
 
 			'actionlog_regexp'=>'\w+_EVENT',
+
+			'supports_privacy'=>true,
 		);
 	}
 

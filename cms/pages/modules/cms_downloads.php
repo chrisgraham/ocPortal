@@ -563,9 +563,6 @@ class Module_cms_downloads extends standard_crud_module
 			$fields->attach(form_input_integer(do_lang_tempcode('NUM_DOWNLOADS'),do_lang_tempcode('DESCRIPTION_META_NUM_DOWNLOADS'),'meta_num_downloads',NULL,false));
 		}
 
-		if (addon_installed('content_reviews'))
-			$fields->attach(content_review_get_fields('download',is_null($id)?NULL:strval($id)));
-
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
@@ -577,6 +574,9 @@ class Module_cms_downloads extends standard_crud_module
 				$fields->attach(get_privacy_form_fields('download',strval($id)));
 			}
 		}
+
+		if (addon_installed('content_reviews'))
+			$fields->attach(content_review_get_fields('download',is_null($id)?NULL:strval($id)));
 
 		return array($fields,$hidden);
 	}

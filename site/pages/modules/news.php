@@ -275,7 +275,7 @@ class Module_news
 						list($privacy_join,$privacy_where)=get_privacy_where_clause('news','d');
 					}
 					$where='1=1'.$privacy_where;
-					$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS title,news_category AS category_id,date_and_time AS add_date,edit_date FROM '.get_table_prefix().'news d '.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title WHERE '.$where,500,$start);
+					$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS title,news_category AS category_id,date_and_time AS add_date,edit_date FROM '.get_table_prefix().'news d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title WHERE '.$where,500,$start);
 
 					foreach ($entry_data as $row)
 					{

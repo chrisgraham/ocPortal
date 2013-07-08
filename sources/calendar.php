@@ -565,25 +565,19 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','e',$auth_member_id,'r.e_member_calendar='.strval($auth_member_id));
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','e',$auth_member_id,'e.e_member_calendar='.strval($auth_member_id));
 			$where.=$privacy_where;
 		}
 	}
-	if ($private!==NULL) // display filter
+	if ($private===1)
 	{
-		if ($private===1)
-		{
-			if ($where!='') $where.=' AND ';
-			$where.='((e_member_calendar='.strval($member_id).') OR (e_submitter='.strval($member_id).' AND e_member_calendar IS NOT NULL))';
-		}
-		elseif ($private===0)
-		{
-			if ($where!='') $where.=' AND ';
-			$where.='(e_member_calendar IS NULL)';
-		} else
-		{
-			// should not get here
-		}
+		if ($where!='') $where.=' AND ';
+		$where.='((e_member_calendar='.strval($member_id).') OR (e_submitter='.strval($member_id).' AND e_member_calendar IS NOT NULL))';
+	}
+	if ($private===0)
+	{
+		if ($where!='') $where.=' AND ';
+		$where.='(e_member_calendar IS NULL)';
 	}
 	if (!is_null($filter))
 	{
@@ -722,13 +716,13 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).' OR e_start_year>'.date('Y',$period_start).') AND (e_end_month<='.strval(intval(date('m',$period_end))+1).' AND e_end_year='.date('Y',$period_end).' OR e_end_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','').')';
 
 	$where=' WHERE '.$where;
-	$event_count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e '.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
+	$event_count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e'.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	if ($event_count>2000)
 	{
 		attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'inform');
 		return array();
 	}
-	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e '.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
+	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e'.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	foreach ($events as $event)
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
@@ -1078,8 +1072,8 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','e',$member_id,'r.e_member_calendar='.strval($member_id));
-			$table.=' '.$privacy_join;
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','e',$member_id,'e.e_member_calendar='.strval($member_id));
+			$table.=$privacy_join;
 			$where.=$privacy_where;
 		}
 	}
