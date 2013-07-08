@@ -534,7 +534,7 @@ class Module_admin_permissions
 		foreach ($m_rows as $row)
 		{
 			if ($row['k_message']==='') $msg=''; else $msg=get_translated_text($row['k_message']);
-			$rows2->attach(do_template('PERMISSION_KEYS_MESSAGE_ROW',array('KEY'=>$row['k_match_key'],'MSG'=>$msg,'UID'=>$row['id'])));
+			$rows2->attach(do_template('PERMISSION_KEYS_MESSAGE_ROW',array('_GUID'=>'bf52d4ac938ce5c495b89d06a4cb9e5e','KEY'=>$row['k_match_key'],'MSG'=>$msg,'UID'=>is_integer($row['id'])?strval($row['id']):$row['id'])));
 		}
 
 		return do_template('PERMISSION_KEYS_PERMISSIONS_SCREEN',array('_GUID'=>'61a702db2df67adb2702ae6c7081b4ab','TITLE'=>$title,'COLS'=>$cols,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows,'ROWS2'=>$rows2));
