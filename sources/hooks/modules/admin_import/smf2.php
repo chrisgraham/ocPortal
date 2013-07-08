@@ -417,6 +417,7 @@ class Hook_smf2
 										ocf_make_boiler_custom_field('im_aim')=>$row['aim'],
 										ocf_make_boiler_custom_field('im_msn')=>$row['msn'],
 										ocf_make_boiler_custom_field('im_yahoo')=>$row['yim'],
+										ocf_make_boiler_custom_field('ocp_fullname')=>$row['real_name'],
 									);
 				if ($row['website_url']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=$row['website_url'];
