@@ -402,6 +402,28 @@ class Module_admin_orders
 	}
 
 	/**
+	 * Method to dispatch an order
+	 *
+	 * @return tempcode	The interface.
+	 */
+	function dispatch()
+	{
+		$title=get_screen_title('ORDER_STATUS_dispatched');
+
+		$id=get_param_integer('id');
+
+		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_dispatched'),array('id'=>$id),'',1);
+		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_dispatched'),array('order_id'=>$id)); // There may be more than one items to update status
+
+		require_code('shopping');
+		update_stock($id);
+
+		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'dispatched','id'=>$id),get_module_zone('admin_orders'));
+
+		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));
+	}
+
+	/**
 	 * UI to add note to an order
 	 *
 	 * @return tempcode	The interface.
@@ -426,7 +448,7 @@ class Module_admin_orders
 
 		if (!is_null($last_action))
 		{
-			$note.=do_lang('ADD_NOTE_UPPEND_TEXT',get_timezoned_date(time(),true,false,true,true),do_lang('ORDER_STATUS_'.$last_action));
+			$note.=do_lang('ADD_NOTE_APPEND_TEXT',get_timezoned_date(time(),true,false,true,true),do_lang('ORDER_STATUS_'.$last_action));
 		}
 
 		$fields->attach(form_input_text(do_lang_tempcode('NOTE'),do_lang_tempcode('NOTE_DESCRIPTION'),'note',$note,true));
@@ -461,7 +483,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Actualiser to add not to an order
+	 * Actualiser to add a note to an order
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -477,7 +499,6 @@ class Module_admin_orders
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('notes'=>$notes),array('id'=>$id),'',1);
 
-		// Send dispatch notification mail
 		$this->send_dispatch_notification($id);
 
 		if (is_null($redirect))	// If redirect url is not passed, redirect to order list
@@ -490,36 +511,12 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to dispatch an order
+	 * Method to dispatch a notification for an order
 	 *
-	 * @return tempcode	The interface.
-	 */
-	function dispatch()
-	{
-		$title=get_screen_title('ORDER_STATUS_dispatched');
-
-		$id=get_param_integer('id');
-
-		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_dispatched'),array('id'=>$id),'',1);
-		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_dispatched'),array('order_id'=>$id)); // There may be more than one items to update status
-
-		require_code('shopping');
-		update_stock($id);
-
-		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'dispatched','id'=>$id),get_module_zone('admin_orders'));
-
-		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));
-	}
-
-	/**
-	 * Method to dispatch an order
-	 *
-	 * @param	AUTO_LINK	Order Id
+	 * @param	AUTO_LINK	Order ID
 	 */
 	function send_dispatch_notification($order_id)
 	{
-		// Mail dispatch notification to customer
-
 		$message=post_param('dispatch_mail_content',NULL);
 
 		if (is_null($message)) return;
