@@ -55,9 +55,17 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	file_put_contents(get_file_base().'/lang_custom/EN/foo.ini','[strings]'."\n".'foo=bar');
-	require_lang('foo');
-	@unlink(get_file_base().'/lang_custom/EN/foo.ini');
-	@unlink(get_file_base().'/lang_cached/EN/foo.lcd');
-	echo do_lang('MEMBERX');
+	$GLOBALS['SITE_DB']->create_table('content_privacy',array(
+		'content_type'=>'*ID_TEXT',
+		'content_id'=>'*ID_TEXT',
+		'guest_view'=>'BINARY',
+		'member_view'=>'BINARY',
+		'friend_view'=>'BINARY'
+	));
+	$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
+		'content_type'=>'*ID_TEXT',
+		'content_id'=>'*ID_TEXT',
+		'member_id'=>'*MEMBER',
+	));
+	add_specific_permission('SUBMISSION','view_private_content',false,true);
 }
