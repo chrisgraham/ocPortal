@@ -558,6 +558,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 				$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
 			}
 
+			$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+
 			if ((!is_null($submitter)) && (!is_guest($submitter)))
 			{
 				// Give points
@@ -577,7 +579,6 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 				$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($displayname,$username));
 				$rendered='';
-				$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
 				if ($content_type!='')
 				{
 					require_code('content');
@@ -827,6 +828,8 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	if ((!$private) && ($post!=''))
 	{
 		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
+
+		$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
 
 		$content_type_title=$content_type;
 		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))

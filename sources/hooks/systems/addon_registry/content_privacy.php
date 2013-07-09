@@ -76,6 +76,7 @@ class Hook_addon_registry_content_privacy
 			'sources/hooks/systems/addon_registry/content_privacy.php',
 			'sources/content_privacy2.php',
 			'sources/content_privacy.php',
+			'sources/hooks/systems/notifications/invited_content.php',
 			'lang/EN/content_privacy.ini',
 		);
 	}
