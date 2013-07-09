@@ -65,7 +65,7 @@ function execute_temp()
 	$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
 		'content_type'=>'*ID_TEXT',
 		'content_id'=>'*ID_TEXT',
-		'member_id'=>'*MEMBER',
+		'member_id'=>'*USER',
 	));
 	add_specific_permission('SUBMISSION','view_private_content',false,true);
 }

@@ -620,6 +620,7 @@ class Module_cms_galleries extends standard_aed_module
 							{
 								syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 							}
+						}
 					}
 				}
 			}
@@ -962,9 +963,10 @@ class Module_cms_galleries extends standard_aed_module
 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes for the image
 	 * @param  boolean			Whether this form will be used for adding a new image
+	 * @param  ?AUTO_LINK		Content ID (NULL: new)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
+	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true,$id=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -1042,7 +1044,7 @@ class Module_cms_galleries extends standard_aed_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields->attach(get_privacy_form_fields());
+				$fields->attach(get_privacy_form_fields('image'));
 			} else
 			{
 				$fields->attach(get_privacy_form_fields('image',strval($id)));
@@ -1106,7 +1108,7 @@ class Module_cms_galleries extends standard_aed_module
 			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
+		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false,$id);
 
 		return array($fields,$hidden,$delete_fields,'',true);
 	}
@@ -1434,9 +1436,10 @@ class Module_cms_galleries_alt extends standard_aed_module
 	 * @param  ?integer			The length of the video (NULL: not yet added, so not yet known)
 	 * @param  ?integer			The width of the video (NULL: not yet added, so not yet known)
 	 * @param  ?integer			The height of the video (NULL: not yet added, so not yet known)
+	 * @param  ?AUTO_LINK		Content ID (NULL: new)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
+	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL,$id=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -1522,7 +1525,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields->attach(get_privacy_form_fields());
+				$fields->attach(get_privacy_form_fields('video'));
 			} else
 			{
 				$fields->attach(get_privacy_form_fields('video',strval($id)));
@@ -1587,7 +1590,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
+		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height'],$myrow['id']);
 
 		return array($fields,$hidden,$delete_fields,'',true);
 	}

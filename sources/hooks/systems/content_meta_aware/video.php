@@ -58,6 +58,9 @@ class Hook_content_meta_aware_video
 			'addon_name'=>'galleries',
 
 			'module'=>'galleries',
+
+			'supports_privacy'=>true,
+			'cms_page'=>'cms_galleries',
 		);
 	}
 
