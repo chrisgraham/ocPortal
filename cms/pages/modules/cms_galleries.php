@@ -1063,7 +1063,7 @@ class Module_cms_galleries extends standard_crud_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields->attach(get_privacy_form_fields());
+				$fields->attach(get_privacy_form_fields('image'));
 			} else
 			{
 				$fields->attach(get_privacy_form_fields('image',strval($id)));
@@ -1616,7 +1616,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields->attach(get_privacy_form_fields());
+				$fields->attach(get_privacy_form_fields('video'));
 			} else
 			{
 				$fields->attach(get_privacy_form_fields('video',strval($id)));
