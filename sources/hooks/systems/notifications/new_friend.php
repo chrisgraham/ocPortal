@@ -24,7 +24,7 @@ class Hook_Notification_new_friend extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['new_friend']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_new_friend'));
+		$list['new_friend']=array(do_lang('ACTIVITY'),do_lang('chat:NOTIFICATION_TYPE_new_friend'));
 		return $list;
 	}
 

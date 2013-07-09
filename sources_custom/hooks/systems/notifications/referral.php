@@ -24,7 +24,7 @@ class Hook_Notification_referral extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['referral']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_referral'));
+		$list['referral']=array(do_lang('MEMBERS'),do_lang('referrals:NOTIFICATION_TYPE_referral'));
 		return $list;
 	}
 }

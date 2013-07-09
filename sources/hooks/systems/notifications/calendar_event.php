@@ -75,7 +75,7 @@ class Hook_Notification_calendar_event extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['calendar_event']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_calendar_event'));
+		$list['calendar_event']=array(do_lang('menus:CONTENT'),do_lang('calendar:NOTIFICATION_TYPE_calendar_event'));
 		return $list;
 	}
 

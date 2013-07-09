@@ -24,7 +24,7 @@ class Hook_Notification_paid_subscription_ended extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['paid_subscription_ended']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('NOTIFICATION_TYPE_paid_subscription_ended'));
+		$list['paid_subscription_ended']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('ecommerce:NOTIFICATION_TYPE_paid_subscription_ended'));
 		return $list;
 	}
 

@@ -81,9 +81,10 @@ function trackback_script()
  * @param  ?boolean		Whether reviews are currently/by-default allowed for this resource (NULL: no reviews allowed here)
  * @param  boolean		Whether the default values for the allow options is actually off (this determines how the tray auto-hides itself)
  * @param  boolean		If there's to be a notes field
+ * @param  boolean		Whether to show a header
  * @return tempcode		The feedback editing fields
  */
-function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false,$has_notes=true)
+function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false,$has_notes=true,$show_header=true)
 {
 	if (get_option('enable_feedback')=='0') return new ocp_tempcode();
 
@@ -121,18 +122,21 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 	if ((get_option('enable_staff_notes')=='1') && ($has_notes))
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
-	if (!$fields->is_empty())
+	if ($show_header)
 	{
-		if ($default_off)
+		if (!$fields->is_empty())
 		{
-			$section_hidden=$notes=='' && !$allow_comments && (is_null($allow_trackbacks) || !$allow_trackbacks) && !$allow_rating;
-		} else
-		{
-			$section_hidden=$notes=='' && $allow_comments && (is_null($allow_trackbacks) || $allow_trackbacks || (get_option('is_on_trackbacks')=='0')) && $allow_rating;
+			if ($default_off)
+			{
+				$section_hidden=$notes=='' && !$allow_comments && (is_null($allow_trackbacks) || !$allow_trackbacks) && !$allow_rating;
+			} else
+			{
+				$section_hidden=$notes=='' && $allow_comments && (is_null($allow_trackbacks) || $allow_trackbacks || (get_option('is_on_trackbacks')=='0')) && $allow_rating;
+			}
+			$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'95864784029fd6d46a8b2ebbca9d81eb','SECTION_HIDDEN'=>$section_hidden,'TITLE'=>do_lang_tempcode((get_option('enable_staff_notes')=='1')?'FEEDBACK_AND_NOTES':'_FEEDBACK')));
+			$_fields->attach($fields);
+			$fields=$_fields;
 		}
-		$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'95864784029fd6d46a8b2ebbca9d81eb','SECTION_HIDDEN'=>$section_hidden,'TITLE'=>do_lang_tempcode((get_option('enable_staff_notes')=='1')?'FEEDBACK_AND_NOTES':'_FEEDBACK')));
-		$_fields->attach($fields);
-		$fields=$_fields;
 	}
 
 	return $fields;

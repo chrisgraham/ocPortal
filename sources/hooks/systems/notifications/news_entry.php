@@ -75,7 +75,7 @@ class Hook_Notification_news_entry extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['news_entry']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_news_entry'));
+		$list['news_entry']=array(do_lang('menus:CONTENT'),do_lang('news:NOTIFICATION_TYPE_news_entry'));
 		return $list;
 	}
 

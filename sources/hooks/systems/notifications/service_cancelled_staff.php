@@ -36,7 +36,7 @@ class Hook_Notification_service_cancelled_staff extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['service_cancelled_staff']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('NOTIFICATION_TYPE_service_cancelled_staff'));
+		$list['service_cancelled_staff']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('ecommerce:NOTIFICATION_TYPE_service_cancelled_staff'));
 		return $list;
 	}
 }

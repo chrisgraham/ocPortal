@@ -36,7 +36,7 @@ class Hook_Notification_pointstore_request_quota extends Hook_Notification__Staf
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['pointstore_request_quota']=array(do_lang('POINT_STORE'),do_lang('NOTIFICATION_TYPE_pointstore_request_quota'));
+		$list['pointstore_request_quota']=array(do_lang('pointstore:POINT_STORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_quota'));
 		return $list;
 	}
 }

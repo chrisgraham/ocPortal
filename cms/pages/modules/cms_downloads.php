@@ -554,14 +554,18 @@ class Module_cms_downloads extends standard_crud_module
 			$fields->attach(form_input_list(do_lang_tempcode('LICENCE'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_LICENCE'),'licence',$licences));
 		}
 
+		// Meta data
+		require_code('seo2');
+		$seo_fields=seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false);
 		require_code('feedback2');
-		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
-
-		$fields->attach(meta_data_get_fields('download',is_null($id)?NULL:strval($id)));
+		$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
+		$fields->attach(meta_data_get_fields('download',is_null($id)?NULL:strval($id),false,NULL,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
 		if (has_privilege(get_member(),'edit_meta_fields'))
 		{
 			$fields->attach(form_input_integer(do_lang_tempcode('NUM_DOWNLOADS'),do_lang_tempcode('DESCRIPTION_META_NUM_DOWNLOADS'),'meta_num_downloads',NULL,false));
 		}
+		$fields->attach($seo_fields);
+		$fields->attach($feedback_fields);
 
 		if (addon_installed('content_privacy'))
 		{
@@ -1040,6 +1044,8 @@ class Module_cms_downloads_cat extends standard_crud_module
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 		$fields->attach(meta_data_get_fields('download_category',is_null($id)?NULL:strval($id)));
+		require_code('seo2');
+		$fields2->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('download_category',is_null($id)?NULL:strval($id)));

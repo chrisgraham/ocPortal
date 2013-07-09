@@ -36,7 +36,7 @@ class Hook_Notification_pointstore_request_pop3 extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['pointstore_request_pop3']=array(do_lang('POINT_STORE'),do_lang('NOTIFICATION_TYPE_pointstore_request_pop3'));
+		$list['pointstore_request_pop3']=array(do_lang('pointstore:POINT_STORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_pop3'));
 		return $list;
 	}
 }

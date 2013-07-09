@@ -36,7 +36,7 @@ class Hook_Notification_ocf_club extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_club']=array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_club'));
+		$list['ocf_club']=array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_club'));
 		return $list;
 	}
 

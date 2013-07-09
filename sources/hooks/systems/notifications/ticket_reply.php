@@ -24,7 +24,7 @@ class Hook_Notification_ticket_reply extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ticket_reply']=array(do_lang('MESSAGES'),do_lang('NOTIFICATION_TYPE_ticket_reply'));
+		$list['ticket_reply']=array(do_lang('notifications:MESSAGES'),do_lang('tickets:NOTIFICATION_TYPE_ticket_reply'));
 		return $list;
 	}
 

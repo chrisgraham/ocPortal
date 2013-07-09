@@ -36,7 +36,7 @@ class Hook_Notification_receive_points_staff extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['receive_points_staff']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_receive_points_staff'));
+		$list['receive_points_staff']=array(do_lang('ACTIVITY'),do_lang('points:NOTIFICATION_TYPE_receive_points_staff'));
 		return $list;
 	}
 }

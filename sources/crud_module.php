@@ -59,7 +59,6 @@ class standard_crud_module
 	var $possibly_some_kind_of_upload=false;
 	var $cat_crud_module=NULL; // Allows chaining of a secondary CRUD module on, to listen for cat CRUD (c)
 	var $alt_crud_module=NULL; // Allows chaining of a secondary CRUD module on, to listen for some other CRUD (v)
-	var $seo_type=NULL;
 	var $award_type=NULL;
 	var $posting_form_title=NULL;
 	var $posting_form_text='';
@@ -560,13 +559,6 @@ class standard_crud_module
 			require_code('fields');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d55b3a9fc65c8586498489f55ca2f1b8','TITLE'=>do_lang_tempcode('MORE'))));
 			append_form_custom_fields($this->award_type,NULL,$fields,$hidden);
-		}
-
-		// SEO?
-		if (!is_null($this->seo_type))
-		{
-			require_code('seo2');
-			$fields2->attach(seo_get_fields($this->seo_type));
 		}
 
 		// Awards?
@@ -1092,13 +1084,6 @@ class standard_crud_module
 			require_code('fields');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3431365db07e3ecd6f9f4d8cf51ff396','TITLE'=>do_lang_tempcode('MORE'))));
 			append_form_custom_fields($this->award_type,$id,$fields,$hidden);
-		}
-
-		// SEO?
-		if (!is_null($this->seo_type))
-		{
-			require_code('seo2');
-			$fields2->attach(seo_get_fields($this->seo_type,$id));
 		}
 
 		// Awards?

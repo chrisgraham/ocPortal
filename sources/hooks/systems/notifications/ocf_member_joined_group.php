@@ -74,7 +74,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_member_joined_group']=array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_member_joined_group'));
+		$list['ocf_member_joined_group']=array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_member_joined_group'));
 		return $list;
 	}
 

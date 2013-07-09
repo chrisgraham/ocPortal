@@ -36,7 +36,7 @@ class Hook_Notification_ocf_choose_avatar extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_choose_avatar']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_choose_avatar'));
+		$list['ocf_choose_avatar']=array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_choose_avatar'));
 		return $list;
 	}
 }

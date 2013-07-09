@@ -72,7 +72,7 @@ class Hook_Notification_quiz_results extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['quiz_results']=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_quiz_results'));
+		$list['quiz_results']=array(do_lang('GENERAL'),do_lang('quiz:NOTIFICATION_TYPE_quiz_results'));
 		return $list;
 	}
 }

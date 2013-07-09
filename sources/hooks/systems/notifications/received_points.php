@@ -24,7 +24,7 @@ class Hook_Notification_received_points extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['received_points']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_received_points'));
+		$list['received_points']=array(do_lang('ACTIVITY'),do_lang('points:NOTIFICATION_TYPE_received_points'));
 		return $list;
 	}
 

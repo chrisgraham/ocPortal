@@ -1143,9 +1143,10 @@ function get_html_trace()
 /**
  * See if a match-key message affects the error context we are in. May also internally trigger a redirect.
  *
- * @param  ?tempcode		The message (NULL: none)
+ * @param  boolean		Only if it is a zone-level match-key
+ * @return ?tempcode		The message (NULL: none)
  */
-function _look_for_match_key_message()
+function _look_for_match_key_message($only_if_zone=false)
 {
 	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
 	sort_maps_by__strlen($match_keys,'k_match_key');
@@ -1153,6 +1154,8 @@ function _look_for_match_key_message()
 	$message=NULL;
 	foreach ($match_keys as $match_key)
 	{
+		if ((substr($match_key,-6)!=':_WILD') && (substr($match_key,-2)!=':*') && ($only_if_zone)) continue;
+
 		if (match_key_match($match_key['k_match_key']))
 		{
 			$message_raw=get_translated_text($match_key['k_message']);
@@ -1177,6 +1180,8 @@ function _look_for_match_key_message()
 					$message=do_lang_tempcode('REDIRECTING');
 				}
 			}
+
+			return $message;
 		}
 	}
 	return $message;
@@ -1196,7 +1201,7 @@ function _access_denied($class,$param,$force_login)
 	require_lang('permissions');
 	require_lang('ocf_config');
 
-	$message=_look_for_match_key_message();
+	$message=_look_for_match_key_message(strpos($class,'ZONE')!==false);
 	if (is_null($message))
 	{
 		if (strpos($class,' ')!==false)

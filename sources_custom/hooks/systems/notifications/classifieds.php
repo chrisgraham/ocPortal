@@ -28,7 +28,7 @@ class Hook_Notification_classifieds extends Hook_Notification
 		if (is_null($catalogues)) return array();
 		foreach ($catalogues as $catalogue)
 		{
-			$list['classifieds__'.$catalogue['c_catalogue_name']]=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_classifieds'));
+			$list['classifieds__'.$catalogue['c_catalogue_name']]=array(do_lang('GENERAL'),do_lang('classifieds:NOTIFICATION_TYPE_classifieds'));
 		}
 		return $list;
 	}

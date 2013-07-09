@@ -24,7 +24,7 @@ class Hook_Notification_calendar_reminder extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['calendar_reminder']=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_calendar_reminder'));
+		$list['calendar_reminder']=array(do_lang('GENERAL'),do_lang('calendar:NOTIFICATION_TYPE_calendar_reminder'));
 		return $list;
 	}
 

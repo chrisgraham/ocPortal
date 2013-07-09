@@ -36,7 +36,7 @@ class Hook_Notification_poll_chosen extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['poll_chosen']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_poll_chosen'));
+		$list['poll_chosen']=array(do_lang('menus:CONTENT'),do_lang('polls:NOTIFICATION_TYPE_poll_chosen'));
 		return $list;
 	}
 

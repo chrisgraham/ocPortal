@@ -36,7 +36,7 @@ class Hook_Notification_checklist_task extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['checklist_task']=array(do_lang('STAFF'),do_lang('NOTIFICATION_TYPE_checklist_task'));
+		$list['checklist_task']=array(do_lang('STAFF'),do_lang('staff_checklist:NOTIFICATION_TYPE_checklist_task'));
 		return $list;
 	}
 }

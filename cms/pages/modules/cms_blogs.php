@@ -261,6 +261,9 @@ class Module_cms_blogs extends standard_crud_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,$send_trackbacks==1,$notes,$allow_comments==2));
 
+		require_code('seo2');
+		$fields2->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id)));
+
 		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
 

@@ -36,7 +36,7 @@ class Hook_Notification_ocf_choose_photo extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_choose_photo']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_choose_photo'));
+		$list['ocf_choose_photo']=array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_choose_photo'));
 		return $list;
 	}
 }

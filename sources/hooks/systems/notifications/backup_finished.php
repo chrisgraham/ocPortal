@@ -36,7 +36,7 @@ class Hook_Notification_backup_finished extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['backup_finished']=array(do_lang('STAFF'),do_lang('NOTIFICATION_TYPE_backup_finished'));
+		$list['backup_finished']=array(do_lang('STAFF'),do_lang('backups:NOTIFICATION_TYPE_backup_finished'));
 		return $list;
 	}
 }

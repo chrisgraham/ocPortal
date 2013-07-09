@@ -96,7 +96,7 @@ class Hook_Notification_activity extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['activity']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_activity'));
+		$list['activity']=array(do_lang('ACTIVITY'),do_lang('activities:NOTIFICATION_TYPE_activity'));
 		return $list;
 	}
 }

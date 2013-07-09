@@ -36,7 +36,7 @@ class Hook_Notification_needs_validation extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['needs_validation']=array(do_lang('VALIDATION'),do_lang('NOTIFICATION_TYPE_needs_validation'));
+		$list['needs_validation']=array(do_lang('VALIDATION'),do_lang('unvalidated:NOTIFICATION_TYPE_needs_validation'));
 		return $list;
 	}
 }

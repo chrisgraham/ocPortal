@@ -24,7 +24,7 @@ class Hook_Notification_got_disease extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['got_disease']=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_got_disease'));
+		$list['got_disease']=array(do_lang('GENERAL'),do_lang('ocdeadpeople:NOTIFICATION_TYPE_got_disease'));
 		return $list;
 	}
 }

@@ -36,7 +36,7 @@ class Hook_Notification_ocf_username_changed_staff extends Hook_Notification__St
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_username_changed_staff']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_username_changed_staff'));
+		$list['ocf_username_changed_staff']=array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_username_changed_staff'));
 		return $list;
 	}
 }

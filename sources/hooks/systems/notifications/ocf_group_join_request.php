@@ -24,7 +24,7 @@ class Hook_Notification_ocf_group_join_request extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_group_join_request']=array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_group_join_request'));
+		$list['ocf_group_join_request']=array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_group_join_request'));
 		return $list;
 	}
 

@@ -24,7 +24,7 @@ class Hook_Notification_gift extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['gift']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_gift'));
+		$list['gift']=array(do_lang('ACTIVITY'),do_lang('ocgifts:NOTIFICATION_TYPE_gift'));
 		return $list;
 	}
 }

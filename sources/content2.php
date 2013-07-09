@@ -18,6 +18,13 @@
  * @package		core
  */
 
+function init__content2()
+{
+	define('META_DATA_HEADER_NO',0);
+	define('META_DATA_HEADER_YES',1);
+	define('META_DATA_HEADER_FORCE',2);
+}
+
 /**
  * Get template fields to insert into a form page, for manipulation of meta data.
  *
@@ -25,92 +32,97 @@
  * @param  ?ID_TEXT		The ID of the resource (NULL: adding)
  * @param  boolean		Whether to allow owner to be left blank (meaning no owner)
  * @param  ?array			List of fields to NOT take in (NULL: empty list)
+ * @param  integer		Whether to show a header (a META_DATA_HEADER_* constant)
  * @return tempcode		Form page tempcode fragment
  */
-function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$fields_to_skip=NULL)
+function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$fields_to_skip=NULL,$show_header=1)
 {
-	if (!has_privilege(get_member(),'edit_meta_fields')) return new ocp_tempcode();
-
 	require_lang('meta_data');
-
-	if (is_null($fields_to_skip)) $fields_to_skip=array();
-
-	require_code('content');
-	$ob=get_content_object($content_type);
-	$info=$ob->info();
 
 	$fields=new ocp_tempcode();
 
-	require_code('content');
-	$content_row=mixed();
-	if (!is_null($content_id))
+	if (has_privilege(get_member(),'edit_meta_fields'))
 	{
-		list(,,,$content_row)=content_get_details($content_type,$content_id);
-	}
+		if (is_null($fields_to_skip)) $fields_to_skip=array();
 
-	$views_field=in_array('views',$fields_to_skip)?NULL:$info['views_field'];
-	if (!is_null($views_field))
-	{
-		$views=is_null($content_row)?0:$content_row[$views_field];
-		$fields->attach(form_input_integer(do_lang_tempcode('_VIEWS'),do_lang_tempcode('DESCRIPTION_META_VIEWS'),'meta_views',NULL,false));
-	}
+		require_code('content');
+		$ob=get_content_object($content_type);
+		$info=$ob->info();
 
-	$submitter_field=in_array('submitter',$fields_to_skip)?NULL:$info['submitter_field'];
-	if (!is_null($submitter_field))
-	{
-		$submitter=is_null($content_row)?get_member():$content_row[$submitter_field];
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
-		if (is_null($username)) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'meta_submitter',$username,!$allow_no_owner));
-	}
-
-	$add_time_field=in_array('add_time',$fields_to_skip)?NULL:$info['add_time_field'];
-	if (!is_null($add_time_field))
-	{
-		$add_time=is_null($content_row)?time():$content_row[$add_time_field];
-		$fields->attach(form_input_date(do_lang_tempcode('ADD_TIME'),do_lang_tempcode('DESCRIPTION_META_ADD_TIME'),'meta_add_time',false,false,true,$add_time,40,intval(date('Y'))-20,NULL,true));
-	}
-
-	if (!is_null($content_id))
-	{
-		$edit_time_field=in_array('edit_time',$fields_to_skip)?NULL:$info['edit_time_field'];
-		if (!is_null($edit_time_field))
-		{
-			$edit_time=is_null($content_row)?NULL:(is_null($content_row[$edit_time_field])?time():max(time(),$content_row[$edit_time_field]));
-			$fields->attach(form_input_date(do_lang_tempcode('EDIT_TIME'),do_lang_tempcode('DESCRIPTION_META_EDIT_TIME'),'meta_edit_time',true,is_null($edit_time),true,$edit_time,10,NULL,NULL,false));
-		}
-	}
-
-	if (($info['support_url_monikers']) && (!in_array('url_moniker',$fields_to_skip)))
-	{
-		$url_moniker=mixed();
+		require_code('content');
+		$content_row=mixed();
 		if (!is_null($content_id))
 		{
-			if ($content_type=='comcode_page')
+			list(,,,$content_row)=content_get_details($content_type,$content_id);
+		}
+
+		$views_field=in_array('views',$fields_to_skip)?NULL:$info['views_field'];
+		if (!is_null($views_field))
+		{
+			$views=is_null($content_row)?0:$content_row[$views_field];
+			$fields->attach(form_input_integer(do_lang_tempcode('_VIEWS'),do_lang_tempcode('DESCRIPTION_META_VIEWS'),'meta_views',NULL,false));
+		}
+
+		$submitter_field=in_array('submitter',$fields_to_skip)?NULL:$info['submitter_field'];
+		if (!is_null($submitter_field))
+		{
+			$submitter=is_null($content_row)?get_member():$content_row[$submitter_field];
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
+			if (is_null($username)) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'meta_submitter',$username,!$allow_no_owner));
+		}
+
+		$add_time_field=in_array('add_time',$fields_to_skip)?NULL:$info['add_time_field'];
+		if (!is_null($add_time_field))
+		{
+			$add_time=is_null($content_row)?time():$content_row[$add_time_field];
+			$fields->attach(form_input_date(do_lang_tempcode('ADD_TIME'),do_lang_tempcode('DESCRIPTION_META_ADD_TIME'),'meta_add_time',false,false,true,$add_time,40,intval(date('Y'))-20,NULL,true));
+		}
+
+		if (!is_null($content_id))
+		{
+			$edit_time_field=in_array('edit_time',$fields_to_skip)?NULL:$info['edit_time_field'];
+			if (!is_null($edit_time_field))
 			{
-				list($zone,$_content_id)=explode(':',$content_id);
-				$attributes=array();
-				$url_moniker=find_id_moniker(array('page'=>$_content_id)+$attributes,$zone);
+				$edit_time=is_null($content_row)?NULL:(is_null($content_row[$edit_time_field])?time():max(time(),$content_row[$edit_time_field]));
+				$fields->attach(form_input_date(do_lang_tempcode('EDIT_TIME'),do_lang_tempcode('DESCRIPTION_META_EDIT_TIME'),'meta_edit_time',true,is_null($edit_time),true,$edit_time,10,NULL,NULL,false));
+			}
+		}
+
+		if (($info['support_url_monikers']) && (!in_array('url_moniker',$fields_to_skip)))
+		{
+			$url_moniker=mixed();
+			if (!is_null($content_id))
+			{
+				if ($content_type=='comcode_page')
+				{
+					list($zone,$_content_id)=explode(':',$content_id);
+					$attributes=array();
+					$url_moniker=find_id_moniker(array('page'=>$_content_id)+$attributes,$zone);
+				} else
+				{
+					$_content_id=$content_id;
+					list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+					$url_moniker=find_id_moniker(array('id'=>$_content_id)+$attributes,$zone);
+				}
+
+				if (is_null($url_moniker)) $url_moniker='';
+
+				$moniker_where=array('m_manually_chosen'=>1,'m_resource_page'=>($content_type=='comcode_page')?$_content_id:$attributes['page'],'m_resource_type'=>isset($attributes['type'])?$attributes['type']:'','m_resource_id'=>$_content_id);
+				$manually_chosen=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',$moniker_where));
 			} else
 			{
-				$_content_id=$content_id;
-				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
-				$url_moniker=find_id_moniker(array('id'=>$_content_id)+$attributes,$zone);
+				$url_moniker='';
+				$manually_chosen=false;
 			}
-
-			if (is_null($url_moniker)) $url_moniker='';
-
-			$moniker_where=array('m_manually_chosen'=>1,'m_resource_page'=>($content_type=='comcode_page')?$_content_id:$attributes['page'],'m_resource_type'=>isset($attributes['type'])?$attributes['type']:'','m_resource_id'=>$_content_id);
-			$manually_chosen=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',$moniker_where));
-		} else
-		{
-			$url_moniker='';
-			$manually_chosen=false;
+			$fields->attach(form_input_codename(do_lang_tempcode('URL_MONIKER'),do_lang_tempcode('DESCRIPTION_META_URL_MONIKER',escape_html($url_moniker)),'meta_url_moniker',$manually_chosen?$url_moniker:'',false,NULL,NULL,array('/')));
 		}
-		$fields->attach(form_input_codename(do_lang_tempcode('URL_MONIKER'),do_lang_tempcode('DESCRIPTION_META_URL_MONIKER',escape_html($url_moniker)),'meta_url_moniker',$manually_chosen?$url_moniker:'',false,NULL,NULL,array('/')));
+	} else
+	{
+		if ($show_header!=META_DATA_HEADER_FORCE) return new ocp_tempcode();
 	}
 
-	if (!$fields->is_empty())
+	if ((!$fields->is_empty()) && ($show_header!=META_DATA_HEADER_NO))
 	{
 		$_fields=new ocp_tempcode();
 		$_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(

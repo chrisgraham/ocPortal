@@ -42,7 +42,7 @@ class Hook_Notification_manual_subscription extends Hook_Notification__Staff
 	{
 		$list=array();
 		require_code('ecommerce');
-		$list['manual_subscription']=array(do_lang('SUBSCRIPTION_EXPIRY'),do_lang('NOTIFICATION_TYPE_manual_subscription',strval(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE)));
+		$list['manual_subscription']=array(do_lang('ecommerce:SUBSCRIPTION_EXPIRY'),do_lang('ecommerce:NOTIFICATION_TYPE_manual_subscription',strval(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE)));
 		return $list;
 	}
 }

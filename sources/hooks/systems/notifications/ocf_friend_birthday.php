@@ -24,7 +24,7 @@ class Hook_Notification_ocf_friend_birthday extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_friend_birthday']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_friend_birthday'));
+		$list['ocf_friend_birthday']=array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_friend_birthday'));
 		return $list;
 	}
 

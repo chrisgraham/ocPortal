@@ -24,7 +24,7 @@ class Hook_Notification_ocf_group_declined extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_group_declined']=array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_group_declined'));
+		$list['ocf_group_declined']=array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_group_declined'));
 		return $list;
 	}
 

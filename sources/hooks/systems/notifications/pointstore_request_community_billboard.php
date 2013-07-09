@@ -36,7 +36,7 @@ class Hook_Notification_pointstore_request_community_billboard extends Hook_Noti
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['pointstore_request_community_billboard']=array(do_lang('POINT_STORE'),do_lang('NOTIFICATION_TYPE_pointstore_request_community_billboard'));
+		$list['pointstore_request_community_billboard']=array(do_lang('pointstore:POINT_STORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_community_billboard'));
 		return $list;
 	}
 }

@@ -59,7 +59,7 @@ class Hook_Notification_ocf_topic_invite extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_topic_invite']=array(do_lang('MESSAGES'),do_lang('NOTIFICATION_TYPE_ocf_topic_invite'));
+		$list['ocf_topic_invite']=array(do_lang('notifications:MESSAGES'),do_lang('ocf:NOTIFICATION_TYPE_ocf_topic_invite'));
 		return $list;
 	}
 

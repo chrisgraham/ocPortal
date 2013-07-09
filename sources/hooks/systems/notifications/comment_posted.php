@@ -112,7 +112,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['comment_posted']=array(do_lang('MESSAGES'),do_lang('NOTIFICATION_TYPE_comment_posted'));
+		$list['comment_posted']=array(do_lang('notifications:MESSAGES'),do_lang('NOTIFICATION_TYPE_comment_posted'));
 		return $list;
 	}
 

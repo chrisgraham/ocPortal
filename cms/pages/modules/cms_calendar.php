@@ -405,10 +405,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 
-		// Type
-		$type_list=nice_get_event_types($type);
-		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_EVENT_TYPE'),'type',$type_list));
-
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
 		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
@@ -416,31 +412,16 @@ class Module_cms_calendar extends standard_crud_module
 		$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,$timezone,$do_timezone_conv==1);
 		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,$end_month,$end_day_of_month,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
 
-		// Validation
-		if ($validated==0) $validated=get_param_integer('validated',0);
-		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
-			if (addon_installed('unvalidated'))
-				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
-
-		$fields2=new ocp_tempcode();
-
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'fd78d3298730d0cb157b20f1b3dd6ae1','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
-
-		// More date stuff
-		$list='';
-		foreach (get_timezone_list() as $_timezone=>$timezone_nice)
-		{
-			$list.=static_evaluate_tempcode(form_input_list_entry($_timezone,$_timezone==$timezone,$timezone_nice));
-		}
-		$fields2->attach(form_input_list(do_lang_tempcode('EVENT_TIMEZONE'),do_lang_tempcode('DESCRIPTION_EVENT_TIMEZONE'),'timezone',make_string_tempcode($list)));
-		$fields2->attach(form_input_tick(do_lang_tempcode('DO_TIMEZONE_CONV'),do_lang_tempcode('DESCRIPTION_DO_TIMEZONE_CONV'),'do_timezone_conv',$do_timezone_conv==1));
+		// Type
+		$type_list=nice_get_event_types($type);
+		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_EVENT_TYPE'),'type',$type_list));
 
 		// Member calendar
 		$member_calendar=get_param_integer('member_id',$member_calendar);
 		if (has_privilege(get_member(),'calendar_add_to_others') || $member_calendar==get_member())
 		{
 			$_member_calendar=is_null($member_calendar)?'':$GLOBALS['FORUM_DRIVER']->get_username($member_calendar);
-			$fields2->attach(form_input_username(do_lang_tempcode('MEMBER_CALENDAR'),do_lang_tempcode('DESCRIPTION_MEMBER_CALENDAR'),'member_calendar',$_member_calendar,!has_privilege(get_member(),'add_public_events')));
+			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_CALENDAR'),do_lang_tempcode('DESCRIPTION_MEMBER_CALENDAR'),'member_calendar',$_member_calendar,!has_privilege(get_member(),'add_public_events')));
 		}
 
 		// Priority
@@ -450,7 +431,33 @@ class Module_cms_calendar extends standard_crud_module
 		$priority_list->attach(form_input_list_entry('3',$priority==3,do_lang_tempcode('PRIORITY_3')));
 		$priority_list->attach(form_input_list_entry('4',$priority==4,do_lang_tempcode('PRIORITY_4')));
 		$priority_list->attach(form_input_list_entry('5',$priority==5,do_lang_tempcode('PRIORITY_5')));
-		$fields2->attach(form_input_list(do_lang_tempcode('PRIORITY'),'','priority',$priority_list));
+		$fields->attach(form_input_list(do_lang_tempcode('PRIORITY'),'','priority',$priority_list));
+
+		// Validation
+		if ($validated==0) $validated=get_param_integer('validated',0);
+		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
+			if (addon_installed('unvalidated'))
+				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+
+		$fields2=new ocp_tempcode();
+
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'fd78d3298730d0cb157b20f1b3dd6ae1','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('TIMEZONE'))));
+
+		// More date stuff
+		if (get_option('allow_international')=='1')
+		{
+			$list='';
+			foreach (get_timezone_list() as $_timezone=>$timezone_nice)
+			{
+				$list.=static_evaluate_tempcode(form_input_list_entry($_timezone,$_timezone==$timezone,$timezone_nice));
+			}
+			$fields2->attach(form_input_list(do_lang_tempcode('EVENT_TIMEZONE'),do_lang_tempcode('DESCRIPTION_EVENT_TIMEZONE'),'timezone',make_string_tempcode($list)));
+			$fields2->attach(form_input_tick(do_lang_tempcode('DO_TIMEZONE_CONV'),do_lang_tempcode('DESCRIPTION_DO_TIMEZONE_CONV'),'do_timezone_conv',$do_timezone_conv==1));
+		} else
+		{
+			$hidden->attach(form_input_hidden('timezone',$timezone));
+			$hidden->attach(form_input_hidden('do_timezone_conv',strval($do_timezone_conv)));
+		}
 
 		// Recurrence
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'313be8d71088bf12c9c5e5f67f28174a','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RECURRENCE'))));
@@ -499,13 +506,17 @@ class Module_cms_calendar extends standard_crud_module
 			$fields2->attach(form_input_float(do_lang_tempcode('REMINDER_TIME'),do_lang_tempcode('DESCRIPTION_REMINDER_TIME'),'hours_before',1.0,true));
 		}
 
-		require_code('feedback2');
-		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
-
 		require_code('activities');
 		$fields2->attach(get_syndication_option_fields());
 
-		$fields2->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id)));
+		// Meta data
+		require_code('seo2');
+		$seo_fields=seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false);
+		require_code('feedback2');
+		$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
+		$fields2->attach(meta_data_get_fields('event',is_null($id)?NULL:strval($id),false,NULL,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+		$fields2->attach($seo_fields);
+		$fields2->attach($feedback_fields);
 
 		if (addon_installed('content_privacy'))
 		{
@@ -1264,6 +1275,8 @@ class Module_cms_calendar_cat extends standard_crud_module
 		}
 
 		$fields->attach(meta_data_get_fields('calendar_type',is_null($id)?NULL:strval($id)));
+		require_code('seo2');
+		$fields2->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
 
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,($title=='')));

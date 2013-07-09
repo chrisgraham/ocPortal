@@ -95,7 +95,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				}
 			}
 
-			if (addon_installed('content_privacy'))
+			if (addon_installed('content_privacy') && addon_installed('ocf_member_photos'))
 			{
 				require_code('content_privacy2');
 				list($privacy_level,$additional_access)=read_privacy_fields('photo_');
@@ -192,7 +192,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 			}
 		}
 
-		if (addon_installed('content_privacy'))
+		if (addon_installed('content_privacy') && addon_installed('ocf_member_photos'))
 		{
 			require_code('content_privacy2');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PHOTO'))));

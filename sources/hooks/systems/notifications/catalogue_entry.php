@@ -78,10 +78,10 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 		{
 			$catalogue_name=$catalogue['c_name'];
 			if (substr($catalogue_name,0,1)=='_') continue;
-			$nl=do_lang('NOTIFICATION_TYPE_catalogue_entry__'.$catalogue_name,NULL,NULL,NULL,NULL,false);
+			$nl=do_lang('catalogues:NOTIFICATION_TYPE_catalogue_entry__'.$catalogue_name,NULL,NULL,NULL,NULL,false);
 			if (is_null($nl))
 			{
-				$nl=do_lang('NOTIFICATION_TYPE_catalogue_entry',get_translated_text($catalogue['c_title']));
+				$nl=do_lang('catalogues:NOTIFICATION_TYPE_catalogue_entry',get_translated_text($catalogue['c_title']));
 			}
 			$list['catalogue_entry__'.$catalogue_name]=array(do_lang('menus:CONTENT'),$nl);
 		}

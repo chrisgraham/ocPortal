@@ -24,7 +24,7 @@ class Hook_Notification_invited_content extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['invited_content']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_invited_content'));
+		$list['invited_content']=array(do_lang('ACTIVITY'),do_lang('content_privacy:NOTIFICATION_TYPE_invited_content'));
 		return $list;
 	}
 }

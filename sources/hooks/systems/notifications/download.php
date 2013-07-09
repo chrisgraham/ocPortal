@@ -71,7 +71,7 @@ class Hook_Notification_download extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['download']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_download'));
+		$list['download']=array(do_lang('menus:CONTENT'),do_lang('downloads:NOTIFICATION_TYPE_download'));
 		return $list;
 	}
 

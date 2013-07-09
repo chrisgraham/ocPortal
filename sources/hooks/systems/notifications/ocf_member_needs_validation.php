@@ -36,7 +36,7 @@ class Hook_Notification_ocf_member_needs_validation extends Hook_Notification__S
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_member_needs_validation']=array(do_lang('VALIDATION'),do_lang('NOTIFICATION_TYPE_ocf_member_needs_validation'));
+		$list['ocf_member_needs_validation']=array(do_lang('VALIDATION'),do_lang('ocf:NOTIFICATION_TYPE_ocf_member_needs_validation'));
 		return $list;
 	}
 }

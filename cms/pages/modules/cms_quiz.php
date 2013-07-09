@@ -265,6 +265,8 @@ class Module_cms_quiz extends standard_crud_module
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 		$fields->attach(meta_data_get_fields('quiz',is_null($id)?NULL:strval($id)));
+		require_code('seo2');
+		$fields->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('quiz',is_null($id)?NULL:strval($id)));

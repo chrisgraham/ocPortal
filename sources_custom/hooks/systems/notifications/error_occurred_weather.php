@@ -36,7 +36,7 @@ class Hook_Notification_error_occurred_weather extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['error_occurred_weather']=array(do_lang('ERRORS'),do_lang('NOTIFICATION_TYPE_error_occurred_weather'));
+		$list['error_occurred_weather']=array(do_lang('ERRORS'),do_lang('weather:NOTIFICATION_TYPE_error_occurred_weather'));
 		return $list;
 	}
 }

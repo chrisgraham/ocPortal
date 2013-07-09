@@ -36,7 +36,7 @@ class Hook_Notification_ticket_reply_staff extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ticket_reply_staff']=array(do_lang('MESSAGES'),do_lang('NOTIFICATION_TYPE_ticket_reply_staff'));
+		$list['ticket_reply_staff']=array(do_lang('notifications:MESSAGES'),do_lang('tickets:NOTIFICATION_TYPE_ticket_reply_staff'));
 		return $list;
 	}
 }

@@ -36,7 +36,7 @@ class Hook_Notification_low_stock extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['low_stock']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('NOTIFICATION_TYPE_low_stock'));
+		$list['low_stock']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('shopping:NOTIFICATION_TYPE_low_stock'));
 		return $list;
 	}
 }

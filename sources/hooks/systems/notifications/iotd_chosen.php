@@ -36,7 +36,7 @@ class Hook_Notification_iotd_chosen extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['iotd_chosen']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_iotd_chosen'));
+		$list['iotd_chosen']=array(do_lang('menus:CONTENT'),do_lang('iotds:NOTIFICATION_TYPE_iotd_chosen'));
 		return $list;
 	}
 

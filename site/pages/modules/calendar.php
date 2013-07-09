@@ -71,7 +71,7 @@ class Module_calendar
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'calendar'));
 
-		delete_menu_item_simple('_SEARCH:calendar:type=misc:member_id={$USER_OVERIDE}');
+		delete_menu_item_simple('_SEARCH:calendar:type=misc');
 
 		delete_config_option('calendar_show_stats_count_events');
 		delete_config_option('calendar_show_stats_count_events_this_week');

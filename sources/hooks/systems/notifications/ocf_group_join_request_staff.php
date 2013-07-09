@@ -36,7 +36,7 @@ class Hook_Notification_ocf_group_join_request_staff extends Hook_Notification__
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_group_join_request_staff']=array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_group_join_request_staff'));
+		$list['ocf_group_join_request_staff']=array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_group_join_request_staff'));
 		return $list;
 	}
 }

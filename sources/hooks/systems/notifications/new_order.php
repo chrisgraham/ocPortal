@@ -36,7 +36,7 @@ class Hook_Notification_new_order extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['new_order']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('NOTIFICATION_TYPE_new_order'));
+		$list['new_order']=array(do_lang('ecommerce:ECOMMERCE'),do_lang('shopping:NOTIFICATION_TYPE_new_order'));
 		return $list;
 	}
 }

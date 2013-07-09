@@ -78,7 +78,7 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['actionlog']=array(do_lang('STAFF'),do_lang('NOTIFICATION_TYPE_actionlog'));
+		$list['actionlog']=array(do_lang('STAFF'),do_lang('actionlog:NOTIFICATION_TYPE_actionlog'));
 		return $list;
 	}
 }

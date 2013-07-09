@@ -148,7 +148,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_topic']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_ocf_topic'));
+		$list['ocf_topic']=array(do_lang('menus:CONTENT'),do_lang('ocf:NOTIFICATION_TYPE_ocf_topic'));
 		return $list;
 	}
 

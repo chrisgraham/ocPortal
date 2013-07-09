@@ -53,10 +53,14 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['FORUM_DB']->create_table('f_group_join_log',array(
-		'id'=>'*AUTO',
-		'member_id'=>'MEMBER',
-		'usergroup_id'=>'?AUTO_LINK',
-		'join_time'=>'TIME'
-	));
+	require_code('notifications');
+	$hooks=find_all_hooks('systems','notifications');
+	$hooks=array_keys($hooks);
+	shuffle($hooks);
+	foreach ($hooks as $hook)
+	{
+		require_code('hooks/systems/notifications/'.$hook);
+		$ob=object_factory('Hook_Notification_'.$hook);
+		$ob->list_handled_codes();
+	}
 }

@@ -70,8 +70,8 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['content_reviews']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_content_reviews'));
-		$list['content_reviews__own']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_content_reviews__own'));
+		$list['content_reviews']=array(do_lang('menus:CONTENT'),do_lang('content_reviews:NOTIFICATION_TYPE_content_reviews'));
+		$list['content_reviews__own']=array(do_lang('menus:CONTENT'),do_lang('content_reviews:NOTIFICATION_TYPE_content_reviews__own'));
 		return $list;
 	}
 }

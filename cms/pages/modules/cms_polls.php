@@ -235,10 +235,11 @@ class Module_cms_polls extends standard_crud_module
 			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
 		}
 
+		// Meta data
 		require_code('feedback2');
-		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
-
-		$fields->attach(meta_data_get_fields('poll',is_null($id)?NULL:strval($id)));
+		$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
+		$fields->attach(meta_data_get_fields('poll',is_null($id)?NULL:strval($id),false,NULL,($feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+		$fields->attach($feedback_fields);
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('poll',is_null($id)?NULL:strval($id)));

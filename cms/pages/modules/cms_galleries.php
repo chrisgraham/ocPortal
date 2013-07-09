@@ -1040,18 +1040,23 @@ class Module_cms_galleries extends standard_crud_module
 			}
 		}
 
+		// Meta data
+		require_code('seo2');
+		$seo_fields=seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false);
 		if (get_option('gallery_feedback_fields')=='1')
 		{
 			require_code('feedback2');
-			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+			$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
 		} else
 		{
 			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
 			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
 			$hidden->attach(form_input_hidden('allow_trackbacks',strval($allow_trackbacks)));
+			$feedback_fields=new ocp_tempcode();
 		}
-
-		$fields->attach(meta_data_get_fields('image',is_null($id)?NULL:strval($id)));
+		$fields->attach(meta_data_get_fields('image',is_null($id)?NULL:strval($id),false,NULL,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+		$fields->attach($seo_fields);
+		$fields->attach($feedback_fields);
 
 		if (addon_installed('content_privacy'))
 		{
@@ -1588,17 +1593,23 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$fields->attach($validated_field);
 		}
 
+		// Meta data
+		require_code('seo2');
+		$seo_fields=seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false);
 		if (get_option('gallery_feedback_fields')=='1')
 		{
 			require_code('feedback2');
-			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+			$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
 		} else
 		{
 			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
 			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
+			$hidden->attach(form_input_hidden('allow_trackbacks',strval($allow_trackbacks)));
+			$feedback_fields=new ocp_tempcode();
 		}
-
-		$fields->attach(meta_data_get_fields('video',is_null($id)?NULL:strval($id)));
+		$fields->attach(meta_data_get_fields('video',is_null($id)?NULL:strval($id),false,NULL,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+		$fields->attach($seo_fields);
+		$fields->attach($feedback_fields);
 
 		if (addon_installed('content_privacy'))
 		{
@@ -2068,16 +2079,6 @@ class Module_cms_galleries_cat extends standard_crud_module
 		}
 		handle_max_file_size($hidden,'image');
 
-		if (get_option('gallery_feedback_fields')=='1')
-		{
-			require_code('feedback2');
-			$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,NULL,false,$notes,$allow_comments==2,true));
-		} else
-		{
-			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
-			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
-		}
-
 		// Permissions
 		if (get_option('gallery_permissions')=='1')
 		{
@@ -2088,7 +2089,22 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(get_category_permissions_hidden_on());
 		}
 
-		$fields->attach(meta_data_get_fields('gallery',($name=='')?NULL:$name,true));
+		// Meta data
+		require_code('seo2');
+		$seo_fields=seo_get_fields($this->seo_type,($name=='')?NULL:$id,false);
+		if (get_option('gallery_feedback_fields')=='1')
+		{
+			require_code('feedback2');
+			$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,NULL,false,$notes,$allow_comments==2,true,true,false);
+		} else
+		{
+			$hidden->attach(form_input_hidden('allow_rating',strval($allow_rating)));
+			$hidden->attach(form_input_hidden('allow_comments',strval($allow_comments)));
+			$feedback_fields=new ocp_tempcode();
+		}
+		$fields->attach(meta_data_get_fields('gallery',($name=='')?NULL:$name,true,NULL,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+		$fields->attach($seo_fields);
+		$fields->attach($feedback_fields);
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('gallery',($name=='')?NULL:$name));

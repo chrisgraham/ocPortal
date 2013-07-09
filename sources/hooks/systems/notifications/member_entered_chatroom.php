@@ -76,7 +76,7 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['member_entered_chatroom']=array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_member_entered_chatroom'));
+		$list['member_entered_chatroom']=array(do_lang('ACTIVITY'),do_lang('chat:NOTIFICATION_TYPE_member_entered_chatroom'));
 		return $list;
 	}
 

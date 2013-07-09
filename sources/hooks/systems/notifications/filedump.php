@@ -84,7 +84,7 @@ class Hook_Notification_filedump extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['filedump']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_filedump'));
+		$list['filedump']=array(do_lang('menus:CONTENT'),do_lang('filedump:NOTIFICATION_TYPE_filedump'));
 		return $list;
 	}
 
