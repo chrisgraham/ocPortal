@@ -244,6 +244,12 @@ class Module_cms_galleries extends standard_aed_module
 		// Feedback
 		require_code('feedback2');
 		$fields->attach(feedback_fields(true,true,true,false,''));
+		// Privacy
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			$fields->attach(get_privacy_form_fields(NULL));
+		}
 		// Max upload limit
 		require_code('files2');
 		$max=floatval(get_max_file_size())/floatval(1024*1024);
@@ -569,7 +575,18 @@ class Module_cms_galleries extends standard_aed_module
 						store_exif('video',strval($id),$exif);
 
 						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-							syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
+						{
+							$privacy_ok=true;
+							if (addon_installed('content_privacy'))
+							{
+								require_code('content_privacy');
+								$privacy_ok=has_privacy_access('video',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+							}
+							if ($privacy_ok)
+							{
+								syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
+							}
+						}
 					}
 				} else
 				{
@@ -592,7 +609,17 @@ class Module_cms_galleries extends standard_aed_module
 						store_exif('image',strval($id),$exif);
 
 						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-							syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
+						{
+							$privacy_ok=true;
+							if (addon_installed('content_privacy'))
+							{
+								require_code('content_privacy');
+								$privacy_ok=has_privacy_access('image',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+							}
+							if ($privacy_ok)
+							{
+								syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
+							}
 					}
 				}
 			}
@@ -744,9 +771,26 @@ class Module_cms_galleries extends standard_aed_module
 				$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
 				$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height,NULL,$time);
 				store_exif('video',strval($id),$exif);
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy2');
+					list($privacy_level,$additional_access)=read_privacy_fields();
+					save_privacy_form_fields('video',strval($id),$privacy_level,$additional_access);
+				}
 
 				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-					syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
+				{
+					$privacy_ok=true;
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						$privacy_ok=has_privacy_access('video',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+					}
+					if ($privacy_ok)
+					{
+						syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
+					}
+				}
 			}
 		} else
 		{
@@ -775,9 +819,26 @@ class Module_cms_galleries extends standard_aed_module
 
 				$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),NULL,$time);
 				store_exif('image',strval($id),$exif);
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy2');
+					list($privacy_level,$additional_access)=read_privacy_fields();
+					save_privacy_form_fields('image',strval($id),$privacy_level,$additional_access);
+				}
 
 				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-					syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
+				{
+					$privacy_ok=true;
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						$privacy_ok=has_privacy_access('image',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+					}
+					if ($privacy_ok)
+					{
+						syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
+					}
+				}
 			}
 		}
 	}
@@ -976,6 +1037,18 @@ class Module_cms_galleries extends standard_aed_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			if (is_null($id))
+			{
+				$fields->attach(get_privacy_form_fields());
+			} else
+			{
+				$fields->attach(get_privacy_form_fields('image',strval($id)));
+			}
+		}
+
 		return array($fields,$hidden);
 	}
 
@@ -1077,12 +1150,30 @@ class Module_cms_galleries extends standard_aed_module
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-				syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
+			{
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('image',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
+				}
+			}
 		}
 
 		if ((has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
 			$GLOBALS['SITE_DB']->query_update('galleries',array('rep_image'=>$urls[1]),array('name'=>$cat),'',1);
+		}
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('image',strval($id),$privacy_level,$additional_access);
 		}
 
 		return strval($id);
@@ -1134,7 +1225,18 @@ class Module_cms_galleries extends standard_aed_module
 			$submitter=$GLOBALS['SITE_DB']->query_value('images','submitter',array('id'=>$id));
 
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_IMAGE':'galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries',1,$submitter);
+			{
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('image',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_IMAGE':'galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries',1,$submitter);
+				}
+			}
 		}
 
 		edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
@@ -1142,6 +1244,13 @@ class Module_cms_galleries extends standard_aed_module
 		if ((has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
 			$GLOBALS['SITE_DB']->query_update('galleries',array('rep_image'=>$thumb_url),array('name'=>$cat),'',1);
+		}
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('image',strval($id),$privacy_level,$additional_access);
 		}
 	}
 
@@ -1159,6 +1268,12 @@ class Module_cms_galleries extends standard_aed_module
 		$this->donext_type=post_param('cat');
 
 		delete_image($id,$delete_status=='2');
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			delete_privacy_form_fields('image',strval($id));
+		}
 	}
 
 	/**
@@ -1402,6 +1517,18 @@ class Module_cms_galleries_alt extends standard_aed_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			if (is_null($id))
+			{
+				$fields->attach(get_privacy_form_fields());
+			} else
+			{
+				$fields->attach(get_privacy_form_fields('video',strval($id)));
+			}
+		}
+
 		return array($fields,$hidden);
 	}
 
@@ -1509,7 +1636,25 @@ class Module_cms_galleries_alt extends standard_aed_module
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-				syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
+			{
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('video',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
+				}
+			}
+		}
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('video',strval($id),$privacy_level,$additional_access);
 		}
 
 		return strval($id);
@@ -1575,10 +1720,28 @@ class Module_cms_galleries_alt extends standard_aed_module
 			$submitter=$GLOBALS['SITE_DB']->query_value('videos','submitter',array('id'=>$id));
 
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
-				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_VIDEO':'galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries',1,$submitter);
+			{
+				$privacy_ok=true;
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					$privacy_ok=has_privacy_access('video',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
+				if ($privacy_ok)
+				{
+					syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_VIDEO':'galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries',1,$submitter);
+				}
+			}
 		}
 
 		edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''));
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('video',strval($id),$privacy_level,$additional_access);
+		}
 	}
 
 	/**
@@ -1595,6 +1758,12 @@ class Module_cms_galleries_alt extends standard_aed_module
 		$this->donext_type=post_param('cat');
 
 		delete_video($id,$delete_status=='2');
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			delete_privacy_form_fields('video',strval($id));
+		}
 	}
 
 	/**

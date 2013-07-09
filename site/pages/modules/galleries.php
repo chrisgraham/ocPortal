@@ -383,12 +383,40 @@ class Module_galleries
 		if (is_null($image_data))
 		{
 			$image_data_count=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)');
-			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
+			if ($image_data_count>2000)
+			{
+				$image_data=array();
+			} else
+			{
+				$privacy_join='';
+				$privacy_where='';
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					list($privacy_join,$privacy_where)=get_privacy_where_clause('image','d');
+				}
+				$where='1=1'.$privacy_where;
+				$image_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'images d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
+			}
 		}
 		if (is_null($video_data))
 		{
 			$video_data_count=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)');
-			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
+			if ($video_data_count>2000)
+			{
+				$video_data=array();
+			} else
+			{
+				$privacy_join='';
+				$privacy_where='';
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					list($privacy_join,$privacy_where)=get_privacy_where_clause('video','d');
+				}
+				$where='1=1'.$privacy_where;
+				$video_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'videos d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
+			}
 		}
 
 		// Subcategories
@@ -773,12 +801,29 @@ class Module_galleries
 		$entry_description=new ocp_tempcode();
 		$probe_type=get_param('probe_type','first');
 		$probe_id=get_param_integer('probe_id',0);
+
+		$extra_join_image='';
+		$extra_join_video='';
+		$extra_where_image='';
+		$extra_where_video='';
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','e');
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','e');
+			$extra_join_image.=$privacy_join_image;
+			$extra_join_video.=$privacy_join_video;
+			$extra_where_image.=$privacy_where_image;
+			$extra_where_video.=$privacy_where_video;
+		}
+
 		if ($probe_type=='first')
 		{
 			$where=db_string_equal_to('cat',$cat);
 			if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 			if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,1);
+			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$where.$extra_where_video.' ORDER BY '.$sort,1,NULL,false,true);
 			if (array_key_exists(0,$first_video))
 			{
 				$row=$first_video[0];
@@ -789,7 +834,7 @@ class Module_galleries
 				$where=db_string_equal_to('cat',$cat);
 				if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 				if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,1);
+				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$where.$extra_where_image.' ORDER BY '.$sort,1,NULL,false,true);
 				if (array_key_exists(0,$first_image))
 				{
 					$row=$first_image[0];
@@ -811,6 +856,11 @@ class Module_galleries
 				if (is_null($row))
 				{
 					$map=array('cat'=>$cat,'id'=>$probe_id);
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						check_privacy('video',strval($probe_id));
+					}
 					if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
 					$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
@@ -855,6 +905,11 @@ class Module_galleries
 				if (is_null($row))
 				{
 					$map=array('cat'=>$cat,'id'=>$probe_id);
+					if (addon_installed('content_privacy'))
+					{
+						require_code('content_privacy');
+						check_privacy('image',strval($probe_id));
+					}
 					if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
 					$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
@@ -1037,6 +1092,17 @@ class Module_galleries
 			$ocselect_extra_where_videos='';
 		}
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','r');
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','r');
+			$extra_join_sql_images.=$privacy_join_image;
+			$extra_join_sql_videos.=$privacy_join_video;
+			$ocselect_extra_where_images.=$privacy_where_image;
+			$ocselect_extra_where_videos.=$privacy_where_video;
+		}
+
 		// Work out totals
 		$num_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images r'.$extra_join_sql_images.' WHERE '.$where.$ocselect_extra_where_images);
 		$num_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos r'.$extra_join_sql_videos.' WHERE '.$where.$ocselect_extra_where_videos);
@@ -1121,6 +1187,12 @@ class Module_galleries
 	function show_image($category_name=NULL,$breadcrumbs=NULL)
 	{
 		$id=get_param_integer('id');
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('image',strval($id));
+		}
 
 		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
 
@@ -1250,6 +1322,12 @@ class Module_galleries
 	function show_video($category_name=NULL,$breadcrumbs=NULL)
 	{
 		$id=get_param_integer('id');
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			check_privacy('video',strval($id));
+		}
 
 		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
 
@@ -1417,13 +1495,29 @@ class Module_galleries
 		if ($days!='') $where.=' AND add_date>='.strval(time()-intval($days)*60*60*24);
 
 		require_code('ocfiltering');
-		$image_select_sql=ocfilter_to_sqlfragment($image_select,'e.id');
+		$image_select_sql=ocfilter_to_sqlfragment($image_select,'r.id');
 		$where_images=$where.' AND '.$image_select_sql;
-		$video_select_sql=ocfilter_to_sqlfragment($video_select,'e.id');
+		$video_select_sql=ocfilter_to_sqlfragment($video_select,'r.id');
 		$where_videos=$where.' AND '.$video_select_sql;
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos);
+		$extra_join_image='';
+		$extra_join_video='';
+		$extra_where_image='';
+		$extra_where_video='';
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy');
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','r');
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','r');
+			$extra_join_image.=$privacy_join_image;
+			$extra_join_video.=$privacy_join_video;
+			$extra_where_image.=$privacy_where_image;
+			$extra_where_video.=$privacy_where_video;
+		}
+
+		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'images r'.$join.$extra_join_image.' WHERE '.$where_images.$extra_where_image,false,true);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'videos r'.$join.$extra_join_video.' WHERE '.$where_videos.$extra_where_video,false,true);
 
 		// These will hopefully be replaced with proper values
 		$position=1;
@@ -1437,8 +1531,8 @@ class Module_galleries
 		$total=$total_videos+$total_images;
 		if ($total<500) // Not too many to navigate through
 		{
-			$rows_images=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_images.',title FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images.' ORDER BY '.$sort);
-			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_videos.',title FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos.' ORDER BY '.$sort);
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT r.id,add_date,url'.$sql_suffix_images.',title FROM '.get_table_prefix().'images r'.$join.$extra_join_image.' WHERE '.$where_images.$extra_where_image.' ORDER BY '.$sort,NULL,NULL,false,true);
+			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT r.id,add_date,url'.$sql_suffix_videos.',title FROM '.get_table_prefix().'videos r'.$join.$extra_join_video.' WHERE '.$where_videos.$extra_where_video.' ORDER BY '.$sort,NULL,NULL,false,true);
 
 			list($_sort,$_dir)=explode(' ',$sort,2);
 

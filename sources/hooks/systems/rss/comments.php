@@ -63,6 +63,14 @@ class Hook_rss_comments
 				if ($zone=='_SEARCH') $zone=get_module_zone($view_pagelink_bits[1]);
 				if (!has_actual_page_access(get_member(),$view_pagelink_bits[1],$zone)) return NULL;
 			}
+
+			// Privacy
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				if (!has_privacy_access($hook,$parts[1]))
+					return NULL;
+			}
 		} else
 		{
 			$zone=get_page_zone($parts[0],false);
