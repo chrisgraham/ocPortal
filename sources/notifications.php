@@ -80,6 +80,7 @@ function _get_notification_ob_for_code($notification_code)
 	$path='hooks/systems/notifications/'.filter_naughty(preg_replace('#\_\_\w*$#','',$notification_code));
 	if ((!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
 	{
+		require_all_lang();
 		$hooks=find_all_hooks('systems','notifications');
 		foreach (array_keys($hooks) as $hook)
 		{

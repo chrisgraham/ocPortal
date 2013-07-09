@@ -29,7 +29,7 @@ class Hook_sw_galleries
 	function get_current_settings()
 	{
 		$settings=array();
-		$test=$GLOBALS['SITE_DB']->query_select_value('gsp','COUNT(*)',array('specific_permission'=>'have_personal_category','the_page'=>'cms_galleries'));
+		$test=$GLOBALS['SITE_DB']->query_select_value('gsp','COUNT(*)',array('privilege'=>'have_personal_category','the_page'=>'cms_galleries'));
 		$settings['keep_personal_galleries']=($test==0)?'0':'1';
 		return $settings;
 	}

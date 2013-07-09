@@ -396,10 +396,13 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('c_name'=>$name),array('c_name'=>$old_name));
 		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('c_name'=>$name),array('c_name'=>$old_name));
 
-		$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'catalogue'));
-		foreach ($types as $type)
+		if (addon_installed('awards'))
 		{
-			$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
+			$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'catalogue'));
+			foreach ($types as $type)
+			{
+				$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
+			}
 		}
 	}
 

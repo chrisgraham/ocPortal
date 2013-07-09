@@ -1527,6 +1527,9 @@ class Hook_ocp_merge
 					$id_new=$GLOBALS['SITE_DB']->query_insert('catalogue_fields',$row2,true);
 					import_id_remap_put('catalogue_field',$old_id,$id_new);
 				}
+			} else
+			{
+				warn_exit(do_lang_tempcode('CANNOT_MERGE_CATALOGUES'));
 			}
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'catalogue_categories ORDER BY id');
@@ -1534,6 +1537,16 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('catalogue_category',strval($row['id']))) continue;
+
+			if ((is_null($row['cc_parent_id'])) && ($GLOBALS['SITE_DB']->query_value('catalogues','c_is_tree',array('c_name'=>$row['c_name']))==1))
+			{
+				$real_root=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_catalogues','id',array('cc_parent_id'=>NULL,'c_name'=>$row['c_name']));
+				if (!is_null($real_root))
+				{
+					import_id_remap_put('catalogue_category',strval($row['id']),$real_root);
+					continue;
+				}
+			}
 
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 			$rep_image=array_key_exists('cc_rep_image',$row)?$row['cc_rep_image']:'';

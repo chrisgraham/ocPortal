@@ -1,5 +1,15 @@
 <?php
 
+function init__users()
+{
+	require_code('facebook_connect');
+}
+
+function unused_other_func()
+{
+	// Just works as a flag that this isn't a "pure" file and hence to run the original's init function
+}
+
 /**
  * Find whether the current member is logged in via httpauth. For Facebook/OpenID we put in a bit of extra code to notify that the session must also be auto-marked as confirmed (which is why the function is called in some cases).
  *

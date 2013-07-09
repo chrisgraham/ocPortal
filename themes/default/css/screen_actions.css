@@ -9,6 +9,8 @@
 
 .screen_actions {
 	overflow: hidden;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 
 .screen_actions div {
@@ -21,6 +23,12 @@
 	width: 20px;
 	height: 16px;
 	display: inline-block;
+}
+
+.screen_actions .facebook_like {
+	position: relative;
+	top: -2px;
+	margin-right: 0;
 }
 
 .screen_actions .print {
