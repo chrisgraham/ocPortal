@@ -206,10 +206,17 @@ function div($tempcode,$guid='')
  *
  * @param  tempcode		The title of the info page
  * @param  mixed			The text to put on the info page (string, or language-tempcode)
+ * @param  boolean		Whether match key messages / redirects should be supported
  * @return tempcode		The info page
  */
-function inform_screen($title,$text)
+function inform_screen($title,$text,$support_match_key_messages=false)
 {
+	if ($support_match_key_messages)
+	{
+		$tmp=_look_for_match_key_message();
+		if (!is_null($tmp)) $text=$tmp;
+	}
+
 	return do_template('INFORM_SCREEN',array('_GUID'=>'6e0aec9eb8a1daca60f322f213ddd2ee','TITLE'=>$title,'TEXT'=>$text));
 }
 
@@ -219,11 +226,18 @@ function inform_screen($title,$text)
  * @param  tempcode		The title of the warn page
  * @param  mixed			The text to put on the warn page (either tempcode or string)
  * @param  boolean		Whether to provide a back button
+ * @param  boolean		Whether match key messages / redirects should be supported
  * @return tempcode		The warn page
  */
-function warn_screen($title,$text,$provide_back=true)
+function warn_screen($title,$text,$provide_back=true,$support_match_key_messages=false)
 {
 	require_code('failure');
+
+	if ($support_match_key_messages)
+	{
+		$tmp=_look_for_match_key_message();
+		if (!is_null($tmp)) $text=$tmp;
+	}
 
 	$text_eval=is_object($text)?$text->evaluate():$text;
 

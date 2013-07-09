@@ -256,10 +256,17 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
  *
  * @param  mixed			The error message (string or tempcode)
  * @param  ID_TEXT		Name of the terminal page template
+ * @param  boolean		Whether match key messages / redirects should be supported
  */
-function _generic_exit($text,$template)
+function _generic_exit($text,$template,$support_match_key_messages=false)
 {
 	@ob_end_clean(); // Incase in minimodule
+
+	if ($support_match_key_messages)
+	{
+		$tmp=_look_for_match_key_message();
+		if (!is_null($tmp)) $text=$tmp;
+	}
 
 	global $WANT_TEXT_ERRORS;
 	if ($WANT_TEXT_ERRORS)
@@ -1134,19 +1141,12 @@ function get_html_trace()
 }
 
 /**
- * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
+ * See if a match-key message affects the error context we are in. May also internally trigger a redirect.
  *
- * @param  ID_TEXT		The class of error (e.g. PRIVILEGE)
- * @param  string			The parameter given to the error message
- * @param  boolean		Force the user to login (even if perhaps they are logged in already)
+ * @param  ?tempcode		The message (NULL: none)
  */
-function _access_denied($class,$param,$force_login)
+function _look_for_match_key_message()
 {
-	set_http_status_code('401'); // Stop spiders ever storing the URL that caused this
-
-	require_lang('permissions');
-	require_lang('ocf_config');
-
 	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
 	sort_maps_by__strlen($match_keys,'k_match_key');
 	$match_keys=array_reverse($match_keys);
@@ -1179,6 +1179,24 @@ function _access_denied($class,$param,$force_login)
 			}
 		}
 	}
+	return $message;
+}
+
+/**
+ * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
+ *
+ * @param  ID_TEXT		The class of error (e.g. PRIVILEGE)
+ * @param  string			The parameter given to the error message
+ * @param  boolean		Force the user to login (even if perhaps they are logged in already)
+ */
+function _access_denied($class,$param,$force_login)
+{
+	set_http_status_code('401'); // Stop spiders ever storing the URL that caused this
+
+	require_lang('permissions');
+	require_lang('ocf_config');
+
+	$message=_look_for_match_key_message();
 	if (is_null($message))
 	{
 		if (strpos($class,' ')!==false)

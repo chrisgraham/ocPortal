@@ -585,13 +585,13 @@ class Module_purchase
 		switch ($availability_status)
 		{
 			case ECOMMERCE_PRODUCT_ALREADY_HAS:
-				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_ALREADY_HAS'));
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_ALREADY_HAS'),true,true);
 
 			case ECOMMERCE_PRODUCT_DISABLED:
-				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_DISABLED'));
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_DISABLED'),true,true);
 
 			case ECOMMERCE_PRODUCT_PROHIBITED:
-				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_PROHIBITED'));
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_PROHIBITED'),true,true);
 
 			case ECOMMERCE_PRODUCT_OUT_OF_STOCK:
 				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_OUT_OF_STOCK'));
