@@ -1154,7 +1154,10 @@ function _look_for_match_key_message($only_if_zone=false)
 	$message=NULL;
 	foreach ($match_keys as $match_key)
 	{
-		if ((substr($match_key,-6)!=':_WILD') && (substr($match_key,-2)!=':*') && ($only_if_zone)) continue;
+		if ($only_if_zone)
+		{
+			if ((substr($match_key['k_match_key'],-6)!=':_WILD') && (substr($match_key['k_match_key'],-2)!=':*')) continue;
+		}
 
 		if (match_key_match($match_key['k_match_key']))
 		{
