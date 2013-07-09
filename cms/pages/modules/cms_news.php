@@ -305,7 +305,7 @@ class Module_cms_news extends standard_crud_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields2->attach(get_privacy_form_fields());
+				$fields2->attach(get_privacy_form_fields('news'));
 			} else
 			{
 				$fields2->attach(get_privacy_form_fields('news',strval($id)));

@@ -477,7 +477,7 @@ class Module_cms_catalogues extends standard_crud_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields->attach(get_privacy_form_fields());
+				$fields->attach(get_privacy_form_fields('catalogue_entry'));
 			} else
 			{
 				$fields->attach(get_privacy_form_fields('catalogue_entry',strval($id)));

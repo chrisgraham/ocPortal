@@ -21,13 +21,13 @@
 /**
  * Get form fields for setting content privacy.
  *
- * @param  ?ID_TEXT	The content type (NULL: adding)
+ * @param  ?ID_TEXT	The content type (NULL: could be multiple)
  * @param  ?ID_TEXT	The content ID (NULL: adding)
  * @param  boolean	Whether to show a header to separate the settings out
  * @param  string		Prefix for field naming
  * @return tempcode	The form fields
  */
-function get_privacy_form_fields($content_type=NULL,$content_id=NULL,$show_header=true,$prefix='')
+function get_privacy_form_fields($content_type,$content_id=NULL,$show_header=true,$prefix='')
 {
 	if (is_guest()) return new ocp_tempcode();
 	if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) return new ocp_tempcode();
@@ -58,9 +58,30 @@ function get_privacy_form_fields($content_type=NULL,$content_id=NULL,$show_heade
 		}
 	} else
 	{
-		$view_by_guests=true;
-		$view_by_members=true;
-		$view_by_friends=true;
+		$test=is_null($content_type)?NULL:$GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','AVG(guest_view)',array('content_type'=>$content_type));
+		if ($test===NULL)
+		{
+			$view_by_guests=true;
+		} else
+		{
+			$view_by_guests=(intval($test)==1);
+		}
+		$test=is_null($content_type)?NULL:$GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','AVG(member_view)',array('content_type'=>$content_type));
+		if ($test===NULL)
+		{
+			$view_by_members=true;
+		} else
+		{
+			$view_by_members=(intval($test)==1);
+		}
+		$test=is_null($content_type)?NULL:$GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','AVG(friend_view)',array('content_type'=>$content_type));
+		if ($test===NULL)
+		{
+			$view_by_friends=true;
+		} else
+		{
+			$view_by_friends=(intval($test)==1);
+		}
 		$additional_access=array();
 	}
 

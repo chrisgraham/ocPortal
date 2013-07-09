@@ -523,7 +523,7 @@ class Module_cms_calendar extends standard_crud_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields2->attach(get_privacy_form_fields());
+				$fields2->attach(get_privacy_form_fields('event'));
 			} else
 			{
 				$fields2->attach(get_privacy_form_fields('event',strval($id)));

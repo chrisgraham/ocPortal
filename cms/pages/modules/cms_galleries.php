@@ -252,7 +252,7 @@ class Module_cms_galleries extends standard_crud_module
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy2');
-			$fields->attach(get_privacy_form_fields());
+			$fields->attach(get_privacy_form_fields(NULL));
 		}
 		// Max upload limit
 		require_code('files2');

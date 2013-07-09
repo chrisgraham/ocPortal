@@ -572,7 +572,7 @@ class Module_cms_downloads extends standard_crud_module
 			require_code('content_privacy2');
 			if (is_null($id))
 			{
-				$fields->attach(get_privacy_form_fields());
+				$fields->attach(get_privacy_form_fields('download'));
 			} else
 			{
 				$fields->attach(get_privacy_form_fields('download',strval($id)));
