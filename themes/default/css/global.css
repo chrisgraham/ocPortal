@@ -780,10 +780,14 @@ body.popup_spacer h2 {
 	margin-{!en_right}: 0.5em;
 	float: left;
 }
-.global_message>span {
+.global_message>span, .global_message>p {
 	margin-left: 22px;
 	padding-left: 0.5em;
 	display: block;
+}
+.global_message>p {
+	margin-top: 0.6em;
+	margin-bottom: 0.6em;
 }
 
 footer {
