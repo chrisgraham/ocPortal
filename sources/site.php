@@ -812,7 +812,6 @@ function do_site()
 
 	// Load up our frames into strings. Note that the header and the footer are fixed already.
 	$middle=request_page(get_page_name(),true);
-	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 	if (($middle===NULL) || ($middle->is_empty_shell()))
 	{
 		set_http_status_code('404');
