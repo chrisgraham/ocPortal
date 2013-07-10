@@ -1207,7 +1207,7 @@ class Module_calendar
 				$entries=do_template('CALENDAR_MONTH_ENTRY_FREE',array('_GUID'=>'a5e193c8c14deb17ac629e0de74458a2','CLASS'=>$class,'TEXT'=>$text));
 			}
 
-			$day_url=build_url(array('page'=>'_SELF','type'=>'misc','view'=>'day','id'=>$explode[0].'-'.$explode[1].'-'.str_pad(strval($i),2,'0',STR_PAD_LEFT)),'_SELF');
+			$day_url=build_url(array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>'day','id'=>$explode[0].'-'.$explode[1].'-'.str_pad(strval($i),2,'0',STR_PAD_LEFT))),'_SELF');
 			$days->attach(do_template('CALENDAR_MONTH_DAY',array('_GUID'=>'44162c09e0647888cf079c0ac78c1912','CURRENT'=>date('Y-m-d')==date('Y-m-d',$timestamp),'DAY_URL'=>$day_url,'CLASS'=>$class,'DAY'=>strval($i),'ENTRIES'=>$entries)));
 		}
 		$ex_array=array_flip(array_reverse(array_flip($ex_array)));
