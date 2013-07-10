@@ -32,6 +32,8 @@ class Hook_occle_fs_etc
 	{
 		global $CONFIG_OPTIONS_CACHE;
 
+		require_all_lang();
+
 		require_code('resource_fs');
 
 		if (count($meta_dir)>0) return false; // Directory doesn't exist

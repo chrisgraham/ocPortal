@@ -48,7 +48,11 @@ WebDAV is a web-based-filesystem protocol that most operating systems support. T
 
 Be aware that some operating systems do not support WebDAV very well. The SabreDAV team have excellent documentation illustrating issues that are outside our control:
  - On Mac, you may need to use Cyberduck to mount WebDAV, as [url="Finder has issues"]https://code.google.com/p/sabredav/wiki/Finder[/url]
- - [url="On Windows"]https://code.google.com/p/sabredav/wiki/Windows[/url], you may want to tune your environment
+ - [url="On Windows"]https://code.google.com/p/sabredav/wiki/Windows[/url], you may want to tune your environment. WebDAV is referred to as "Web folders". Alternatively, you may wish to use Cyberduck
+
+Access WebDAV by connecting to: [tt]http://baseurl/webdav/[/tt], or [tt]http://baseurl/DavWWWRoot/webdav/[/tt] using Windows's Web Folders feature. The trailing slash is important.
+You will need to enable this by the association rewrite rule in our recommended configuration.
+You will need to authorise against an administrative user.
 
 [title="2"]The [tt]var[/tt] meta-filesystems[/title]
 

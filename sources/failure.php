@@ -1014,9 +1014,7 @@ function die_html_trace($message)
 					$_value=gettype($value);
 				} else
 				{
-					@ob_start();
-					var_export($value);
-					$_value=ob_get_clean();
+					$_value=serialize($value);
 				}
 			}
 			catch (Exception $e) // Can happen for SimpleXMLElement
@@ -1078,9 +1076,7 @@ function get_html_trace()
 								$__value=gettype($param);
 							} else
 							{
-								@ob_start();
-								var_export($param);
-								$__value=ob_get_clean();
+								$__value=serialize($param);
 							}
 							if ((strlen($__value)<MAX_STACK_TRACE_VALUE_LENGTH) || (defined('HIPHOP_PHP')))
 							{
@@ -1112,10 +1108,7 @@ function get_html_trace()
 						$_value=make_string_tempcode(escape_html(gettype($value)));
 					} else
 					{
-						@ob_start();
-						var_export($value);
-						$_value=make_string_tempcode(escape_html(ob_get_contents()));
-						ob_end_clean();
+						$_value=serialize($value);
 					}
 				}
 				catch (Exception $e) // Can happen for SimpleXMLElement

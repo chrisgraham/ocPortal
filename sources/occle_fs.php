@@ -184,6 +184,7 @@ class occle_fs
 	function _pwd_to_array($pwd)
 	{
 		// Convert a string-form pwd to an array-form pwd, and sanitise it
+		if ($pwd=='') return array();
 		$absolute=($pwd[0]=='/');
 		$_pwd=explode('/',$pwd);
 		if ($absolute) $target_directory=array();
@@ -416,12 +417,12 @@ class occle_fs
 			if ($entry[1]==OCCLEFS_DIR)
 			{
 				// Directory
-				$directories[]=$entry;
+				$directories[$entry[0]]=$entry;
 			}
 			elseif ($entry[1]==OCCLEFS_FILE)
 			{
 				// File
-				$files[]=$entry;
+				$files[$entry[0]]=$entry;
 			}
 		}
 

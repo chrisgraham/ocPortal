@@ -167,9 +167,7 @@ if (!function_exists('critical_error'))
 								}
 							} else
 							{
-								@ob_start();
-								var_export($value);
-								$_value=ob_get_clean();
+								$_value=serialize($value);
 							}
 						}
 					}
