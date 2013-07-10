@@ -414,8 +414,8 @@ class Module_cms_news extends standard_aed_module
 
 		$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$url=$urls[0];
-		if (($url!='') && (function_exists('imagecreatefromstring')))
-			convert_image(get_base_url().'/'.$url,get_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+		if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+			convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?time():$schedule;
@@ -498,8 +498,8 @@ class Module_cms_news extends standard_aed_module
 		{
 			$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 			$url=$urls[0];
-			if (($url!='') && (function_exists('imagecreatefromstring')))
-				convert_image(get_base_url().'/'.$url,get_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+			if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+				convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 			if (($url=='') && (post_param_integer('file_unlink',0)!=1)) $url=NULL;
 		} else
 		{
