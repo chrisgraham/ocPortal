@@ -64,6 +64,7 @@ function facebook_install()
 	$facebook_sync_username=get_option('facebook_sync_username',true);
 	if (is_null($facebook_sync_username))
 	{
+		add_config_option('FACEBOOK_LOGIN','facebook_login','tick','return \'1\';','FEATURE','FACEBOOK_SYNDICATION');
 		add_config_option('FACEBOOK_SYNC_USERNAME','facebook_sync_username','tick','return \'0\';','FEATURE','FACEBOOK_SYNDICATION');
 		add_config_option('FACEBOOK_SYNC_DOB','facebook_sync_dob','tick','return \'0\';','FEATURE','FACEBOOK_SYNDICATION');
 		add_config_option('FACEBOOK_SYNC_EMAIL','facebook_sync_email','tick','return \'0\';','FEATURE','FACEBOOK_SYNDICATION');
@@ -149,9 +150,6 @@ function handle_facebook_connection_login($current_logged_in_member)
 		$dob_month=intval($_dob[0]);
 		$dob_year=intval($_dob[2]);
 	}
-
-	// Make sure we are installed/upgraded
-	facebook_install();
 
 	// See if they have logged in before - i.e. have a synched account
 	$member_row=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>$facebook_uid),'ORDER BY id DESC',1);
