@@ -147,13 +147,20 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 	$resource_info=$resource_object->info();
 	$resourcefs_hook=$resource_info['occle_filesystem_hook'];
 
+	if (is_null($label))
+	{
+		require_code('content');
+		list($label)=content_get_details($resource_type,$resource_id,true);
+		if (is_null($label)) return array(NULL,NULL);
+	}
+
 	$lookup=$definitely_new?array():$GLOBALS['SITE_DB']->query_select('alternative_ids',array('resource_moniker','resource_guid','resource_label'),array('resource_type'=>$resource_type,'resource_id'=>$resource_id),'',1);
 	if (array_key_exists(0,$lookup))
 	{
 		$no_exists_check_for=$lookup[0]['resource_moniker'];
 		$guid=is_null($new_guid)?$lookup[0]['resource_guid']:$new_guid;
 
-		if (is_null($new_guid))
+		if ((is_null($new_guid)) && ($lookup[0]['resource_label']==$label))
 		{
 			$ret=array($no_exists_check_for,$guid,$lookup[0]['resource_label']);
 			$cache[$resource_type][$resource_id]=$ret;
@@ -163,13 +170,6 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 	{
 		$no_exists_check_for=mixed();
 		$guid=is_null($new_guid)?generate_guid():$new_guid;
-	}
-
-	if (is_null($label))
-	{
-		require_code('content');
-		list($label)=content_get_details($resource_type,$resource_id,true);
-		if (is_null($label)) return array(NULL,NULL);
 	}
 
 	require_code('urls2');
@@ -2362,6 +2362,10 @@ class resource_fs_base
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
+		if ($file_name=='_folder.'.RESOURCEFS_DEFAULT_EXTENSION)
+		{
+			return true; // Fake success, as needs to do so when deleting folder contents
+		}
 		return $this->file_delete($file_name,implode('/',$meta_dir));
 	}
 }

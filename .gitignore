@@ -63,4 +63,4 @@ _tests/codechecker/functions.dat
 /closed.html.old
 /sites
 /db.sql
-
+*.tempfile

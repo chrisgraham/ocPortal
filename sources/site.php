@@ -85,23 +85,26 @@ function init__site()
 	}
 
 	// Detect bad access domain
-	global $SITE_INFO;
-	$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
-	if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
+	if (!running_script('webdav')/*we may want to allow WebDAV to run on a different domain*/)
 	{
-		$parsed_base_url=parse_url(get_base_url());
-
-		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
+		global $SITE_INFO;
+		$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
+		if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
 		{
-			if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
-			{
-				if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-				{
-					attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
-				}
+			$parsed_base_url=parse_url(get_base_url());
 
-				header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
-				exit();
+			if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
+			{
+				if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
+				{
+					if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+					{
+						attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
+					}
+
+					header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
+					exit();
+				}
 			}
 		}
 	}

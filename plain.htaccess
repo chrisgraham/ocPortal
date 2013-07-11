@@ -21,7 +21,7 @@ RewriteCond %{DOCUMENT_ROOT}/$1 -d
 RewriteRule (.*) - [L]
 
 # WebDAV implementation (requires the non-bundled WebDAV addon)
-RewriteRule ^webdav/.* data_custom/webdav.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+RewriteRule ^webdav(/.*|$) data_custom/webdav.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
 # Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]

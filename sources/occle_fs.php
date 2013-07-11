@@ -104,6 +104,7 @@ class occle_fs
 		else
 		{
 			$default_dir=array();
+			require_code('users_active_actions');
 			ocp_setcookie('occle_dir',$this->_pwd_to_string($default_dir));
 			return $default_dir;
 		}
@@ -505,6 +506,7 @@ class occle_fs
 		if ($this->_is_dir($target_directory))
 		{
 			$this->pwd=$target_directory;
+			require_code('users_active_actions');
 			ocp_setcookie('occle_dir',$this->_pwd_to_string($target_directory));
 
 			return true;
@@ -563,10 +565,10 @@ class occle_fs
 				switch ($value[1])
 				{
 					case OCCLEFS_FILE:
-						$object->remove_file(array_merge($meta_dir,array($directory_name)),$meta_root_node,$value,$this);
+						$object->remove_file($directory,$meta_root_node,$value[0],$this);
 						break;
 					case OCCLEFS_DIR:
-						$this->remove_directory(array_merge($directory,array($value))); // Recurse
+						$this->remove_directory(array_merge($directory,array($value[0]))); // Recurse
 						break;
 				}
 			}
@@ -627,6 +629,29 @@ class occle_fs
 	 */
 	function move_directory($to_move,$destination)
 	{
+		$to_move_meta_dir=array();
+		$to_move_meta_root_node='';
+		$to_move_meta_root_node_type='';
+		$this->_discern_meta_dir($to_move_meta_dir,$to_move_meta_root_node,$to_move_meta_root_node_type,$to_move);
+		require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($to_move_meta_root_node_type));
+		$to_move_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($to_move_meta_root_node_type));
+
+		$destination_meta_dir=array();
+		$destination_meta_root_node='';
+		$destination_meta_root_node_type='';
+		$this->_discern_meta_dir($destination_meta_dir,$destination_meta_root_node,$destination_meta_root_node_type,$destination);
+		require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($destination_meta_root_node_type));
+		$destination_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($destination_meta_root_node_type));
+
+		if ($destination_meta_root_node==$to_move_meta_root_node_type)
+		{
+			if (method_exists($to_move_object,'folder_save')) // Resource-fs wants a better renaming technique
+			{
+				$new_label=array_pop($destination_meta_dir);
+				return $to_move_object->folder_save(array_pop($to_move_meta_dir),implode('/',$destination_meta_dir),array('label'=>$new_label));
+			}
+		}
+
 		$success=$this->copy_directory($to_move,$destination);
 		if ($success) return $this->remove_directory($to_move);
 		else return false;
@@ -655,6 +680,29 @@ class occle_fs
 	 */
 	function move_file($to_move,$destination)
 	{
+		$to_move_meta_dir=array();
+		$to_move_meta_root_node='';
+		$to_move_meta_root_node_type='';
+		$this->_discern_meta_dir($to_move_meta_dir,$to_move_meta_root_node,$to_move_meta_root_node_type,$to_move);
+		require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($to_move_meta_root_node_type));
+		$to_move_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($to_move_meta_root_node_type));
+
+		$destination_meta_dir=array();
+		$destination_meta_root_node='';
+		$destination_meta_root_node_type='';
+		$this->_discern_meta_dir($destination_meta_dir,$destination_meta_root_node,$destination_meta_root_node_type,$destination);
+		require_code('hooks/systems/occle_fs/'.filter_naughty_harsh($destination_meta_root_node_type));
+		$destination_object=object_factory('Hook_occle_fs_'.filter_naughty_harsh($destination_meta_root_node_type));
+
+		if ($destination_meta_root_node==$to_move_meta_root_node_type)
+		{
+			if (method_exists($to_move_object,'file_save')) // Resource-fs wants a better renaming technique
+			{
+				$new_label=basename(array_pop($destination_meta_dir),'.'.RESOURCEFS_DEFAULT_EXTENSION);
+				return $to_move_object->file_save(array_pop($to_move_meta_dir),implode('/',$destination_meta_dir),array('label'=>$new_label));
+			}
+		}
+
 		$success=$this->copy_file($to_move,$destination);
 		if ($success) return $this->remove_file($to_move);
 		return false;

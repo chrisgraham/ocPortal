@@ -173,8 +173,7 @@ namespace webdav_occlefs
 			{
 				ob_start();
 				fpassthru($data);
-				$data=ob_get_contents();
-				ob_end_clean();
+				$data=ob_get_clean();
 			}
 			$test=$this->occlefs->write_file($parsedNewPath,is_null($data)?'':$data);
 
@@ -231,7 +230,7 @@ namespace webdav_occlefs
 			if ($this->occlefs->_is_dir($parsedPath))
 			{
 				return new Directory($path);
-			} else
+			} elseif ($this->occlefs->_is_file($parsedPath))
 			{
 				return new File($path);
 			}
@@ -333,9 +332,9 @@ namespace webdav_occlefs
 			{
 				ob_start();
 				fpassthru($data);
-				$data=ob_get_contents();
-				ob_end_clean();
+				$data=ob_get_clean();
 			}
+
 			$test=$this->occlefs->write_file($parsedPath,is_null($data)?'':$data);
 
 			if ($test===false)

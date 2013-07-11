@@ -236,7 +236,14 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 
 	// Put into error log
 	if (get_param_integer('keep_fatalistic',0)==0)
-		@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(),0);
+	{
+		$log='PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy();
+		$log.=chr(10);
+		ob_start();
+		debug_print_backtrace();
+		$log.=ob_get_clean();
+		@error_log($log,0);
+	}
 
 	if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) // Don't display - die as normal
 	{

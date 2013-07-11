@@ -47,7 +47,9 @@ function webdav_script()
 	if (is_file($log_path))
 	{
 		$WEBDAV_LOG_FILE=fopen($log_path,'a');
-		webdav_log('Request... '.ocp_srv('REQUEST_METHOD').': '.ocp_srv('REQUEST_URI').chr(10).file_get_contents('php://input'));
+		$log_message='Request... '.ocp_srv('REQUEST_METHOD').': '.ocp_srv('REQUEST_URI');
+		//$log_message.=chr(10).file_get_contents('php://input'); // Only enable when debugging, as breaks PUT requests (see http://stackoverflow.com/questions/3107624/why-can-php-input-be-read-more-than-once-despite-the-documentation-saying-othe)
+		webdav_log($log_message);
 	}
 
 	// Initialise...
@@ -61,9 +63,12 @@ function webdav_script()
 	if (is_null($webdav_root)) $webdav_root='webdav';
 	$server->setBaseUri($parsed['path'].$webdav_root);
 
-	$auth_backend=new webdav_occlefs\Auth();
-	$auth_plugin=new DAV\Auth\Plugin($auth_backend,get_site_name()/*the auth realm*/);
-	$server->addPlugin($auth_plugin);
+	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // If already admin (e.g. backdoor_ip), no need for access check
+	{
+		$auth_backend=new webdav_occlefs\Auth();
+		$auth_plugin=new DAV\Auth\Plugin($auth_backend,get_site_name()/*the auth realm*/);
+		$server->addPlugin($auth_plugin);
+	}
 
 	$lock_backend=new DAV\Locks\Backend\File(get_custom_file_base().'/data_custom/modules/webdav/locks/locks.dat');
 	$lock_plugin=new DAV\Locks\Plugin($lock_backend);
