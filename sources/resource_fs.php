@@ -1838,7 +1838,7 @@ class resource_fs_base
 	 */
 	function file_save_xml($filename,$path,$data)
 	{
-		$properties=@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
+		$properties=($data=='')?array():@unserialize($data); // TODO: Should be XML parsing, #1160 on tracker
 		if ($properties===false) return false;
 		return $this->file_save($filename,$path,$properties);
 	}

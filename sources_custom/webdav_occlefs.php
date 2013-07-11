@@ -46,13 +46,6 @@ namespace webdav_occlefs
 		protected $occlefs;
 
 		/**
-		 * Directory listing cache
-		 *
-		 * @var array
-		 */
-		protected $listing_cache=array();
-
-		/**
 		 * Sets up the node, expects a full path name
 		 *
 		 * @param string $path
@@ -110,7 +103,7 @@ namespace webdav_occlefs
 				throw new \Sabre\DAV\Exception\Forbidden('Error renaming/moving '.$name);
 			}
 
-			$this->listing_cache=array();
+			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
 
 			$this->path=$newPath;
 		}
@@ -122,6 +115,8 @@ namespace webdav_occlefs
 		 */
 		public function getLastModified()
 		{
+			if ($this->path=='') return NULL;
+
 			list($currentPath,$currentName)=\Sabre\DAV\URLUtil::splitPath($this->path);
 			$parsedCurrentPath=$this->occlefs->_pwd_to_array($currentPath);
 
@@ -146,9 +141,9 @@ namespace webdav_occlefs
 		function _listingWrap($parsedPath)
 		{
 			$sz=serialize($parsedPath);
-			if (isset($this->listing_cache[$sz])) return $this->listing_cache[$sz];
-			$this->listing_cache[$sz]=$this->occlefs->listing($parsedPath);
-			return $this->listing_cache[$sz];
+			if (isset($GLOBALS['OCCLEFS_LISTING_CACHE'][$sz])) return $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz];
+			$GLOBALS['OCCLEFS_LISTING_CACHE'][$sz]=$this->occlefs->listing($parsedPath);
+			return $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz];
 		}
 	}
 
@@ -174,6 +169,13 @@ namespace webdav_occlefs
 
 			$parsedNewPath=$this->occlefs->_pwd_to_array($newPath);
 
+			if (is_resource($data))
+			{
+				ob_start();
+				fpassthru($data);
+				$data=ob_get_contents();
+				ob_end_clean();
+			}
 			$test=$this->occlefs->write_file($parsedNewPath,is_null($data)?'':$data);
 
 			if ($test===false)
@@ -181,7 +183,7 @@ namespace webdav_occlefs
 				throw new \Sabre\DAV\Exception\Forbidden('Could not create '.$name);
 			}
 
-			$this->listing_cache=array();
+			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
 		}
 
 		/**
@@ -203,7 +205,7 @@ namespace webdav_occlefs
 				throw new \Sabre\DAV\Exception\Forbidden('Could not create '.$name);
 			}
 
-			$this->listing_cache=array();
+			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
 		}
 
 		/**
@@ -223,7 +225,7 @@ namespace webdav_occlefs
 
 			if ($name=='')
 			{
-				return new Directory('/');
+				return new Directory('');
 			}
 
 			if ($this->occlefs->_is_dir($parsedPath))
@@ -304,7 +306,7 @@ namespace webdav_occlefs
 				throw new \Sabre\DAV\Exception\Forbidden('Could not delete '.$this->path);
 			}
 
-			$this->listing_cache=array();
+			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
 		}
 	}
 
@@ -327,6 +329,13 @@ namespace webdav_occlefs
 		{
 			$parsedPath=$this->occlefs->_pwd_to_array($this->path);
 
+			if (is_resource($data))
+			{
+				ob_start();
+				fpassthru($data);
+				$data=ob_get_contents();
+				ob_end_clean();
+			}
 			$test=$this->occlefs->write_file($parsedPath,is_null($data)?'':$data);
 
 			if ($test===false)
@@ -370,7 +379,7 @@ namespace webdav_occlefs
 				throw new \Sabre\DAV\Exception\Forbidden('Could not delete '.$this->path);
 			}
 
-			$this->listing_cache=array();
+			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
 		}
 
 		/**
@@ -387,9 +396,13 @@ namespace webdav_occlefs
 			foreach ($listing[1] as $l)
 			{
 				list($filename,$filetype,$filesize,$filetime)=$l;
-				if ($filename==$currentName) return $filesize;
+				if ($filename==$currentName)
+				{
+					if (is_null($filesize)) $filesize=strlen($this->get()); // Needed at least for Cyberduck
+					return $filesize;
+				}
 			}
-@var_dump($listing);@exit('!');
+
 			throw new \Sabre\DAV\Exception\NotFound('Could not find '.$this->path);
 
 			return NULL;

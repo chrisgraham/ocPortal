@@ -21,6 +21,18 @@
 use Sabre\DAV;
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__webdav()
+{
+	global $OCCLEFS_LISTING_CACHE;
+	$OCCLEFS_LISTING_CACHE=array();
+
+	global $WEBDAV_LOG_FILE;
+	$WEBDAV_LOG_FILE=NULL;
+}
+
+/**
  * Main WebDAV entry-point script
  */
 function webdav_script()
@@ -28,6 +40,17 @@ function webdav_script()
 	require_code('sabredav/vendor/autoload');
 
 	require_code('webdav_occlefs');
+
+	// Optional logging (create this file and give write access to it)
+	$log_path=get_custom_file_base().'/data_custom/modules/webdav/tmp/debug.log';
+	global $WEBDAV_LOG_FILE;
+	if (is_file($log_path))
+	{
+		$WEBDAV_LOG_FILE=fopen($log_path,'a');
+		webdav_log('Request... '.ocp_srv('REQUEST_METHOD').': '.ocp_srv('REQUEST_URI').chr(10).file_get_contents('php://input'));
+	}
+
+	// Initialise...
 
 	$root_dir=new webdav_occlefs\Directory('');
 	$server=new DAV\Server($root_dir);
@@ -50,4 +73,25 @@ function webdav_script()
 	$server->addPlugin($tffp);
 
 	$server->exec();
+
+	// Close off log
+	if (!is_null($WEBDAV_LOG_FILE))
+	{
+		fclose($WEBDAV_LOG_FILE);
+		$WEBDAV_LOG_FILE=NULL;
+	}
+}
+
+/**
+ * Log something to the WebDAV log.
+ *
+ * @param string	String to log
+ */
+function webdav_log($str)
+{
+	global $WEBDAV_LOG_FILE;
+	if (!is_null($WEBDAV_LOG_FILE))
+	{
+		fwrite($WEBDAV_LOG_FILE,$str.chr(10).chr(10));
+	}
 }

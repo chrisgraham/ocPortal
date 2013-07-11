@@ -760,6 +760,7 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>'download_'.strval($id)));
 		if (is_null($test))
 		{
+			require_lang('downloads');
 			require_code('galleries2');
 			$download_gallery_root=get_option('download_gallery_root');
 			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
