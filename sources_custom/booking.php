@@ -155,7 +155,22 @@ function get_booking_request_from_form()
 				}
 			}
 
-			$request[]=array('bookable_id'=>$bookable_id,'start_day'=>$start_day,'start_month'=>$start_month,'start_year'=>$start_year,'end_day'=>$end_day,'end_month'=>$end_month,'end_year'=>$end_year,'quantity'=>$quantity,'notes'=>$notes,'supplements'=>$supplements);
+			$request[]=array(
+				'bookable_id'=>$bookable_id,
+				'start_day'=>$start_day,
+				'start_month'=>$start_month,
+				'start_year'=>$start_year,
+				'end_day'=>$end_day,
+				'end_month'=>$end_month,
+				'end_year'=>$end_year,
+				'quantity'=>$quantity,
+				'notes'=>$notes,
+				'supplements'=>$supplements,
+				'customer_name'=>post_param('customer_name',''),
+				'customer_email'=>post_param('customer_email',''),
+				'customer_mobile'=>post_param('customer_mobile',''),
+				'customer_phone'=>post_param('customer_phone',''),
+			);
 		}
 	}
 
@@ -174,7 +189,10 @@ function save_booking_form_to_db($request,$ignore_bookings,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_guest($member_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+	if (get_option('member_booking_only')=='1')
+	{
+		if (is_guest($member_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+	}
 
 	$test=check_booking_dates_available($request,$ignore_bookings);
 	if (!is_null($test))
@@ -224,6 +242,10 @@ function add_booking($request,$member_id)
 					'booked_at'=>time(),
 					'paid_at'=>NULL,
 					'paid_trans_id'=>NULL,
+					'customer_name'=>$req['customer_name'],
+					'customer_email'=>$req['customer_email'],
+					'customer_mobile'=>$req['customer_mobile'],
+					'customer_phone'=>$req['customer_phone'],
 				);
 				$booking_id=$GLOBALS['SITE_DB']->query_insert('booking',$row,true);
 
@@ -275,6 +297,11 @@ function find_free_bookable_code($bookable_id,$day,$month,$year,$preferred_code)
  */
 function find_booking_under($member_id,$id)
 {
+	if (get_option('member_booking_only')=='0')
+	{
+		return strval($id);
+	}
+
 	$all=get_member_booking_request($member_id);
 	foreach ($all as $i=>$r)
 	{
@@ -388,11 +415,11 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 
 	// Check bookable time is in active period
 	$from=mktime(0,0,0,$bookable_row['active_from_month'],$bookable_row['active_from_day'],$bookable_row['active_from_year']);
-	if ($asked<$from) return do_lang_tempcode('BOOKING_IMPOSSIBLE_NOT_STARTED',escape_html(get_timezoned_date($from,false,true,true)));
+	if ($asked<$from) return do_lang_tempcode('BOOKING_IMPOSSIBLE_NOT_STARTED',escape_html(get_timezoned_date($from,false,true,false,true)));
 	if (!is_null($bookable_row['active_to_month']))
 	{
 		$to=mktime(0,0,0,$bookable_row['active_to_month'],$bookable_row['active_to_day'],$bookable_row['active_to_year']);
-		if ($asked>=$to) return do_lang_tempcode('BOOKING_IMPOSSIBLE_ENDED',escape_html(get_timezoned_date($to,false,true,true)));
+		if ($asked>=$to) return do_lang_tempcode('BOOKING_IMPOSSIBLE_ENDED',escape_html(get_timezoned_date($to,false,true,false,true)));
 	}
 
 	// Check bookable is not blacked for time
@@ -405,10 +432,10 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 		{
 			if ($from==$to)
 			{
-				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_ONEOFF',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
+				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_ONEOFF',escape_html(get_timezoned_date($from,false,true,false,true)),escape_html(get_translated_text($black['blacked_explanation'])));
 			} else
 			{
-				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_PERIOD',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_timezoned_date($to,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
+				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_PERIOD',escape_html(get_timezoned_date($from,false,true,false,true)),escape_html(get_timezoned_date($to,false,true,false,true)),escape_html(get_translated_text($black['blacked_explanation'])));
 			}
 		}
 	}
@@ -417,7 +444,7 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 	$query='SELECT COUNT(*) FROM '.get_table_prefix().'booking WHERE b_day='.strval($day).' AND b_month='.strval($month).' AND b_year='.strval($year);
 	foreach ($ignore_bookings as $b) $query.=' AND id<>'.strval($b);
 	$codes_taken_already=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
-	if ($codes_taken_already+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL',get_timezoned_date($asked,false,true,true));
+	if ($codes_taken_already+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL',get_timezoned_date($asked,false,true,false,true));
 
 	// Good!
 	return NULL;
@@ -432,15 +459,44 @@ function send_booking_emails($request)
 {
 	require_code('notifications');
 
+	if (get_option('member_booking_only')=='1')
+	{
+		$customer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
+		$customer_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+	} else
+	{
+		$customer_email=$request[0]['customer_email'];
+		$customer_name=$request[0]['customer_name'];
+	}
+
+	$tpl_map=array(
+		'EMAIL_ADDRESS'=>$customer_email,
+		'MEMBER_ID'=>strval(get_member()),
+		'USERNAME'=>$customer_name,
+		'PRICE'=>float_format(find_booking_price($request)),
+		'DETAILS'=>make_booking_request_printable($request),
+		'MOBILE_NUMBER'=>$request[0]['customer_mobile'],
+		'PHONE_NUMBER'=>$request[0]['customer_phone'],
+	);
+
 	// Send receipt to customer
-	$customer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-	$customer_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',array('_GUID'=>'8b5557e1897af5a9cb759c88020635d4','EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)));
-	dispatch_notification('booking_customer',NULL,do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),array(get_member()),A_FROM_SYSTEM_PRIVILEGED);
+	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',$tpl_map);
+	$subject=do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name());
+	$body=static_evaluate_tempcode($receipt);
+	if (get_option('member_booking_only')=='1')
+	{
+		dispatch_notification('booking_customer',NULL,$subject,$body,array(get_member()),A_FROM_SYSTEM_PRIVILEGED);
+	} else
+	{
+		require_code('mail');
+		mail_wrap($subject,$body,array($customer_email),$customer_name);
+	}
 
 	// Send notice to staff
-	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('_GUID'=>'d223b42f024f853f63cd9908155667a8','EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)),get_site_default_lang());
-	dispatch_notification('booking_inform_staff',NULL,do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,2);
+	$notice=do_template('BOOKING_NOTICE_FCOMCODE',$tpl_map,get_site_default_lang());
+	$subject=do_lang('SUBJECT_BOOKING_NOTICE',$customer_name,get_site_name());
+	$body=static_evaluate_tempcode($notice);
+	dispatch_notification('booking_inform_staff',NULL,$subject,$body,NULL,NULL,2);
 }
 
 /**
@@ -467,8 +523,8 @@ function make_booking_request_printable($request)
 			'DESCRIPTION'=>get_translated_tempcode($bookable_row[0]['description']),
 			'QUANTITY'=>integer_format($_part['quantity']),
 			'_QUANTITY'=>strval($_part['quantity']),
-			'START'=>get_timezoned_date($start,false,true,true),
-			'END'=>($start==$end)?'':get_timezoned_date($end,false,true,true),
+			'START'=>get_timezoned_date($start,false,true,false,true),
+			'END'=>($start==$end)?'':get_timezoned_date($end,false,true,false,true),
 			'_START'=>strval($start),
 			'_END'=>strval($end),
 			'NOTES'=>$_part['notes'],

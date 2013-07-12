@@ -135,8 +135,8 @@ class Module_cms_booking extends standard_aed_module
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['title']));
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['categorisation']));
 			$fr[]=float_format($row['price']);
-			$fr[]=get_timezoned_date(mktime($row['active_from_month'],$row['active_from_day'],$row['active_from_year']),false,true,true);
-			$fr[]=get_timezoned_date(mktime($row['active_to_month'],$row['active_to_day'],$row['active_to_year']),false,true,true);
+			$fr[]=get_timezoned_date(mktime($row['active_from_month'],$row['active_from_day'],$row['active_from_year']),false,true,false,true);
+			$fr[]=get_timezoned_date(mktime($row['active_to_month'],$row['active_to_day'],$row['active_to_year']),false,true,false,true);
 			$fr[]=($row['enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
@@ -758,14 +758,30 @@ class Module_cms_booking_bookings extends standard_aed_module
 		}
 		$request=array();
 		if (get_param_integer('id',NULL)!==NULL) $where=array('member_id'=>get_param_integer('id'));
-		$_rows=$db->query_select($table.' r '.$join,array('DISTINCT member_id'),$where,'ORDER BY '.$orderer);
+		if (get_option('member_booking_only')=='1')
+		{
+			$_rows=$db->query_select($table.' r '.$join,array('DISTINCT member_id'),$where,'ORDER BY '.$orderer);
+		} else
+		{
+			$_rows=$db->query_select($table.' r '.$join,array('id'),$where,'ORDER BY '.$orderer);
+		}
 		foreach ($_rows as $row)
 		{
-			$member_request=get_member_booking_request($row['member_id']);
-
-			foreach ($member_request as $i=>$r)
+			if (get_option('member_booking_only')=='1')
 			{
-				$r['_id']=strval($row['member_id']).'_'.strval($i);
+				$member_request=get_member_booking_request($row['member_id']);
+
+				foreach ($member_request as $i=>$r)
+				{
+					$r['_id']=strval($row['member_id']).'_'.strval($i);
+					$request[]=$r;
+				}
+			} else
+			{
+				$member_request=get_booking_request_from_db(array($row['id']));
+
+				$r=$member_request[0];
+				$r['_id']=strval($row['id']);
 				$request[]=$r;
 			}
 		}
@@ -840,9 +856,15 @@ class Module_cms_booking_bookings extends standard_aed_module
 
 			$fr=array();
 			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$row['bookable_id'])));
-			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,true);
-			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,true);
-			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id']);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,false,true);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,false,true);
+			if (get_option('member_booking_only')=='1')
+			{
+				$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id']);
+			} else
+			{
+				$fr[]=$row['_rows'][0]['customer_name'];
+			}
 			$fr[]=number_format($row['quantity']);
 			$fr[]=get_timezoned_date($row['_rows'][0]['booked_at']);
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
@@ -909,6 +931,10 @@ class Module_cms_booking_bookings extends standard_aed_module
 				'quantity'=>1,
 				'notes'=>'',
 				'supplements'=>array(),
+				'customer_name'=>'',
+				'customer_email'=>'',
+				'customer_mobile'=>'',
+				'customer_phone'=>'',
 			);
 		}
 		if (is_null($member_id)) $member_id=get_member();
@@ -924,7 +950,16 @@ class Module_cms_booking_bookings extends standard_aed_module
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_notes',$details['notes'],false));
 
 		$member_directory_url=build_url(array('page'=>'members'),get_module_zone('members'));
-		$fields->attach(form_input_username(do_lang_tempcode('BOOKING_FOR'),do_lang_tempcode('DESCRIPTION_BOOKING_FOR',escape_html($member_directory_url->evaluate())),'username',$GLOBALS['FORUM_DRIVER']->get_username($member_id),true,false));
+		if (get_option('member_booking_only')=='1')
+		{
+			$fields->attach(form_input_username(do_lang_tempcode('BOOKING_FOR'),do_lang_tempcode('DESCRIPTION_BOOKING_FOR',escape_html($member_directory_url->evaluate())),'username',$GLOBALS['FORUM_DRIVER']->get_username($member_id),true,false));
+		} else
+		{
+			$fields->attach(form_input_line(do_lang_tempcode('NAME'),'','customer_name',$details['customer_name'],true));
+			$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),'','customer_email',$details['customer_email'],true));
+			$fields->attach(form_input_line(do_lang_tempcode('MOBILE_NUMBER'),'','customer_mobile',$details['customer_mobile'],false));
+			$fields->attach(form_input_line(do_lang_tempcode('PHONE_NUMBER'),'','customer_phone',$details['customer_phone'],true));
+		}
 
 		$supplement_rows=$GLOBALS['SITE_DB']->query_select('bookable_supplement a JOIN '.get_table_prefix().'bookable_supplement_for b ON a.id=b.supplement_id',array('a.*'),array('bookable_id'=>$details['bookable_id']),'ORDER BY sort_order');
 		foreach ($supplement_rows as $supplement_row)
@@ -960,6 +995,12 @@ class Module_cms_booking_bookings extends standard_aed_module
 	 */
 	function fill_in_edit_form($_id)
 	{
+		if (get_option('member_booking_only')=='0')
+		{
+			$request=get_booking_request_from_db(array(intval($_id)));
+			return $this->get_form_fields($request[0]);
+		}
+
 		list($member_id,$i)=array_map('intval',explode('_',$_id,2));
 		$request=get_member_booking_request($member_id);
 		return $this->get_form_fields($request[$i],$member_id);
@@ -972,12 +1013,18 @@ class Module_cms_booking_bookings extends standard_aed_module
 	 */
 	function add_actualisation()
 	{
-		$username=post_param('username');
-		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id))
+		if (get_option('member_booking_only')=='1')
 		{
-			require_code('ocf_member_action');
-			$member_id=ocf_make_member($username,uniqid('',true),'',array(),NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
+			$username=post_param('username');
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+			if (is_null($member_id))
+			{
+				require_code('ocf_member_action');
+				$member_id=ocf_make_member($username,uniqid('',true),'',array(),NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
+			}
+		} else
+		{
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 		}
 
 		$request=get_booking_request_from_form();
@@ -993,6 +1040,11 @@ class Module_cms_booking_bookings extends standard_aed_module
 			}
 		}
 
+		if (get_option('member_booking_only')=='0')
+		{
+			return strval($request[0]['_rows'][0]['id']);
+		}
+
 		return strval($member_id).'_'.strval($i);
 	}
 
@@ -1003,8 +1055,15 @@ class Module_cms_booking_bookings extends standard_aed_module
 	 */
 	function edit_actualisation($_id)
 	{
-		list($member_id,$i)=array_map('intval',explode('_',$_id,2));
-		$old_request=get_member_booking_request($member_id);
+		if (get_option('member_booking_only')=='0')
+		{
+			$old_request=get_booking_request_from_db(array(intval($_id)));
+			$i=0;
+		} else
+		{
+			list($member_id,$i)=array_map('intval',explode('_',$_id,2));
+			$old_request=get_member_booking_request($member_id);
+		}
 		$ignore_bookings=array();
 		foreach ($old_request[$i]['_rows'] as $row)
 		{
@@ -1027,8 +1086,15 @@ class Module_cms_booking_bookings extends standard_aed_module
 	 */
 	function delete_actualisation($_id)
 	{
-		list($member_id,$i)=array_map('intval',explode('_',$_id,2));
-		$request=get_member_booking_request($member_id);
+		if (get_option('member_booking_only')=='0')
+		{
+			$request=get_booking_request_from_db(array(intval($_id)));
+			$i=0;
+		} else
+		{
+			list($member_id,$i)=array_map('intval',explode('_',$_id,2));
+			$request=get_member_booking_request($member_id);
+		}
 
 		foreach ($request[$i]['_rows'] as $row)
 		{

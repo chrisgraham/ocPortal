@@ -85,6 +85,10 @@ function get_booking_request_from_db($booking_ids)
 			'supplements'=>list_to_map('supplement_id',$supplements),
 			'quantity'=>1,
 			'_rows'=>array($booking[0]), // Used by code that wants exact details, not standard part of booking details structure
+			'customer_name'=>$booking[0]['customer_name'],
+			'customer_email'=>$booking[0]['customer_email'],
+			'customer_mobile'=>$booking[0]['customer_mobile'],
+			'customer_phone'=>$booking[0]['customer_phone'],
 		);
 	}
 

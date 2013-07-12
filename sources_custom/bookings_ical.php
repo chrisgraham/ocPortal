@@ -53,7 +53,9 @@ function bookables_ical_script()
 		echo "DESCRIPTION:".ical_escape($description)."\n";
 
 		if (!is_guest($event['submitter']))
+		{
 			echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($event['submitter'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($event['submitter'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($event['submitter']))."\n";
+		}
 		echo "CATEGORIES:".ical_escape(get_translated_text($event['categorisation']))."\n";
 		echo "CLASS:".(($event['price']==0.0)?'PUBLIC':'PRIVATE')."\n";
 		echo "STATUS:".(($event['enabled']==1)?'CONFIRMED':'TENTATIVE')."\n";
@@ -116,7 +118,19 @@ function bookables_ical_script()
 				foreach ($attendees as $attendee)
 				{
 					if (!is_guest($event['member_id']))
-						echo "ATTENDEE;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($attendee['member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($attendee['member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($attendee['member_id']))."\n";
+					{
+						if (!is_guest($attendee['member_id']))
+						{
+							$customer_name=$GLOBALS['FORUM_DRIVER']->get_username($attendee['member_id']);
+							$customer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($attendee['member_id']);
+							echo "ATTENDEE;CN=".ical_escape($customer_name).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($attendee['member_id'])).":MAILTO:".ical_escape($customer_email)."\n";
+						} else
+						{
+							$customer_name=$attendee['customer_name'];
+							$customer_email=$attendee['customer_email'];
+							echo "ATTENDEE;CN=".ical_escape($customer_name).";MAILTO:".ical_escape($customer_email)."\n";
+						}
+					}
 				}
 			}
 		}
@@ -214,7 +228,19 @@ function bookings_ical_script()
 				echo "DESCRIPTION:".ical_escape($description)."\n";
 
 				if (!is_guest($booking['member_id']))
-					echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($booking['member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($booking['member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($booking['member_id']))."\n";
+				{
+					if (!is_guest($booking['member_id']))
+					{
+						$customer_name=$GLOBALS['FORUM_DRIVER']->get_username($booking['member_id']);
+						$customer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($booking['member_id']);
+						echo "ORGANIZER;CN=".ical_escape($customer_name).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($booking['member_id'])).":MAILTO:".ical_escape($customer_email)."\n";
+					} else
+					{
+						$customer_name=$booking['customer_name'];
+						$customer_email=$booking['customer_email'];
+						echo "ORGANIZER;CN=".ical_escape($customer_name).";MAILTO:".ical_escape($customer_email)."\n";
+					}
+				}
 				echo "CATEGORIES:".ical_escape($bookable_category)."\n";
 				echo "CLASS:PRIVATE\n";
 				echo "STATUS:".(($booking['paid_at']!==NULL)?'CONFIRMED':'TENTATIVE')."\n";

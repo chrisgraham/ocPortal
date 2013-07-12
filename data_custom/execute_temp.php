@@ -55,9 +55,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	file_put_contents(get_file_base().'/lang_custom/EN/foo.ini','[strings]'."\n".'foo=bar');
-	require_lang('foo');
-	@unlink(get_file_base().'/lang_custom/EN/foo.ini');
-	@unlink(get_file_base().'/lang_cached/EN/foo.lcd');
-	echo do_lang('MEMBERX');
+	$GLOBALS['SITE_DB']->add_table_field('booking','customer_name','SHORT_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('booking','customer_email','SHORT_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('booking','customer_mobile','SHORT_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('booking','customer_phone','SHORT_TEXT');
 }
