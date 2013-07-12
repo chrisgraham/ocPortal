@@ -117,6 +117,13 @@
 						<td>{PRIORITY_LANG*}</td>
 					</tr>
 
+					{+START,IF_PASSED,MEMBER_CALENDAR}
+						<tr>
+							<th>{!MEMBER_CALENDAR}</th>
+							<td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_CALENDAR}}">{$USERNAME*,{MEMBER_CALENDAR}}</a></td>
+						</tr>
+					{+END}
+
 					{+START,IF_PASSED,IS_PUBLIC}
 						<tr>
 							<th>{!IS_PUBLIC}</th>

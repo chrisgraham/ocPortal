@@ -1555,7 +1555,7 @@ class Module_calendar
 		// Edit URL
 		if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_edit_permission(($event['e_member_calendar']!==NULL)?'low':'mid',get_member(),$event['e_submitter'],'cms_calendar',array('calendar',$event['e_type']))))
 		{
-			$edit_url=build_url(array('page'=>'cms_calendar','type'=>'_ed','id'=>$id),get_module_zone('cms_calendar'));
+			$edit_url=build_url(array('page'=>'cms_calendar','type'=>'_ed','id'=>$id,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
 		} else
 		{
 			$edit_url=new ocp_tempcode();
@@ -1643,6 +1643,7 @@ class Module_calendar
 			'TO_DAY'=>$to_day_formatted,
 			'RECURRENCE'=>$recurrence,
 			'IS_PUBLIC'=>$is_public,
+			'MEMBER_CALENDAR'=>is_null($event['e_member_calendar'])?'':strval($event['e_member_calendar']),
 			'PRIORITY'=>strval($priority),
 			'PRIORITY_LANG'=>$priority_lang,
 			'TYPE'=>$type,
