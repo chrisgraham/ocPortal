@@ -182,6 +182,9 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
 		unset($REVERSABLE_TAGS['attachment_safe']);
 	}*/
 
+	if (count($_POST)!=0)
+		@header('X-XSS-Protection: 0');
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	if (is_null($source_member))

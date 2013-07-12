@@ -46,10 +46,27 @@
 	</tr>
 	<tr>
 		<th>{!CUSTOMER_NAME}</th>
-		<td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{USERNAME*}</a></td>
+		<td>
+			{+START,IF,{$CONFIG_OPTION,member_booking_only}}
+				<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{USERNAME*}</a>
+			{+END}
+			{+START,IF,{$NOT,{$CONFIG_OPTION,member_booking_only}}}
+				{USERNAME*}
+			{+END}
+		</td>
 	</tr>
 	<tr>
 		<th>{!CUSTOMER_EMAIL}</th>
 		<td>{EMAIL_ADDRESS*}</td>
 	</tr>
+	{+START,IF,{$NOT,{$CONFIG_OPTION,member_booking_only}}}
+		<tr>
+			<th>{!MOBILE_NUMBER}</th>
+			<td>{MOBILE_NUMBER*}</td>
+		</tr>
+		<tr>
+			<th>{!PHONE_NUMBER}</th>
+			<td>{PHONE_NUMBER*}</td>
+		</tr>
+	{+END}
 </tbody></table></div>

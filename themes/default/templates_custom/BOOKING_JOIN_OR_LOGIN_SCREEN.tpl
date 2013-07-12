@@ -1,14 +1,16 @@
 {TITLE}
 
-<p>
-	{!ALREADY_MEMBER_LOGIN,{$PAGE_LINK*,:login:redirect={$SELF_URL&}},{HIDDEN}}
-</p>
+{+START,IF,{$CONFIG_OPTION,member_booking_only}}
+	<p>
+		{!ALREADY_MEMBER_LOGIN,{$PAGE_LINK*,:login:redirect={$SELF_URL&}},{HIDDEN}}
+	</p>
 
-<hr />
+	<hr />
 
-<p>
-	{!ENTER_PROFILE_DETAILS}
-</p>
+	<p>
+		{!ENTER_PROFILE_DETAILS}
+	</p>
+{+END}
 
 {FORM}
 

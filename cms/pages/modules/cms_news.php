@@ -61,7 +61,31 @@ class Module_cms_news extends standard_aed_module
 	function get_sp_overrides()
 	{
 		require_lang('news');
-		return array('mass_import'=>0,'have_personal_category'=>0,'submit_cat_highrange_content'=>array(0,'ADD_NEWS_CATEGORY'),'edit_own_cat_highrange_content'=>array(0,'EDIT_OWN_NEWS_CATEGORY'),'edit_cat_highrange_content'=>array(0,'EDIT_NEWS_CATEGORY'),'delete_own_cat_highrange_content'=>array(0,'DELETE_OWN_NEWS_CATEGORY'),'delete_cat_highrange_content'=>array(0,'DELETE_NEWS_CATEGORY'),'submit_highrange_content'=>array(1,'ADD_NEWS'),'bypass_validation_highrange_content'=>array(1,'BYPASS_NEWS_VALIDATION'),'edit_own_highrange_content'=>array(1,'EDIT_OWN_NEWS'),'edit_highrange_content'=>array(1,'EDIT_NEWS'),'delete_own_highrange_content'=>array(1,'DELETE_OWN_NEWS'),'delete_highrange_content'=>array(1,'DELETE_NEWS'));
+		return array(
+			'mass_import'=>0,
+
+			'have_personal_category'=>0,
+
+			'submit_cat_highrange_content'=>array(0,'ADD_NEWS_CATEGORY'),
+			'edit_own_cat_highrange_content'=>array(0,'EDIT_OWN_NEWS_CATEGORY'),
+			'edit_cat_highrange_content'=>array(0,'EDIT_NEWS_CATEGORY'),
+			'delete_own_cat_highrange_content'=>array(0,'DELETE_OWN_NEWS_CATEGORY'),
+			'delete_cat_highrange_content'=>array(0,'DELETE_NEWS_CATEGORY'),
+
+			'submit_highrange_content'=>array(1,'ADD_NEWS'),
+			'bypass_validation_highrange_content'=>array(1,'BYPASS_NEWS_VALIDATION'),
+			'edit_own_highrange_content'=>array(1,'EDIT_OWN_NEWS'),
+			'edit_highrange_content'=>array(1,'EDIT_NEWS'),
+			'delete_own_highrange_content'=>array(1,'DELETE_OWN_NEWS'),
+			'delete_highrange_content'=>array(1,'DELETE_NEWS'),
+
+			'submit_midrange_content'=>array(1,'ADD_NEWS_BLOG'),
+			'bypass_validation_midrange_content'=>array(1,'BYPASS_NEWS_BLOG_VALIDATION'),
+			'edit_own_midrange_content'=>array(1,'EDIT_OWN_NEWS_BLOG'),
+			'edit_midrange_content'=>array(1,'EDIT_NEWS_BLOG'),
+			'delete_own_midrange_content'=>array(1,'DELETE_OWN_NEWS_BLOG'),
+			'delete_midrange_content'=>array(1,'DELETE_NEWS_BLOG'),
+		);
 	}
 
 	/**
@@ -414,8 +438,8 @@ class Module_cms_news extends standard_aed_module
 
 		$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$url=$urls[0];
-		if (($url!='') && (function_exists('imagecreatefromstring')))
-			convert_image(get_base_url().'/'.$url,get_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+		if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+			convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?time():$schedule;
@@ -498,8 +522,8 @@ class Module_cms_news extends standard_aed_module
 		{
 			$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 			$url=$urls[0];
-			if (($url!='') && (function_exists('imagecreatefromstring')))
-				convert_image(get_base_url().'/'.$url,get_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+			if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+				convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 			if (($url=='') && (post_param_integer('file_unlink',0)!=1)) $url=NULL;
 		} else
 		{
