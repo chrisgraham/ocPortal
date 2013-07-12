@@ -2,7 +2,9 @@
 	{+START,IF_PASSED_AND_TRUE,GET}{$HIDDENS_FOR_GET_FORM,{URL}}{+END}
 
 	<p class="lonely_label"><label for="licence">{!LICENCE}:</label></p>
-	<textarea readonly="readonly" class="purchase_licence" id="licence" name="licence" cols="50" rows="11">{LICENCE*}</textarea>
+	<div class="constrain_field">
+		<textarea readonly="readonly" class="purchase_licence" id="licence" name="licence" cols="50" rows="11">{LICENCE*}</textarea>
+	</div>
 
 	<p class="purchase_button">
 		<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!I_AGREE}" />
