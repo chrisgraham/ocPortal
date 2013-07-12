@@ -126,7 +126,8 @@ class Hook_addon_registry_newsletter
 			'NEWSLETTER_CONFIRM_WRAP.tpl'=>'administrative__newsletter_confirm_wrap',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl'=>'block_main_newsletter_signup_done',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl'=>'block_main_newsletter_signup',
-			'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl'=>'newsletter_new_resource_fcomcode'
+			'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl'=>'newsletter_new_resource_fcomcode',
+			'PERIODIC_NEWSLETTER_REMOVE.tpl'=>'periodic_newsletter_remove',
 		);
 	}
 
@@ -295,6 +296,16 @@ class Hook_addon_registry_newsletter
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph()
+			)), NULL, '', true)
+		);
+	}
+
+	function tpl_preview__periodic_newsletter_remove()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('PERIODIC_NEWSLETTER_REMOVE', array(
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
 			)), NULL, '', true)
 		);
 	}

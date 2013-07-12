@@ -1070,7 +1070,8 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$
 			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'); // Used to set the repeating sequence $day is for (e.g. 0 means first Monday, 7 means second Monday, and so on)
 			$nth=intval(1.0+floatval($day)/7.0);
 
-			$month_start=mktime(0,0,0,$month,1,$year)-1; // The "-1" is needed on SOME PHP versions, to set the window 1 second before where we're looking to make it find something right at the start of the actual window
+			$month_start=mktime(0,0,0,$month,1,$year);
+			if (strtotime('+0 Tuesday',mktime(0,0,0,1,1,2013))!=mktime(0,0,0,1,1,2013)) $month_start-=1; // This "-1" is needed on SOME PHP versions, to set the window 1 second before where we're looking to make it find something right at the start of the actual window
 			if (function_exists('date_default_timezone_set'))
 			{
 				date_default_timezone_set($timezone);
