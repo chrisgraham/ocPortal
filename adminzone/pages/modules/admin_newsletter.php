@@ -846,7 +846,7 @@ class Module_admin_newsletter extends standard_aed_module
 				$fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,NULL,false,false));
 			}
 
-			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url()));
+			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url(false,false,array('lang'=>$lang))));
 		} else
 		{
 			$cutoff_time=get_input_date('cutoff');
@@ -891,7 +891,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 * @param  BINARY					Whether to show artices in full (as opposed to summaries)
 	 * @param  LANGUAGE_NAME		Language to send in
 	 * @param  TIME					When to cut off content from
-	 * @return tempcode				The UI
+	 * @return tempcode				The Comcode, in template form
 	 */
 	function generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
 	{
@@ -1131,7 +1131,7 @@ class Module_admin_newsletter extends standard_aed_module
 		}
 
 		// Some general details of how to send
-		if ((addon_installed('calendar')) && ($periodic_action=='none'))
+		if ((addon_installed('calendar')) && ($periodic_action=='none') && (cron_installed()))
 			$fields->attach(form_input_date__scheduler(do_lang_tempcode('DEFER_TIME'),do_lang_tempcode('DESCRIPTION_DEFER_TIME'),'schedule',true,true,true));
 		$from_email=post_param('from_email',get_option('staff_address'));
 		if (!is_null($defaults)) $from_email=post_param('from_email',$defaults['np_from_email']);
@@ -1522,7 +1522,7 @@ class Module_admin_newsletter extends standard_aed_module
 			}
 
 			$url=build_url(array('page'=>'admin_newsletter','type'=>'misc','redirected'=>'1'),get_module_zone('admin_newsletter'));
-			return redirect_screen(do_lang('PERIODIC_SUCCESS'),$url,$message,false,'inform');
+			return redirect_screen(do_lang('SUCCESS'),$url,$message,false,'inform');
 		}
 
 		if (addon_installed('calendar'))

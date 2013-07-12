@@ -104,7 +104,8 @@ class Hook_addon_registry_newsletter
 			'themes/default/images/bigicons/subscribers.png',
 			'sources/hooks/modules/admin_newsletter/index.html',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl',
-			'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl'
+			'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl',
+			'PERIODIC_NEWSLETTER_REMOVE.tpl',
 		);
 	}
 
