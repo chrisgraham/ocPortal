@@ -4196,8 +4196,6 @@ gallery_syndication
  - lang_custom/EN/gallery_syndication_youtube.ini
  - lang_custom/EN/gallery_syndication_vimeo.ini
  - sources_custom/gallery_syndication.php
- - sources_custom/hooks/modules/admin_config/video_sync_transcoding.php
- - sources_custom/hooks/modules/admin_config/index.html
  - sources_custom/hooks/modules/video_syndication/vimeo.php
  - sources_custom/hooks/modules/video_syndication/youtube.php
  - sources_custom/hooks/modules/video_syndication/index.html

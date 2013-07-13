@@ -30,7 +30,7 @@ class Hook_config_default_payment_gateway
 	{
 		return array(
 			'human_name'=>'PAYMENT_GATEWAY',
-			'the_type'=>'line',
+			'the_type'=>'special',
 			'c_category'=>'ECOMMERCE',
 			'c_group'=>'PAYMENT_GATEWAY',
 			'explanation'=>'CONFIG_OPTION_payment_gateway',
@@ -49,6 +49,23 @@ class Hook_config_default_payment_gateway
 	function get_default()
 	{
 		return 'paypal';
+	}
+
+	/**
+	 * Field inputter (because the_type=special).
+	 *
+	 * @param  array			The config row
+	 * @return tempcode		The inputter
+	 */
+	function field_inputter($myrow)
+	{
+		$list='';
+		$all_via=find_all_hooks('systems','ecommerce_via');
+		foreach (array_keys($all_via) as $via)
+		{
+			$list.=static_evaluate_tempcode(form_input_list_entry($via,$via==get_option($myrow['the_name'])));
+		}
+		return form_input_list($name_tempcode,$explanation,$myrow['the_name'],make_string_tempcode($list));
 	}
 
 }

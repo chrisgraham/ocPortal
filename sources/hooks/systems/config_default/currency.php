@@ -30,7 +30,7 @@ class Hook_config_default_currency
 	{
 		return array(
 			'human_name'=>'CURRENCY',
-			'the_type'=>'line',
+			'the_type'=>'special',
 			'c_category'=>'ECOMMERCE',
 			'c_group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_currency',
@@ -49,6 +49,24 @@ class Hook_config_default_currency
 	function get_default()
 	{
 		return 'GBP';
+	}
+
+	/**
+	 * Field inputter (because the_type=special).
+	 *
+	 * @param  array			The config row
+	 * @return tempcode		The inputter
+	 */
+	function field_inputter($myrow)
+	{
+		$list='';
+		require_code('currency');
+		$currencies=array_keys(get_currency_map());
+		foreach ($currencies as $currency)
+		{
+			$list.=static_evaluate_tempcode(form_input_list_entry($currency,$currency==get_option($myrow['the_name'])));
+		}
+		return form_input_list($name_tempcode,$explanation,$myrow['the_name'],make_string_tempcode($list));
 	}
 
 }

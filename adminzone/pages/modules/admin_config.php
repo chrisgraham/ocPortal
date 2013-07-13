@@ -655,9 +655,9 @@ class Module_admin_config
 							break;
 
 						default:
-							require_code('hooks/modules/admin_config/'.filter_naughty_harsh($myrow['the_name']));
-							$hook_ob=object_factory('Hook_admin_config_'.filter_naughty_harsh($myrow['the_name']));
-							$out.=static_evaluate_tempcode($hook_ob->run($myrow));
+							require_code('hooks/systems/config_default/'.filter_naughty_harsh($myrow['the_name']));
+							$hook_ob=object_factory('Hook_config_default_'.filter_naughty_harsh($myrow['the_name']));
+							$out.=static_evaluate_tempcode($hook_ob->field_inputter($myrow));
 							break;
 					}
 					break;
@@ -665,39 +665,20 @@ class Module_admin_config
 				case 'integer':
 					$out.=static_evaluate_tempcode(form_input_integer($name_tempcode,$explanation,$myrow['the_name'],intval(get_option($myrow['the_name'])),false));
 					break;
-				case 'line':
-					if ((strpos($myrow['the_name'],'colour')!==false) && (substr(get_option($myrow['the_name']),0,1)=='#'))
-					{
-						$out.=static_evaluate_tempcode(form_input_colour($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,NULL,true));
-					}
-					elseif ($myrow['the_name']=='currency')
-					{
-						$list='';
-						require_code('currency');
-						$currencies=array_keys(get_currency_map());
-						foreach ($currencies as $currency)
-						{
-							$list.=static_evaluate_tempcode(form_input_list_entry($currency,$currency==get_option($myrow['the_name'])));
-						}
-						$out.=static_evaluate_tempcode(form_input_list($name_tempcode,$explanation,$myrow['the_name'],make_string_tempcode($list)));
-					}
-					elseif ($myrow['the_name']=='payment_gateway')
-					{
-						$list='';
-						$all_via=find_all_hooks('systems','ecommerce_via');
-						foreach (array_keys($all_via) as $via)
-						{
-							$list.=static_evaluate_tempcode(form_input_list_entry($via,$via==get_option($myrow['the_name'])));
-						}
-						$out.=static_evaluate_tempcode(form_input_list($name_tempcode,$explanation,$myrow['the_name'],make_string_tempcode($list)));
-					} else
-					{
-						$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
-					}
+
+				case 'colour':
+					$out.=static_evaluate_tempcode(form_input_colour($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,NULL,true));
 					break;
+
+				case 'line':
+				case 'transline':
+					$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
+					break;
+
 				case 'username':
 					$out.=static_evaluate_tempcode(form_input_username($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,false));
 					break;
+
 				case 'list':
 					$list='';
 					$_value=get_option($myrow['the_name']);
@@ -717,24 +698,24 @@ class Module_admin_config
 					}
 					$out.=static_evaluate_tempcode(form_input_list($name_tempcode,$explanation,$myrow['the_name'],make_string_tempcode($list),NULL,false,false));
 					break;
-				case 'transline':
-					$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
-					break;
+
 				case 'text':
-					$out.=static_evaluate_tempcode(form_input_text($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,NULL,true));
-					break;
 				case 'transtext':
 					$out.=static_evaluate_tempcode(form_input_text($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,NULL,true));
 					break;
+
 				case 'float':
 					$out.=static_evaluate_tempcode(form_input_float($name_tempcode,$explanation,$myrow['the_name'],floatval(get_option($myrow['the_name'])),false));
 					break;
+
 				case 'tick':
 					$out.=static_evaluate_tempcode(form_input_tick($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name'])=='1'));
 					break;
+
 				case 'date':
 					$out.=static_evaluate_tempcode(form_input_date($name_tempcode,$explanation,$myrow['the_name'],false,false,false,intval(get_option($myrow['the_name'])),40,intval(date('Y'))-20,NULL,false));
 					break;
+
 				case 'forum':
 				case '?forum':
 					if ((get_forum_type()=='ocf') && (addon_installed('ocf_forum')))
@@ -764,6 +745,7 @@ class Module_admin_config
 						$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
 					}
 					break;
+
 				case 'forum_grouping':
 					if (get_forum_type()=='ocf')
 					{
@@ -777,6 +759,7 @@ class Module_admin_config
 						$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
 					}
 					break;
+
 				case 'usergroup':
 					if (get_forum_type()=='ocf')
 					{
@@ -794,6 +777,7 @@ class Module_admin_config
 
 			$current_group=$myrow['c_group'];
 		}
+
 		if ($out!='')
 		{
 			$_group_description=do_lang('CONFIG_GROUP_DESCRIP_'.$current_group,escape_html($post_max_size),escape_html($upload_max_filesize),NULL,NULL,false);

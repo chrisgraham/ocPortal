@@ -222,8 +222,6 @@ class Hook_addon_registry_core
 			'pages/comcode/EN/panel_top.txt',
 			'pages/comcode/EN/panel_bottom.txt',
 			'lang/EN/dearchive.ini',
-			'sources/hooks/modules/admin_config/.htaccess',
-			'sources/hooks/modules/admin_config/index.html',
 			'sources/ocfiltering.php',
 			'sources/ocselect.php',
 			'lang/EN/ocselect.ini',
