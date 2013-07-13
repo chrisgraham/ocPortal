@@ -217,6 +217,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 
 	if ((get_page_name()!='admin_themewizard') && (get_page_name()!='admin_import'))
 	{
+		require_all_lang();
 		static $logged=0;
 		$logged++;
 		if ($logged<10) // Be extra sure it's not some kind of import, causing spam

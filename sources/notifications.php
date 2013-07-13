@@ -77,6 +77,7 @@ function _get_notification_ob_for_code($notification_code)
 	$path='hooks/systems/notifications/'.filter_naughty($notification_code);
 	if ((!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
 	{
+		require_all_lang();
 		$hooks=find_all_hooks('systems','notifications');
 		foreach (array_keys($hooks) as $hook)
 		{
@@ -119,6 +120,8 @@ function _get_notification_ob_for_code($notification_code)
 function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL)
 {
 	if ($subject=='') $subject='<'.$notification_code.' -- '.(is_null($code_category)?'':$code_category).'>';
+
+	if (running_script('install')) return;
 
 	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category);
 	if (get_param_integer('keep_debug_notifications',0)==1)

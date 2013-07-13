@@ -1320,6 +1320,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 		document.getElementById(name).onchange=null;
 
 		var mid=name.lastIndexOf('_');
+		if (mid==-1) mid=name.length-2;
 		var nameStub=name.substring(0,mid+1);
 		var thisNum=name.substring(mid+1,name.length)-0;
 		var nextNum=thisNum+1;

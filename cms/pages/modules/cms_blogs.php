@@ -28,7 +28,7 @@ class Module_cms_blogs extends standard_aed_module
 	var $lang_type='NEWS_BLOG';
 	var $select_name='TITLE';
 	var $code_require='news';
-	var $permissions_require='high';
+	var $permissions_require='mid';
 	var $permissions_cat_require='news';
 	var $permissions_cat_name='main_news_category';
 	var $user_facing=true;
@@ -93,8 +93,8 @@ class Module_cms_blogs extends standard_aed_module
 		return do_next_manager(get_page_title('MANAGE_BLOGS'),comcode_lang_string('DOC_BLOGS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
-						has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS_BLOG')):NULL,
+						has_specific_permission(get_member(),'submit_midrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
+						has_specific_permission(get_member(),'edit_own_midrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS_BLOG')):NULL,
 						has_specific_permission(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import_wordpress'),'_SELF'),do_lang('IMPORT_WORDPRESS')):NULL,
 					),
 					do_lang('MANAGE_BLOGS')
@@ -138,7 +138,7 @@ class Module_cms_blogs extends standard_aed_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
+		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_news')?NULL:get_member();
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned),false,' JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category AND nc_owner IS NOT NULL');
 		if (count($rows)==0) return NULL;
 		foreach ($rows as $row)
@@ -169,7 +169,7 @@ class Module_cms_blogs extends standard_aed_module
 	 */
 	function nice_get_entries()
 	{
-		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
+		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_news')?NULL:get_member();
 		return nice_get_news(NULL,$only_owned,false,true);
 	}
 
@@ -544,14 +544,14 @@ class Module_cms_blogs extends standard_aed_module
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
 					array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-					has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_midrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
+					has_specific_permission(get_member(),'edit_own_midrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
 					is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id,'blog'=>1),get_module_zone('news')),							// View this
 					array('news',array('type'=>'misc','blog'=>1),get_module_zone('news')),									 // View archive
 					NULL,	  // Add to category
-					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-					is_null($cat)?NULL:has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
+					has_specific_permission(get_member(),'submit_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+					has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+					is_null($cat)?NULL:has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
 					NULL																						 // View this category
 		);
 	}

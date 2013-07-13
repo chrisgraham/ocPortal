@@ -1419,7 +1419,8 @@ class Module_topics
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('seedy_page'));
+			$specialisation->attach(get_award_fields('topic'));
+			$specialisation->attach(get_award_fields('post'));
 		}
 
 		// Render form
@@ -2019,6 +2020,12 @@ END;
 		}
 
 		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1 || is_null($forum_id),$forum_id==-1 || is_null($forum_id),false,$parent_id);
+
+		if (addon_installed('awards'))
+		{
+			require_code('awards');
+			handle_award_setting('post',strval($post_id));
+		}
 
 		if ((!is_null($forum_id)) && ($anonymous==0) && ($intended_solely_for===NULL))
 		{

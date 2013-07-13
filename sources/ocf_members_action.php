@@ -299,6 +299,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	{
 		if ($g!=$primary_group)
 		{
+			$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id,'gm_group_id'=>$g),'',1);
 			$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
 				'gm_group_id'=>$g,
 				'gm_member_id'=>$member_id,

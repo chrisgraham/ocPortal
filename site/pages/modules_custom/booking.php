@@ -245,13 +245,13 @@ class Module_booking
 			// Message if not currently active
 			if ($active_from>time())
 			{
-				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false,true,true));
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false,true,false,true));
 			}
 
 			// Message if becomes inactive within next 6 months
 			if ((!is_null($active_to)) && ($active_to<SHOW_WARNINGS_UNTIL))
 			{
-				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false,true,true));
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false,true,false,true));
 			}
 
 			// Message about any black-outs within next 6 months
@@ -272,8 +272,8 @@ class Module_booking
 				{
 					$messages[]=do_lang_tempcode(
 						($black_from==$black_to)?'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF':'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
-						get_timezoned_date($black_from,false,true,true),
-						get_timezoned_date($black_to,false,true,true),
+						get_timezoned_date($black_from,false,true,false,true),
+						get_timezoned_date($black_to,false,true,false,true),
 						get_translated_tempcode($black['blacked_explanation'])
 					);
 				}

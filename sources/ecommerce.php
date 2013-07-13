@@ -32,6 +32,8 @@ function init__ecommerce()
 		define('PRODUCT_CATALOGUE',4);
 		define('PRODUCT_ORDERS',5);
 	}
+
+	require_lang('ecommerce');
 }
 
 /**
@@ -357,7 +359,6 @@ function perform_local_payment()
  */
 function handle_transaction_script()
 {
-	require_lang('ecommerce');
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);

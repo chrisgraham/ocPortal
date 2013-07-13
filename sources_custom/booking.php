@@ -393,11 +393,11 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 
 	// Check bookable time is in active period
 	$from=mktime(0,0,0,$bookable_row['active_from_month'],$bookable_row['active_from_day'],$bookable_row['active_from_year']);
-	if ($asked<$from) return do_lang_tempcode('BOOKING_IMPOSSIBLE_NOT_STARTED',escape_html(get_timezoned_date($from,false,true,true)));
+	if ($asked<$from) return do_lang_tempcode('BOOKING_IMPOSSIBLE_NOT_STARTED',escape_html(get_timezoned_date($from,false,true,false,true)));
 	if (!is_null($bookable_row['active_to_month']))
 	{
 		$to=mktime(0,0,0,$bookable_row['active_to_month'],$bookable_row['active_to_day'],$bookable_row['active_to_year']);
-		if ($asked>=$to) return do_lang_tempcode('BOOKING_IMPOSSIBLE_ENDED',escape_html(get_timezoned_date($to,false,true,true)));
+		if ($asked>=$to) return do_lang_tempcode('BOOKING_IMPOSSIBLE_ENDED',escape_html(get_timezoned_date($to,false,true,false,true)));
 	}
 
 	// Check bookable is not blacked for time
@@ -410,10 +410,10 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 		{
 			if ($from==$to)
 			{
-				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_ONEOFF',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
+				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_ONEOFF',escape_html(get_timezoned_date($from,false,true,false,true)),escape_html(get_translated_text($black['blacked_explanation'])));
 			} else
 			{
-				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_PERIOD',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_timezoned_date($to,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
+				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_PERIOD',escape_html(get_timezoned_date($from,false,true,false,true)),escape_html(get_timezoned_date($to,false,true,false,true)),escape_html(get_translated_text($black['blacked_explanation'])));
 			}
 		}
 	}
@@ -422,7 +422,7 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 	$query='SELECT COUNT(*) FROM '.get_table_prefix().'booking WHERE b_day='.strval($day).' AND b_month='.strval($month).' AND b_year='.strval($year);
 	foreach ($ignore_bookings as $b) $query.=' AND id<>'.strval($b);
 	$codes_taken_already=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
-	if ($codes_taken_already+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL',get_timezoned_date($asked,false,true,true));
+	if ($codes_taken_already+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL',get_timezoned_date($asked,false,true,false,true));
 
 	// Good!
 	return NULL;
@@ -472,8 +472,8 @@ function make_booking_request_printable($request)
 			'DESCRIPTION'=>get_translated_tempcode($bookable_row[0]['description']),
 			'QUANTITY'=>integer_format($_part['quantity']),
 			'_QUANTITY'=>strval($_part['quantity']),
-			'START'=>get_timezoned_date($start,false,true,true),
-			'END'=>($start==$end)?'':get_timezoned_date($end,false,true,true),
+			'START'=>get_timezoned_date($start,false,true,false,true),
+			'END'=>($start==$end)?'':get_timezoned_date($end,false,true,false,true),
 			'_START'=>strval($start),
 			'_END'=>strval($end),
 			'NOTES'=>$_part['notes'],

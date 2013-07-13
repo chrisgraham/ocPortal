@@ -1184,6 +1184,8 @@ class Module_chat
 			$buddies=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
 			foreach ($buddies as $buddy)
 			{
+				if (is_null($GLOBALS['FORUM_DRIVER']->get_username($buddy['member_liked']))) continue;
+
 				$effect_settings=get_effect_settings(false,$buddy['member_liked']); // Find what the member has it set to
 				$has_some=false;
 				foreach ($effect_settings as $s) if ($s['VALUE']!='-1') $has_some=true;
@@ -1220,6 +1222,8 @@ class Module_chat
 			$suffixes=array('');
 			foreach ($buddies as $buddy)
 			{
+				if (is_null($GLOBALS['FORUM_DRIVER']->get_username($buddy['member_liked']))) continue;
+
 				$suffixes[]='_'.strval($buddy['member_liked']);
 			}
 		}

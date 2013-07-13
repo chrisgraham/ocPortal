@@ -107,6 +107,7 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/modules/admin_newsletter/index.html',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl',
 			'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl',
+			'PERIODIC_NEWSLETTER_REMOVE.tpl',
 		);
 	}
 
@@ -292,6 +293,16 @@ class Hook_addon_registry_newsletter
 					'DESCRIPTION'=>lorem_paragraph(),
 						)
 			),NULL,'',true),
+		);
+	}
+
+	function tpl_preview__periodic_newsletter_remove()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('PERIODIC_NEWSLETTER_REMOVE', array(
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+			)), NULL, '', true)
 		);
 	}
 }

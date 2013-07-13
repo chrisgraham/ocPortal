@@ -140,8 +140,8 @@ class Module_cms_booking extends standard_aed_module
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['title']));
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['categorisation']));
 			$fr[]=float_format($row['price']);
-			$fr[]=get_timezoned_date(mktime($row['active_from_month'],$row['active_from_day'],$row['active_from_year']),false,true,true);
-			$fr[]=get_timezoned_date(mktime($row['active_to_month'],$row['active_to_day'],$row['active_to_year']),false,true,true);
+			$fr[]=get_timezoned_date(mktime($row['active_from_month'],$row['active_from_day'],$row['active_from_year']),false,true,false,true);
+			$fr[]=get_timezoned_date(mktime($row['active_to_month'],$row['active_to_day'],$row['active_to_year']),false,true,false,true);
 			$fr[]=($row['enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
@@ -845,8 +845,8 @@ class Module_cms_booking_bookings extends standard_aed_module
 
 			$fr=array();
 			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$row['bookable_id'])));
-			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,true);
-			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,true);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,false,true);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,false,true);
 			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id']);
 			$fr[]=number_format($row['quantity']);
 			$fr[]=get_timezoned_date($row['_rows'][0]['booked_at']);
