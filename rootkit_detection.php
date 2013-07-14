@@ -110,11 +110,6 @@ END;
 			}
 		}
 	}
-	$r=mysql_query('SELECT * FROM '.$prefix.'config WHERE config_value IS NULL ORDER BY the_name',$db);
-	while (($row=mysql_fetch_assoc($r))!==false)
-	{
-		$results.="Executable-config-option: {$row['the_name']}=".$row['eval']."\n";
-	}
 	$r=mysql_query('SELECT * FROM '.$prefix.'f_groups WHERE g_is_super_admin=1 OR g_is_super_moderator=1 ORDER BY id',$db);
 	$staff_groups=array();
 	$pg='';

@@ -113,7 +113,7 @@ class Database_Static_mysqli extends Database_super_mysql
 		}
 		@mysqli_query($db,'SET WAIT_TIMEOUT=28800');
 		@mysqli_query($db,'SET SQL_BIG_SELECTS=1');
-		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysqli_query($db,'SET sql_mode=STRICT_ALL_TABLES');
+		if ((get_forum_type()=='ocf') && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) @mysqli_query($db,'SET sql_mode=STRICT_ALL_TABLES');
 		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
 		return array($db,$db_name);

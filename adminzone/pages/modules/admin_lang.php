@@ -420,9 +420,9 @@ class Module_admin_lang
 
 		log_it('TRANSLATE_CONTENT');
 
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		if (get_param_integer('contextual',0)==1)
 		{
@@ -771,7 +771,7 @@ msgstr ""
 	function set_lang_code()
 	{
 		decache('side_language');
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
 
 		$lang=get_param('lang');
@@ -819,7 +819,7 @@ msgstr ""
 
 		log_it('TRANSLATE_CODE');
 
-		require_code('view_modes');
+		require_code('caches3');
 		erase_cached_language();
 		erase_cached_templates();
 
@@ -886,7 +886,7 @@ msgstr ""
 
 		log_it('TRANSLATE_CODE');
 
-		require_code('view_modes');
+		require_code('caches3');
 		erase_cached_language();
 		erase_cached_templates();
 

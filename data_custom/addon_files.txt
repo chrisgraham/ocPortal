@@ -24,7 +24,7 @@ oc_banter
  - sources_custom/hooks/systems/upon_query/insults.php
  - text_custom/EN/insults.txt
  - themes/default/images_custom/bigicons/insults.png
- - sources_custom/hooks/systems/config_default/insult_points.php
+ - sources_custom/hooks/systems/config/insult_points.php
 
 oc_dead_people
 --------------
@@ -199,18 +199,16 @@ oc_best_buddy
  - sources_custom/points2.php
  - sources_custom/hooks/systems/upon_query/add_mentor.php
  - lang_custom/EN/ocbestbuddy.ini
- - sources_custom/hooks/systems/config_default/mentor_usergroup.php
+ - sources_custom/hooks/systems/config/mentor_usergroup.php
 
 oc_thief
 --------
- - data_custom/octhief_install.php
- - data_custom/octhief_uninstall.php
  - lang_custom/EN/octhief.ini
  - sources_custom/hooks/systems/cron/octhief.php
- - sources_custom/hooks/systems/config_default/octhief_group.php
- - sources_custom/hooks/systems/config_default/octhief_number.php
- - sources_custom/hooks/systems/config_default/octhief_points.php
- - sources_custom/hooks/systems/config_default/octhief_type.php
+ - sources_custom/hooks/systems/config/octhief_group.php
+ - sources_custom/hooks/systems/config/octhief_number.php
+ - sources_custom/hooks/systems/config/octhief_points.php
+ - sources_custom/hooks/systems/config/octhief_type.php
 
 oc_bank
 -------
@@ -218,7 +216,9 @@ oc_bank
  - lang_custom/EN/bank.ini
  - sources_custom/hooks/systems/cron/bank.php
  - themes/default/templates_custom/POINTSTORE_BANK.tpl
- - sources_custom/hooks/systems/config_default/bank_dividend.php
+ - sources_custom/hooks/systems/config/bank_dividend.php
+ - data_custom/ocbank_uninstall.php 
+ - data_custom/ocbank_install.php 
 
 amazon_wishlist
 ---------------
@@ -285,10 +285,10 @@ facebook_support
  - sources_custom/facebook/jsonwrapper/JSON/LICENSE
  - facebook_connect.php
  - sources_custom/hooks/modules/members/facebook.php
- - sources_custom/hooks/systems/config_default/facebook_allow_signups.php
- - sources_custom/hooks/systems/config_default/facebook_appid.php
- - sources_custom/hooks/systems/config_default/facebook_secret_code.php
- - sources_custom/hooks/systems/config_default/facebook_uid.php
+ - sources_custom/hooks/systems/config/facebook_allow_signups.php
+ - sources_custom/hooks/systems/config/facebook_appid.php
+ - sources_custom/hooks/systems/config/facebook_secret_code.php
+ - sources_custom/hooks/systems/config/facebook_uid.php
  - sources_custom/ocf_field_editability.php
 
 twitter_support
@@ -299,8 +299,8 @@ twitter_support
  - sources_custom/hooks/systems/syndication/twitter.php
  - sources_custom/hooks/systems/do_next_menus/twitter.php
  - themes/default/images_custom/bigicons/twitter.png
- - sources_custom/hooks/systems/config_default/twitter_api_key.php
- - sources_custom/hooks/systems/config_default/twitter_api_secret.php
+ - sources_custom/hooks/systems/config/twitter_api_key.php
+ - sources_custom/hooks/systems/config/twitter_api_secret.php
 
 google_search
 -------------
@@ -592,8 +592,6 @@ getid3
 
 google_translate
 ----------------
- - data_custom/google_translate_install.php
- - data_custom/google_translate_uninstall.php
  - lang_custom/EN/google_translate.ini
  - lang_custom/AR/global.ini
  - lang_custom/BG/global.ini
@@ -700,7 +698,7 @@ google_translate
  - lang_custom/PL/index.html
  - lang_custom/PT/.htaccess
  - lang_custom/PT/index.html
- - sources_custom/hooks/systems/config_default/enable_google_translate.php
+ - sources_custom/hooks/systems/config/enable_google_translate.php
 
 octavius
 --------
@@ -1284,18 +1282,16 @@ oc_jester
 ---------
  - sources_custom/forum/ocf.php
  - lang_custom/EN/ocjester.ini
- - data_custom/ocjester_install.php
- - data_custom/ocjester_uninstall.php
  - themes/default/templates_custom/EMOTICON_IMG_CODE_THEMED.tpl
  - forum/pages/modules_custom/topicview.php
- - sources_custom/hooks/systems/config_default/ocjester_avatar_switch_shown_for.php
- - sources_custom/hooks/systems/config_default/ocjester_emoticon_magnet_shown_for.php
- - sources_custom/hooks/systems/config_default/ocjester_leet_shown_for.php
- - sources_custom/hooks/systems/config_default/ocjester_name_changes.php
- - sources_custom/hooks/systems/config_default/ocjester_name_changes_shown_for.php
- - sources_custom/hooks/systems/config_default/ocjester_piglatin_shown_for.php
- - sources_custom/hooks/systems/config_default/ocjester_string_changes.php
- - sources_custom/hooks/systems/config_default/ocjester_string_changes_shown_for.php
+ - sources_custom/hooks/systems/config/ocjester_avatar_switch_shown_for.php
+ - sources_custom/hooks/systems/config/ocjester_emoticon_magnet_shown_for.php
+ - sources_custom/hooks/systems/config/ocjester_leet_shown_for.php
+ - sources_custom/hooks/systems/config/ocjester_name_changes.php
+ - sources_custom/hooks/systems/config/ocjester_name_changes_shown_for.php
+ - sources_custom/hooks/systems/config/ocjester_piglatin_shown_for.php
+ - sources_custom/hooks/systems/config/ocjester_string_changes.php
+ - sources_custom/hooks/systems/config/ocjester_string_changes_shown_for.php
 
 oc_challenge
 ------------
@@ -2230,7 +2226,7 @@ reported_content
  - lang_custom/EN/reportcontent.ini
  - site/pages/modules_custom/reportcontent.php
  - themes/default/templates_custom/REPORTED_CONTENT_FCOMCODE.tpl
- - sources_custom/hooks/systems/config_default/reported_times.php
+ - sources_custom/hooks/systems/config/reported_times.php
 
 workflows
 ---------
@@ -2573,8 +2569,8 @@ booking
  - themes/default/images_custom/bigicons/bookable.png
  - themes/default/images_custom/bigicons/booking.png
  - themes/default/images_custom/bigicons/supplement.png
- - sources_custom/hooks/systems/config_default/bookings_max_ahead_months.php
- - sources_custom/hooks/systems/config_default/bookings_show_warnings_for_months.php
+ - sources_custom/hooks/systems/config/bookings_max_ahead_months.php
+ - sources_custom/hooks/systems/config/bookings_show_warnings_for_months.php
 
 columns
 -------
@@ -2597,7 +2593,7 @@ classified_ads
  - themes/default/templates_custom/CLASSIFIED_ADVERTS_SCREEN.tpl
  - themes/default/templates_custom/CLASSIFIEDS_PRICING_SCREEN.tpl
  - themes/default/templates_custom/CLASSIFIEDS.tpl
- - sources_custom/hooks/systems/config_default/max_classified_listings_per_screen.php
+ - sources_custom/hooks/systems/config/max_classified_listings_per_screen.php
 
 custom_ratings
 --------------
@@ -2675,7 +2671,7 @@ ocportalcom_support_credits
  - lang_custom/EN/customers.ini
  - text_custom/EN/support_credits_licence.txt
  - sources_custom/hooks/modules/members/customers.php
- - sources_custom/hooks/systems/config_default/support_credit_value.php
+ - sources_custom/hooks/systems/config/support_credit_value.php
  - sources_custom/hooks/systems/ecommerce/support_credits.php
  - sources_custom/hooks/systems/ocf_cpf_filter/customers.php
  - sources_custom/miniblocks/credit_exps.php
@@ -2683,12 +2679,12 @@ ocportalcom_support_credits
  - themes/default/templates_custom/BLOCK_CREDIT_EXPS_INNER.tpl
  - themes/default/templates_custom/POINTS_PROFILE.tpl
  - themes/default/templates_custom/SUPPORT_CREDITS_OUTSTANDING_SCREEN.tpl
- - sources_custom/hooks/systems/config_default/support_budget_priority.php
- - sources_custom/hooks/systems/config_default/support_credit_value.php
- - sources_custom/hooks/systems/config_default/support_day_priority.php
- - sources_custom/hooks/systems/config_default/support_emergency_priority.php
- - sources_custom/hooks/systems/config_default/support_high_priority.php
- - sources_custom/hooks/systems/config_default/support_normal_priority.php
+ - sources_custom/hooks/systems/config/support_budget_priority.php
+ - sources_custom/hooks/systems/config/support_credit_value.php
+ - sources_custom/hooks/systems/config/support_day_priority.php
+ - sources_custom/hooks/systems/config/support_emergency_priority.php
+ - sources_custom/hooks/systems/config/support_high_priority.php
+ - sources_custom/hooks/systems/config/support_normal_priority.php
  - sources_custom/points.php
  - sources_custom/points3.php
  - tracker/.gitignore
@@ -2759,6 +2755,7 @@ ocportalcom_support_credits
  - tracker/bugnote_update.php
  - tracker/bugnote_view_inc.php
  - tracker/changelog_page.php
+ - tracker/configs_inc.php
  - tracker/config_defaults_inc.php
  - tracker/config_filter_defaults_inc.php
  - tracker/config_inc.php
@@ -4115,8 +4112,8 @@ weather
 tester
 ------
 
- - sources_custom/hooks/systems/config_default/bug_report_text.php
- - sources_custom/hooks/systems/config_default/tester_forum_name.php
+ - sources_custom/hooks/systems/config/bug_report_text.php
+ - sources_custom/hooks/systems/config/tester_forum_name.php
  - themes/default/css_custom/tester.css
  - sources_custom/hooks/systems/addon_registry/tester.php
  - themes/default/templates_custom/TESTER_ADD_SECTION_SCREEN.tpl
@@ -4132,8 +4129,8 @@ tester
  - lang_custom/EN/tester.ini
  - site/pages/modules_custom/tester.php
  - sources_custom/hooks/systems/content_meta_aware/tester.php
- - sources_custom/hooks/systems/config_default/bug_report_text.php
- - sources_custom/hooks/systems/config_default/tester_forum_name.php
+ - sources_custom/hooks/systems/config/bug_report_text.php
+ - sources_custom/hooks/systems/config/tester_forum_name.php
 
 promotion_stats
 ---------------
@@ -4174,9 +4171,9 @@ twitter_feed_integration_block
  - themes/default/images_custom/twitter_feed/retweet.png
  - themes/default/images_custom/twitter_feed/retweet_hover.png
  - themes/default/images_custom/twitter_feed/retweet_on.png
- - sources_custom/hooks/systems/config_default/twitterfeed_update_time.php
- - sources_custom/hooks/systems/config_default/twitterfeed_use_twitter_support_config.php
- - sources_custom/hooks/systems/config_default/channel_update_time.php
+ - sources_custom/hooks/systems/config/twitterfeed_update_time.php
+ - sources_custom/hooks/systems/config/twitterfeed_use_twitter_support_config.php
+ - sources_custom/hooks/systems/config/channel_update_time.php
 
 nested_cpf_csv_lists
 --------------------
@@ -4203,14 +4200,14 @@ gallery_syndication
  - sources_custom/hooks/systems/do_next_menus/gallery_syndication.php
  - sources_custom/oauth2.php
  - sources_custom/vimeo.php
- - sources_custom/hooks/systems/config_default/vimeo_client_id.php
- - sources_custom/hooks/systems/config_default/vimeo_client_secret.php
- - sources_custom/hooks/systems/config_default/youtube_client_id.php
- - sources_custom/hooks/systems/config_default/youtube_client_secret.php
- - sources_custom/hooks/systems/config_default/youtube_developer_key.php
- - sources_custom/hooks/systems/config_default/video_sync_transcoding.php
- - sources_custom/hooks/systems/config_default/gallery_sync_ocfilter.php
- - sources_custom/hooks/systems/config_default/gallery_sync_orphaned_handling.php
+ - sources_custom/hooks/systems/config/vimeo_client_id.php
+ - sources_custom/hooks/systems/config/vimeo_client_secret.php
+ - sources_custom/hooks/systems/config/youtube_client_id.php
+ - sources_custom/hooks/systems/config/youtube_client_secret.php
+ - sources_custom/hooks/systems/config/youtube_developer_key.php
+ - sources_custom/hooks/systems/config/video_sync_transcoding.php
+ - sources_custom/hooks/systems/config/gallery_sync_ocfilter.php
+ - sources_custom/hooks/systems/config/gallery_sync_orphaned_handling.php
 
 pagination_protection
 ---------------------

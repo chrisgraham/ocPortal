@@ -12,15 +12,15 @@
  * @copyright	ocProducts Ltd
  * @package		ocportalcom
  */
+
 $ocp_hours_field=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM mantis_custom_field_table WHERE name=\'Time estimation (hours)\'');
 require_lang('customers');
 $title_tracker=do_lang('TRACKER');
+
 $result=get_option('currency',true);
 $s_currency=is_null($result)?'USD':strval($result);
-$result=get_option('support_credit_value',true);
-$s_credit_value=is_null($result)?5.5:floatval($result);
-$result=get_option('support_budget_priority',true);
-$budget_minutes=is_null($result)?10:intval($result);
+$s_credit_value=floatval(get_option('support_credit_value'));
+$budget_minutes=intval(get_option('support_budget_priority'));
 $multi_rate=(intval(60/$budget_minutes)<1)?1:intval(60/$budget_minutes);
 if (!running_script('tracker'))
 {

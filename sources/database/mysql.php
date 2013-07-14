@@ -112,7 +112,7 @@ class Database_Static_mysql extends Database_super_mysql
 		}
 		@mysql_query('SET WAIT_TIMEOUT=28800',$db);
 		@mysql_query('SET SQL_BIG_SELECTS=1',$db);
-		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'',$db); else @mysql_query('SET sql_mode=\'MYSQL40\'',$db);
+		if ((get_forum_type()=='ocf') && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'',$db); else @mysql_query('SET sql_mode=\'MYSQL40\'',$db);
 		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
 		return array($db,$db_name);

@@ -115,7 +115,7 @@ function init__zones()
 function zone_black_magic_filterer($path,$relative=false)
 {
 	static $no_collapse_zones=NULL;
-	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones',true)!=='1');
+	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones')!='1');
 	if ($no_collapse_zones) return $path;
 
 	global $ZBMF_CACHE;
@@ -488,7 +488,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		{
 			if (($file!='.') && ($file!='..') && (is_dir($file)) && (is_readable(get_file_base().'/'.$file)) && (is_file(get_file_base().'/'.$file.'/index.php')) && (is_dir(get_file_base().'/'.$file.'/pages/modules')))
 			{
-				if ((get_option('collapse_user_zones',true)==='1') && ($file=='site')) continue;
+				if ((get_option('collapse_user_zones')=='1') && ($file=='site')) continue;
 
 				$out[]=$file;
 
@@ -525,7 +525,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 	$zones=array();
 	foreach ($rows as $zone)
 	{
-		if ((get_option('collapse_user_zones',true)==='1') && ($zone['zone_name']=='site')) continue;
+		if ((get_option('collapse_user_zones')=='1') && ($zone['zone_name']=='site')) continue;
 
 		$zone['zone_title']=get_translated_text($zone['_zone_title']);
 
@@ -999,7 +999,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 		$_cache_identifier=call_user_func($cache_on[0],$map);
 	} else
 	{
-		if (($cache_on!='') && (!defined('HIPHOP_PHP')))
+		if ($cache_on!='')
 		{
 			$block_id=mixed();
 			if (strpos($cache_on,'block_id')!==false)
@@ -1011,7 +1011,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 			{
 				$_cache_identifier[]=$on;
 			}
-		} elseif (defined('HIPHOP_PHP')) return NULL;
+		}
 	}
 
 	// NB: Don't extend this without thinking, see hard-coded in decache() function too

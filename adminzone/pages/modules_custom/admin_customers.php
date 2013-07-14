@@ -41,14 +41,6 @@ class Module_admin_customers
 	 */
 	function uninstall()
 	{
-		/* NB: Does not delete CPFs and multi-mods. But that doesn't actually matter */
-		delete_config_option('support_credit_value');
-
-		delete_config_option('support_budget_priority');
-		delete_config_option('support_normal_priority');
-		delete_config_option('support_day_priority');
-		delete_config_option('support_high_priority');
-		delete_config_option('support_emergency_priority');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('credit_purchases');
 
 		// MANTIS TABLE DELETION
@@ -112,13 +104,6 @@ class Module_admin_customers
 		ocf_make_custom_field('ocp_ftp_username',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_ftp_password',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
 		ocf_make_custom_field('ocp_profession',1,'',do_lang('CUSTOMER_PROFESSION_CPF_LIST'),0,1,1,0,'list');
-
-		add_config_option('SUPPORT_CREDIT_VALUE','support_credit_value','float','return \'5.5\';','FEATURE','SECTION_CUSTOMERS');
-		add_config_option('SUPPORT_PRIORITY_BUDGET_MINUTES','support_budget_priority','float','return \'10\';','FEATURE','SECTION_CUSTOMERS');
-		add_config_option('SUPPORT_PRIORITY_NORMAL_MINUTES','support_normal_priority','float','return \'8\';','FEATURE','SECTION_CUSTOMERS');
-		add_config_option('SUPPORT_PRIORITY_DAY_MINUTES','support_day_priority','float','return \'7\';','FEATURE','SECTION_CUSTOMERS');
-		add_config_option('SUPPORT_PRIORITY_HIGH_MINUTES','support_high_priority','float','return \'5\';','FEATURE','SECTION_CUSTOMERS');
-		add_config_option('SUPPORT_PRIORITY_EMERGENCY_MINUTES','support_emergency_priority','float','return \'3\';','FEATURE','SECTION_CUSTOMERS');
 
 		$GLOBALS['SITE_DB']->create_table('credit_purchases',array(
 			'purchase_id'=>'*AUTO',

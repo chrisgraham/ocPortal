@@ -13,7 +13,7 @@ class upon_query_insults
 	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (!isset($GLOBALS['FORUM_DB'])) return;
-		if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return;
+		if ($GLOBALS['IN_MINIKERNEL_VERSION']) return;
 		if ($GLOBALS['BOOTSTRAPPING']==1) return;
 
 		//if (strpos($query,$GLOBALS['FORUM_DB']->get_table_prefix().'f_members')!==false && strpos($query,'BY RAND')==false) // to test without registration

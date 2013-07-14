@@ -423,13 +423,11 @@ class Module_admin_addons
 		}
 
 		// Clear some cacheing
-		require_code('view_modes');
-		require_code('zones2');
-		require_code('zones3');
+		require_code('caches3');
 		erase_comcode_page_cache();
 		erase_block_cache();
 		//persistent_cache_delete('OPTIONS');  Done by set_option
-		persistent_cache_empty();
+		erase_persistent_cache();
 		erase_cached_templates();
 
 		// Show it worked / Refresh
@@ -571,13 +569,11 @@ class Module_admin_addons
 		uninstall_addon($name);
 
 		// Clear some cacheing
-		require_code('view_modes');
-		require_code('zones2');
-		require_code('zones3');
+		require_code('caches3');
 		erase_comcode_page_cache();
 		erase_block_cache();
 		//persistent_cache_delete('OPTIONS');  Done by set_option
-		persistent_cache_empty();
+		erase_persistent_cache();
 		erase_cached_templates();
 
 		// Show it worked / Refresh

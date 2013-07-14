@@ -72,7 +72,7 @@ class Hook_addon_registry_recommend
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/points_RECOMMEND_SITE.php',
+			'sources/hooks/systems/config/points_RECOMMEND_SITE.php',
 			'sources/hooks/systems/realtime_rain/recommend.php',
 			'sources/hooks/systems/addon_registry/recommend.php',
 			'themes/default/images/menu_items/community_navigation/recommend.png',
@@ -91,7 +91,7 @@ class Hook_addon_registry_recommend
 			'sources/blocks/main_screen_actions.php',
 			'screen_actions.css',
 			'BLOCK_MAIN_SCREEN_ACTIONS.tpl',
-			'sources/hooks/systems/config_default/enable_csv_recommend.php',
+			'sources/hooks/systems/config/enable_csv_recommend.php',
 		);
 	}
 

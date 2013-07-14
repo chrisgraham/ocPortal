@@ -50,13 +50,8 @@ class Hook_checklist_iotds
 
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
-		$config_row=$GLOBALS['SITE_DB']->query_select('config',array('c_category','c_group'),array('the_name'=>'iotd_update_time'),'',1);
-		if (array_key_exists(0,$config_row))
-		{
-			$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$config_row[0]['c_category']),get_module_zone('admin_config'));
-			$config_url=$_config_url->evaluate();
-			$config_url.='#group_'.$config_row[0]['c_group'];
-		} else $config_url=NULL;
+		require_code('config2');
+		$config_url=config_option_url('iotd_update_time');
 
 		$url=build_url(array('page'=>'cms_iotds','type'=>'ed'),get_module_zone('cms_iotds'));
 		$num_queue=$this->get_num_iotd_queue();

@@ -564,7 +564,7 @@ class database_driver
 	 */
 	function query_insert($table,$map,$ret=false,$fail_ok=false,$save_as_volatile=false)
 	{
-		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching',true)==='1'))
+		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching')=='1'))
 		{
 			global $FILECACHE_OBJECT;
 			if ($FILECACHE_OBJECT===NULL) $this->initialise_filesystem_db();
@@ -792,7 +792,7 @@ class database_driver
 	 */
 	function query_select($table,$select=NULL,$where_map=NULL,$end='',$max=NULL,$start=NULL,$fail_ok=false,$lang_fields=NULL)
 	{
-		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching',true)==='1'))
+		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching')=='1'))
 		{
 			global $FILECACHE_OBJECT;
 			if ($FILECACHE_OBJECT===NULL) $this->initialise_filesystem_db();
@@ -948,7 +948,7 @@ class database_driver
 			fb('Query: '.$query);
 		}
 
-		if (($QUERY_COUNT==250) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && ($IN_MINIKERNEL_VERSION==0) && (get_param('special_page_type','')!='query'))
+		if (($QUERY_COUNT==250) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && (!$IN_MINIKERNEL_VERSION) && (get_param('special_page_type','')!='query'))
 		{
 			$NO_QUERY_LIMIT=true;
 			$log_path=get_custom_file_base().'/data_custom/big_query_screens.log';
@@ -1187,7 +1187,7 @@ class database_driver
 	 */
 	function query_delete($table,$where_map=NULL,$end='',$max=NULL,$start=NULL,$fail_ok=false)
 	{
-		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching',true)==='1'))
+		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching')=='1'))
 		{
 			global $FILECACHE_OBJECT;
 			if ($FILECACHE_OBJECT===NULL) $this->initialise_filesystem_db();

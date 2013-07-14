@@ -158,7 +158,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 	// New sessions=Login points
 	if ((!is_null($member)) && (!is_guest($member)) && (addon_installed('points')) && (addon_installed('stats')))
 	{
-		$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
+		$points_per_daily_visit=intval(get_option('points_per_daily_visit'));
 		if ($points_per_daily_visit!=0)
 		{
 			// See if this is the first visit today
@@ -315,13 +315,13 @@ function try_httpauth_login()
 		{
 			@ob_end_clean();
 			if (!function_exists('do_header')) require_code('site');
-			$middle=ocf_member_external_linker_ask($_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled',true)!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
+			$middle=ocf_member_external_linker_ask($_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled')!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
 			$tpl=globalise($middle,NULL,'',true);
 			$tpl->evaluate_echo();
 			exit();
 		} else
 		{
-			$member=ocf_member_external_linker($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled',true)!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
+			$member=ocf_member_external_linker($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled')!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
 		}
 	}
 

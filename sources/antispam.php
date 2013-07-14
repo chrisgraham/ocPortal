@@ -40,8 +40,8 @@ function init__antispam()
 function inject_action_spamcheck($username=NULL,$email=NULL)
 {
 	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') && (is_guest()))
+	$spam_check_level=get_option('spam_check_level');
+	if (($spam_check_level=='EVERYTHING') || ($spam_check_level=='ACTIONS') || ($spam_check_level=='GUESTACTIONS') && (is_guest()))
 	{
 		check_rbls();
 		check_stopforumspam($username,$email);

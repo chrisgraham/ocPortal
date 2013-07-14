@@ -230,8 +230,8 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_BIG_TABS_CONTROLLER.tpl',
 			'COMCODE_BIG_TABS_TAB.tpl',
 			'big_tabs.css',
-			'sources/hooks/systems/config_default/attachment_default_height.php',
-			'sources/hooks/systems/config_default/attachment_default_width.php',
+			'sources/hooks/systems/config/attachment_default_height.php',
+			'sources/hooks/systems/config/attachment_default_width.php',
 		);
 	}
 

@@ -1093,13 +1093,7 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 {
 	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 
-	if (defined('HIPHOP_PHP'))
-	{
-		$out=new ocp_tempcode();
-	} else
-	{
-		$out=new ocp_tempcode_static();
-	}
+	$out=new ocp_tempcode();
 	$continuation='';
 	$chr_10=chr(10);
 	$symbol_len=strlen($text);

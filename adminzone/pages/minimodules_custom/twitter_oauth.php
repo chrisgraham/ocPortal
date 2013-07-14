@@ -8,23 +8,8 @@ require_lang('twitter');
 
 $title=get_screen_title('TWITTER_OAUTH');
 
-$api_key=get_option('twitter_api_key',true);
-$api_secret=get_option('twitter_api_secret',true);
-
-if (is_null($api_key))
-{
-	require_code('database_action');
-
-	add_config_option('TWITTER_API_KEY','twitter_api_key','line','return \'\';','FEATURE','TWITTER_SYNDICATION');
-	add_config_option('TWITTER_API_SECRET','twitter_api_secret','line','return \'\';','FEATURE','TWITTER_SYNDICATION');
-	/*
-	delete_config_option('twitter_api_key');
-	delete_config_option('twitter_api_secret');
-	*/
-
-	$api_key='';
-	$api_secret='';
-}
+$api_key=get_option('twitter_api_key');
+$api_secret=get_option('twitter_api_secret');
 
 if ($api_key=='' || $api_secret=='')
 {

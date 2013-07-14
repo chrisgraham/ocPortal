@@ -136,13 +136,10 @@ class Module_admin_xml_storage
 		}
 
 		// Clear some cacheing
-		require_code('view_modes');
-		require_code('zones2');
-		require_code('zones3');
+		require_code('caches3');
 		erase_comcode_page_cache();
-		require_code('view_modes');
 		erase_block_cache();
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		breadcrumb_set_self(do_lang_tempcode('_RESULTS'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_DATA_MANAGEMENT'))));

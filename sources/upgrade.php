@@ -642,7 +642,7 @@ END;
  */
 function clear_caches_1() // These have to happen early - to prevent things that could kill the update process
 {
-	require_code('view_modes');
+	require_code('caches3');
 	erase_cached_templates();
 	erase_cached_language();
 }
@@ -652,13 +652,11 @@ function clear_caches_1() // These have to happen early - to prevent things that
  */
 function clear_caches_2()
 {
-	require_code('view_modes');
-	require_code('zones2');
-	require_code('zones3');
+	require_code('caches3');
 	erase_comcode_cache();
 	erase_block_cache();
 	erase_comcode_page_cache();
-	persistent_cache_empty();
+	erase_persistent_cache();
 }
 
 /**
@@ -1475,10 +1473,6 @@ function version_specific()
 	if (is_null($_version_database)) $version_database=2.1; // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
 	if ($version_database<$version_files)
 	{
-		if ($version_database<8.0)
-		{
-			actual_delete_zone_lite('personalzone');
-		}
 		if ($version_database<9.0)
 		{
 			$dh=@opendir(get_custom_file_base().'/imports/mods');
@@ -1502,8 +1496,6 @@ function version_specific()
 				$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>$to),array('module_the_name'=>$from),'',1);
 			}
 
-			$GLOBALS['SITE_DB']->alter_table_field('config','the_page','ID_TEXT','c_category');
-			$GLOBALS['SITE_DB']->alter_table_field('config','section','ID_TEXT','c_group');
 			$GLOBALS['SITE_DB']->alter_table_field('msp','specific_permission','ID_TEXT','privilege');
 			$GLOBALS['SITE_DB']->alter_table_field('gsp','specific_permission','ID_TEXT','privilege');
 			$GLOBALS['SITE_DB']->alter_table_field('pstore_permissions','p_specific_permission','ID_TEXT','p_privilege');
@@ -1517,6 +1509,27 @@ function version_specific()
 
 			$GLOBALS['SITE_DB']->alter_table_field('adminlogs','the_user','MEMBER','member_id');
 			$GLOBALS['SITE_DB']->alter_table_field('sessions','the_user','MEMBER','member_id');
+
+			$GLOBALS['SITE_DB']->delete_table_field('config','human_name');
+			$GLOBALS['SITE_DB']->delete_table_field('config','the_type');
+			$GLOBALS['SITE_DB']->delete_table_field('config','eval');
+			$GLOBALS['SITE_DB']->delete_table_field('config','the_page');
+			$GLOBALS['SITE_DB']->delete_table_field('config','section');
+			$GLOBALS['SITE_DB']->delete_table_field('config','explanation');
+			$GLOBALS['SITE_DB']->delete_table_field('config','shared_hosting_restricted');
+			$GLOBALS['SITE_DB']->delete_table_field('config','c_data');
+			$GLOBALS['SITE_DB']->alter_table_field('config','the_name','ID_TEXT','c_name');
+			$GLOBALS['SITE_DB']->alter_table_field('config','config_value','LONG_TEXT','c_value');
+			$GLOBALS['SITE_DB']->add_table_field('config','c_needs_dereference','BINARY',0);
+			$hooks=find_all_hooks('systems','config');
+			foreach (array_keys($hooks) as $hook)
+			{
+				require_code('hooks/systems/config/'.filter_naughty($hook));
+				$ob=object_factory('Hook_config_'.$hook);
+				$option=$ob->get_details();
+				$needs_dereference=($option['type']=='transtext' || $option['type']=='transline')?1:0;
+				$GLOBALS['SITE_DB']->query_update('config',array('c_needs_dereference'=>$needs_dereference),array('c_name'=>$hook),'',1);
+			}
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 

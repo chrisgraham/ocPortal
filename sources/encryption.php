@@ -35,10 +35,9 @@ function is_encryption_available()
  */
 function is_encryption_enabled()
 {
-	$public_key=get_option('encryption_key',true);
-	if (is_null($public_key)) return false; // We must be installing/upgrading
+	$public_key=get_option('encryption_key');
 	$private_key=get_option('decryption_key');
-	return ((function_exists('openssl_pkey_get_public')) && (!is_null($public_key)) && ($public_key!='') && ($private_key!='') && (file_exists($public_key)) && (file_exists($private_key)));
+	return ((function_exists('openssl_pkey_get_public')) && ($public_key!='') && ($private_key!='') && (file_exists($public_key)) && (file_exists($private_key)));
 }
 
 /**

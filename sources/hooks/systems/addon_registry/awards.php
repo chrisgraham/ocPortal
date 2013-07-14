@@ -93,7 +93,7 @@ class Hook_addon_registry_awards
 			'sources/hooks/modules/admin_import_types/awards.php',
 			'sources/hooks/systems/block_ui_renderers/awards.php',
 			'sources/hooks/systems/occle_fs/award_types.php',
-			'sources/hooks/systems/config_default/awarded_items_per_page.php',
+			'sources/hooks/systems/config/awarded_items_per_page.php',
 		);
 	}
 

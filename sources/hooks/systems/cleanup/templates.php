@@ -43,7 +43,6 @@ class Hook_templates
 	 */
 	function run()
 	{
-		require_code('view_modes');
 		erase_cached_templates();
 
 		return new ocp_tempcode();

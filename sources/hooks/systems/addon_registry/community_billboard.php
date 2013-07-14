@@ -74,7 +74,7 @@ class Hook_addon_registry_community_billboard
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/system_community_billboard.php',
+			'sources/hooks/systems/config/system_community_billboard.php',
 			'themes/default/images/pagepics/community_billboard.png',
 			'sources/hooks/systems/addon_registry/community_billboard.php',
 			'sources/hooks/modules/admin_import_types/community_billboard.php',
@@ -85,7 +85,6 @@ class Hook_addon_registry_community_billboard
 			'sources/community_billboard.php',
 			'sources/hooks/blocks/main_staff_checklist/community_billboard.php',
 			'sources/hooks/modules/pointstore/community_billboard.php',
-			'sources/hooks/systems/config_default/community_message.php',
 		);
 	}
 

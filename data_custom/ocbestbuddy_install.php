@@ -32,18 +32,6 @@ if (!file_exists($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(1
 
 
 require_code('database_action');
-require_code('config2');
-require_code('menus2');
-
-require_code('developer_tools');
-require_code('database_action');
-
-require_lang('ocbestbuddy');
-
-
-destrictify();
-
-add_config_option('MENTOR_USERGROUP','mentor_usergroup','usergroup','return do_lang(\'SUPER_MEMBERS\');','USERS','JOINING');
 
 $GLOBALS['SITE_DB']->create_table('members_mentors',array(
 	'id'=>'*AUTO',

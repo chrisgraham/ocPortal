@@ -75,7 +75,7 @@ class Hook_addon_registry_ocf_member_titles
 		return array(
 			'sources/hooks/systems/addon_registry/ocf_member_titles.php',
 			'sources/hooks/systems/profiles_tabs_edit/title.php',
-			'sources/hooks/systems/config_default/max_member_title_length.php',
+			'sources/hooks/systems/config/max_member_title_length.php',
 		);
 	}
 

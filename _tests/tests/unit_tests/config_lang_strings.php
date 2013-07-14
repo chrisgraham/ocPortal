@@ -27,19 +27,19 @@ class config_lang_strings_test_set extends ocp_test_case
 
 	function testStrings()
 	{
-		$options=$GLOBALS['SITE_DB']->query_select('config',array('the_name','human_name','the_type'));
+		$hooks=find_all_hooks('systems','config');
+		$options=array();
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/config/'.filter_naughty($hook));
+			$ob=object_factory('Hook_config_'.$hook);
+			$options[]=$ob->get_details();
+		}
 		require_all_lang();
 		foreach ($options as $option)
 		{
 			$test=do_lang($option['human_name'],NULL,NULL,NULL,NULL,false);
 			$this->assertFalse(is_null($test),'Error on: '.$option['human_name']);
-
-			//if ($option['the_type']!='tick')
-			if ((strpos($option['the_name'],'link')===false) && (strpos($option['the_name'],'stats')===false) && (strpos($option['the_name'],'show')===false))
-			{
-				$test=do_lang('CONFIG_OPTION_'.$option['the_name'],NULL,NULL,NULL,NULL,false);
-				$this->assertFalse(is_null($test),'Error on: '.'CONFIG_OPTION_'.$option['the_name']);
-			}
 		}
 	}
 

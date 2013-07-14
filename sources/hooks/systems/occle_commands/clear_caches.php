@@ -33,7 +33,7 @@ class Hook_occle_command_clear_caches
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('clear_caches',array('h'),array(true)),'','');
 		else
 		{
-			require_code('view_modes');
+			require_code('caches3');
 
 			$_caches=array();
 			if (array_key_exists(0,$parameters))

@@ -41,58 +41,6 @@ class Block_side_stats
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('forum_show_stats_count_members');
-		delete_config_option('forum_show_stats_count_topics');
-		delete_config_option('forum_show_stats_count_posts');
-		delete_config_option('forum_show_stats_count_posts_today');
-		delete_config_option('activity_show_stats_count_users_online');
-		delete_config_option('activity_show_stats_count_users_online_record');
-		delete_config_option('activity_show_stats_count_users_online_forum');
-		delete_config_option('activity_show_stats_count_page_views_today');
-		delete_config_option('activity_show_stats_count_page_views_this_week');
-		delete_config_option('activity_show_stats_count_page_views_this_month');
-		delete_config_option('forum_show_stats_count_members_active_today');
-		delete_config_option('forum_show_stats_count_members_active_this_week');
-		delete_config_option('forum_show_stats_count_members_active_this_month');
-		delete_config_option('forum_show_stats_count_members_new_today');
-		delete_config_option('forum_show_stats_count_members_new_this_week');
-		delete_config_option('forum_show_stats_count_members_new_this_month');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			add_config_option('COUNT_MEMBERS','forum_show_stats_count_members','tick','return addon_installed(\'stats_block\')?\'1\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_TOPICS','forum_show_stats_count_topics','tick','return addon_installed(\'stats_block\')?\'1\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_POSTS','forum_show_stats_count_posts','tick','return addon_installed(\'stats_block\')?\'1\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_POSTSTODAY','forum_show_stats_count_posts_today','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_ONSITE','activity_show_stats_count_users_online','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_ONSITE_RECORD','activity_show_stats_count_users_online_record','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_ONFORUMS','activity_show_stats_count_users_online_forum','tick','return ((get_forum_type()!=\'ocf\') && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('PAGE_VIEWS_TODAY','activity_show_stats_count_page_views_today','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('PAGE_VIEWS_THIS_WEEK','activity_show_stats_count_page_views_this_week','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('PAGE_VIEWS_THIS_MONTH','activity_show_stats_count_page_views_this_month','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('MEMBERS_ACTIVE_TODAY','forum_show_stats_count_members_active_today','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('MEMBERS_ACTIVE_THIS_WEEK','forum_show_stats_count_members_active_this_week','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('MEMBERS_ACTIVE_THIS_MONTH','forum_show_stats_count_members_active_this_month','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('MEMBERS_NEW_TODAY','forum_show_stats_count_members_new_today','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('MEMBERS_NEW_THIS_WEEK','forum_show_stats_count_members_new_this_week','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('MEMBERS_NEW_THIS_MONTH','forum_show_stats_count_members_new_this_month','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
-		}
-	}
-
-	/**
 	 * Standard modular cache function.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
@@ -120,7 +68,7 @@ class Block_side_stats
 		$on_forum=$GLOBALS['FORUM_DRIVER']->get_num_users_forums();
 		if (!is_null($on_forum))
 		{
-			if (get_option('activity_show_stats_count_users_online',true)=='1')
+			if (get_option('activity_show_stats_count_users_online')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'5ac97313d4c83e8afdeec09a48cea030',
@@ -128,7 +76,7 @@ class Block_side_stats
 					'VALUE'=>integer_format(get_num_users_site()),
 				)));
 			}
-			if (get_option('activity_show_stats_count_users_online_record',true)=='1')
+			if (get_option('activity_show_stats_count_users_online_record')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'dc6d0893cf98703a951da168c6a9d0ac',
@@ -136,7 +84,7 @@ class Block_side_stats
 					'VALUE'=>integer_format(get_num_users_peak()),
 				)));
 			}
-			if (get_option('activity_show_stats_count_users_online_forum',true)=='1')
+			if (get_option('activity_show_stats_count_users_online_forum')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'14f2fdbf59e86c34d93cbf16bed3f0eb',
@@ -147,7 +95,7 @@ class Block_side_stats
 			$title=do_lang_tempcode('SECTION_USERS');
 		} else
 		{
-			if (get_option('activity_show_stats_count_users_online',true)=='1')
+			if (get_option('activity_show_stats_count_users_online')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'9c9760b2ed9e985e96b53c91c511e84e',
@@ -155,7 +103,7 @@ class Block_side_stats
 					'VALUE'=>integer_format(get_num_users_site()),
 				)));
 			}
-			if (get_option('activity_show_stats_count_users_online_record',true)=='1')
+			if (get_option('activity_show_stats_count_users_online_record')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'d18068d747fe1fe364042133e4b3ba84',
@@ -167,7 +115,7 @@ class Block_side_stats
 		}
 		if (addon_installed('stats'))
 		{
-			if (get_option('activity_show_stats_count_page_views_today',true)=='1')
+			if (get_option('activity_show_stats_count_page_views_today')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'fc9760b2ed9e985e96b53c91c511e84e',
@@ -175,7 +123,7 @@ class Block_side_stats
 					'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24))),
 				)));
 			}
-			if (get_option('activity_show_stats_count_page_views_this_week',true)=='1')
+			if (get_option('activity_show_stats_count_page_views_this_week')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'gc9760b2ed9e985e96b53c91c511e84e',
@@ -183,7 +131,7 @@ class Block_side_stats
 					'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24*7))),
 				)));
 			}
-			if (get_option('activity_show_stats_count_page_views_this_month',true)=='1')
+			if (get_option('activity_show_stats_count_page_views_this_month')=='1')
 			{
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 					'_GUID'=>'hc9760b2ed9e985e96b53c91c511e84e',

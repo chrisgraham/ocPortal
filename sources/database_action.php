@@ -149,18 +149,19 @@ function get_db_keywords()
 function get_false_permissions()
 {
 	return array(
-		array('GENERAL_SETTINGS','bypass_flood_control'),
 		array('_COMCODE','allow_html'),
-		array('GENERAL_SETTINGS','remove_page_split'),
-		array('STAFF_ACTIONS','access_closed_site'),
-		array('STAFF_ACTIONS','bypass_bandwidth_restriction'),
 		array('_COMCODE','comcode_dangerous'),
 		array('_COMCODE','comcode_nuisance'),
+		array('_COMCODE','use_very_dangerous_comcode'),
+		array('STAFF_ACTIONS','access_closed_site'),
+		array('STAFF_ACTIONS','bypass_bandwidth_restriction'),
 		array('STAFF_ACTIONS','see_php_errors'),
 		array('STAFF_ACTIONS','see_stack_dump'),
-		array('GENERAL_SETTINGS','bypass_word_filter'),
 		array('STAFF_ACTIONS','view_profiling_modes'),
 		array('STAFF_ACTIONS','access_overrun_site'),
+		array('STAFF_ACTIONS','view_content_history'),
+		array('STAFF_ACTIONS','restore_content_history'),
+		array('STAFF_ACTIONS','delete_content_history'),
 		array('SUBMISSION','bypass_validation_highrange_content'),
 		array('SUBMISSION','bypass_validation_midrange_content'),
 		array('SUBMISSION','edit_highrange_content'),
@@ -176,9 +177,6 @@ function get_false_permissions()
 		array('SUBMISSION','delete_own_lowrange_content'),
 		array('SUBMISSION','can_submit_to_others_categories'),
 		array('SUBMISSION','search_engine_links'),
-		array('STAFF_ACTIONS','view_content_history'),
-		array('STAFF_ACTIONS','restore_content_history'),
-		array('STAFF_ACTIONS','delete_content_history'),
 		array('SUBMISSION','submit_cat_highrange_content'),
 		array('SUBMISSION','submit_cat_midrange_content'),
 		array('SUBMISSION','submit_cat_lowrange_content'),
@@ -195,19 +193,44 @@ function get_false_permissions()
 		array('SUBMISSION','delete_own_cat_midrange_content'),
 		array('SUBMISSION','delete_own_cat_lowrange_content'),
 		array('SUBMISSION','mass_import'),
+		array('SUBMISSION','scheduled_publication_times'),
+		array('SUBMISSION','mass_delete_from_ip'),
+		array('SUBMISSION','exceed_filesize_limit'),
+		array('SUBMISSION','draw_to_server'),
+		array('GENERAL_SETTINGS','open_virtual_roots'),
+		array('GENERAL_SETTINGS','view_revision_history'),
+		array('GENERAL_SETTINGS','sees_javascript_error_alerts'),
+		array('GENERAL_SETTINGS','see_software_docs'),
+		array('GENERAL_SETTINGS','see_unvalidated'),
+		array('GENERAL_SETTINGS','may_enable_staff_notifications'),
+		array('GENERAL_SETTINGS','bypass_flood_control'),
+		array('GENERAL_SETTINGS','remove_page_split'),
+		array('GENERAL_SETTINGS','bypass_word_filter'),
 	);
 }
 
 /**
- * Check if a config option exists.
+ * Returns a list of pairs, for which permissions are true by default for ordinary usergroups.
  *
- * @param  ID_TEXT		The name of the option
- * @return boolean		Whether it exists
+ * @return array		List of pairs
  */
-function config_option_exists($name)
+function get_true_permissions()
 {
-	$test=get_option($name,true);
-	return !is_null($test);
+	return array(
+		array('SUBMISSION','edit_own_lowrange_content'),
+		array('SUBMISSION','submit_highrange_content'),
+		array('SUBMISSION','submit_midrange_content'),
+		array('SUBMISSION','submit_lowrange_content'),
+		array('SUBMISSION','bypass_validation_lowrange_content'),
+		array('SUBMISSION','set_own_author_profile'),
+		array('SUBMISSION','have_personal_category'),
+		array('_FEEDBACK','rate'),
+		array('_FEEDBACK','comment'),
+		array('VOTE','vote_in_polls'),
+		array('GENERAL_SETTINGS','jump_to_unvalidated'),
+		array('GENERAL_SETTINGS','avoid_simplified_adminzone_look'),
+		array('_COMCODE','reuse_others_attachments'),
+	);
 }
 
 /**
@@ -220,80 +243,6 @@ function permission_exists($name)
 {
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('privilege_list','the_name',array('the_name'=>$name));
 	return !is_null($test);
-}
-
-/**
- * Add a configuration option into the database, and initialise it with a specified value.
- *
- * @param  ID_TEXT		The language code to the human name of the config option
- * @param  ID_TEXT		The codename for the config option
- * @param  ID_TEXT		The type of the config option
- * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup colour special username
- * @param  SHORT_TEXT	The PHP code to execute to get the default value for this option. Be careful not to make a get_option loop.
- * @param  ID_TEXT		The language code for the option category to store the option in
- * @param  ID_TEXT		The language code for the option group to store the option in
- * @param  BINARY			Whether the option is not settable when on a shared ocportal-hosting environment
- * @param  SHORT_TEXT	Extra data for the option
- */
-function add_config_option($human_name,$name,$type,$eval,$category,$group,$shared_hosting_restricted=0,$data='')
-{
-	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','?forum','forum','forum_grouping','usergroup','colour','special','username')))
-		fatal_exit('Invalid config option type');
-
-	$map=array('c_set'=>0,'config_value'=>'','the_name'=>$name,'human_name'=>$human_name,'the_type'=>$type,'eval'=>$eval,'c_category'=>$category,'c_group'=>$group,'explanation'=>'CONFIG_OPTION_'.$name,'shared_hosting_restricted'=>$shared_hosting_restricted,'c_data'=>$data);
-	if ($GLOBALS['IN_MINIKERNEL_VERSION']==0)
-	{
-		$GLOBALS['SITE_DB']->query_insert('config',$map,false,true); // Allow failure in case the config option got auto-installed through searching (can happen if the option is referenced efore the module installs right)
-	} else
-	{
-		$GLOBALS['SITE_DB']->query_insert('config',$map); // From installer we want to know if there are errors in our install cycle
-	}
-	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
-	global $CONFIG_OPTIONS_CACHE;
-	if ($CONFIG_OPTIONS_CACHE==array()) // Installer might not have loaded any yet
-	{
-		load_options();
-	} else
-	{
-		$CONFIG_OPTIONS_CACHE[$name]=$map;
-		if (multi_lang())
-		{
-			unset($CONFIG_OPTIONS_CACHE[$name]['config_value_translated']);
-		}
-	}
-}
-
-/**
- * Deletes a specified config option permanently from the database.
- *
- * @param  ID_TEXT		The codename of the config option
- */
-function delete_config_option($name)
-{
-	$rows=$GLOBALS['SITE_DB']->query_select('config',array('*'),array('the_name'=>$name),'',1);
-	if (array_key_exists(0,$rows))
-	{
-		$myrow=$rows[0];
-		if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (is_numeric($myrow['config_value'])))
-		{
-			delete_lang($myrow['config_value']);
-		}
-		$GLOBALS['SITE_DB']->query_delete('config',array('the_name'=>$name),'',1);
-		/*global $CONFIG_OPTIONS_CACHE;  Don't do this, it will cause problems in some parts of the code
-		unset($CONFIG_OPTIONS_CACHE[$name]);*/
-	}
-	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
-}
-
-/**
- * Rename a config option.
- *
- * @param  ID_TEXT		The old name
- * @param  ID_TEXT		The new name
- */
-function rename_config_option($old,$new)
-{
-	$GLOBALS['SITE_DB']->query_update('config',array('the_name'=>$new),array('the_name'=>$old),'',1);
 }
 
 /**

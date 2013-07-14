@@ -2244,7 +2244,7 @@ function has_cookies() // Will fail on users first visit, but then will catch on
 function has_js()
 {
 	if (!function_exists('get_option')) return true;
-	if (get_option('detect_javascript',true)==='0') return true;
+	if (get_option('detect_javascript')=='0') return true;
 	if (get_param_integer('keep_has_js',0)==1) return true;
 	if (get_param_integer('keep_has_js',NULL)===0) return false;
 	return ((array_key_exists('js_on',$_COOKIE)) && ($_COOKIE['js_on']=='1'));
@@ -2551,14 +2551,11 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	if (!addon_installed('securitylogging')) return false;
 
 	// Check exclusions first
-	$_exclusions=get_option('spam_check_exclusions',true);
-	if ($_exclusions!==NULL)
+	$_exclusions=get_option('spam_check_exclusions');
+	$exclusions=explode(',',$_exclusions);
+	foreach ($exclusions as $exclusion)
 	{
-		$exclusions=explode(',',$_exclusions);
-		foreach ($exclusions as $exclusion)
-		{
-			if (trim($ip)==$exclusion) return false;
-		}
+		if (trim($ip)==$exclusion) return false;
 	}
 
 	global $SITE_INFO;
@@ -2723,7 +2720,8 @@ function check_suhosin_request_size($size)
  */
 function check_suhosin_request_quantity($inc=1,$name_length=0)
 {
-	static $count=0,$name_length_count=0;
+	static $count=0;
+	static $name_length_count=0;
 	$count+=$inc;
 	$name_length_count+=$name_length;
 

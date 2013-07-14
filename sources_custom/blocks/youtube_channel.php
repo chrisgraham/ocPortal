@@ -32,29 +32,6 @@ class Block_youtube_channel
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('channel_update_time');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		// New install or prior to YouTube Channel Integration Block v8.3 gets a channel update time option added to Blocks configuration page.
-		if (($upgrade_from < 9) || (is_null($upgrade_from))) 
-		{
-			add_config_option('UPDATE_TIME','channel_update_time','integer','return \'60\';','BLOCKS','YOUTUBE_CHANNEL_INTEGRATION');
-		}
-	}
-
-	/**
 	 * Standard modular cache function.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).

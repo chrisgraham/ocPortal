@@ -92,13 +92,13 @@ function init__global2()
 	$CONVERTED_ENCODING=false;
 	$KNOWN_AJAX=false;
 	/** Whether we are loading up in micro-bootup mode (reduced amount of loading for quicker simple responses).
-	 * @global BINARY $MICRO_BOOTUP
+	 * @global boolean $MICRO_BOOTUP
 	 */
-	if (!isset($MICRO_BOOTUP)) $MICRO_BOOTUP=0;
+	if (!isset($MICRO_BOOTUP)) $MICRO_BOOTUP=false;
 	/** Whether we are loading up in micro-ajax-bootup mode (reduced amount of loading for quicker simple AJAX responses).
-	 * @global BINARY $MICRO_AJAX_BOOTUP
+	 * @global boolean $MICRO_AJAX_BOOTUP
 	 */
-	if (!isset($MICRO_AJAX_BOOTUP)) $MICRO_AJAX_BOOTUP=0;
+	if (!isset($MICRO_AJAX_BOOTUP)) $MICRO_AJAX_BOOTUP=false;
 	/** Whether we know input text is in UTF8 because it came from an AJAX call (which is always UTF).
 	 * @global boolean $KNOWN_UTF8
 	 */
@@ -154,9 +154,9 @@ function init__global2()
 
 	// Load most basic config
 	/** Whether ocPortal is currently running from the 'minikernel' used during installation
-	 * @global BINARY $IN_MINIKERNEL_VERSION
+	 * @global boolean $IN_MINIKERNEL_VERSION
 	 */
-	$IN_MINIKERNEL_VERSION=0;
+	$IN_MINIKERNEL_VERSION=false;
 	$EXITING=0;
 	if ((array_key_exists('use_ocf',$_GET)) && (running_script('upgrader')))
 	{
@@ -169,7 +169,7 @@ function init__global2()
 	$BASE_URL_HTTPS_CACHE=NULL;
 
 	require_code_no_override('version');
-	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
+	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP))
 	{
 		// Marker that ocPortal running
 		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
@@ -184,7 +184,7 @@ function init__global2()
 
 	// Most critical things
 	require_code('global3'); // A lot of support code is present in this
-	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
+	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))
 		{
@@ -201,31 +201,31 @@ function init__global2()
 	require_code('global4');
 	if ((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0'))
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
-	if ($MICRO_BOOTUP==0)
+	if (!$MICRO_BOOTUP)
 	{
 		load_user_stuff();
 	}
 
 	// For any kind of niceness we need these. The order is chosen for complex dependency reasons - don't mess with it
-	if ($MICRO_AJAX_BOOTUP==0)
+	if (!$MICRO_AJAX_BOOTUP)
 	{
 		require_code('themes'); // Output needs to know about themes
 		require_code('templates'); // So that we can do error templates
 		require_code('tempcode'); // Output is done with tempcode
-		if ($MICRO_BOOTUP==0)
+		if (!$MICRO_BOOTUP)
 		{
 			require_code('comcode'); // Much output goes through comcode
 		}
 	}
 	require_code('zones'); // Zone is needed because zones are where all ocPortal pages reside
 
-	if ((get_option('collapse_user_zones',true)==='1') && ($RELATIVE_PATH=='site'))
+	if ((get_option('collapse_user_zones')=='1') && ($RELATIVE_PATH=='site'))
 	{
 		get_base_url();/*force calculation first*/
 		$RELATIVE_PATH='';
 	}
 	require_code('users'); // Users are important due to permissions
-	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for Guests
+	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP)) // Fast cacheing for Guests
 	{
 		if ((running_script('index')) && (count($_POST)==0))
 		{
@@ -236,12 +236,12 @@ function init__global2()
 		}
 	}
 	$CACHE_TEMPLATES=((get_option('is_on_template_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
-	if ($MICRO_AJAX_BOOTUP==0)
+	if (!$MICRO_AJAX_BOOTUP)
 	{
 		require_code('temporal'); // Date/time functions
 		require_code('lang'); // So that we can do language stuff (e.g. errors)
 		convert_data_encodings();
-		if ($MICRO_BOOTUP==0)
+		if (!$MICRO_BOOTUP)
 		{
 			require_code('permissions'); // So we can check access
 		}
@@ -254,15 +254,15 @@ function init__global2()
 	$HAS_SET_ERROR_HANDLER=true;
 
 	// Initialise members
-	if ($MICRO_BOOTUP==0)
+	if (!$MICRO_BOOTUP)
 	{
 		if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
 	}
 
 	// More things to initialise
-	if ($MICRO_BOOTUP==0)
+	if (!$MICRO_BOOTUP)
 	{
-		if (($IN_MINIKERNEL_VERSION!=1) && ($MICRO_AJAX_BOOTUP==0))
+		if ((!$IN_MINIKERNEL_VERSION) && (!$MICRO_AJAX_BOOTUP))
 		{
 			has_cookies(); // Will determine at early point whether we have cookie support
 			get_num_users_site(); // Will kill site if there are too many users
@@ -272,7 +272,7 @@ function init__global2()
 
 	// Register Internationalisation settings
 	@header('Content-type: text/html; charset='.get_charset());
-	if ((function_exists('setlocale')) && ($MICRO_AJAX_BOOTUP==0))
+	if ((function_exists('setlocale')) && (!$MICRO_AJAX_BOOTUP))
 	{
 		$locales=explode(',',do_lang('locale'));
 		setlocale(LC_ALL,$locales[0]);
@@ -281,8 +281,8 @@ function init__global2()
 	}
 
 	// Check RBL's
-	$spam_check_level=get_option('spam_check_level',true);
-	if ($spam_check_level==='EVERYTHING')
+	$spam_check_level=get_option('spam_check_level');
+	if ($spam_check_level=='EVERYTHING')
 	{
 		if (get_option('spam_block_lists')!='')
 		{
@@ -291,7 +291,7 @@ function init__global2()
 		}
 	}
 
-	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
+	if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP))
 	{
 		// Before anything gets outputted
 		handle_logins();
@@ -308,7 +308,7 @@ function init__global2()
 		@ini_set('log_errors','1');
 		@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
 	}
-	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
+	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
 	{
 		@ini_set('display_errors','1');
 	} elseif (!$DEV_MODE) @ini_set('display_errors','0');
@@ -317,28 +317,27 @@ function init__global2()
 	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
 
 	// Check installer not left behind
-	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']!='1')))
+	if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']!='1')))
 	{
 		if ((is_file(get_file_base().'/install.php')) && (!is_file(get_file_base().'/install_ok')) && (running_script('index')))
 			warn_exit(do_lang_tempcode('MUST_DELETE_INSTALLER'));
 	}
 
-	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
+	if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP))
 	{
 		// Clear cacheing if needed
 		$changed_base_url=!array_key_exists('base_url',$SITE_INFO) && get_long_value('last_base_url')!==get_base_url(false);
 		if ((running_script('index')) && ((is_browser_decacheing()) || ($changed_base_url)))
 		{
 			delete_value('cdn');
-			require_code('view_modes');
+			require_code('caches3');
 			erase_block_cache();
 			erase_cached_templates(!$changed_base_url);
 			erase_cached_language();
-			persistent_cache_empty();
+			erase_persistent_cache();
 			if ($changed_base_url)
 			{
-				require_lang('zones');
-				require_code('zones3');
+				require_code('caches3');
 				erase_comcode_page_cache();
 				set_long_value('last_base_url',get_base_url(false));
 			}
@@ -361,13 +360,13 @@ function init__global2()
 	// Okay, we've loaded everything critical. Don't need to tell ocPortal to be paranoid now.
 	$BOOTSTRAPPING=0;
 
-	if (($SEMI_DEV_MODE) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
+	if (($SEMI_DEV_MODE) && (!$MICRO_AJAX_BOOTUP)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
 	{
 		if ($SEMI_DEV_MODE)
 		{
 			/*if ((mt_rand(0,2)==1) && ($DEV_MODE) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
 			{
-				require_code('view_modes');
+				require_code('caches3');
 				erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
 			}*/
 
@@ -1361,7 +1360,7 @@ function __param($array,$name,$default,$integer=false,$posted=false)
 	if ($mq===NULL) $mq=get_magic_quotes_gpc();
 	if ($mq) $val=stripslashes($val);
 
-	if (($posted) && (count($_POST)!=0) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
+	if (($posted) && (count($_POST)!=0) && ($GLOBALS['BOOTSTRAPPING']==0) && (!$GLOBALS['MICRO_AJAX_BOOTUP'])) // Check against fields.xml
 	{
 		require_code('input_filter');
 		return check_posted_field($name,$val);

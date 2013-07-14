@@ -123,8 +123,6 @@ class Module_admin_import
 		set_helper_panel_pic('pagepics/importdata');
 		set_helper_panel_tutorial('tut_importer');
 
-		if (defined('HIPHOP_PHP')) warn_exit(do_lang_tempcode('NO_HIPHOP'));
-
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		disable_php_memory_limit();

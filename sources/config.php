@@ -24,7 +24,7 @@
 function init__config()
 {
 	global $VALUE_OPTIONS_CACHE,$IN_MINIKERNEL_VERSION;
-	if ($IN_MINIKERNEL_VERSION==0)
+	if (!$IN_MINIKERNEL_VERSION)
 	{
 		load_options();
 
@@ -68,7 +68,7 @@ function multi_lang()
 	global $MULTI_LANG_CACHE;
 	if ($MULTI_LANG_CACHE!==NULL) return $MULTI_LANG_CACHE;
 	$MULTI_LANG_CACHE=false;
-	if (get_option('allow_international',true)!=='1') return false;
+	if (get_option('allow_international')!='1') return false;
 
 	require_code('config2');
 	return _multi_lang();
@@ -80,22 +80,116 @@ function multi_lang()
 function load_options()
 {
 	global $CONFIG_OPTIONS_CACHE,$CONFIG_OPTIONS_BEING_CACHED;
-	$CONFIG_OPTIONS_BEING_CACHED=true;
-	$CONFIG_OPTIONS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
+
+	$CONFIG_OPTIONS_BEING_CACHED=function_exists('persistent_cache_get');
+
+	$CONFIG_OPTIONS_CACHE=$CONFIG_OPTIONS_BEING_CACHED?persistent_cache_get('OPTIONS'):NULL;
 	if (is_array($CONFIG_OPTIONS_CACHE)) return;
-	$CONFIG_OPTIONS_BEING_CACHED=false;
+
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
 		global $SITE_INFO;
-		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.the_type','c.c_set','t.text_original AS config_value_translated','(case c_set when 0 then eval else \'\' end) AS eval'),array(),'',NULL,NULL,true);
+		$join='config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON c.c_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND c.c_needs_dereference=1';
+		$select=array('c.*','t.text_original AS c_value_translated');
+		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select($join,$select,array(),'',NULL,NULL,true);
 	} else
 	{
-		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('the_name','config_value','the_type','c_set'),NULL,'',NULL,NULL,true);
+		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('*'),NULL,'',NULL,NULL,true);
 	}
 
-	if ($CONFIG_OPTIONS_CACHE===NULL) critical_error('DATABASE_FAIL');
-	$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
-	if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+	if ($CONFIG_OPTIONS_CACHE===NULL)
+	{
+		if ($GLOBALS['SITE_DB']->table_exists('config'))
+		{ // LEGACY: Has to use old naming from pre v10
+			$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('the_name AS c_name','config_value AS c_value','if(the_type=\'transline\' OR the_type=\'transtext\',1,0) AS c_needs_dereference','c_set'),NULL,'',NULL,NULL,true);
+			if ($CONFIG_OPTIONS_CACHE===NULL)
+				critical_error('DATABASE_FAIL');
+		} else
+		{
+			critical_error('DATABASE_FAIL');
+		}
+	}
+
+	$CONFIG_OPTIONS_CACHE=list_to_map('c_name',$CONFIG_OPTIONS_CACHE);
+
+	if ($CONFIG_OPTIONS_BEING_CACHED) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+}
+
+/**
+ * Clean all loaded config options, removing loaded translations if they do not match what the user actually has.
+ */
+function cleanup_loaded_options()
+{
+	if ((user_lang()!=get_site_default_lang()) && (strpos(get_db_type(),'mysql')!==false))
+	{
+		global $CONFIG_OPTIONS_CACHE;
+		foreach ($CONFIG_OPTIONS_CACHE as $name=>$option)
+		{
+			if ($option['c_needs_dereference']==1)
+			{
+				unset($CONFIG_OPTIONS_CACHE[$name]['c_value_translated']);
+			}
+		}
+	}
+}
+
+/**
+ * Find the value of the specified configuration option.
+ *
+ * @param  ID_TEXT		The name of the option
+ * @param  boolean		Where to accept a missing option (and return NULL)
+ * @return ?SHORT_TEXT	The value (NULL: either null value, or no option found whilst $missing_ok set)
+ */
+function get_option($name,$missing_ok=false)
+{
+	global $CONFIG_OPTIONS_CACHE;
+
+	// Maybe missing a DB row, or has an old NULL one, so we need to auto-create from hook
+	if (!isset($CONFIG_OPTIONS_CACHE[$name]['c_value']))
+	{
+		if ((running_script('upgrader')) || (running_script('execute_temp'))) return NULL; // Upgrade scenario, probably can't do this robustly
+
+		if ($missing_ok) return NULL;
+
+		global $GET_OPTION_LOOP;
+		$GET_OPTION_LOOP=1;
+
+		require_code('config2');
+		$value=get_default_option($name);
+		set_option($name,$value,0);
+
+		$GET_OPTION_LOOP=0;
+	}
+
+	// Load up row
+	$option=&$CONFIG_OPTIONS_CACHE[$name];
+
+	// The master of redundant quick exit points
+	if (isset($option['c_value_translated']))
+	{
+		return $option['c_value_translated'];
+	}
+
+	// Non-translated
+	if ($option['c_needs_dereference']==0)
+	{
+		$value=$option['c_value'];
+		$option['c_value_translated']=$value; // Allows slightly better code path next time
+
+		global $CONFIG_OPTIONS_BEING_CACHED;
+		if ($CONFIG_OPTIONS_BEING_CACHED) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+
+		return $value;
+	}
+
+	// Translated...
+	$value=get_translated_text(intval($option['c_value']));
+	$option['c_value_translated']=$value;
+
+	global $CONFIG_OPTIONS_BEING_CACHED;
+	if ($CONFIG_OPTIONS_BEING_CACHED) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+
+	return $value;
 }
 
 /**
@@ -147,7 +241,7 @@ function set_long_value($name,$value)
 function get_value($name,$default=NULL,$env_also=false)
 {
 	global $IN_MINIKERNEL_VERSION,$VALUE_OPTIONS_CACHE;
-	if ($IN_MINIKERNEL_VERSION==1) return $default;
+	if ($IN_MINIKERNEL_VERSION) return $default;
 
 	if (isset($VALUE_OPTIONS_CACHE[$name])) return $VALUE_OPTIONS_CACHE[$name]['the_value'];
 
@@ -209,76 +303,6 @@ function delete_value($name)
 	if (function_exists('persistent_cache_delete')) persistent_cache_delete('VALUES');
 	global $VALUE_OPTIONS_CACHE;
 	unset($VALUE_OPTIONS_CACHE[$name]);
-}
-
-/**
- * Find the value of the specified configuration option.
- *
- * @param  ID_TEXT		The name of the option
- * @param  boolean		Where to accept a missing option (and return NULL)
- * @return ?SHORT_TEXT	The value (NULL: either null value, or no option found whilst $missing_ok set)
- */
-function get_option($name,$missing_ok=false)
-{
-	global $CONFIG_OPTIONS_CACHE;
-
-	if (!isset($CONFIG_OPTIONS_CACHE[$name]))
-	{
-		if ($missing_ok) return NULL;
-		require_code('config2');
-		find_lost_option($name);
-	}
-
-	$option=&$CONFIG_OPTIONS_CACHE[$name];
-
-	// The master of redundant quick exit points. Has to be after the above IF due to weird PHP isset/NULL bug on some 5.1.4 (and possibly others)
-	if (isset($option['config_value_translated']))
-	{
-		if ($option['config_value_translated']=='<null>') return NULL;
-		return $option['config_value_translated'];
-	}
-
-	// Redundant, quick exit points
-	$type=$option['the_type'];
-	if (!isset($option['c_set'])) $option['c_set']=($option['config_value']===NULL)?0:1; // for compatibility during upgrades
-	if (($option['c_set']==1) && ($type!='transline') && ($type!='transtext'))
-	{
-		$option['config_value_translated']=$option['config_value']; // Allows slightly better code path next time
-		if ($option['config_value_translated']===NULL) $option['config_value_translated']='<null>';
-		$CONFIG_OPTIONS_CACHE[$name]=$option;
-		global $CONFIG_OPTIONS_BEING_CACHED;
-		if ($CONFIG_OPTIONS_BEING_CACHED) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
-		if ($option['config_value']=='<null>') return NULL;
-		return $option['config_value'];
-	}
-
-	global $GET_OPTION_LOOP;
-	$GET_OPTION_LOOP=1;
-
-	// Find default if not set
-	if ($option['c_set']==0)
-	{
-		require_code('config2');
-		return _get_default_option($option,$type,$name);
-	}
-
-	// Translations if needed
-	if (($type=='transline') || ($type=='transtext'))
-	{
-		if (!isset($option['config_value_translated']))
-		{
-			$option['config_value_translated']=get_translated_text(intval($option['config_value']));
-			$CONFIG_OPTIONS_CACHE[$name]=$option;
-			persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
-		}
-		// Answer
-		$GET_OPTION_LOOP=0;
-		return $option['config_value_translated'];
-	}
-
-	// Answer
-	$GET_OPTION_LOOP=0;
-	return $option['config_value'];
 }
 
 /**

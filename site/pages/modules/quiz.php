@@ -54,9 +54,9 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_member_last_visit');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_winner');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
-		delete_config_option('points_ADD_QUIZ');
-		delete_config_option('quiz_show_stats_count_total_open');
+
 		delete_privilege('bypass_quiz_repeat_time_restriction');
+
 		delete_menu_item_simple('_SEARCH:quiz:type=misc');
 	}
 
@@ -88,10 +88,7 @@ class Module_quiz
 				'v_quiz_id'=>'AUTO_LINK',
 			));
 
-			add_config_option('QUIZZES','quiz_show_stats_count_total_open','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_privilege('QUIZZES','bypass_quiz_repeat_time_restriction',false);
-
-			add_config_option('ADD_QUIZ','points_ADD_QUIZ','integer','return addon_installed(\'points\')?\'0\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
 			$GLOBALS['SITE_DB']->create_table('quizzes',array(
 				'id'=>'*AUTO',

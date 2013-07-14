@@ -72,7 +72,7 @@ class Hook_addon_registry_msn
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/network_links.php',
+			'sources/hooks/systems/config/network_links.php',
 			'sources/hooks/systems/addon_registry/msn.php',
 			'sources/hooks/blocks/main_notes/msn.php',
 			'BLOCK_SIDE_NETWORK.tpl',

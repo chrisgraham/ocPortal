@@ -57,15 +57,15 @@ function ocjester_filtering_wrap_2($in)
 function ocjester_filtering($in)
 {
 	require_code('ocfiltering');
-	$passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option('ocjester_piglatin_shown_for',true),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
+	$passes=(count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_piglatin_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
 	if ($passes)
 		$in=ocjester_piglatin_filter($in);
 
-	$passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option('ocjester_leet_shown_for',true),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
+	$passes=(count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_leet_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
 	if ($passes)
 		$in=ocjester_leet_filter($in);
 
-	$passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option('ocjester_string_changes_shown_for',true),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
+	$passes=(count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_string_changes_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
 	if ($passes)
 		$in=ocjester_string_changes_filter($in);
 
@@ -164,7 +164,7 @@ function isVowel($chLetter) {
 
 function ocjester_string_changes_filter($in)
 {
-	$changes=@explode("\n",get_option('ocjester_string_changes',true));
+	$changes=explode(chr(10),get_option('ocjester_string_changes'));
 	$remap=array();
 	foreach ($changes as $change)
 	{

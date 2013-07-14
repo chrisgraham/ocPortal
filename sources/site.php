@@ -63,8 +63,8 @@ function init__site()
 	{
 		$ruri=ocp_srv('REQUEST_URI');
 
-		$url_scheme=get_option('url_scheme',true);
-		if (($url_scheme==='PG') || ($url_scheme==='HTM'))
+		$url_scheme=get_option('url_scheme');
+		if (($url_scheme=='PG') || ($url_scheme=='HTM'))
 		{
 			if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
 			{
@@ -1691,7 +1691,7 @@ function log_stats($string,$pg_time)
 {
 	if (!addon_installed('stats')) return;
 
-	if ((get_option('site_closed')=='1') && (get_option('stats_when_closed',true)==='1')) return;
+	if ((get_option('site_closed')=='1') && (get_option('stats_when_closed')=='1')) return;
 
 	if ((get_option('super_logging')=='1') || (get_param('track',NULL)!==NULL))
 	{
@@ -1716,7 +1716,7 @@ function log_stats($string,$pg_time)
 	$os=substr(get_os_string(),0,255);
 	if ($os===NULL) $os='';
 
-	if ((get_option('bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
+	if ((get_option('bot_stats')=='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
 
 	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'member_id'=>$member,'date_and_time'=>$time,'referer'=>$referer,'s_get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)),false,true);
 	if (mt_rand(0,1000)==1)

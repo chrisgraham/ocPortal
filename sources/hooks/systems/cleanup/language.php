@@ -43,7 +43,6 @@ class Hook_language
 	 */
 	function run()
 	{
-		require_code('view_modes');
 		erase_cached_language();
 
 		return new ocp_tempcode();

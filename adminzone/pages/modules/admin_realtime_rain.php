@@ -52,25 +52,6 @@ class Module_admin_realtime_rain
 	}
 
 	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		add_config_option('REALTIME_RAIN_BUTTON','bottom_show_realtime_rain_button','tick','return \'0\';','THEME','BOTTOM_LINKS');
-	}
-
-	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('bottom_show_realtime_rain_button');
-	}
-
-	/**
 	 * Standard modular run function.
 	 *
 	 * @return tempcode	The result of execution.

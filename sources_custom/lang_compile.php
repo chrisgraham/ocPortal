@@ -42,10 +42,10 @@ if (!function_exists('require_lang_compile'))
 	{
 		global $LANGUAGE_STRINGS_CACHE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
 
-		$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache',true)=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
+		$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
 		if ($desire_cache)
 		{
-			if ($GLOBALS['IN_MINIKERNEL_VERSION']==0)
+			if (!$GLOBALS['IN_MINIKERNEL_VERSION'])
 			{
 				global $DECACHED_COMCODE_LANG_STRINGS;
 

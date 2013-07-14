@@ -37,24 +37,6 @@ class clean_reinstall_test_set extends ocp_test_case
 			}
 		}
 
-		$options=$GLOBALS['SITE_DB']->query_select('config',array('the_name'));
-		foreach ($options as $option)
-		{
-			foreach ($files as $file_contents)
-			{
-				if ($file_contents===NULL) continue;
-
-				if (strpos($file_contents,'delete_config_option(\''.$option['the_name'].'\');')!==false)
-				{
-					continue 2;
-				}
-			}
-
-			$c=file_get_contents(get_file_base().'/adminzone/pages/modules/admin_config.php');
-			$is_listed=(strpos(substr($c,0,strpos($c,'delete_config_option($option);')),'\''.$option['the_name'].'\'')!==false);
-			$this->assertTrue($is_listed,'Could not find uninstall for option: '.$option['the_name']);
-		}
-
 		$privileges=$GLOBALS['SITE_DB']->query_select('privilege_list',array('the_name'));
 		foreach ($privileges as $privilege)
 		{

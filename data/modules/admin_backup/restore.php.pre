@@ -13,7 +13,7 @@
 */
 
 global $IN_MINIKERNEL_VERSION;
-$IN_MINIKERNEL_VERSION=1;
+$IN_MINIKERNEL_VERSION=true;
 
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE;
@@ -37,9 +37,6 @@ $REQUIRED_BEFORE=array();
 
 global $SITE_INFO;
 $SITE_INFO=array();
-
-global $CONFIG_OPTIONS_CACHE;
-$CONFIG_OPTIONS_CACHE=array();
 
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;

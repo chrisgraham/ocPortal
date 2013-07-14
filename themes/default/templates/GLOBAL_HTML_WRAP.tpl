@@ -227,6 +227,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{$,Uncomment to show user"s time {$DATE} {$TIME}}
 						{$COPYRIGHT`}
 
+						{$REQUIRE_CSS,font_sizer}
 						{+START,INCLUDE,FONT_SIZER}{+END}
 					</div>
 

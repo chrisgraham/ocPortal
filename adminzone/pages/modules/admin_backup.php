@@ -62,14 +62,6 @@ class Module_admin_backup
 		delete_value('backup_recurrance_days');
 		delete_value('backup_max_size');
 		delete_value('backup_b_type');
-		delete_config_option('backup_time');
-		delete_config_option('backup_time');
-		delete_config_option('backup_server_hostname');
-		delete_config_option('backup_server_port');
-		delete_config_option('backup_server_user');
-		delete_config_option('backup_server_password');
-		delete_config_option('backup_server_path');
-		delete_config_option('backup_overwrite');
 
 		//require_code('files');
 		//deldir_contents(get_custom_file_base().'/exports/backups',true);
@@ -83,16 +75,6 @@ class Module_admin_backup
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
-			add_config_option('BACKUP_REGULARITY','backup_time','integer','return \'168\';','ADMIN','CHECK_LIST',1);
-			add_config_option('BACKUP_SERVER_HOSTNAME','backup_server_hostname','line','return \'\';','FEATURE','BACKUPS');
-			add_config_option('BACKUP_SERVER_PORT','backup_server_port','integer','return \'21\';','FEATURE','BACKUPS');
-			add_config_option('BACKUP_SERVER_USER','backup_server_user','line','return \'\';','FEATURE','BACKUPS');
-			add_config_option('BACKUP_SERVER_PASSWORD','backup_server_password','line','return \'\';','FEATURE','BACKUPS');
-			add_config_option('BACKUP_SERVER_PATH','backup_server_path','line','return \'\';','FEATURE','BACKUPS');
-			add_config_option('BACKUP_OVERWRITE','backup_overwrite','tick','return \'0\';','FEATURE','BACKUPS');
-		}
 	}
 
 	/**

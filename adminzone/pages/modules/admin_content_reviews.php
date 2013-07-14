@@ -56,8 +56,6 @@ class Module_admin_content_reviews
 	 */
 	function uninstall()
 	{
-		delete_config_option('comcode_page_default_review_freq');
-
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_reviews');
 
 		delete_privilege('set_content_review_settings');
@@ -71,8 +69,6 @@ class Module_admin_content_reviews
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		add_config_option('COMCODE_PAGE_DEFAULT_REVIEW_FREQ','comcode_page_default_review_freq','integer','return \'0\';','ADMIN','CONTENT_REVIEWS');
-
 		add_privilege('SUBMISSION','set_content_review_settings',false);
 
 		$GLOBALS['SITE_DB']->create_table('content_reviews',array(

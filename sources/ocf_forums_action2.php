@@ -40,7 +40,10 @@ function ocf_edit_forum_grouping($forum_grouping_id,$title,$description,$expande
 	{
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','c_title',array('c_title'=>$old_title));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
-			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$title),array('the_type'=>'forum_grouping','config_value'=>$old_title));
+		{
+			require_code('config2');
+			config_update_value_ref($old_title,$title,'forum_grouping');
+		}
 	}
 
 	log_it('EDIT_FORUM_GROUPING',strval($forum_grouping_id),$title);
@@ -144,7 +147,10 @@ function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_par
 	{
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('f_name'=>$old_name));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
-			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$name),array('the_type'=>'forum','config_value'=>$old_name));
+		{
+			require_code('config2');
+			config_update_value_ref($old_name,$name,'forum');
+		}
 	}
 
 	if (($old_parent!=$new_parent) && ($new_parent!=INTEGER_MAGIC_NULL))

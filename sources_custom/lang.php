@@ -206,7 +206,7 @@ if (!function_exists('_do_lang'))
 					//print_r(debug_backtrace());
 					if ($USER_LANG_LOOP==1) critical_error('RELAY','Missing language code: '.escape_html($codename).'. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/'.fallback_lang().'/*.ini) for ocPortal on this website have been corrupted.');
 					if ($REQUIRE_LANG_LOOP>=2) return ''; // Probably failing to load global.ini, so just output with some text missing
-					require_code('view_modes');
+					require_code('caches3');
 					erase_cached_language();
 					fatal_exit(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)));
 				} else
@@ -406,7 +406,7 @@ function google_translate($str_in, $lang)
 
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	if (get_option('enable_google_translate',true)!=='1') return $str_in;
+	if (get_option('enable_google_translate')!='1') return $str_in;
 
 	if ($tempcode) $str_in=$str_in->evaluate();
 
@@ -581,7 +581,7 @@ if (!function_exists('get_site_default_lang'))
 		if (!array_key_exists('default_lang',$SITE_INFO)) // We must be installing
 		{
 			global $IN_MINIKERNEL_VERSION;
-			if ($IN_MINIKERNEL_VERSION==1)
+			if ($IN_MINIKERNEL_VERSION)
 			{
 				if (array_key_exists('lang',$_POST)) return $_POST['lang'];
 				if (array_key_exists('lang',$_GET)) return $_GET['lang'];

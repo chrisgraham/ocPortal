@@ -186,7 +186,7 @@ class forum_driver_none extends forum_driver_base
 	function find_emoticons()
 	{
 		global $IN_MINIKERNEL_VERSION;
-		if ($IN_MINIKERNEL_VERSION==1) return array();
+		if ($IN_MINIKERNEL_VERSION) return array();
 
 		global $EMOTICON_LEVELS;
 		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;

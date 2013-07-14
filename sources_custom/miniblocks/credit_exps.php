@@ -13,17 +13,13 @@
  * @package		ocportalcom_support_credits
  */
 
-$result=get_option('support_budget_priority',true);
-$budget_minutes=is_null($result)?'10':strval(integer_format($result));
-$result=get_option('support_normal_priority',true);
-$normal_minutes=is_null($result)?'8':strval(integer_format($result));
-$result=get_option('support_day_priority',true);
-$day_minutes=is_null($result)?'7':strval(integer_format($result));
-$result=get_option('support_high_priority',true);
-$high_minutes=is_null($result)?'5':strval(integer_format($result));
-$result=get_option('support_emergency_priority',true);
-$emergency_minutes=is_null($result)?'3': strval(integer_format($result));
-$s_currency=is_null($result=get_option('currency',true))?'USD':strval($result);
+$budget_minutes=integer_format(get_option('support_budget_priority'));
+$normal_minutes=integer_format(get_option('support_normal_priority'));
+$day_minutes=integer_format(get_option('support_day_priority'));
+$high_minutes=integer_format(get_option('support_high_priority'));
+$emergency_minutes=integer_format(get_option('support_emergency_priority'));
+$s_currency=get_option('currency',true);
+if (is_null($s_currency)) $s_currency='USD';
 
 require_lang('customers');
 

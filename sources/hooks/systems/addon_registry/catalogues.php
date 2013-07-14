@@ -146,9 +146,9 @@ class Hook_addon_registry_catalogues
 			'sources/blocks/main_contact_catalogues.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_ALL_FIELD_VALUES.php',
 			'sources/hooks/systems/block_ui_renderers/catalogues.php',
-			'sources/hooks/systems/config_default/catalogue_entries_per_page.php',
-			'sources/hooks/systems/config_default/catalogue_subcats_per_page.php',
-			'sources/hooks/systems/config_default/catalogues_subcat_narrowin.php',
+			'sources/hooks/systems/config/catalogue_entries_per_page.php',
+			'sources/hooks/systems/config/catalogue_subcats_per_page.php',
+			'sources/hooks/systems/config/catalogues_subcat_narrowin.php',
 		);
 	}
 

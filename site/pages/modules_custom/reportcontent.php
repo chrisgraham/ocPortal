@@ -46,8 +46,6 @@ class Module_reportcontent
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('reported_content');
-
-		delete_config_option('reported_times');
 	}
 
 	/**
@@ -67,8 +65,6 @@ class Module_reportcontent
 			'r_counts'=>'BINARY', // If the content is marked unvalidated, r_counts is set to 0 for each row for it, so if it's revalidated the counts apply elsewhere
 		));
 		$GLOBALS['SITE_DB']->create_index('reported_content','reported_already',array('r_content_type','r_content_id'));
-
-		add_config_option('REPORTED_TIMES','reported_times','integer','return \'3\';','FEATURE','REPORT_CONTENT');
 	}
 
 	/**

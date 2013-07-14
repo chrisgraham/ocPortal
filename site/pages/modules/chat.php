@@ -55,22 +55,6 @@ class Module_chat
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_events');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_sound_effects');
 
-		delete_config_option('is_on_chat');
-		delete_config_option('chat_flood_timelimit');
-		delete_config_option('chat_default_post_colour');
-		delete_config_option('chat_default_post_font');
-		delete_config_option('chat_private_room_deletion_time');
-		delete_config_option('username_click_im');
-		delete_config_option('points_chat');
-		delete_config_option('chat_show_stats_count_users');
-		delete_config_option('chat_show_stats_count_rooms');
-		delete_config_option('chat_show_stats_count_messages');
-		delete_config_option('sitewide_im');
-		delete_config_option('group_private_chatrooms');
-		delete_config_option('chat_message_check_interval');
-		delete_config_option('chat_transitory_alert_time');
-		delete_config_option('max_chat_lobby_friends');
-
 		delete_privilege('create_private_room');
 		delete_privilege('start_im');
 		delete_privilege('moderate_my_private_rooms');
@@ -133,15 +117,9 @@ class Module_chat
 			$GLOBALS['SITE_DB']->create_index('chat_messages','ordering',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('chat_messages','room_id',array('room_id'));
 
-			add_config_option('FLOOD_TIMELIMIT','chat_flood_timelimit','integer','return \'5\';','FEATURE','SECTION_CHAT');
-
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_chat',20,1,0,0,0,'','integer');
 
 			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'menu_items/community_navigation/chat');
-
-			add_config_option('CHAT_OPTIONS_COLOUR_NAME','chat_default_post_colour','colour','return \'inherit\';','FEATURE','SECTION_CHAT'); // NB: compressed up due to 256 character limit
-			add_config_option('CHAT_OPTIONS_TEXT_NAME','chat_default_post_font','list','return \'Verdana\';','FEATURE','SECTION_CHAT',0,'Arial|Courier|Georgia|Impact|Times| Trebuchet|Verdana|Tahoma|Geneva|Helvetica');
-			add_config_option('PRIVATE_ROOM_DELETION_TIME','chat_private_room_deletion_time','integer','return \'1440\';','FEATURE','SECTION_CHAT');
 
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($usergroups) as $id)
@@ -151,7 +129,6 @@ class Module_chat
 
 			add_privilege('SECTION_CHAT','create_private_room',true);
 			add_privilege('SECTION_CHAT','start_im',true);
-			add_config_option('USERNAME_CLICK_IM','username_click_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
 
 			$GLOBALS['SITE_DB']->create_table('chat_blocking',array(
 				'member_blocker'=>'*MEMBER',
@@ -174,11 +151,6 @@ class Module_chat
 			));
 
 			$GLOBALS['SITE_DB']->create_index('chat_events','event_ordering',array('e_date_and_time'));
-
-			add_config_option('CHATTING','points_chat','integer','return addon_installed(\'points\')?\'1\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('COUNT_CHATTERS','chat_show_stats_count_users','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('ROOMS','chat_show_stats_count_rooms','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('COUNT_CHATPOSTS','chat_show_stats_count_messages','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 
 			$GLOBALS['SITE_DB']->create_table('chat_active',array(
 				'id'=>'*AUTO', // serves no purpose really, but needed as room_id can be NULL but is in compound key
@@ -212,13 +184,6 @@ class Module_chat
 			add_privilege('SECTION_CHAT','moderate_my_private_rooms',true);
 			add_privilege('SECTION_CHAT','ban_chatters_from_rooms',false);
 			// NB: edit_lowrange_content may be overridden for the chat module also, allowing editing messages in rooms
-
-			add_config_option('SITEWIDE_IM','sitewide_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<11))
-		{
-			add_config_option('GROUP_PRIVATE_CHATROOMS','group_private_chatrooms','tick','return \'1\';','FEATURE','SECTION_CHAT');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
@@ -226,13 +191,6 @@ class Module_chat
 			$GLOBALS['SITE_DB']->rename_table('chat_buddies','chat_friends');
 
 			$GLOBALS['SITE_DB']->alter_table_field('chat_messages','user_id','MEMBER','member_id');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<12))
-		{
-			add_config_option('CHAT_MESSAGE_CHECK_INTERVAL','chat_message_check_interval','integer','return \'5000\';','FEATURE','CHAT');
-			add_config_option('CHAT_TRANSITORY_ALERT_TIME','chat_transitory_alert_time','integer','return \'7000\';','FEATURE','CHAT');
-			add_config_option('MAX_CHAT_LOBBY_FRIENDS','max_chat_lobby_friends','integer','return \'15\';','FEATURE','CHAT');
 		}
 	}
 

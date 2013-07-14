@@ -49,9 +49,6 @@ class Module_admin_themes
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('theme_images');
 
-		delete_config_option('templates_store_revisions');
-		delete_config_option('templates_number_revisions_show');
-
 		require_code('files');
 		$langs=find_all_langs(true);
 		foreach (array_keys($langs) as $lang)
@@ -84,9 +81,6 @@ class Module_admin_themes
 				'lang'=>'*LANGUAGE_NAME'
 			));
 			$GLOBALS['SITE_DB']->create_index('theme_images','theme',array('theme','lang'));
-
-			add_config_option('STORE_REVISIONS','templates_store_revisions','tick','return \'1\';','ADMIN','EDIT_TEMPLATES');
-			add_config_option('SHOW_REVISIONS','templates_number_revisions_show','integer','return \'5\';','ADMIN','EDIT_TEMPLATES');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
@@ -354,7 +348,7 @@ class Module_admin_themes
 		{
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'zones SET zone_theme=\''.db_escape_string($theme).'\' WHERE '.db_string_not_equal_to('zone_name','cms').' AND '.db_string_not_equal_to('zone_name','adminzone'));
 		}
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		$before=better_parse_ini_file((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini');
 		$myfile=@fopen((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini','wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
@@ -1542,7 +1536,6 @@ class Module_admin_themes
 		// Erase cache
 		$theme=filter_naughty(post_param('theme'));
 		erase_cached_templates();
-		require_code('view_modes');
 		erase_block_cache();
 
 		$title=get_screen_title('EDIT_TEMPLATES');

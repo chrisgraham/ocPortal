@@ -30,7 +30,7 @@
 function _helper_apply_emoticons($this_ref,$member_id=NULL)
 {
 	global $IN_MINIKERNEL_VERSION;
-	if ($IN_MINIKERNEL_VERSION==1) return array();
+	if ($IN_MINIKERNEL_VERSION) return array();
 
 	$extra='';
 	if (is_null($member_id))

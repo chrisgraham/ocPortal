@@ -29,10 +29,8 @@ class Hook_symbol_USER_FB_CONNECT
 			$token=get_long_value('facebook_oauth_token__'.strval($member_id));
 			if (($token===NULL) || ($token=='')) return '';
 
-			$appid=get_option('facebook_appid',true);
-			if (is_null($appid)) return '';
-			$appsecret=get_option('facebook_secret_code',true);
-			if (is_null($appsecret)) return '';
+			$appid=get_option('facebook_appid');
+			$appsecret=get_option('facebook_secret_code');
 			try
 			{
 				$facebook_connect=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));

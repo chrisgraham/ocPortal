@@ -538,7 +538,7 @@ function has_some_cat_privilege($member,$permission,$page,$permission_module)
 function has_privilege($member,$permission,$page=NULL,$cats=NULL)
 {
 	if (running_script('upgrader')) return true;
-	if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return true;
+	if ($GLOBALS['IN_MINIKERNEL_VERSION']) return true;
 
 	if ($page===NULL) $page=get_page_name();
 

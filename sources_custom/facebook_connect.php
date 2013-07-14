@@ -37,52 +37,12 @@ function init__facebook_connect()
 	}
 	global $FACEBOOK_CONNECT;
 	$FACEBOOK_CONNECT=mixed();
-	$appid=get_option('facebook_appid',true);
-	if (is_null($appid)) return;
-	$appsecret=get_option('facebook_secret_code',true);
-	if (is_null($appsecret)) return;
+	$appid=get_option('facebook_appid');
+	$appsecret=get_option('facebook_secret_code');
 	$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 
 	require_javascript('javascript_facebook');
 	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
-}
-
-function facebook_install()
-{
-	require_code('database_action');
-
-	$facebook_appid=get_option('facebook_appid',true);
-	if (is_null($facebook_appid))
-	{
-		add_config_option('FACEBOOK_APPID','facebook_appid','line','return \'\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_SECRET','facebook_secret_code','line','return \'\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_UID','facebook_uid','line','return \'\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_ALLOW_SIGNUPS','facebook_allow_signups','tick','return \'1\';','USERS','FACEBOOK_SYNDICATION');
-	}
-
-	$facebook_sync_username=get_option('facebook_sync_username',true);
-	if (is_null($facebook_sync_username))
-	{
-		add_config_option('FACEBOOK_SYNC_USERNAME','facebook_sync_username','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_SYNC_DOB','facebook_sync_dob','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_SYNC_EMAIL','facebook_sync_email','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_SYNC_AVATAR','facebook_sync_avatar','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_AUTO_SYNDICATE','facebook_auto_syndicate','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
-		add_config_option('FACEBOOK_MEMBER_SYNDICATE_TO_PAGE','facebook_member_syndicate_to_page','tick','return \'0\';','USERS','FACEBOOK_SYNDICATION');
-	}
-
-	/*
-	delete_config_option('facebook_appid');
-	delete_config_option('facebook_secret_code');
-	delete_config_option('facebook_uid');
-	delete_config_option('facebook_allow_signups');
-	delete_config_option('facebook_sync_username');
-	delete_config_option('facebook_sync_dob');
-	delete_config_option('facebook_sync_email');
-	delete_config_option('facebook_sync_avatar');
-	delete_config_option('facebook_auto_syndicate');
-	delete_config_option('facebook_member_syndicate_to_page');
-	*/
 }
 
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app
@@ -161,9 +121,6 @@ function handle_facebook_connection_login($current_logged_in_member)
 		$dob_month=intval($_dob[0]);
 		$dob_year=intval($_dob[2]);
 	}
-
-	// Make sure we are installed/upgraded
-	facebook_install();
 
 	// See if they have logged in before - i.e. have a synched account
 	$member_row=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>$facebook_uid),'ORDER BY id DESC',1);
@@ -269,7 +226,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 		// If we're still here, we have to create a new account...
 		// -------------------------------------------------------
 
-		if (get_option('facebook_allow_signups',true)==='0')
+		if (get_option('facebook_allow_signups')=='0')
 		{
 			require_lang('facebook');
 			attach_message(do_lang_tempcode('FACEBOOK_SIGNUPS_DISABLED'),'warn');
@@ -299,8 +256,8 @@ function handle_facebook_connection_login($current_logged_in_member)
 			$username=get_username_from_human_name($username);
 
 			// Check RBL's/stopforumspam
-			$spam_check_level=get_option('spam_check_level',true);
-			if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
+			$spam_check_level=get_option('spam_check_level');
+			if (($spam_check_level=='EVERYTHING') || ($spam_check_level=='ACTIONS') || ($spam_check_level=='GUESTACTIONS') || ($spam_check_level=='JOINING'))
 			{
 				require_code('antispam');
 				check_rbls();

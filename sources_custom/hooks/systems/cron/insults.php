@@ -33,15 +33,6 @@ class Hook_cron_insults
 
 		// how many points a correct response will give
 		$_insult_points=get_option('insult_points', true);
-		if (is_null($_insult_points))
-		{
-			// add option and default value if not installed yet
-			require_code('database_action');
-			add_config_option('INSULT_POINTS','insult_points','integer','return \'10\';','POINTS','INSULT_TITLE');
-			/*
-			delete_config_option('insult_points');
-			*/
-		}
 		$insult_points=(isset($_insult_points) && is_numeric($_insult_points))?intval($_insult_points):10;
 
 		// who to insult?

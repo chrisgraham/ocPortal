@@ -32,19 +32,6 @@ if (!file_exists($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(1
 
 
 require_code('database_action');
-require_code('config2');
-require_code('menus2');
-
-require_code('developer_tools');
-require_code('database_action');
-
-require_lang('ocbestbuddy');
-
-
-destrictify();
-
-//add option and default value
-delete_config_option('mentor_usergroup');
 
 $GLOBALS['SITE_DB']->drop_table_if_exists('members_mentors');
 

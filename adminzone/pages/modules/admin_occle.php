@@ -75,9 +75,6 @@ class Module_admin_occle
 				'c_incoming'=>'BINARY',
 				'c_timestamp'=>'TIME'
 			));
-
-			add_config_option('OCCLE_CHAT_ANNOUNCE','occle_chat_announce','tick','return \'0\';','SITE','OCCLE');
-			add_config_option('OCCLE_BUTTON','bottom_show_occle_button','tick','return (get_file_base()!=get_custom_file_base())?\'0\':\'1\';','THEME','BOTTOM_LINKS');
 		}
 	}
 
@@ -89,9 +86,6 @@ class Module_admin_occle
 		$GLOBALS['SITE_DB']->drop_table_if_exists('occlechat');
 
 		delete_value('last_occle_command');
-
-		delete_config_option('occle_chat_announce');
-		delete_config_option('bottom_show_occle_button');
 	}
 
 	/**

@@ -35,31 +35,6 @@ class Block_twitter_feed
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('twitterfeed_update_time');
-		delete_config_option('twitterfeed_use_twitter_support_config');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		// New install or prior to gets a channel update time option added to Blocks configuration page.
-		if (($upgrade_from < 2) || (is_null($upgrade_from))) 
-		{
-			add_config_option('UPDATE_TIME','twitterfeed_update_time','integer','return \'30\';','BLOCKS','TWITTER_FEED_INTEGRATION');
-			add_config_option('USE_TWITTER_SUPPORT_CONFIG','twitterfeed_use_twitter_support_config','tick','return \'0\';','BLOCKS','TWITTER_FEED_INTEGRATION');
-		}
-	}
-
-	/**
 	 * Standard modular cache function.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
@@ -83,7 +58,7 @@ class Block_twitter_feed
 		// Set up variables from parameters
 		$api_key=array_key_exists('api_key',$map)?$map['api_key']:'';
 		$api_secret=array_key_exists('api_secret',$map)?$map['api_secret']:'';
-		if ( (get_option('twitterfeed_use_twitter_support_config',true)=='1') && $api_key == '' && $api_secret == '' ) {
+		if ( (get_option('twitterfeed_use_twitter_support_config')=='1') && $api_key == '' && $api_secret == '' ) {
 			$api_key=get_option('twitter_api_key');
 			$api_secret=get_option('twitter_api_secret');
 		}

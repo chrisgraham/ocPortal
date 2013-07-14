@@ -59,16 +59,6 @@ class Module_news
 
 		delete_attachments('news');
 
-		delete_config_option('points_ADD_NEWS');
-		delete_config_option('news_update_time');
-		delete_config_option('blog_update_time');
-		delete_config_option('ping_url');
-		delete_config_option('news_show_stats_count_total_posts');
-		delete_config_option('news_show_stats_count_blogs');
-		delete_config_option('enable_secondary_news');
-		delete_config_option('news_categories_per_page');
-		delete_config_option('news_entries_per_page');
-
 		delete_menu_item_simple('_SEARCH:cms_news:type=ad');
 	}
 
@@ -134,13 +124,6 @@ class Module_news
 				'register_time'=>'TIME'
 			));
 
-			add_config_option('ADD_NEWS','points_ADD_NEWS','integer','return addon_installed(\'points\')?\'225\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('NEWS_REGULARITY','news_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
-			add_config_option('BLOG_REGULARITY','blog_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
-			add_config_option('PING_URL','ping_url','text','return \'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}\';','FEATURE','NEWS');
-			add_config_option('TOTAL_NEWS_ENTRIES','news_show_stats_count_total_posts','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('BLOGS','news_show_stats_count_blogs','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-
 			$GLOBALS['SITE_DB']->create_table('news_category_entries',array(
 				'news_entry'=>'*AUTO_LINK',
 				'news_entry_category'=>'*AUTO_LINK'
@@ -158,13 +141,6 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_ititle',array('title'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnews',array('news'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnewsa',array('news_article'));
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			add_config_option('ENABLE_SECONDARY_NEWS','enable_secondary_news','tick','return \'0\';','FEATURE','NEWS');
-			add_config_option('NEWS_CATEGORIES_PER_PAGE','news_categories_per_page','integer','return \'30\';','FEATURE','NEWS');
-			add_config_option('NEWS_ENTRIES_PER_PAGE','news_entries_per_page','integer','return \'30\';','FEATURE','NEWS');
 		}
 	}
 

@@ -315,6 +315,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 .css_colour_chooser_fixed {
 	width: 366px;
 	float: left;
+	margin-top: 3px; /* As the selection bars overflow a bit */
 }
 
 .css_colour_chooser_from, .css_colour_chooser_to {

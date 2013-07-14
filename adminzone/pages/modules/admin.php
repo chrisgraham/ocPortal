@@ -275,6 +275,8 @@ class Module_admin
 		require_code('zones2');
 		disable_php_memory_limit();
 
+		$GLOBALS['NO_QUERY_LIMIT']=true;
+
 		if (function_exists('set_time_limit')) @set_time_limit(100);
 
 		$n=mixed();
@@ -548,70 +550,58 @@ class Module_admin
 			// Config options- names, descriptions, groups, categories
 			$content[$current_results_type]=new ocp_tempcode();
 			$map=array();
-			if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) $map['shared_hosting_restricted']=0;
-			$all_options=$GLOBALS['SITE_DB']->query_select('config',array('the_name','human_name','c_category','c_group','explanation','eval'),$map);
-			$all_options[]=array('the_name'=>'timezone','human_name'=>'TIME_ZONE','config_value'=>'','the_type'=>'special','eval'=>'','c_category'=>'SITE','c_group'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
+			$hooks=find_all_hooks('systems','config');
+			$all_options=array();
+			foreach (array_keys($hooks) as $hook)
+			{
+				require_code('hooks/systems/config/'.filter_naughty($hook));
+				$ob=object_factory('Hook_config_'.$hook);
+				$option=$ob->get_details();
+				if ((is_null($GLOBALS['CURRENT_SHARE_USER'])) || ($option['shared_hosting_restricted']==0))
+				{
+					if (!is_null($ob->get_default()))
+					{
+						$all_options[$hook]=$option;
+					}
+				}
+			}
+			$all_options['timezone']=array('human_name'=>'TIME_ZONE','c_value'=>'','the_type'=>'special','category'=>'SITE','group'=>'GENERAL','explanation'=>'DESCRIPTION_TIMEZONE_SITE','shared_hosting_restricted'=>0);
 			$config_categories=array();
 			$conf_found_count=0;
-			foreach ($all_options as $p)
+			foreach ($all_options as $name=>$p)
 			{
-				if (defined('HIPHOP_PHP'))
-				{
-					require_code('hooks/systems/config_default/'.$p['the_name']);
-					$hook=object_factory('Hook_config_default_'.$p['the_name']);
-					$null_test=$hook->get_default();
-				} else
-				{
-					$null_test=eval($p['eval']);
-				}
+				$n=do_lang_tempcode($p['human_name']);
+				$t=do_lang($p['explanation'],NULL,NULL,NULL,NULL,false);
 
-				if (!is_null($null_test))
+				$value=array_key_exists('c_value',$p)?$p['c_value']:get_option($name);
+
+				if ((($this->_keyword_match($name)) || ($this->_keyword_match($n->evaluate())) || ($this->_keyword_match($t)) || ($this->_keyword_match($value))))
 				{
-					$n=do_lang_tempcode($p['human_name']);
-					switch ($p['the_name'])
+					$_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['category']),'adminzone');
+					$url=$_url->evaluate();
+					$url.='#group_'.$p['group'];
+					if (is_null($t)) $t='';
+					$breadcrumbs=new ocp_tempcode();
+					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('SETUP')));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'misc'),'adminzone'),do_lang_tempcode('CONFIGURATION')));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['category']),'adminzone'),do_lang('CONFIG_CATEGORY_'.$p['category'])));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+					$breadcrumbs->attach(hyperlink($url,do_lang($p['group'])));
+					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
+					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'f7271912ccbe0358fe263ed61f7ed427','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
+
+					if ($conf_found_count>100)
 					{
-						case 'timezone':
-							$t=do_lang('DESCRIPTION_TIMEZONE_SITE');
-							break;
-
-						default:
-							$t=do_lang($p['explanation'],NULL,NULL,NULL,NULL,false);
-							break;
+						$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'360a5362435a57f9c1d6a7b18624f53b','NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
+						break;
 					}
-					if (is_null($n)) continue;
-					$config_value=array_key_exists('config_value',$p)?$p['config_value']:get_option($p['the_name']);
-					if ($config_value===false) continue;
-					if ((($this->_keyword_match($p['the_name'])) || ($this->_keyword_match($n->evaluate())) || ($this->_keyword_match($t)) || ($this->_keyword_match($config_value))))
-					{
-						if (!is_null($null_test))
-						{
-							$_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['c_category']),'adminzone');
-							$url=$_url->evaluate();
-							$url.='#group_'.$p['c_group'];
-							if (is_null($t)) $t='';
-							$breadcrumbs=new ocp_tempcode();
-							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('SETUP')));
-							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'misc'),'adminzone'),do_lang_tempcode('CONFIGURATION')));
-							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['c_category']),'adminzone'),do_lang('CONFIG_CATEGORY_'.$p['c_category'])));
-							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-							$breadcrumbs->attach(hyperlink($url,do_lang($p['c_group'])));
-							$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
-							$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'f7271912ccbe0358fe263ed61f7ed427','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
 
-							if ($conf_found_count>100)
-							{
-								$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'360a5362435a57f9c1d6a7b18624f53b','NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
-								break;
-							}
+					$conf_found_count++;
 
-							$conf_found_count++;
-
-							if (!array_key_exists($p['c_category'],$config_categories)) $config_categories[$p['c_category']]=array();
-							$config_categories[$p['c_category']][$p['c_group']]=1;
-						}
-					}
+					if (!array_key_exists($p['category'],$config_categories)) $config_categories[$p['category']]=array();
+					$config_categories[$p['category']][$p['group']]=1;
 				}
 			}
 			$current_results_type=do_lang('OPTION_CATEGORIES');
@@ -863,7 +853,7 @@ class Module_admin
 				array('WIDE','DESCRIPTION_WIDE'),
 				array('REVEAL_AGE','DESCRIPTION_REVEAL_AGE'),
 				array('PREVIEW_POSTS','DESCRIPTION_PREVIEW_POSTS'),
-				array('AUTO_MONITOR_CONTRIB_CONTENT','DESCRIPTION_AUTO_MONITOR_CONTRIB_CONTENT'),
+				array('AUTO_NOTIFICATION_CONTRIB_CONTENT','DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),
 				array('PT_RULES_TEXT','PT_RULES_TEXT_DESCRIPTION'),
 			);
 			foreach ($applicable_langstrings as $_langstring)

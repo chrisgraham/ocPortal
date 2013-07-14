@@ -45,8 +45,7 @@ class Hook_comcode_pages
 	 */
 	function run()
 	{
-		require_lang('zones');
-		require_code('zones3');
+		require_code('caches3');
 
 		erase_comcode_page_cache();
 

@@ -31,7 +31,7 @@ class Hook_symbol_CHAT_IM
 	{
 		$value='';
 
-		if ((get_option('sitewide_im',true)==='1') && (!is_guest()) && ((!array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) || ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0)))
+		if ((get_option('sitewide_im')=='1') && (!is_guest()) && ((!array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) || ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0)))
 		{
 			require_code('chat');
 			require_lang('chat');

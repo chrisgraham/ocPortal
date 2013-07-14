@@ -238,10 +238,10 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
 		$log='PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy();
-		$log.=chr(10);
+		/*$log.=chr(10);
 		ob_start();
-		debug_print_backtrace();
-		$log.=ob_get_clean();
+		debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
+		$log.=ob_get_clean();*/
 		@error_log($log,0);
 	}
 
@@ -933,7 +933,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 	dispatch_notification($notification_type,NULL,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	if (
 		($ocproducts) && 
-		(get_option('send_error_emails_ocproducts',true)=='1') && 
+		(get_option('send_error_emails_ocproducts')=='1') && 
 		(!running_script('cron_bridge')) && 
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
@@ -1014,23 +1014,9 @@ function die_html_trace($message)
 		$traces='';
 		foreach ($stage as $key=>$value)
 		{
-			try
-			{
-				if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)))
-				{
-					$_value=gettype($value);
-				} else
-				{
-					$_value=serialize($value);
-				}
-			}
-			catch (Exception $e) // Can happen for SimpleXMLElement
-			{
-				$_value=make_string_tempcode(escape_html('...'));
-			}
+			$_value=put_value_in_stack_trace($value);
 
 			global $SITE_INFO;
-			if (is_object($_value)) $_value=$_value->evaluate();
 			if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password'])>4))
 				$_value=str_replace($SITE_INFO['db_site_password'],'(password removed)',$_value);
 			if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4))
@@ -1048,6 +1034,53 @@ function die_html_trace($message)
 }
 
 /**
+ * Prepare a value for display in a stack trace.
+ *
+ * @param  mixed			Complex value
+ * @return string			String version
+ */
+function put_value_in_stack_trace($value)
+{
+	try
+	{
+		if ((is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)))
+		{
+			$_value=gettype($value);
+		}
+		elseif (is_object($value) && (is_a($value,'ocp_tempcode')))
+		{
+			$_value=$value->evaluate();
+			if (strlen($_value)>1000) $_value=substr($_value,0,1000).'...';
+		}
+		elseif (is_array($value) || is_object($value))
+		{
+			$_value=serialize($value);
+		}
+		elseif (is_string($value))
+		{
+			$_value=$value;
+		}
+		elseif (is_float($value))
+		{
+			$_value=float_format($value);
+		}
+		elseif (is_integer($value))
+		{
+			$_value=integer_format($value);
+		}
+		else
+		{
+			$_value=strval($value);
+		}
+	}
+	catch (Exception $e) // Can happen for SimpleXMLElement
+	{
+		$_value='...';
+	}
+	return $_value;
+}
+
+/**
  * Return a debugging back-trace of the current execution stack. Use this for debugging purposes.
  *
  * @return tempcode		Debugging backtrace
@@ -1061,7 +1094,7 @@ function get_html_trace()
 	foreach ($_trace as $i=>$stage)
 	{
 		$traces=new ocp_tempcode();
-//		if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;
+		//if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;
 		$file='';
 		$line='';
 		$__value=mixed();
@@ -1076,56 +1109,15 @@ function get_html_trace()
 				{
 					if (!((is_array($param)) && (array_key_exists('GLOBALS',$param)))) // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
 					{
-						try
-						{
-							if ((is_object($param) && (is_a($param,'ocp_tempcode'))) || (is_null($param)) || ((is_array($param)) && (defined('HIPHOP_PHP'))) || (is_null($param)) || (strpos(serialize($param),';R:')!==false))
-							{
-								$__value=gettype($param);
-							} else
-							{
-								$__value=serialize($param);
-							}
-							if ((strlen($__value)<MAX_STACK_TRACE_VALUE_LENGTH) || (defined('HIPHOP_PHP')))
-							{
-								$_value->attach(paragraph(escape_html($__value)));
-							} else
-							{
-								$_value=make_string_tempcode(escape_html('...'));
-							}
-						}
-						catch (Exception $e) // Can happen for SimpleXMLElement
-						{
-							$_value=make_string_tempcode(escape_html('...'));
-						}
+						$__value=put_value_in_stack_trace($param);
 					}
 				}
 			} else
 			{
-				$value=mixed();
-				if (is_float($__value))
-					$value=float_format($__value);
-				elseif (is_integer($__value))
-					$value=integer_format($__value);
-				else $value=$__value;
-
-				try
-				{
-					if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH)) || (strpos(serialize($value),';R:')!==false))
-					{
-						$_value=make_string_tempcode(escape_html(gettype($value)));
-					} else
-					{
-						$_value=serialize($value);
-					}
-				}
-				catch (Exception $e) // Can happen for SimpleXMLElement
-				{
-					$_value=make_string_tempcode(escape_html('...'));
-				}
+				$_value=put_value_in_stack_trace($__value);
 			}
 
 			global $SITE_INFO;
-			if (is_object($_value)) $_value=$_value->evaluate();
 			if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password'])>4))
 				$_value=str_replace($SITE_INFO['db_site_password'],'(password removed)',$_value);
 			if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4))

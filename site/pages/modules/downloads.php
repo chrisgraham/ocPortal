@@ -52,22 +52,6 @@ class Module_downloads
 		$GLOBALS['SITE_DB']->drop_table_if_exists('download_logging');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('download_licences');
 
-		delete_config_option('maximum_download');
-		delete_config_option('is_on_downloads');
-		delete_config_option('show_dload_trees');
-		delete_config_option('points_ADD_DOWNLOAD');
-		delete_config_option('downloads_show_stats_count_total');
-		delete_config_option('downloads_show_stats_count_archive');
-		delete_config_option('downloads_show_stats_count_downloads');
-		delete_config_option('downloads_show_stats_count_bandwidth');
-		delete_config_option('immediate_downloads');
-		delete_config_option('download_gallery_root');
-		delete_config_option('downloads_subcat_narrowin');
-		delete_config_option('dload_search_index');
-		delete_config_option('download_subcats_per_page');
-		delete_config_option('download_entries_per_page');
-		delete_config_option('downloads_default_sort_order');
-
 		delete_privilege('download');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads'));
@@ -170,14 +154,6 @@ class Module_downloads
 			));
 			$GLOBALS['SITE_DB']->create_index('download_logging','calculate_bandwidth',array('date_and_time'));
 
-			add_config_option('MAXIMUM_DOWNLOAD','maximum_download','integer','return \'15\';','SITE','CLOSED_SITE');
-			add_config_option('ADD_DOWNLOAD','points_ADD_DOWNLOAD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('_SECTION_DOWNLOADS','downloads_show_stats_count_total','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('TOTAL_DOWNLOADS_IN_ARCHIVE','downloads_show_stats_count_archive','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_COUNT_DOWNLOADS','downloads_show_stats_count_downloads','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_COUNT_BANDWIDTH','downloads_show_stats_count_bandwidth','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('IMMEDIATE_DOWNLOADS','immediate_downloads','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
-
 			require_lang('downloads');
 			add_menu_item_simple('main_content',NULL,'SECTION_DOWNLOADS','_SEARCH:downloads:type=misc',0,0,true,'',0,'',1);
 
@@ -188,19 +164,8 @@ class Module_downloads
 			));
 		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			add_config_option('DOWNLOAD_GALLERY_ROOT','download_gallery_root','line','return (addon_installed(\'galleries\')?\'root\':NULL);','FEATURE','SECTION_DOWNLOADS');
-		}
-
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
-			add_config_option('DOWNLOADS_SUBCAT_NARROWIN','downloads_subcat_narrowin','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
-			add_config_option('DLOAD_SEARCH_INDEX','dload_search_index','tick','return \'1\';','FEATURE','SECTION_DOWNLOADS');
-			add_config_option('DOWNLOAD_SUBCATS_PER_PAGE','download_subcats_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
-			add_config_option('DOWNLOAD_ENTRIES_PER_PAGE','download_entries_per_page','integer','return \'30\';','FEATURE','SECTION_DOWNLOADS');
-			add_config_option('DOWNLOADS_DEFAULT_SORT_ORDER','downloads_default_sort_order','list','return \'t.text_original ASC\';','FEATURE','SECTION_DOWNLOADS',0,'t.text_original ASC|file_size ASC|file_size DESC|num_downloads DESC|average_rating DESC|compound_rating DESC|add_date ASC|add_date DESC|fixed_random ASC');
-
 			add_privilege('_SECTION_DOWNLOADS','download',true);
 		}
 

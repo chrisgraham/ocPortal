@@ -57,9 +57,6 @@ class Module_recommend
 	 */
 	function uninstall()
 	{
-		delete_config_option('points_RECOMMEND_SITE');
-		delete_config_option('enable_csv_recommend');
-
 		delete_menu_item_simple('_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
 		delete_menu_item_simple('_SEARCH:recommend');
 	}
@@ -74,11 +71,6 @@ class Module_recommend
 	{
 		require_lang('recommend');
 
-		if (is_null($upgrade_from))
-		{
-			add_config_option('RECOMMEND_SITE','points_RECOMMEND_SITE','integer','return addon_installed(\'points\')?\'350\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-		}
-
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
@@ -88,11 +80,6 @@ class Module_recommend
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
 			add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend'); // We could append ":from={$SELF_URL&,0,0,0,from=<null>}" to page-link, but we probably don't want context-sensitivity
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			add_config_option('ENABLE_CSV_RECOMMEND','enable_csv_recommend','tick','return \'1\';','FEATURE','RECOMMEND_SITE');
 		}
 	}
 

@@ -1007,12 +1007,11 @@ class Module_admin_setupwizard
 		set_value('setupwizard_completed','1');
 
 		// Clear some cacheing
-		require_code('view_modes');
-		require_code('zones3');
+		require_code('caches3');
 		erase_comcode_page_cache();
 		erase_block_cache();
 		//persistent_cache_delete('OPTIONS');  Done by set_option
-		persistent_cache_empty();
+		erase_persistent_cache();
 		erase_cached_templates();
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));

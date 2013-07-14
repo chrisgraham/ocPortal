@@ -299,8 +299,8 @@ function is_page_https($zone,$page)
 function can_try_mod_rewrite($avoid_remap=false)
 {
 	if (!function_exists('get_option')) return false;
-	$url_scheme=get_option('url_scheme',true);
-	return (($url_scheme!==NULL) && ($url_scheme!=='RAW') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite']=='0')) && (!$avoid_remap)); // If we don't have the option on or are not using apache, return
+	$url_scheme=get_option('url_scheme');
+	return (($url_scheme!='RAW') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite']=='0')) && (!$avoid_remap)); // If we don't have the option on or are not using apache, return
 }
 
 /**
@@ -403,7 +403,7 @@ function url_monikers_enabled()
 {
 	if (!function_exists('get_option')) return false;
 	if (get_param_integer('keep_simpleurls',0)==1) return false;
-	if (get_option('url_monikers_enabled',true)!=='1') return false;
+	if (get_option('url_monikers_enabled')!='1') return false;
 	return true;
 }
 

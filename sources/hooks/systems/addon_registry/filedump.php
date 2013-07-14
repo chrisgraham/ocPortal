@@ -73,8 +73,8 @@ class Hook_addon_registry_filedump
 	{
 		return array(
 			'sources/hooks/systems/notifications/filedump.php',
-			'sources/hooks/systems/config_default/filedump_show_stats_count_total_files.php',
-			'sources/hooks/systems/config_default/filedump_show_stats_count_total_space.php',
+			'sources/hooks/systems/config/filedump_show_stats_count_total_files.php',
+			'sources/hooks/systems/config/filedump_show_stats_count_total_space.php',
 			'sources/hooks/blocks/side_stats/stats_filedump.php',
 			'sources/hooks/systems/addon_registry/filedump.php',
 			'sources/hooks/systems/ajax_tree/choose_filedump_file.php',
@@ -84,7 +84,7 @@ class Hook_addon_registry_filedump
 			'uploads/filedump/index.html',
 			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
-			'sources/hooks/systems/config_default/is_on_folder_create.php',
+			'sources/hooks/systems/config/is_on_folder_create.php',
 			'sources/hooks/modules/search/filedump.php',
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/systems/occle_fs/home.php',

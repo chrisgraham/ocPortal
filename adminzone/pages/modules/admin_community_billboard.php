@@ -58,8 +58,6 @@ class Module_admin_community_billboard extends standard_crud_module
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('community_billboard');
-
-		delete_config_option('system_community_billboard');
 	}
 
 	/**
@@ -84,8 +82,6 @@ class Module_admin_community_billboard extends standard_crud_module
 			));
 
 			$GLOBALS['SITE_DB']->create_index('community_billboard','find_active_billboard_msg',array('active_now'));
-
-			add_config_option('SYSTEM_COMMUNITY_BILLBOARD','system_community_billboard','transline','return \'\';','FEATURE','COMMUNITY_BILLBOARD');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))

@@ -1,6 +1,6 @@
 <a id="group_{GROUP_NAME*}"></a>
 
-<h3>{CURRENT_GROUP}</h3>
+<h3>{GROUP_TITLE*}</h3>
 
 <div class="wide_table_wrap"><table class="map_table form_table wide_table">
 	{+START,IF,{$NOT,{$MOBILE}}}

@@ -72,11 +72,6 @@ class Module_calendar
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'calendar'));
 
 		delete_menu_item_simple('_SEARCH:calendar:type=misc');
-
-		delete_config_option('calendar_show_stats_count_events');
-		delete_config_option('calendar_show_stats_count_events_this_week');
-		delete_config_option('calendar_show_stats_count_events_this_month');
-		delete_config_option('calendar_show_stats_count_events_this_year');
 	}
 
 	/**
@@ -173,11 +168,6 @@ class Module_calendar
 				'j_event_id'=>'AUTO_LINK'
 			));
 			$GLOBALS['SITE_DB']->create_index('calendar_jobs','applicablejobs',array('j_time'));
-
-			add_config_option('EVENTS','calendar_show_stats_count_events','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_EVENTS_THIS_WEEK','calendar_show_stats_count_events_this_week','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_EVENTS_THIS_MONTH','calendar_show_stats_count_events_this_month','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_EVENTS_THIS_YEAR','calendar_show_stats_count_events_this_year','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))

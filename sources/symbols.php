@@ -224,7 +224,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IMG_INLINE':
 				if (isset($param[0]))
 				{
-					if ((isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
+					if ((isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && (!$GLOBALS['IN_MINIKERNEL_VERSION']) && ($GLOBALS['FORUM_DRIVER']!==NULL))
 					{
 						$value=find_theme_image($param[0],true,true,(isset($param[2]) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 					} else
@@ -247,7 +247,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IMG':
 				if (isset($param[0]))
 				{
-					if ((isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
+					if ((isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && (!$GLOBALS['IN_MINIKERNEL_VERSION']) && ($GLOBALS['FORUM_DRIVER']!==NULL))
 					{
 						$value=find_theme_image($param[0],((isset($param[3])) && ($param[3]=='1')),false,(isset($param[2]) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 					} else
@@ -507,7 +507,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'CONFIG_OPTION':
 				if (isset($param[0]))
 				{
-					if (!isset($GLOBALS['CONFIG_OPTIONS_CACHE'])) // Installer, likely executing JAVASCRIPT.tpl
+					if ($GLOBALS['IN_MINIKERNEL_VERSION']) // Installer, likely executing JAVASCRIPT.tpl. We need a saner default for Javascript
 					{
 						$value='0';
 					} else
@@ -851,7 +851,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value='0';
 				if (!is_guest())
 				{
-					$value=(get_option('ocp_show_su',true)=='1') && (has_privilege(get_member(),'assume_any_member'))?'1':'0';
+					$value=(get_option('ocp_show_su')=='1') && (has_privilege(get_member(),'assume_any_member'))?'1':'0';
 				}
 				break;
 
@@ -859,7 +859,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (!is_guest())
 				{
 					// Different types of page type for staff (debug view, etc)
-					if ((get_option('ocp_show_staff_page_actions',true)=='1') && (has_privilege(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
+					if ((get_option('ocp_show_staff_page_actions')=='1') && (has_privilege(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
 					{
 						require_code('site2');
 						$value=get_staff_actions_list();
@@ -1249,7 +1249,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'IMG_WIDTH':
 			case 'IMG_HEIGHT':
-				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0))
+				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && (!$GLOBALS['IN_MINIKERNEL_VERSION']))
 				{
 					global $THEME_IMG_DIMS_CACHE;
 					if (!isset($THEME_IMG_DIMS_CACHE))
@@ -2281,8 +2281,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HONEYPOT_LINK':
-				$honeypot_url=get_option('honeypot_url',true);
-				if (($honeypot_url!=='') && (!is_null($honeypot_url)))
+				$honeypot_url=get_option('honeypot_url');
+				if (($honeypot_url!='') && (!is_null($honeypot_url)))
 				{
 					$first_char=substr(md5(get_page_name()),0,1);
 					$bot_phrase=get_option('honeypot_phrase');

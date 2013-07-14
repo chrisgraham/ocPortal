@@ -74,7 +74,7 @@ function total_points($member,$timestamp=NULL)
 	$points_rating=intval(get_option('points_rating'));
 	$points_gained_voting=array_key_exists('points_gained_voting',$_points_gained)?$_points_gained['points_gained_voting']:0;
 	$points_voting=intval(get_option('points_voting'));
-	$points_per_day=intval(get_option('points_per_day',true));
+	$points_per_day=intval(get_option('points_per_day'));
 	$points_gained_auto=intval(floor(floatval(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member))/floatval(60*60*24)));
 
 	if (!is_null($timestamp))

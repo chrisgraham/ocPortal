@@ -115,10 +115,6 @@ class Module_cms_comcode_pages
 		$GLOBALS['SITE_DB']->drop_table_if_exists('comcode_pages');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('cached_comcode_pages');
 
-		delete_config_option('store_revisions');
-		delete_config_option('number_revisions_show');
-		delete_config_option('points_COMCODE_PAGE_ADD');
-
 		/*$zones=find_all_zones(true);		We don't want to get rid of on-disk data when reinstalling
 		require_code('files');
 		$langs=find_all_langs(true);
@@ -143,8 +139,6 @@ class Module_cms_comcode_pages
 	{
 		if (is_null($upgrade_from))
 		{
-			require_code('zones2');
-
 			$GLOBALS['SITE_DB']->create_table('comcode_pages',array(
 				'the_zone'=>'*ID_TEXT',
 				'the_page'=>'*ID_TEXT',
@@ -158,7 +152,6 @@ class Module_cms_comcode_pages
 			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_submitter',array('p_submitter'));
 			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_add_date',array('p_add_date'));
 			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_validated',array('p_validated'));
-			add_config_option('COMCODE_PAGE_ADD','points_COMCODE_PAGE_ADD','integer','return addon_installed(\'points\')?\'10\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
 			$GLOBALS['SITE_DB']->create_table('cached_comcode_pages',array(
 				'the_zone'=>'*ID_TEXT',
@@ -167,11 +160,6 @@ class Module_cms_comcode_pages
 				'the_theme'=>'*ID_TEXT',
 				'cc_page_title'=>'?SHORT_TRANS'
 			));
-
-			//update_comcode_page_cache(); Lets not force the installer to know comcode. The cache will be generated on first page view
-
-			add_config_option('STORE_REVISIONS','store_revisions','tick','return \'1\';','ADMIN','COMCODE_PAGE_MANAGEMENT');
-			add_config_option('SHOW_REVISIONS','number_revisions_show','integer','return \'5\';','ADMIN','COMCODE_PAGE_MANAGEMENT');
 
 			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ftjoin_ccpt',array('cc_page_title'));
 			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ftjoin_ccsi',array('string_index'));

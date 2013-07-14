@@ -72,10 +72,10 @@ class Hook_addon_registry_core_cleanup_tools
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/is_on_block_cache.php',
-			'sources/hooks/systems/config_default/is_on_comcode_page_cache.php',
-			'sources/hooks/systems/config_default/is_on_lang_cache.php',
-			'sources/hooks/systems/config_default/is_on_template_cache.php',
+			'sources/hooks/systems/config/is_on_block_cache.php',
+			'sources/hooks/systems/config/is_on_comcode_page_cache.php',
+			'sources/hooks/systems/config/is_on_lang_cache.php',
+			'sources/hooks/systems/config/is_on_template_cache.php',
 			'data/modules/admin_cleanup/.htaccess',
 			'data/modules/admin_cleanup/index.html',
 			'sources/hooks/systems/addon_registry/core_cleanup_tools.php',

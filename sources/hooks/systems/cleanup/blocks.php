@@ -43,9 +43,8 @@ class Hook_blocks
 	 */
 	function run()
 	{
-		require_code('view_modes');
 		erase_block_cache();
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		erase_persistent_cache();
 
 		return new ocp_tempcode();
 	}

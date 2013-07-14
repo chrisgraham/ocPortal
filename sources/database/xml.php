@@ -587,7 +587,7 @@ class Database_Static_xml
 								$inserts[$i][$key]=isset($TABLE_BASES[$table_name])?$TABLE_BASES[$table_name]:$this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
 								while ((file_exists($db[0].'/'.$table_name.'/'.strval($inserts[$i][$key]).'.xml')) || (file_exists($db[0].'/'.$table_name.'/'.$this->_guid($schema,$inserts[$i]).'.xml')) || (file_exists($db[0].'/'.$table_name.'/'.strval($inserts[$i][$key]).'.xml-volatile')) || (file_exists($db[0].'/'.$table_name.'/'.$this->_guid($schema,$inserts[$i]).'.xml-volatile')))
 								{
-									if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) // In particular the f_groups/f_forum_groupings/calendar_types usage of tables references ID numbers for things. But let's just make all installer stuff linear
+									if ($GLOBALS['IN_MINIKERNEL_VERSION']) // In particular the f_groups/f_forum_groupings/calendar_types usage of tables references ID numbers for things. But let's just make all installer stuff linear
 									{
 										$inserts[$i][$key]++;
 										$TABLE_BASES[$table_name]=$inserts[$i][$key]+1;
@@ -1850,7 +1850,7 @@ class Database_Static_xml
 						$record[$key]=isset($TABLE_BASES[$table_name])?$TABLE_BASES[$table_name]:$this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
 						while ((file_exists($db[0].'/'.$table_name.'/'.strval($record[$key]).'.xml')) || (file_exists($db[0].'/'.$table_name.'/'.$this->_guid($schema,$record).'.xml')) || (file_exists($db[0].'/'.$table_name.'/'.strval($record[$key]).'.xml-volatile')) || (file_exists($db[0].'/'.$table_name.'/'.$this->_guid($schema,$record).'.xml-volatile')))
 						{
-							if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) // In particular the f_groups/f_forum_groupings/calendar_types usage of tables references ID numbers for things. But let's just make all installer stuff linear
+							if ($GLOBALS['IN_MINIKERNEL_VERSION']) // In particular the f_groups/f_forum_groupings/calendar_types usage of tables references ID numbers for things. But let's just make all installer stuff linear
 							{
 								$record[$key]++;
 								$TABLE_BASES[$table_name]=$record[$key]+1;

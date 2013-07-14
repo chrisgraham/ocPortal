@@ -234,7 +234,7 @@ class Module_admin_redirects
 		}
 
 		$GLOBALS['SITE_DB']->query_delete('redirects');
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		foreach ($found as $i=>$val)
 		{
@@ -252,7 +252,7 @@ class Module_admin_redirects
 			}
 		}
 
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
 
 		log_it('SET_REDIRECTS');

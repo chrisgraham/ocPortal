@@ -80,7 +80,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		@dbx_query($db,'SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"');
 		@dbx_query($db,'SET WAIT_TIMEOUT=28800');
 		@dbx_query($db,'SET SQL_BIG_SELECTS=1');
-		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @dbx_query($db,'SET sql_mode=\'STRICT_ALL_TABLES\'');
+		if ((get_forum_type()=='ocf') && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) @dbx_query($db,'SET sql_mode=\'STRICT_ALL_TABLES\'');
 		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
 		return array($db,$db_name);

@@ -74,7 +74,7 @@ class Hook_addon_registry_supermember_directory
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/supermembers_text.php',
+			'sources/hooks/systems/config/supermembers_text.php',
 			'sources/hooks/systems/addon_registry/supermember_directory.php',
 			'lang/EN/supermembers.ini',
 			'SUPERMEMBERS_SCREEN.tpl',

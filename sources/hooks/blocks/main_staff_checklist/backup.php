@@ -30,8 +30,8 @@ class Hook_checklist_backup
 	{
 		if (!addon_installed('backup')) return array();
 
-		if (get_option('backup_time',true)=='') return array();
-		$limit_hours=intval(get_option('backup_time',true));
+		if (get_option('backup_time')=='') return array();
+		$limit_hours=intval(get_option('backup_time'));
 
 		require_lang('backups');
 
@@ -49,13 +49,8 @@ class Hook_checklist_backup
 
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
-		$config_row=$GLOBALS['SITE_DB']->query_select('config',array('c_category','c_group'),array('the_name'=>'backup_time'),'',1);
-		if (array_key_exists(0,$config_row))
-		{
-			$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$config_row[0]['c_category']),get_module_zone('admin_config'));
-			$config_url=$_config_url->evaluate();
-			$config_url.='#group_'.$config_row[0]['c_group'];
-		} else $config_url=NULL;
+		require_code('config2');
+		$config_url=config_option_url('backup_time');
 
 		$url=build_url(array('page'=>'admin_backup','type'=>'misc'),'adminzone');
 		list($info,$seconds_due_in)=staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);

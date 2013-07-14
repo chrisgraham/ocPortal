@@ -46,7 +46,7 @@ function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm
 	if ($perm_check)
 	{
 		if (strlen($a)<3) return $a;
-		if ((function_exists('has_privilege')) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0) && (has_privilege(get_member(),'bypass_word_filter')))
+		if ((function_exists('has_privilege')) && (!$GLOBALS['MICRO_AJAX_BOOTUP']) && (has_privilege(get_member(),'bypass_word_filter')))
 			return $a;
 	}
 

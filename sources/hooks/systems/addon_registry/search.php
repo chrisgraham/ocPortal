@@ -107,8 +107,8 @@ class Hook_addon_registry_search
 			'themes/default/images/google.png',
 			'OPENSEARCH.tpl',
 			'data/opensearch.php',
-			'sources/hooks/systems/config_default/search_results_per_page.php',
-			'sources/hooks/systems/config_default/enable_boolean_search.php',
+			'sources/hooks/systems/config/search_results_per_page.php',
+			'sources/hooks/systems/config/enable_boolean_search.php',
 		);
 	}
 

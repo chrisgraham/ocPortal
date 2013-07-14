@@ -417,17 +417,33 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if ($id==db_get_first_id()) return false;
 
 		$fname=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$id));
-		$all_configured_forums=$GLOBALS['SITE_DB']->query_select('config',array('*'),array('the_type'=>'forum'));
-		foreach ($all_configured_forums as $f)
+
+		$hooks=find_all_hooks('systems','config');
+		foreach (array_keys($hooks) as $hook)
 		{
-			if ((get_option($f['the_name'])==$fname) || (get_option($f['the_name'])==$_id))
+			$value=get_option($hook,true);
+			if (($value===$fname) || ($value===$_id))
 			{
-				require_all_lang();
-				$_edit_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$f['the_page']),get_module_zone('admin_config'));
-				$edit_url=$_edit_url->evaluate();
-				$edit_url.='#group_'.$f['section'];
-				attach_message(do_lang_tempcode('CANNOT_DELETE_FORUM_OPTION',escape_html($edit_url),escape_html(do_lang_tempcode($f['human_name']))),'notice');
-				return false;
+				require_code('hooks/systems/config/'.filter_naughty($hook));
+				$ob=object_factory('Hook_config_'.$hook);
+
+				$option=$ob->get_details();
+				if ($option['the_type']=='forum')
+				{
+					if ((is_null($GLOBALS['CURRENT_SHARE_USER'])) || ($option['shared_hosting_restricted']==0))
+					{
+						require_code('config2');
+						require_all_lang();
+						$edit_url=config_option_url($hook);
+						$message=do_lang_tempcode(
+							'CANNOT_DELETE_FORUM_OPTION',
+							escape_html($edit_url),
+							escape_html(do_lang_tempcode($f['human_name']))
+						);
+						attach_message($message,'notice');
+						return false;
+					}
+				}
 			}
 		}
 

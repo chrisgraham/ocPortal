@@ -53,25 +53,6 @@ class Block_side_network
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('network_links');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		add_config_option('NETWORK_LINKS','network_links','line','return get_base_url().\'/netlink.php\';','SITE','MULTI_SITE_NETWORKING',1);
-	}
-
-	/**
 	 * Standard modular run function.
 	 *
 	 * @param  array		A map of parameters.

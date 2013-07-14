@@ -93,130 +93,18 @@ function _multi_lang()
 /**
  * Get the default value of a config option.
  *
- * @param  array			The option row from the database
- * @param  ID_TEXT		The type of the option
  * @param  ID_TEXT		The name of the option
- * @return SHORT_TEXT	The value
+ * @return ?SHORT_TEXT	The value (NULL: disabled)
  */
-function _get_default_option($option,$type,$name)
+function get_default_option($name)
 {
-	global $GET_OPTION_LOOP;
+	require_code('hooks/systems/config/'.filter_naughty($name));
+	$ob=object_factory('Hook_config_'.$name);
 
-	if (($type=='transline') || ($type=='transtext'))
-	{
-		if (defined('HIPHOP_PHP'))
-		{
-			require_code('hooks/systems/config_default/'.$name);
-			$hook=object_factory('Hook_config_default_'.$name);
-			$option['config_value_translated']=$hook->get_default();
-		} else
-		{
-			if (!isset($option['eval']))
-			{
-				global $SITE_INFO;
-				$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
-				$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
-				$option=&$CONFIG_OPTIONS_CACHE[$name];
-			}
-			$option['config_value_translated']=eval($option['eval'].';');
-			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
-			if ((get_value('setupwizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
-			{
-				set_option($name,$option['config_value_translated'],$option['the_type']);
-			}
-		}
-		if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
-		$GET_OPTION_LOOP=0;
-		return $option['config_value_translated'];
-	}
-	if (defined('HIPHOP_PHP'))
-	{
-		require_code('hooks/systems/config_default/'.$name);
-		$hook=object_factory('Hook_config_default_'.$name);
-		$option['config_value']=$hook->get_default();
-	} else
-	{
-		if (!isset($option['eval']))
-		{
-			global $SITE_INFO;
-			$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
-			$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
-			$option=&$CONFIG_OPTIONS_CACHE[$name];
-		}
-		if ((function_exists('do_lang')) || (strpos($option['eval'],'lang')===false)) // Something in set_option may need do_lang
-		{
-			$option['config_value']=eval($option['eval'].';');
-			if ((get_value('setupwizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
-			{
-				require_code('config2');
-				set_option($name,$option['config_value']);
-			}
-		}
-	}
-	if (is_object($option['config_value'])) $option['config_value']=$option['config_value']->evaluate(); elseif (is_integer($option['config_value'])) $option['config_value']=strval($option['config_value']);
+	$value=$ob->get_default();
+	if (is_null($value)) $value=''; // Cannot save a NULL. We don't need to save as NULL anyway, options are only disabled when they wouldn't have been used anyway
 
-	$GET_OPTION_LOOP=0;
-	$option['c_set']=1;
-	return $option['config_value'];
-}
-
-/**
- * An option has dissappeared somehow - find it via searching our code-base for it's install code. It doesn't get returned, just loaded up. This function will produce a fatal error if we cannot find it.
- *
- * @param  ID_TEXT		The name of the value
- */
-function find_lost_option($name)
-{
-	global $CONFIG_OPTIONS_CACHE;
-
-	// In the dark dark past, we'd bomb out...
-	if ((function_exists('find_all_zones')) && (!defined('HIPHOP_PHP')))
-	{
-		// However times are pleasant, the grass is green, the sun high is the summer sky. Let's perform some voodoo magic...
-		$all_zones=find_all_zones();
-		$search=array();
-		$types=array('modules_custom','modules');
-		foreach ($all_zones as $zone)
-		{
-			foreach ($types as $type)
-			{
-				$pages=find_all_pages($zone,$type);
-				foreach ($pages as $page=>$type2)
-				{
-					$search[]=zone_black_magic_filterer(get_file_base().'/'.$zone.(($zone!='')?'/':'').'pages/'.$type2.'/'.$page.'.php');
-				}
-			}
-		}
-		require_code('zones2');
-		require_code('zones3');
-		$all_blocks=find_all_blocks();
-		foreach ($all_blocks as $block=>$type)
-		{
-			$search[]=get_file_base().'/'.$type.'/blocks/'.$block.'.php';
-		}
-		if (file_exists(get_file_base().'/sources_custom/ocf_install.php'))
-			$search[]=get_file_base().'/sources_custom/ocf_install.php';
-		$search[]=get_file_base().'/sources/ocf_install.php';
-
-		$matches=array();
-		foreach ($search as $s)
-		{
-			$code=file_get_contents($s);
-			if (preg_match('#add_config_option\(\'\w+\',\''.preg_quote($name,'#').'\',\'\w+\',\'.+\',\'\w+\',\'\w+\'(,1)?\);#',$code,$matches)>0)
-			{
-				require_code('database_action');
-				$upgrade_from=NULL; // In case referenced in add_config_option line
-				eval($matches[0]);
-
-				// We could put out a message, but no need to scare people
-				//	attach_message(do_lang_tempcode('CONFIG_OPTION_FETCHED',escape_html($name)),'warn');	 CONFIG_OPTION_FETCHED=A config option ({1}) was missing, but has been hunted down and installed. This is an unexpected inconsistency, please refresh the page, and hopefully it has been permanently corrected.
-
-				load_options();
-				break;
-			}
-		}
-	}
-	if (!array_key_exists($name,$CONFIG_OPTIONS_CACHE)) fatal_exit(do_lang_tempcode('_MISSING_OPTION',escape_html($name)));
+	return $value;
 }
 
 /**
@@ -224,53 +112,143 @@ function find_lost_option($name)
  *
  * @param  ID_TEXT		The name of the value
  * @param  LONG_TEXT		The value
- * @param  ?ID_TEXT		The type of the option. This is normally ommited, but to save a DB lookup, may be passed through (NULL: work out the type)
- * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup colour special username
- * @param  ?LONG_TEXT	The current value of the config option (NULL: unknown). This is just for efficiency for remapping language config options.
+ * @param  BINARY			Whether this was a human-set value
  */
-function set_option($name,$value,$type=NULL,$current_value=NULL)
+function set_option($name,$value,$will_be_formally_set=1)
 {
 	global $CONFIG_OPTIONS_CACHE;
 
-	if (is_null($type))
+	if (!isset($CONFIG_OPTIONS_CACHE[$name])) // Not installed with a DB setting row, so install it; even if it's just the default, we need it for performance
 	{
-		global $GET_OPTION_LOOP;
-		if ($GET_OPTION_LOOP!=1)
-			get_option($name); // Ensure it's installed
+		require_code('hooks/systems/config/'.filter_naughty($name));
+		$ob=object_factory('Hook_config_'.$name);
+		$option=$ob->get_details();
 
-		$type=$CONFIG_OPTIONS_CACHE[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_select_value('config','the_type',array('the_name'=>$name));
-	}
+		$needs_dereference=($option['type']=='transtext' || $option['type']=='transline')?1:0;
 
-	if (($type=='transline') || ($type=='transtext'))
-	{
-//		$current_value=$GLOBALS['SITE_DB']->query_select_value('config','config_value',array('the_name'=>$name));
-
-		if ((array_key_exists('c_set',$CONFIG_OPTIONS_CACHE[$name])) && ($CONFIG_OPTIONS_CACHE[$name]['c_set']==0))
-		{
-			$GLOBALS['SITE_DB']->query_update('config',array('config_value'=>strval(insert_lang($value,1)),'c_set'=>1),array('the_name'=>$name),'',1);
-		} else
-		{
-			$current_value=$CONFIG_OPTIONS_CACHE[$name]['config_value'];
-			if (!is_null($current_value)) // Should never happen, but might during upgrading
-				lang_remap(intval($current_value),$value);
-		}
+		$CONFIG_OPTIONS_CACHE[$name]=array(
+			'c_name'=>$name,
+			'c_set'=>$will_be_formally_set,
+			'c_value'=>($needs_dereference==1)?strval(insert_lang($value,1)):$value,
+			'c_needs_dereference'=>$needs_dereference,
+		);
+		if ($will_be_formally_set==0 && $GLOBALS['IN_MINIKERNEL_VERSION']) return; // Don't save in the installer
+		$GLOBALS['SITE_DB']->query_insert('config',$CONFIG_OPTIONS_CACHE[$name]);
 	} else
 	{
-		$map=array('config_value'=>$value);
-		if (array_key_exists('c_set',$CONFIG_OPTIONS_CACHE[$name])) $map['c_set']=1;
-		$GLOBALS['SITE_DB']->query_update('config',$map,array('the_name'=>$name),'',1);
-
-		$CONFIG_OPTIONS_CACHE[$name]['config_value']=$value;
+		$needs_dereference=$CONFIG_OPTIONS_CACHE[$name]['c_needs_dereference'];
 	}
 
-	$CONFIG_OPTIONS_CACHE[$name]['config_value_translated']=$value;
+	if ($needs_dereference==1) // Translated
+	{
+		$current_value=$CONFIG_OPTIONS_CACHE[$name]['c_value'];
+		if ($current_value===NULL)
+		{
+			$CONFIG_OPTIONS_CACHE[$name]['c_value']=strval(insert_lang($value,1));
+			$GLOBALS['SITE_DB']->query_update('config',array('c_value'=>$CONFIG_OPTIONS_CACHE[$name]['c_value'],'c_set'=>$will_be_formally_set),array('c_name'=>$name),'',1);
+		} else
+		{
+			lang_remap(intval($current_value),$value);
+			$GLOBALS['SITE_DB']->query_update('config',array('c_set'=>$will_be_formally_set),array('c_name'=>$name),'',1);
+		}
+	} else // Not translated
+	{
+		$GLOBALS['SITE_DB']->query_update('config',array('c_value'=>$value,'c_set'=>$will_be_formally_set),array('c_name'=>$name),'',1);
 
-	if (function_exists('log_it'))
+		$CONFIG_OPTIONS_CACHE[$name]['c_value']=$value;
+	}
+
+	// For use by get_option during same script execution
+	$CONFIG_OPTIONS_CACHE[$name]['c_value_translated']=$value;
+	$CONFIG_OPTIONS_CACHE[$name]['c_set']=$will_be_formally_set;
+
+	// Log it
+	if ((function_exists('log_it')) && ($will_be_formally_set==1))
 	{
 		require_lang('config');
 		log_it('CONFIGURATION',$name,$value);
 	}
 
+	// Update persistent cache
 	if (function_exists('persistent_cache_delete'))
 		persistent_cache_delete('OPTIONS');
+}
+
+/**
+ * Update a reference stored in a config option.
+ *
+ * @param  SHORT_TEXT	The old value
+ * @param  SHORT_TEXT	The name value
+ * @param  ID_TEXT		The type
+ */
+function config_update_value_ref($old_title,$title,$type)
+{
+	$hooks=find_all_hooks('systems','config');
+	$all_options=array();
+	foreach (array_keys($hooks) as $hook)
+	{
+		require_code('hooks/systems/config/'.filter_naughty($hook));
+		$ob=object_factory('Hook_config_'.$hook);
+		$option=$ob->get_details();
+		if ($option['type']==$type)
+		{
+			$GLOBALS['FORUM_DB']->query_update('config',array('c_value'=>$title),array('c_name'=>$hook,'c_value'=>$old_title));
+		}
+	}
+}
+
+/**
+ * Update a reference stored in a config option.
+ *
+ * @param  ID_TEXT		The config option name
+ * @return ?URLPATH		URL to set the config option (NULL: no such option exists)
+ */
+function config_option_url($name)
+{
+	$value=get_option($name,true);
+	if (is_null($value)) return NULL;
+
+	require_code('hooks/systems/config/'.filter_naughty($name));
+	$ob=object_factory('Hook_config_'.$name);
+	$option=$ob->get_details();
+
+	$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$option['category']),get_module_zone('admin_config'));
+	$config_url=$_config_url->evaluate();
+	$config_url.='#group_'.$option['group'];
+
+	return $config_url;
+}
+
+/**
+ * Deletes a specified config option permanently from the database.
+ *
+ * @param  ID_TEXT		The codename of the config option
+ */
+function delete_config_option($name)
+{
+	$rows=$GLOBALS['SITE_DB']->query_select('config',array('*'),array('c_name'=>$name),'',1);
+	if (array_key_exists(0,$rows))
+	{
+		$myrow=$rows[0];
+		if (($myrow['c_needs_dereference']==1) && (is_numeric($myrow['c_value'])))
+		{
+			delete_lang($myrow['c_value']);
+		}
+		$GLOBALS['SITE_DB']->query_delete('config',array('c_name'=>$name),'',1);
+		/*global $CONFIG_OPTIONS_CACHE;  Don't do this, it will cause problems in some parts of the code
+		unset($CONFIG_OPTIONS_CACHE[$name]);*/
+	}
+	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
+}
+
+/**
+ * Rename a config option.
+ *
+ * @param  ID_TEXT		The old name
+ * @param  ID_TEXT		The new name
+ */
+function rename_config_option($old,$new)
+{
+	$GLOBALS['SITE_DB']->query_update('config',array('c_name'=>$new),array('c_name'=>$old),'',1);
+	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
 }

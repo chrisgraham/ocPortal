@@ -45,24 +45,7 @@ class Hook_image_thumbs
 	 */
 	function run()
 	{
-		$thumb_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta WHERE m_name LIKE \''.db_encode_like('%thumb_url').'\'');
-		foreach ($thumb_fields as $field)
-		{
-			if ($field['m_table']=='videos') continue;
-
-			$GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name']=>''));
-		}
-		$full=get_custom_file_base().'/uploads/auto_thumbs';
-		$dh=@opendir($full);
-		if ($dh!==false)
-		{
-			while (($file=readdir($dh))!==false)
-			{
-				@unlink($full.'/'.$file);
-			}
-			closedir($dh);
-		}
-		require_code('view_modes');
+		erase_thumb_cache();
 		erase_comcode_cache();
 
 		return new ocp_tempcode();

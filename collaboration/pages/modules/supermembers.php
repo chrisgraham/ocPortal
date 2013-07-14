@@ -57,9 +57,6 @@ class Module_supermembers
 	 */
 	function uninstall()
 	{
-		delete_config_option('supermembers_groups');
-		delete_config_option('supermembers_text');
-		delete_config_option('is_on_supermember_filter');
 		delete_menu_item_simple('_SEARCH:supermembers');
 	}
 
@@ -76,8 +73,6 @@ class Module_supermembers
 			set_option('supermembers_text','[html]'.get_option('supermembers_text').'[/html]');
 			return;
 		}
-
-		add_config_option('PAGE_TEXT','supermembers_text','transtext','return do_lang(\'SUPERMEMBERS_TEXT\');','SECURITY','SUPER_MEMBERS');
 
 		require_lang('supermembers');
 		add_menu_item_simple('collab_website',NULL,'SUPER_MEMBERS','_SEARCH:supermembers');

@@ -442,7 +442,7 @@ if ((!isset($CURRENT_SHARE_USER)) || (isset($_SERVER['REQUEST_METHOD'])))
  */
 $PURE_POST=$_POST;
 $NO_QUERY_LIMIT=false;
-$IN_MINIKERNEL_VERSION=0;
+$IN_MINIKERNEL_VERSION=false;
 
 // Critical error reporting system
 global $FILE_BASE;

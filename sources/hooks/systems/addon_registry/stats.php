@@ -73,8 +73,8 @@ class Hook_addon_registry_stats
 	{
 		return array(
 			'sources/hooks/modules/admin_setupwizard/stats.php',
-			'sources/hooks/systems/config_default/stats_store_time.php',
-			'sources/hooks/systems/config_default/super_logging.php',
+			'sources/hooks/systems/config/stats_store_time.php',
+			'sources/hooks/systems/config/super_logging.php',
 			'sources/hooks/systems/realtime_rain/stats.php',
 			'data/modules/admin_cleanup/page_stats.php.pre',
 			'sources/hooks/systems/cleanup/page_stats.php',
@@ -119,7 +119,7 @@ class Hook_addon_registry_stats
 			'themes/default/images/pagepics/statistics_pageviews.png',
 			'themes/default/images/pagepics/statistics_referrers.png',
 			'themes/default/images/pagepics/submits.png',
-			'sources/hooks/systems/config_default/bot_stats.php',
+			'sources/hooks/systems/config/bot_stats.php',
 		);
 	}
 

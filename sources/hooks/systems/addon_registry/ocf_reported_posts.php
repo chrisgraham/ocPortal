@@ -78,7 +78,7 @@ class Hook_addon_registry_ocf_reported_posts
 			'OCF_REPORTED_POST_FCOMCODE.tpl',
 			'sources/hooks/blocks/main_staff_checklist/reported_posts.php',
 			'themes/default/images/EN/pageitem/report_post.png',
-			'sources/hooks/systems/config_default/reported_posts_forum.php',
+			'sources/hooks/systems/config/reported_posts_forum.php',
 		);
 	}
 

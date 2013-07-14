@@ -25,22 +25,13 @@ class video_syndication_vimeo
 
 	function uninstall()
 	{
-		delete_config_option('vimeo_client_id');
-		delete_config_option('vimeo_client_secret');
 	}
 
 	function __construct()
 	{
 		require_code('vimeo');
 
-		// Ensure config options installed
 		$service_name='vimeo';
-		$client_id=get_option($service_name.'_client_id',true);
-		if (is_null($client_id))
-		{
-			require_code('oauth2');
-			install_oauth_settings_for($service_name);
-		}
 
 		// Initialise official client
 		$this->_vimeo_ob=new phpVimeo(
@@ -69,12 +60,12 @@ class video_syndication_vimeo
 
 	function is_active()
 	{
-		$vimeo_client_id=get_option('vimeo_client_id',true);
-		if ((is_null($vimeo_client_id)) || ($vimeo_client_id==''))
+		$vimeo_client_id=get_option('vimeo_client_id');
+		if ($vimeo_client_id=='')
 			return false;
 
-		$vimeo_client_secret=get_option('vimeo_client_secret',true);
-		if ((is_null($vimeo_client_secret)) || ($vimeo_client_secret==''))
+		$vimeo_client_secret=get_option('vimeo_client_secret');
+		if ($vimeo_client_secret=='')
 			return false;
 
 		$token=get_long_value('vimeo_access_token');

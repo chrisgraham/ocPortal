@@ -124,7 +124,7 @@ class Module_admin_ssl
 
 		$title=get_screen_title('SSL_CONFIGURATION');
 
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

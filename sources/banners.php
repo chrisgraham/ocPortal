@@ -211,7 +211,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		if ($rows===NULL) $rows=array(); // Error, but tolerate it as it could be on each page load
 
 		// Filter out what we don't have permission for
-		if (get_option('use_banner_permissions',true)==='1')
+		if (get_option('use_banner_permissions')=='1')
 		{
 			load_user_stuff();
 			require_code('permissions');

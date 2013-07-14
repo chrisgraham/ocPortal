@@ -583,7 +583,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'theme','category_name'=>$themename,'group_id'=>$group_id));
 		}
 
-		persistent_cache_empty();
+		erase_persistent_cache();
 	}
 }
 

@@ -69,10 +69,6 @@ class Module_catalogues
 		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/catalogues',true);
 
-		delete_config_option('catalogues_subcat_narrowin');
-		delete_config_option('catalogue_subcats_per_page');
-		delete_config_option('catalogue_entries_per_page');
-
 		delete_privilege('high_catalogue_entry_timeout');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=misc');
@@ -441,13 +437,6 @@ class Module_catalogues
 					while (count($rows)!=0);
 				}
 			}
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<7))
-		{
-			add_config_option('CATALOGUES_SUBCAT_NARROWIN','catalogues_subcat_narrowin','tick','return \'0\';','FEATURE','CATALOGUES');
-			add_config_option('CATALOGUE_SUBCATS_PER_PAGE','catalogue_subcats_per_page','integer','return \'30\';','FEATURE','CATALOGUES');
-			add_config_option('CATALOGUE_ENTRIES_PER_PAGE','catalogue_entries_per_page','integer','return \'30\';','FEATURE','CATALOGUES');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))

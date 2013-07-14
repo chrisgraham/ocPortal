@@ -18,6 +18,9 @@
  * @package		core
  */
 
+/**
+ * Standard code module initialisation function.
+ */
 function init__content2()
 {
 	define('META_DATA_HEADER_NO',0);

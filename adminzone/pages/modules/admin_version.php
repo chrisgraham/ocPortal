@@ -84,15 +84,11 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_privacy');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
 
-		delete_privilege('reuse_others_attachments');
 		delete_privilege('use_sms');
 		delete_privilege('sms_higher_limit');
 		delete_privilege('sms_higher_trigger_limit');
-		delete_privilege('assume_any_member');
 		delete_privilege('edit_meta_fields');
 		delete_privilege('view_private_content');
-
-		delete_config_option('url_monikers_enabled');
 	}
 
 	/**
@@ -106,10 +102,10 @@ class Module_admin_version
 		// A lot of "peripheral architectural" tables are defined here. Central ones are defined in the installer -- as they need to be installed before any module.
 		// This is always the first module to be installed.
 
+		// A lot of core upgrade is also here. When absolutely necessary it is put in upgrade.php.
+
 		if (($upgrade_from<10) || (is_null($upgrade_from)))
 		{
-			add_config_option('URL_MONIKERS_ENABLED','url_monikers_enabled','tick','return \'1\';','SITE','SEO');
-
 			$GLOBALS['SITE_DB']->create_table('url_id_monikers',array(
 				'id'=>'*AUTO',
 				'm_resource_page'=>'ID_TEXT',
@@ -308,10 +304,9 @@ class Module_admin_version
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
 		{
 			$GLOBALS['SITE_DB']->rename_table('security_images','captchas');
-			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA','human_name'=>'USE_CAPTCHAS','the_name'=>'use_captchas'),array('the_name'=>'use_security_images'),'',1);
-			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'captcha_single_guess'),'',1);
-			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
+
 			$GLOBALS['SITE_DB']->alter_table_field('cache','langs_required','LONG_TEXT','dependencies');
+
 			$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_manually_chosen','BINARY');
 
 			$GLOBALS['SITE_DB']->change_primary_key('member_privileges',array('member_id','privilege','the_page','module_the_name','category_name'));
@@ -361,7 +356,8 @@ class Module_admin_version
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
 		{
-			add_privilege('_COMCODE','reuse_others_attachments',true);
+			set_value('version',float_to_raw_string(ocp_version_number()));
+			set_value('ocf_version',float_to_raw_string(ocp_version_number()));
 
 			$GLOBALS['SITE_DB']->create_table('menu_items',array(
 				'id'=>'*AUTO',
@@ -500,7 +496,6 @@ class Module_admin_version
 				'm_confirm_code'=>'IP'
 			));*/
 			/*$GLOBALS['SITE_DB']->create_index('confirmed_mobiles','confirmed_numbers',array('m_confirm_code'));*/
-			add_privilege('STAFF_ACTIONS','assume_any_member',false,true);
 
 			$GLOBALS['SITE_DB']->create_table('autosave',array(
 				'id'=>'*AUTO',

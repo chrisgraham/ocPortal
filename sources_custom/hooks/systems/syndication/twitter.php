@@ -9,8 +9,7 @@ class Hook_Syndication_twitter
 
 	function is_available()
 	{
-		$api_key=get_option('twitter_api_key',true);
-		if (is_null($api_key)) return false;
+		$api_key=get_option('twitter_api_key');
 		if ($api_key=='') return false;
 
 		return true;
@@ -28,8 +27,8 @@ class Hook_Syndication_twitter
 		require_lang('twitter');
 		require_code('twitter');
 
-		$api_key=get_option('twitter_api_key',true);
-		$api_secret=get_option('twitter_api_secret',true);
+		$api_key=get_option('twitter_api_key');
+		$api_secret=get_option('twitter_api_secret');
 		$twitter=new Twitter($api_key,$api_secret);
 
 		if (get_param_integer('oauth_in_progress',0)==0)

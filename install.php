@@ -26,7 +26,7 @@ if ((!array_key_exists('type',$_GET)) && (file_exists('install_locked')))
 }
 
 global $IN_MINIKERNEL_VERSION;
-$IN_MINIKERNEL_VERSION=1;
+$IN_MINIKERNEL_VERSION=true;
 
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
@@ -1049,7 +1049,7 @@ function step_5()
 	if (post_param_integer('confirm',0)==0)
 	{
 		$tmp=new database_driver(trim(post_param('db_site')),trim(post_param('db_site_host')),trim(post_param('db_site_user')),trim(post_param('db_site_password')),$table_prefix);
-		$test=$tmp->query_select_value_if_there('config','the_type',array('the_name'=>'is_on_gd'),'',true);
+		$test=$tmp->query_select_value_if_there('config','c_value',array('c_name'=>'is_on_gd'),'',true);
 		unset($tmp);
 		if (!is_null($test))
 		{
@@ -1651,17 +1651,10 @@ function step_5_core()
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('config');
 	$GLOBALS['SITE_DB']->create_table('config',array(
-		'the_name'=>'*ID_TEXT',
-		'human_name'=>'ID_TEXT',
+		'c_name'=>'*ID_TEXT',
 		'c_set'=>'BINARY',
-		'config_value'=>'LONG_TEXT',
-		'the_type'=>'ID_TEXT',
-		'eval'=>'SHORT_TEXT',
-		'c_category'=>'ID_TEXT',
-		'c_group'=>'ID_TEXT',
-		'explanation'=>'ID_TEXT',
-		'shared_hosting_restricted'=>'BINARY',
-		'c_data'=>'SHORT_TEXT'
+		'c_value'=>'LONG_TEXT',
+		'c_needs_dereference'=>'BINARY'
 	));
 
 	// Privileges
@@ -1731,6 +1724,7 @@ function step_5_core_2()
 		'zone_displayed_in_menu'=>'BINARY'
 	));
 
+	// Create default zones
 	require_lang('zones');
 	$trans1=insert_lang(do_lang('A_SITE_ABOUT','???'),1,NULL,false,NULL,$INSTALL_LANG);
 	$trans2=insert_lang(do_lang('HEADER_TEXT_ADMINZONE'),1,NULL,false,NULL,$INSTALL_LANG);

@@ -30,8 +30,6 @@ class Hook_occle_fs_etc
 	 */
 	function listing($meta_dir,$meta_root_node,&$occle_fs)
 	{
-		global $CONFIG_OPTIONS_CACHE;
-
 		require_all_lang();
 
 		require_code('resource_fs');
@@ -43,7 +41,8 @@ class Hook_occle_fs_etc
 		$modification_times=collapse_2d_complexity('param_a','date_and_time',$GLOBALS['SITE_DB']->query($query));
 
 		$listing=array();
-		foreach (array_keys($CONFIG_OPTIONS_CACHE) as $option)
+		$hooks=find_all_hooks('systems','config');
+		foreach (array_keys($hooks) as $option)
 		{
 			$value=get_option($option);
 			if (is_null($value)) continue;
@@ -119,16 +118,6 @@ class Hook_occle_fs_etc
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 
 		return false;
-
-		/*	This is silly really!
-		$hooks=find_all_hooks('systems','occle_fs_extended_config');
-		$extended_config_filename=preg_replace('#^\_(.*)s'.preg_quote('.'.RESOURCEFS_DEFAULT_EXTENSION,'#').'$#','${1}',$file_name);
-		if (array_key_exists($extended_config_filename,$hooks)) return false;
-
-		delete_config_option($file_name);
-
-		return true;
-		*/
 	}
 
 	/**
@@ -186,8 +175,8 @@ class Hook_occle_fs_etc
 			return $ob->write_file($meta_dir,$meta_root_node,$file_name,$contents,$occle_fs);
 		}
 
-		global $CONFIG_OPTIONS_CACHE;
-		if (!array_key_exists($file_name,$CONFIG_OPTIONS_CACHE)) return false; // File doesn't exist
+		$value=get_option($file_name,true);
+		if (is_null($value)) return false; // File doesn't exist
 
 		set_option($file_name,$contents);
 

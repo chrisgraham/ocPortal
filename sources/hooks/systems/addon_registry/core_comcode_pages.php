@@ -72,9 +72,9 @@ class Hook_addon_registry_core_comcode_pages
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/number_revisions_show.php',
-			'sources/hooks/systems/config_default/points_COMCODE_PAGE_ADD.php',
-			'sources/hooks/systems/config_default/store_revisions.php',
+			'sources/hooks/systems/config/number_revisions_show.php',
+			'sources/hooks/systems/config/points_COMCODE_PAGE_ADD.php',
+			'sources/hooks/systems/config/store_revisions.php',
 			'sources/hooks/systems/addon_registry/core_comcode_pages.php',
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl',
 			'COMCODE_PAGE_BOX.tpl',
@@ -91,8 +91,8 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/systems/attachments/comcode_page.php',
 			'sources/hooks/modules/admin_unvalidated/comcode_pages.php',
 			'sources/hooks/modules/admin_newsletter/comcode_pages.php',
-			'sources/hooks/systems/config_default/comcode_page_default_review_freq.php',
-			'sources/hooks/systems/config_default/is_on_comcode_page_children.php',
+			'sources/hooks/systems/config/comcode_page_default_review_freq.php',
+			'sources/hooks/systems/config/is_on_comcode_page_children.php',
 		);
 	}
 

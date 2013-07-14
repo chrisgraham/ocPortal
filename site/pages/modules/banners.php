@@ -53,14 +53,6 @@ class Module_banners
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'banners'));
 
-		delete_config_option('is_on_banners');
-		delete_config_option('money_ad_code');
-		delete_config_option('use_banner_permissions');
-		delete_config_option('advert_chance');
-		delete_config_option('points_ADD_BANNER');
-		delete_config_option('admin_banners');
-		delete_config_option('banner_autosize');
-
 		delete_privilege('full_banner_setup');
 		delete_privilege('view_anyones_banner_stats');
 		delete_privilege('banner_free');
@@ -129,8 +121,6 @@ class Module_banners
 			add_privilege('BANNERS','full_banner_setup',false);
 			add_privilege('BANNERS','view_anyones_banner_stats',false);
 
-			add_config_option('ADD_BANNER','points_ADD_BANNER','integer','return addon_installed(\'points\')?\'0\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-
 			$GLOBALS['SITE_DB']->create_table('banner_types',array(
 				'id'=>'*ID_TEXT',
 				't_is_textual'=>'BINARY',
@@ -162,10 +152,6 @@ class Module_banners
 			$GLOBALS['SITE_DB']->create_index('banner_clicks','clicker_ip',array('c_ip_address'));
 
 			add_privilege('BANNERS','banner_free',false);
-
-			add_config_option('PERMISSIONS','use_banner_permissions','tick','return \'0\';','FEATURE','BANNERS');
-			add_config_option('BANNER_AUTOSIZE','banner_autosize','tick','return \'0\';','FEATURE','BANNERS');
-			add_config_option('ADMIN_BANNERS','admin_banners','tick','return \'0\';','FEATURE','BANNERS');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))

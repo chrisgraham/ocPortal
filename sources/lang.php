@@ -108,17 +108,7 @@ function init__lang()
 		$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 	}
 
-	global $CONFIG_OPTIONS_CACHE;
-	if (isset($CONFIG_OPTIONS_CACHE))
-	{
-		if (user_lang()!=get_site_default_lang())
-		{
-			foreach ($CONFIG_OPTIONS_CACHE as $name=>$option)
-			{
-				unset($CONFIG_OPTIONS_CACHE[$name]['config_value_translated']);
-			}
-		}
-	}
+	if (function_exists('cleanup_loaded_options')) cleanup_loaded_options();
 }
 
 // ====
@@ -189,7 +179,7 @@ function user_lang()
 	if ($USER_LANG_CACHED!==NULL) return $USER_LANG_CACHED;
 	global $MEMBER_CACHED,$USER_LANG_LOOP,$IN_MINIKERNEL_VERSION;
 
-	if ($IN_MINIKERNEL_VERSION==1)
+	if ($IN_MINIKERNEL_VERSION)
 	{
 		return get_site_default_lang();
 	}
@@ -220,7 +210,7 @@ function user_lang()
 
 		if (($lang!='') && (does_lang_exist($lang))) return $lang;
 
-		if ((array_key_exists('GET_OPTION_LOOP',$GLOBALS)) && ($GLOBALS['GET_OPTION_LOOP']==0) && (function_exists('get_option')) && (get_option('detect_lang_browser',true)=='1'))
+		if ((array_key_exists('GET_OPTION_LOOP',$GLOBALS)) && ($GLOBALS['GET_OPTION_LOOP']==0) && (function_exists('get_option')) && (get_option('detect_lang_browser')=='1'))
 		{
 			// In browser?
 			$lang=get_lang_browser();
@@ -243,14 +233,14 @@ function user_lang()
 		$USER_LANG_CACHED=$lang;
 	} else
 	{
-		if (((get_forum_type()=='ocf') || (get_option('detect_lang_forum',true)=='1') || (get_option('detect_lang_browser',true)=='1')) && ((!$GLOBALS['DEV_MODE']) || (get_site_default_lang()!='Gibb')))
+		if (((get_forum_type()=='ocf') || (get_option('detect_lang_forum')=='1') || (get_option('detect_lang_browser')=='1')) && ((!$GLOBALS['DEV_MODE']) || (get_site_default_lang()!='Gibb')))
 		{
 			// In forum?
-			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_forum',true)=='1'))
+			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_forum')=='1'))
 			{
 				$USER_LANG_CACHED=get_lang_forum_user(get_member());
 			}
-			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_browser',true)=='1'))
+			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_browser')=='1'))
 			{
 				$USER_LANG_CACHED=get_lang_browser();
 			}
@@ -329,7 +319,7 @@ function get_site_default_lang()
 	if (!array_key_exists('default_lang',$SITE_INFO)) // We must be installing
 	{
 		global $IN_MINIKERNEL_VERSION;
-		if ($IN_MINIKERNEL_VERSION==1)
+		if ($IN_MINIKERNEL_VERSION)
 		{
 			if (array_key_exists('lang',$_POST)) return $_POST['lang'];
 			if (array_key_exists('lang',$_GET)) return $_GET['lang'];
@@ -527,7 +517,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		}
 	} else
 	{
-		$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache',true)=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
+		$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
 		if ($desire_cache)
 		{
 			$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
@@ -570,7 +560,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	{
 		if (($desire_cache) && (is_file($cache_path))) // Must have been dirty cache, so we need to kill compiled templates too (as lang is compiled into them)
 		{
-			require_code('view_modes');
+			require_code('caches3');
 			global $ERASED_TEMPLATES_ONCE;
 			if (!$ERASED_TEMPLATES_ONCE)
 				erase_cached_templates();
@@ -841,7 +831,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				//print_r(debug_backtrace());
 				if ($USER_LANG_LOOP==1) critical_error('RELAY','Missing language code: '.escape_html($codename).'. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/'.fallback_lang().'/*.ini) for ocPortal on this website have been corrupted.');
 				if ($REQUIRE_LANG_LOOP>=2) return ''; // Probably failing to load global.ini, so just output with some text missing
-				require_code('view_modes');
+				require_code('caches3');
 				erase_cached_language();
 				fatal_exit(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)));
 			} else

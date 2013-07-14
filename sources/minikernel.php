@@ -47,7 +47,7 @@ function init__minikernel()
 	$EXITING=NULL;
 
 	global $MICRO_BOOTUP;
-	$MICRO_BOOTUP=0;
+	$MICRO_BOOTUP=false;
 
 	global $XSS_DETECT,$LAX_COMCODE;
 	$XSS_DETECT=false;
@@ -270,13 +270,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 		case E_WARNING:
 		case E_NOTICE:
 			@ob_end_clean(); // We can't be doing output buffering at this point
-			if (!$GLOBALS['SUPPRESS_ERROR_DEATH'])
-			{
-				fatal_exit('PHP ['.strval($errno).'] '.$errstr);
-			} else
-			{
-				attach_message(protect_from_escaping($errstr),'warn');
-			}
+			fatal_exit('PHP ['.strval($errno).'] '.$errstr);
 	}
 
 	return false;

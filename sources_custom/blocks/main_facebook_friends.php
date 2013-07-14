@@ -56,8 +56,8 @@ class Block_main_facebook_friends
 		require_lang('facebook_friends');
 		require_code('facebook_connect');
 
-		$appid=get_option('facebook_appid',true);
-		if ((is_null($appid)) || ($appid=='')) return new ocp_tempcode();
+		$appid=get_option('facebook_appid');
+		if ($appid=='') return new ocp_tempcode();
 
 		$stream=array_key_exists('stream',$map)?$map['stream']:'0';
 		$fans=array_key_exists('fans',$map)?$map['fans']:'10';

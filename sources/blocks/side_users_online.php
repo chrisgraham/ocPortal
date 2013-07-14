@@ -41,30 +41,6 @@ class Block_side_users_online
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('usersonline_show_newest_member');
-		delete_config_option('usersonline_show_birthdays');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			add_config_option('SHOW_NEWEST_MEMBER','usersonline_show_newest_member','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'1\';','BLOCKS','USERS_ONLINE_BLOCK');
-			add_config_option('BIRTHDAYS','usersonline_show_birthdays','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK');
-		}
-	}
-
-	/**
 	 * Standard modular cache function.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
@@ -139,7 +115,7 @@ class Block_side_users_online
 			require_lang('ocf');
 
 			// Show newest member
-			if (get_option('usersonline_show_newest_member',true)=='1')
+			if (get_option('usersonline_show_newest_member')=='1')
 			{
 				$newest_member=$GLOBALS['FORUM_DB']->query_select('f_members',array('m_username','id'),array('m_validated'=>1),'ORDER BY id DESC',1);
 				$username_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($newest_member[0]['id'],false,$newest_member[0]['m_username']);
@@ -147,7 +123,7 @@ class Block_side_users_online
 			}
 
 			// Birthdays
-			if (get_option('usersonline_show_birthdays',true)=='1')
+			if (get_option('usersonline_show_birthdays')=='1')
 			{
 				require_code('ocf_members');
 				$_birthdays=ocf_find_birthdays();

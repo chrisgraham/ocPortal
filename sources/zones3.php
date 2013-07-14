@@ -19,29 +19,6 @@
  */
 
 /**
- * Erase the Comcode page cache
- */
-function erase_comcode_page_cache()
-{
-	$GLOBALS['NO_QUERY_LIMIT']=true;
-
-	do
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),NULL,'',50,NULL,true,array());
-		if (is_null($rows)) $rows=array();
-		foreach ($rows as $row)
-		{
-			delete_lang($row['string_index']);
-			$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('string_index'=>$row['string_index']));
-		}
-	}
-	while (count($rows)!=0);
-	persistent_cache_empty();
-
-	$GLOBALS['NO_QUERY_LIMIT']=false;
-}
-
-/**
  * Edit a zone.
  *
  * @param  ID_TEXT		The current name of the zone
@@ -504,7 +481,7 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	}
 
 	// Empty caching
-	persistent_cache_empty();
+	erase_persistent_cache();
 	//persistent_cache_delete(array('PAGE_INFO'));
 	decache('main_comcode_page_children');
 	decache('main_sitemap');
@@ -584,7 +561,7 @@ function delete_ocp_page($zone,$page,$type=NULL,$use_afm=false)
 			delete_comcode_attachments('comcode_page',$zone.':'.$page);
 			$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_page'=>$page,'the_zone'=>$zone));
 			$GLOBALS['SITE_DB']->query_delete('comcode_pages',array('the_page'=>$page,'the_zone'=>$zone));
-			persistent_cache_empty();
+			erase_persistent_cache();
 			decache('main_comcode_page_children');
 
 			require_code('seo2');

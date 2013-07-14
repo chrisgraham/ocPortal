@@ -447,7 +447,7 @@ class Module_admin_zones
 			}
 		}
 
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		// Redirect
 		$url=get_param('redirect');
@@ -897,9 +897,9 @@ class Module_admin_zones
 		}
 
 		decache('main_sitemap');
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		erase_persistent_cache();
 	}
 
 }

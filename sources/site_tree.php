@@ -212,9 +212,9 @@ function site_tree_script()
 		}
 
 		decache('main_sitemap');
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		erase_persistent_cache();
 
 		// Tra la la tada
 		return;
@@ -353,7 +353,7 @@ function site_tree_script()
 
 				$has_children=($privilege_perms!='');
 
-				if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $privilege_perms.='inherits_something="1" ';
+				if (count(array_diff(array_keys($overridables),array('submit_highrange_content','submit_midrange_content','submit_lowrange_content')))!=0) $privilege_perms.='inherits_something="1" ';
 				$serverid=$zone.':'.(is_string($page)?$page:strval($page));
 				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'description="'.xmlentities($description).'" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="true" '.$view_perms.$privilege_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 			} else

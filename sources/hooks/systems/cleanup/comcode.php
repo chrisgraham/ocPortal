@@ -45,7 +45,6 @@ class Hook_comcode
 	 */
 	function run()
 	{
-		require_code('view_modes');
 		erase_comcode_cache();
 
 		return new ocp_tempcode();

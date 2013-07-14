@@ -75,9 +75,9 @@ class Hook_addon_registry_syndication_blocks
 	{
 		return array(
 			'sources/hooks/systems/notifications/error_occurred_rss.php',
-			'sources/hooks/systems/config_default/is_on_rss.php',
-			'sources/hooks/systems/config_default/is_rss_advertised.php',
-			'sources/hooks/systems/config_default/rss_update_time.php',
+			'sources/hooks/systems/config/is_on_rss.php',
+			'sources/hooks/systems/config/is_rss_advertised.php',
+			'sources/hooks/systems/config/rss_update_time.php',
 			'BLOCK_MAIN_RSS.tpl',
 			'BLOCK_MAIN_RSS_CATEGORY.tpl',
 			'BLOCK_MAIN_RSS_CATEGORY_NO_IMG.tpl',

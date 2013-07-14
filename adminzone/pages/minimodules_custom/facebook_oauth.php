@@ -8,15 +8,7 @@ require_lang('facebook');
 
 $title=get_screen_title('FACEBOOK_OAUTH');
 
-$facebook_appid=get_option('facebook_appid',true);
-
-if (is_null($facebook_appid))
-{
-	require_code('facebook_connect');
-	facebook_install();
-
-	$facebook_appid='';
-}
+$facebook_appid=get_option('facebook_appid');
 
 if ($facebook_appid=='')
 {

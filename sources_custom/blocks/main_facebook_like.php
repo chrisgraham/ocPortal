@@ -43,8 +43,8 @@ class Block_main_facebook_like
 	{
 		require_code('facebook_connect');
 
-		$appid=get_option('facebook_appid',true);
-		if ((is_null($appid)) || ($appid=='')) return new ocp_tempcode();
+		$appid=get_option('facebook_appid');
+		if ($appid=='') return new ocp_tempcode();
 
 		return do_template('BLOCK_MAIN_FACEBOOK_LIKE');
 	}

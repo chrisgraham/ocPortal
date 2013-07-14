@@ -24,21 +24,10 @@ class video_syndication_youtube
 
 	function uninstall()
 	{
-		delete_config_option('youtube_client_id');
-		delete_config_option('youtube_client_secret');
-		delete_config_option('youtube_developer_key');
 	}
 
 	function __construct()
 	{
-		// Ensure config options installed
-		$service_name='youtube';
-		$client_id=get_option($service_name.'_client_id',true);
-		if (is_null($client_id))
-		{
-			require_code('oauth2');
-			install_oauth_settings_for($service_name,true);
-		}
 	}
 
 	function get_service_title()
@@ -53,20 +42,20 @@ class video_syndication_youtube
 
 	function is_active()
 	{
-		$youtube_client_id=get_option('youtube_client_id',true);
-		if ((is_null($youtube_client_id)) || ($youtube_client_id==''))
+		$youtube_client_id=get_option('youtube_client_id');
+		if ($youtube_client_id=='')
 			return false;
 
-		$youtube_client_secret=get_option('youtube_client_secret',true);
-		if ((is_null($youtube_client_secret)) || ($youtube_client_secret==''))
+		$youtube_client_secret=get_option('youtube_client_secret');
+		if ($youtube_client_secret=='')
 			return false;
 
-		$youtube_developer_key=get_option('youtube_developer_key',true);
-		if ((is_null($youtube_developer_key)) || ($youtube_developer_key==''))
+		$youtube_developer_key=get_option('youtube_developer_key');
+		if ($youtube_developer_key=='')
 			return false;
 
 		$refresh_token=get_long_value('youtube_refresh_token');
-		if ((is_null($refresh_token)) || ($refresh_token==''))
+		if ($refresh_token=='')
 			return false;
 
 		return ($youtube_client_id!='');

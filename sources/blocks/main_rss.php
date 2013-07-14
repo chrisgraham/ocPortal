@@ -41,35 +41,6 @@ class Block_main_rss
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('rss_max_entries');
-		delete_config_option('rss_side_max_entries');
-		delete_config_option('is_on_rss');
-		delete_config_option('is_rss_advertised');
-		delete_config_option('rss_update_time');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		// TODO: This is actually for the 'syndication' addon (#354 on tracker)
-		if (is_null($upgrade_from))
-		{
-			add_config_option('ENABLE_RSS','is_on_rss','tick','return \'1\';','FEATURE','_FEEDS');
-			add_config_option('UPDATE_TIME','rss_update_time','integer','return \'60\';','FEATURE','_FEEDS');
-			add_config_option('ENABLE_RSS_ADVERTISING','is_rss_advertised','tick','return \'0\';','FEATURE','_FEEDS');
-		}
-	}
-
-	/**
 	 * Standard modular cache function.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).

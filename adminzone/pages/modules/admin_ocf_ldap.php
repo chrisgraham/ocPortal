@@ -43,58 +43,6 @@ class Module_admin_ocf_ldap
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('ldap_is_enabled');
-		delete_config_option('ldap_is_windows');
-		delete_config_option('ldap_allow_joining');
-		delete_config_option('ldap_hostname');
-		delete_config_option('ldap_base_dn');
-		delete_config_option('ldap_bind_rdn');
-		delete_config_option('ldap_bind_password');
-		delete_config_option('windows_auth_is_enabled');
-		delete_config_option('ldap_login_qualifier');
-		delete_config_option('ldap_group_search_qualifier');
-		delete_config_option('ldap_member_search_qualifier');
-		delete_config_option('ldap_member_property');
-		delete_config_option('ldap_none_bind_logins');
-		delete_config_option('ldap_version');
-		delete_config_option('ldap_group_class');
-		delete_config_option('ldap_member_class');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			add_config_option('LDAP_IS_ENABLED','ldap_is_enabled','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))?'0':'0').'\';','USERS','LDAP',1);
-			add_config_option('LDAP_IS_WINDOWS','ldap_is_windows','tick','return (DIRECTORY_SEPARATOR==\'/\')?\'0\':\'1\';','USERS','LDAP',1);
-			add_config_option('LDAP_ALLOW_JOINING','ldap_allow_joining','tick','return \'0\';','USERS','LDAP',1);
-			add_config_option('LDAP_HOSTNAME','ldap_hostname','line','return \'localhost\';','USERS','LDAP',1);
-			add_config_option('LDAP_BASE_DN','ldap_base_dn','line','return \''.'dc='.str_replace('.',',dc=',ocp_srv('HTTP_HOST')).'\';','USERS','LDAP',1);
-			add_config_option('USERNAME','ldap_bind_rdn','line','return (DIRECTORY_SEPARATOR==\'/\')?\'NotManager\':\'NotAdministrator\';','USERS','LDAP',1);
-			add_config_option('PASSWORD','ldap_bind_password','line','return \'\';','USERS','LDAP',1);
-			add_config_option('WINDOWS_AUTHENTICATION','windows_auth_is_enabled','tick','return \'0\';','USERS','LDAP');
-			add_config_option('LDAP_LOGIN_QUALIFIER','ldap_login_qualifier','line','return \'\';','USERS','LDAP');
-			add_config_option('LDAP_GROUP_SEARCH_QUALIFIER','ldap_group_search_qualifier','line','return \'\';','USERS','LDAP');
-			add_config_option('LDAP_MEMBER_SEARCH_QUALIFIER','ldap_member_search_qualifier','line','return \'\';','USERS','LDAP');
-			add_config_option('LDAP_MEMBER_PROPERTY','ldap_member_property','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'sAMAccountName\':\'cn\';','USERS','LDAP');
-			add_config_option('LDAP_NONE_BIND_LOGINS','ldap_none_bind_logins','tick','return \'0\';','USERS','LDAP');
-			add_config_option('LDAP_VERSION','ldap_version','integer','return \'3\';','USERS','LDAP');
-			add_config_option('LDAP_GROUP_CLASS','ldap_group_class','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'group\':\'posixGroup\';','USERS','LDAP');
-			add_config_option('LDAP_MEMBER_CLASS','ldap_member_class','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'user\':\'posixAccount\';','USERS','LDAP');
-		}
-	}
-
-	/**
 	 * Standard modular entry-point finder function.
 	 *
 	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).

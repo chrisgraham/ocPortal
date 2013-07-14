@@ -380,7 +380,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('_DESCRIPTION_NAME'),is_null($member_id)?'username':'edit_username',$username,true));
 			} else
 			{
-				$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
+				$prohibit_username_whitespace=get_option('prohibit_username_whitespace');
 				if ($prohibit_username_whitespace=='1')
 				{
 					$fields->attach(form_input_codename(do_lang_tempcode('USERNAME'),do_lang_tempcode('DESCRIPTION_USERNAME'),is_null($member_id)?'username':'edit_username',$username,true));
@@ -1357,15 +1357,15 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	{
 		if (!is_null($username))
 		{
-			$_maximum_username_length=get_option('maximum_username_length',true);
-			if (is_null($_maximum_username_length)) $maximum_username_length=15; else $maximum_username_length=intval($_maximum_username_length);
+			$_maximum_username_length=get_option('maximum_username_length');
+			$maximum_username_length=intval($_maximum_username_length);
 			if ((ocp_mb_strlen($username)>$maximum_username_length) && ($username_changed))
 			{
 				if ($return_errors) return do_lang_tempcode('USERNAME_TOO_LONG',integer_format($maximum_username_length));
 				warn_exit(do_lang_tempcode('USERNAME_TOO_LONG',integer_format($maximum_username_length)));
 			}
-			$_minimum_username_length=get_option('minimum_username_length',true);
-			if (is_null($_minimum_username_length)) $minimum_username_length=1; else $minimum_username_length=intval($_minimum_username_length);
+			$_minimum_username_length=get_option('minimum_username_length');
+			$minimum_username_length=intval($_minimum_username_length);
 			if ((ocp_mb_strlen($username)<$minimum_username_length) && ($username_changed))
 			{
 				if ($return_errors) return do_lang_tempcode('USERNAME_TOO_SHORT',integer_format($minimum_username_length));
@@ -1385,7 +1385,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	{
 		if (get_option('signup_fullname')=='0')
 		{
-			$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
+			$prohibit_username_whitespace=get_option('prohibit_username_whitespace');
 			if (($prohibit_username_whitespace==='1') && (preg_match('#\s#',$username)!=0) && ($username_changed))
 			{
 				if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');
@@ -1395,7 +1395,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	}
 	if (!is_null($password))
 	{
-		$prohibit_password_whitespace=get_option('prohibit_password_whitespace',true);
+		$prohibit_password_whitespace=get_option('prohibit_password_whitespace');
 		if (($prohibit_password_whitespace==='1') && (preg_match('#\s#',$password)!=0) && ($username_changed))
 		{
 			if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');

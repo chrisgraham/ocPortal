@@ -74,8 +74,8 @@ class Hook_addon_registry_core_themeing
 		return array(
 			'themes_editor.css',
 			'sources/hooks/systems/snippets/exists_theme.php',
-			'sources/hooks/systems/config_default/templates_number_revisions_show.php',
-			'sources/hooks/systems/config_default/templates_store_revisions.php',
+			'sources/hooks/systems/config/templates_number_revisions_show.php',
+			'sources/hooks/systems/config/templates_store_revisions.php',
 			'adminzone/load_template.php',
 			'sources/hooks/systems/addon_registry/core_themeing.php',
 			'JAVASCRIPT_THEME_COLOURS.tpl',
@@ -109,7 +109,7 @@ class Hook_addon_registry_core_themeing
 			'themes/default/images/pagepics/themes.png',
 			'lang/EN/themes.ini',
 			'sources/lorem.php',
-			'sources/hooks/systems/config_default/enable_theme_img_buttons.php',
+			'sources/hooks/systems/config/enable_theme_img_buttons.php',
 		);
 	}
 

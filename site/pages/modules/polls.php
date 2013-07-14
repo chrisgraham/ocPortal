@@ -51,11 +51,8 @@ class Module_polls
 		$GLOBALS['SITE_DB']->drop_table_if_exists('poll_votes');
 
 		delete_privilege('choose_poll');
-		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls'));
 
-		delete_config_option('points_ADD_POLL');
-		delete_config_option('points_CHOOSE_POLL');
-		delete_config_option('poll_update_time');
+		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls'));
 
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_voting');
 	}
@@ -114,9 +111,6 @@ class Module_polls
 
 			add_privilege('POLLS','choose_poll',false);
 
-			add_config_option('ADD_POLL','points_ADD_POLL','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('CHOOSE_POLL','points_CHOOSE_POLL','integer','return addon_installed(\'points\')?\'35\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('POLL_REGULARITY','poll_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_pq',array('question'));
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po1',array('option1'));
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po2',array('option2'));

@@ -26,8 +26,8 @@ function check_joining_allowed()
 	if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
 
 	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
+	$spam_check_level=get_option('spam_check_level');
+	if (($spam_check_level=='EVERYTHING') || ($spam_check_level=='ACTIONS') || ($spam_check_level=='GUESTACTIONS') || ($spam_check_level=='JOINING'))
 	{
 		require_code('antispam');
 		check_rbls();
@@ -299,8 +299,8 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	}
 
 	// Check RBL's/stopforumspam
-	$spam_check_level=get_option('spam_check_level',true);
-	if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
+	$spam_check_level=get_option('spam_check_level');
+	if (($spam_check_level=='EVERYTHING') || ($spam_check_level=='ACTIONS') || ($spam_check_level=='GUESTACTIONS') || ($spam_check_level=='JOINING'))
 	{
 		require_code('antispam');
 		check_rbls();

@@ -32,7 +32,7 @@ function init__caches()
 	 */
 	$MEM_CACHE=NULL;
 	$use_memcache=((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache']=='1'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
-	if (($use_memcache) && ($GLOBALS['IN_MINIKERNEL_VERSION']!=1))
+	if (($use_memcache) && (!$GLOBALS['IN_MINIKERNEL_VERSION']))
 	{
 		if (class_exists('Memcache'))
 		{
@@ -136,7 +136,7 @@ function persistent_cache_delete($key)
 /**
  * Remove all data from the persistent cache.
  */
-function persistent_cache_empty()
+function erase_persistent_cache()
 {
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
@@ -165,8 +165,6 @@ function decache($cached_for,$identifier=NULL)
  */
 function find_cache_on($codename)
 {
-	if (defined('HIPHOP_PHP')) return NULL;
-
 	// See if we have it cached
 	global $BLOCK_CACHE_ON_CACHE;
 	if ($BLOCK_CACHE_ON_CACHE===NULL)

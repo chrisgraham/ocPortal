@@ -91,7 +91,7 @@ class Hook_cron_block_caching
 						$_cache_identifier=call_user_func($cache_on[0],$map);
 					} else
 					{
-						if (($cache_on!='') && (!defined('HIPHOP_PHP')))
+						if ($cache_on!='')
 						{
 							$_cache_on=eval('return '.$cache_on.';'); // NB: This uses $map, as $map is referenced inside $cache_on
 							if (is_null($_cache_on)) return NULL;
@@ -99,7 +99,7 @@ class Hook_cron_block_caching
 							{
 								$_cache_identifier[]=$on;
 							}
-						} elseif (defined('HIPHOP_PHP')) return NULL;
+						}
 					}
 					$_cache_identifier[]=$request['c_timezone'];
 					$_cache_identifier[]=$request['c_is_bot']==0;

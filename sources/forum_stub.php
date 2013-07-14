@@ -74,7 +74,7 @@ class forum_driver_base
 
 		if ((!$definitely_profile) && ($id!=$this->get_guest_id()) && (addon_installed('chat')) && (has_privilege(get_member(),'start_im')))
 		{
-			$username_click_im=get_option('username_click_im',true);
+			$username_click_im=get_option('username_click_im');
 			if ($username_click_im=='1')
 			{
 				$url=build_url(array('page'=>'chat','type'=>'misc','enter_im'=>$id),get_module_zone('chat'));
@@ -86,7 +86,7 @@ class forum_driver_base
 		$url=$this->_member_profile_url($id,$tempcode_okay);
 		if (($tempcode_okay) && (!is_object($url)))
 			$url=make_string_tempcode($url);
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal')=='1'))
 		{
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 			if (!$tempcode_okay) $url=$url->evaluate();
@@ -122,7 +122,7 @@ class forum_driver_base
 	function join_url()
 	{
 		$url=$this->_join_url();
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal')=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
 
@@ -135,7 +135,7 @@ class forum_driver_base
 	function online_members_url($tempcode_okay=false)
 	{
 		$url=$this->_online_members_url($tempcode_okay);
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal')=='1'))
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
@@ -150,7 +150,7 @@ class forum_driver_base
 	function member_pm_url($id,$tempcode_okay=false)
 	{
 		$url=$this->_member_pm_url($id,$tempcode_okay);
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal')=='1'))
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
@@ -165,7 +165,7 @@ class forum_driver_base
 	function forum_url($id,$tempcode_okay=false)
 	{
 		$url=$this->_forum_url($id,$tempcode_okay);
-		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
+		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal')=='1'))
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
@@ -310,7 +310,7 @@ class forum_driver_base
 	function get_moderator_groups()
 	{
 		global $MODERATOR_GROUP_CACHE,$IN_MINIKERNEL_VERSION;
-		if ((!is_null($MODERATOR_GROUP_CACHE)) && (($IN_MINIKERNEL_VERSION==0) || ($MODERATOR_GROUP_CACHE!=array()))) return $MODERATOR_GROUP_CACHE;
+		if ((!is_null($MODERATOR_GROUP_CACHE)) && ((!$IN_MINIKERNEL_VERSION) || ($MODERATOR_GROUP_CACHE!=array()))) return $MODERATOR_GROUP_CACHE;
 
 		$ret=$this->_get_moderator_groups();
 		$MODERATOR_GROUP_CACHE=$ret;
@@ -399,7 +399,7 @@ class forum_driver_base
 		if ($USER_THEME_CACHE!==NULL) return $USER_THEME_CACHE;
 
 		global $IN_MINIKERNEL_VERSION;
-		if (($IN_MINIKERNEL_VERSION==1) || (in_safe_mode())) return 'default';
+		if (($IN_MINIKERNEL_VERSION) || (in_safe_mode())) return 'default';
 
 		// Try hardcoded in URL
 		$USER_THEME_CACHE=filter_naughty(get_param('keep_theme',get_param('utheme','-1')));

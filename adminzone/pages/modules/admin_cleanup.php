@@ -43,34 +43,6 @@ class Module_admin_cleanup
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_config_option('is_on_block_cache');
-		delete_config_option('is_on_template_cache');
-		delete_config_option('is_on_comcode_page_cache');
-		delete_config_option('is_on_lang_cache');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			add_config_option('BLOCK_CACHE','is_on_block_cache','tick','return $GLOBALS[\'SEMI_DEV_MODE\']?\'0\':\'1\';','PERFORMANCE','CACHES',1);
-			add_config_option('TEMPLATE_CACHE','is_on_template_cache','tick','return \'1\';','PERFORMANCE','CACHES',1);
-			add_config_option('COMCODE_PAGE_CACHE','is_on_comcode_page_cache','tick','return \'1\';','PERFORMANCE','CACHES',1);
-			add_config_option('LANGUAGE_CACHE','is_on_lang_cache','tick','return \'1\';','PERFORMANCE','CACHES',1);
-		}
-	}
-
-	/**
 	 * Standard modular entry-point finder function.
 	 *
 	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
@@ -91,7 +63,6 @@ class Module_admin_cleanup
 		set_helper_panel_tutorial('tut_cleanup');
 
 		require_lang('cleanup');
-		require_code('view_modes');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');

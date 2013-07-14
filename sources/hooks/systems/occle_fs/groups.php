@@ -422,7 +422,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$photo_thumb_url=$this->_default_property_str($properties,'photo_thumb_url');
 		$views_signatures=$this->_default_property_int($properties,'views_signatures');
 		$auto_monitor_contrib_content=$this->_default_property_int_null($properties,'auto_monitor_contrib_content');
-		if (is_null($auto_monitor_contrib_content)) $auto_monitor_contrib_content=@intval(get_option('auto_notifications',true));
+		if (is_null($auto_monitor_contrib_content)) $auto_monitor_contrib_content=intval(get_option('auto_notifications'));
 		$language=$this->_default_property_str_null($properties,'language');
 		$allow_emails=$this->_default_property_int_modeavg($properties,'allow_emails','f_members',1,'m_allow_emails');
 		$allow_emails_from_staff=$this->_default_property_int_modeavg($properties,'allow_emails_from_staff','f_members',1,'m_allow_emails_from_staff');

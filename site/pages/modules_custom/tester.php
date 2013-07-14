@@ -63,9 +63,6 @@ class Module_tester
 		delete_privilege('perform_tests');
 		delete_privilege('add_tests');
 		delete_privilege('edit_own_tests');
-
-		delete_config_option('tester_forum_name');
-		delete_config_option('bug_report_text');
 	}
 
 	/**
@@ -97,9 +94,6 @@ class Module_tester
 		add_privilege('TESTER','perform_tests',false);
 		add_privilege('TESTER','add_tests',true);
 		add_privilege('TESTER','edit_own_tests',true);
-
-		add_config_option('TESTER_FORUM_NAME','tester_forum_name','forum','return do_lang(\'DEFAULT_TESTER_FORUM\');','FEATURE','TESTER');
-		add_config_option('BUG_REPORT_TEXT','bug_report_text','text','return do_lang(\'DEFAULT_BUG_REPORT_TEMPLATE\');','FEATURE','TESTER');
 	}
 
 	/**

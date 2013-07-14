@@ -51,7 +51,7 @@ class auth_test_set extends ocp_test_case
 
 	function testPrivilegeDoesFail()
 	{
-		$this->assertTrue(!has_privilege($GLOBALS['FORUM_DRIVER']->get_guest_id(),'add_highrange_content'));
+		$this->assertTrue(!has_privilege($GLOBALS['FORUM_DRIVER']->get_guest_id(),'bypass_validation_highrange_content'));
 	}
 
 	function testAdminZoneDoesFail()

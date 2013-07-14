@@ -55,10 +55,6 @@ class Module_iotds
 
 		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/iotds',true);
-
-		delete_config_option('points_ADD_IOTD');
-		delete_config_option('points_CHOOSE_IOTD');
-		delete_config_option('iotd_update_time');
 	}
 
 	/**
@@ -98,9 +94,6 @@ class Module_iotds
 
 			add_privilege('IOTDS','choose_iotd',false);
 
-			add_config_option('CHOOSE_IOTD','points_CHOOSE_IOTD','integer','return addon_installed(\'points\')?\'35\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('ADD_IOTD','points_ADD_IOTD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('IOTD_REGULARITY','iotd_update_time','integer','return \'24\';','ADMIN','CHECK_LIST');
 			$GLOBALS['SITE_DB']->create_index('iotd','ftjoin_icap',array('caption'));
 		}
 	}

@@ -50,11 +50,6 @@ class Module_tickets
 		$GLOBALS['SITE_DB']->drop_table_if_exists('ticket_types');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('tickets');
 
-		delete_config_option('ticket_text');
-		delete_config_option('ticket_forum_name');
-		delete_config_option('ticket_member_forums');
-		delete_config_option('ticket_type_forums');
-
 		delete_privilege('view_others_tickets');
 		delete_privilege('support_operator');
 
@@ -80,11 +75,6 @@ class Module_tickets
 
 		if (is_null($upgrade_from))
 		{
-			add_config_option('TICKET_FORUM_NAME','ticket_forum_name','forum','require_lang(\'tickets\'); return do_lang(\'TICKET_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','SUPPORT_TICKETS');
-			add_config_option('PAGE_TEXT','ticket_text','transtext','return do_lang(\'NEW_TICKET_WELCOME\');','FEATURE','SUPPORT_TICKETS');
-			add_config_option('TICKET_MEMBER_FORUMS','ticket_member_forums','tick','return \'0\';','FEATURE','SUPPORT_TICKETS');
-			add_config_option('TICKET_TYPE_FORUMS','ticket_type_forums','tick','return \'0\';','FEATURE','SUPPORT_TICKETS');
-
 			$GLOBALS['SITE_DB']->create_table('tickets',array(
 				'ticket_id'=>'*SHORT_TEXT',
 				'topic_id'=>'AUTO_LINK',

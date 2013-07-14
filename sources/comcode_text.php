@@ -164,7 +164,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 		$comcode_dangerous_html=true;
 	} else
 	{
-		$comcode_dangerous=($GLOBALS['MICRO_BOOTUP']==0) && (has_privilege($source_member,'comcode_dangerous'));
+		$comcode_dangerous=(!$GLOBALS['MICRO_BOOTUP']) && (has_privilege($source_member,'comcode_dangerous'));
 		$comcode_dangerous_html=false;
 		if ((has_privilege($source_member,'allow_html')) && (($is_all_semihtml) || (strpos($comcode,'[html')!==false) || (strpos($comcode,'[semihtml')!==false)))
 		{

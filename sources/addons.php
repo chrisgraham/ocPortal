@@ -658,12 +658,10 @@ function install_addon($file,$files=NULL)
 	}
 
 	// Clear some cacheing
-	require_code('view_modes');
-	require_code('zones2');
-	require_code('zones3');
+	require_code('caches3');
 	erase_comcode_page_cache();
 	erase_block_cache();
-	persistent_cache_empty();
+	erase_persistent_cache();
 	erase_cached_templates();
 	erase_cached_language();
 
@@ -714,14 +712,13 @@ function uninstall_addon($name)
 
 	require_code('zones2');
 	require_code('zones3');
+	require_code('config2');
 
 	// Clear some cacheing
-	require_code('view_modes');
-	require_code('zones2');
-	require_code('zones3');
+	require_code('caches3');
 	erase_comcode_page_cache();
 	erase_block_cache();
-	persistent_cache_empty();
+	erase_persistent_cache();
 	erase_cached_templates();
 	erase_cached_language();
 	global $HOOKS_CACHE;
@@ -747,8 +744,10 @@ function uninstall_addon($name)
 					uninstall_module($matches[1],$matches[3]);
 				if (preg_match('#sources(_custom)?/blocks/(.*)\.php#',$filename,$matches)!=0)
 					uninstall_block($matches[2]);
-				if (preg_match('#^([^/]*)/index.php#',$filename,$matches)!=0)
+				if (preg_match('#^([^/]*)/index\.php#',$filename,$matches)!=0)
 					actual_delete_zone_lite($matches[1]);
+				if (preg_match('#^sources(_custom)?/hooks/systems/config/([^/]*)\.php#',$filename,$matches)!=0)
+					delete_config_option($matches[2]);
 				if (($filename!='addon.inf') && ($filename!='addon_install_code.php') && ($filename!='') && (substr($filename,-1)!='/'))
 				{
 					$last[]=$filename;

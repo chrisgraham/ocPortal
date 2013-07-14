@@ -73,7 +73,7 @@ class Hook_addon_registry_staff_messaging
 	{
 		return array(
 			'sources/hooks/blocks/main_staff_checklist/messaging.php',
-			'sources/hooks/systems/config_default/messaging_forum_name.php',
+			'sources/hooks/systems/config/messaging_forum_name.php',
 			'sources/hooks/systems/addon_registry/staff_messaging.php',
 			'sources/hooks/systems/do_next_menus/messaging.php',
 			'themes/default/images/bigicons/messaging.png',

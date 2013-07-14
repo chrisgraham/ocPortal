@@ -53,14 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('notifications');
-	$hooks=find_all_hooks('systems','notifications');
-	$hooks=array_keys($hooks);
-	shuffle($hooks);
-	foreach ($hooks as $hook)
-	{
-		require_code('hooks/systems/notifications/'.$hook);
-		$ob=object_factory('Hook_Notification_'.$hook);
-		$ob->list_handled_codes();
-	}
 }

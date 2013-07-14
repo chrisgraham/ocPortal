@@ -616,7 +616,7 @@ function nice_get_themes($theme=NULL,$no_rely=false,$show_everything=false,$defa
  */
 function find_all_themes($full_details=false)
 {
-	if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return $full_details?array('default'=>array()):array('default'=>do_lang('DEFAULT'));
+	if ($GLOBALS['IN_MINIKERNEL_VERSION']) return $full_details?array('default'=>array()):array('default'=>do_lang('DEFAULT'));
 
 	require_code('files');
 

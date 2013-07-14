@@ -219,7 +219,7 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 	if (get_member()==6) attach_message($cmd,'inform');
 	shell_exec($cmd);
 	$db_conn=new database_driver('myocp_site_'.$codename,'localhost'/*$server*/,$user,$GLOBALS['SITE_INFO']['mysql_myocp_password'],'ocp_');
-	$db_conn->query_update('config',array('config_value'=>$email_address),array('the_name'=>'staff_address'),'',1);
+	$db_conn->query_update('config',array('c_value'=>$email_address),array('c_name'=>'staff_address'),'',1);
 	$pass=md5($password);
 	$salt='';
 	$compat='md5';

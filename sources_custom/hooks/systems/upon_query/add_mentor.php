@@ -14,7 +14,7 @@ class upon_query_add_mentor
 		if (get_mass_import_mode()) return;
 
 		if (!isset($GLOBALS['FORUM_DB'])) return;
-		if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return;
+		if ($GLOBALS['IN_MINIKERNEL_VERSION']) return;
 
 		//if (strpos($query,$GLOBALS['FORUM_DB']->get_table_prefix().'f_members')!==false && strpos($query,'BY RAND')==false) // to test without registration
 		if (strpos($query,'INTO '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members')!==false)
@@ -22,8 +22,7 @@ class upon_query_add_mentor
 			load_user_stuff();
 			if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
 
-			$mentor_usergroup=get_option('mentor_usergroup',true);
-			if (is_null($mentor_usergroup)) return;
+			$mentor_usergroup=get_option('mentor_usergroup');
 
 			require_code('ocf_topics');
 			require_code('ocf_forums');
@@ -44,7 +43,7 @@ class upon_query_add_mentor
 			}
 			if ($mentor_usergroup_id===NULL) return;
 
-			$mentor_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (g.gm_member_id=m.id AND gm_validated=1) WHERE gm_group_id='.strval($mentor_usergroup_id).' OR m_primary_group='.strval($mentor_usergroup_id).' ORDER BY RAND( ) LIMIT 1',NULL, NULL,true);
+			$mentor_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (g.gm_member_id=m.id AND gm_validated=1) WHERE gm_group_id='.strval($mentor_usergroup_id).' OR m_primary_group='.strval($mentor_usergroup_id).' ORDER BY RAND() LIMIT 1',NULL, NULL,true);
 			if ($mentor_id===NULL) return;
 			$member_id=$ret;
 			$time=time();

@@ -31,10 +31,10 @@ class Hook_stats_forum
 		if (get_forum_type()!='none')
 		{
 			$bits=new ocp_tempcode();
-			if (get_option('forum_show_stats_count_members',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'a2dbcdec813d5a5edbb416bf087b4a97','KEY'=>do_lang_tempcode('COUNT_MEMBERS'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_members()))));
+			if (get_option('forum_show_stats_count_members')=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'a2dbcdec813d5a5edbb416bf087b4a97','KEY'=>do_lang_tempcode('COUNT_MEMBERS'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_members()))));
 			if (get_forum_type()=='ocf')
 			{
-				if (get_option('forum_show_stats_count_members_new_today',true)=='1')
+				if (get_option('forum_show_stats_count_members_new_today')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'fd2e149f6921836e3c2ea1039644e2e7',
@@ -42,7 +42,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_join_time>'.strval(time()-60*60*24))),
 					)));
 				}
-				if (get_option('forum_show_stats_count_members_new_this_week',true)=='1')
+				if (get_option('forum_show_stats_count_members_new_this_week')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'10128b288dec4a578517de75cc9e404d',
@@ -50,7 +50,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_join_time>'.strval(time()-60*60*24*7))),
 					)));
 				}
-				if (get_option('forum_show_stats_count_members_new_this_month',true)=='1')
+				if (get_option('forum_show_stats_count_members_new_this_month')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'b2dbcdec813d5a5edbb416bf087b4a97',
@@ -58,7 +58,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_join_time>'.strval(time()-60*60*24*31))),
 					)));
 				}
-				if (get_option('forum_show_stats_count_members_active_today',true)=='1')
+				if (get_option('forum_show_stats_count_members_active_today')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'cc9760b2ed9e985e96b53c91c511e84e',
@@ -66,7 +66,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_last_visit_time>'.strval(time()-60*60*24))),
 					)));
 				}
-				if (get_option('forum_show_stats_count_members_active_this_week',true)=='1')
+				if (get_option('forum_show_stats_count_members_active_this_week')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'dc9760b2ed9e985e96b53c91c511e84e',
@@ -74,7 +74,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE m_last_visit_time>'.strval(time()-60*60*24*7))),
 					)));
 				}
-				if (get_option('forum_show_stats_count_members_active_this_month',true)=='1')
+				if (get_option('forum_show_stats_count_members_active_this_month')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'ec9760b2ed9e985e96b53c91c511e84e',
@@ -85,7 +85,7 @@ class Hook_stats_forum
 			}
 			if (!has_no_forum())
 			{
-				if (get_option('forum_show_stats_count_topics',true)=='1')
+				if (get_option('forum_show_stats_count_topics')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'2e0fe7ccbb15052743c94aab6a3654bc',
@@ -93,7 +93,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topics()),
 					)));
 				}
-				if (get_option('forum_show_stats_count_posts',true)=='1')
+				if (get_option('forum_show_stats_count_posts')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'de7e97b855cfbc4d60d069ca3f652b17',
@@ -101,7 +101,7 @@ class Hook_stats_forum
 						'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_num_forum_posts()),
 					)));
 				}
-				if (get_option('forum_show_stats_count_posts_today',true)=='1')
+				if (get_option('forum_show_stats_count_posts_today')=='1')
 				{
 					$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
 						'_GUID'=>'8649eee4a70ce0383c5534da43e2b58c',

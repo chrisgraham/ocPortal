@@ -91,7 +91,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	if (is_null($allow_emails_from_staff)) $allow_emails_from_staff=1;
 	if (is_null($avatar_url))
 	{
-		if (($GLOBALS['IN_MINIKERNEL_VERSION']==1) || (!addon_installed('ocf_member_avatars')))
+		if (($GLOBALS['IN_MINIKERNEL_VERSION']) || (!addon_installed('ocf_member_avatars')))
 		{
 			$avatar_url='';
 		} else

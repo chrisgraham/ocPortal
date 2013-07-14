@@ -13,7 +13,7 @@ if (!function_exists('init__forum__ocf'))
 	{
 		if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
 
-		$option=get_option('ocjester_name_changes',true);
+		$option=get_option('ocjester_name_changes');
 		if ($option=='') return $in;
 
 		$in=str_replace("return \$this->get_member_row_field(\$member,'m_username');","return ocjester_name_filter(\$this->get_member_row_field(\$member,'m_username'));",$in);
@@ -32,7 +32,7 @@ function ocjester_name_filter($in)
 {
 	require_code('ocfiltering');
 
-	$passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for',true),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
+	$passes=(count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
 	if (!$passes) return $in;
 
 	$alphabetic=@explode("\n",$option);

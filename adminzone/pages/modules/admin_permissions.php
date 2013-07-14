@@ -51,35 +51,15 @@ class Module_admin_permissions
 		$GLOBALS['SITE_DB']->drop_table_if_exists('group_page_access');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('match_key_messages');
 
-		delete_privilege('edit_own_lowrange_content');
-		delete_privilege('submit_highrange_content');
-		delete_privilege('submit_midrange_content');
-		delete_privilege('submit_lowrange_content');
-		delete_privilege('set_own_author_profile');
-		delete_privilege('rate');
-		delete_privilege('vote_in_polls');
-		delete_privilege('comment');
-		delete_privilege('have_personal_category');
-		delete_privilege('draw_to_server');
-		delete_privilege('see_unvalidated');
-		delete_privilege('jump_to_unvalidated');
-		delete_privilege('use_very_dangerous_comcode');
-		delete_privilege('open_virtual_roots');
-		delete_privilege('scheduled_publication_times');
-		delete_privilege('mass_delete_from_ip');
-		delete_privilege('exceed_filesize_limit');
-		delete_privilege('view_revision_history');
-		delete_privilege('sees_javascript_error_alerts');
-		delete_privilege('avoid_simplified_adminzone_look');
-		delete_privilege('see_software_docs');
-		delete_privilege('bypass_validation_lowrange_content');
-		delete_privilege('may_enable_staff_notifications');
-
 		$false_permissions=get_false_permissions();
 		foreach ($false_permissions as $permission)
-		{
 			delete_privilege($permission[1]);
-		}
+
+		$true_permissions=get_true_permissions();
+		foreach ($true_permissions as $permission)
+			delete_privilege($permission[1]);
+
+		delete_privilege('assume_any_member');
 	}
 
 	/**
@@ -92,10 +72,6 @@ class Module_admin_permissions
 	{
 		if (is_null($upgrade_from))
 		{
-			add_privilege('SUBMISSION','draw_to_server',false);
-			add_privilege('GENERAL_SETTINGS','see_unvalidated',false);
-			add_privilege('GENERAL_SETTINGS','jump_to_unvalidated',true);
-
 			$GLOBALS['SITE_DB']->create_table('match_key_messages',array(
 				'id'=>'*AUTO',
 				'k_message'=>'LONG_TRANS',
@@ -145,31 +121,18 @@ class Module_admin_permissions
 			}
 			$GLOBALS['SITE_DB']->create_index('group_page_access','group_id',array('group_id'));
 
-			add_privilege('SUBMISSION','edit_own_lowrange_content',true);
-			add_privilege('SUBMISSION','submit_highrange_content',true);
-			add_privilege('SUBMISSION','submit_midrange_content',true);
-			add_privilege('SUBMISSION','submit_lowrange_content',true);
-			add_privilege('SUBMISSION','bypass_validation_lowrange_content',true);
-			add_privilege('SUBMISSION','set_own_author_profile',true);
-			add_privilege('_FEEDBACK','rate',true);
-			add_privilege('_FEEDBACK','comment',true);
-			add_privilege('SUBMISSION','have_personal_category',true);
-			add_privilege('POLLS','vote_in_polls',true);
-			add_privilege('_COMCODE','use_very_dangerous_comcode',false);
-			add_privilege('GENERAL_SETTINGS','open_virtual_roots',false);
-			add_privilege('SUBMISSION','scheduled_publication_times',false);
-			add_privilege('SUBMISSION','mass_delete_from_ip',false);
-			add_privilege('SUBMISSION','exceed_filesize_limit',false);
-			add_privilege('GENERAL_SETTINGS','view_revision_history',false);
-			add_privilege('GENERAL_SETTINGS','sees_javascript_error_alerts',false);
-			add_privilege('GENERAL_SETTINGS','avoid_simplified_adminzone_look',false,true);
-			add_privilege('GENERAL_SETTINGS','see_software_docs',false);
-
+			// False privileges
 			$false_permissions=get_false_permissions();
 			foreach ($false_permissions as $permission)
-			{
 				add_privilege($permission[0],$permission[1],false);
-			}
+
+			// For admins only
+			add_privilege('STAFF_ACTIONS','assume_any_member',false,true);
+
+			// True privileges
+			$true_permissions=get_true_permissions();
+			foreach ($true_permissions as $permission)
+				add_privilege($permission[0],$permission[1],true);
 		}
 	}
 
@@ -667,9 +630,9 @@ class Module_admin_permissions
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		decache('main_sitemap');
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		erase_persistent_cache();
 
 		log_it('PAGE_ACCESS');
 
@@ -990,9 +953,9 @@ class Module_admin_permissions
 		breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
 
 		decache('main_sitemap');
-		require_code('view_modes');
+		require_code('caches3');
 		erase_block_cache();
-		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+		erase_persistent_cache();
 
 		log_it('PRIVILEGES');
 

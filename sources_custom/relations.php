@@ -390,7 +390,7 @@ function get_relation_map()
 		'video_transcoding.t_local_id'=>'videos.id',
 		'f_welcome_emails.w_newsletter'=>'newsletters.id',
 		'f_welcome_emails.w_usergroup'=>'f_groups.id',
-		'f_usergroup_join_log.usergroup_id'=>'f_groups.id',
+		'f_group_join_log.usergroup_id'=>'f_groups.id',
 	);
 
 	return $relation_map;

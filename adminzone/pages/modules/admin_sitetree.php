@@ -491,7 +491,7 @@ class Module_admin_sitetree
 			}
 		}
 
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		decache('main_sitemap');
 
@@ -672,7 +672,7 @@ class Module_admin_sitetree
 		}
 		if (is_null($moved_something)) warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
 
-		persistent_cache_empty();
+		erase_persistent_cache();
 
 		require_lang('addons');
 		if ($cannot_move->is_empty()) $message=do_lang_tempcode('SUCCESS'); else $message=do_lang_tempcode('WOULD_NOT_OVERWRITE_BUT_SUCCESS',$cannot_move);

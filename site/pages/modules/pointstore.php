@@ -52,32 +52,6 @@ class Module_pointstore
 		$GLOBALS['SITE_DB']->drop_table_if_exists('pstore_customs');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('pstore_permissions');
 
-		delete_config_option('is_on_banner_buy');
-		delete_config_option('initial_banner_hits');
-		delete_config_option('is_on_pop3_buy');
-		delete_config_option('initial_quota');
-		delete_config_option('max_quota');
-		delete_config_option('mail_server');
-		delete_config_option('pop_url');
-		delete_config_option('quota_url');
-		delete_config_option('is_on_forw_buy');
-		delete_config_option('forw_url');
-		delete_config_option('highlight_name');
-		delete_config_option('topic_pin');
-		delete_config_option('maximum_gamble_multiplier');
-		delete_config_option('average_gamble_multiplier');
-		delete_config_option('banner_setup');
-		delete_config_option('banner_imp');
-		delete_config_option('banner_hit');
-		delete_config_option('quota');
-		delete_config_option('community_message');
-		delete_config_option('is_on_community_billboard_buy');
-		delete_config_option('is_on_highlight_name_buy');
-		delete_config_option('is_on_topic_pin_buy');
-		delete_config_option('is_on_gambling_buy');
-		delete_config_option('minimum_gamble_amount');
-		delete_config_option('maximum_gamble_amount');
-
 		delete_menu_item_simple('_SEARCH:pointstore:type=misc');
 	}
 
@@ -108,42 +82,6 @@ class Module_pointstore
 			require_lang('pointstore');
 			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'menu_items/community_navigation/pointstore');
 
-			// Pointstore Options
-			//  Banners
-				add_config_option('ENABLE_PURCHASE','is_on_banner_buy','tick','return (!addon_installed(\'banners\'))?NULL:\'1\';','POINTSTORE','BANNERS');
-				add_config_option('HITS_ALLOCATED','initial_banner_hits','integer','return (!addon_installed(\'banners\'))?NULL:\'100\';','POINTSTORE','BANNERS');
-			//  POP3
-				add_config_option('ENABLE_PURCHASE','is_on_pop3_buy','tick','return \'0\';','POINTSTORE','POP3',1);
-				add_config_option('QUOTA','initial_quota','integer','return \'200\';','POINTSTORE','POP3',1);
-				add_config_option('MAX_QUOTA','max_quota','integer','return \'10000\';','POINTSTORE','POP3',1);
-				add_config_option('MAIL_SERVER','mail_server','line','return \'mail.\'.get_domain();','POINTSTORE','POP3',1);
-				add_config_option('POP3_MAINTAIN_URL','pop_url','line','return \'http://\'.get_domain().\':2082/frontend/x/mail/addpop2.html\';','POINTSTORE','POP3',1);
-				add_config_option('QUOTA_MAINTAIN_URL','quota_url','line','return \'http://\'.get_domain().\':2082/frontend/x/mail/pops.html\';','POINTSTORE','POP3',1);
-			//  Forwarding
-				add_config_option('ENABLE_PURCHASE','is_on_forw_buy','tick','return \'0\';','POINTSTORE','FORWARDING',1);
-				add_config_option('FORW_MAINTAIN_URL','forw_url','line','return \'http://\'.get_domain().\':2082/frontend/x/mail/addfwd.html\';','POINTSTORE','FORWARDING',1);
-			//  Community billboard
-				add_config_option('ENABLE_PURCHASE','is_on_community_billboard_buy','tick','return (!addon_installed(\'community_billboard\'))?NULL:\'1\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
-			//  Highlighted names
-				add_config_option('ENABLE_PURCHASE','is_on_highlight_name_buy','tick','return (get_forum_type()!=\'ocf\')?NULL:\'1\';','POINTSTORE','NAME_HIGHLIGHTING');
-				add_config_option('COST_highlight_name','highlight_name','integer','return (get_forum_type()!=\'ocf\')?NULL:\'2000\';','POINTSTORE','NAME_HIGHLIGHTING');
-			//  Topic pinning
-				add_config_option('ENABLE_PURCHASE','is_on_topic_pin_buy','tick','return (!addon_installed(\'ocf_forum\'))?NULL:\'1\';','POINTSTORE','TOPIC_PINNING');
-				add_config_option('COST_topic_pin','topic_pin','integer','return (!addon_installed(\'ocf_forum\'))?NULL:\'180\';','POINTSTORE','TOPIC_PINNING');
-			//  Gambling
-				add_config_option('ENABLE_PURCHASE','is_on_gambling_buy','tick','return \'1\';','POINTSTORE','GAMBLING');
-				add_config_option('MINIMUM_GAMBLE_AMOUNT','minimum_gamble_amount','integer','return \'6\';','POINTSTORE','GAMBLING');
-				add_config_option('MAXIMUM_GAMBLE_AMOUNT','maximum_gamble_amount','integer','return \'200\';','POINTSTORE','GAMBLING');
-				add_config_option('MAXIMUM_GAMBLE_MULTIPLIER','maximum_gamble_multiplier','integer','return \'200\';','POINTSTORE','GAMBLING');
-				add_config_option('AVERAGE_GAMBLE_MULTIPLIER','average_gamble_multiplier','integer','return \'85\';','POINTSTORE','GAMBLING');
-			//  Banners
-				add_config_option('COST_banner_setup','banner_setup','integer','return (!addon_installed(\'banners\'))?NULL:\'750\';','POINTSTORE','BANNERS');
-				add_config_option('COST_banner_imp','banner_imp','integer','return (!addon_installed(\'banners\'))?NULL:\'700\';','POINTSTORE','BANNERS');
-				add_config_option('COST_banner_hit','banner_hit','integer','return (!addon_installed(\'banners\'))?NULL:\'20\';','POINTSTORE','BANNERS');
-			//  POP3
-				add_config_option('COST_quota','quota','integer','return \'2\';','POINTSTORE','POP3');
-			//  Community billboard
-				add_config_option('COST_COMMUNITY_MESSAGE','community_message','integer','return (!addon_installed(\'community_billboard\'))?NULL:\'700\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
 			// Custom
 				$GLOBALS['SITE_DB']->create_table('pstore_customs',array(
 					'id'=>'*AUTO',
@@ -185,8 +123,7 @@ class Module_pointstore
 
 		if (($upgrade_from<6) && (!is_null($upgrade_from)))
 		{
-			rename_config_option('text','community_message');
-			$GLOBALS['SITE_DB']->query_update('config',array('human_name'=>'COST_COMMUNITY_MESSAGE'),array('the_name'=>'community_message'),'',1);
+			rename_config_option('text','community_billboard');
 			rename_config_option('is_on_flagrant_buy','is_on_community_billboard_buy');
 		}
 	}

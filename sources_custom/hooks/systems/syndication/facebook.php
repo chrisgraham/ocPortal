@@ -9,8 +9,7 @@ class Hook_Syndication_facebook
 
 	function is_available()
 	{
-		$appapikey=get_option('facebook_appid',true);
-		if (is_null($appapikey)) return false;
+		$appapikey=get_option('facebook_appid');
 		$appsecret=get_option('facebook_secret_code');
 		if (($appapikey=='') || ($appsecret=='')) return false;
 
@@ -19,9 +18,6 @@ class Hook_Syndication_facebook
 
 	function syndication_javascript()
 	{
-		require_code('facebook_connect');
-		facebook_install();
-
 		if (get_option('facebook_member_syndicate_to_page')=='0') return '';
 
 		require_lang('facebook');

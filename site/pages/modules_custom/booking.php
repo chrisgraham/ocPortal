@@ -54,9 +54,6 @@ class Module_booking
 		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_supplement');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_supplement_for');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('booking_supplement');
-
-		delete_config_option('bookings_show_warnings_for_months');
-		delete_config_option('bookings_max_ahead_months');
 	}
 
 	/**
@@ -153,9 +150,6 @@ class Module_booking
 			'quantity'=>'INTEGER',
 			'notes'=>'LONG_TEXT',
 		));
-
-		add_config_option('BOOKINGS_SHOW_WARNINGS_FOR_MONTHS','bookings_show_warnings_for_months','integer','return \'6\';','FEATURE','BOOKINGS');
-		add_config_option('BOOKINGS_MAX_AHEAD_MONTHS','bookings_max_ahead_months','integer','return \'36\';','FEATURE','BOOKINGS');
 	}
 
 	/**

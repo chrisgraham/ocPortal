@@ -72,8 +72,8 @@ class Hook_addon_registry_users_online_block
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/usersonline_show_birthdays.php',
-			'sources/hooks/systems/config_default/usersonline_show_newest_member.php',
+			'sources/hooks/systems/config/usersonline_show_birthdays.php',
+			'sources/hooks/systems/config/usersonline_show_newest_member.php',
 			'sources/hooks/systems/addon_registry/users_online_block.php',
 			'BLOCK_SIDE_USERS_ONLINE.tpl',
 			'BLOCK_SIDE_USERS_ONLINE_USER.tpl',

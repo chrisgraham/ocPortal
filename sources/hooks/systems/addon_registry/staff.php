@@ -72,9 +72,9 @@ class Hook_addon_registry_staff
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/is_on_staff_filter.php',
-			'sources/hooks/systems/config_default/is_on_sync_staff.php',
-			'sources/hooks/systems/config_default/staff_text.php',
+			'sources/hooks/systems/config/is_on_staff_filter.php',
+			'sources/hooks/systems/config/is_on_sync_staff.php',
+			'sources/hooks/systems/config/staff_text.php',
 			'sources/hooks/systems/addon_registry/staff.php',
 			'sources/hooks/systems/do_next_menus/staff.php',
 			'STAFF_SCREEN.tpl',

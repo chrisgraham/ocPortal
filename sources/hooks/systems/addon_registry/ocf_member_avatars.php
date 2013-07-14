@@ -79,7 +79,7 @@ class Hook_addon_registry_ocf_member_avatars
 			'uploads/ocf_avatars/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/avatar.php',
 			'themes/default/images/ocf_default_avatars/index.html',
-			'sources/hooks/systems/config_default/random_avatars.php',
+			'sources/hooks/systems/config/random_avatars.php',
 		);
 	}
 

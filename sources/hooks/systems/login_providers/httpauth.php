@@ -32,7 +32,7 @@ class Hook_login_provider_httpauth
 		// NB: We do even if we already have a session, as parts of the site may be HTTP-auth, and others not - so we need to let it work as an override
 		if (get_forum_type()=='ocf')
 		{
-			if (get_option('windows_auth_is_enabled',true)=='1')
+			if (get_option('windows_auth_is_enabled')=='1')
 			{
 				// For Windows auth, we force this always. For httpauth on non-Windows we let the .htaccess file force this, if the webmaster wants it
 				require_code('users_inactive_occasionals');
@@ -58,7 +58,7 @@ class Hook_login_provider_httpauth
 			//  - Don't assign any special permissions to these kinds of members
 			//  - or, lock off all zones with .htaccess other than root (and root has httpauth login denied)
 
-			if ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (($member===NULL) || (is_guest($member))) && ((get_option('httpauth_is_enabled',true)=='1') || (get_option('windows_auth_is_enabled',true)=='1')))
+			if ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (($member===NULL) || (is_guest($member))) && ((get_option('httpauth_is_enabled')=='1') || (get_option('windows_auth_is_enabled')=='1')))
 			{
 				require_code('users_inactive_occasionals');
 				$member=try_httpauth_login();		

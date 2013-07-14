@@ -495,8 +495,8 @@ function set_page_permissions_from_environment($zone,$page)
 	}
 
 	decache('main_sitemap');
-	require_code('view_modes');
+	require_code('caches3');
 	erase_block_cache();
-	if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+	erase_persistent_cache();
 }
 

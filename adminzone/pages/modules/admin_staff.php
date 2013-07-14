@@ -47,9 +47,6 @@ class Module_admin_staff
 	 */
 	function uninstall()
 	{
-		delete_config_option('staff_text');
-		delete_config_option('is_on_staff_filter');
-		delete_config_option('is_on_sync_staff');
 	}
 
 	/**
@@ -60,23 +57,6 @@ class Module_admin_staff
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ($upgrade_from==2)
-		{
-			$GLOBALS['SITE_DB']->query_update('config',array('eval'=>'return do_lang(\'POST_STAFF\');'),array('the_name'=>'staff_text'),'',1);
-			if ($GLOBALS['CONFIG_OPTIONS_CACHE']['staff_text']['c_set']==1)
-			{
-				set_option('staff_text','[html]'.get_option('staff_text').'[/html]');
-			} else
-			{
-				set_option('staff_text',do_lang('POST_STAFF'));
-			}
-			return;
-		}
-
-		add_config_option('PAGE_TEXT','staff_text','transtext','return do_lang(\'POST_STAFF\');','SECURITY','STAFF');
-		add_config_option('MEMBER_FILTER','is_on_staff_filter','tick','return \'0\';','SECURITY','STAFF',1);
-		add_config_option('SYNCHRONISATION','is_on_sync_staff','tick','return \'0\';','SECURITY','STAFF',1);
-
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		foreach (array_keys($usergroups) as $id)
 		{

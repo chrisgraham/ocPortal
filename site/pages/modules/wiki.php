@@ -52,11 +52,6 @@ class Module_wiki
 		$GLOBALS['SITE_DB']->drop_table_if_exists('wiki_changes');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('wiki_posts');
 
-		delete_config_option('is_on_wiki');
-		delete_config_option('points_wiki');
-		delete_config_option('wiki_show_stats_count_pages');
-		delete_config_option('wiki_show_stats_count_posts');
-
 		delete_value('num_wiki_pages');
 		delete_value('num_wiki_posts');
 		delete_value('num_wiki_files');
@@ -90,11 +85,6 @@ class Module_wiki
 
 		if (is_null($upgrade_from))
 		{
-			add_config_option('WIKI_MAKE_POST','points_wiki','integer','return addon_installed(\'points\')?\'10\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-
-			add_config_option('WIKI_PAGES','wiki_show_stats_count_pages','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('WIKI_POSTS','wiki_show_stats_count_posts','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-
 			$GLOBALS['SITE_DB']->create_table('wiki_changes',array(
 				'id'=>'*AUTO',
 				'the_action'=>'ID_TEXT',

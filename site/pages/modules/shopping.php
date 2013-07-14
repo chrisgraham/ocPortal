@@ -55,9 +55,6 @@ class Module_shopping
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'shopping'));
 
-		delete_config_option('shipping_cost_factor');
-		delete_config_option('allow_opting_out_of_tax');
-
 		delete_menu_item_simple('_SEARCH:catalogues:type=category:catalogue_name=products');
 
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('firstname');
@@ -163,9 +160,6 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_index('shopping_order','recent_shopped',array('add_date'));
 
 			$GLOBALS['SITE_DB']->create_index('shopping_logging','calculate_bandwidth',array('date_and_time'));
-
-			add_config_option('SHIPPING_COST_FACTOR','shipping_cost_factor','float','return \'0\';','ECOMMERCE','SHOPPING',1);
-			add_config_option('ALLOW_OPTING_OUT_OF_TAX','allow_opting_out_of_tax','tick','return \'1\';','ECOMMERCE','SHOPPING');
 
 			add_menu_item_simple('ecommerce_features',NULL,'ORDERS','_SEARCH:shopping:type=my_orders');
 

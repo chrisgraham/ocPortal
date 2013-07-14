@@ -6280,6 +6280,13 @@ function debug_backtrace()
 }
 
 /**
+ * Generates a backtrace to the output.
+ */
+function debug_print_backtrace()
+{
+}
+
+/**
  * Sets the default timezone used by all date/time functions in a script.
  *
  * @param  string 	 	Timezone identifier.

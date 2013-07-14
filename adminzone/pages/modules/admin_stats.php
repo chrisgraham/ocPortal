@@ -51,10 +51,6 @@ class Module_admin_stats
 		$GLOBALS['SITE_DB']->drop_table_if_exists('stats');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('usersonline_track');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('ip_country');
-
-		delete_config_option('super_logging');
-		delete_config_option('stats_store_time');
-		delete_config_option('bot_stats');
 	}
 
 	/**
@@ -99,10 +95,6 @@ class Module_admin_stats
 			));
 
 			$GLOBALS['SITE_DB']->create_index('usersonline_track','peak_track',array('peak'));
-
-			add_config_option('SUPER_LOGGING','super_logging','tick','return \'1\';','SITE','LOGGING',1);
-			add_config_option('STORE_TIME','stats_store_time','integer','return \'124\';','SITE','LOGGING',1);
-			add_config_option('BOT_STATS','bot_stats','tick','return \'1\';','SITE','LOGGING');
 
 			$GLOBALS['SITE_DB']->create_table('ip_country',array(
 				'id'=>'*AUTO',

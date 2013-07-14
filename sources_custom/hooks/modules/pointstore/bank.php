@@ -10,7 +10,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @package		oc_bank
  */
 
 class Hook_pointstore_bank
@@ -47,34 +47,11 @@ class Hook_pointstore_bank
 		require_code('database_action');
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		$fresh_install=false;
-		if (!$GLOBALS['SITE_DB']->table_exists('bank'))
-		{
-			$fresh_install=true;
-			$GLOBALS['SITE_DB']->create_table('bank',array(
-				'id'=>'*AUTO',
-				'member_id'=>'INTEGER',
-				'amount'=>'INTEGER',
-				'dividend'=>'INTEGER',
-				'add_time'=>'?TIME',
-		   ));
-		}
-
-		$_bank_dividend=get_option('bank_dividend',true);
-		if (is_null($_bank_dividend))
-		{
-			// Add option and default value
-			add_config_option('BANK_DIVIDEND','bank_dividend','integer','return \'4\';','POINTSTORE','BANKING');
-			/*delete_config_option('bank_dividend');*/
-			if (!$fresh_install) $GLOBALS['SITE_DB']->alter_table_field('bank','user_id','MEMBER','member_id');
-			// IDEA: Make 30 days a config option too, or even have multiple products?
-			// IDEA: Send email saying bank returned money?
-			// IDEA: Have the bank do marketing to people? http://ocportal.com/forum/topicview/misc/addons/ocbank_4.htm?redirected=1#post_87711
-			$bank_dividend=4;
-		} else
-		{
-			$bank_dividend=intval($_bank_dividend);
-		}
+		$_bank_dividend=get_option('bank_dividend');
+		// IDEA: Make 30 days a config option too, or even have multiple products?
+		// IDEA: Send email saying bank returned money?
+		// IDEA: Have the bank do marketing to people? http://ocportal.com/forum/topicview/misc/addons/ocbank_4.htm?redirected=1#post_87711
+		$bank_dividend=intval($_bank_dividend);
 
 		$title=get_screen_title('BANKING');
 

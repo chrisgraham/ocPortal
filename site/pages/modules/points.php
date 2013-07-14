@@ -50,24 +50,6 @@ class Module_points
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chargelog');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('gifts');
 
-		delete_config_option('points_joining');
-		delete_config_option('points_posting');
-		delete_config_option('points_rating');
-		delete_config_option('points_voting');
-		delete_config_option('points_per_day');
-		delete_config_option('points_per_daily_visit');
-		delete_config_option('points_if_liked');
-		delete_config_option('points_show_personal_stats_points_left');
-		delete_config_option('points_show_personal_stats_points_used');
-		delete_config_option('points_show_personal_stats_gift_points_left');
-		delete_config_option('points_show_personal_stats_gift_points_used');
-		delete_config_option('points_show_personal_stats_total_points');
-		delete_config_option('points_show_personal_profile_link');
-		delete_config_option('points_per_currency_unit');
-		delete_config_option('gift_reward_chance');
-		delete_config_option('gift_reward_amount');
-		delete_config_option('point_logs_per_page');
-
 		delete_privilege('give_points_self');
 		delete_privilege('have_negative_gift_points');
 		delete_privilege('give_negative_points');
@@ -116,18 +98,6 @@ class Module_points
 			$GLOBALS['SITE_DB']->create_index('gifts','giftsgiven',array('gift_from'));
 			$GLOBALS['SITE_DB']->create_index('gifts','giftsreceived',array('gift_to'));
 
-			add_config_option('JOINING','points_joining','integer','return \'40\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('MAKE_POST','points_posting','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('RATING','points_rating','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('VOTING','points_voting','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('COUNT_POINTS_LEFT','points_show_personal_stats_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_POINTS_USED','points_show_personal_stats_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_GIFT_POINTS_LEFT','points_show_personal_stats_gift_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_GIFT_POINTS_USED','points_show_personal_stats_gift_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_POINTS_EVER','points_show_personal_stats_total_points','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('POINTS_PER_DAY','points_per_day','integer','return \'0\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('POINTS_PER_DAILY_VISIT','points_per_daily_visit','integer','return \'0\';','POINTS','COUNT_POINTS_GIVEN');
-
 			add_privilege('POINTS','trace_anonymous_gifts',false);
 			add_privilege('POINTS','give_points_self',false);
 			add_privilege('POINTS','have_negative_gift_points',false);
@@ -138,19 +108,6 @@ class Module_points
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('gift_points_used',20,1,0,0,0,'','integer');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_given',20,1,0,0,0,'','integer');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_rating',20,1,0,0,0,'','integer');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<7))
-		{
-			add_config_option('POINTS_IF_LIKED','points_if_liked','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('POINTS_PER_CURRENCY_UNIT','points_per_currency_unit','integer','return addon_installed(\'ecommerce\')?\'100.0\':NULL;','POINTS','ECOMMERCE');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<8))
-		{
-			add_config_option('GIFT_REWARD_CHANCE','gift_reward_chance','integer','return \'25\';','POINTS','GIFT_TRANSACTIONS');
-			add_config_option('GIFT_REWARD_AMOUNT','gift_reward_amount','integer','return \'25\';','POINTS','GIFT_TRANSACTIONS');
-			add_config_option('POINT_LOGS_PER_PAGE','point_logs_per_page','integer','return \'10\';','POINTS','GENERAL');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

@@ -208,14 +208,14 @@ $profile.=<<<END
 	{
 
 END;
-		$config_options=$GLOBALS['SITE_DB']->query_select('config',array('the_name','eval'));
+		$config_options=$GLOBALS['SITE_DB']->query_select('config',array('*'));
+		require_code('config2');
 		foreach ($config_options as $option)
 		{
-			$name=$option['the_name'];
+			$name=$option['c_name'];
 			if (in_array($name,array('site_name','description','site_scope','copyright','staff_address','keywords','google_analytics','fixed_width','site_closed','closed','stats_store_time','show_content_tagging','show_content_tagging_inline','show_screen_actions','collapse_user_zones'))) continue; // These are set separately
 			$value=get_option($name);
-			$default=eval($option['eval'].';');
-			if ($value==$default) continue;
+			if ($value==get_default_option($name)) continue;
 			$_name=php_addslashes($name);
 			$_value=php_addslashes($value);
 			$profile.="\t\tif (get_option(\"{$_name}\",true)!==NULL) set_option(\"{$_name}\",\"{$_value}\");\n";

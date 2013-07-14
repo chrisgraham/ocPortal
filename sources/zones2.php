@@ -827,7 +827,7 @@ function _find_all_pages($zone,$type,$ext='php',$keep_ext_on=false,$cutoff_time=
 		closedir($dh);
 	}
 
-	if (($zone=='') && (get_option('collapse_user_zones',true)==='1'))
+	if (($zone=='') && (get_option('collapse_user_zones')=='1'))
 		$out+=_find_all_pages('site',$type,$ext,$keep_ext_on);
 
 	ksort($out);

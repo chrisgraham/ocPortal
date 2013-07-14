@@ -60,10 +60,14 @@ function points_profile($member_id_of,$member_id_viewing)
 	$points_rating=intval(get_option('points_rating'));
 	$points_voting=intval(get_option('points_voting'));
 	$points_joining=intval(get_option('points_joining'));
-	$points_wiki_posting=intval(get_option('points_wiki',true));
-	$points_chat_posting=intval(get_option('points_chat',true));
-	$points_per_day=intval(get_option('points_per_day',true));
-	$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
+	$_points_wiki_posting=get_option('points_wiki',true);
+	if (is_null($_points_wiki_posting)) $_points_wiki_posting=0;
+	$points_wiki_posting=intval($_points_wiki_posting);
+	$_points_chat=get_option('points_chat',true);
+	if (is_null($_points_chat)) $_points_chat=0;
+	$points_chat_posting=intval($_points_chat);
+	$points_per_day=intval(get_option('points_per_day'));
+	$points_per_daily_visit=intval(get_option('points_per_daily_visit'));
 	$points_credits=50;
 
 	$days_joined=intval(floor(floatval(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member_id_of))/(60.0*60.0*24.0)));
