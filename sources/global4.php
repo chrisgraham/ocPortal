@@ -162,7 +162,7 @@ function member_personal_links_and_details($member_id)
 	}
 
 	// Links to usergroups
-	if (get_option('ocp_show_personal_usergroup')=='1')
+	if (get_option('show_personal_usergroup')=='1')
 	{
 		$group_id=$GLOBALS['FORUM_DRIVER']->mrow_group($GLOBALS['FORUM_DRIVER']->get_member_row($member_id));
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
@@ -181,7 +181,7 @@ function member_personal_links_and_details($member_id)
 	}
 
 	// Last visit time
-	if (get_option('ocp_show_personal_last_visit')=='1')
+	if (get_option('show_personal_last_visit')=='1')
 	{
 		$row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
 		$last_visit=$GLOBALS['FORUM_DRIVER']->mrow_lastvisit($row);
@@ -216,7 +216,7 @@ function member_personal_links_and_details($member_id)
 	}
 
 	// Subscription links
-	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')) && (get_option('ocp_show_personal_sub_links')=='1') && (!has_zone_access($member_id,'adminzone')) && (has_actual_page_access($member_id,'purchase')))
+	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')) && (get_option('show_personal_sub_links')=='1') && (!has_zone_access($member_id,'adminzone')) && (has_actual_page_access($member_id,'purchase')))
 	{
 		require_lang('ecommerce');
 
@@ -244,14 +244,14 @@ function member_personal_links_and_details($member_id)
 	}
 
 	// Admin Zone link
-	if ((get_option('ocp_show_personal_adminzone_link')=='1') && (has_zone_access($member_id,'adminzone')))
+	if ((get_option('show_personal_adminzone_link')=='1') && (has_zone_access($member_id,'adminzone')))
 	{
 		$url=build_url(array('page'=>''),'adminzone');
 		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'ae243058f780f9528016f7854763a5fa','ACCESSKEY'=>'I','NAME'=>do_lang_tempcode('ADMIN_ZONE'),'URL'=>$url)));
 	}
 
 	// Conceded mode link
-	if (($GLOBALS['SESSION_CONFIRMED_CACHE']==1) && (get_option('ocp_show_conceded_mode_link')=='1'))
+	if (($GLOBALS['SESSION_CONFIRMED_CACHE']==1) && (get_option('show_conceded_mode_link')=='1'))
 	{
 		$url=build_url(array('page'=>'login','type'=>'concede','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
 		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'81fa81cfd3130e42996bf72b0e03d8aa','POST'=>true,'NAME'=>do_lang_tempcode('CONCEDED_MODE'),'DESCRIPTION'=>do_lang_tempcode('DESCRIPTION_CONCEDED_MODE'),'URL'=>$url)));

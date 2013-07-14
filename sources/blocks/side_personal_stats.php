@@ -56,7 +56,7 @@ class Block_side_personal_stats
 			$avatar_url='';
 			if (!has_no_forum())
 			{
-				if (get_option('ocp_show_avatar')==='1')
+				if (get_option('show_avatar')==='1')
 				{
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 				}
