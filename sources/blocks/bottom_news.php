@@ -35,7 +35,7 @@ class Block_bottom_news
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','filter','filter_and','zone','blogs');
+		$info['parameters']=array('param','filter','filter_and','zone','blogs','as_guest');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_bottom_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):5,array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):5,array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:15;
 		return $info;
 	}
@@ -99,7 +99,9 @@ class Block_bottom_news
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','p');
+			$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
+			$viewing_member_id=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','p',$viewing_member_id);
 			$join.=$privacy_join;
 			$q_filter.=$privacy_where;
 		}

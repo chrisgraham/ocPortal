@@ -35,7 +35,7 @@ class Block_side_calendar
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','zone','days','title','filter','private');
+		$info['parameters']=array('param','zone','days','title','filter','private','as_guest');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_side_calendar
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(((array_key_exists(\'private\',$map)) && ($map[\'private\']!=\'\'))?intval($map[\'private\']):mixed(),array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',utctime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',utctime_to_usertime()))';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(((array_key_exists(\'private\',$map)) && ($map[\'private\']!=\'\'))?intval($map[\'private\']):mixed(),array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',utctime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',utctime_to_usertime()))';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
 		return $info;
 	}
@@ -81,8 +81,8 @@ class Block_side_calendar
 
 		$calendar_url=build_url($filter+array('page'=>'calendar','type'=>'misc','view'=>'month','id'=>strval($year).'-'.strval($month)),$zone);
 
-		$no_cacheing=(array_key_exists('cache',$map)) && ($map['cache']=='0');
-		$member=$no_cacheing?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
+		$member=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():get_member();
 
 		$type=array_key_exists('param',$map)?$map['param']:'year';
 
@@ -91,7 +91,7 @@ class Block_side_calendar
 			$period_start=mktime(0,0,0,$month,1,$year);
 			$period_end=mktime(23,59,0,$month+1,0,$year);
 
-			$happenings=calendar_matches($member,$member,$no_cacheing?(!has_privilege(get_member(),'assume_any_member')):true,$period_start,$period_end,$filter,true,$private);
+			$happenings=calendar_matches($member,$member,!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,$filter,true,$private);
 
 			$entries=array();
 			$priorities=array();
@@ -220,7 +220,7 @@ class Block_side_calendar
 		$num_days=array_key_exists('days',$map)?intval($map['days']):30;
 		$period_end=$period_start+60*60*24*$num_days;
 
-		$happenings=calendar_matches($member,$member,$no_cacheing?(!has_privilege(get_member(),'assume_any_member')):true,$period_start-100*60*60*24,$period_end,$filter,true,$private);
+		$happenings=calendar_matches($member,$member,!has_privilege(get_member(),'assume_any_member'),$period_start-100*60*60*24,$period_end,$filter,true,$private);
 
 		$days=array();
 		for ($hap_i=0;$hap_i<count($happenings);$hap_i++)

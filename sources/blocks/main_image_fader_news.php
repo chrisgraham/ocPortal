@@ -35,7 +35,7 @@ class Block_main_image_fader_news
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('title','max','time','param','zone','blogs');
+		$info['parameters']=array('title','max','time','param','zone','blogs','as_guest');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_image_fader_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -95,7 +95,9 @@ class Block_main_image_fader_news
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','r');
+			$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
+			$viewing_member_id=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
+			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','r',$viewing_member_id);
 			$join.=$privacy_join;
 			$q_filter.=$privacy_where;
 		}

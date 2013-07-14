@@ -281,9 +281,10 @@ function count_catalogue_category_children($category_id)
  * @param  string				ocSelect to apply (blank: none).
  * @param  ?ID_TEXT			Orderer (NULL: read from environment)
  * @param  ID_TEXT			Environment param used for ordering
+ * @param  ?MEMBER			Viewing member ID (NULL: current user)
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
-function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$filter,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='order')
+function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$filter,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='order',$viewing_member_id=NULL)
 {
 	if ($_ocselect!='')
 	{
@@ -358,7 +359,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	if ($filter==='1=1') $filter=NULL;
 	if ($entries===NULL)
 	{
-		list($in_db_sorting,$num_entries,$entries)=get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,$do_sorting,$ocselect,$order_by,$direction);
+		list($in_db_sorting,$num_entries,$entries)=get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,$do_sorting,$ocselect,$order_by,'',$direction);
 	} else // Oh, we already have $entries
 	{
 		$num_entries=count($entries);
@@ -594,9 +595,10 @@ function _catalogues_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
  * @param  ID_TEXT			Orderer
  * @param  ID_TEXT			Order direction
  * @param  string				Additional WHERE SQL to add on to query
+ * @param  ?MEMBER			Viewing member ID (NULL: current user)
  * @return array				A tuple: whether sorting was done, number of entries returned, list of entries
  */
-function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,$do_sorting,$ocselect,$order_by,$direction,$extra_where='')
+function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,$do_sorting,$ocselect,$order_by,$direction,$extra_where='',$viewing_member_id=NULL)
 {
 	$where_clause='1=1'.$extra_where;
 	if ($category_id!==NULL)
@@ -625,7 +627,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 	if (addon_installed('content_privacy'))
 	{
 		require_code('content_privacy');
-		list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r');
+		list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','r',$viewing_member_id);
 	}
 	$extra_join[]=$privacy_join;
 	$where_clause.=$privacy_where;

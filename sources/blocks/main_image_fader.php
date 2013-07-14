@@ -35,7 +35,7 @@ class Block_main_image_fader
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','time','zone','order');
+		$info['parameters']=array('param','time','zone','order','as_guest');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_image_fader
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60;
 		return $info;
 	}
@@ -86,8 +86,10 @@ class Block_main_image_fader
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','e');
-			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','e');
+			$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
+			$viewing_member_id=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','e',$viewing_member_id);
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','e',$viewing_member_id);
 			$extra_join_image.=$privacy_join_image;
 			$extra_join_video.=$privacy_join_video;
 			$extra_where_image.=$privacy_where_image;
