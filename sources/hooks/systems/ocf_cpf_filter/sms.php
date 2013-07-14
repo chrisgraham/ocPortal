@@ -29,7 +29,7 @@ class Hook_ocf_cpf_filter_sms
 	function to_enable()
 	{
 		$cpf=array();
-		if (get_option('is_on_sms',true)==='1') $cpf['mobile_phone_number']=1;
+		if (get_option('sms_username','')!='') $cpf['mobile_phone_number']=1;
 		return $cpf;
 	}
 

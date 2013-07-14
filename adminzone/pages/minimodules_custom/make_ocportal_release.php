@@ -27,6 +27,8 @@ $version_pretty=get_version_pretty__from_dotted(get_version_dotted__from_anythin
 
 $is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
+$is_old_tree=get_param_integer('is_old_tree')==1;
+
 $is_bleeding_edge=get_param_integer('is_bleeding_edge')==1;
 if (!$is_bleeding_edge)
 {
@@ -101,7 +103,7 @@ $all_downloads_to_add=array(
 		'name'=>"ocPortal Version {$version_pretty}{$bleeding1}",
 		'description'=>"This is version {$version_pretty}.".(is_null($bug_category_id)?"":"\n\nAny [url=\"critical bug fixes\" title=\"{!LINK_NEW_WINDOW}\"]http://ocportal.com/site/catalogues/category/".strval($bug_category_id).".htm[/url] for this version are organised on the ocPortal website."),
 		'filename'=>'ocportal_quick_installer-'.$version_dotted.'.zip',
-		'comments'=>$is_bleeding_edge?'':'This is the latest version.',
+		'comments'=>($is_bleeding_edge || $is_old_tree)?'':'This is the latest version.',
 		'category_id'=>$release_category_id,
 		'internal_name'=>'Quick installer',
 	),
@@ -177,7 +179,7 @@ foreach ($all_downloads_to_add as $i=>$d)
 
 // Edit past download
 
-if ((!$is_bleeding_edge) && (isset($all_downloads_to_add[0]['download_id'])))
+if ((!$is_bleeding_edge) && (!$is_old_tree) && (isset($all_downloads_to_add[0]['download_id'])))
 {
 	$last_version_str=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','t.id',array('text_original'=>'This is the latest version.'));
 	if (!is_null($last_version_str))
@@ -192,7 +194,7 @@ if ((!$is_bleeding_edge) && (isset($all_downloads_to_add[0]['download_id'])))
 }
 
 // Extract latest download
-if (!$is_bleeding_edge)
+if ((!$is_bleeding_edge) && (!$is_old_tree))
 {
 	@unlink('data.ocp');
 	@unlink('install.php');

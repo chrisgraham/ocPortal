@@ -107,6 +107,7 @@ function phase_0()
 			<legend style="display: none;">Submit</legend>
 			<input type="checkbox" name="skip" id="skip" value="1" '.$skip_check.' /><label for="skip">Installer already compiled</label>
 			<input type="checkbox" name="bleeding_edge" '.(((strpos($release_description,'patch release')===false) && (strpos($release_description,'gold')===false))?'checked="checked" ':'').'id="bleeding_edge" value="1" /><label for="bleeding_edge">Bleeding-edge release</label>
+			<input type="checkbox" name="old_tree" id="old_tree" value="1" /><label for="old_tree">Older-tree maintenance release</label>
 			<p><input type="submit" class="button_page" value="Shake it baby" /></p>
 		</fieldset>
 	</form>
@@ -161,6 +162,7 @@ function phase_1()
 {
 	$version_dotted=post_param('version');
 	$is_bleeding_edge=(post_param_integer('bleeding_edge',0)==1);
+	$is_old_tree=(post_param_integer('old_tree',0)==1);
 	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
 	if ((post_param_integer('intermediary_tasks',0)==0) && ($is_substantial) && (!$is_bleeding_edge))
@@ -177,6 +179,7 @@ function phase_1()
 	$descrip=post_param('descrip');
 	if (substr($descrip,-1)=='.') $descrip=substr($descrip,0,strlen($descrip)-1);
 	$bleeding_edge=($is_bleeding_edge?'1':'0');
+	$old_tree=($old_tree?'1':'0');
 
 	if (post_param_integer('skip',0)==0)
 	{
@@ -191,6 +194,7 @@ function phase_1()
 			<input type="hidden" name="justification" value="'.escape_html($justification).'" />
 			<input type="hidden" name="version" value="'.escape_html($version_dotted).'" />
 			<input type="hidden" name="bleeding_edge" value="'.escape_html($bleeding_edge).'" />
+			<input type="hidden" name="old_tree" value="'.escape_html($old_tree).'" />
 			<input type="hidden" name="changes" value="'.escape_html($changes).'" />
 			<input type="hidden" name="descrip" value="'.escape_html($descrip).'" />
 
@@ -216,9 +220,10 @@ function phase_2()
 	$version_branch=get_version_branch();
 	$version_pretty=get_version_pretty__from_dotted($version_dotted);
 	$is_bleeding_edge=(post_param_integer('bleeding_edge',0)==1);
+	$is_old_tree=(post_param_integer('old_tree',0)==1);
 	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
-	$push_url=brand_base_url().'/adminzone/index.php?page=make_ocportal_release&version='.urlencode($version_dotted).'&is_bleeding_edge='.($is_bleeding_edge?'1':'0').'&descrip='.urlencode($descrip).'&needed='.urlencode($needed).'&justification='.urlencode($justification);
+	$push_url=brand_base_url().'/adminzone/index.php?page=make_ocportal_release&version='.urlencode($version_dotted).'&is_bleeding_edge='.($is_bleeding_edge?'1':'0').'&is_old_tree='.($is_old_tree?'1':'0').'&descrip='.urlencode($descrip).'&needed='.urlencode($needed).'&justification='.urlencode($justification);
 
 	echo '
 	<p>Here\'s a list of things for you to do. Get to it!</p>
@@ -241,7 +246,7 @@ function phase_2()
 		</li>
 	';
 
-	if (!$is_bleeding_edge)
+	if ((!$is_bleeding_edge) && (!$is_old_tree))
 	{
 		require_code('make_release');
 		$builds_path=get_builds_path();

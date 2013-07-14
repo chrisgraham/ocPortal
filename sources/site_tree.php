@@ -339,7 +339,7 @@ function site_tree_script()
 
 				$has_children=($sp_perms!='');
 
-				if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $sp_perms.='inherits_something="1" ';
+				if (count(array_diff(array_keys($overridables),array('submit_highrange_content','submit_midrange_content','submit_lowrange_content')))!=0) $sp_perms.='inherits_something="1" ';
 				$serverid=$zone.':'.(is_string($page)?$page:strval($page));
 				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'description="'.xmlentities($description).'" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="true" '.$view_perms.$sp_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 			} else
@@ -506,7 +506,7 @@ function site_tree_script()
 						}
 					}
 
-					if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $sp_perms.='inherits_something="1" ';
+					if (count(array_diff(array_keys($overridables),array('submit_highrange_content','submit_midrange_content','submit_lowrange_content')))!=0) $sp_perms.='inherits_something="1" ';
 					$serverid=$actual_page_link;
 					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="'.$highlight.'" '.$view_perms.$sp_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.(!is_null($module_the_name)?'true':'false').'">';
 				} else
